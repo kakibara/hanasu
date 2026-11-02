@@ -19,6 +19,8 @@ struct SettingsView: View {
                 .tabItem { Label("Gemini", systemImage: "sparkles") }
             WordsTab(settings: settings)
                 .tabItem { Label("辞書・ルール", systemImage: "character.book.closed") }
+            SnippetsSettingsView()
+                .tabItem { Label("スニペット", systemImage: "text.badge.plus") }
             MeetingTab(
                 settings: settings,
                 onOpenMeetingNotes: onOpenMeetingNotes,

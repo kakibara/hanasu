@@ -187,6 +187,33 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
     RunLoop.main.run()
 }
 
+// スニペットの照合の確認:  Hanasu --match-snippet <文字起こし> [--snippets <JSON>] [--refine [--translate]]（SnippetsCLI.swift）
+if let index = CommandLine.arguments.firstIndex(of: "--match-snippet"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    let args = CommandLine.arguments
+    Task { @MainActor in
+        do {
+            try await SnippetsCLI.matchSnippet(args[index + 1], args: args)
+            exit(0)
+        } catch {
+            FileHandle.standardError.write(Data("error: \(error.localizedDescription) (\(error))\n".utf8))
+            exit(1)
+        }
+    }
+    RunLoop.main.run()
+}
+
+// 設定画面の「スニペット」タブを画像にする:  Hanasu --render-snippets-settings <出力.png> [--empty]
+if let index = CommandLine.arguments.firstIndex(of: "--render-snippets-settings"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated {
+        SnippetsCLI.renderSettings(to: CommandLine.arguments[index + 1], empty: CommandLine.arguments.contains("--empty"))
+    }
+    exit(0)
+}
+
 MainActor.assumeIsolated {
     let app = NSApplication.shared
     let delegate = AppDelegate()
