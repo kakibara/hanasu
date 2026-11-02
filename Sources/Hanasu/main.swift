@@ -1,0 +1,154 @@
+import AppKit
+import AVFoundation
+import SwiftUI
+
+// 動作確認用の CLI モード:
+//   Hanasu --transcribe-file <音声ファイル> [--engine dictation|speech] [--refine [--model <id>]]
+// --refine を付けると Gemini 整形も行う。認証は GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウント JSON のパス）、
+// 設定画面の認証情報、GEMINI_API_KEY の順に使う。
+if let index = CommandLine.arguments.firstIndex(of: "--transcribe-file"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    let args = CommandLine.arguments
+    let url = URL(fileURLWithPath: args[index + 1])
+    let engine = args.firstIndex(of: "--engine").flatMap { args.indices.contains($0 + 1) ? RecognizerEngine(rawValue: args[$0 + 1]) : nil } ?? .speech
+    Task { @MainActor in
+        do {
+            let settings = AppSettings.shared
+            let recognizer = SpeechRecognizer()
+            recognizer.onAssetDownloadProgress = { print(String(format: "downloading model… %.0f%%", $0 * 100)) }
+            let started = Date()
+            let raw = try await recognizer.transcribeFile(at: url, localeIdentifier: settings.localeIdentifier, engine: engine)
+            print(String(format: "[認識 %@ %.1fs] %@", engine.rawValue, Date().timeIntervalSince(started), raw))
+            if args.contains("--refine") {
+                let env = ProcessInfo.processInfo.environment
+                let auth: GeminiClient.Auth
+                if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
+                    auth = .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
+                } else {
+                    auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
+                }
+                let model = args.firstIndex(of: "--model").flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil } ?? settings.model
+                let refineStarted = Date()
+                let output = try await GeminiClient(auth: auth).refine(.init(
+                    transcript: raw, model: model, appName: nil,
+                    dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions))
+                print(String(format: "[整形 %@ %.1fs] %@", model, Date().timeIntervalSince(refineStarted), output))
+            }
+            exit(0)
+        } catch {
+            FileHandle.standardError.write(Data("error: \(error.localizedDescription) (\(error))\n".utf8))
+            exit(1)
+        }
+    }
+    RunLoop.main.run()
+}
+
+// オーディオ機器の一覧:  Hanasu --list-audio-devices
+if CommandLine.arguments.contains("--list-audio-devices") {
+    for device in AudioDevices.all() {
+        print("\(device.name)\t入力 \(device.inputChannels)ch / 出力 \(device.outputChannels)ch"
+              + "\t\(AudioDevices.nominalSampleRate(device.id).map { "\(Int($0))Hz" } ?? "-")\t\(device.uid)")
+    }
+    print("既定の出力: \(AudioDevices.defaultOutputUID ?? "-")")
+    // 会議の記録と同じ方法でマイクのエンジンを作り、形式を読めるか確かめる
+    for uid in [""] + AudioDevices.inputs.map(\.uid) {
+        let engine = MeetingRecorder.makeMicEngine(inputDeviceUID: uid)
+        let format = engine.inputNode.inputFormat(forBus: 0)
+        print("マイク \(uid.isEmpty ? "（システムの設定）" : uid): \(Int(format.sampleRate))Hz \(format.channelCount)ch")
+    }
+    exit(0)
+}
+
+// 会議ノートの機器の選択欄を画像にする（見た目の確認用）:  Hanasu --render-device-pickers <出力.png>
+if let index = CommandLine.arguments.firstIndex(of: "--render-device-pickers"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated {
+        _ = NSApplication.shared
+        let view = VStack(spacing: 10) {
+            MeetingDevicePickers(compact: true)
+            Button {} label: { Label("会議の記録を開始", systemImage: "record.circle").frame(maxWidth: .infinity) }
+                .controlSize(.large)
+                .buttonStyle(.borderedProminent)
+        }
+        .padding(10)
+        .frame(width: 260)
+        .background(Color(nsColor: .windowBackgroundColor))
+        // メニュー型の Picker は AppKit の部品なので、画面外のウインドウに置いて描く
+        let hosting = NSHostingView(rootView: view)
+        hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
+        let window = NSWindow(contentRect: hosting.frame, styleMask: [.borderless], backing: .buffered, defer: false)
+        window.contentView = hosting
+        hosting.layoutSubtreeIfNeeded()
+        if let rep = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) {
+            hosting.cacheDisplay(in: hosting.bounds, to: rep)
+            try? rep.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
+            print("wrote")
+        }
+    }
+    exit(0)
+}
+
+// 会議記録の後処理の確認:
+//   Hanasu --meeting-files <自分の音声> <相手の音声>
+// 2 つのファイルを「自分」「相手」のチャンネルとして文字起こしし、話者の割り当て → 議事録 → 保存まで行う。
+if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
+   CommandLine.arguments.indices.contains(index + 2)
+{
+    let args = CommandLine.arguments
+    let files = [URL(fileURLWithPath: args[index + 1]), URL(fileURLWithPath: args[index + 2])]
+    Task { @MainActor in
+        do {
+            let settings = AppSettings.shared
+            var meeting = try MeetingStore.newMeeting()
+            meeting.title = "テスト会議（\(files[1].deletingPathExtension().lastPathComponent)）"
+            var phrases: [MeetingChannel: [TranscribedPhrase]] = [:]
+            let started = Date()
+            for (channel, url) in zip([MeetingChannel.me, .others], files) {
+                let file = try AVAudioFile(forReading: url)
+                let transcriber = ChannelTranscriber(
+                    channel: channel, inputFormat: file.processingFormat,
+                    fileURL: MeetingStore.audioURL(for: meeting, channel: channel),
+                    meetingStart: meeting.startedAt, fixedTimeOffset: 0)
+                try await transcriber.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: settings.dictionaryWords)
+                while file.framePosition < file.length {
+                    guard let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 8192) else { break }
+                    try file.read(into: buffer)
+                    if buffer.frameLength == 0 { break }
+                    transcriber.append(buffer)
+                }
+                phrases[channel] = await transcriber.finish()
+                meeting.duration = max(meeting.duration, Double(file.length) / file.processingFormat.sampleRate)
+            }
+            if ProcessInfo.processInfo.environment["HANASU_DEBUG"] != nil {
+                for p in (phrases[.me] ?? []) + (phrases[.others] ?? []) {
+                    print("\(p.channel.rawValue) [\(String(format: "%.2f-%.2f", p.start, p.end))] " +
+                          p.words.map { "\($0.text)@\(String(format: "%.2f-%.2f", $0.start, $0.end))" }.joined(separator: " "))
+                }
+            }
+            print(String(format: "[文字起こし %.1fs] 自分 %d 件 / 相手 %d 件", Date().timeIntervalSince(started),
+                         phrases[.me]?.count ?? 0, phrases[.others]?.count ?? 0))
+            let recorder = MeetingRecorder()
+            let minutesStarted = Date()
+            let result = await recorder.process(meeting, me: phrases[.me] ?? [], others: phrases[.others] ?? [])
+            print(result.transcriptMarkdown())
+            print(String(format: "[議事録 %@ %.1fs]", settings.meetingMinutesModel, Date().timeIntervalSince(minutesStarted)))
+            print(result.minutes ?? result.errorMessage ?? "(なし)")
+            print("保存先: \(MeetingStore.directory(for: result).path)")
+            exit(0)
+        } catch {
+            FileHandle.standardError.write(Data("error: \(error.localizedDescription) (\(error))\n".utf8))
+            exit(1)
+        }
+    }
+    RunLoop.main.run()
+}
+
+MainActor.assumeIsolated {
+    let app = NSApplication.shared
+    let delegate = AppDelegate()
+    app.delegate = delegate
+    app.setActivationPolicy(.regular)
+    app.run()
+}
