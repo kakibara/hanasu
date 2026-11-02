@@ -8,6 +8,7 @@
 - 英訳して入力: `⌥⇧ Space` で録音するか、録音中の表示で「English」を選ぶと、日本語で話した内容を Gemini が自然な英語に翻訳して入力する
 
 会議の記録機能もあります（Google Meet・Slack ハドル・Teams など）。マイクを「自分」、Mac で鳴っている音を「相手」として録り、文字起こしと Gemini の議事録を `~/Documents/Hanasu/Meetings/` に保存します。メニューバー →「会議の記録を開始」か `⌃⌥⌘ M`。イヤホンの利用を推奨します。
+会議ノートでは、過去の会議の文字起こしと議事録を横断して検索でき（`⌘F`）、「先週の定例で何が決まった？」のように質問すると、関係する会議をもとに Gemini が根拠の会議を引用して答えます（✦ ボタン）。
 
 設計・仕様・技術選定は [docs/DESIGN.md](docs/DESIGN.md)（音声入力）と [docs/MEETING_RECORDER.md](docs/MEETING_RECORDER.md)（会議の記録）。
 

@@ -187,6 +187,9 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
     RunLoop.main.run()
 }
 
+// 会議の横断検索・質問の確認（--search-meetings / --ask-meetings など。MeetingSearchCLI.swift）
+MainActor.assumeIsolated { MeetingSearchCLI.runIfRequested(CommandLine.arguments) }
+
 MainActor.assumeIsolated {
     let app = NSApplication.shared
     let delegate = AppDelegate()
