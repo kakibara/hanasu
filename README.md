@@ -63,3 +63,11 @@ open build/Hanasu.app
 ditto -c -k --keepParent build/Hanasu.app build/Hanasu-0.1.0.zip
 gh release create v0.1.0 build/Hanasu-0.1.0.zip --title "Hanasu 0.1.0"
 ```
+
+## ライセンス
+
+Copyright (C) 2026 kakibara
+
+[GNU Affero General Public License v3.0](LICENSE)（AGPL-3.0）で配布します。改変して配布したり、ネットワーク越しにサービスとして提供したりする場合は、そのソースコードも同じライセンスで公開する必要があります。
+
+組み込んでいる第三者のソフトウェア（FluidAudio など）のライセンスは [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) にあります。配布するアプリにも `Contents/Resources` に同梱しています。
