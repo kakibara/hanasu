@@ -133,8 +133,9 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
 }
 
 // 会議記録の後処理の確認:
-//   Hanasu --meeting-files <自分の音声> <相手の音声>
+//   Hanasu --meeting-files <自分の音声> <相手の音声> [--notes <メモのテキスト>]
 // 2 つのファイルを「自分」「相手」のチャンネルとして文字起こしし、話者の割り当て → 議事録 → 保存まで行う。
+// --notes には、会議中のメモと「ここ重要」の印を、会議ノートの「メモ」タブと同じ形式（[12:34] 内容 / [12:40] ★）で渡す。
 if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
    CommandLine.arguments.indices.contains(index + 2)
 {
@@ -145,6 +146,10 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             let settings = AppSettings.shared
             var meeting = try MeetingStore.newMeeting()
             meeting.title = "テスト会議（\(files[1].deletingPathExtension().lastPathComponent)）"
+            if let notesIndex = args.firstIndex(of: "--notes"), args.indices.contains(notesIndex + 1) {
+                meeting.notes = MeetingNote.parse(try String(contentsOfFile: args[notesIndex + 1], encoding: .utf8))
+                print("メモ: \(meeting.notes?.count ?? 0) 件\n\(meeting.notesForPrompt() ?? "")")
+            }
             var phrases: [MeetingChannel: [TranscribedPhrase]] = [:]
             let started = Date()
             for (channel, url) in zip([MeetingChannel.me, .others], files) {
@@ -185,6 +190,21 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
         }
     }
     RunLoop.main.run()
+}
+
+// 会議中のメモの画面を画像にする（見た目の確認用）:  Hanasu --render-meeting-notes <出力フォルダ>
+if let index = CommandLine.arguments.firstIndex(of: "--render-meeting-notes"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated {
+        do {
+            try MeetingNotesPreview.render(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
+        } catch {
+            FileHandle.standardError.write(Data("error: \(error.localizedDescription)\n".utf8))
+            exit(1)
+        }
+    }
+    exit(0)
 }
 
 MainActor.assumeIsolated {

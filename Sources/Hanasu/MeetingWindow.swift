@@ -35,7 +35,7 @@ struct MeetingWindowView: View {
                                        description: Text("下のボタンか ⌃⌥⌘M で記録を始められます。"))
             }
         }
-        .frame(minWidth: 820, minHeight: 520)
+        .frame(minWidth: 900, minHeight: 520)
         .onChange(of: recorder.current?.id) { _, newID in
             if let newID { selection = newID }
         }
@@ -102,7 +102,7 @@ private struct RecordButton: View {
     }
 }
 
-private struct LiveTranscriptView: View {
+struct LiveTranscriptView: View {
     @ObservedObject var recorder: MeetingRecorder
 
     var body: some View {
@@ -155,6 +155,13 @@ private struct LiveTranscriptView: View {
                 }
                 .onChange(of: recorder.liveLines.count) { proxy.scrollTo("bottom") }
             }
+            .safeAreaInset(edge: .trailing, spacing: 0) {
+                // メモと「ここ重要」（MeetingNotesViews.swift）
+                HStack(spacing: 0) {
+                    Divider()
+                    LiveNotesPanel(recorder: recorder).frame(width: 280)
+                }
+            }
         }
     }
 }
@@ -206,6 +213,8 @@ private struct MeetingDetailView: View {
                     Spacer()
                     Button("話者名…") { editingSpeakers = true }
                         .disabled(meeting.speakers.isEmpty)
+                    Button("議事録を作り直す") { Task { await recorder.regenerateMinutes(meeting) } }
+                        .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
                     Button("コピー") { copy() }
                     Button("Finder で表示") {
                         NSWorkspace.shared.activateFileViewerSelecting([MeetingStore.directory(for: meeting)])
@@ -223,34 +232,39 @@ private struct MeetingDetailView: View {
                 Picker("", selection: $tab) {
                     Text("議事録").tag(0)
                     Text("文字起こし").tag(1)
+                    Text("メモ").tag(2)
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
-                .frame(width: 240)
+                .frame(width: 300)
             }
             .padding()
             Divider()
-            ScrollView {
-                Group {
-                    if tab == 0 {
-                        if let minutes = meeting.minutes {
-                            MarkdownText(markdown: minutes)
+            if tab == 2 {
+                MeetingNotesEditor(meeting: meeting, recorder: recorder)
+            } else {
+                ScrollView {
+                    Group {
+                        if tab == 0 {
+                            if let minutes = meeting.minutes {
+                                MarkdownText(markdown: minutes)
+                            } else {
+                                Text(meeting.status == .processing ? "議事録を作成中です…" : "議事録はありません。")
+                                    .foregroundStyle(.secondary)
+                            }
                         } else {
-                            Text(meeting.status == .processing ? "議事録を作成中です…" : "議事録はありません。")
-                                .foregroundStyle(.secondary)
-                        }
-                    } else {
-                        LazyVStack(alignment: .leading, spacing: 10) {
-                            ForEach(meeting.mergedBlocks()) { block in
-                                TranscriptLine(time: block.start, speaker: meeting.displayName(for: block.speaker),
-                                               color: Self.color(for: block.speaker, in: meeting), text: block.text)
+                            LazyVStack(alignment: .leading, spacing: 10) {
+                                ForEach(meeting.mergedBlocks()) { block in
+                                    TranscriptLine(time: block.start, speaker: meeting.displayName(for: block.speaker),
+                                                   color: Self.color(for: block.speaker, in: meeting), text: block.text)
+                                }
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    .textSelection(.enabled)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-                .textSelection(.enabled)
             }
         }
         .onAppear { title = meeting.title }
@@ -261,7 +275,7 @@ private struct MeetingDetailView: View {
     }
 
     private func copy() {
-        let text = tab == 0 ? (meeting.minutes ?? "") : meeting.transcriptMarkdown()
+        let text = tab == 0 ? (meeting.minutes ?? "") : tab == 1 ? meeting.transcriptMarkdown() : meeting.notesText
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(text, forType: .string)
     }
