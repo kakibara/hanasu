@@ -46,10 +46,17 @@ private struct GeneralTab: View {
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
+                LabeledContent("英訳して入力") {
+                    ShortcutRecorder(
+                        combo: $settings.translateHotKey,
+                        defaultCombo: .defaultTranslate,
+                        onBeginRecording: onBeginShortcutRecording,
+                        onEndRecording: onEndShortcutRecording)
+                }
                 Picker("録音モード", selection: $settings.recordingMode) {
                     ForEach(RecordingMode.allCases) { Text($0.label).tag($0) }
                 }
-                Text("録音中は Esc で取り消せます。")
+                Text("日本語で話すと、「英訳して入力」では Gemini が自然な英語に翻訳して入力します（Gemini の認証情報が必要です）。録音中は Esc で取り消せます。")
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section("音声認識") {
@@ -126,7 +133,9 @@ private struct GeminiTab: View {
                 TextField("認識結果の例", text: $testInput, axis: .vertical)
                     .lineLimit(2...4)
                 HStack {
-                    Button(isTesting ? "送信中…" : "整形を試す", action: runTest)
+                    Button(isTesting ? "送信中…" : "整形を試す") { runTest(translate: false) }
+                        .disabled(isTesting || testInput.isEmpty)
+                    Button("英訳を試す") { runTest(translate: true) }
                         .disabled(isTesting || testInput.isEmpty)
                     Spacer()
                 }
@@ -158,7 +167,7 @@ private struct GeminiTab: View {
         }
     }
 
-    private func runTest() {
+    private func runTest(translate: Bool) {
         isTesting = true
         testOutput = ""
         let request = GeminiClient.Request(
@@ -174,7 +183,8 @@ private struct GeminiTab: View {
             let started = Date()
             do {
                 guard let auth = try GeminiClient.authFromSettings(settings) else { throw GeminiError.missingAPIKey }
-                let output = try await GeminiClient(auth: auth).refine(request)
+                let client = GeminiClient(auth: auth)
+                let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
                 testOutput = output + String(format: "\n\n（%.1f 秒）", Date().timeIntervalSince(started))
             } catch {
                 testOutput = "⚠️ " + error.localizedDescription

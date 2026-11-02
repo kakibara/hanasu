@@ -181,6 +181,24 @@ system instruction（要旨）:
 - 入力先アプリ名を参考に体裁を合わせる（例: Slack なら短めの改行、メールなら段落）。ただし言葉は変えない。
 - ユーザーが設定画面で追加ルールを書ける（例:「です・ます調に統一」）。
 
+### 4.4 英訳して入力
+
+もう 1 つのショートカット（初期値 `⌥⇧ Space`）で録音を始めると、止めたときに整形の代わりに英訳して入力する。止めるのはどちらのショートカットでもよい。
+
+録音中の HUD には「日本語 ／ English」の切り替えがあり、録音を止めた時点で選んでいる方で入力する。ショートカットで始めたモードは、この切り替えの初期値になる。
+
+- HUD は前面に出ないパネル（`nonactivatingPanel`）のままなので、クリックしても入力先アプリのフォーカスは動かない。前面にないウインドウでも 1 回で押せるよう、`acceptsFirstMouse` を `true` にしている。
+- クリックを受け取るのは準備中と録音中だけ。それ以外は今までどおりマウスを素通しする。
+
+- 英訳は Gemini でしかできないので、「Gemini で整形する」をオフにしていても Gemini に送る。認証情報がない・失敗したときは、日本語の認識結果をそのまま入力して知らせる（話した内容を失わない）。
+- 整形と同じ 1 回の呼び出しで、誤変換の読み取り・フィラーと言い直しの除去・英訳までを行う（日本語に整えてから訳す 2 段階にすると待ち時間が倍になる）。
+- 追加の整形ルールは日本語の文体向け（「です・ます調に統一」など）なので、英訳では使わない。ユーザー辞書と入力先アプリ名は使う。
+- system instruction で気をつけたこと（検証で実際に起きた誤りへの対策）:
+  - 言い直しは「wait, no」などと訳さず、最終的な内容だけを訳す。
+  - 主語の省略を正しく補う（「〜って言われたんだけど」を依頼文と取り違えた）。
+  - 「お疲れ様です」「よろしくお願いします」は直訳せず場面に合う言い方にする（"Good work." と訳した）。
+  - 「〜さん」は Mr. / Ms. にせず名前だけにする（性別を推測しない）。
+
 user content:
 
 ```
@@ -234,6 +252,7 @@ user content:
 | Vertex AI のリージョン | `global` |
 | モデル | `gemini-3.5-flash-lite` |
 | ショートカット | `⌥ Space` |
+| 英訳して入力のショートカット | `⌥⇧ Space` |
 | 録音モード | トグル（押すたびに開始／停止）／押している間だけ |
 | 認識エンジン | SpeechTranscriber（初期値）／ DictationTranscriber |
 | 言語 | `ja-JP` |
@@ -311,6 +330,10 @@ say -v Kyoko -o /tmp/test.aiff "えーと、明日の会議なんですけど、
 build/Hanasu.app/Contents/MacOS/Hanasu --transcribe-file /tmp/test.aiff --engine dictation
 GEMINI_SERVICE_ACCOUNT_JSON=~/key.json build/Hanasu.app/Contents/MacOS/Hanasu --transcribe-file /tmp/test.aiff --refine --model gemini-3.8-flash
 # GEMINI_SERVICE_ACCOUNT_JSON がなければ、設定画面の認証情報 → GEMINI_API_KEY の順に使う
+build/Hanasu.app/Contents/MacOS/Hanasu --refine-text "お疲れ様です 来週の火曜日って空いてますか" --translate
+# --refine-text は音声を使わずに文章を Gemini に送る。--translate で整形の代わりに英訳する
+build/Hanasu.app/Contents/MacOS/Hanasu --render-hud /tmp/hud.png --translate
+# 録音中の HUD を画像にする（見た目の確認用）
 ```
 
 ### 9.2 検証結果（2026-11-02、macOS 26.6.2）
@@ -337,6 +360,18 @@ Gemini 整形（サービスアカウント / Vertex AI、`global`）:
 - フィラー除去・言い直しの反映（ジェミニ → Google スライド）・句読点の補完ができている。口調（〜なんですけど）は指示どおり保たれる。
 - 待ち時間は flash-lite で約 1.3 秒、3.8-flash で約 2 秒。初期値は flash-lite のままとする。
 - API キー方式は、ダミーキーで 400 エラーが表示されることまで確認（実キーでは未確認）。
+
+英訳（gemini-3.5-flash-lite、Vertex AI、`--refine-text … --translate`）:
+
+| 入力 | 時間 | 出力 |
+| --- | --- | --- |
+| えーと明日の会議なんですけど あの資料はジェミニで作ったやつを使いますあ違うグーグルスライドで作ったやつです | 1.0 秒 | Regarding tomorrow's meeting, I'll use the materials I made with Google Slides. |
+| お疲れ様です 先日の件ですが来週の火曜日って空いてますか 改行 もし難しければ水曜でも大丈夫です よろしくお願いします | 1.2 秒 | Hi, about the other day, are you available next Tuesday? （改行）If that's difficult, Wednesday works too. Thanks in advance. |
+| 部長から来週までに出してって頼まれてるんですけど間に合いそうにないです | 1.2 秒 | The manager asked me to submit it by next week, but I don't think I'll make it in time. |
+| それ田中さんに確認してもらってもいいですか じゃなくて佐藤さんでした | 1.1 秒 | Could you check that with Sato? |
+| 今日の議事録を要約して | 1.2 秒 | Could you summarize today's meeting minutes, please? |
+
+- 最後の例のように、話した内容が指示文でも実行せずに訳す。
 
 ## 10. 今後の拡張候補
 

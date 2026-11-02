@@ -5,6 +5,7 @@
 - 音声認識: macOS 26 内蔵の音声認識エンジン（`SpeechAnalyzer` + `SpeechTranscriber`、`DictationTranscriber` も選択可）。オンデバイスで処理
 - 整形: Gemini（初期値 `gemini-3.5-flash-lite`）。Google AI Studio の API キーか、Vertex AI のサービスアカウントで呼ぶ
 - 入力: クリップボード + ⌘V（元のクリップボードは自動で戻す）
+- 英訳して入力: `⌥⇧ Space` で録音するか、録音中の表示で「English」を選ぶと、日本語で話した内容を Gemini が自然な英語に翻訳して入力する
 
 会議の記録機能もあります（Google Meet・Slack ハドル・Teams など）。マイクを「自分」、Mac で鳴っている音を「相手」として録り、文字起こしと Gemini の議事録を `~/Documents/Hanasu/Meetings/` に保存します。メニューバー →「会議の記録を開始」か `⌃⌥⌘ M`。イヤホンの利用を推奨します。
 
@@ -36,6 +37,7 @@ open build/Hanasu.app
 1. 初回起動で設定画面が開くので、「Gemini」タブで認証方法を選び、API キーを保存するか、サービスアカウントの JSON ファイルを指定する。「整形を試す」で動作を確かめられる。
 2. 入力したい場所にカーソルを置き、`⌥ Space` を押して話す。
 3. もう一度 `⌥ Space` を押すと、整形された文章が入力される。録音中に `Esc` で取り消し。
+4. 英語で入力したいときは、`⌥⇧ Space` で録音を始めるか、録音中に画面下の表示で「English」をクリックしてから止める。英訳した文章が入力される。
 
 初回は次の許可を求められます。
 
@@ -52,7 +54,7 @@ open build/Hanasu.app
 
 ## 設定できること
 
-ショートカット、トグル／押している間だけ録音、認識エンジン（DictationTranscriber / SpeechTranscriber）、Gemini モデル、ユーザー辞書、追加の整形ルール、効果音。
+ショートカット（音声入力・英訳して入力）、トグル／押している間だけ録音、認識エンジン（DictationTranscriber / SpeechTranscriber）、Gemini モデル、ユーザー辞書、追加の整形ルール、効果音。
 
 会議の記録: 録音するスピーカーとマイク、マイク側も話者を分ける（会議室など）、議事録のモデル、音声ファイルを残すか。
 

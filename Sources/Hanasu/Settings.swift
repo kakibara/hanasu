@@ -46,6 +46,7 @@ struct HotKeyCombo: Equatable {
     var modifiers: UInt32  // cmdKey / optionKey / controlKey / shiftKey の組み合わせ
 
     static let `default` = HotKeyCombo(keyCode: UInt32(kVK_Space), modifiers: UInt32(optionKey))
+    static let defaultTranslate = HotKeyCombo(keyCode: UInt32(kVK_Space), modifiers: UInt32(optionKey | shiftKey))
     static let defaultMeeting = HotKeyCombo(
         keyCode: UInt32(kVK_ANSI_M), modifiers: UInt32(controlKey | optionKey | cmdKey))
 
@@ -125,6 +126,13 @@ final class AppSettings: ObservableObject {
             defaults.set(Int(hotKey.modifiers), forKey: Keys.hotKeyModifiers)
         }
     }
+    /// 話した内容を英語に翻訳して入力するショートカット
+    @Published var translateHotKey: HotKeyCombo {
+        didSet {
+            defaults.set(Int(translateHotKey.keyCode), forKey: Keys.translateHotKeyCode)
+            defaults.set(Int(translateHotKey.modifiers), forKey: Keys.translateHotKeyModifiers)
+        }
+    }
     @Published var recordingMode: RecordingMode { didSet { defaults.set(recordingMode.rawValue, forKey: Keys.recordingMode) } }
     @Published var engine: RecognizerEngine { didSet { defaults.set(engine.rawValue, forKey: Keys.engine) } }
     @Published var localeIdentifier: String { didSet { defaults.set(localeIdentifier, forKey: Keys.locale) } }
@@ -165,6 +173,8 @@ final class AppSettings: ObservableObject {
             Keys.vertexLocation: "global",
             Keys.hotKeyCode: Int(HotKeyCombo.default.keyCode),
             Keys.hotKeyModifiers: Int(HotKeyCombo.default.modifiers),
+            Keys.translateHotKeyCode: Int(HotKeyCombo.defaultTranslate.keyCode),
+            Keys.translateHotKeyModifiers: Int(HotKeyCombo.defaultTranslate.modifiers),
             Keys.recordingMode: RecordingMode.toggle.rawValue,
             Keys.engine: RecognizerEngine.speech.rawValue,
             Keys.locale: "ja-JP",
@@ -189,6 +199,9 @@ final class AppSettings: ObservableObject {
         hotKey = HotKeyCombo(
             keyCode: UInt32(defaults.integer(forKey: Keys.hotKeyCode)),
             modifiers: UInt32(defaults.integer(forKey: Keys.hotKeyModifiers)))
+        translateHotKey = HotKeyCombo(
+            keyCode: UInt32(defaults.integer(forKey: Keys.translateHotKeyCode)),
+            modifiers: UInt32(defaults.integer(forKey: Keys.translateHotKeyModifiers)))
         recordingMode = RecordingMode(rawValue: defaults.string(forKey: Keys.recordingMode)!) ?? .toggle
         engine = RecognizerEngine(rawValue: defaults.string(forKey: Keys.engine)!) ?? .speech
         localeIdentifier = defaults.string(forKey: Keys.locale)!
@@ -215,6 +228,8 @@ final class AppSettings: ObservableObject {
         static let vertexLocation = "vertexLocation"
         static let hotKeyCode = "hotKeyCode"
         static let hotKeyModifiers = "hotKeyModifiers"
+        static let translateHotKeyCode = "translateHotKeyCode"
+        static let translateHotKeyModifiers = "translateHotKeyModifiers"
         static let recordingMode = "recordingMode"
         static let engine = "recognizerEngine"
         static let locale = "localeIdentifier"

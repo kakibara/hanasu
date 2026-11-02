@@ -3,9 +3,47 @@ import AVFoundation
 import SwiftUI
 
 // 動作確認用の CLI モード:
-//   Hanasu --transcribe-file <音声ファイル> [--engine dictation|speech] [--refine [--model <id>]]
-// --refine を付けると Gemini 整形も行う。認証は GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウント JSON のパス）、
-// 設定画面の認証情報、GEMINI_API_KEY の順に使う。
+//   Hanasu --transcribe-file <音声ファイル> [--engine dictation|speech] [--refine [--translate] [--model <id>]]
+//   Hanasu --refine-text <文章> [--translate] [--model <id>]
+// --refine を付けると Gemini 整形も行い、--translate を付けると整形の代わりに英訳する。
+// 認証は GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウント JSON のパス）、設定画面の認証情報、GEMINI_API_KEY の順に使う。
+@MainActor
+func cliRefine(_ raw: String, args: [String]) async throws {
+    let settings = AppSettings.shared
+    let env = ProcessInfo.processInfo.environment
+    let auth: GeminiClient.Auth
+    if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
+        auth = .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
+    } else {
+        auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
+    }
+    let model = args.firstIndex(of: "--model").flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil } ?? settings.model
+    let translate = args.contains("--translate")
+    let client = GeminiClient(auth: auth)
+    let request = GeminiClient.Request(
+        transcript: raw, model: model, appName: nil,
+        dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions)
+    let started = Date()
+    let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
+    print(String(format: "[%@ %@ %.1fs] %@", translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
+}
+
+if let index = CommandLine.arguments.firstIndex(of: "--refine-text"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    let args = CommandLine.arguments
+    Task { @MainActor in
+        do {
+            try await cliRefine(args[index + 1], args: args)
+            exit(0)
+        } catch {
+            FileHandle.standardError.write(Data("error: \(error.localizedDescription) (\(error))\n".utf8))
+            exit(1)
+        }
+    }
+    RunLoop.main.run()
+}
+
 if let index = CommandLine.arguments.firstIndex(of: "--transcribe-file"),
    CommandLine.arguments.indices.contains(index + 1)
 {
@@ -21,19 +59,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--transcribe-file"),
             let raw = try await recognizer.transcribeFile(at: url, localeIdentifier: settings.localeIdentifier, engine: engine)
             print(String(format: "[認識 %@ %.1fs] %@", engine.rawValue, Date().timeIntervalSince(started), raw))
             if args.contains("--refine") {
-                let env = ProcessInfo.processInfo.environment
-                let auth: GeminiClient.Auth
-                if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
-                    auth = .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
-                } else {
-                    auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
-                }
-                let model = args.firstIndex(of: "--model").flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil } ?? settings.model
-                let refineStarted = Date()
-                let output = try await GeminiClient(auth: auth).refine(.init(
-                    transcript: raw, model: model, appName: nil,
-                    dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions))
-                print(String(format: "[整形 %@ %.1fs] %@", model, Date().timeIntervalSince(refineStarted), output))
+                try await cliRefine(raw, args: args)
             }
             exit(0)
         } catch {
@@ -86,6 +112,22 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-device-pickers"),
             try? rep.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
             print("wrote")
         }
+    }
+    exit(0)
+}
+
+// 音声入力の HUD を画像にする（見た目の確認用）:  Hanasu --render-hud <出力.png> [--translate]
+if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated {
+        _ = NSApplication.shared
+        let hud = HUDController()
+        hud.show(.recording)
+        hud.model.translating = CommandLine.arguments.contains("--translate")
+        hud.updateTranscript("明日の会議なんですけど、資料は Google スライドで作ったものを使います")
+        try? hud.snapshotPNG()?.write(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
+        print("wrote")
     }
     exit(0)
 }

@@ -14,6 +14,23 @@ final class HUDModel: ObservableObject {
     @Published var phase: Phase = .recording
     @Published var transcript = ""
     @Published var startedAt = Date()
+    /// 英訳モードで録音しているか
+    @Published var translating = false
+    /// HUD の「日本語／English」を押したとき。録音を止めた時点の選択で出力の言語が決まる
+    var onSelectTranslating: ((Bool) -> Void)?
+
+    /// 準備中と録音中は、出力の言語を選べる
+    var canChooseLanguage: Bool {
+        switch phase {
+        case .preparing, .recording: true
+        default: false
+        }
+    }
+}
+
+/// 前面にないパネルでも、1 回のクリックでボタンが押せるようにする
+private final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }
 
 /// 画面下部に出る小さな状態表示。入力先アプリのフォーカスを奪わない。
@@ -36,7 +53,7 @@ final class HUDController {
         panel.hasShadow = true
         panel.ignoresMouseEvents = true
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
-        let hosting = NSHostingView(rootView: HUDView(model: model))
+        let hosting = FirstMouseHostingView(rootView: HUDView(model: model))
         hosting.sizingOptions = []
         panel.contentView = hosting
     }
@@ -50,6 +67,8 @@ final class HUDController {
             model.startedAt = Date()
         }
         model.phase = phase
+        // 言語の切り替えボタンを押せる間だけクリックを受け取る。パネルは前面に出ないので、入力先のフォーカスは動かない
+        panel.ignoresMouseEvents = !model.canChooseLanguage
         position()
         panel.orderFrontRegardless()
 
@@ -58,6 +77,15 @@ final class HUDController {
         case .error: hide(after: 4)
         default: break
         }
+    }
+
+    /// 見た目の確認用に、今の表示を PNG にする
+    func snapshotPNG() -> Data? {
+        guard let view = panel.contentView else { return nil }
+        view.layoutSubtreeIfNeeded()
+        guard let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { return nil }
+        view.cacheDisplay(in: view.bounds, to: rep)
+        return rep.representation(using: .png, properties: [:])
     }
 
     func updateTranscript(_ text: String) {
@@ -88,7 +116,10 @@ private struct HUDView: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 8) {
                 statusIcon
-                Text(title).font(.system(size: 13, weight: .semibold))
+                Text(title).font(.system(size: 13, weight: .semibold)).lineLimit(1)
+                if model.canChooseLanguage {
+                    LanguageSwitch(translating: model.translating) { model.onSelectTranslating?($0) }
+                }
                 Spacer()
                 if model.phase == .recording {
                     TimelineView(.periodic(from: model.startedAt, by: 1)) { context in
@@ -134,7 +165,7 @@ private struct HUDView: View {
         switch model.phase {
         case .preparing(let message): message
         case .recording: "録音中"
-        case .processing: "Gemini で整えています…"
+        case .processing: model.translating ? "Gemini で英語に翻訳しています…" : "Gemini で整えています…"
         case .done(let message): message
         case .error: "エラー"
         }
@@ -152,5 +183,34 @@ private struct HUDView: View {
     private func elapsed(at date: Date) -> String {
         let seconds = max(0, Int(date.timeIntervalSince(model.startedAt)))
         return String(format: "%d:%02d", seconds / 60, seconds % 60)
+    }
+}
+
+/// 出力の言語を選ぶ小さな切り替え。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
+private struct LanguageSwitch: View {
+    var translating: Bool
+    var onSelect: (Bool) -> Void
+
+    var body: some View {
+        HStack(spacing: 2) {
+            option("日本語", selected: !translating) { onSelect(false) }
+            option("English", selected: translating) { onSelect(true) }
+        }
+        .padding(2)
+        .background(.quaternary, in: Capsule())
+        .help("録音を止めたときに選んでいる言語で入力します")
+    }
+
+    private func option(_ label: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(label)
+                .font(.system(size: 11, weight: selected ? .semibold : .regular))
+                .foregroundStyle(selected ? Color.white : Color.secondary)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(selected ? Color.accentColor : Color.clear, in: Capsule())
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
     }
 }

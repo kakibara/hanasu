@@ -5,20 +5,24 @@ import os
 
 let appLog = Logger(subsystem: "dev.mactypeless.Hanasu", category: "dictation")
 
-/// ホットキー → 録音 → 文字起こし → Gemini 整形 → 入力、の流れを管理する。
+/// ホットキー → 録音 → 文字起こし → Gemini 整形（または英訳） → 入力、の流れを管理する。
 @MainActor
 final class DictationController {
     enum State { case idle, preparing, recording, processing }
+    /// 録音を始めたショートカットで決まる。整形して日本語で入力するか、英語に翻訳して入力するか
+    enum Mode { case refine, translateToEnglish }
 
     struct HistoryEntry {
         let date: Date
         let raw: String
         let output: String
+        let mode: Mode
     }
 
     private(set) var state: State = .idle {
         didSet { onStateChange?(state) }
     }
+    private(set) var mode: Mode = .refine
     private(set) var history: [HistoryEntry] = []
     var onStateChange: ((State) -> Void)?
     /// ショートカットの登録に失敗したとき（他アプリと衝突など）
@@ -29,6 +33,7 @@ final class DictationController {
     private let recognizer = SpeechRecognizer()
     private let hud = HUDController()
     private var mainHotKeyID: UInt32?
+    private var translateHotKeyID: UInt32?
     private var escapeHotKeyID: UInt32?
     private var stopRequested = false
     private var cancelRequested = false
@@ -42,9 +47,16 @@ final class DictationController {
         recognizer.onAssetDownloadProgress = { [weak self] fraction in
             self?.hud.show(.preparing("日本語の音声モデルをダウンロード中… \(Int(fraction * 100))%"))
         }
+        hud.model.onSelectTranslating = { [weak self] translating in
+            self?.selectOutputLanguage(translating: translating)
+        }
         settings.$hotKey
             .removeDuplicates()
-            .sink { [weak self] combo in self?.registerMainHotKey(combo) }
+            .sink { [weak self] combo in self?.registerHotKey(combo, mode: .refine) }
+            .store(in: &cancellables)
+        settings.$translateHotKey
+            .removeDuplicates()
+            .sink { [weak self] combo in self?.registerHotKey(combo, mode: .translateToEnglish) }
             .store(in: &cancellables)
     }
 
@@ -52,28 +64,36 @@ final class DictationController {
 
     /// ショートカット記録中は一時的に外す（記録したいキーを横取りしないため）
     func suspendHotKey() {
-        if let id = mainHotKeyID { hotKeys.unregister(id) }
+        for id in [mainHotKeyID, translateHotKeyID].compactMap({ $0 }) { hotKeys.unregister(id) }
         mainHotKeyID = nil
+        translateHotKeyID = nil
     }
 
     func resumeHotKey() {
-        registerMainHotKey(settings.hotKey)
+        registerHotKey(settings.hotKey, mode: .refine)
+        registerHotKey(settings.translateHotKey, mode: .translateToEnglish)
     }
 
-    private func registerMainHotKey(_ combo: HotKeyCombo) {
-        if let id = mainHotKeyID { hotKeys.unregister(id) }
-        mainHotKeyID = hotKeys.register(combo) { [weak self] event in
-            self?.handleHotKey(event)
+    private func registerHotKey(_ combo: HotKeyCombo, mode: Mode) {
+        let previous = mode == .refine ? mainHotKeyID : translateHotKeyID
+        if let previous { hotKeys.unregister(previous) }
+        let id = hotKeys.register(combo) { [weak self] event in
+            self?.handleHotKey(event, mode: mode)
         }
-        if mainHotKeyID == nil {
+        switch mode {
+        case .refine: mainHotKeyID = id
+        case .translateToEnglish: translateHotKeyID = id
+        }
+        if id == nil {
             onHotKeyRegistrationFailed?(combo)
         }
     }
 
-    private func handleHotKey(_ event: HotKeyManager.Event) {
+    /// 開始はショートカットごとのモードで。録音中はどちらのショートカットでも止まる
+    private func handleHotKey(_ event: HotKeyManager.Event, mode: Mode) {
         switch (settings.recordingMode, event, state) {
         case (_, .pressed, .idle):
-            startDictation()
+            startDictation(mode: mode)
         case (.toggle, .pressed, .recording), (.pushToTalk, .released, .recording):
             Task { await finishDictation() }
         case (.toggle, .pressed, .preparing), (.pushToTalk, .released, .preparing):
@@ -96,21 +116,30 @@ final class DictationController {
 
     // MARK: - 操作
 
-    func toggleFromMenu() {
+    /// 録音中に HUD で出力の言語を切り替える。止めた時点の選択で、整形するか英訳するかが決まる
+    func selectOutputLanguage(translating: Bool) {
+        guard state == .preparing || state == .recording else { return }
+        mode = translating ? .translateToEnglish : .refine
+        hud.model.translating = translating
+    }
+
+    func toggleFromMenu(mode: Mode = .refine) {
         switch state {
-        case .idle: startDictation()
+        case .idle: startDictation(mode: mode)
         case .recording: Task { await finishDictation() }
         case .preparing: stopRequested = true
         case .processing: break
         }
     }
 
-    func startDictation() {
+    func startDictation(mode: Mode = .refine) {
         guard state == .idle else { return }
+        self.mode = mode
         state = .preparing
         stopRequested = false
         cancelRequested = false
         targetAppName = NSWorkspace.shared.frontmostApplication?.localizedName
+        hud.model.translating = mode == .translateToEnglish
         hud.show(.preparing("準備中…"))
         setEscapeHotKey(enabled: true)
 
@@ -183,29 +212,34 @@ final class DictationController {
 
         var output = raw
         var warning: String?
-        if settings.refineWithGemini {
+        let translating = mode == .translateToEnglish
+        // 英訳は Gemini でしかできないので、整形をオフにしていても Gemini に送る
+        if settings.refineWithGemini || translating {
+            let verb = translating ? "翻訳" : "整形"
             do {
                 if let auth = try GeminiClient.authFromSettings(settings) {
-                    output = try await GeminiClient(auth: auth).refine(.init(
+                    let client = GeminiClient(auth: auth)
+                    let request = GeminiClient.Request(
                         transcript: raw,
                         model: settings.model,
                         appName: settings.sendAppName ? targetAppName : nil,
                         dictionary: settings.dictionaryWords,
-                        extraInstructions: settings.extraInstructions))
-                    appLog.notice("refined by \(self.settings.model, privacy: .public): \(output.count) chars")
+                        extraInstructions: settings.extraInstructions)
+                    output = translating ? try await client.translateToEnglish(request) : try await client.refine(request)
+                    appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(self.settings.model, privacy: .public): \(output.count) chars")
                 } else {
-                    appLog.notice("refine skipped: no credentials (mode=\(self.settings.authMode.rawValue, privacy: .public))")
-                    warning = "Gemini の認証情報が未設定のため、整形せずに入力しました（メニュー → 設定）。"
+                    appLog.notice("\(verb, privacy: .public) skipped: no credentials (mode=\(self.settings.authMode.rawValue, privacy: .public))")
+                    warning = "Gemini の認証情報が未設定のため、\(verb)せずに入力しました（メニュー → 設定）。"
                 }
             } catch {
-                appLog.error("refine failed: \(error.localizedDescription, privacy: .public)")
-                warning = "\(error.localizedDescription)\n整形前の文章を入力しました。"
+                appLog.error("\(verb, privacy: .public) failed: \(error.localizedDescription, privacy: .public)")
+                warning = "\(error.localizedDescription)\n\(verb)前の文章を入力しました。"
             }
         }
 
         let outcome = await TextInserter.insert(output)
         appLog.notice("insert outcome: \(String(describing: outcome), privacy: .public), frontmost=\(NSWorkspace.shared.frontmostApplication?.bundleIdentifier ?? "-", privacy: .public)")
-        history.insert(HistoryEntry(date: Date(), raw: raw, output: output), at: 0)
+        history.insert(HistoryEntry(date: Date(), raw: raw, output: output, mode: mode), at: 0)
         if history.count > 10 { history.removeLast(history.count - 10) }
         state = .idle
 
@@ -216,7 +250,7 @@ final class DictationController {
         case (.pasted, let warning?):
             hud.show(.error(warning))
         case (.pasted, nil):
-            hud.show(.done("入力しました"))
+            hud.show(.done(translating ? "英訳して入力しました" : "入力しました"))
         }
     }
 

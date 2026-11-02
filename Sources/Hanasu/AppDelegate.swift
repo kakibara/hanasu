@@ -84,6 +84,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                                 action: #selector(toggleDictation), keyEquivalent: "")
         toggle.isEnabled = controller.state != .processing
         menu.addItem(toggle)
+        if controller.state == .idle {
+            menu.addItem(NSMenuItem(title: "英訳して入力を開始　\(settings.translateHotKey.displayString)",
+                                    action: #selector(toggleTranslation), keyEquivalent: ""))
+        }
         menu.addItem(.separator())
 
         let meetingTitle: String
@@ -112,7 +116,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             let item = NSMenuItem(title: String(title.prefix(40)) + (title.count > 40 ? "…" : ""),
                                   action: #selector(copyHistory(_:)), keyEquivalent: "")
             item.tag = index
-            item.toolTip = "整形後:\n\(entry.output)\n\n認識結果:\n\(entry.raw)"
+            let label = entry.mode == .translateToEnglish ? "英訳" : "整形後"
+            item.toolTip = "\(label):\n\(entry.output)\n\n認識結果:\n\(entry.raw)"
             historyMenu.addItem(item)
         }
         historyItem.submenu = historyMenu
@@ -237,6 +242,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func toggleDictation() {
         controller.toggleFromMenu()
+    }
+
+    @objc private func toggleTranslation() {
+        controller.toggleFromMenu(mode: .translateToEnglish)
     }
 
     @objc private func copyHistory(_ sender: NSMenuItem) {
