@@ -38,6 +38,7 @@ final class DictationController {
     private var stopRequested = false
     private var cancelRequested = false
     private var targetAppName: String?
+    private var screenContextCapture: ScreenContextCapture?
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
@@ -139,6 +140,7 @@ final class DictationController {
         stopRequested = false
         cancelRequested = false
         targetAppName = NSWorkspace.shared.frontmostApplication?.localizedName
+        screenContextCapture = ScreenContextCapture.begin()
         hud.model.translating = mode == .translateToEnglish
         hud.show(.preparing("準備中…"))
         setEscapeHotKey(enabled: true)
@@ -224,7 +226,8 @@ final class DictationController {
                         model: settings.model,
                         appName: settings.sendAppName ? targetAppName : nil,
                         dictionary: settings.dictionaryWords,
-                        extraInstructions: settings.extraInstructions)
+                        extraInstructions: settings.extraInstructions,
+                        screenContext: await screenContextCapture?.result())
                     output = translating ? try await client.translateToEnglish(request) : try await client.refine(request)
                     appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(self.settings.model, privacy: .public): \(output.count) chars")
                 } else {

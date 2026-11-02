@@ -28,6 +28,9 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     print(String(format: "[%@ %@ %.1fs] %@", translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
 }
 
+// 画面の文脈の確認（--dump-context、--refine-text … --context）。該当しなければ何もしない
+MainActor.assumeIsolated { ScreenContextCLI.runIfRequested() }
+
 if let index = CommandLine.arguments.firstIndex(of: "--refine-text"),
    CommandLine.arguments.indices.contains(index + 1)
 {
