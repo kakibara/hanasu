@@ -1,6 +1,8 @@
-// Hanasu のアプリアイコンを描いて Resources/AppIcon.icns を作る。
-//   swift scripts/make-icon.swift
-// 声の波形が文字の行に変わっていく図柄に、AI の整形を表すきらめきを添える。
+// Hanasu のアプリアイコンを描いて build/AppIcon.iconset を作る。
+//   swift scripts/make-icon.swift .
+//   iconutil -c icns build/AppIcon.iconset -o Resources/AppIcon.icns
+// 会議室の落ち着いた青緑を背景に、重なった 2 つの吹き出し（複数人の会話）を置く。
+// 奥の吹き出しには声の波形、手前の吹き出しには議事録の行を描き、「話した声が記録になる」ことを表す。
 import AppKit
 
 let canvas: CGFloat = 1024
@@ -27,29 +29,45 @@ func capsule(_ rect: CGRect) -> CGPath {
     return CGPath(roundedRect: rect, cornerWidth: r, cornerHeight: r, transform: nil)
 }
 
-/// 4 方向に尖ったきらめき
-func sparkle(center: CGPoint, radius: CGFloat) -> CGPath {
-    let path = CGMutablePath()
-    let inner = radius * 0.28
-    for i in 0..<8 {
-        let angle = CGFloat(i) * .pi / 4 + .pi / 2
-        let r = i % 2 == 0 ? radius : inner
-        let p = CGPoint(x: center.x + cos(angle) * r, y: center.y + sin(angle) * r)
-        if i == 0 {
-            path.move(to: p)
-        } else {
-            // 辺を内側に少し曲げて柔らかい星にする
-            let prevAngle = CGFloat(i - 1) * .pi / 4 + .pi / 2
-            let mid = (angle + prevAngle) / 2
-            let control = CGPoint(x: center.x + cos(mid) * inner * 0.6, y: center.y + sin(mid) * inner * 0.6)
-            path.addQuadCurve(to: p, control: control)
-        }
+/// 角丸の吹き出し（本体としっぽ）。tailLeft なら左下、そうでなければ右下にしっぽを付ける。
+/// 本体としっぽは別々の形なので、塗るときは fillBubble でまとめて塗る（つなぎ目に線が出ないように）。
+func speechBubble(_ rect: CGRect, radius: CGFloat, tailLeft: Bool) -> [CGPath] {
+    let bodyPath = CGPath(roundedRect: rect, cornerWidth: radius, cornerHeight: radius, transform: nil)
+    let tail = CGMutablePath()
+    let baseY = rect.minY + 40          // 本体の内側から始めて、すき間ができないようにする
+    let width: CGFloat = 92
+    let drop: CGFloat = 64              // 本体の下端からしっぽの先まで
+    if tailLeft {
+        let x0 = rect.minX + radius * 0.75
+        let tip = CGPoint(x: x0 - 18, y: rect.minY - drop)
+        tail.move(to: CGPoint(x: x0, y: baseY))
+        tail.addLine(to: CGPoint(x: x0 + width, y: baseY))
+        tail.addQuadCurve(to: tip, control: CGPoint(x: x0 + width * 0.45, y: rect.minY - drop * 0.15))
+        tail.addQuadCurve(to: CGPoint(x: x0, y: baseY), control: CGPoint(x: x0 - 4, y: rect.minY - drop * 0.3))
+    } else {
+        let x0 = rect.maxX - radius * 0.75
+        let tip = CGPoint(x: x0 + 18, y: rect.minY - drop)
+        tail.move(to: CGPoint(x: x0, y: baseY))
+        tail.addLine(to: CGPoint(x: x0 - width, y: baseY))
+        tail.addQuadCurve(to: tip, control: CGPoint(x: x0 - width * 0.45, y: rect.minY - drop * 0.15))
+        tail.addQuadCurve(to: CGPoint(x: x0, y: baseY), control: CGPoint(x: x0 + 4, y: rect.minY - drop * 0.3))
     }
-    let first = CGPoint(x: center.x + cos(.pi / 2) * radius, y: center.y + sin(.pi / 2) * radius)
-    let lastMid = CGFloat(7.5) * .pi / 4 + .pi / 2
-    path.addQuadCurve(to: first, control: CGPoint(x: center.x + cos(lastMid) * inner * 0.6, y: center.y + sin(lastMid) * inner * 0.6))
-    path.closeSubpath()
-    return path
+    tail.closeSubpath()
+    return [bodyPath, tail]
+}
+
+/// 吹き出しを影つきで塗る。透明レイヤーにまとめて塗るので、影もつなぎ目も 1 つの形として扱われる。
+func fillBubble(_ ctx: CGContext, _ parts: [CGPath], fill: CGColor, shadow: CGColor, blur: CGFloat) {
+    ctx.saveGState()
+    ctx.setShadow(offset: CGSize(width: 0, height: -10), blur: blur, color: shadow)
+    ctx.beginTransparencyLayer(auxiliaryInfo: nil)
+    ctx.setFillColor(fill)
+    for part in parts {
+        ctx.addPath(part)
+        ctx.fillPath()
+    }
+    ctx.endTransparencyLayer()
+    ctx.restoreGState()
 }
 
 func color(_ hex: UInt32, _ alpha: CGFloat = 1) -> CGColor {
@@ -67,67 +85,60 @@ func drawIcon(in ctx: CGContext) {
     ctx.saveGState()
     ctx.setShadow(offset: CGSize(width: 0, height: -12), blur: 28, color: color(0x000000, 0.35))
     ctx.addPath(shape)
-    ctx.setFillColor(color(0x4B3FE0))
+    ctx.setFillColor(color(0x24525B))
     ctx.fillPath()
     ctx.restoreGState()
 
-    // 背景のグラデーション（藍 → 紫 → 桃）
+    // 背景: 会議室の壁やホワイトボードのような、落ち着いた青緑
     ctx.saveGState()
     ctx.addPath(shape)
     ctx.clip()
-    let background = CGGradient(colorsSpace: space, colors: [
-        color(0x3D5AFE), color(0x7C4DFF), color(0xE040FB), color(0xFF6E9C),
-    ] as CFArray, locations: [0, 0.42, 0.78, 1])!
-    ctx.drawLinearGradient(background, start: CGPoint(x: body.minX, y: body.maxY),
-                           end: CGPoint(x: body.maxX, y: body.minY), options: [])
-    // 上からの柔らかい光（ガラスの質感）
-    let glow = CGGradient(colorsSpace: space, colors: [color(0xFFFFFF, 0.32), color(0xFFFFFF, 0)] as CFArray,
+    let background = CGGradient(colorsSpace: space, colors: [color(0x3A7A7E), color(0x24525B), color(0x1A3B46)] as CFArray,
+                                locations: [0, 0.55, 1])!
+    ctx.drawLinearGradient(background, start: CGPoint(x: body.midX, y: body.maxY),
+                           end: CGPoint(x: body.midX, y: body.minY), options: [])
+    // 上からの柔らかい光
+    let glow = CGGradient(colorsSpace: space, colors: [color(0xFFFFFF, 0.16), color(0xFFFFFF, 0)] as CFArray,
                           locations: [0, 1])!
-    ctx.drawRadialGradient(glow, startCenter: CGPoint(x: body.midX - 120, y: body.maxY - 60), startRadius: 0,
-                           endCenter: CGPoint(x: body.midX - 120, y: body.maxY - 60), endRadius: 620, options: [])
+    ctx.drawRadialGradient(glow, startCenter: CGPoint(x: body.midX, y: body.maxY), startRadius: 0,
+                           endCenter: CGPoint(x: body.midX, y: body.maxY), endRadius: 640, options: [])
     ctx.restoreGState()
 
     // 縁の細いハイライト
     ctx.saveGState()
     ctx.addPath(shape)
-    ctx.setStrokeColor(color(0xFFFFFF, 0.28))
+    ctx.setStrokeColor(color(0xFFFFFF, 0.18))
     ctx.setLineWidth(4)
     ctx.strokePath()
     ctx.restoreGState()
 
-    // 図柄（白）。左の縦の波形が、右の横の文字の行に変わる
-    ctx.saveGState()
-    ctx.setShadow(offset: CGSize(width: 0, height: -8), blur: 22, color: color(0x2A0E6B, 0.35))
-    ctx.beginTransparencyLayer(auxiliaryInfo: nil)
-    let centerY: CGFloat = 470
-    let barWidth: CGFloat = 50
-    let gap: CGFloat = 30
-    let heights: [CGFloat] = [150, 290, 420, 300]
-    // 波形 4 本（290）＋すき間 42＋いちばん長い行 250 を本体の中央に置く
-    var x: CGFloat = 512 - (290 + 42 + 250) / 2
-    for (i, h) in heights.enumerated() {
-        ctx.addPath(capsule(CGRect(x: x, y: centerY - h / 2, width: barWidth, height: h)))
-        ctx.setFillColor(color(0xFFFFFF, 0.72 + 0.28 * CGFloat(i) / CGFloat(heights.count - 1)))
+    let shadow = color(0x0B1E25, 0.45)
+
+    // 奥の吹き出し（琥珀色）: 話している声の波形
+    let back = CGRect(x: 196, y: 486, width: 430, height: 300)
+    fillBubble(ctx, speechBubble(back, radius: 92, tailLeft: true), fill: color(0xF2A83B), shadow: shadow, blur: 24)
+    let barWidth: CGFloat = 34
+    let heights: [CGFloat] = [70, 150, 210, 120, 80]
+    var x: CGFloat = 262
+    for h in heights {
+        ctx.addPath(capsule(CGRect(x: x, y: 658 - h / 2, width: barWidth, height: h)))
+        ctx.setFillColor(color(0x5A3A12, 0.85))
         ctx.fillPath()
-        x += barWidth + gap
+        x += barWidth + 22
     }
-    // 文字の行
-    let lineX = x + 12
-    let lines: [(dy: CGFloat, width: CGFloat)] = [(118, 200), (0, 250), (-118, 170)]
+
+    // 手前の吹き出し（生成りの紙）: 議事録の行
+    let front = CGRect(x: 398, y: 262, width: 430, height: 316)
+    fillBubble(ctx, speechBubble(front, radius: 96, tailLeft: false), fill: color(0xFBF6EC), shadow: shadow, blur: 30)
+    let lineHeight: CGFloat = 34
+    let lines: [(y: CGFloat, width: CGFloat, color: UInt32)] = [
+        (488, 270, 0x24525B), (420, 320, 0x24525B), (352, 200, 0xD98C1F),
+    ]
     for line in lines {
-        ctx.addPath(capsule(CGRect(x: lineX, y: centerY + line.dy - barWidth / 2, width: line.width, height: barWidth)))
-        ctx.setFillColor(color(0xFFFFFF))
+        ctx.addPath(capsule(CGRect(x: 456, y: line.y - lineHeight / 2, width: line.width, height: lineHeight)))
+        ctx.setFillColor(color(line.color))
         ctx.fillPath()
     }
-    // きらめき
-    ctx.addPath(sparkle(center: CGPoint(x: 728, y: 744), radius: 84))
-    ctx.setFillColor(color(0xFFFFFF))
-    ctx.fillPath()
-    ctx.addPath(sparkle(center: CGPoint(x: 812, y: 650), radius: 36))
-    ctx.setFillColor(color(0xFFFFFF, 0.85))
-    ctx.fillPath()
-    ctx.endTransparencyLayer()
-    ctx.restoreGState()
 }
 
 func renderPNG(size: Int) -> Data {
