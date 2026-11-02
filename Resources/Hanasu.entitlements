@@ -5,5 +5,8 @@
 	<!-- Hardened Runtime でマイク入力を使うために必要 -->
 	<key>com.apple.security.device.audio-input</key>
 	<true/>
+	<!-- Hardened Runtime でリマインダー（EventKit）を使うために必要（会議ノートのアクションアイテムの登録） -->
+	<key>com.apple.security.personal-information.calendars</key>
+	<true/>
 </dict>
 </plist>

@@ -133,7 +133,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
 }
 
 // 会議記録の後処理の確認:
-//   Hanasu --meeting-files <自分の音声> <相手の音声>
+//   Hanasu --meeting-files <自分の音声> <相手の音声> [--template <型>] [--custom-prompt <指示>]
 // 2 つのファイルを「自分」「相手」のチャンネルとして文字起こしし、話者の割り当て → 議事録 → 保存まで行う。
 if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
    CommandLine.arguments.indices.contains(index + 2)
@@ -145,6 +145,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             let settings = AppSettings.shared
             var meeting = try MeetingStore.newMeeting()
             meeting.title = "テスト会議（\(files[1].deletingPathExtension().lastPathComponent)）"
+            MinutesCLI.applyTemplateArguments(args, to: &meeting)
             var phrases: [MeetingChannel: [TranscribedPhrase]] = [:]
             let started = Date()
             for (channel, url) in zip([MeetingChannel.me, .others], files) {
@@ -186,6 +187,9 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
     }
     RunLoop.main.run()
 }
+
+// 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）
+MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 
 MainActor.assumeIsolated {
     let app = NSApplication.shared

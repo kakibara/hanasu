@@ -76,6 +76,8 @@ private struct RecordButton: View {
             // 録音する機器（記録中は変えられない。次の記録から反映）
             MeetingDevicePickers(compact: true)
                 .disabled(recorder.state != .idle)
+            MinutesTemplatePicker()
+                .disabled(recorder.state != .idle)
             switch recorder.state {
             case .idle:
                 Button { recorder.toggle() } label: {
@@ -186,7 +188,7 @@ private struct LevelMeter: View {
     }
 }
 
-private struct MeetingDetailView: View {
+struct MeetingDetailView: View {
     let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder
     @State private var tab = 0
@@ -206,7 +208,7 @@ private struct MeetingDetailView: View {
                     Spacer()
                     Button("話者名…") { editingSpeakers = true }
                         .disabled(meeting.speakers.isEmpty)
-                    Button("コピー") { copy() }
+                    MeetingExportMenu(meeting: meeting, recorder: recorder, showingTranscript: tab == 1)
                     Button("Finder で表示") {
                         NSWorkspace.shared.activateFileViewerSelecting([MeetingStore.directory(for: meeting)])
                     }
@@ -220,13 +222,17 @@ private struct MeetingDetailView: View {
                         }
                     }
                 }
-                Picker("", selection: $tab) {
-                    Text("議事録").tag(0)
-                    Text("文字起こし").tag(1)
+                HStack {
+                    Picker("", selection: $tab) {
+                        Text("議事録").tag(0)
+                        Text("文字起こし").tag(1)
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .frame(width: 240)
+                    Spacer()
+                    MinutesTemplateMenu(meeting: meeting, recorder: recorder)
                 }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .frame(width: 240)
             }
             .padding()
             Divider()
@@ -258,12 +264,6 @@ private struct MeetingDetailView: View {
         .sheet(isPresented: $editingSpeakers) {
             SpeakerNamesSheet(meeting: meeting, recorder: recorder)
         }
-    }
-
-    private func copy() {
-        let text = tab == 0 ? (meeting.minutes ?? "") : meeting.transcriptMarkdown()
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(text, forType: .string)
     }
 
     static func color(for speaker: String, in meeting: Meeting) -> Color {
