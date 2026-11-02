@@ -187,6 +187,9 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
     RunLoop.main.run()
 }
 
+// 音声入力の履歴の確認（--render-history / --history-check）。中身は DictationHistoryCLI.swift
+MainActor.assumeIsolated { DictationHistoryCLI.runIfRequested() }
+
 MainActor.assumeIsolated {
     let app = NSApplication.shared
     let delegate = AppDelegate()

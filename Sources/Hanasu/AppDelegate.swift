@@ -6,6 +6,7 @@ import SwiftUI
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var statusItem: NSStatusItem!
     private var controller: DictationController!
+    private var historyUI: DictationHistoryUI!
     private var settingsWindow: NSWindow?
     private var meetingWindow: NSWindow?
     private let meetingRecorder: MeetingRecorder = {
@@ -18,6 +19,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         controller = DictationController()
+        historyUI = DictationHistoryUI(
+            isDictationBusy: { [weak self] in self?.controller.state != .idle },
+            onHotKeyRegistrationFailed: { [weak self] combo in
+                self?.showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「履歴」タブで別のキーを選んでください。")
+            })
         NSApp.mainMenu = makeMainMenu()
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -107,21 +113,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(.separator())
 
         let historyItem = NSMenuItem(title: "最近の結果", action: nil, keyEquivalent: "")
-        let historyMenu = NSMenu()
-        if controller.history.isEmpty {
-            historyMenu.addItem(withTitle: "（まだありません）", action: nil, keyEquivalent: "")
-        }
-        for (index, entry) in controller.history.enumerated() {
-            let title = entry.output.replacingOccurrences(of: "\n", with: " ")
-            let item = NSMenuItem(title: String(title.prefix(40)) + (title.count > 40 ? "…" : ""),
-                                  action: #selector(copyHistory(_:)), keyEquivalent: "")
-            item.tag = index
-            let label = entry.mode == .translateToEnglish ? "英訳" : "整形後"
-            item.toolTip = "\(label):\n\(entry.output)\n\n認識結果:\n\(entry.raw)"
-            historyMenu.addItem(item)
-        }
-        historyItem.submenu = historyMenu
+        historyItem.submenu = historyUI.makeRecentResultsMenu()
         menu.addItem(historyItem)
+        menu.addItem(NSMenuItem(title: "履歴を開く…", action: #selector(openHistoryWindow), keyEquivalent: ""))
 
         let trusted = Permissions.isAccessibilityTrusted(prompt: false)
         let axItem = NSMenuItem(
@@ -136,7 +130,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         for item in menu.items where item.action != nil && item.action != #selector(NSApplication.terminate(_:)) {
             item.target = self
         }
-        for item in historyMenu.items { item.target = self }
     }
 
     // MARK: - Dock
@@ -248,10 +241,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         controller.toggleFromMenu(mode: .translateToEnglish)
     }
 
-    @objc private func copyHistory(_ sender: NSMenuItem) {
-        guard controller.history.indices.contains(sender.tag) else { return }
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(controller.history[sender.tag].output, forType: .string)
+    @objc private func openHistoryWindow() {
+        historyUI.openWindow()
     }
 
     @objc private func openSettings() {
@@ -261,14 +252,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 onBeginShortcutRecording: { [weak self] in
                     guard let self else { return }
                     self.controller.suspendHotKey()
+                    self.historyUI.suspendHotKey()
                     if let id = self.meetingHotKeyID { self.meetingHotKeys.unregister(id) }
                     self.meetingHotKeyID = nil
                 },
                 onEndShortcutRecording: { [weak self] in
                     guard let self else { return }
                     self.controller.resumeHotKey()
+                    self.historyUI.resumeHotKey()
                     self.registerMeetingHotKey(AppSettings.shared.meetingHotKey)
-                })
+                },
+                onOpenHistory: { [weak self] in self?.historyUI.openWindow() })
             let window = NSWindow(contentViewController: NSHostingController(rootView: view))
             window.title = "Hanasu 設定"
             window.styleMask = [.titled, .closable]

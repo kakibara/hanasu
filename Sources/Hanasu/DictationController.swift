@@ -12,18 +12,10 @@ final class DictationController {
     /// 録音を始めたショートカットで決まる。整形して日本語で入力するか、英語に翻訳して入力するか
     enum Mode { case refine, translateToEnglish }
 
-    struct HistoryEntry {
-        let date: Date
-        let raw: String
-        let output: String
-        let mode: Mode
-    }
-
     private(set) var state: State = .idle {
         didSet { onStateChange?(state) }
     }
     private(set) var mode: Mode = .refine
-    private(set) var history: [HistoryEntry] = []
     var onStateChange: ((State) -> Void)?
     /// ショートカットの登録に失敗したとき（他アプリと衝突など）
     var onHotKeyRegistrationFailed: ((HotKeyCombo) -> Void)?
@@ -38,6 +30,8 @@ final class DictationController {
     private var stopRequested = false
     private var cancelRequested = false
     private var targetAppName: String?
+    /// 履歴に残す録音の保存先（「音声も残す」がオンのとき）
+    private var pendingAudioURL: URL?
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
@@ -139,6 +133,7 @@ final class DictationController {
         stopRequested = false
         cancelRequested = false
         targetAppName = NSWorkspace.shared.frontmostApplication?.localizedName
+        pendingAudioURL = DictationHistoryStore.shared.newAudioURL()
         hud.model.translating = mode == .translateToEnglish
         hud.show(.preparing("準備中…"))
         setEscapeHotKey(enabled: true)
@@ -149,7 +144,8 @@ final class DictationController {
                 try await recognizer.start(
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
-                    contextualStrings: settings.dictionaryWords)
+                    contextualStrings: settings.dictionaryWords,
+                    audioFileURL: pendingAudioURL)
             } catch {
                 fail(error.localizedDescription)
                 return
@@ -184,12 +180,16 @@ final class DictationController {
 
     private func finishCancelled() {
         state = .idle
+        DictationHistoryStore.shared.discardAudio(pendingAudioURL)
+        pendingAudioURL = nil
         setEscapeHotKey(enabled: false)
         hud.show(.done("取り消しました"))
     }
 
     private func fail(_ message: String) {
         state = .idle
+        DictationHistoryStore.shared.discardAudio(pendingAudioURL)
+        pendingAudioURL = nil
         setEscapeHotKey(enabled: false)
         playSound("Basso")
         hud.show(.error(message))
@@ -212,6 +212,8 @@ final class DictationController {
 
         var output = raw
         var warning: String?
+        var historyStatus: DictationHistoryEntry.Status = .refineOff
+        var historyError: String?
         let translating = mode == .translateToEnglish
         // 英訳は Gemini でしかできないので、整形をオフにしていても Gemini に送る
         if settings.refineWithGemini || translating {
@@ -226,21 +228,29 @@ final class DictationController {
                         dictionary: settings.dictionaryWords,
                         extraInstructions: settings.extraInstructions)
                     output = translating ? try await client.translateToEnglish(request) : try await client.refine(request)
+                    historyStatus = .succeeded
                     appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(self.settings.model, privacy: .public): \(output.count) chars")
                 } else {
                     appLog.notice("\(verb, privacy: .public) skipped: no credentials (mode=\(self.settings.authMode.rawValue, privacy: .public))")
                     warning = "Gemini の認証情報が未設定のため、\(verb)せずに入力しました（メニュー → 設定）。"
+                    historyStatus = .noCredentials
                 }
             } catch {
                 appLog.error("\(verb, privacy: .public) failed: \(error.localizedDescription, privacy: .public)")
                 warning = "\(error.localizedDescription)\n\(verb)前の文章を入力しました。"
+                historyStatus = .geminiFailed
+                historyError = error.localizedDescription
             }
         }
 
+        // 入力先がずれても取り戻せるよう、貼り付けの前に履歴へ残す
+        DictationHistoryStore.shared.record(
+            raw: raw, output: output, mode: .init(mode), appName: targetAppName, status: historyStatus,
+            errorMessage: historyError, model: historyStatus == .succeeded ? settings.model : nil,
+            audioURL: pendingAudioURL)
+        pendingAudioURL = nil
         let outcome = await TextInserter.insert(output)
         appLog.notice("insert outcome: \(String(describing: outcome), privacy: .public), frontmost=\(NSWorkspace.shared.frontmostApplication?.bundleIdentifier ?? "-", privacy: .public)")
-        history.insert(HistoryEntry(date: Date(), raw: raw, output: output, mode: mode), at: 0)
-        if history.count > 10 { history.removeLast(history.count - 10) }
         state = .idle
 
         switch (outcome, warning) {
