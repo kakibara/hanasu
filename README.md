@@ -7,7 +7,7 @@
 - 入力: クリップボード + ⌘V（元のクリップボードは自動で戻す）
 - 英訳して入力: `⌥⇧ Space` で録音するか、録音中の表示で「English」を選ぶと、日本語で話した内容を Gemini が自然な英語に翻訳して入力する
 
-会議の記録機能もあります（Google Meet・Slack ハドル・Teams など）。マイクを「自分」、Mac で鳴っている音を「相手」として録り、文字起こしと Gemini の議事録を `~/Documents/Hanasu/Meetings/` に保存します。メニューバー →「会議の記録を開始」か `⌃⌥⌘ M`。イヤホンの利用を推奨します。
+会議の記録機能もあります（Google Meet・Slack ハドル・Teams など）。マイクを「自分」、Mac で鳴っている音を「相手」として録り、文字起こしと Gemini の議事録を `~/Documents/Hanasu/Meetings/` に保存します。メニューバー →「会議の記録を開始」か `⌃⌥⌘ M`。イヤホンの利用を推奨します。Zoom・Teams・Slack ハドル・Webex・FaceTime・ブラウザ（Google Meet など）がマイクを使い始めると「会議を記録しますか？」と提案します（自動では記録しません）。
 
 設計・仕様・技術選定は [docs/DESIGN.md](docs/DESIGN.md)（音声入力）と [docs/MEETING_RECORDER.md](docs/MEETING_RECORDER.md)（会議の記録）。
 
@@ -57,7 +57,7 @@ open build/Hanasu.app
 
 ショートカット（音声入力・英訳して入力）、トグル／押している間だけ録音、認識エンジン（DictationTranscriber / SpeechTranscriber）、Gemini モデル、ユーザー辞書、追加の整形ルール、効果音。
 
-会議の記録: 録音するスピーカーとマイク、マイク側も話者を分ける（会議室など）、議事録のモデル、音声ファイルを残すか。
+会議の記録: 録音するスピーカーとマイク、マイク側も話者を分ける（会議室など）、議事録のモデル、音声ファイルを残すか、会議の自動検出（オン／オフと対象のアプリ）。
 
 ## リリースの作り方
 

@@ -86,6 +86,35 @@ if CommandLine.arguments.contains("--list-audio-devices") {
     exit(0)
 }
 
+// 会議の自動検出の確認:
+//   Hanasu --list-audio-processes      オーディオを使っているプロセスの一覧（bundle ID、入力中・出力中）
+//   Hanasu --watch-audio-processes     変化を待って表示する（Ctrl-C で終了）
+//   Hanasu --render-meeting-suggestion <出力.png> [--stop] [--app zoom|teams|slack|webex|facetime|chrome|safari|arc|edge]
+//   Hanasu --simulate-meeting-detection  検出と記録の状態を台本どおりに動かし、提案の出かたを確かめる
+//   Hanasu --render-meeting-detection-settings <出力.png>  設定の「会議の自動検出」欄
+if CommandLine.arguments.contains("--list-audio-processes") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.listProcesses() }
+    exit(0)
+}
+if CommandLine.arguments.contains("--watch-audio-processes") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.watch() }
+}
+if CommandLine.arguments.contains("--simulate-meeting-detection") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.simulate() }
+}
+if let index = CommandLine.arguments.firstIndex(of: "--render-meeting-suggestion"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated { MeetingDetectorCLI.renderSuggestion(to: CommandLine.arguments[index + 1], args: CommandLine.arguments) }
+    exit(0)
+}
+if let index = CommandLine.arguments.firstIndex(of: "--render-meeting-detection-settings"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated { MeetingDetectorCLI.renderSettings(to: CommandLine.arguments[index + 1]) }
+    exit(0)
+}
+
 // 会議ノートの機器の選択欄を画像にする（見た目の確認用）:  Hanasu --render-device-pickers <出力.png>
 if let index = CommandLine.arguments.firstIndex(of: "--render-device-pickers"),
    CommandLine.arguments.indices.contains(index + 1)
