@@ -180,6 +180,7 @@ system instruction（要旨）:
 - ユーザー辞書の語は、近い音の語が出てきたらその表記に直す。
 - 入力先アプリ名を参考に体裁を合わせる（例: Slack なら短めの改行、メールなら段落）。ただし言葉は変えない。
 - ユーザーが設定画面で追加ルールを書ける（例:「です・ます調に統一」）。
+- 入力先アプリに文体のプリセットや追加ルールを割り当てていれば、その文体ルールも足す（4.5）。
 
 ### 4.4 英訳して入力
 
@@ -212,6 +213,71 @@ user content:
 期待出力: `明日の会議ですが、資料は Gemini で作ったものを使います。`
 
 （「言い直しの反映」「フィラー除去」はするが、「なんですけど→ですが」のような口調の大きな変更をどこまでやるかは、追加ルール設定で調整できるようにする）
+
+### 4.5 アプリ別の整形スタイル
+
+Wispr Flow や Typeless の「アプリに合わせて文体を変える」機能にならい、入力先アプリ（bundle ID）ごとに次の 2 つを決められるようにした。設定画面の「アプリ別」タブで編集する（`AppStylesView.swift`）。
+
+- Gemini に渡す文体ルール: プリセット 1 つ ＋ このアプリ用の追加ルール（自由記述）
+- 既定の出力言語: 日本語 / English
+
+プリセット（`AppStyles.swift` の `AppStylePreset`）と初期の割り当て:
+
+| プリセット | 内容 | 初期の割り当て |
+| --- | --- | --- |
+| チャット | くだけた短い文。つなぎの言葉や前置きは削る。段落は作らない。敬語で話したときは丁寧語は残す | Slack、Teams（新旧）、Discord、LINE、メッセージ |
+| メール | 丁寧な書き言葉（です・ます調、依頼は敬語）。まとまりごとに空行で段落を分ける。話していない挨拶・署名は足さない | メール、Outlook、Spark（新旧） |
+| 文書（です・ます） | 書き言葉の です・ます調 に統一し、段落を分ける | Pages、Word、Notion |
+| 文書（である） | 書き言葉の である調 に統一し、段落を分ける | （なし。割り当てを変えて使う） |
+| なし | プリセットを使わない（追加ルールや出力言語だけを決めたいとき） | — |
+
+- 割り当ては一覧で変えられる。アプリの追加は「実行中のアプリ」から選ぶか、`/Applications` から .app を選ぶ。「初期設定に戻す」で上の表に戻る。
+- 保存先は UserDefaults の `appStyles`（JSON）と `appStylesEnabled`。`AppSettings` とは別の `AppStyleStore` に持つ。
+- チャットを「タメ口にする」まではしない。日本の仕事用チャットでは上司や社外にも書くので、敬語で話したのにくだけすぎると困る。タメ口にしたいときは、そのアプリの追加ルールに書けばプリセットより優先される。
+- 文書は です・ます調 と である調 のどちらに揃えるかが用途で分かれるので、プリセットを 2 つに分けた。初期値は、話し言葉から変える量が少ない です・ます調 にした。
+
+**流れ**: 録音を始めたときに `NSWorkspace.frontmostApplication.bundleIdentifier` を記録し、そのアプリのスタイルを引く（`DictationController.startDictation`）。整形のときに `GeminiClient.Request.appStyle` として渡し、`userPrompt` の「追加ルール」の後ろに次の節を足す。
+
+```
+入力先アプリ向けの文体ルール（Slack）:
+- （プリセットのルール）
+- このアプリ用の追加ルール（上の項目と食い違うときはこちらを優先）:
+  （ユーザーが書いたルール）
+- この文体ルールは、「口調を変えない」「言葉は変えない」より優先する。語尾・言い回し・改行は変えてよいが、話した内容（事実・用件・意図）は変えない
+- 上の「追加ルール」とこの文体ルールが食い違うときは、この文体ルールを優先する
+```
+
+- **優先順位**: アプリ別の追加ルール ＞ プリセット ＞ 共通の追加ルール（「辞書・ルール」タブ）＞ system instruction の「口調を変えない」。より狭い対象に向けて書いたものを優先する。最後の 2 行はそれをプロンプトに明記するもので、共通の追加ルールが空なら最後の行は入れない。
+- system instruction には「指定がない限り口調を変えない」とあり、最初はプリセットを足してもほとんど文体が変わらなかった。「口調を変えない」より優先すると書き、プリセットに言い換えの例（「〜なんですけど → 〜ですが」など）を入れて効くようにした。
+- 「入力先アプリ名を Gemini に伝える」をオフにしているときは、見出しにアプリ名を入れない（ルールの本文だけを送る）。
+- **英訳のとき**: プリセットは英訳向けのルール（チャットはカジュアルで短い英語、メールは丁寧でプロフェッショナルな英語、文書は書き言葉の英語）に切り替える。このアプリ用の追加ルールも渡す（出力を English にしたアプリでは、英語の出力を前提に書かれるため）。日本語の語尾や敬語についてのルールは「英語の丁寧さの度合いとして読み替える」と添える。共通の追加ルールは、これまでどおり英訳では使わない。
+- **出力言語**: 既定の出力言語を English にしたアプリで、`⌥ Space`（整形）で録音を始めると、英訳モードで始める（HUD も English）。HUD で「日本語」を押せばそちらが優先される（止めた時点の選択で決まる、4.4 と同じ）。`⌥⇧ Space` はどのアプリでも英訳。
+- 「アプリ別」タブのスイッチをオフにすると、どのアプリでも使わない。
+
+Slack とメールで同じ文を整形した結果（gemini-3.5-flash-lite、Vertex AI、`--refine-text … --app <bundle id>`。英訳は `--translate` を足したもの）:
+
+入力: 「えーとお疲れ様です 明日の定例なんですけど あの資料の準備がちょっと間に合いそうにないので えっと金曜日にずらしてもらってもいいですか 改行 もし難しければ明日は口頭で説明します」
+
+| アプリ | 出力 |
+| --- | --- |
+| （指定なし） | お疲れ様です。明日の定例なんですけど、あの資料の準備がちょっと間に合いそうにないので、金曜日にずらしてもらってもいいですか。／もし難しければ、明日は口頭で説明します。 |
+| Slack（チャット） | お疲れ様です。明日の定例なんですけど、資料の準備が間に合いそうにないので、金曜日にずらしてもらってもいいですか？／もし難しければ、明日は口頭で説明します。 |
+| メール | お疲れ様です。（空行）明日の定例ですが、資料の準備が少し間に合いそうにないので、金曜日にずらしていただけますでしょうか。（空行）もし難しければ、明日は口頭で説明します。 |
+| Slack（英訳） | Hi, I might not make it in time with the materials for tomorrow's regular meeting. Could we push it to Friday? （空行）If that's difficult, I can just explain it verbally tomorrow. |
+| メール（英訳） | Hi,（空行）Regarding tomorrow's regular meeting, I won't be able to get the materials ready in time. Would it be possible to reschedule to Friday?（空行）If that's difficult, I can explain things verbally tomorrow instead. |
+
+（「／」は改行）
+
+#### ブラウザのサイト別スタイル（未実装・今後の課題）
+
+Chrome / Safari / Arc の中で「Gmail ならメール、Slack の Web 版ならチャット」とサイトで分けるには、録音を始めたときに前面タブの URL が要る。アクセシビリティ（AX）で取れるかを調べた結果:
+
+- **Safari**: Web の中身は `AXWebArea` で、`AXURL` 属性にページの URL がある。`AXFocusedUIElement` から `AXParent` をたどって `AXWebArea` を探せば取れる見込み。Hanasu は ⌘V のためにアクセシビリティの許可を持っているので、許可は増えない。
+- **Chrome / Arc（Chromium）**: 支援技術が動いていないと、Web の中身の AX ツリーを作らない。アプリの要素に `AXManualAccessibility`（または `AXEnhancedUserInterface`）を立てれば作るが、その後はすべてのページで AX ツリーを保つので、CPU とメモリを余計に使う（`AXEnhancedUserInterface` はウインドウ操作のアニメーションが崩れる副作用も知られている）。アドレスバー（`AXTextField`）の値を読む方法もあるが、スキームが省かれていたり、入力途中の文字列だったりする。
+- **AppleScript**（`URL of active tab of front window`）なら Chrome・Safari・Arc とも取れるが、ブラウザごとに「オートメーション」の許可が新たに要り、Info.plist に `NSAppleEventsUsageDescription` を足す必要がある。
+- このセッションの開発環境ではアクセシビリティの許可がなく（アプリの起動もしない約束）、実機で確かめられなかった。
+
+Safari だけなら小さく作れるが、利用者の多い Chrome / Arc で副作用なしに取る方法が決まらないため、今回は見送った。作るときは、スタイルのキーを bundle ID に加えてホスト名（例: `mail.google.com`）でも持ち、ホスト名の一致をアプリより先に見る形にする。
 
 ### 4.4 エラー処理
 
@@ -261,6 +327,7 @@ user content:
 | ユーザー辞書 | （空。1 行 1 語） |
 | 効果音 | ON |
 | 入力先アプリ名を Gemini に渡す | ON |
+| 入力先アプリに合わせて文体を変える | ON（アプリ別のプリセット・追加ルール・出力言語は 4.5） |
 
 ## 6. 権限
 
@@ -297,6 +364,8 @@ mac-typeless/
 │   ├── HUDPanel.swift             # 浮遊表示
 │   ├── Settings.swift             # 設定値（UserDefaults）
 │   ├── SettingsView.swift         # 設定画面（SwiftUI）
+│   ├── AppStyles.swift            # アプリ別の整形スタイル（プリセット・保存・プロンプトの節）
+│   ├── AppStylesView.swift        # 設定画面の「アプリ別」タブ
 │   ├── ShortcutRecorder.swift     # ショートカット記録 UI
 │   ├── Keychain.swift             # API キー保存
 │   └── Permissions.swift          # 権限確認
@@ -332,6 +401,10 @@ GEMINI_SERVICE_ACCOUNT_JSON=~/key.json build/Hanasu.app/Contents/MacOS/Hanasu --
 # GEMINI_SERVICE_ACCOUNT_JSON がなければ、設定画面の認証情報 → GEMINI_API_KEY の順に使う
 build/Hanasu.app/Contents/MacOS/Hanasu --refine-text "お疲れ様です 来週の火曜日って空いてますか" --translate
 # --refine-text は音声を使わずに文章を Gemini に送る。--translate で整形の代わりに英訳する
+build/Hanasu.app/Contents/MacOS/Hanasu --refine-text "明日なんですけど休みます" --app com.tinyspeck.slackmacgap --show-prompt
+# --app でそのアプリ向けの文体ルールを足す（出力言語が English のアプリなら英訳）。--show-prompt で送る user content も表示する
+build/Hanasu.app/Contents/MacOS/Hanasu --render-app-styles /tmp/app-styles.png --expanded
+# 設定の「アプリ別」タブを画像にする
 build/Hanasu.app/Contents/MacOS/Hanasu --render-hud /tmp/hud.png --translate
 # 録音中の HUD を画像にする（見た目の確認用）
 ```
@@ -376,7 +449,7 @@ Gemini 整形（サービスアカウント / Vertex AI、`global`）:
 ## 10. 今後の拡張候補
 
 - 選択中のテキストを音声で書き換える（「これを丁寧にして」）モード
-- アプリごとの整形ルール（Slack はカジュアル、メールは敬語など）
+- ブラウザのサイト別スタイル（Gmail はメール、Slack の Web 版はチャットなど）。調べた結果は 4.5
 - Gemini のストリーミング応答で体感待ち時間を短縮
 - Fn キー（Globe キー）でのトリガー（`CGEventTap` が必要で、入力監視権限が要る）
 - 履歴の永続化と検索

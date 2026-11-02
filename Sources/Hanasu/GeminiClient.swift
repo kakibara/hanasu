@@ -24,6 +24,8 @@ struct GeminiClient {
         var appName: String?
         var dictionary: [String]
         var extraInstructions: String
+        /// 入力先アプリ別の文体ルール（AppStyles.swift）。nil なら使わない
+        var appStyle: AppStyle? = nil
     }
 
     enum Auth {
@@ -105,7 +107,7 @@ struct GeminiClient {
         model.contains("lite") ? "minimal" : "low"
     }
 
-    static func userPrompt(for request: Request) -> String {
+    static func userPrompt(for request: Request, translating: Bool = false) -> String {
         var lines: [String] = []
         if let appName = request.appName, !appName.isEmpty {
             lines.append("入力先アプリ: \(appName)（体裁の参考。言葉は変えない）")
@@ -116,6 +118,9 @@ struct GeminiClient {
         let extra = request.extraInstructions.trimmingCharacters(in: .whitespacesAndNewlines)
         if !extra.isEmpty {
             lines.append("追加ルール:\n\(extra)")
+        }
+        if let section = request.appStyle?.promptSection(appName: request.appName, translating: translating, hasCommonRules: !extra.isEmpty) {
+            lines.append(section)
         }
         lines.append("<transcript>\n\(request.transcript)\n</transcript>")
         return lines.joined(separator: "\n")
@@ -129,12 +134,13 @@ struct GeminiClient {
     }
 
     /// 話した内容を英語に翻訳する。追加の整形ルールは日本語の文体向けなので使わない。
+    /// アプリ別の文体ルールは、英訳向けのルールに切り替えて使う。
     func translateToEnglish(_ request: Request) async throws -> String {
         var request = request
         request.extraInstructions = ""
         return try await generate(
             systemInstruction: Self.translationInstruction,
-            userText: Self.userPrompt(for: request),
+            userText: Self.userPrompt(for: request, translating: true),
             model: request.model)
     }
 

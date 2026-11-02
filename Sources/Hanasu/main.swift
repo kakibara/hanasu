@@ -4,8 +4,10 @@ import SwiftUI
 
 // 動作確認用の CLI モード:
 //   Hanasu --transcribe-file <音声ファイル> [--engine dictation|speech] [--refine [--translate] [--model <id>]]
-//   Hanasu --refine-text <文章> [--translate] [--model <id>]
+//   Hanasu --refine-text <文章> [--translate] [--model <id>] [--app <bundle id>] [--show-prompt]
 // --refine を付けると Gemini 整形も行い、--translate を付けると整形の代わりに英訳する。
+// --app を付けると、そのアプリ向けの文体ルール（設定の「アプリ別」）で整形する。既定の出力言語が English なら英訳する。
+// --show-prompt を付けると、Gemini に送る user content も表示する。
 // 認証は GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウント JSON のパス）、設定画面の認証情報、GEMINI_API_KEY の順に使う。
 @MainActor
 func cliRefine(_ raw: String, args: [String]) async throws {
@@ -18,11 +20,18 @@ func cliRefine(_ raw: String, args: [String]) async throws {
         auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
     }
     let model = args.firstIndex(of: "--model").flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil } ?? settings.model
-    let translate = args.contains("--translate")
+    let app = cliAppStyle(args: args)
+    let translate = args.contains("--translate") || app.style?.outputLanguage == .english
     let client = GeminiClient(auth: auth)
     let request = GeminiClient.Request(
-        transcript: raw, model: model, appName: nil,
-        dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions)
+        transcript: raw, model: model, appName: app.name,
+        dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions,
+        appStyle: app.style)
+    if args.contains("--show-prompt") {
+        var shown = request
+        if translate { shown.extraInstructions = "" }  // translateToEnglish と同じく、英訳では共通の追加ルールを外す
+        print(GeminiClient.userPrompt(for: shown, translating: translate))
+    }
     let started = Date()
     let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
     print(String(format: "[%@ %@ %.1fs] %@", translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
@@ -112,6 +121,17 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-device-pickers"),
             try? rep.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
             print("wrote")
         }
+    }
+    exit(0)
+}
+
+// 設定の「アプリ別」タブを画像にする（見た目の確認用）:  Hanasu --render-app-styles <出力.png> [--expanded]
+if let index = CommandLine.arguments.firstIndex(of: "--render-app-styles"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated {
+        renderAppStylesPNG(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]),
+                           expandedFirst: CommandLine.arguments.contains("--expanded"))
     }
     exit(0)
 }
