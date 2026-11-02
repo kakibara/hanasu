@@ -4,7 +4,7 @@ import SwiftUI
 
 // 動作確認用の CLI モード:
 //   Hanasu --transcribe-file <音声ファイル> [--engine dictation|speech] [--refine [--translate] [--model <id>]]
-//   Hanasu --refine-text <文章> [--translate] [--model <id>]
+//   Hanasu --refine-text <文章> [--translate] [--model <id>] [--dictionary <辞書ファイル>]
 // --refine を付けると Gemini 整形も行い、--translate を付けると整形の代わりに英訳する。
 // 認証は GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウント JSON のパス）、設定画面の認証情報、GEMINI_API_KEY の順に使う。
 @MainActor
@@ -20,12 +20,21 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     let model = args.firstIndex(of: "--model").flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil } ?? settings.model
     let translate = args.contains("--translate")
     let client = GeminiClient(auth: auth)
+    // 音声入力と同じく、置き換えルールを当ててから送る（--dictionary <ファイル> で辞書を差し替えられる）
+    let dictionary = try DictionaryCLI.dictionary(from: args)
     let request = GeminiClient.Request(
-        transcript: raw, model: model, appName: nil,
-        dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions)
+        transcript: dictionary.apply(to: raw), model: model, appName: nil,
+        dictionary: dictionary.spellings, extraInstructions: settings.extraInstructions,
+        dictionaryRules: dictionary.rules)
     let started = Date()
     let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
     print(String(format: "[%@ %@ %.1fs] %@", translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
+}
+
+// ユーザー辞書の確認（--apply-dictionary / --test-dictionary / --suggest-dictionary / --render-dictionary-settings）。
+// 使い方は DictionaryCLI.swift を参照
+if DictionaryCLI.handles(CommandLine.arguments) {
+    MainActor.assumeIsolated { DictionaryCLI.run(CommandLine.arguments) }
 }
 
 if let index = CommandLine.arguments.firstIndex(of: "--refine-text"),
@@ -153,7 +162,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
                     channel: channel, inputFormat: file.processingFormat,
                     fileURL: MeetingStore.audioURL(for: meeting, channel: channel),
                     meetingStart: meeting.startedAt, fixedTimeOffset: 0)
-                try await transcriber.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: settings.dictionaryWords)
+                try await transcriber.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: settings.userDictionary.contextualStrings)
                 while file.framePosition < file.length {
                     guard let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 8192) else { break }
                     try file.read(into: buffer)

@@ -149,7 +149,7 @@ final class DictationController {
                 try await recognizer.start(
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
-                    contextualStrings: settings.dictionaryWords)
+                    contextualStrings: settings.userDictionary.contextualStrings)
             } catch {
                 fail(error.localizedDescription)
                 return
@@ -210,7 +210,8 @@ final class DictationController {
             return
         }
 
-        var output = raw
+        // ユーザー辞書の置き換えルールを決定的に当てる（Gemini で整形しないときも効く）
+        var output = settings.userDictionary.apply(to: raw)
         var warning: String?
         let translating = mode == .translateToEnglish
         // 英訳は Gemini でしかできないので、整形をオフにしていても Gemini に送る
@@ -220,11 +221,12 @@ final class DictationController {
                 if let auth = try GeminiClient.authFromSettings(settings) {
                     let client = GeminiClient(auth: auth)
                     let request = GeminiClient.Request(
-                        transcript: raw,
+                        transcript: output,
                         model: settings.model,
                         appName: settings.sendAppName ? targetAppName : nil,
                         dictionary: settings.dictionaryWords,
-                        extraInstructions: settings.extraInstructions)
+                        extraInstructions: settings.extraInstructions,
+                        dictionaryRules: settings.userDictionary.rules)
                     output = translating ? try await client.translateToEnglish(request) : try await client.refine(request)
                     appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(self.settings.model, privacy: .public): \(output.count) chars")
                 } else {
@@ -241,6 +243,7 @@ final class DictationController {
         appLog.notice("insert outcome: \(String(describing: outcome), privacy: .public), frontmost=\(NSWorkspace.shared.frontmostApplication?.bundleIdentifier ?? "-", privacy: .public)")
         history.insert(HistoryEntry(date: Date(), raw: raw, output: output, mode: mode), at: 0)
         if history.count > 10 { history.removeLast(history.count - 10) }
+        RecentDictations.record(raw: raw, output: output)
         state = .idle
 
         switch (outcome, warning) {
