@@ -1,0 +1,8 @@
+# tagpr の設定: https://github.com/Songmu/tagpr
+[tagpr]
+	vPrefix = true
+	releaseBranch = main
+	versionFile = VERSION
+	changelog = true
+	# リリースは下書きで作り、アプリの zip を添付してから公開する（.github/workflows/tagpr.yml）
+	release = draft

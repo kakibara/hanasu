@@ -1,0 +1,78 @@
+# main への push ごとに tagpr がリリース PR を作り・更新する。
+# リリース PR をマージすると tagpr がタグと下書きのリリースを作り、続く release ジョブが
+# macOS でアプリをビルドして zip を添付し、リリースを公開する。
+name: tagpr
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  tagpr:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tagpr.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - id: tagpr
+        uses: Songmu/tagpr@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: tagpr
+    if: needs.tagpr.outputs.tag != ''
+    runs-on: macos-26
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ needs.tagpr.outputs.tag }}
+      # scripts/setup-release-signing.sh で登録する（なければアドホック署名になる）
+      SIGNING_CERT_P12: ${{ secrets.MACOS_SIGNING_CERT_P12 }}
+      SIGNING_CERT_PASSWORD: ${{ secrets.MACOS_SIGNING_CERT_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.tagpr.outputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Import signing certificate
+        if: env.SIGNING_CERT_P12 != ''
+        run: |
+          ./scripts/ci-import-signing-cert.sh
+          echo "SIGN_IDENTITY=Hanasu Release Signing" >> "$GITHUB_ENV"
+
+      - name: Build
+        run: |
+          swift --version
+          ./scripts/build-app.sh
+          codesign -dvv build/Hanasu.app 2>&1 | grep -E "Identifier|Authority|Signature" || true
+
+      - name: Upload and publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${TAG#v}"
+          ZIP="build/Hanasu-${VERSION}.zip"
+          ditto -c -k --keepParent build/Hanasu.app "$ZIP"
+          SHA256="$(shasum -a 256 "$ZIP" | awk '{print $1}')"
+          gh release upload "$TAG" "$ZIP" --clobber
+          gh release view "$TAG" --json body --jq .body > build/notes.md
+          {
+            echo
+            echo "## インストール"
+            echo
+            echo "1. \`Hanasu-${VERSION}.zip\` を展開し、\`Hanasu.app\` を「アプリケーション」フォルダに入れます。"
+            echo "2. Apple の公証を受けていない自己署名のアプリなので、初回は Finder で右クリック →「開く」から開いてください（またはターミナルで \`xattr -dr com.apple.quarantine /Applications/Hanasu.app\`）。"
+            echo "3. macOS 26 (Tahoe) 以降、Apple Silicon が必要です。詳しくは [README](https://github.com/${GITHUB_REPOSITORY}#readme) を見てください。"
+            echo
+            echo "SHA-256 (Hanasu-${VERSION}.zip): \`${SHA256}\`"
+          } >> build/notes.md
+          gh release edit "$TAG" --notes-file build/notes.md --draft=false
