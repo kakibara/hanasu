@@ -18,11 +18,14 @@ final class HUDModel: ObservableObject {
     @Published var translating = false
     /// HUD の「日本語／English」を押したとき。録音を止めた時点の選択で出力の言語が決まる
     var onSelectTranslating: ((Bool) -> Void)?
+    /// 選択を声で編集しているときの補足（「選択 120 文字」など）。nil なら通常の音声入力
+    @Published var editBadge: String?
 
     /// 準備中と録音中は、出力の言語を選べる
     var canChooseLanguage: Bool {
         switch phase {
-        case .preparing, .recording: true
+        // 編集モードでは、出力の言語は話した指示で決まる
+        case .preparing, .recording: editBadge == nil
         default: false
         }
     }
@@ -117,6 +120,14 @@ private struct HUDView: View {
             HStack(spacing: 8) {
                 statusIcon
                 Text(title).font(.system(size: 13, weight: .semibold)).lineLimit(1)
+                if let editBadge {
+                    Text(editBadge)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 2)
+                        .background(.quaternary, in: Capsule())
+                }
                 if model.canChooseLanguage {
                     LanguageSwitch(translating: model.translating) { model.onSelectTranslating?($0) }
                 }
@@ -164,16 +175,31 @@ private struct HUDView: View {
     private var title: String {
         switch model.phase {
         case .preparing(let message): message
-        case .recording: "録音中"
-        case .processing: model.translating ? "Gemini で英語に翻訳しています…" : "Gemini で整えています…"
+        case .recording: model.editBadge == nil ? "録音中" : "編集モード"
+        case .processing:
+            if model.editBadge != nil { "Gemini で書き換えています…" }
+            else if model.translating { "Gemini で英語に翻訳しています…" }
+            else { "Gemini で整えています…" }
         case .done(let message): message
         case .error: "エラー"
         }
     }
 
+    /// 編集モードの補足は、作業中（準備・録音・書き換え）だけ出す
+    private var editBadge: String? {
+        guard let badge = model.editBadge, !badge.isEmpty else { return nil }
+        switch model.phase {
+        case .preparing, .recording, .processing: return badge
+        case .done, .error: return nil
+        }
+    }
+
     private var detail: String? {
         switch model.phase {
-        case .recording: model.transcript.isEmpty ? "話してください…" : model.transcript
+        case .recording:
+            if !model.transcript.isEmpty { model.transcript }
+            else if model.editBadge != nil { "指示を話してください（例: もっと丁寧に／箇条書きにして／英語にして）" }
+            else { "話してください…" }
         case .processing: model.transcript.isEmpty ? nil : model.transcript
         case .error(let message): message
         case .preparing, .done: nil

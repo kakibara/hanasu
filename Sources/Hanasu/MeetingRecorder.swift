@@ -99,7 +99,7 @@ final class MeetingRecorder: ObservableObject {
                     if channel == .me { self?.volatileMe = text } else { self?.volatileOthers = text }
                 }
             }
-            let words = settings.dictionaryWords
+            let words = settings.userDictionary.contextualStrings
             async let preparedMe: Void = me.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: words)
             async let preparedOthers: Void = others.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: words)
             _ = try await (preparedMe, preparedOthers)
@@ -113,6 +113,7 @@ final class MeetingRecorder: ObservableObject {
             recordingStartedAt = Date()
             startLevelTimer()
             setState(.recording)
+            MeetingHighlightHotKey.shared.activate { [weak self] in self?.addHighlight() }
             NSSound(named: "Tink")?.play()
             appLog.notice("meeting recording started: \(meeting.id, privacy: .public)")
         } catch {
@@ -243,6 +244,60 @@ final class MeetingRecorder: ObservableObject {
         meetings = MeetingStore.loadAll()
     }
 
+    // MARK: - メモと「ここ重要」の印（MeetingNotes.swift）
+
+    /// 録音開始からの経過秒数
+    var elapsed: Double {
+        current.map { Date().timeIntervalSince($0.startedAt) } ?? 0
+    }
+
+    /// 記録中のメモを 1 行足す。time は書き始めた時刻（録音開始からの秒数）。省略すると今の時刻。
+    func addNote(_ text: String, at time: Double? = nil) {
+        let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        appendNote(MeetingNote(kind: .note, time: time ?? elapsed, text: text))
+    }
+
+    /// 今の時刻に「ここ重要」の印を付ける
+    func addHighlight(_ text: String = "") {
+        guard state == .recording else { return }
+        appendNote(MeetingNote(kind: .highlight, time: elapsed, text: text.trimmingCharacters(in: .whitespacesAndNewlines)))
+        NSSound(named: "Morse")?.play()
+    }
+
+    func removeNote(id: MeetingNote.ID) {
+        guard state == .recording, var meeting = current else { return }
+        meeting.notes?.removeAll { $0.id == id }
+        current = meeting
+        try? MeetingStore.save(meeting)
+    }
+
+    /// 記録後にメモを書き換える
+    @discardableResult
+    func updateNotes(_ meeting: Meeting, notes: [MeetingNote]) -> Meeting {
+        var updated = meeting
+        updated.notes = notes
+        try? MeetingStore.save(updated)
+        reloadMeetings()
+        return updated
+    }
+
+    /// 記録中の会議にメモを足して、すぐ保存する（アプリが落ちてもメモは残る）
+    private func appendNote(_ note: MeetingNote) {
+        guard state == .recording, var meeting = current else { return }
+        meeting.notes = (meeting.notes ?? []) + [note]
+        current = meeting
+        try? MeetingStore.save(meeting)
+    }
+
+    /// 記録中の画面を PNG に描き出す確認用に、録音せずに「記録中」の状態にする（CLI の --render-meeting-notes）
+    func showPreviewForRendering(_ meeting: Meeting, lines: [LiveLine], volatileOthers: String = "") {
+        current = meeting
+        liveLines = lines
+        self.volatileOthers = volatileOthers
+        state = .recording
+    }
+
     // MARK: - Private
 
     private func update(_ meeting: Meeting, _ change: (inout Meeting) -> Void) {
@@ -259,6 +314,7 @@ final class MeetingRecorder: ObservableObject {
     }
 
     private func teardownAudio() async {
+        MeetingHighlightHotKey.shared.deactivate()
         stopMic()
         systemTap?.stop()
         systemTap = nil

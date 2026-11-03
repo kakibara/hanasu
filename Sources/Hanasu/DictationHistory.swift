@@ -1,0 +1,432 @@
+@preconcurrency import AVFoundation
+import Carbon.HIToolbox
+import Combine
+import Foundation
+
+/// 音声入力の履歴 1 件。
+struct DictationHistoryEntry: Codable, Identifiable, Equatable {
+    enum Mode: String, Codable {
+        case refine
+        case translate
+
+        init(_ mode: DictationController.Mode) {
+            self = mode == .translateToEnglish ? .translate : .refine
+        }
+
+        var label: String { self == .translate ? "英訳" : "整形" }
+    }
+
+    enum Status: String, Codable {
+        /// Gemini で整形（英訳）できた
+        case succeeded
+        /// Gemini がエラーになり、原文のまま入力した
+        case geminiFailed
+        /// 認証情報が未設定で、原文のまま入力した
+        case noCredentials
+        /// 整形をオフにしていて、原文のまま入力した
+        case refineOff
+
+        var label: String {
+            switch self {
+            case .succeeded: "成功"
+            case .geminiFailed: "Gemini 失敗"
+            case .noCredentials: "未設定のため原文のまま"
+            case .refineOff: "整形オフ（原文のまま）"
+            }
+        }
+
+        /// 一覧で「失敗・未整形」として印を付ける
+        var isUnrefined: Bool { self != .succeeded }
+        /// 失敗したもの（取り戻したい可能性が高い）
+        var isFailure: Bool { self == .geminiFailed || self == .noCredentials }
+    }
+
+    var id = UUID()
+    var date: Date
+    /// 文字起こしの原文
+    var raw: String
+    /// 入力した結果（整形後・英訳後。失敗時は原文と同じ）
+    var output: String
+    var mode: Mode
+    /// 入力先アプリ
+    var appName: String?
+    var status: Status
+    /// Gemini のエラー内容
+    var errorMessage: String?
+    /// 整形・英訳に使ったモデル
+    var model: String?
+    /// History/Audio/ にある録音のファイル名
+    var audioFileName: String?
+    /// 履歴ウインドウで整形・英訳し直した日時
+    var retriedAt: Date?
+    /// 「履歴を保存しない」設定のときの項目。ファイルには書かず、メモリ上だけに置く
+    var transient = false
+
+    private enum CodingKeys: String, CodingKey {
+        case id, date, raw, output, mode, appName, status, errorMessage, model, audioFileName, retriedAt
+    }
+}
+
+extension HotKeyCombo {
+    /// 最後の結果をもう一度入力するショートカット
+    static let defaultRepaste = HotKeyCombo(keyCode: UInt32(kVK_ANSI_V), modifiers: UInt32(optionKey | shiftKey))
+}
+
+/// 履歴の設定。AppSettings とは別の UserDefaults のキーで持つ。
+final class HistorySettings: ObservableObject {
+    static let shared = HistorySettings()
+
+    static let countOptions = [100, 500, 1000, 5000]
+    /// 0 は無期限
+    static let dayOptions = [7, 30, 90, 365, 0]
+
+    private let defaults = UserDefaults.standard
+
+    /// 履歴をファイルに保存する
+    @Published var enabled: Bool { didSet { defaults.set(enabled, forKey: Keys.enabled) } }
+    /// 残す件数の上限
+    @Published var maxCount: Int { didSet { defaults.set(maxCount, forKey: Keys.maxCount) } }
+    /// 残す日数（0 は無期限）
+    @Published var maxDays: Int { didSet { defaults.set(maxDays, forKey: Keys.maxDays) } }
+    /// 録音した音声も残す
+    @Published var keepAudio: Bool { didSet { defaults.set(keepAudio, forKey: Keys.keepAudio) } }
+    @Published var repasteHotKey: HotKeyCombo {
+        didSet {
+            defaults.set(Int(repasteHotKey.keyCode), forKey: Keys.repasteHotKeyCode)
+            defaults.set(Int(repasteHotKey.modifiers), forKey: Keys.repasteHotKeyModifiers)
+        }
+    }
+
+    private init() {
+        defaults.register(defaults: [
+            Keys.enabled: true,
+            Keys.maxCount: 1000,
+            Keys.maxDays: 30,
+            Keys.keepAudio: false,
+            Keys.repasteHotKeyCode: Int(HotKeyCombo.defaultRepaste.keyCode),
+            Keys.repasteHotKeyModifiers: Int(HotKeyCombo.defaultRepaste.modifiers),
+        ])
+        enabled = defaults.bool(forKey: Keys.enabled)
+        maxCount = defaults.integer(forKey: Keys.maxCount)
+        maxDays = defaults.integer(forKey: Keys.maxDays)
+        keepAudio = defaults.bool(forKey: Keys.keepAudio)
+        repasteHotKey = HotKeyCombo(
+            keyCode: UInt32(defaults.integer(forKey: Keys.repasteHotKeyCode)),
+            modifiers: UInt32(defaults.integer(forKey: Keys.repasteHotKeyModifiers)))
+    }
+
+    private enum Keys {
+        static let enabled = "historyEnabled"
+        static let maxCount = "historyMaxCount"
+        static let maxDays = "historyMaxDays"
+        static let keepAudio = "historyKeepAudio"
+        static let repasteHotKeyCode = "repasteHotKeyCode"
+        static let repasteHotKeyModifiers = "repasteHotKeyModifiers"
+    }
+}
+
+enum DictationHistoryError: LocalizedError {
+    case notFound
+
+    var errorDescription: String? {
+        switch self {
+        case .notFound: "履歴が見つかりません（削除された可能性があります）"
+        }
+    }
+}
+
+/// 音声入力の履歴を ~/Library/Application Support/Hanasu/History/history.json に保存する。
+/// 新しい順に持ち、件数と日数の上限を超えたものは古い順に消す（録音した音声も一緒に消す）。
+@MainActor
+final class DictationHistoryStore: ObservableObject {
+    static let shared: DictationHistoryStore = {
+        let store = DictationHistoryStore(directory: defaultDirectory)
+        store.bind(to: HistorySettings.shared)
+        store.load()
+        return store
+    }()
+
+    static var defaultDirectory: URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("Hanasu/History", isDirectory: true)
+    }
+
+    /// 保存の方針。アプリでは HistorySettings から、確認用の CLI では直接決める
+    struct Policy: Equatable {
+        var enabled = true
+        var maxCount = 1000
+        var maxDays = 30
+        var keepAudio = false
+    }
+
+    /// 保存しない設定のときに、メモリ上に置いておく件数（「最近の結果」と再入力のため）
+    static let transientLimit = 10
+
+    @Published private(set) var entries: [DictationHistoryEntry] = []
+    /// 直近の保存・読み込みのエラー
+    @Published private(set) var lastError: String?
+    var policy = Policy() {
+        didSet { if policy != oldValue, prune() { save() } }
+    }
+
+    let directory: URL
+    var fileURL: URL { directory.appendingPathComponent("history.json") }
+    var audioDirectory: URL { directory.appendingPathComponent("Audio", isDirectory: true) }
+
+    private var cancellables: Set<AnyCancellable> = []
+
+    init(directory: URL) {
+        self.directory = directory
+    }
+
+    func bind(to settings: HistorySettings) {
+        settings.$enabled.combineLatest(settings.$maxCount, settings.$maxDays, settings.$keepAudio)
+            .map { Policy(enabled: $0, maxCount: $1, maxDays: $2, keepAudio: $3) }
+            .removeDuplicates()
+            .sink { [weak self] in self?.policy = $0 }
+            .store(in: &cancellables)
+    }
+
+    // MARK: - 読み書き
+
+    private struct FileContents: Codable {
+        var version = 1
+        var entries: [DictationHistoryEntry]
+    }
+
+    func load() {
+        let transient = entries.filter(\.transient)
+        do {
+            if FileManager.default.fileExists(atPath: fileURL.path) {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let contents = try decoder.decode(FileContents.self, from: Data(contentsOf: fileURL))
+                entries = (contents.entries + transient).sorted { $0.date > $1.date }
+            } else {
+                entries = transient
+            }
+            lastError = nil
+        } catch {
+            appLog.error("history load error: \(error.localizedDescription, privacy: .public)")
+            lastError = "履歴を読み込めませんでした: \(error.localizedDescription)"
+            return  // 壊れたファイルを上書きしないよう、ここで止める
+        }
+        if prune() { save() }
+        removeOrphanAudio()
+    }
+
+    func save() {
+        let fm = FileManager.default
+        do {
+            try fm.createDirectory(at: directory, withIntermediateDirectories: true,
+                                   attributes: [.posixPermissions: 0o700])
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+            encoder.dateEncodingStrategy = .iso8601
+            let data = try encoder.encode(FileContents(entries: entries.filter { !$0.transient }))
+            try data.write(to: fileURL, options: .atomic)
+            // 話した内容が入っているので、本人だけが読めるようにする
+            try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: fileURL.path)
+            lastError = nil
+        } catch {
+            appLog.error("history save error: \(error.localizedDescription, privacy: .public)")
+            lastError = "履歴を保存できませんでした: \(error.localizedDescription)"
+        }
+    }
+
+    // MARK: - 追加・更新・削除
+
+    /// 録音を残す設定なら、これから録る音声の保存先を返す
+    func newAudioURL() -> URL? {
+        guard policy.enabled, policy.keepAudio else { return nil }
+        do {
+            try FileManager.default.createDirectory(at: audioDirectory, withIntermediateDirectories: true,
+                                                    attributes: [.posixPermissions: 0o700])
+        } catch {
+            appLog.error("history audio dir error: \(error.localizedDescription, privacy: .public)")
+            return nil
+        }
+        return audioDirectory.appendingPathComponent("\(UUID().uuidString).m4a")
+    }
+
+    /// 使わなかった録音（取り消し・エラー）を消す
+    func discardAudio(_ url: URL?) {
+        guard let url else { return }
+        try? FileManager.default.removeItem(at: url)
+    }
+
+    @discardableResult
+    func record(
+        raw: String, output: String, mode: DictationHistoryEntry.Mode, appName: String?,
+        status: DictationHistoryEntry.Status, errorMessage: String? = nil, model: String? = nil,
+        audioURL: URL? = nil, date: Date = Date()
+    ) -> DictationHistoryEntry {
+        // ファイルには秒単位で書くので、メモリ上もそろえておく
+        var entry = DictationHistoryEntry(
+            date: Self.wholeSeconds(date), raw: raw, output: output, mode: mode, appName: appName,
+            status: status, errorMessage: errorMessage, model: model)
+        if policy.enabled {
+            if let audioURL, FileManager.default.fileExists(atPath: audioURL.path) {
+                entry.audioFileName = audioURL.lastPathComponent
+            }
+        } else {
+            entry.transient = true
+            discardAudio(audioURL)
+        }
+        entries.insert(entry, at: 0)
+        entries.sort { $0.date > $1.date }
+        prune()
+        if !entry.transient { save() }
+        return entry
+    }
+
+    private static func wholeSeconds(_ date: Date) -> Date {
+        Date(timeIntervalSince1970: date.timeIntervalSince1970.rounded(.down))
+    }
+
+    func delete(_ ids: Set<UUID>) {
+        let removed = entries.filter { ids.contains($0.id) }
+        guard !removed.isEmpty else { return }
+        entries.removeAll { ids.contains($0.id) }
+        removed.forEach(removeAudio(of:))
+        save()
+    }
+
+    func deleteAll() {
+        entries.forEach(removeAudio(of:))
+        entries.removeAll()
+        save()
+    }
+
+    /// 録音した音声だけをすべて消す（文字の履歴は残す）
+    func deleteAllAudio() {
+        try? FileManager.default.removeItem(at: audioDirectory)
+        for index in entries.indices { entries[index].audioFileName = nil }
+        save()
+    }
+
+    func audioURL(for entry: DictationHistoryEntry) -> URL? {
+        guard let name = entry.audioFileName else { return nil }
+        let url = audioDirectory.appendingPathComponent(name)
+        return FileManager.default.fileExists(atPath: url.path) ? url : nil
+    }
+
+    /// 残している録音の合計サイズ（バイト）と件数
+    func audioUsage() -> (bytes: Int64, count: Int) {
+        let urls = (try? FileManager.default.contentsOfDirectory(
+            at: audioDirectory, includingPropertiesForKeys: [.fileSizeKey])) ?? []
+        let bytes = urls.reduce(Int64(0)) { sum, url in
+            sum + Int64((try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0)
+        }
+        return (bytes, urls.count)
+    }
+
+    /// 上限を超えた履歴を消す。消したものがあれば true
+    @discardableResult
+    private func prune(now: Date = Date()) -> Bool {
+        var kept: [DictationHistoryEntry] = []
+        var removed: [DictationHistoryEntry] = []
+        let cutoff = policy.maxDays > 0 ? now.addingTimeInterval(-Double(policy.maxDays) * 86400) : nil
+        var persistentCount = 0
+        var transientCount = 0
+        for entry in entries {  // 新しい順
+            let keep: Bool
+            if entry.transient {
+                transientCount += 1
+                keep = transientCount <= Self.transientLimit
+            } else if let cutoff, entry.date < cutoff {
+                keep = false
+            } else {
+                persistentCount += 1
+                keep = persistentCount <= max(1, policy.maxCount)
+            }
+            if keep { kept.append(entry) } else { removed.append(entry) }
+        }
+        guard !removed.isEmpty else { return false }
+        entries = kept
+        removed.forEach(removeAudio(of:))
+        return true
+    }
+
+    private func removeAudio(of entry: DictationHistoryEntry) {
+        guard let name = entry.audioFileName else { return }
+        try? FileManager.default.removeItem(at: audioDirectory.appendingPathComponent(name))
+    }
+
+    /// どの履歴からも参照されていない録音を消す（起動時の読み込みで呼ぶ）
+    private func removeOrphanAudio() {
+        let referenced = Set(entries.compactMap(\.audioFileName))
+        let urls = (try? FileManager.default.contentsOfDirectory(at: audioDirectory, includingPropertiesForKeys: nil)) ?? []
+        for url in urls where !referenced.contains(url.lastPathComponent) {
+            try? FileManager.default.removeItem(at: url)
+        }
+    }
+
+    // MARK: - 整形・英訳のやり直し
+
+    /// 原文から Gemini を呼び直し、結果でこの履歴を上書きする。失敗したときは履歴を変えずにエラーを投げる
+    @discardableResult
+    func retry(_ id: UUID, mode: DictationHistoryEntry.Mode, auth overrideAuth: GeminiClient.Auth? = nil) async throws
+        -> DictationHistoryEntry
+    {
+        guard let entry = entries.first(where: { $0.id == id }) else { throw DictationHistoryError.notFound }
+        let settings = AppSettings.shared
+        guard let auth = try overrideAuth ?? GeminiClient.authFromSettings(settings) else {
+            throw GeminiError.missingAPIKey
+        }
+        let client = GeminiClient(auth: auth)
+        let request = GeminiClient.Request(
+            transcript: entry.raw,
+            model: settings.model,
+            appName: settings.sendAppName ? entry.appName : nil,
+            dictionary: settings.dictionaryWords,
+            extraInstructions: settings.extraInstructions)
+        let output = mode == .translate ? try await client.translateToEnglish(request) : try await client.refine(request)
+        // 待っている間に消された場合
+        guard let index = entries.firstIndex(where: { $0.id == id }) else { throw DictationHistoryError.notFound }
+        entries[index].output = output
+        entries[index].mode = mode
+        entries[index].status = .succeeded
+        entries[index].errorMessage = nil
+        entries[index].model = settings.model
+        entries[index].retriedAt = Self.wholeSeconds(Date())
+        if !entries[index].transient { save() }
+        return entries[index]
+    }
+}
+
+/// 録音した音声を m4a に書き出す。オーディオのタップから書き、止めるときに閉じる。
+final class DictationAudioWriter: @unchecked Sendable {
+    private let lock = NSLock()
+    private var file: AVAudioFile?
+
+    init(url: URL, format: AVAudioFormat) throws {
+        file = try AVAudioFile(
+            forWriting: url,
+            settings: [
+                AVFormatIDKey: kAudioFormatMPEG4AAC,
+                AVSampleRateKey: format.sampleRate,
+                AVNumberOfChannelsKey: format.channelCount,
+                AVEncoderBitRateKey: 32000,
+            ],
+            commonFormat: format.commonFormat,
+            interleaved: format.isInterleaved)
+    }
+
+    func write(_ buffer: AVAudioPCMBuffer) {
+        lock.withLock {
+            do {
+                try file?.write(from: buffer)
+            } catch {
+                appLog.error("dictation audio write error: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+    }
+
+    func close() {
+        lock.withLock {
+            file?.close()
+            file = nil
+        }
+    }
+}

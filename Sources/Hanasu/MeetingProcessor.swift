@@ -215,16 +215,20 @@ enum MeetingProcessor {
     """
 
     static func makeMinutes(for meeting: Meeting, client: GeminiClient, model: String) async throws -> String {
-        let transcript = meeting.transcriptForPrompt()
+        // メモか印があれば、それを優先するよう指示を足し、印の前後の発言に ★ を付ける
+        let userNotes = meeting.notesForPrompt()
+        let transcript = userNotes == nil ? meeting.transcriptForPrompt() : meeting.transcriptForPromptMarkingHighlights()
+        let notesBlock = userNotes.map { "\n<user_notes>\n\($0)\n</user_notes>\n" } ?? ""
         let user = """
         会議: \(meeting.title)
         日時: \(Meeting.dateFormatter.string(from: meeting.startedAt))（\(Meeting.clock(meeting.duration))）
-
+        \(notesBlock)
         <transcript>
         \(transcript)
         </transcript>
         """
-        let body = try await client.generate(systemInstruction: minutesInstruction, userText: user, model: model)
+        let instruction = userNotes == nil ? minutesInstruction : minutesInstruction + "\n" + notesInstruction
+        let body = try await client.generate(systemInstruction: instruction, userText: user, model: model)
         return "# \(meeting.title) — 議事録\n\n\(body)\n"
     }
 }
