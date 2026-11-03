@@ -5,6 +5,7 @@ enum GeminiError: LocalizedError {
     case http(status: Int, message: String)
     case emptyResponse(reason: String?)
     case invalidResponse
+    case invalidLocation(String)
 
     var errorDescription: String? {
         switch self {
@@ -12,6 +13,7 @@ enum GeminiError: LocalizedError {
         case .http(let status, let message): "Gemini API エラー（\(status)）: \(message)"
         case .emptyResponse(let reason): "Gemini から結果が返りませんでした" + (reason.map { "（\($0)）" } ?? "")
         case .invalidResponse: "Gemini の応答を読み取れませんでした"
+        case .invalidLocation(let location): "Vertex AI のリージョン「\(location)」は使えません（英小文字・数字・ハイフンだけ。例: global、us-central1）"
         }
     }
 }
@@ -49,7 +51,7 @@ struct GeminiClient {
     static func authFromSettings(_ settings: AppSettings) throws -> Auth? {
         switch settings.authMode {
         case .apiKey:
-            return Keychain.loadAPIKey().map(Auth.apiKey)
+            return try Keychain.load(.geminiAPIKey).map(Auth.apiKey)
         case .serviceAccount:
             let path = settings.serviceAccountPath.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !path.isEmpty else { return nil }
@@ -148,23 +150,33 @@ struct GeminiClient {
 
     // 要件: REQ-DIC-003
     func refine(_ request: Request) async throws -> String {
-        try await generate(
-            systemInstruction: Self.systemInstruction + ScreenContext.instruction(for: request.screenContext, translating: false),
-            userText: Self.userPrompt(for: request),
-            model: request.model)
+        let prompt = Self.refinePrompt(request)
+        return try await generate(systemInstruction: prompt.system, userText: prompt.user, model: request.model)
+    }
+
+    // 要件: REQ-DIC-003
+    // 設計判断: DEC-COM-047
+    /// 整形のシステムプロンプトと user content。Claude でも同じ文面を使う（TextAIClient）
+    static func refinePrompt(_ request: Request) -> (system: String, user: String) {
+        (systemInstruction + ScreenContext.instruction(for: request.screenContext, translating: false),
+         userPrompt(for: request))
     }
 
     // 要件: REQ-DIC-010
-    // 設計判断: DEC-DIC-022, DEC-DIC-023
-    /// 話した内容を英語に翻訳する。追加の整形ルールは日本語の文体向けなので使わない。
-    /// アプリ別の文体ルールは、英訳向けのルールに切り替えて使う。
     func translateToEnglish(_ request: Request) async throws -> String {
+        let prompt = Self.translationPrompt(request)
+        return try await generate(systemInstruction: prompt.system, userText: prompt.user, model: request.model)
+    }
+
+    // 要件: REQ-DIC-010
+    // 設計判断: DEC-DIC-022, DEC-DIC-023, DEC-COM-047
+    /// 話した内容を英語に翻訳するときのプロンプト。追加の整形ルールは日本語の文体向けなので使わない。
+    /// アプリ別の文体ルールは、英訳向けのルールに切り替えて使う。
+    static func translationPrompt(_ request: Request) -> (system: String, user: String) {
         var request = request
         request.extraInstructions = ""
-        return try await generate(
-            systemInstruction: Self.translationInstruction + ScreenContext.instruction(for: request.screenContext, translating: true),
-            userText: Self.userPrompt(for: request, translating: true),
-            model: request.model)
+        return (translationInstruction + ScreenContext.instruction(for: request.screenContext, translating: true),
+                userPrompt(for: request, translating: true))
     }
 
     /// テキストを 1 回送り、応答の本文を返す。thinkingLevel を省くとモデル名から決める。
@@ -199,6 +211,9 @@ struct GeminiClient {
             urlRequest = URLRequest(url: url, timeoutInterval: timeout)
             urlRequest.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
         case .serviceAccount(let credentials, let location):
+            // 設計判断: DEC-COM-053
+            // リージョンはホスト名に入るので、英小文字・数字・ハイフンだけを受け付ける（別のホストに向けられないように）
+            guard Self.isValidLocation(location) else { throw GeminiError.invalidLocation(location) }
             // global 以外のリージョンはホスト名にリージョンが付く
             let host = location == "global" ? "aiplatform.googleapis.com" : "\(location)-aiplatform.googleapis.com"
             let url = URL(string: "https://\(host)/v1/projects/\(credentials.projectID)/locations/\(location)/publishers/google/models/\(escapedModel):generateContent")!
@@ -210,7 +225,8 @@ struct GeminiClient {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
 
-        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        // 設計判断: DEC-COM-044
+        let (data, response) = try await SecureHTTP.data(for: urlRequest)
         guard let http = response as? HTTPURLResponse else { throw GeminiError.invalidResponse }
         guard (200..<300).contains(http.statusCode) else {
             let decoded = try? JSONDecoder().decode(ErrorEnvelope.self, from: data)
@@ -230,6 +246,12 @@ struct GeminiClient {
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { throw GeminiError.emptyResponse(reason: candidate.finishReason) }
         return text
+    }
+
+    // 設計判断: DEC-COM-053
+    static func isValidLocation(_ location: String) -> Bool {
+        !location.isEmpty && location.count <= 40
+            && location.unicodeScalars.allSatisfy { ("a"..."z").contains($0) || ("0"..."9").contains($0) || $0 == "-" }
     }
 
     private struct GenerateContentResponse: Decodable {

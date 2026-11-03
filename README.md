@@ -6,7 +6,7 @@
 
 **Speak naturally. Get clean, ready-to-send text and meeting minutes that write themselves.**
 
-A voice-input and meeting-notes app for macOS and Windows. It uses on-device speech recognition and Gemini.
+A voice-input and meeting-notes app for macOS and Windows. It uses on-device speech recognition and Gemini or Claude.
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
@@ -28,8 +28,8 @@ A voice-input and meeting-notes app for macOS and Windows. It uses on-device spe
 ## Why Hanasu
 
 Built-in dictation gives you a raw transcript. It keeps fillers and homophone mistakes, has no punctuation, and includes every "wait, I mean…".
-Hanasu sends the transcript to Gemini, which fixes those mistakes and tidies the text. Then Hanasu types the result where your cursor is.
-It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Hanasu is free and open source, and you bring your own Gemini key.
+Hanasu sends the transcript to Gemini or Claude, which fixes those mistakes and tidies the text. Then Hanasu types the result where your cursor is.
+It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Hanasu is free and open source, and you bring your own Gemini or Claude API key.
 
 ## Features
 
@@ -71,6 +71,17 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Hanasu is free a
   <img src="docs/images/meeting-minutes.png" width="420" alt="Minutes with action items">
   <img src="docs/images/meeting-suggestion.png" width="420" alt="Meeting detection">
 </p>
+
+### 🤖 Choose your AI
+
+Pick the AI that polishes your text, separately for **voice input** and **meetings**.
+
+| AI | Default model | Sign-in |
+| --- | --- | --- |
+| **Gemini** (default) | voice input `gemini-3.5-flash-lite`, meetings `gemini-3.8-flash` | Google AI Studio API key or Vertex AI service account |
+| **Claude** | voice input `claude-haiku-5-5`, meetings `claude-sonnet-5-5` (Opus 5.5 also available) | Anthropic API key |
+
+Claude only handles text. Speech is transcribed by the engine below.
 
 ### 🔊 Choose your speech engine
 
@@ -114,7 +125,7 @@ See [windows/README.md](windows/README.md) for more notes and how the Windows ve
 
 ## Quick start
 
-1. **Add a Gemini credential.** Open **Settings → Gemini**. Paste an API key from [Google AI Studio](https://aistudio.google.com/apikey), or select a Vertex AI service-account JSON file. Click the test button to check that it works.
+1. **Add an AI credential.** Open **Settings → AI** and choose Gemini or Claude. For Gemini, paste an API key from [Google AI Studio](https://aistudio.google.com/apikey) or select a Vertex AI service-account JSON file. For Claude, paste an API key from the [Claude Console](https://console.anthropic.com/settings/keys). Click the test button to check that it works.
 2. **Dictate.** Put the cursor where you want the text, press the shortcut, speak, and press the shortcut again.
 3. **Record a meeting.** Use the menu-bar (Mac) or tray (Windows) menu, or the shortcut. Headphones help keep the two sides apart.
 
@@ -135,10 +146,11 @@ You can change every shortcut in Settings. The full user guide (in Japanese) is 
 ## Privacy
 
 - **Audio stays on your device by default.** Speech recognition, Whisper and speaker diarization all run locally.
-- **Gemini gets text, not audio.** It receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask.
+- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask.
 - **Audio goes to Google only if you choose it.** If you select the Gemini speech engine, the recorded audio is sent to Google.
 - **Meetings are plain files.** They are saved as JSON and Markdown under `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac and Windows use the same format.
-- **No telemetry.** Hanasu collects no analytics. API keys are stored in the macOS Keychain, or encrypted with DPAPI on Windows.
+- **No telemetry.** Hanasu collects no analytics.
+- **API keys are protected by the OS.** On macOS they are kept in the Keychain, and other apps must ask for your login password to read them. On Windows they are encrypted with DPAPI, or with a Windows Hello key if you choose. Neither can fully stop malware running as your user. See [docs/design/security.md](docs/design/security.md).
 
 > [!IMPORTANT]
 > Get consent from everyone in the meeting before you record. Follow your organization's rules on recording and on using AI services.

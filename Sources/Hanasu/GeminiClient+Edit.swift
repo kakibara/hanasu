@@ -75,6 +75,7 @@ extension GeminiClient {
             model: request.model)
         return Self.stripCodeFence(output, selection: request.selection)
     }
+    // Claude で書き換えるときも、同じ editInstruction・editPrompt・stripCodeFence を使う（TextAIClient.editSelection）
 
     // 設計判断: DEC-DIC-034
     /// 指示に反してコードブロックで囲んで返されたときは外す（選択文自体がコードブロックなら外さない）

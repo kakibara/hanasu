@@ -88,6 +88,15 @@ Typeless のような「話した内容を、自然な日本語に整えて今�
 
 モデルの既定（`AppSettings.suggestedModels`）と thinkingLevel の決め方（`GeminiClient.thinkingLevel`）は DEC-COM-005・DEC-COM-006。音声入力は「待たされない」ことが最重要なので、軽いモデルと最小の思考を既定にしている。
 
+### 3.2.1 整形などの AI を Claude にする（Claude API）
+
+- 設定の「AI」タブで、**音声入力**（整形・英訳・選択の編集）と**会議**（議事録・会議への質問・辞書の候補）のそれぞれに、Gemini か Claude とモデルを選ぶ（`AppSettings.aiProvider(for:)`・`textModel(for:)`、DEC-COM-040）。呼び出し側は `TextAIClient.fromSettings(_:for:)` でクライアントを受け取り、送り先を意識しない。
+- `TextAIClient` は、Gemini なら `GeminiClient` に任せ、Claude なら同じプロンプト（`GeminiClient.refinePrompt`・`translationPrompt`・`editPrompt` など）を `ClaudeClient` で送る（DEC-COM-047）。
+- `ClaudeClient` は REST の Messages API を直接呼ぶ（DEC-COM-041）。考える量は `output_config.effort` だけで決め、音声入力は low、会議は medium（DEC-COM-043）。応答は `stop_reason` を先に見る（refusal・max_tokens はエラー。DEC-COM-045）。429 / 5xx だけ少しやり直す（DEC-COM-046）。
+- API キーはキーチェーンに入れ、送るたびに読む（`Keychain`、`ClaudeClient.fromKeychain`。DEC-COM-048・DEC-COM-049）。設定画面は `AISettingsTab`・`ClaudeKeySection`。
+- 音声は Claude に送らない。文字起こしのエンジン（4.10）はそのまま。
+- 確認: `--refine-text <文> --ai claude [--show-request]`、`--claude-test`、`--keychain-selftest`、`--render-ai-settings <png>`（`ClaudeCLI.swift`）。
+
 ### 3.3 グローバルショートカット: Carbon `RegisterEventHotKey`
 
 - アクセシビリティ権限なしで使える、古くからある安定した API。
@@ -527,12 +536,13 @@ Wispr Flow や Typeless は辞書を自動で学習する。Hanasu では、自�
 | マイク | 録音 | `AVCaptureDevice.requestAccess(for: .audio)`（Info.plist: `NSMicrophoneUsageDescription`） |
 | 音声認識 | 標準エンジンの利用 | `SFSpeechRecognizer.requestAuthorization`（Info.plist: `NSSpeechRecognitionUsageDescription`） |
 | アクセシビリティ | ⌘V の送信、画面の文脈の読み取り（オンのときだけ） | `AXIsProcessTrustedWithOptions` でダイアログ → ユーザーがシステム設定で許可 |
-| ネットワーク | Gemini API | サンドボックスなしのため不要 |
+| ネットワーク | Gemini API・Claude API | サンドボックスなしのため不要 |
 
 ## 7. セキュリティ・プライバシー
 
 - 音声はオンデバイスで処理し、外部には送らない（Mac 標準・Whisper）。文字起こしのエンジンに Gemini を選んだときだけ、録った音声を Gemini に送る。設定画面にそのことを書く（4.10）。整形・英訳で Gemini に送るのは、認識後のテキストと入力先アプリ名（OFF 可）・ユーザー辞書・追加ルール・アプリ別の文体ルール。画面の文脈をオンにしたときは、ウインドウのタイトルと入力欄のカーソル前後の文章（各 500 文字まで）も送る（4.8 参照）。選択を声で編集するときは、選択した文章も送る（4.5）。
-- API キーはキーチェーン（`kSecClassGenericPassword`）に保存。UserDefaults やログには残さない。
+- API キー（Gemini・Claude）はキーチェーン（`kSecClassGenericPassword`）に保存。UserDefaults やログには残さない。守れる範囲と、そのほかの調査の結果は [security.md](security.md)。
+- 整形などの AI に Claude を選んだときは、Gemini に送るのと同じもの（文字起こしの結果・辞書・アプリ名など。音声は送らない）を Claude に送る（3.2.1）。
 - サービスアカウントは鍵ファイルのパスだけを保存し、中身はアプリに取り込まない。アクセストークンはメモリ上だけに置く。
 - 貼り付け用のクリップボード項目には Transient/Concealed の印を付け、クリップボード履歴アプリに残りにくくする。
 - 認識テキストと結果は履歴として `~/Library/Application Support/Hanasu/History/` に保存する（本人だけが読める権限。設定でオフにでき、件数・期間の上限で古い順に消える）。録音は既定では残さない。

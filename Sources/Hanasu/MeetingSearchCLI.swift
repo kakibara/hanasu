@@ -65,7 +65,7 @@ enum MeetingSearchCLI {
                     let settings = AppSettings.shared
                     var options = MeetingAsk.Options()
                     if let limit = value(after: "--limit").flatMap(Int.init) { options.maxMeetings = limit }
-                    let model = value(after: "--model") ?? settings.meetingMinutesModel
+                    let model = TextAIClient.cliModel(args: args, settings: settings, for: .meeting)
                     let context = await MeetingAsk.gatherContext(question: question, meetings: meetings, index: index, options: options)
                     print("[質問] 検索語: \(context.keywords.joined(separator: ", "))"
                           + (context.period.map { "  期間: \($0.start.formatted()) 〜 \($0.end.formatted())" } ?? ""))
@@ -76,7 +76,7 @@ enum MeetingSearchCLI {
                     if args.contains("--show-context") { print(context.prompt) }
                     let askStarted = Date()
                     let answer = try await MeetingAsk.ask(question: question, meetings: meetings, index: index,
-                                                          client: GeminiClient(auth: try auth(), timeout: 180),
+                                                          client: try TextAIClient.cli(args: args, settings: settings, for: .meeting, timeout: 180),
                                                           model: model, options: options)
                     print(String(format: "\n[答え %@ %.1fs] 引用された会議 %d 件", model, Date().timeIntervalSince(askStarted), answer.cited.count))
                     print(answer.text)
@@ -92,16 +92,6 @@ enum MeetingSearchCLI {
     private static func fail(_ error: Error) -> Never {
         FileHandle.standardError.write(Data("error: \(error.localizedDescription) (\(error))\n".utf8))
         exit(1)
-    }
-
-    @MainActor
-    private static func auth() throws -> GeminiClient.Auth {
-        let settings = AppSettings.shared
-        let env = ProcessInfo.processInfo.environment
-        if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
-            return .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
-        }
-        return try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
     }
 
     /// `MeetingStore.loadAll()` と同じ読み方で、指定したフォルダから会議を読む

@@ -64,20 +64,12 @@ enum EditModeCLI {
 
     private static func edit(selection: String, instruction: String, args: [String]) async throws {
         let settings = AppSettings.shared
-        let env = ProcessInfo.processInfo.environment
-        let auth: GeminiClient.Auth
-        if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
-            auth = .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
-        } else {
-            auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
-        }
-        let model = args.firstIndex(of: "--model").flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil } ?? settings.model
+        let client = try TextAIClient.cli(args: args, settings: settings, for: .dictation, timeout: 60)
+        let model = TextAIClient.cliModel(args: args, settings: settings, for: .dictation)
         if let error = EditModeController.selectionError(selection) {
             print("[選択エラー] \(error)")
             return
         }
-        var client = GeminiClient(auth: auth)
-        client.timeout = 60
         let started = Date()
         let output = try await client.editSelection(GeminiClient.EditRequest(
             selection: selection, instruction: instruction, model: model,

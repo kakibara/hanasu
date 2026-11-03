@@ -13,6 +13,8 @@
 | FUT-001 | Windows 版（音声入力と会議の記録） | 実装した（PR #19）→ REQ-COM-010, REQ-COM-011 | ユーザーの指定（2026-11-03） |
 | FUT-002 | Windows 版のコードに要件・設計判断のタグを付ける | 未着手 | この PR |
 | FUT-003 | Windows 版に、Mac 版だけにある機能を足す | 未着手（足すかは未定） | PR #19 |
+| FUT-010 | Developer ID で署名し、API キーをデータ保護キーチェーンに移す | 未着手（Apple Developer Program が要る） | Claude API の対応の PR |
+| FUT-011 | Whisper・話者分離のモデルを、決めたリビジョンとハッシュに固定する | 未着手 | Claude API の対応の PR |
 | FUT-101 | ブラウザのサイト別スタイル | 見送り | PR #5 |
 | FUT-102 | 画面の文脈で、Slack のスレッドの直前のメッセージも読む | 見送り | PR #7 |
 | FUT-103 | 音声認識にカスタム言語モデル（customLanguageModel）を使う | 見送り | PR #12 |
@@ -88,6 +90,16 @@
 - 状態: 見送り（数秒ごとに文字起こしし直すので、CPU と電池の負担が大きい）
 - 中身: Whisper のエンジンでも、録音中に途中経過を HUD に出す（REQ-DIC-002 の食い違いの解消の候補）。
 - 出どころ: PR #17
+
+### FUT-010 Developer ID で署名し、API キーをデータ保護キーチェーンに移す
+- 状態: 未着手（Apple Developer Program に入る必要がある）
+- 中身: Team ID のある証明書（Developer ID）で署名・公証し、keychain-access-groups の entitlement を付けて、API キーをデータ保護キーチェーン（`kSecUseDataProtectionKeychain`）に移す。`SecAccessControl` で使うときに本人の確認（Touch ID）を求めることもできるようになる。今の自己署名では使えない（-34018）ので、ファイル型のキーチェーンの ACL にしている（DEC-COM-048）。同じユーザーで動くアドホック署名のプログラムが確認なしで読めた問題（[design/security.md](design/security.md) の 1.3）は、これで防げる見込み。
+- 出どころ: Claude API の対応の PR（セキュリティの調査）
+
+### FUT-011 Whisper・話者分離のモデルを、決めたリビジョンとハッシュに固定する
+- 状態: 未着手
+- 中身: いまは WhisperKit・FluidAudio が、Hugging Face のリポジトリの最新（`main`）を取り、サーバーが返すハッシュと比べている。Hanasu の側でリビジョン（コミット）とファイルのハッシュを決めて渡し、差し替えられたモデルを取らないようにする（[design/security.md](design/security.md) の 4 章）。
+- 出どころ: Claude API の対応の PR（セキュリティの調査）
 
 ### FUT-107 Gemini のストリーミング応答で、体感の待ち時間を短くする
 - 状態: 未着手

@@ -6,7 +6,7 @@
 
 **話すだけで、そのまま送れる文章に。会議の議事録も、自動で。**
 
-macOS と Windows で使える、音声入力と会議の記録のアプリです。端末の上で動く音声認識と、Gemini を使います。
+macOS と Windows で使える、音声入力と会議の記録のアプリです。端末の上で動く音声認識と、Gemini か Claude を使います。
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
@@ -24,8 +24,8 @@ macOS と Windows で使える、音声入力と会議の記録のアプリで�
 ## Hanasu とは
 
 OS の音声入力では、言いよどみや同音異義語の誤変換、「あ、違う」と言い直す前の文が、そのまま残ります。
-Hanasu は文字起こしを Gemini に渡し、そうした部分を整えた日本語にしてから、カーソルの位置に入力します。
-Typeless・Wispr Flow・Aqua Voice・Granola を参考に作りました。無料のオープンソースで、Gemini のキーは自分のものを使います。
+Hanasu は文字起こしを Gemini か Claude に渡し、そうした部分を整えた日本語にしてから、カーソルの位置に入力します。
+Typeless・Wispr Flow・Aqua Voice・Granola を参考に作りました。無料のオープンソースで、Gemini か Claude の API キーは自分のものを使います。
 
 ## できること
 
@@ -68,6 +68,17 @@ Typeless・Wispr Flow・Aqua Voice・Granola を参考に作りました。無�
   <img src="docs/images/meeting-suggestion.png" width="420" alt="会議の自動検出">
 </p>
 
+### 🤖 整形に使う AI を選べる
+
+文章を整える AI を、**音声入力**と**会議**で別々に選べます。
+
+| AI | 既定のモデル | 認証 |
+| --- | --- | --- |
+| **Gemini**（既定） | 音声入力 `gemini-3.5-flash-lite`、会議 `gemini-3.8-flash` | Google AI Studio の API キーか Vertex AI のサービスアカウント |
+| **Claude** | 音声入力 `claude-haiku-5-5`、会議 `claude-sonnet-5-5`（Opus 5.5 も選べる） | Anthropic の API キー |
+
+Claude は文章だけを扱います。音声の文字起こしは、下のエンジンが行います。
+
 ### 🔊 文字起こしのエンジンを選べる
 
 | エンジン | 動く場所 | 録音中の文字 | 補足 |
@@ -109,7 +120,7 @@ Windows 版の注意点と Mac 版との違いは、[windows/README.md](windows/
 
 ## はじめかた
 
-1. **Gemini の認証情報を設定する。** 設定の「Gemini」タブで、[Google AI Studio](https://aistudio.google.com/apikey) の API キーを入れるか、Vertex AI のサービスアカウントの JSON を選びます。「整形を試す」で動作を確かめられます。
+1. **AI の認証情報を設定する。** 設定の「AI」タブで Gemini か Claude を選びます。Gemini なら [Google AI Studio](https://aistudio.google.com/apikey) の API キーか Vertex AI のサービスアカウントの JSON、Claude なら [Claude Console](https://console.anthropic.com/settings/keys) の API キーを入れます。「整形を試す」で動作を確かめられます。
 2. **音声入力する。** 入力したい場所にカーソルを置き、ショートカットを押して話し、もう一度押します。
 3. **会議を記録する。** メニューバー（Windows はタスクトレイ）のメニューか、ショートカットで始めます。イヤホンを使うと、自分と相手の音が混ざりにくくなります。
 
@@ -130,10 +141,11 @@ Windows 版の注意点と Mac 版との違いは、[windows/README.md](windows/
 ## プライバシー
 
 - **音声は、既定では端末の外に出しません。** 音声認識・Whisper・話者分離は、端末の上で動きます。
-- **Gemini に送るのはテキストです。** 送るのは文字起こしです。設定によっては、入力先のアプリ名、画面の文脈、質問に使う会議の文字起こしも送ります。
+- **AI に送るのはテキストです。** Gemini か Claude に送るのは文字起こしです。設定によっては、入力先のアプリ名、画面の文脈、質問に使う会議の文字起こしも送ります。
 - **音声を Google に送るのは、選んだときだけです。** 文字起こしのエンジンに Gemini を選ぶと、録った音声を送ります。
 - **会議の記録は、ただのファイルです。** `~/Documents/Hanasu/Meetings/`（Windows は `ドキュメント\Hanasu\Meetings\`）に、JSON と Markdown で保存します。Mac 版と Windows 版で形式は同じです。
-- **利用状況は集めません。** API キーは、macOS ではキーチェーンに、Windows では DPAPI で暗号化して保存します。
+- **利用状況は集めません。**
+- **API キーは OS の仕組みで守ります。** macOS ではキーチェーンに保存し、ほかのアプリが読むにはログインのパスワードが要ります。Windows では DPAPI か、選べば Windows Hello の鍵で暗号化します。どちらも、同じユーザーで動くマルウェアからは守りきれません（[docs/design/security.md](docs/design/security.md)）。
 
 > [!IMPORTANT]
 > 録音の前に、会議の参加者の了承を得てください。会社の規程で録音や外部の AI の利用が制限されている場合は、それに従ってください。
