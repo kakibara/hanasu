@@ -124,8 +124,8 @@ Windows 10（2004 以降）/ 11 向けの版を [windows/](windows/) で作っ�
 
 ## ライセンス
 
-Copyright (C) 2026 kakibara
+Copyright 2026 kakibara
 
-[GNU Affero General Public License v3.0](LICENSE)（AGPL-3.0）で配布します。改変して配布したり、ネットワーク越しにサービスとして提供したりする場合は、そのソースコードも同じライセンスで公開する必要があります。
+[Apache License 2.0](LICENSE)（Apache-2.0）で配布します。改変・再配布・製品への組み込みは自由ですが、ライセンス文と [NOTICE](NOTICE) の表示を残し、改変したファイルにはその旨を書いてください。
 
-組み込んでいる第三者のソフトウェア（FluidAudio など）のライセンスは [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) にあります。配布するアプリにも `Contents/Resources` に同梱しています。
+組み込んでいる第三者のソフトウェアのライセンスは、Mac 版は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、Windows 版は [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) にあります。配布物にも同梱しています（Mac 版は `Hanasu.app/Contents/Resources`、Windows 版は zip の `Hanasu` フォルダ）。

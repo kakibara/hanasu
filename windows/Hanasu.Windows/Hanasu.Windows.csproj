@@ -45,6 +45,16 @@
     <Resource Include="Assets\Hanasu.ico" />
   </ItemGroup>
 
+  <!-- 要件: REQ-REL-005 -->
+  <!-- 配布物（publish のフォルダ）に、Hanasu のライセンスと第三者のライセンスの表示を入れる。
+       .NET ランタイムの第三者の表示は、ProtectedData のパッケージに入っている dotnet/runtime のものを使う -->
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Link="LICENSE.txt" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Include="..\..\NOTICE" Link="NOTICE.txt" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Include="..\THIRD_PARTY_NOTICES.md" Link="THIRD_PARTY_NOTICES.md" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Include="$(NuGetPackageRoot)system.security.cryptography.protecteddata/8.0.0/THIRD-PARTY-NOTICES.TXT" Link="dotnet-THIRD-PARTY-NOTICES.txt" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+  </ItemGroup>
+
   <!-- Whisper.net.Runtime はすべての OS のネイティブライブラリを runtimes/ に置くので、配布物には publish した RID（win-x64 など）の分だけを入れる。
        ネイティブライブラリは exe に入れず、exe の隣の runtimes/win-*/ に置く（Whisper.net がそこから読むため） -->
   <Target Name="DropNonWindowsWhisperRuntimes" AfterTargets="ComputeResolvedFilesToPublishList">

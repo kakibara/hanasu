@@ -41,7 +41,7 @@ REQUIRED = {
 RETIRED_SECTION = "廃止"
 
 # タグを探すファイル（コード）
-CODE_SUFFIXES = {".swift", ".cs", ".xaml", ".sh", ".ps1", ".yml", ".yaml", ".py"}
+CODE_SUFFIXES = {".swift", ".cs", ".xaml", ".csproj", ".props", ".sh", ".ps1", ".yml", ".yaml", ".py"}
 CODE_NAMES = {".tagpr"}
 SKIP_DIRS = {".git", ".build", "build", "docs", "node_modules", "bin", "obj", ".swiftpm", "publish"}
 SELF = Path(__file__).resolve()
