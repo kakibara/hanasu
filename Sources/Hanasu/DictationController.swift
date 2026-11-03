@@ -161,6 +161,8 @@ final class DictationController {
     // 設計判断: DEC-DIC-045
     func startDictation(mode: Mode = .refine) {
         guard state == .idle, canStart() else { return }
+        // 前に貼り付けられずに残した結果の表示は、次の録音を始めたら閉じる（DEC-DIC-094）
+        PasteFallbackPanel.shared.close()
         self.mode = mode
         state = .preparing
         stopRequested = false
@@ -238,8 +240,8 @@ final class DictationController {
         hud.show(.error(message))
     }
 
-    // 要件: REQ-DIC-007, REQ-DIC-070
-    // 設計判断: DEC-DIC-014, DEC-DIC-015, DEC-DIC-021, DEC-DIC-052, DEC-DIC-072
+    // 要件: REQ-DIC-007, REQ-DIC-070, REQ-DIC-080
+    // 設計判断: DEC-DIC-014, DEC-DIC-015, DEC-DIC-021, DEC-DIC-052, DEC-DIC-072, DEC-DIC-094
     func finishDictation() async {
         guard state == .recording else { return }
         state = .processing
@@ -326,6 +328,10 @@ final class DictationController {
         case (.copiedOnly, _):
             hud.show(.error("アクセシビリティが許可されていないため、クリップボードにコピーしました。⌘V で貼り付けてください。設定でオンになっている場合は、一覧から Hanasu を削除（−）して追加し直してください。"))
             _ = Permissions.isAccessibilityTrusted(prompt: true)
+        case (.notPasted(let clipboardKept), _):
+            // 入力できる場所がない。HUD の代わりに、自動では閉じないパネルで全文を残す（整形の失敗などの知らせも載せる）
+            hud.hide()
+            PasteFallbackPanel.shared.show(text: output, subject: .result, clipboardKept: clipboardKept, warning: warning)
         case (.pasted, let warning?):
             hud.show(.error(warning))
         case (.pasted, nil):

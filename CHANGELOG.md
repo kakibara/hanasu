@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.3.1](https://github.com/kakibara/hanasu/compare/v1.3.0...v1.3.1) - 2026-11-03
+
+- 文書を実装済みの仕様と将来の計画に分け、要件・設計判断を ID で追えるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/21
+- ライセンスを Apache-2.0 にし、Windows 版の配布物にもライセンスの表示を入れる by @kakibara in https://github.com/kakibara/hanasu/pull/23
+- README を GitHub 向けに作り直し、英語版を用意する by @kakibara in https://github.com/kakibara/hanasu/pull/24
+- Claude API を選べるようにし、API キーの保存とセキュリティを見直す（Mac 版） by @kakibara in https://github.com/kakibara/hanasu/pull/26
+- Claude API を選べるようにし、API キーの保存とセキュリティを見直す（Windows 版） by @kakibara in https://github.com/kakibara/hanasu/pull/25
+
 ## [v1.3.0](https://github.com/kakibara/hanasu/compare/v1.2.0...v1.3.0) - 2026-11-03
 
 - 録音中の HUD に停止・取消のボタンを付ける by @kakibara in https://github.com/kakibara/hanasu/pull/16

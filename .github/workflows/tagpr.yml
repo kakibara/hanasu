@@ -120,12 +120,20 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
+      # 設計判断: DEC-COM-150
+      # 依存の版とハッシュは、ここで packages.lock.json と照らし合わせる（食い違えば失敗させる）
+      - name: Restore
+        if: steps.check.outputs.exists == 'true'
+        run: dotnet restore windows/Hanasu.Windows.sln --locked-mode
+
+      # publish は RID（win-x64）と ILLink を足して restore し直すので、lock ファイル（RID なしで作る）とは入力が合わない。
+      # 上の Restore で確かめてあるので、ここでは locked mode を外す（windows.yml と同じ）
       - name: Publish
         if: steps.check.outputs.exists == 'true'
         run: |
           $version = $env:TAG.TrimStart('v')
           dotnet publish windows/Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self-contained `
-            -p:PublishSingleFile=true -p:Version=$version -o build/windows/Hanasu
+            -p:PublishSingleFile=true -p:RestoreLockedMode=false -p:Version=$version -o build/windows/Hanasu
 
       - name: Upload zip
         id: upload

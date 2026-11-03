@@ -72,6 +72,8 @@ private struct GeneralTab: View {
             }
             // 音声入力と会議の記録の文字起こしのエンジン（TranscriptionEngineSettingsView.swift）
             TranscriptionEngineSettingsSection(settings: settings)
+            // 入力できる場所がないときのクリップボードの扱い（PasteFallbackPanel.swift）
+            PasteFallbackSettingsSection()
             Section("その他") {
                 Toggle("開始・終了の効果音を鳴らす", isOn: $settings.playSounds)
             }

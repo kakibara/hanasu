@@ -144,6 +144,9 @@ final class EditModeController {
     // 設計判断: DEC-DIC-032
     func start() {
         guard state == .idle, dictation.state == .idle else { return }
+        // 前に貼り付けられずに残した結果の表示は、次の録音を始めたら閉じる（DEC-DIC-094）。
+        // 表示がキーウインドウのままだと、選択の写し取り（⌘C）がそちらへ行ってしまうので、読み取りの前に閉じる
+        PasteFallbackPanel.shared.close()
         // 選択の読み取り（アクセシビリティ API・⌘C）にも貼り付け（⌘V）にも要る
         guard Permissions.isAccessibilityTrusted(prompt: false) else {
             fail("選択を声で編集するには、アクセシビリティの許可が必要です（選択した文章の読み取りと貼り付けに使います）。")
@@ -287,7 +290,8 @@ final class EditModeController {
         setEscapeHotKey(enabled: false)
     }
 
-    // 設計判断: DEC-DIC-036
+    // 要件: REQ-DIC-080
+    // 設計判断: DEC-DIC-036, DEC-DIC-096
     func finish() async {
         guard state == .recording else { return }
         state = .processing
@@ -337,6 +341,10 @@ final class EditModeController {
         switch outcome {
         case .copiedOnly:
             hud.show(.error("アクセシビリティが許可されていないため、書き換えた文章をクリップボードにコピーしました。⌘V で貼り付けてください。"))
+        case .notPasted(let clipboardKept):
+            // 編集の結果は履歴に残らない（DEC-DIC-036）ので、ここで失わないよう全文を残す
+            hud.hide()
+            PasteFallbackPanel.shared.show(text: output, subject: .edit, clipboardKept: clipboardKept)
         case .pasted:
             hud.show(.done("書き換えました（⌘Z で元に戻せます）"))
         }
