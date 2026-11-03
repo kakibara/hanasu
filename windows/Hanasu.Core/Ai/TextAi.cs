@@ -15,6 +15,7 @@ public enum TextPurpose
 /// 文章の処理（整形・英訳・議事録）に使う AI。Gemini と Claude の両方がこれを満たす。
 /// 音声の文字起こしは含めない（Claude は音声を受け付けないため。Gemini の文字起こしは GeminiClient を直接使う）。
 /// </summary>
+// 設計判断: DEC-COM-140
 public interface ITextGenerator
 {
     /// <summary>設定画面や知らせに出す名前（「Gemini」「Claude」）</summary>
