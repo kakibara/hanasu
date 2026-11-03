@@ -1,0 +1,306 @@
+using Hanasu.Core.Settings;
+using Hanasu.Core.Transcription;
+
+namespace Hanasu.Core.Dictation;
+
+public enum DictationState { Idle, Preparing, Recording, Processing }
+
+public enum HotKeyEventKind { Pressed, Released }
+
+public enum InsertOutcome
+{
+    /// <summary>貼り付けた</summary>
+    Pasted,
+    /// <summary>貼り付けを送れなかったので、クリップボードへのコピーだけ行った</summary>
+    CopiedOnly,
+}
+
+/// <summary>カーソル位置へテキストを入力する（Windows ではクリップボード + Ctrl+V）。</summary>
+public interface ITextInserter
+{
+    Task<InsertOutcome> InsertAsync(string text);
+}
+
+public enum SoundCue { Start, Stop, Error }
+
+/// <summary>音声入力の流れが使う、OS 側の部品。</summary>
+public sealed class DictationServices
+{
+    public required Func<AppSettings> Settings { get; init; }
+    /// <summary>設定のエンジンに合わせて、1 回分の文字起こしを作る</summary>
+    public required Func<AppSettings, IDictationTranscriber> CreateTranscriber { get; init; }
+    public required DictationTextProcessor Processor { get; init; }
+    public required ITextInserter Inserter { get; init; }
+    public required IHud Hud { get; init; }
+    public required RecentResults Recent { get; init; }
+    /// <summary>今の前面アプリの名前（入力先として Gemini に伝える）</summary>
+    public Func<string?> ForegroundAppName { get; init; } = () => null;
+    /// <summary>録音中だけ Esc を取り消しのショートカットとして登録する</summary>
+    public Action<bool> SetEscapeHotKeyEnabled { get; init; } = _ => { };
+    public Action<SoundCue> PlaySound { get; init; } = _ => { };
+    /// <summary>直し方のページ（ms-settings: など）を開く</summary>
+    public Action<string> OpenHelp { get; init; } = _ => { };
+    public Action<string> Log { get; init; } = _ => { };
+}
+
+/// <summary>
+/// ホットキー → 録音 → 文字起こし → Gemini 整形（または英訳） → 入力、の流れを管理する。Mac 版の DictationController の移植。
+/// UI スレッドから呼ぶ（await の続きも UI スレッドに戻る前提）。OS に依存する部分は DictationServices で受け取る。
+/// </summary>
+/// <remarks>
+/// 状態遷移:
+/// idle ──hotkey──▶ preparing ──(マイク開始)──▶ recording
+/// recording ──hotkey(トグル) / 解放(押している間)──▶ processing ──(Gemini→入力)──▶ idle
+/// recording ──Esc──▶ idle（何もしない）
+/// preparing / recording ──エラー──▶ idle（HUD でエラー表示）
+/// processing 中の hotkey は無視
+/// </remarks>
+public sealed class DictationController
+{
+    private readonly DictationServices services;
+    private DictationState state = DictationState.Idle;
+    private IDictationTranscriber? transcriber;
+    private bool stopRequested;
+    private bool cancelRequested;
+    private string? targetAppName;
+
+    public DictationController(DictationServices services)
+    {
+        this.services = services;
+        services.Hud.LanguageSelected += (_, translating) => SelectOutputLanguage(translating);
+        services.Hud.StopRequested += (_, _) => RequestStop();
+        services.Hud.CancelRequested += (_, _) => Cancel();
+    }
+
+    public DictationState State
+    {
+        get => state;
+        private set
+        {
+            if (state == value) return;
+            state = value;
+            StateChanged?.Invoke(this, value);
+        }
+    }
+
+    public DictationMode Mode { get; private set; } = DictationMode.Refine;
+
+    public event EventHandler<DictationState>? StateChanged;
+
+    /// <summary>ほかの録音（会議の記録など）が動いている間は false を返す</summary>
+    public Func<bool> CanStart { get; set; } = () => true;
+
+    /// <summary>開始はショートカットごとのモードで。録音中はどちらのショートカットでも止まる</summary>
+    public void HandleHotKey(HotKeyEventKind kind, DictationMode mode)
+    {
+        var recordingMode = services.Settings().RecordingMode;
+        switch (kind, State)
+        {
+            case (HotKeyEventKind.Pressed, DictationState.Idle):
+                _ = StartAsync(mode);
+                break;
+            case (HotKeyEventKind.Pressed, DictationState.Recording) when recordingMode == RecordingMode.Toggle:
+            case (HotKeyEventKind.Released, DictationState.Recording) when recordingMode == RecordingMode.PushToTalk:
+                _ = FinishAsync();
+                break;
+            case (HotKeyEventKind.Pressed, DictationState.Preparing) when recordingMode == RecordingMode.Toggle:
+            case (HotKeyEventKind.Released, DictationState.Preparing) when recordingMode == RecordingMode.PushToTalk:
+                stopRequested = true;
+                break;
+        }
+    }
+
+    /// <summary>メニューから。止まっていれば始め、録音中なら止める</summary>
+    public void ToggleFromMenu(DictationMode mode = DictationMode.Refine)
+    {
+        switch (State)
+        {
+            case DictationState.Idle: _ = StartAsync(mode); break;
+            case DictationState.Recording: _ = FinishAsync(); break;
+            case DictationState.Preparing: stopRequested = true; break;
+        }
+    }
+
+    /// <summary>HUD の「■ 停止」。ショートカットをもう一度押したのと同じく、止めて文字起こしし、入力まで進める</summary>
+    public void RequestStop()
+    {
+        switch (State)
+        {
+            case DictationState.Recording: _ = FinishAsync(); break;
+            case DictationState.Preparing: stopRequested = true; break;
+        }
+    }
+
+    /// <summary>録音中に HUD で出力の言語を切り替える。止めた時点の選択で、整形するか英訳するかが決まる</summary>
+    public void SelectOutputLanguage(bool translating)
+    {
+        if (State is not (DictationState.Preparing or DictationState.Recording)) return;
+        Mode = translating ? DictationMode.TranslateToEnglish : DictationMode.Refine;
+        services.Hud.SetTranslating(translating);
+    }
+
+    public async Task StartAsync(DictationMode mode = DictationMode.Refine)
+    {
+        if (State != DictationState.Idle || !CanStart()) return;
+        Mode = mode;
+        State = DictationState.Preparing;
+        stopRequested = false;
+        cancelRequested = false;
+        targetAppName = services.ForegroundAppName();
+        services.Hud.SetTranslating(mode == DictationMode.TranslateToEnglish);
+        services.Hud.UpdateTranscript("");
+        services.Hud.Show(HudState.Preparing("準備中…"));
+        services.SetEscapeHotKeyEnabled(true);
+
+        var settings = services.Settings();
+        try
+        {
+            transcriber = services.CreateTranscriber(settings);
+            transcriber.PartialTextChanged += OnPartialText;
+            var context = new TranscriptionContext(settings.LocaleIdentifier, settings.UserDictionary.ContextualStrings, settings.MicrophoneDeviceId);
+            await transcriber.StartAsync(context);
+        }
+        catch (Exception e)
+        {
+            await DisposeTranscriberAsync();
+            Fail(e);
+            return;
+        }
+        if (cancelRequested)
+        {
+            await CancelTranscriberAsync();
+            FinishCancelled();
+            return;
+        }
+        State = DictationState.Recording;
+        services.PlaySound(SoundCue.Start);
+        services.Hud.Show(HudState.Recording);
+        if (stopRequested) await FinishAsync();
+    }
+
+    public void Cancel()
+    {
+        switch (State)
+        {
+            case DictationState.Preparing:
+                cancelRequested = true;
+                break;
+            case DictationState.Recording:
+                _ = CancelRecordingAsync();
+                break;
+        }
+    }
+
+    private async Task CancelRecordingAsync()
+    {
+        // 取り消しの途中でホットキーが来ても始め直さないよう、先に状態を変える
+        State = DictationState.Processing;
+        await CancelTranscriberAsync();
+        FinishCancelled();
+    }
+
+    public async Task FinishAsync()
+    {
+        if (State != DictationState.Recording || transcriber is null) return;
+        State = DictationState.Processing;
+        services.SetEscapeHotKeyEnabled(false);
+        services.PlaySound(SoundCue.Stop);
+        var settings = services.Settings();
+        var usesGemini = DictationTextProcessor.UsesGemini(settings, Mode);
+        services.Hud.Show(HudState.Processing(transcriber.FinishingMessage
+            ?? (usesGemini ? HudText.ProcessingTitle(Mode == DictationMode.TranslateToEnglish) : "仕上げています…")));
+
+        string raw;
+        try
+        {
+            raw = (await transcriber.StopAsync()).Trim();
+        }
+        catch (Exception e)
+        {
+            await DisposeTranscriberAsync();
+            Fail(e);
+            return;
+        }
+        await DisposeTranscriberAsync();
+        services.Log($"recognized {raw.Length} chars");
+        services.Hud.UpdateTranscript(raw);
+        if (raw.Length == 0)
+        {
+            Fail("音声が認識されませんでした");
+            return;
+        }
+
+        if (usesGemini) services.Hud.Show(HudState.Processing(HudText.ProcessingTitle(Mode == DictationMode.TranslateToEnglish)));
+        var outcome = await services.Processor.ProcessAsync(raw, Mode, targetAppName, settings);
+        services.Log($"process: {outcome.Status}, {outcome.Output.Length} chars");
+        // 入力先がずれても取り戻せるよう、貼り付けの前に残す
+        services.Recent.Add(raw, outcome.Output, Mode);
+        InsertOutcome inserted;
+        try
+        {
+            inserted = await services.Inserter.InsertAsync(outcome.Output);
+        }
+        catch (Exception e)
+        {
+            Fail($"入力できませんでした: {e.Message}\nメニューの「最近の結果」からコピーできます。");
+            return;
+        }
+        State = DictationState.Idle;
+
+        if (inserted == InsertOutcome.CopiedOnly)
+        {
+            services.Hud.Show(HudState.Error("入力先に貼り付けられなかったため、クリップボードにコピーしました。Ctrl+V で貼り付けてください（管理者として動いているアプリには貼り付けられません）。"));
+        }
+        else if (outcome.Warning is not null)
+        {
+            services.PlaySound(SoundCue.Error);
+            services.Hud.Show(HudState.Error(outcome.Warning));
+        }
+        else
+        {
+            services.Hud.Show(HudState.Done(Mode == DictationMode.TranslateToEnglish ? "英訳して入力しました" : "入力しました"));
+        }
+    }
+
+    private void OnPartialText(object? sender, string text) => services.Hud.UpdateTranscript(text);
+
+    private void FinishCancelled()
+    {
+        State = DictationState.Idle;
+        services.SetEscapeHotKeyEnabled(false);
+        services.Hud.Show(HudState.Done("取り消しました"));
+    }
+
+    private void Fail(Exception e)
+    {
+        services.Log($"failed: {e}");
+        if (e is TranscriptionException { HelpUri: { } uri }) services.OpenHelp(uri);
+        Fail(e.Message);
+    }
+
+    private void Fail(string message)
+    {
+        State = DictationState.Idle;
+        services.SetEscapeHotKeyEnabled(false);
+        services.PlaySound(SoundCue.Error);
+        services.Hud.Show(HudState.Error(message));
+    }
+
+    private async Task CancelTranscriberAsync()
+    {
+        if (transcriber is null) return;
+        try { await transcriber.CancelAsync(); }
+        catch (Exception e) { services.Log($"cancel failed: {e.Message}"); }
+        await DisposeTranscriberAsync();
+    }
+
+    private async Task DisposeTranscriberAsync()
+    {
+        var t = transcriber;
+        transcriber = null;
+        if (t is null) return;
+        t.PartialTextChanged -= OnPartialText;
+        try { await t.DisposeAsync(); }
+        catch (Exception e) { services.Log($"dispose failed: {e.Message}"); }
+    }
+}

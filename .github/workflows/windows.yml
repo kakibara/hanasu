@@ -1,0 +1,72 @@
+# Windows 版（windows/）のビルド・テスト・配布物の作成。
+# windows/ を触る PR と、main への push で動く。リリースへの添付は tagpr.yml が受け持つ（ここでは artifact に残すだけ）。
+name: windows
+on:
+  pull_request:
+    paths:
+      - "windows/**"
+      - ".github/workflows/windows.yml"
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: windows
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore Hanasu.Windows.sln
+
+      - name: Build
+        run: dotnet build Hanasu.Windows.sln -c Release --no-restore
+
+      - name: Test
+        run: dotnet test Hanasu.Core.Tests/Hanasu.Core.Tests.csproj -c Release --no-build --logger "console;verbosity=normal"
+
+      - name: Publish (win-x64, self-contained, single file)
+        run: dotnet publish Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o publish/win-x64
+
+      - name: Check publish output
+        shell: pwsh
+        run: |
+          $expected = @(
+            "publish/win-x64/Hanasu.exe",
+            "publish/win-x64/sherpa-onnx-c-api.dll",
+            "publish/win-x64/onnxruntime.dll",
+            "publish/win-x64/runtimes/win-x64/whisper.dll",
+            "publish/win-x64/runtimes/win-x64/ggml-whisper.dll",
+            "publish/win-x64/runtimes/win-x64/ggml-base-whisper.dll",
+            "publish/win-x64/runtimes/win-x64/ggml-cpu-whisper.dll"
+          )
+          foreach ($path in $expected) {
+            if (-not (Test-Path $path)) { throw "見つかりません: $path" }
+          }
+          Get-ChildItem -Recurse publish/win-x64 | Select-Object FullName, Length | Format-Table -AutoSize
+
+      - name: Zip
+        shell: pwsh
+        run: Compress-Archive -Path publish/win-x64/* -DestinationPath publish/Hanasu-windows-x64.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Hanasu-windows-x64
+          path: windows/publish/Hanasu-windows-x64.zip
+          if-no-files-found: error

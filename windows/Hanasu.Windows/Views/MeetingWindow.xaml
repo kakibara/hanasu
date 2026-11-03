@@ -1,0 +1,149 @@
+<Window x:Class="Hanasu.Windows.Views.MeetingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="会議ノート — Hanasu"
+        Width="1040" Height="720" MinWidth="760" MinHeight="480"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Yu Gothic UI, Meiryo UI, Segoe UI" FontSize="13">
+    <Window.Resources>
+        <Style x:Key="Note" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FF5F6368" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,3,0,0" />
+        </Style>
+        <Style x:Key="Label" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="0,8,0,2" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="10,3" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+            <Setter Property="MinHeight" Value="26" />
+        </Style>
+        <Style x:Key="Reader" TargetType="TextBox">
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="FontSize" Value="13.5" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- 左: 記録中の表示・会議の一覧・記録の開始 -->
+        <Border Grid.Column="0" BorderBrush="#FFE0E0E0" BorderThickness="0,0,1,0" Background="#FFFAFAFA">
+            <DockPanel Margin="10">
+                <Border x:Name="LiveBox" DockPanel.Dock="Top" Background="#FFFDECEA" CornerRadius="6" Padding="10,8" Margin="0,0,0,8" Visibility="Collapsed">
+                    <StackPanel>
+                        <DockPanel>
+                            <Button x:Name="StopButton" DockPanel.Dock="Right" Content="■ 停止" Margin="0" Click="OnStopClick" />
+                            <TextBlock x:Name="LiveTitle" FontWeight="SemiBold" Foreground="#FFC5221F" VerticalAlignment="Center" Text="● 記録中" />
+                        </DockPanel>
+                        <TextBlock x:Name="LiveElapsed" FontSize="22" FontFamily="Consolas, Segoe UI" Margin="0,4,0,0" Text="00:00" />
+                        <TextBlock x:Name="LiveProgress" Style="{StaticResource Note}" />
+                    </StackPanel>
+                </Border>
+
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,8,0,0">
+                    <TextBlock Style="{StaticResource Label}" Text="自分（マイク）" />
+                    <ComboBox x:Name="MicCombo" SelectionChanged="OnMicChanged" />
+                    <TextBlock Style="{StaticResource Label}" Text="相手（この出力で鳴る音）" />
+                    <ComboBox x:Name="OutputCombo" SelectionChanged="OnOutputChanged" />
+                    <TextBlock Style="{StaticResource Label}" Text="議事録の型" />
+                    <ComboBox x:Name="NextTemplateCombo" SelectionChanged="OnNextTemplateChanged" />
+                    <TextBox x:Name="CustomPromptBox" Margin="0,4,0,0" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="60" MaxHeight="120"
+                             VerticalScrollBarVisibility="Auto" Padding="4,3" Visibility="Collapsed" LostFocus="OnCustomPromptChanged" />
+                    <Button x:Name="StartButton" Margin="0,10,0,0" Padding="10,6" Content="● 会議の記録を開始" Click="OnStartClick" />
+                    <TextBlock x:Name="StartNote" Style="{StaticResource Note}" />
+                </StackPanel>
+
+                <ListBox x:Name="MeetingList" SelectionChanged="OnMeetingSelected" BorderThickness="0" Background="Transparent"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="2,4">
+                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Detail}" FontSize="11.5" Foreground="#FF5F6368" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!-- 右: 選んだ会議 -->
+        <TextBlock x:Name="EmptyText" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF5F6368"
+                   Text="左の一覧から会議を選ぶか、左下の「会議の記録を開始」で記録を始めます。" TextWrapping="Wrap" Margin="24" />
+        <DockPanel x:Name="DetailPanel" Grid.Column="1" Margin="14,10,14,10" Visibility="Collapsed">
+            <StackPanel DockPanel.Dock="Top">
+                <TextBox x:Name="TitleBox" FontSize="18" FontWeight="SemiBold" BorderThickness="0,0,0,1" Padding="0,2" LostFocus="OnTitleChanged" />
+                <TextBlock x:Name="MeetingInfo" Style="{StaticResource Note}" />
+                <WrapPanel x:Name="ActionsPanel" Margin="0,8,0,0">
+                    <Button x:Name="RegenerateButton" Content="議事録を作り直す" Click="OnRegenerateClick" />
+                    <TextBlock Text="型:" VerticalAlignment="Center" Margin="4,0,4,0" />
+                    <ComboBox x:Name="TemplateCombo" MinWidth="110" Margin="0,0,6,0" SelectionChanged="OnTemplateChanged" />
+                    <Button x:Name="CopyButton" Content="Markdown をコピー" Click="OnCopyClick" />
+                    <Button Content="エクスプローラーで開く" Click="OnOpenFolderClick" />
+                </WrapPanel>
+                <TextBlock x:Name="ErrorText" Style="{StaticResource Note}" Foreground="#FFC5221F" Visibility="Collapsed" />
+                <TextBlock x:Name="ActionStatus" Style="{StaticResource Note}" />
+                <TextBlock Style="{StaticResource Label}" Text="話者名（変えると文字起こしと議事録の表示に使います）" x:Name="SpeakersLabel" />
+                <WrapPanel x:Name="SpeakersPanel" />
+            </StackPanel>
+
+            <!-- 記録中: メモと「ここ重要」 -->
+            <Border x:Name="RecordingPanel" DockPanel.Dock="Top" Margin="0,10,0,0" Padding="10" Background="#FFF6F8FC" CornerRadius="6" Visibility="Collapsed">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="自分" Margin="0,0,6,0" VerticalAlignment="Center" FontSize="12" />
+                        <ProgressBar x:Name="MicLevel" Grid.Column="1" Height="6" Maximum="0.3" />
+                        <TextBlock Grid.Column="2" Text="相手" Margin="12,0,6,0" VerticalAlignment="Center" FontSize="12" />
+                        <ProgressBar x:Name="OutputLevel" Grid.Column="3" Height="6" Maximum="0.3" />
+                    </Grid>
+                    <TextBlock x:Name="RecordingNote" Style="{StaticResource Note}" />
+                    <DockPanel Margin="0,8,0,0">
+                        <Button DockPanel.Dock="Right" x:Name="HighlightButton" Content="★ ここ重要" Margin="6,0,0,0" Click="OnHighlightClick" />
+                        <Button DockPanel.Dock="Right" Content="メモを足す" Margin="6,0,0,0" Click="OnAddNoteClick" />
+                        <TextBox x:Name="NoteInput" Padding="4,3" KeyDown="OnNoteInputKeyDown" TextChanged="OnNoteInputChanged" />
+                    </DockPanel>
+                    <TextBlock Style="{StaticResource Note}" Text="Enter でメモを足します（時刻は書き始めた時点）。書きかけの文があるときに「ここ重要」を押すと、その文を印の説明にします。" />
+                    <TextBlock x:Name="LiveNotes" Margin="0,6,0,0" TextWrapping="Wrap" FontFamily="Consolas, Yu Gothic UI" />
+                </StackPanel>
+            </Border>
+
+            <TabControl x:Name="Tabs" Margin="0,10,0,0">
+                <TabItem Header="議事録">
+                    <TextBox x:Name="MinutesBox" Style="{StaticResource Reader}" />
+                </TabItem>
+                <TabItem Header="文字起こし">
+                    <TextBox x:Name="TranscriptBox" Style="{StaticResource Reader}" />
+                </TabItem>
+                <TabItem Header="メモ">
+                    <DockPanel Margin="6">
+                        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,6,0,0">
+                            <Button Content="保存" Click="OnSaveNotesClick" />
+                            <Button x:Name="SaveNotesAndRegenerateButton" Content="保存して議事録を作り直す" Click="OnSaveNotesAndRegenerateClick" />
+                        </StackPanel>
+                        <TextBlock DockPanel.Dock="Top" Style="{StaticResource Note}" Margin="0,0,0,4"
+                                   Text="1 行に 1 件。「[12:34] 内容」はメモ、「[12:40] ★ 説明」は「ここ重要」の印、時刻のない行は記録のあとに書き足したメモです。" />
+                        <TextBox x:Name="NotesBox" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Padding="4,3"
+                                 FontFamily="Consolas, Yu Gothic UI" />
+                    </DockPanel>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </Grid>
+</Window>

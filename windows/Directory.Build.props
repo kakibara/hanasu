@@ -1,0 +1,17 @@
+<Project>
+  <!-- windows/ 以下のすべてのプロジェクトに共通の設定 -->
+  <PropertyGroup>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Version>0.1.0</Version>
+    <Company>Hanasu</Company>
+    <Product>Hanasu for Windows</Product>
+    <Copyright>Copyright (c) Hanasu contributors</Copyright>
+    <!-- Mac（.NET SDK だけ）でも Windows 向けのプロジェクトをコンパイルできるようにする -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <!-- 配布物に .pdb を並べないよう、Release ではデバッグ情報を dll / exe に埋め込む -->
+    <DebugType Condition="'$(Configuration)' == 'Release'">embedded</DebugType>
+  </PropertyGroup>
+</Project>
