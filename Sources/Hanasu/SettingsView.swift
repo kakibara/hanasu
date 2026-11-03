@@ -7,6 +7,7 @@ struct SettingsView: View {
     var onOpenMeetingNotes: () -> Void
     var onBeginShortcutRecording: () -> Void
     var onEndShortcutRecording: () -> Void
+    var onOpenHistory: () -> Void = {}
 
     var body: some View {
         TabView {
@@ -29,6 +30,11 @@ struct SettingsView: View {
                 onBeginShortcutRecording: onBeginShortcutRecording,
                 onEndShortcutRecording: onEndShortcutRecording)
                 .tabItem { Label("会議", systemImage: "person.2.wave.2") }
+            HistorySettingsTab(
+                onOpenHistory: onOpenHistory,
+                onBeginShortcutRecording: onBeginShortcutRecording,
+                onEndShortcutRecording: onEndShortcutRecording)
+                .tabItem { Label("履歴", systemImage: "clock.arrow.circlepath") }
             PermissionsTab()
                 .tabItem { Label("権限", systemImage: "lock.shield") }
         }
