@@ -43,7 +43,7 @@ enum PasteTargetDecision: String, Sendable {
 }
 
 // 要件: REQ-DIC-080
-// 設計判断: DEC-DIC-091, DEC-DIC-092
+// 設計判断: DEC-DIC-091, DEC-DIC-092, DEC-DIC-097
 /// フォーカスの様子から、貼り付けるか・結果を表示するかを決める。
 /// 誤って表示に回すより貼り付けを試す方を優先し、「入力できる場所がない」とはっきり分かるときだけ .show にする。
 enum PasteTargetJudge {
@@ -65,6 +65,10 @@ enum PasteTargetJudge {
     static let nonTextRoles: Set<String> = controlRoles.union([
         "AXImage", "AXLink", "AXStaticText", "AXWebArea", "AXMenuBar", "AXMenuBarItem", "AXTabGroup", "AXToolbar",
     ])
+
+    // 設計判断: DEC-DIC-097
+    /// AXWebArea（Web ページの入力欄の外）にフォーカスがあると言い切れるアプリ。Web の中身の AX をいつも出す Safari だけ
+    static let webAreaTrustedBundleIDs: Set<String> = ["com.apple.Safari", "com.apple.SafariTechnologyPreview"]
 
     static func decide(_ s: PasteFocusSnapshot) -> (decision: PasteTargetDecision, reason: String) {
         guard s.hasApp else { return (.unknown, "フォーカスのあるアプリが分からない") }
@@ -94,6 +98,11 @@ enum PasteTargetJudge {
         }
         // Electron は AX の出しかたがアプリごとにまちまちで、何も選んでいなくても ⌘V を入力欄へ回すアプリもある
         if s.isElectron { return (.unknown, "Electron 製のアプリ（\(describe(s))）") }
+        // Chromium（Chrome・Edge・Arc など）は支援技術に頼まれるまで Web の中身を出さないので、入力欄にフォーカスがあっても
+        // AXWebArea が返り続けることがある。Safari のほかでは、AXWebArea だけでは入力欄の外と決めない
+        if role == "AXWebArea", !webAreaTrustedBundleIDs.contains(s.bundleID ?? "") {
+            return (.unknown, "Safari のほかの Web の領域（\(describe(s))）")
+        }
         if isFinder { return (.show, "Finder のファイルの一覧など（\(describe(s))）") }
         if nonTextRoles.contains(role) { return (.show, "文字を入れられない要素（\(describe(s))）") }
         return (.unknown, "入力欄かどうか分からない要素（\(describe(s))）")

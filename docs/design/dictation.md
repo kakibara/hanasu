@@ -127,7 +127,7 @@ Typeless のような「話した内容を、自然な日本語に整えて今�
 手順 1 の前に、キーボードのフォーカスが文字を入れられる場所にあるかを AX で確かめる。コードは `PasteTarget.swift`（判定・読み取り・設定）、`PasteFallbackPanel.swift`（結果を残すパネルと設定の欄）。
 
 - 読むもの（`PasteTargetProbe.readFocus`）: システム全体のフォーカスのあるアプリ（Spotlight などのパネルも拾える）の、フォーカスのあるウインドウと要素。要素の役割・サブロール、`AXValue` を書き換えられるか、選択範囲、`AXEditableAncestor`。アプリが Electron 製か（アプリの中の `Electron Framework.framework`）。
-- 判定（`PasteTargetJudge.decide`、純粋な関数）: 貼る / 表示する / 分からない の 3 つ。「表示する」は、Finder・ウインドウがない・ボタンやリンクや `AXWebArea` などにフォーカスがある、とはっきり分かるときだけ。Electron 製のアプリと、中身の分からない要素（`AXGroup`・一覧・表など）は「分からない」で、今までどおり貼る。細かい決まりは DEC-DIC-091・092。
+- 判定（`PasteTargetJudge.decide`、純粋な関数）: 貼る / 表示する / 分からない の 3 つ。「表示する」は、Finder・ウインドウがない・ボタンやリンク・Safari の `AXWebArea` などにフォーカスがある、とはっきり分かるときだけ。Electron 製のアプリ、Safari のほかの `AXWebArea`（Chromium は Web の中身を出さないことがある）、中身の分からない要素（`AXGroup`・一覧・表など）は「分からない」で、今までどおり貼る。細かい決まりは DEC-DIC-091・092・097。
 - 「表示する」と出たら 0.15 秒おいて読み直し、2 回とも同じときだけ表示に回す（DEC-DIC-093）。
 - 表示に回すと `TextInserter.insert` は ⌘V を送らずに `.notPasted(clipboardKept:)` を返す。設定が「クリップボードにも入れておく」（既定）なら、印を付けた結果をクリップボードに置いたままにし、「表示だけにする」ならクリップボードに触らない（DEC-DIC-095）。
 - 呼び出し元（音声入力・選択を声で編集・もう一度入力）は HUD を隠し、`PasteFallbackPanel` に全文を出す（5.2、DEC-DIC-094・096）。
