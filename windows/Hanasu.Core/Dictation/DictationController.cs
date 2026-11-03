@@ -7,18 +7,23 @@ public enum DictationState { Idle, Preparing, Recording, Processing }
 
 public enum HotKeyEventKind { Pressed, Released }
 
-public enum InsertOutcome
+/// <summary>入力の結果。貼り付けなかったときは、その理由と、クリップボードに結果の文章が入っているか</summary>
+public sealed record InsertOutcome(NotPastedReason? NotPasted = null, bool ClipboardHasText = false)
 {
     /// <summary>貼り付けた</summary>
-    Pasted,
-    /// <summary>貼り付けを送れなかったので、クリップボードへのコピーだけ行った</summary>
-    CopiedOnly,
+    public static InsertOutcome Pasted { get; } = new();
+
+    /// <summary>貼り付けなかった（入力できる場所がない・権限の高いウインドウ・送れなかった など）</summary>
+    public static InsertOutcome NotPastedBecause(NotPastedReason reason, bool clipboardHasText) => new(reason, clipboardHasText);
+
+    public bool WasPasted => NotPasted is null;
 }
 
 /// <summary>カーソル位置へテキストを入力する（Windows ではクリップボード + Ctrl+V）。</summary>
 public interface ITextInserter
 {
-    Task<InsertOutcome> InsertAsync(string text);
+    /// <param name="fallback">貼り付けられないと分かったとき、結果をクリップボードに入れたままにするか（REQ-DIC-081）</param>
+    Task<InsertOutcome> InsertAsync(string text, PasteFallbackClipboard fallback);
 }
 
 public enum SoundCue { Start, Stop, Error }
@@ -238,18 +243,19 @@ public sealed class DictationController
         InsertOutcome inserted;
         try
         {
-            inserted = await services.Inserter.InsertAsync(outcome.Output);
+            inserted = await services.Inserter.InsertAsync(outcome.Output, settings.PasteFallbackClipboard);
         }
         catch (Exception e)
         {
-            Fail($"入力できませんでした: {e.Message}\nメニューの「最近の結果」からコピーできます。");
-            return;
+            // 入力の途中で失敗しても、結果は画面に残す（クリップボードに入っているかは分からないので、入っていないものとして案内する）
+            services.Log($"insert failed: {e}");
+            inserted = InsertOutcome.NotPastedBecause(NotPastedReason.Failed, clipboardHasText: false);
         }
         State = DictationState.Idle;
 
-        if (inserted == InsertOutcome.CopiedOnly)
+        if (inserted.NotPasted is { } reason)
         {
-            services.Hud.Show(HudState.Error("入力先に貼り付けられなかったため、クリップボードにコピーしました。Ctrl+V で貼り付けてください（管理者として動いているアプリには貼り付けられません）。"));
+            ShowUnpasted(outcome, reason, inserted.ClipboardHasText);
         }
         else if (outcome.Warning is not null)
         {
@@ -260,6 +266,19 @@ public sealed class DictationController
         {
             services.Hud.Show(HudState.Done(Mode == DictationMode.TranslateToEnglish ? "英訳して入力しました" : "入力しました"));
         }
+    }
+
+    /// <summary>
+    /// 貼り付けなかったときは、結果の全文を HUD に残す（自動では閉じない。次に音声入力を始めると閉じる）。
+    /// 権限の高いウインドウ・送れなかったときも、入力できる場所がないときと同じ表示にそろえる（DEC-DIC-123）
+    /// </summary>
+    // 要件: REQ-DIC-080
+    // 設計判断: DEC-DIC-121, DEC-DIC-123
+    private void ShowUnpasted(ProcessOutcome outcome, NotPastedReason reason, bool clipboardHasText)
+    {
+        services.Log($"not pasted: {reason}, clipboard has text: {clipboardHasText}");
+        if (outcome.Warning is not null) services.PlaySound(SoundCue.Error);
+        services.Hud.Show(HudState.Unpasted(outcome.Output, reason, clipboardHasText, outcome.Warning));
     }
 
     private void OnPartialText(object? sender, string text) => services.Hud.UpdateTranscript(text);

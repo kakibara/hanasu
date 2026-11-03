@@ -46,7 +46,7 @@
 - 出典: 初版の「目的とユーザー体験」5
 - 対象: Mac / Windows
 - 実装の場所: `TextInserter.insert`
-- Windows の実装: `windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`
+- Windows の実装: `windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`。入力できる場所がないと分かったときは貼らずに結果を画面に残す（REQ-DIC-080）
 - 確かめ方: 実機で確かめる
 
 ### REQ-DIC-005 録音中に Esc で取り消す
@@ -195,25 +195,41 @@
 
 ### REQ-DIC-080 入力できる場所がないときは、結果を画面に残して自分で貼れるようにする
 - 内容: 音声入力の結果を入れるときに、フォーカスが文字を入力できる場所にない（ペーストできない）と分かったら、結果の文章を画面に表示し、自動では閉じない。表示から文章をコピーでき、閉じるまで残る。
+- 受け入れ条件:
+  - Mac: デスクトップ（Finder）を前面にして音声入力すると、⌘V を送らず、画面の下部に結果の全文が出る。
+  - Mac: 表示の文字は選んでコピーできる。「コピー」で全文をコピーできる。「閉じる」・Esc で閉じる。自動では閉じず、次に録音を始めたら閉じる。
+  - Mac: 長い文章はスクロールで読める。
+  - Mac: 入力欄にカーソルがあるとき・入力欄かどうか分からないとき（Electron 製のアプリなど）は、今までどおり貼り付ける。
+  - Mac: 選択を声で編集した結果・「最後の結果をもう一度入力」も同じように扱う。
+  - Mac: アクセシビリティの許可がないときは、今までどおりコピーして案内する（DEC-DIC-014）。
+  - Windows: デスクトップ・タスクバーが前面にある、前面のウインドウにフォーカスがない、読み取り専用の入力欄やエクスプローラーのファイルの一覧にフォーカスがある、のどれかで音声入力を終えると、Ctrl+V を送らず、HUD が広がって結果の全文を出す（DEC-DIC-120・121）。
+  - Windows: 表示は自動では消えない。文章は選べ、長ければスクロールで読める。「コピー」で写せる。「閉じる」か、文章をクリックしたあとの Esc で閉じる。次に音声入力を始めると閉じる。
+  - Windows: 入力できる場所か分からないとき（ブラウザ・Electron・Excel のセル・独自に描くアプリなど）は、今までどおり貼り付ける。
+  - Windows: 管理者として動いているアプリが前面にあるとき・Ctrl+V を送れなかったとき・クリップボードを使えなかったときも、同じ表示にする（DEC-DIC-123）。
+  - Windows: 「最近の結果」には今までどおり残る。
 - 出典: ユーザーの依頼（2026-11-04「フォーカスがどこにも当たっていなくて、ペーストする時にペーストできないという場合は、画面上に文字を表示して…画面を自動で閉じないようにしてください」）
 - 対象: Mac / Windows
-- 受け入れ条件:
-  - デスクトップ（Finder）を前面にして音声入力すると、⌘V を送らず、画面の下部に結果の全文が出る。
-  - 表示の文字は選んでコピーできる。「コピー」で全文をコピーできる。「閉じる」・Esc で閉じる。自動では閉じず、次に録音を始めたら閉じる。
-  - 長い文章はスクロールで読める。
-  - 入力欄にカーソルがあるとき・入力欄かどうか分からないとき（Electron 製のアプリなど）は、今までどおり貼り付ける。
-  - 選択を声で編集した結果・「最後の結果をもう一度入力」も同じように扱う。
-  - アクセシビリティの許可がないときは、今までどおりコピーして案内する（DEC-DIC-014）。
 - 実装の場所: `PasteTargetJudge.decide`、`PasteTargetProbe`、`TextInserter.insert`（`Outcome.notPasted`）、`PasteFallbackPanel`、`DictationController.finishDictation`、`EditModeController.finish`、`DictationHistoryUI.repasteLast`
-- 確かめ方: `.build/debug/Hanasu --test-paste-target`（判定の表。失敗があれば終了コード 1）、`--render-paste-fallback /tmp/fallback.png [--long]`、`--probe-paste-target [秒]`（実機のフォーカスでの判定。アクセシビリティの許可が要る）。パネルの操作（選択・Esc・コピー）は実機で確かめる
+- Windows の実装: `windows/Hanasu.Core/Dictation/PasteTarget.cs`（判定）、`windows/Hanasu.Windows/Services/FocusProbe.cs`（Win32 と UI Automation から集める）、`windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`、`windows/Hanasu.Core/Dictation/DictationController.cs`（`ShowUnpasted`）、`windows/Hanasu.Windows/Views/HudWindow.xaml.cs`（表示）
+- 確かめ方:
+  - Mac: `.build/debug/Hanasu --test-paste-target`（判定の表。失敗があれば終了コード 1）、`--render-paste-fallback /tmp/fallback.png [--long]`、`--probe-paste-target [秒]`（実機のフォーカスでの判定。アクセシビリティの許可が要る）。パネルの操作（選択・Esc・コピー）は実機で確かめる
+  - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~PasteTarget|FullyQualifiedName~Unpasted"`（判定・表示の文言・流れ）。表示とフォーカスの動きは実機で確かめる
+- 食い違い（ユーザーの確認待ち）: Windows で「読み取り専用の入力欄」として見分けるのは、Win32 の `Edit`・`RichEdit*`（`ES_READONLY`）と、デスクトップ・タスクバー・エクスプローラーの上の欄だけ（DEC-DIC-124）。ふつうのアプリの WPF・ストアアプリの読み取り専用の欄では、UI Automation に問い合わせずに貼り付けを試す（入らないが「最近の結果」には残る）。この範囲でよいか。
 
 ### REQ-DIC-081 入力できる場所がないときのクリップボードの扱いを、設定で選べる
 - 内容: REQ-DIC-080 のとき、クリップボードを元に戻して表示からコピーするか、結果をクリップボードに入れたままにしてペーストだけで済むようにするかを、設定で選べる。
+- 受け入れ条件:
+  - Mac: 設定の「一般」→「入力できる場所がないとき」で選べる。「クリップボードにも入れておく」（既定）では、表示が出たあと入力したい場所で ⌘V を押すと結果が入る。「表示だけにする」では、クリップボードは音声入力の前のまま。
+  - Windows: 設定 → 一般 →「入力できる場所がないとき」で、「クリップボードにも入れておく」（既定）か「表示だけにして、クリップボードは元のままにする」を選べる（DEC-DIC-122）。
+  - Windows: 「クリップボードにも入れておく」では、表示が出たときに結果がクリップボードに入っていて、貼りたい場所で Ctrl+V を押すだけで貼れる。クリップボードの履歴（Win+V）には残らない。
+  - Windows: 「表示だけにする」では、クリップボードは音声入力の前のまま変わらない。
 - 出典: ユーザーの依頼（2026-11-04「自分でコピーペーストをするのか、クリップボードにも初めからコピーされていて、ペーストだけで済むようにするのかをオプションで選択できるようにしてください」）
 - 対象: Mac / Windows
-- 受け入れ条件: 設定の「一般」→「入力できる場所がないとき」で選べる。「クリップボードにも入れておく」（既定）では、表示が出たあと入力したい場所で ⌘V を押すと結果が入る。「表示だけにする」では、クリップボードは音声入力の前のまま。
 - 実装の場所: `PasteFallbackSettings`、`PasteFallbackSettingsSection`、`TextInserter.insert`
-- 確かめ方: `.build/debug/Hanasu --render-paste-fallback-settings /tmp/fallback-settings.png`、`--render-paste-fallback /tmp/fallback.png --display-only`。クリップボードの中身は実機で確かめる
+- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`（`PasteFallbackClipboard`）、`windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`
+- 確かめ方:
+  - Mac: `.build/debug/Hanasu --render-paste-fallback-settings /tmp/fallback-settings.png`、`--render-paste-fallback /tmp/fallback.png --display-only`。クリップボードの中身は実機で確かめる
+  - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~PasteFallback|FullyQualifiedName~FallbackSetting"`（設定の保存と、入力への渡し方）。クリップボードの中身は実機で確かめる
 
 ---
 
@@ -911,18 +927,18 @@
 - 実装の場所: `windows/Hanasu.Core/Settings/HotKeyCombo.cs`、`windows/Hanasu.Windows/Services/HotKeyService.cs`
 
 ### DEC-DIC-111 Windows 版の入力は、クリップボードと SendInput の Ctrl+V
-- 決めたこと: クリップボードを退避して文章を置き、修飾キーが離されるのを待ってから `SendInput` で Ctrl+V を送り、500 ms 後に元に戻す（その間にコピーされていたら戻さない）。クリップボードの履歴（Win+V）とクラウド同期に残さない印を付ける。
+- 決めたこと: 修飾キーが離されるのを待ち、貼り付け先を確かめてから（DEC-COM-149・DEC-DIC-120）、クリップボードを退避して文章を置き、`SendInput` で Ctrl+V を送り、500 ms 後に元に戻す（その間にコピーされていたら戻さない）。クリップボードの履歴（Win+V）とクラウド同期に残さない印を付ける。
 - 理由: Mac 版の DEC-DIC-013 と同じ考え方。押したままの修飾キーが混ざらないようにする。
-- 決めた場面: PR #19
+- 決めた場面: PR #19。貼り付け先を確かめてからクリップボードに置く順にしたのは、入力できる場所がないときに結果を画面に残す PR（Windows 版）
 - 関係する要件: REQ-DIC-004
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`
 
 ### DEC-DIC-112 Windows 版の HUD は、フォーカスを奪わないウインドウにする
-- 決めたこと: 画面の下の小さな表示を `WS_EX_NOACTIVATE` で作り、ヘッダーの右に「経過時間・取消・■ 停止」を並べる。押せるのは準備中・録音中だけで、それ以外はマウスを素通しする。
+- 決めたこと: 画面の下の小さな表示を `WS_EX_NOACTIVATE` で作り、ヘッダーの右に「経過時間・取消・■ 停止」を並べる。押せるのは準備中・録音中と、貼り付けなかった結果の表示（DEC-DIC-121）だけで、それ以外はマウスを素通しする。
 - 理由: Mac 版の DEC-DIC-016・DEC-DIC-025 と同じく、入力先のフォーカスを動かさない。
-- 決めた場面: PR #19
-- 関係する要件: REQ-DIC-002, REQ-DIC-011, REQ-DIC-012
+- 決めた場面: PR #19。結果の表示は、入力できる場所がないときに結果を画面に残す PR（Windows 版）
+- 関係する要件: REQ-DIC-002, REQ-DIC-011, REQ-DIC-012, REQ-DIC-080
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Windows/Views/HudWindow.xaml.cs`、`windows/Hanasu.Core/Dictation/Hud.cs`
 
@@ -941,6 +957,52 @@
 - 関係する要件: REQ-DIC-008
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/Dictation/DictationText.cs`、`windows/Hanasu.Windows/TrayIcon.cs`
+
+### DEC-DIC-120 Windows 版は、Win32 の前面とフォーカスを主に見て、分からなければ貼り付ける
+- 決めたこと: Ctrl+V を送る直前に、前面のウインドウのクラス名と、そのスレッドの `GetGUIThreadInfo`（`hwndFocus`・`hwndCaret`）、フォーカスのある Win32 の入力欄（`Edit`・`RichEdit*`）の読み取り専用のスタイル（`ES_READONLY`）、UI Automation の `FocusedElement` の ControlType と `ValuePattern.IsReadOnly`（DEC-DIC-124 のときだけ）を集め、Core の `PasteTargetJudge.Judge`（純粋な関数）で決める。上から順に:
+  1. 前面のウインドウがない → 貼らない
+  2. フォーカスが読み取り専用の Edit（Win32 の `ES_READONLY`。キャレットがあっても）→ 貼らない
+  3. フォーカスが Edit・Document か、システムのキャレットがある → 貼る（デスクトップの上のアイコンの名前の変更も貼る）
+  4. 前面がデスクトップ（`Progman`・`WorkerW`）かタスクバー（`Shell_TrayWnd`・`Shell_SecondaryTrayWnd`）→ 貼らない。エクスプローラー（`CabinetWClass`）は、UI Automation で入力欄でない（ファイルの一覧など）と分かったときだけ貼らない
+  5. 前面のスレッドに `hwndFocus` がない → 貼らない。ただしストアアプリ（`ApplicationFrameWindow`・`Windows.UI.Core.CoreWindow`）は、フォーカスが別のスレッドにあるので除く
+  6. それ以外（分からない）→ 貼る
+- 理由: 依頼の「分からないときは今までどおり貼り付ける」に合わせ、貼らないと決めるのは確かなときだけにした。ブラウザ・Electron は UI Automation の木を遅れて作り、ページ全体を読み取り専用の Document として出すことがあるので、Document の読み取り専用では貼らないと決めない。Excel のセル（入力欄ではないが Ctrl+V で入る）・ターミナル・独自に描くアプリも「入力欄でない」とは決めない。判定を Core に置き、Mac の上の `dotnet test` で確かめられるようにした。
+- 決めた場面: 入力できる場所がないときに結果を画面に残す PR（Windows 版）
+- 関係する要件: REQ-DIC-080
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Dictation/PasteTarget.cs`、`windows/Hanasu.Windows/Services/FocusProbe.cs`
+
+### DEC-DIC-121 Windows 版は、HUD を広げて結果を残し、文章をクリックしたときだけ前面に出す
+- 決めたこと: 貼り付けなかったときは、HUD（DEC-DIC-112）を幅 600・高さ 330 に広げ、見出し（理由）・貼り方の案内・結果の全文（読み取り専用の `TextBox`、長ければスクロール）・「コピー」「閉じる」を出す（`HudPhase.Unpasted`）。自動では閉じず、クリックを受け取る。ふだんは `WS_EX_NOACTIVATE` のままで、ボタンは前面に出さずに押せる。文章をクリックしたときだけ `WS_EX_NOACTIVATE` を外して前面に出し、文字の選択・Ctrl+C・Esc（閉じる）を使えるようにする。閉じるとき・前面に出したまま次の音声入力を始めたときは、入力先だったウインドウ（`ForegroundWindowTracker`）にフォーカスを返す。次の音声入力の HUD が出ると、結果の表示は消える。「コピー」は、ユーザーが自分でコピーする操作なので、履歴に残さない印を付けない（DEC-COM-149 と同じ）。
+- 理由: 新しいウインドウを作るより、今の HUD の位置と見た目のまま広げる方が、何が起きたか分かりやすい。Esc を全体のショートカットにすると、表示が残っている間ずっとほかのアプリの Esc を奪うので、前面に出したときだけにした。
+- 決めた場面: 入力できる場所がないときに結果を画面に残す PR（Windows 版）
+- 関係する要件: REQ-DIC-080
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Views/HudWindow.xaml.cs`、`windows/Hanasu.Core/Dictation/Hud.cs`
+
+### DEC-DIC-122 Windows 版の既定は「クリップボードにも入れておく」。「表示だけ」ではクリップボードに触らない
+- 決めたこと: `AppSettings.PasteFallbackClipboard` の既定は `KeepResult`（結果をクリップボードに入れたままにする。印は DEC-COM-149 と同じ）。`RestoreOriginal`（表示だけ）では、貼らないと決めた時点でクリップボードに何も置かない（退避して戻すのではなく、初めから触らない）。Ctrl+V を送れなかったときは、置いた文章を元に戻す。
+- 理由: 依頼の「ペーストだけで済む」方が手数が少なく、迷ったら (b) という方針にも合う。PR #19 からの「管理者として動いているアプリにはクリップボードに残す」動き（DEC-COM-149）とも同じになる。「表示だけ」でクリップボードに触らなければ、戻し損ねることがない。
+- 決めた場面: 入力できる場所がないときに結果を画面に残す PR（Windows 版）
+- 関係する要件: REQ-DIC-081
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Settings/AppSettings.cs`、`windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`
+
+### DEC-DIC-123 Windows 版は、貼り付けられなかったときをすべて同じ表示にそろえる
+- 決めたこと: 入力できる場所がないとき（DEC-DIC-120）に加えて、Hanasu より権限の高いウインドウが前面にあるとき（UIPI。DEC-COM-149）・`SendInput` が失敗したとき・クリップボードを使えなかったとき・入力の途中で例外が起きたときも、同じ結果の表示（DEC-DIC-121）にし、クリップボードは設定（DEC-DIC-122）に従う。見出しだけを理由ごとに変える（`HudText.UnpastedTitle`）。整形に失敗した警告があれば、案内の前に出す。
+- 理由: どれも「貼り付けられなかったので自分で貼る」場面で、ユーザーがすることは同じ。前は 5 秒で消えるエラー表示で、読み終える前に消えることがあった。
+- 決めた場面: 入力できる場所がないときに結果を画面に残す PR（Windows 版）
+- 関係する要件: REQ-DIC-080, REQ-DIC-081
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Dictation/DictationController.cs`（`ShowUnpasted`）、`windows/Hanasu.Core/Dictation/Hud.cs`
+
+### DEC-DIC-124 Windows 版は、UI Automation を判定が変わりうるときだけ問い合わせ、400 ms で打ち切る
+- 決めたこと: UI Automation の `FocusedElement` は、結果で判定が「貼る」から変わりうるとき（前面がデスクトップ・タスクバー・エクスプローラー、または前面のスレッドにフォーカスがない。`PasteTargetJudge.NeedsAutomation`）だけ問い合わせる。スレッドプールで問い合わせて 400 ms で打ち切る（打ち切ったら「分からない」）。`GetGUIThreadInfo` でシステムのキャレットが見つかったときも、問い合わせずに貼る。読み取り専用の入力欄は、Win32 の `Edit`・`RichEdit*` だけをスタイル（`ES_READONLY`）で見る。
+- 理由: UI Automation はほかのプロセスに問い合わせるので、応答しないアプリがあると貼り付けが止まる。Hanasu 自身のウインドウにフォーカスがあるときに UI スレッドで待つと、問い合わせが UI スレッドに戻れず止まるので、UI スレッドは await で空けておく。Chrome・Edge・Electron（Slack・Teams・VS Code）はアクセシビリティが無効だとシステムのキャレットを作らないので、毎回の音声入力で最大 400 ms 待つことになり、問い合わせそのものが Chromium のアクセシビリティを有効にして CPU とメモリを増やすおそれもある。これらでは UI Automation が何を返しても貼る（DEC-DIC-120 の 6）ので、問い合わせない。代わりに、ほかのアプリの読み取り専用の入力欄は WPF・ストアアプリのものを見分けられない（貼っても入らないが、「最近の結果」には残る）。PR のレビューで直した。
+- 決めた場面: 入力できる場所がないときに結果を画面に残す PR（Windows 版）
+- 関係する要件: REQ-DIC-080
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/FocusProbe.cs`、`PasteTargetJudge.NeedsAutomation`・`IsWin32EditClass`（`windows/Hanasu.Core/Dictation/PasteTarget.cs`）
 
 ---
 

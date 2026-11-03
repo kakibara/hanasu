@@ -192,3 +192,12 @@ Claude の API キーがないので、本物の Claude での整形・英訳・
 - 設定の欄の画像（`--render-paste-fallback-settings <png>`）: 「入力できる場所がないとき」に 2 つの選択肢（既定は「クリップボードにも入れておく」）と説明が出る。
 - `--probe-paste-target`: このセッションの端末にアクセシビリティの許可がないので、「許可がありません」と出て終わることだけを確かめた。実際のアプリでの判定は確かめていない。
 - 確かめていないこと（実機）: パネルがアプリを前面に出さずにキーウインドウになり、Esc・⌘C・⌘A・文字の選択が効くか。Chrome で入力欄にフォーカスがあるとき、最初の問い合わせから入力欄が見えるか（見えなくても読み直しで拾えるか）。Spotlight・Raycast の欄に貼れるか。
+
+## 12. Windows 版の、入力できる場所がないときの表示（2026-11-04、macOS の上の .NET 10 SDK）
+
+関係: REQ-DIC-080・081、DEC-DIC-120〜124、DEC-COM-149
+
+Windows の実機がないので、画面とフォーカスの動きはまだ確かめていない。Mac の上で確かめたこと:
+
+- `dotnet test Hanasu.Core.Tests`: 200 件すべて通った（レビューで UI Automation を問い合わせる場面の絞り込みと Win32 の読み取り専用の Edit を足し、217 件）。貼り付け先の判定（`PasteTargetTests`。デスクトップ・タスクバー・フォーカスなし・読み取り専用・エクスプローラーの一覧は貼らない。デスクトップの名前の変更・キャレットあり・ストアアプリ・ブラウザ・Excel のセル・何も分からないときは貼る）、貼らなかったときの流れ（全文を `HudPhase.Unpasted` で残す・自動では閉じない・設定が入力に渡る・権限の高いウインドウと例外も同じ表示・次の音声入力で置き換わる・「最近の結果」に残る）、設定の保存（`pasteFallbackClipboard`、項目のない前の版の settings.json は既定値）。
+- `dotnet build Hanasu.Windows.sln -c Release`（警告 0）と `dotnet publish … -r win-x64 --self-contained -p:PublishSingleFile=true`（`Hanasu.exe` 約 82 MB と、今までと同じ DLL・ライセンスの表示）が通った。UI Automation（`UIAutomationClient`）は .NET の Windows デスクトップのランタイムに入っているので、依存パッケージは増えていない。

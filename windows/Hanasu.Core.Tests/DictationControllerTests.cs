@@ -81,11 +81,14 @@ internal sealed class FakeRefiner : IDictationRefiner
 internal sealed class FakeInserter : ITextInserter
 {
     public List<string> Inserted { get; } = new();
+    public List<PasteFallbackClipboard> Fallbacks { get; } = new();
     public InsertOutcome Outcome { get; set; } = InsertOutcome.Pasted;
-    public Task<InsertOutcome> InsertAsync(string text)
+    public Exception? Error { get; set; }
+    public Task<InsertOutcome> InsertAsync(string text, PasteFallbackClipboard fallback)
     {
         Inserted.Add(text);
-        return Task.FromResult(Outcome);
+        Fallbacks.Add(fallback);
+        return Error is null ? Task.FromResult(Outcome) : Task.FromException<InsertOutcome>(Error);
     }
 }
 
@@ -342,13 +345,93 @@ public class DictationControllerTests
         Assert.Null(Assert.Single(h.Refiner.Calls).Request.AppName);
     }
 
+    // 確かめ方: REQ-DIC-080
     [Fact]
-    public async Task CopiedOnlyIsReported()
+    public async Task UnpastedResultStaysOnTheHudWithTheFullText()
     {
-        var h = new Harness { Inserter = { Outcome = InsertOutcome.CopiedOnly } };
+        var h = new Harness { Transcriber = { Result = "えーと資料はジェミニで作りました" } };
+        h.Inserter.Outcome = InsertOutcome.NotPastedBecause(NotPastedReason.Desktop, clipboardHasText: true);
         await h.Controller.StartAsync();
         await h.Controller.FinishAsync();
-        Assert.Contains("クリップボードにコピー", h.Hud.Last.Message);
+
+        var shown = h.Hud.Last;
+        Assert.Equal(HudPhase.Unpasted, shown.Phase);
+        Assert.Equal("整形:えーと資料はGeminiで作りました", shown.ResultText);
+        Assert.Equal("入力できる場所が見つかりませんでした", HudText.Title(shown));
+        Assert.Contains("クリップボードにも入れてあります", HudText.Detail(shown, ""));
+        // 自動では閉じない。クリックを受け取る
+        Assert.Null(HudText.AutoHideDelay(shown.Phase));
+        Assert.True(HudText.AcceptsClicks(shown.Phase));
+        Assert.Equal(DictationState.Idle, h.Controller.State);
+        // 履歴（最近の結果）には今までどおり残る
+        Assert.Equal("整形:えーと資料はGeminiで作りました", h.Recent.Entries[0].Output);
+    }
+
+    // 確かめ方: REQ-DIC-081
+    [Theory]
+    [InlineData(PasteFallbackClipboard.KeepResult)]
+    [InlineData(PasteFallbackClipboard.RestoreOriginal)]
+    public async Task FallbackSettingIsPassedToTheInserter(PasteFallbackClipboard fallback)
+    {
+        var h = new Harness();
+        h.Settings.PasteFallbackClipboard = fallback;
+        h.Inserter.Outcome = InsertOutcome.NotPastedBecause(NotPastedReason.NoFocus, clipboardHasText: fallback == PasteFallbackClipboard.KeepResult);
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Equal(fallback, Assert.Single(h.Inserter.Fallbacks));
+        var note = HudText.Detail(h.Hud.Last, "");
+        if (fallback == PasteFallbackClipboard.KeepResult) Assert.Contains("Ctrl+V を押してください", note);
+        else Assert.Contains("「コピー」を押す", note);
+    }
+
+    [Fact]
+    public async Task HigherIntegrityWindowGetsTheSamePanel()
+    {
+        var h = new Harness { Inserter = { Outcome = InsertOutcome.NotPastedBecause(NotPastedReason.HigherIntegrity, clipboardHasText: true) } };
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Equal(HudPhase.Unpasted, h.Hud.Last.Phase);
+        Assert.Equal("管理者として動いているアプリには貼り付けられません", HudText.Title(h.Hud.Last));
+    }
+
+    [Fact]
+    public async Task InsertErrorStillKeepsTheResultOnScreen()
+    {
+        var h = new Harness { Inserter = { Error = new InvalidOperationException("壊れた") } };
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Equal(HudPhase.Unpasted, h.Hud.Last.Phase);
+        Assert.Equal("入力できませんでした", HudText.Title(h.Hud.Last));
+        Assert.Contains("「コピー」を押す", HudText.Detail(h.Hud.Last, ""));
+        Assert.Equal(DictationState.Idle, h.Controller.State);
+    }
+
+    [Fact]
+    public async Task AiWarningIsShownAboveTheHowTo()
+    {
+        var h = new Harness { HasCredentials = false };
+        h.Inserter.Outcome = InsertOutcome.NotPastedBecause(NotPastedReason.Taskbar, clipboardHasText: true);
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        var note = HudText.Detail(h.Hud.Last, "")!;
+        Assert.Equal(HudPhase.Unpasted, h.Hud.Last.Phase);
+        Assert.Contains("\n", note);
+        Assert.EndsWith("Ctrl+V を押してください。", note);
+        Assert.Contains(SoundCue.Error, h.Sounds);
+    }
+
+    [Fact]
+    public async Task NextDictationReplacesTheUnpastedPanel()
+    {
+        var h = new Harness { Inserter = { Outcome = InsertOutcome.NotPastedBecause(NotPastedReason.Desktop, clipboardHasText: true) } };
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Equal(HudPhase.Unpasted, h.Hud.Last.Phase);
+        h.Inserter.Outcome = InsertOutcome.Pasted;
+        await h.Controller.StartAsync();
+        Assert.Equal(HudPhase.Recording, h.Hud.Last.Phase);
+        await h.Controller.FinishAsync();
+        Assert.Equal(HudPhase.Done, h.Hud.Last.Phase);
     }
 
     [Fact]

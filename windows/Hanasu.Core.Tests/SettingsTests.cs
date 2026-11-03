@@ -17,6 +17,22 @@ public class SettingsTests
         Assert.Equal("gemini-3.5-flash-lite", s.Model);
         Assert.True(s.RefineWithGemini);
         Assert.True(s.SendAppName);
+        // 貼り付けられないときは、クリップボードにも入れておく（DEC-DIC-122）
+        Assert.Equal(PasteFallbackClipboard.KeepResult, s.PasteFallbackClipboard);
+    }
+
+    // 確かめ方: REQ-DIC-081
+    [Fact]
+    public void PasteFallbackClipboardIsSavedByName()
+    {
+        var path = Path.Combine(TestKeys.TempDirectory(), "settings.json");
+        var store = new SettingsStore(path);
+        store.Save(new AppSettings { PasteFallbackClipboard = PasteFallbackClipboard.RestoreOriginal });
+        Assert.Contains("\"pasteFallbackClipboard\": \"RestoreOriginal\"", File.ReadAllText(path));
+        Assert.Equal(PasteFallbackClipboard.RestoreOriginal, store.Load().PasteFallbackClipboard);
+        // 前の版の settings.json（項目がない）は既定値になる
+        File.WriteAllText(path, "{ \"playSounds\": true }");
+        Assert.Equal(PasteFallbackClipboard.KeepResult, store.Load().PasteFallbackClipboard);
     }
 
     [Fact]

@@ -17,6 +17,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
    - **Ctrl + Alt + Shift + Space** で始めると英訳して入力する。録音中に HUD の「日本語 / English」を押して切り替えてもよい（止めた時点の選択で決まる）。
    - 録音中は **Esc**（または HUD の「取消」）で取り消す。
    - 「押している間だけ録音」も選べる（設定 → 一般 → 録音のしかた）。
+   - 入力できる場所にフォーカスがない（デスクトップが前面にある など）か、管理者として動いているアプリが前面にあって貼り付けられないときは、結果を画面の下に表示して残す（自動では閉じない）。「コピー」か文章を選んでコピーし、「閉じる」で閉じる。既定では結果をクリップボードにも入れておくので、貼りたい場所で Ctrl+V を押すだけでよい（設定 → 一般 →「入力できる場所がないとき」で、クリップボードを元のままにすることもできる）。
 5. タスクトレイのメニュー →「最近の結果」から、直近 10 件をクリップボードにコピーできる（メモリ上だけ。終了すると消える）。
 
 ### 会議の記録
@@ -73,7 +74,7 @@ windows/
 │   ├── Settings/                設定（settings.json）・ショートカットの組み合わせ・API キーの保存（SecretStore。DPAPI と Windows Hello はインターフェイスで渡す）
 │   ├── Audio/                   16 kHz・モノラルへの変換（窓付き sinc の再サンプリング）・WAV・無音の判定・効果音
 │   ├── Transcription/           文字起こしのインターフェイス・録ってからまとめて文字起こし・Gemini の文字起こし・Whisper のモデル管理
-│   ├── Dictation/               音声入力の流れ（状態遷移）・整形と失敗時の扱い・最近の結果・HUD の文言
+│   ├── Dictation/               音声入力の流れ（状態遷移）・整形と失敗時の扱い・最近の結果・HUD の文言・貼り付け先の判定（PasteTarget）
 │   └── Meetings/                会議の記録: データと meeting.json（Mac 版と同じ形）・保存・議事録の型とプロンプト（Mac 版と共有）・
 │                                話者の割り当てと回り込みの除去・Gemini の時刻つき文字起こし・後処理・記録の流れ（MeetingController）
 ├── Hanasu.Whisper/              net8.0。Whisper.net（whisper.cpp）での文字起こし（会議用に時刻つきの区間も返す）
@@ -82,7 +83,7 @@ windows/
 │   ├── AppHost.cs               部品を組み立てる場所
 │   ├── TrayIcon.cs              タスクトレイのメニュー（WinForms の NotifyIcon）
 │   ├── Services/                RegisterHotKey、WASAPI の録音（NAudio。会議はマイクとループバック）、Windows の音声認識（WinRT）、
-│   │                            クリップボード + SendInput の入力、前面アプリ、DPAPI・Windows Hello・DLL の探索・UIPI（WindowsSecurity）、効果音、ログ
+│   │                            クリップボード + SendInput の入力、貼り付け先の様子（FocusProbe）、前面アプリ、DPAPI・Windows Hello・DLL の探索・UIPI（WindowsSecurity）、効果音、ログ
 │   └── Views/                   HUD（WS_EX_NOACTIVATE）・設定画面・会議ノート・ショートカットの記録欄
 ├── Hanasu.Cli/                  net8.0。確認用の CLI（Mac でも動く）
 └── Hanasu.Core.Tests/           xUnit。Mac でも Windows でも dotnet test で動く
@@ -98,13 +99,21 @@ HotKeyService（RegisterHotKey + 離したかの見張り）
         │                                                └─ IBatchTranscriber ─┬ WhisperBatchTranscriber
         │                                                                     └ GeminiBatchTranscriber（inline data で WAV を送る）
         ├─ DictationTextProcessor（辞書の置き換え → 音声入力の AI（Gemini / Claude）で整形 / 英訳。認証がない・失敗したら原文を入れて知らせる）
-        ├─ ClipboardTextInserter（クリップボード退避 → 文章 → Ctrl+V → 元に戻す）
-        └─ IHud ── HudWindow（録音中・経過時間・途中経過・処理中・完了・エラー・日本語/English・取消・■ 停止）
+        ├─ ClipboardTextInserter（修飾キーを離すのを待つ → 貼り付け先の確認 → クリップボード退避 → 文章 → Ctrl+V → 元に戻す）
+        │     └─ 貼り付け先の確認: WindowsSecurity.IsHigherIntegrity（UIPI）→ FocusProbe（Win32・UI Automation）→ PasteTargetJudge（Core）
+        └─ IHud ── HudWindow（録音中・経過時間・途中経過・処理中・完了・エラー・日本語/English・取消・■ 停止・貼り付けなかった結果）
 ```
 
 - 状態遷移・HUD の文言・整形の失敗時の扱いは Core にあり、UI なしでテストしている（`DictationControllerTests`）。
 - OS に依存する部品は `DictationServices` で渡す。Windows の部品は `AppHost.cs` で組み立てる。
 - タスクトレイのメニューから始めると前面がタスクバーに移るので、`ForegroundWindowTracker` が覚えている直前のウインドウを前面に戻してから録音する。
+
+#### 貼り付けられないとき（REQ-DIC-080・081）
+
+- Ctrl+V を送る直前に、`FocusProbe` が前面のウインドウのクラス名・`GetGUIThreadInfo`（`hwndFocus`・`hwndCaret`）・フォーカスのある Win32 の入力欄の `ES_READONLY`・UI Automation の `FocusedElement`（ControlType・`ValuePattern.IsReadOnly`）を集め、Core の `PasteTargetJudge.Judge` が貼るかを決める。貼らないのは、前面のウインドウがない・デスクトップ・タスクバー・前面のスレッドにフォーカスがない・読み取り専用の入力欄・エクスプローラーのファイルの一覧、と分かったときだけで、分からなければ貼る（ブラウザ・Electron・Excel のセルなど。DEC-DIC-120）。
+- UI Automation は、結果で判定が変わりうるとき（デスクトップ・タスクバー・エクスプローラー・フォーカスがない。`PasteTargetJudge.NeedsAutomation`）だけ、スレッドプールで問い合わせて 400 ms で打ち切る。キャレットがあるときも問い合わせない。ブラウザ・Electron で毎回待たず、Chromium のアクセシビリティを有効にさせないため（DEC-DIC-124）。
+- 貼らないとき（権限の高いウインドウ・`SendInput` の失敗・クリップボードを使えない・例外も同じ。DEC-DIC-123）は、`DictationController.ShowUnpasted` が `HudPhase.Unpasted` を出し、`HudWindow` が広がって結果の全文・「コピー」「閉じる」を出す。自動では閉じず、次の音声入力の HUD で消える。文章をクリックしたときだけ前面に出して（選択・Ctrl+C・Esc のため）、閉じるときに入力先だったウインドウにフォーカスを返す（DEC-DIC-121）。
+- クリップボードは `AppSettings.PasteFallbackClipboard` に従う。既定の `KeepResult` は結果を（履歴に残さない印を付けて）入れたままにし、`RestoreOriginal` は初めから触らない（DEC-DIC-122）。
 
 ### 会議の記録の作り
 
@@ -266,7 +275,7 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
   設定 → AI →「API キーを Windows Hello で守る」をオンにすると、ほかのアプリが読もうとすると Windows Hello の確認が出る。確認は起動してから最初に使うとき 1 回で、画面をロックするとまた求める。Hanasu が動いている間のメモリまでは守れない。
 - **配布物は署名していない**。初めて起動すると SmartScreen が「Windows によって PC が保護されました」と出す。ダウンロードした zip の SHA-256 を、リリースの `.sha256` と比べてから使う（PowerShell: `Get-FileHash Hanasu-windows-x64.zip`）。
 - **zip は専用のフォルダに展開する**（「ダウンロード」フォルダの直下で展開しない）。exe は起動するときに同じフォルダの DLL を読むことがあり、知らない DLL が混ざっていると乗っ取られるおそれがある。
-- 管理者として動いているアプリには貼り付けを送らない（届かないので）。クリップボードに残すので、Ctrl+V で貼る。
+- 管理者として動いているアプリには貼り付けを送らない（届かないので）。入力できる場所がないときと同じく結果を画面に残す（既定ではクリップボードにも残すので、Ctrl+V で貼る）。
 - モデルは決まったホストから取り、SHA-256 を確かめてから使う。
 
 ## 依存パッケージ
