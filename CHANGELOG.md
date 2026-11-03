@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.3.0](https://github.com/kakibara/hanasu/compare/v1.2.0...v1.3.0) - 2026-11-03
+
+- 録音中の HUD に停止・取消のボタンを付ける by @kakibara in https://github.com/kakibara/hanasu/pull/16
+- 文字起こしのエンジンを Mac 標準 / Whisper / Gemini から選べるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/17
+- リリースを zip に戻し、Windows 版も添付する by @kakibara in https://github.com/kakibara/hanasu/pull/20
+- Windows 版（音声入力と会議の記録）を追加する by @kakibara in https://github.com/kakibara/hanasu/pull/19
+
 ## [v1.2.0](https://github.com/kakibara/hanasu/compare/v1.1.1...v1.2.0) - 2026-11-03
 
 - 選択したテキストを声で書き換える編集モードを追加する by @kakibara in https://github.com/kakibara/hanasu/pull/8
