@@ -593,10 +593,10 @@
 ### DEC-COM-150 Windows 版の依存パッケージは lock ファイルで固定し、配布物の SHA-256 を残す
 - 決めたこと: すべてのプロジェクトで `packages.lock.json` を使い（`RestorePackagesWithLockFile`）、CI の Restore の段では `--locked-mode`（`CI=true` のとき `RestoreLockedMode`）で、lock と食い違えば失敗させる。publish の段は RID（win-x64）と ILLink を足して restore し直し、lock ファイル（RID なしで作る）と入力が合わないので、locked mode を外す。CI は zip の SHA-256 を `Hanasu-windows-x64.zip.sha256` に書いて artifact に入れる。
 - 理由: 同じ版の番号でも中身が差し替わったパッケージや、知らないうちに上がった推移的な依存を取り込まない。配布物は署名していないので、ダウンロードした人がハッシュで確かめられるようにする。
-- 決めた場面: Claude API に対応した PR
+- 決めた場面: Claude API に対応した PR。リリースのワークフローにも同じ扱いを入れたのは、v1.3.1 の Windows 版のビルドが locked mode で失敗したため
 - 関係する要件: REQ-COM-022, REQ-REL-005
 - 対象: Windows
-- 実装の場所: `windows/Directory.Build.props`、`.github/workflows/windows.yml`
+- 実装の場所: `windows/Directory.Build.props`、`.github/workflows/windows.yml`、`.github/workflows/tagpr.yml`（リリースの Windows 版のビルド）
 
 ---
 
