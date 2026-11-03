@@ -4,8 +4,10 @@ import SwiftUI
 
 // 動作確認用の CLI モード:
 //   Hanasu --transcribe-file <音声ファイル> [--engine dictation|speech] [--refine [--translate] [--model <id>]]
-//   Hanasu --refine-text <文章> [--translate] [--model <id>]
+//   Hanasu --refine-text <文章> [--translate] [--model <id>] [--app <bundle id>] [--show-prompt] [--dictionary <辞書ファイル>]
 // --refine を付けると Gemini 整形も行い、--translate を付けると整形の代わりに英訳する。
+// --app を付けると、そのアプリ向けの文体ルール（設定の「アプリ別」）で整形する。既定の出力言語が English なら英訳する。
+// --show-prompt を付けると、Gemini に送る user content も表示する。
 // 認証は GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウント JSON のパス）、設定画面の認証情報、GEMINI_API_KEY の順に使う。
 @MainActor
 func cliRefine(_ raw: String, args: [String]) async throws {
@@ -18,14 +20,33 @@ func cliRefine(_ raw: String, args: [String]) async throws {
         auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
     }
     let model = args.firstIndex(of: "--model").flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil } ?? settings.model
-    let translate = args.contains("--translate")
+    let app = cliAppStyle(args: args)
+    let translate = args.contains("--translate") || app.style?.outputLanguage == .english
     let client = GeminiClient(auth: auth)
+    // 音声入力と同じく、置き換えルールを当ててから送る（--dictionary <ファイル> で辞書を差し替えられる）
+    let dictionary = try DictionaryCLI.dictionary(from: args)
     let request = GeminiClient.Request(
-        transcript: raw, model: model, appName: nil,
-        dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions)
+        transcript: dictionary.apply(to: raw), model: model, appName: app.name,
+        dictionary: dictionary.spellings, extraInstructions: settings.extraInstructions,
+        dictionaryRules: dictionary.rules, appStyle: app.style)
+    if args.contains("--show-prompt") {
+        var shown = request
+        if translate { shown.extraInstructions = "" }  // translateToEnglish と同じく、英訳では共通の追加ルールを外す
+        print(GeminiClient.userPrompt(for: shown, translating: translate))
+    }
     let started = Date()
     let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
     print(String(format: "[%@ %@ %.1fs] %@", translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
+}
+
+// 選択を声で編集するモードの確認（--edit-text / --render-edit-hud / --render-edit-settings）。中身は EditModeCLI.swift
+MainActor.assumeIsolated { EditModeCLI.runIfRequested() }
+// 画面の文脈の確認（--dump-context、--refine-text … --context）。該当しなければ何もしない
+MainActor.assumeIsolated { ScreenContextCLI.runIfRequested() }
+// ユーザー辞書の確認（--apply-dictionary / --test-dictionary / --suggest-dictionary / --render-dictionary-settings）。
+// 使い方は DictionaryCLI.swift を参照
+if DictionaryCLI.handles(CommandLine.arguments) {
+    MainActor.assumeIsolated { DictionaryCLI.run(CommandLine.arguments) }
 }
 
 if let index = CommandLine.arguments.firstIndex(of: "--refine-text"),
@@ -86,6 +107,35 @@ if CommandLine.arguments.contains("--list-audio-devices") {
     exit(0)
 }
 
+// 会議の自動検出の確認:
+//   Hanasu --list-audio-processes      オーディオを使っているプロセスの一覧（bundle ID、入力中・出力中）
+//   Hanasu --watch-audio-processes     変化を待って表示する（Ctrl-C で終了）
+//   Hanasu --render-meeting-suggestion <出力.png> [--stop] [--app zoom|teams|slack|webex|facetime|chrome|safari|arc|edge]
+//   Hanasu --simulate-meeting-detection  検出と記録の状態を台本どおりに動かし、提案の出かたを確かめる
+//   Hanasu --render-meeting-detection-settings <出力.png>  設定の「会議の自動検出」欄
+if CommandLine.arguments.contains("--list-audio-processes") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.listProcesses() }
+    exit(0)
+}
+if CommandLine.arguments.contains("--watch-audio-processes") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.watch() }
+}
+if CommandLine.arguments.contains("--simulate-meeting-detection") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.simulate() }
+}
+if let index = CommandLine.arguments.firstIndex(of: "--render-meeting-suggestion"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated { MeetingDetectorCLI.renderSuggestion(to: CommandLine.arguments[index + 1], args: CommandLine.arguments) }
+    exit(0)
+}
+if let index = CommandLine.arguments.firstIndex(of: "--render-meeting-detection-settings"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated { MeetingDetectorCLI.renderSettings(to: CommandLine.arguments[index + 1]) }
+    exit(0)
+}
+
 // 会議ノートの機器の選択欄を画像にする（見た目の確認用）:  Hanasu --render-device-pickers <出力.png>
 if let index = CommandLine.arguments.firstIndex(of: "--render-device-pickers"),
    CommandLine.arguments.indices.contains(index + 1)
@@ -112,6 +162,17 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-device-pickers"),
             try? rep.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
             print("wrote")
         }
+    }
+    exit(0)
+}
+
+// 設定の「アプリ別」タブを画像にする（見た目の確認用）:  Hanasu --render-app-styles <出力.png> [--expanded]
+if let index = CommandLine.arguments.firstIndex(of: "--render-app-styles"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated {
+        renderAppStylesPNG(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]),
+                           expandedFirst: CommandLine.arguments.contains("--expanded"))
     }
     exit(0)
 }
@@ -153,7 +214,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
                     channel: channel, inputFormat: file.processingFormat,
                     fileURL: MeetingStore.audioURL(for: meeting, channel: channel),
                     meetingStart: meeting.startedAt, fixedTimeOffset: 0)
-                try await transcriber.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: settings.dictionaryWords)
+                try await transcriber.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: settings.userDictionary.contextualStrings)
                 while file.framePosition < file.length {
                     guard let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 8192) else { break }
                     try file.read(into: buffer)
@@ -185,6 +246,33 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
         }
     }
     RunLoop.main.run()
+}
+
+// スニペットの照合の確認:  Hanasu --match-snippet <文字起こし> [--snippets <JSON>] [--refine [--translate]]（SnippetsCLI.swift）
+if let index = CommandLine.arguments.firstIndex(of: "--match-snippet"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    let args = CommandLine.arguments
+    Task { @MainActor in
+        do {
+            try await SnippetsCLI.matchSnippet(args[index + 1], args: args)
+            exit(0)
+        } catch {
+            FileHandle.standardError.write(Data("error: \(error.localizedDescription) (\(error))\n".utf8))
+            exit(1)
+        }
+    }
+    RunLoop.main.run()
+}
+
+// 設定画面の「スニペット」タブを画像にする:  Hanasu --render-snippets-settings <出力.png> [--empty]
+if let index = CommandLine.arguments.firstIndex(of: "--render-snippets-settings"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated {
+        SnippetsCLI.renderSettings(to: CommandLine.arguments[index + 1], empty: CommandLine.arguments.contains("--empty"))
+    }
+    exit(0)
 }
 
 // 音声入力の履歴の確認（--render-history / --history-check）。中身は DictationHistoryCLI.swift

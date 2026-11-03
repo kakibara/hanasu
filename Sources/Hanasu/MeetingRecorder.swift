@@ -99,7 +99,7 @@ final class MeetingRecorder: ObservableObject {
                     if channel == .me { self?.volatileMe = text } else { self?.volatileOthers = text }
                 }
             }
-            let words = settings.dictionaryWords
+            let words = settings.userDictionary.contextualStrings
             async let preparedMe: Void = me.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: words)
             async let preparedOthers: Void = others.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: words)
             _ = try await (preparedMe, preparedOthers)

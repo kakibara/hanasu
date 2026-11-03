@@ -19,6 +19,8 @@ final class DictationController {
     var onStateChange: ((State) -> Void)?
     /// ショートカットの登録に失敗したとき（他アプリと衝突など）
     var onHotKeyRegistrationFailed: ((HotKeyCombo) -> Void)?
+    /// ほかの録音（選択を声で編集）が動いている間は false を返す
+    var canStart: () -> Bool = { true }
 
     private let settings = AppSettings.shared
     private let hotKeys = HotKeyManager()
@@ -32,6 +34,9 @@ final class DictationController {
     private var targetAppName: String?
     /// 履歴に残す録音の保存先（「音声も残す」がオンのとき）
     private var pendingAudioURL: URL?
+    /// 録音を始めたときの前面アプリのスタイル（アプリ別の設定がなければ nil）
+    private var targetAppStyle: AppStyle?
+    private var screenContextCapture: ScreenContextCapture?
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
@@ -127,14 +132,20 @@ final class DictationController {
     }
 
     func startDictation(mode: Mode = .refine) {
-        guard state == .idle else { return }
+        guard state == .idle, canStart() else { return }
         self.mode = mode
         state = .preparing
         stopRequested = false
         cancelRequested = false
         targetAppName = NSWorkspace.shared.frontmostApplication?.localizedName
+        targetAppStyle = AppStyleStore.shared.style(forBundleID: NSWorkspace.shared.frontmostApplication?.bundleIdentifier)
+        // 既定の出力言語が英語のアプリでは English から始める。HUD で切り替えればそちらが優先される
+        if mode == .refine, targetAppStyle?.outputLanguage == .english {
+            self.mode = .translateToEnglish
+        }
+        screenContextCapture = ScreenContextCapture.begin()
         pendingAudioURL = DictationHistoryStore.shared.newAudioURL()
-        hud.model.translating = mode == .translateToEnglish
+        hud.model.translating = self.mode == .translateToEnglish
         hud.show(.preparing("準備中…"))
         setEscapeHotKey(enabled: true)
 
@@ -144,7 +155,7 @@ final class DictationController {
                 try await recognizer.start(
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
-                    contextualStrings: settings.dictionaryWords,
+                    contextualStrings: settings.userDictionary.contextualStrings + SnippetStore.shared.triggerPhrases,
                     audioFileURL: pendingAudioURL)
             } catch {
                 fail(error.localizedDescription)
@@ -210,24 +221,44 @@ final class DictationController {
             return
         }
 
-        var output = raw
+        // ユーザー辞書の置き換えルールを決定的に当てる（Gemini で整形しないときも効く）
+        let corrected = settings.userDictionary.apply(to: raw)
+        // スニペット: 起動フレーズと一致した部分は、Gemini を通さず登録した本文に置き換える（Snippets.swift）。照合は辞書を当てたあとの文で行う
+        let snippetMatch = SnippetMatcher.match(corrected, snippets: SnippetStore.shared.snippets)
+        if let snippetMatch {
+            appLog.notice("snippet matched: \(snippetMatch.snippets.count) snippets, whole=\(snippetMatch.isWholeUtterance)")
+        }
+        var output = snippetMatch?.assembledWithoutConversion ?? corrected
         var warning: String?
         var historyStatus: DictationHistoryEntry.Status = .refineOff
         var historyError: String?
         let translating = mode == .translateToEnglish
-        // 英訳は Gemini でしかできないので、整形をオフにしていても Gemini に送る
-        if settings.refineWithGemini || translating {
+        // 英訳は Gemini でしかできないので、整形をオフにしていても Gemini に送る。全体がスニペットなら呼ばない
+        if settings.refineWithGemini || translating, snippetMatch?.isWholeUtterance != true {
             let verb = translating ? "翻訳" : "整形"
             do {
                 if let auth = try GeminiClient.authFromSettings(settings) {
                     let client = GeminiClient(auth: auth)
                     let request = GeminiClient.Request(
-                        transcript: raw,
+                        transcript: output,
                         model: settings.model,
                         appName: settings.sendAppName ? targetAppName : nil,
                         dictionary: settings.dictionaryWords,
-                        extraInstructions: settings.extraInstructions)
-                    output = translating ? try await client.translateToEnglish(request) : try await client.refine(request)
+                        extraInstructions: settings.extraInstructions,
+                        dictionaryRules: settings.userDictionary.rules,
+                        appStyle: targetAppStyle,
+                        screenContext: await screenContextCapture?.result())
+                    // スニペットがあれば、その前後の文だけを整形（英訳）してつなぐ。本文は送らない
+                    let convert: @Sendable (String) async throws -> String = { text in
+                        var request = request
+                        request.transcript = text
+                        return translating ? try await client.translateToEnglish(request) : try await client.refine(request)
+                    }
+                    if let snippetMatch {
+                        output = try await snippetMatch.assemble(convert: convert)
+                    } else {
+                        output = try await convert(corrected)
+                    }
                     historyStatus = .succeeded
                     appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(self.settings.model, privacy: .public): \(output.count) chars")
                 } else {
@@ -251,6 +282,7 @@ final class DictationController {
         pendingAudioURL = nil
         let outcome = await TextInserter.insert(output)
         appLog.notice("insert outcome: \(String(describing: outcome), privacy: .public), frontmost=\(NSWorkspace.shared.frontmostApplication?.bundleIdentifier ?? "-", privacy: .public)")
+        RecentDictations.record(raw: raw, output: output)
         state = .idle
 
         switch (outcome, warning) {
@@ -260,7 +292,7 @@ final class DictationController {
         case (.pasted, let warning?):
             hud.show(.error(warning))
         case (.pasted, nil):
-            hud.show(.done(translating ? "英訳して入力しました" : "入力しました"))
+            hud.show(.done(snippetMatch?.hudMessage ?? (translating ? "英訳して入力しました" : "入力しました")))
         }
     }
 
