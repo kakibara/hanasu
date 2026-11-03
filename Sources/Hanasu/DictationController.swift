@@ -42,6 +42,7 @@ final class DictationController {
     private var targetAppName: String?
     /// 録音を始めたときの前面アプリのスタイル（アプリ別の設定がなければ nil）
     private var targetAppStyle: AppStyle?
+    private var screenContextCapture: ScreenContextCapture?
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
@@ -148,6 +149,7 @@ final class DictationController {
         if mode == .refine, targetAppStyle?.outputLanguage == .english {
             self.mode = .translateToEnglish
         }
+        screenContextCapture = ScreenContextCapture.begin()
         hud.model.translating = self.mode == .translateToEnglish
         hud.show(.preparing("準備中…"))
         setEscapeHotKey(enabled: true)
@@ -239,7 +241,8 @@ final class DictationController {
                         appName: settings.sendAppName ? targetAppName : nil,
                         dictionary: settings.dictionaryWords,
                         extraInstructions: settings.extraInstructions,
-                        appStyle: targetAppStyle)
+                        appStyle: targetAppStyle,
+                        screenContext: await screenContextCapture?.result())
                     // スニペットがあれば、その前後の文だけを整形（英訳）してつなぐ。本文は送らない
                     let convert: @Sendable (String) async throws -> String = { text in
                         var request = request

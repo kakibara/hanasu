@@ -94,6 +94,7 @@ private struct GeminiTab: View {
                 Toggle("Gemini で自然な日本語に整える", isOn: $settings.refineWithGemini)
                 Toggle("入力先のアプリ名を Gemini に伝える（体裁の参考）", isOn: $settings.sendAppName)
             }
+            ScreenContextSettingsSection()
             Section("認証") {
                 Picker("認証方法", selection: $settings.authMode) {
                     ForEach(GeminiAuthMode.allCases) { Text($0.label).tag($0) }
