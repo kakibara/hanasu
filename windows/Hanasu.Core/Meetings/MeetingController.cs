@@ -40,8 +40,8 @@ public sealed class MeetingServices
     public required Func<AppSettings, ISegmentTranscriber> CreateTranscriber { get; init; }
     /// <summary>話者分離をしない設定なら null を返す</summary>
     public Func<AppSettings, ISpeakerDiarizer?> CreateDiarizer { get; init; } = _ => null;
-    /// <summary>議事録用の Gemini（認証情報がなければ null）</summary>
-    public required Func<AppSettings, GeminiClient?> CreateMinutesClient { get; init; }
+    /// <summary>議事録用の AI（設定の「会議の AI」。認証情報がなければ null）</summary>
+    public required Func<AppSettings, Ai.ITextGenerator?> CreateMinutesClient { get; init; }
     public Func<DateTimeOffset> Now { get; init; } = () => DateTimeOffset.Now;
     public Action<string> Log { get; init; } = _ => { };
 }
@@ -220,7 +220,8 @@ public sealed class MeetingController
             Context = Context(settings),
             Diarizer = settings.DiarizeOthers ? services.CreateDiarizer(settings) : null,
             MinutesClient = settings.MakeMeetingMinutes ? () => services.CreateMinutesClient(settings) : null,
-            MinutesModel = settings.MeetingMinutesModel,
+            MinutesModel = settings.MinutesModel,
+            MinutesProvider = settings.MeetingAi,
             KeepAudio = settings.KeepMeetingAudio,
             Log = services.Log,
         };
@@ -281,7 +282,7 @@ public sealed class MeetingController
     {
         var settings = services.Settings();
         var client = services.CreateMinutesClient(settings)
-            ?? throw GeminiException.MissingCredentials();
+            ?? throw (settings.MeetingAi == TextAiProvider.Claude ? Claude.ClaudeException.MissingCredentials() : GeminiException.MissingCredentials());
         var draft = MeetingJson.Deserialize(MeetingJson.Serialize(meeting));
         draft.Id = meeting.Id;
         if (template is { } t)
@@ -289,13 +290,14 @@ public sealed class MeetingController
             draft.MinutesTemplateId = t.RawValue();
             draft.CustomMinutesPrompt = t == MinutesTemplate.Custom ? customPrompt ?? settings.MeetingCustomMinutesPrompt : null;
         }
-        var result = await MeetingProcessor.MakeMinutesAsync(draft, client, settings.MeetingMinutesModel, cancellationToken).ConfigureAwait(false);
+        var result = await MeetingProcessor.MakeMinutesAsync(draft, client, settings.MinutesModel, cancellationToken).ConfigureAwait(false);
         meeting.MinutesTemplateId = draft.MinutesTemplateId;
         meeting.CustomMinutesPrompt = draft.CustomMinutesPrompt;
         meeting.Minutes = result.Markdown;
         meeting.ActionItems = result.ActionItems;
         if (meeting.ErrorMessage?.StartsWith("議事録を作れませんでした", StringComparison.Ordinal) == true
-            || meeting.ErrorMessage?.StartsWith("Gemini の認証情報", StringComparison.Ordinal) == true)
+            || meeting.ErrorMessage?.StartsWith("Gemini の認証情報", StringComparison.Ordinal) == true
+            || meeting.ErrorMessage?.StartsWith("Claude の認証情報", StringComparison.Ordinal) == true)
         {
             meeting.ErrorMessage = null;
         }

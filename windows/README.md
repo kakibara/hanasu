@@ -1,6 +1,6 @@
 # Hanasu for Windows
 
-Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常駐し、ショートカットで録音して文字起こしし、Gemini で自然な日本語に整えて（または英訳して）カーソル位置に入力する。
+Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常駐し、ショートカットで録音して文字起こしし、AI（Gemini か Claude）で自然な日本語に整えて（または英訳して）カーソル位置に入力する。
 
 - **音声入力**（第 1 段階）と、そのための土台（録音・文字起こし・Gemini・設定）
 - **会議の記録**（第 2 段階）: マイク（自分）と PC の音（相手）を別々に録り、記録のあとに文字起こし・話者分離・議事録まで作る。Mac 版の会議の記録（[docs/design/meeting.md](../docs/design/meeting.md)）にそろえた
@@ -8,9 +8,12 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 ## 使い方
 
 1. `Hanasu.exe` を起動すると、タスクトレイにアイコンが出る（初回は設定画面も開く）。
-2. 設定 → Gemini で、API キー（Google AI Studio）か、Vertex AI のサービスアカウントの JSON を設定する。
+2. 設定 → AI で、音声入力と会議（議事録）に使う AI（Gemini / Claude）とモデルを選び、その認証を設定する。
+   - Gemini: API キー（Google AI Studio）か、Vertex AI のサービスアカウントの JSON
+   - Claude: API キー（[Claude Console](https://platform.claude.com/) で作る）。「接続を試す」で確かめられる（料金はかからない）
+   - API キーは暗号化して保存する。「API キーを Windows Hello で守る」をオンにすると、使うときに PIN・顔・指紋で確認する（下の「セキュリティ」）
 3. 入力したい場所にカーソルを置き、**Ctrl + Alt + Space** で録音を始める。画面の下に HUD が出る。
-4. もう一度 **Ctrl + Alt + Space**（または HUD の「■ 停止」）で止めると、文字起こし → Gemini で整形 → 貼り付け まで進む。
+4. もう一度 **Ctrl + Alt + Space**（または HUD の「■ 停止」）で止めると、文字起こし → AI で整形 → 貼り付け まで進む。
    - **Ctrl + Alt + Shift + Space** で始めると英訳して入力する。録音中に HUD の「日本語 / English」を押して切り替えてもよい（止めた時点の選択で決まる）。
    - 録音中は **Esc**（または HUD の「取消」）で取り消す。
    - 「押している間だけ録音」も選べる（設定 → 一般 → 録音のしかた）。
@@ -25,13 +28,13 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
      「ここ重要」は **Ctrl + Alt + Shift + H**（記録中だけ有効）でも付けられる。書きかけのメモがあれば、その文を印の説明にする。
    - 記録中のライブの文字起こしはない（下の「会議の記録の作り」）。
 4. もう一度 **Ctrl + Alt + Shift + M**（または「■ 停止」・メニューの「会議の記録を停止」）で止めると、
-   「自分」「相手」の順に文字起こし → 相手側の話者分離 → Gemini で議事録 まで進み、終わるとタスクトレイに知らせる。
+   「自分」「相手」の順に文字起こし → 相手側の話者分離 → AI（設定 → AI の「会議」）で議事録 まで進み、終わるとタスクトレイに知らせる。
 5. 会議ノートで、議事録・文字起こし・メモのタブを見る。
    - 話者名: 「話者1」などの欄に名前を書くと、文字起こしと議事録の表示（と、作り直したときの議事録）に使う。
    - 「議事録を作り直す」「型: 〇〇」（型を選び直して作り直す）、「Markdown をコピー」（表示中のタブ）、「エクスプローラーで開く」。
    - 「メモ」タブで記録後にメモを直し、「保存して議事録を作り直す」。
    - 題名は上の欄で直せる。
-6. 設定 → 会議 で、文字起こしのエンジン（Whisper / Gemini）・ショートカット・話者分離・議事録のモデル・音声を残すか・保存先を変えられる。
+6. 設定 → 会議 で、文字起こしのエンジン（Whisper / Gemini）・ショートカット・話者分離・音声を残すか・保存先を変えられる。議事録の AI とモデルは 設定 → AI。
 
 既定のショートカットは、Windows が使う組み合わせを避けて選んだ。
 
@@ -50,8 +53,10 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
   - **Windows 標準（既定）**: 日本語の音声認識（設定 → 時刻と言語 → 言語と地域 → 日本語 → 言語のオプション）と、「オンライン音声認識」をオンにすること（設定 → プライバシーとセキュリティ → 音声認識）。マイクは Windows の既定のマイクを使う
   - **Whisper**: Microsoft Visual C++ 再頒布可能パッケージ（2015〜2022, x64）と、AVX2 に対応した CPU（Whisper.net のランタイムの条件）。モデルは設定で選んだときにダウンロードする
   - **Gemini**: Gemini の認証情報（整形と同じもの）。録音した音声が Google に送られる
-- 会議の記録: 文字起こしは Whisper（既定。モデルは「一般」タブで選んだもの）か Gemini。話者分離のモデル（約 34 MB）は初めて使うときにダウンロードする。議事録には Gemini の認証情報が要る
+- 会議の記録: 文字起こしは Whisper（既定。モデルは「一般」タブで選んだもの）か Gemini。話者分離のモデル（約 34 MB）は初めて使うときにダウンロードする。議事録には、会議の AI（Gemini か Claude）の認証情報が要る
 - Gemini の認証情報: API キー（[Google AI Studio](https://aistudio.google.com/apikey)）か、Vertex AI ユーザー（`roles/aiplatform.user`）のあるサービスアカウントの JSON 鍵
+- Claude を使うとき: Claude API の API キー。Claude は文章の処理（整形・英訳・議事録）だけに使い、音声は送らない（文字起こしは Windows 標準・Whisper・Gemini）
+- Windows Hello で API キーを守るとき: Windows Hello（PIN・顔・指紋）が設定されていること
 
 ## 構成
 
@@ -60,9 +65,12 @@ windows/
 ├── Hanasu.Windows.sln
 ├── Directory.Build.props        共通の設定（C# 12、Nullable、EnableWindowsTargeting など）
 ├── Hanasu.Core/                 net8.0。OS に依存しない部品（Mac でもテストできる）
-│   ├── Gemini/                  プロンプト（Mac 版と同じ文面）・REST クライアント・サービスアカウントの JWT（RS256）・認証の決め方
+│   ├── Ai/                      文章の処理の AI の共通の形（ITextGenerator）・用途ごとの選び方（TextAiFactory）・区切りのタグの無害化・ログの伏せ字
+│   ├── Claude/                  Claude API（公式の C# SDK）での整形・英訳・議事録・エラーの分類・モデルの一覧
+│   ├── Gemini/                  プロンプト（Mac 版と同じ文面。Claude にも同じものを送る）・REST クライアント・サービスアカウントの JWT（RS256）・認証の決め方
+│   ├── Net/                     リダイレクトに従わない HttpClient・モデルのダウンロード（ハッシュの確認）
 │   ├── Text/UserDictionary.cs   ユーザー辞書と置き換えルール（Mac 版の UserDictionary.swift の移植）
-│   ├── Settings/                設定（settings.json）・ショートカットの組み合わせ・秘密の値の暗号化のインターフェイス
+│   ├── Settings/                設定（settings.json）・ショートカットの組み合わせ・API キーの保存（SecretStore。DPAPI と Windows Hello はインターフェイスで渡す）
 │   ├── Audio/                   16 kHz・モノラルへの変換（窓付き sinc の再サンプリング）・WAV・無音の判定・効果音
 │   ├── Transcription/           文字起こしのインターフェイス・録ってからまとめて文字起こし・Gemini の文字起こし・Whisper のモデル管理
 │   ├── Dictation/               音声入力の流れ（状態遷移）・整形と失敗時の扱い・最近の結果・HUD の文言
@@ -74,7 +82,7 @@ windows/
 │   ├── AppHost.cs               部品を組み立てる場所
 │   ├── TrayIcon.cs              タスクトレイのメニュー（WinForms の NotifyIcon）
 │   ├── Services/                RegisterHotKey、WASAPI の録音（NAudio。会議はマイクとループバック）、Windows の音声認識（WinRT）、
-│   │                            クリップボード + SendInput の入力、前面アプリ、DPAPI、効果音、ログ
+│   │                            クリップボード + SendInput の入力、前面アプリ、DPAPI・Windows Hello・DLL の探索・UIPI（WindowsSecurity）、効果音、ログ
 │   └── Views/                   HUD（WS_EX_NOACTIVATE）・設定画面・会議ノート・ショートカットの記録欄
 ├── Hanasu.Cli/                  net8.0。確認用の CLI（Mac でも動く）
 └── Hanasu.Core.Tests/           xUnit。Mac でも Windows でも dotnet test で動く
@@ -89,7 +97,7 @@ HotKeyService（RegisterHotKey + 離したかの見張り）
         │                         └ RecordThenTranscribe ── WasapiRecorder（16 kHz・モノラル）
         │                                                └─ IBatchTranscriber ─┬ WhisperBatchTranscriber
         │                                                                     └ GeminiBatchTranscriber（inline data で WAV を送る）
-        ├─ DictationTextProcessor（辞書の置き換え → Gemini で整形 / 英訳。認証がない・失敗したら原文を入れて知らせる）
+        ├─ DictationTextProcessor（辞書の置き換え → 音声入力の AI（Gemini / Claude）で整形 / 英訳。認証がない・失敗したら原文を入れて知らせる）
         ├─ ClipboardTextInserter（クリップボード退避 → 文章 → Ctrl+V → 元に戻す）
         └─ IHud ── HudWindow（録音中・経過時間・途中経過・処理中・完了・エラー・日本語/English・取消・■ 停止）
 ```
@@ -112,7 +120,7 @@ MeetingController（Core。idle → starting → recording → processing → id
           → 無音のところにかかった時刻を声のあるところへ寄せる（MeetingAudio.SnapToSpeech）→ チャンネルの開始のずれを足す
        2. 相手側の話者分離（SherpaSpeakerDiarizer。失敗したら「相手」1 人として続ける）
        3. 話者の割り当て・回り込みの除去（MeetingProcessor。Mac 版の移植）
-       4. Gemini で議事録（MinutesPrompt。型・メモ・「ここ重要」・アクションアイテムの取り出し）
+       4. 会議の AI（Gemini / Claude）で議事録（MinutesPrompt。型・メモ・「ここ重要」・アクションアイテムの取り出し）
        5. 保存（MeetingStore: meeting.json・transcript.md・minutes.md・notes.md）。設定で音声を消す
 ```
 
@@ -137,7 +145,7 @@ MeetingController（Core。idle → starting → recording → processing → id
 - **話者の割り当て**: Mac 版 `MeetingProcessor` の移植（語の終わり寄りの時刻で話者を決める、区間のすき間の扱い、登場順に話者1・話者2…）。Windows 版で 2 つだけ足した:
   - 1 つの発話を話者で分けたとき、端に残った 1 秒未満・4 文字以下のかけらは隣にまとめる（Whisper の語の時刻が少し遅れ、前の人の最後の語が次の人に付きやすいため）。
   - スピーカーからの回り込みの除去は、6 文字以上のかけらだけを対象にする（「ます」「ありますか」がたまたま似て消えるのを防ぐ）。
-- **議事録**: Gemini（設定の「議事録のモデル」、既定は gemini-3.8-flash）。プロンプト（型ごとの見出しと指示・メモと「ここ重要」の扱い・`{{ACTION_ITEMS}}` と `<action_items>` の JSON）は
+- **議事録**: 設定 → AI の「会議（議事録）」で選んだ AI とモデル（既定は Gemini の gemini-3.8-flash。Claude にすると既定は claude-sonnet-5-5）。プロンプト（型ごとの見出しと指示・メモと「ここ重要」の扱い・`{{ACTION_ITEMS}}` と `<action_items>` の JSON）は
   Mac 版の `MinutesTemplate.swift`・`MeetingNotes.swift` と同じ文面にし、共有している部分には「両方を直す」とコメントを書いた。
 - **保存**: `MeetingStore`。`meeting.json` は Mac 版（`MeetingModels.swift`）と同じ JSON（キーは camelCase、列挙は小文字、日時は秒までの UTC、UUID は大文字、null は書かない）。
   Mac で作った会議のフォルダを保存先に置けば、そのまま会議ノートで開ける（`MeetingJsonTests`。Swift の Codable で Windows の `meeting.json` を読めることも確かめた）。
@@ -165,7 +173,7 @@ dotnet publish Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self
 できるもの（`windows/publish/win-x64/`）:
 
 ```
-Hanasu.exe                          本体（.NET ランタイム込み、約 78 MB。WPF のネイティブ DLL も中に入れてある）
+Hanasu.exe                          本体（.NET ランタイム込み、約 82 MB。WPF のネイティブ DLL も中に入れてある）
 sherpa-onnx-c-api.dll               話者分離（sherpa-onnx）のネイティブライブラリ
 onnxruntime.dll                     その依存（ONNX Runtime）。exe に入れると一時フォルダに展開して読むことになり、
                                     Windows 11 の System32 にある別の版の onnxruntime.dll と取り違えるおそれがあるので、exe の隣に置く
@@ -176,13 +184,13 @@ runtimes/win-x64/ggml-cpu-whisper.dll
 ```
 
 **フォルダごと（`Hanasu.exe`・2 つの DLL・`runtimes/`）を zip にして配る。** `Hanasu.exe` だけを配ると、Whisper のエンジンと話者分離が使えない（Windows 標準と Gemini は動く。話者分離に失敗したときは相手側を「相手」1 人にまとめる）。
-CI（`.github/workflows/windows.yml`）は同じコマンドで作り、`Hanasu-windows-x64.zip`（中身は上のフォルダ）を artifact に残す。
+CI（`.github/workflows/windows.yml`）は同じコマンドで作り、`Hanasu-windows-x64.zip`（中身は上のフォルダ）とその SHA-256（`Hanasu-windows-x64.zip.sha256`）を artifact に残す。
 
 ARM64 版は `-r win-arm64 -o publish/win-arm64` で同じ形のものができる（runtimes/win-arm64/ が付く。実機では確かめていない）。
 
 ### 確認用の CLI
 
-認証は環境変数 `GEMINI_SERVICE_ACCOUNT_JSON`（サービスアカウントの JSON のパス）か `GEMINI_API_KEY`。
+Gemini の認証は環境変数 `GEMINI_SERVICE_ACCOUNT_JSON`（サービスアカウントの JSON のパス）か `GEMINI_API_KEY`。Claude は `ANTHROPIC_API_KEY`。
 
 ```bash
 cd windows
@@ -193,10 +201,15 @@ dotnet run --project Hanasu.Cli -- dictation <wav> --engine whisper|gemini [--tr
 dotnet run --project Hanasu.Cli -- dict <辞書ファイル> "<文章>"
 dotnet run --project Hanasu.Cli -- models
 
+# Claude
+dotnet run --project Hanasu.Cli -- claude-request "<文章>" [--translate | --minutes] [--model <id>]   # 送らずに、送る HTTP リクエストを出す（キーは伏せる。キーがなくても動く）
+dotnet run --project Hanasu.Cli -- claude-refine "<文章>" [--translate] [--model <id>] [--app Slack]  # Claude で整形・英訳する（使ったトークンとキャッシュも出す）
+dotnet run --project Hanasu.Cli -- claude-check [--model <id>] [--fake-key]                          # 「接続を試す」と同じ確かめ。--fake-key は偽のキーで 401 の文言を見る
+
 # 会議の後処理（2 つの音声を「自分」「相手」として文字起こし → 話者分離 → 話者の割り当て → 議事録）。会議は --meetings-dir の下に作る
 dotnet run --project Hanasu.Cli -- meeting-files me.wav others.wav --meetings-dir <保存先> [--engine whisper|gemini] [--whisper-model base] [--models-dir <dir>] [--download] \
-    [--others-offset 1.5] [--template regular] [--notes notes.txt] [--no-minutes] [--no-diarize] [--diarization-models-dir <dir>] [--minutes-model <id>] [--delete-audio]
-dotnet run --project Hanasu.Cli -- meeting-minutes <会議のフォルダ> [--template sales]   # 議事録を作り直す
+    [--others-offset 1.5] [--template regular] [--notes notes.txt] [--no-minutes] [--no-diarize] [--diarization-models-dir <dir>] [--minutes-ai gemini|claude] [--minutes-model <id>] [--delete-audio]
+dotnet run --project Hanasu.Cli -- meeting-minutes <会議のフォルダ> [--template sales] [--minutes-ai claude]   # 議事録を作り直す
 dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>                        # meeting.json を読んで出す（Mac で作った会議が読めるかの確認）
 ```
 
@@ -207,10 +220,10 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | もの | 場所 |
 | --- | --- |
 | 設定 | `%APPDATA%\Hanasu\settings.json`（JSON。壊れていたら `settings.json.broken` に退けて既定値で始める） |
-| Gemini の API キー | 設定の `protectedApiKey` に、DPAPI（CurrentUser）で暗号化して Base64 で入れる。平文では保存しない |
+| API キー（Gemini・Claude） | `%LOCALAPPDATA%\Hanasu\secrets.json` に、DPAPI（CurrentUser）か Windows Hello の鍵で暗号化して入れる。平文では保存しない。settings.json には入れない（PR #19 までの settings.json の `protectedApiKey` は、起動したときにそのまま移す） |
 | サービスアカウント | JSON のパスだけを保存する（鍵の中身は写さない） |
 | Whisper のモデル | `%LOCALAPPDATA%\Hanasu\Models\ggml-*.bin`（ダウンロード中は `.download`） |
-| ログ | `%LOCALAPPDATA%\Hanasu\Logs\hanasu.log`（文字起こしの中身は書かない） |
+| ログ | `%LOCALAPPDATA%\Hanasu\Logs\hanasu.log`（文字起こしの中身は書かない。API キーに見える文字列は伏せる） |
 | 最近の結果 | メモリ上だけ（10 件） |
 | 会議の記録 | `ドキュメント\Hanasu\Meetings\<yyyy-MM-dd HHmm>\`（設定 → 会議 で変えられる）。`meeting.json`・`transcript.md`・`minutes.md`・`notes.md`・`me.wav`・`others.wav` |
 | 話者分離のモデル | `%LOCALAPPDATA%\Hanasu\Models\diarization\*.onnx` |
@@ -221,13 +234,13 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | --- | --- |
 | 音声認識 | Windows 標準（`Windows.Media.SpeechRecognition`）・Whisper・Gemini から選ぶ。Mac 版の SpeechAnalyzer の代わり |
 | 入力 | クリップボード + `SendInput` の Ctrl+V。クリップボードの履歴（Win+V）とクラウド同期に残さない印を付ける |
-| アプリ別スタイル | **未実装**（入力先アプリ名を Gemini に伝えるだけ） |
+| アプリ別スタイル | **未実装**（入力先アプリ名を AI に伝えるだけ） |
 | スニペット | **未実装** |
 | 画面の文脈 | **未実装** |
 | 履歴ウインドウ（検索・整え直し・音声の保存） | **未実装**。代わりにメモリ上の「最近の結果」10 件をメニューからコピーできる |
 | 最後の結果をもう一度入力（`⌥⇧ V`） | **未実装**（「最近の結果」からコピーして貼る） |
 | 選択を声で編集 | **未実装** |
-| 辞書の候補を探す（Gemini で提案） | **未実装**（辞書の編集と置き換えの試しはできる） |
+| 辞書の候補を探す（AI で提案） | **未実装**（辞書の編集と置き換えの試しはできる） |
 | 会議の記録 | 作った（下の表は会議の記録での差） |
 
 会議の記録での差:
@@ -245,6 +258,17 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | 会議の自動検出（会議アプリがマイクを使い始めたら知らせる） | **未実装** |
 | 会議の横断検索・会議への質問（Ask） | **未実装** |
 
+## セキュリティ
+
+詳しくは [docs/design/security-windows.md](../docs/design/security-windows.md)。
+
+- **API キー**: 既定の DPAPI は、この Windows ユーザーでしか読めないが、**同じユーザーで動くほかのアプリは確認なしに読める**（署名もパッケージ化もしていないアプリは、Windows に見分けてもらえないため）。
+  設定 → AI →「API キーを Windows Hello で守る」をオンにすると、ほかのアプリが読もうとすると Windows Hello の確認が出る。確認は起動してから最初に使うとき 1 回で、画面をロックするとまた求める。Hanasu が動いている間のメモリまでは守れない。
+- **配布物は署名していない**。初めて起動すると SmartScreen が「Windows によって PC が保護されました」と出す。ダウンロードした zip の SHA-256 を、リリースの `.sha256` と比べてから使う（PowerShell: `Get-FileHash Hanasu-windows-x64.zip`）。
+- **zip は専用のフォルダに展開する**（「ダウンロード」フォルダの直下で展開しない）。exe は起動するときに同じフォルダの DLL を読むことがあり、知らない DLL が混ざっていると乗っ取られるおそれがある。
+- 管理者として動いているアプリには貼り付けを送らない（届かないので）。クリップボードに残すので、Ctrl+V で貼る。
+- モデルは決まったホストから取り、SHA-256 を確かめてから使う。
+
 ## 依存パッケージ
 
 | パッケージ | 使う場所 | ライセンス |
@@ -252,11 +276,13 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | [NAudio.Wasapi](https://github.com/naudio/NAudio) 2.2.1（と NAudio.Core） | マイクの録音（WASAPI） | MIT |
 | [Whisper.net](https://github.com/sandrohanea/whisper.net) / Whisper.net.Runtime 1.9.1（whisper.cpp を含む） | Whisper の文字起こし | MIT（whisper.cpp も MIT） |
 | System.Security.Cryptography.ProtectedData 8.0.0 | API キーの DPAPI 暗号化 | MIT |
+| [Anthropic](https://github.com/anthropics/anthropic-sdk-csharp) 13.4.0（公式の C# SDK。Microsoft.Extensions.AI.Abstractions・System.Text.Json などを含む） | Claude API | Apache-2.0（依存は MIT） |
 | xunit 2.9.3 / xunit.runner.visualstudio 2.8.2 | テストのみ | Apache-2.0 |
 | Microsoft.NET.Test.Sdk 17.14.1 | テストのみ | MIT |
 | [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（org.k2fsa.sherpa.onnx 1.13.8、ONNX Runtime を含む） | 会議の相手側の話者分離 | Apache-2.0（ONNX Runtime は MIT） |
 
 配布物には、Hanasu のライセンス（`LICENSE.txt`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したら、THIRD_PARTY_NOTICES.md にも足すこと。
+依存の版とハッシュは各プロジェクトの `packages.lock.json` に固定している（CI は locked mode）。パッケージを足したり版を変えたりしたら、`dotnet restore` で lock ファイルを作り直してコミットする。
 
 Whisper のモデル（`ggml-*.bin`）は配布物に含めず、利用者が選んだときに [Hugging Face の ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp) からダウンロードする（OpenAI の Whisper のモデル、MIT）。
 話者分離のモデルも配布物に含めず、初めて使うときにダウンロードする: [pyannote segmentation-3.0 の ONNX 版](https://huggingface.co/csukuangfj/sherpa-onnx-pyannote-segmentation-3-0)（MIT）、

@@ -3,28 +3,29 @@ using System.IO;
 using System.Media;
 using System.Security.Cryptography;
 using System.Text;
+using Hanasu.Core;
 using Hanasu.Core.Audio;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Settings;
 
 namespace Hanasu.Windows.Services;
 
-/// <summary>API キーを DPAPI（CurrentUser）で暗号化する。同じ Windows ユーザーでしか復号できない。</summary>
-internal sealed class DpapiSecretProtector : ISecretProtector
+/// <summary>
+/// DPAPI（CurrentUser）。同じ Windows ユーザーでしか復号できない（同じユーザーで動くほかのプロセスは復号できる。docs/design/security-windows.md）。
+/// エントロピーは SecretStore が種類ごとに決める。
+/// </summary>
+// 設計判断: DEC-COM-144
+internal sealed class DpapiDataProtector : IDataProtector
 {
-    // Hanasu 以外のアプリが同じ値を復号しにくくするための追加のエントロピー
-    private static readonly byte[] Entropy = Encoding.UTF8.GetBytes("Hanasu.Windows.GeminiApiKey");
+    public byte[] Protect(byte[] data, byte[] entropy) => ProtectedData.Protect(data, entropy, DataProtectionScope.CurrentUser);
 
-    public string Protect(string plaintext) =>
-        Convert.ToBase64String(ProtectedData.Protect(Encoding.UTF8.GetBytes(plaintext), Entropy, DataProtectionScope.CurrentUser));
-
-    public string? Unprotect(string protectedText)
+    public byte[]? Unprotect(byte[] data, byte[] entropy)
     {
         try
         {
-            return Encoding.UTF8.GetString(ProtectedData.Unprotect(Convert.FromBase64String(protectedText), Entropy, DataProtectionScope.CurrentUser));
+            return ProtectedData.Unprotect(data, entropy, DataProtectionScope.CurrentUser);
         }
-        catch (Exception e) when (e is CryptographicException or FormatException)
+        catch (CryptographicException)
         {
             return null;
         }
@@ -62,7 +63,11 @@ internal sealed class SoundService
     }
 }
 
-/// <summary>動作の記録（%LOCALAPPDATA%\Hanasu\Logs\hanasu.log）。文字起こしの中身は書かない。</summary>
+/// <summary>
+/// 動作の記録（%LOCALAPPDATA%\Hanasu\Logs\hanasu.log）。文字起こし・会議の中身は書かない。
+/// 念のため、API キーやトークンに見える文字列は伏せてから書く（SecretRedactor）。
+/// </summary>
+// 設計判断: DEC-COM-147
 internal static class AppLog
 {
     private static readonly object Gate = new();
@@ -72,6 +77,7 @@ internal static class AppLog
 
     public static void Write(string message)
     {
+        message = SecretRedactor.Redact(message);
         Debug.WriteLine(message);
         try
         {

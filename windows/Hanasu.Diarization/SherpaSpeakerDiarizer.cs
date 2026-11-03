@@ -3,25 +3,27 @@ using SherpaOnnx;
 
 namespace Hanasu.Diarization;
 
-/// <summary>話者分離に使うモデル 1 つ。</summary>
-public sealed record DiarizationModelFile(string FileName, Uri DownloadUri, long ApproximateBytes, string Description);
+/// <summary>話者分離に使うモデル 1 つ。Bytes と Sha256 は Hugging Face の LFS の値（ダウンロードしたものと比べる）</summary>
+public sealed record DiarizationModelFile(string FileName, Uri DownloadUri, long Bytes, string Sha256, string Description);
 
 /// <summary>
 /// 話者分離のモデル（初めて使うときにダウンロードする）。置き場所は Whisper と同じ %LOCALAPPDATA%\Hanasu\Models の下の diarization。
 /// - 区間の検出: pyannote segmentation-3.0 の ONNX 版（sherpa-onnx の作者が変換したもの。MIT）
-/// - 話者の埋め込み: 3D-Speaker の CAM++（中国語・英語の大量の話者で学習。Apache-2.0）
+/// - 話者の埋め込み: 3D-Speaker の CAM++（中国語・英語の大量の話者で学習。Apache-2.0）。
+///   sherpa-onnx の GitHub のリリースと同じファイル（同じ名前・同じ大きさ）を、ハッシュが公開されている Hugging Face から取る
 /// </summary>
+// 設計判断: DEC-COM-146
 public sealed class DiarizationModels
 {
     public static readonly DiarizationModelFile Segmentation = new(
         "pyannote-segmentation-3.0.onnx",
         new Uri("https://huggingface.co/csukuangfj/sherpa-onnx-pyannote-segmentation-3-0/resolve/main/model.onnx"),
-        5_990_000, "話している区間の検出（pyannote segmentation-3.0）");
+        5_992_913, "220ad67ca923bef2fa91f2390c786097bf305bceb5e261d4af67b38e938e1079", "話している区間の検出（pyannote segmentation-3.0）");
 
     public static readonly DiarizationModelFile Embedding = new(
         "3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx",
-        new Uri("https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-recongition-models/3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx"),
-        28_281_164, "話者の声の特徴（3D-Speaker CAM++）");
+        new Uri("https://huggingface.co/csukuangfj/speaker-embedding-models/resolve/main/3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx"),
+        28_281_164, "aa3cfc16963a10586a9393f5035d6d6b57e98d358b347f80c2a30bf4f00ceba2", "話者の声の特徴（3D-Speaker CAM++）");
 
     public static IReadOnlyList<DiarizationModelFile> All { get; } = [Segmentation, Embedding];
 
@@ -33,12 +35,13 @@ public sealed class DiarizationModels
     public DiarizationModels(string directory, HttpClient? http = null)
     {
         Directory = directory;
-        this.http = http ?? new HttpClient { Timeout = TimeSpan.FromMinutes(10) };
+        this.http = http ?? Hanasu.Core.SafeHttp.CreateForDownloads(TimeSpan.FromMinutes(10));
     }
 
     public string PathFor(DiarizationModelFile model) => Path.Combine(Directory, model.FileName);
 
-    public bool IsReady => All.All(m => File.Exists(PathFor(m)));
+    /// <summary>すべて置いてあり、大きさが合っているか（ハッシュはダウンロードのときに確かめている）</summary>
+    public bool IsReady => All.All(m => new FileInfo(PathFor(m)) is { Exists: true } f && f.Length == m.Bytes);
 
     /// <summary>なければダウンロードする（「.download」に書いてから名前を変える）。progress には「12/34 MB」のような文言を渡す</summary>
     public async Task EnsureDownloadedAsync(IProgress<string>? progress = null, CancellationToken cancellationToken = default)
@@ -47,33 +50,20 @@ public sealed class DiarizationModels
         try
         {
             System.IO.Directory.CreateDirectory(Directory);
-            var missing = All.Where(m => !File.Exists(PathFor(m))).ToList();
-            var total = missing.Sum(m => m.ApproximateBytes);
+            var missing = All.Where(m => !(new FileInfo(PathFor(m)) is { Exists: true } f && f.Length == m.Bytes)).ToList();
+            var total = missing.Sum(m => m.Bytes);
             long done = 0;
             foreach (var model in missing)
             {
-                var path = PathFor(model);
-                var temp = path + ".download";
-                using (var response = await http.GetAsync(model.DownloadUri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
+                long lastReport = 0;
+                await Hanasu.Core.ModelDownload.DownloadVerifiedAsync(http, model.DownloadUri, PathFor(model), model.Sha256, model.Bytes, (received, _) =>
                 {
-                    response.EnsureSuccessStatusCode();
-                    await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-                    await using var file = File.Create(temp);
-                    var buffer = new byte[81920];
-                    long lastReport = 0;
-                    int read;
-                    while ((read = await source.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) > 0)
-                    {
-                        await file.WriteAsync(buffer.AsMemory(0, read), cancellationToken).ConfigureAwait(false);
-                        done += read;
-                        if (done - lastReport > 2_000_000)
-                        {
-                            lastReport = done;
-                            progress?.Report($"話者分離のモデルをダウンロードしています…（{done / 1_000_000} / {total / 1_000_000} MB）");
-                        }
-                    }
-                }
-                File.Move(temp, path, overwrite: true);
+                    var sum = done + received;
+                    if (sum - lastReport <= 2_000_000) return;
+                    lastReport = sum;
+                    progress?.Report($"話者分離のモデルをダウンロードしています…（{sum / 1_000_000} / {total / 1_000_000} MB）");
+                }, cancellationToken).ConfigureAwait(false);
+                done += model.Bytes;
             }
         }
         finally

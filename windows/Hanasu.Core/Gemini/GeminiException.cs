@@ -1,3 +1,5 @@
+using Hanasu.Core.Ai;
+
 namespace Hanasu.Core.Gemini;
 
 public enum GeminiErrorKind
@@ -10,7 +12,7 @@ public enum GeminiErrorKind
 }
 
 /// <summary>Gemini の呼び出しの失敗。Message はそのまま HUD に出せる日本語にする。</summary>
-public sealed class GeminiException : Exception
+public sealed class GeminiException : TextAiException
 {
     public GeminiErrorKind Kind { get; }
     public int? StatusCode { get; }
@@ -24,6 +26,8 @@ public sealed class GeminiException : Exception
         StatusCode = status;
         Reason = reason;
     }
+
+    public override bool IsCredentialProblem => Kind == GeminiErrorKind.MissingCredentials || StatusCode is 401 or 403;
 
     public static GeminiException MissingCredentials() =>
         new(GeminiErrorKind.MissingCredentials, "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません");

@@ -58,45 +58,61 @@
 - 内容: 整形・英訳などの文章の処理に使う AI を、Gemini と Claude（Anthropic の Claude API）から選べる。Claude の認証は、ユーザーが入力する API キーで行う。音声の文字起こしには使わない。
 - 受け入れ条件: 設定で Claude を選び API キーを入れると、整形・英訳などが Claude で行われる。キーが正しくないときは、そう分かる文言で知らせる。
   - Mac: 設定の「AI」タブで、音声入力か会議の AI を Claude にし、「Claude（Anthropic）の API キー」に保存すると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）が Claude で行われる。キーが正しくないときは「Claude の API キーが正しくありません（401）」と出る（「接続を試す」でも、整形のときも）。音声は Claude に送らない（文字起こしは「一般」→「文字起こし」のエンジンのまま）。
+  - Windows: 設定 → AI で「音声入力」か「会議」の AI を Claude にし、「Claude の API キー」を保存すると、整形・英訳・議事録（作り直しを含む）が Claude で行われる。キーが正しくなければ、HUD・会議ノート・「接続を試す」に「Claude の API キーが正しくありません（401）」と出る（音声入力では整える前の文章を入力する）。
 - 出典: ユーザーの依頼（2026-11-03「claude APIも利用できるようにして。認証はAPIキーを入力する形にして」）
 - 対象: Mac / Windows
 - 実装の場所: `ClaudeClient`、`TextAIClient`、`TextAIProvider`、`AISettingsTab`、`ClaudeKeySection`
-- 確かめ方: `.build/debug/Hanasu --refine-text <文> --ai claude --show-request`（送る JSON とヘッダー。キーは伏せる）、`ANTHROPIC_API_KEY=<偽のキー> .build/debug/Hanasu --refine-text <文> --ai claude` と `--claude-test`（401 の文言）、`--render-ai-settings /tmp/ai.png --claude`
+- Windows の実装: `windows/Hanasu.Core/Claude/ClaudeClient.cs`、`windows/Hanasu.Core/Claude/ClaudeException.cs`、`windows/Hanasu.Core/Ai/TextAiFactory.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
+- 確かめ方: Mac は `.build/debug/Hanasu --refine-text <文> --ai claude --show-request`（送る JSON とヘッダー。キーは伏せる）、`ANTHROPIC_API_KEY=<偽のキー> .build/debug/Hanasu --refine-text <文> --ai claude` と `--claude-test`（401 の文言）、`--render-ai-settings /tmp/ai.png --claude`
+  - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`ClaudeClientTests`・`TextAiSelectionTests`）、`dotnet run --project Hanasu.Cli -- claude-request "<文章>"`（送る内容。キーは伏せる）、`claude-check --fake-key`（401 の文言）、`claude-refine "<文章>"`（`ANTHROPIC_API_KEY` があるとき）
 
 ### REQ-COM-021 API キーは、他のアプリから読み取れない形で保存する
 - 内容: Claude と Gemini の API キーを、OS が用意する保護の仕組みに保存し、Hanasu 以外のアプリからは（ユーザーの確認なしに）読めないようにする。ログ・設定ファイル・画面には平文で出さない。
 - 受け入れ条件:
   - Mac: キーはログインキーチェーンの項目（サービス `dev.mactypeless.Hanasu`）に入り、その ACL は復号を Hanasu 自身だけに許し、ほかのアプリにはログインのパスワードを求める（`security dump-keychain -a` で `require-password`）。UserDefaults・ログ・画面にはキーを出さない（設定画面は末尾 4 文字だけ。入力欄はマスクし、保存したら空にする）。削除できる。
   - Mac で守れないもの: この Mac（macOS 26.6.2）で試すと、アドホック署名の別のプログラムは ACL に関係なく確認なしで読めた（[design/security.md](../design/security.md) の 1.3）。同じユーザーで動く悪意のあるプログラムからは守れない。
+  - Windows: API キーは `%LOCALAPPDATA%\Hanasu\secrets.json` に暗号化して置き、`settings.json`・ログ・画面には平文で出さない（画面は末尾 4 文字だけ）。設定 → AI →「API キーを Windows Hello で守る」をオンにすると、ほかのアプリが読もうとしても Windows Hello の確認（PIN・顔・指紋）が出る。オフ（既定の DPAPI）のときは、同じ Windows ユーザーで動くほかのアプリからは確認なしに読める（Windows の仕組みの限界。[design/security-windows.md](../design/security-windows.md)）。PR #19 までに保存した Gemini の API キーは、そのまま読める。
 - 出典: ユーザーの依頼（2026-11-03「APIキーは重要な情報なので、他のアプリからは読み取れない状態で保存して」）
 - 対象: Mac / Windows
 - 実装の場所: `Keychain`（`save`・`load`・`hint`・`delete`）、`ClaudeKeySection`、`ClaudeClient.redacted`
-- 確かめ方: `.build/debug/Hanasu --keychain-selftest`（名前を変えた一時的な項目で、保存・末尾 4 文字・読み出し・ACL・削除。`--keep` で残し、`--keychain-selftest-delete <サービス名>` で消す）
+- Windows の実装: `windows/Hanasu.Core/Settings/SecretStore.cs`、`windows/Hanasu.Windows/Services/WindowsSecurity.cs`（`WindowsHelloKey`）、`windows/Hanasu.Windows/Services/SmallServices.cs`（`DpapiDataProtector`）
+- 確かめ方: Mac は `.build/debug/Hanasu --keychain-selftest`（名前を変えた一時的な項目で、保存・末尾 4 文字・読み出し・ACL・削除。`--keep` で残し、`--keychain-selftest-delete <サービス名>` で消す）
+  - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`SecretStoreTests`。DPAPI と Windows Hello は偽物）。Windows Hello の確認が出ることは Windows の実機で確かめる（まだ確かめていない）
 
 ### REQ-COM-022 セキュリティの調査の結果を、実装と文書に入れる
 - 内容: 通信・秘密の扱い・ダウンロード・保存するファイル・クリップボード・プロンプトインジェクション・権限・依存関係・配布について調べ、直せるものは直し、残る危険は文書に書く。
 - 受け入れ条件:
   - Mac: [design/security.md](../design/security.md) に、項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの: AI の通信はリダイレクトに従わずキャッシュを残さない（DEC-COM-044）、サービスアカウントの `token_uri` と Vertex AI のリージョンを確かめる（DEC-COM-053）、会議のフォルダを 0700 にする（DEC-COM-052）、自己署名でも Hardened Runtime を付ける（DEC-COM-051）。
+  - Windows: [design/security-windows.md](../design/security-windows.md) に項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの（モデルのハッシュの確認、リダイレクトでキーを送らない、DLL の探索の場所、権限の高いウインドウに貼らない、区切りのタグの無害化、ログの伏せ字、NuGet の lock ファイル、配布物の SHA-256）は、DEC-COM-142・145〜150 のとおりに動く。
 - 出典: ユーザーの依頼（2026-11-03「その他セキュリティで気をつけるべきところを調査してその結果を盛り込んで」）
 - 対象: Mac / Windows
 - 実装の場所: `SecureHTTP`、`ServiceAccountTokenProvider.isTrustedTokenURL`、`GeminiClient.isValidLocation`、`MeetingStore.createPrivateDirectory`、`scripts/build-app.sh`
-- 確かめ方: [design/security.md](../design/security.md) の各項目。`--keychain-selftest`。Hardened Runtime は `./scripts/build-app.sh` のあとに `codesign -dvv build/Hanasu.app`（flags に runtime）と実機の起動で確かめる
+- Windows の実装: `windows/Hanasu.Core/Net/ModelDownload.cs`、`windows/Hanasu.Core/Net/SafeHttp.cs`、`windows/Hanasu.Core/Ai/PromptText.cs`、`windows/Hanasu.Core/Ai/SecretRedactor.cs`、`windows/Hanasu.Windows/Services/WindowsSecurity.cs`
+- 確かめ方: Mac は [design/security.md](../design/security.md) の各項目。`--keychain-selftest`。Hardened Runtime は `./scripts/build-app.sh` のあとに `codesign -dvv build/Hanasu.app`（flags に runtime）と実機の起動で確かめる
+  - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`DownloadWithWrongHashIsRejected`・`DownloadsOnlyFromAllowedHosts`・`PromptSafetyTests`）、CI（`.github/workflows/windows.yml` の locked restore と SHA-256）。DLL の探索と UIPI は Windows の実機で確かめる（まだ確かめていない）
 
 ### REQ-COM-023 Claude の既定のモデルは、音声入力は Haiku 5.5、会議は Sonnet 5.5 にする
 - 内容: Claude を選んだときの既定のモデルは、音声入力（整形・英訳・選択の編集）が `claude-haiku-5-5`、会議（議事録・会議への質問）が `claude-sonnet-5-5`。どちらも設定で Haiku 5.5 / Sonnet 5.5 / Opus 5.5 から変えられる。
 - 受け入れ条件: 設定を変えていない状態で Claude を選ぶと、音声入力は `claude-haiku-5-5`、会議は `claude-sonnet-5-5` で送られる（Mac: `--refine-text … --ai claude --show-request` の `model`、`--render-ai-settings`）。「AI」タブのモデルの選択で 3 つから変えられる。
+  - Windows: 設定を変えていない状態で Claude を選ぶと、音声入力は `claude-haiku-5-5`、議事録は `claude-sonnet-5-5` で送る。設定 → AI のモデルの欄で 3 つから選べる。一覧にない ID が設定に残っていたら既定に戻す。
 - 出典: ユーザーの指示（2026-11-03「規定モデルは haiku にして」、2026-11-04「Claude は議事録は sonnet にして」）
 - 対象: Mac / Windows
 - 実装の場所: `ClaudeClient.Model`（`defaultDictation`・`defaultMeeting`）、`AppSettings.init`（`claudeModel`・`claudeMinutesModel` の初期値）
-- 確かめ方: `.build/debug/Hanasu --refine-text <文> --ai claude --show-request`、`--render-ai-settings /tmp/ai.png --claude`
+- Windows の実装: `windows/Hanasu.Core/Claude/ClaudeModels.cs`、`windows/Hanasu.Core/Settings/AppSettings.cs`
+- 確かめ方: Mac は `.build/debug/Hanasu --refine-text <文> --ai claude --show-request`、`--render-ai-settings /tmp/ai.png --claude`
+  - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`ClaudeClientTests.ModelsAndDefaults`・`UnknownModelFallsBackToTheDefaultForThePurpose`）、`dotnet run --project Hanasu.Cli -- claude-request "<文章>" [--minutes]`
 
 ### REQ-COM-024 音声入力と会議で、使う AI とモデルを別々に選べる
 - 内容: 音声入力（整形・英訳・選択の編集）と会議（議事録・会議への質問）のそれぞれで、AI（Gemini / Claude）とモデルを別々に選べる。
-- 受け入れ条件: Mac: 設定の「AI」タブの「使う AI とモデル」に「音声入力」と「会議」が並び、それぞれで Gemini / Claude とモデルを選べる（例: 音声入力は Gemini の flash-lite、会議は Claude Sonnet 5.5）。既定は、今までの設定を引き継いで両方 Gemini（音声入力は `geminiModel`、会議は `meetingMinutesModel`）。辞書の候補探しは会議の設定を使う（DEC-COM-040）。
+- 受け入れ条件:
+  - Mac: 設定の「AI」タブの「使う AI とモデル」に「音声入力」と「会議」が並び、それぞれで Gemini / Claude とモデルを選べる（例: 音声入力は Gemini の flash-lite、会議は Claude Sonnet 5.5）。既定は、今までの設定を引き継いで両方 Gemini（音声入力は `geminiModel`、会議は `meetingMinutesModel`）。辞書の候補探しは会議の設定を使う（DEC-COM-040）。
+  - Windows: 設定 → AI の「使う AI とモデル」に「音声入力（整形・英訳）」と「会議（議事録）」の 2 行があり、行ごとに AI とモデルを選べる。既定は今までどおり（どちらも Gemini、モデルは gemini-3.5-flash-lite と gemini-3.8-flash）。Windows 版には選択の編集・会議への質問がないので、音声入力は整形・英訳、会議は議事録（作り直しを含む）に効く。
 - 出典: ユーザーの指示（2026-11-03「会議の要約モデルと音声入力モデルは個別に指定できるようにして」）
 - 対象: Mac / Windows
 - 実装の場所: `TextAIPurpose`、`AppSettings`（`dictationAIProvider`・`meetingAIProvider`・`aiProvider(for:)`・`textModel(for:)`）、`AIChoiceRow`
-- 確かめ方: `.build/debug/Hanasu --render-ai-settings /tmp/ai.png --claude`（音声入力は Gemini、会議は Claude の見た目）
+- Windows の実装: `windows/Hanasu.Core/Ai/TextAiFactory.cs`、`windows/Hanasu.Core/Settings/AppSettings.cs`（`DictationAi` / `MeetingAi`）、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
+- 確かめ方: Mac は `.build/debug/Hanasu --render-ai-settings /tmp/ai.png --claude`（音声入力は Gemini、会議は Claude の見た目）
+  - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`TextAiSelectionTests`）
 
 ---
 
@@ -455,12 +471,12 @@
 - 実装の場所: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`
 
 ### DEC-COM-103 Windows 版の設定と秘密の保存
-- 決めたこと: 設定は `%APPDATA%\Hanasu\settings.json`（壊れていたら `settings.json.broken` に退けて既定値で始める）。Gemini の API キーは DPAPI（CurrentUser と追加のエントロピー）で暗号化して設定に入れ、平文では保存しない。サービスアカウントは JSON のパスだけを保存する。ログは `%LOCALAPPDATA%\Hanasu\Logs\hanasu.log` で、文字起こしの中身は書かない。
-- 理由: 資格情報マネージャーより扱いが簡単で、同じユーザーでしか復号できない（Mac 版のキーチェーン、DEC-COM-002 にあたる）。
-- 決めた場面: PR #19
-- 関係する要件: REQ-COM-010
+- 決めたこと: 設定は `%APPDATA%\Hanasu\settings.json`（壊れていたら `settings.json.broken` に退けて既定値で始める）。API キーは settings.json に入れず、`%LOCALAPPDATA%\Hanasu\secrets.json` に暗号化して置く（DEC-COM-144。PR #19 では settings.json の `protectedApiKey` に DPAPI で入れていた）。サービスアカウントは JSON のパスだけを保存する。ログは `%LOCALAPPDATA%\Hanasu\Logs\hanasu.log` で、文字起こしの中身は書かない（キーに見えるものは伏せる。DEC-COM-147）。
+- 理由: 設定ファイルは、問い合わせのときに見せたり、移動プロファイルで別の PC に運ばれたりする。秘密は端末ごとの場所に分ける。
+- 決めた場面: PR #19。API キーの置き場所は Claude API に対応した PR で変えた
+- 関係する要件: REQ-COM-010, REQ-COM-021
 - 対象: Windows
-- 実装の場所: `windows/Hanasu.Core/Settings/SettingsStore.cs`
+- 実装の場所: `windows/Hanasu.Core/Settings/SettingsStore.cs`、`windows/Hanasu.Core/Settings/SecretStore.cs`
 
 ### DEC-COM-104 Windows 標準のエンジンは、Windows の既定のマイクを使う
 - 決めたこと: Windows 標準（`Windows.Media.SpeechRecognition` の連続認識）を選んだときは、Windows の既定のマイクを使い、設定画面でマイクの選択を無効にする（そう書く）。マイクの選択は Whisper / Gemini で使う。オンライン音声認識がオフ・日本語の音声認識がない・マイクが許可されていないときは、HUD に理由と直し方を出し、該当の設定ページ（`ms-settings:`）を開く。
@@ -493,6 +509,94 @@
 - 関係する要件: REQ-COM-010, REQ-COM-011
 - 対象: Windows
 - 実装の場所: なし（作っていない）
+
+### DEC-COM-140 Windows 版の AI の選択は、音声入力と会議で 1 つずつ。設定画面の「Gemini」タブを「AI」タブにする
+- 決めたこと: 設定に `DictationAi`（整形・英訳）と `MeetingAi`（議事録・作り直し）を持ち、どちらも既定は Gemini（今までどおり）。モデルは AI ごとに別に持つ（Gemini は今の `model` と `meetingMinutesModel`、Claude は `claudeModel` と `claudeMinutesModel`）ので、AI を切り替えても前に選んだモデルが残る。設定画面の「Gemini」タブを「AI」タブにして、上に「使う AI とモデル」の 2 行（音声入力・会議）、下に Gemini の認証・Claude の API キー・キーの保護・試すを並べる。会議タブの「議事録のモデル」は AI タブへ移した。英訳は AI でしかできないので、「AI で整形する」をオフにしても英訳は音声入力の AI に送る（今までどおり）。Gemini での文字起こし（エンジンが Gemini のとき）は、AI の選択にかかわらず Gemini の認証と音声入力の Gemini のモデルを使う。
+- 理由: ユーザーの指示（REQ-COM-024）。音声入力は速さ、議事録は質を優先したいので、用途ごとに選べるほうがよい。認証は AI ごとに 1 つで足りるので、用途ごとには持たない。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-020, REQ-COM-024
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Ai/TextAiFactory.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`
+
+### DEC-COM-141 Windows 版の Claude は公式の C# SDK で呼び、Sonnet 5.5・Opus 5.5 はサーバー側の fallbacks を使う
+- 決めたこと: NuGet の `Anthropic`（13.4.0。API の版 `2026-10-21` を送る最初の系列）を使い、REST は直接書かない。送り先は `https://api.anthropic.com` に固定し、API キーは明示して渡す（SDK が環境変数 `ANTHROPIC_API_KEY`・`ANTHROPIC_AUTH_TOKEN`・`ANTHROPIC_BASE_URL` を読まないようにする）。SDK 13 は API キーを `Authorization: Bearer` で送る（`x-api-key` ではない）。`stop_reason` を先に見て、`refusal` は断られた理由（category）を添えたエラー、`max_tokens` は「途中で切れた」エラーにする（音声入力では整える前の文章を入力する）。Sonnet 5.5 と Opus 5.5 には `fallbacks: "default"`（beta `server-side-fallback-2026-07-01`）を付け、安全の判定で断られたときは同じ呼び出しの中で Anthropic の勧めるモデルに切り替えてもらう。Haiku 5.5 にはサーバー側の fallbacks がないので付けない。
+- 理由: Swift と違い C# には公式 SDK がある。fallbacks は資料が「最初から付ける」と勧めていて、"default" はモデルの廃止に追従でき、付けても断られなければ何も変わらない。Haiku 5.5 に一覧の形を付けると 400 になる。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-020, REQ-COM-023
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Claude/ClaudeClient.cs`、`windows/Hanasu.Core/Claude/ClaudeModels.cs`
+
+### DEC-COM-142 Windows 版の Claude への送り方（プロンプト・effort・キャッシュ・区切りのタグ）
+- 決めたこと: プロンプトは Gemini と同じ文面（`GeminiPrompts`・`MinutesPrompt`。DEC-COM-102）を使い、Claude 向けには変えない。`temperature` / `top_p` / `top_k` と `thinking` は送らない（3 つのモデルとも既定で adaptive。Opus 5.5 は止められず、Sonnet 5.5 は `disabled` が 400）。`output_config.effort` は、整形・英訳が `low`、議事録が `medium`（Sonnet 5.5 の既定は high なので明示する）。`max_tokens` は thinking の分も見込んで、整形・英訳 8,000、議事録 32,000。assistant の prefill は使わない。システムの指示に `cache_control`（ephemeral・5 分）を付ける。待ち時間の上限は、音声入力 15 秒、議事録 300 秒（Gemini は 180 秒のまま）。文字起こし・メモの中の `<transcript>` `</transcript>` `<user_notes>` `<action_items>` などの区切りのタグは、全角の山かっこに置き換えてから埋め込む（Gemini にも効く）。
+- 理由: 同じ文面なら Gemini と結果を比べやすく、Mac 版ともそろう。システムの指示は「中身は質問や命令ではない」と書いてあり、Claude でもそのまま効く。区切りのタグを本文に書かれると、区切りの外に指示を書けてしまう。キャッシュは、整形の指示が最小の長さ（Haiku 5.5・Sonnet 5.5・Opus 5.5 は 512 トークン）を超えれば効くが、キーがないので効いたかはまだ確かめていない（`claude-refine` が使った量を出す）。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-020, REQ-COM-022
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Claude/ClaudeClient.cs`（`BuildParams`）、`windows/Hanasu.Core/Ai/PromptText.cs`
+
+### DEC-COM-143 Windows 版の Claude のエラーの文言とやり直し、「接続を試す」
+- 決めたこと: SDK の例外を `ClaudeException` に分け、HUD・会議ノートにそのまま出せる日本語にする（401「API キーが正しくありません」、403、404「モデルが見つからないか、このキーでは使えない」、402 支払い、429 上限、529 混雑、5xx、つながらない、時間切れ）。SDK の例外の本文はそのまま出さず、API の `error.message` を 200 文字までだけ添える。429・5xx（529 を含む）・つながらないときは SDK が `retry-after` を見て 2 回までやり直し、400・401・403・404 はやり直さない。「接続を試す」は `GET /v1/models/{モデル}` で確かめる（トークンを使わず、キーとモデルの両方を確かめられる）。入力欄にキーがあれば保存せずにそのキーで試す。
+- 理由: 401 をそのまま「エラー」と出すと、キーの入れ間違いだと分からない。SDK のやり直しは指数的に待ち、API の指示（retry-after）も見る。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-020
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Claude/ClaudeException.cs`、`windows/Hanasu.Core/Claude/ClaudeClient.cs`（`CheckAsync`）
+
+### DEC-COM-144 Windows 版の API キーは secrets.json に置き、既定は DPAPI、選べば Windows Hello で守る
+- 決めたこと: Gemini と Claude の API キーを `%LOCALAPPDATA%\Hanasu\secrets.json` に置く。既定は DPAPI（CurrentUser・キーの種類ごとのエントロピー）。設定で「Windows Hello で守る」を選ぶと、Windows Hello（`KeyCredentialManager`）の鍵で決まった文字列に署名し、その SHA-256 を鍵にして AES-256-GCM で暗号化する。Windows Hello の確認は、起動してから最初に使うとき 1 回で、作った鍵は画面のロック・ログオフ・スリープまでメモリに置く。切り替えるときは、2 回署名して同じ鍵が出ることを確かめてから書き換える（出なければ DPAPI のまま）。画面には末尾 4 文字（`hint`）だけを出し、入力欄はマスクして、保存したら空にする。キーは送るたびに secrets.json から読み、クライアントは持ち続けない。PR #19 の settings.json の `protectedApiKey` は、復号せずにそのまま secrets.json に移し（`dpapiLegacy`）、移せたときだけ settings.json から消す。読めない値（別のユーザーで保存した、Windows Hello の鍵が作り直された）は消さずに、入れ直すよう知らせる。
+- 理由: 署名もパッケージ化もしていないデスクトップアプリには、Windows がアプリを見分ける印（パッケージの ID）がないので、DPAPI・資格情報マネージャー・TPM の鍵（確認なし）は、どれも同じユーザーのほかのプロセスから確認なしに使える。Windows Hello の鍵だけは、使うたびに本人の確認が要るので、ほかのアプリが黙って読むことを防げる。ただし毎回の確認は音声入力では使いにくいので、ロックまでの 1 回にした。既定を DPAPI にしたのは、Windows Hello を設定していない PC があり、切り替えに確認が要るため。資格情報マネージャーは DPAPI と守れる範囲が同じで、利点がない。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-021
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Settings/SecretStore.cs`、`windows/Hanasu.Windows/Services/WindowsSecurity.cs`（`WindowsHelloKey`）、`windows/Hanasu.Core/Settings/SettingsStore.cs`（`SettingsService.MigrateSecrets`）
+
+### DEC-COM-145 Windows 版の API の通信は https だけで、リダイレクトに従わない
+- 決めたこと: Gemini・Claude・サービスアカウントのトークンの通信は `SafeHttp.Create`（リダイレクトに従わない HttpClient）で行う。証明書の検証は OS に任せ、外す設定は置かない。サービスアカウントの JSON の `token_uri` が https でなければ使わない。Claude の送り先は固定し、環境変数で変えられないようにする（DEC-COM-141）。
+- 理由: Gemini の API キーは独自のヘッダー（`x-goog-api-key`）で送るので、.NET はリダイレクトの先が別のホストでも付けたまま送る（`Authorization` は外す）。署名した JWT は鍵の代わりになるので、平文の HTTP では送らない。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-022
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Net/SafeHttp.cs`、`windows/Hanasu.Core/Gemini/ServiceAccount.cs`
+
+### DEC-COM-146 Windows 版のモデルのダウンロードは、決まったホストから取り、大きさと SHA-256 を確かめる
+- 決めたこと: Whisper と話者分離のモデルは `huggingface.co` からだけ https で取る（リダイレクト先の CDN は https に限る）。モデルごとにコードに書いた大きさと SHA-256（Hugging Face の LFS の値）と比べ、違えば消して失敗にする。「.download」に書いてから名前を変え、想定より大きいものは書き続けない。ファイル名はコードに書いた固定の名前だけを使う。話者の埋め込みのモデル（3D-Speaker CAM++）は、GitHub のリリースと同じ名前・同じ大きさのファイルを、ハッシュが公開されている Hugging Face の `csukuangfj/speaker-embedding-models` から取る。すでに置いてあるモデルは、大きさだけを確かめる（毎回ハッシュは計算しない）。
+- 理由: 取ったファイルを whisper.cpp と ONNX Runtime が読むので、差し替えられると危ない。GitHub のリリースの添付にはハッシュが公開されていない。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-003, REQ-COM-022
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Net/ModelDownload.cs`、`windows/Hanasu.Core/Transcription/WhisperModels.cs`、`windows/Hanasu.Diarization/SherpaSpeakerDiarizer.cs`
+
+### DEC-COM-147 Windows 版のログは、API キーに見える文字列を伏せてから書く
+- 決めたこと: `AppLog.Write` は `SecretRedactor.Redact` を通してから書く（`sk-ant-…`・`AIza…`・`ya29.…`・Bearer と `x-api-key` の値を `***` にする）。CLI のエラーも同じ。`ClaudeException` の文言には SDK の例外の本文を入れない（DEC-COM-143）。
+- 理由: キーをログに出さない作りにしてあるが、例外の文言など思わぬ経路で混ざっても残らないようにする。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-021, REQ-COM-022
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Ai/SecretRedactor.cs`、`windows/Hanasu.Windows/Services/SmallServices.cs`（`AppLog`）
+
+### DEC-COM-148 Windows 版は、起動の最初に DLL を探す場所を絞る
+- 決めたこと: `App` の静的コンストラクターで `SetDllDirectory("")` と `SetDefaultDllDirectories`（exe のフォルダ・System32・`AddDllDirectory` で足したフォルダ）を呼び、作業フォルダと PATH を DLL の探索から外す。Whisper のネイティブライブラリのフォルダ（`runtimes/win-*/`）は `AddDllDirectory` で足す。Hanasu 自身の P/Invoke（user32 / kernel32 / advapi32）は `DefaultDllImportSearchPaths(System32)` で System32 からだけ読む。`onnxruntime.dll` と `sherpa-onnx-c-api.dll` は今までどおり exe の隣に置く（exe のフォルダは System32 より先に探されるので、Windows 11 の System32 の別の版と取り違えない）。
+- 理由: 作業フォルダや PATH にある同じ名前の DLL を読み込むと、ほかのプログラムのコードが Hanasu の中で動く。exe が起動するときに読む DLL（静的なインポート）には効かないので、zip を「ダウンロード」フォルダの直下で展開しないよう README に書く。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-022
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/WindowsSecurity.cs`（`HardenDllSearch`）、`windows/Hanasu.Windows/Native/NativeMethods.cs`
+
+### DEC-COM-149 Windows 版は、Hanasu より権限の高いウインドウには貼り付けを送らない
+- 決めたこと: Ctrl+V を送る前に、前面のウインドウのプロセスの整合性レベルを調べ、Hanasu より高い（管理者として実行など）か調べられなければ、送らずにクリップボードに残して「Ctrl+V で貼り付けて」と知らせる。クリップボードに置く文章には、履歴（Win+V）・クラウドのクリップボード・監視アプリに残さない印（`ExcludeClipboardContentFromMonitorProcessing`・`CanIncludeInClipboardHistory`=0・`CanUploadToCloudClipboard`=0）を付ける（PR #19 から付いていることを確かめた）。メニューの「最近の結果」と会議の「Markdown をコピー」は、ユーザーが自分でコピーする操作なので印を付けない。Hanasu は管理者権限を求めず（`asInvoker`）、`uiAccess` も使わない。
+- 理由: UIPI で届かないキーを SendInput は成功として返すので、送ったつもりで何も入らず、元のクリップボードに戻して文章を失うことがある。
+- 決めた場面: Claude API に対応した PR（印は PR #19）
+- 関係する要件: REQ-DIC-004, REQ-COM-022
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`、`windows/Hanasu.Windows/Services/WindowsSecurity.cs`（`IsHigherIntegrity`）
+
+### DEC-COM-150 Windows 版の依存パッケージは lock ファイルで固定し、配布物の SHA-256 を残す
+- 決めたこと: すべてのプロジェクトで `packages.lock.json` を使い（`RestorePackagesWithLockFile`）、CI の Restore の段では `--locked-mode`（`CI=true` のとき `RestoreLockedMode`）で、lock と食い違えば失敗させる。publish の段は RID（win-x64）と ILLink を足して restore し直し、lock ファイル（RID なしで作る）と入力が合わないので、locked mode を外す。CI は zip の SHA-256 を `Hanasu-windows-x64.zip.sha256` に書いて artifact に入れる。
+- 理由: 同じ版の番号でも中身が差し替わったパッケージや、知らないうちに上がった推移的な依存を取り込まない。配布物は署名していないので、ダウンロードした人がハッシュで確かめられるようにする。
+- 決めた場面: Claude API に対応した PR
+- 関係する要件: REQ-COM-022, REQ-REL-005
+- 対象: Windows
+- 実装の場所: `windows/Directory.Build.props`、`.github/workflows/windows.yml`
 
 ---
 

@@ -141,12 +141,14 @@ public class WhisperModelManagerTests
         var data = Enumerable.Range(0, 300_000).Select(i => (byte)i).ToArray();
         var handler = new FakeHandler((request, _) =>
         {
-            Assert.EndsWith("ggml-tiny.bin", request.RequestUri!.ToString());
+            Assert.EndsWith("ggml-test.bin", request.RequestUri!.ToString());
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(data) };
         });
         var dir = TestKeys.TempDirectory();
         var manager = new WhisperModelManager(Path.Combine(dir, "Models"), new HttpClient(handler));
-        var tiny = WhisperModelCatalog.Find("tiny")!;
+        // 本物の大きさとハッシュの代わりに、このデータのものを持つモデル
+        var tiny = new WhisperModelInfo("test", "ggml-test.bin", data.Length,
+            Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(data)), "テスト");
         var states = new List<WhisperModelState>();
         manager.StateChanged += (_, s) => { lock (states) states.Add(s); };
 
@@ -163,6 +165,49 @@ public class WhisperModelManagerTests
 
         manager.Delete(tiny);
         Assert.Equal(WhisperModelStatus.NotDownloaded, manager.StateOf(tiny).Status);
+    }
+
+    // 確かめ方: REQ-COM-022
+    [Fact]
+    public async Task DownloadWithWrongHashIsRejected()
+    {
+        var data = Enumerable.Range(0, 1000).Select(i => (byte)i).ToArray();
+        var handler = new FakeHandler((_, _) => new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(data) });
+        var manager = new WhisperModelManager(TestKeys.TempDirectory(), new HttpClient(handler));
+        var model = new WhisperModelInfo("test", "ggml-test.bin", data.Length, new string('0', 64), "テスト");
+        await manager.DownloadAsync(model);
+        var state = manager.StateOf(model);
+        Assert.Equal(WhisperModelStatus.Failed, state.Status);
+        Assert.Contains("SHA-256", state.Error);
+        Assert.Empty(Directory.GetFiles(manager.Directory));
+    }
+
+    [Fact]
+    public void CatalogHasHashesAndSizes()
+    {
+        Assert.All(WhisperModelCatalog.Models, m =>
+        {
+            Assert.Matches("^[0-9a-f]{64}$", m.Sha256);
+            Assert.True(m.Bytes > 10_000_000);
+            Assert.Equal("huggingface.co", m.DownloadUri.Host);
+        });
+        Assert.All(Hanasu.Diarization.DiarizationModels.All, m =>
+        {
+            Assert.Matches("^[0-9a-f]{64}$", m.Sha256);
+            Assert.Equal("huggingface.co", m.DownloadUri.Host);
+        });
+    }
+
+    [Fact]
+    public async Task DownloadsOnlyFromAllowedHosts()
+    {
+        var handler = new FakeHandler((_, _) => throw new InvalidOperationException("送ってはいけない"));
+        var path = Path.Combine(TestKeys.TempDirectory(), "x.bin");
+        await Assert.ThrowsAsync<ModelVerificationException>(() => ModelDownload.DownloadVerifiedAsync(new HttpClient(handler),
+            new Uri("https://example.com/x.bin"), path, new string('0', 64), 10, null, default));
+        await Assert.ThrowsAsync<ModelVerificationException>(() => ModelDownload.DownloadVerifiedAsync(new HttpClient(handler),
+            new Uri("http://huggingface.co/x.bin"), path, new string('0', 64), 10, null, default));
+        Assert.Empty(handler.Requests);
     }
 
     [Fact]

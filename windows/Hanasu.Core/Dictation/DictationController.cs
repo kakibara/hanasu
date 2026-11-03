@@ -33,7 +33,7 @@ public sealed class DictationServices
     public required ITextInserter Inserter { get; init; }
     public required IHud Hud { get; init; }
     public required RecentResults Recent { get; init; }
-    /// <summary>今の前面アプリの名前（入力先として Gemini に伝える）</summary>
+    /// <summary>今の前面アプリの名前（入力先として AI に伝える）</summary>
     public Func<string?> ForegroundAppName { get; init; } = () => null;
     /// <summary>録音中だけ Esc を取り消しのショートカットとして登録する</summary>
     public Action<bool> SetEscapeHotKeyEnabled { get; init; } = _ => { };
@@ -208,7 +208,7 @@ public sealed class DictationController
         var settings = services.Settings();
         var usesGemini = DictationTextProcessor.UsesGemini(settings, Mode);
         services.Hud.Show(HudState.Processing(transcriber.FinishingMessage
-            ?? (usesGemini ? HudText.ProcessingTitle(Mode == DictationMode.TranslateToEnglish) : "仕上げています…")));
+            ?? (usesGemini ? HudText.ProcessingTitle(Mode == DictationMode.TranslateToEnglish, Ai.TextAiFactory.NameOf(settings.DictationAi)) : "仕上げています…")));
 
         string raw;
         try
@@ -230,7 +230,7 @@ public sealed class DictationController
             return;
         }
 
-        if (usesGemini) services.Hud.Show(HudState.Processing(HudText.ProcessingTitle(Mode == DictationMode.TranslateToEnglish)));
+        if (usesGemini) services.Hud.Show(HudState.Processing(HudText.ProcessingTitle(Mode == DictationMode.TranslateToEnglish, Ai.TextAiFactory.NameOf(settings.DictationAi))));
         var outcome = await services.Processor.ProcessAsync(raw, Mode, targetAppName, settings);
         services.Log($"process: {outcome.Status}, {outcome.Output.Length} chars");
         // 入力先がずれても取り戻せるよう、貼り付けの前に残す

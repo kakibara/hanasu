@@ -32,6 +32,16 @@ public enum GeminiAuthMode
     ServiceAccount,
 }
 
+/// <summary>文章の処理（整形・英訳・議事録）に使う AI</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<TextAiProvider>))]
+public enum TextAiProvider
+{
+    /// <summary>Gemini（既定。今までどおり）</summary>
+    Gemini,
+    /// <summary>Claude（Anthropic の Claude API。API キーで使う）</summary>
+    Claude,
+}
+
 /// <summary>
 /// 設定。<c>%APPDATA%\Hanasu\settings.json</c> に JSON で保存する（<see cref="SettingsStore"/>）。
 /// 会議の記録の設定もここに足していく（Mac 版の AppSettings と同じく 1 か所にまとめる）。
@@ -53,10 +63,24 @@ public sealed class AppSettings
     public string LocaleIdentifier { get; set; } = "ja-JP";
     public bool PlaySounds { get; set; } = true;
 
-    // Gemini
+    // AI（文章の処理）。音声入力（整形・英訳）と会議（議事録）で、AI とモデルを別々に選ぶ（REQ-COM-024）
+    /// <summary>AI で整形する（名前は前の版のまま。Gemini と Claude のどちらでも使う）</summary>
     public bool RefineWithGemini { get; set; } = true;
+    /// <summary>音声入力の整形・英訳に使う AI</summary>
+    public TextAiProvider DictationAi { get; set; } = TextAiProvider.Gemini;
+    /// <summary>会議の議事録（作り直しを含む）に使う AI</summary>
+    public TextAiProvider MeetingAi { get; set; } = TextAiProvider.Gemini;
+    /// <summary>音声入力の整形・英訳に使う Claude のモデル（REQ-COM-023）</summary>
+    public string ClaudeModel { get; set; } = Claude.ClaudeModels.DefaultModel;
+    /// <summary>議事録に使う Claude のモデル（REQ-COM-023）</summary>
+    public string ClaudeMinutesModel { get; set; } = Claude.ClaudeModels.DefaultMinutesModel;
+
+    // Gemini
     public GeminiAuthMode AuthMode { get; set; } = GeminiAuthMode.ApiKey;
-    /// <summary>API キーを DPAPI（ユーザー単位）で暗号化して Base64 にしたもの。平文では保存しない</summary>
+    /// <summary>
+    /// PR #19 までの Gemini の API キー（DPAPI で暗号化して Base64）。今は secrets.json（SecretStore）に置くので、
+    /// 読み込んだときに移して空にする（SettingsService.MigrateSecrets）
+    /// </summary>
     public string ProtectedApiKey { get; set; } = "";
     public string ServiceAccountPath { get; set; } = "";
     public string VertexLocation { get; set; } = "global";
@@ -102,6 +126,14 @@ public sealed class AppSettings
     /// <summary>ユーザー辞書の正しい表記の一覧</summary>
     [JsonIgnore]
     public IReadOnlyList<string> DictionaryWords => UserDictionary.Spellings;
+
+    /// <summary>音声入力の整形・英訳に使うモデル（選んだ AI のもの）</summary>
+    [JsonIgnore]
+    public string DictationModel => DictationAi == TextAiProvider.Claude ? ClaudeModel : Model;
+
+    /// <summary>議事録に使うモデル（選んだ AI のもの）</summary>
+    [JsonIgnore]
+    public string MinutesModel => MeetingAi == TextAiProvider.Claude ? ClaudeMinutesModel : MeetingMinutesModel;
 
     public AppSettings Clone() => (AppSettings)MemberwiseClone();
 }

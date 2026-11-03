@@ -218,11 +218,12 @@ public static class MeetingProcessor
     // MARK: - 議事録
 
     /// <summary>議事録を作る。見出しの構成は会議の型で決まる。メモか印があれば、それを優先するよう指示を足す</summary>
-    public static async Task<MinutesResult> MakeMinutesAsync(Meeting meeting, GeminiClient client, string model,
+    /// <remarks>Gemini でも Claude でも同じプロンプトを送る（設定の「会議の AI」。REQ-COM-024）</remarks>
+    public static async Task<MinutesResult> MakeMinutesAsync(Meeting meeting, Ai.ITextGenerator client, string model,
         CancellationToken cancellationToken = default)
     {
-        var body = await client.GenerateAsync(MinutesPrompt.FullInstruction(meeting), [new GeminiPart.Text(MinutesPrompt.UserText(meeting))],
-            model, cancellationToken: cancellationToken).ConfigureAwait(false);
+        var body = await client.GenerateTextAsync(Ai.TextPurpose.Minutes, MinutesPrompt.FullInstruction(meeting), MinutesPrompt.UserText(meeting),
+            model, cancellationToken).ConfigureAwait(false);
         return MinutesPrompt.Parse(body, meeting.Title);
     }
 }

@@ -126,7 +126,8 @@ public static class GeminiPrompts
         {
             lines.Add($"追加ルール:\n{extra}");
         }
-        lines.Add($"<transcript>\n{request.Transcript}\n</transcript>");
+        // 文字起こしの中の区切りのタグは無害にしてから埋め込む（プロンプトインジェクションの対策。Windows 版で足した）
+        lines.Add($"<transcript>\n{Ai.PromptText.NeutralizeDelimiters(request.Transcript)}\n</transcript>");
         return string.Join("\n", lines);
     }
 

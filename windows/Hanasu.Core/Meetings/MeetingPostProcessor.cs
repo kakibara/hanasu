@@ -1,5 +1,7 @@
 using Hanasu.Core.Audio;
+using Hanasu.Core.Ai;
 using Hanasu.Core.Gemini;
+using Hanasu.Core.Settings;
 using Hanasu.Core.Transcription;
 
 namespace Hanasu.Core.Meetings;
@@ -18,8 +20,10 @@ public sealed class MeetingPostProcessor
     public required TranscriptionContext Context { get; init; }
     /// <summary>null なら話者分離をしない（相手側は全部「相手」）</summary>
     public ISpeakerDiarizer? Diarizer { get; init; }
-    /// <summary>議事録を作るクライアント。認証情報がなければ null を返す。null（関数ごと）なら議事録を作らない</summary>
-    public Func<GeminiClient?>? MinutesClient { get; init; }
+    /// <summary>議事録を作るクライアント（会議の AI。Gemini か Claude）。認証情報がなければ null を返す。null（関数ごと）なら議事録を作らない</summary>
+    public Func<ITextGenerator?>? MinutesClient { get; init; }
+    /// <summary>会議の AI の名前（知らせの文言に使う）</summary>
+    public TextAiProvider MinutesProvider { get; init; } = TextAiProvider.Gemini;
     public string MinutesModel { get; init; } = "gemini-3.8-flash";
     /// <summary>false なら、処理のあとで音声ファイルを消す（文字起こしに失敗したチャンネルがあれば残す）</summary>
     public bool KeepAudio { get; init; } = true;
@@ -71,7 +75,7 @@ public sealed class MeetingPostProcessor
 
         if (MinutesClient is not null && meeting.Utterances.Count > 0)
         {
-            GeminiClient? client = null;
+            ITextGenerator? client = null;
             string? authError = null;
             try
             {
@@ -83,20 +87,20 @@ public sealed class MeetingPostProcessor
             }
             if (client is null)
             {
-                errors.Add(authError ?? "Gemini の認証情報が設定されていないため、議事録は作っていません（メニュー → 設定 → Gemini）。");
+                errors.Add(authError ?? $"{TextAiFactory.NameOf(MinutesProvider)} の認証情報が設定されていないため、議事録は作っていません（メニュー → 設定 → AI）。");
             }
             else
             {
-                progress?.Report("Gemini で議事録を作っています…");
+                progress?.Report($"{client.ProviderName} で議事録を作っています…");
                 try
                 {
                     var result = await MeetingProcessor.MakeMinutesAsync(meeting, client, MinutesModel, cancellationToken).ConfigureAwait(false);
                     meeting.Minutes = result.Markdown;
                     meeting.ActionItems = result.ActionItems;
                 }
-                catch (GeminiException e)
+                catch (TextAiException e)
                 {
-                    Log?.Invoke($"minutes failed: {e.Kind}");
+                    Log?.Invoke($"minutes failed: {e.GetType().Name}");
                     errors.Add($"議事録を作れませんでした: {e.Message}");
                 }
             }

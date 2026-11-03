@@ -53,8 +53,8 @@ public static class HudText
     };
 
     /// <summary>処理中の見出し</summary>
-    public static string ProcessingTitle(bool translating) =>
-        translating ? "Gemini で英語に翻訳しています…" : "Gemini で整えています…";
+    public static string ProcessingTitle(bool translating, string provider = "Gemini") =>
+        translating ? $"{provider} で英語に翻訳しています…" : $"{provider} で整えています…";
 
     /// <summary>経過時間（m:ss）</summary>
     public static string Elapsed(TimeSpan elapsed)

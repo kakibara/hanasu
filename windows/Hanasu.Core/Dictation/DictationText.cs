@@ -1,3 +1,4 @@
+using Hanasu.Core.Ai;
 using Hanasu.Core.Gemini;
 using Hanasu.Core.Settings;
 
@@ -8,34 +9,35 @@ public enum DictationMode { Refine, TranslateToEnglish }
 
 public enum ProcessStatus
 {
-    /// <summary>Gemini で整形（英訳）した</summary>
+    /// <summary>AI（Gemini か Claude）で整形（英訳）した</summary>
     Succeeded,
     /// <summary>整形をオフにしていたので、辞書だけ当てた</summary>
     RefineOff,
     /// <summary>認証情報がないので、原文を入力した</summary>
     NoCredentials,
-    /// <summary>Gemini が失敗したので、原文を入力した</summary>
-    GeminiFailed,
+    /// <summary>AI が失敗したので、原文を入力した</summary>
+    AiFailed,
 }
 
 /// <summary>整形の結果。Warning があれば HUD でエラーとして知らせる（入力はする）。</summary>
 public sealed record ProcessOutcome(string Output, ProcessStatus Status, string? Warning = null);
 
 /// <summary>
-/// 認識結果に辞書を当て、Gemini で整形（または英訳）する。失敗したら原文を返して知らせる（話した内容を失わない）。
+/// 認識結果に辞書を当て、AI（設定の「音声入力の AI」。Gemini か Claude）で整形（または英訳）する。
+/// 失敗したら原文を返して知らせる（話した内容を失わない）。
 /// Mac 版の DictationController.finishDictation の中ほどにあたる（スニペット・アプリ別スタイル・画面の文脈は Windows 版にはない）。
 /// </summary>
 public sealed class DictationTextProcessor
 {
     private readonly Func<AppSettings, IDictationRefiner?> refinerFactory;
 
-    /// <param name="refinerFactory">設定から Gemini のクライアントを作る。認証情報がなければ null。サービスアカウントが読めなければ例外</param>
+    /// <param name="refinerFactory">設定から、音声入力の AI のクライアントを作る。認証情報がなければ null。サービスアカウントが読めなければ例外</param>
     public DictationTextProcessor(Func<AppSettings, IDictationRefiner?> refinerFactory)
     {
         this.refinerFactory = refinerFactory;
     }
 
-    /// <summary>Gemini に送るか（英訳は Gemini でしかできないので、整形をオフにしていても送る）</summary>
+    /// <summary>AI に送るか（英訳は AI でしかできないので、整形をオフにしていても送る）</summary>
     public static bool UsesGemini(AppSettings settings, DictationMode mode) =>
         settings.RefineWithGemini || mode == DictationMode.TranslateToEnglish;
 
@@ -55,12 +57,12 @@ public sealed class DictationTextProcessor
             if (refiner is null)
             {
                 return new ProcessOutcome(corrected, ProcessStatus.NoCredentials,
-                    $"Gemini の認証情報が未設定のため、{verb}せずに入力しました（メニュー → 設定）。");
+                    $"{TextAiFactory.NameOf(settings.DictationAi)} の認証情報が未設定のため、{verb}せずに入力しました（メニュー → 設定 → AI）。");
             }
             var request = new RefineRequest
             {
                 Transcript = corrected,
-                Model = settings.Model,
+                Model = settings.DictationModel,
                 AppName = settings.SendAppName ? appName : null,
                 Dictionary = dictionary.Spellings,
                 ExtraInstructions = settings.ExtraInstructions,
@@ -71,9 +73,9 @@ public sealed class DictationTextProcessor
                 : await refiner.RefineAsync(request, cancellationToken).ConfigureAwait(false);
             return new ProcessOutcome(output, ProcessStatus.Succeeded);
         }
-        catch (Exception e) when (e is GeminiException or ServiceAccountException or HttpRequestException)
+        catch (Exception e) when (e is TextAiException or ServiceAccountException or HttpRequestException)
         {
-            return new ProcessOutcome(corrected, ProcessStatus.GeminiFailed, $"{e.Message}\n{verb}前の文章を入力しました。");
+            return new ProcessOutcome(corrected, ProcessStatus.AiFailed, $"{e.Message}\n{verb}前の文章を入力しました。");
         }
     }
 }

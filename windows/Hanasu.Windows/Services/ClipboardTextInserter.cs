@@ -9,11 +9,12 @@ namespace Hanasu.Windows.Services;
 /// <summary>
 /// クリップボードに入れて Ctrl+V を SendInput で送り、カーソル位置に入力する（Mac 版の TextInserter と同じ流れ）。
 /// 1. 今のクリップボードを形式ごとに退避する
-/// 2. 文章を置く。クリップボードの履歴（Win+V）やクラウド同期に残らないよう、除外の印を付ける
+/// 2. 文章を置く。クリップボードの履歴（Win+V）やクラウド同期に残らないよう、除外の印を付ける（DEC-COM-149）
 /// 3. ホットキーの修飾キーが離されるのを待って、Ctrl+V を送る
 /// 4. 少し待ってから、退避したクリップボードを戻す（その間にユーザーがコピーしていたら戻さない）
 /// UI スレッド（STA）から呼ぶ。
 /// </summary>
+// 設計判断: DEC-COM-149
 internal sealed class ClipboardTextInserter : ITextInserter
 {
     /// <summary>貼り付け先がクリップボードを読み終えるまで待つ時間</summary>
@@ -27,9 +28,15 @@ internal sealed class ClipboardTextInserter : ITextInserter
 
         // 修飾キーを押したまま Ctrl+V を送ると Ctrl+Alt+V などになってしまうので、離されるまで待つ
         await WaitForModifierReleaseAsync();
+        // 管理者として動いているアプリなど、Hanasu より権限の高いウインドウにはキーが届かない（UIPI）。
+        // SendInput は成功を返してしまうので、先に確かめ、送らずにクリップボードに残す（印は付けたまま）
+        if (WindowsSecurity.IsHigherIntegrity(NativeMethods.GetForegroundWindow()))
+        {
+            return InsertOutcome.CopiedOnly;
+        }
         if (!SendCtrlV())
         {
-            // 管理者として動いているアプリなどには送れない（UIPI）。クリップボードには残す
+            // ほかの理由で送れなかった（入力がほかに奪われている など）。クリップボードには残す
             return InsertOutcome.CopiedOnly;
         }
 

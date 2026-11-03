@@ -38,8 +38,13 @@ public sealed record ServiceAccountCredentials(string ProjectId, string ClientEm
             {
                 throw new ServiceAccountException("サービスアカウントの JSON を読み取れません");
             }
-            return new ServiceAccountCredentials(raw.ProjectId, raw.ClientEmail, raw.PrivateKey,
-                string.IsNullOrEmpty(raw.TokenUri) ? "https://oauth2.googleapis.com/token" : raw.TokenUri);
+            var tokenUri = string.IsNullOrEmpty(raw.TokenUri) ? "https://oauth2.googleapis.com/token" : raw.TokenUri;
+            // 署名した JWT（鍵の代わりになる）を平文の HTTP で送らない
+            if (!Uri.TryCreate(tokenUri, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps)
+            {
+                throw new ServiceAccountException("サービスアカウントの JSON の token_uri が https ではありません");
+            }
+            return new ServiceAccountCredentials(raw.ProjectId, raw.ClientEmail, raw.PrivateKey, tokenUri);
         }
         catch (JsonException e)
         {
@@ -67,7 +72,7 @@ public sealed class ServiceAccountTokenProvider
 {
     public const string Scope = "https://www.googleapis.com/auth/cloud-platform";
 
-    public static ServiceAccountTokenProvider Shared { get; } = new(new HttpClient());
+    public static ServiceAccountTokenProvider Shared { get; } = new(SafeHttp.Create(TimeSpan.FromSeconds(30)));
 
     private readonly HttpClient http;
     private readonly Func<DateTimeOffset> now;

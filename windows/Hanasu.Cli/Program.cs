@@ -1,5 +1,12 @@
 using System.Diagnostics;
+using System.Net;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using Hanasu.Core;
+using Hanasu.Core.Ai;
 using Hanasu.Core.Audio;
+using Hanasu.Core.Claude;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
 using Hanasu.Core.Meetings;
@@ -9,7 +16,11 @@ using Hanasu.Core.Transcription;
 using Hanasu.Diarization;
 using Hanasu.Whisper;
 
-// 確認用の CLI。認証は環境変数 GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウントの JSON のパス）か GEMINI_API_KEY。
+// 確認用の CLI。Gemini の認証は環境変数 GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウントの JSON のパス）か GEMINI_API_KEY。
+// Claude の認証は環境変数 ANTHROPIC_API_KEY（claude-request はキーなしで動く。キーは表示しない）。
+//   hanasu-cli claude-request "<文章>" [--translate | --minutes] [--model <id>]   送らずに、送る HTTP リクエスト（ヘッダーと本文）を出す
+//   hanasu-cli claude-refine "<文章>" [--translate] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]   Claude で整形・英訳する
+//   hanasu-cli claude-check [--model <id>] [--fake-key]   「接続を試す」と同じ確かめ。--fake-key は偽のキーで送り、401 の文言を見る
 //   hanasu-cli refine "<文章>" [--translate] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]
 //   hanasu-cli transcribe-gemini <wav> [--model <id>] [--dict <辞書ファイル>]
 //   hanasu-cli transcribe-whisper <wav> [--model tiny] [--models-dir <dir>] [--download]
@@ -37,15 +48,18 @@ try
         case "meeting-files": await MeetingFiles(args); break;
         case "meeting-minutes": await MeetingMinutes(args); break;
         case "meeting-show": MeetingShow(args); break;
+        case "claude-request": await ClaudeRequest(args); break;
+        case "claude-refine": await ClaudeRefine(args); break;
+        case "claude-check": await ClaudeCheck(args); break;
         default:
-            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show ...（Program.cs の先頭を参照）");
+            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show|claude-request|claude-refine|claude-check ...（Program.cs の先頭を参照）");
             return 2;
     }
     return 0;
 }
-catch (Exception e) when (e is GeminiException or ServiceAccountException or TranscriptionException or InvalidDataException or IOException)
+catch (Exception e) when (e is TextAiException or ServiceAccountException or TranscriptionException or InvalidDataException or IOException)
 {
-    Console.Error.WriteLine($"エラー: {e.Message}");
+    Console.Error.WriteLine($"エラー: {SecretRedactor.Redact(e.Message)}");
     return 1;
 }
 finally
@@ -72,6 +86,11 @@ static GeminiAuth AuthFromEnvironment()
     if (Environment.GetEnvironmentVariable("GEMINI_API_KEY") is { Length: > 0 } key) return new GeminiAuth.ApiKey(key);
     throw GeminiException.MissingCredentials();
 }
+
+static ClaudeClient ClaudeFromEnvironment(TimeSpan timeout) =>
+    Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") is { Length: > 0 } key
+        ? new ClaudeClient(key) { Timeout = timeout }
+        : throw ClaudeException.MissingCredentials();
 
 static UserDictionary LoadDictionary(string[] args) =>
     new(Option(args, "--dict") is { } file ? File.ReadAllText(file) : "");
@@ -224,8 +243,9 @@ static async Task MeetingFiles(string[] args)
         Transcriber = transcriber,
         Context = new TranscriptionContext("ja-JP", settings.UserDictionary.ContextualStrings, ""),
         Diarizer = Flag(args, "--no-diarize") ? null : new SherpaSpeakerDiarizer(new DiarizationModels(diarizationDir)),
-        MinutesClient = Flag(args, "--no-minutes") ? null : () => new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(180) },
-        MinutesModel = Option(args, "--minutes-model") ?? "gemini-3.8-flash",
+        MinutesClient = Flag(args, "--no-minutes") ? null : () => MinutesClientFromEnvironment(args),
+        MinutesModel = Option(args, "--minutes-model") ?? DefaultMinutesModel(args),
+        MinutesProvider = Option(args, "--minutes-ai") == "claude" ? TextAiProvider.Claude : TextAiProvider.Gemini,
         KeepAudio = !Flag(args, "--delete-audio"),
         Log = m => Console.Error.WriteLine($"[log] {m}"),
     };
@@ -254,14 +274,23 @@ static async Task MeetingMinutes(string[] args)
         meeting.MinutesTemplateId = (MinutesTemplates.FromRawValue(name) ?? throw new IOException($"議事録の型が見つかりません: {name}")).RawValue();
     }
     var sw = Stopwatch.StartNew();
-    var result = await MeetingProcessor.MakeMinutesAsync(meeting, new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(180) },
-        Option(args, "--minutes-model") ?? "gemini-3.8-flash");
+    var result = await MeetingProcessor.MakeMinutesAsync(meeting, MinutesClientFromEnvironment(args),
+        Option(args, "--minutes-model") ?? DefaultMinutesModel(args));
     meeting.Minutes = result.Markdown;
     meeting.ActionItems = result.ActionItems;
     store.Save(meeting);
     Console.WriteLine($"[議事録 {sw.Elapsed.TotalSeconds:0.0}s]");
     Console.WriteLine(meeting.Minutes);
 }
+
+/// <summary>議事録の AI（--minutes-ai gemini|claude。既定は gemini）</summary>
+static ITextGenerator MinutesClientFromEnvironment(string[] args) =>
+    Option(args, "--minutes-ai") == "claude"
+        ? ClaudeFromEnvironment(TimeSpan.FromSeconds(300))
+        : new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(180) };
+
+static string DefaultMinutesModel(string[] args) =>
+    Option(args, "--minutes-ai") == "claude" ? ClaudeModels.DefaultMinutesModel : "gemini-3.8-flash";
 
 static void MeetingShow(string[] args)
 {
@@ -289,6 +318,113 @@ static void PrintMeeting(string folder, Meeting meeting)
         Console.WriteLine(meeting.Minutes);
     }
     foreach (var item in meeting.ResolvedActionItems) Console.WriteLine($"アクション: {item.MarkdownLine}");
+}
+
+// MARK: - Claude
+
+static RefineRequest ClaudeRefineRequest(string[] args, string text, string defaultModel)
+{
+    var dictionary = LoadDictionary(args);
+    return new RefineRequest
+    {
+        Transcript = dictionary.Apply(text),
+        Model = Option(args, "--model") ?? defaultModel,
+        AppName = Option(args, "--app"),
+        Dictionary = dictionary.Spellings,
+        DictionaryRules = dictionary.Rules,
+        ExtraInstructions = Option(args, "--rules") ?? "",
+    };
+}
+
+/// <summary>送らずに、SDK が組み立てる HTTP リクエストを出す（キーは伏せる）。キーがなければ架空のキーで組み立てる</summary>
+// 確かめ方: REQ-COM-020
+static async Task ClaudeRequest(string[] args)
+{
+    var text = args.ElementAtOrDefault(1) ?? throw new IOException("文章を指定してください");
+    var purpose = Flag(args, "--minutes") ? TextPurpose.Minutes : Flag(args, "--translate") ? TextPurpose.Translate : TextPurpose.Refine;
+    var request = ClaudeRefineRequest(args, text, purpose == TextPurpose.Minutes ? ClaudeModels.DefaultMinutesModel : ClaudeModels.DefaultModel);
+    var key = Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") is { Length: > 0 } k ? k : "sk-ant-api03-dry-run-not-a-real-key-0000";
+    var capture = new CaptureHandler();
+    var client = new ClaudeClient(key, new HttpClient(capture));
+    var (system, user) = purpose switch
+    {
+        TextPurpose.Translate => (GeminiPrompts.TranslationInstruction, GeminiPrompts.UserPrompt(request, translating: true)),
+        TextPurpose.Minutes => (MinutesPrompt.SystemInstruction(MinutesTemplate.Regular, null), $"<transcript>\n{PromptText.NeutralizeDelimiters(text)}\n</transcript>"),
+        _ => (GeminiPrompts.SystemInstruction, GeminiPrompts.UserPrompt(request)),
+    };
+    await client.GenerateTextAsync(purpose, system, user, request.Model);
+    var sent = capture.Requests.Single();
+    Console.WriteLine($"{sent.Method} {sent.Uri}");
+    foreach (var (name, value) in sent.Headers.OrderBy(h => h.Name, StringComparer.OrdinalIgnoreCase))
+    {
+        var shown = name.Equals("x-api-key", StringComparison.OrdinalIgnoreCase) || name.Equals("authorization", StringComparison.OrdinalIgnoreCase)
+            ? (value.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase) ? "Bearer " + SecretRedactor.Mask(value[7..]) : SecretRedactor.Mask(value))
+            : value;
+        Console.WriteLine($"{name}: {shown}");
+    }
+    Console.WriteLine();
+    Console.WriteLine(JsonNode.Parse(sent.Body ?? "{}")!.ToJsonString(new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+    }));
+}
+
+/// <summary>Claude で整形・英訳する（ANTHROPIC_API_KEY が要る）。使ったトークン（キャッシュを含む）も出す</summary>
+// 確かめ方: REQ-COM-020
+static async Task ClaudeRefine(string[] args)
+{
+    var text = args.ElementAtOrDefault(1) ?? throw new IOException("文章を指定してください");
+    var request = ClaudeRefineRequest(args, text, ClaudeModels.DefaultModel);
+    var client = ClaudeFromEnvironment(TimeSpan.FromSeconds(60));
+    var translating = Flag(args, "--translate");
+    var sw = Stopwatch.StartNew();
+    var output = translating ? await client.TranslateToEnglishAsync(request) : await client.RefineAsync(request);
+    var u = client.LastUsage;
+    Console.WriteLine($"[{(translating ? "英訳" : "整形")} {request.Model} {sw.Elapsed.TotalSeconds:0.0}s 入力 {u?.InputTokens} / 出力 {u?.OutputTokens} / キャッシュ作成 {u?.CacheCreationInputTokens} / キャッシュ読み {u?.CacheReadInputTokens} / 応答したモデル {u?.ServedBy}]");
+    Console.WriteLine(output);
+}
+
+/// <summary>「接続を試す」と同じ確かめ（GET /v1/models/{id}）。--fake-key で偽のキーを送り、401 の文言を出す</summary>
+// 確かめ方: REQ-COM-020
+static async Task ClaudeCheck(string[] args)
+{
+    var model = Option(args, "--model") ?? ClaudeModels.DefaultModel;
+    var client = Flag(args, "--fake-key")
+        ? new ClaudeClient("sk-ant-api03-hanasu-fake-key-for-401-check-0000") { Timeout = TimeSpan.FromSeconds(20) }
+        : ClaudeFromEnvironment(TimeSpan.FromSeconds(20));
+    try
+    {
+        await client.CheckAsync(model);
+        Console.WriteLine($"接続できました。{model} を使えます。");
+    }
+    catch (ClaudeException e)
+    {
+        Console.WriteLine($"[{e.Kind} {e.StatusCode}] {e.Message}");
+        if (!Flag(args, "--fake-key")) throw;
+    }
+}
+
+/// <summary>SDK が送る HTTP リクエストを受け取り、送らずに決まった応答を返す</summary>
+sealed class CaptureHandler : HttpMessageHandler
+{
+    public sealed record Captured(string Method, Uri? Uri, List<(string Name, string Value)> Headers, string? Body);
+
+    public List<Captured> Requests { get; } = new();
+
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        var headers = request.Headers.SelectMany(h => h.Value.Select(v => (h.Key, v))).ToList();
+        if (request.Content is not null) headers.AddRange(request.Content.Headers.SelectMany(h => h.Value.Select(v => (h.Key, v))));
+        var body = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken);
+        Requests.Add(new Captured(request.Method.Method, request.RequestUri, headers, body));
+        const string reply = """
+            {"id":"msg_dry_run","type":"message","role":"assistant","model":"claude-haiku-5-5",
+             "content":[{"type":"text","text":"（送らずに表示しただけ）"}],"stop_reason":"end_turn","stop_sequence":null,
+             "usage":{"input_tokens":0,"output_tokens":0}}
+            """;
+        return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(reply, Encoding.UTF8, "application/json") };
+    }
 }
 
 /// <summary>マイクの代わりに、決まった音声を返す</summary>

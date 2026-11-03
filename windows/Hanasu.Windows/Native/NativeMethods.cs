@@ -1,6 +1,10 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
+// このアセンブリの P/Invoke（user32 / kernel32 / advapi32）は System32 からだけ読む（exe の隣や作業フォルダに置かれた同名の DLL を読まない）
+// 設計判断: DEC-COM-148
+[assembly: DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+
 namespace Hanasu.Windows.Native;
 
 /// <summary>Win32 API の宣言（user32 / kernel32）。</summary>
@@ -36,6 +40,46 @@ internal static partial class NativeMethods
     public const uint WINEVENT_OUTOFCONTEXT = 0x0000;
 
     public const uint PROCESS_QUERY_LIMITED_INFORMATION = 0x1000;
+
+    // DLL の探索の場所（SetDefaultDllDirectories）
+    public const uint LOAD_LIBRARY_SEARCH_APPLICATION_DIR = 0x00000200;
+    public const uint LOAD_LIBRARY_SEARCH_USER_DIRS = 0x00000400;
+    public const uint LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
+
+    public const uint TOKEN_QUERY = 0x0008;
+    public const int TokenIntegrityLevel = 25;
+
+    [LibraryImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetDefaultDllDirectories(uint directoryFlags);
+
+    [LibraryImport("kernel32.dll", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    public static partial IntPtr AddDllDirectory(string newDirectory);
+
+    [LibraryImport("kernel32.dll", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetDllDirectoryW(string lpPathName);
+
+    [LibraryImport("advapi32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool OpenProcessToken(IntPtr processHandle, uint desiredAccess, out IntPtr tokenHandle);
+
+    [LibraryImport("advapi32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool GetTokenInformation(IntPtr tokenHandle, int tokenInformationClass, IntPtr tokenInformation,
+        uint tokenInformationLength, out uint returnLength);
+
+    [LibraryImport("advapi32.dll")]
+    public static partial IntPtr GetSidSubAuthorityCount(IntPtr sid);
+
+    [LibraryImport("advapi32.dll")]
+    public static partial IntPtr GetSidSubAuthority(IntPtr sid, uint subAuthority);
+
+    [LibraryImport("kernel32.dll")]
+    public static partial IntPtr GetCurrentProcess();
+
+    [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16)]
+    public static partial IntPtr FindWindowW(string? lpClassName, string? lpWindowName);
 
     [LibraryImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]

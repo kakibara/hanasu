@@ -289,8 +289,10 @@ public static class MinutesPrompt
     public static string UserText(Meeting meeting)
     {
         // メモか印があれば <user_notes> を足し、印の前後の発言に ★ を付ける
-        var userNotes = meeting.NotesForPrompt();
-        var transcript = userNotes is null ? meeting.TranscriptForPrompt() : meeting.TranscriptForPromptMarkingHighlights();
+        // 文字起こしとメモの中の区切りのタグは無害にしてから埋め込む（プロンプトインジェクションの対策。Windows 版で足した）
+        var userNotes = meeting.NotesForPrompt() is { } n ? Ai.PromptText.NeutralizeDelimiters(n) : null;
+        var transcript = Ai.PromptText.NeutralizeDelimiters(
+            userNotes is null ? meeting.TranscriptForPrompt() : meeting.TranscriptForPromptMarkingHighlights());
         var notesBlock = userNotes is null ? "" : $"\n<user_notes>\n{userNotes}\n</user_notes>\n";
         return $"""
             会議: {meeting.Title}
@@ -302,7 +304,7 @@ public static class MinutesPrompt
             """;
     }
 
-    /// <summary>Gemini の応答を、議事録の Markdown と構造化したアクションアイテムに分ける</summary>
+    /// <summary>AI（Gemini・Claude）の応答を、議事録の Markdown と構造化したアクションアイテムに分ける</summary>
     public static MinutesResult Parse(string response, string title)
     {
         var body = response;
