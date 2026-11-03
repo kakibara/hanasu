@@ -177,3 +177,18 @@ Claude の API キーがないので、本物の Claude での整形・英訳・
 - `dotnet test Hanasu.Core.Tests`: 168 件すべて通った（Claude の送る内容・エラーの分類・やり直し・refusal・max_tokens、用途ごとの AI の選択、secrets.json・DPAPI・Windows Hello・PR #19 の形からの移行は偽物の DPAPI と Windows Hello で、モデルのハッシュの確認）。
 - `dotnet build Hanasu.Windows.sln -c Release`（警告 0）と `dotnet publish … -r win-x64 --self-contained -p:PublishSingleFile=true`（`Hanasu.exe` 約 82 MB と、今までと同じ DLL・ライセンスの表示）が通った。
 - プロンプトキャッシュが効くか（整形の指示が 512 トークンを超えるか）は、キーがないので確かめていない。
+
+## 11. 入力できる場所がないときの表示（Mac 版、2026-11-04、macOS 26.6.2）
+
+関係: REQ-DIC-080、REQ-DIC-081、DEC-DIC-091〜096
+
+アプリは起動せず、CLI と画像で確かめた。
+
+- 判定の表（`.build/debug/Hanasu --test-paste-target`）: 43 件すべて合格（レビューで DEC-DIC-097 の 4 件を足した）。
+  - 貼る: テキストエディット・Safari のアドレス欄・検索欄・コンボボックス・パスワード欄・Terminal（書き換えられない `AXTextArea`）・Chrome の contenteditable（`AXEditableAncestor`）・Finder の名前の変更と検索欄・Electron の入力欄。
+  - 表示する: Finder のファイルの一覧とデスクトップ・ウインドウのないアプリ（Electron も）・Safari（と Technology Preview）のページの入力欄の外（`AXWebArea`）・リンク・ボタン・書き換えられるスライダー・チェックボックス・ラベル・画像。
+  - 分からない（貼る）: Chrome・Edge・WKWebView のアプリの `AXWebArea`、Electron の `AXWebArea`・ボタン・要素なし、ウインドウはあるのに要素がない（kitty など）、`AXWindow`・`AXGroup`、Excel・Mail の表、Keynote の `AXLayoutArea`、読めなかったとき、アプリが分からないとき。
+- パネルの画像（`--render-paste-fallback <png>`、`--long`・`--display-only`・`--warning`・`--edit`）: 短い文は 1 行の欄、12 行の長い文は高さ 260 で切れてスクロールになる。案内の文は「クリップボードにも入っています…⌘V」と「…「コピー」を押してから…」で変わり、整形の失敗の知らせはオレンジで出る。文字数・「コピー」「閉じる」が下に並ぶ。
+- 設定の欄の画像（`--render-paste-fallback-settings <png>`）: 「入力できる場所がないとき」に 2 つの選択肢（既定は「クリップボードにも入れておく」）と説明が出る。
+- `--probe-paste-target`: このセッションの端末にアクセシビリティの許可がないので、「許可がありません」と出て終わることだけを確かめた。実際のアプリでの判定は確かめていない。
+- 確かめていないこと（実機）: パネルがアプリを前面に出さずにキーウインドウになり、Esc・⌘C・⌘A・文字の選択が効くか。Chrome で入力欄にフォーカスがあるとき、最初の問い合わせから入力欄が見えるか（見えなくても読み直しで拾えるか）。Spotlight・Raycast の欄に貼れるか。
