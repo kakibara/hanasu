@@ -45,6 +45,7 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Hanasu is free a
 | **Dictionary** | Add proper nouns and replacement rules such as `ストックマーク => Stockmark`. Gemini can also suggest new entries from your history. |
 | **Screen context** *(opt-in)* | Hanasu reads the window title and the text around your cursor, so names match what is already on screen. Password fields are never read. |
 | **History** | Search past results and retry failed ones. Press <kbd>⌥⇧ V</kbd> to paste the last result again. |
+| **Nowhere to paste?** | If no text field has focus (for example, the desktop is in front), Hanasu keeps the result on screen instead of pasting it. Copy it from there, or just press <kbd>⌘V</kbd> where you want it (you can choose whether the result stays on the clipboard). |
 
 <p align="center">
   <img src="docs/images/hud-english.png" width="420" alt="English output">

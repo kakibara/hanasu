@@ -122,6 +122,16 @@ Typeless のような「話した内容を、自然な日本語に整えて今�
 
 アクセシビリティ権限がない場合はクリップボードにコピーだけして通知する。
 
+#### 入力できる場所がないとき（REQ-DIC-080・081）
+
+手順 1 の前に、キーボードのフォーカスが文字を入れられる場所にあるかを AX で確かめる。コードは `PasteTarget.swift`（判定・読み取り・設定）、`PasteFallbackPanel.swift`（結果を残すパネルと設定の欄）。
+
+- 読むもの（`PasteTargetProbe.readFocus`）: システム全体のフォーカスのあるアプリ（Spotlight などのパネルも拾える）の、フォーカスのあるウインドウと要素。要素の役割・サブロール、`AXValue` を書き換えられるか、選択範囲、`AXEditableAncestor`。アプリが Electron 製か（アプリの中の `Electron Framework.framework`）。
+- 判定（`PasteTargetJudge.decide`、純粋な関数）: 貼る / 表示する / 分からない の 3 つ。「表示する」は、Finder・ウインドウがない・ボタンやリンクや `AXWebArea` などにフォーカスがある、とはっきり分かるときだけ。Electron 製のアプリと、中身の分からない要素（`AXGroup`・一覧・表など）は「分からない」で、今までどおり貼る。細かい決まりは DEC-DIC-091・092。
+- 「表示する」と出たら 0.15 秒おいて読み直し、2 回とも同じときだけ表示に回す（DEC-DIC-093）。
+- 表示に回すと `TextInserter.insert` は ⌘V を送らずに `.notPasted(clipboardKept:)` を返す。設定が「クリップボードにも入れておく」（既定）なら、印を付けた結果をクリップボードに置いたままにし、「表示だけにする」ならクリップボードに触らない（DEC-DIC-095）。
+- 呼び出し元（音声入力・選択を声で編集・もう一度入力）は HUD を隠し、`PasteFallbackPanel` に全文を出す（5.2、DEC-DIC-094・096）。
+
 ### 3.5 アプリ形態・ビルド
 
 - Swift 6.2 / SwiftUI（設定画面）+ AppKit（メニューバー、HUD、イベント処理）
@@ -212,6 +222,7 @@ processing 中の hotkey は無視
 | API キー未設定 | 整形せず認識結果をそのまま入力し、設定画面を案内 |
 | Gemini のタイムアウト（15 秒）/ HTTP エラー / 空応答 | 認識結果をそのまま入力し、HUD にエラー内容を出す |
 | アクセシビリティ権限なし | クリップボードへのコピーのみ行い、⌘V で貼るよう HUD で案内 |
+| 入力できる場所がない（デスクトップが前面など） | 貼り付けずに、結果の全文を自動では閉じないパネルに出す（3.4） |
 
 ### 4.5 選択を声で編集
 
@@ -456,10 +467,11 @@ Mac 標準（SpeechAnalyzer）は速く途中経過も出るが、専門用語�
 - 表示: 状態（● 録音中 / 整形中… / エラー）、経過秒数、認識中テキストの末尾
 - 録音中は右上に「取消」と「■ 停止」のボタンを出す。停止はショートカットをもう一度押すのと同じ（録音を止めて入力する）、取消は Esc と同じ。準備中・録音中だけクリックを受け取り（`ignoresMouseEvents` を切り替える）、`acceptsFirstMouse` で前面にないパネルでも 1 回で押せる。選択を声で編集するモードの HUD でも同じ。
 - 完了は 1.2 秒後、エラーは 4 秒後に自動で消える（DEC-DIC-016）。
+- 入力できる場所がなくて貼り付けなかったときは、HUD を隠して、同じ場所に結果を残すパネル（`PasteFallbackPanel`）を出す。全文を選べる文字で出し（長ければスクロール）、「コピー」「閉じる」を置く。自動では閉じず、Esc・⌘W・「閉じる」か、次に録音を始めたときに閉じる。アプリは前面に出さずにパネルだけキーウインドウにするので、Esc と ⌘C がすぐに効く（DEC-DIC-094）。
 
 ### 5.3 設定（UserDefaults、API キーのみキーチェーン）
 
-- 初版の設定は `AppSettings`（`Settings.swift`。既定値は `init` の `defaults.register`）。あとから足した機能の設定は、それぞれのストア（`AppStyleStore`・`SnippetStore`・`ScreenContextSettings`・`HistorySettings`・`EditModeSettings`・`MeetingNotesSettings`・`MeetingDetectionSettings`・`MinutesTemplateStore`）に分けてある（DEC-COM-013）。
+- 初版の設定は `AppSettings`（`Settings.swift`。既定値は `init` の `defaults.register`）。あとから足した機能の設定は、それぞれのストア（`AppStyleStore`・`SnippetStore`・`ScreenContextSettings`・`HistorySettings`・`EditModeSettings`・`PasteFallbackSettings`・`MeetingNotesSettings`・`MeetingDetectionSettings`・`MinutesTemplateStore`）に分けてある（DEC-COM-013）。
 - 設定画面は `SettingsView.swift` と、機能ごとの `*SettingsView.swift`・`*Settings*` の View。
 - 決めた既定値のうち理由のあるものは、spec の設計判断に書いてある（例: DEC-DIC-002、DEC-DIC-060、DEC-DIC-073、DEC-COM-005、DEC-COM-022）。
 
@@ -565,6 +577,9 @@ mac-typeless/
 │   ├── ScreenContextCLI.swift     # 画面の文脈の確認用 CLI
 │   ├── ServiceAccount.swift       # サービスアカウント → アクセストークン（JWT/RS256）
 │   ├── TextInserter.swift         # クリップボード + ⌘V
+│   ├── PasteTarget.swift          # 入力できる場所があるかの判定（AX）と、そのときの設定
+│   ├── PasteFallbackPanel.swift   # 貼り付けられなかった結果を残すパネルと、設定の欄
+│   ├── PasteFallbackCLI.swift     # 判定の自己テスト・パネルの画像の CLI
 │   ├── HotKeyManager.swift        # Carbon ホットキー
 │   ├── HUDPanel.swift             # 浮遊表示
 │   ├── Settings.swift             # 設定値（UserDefaults）
@@ -617,7 +632,7 @@ open build/Hanasu.app
 
 ### 9.1 動作確認用の CLI モード
 
-マイクを使わずに認識〜整形の経路を確かめるため、音声ファイルや文章を同じ経路に流すモードを用意した。入口は `Sources/Hanasu/main.swift` で、機能ごとの CLI は `*CLI.swift`（`DictionaryCLI`・`SnippetsCLI`・`ScreenContextCLI`・`EditModeCLI`・`DictationHistoryCLI`・`TranscriptionEngineCLI` など）。各要件で使うコマンドの例は、spec の「確かめ方」と、CLI の入口の `// 確かめ方: REQ-…` のコメントにある。
+マイクを使わずに認識〜整形の経路を確かめるため、音声ファイルや文章を同じ経路に流すモードを用意した。入口は `Sources/Hanasu/main.swift` で、機能ごとの CLI は `*CLI.swift`（`DictionaryCLI`・`SnippetsCLI`・`ScreenContextCLI`・`EditModeCLI`・`PasteFallbackCLI`・`DictationHistoryCLI`・`TranscriptionEngineCLI` など）。各要件で使うコマンドの例は、spec の「確かめ方」と、CLI の入口の `// 確かめ方: REQ-…` のコメントにある。
 
 - Gemini の認証は、環境変数 `GEMINI_SERVICE_ACCOUNT_JSON` → 設定画面の認証情報 → `GEMINI_API_KEY` の順に使う。
 - `-whisperModel` などの UserDefaults の引数で、その回だけ設定を上書きできる（保存しない）。

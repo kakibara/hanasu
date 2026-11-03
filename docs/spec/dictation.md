@@ -193,6 +193,28 @@
 - 実装の場所: `DictionarySuggester`、`DictionarySuggestionSection`
 - 確かめ方: `.build/debug/Hanasu --suggest-dictionary --from-file /tmp/texts.txt`、`--render-dictionary-settings /tmp/dict.png`
 
+### REQ-DIC-080 入力できる場所がないときは、結果を画面に残して自分で貼れるようにする
+- 内容: 音声入力の結果を入れるときに、フォーカスが文字を入力できる場所にない（ペーストできない）と分かったら、結果の文章を画面に表示し、自動では閉じない。表示から文章をコピーでき、閉じるまで残る。
+- 出典: ユーザーの依頼（2026-11-04「フォーカスがどこにも当たっていなくて、ペーストする時にペーストできないという場合は、画面上に文字を表示して…画面を自動で閉じないようにしてください」）
+- 対象: Mac / Windows
+- 受け入れ条件:
+  - デスクトップ（Finder）を前面にして音声入力すると、⌘V を送らず、画面の下部に結果の全文が出る。
+  - 表示の文字は選んでコピーできる。「コピー」で全文をコピーできる。「閉じる」・Esc で閉じる。自動では閉じず、次に録音を始めたら閉じる。
+  - 長い文章はスクロールで読める。
+  - 入力欄にカーソルがあるとき・入力欄かどうか分からないとき（Electron 製のアプリなど）は、今までどおり貼り付ける。
+  - 選択を声で編集した結果・「最後の結果をもう一度入力」も同じように扱う。
+  - アクセシビリティの許可がないときは、今までどおりコピーして案内する（DEC-DIC-014）。
+- 実装の場所: `PasteTargetJudge.decide`、`PasteTargetProbe`、`TextInserter.insert`（`Outcome.notPasted`）、`PasteFallbackPanel`、`DictationController.finishDictation`、`EditModeController.finish`、`DictationHistoryUI.repasteLast`
+- 確かめ方: `.build/debug/Hanasu --test-paste-target`（判定の表。失敗があれば終了コード 1）、`--render-paste-fallback /tmp/fallback.png [--long]`、`--probe-paste-target [秒]`（実機のフォーカスでの判定。アクセシビリティの許可が要る）。パネルの操作（選択・Esc・コピー）は実機で確かめる
+
+### REQ-DIC-081 入力できる場所がないときのクリップボードの扱いを、設定で選べる
+- 内容: REQ-DIC-080 のとき、クリップボードを元に戻して表示からコピーするか、結果をクリップボードに入れたままにしてペーストだけで済むようにするかを、設定で選べる。
+- 出典: ユーザーの依頼（2026-11-04「自分でコピーペーストをするのか、クリップボードにも初めからコピーされていて、ペーストだけで済むようにするのかをオプションで選択できるようにしてください」）
+- 対象: Mac / Windows
+- 受け入れ条件: 設定の「一般」→「入力できる場所がないとき」で選べる。「クリップボードにも入れておく」（既定）では、表示が出たあと入力したい場所で ⌘V を押すと結果が入る。「表示だけにする」では、クリップボードは音声入力の前のまま。
+- 実装の場所: `PasteFallbackSettings`、`PasteFallbackSettingsSection`、`TextInserter.insert`
+- 確かめ方: `.build/debug/Hanasu --render-paste-fallback-settings /tmp/fallback-settings.png`、`--render-paste-fallback /tmp/fallback.png --display-only`。クリップボードの中身は実機で確かめる
+
 ---
 
 ## 設計判断
@@ -294,7 +316,7 @@
 - 実装の場所: `DictationController.handleHotKey`
 
 ### DEC-DIC-013 入力はクリップボードと ⌘V で行い、元のクリップボードを戻す
-- 決めたこと: クリップボードの中身を退避し、文章を置いて `CGEvent` で ⌘V を送り、約 0.4 秒後に元に戻す（その間にユーザーがコピーしたら戻さない）。置く項目には `org.nspasteboard.TransientType` / `ConcealedType` を付ける。
+- 決めたこと: クリップボードの中身を退避し、文章を置いて `CGEvent` で ⌘V を送り、約 0.4 秒後に元に戻す（その間にユーザーがコピーしたら戻さない）。置く項目には `org.nspasteboard.TransientType` / `ConcealedType` を付ける。送る前に入力できる場所があるかを確かめ、ないと分かったときは貼り付けずに返す（DEC-DIC-091、REQ-DIC-080）。
 - 理由: Accessibility API での書き込みはアプリによって効かず、1 文字ずつのキー入力は IME と干渉する。ほぼどのアプリでも動く方法にした。印はクリップボード履歴アプリに残りにくくするため。
 - 決めた場面: 初版（a787da8）
 - 関係する要件: REQ-DIC-004
@@ -320,7 +342,7 @@
 ### DEC-DIC-016 HUD は前面に出ない小さなパネルにし、終わったら自動で消す
 - 決めたこと: HUD は `NSPanel` の `.nonactivatingPanel`。マウスのある画面の下部中央に出す。完了は 1.2 秒後、エラーは 4 秒後に消える。
 - 理由: 入力先アプリのフォーカスを奪わないため。
-- 決めた場面: 初版（a787da8）。消えるまでの時間は文書（1.5 秒）とコードがずれていたので、コード（1.2 秒）に文書を合わせた（このPR）
+- 決めた場面: 初版（a787da8）。消えるまでの時間は文書（1.5 秒）とコードがずれていたので、コード（1.2 秒）に文書を合わせた（このPR）。入力できる場所がなくて結果を残すときは、HUD を隠して別のパネルに出す（DEC-DIC-094）
 - 関係する要件: REQ-DIC-002
 - 対象: Mac
 - 実装の場所: `HUDController`
@@ -796,6 +818,57 @@
 - 関係する要件: REQ-DIC-070
 - 対象: Mac
 - 実装の場所: `DictionaryEditorSection`
+
+### DEC-DIC-091 判定は AX で読み、「入力できる場所がない」とはっきり分かるときだけ表示に回す
+- 決めたこと: ⌘V を送る直前に、システム全体のフォーカスのあるアプリ（`kAXFocusedApplication`。取れなければ前面のアプリ）の、フォーカスのあるウインドウと要素を AX で読む（1 回 0.2 秒まで）。判定は `PasteTargetJudge.decide` で、次の順に決める。
+  - 貼る: 役割が `AXTextField`・`AXTextArea`・`AXComboBox`・`AXSearchField`、サブロールが `AXSearchField`・`AXSecureTextField`、Web の編集できる領域の中（`AXEditableAncestor`）、値が文字ではない部品（ボタン・スライダーなど）以外で `AXValue` を書き換えられるか選択範囲（`kAXSelectedTextRange`）を持つ。
+  - 表示する: Finder（デスクトップ・ファイルの一覧。名前の変更と検索欄は上の「貼る」）、ウインドウも要素もない（kAXErrorNoValue）、要素の役割がボタン・チェックボックス・スライダー・リンク・ラベル・画像・`AXWebArea`（Web ページの入力欄の外）など。
+  - 分からない（貼る）: それ以外。読めなかった（タイムアウトなど）、ウインドウはあるのに要素がない、`AXWindow`・`AXGroup`・一覧や表（`AXList`・`AXTable`・`AXOutline`）・`AXLayoutArea` など。
+- 理由: 依頼どおり、誤って表示に回すより貼り付けを試す方を優先する。自前で描くアプリ（kitty・Alacritty などのターミナル）は要素を出さないか `AXWindow` を返すので「要素がない」だけでは決めない。Excel・Numbers の表や Keynote の画面は、選んだまま ⌘V で貼れるので一覧・表は分からないに入れる。Terminal の本文は `AXValue` を書き換えられない `AXTextArea` だが貼れるので、入力欄の役割なら書き換えられるかは見ない。Spotlight・Raycast などのパネルは前面のアプリとは別のプロセスにフォーカスがあるので、システム全体のフォーカスから読む。
+- 決めた場面: このPR（貼り付けられないときの表示、Mac 版）
+- 関係する要件: REQ-DIC-080
+- 対象: Mac
+- 実装の場所: `PasteTargetJudge.decide`、`PasteTargetProbe.readFocus`
+
+### DEC-DIC-092 Electron 製のアプリでは、ウインドウがないときのほかは表示に回さない
+- 決めたこと: アプリの中に `Contents/Frameworks/Electron Framework.framework` があれば Electron 製とみなし、入力欄に見えない要素にフォーカスがあっても「分からない」として貼り付ける。`AXManualAccessibility` は立てない。
+- 理由: Electron（Slack・VS Code など）は、支援技術から頼まれるまで中身を出さず（DEC-DIC-062）、出しても作りがアプリごとにまちまち。Slack のように、入力欄の外で ⌘V を押しても入力欄へ回すアプリもある。依頼で「分からないときは貼り付ける」と決まっている。どちらにしても貼り付けるので、`AXManualAccessibility` を立てて中身を出させる必要もない。
+- 決めた場面: このPR
+- 関係する要件: REQ-DIC-080
+- 対象: Mac
+- 実装の場所: `PasteTargetJudge.decide`、`PasteTargetProbe.isElectron`
+
+### DEC-DIC-093 表示に回すときは、0.15 秒おいて読み直し、2 回とも同じときだけにする
+- 決めたこと: 1 回目の判定が「表示する」なら、0.15 秒待ってもう一度読み、そのときも「表示する」なら表示に回す。
+- 理由: Chrome などの Chromium は、支援技術に聞かれてから AX の木を作るので、最初の問い合わせでは入力欄にフォーカスがあっても `AXWebArea` が返ることがある。表示に回すときだけ待つので、ふつうの貼り付けは遅くならない。
+- 決めた場面: このPR
+- 関係する要件: REQ-DIC-080
+- 対象: Mac
+- 実装の場所: `PasteTargetProbe.check`
+
+### DEC-DIC-094 結果は、HUD とは別の、自動では閉じないパネルに全文を出す
+- 決めたこと: HUD を隠し、同じ場所（マウスのある画面の下部中央）に幅 480 の別のパネル `PasteFallbackPanel` を出す。見出し・案内（クリップボードに入っているか）・整形の失敗などの知らせ・選択できる文章の欄（高さ 260 まで。超えたらスクロール）・文字数・「コピー」「閉じる」を置く。`NSPanel` の `.nonactivatingPanel` のまま、出すときにキーウインドウにして（アプリは前面に出さない）、Esc・⌘W で閉じ、⌘C で選んだ部分（選んでいなければ全文）をコピー、⌘A で全文を選ぶ。キーはパネルで受ける（アプリが前面にないので、メニューのショートカットに頼らない）。背景をドラッグして動かせる。自動では閉じず、次に音声入力か選択の編集を始めたとき、「最後の結果をもう一度入力」の前に閉じる。「コピー」はふつうのコピー（「最近の結果」と同じく印を付けない）。閉じたら文章をメモリから消す。
+- 理由: HUD は録音のたびに出し直し、完了やエラーで自動で消える（DEC-DIC-016）ので、残す表示は分けた。入力先はないと分かっているので、キーウインドウにしても奪うフォーカスがなく、Esc と ⌘C がすぐに効く。編集の前に閉じるのは、キーウインドウのままだと選択の写し取り（⌘C）がパネルへ行くため。
+- 決めた場面: このPR
+- 関係する要件: REQ-DIC-080
+- 対象: Mac
+- 実装の場所: `PasteFallbackPanel`、`KeyablePanel`、`DictationController.startDictation`、`EditModeController.start`
+
+### DEC-DIC-095 クリップボードの既定は「クリップボードにも入れておく」
+- 決めたこと: 既定は「クリップボードにも入れておく」。結果を貼り付けのときと同じ印（`org.nspasteboard.TransientType` / `ConcealedType`）を付けて置き、元に戻さない。「表示だけにする」では、クリップボードに触らない（音声入力の前のまま）。設定は `PasteFallbackSettings`（UserDefaults の `pasteFallbackClipboard`）に持ち、「一般」タブの「入力できる場所がないとき」で選ぶ。
+- 理由: 話した人は入力するつもりなので、入力したい場所をクリックして ⌘V を押すだけで済む方が手数が少ない。アクセシビリティの許可がないとき（DEC-DIC-014）もクリップボードに置くので、振る舞いがそろう。印はクリップボード履歴アプリに残りにくくするため（今の作りに合わせる）で、⌘V で貼るのには差し支えない。
+- 決めた場面: このPR
+- 関係する要件: REQ-DIC-081
+- 対象: Mac
+- 実装の場所: `PasteFallbackClipboard`、`PasteFallbackSettings`、`TextInserter.insert`
+
+### DEC-DIC-096 選択を声で編集した結果と、もう一度入力した結果にも同じ扱いをする
+- 決めたこと: `TextInserter.insert` が判定するので、音声入力・選択を声で編集・「最後の結果をもう一度入力」のどれでも、入力できる場所がなければ表示に回す。履歴への記録（DEC-DIC-072）は今までどおり貼り付けの前に行う。
+- 理由: 編集の結果は履歴にも「最近の結果」にも残らない（DEC-DIC-036）ので、貼れないと失われる。Web ページの読むだけの文章を選んで編集したときなどに起きる。
+- 決めた場面: このPR
+- 関係する要件: REQ-DIC-080, REQ-DIC-062
+- 対象: Mac
+- 実装の場所: `EditModeController.finish`、`DictationHistoryUI.repasteLast`
 
 ### DEC-DIC-100 Whisper / Gemini では、録音を止めてからまとめて文字起こしする
 - 決めたこと: 録音中は `AVAudioEngine` のタップで 16 kHz モノラルに変換してためておき、止めたらまとめて文字起こしする。そのあとは Mac 標準と同じ流れ（辞書の置き換え → スニペット → 整形・英訳 → 履歴 → 入力）。0.3 秒に満たない録音は押し間違いとして扱う。

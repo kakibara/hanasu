@@ -52,6 +52,8 @@ MainActor.assumeIsolated { ClaudeCLI.runIfRequested() }
 MainActor.assumeIsolated { EditModeCLI.runIfRequested() }
 // 画面の文脈の確認（--dump-context、--refine-text … --context）。該当しなければ何もしない
 MainActor.assumeIsolated { ScreenContextCLI.runIfRequested() }
+// 入力できる場所がないときの確認（--test-paste-target / --probe-paste-target / --render-paste-fallback[-settings]）。PasteFallbackCLI.swift
+MainActor.assumeIsolated { PasteFallbackCLI.runIfRequested() }
 // ユーザー辞書の確認（--apply-dictionary / --test-dictionary / --suggest-dictionary / --render-dictionary-settings）。
 // 使い方は DictionaryCLI.swift を参照
 if DictionaryCLI.handles(CommandLine.arguments) {

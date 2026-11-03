@@ -50,8 +50,8 @@ final class DictationHistoryUI: NSObject {
         if hotKeyID == nil { onHotKeyRegistrationFailed(combo) }
     }
 
-    // 要件: REQ-DIC-062
-    // 設計判断: DEC-DIC-077
+    // 要件: REQ-DIC-062, REQ-DIC-080
+    // 設計判断: DEC-DIC-077, DEC-DIC-096
     /// 最後の結果を、いま前面にあるアプリへもう一度入力する
     @objc func repasteLast() {
         guard !isDictationBusy() else { return }
@@ -61,11 +61,18 @@ final class DictationHistoryUI: NSObject {
             return
         }
         Task {
+            // 結果を残す表示がキーウインドウのままだと、⌘V がそちらへ行ってしまう。閉じて、フォーカスが戻るのを少し待つ
+            if PasteFallbackPanel.shared.isVisible {
+                PasteFallbackPanel.shared.close()
+                try? await Task.sleep(for: .milliseconds(100))
+            }
             switch await TextInserter.insert(last.output) {
             case .pasted:
                 hud.show(.done("最後の結果をもう一度入力しました"))
             case .copiedOnly:
                 hud.show(.error("アクセシビリティが許可されていないため、クリップボードにコピーしました。⌘V で貼り付けてください。"))
+            case .notPasted(let clipboardKept):
+                PasteFallbackPanel.shared.show(text: last.output, subject: .result, clipboardKept: clipboardKept)
             }
         }
     }
