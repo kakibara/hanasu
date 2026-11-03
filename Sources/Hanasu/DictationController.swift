@@ -27,6 +27,8 @@ final class DictationController {
     var onStateChange: ((State) -> Void)?
     /// ショートカットの登録に失敗したとき（他アプリと衝突など）
     var onHotKeyRegistrationFailed: ((HotKeyCombo) -> Void)?
+    /// ほかの録音（選択を声で編集）が動いている間は false を返す
+    var canStart: () -> Bool = { true }
 
     private let settings = AppSettings.shared
     private let hotKeys = HotKeyManager()
@@ -38,6 +40,8 @@ final class DictationController {
     private var stopRequested = false
     private var cancelRequested = false
     private var targetAppName: String?
+    /// 録音を始めたときの前面アプリのスタイル（アプリ別の設定がなければ nil）
+    private var targetAppStyle: AppStyle?
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
@@ -133,13 +137,18 @@ final class DictationController {
     }
 
     func startDictation(mode: Mode = .refine) {
-        guard state == .idle else { return }
+        guard state == .idle, canStart() else { return }
         self.mode = mode
         state = .preparing
         stopRequested = false
         cancelRequested = false
         targetAppName = NSWorkspace.shared.frontmostApplication?.localizedName
-        hud.model.translating = mode == .translateToEnglish
+        targetAppStyle = AppStyleStore.shared.style(forBundleID: NSWorkspace.shared.frontmostApplication?.bundleIdentifier)
+        // 既定の出力言語が英語のアプリでは English から始める。HUD で切り替えればそちらが優先される
+        if mode == .refine, targetAppStyle?.outputLanguage == .english {
+            self.mode = .translateToEnglish
+        }
+        hud.model.translating = self.mode == .translateToEnglish
         hud.show(.preparing("準備中…"))
         setEscapeHotKey(enabled: true)
 
@@ -229,7 +238,8 @@ final class DictationController {
                         model: settings.model,
                         appName: settings.sendAppName ? targetAppName : nil,
                         dictionary: settings.dictionaryWords,
-                        extraInstructions: settings.extraInstructions)
+                        extraInstructions: settings.extraInstructions,
+                        appStyle: targetAppStyle)
                     // スニペットがあれば、その前後の文だけを整形（英訳）してつなぐ。本文は送らない
                     let convert: @Sendable (String) async throws -> String = { text in
                         var request = request
