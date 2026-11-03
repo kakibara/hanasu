@@ -20,12 +20,30 @@ final class HUDModel: ObservableObject {
     var onSelectTranslating: ((Bool) -> Void)?
     /// 選択を声で編集しているときの補足（「選択 120 文字」など）。nil なら通常の音声入力
     @Published var editBadge: String?
+    /// 録音を止めてからまとめて文字起こしするエンジン（Whisper / Gemini）。nil なら Mac 標準（途中経過が出る）
+    @Published var batchEngine: TranscriptionEngine?
+    /// 録音中の音量（0〜1。batchEngine があるときの音量の目安）
+    @Published var level: Float = 0
+    /// まとめての文字起こしをしている間は true（「Whisper で文字起こししています…」）
+    @Published var transcribing = false
+    /// HUD の「停止」を押したとき（ショートカットをもう一度押したときと同じく、録音を止めて入力する）
+    var onStop: (() -> Void)?
+    /// HUD の「取消」を押したとき（Esc と同じ）
+    var onCancel: (() -> Void)?
 
     /// 準備中と録音中は、出力の言語を選べる
     var canChooseLanguage: Bool {
         switch phase {
         // 編集モードでは、出力の言語は話した指示で決まる
         case .preparing, .recording: editBadge == nil
+        default: false
+        }
+    }
+
+    /// 準備中と録音中は、ボタン（言語の切り替え・停止・取消）のクリックを受け取る
+    var acceptsClicks: Bool {
+        switch phase {
+        case .preparing, .recording: true
         default: false
         }
     }
@@ -65,13 +83,15 @@ final class HUDController {
         hideTask?.cancel()
         if case .preparing = phase {
             model.transcript = ""
+            model.level = 0
+            model.transcribing = false
         }
         if phase == .recording {
             model.startedAt = Date()
         }
         model.phase = phase
-        // 言語の切り替えボタンを押せる間だけクリックを受け取る。パネルは前面に出ないので、入力先のフォーカスは動かない
-        panel.ignoresMouseEvents = !model.canChooseLanguage
+        // ボタンを押せる間だけクリックを受け取る。パネルは前面に出ないので、入力先のフォーカスは動かない
+        panel.ignoresMouseEvents = !model.acceptsClicks
         position()
         panel.orderFrontRegardless()
 
@@ -138,10 +158,28 @@ private struct HUDView: View {
                             .font(.system(size: 12, design: .monospaced))
                             .foregroundStyle(.secondary)
                     }
-                    Text("Esc で取消").font(.system(size: 11)).foregroundStyle(.secondary)
+                    Button { model.onCancel?() } label: {
+                        Text("取消").font(.system(size: 11)).foregroundStyle(.secondary)
+                            .padding(.horizontal, 4)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .help("録音を取り消します（Esc）")
+                    StopButton { model.onStop?() }
                 }
             }
-            if let detail {
+            if model.phase == .recording, let engine = model.batchEngine, model.transcript.isEmpty {
+                // 途中経過が出ないエンジンでは、声が届いているかを音量で示す
+                HStack(spacing: 8) {
+                    LevelMeter(level: model.level)
+                    Text(model.editBadge != nil
+                         ? "指示を話してください。止めてから \(engine.shortName) で文字起こしします"
+                         : "止めてから \(engine.shortName) で文字起こしします（録音中は文字が出ません）")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+            } else if let detail {
                 Text(detail)
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
@@ -175,9 +213,11 @@ private struct HUDView: View {
     private var title: String {
         switch model.phase {
         case .preparing(let message): message
-        case .recording: model.editBadge == nil ? "録音中" : "編集モード"
+        case .recording:
+            (model.editBadge == nil ? "録音中" : "編集モード") + (model.batchEngine.map { "（\($0.shortName)）" } ?? "")
         case .processing:
-            if model.editBadge != nil { "Gemini で書き換えています…" }
+            if model.transcribing, let engine = model.batchEngine { "\(engine.shortName) で文字起こししています…" }
+            else if model.editBadge != nil { "Gemini で書き換えています…" }
             else if model.translating { "Gemini で英語に翻訳しています…" }
             else { "Gemini で整えています…" }
         case .done(let message): message
@@ -212,6 +252,27 @@ private struct HUDView: View {
     }
 }
 
+/// 録音を止めて入力するボタン。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
+private struct StopButton: View {
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 4) {
+                Image(systemName: "stop.fill").font(.system(size: 9))
+                Text("停止").font(.system(size: 11, weight: .semibold))
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 3)
+            .background(Color.red.opacity(0.85), in: Capsule())
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .help("録音を止めて入力します（ショートカットをもう一度押すのと同じ）")
+    }
+}
+
 /// 出力の言語を選ぶ小さな切り替え。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
 private struct LanguageSwitch: View {
     var translating: Bool
@@ -238,5 +299,24 @@ private struct LanguageSwitch: View {
                 .contentShape(Capsule())
         }
         .buttonStyle(.plain)
+    }
+}
+
+/// 音量の目安（Whisper / Gemini で録っているとき）。RMS を dB にして、-60〜-10 dB を 0〜1 に割り当てる
+private struct LevelMeter: View {
+    var level: Float
+
+    var body: some View {
+        let db = 20 * log10(max(Double(level), 1e-6))
+        let fraction = min(max((db + 60) / 50, 0), 1)
+        HStack(spacing: 2) {
+            ForEach(0..<12, id: \.self) { i in
+                RoundedRectangle(cornerRadius: 1.5)
+                    .fill(Double(i) / 12 < fraction ? Color.green : Color.secondary.opacity(0.25))
+                    .frame(width: 4, height: 6 + CGFloat(i) * 0.8)
+            }
+        }
+        .frame(height: 16, alignment: .bottom)
+        .animation(.easeOut(duration: 0.1), value: fraction)
     }
 }

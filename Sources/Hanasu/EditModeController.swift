@@ -36,11 +36,19 @@ final class EditModeController {
     init(dictation: DictationController) {
         self.dictation = dictation
         hud.model.editBadge = ""
+        hud.model.onStop = { [weak self] in self?.stopFromHUD() }
+        hud.model.onCancel = { [weak self] in self?.cancel() }
         recognizer.onPartialText = { [weak self] text in
             self?.hud.updateTranscript(text)
         }
         recognizer.onAssetDownloadProgress = { [weak self] fraction in
             self?.hud.show(.preparing("日本語の音声モデルをダウンロード中… \(Int(fraction * 100))%"))
+        }
+        recognizer.onLevel = { [weak self] level in
+            self?.hud.model.level = level
+        }
+        recognizer.onBatchTranscriptionStarted = { [weak self] _ in
+            self?.hud.model.transcribing = true
         }
         // 編集中は音声入力を始めない（マイクと HUD を取り合わないため）
         dictation.canStart = { [weak self] in self?.state == .idle }
@@ -112,6 +120,15 @@ final class EditModeController {
 
     // MARK: - 操作
 
+    /// HUD の「停止」。ショートカットをもう一度押したときと同じく、録音を止めて書き換える
+    func stopFromHUD() {
+        switch state {
+        case .recording: Task { await finish() }
+        case .preparing: stopRequested = true
+        case .idle, .processing: break
+        }
+    }
+
     func toggleFromMenu() {
         switch state {
         case .idle: start()
@@ -147,6 +164,8 @@ final class EditModeController {
         cancelRequested = false
         pendingFailure = nil
         hud.model.editBadge = "選択を読み取り中…"
+        // Whisper / Gemini は録音を止めてからまとめて文字起こしするので、HUD の出しかたを変える
+        hud.model.batchEngine = settings.dictationEngine.isLive ? nil : settings.dictationEngine
         hud.show(.preparing("準備中…"))
         setEscapeHotKey(enabled: true)
 
@@ -165,11 +184,12 @@ final class EditModeController {
 
         Task {
             do {
-                try await Permissions.ensureRecordingPermissions()
+                try await Permissions.ensureRecordingPermissions(speechRecognition: settings.dictationEngine == .apple)
                 try await recognizer.start(
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
-                    contextualStrings: settings.dictionaryWords)
+                    contextualStrings: settings.dictionaryWords,
+                    transcription: settings.dictationEngine)
             } catch {
                 selectionTask?.cancel()
                 fail(error.localizedDescription)
@@ -268,6 +288,7 @@ final class EditModeController {
         hud.show(.processing)
 
         let instruction = await recognizer.stop()
+        hud.model.transcribing = false
         appLog.notice("edit: instruction \(instruction.count) chars")
         hud.updateTranscript(instruction)
         // 押している間だけ録音するモードでは、ここで初めて ⌘C で選択を写し取ることがある
@@ -282,7 +303,7 @@ final class EditModeController {
         }
         hud.model.editBadge = "選択 \(selection.count) 文字"
         guard !instruction.isEmpty else {
-            fail("指示が聞き取れませんでした。選択した文章はそのままです。")
+            fail(recognizer.lastError.map { "\($0)。選択した文章はそのままです。" } ?? "指示が聞き取れませんでした。選択した文章はそのままです。")
             return
         }
 

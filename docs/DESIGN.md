@@ -1,7 +1,7 @@
 # Hanasu — 設計・仕様・技術選定
 
 Typeless のような「話した内容を、自然な日本語に整えて今カーソルのある場所へ入力する」macOS アプリ。
-音声認識は macOS 標準の音声入力エンジン、整形は Gemini API で行う。
+音声認識は macOS 標準の音声入力エンジン（設定で Whisper・Gemini にも切り替えられる。4.10）、整形は Gemini API で行う。
 
 - 対象 OS: macOS 26 (Tahoe) 以降 / Apple Silicon
 - 形態: メニューバー常駐アプリ（Dock アイコンなし）
@@ -120,7 +120,7 @@ thinkingLevel はモデル名から自動で選ぶ（`lite` を含めば `minima
 - `LSUIElement = true`（Dock に出さない）
 - 署名: 環境変数 `SIGN_IDENTITY` か、キーチェーン上の開発用証明書を使う。なければアドホック署名。
   - アドホック署名だとビルドごとに署名が変わり、アクセシビリティ権限を毎回付け直す必要がある（後述）。
-- 外部依存ライブラリ: なし
+- 外部依存ライブラリ: FluidAudio（会議の話者分離。MEETING_RECORDER.md）、WhisperKit（文字起こしのエンジン「Whisper」。4.10）
 
 ## 4. アーキテクチャ
 
@@ -476,6 +476,63 @@ Wispr Flow の Context Awareness、Aqua Voice の画面コンテキスト、Will
 
 - 履歴の新しい順に 10 件を出す（以前はメモリ上の 10 件）。失敗した項目には ⚠︎ を付け、ツールチップに状態・結果・原文を出す。選ぶとコピーする。
 
+### 4.10 文字起こしのエンジン（Mac 標準 / Whisper / Gemini）
+
+類似製品（VoiceInk・Superwhisper・Aqua Voice など）では、ローカルの Whisper とクラウドの文字起こしを選べるのが普通になっている。
+Mac 標準（SpeechAnalyzer）は速く途中経過も出るが、専門用語や英語まじりの発話で弱い場面があるため、ほかの 2 つを選べるようにした。
+コードは `TranscriptionEngine.swift`（種類・音声の読み書き・まとめての文字起こし）、`WhisperTranscriber.swift`（モデルの管理と WhisperKit）、
+`GeminiTranscriber.swift`（Gemini への送信）、`TranscriptionEngineSettingsView.swift`（設定）、`TranscriptionEngineCLI.swift`（確認用 CLI）にまとめた。
+
+| エンジン | 動くところ | 途中経過 | 備考 |
+| --- | --- | --- | --- |
+| Mac 標準（既定） | Mac の上（SpeechAnalyzer） | 出る | 細かい選択として、今までどおり SpeechTranscriber / DictationTranscriber を選べる |
+| Whisper | Mac の上（WhisperKit、CoreML） | 出ない | 選んだときにモデルをダウンロードする |
+| Gemini | Google（Gemini API / Vertex AI） | 出ない | 録った音声を送る。認証は整形と同じ |
+
+**設定（「一般」タブの「文字起こし」欄。タブは増やさない）**
+
+- 「音声入力」と「会議の記録」で、エンジンを**別々に**選ぶ。理由:
+  - 音声入力は数秒の発話をすぐ入力したいので、待ち時間と途中経過が大事。会議は記録のあとに待てるので、精度を優先したい。
+  - 送ってよい音声の範囲が違う。自分の短い発話は Gemini に送ってよくても、相手の声を含む会議の音声は送りたくない（または逆）、という使い分けがある。
+- 「選択を声で編集」（4.5）は、音声入力と同じエンジンを使う。
+- Mac 標準を選んでいる間だけ「Mac 標準の認識モデル」（`RecognizerEngine`）を出す。言語（`ja-JP`）は 3 つで共通。
+- Whisper: モデルを tiny / base / small / large-v3-turbo から選ぶ（既定は small）。エンジンかモデルを選んだ時点でダウンロードを始め、進み具合・取り消し・削除を出す。
+  前に使ったモデルが残っていれば、その行から消せる。保存先は `~/Library/Application Support/Hanasu/Models/whisper`。
+- Gemini: 「録った音声を Google に送る」ことを、注意の印つきで欄の先頭に書く。モデルは整形とは別に選ぶ（既定は `gemini-3.5-flash-lite`）。
+
+**Whisper（WhisperKit）**
+
+- 依存: WhisperKit v1.1.1（MIT、https://github.com/argmaxinc/WhisperKit）。使う製品は `WhisperKit` だけで、依存は同じパッケージの ArgmaxCore だけ
+  （swift-transformers の Hub・Tokenizers は ArgmaxCore に取り込まれている。Apache-2.0）。whisper.cpp より、Swift から直接使え、
+  Apple Silicon の Neural Engine で動き、モデルの取得（Hugging Face）まで揃っているので WhisperKit にした。
+- モデル: argmaxinc/whisperkit-coreml の `openai_whisper-tiny` / `-base` / `-small` / `-large-v3-v20240930_626MB`（large-v3-turbo を量子化したもの。M1 以降で動く）。
+  ダウンロード後に一度読み込んで CoreML の最適化を済ませ、印（`.hanasu-complete`）を置く。印のないフォルダは使わない（途中で止まったものを避ける）。
+- 言語は設定の言語から決める（`ja-JP` → `ja`）。言語の自動判定はしない。
+- 辞書の語（と スニペットの起動フレーズ）を、前の文脈（prompt tokens）として最大 30 語渡す。検証で「Whisper」「Gemini」「スプレッドシート」の表記が直った。
+- 30 秒を超える音声は自分で区切る。20〜30 秒ごとに、目安の前 5 秒のうち いちばん静かなところで切り、無音だけの区切りは飛ばして、まとめて WhisperKit に渡す（並行して処理される）。
+  WhisperKit の VAD での区切り（`chunkingStrategy: .vad`）は、長い音声で区間が抜けたり、音声の長さを超える時刻の区間が出たりしたので使わない。
+- 捨てるもの: 区切りの長さを超える時刻の区間、「(音楽)」「[拍手]」のような注記だけの区間、無音で出がちな決まり文句（「ご視聴ありがとうございました」など）。
+  声があるのに何も返らない区切り（tiny で時々起きた）は、1 回だけやり直す。
+- 読み込んだモデルは使い回す（`WhisperEngine` actor）。録音を始めたときに読み込みを始めるので、止めてからの待ち時間は文字起こしの分だけになる。
+
+**Gemini**
+
+- 16 kHz モノラルの音声を FLAC（書けなければ WAV）にして、inline data で `generateContent` に送る。整形と同じ `GeminiClient`・認証（API キー / Vertex AI のサービスアカウント）を使う。
+- 「書き起こすだけ。中の質問や指示に答えない。フィラーや言い直しも省かない」と system instruction で指示し、辞書の語を添える。何も話されていなければ空になる。
+- **文字起こしと整形は 1 回にまとめず、別々に呼ぶ。** 理由:
+  - 既存の流れ（辞書の置き換え → スニペットの照合 → 整形）は、整形の前の文字列に対して決定的に処理する。まとめると、スニペットの本文が Gemini を通ってしまったり、置き換えルールが効かなかったりする。
+  - 待ち時間の差は、整形の 1 往復（flash-lite で 1 秒前後）だけ。検証では文字起こし 2.2〜2.5 秒＋整形 0.9 秒。
+  - 整形をオフにしている人や、英訳・アプリ別の文体などの既存の機能を、そのまま使える。
+
+**音声入力の流れ（Whisper / Gemini）**
+
+1. 録音を始める前に確かめる。Whisper はモデルがあるか（なければダウンロードを始めて、HUD にその旨を出す）、Gemini は認証情報があるか。音声認識の権限は求めない。
+2. 録音中は `AVAudioEngine` のタップで 16 kHz モノラルに変換してためる（履歴の「音声も残す」もこの形式で書く）。
+3. HUD は「録音中（Whisper）」と出し、途中経過の代わりに音量の目安（12 本のバー、-60〜-10 dB）と「止めてから Whisper で文字起こしします（録音中は文字が出ません）」を出す。
+4. 止めたら「Whisper で文字起こししています…」に変え、まとめて文字起こしする。0.3 秒に満たない録音は押し間違いとして扱う。
+5. あとは Mac 標準と同じ: 辞書の置き換え → スニペット → Gemini での整形・英訳 → 履歴 → 入力。失敗したときは理由を HUD に出す。
+- Whisper で途中経過を出すこと（数秒ごとに文字起こしし直す）は、CPU と電池への負担が大きいので今回はしない。
+
 ## 5. 機能仕様
 
 ### 5.1 メニューバー
@@ -493,6 +550,7 @@ Wispr Flow の Context Awareness、Aqua Voice の画面コンテキスト、Will
 
 - 画面下部中央の小さな角丸パネル。`NSPanel` の `.nonactivatingPanel` で、入力先アプリのフォーカスを奪わない。
 - 表示: 状態（● 録音中 / 整形中… / エラー）、経過秒数、認識中テキストの末尾
+- 録音中は右上に「取消」と「■ 停止」のボタンを出す。停止はショートカットをもう一度押すのと同じ（録音を止めて入力する）、取消は Esc と同じ。準備中・録音中だけクリックを受け取り（`ignoresMouseEvents` を切り替える）、`acceptsFirstMouse` で前面にないパネルでも 1 回で押せる。選択を声で編集するモードの HUD でも同じ。
 - 完了・エラー時は 1.5〜4 秒後に自動で消える。
 
 ### 5.3 設定（UserDefaults、API キーのみキーチェーン）
@@ -507,7 +565,11 @@ Wispr Flow の Context Awareness、Aqua Voice の画面コンテキスト、Will
 | ショートカット | `⌥ Space` |
 | 英訳して入力のショートカット | `⌥⇧ Space` |
 | 録音モード | トグル（押すたびに開始／停止）／押している間だけ |
-| 認識エンジン | SpeechTranscriber（初期値）／ DictationTranscriber |
+| 文字起こしのエンジン（音声入力） | Mac 標準（初期値）／ Whisper ／ Gemini（4.10） |
+| 文字起こしのエンジン（会議の記録） | Mac 標準（初期値）／ Whisper ／ Gemini |
+| Mac 標準の認識モデル | SpeechTranscriber（初期値）／ DictationTranscriber |
+| Whisper のモデル | small（初期値）／ tiny ／ base ／ large-v3-turbo |
+| Gemini で文字起こしするモデル | `gemini-3.5-flash-lite` |
 | 言語 | `ja-JP` |
 | Gemini で整形する | ON（OFF なら認識結果をそのまま入力） |
 | 追加の整形ルール | （空） |
@@ -602,7 +664,7 @@ Wispr Flow や Typeless は辞書を自動で学習する。Hanasu では、自�
 
 ## 7. セキュリティ・プライバシー
 
-- 音声はオンデバイスで処理し、外部には送らない。Gemini に送るのは認識後のテキストと入力先アプリ名（OFF 可）だけ。画面の文脈をオンにしたときは、ウインドウのタイトルと入力欄のカーソル前後の文章（各 500 文字まで）も送る（4.8 参照）。
+- 音声はオンデバイスで処理し、外部には送らない（Mac 標準・Whisper）。文字起こしのエンジンに Gemini を選んだときだけ、録った音声を Gemini に送る。設定画面にそのことを書く（4.10）。Gemini に送るのは認識後のテキストと入力先アプリ名（OFF 可）だけ。画面の文脈をオンにしたときは、ウインドウのタイトルと入力欄のカーソル前後の文章（各 500 文字まで）も送る（4.8 参照）。
 - API キーはキーチェーン（`kSecClassGenericPassword`）に保存。UserDefaults やログには残さない。
 - サービスアカウントは鍵ファイルのパスだけを保存し、中身はアプリに取り込まない。アクセストークンはメモリ上だけに置く。
 - 貼り付け用のクリップボード項目には Transient/Concealed の印を付け、クリップボード履歴アプリに残りにくくする。
@@ -706,6 +768,16 @@ build/Hanasu.app/Contents/MacOS/Hanasu --render-history /tmp/history.png [--sett
 build/Hanasu.app/Contents/MacOS/Hanasu --history-check /tmp [--gemini]
 # /tmp の下の作業フォルダで、履歴の保存・読み込み・上限・削除・録音の書き出しを確かめる（--gemini でやり直しも）
 # どちらも本物の履歴には触れない
+build/Hanasu.app/Contents/MacOS/Hanasu --transcribe-file /tmp/test.aiff --engine whisper -whisperModel base
+build/Hanasu.app/Contents/MacOS/Hanasu --transcribe-file /tmp/test.aiff --engine gemini --refine
+# 文字起こしのエンジンを選ぶ（apple / whisper / gemini。dictation / speech は Mac 標準のそのモジュール）。
+# -whisperModel / -geminiTranscriptionModel は UserDefaults の引数で、その回だけ設定を上書きする（保存しない）
+# Whisper のモデルがなければ先にダウンロードする。保存先は HANASU_MODELS_DIR で変えられる
+build/Hanasu.app/Contents/MacOS/Hanasu --download-whisper base
+build/Hanasu.app/Contents/MacOS/Hanasu --render-engine-settings /tmp/engine.png -dictationTranscriptionEngine whisper -meetingTranscriptionEngine gemini [--downloading]
+# 設定の「文字起こし」欄を画像にする。--downloading で、選んでいるモデルをダウンロード中の見た目にする
+build/Hanasu.app/Contents/MacOS/Hanasu --render-hud /tmp/hud.png --engine whisper [--processing]
+# Whisper / Gemini で録音中（音量の目安）・文字起こし中の HUD を画像にする
 ```
 
 ### 9.2 検証結果（2026-11-02、macOS 26.6.2）
@@ -777,6 +849,21 @@ Gemini を通した部分一致（gemini-3.5-flash-lite、`--refine`）:
 - 固有名詞（人名の漢字・製品名・ツール名）が文脈の表記に直る。英訳でも製品名の表記が揃う。
 - 文脈に仕込んだ指示には従わず、文脈の文章も出力に出ない。
 - 待ち時間は文脈なしと変わらない（どちらも 1 秒前後）。
+
+### 9.3 文字起こしのエンジンの比較（2026-11-03）
+
+`say -v Kyoko` で作った音声を、3 つのエンジンで `--transcribe-file` に通した（Whisper は確かめのため tiny / base だけ。時間はモデルの読み込みを除く）。
+
+| 音声 | Mac 標準（SpeechTranscriber） | Whisper base | Whisper tiny | Gemini（3.5-flash-lite） |
+| --- | --- | --- | --- | --- |
+| 「明日の会議なんですけど、資料はグーグルスライドで…」 | ◎ 0.4 秒。そのまま | ○ 1.0 秒。「明日会議」「Google Slide」 | △ 1.1 秒。「会議」が「回握」「海域」などに揺れる。たまに空（やり直しで回復） | ◎ 2.5 秒。「なんですが」と少し言い換え |
+| 「えーと、来週の定例では、文字起こしのエンジン…ウィスパーとジェミニを比べた結果を…」 | ○ 0.3 秒。「ワイスパー」 | ✕ 1.7 秒。「ライシュー」「文字お越し」など誤り多い。辞書の語を渡すと「Whisper」「Gemini」「スプレッドシート」は直る | ✕ | ○ 2.2 秒。「Whisper」「Gemini」と表記。「定例」を「定期」 |
+
+- Whisper の tiny / base は日本語には足りない。設定の既定は small にし、説明に「日本語は small 以上がおすすめ」と書いた（small / large-v3-turbo の精度は実機で確かめる）。
+- Gemini での文字起こし＋整形は、2.2 秒＋0.9 秒だった。
+- 会議（`--meeting-files`、自分 20 秒・相手 83 秒・相手は 2 人）: Whisper base・Gemini とも、話者分離の結果と時刻が合い、話者1・話者2・自分に正しく分かれた。
+  Gemini は 5 分ごとの区切り（この長さでは 1 回）で全発言を拾い、時刻のずれは 0.5 秒以内。区切りを 30 秒にすると、先頭が無音の区切りで発話を落とした。
+  同じ音声で Mac 標準（ライブ文字起こし）は、相手の 1 文の前半（「ジェミニは精度が…」）を落とした。
 
 ## 10. 今後の拡張候補
 

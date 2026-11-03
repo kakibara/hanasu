@@ -7,8 +7,16 @@ Hanasu は GNU Affero General Public License v3.0（[LICENSE](LICENSE)）で配�
   - 同梱されている第三者のコード（fastcluster、VBx、音声合成のテキスト処理など）のライセンスも以下に含めます。
   - ビルド済みバイナリ NemoTextProcessing は組み込んでいません（`traits: []` で除外）。
 
+- **WhisperKit**（Argmax OSS）v1.1.1（https://github.com/argmaxinc/WhisperKit）— MIT License
+  - 組み込むのは WhisperKit と ArgmaxCore だけです（TTSKit・SpeakerKit・CLI は組み込んでいません）。
+  - ArgmaxCore の一部（Sources/ArgmaxCore/External の Hub・Tokenizers）は swift-transformers
+    （https://github.com/huggingface/swift-transformers、Copyright 2022 Hugging Face SAS）を元にしたもので、
+    Apache License 2.0 です（全文は下の FluidAudio の節と同じ）。
+
 話者分離のモデル（pyannote speaker-diarization-community-1 の CoreML 版、FluidInference 配布）はアプリに同梱せず、
 初回の話者分離のときに Hugging Face からダウンロードされます。モデルのライセンスはダウンロード元の表示に従います。
+Whisper のモデル（argmaxinc/whisperkit-coreml。OpenAI Whisper を CoreML にしたもの、MIT）も同梱せず、
+設定で Whisper を選んだときに Hugging Face からダウンロードされます。
 
 
 ---
@@ -1276,4 +1284,32 @@ Apache License
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+````
+
+---
+
+## WhisperKit（Argmax OSS）— MIT License
+
+````text
+MIT License
+
+Copyright (c) 2024 argmax, inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ````

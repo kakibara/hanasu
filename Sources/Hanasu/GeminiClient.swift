@@ -157,16 +157,25 @@ struct GeminiClient {
 
     /// テキストを 1 回送り、応答の本文を返す。thinkingLevel を省くとモデル名から決める。
     func generate(systemInstruction: String, userText: String, model rawModel: String, thinkingLevel: String? = nil) async throws -> String {
+        try await generate(systemInstruction: systemInstruction, parts: [["text": userText]], model: rawModel, thinkingLevel: thinkingLevel)
+    }
+
+    /// user content のパート（テキストのほか、inline data の音声など）を送る。
+    /// responseSchema を渡すと JSON で返させる（GeminiTranscriber.swift の会議の文字起こし）
+    func generate(systemInstruction: String, parts: [[String: Any]], model rawModel: String, thinkingLevel: String? = nil,
+                  responseSchema: [String: Any]? = nil) async throws -> String {
         let model = rawModel.trimmingCharacters(in: .whitespacesAndNewlines)
         let escapedModel = model.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? model
 
+        var generationConfig: [String: Any] = [
+            "responseMimeType": responseSchema == nil ? "text/plain" : "application/json",
+            "thinkingConfig": ["thinkingLevel": thinkingLevel ?? Self.thinkingLevel(for: model)],
+        ]
+        if let responseSchema { generationConfig["responseSchema"] = responseSchema }
         let body: [String: Any] = [
             "systemInstruction": ["parts": [["text": systemInstruction]]],
-            "contents": [["role": "user", "parts": [["text": userText]]]],
-            "generationConfig": [
-                "responseMimeType": "text/plain",
-                "thinkingConfig": ["thinkingLevel": thinkingLevel ?? Self.thinkingLevel(for: model)],
-            ],
+            "contents": [["role": "user", "parts": parts]],
+            "generationConfig": generationConfig,
         ]
 
         var urlRequest: URLRequest

@@ -70,14 +70,8 @@ private struct GeneralTab: View {
                 Text("日本語で話すと、「英訳して入力」では Gemini が自然な英語に翻訳して入力します（Gemini の認証情報が必要です）。録音中は Esc で取り消せます。")
                     .font(.caption).foregroundStyle(.secondary)
             }
-            Section("音声認識") {
-                Picker("認識エンジン", selection: $settings.engine) {
-                    ForEach(RecognizerEngine.allCases) { Text($0.label).tag($0) }
-                }
-                TextField("言語", text: $settings.localeIdentifier, prompt: Text("ja-JP"))
-                Text("どちらも macOS 内蔵のオンデバイスモデルです。音声は Mac の外に送られません。")
-                    .font(.caption).foregroundStyle(.secondary)
-            }
+            // 音声入力と会議の記録の文字起こしのエンジン（TranscriptionEngineSettingsView.swift）
+            TranscriptionEngineSettingsSection(settings: settings)
             Section("その他") {
                 Toggle("開始・終了の効果音を鳴らす", isOn: $settings.playSounds)
             }
