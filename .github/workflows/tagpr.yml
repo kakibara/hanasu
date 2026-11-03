@@ -108,7 +108,7 @@ jobs:
           $has = Test-Path windows/Hanasu.Windows/Hanasu.Windows.csproj
           "exists=$($has.ToString().ToLower())" >> $env:GITHUB_OUTPUT
 
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v4
         if: steps.check.outputs.exists == 'true'
         with:
           dotnet-version: "8.0.x"
