@@ -25,7 +25,7 @@
 
 ## インストール（リリース版）
 
-1. [Releases](https://github.com/kakibara/hanasu/releases) から `Hanasu-<バージョン>.dmg` をダウンロードして開き、`Hanasu.app` を「Applications」フォルダにドラッグする。
+1. [Releases](https://github.com/kakibara/hanasu/releases) から `Hanasu-<バージョン>-macOS.zip` をダウンロードして展開し、`Hanasu.app` を「アプリケーション」フォルダに入れる。
 2. Apple の公証（notarization）を受けていない自己署名のアプリなので、そのままでは「開発元を確認できない」として開けません。次のどちらかで開いてください。
    - 一度開こうとして確認が出たら「完了」を押し、システム設定 → プライバシーとセキュリティ の下にある「このまま開く」を押す（macOS 15 以降は、右クリック →「開く」では開けません）
    - またはターミナルで `xattr -dr com.apple.quarantine /Applications/Hanasu.app` を実行してから開く
@@ -36,7 +36,6 @@
 ```bash
 ./scripts/build-app.sh
 open build/Hanasu.app
-./scripts/make-dmg.sh   # 配布用の build/Hanasu-<バージョン>.dmg を作る（任意）
 ```
 
 ## 使い方
@@ -102,7 +101,7 @@ Hanasu                              … 語だけ。音声認識と Gemini の�
 1. `main` に変更が入ると、tagpr が次のバージョンのリリース PR（`VERSION` と `CHANGELOG.md` の更新）を作り・更新します。
    - 既定はパッチ（0.1.0 → 0.1.1）。リリース PR に `tagpr:minor` / `tagpr:major` ラベルを付けるか、`VERSION` を直接書き換えると上げ幅を変えられます。
 2. リリース PR をマージすると、tagpr がタグと下書きのリリースを作ります。
-3. 続けて macOS 26 のランナーがアプリをビルドし、`Hanasu-<バージョン>.dmg` を添付してリリースを公開します。既存のタグの dmg を作り直すときは、Actions の「tagpr」を tag を指定して手動で実行します。
+3. 続けて macOS 26 のランナーが Mac 版を、Windows のランナーが Windows 版をビルドし、`Hanasu-<バージョン>-macOS.zip` と `Hanasu-<バージョン>-Windows-x64.zip` を添付してリリースを公開します。既存のタグの添付ファイルを作り直すときは、Actions の「tagpr」を tag を指定して手動で実行します。
 
 初回だけ必要な準備:
 

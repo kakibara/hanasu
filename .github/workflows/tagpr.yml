@@ -1,7 +1,9 @@
 # main への push ごとに tagpr がリリース PR を作り・更新する。
-# リリース PR をマージすると tagpr がタグと下書きのリリースを作り、続く release ジョブが
-# macOS でアプリをビルドして dmg を添付し、リリースを公開する。
-# 既存のタグの dmg を作り直したいときは、Actions から tag を指定して手動で実行する。
+# リリース PR をマージすると tagpr がタグと下書きのリリースを作る。続けて
+#   - mac ジョブ: macOS でアプリをビルドして zip を添付する
+#   - windows ジョブ: Windows 版をビルドして zip を添付する（windows/ がないタグでは何もしない）
+#   - publish ジョブ: インストール手順と SHA-256 をリリースノートに足して公開する
+# 既存のタグの添付ファイルを作り直したいときは、Actions から tag を指定して手動で実行する。
 name: tagpr
 on:
   push:
@@ -9,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "dmg を作り直すタグ（例: v1.1.0）"
+        description: "添付ファイルを作り直すタグ（例: v1.3.0）"
         required: true
 
 permissions:
@@ -32,13 +34,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  release:
+  mac:
     needs: tagpr
     # 手動実行では tagpr を飛ばすので、飛ばされても動くようにする
     if: ${{ !cancelled() && !failure() && (needs.tagpr.outputs.tag != '' || inputs.tag != '') }}
     runs-on: macos-26
     permissions:
       contents: write
+    outputs:
+      asset: ${{ steps.upload.outputs.asset }}
+      sha256: ${{ steps.upload.outputs.sha256 }}
     env:
       TAG: ${{ needs.tagpr.outputs.tag || inputs.tag }}
       # scripts/setup-release-signing.sh で登録する（なければアドホック署名になる）
@@ -63,35 +68,115 @@ jobs:
           ./scripts/build-app.sh
           codesign -dvv build/Hanasu.app 2>&1 | grep -E "Identifier|Authority|Signature" || true
 
-      - name: Make dmg
-        run: |
-          # dmg 化より前のタグを作り直すときは、ワークフローと同じコミットのスクリプトを使う
-          if [[ ! -f scripts/make-dmg.sh ]]; then
-            git show "$GITHUB_SHA:scripts/make-dmg.sh" > scripts/make-dmg.sh
-            chmod +x scripts/make-dmg.sh
-          fi
-          ./scripts/make-dmg.sh
-
-      - name: Upload and publish
+      - name: Upload zip
+        id: upload
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION="${TAG#v}"
-          DMG="build/Hanasu-${VERSION}.dmg"
-          SHA256="$(shasum -a 256 "$DMG" | awk '{print $1}')"
-          gh release upload "$TAG" "$DMG" --clobber
-          # 以前の版は zip で配っていたので、作り直したときは消す
-          gh release delete-asset "$TAG" "Hanasu-${VERSION}.zip" --yes 2>/dev/null || true
+          ASSET="Hanasu-${VERSION}-macOS.zip"
+          # ditto で固めると、署名と拡張属性を保ったまま Finder で展開できる
+          ditto -c -k --keepParent build/Hanasu.app "build/${ASSET}"
+          gh release upload "$TAG" "build/${ASSET}" --clobber
+          echo "asset=${ASSET}" >> "$GITHUB_OUTPUT"
+          echo "sha256=$(shasum -a 256 "build/${ASSET}" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+  windows:
+    needs: tagpr
+    if: ${{ !cancelled() && !failure() && (needs.tagpr.outputs.tag != '' || inputs.tag != '') }}
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    outputs:
+      asset: ${{ steps.upload.outputs.asset }}
+      sha256: ${{ steps.upload.outputs.sha256 }}
+    env:
+      TAG: ${{ needs.tagpr.outputs.tag || inputs.tag }}
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.tagpr.outputs.tag || inputs.tag }}
+          persist-credentials: false
+
+      - name: Check Windows project
+        id: check
+        run: |
+          # Windows 版より前のタグでは何もしない
+          $has = Test-Path windows/Hanasu.Windows/Hanasu.Windows.csproj
+          "exists=$($has.ToString().ToLower())" >> $env:GITHUB_OUTPUT
+
+      - uses: actions/setup-dotnet@v4
+        if: steps.check.outputs.exists == 'true'
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Publish
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          $version = $env:TAG.TrimStart('v')
+          dotnet publish windows/Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self-contained `
+            -p:PublishSingleFile=true -p:Version=$version -o build/windows/Hanasu
+
+      - name: Upload zip
+        id: upload
+        if: steps.check.outputs.exists == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $version = $env:TAG.TrimStart('v')
+          $asset = "Hanasu-$version-Windows-x64.zip"
+          Compress-Archive -Path build/windows/Hanasu -DestinationPath "build/$asset" -Force
+          gh release upload $env:TAG "build/$asset" --clobber
+          $sha = (Get-FileHash -Algorithm SHA256 "build/$asset").Hash.ToLower()
+          "asset=$asset" >> $env:GITHUB_OUTPUT
+          "sha256=$sha" >> $env:GITHUB_OUTPUT
+
+  publish:
+    needs: [tagpr, mac, windows]
+    if: ${{ !cancelled() && needs.mac.result == 'success' && needs.windows.result == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ needs.tagpr.outputs.tag || inputs.tag }}
+      MAC_ASSET: ${{ needs.mac.outputs.asset }}
+      MAC_SHA256: ${{ needs.mac.outputs.sha256 }}
+      WIN_ASSET: ${{ needs.windows.outputs.asset }}
+      WIN_SHA256: ${{ needs.windows.outputs.sha256 }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Publish release
+        run: |
           # 作り直したときに二重にならないよう、前回付けたインストール手順から後ろを除いてから付け直す
-          gh release view "$TAG" --json body --jq .body | awk '/^## インストール$/ {exit} {print}' > build/notes.md
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json body --jq .body | awk '/^## インストール$/ {exit} {print}' > notes.md
           {
             echo
             echo "## インストール"
             echo
-            echo "1. \`Hanasu-${VERSION}.dmg\` を開き、\`Hanasu.app\` を「Applications」フォルダにドラッグします。"
-            echo "2. Apple の公証を受けていない自己署名のアプリなので、初回は開けない旨の確認が出ます。「完了」を押してから、システム設定 → プライバシーとセキュリティ の下にある「このまま開く」を押してください（またはターミナルで \`xattr -dr com.apple.quarantine /Applications/Hanasu.app\` を実行してから開きます）。"
-            echo "3. macOS 26 (Tahoe) 以降、Apple Silicon が必要です。詳しくは [README](https://github.com/${GITHUB_REPOSITORY}#readme) を見てください。"
+            echo "### macOS"
             echo
-            echo "SHA-256 (Hanasu-${VERSION}.dmg): \`${SHA256}\`"
-          } >> build/notes.md
-          gh release edit "$TAG" --notes-file build/notes.md --draft=false
+            echo "1. \`${MAC_ASSET}\` を展開し、\`Hanasu.app\` を「アプリケーション」フォルダに入れます。"
+            echo "2. Apple の公証を受けていない自己署名のアプリなので、初回は開けない旨の確認が出ます。「完了」を押してから、システム設定 → プライバシーとセキュリティ の下にある「このまま開く」を押してください（またはターミナルで \`xattr -dr com.apple.quarantine /Applications/Hanasu.app\` を実行してから開きます）。"
+            echo "3. macOS 26 (Tahoe) 以降、Apple Silicon が必要です。"
+            if [[ -n "$WIN_ASSET" ]]; then
+              echo
+              echo "### Windows"
+              echo
+              echo "1. \`${WIN_ASSET}\` を展開し、\`Hanasu\` フォルダを好きな場所（例: \`%LOCALAPPDATA%\\Programs\`）に置いて \`Hanasu.exe\` を開きます。"
+              echo "2. コード署名をしていないので、初回は SmartScreen の確認が出ます。「詳細情報」→「実行」を押してください。"
+              echo "3. Windows 10（2004 以降）/ 11、x64 が必要です。"
+            fi
+            echo
+            echo "詳しくは [README](https://github.com/${GITHUB_REPOSITORY}#readme) を見てください。"
+            echo
+            echo "SHA-256:"
+            echo
+            echo "- \`${MAC_ASSET}\`: \`${MAC_SHA256}\`"
+            if [[ -n "$WIN_ASSET" ]]; then
+              echo "- \`${WIN_ASSET}\`: \`${WIN_SHA256}\`"
+            fi
+          } >> notes.md
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --notes-file notes.md --draft=false
