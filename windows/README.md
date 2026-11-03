@@ -57,6 +57,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 - 会議の記録: 文字起こしは Whisper（既定。モデルは「一般」タブで選んだもの）か Gemini。話者分離のモデル（約 34 MB）は初めて使うときにダウンロードする。議事録には、会議の AI（Gemini か Claude）の認証情報が要る
 - Gemini の認証情報: API キー（[Google AI Studio](https://aistudio.google.com/apikey)）か、Vertex AI ユーザー（`roles/aiplatform.user`）のあるサービスアカウントの JSON 鍵
 - Claude を使うとき: Claude API の API キー。Claude は文章の処理（整形・英訳・議事録）だけに使い、音声は送らない（文字起こしは Windows 標準・Whisper・Gemini）
+- ローカルの LLM を使うとき（REQ-COM-030）: 設定 → AI で「ローカル」にし、モデル（Gemma 4 E4B 4.59 GB・LFM2.5-1.2B-JP 1.25 GB・Sarashina2.2 2.07 GB）をダウンロードする。CPU で動かすので、Gemma 4 E4B はメモリ 16 GB 以上が目安。文章は PC の外に送らない
 - Windows Hello で API キーを守るとき: Windows Hello（PIN・顔・指紋）が設定されていること
 
 ## 構成
@@ -190,10 +191,13 @@ runtimes/win-x64/whisper.dll        Whisper のネイティブライブラリ（
 runtimes/win-x64/ggml-whisper.dll
 runtimes/win-x64/ggml-base-whisper.dll
 runtimes/win-x64/ggml-cpu-whisper.dll
+llama/llama-server.exe              ローカルの LLM を動かす llama.cpp（b11770）と、それが読む DLL（llama*.dll・ggml*.dll・libomp.dll など）。
+llama/*.dll                         publish のあとに pwsh ../scripts/fetch-llama-cpp.ps1 -Destination publish/win-x64 で入れる（SHA-256 を確かめる）
 ```
 
-**フォルダごと（`Hanasu.exe`・2 つの DLL・`runtimes/`）を zip にして配る。** `Hanasu.exe` だけを配ると、Whisper のエンジンと話者分離が使えない（Windows 標準と Gemini は動く。話者分離に失敗したときは相手側を「相手」1 人にまとめる）。
-CI（`.github/workflows/windows.yml`）は同じコマンドで作り、`Hanasu-windows-x64.zip`（中身は上のフォルダ）とその SHA-256（`Hanasu-windows-x64.zip.sha256`）を artifact に残す。
+**フォルダごと（`Hanasu.exe`・2 つの DLL・`runtimes/`・`llama/`）を zip にして配る。** `Hanasu.exe` だけを配ると、Whisper のエンジンと話者分離とローカルの LLM が使えない（Windows 標準と Gemini は動く。話者分離に失敗したときは相手側を「相手」1 人にまとめる）。
+CI（`.github/workflows/windows.yml`）は同じコマンドで作り、`llama/` を足して、`Hanasu-windows-x64.zip`（中身は上のフォルダ）とその SHA-256（`Hanasu-windows-x64.zip.sha256`）を artifact に残す。
+- ローカルの LLM（`LocalLlmServer`）は、使うときに `llama\llama-server.exe` を 127.0.0.1 の空いたポートで起動し、5 分使わなければ止める。Hanasu と一緒に終わるよう、ジョブオブジェクトに入れる（`ChildProcessJob`。DEC-COM-063）。Windows 版の配布物は CPU 版の llama.cpp なので、GPU は使わない。
 
 ARM64 版は `-r win-arm64 -o publish/win-arm64` で同じ形のものができる（runtimes/win-arm64/ が付く。実機では確かめていない）。
 
@@ -214,6 +218,7 @@ dotnet run --project Hanasu.Cli -- models
 dotnet run --project Hanasu.Cli -- claude-request "<文章>" [--translate | --minutes] [--model <id>]   # 送らずに、送る HTTP リクエストを出す（キーは伏せる。キーがなくても動く）
 dotnet run --project Hanasu.Cli -- claude-refine "<文章>" [--translate] [--model <id>] [--app Slack]  # Claude で整形・英訳する（使ったトークンとキャッシュも出す）
 dotnet run --project Hanasu.Cli -- claude-check [--model <id>] [--fake-key]                          # 「接続を試す」と同じ確かめ。--fake-key は偽のキーで 401 の文言を見る
+dotnet run --project Hanasu.Cli -- local-list | local-download <id> | local-refine "<文章>" [--model <id>] [--server <llama-server>] [--models-dir <dir>]  # ローカルの LLM（Mac の llama-server でも動く）
 
 # 会議の後処理（2 つの音声を「自分」「相手」として文字起こし → 話者分離 → 話者の割り当て → 議事録）。会議は --meetings-dir の下に作る
 dotnet run --project Hanasu.Cli -- meeting-files me.wav others.wav --meetings-dir <保存先> [--engine whisper|gemini] [--whisper-model base] [--models-dir <dir>] [--download] \
@@ -236,6 +241,7 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | 最近の結果 | メモリ上だけ（10 件） |
 | 会議の記録 | `ドキュメント\Hanasu\Meetings\<yyyy-MM-dd HHmm>\`（設定 → 会議 で変えられる）。`meeting.json`・`transcript.md`・`minutes.md`・`notes.md`・`me.wav`・`others.wav` |
 | 話者分離のモデル | `%LOCALAPPDATA%\Hanasu\Models\diarization\*.onnx` |
+| ローカルの LLM のモデル | `%LOCALAPPDATA%\Hanasu\Models\llm\*.gguf`（ダウンロード中は `.download`） |
 
 ## Mac 版との差
 

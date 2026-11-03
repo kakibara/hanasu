@@ -20,7 +20,7 @@ struct AISettingsTab: View {
             } header: {
                 Text("使う AI とモデル")
             } footer: {
-                Text("文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、Claude には音声を送りません。辞書の候補探しは「会議」の AI を使います。")
+                Text("文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、Claude には音声を送りません。辞書の候補探しは「会議」の AI を使います。「ローカル」は、この Mac の中で小型の LLM を動かします（文章をネットに送りません）。")
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {
@@ -73,7 +73,7 @@ struct AISettingsTab: View {
     }
 }
 
-// 要件: REQ-COM-024
+// 要件: REQ-COM-024, REQ-COM-030
 /// 1 つの用途（音声入力 / 会議）の、AI とモデルの選択
 private struct AIChoiceRow: View {
     @ObservedObject var settings: AppSettings
@@ -87,6 +87,9 @@ private struct AIChoiceRow: View {
     }
     private var claudeModel: Binding<String> {
         purpose == .dictation ? $settings.claudeModel : $settings.claudeMinutesModel
+    }
+    private var localModel: Binding<LocalLLMModel> {
+        purpose == .dictation ? $settings.localDictationModel : $settings.localMeetingModel
     }
 
     var body: some View {
@@ -132,6 +135,8 @@ private struct AIChoiceRow: View {
                      ? "考える量（effort）は low。待ち時間を短くするため"
                      : "考える量（effort）は medium。長い会議の記録をまとめるため")
                     .font(.caption).foregroundStyle(.secondary)
+            case .local:
+                LocalModelChoice(model: localModel)
             }
         }
         .padding(.vertical, 2)

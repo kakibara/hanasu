@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- 同梱の llama-server を自己署名で署名するときだけ使う（設計判断: DEC-COM-061）。
+     自己署名の証明書には Team ID がなく、Hardened Runtime のライブラリの検証で、同じ証明書で署名した dylib も読めないため。
+     Apple の証明書（Team ID あり）で署名するときは使わない -->
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.cs.disable-library-validation</key>
+	<true/>
+</dict>
+</plist>

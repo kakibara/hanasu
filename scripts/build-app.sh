@@ -21,6 +21,12 @@ cp Resources/Info.plist "$APP/Contents/Info.plist"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 # 要件: REQ-REL-005
 cp LICENSE NOTICE THIRD_PARTY_NOTICES.md "$APP/Contents/Resources/"
+# 要件: REQ-COM-030
+# 設計判断: DEC-COM-061
+# ローカルの LLM を動かす llama-server（llama.cpp）。SHA-256 を確かめてから入れる（ライセンスは llama/LICENSE）
+./scripts/fetch-llama-cpp.sh
+mkdir -p "$APP/Contents/Resources/llama"
+cp -P build/llama-cpp/macos-arm64/* "$APP/Contents/Resources/llama/"
 
 VERSION="$(tr -d '[:space:]' < VERSION)"
 BUILD_NUMBER="$(git rev-list --count HEAD 2>/dev/null || echo 1)"
@@ -35,6 +41,25 @@ fi
 if [[ -z "$IDENTITY" ]] && security find-identity -p codesigning 2>/dev/null | grep -q '"Hanasu Local Signing"'; then
   # scripts/create-signing-cert.sh で作った自己署名証明書。署名が毎回同じになり、権限が保たれる
   IDENTITY="Hanasu Local Signing"
+fi
+# 設計判断: DEC-COM-061
+# 同梱した llama-server と dylib を、本体と同じ証明書で署名し直す（ライブラリから順に。シンボリックリンクは飛ばす）
+sign_llama() {
+  local llama="$APP/Contents/Resources/llama"
+  for file in "$llama"/*.dylib "$llama/llama-server"; do
+    [[ -L "$file" ]] && continue
+    codesign --force "$@" "$file"
+  done
+}
+if [[ "$IDENTITY" == *"Apple Development"* || "$IDENTITY" == *"Developer ID"* ]]; then
+  sign_llama --options runtime --sign "$IDENTITY"
+elif [[ -n "$IDENTITY" ]]; then
+  # 自己署名には Team ID がないので、Hardened Runtime のライブラリの検証で同梱の dylib を読めない。llama-server だけ検証を外す
+  sign_llama --options runtime --sign "$IDENTITY"
+  codesign --force --options runtime --entitlements Resources/llama-server.entitlements --sign "$IDENTITY" \
+    "$APP/Contents/Resources/llama/llama-server"
+else
+  sign_llama --sign -
 fi
 if [[ "$IDENTITY" == *"Apple Development"* || "$IDENTITY" == *"Developer ID"* ]]; then
   # Apple の証明書なら Hardened Runtime を付ける（公証に必要）

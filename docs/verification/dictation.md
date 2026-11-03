@@ -201,3 +201,34 @@ Windows の実機がないので、画面とフォーカスの動きはまだ確
 
 - `dotnet test Hanasu.Core.Tests`: 200 件すべて通った（レビューで UI Automation を問い合わせる場面の絞り込みと Win32 の読み取り専用の Edit を足し、217 件）。貼り付け先の判定（`PasteTargetTests`。デスクトップ・タスクバー・フォーカスなし・読み取り専用・エクスプローラーの一覧は貼らない。デスクトップの名前の変更・キャレットあり・ストアアプリ・ブラウザ・Excel のセル・何も分からないときは貼る）、貼らなかったときの流れ（全文を `HudPhase.Unpasted` で残す・自動では閉じない・設定が入力に渡る・権限の高いウインドウと例外も同じ表示・次の音声入力で置き換わる・「最近の結果」に残る）、設定の保存（`pasteFallbackClipboard`、項目のない前の版の settings.json は既定値）。
 - `dotnet build Hanasu.Windows.sln -c Release`（警告 0）と `dotnet publish … -r win-x64 --self-contained -p:PublishSingleFile=true`（`Hanasu.exe` 約 82 MB と、今までと同じ DLL・ライセンスの表示）が通った。UI Automation（`UIAutomationClient`）は .NET の Windows デスクトップのランタイムに入っているので、依存パッケージは増えていない。
+
+## 13. ローカルの LLM（2026-11-04、macOS 26.6.2、Apple M3・メモリ 24 GB）
+
+関係: REQ-COM-030、DEC-COM-060〜067、DEC-MTG-062
+
+アプリの画面は起動せず、CLI と画像で確かめた。llama.cpp は b11770（`scripts/fetch-llama-cpp.sh` で SHA-256 を確かめて取ったもの）。
+
+- 取得: `--local-llm-download` で 3 つのモデルを Hugging Face から取り、大きさと SHA-256 が決めた値と合った（LFM2.5 1.25 GB は 42 秒、Sarashina2.2 2.07 GB は 68 秒、Gemma 4 E4B 4.59 GB は 148 秒）。
+- 同梱: `scripts/build-app.sh` で `Hanasu.app/Contents/Resources/llama/` に入れ、自己署名（Hanasu Local Signing）と Hardened Runtime で署名した。自己署名には Team ID がないので、ライブラリの検証で同梱の dylib を読めなかった（`different Team IDs`）。llama-server だけ `com.apple.security.cs.disable-library-validation` を付けて署名し直すと動き、`codesign --verify --deep --strict` も通った。
+- 整形（`--refine-text … --ai local`。初回はモデルの読み込みを含む）:
+
+  | モデル | 初回 | 2 回目以降 | 結果 |
+  | --- | --- | --- | --- |
+  | LFM2.5-1.2B-JP | 9.7 秒 | 1.5〜3.3 秒 | 速い。言い直し（「ジェミニで…あ違うグーグルスライド」）を読み違え、言っていない一文を足すことがあった |
+  | Sarashina2.2 3B | 3.5 秒 | 3.2 秒 | 文は自然。結果の全体を「」で囲み、終わりの印 `</s>` を文字で出したので、`stop` と後始末（`cleanUpRewrite`）を足した |
+  | Gemma 4 E4B | 6.2 秒 | 3.8 秒 | 言い直しを正しく扱えた。3 つでいちばん自然 |
+
+- 議事録（`--minutes-from-transcript`、作った 2 時間 40 分・335 行・2.2 万字の文字起こし）:
+
+  | モデル | 時間 | 結果 |
+  | --- | --- | --- |
+  | Sarashina2.2（文脈 8K） | 188 秒 | 文脈に入らないので、部分ごとの要点にまとめてから作った（DEC-COM-065）。議題・決定事項は拾えたが、担当者の取り違えや、型の見本（`[owner]`）の写し、作った期限があった |
+  | LFM2.5（文脈 32K） | 52 秒 | 同じ議題の繰り返しになり、アクションアイテムが出なかった。議事録には向かない |
+  | Gemma 4 E4B（文脈 32K） | 110 秒 | 議題・決定事項・アクションアイテムをよくまとめた。ただしアクションアイテムを `<action_items>` ではなく本文に JSON で書いたので、本文の中の JSON も読むようにした（`MinutesPrompt.inlineItems`。`--export-minutes` で 4 件読めた） |
+
+- 長い入力の縮め方: `--local-llm-test-fit` が 8 件すべて合格（入る入力はそのまま・議事録は要点に置き換え・メモと見出しは残す・ほかは後ろを省く・`<transcript>` が 2 つなら分けない・1 行が長くても分ける）。
+- サーバーの後片付け: CLI を終えると、`atexit` で llama-server が止まる（数秒のうちに `pgrep` から消えた）。
+- 設定の画面（`--render-ai-settings <png> --local`）: 音声入力・会議とも「ローカル」で、モデルの選択、ダウンロード済み／ダウンロードのボタン、LFM2.5 のライセンスの注意（オレンジ）、Gemma のライセンスが出た。
+- Windows 版の Core（`LocalLlmClient`・`LocalLlmServer`）: `dotnet run --project Hanasu.Cli -- local-refine … --model sarashina2.2-3b --server build/llama-cpp/macos-arm64/llama-server` で、Mac の llama-server に対して整形できた（4.4 秒）。`dotnet test Hanasu.Core.Tests` は 230 件すべて合格。
+- 確かめていないこと: Windows の実機（CPU の速さ、ジョブオブジェクト、設定画面の操作、`fetch-llama-cpp.ps1` の展開）。アプリの画面からの操作（設定でのダウンロード・削除、音声入力・会議ノートからの呼び出し、5 分たって止まること）。Developer ID での署名（FUT-010）のときは、ライブラリの検証を外さずに動くはず（Team ID がそろうため）。
+- 確認のあと、Gemma 4 E4B のモデルは消した（ディスクの空きを戻すため）。

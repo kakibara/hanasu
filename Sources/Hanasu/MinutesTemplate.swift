@@ -423,6 +423,13 @@ enum MinutesPrompt {
             }
         }
         body = body.trimmingCharacters(in: .whitespacesAndNewlines)
+        // 小さいモデル（ローカル）は <action_items> を使わず、本文の中に JSON の配列をそのまま書くことがある。
+        // 読めれば、その場所を一覧に置き換える
+        if items == nil, let inline = inlineItems(in: body) {
+            items = inline.items
+            let list = inline.items.isEmpty ? "なし" : inline.items.map(\.markdownLine).joined(separator: "\n")
+            body.replaceSubrange(inline.range, with: list)
+        }
 
         let resolved = items ?? ActionItem.parse(fromMarkdown: body)
         if body.contains(placeholder) {
@@ -439,6 +446,16 @@ enum MinutesPrompt {
         var task: String?
         var due: String?
         var due_note: String?
+    }
+
+    // 設計判断: DEC-MTG-062
+    /// 本文の中の、アクションアイテムの JSON の配列（`[{` から `}]` まで）。読めなければ nil
+    static func inlineItems(in body: String) -> (range: Range<String.Index>, items: [ActionItem])? {
+        guard let start = body.range(of: "[{"), let end = body.range(of: "}]", options: .backwards),
+              start.lowerBound < end.upperBound else { return nil }
+        let range = start.lowerBound..<end.upperBound
+        guard let items = decodeItems(String(body[range])) else { return nil }
+        return (range, items)
     }
 
     // 設計判断: DEC-MTG-062

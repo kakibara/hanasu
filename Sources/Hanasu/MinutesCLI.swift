@@ -247,8 +247,8 @@ enum MinutesCLI {
         }
         var meeting = Meeting(id: "cli", title: url.deletingPathExtension().lastPathComponent, startedAt: Date())
         let text = try String(contentsOf: url, encoding: .utf8)
-        if text.contains("<action_items>") || text.contains(MinutesPrompt.placeholder) {
-            // Gemini の応答そのもの（応答の読み取りの確認用）
+        if text.contains("<action_items>") || text.contains(MinutesPrompt.placeholder) || MinutesPrompt.inlineItems(in: text) != nil {
+            // AI の応答そのもの（応答の読み取りの確認用。本文の中に JSON を書いた小さいモデルの応答も）
             let result = MinutesPrompt.parse(text, title: meeting.title)
             meeting.minutes = result.markdown
             meeting.actionItems = result.actionItems

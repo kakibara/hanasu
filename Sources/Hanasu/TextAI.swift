@@ -1,23 +1,27 @@
 import Foundation
 
-// 要件: REQ-COM-020
+// 要件: REQ-COM-020, REQ-COM-030
 // 設計判断: DEC-COM-040
 /// 整形などの文章の処理に使う AI。文字起こしのエンジン（OS 標準 / Whisper / Gemini）とは別に選ぶ
 enum TextAIProvider: String, CaseIterable, Identifiable {
     case gemini
     case claude
+    /// 端末の中で動く小型の LLM（llama.cpp）
+    case local
 
     var id: String { rawValue }
     var label: String {
         switch self {
         case .gemini: "Gemini（Google）"
         case .claude: "Claude（Anthropic）"
+        case .local: "ローカル（この Mac の中）"
         }
     }
     var name: String {
         switch self {
         case .gemini: "Gemini"
         case .claude: "Claude"
+        case .local: "ローカル"
         }
     }
 }
@@ -47,6 +51,7 @@ enum TextAIError: LocalizedError {
         switch self {
         case .missingCredentials(.gemini): "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません（設定 →「AI」）"
         case .missingCredentials(.claude): "Claude の API キーが設定されていません（設定 →「AI」）"
+        case .missingCredentials(.local): "ローカルの LLM のモデルがまだダウンロードされていません（設定 →「AI」でダウンロードしてください）"
         }
     }
 }
@@ -59,6 +64,7 @@ struct TextAIClient {
     enum Backend {
         case gemini(GeminiClient)
         case claude(ClaudeClient)
+        case local(LocalLLMClient)
     }
 
     var backend: Backend
@@ -67,6 +73,7 @@ struct TextAIClient {
         switch backend {
         case .gemini: .gemini
         case .claude: .claude
+        case .local: .local
         }
     }
 
@@ -76,12 +83,14 @@ struct TextAIClient {
             switch backend {
             case .gemini(let client): client.timeout
             case .claude(let client): client.timeout
+            case .local(let client): client.timeout
             }
         }
         set {
             switch backend {
             case .gemini(var client): client.timeout = newValue; backend = .gemini(client)
             case .claude(var client): client.timeout = newValue; backend = .claude(client)
+            case .local(var client): client.timeout = max(newValue, client.timeout); backend = .local(client)
             }
         }
     }
@@ -95,6 +104,12 @@ struct TextAIClient {
             return try GeminiClient.authFromSettings(settings).map { TextAIClient(.gemini(GeminiClient(auth: $0, timeout: timeout))) }
         case .claude:
             return ClaudeClient.fromKeychain(timeout: timeout).map { TextAIClient(.claude($0)) }
+        case .local:
+            // 要件: REQ-COM-030
+            let model = settings.localModel(for: purpose)
+            guard LocalLLMStore.isDownloaded(model) else { return nil }
+            return TextAIClient(.local(LocalLLMClient(
+                model: model, timeout: max(timeout, LocalLLMClient.minimumTimeout(for: purpose)))))
         }
     }
 
@@ -116,6 +131,10 @@ struct TextAIClient {
         case .claude(let client):
             let prompt = GeminiClient.refinePrompt(request)
             return try await client.generate(system: prompt.system, userText: prompt.user, model: request.model, effort: .low)
+        case .local(let client):
+            let prompt = GeminiClient.refinePrompt(request)
+            let output = try await client.generate(system: prompt.system, userText: prompt.user, purpose: .short)
+            return LocalLLMClient.cleanUpRewrite(output, input: request.transcript)
         }
     }
 
@@ -127,6 +146,10 @@ struct TextAIClient {
         case .claude(let client):
             let prompt = GeminiClient.translationPrompt(request)
             return try await client.generate(system: prompt.system, userText: prompt.user, model: request.model, effort: .low)
+        case .local(let client):
+            let prompt = GeminiClient.translationPrompt(request)
+            let output = try await client.generate(system: prompt.system, userText: prompt.user, purpose: .short)
+            return LocalLLMClient.cleanUpRewrite(output, input: request.transcript)
         }
     }
 
@@ -140,13 +163,18 @@ struct TextAIClient {
                 system: GeminiClient.editInstruction, userText: GeminiClient.editPrompt(for: request),
                 model: request.model, effort: .low)
             return GeminiClient.stripCodeFence(output, selection: request.selection)
+        case .local(let client):
+            let output = try await client.generate(
+                system: GeminiClient.editInstruction, userText: GeminiClient.editPrompt(for: request), purpose: .short)
+            return GeminiClient.stripCodeFence(output, selection: request.selection)
         }
     }
 
     // MARK: - そのほか（辞書の候補・議事録・会議への質問）
 
     // 設計判断: DEC-COM-043
-    /// テキストを 1 回送り、応答の本文を返す。effort は Claude のときだけ使う（Gemini はモデル名から thinkingLevel を決める）
+    /// テキストを 1 回送り、応答の本文を返す。effort は Claude のときだけ使う（Gemini はモデル名から thinkingLevel を決める）。
+    /// ローカルでは effort で出力の上限を決める（low は整形などの短い処理、medium は議事録・会議への質問）
     func generate(systemInstruction: String, userText: String, model: String,
                   effort: ClaudeClient.Effort = .low) async throws -> String {
         switch backend {
@@ -154,6 +182,8 @@ struct TextAIClient {
             return try await client.generate(systemInstruction: systemInstruction, userText: userText, model: model)
         case .claude(let client):
             return try await client.generate(system: systemInstruction, userText: userText, model: model, effort: effort)
+        case .local(let client):
+            return try await client.generate(system: systemInstruction, userText: userText, purpose: effort == .low ? .short : .long)
         }
     }
 }
@@ -164,6 +194,7 @@ extension TextAIClient {
     /// CLI の確認で使うクライアント。`--ai gemini|claude` で AI を選ぶ（省くと設定のまま）。
     /// - Claude: 環境変数 ANTHROPIC_API_KEY → 設定（キーチェーン）の順
     /// - Gemini: 環境変数 GEMINI_SERVICE_ACCOUNT_JSON → 設定 → 環境変数 GEMINI_API_KEY の順（これまでどおり）
+    /// - ローカル: `--model <id>`（gemma-4-e4b / lfm2.5-1.2b-jp / sarashina2.2-3b）か設定のモデル。ダウンロード済みであること
     static func cli(args: [String], settings: AppSettings, for purpose: TextAIPurpose, timeout: TimeInterval = 15) throws -> TextAIClient {
         let env = ProcessInfo.processInfo.environment
         switch cliProvider(args: args, settings: settings, for: purpose) {
@@ -180,6 +211,13 @@ extension TextAIClient {
                 auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
             }
             return TextAIClient(.gemini(GeminiClient(auth: auth, timeout: timeout)))
+        case .local:
+            let id = cliModel(args: args, settings: settings, for: purpose)
+            guard let model = LocalLLMModel(rawValue: id) else {
+                throw LocalLLMServer.Failure.unknownModel(id)
+            }
+            guard LocalLLMStore.isDownloaded(model) else { throw LocalLLMServer.Failure.modelNotDownloaded(model) }
+            return TextAIClient(.local(LocalLLMClient(model: model, timeout: max(timeout, LocalLLMClient.minimumTimeout(for: purpose)))))
         }
     }
 
@@ -198,6 +236,7 @@ extension TextAIClient {
         case (.dictation, .gemini): return settings.model
         case (.meeting, .claude): return settings.claudeMinutesModel
         case (.meeting, .gemini): return settings.meetingMinutesModel
+        case (_, .local): return settings.localModel(for: purpose).rawValue
         }
     }
 }

@@ -1,0 +1,8 @@
+# 同梱する llama.cpp の版と、配布物の SHA-256（設計判断: DEC-COM-061）。
+# scripts/fetch-llama-cpp.sh（Mac）と .github/workflows の Windows の publish が読む。版を変えるときは、
+# https://github.com/ggml-org/llama.cpp/releases/tag/<版> の配布物の digest を写し、spec の DEC-COM-061 も直す
+version=b11770
+macos_asset=llama-b11770-bin-macos-arm64.tar.gz
+macos_sha256=83790ddc9e771111077fe224f65e973bce21d80c0e0ae87b5e2e5247c04843e7
+windows_asset=llama-b11770-bin-win-cpu-x64.zip
+windows_sha256=2b7f4c3a844683780e2b3abe77b7ca014bc4185cb19f5be75db507bdcc686281

@@ -119,6 +119,9 @@ public sealed class SettingsStore
         s.ClaudeMinutesModel = Claude.ClaudeModels.Normalize(s.ClaudeMinutesModel, Claude.ClaudeModels.DefaultMinutesModel);
         if (!Enum.IsDefined(s.DictationAi)) s.DictationAi = TextAiProvider.Gemini;
         if (!Enum.IsDefined(s.MeetingAi)) s.MeetingAi = TextAiProvider.Gemini;
+        // 一覧にないローカルのモデルは既定に戻す
+        s.LocalDictationModel = LocalLlm.LocalLlmModel.Find(s.LocalDictationModel)?.Id ?? LocalLlm.LocalLlmModel.DefaultDictation.Id;
+        s.LocalMeetingModel = LocalLlm.LocalLlmModel.Find(s.LocalMeetingModel)?.Id ?? LocalLlm.LocalLlmModel.DefaultMeeting.Id;
         s.ServiceAccountPath ??= "";
         // ターミナルから起動した場合などは、環境変数のサービスアカウントを初期値にする（Mac 版と同じ）
         if (s.ServiceAccountPath.Length == 0 && Environment.GetEnvironmentVariable("GEMINI_SERVICE_ACCOUNT_JSON") is { Length: > 0 } envPath)

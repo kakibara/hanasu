@@ -4,6 +4,7 @@ using Hanasu.Core.Ai;
 using Hanasu.Core.Claude;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
+using Hanasu.Core.LocalLlm;
 using Hanasu.Core.Meetings;
 using Hanasu.Core.Settings;
 using Hanasu.Core.Transcription;
@@ -41,6 +42,9 @@ internal sealed class AppHost : IDisposable
     public SettingsService Settings { get; }
     public SecretStore Secrets { get; }
     public WhisperModelManager WhisperModels { get; } = new(HanasuPaths.ModelsDirectory);
+    // 要件: REQ-COM-030
+    /// <summary>ローカルの LLM のモデル（ダウンロード・削除）。サーバーは LocalLlmServer.Shared を使う</summary>
+    public LocalLlmModelManager LocalLlmModels { get; } = new(LocalLlmServer.Shared);
     public RecentResults Recent { get; } = new();
     public DictationController Dictation { get; }
     public MeetingController Meetings { get; }
@@ -102,6 +106,10 @@ internal sealed class AppHost : IDisposable
     public void Start()
     {
         AppLog.Write($"start {typeof(AppHost).Assembly.GetName().Version}");
+        // 設計判断: DEC-COM-063
+        // ローカルの LLM のサーバーは、Hanasu と一緒に終わるジョブオブジェクトに入れる
+        LocalLlmServer.Shared.ProcessStarted = ChildProcessJob.Assign;
+        LocalLlmServer.Shared.Log = AppLog.Write;
         // Windows Hello の鍵は、画面のロック・スリープでメモリから消す（次に使うときにまた確認する）
         Microsoft.Win32.SystemEvents.SessionSwitch += OnSessionSwitch;
         Microsoft.Win32.SystemEvents.PowerModeChanged += OnPowerModeChanged;
@@ -160,6 +168,7 @@ internal sealed class AppHost : IDisposable
     public ITextAiClient? CreateTextAi(AppSettings settings, TextAiUse use)
     {
         var provider = TextAiFactory.ProviderFor(settings, use);
+        // ローカルは、モデルの読み込みを含めてもっと長く待つ（LocalLlmClient.MinimumTimeout。DEC-COM-064）
         var timeout = use == TextAiUse.Dictation ? TimeSpan.FromSeconds(15)
             : provider == TextAiProvider.Claude ? TimeSpan.FromSeconds(300) : TimeSpan.FromSeconds(180);
         return TextAiFactory.Create(settings, Secrets, use, timeout);
@@ -344,5 +353,6 @@ internal sealed class AppHost : IDisposable
         foreground.Dispose();
         hud.Close();
         WhisperBatchTranscriber.ReleaseCachedModel();
+        LocalLlmServer.Shared.Stop();
     }
 }
