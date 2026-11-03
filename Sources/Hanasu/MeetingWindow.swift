@@ -5,19 +5,40 @@ import SwiftUI
 struct MeetingWindowView: View {
     @ObservedObject var recorder: MeetingRecorder
     @State private var selection: String?
+    @StateObject private var search = MeetingSearchModel()
+    @StateObject private var ask = MeetingAskModel()
+    /// 検索結果から開いたときの飛び先
+    @State private var jump: MeetingJump?
+    @State private var showingAsk = false
 
     var body: some View {
         NavigationSplitView {
-            List(selection: $selection) {
-                if let current = recorder.current {
-                    Section("記録中") {
-                        MeetingRow(meeting: current, live: true).tag(current.id)
+            Group {
+                if search.isActive {
+                    MeetingSearchResultsList(model: search, selectedHitID: selectedHitID) { id, hit in
+                        showingAsk = false
+                        selection = id
+                        jump = MeetingJump(meetingID: id, location: hit?.location, terms: search.terms)
+                    }
+                } else {
+                    List(selection: $selection) {
+                        if let current = recorder.current {
+                            Section("記録中") {
+                                MeetingRow(meeting: current, live: true).tag(current.id)
+                            }
+                        }
+                        Section("会議") {
+                            ForEach(recorder.meetings.filter { $0.id != recorder.current?.id }) { meeting in
+                                MeetingRow(meeting: meeting, live: false).tag(meeting.id)
+                            }
+                        }
                     }
                 }
-                Section("会議") {
-                    ForEach(recorder.meetings.filter { $0.id != recorder.current?.id }) { meeting in
-                        MeetingRow(meeting: meeting, live: false).tag(meeting.id)
-                    }
+            }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                MeetingSearchField(model: search) {
+                    showingAsk = true
+                    selection = nil
                 }
             }
             .navigationSplitViewColumnWidth(min: 220, ideal: 260)
@@ -26,16 +47,30 @@ struct MeetingWindowView: View {
                     .padding(10)
             }
         } detail: {
-            if let id = selection, id == recorder.current?.id {
+            if showingAsk {
+                MeetingAskView(model: ask, meetings: recorder.meetings, index: search.index) { id in
+                    showingAsk = false
+                    selection = id
+                    jump = nil
+                }
+            } else if let id = selection, id == recorder.current?.id {
                 LiveTranscriptView(recorder: recorder)
             } else if let id = selection, let meeting = recorder.meetings.first(where: { $0.id == id }) {
-                MeetingDetailView(meeting: meeting, recorder: recorder)
+                MeetingDetailView(meeting: meeting, recorder: recorder, jump: jump?.meetingID == id ? jump : nil)
             } else {
                 ContentUnavailableView("会議を選んでください", systemImage: "waveform",
                                        description: Text("下のボタンか ⌃⌥⌘M で記録を始められます。"))
             }
         }
         .frame(minWidth: 900, minHeight: 520)
+        .onReceive(recorder.$meetings) { search.update($0) }
+        .onChange(of: search.isActive) { _, active in
+            if !active { jump = nil }  // 検索をやめたら、検索語の色も消す
+        }
+        .onChange(of: selection) { _, newID in
+            if newID != nil { showingAsk = false }
+            if newID != jump?.meetingID { jump = nil }
+        }
         .onChange(of: recorder.current?.id) { _, newID in
             if let newID { selection = newID }
         }
@@ -43,6 +78,11 @@ struct MeetingWindowView: View {
             // 処理が終わったら、その会議を選んだままにする
             if new == .idle, case .processing = old, let first = recorder.meetings.first { selection = first.id }
         }
+    }
+
+    private var selectedHitID: String? {
+        guard let jump, let location = jump.location else { return nil }
+        return MeetingSearchHit(meetingID: jump.meetingID, location: location, snippet: "").id
     }
 }
 
@@ -193,9 +233,11 @@ private struct LevelMeter: View {
     }
 }
 
-private struct MeetingDetailView: View {
+struct MeetingDetailView: View {
     let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder
+    /// 検索結果から開いたときの飛び先（その位置までスクロールし、検索語に色を付ける）
+    var jump: MeetingJump?
     @State private var tab = 0
     @State private var title = ""
     @State private var editingSpeakers = false
@@ -243,34 +285,79 @@ private struct MeetingDetailView: View {
             if tab == 2 {
                 MeetingNotesEditor(meeting: meeting, recorder: recorder)
             } else {
-                ScrollView {
-                    Group {
-                        if tab == 0 {
-                            if let minutes = meeting.minutes {
-                                MarkdownText(markdown: minutes)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        Group {
+                            if tab == 0 {
+                                if let minutes = meeting.minutes {
+                                    MarkdownText(markdown: minutes, highlight: jump?.terms ?? [], focusedLine: focusedMinutesLine)
+                                } else {
+                                    Text(meeting.status == .processing ? "議事録を作成中です…" : "議事録はありません。")
+                                        .foregroundStyle(.secondary)
+                                }
                             } else {
-                                Text(meeting.status == .processing ? "議事録を作成中です…" : "議事録はありません。")
-                                    .foregroundStyle(.secondary)
-                            }
-                        } else {
-                            LazyVStack(alignment: .leading, spacing: 10) {
-                                ForEach(meeting.mergedBlocks()) { block in
-                                    TranscriptLine(time: block.start, speaker: meeting.displayName(for: block.speaker),
-                                                   color: Self.color(for: block.speaker, in: meeting), text: block.text)
+                                LazyVStack(alignment: .leading, spacing: 10) {
+                                    ForEach(meeting.mergedBlocks()) { block in
+                                        TranscriptLine(time: block.start, speaker: meeting.displayName(for: block.speaker),
+                                                       color: Self.color(for: block.speaker, in: meeting), text: block.text,
+                                                       highlight: jump?.terms ?? [], focused: block.id == focusedBlockID)
+                                            .id(block.id)
+                                    }
                                 }
                             }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .textSelection(.enabled)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .textSelection(.enabled)
+                    .onAppear { scroll(to: jump, proxy: proxy) }
+                    .onChange(of: jump) { _, newJump in scroll(to: newJump, proxy: proxy) }
                 }
             }
         }
         .onAppear { title = meeting.title }
         .onChange(of: meeting.id) { title = meeting.title }
+        // 「メモ」タブを開いているときに検索の結果を選んだら、飛び先のタブに切り替える（表示されたらスクロールする）
+        .onChange(of: jump) { _, newJump in
+            guard tab == 2, let location = newJump?.location else { return }
+            switch location {
+            case .title: break
+            case .minutes: tab = 0
+            case .transcript: tab = 1
+            }
+        }
         .sheet(isPresented: $editingSpeakers) {
             SpeakerNamesSheet(meeting: meeting, recorder: recorder)
+        }
+    }
+
+    private var focusedBlockID: UUID? {
+        if case .transcript(let blockID, _, _) = jump?.location { return blockID }
+        return nil
+    }
+
+    private var focusedMinutesLine: Int? {
+        if case .minutes(let line) = jump?.location { return line }
+        return nil
+    }
+
+    /// 検索でヒットした位置へ移る（議事録の行なら議事録タブ、発言なら文字起こしタブ）
+    private func scroll(to jump: MeetingJump?, proxy: ScrollViewProxy) {
+        guard let jump, jump.meetingID == meeting.id, let location = jump.location else { return }
+        switch location {
+        case .title: return
+        case .minutes(let line):
+            tab = 0
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(80))  // タブの中身ができてから
+                withAnimation { proxy.scrollTo(MarkdownText.lineID(line), anchor: .center) }
+            }
+        case .transcript(let blockID, _, _):
+            tab = 1
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(80))
+                withAnimation { proxy.scrollTo(blockID, anchor: .center) }
+            }
         }
     }
 
@@ -328,6 +415,8 @@ private struct TranscriptLine: View {
     let speaker: String
     let color: Color
     let text: String
+    var highlight: [String] = []
+    var focused = false
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 10) {
@@ -339,23 +428,32 @@ private struct TranscriptLine: View {
                 .font(.callout.bold())
                 .foregroundStyle(color)
                 .frame(width: 72, alignment: .leading)
-            Text(text)
+            Text(MeetingSearchHighlight.apply(AttributedString(text), terms: highlight))
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .background(focused ? RoundedRectangle(cornerRadius: 6).fill(Color.accentColor.opacity(0.12)).padding(-4) : nil)
     }
 }
 
 /// 議事録用の簡易 Markdown 表示（見出し・箇条書き・チェックボックス・強調）
-private struct MarkdownText: View {
+struct MarkdownText: View {
     let markdown: String
+    /// 色を付ける検索語
+    var highlight: [String] = []
+    /// 検索でヒットした行（背景を付ける）
+    var focusedLine: Int?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            ForEach(Array(markdown.components(separatedBy: "\n").enumerated()), id: \.offset) { _, line in
+            ForEach(Array(markdown.components(separatedBy: "\n").enumerated()), id: \.offset) { offset, line in
                 lineView(line)
+                    .background(offset == focusedLine ? RoundedRectangle(cornerRadius: 6).fill(Color.accentColor.opacity(0.12)).padding(-4) : nil)
+                    .id(Self.lineID(offset))
             }
         }
     }
+
+    static func lineID(_ line: Int) -> String { "minutes-line-\(line)" }
 
     @ViewBuilder private func lineView(_ line: String) -> some View {
         let trimmed = line.trimmingCharacters(in: .whitespaces)
@@ -388,8 +486,8 @@ private struct MarkdownText: View {
     private func inline(_ text: String) -> Text {
         if let attributed = try? AttributedString(
             markdown: text, options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace)) {
-            return Text(attributed)
+            return Text(MeetingSearchHighlight.apply(attributed, terms: highlight))
         }
-        return Text(text)
+        return Text(MeetingSearchHighlight.apply(AttributedString(text), terms: highlight))
     }
 }
