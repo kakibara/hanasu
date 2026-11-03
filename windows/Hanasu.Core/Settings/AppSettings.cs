@@ -32,6 +32,16 @@ public enum GeminiAuthMode
     ServiceAccount,
 }
 
+/// <summary>入力できる場所がなくて貼り付けなかったとき、クリップボードをどうするか（REQ-DIC-081）</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<PasteFallbackClipboard>))]
+public enum PasteFallbackClipboard
+{
+    /// <summary>結果をクリップボードに入れたままにする。貼りたい場所で Ctrl+V を押すだけで済む（既定。DEC-DIC-122）</summary>
+    KeepResult,
+    /// <summary>結果は画面に表示するだけにして、クリップボードは元のままにする（表示の「コピー」で写す）</summary>
+    RestoreOriginal,
+}
+
 /// <summary>文章の処理（整形・英訳・議事録）に使う AI</summary>
 [JsonConverter(typeof(JsonStringEnumConverter<TextAiProvider>))]
 public enum TextAiProvider
@@ -62,6 +72,10 @@ public sealed class AppSettings
     public string WhisperModel { get; set; } = "small";
     public string LocaleIdentifier { get; set; } = "ja-JP";
     public bool PlaySounds { get; set; } = true;
+    // 要件: REQ-DIC-081
+    // 設計判断: DEC-DIC-122
+    /// <summary>入力できる場所がなくて貼り付けなかったとき、結果をクリップボードに入れたままにするか</summary>
+    public PasteFallbackClipboard PasteFallbackClipboard { get; set; } = PasteFallbackClipboard.KeepResult;
 
     // AI（文章の処理）。音声入力（整形・英訳）と会議（議事録）で、AI とモデルを別々に選ぶ（REQ-COM-024）
     /// <summary>AI で整形する（名前は前の版のまま。Gemini と Claude のどちらでも使う）</summary>

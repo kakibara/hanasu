@@ -82,6 +82,8 @@ public partial class SettingsWindow : Window
         MicrophoneCombo.DisplayMemberPath = nameof(MicrophoneInfo.Name);
         MicrophoneCombo.SelectedItem = microphones.First(m => m.Id == s.MicrophoneDeviceId);
         PlaySoundsCheck.IsChecked = s.PlaySounds;
+        FallbackKeepRadio.IsChecked = s.PasteFallbackClipboard == PasteFallbackClipboard.KeepResult;
+        FallbackRestoreRadio.IsChecked = s.PasteFallbackClipboard == PasteFallbackClipboard.RestoreOriginal;
 
         RefineCheck.IsChecked = s.RefineWithGemini;
         ApiKeyRadio.IsChecked = s.AuthMode == GeminiAuthMode.ApiKey;
@@ -190,6 +192,10 @@ public partial class SettingsWindow : Window
     }
 
     private void OnPlaySoundsChanged(object sender, RoutedEventArgs e) => Save(s => s.PlaySounds = PlaySoundsCheck.IsChecked == true);
+
+    // 要件: REQ-DIC-081
+    private void OnPasteFallbackChanged(object sender, RoutedEventArgs e) =>
+        Save(s => s.PasteFallbackClipboard = FallbackRestoreRadio.IsChecked == true ? PasteFallbackClipboard.RestoreOriginal : PasteFallbackClipboard.KeepResult);
 
     private void OnOpenSpeechPrivacy(object sender, RoutedEventArgs e) => Shell.Open("ms-settings:privacy-speech");
 

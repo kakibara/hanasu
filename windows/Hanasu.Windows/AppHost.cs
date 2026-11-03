@@ -81,6 +81,8 @@ internal sealed class AppHost : IDisposable
             CreateMinutesClient = s => CreateTextAi(s, TextAiUse.Meeting),
             Log = AppLog.Write,
         });
+        // 貼り付けなかった結果の表示を、文章を選ぶために前面に出したあとは、入力先だったウインドウにフォーカスを返す
+        hud.RestoreFocus = foreground.RestoreLastExternalWindow;
         Dictation.CanStart = () => Meetings.State == MeetingState.Idle;
         Meetings.CanStart = () => Dictation.State == Core.Dictation.DictationState.Idle;
     }

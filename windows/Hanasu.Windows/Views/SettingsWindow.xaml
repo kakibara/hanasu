@@ -121,6 +121,13 @@
                         <ComboBox x:Name="MicrophoneCombo" SelectionChanged="OnMicrophoneChanged" HorizontalAlignment="Left" MinWidth="320" />
                         <TextBlock x:Name="MicrophoneNote" Style="{StaticResource Note}" />
 
+                        <!-- 要件: REQ-DIC-081 -->
+                        <TextBlock Style="{StaticResource Section}" Text="入力できる場所がないとき" />
+                        <TextBlock Style="{StaticResource Note}" Margin="0,0,0,6"
+                                   Text="フォーカスが入力欄にない（デスクトップが前面にある など）か、管理者として動いているアプリが前面にあって貼り付けられないときは、結果を画面の下に表示します。表示は閉じるまで残り、「コピー」か文章を選んでコピーできます。" />
+                        <RadioButton x:Name="FallbackKeepRadio" GroupName="PasteFallback" Content="クリップボードにも入れておく（貼りたい場所で Ctrl+V を押すだけで済む）" Checked="OnPasteFallbackChanged" />
+                        <RadioButton x:Name="FallbackRestoreRadio" GroupName="PasteFallback" Margin="0,4,0,0" Content="表示だけにして、クリップボードは元のままにする（表示の「コピー」で写す）" Checked="OnPasteFallbackChanged" />
+
                         <TextBlock Style="{StaticResource Section}" Text="そのほか" />
                         <CheckBox x:Name="PlaySoundsCheck" Content="録音の開始・停止で音を鳴らす" Checked="OnPlaySoundsChanged" Unchecked="OnPlaySoundsChanged" />
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">

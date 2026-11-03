@@ -74,6 +74,7 @@
         <Grid Margin="16,11,16,11">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -111,7 +112,8 @@
                 </Grid>
 
                 <TextBlock x:Name="TitleText" DockPanel.Dock="Left" Foreground="White" FontSize="13" FontWeight="SemiBold"
-                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="190" />
+                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="190"
+                           ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
 
                 <Border x:Name="LanguageSwitch" DockPanel.Dock="Left" Margin="10,0,0,0" Padding="2" CornerRadius="11" Background="#24FFFFFF"
                         VerticalAlignment="Center" ToolTip="録音を止めたときに選んでいる言語で入力します">
@@ -131,11 +133,29 @@
                 </Button>
                 <Button x:Name="CancelButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#30FFFFFF" Margin="8,0,0,0"
                         Content="取消" Click="OnCancelClick" ToolTip="何も入力せずに取り消します（Esc）" />
+                <!-- 要件: REQ-DIC-080 -->
+                <!-- 設計判断: DEC-DIC-121 -->
+                <!-- 貼り付けなかった結果の表示。右から「閉じる・コピー」 -->
+                <Button x:Name="CloseButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#30FFFFFF" Margin="6,0,0,0"
+                        Content="閉じる" Click="OnCloseClick" Visibility="Collapsed"
+                        ToolTip="この表示を閉じます（文章をクリックしたあとは Esc でも閉じられます）" />
+                <Button x:Name="CopyButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#FF2F7DF6" Margin="8,0,0,0"
+                        Click="OnCopyClick" Visibility="Collapsed" ToolTip="文章をクリップボードにコピーします">
+                    <TextBlock x:Name="CopyButtonText" Text="コピー" FontWeight="SemiBold" />
+                </Button>
                 <TextBlock x:Name="ElapsedText" DockPanel.Dock="Right" Foreground="#B8FFFFFF" FontFamily="Consolas" FontSize="12" VerticalAlignment="Center" />
             </DockPanel>
 
             <TextBlock x:Name="DetailText" Grid.Row="1" Margin="0,6,0,0" Foreground="#C8FFFFFF" FontSize="12"
                        TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="52" />
+
+            <!-- 貼り付けなかった結果の全文。選んでコピーできる（読み取り専用）。長ければスクロールする -->
+            <TextBox x:Name="ResultBox" Grid.Row="2" Margin="0,8,0,0" Visibility="Collapsed"
+                     IsReadOnly="True" IsReadOnlyCaretVisible="True" TextWrapping="Wrap" AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                     Background="#33000000" Foreground="White" CaretBrush="White" SelectionBrush="#FF2F7DF6"
+                     BorderBrush="#2EFFFFFF" BorderThickness="1" Padding="6,4" FontSize="13"
+                     PreviewMouseLeftButtonDown="OnResultMouseDown" />
         </Grid>
     </Border>
 </Window>

@@ -583,10 +583,10 @@
 - 実装の場所: `windows/Hanasu.Windows/Services/WindowsSecurity.cs`（`HardenDllSearch`）、`windows/Hanasu.Windows/Native/NativeMethods.cs`
 
 ### DEC-COM-149 Windows 版は、Hanasu より権限の高いウインドウには貼り付けを送らない
-- 決めたこと: Ctrl+V を送る前に、前面のウインドウのプロセスの整合性レベルを調べ、Hanasu より高い（管理者として実行など）か調べられなければ、送らずにクリップボードに残して「Ctrl+V で貼り付けて」と知らせる。クリップボードに置く文章には、履歴（Win+V）・クラウドのクリップボード・監視アプリに残さない印（`ExcludeClipboardContentFromMonitorProcessing`・`CanIncludeInClipboardHistory`=0・`CanUploadToCloudClipboard`=0）を付ける（PR #19 から付いていることを確かめた）。メニューの「最近の結果」と会議の「Markdown をコピー」は、ユーザーが自分でコピーする操作なので印を付けない。Hanasu は管理者権限を求めず（`asInvoker`）、`uiAccess` も使わない。
+- 決めたこと: Ctrl+V を送る前に、前面のウインドウのプロセスの整合性レベルを調べ、Hanasu より高い（管理者として実行など）か調べられなければ、送らずに結果を画面に残す（入力できる場所がないときと同じ表示。DEC-DIC-123）。クリップボードに残すかは設定に従う（既定は残す。REQ-DIC-081・DEC-DIC-122）。クリップボードに置く文章には、履歴（Win+V）・クラウドのクリップボード・監視アプリに残さない印（`ExcludeClipboardContentFromMonitorProcessing`・`CanIncludeInClipboardHistory`=0・`CanUploadToCloudClipboard`=0）を付ける（PR #19 から付いていることを確かめた）。メニューの「最近の結果」と会議の「Markdown をコピー」は、ユーザーが自分でコピーする操作なので印を付けない。Hanasu は管理者権限を求めず（`asInvoker`）、`uiAccess` も使わない。
 - 理由: UIPI で届かないキーを SendInput は成功として返すので、送ったつもりで何も入らず、元のクリップボードに戻して文章を失うことがある。
-- 決めた場面: Claude API に対応した PR（印は PR #19）
-- 関係する要件: REQ-DIC-004, REQ-COM-022
+- 決めた場面: Claude API に対応した PR（印は PR #19）。結果を画面に残す表示にそろえたのは、入力できる場所がないときに結果を画面に残す PR（Windows 版）
+- 関係する要件: REQ-DIC-004, REQ-COM-022, REQ-DIC-080
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`、`windows/Hanasu.Windows/Services/WindowsSecurity.cs`（`IsHigherIntegrity`）
 
