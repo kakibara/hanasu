@@ -7,6 +7,7 @@ struct SettingsView: View {
     var onOpenMeetingNotes: () -> Void
     var onBeginShortcutRecording: () -> Void
     var onEndShortcutRecording: () -> Void
+    var onOpenHistory: () -> Void = {}
 
     var body: some View {
         TabView {
@@ -19,12 +20,21 @@ struct SettingsView: View {
                 .tabItem { Label("Gemini", systemImage: "sparkles") }
             WordsTab(settings: settings)
                 .tabItem { Label("辞書・ルール", systemImage: "character.book.closed") }
+            AppStylesTab()
+                .tabItem { Label("アプリ別", systemImage: "square.grid.2x2") }
+            SnippetsSettingsView()
+                .tabItem { Label("スニペット", systemImage: "text.badge.plus") }
             MeetingTab(
                 settings: settings,
                 onOpenMeetingNotes: onOpenMeetingNotes,
                 onBeginShortcutRecording: onBeginShortcutRecording,
                 onEndShortcutRecording: onEndShortcutRecording)
                 .tabItem { Label("会議", systemImage: "person.2.wave.2") }
+            HistorySettingsTab(
+                onOpenHistory: onOpenHistory,
+                onBeginShortcutRecording: onBeginShortcutRecording,
+                onEndShortcutRecording: onEndShortcutRecording)
+                .tabItem { Label("履歴", systemImage: "clock.arrow.circlepath") }
             PermissionsTab()
                 .tabItem { Label("権限", systemImage: "lock.shield") }
         }
@@ -53,6 +63,7 @@ private struct GeneralTab: View {
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
+                EditModeShortcutRow(onBeginRecording: onBeginShortcutRecording, onEndRecording: onEndShortcutRecording)
                 Picker("録音モード", selection: $settings.recordingMode) {
                     ForEach(RecordingMode.allCases) { Text($0.label).tag($0) }
                 }
@@ -89,6 +100,7 @@ private struct GeminiTab: View {
                 Toggle("Gemini で自然な日本語に整える", isOn: $settings.refineWithGemini)
                 Toggle("入力先のアプリ名を Gemini に伝える（体裁の参考）", isOn: $settings.sendAppName)
             }
+            ScreenContextSettingsSection()
             Section("認証") {
                 Picker("認証方法", selection: $settings.authMode) {
                     ForEach(GeminiAuthMode.allCases) { Text($0.label).tag($0) }
@@ -171,11 +183,12 @@ private struct GeminiTab: View {
         isTesting = true
         testOutput = ""
         let request = GeminiClient.Request(
-            transcript: testInput,
+            transcript: settings.userDictionary.apply(to: testInput),
             model: settings.model,
             appName: nil,
             dictionary: settings.dictionaryWords,
-            extraInstructions: settings.extraInstructions)
+            extraInstructions: settings.extraInstructions,
+            dictionaryRules: settings.userDictionary.rules)
         if settings.authMode == .apiKey {
             Keychain.saveAPIKey(apiKey)
         }
@@ -199,16 +212,8 @@ private struct WordsTab: View {
 
     var body: some View {
         Form {
-            Section {
-                TextEditor(text: $settings.dictionaryText)
-                    .font(.body.monospaced())
-                    .frame(minHeight: 120)
-            } header: {
-                Text("ユーザー辞書（1 行に 1 語）")
-            } footer: {
-                Text("固有名詞や専門用語を書いておくと、音声認識と Gemini の両方でその表記に寄せます。")
-                    .font(.caption).foregroundStyle(.secondary)
-            }
+            DictionaryEditorSection(text: $settings.dictionaryText)
+            DictionarySuggestionSection(settings: settings)
             Section {
                 TextEditor(text: $settings.extraInstructions)
                     .frame(minHeight: 100)
@@ -270,6 +275,7 @@ private struct MeetingTab: View {
                 }
                 Toggle("音声ファイル（me.m4a / others.m4a）を残す", isOn: $settings.keepMeetingAudio)
             }
+            MeetingDetectionSettingsSection()
             MeetingNotesSettingsSection(onBeginShortcutRecording: onBeginShortcutRecording,
                                         onEndShortcutRecording: onEndShortcutRecording)
             Section {

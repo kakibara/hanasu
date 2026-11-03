@@ -48,7 +48,7 @@ Granola のドキュメントでは「マイクを 1 チャンネル、PC で鳴
 | F6 | Gemini で議事録（要約・決定事項・TODO）を作る | 必須 |
 | F7 | 記録した会議を一覧し、文字起こし・議事録を読める・コピーできる | 必須 |
 | F8 | 話者名を後から付け替えられる（「話者1」→「田中さん」） | あると良い |
-| F9 | 会議アプリがマイクを使い始めたら「記録しますか？」と知らせる | あると良い（フェーズ 2） |
+| F9 | 会議アプリがマイクを使い始めたら「記録しますか？」と知らせる（4.8） | あると良い（実装済み） |
 | F10 | 音声ファイルを残すか、処理後に消すかを選べる | あると良い |
 | F11 | 記録中にメモを書ける。1 行ずつ、録音開始からの経過時間つきで保存する（Granola のメモ） | あると良い |
 | F12 | 記録中に「ここ重要」の印を付けられる（ボタンと、設定で変えられるショートカット。Otter / tl;dv のハイライト） | あると良い |
@@ -160,7 +160,77 @@ Granola のドキュメントでは「マイクを 1 チャンネル、PC で鳴
 - モデルは要約の質を優先して `gemini-3.8-flash` を初期値にする（音声入力と違って待ち時間が問題になりにくい）。
 - 出力: 概要／話題ごとの要点／決定事項／TODO（担当・期限が分かれば）／話者名の推定（「話者1 は文中で『田中さん』と呼ばれている」など。推定であることを明記し、自動では書き換えない）。
 
-### 4.8 会議中のメモと「ここ重要」の印（F11〜F14）
+### 4.8 会議の自動検出（F9）
+
+Granola・Notion AI Meeting Notes の「会議が始まると記録を勧める」、Krisp の会議の自動検出にならい、会議アプリがマイクを使い始めたら記録を提案する。
+**自動では記録を始めない。** 必ずユーザーがボタンを押してから始める。
+
+#### 検出のしかた
+
+1. Core Audio のプロセスオブジェクト（`kAudioHardwarePropertyProcessObjectList`）から、各プロセスの `kAudioProcessPropertyBundleID`・`kAudioProcessPropertyPID`・`kAudioProcessPropertyIsRunningInput` を読む。
+2. bundle ID の先頭で会議アプリを判別する。Chrome・Slack・Teams はマイクをヘルパー（`com.google.Chrome.helper` など）で使うので、実行ファイルのパス（`proc_pidpath`）からいちばん外側の `.app` を求め、その bundle ID でも判別する。
+
+| 対象 | bundle ID の先頭 |
+| --- | --- |
+| Zoom | `us.zoom.` |
+| Microsoft Teams | `com.microsoft.teams`（`teams2`・ヘルパー・`modulehost` を含む） |
+| Slack（ハドル） | `com.tinyspeck.slackmacgap` |
+| Webex | `com.cisco.webex`、`Cisco-Systems.Spark`、`com.webex.` |
+| FaceTime | `com.apple.FaceTime`、`com.apple.avconferenced`（通話の音声を扱うデーモン） |
+| Google Chrome / Arc / Microsoft Edge | `com.google.Chrome` / `company.thebrowser.` / `com.microsoft.edgemac` |
+| Safari | `com.apple.Safari`、`com.apple.WebKit.GPU`（Safari のマイクは WebKit の GPU プロセスが扱う） |
+
+- ブラウザは Google Meet かどうかまでは分からない（タブの URL は読まない）。ブラウザがマイクを使い始めたら「ブラウザの会議（Google Meet など）かもしれません」と提案する。
+- `com.apple.WebKit.GPU` は Safari 以外の WebKit を使うアプリとも共通なので、それらがマイクを使っても Safari として提案されることがある。
+- Hanasu 自身（音声入力・会議の記録）は PID で除く。
+
+#### 監視: リスナー＋マイク使用中だけの読み直し
+
+CPU の負荷を小さくするため、ポーリングを常には行わず、プロパティリスナーを基本にした。
+
+| 見るもの | プロパティ | 用途 |
+| --- | --- | --- |
+| システムオブジェクト | `kAudioHardwarePropertyProcessObjectList`、`kAudioHardwarePropertyDevices` | プロセス・機器が増えた・減った |
+| 会議アプリのプロセス | `kAudioProcessPropertyIsRunning`、`kAudioProcessPropertyIsRunningInput` | 入出力を始めた・止めた |
+| 入力機器 | `kAudioDevicePropertyDeviceIsRunningSomewhere` | どこかのアプリがマイクを使い始めた・止めた |
+
+macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunningOutput` の変化はリスナーに届かず、`kAudioProcessPropertyIsRunning`（入力か出力のどちらか）だけが届いた（`afplay` で確認）。
+これだと、すでに音を鳴らしているブラウザがマイクを使い始めても通知が来ない。そこで、**入力機器の `IsRunningSomewhere` が 1 の間（＝誰かがマイクを使っている間）だけ、3 秒おきに会議アプリの `IsRunningInput` を読み直す。**
+マイクを誰も使っていない間はタイマーも動かさないので、待っている間の CPU 使用はほぼ 0。マイクを使っている間も、読むのは会議アプリの数個のプロセスの値だけ。
+
+#### 提案のしかた
+
+| 場面 | 動き |
+| --- | --- |
+| 対象のアプリがマイクを使い始めて 3 秒たった（記録していないとき） | 画面の右上に「会議を記録しますか？」（「記録する」「今回はしない」）。一瞬だけマイクを確かめるアプリでは出さない |
+| 「記録する」 | 会議ノートを開いて記録を始める（メニューの「会議の記録を開始」と同じ） |
+| 「今回はしない」 | その会議では聞かない。マイクを止めて 60 秒たつまでは、また使い始めても聞かない（ミュートでマイクを止めるアプリのため） |
+| すでに記録中・準備中・処理中 | 開始の提案は出さない。記録を終えた時点でまだマイクを使っているアプリにも、改めて聞かない |
+| 記録中に、記録中にマイクを使っていた会議アプリがすべてマイクを止めて 15 秒たった | 「記録を止めますか？」（「記録を止める」「続ける」）。15 秒以内にまた使い始めたら出さない |
+| 「続ける」 | 記録を続ける。会議アプリがまたマイクを使ってから止めるまでは聞かない |
+| 返事がないまま 2 分 | 「今回はしない」「続ける」として閉じる |
+
+- パネルは `nonactivatingPanel` で前面に出ず、会議アプリのフォーカスを奪わない。全画面の会議アプリの上にも出る（`fullScreenAuxiliary`）。HUD と同じく、1 回のクリックで押せるように AppKit の部品ではなくボタンで作った。
+- 通知センター（`UNUserNotificationCenter`）ではなくパネルにしたのは、通知の許可が要らないこと、通知を切っている・集中モードの人にも出ること、CLI で見た目を確かめられること、のため。
+- 提案を出すときは、効果音の設定がオンなら `Glass` を鳴らす。
+
+#### 設定（「会議」タブ →「会議の自動検出」）
+
+- 「会議が始まったら記録を提案する」: **既定はオン。** 提案するだけで勝手に録音はしないこと、目的が「記録の始め忘れ」を防ぐことで、オフが既定だと気づかれないまま役に立たないこと、待っている間の負荷がほぼないこと、から。不要なら「今回はしない」か設定でオフにできる。
+- 対象のアプリ（会議アプリ 5 つ、ブラウザ 4 つ）をそれぞれ選べる。既定はすべてオン。外したアプリを保存するので、あとで対象を足したときは既定でオンになる。
+- 設定は共有の `AppSettings` を大きく変えないよう、`MeetingDetectionSettings`（UserDefaults の `meetingAutoDetect`、`meetingAutoDetectDisabledApps`）に分けた。
+
+#### 確認用の CLI
+
+```bash
+.build/debug/Hanasu --list-audio-processes        # 今 Core Audio にいるプロセス（PID・入力中・出力中・会議アプリ・bundle ID）
+.build/debug/Hanasu --watch-audio-processes       # 変化を待って表示（リスナーが届くかの確認。Ctrl-C で終了）
+.build/debug/Hanasu --simulate-meeting-detection  # 検出と記録の状態を台本どおりに動かし、提案の出かたを表示（待ち時間は短縮）
+.build/debug/Hanasu --render-meeting-suggestion out.png [--stop] [--app zoom|teams|slack|webex|facetime|chrome|safari|arc|edge]
+.build/debug/Hanasu --render-meeting-detection-settings out.png
+```
+
+### 4.9 会議中のメモと「ここ重要」の印（F11〜F14）
 
 - **データ**: `MeetingNote`（`kind`: `note`／`highlight`、`time`: 録音開始からの秒数、`text`）。`Meeting.notes` に配列で持ち、`meeting.json` に一緒に保存する。
   `notes` は省略可（`Optional`）にして、メモ機能より前の `meeting.json` もそのまま読めるようにした。メモがあれば `notes.md` も書き出す。
@@ -224,6 +294,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 - **会議ノート ウィンドウ**: 左に会議の一覧、右に選んだ会議の「議事録」「文字起こし」「メモ」タブ。録音中の会議はライブの文字起こしと、右側にメモ欄・「ここ重要」ボタン・字幕の切り替えを表示。話者名の変更、議事録の作り直し、Markdown のコピー、Finder で開く。
 - **字幕パネル**: 記録中、ほかのアプリの前面に直近の発言を出す小さなパネル（記録中の画面のメモ欄の上のボタンで出す）。
 - **ショートカット**: 記録の開始／停止 `⌃⌥⌘ M`、「ここ重要」の印 `⌃⌥⌘ H`（記録中だけ有効）。どちらも変更可。
+- **提案のパネル**: 会議アプリがマイクを使い始めたら画面の右上に「会議を記録しますか？」、記録中に止めたら「記録を止めますか？」（4.8）。
 
 ## 7. 権限
 
@@ -239,7 +310,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 | --- | --- |
 | 1（実装済み） | F1〜F7・F10、FluidAudio による相手側の話者分離、話者名の付け替え（F8） |
 | 1.5（実装済み） | 会議中のメモと「ここ重要」の印、議事録への反映、記録後の編集と作り直し、字幕パネル（F11〜F14） |
-| 2 | 会議の自動検出（F9）、会議アプリだけを録るモード、マイク側のエコーキャンセル |
+| 2 | 会議の自動検出（F9、実装済み）、会議アプリだけを録るモード、マイク側のエコーキャンセル |
 
 ## 9. 検証方法
 
@@ -300,7 +371,19 @@ Bluetooth イヤホン（LinkBuds Clip）を使った実際の会議で、何も
 - `Hanasu --list-audio-devices` で機器の一覧（UID・サンプリングレート）と、会議の記録と同じ方法で作ったマイクの形式を表示
 - 起動時に、アプリの終了などで「記録中」「処理中」のまま残った会議を「失敗」にする
 
-### 10.3 会議中のメモと印（2026-11-03）
+### 10.3 会議の自動検出（2026-11-03）
+
+| 項目 | 結果 |
+| --- | --- |
+| `--list-audio-processes` | 44 件のプロセスを表示。Chrome・Slack・Teams のヘルパーはアプリ本体の bundle ID に戻して判別できた（例: `com.microsoft.teams2.modulehost` → teams）。`com.apple.WebKit.GPU` は safari、`com.apple.avconferenced` は facetime と判別 |
+| リスナー（`--watch-audio-processes` と `afplay`） | `afplay` のプロセスの増減と、出力中になったことが届いた。`IsRunningOutput` そのものの通知は届かず、`IsRunning` の通知で読み直して分かった（4.8） |
+| 負荷 | 監視中の CPU 時間は数秒で 0.04 秒、CPU 使用率 0.0% |
+| 提案の出かた（`--simulate-meeting-detection`） | 開始の提案、「今回はしない」のあとミュート相当で止めて再開しても聞かないこと、ブラウザの提案、「記録する」→ 停止の提案 →「記録を止める」、停止の提案が出る前の再開で取り消すこと、「続ける」、記録を終えた時点で使用中のアプリに聞かないこと、を確認 |
+| 見た目 | 提案のパネル（開始・ブラウザ・停止）と設定の欄を PNG に描き出して確認 |
+
+実際の会議アプリ（Zoom・Meet など）がマイクを使ったときの検出は、マイクの許可が要るため実機で確認する。
+
+### 10.4 会議中のメモと印（2026-11-03）
 
 `say` の 3 つの声で 80 秒の架空の会議（リリース日・β版の対象・ランチの雑談）を作り、メモのファイルと一緒に後処理に流した。
 

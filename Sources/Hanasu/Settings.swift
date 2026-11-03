@@ -157,11 +157,9 @@ final class AppSettings: ObservableObject {
     /// 会議で録音するマイクの UID。空ならシステムの設定に従う
     @Published var meetingInputDeviceUID: String { didSet { defaults.set(meetingInputDeviceUID, forKey: Keys.meetingInputDeviceUID) } }
 
-    /// ユーザー辞書（1 行 1 語、空行は除く）
+    /// ユーザー辞書の正しい表記の一覧（語だけの行と、置き換えルールの右側）。書き方は UserDictionary を参照
     var dictionaryWords: [String] {
-        dictionaryText.split(whereSeparator: \.isNewline)
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
+        userDictionary.spellings
     }
 
     private init() {

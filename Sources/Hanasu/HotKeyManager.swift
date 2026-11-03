@@ -12,9 +12,10 @@ final class HotKeyManager {
     }
 
     private static let signature: OSType = 0x484E_5355  // 'HNSU'
-    private var registrations: [UInt32: Registration] = [:]
-    /// ID はインスタンスをまたいで重ならないようにする（ハンドラはどのインスタンスにも届き、ID で見分けるため）
+    /// ID はインスタンスをまたいで重ならないようにする。どのインスタンスもアプリの同じイベントターゲットにハンドラを置くので、
+    /// ID が重なると、後から置いたハンドラがほかのインスタンスのショートカットまで自分のものとして受け取ってしまう
     private static var nextID: UInt32 = 1
+    private var registrations: [UInt32: Registration] = [:]
     private var eventHandler: EventHandlerRef?
 
     init() {
