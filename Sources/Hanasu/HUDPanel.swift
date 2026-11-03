@@ -26,12 +26,24 @@ final class HUDModel: ObservableObject {
     @Published var level: Float = 0
     /// まとめての文字起こしをしている間は true（「Whisper で文字起こししています…」）
     @Published var transcribing = false
+    /// HUD の「停止」を押したとき（ショートカットをもう一度押したときと同じく、録音を止めて入力する）
+    var onStop: (() -> Void)?
+    /// HUD の「取消」を押したとき（Esc と同じ）
+    var onCancel: (() -> Void)?
 
     /// 準備中と録音中は、出力の言語を選べる
     var canChooseLanguage: Bool {
         switch phase {
         // 編集モードでは、出力の言語は話した指示で決まる
         case .preparing, .recording: editBadge == nil
+        default: false
+        }
+    }
+
+    /// 準備中と録音中は、ボタン（言語の切り替え・停止・取消）のクリックを受け取る
+    var acceptsClicks: Bool {
+        switch phase {
+        case .preparing, .recording: true
         default: false
         }
     }
@@ -78,8 +90,8 @@ final class HUDController {
             model.startedAt = Date()
         }
         model.phase = phase
-        // 言語の切り替えボタンを押せる間だけクリックを受け取る。パネルは前面に出ないので、入力先のフォーカスは動かない
-        panel.ignoresMouseEvents = !model.canChooseLanguage
+        // ボタンを押せる間だけクリックを受け取る。パネルは前面に出ないので、入力先のフォーカスは動かない
+        panel.ignoresMouseEvents = !model.acceptsClicks
         position()
         panel.orderFrontRegardless()
 
@@ -146,7 +158,14 @@ private struct HUDView: View {
                             .font(.system(size: 12, design: .monospaced))
                             .foregroundStyle(.secondary)
                     }
-                    Text("Esc で取消").font(.system(size: 11)).foregroundStyle(.secondary)
+                    Button { model.onCancel?() } label: {
+                        Text("取消").font(.system(size: 11)).foregroundStyle(.secondary)
+                            .padding(.horizontal, 4)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .help("録音を取り消します（Esc）")
+                    StopButton { model.onStop?() }
                 }
             }
             if model.phase == .recording, let engine = model.batchEngine, model.transcript.isEmpty {
@@ -230,6 +249,27 @@ private struct HUDView: View {
     private func elapsed(at date: Date) -> String {
         let seconds = max(0, Int(date.timeIntervalSince(model.startedAt)))
         return String(format: "%d:%02d", seconds / 60, seconds % 60)
+    }
+}
+
+/// 録音を止めて入力するボタン。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
+private struct StopButton: View {
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 4) {
+                Image(systemName: "stop.fill").font(.system(size: 9))
+                Text("停止").font(.system(size: 11, weight: .semibold))
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 3)
+            .background(Color.red.opacity(0.85), in: Capsule())
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .help("録音を止めて入力します（ショートカットをもう一度押すのと同じ）")
     }
 }
 

@@ -36,6 +36,8 @@ final class EditModeController {
     init(dictation: DictationController) {
         self.dictation = dictation
         hud.model.editBadge = ""
+        hud.model.onStop = { [weak self] in self?.stopFromHUD() }
+        hud.model.onCancel = { [weak self] in self?.cancel() }
         recognizer.onPartialText = { [weak self] text in
             self?.hud.updateTranscript(text)
         }
@@ -117,6 +119,15 @@ final class EditModeController {
     }
 
     // MARK: - 操作
+
+    /// HUD の「停止」。ショートカットをもう一度押したときと同じく、録音を止めて書き換える
+    func stopFromHUD() {
+        switch state {
+        case .recording: Task { await finish() }
+        case .preparing: stopRequested = true
+        case .idle, .processing: break
+        }
+    }
 
     func toggleFromMenu() {
         switch state {
