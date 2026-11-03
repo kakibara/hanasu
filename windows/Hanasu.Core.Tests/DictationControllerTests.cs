@@ -1,0 +1,418 @@
+using Hanasu.Core.Dictation;
+using Hanasu.Core.Gemini;
+using Hanasu.Core.Settings;
+using Hanasu.Core.Transcription;
+
+namespace Hanasu.Core.Tests;
+
+internal sealed class FakeHud : IHud
+{
+    public List<HudState> Shown { get; } = new();
+    public string Transcript { get; private set; } = "";
+    public bool Translating { get; private set; }
+    public event EventHandler<bool>? LanguageSelected;
+    public event EventHandler? StopRequested;
+    public event EventHandler? CancelRequested;
+    public void ClickStop() => StopRequested?.Invoke(this, EventArgs.Empty);
+    public void ClickCancel() => CancelRequested?.Invoke(this, EventArgs.Empty);
+    public void Show(HudState state) => Shown.Add(state);
+    public void UpdateTranscript(string text) => Transcript = text;
+    public void SetTranslating(bool translating) => Translating = translating;
+    public void Click(bool english) => LanguageSelected?.Invoke(this, english);
+    public HudState Last => Shown[^1];
+}
+
+internal sealed class FakeTranscriber : IDictationTranscriber
+{
+    public string Result { get; set; } = "えーと明日の会議です";
+    public Exception? StartError { get; set; }
+    public TaskCompletionSource? StartGate { get; set; }
+    public bool Started, Stopped, Cancelled, Disposed;
+    public TranscriptionContext? Context;
+    public event EventHandler<string>? PartialTextChanged;
+    public string? FinishingMessage => null;
+
+    public async Task StartAsync(TranscriptionContext context, CancellationToken cancellationToken = default)
+    {
+        Context = context;
+        if (StartGate is not null) await StartGate.Task;
+        if (StartError is not null) throw StartError;
+        Started = true;
+        PartialTextChanged?.Invoke(this, "えーと");
+    }
+
+    public Task<string> StopAsync(CancellationToken cancellationToken = default)
+    {
+        Stopped = true;
+        return Task.FromResult(Result);
+    }
+
+    public Task CancelAsync()
+    {
+        Cancelled = true;
+        return Task.CompletedTask;
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        Disposed = true;
+        return ValueTask.CompletedTask;
+    }
+}
+
+internal sealed class FakeRefiner : IDictationRefiner
+{
+    public List<(string Kind, RefineRequest Request)> Calls { get; } = new();
+    public Exception? Error { get; set; }
+
+    public Task<string> RefineAsync(RefineRequest request, CancellationToken cancellationToken = default)
+    {
+        Calls.Add(("refine", request));
+        return Error is null ? Task.FromResult("整形:" + request.Transcript) : Task.FromException<string>(Error);
+    }
+
+    public Task<string> TranslateToEnglishAsync(RefineRequest request, CancellationToken cancellationToken = default)
+    {
+        Calls.Add(("translate", request));
+        return Error is null ? Task.FromResult("EN:" + request.Transcript) : Task.FromException<string>(Error);
+    }
+}
+
+internal sealed class FakeInserter : ITextInserter
+{
+    public List<string> Inserted { get; } = new();
+    public InsertOutcome Outcome { get; set; } = InsertOutcome.Pasted;
+    public Task<InsertOutcome> InsertAsync(string text)
+    {
+        Inserted.Add(text);
+        return Task.FromResult(Outcome);
+    }
+}
+
+internal sealed class Harness
+{
+    public AppSettings Settings { get; } = new() { DictionaryText = "ジェミニ => Gemini\nHanasu" };
+    public FakeHud Hud { get; } = new();
+    public FakeTranscriber Transcriber { get; set; } = new();
+    public FakeRefiner Refiner { get; } = new();
+    public bool HasCredentials { get; set; } = true;
+    public FakeInserter Inserter { get; } = new();
+    public RecentResults Recent { get; } = new();
+    public List<bool> Escape { get; } = new();
+    public List<SoundCue> Sounds { get; } = new();
+    public List<string> OpenedHelp { get; } = new();
+    public DictationController Controller { get; }
+
+    public Harness()
+    {
+        Controller = new DictationController(new DictationServices
+        {
+            Settings = () => Settings,
+            CreateTranscriber = _ => Transcriber,
+            Processor = new DictationTextProcessor(_ => HasCredentials ? Refiner : null),
+            Inserter = Inserter,
+            Hud = Hud,
+            Recent = Recent,
+            ForegroundAppName = () => "Slack",
+            SetEscapeHotKeyEnabled = Escape.Add,
+            PlaySound = Sounds.Add,
+            OpenHelp = OpenedHelp.Add,
+        });
+    }
+}
+
+public class DictationControllerTests
+{
+    [Fact]
+    public async Task ToggleRecordsRefinesAndInserts()
+    {
+        var h = new Harness { Transcriber = { Result = "えーと資料はジェミニで作りました" } };
+        h.Controller.HandleHotKey(HotKeyEventKind.Pressed, DictationMode.Refine);
+        await Task.Yield();
+        Assert.Equal(DictationState.Recording, h.Controller.State);
+        Assert.Equal(HudState.Recording, h.Hud.Last);
+        Assert.Equal("えーと", h.Hud.Transcript);
+        Assert.Equal([true], h.Escape);
+        Assert.Contains("ジェミニ", h.Transcriber.Context!.ContextualStrings);
+
+        // 押している間だけのモードではないので、離しても止まらない
+        h.Controller.HandleHotKey(HotKeyEventKind.Released, DictationMode.Refine);
+        Assert.Equal(DictationState.Recording, h.Controller.State);
+
+        h.Controller.HandleHotKey(HotKeyEventKind.Pressed, DictationMode.Refine);
+        await WaitIdle(h);
+        Assert.True(h.Transcriber.Stopped && h.Transcriber.Disposed);
+        // 辞書を当ててから Gemini に送る
+        var (kind, request) = Assert.Single(h.Refiner.Calls);
+        Assert.Equal("refine", kind);
+        Assert.Equal("えーと資料はGeminiで作りました", request.Transcript);
+        Assert.Equal("Slack", request.AppName);
+        Assert.Equal(["Gemini", "Hanasu"], request.Dictionary);
+        Assert.Equal(["整形:えーと資料はGeminiで作りました"], h.Inserter.Inserted);
+        Assert.Equal(HudPhase.Done, h.Hud.Last.Phase);
+        Assert.Equal("入力しました", h.Hud.Last.Message);
+        Assert.Equal([SoundCue.Start, SoundCue.Stop], h.Sounds);
+        Assert.Equal("えーと資料はジェミニで作りました", Assert.Single(h.Recent.Entries).Raw);
+        Assert.Equal([true, false], h.Escape);
+    }
+
+    [Fact]
+    public async Task PushToTalkStopsOnRelease()
+    {
+        var h = new Harness();
+        h.Settings.RecordingMode = RecordingMode.PushToTalk;
+        h.Controller.HandleHotKey(HotKeyEventKind.Pressed, DictationMode.Refine);
+        await Task.Yield();
+        h.Controller.HandleHotKey(HotKeyEventKind.Pressed, DictationMode.Refine);  // 押し直し（キーリピートなど）は無視
+        Assert.Equal(DictationState.Recording, h.Controller.State);
+        h.Controller.HandleHotKey(HotKeyEventKind.Released, DictationMode.Refine);
+        await WaitIdle(h);
+        Assert.Single(h.Inserter.Inserted);
+    }
+
+    [Fact]
+    public async Task ReleaseWhilePreparingStopsRightAfterStart()
+    {
+        var h = new Harness { Transcriber = { StartGate = new TaskCompletionSource() } };
+        h.Settings.RecordingMode = RecordingMode.PushToTalk;
+        h.Controller.HandleHotKey(HotKeyEventKind.Pressed, DictationMode.Refine);
+        Assert.Equal(DictationState.Preparing, h.Controller.State);
+        h.Controller.HandleHotKey(HotKeyEventKind.Released, DictationMode.Refine);
+        h.Transcriber.StartGate.SetResult();
+        await WaitIdle(h);
+        Assert.True(h.Transcriber.Stopped);
+        Assert.Single(h.Inserter.Inserted);
+    }
+
+    [Fact]
+    public async Task TranslateHotKeyAndHudSwitchChooseTheLanguage()
+    {
+        var h = new Harness();
+        await h.Controller.StartAsync(DictationMode.TranslateToEnglish);
+        Assert.True(h.Hud.Translating);
+        // HUD で「日本語」を押すと、止めた時点の選択で入力する
+        h.Hud.Click(english: false);
+        Assert.False(h.Hud.Translating);
+        Assert.Equal(DictationMode.Refine, h.Controller.Mode);
+        h.Hud.Click(english: true);
+        await h.Controller.FinishAsync();
+        Assert.Equal("translate", Assert.Single(h.Refiner.Calls).Kind);
+        Assert.Equal("英訳して入力しました", h.Hud.Last.Message);
+        // 録音が終わったら切り替えは効かない
+        h.Hud.Click(english: false);
+        Assert.Equal(DictationMode.TranslateToEnglish, h.Controller.Mode);
+    }
+
+    [Fact]
+    public async Task EscapeCancelsWithoutInserting()
+    {
+        var h = new Harness();
+        await h.Controller.StartAsync();
+        h.Controller.Cancel();
+        await WaitIdle(h);
+        Assert.True(h.Transcriber.Cancelled);
+        Assert.Empty(h.Inserter.Inserted);
+        Assert.Equal("取り消しました", h.Hud.Last.Message);
+        Assert.Equal([true, false], h.Escape);
+    }
+
+    [Fact]
+    public async Task HudStopButtonFinishesAndInserts()
+    {
+        var h = new Harness();
+        // 押している間だけのモードでも、停止ボタンで止まる
+        h.Settings.RecordingMode = RecordingMode.PushToTalk;
+        await h.Controller.StartAsync();
+        h.Hud.ClickStop();
+        await WaitIdle(h);
+        Assert.True(h.Transcriber.Stopped);
+        Assert.Single(h.Inserter.Inserted);
+        Assert.Equal("入力しました", h.Hud.Last.Message);
+    }
+
+    [Fact]
+    public async Task HudStopButtonWhilePreparingStopsRightAfterStart()
+    {
+        var h = new Harness { Transcriber = { StartGate = new TaskCompletionSource() } };
+        var start = h.Controller.StartAsync();
+        h.Hud.ClickStop();
+        h.Transcriber.StartGate.SetResult();
+        await start;
+        await WaitIdle(h);
+        Assert.Single(h.Inserter.Inserted);
+    }
+
+    [Fact]
+    public async Task HudCancelButtonActsLikeEscape()
+    {
+        var h = new Harness();
+        await h.Controller.StartAsync();
+        h.Hud.ClickCancel();
+        await WaitIdle(h);
+        Assert.True(h.Transcriber.Cancelled);
+        Assert.Empty(h.Inserter.Inserted);
+        Assert.Equal("取り消しました", h.Hud.Last.Message);
+        // 終わった後に押されても何もしない
+        h.Hud.ClickStop();
+        h.Hud.ClickCancel();
+        Assert.Equal(DictationState.Idle, h.Controller.State);
+    }
+
+    [Fact]
+    public async Task CancelWhilePreparing()
+    {
+        var h = new Harness { Transcriber = { StartGate = new TaskCompletionSource() } };
+        var start = h.Controller.StartAsync();
+        h.Controller.Cancel();
+        h.Transcriber.StartGate.SetResult();
+        await start;
+        Assert.Equal(DictationState.Idle, h.Controller.State);
+        Assert.True(h.Transcriber.Cancelled);
+        Assert.Empty(h.Inserter.Inserted);
+    }
+
+    [Fact]
+    public async Task StartErrorsAreShownAndOpenHelp()
+    {
+        var h = new Harness { Transcriber = { StartError = new TranscriptionException("オンライン音声認識をオンにしてください", "ms-settings:privacy-speech") } };
+        await h.Controller.StartAsync();
+        Assert.Equal(DictationState.Idle, h.Controller.State);
+        Assert.Equal(HudState.Error("オンライン音声認識をオンにしてください"), h.Hud.Last);
+        Assert.Equal(["ms-settings:privacy-speech"], h.OpenedHelp);
+        Assert.True(h.Transcriber.Disposed);
+        Assert.Equal([true, false], h.Escape);
+    }
+
+    [Fact]
+    public async Task EmptyRecognitionInsertsNothing()
+    {
+        var h = new Harness { Transcriber = { Result = "  " } };
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Empty(h.Inserter.Inserted);
+        Assert.Equal(HudState.Error("音声が認識されませんでした"), h.Hud.Last);
+    }
+
+    [Fact]
+    public async Task WithoutCredentialsTheRawTextIsInsertedWithAWarning()
+    {
+        var h = new Harness { HasCredentials = false, Transcriber = { Result = "ジェミニのテスト" } };
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Equal(["Geminiのテスト"], h.Inserter.Inserted);
+        Assert.Equal(HudPhase.Error, h.Hud.Last.Phase);
+        Assert.Contains("認証情報が未設定", h.Hud.Last.Message);
+    }
+
+    [Fact]
+    public async Task GeminiFailureFallsBackToRawText()
+    {
+        var h = new Harness();
+        h.Refiner.Error = GeminiException.Http(500, "Internal");
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Equal(["えーと明日の会議です"], h.Inserter.Inserted);
+        Assert.Contains("整形前の文章を入力しました", h.Hud.Last.Message);
+        Assert.Contains(SoundCue.Error, h.Sounds);
+    }
+
+    [Fact]
+    public async Task RefineOffSkipsGeminiButTranslationStillUsesIt()
+    {
+        var h = new Harness();
+        h.Settings.RefineWithGemini = false;
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Empty(h.Refiner.Calls);
+        Assert.Equal("入力しました", h.Hud.Last.Message);
+
+        h.Transcriber = new FakeTranscriber();
+        await h.Controller.StartAsync(DictationMode.TranslateToEnglish);
+        await h.Controller.FinishAsync();
+        Assert.Equal("translate", Assert.Single(h.Refiner.Calls).Kind);
+    }
+
+    [Fact]
+    public async Task AppNameIsNotSentWhenTurnedOff()
+    {
+        var h = new Harness();
+        h.Settings.SendAppName = false;
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Null(Assert.Single(h.Refiner.Calls).Request.AppName);
+    }
+
+    [Fact]
+    public async Task CopiedOnlyIsReported()
+    {
+        var h = new Harness { Inserter = { Outcome = InsertOutcome.CopiedOnly } };
+        await h.Controller.StartAsync();
+        await h.Controller.FinishAsync();
+        Assert.Contains("クリップボードにコピー", h.Hud.Last.Message);
+    }
+
+    [Fact]
+    public async Task DoesNotStartWhenBlocked()
+    {
+        var h = new Harness();
+        h.Controller.CanStart = () => false;
+        await h.Controller.StartAsync();
+        Assert.Equal(DictationState.Idle, h.Controller.State);
+        Assert.Empty(h.Hud.Shown);
+    }
+
+    private static async Task WaitIdle(Harness h)
+    {
+        for (var i = 0; i < 200 && h.Controller.State != DictationState.Idle; i++) await Task.Delay(5);
+        Assert.Equal(DictationState.Idle, h.Controller.State);
+    }
+}
+
+public class RecentResultsTests
+{
+    [Fact]
+    public void KeepsTheNewestTen()
+    {
+        var recent = new RecentResults();
+        for (var i = 0; i < 12; i++) recent.Add($"raw{i}", $"out{i}", DictationMode.Refine);
+        Assert.Equal(10, recent.Entries.Count);
+        Assert.Equal("out11", recent.Entries[0].Output);
+        Assert.Equal("out2", recent.Entries[^1].Output);
+    }
+
+    [Fact]
+    public void MenuLabelIsShortAndSingleLine()
+    {
+        var entry = new RecentResults.Entry(new DateTimeOffset(2026, 11, 3, 9, 5, 0, TimeSpan.Zero), "r", "一行目\n" + new string('あ', 60), DictationMode.Refine);
+        var label = RecentResults.MenuLabel(entry);
+        Assert.StartsWith("09:05  一行目 あ", label);
+        Assert.EndsWith("…", label);
+        Assert.DoesNotContain('\n', label);
+    }
+}
+
+public class HudTextTests
+{
+    [Fact]
+    public void TitlesAndDetailsFollowMac()
+    {
+        Assert.Equal("録音中", HudText.Title(HudState.Recording));
+        Assert.Equal("話してください…", HudText.Detail(HudState.Recording, ""));
+        Assert.Equal("エラー", HudText.Title(HudState.Error("失敗")));
+        Assert.Equal("失敗", HudText.Detail(HudState.Error("失敗"), "x"));
+        Assert.Equal("Gemini で英語に翻訳しています…", HudText.ProcessingTitle(true));
+        Assert.True(HudText.CanChooseLanguage(HudPhase.Recording));
+        Assert.False(HudText.CanChooseLanguage(HudPhase.Processing));
+        Assert.True(HudText.ShowsRecordingControls(HudPhase.Recording));
+        Assert.False(HudText.ShowsRecordingControls(HudPhase.Done));
+        Assert.Equal("1:05", HudText.Elapsed(TimeSpan.FromSeconds(65)));
+    }
+
+    [Fact]
+    public void LongTranscriptShowsTheEnd()
+    {
+        var text = new string('あ', 200) + "最後";
+        var tail = HudText.Tail(text, 10);
+        Assert.Equal("…" + new string('あ', 8) + "最後", tail);
+    }
+}

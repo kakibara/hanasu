@@ -1,0 +1,4 @@
+# Windows 版のソースは LF にそろえる（C# の raw 文字列リテラルに改行コードが入るため、チェックアウト先で CRLF にしない）
+* text=auto eol=lf
+*.ico binary
+*.png binary

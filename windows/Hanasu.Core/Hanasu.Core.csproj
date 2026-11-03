@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- OS に依存しない部品（プロンプト・Gemini・サービスアカウント・辞書・設定・録音データの変換・状態の管理）。
+       音声入力と会議の記録の両方から使う。Mac の上でもテストできるよう net8.0 にする -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Hanasu.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Hanasu.Core.Tests" />
+  </ItemGroup>
+
+</Project>
