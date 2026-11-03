@@ -26,6 +26,10 @@ struct GeminiClient {
         var extraInstructions: String
         /// ユーザー辞書の置き換えルール（認識結果には先に当ててあるが、近い音の語も直せるよう Gemini にも渡す）
         var dictionaryRules: [UserDictionary.Rule] = []
+        /// 入力先アプリ別の文体ルール（AppStyles.swift）。nil なら使わない
+        var appStyle: AppStyle? = nil
+        /// 録音を始めたときの画面の文脈（設定でオンのときだけ）
+        var screenContext: ScreenContext? = nil
     }
 
     enum Auth {
@@ -107,7 +111,7 @@ struct GeminiClient {
         model.contains("lite") ? "minimal" : "low"
     }
 
-    static func userPrompt(for request: Request) -> String {
+    static func userPrompt(for request: Request, translating: Bool = false) -> String {
         var lines: [String] = []
         if let appName = request.appName, !appName.isEmpty {
             lines.append("入力先アプリ: \(appName)（体裁の参考。言葉は変えない）")
@@ -123,24 +127,31 @@ struct GeminiClient {
         if !extra.isEmpty {
             lines.append("追加ルール:\n\(extra)")
         }
+        if let section = request.appStyle?.promptSection(appName: request.appName, translating: translating, hasCommonRules: !extra.isEmpty) {
+            lines.append(section)
+        }
+        if let block = request.screenContext?.promptBlock() {
+            lines.append(block)
+        }
         lines.append("<transcript>\n\(request.transcript)\n</transcript>")
         return lines.joined(separator: "\n")
     }
 
     func refine(_ request: Request) async throws -> String {
         try await generate(
-            systemInstruction: Self.systemInstruction,
+            systemInstruction: Self.systemInstruction + ScreenContext.instruction(for: request.screenContext, translating: false),
             userText: Self.userPrompt(for: request),
             model: request.model)
     }
 
     /// 話した内容を英語に翻訳する。追加の整形ルールは日本語の文体向けなので使わない。
+    /// アプリ別の文体ルールは、英訳向けのルールに切り替えて使う。
     func translateToEnglish(_ request: Request) async throws -> String {
         var request = request
         request.extraInstructions = ""
         return try await generate(
-            systemInstruction: Self.translationInstruction,
-            userText: Self.userPrompt(for: request),
+            systemInstruction: Self.translationInstruction + ScreenContext.instruction(for: request.screenContext, translating: true),
+            userText: Self.userPrompt(for: request, translating: true),
             model: request.model)
     }
 
