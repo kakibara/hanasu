@@ -116,6 +116,8 @@ private struct RecordButton: View {
             // 録音する機器（記録中は変えられない。次の記録から反映）
             MeetingDevicePickers(compact: true)
                 .disabled(recorder.state != .idle)
+            MinutesTemplatePicker()
+                .disabled(recorder.state != .idle)
             switch recorder.state {
             case .idle:
                 Button { recorder.toggle() } label: {
@@ -257,7 +259,7 @@ struct MeetingDetailView: View {
                         .disabled(meeting.speakers.isEmpty)
                     Button("議事録を作り直す") { Task { await recorder.regenerateMinutes(meeting) } }
                         .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
-                    Button("コピー") { copy() }
+                    MeetingExportMenu(meeting: meeting, recorder: recorder, showingTranscript: tab == 1)
                     Button("Finder で表示") {
                         NSWorkspace.shared.activateFileViewerSelecting([MeetingStore.directory(for: meeting)])
                     }
@@ -271,14 +273,18 @@ struct MeetingDetailView: View {
                         }
                     }
                 }
-                Picker("", selection: $tab) {
-                    Text("議事録").tag(0)
-                    Text("文字起こし").tag(1)
-                    Text("メモ").tag(2)
+                HStack {
+                    Picker("", selection: $tab) {
+                        Text("議事録").tag(0)
+                        Text("文字起こし").tag(1)
+                        Text("メモ").tag(2)
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .frame(width: 300)
+                    Spacer()
+                    MinutesTemplateMenu(meeting: meeting, recorder: recorder)
                 }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .frame(width: 300)
             }
             .padding()
             Divider()
@@ -359,12 +365,6 @@ struct MeetingDetailView: View {
                 withAnimation { proxy.scrollTo(blockID, anchor: .center) }
             }
         }
-    }
-
-    private func copy() {
-        let text = tab == 0 ? (meeting.minutes ?? "") : tab == 1 ? meeting.transcriptMarkdown() : meeting.notesText
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(text, forType: .string)
     }
 
     static func color(for speaker: String, in meeting: Meeting) -> Color {

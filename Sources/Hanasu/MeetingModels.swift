@@ -49,6 +49,12 @@ struct Meeting: Codable, Identifiable, Hashable {
     var utterances: [Utterance] = []
     var minutes: String?
     var errorMessage: String?
+    /// 議事録の型（MinutesTemplate の rawValue）。nil は「自動」
+    var minutesTemplate: String?
+    /// 型が「カスタム」のときの指示
+    var customMinutesPrompt: String?
+    /// 議事録から取り出したアクションアイテム。nil はこの機能より前に作った議事録
+    var actionItems: [ActionItem]?
     /// ユーザーのメモと「ここ重要」の印（MeetingNotes.swift）。古い会議の meeting.json にはないので省略可にする
     var notes: [MeetingNote]?
 

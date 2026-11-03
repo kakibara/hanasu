@@ -194,7 +194,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
 }
 
 // 会議記録の後処理の確認:
-//   Hanasu --meeting-files <自分の音声> <相手の音声> [--notes <メモのテキスト>]
+//   Hanasu --meeting-files <自分の音声> <相手の音声> [--template <型>] [--custom-prompt <指示>] [--notes <メモのテキスト>]
 // 2 つのファイルを「自分」「相手」のチャンネルとして文字起こしし、話者の割り当て → 議事録 → 保存まで行う。
 // --notes には、会議中のメモと「ここ重要」の印を、会議ノートの「メモ」タブと同じ形式（[12:34] 内容 / [12:40] ★）で渡す。
 if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
@@ -207,6 +207,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             let settings = AppSettings.shared
             var meeting = try MeetingStore.newMeeting()
             meeting.title = "テスト会議（\(files[1].deletingPathExtension().lastPathComponent)）"
+            MinutesCLI.applyTemplateArguments(args, to: &meeting)
             if let notesIndex = args.firstIndex(of: "--notes"), args.indices.contains(notesIndex + 1) {
                 meeting.notes = MeetingNote.parse(try String(contentsOfFile: args[notesIndex + 1], encoding: .utf8))
                 print("メモ: \(meeting.notes?.count ?? 0) 件\n\(meeting.notesForPrompt() ?? "")")
@@ -300,6 +301,9 @@ MainActor.assumeIsolated { DictationHistoryCLI.runIfRequested() }
 
 // 会議の横断検索・質問の確認（--search-meetings / --ask-meetings など。MeetingSearchCLI.swift）
 MainActor.assumeIsolated { MeetingSearchCLI.runIfRequested(CommandLine.arguments) }
+
+// 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）
+MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 
 MainActor.assumeIsolated {
     let app = NSApplication.shared
