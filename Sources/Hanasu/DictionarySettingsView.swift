@@ -214,12 +214,13 @@ struct DictionarySuggestionSection: View {
         candidates = []
         selected = []
         let existing = settings.userDictionary
-        let model = settings.meetingMinutesModel
+        let model = settings.textModel(for: .meeting)
         Task {
             do {
-                guard let auth = try GeminiClient.authFromSettings(settings) else { throw GeminiError.missingAPIKey }
+                // 辞書の候補探しは会議の記録を読む長い処理なので、会議の AI を使う（DEC-COM-040）
+                let client = try TextAIClient.requireFromSettings(settings, for: .meeting)
                 let found = try await DictionarySuggester.suggest(
-                    corpus: corpus, existing: existing, client: GeminiClient(auth: auth), model: model)
+                    corpus: corpus, existing: existing, client: client, model: model)
                 candidates = found
                 message = found.isEmpty ? "新しい候補は見つかりませんでした。" : "追加したいものを選んでください（\(model)）。"
             } catch {

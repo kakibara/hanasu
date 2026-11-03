@@ -118,7 +118,7 @@ enum DictionarySuggester {
     }
 
     // 設計判断: DEC-DIC-088
-    static func suggest(corpus: Corpus, existing: UserDictionary, client: GeminiClient, model: String) async throws -> [DictionaryCandidate] {
+    static func suggest(corpus: Corpus, existing: UserDictionary, client: TextAIClient, model: String) async throws -> [DictionaryCandidate] {
         var client = client
         // 会議の記録は長いので、整形（15 秒）より長く待つ
         client.timeout = 120

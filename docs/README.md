@@ -16,7 +16,7 @@
 | --- | --- | --- | --- |
 | DIC 音声入力（英訳・選択を声で編集・アプリ別の文体・スニペット・画面の文脈・履歴・辞書） | [spec/dictation.md](spec/dictation.md) | [design/dictation.md](design/dictation.md) | [verification/dictation.md](verification/dictation.md) |
 | MTG 会議の記録 | [spec/meeting.md](spec/meeting.md) | [design/meeting.md](design/meeting.md) | [verification/meeting.md](verification/meeting.md) |
-| COM 設定・認証・共通（文字起こしのエンジン、Gemini、ショートカット、権限） | [spec/common.md](spec/common.md) | design/dictation.md の 3 章・4.10・5.3・6・7 | verification/dictation.md の 8 |
+| COM 設定・認証・共通（文字起こしのエンジン、Gemini・Claude、ショートカット、権限、セキュリティ） | [spec/common.md](spec/common.md) | design/dictation.md の 3 章・4.10・5.3・6・7、[design/security.md](design/security.md) | verification/dictation.md の 8・9 |
 | REL 配布・リリース | [spec/release.md](spec/release.md) | [README.md](../README.md) の「リリースの作り方」 | — |
 | Windows 版（DIC・MTG・COM の「対象: Windows」） | 各 spec の「対象」と「Windows の実装」 | [windows/README.md](../windows/README.md)（Windows 版の作り・Mac 版との差） | windows/README.md と PR #19 |
 

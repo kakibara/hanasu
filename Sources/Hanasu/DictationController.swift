@@ -268,15 +268,16 @@ final class DictationController {
         var historyStatus: DictationHistoryEntry.Status = .refineOff
         var historyError: String?
         let translating = mode == .translateToEnglish
-        // 英訳は Gemini でしかできないので、整形をオフにしていても Gemini に送る。全体がスニペットなら呼ばない
+        // 英訳は AI でしかできないので、整形をオフにしていても AI（Gemini か Claude）に送る。全体がスニペットなら呼ばない
         if settings.refineWithGemini || translating, snippetMatch?.isWholeUtterance != true {
             let verb = translating ? "翻訳" : "整形"
             do {
-                if let auth = try GeminiClient.authFromSettings(settings) {
-                    let client = GeminiClient(auth: auth)
+                // 要件: REQ-COM-020, REQ-COM-024
+                if let client = try TextAIClient.fromSettings(settings, for: .dictation) {
+                    let model = settings.textModel(for: .dictation)
                     let request = GeminiClient.Request(
                         transcript: output,
-                        model: settings.model,
+                        model: model,
                         appName: settings.sendAppName ? targetAppName : nil,
                         dictionary: settings.dictionaryWords,
                         extraInstructions: settings.extraInstructions,
@@ -295,10 +296,11 @@ final class DictationController {
                         output = try await convert(corrected)
                     }
                     historyStatus = .succeeded
-                    appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(self.settings.model, privacy: .public): \(output.count) chars")
+                    appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(model, privacy: .public): \(output.count) chars")
                 } else {
-                    appLog.notice("\(verb, privacy: .public) skipped: no credentials (mode=\(self.settings.authMode.rawValue, privacy: .public))")
-                    warning = "Gemini の認証情報が未設定のため、\(verb)せずに入力しました（メニュー → 設定）。"
+                    let provider = settings.aiProvider(for: .dictation)
+                    appLog.notice("\(verb, privacy: .public) skipped: no credentials (ai=\(provider.rawValue, privacy: .public))")
+                    warning = "\(provider.name) の認証情報が未設定のため、\(verb)せずに入力しました（メニュー → 設定 →「AI」）。"
                     historyStatus = .noCredentials
                 }
             } catch {
@@ -312,7 +314,7 @@ final class DictationController {
         // 入力先がずれても取り戻せるよう、貼り付けの前に履歴へ残す
         DictationHistoryStore.shared.record(
             raw: raw, output: output, mode: .init(mode), appName: targetAppName, status: historyStatus,
-            errorMessage: historyError, model: historyStatus == .succeeded ? settings.model : nil,
+            errorMessage: historyError, model: historyStatus == .succeeded ? settings.textModel(for: .dictation) : nil,
             audioURL: pendingAudioURL)
         pendingAudioURL = nil
         let outcome = await TextInserter.insert(output)

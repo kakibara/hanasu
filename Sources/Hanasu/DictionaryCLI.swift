@@ -88,17 +88,12 @@ enum DictionaryCLI {
             corpus.meetings = DictionarySuggester.recentMeetings()
         }
         guard !corpus.isEmpty else { throw GeminiError.emptyResponse(reason: "材料がありません") }
-        let env = ProcessInfo.processInfo.environment
-        let auth: GeminiClient.Auth
-        if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
-            auth = .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
-        } else {
-            auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
-        }
-        let model = value(after: "--model", in: args) ?? settings.meetingMinutesModel
+        // 辞書の候補探しは会議の AI を使う。--ai gemini|claude で変えられる（TextAIClient.cli）
+        let client = try TextAIClient.cli(args: args, settings: settings, for: .meeting, timeout: 120)
+        let model = TextAIClient.cliModel(args: args, settings: settings, for: .meeting)
         let started = Date()
         let candidates = try await DictionarySuggester.suggest(
-            corpus: corpus, existing: dictionary, client: GeminiClient(auth: auth), model: model)
+            corpus: corpus, existing: dictionary, client: client, model: model)
         print(String(format: "[候補 %@ %.1fs] 音声入力 %d 件 / 会議 %d 件 → %d 件", model, Date().timeIntervalSince(started),
                      corpus.dictations.count, corpus.meetings.count, candidates.count))
         for c in candidates {

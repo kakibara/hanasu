@@ -1,9 +1,9 @@
 # 設定・認証・共通の仕様（COM）
 
-音声入力と会議の記録で共通のもの（文字起こしのエンジン、Gemini の呼び出しと認証、アプリの形、ショートカット、設定、権限）について、**実装済み**の振る舞いのうち、要件（REQ）と設計判断（DEC）を並べる。
+音声入力と会議の記録で共通のもの（文字起こしのエンジン、Gemini・Claude の呼び出しと認証、セキュリティ、アプリの形、ショートカット、設定、権限）について、**実装済み**の振る舞いのうち、要件（REQ）と設計判断（DEC）を並べる。
 
 - 区分・ID・タグの決まりは [docs/README.md](../README.md)。
-- 実装の説明は [design/dictation.md](../design/dictation.md)（3 章・4.10・5.3・6・7）と [design/meeting.md](../design/meeting.md)（4.3.1）。
+- 実装の説明は [design/dictation.md](../design/dictation.md)（3 章・4.10・5.3・6・7）と [design/meeting.md](../design/meeting.md)（4.3.1）、セキュリティは [design/security.md](../design/security.md)。
 
 ---
 
@@ -54,6 +54,50 @@
 - 実装の場所: `windows/Hanasu.Core/Meetings/MeetingController.cs`、`windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`MeetingJsonTests` など）、`dotnet run --project Hanasu.Cli -- meeting-files me.wav others.wav --meetings-dir <保存先>`。ループバックの録音は Windows の実機で確かめる（まだ確かめていない）
 
+### REQ-COM-020 整形などに使う AI として、Claude API を選べる
+- 内容: 整形・英訳などの文章の処理に使う AI を、Gemini と Claude（Anthropic の Claude API）から選べる。Claude の認証は、ユーザーが入力する API キーで行う。音声の文字起こしには使わない。
+- 受け入れ条件: 設定で Claude を選び API キーを入れると、整形・英訳などが Claude で行われる。キーが正しくないときは、そう分かる文言で知らせる。
+  - Mac: 設定の「AI」タブで、音声入力か会議の AI を Claude にし、「Claude（Anthropic）の API キー」に保存すると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）が Claude で行われる。キーが正しくないときは「Claude の API キーが正しくありません（401）」と出る（「接続を試す」でも、整形のときも）。音声は Claude に送らない（文字起こしは「一般」→「文字起こし」のエンジンのまま）。
+- 出典: ユーザーの依頼（2026-11-03「claude APIも利用できるようにして。認証はAPIキーを入力する形にして」）
+- 対象: Mac / Windows
+- 実装の場所: `ClaudeClient`、`TextAIClient`、`TextAIProvider`、`AISettingsTab`、`ClaudeKeySection`
+- 確かめ方: `.build/debug/Hanasu --refine-text <文> --ai claude --show-request`（送る JSON とヘッダー。キーは伏せる）、`ANTHROPIC_API_KEY=<偽のキー> .build/debug/Hanasu --refine-text <文> --ai claude` と `--claude-test`（401 の文言）、`--render-ai-settings /tmp/ai.png --claude`
+
+### REQ-COM-021 API キーは、他のアプリから読み取れない形で保存する
+- 内容: Claude と Gemini の API キーを、OS が用意する保護の仕組みに保存し、Hanasu 以外のアプリからは（ユーザーの確認なしに）読めないようにする。ログ・設定ファイル・画面には平文で出さない。
+- 受け入れ条件:
+  - Mac: キーはログインキーチェーンの項目（サービス `dev.mactypeless.Hanasu`）に入り、その ACL は復号を Hanasu 自身だけに許し、ほかのアプリにはログインのパスワードを求める（`security dump-keychain -a` で `require-password`）。UserDefaults・ログ・画面にはキーを出さない（設定画面は末尾 4 文字だけ。入力欄はマスクし、保存したら空にする）。削除できる。
+  - Mac で守れないもの: この Mac（macOS 26.6.2）で試すと、アドホック署名の別のプログラムは ACL に関係なく確認なしで読めた（[design/security.md](../design/security.md) の 1.3）。同じユーザーで動く悪意のあるプログラムからは守れない。
+- 出典: ユーザーの依頼（2026-11-03「APIキーは重要な情報なので、他のアプリからは読み取れない状態で保存して」）
+- 対象: Mac / Windows
+- 実装の場所: `Keychain`（`save`・`load`・`hint`・`delete`）、`ClaudeKeySection`、`ClaudeClient.redacted`
+- 確かめ方: `.build/debug/Hanasu --keychain-selftest`（名前を変えた一時的な項目で、保存・末尾 4 文字・読み出し・ACL・削除。`--keep` で残し、`--keychain-selftest-delete <サービス名>` で消す）
+
+### REQ-COM-022 セキュリティの調査の結果を、実装と文書に入れる
+- 内容: 通信・秘密の扱い・ダウンロード・保存するファイル・クリップボード・プロンプトインジェクション・権限・依存関係・配布について調べ、直せるものは直し、残る危険は文書に書く。
+- 受け入れ条件:
+  - Mac: [design/security.md](../design/security.md) に、項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの: AI の通信はリダイレクトに従わずキャッシュを残さない（DEC-COM-044）、サービスアカウントの `token_uri` と Vertex AI のリージョンを確かめる（DEC-COM-053）、会議のフォルダを 0700 にする（DEC-COM-052）、自己署名でも Hardened Runtime を付ける（DEC-COM-051）。
+- 出典: ユーザーの依頼（2026-11-03「その他セキュリティで気をつけるべきところを調査してその結果を盛り込んで」）
+- 対象: Mac / Windows
+- 実装の場所: `SecureHTTP`、`ServiceAccountTokenProvider.isTrustedTokenURL`、`GeminiClient.isValidLocation`、`MeetingStore.createPrivateDirectory`、`scripts/build-app.sh`
+- 確かめ方: [design/security.md](../design/security.md) の各項目。`--keychain-selftest`。Hardened Runtime は `./scripts/build-app.sh` のあとに `codesign -dvv build/Hanasu.app`（flags に runtime）と実機の起動で確かめる
+
+### REQ-COM-023 Claude の既定のモデルは、音声入力は Haiku 5.5、会議は Sonnet 5.5 にする
+- 内容: Claude を選んだときの既定のモデルは、音声入力（整形・英訳・選択の編集）が `claude-haiku-5-5`、会議（議事録・会議への質問）が `claude-sonnet-5-5`。どちらも設定で Haiku 5.5 / Sonnet 5.5 / Opus 5.5 から変えられる。
+- 受け入れ条件: 設定を変えていない状態で Claude を選ぶと、音声入力は `claude-haiku-5-5`、会議は `claude-sonnet-5-5` で送られる（Mac: `--refine-text … --ai claude --show-request` の `model`、`--render-ai-settings`）。「AI」タブのモデルの選択で 3 つから変えられる。
+- 出典: ユーザーの指示（2026-11-03「規定モデルは haiku にして」、2026-11-04「Claude は議事録は sonnet にして」）
+- 対象: Mac / Windows
+- 実装の場所: `ClaudeClient.Model`（`defaultDictation`・`defaultMeeting`）、`AppSettings.init`（`claudeModel`・`claudeMinutesModel` の初期値）
+- 確かめ方: `.build/debug/Hanasu --refine-text <文> --ai claude --show-request`、`--render-ai-settings /tmp/ai.png --claude`
+
+### REQ-COM-024 音声入力と会議で、使う AI とモデルを別々に選べる
+- 内容: 音声入力（整形・英訳・選択の編集）と会議（議事録・会議への質問）のそれぞれで、AI（Gemini / Claude）とモデルを別々に選べる。
+- 受け入れ条件: Mac: 設定の「AI」タブの「使う AI とモデル」に「音声入力」と「会議」が並び、それぞれで Gemini / Claude とモデルを選べる（例: 音声入力は Gemini の flash-lite、会議は Claude Sonnet 5.5）。既定は、今までの設定を引き継いで両方 Gemini（音声入力は `geminiModel`、会議は `meetingMinutesModel`）。辞書の候補探しは会議の設定を使う（DEC-COM-040）。
+- 出典: ユーザーの指示（2026-11-03「会議の要約モデルと音声入力モデルは個別に指定できるようにして」）
+- 対象: Mac / Windows
+- 実装の場所: `TextAIPurpose`、`AppSettings`（`dictationAIProvider`・`meetingAIProvider`・`aiProvider(for:)`・`textModel(for:)`）、`AIChoiceRow`
+- 確かめ方: `.build/debug/Hanasu --render-ai-settings /tmp/ai.png --claude`（音声入力は Gemini、会議は Claude の見た目）
+
 ---
 
 ## 設計判断
@@ -67,10 +111,10 @@
 - 実装の場所: `GeminiClient.Auth`、`GeminiClient.authFromSettings`、`GeminiClient.generate`
 
 ### DEC-COM-002 API キーはキーチェーンに保存する
-- 決めたこと: API キーはキーチェーン（`kSecClassGenericPassword`）に保存し、UserDefaults やログには残さない。
+- 決めたこと: API キー（Gemini・Claude）はキーチェーン（`kSecClassGenericPassword`、サービス `dev.mactypeless.Hanasu`、アカウント `gemini-api-key` / `claude-api-key`）に保存し、UserDefaults やログには残さない。項目の ACL は DEC-COM-048。
 - 理由: 秘密情報を平文の設定ファイルに置かない。
-- 決めた場面: 初版（a787da8）
-- 関係する要件: REQ-DIC-003
+- 決めた場面: 初版（a787da8）。Claude のキーと ACL はこの PR（Claude API の対応）
+- 関係する要件: REQ-DIC-003, REQ-COM-021
 - 対象: Mac
 - 実装の場所: `Keychain`
 
@@ -273,6 +317,118 @@
 - 関係する要件: REQ-COM-001, REQ-MTG-023
 - 対象: Mac
 - 実装の場所: `TranscriptionEngine.label`、`GeminiTranscriptionSection`
+
+### DEC-COM-040 AI は用途ごとに 1 つ選び、文字起こしのエンジンとは別にする
+- 決めたこと: 文章の処理に使う AI（Gemini / Claude）を、「音声入力」（整形・英訳・選択の編集・音声入力の履歴のやり直し）と「会議」（議事録とその作り直し・会議への質問・辞書の候補探し）の 2 つの用途で別々に選ぶ。既定はどちらも Gemini（今までの設定を引き継ぐ）。辞書の候補探しは会議の記録を読む長い処理なので、会議の設定（AI とモデル、Gemini なら `meetingMinutesModel`）を使う。文字起こしのエンジン（OS 標準 / Whisper / Gemini）は今までどおり別に選び、Claude には音声を送らない。設定画面は「Gemini」タブを「AI」タブにし、先頭に 2 つの用途を並べる。Gemini の認証の欄は、文字起こしのエンジン「Gemini」でも使うので、AI の選択に関わらず出す。
+- 理由: ユーザーの指示（REQ-COM-024）。音声入力は速さ、会議は長い記録のまとめと、求めるものが違う。辞書の候補探しは、今まで議事録のモデルを使っていた（DEC-DIC-088 の作り）のに合わせた。
+- 決めた場面: この PR（Claude API の対応）
+- 関係する要件: REQ-COM-020, REQ-COM-024
+- 対象: Mac
+- 実装の場所: `TextAIProvider`、`TextAIPurpose`、`TextAIClient.fromSettings`、`AppSettings.aiProvider(for:)`・`textModel(for:)`、`AISettingsTab`
+
+### DEC-COM-041 Claude は SDK を使わず、REST の Messages API を直接呼ぶ
+- 決めたこと: `POST https://api.anthropic.com/v1/messages` に、`x-api-key`・`anthropic-version: 2026-10-21`・`content-type: application/json` を付けて送る。`temperature` / `top_p` / `top_k`（この版では 400）と assistant の prefill（400）は送らない。出力の形はシステムプロンプトの指示で決める。応答は `type` が `text` のブロックだけをつなぐ（`thinking`・`fallback` のブロックは除く）。streaming は使わない。
+- 理由: Swift には公式 SDK がない。Gemini と同じく 1 回送って結果を待つ形（DEC-COM-007）にそろえる。議事録は長いが、max_tokens とタイムアウトを大きくして待つ（DEC-COM-043）。
+- 決めた場面: この PR
+- 関係する要件: REQ-COM-020
+- 対象: Mac
+- 実装の場所: `ClaudeClient.requestBody`・`headers`・`generate`・`parseMessage`
+
+### DEC-COM-042 Claude のモデルは 3 つから選ぶ
+- 決めたこと: `claude-haiku-5-5`・`claude-sonnet-5-5`・`claude-opus-5-5`（日付を付けない ID）から選ぶ。音声入力と会議で別々に持つ（`claudeModel`・`claudeMinutesModel`）。既定は REQ-COM-023。一覧にない ID が設定に入っていても、そのまま送る。設定画面に料金の目安（2026-11 時点）を書く。
+- 理由: 速さ・費用・賢さの違う 3 段階で足りる。料金は使う人が選ぶときの判断材料になるが、変わるので時点を書く。
+- 決めた場面: この PR
+- 関係する要件: REQ-COM-020, REQ-COM-023, REQ-COM-024
+- 対象: Mac
+- 実装の場所: `ClaudeClient.Model`、`AIChoiceRow`、`ClaudeKeySection`
+
+### DEC-COM-043 Claude の考える量は effort で決め、thinking は送らない
+- 決めたこと: 音声入力の処理（整形・英訳・選択の編集）は `output_config.effort: "low"`、`max_tokens` 8192。会議の処理（議事録・会議への質問・辞書の候補）は `"medium"`、`max_tokens` 32000、タイムアウトは最低 600 秒。`thinking` は送らない（3 つとも adaptive が既定）。
+- 理由: Opus 5.5 は thinking を無効にできず（`disabled` は 400）、Sonnet 5.5 は `disabled` が 400（`between_tools` は Sonnet 5.5 だけ）、Haiku 5.5 は `disabled` を受け付けるが、3 つで形をそろえるため effort だけで決める。資料では、軽い処理は low で考えるのを省くことが多い。thinking も max_tokens に数えられるので、返ってくる文章より大きく取る。議事録は streaming を使わないので、出力が長くても切れないだけのタイムアウトにする。
+- 決めた場面: この PR
+- 関係する要件: REQ-COM-020
+- 対象: Mac
+- 実装の場所: `ClaudeClient.Effort`、`TextAIClient`（用途ごとの effort）、`MeetingProcessor.makeMinutes`、`MeetingAsk.ask`
+
+### DEC-COM-044 AI の通信は、リダイレクトに従わず、キャッシュとクッキーを使わない
+- 決めたこと: Gemini・Claude・サービスアカウントのトークンの通信は、`SecureHTTP.session`（ephemeral、URL キャッシュ・クッキー・資格情報の保存なし、TLS 1.2 以上）で送る。リダイレクトには従わずエラーにする。`https` 以外の URL には送らない。証明書の検証は OS の既定のまま。
+- 理由: リダイレクトに従うと、キーの入ったヘッダー（`x-api-key`・`x-goog-api-key`・`Authorization`）が別のホストに送られうる。応答（整えた文章・議事録）をディスクのキャッシュに残さない。
+- 決めた場面: この PR（セキュリティの調査）
+- 関係する要件: REQ-COM-022
+- 対象: Mac
+- 実装の場所: `SecureHTTP`
+
+### DEC-COM-045 Claude の stop_reason を先に見て、refusal は server-side fallback に任せる（Haiku 以外）
+- 決めたこと: 応答の `stop_reason` が `refusal` なら「安全のための判定で断られた」（`stop_details.category` があれば添える）、`max_tokens` なら「長さの上限で切れた」としてエラーにし、本文は使わない（音声入力では、整形前の文章を入力する）。Sonnet 5.5 と Opus 5.5 には `fallbacks: "default"` と `anthropic-beta: server-side-fallback-2026-07-01` を付け、断られたときは Anthropic が勧めるモデルで同じリクエストをやり直してもらう。Haiku 5.5 には付けない。
+- 理由: refusal は HTTP 200 で返り、中身が空か途中まで。切れた文章を貼り付けると困る。資料は fallbacks を最初から付けることを勧めている。Haiku 5.5 には server-side fallback がない（配列の形は 400、`"default"` は断られたまま）。
+- 決めた場面: この PR
+- 関係する要件: REQ-COM-020
+- 対象: Mac
+- 実装の場所: `ClaudeClient.parseMessage`、`ClaudeClient.Model.supportsServerSideFallback`、`ClaudeClient.requestBody`
+
+### DEC-COM-046 Claude のエラーは 429 と 5xx だけ少しやり直し、ほかは分かる文言で知らせる
+- 決めたこと: 429 と 5xx（529 を含む）は、`retry-after`（なければ 1 秒・2 秒）だけ待って 2 回までやり直す。待ち時間がタイムアウトの半分（最大 10 秒）を超えるときはやり直さない。400 / 401 / 402 / 403 / 404 / 413 はやり直さず、状態ごとの文言にする（401 は「API キーが正しくありません」）。文言にキーは入れない。
+- 理由: 音声入力は待たされないことが大事（DEC-DIC-010 の 15 秒）。4xx はやり直しても直らない。
+- 決めた場面: この PR
+- 関係する要件: REQ-COM-020
+- 対象: Mac
+- 実装の場所: `ClaudeClient.send`・`retryDelay`・`ClaudeError`
+
+### DEC-COM-047 Claude にも Gemini と同じプロンプトを送り、システムプロンプトをキャッシュする
+- 決めたこと: 整形・英訳・選択の編集・議事録・会議への質問・辞書の候補は、Gemini と同じ文面（`GeminiClient.refinePrompt`・`translationPrompt`・`editInstruction`・`editPrompt`、`MinutesPrompt`、`MeetingAsk.instruction`、`DictionarySuggester.instruction`）を使い、Claude ではシステムプロンプトを `system` に入れる。`system` のブロックに `cache_control: {type: "ephemeral"}` を付ける。
+- 理由: 2 つの AI で振る舞いをそろえ、プロンプトインジェクションの対策（`<transcript>` タグ、選択文のランダムなタグ名）もそのまま効かせる。システムプロンプトは固定なのでキャッシュが効くが、最小のトークン数（512）に満たなければキャッシュされない（エラーにはならない）。整形のシステムプロンプトは日本語で約 600 文字で、最小に届くかは本物のキーで確かめていない。
+- 決めた場面: この PR
+- 関係する要件: REQ-COM-020, REQ-DIC-003
+- 対象: Mac
+- 実装の場所: `TextAIClient`、`GeminiClient.refinePrompt`・`translationPrompt`、`ClaudeClient.requestBody`
+
+### DEC-COM-048 キーチェーンの項目の ACL は、Hanasu だけに読ませ、ほかのアプリにはパスワードを求める
+- 決めたこと: ファイル型のログインキーチェーンに、`SecAccessCreate` で作った ACL を付けて保存する。復号を許すアプリは Hanasu 自身だけ、ほかのアプリには `requirePassphase`（ログインのパスワードの入力）を求める。macOS 26.6 では、ACL の確認の出し方が保存のときにバイト順が入れ替わったので、入れ替えた値で保存し、保存された項目を読み返して確かめる（違えば、そのままの値で作り直す）。データ保護キーチェーン（`kSecUseDataProtectionKeychain`）・`SecAccessControl`・Secure Enclave の永続の鍵は使わない。`kSecAttrAccessible` は、ファイル型のキーチェーンでは効かないので付けない。
+- 理由: データ保護キーチェーンなどは、Apple Developer の Team ID と keychain-access-groups の entitlement（プロビジョニングプロファイルが要る）がないと -34018 になる（この Mac で確かめた）。自己署名のアプリでできる一番強い形が、ファイル型のキーチェーンの ACL。確認を「許可」のクリックではなくパスワードにすると、うっかり許すことが減る。
+- 決めた場面: この PR（[design/security.md](../design/security.md) の 1 章）
+- 関係する要件: REQ-COM-021
+- 対象: Mac
+- 実装の場所: `Keychain.save`・`makeAccess`・`storedDecryptPrompt`
+
+### DEC-COM-049 API キーは使うときに読み、設定画面には末尾 4 文字だけを出す
+- 決めたこと: キーはリクエストを送るたびにキーチェーンから読み、クライアントやビューの状態に持たない（`ClaudeClient.apiKey` は読み出す関数）。設定画面は、保存のときに項目の属性（`kSecAttrComment`）に書いた末尾 4 文字（「…abcd」）を出し、キーの中身を読まない。入力欄は `SecureField` で、保存したら空にする。キーの有無も属性だけで調べる（確認のダイアログが出ない）。
+- 理由: 前の版は設定画面を開くとキーを読み、`@State` に持っていた。メモリに長く置かない。属性はほかのアプリからも読めるが、末尾 4 文字だけなら困らない。
+- 決めた場面: この PR
+- 関係する要件: REQ-COM-021
+- 対象: Mac
+- 実装の場所: `Keychain.hint`・`exists`、`ClaudeClient.fromKeychain`、`ClaudeKeySection`、`GeminiAuthSection`
+
+### DEC-COM-050 「接続を試す」は GET /v1/models/{model} で確かめる
+- 決めたこと: 「接続を試す」は、選んでいるモデルの `GET https://api.anthropic.com/v1/models/{model}` を送る。200 なら「接続できました」、401 なら「キーが正しくありません」、404 なら「モデルが見つからないか、このキーでは使えません」。
+- 理由: トークンを使わずに、キーの正しさとモデルを使えることを確かめられる。
+- 決めた場面: この PR
+- 関係する要件: REQ-COM-020
+- 対象: Mac
+- 実装の場所: `ClaudeClient.testConnection`、`ClaudeKeySection.testConnection`
+
+### DEC-COM-051 自己署名でも Hardened Runtime を付ける
+- 決めたこと: `scripts/build-app.sh` で自己署名の証明書（Hanasu Local Signing / Hanasu Release Signing）で署名するときも `--options runtime` を付ける。entitlements はマイク（`device.audio-input`）とリマインダー（`personal-information.calendars`）だけのまま。
+- 理由: キーチェーンは Hanasu を信頼するので、ほかのプログラムが `DYLD_INSERT_LIBRARIES` などで Hanasu にコードを差し込むと、Hanasu としてキーを読める。Hardened Runtime はそれを止める。Hanasu はシステムのもの以外の dylib を読み込まない（`otool -L` で確かめた）ので、ライブラリの検証で困らない。
+- 決めた場面: この PR
+- 関係する要件: REQ-COM-022
+- 対象: Mac
+- 実装の場所: `scripts/build-app.sh`
+
+### DEC-COM-052 会議の記録のフォルダは、本人だけが開けるようにする
+- 決めたこと: `~/Documents/Hanasu/Meetings` と会議ごとのフォルダを 0700 で作り、前の版で作ったもの（0755）も保存のときに 0700 に直す。
+- 理由: 会話の録音・文字起こし・議事録が入る。`~/Documents` はふつう本人だけが開けるが、権限を変えられていても守れるようにする。音声入力の履歴はすでに 0700 / 0600（DEC-DIC-070）。
+- 決めた場面: この PR（セキュリティの調査）
+- 関係する要件: REQ-COM-022, REQ-MTG-005
+- 対象: Mac
+- 実装の場所: `MeetingStore.createPrivateDirectory`
+
+### DEC-COM-053 サービスアカウントの token_uri と Vertex AI のリージョンを確かめてから送る
+- 決めたこと: 鍵ファイルの `token_uri` が `https://oauth2.googleapis.com`（古い鍵の `https://accounts.google.com`）でなければ、署名した JWT を送らない。Vertex AI のリージョンは英小文字・数字・ハイフンだけを受け付ける（ホスト名に入るため）。
+- 理由: 鍵ファイルや設定（UserDefaults）を書き換えられると、署名した JWT やアクセストークンを別のホストに送らされうる。
+- 決めた場面: この PR（セキュリティの調査）
+- 関係する要件: REQ-COM-022
+- 対象: Mac
+- 実装の場所: `ServiceAccountTokenProvider.isTrustedTokenURL`、`GeminiClient.isValidLocation`
 
 ### DEC-COM-100 Windows 版は C# / .NET 8 / WPF で作り、OS に依存しない部分を分ける
 - 決めたこと: `windows/` に C# 12 / .NET 8（LTS）/ WPF で作る（ターゲットは `net8.0-windows10.0.19041.0`）。プロンプト・Gemini・JWT・辞書・設定・音声の変換・状態遷移は OS に依存しない `Hanasu.Core`（net8.0）に置き、Mac でも `dotnet test` で確かめる。Whisper（`Hanasu.Whisper`）と話者分離（`Hanasu.Diarization`）も net8.0 に分ける。

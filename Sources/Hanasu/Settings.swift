@@ -124,6 +124,16 @@ final class AppSettings: ObservableObject {
     private let defaults = UserDefaults.standard
 
     @Published var model: String { didSet { defaults.set(model, forKey: Keys.model) } }
+    // 要件: REQ-COM-020, REQ-COM-024
+    // 設計判断: DEC-COM-040
+    /// 音声入力（整形・英訳・選択の編集）に使う AI（Gemini か Claude）。文字起こしのエンジンとは別
+    @Published var dictationAIProvider: TextAIProvider { didSet { defaults.set(dictationAIProvider.rawValue, forKey: Keys.dictationAIProvider) } }
+    /// 会議（議事録・会議への質問・辞書の候補）に使う AI
+    @Published var meetingAIProvider: TextAIProvider { didSet { defaults.set(meetingAIProvider.rawValue, forKey: Keys.meetingAIProvider) } }
+    /// Claude を選んだときの、音声入力のモデル
+    @Published var claudeModel: String { didSet { defaults.set(claudeModel, forKey: Keys.claudeModel) } }
+    /// Claude を選んだときの、会議のモデル
+    @Published var claudeMinutesModel: String { didSet { defaults.set(claudeMinutesModel, forKey: Keys.claudeMinutesModel) } }
     @Published var authMode: GeminiAuthMode { didSet { defaults.set(authMode.rawValue, forKey: Keys.authMode) } }
     @Published var serviceAccountPath: String { didSet { defaults.set(serviceAccountPath, forKey: Keys.serviceAccountPath) } }
     @Published var vertexLocation: String { didSet { defaults.set(vertexLocation, forKey: Keys.vertexLocation) } }
@@ -182,6 +192,22 @@ final class AppSettings: ObservableObject {
         Locale(identifier: localeIdentifier).language.languageCode?.identifier ?? "ja"
     }
 
+    // 要件: REQ-COM-024
+    // 設計判断: DEC-COM-040
+    func aiProvider(for purpose: TextAIPurpose) -> TextAIProvider {
+        purpose == .dictation ? dictationAIProvider : meetingAIProvider
+    }
+
+    /// 用途ごとの、選んだ AI のモデル（Gemini の音声入力は model、会議は meetingMinutesModel）
+    func textModel(for purpose: TextAIPurpose) -> String {
+        switch (purpose, aiProvider(for: purpose)) {
+        case (.dictation, .gemini): model
+        case (.dictation, .claude): claudeModel
+        case (.meeting, .gemini): meetingMinutesModel
+        case (.meeting, .claude): claudeMinutesModel
+        }
+    }
+
     /// ユーザー辞書の正しい表記の一覧（語だけの行と、置き換えルールの右側）。書き方は UserDictionary を参照
     var dictionaryWords: [String] {
         userDictionary.spellings
@@ -191,6 +217,12 @@ final class AppSettings: ObservableObject {
         defaults.register(defaults: [
             Keys.model: Self.suggestedModels[0],
             Keys.authMode: GeminiAuthMode.apiKey.rawValue,
+            // 設計判断: DEC-COM-040
+            Keys.dictationAIProvider: TextAIProvider.gemini.rawValue,
+            Keys.meetingAIProvider: TextAIProvider.gemini.rawValue,
+            // 要件: REQ-COM-023
+            Keys.claudeModel: ClaudeClient.Model.defaultDictation.rawValue,
+            Keys.claudeMinutesModel: ClaudeClient.Model.defaultMeeting.rawValue,
             // ターミナルから起動した場合は環境変数のパスを初期値にする
             Keys.serviceAccountPath: ProcessInfo.processInfo.environment["GEMINI_SERVICE_ACCOUNT_JSON"] ?? "",
             // 設計判断: DEC-COM-004
@@ -227,6 +259,10 @@ final class AppSettings: ObservableObject {
         ])
         model = defaults.string(forKey: Keys.model)!
         authMode = GeminiAuthMode(rawValue: defaults.string(forKey: Keys.authMode)!) ?? .apiKey
+        dictationAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.dictationAIProvider)!) ?? .gemini
+        meetingAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.meetingAIProvider)!) ?? .gemini
+        claudeModel = defaults.string(forKey: Keys.claudeModel)!
+        claudeMinutesModel = defaults.string(forKey: Keys.claudeMinutesModel)!
         serviceAccountPath = defaults.string(forKey: Keys.serviceAccountPath)!
         vertexLocation = defaults.string(forKey: Keys.vertexLocation)!
         hotKey = HotKeyCombo(
@@ -261,6 +297,10 @@ final class AppSettings: ObservableObject {
     private enum Keys {
         static let model = "geminiModel"
         static let authMode = "geminiAuthMode"
+        static let dictationAIProvider = "dictationTextAIProvider"
+        static let meetingAIProvider = "meetingTextAIProvider"
+        static let claudeModel = "claudeModel"
+        static let claudeMinutesModel = "claudeMinutesModel"
         static let serviceAccountPath = "serviceAccountPath"
         static let vertexLocation = "vertexLocation"
         static let hotKeyCode = "hotKeyCode"

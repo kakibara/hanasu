@@ -29,7 +29,7 @@ final class EditModeController {
     private var cancelRequested = false
     /// 準備中に選択がないとわかったとき、準備が終わってから出すエラー
     private var pendingFailure: String?
-    private var auth: GeminiClient.Auth?
+    private var client: TextAIClient?
     private var targetAppName: String?
     private var selectionTask: Task<String?, Never>?
     private var cancellables: Set<AnyCancellable> = []
@@ -151,11 +151,13 @@ final class EditModeController {
             return
         }
         do {
-            guard let auth = try GeminiClient.authFromSettings(settings) else {
-                fail("Gemini の認証情報が未設定のため、選択を声で編集できません（メニュー → 設定 →「Gemini」）。")
+            // キーそのものは持たない（Claude は送るときにキーチェーンから読む）
+            guard let client = try TextAIClient.fromSettings(settings, for: .dictation, timeout: 60) else {
+                let provider = settings.aiProvider(for: .dictation)
+                fail("\(provider.name) の認証情報が未設定のため、選択を声で編集できません（メニュー → 設定 →「AI」）。")
                 return
             }
-            self.auth = auth
+            self.client = client
         } catch {
             fail(error.localizedDescription)
             return
@@ -281,7 +283,7 @@ final class EditModeController {
         state = .idle
         selectionTask?.cancel()
         selectionTask = nil
-        auth = nil
+        client = nil
         setEscapeHotKey(enabled: false)
     }
 
@@ -303,8 +305,8 @@ final class EditModeController {
             fail(error)
             return
         }
-        guard let selection, let auth else {
-            fail("Gemini の認証情報を読み込めませんでした。")
+        guard let selection, let client else {
+            fail("AI の認証情報を読み込めませんでした。")
             return
         }
         hud.model.editBadge = "選択 \(selection.count) 文字"
@@ -315,15 +317,14 @@ final class EditModeController {
 
         let output: String
         do {
-            var client = GeminiClient(auth: auth)
-            client.timeout = 60  // 長い選択の書き換えは、整形より時間がかかる
+            // 長い選択の書き換えは整形より時間がかかるので、60 秒待つ（start で作ったクライアント）
             output = try await client.editSelection(GeminiClient.EditRequest(
                 selection: selection,
                 instruction: instruction,
-                model: settings.model,
+                model: settings.textModel(for: .dictation),
                 appName: settings.sendAppName ? targetAppName : nil,
                 dictionary: settings.dictionaryWords))
-            appLog.notice("edit: rewritten by \(self.settings.model, privacy: .public): \(selection.count) → \(output.count) chars")
+            appLog.notice("edit: rewritten by \(self.settings.textModel(for: .dictation), privacy: .public): \(selection.count) → \(output.count) chars")
         } catch {
             appLog.error("edit failed: \(error.localizedDescription, privacy: .public)")
             fail("\(error.localizedDescription)\n選択した文章はそのままです。")

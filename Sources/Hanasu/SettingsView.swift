@@ -1,6 +1,5 @@
 import AVFoundation
 import SwiftUI
-import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @ObservedObject var settings = AppSettings.shared
@@ -16,8 +15,9 @@ struct SettingsView: View {
                 onBeginShortcutRecording: onBeginShortcutRecording,
                 onEndShortcutRecording: onEndShortcutRecording)
                 .tabItem { Label("一般", systemImage: "gearshape") }
-            GeminiTab(settings: settings)
-                .tabItem { Label("Gemini", systemImage: "sparkles") }
+            // 要件: REQ-COM-020, REQ-COM-024
+            AISettingsTab(settings: settings)
+                .tabItem { Label("AI", systemImage: "sparkles") }
             WordsTab(settings: settings)
                 .tabItem { Label("辞書・ルール", systemImage: "character.book.closed") }
             AppStylesTab()
@@ -67,7 +67,7 @@ private struct GeneralTab: View {
                 Picker("録音モード", selection: $settings.recordingMode) {
                     ForEach(RecordingMode.allCases) { Text($0.label).tag($0) }
                 }
-                Text("日本語で話すと、「英訳して入力」では Gemini が自然な英語に翻訳して入力します（Gemini の認証情報が必要です）。録音中は Esc で取り消せます。")
+                Text("日本語で話すと、「英訳して入力」では AI（「AI」タブで音声入力に選んだ Gemini か Claude）が自然な英語に翻訳して入力します。録音中は Esc で取り消せます。")
                     .font(.caption).foregroundStyle(.secondary)
             }
             // 音声入力と会議の記録の文字起こしのエンジン（TranscriptionEngineSettingsView.swift）
@@ -77,127 +77,6 @@ private struct GeneralTab: View {
             }
         }
         .formStyle(.grouped)
-    }
-}
-
-private struct GeminiTab: View {
-    @ObservedObject var settings: AppSettings
-    @State private var apiKey = Keychain.loadAPIKey() ?? ""
-    @State private var savedMessage: String?
-    @State private var testInput = "えーと明日の会議なんですけど あの資料はジェミニで作ったやつを使いますあ違うグーグルスライドで作ったやつです"
-    @State private var testOutput = ""
-    @State private var isTesting = false
-
-    var body: some View {
-        Form {
-            Section {
-                Toggle("Gemini で自然な日本語に整える", isOn: $settings.refineWithGemini)
-                Toggle("入力先のアプリ名を Gemini に伝える（体裁の参考）", isOn: $settings.sendAppName)
-            }
-            ScreenContextSettingsSection()
-            Section("認証") {
-                Picker("認証方法", selection: $settings.authMode) {
-                    ForEach(GeminiAuthMode.allCases) { Text($0.label).tag($0) }
-                }
-                switch settings.authMode {
-                case .apiKey:
-                    HStack {
-                        SecureField("API キー", text: $apiKey)
-                        Button("保存") {
-                            savedMessage = Keychain.saveAPIKey(apiKey) ? "キーチェーンに保存しました" : "保存に失敗しました"
-                        }
-                    }
-                    if let savedMessage {
-                        Text(savedMessage).font(.caption).foregroundStyle(.secondary)
-                    }
-                    Link("Google AI Studio で API キーを発行", destination: URL(string: "https://aistudio.google.com/apikey")!)
-                        .font(.caption)
-                case .serviceAccount:
-                    HStack {
-                        TextField("サービスアカウントの JSON", text: $settings.serviceAccountPath, prompt: Text("~/path/to/key.json"))
-                        Button("選択…", action: chooseServiceAccountFile)
-                    }
-                    TextField("リージョン", text: $settings.vertexLocation, prompt: Text("global"))
-                    Text(serviceAccountSummary)
-                        .font(.caption).foregroundStyle(.secondary)
-                }
-            }
-            Section("モデル") {
-                HStack {
-                    TextField("モデル", text: $settings.model)
-                    Menu("候補") {
-                        ForEach(AppSettings.suggestedModels, id: \.self) { model in
-                            Button(model) { settings.model = model }
-                        }
-                    }
-                    .fixedSize()
-                }
-                Text("思考レベル: \(GeminiClient.thinkingLevel(for: settings.model))（lite は minimal、それ以外は low）")
-                    .font(.caption).foregroundStyle(.secondary)
-            }
-            Section("試してみる") {
-                TextField("認識結果の例", text: $testInput, axis: .vertical)
-                    .lineLimit(2...4)
-                HStack {
-                    Button(isTesting ? "送信中…" : "整形を試す") { runTest(translate: false) }
-                        .disabled(isTesting || testInput.isEmpty)
-                    Button("英訳を試す") { runTest(translate: true) }
-                        .disabled(isTesting || testInput.isEmpty)
-                    Spacer()
-                }
-                if !testOutput.isEmpty {
-                    Text(testOutput).textSelection(.enabled)
-                }
-            }
-        }
-        .formStyle(.grouped)
-    }
-
-    private var serviceAccountSummary: String {
-        let path = settings.serviceAccountPath.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !path.isEmpty else { return "Vertex AI のユーザー権限（roles/aiplatform.user）を持つサービスアカウントの鍵を指定してください。" }
-        do {
-            let credentials = try ServiceAccountCredentials.load(path: path)
-            return "プロジェクト: \(credentials.projectID)　アカウント: \(credentials.clientEmail)"
-        } catch {
-            return "⚠️ " + error.localizedDescription
-        }
-    }
-
-    private func chooseServiceAccountFile() {
-        let panel = NSOpenPanel()
-        panel.allowedContentTypes = [.json]
-        panel.canChooseDirectories = false
-        if panel.runModal() == .OK, let url = panel.url {
-            settings.serviceAccountPath = url.path
-        }
-    }
-
-    private func runTest(translate: Bool) {
-        isTesting = true
-        testOutput = ""
-        let request = GeminiClient.Request(
-            transcript: settings.userDictionary.apply(to: testInput),
-            model: settings.model,
-            appName: nil,
-            dictionary: settings.dictionaryWords,
-            extraInstructions: settings.extraInstructions,
-            dictionaryRules: settings.userDictionary.rules)
-        if settings.authMode == .apiKey {
-            Keychain.saveAPIKey(apiKey)
-        }
-        Task {
-            let started = Date()
-            do {
-                guard let auth = try GeminiClient.authFromSettings(settings) else { throw GeminiError.missingAPIKey }
-                let client = GeminiClient(auth: auth)
-                let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
-                testOutput = output + String(format: "\n\n（%.1f 秒）", Date().timeIntervalSince(started))
-            } catch {
-                testOutput = "⚠️ " + error.localizedDescription
-            }
-            isTesting = false
-        }
     }
 }
 
@@ -257,15 +136,10 @@ private struct MeetingTab: View {
                     Text("マイク側も話者を分ける")
                     Text("会議室などで 1 つのマイクを複数人で使うときにオン。いちばん長く話した人を「自分」、ほかを「同席者1」「同席者2」…にします。1 人で参加するときはオフのままにしてください（自分の声が 2 人に分かれることがあります）。")
                 }
-                Toggle("記録後に Gemini で議事録を作る", isOn: $settings.makeMeetingMinutes)
-                HStack {
-                    TextField("議事録のモデル", text: $settings.meetingMinutesModel)
-                    Menu("候補") {
-                        ForEach(AppSettings.suggestedModels, id: \.self) { model in
-                            Button(model) { settings.meetingMinutesModel = model }
-                        }
-                    }
-                    .fixedSize()
+                Toggle(isOn: $settings.makeMeetingMinutes) {
+                    Text("記録後に AI で議事録を作る")
+                    // 要件: REQ-COM-024
+                    Text("議事録のモデル: \(settings.aiProvider(for: .meeting).name) · \(settings.textModel(for: .meeting))（「AI」タブで、音声入力とは別に選べます）")
                 }
                 Toggle("音声ファイル（me.m4a / others.m4a）を残す", isOn: $settings.keepMeetingAudio)
             }

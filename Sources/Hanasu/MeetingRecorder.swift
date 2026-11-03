@@ -261,9 +261,10 @@ final class MeetingRecorder: ObservableObject {
         if settings.makeMeetingMinutes, !meeting.utterances.isEmpty {
             setState(.processing("議事録を作成しています…"))
             do {
-                guard let auth = try GeminiClient.authFromSettings(settings) else { throw GeminiError.missingAPIKey }
+                // 要件: REQ-COM-024
+                let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
                 let result = try await MeetingProcessor.makeMinutes(
-                    for: meeting, client: GeminiClient(auth: auth, timeout: 300), model: settings.meetingMinutesModel)
+                    for: meeting, client: client, model: settings.textModel(for: .meeting))
                 meeting.minutes = result.markdown
                 meeting.actionItems = result.actionItems
             } catch {
@@ -306,14 +307,14 @@ final class MeetingRecorder: ObservableObject {
         setState(.processing("議事録を作り直しています…"))
         var updated = meeting
         do {
-            guard let auth = try GeminiClient.authFromSettings(settings) else { throw GeminiError.missingAPIKey }
+            let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
             var source = meeting
             if let template {
                 source.minutesTemplate = template.rawValue
                 source.customMinutesPrompt = template == .custom ? customPrompt : nil
             }
             let result = try await MeetingProcessor.makeMinutes(
-                for: source, client: GeminiClient(auth: auth, timeout: 300), model: settings.meetingMinutesModel)
+                for: source, client: client, model: settings.textModel(for: .meeting))
             updated.minutesTemplate = source.minutesTemplate
             updated.customMinutesPrompt = source.customMinutesPrompt
             updated.minutes = result.markdown

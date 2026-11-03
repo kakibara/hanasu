@@ -7,6 +7,7 @@ enum ServiceAccountError: LocalizedError {
     case invalidPrivateKey
     case signingFailed(String)
     case tokenRequestFailed(status: Int, message: String)
+    case untrustedTokenURI(String)
 
     var errorDescription: String? {
         switch self {
@@ -15,6 +16,7 @@ enum ServiceAccountError: LocalizedError {
         case .invalidPrivateKey: "サービスアカウントの秘密鍵を読み取れません"
         case .signingFailed(let message): "アクセストークン用の署名に失敗しました: \(message)"
         case .tokenRequestFailed(let status, let message): "アクセストークンの取得に失敗しました（\(status)）: \(message)"
+        case .untrustedTokenURI(let uri): "サービスアカウントの token_uri（\(uri)）が Google のトークンの窓口（oauth2.googleapis.com）ではないため、使いません"
         }
     }
 }
@@ -61,13 +63,19 @@ actor ServiceAccountTokenProvider {
         }
         let assertion = try Self.makeJWT(credentials)
 
-        var request = URLRequest(url: URL(string: credentials.tokenURI)!, timeoutInterval: 15)
+        // 設計判断: DEC-COM-053
+        // token_uri は鍵ファイルに書いてある値だが、署名した JWT を送る先なので Google のトークンの窓口に限る
+        guard let tokenURL = URL(string: credentials.tokenURI), Self.isTrustedTokenURL(tokenURL) else {
+            throw ServiceAccountError.untrustedTokenURI(credentials.tokenURI)
+        }
+        var request = URLRequest(url: tokenURL, timeoutInterval: 15)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpBody = Data(
             "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=\(assertion)".utf8)
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        // 設計判断: DEC-COM-044
+        let (data, response) = try await SecureHTTP.data(for: request)
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
         guard (200..<300).contains(status),
               let token = try? JSONDecoder().decode(TokenResponse.self, from: data)
@@ -77,6 +85,13 @@ actor ServiceAccountTokenProvider {
         }
         cache[credentials.clientEmail] = (token.access_token, Date().addingTimeInterval(TimeInterval(token.expires_in)))
         return token.access_token
+    }
+
+    // 設計判断: DEC-COM-053
+    static func isTrustedTokenURL(_ url: URL) -> Bool {
+        // 古い鍵ファイルは https://accounts.google.com/o/oauth2/token を書いている
+        url.scheme == "https" && ["oauth2.googleapis.com", "accounts.google.com"].contains(url.host ?? "")
+            && url.port == nil && url.user == nil
     }
 
     private struct TokenResponse: Decodable {

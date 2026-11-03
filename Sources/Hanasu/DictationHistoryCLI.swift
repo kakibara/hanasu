@@ -204,17 +204,17 @@ enum DictationHistoryCLI {
         // 9. Gemini で整形・英訳し直す
         if gemini {
             do {
-                let auth = try cliAuth()
+                let client = try TextAIClient.cli(args: CommandLine.arguments, settings: AppSettings.shared, for: .dictation)
                 let retryStore = DictationHistoryStore(directory: directory)
                 let entry = retryStore.record(
                     raw: "えーと明日の会議なんですけど あの資料はジェミニで作ったやつを使いますあ違うグーグルスライドで作ったやつです",
                     output: "えーと明日の会議なんですけど あの資料はジェミニで作ったやつを使いますあ違うグーグルスライドで作ったやつです",
                     mode: .refine, appName: "Slack", status: .geminiFailed, errorMessage: "テスト用のエラー")
-                let refined = try await retryStore.retry(entry.id, mode: .refine, auth: auth)
+                let refined = try await retryStore.retry(entry.id, mode: .refine, client: client)
                 print("  整形し直し: \(refined.output)")
                 expect(refined.status == .succeeded && refined.errorMessage == nil && refined.retriedAt != nil
                        && refined.output != entry.raw, "整形し直すと結果と状態が更新される")
-                let translated = try await retryStore.retry(entry.id, mode: .translate, auth: auth)
+                let translated = try await retryStore.retry(entry.id, mode: .translate, client: client)
                 print("  英訳し直し: \(translated.output)")
                 expect(translated.mode == .translate && translated.status == .succeeded, "英訳し直すとモードが英訳になる")
                 let saved = DictationHistoryStore(directory: directory)
@@ -228,15 +228,5 @@ enum DictationHistoryCLI {
         try? FileManager.default.removeItem(at: directory)
         print(failures == 0 ? "すべて OK" : "\(failures) 件が NG")
         return failures == 0
-    }
-
-    /// main.swift の cliRefine と同じ順で認証を選ぶ
-    private static func cliAuth() throws -> GeminiClient.Auth {
-        let settings = AppSettings.shared
-        let env = ProcessInfo.processInfo.environment
-        if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
-            return .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
-        }
-        return try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
     }
 }

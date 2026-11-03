@@ -83,11 +83,11 @@ final class MeetingAskModel: ObservableObject {
             defer { running = false }
             do {
                 let settings = AppSettings.shared
-                guard let auth = try GeminiClient.authFromSettings(settings) else { throw GeminiError.missingAPIKey }
+                let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 180)
                 await index.update(meetings)
                 answer = try await MeetingAsk.ask(
                     question: question, meetings: meetings, index: index,
-                    client: GeminiClient(auth: auth, timeout: 180), model: settings.meetingMinutesModel)
+                    client: client, model: settings.textModel(for: .meeting))
             } catch {
                 self.error = "答えを作れませんでした: \(error.localizedDescription)"
             }

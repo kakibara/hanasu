@@ -78,9 +78,10 @@ enum MinutesCLI {
         applyTemplateArguments(args, to: &meeting)
 
         let settings = AppSettings.shared
-        let model = value(after: "--model", in: args) ?? settings.meetingMinutesModel
+        let model = TextAIClient.cliModel(args: args, settings: settings, for: .meeting)
         let started = Date()
-        let result = try await MeetingProcessor.makeMinutes(for: meeting, client: GeminiClient(auth: try auth(), timeout: 300), model: model)
+        let client = try TextAIClient.cli(args: args, settings: settings, for: .meeting, timeout: 300)
+        let result = try await MeetingProcessor.makeMinutes(for: meeting, client: client, model: model)
         meeting.minutes = result.markdown
         meeting.actionItems = result.actionItems
         print(String(format: "[議事録 %@ 型=%@ %.1fs 発言 %d 件]", model, meeting.template.title,
@@ -255,15 +256,6 @@ enum MinutesCLI {
             meeting.minutes = text
         }
         return meeting
-    }
-
-    private static func auth() throws -> GeminiClient.Auth {
-        let settings = AppSettings.shared
-        let env = ProcessInfo.processInfo.environment
-        if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
-            return .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
-        }
-        return try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
     }
 
     private static func parseDate(_ s: String) -> Date? {

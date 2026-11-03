@@ -1,15 +1,15 @@
 import AppKit
 import SwiftUI
 
-/// 設定画面の「画面の文脈」の欄。Gemini タブに置く
+/// 設定画面の「画面の文脈」の欄。AI タブに置く
 struct ScreenContextSettingsSection: View {
     @ObservedObject var settings = ScreenContextSettings.shared
 
     var body: some View {
         Section {
             Toggle(isOn: $settings.enabled) {
-                Text("画面の文脈を Gemini に渡す")
-                Text("録音を始めたときに、前面のウインドウのタイトルと、入力欄のカーソルの前後の文章（それぞれ最大 \(ScreenContextReader.maxChars) 文字）を読み取ります。固有名詞の表記や書き方、話の流れを合わせるための参考として、話した内容と一緒に Gemini に送ります（英訳でも使います）。パスワード欄と下の除外アプリは読みません。読み取った文章は保存しません。")
+                Text("画面の文脈を AI に渡す")
+                Text("録音を始めたときに、前面のウインドウのタイトルと、入力欄のカーソルの前後の文章（それぞれ最大 \(ScreenContextReader.maxChars) 文字）を読み取ります。固有名詞の表記や書き方、話の流れを合わせるための参考として、話した内容と一緒に AI（Gemini か Claude）に送ります（英訳でも使います）。パスワード欄と下の除外アプリは読みません。読み取った文章は保存しません。")
             }
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
@@ -30,7 +30,7 @@ struct ScreenContextSettingsSection: View {
         } header: {
             Text("画面の文脈")
         } footer: {
-            Text("読み取りにはアクセシビリティの許可（自動入力と同じもの）を使います。画面に表示されている他人のメッセージも Gemini に送られることがあるので、社外秘の画面などでは除外に入れるか、オフにしてください。")
+            Text("読み取りにはアクセシビリティの許可（自動入力と同じもの）を使います。画面に表示されている他人のメッセージも AI に送られることがあるので、社外秘の画面などでは除外に入れるか、オフにしてください。")
                 .font(.caption).foregroundStyle(.secondary)
         }
     }

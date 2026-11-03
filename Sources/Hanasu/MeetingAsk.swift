@@ -169,13 +169,13 @@ enum MeetingAsk {
     """
 
     // 設計判断: DEC-MTG-054
-    static func ask(question: String, meetings: [Meeting], index: MeetingSearchIndex, client: GeminiClient,
+    static func ask(question: String, meetings: [Meeting], index: MeetingSearchIndex, client: TextAIClient,
                     model: String, options: Options = Options()) async throws -> Answer {
         let context = await gatherContext(question: question, meetings: meetings, index: index, options: options)
         guard !context.sources.isEmpty else {
             return Answer(text: "質問に使える会議の記録がありません。", sources: [], cited: [], keywords: context.keywords)
         }
-        let text = try await client.generate(systemInstruction: instruction, userText: context.prompt, model: model)
+        let text = try await client.generate(systemInstruction: instruction, userText: context.prompt, model: model, effort: .medium)
         return Answer(text: text, sources: context.sources, cited: cited(in: text, sources: context.sources),
                       keywords: context.keywords)
     }
