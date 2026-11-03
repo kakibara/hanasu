@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- タスクトレイに常駐する Windows 版 Hanasu 本体（WPF）。
+       10.0.19041.0 は Windows.Media.SpeechRecognition（WinRT）を使うため -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <!-- タスクトレイのアイコン（NotifyIcon）だけ WinForms を使う -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>Hanasu.Windows</RootNamespace>
+    <AssemblyName>Hanasu</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\Hanasu.ico</ApplicationIcon>
+    <!-- 配布のコマンドは windows/README.md の「配布」を参照 -->
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType Condition="'$(Configuration)' == 'Release'">embedded</DebugType>
+    <!-- LibraryImport（P/Invoke のソース生成）に要る -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- WFAC010 は WinForms のアプリ向けの警告。WPF は manifest で DPI を決めるのが推奨なので抑える -->
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- WPF と WinForms の両方を使うと Application などの名前がぶつかるので、WinForms の既定の using は外す -->
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hanasu.Core\Hanasu.Core.csproj" />
+    <ProjectReference Include="..\Hanasu.Whisper\Hanasu.Whisper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Hanasu.ico" />
+  </ItemGroup>
+
+  <!-- Whisper.net.Runtime はすべての OS のネイティブライブラリを runtimes/ に置くので、配布物には publish した RID（win-x64 など）の分だけを入れる。
+       ネイティブライブラリは exe に入れず、exe の隣の runtimes/win-*/ に置く（Whisper.net がそこから読むため） -->
+  <Target Name="DropNonWindowsWhisperRuntimes" AfterTargets="ComputeResolvedFilesToPublishList">
+    <PropertyGroup>
+      <!-- RID を指定して publish したときはその RID のものだけ、指定しないときは Windows 用をすべて残す -->
+      <_HanasuRuntimeDir Condition="'$(RuntimeIdentifier)' != ''">runtimes/$(RuntimeIdentifier)/</_HanasuRuntimeDir>
+      <_HanasuRuntimeDir Condition="'$(RuntimeIdentifier)' == ''">runtimes/win-</_HanasuRuntimeDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <_HanasuForeignRuntime Include="@(ResolvedFileToPublish)"
+          Condition="$([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Replace('\','/').StartsWith('runtimes/')) And !$([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Replace('\','/').StartsWith('$(_HanasuRuntimeDir)'))" />
+      <ResolvedFileToPublish Remove="@(_HanasuForeignRuntime)" />
+      <!-- macOS の Metal 用のシェーダーも要らない -->
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.metal'" />
+      <!-- Whisper のネイティブライブラリは exe に入れず、ファイルのまま置く -->
+      <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="$([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Replace('\','/').StartsWith('runtimes/win-'))">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

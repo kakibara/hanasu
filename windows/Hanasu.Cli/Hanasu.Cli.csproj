@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 確認用の CLI。Core の Gemini クライアント・辞書・Whisper を、Windows がない環境（Mac など）でも動かして確かめる -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Hanasu.Cli</RootNamespace>
+    <AssemblyName>hanasu-cli</AssemblyName>
+    <!-- .NET 8 のランタイムがない環境（.NET 10 だけの Mac など）でも動かせるようにする -->
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hanasu.Core\Hanasu.Core.csproj" />
+    <ProjectReference Include="..\Hanasu.Whisper\Hanasu.Whisper.csproj" />
+  </ItemGroup>
+
+</Project>

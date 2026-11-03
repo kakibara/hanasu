@@ -1,0 +1,141 @@
+<Window x:Class="Hanasu.Windows.Views.HudWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Hanasu"
+        Width="500" Height="136"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="NoResize" ShowInTaskbar="False" ShowActivated="False" Topmost="True" Focusable="False"
+        FontFamily="Yu Gothic UI, Meiryo UI, Segoe UI"
+        TextOptions.TextFormattingMode="Display">
+    <Window.Resources>
+        <!-- 「日本語 / English」の切り替え。押してもフォーカスを取らない -->
+        <Style x:Key="LanguageOption" TargetType="Button">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="#B8FFFFFF" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Padding" Value="9,2" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Chip" Background="Transparent" CornerRadius="9" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Tag" Value="selected">
+                                <Setter TargetName="Chip" Property="Background" Value="#FF2F7DF6" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                    <Condition Property="Tag" Value="{x:Null}" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Chip" Property="Background" Value="#22FFFFFF" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- 「取消」「■ 停止」。押してもフォーカスを取らない -->
+        <Style x:Key="HudButton" TargetType="Button">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Padding" Value="9,2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Chip" Background="{TemplateBinding Background}" CornerRadius="9" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chip" Property="Opacity" Value="0.85" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Chip" Property="Opacity" Value="0.7" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Margin="12" CornerRadius="14" Background="#F21E2126" BorderBrush="#2EFFFFFF" BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="14" ShadowDepth="2" Opacity="0.35" />
+        </Border.Effect>
+        <Grid Margin="16,11,16,11">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0" LastChildFill="False">
+                <!-- 状態のアイコン -->
+                <Grid DockPanel.Dock="Left" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center">
+                    <Ellipse x:Name="RecordingDot" Width="12" Height="12" Fill="#FFFF453A" Visibility="Collapsed">
+                        <Ellipse.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.35" Duration="0:0:0.7" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Ellipse.Triggers>
+                    </Ellipse>
+                    <Path x:Name="Spinner" Width="14" Height="14" Stroke="#DDFFFFFF" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                          Data="M 7,1 A 6,6 0 1 1 1,7" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+                        <Path.RenderTransform>
+                            <RotateTransform x:Name="SpinnerRotation" />
+                        </Path.RenderTransform>
+                        <Path.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimation Storyboard.TargetName="SpinnerRotation" Storyboard.TargetProperty="Angle" From="0" To="360" Duration="0:0:0.9" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Path.Triggers>
+                    </Path>
+                    <TextBlock x:Name="DoneMark" Text="✓" Foreground="#FF32D74B" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed" />
+                    <TextBlock x:Name="ErrorMark" Text="⚠" Foreground="#FFFF9F0A" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed" />
+                </Grid>
+
+                <TextBlock x:Name="TitleText" DockPanel.Dock="Left" Foreground="White" FontSize="13" FontWeight="SemiBold"
+                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="190" />
+
+                <Border x:Name="LanguageSwitch" DockPanel.Dock="Left" Margin="10,0,0,0" Padding="2" CornerRadius="11" Background="#24FFFFFF"
+                        VerticalAlignment="Center" ToolTip="録音を止めたときに選んでいる言語で入力します">
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="JapaneseButton" Style="{StaticResource LanguageOption}" Content="日本語" Click="OnJapaneseClick" />
+                        <Button x:Name="EnglishButton" Style="{StaticResource LanguageOption}" Content="English" Click="OnEnglishClick" />
+                    </StackPanel>
+                </Border>
+
+                <!-- 右側は「経過時間・取消・■ 停止」の順（DockPanel の Right は先に書いたものほど右に来る） -->
+                <Button x:Name="StopButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#FFE5352B" Margin="6,0,0,0"
+                        Click="OnStopClick" ToolTip="録音を止めて入力します（ショートカットをもう一度押すのと同じ）">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="8" Height="8" Fill="White" RadiusX="1" RadiusY="1" VerticalAlignment="Center" Margin="0,0,5,0" />
+                        <TextBlock Text="停止" FontWeight="SemiBold" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="CancelButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#30FFFFFF" Margin="8,0,0,0"
+                        Content="取消" Click="OnCancelClick" ToolTip="何も入力せずに取り消します（Esc）" />
+                <TextBlock x:Name="ElapsedText" DockPanel.Dock="Right" Foreground="#B8FFFFFF" FontFamily="Consolas" FontSize="12" VerticalAlignment="Center" />
+            </DockPanel>
+
+            <TextBlock x:Name="DetailText" Grid.Row="1" Margin="0,6,0,0" Foreground="#C8FFFFFF" FontSize="12"
+                       TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="52" />
+        </Grid>
+    </Border>
+</Window>

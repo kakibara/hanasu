@@ -1,0 +1,228 @@
+<Window x:Class="Hanasu.Windows.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Hanasu.Windows.Views"
+        Title="Hanasu の設定"
+        Width="680" Height="720" MinWidth="560" MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Yu Gothic UI, Meiryo UI, Segoe UI" FontSize="13">
+    <Window.Resources>
+        <Style x:Key="Section" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,14,0,6" />
+        </Style>
+        <Style x:Key="Note" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FF5F6368" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,3,0,0" />
+        </Style>
+        <Style x:Key="Error" TargetType="TextBlock" BasedOn="{StaticResource Note}">
+            <Setter Property="Foreground" Value="#FFC5221F" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,3" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="MinHeight" Value="26" />
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,4,0,0" />
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Margin" Value="0,3,16,0" />
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <Border DockPanel.Dock="Bottom" BorderBrush="#FFE0E0E0" BorderThickness="0,1,0,0" Padding="16,10">
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Content="閉じる" Click="OnCloseClick" Margin="0" IsCancel="True" />
+                <TextBlock x:Name="SaveStatus" Style="{StaticResource Note}" VerticalAlignment="Center" Text="変更はすぐに保存されます" />
+            </DockPanel>
+        </Border>
+
+        <TabControl Margin="12,12,12,6">
+            <!-- 一般 -->
+            <TabItem Header="一般">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14,4,14,14">
+                        <TextBlock Style="{StaticResource Section}" Text="ショートカット" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="音声入力" VerticalAlignment="Center" />
+                            <local:HotKeyBox x:Name="DictationHotKeyBox" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" />
+                            <Button Grid.Row="0" Grid.Column="2" Content="既定に戻す" Click="OnResetDictationHotKey" />
+                            <TextBlock Grid.Row="1" Text="英訳して入力" VerticalAlignment="Center" />
+                            <local:HotKeyBox x:Name="TranslateHotKeyBox" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" />
+                            <Button Grid.Row="1" Grid.Column="2" Content="既定に戻す" Click="OnResetTranslateHotKey" />
+                        </Grid>
+                        <TextBlock x:Name="HotKeyError" Style="{StaticResource Error}" Visibility="Collapsed" />
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="欄をクリックしてから、使いたい組み合わせを押します。録音中は Esc で取り消せます。Alt + Space（ウインドウメニュー）と Win + H（Windows の音声入力）は Windows が使うので避けています。" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="録音のしかた" />
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="ToggleModeRadio" GroupName="RecordingMode" Content="押すたびに開始／停止（トグル）" Checked="OnRecordingModeChanged" />
+                            <RadioButton x:Name="PushToTalkRadio" GroupName="RecordingMode" Content="押している間だけ録音" Checked="OnRecordingModeChanged" />
+                        </StackPanel>
+
+                        <TextBlock Style="{StaticResource Section}" Text="文字起こしのエンジン" />
+                        <ComboBox x:Name="EngineCombo" SelectionChanged="OnEngineChanged" HorizontalAlignment="Left" MinWidth="320">
+                            <ComboBoxItem Content="Windows 標準の音声認識（既定）" Tag="Windows" />
+                            <ComboBoxItem Content="Whisper（この PC の上で動かす）" Tag="Whisper" />
+                            <ComboBoxItem Content="Gemini（音声を Google に送る）" Tag="Gemini" />
+                        </ComboBox>
+
+                        <!-- Windows 標準 -->
+                        <StackPanel x:Name="WindowsEnginePanel" Margin="0,6,0,0">
+                            <TextBlock Style="{StaticResource Note}"
+                                       Text="Windows の音声認識（ディクテーション）で日本語を認識し、話している間に途中経過を出します。Microsoft のオンライン音声認識を使うため、Windows の設定 → プライバシーとセキュリティ → 音声認識 で「オンライン音声認識」をオンにしてください。マイクは Windows の既定のマイクを使います（下の選択は使いません）。" />
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <Button Content="音声認識の設定を開く" Click="OnOpenSpeechPrivacy" />
+                                <Button Content="言語の設定を開く" Click="OnOpenLanguageSettings" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Whisper -->
+                        <StackPanel x:Name="WhisperEnginePanel" Margin="0,6,0,0">
+                            <TextBlock Style="{StaticResource Note}"
+                                       Text="whisper.cpp でこの PC の上で文字起こしします（音声は外に出ません）。録音を止めてからまとめて文字起こしします。モデルを選ぶと Hugging Face からダウンロードします。大きいモデルほど精度は上がりますが、遅くなります。" />
+                            <DockPanel Margin="0,6,0,0">
+                                <TextBlock Text="モデル" Width="60" VerticalAlignment="Center" />
+                                <ComboBox x:Name="WhisperModelCombo" SelectionChanged="OnWhisperModelChanged" />
+                            </DockPanel>
+                            <DockPanel Margin="60,6,0,0">
+                                <Button x:Name="WhisperDownloadButton" Content="ダウンロード" Click="OnWhisperDownload" />
+                                <Button x:Name="WhisperCancelButton" Content="取り消し" Click="OnWhisperCancel" />
+                                <Button x:Name="WhisperDeleteButton" Content="削除" Click="OnWhisperDelete" />
+                                <Button Content="保存先を開く" Click="OnOpenModelsFolder" />
+                                <TextBlock x:Name="WhisperStatus" VerticalAlignment="Center" TextWrapping="Wrap" />
+                            </DockPanel>
+                            <ProgressBar x:Name="WhisperProgress" Margin="60,6,0,0" Height="6" Minimum="0" Maximum="1" Visibility="Collapsed" />
+                            <TextBlock x:Name="WhisperFolderNote" Style="{StaticResource Note}" Margin="60,4,0,0" />
+                        </StackPanel>
+
+                        <!-- Gemini -->
+                        <StackPanel x:Name="GeminiEnginePanel" Margin="0,6,0,0">
+                            <TextBlock Style="{StaticResource Note}" Foreground="#FFB06000"
+                                       Text="録音した音声を Google の Gemini API（Gemini タブで設定した認証とモデル）に送って文字起こしします。音声が Google に送られることに注意してください。録音を止めてからまとめて送ります（1 回 7 分まで）。" />
+                        </StackPanel>
+
+                        <TextBlock Style="{StaticResource Section}" Text="マイク" />
+                        <ComboBox x:Name="MicrophoneCombo" SelectionChanged="OnMicrophoneChanged" HorizontalAlignment="Left" MinWidth="320" />
+                        <TextBlock x:Name="MicrophoneNote" Style="{StaticResource Note}" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="そのほか" />
+                        <CheckBox x:Name="PlaySoundsCheck" Content="録音の開始・停止で音を鳴らす" Checked="OnPlaySoundsChanged" Unchecked="OnPlaySoundsChanged" />
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <Button Content="ログのフォルダを開く" Click="OnOpenLogs" />
+                            <Button Content="設定のフォルダを開く" Click="OnOpenSettingsFolder" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Gemini -->
+            <TabItem Header="Gemini">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14,4,14,14">
+                        <CheckBox x:Name="RefineCheck" Margin="0,12,0,0" Content="Gemini で整形する（誤変換・フィラー・言い直し・句読点を直す）" Checked="OnRefineChanged" Unchecked="OnRefineChanged" />
+                        <TextBlock Style="{StaticResource Note}" Text="オフにすると、認識結果に辞書の置き換えだけを当てて入力します。英訳は Gemini でしかできないので、オフでも Gemini に送ります。" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="認証" />
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="ApiKeyRadio" GroupName="Auth" Content="API キー（Google AI Studio）" Checked="OnAuthModeChanged" />
+                            <RadioButton x:Name="ServiceAccountRadio" GroupName="Auth" Content="サービスアカウント（Vertex AI）" Checked="OnAuthModeChanged" />
+                        </StackPanel>
+
+                        <StackPanel x:Name="ApiKeyPanel" Margin="0,8,0,0">
+                            <DockPanel>
+                                <TextBlock Text="API キー" Width="110" VerticalAlignment="Center" />
+                                <Button DockPanel.Dock="Right" Content="削除" Click="OnDeleteApiKey" Margin="8,0,0,0" />
+                                <Button DockPanel.Dock="Right" Content="保存" Click="OnSaveApiKey" Margin="8,0,0,0" />
+                                <PasswordBox x:Name="ApiKeyBox" Padding="4,3" />
+                            </DockPanel>
+                            <TextBlock x:Name="ApiKeyStatus" Style="{StaticResource Note}" Margin="110,3,0,0" />
+                            <TextBlock Style="{StaticResource Note}" Margin="110,0,0,0"
+                                       Text="キーは Windows の DPAPI で暗号化して保存します（このユーザーでしか読めません）。" />
+                        </StackPanel>
+
+                        <StackPanel x:Name="ServiceAccountPanel" Margin="0,8,0,0">
+                            <DockPanel>
+                                <TextBlock Text="鍵（JSON）" Width="110" VerticalAlignment="Center" />
+                                <Button DockPanel.Dock="Right" Content="参照…" Click="OnBrowseServiceAccount" Margin="8,0,0,0" />
+                                <TextBox x:Name="ServiceAccountPathBox" Padding="4,3" LostFocus="OnServiceAccountPathChanged" />
+                            </DockPanel>
+                            <DockPanel Margin="0,6,0,0">
+                                <TextBlock Text="リージョン" Width="110" VerticalAlignment="Center" />
+                                <TextBox x:Name="VertexLocationBox" Width="160" HorizontalAlignment="Left" Padding="4,3" LostFocus="OnVertexLocationChanged" />
+                            </DockPanel>
+                            <TextBlock Style="{StaticResource Note}" Margin="110,3,0,0"
+                                       Text="Vertex AI ユーザー（roles/aiplatform.user）の権限があるサービスアカウントの鍵を選びます。リージョンは global が既定です（新しいモデルが先に来るため）。" />
+                        </StackPanel>
+
+                        <TextBlock Style="{StaticResource Section}" Text="モデル" />
+                        <ComboBox x:Name="ModelCombo" IsEditable="True" HorizontalAlignment="Left" MinWidth="320" LostFocus="OnModelChanged" SelectionChanged="OnModelSelectionChanged" />
+                        <TextBlock Style="{StaticResource Note}" Text="gemini-3.5-flash-lite が既定（速い）。誤変換が多いときや長文は gemini-3.8-flash。一覧にないモデル ID も入力できます。" />
+
+                        <CheckBox x:Name="SendAppNameCheck" Margin="0,12,0,0" Content="入力先のアプリ名を Gemini に伝える（体裁の参考にする）" Checked="OnSendAppNameChanged" Unchecked="OnSendAppNameChanged" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="試す" />
+                        <TextBox x:Name="TrialInput" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="56" Padding="4,3"
+                                 Text="えーと明日の会議なんですけど あの 資料はジェミニで作ったやつを使います" />
+                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                            <Button x:Name="TrialRefineButton" Content="整形を試す" Click="OnTrialRefine" />
+                            <Button x:Name="TrialTranslateButton" Content="英訳を試す" Click="OnTrialTranslate" />
+                            <TextBlock x:Name="TrialStatus" Style="{StaticResource Note}" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBox x:Name="TrialOutput" IsReadOnly="True" TextWrapping="Wrap" MinHeight="56" Margin="0,6,0,0" Padding="4,3" Background="#FFF7F7F7" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- 辞書・ルール -->
+            <TabItem Header="辞書・ルール">
+                <Grid Margin="14,4,14,14">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Style="{StaticResource Section}" Text="ユーザー辞書" />
+                    <TextBlock Grid.Row="1" Style="{StaticResource Note}" Margin="0,0,0,6">
+                        1 行に 1 つ。語だけ書くと、Gemini にその表記を伝えます。「読み =&gt; 表記」と書くと、認識結果のその読みを表記に置き換えます（例: ストックマーク =&gt; Stockmark、左は「,」で区切って複数書ける）。「#」で始まる行はメモです。
+                    </TextBlock>
+                    <TextBox x:Name="DictionaryBox" Grid.Row="2" AcceptsReturn="True" AcceptsTab="False" VerticalScrollBarVisibility="Auto"
+                             FontFamily="Consolas, Yu Gothic UI" Padding="4,3" TextChanged="OnDictionaryChanged" />
+                    <TextBlock x:Name="DictionaryIssues" Grid.Row="3" Style="{StaticResource Error}" Visibility="Collapsed" />
+                    <DockPanel Grid.Row="4" Margin="0,6,0,0">
+                        <TextBlock Text="置き換えを試す" Width="110" VerticalAlignment="Center" />
+                        <TextBox x:Name="DictionaryTrialBox" Padding="4,3" TextChanged="OnDictionaryTrialChanged" />
+                    </DockPanel>
+                    <TextBlock x:Name="DictionaryTrialResult" Grid.Row="5" Style="{StaticResource Note}" Margin="110,3,0,0" />
+
+                    <TextBlock Grid.Row="6" Style="{StaticResource Section}" Text="追加の整形ルール" />
+                    <DockPanel Grid.Row="7">
+                        <TextBlock DockPanel.Dock="Top" Style="{StaticResource Note}" Margin="0,0,0,6"
+                                   Text="整形のときに Gemini に渡すルール（例: です・ます調に統一）。英訳では使いません。" />
+                        <TextBox x:Name="ExtraInstructionsBox" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Padding="4,3" TextChanged="OnExtraInstructionsChanged" />
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

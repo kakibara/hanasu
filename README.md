@@ -93,6 +93,14 @@ Hanasu                              … 語だけ。音声認識と Gemini の�
 
 リマインダーへの登録は、会議ノートで「リマインダーに登録」を押したときに初めてアクセスの許可を求めます。
 
+## Windows 版
+
+Windows 10（2004 以降）/ 11 向けの版を [windows/](windows/) で作っている（C# / .NET 8 / WPF）。今は音声入力だけで、会議の記録はこれから足す。
+
+- タスクトレイに常駐し、`Ctrl + Alt + Space` で音声入力、`Ctrl + Alt + Shift + Space` で英訳して入力する（設定で変えられる）
+- 文字起こしは Windows 標準の音声認識（既定）・Whisper（PC の上で動かす）・Gemini から選ぶ。整形と英訳は Mac 版と同じ指示で Gemini が行う
+- ビルド・配布物の作り方・Mac 版との差は [windows/README.md](windows/README.md)
+
 ## リリースの作り方
 
 [tagpr](https://github.com/Songmu/tagpr) で行います（`.tagpr`、`.github/workflows/tagpr.yml`）。
