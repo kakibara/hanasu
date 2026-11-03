@@ -177,11 +177,12 @@ private struct GeminiTab: View {
         isTesting = true
         testOutput = ""
         let request = GeminiClient.Request(
-            transcript: testInput,
+            transcript: settings.userDictionary.apply(to: testInput),
             model: settings.model,
             appName: nil,
             dictionary: settings.dictionaryWords,
-            extraInstructions: settings.extraInstructions)
+            extraInstructions: settings.extraInstructions,
+            dictionaryRules: settings.userDictionary.rules)
         if settings.authMode == .apiKey {
             Keychain.saveAPIKey(apiKey)
         }
@@ -205,16 +206,8 @@ private struct WordsTab: View {
 
     var body: some View {
         Form {
-            Section {
-                TextEditor(text: $settings.dictionaryText)
-                    .font(.body.monospaced())
-                    .frame(minHeight: 120)
-            } header: {
-                Text("ユーザー辞書（1 行に 1 語）")
-            } footer: {
-                Text("固有名詞や専門用語を書いておくと、音声認識と Gemini の両方でその表記に寄せます。")
-                    .font(.caption).foregroundStyle(.secondary)
-            }
+            DictionaryEditorSection(text: $settings.dictionaryText)
+            DictionarySuggestionSection(settings: settings)
             Section {
                 TextEditor(text: $settings.extraInstructions)
                     .frame(minHeight: 100)

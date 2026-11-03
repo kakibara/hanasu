@@ -24,6 +24,8 @@ struct GeminiClient {
         var appName: String?
         var dictionary: [String]
         var extraInstructions: String
+        /// ユーザー辞書の置き換えルール（認識結果には先に当ててあるが、近い音の語も直せるよう Gemini にも渡す）
+        var dictionaryRules: [UserDictionary.Rule] = []
         /// 入力先アプリ別の文体ルール（AppStyles.swift）。nil なら使わない
         var appStyle: AppStyle? = nil
         /// 録音を始めたときの画面の文脈（設定でオンのときだけ）
@@ -116,6 +118,10 @@ struct GeminiClient {
         }
         if !request.dictionary.isEmpty {
             lines.append("ユーザー辞書: \(request.dictionary.joined(separator: ", "))")
+        }
+        if !request.dictionaryRules.isEmpty {
+            let rules = request.dictionaryRules.map { "- \($0.sources.joined(separator: "、")) → \($0.target)" }
+            lines.append("置き換えルール（左の読み・誤認識や、それに近い音の語が出てきたら右の表記にする）:\n\(rules.joined(separator: "\n"))")
         }
         let extra = request.extraInstructions.trimmingCharacters(in: .whitespacesAndNewlines)
         if !extra.isEmpty {

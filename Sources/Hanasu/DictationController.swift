@@ -160,7 +160,7 @@ final class DictationController {
                 try await recognizer.start(
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
-                    contextualStrings: settings.dictionaryWords + SnippetStore.shared.triggerPhrases)
+                    contextualStrings: settings.userDictionary.contextualStrings + SnippetStore.shared.triggerPhrases)
             } catch {
                 fail(error.localizedDescription)
                 return
@@ -221,12 +221,14 @@ final class DictationController {
             return
         }
 
-        // スニペット: 起動フレーズと一致した部分は、Gemini を通さず登録した本文に置き換える（Snippets.swift）
-        let snippetMatch = SnippetMatcher.match(raw, snippets: SnippetStore.shared.snippets)
+        // ユーザー辞書の置き換えルールを決定的に当てる（Gemini で整形しないときも効く）
+        let corrected = settings.userDictionary.apply(to: raw)
+        // スニペット: 起動フレーズと一致した部分は、Gemini を通さず登録した本文に置き換える（Snippets.swift）。照合は辞書を当てたあとの文で行う
+        let snippetMatch = SnippetMatcher.match(corrected, snippets: SnippetStore.shared.snippets)
         if let snippetMatch {
             appLog.notice("snippet matched: \(snippetMatch.snippets.count) snippets, whole=\(snippetMatch.isWholeUtterance)")
         }
-        var output = snippetMatch?.assembledWithoutConversion ?? raw
+        var output = snippetMatch?.assembledWithoutConversion ?? corrected
         var warning: String?
         let translating = mode == .translateToEnglish
         // 英訳は Gemini でしかできないので、整形をオフにしていても Gemini に送る。全体がスニペットなら呼ばない
@@ -236,11 +238,12 @@ final class DictationController {
                 if let auth = try GeminiClient.authFromSettings(settings) {
                     let client = GeminiClient(auth: auth)
                     let request = GeminiClient.Request(
-                        transcript: raw,
+                        transcript: output,
                         model: settings.model,
                         appName: settings.sendAppName ? targetAppName : nil,
                         dictionary: settings.dictionaryWords,
                         extraInstructions: settings.extraInstructions,
+                        dictionaryRules: settings.userDictionary.rules,
                         appStyle: targetAppStyle,
                         screenContext: await screenContextCapture?.result())
                     // スニペットがあれば、その前後の文だけを整形（英訳）してつなぐ。本文は送らない
@@ -252,7 +255,7 @@ final class DictationController {
                     if let snippetMatch {
                         output = try await snippetMatch.assemble(convert: convert)
                     } else {
-                        output = try await convert(raw)
+                        output = try await convert(corrected)
                     }
                     appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(self.settings.model, privacy: .public): \(output.count) chars")
                 } else {
@@ -269,6 +272,7 @@ final class DictationController {
         appLog.notice("insert outcome: \(String(describing: outcome), privacy: .public), frontmost=\(NSWorkspace.shared.frontmostApplication?.bundleIdentifier ?? "-", privacy: .public)")
         history.insert(HistoryEntry(date: Date(), raw: raw, output: output, mode: mode), at: 0)
         if history.count > 10 { history.removeLast(history.count - 10) }
+        RecentDictations.record(raw: raw, output: output)
         state = .idle
 
         switch (outcome, warning) {
