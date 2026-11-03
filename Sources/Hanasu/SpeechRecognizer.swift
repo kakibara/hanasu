@@ -18,6 +18,8 @@ enum SpeechRecognizerError: LocalizedError {
     }
 }
 
+// 要件: REQ-COM-002
+// 設計判断: DEC-DIC-001
 /// macOS 26 の SpeechAnalyzer で、マイク音声をオンデバイスで文字に起こす。
 @MainActor
 final class SpeechRecognizer {
@@ -116,6 +118,7 @@ final class SpeechRecognizer {
         self.audioWriter = writer
     }
 
+    // 設計判断: DEC-DIC-003
     /// 録音を止め、残りの音声を確定させてから全文を返す。
     func stop() async -> String {
         if batch != nil { return await stopBatch() }
@@ -187,6 +190,7 @@ final class SpeechRecognizer {
 
     // MARK: - Whisper / Gemini（録音を止めてからまとめて文字起こしする）
 
+    // 設計判断: DEC-DIC-100, DEC-DIC-102
     private func startBatch(engine: TranscriptionEngine, hints: [String], audioFileURL: URL?) throws {
         let settings = AppSettings.shared
         switch engine {
@@ -209,6 +213,7 @@ final class SpeechRecognizer {
         batch = capture
     }
 
+    // 設計判断: DEC-DIC-100
     private func stopBatch() async -> String {
         guard let batch else { return "" }
         self.batch = nil
@@ -243,6 +248,7 @@ final class SpeechRecognizer {
         inputContinuation?.finish()
     }
 
+    // 設計判断: DEC-DIC-003
     private nonisolated static func yieldSilence(
         to continuation: AsyncStream<AnalyzerInput>.Continuation, format: AVAudioFormat, seconds: Double = 0.6
     ) {

@@ -9,6 +9,7 @@ let appLog = Logger(subsystem: "dev.mactypeless.Hanasu", category: "dictation")
 @MainActor
 final class DictationController {
     enum State { case idle, preparing, recording, processing }
+    // 要件: REQ-DIC-010
     /// 録音を始めたショートカットで決まる。整形して日本語で入力するか、英語に翻訳して入力するか
     enum Mode { case refine, translateToEnglish }
 
@@ -19,6 +20,7 @@ final class DictationController {
     var onStateChange: ((State) -> Void)?
     /// ショートカットの登録に失敗したとき（他アプリと衝突など）
     var onHotKeyRegistrationFailed: ((HotKeyCombo) -> Void)?
+    // 設計判断: DEC-DIC-035
     /// ほかの録音（選択を声で編集）が動いている間は false を返す
     var canStart: () -> Bool = { true }
 
@@ -39,6 +41,7 @@ final class DictationController {
     private var screenContextCapture: ScreenContextCapture?
     private var cancellables: Set<AnyCancellable> = []
 
+    // 要件: REQ-DIC-002
     init() {
         recognizer.onPartialText = { [weak self] text in
             self?.hud.updateTranscript(text)
@@ -96,6 +99,8 @@ final class DictationController {
         }
     }
 
+    // 要件: REQ-DIC-001, REQ-DIC-006
+    // 設計判断: DEC-DIC-012, DEC-DIC-020
     /// 開始はショートカットごとのモードで。録音中はどちらのショートカットでも止まる
     private func handleHotKey(_ event: HotKeyManager.Event, mode: Mode) {
         switch (settings.recordingMode, event, state) {
@@ -110,6 +115,7 @@ final class DictationController {
         }
     }
 
+    // 要件: REQ-DIC-005
     private func setEscapeHotKey(enabled: Bool) {
         if enabled, escapeHotKeyID == nil {
             escapeHotKeyID = hotKeys.register(HotKeyCombo(keyCode: UInt32(kVK_Escape), modifiers: 0)) { [weak self] event in
@@ -123,6 +129,7 @@ final class DictationController {
 
     // MARK: - 操作
 
+    // 要件: REQ-DIC-011
     /// 録音中に HUD で出力の言語を切り替える。止めた時点の選択で、整形するか英訳するかが決まる
     func selectOutputLanguage(translating: Bool) {
         guard state == .preparing || state == .recording else { return }
@@ -130,6 +137,8 @@ final class DictationController {
         hud.model.translating = translating
     }
 
+    // 要件: REQ-DIC-012
+    // 設計判断: DEC-DIC-026
     /// HUD の「停止」。ショートカットをもう一度押したときと同じく、録音を止めて入力する
     func stopFromHUD() {
         switch state {
@@ -148,6 +157,8 @@ final class DictationController {
         }
     }
 
+    // 要件: REQ-DIC-020, REQ-DIC-021
+    // 設計判断: DEC-DIC-045
     func startDictation(mode: Mode = .refine) {
         guard state == .idle, canStart() else { return }
         self.mode = mode
@@ -195,6 +206,7 @@ final class DictationController {
         }
     }
 
+    // 要件: REQ-DIC-005
     func cancelDictation() {
         switch state {
         case .preparing:
@@ -226,6 +238,8 @@ final class DictationController {
         hud.show(.error(message))
     }
 
+    // 要件: REQ-DIC-007, REQ-DIC-070
+    // 設計判断: DEC-DIC-014, DEC-DIC-015, DEC-DIC-021, DEC-DIC-052, DEC-DIC-072
     func finishDictation() async {
         guard state == .recording else { return }
         state = .processing
@@ -317,6 +331,7 @@ final class DictationController {
         }
     }
 
+    // 設計判断: DEC-DIC-018
     private func playSound(_ name: String) {
         guard settings.playSounds else { return }
         NSSound(named: NSSound.Name(name))?.play()

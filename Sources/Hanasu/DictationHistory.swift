@@ -3,6 +3,7 @@ import Carbon.HIToolbox
 import Combine
 import Foundation
 
+// 設計判断: DEC-DIC-071
 /// 音声入力の履歴 1 件。
 struct DictationHistoryEntry: Codable, Identifiable, Equatable {
     enum Mode: String, Codable {
@@ -72,6 +73,7 @@ extension HotKeyCombo {
     static let defaultRepaste = HotKeyCombo(keyCode: UInt32(kVK_ANSI_V), modifiers: UInt32(optionKey | shiftKey))
 }
 
+// 設計判断: DEC-DIC-073
 /// 履歴の設定。AppSettings とは別の UserDefaults のキーで持つ。
 final class HistorySettings: ObservableObject {
     static let shared = HistorySettings()
@@ -135,6 +137,7 @@ enum DictationHistoryError: LocalizedError {
     }
 }
 
+// 要件: REQ-DIC-060
 /// 音声入力の履歴を ~/Library/Application Support/Hanasu/History/history.json に保存する。
 /// 新しい順に持ち、件数と日数の上限を超えたものは古い順に消す（録音した音声も一緒に消す）。
 @MainActor
@@ -194,6 +197,7 @@ final class DictationHistoryStore: ObservableObject {
         var entries: [DictationHistoryEntry]
     }
 
+    // 設計判断: DEC-DIC-070
     func load() {
         let transient = entries.filter(\.transient)
         do {
@@ -215,6 +219,7 @@ final class DictationHistoryStore: ObservableObject {
         removeOrphanAudio()
     }
 
+    // 設計判断: DEC-DIC-070
     func save() {
         let fm = FileManager.default
         do {
@@ -255,6 +260,7 @@ final class DictationHistoryStore: ObservableObject {
         try? FileManager.default.removeItem(at: url)
     }
 
+    // 設計判断: DEC-DIC-072, DEC-DIC-074
     @discardableResult
     func record(
         raw: String, output: String, mode: DictationHistoryEntry.Mode, appName: String?,
@@ -321,6 +327,7 @@ final class DictationHistoryStore: ObservableObject {
         return (bytes, urls.count)
     }
 
+    // 設計判断: DEC-DIC-073
     /// 上限を超えた履歴を消す。消したものがあれば true
     @discardableResult
     private func prune(now: Date = Date()) -> Bool {
@@ -353,6 +360,7 @@ final class DictationHistoryStore: ObservableObject {
         try? FileManager.default.removeItem(at: audioDirectory.appendingPathComponent(name))
     }
 
+    // 設計判断: DEC-DIC-075
     /// どの履歴からも参照されていない録音を消す（起動時の読み込みで呼ぶ）
     private func removeOrphanAudio() {
         let referenced = Set(entries.compactMap(\.audioFileName))
@@ -364,6 +372,8 @@ final class DictationHistoryStore: ObservableObject {
 
     // MARK: - 整形・英訳のやり直し
 
+    // 要件: REQ-DIC-061
+    // 設計判断: DEC-DIC-076
     /// 原文から Gemini を呼び直し、結果でこの履歴を上書きする。失敗したときは履歴を変えずにエラーを投げる
     @discardableResult
     func retry(_ id: UUID, mode: DictationHistoryEntry.Mode, auth overrideAuth: GeminiClient.Auth? = nil) async throws
@@ -395,6 +405,7 @@ final class DictationHistoryStore: ObservableObject {
     }
 }
 
+// 設計判断: DEC-DIC-075
 /// 録音した音声を m4a に書き出す。オーディオのタップから書き、止めるときに閉じる。
 final class DictationAudioWriter: @unchecked Sendable {
     private let lock = NSLock()

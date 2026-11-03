@@ -18,6 +18,8 @@ final class HUDModel: ObservableObject {
     @Published var translating = false
     /// HUD の「日本語／English」を押したとき。録音を止めた時点の選択で出力の言語が決まる
     var onSelectTranslating: ((Bool) -> Void)?
+    // 要件: REQ-DIC-012
+    // 設計判断: DEC-DIC-101
     /// 選択を声で編集しているときの補足（「選択 120 文字」など）。nil なら通常の音声入力
     @Published var editBadge: String?
     /// 録音を止めてからまとめて文字起こしするエンジン（Whisper / Gemini）。nil なら Mac 標準（途中経過が出る）
@@ -40,6 +42,7 @@ final class HUDModel: ObservableObject {
         }
     }
 
+    // 設計判断: DEC-DIC-025
     /// 準備中と録音中は、ボタン（言語の切り替え・停止・取消）のクリックを受け取る
     var acceptsClicks: Bool {
         switch phase {
@@ -49,11 +52,14 @@ final class HUDModel: ObservableObject {
     }
 }
 
+// 設計判断: DEC-DIC-025
 /// 前面にないパネルでも、1 回のクリックでボタンが押せるようにする
 private final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }
 
+// 要件: REQ-DIC-002
+// 設計判断: DEC-DIC-016
 /// 画面下部に出る小さな状態表示。入力先アプリのフォーカスを奪わない。
 @MainActor
 final class HUDController {
@@ -252,6 +258,7 @@ private struct HUDView: View {
     }
 }
 
+// 設計判断: DEC-DIC-026
 /// 録音を止めて入力するボタン。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
 private struct StopButton: View {
     var action: () -> Void
@@ -273,6 +280,7 @@ private struct StopButton: View {
     }
 }
 
+// 要件: REQ-DIC-011
 /// 出力の言語を選ぶ小さな切り替え。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
 private struct LanguageSwitch: View {
     var translating: Bool
@@ -302,6 +310,7 @@ private struct LanguageSwitch: View {
     }
 }
 
+// 設計判断: DEC-DIC-101
 /// 音量の目安（Whisper / Gemini で録っているとき）。RMS を dB にして、-60〜-10 dB を 0〜1 に割り当てる
 private struct LevelMeter: View {
     var level: Float

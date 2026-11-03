@@ -75,6 +75,7 @@ struct UserDictionary: Equatable {
         self.lines = lines
     }
 
+    // 設計判断: DEC-DIC-080
     static func parseLine(_ raw: String) -> Line {
         let line = raw.trimmingCharacters(in: .whitespaces)
         if line.isEmpty || line.hasPrefix("#") { return .other(raw) }
@@ -124,6 +125,7 @@ struct UserDictionary: Equatable {
         Self.unique(entries.map { $0.spelling.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty })
     }
 
+    // 設計判断: DEC-DIC-009
     /// 音声認識の語彙ヒント（AnalysisContext.contextualStrings）に渡す語。
     /// 正しい表記に加えて、ルールの読みも渡す（読みどおりに認識されれば、後の置き換えで確実に直せる）
     var contextualStrings: [String] {
@@ -164,10 +166,12 @@ struct UserDictionary: Equatable {
         var target: String
     }
 
+    // 要件: REQ-DIC-070
     func apply(to text: String) -> String {
         applyWithLog(to: text).text
     }
 
+    // 設計判断: DEC-DIC-081, DEC-DIC-083
     /// 置き換えた結果と、どこをどう置き換えたか
     func applyWithLog(to text: String) -> (text: String, replacements: [Replacement]) {
         let rules = rules
@@ -249,6 +253,7 @@ struct UserDictionary: Equatable {
 
     enum CharClass { case latin, katakana, other }
 
+    // 設計判断: DEC-DIC-081
     /// 大文字小文字・全角半角を区別しないように畳む
     static func fold(_ c: Character) -> [Character] {
         Array(String(c).folding(options: [.caseInsensitive, .widthInsensitive], locale: nil))
@@ -259,6 +264,7 @@ struct UserDictionary: Equatable {
         s.filter { !$0.isWhitespace }.flatMap(fold)
     }
 
+    // 設計判断: DEC-DIC-082
     static func charClass(_ c: Character) -> CharClass {
         if c.isASCII, c.isLetter || c.isNumber { return .latin }
         guard let scalar = c.unicodeScalars.first else { return .other }
@@ -268,6 +274,7 @@ struct UserDictionary: Equatable {
         }
     }
 
+    // 設計判断: DEC-DIC-082
     /// 2 つの文字が同じ語の一部としてつながるか（英数字どうし、カタカナどうし）
     static func joins(_ a: CharClass, _ b: CharClass) -> Bool {
         a == b && a != .other

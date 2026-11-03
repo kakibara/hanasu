@@ -7,6 +7,7 @@ struct SpeakerTurn: Hashable {
     var end: Double
 }
 
+// 設計判断: DEC-MTG-010
 /// 相手側の音声ファイルを話者ごとの区間に分ける部品。実装を差し替えられるようにしておく。
 protocol SpeakerDiarizer {
     func diarize(audioURL: URL) async throws -> [SpeakerTurn]
@@ -19,6 +20,7 @@ struct NoSpeakerDiarizer: SpeakerDiarizer {
 
 /// 録音の後処理: 話者の割り当て、回り込みの除去、議事録の作成。
 enum MeetingProcessor {
+    // 要件: REQ-MTG-004
     /// 自分と相手の発話から、話者つきの発言を作る。
     /// - Parameters:
     ///   - turns: 相手側の話者分離の結果。空なら相手側は "others" 1 人として扱う。
@@ -54,6 +56,7 @@ enum MeetingProcessor {
         phrase.words.isEmpty ? [TimedWord(text: phrase.text, start: phrase.start, end: phrase.end)] : phrase.words
     }
 
+    // 設計判断: DEC-MTG-011
     /// マイク側の話者分離の ID を付け直す。話した時間がいちばん長い人を「自分」（me）、
     /// ほかを登場順に同席者（room1, room2, ...）にする。
     static func labelMicSpeakers(_ utterances: [Utterance], turns: [SpeakerTurn]) -> [Utterance] {
@@ -72,6 +75,7 @@ enum MeetingProcessor {
         }
     }
 
+    // 設計判断: DEC-MTG-012
     /// 語を話者へ割り当て、同じ話者が続く語をまとめる。
     static func split(_ words: [TimedWord], by turns: [SpeakerTurn]) -> [Utterance] {
         var result: [Utterance] = []
@@ -91,6 +95,7 @@ enum MeetingProcessor {
             .filter { !$0.text.isEmpty }
     }
 
+    // 設計判断: DEC-MTG-012
     /// その時刻を含む区間の話者。区間と区間のすき間にある語は、前の区間の終わりから間があいて
     /// 始まっていれば次の話者（話者分離は話し始めの検出が遅れがち）、そうでなければ前の話者とする。
     static func speaker(at time: Double, wordStart: Double? = nil, in turns: [SpeakerTurn], pause: Double = 0.3) -> String {
@@ -108,6 +113,7 @@ enum MeetingProcessor {
         }
     }
 
+    // 設計判断: DEC-MTG-012
     /// 話者分離の ID（"S1" など）を、登場順に spk1, spk2, ... に付け直す。
     static func renumberSpeakers(_ utterances: [Utterance]) -> [Utterance] {
         var mapping: [String: String] = [:]
@@ -119,6 +125,7 @@ enum MeetingProcessor {
         }
     }
 
+    // 設計判断: DEC-MTG-013
     /// スピーカーの音がマイクに回り込んで「自分」として二重に記録された部分を除き、残った語のまとまりを返す。
     /// 自分の発話を語ごとに「相手が話している時間と重なるか」で区切り、重なる部分の文字が
     /// その時間の相手の発言とよく似ていれば回り込みとみなして捨てる。
@@ -187,6 +194,7 @@ enum MeetingProcessor {
 
     // MARK: - 議事録
 
+    // 要件: REQ-MTG-006
     /// 議事録を作る。見出しの構成は会議の型（meeting.template）で決まる（MinutesTemplate.swift）。
     /// メモか印があれば、それを優先するよう指示を足す（MeetingNotes.swift）。
     static func makeMinutes(for meeting: Meeting, client: GeminiClient, model: String) async throws -> MinutesResult {

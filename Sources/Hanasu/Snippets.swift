@@ -35,6 +35,8 @@ struct Snippet: Codable, Identifiable, Equatable {
     var displayName: String { phrases.first ?? "" }
 }
 
+// 要件: REQ-DIC-030
+// 設計判断: DEC-DIC-055
 /// スニペットの一覧。UserDefaults に JSON で保存する（AppSettings とは別のキー）。
 final class SnippetStore: ObservableObject {
     static let shared = SnippetStore(defaults: .standard)
@@ -102,6 +104,7 @@ struct SnippetMatch {
         parts.compactMap { if case .snippet(let s) = $0 { s } else { nil } }
     }
 
+    // 設計判断: DEC-DIC-052
     /// HUD の表示。例: 「スニペット『メールの署名』を入力しました」
     var hudMessage: String {
         "スニペット" + snippets.map { "『\($0.displayName)』" }.joined() + "を入力しました"
@@ -117,6 +120,7 @@ struct SnippetMatch {
         })
     }
 
+    // 設計判断: DEC-DIC-053, DEC-DIC-054
     /// 文の部分を convert（Gemini の整形・英訳）で変換し、スニペットの本文とつなぐ。
     /// 本文は convert に渡さない（英訳モードでも本文は訳さない）。文の部分が複数あれば並行して変換する。
     func assemble(convert: @escaping @Sendable (String) async throws -> String) async throws -> String {
@@ -139,6 +143,7 @@ struct SnippetMatch {
         })
     }
 
+    // 設計判断: DEC-DIC-053
     /// 文とスニペットをつなぐ。複数行の本文は前後で改行し、1 行の本文はそのまま続ける。
     /// 英字どうしが接するとき（英訳した文と URL など）は半角スペースを入れる。
     static func join(_ pieces: [(text: String, isSnippet: Bool)]) -> String {
@@ -162,6 +167,8 @@ struct SnippetMatch {
     }
 }
 
+// 要件: REQ-DIC-030
+// 設計判断: DEC-DIC-050
 /// 文字起こしと起動フレーズを照合する。
 enum SnippetMatcher {
     /// 文頭のフィラー（正規化した形）。長いものから順に試す
@@ -174,6 +181,7 @@ enum SnippetMatcher {
         .union(.punctuationCharacters)
         .union(.symbols)
 
+    // 設計判断: DEC-DIC-051
     /// 表記の揺れをならす。全角・半角をそろえ（NFKC）、英字を小文字に、カタカナをひらがなにして、空白・句読点・記号を除く。
     /// 起動フレーズと文字起こしの両方にかける。
     static func normalize(_ text: String) -> String {
@@ -190,6 +198,7 @@ enum SnippetMatcher {
         return String(scalars)
     }
 
+    // 設計判断: DEC-DIC-051
     /// 文字起こし側の照合に使う形。正規化した形に加えて、文頭のフィラーと文末の「です」などを 1 つずつ外した形も試す。
     /// 起動フレーズ側からは外さない（「よろしくお願いします」を起動フレーズにしても、その形のまま一致させるため）。
     static func candidates(_ text: String) -> [String] {
@@ -207,6 +216,7 @@ enum SnippetMatcher {
         return forms.filter { !$0.isEmpty && seen.insert($0).inserted }
     }
 
+    // 設計判断: DEC-DIC-055
     /// 正規化した起動フレーズ → スニペット。同じ形が重なったら一覧で先のものを使う。本文が空のものは除く
     static func table(for snippets: [Snippet]) -> [String: Snippet] {
         var table: [String: Snippet] = [:]
@@ -219,6 +229,7 @@ enum SnippetMatcher {
         return table
     }
 
+    // 設計判断: DEC-DIC-053
     /// 照合する。一致しなければ nil。
     /// 1. 全体が起動フレーズなら、そのスニペットだけを返す。
     /// 2. そうでなければ、句読点・空白で区切った区間（連続する複数の区間も可）が起動フレーズと一致する所を本文に置き換える。

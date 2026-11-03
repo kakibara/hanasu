@@ -6,6 +6,7 @@ import Foundation
 // 会議の自動検出: 会議アプリがマイクを使い始めたら「会議を記録しますか？」と提案する。
 // 記録は必ずユーザーがボタンを押してから始める（自動では始めない）。
 
+// 設計判断: DEC-MTG-031
 /// 検出の対象にする会議アプリ
 enum MeetingApp: String, CaseIterable, Identifiable {
     case zoom, teams, slack, webex, facetime
@@ -75,6 +76,7 @@ enum MeetingApp: String, CaseIterable, Identifiable {
     }
 }
 
+// 設計判断: DEC-MTG-034
 /// 自動検出の設定。共有の AppSettings を大きく変えないよう、ここに分けて持つ
 final class MeetingDetectionSettings: ObservableObject {
     static let shared = MeetingDetectionSettings()
@@ -169,6 +171,7 @@ enum AudioProcesses {
         return AudioObjectGetPropertyData(id, &address, 0, nil, &size, &value) == noErr && value != 0
     }
 
+    // 設計判断: DEC-MTG-031
     /// 実行ファイルのパスから、いちばん外側の .app の bundle ID を求める。
     /// Chrome や Slack はマイクをヘルパー（…/Google Chrome.app/…/Google Chrome Helper.app）で使うので、本体に戻す。
     static func appBundleID(pid: pid_t) -> String? {
@@ -183,6 +186,8 @@ enum AudioProcesses {
 
 // MARK: - 検出
 
+// 要件: REQ-MTG-009
+// 設計判断: DEC-MTG-030
 /// 会議アプリのマイクの使用を見張る。
 /// 基本は Core Audio のプロパティリスナーで、変化があったときだけ読む（マイクを誰も使っていない間は CPU を使わない）。
 /// - システムオブジェクトの kAudioHardwarePropertyProcessObjectList: プロセスが増えた・減った
@@ -348,9 +353,11 @@ final class MeetingDetector {
 
 // MARK: - 提案
 
+// 要件: REQ-MTG-009
 /// 検出結果と記録の状態から、記録の開始・停止を提案する
 @MainActor
 final class MeetingAutoDetect {
+    // 設計判断: DEC-MTG-032
     struct Timing {
         /// マイクを使い始めてから提案するまで（一瞬だけマイクを確かめるアプリで出さないため）
         var startDelay: TimeInterval = 3
@@ -450,6 +457,7 @@ final class MeetingAutoDetect {
         evaluate()
     }
 
+    // 設計判断: DEC-MTG-032
     private func evaluate() {
         let active = activeTargets
         // マイクを止めたアプリの「今回はしない」は、しばらくしてから忘れる

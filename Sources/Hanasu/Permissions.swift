@@ -29,6 +29,7 @@ enum Permissions {
         SFSpeechRecognizer.authorizationStatus()
     }
 
+    // 設計判断: DEC-COM-014
     /// 録音に必要な権限（マイク・音声認識）を、未決定なら尋ね、拒否されていればエラーにする。
     /// Whisper / Gemini で文字起こしするときは、音声認識の権限は要らない（speechRecognition: false）
     static func ensureRecordingPermissions(speechRecognition: Bool = true) async throws {

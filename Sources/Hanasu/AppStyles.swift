@@ -1,6 +1,7 @@
 import AppKit
 import Combine
 
+// 設計判断: DEC-DIC-040, DEC-DIC-041, DEC-DIC-042
 /// 入力先アプリに合わせた文体のひな形。アプリにはどれか 1 つを割り当てる。
 enum AppStylePreset: String, Codable, CaseIterable, Identifiable {
     case none
@@ -91,6 +92,7 @@ enum AppStylePreset: String, Codable, CaseIterable, Identifiable {
     }
 }
 
+// 要件: REQ-DIC-021
 /// アプリごとの既定の出力言語
 enum AppOutputLanguage: String, Codable, CaseIterable, Identifiable {
     case japanese
@@ -122,6 +124,8 @@ struct AppStyle: Codable, Identifiable, Equatable {
         preset != .none || !rules.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
+    // 要件: REQ-DIC-020
+    // 設計判断: DEC-DIC-043, DEC-DIC-044, DEC-DIC-046
     /// `GeminiClient.userPrompt` に足す節。足すものがなければ nil。
     /// - appName: 入力先アプリ名を Gemini に伝える設定がオフなら nil（名前を出さない）
     /// - hasCommonRules: 共通の追加ルールがプロンプトに入っているか（入っていれば優先順位を書く）
@@ -154,6 +158,8 @@ struct AppStyle: Codable, Identifiable, Equatable {
     }
 }
 
+// 要件: REQ-DIC-020
+// 設計判断: DEC-DIC-040, DEC-DIC-047
 /// アプリ別スタイルの一覧。UserDefaults に JSON で保存する（AppSettings とは別に持つ）。
 final class AppStyleStore: ObservableObject {
     static let shared = AppStyleStore()

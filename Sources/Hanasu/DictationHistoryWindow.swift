@@ -41,6 +41,7 @@ final class DictationHistoryUI: NSObject {
         registerHotKey(HistorySettings.shared.repasteHotKey)
     }
 
+    // 設計判断: DEC-DIC-077
     private func registerHotKey(_ combo: HotKeyCombo) {
         suspendHotKey()
         hotKeyID = hotKeys.register(combo) { [weak self] event in
@@ -49,6 +50,8 @@ final class DictationHistoryUI: NSObject {
         if hotKeyID == nil { onHotKeyRegistrationFailed(combo) }
     }
 
+    // 要件: REQ-DIC-062
+    // 設計判断: DEC-DIC-077
     /// 最後の結果を、いま前面にあるアプリへもう一度入力する
     @objc func repasteLast() {
         guard !isDictationBusy() else { return }
@@ -69,6 +72,8 @@ final class DictationHistoryUI: NSObject {
 
     // MARK: - メニュー
 
+    // 要件: REQ-DIC-008
+    // 設計判断: DEC-DIC-078
     /// メニューバーの「最近の結果」の中身（履歴の新しい順に 10 件）
     func makeRecentResultsMenu() -> NSMenu {
         let menu = NSMenu()
@@ -127,6 +132,7 @@ final class DictationHistoryUI: NSObject {
 
 // MARK: - 履歴ウインドウ
 
+// 設計判断: DEC-DIC-079
 enum DictationHistoryFilter: String, CaseIterable, Identifiable {
     case all
     case unrefined
@@ -135,6 +141,8 @@ enum DictationHistoryFilter: String, CaseIterable, Identifiable {
     var label: String { self == .all ? "すべて" : "失敗・未整形" }
 }
 
+// 要件: REQ-DIC-060
+// 設計判断: DEC-DIC-079
 struct DictationHistoryView: View {
     @ObservedObject var store: DictationHistoryStore
     @State var selection: UUID?
@@ -292,6 +300,7 @@ struct DictationHistoryView: View {
     }()
 }
 
+// 要件: REQ-DIC-061
 /// 失敗・未整形の印
 struct DictationHistoryStatusMark: View {
     let status: DictationHistoryEntry.Status

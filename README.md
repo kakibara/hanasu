@@ -15,7 +15,7 @@
 
 議事録は型（自動・定例・1on1・商談・ブレスト・カスタム）を選んで作れます。記録を始める前に会議ノートの左下で選ぶか、あとから会議ノートで選び直して作り直します。アクションアイテム（担当・内容・期限）は決まった形で取り出し、会議ノートの「書き出し」から Markdown・Slack 向けのコピー、.md / .txt の保存、リマインダーへの登録ができます。
 
-設計・仕様・技術選定は [docs/DESIGN.md](docs/DESIGN.md)（音声入力）と [docs/MEETING_RECORDER.md](docs/MEETING_RECORDER.md)（会議の記録）。
+文書の地図は [docs/README.md](docs/README.md)。実装済みの要件・設計判断は [docs/spec/](docs/spec/)、設計・技術選定は [docs/design/dictation.md](docs/design/dictation.md)（音声入力）と [docs/design/meeting.md](docs/design/meeting.md)（会議の記録）、計画は [docs/roadmap.md](docs/roadmap.md)。
 
 ## 必要なもの
 
@@ -89,7 +89,7 @@ Hanasu                              … 語だけ。音声認識と Gemini の�
 ```
 
 - 置き換えルールは文字起こしの結果に必ず当てるので、Gemini で整形しないときも効きます。
-- 英字の大文字小文字・全角半角・空白の有無は区別しません。英字やカタカナの語の途中では置き換えません（`マーク => Mark` は「マークダウン」の中では効かない）。細かい規則は [docs/DESIGN.md](docs/DESIGN.md) の 5.4。
+- 英字の大文字小文字・全角半角・空白の有無は区別しません。英字やカタカナの語の途中では置き換えません（`マーク => Mark` は「マークダウン」の中では効かない）。細かい規則は [docs/design/dictation.md](docs/design/dictation.md) の 5.4。
 - 「候補を探す」を押すと、今回の起動後の音声入力の結果と会議の文字起こし・議事録から、Gemini が辞書の候補を挙げます。選んだものだけが辞書に入ります。会議の中身を送る外部の送り先は Gemini だけです。
 
 リマインダーへの登録は、会議ノートで「リマインダーに登録」を押したときに初めてアクセスの許可を求めます。

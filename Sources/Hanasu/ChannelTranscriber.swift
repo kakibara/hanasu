@@ -2,6 +2,8 @@
 import Foundation
 import Speech
 
+// 要件: REQ-MTG-002, REQ-MTG-003, REQ-MTG-023
+// 設計判断: DEC-MTG-005
 /// 会議の 1 チャンネル（自分／相手）分の音声を、文字起こししながら音声ファイルにも書き出す。
 /// append はオーディオスレッドなど任意のスレッドから呼んでよい（内部のキューで順番に処理する）。
 final class ChannelTranscriber: @unchecked Sendable {
@@ -123,6 +125,7 @@ final class ChannelTranscriber: @unchecked Sendable {
     /// 記録のあとに音声ファイルから文字起こしするとき、時刻をそろえるのに使う
     var audioStartOffset: Double { queue.sync { timeOffset ?? 0 } }
 
+    // 設計判断: DEC-MTG-006
     func append(_ buffer: AVAudioPCMBuffer) {
         queue.async { [self] in
             guard live ? continuation != nil : file != nil,
@@ -269,6 +272,7 @@ final class ChannelTranscriber: @unchecked Sendable {
     }
 }
 
+// 設計判断: DEC-DIC-004
 /// オンデバイス音声モデルの準備（未インストールならダウンロード）
 enum SpeechAssets {
     static func ensureInstalled(for module: any SpeechModule, progress: (@Sendable (Double) -> Void)? = nil) async throws {

@@ -36,6 +36,8 @@ struct MeetingSearchResult: Identifiable, Hashable {
     var id: String { meetingID }
 }
 
+// 要件: REQ-MTG-015
+// 設計判断: DEC-MTG-050
 /// 会議の横断検索の索引。
 ///
 /// 日本語は単語の区切りがないので、文字の 2-gram（隣り合う 2 文字）ごとに「その 2 文字を含む箇所」を引けるようにしておき、
@@ -79,6 +81,7 @@ actor MeetingSearchIndex {
 
     var meetingCount: Int { entries.count }
 
+    // 設計判断: DEC-MTG-051
     /// 検索語（空白区切りは AND）を含む箇所を、会議ごとにまとめて返す。会議は新しい順。
     /// - Parameter hitsPerMeeting: 1 つの会議から返す箇所の上限（totalHits には全件の数が入る）
     func search(_ query: String, hitsPerMeeting: Int = 20, maxMeetings: Int = 200) -> [MeetingSearchResult] {
@@ -108,6 +111,7 @@ actor MeetingSearchIndex {
 
     // MARK: - 正規化
 
+    // 設計判断: DEC-MTG-051
     /// 大文字・小文字、全角・半角（英数字とカタカナ）の違いを無視するための変換
     static func fold(_ text: String) -> String {
         text.folding(options: [.caseInsensitive, .widthInsensitive], locale: nil)

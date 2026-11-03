@@ -1,5 +1,7 @@
 import Foundation
 
+// 要件: REQ-MTG-017
+// 設計判断: DEC-MTG-060
 /// 議事録の型（テンプレート）。型ごとに、Gemini に渡す見出しの構成と書き方の指示を持つ。
 enum MinutesTemplate: String, CaseIterable, Identifiable, Codable {
     /// 会議の種類を決めずにまとめる（従来の議事録）
@@ -184,6 +186,8 @@ enum MinutesTemplate: String, CaseIterable, Identifiable, Codable {
     }
 }
 
+// 要件: REQ-MTG-018
+// 設計判断: DEC-MTG-063
 /// 議事録から取り出したアクションアイテム（担当・内容・期限）
 struct ActionItem: Codable, Hashable, Identifiable {
     var id = UUID()
@@ -232,6 +236,7 @@ struct ActionItem: Codable, Hashable, Identifiable {
         return f
     }()
 
+    // 設計判断: DEC-MTG-064
     /// Markdown の議事録のチェックボックスの行から取り出す（この機能より前に作った議事録や、JSON が壊れていたとき用）。
     /// 「TODO」「アクション」「次のステップ」を含む見出しの下の `- [ ] 内容（担当: 〇〇 / 期限: △△）` を読む。
     static func parse(fromMarkdown markdown: String) -> [ActionItem] {
@@ -283,6 +288,7 @@ extension Meeting {
     }
 }
 
+// 設計判断: DEC-MTG-061
 /// 記録を始める前に選んだ議事録の型と、カスタムの指示（UserDefaults）。
 /// 会議ノートの左下の選択欄（@AppStorage）と同じキーを使う。
 enum MinutesTemplateStore {
@@ -318,11 +324,13 @@ struct MinutesResult {
     var actionItems: [ActionItem]
 }
 
+// 要件: REQ-MTG-006
 /// 議事録のプロンプトの組み立てと、応答の読み取り。
 enum MinutesPrompt {
     /// アクションアイテムの見出しの下に Gemini が置く目印。アプリが一覧に置き換える。
     static let placeholder = "{{ACTION_ITEMS}}"
 
+    // 設計判断: DEC-MTG-014
     static func systemInstruction(template: MinutesTemplate, customPrompt: String?) -> String {
         var parts: [String] = []
         parts.append("""
@@ -395,6 +403,8 @@ enum MinutesPrompt {
         """
     }
 
+    // 要件: REQ-MTG-018
+    // 設計判断: DEC-MTG-062
     /// Gemini の応答を、議事録の Markdown と構造化したアクションアイテムに分ける。
     static func parse(_ response: String, title: String) -> MinutesResult {
         var body = response
@@ -431,6 +441,7 @@ enum MinutesPrompt {
         var due_note: String?
     }
 
+    // 設計判断: DEC-MTG-062
     static func decodeItems(_ json: String) -> [ActionItem]? {
         let trimmed = json.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let data = trimmed.data(using: .utf8),

@@ -1,0 +1,21 @@
+# 要件・設計判断（docs/spec）とコードのタグを突き合わせる（決まりは docs/README.md）。
+# ID の重複、ない ID を指すタグ、タグのない要件、切れたリンクがあれば失敗する。
+name: spec
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      # ubuntu-latest の python3（標準ライブラリだけを使う）
+      - name: Check spec and tags
+        run: python3 scripts/check-spec.py

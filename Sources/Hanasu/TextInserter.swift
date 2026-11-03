@@ -2,6 +2,8 @@ import AppKit
 import ApplicationServices
 import Carbon.HIToolbox
 
+// 要件: REQ-DIC-004
+// 設計判断: DEC-DIC-013
 /// クリップボード経由で、最前面アプリのカーソル位置にテキストを入力する。
 @MainActor
 enum TextInserter {
@@ -15,6 +17,7 @@ enum TextInserter {
     private static let transientType = NSPasteboard.PasteboardType("org.nspasteboard.TransientType")
     private static let concealedType = NSPasteboard.PasteboardType("org.nspasteboard.ConcealedType")
 
+    // 設計判断: DEC-DIC-014
     static func insert(_ text: String) async -> Outcome {
         let pasteboard = NSPasteboard.general
 

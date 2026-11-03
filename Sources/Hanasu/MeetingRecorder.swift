@@ -51,6 +51,7 @@ final class MeetingRecorder: ObservableObject {
 
     // MARK: - 開始・停止
 
+    // 要件: REQ-MTG-001
     func toggle() {
         switch state {
         case .idle: Task { await start() }
@@ -59,6 +60,8 @@ final class MeetingRecorder: ObservableObject {
         }
     }
 
+    // 要件: REQ-MTG-002
+    // 設計判断: DEC-MTG-001, DEC-DIC-085
     func start() async {
         guard state == .idle else { return }
         setState(.starting)
@@ -178,6 +181,7 @@ final class MeetingRecorder: ObservableObject {
         setState(.idle)
     }
 
+    // 設計判断: DEC-MTG-007
     /// Whisper / Gemini を選んでいるときに、記録を始められるかを確かめる
     static func checkReady(_ engine: TranscriptionEngine) throws {
         switch engine {
@@ -194,6 +198,7 @@ final class MeetingRecorder: ObservableObject {
         }
     }
 
+    // 設計判断: DEC-MTG-009
     /// 記録した音声ファイル（me.m4a / others.m4a）を、Whisper / Gemini で文字起こしする。CLI の動作確認からも使う。
     /// - Parameter offsets: チャンネルごとの、音声ファイルの先頭が録音開始から何秒後か
     /// - Returns: 失敗したチャンネルがあれば error にその説明が入る（できたチャンネルの結果は返す）
@@ -217,6 +222,8 @@ final class MeetingRecorder: ObservableObject {
         return (phrases[.me] ?? [], phrases[.others] ?? [], error)
     }
 
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-009, DEC-MTG-015
     /// 後処理（話者分離 → 並べ替え → 議事録 → 保存）。CLI の動作確認からも使う。
     /// 音声を残さない設定のときは、最後（話者分離と文字起こしのあと）に音声ファイルを消す。keepAudio なら消さない
     func process(_ meeting: Meeting, me mine: [TranscribedPhrase], others theirs: [TranscribedPhrase],
@@ -286,10 +293,13 @@ final class MeetingRecorder: ObservableObject {
         update(meeting) { $0.title = title }
     }
 
+    // 要件: REQ-MTG-008
     func renameSpeaker(_ meeting: Meeting, speaker: String, to name: String) {
         update(meeting) { $0.speakerNames[speaker] = name }
     }
 
+    // 要件: REQ-MTG-013
+    // 設計判断: DEC-MTG-061
     /// 議事録を作り直す。template を渡すと、その型に変えて作る（失敗したら型も元のまま）。
     func regenerateMinutes(_ meeting: Meeting, template: MinutesTemplate? = nil, customPrompt: String? = nil) async {
         guard state == .idle else { return }
@@ -339,6 +349,7 @@ final class MeetingRecorder: ObservableObject {
         current.map { Date().timeIntervalSince($0.startedAt) } ?? 0
     }
 
+    // 要件: REQ-MTG-011
     /// 記録中のメモを 1 行足す。time は書き始めた時刻（録音開始からの秒数）。省略すると今の時刻。
     func addNote(_ text: String, at time: Double? = nil) {
         let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -346,6 +357,7 @@ final class MeetingRecorder: ObservableObject {
         appendNote(MeetingNote(kind: .note, time: time ?? elapsed, text: text))
     }
 
+    // 要件: REQ-MTG-012
     /// 今の時刻に「ここ重要」の印を付ける
     func addHighlight(_ text: String = "") {
         guard state == .recording else { return }
@@ -370,6 +382,7 @@ final class MeetingRecorder: ObservableObject {
         return updated
     }
 
+    // 設計判断: DEC-MTG-043
     /// 記録中の会議にメモを足して、すぐ保存する（アプリが落ちてもメモは残る）
     private func appendNote(_ note: MeetingNote) {
         guard state == .recording, var meeting = current else { return }
@@ -395,6 +408,7 @@ final class MeetingRecorder: ObservableObject {
         reloadMeetings()
     }
 
+    // 要件: REQ-MTG-003
     private func receive(_ phrase: TranscribedPhrase) {
         liveLines.append(LiveLine(channel: phrase.channel, start: phrase.start, text: phrase.text))
         liveLines.sort { $0.start < $1.start }
@@ -415,6 +429,7 @@ final class MeetingRecorder: ObservableObject {
 
     // MARK: - マイク
 
+    // 設計判断: DEC-MTG-004
     /// 設定で選んだマイク（未指定ならシステムの設定）を入力にしたエンジン
     nonisolated static func makeMicEngine(inputDeviceUID uid: String) -> AVAudioEngine {
         let engine = AVAudioEngine()
@@ -426,6 +441,7 @@ final class MeetingRecorder: ObservableObject {
         return engine
     }
 
+    // 設計判断: DEC-MTG-004
     /// マイクの録音を始める。機器の構成が変わったら（Bluetooth の切り替えなど）作り直す。
     private func startMic(for me: ChannelTranscriber, engine given: AVAudioEngine? = nil) throws {
         stopMic()
@@ -472,6 +488,7 @@ final class MeetingRecorder: ObservableObject {
         }
     }
 
+    // 設計判断: DEC-MTG-020
     private func updateLevels() {
         guard let me = meTranscriber, let others = othersTranscriber else { return }
         meLevel = me.level

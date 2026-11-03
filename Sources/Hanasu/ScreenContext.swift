@@ -32,6 +32,8 @@ struct ScreenContext: Sendable, Codable, Equatable {
 // MARK: - プロンプト
 
 extension ScreenContext {
+    // 要件: REQ-DIC-040
+    // 設計判断: DEC-DIC-065
     /// user content に入れるブロック。渡すものがなければ nil。
     /// アプリ名は従来どおり「入力先アプリ」の行で送る（オフにできる）ので、ここには入れない。
     func promptBlock() -> String? {
@@ -51,11 +53,13 @@ extension ScreenContext {
         return lines.joined(separator: "\n")
     }
 
+    // 設計判断: DEC-DIC-065
     /// 画面の文字に含まれる "<" を全角にして、タグを閉じたり <transcript> を偽装したりできないようにする
     static func escape(_ text: String) -> String {
         text.replacingOccurrences(of: "<", with: "＜")
     }
 
+    // 設計判断: DEC-DIC-065, DEC-DIC-066
     /// 文脈を渡すときに system instruction の末尾へ足す文。渡さないときは空文字。
     static func instruction(for context: ScreenContext?, translating: Bool) -> String {
         guard context?.promptBlock() != nil else { return "" }
@@ -94,6 +98,7 @@ extension ScreenContext {
 
 // MARK: - 設定
 
+// 設計判断: DEC-DIC-060
 /// 画面の文脈の設定。ほかの設定と同じく UserDefaults に保存する（Settings.swift を大きく変えないよう分けている）
 final class ScreenContextSettings: ObservableObject {
     static let shared = ScreenContextSettings()
@@ -123,6 +128,7 @@ final class ScreenContextSettings: ObservableObject {
             .filter { !$0.isEmpty }
     }
 
+    // 設計判断: DEC-DIC-063
     func isExcluded(bundleID: String?, appName: String?) -> Bool {
         let candidates = [bundleID, appName].compactMap { $0?.lowercased() }
         return excludedApps.contains { candidates.contains($0.lowercased()) }
@@ -145,6 +151,7 @@ final class ScreenContextSettings: ObservableObject {
 
 // MARK: - 読み取り（Accessibility API）
 
+// 要件: REQ-DIC-040
 enum ScreenContextReader {
     /// カーソルの前後それぞれで読む文字数
     static let maxChars = 500
@@ -163,6 +170,7 @@ enum ScreenContextReader {
         return Target(pid: app.processIdentifier, appName: app.localizedName, bundleID: app.bundleIdentifier)
     }
 
+    // 設計判断: DEC-DIC-061, DEC-DIC-062, DEC-DIC-063, DEC-DIC-067
     /// 前面アプリの文脈を読む。AX を同期で呼ぶので、メインスレッド以外から呼ぶ。
     static func read(_ target: Target, maxChars: Int = maxChars) -> ScreenContext {
         var context = ScreenContext(appName: target.appName, bundleID: target.bundleID)
@@ -296,6 +304,8 @@ enum ScreenContextReader {
 
 // MARK: - 録音中の非同期の読み取り
 
+// 要件: REQ-DIC-040
+// 設計判断: DEC-DIC-064
 /// 録音の開始と並行して文脈を読み、止めたときに結果を受け取る。
 /// 読み取りは別スレッドで行うので、録音の開始は待たせない。
 final class ScreenContextCapture: Sendable {

@@ -2,6 +2,7 @@
 # GitHub Actions 用: Secrets の署名証明書（PKCS#12）を一時キーチェーンに読み込む。
 #   SIGNING_CERT_P12      base64 にした .p12
 #   SIGNING_CERT_PASSWORD .p12 のパスワード
+# 要件: REQ-REL-002
 set -euo pipefail
 
 : "${SIGNING_CERT_P12:?}"

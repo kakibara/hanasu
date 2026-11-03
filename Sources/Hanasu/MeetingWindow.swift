@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 
+// 要件: REQ-MTG-007
 /// 会議ノート: 記録した会議の一覧と、議事録・文字起こしの表示。
 struct MeetingWindowView: View {
     @ObservedObject var recorder: MeetingRecorder
@@ -144,6 +145,7 @@ private struct RecordButton: View {
     }
 }
 
+// 要件: REQ-MTG-003
 struct LiveTranscriptView: View {
     @ObservedObject var recorder: MeetingRecorder
 
@@ -242,6 +244,7 @@ private struct LevelMeter: View {
     }
 }
 
+// 要件: REQ-MTG-007
 struct MeetingDetailView: View {
     let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder

@@ -1,6 +1,7 @@
 import Carbon.HIToolbox
 import Foundation
 
+// 要件: REQ-DIC-006
 enum RecordingMode: String, CaseIterable, Identifiable {
     case toggle
     case pushToTalk
@@ -27,6 +28,7 @@ enum GeminiAuthMode: String, CaseIterable, Identifiable {
     }
 }
 
+// 設計判断: DEC-DIC-002
 enum RecognizerEngine: String, CaseIterable, Identifiable {
     case dictation
     case speech
@@ -45,8 +47,11 @@ struct HotKeyCombo: Equatable {
     var keyCode: UInt32
     var modifiers: UInt32  // cmdKey / optionKey / controlKey / shiftKey の組み合わせ
 
+    // 設計判断: DEC-DIC-011
     static let `default` = HotKeyCombo(keyCode: UInt32(kVK_Space), modifiers: UInt32(optionKey))
+    // 設計判断: DEC-DIC-020
     static let defaultTranslate = HotKeyCombo(keyCode: UInt32(kVK_Space), modifiers: UInt32(optionKey | shiftKey))
+    // 設計判断: DEC-MTG-021
     static let defaultMeeting = HotKeyCombo(
         keyCode: UInt32(kVK_ANSI_M), modifiers: UInt32(controlKey | optionKey | cmdKey))
 
@@ -109,9 +114,11 @@ enum KeyNames {
     }
 }
 
+// 設計判断: DEC-COM-013
 final class AppSettings: ObservableObject {
     static let shared = AppSettings()
 
+    // 設計判断: DEC-COM-005
     static let suggestedModels = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-flash-latest"]
 
     private let defaults = UserDefaults.standard
@@ -133,6 +140,9 @@ final class AppSettings: ObservableObject {
             defaults.set(Int(translateHotKey.modifiers), forKey: Keys.translateHotKeyModifiers)
         }
     }
+    // 要件: REQ-COM-001
+    // 設計判断: DEC-COM-020
+    // 設計判断: DEC-COM-032
     @Published var recordingMode: RecordingMode { didSet { defaults.set(recordingMode.rawValue, forKey: Keys.recordingMode) } }
     /// Mac 標準のエンジンを選んだときの、SpeechAnalyzer のモジュール
     @Published var engine: RecognizerEngine { didSet { defaults.set(engine.rawValue, forKey: Keys.engine) } }
@@ -166,6 +176,7 @@ final class AppSettings: ObservableObject {
     /// 会議で録音するマイクの UID。空ならシステムの設定に従う
     @Published var meetingInputDeviceUID: String { didSet { defaults.set(meetingInputDeviceUID, forKey: Keys.meetingInputDeviceUID) } }
 
+    // 設計判断: DEC-COM-024
     /// Whisper に渡す言語コード（設定の言語 ja-JP → ja）。読めなければ日本語にする
     var whisperLanguage: String {
         Locale(identifier: localeIdentifier).language.languageCode?.identifier ?? "ja"
@@ -182,15 +193,19 @@ final class AppSettings: ObservableObject {
             Keys.authMode: GeminiAuthMode.apiKey.rawValue,
             // ターミナルから起動した場合は環境変数のパスを初期値にする
             Keys.serviceAccountPath: ProcessInfo.processInfo.environment["GEMINI_SERVICE_ACCOUNT_JSON"] ?? "",
+            // 設計判断: DEC-COM-004
             Keys.vertexLocation: "global",
             Keys.hotKeyCode: Int(HotKeyCombo.default.keyCode),
             Keys.hotKeyModifiers: Int(HotKeyCombo.default.modifiers),
             Keys.translateHotKeyCode: Int(HotKeyCombo.defaultTranslate.keyCode),
             Keys.translateHotKeyModifiers: Int(HotKeyCombo.defaultTranslate.modifiers),
             Keys.recordingMode: RecordingMode.toggle.rawValue,
+            // 設計判断: DEC-DIC-002
             Keys.engine: RecognizerEngine.speech.rawValue,
+            // 要件: REQ-COM-002
             Keys.dictationEngine: TranscriptionEngine.apple.rawValue,
             Keys.meetingEngine: TranscriptionEngine.apple.rawValue,
+            // 設計判断: DEC-COM-022
             Keys.whisperModel: WhisperModel.small.rawValue,
             Keys.geminiTranscriptionModel: Self.suggestedModels[0],
             Keys.locale: "ja-JP",
@@ -201,7 +216,9 @@ final class AppSettings: ObservableObject {
             Keys.sendAppName: true,
             Keys.meetingHotKeyCode: Int(HotKeyCombo.defaultMeeting.keyCode),
             Keys.meetingHotKeyModifiers: Int(HotKeyCombo.defaultMeeting.modifiers),
+            // 設計判断: DEC-MTG-014
             Keys.meetingMinutesModel: "gemini-3.8-flash",
+            // 設計判断: DEC-MTG-016
             Keys.keepMeetingAudio: true,
             Keys.makeMeetingMinutes: true,
             Keys.meetingOutputDeviceUID: "",

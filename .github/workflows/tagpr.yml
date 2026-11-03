@@ -4,10 +4,12 @@
 #   - windows ジョブ: Windows 版をビルドして zip を添付する（windows/ がないタグでは何もしない）
 #   - publish ジョブ: インストール手順と SHA-256 をリリースノートに足して公開する
 # 既存のタグの添付ファイルを作り直したいときは、Actions から tag を指定して手動で実行する。
+# 設計判断: DEC-REL-002
 name: tagpr
 on:
   push:
     branches: ["main"]
+  # 設計判断: DEC-REL-006
   workflow_dispatch:
     inputs:
       tag:
@@ -20,6 +22,7 @@ permissions:
   issues: read
 
 jobs:
+  # 要件: REQ-REL-001
   tagpr:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -34,6 +37,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  # 要件: REQ-REL-002, REQ-REL-003
   mac:
     needs: tagpr
     # 手動実行では tagpr を飛ばすので、飛ばされても動くようにする
@@ -75,12 +79,15 @@ jobs:
         run: |
           VERSION="${TAG#v}"
           ASSET="Hanasu-${VERSION}-macOS.zip"
+          # 設計判断: DEC-REL-003
           # ditto で固めると、署名と拡張属性を保ったまま Finder で展開できる
           ditto -c -k --keepParent build/Hanasu.app "build/${ASSET}"
           gh release upload "$TAG" "build/${ASSET}" --clobber
           echo "asset=${ASSET}" >> "$GITHUB_OUTPUT"
           echo "sha256=$(shasum -a 256 "build/${ASSET}" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
 
+  # 要件: REQ-REL-004
+  # 設計判断: DEC-REL-004
   windows:
     needs: tagpr
     if: ${{ !cancelled() && !failure() && (needs.tagpr.outputs.tag != '' || inputs.tag != '') }}
@@ -134,6 +141,7 @@ jobs:
           "asset=$asset" >> $env:GITHUB_OUTPUT
           "sha256=$sha" >> $env:GITHUB_OUTPUT
 
+  # 設計判断: DEC-REL-001, DEC-REL-005
   publish:
     needs: [tagpr, mac, windows]
     if: ${{ !cancelled() && needs.mac.result == 'success' && needs.windows.result == 'success' }}

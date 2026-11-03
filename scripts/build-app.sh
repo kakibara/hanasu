@@ -4,6 +4,7 @@
 #   ./scripts/build-app.sh debug      デバッグビルド
 #   SIGN_IDENTITY="Apple Development: ..." ./scripts/build-app.sh   証明書を指定して署名
 # バージョンは VERSION（tagpr が更新する）から Info.plist に書き込む。
+# 設計判断: DEC-COM-015, DEC-REL-007
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
