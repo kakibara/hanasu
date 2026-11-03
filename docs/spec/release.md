@@ -3,7 +3,7 @@
 リリースの作り方と、配布物の形について、**実装済み**の振る舞いのうち、要件（REQ）と設計判断（DEC）を並べる。
 
 - 区分・ID・タグの決まりは [docs/README.md](../README.md)。
-- 手順は [README.md](../../README.md) の「リリースの作り方」。
+- 手順は [docs/releasing.md](../releasing.md)。
 
 ---
 
