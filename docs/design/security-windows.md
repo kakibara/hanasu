@@ -94,7 +94,7 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 ### 2.8 依存関係・CI
 
 - 確かめたこと: パッケージは版を固定していた（`PackageReference` の Version）が、推移的な依存とハッシュは固定していなかった。CI（`windows.yml`）は秘密を使わず、`permissions: contents: read`・`persist-credentials: false`。
-- 直したこと（DEC-COM-150）: `packages.lock.json` を使い、CI では locked mode で restore する（lock と食い違えば失敗）。
+- 直したこと（DEC-COM-150）: `packages.lock.json` を使い、CI の Restore の段では locked mode で restore する（lock と食い違えば失敗）。publish の段は RID を足して restore し直すので locked mode を外している（同じ版に決まる）。
 - 残る危険: GitHub Actions（`actions/checkout@v6` など）は版のタグで指していて、コミットの SHA で固定していない（ほかのワークフローと合わせて直すのがよい）。Anthropic の SDK は推移的に Microsoft.Extensions.AI.Abstractions などを取り込む（[THIRD_PARTY_NOTICES.md](../../windows/THIRD_PARTY_NOTICES.md)）。
 
 ### 2.9 配布
