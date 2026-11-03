@@ -134,7 +134,7 @@ struct MeetingSearchField: View {
             Button(action: onAsk) {
                 Image(systemName: "sparkles")
             }
-            .help("過去の会議について Gemini に質問する")
+            .help("過去の会議について AI に質問する")
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
@@ -257,7 +257,7 @@ struct MeetingAskView: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 8) {
                 Label("会議に質問", systemImage: "sparkles").font(.title2.bold())
-                Text("検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を Gemini に渡して答えさせます。会議の内容は Gemini にだけ送ります。")
+                Text("検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を AI（「AI」タブで会議に選んだ Gemini か Claude）に渡して答えさせます。会議の内容はその AI にだけ送ります。")
                     .font(.caption).foregroundStyle(.secondary)
                 HStack {
                     TextField("例: 先週の定例で何が決まった？", text: $model.question)
