@@ -49,6 +49,8 @@ final class DictationController {
         hud.model.onSelectTranslating = { [weak self] translating in
             self?.selectOutputLanguage(translating: translating)
         }
+        hud.model.onStop = { [weak self] in self?.stopFromHUD() }
+        hud.model.onCancel = { [weak self] in self?.cancelDictation() }
         settings.$hotKey
             .removeDuplicates()
             .sink { [weak self] combo in self?.registerHotKey(combo, mode: .refine) }
@@ -120,6 +122,15 @@ final class DictationController {
         guard state == .preparing || state == .recording else { return }
         mode = translating ? .translateToEnglish : .refine
         hud.model.translating = translating
+    }
+
+    /// HUD の「停止」。ショートカットをもう一度押したときと同じく、録音を止めて入力する
+    func stopFromHUD() {
+        switch state {
+        case .recording: Task { await finishDictation() }
+        case .preparing: stopRequested = true
+        case .idle, .processing: break
+        }
     }
 
     func toggleFromMenu(mode: Mode = .refine) {
