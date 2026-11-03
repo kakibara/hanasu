@@ -6,7 +6,9 @@ Google Meet・Slack ハドル・Microsoft Teams などのオンライン会議�
 - 対象 OS: macOS 26 (Tahoe) 以降 / Apple Silicon
 - 作成日: 2026-11-02
 
-この文書は**実装の説明**（事例調査・技術選定・アーキテクチャ・プロンプト・保存形式・状態遷移）。
+> **この文書は「今こう作られている」の説明（as-is）。** コードと食い違ったら、コードが正しい（気づいたら、この文書を直す）。「こうあるべき」（要件と設計判断）は spec に書く。プロンプトの全文・既定値の一覧・CLI のオプションの一覧のようなコードの写しは置かず、ファイルと型・関数の名前で誘導する。
+
+この文書は実装の説明（事例調査・技術選定・アーキテクチャ・データの流れ・状態遷移・なぜその作りにしたか）。
 
 - 要件（初版の要件定義 F1〜F10・非機能要件・対象外と、あとから足した F11〜F16 など）と設計判断は [spec/meeting.md](../spec/meeting.md)。振る舞いを変えるときは、先に spec を見る（[docs/README.md](../README.md)）。
 - 日付の付いた検証の結果と、過去に起きた問題は [verification/meeting.md](../verification/meeting.md)。
@@ -165,15 +167,7 @@ Granola・Notion AI Meeting Notes の「会議が始まると記録を勧める�
 1. Core Audio のプロセスオブジェクト（`kAudioHardwarePropertyProcessObjectList`）から、各プロセスの `kAudioProcessPropertyBundleID`・`kAudioProcessPropertyPID`・`kAudioProcessPropertyIsRunningInput` を読む。
 2. bundle ID の先頭で会議アプリを判別する。Chrome・Slack・Teams はマイクをヘルパー（`com.google.Chrome.helper` など）で使うので、実行ファイルのパス（`proc_pidpath`）からいちばん外側の `.app` を求め、その bundle ID でも判別する。
 
-| 対象 | bundle ID の先頭 |
-| --- | --- |
-| Zoom | `us.zoom.` |
-| Microsoft Teams | `com.microsoft.teams`（`teams2`・ヘルパー・`modulehost` を含む） |
-| Slack（ハドル） | `com.tinyspeck.slackmacgap` |
-| Webex | `com.cisco.webex`、`Cisco-Systems.Spark`、`com.webex.` |
-| FaceTime | `com.apple.FaceTime`、`com.apple.avconferenced`（通話の音声を扱うデーモン） |
-| Google Chrome / Arc / Microsoft Edge | `com.google.Chrome` / `company.thebrowser.` / `com.microsoft.edgemac` |
-| Safari | `com.apple.Safari`、`com.apple.WebKit.GPU`（Safari のマイクは WebKit の GPU プロセスが扱う） |
+対象のアプリ（Zoom・Teams・Slack・Webex・FaceTime と、ブラウザの Chrome・Arc・Edge・Safari）と、見分けに使う bundle ID の先頭は `MeetingDetector.swift` の `MeetingApp`（DEC-MTG-031）。
 
 - ブラウザは Google Meet かどうかまでは分からない（タブの URL は読まない）。ブラウザがマイクを使い始めたら「ブラウザの会議（Google Meet など）かもしれません」と提案する。
 - `com.apple.WebKit.GPU` は Safari 以外の WebKit を使うアプリとも共通なので、それらがマイクを使っても Safari として提案されることがある。
@@ -217,13 +211,7 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
 
 #### 確認用の CLI
 
-```bash
-.build/debug/Hanasu --list-audio-processes        # 今 Core Audio にいるプロセス（PID・入力中・出力中・会議アプリ・bundle ID）
-.build/debug/Hanasu --watch-audio-processes       # 変化を待って表示（リスナーが届くかの確認。Ctrl-C で終了）
-.build/debug/Hanasu --simulate-meeting-detection  # 検出と記録の状態を台本どおりに動かし、提案の出かたを表示（待ち時間は短縮）
-.build/debug/Hanasu --render-meeting-suggestion out.png [--stop] [--app zoom|teams|slack|webex|facetime|chrome|safari|arc|edge]
-.build/debug/Hanasu --render-meeting-detection-settings out.png
-```
+`MeetingDetectorCLI.swift`（`--list-audio-processes`・`--watch-audio-processes`・`--simulate-meeting-detection`・提案のパネルの描き出し）。
 
 ### 4.9 会議中のメモと「ここ重要」の印（F11〜F14）
 
@@ -248,14 +236,7 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
 
 Granola のテンプレート（1on1・商談・採用面接など）にならい、会議の種類に合わせて議事録の見出しを変えられるようにした（`MinutesTemplate.swift`）。
 
-| 型 | 見出しの構成 | 指示のねらい |
-| --- | --- | --- |
-| 自動（初期値） | 概要／話し合った内容（話題ごと）／決定事項 | 従来の議事録と同じ |
-| 定例 | 概要／進捗（テーマごと）／報告・共有事項／課題・リスク／決定事項／次回までに確認すること | 会議に出ていない人が読んでも状況が分かる |
-| 1on1 | 概要／近況・コンディション／話題と相談事／フィードバック／キャリア・成長／合意したこと／次回話したいこと | 本人の意図が伝わるように。個人的な事情は穏当な言い方で |
-| 商談 | 概要／顧客の課題／提案内容／顧客の反応／懸念・質問／予算・時期・決裁 | 営業の記録としてそのまま使える。予算・時期・決裁者は必ず残す |
-| ブレスト | 概要／出たアイデア（テーマごと）／有望なアイデア／論点・未解決の問い | アイデアはなるべく漏らさず、誰の案かを添える |
-| カスタム | ユーザーが書いた指示に従う | 指示は `<user_template>` で囲んでシステム指示に入れる |
+型は 自動（初期値）・定例・1on1・商談・ブレスト・カスタム。型ごとの見出しの構成と指示の文面は `MinutesTemplate.swift` の `MinutesTemplate` と `MinutesPrompt.systemInstruction`（DEC-MTG-060）。
 
 - どの型でも、最後に「アクションアイテム」（商談は「次のアクション」、ブレストは「次のステップ」）と「話者についてのメモ」の見出しを付ける。
 - 選べる場面は 2 つ。
@@ -396,14 +377,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 
 ### 11.3 確認用の CLI
 
-```bash
-.build/debug/Hanasu --search-meetings <語> [--meetings-dir <フォルダ>]
-.build/debug/Hanasu --ask-meetings <質問> [--meetings-dir <フォルダ>] [--limit <会議数>] [--model <id>] [--show-context]
-.build/debug/Hanasu --write-sample-meetings <フォルダ>          # 架空の会議 3 件を書き出す
-.build/debug/Hanasu --render-meeting-search <出力.png> [--ask]   # 架空のデータで検索（質問）の画面を描く
-```
-
-`--meetings-dir` を省くと `~/Documents/Hanasu/Meetings` を使う。`--show-context` は Gemini に渡す本文をそのまま表示する。
+`MeetingSearchCLI.swift`（`--search-meetings`・`--ask-meetings`・`--write-sample-meetings`・画面の描き出し）。`--meetings-dir` を省くと `~/Documents/Hanasu/Meetings` を使うので、確かめるときは `--write-sample-meetings` で作った架空の会議のフォルダを渡す。
 
 ## 参考
 

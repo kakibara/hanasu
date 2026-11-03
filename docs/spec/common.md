@@ -12,26 +12,47 @@
 ### REQ-COM-001 文字起こしのエンジンを、Mac 標準 / Whisper / Gemini から選べる
 - 内容: 音声入力と会議の記録の両方で、文字起こしのエンジンを OS 標準・Whisper（端末の上で動かす）・Gemini（音声を送る）の 3 つから選べる。
 - 受け入れ条件: 設定の「一般」→「文字起こし」でエンジンを変えると、次の音声入力・会議の記録からそのエンジンで文字起こしされる。
-- 出典: ユーザーの指定（2026-11-03、PR #17）「Mac 標準 / Whisper / Gemini を選べる。Windows でも同じにする」
-- 対象: Mac（Windows は PR #19 で作業中。[roadmap.md](../roadmap.md) FUT-001）
+- 出典: ユーザーの指定（2026-11-03、PR #17）「Mac 標準 / Whisper / Gemini を選べる。Windows でも同じにする」。Windows はユーザーの依頼（2026-11-03「Windows でも使えるようにして」）と PR #19
+- 対象: Mac / Windows
 - 実装の場所: `TranscriptionEngine`、`AppSettings`（`dictationEngine` / `meetingEngine`）、`TranscriptionEngineSettingsSection`、`BatchTranscriber`
+- Windows の実装: `windows/Hanasu.Core/Transcription/Transcribers.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
 - 確かめ方: `.build/debug/Hanasu --transcribe-file /tmp/test.aiff --engine apple|whisper|gemini`、`--meeting-files me.wav others.wav --engine whisper|gemini`、`--render-engine-settings /tmp/engine.png`
+- 食い違い（ユーザーの確認待ち）: Windows 版の会議の記録では Windows 標準のエンジンを選べず、Whisper / Gemini の 2 つだけ（DEC-MTG-101、PR #19）。ユーザーの指定は「Windows でも同じにする」だったが、Windows 標準の音声認識は既定のマイクからしか聞けず、PC の音（相手）を渡せないため、実装したエージェントが外した。要件を「Windows の会議では Whisper / Gemini」に変えるかを確かめる
 
 ### REQ-COM-002 文字起こしの既定は、OS 標準のエンジンにする
 - 内容: 文字起こしのエンジンの既定は OS 標準（Mac は SpeechAnalyzer。音は Mac の外に出ない）。初版から「Mac 標準の音声入力エンジン」で文字起こしする。
 - 受け入れ条件: 設定を変えていない状態で、音声入力と会議の記録が Mac 標準のエンジンで文字起こしされる。
-- 出典: 初版（a787da8）の「Mac 標準の音声入力」で認識するという依頼。ユーザーの指定（2026-11-03、PR #17）「既定は OS の標準」
-- 対象: Mac（Windows は Windows 標準の音声認識。PR #19 で作業中）
+- 出典: 初版（a787da8）の「Mac 標準の音声入力」で認識するという依頼。ユーザーの指定（2026-11-03、PR #17）「既定は OS の標準」。Windows は PR #19（音声入力の既定は Windows 標準の音声認識）
+- 対象: Mac / Windows
 - 実装の場所: `AppSettings.init`（`dictationEngine` / `meetingEngine` の初期値）、`SpeechRecognizer`
+- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`、`windows/Hanasu.Windows/Services/WindowsSpeechTranscriber.cs`
 - 確かめ方: 新しいユーザーの UserDefaults で `--render-engine-settings /tmp/engine.png` を描き、Mac 標準が選ばれていること
+- 食い違い（ユーザーの確認待ち）: Windows 版の会議の記録の既定は Whisper（Windows 標準を選べないため。DEC-MTG-101）。「既定は OS の標準」を Windows の会議にも当てはめるかを確かめる
 
 ### REQ-COM-003 Whisper は、選んだときにモデルをダウンロードする
 - 内容: Whisper のモデルはアプリに同梱せず、エンジンかモデルを選んだ時点でダウンロードする。
 - 受け入れ条件: 設定で Whisper を選ぶとダウンロードが始まり、進み具合が出て、終わるとそのモデルで文字起こしできる。
-- 出典: ユーザーの指定（2026-11-03、PR #17）「Whisper は選んだときにモデルをダウンロードする」
-- 対象: Mac（Windows は PR #19 で作業中）
+- 出典: ユーザーの指定（2026-11-03、PR #17）「Whisper は選んだときにモデルをダウンロードする」。Windows は PR #19
+- 対象: Mac / Windows
 - 実装の場所: `WhisperModelStore.ensureDownloaded`、`TranscriptionEngineSettingsSection.downloadIfNeeded`
+- Windows の実装: `windows/Hanasu.Core/Transcription/WhisperModels.cs`
 - 確かめ方: `.build/debug/Hanasu --download-whisper base`（保存先は `HANASU_MODELS_DIR` で変えられる）、`--render-engine-settings /tmp/engine.png --downloading`
+
+### REQ-COM-010 Windows でも音声入力を使える
+- 内容: Windows 10（2004 以降）/ 11 でも、Mac 版と同じ流れの音声入力（ショートカットで録音 → 文字起こし → Gemini で整形・英訳 → カーソル位置に入力）を使える。共通の要件（REQ-DIC-001〜008・010〜012・070、REQ-COM-001〜003）は、それぞれの項目の「対象」に Windows を書いた。
+- 受け入れ条件: Windows の PC で `Hanasu.exe` を起動するとタスクトレイに常駐し、`Ctrl + Alt + Space` で話した内容が整えられてカーソル位置に入る。
+- 出典: ユーザーの依頼（2026-11-03「Windows でも使えるようにして」「音声入力と会議の記録の両方」）、PR #19
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Dictation/DictationController.cs`、`windows/Hanasu.Windows/AppHost.cs`
+- 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`DictationControllerTests`）、`dotnet run --project Hanasu.Cli -- dictation <wav> --engine whisper|gemini`。起動・常駐・入力は Windows の実機で確かめる（まだ確かめていない）
+
+### REQ-COM-011 Windows でも会議の記録を使える
+- 内容: Windows でも、マイク（自分）と PC の音（相手）を別々に録り、記録のあとに文字起こし・相手側の話者分離・Gemini の議事録まで作り、会議ノートで読める。共通の要件（REQ-MTG-001〜013・017・018・020〜025・030〜033）は、それぞれの項目の「対象」に Windows を書いた。
+- 受け入れ条件: Windows の PC で `Ctrl + Alt + Shift + M` で記録を始めて止めると、`ドキュメント\Hanasu\Meetings\<日時>\` に文字起こしと議事録ができる。`meeting.json` は Mac 版と同じ形で、Mac で作った会議も開ける。
+- 出典: ユーザーの依頼（2026-11-03「音声入力と会議の記録の両方」）、PR #19（第 2 段階、a8d8236）
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Meetings/MeetingController.cs`、`windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`MeetingJsonTests` など）、`dotnet run --project Hanasu.Cli -- meeting-files me.wav others.wav --meetings-dir <保存先>`。ループバックの録音は Windows の実機で確かめる（まだ確かめていない）
 
 ---
 
@@ -252,3 +273,73 @@
 - 関係する要件: REQ-COM-001, REQ-MTG-023
 - 対象: Mac
 - 実装の場所: `TranscriptionEngine.label`、`GeminiTranscriptionSection`
+
+### DEC-COM-100 Windows 版は C# / .NET 8 / WPF で作り、OS に依存しない部分を分ける
+- 決めたこと: `windows/` に C# 12 / .NET 8（LTS）/ WPF で作る（ターゲットは `net8.0-windows10.0.19041.0`）。プロンプト・Gemini・JWT・辞書・設定・音声の変換・状態遷移は OS に依存しない `Hanasu.Core`（net8.0）に置き、Mac でも `dotnet test` で確かめる。Whisper（`Hanasu.Whisper`）と話者分離（`Hanasu.Diarization`）も net8.0 に分ける。
+- 理由: WinRT の音声認識に 19041 が要る。Windows の実機がない環境でも、UI 以外を Mac の上でテストし、CLI で実際に確かめられるようにする。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-010, REQ-COM-011
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/`、`windows/Directory.Build.props`
+
+### DEC-COM-101 Windows 版はタスクトレイに常駐し、2 つ目の起動は知らせて終える
+- 決めたこと: WinForms の `NotifyIcon` でタスクトレイに常駐する（メニューは「音声入力を開始」「英訳して入力」「最近の結果」「設定…」「終了」と会議の項目）。2 つ目の起動は知らせて終わる。初回の起動では設定画面を開く。
+- 理由: WPF に標準のトレイアイコンがなく、依存を増やさずに済む。2 つ起動するとホットキーを取り合う。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-010
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/TrayIcon.cs`、`windows/Hanasu.Windows/App.xaml.cs`
+
+### DEC-COM-102 Windows 版の整形・英訳・議事録のプロンプトは、Mac 版と同じ文面にする
+- 決めたこと: Mac 版の `GeminiClient.swift`（整形・英訳）、`MinutesTemplate.swift`・`MeetingNotes.swift`（議事録）の文面と組み立てをそのまま移し、共有している部分には「両方を直す」とコメントを書く。テストで文面と組み立てを確かめる。
+- 理由: Mac と Windows で結果をそろえる。片方だけ直すことを防ぐ。
+- 決めた場面: PR #19
+- 関係する要件: REQ-DIC-003, REQ-DIC-010, REQ-MTG-006
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`
+
+### DEC-COM-103 Windows 版の設定と秘密の保存
+- 決めたこと: 設定は `%APPDATA%\Hanasu\settings.json`（壊れていたら `settings.json.broken` に退けて既定値で始める）。Gemini の API キーは DPAPI（CurrentUser と追加のエントロピー）で暗号化して設定に入れ、平文では保存しない。サービスアカウントは JSON のパスだけを保存する。ログは `%LOCALAPPDATA%\Hanasu\Logs\hanasu.log` で、文字起こしの中身は書かない。
+- 理由: 資格情報マネージャーより扱いが簡単で、同じユーザーでしか復号できない（Mac 版のキーチェーン、DEC-COM-002 にあたる）。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-010
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Settings/SettingsStore.cs`
+
+### DEC-COM-104 Windows 標準のエンジンは、Windows の既定のマイクを使う
+- 決めたこと: Windows 標準（`Windows.Media.SpeechRecognition` の連続認識）を選んだときは、Windows の既定のマイクを使い、設定画面でマイクの選択を無効にする（そう書く）。マイクの選択は Whisper / Gemini で使う。オンライン音声認識がオフ・日本語の音声認識がない・マイクが許可されていないときは、HUD に理由と直し方を出し、該当の設定ページ（`ms-settings:`）を開く。
+- 理由: この API は録音デバイスを受け取れない。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-001, REQ-COM-002
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/WindowsSpeechTranscriber.cs`
+
+### DEC-COM-105 Windows 版の Whisper は Whisper.net で動かし、既定は small
+- 決めたこと: Whisper.net（whisper.cpp）で動かす。モデルは tiny〜large-v3-turbo（q5_0 を含む）から選び、既定は small。設定でモデルを選んだ時点で `%LOCALAPPDATA%\Hanasu\Models` にダウンロードする（進み具合・取り消し・削除あり）。無音（約 -46 dBFS 未満）なら Whisper / Gemini に送らず、決まり文句の段は捨てる。
+- 理由: Whisper.net は Mac でも動くので CLI で確かめられた。tiny は日本語の精度が低かった。Whisper は無音に「ご視聴ありがとうございました」と書く。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-001, REQ-COM-003
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Whisper/WhisperBatchTranscriber.cs`、`windows/Hanasu.Core/Transcription/WhisperModels.cs`
+
+### DEC-COM-106 Windows 版の Gemini での文字起こし
+- 決めたこと: 録った音声を WAV にして inline data で送り、文字起こしだけをさせる（指示は `GeminiPrompts.TranscriptionInstruction` に新しく書いた。整形は次の呼び出しで行うので「聞こえたとおり」に書き起こさせる）。音声入力では 1 回 7 分まで。タイムアウトは、整形・英訳が 15 秒（Mac 版と同じ）、音声の文字起こしが 60 秒。設定画面に「音声が Google に送られる」と書く。
+- 理由: inline data の上限に収める。文字起こしと整形を分けるのは Mac 版と同じ理由（DEC-COM-031）。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-001
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Transcription/Transcribers.cs`、`windows/Hanasu.Core/Gemini/GeminiPrompts.cs`
+
+### DEC-COM-107 Windows 版は、Mac 版の一部の機能を持たない
+- 決めたこと: Windows 版には、アプリ別の文体・スニペット・画面の文脈・履歴ウインドウ・最後の結果の再入力・選択を声で編集・辞書の候補の提案・会議の字幕・マイク側の話者分離・会議の自動検出・会議の横断検索と質問・議事録のファイル保存・Slack 向けのコピー・リマインダーへの登録がない（REQ-DIC-020〜071 の一部、REQ-MTG-009・014〜016・019 は「対象: Mac」のまま）。一覧は [windows/README.md](../../windows/README.md) の「Mac 版との差」。
+- 理由: PR #19 の範囲を、音声入力（第 1 段階）と会議の記録（第 2 段階）の中心にした。足すかどうかは [roadmap.md](../roadmap.md) FUT-003。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-010, REQ-COM-011
+- 対象: Windows
+- 実装の場所: なし（作っていない）
+
+---
+
+## 廃止
+
+やめた要件・設計判断は、消さずにここへ移す（`- 状態: 廃止（日付・理由・PR）`）。今はない。

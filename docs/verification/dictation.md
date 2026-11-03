@@ -118,7 +118,7 @@ Gemini を通した部分一致（gemini-3.5-flash-lite、`--refine`）:
 
 関係: REQ-DIC-040、DEC-DIC-065
 
-画面の文脈（gemini-3.5-flash-lite、Vertex AI、`--refine-text … --context`、2026-11-03）。文脈は [design/dictation.md](../design/dictation.md) 4.8 の例（Slack の `#hanasu-dev` で、前の文に「東海林さん」「Hanasu」「tagpr」がある）:
+画面の文脈（gemini-3.5-flash-lite、Vertex AI、`--refine-text … --context`、2026-11-03）。文脈は（Slack の `#hanasu-dev` で、前の文に「東海林さん」「Hanasu」「tagpr」がある）:
 
 | 入力 | 文脈なし | 文脈あり |
 | --- | --- | --- |

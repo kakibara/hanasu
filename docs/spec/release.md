@@ -39,7 +39,7 @@
 - 出典: ユーザーの指定（2026-11-03、PR #20）「Windows 版もリリースに添付する」
 - 対象: Windows
 - 実装の場所: `.github/workflows/tagpr.yml`（`windows` ジョブ）
-- 確かめ方: 次のリリースの添付ファイル。Windows 版のコードはまだ main にない（PR #19、[roadmap.md](../roadmap.md) FUT-001）
+- 確かめ方: 次のリリースの添付ファイル（Windows 版のコードは PR #19 で main に入った。CI の `windows.yml` で publish まで確かめている）
 
 ---
 
@@ -100,3 +100,17 @@
 - 関係する要件: REQ-REL-002
 - 対象: Mac
 - 実装の場所: `scripts/create-signing-cert.sh`、`scripts/build-app.sh`
+
+### DEC-REL-008 Windows 版の話者分離のネイティブ DLL は、exe の隣に置く
+- 決めたこと: `sherpa-onnx-c-api.dll` と `onnxruntime.dll` は single file の exe に入れず、exe の隣に置いて、フォルダごと zip にする。`windows.yml` の確認にも入れる。
+- 理由: exe に入れると一時フォルダに展開して読むことになり、Windows 11 の System32 にある別の版の `onnxruntime.dll` と取り違えるおそれがある。
+- 決めた場面: PR #19
+- 関係する要件: REQ-REL-004
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`
+
+---
+
+## 廃止
+
+やめた要件・設計判断は、消さずにここへ移す（`- 状態: 廃止（日付・理由・PR）`）。今はない。

@@ -14,65 +14,73 @@
 - 内容: メニューバーの「会議の記録を開始／停止」と、ショートカット（初期値 `⌃⌥⌘ M`）で記録を始め、止める。
 - 受け入れ条件: どのアプリが前面でもショートカットで記録が始まり、もう一度押すと止まって後処理に進む。
 - 出典: 初版の要件定義 F1（必須、a787da8）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `AppDelegate.registerMeetingHotKey`、`MeetingRecorder.toggle`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`、`windows/Hanasu.Windows/TrayIcon.cs`（メニューはタスクトレイ。ショートカットは DEC-MTG-110）
 - 確かめ方: 実機で確かめる
 
 ### REQ-MTG-002 マイク（自分）とシステム音声（相手側）を別々に録る（F2）
 - 内容: マイクを「自分」、Mac が鳴らしている音を「相手」の 2 チャンネルとして別々に録音する。
 - 受け入れ条件: 記録した会議のフォルダに `me.m4a` と `others.m4a` ができ、それぞれに自分の声・相手の声が入る。
 - 出典: 初版の要件定義 F2（必須）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MeetingRecorder.start`、`SystemAudioTap`、`ChannelTranscriber`
+- Windows の実装: `windows/Hanasu.Windows/Services/MeetingChannelRecorder.cs`（相手は WASAPI ループバック。DEC-MTG-100）
 - 確かめ方: 実機で確かめる（システムオーディオ録音の許可が要る）。`--list-audio-devices` で機器の一覧
 
 ### REQ-MTG-003 録音中に、文字起こしをリアルタイムに出す（F3）
 - 内容: 録音中は、自分／相手を区別した文字起こしをリアルタイムに表示する。
 - 受け入れ条件: Mac 標準のエンジンで記録中、会議ノートに自分と相手の発言が順に出る。
 - 出典: 初版の要件定義 F3（必須）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `LiveTranscriptView`、`MeetingRecorder.receive`、`ChannelTranscriber`
+- Windows の実装: なし（Windows 版の会議ではライブの文字起こしを出さない。食い違いを参照）
 - 確かめ方: `--render-meeting-notes <フォルダ>` で記録中の画面を PNG にする。実際の会議は実機
-- 食い違い（ユーザーの確認待ち）: 文字起こしのエンジンに Whisper / Gemini を選ぶと、記録中はライブの文字起こしを出さず、記録を止めたあとにまとめて文字起こしする（DEC-MTG-005、PR #17）。F3 は必須の要件だが、出さないのは実装したエージェントの判断。要件を「Mac 標準のときだけ」に絞るかを確かめる
+- 食い違い（ユーザーの確認待ち）: 文字起こしのエンジンに Whisper / Gemini を選ぶと、記録中はライブの文字起こしを出さず、記録を止めたあとにまとめて文字起こしする（DEC-MTG-005、PR #17）。F3 は必須の要件だが、出さないのは実装したエージェントの判断。要件を「Mac 標準のときだけ」に絞るかを確かめる。Windows 版の会議は Whisper / Gemini しか選べない（DEC-MTG-101）ので、ライブの文字起こしはいつも出ない
 
 ### REQ-MTG-004 相手側の音声を話者分離する（F4）
 - 内容: 記録を止めたあと、相手側の音声を話者分離し、「話者1」「話者2」…に分ける。
 - 受け入れ条件: 相手が 2 人の会議で、相手の発言が話者1・話者2 に分かれる。
 - 出典: 初版の要件定義 F4（必須）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `FluidAudioDiarizer`、`MeetingProcessor.buildUtterances`
+- Windows の実装: `windows/Hanasu.Diarization/SherpaSpeakerDiarizer.cs`、`windows/Hanasu.Core/Meetings/MeetingProcessor.cs`
 - 確かめ方: `.build/debug/Hanasu --meeting-files me.wav others.wav`（`say` の声で作った架空の会議）
 
 ### REQ-MTG-005 話者ごとの発言を、時刻つきの文字起こしとして保存する（F5）
 - 内容: 話者と時刻の付いた発言を、文字起こしとして保存する。
 - 受け入れ条件: `transcript.md` に `[00:01:23] 話者1: …` の形で発言が並ぶ。
 - 出典: 初版の要件定義 F5（必須）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `Meeting.transcriptMarkdown`、`MeetingStore.save`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingStore.cs`
 - 確かめ方: `--meeting-files me.wav others.wav` の出力
 
 ### REQ-MTG-006 Gemini で議事録を作る（F6）
 - 内容: Gemini で議事録（要約・決定事項・TODO）を作る。TODO は PR #13 から「アクションアイテム」として取り出す（REQ-MTG-018）。
 - 受け入れ条件: 記録のあと `minutes.md` に、概要・決定事項・アクションアイテムを含む議事録ができる。
 - 出典: 初版の要件定義 F6（必須）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MeetingProcessor.makeMinutes`、`MinutesPrompt`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`（Mac 版と同じ文面）
 - 確かめ方: `.build/debug/Hanasu --minutes-from-transcript <文字起こし>`（Gemini の認証が要る）
 
 ### REQ-MTG-007 記録した会議を一覧し、読める・コピーできる（F7）
 - 内容: 会議ノートのウインドウで、記録した会議を一覧し、文字起こしと議事録を読める・コピーできる。
 - 受け入れ条件: 会議ノートの左に会議の一覧が出て、選ぶと右に「議事録」「文字起こし」が出る。コピー（書き出し）ができる。
 - 出典: 初版の要件定義 F7（必須）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MeetingWindowView`、`MeetingDetailView`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（書き出しは「Markdown をコピー」だけ）
 - 確かめ方: `--render-minutes-ui <フォルダ> --meeting-json <json>` で画面を PNG にする
 
 ### REQ-MTG-008 話者名を、あとから付け替えられる（F8）
 - 内容: 「話者1」を「田中さん」のように、あとから付け替えられる。
 - 受け入れ条件: 会議ノートで話者名を変えると、文字起こしと議事録の表示がその名前になり、保存される。
 - 出典: 初版の要件定義 F8（あると良い）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MeetingRecorder.renameSpeaker`、`Meeting.displayName`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: 実機で確かめる
 
 ### REQ-MTG-009 会議アプリがマイクを使い始めたら、記録するかを聞く（F9）
@@ -87,32 +95,36 @@
 - 内容: 設定で、録音した音声ファイルを残すか、後処理のあとに消すかを選べる。
 - 受け入れ条件: 「音声ファイルを残す」をオフにすると、後処理のあとに `me.m4a` / `others.m4a` が消える。
 - 出典: 初版の要件定義 F10（あると良い）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MeetingRecorder.process`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`
 - 確かめ方: `--meeting-files me.wav others.wav -keepMeetingAudio NO`
 
 ### REQ-MTG-011 記録中にメモを書ける（F11）
 - 内容: 記録中にメモを書ける。1 行ずつ、録音開始からの経過時間つきで保存する。
 - 受け入れ条件: 記録中にメモ欄で Enter を押すと、時刻つきの行が並び、`meeting.json` と `notes.md` に残る。
 - 出典: PR #10（10 個の改善案の 1 つ）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `LiveNotesPanel`、`MeetingRecorder.addNote`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `--render-meeting-notes <フォルダ>`、`--meeting-files me.wav others.wav --notes notes.txt`
 
 ### REQ-MTG-012 記録中に「ここ重要」の印を付けられる（F12）
 - 内容: 記録中に、ボタンと設定で変えられるショートカットで「ここ重要」の印を付けられる。
 - 受け入れ条件: 会議ツールを前面にしたまま `⌃⌥⌘ H` を押すと、その時刻に印が付く。
 - 出典: PR #10
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MeetingRecorder.addHighlight`、`MeetingHighlightHotKey`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（ショートカットは DEC-MTG-110）
 - 確かめ方: 実機で確かめる。印の反映は `--meeting-files … --notes notes.txt`
 
 ### REQ-MTG-013 議事録は、メモと印を優先して反映する。記録後にメモを直して作り直せる（F13）
 - 内容: 議事録はメモと印を優先して反映する。記録後にメモを直して、議事録を作り直せる。
 - 受け入れ条件: 印を付けた箇所が議事録の「重要とした箇所」にまとまり、メモにしかない内容も残る。「保存して議事録を作り直す」で議事録が変わる。
 - 出典: PR #10
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `Meeting.notesForPrompt`、`Meeting.transcriptForPromptMarkingHighlights`、`MeetingRecorder.regenerateMinutes`、`MeetingNotesEditor`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `--meeting-files me.wav others.wav --notes notes.txt`
 
 ### REQ-MTG-014 文字起こしの字幕を、ほかのアプリの前面に出せる（F14）
@@ -143,16 +155,18 @@
 - 内容: 議事録を、会議の種類に合わせた型（テンプレート）で作れる。記録の前に選ぶことも、あとから選び直して作り直すこともできる。
 - 受け入れ条件: 型を「商談」にすると、顧客の課題・提案内容などの見出しで議事録ができる。
 - 出典: PR #13
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MinutesTemplate`、`MinutesTemplatePicker`、`MinutesTemplateMenu`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`
 - 確かめ方: `.build/debug/Hanasu --minutes-from-transcript sales.txt --template sales`
 
 ### REQ-MTG-018 アクションアイテムを、決まった形で取り出す
 - 内容: 議事録のアクションアイテム（担当・内容・期限）を、Markdown とは別に構造化して取り出し、保存する。
 - 受け入れ条件: `meeting.json` の `actionItems` に担当・内容・期限が入り、議事録には一覧として出る。
 - 出典: PR #13
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `ActionItem`、`MinutesPrompt.parse`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`
 - 確かめ方: `--minutes-from-transcript sales.txt --template sales --save-json sales.json`
 
 ### REQ-MTG-019 議事録とアクションアイテムを書き出す
@@ -167,16 +181,18 @@
 - 内容: Google Meet（ブラウザ）・Slack ハドル・Microsoft Teams に対応する。仕組み上、Zoom など Mac で音が鳴るものは全部対象。
 - 受け入れ条件: どの会議ツールでも、同じ操作で記録できる（ツールごとの設定が要らない）。
 - 出典: 初版の非機能要件「対応ツール」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `SystemAudioTap`（アプリを限定せずに Mac 全体の音を録る）
+- Windows の実装: `windows/Hanasu.Windows/Services/MeetingChannelRecorder.cs`（選んだ出力機器で鳴る音すべて）
 - 確かめ方: 実機で、各会議ツールで確かめる
 
 ### REQ-MTG-021 会議の長さ（非機能要件）
 - 内容: 2 時間までの会議で実用に耐えること。
 - 受け入れ条件: 2 時間の会議を記録して、文字起こしと議事録ができる。
 - 出典: 初版の非機能要件「会議の長さ」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: 特定の場所はない（録音・文字起こし・後処理の全体）
+- Windows の実装: 特定の場所はない
 - コードのタグ: 不要（全体の性質で、決めている 1 か所がない）
 - 確かめ方: 実機で確かめる（まだ 2 時間の会議では確かめていない）
 
@@ -184,8 +200,9 @@
 - 内容: 1 時間の会議で、停止から議事録の完成まで数分以内。
 - 受け入れ条件: 1 時間の会議で、停止から数分以内に議事録ができる。
 - 出典: 初版の非機能要件「処理時間」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: 特定の場所はない（後処理の全体）
+- Windows の実装: 特定の場所はない
 - コードのタグ: 不要（全体の性質で、決めている 1 か所がない）
 - 確かめ方: 実機で確かめる。41 秒の音声での処理時間は [verification/meeting.md](../verification/meeting.md) 2〜3
 
@@ -193,17 +210,19 @@
 - 内容: 音声認識と話者分離は Mac の上で行う。外部（Gemini）に送るのは文字起こしテキストだけ。
 - 受け入れ条件: 既定の設定（Mac 標準のエンジン）で記録したとき、音声は Mac の外に出ない。
 - 出典: 初版の非機能要件「プライバシー」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `ChannelTranscriber`（オンデバイスの SpeechAnalyzer）、`FluidAudioDiarizer`（オンデバイス）
+- Windows の実装: `windows/Hanasu.Whisper/WhisperBatchTranscriber.cs`（会議の既定）、`windows/Hanasu.Diarization/SherpaSpeakerDiarizer.cs`（どちらも PC の上で動く）
 - 確かめ方: 実機で、通信先を確かめる
-- 食い違い（ユーザーの確認待ち）: 会議の文字起こしのエンジンに Gemini を選ぶと、録った音声（自分と相手の声）を Gemini に送る（REQ-COM-001、DEC-MTG-008、PR #17）。エンジンに Gemini を選べることはユーザーの指定（2026-11-03）なので、この要件に「Gemini のエンジンを選んだときを除く」と足すかを確かめる。設定画面には、音声を Google に送ることを注意の印つきで出している（DEC-COM-033）
+- 食い違い（ユーザーの確認待ち）: 会議の文字起こしのエンジンに Gemini を選ぶと、録った音声（自分と相手の声）を Gemini に送る（REQ-COM-001、DEC-MTG-008、PR #17）。エンジンに Gemini を選べることはユーザーの指定（2026-11-03）なので、この要件に「Gemini のエンジンを選んだときを除く」と足すかを確かめる。設定画面には、音声を Google に送ることを注意の印つきで出している（DEC-COM-033）Windows 版も、会議の文字起こしに Gemini を選ぶと音声を送る（既定の Whisper は PC の上で動く）
 
 ### REQ-MTG-024 会議中の負荷（非機能要件）
 - 内容: 会議中に CPU を使いすぎて、会議ツールの音声が途切れないこと。
 - 受け入れ条件: 記録中も会議ツールの音声が途切れない。
 - 出典: 初版の非機能要件「負荷」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: 特定の場所はない（話者分離と議事録を記録のあとに回すこと、DEC-MTG-005 など）
+- Windows の実装: 特定の場所はない
 - コードのタグ: 不要（全体の性質で、決めている 1 か所がない）
 - 確かめ方: 実機で確かめる
 
@@ -211,8 +230,9 @@
 - 内容: `~/Documents/Hanasu/Meetings/` の下に、会議ごとに 1 フォルダ。Markdown なので他のツールでも読める。
 - 受け入れ条件: 記録した会議ごとにフォルダができ、`transcript.md`・`minutes.md` を他のエディタで読める。
 - 出典: 初版の非機能要件「保存先」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MeetingStore`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingStore.cs`（`ドキュメント\Hanasu\Meetings\`。保存先は設定で変えられる。DEC-MTG-108）
 - 確かめ方: `--meeting-files me.wav others.wav` の出力先
 
 ### REQ-MTG-026 録音中であることを、メニューバーに常に表示する（運用上の注意）
@@ -228,8 +248,9 @@
 - 内容: 会議ツールの画面・映像は記録しない。
 - 受け入れ条件: 画面収録の許可を求めず、映像のファイルを作らない。
 - 出典: 初版の「対象外（今回はやらない）」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: なし
+- Windows の実装: なし
 - コードのタグ: 不要（やらないことの要件）
 - 確かめ方: 権限の一覧（[design/meeting.md](../design/meeting.md) 7）に画面収録がないこと
 
@@ -237,8 +258,9 @@
 - 内容: 会議ツールへボットで参加しない。ボットでの記録は計画（[roadmap.md](../roadmap.md) FUT-203）。
 - 受け入れ条件: 会議の参加者に Hanasu のボットが現れない。
 - 出典: 初版の「対象外（今回はやらない）」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: なし
+- Windows の実装: なし
 - コードのタグ: 不要（やらないことの要件）
 - 確かめ方: 該当する機能がないこと
 
@@ -246,8 +268,9 @@
 - 内容: 会議ツールの参加者一覧を読んで名前を取ることはしない。話者名は推定（議事録の「話者についてのメモ」）と、手での付け替え（REQ-MTG-008）だけ。
 - 受け入れ条件: 話者は「話者1」などのまま保存され、自動では名前に変わらない。
 - 出典: 初版の「対象外（今回はやらない）」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: なし
+- Windows の実装: なし
 - コードのタグ: 不要（やらないことの要件）
 - 確かめ方: 該当する機能がないこと
 
@@ -255,8 +278,9 @@
 - 内容: 複数台の Mac で録った記録を 1 つにまとめることはしない。
 - 受け入れ条件: 記録は Mac ごとに別の会議として保存される。
 - 出典: 初版の「対象外（今回はやらない）」
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: なし
+- Windows の実装: なし
 - コードのタグ: 不要（やらないことの要件）
 - 確かめ方: 該当する機能がないこと
 
@@ -631,3 +655,97 @@
 - 関係する要件: REQ-MTG-019
 - 対象: Mac
 - 実装の場所: `ReminderExporter`、`ReminderExportSheet`
+
+### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
+- 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。
+- 理由: Mac 版の Process Tap（DEC-MTG-002）にあたる、ドライバーの要らない方法。効果音を鳴らすとループバックに入る。
+- 決めた場面: PR #19
+- 関係する要件: REQ-MTG-002, REQ-MTG-020
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/MeetingChannelRecorder.cs`
+
+### DEC-MTG-101 Windows 版の会議では、Windows 標準のエンジンを選べない（既定は Whisper）
+- 決めたこと: 会議の文字起こしは Whisper（既定）か Gemini。古い設定で Windows 標準になっていたら Whisper に直す。記録中のライブの文字起こしは出さず、「止めたあとに Whisper で行います」と出す。Whisper のモデルは音声入力と共通。始める前に、Whisper はモデルがあるか、Gemini は認証情報があるかを確かめる。
+- 理由: Windows 標準の `SpeechRecognizer` は既定のマイクからしか聞けず、ループバックで録った相手の音を渡せない。「自分だけ Windows 標準・相手は Whisper」は、結局 Whisper のモデルが要るうえ、チャンネルで質と時刻の精度がそろわず、選んだマイクも使えないので採らなかった。ライブを出さないのは Mac 版で Whisper / Gemini を選んだときと同じ理由（DEC-MTG-005）。ユーザーの指定（REQ-COM-001、REQ-COM-002）と合わないので、そちらに食い違いとして書いた。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-001, REQ-COM-002, REQ-MTG-003
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Meetings/MeetingController.cs`、`windows/Hanasu.Core/Settings/AppSettings.cs`
+
+### DEC-MTG-102 Windows 版の会議の音声は、WAV にストリームで書く
+- 決めたこと: チャンネルごとに 16 kHz・モノラル・16 bit の WAV（`me.wav` / `others.wav`）に書きながら録り、ヘッダーの長さは 5 秒ごとに書き直す。
+- 理由: 長い会議でもメモリに溜めない。Windows で AAC を書くには Media Foundation が要る。アプリが落ちても途中までの音声を読める。
+- 決めた場面: PR #19
+- 関係する要件: REQ-MTG-002, REQ-MTG-010
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Audio/WavStreamWriter.cs`、`windows/Hanasu.Windows/Services/MeetingChannelRecorder.cs`
+
+### DEC-MTG-103 Windows 版の 2 つのチャンネルの時刻合わせ
+- 決めたこと: チャンネルごとに「最初の音が録音開始から何秒後に届いたか」を `meeting.json` の `audioStartOffsets` に残し、文字起こしの時刻に足す。ループバックは PC が無音の間データを渡さないので、届いた時刻と書いた長さの差が 0.25 秒より開いたら、その分の無音を足す（`ChannelTimeline`）。無音のところにかかった文字起こしの時刻は、声のあるところへ寄せる。
+- 理由: Mac 版の DEC-MTG-006 と同じく共通の時間軸にそろえる。
+- 決めた場面: PR #19
+- 関係する要件: REQ-MTG-005
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/MeetingChannelRecorder.cs`、`windows/Hanasu.Core/Meetings/MeetingTranscription.cs`
+
+### DEC-MTG-104 Windows 版の話者分離は sherpa-onnx で行う
+- 決めたこと: sherpa-onnx（NuGet の 1.13.8、Apache-2.0）の `OfflineSpeakerDiarization` で、相手側を会議全体で 1 回に分ける。話者の数は決めず、しきい値 0.5 でまとめる。モデル（pyannote segmentation-3.0 の ONNX 版と 3D-Speaker の CAM++、約 34 MB）は初めて使うときに `%LOCALAPPDATA%\Hanasu\Models\diarization` にダウンロードする。失敗したら相手を「相手」1 人にまとめて続け、タスクトレイで知らせる。設定「相手側の話者を分ける」は既定でオン。マイク側の話者分離は作っていない。
+- 理由: FluidAudio（DEC-MTG-010）は Apple 専用。sherpa-onnx は C# の API があり Mac でも動くので CLI で確かめられた。公開から 7 週たった版を選んだ。
+- 決めた場面: PR #19
+- 関係する要件: REQ-MTG-004, REQ-MTG-023
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Diarization/SherpaSpeakerDiarizer.cs`
+
+### DEC-MTG-105 Windows 版の Whisper の語の時刻は、トークンの時刻から作る
+- 決めたこと: トークンごとの時刻（t0/t1）を使い、Whisper.net が文字化け（U+FFFD）にして渡す日本語のトークンの断片は、前後の読めるトークンの位置から間の文字をまとめて 1 語にする。「(字幕)」のような括弧書きの注釈は除く。whisper.cpp の DTW の時刻は使わない。
+- 理由: 日本語のトークンは 1 文字の途中で切れることがある。DTW の時刻は長い音声で途中から文字起こしが止まった。
+- 決めた場面: PR #19
+- 関係する要件: REQ-MTG-004, REQ-MTG-005
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Whisper/WhisperBatchTranscriber.cs`
+
+### DEC-MTG-106 Windows 版の話者の割り当てに、2 つの決まりを足す
+- 決めたこと: Mac 版の `MeetingProcessor`（DEC-MTG-012、DEC-MTG-013）を移し、2 つ足す。1 つの発話を話者で分けたとき、端に残った 1 秒未満・4 文字以下のかけらは隣にまとめる。スピーカーからの回り込みの除去は 6 文字以上のかけらだけを対象にする。
+- 理由: 合成音声の確認で、Whisper の語の時刻の遅れから「でした。」が次の人に付いたり、「ます」が回り込みとして消えたりした。
+- 決めた場面: PR #19
+- 関係する要件: REQ-MTG-004, REQ-MTG-005
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Meetings/MeetingProcessor.cs`
+
+### DEC-MTG-107 Windows 版の会議の Gemini 文字起こしは、整形と同じモデルを使う
+- 決めたこと: 会議を Gemini で文字起こしするときのモデルは、設定の Gemini のモデル（整形と同じ）。区切り方は Mac 版と同じ 5 分ごと・最大 3 つを並行（DEC-MTG-008）で、音声は WAV（5 分で約 10 MB）。
+- 理由: 文字起こしには速いモデルで足りた（flash-lite で 1 分の会議を正確に起こせた）。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-001
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Meetings/MeetingTranscription.cs`
+
+### DEC-MTG-108 Windows 版の meeting.json は、Mac 版と同じ形にする
+- 決めたこと: キーは camelCase、列挙は小文字、日時は秒までの UTC、UUID は大文字、null は書かない。保存先は `ドキュメント\Hanasu\Meetings\<yyyy-MM-dd HHmm>\` で、設定で変えられる。Windows 版だけが書く `audioStartOffsets` は Mac 版では読み飛ばされる。`reminderID` は読み書きで落とさない。
+- 理由: Mac で作った会議のフォルダを、そのまま Windows の会議ノートで開けるようにする（逆も）。Swift の `.iso8601` は小数の秒を読めない。
+- 決めた場面: PR #19
+- 関係する要件: REQ-MTG-025, REQ-COM-011
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Meetings/MeetingModels.cs`、`windows/Hanasu.Core/Meetings/MeetingStore.cs`
+
+### DEC-MTG-109 Windows 版では、音声入力と会議の記録を同時に動かさない
+- 決めたこと: 一方が動いている間は、もう一方を始めない（記録中は音声入力のメニューとショートカットを止める）。終了しようとすると、記録中なら確かめる。起動時に、記録中・処理中のまま残った会議を「失敗」にする（音声は残る）。
+- 理由: マイクを取り合わないようにする。Mac 版の DEC-MTG-018 と同じく、落ちた会議が「記録中」のまま残らないようにする。
+- 決めた場面: PR #19
+- 関係する要件: REQ-COM-010, REQ-COM-011
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Dictation/DictationController.cs`、`windows/Hanasu.Core/Meetings/MeetingController.cs`
+
+### DEC-MTG-110 Windows 版の会議のショートカットは、修飾キーを 3 つにする
+- 決めたこと: 記録の開始・停止は `Ctrl + Alt + Shift + M`、「ここ重要」は `Ctrl + Alt + Shift + H`（記録中だけ登録）。設定で変えられる。
+- 理由: `Ctrl + Shift + M`・`Alt + M` などは Teams・Zoom などのミュートに使われている。
+- 決めた場面: PR #19
+- 関係する要件: REQ-MTG-001, REQ-MTG-012
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Settings/AppSettings.cs`
+
+---
+
+## 廃止
+
+やめた要件・設計判断は、消さずにここへ移す（`- 状態: 廃止（日付・理由・PR）`）。今はない。

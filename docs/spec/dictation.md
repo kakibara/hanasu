@@ -16,89 +16,100 @@
   - どのアプリが前面にあっても、ショートカットで録音が始まる（HUD が出る）。
   - もう一度押すと録音が止まり、整形・入力に進む。
 - 出典: 初版（a787da8、2026-11-02）の「目的とユーザー体験」1〜3。Typeless 風の音声入力という初版の依頼
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationController.handleHotKey`、`HotKeyManager`
+- Windows の実装: `windows/Hanasu.Windows/Services/HotKeyService.cs`、`windows/Hanasu.Core/Dictation/DictationController.cs`。既定のショートカットは DEC-DIC-110
 - 確かめ方: 実機で確かめる（CLI では確かめられない）
 
 ### REQ-DIC-002 録音中は、認識中のテキストを HUD にリアルタイムに出す
 - 内容: 録音中は画面下部に小さな HUD を出し、認識中のテキストを順に表示する。
 - 受け入れ条件: Mac 標準のエンジンで録音しているとき、話した内容が HUD に順に出る。
 - 出典: 初版の「目的とユーザー体験」2
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `HUDController`、`DictationController.init`（`onPartialText`）
+- Windows の実装: `windows/Hanasu.Windows/Views/HudWindow.xaml.cs`、`windows/Hanasu.Windows/Services/WindowsSpeechTranscriber.cs`（Windows 標準のエンジンのときに途中経過を出す）
 - 確かめ方: `.build/debug/Hanasu --render-hud /tmp/hud.png` で見た目。途中経過は実機で確かめる
-- 食い違い（ユーザーの確認待ち）: 文字起こしのエンジンに Whisper / Gemini を選ぶと、録音中は文字を出さず、音量の目安だけを出す（DEC-DIC-101、PR #17）。エンジンを選べること（REQ-COM-001）はユーザーの指定だが、途中経過を出さないのは実装したエージェントの判断。要件を「Mac 標準のときだけ」に絞るかを確かめる
+- 食い違い（ユーザーの確認待ち）: 文字起こしのエンジンに Whisper / Gemini を選ぶと、録音中は文字を出さず、音量の目安だけを出す（DEC-DIC-101、PR #17）。エンジンを選べること（REQ-COM-001）はユーザーの指定だが、途中経過を出さないのは実装したエージェントの判断。要件を「Mac 標準のときだけ」に絞るかを確かめる。Windows 版も、Whisper / Gemini では録音中に文字を出さない（Windows 標準では出す）
 
 ### REQ-DIC-003 認識結果を Gemini で自然な日本語に整える
 - 内容: 認識結果の全体を Gemini に送り、誤変換（同音異義語）・フィラー（「えー」「あのー」）・句読点・言い直しを整えた日本語にする。
 - 受け入れ条件: 「えーと、明日の会議なんですけど、あのー、資料はジェミニで作ったやつを使います。あ、違う、グーグルスライドで作ったやつです。」が、フィラーを除き言い直しを反映した文（「明日の会議なんですけど、資料はGoogleスライドで作ったやつを使います。」など）になる。
 - 出典: 初版の「目的とユーザー体験」4。Typeless 風の音声入力と Gemini での整形という初版の依頼
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `GeminiClient.refine`、`GeminiClient.systemInstruction`
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（Mac 版と同じ文面）、`windows/Hanasu.Core/Dictation/DictationText.cs`
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>"`（Gemini の認証が要る）
 
 ### REQ-DIC-004 整形した文章を、元のカーソル位置に入力する
 - 内容: 整形後の文章を、録音を始めたときにカーソルがあった場所に入力する。
 - 受け入れ条件: 録音を始めたアプリの入力欄に文章が入る。
 - 出典: 初版の「目的とユーザー体験」5
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `TextInserter.insert`
+- Windows の実装: `windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`
 - 確かめ方: 実機で確かめる
 
 ### REQ-DIC-005 録音中に Esc で取り消す
 - 内容: 録音中に `Esc` を押すと、何も入力せずに終える。
 - 受け入れ条件: 録音中に `Esc` を押すと HUD に「取り消しました」と出て、何も入力されない。
 - 出典: 初版の「目的とユーザー体験」補助動作
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationController.cancelDictation`、`DictationController.setEscapeHotKey`
+- Windows の実装: `windows/Hanasu.Core/Dictation/DictationController.cs`
 - 確かめ方: 実機で確かめる
 
 ### REQ-DIC-006 押している間だけ録音するモードを選べる
 - 内容: 設定で「押している間だけ録音」（プッシュトゥトーク）を選べる。
 - 受け入れ条件: このモードでは、ショートカットを押している間だけ録音し、離すと止めて入力に進む。
 - 出典: 初版の「目的とユーザー体験」補助動作
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `RecordingMode`、`DictationController.handleHotKey`
+- Windows の実装: `windows/Hanasu.Core/Dictation/DictationController.cs`
 - 確かめ方: 実機で確かめる
 
 ### REQ-DIC-007 Gemini が失敗しても、話した内容を失わない
 - 内容: Gemini での整形に失敗したら、整形前の認識結果をそのまま入力し、そのことを知らせる。
 - 受け入れ条件: 認証情報がない・HTTP エラー・タイムアウト・空の応答のとき、認識結果がそのまま入力され、HUD に理由が出る。
 - 出典: 初版の「目的とユーザー体験」補助動作
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationController.finishDictation`
+- Windows の実装: `windows/Hanasu.Core/Dictation/DictationText.cs`
 - 確かめ方: 実機で、認証情報を外して確かめる
 
 ### REQ-DIC-008 直近の結果を、メニューからコピーし直せる
 - 内容: メニューバーの「最近の結果」に直近の結果を並べ、選ぶとコピーする。
 - 受け入れ条件: 音声入力のあと「最近の結果」に結果が出て、選ぶとクリップボードに入る。
 - 出典: 初版の「目的とユーザー体験」補助動作（「直近の結果はメニューから再コピーできる」）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationHistoryUI.makeRecentResultsMenu`
+- Windows の実装: `windows/Hanasu.Windows/TrayIcon.cs`（メモリ上の 10 件。DEC-DIC-114）
 - 確かめ方: 実機で確かめる
 
 ### REQ-DIC-010 話した日本語を、英語に翻訳して入力するモード
 - 内容: 音声入力のモードとして、話した内容を英語に翻訳して入力するモードを持つ。専用のショートカットかメニューで始める。
 - 受け入れ条件: 英訳のモードで日本語で話すと、自然な英語の文章が入力される。
 - 出典: 2026-11-02 のユーザーの依頼「音声入力モードで、話した内容を英語に翻訳して出力するモード」（80d77fc）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `GeminiClient.translateToEnglish`、`GeminiClient.translationInstruction`、`DictationController.Mode`
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`、`windows/Hanasu.Core/Dictation/DictationController.cs`
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>" --translate`
 
 ### REQ-DIC-011 録音の終わりに HUD で English を選ぶと、英語で出力する
 - 内容: 録音中の HUD に「日本語 ／ English」の切り替えを出し、録音を止めた時点で選んでいる言語で入力する。
 - 受け入れ条件: 日本語で始めた録音でも、止める前に HUD の「English」を押せば英訳が入力される（逆も同じ）。
 - 出典: 2026-11-02 のユーザーの依頼「音声入力が終わったときに UI で英語を選ぶと英語で出力される」（80d77fc）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationController.selectOutputLanguage`、`HUDPanel.swift` の `LanguageSwitch`
+- Windows の実装: `windows/Hanasu.Windows/Views/HudWindow.xaml.cs`、`windows/Hanasu.Core/Dictation/DictationController.cs`
 - 確かめ方: `.build/debug/Hanasu --render-hud /tmp/hud.png --translate` で見た目。クリックは実機で確かめる
 
 ### REQ-DIC-012 録音中の HUD のボタンで、止める・取り消す
 - 内容: 録音中の HUD に「■ 停止」と「取消」のボタンを出し、マウスのクリックで録音を止めて入力する・取り消す。選択を声で編集するときの HUD でも同じ。
 - 受け入れ条件: 「■ 停止」を押すとショートカットをもう一度押したのと同じく入力され、「取消」を押すと `Esc` と同じく取り消される。入力先のフォーカスは動かない。
 - 出典: ユーザーの依頼「録音中をマウスのクリックで終了できるように」（PR #16）
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationController.stopFromHUD`、`EditModeController.stopFromHUD`、`HUDModel.onStop`
+- Windows の実装: `windows/Hanasu.Windows/Views/HudWindow.xaml.cs`
 - 確かめ方: `--render-hud`・`--render-edit-hud` で見た目。クリックは実機で確かめる
 
 ### REQ-DIC-020 入力先アプリに合わせて文体を変える
@@ -169,8 +180,9 @@
 - 内容: ユーザー辞書に `読み・誤認識 => 正しい表記` の置き換えルールを書ける。ルールは文字起こしの結果に決定的に当てるので、Gemini で整形しないときも効く。
 - 受け入れ条件: `ストックマーク => Stockmark` を書くと、文字起こしの「ストックマーク」が、整形のオン・オフにかかわらず「Stockmark」になる。
 - 出典: PR #12
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `UserDictionary.apply`、`DictationController.finishDictation`
+- Windows の実装: `windows/Hanasu.Core/Text/UserDictionary.cs`（Mac 版の移植）
 - 確かめ方: `.build/debug/Hanasu --test-dictionary`（失敗があれば終了コード 1）、`--apply-dictionary "<文>" --dictionary /tmp/dict.txt`
 
 ### REQ-DIC-071 辞書の候補を挙げてもらい、選んだものだけを足す
@@ -808,3 +820,49 @@
 - 関係する要件: REQ-COM-001, REQ-COM-003
 - 対象: Mac
 - 実装の場所: `SpeechRecognizer.startBatch`
+
+### DEC-DIC-110 Windows 版の既定のショートカット
+- 決めたこと: 音声入力は `Ctrl + Alt + Space`、英訳は `Ctrl + Alt + Shift + Space`。設定で変えられる。`Alt + Space`（ウインドウメニュー）、`Win + H`（音声入力）、`Win + Space`（入力言語の切り替え）、`Ctrl + Space` / `Shift + Space`（IME のオン・オフ、全角・半角スペース）は避け、設定でも選べないようにする。登録は `RegisterHotKey` で、「押している間だけ」のために離したかを見張る。
+- 理由: Windows が使う組み合わせとぶつからないようにする（Mac 版の ⌥ Space にあたるキーは Windows では使えない）。
+- 決めた場面: PR #19
+- 関係する要件: REQ-DIC-001, REQ-DIC-006, REQ-DIC-010
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Settings/HotKeyCombo.cs`、`windows/Hanasu.Windows/Services/HotKeyService.cs`
+
+### DEC-DIC-111 Windows 版の入力は、クリップボードと SendInput の Ctrl+V
+- 決めたこと: クリップボードを退避して文章を置き、修飾キーが離されるのを待ってから `SendInput` で Ctrl+V を送り、500 ms 後に元に戻す（その間にコピーされていたら戻さない）。クリップボードの履歴（Win+V）とクラウド同期に残さない印を付ける。
+- 理由: Mac 版の DEC-DIC-013 と同じ考え方。押したままの修飾キーが混ざらないようにする。
+- 決めた場面: PR #19
+- 関係する要件: REQ-DIC-004
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`
+
+### DEC-DIC-112 Windows 版の HUD は、フォーカスを奪わないウインドウにする
+- 決めたこと: 画面の下の小さな表示を `WS_EX_NOACTIVATE` で作り、ヘッダーの右に「経過時間・取消・■ 停止」を並べる。押せるのは準備中・録音中だけで、それ以外はマウスを素通しする。
+- 理由: Mac 版の DEC-DIC-016・DEC-DIC-025 と同じく、入力先のフォーカスを動かさない。
+- 決めた場面: PR #19
+- 関係する要件: REQ-DIC-002, REQ-DIC-011, REQ-DIC-012
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Views/HudWindow.xaml.cs`、`windows/Hanasu.Core/Dictation/Hud.cs`
+
+### DEC-DIC-113 タスクトレイのメニューから始めたら、直前のウインドウを前面に戻してから録音する
+- 決めたこと: 直前に前面だったウインドウを覚えておき、メニューから始めたときはそれを前面に戻してから録音する。
+- 理由: メニューを開くと前面がタスクバーに移り、入力先がずれる。
+- 決めた場面: PR #19
+- 関係する要件: REQ-DIC-004
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/ForegroundWindowTracker.cs`
+
+### DEC-DIC-114 Windows 版の「最近の結果」は、メモリ上の 10 件だけ
+- 決めたこと: 直近の 10 件をメモリ上に置き、タスクトレイのメニューから選ぶとコピーする。終了すると消える。
+- 理由: 履歴ウインドウ（REQ-DIC-060）は Windows 版の範囲外にした（DEC-COM-107）。初版の Mac 版と同じ形。
+- 決めた場面: PR #19
+- 関係する要件: REQ-DIC-008
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Dictation/DictationText.cs`、`windows/Hanasu.Windows/TrayIcon.cs`
+
+---
+
+## 廃止
+
+やめた要件・設計判断は、消さずにここへ移す（`- 状態: 廃止（日付・理由・PR）`）。今はない。

@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 
+// 確かめ方: REQ-DIC-070, REQ-DIC-071
 /// ユーザー辞書まわりの動作確認用の CLI モード:
 ///
 ///     Hanasu --apply-dictionary <文> [--dictionary <辞書ファイル>]

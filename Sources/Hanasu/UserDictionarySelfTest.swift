@@ -1,5 +1,6 @@
 import Foundation
 
+// 確かめ方: REQ-DIC-070
 // 設計判断: DEC-DIC-086
 /// ユーザー辞書の置き換えの確認（`Hanasu --test-dictionary`）。
 /// このパッケージは Command Line Tools だけでビルドするので XCTest / Swift Testing が使えない。

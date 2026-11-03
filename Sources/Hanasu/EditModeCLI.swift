@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 
+// 確かめ方: REQ-DIC-050, REQ-DIC-012
 /// 選択を声で編集するモードの、動作確認用の CLI モード:
 ///   Hanasu --edit-text <選択文> <指示> [--model <id>]   選択文を指示どおりに Gemini で書き換えて表示する
 ///   Hanasu --render-edit-hud <出力.png> [--processing]  編集モードの HUD を画像にする

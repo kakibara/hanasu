@@ -52,6 +52,7 @@ if DictionaryCLI.handles(CommandLine.arguments) {
     MainActor.assumeIsolated { DictionaryCLI.run(CommandLine.arguments) }
 }
 
+// 確かめ方: REQ-DIC-003, REQ-DIC-010, REQ-DIC-020, REQ-DIC-021
 if let index = CommandLine.arguments.firstIndex(of: "--refine-text"),
    CommandLine.arguments.indices.contains(index + 1)
 {
@@ -68,6 +69,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--refine-text"),
     RunLoop.main.run()
 }
 
+// 確かめ方: REQ-COM-001
 if let index = CommandLine.arguments.firstIndex(of: "--transcribe-file"),
    CommandLine.arguments.indices.contains(index + 1)
 {
@@ -102,6 +104,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--transcribe-file"),
 }
 
 // オーディオ機器の一覧:  Hanasu --list-audio-devices
+// 確かめ方: REQ-MTG-002
 if CommandLine.arguments.contains("--list-audio-devices") {
     for device in AudioDevices.all() {
         print("\(device.name)\t入力 \(device.inputChannels)ch / 出力 \(device.outputChannels)ch"
@@ -130,6 +133,7 @@ if CommandLine.arguments.contains("--list-audio-processes") {
 if CommandLine.arguments.contains("--watch-audio-processes") {
     MainActor.assumeIsolated { MeetingDetectorCLI.watch() }
 }
+// 確かめ方: REQ-MTG-009
 if CommandLine.arguments.contains("--simulate-meeting-detection") {
     MainActor.assumeIsolated { MeetingDetectorCLI.simulate() }
 }
@@ -177,6 +181,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-device-pickers"),
 }
 
 // 設定の「アプリ別」タブを画像にする（見た目の確認用）:  Hanasu --render-app-styles <出力.png> [--expanded]
+// 確かめ方: REQ-DIC-020
 if let index = CommandLine.arguments.firstIndex(of: "--render-app-styles"),
    CommandLine.arguments.indices.contains(index + 1)
 {
@@ -189,6 +194,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-app-styles"),
 
 // 音声入力の HUD を画像にする（見た目の確認用）:  Hanasu --render-hud <出力.png> [--translate] [--engine whisper|gemini [--processing]]
 // --engine whisper|gemini は、録音を止めてからまとめて文字起こしするときの見た目（音量の目安）。--processing で文字起こし中
+// 確かめ方: REQ-DIC-002, REQ-DIC-011, REQ-DIC-012
 if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
    CommandLine.arguments.indices.contains(index + 1)
 {
@@ -215,6 +221,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
 // --engine whisper|gemini では、記録中と同じく音声を書き出すだけにして、記録のあとの文字起こしを行う。
 // 2 つのファイルを「自分」「相手」のチャンネルとして文字起こしし、話者の割り当て → 議事録 → 保存まで行う。
 // --notes には、会議中のメモと「ここ重要」の印を、会議ノートの「メモ」タブと同じ形式（[12:34] 内容 / [12:40] ★）で渡す。
+// 確かめ方: REQ-MTG-004, REQ-MTG-005, REQ-MTG-010, REQ-MTG-011, REQ-MTG-012, REQ-MTG-013, REQ-MTG-025
 if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
    CommandLine.arguments.indices.contains(index + 2)
 {
@@ -282,6 +289,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
 }
 
 // スニペットの照合の確認:  Hanasu --match-snippet <文字起こし> [--snippets <JSON>] [--refine [--translate]]（SnippetsCLI.swift）
+// 確かめ方: REQ-DIC-030
 if let index = CommandLine.arguments.firstIndex(of: "--match-snippet"),
    CommandLine.arguments.indices.contains(index + 1)
 {
@@ -309,6 +317,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-snippets-settings"
 }
 
 // 会議中のメモの画面を画像にする（見た目の確認用）:  Hanasu --render-meeting-notes <出力フォルダ>
+// 確かめ方: REQ-MTG-003, REQ-MTG-011, REQ-MTG-014
 if let index = CommandLine.arguments.firstIndex(of: "--render-meeting-notes"),
    CommandLine.arguments.indices.contains(index + 1)
 {
