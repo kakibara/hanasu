@@ -6,6 +6,7 @@ import SwiftUI
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var statusItem: NSStatusItem!
     private var controller: DictationController!
+    private var editController: EditModeController!
     private var settingsWindow: NSWindow?
     private var meetingWindow: NSWindow?
     private let meetingRecorder: MeetingRecorder = {
@@ -28,6 +29,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         updateIcon(for: .idle)
 
         controller.onStateChange = { [weak self] state in self?.updateIcon(for: state) }
+        editController = EditModeController(dictation: controller)
+        editController.onStateChange = { [weak self] state in
+            guard let self else { return }
+            self.updateIcon(for: state == .idle ? self.controller.state : state)
+        }
+        editController.onHotKeyRegistrationFailed = { [weak self] combo in
+            self?.showAlert(
+                "ショートカット \(combo.displayString) を登録できませんでした",
+                "他のアプリやシステムのショートカットと重なっている可能性があります。設定で「選択を声で編集」に別のキーを選んでください。")
+        }
         meetingRecorder.onStateChange = { [weak self] _ in
             guard let self else { return }
             self.updateIcon(for: self.controller.state)
@@ -90,6 +101,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         if controller.state == .idle {
             menu.addItem(NSMenuItem(title: "英訳して入力を開始　\(settings.translateHotKey.displayString)",
                                     action: #selector(toggleTranslation), keyEquivalent: ""))
+            let editItem = NSMenuItem(title: "\(editController.menuTitle)　\(editController.hotKey.displayString)",
+                                      action: #selector(toggleEditMode), keyEquivalent: "")
+            editItem.isEnabled = editController.state != .processing
+            menu.addItem(editItem)
         }
         menu.addItem(.separator())
 
@@ -251,6 +266,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         controller.toggleFromMenu(mode: .translateToEnglish)
     }
 
+    @objc private func toggleEditMode() {
+        editController.toggleFromMenu()
+    }
+
     @objc private func copyHistory(_ sender: NSMenuItem) {
         guard controller.history.indices.contains(sender.tag) else { return }
         NSPasteboard.general.clearContents()
@@ -264,12 +283,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 onBeginShortcutRecording: { [weak self] in
                     guard let self else { return }
                     self.controller.suspendHotKey()
+                    self.editController.suspendHotKey()
                     if let id = self.meetingHotKeyID { self.meetingHotKeys.unregister(id) }
                     self.meetingHotKeyID = nil
                 },
                 onEndShortcutRecording: { [weak self] in
                     guard let self else { return }
                     self.controller.resumeHotKey()
+                    self.editController.resumeHotKey()
                     self.registerMeetingHotKey(AppSettings.shared.meetingHotKey)
                 })
             let window = NSWindow(contentViewController: NSHostingController(rootView: view))

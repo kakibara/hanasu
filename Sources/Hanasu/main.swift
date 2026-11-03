@@ -28,6 +28,9 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     print(String(format: "[%@ %@ %.1fs] %@", translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
 }
 
+// 選択を声で編集するモードの確認（--edit-text / --render-edit-hud / --render-edit-settings）。中身は EditModeCLI.swift
+MainActor.assumeIsolated { EditModeCLI.runIfRequested() }
+
 if let index = CommandLine.arguments.firstIndex(of: "--refine-text"),
    CommandLine.arguments.indices.contains(index + 1)
 {
