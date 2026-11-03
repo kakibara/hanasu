@@ -381,12 +381,16 @@ enum MinutesPrompt {
     }
 
     static func userText(for meeting: Meeting) -> String {
-        """
+        // メモか印があれば <user_notes> を足し、印の前後の発言に ★ を付ける（MeetingNotes.swift）
+        let userNotes = meeting.notesForPrompt()
+        let transcript = userNotes == nil ? meeting.transcriptForPrompt() : meeting.transcriptForPromptMarkingHighlights()
+        let notesBlock = userNotes.map { "\n<user_notes>\n\($0)\n</user_notes>\n" } ?? ""
+        return """
         会議: \(meeting.title)
         日時: \(Meeting.dateFormatter.string(from: meeting.startedAt))（\(Meeting.clock(meeting.duration))）
-
+        \(notesBlock)
         <transcript>
-        \(meeting.transcriptForPrompt())
+        \(transcript)
         </transcript>
         """
     }

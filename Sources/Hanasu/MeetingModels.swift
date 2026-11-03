@@ -55,6 +55,8 @@ struct Meeting: Codable, Identifiable, Hashable {
     var customMinutesPrompt: String?
     /// 議事録から取り出したアクションアイテム。nil はこの機能より前に作った議事録
     var actionItems: [ActionItem]?
+    /// ユーザーのメモと「ここ重要」の印（MeetingNotes.swift）。古い会議の meeting.json にはないので省略可にする
+    var notes: [MeetingNote]?
 
     func displayName(for speaker: String) -> String {
         if let name = speakerNames[speaker], !name.isEmpty { return name }
@@ -156,6 +158,12 @@ enum MeetingStore {
         try meeting.transcriptMarkdown().write(to: dir.appendingPathComponent("transcript.md"), atomically: true, encoding: .utf8)
         if let minutes = meeting.minutes {
             try minutes.write(to: dir.appendingPathComponent("minutes.md"), atomically: true, encoding: .utf8)
+        }
+        let notesURL = dir.appendingPathComponent("notes.md")
+        if meeting.allNotes.isEmpty {
+            try? FileManager.default.removeItem(at: notesURL)
+        } else {
+            try meeting.notesMarkdown().write(to: notesURL, atomically: true, encoding: .utf8)
         }
     }
 

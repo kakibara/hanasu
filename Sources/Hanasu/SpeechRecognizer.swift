@@ -33,10 +33,13 @@ final class SpeechRecognizer {
     private var resultsTask: Task<Void, Never>?
     private var finalizedText = ""
     private var volatileText = ""
+    /// 録音を残すときの書き出し先（履歴の「音声も残す」）
+    private var audioWriter: DictationAudioWriter?
 
     var isRunning: Bool { analyzer != nil }
 
-    func start(localeIdentifier: String, engine: RecognizerEngine, contextualStrings: [String]) async throws {
+    func start(localeIdentifier: String, engine: RecognizerEngine, contextualStrings: [String],
+               audioFileURL: URL? = nil) async throws {
         guard analyzer == nil else { throw SpeechRecognizerError.alreadyRunning }
         finalizedText = ""
         volatileText = ""
@@ -74,13 +77,16 @@ final class SpeechRecognizer {
         }
         try await analyzer.start(inputSequence: stream)
 
-        let tap = Self.makeTapBlock(from: inputFormat, to: analyzerFormat, continuation: continuation)
+        // 録音を残せなくても、音声入力は続ける
+        let writer = audioFileURL.flatMap { try? DictationAudioWriter(url: $0, format: analyzerFormat) }
+        let tap = Self.makeTapBlock(from: inputFormat, to: analyzerFormat, continuation: continuation, writer: writer)
         audioEngine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat, block: tap)
         audioEngine.prepare()
         do {
             try audioEngine.start()
         } catch {
             audioEngine.inputNode.removeTap(onBus: 0)
+            writer?.close()
             continuation.finish()
             await analyzer.cancelAndFinishNow()
             resultsTask?.cancel()
@@ -92,6 +98,7 @@ final class SpeechRecognizer {
         self.analyzer = analyzer
         self.inputContinuation = continuation
         self.analyzerFormat = analyzerFormat
+        self.audioWriter = writer
     }
 
     /// 録音を止め、残りの音声を確定させてから全文を返す。
@@ -162,6 +169,8 @@ final class SpeechRecognizer {
     private func stopAudio() {
         audioEngine?.inputNode.removeTap(onBus: 0)
         audioEngine?.stop()
+        audioWriter?.close()
+        audioWriter = nil
         if let continuation = inputContinuation, let format = analyzerFormat {
             // 末尾に無音を足すと、言い終わり直後に止めても最後の語まで確定しやすい
             Self.yieldSilence(to: continuation, format: format)
@@ -266,12 +275,14 @@ final class SpeechRecognizer {
     private nonisolated static func makeTapBlock(
         from inputFormat: AVAudioFormat,
         to outputFormat: AVAudioFormat,
-        continuation: AsyncStream<AnalyzerInput>.Continuation
+        continuation: AsyncStream<AnalyzerInput>.Continuation,
+        writer: DictationAudioWriter? = nil
     ) -> AVAudioNodeTapBlock {
         let converter = inputFormat == outputFormat ? nil : AVAudioConverter(from: inputFormat, to: outputFormat)
         converter?.primeMethod = .none
         return { buffer, _ in
             guard let converter else {
+                writer?.write(buffer)
                 continuation.yield(AnalyzerInput(buffer: buffer))
                 return
             }
@@ -290,6 +301,7 @@ final class SpeechRecognizer {
                 return buffer
             }
             if error == nil, converted.frameLength > 0 {
+                writer?.write(converted)
                 continuation.yield(AnalyzerInput(buffer: converted))
             }
         }

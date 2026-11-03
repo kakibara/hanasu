@@ -188,8 +188,10 @@ enum MeetingProcessor {
     // MARK: - 議事録
 
     /// 議事録を作る。見出しの構成は会議の型（meeting.template）で決まる（MinutesTemplate.swift）。
+    /// メモか印があれば、それを優先するよう指示を足す（MeetingNotes.swift）。
     static func makeMinutes(for meeting: Meeting, client: GeminiClient, model: String) async throws -> MinutesResult {
-        let instruction = MinutesPrompt.systemInstruction(template: meeting.template, customPrompt: meeting.customMinutesPrompt)
+        var instruction = MinutesPrompt.systemInstruction(template: meeting.template, customPrompt: meeting.customMinutesPrompt)
+        if meeting.notesForPrompt() != nil { instruction += "\n" + notesInstruction }
         let body = try await client.generate(
             systemInstruction: instruction, userText: MinutesPrompt.userText(for: meeting), model: model)
         return MinutesPrompt.parse(body, title: meeting.title)
