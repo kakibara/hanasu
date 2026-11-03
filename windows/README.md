@@ -2,8 +2,8 @@
 
 Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常駐し、ショートカットで録音して文字起こしし、Gemini で自然な日本語に整えて（または英訳して）カーソル位置に入力する。
 
-- 第 1 段階（このフォルダの今の中身）: **音声入力**と、そのための土台（録音・文字起こし・Gemini・設定）
-- 第 2 段階（これから）: **会議の記録**。土台の部品をそのまま使えるように分けてある（下の「会議の記録を足すとき」）
+- **音声入力**（第 1 段階）と、そのための土台（録音・文字起こし・Gemini・設定）
+- **会議の記録**（第 2 段階）: マイク（自分）と PC の音（相手）を別々に録り、記録のあとに文字起こし・話者分離・議事録まで作る。Mac 版の会議の記録（`docs/MEETING_RECORDER.md`）にそろえた
 
 ## 使い方
 
@@ -16,6 +16,23 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
    - 「押している間だけ録音」も選べる（設定 → 一般 → 録音のしかた）。
 5. タスクトレイのメニュー →「最近の結果」から、直近 10 件をクリップボードにコピーできる（メモリ上だけ。終了すると消える）。
 
+### 会議の記録
+
+1. 録音することを相手に伝える（同意を得る）。イヤホンを使うと、相手の声がマイクに回り込みにくい。
+2. タスクトレイのメニュー →「会議ノートを開く」。左下で「自分（マイク）」「相手（この出力で鳴る音）」と「議事録の型」を選ぶ（初期値は Windows の既定の機器と「自動」）。
+3. 「● 会議の記録を開始」か **Ctrl + Alt + Shift + M**（タスクトレイのメニュー「会議の記録を開始」でもよい）で始める。
+   - 記録中は、会議ノートの左上に経過時間と「■ 停止」、右にメモ欄と「★ ここ重要」が出る。メモは Enter で足す（時刻は書き始めた時点）。
+     「ここ重要」は **Ctrl + Alt + Shift + H**（記録中だけ有効）でも付けられる。書きかけのメモがあれば、その文を印の説明にする。
+   - 記録中のライブの文字起こしはない（下の「会議の記録の作り」）。
+4. もう一度 **Ctrl + Alt + Shift + M**（または「■ 停止」・メニューの「会議の記録を停止」）で止めると、
+   「自分」「相手」の順に文字起こし → 相手側の話者分離 → Gemini で議事録 まで進み、終わるとタスクトレイに知らせる。
+5. 会議ノートで、議事録・文字起こし・メモのタブを見る。
+   - 話者名: 「話者1」などの欄に名前を書くと、文字起こしと議事録の表示（と、作り直したときの議事録）に使う。
+   - 「議事録を作り直す」「型: 〇〇」（型を選び直して作り直す）、「Markdown をコピー」（表示中のタブ）、「エクスプローラーで開く」。
+   - 「メモ」タブで記録後にメモを直し、「保存して議事録を作り直す」。
+   - 題名は上の欄で直せる。
+6. 設定 → 会議 で、文字起こしのエンジン（Whisper / Gemini）・ショートカット・話者分離・議事録のモデル・音声を残すか・保存先を変えられる。
+
 既定のショートカットは、Windows が使う組み合わせを避けて選んだ。
 
 | 避けたもの | 理由 |
@@ -24,6 +41,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 | Win + H | Windows の音声入力 |
 | Win + Space | 入力言語の切り替え |
 | Ctrl + Space / Shift + Space | 日本語入力のオン／オフ（IME による）、全角／半角スペース |
+| Ctrl + Shift + M・Alt + M など（会議） | Teams・Zoom などの会議ツールのミュートなど。会議のショートカットは修飾キーを 3 つ（Ctrl + Alt + Shift）にした |
 
 ## 必要なもの
 
@@ -32,6 +50,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
   - **Windows 標準（既定）**: 日本語の音声認識（設定 → 時刻と言語 → 言語と地域 → 日本語 → 言語のオプション）と、「オンライン音声認識」をオンにすること（設定 → プライバシーとセキュリティ → 音声認識）。マイクは Windows の既定のマイクを使う
   - **Whisper**: Microsoft Visual C++ 再頒布可能パッケージ（2015〜2022, x64）と、AVX2 に対応した CPU（Whisper.net のランタイムの条件）。モデルは設定で選んだときにダウンロードする
   - **Gemini**: Gemini の認証情報（整形と同じもの）。録音した音声が Google に送られる
+- 会議の記録: 文字起こしは Whisper（既定。モデルは「一般」タブで選んだもの）か Gemini。話者分離のモデル（約 34 MB）は初めて使うときにダウンロードする。議事録には Gemini の認証情報が要る
 - Gemini の認証情報: API キー（[Google AI Studio](https://aistudio.google.com/apikey)）か、Vertex AI ユーザー（`roles/aiplatform.user`）のあるサービスアカウントの JSON 鍵
 
 ## 構成
@@ -46,14 +65,17 @@ windows/
 │   ├── Settings/                設定（settings.json）・ショートカットの組み合わせ・秘密の値の暗号化のインターフェイス
 │   ├── Audio/                   16 kHz・モノラルへの変換（窓付き sinc の再サンプリング）・WAV・無音の判定・効果音
 │   ├── Transcription/           文字起こしのインターフェイス・録ってからまとめて文字起こし・Gemini の文字起こし・Whisper のモデル管理
-│   └── Dictation/               音声入力の流れ（状態遷移）・整形と失敗時の扱い・最近の結果・HUD の文言
-├── Hanasu.Whisper/              net8.0。Whisper.net（whisper.cpp）での文字起こし
+│   ├── Dictation/               音声入力の流れ（状態遷移）・整形と失敗時の扱い・最近の結果・HUD の文言
+│   └── Meetings/                会議の記録: データと meeting.json（Mac 版と同じ形）・保存・議事録の型とプロンプト（Mac 版と共有）・
+│                                話者の割り当てと回り込みの除去・Gemini の時刻つき文字起こし・後処理・記録の流れ（MeetingController）
+├── Hanasu.Whisper/              net8.0。Whisper.net（whisper.cpp）での文字起こし（会議用に時刻つきの区間も返す）
+├── Hanasu.Diarization/          net8.0。sherpa-onnx での相手側の話者分離と、そのモデルのダウンロード
 ├── Hanasu.Windows/              net8.0-windows10.0.19041.0。WPF の本体（タスクトレイ・ホットキー・録音・HUD・設定画面）
 │   ├── AppHost.cs               部品を組み立てる場所
 │   ├── TrayIcon.cs              タスクトレイのメニュー（WinForms の NotifyIcon）
-│   ├── Services/                RegisterHotKey、WASAPI の録音（NAudio）、Windows の音声認識（WinRT）、
+│   ├── Services/                RegisterHotKey、WASAPI の録音（NAudio。会議はマイクとループバック）、Windows の音声認識（WinRT）、
 │   │                            クリップボード + SendInput の入力、前面アプリ、DPAPI、効果音、ログ
-│   └── Views/                   HUD（WS_EX_NOACTIVATE）・設定画面・ショートカットの記録欄
+│   └── Views/                   HUD（WS_EX_NOACTIVATE）・設定画面・会議ノート・ショートカットの記録欄
 ├── Hanasu.Cli/                  net8.0。確認用の CLI（Mac でも動く）
 └── Hanasu.Core.Tests/           xUnit。Mac でも Windows でも dotnet test で動く
 ```
@@ -76,18 +98,52 @@ HotKeyService（RegisterHotKey + 離したかの見張り）
 - OS に依存する部品は `DictationServices` で渡す。Windows の部品は `AppHost.cs` で組み立てる。
 - タスクトレイのメニューから始めると前面がタスクバーに移るので、`ForegroundWindowTracker` が覚えている直前のウインドウを前面に戻してから録音する。
 
-### 会議の記録を足すとき
+### 会議の記録の作り
 
-次の部品をそのまま使える。
+```
+MeetingController（Core。idle → starting → recording → processing → idle）
+  ├─ 記録中: MeetingChannelRecorder ×2（Windows）
+  │    ├ 自分: マイク（WasapiCapture）────────┐ 16 kHz・モノラルに変換（StreamingResampler）
+  │    └ 相手: 出力のループバック（WasapiLoopbackCapture）┘ → ChannelTimeline で時刻をそろえる → WavStreamWriter（me.wav / others.wav）
+  └─ 止めたあと: MeetingPostProcessor（Core）
+       1. チャンネルごとに文字起こし（ISegmentTranscriber）
+          ├ WhisperBatchTranscriber（語ごとの時刻つき）
+          └ GeminiSegmentTranscriber（5 分ごとに区切り、JSON で区間を返させる。最大 3 つを並行）
+          → 無音のところにかかった時刻を声のあるところへ寄せる（MeetingAudio.SnapToSpeech）→ チャンネルの開始のずれを足す
+       2. 相手側の話者分離（SherpaSpeakerDiarizer。失敗したら「相手」1 人として続ける）
+       3. 話者の割り当て・回り込みの除去（MeetingProcessor。Mac 版の移植）
+       4. Gemini で議事録（MinutesPrompt。型・メモ・「ここ重要」・アクションアイテムの取り出し）
+       5. 保存（MeetingStore: meeting.json・transcript.md・minutes.md・notes.md）。設定で音声を消す
+```
 
-| 部品 | 会議の記録での使い道 |
-| --- | --- |
-| `IAudioRecorder` / `WasapiRecorder` | マイク（自分）の録音。`SamplesAvailable` で録りながら 16 kHz・モノラルの音声を受け取れる。システム音声（相手）は NAudio の `WasapiLoopbackCapture` で同じ形のクラスを作る（`StreamingResampler` と `SampleConversion` をそのまま使える） |
-| `IBatchTranscriber`（Whisper / Gemini） | 区切った音声の文字起こし。Whisper のモデルは `WhisperModelManager` で共通（同じ `%LOCALAPPDATA%\Hanasu\Models`）。`WhisperBatchTranscriber` は読み込んだモデルを使い回す |
-| `GeminiClient.GenerateAsync` | 議事録づくり（`systemInstruction` と parts を渡すだけ。`Timeout` は長めにする）。`responseMimeType` に `application/json` も渡せる |
-| `GeminiAuthResolver` / `SettingsService` | 認証と設定は音声入力と共通。会議の設定は `AppSettings` に足す（`SettingsStore.Normalize` で既定値を補う） |
-| `HotKeyService` | 会議の開始・停止のショートカット |
-| `AppHost` | `MeetingController` などをここで作り、`DictationController.CanStart` で音声入力と同時に動かないようにする |
+- **2 つのチャンネルと時刻**: マイクとループバックを別々に録り、録音開始を 0 秒とした共通の時間軸にそろえる。
+  チャンネルごとに「最初の音が録音開始から何秒後に届いたか」（開始のずれ）を `meeting.json` の `audioStartOffsets` に残し、文字起こしの時刻に足す。
+  WASAPI のループバックは、PC が何も鳴らしていない間はデータを渡してこないので、届いた時刻と書いた長さの差が 0.25 秒より開いたら、その分の無音を足す（`ChannelTimeline`）。
+- **録音はファイルに直接書く**: 音声入力の `WasapiRecorder` はメモリに溜めるが、会議は長いので 16 kHz・モノラル・16 bit の WAV に書きながら録る（1 時間で 1 チャンネル約 115 MB）。
+  ヘッダーの長さの欄は 5 秒ごとに書き直すので、アプリが落ちても途中までの音声を読める。
+- **文字起こしのエンジン**（設定 → 会議）: **Whisper（既定）か Gemini。Windows 標準は会議では選べない。**
+  - 理由: Windows 標準の `SpeechRecognizer` は Windows の既定のマイクからしか聞けず、ループバックで録った PC の音（相手）を渡せない。
+    「自分だけ Windows 標準・相手は Whisper」も考えたが、結局 Whisper のモデルが要るうえ、チャンネルで認識の質と時刻の精度がそろわず、選んだマイクも使えないので採らなかった。
+  - Whisper のモデルは音声入力と共通（「一般」タブで選んだもの）。記録を始める前に、Whisper はモデルがあるか、Gemini は認証情報があるかを確かめ、なければ始めずに理由を出す。
+  - **記録中のライブの文字起こしは出さない**（Mac 版で Whisper / Gemini を選んだときと同じ）。Whisper を数秒ごとに回すと会議中の CPU の負担が大きく、Gemini で細かく送ると呼び出しの数と費用がかさむため。
+  - Whisper の語の時刻: トークンごとの時刻（t0/t1）を使う。日本語のトークンは 1 文字の途中で切れることがあり、Whisper.net はその断片を文字化け（U+FFFD）にして渡すので、
+    前後の読めるトークンの位置から間の文字をまとめて 1 語にする。「(字幕)」のような括弧書きの注釈は除く。whisper.cpp の DTW の時刻も試したが、長い音声で途中から文字起こしが止まったので使っていない。
+  - Gemini: Mac 版と同じく 5 分ごとに区切り（目安の前 15 秒のうち、いちばん静かなところで切る）、`responseSchema` で `segments: [{start, end, text}]` を返させる。音声は WAV（5 分で約 10 MB）。
+- **話者分離**（設定 → 会議 →「相手側の話者を分ける」、既定でオン）: [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（Apache-2.0）の `OfflineSpeakerDiarization`。
+  会議全体を 1 回で処理するので話者番号が最後まで一貫する。話者の数は決めず、声の特徴の近さ（しきい値 0.5）でまとめる。
+  - モデルは初めて使うときに `%LOCALAPPDATA%\Hanasu\Models\diarization` にダウンロードする: pyannote segmentation-3.0 の ONNX 版（約 6 MB、MIT）と 3D-Speaker の CAM++（約 28 MB、Apache-2.0。中国語・英語の大量の話者で学習）。
+  - 失敗したとき（ダウンロードできないなど）は、相手側を「相手」1 人にまとめて続け、タスクトレイで知らせる。
+  - マイク側の話者分離（会議室で 1 つのマイクを共有する場合、Mac 版の「マイク側も話者を分ける」）は作っていない。
+- **話者の割り当て**: Mac 版 `MeetingProcessor` の移植（語の終わり寄りの時刻で話者を決める、区間のすき間の扱い、登場順に話者1・話者2…）。Windows 版で 2 つだけ足した:
+  - 1 つの発話を話者で分けたとき、端に残った 1 秒未満・4 文字以下のかけらは隣にまとめる（Whisper の語の時刻が少し遅れ、前の人の最後の語が次の人に付きやすいため）。
+  - スピーカーからの回り込みの除去は、6 文字以上のかけらだけを対象にする（「ます」「ありますか」がたまたま似て消えるのを防ぐ）。
+- **議事録**: Gemini（設定の「議事録のモデル」、既定は gemini-3.8-flash）。プロンプト（型ごとの見出しと指示・メモと「ここ重要」の扱い・`{{ACTION_ITEMS}}` と `<action_items>` の JSON）は
+  Mac 版の `MinutesTemplate.swift`・`MeetingNotes.swift` と同じ文面にし、共有している部分には「両方を直す」とコメントを書いた。
+- **保存**: `MeetingStore`。`meeting.json` は Mac 版（`MeetingModels.swift`）と同じ JSON（キーは camelCase、列挙は小文字、日時は秒までの UTC、UUID は大文字、null は書かない）。
+  Mac で作った会議のフォルダを保存先に置けば、そのまま会議ノートで開ける（`MeetingJsonTests`。Swift の Codable で Windows の `meeting.json` を読めることも確かめた）。
+  Windows 版だけが書く `audioStartOffsets` は、Mac 版では読み飛ばされる。
+- 音声入力と会議の記録は同時に動かさない（`DictationController.CanStart` / `MeetingController.CanStart`）。
+- 起動時に、記録中・処理中のまま残った会議を「失敗」にする（音声は残る）。
 
 ## ビルド・テスト・配布
 
@@ -110,13 +166,16 @@ dotnet publish Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self
 
 ```
 Hanasu.exe                          本体（.NET ランタイム込み、約 78 MB。WPF のネイティブ DLL も中に入れてある）
+sherpa-onnx-c-api.dll               話者分離（sherpa-onnx）のネイティブライブラリ
+onnxruntime.dll                     その依存（ONNX Runtime）。exe に入れると一時フォルダに展開して読むことになり、
+                                    Windows 11 の System32 にある別の版の onnxruntime.dll と取り違えるおそれがあるので、exe の隣に置く
 runtimes/win-x64/whisper.dll        Whisper のネイティブライブラリ（exe には入れない。Whisper.net が exe の隣の runtimes/ から読むため）
 runtimes/win-x64/ggml-whisper.dll
 runtimes/win-x64/ggml-base-whisper.dll
 runtimes/win-x64/ggml-cpu-whisper.dll
 ```
 
-**フォルダごと（`Hanasu.exe` と `runtimes/`）を zip にして配る。** `Hanasu.exe` だけを配ると、Whisper のエンジンが使えない（Windows 標準と Gemini は動く）。
+**フォルダごと（`Hanasu.exe`・2 つの DLL・`runtimes/`）を zip にして配る。** `Hanasu.exe` だけを配ると、Whisper のエンジンと話者分離が使えない（Windows 標準と Gemini は動く。話者分離に失敗したときは相手側を「相手」1 人にまとめる）。
 CI（`.github/workflows/windows.yml`）は同じコマンドで作り、`Hanasu-windows-x64.zip`（中身は上のフォルダ）を artifact に残す。
 
 ARM64 版は `-r win-arm64 -o publish/win-arm64` で同じ形のものができる（runtimes/win-arm64/ が付く。実機では確かめていない）。
@@ -133,7 +192,15 @@ dotnet run --project Hanasu.Cli -- transcribe-whisper <wav> --model tiny [--mode
 dotnet run --project Hanasu.Cli -- dictation <wav> --engine whisper|gemini [--translate] [--whisper-model tiny]
 dotnet run --project Hanasu.Cli -- dict <辞書ファイル> "<文章>"
 dotnet run --project Hanasu.Cli -- models
+
+# 会議の後処理（2 つの音声を「自分」「相手」として文字起こし → 話者分離 → 話者の割り当て → 議事録）。会議は --meetings-dir の下に作る
+dotnet run --project Hanasu.Cli -- meeting-files me.wav others.wav --meetings-dir <保存先> [--engine whisper|gemini] [--whisper-model base] [--models-dir <dir>] [--download] \
+    [--others-offset 1.5] [--template regular] [--notes notes.txt] [--no-minutes] [--no-diarize] [--diarization-models-dir <dir>] [--minutes-model <id>] [--delete-audio]
+dotnet run --project Hanasu.Cli -- meeting-minutes <会議のフォルダ> [--template sales]   # 議事録を作り直す
+dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>                        # meeting.json を読んで出す（Mac で作った会議が読めるかの確認）
 ```
+
+`HANASU_DEBUG=1` を付けると、Whisper の区間と語の時刻、Gemini の応答を出す。`HANASU_GEMINI_CHUNK_SECONDS`（Gemini の区切りの長さ）と `HANASU_DIARIZATION_THRESHOLD`（話者分離のしきい値）で確認用に値を変えられる。
 
 ## 保存する場所
 
@@ -145,6 +212,8 @@ dotnet run --project Hanasu.Cli -- models
 | Whisper のモデル | `%LOCALAPPDATA%\Hanasu\Models\ggml-*.bin`（ダウンロード中は `.download`） |
 | ログ | `%LOCALAPPDATA%\Hanasu\Logs\hanasu.log`（文字起こしの中身は書かない） |
 | 最近の結果 | メモリ上だけ（10 件） |
+| 会議の記録 | `ドキュメント\Hanasu\Meetings\<yyyy-MM-dd HHmm>\`（設定 → 会議 で変えられる）。`meeting.json`・`transcript.md`・`minutes.md`・`notes.md`・`me.wav`・`others.wav` |
+| 話者分離のモデル | `%LOCALAPPDATA%\Hanasu\Models\diarization\*.onnx` |
 
 ## Mac 版との差
 
@@ -159,7 +228,22 @@ dotnet run --project Hanasu.Cli -- models
 | 最後の結果をもう一度入力（`⌥⇧ V`） | **未実装**（「最近の結果」からコピーして貼る） |
 | 選択を声で編集 | **未実装** |
 | 辞書の候補を探す（Gemini で提案） | **未実装**（辞書の編集と置き換えの試しはできる） |
-| 会議の記録 | **これから**（第 2 段階） |
+| 会議の記録 | 作った（下の表は会議の記録での差） |
+
+会議の記録での差:
+
+| 機能 | Windows 版 |
+| --- | --- |
+| 相手の音 | Core Audio Process Tap の代わりに WASAPI ループバック（選んだ出力の機器で鳴る音すべて）。Hanasu 自身の音を除く仕組みはないので、会議中は効果音を鳴らさない |
+| 文字起こし | Whisper（既定）・Gemini。**Windows 標準は選べない**（ループバックの音を渡せないため）。Mac 版の「Mac 標準」のような記録中のライブの文字起こしはない |
+| 字幕パネル（前面に浮かぶ直近の発言） | **なし**（ライブの文字起こしがないため） |
+| 話者分離 | FluidAudio の代わりに sherpa-onnx（pyannote segmentation-3.0 + 3D-Speaker CAM++）。**マイク側の話者分離（同席者）は未実装** |
+| メモと「ここ重要」 | 作った（記録中のメモ欄・ボタン・ショートカット、記録後のメモの編集と作り直し）。印の効果音は鳴らさない（ループバックに入るため） |
+| 議事録の型・アクションアイテム | 作った（Mac 版と同じプロンプト） |
+| 音声ファイル | AAC（m4a）ではなく WAV（me.wav / others.wav）。Mac で作った会議の音声（m4a）は Windows 版では文字起こしし直せない（会議ノートで読むのはできる） |
+| 書き出し | 「Markdown をコピー」だけ。**ファイルとして保存・Slack 向けのコピー・リマインダーへの登録は未実装**（`reminderID` は読み書きで落とさない） |
+| 会議の自動検出（会議アプリがマイクを使い始めたら知らせる） | **未実装** |
+| 会議の横断検索・会議への質問（Ask） | **未実装** |
 
 ## 依存パッケージ
 
@@ -170,5 +254,8 @@ dotnet run --project Hanasu.Cli -- models
 | System.Security.Cryptography.ProtectedData 8.0.0 | API キーの DPAPI 暗号化 | MIT |
 | xunit 2.9.3 / xunit.runner.visualstudio 2.8.2 | テストのみ | Apache-2.0 |
 | Microsoft.NET.Test.Sdk 17.14.1 | テストのみ | MIT |
+| [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（org.k2fsa.sherpa.onnx 1.13.8、ONNX Runtime を含む） | 会議の相手側の話者分離 | Apache-2.0（ONNX Runtime は MIT） |
 
 Whisper のモデル（`ggml-*.bin`）は配布物に含めず、利用者が選んだときに [Hugging Face の ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp) からダウンロードする（OpenAI の Whisper のモデル、MIT）。
+話者分離のモデルも配布物に含めず、初めて使うときにダウンロードする: [pyannote segmentation-3.0 の ONNX 版](https://huggingface.co/csukuangfj/sherpa-onnx-pyannote-segmentation-3-0)（MIT）、
+[3D-Speaker の CAM++](https://github.com/k2-fsa/sherpa-onnx/releases/tag/speaker-recongition-models)（`3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx`、Apache-2.0）。

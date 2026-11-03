@@ -11,7 +11,7 @@ internal sealed record MicrophoneInfo(string Id, string Name);
 /// <summary>
 /// WASAPI（NAudio の WasapiCapture）でマイクから録音し、16 kHz・モノラルの float に変換して溜める。
 /// 共有モードの形式（多くは 48 kHz・ステレオ・float）のまま受け取り、Core の StreamingResampler で落とす。
-/// 会議の記録でもマイク側はこのクラスを使う（システム音声は WasapiLoopbackCapture で同じ形にできる）。
+/// 会議の記録は長いのでメモリに溜めず、MeetingChannelRecorder（マイクとループバック）でファイルに書く。
 /// </summary>
 internal sealed class WasapiRecorder : IAudioRecorder
 {

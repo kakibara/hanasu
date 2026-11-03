@@ -79,12 +79,16 @@ public sealed class GeminiClient : IDictationRefiner
         }
     }
 
-    /// <summary>1 回送り、応答の本文を返す。thinkingLevel を省くとモデル名から決める。</summary>
+    /// <summary>
+    /// 1 回送り、応答の本文を返す。thinkingLevel を省くとモデル名から決める。
+    /// responseSchema を渡すと JSON モード（responseMimeType は application/json）で、その形の JSON を返させる（会議の文字起こしで使う）。
+    /// </summary>
     public async Task<string> GenerateAsync(string systemInstruction, IReadOnlyList<GeminiPart> parts, string model,
-        string? thinkingLevel = null, string responseMimeType = "text/plain", CancellationToken cancellationToken = default)
+        string? thinkingLevel = null, string responseMimeType = "text/plain", CancellationToken cancellationToken = default,
+        JsonNode? responseSchema = null)
     {
         model = model.Trim();
-        var body = BuildRequestBody(systemInstruction, parts, model, thinkingLevel, responseMimeType);
+        var body = BuildRequestBody(systemInstruction, parts, model, thinkingLevel, responseMimeType, responseSchema);
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(Timeout);
         try
@@ -134,7 +138,7 @@ public sealed class GeminiClient : IDictationRefiner
     }
 
     internal static string BuildRequestBody(string systemInstruction, IReadOnlyList<GeminiPart> parts, string model,
-        string? thinkingLevel, string responseMimeType = "text/plain")
+        string? thinkingLevel, string responseMimeType = "text/plain", JsonNode? responseSchema = null)
     {
         var partNodes = new JsonArray();
         foreach (var part in parts)
@@ -150,15 +154,17 @@ public sealed class GeminiClient : IDictationRefiner
             });
         }
         // temperature などのサンプリングパラメータは非推奨になったため送らない（Mac 版と同じ）
+        var generationConfig = new JsonObject
+        {
+            ["responseMimeType"] = responseSchema is null ? responseMimeType : "application/json",
+            ["thinkingConfig"] = new JsonObject { ["thinkingLevel"] = thinkingLevel ?? GeminiPrompts.ThinkingLevel(model) },
+        };
+        if (responseSchema is not null) generationConfig["responseSchema"] = responseSchema.DeepClone();
         var root = new JsonObject
         {
             ["systemInstruction"] = new JsonObject { ["parts"] = new JsonArray(new JsonObject { ["text"] = systemInstruction }) },
             ["contents"] = new JsonArray(new JsonObject { ["role"] = "user", ["parts"] = partNodes }),
-            ["generationConfig"] = new JsonObject
-            {
-                ["responseMimeType"] = responseMimeType,
-                ["thinkingConfig"] = new JsonObject { ["thinkingLevel"] = thinkingLevel ?? GeminiPrompts.ThinkingLevel(model) },
-            },
+            ["generationConfig"] = generationConfig,
         };
         return root.ToJsonString();
     }

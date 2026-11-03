@@ -49,6 +49,8 @@ jobs:
         run: |
           $expected = @(
             "publish/win-x64/Hanasu.exe",
+            "publish/win-x64/sherpa-onnx-c-api.dll",
+            "publish/win-x64/onnxruntime.dll",
             "publish/win-x64/runtimes/win-x64/whisper.dll",
             "publish/win-x64/runtimes/win-x64/ggml-whisper.dll",
             "publish/win-x64/runtimes/win-x64/ggml-base-whisper.dll",

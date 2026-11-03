@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
+using Hanasu.Core.Meetings;
 using Hanasu.Core.Settings;
 using Hanasu.Core.Text;
 using Hanasu.Core.Transcription;
@@ -14,7 +15,7 @@ using Microsoft.Win32;
 namespace Hanasu.Windows.Views;
 
 /// <summary>
-/// 設定画面（一般 / Gemini / 辞書・ルール）。変更はその場で SettingsService に書き、すぐ保存する（Mac 版と同じ）。
+/// 設定画面（一般 / Gemini / 会議 / 辞書・ルール）。変更はその場で SettingsService に書き、すぐ保存する（Mac 版と同じ）。
 /// </summary>
 public partial class SettingsWindow : Window
 {
@@ -32,8 +33,12 @@ public partial class SettingsWindow : Window
 
         DictationHotKeyBox.Recorded += (_, combo) => SetHotKey(combo, translate: false);
         TranslateHotKeyBox.Recorded += (_, combo) => SetHotKey(combo, translate: true);
-        DictationHotKeyBox.RecordingChanged += (_, recording) => host.SuspendHotKeys(recording);
-        TranslateHotKeyBox.RecordingChanged += (_, recording) => host.SuspendHotKeys(recording);
+        MeetingHotKeyBox.Recorded += (_, combo) => SetMeetingHotKey(combo, highlight: false);
+        HighlightHotKeyBox.Recorded += (_, combo) => SetMeetingHotKey(combo, highlight: true);
+        foreach (var box in new[] { DictationHotKeyBox, TranslateHotKeyBox, MeetingHotKeyBox, HighlightHotKeyBox })
+        {
+            box.RecordingChanged += (_, recording) => host.SuspendHotKeys(recording);
+        }
         host.WhisperModels.StateChanged += OnWhisperStateChanged;
         Closed += (_, _) =>
         {
@@ -76,6 +81,19 @@ public partial class SettingsWindow : Window
         ModelCombo.Text = s.Model;
         SendAppNameCheck.IsChecked = s.SendAppName;
 
+        MeetingHotKeyBox.Combo = s.MeetingHotKey;
+        HighlightHotKeyBox.Combo = s.HighlightHotKey;
+        HighlightHotKeyCheck.IsChecked = s.HighlightHotKeyEnabled;
+        MeetingEngineCombo.SelectedItem = MeetingEngineCombo.Items.OfType<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == s.MeetingEngine.ToString())
+            ?? MeetingEngineCombo.Items[0];
+        DiarizeCheck.IsChecked = s.DiarizeOthers;
+        MakeMinutesCheck.IsChecked = s.MakeMeetingMinutes;
+        MinutesModelCombo.ItemsSource = AppSettings.SuggestedModels;
+        MinutesModelCombo.Text = s.MeetingMinutesModel;
+        KeepAudioCheck.IsChecked = s.KeepMeetingAudio;
+        MeetingsDirBox.Text = new MeetingStore(s.MeetingsDirectory).BaseDirectory;
+        UpdateMeetingEngineNote(s.MeetingEngine);
+
         DictionaryBox.Text = s.DictionaryText;
         ExtraInstructionsBox.Text = s.ExtraInstructions;
 
@@ -98,8 +116,9 @@ public partial class SettingsWindow : Window
     private void SetHotKey(HotKeyCombo combo, bool translate)
     {
         var problem = combo.Validate();
-        var other = translate ? settings.Current.HotKey : settings.Current.TranslateHotKey;
-        if (problem is null && combo == other) problem = "もう一方のショートカットと同じです";
+        var current = settings.Current;
+        var others = new[] { translate ? current.HotKey : current.TranslateHotKey, current.MeetingHotKey, current.HighlightHotKey };
+        if (problem is null && others.Contains(combo)) problem = "ほかのショートカット（音声入力・英訳・会議）と同じです";
         if (problem is not null)
         {
             HotKeyError.Text = problem;
@@ -341,6 +360,88 @@ public partial class SettingsWindow : Window
             TrialRefineButton.IsEnabled = TrialTranslateButton.IsEnabled = true;
         }
     }
+
+    // MARK: - 会議
+
+    private void SetMeetingHotKey(HotKeyCombo combo, bool highlight)
+    {
+        var problem = combo.Validate();
+        var s = settings.Current;
+        var others = new[] { s.HotKey, s.TranslateHotKey, highlight ? s.MeetingHotKey : s.HighlightHotKey };
+        if (problem is null && others.Contains(combo)) problem = "ほかのショートカット（音声入力・英訳・会議）と同じです";
+        if (problem is not null)
+        {
+            MeetingHotKeyError.Text = problem;
+            MeetingHotKeyError.Visibility = Visibility.Visible;
+            return;
+        }
+        MeetingHotKeyError.Visibility = Visibility.Collapsed;
+        Save(x =>
+        {
+            if (highlight) x.HighlightHotKey = combo;
+            else x.MeetingHotKey = combo;
+        });
+        (highlight ? HighlightHotKeyBox : MeetingHotKeyBox).Combo = combo;
+    }
+
+    private void OnResetMeetingHotKey(object sender, RoutedEventArgs e) => SetMeetingHotKey(HotKeyCombo.DefaultMeeting, highlight: false);
+
+    private void OnResetHighlightHotKey(object sender, RoutedEventArgs e) => SetMeetingHotKey(HotKeyCombo.DefaultHighlight, highlight: true);
+
+    private void OnHighlightHotKeyEnabledChanged(object sender, RoutedEventArgs e) => Save(s => s.HighlightHotKeyEnabled = HighlightHotKeyCheck.IsChecked == true);
+
+    private void OnMeetingEngineChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (MeetingEngineCombo.SelectedItem is not ComboBoxItem { Tag: string tag } || !Enum.TryParse<TranscriptionEngine>(tag, out var engine)) return;
+        Save(s => s.MeetingEngine = engine);
+        UpdateMeetingEngineNote(engine);
+        if (!loading && engine == TranscriptionEngine.Whisper) StartWhisperDownloadIfNeeded();
+    }
+
+    private void UpdateMeetingEngineNote(TranscriptionEngine engine)
+    {
+        if (engine == TranscriptionEngine.Gemini)
+        {
+            MeetingEngineNote.Text = "録音した会議の音声を 5 分ごとに区切って Gemini（Gemini タブの認証とモデル）に送ります。音声が Google に送られることに注意してください。";
+            return;
+        }
+        var model = WhisperModelCatalog.Find(settings.Current.WhisperModel);
+        var ready = model is not null && host.WhisperModels.IsDownloaded(model);
+        MeetingEngineNote.Text = $"Whisper のモデルは「一般」タブで選んだもの（{model?.Id}）を使います。" + (ready ? "" : " まだダウンロードしていません（「一般」タブでダウンロードしてください）。");
+    }
+
+    private void OnDiarizeChanged(object sender, RoutedEventArgs e) => Save(s => s.DiarizeOthers = DiarizeCheck.IsChecked == true);
+
+    private void OnMakeMinutesChanged(object sender, RoutedEventArgs e) => Save(s => s.MakeMeetingMinutes = MakeMinutesCheck.IsChecked == true);
+
+    private void OnMinutesModelChanged(object sender, RoutedEventArgs e)
+    {
+        var model = MinutesModelCombo.Text.Trim();
+        if (model.Length > 0) Save(s => s.MeetingMinutesModel = model);
+    }
+
+    private void OnMinutesModelSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (MinutesModelCombo.SelectedItem is string model) Save(s => s.MeetingMinutesModel = model);
+    }
+
+    private void OnKeepAudioChanged(object sender, RoutedEventArgs e) => Save(s => s.KeepMeetingAudio = KeepAudioCheck.IsChecked == true);
+
+    private void OnBrowseMeetingsFolder(object sender, RoutedEventArgs e)
+    {
+        var dialog = new OpenFolderDialog { Title = "会議の保存先を選ぶ", InitialDirectory = MeetingsDirBox.Text };
+        if (dialog.ShowDialog(this) != true) return;
+        Save(s => s.MeetingsDirectory = dialog.FolderName);
+        MeetingsDirBox.Text = dialog.FolderName;
+    }
+
+    private void OnResetMeetingsFolder(object sender, RoutedEventArgs e)
+    {
+        Save(s => s.MeetingsDirectory = "");
+        MeetingsDirBox.Text = MeetingStore.DefaultBaseDirectory;
+    }
+
+    private void OnOpenMeetingsFolder(object sender, RoutedEventArgs e) => OpenFolder(MeetingsDirBox.Text);
 
     // MARK: - 辞書・ルール
 

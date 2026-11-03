@@ -189,6 +189,70 @@
                 </ScrollViewer>
             </TabItem>
 
+            <!-- 会議 -->
+            <TabItem Header="会議">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14,4,14,14">
+                        <TextBlock Style="{StaticResource Section}" Text="ショートカット" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="記録の開始／停止" VerticalAlignment="Center" />
+                            <local:HotKeyBox x:Name="MeetingHotKeyBox" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" />
+                            <Button Grid.Row="0" Grid.Column="2" Content="既定に戻す" Click="OnResetMeetingHotKey" />
+                            <TextBlock Grid.Row="1" Text="「ここ重要」の印" VerticalAlignment="Center" />
+                            <local:HotKeyBox x:Name="HighlightHotKeyBox" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" />
+                            <Button Grid.Row="1" Grid.Column="2" Content="既定に戻す" Click="OnResetHighlightHotKey" />
+                        </Grid>
+                        <TextBlock x:Name="MeetingHotKeyError" Style="{StaticResource Error}" Visibility="Collapsed" />
+                        <CheckBox x:Name="HighlightHotKeyCheck" Content="「ここ重要」のショートカットを使う（記録中だけ有効になります）" Checked="OnHighlightHotKeyEnabledChanged" Unchecked="OnHighlightHotKeyEnabledChanged" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="文字起こし" />
+                        <ComboBox x:Name="MeetingEngineCombo" SelectionChanged="OnMeetingEngineChanged" HorizontalAlignment="Left" MinWidth="320">
+                            <ComboBoxItem Content="Whisper（この PC の上で動かす。既定）" Tag="Whisper" />
+                            <ComboBoxItem Content="Gemini（音声を Google に送る）" Tag="Gemini" />
+                        </ComboBox>
+                        <TextBlock x:Name="MeetingEngineNote" Style="{StaticResource Note}" />
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="記録中は音声をファイルに書くだけにして、記録を止めたあとに「自分」「相手」のチャンネルごとに時刻つきで文字起こしします。Windows 標準の音声認識は、Windows の既定のマイクからしか聞けず PC の音（相手）を渡せないため、会議では選べません。" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="話者" />
+                        <CheckBox x:Name="DiarizeCheck" Content="相手側の話者を分ける（話者1・話者2…）" Checked="OnDiarizeChanged" Unchecked="OnDiarizeChanged" />
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="sherpa-onnx（pyannote と 3D-Speaker のモデル）でこの PC の上で分けます。初めて使うときにモデル（約 34 MB）をダウンロードします。オフにすると、相手側は「相手」1 人にまとめます。話者名は会議ノートで付け替えられます。" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="議事録" />
+                        <CheckBox x:Name="MakeMinutesCheck" Content="記録のあとに Gemini で議事録を作る" Checked="OnMakeMinutesChanged" Unchecked="OnMakeMinutesChanged" />
+                        <DockPanel Margin="0,6,0,0">
+                            <TextBlock Text="議事録のモデル" Width="110" VerticalAlignment="Center" />
+                            <ComboBox x:Name="MinutesModelCombo" IsEditable="True" HorizontalAlignment="Left" MinWidth="240" LostFocus="OnMinutesModelChanged" SelectionChanged="OnMinutesModelSelectionChanged" />
+                        </DockPanel>
+                        <TextBlock Style="{StaticResource Note}" Text="要約の質を優先して gemini-3.8-flash が既定です。文字起こしのテキストだけを送ります（文字起こしのエンジンが Gemini のときは、音声も送ります）。議事録の型は会議ノートで選びます。" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="保存" />
+                        <CheckBox x:Name="KeepAudioCheck" Content="処理のあとも音声ファイル（me.wav / others.wav）を残す" Checked="OnKeepAudioChanged" Unchecked="OnKeepAudioChanged" />
+                        <TextBlock Style="{StaticResource Note}" Text="オフにすると、文字起こしと議事録のあとで音声を消します（文字起こしに失敗したときは残します）。16 kHz・モノラルの WAV で、1 時間あたり 1 チャンネル約 115 MB です。" />
+                        <DockPanel Margin="0,8,0,0">
+                            <TextBlock Text="保存先" Width="110" VerticalAlignment="Center" />
+                            <Button DockPanel.Dock="Right" Content="開く" Click="OnOpenMeetingsFolder" Margin="8,0,0,0" />
+                            <Button DockPanel.Dock="Right" Content="既定に戻す" Click="OnResetMeetingsFolder" Margin="8,0,0,0" />
+                            <Button DockPanel.Dock="Right" Content="参照…" Click="OnBrowseMeetingsFolder" Margin="8,0,0,0" />
+                            <TextBox x:Name="MeetingsDirBox" Padding="4,3" IsReadOnly="True" />
+                        </DockPanel>
+                        <TextBlock Style="{StaticResource Note}" Margin="110,3,0,0" Text="会議ごとに「日時」のフォルダを作り、meeting.json（Mac 版と同じ形）・transcript.md・minutes.md・notes.md と音声を置きます。" />
+                        <TextBlock Style="{StaticResource Note}" Foreground="#FFB06000" Margin="0,10,0,0"
+                                   Text="録音するときは、相手の同意を得てください。イヤホンを使うと、相手の声がマイクに回り込みにくくなります。" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
             <!-- 辞書・ルール -->
             <TabItem Header="辞書・ルール">
                 <Grid Margin="14,4,14,14">

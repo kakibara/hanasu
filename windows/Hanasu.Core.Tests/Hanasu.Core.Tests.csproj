@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Hanasu.Core\Hanasu.Core.csproj" />
     <ProjectReference Include="..\Hanasu.Whisper\Hanasu.Whisper.csproj" />
+    <ProjectReference Include="..\Hanasu.Diarization\Hanasu.Diarization.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,9 +2,11 @@ using System.Diagnostics;
 using Hanasu.Core.Audio;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
+using Hanasu.Core.Meetings;
 using Hanasu.Core.Settings;
 using Hanasu.Core.Text;
 using Hanasu.Core.Transcription;
+using Hanasu.Diarization;
 using Hanasu.Whisper;
 
 // 確認用の CLI。認証は環境変数 GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウントの JSON のパス）か GEMINI_API_KEY。
@@ -14,6 +16,12 @@ using Hanasu.Whisper;
 //   hanasu-cli dictation <wav> --engine whisper|gemini [--translate] [--whisper-model tiny] [--models-dir <dir>]
 //   hanasu-cli dict <辞書ファイル> "<文章>"
 //   hanasu-cli models
+//   hanasu-cli meeting-files <自分の wav> <相手の wav> --meetings-dir <保存先> [--engine whisper|gemini] [--whisper-model tiny] [--models-dir <dir>]
+//              [--download] [--others-offset <秒>] [--me-offset <秒>] [--template regular] [--notes <メモのファイル>] [--no-minutes]
+//              [--no-diarize] [--diarization-models-dir <dir>] [--minutes-model <id>] [--model <文字起こしの Gemini のモデル>] [--delete-audio]
+//     会議の後処理（チャンネルごとの文字起こし → 話者分離 → 話者の割り当て → 議事録）を、2 つの音声ファイルで通す
+//   hanasu-cli meeting-minutes <会議のフォルダ> [--template <型>] [--minutes-model <id>]   議事録を作り直す
+//   hanasu-cli meeting-show <会議のフォルダ>   meeting.json を読んで中身を出す（Mac で作った会議が読めるかの確認）
 
 var command = args.FirstOrDefault();
 try
@@ -26,8 +34,11 @@ try
         case "dictation": await Dictation(args); break;
         case "dict": Dict(args); break;
         case "models": Models(); break;
+        case "meeting-files": await MeetingFiles(args); break;
+        case "meeting-minutes": await MeetingMinutes(args); break;
+        case "meeting-show": MeetingShow(args); break;
         default:
-            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models ...（Program.cs の先頭を参照）");
+            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show ...（Program.cs の先頭を参照）");
             return 2;
     }
     return 0;
@@ -170,6 +181,114 @@ static void Dict(string[] args)
 static void Models()
 {
     foreach (var m in WhisperModelCatalog.Models) Console.WriteLine($"{m.Id}\t{m.SizeLabel}\t{m.Description}\t{m.DownloadUri}");
+}
+
+/// <summary>
+/// 会議の後処理を、マイクとループバックの代わりに 2 つの音声ファイルで通す。会議は --meetings-dir の下に作る
+/// （~/Documents/Hanasu/Meetings には書かないよう、保存先は必ず指定させる）
+/// </summary>
+static async Task MeetingFiles(string[] args)
+{
+    var mePath = args.ElementAtOrDefault(1) ?? throw new IOException("自分の音声（WAV）を指定してください");
+    var othersPath = args.ElementAtOrDefault(2) ?? throw new IOException("相手の音声（WAV）を指定してください");
+    var dir = Option(args, "--meetings-dir") ?? throw new IOException("--meetings-dir で保存先を指定してください");
+    var settings = CliSettings(args);
+    var store = new MeetingStore(dir);
+    var meeting = store.NewMeeting(DateTimeOffset.Now);
+    if (Option(args, "--template") is { } templateName)
+    {
+        var template = MinutesTemplates.FromRawValue(templateName) ?? throw new IOException($"議事録の型が見つかりません: {templateName}");
+        meeting.MinutesTemplateId = template.RawValue();
+        if (template == MinutesTemplate.Custom) meeting.CustomMinutesPrompt = MinutesTemplates.DefaultCustomPrompt;
+    }
+    if (Option(args, "--notes") is { } notesFile) meeting.Notes = MeetingNote.Parse(File.ReadAllText(notesFile));
+
+    // 録音のかわりに、音声を 16 kHz・モノラルの WAV にして会議のフォルダに置く
+    double Seconds(string name) => double.Parse(Option(args, name) ?? "0", System.Globalization.CultureInfo.InvariantCulture);
+    var me = WavFile.DecodeTo16kMono(File.ReadAllBytes(mePath));
+    var others = WavFile.DecodeTo16kMono(File.ReadAllBytes(othersPath));
+    File.WriteAllBytes(store.AudioPath(meeting, MeetingChannel.Me), WavFile.Encode(me));
+    File.WriteAllBytes(store.AudioPath(meeting, MeetingChannel.Others), WavFile.Encode(others));
+    meeting.AudioStartOffsets = new() { ["me"] = Seconds("--me-offset"), ["others"] = Seconds("--others-offset") };
+    meeting.Duration = Math.Max(Seconds("--me-offset") + me.Length / (double)AudioFormat.SampleRate,
+        Seconds("--others-offset") + others.Length / (double)AudioFormat.SampleRate);
+
+    var engine = Option(args, "--engine") ?? "whisper";
+    ISegmentTranscriber transcriber = engine == "gemini"
+        ? new GeminiSegmentTranscriber(() => new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(300) }, () => settings.Model)
+        : new WhisperBatchTranscriber(() => EnsureWhisperModel(args, "--whisper-model").GetAwaiter().GetResult(), () => "whisper");
+    var diarizationDir = Option(args, "--diarization-models-dir") ?? Path.Combine(HanasuPaths.ModelsDirectory, "diarization");
+    var processor = new MeetingPostProcessor
+    {
+        Store = store,
+        Transcriber = transcriber,
+        Context = new TranscriptionContext("ja-JP", settings.UserDictionary.ContextualStrings, ""),
+        Diarizer = Flag(args, "--no-diarize") ? null : new SherpaSpeakerDiarizer(new DiarizationModels(diarizationDir)),
+        MinutesClient = Flag(args, "--no-minutes") ? null : () => new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(180) },
+        MinutesModel = Option(args, "--minutes-model") ?? "gemini-3.8-flash",
+        KeepAudio = !Flag(args, "--delete-audio"),
+        Log = m => Console.Error.WriteLine($"[log] {m}"),
+    };
+    var sw = Stopwatch.StartNew();
+    string? last = null;
+    var result = await processor.ProcessAsync(meeting, new InlineProgress<string>(m =>
+    {
+        // Whisper の進み具合（%）は 25% ごとにだけ出す
+        var percent = System.Text.RegularExpressions.Regex.Match(m, @"(\d+)%）$");
+        if (m == last || (percent.Success && int.Parse(percent.Groups[1].Value) % 25 != 0)) return;
+        last = m;
+        Console.Error.WriteLine($"[{sw.Elapsed.TotalSeconds,5:0.0}s] {m}");
+    }));
+    foreach (var w in result.Warnings) Console.WriteLine($"警告: {w}");
+    PrintMeeting(store.DirectoryOf(meeting), result.Meeting);
+    Console.WriteLine($"[後処理 {sw.Elapsed.TotalSeconds:0.0}s]");
+}
+
+static async Task MeetingMinutes(string[] args)
+{
+    var folder = Path.GetFullPath(args.ElementAtOrDefault(1) ?? throw new IOException("会議のフォルダを指定してください"));
+    var store = new MeetingStore(Path.GetDirectoryName(folder));
+    var meeting = store.Load(Path.GetFileName(folder)) ?? throw new IOException("meeting.json を読めません");
+    if (Option(args, "--template") is { } name)
+    {
+        meeting.MinutesTemplateId = (MinutesTemplates.FromRawValue(name) ?? throw new IOException($"議事録の型が見つかりません: {name}")).RawValue();
+    }
+    var sw = Stopwatch.StartNew();
+    var result = await MeetingProcessor.MakeMinutesAsync(meeting, new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(180) },
+        Option(args, "--minutes-model") ?? "gemini-3.8-flash");
+    meeting.Minutes = result.Markdown;
+    meeting.ActionItems = result.ActionItems;
+    store.Save(meeting);
+    Console.WriteLine($"[議事録 {sw.Elapsed.TotalSeconds:0.0}s]");
+    Console.WriteLine(meeting.Minutes);
+}
+
+static void MeetingShow(string[] args)
+{
+    var folder = Path.GetFullPath(args.ElementAtOrDefault(1) ?? throw new IOException("会議のフォルダを指定してください"));
+    var meeting = new MeetingStore(Path.GetDirectoryName(folder)).Load(Path.GetFileName(folder)) ?? throw new IOException("meeting.json を読めません");
+    PrintMeeting(folder, meeting);
+}
+
+static void PrintMeeting(string folder, Meeting meeting)
+{
+    Console.WriteLine($"会議: {meeting.Title}（{meeting.Status}、{Meeting.Clock(meeting.Duration)}、型: {meeting.Template.Title()}）");
+    Console.WriteLine($"保存先: {folder}");
+    if (meeting.ErrorMessage is not null) Console.WriteLine($"エラー: {meeting.ErrorMessage}");
+    Console.WriteLine($"話者: {string.Join("、", meeting.Speakers.Select(s => $"{s}={meeting.DisplayName(s)}"))}");
+    Console.WriteLine();
+    Console.WriteLine(meeting.TranscriptForPrompt());
+    if (meeting.AllNotes.Count > 0)
+    {
+        Console.WriteLine();
+        Console.WriteLine(meeting.NotesText);
+    }
+    if (meeting.Minutes is not null)
+    {
+        Console.WriteLine();
+        Console.WriteLine(meeting.Minutes);
+    }
+    foreach (var item in meeting.ResolvedActionItems) Console.WriteLine($"アクション: {item.MarkdownLine}");
 }
 
 /// <summary>マイクの代わりに、決まった音声を返す</summary>

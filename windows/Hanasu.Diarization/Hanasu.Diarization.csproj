@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 会議の相手側の話者分離（sherpa-onnx。pyannote の segmentation と話者の埋め込みのモデルを ONNX Runtime で動かす）。
+       sherpa-onnx は Windows / macOS / Linux で動くので net8.0 にし、Mac の CLI からも確かめられるようにする -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Hanasu.Diarization</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Hanasu.Core.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hanasu.Core\Hanasu.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="org.k2fsa.sherpa.onnx" Version="1.13.8" />
+  </ItemGroup>
+
+</Project>

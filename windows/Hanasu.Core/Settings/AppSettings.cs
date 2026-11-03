@@ -64,6 +64,34 @@ public sealed class AppSettings
     /// <summary>入力先アプリ名を Gemini に伝える</summary>
     public bool SendAppName { get; set; } = true;
 
+    // 会議の記録
+    /// <summary>
+    /// 会議の文字起こしのエンジン。Whisper（既定）か Gemini。Windows 標準は選べない
+    /// （SpeechRecognizer は既定のマイクからしか聞けず、ループバックで録った PC の音を渡せないため。windows/README.md）
+    /// </summary>
+    public TranscriptionEngine MeetingEngine { get; set; } = TranscriptionEngine.Whisper;
+    /// <summary>会議の記録の開始／停止</summary>
+    public HotKeyCombo MeetingHotKey { get; set; } = HotKeyCombo.DefaultMeeting;
+    /// <summary>「ここ重要」の印。記録中だけ登録する</summary>
+    public HotKeyCombo HighlightHotKey { get; set; } = HotKeyCombo.DefaultHighlight;
+    public bool HighlightHotKeyEnabled { get; set; } = true;
+    /// <summary>議事録のモデル（Mac 版と同じく、要約の質を優先して gemini-3.8-flash）</summary>
+    public string MeetingMinutesModel { get; set; } = "gemini-3.8-flash";
+    public bool MakeMeetingMinutes { get; set; } = true;
+    /// <summary>処理のあとも音声ファイル（me.wav / others.wav）を残す</summary>
+    public bool KeepMeetingAudio { get; set; } = true;
+    /// <summary>相手側の話者を分ける（sherpa-onnx。初めて使うときにモデルをダウンロードする）</summary>
+    public bool DiarizeOthers { get; set; } = true;
+    /// <summary>会議で「自分」として録るマイク。空なら Windows の既定のマイク</summary>
+    public string MeetingMicrophoneDeviceId { get; set; } = "";
+    /// <summary>会議で「相手」として録る出力（スピーカー・ヘッドホン）。空なら Windows の既定の出力</summary>
+    public string MeetingOutputDeviceId { get; set; } = "";
+    /// <summary>会議の保存先。空なら ドキュメント\Hanasu\Meetings</summary>
+    public string MeetingsDirectory { get; set; } = "";
+    /// <summary>次に記録する会議の議事録の型（Meeting.MinutesTemplate の値）</summary>
+    public string MeetingMinutesTemplate { get; set; } = "auto";
+    public string MeetingCustomMinutesPrompt { get; set; } = Meetings.MinutesTemplates.DefaultCustomPrompt;
+
     // 辞書・ルール
     public string DictionaryText { get; set; } = "";
     public string ExtraInstructions { get; set; } = "";

@@ -84,6 +84,29 @@ public sealed class SettingsStore
         File.Move(temp, Path, overwrite: true);
     }
 
+    /// <summary>会議の記録の設定を補う。ショートカットは音声入力のものと重ならないようにする</summary>
+    private static void NormalizeMeeting(AppSettings s)
+    {
+        // Windows 標準のエンジンは会議では使えない（ループバックの音を渡せない）ので Whisper にする
+        if (s.MeetingEngine == TranscriptionEngine.Windows) s.MeetingEngine = TranscriptionEngine.Whisper;
+        var taken = new List<HotKeyCombo> { s.HotKey, s.TranslateHotKey };
+        s.MeetingHotKey = Pick(s.MeetingHotKey, HotKeyCombo.DefaultMeeting, taken);
+        taken.Add(s.MeetingHotKey);
+        s.HighlightHotKey = Pick(s.HighlightHotKey, HotKeyCombo.DefaultHighlight, taken);
+        if (string.IsNullOrWhiteSpace(s.MeetingMinutesModel)) s.MeetingMinutesModel = "gemini-3.8-flash";
+        s.MeetingMicrophoneDeviceId ??= "";
+        s.MeetingOutputDeviceId ??= "";
+        s.MeetingsDirectory ??= "";
+        if (Meetings.MinutesTemplates.FromRawValue(s.MeetingMinutesTemplate) is null) s.MeetingMinutesTemplate = "auto";
+        s.MeetingCustomMinutesPrompt ??= Meetings.MinutesTemplates.DefaultCustomPrompt;
+
+        static HotKeyCombo Pick(HotKeyCombo? value, HotKeyCombo fallback, List<HotKeyCombo> taken)
+        {
+            if (value is not null && value.Validate() is null && !taken.Contains(value)) return value;
+            return taken.Contains(fallback) ? new HotKeyCombo(HotKeyModifiers.None, 0x7B /* F12 */) : fallback;
+        }
+    }
+
     /// <summary>読み込んだ値のうち、使えないものを既定値に戻す</summary>
     internal static void Normalize(AppSettings s)
     {
@@ -95,6 +118,7 @@ public sealed class SettingsStore
             s.TranslateHotKey = s.HotKey == HotKeyCombo.DefaultTranslate ? HotKeyCombo.DefaultDictation : HotKeyCombo.DefaultTranslate;
         }
         s.MicrophoneDeviceId ??= "";
+        NormalizeMeeting(s);
         s.WhisperModel = Transcription.WhisperModelCatalog.Find(s.WhisperModel)?.Id ?? "small";
         if (string.IsNullOrWhiteSpace(s.LocaleIdentifier)) s.LocaleIdentifier = "ja-JP";
         s.ProtectedApiKey ??= "";

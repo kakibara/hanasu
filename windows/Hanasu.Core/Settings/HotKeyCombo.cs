@@ -25,6 +25,13 @@ public sealed record HotKeyCombo(HotKeyModifiers Modifiers, int VirtualKey)
 
     public static HotKeyCombo DefaultDictation { get; } = new(HotKeyModifiers.Control | HotKeyModifiers.Alt, VkSpace);
     public static HotKeyCombo DefaultTranslate { get; } = new(HotKeyModifiers.Control | HotKeyModifiers.Alt | HotKeyModifiers.Shift, VkSpace);
+    /// <summary>
+    /// 会議の記録の開始／停止。Ctrl + Alt + Shift + M（Mac 版の ⌃⌥⌘ M にあたる）。
+    /// Teams のミュート（Ctrl + Shift + M）や Zoom（Alt + M など）と重ならないよう、修飾キーを 3 つにした
+    /// </summary>
+    public static HotKeyCombo DefaultMeeting { get; } = new(HotKeyModifiers.Control | HotKeyModifiers.Alt | HotKeyModifiers.Shift, 0x4D);
+    /// <summary>「ここ重要」の印。Ctrl + Alt + Shift + H（Mac 版の ⌃⌥⌘ H にあたる）。記録中だけ登録する</summary>
+    public static HotKeyCombo DefaultHighlight { get; } = new(HotKeyModifiers.Control | HotKeyModifiers.Alt | HotKeyModifiers.Shift, 0x48);
 
     [JsonIgnore]
     public string DisplayString

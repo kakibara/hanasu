@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Hanasu.Core\Hanasu.Core.csproj" />
     <ProjectReference Include="..\Hanasu.Whisper\Hanasu.Whisper.csproj" />
+    <ProjectReference Include="..\Hanasu.Diarization\Hanasu.Diarization.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,6 +59,11 @@
       <ResolvedFileToPublish Remove="@(_HanasuForeignRuntime)" />
       <!-- macOS の Metal 用のシェーダーも要らない -->
       <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.metal'" />
+      <!-- 話者分離（sherpa-onnx）のネイティブライブラリも exe に入れず、exe の隣に置く。
+           exe に入れると一時フォルダに展開して読むことになり、Windows 11 の System32 にある別の版の onnxruntime.dll と取り違えるおそれがあるため -->
+      <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(Filename)' == 'sherpa-onnx-c-api' Or '%(Filename)' == 'onnxruntime'">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
       <!-- Whisper のネイティブライブラリは exe に入れず、ファイルのまま置く -->
       <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="$([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Replace('\','/').StartsWith('runtimes/win-'))">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
