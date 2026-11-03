@@ -276,6 +276,8 @@ private struct MeetingTab: View {
                 Toggle("音声ファイル（me.m4a / others.m4a）を残す", isOn: $settings.keepMeetingAudio)
             }
             MeetingDetectionSettingsSection()
+            MeetingNotesSettingsSection(onBeginShortcutRecording: onBeginShortcutRecording,
+                                        onEndShortcutRecording: onEndShortcutRecording)
             Section {
                 Text("マイクを「自分」、スピーカーの音（Meet・Slack ハドル・Teams など）を「相手」として録ります。スピーカーだと相手の声がマイクにも入るので、イヤホンを使うと正確になります。")
                 Text("録音する前に、参加者の了承を得てください。")
