@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.3.2](https://github.com/kakibara/hanasu/compare/v1.3.1...v1.3.2) - 2026-11-03
+
+- リリースの Windows 版のビルドでも、publish では lock ファイルの locked mode を外す by @kakibara in https://github.com/kakibara/hanasu/pull/29
+- 入力できる場所がないときは、結果を画面に残して自分で貼れるようにする（Mac 版） by @kakibara in https://github.com/kakibara/hanasu/pull/27
+- 入力できる場所がないときは、結果を画面に残して自分で貼れるようにする（Windows 版） by @kakibara in https://github.com/kakibara/hanasu/pull/28
+
 ## [v1.3.1](https://github.com/kakibara/hanasu/compare/v1.3.0...v1.3.1) - 2026-11-03
 
 - 文書を実装済みの仕様と将来の計画に分け、要件・設計判断を ID で追えるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/21
