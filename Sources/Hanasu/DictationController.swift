@@ -158,7 +158,7 @@ final class DictationController {
                 try await recognizer.start(
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
-                    contextualStrings: settings.dictionaryWords)
+                    contextualStrings: settings.dictionaryWords + SnippetStore.shared.triggerPhrases)
             } catch {
                 fail(error.localizedDescription)
                 return
@@ -219,11 +219,16 @@ final class DictationController {
             return
         }
 
-        var output = raw
+        // スニペット: 起動フレーズと一致した部分は、Gemini を通さず登録した本文に置き換える（Snippets.swift）
+        let snippetMatch = SnippetMatcher.match(raw, snippets: SnippetStore.shared.snippets)
+        if let snippetMatch {
+            appLog.notice("snippet matched: \(snippetMatch.snippets.count) snippets, whole=\(snippetMatch.isWholeUtterance)")
+        }
+        var output = snippetMatch?.assembledWithoutConversion ?? raw
         var warning: String?
         let translating = mode == .translateToEnglish
-        // 英訳は Gemini でしかできないので、整形をオフにしていても Gemini に送る
-        if settings.refineWithGemini || translating {
+        // 英訳は Gemini でしかできないので、整形をオフにしていても Gemini に送る。全体がスニペットなら呼ばない
+        if settings.refineWithGemini || translating, snippetMatch?.isWholeUtterance != true {
             let verb = translating ? "翻訳" : "整形"
             do {
                 if let auth = try GeminiClient.authFromSettings(settings) {
@@ -235,7 +240,17 @@ final class DictationController {
                         dictionary: settings.dictionaryWords,
                         extraInstructions: settings.extraInstructions,
                         appStyle: targetAppStyle)
-                    output = translating ? try await client.translateToEnglish(request) : try await client.refine(request)
+                    // スニペットがあれば、その前後の文だけを整形（英訳）してつなぐ。本文は送らない
+                    let convert: @Sendable (String) async throws -> String = { text in
+                        var request = request
+                        request.transcript = text
+                        return translating ? try await client.translateToEnglish(request) : try await client.refine(request)
+                    }
+                    if let snippetMatch {
+                        output = try await snippetMatch.assemble(convert: convert)
+                    } else {
+                        output = try await convert(raw)
+                    }
                     appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(self.settings.model, privacy: .public): \(output.count) chars")
                 } else {
                     appLog.notice("\(verb, privacy: .public) skipped: no credentials (mode=\(self.settings.authMode.rawValue, privacy: .public))")
@@ -260,7 +275,7 @@ final class DictationController {
         case (.pasted, let warning?):
             hud.show(.error(warning))
         case (.pasted, nil):
-            hud.show(.done(translating ? "英訳して入力しました" : "入力しました"))
+            hud.show(.done(snippetMatch?.hudMessage ?? (translating ? "英訳して入力しました" : "入力しました")))
         }
     }
 

@@ -21,6 +21,8 @@ struct SettingsView: View {
                 .tabItem { Label("辞書・ルール", systemImage: "character.book.closed") }
             AppStylesTab()
                 .tabItem { Label("アプリ別", systemImage: "square.grid.2x2") }
+            SnippetsSettingsView()
+                .tabItem { Label("スニペット", systemImage: "text.badge.plus") }
             MeetingTab(
                 settings: settings,
                 onOpenMeetingNotes: onOpenMeetingNotes,
