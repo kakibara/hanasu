@@ -55,6 +55,7 @@ private struct GeneralTab: View {
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
+                EditModeShortcutRow(onBeginRecording: onBeginShortcutRecording, onEndRecording: onEndShortcutRecording)
                 Picker("録音モード", selection: $settings.recordingMode) {
                     ForEach(RecordingMode.allCases) { Text($0.label).tag($0) }
                 }
@@ -272,6 +273,7 @@ private struct MeetingTab: View {
                 }
                 Toggle("音声ファイル（me.m4a / others.m4a）を残す", isOn: $settings.keepMeetingAudio)
             }
+            MeetingDetectionSettingsSection()
             Section {
                 Text("マイクを「自分」、スピーカーの音（Meet・Slack ハドル・Teams など）を「相手」として録ります。スピーカーだと相手の声がマイクにも入るので、イヤホンを使うと正確になります。")
                 Text("録音する前に、参加者の了承を得てください。")

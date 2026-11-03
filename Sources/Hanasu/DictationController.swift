@@ -27,6 +27,8 @@ final class DictationController {
     var onStateChange: ((State) -> Void)?
     /// ショートカットの登録に失敗したとき（他アプリと衝突など）
     var onHotKeyRegistrationFailed: ((HotKeyCombo) -> Void)?
+    /// ほかの録音（選択を声で編集）が動いている間は false を返す
+    var canStart: () -> Bool = { true }
 
     private let settings = AppSettings.shared
     private let hotKeys = HotKeyManager()
@@ -135,7 +137,7 @@ final class DictationController {
     }
 
     func startDictation(mode: Mode = .refine) {
-        guard state == .idle else { return }
+        guard state == .idle, canStart() else { return }
         self.mode = mode
         state = .preparing
         stopRequested = false

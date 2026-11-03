@@ -12,8 +12,10 @@ final class HotKeyManager {
     }
 
     private static let signature: OSType = 0x484E_5355  // 'HNSU'
+    /// ID はインスタンスをまたいで重ならないようにする。どのインスタンスもアプリの同じイベントターゲットにハンドラを置くので、
+    /// ID が重なると、後から置いたハンドラがほかのインスタンスのショートカットまで自分のものとして受け取ってしまう
+    private static var nextID: UInt32 = 1
     private var registrations: [UInt32: Registration] = [:]
-    private var nextID: UInt32 = 1
     private var eventHandler: EventHandlerRef?
 
     init() {
@@ -37,8 +39,8 @@ final class HotKeyManager {
     /// 登録に成功すれば ID を返す。他のアプリと衝突している場合などは nil。
     @discardableResult
     func register(_ combo: HotKeyCombo, handler: @escaping (Event) -> Void) -> UInt32? {
-        let id = nextID
-        nextID += 1
+        let id = Self.nextID
+        Self.nextID += 1
         var ref: EventHotKeyRef?
         let status = RegisterEventHotKey(
             combo.keyCode, combo.modifiers,
