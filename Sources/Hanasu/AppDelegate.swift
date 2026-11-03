@@ -15,6 +15,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }()
     private let meetingHotKeys = HotKeyManager()
     private var meetingHotKeyID: UInt32?
+    private var meetingAutoDetect: MeetingAutoDetect?
     private var cancellables: Set<AnyCancellable> = []
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -46,6 +47,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             .removeDuplicates()
             .sink { [weak self] combo in self?.registerMeetingHotKey(combo) }
             .store(in: &cancellables)
+        // 会議アプリがマイクを使い始めたら記録を提案する（記録はユーザーが押してから）
+        meetingAutoDetect = MeetingAutoDetect(recorder: meetingRecorder) { [weak self] in self?.toggleMeeting() }
         controller.onHotKeyRegistrationFailed = { [weak self] combo in
             self?.showAlert(
                 "ショートカット \(combo.displayString) を登録できませんでした",
