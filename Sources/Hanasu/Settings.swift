@@ -134,7 +134,16 @@ final class AppSettings: ObservableObject {
         }
     }
     @Published var recordingMode: RecordingMode { didSet { defaults.set(recordingMode.rawValue, forKey: Keys.recordingMode) } }
+    /// Mac 標準のエンジンを選んだときの、SpeechAnalyzer のモジュール
     @Published var engine: RecognizerEngine { didSet { defaults.set(engine.rawValue, forKey: Keys.engine) } }
+    /// 音声入力（と選択を声で編集）の文字起こしのエンジン
+    @Published var dictationEngine: TranscriptionEngine { didSet { defaults.set(dictationEngine.rawValue, forKey: Keys.dictationEngine) } }
+    /// 会議の記録の文字起こしのエンジン
+    @Published var meetingEngine: TranscriptionEngine { didSet { defaults.set(meetingEngine.rawValue, forKey: Keys.meetingEngine) } }
+    /// Whisper のモデル（音声入力と会議で共通）
+    @Published var whisperModel: WhisperModel { didSet { defaults.set(whisperModel.rawValue, forKey: Keys.whisperModel) } }
+    /// Gemini で文字起こしするときのモデル（整形のモデルとは別）
+    @Published var geminiTranscriptionModel: String { didSet { defaults.set(geminiTranscriptionModel, forKey: Keys.geminiTranscriptionModel) } }
     @Published var localeIdentifier: String { didSet { defaults.set(localeIdentifier, forKey: Keys.locale) } }
     @Published var refineWithGemini: Bool { didSet { defaults.set(refineWithGemini, forKey: Keys.refine) } }
     @Published var extraInstructions: String { didSet { defaults.set(extraInstructions, forKey: Keys.extraInstructions) } }
@@ -157,6 +166,11 @@ final class AppSettings: ObservableObject {
     /// 会議で録音するマイクの UID。空ならシステムの設定に従う
     @Published var meetingInputDeviceUID: String { didSet { defaults.set(meetingInputDeviceUID, forKey: Keys.meetingInputDeviceUID) } }
 
+    /// Whisper に渡す言語コード（設定の言語 ja-JP → ja）。読めなければ日本語にする
+    var whisperLanguage: String {
+        Locale(identifier: localeIdentifier).language.languageCode?.identifier ?? "ja"
+    }
+
     /// ユーザー辞書の正しい表記の一覧（語だけの行と、置き換えルールの右側）。書き方は UserDictionary を参照
     var dictionaryWords: [String] {
         userDictionary.spellings
@@ -175,6 +189,10 @@ final class AppSettings: ObservableObject {
             Keys.translateHotKeyModifiers: Int(HotKeyCombo.defaultTranslate.modifiers),
             Keys.recordingMode: RecordingMode.toggle.rawValue,
             Keys.engine: RecognizerEngine.speech.rawValue,
+            Keys.dictationEngine: TranscriptionEngine.apple.rawValue,
+            Keys.meetingEngine: TranscriptionEngine.apple.rawValue,
+            Keys.whisperModel: WhisperModel.small.rawValue,
+            Keys.geminiTranscriptionModel: Self.suggestedModels[0],
             Keys.locale: "ja-JP",
             Keys.refine: true,
             Keys.extraInstructions: "",
@@ -202,6 +220,10 @@ final class AppSettings: ObservableObject {
             modifiers: UInt32(defaults.integer(forKey: Keys.translateHotKeyModifiers)))
         recordingMode = RecordingMode(rawValue: defaults.string(forKey: Keys.recordingMode)!) ?? .toggle
         engine = RecognizerEngine(rawValue: defaults.string(forKey: Keys.engine)!) ?? .speech
+        dictationEngine = TranscriptionEngine(rawValue: defaults.string(forKey: Keys.dictationEngine)!) ?? .apple
+        meetingEngine = TranscriptionEngine(rawValue: defaults.string(forKey: Keys.meetingEngine)!) ?? .apple
+        whisperModel = WhisperModel(rawValue: defaults.string(forKey: Keys.whisperModel)!) ?? .small
+        geminiTranscriptionModel = defaults.string(forKey: Keys.geminiTranscriptionModel)!
         localeIdentifier = defaults.string(forKey: Keys.locale)!
         refineWithGemini = defaults.bool(forKey: Keys.refine)
         extraInstructions = defaults.string(forKey: Keys.extraInstructions)!
@@ -230,6 +252,10 @@ final class AppSettings: ObservableObject {
         static let translateHotKeyModifiers = "translateHotKeyModifiers"
         static let recordingMode = "recordingMode"
         static let engine = "recognizerEngine"
+        static let dictationEngine = "dictationTranscriptionEngine"
+        static let meetingEngine = "meetingTranscriptionEngine"
+        static let whisperModel = "whisperModel"
+        static let geminiTranscriptionModel = "geminiTranscriptionModel"
         static let locale = "localeIdentifier"
         static let refine = "refineWithGemini"
         static let extraInstructions = "extraInstructions"

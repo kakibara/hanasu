@@ -25,6 +25,12 @@ final class SpeechRecognizer {
     var onPartialText: ((String) -> Void)?
     /// 音声モデルのダウンロード進捗（0...1）
     var onAssetDownloadProgress: ((Double) -> Void)?
+    /// 録音中の音量（0〜1。Whisper / Gemini で録っているときだけ、HUD の音量の目安に使う）
+    var onLevel: ((Float) -> Void)?
+    /// 録音を止めたあと、まとめて文字起こしを始めたとき（Whisper / Gemini）
+    var onBatchTranscriptionStarted: ((TranscriptionEngine) -> Void)?
+    /// 直近の stop() で文字起こしに失敗したときの理由（Whisper / Gemini）
+    private(set) var lastError: String?
 
     private var audioEngine: AVAudioEngine?
     private var analyzer: SpeechAnalyzer?
@@ -36,13 +42,22 @@ final class SpeechRecognizer {
     /// 録音を残すときの書き出し先（履歴の「音声も残す」）
     private var audioWriter: DictationAudioWriter?
 
-    var isRunning: Bool { analyzer != nil }
+    /// Whisper / Gemini で録っている間の状態。録音を止めてからまとめて文字起こしする
+    private var batch: BatchCapture?
 
+    var isRunning: Bool { analyzer != nil || batch != nil }
+
+    /// - Parameter transcription: 文字起こしのエンジン。Mac 標準以外では、engine（SpeechAnalyzer のモジュール）は使わない
     func start(localeIdentifier: String, engine: RecognizerEngine, contextualStrings: [String],
-               audioFileURL: URL? = nil) async throws {
-        guard analyzer == nil else { throw SpeechRecognizerError.alreadyRunning }
+               audioFileURL: URL? = nil, transcription: TranscriptionEngine = .apple) async throws {
+        guard analyzer == nil, batch == nil else { throw SpeechRecognizerError.alreadyRunning }
         finalizedText = ""
         volatileText = ""
+        lastError = nil
+        if transcription != .apple {
+            try startBatch(engine: transcription, hints: contextualStrings, audioFileURL: audioFileURL)
+            return
+        }
 
         let (module, results) = try await makeModule(localeIdentifier: localeIdentifier, engine: engine)
         try await ensureAssetsInstalled(for: module)
@@ -103,6 +118,7 @@ final class SpeechRecognizer {
 
     /// 録音を止め、残りの音声を確定させてから全文を返す。
     func stop() async -> String {
+        if batch != nil { return await stopBatch() }
         guard let analyzer else { return "" }
         stopAudio()
         do {
@@ -117,6 +133,11 @@ final class SpeechRecognizer {
     }
 
     func cancel() async {
+        if let batch {
+            batch.stopAudio()
+            self.batch = nil
+            return
+        }
         guard let analyzer else { return }
         stopAudio()
         await analyzer.cancelAndFinishNow()
@@ -162,6 +183,50 @@ final class SpeechRecognizer {
         try await analyzer.finalizeAndFinishThroughEndOfInput()
         await resultsTask.value
         return (finalizedText + volatileText).trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    // MARK: - Whisper / Gemini（録音を止めてからまとめて文字起こしする）
+
+    private func startBatch(engine: TranscriptionEngine, hints: [String], audioFileURL: URL?) throws {
+        let settings = AppSettings.shared
+        switch engine {
+        case .whisper:
+            let model = settings.whisperModel
+            guard WhisperModelStore.isDownloaded(model) else {
+                // まだなら、ここでダウンロードを始めておく
+                WhisperModelStore.shared.ensureDownloaded(model)
+                throw BatchTranscriptionError.whisperModelMissing(model)
+            }
+            // 録音している間に読み込んでおくと、止めてからの待ち時間が短くなる
+            Task.detached { await WhisperEngine.shared.preload(model) }
+        case .gemini:
+            guard try GeminiTranscriber.auth(settings: settings) != nil else { throw BatchTranscriptionError.noCredentials }
+        case .apple:
+            break
+        }
+        let capture = BatchCapture(engine: engine, hints: hints)
+        try capture.start(audioFileURL: audioFileURL) { [weak self] level in self?.onLevel?(level) }
+        batch = capture
+    }
+
+    private func stopBatch() async -> String {
+        guard let batch else { return "" }
+        self.batch = nil
+        let samples = batch.stopAudio()
+        // 0.3 秒に満たないものは、押し間違いとみなす
+        guard Double(samples.count) / TranscriptionAudio.sampleRate >= 0.3 else { return "" }
+        onBatchTranscriptionStarted?(batch.engine)
+        let started = Date()
+        do {
+            let text = try await BatchTranscriber.transcribeText(
+                samples, engine: batch.engine, settings: AppSettings.shared, hints: batch.hints)
+            appLog.notice("batch transcription (\(batch.engine.rawValue, privacy: .public)): \(text.count) chars in \(Date().timeIntervalSince(started), format: .fixed(precision: 1))s")
+            return text
+        } catch {
+            appLog.error("batch transcription failed: \(String(describing: error), privacy: .public)")
+            lastError = "\(batch.engine.shortName) で文字起こしできませんでした: \(error.localizedDescription)"
+            return ""
+        }
     }
 
     // MARK: - Private
@@ -306,4 +371,79 @@ final class SpeechRecognizer {
             }
         }
     }
+}
+
+/// Whisper / Gemini 用に、マイクの音声を 16 kHz モノラルでためておく。音量は 0.1 秒ごとに知らせる
+@MainActor
+private final class BatchCapture {
+    let engine: TranscriptionEngine
+    let hints: [String]
+    private let audioEngine = AVAudioEngine()
+    private let box = SampleBox()
+    private var writer: DictationAudioWriter?
+    private var levelTimer: Timer?
+
+    init(engine: TranscriptionEngine, hints: [String]) {
+        self.engine = engine
+        self.hints = hints
+    }
+
+    func start(audioFileURL: URL?, onLevel: @escaping (Float) -> Void) throws {
+        let inputFormat = audioEngine.inputNode.outputFormat(forBus: 0)
+        guard inputFormat.sampleRate > 0, inputFormat.channelCount > 0 else { throw SpeechRecognizerError.noInputDevice }
+        // 録音を残せなくても、音声入力は続ける
+        let writer = audioFileURL.flatMap { try? DictationAudioWriter(url: $0, format: TranscriptionAudio.format) }
+        let box = self.box
+        let converter = BatchSampleConverter()
+        audioEngine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat) { buffer, _ in
+            guard let converted = converter.convertToBuffer(buffer) else { return }
+            writer?.write(converted)
+            box.append(converted)
+        }
+        audioEngine.prepare()
+        do {
+            try audioEngine.start()
+        } catch {
+            audioEngine.inputNode.removeTap(onBus: 0)
+            writer?.close()
+            throw error
+        }
+        self.writer = writer
+        levelTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [box] _ in
+            let level = box.level
+            MainActor.assumeIsolated { onLevel(level) }
+        }
+    }
+
+    /// 録音を止め、ためた音声を返す
+    @discardableResult
+    func stopAudio() -> [Float] {
+        levelTimer?.invalidate()
+        levelTimer = nil
+        audioEngine.inputNode.removeTap(onBus: 0)
+        audioEngine.stop()
+        writer?.close()
+        writer = nil
+        return box.samples
+    }
+}
+
+/// オーディオスレッドから音声を足していく入れ物
+private final class SampleBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var _samples: [Float] = []
+    private var _level: Float = 0
+
+    func append(_ buffer: AVAudioPCMBuffer) {
+        guard let data = buffer.floatChannelData?[0] else { return }
+        let chunk = UnsafeBufferPointer(start: data, count: Int(buffer.frameLength))
+        let rms = TranscriptionAudio.rms(chunk)
+        lock.withLock {
+            _samples.append(contentsOf: chunk)
+            _level = rms
+        }
+    }
+
+    var samples: [Float] { lock.withLock { _samples } }
+    var level: Float { lock.withLock { _level } }
 }

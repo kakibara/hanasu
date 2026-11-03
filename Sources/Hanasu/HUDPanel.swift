@@ -20,6 +20,12 @@ final class HUDModel: ObservableObject {
     var onSelectTranslating: ((Bool) -> Void)?
     /// 選択を声で編集しているときの補足（「選択 120 文字」など）。nil なら通常の音声入力
     @Published var editBadge: String?
+    /// 録音を止めてからまとめて文字起こしするエンジン（Whisper / Gemini）。nil なら Mac 標準（途中経過が出る）
+    @Published var batchEngine: TranscriptionEngine?
+    /// 録音中の音量（0〜1。batchEngine があるときの音量の目安）
+    @Published var level: Float = 0
+    /// まとめての文字起こしをしている間は true（「Whisper で文字起こししています…」）
+    @Published var transcribing = false
 
     /// 準備中と録音中は、出力の言語を選べる
     var canChooseLanguage: Bool {
@@ -65,6 +71,8 @@ final class HUDController {
         hideTask?.cancel()
         if case .preparing = phase {
             model.transcript = ""
+            model.level = 0
+            model.transcribing = false
         }
         if phase == .recording {
             model.startedAt = Date()
@@ -141,7 +149,18 @@ private struct HUDView: View {
                     Text("Esc で取消").font(.system(size: 11)).foregroundStyle(.secondary)
                 }
             }
-            if let detail {
+            if model.phase == .recording, let engine = model.batchEngine, model.transcript.isEmpty {
+                // 途中経過が出ないエンジンでは、声が届いているかを音量で示す
+                HStack(spacing: 8) {
+                    LevelMeter(level: model.level)
+                    Text(model.editBadge != nil
+                         ? "指示を話してください。止めてから \(engine.shortName) で文字起こしします"
+                         : "止めてから \(engine.shortName) で文字起こしします（録音中は文字が出ません）")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+            } else if let detail {
                 Text(detail)
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
@@ -175,9 +194,11 @@ private struct HUDView: View {
     private var title: String {
         switch model.phase {
         case .preparing(let message): message
-        case .recording: model.editBadge == nil ? "録音中" : "編集モード"
+        case .recording:
+            (model.editBadge == nil ? "録音中" : "編集モード") + (model.batchEngine.map { "（\($0.shortName)）" } ?? "")
         case .processing:
-            if model.editBadge != nil { "Gemini で書き換えています…" }
+            if model.transcribing, let engine = model.batchEngine { "\(engine.shortName) で文字起こししています…" }
+            else if model.editBadge != nil { "Gemini で書き換えています…" }
             else if model.translating { "Gemini で英語に翻訳しています…" }
             else { "Gemini で整えています…" }
         case .done(let message): message
@@ -238,5 +259,24 @@ private struct LanguageSwitch: View {
                 .contentShape(Capsule())
         }
         .buttonStyle(.plain)
+    }
+}
+
+/// 音量の目安（Whisper / Gemini で録っているとき）。RMS を dB にして、-60〜-10 dB を 0〜1 に割り当てる
+private struct LevelMeter: View {
+    var level: Float
+
+    var body: some View {
+        let db = 20 * log10(max(Double(level), 1e-6))
+        let fraction = min(max((db + 60) / 50, 0), 1)
+        HStack(spacing: 2) {
+            ForEach(0..<12, id: \.self) { i in
+                RoundedRectangle(cornerRadius: 1.5)
+                    .fill(Double(i) / 12 < fraction ? Color.green : Color.secondary.opacity(0.25))
+                    .frame(width: 4, height: 6 + CGFloat(i) * 0.8)
+            }
+        }
+        .frame(height: 16, alignment: .bottom)
+        .animation(.easeOut(duration: 0.1), value: fraction)
     }
 }

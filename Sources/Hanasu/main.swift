@@ -3,7 +3,8 @@ import AVFoundation
 import SwiftUI
 
 // 動作確認用の CLI モード:
-//   Hanasu --transcribe-file <音声ファイル> [--engine dictation|speech] [--refine [--translate] [--model <id>]]
+//   Hanasu --transcribe-file <音声ファイル> [--engine apple|whisper|gemini|dictation|speech] [--refine [--translate] [--model <id>]]
+//   （Whisper / Gemini の確認の詳細は TranscriptionEngineCLI.swift）
 //   Hanasu --refine-text <文章> [--translate] [--model <id>] [--app <bundle id>] [--show-prompt] [--dictionary <辞書ファイル>]
 // --refine を付けると Gemini 整形も行い、--translate を付けると整形の代わりに英訳する。
 // --app を付けると、そのアプリ向けの文体ルール（設定の「アプリ別」）で整形する。既定の出力言語が English なら英訳する。
@@ -39,6 +40,8 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     print(String(format: "[%@ %@ %.1fs] %@", translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
 }
 
+// 文字起こしのエンジンの確認（--download-whisper / --render-engine-settings）。TranscriptionEngineCLI.swift
+MainActor.assumeIsolated { TranscriptionEngineCLI.runIfRequested() }
 // 選択を声で編集するモードの確認（--edit-text / --render-edit-hud / --render-edit-settings）。中身は EditModeCLI.swift
 MainActor.assumeIsolated { EditModeCLI.runIfRequested() }
 // 画面の文脈の確認（--dump-context、--refine-text … --context）。該当しなければ何もしない
@@ -70,15 +73,22 @@ if let index = CommandLine.arguments.firstIndex(of: "--transcribe-file"),
 {
     let args = CommandLine.arguments
     let url = URL(fileURLWithPath: args[index + 1])
-    let engine = args.firstIndex(of: "--engine").flatMap { args.indices.contains($0 + 1) ? RecognizerEngine(rawValue: args[$0 + 1]) : nil } ?? .speech
     Task { @MainActor in
         do {
             let settings = AppSettings.shared
-            let recognizer = SpeechRecognizer()
-            recognizer.onAssetDownloadProgress = { print(String(format: "downloading model… %.0f%%", $0 * 100)) }
+            let (transcription, engine) = TranscriptionEngineCLI.parseEngine(args)
+            let raw: String
             let started = Date()
-            let raw = try await recognizer.transcribeFile(at: url, localeIdentifier: settings.localeIdentifier, engine: engine)
-            print(String(format: "[認識 %@ %.1fs] %@", engine.rawValue, Date().timeIntervalSince(started), raw))
+            if transcription == .apple {
+                let recognizer = SpeechRecognizer()
+                recognizer.onAssetDownloadProgress = { print(String(format: "downloading model… %.0f%%", $0 * 100)) }
+                raw = try await recognizer.transcribeFile(at: url, localeIdentifier: settings.localeIdentifier, engine: engine)
+            } else {
+                raw = try await TranscriptionEngineCLI.transcribeFile(url, engine: transcription)
+            }
+            let label = transcription == .apple ? engine.rawValue
+                : transcription == .whisper ? "whisper \(settings.whisperModel.rawValue)" : "gemini \(settings.geminiTranscriptionModel)"
+            print(String(format: "[認識 %@ %.1fs] %@", label, Date().timeIntervalSince(started), raw))
             if args.contains("--refine") {
                 try await cliRefine(raw, args: args)
             }
@@ -177,16 +187,23 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-app-styles"),
     exit(0)
 }
 
-// 音声入力の HUD を画像にする（見た目の確認用）:  Hanasu --render-hud <出力.png> [--translate]
+// 音声入力の HUD を画像にする（見た目の確認用）:  Hanasu --render-hud <出力.png> [--translate] [--engine whisper|gemini [--processing]]
+// --engine whisper|gemini は、録音を止めてからまとめて文字起こしするときの見た目（音量の目安）。--processing で文字起こし中
 if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
    CommandLine.arguments.indices.contains(index + 1)
 {
     MainActor.assumeIsolated {
         _ = NSApplication.shared
         let hud = HUDController()
-        hud.show(.recording)
+        let (engine, _) = TranscriptionEngineCLI.parseEngine(CommandLine.arguments)
+        hud.model.batchEngine = engine.isLive ? nil : engine
+        if engine.isLive || CommandLine.arguments.contains("--processing") {
+            hud.updateTranscript("明日の会議なんですけど、資料は Google スライドで作ったものを使います")
+        }
+        hud.model.transcribing = CommandLine.arguments.contains("--processing")
+        hud.show(CommandLine.arguments.contains("--processing") ? .processing : .recording)
+        hud.model.level = 0.05
         hud.model.translating = CommandLine.arguments.contains("--translate")
-        hud.updateTranscript("明日の会議なんですけど、資料は Google スライドで作ったものを使います")
         try? hud.snapshotPNG()?.write(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
         print("wrote")
     }
@@ -194,7 +211,8 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
 }
 
 // 会議記録の後処理の確認:
-//   Hanasu --meeting-files <自分の音声> <相手の音声> [--template <型>] [--custom-prompt <指示>] [--notes <メモのテキスト>]
+//   Hanasu --meeting-files <自分の音声> <相手の音声> [--engine apple|whisper|gemini] [--template <型>] [--custom-prompt <指示>] [--notes <メモのテキスト>]
+// --engine whisper|gemini では、記録中と同じく音声を書き出すだけにして、記録のあとの文字起こしを行う。
 // 2 つのファイルを「自分」「相手」のチャンネルとして文字起こしし、話者の割り当て → 議事録 → 保存まで行う。
 // --notes には、会議中のメモと「ここ重要」の印を、会議ノートの「メモ」タブと同じ形式（[12:34] 内容 / [12:40] ★）で渡す。
 if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
@@ -213,13 +231,16 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
                 print("メモ: \(meeting.notes?.count ?? 0) 件\n\(meeting.notesForPrompt() ?? "")")
             }
             var phrases: [MeetingChannel: [TranscribedPhrase]] = [:]
+            let (transcription, _) = TranscriptionEngineCLI.parseEngine(args)
+            if transcription == .whisper { try await TranscriptionEngineCLI.ensureWhisperModel(settings.whisperModel) }
+            let recorder = MeetingRecorder()
             let started = Date()
             for (channel, url) in zip([MeetingChannel.me, .others], files) {
                 let file = try AVAudioFile(forReading: url)
                 let transcriber = ChannelTranscriber(
                     channel: channel, inputFormat: file.processingFormat,
                     fileURL: MeetingStore.audioURL(for: meeting, channel: channel),
-                    meetingStart: meeting.startedAt, fixedTimeOffset: 0)
+                    meetingStart: meeting.startedAt, fixedTimeOffset: 0, live: transcription.isLive)
                 try await transcriber.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: settings.userDictionary.contextualStrings)
                 while file.framePosition < file.length {
                     guard let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 8192) else { break }
@@ -230,6 +251,13 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
                 phrases[channel] = await transcriber.finish()
                 meeting.duration = max(meeting.duration, Double(file.length) / file.processingFormat.sampleRate)
             }
+            var keepAudio = false
+            if !transcription.isLive {
+                recorder.onStateChange = { state in if case .processing(let message) = state { print(message) } }
+                let result = await recorder.transcribeRecordedAudio(meeting, engine: transcription, offsets: [.me: 0, .others: 0])
+                phrases = [.me: result.me, .others: result.others]
+                if let error = result.error { print("⚠️ \(error)"); meeting.errorMessage = error; keepAudio = true }
+            }
             if ProcessInfo.processInfo.environment["HANASU_DEBUG"] != nil {
                 for p in (phrases[.me] ?? []) + (phrases[.others] ?? []) {
                     print("\(p.channel.rawValue) [\(String(format: "%.2f-%.2f", p.start, p.end))] " +
@@ -238,9 +266,8 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             }
             print(String(format: "[文字起こし %.1fs] 自分 %d 件 / 相手 %d 件", Date().timeIntervalSince(started),
                          phrases[.me]?.count ?? 0, phrases[.others]?.count ?? 0))
-            let recorder = MeetingRecorder()
             let minutesStarted = Date()
-            let result = await recorder.process(meeting, me: phrases[.me] ?? [], others: phrases[.others] ?? [])
+            let result = await recorder.process(meeting, me: phrases[.me] ?? [], others: phrases[.others] ?? [], keepAudio: keepAudio)
             print(result.transcriptMarkdown())
             print(String(format: "[議事録 %@ %.1fs]", settings.meetingMinutesModel, Date().timeIntervalSince(minutesStarted)))
             print(result.minutes ?? result.errorMessage ?? "(なし)")

@@ -32,6 +32,8 @@ final class MeetingRecorder: ObservableObject {
     @Published private(set) var othersLevel: Float = 0
     /// 音が入っていないときの注意
     @Published private(set) var warnings: [String] = []
+    /// 記録中の会議を、記録のあとにまとめて文字起こしするエンジン（Whisper / Gemini）。nil なら Mac 標準のライブ文字起こし
+    @Published private(set) var batchEngine: TranscriptionEngine?
 
     var onStateChange: ((State) -> Void)?
     var diarizer: SpeakerDiarizer = FluidAudioDiarizer()
@@ -66,7 +68,10 @@ final class MeetingRecorder: ObservableObject {
         volatileOthers = ""
 
         do {
-            try await Permissions.ensureRecordingPermissions()
+            // 文字起こしのエンジンは、記録を始めたときの設定で決める（記録中に設定を変えても混ざらない）
+            let engine = settings.meetingEngine
+            try Self.checkReady(engine)
+            try await Permissions.ensureRecordingPermissions(speechRecognition: engine.isLive)
             var meeting = try MeetingStore.newMeeting()
             meeting.status = .recording
             MinutesTemplateStore.apply(to: &meeting)
@@ -83,7 +88,8 @@ final class MeetingRecorder: ObservableObject {
             guard let tapFormat = tap.format else { throw SystemAudioTapError.unsupportedFormat }
             let others = ChannelTranscriber(
                 channel: .others, inputFormat: tapFormat,
-                fileURL: MeetingStore.audioURL(for: meeting, channel: .others), meetingStart: meeting.startedAt)
+                fileURL: MeetingStore.audioURL(for: meeting, channel: .others), meetingStart: meeting.startedAt,
+                live: engine.isLive)
 
             // マイク（自分）。エンジンは録音にもそのまま使う（ノードはエンジンを保持しないので、
             // エンジンを変数に持たないまま inputNode に触ると解放済みのメモリを読んで落ちる）
@@ -92,7 +98,8 @@ final class MeetingRecorder: ObservableObject {
             guard micFormat.sampleRate > 0 else { throw SpeechRecognizerError.noInputDevice }
             let me = ChannelTranscriber(
                 channel: .me, inputFormat: micFormat,
-                fileURL: MeetingStore.audioURL(for: meeting, channel: .me), meetingStart: meeting.startedAt)
+                fileURL: MeetingStore.audioURL(for: meeting, channel: .me), meetingStart: meeting.startedAt,
+                live: engine.isLive)
 
             for transcriber in [me, others] {
                 transcriber.onPhrase = { [weak self] phrase in self?.receive(phrase) }
@@ -111,6 +118,7 @@ final class MeetingRecorder: ObservableObject {
             othersTranscriber = others
             try startMic(for: me, engine: micEngine)
 
+            batchEngine = engine.isLive ? nil : engine
             recordingStartedAt = Date()
             startLevelTimer()
             setState(.recording)
@@ -143,21 +151,76 @@ final class MeetingRecorder: ObservableObject {
         await teardownAudio()
         async let mePhrases = me.finish()
         async let otherPhrases = others.finish()
-        let (mine, theirs) = await (mePhrases, otherPhrases)
+        var (mine, theirs) = await (mePhrases, otherPhrases)
         meTranscriber = nil
         othersTranscriber = nil
 
         meeting.duration = Date().timeIntervalSince(meeting.startedAt)
         meeting.status = .processing
         current = meeting
-        meeting = await process(meeting, me: mine, others: theirs)
+        var transcriptionFailed = false
+        if let engine = batchEngine {
+            // Whisper / Gemini: 書き出した音声ファイルから、チャンネルごとに時刻つきで文字起こしする
+            try? MeetingStore.save(meeting)
+            let result = await transcribeRecordedAudio(
+                meeting, engine: engine, offsets: [.me: me.audioStartOffset, .others: others.audioStartOffset])
+            (mine, theirs) = (result.me, result.others)
+            if let error = result.error {
+                meeting.errorMessage = error
+                transcriptionFailed = true
+            }
+        }
+        // 文字起こしに失敗したときは、音声を残さない設定でも消さない（あとで文字起こしし直せるように）
+        meeting = await process(meeting, me: mine, others: theirs, keepAudio: transcriptionFailed)
+        batchEngine = nil
         current = nil
         reloadMeetings()
         setState(.idle)
     }
 
+    /// Whisper / Gemini を選んでいるときに、記録を始められるかを確かめる
+    static func checkReady(_ engine: TranscriptionEngine) throws {
+        switch engine {
+        case .apple:
+            break
+        case .whisper:
+            let model = AppSettings.shared.whisperModel
+            guard WhisperModelStore.isDownloaded(model) else {
+                WhisperModelStore.shared.ensureDownloaded(model)
+                throw BatchTranscriptionError.whisperModelMissing(model)
+            }
+        case .gemini:
+            guard try GeminiTranscriber.auth(settings: AppSettings.shared) != nil else { throw BatchTranscriptionError.noCredentials }
+        }
+    }
+
+    /// 記録した音声ファイル（me.m4a / others.m4a）を、Whisper / Gemini で文字起こしする。CLI の動作確認からも使う。
+    /// - Parameter offsets: チャンネルごとの、音声ファイルの先頭が録音開始から何秒後か
+    /// - Returns: 失敗したチャンネルがあれば error にその説明が入る（できたチャンネルの結果は返す）
+    func transcribeRecordedAudio(_ meeting: Meeting, engine: TranscriptionEngine, offsets: [MeetingChannel: Double])
+        async -> (me: [TranscribedPhrase], others: [TranscribedPhrase], error: String?)
+    {
+        var phrases: [MeetingChannel: [TranscribedPhrase]] = [:]
+        var errors: [String] = []
+        for channel in [MeetingChannel.me, .others] {
+            do {
+                phrases[channel] = try await MeetingBatchTranscription.transcribe(
+                    audioURL: MeetingStore.audioURL(for: meeting, channel: channel), channel: channel,
+                    offset: offsets[channel] ?? 0, engine: engine, settings: settings,
+                    progress: { [weak self] message in self?.setState(.processing(message)) })
+            } catch {
+                appLog.error("meeting batch transcription failed (\(channel.rawValue, privacy: .public)): \(String(describing: error), privacy: .public)")
+                errors.append("\(channel == .me ? "自分" : "相手")の音声: \(error.localizedDescription)")
+            }
+        }
+        let error = errors.isEmpty ? nil : "\(engine.shortName) で文字起こしできなかった部分があります（音声ファイルは残しています）。" + errors.joined(separator: " / ")
+        return (phrases[.me] ?? [], phrases[.others] ?? [], error)
+    }
+
     /// 後処理（話者分離 → 並べ替え → 議事録 → 保存）。CLI の動作確認からも使う。
-    func process(_ meeting: Meeting, me mine: [TranscribedPhrase], others theirs: [TranscribedPhrase]) async -> Meeting {
+    /// 音声を残さない設定のときは、最後（話者分離と文字起こしのあと）に音声ファイルを消す。keepAudio なら消さない
+    func process(_ meeting: Meeting, me mine: [TranscribedPhrase], others theirs: [TranscribedPhrase],
+                 keepAudio: Bool = false) async -> Meeting {
         var meeting = meeting
         var turns: [SpeakerTurn] = []
         let othersAudio = MeetingStore.audioURL(for: meeting, channel: .others)
@@ -197,13 +260,14 @@ final class MeetingRecorder: ObservableObject {
                 meeting.minutes = result.markdown
                 meeting.actionItems = result.actionItems
             } catch {
-                meeting.errorMessage = "議事録を作れませんでした: \(error.localizedDescription)"
+                let message = "議事録を作れませんでした: \(error.localizedDescription)"
+                meeting.errorMessage = meeting.errorMessage.map { $0 + "\n" + message } ?? message
                 appLog.error("minutes failed: \(error.localizedDescription, privacy: .public)")
             }
         }
 
         meeting.status = .done
-        if !settings.keepMeetingAudio {
+        if !settings.keepMeetingAudio, !keepAudio {
             for channel in [MeetingChannel.me, .others] {
                 try? FileManager.default.removeItem(at: MeetingStore.audioURL(for: meeting, channel: channel))
             }

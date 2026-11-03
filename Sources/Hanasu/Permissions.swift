@@ -30,7 +30,8 @@ enum Permissions {
     }
 
     /// 録音に必要な権限（マイク・音声認識）を、未決定なら尋ね、拒否されていればエラーにする。
-    static func ensureRecordingPermissions() async throws {
+    /// Whisper / Gemini で文字起こしするときは、音声認識の権限は要らない（speechRecognition: false）
+    static func ensureRecordingPermissions(speechRecognition: Bool = true) async throws {
         switch microphoneStatus {
         case .authorized: break
         case .notDetermined:
@@ -38,6 +39,7 @@ enum Permissions {
         default:
             throw PermissionError.microphoneDenied
         }
+        guard speechRecognition else { return }
 
         switch speechStatus {
         case .authorized: break

@@ -179,6 +179,13 @@ struct LiveTranscriptView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 10) {
+                        if let engine = recorder.batchEngine {
+                            // Whisper / Gemini では、記録中は文字起こししない
+                            Label("文字起こしは、記録を止めたあとに \(engine.shortName) で行います。記録中はここに文字が出ません。",
+                                  systemImage: "waveform")
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                        }
                         ForEach(recorder.liveLines) { line in
                             TranscriptLine(time: line.start, speaker: line.channel == .me ? "自分" : "相手",
                                            color: line.channel == .me ? .accentColor : .orange, text: line.text)
