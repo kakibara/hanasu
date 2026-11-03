@@ -110,8 +110,8 @@ HotKeyService（RegisterHotKey + 離したかの見張り）
 
 #### 貼り付けられないとき（REQ-DIC-080・081）
 
-- Ctrl+V を送る直前に、`FocusProbe` が前面のウインドウのクラス名・`GetGUIThreadInfo`（`hwndFocus`・`hwndCaret`）・UI Automation の `FocusedElement`（ControlType・`ValuePattern.IsReadOnly`）を集め、Core の `PasteTargetJudge.Judge` が貼るかを決める。貼らないのは、前面のウインドウがない・デスクトップ・タスクバー・前面のスレッドにフォーカスがない・読み取り専用の入力欄・エクスプローラーのファイルの一覧、と分かったときだけで、分からなければ貼る（ブラウザ・Electron・Excel のセルなど。DEC-DIC-120）。
-- UI Automation はスレッドプールで問い合わせて 400 ms で打ち切る。キャレットがあれば問い合わせない（DEC-DIC-124）。
+- Ctrl+V を送る直前に、`FocusProbe` が前面のウインドウのクラス名・`GetGUIThreadInfo`（`hwndFocus`・`hwndCaret`）・フォーカスのある Win32 の入力欄の `ES_READONLY`・UI Automation の `FocusedElement`（ControlType・`ValuePattern.IsReadOnly`）を集め、Core の `PasteTargetJudge.Judge` が貼るかを決める。貼らないのは、前面のウインドウがない・デスクトップ・タスクバー・前面のスレッドにフォーカスがない・読み取り専用の入力欄・エクスプローラーのファイルの一覧、と分かったときだけで、分からなければ貼る（ブラウザ・Electron・Excel のセルなど。DEC-DIC-120）。
+- UI Automation は、結果で判定が変わりうるとき（デスクトップ・タスクバー・エクスプローラー・フォーカスがない。`PasteTargetJudge.NeedsAutomation`）だけ、スレッドプールで問い合わせて 400 ms で打ち切る。キャレットがあるときも問い合わせない。ブラウザ・Electron で毎回待たず、Chromium のアクセシビリティを有効にさせないため（DEC-DIC-124）。
 - 貼らないとき（権限の高いウインドウ・`SendInput` の失敗・クリップボードを使えない・例外も同じ。DEC-DIC-123）は、`DictationController.ShowUnpasted` が `HudPhase.Unpasted` を出し、`HudWindow` が広がって結果の全文・「コピー」「閉じる」を出す。自動では閉じず、次の音声入力の HUD で消える。文章をクリックしたときだけ前面に出して（選択・Ctrl+C・Esc のため）、閉じるときに入力先だったウインドウにフォーカスを返す（DEC-DIC-121）。
 - クリップボードは `AppSettings.PasteFallbackClipboard` に従う。既定の `KeepResult` は結果を（履歴に残さない印を付けて）入れたままにし、`RestoreOriginal` は初めから触らない（DEC-DIC-122）。
 

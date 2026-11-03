@@ -206,6 +206,7 @@
 - 実装の場所: Mac 版は、Mac 版の PR（feature/paste-fallback-mac）で書く
 - Windows の実装: `windows/Hanasu.Core/Dictation/PasteTarget.cs`（判定）、`windows/Hanasu.Windows/Services/FocusProbe.cs`（Win32 と UI Automation から集める）、`windows/Hanasu.Windows/Services/ClipboardTextInserter.cs`、`windows/Hanasu.Core/Dictation/DictationController.cs`（`ShowUnpasted`）、`windows/Hanasu.Windows/Views/HudWindow.xaml.cs`（表示）
 - 確かめ方: Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~PasteTarget|FullyQualifiedName~Unpasted"`（判定・表示の文言・流れ）。表示とフォーカスの動きは実機で確かめる
+- 食い違い（ユーザーの確認待ち）: Windows で「読み取り専用の入力欄」として見分けるのは、Win32 の `Edit`・`RichEdit*`（`ES_READONLY`）と、デスクトップ・タスクバー・エクスプローラーの上の欄だけ（DEC-DIC-124）。ふつうのアプリの WPF・ストアアプリの読み取り専用の欄では、UI Automation に問い合わせずに貼り付けを試す（入らないが「最近の結果」には残る）。この範囲でよいか。
 
 ### REQ-DIC-081 入力できる場所がないときのクリップボードの扱いを、設定で選べる
 - 内容: REQ-DIC-080 のとき、クリップボードを元に戻して表示からコピーするか、結果をクリップボードに入れたままにしてペーストだけで済むようにするかを、設定で選べる。
@@ -888,9 +889,9 @@
 - 実装の場所: `windows/Hanasu.Core/Dictation/DictationText.cs`、`windows/Hanasu.Windows/TrayIcon.cs`
 
 ### DEC-DIC-120 Windows 版は、Win32 の前面とフォーカスを主に見て、分からなければ貼り付ける
-- 決めたこと: Ctrl+V を送る直前に、前面のウインドウのクラス名と、そのスレッドの `GetGUIThreadInfo`（`hwndFocus`・`hwndCaret`）、UI Automation の `FocusedElement` の ControlType と `ValuePattern.IsReadOnly` を集め、Core の `PasteTargetJudge.Judge`（純粋な関数）で決める。上から順に:
+- 決めたこと: Ctrl+V を送る直前に、前面のウインドウのクラス名と、そのスレッドの `GetGUIThreadInfo`（`hwndFocus`・`hwndCaret`）、フォーカスのある Win32 の入力欄（`Edit`・`RichEdit*`）の読み取り専用のスタイル（`ES_READONLY`）、UI Automation の `FocusedElement` の ControlType と `ValuePattern.IsReadOnly`（DEC-DIC-124 のときだけ）を集め、Core の `PasteTargetJudge.Judge`（純粋な関数）で決める。上から順に:
   1. 前面のウインドウがない → 貼らない
-  2. フォーカスが読み取り専用の Edit → 貼らない
+  2. フォーカスが読み取り専用の Edit（Win32 の `ES_READONLY`。キャレットがあっても）→ 貼らない
   3. フォーカスが Edit・Document か、システムのキャレットがある → 貼る（デスクトップの上のアイコンの名前の変更も貼る）
   4. 前面がデスクトップ（`Progman`・`WorkerW`）かタスクバー（`Shell_TrayWnd`・`Shell_SecondaryTrayWnd`）→ 貼らない。エクスプローラー（`CabinetWClass`）は、UI Automation で入力欄でない（ファイルの一覧など）と分かったときだけ貼らない
   5. 前面のスレッドに `hwndFocus` がない → 貼らない。ただしストアアプリ（`ApplicationFrameWindow`・`Windows.UI.Core.CoreWindow`）は、フォーカスが別のスレッドにあるので除く
@@ -925,13 +926,13 @@
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/Dictation/DictationController.cs`（`ShowUnpasted`）、`windows/Hanasu.Core/Dictation/Hud.cs`
 
-### DEC-DIC-124 Windows 版は、UI Automation の問い合わせを 400 ms で打ち切り、キャレットがあれば問い合わせない
-- 決めたこと: UI Automation の `FocusedElement` は、スレッドプールで問い合わせて 400 ms で打ち切る（打ち切ったら「分からない」）。`GetGUIThreadInfo` でシステムのキャレットが見つかったときは、問い合わせずに貼る。
-- 理由: UI Automation はほかのプロセスに問い合わせるので、応答しないアプリがあると貼り付けが止まる。Hanasu 自身のウインドウにフォーカスがあるときに UI スレッドで待つと、問い合わせが UI スレッドに戻れず止まるので、UI スレッドは await で空けておく。キャレットのある、ふつうの Win32 の入力欄では待ち時間を増やさない。
+### DEC-DIC-124 Windows 版は、UI Automation を判定が変わりうるときだけ問い合わせ、400 ms で打ち切る
+- 決めたこと: UI Automation の `FocusedElement` は、結果で判定が「貼る」から変わりうるとき（前面がデスクトップ・タスクバー・エクスプローラー、または前面のスレッドにフォーカスがない。`PasteTargetJudge.NeedsAutomation`）だけ問い合わせる。スレッドプールで問い合わせて 400 ms で打ち切る（打ち切ったら「分からない」）。`GetGUIThreadInfo` でシステムのキャレットが見つかったときも、問い合わせずに貼る。読み取り専用の入力欄は、Win32 の `Edit`・`RichEdit*` だけをスタイル（`ES_READONLY`）で見る。
+- 理由: UI Automation はほかのプロセスに問い合わせるので、応答しないアプリがあると貼り付けが止まる。Hanasu 自身のウインドウにフォーカスがあるときに UI スレッドで待つと、問い合わせが UI スレッドに戻れず止まるので、UI スレッドは await で空けておく。Chrome・Edge・Electron（Slack・Teams・VS Code）はアクセシビリティが無効だとシステムのキャレットを作らないので、毎回の音声入力で最大 400 ms 待つことになり、問い合わせそのものが Chromium のアクセシビリティを有効にして CPU とメモリを増やすおそれもある。これらでは UI Automation が何を返しても貼る（DEC-DIC-120 の 6）ので、問い合わせない。代わりに、ほかのアプリの読み取り専用の入力欄は WPF・ストアアプリのものを見分けられない（貼っても入らないが、「最近の結果」には残る）。PR のレビューで直した。
 - 決めた場面: 入力できる場所がないときに結果を画面に残す PR（Windows 版）
 - 関係する要件: REQ-DIC-080
 - 対象: Windows
-- 実装の場所: `windows/Hanasu.Windows/Services/FocusProbe.cs`
+- 実装の場所: `windows/Hanasu.Windows/Services/FocusProbe.cs`、`PasteTargetJudge.NeedsAutomation`・`IsWin32EditClass`（`windows/Hanasu.Core/Dictation/PasteTarget.cs`）
 
 ---
 

@@ -14,6 +14,9 @@ internal static partial class NativeMethods
     public const uint MOD_NOREPEAT = 0x4000;
 
     public const int GWL_EXSTYLE = -20;
+    public const int GWL_STYLE = -16;
+    /// <summary>Edit・RichEdit の読み取り専用のスタイル</summary>
+    public const int ES_READONLY = 0x0800;
     public const int WS_EX_TRANSPARENT = 0x00000020;
     public const int WS_EX_TOOLWINDOW = 0x00000080;
     public const int WS_EX_TOPMOST = 0x00000008;

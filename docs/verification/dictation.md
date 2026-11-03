@@ -184,5 +184,5 @@ Claude の API キーがないので、本物の Claude での整形・英訳・
 
 Windows の実機がないので、画面とフォーカスの動きはまだ確かめていない。Mac の上で確かめたこと:
 
-- `dotnet test Hanasu.Core.Tests`: 200 件すべて通った。貼り付け先の判定（`PasteTargetTests`。デスクトップ・タスクバー・フォーカスなし・読み取り専用・エクスプローラーの一覧は貼らない。デスクトップの名前の変更・キャレットあり・ストアアプリ・ブラウザ・Excel のセル・何も分からないときは貼る）、貼らなかったときの流れ（全文を `HudPhase.Unpasted` で残す・自動では閉じない・設定が入力に渡る・権限の高いウインドウと例外も同じ表示・次の音声入力で置き換わる・「最近の結果」に残る）、設定の保存（`pasteFallbackClipboard`、項目のない前の版の settings.json は既定値）。
+- `dotnet test Hanasu.Core.Tests`: 200 件すべて通った（レビューで UI Automation を問い合わせる場面の絞り込みと Win32 の読み取り専用の Edit を足し、217 件）。貼り付け先の判定（`PasteTargetTests`。デスクトップ・タスクバー・フォーカスなし・読み取り専用・エクスプローラーの一覧は貼らない。デスクトップの名前の変更・キャレットあり・ストアアプリ・ブラウザ・Excel のセル・何も分からないときは貼る）、貼らなかったときの流れ（全文を `HudPhase.Unpasted` で残す・自動では閉じない・設定が入力に渡る・権限の高いウインドウと例外も同じ表示・次の音声入力で置き換わる・「最近の結果」に残る）、設定の保存（`pasteFallbackClipboard`、項目のない前の版の settings.json は既定値）。
 - `dotnet build Hanasu.Windows.sln -c Release`（警告 0）と `dotnet publish … -r win-x64 --self-contained -p:PublishSingleFile=true`（`Hanasu.exe` 約 82 MB と、今までと同じ DLL・ライセンスの表示）が通った。UI Automation（`UIAutomationClient`）は .NET の Windows デスクトップのランタイムに入っているので、依存パッケージは増えていない。

@@ -80,6 +80,57 @@ public class PasteTargetTests
         Assert.True(Judge(new FocusSnapshot(true, "Notepad", true, HasCaret: true)).CanPaste);
     }
 
+    [Theory]
+    [InlineData("Progman", true, true)]
+    [InlineData("WorkerW", true, true)]
+    [InlineData("Shell_TrayWnd", true, true)]
+    [InlineData("CabinetWClass", true, true)]
+    [InlineData("Notepad", false, true)]
+    [InlineData("ApplicationFrameWindow", false, true)]
+    [InlineData("Chrome_WidgetWin_1", true, false)]
+    [InlineData("XLMAIN", true, false)]
+    [InlineData("CASCADIA_HOSTING_WINDOW_CLASS", true, false)]
+    [InlineData("Chrome_WidgetWin_1", null, false)]
+    public void AutomationIsQueriedOnlyWhenItCanChangeTheDecision(string className, bool? hasFocusWindow, bool expected)
+    {
+        Assert.Equal(expected, PasteTargetJudge.NeedsAutomation(className, hasFocusWindow));
+    }
+
+    [Fact]
+    public void WhenAutomationIsSkippedTheDecisionIsAlwaysPaste()
+    {
+        // NeedsAutomation が false のとき、UI Automation の結果（Edit / Document / Other / 分からない）がどれでも貼る。
+        // 読み取り専用の Edit だけは別（FocusProbe が Win32 のスタイルで見て渡す）
+        foreach (var cls in new[] { "Chrome_WidgetWin_1", "XLMAIN", "Notepad" })
+        {
+            Assert.False(PasteTargetJudge.NeedsAutomation(cls, true));
+            foreach (var control in Enum.GetValues<FocusedControlKind>())
+            {
+                Assert.True(Judge(new FocusSnapshot(true, cls, true, false, control)).CanPaste);
+            }
+        }
+    }
+
+    [Theory]
+    [InlineData("Edit", true)]
+    [InlineData("RichEdit20W", true)]
+    [InlineData("RICHEDIT50W", true)]
+    [InlineData("Chrome_RenderWidgetHostHWND", false)]
+    [InlineData("Scintilla", false)]
+    public void Win32EditClasses(string className, bool expected)
+    {
+        Assert.Equal(expected, PasteTargetJudge.IsWin32EditClass(className));
+    }
+
+    [Fact]
+    public void ReadOnlyWin32EditWithCaretIsNoTarget()
+    {
+        // FocusProbe は ES_READONLY の Edit を、キャレットがあっても読み取り専用の Edit として渡す
+        var d = Judge(new FocusSnapshot(true, "#32770", true, HasCaret: true, FocusedControl: FocusedControlKind.Edit, IsReadOnly: true));
+        Assert.False(d.CanPaste);
+        Assert.Equal(NotPastedReason.ReadOnly, d.Reason);
+    }
+
     [Fact]
     public void FileExplorerListIsNoTargetButItsAddressBarIsPasted()
     {

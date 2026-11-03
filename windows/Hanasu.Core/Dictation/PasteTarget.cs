@@ -90,6 +90,24 @@ public static class PasteTargetJudge
         "ApplicationFrameWindow", "Windows.UI.Core.CoreWindow",
     };
 
+    // 設計判断: DEC-DIC-124
+    /// <summary>
+    /// UI Automation の結果で、判定が「貼る」から変わりうるか。デスクトップ・タスクバー・エクスプローラーが前面のとき（入力欄なら貼る・そうでなければ貼らない）と、
+    /// 前面のスレッドにフォーカスがないとき（ストアアプリなどで入力欄が見つかれば貼る）だけ。それ以外は Judge が何を受け取っても貼るので、問い合わせない
+    /// （読み取り専用の Win32 の入力欄は FocusProbe が ES_READONLY で見る）
+    /// </summary>
+    public static bool NeedsAutomation(string? foregroundClass, bool? hasFocusWindow)
+    {
+        if (hasFocusWindow == false) return true;
+        return foregroundClass is { } c
+            && (DesktopClasses.Contains(c) || TaskbarClasses.Contains(c) || FileExplorerClasses.Contains(c));
+    }
+
+    /// <summary>ES_READONLY のスタイルで読み取り専用かが分かる、Win32 の入力欄のクラス（Edit・RichEdit20W・RICHEDIT50W など）</summary>
+    public static bool IsWin32EditClass(string className) =>
+        className.Equals("Edit", StringComparison.OrdinalIgnoreCase)
+        || className.StartsWith("RichEdit", StringComparison.OrdinalIgnoreCase);
+
     public static PasteTargetDecision Judge(FocusSnapshot s)
     {
         // 1. 前面にウインドウがない（すべて最小化した直後 など）
