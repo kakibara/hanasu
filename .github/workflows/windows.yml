@@ -32,8 +32,10 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
+      # 設計判断: DEC-COM-150
+      # packages.lock.json と食い違えば失敗させる（Directory.Build.props も CI=true で locked mode にする）
       - name: Restore
-        run: dotnet restore Hanasu.Windows.sln
+        run: dotnet restore Hanasu.Windows.sln --locked-mode
 
       - name: Build
         run: dotnet build Hanasu.Windows.sln -c Release --no-restore
@@ -68,10 +70,17 @@ jobs:
 
       - name: Zip
         shell: pwsh
-        run: Compress-Archive -Path publish/win-x64/* -DestinationPath publish/Hanasu-windows-x64.zip
+        run: |
+          Compress-Archive -Path publish/win-x64/* -DestinationPath publish/Hanasu-windows-x64.zip
+          # 配る zip の SHA-256 を残す（ダウンロードした人が確かめられるように）
+          $hash = (Get-FileHash publish/Hanasu-windows-x64.zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  Hanasu-windows-x64.zip" | Out-File -Encoding ascii publish/Hanasu-windows-x64.zip.sha256
+          Write-Output "SHA-256: $hash"
 
       - uses: actions/upload-artifact@v4
         with:
           name: Hanasu-windows-x64
-          path: windows/publish/Hanasu-windows-x64.zip
+          path: |
+            windows/publish/Hanasu-windows-x64.zip
+            windows/publish/Hanasu-windows-x64.zip.sha256
           if-no-files-found: error

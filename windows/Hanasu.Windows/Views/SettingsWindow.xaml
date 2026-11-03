@@ -114,7 +114,7 @@
                         <!-- Gemini -->
                         <StackPanel x:Name="GeminiEnginePanel" Margin="0,6,0,0">
                             <TextBlock Style="{StaticResource Note}" Foreground="#FFB06000"
-                                       Text="録音した音声を Google の Gemini API（Gemini タブで設定した認証とモデル）に送って文字起こしします。音声が Google に送られることに注意してください。録音を止めてからまとめて送ります（1 回 7 分まで）。" />
+                                       Text="録音した音声を Google の Gemini API（AI タブで設定した Gemini の認証と、音声入力の Gemini のモデル）に送って文字起こしします。音声が Google に送られることに注意してください。録音を止めてからまとめて送ります（1 回 7 分まで）。" />
                         </StackPanel>
 
                         <TextBlock Style="{StaticResource Section}" Text="マイク" />
@@ -131,14 +131,49 @@
                 </ScrollViewer>
             </TabItem>
 
-            <!-- Gemini -->
-            <TabItem Header="Gemini">
+            <!-- AI（文章の処理。音声入力と会議で別々に選ぶ） -->
+            <TabItem Header="AI">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="14,4,14,14">
-                        <CheckBox x:Name="RefineCheck" Margin="0,12,0,0" Content="Gemini で整形する（誤変換・フィラー・言い直し・句読点を直す）" Checked="OnRefineChanged" Unchecked="OnRefineChanged" />
-                        <TextBlock Style="{StaticResource Note}" Text="オフにすると、認識結果に辞書の置き換えだけを当てて入力します。英訳は Gemini でしかできないので、オフでも Gemini に送ります。" />
+                        <TextBlock Style="{StaticResource Section}" Text="使う AI とモデル" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="110" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="音声入力（整形・英訳）" VerticalAlignment="Center" />
+                            <ComboBox x:Name="DictationAiCombo" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" SelectionChanged="OnDictationAiChanged">
+                                <ComboBoxItem Content="Gemini" Tag="Gemini" />
+                                <ComboBoxItem Content="Claude" Tag="Claude" />
+                            </ComboBox>
+                            <Grid Grid.Row="0" Grid.Column="2" Margin="0,2,0,2">
+                                <ComboBox x:Name="ModelCombo" IsEditable="True" LostFocus="OnModelChanged" SelectionChanged="OnModelSelectionChanged" />
+                                <ComboBox x:Name="ClaudeModelCombo" SelectionChanged="OnClaudeModelChanged" />
+                            </Grid>
+                            <TextBlock Grid.Row="1" Text="会議（議事録）" VerticalAlignment="Center" />
+                            <ComboBox x:Name="MeetingAiCombo" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" SelectionChanged="OnMeetingAiChanged">
+                                <ComboBoxItem Content="Gemini" Tag="Gemini" />
+                                <ComboBoxItem Content="Claude" Tag="Claude" />
+                            </ComboBox>
+                            <Grid Grid.Row="1" Grid.Column="2" Margin="0,2,0,2">
+                                <ComboBox x:Name="MinutesModelCombo" IsEditable="True" LostFocus="OnMinutesModelChanged" SelectionChanged="OnMinutesModelSelectionChanged" />
+                                <ComboBox x:Name="ClaudeMinutesModelCombo" SelectionChanged="OnClaudeMinutesModelChanged" />
+                            </Grid>
+                        </Grid>
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="音声入力と会議で、AI とモデルを別々に選べます。Gemini は gemini-3.5-flash-lite（音声入力）と gemini-3.8-flash（議事録）、Claude は Haiku 5.5（音声入力）と Sonnet 5.5（議事録）が既定です。Claude は文章の処理だけに使い、音声の文字起こしには使いません（文字起こしのエンジンは「一般」・「会議」タブ）。" />
+                        <TextBlock x:Name="AiCredentialNote" Style="{StaticResource Error}" Visibility="Collapsed" />
 
-                        <TextBlock Style="{StaticResource Section}" Text="認証" />
+                        <CheckBox x:Name="RefineCheck" Margin="0,12,0,0" Content="AI で整形する（誤変換・フィラー・言い直し・句読点を直す）" Checked="OnRefineChanged" Unchecked="OnRefineChanged" />
+                        <TextBlock Style="{StaticResource Note}" Text="オフにすると、認識結果に辞書の置き換えだけを当てて入力します。英訳は AI でしかできないので、オフでも AI に送ります。" />
+                        <CheckBox x:Name="SendAppNameCheck" Margin="0,8,0,0" Content="入力先のアプリ名を AI に伝える（体裁の参考にする）" Checked="OnSendAppNameChanged" Unchecked="OnSendAppNameChanged" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="Gemini の認証" />
                         <StackPanel Orientation="Horizontal">
                             <RadioButton x:Name="ApiKeyRadio" GroupName="Auth" Content="API キー（Google AI Studio）" Checked="OnAuthModeChanged" />
                             <RadioButton x:Name="ServiceAccountRadio" GroupName="Auth" Content="サービスアカウント（Vertex AI）" Checked="OnAuthModeChanged" />
@@ -152,8 +187,6 @@
                                 <PasswordBox x:Name="ApiKeyBox" Padding="4,3" />
                             </DockPanel>
                             <TextBlock x:Name="ApiKeyStatus" Style="{StaticResource Note}" Margin="110,3,0,0" />
-                            <TextBlock Style="{StaticResource Note}" Margin="110,0,0,0"
-                                       Text="キーは Windows の DPAPI で暗号化して保存します（このユーザーでしか読めません）。" />
                         </StackPanel>
 
                         <StackPanel x:Name="ServiceAccountPanel" Margin="0,8,0,0">
@@ -167,16 +200,28 @@
                                 <TextBox x:Name="VertexLocationBox" Width="160" HorizontalAlignment="Left" Padding="4,3" LostFocus="OnVertexLocationChanged" />
                             </DockPanel>
                             <TextBlock Style="{StaticResource Note}" Margin="110,3,0,0"
-                                       Text="Vertex AI ユーザー（roles/aiplatform.user）の権限があるサービスアカウントの鍵を選びます。リージョンは global が既定です（新しいモデルが先に来るため）。" />
+                                       Text="Vertex AI ユーザー（roles/aiplatform.user）の権限があるサービスアカウントの鍵を選びます。鍵のファイルの場所だけを保存します（中身は写しません）。鍵のファイルはほかの人が読めない場所に置いてください。リージョンは global が既定です。" />
                         </StackPanel>
 
-                        <TextBlock Style="{StaticResource Section}" Text="モデル" />
-                        <ComboBox x:Name="ModelCombo" IsEditable="True" HorizontalAlignment="Left" MinWidth="320" LostFocus="OnModelChanged" SelectionChanged="OnModelSelectionChanged" />
-                        <TextBlock Style="{StaticResource Note}" Text="gemini-3.5-flash-lite が既定（速い）。誤変換が多いときや長文は gemini-3.8-flash。一覧にないモデル ID も入力できます。" />
+                        <TextBlock Style="{StaticResource Section}" Text="Claude の API キー" />
+                        <DockPanel>
+                            <TextBlock Text="API キー" Width="110" VerticalAlignment="Center" />
+                            <Button DockPanel.Dock="Right" Content="削除" Click="OnDeleteClaudeKey" Margin="8,0,0,0" />
+                            <Button DockPanel.Dock="Right" x:Name="ClaudeCheckButton" Content="接続を試す" Click="OnCheckClaude" Margin="8,0,0,0" />
+                            <Button DockPanel.Dock="Right" Content="保存" Click="OnSaveClaudeKey" Margin="8,0,0,0" />
+                            <PasswordBox x:Name="ClaudeKeyBox" Padding="4,3" />
+                        </DockPanel>
+                        <TextBlock x:Name="ClaudeKeyStatus" Style="{StaticResource Note}" Margin="110,3,0,0" />
+                        <TextBlock Style="{StaticResource Note}" Margin="110,0,0,0"
+                                   Text="Claude Console（platform.claude.com）で作った API キーを入れます。保存したキーは画面に出しません（末尾 4 文字だけ）。「接続を試す」はモデルの情報を取るだけで、料金はかかりません。" />
 
-                        <CheckBox x:Name="SendAppNameCheck" Margin="0,12,0,0" Content="入力先のアプリ名を Gemini に伝える（体裁の参考にする）" Checked="OnSendAppNameChanged" Unchecked="OnSendAppNameChanged" />
+                        <TextBlock Style="{StaticResource Section}" Text="API キーの保護" />
+                        <CheckBox x:Name="HelloCheck" Content="API キーを Windows Hello で守る（使うときに PIN・顔・指紋で確認する）" Checked="OnHelloChanged" Unchecked="OnHelloChanged" />
+                        <TextBlock x:Name="HelloStatus" Style="{StaticResource Note}" />
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="キーは %LOCALAPPDATA%\Hanasu\secrets.json に暗号化して置き、settings.json には入れません。既定の DPAPI は、この Windows ユーザーでしか読めませんが、同じユーザーで動くほかのアプリは確認なしに読めます。Windows Hello にすると、ほかのアプリが読もうとしても Windows Hello の確認が出ます（確認は起動してから最初に使うとき 1 回で、画面をロックするとまた求めます）。Hanasu が動いている間に同じユーザーのアプリがメモリを読むことまでは防げません。" />
 
-                        <TextBlock Style="{StaticResource Section}" Text="試す" />
+                        <TextBlock Style="{StaticResource Section}" Text="試す（音声入力の AI）" />
                         <TextBox x:Name="TrialInput" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="56" Padding="4,3"
                                  Text="えーと明日の会議なんですけど あの 資料はジェミニで作ったやつを使います" />
                         <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
@@ -229,12 +274,9 @@
                                    Text="sherpa-onnx（pyannote と 3D-Speaker のモデル）でこの PC の上で分けます。初めて使うときにモデル（約 34 MB）をダウンロードします。オフにすると、相手側は「相手」1 人にまとめます。話者名は会議ノートで付け替えられます。" />
 
                         <TextBlock Style="{StaticResource Section}" Text="議事録" />
-                        <CheckBox x:Name="MakeMinutesCheck" Content="記録のあとに Gemini で議事録を作る" Checked="OnMakeMinutesChanged" Unchecked="OnMakeMinutesChanged" />
-                        <DockPanel Margin="0,6,0,0">
-                            <TextBlock Text="議事録のモデル" Width="110" VerticalAlignment="Center" />
-                            <ComboBox x:Name="MinutesModelCombo" IsEditable="True" HorizontalAlignment="Left" MinWidth="240" LostFocus="OnMinutesModelChanged" SelectionChanged="OnMinutesModelSelectionChanged" />
-                        </DockPanel>
-                        <TextBlock Style="{StaticResource Note}" Text="要約の質を優先して gemini-3.8-flash が既定です。文字起こしのテキストだけを送ります（文字起こしのエンジンが Gemini のときは、音声も送ります）。議事録の型は会議ノートで選びます。" />
+                        <CheckBox x:Name="MakeMinutesCheck" Content="記録のあとに AI で議事録を作る" Checked="OnMakeMinutesChanged" Unchecked="OnMakeMinutesChanged" />
+                        <TextBlock x:Name="MinutesAiNote" Style="{StaticResource Note}" />
+                        <TextBlock Style="{StaticResource Note}" Text="議事録の AI とモデルは「AI」タブの「会議（議事録）」で選びます。文字起こしのテキストだけを送ります（文字起こしのエンジンが Gemini のときは、音声も Google に送ります）。議事録の型は会議ノートで選びます。" />
 
                         <TextBlock Style="{StaticResource Section}" Text="保存" />
                         <CheckBox x:Name="KeepAudioCheck" Content="処理のあとも音声ファイル（me.wav / others.wav）を残す" Checked="OnKeepAudioChanged" Unchecked="OnKeepAudioChanged" />
@@ -268,7 +310,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Style="{StaticResource Section}" Text="ユーザー辞書" />
                     <TextBlock Grid.Row="1" Style="{StaticResource Note}" Margin="0,0,0,6">
-                        1 行に 1 つ。語だけ書くと、Gemini にその表記を伝えます。「読み =&gt; 表記」と書くと、認識結果のその読みを表記に置き換えます（例: ストックマーク =&gt; Stockmark、左は「,」で区切って複数書ける）。「#」で始まる行はメモです。
+                        1 行に 1 つ。語だけ書くと、AI にその表記を伝えます。「読み =&gt; 表記」と書くと、認識結果のその読みを表記に置き換えます（例: ストックマーク =&gt; Stockmark、左は「,」で区切って複数書ける）。「#」で始まる行はメモです。
                     </TextBlock>
                     <TextBox x:Name="DictionaryBox" Grid.Row="2" AcceptsReturn="True" AcceptsTab="False" VerticalScrollBarVisibility="Auto"
                              FontFamily="Consolas, Yu Gothic UI" Padding="4,3" TextChanged="OnDictionaryChanged" />
@@ -282,7 +324,7 @@
                     <TextBlock Grid.Row="6" Style="{StaticResource Section}" Text="追加の整形ルール" />
                     <DockPanel Grid.Row="7">
                         <TextBlock DockPanel.Dock="Top" Style="{StaticResource Note}" Margin="0,0,0,6"
-                                   Text="整形のときに Gemini に渡すルール（例: です・ます調に統一）。英訳では使いません。" />
+                                   Text="整形のときに AI（Gemini・Claude）に渡すルール（例: です・ます調に統一）。英訳では使いません。" />
                         <TextBox x:Name="ExtraInstructionsBox" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Padding="4,3" TextChanged="OnExtraInstructionsChanged" />
                     </DockPanel>
                 </Grid>

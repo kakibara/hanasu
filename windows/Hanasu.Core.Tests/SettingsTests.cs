@@ -78,32 +78,32 @@ public class SettingsTests
     }
 
     [Fact]
-    public void ApiKeyIsStoredProtected()
+    public async Task ApiKeyIsStoredOutsideSettings()
     {
-        var path = Path.Combine(TestKeys.TempDirectory(), "settings.json");
-        var service = new SettingsService(new SettingsStore(path), new ReversingProtector());
-        SettingsChangedEventArgs? changed = null;
-        service.Changed += (_, e) => changed = e;
+        var dir = TestKeys.TempDirectory();
+        var path = Path.Combine(dir, "settings.json");
+        var secrets = TestKeys.Secrets(dir);
+        var service = new SettingsService(new SettingsStore(path), secrets);
 
-        service.SetApiKey("  AIza-secret  ");
+        await secrets.SetAsync(SecretKind.GeminiApiKey, "  AIza-secret-0123456789  ");
+        service.Update(s => s.Model = "gemini-3.8-flash");
         Assert.DoesNotContain("AIza-secret", File.ReadAllText(path));
-        Assert.Equal("AIza-secret", service.LoadApiKey());
-        Assert.NotNull(changed);
-        Assert.Equal("", changed!.Before.ProtectedApiKey);
+        Assert.DoesNotContain("AIza-secret", File.ReadAllText(secrets.Path));
+        Assert.Equal("AIza-secret-0123456789", await secrets.GetAsync(SecretKind.GeminiApiKey));
 
-        var auth = GeminiAuthResolver.Resolve(service.Current, service.Protector);
-        Assert.Equal("AIza-secret", Assert.IsType<GeminiAuth.ApiKey>(auth).Key);
+        var auth = GeminiAuthResolver.Resolve(service.Current, secrets);
+        Assert.IsType<GeminiAuth.StoredApiKey>(auth);
         Assert.DoesNotContain("AIza", auth!.ToString());
 
-        service.SetApiKey("");
-        Assert.Null(service.LoadApiKey());
-        Assert.Null(GeminiAuthResolver.Resolve(service.Current, service.Protector));
+        await secrets.SetAsync(SecretKind.GeminiApiKey, "");
+        Assert.Null(await secrets.GetAsync(SecretKind.GeminiApiKey));
+        Assert.Null(GeminiAuthResolver.Resolve(service.Current, secrets));
     }
 
     [Fact]
     public void CurrentIsACopy()
     {
-        var service = new SettingsService(new SettingsStore(Path.Combine(TestKeys.TempDirectory(), "s.json")), new ReversingProtector());
+        var service = new SettingsService(new SettingsStore(Path.Combine(TestKeys.TempDirectory(), "s.json")), TestKeys.Secrets());
         var copy = service.Current;
         copy.Model = "changed";
         Assert.NotEqual("changed", service.Current.Model);
@@ -115,9 +115,9 @@ public class SettingsTests
     public void ServiceAccountModeNeedsAPath()
     {
         var s = new AppSettings { AuthMode = GeminiAuthMode.ServiceAccount, ServiceAccountPath = "" };
-        Assert.Null(GeminiAuthResolver.Resolve(s, new ReversingProtector()));
+        Assert.Null(GeminiAuthResolver.Resolve(s, TestKeys.Secrets()));
         s.ServiceAccountPath = Path.Combine(TestKeys.TempDirectory(), "missing.json");
-        Assert.Throws<ServiceAccountException>(() => GeminiAuthResolver.Resolve(s, new ReversingProtector()));
+        Assert.Throws<ServiceAccountException>(() => GeminiAuthResolver.Resolve(s, TestKeys.Secrets()));
     }
 }
 

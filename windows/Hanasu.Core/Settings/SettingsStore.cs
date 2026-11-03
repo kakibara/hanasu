@@ -21,14 +21,6 @@ public static class HanasuPaths
     public static string ModelsDirectory => Path.Combine(LocalDataDirectory, "Models");
 }
 
-/// <summary>秘密の値（API キー）を守って保存するための暗号化。Windows では DPAPI（CurrentUser）を使う。</summary>
-public interface ISecretProtector
-{
-    string Protect(string plaintext);
-    /// <summary>復号できなければ null</summary>
-    string? Unprotect(string protectedText);
-}
-
 /// <summary>設定を JSON で読み書きする。</summary>
 public sealed class SettingsStore
 {
@@ -122,6 +114,11 @@ public sealed class SettingsStore
         s.WhisperModel = Transcription.WhisperModelCatalog.Find(s.WhisperModel)?.Id ?? "small";
         if (string.IsNullOrWhiteSpace(s.LocaleIdentifier)) s.LocaleIdentifier = "ja-JP";
         s.ProtectedApiKey ??= "";
+        // 一覧にない Claude のモデルは既定（音声入力は Haiku 5.5、議事録は Sonnet 5.5）に戻す
+        s.ClaudeModel = Claude.ClaudeModels.Normalize(s.ClaudeModel);
+        s.ClaudeMinutesModel = Claude.ClaudeModels.Normalize(s.ClaudeMinutesModel, Claude.ClaudeModels.DefaultMinutesModel);
+        if (!Enum.IsDefined(s.DictationAi)) s.DictationAi = TextAiProvider.Gemini;
+        if (!Enum.IsDefined(s.MeetingAi)) s.MeetingAi = TextAiProvider.Gemini;
         s.ServiceAccountPath ??= "";
         // ターミナルから起動した場合などは、環境変数のサービスアカウントを初期値にする（Mac 版と同じ）
         if (s.ServiceAccountPath.Length == 0 && Environment.GetEnvironmentVariable("GEMINI_SERVICE_ACCOUNT_JSON") is { Length: > 0 } envPath)
@@ -147,13 +144,34 @@ public sealed class SettingsService
 
     public event EventHandler<SettingsChangedEventArgs>? Changed;
 
-    public ISecretProtector Protector { get; }
+    /// <summary>API キー（settings.json には入れない）</summary>
+    public SecretStore Secrets { get; }
 
-    public SettingsService(SettingsStore store, ISecretProtector protector)
+    public SettingsService(SettingsStore store, SecretStore secrets)
     {
         this.store = store;
-        Protector = protector;
+        Secrets = secrets;
         current = store.Load();
+        MigrateSecrets();
+    }
+
+    /// <summary>
+    /// PR #19 までの settings.json の Gemini の API キーを secrets.json に移す（復号せずにそのまま移すので、読めなくならない）。
+    /// secrets.json に書けたときだけ settings.json から消す
+    /// </summary>
+    // 設計判断: DEC-COM-144
+    private void MigrateSecrets()
+    {
+        var legacy = current.ProtectedApiKey;
+        if (legacy.Length == 0) return;
+        try
+        {
+            if (Secrets.MigrateLegacy(legacy)) Update(s => s.ProtectedApiKey = "");
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            // 移せなければ、次に起動したときにもう一度試す（settings.json の値は残す）
+        }
     }
 
     /// <summary>今の設定の写し（書き換えても保存されない）</summary>
@@ -177,20 +195,6 @@ public sealed class SettingsService
         try { store.Save(after); } catch (Exception e) when (e is IOException or UnauthorizedAccessException) { error = e; }
         Changed?.Invoke(this, new SettingsChangedEventArgs(before, after.Clone()));
         return error;
-    }
-
-    /// <summary>API キーを暗号化して保存する。空なら消す</summary>
-    public Exception? SetApiKey(string? apiKey)
-    {
-        var trimmed = apiKey?.Trim() ?? "";
-        var protectedText = trimmed.Length == 0 ? "" : Protector.Protect(trimmed);
-        return Update(s => s.ProtectedApiKey = protectedText);
-    }
-
-    public string? LoadApiKey()
-    {
-        var protectedText = Current.ProtectedApiKey;
-        return protectedText.Length == 0 ? null : Protector.Unprotect(protectedText);
     }
 }
 

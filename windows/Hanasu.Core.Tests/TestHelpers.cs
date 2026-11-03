@@ -25,12 +25,59 @@ internal sealed class FakeHandler(Func<HttpRequestMessage, string?, HttpResponse
         $$"""{"candidates":[{"content":{"parts":[{"text":{{System.Text.Json.JsonSerializer.Serialize(text)}}}]},"finishReason":"STOP"}]}""";
 }
 
-/// <summary>テスト用の暗号化（逆さにするだけ）</summary>
-internal sealed class ReversingProtector : ISecretProtector
+/// <summary>
+/// テスト用の DPAPI。エントロピーと「ユーザー」を混ぜて XOR するだけ（違うエントロピー・違うユーザーでは読めない）
+/// </summary>
+internal sealed class FakeDpapi(string user = "alice") : IDataProtector
 {
-    public string Protect(string plaintext) => "p:" + new string(plaintext.Reverse().ToArray());
-    public string? Unprotect(string protectedText) =>
-        protectedText.StartsWith("p:") ? new string(protectedText[2..].Reverse().ToArray()) : null;
+    private static readonly byte[] Magic = "DPAPI"u8.ToArray();
+
+    public byte[] Protect(byte[] data, byte[] entropy)
+    {
+        var pad = Pad(entropy, data.Length);
+        return Magic.Concat(SHA256.HashData(entropy.Concat(Encoding.UTF8.GetBytes(user)).ToArray()).Take(4))
+            .Concat(data.Select((b, i) => (byte)(b ^ pad[i]))).ToArray();
+    }
+
+    public byte[]? Unprotect(byte[] data, byte[] entropy)
+    {
+        if (data.Length < 9 || !data.AsSpan(0, 5).SequenceEqual(Magic)) return null;
+        var check = SHA256.HashData(entropy.Concat(Encoding.UTF8.GetBytes(user)).ToArray()).Take(4).ToArray();
+        if (!data.AsSpan(5, 4).SequenceEqual(check)) return null;
+        var body = data[9..];
+        var pad = Pad(entropy, body.Length);
+        return body.Select((b, i) => (byte)(b ^ pad[i])).ToArray();
+    }
+
+    private byte[] Pad(byte[] entropy, int length)
+    {
+        var seed = SHA256.HashData(entropy.Concat(Encoding.UTF8.GetBytes(user)).ToArray());
+        return Enumerable.Range(0, length).Select(i => seed[i % seed.Length]).ToArray();
+    }
+}
+
+/// <summary>テスト用の Windows Hello。確認の回数を数える。deterministic が false なら、毎回違う鍵を返す（壊れた実装のまね）</summary>
+internal sealed class FakePresenceKey : IUserPresenceKey
+{
+    private byte[]? key;
+    public bool Available { get; set; } = true;
+    public bool Deterministic { get; set; } = true;
+    public bool Refuse { get; set; }
+    public int Prompts { get; private set; }
+
+    public Task<bool> IsAvailableAsync() => Task.FromResult(Available);
+
+    public Task<byte[]> DeriveKeyAsync(bool create, CancellationToken cancellationToken)
+    {
+        Prompts++;
+        if (Refuse) throw new SecretAccessException("Windows Hello の確認が取り消されました");
+        if (key is null)
+        {
+            if (!create) throw new SecretAccessException("鍵がない");
+            key = RandomNumberGenerator.GetBytes(32);
+        }
+        return Task.FromResult(Deterministic ? (byte[])key.Clone() : RandomNumberGenerator.GetBytes(32));
+    }
 }
 
 internal static class TestKeys
@@ -50,6 +97,9 @@ internal static class TestKeys
         });
         return (ServiceAccountCredentials.Parse(json), rsa);
     }
+
+    public static SecretStore Secrets(string? dir = null, IUserPresenceKey? presence = null, string user = "alice") =>
+        new(Path.Combine(dir ?? TempDirectory(), "secrets.json"), new FakeDpapi(user), presence);
 
     public static string TempDirectory()
     {

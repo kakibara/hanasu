@@ -1,5 +1,7 @@
 using System.IO;
 using System.Windows;
+using Hanasu.Core.Ai;
+using Hanasu.Core.Claude;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
 using Hanasu.Core.Meetings;
@@ -37,6 +39,7 @@ internal sealed class AppHost : IDisposable
     private bool hotKeysSuspended;
 
     public SettingsService Settings { get; }
+    public SecretStore Secrets { get; }
     public WhisperModelManager WhisperModels { get; } = new(HanasuPaths.ModelsDirectory);
     public RecentResults Recent { get; } = new();
     public DictationController Dictation { get; }
@@ -47,12 +50,14 @@ internal sealed class AppHost : IDisposable
         this.app = app;
         var store = new SettingsStore();
         firstRun = !File.Exists(store.Path);
-        Settings = new SettingsService(store, new DpapiSecretProtector());
+        // API キーは settings.json ではなく %LOCALAPPDATA%\Hanasu\secrets.json に、DPAPI か Windows Hello で暗号化して置く（DEC-COM-144）
+        Secrets = new SecretStore(SecretStore.DefaultPath, new DpapiDataProtector(), new WindowsHelloKey());
+        Settings = new SettingsService(store, Secrets);
         Dictation = new DictationController(new DictationServices
         {
             Settings = () => Settings.Current,
             CreateTranscriber = CreateTranscriber,
-            Processor = new DictationTextProcessor(s => CreateGeminiClient(s)),
+            Processor = new DictationTextProcessor(s => CreateTextAi(s, TextAiUse.Dictation)),
             Inserter = inserter,
             Hud = hud,
             Recent = Recent,
@@ -72,8 +77,8 @@ internal sealed class AppHost : IDisposable
             CreateLoopbackRecorder = s => new MeetingChannelRecorder(MeetingChannel.Others, s.MeetingOutputDeviceId),
             CreateTranscriber = CreateMeetingTranscriber,
             CreateDiarizer = s => s.DiarizeOthers ? new SherpaSpeakerDiarizer(new DiarizationModels(Path.Combine(HanasuPaths.ModelsDirectory, "diarization"))) : null,
-            // 議事録は長い（1 時間の会議で数万文字）ので、待ち時間を長めにする
-            CreateMinutesClient = s => CreateGeminiClient(s, TimeSpan.FromSeconds(180)),
+            // 議事録は長い（1 時間の会議で数万文字）ので、待ち時間を長めにする（Claude は出力の上限も大きいので 5 分）
+            CreateMinutesClient = s => CreateTextAi(s, TextAiUse.Meeting),
             Log = AppLog.Write,
         });
         Dictation.CanStart = () => Meetings.State == MeetingState.Idle;
@@ -95,6 +100,9 @@ internal sealed class AppHost : IDisposable
     public void Start()
     {
         AppLog.Write($"start {typeof(AppHost).Assembly.GetName().Version}");
+        // Windows Hello の鍵は、画面のロック・スリープでメモリから消す（次に使うときにまた確認する）
+        Microsoft.Win32.SystemEvents.SessionSwitch += OnSessionSwitch;
+        Microsoft.Win32.SystemEvents.PowerModeChanged += OnPowerModeChanged;
         tray = new TrayIcon(this);
         Dictation.StateChanged += (_, state) => tray?.UpdateState(state);
         Recent.Changed += (_, _) => app.Dispatcher.BeginInvoke(() => tray?.UpdateRecent());
@@ -139,11 +147,20 @@ internal sealed class AppHost : IDisposable
         }
     }
 
-    /// <summary>設定から Gemini のクライアントを作る。認証情報がなければ null</summary>
-    public GeminiClient? CreateGeminiClient(AppSettings settings, TimeSpan? timeout = null)
+    /// <summary>設定から Gemini のクライアントを作る（音声の文字起こしに使う）。認証情報がなければ null</summary>
+    public GeminiClient? CreateGeminiClient(AppSettings settings, TimeSpan? timeout = null) =>
+        TextAiFactory.CreateGemini(settings, Secrets, timeout ?? TimeSpan.FromSeconds(15));
+
+    /// <summary>
+    /// 文章の処理（整形・英訳・議事録）に使う AI を、用途ごとの設定（REQ-COM-024）で作る。認証情報がなければ null。
+    /// 待ち時間は、音声入力が 15 秒、議事録が Gemini 180 秒・Claude 300 秒
+    /// </summary>
+    public ITextAiClient? CreateTextAi(AppSettings settings, TextAiUse use)
     {
-        var auth = GeminiAuthResolver.Resolve(settings, Settings.Protector);
-        return auth is null ? null : new GeminiClient(auth) { Timeout = timeout ?? TimeSpan.FromSeconds(15) };
+        var provider = TextAiFactory.ProviderFor(settings, use);
+        var timeout = use == TextAiUse.Dictation ? TimeSpan.FromSeconds(15)
+            : provider == TextAiProvider.Claude ? TimeSpan.FromSeconds(300) : TimeSpan.FromSeconds(180);
+        return TextAiFactory.Create(settings, Secrets, use, timeout);
     }
 
     // MARK: - ホットキー
@@ -301,8 +318,25 @@ internal sealed class AppHost : IDisposable
         app.Shutdown();
     }
 
+    private void OnSessionSwitch(object? sender, Microsoft.Win32.SessionSwitchEventArgs e)
+    {
+        if (e.Reason is Microsoft.Win32.SessionSwitchReason.SessionLock or Microsoft.Win32.SessionSwitchReason.SessionLogoff
+            or Microsoft.Win32.SessionSwitchReason.ConsoleDisconnect or Microsoft.Win32.SessionSwitchReason.RemoteDisconnect)
+        {
+            Secrets.Lock();
+        }
+    }
+
+    private void OnPowerModeChanged(object? sender, Microsoft.Win32.PowerModeChangedEventArgs e)
+    {
+        if (e.Mode == Microsoft.Win32.PowerModes.Suspend) Secrets.Lock();
+    }
+
     public void Dispose()
     {
+        Microsoft.Win32.SystemEvents.SessionSwitch -= OnSessionSwitch;
+        Microsoft.Win32.SystemEvents.PowerModeChanged -= OnPowerModeChanged;
+        Secrets.Lock();
         tray?.Dispose();
         hotKeys.Dispose();
         foreground.Dispose();

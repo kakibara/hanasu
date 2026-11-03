@@ -156,7 +156,7 @@ public sealed class GeminiBatchTranscriber : IBatchTranscriber
         }
         if (client is null)
         {
-            throw new TranscriptionException("文字起こしのエンジンが Gemini ですが、Gemini の認証情報が設定されていません（メニュー → 設定 → Gemini）。");
+            throw new TranscriptionException("文字起こしのエンジンが Gemini ですが、Gemini の認証情報が設定されていません（メニュー → 設定 → AI）。");
         }
         return Task.CompletedTask;
     }
@@ -173,7 +173,7 @@ public sealed class GeminiBatchTranscriber : IBatchTranscriber
         {
             return await client!.TranscribeAudioAsync(wav, "audio/wav", model(), dictionary(), cancellationToken).ConfigureAwait(false);
         }
-        catch (Gemini.GeminiException e)
+        catch (Ai.TextAiException e)
         {
             throw new TranscriptionException($"Gemini での文字起こしに失敗しました: {e.Message}", inner: e);
         }

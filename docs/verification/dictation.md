@@ -146,3 +146,19 @@ Gemini を通した部分一致（gemini-3.5-flash-lite、`--refine`）:
 - 会議（`--meeting-files`、自分 20 秒・相手 83 秒・相手は 2 人）: Whisper base・Gemini とも、話者分離の結果と時刻が合い、話者1・話者2・自分に正しく分かれた。
   Gemini は 5 分ごとの区切り（この長さでは 1 回）で全発言を拾い、時刻のずれは 0.5 秒以内。区切りを 30 秒にすると、先頭が無音の区切りで発話を落とした。
   同じ音声で Mac 標準（ライブ文字起こし）は、相手の 1 文の前半（「ジェミニは精度が…」）を落とした。
+
+## 9. Windows 版の Claude API と API キーの保存（2026-11-04、macOS の上の .NET 10 SDK）
+
+関係: REQ-COM-020〜024、DEC-COM-140〜150
+
+Claude の API キーがないので、本物の Claude での整形・英訳・議事録はまだ確かめていない（`ANTHROPIC_API_KEY` があれば `claude-refine` で確かめられる）。キーなしで確かめたこと:
+
+- 送る内容（`dotnet run --project Hanasu.Cli -- claude-request "…" [--minutes]`。送らずに SDK が組み立てた HTTP を出す）:
+  - `POST https://api.anthropic.com/v1/messages`、`anthropic-version: 2026-10-21`、キーは `Authorization: Bearer`（SDK 13.4.0 の形。伏せて表示）。
+  - 整形: `model: claude-haiku-5-5`、`max_tokens: 8000`、`output_config.effort: low`、`system` は Gemini と同じ文面に `cache_control: ephemeral`、`messages` は user 1 つ。`temperature` などと `thinking`・`fallbacks`・`anthropic-beta` はない。
+  - 議事録: `model: claude-sonnet-5-5`、`max_tokens: 32000`、`effort: medium`、`fallbacks: "default"` と `anthropic-beta: server-side-fallback-2026-07-01`。
+  - 文字起こしに `</transcript>` を混ぜると、`＜/transcript＞` に置き換わって送られる。
+- 偽のキー（`claude-check --fake-key`。`GET /v1/models/claude-haiku-5-5` を本物の API に送る）: `[Unauthorized 401] Claude の API キーが正しくありません（401）。設定 → AI で、Claude Console で作ったキーを入れ直してください` と出た。
+- `dotnet test Hanasu.Core.Tests`: 168 件すべて通った（Claude の送る内容・エラーの分類・やり直し・refusal・max_tokens、用途ごとの AI の選択、secrets.json・DPAPI・Windows Hello・PR #19 の形からの移行は偽物の DPAPI と Windows Hello で、モデルのハッシュの確認）。
+- `dotnet build Hanasu.Windows.sln -c Release`（警告 0）と `dotnet publish … -r win-x64 --self-contained -p:PublishSingleFile=true`（`Hanasu.exe` 約 82 MB と、今までと同じ DLL・ライセンスの表示）が通った。
+- プロンプトキャッシュが効くか（整形の指示が 512 トークンを超えるか）は、キーがないので確かめていない。

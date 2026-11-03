@@ -13,5 +13,11 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <!-- 配布物に .pdb を並べないよう、Release ではデバッグ情報を dll / exe に埋め込む -->
     <DebugType Condition="'$(Configuration)' == 'Release'">embedded</DebugType>
+    <!-- 依存パッケージの版とハッシュを packages.lock.json に固定する。CI（GitHub Actions は CI=true）では、
+         lock ファイルと食い違えば restore を失敗させる（知らないうちに別の版・別の中身を取り込まない）。
+         依存を足したら、手元で dotnet restore して lock ファイルもコミットする -->
+    <!-- 設計判断: DEC-COM-150 -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode Condition="'$(CI)' == 'true'">true</RestoreLockedMode>
   </PropertyGroup>
 </Project>

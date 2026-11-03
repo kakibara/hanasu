@@ -123,7 +123,7 @@ public partial class MeetingWindow : Window
         {
             MeetingStatus.Recording => "記録を止めると、文字起こしのあとに議事録を作ります。",
             MeetingStatus.Processing => "処理中です…",
-            _ => "議事録はまだありません。「議事録を作り直す」で作れます（Gemini の設定が要ります）。",
+            _ => "議事録はまだありません。「議事録を作り直す」で作れます（設定 → AI の「会議」の AI の設定が要ります）。",
         });
         TranscriptBox.Text = m.Utterances.Count == 0
             ? (IsLive(m) ? "文字起こしは、記録を止めたあとに行います。" : "文字起こしはありません。")
@@ -214,7 +214,7 @@ public partial class MeetingWindow : Window
     private async Task RegenerateAsync(Meeting m, MinutesTemplate? template)
     {
         RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = false;
-        ActionStatus.Text = "Gemini で議事録を作っています…";
+        ActionStatus.Text = $"{Core.Ai.TextAiFactory.NameOf(host.Settings.Current.MeetingAi)} で議事録を作っています…";
         var started = Stopwatch.StartNew();
         try
         {
@@ -222,7 +222,7 @@ public partial class MeetingWindow : Window
             ActionStatus.Text = $"議事録を作り直しました（{started.Elapsed.TotalSeconds:0} 秒）";
             Tabs.SelectedIndex = 0;
         }
-        catch (Exception ex) when (ex is Core.Gemini.GeminiException or Core.Gemini.ServiceAccountException or IOException)
+        catch (Exception ex) when (ex is Core.Ai.TextAiException or Core.Gemini.ServiceAccountException or IOException)
         {
             // 失敗したときは、型も議事録も元のまま
             ActionStatus.Text = $"議事録を作れませんでした: {ex.Message}";

@@ -11,6 +11,9 @@ Hanasu は Apache License 2.0（同梱の `LICENSE.txt`）で配布します。
 | [Whisper.net](https://github.com/sandrohanea/whisper.net) | 1.9.1 | `Hanasu.exe` | MIT |
 | [whisper.cpp / ggml](https://github.com/ggml-org/whisper.cpp)（Whisper.net.Runtime に入っている） | Whisper.net.Runtime 1.9.1 | `runtimes/win-x64/*.dll` | MIT |
 | [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) | 1.13.8 | `Hanasu.exe`、`sherpa-onnx-c-api.dll` | Apache-2.0 |
+| [Anthropic C# SDK](https://github.com/anthropics/anthropic-sdk-csharp)（NuGet の Anthropic） | 13.4.0 | `Hanasu.exe` | Apache-2.0 |
+| Microsoft.Extensions.AI.Abstractions（Anthropic SDK の依存） | 10.5.1 | `Hanasu.exe` | MIT |
+| System.Text.Json・System.Text.Encodings.Web・System.IO.Pipelines・System.Net.ServerSentEvents（Anthropic SDK の依存） | 10.0.6・10.0.6・10.0.6・10.0.1 | `Hanasu.exe` | MIT |
 | [ONNX Runtime](https://github.com/microsoft/onnxruntime)（sherpa-onnx に入っている） | sherpa-onnx 1.13.8 に同梱の版 | `onnxruntime.dll` | MIT |
 
 次のモデルは配布物に含めません。利用者が選んだとき（または初めて使うとき）に、ダウンロード元から取得します。ライセンスはダウンロード元の表示に従います。
@@ -24,11 +27,12 @@ Hanasu は Apache License 2.0（同梱の `LICENSE.txt`）で配布します。
 
 次の著作権表示のそれぞれに、下の MIT License の条文が適用されます。
 
-- .NET ランタイム、System.Security.Cryptography.ProtectedData: Copyright (c) .NET Foundation and Contributors
+- .NET ランタイム、System.Security.Cryptography.ProtectedData、Microsoft.Extensions.AI.Abstractions、System.Text.Json、System.Text.Encodings.Web、System.IO.Pipelines、System.Net.ServerSentEvents: Copyright (c) .NET Foundation and Contributors
 - NAudio: Copyright (c) 2020 Mark Heath
 - Whisper.net: Copyright (c) 2024 sandrohanea
 - whisper.cpp / ggml: Copyright (c) 2023-2024 The ggml authors
 - ONNX Runtime: Copyright (c) Microsoft Corporation
+- Anthropic C# SDK（13.0.0 で Apache-2.0 に変わる前に入った第三者の貢献の分。パッケージの LICENSE-MIT）: Copyright 2023 Anthropic, PBC.
 
 ```
 MIT License
@@ -55,5 +59,6 @@ SOFTWARE.
 ## Apache License 2.0 の各ソフトウェア
 
 - sherpa-onnx: Copyright 2019-2023 Xiaomi Corporation
+- Anthropic C# SDK: Copyright 2023 Anthropic, PBC（13.0.0 から Apache-2.0。それより前にリポジトリに入った第三者の貢献には、上の MIT License の節の表示も当てはまる）
 
 条文は同梱の `LICENSE.txt`（Hanasu 自身のライセンスと同じ Apache License 2.0）にあります。

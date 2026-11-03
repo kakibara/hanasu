@@ -11,6 +11,9 @@ public partial class App : Application
     private Mutex? singleInstance;
     private AppHost? host;
 
+    // WPF のネイティブ DLL などを読み込む前に、DLL を探す場所を絞る（DEC-COM-148）
+    static App() => WindowsSecurity.HardenDllSearch();
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);

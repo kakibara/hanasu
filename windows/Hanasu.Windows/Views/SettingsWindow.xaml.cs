@@ -2,6 +2,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Hanasu.Core.Ai;
+using Hanasu.Core.Claude;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
 using Hanasu.Core.Meetings;
@@ -15,8 +17,12 @@ using Microsoft.Win32;
 namespace Hanasu.Windows.Views;
 
 /// <summary>
-/// 設定画面（一般 / Gemini / 会議 / 辞書・ルール）。変更はその場で SettingsService に書き、すぐ保存する（Mac 版と同じ）。
+/// 設定画面（一般 / AI / 会議 / 辞書・ルール）。変更はその場で SettingsService に書き、すぐ保存する（Mac 版と同じ）。
+/// AI タブでは、音声入力と会議の AI とモデルを別々に選び（REQ-COM-024）、Gemini の認証と Claude の API キーを設定する。
+/// API キーは入力欄をマスクし、保存したあとは末尾 4 文字だけを見せる（REQ-COM-021）。
 /// </summary>
+// 要件: REQ-COM-020, REQ-COM-021, REQ-COM-024
+// 設計判断: DEC-COM-140, DEC-COM-144
 public partial class SettingsWindow : Window
 {
     private readonly AppHost host;
@@ -40,9 +46,14 @@ public partial class SettingsWindow : Window
             box.RecordingChanged += (_, recording) => host.SuspendHotKeys(recording);
         }
         host.WhisperModels.StateChanged += OnWhisperStateChanged;
+        host.Secrets.Changed += OnSecretChanged;
         Closed += (_, _) =>
         {
             host.WhisperModels.StateChanged -= OnWhisperStateChanged;
+            host.Secrets.Changed -= OnSecretChanged;
+            // 入力欄に残ったキーを消す
+            ApiKeyBox.Clear();
+            ClaudeKeyBox.Clear();
             host.SuspendHotKeys(false);
         };
     }
@@ -79,6 +90,14 @@ public partial class SettingsWindow : Window
         VertexLocationBox.Text = s.VertexLocation;
         ModelCombo.ItemsSource = AppSettings.SuggestedModels;
         ModelCombo.Text = s.Model;
+        ClaudeModelCombo.ItemsSource = ClaudeModels.All;
+        ClaudeModelCombo.DisplayMemberPath = nameof(ClaudeModelInfo.Label);
+        ClaudeModelCombo.SelectedItem = ClaudeModels.Find(s.ClaudeModel);
+        ClaudeMinutesModelCombo.ItemsSource = ClaudeModels.All;
+        ClaudeMinutesModelCombo.DisplayMemberPath = nameof(ClaudeModelInfo.Label);
+        ClaudeMinutesModelCombo.SelectedItem = ClaudeModels.Find(s.ClaudeMinutesModel);
+        DictationAiCombo.SelectedItem = DictationAiCombo.Items.OfType<ComboBoxItem>().First(i => (string)i.Tag == s.DictationAi.ToString());
+        MeetingAiCombo.SelectedItem = MeetingAiCombo.Items.OfType<ComboBoxItem>().First(i => (string)i.Tag == s.MeetingAi.ToString());
         SendAppNameCheck.IsChecked = s.SendAppName;
 
         MeetingHotKeyBox.Combo = s.MeetingHotKey;
@@ -99,7 +118,10 @@ public partial class SettingsWindow : Window
 
         UpdateEnginePanels(s.Engine);
         UpdateAuthPanels(s.AuthMode);
+        UpdateAiPanels();
         UpdateApiKeyStatus();
+        UpdateClaudeKeyStatus();
+        _ = UpdateHelloAsync();
         UpdateWhisperControls();
         UpdateDictionaryIssues();
     }
@@ -146,6 +168,7 @@ public partial class SettingsWindow : Window
         if (EngineCombo.SelectedItem is not ComboBoxItem { Tag: string tag } || !Enum.TryParse<TranscriptionEngine>(tag, out var engine)) return;
         Save(s => s.Engine = engine);
         UpdateEnginePanels(engine);
+        UpdateAiPanels();
         // Whisper を選んだ時点で、モデルがなければダウンロードを始める
         if (!loading && engine == TranscriptionEngine.Whisper) StartWhisperDownloadIfNeeded();
     }
@@ -253,15 +276,70 @@ public partial class SettingsWindow : Window
         };
     }
 
-    // MARK: - Gemini
+    // MARK: - AI（音声入力と会議で別々に選ぶ）
+
+    private static TextAiProvider? ProviderOf(ComboBox combo) =>
+        combo.SelectedItem is ComboBoxItem { Tag: string tag } && Enum.TryParse<TextAiProvider>(tag, out var p) ? p : null;
+
+    private void OnDictationAiChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ProviderOf(DictationAiCombo) is not { } provider) return;
+        Save(s => s.DictationAi = provider);
+        UpdateAiPanels();
+    }
+
+    private void OnMeetingAiChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ProviderOf(MeetingAiCombo) is not { } provider) return;
+        Save(s => s.MeetingAi = provider);
+        UpdateAiPanels();
+    }
+
+    private void OnClaudeModelChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ClaudeModelCombo.SelectedItem is ClaudeModelInfo model) Save(s => s.ClaudeModel = model.Id);
+    }
+
+    private void OnClaudeMinutesModelChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ClaudeMinutesModelCombo.SelectedItem is ClaudeModelInfo model) Save(s => s.ClaudeMinutesModel = model.Id);
+        UpdateAiPanels();
+    }
+
+    /// <summary>選んだ AI のモデルの欄だけを出し、認証情報が足りなければ知らせる</summary>
+    private void UpdateAiPanels()
+    {
+        if (ModelCombo is null || MinutesAiNote is null) return;
+        var s = settings.Current;
+        ModelCombo.Visibility = s.DictationAi == TextAiProvider.Gemini ? Visibility.Visible : Visibility.Collapsed;
+        ClaudeModelCombo.Visibility = s.DictationAi == TextAiProvider.Claude ? Visibility.Visible : Visibility.Collapsed;
+        MinutesModelCombo.Visibility = s.MeetingAi == TextAiProvider.Gemini ? Visibility.Visible : Visibility.Collapsed;
+        ClaudeMinutesModelCombo.Visibility = s.MeetingAi == TextAiProvider.Claude ? Visibility.Visible : Visibility.Collapsed;
+        MinutesAiNote.Text = $"議事録は {TextAiFactory.NameOf(s.MeetingAi)}（{s.MinutesModel}）で作ります。";
+
+        var missing = new List<string>();
+        var claudeNeeded = s.DictationAi == TextAiProvider.Claude || s.MeetingAi == TextAiProvider.Claude;
+        var geminiNeeded = s.DictationAi == TextAiProvider.Gemini || s.MeetingAi == TextAiProvider.Gemini
+            || s.Engine == TranscriptionEngine.Gemini || s.MeetingEngine == TranscriptionEngine.Gemini;
+        if (claudeNeeded && !host.Secrets.Has(SecretKind.ClaudeApiKey)) missing.Add("Claude の API キー");
+        if (geminiNeeded && (s.AuthMode == GeminiAuthMode.ApiKey ? !host.Secrets.Has(SecretKind.GeminiApiKey) : s.ServiceAccountPath.Trim().Length == 0))
+        {
+            missing.Add("Gemini の認証情報");
+        }
+        AiCredentialNote.Text = missing.Count == 0 ? "" : $"{string.Join("・", missing)}がまだ設定されていません（下で設定します）。";
+        AiCredentialNote.Visibility = missing.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+    }
 
     private void OnRefineChanged(object sender, RoutedEventArgs e) => Save(s => s.RefineWithGemini = RefineCheck.IsChecked == true);
+
+    // MARK: - Gemini の認証
 
     private void OnAuthModeChanged(object sender, RoutedEventArgs e)
     {
         var mode = ServiceAccountRadio.IsChecked == true ? GeminiAuthMode.ServiceAccount : GeminiAuthMode.ApiKey;
         Save(s => s.AuthMode = mode);
         UpdateAuthPanels(mode);
+        UpdateAiPanels();
     }
 
     private void UpdateAuthPanels(GeminiAuthMode mode)
@@ -270,36 +348,132 @@ public partial class SettingsWindow : Window
         ServiceAccountPanel.Visibility = mode == GeminiAuthMode.ServiceAccount ? Visibility.Visible : Visibility.Collapsed;
     }
 
-    private void OnSaveApiKey(object sender, RoutedEventArgs e)
+    private void OnSaveApiKey(object sender, RoutedEventArgs e) => _ = SaveKeyAsync(SecretKind.GeminiApiKey, ApiKeyBox, ApiKeyStatus);
+
+    private void OnDeleteApiKey(object sender, RoutedEventArgs e) => _ = DeleteKeyAsync(SecretKind.GeminiApiKey, ApiKeyBox, ApiKeyStatus);
+
+    private void UpdateApiKeyStatus() => ApiKeyStatus.Text = host.Secrets.Describe(SecretKind.GeminiApiKey).Describe();
+
+    // MARK: - Claude の API キー
+
+    private void OnSaveClaudeKey(object sender, RoutedEventArgs e) => _ = SaveKeyAsync(SecretKind.ClaudeApiKey, ClaudeKeyBox, ClaudeKeyStatus);
+
+    private void OnDeleteClaudeKey(object sender, RoutedEventArgs e) => _ = DeleteKeyAsync(SecretKind.ClaudeApiKey, ClaudeKeyBox, ClaudeKeyStatus);
+
+    private void UpdateClaudeKeyStatus() => ClaudeKeyStatus.Text = host.Secrets.Describe(SecretKind.ClaudeApiKey).Describe();
+
+    /// <summary>入力欄のキーを保存して、欄を空にする（保存したキーは画面に戻さない）</summary>
+    private async Task SaveKeyAsync(SecretKind kind, PasswordBox box, TextBlock status)
     {
-        if (ApiKeyBox.Password.Trim().Length == 0)
+        var value = box.Password.Trim();
+        if (value.Length == 0)
         {
-            ApiKeyStatus.Text = "API キーを入力してください";
+            status.Text = "API キーを入力してください";
             return;
         }
-        var error = settings.SetApiKey(ApiKeyBox.Password);
-        ApiKeyBox.Clear();
-        UpdateApiKeyStatus(error);
-    }
-
-    private void OnDeleteApiKey(object sender, RoutedEventArgs e)
-    {
-        var error = settings.SetApiKey(null);
-        ApiKeyBox.Clear();
-        UpdateApiKeyStatus(error);
-    }
-
-    private void UpdateApiKeyStatus(Exception? error = null)
-    {
-        if (error is not null)
+        if (kind == SecretKind.ClaudeApiKey && !value.StartsWith("sk-ant-", StringComparison.Ordinal))
         {
-            ApiKeyStatus.Text = $"保存できませんでした: {error.Message}";
+            status.Text = "Claude の API キーは「sk-ant-」で始まります。入力を確かめてください";
             return;
         }
-        var key = settings.LoadApiKey();
-        ApiKeyStatus.Text = key is null
-            ? (settings.Current.ProtectedApiKey.Length > 0 ? "保存したキーを読めません（別のユーザーで保存した可能性があります）。もう一度保存してください。" : "未設定")
-            : $"保存済み（…{key[^Math.Min(4, key.Length)..]}）";
+        try
+        {
+            await host.Secrets.SetAsync(kind, value);
+            box.Clear();
+            status.Text = host.Secrets.Describe(kind).Describe();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or SecretAccessException or System.Security.Cryptography.CryptographicException)
+        {
+            status.Text = $"保存できませんでした: {ex.Message}";
+        }
+        UpdateAiPanels();
+    }
+
+    private async Task DeleteKeyAsync(SecretKind kind, PasswordBox box, TextBlock status)
+    {
+        box.Clear();
+        try
+        {
+            await host.Secrets.SetAsync(kind, null);
+            status.Text = host.Secrets.Describe(kind).Describe();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            status.Text = $"削除できませんでした: {ex.Message}";
+        }
+        UpdateAiPanels();
+    }
+
+    private void OnSecretChanged(object? sender, SecretKind kind) => Dispatcher.BeginInvoke(() =>
+    {
+        UpdateApiKeyStatus();
+        UpdateClaudeKeyStatus();
+        UpdateAiPanels();
+    });
+
+    /// <summary>「接続を試す」。入力欄にキーがあればそのキーで（保存はしない）、なければ保存したキーで、モデルの情報を取る</summary>
+    private async void OnCheckClaude(object sender, RoutedEventArgs e)
+    {
+        var typed = ClaudeKeyBox.Password.Trim();
+        var model = settings.Current.ClaudeModel;
+        ClaudeCheckButton.IsEnabled = false;
+        ClaudeKeyStatus.Text = "Claude API に接続しています…";
+        try
+        {
+            var client = typed.Length > 0
+                ? new ClaudeClient(typed)
+                : TextAiFactory.CreateClaude(host.Secrets, TimeSpan.FromSeconds(15)) ?? throw ClaudeException.MissingCredentials();
+            await client.CheckAsync(model);
+            ClaudeKeyStatus.Text = (typed.Length > 0 ? "このキーで接続できました（まだ保存していません）。" : "接続できました。")
+                + $" {model} を使えます。{(typed.Length > 0 ? "" : host.Secrets.Describe(SecretKind.ClaudeApiKey).Describe())}";
+        }
+        catch (TextAiException ex)
+        {
+            ClaudeKeyStatus.Text = ex.Message;
+        }
+        finally
+        {
+            ClaudeCheckButton.IsEnabled = true;
+        }
+    }
+
+    // MARK: - API キーの保護（Windows Hello）
+
+    private async Task UpdateHelloAsync()
+    {
+        var available = await host.Secrets.IsPresenceAvailableAsync();
+        var on = host.Secrets.PreferredProtection == SecretProtection.WindowsHello;
+        var wasLoading = loading;
+        loading = true;
+        HelloCheck.IsChecked = on;
+        loading = wasLoading;
+        HelloCheck.IsEnabled = available || on;
+        HelloStatus.Text = available
+            ? (on ? "Windows Hello で守っています。" : "今は DPAPI で守っています。")
+            : "この PC では Windows Hello が設定されていないため、選べません（Windows の設定 → アカウント → サインイン オプション）。";
+    }
+
+    private async void OnHelloChanged(object sender, RoutedEventArgs e)
+    {
+        if (loading) return;
+        var want = HelloCheck.IsChecked == true ? SecretProtection.WindowsHello : SecretProtection.Dpapi;
+        if (want == host.Secrets.PreferredProtection) return;
+        HelloCheck.IsEnabled = false;
+        HelloStatus.Text = want == SecretProtection.WindowsHello
+            ? "Windows Hello の確認を求めています（確かめのため 2 回出ます）…"
+            : "Windows Hello の確認を求めています（DPAPI に戻すため、いったん読みます）…";
+        try
+        {
+            await host.Secrets.ChangeProtectionAsync(want);
+        }
+        catch (Exception ex) when (ex is SecretAccessException or IOException or UnauthorizedAccessException)
+        {
+            HelloStatus.Text = $"切り替えられませんでした: {ex.Message}";
+            await UpdateHelloAsync();
+            HelloStatus.Text = $"切り替えられませんでした: {ex.Message}";
+            return;
+        }
+        await UpdateHelloAsync();
     }
 
     private void OnBrowseServiceAccount(object sender, RoutedEventArgs e)
@@ -310,7 +484,11 @@ public partial class SettingsWindow : Window
         OnServiceAccountPathChanged(sender, e);
     }
 
-    private void OnServiceAccountPathChanged(object sender, RoutedEventArgs e) => Save(s => s.ServiceAccountPath = ServiceAccountPathBox.Text.Trim());
+    private void OnServiceAccountPathChanged(object sender, RoutedEventArgs e)
+    {
+        Save(s => s.ServiceAccountPath = ServiceAccountPathBox.Text.Trim());
+        UpdateAiPanels();
+    }
 
     private void OnVertexLocationChanged(object sender, RoutedEventArgs e)
     {
@@ -335,7 +513,7 @@ public partial class SettingsWindow : Window
 
     private void OnTrialTranslate(object sender, RoutedEventArgs e) => _ = RunTrialAsync(DictationMode.TranslateToEnglish);
 
-    /// <summary>今の設定で 1 回整形（英訳）してみる。音声入力と同じ流れ（辞書 → Gemini）を通す</summary>
+    /// <summary>今の設定で 1 回整形（英訳）してみる。音声入力と同じ流れ（辞書 → 音声入力の AI）を通す</summary>
     private async Task RunTrialAsync(DictationMode mode)
     {
         // 入力中の欄の値を先に保存する
@@ -348,11 +526,11 @@ public partial class SettingsWindow : Window
         var started = Stopwatch.StartNew();
         try
         {
-            var processor = new DictationTextProcessor(x => host.CreateGeminiClient(x));
+            var processor = new DictationTextProcessor(x => host.CreateTextAi(x, TextAiUse.Dictation));
             var outcome = await processor.ProcessAsync(TrialInput.Text, mode, "Hanasu の設定画面", s);
             TrialOutput.Text = outcome.Output;
             TrialStatus.Text = outcome.Warning is null
-                ? $"{s.Model} で {started.Elapsed.TotalSeconds:0.0} 秒"
+                ? $"{TextAiFactory.NameOf(s.DictationAi)}（{s.DictationModel}）で {started.Elapsed.TotalSeconds:0.0} 秒"
                 : outcome.Warning.ReplaceLineEndings(" ");
         }
         finally
@@ -395,6 +573,7 @@ public partial class SettingsWindow : Window
         if (MeetingEngineCombo.SelectedItem is not ComboBoxItem { Tag: string tag } || !Enum.TryParse<TranscriptionEngine>(tag, out var engine)) return;
         Save(s => s.MeetingEngine = engine);
         UpdateMeetingEngineNote(engine);
+        UpdateAiPanels();
         if (!loading && engine == TranscriptionEngine.Whisper) StartWhisperDownloadIfNeeded();
     }
 
@@ -402,7 +581,7 @@ public partial class SettingsWindow : Window
     {
         if (engine == TranscriptionEngine.Gemini)
         {
-            MeetingEngineNote.Text = "録音した会議の音声を 5 分ごとに区切って Gemini（Gemini タブの認証とモデル）に送ります。音声が Google に送られることに注意してください。";
+            MeetingEngineNote.Text = "録音した会議の音声を 5 分ごとに区切って Gemini（AI タブの Gemini の認証と、音声入力の Gemini のモデル）に送ります。音声が Google に送られることに注意してください。";
             return;
         }
         var model = WhisperModelCatalog.Find(settings.Current.WhisperModel);
@@ -418,11 +597,13 @@ public partial class SettingsWindow : Window
     {
         var model = MinutesModelCombo.Text.Trim();
         if (model.Length > 0) Save(s => s.MeetingMinutesModel = model);
+        UpdateAiPanels();
     }
 
     private void OnMinutesModelSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (MinutesModelCombo.SelectedItem is string model) Save(s => s.MeetingMinutesModel = model);
+        UpdateAiPanels();
     }
 
     private void OnKeepAudioChanged(object sender, RoutedEventArgs e) => Save(s => s.KeepMeetingAudio = KeepAudioCheck.IsChecked == true);

@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Hanasu.Core.Ai;
 
 namespace Hanasu.Core.Gemini;
 
@@ -12,6 +13,14 @@ public abstract record GeminiAuth
     public sealed record ApiKey(string Key) : GeminiAuth
     {
         public override string ToString() => "GeminiAuth.ApiKey { Key = *** }";
+    }
+
+    /// <summary>
+    /// 保存した API キー。送るたびに読む（メモリ上に長く持たない。REQ-COM-021）。読めなければ null を返す
+    /// </summary>
+    public sealed record StoredApiKey(Func<CancellationToken, Task<string?>> Load) : GeminiAuth
+    {
+        public override string ToString() => "GeminiAuth.StoredApiKey";
     }
 
     /// <summary>Google Cloud のサービスアカウント（Vertex AI, aiplatform.googleapis.com）</summary>
@@ -36,9 +45,14 @@ public interface IDictationRefiner
 /// Gemini の REST（generateContent）を直接呼ぶ。SDK は使わない（Mac 版と同じ。リクエストは 1 種類だけのため）。
 /// 会議の記録（議事録・長い音声の文字起こし）からも GenerateAsync を使う。
 /// </summary>
-public sealed class GeminiClient : IDictationRefiner
+// 設計判断: DEC-COM-145
+public sealed class GeminiClient : ITextAiClient
 {
-    private static readonly HttpClient SharedHttp = new() { Timeout = System.Threading.Timeout.InfiniteTimeSpan };
+    /// <summary>
+    /// リダイレクトには従わない。API キーは x-goog-api-key（独自のヘッダー）で送るので、
+    /// リダイレクトに従うと、行き先が別のホストでもキーが付いたまま送られてしまうため（Authorization と違い、.NET は外さない）
+    /// </summary>
+    private static readonly HttpClient SharedHttp = SafeHttp.Create();
 
     private readonly GeminiAuth auth;
     private readonly HttpClient http;
@@ -53,6 +67,12 @@ public sealed class GeminiClient : IDictationRefiner
         this.http = http ?? SharedHttp;
         this.tokenProvider = tokenProvider ?? ServiceAccountTokenProvider.Shared;
     }
+
+    public string ProviderName => "Gemini";
+
+    public Task<string> GenerateTextAsync(TextPurpose purpose, string systemInstruction, string userText, string model,
+        CancellationToken cancellationToken = default) =>
+        GenerateAsync(systemInstruction, [new GeminiPart.Text(userText)], model, cancellationToken: cancellationToken);
 
     public Task<string> RefineAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
         GenerateAsync(GeminiPrompts.SystemInstruction, [new GeminiPart.Text(GeminiPrompts.UserPrompt(request))], request.Model,
@@ -114,7 +134,9 @@ public sealed class GeminiClient : IDictationRefiner
         HttpRequestMessage request;
         switch (auth)
         {
-            case GeminiAuth.ApiKey { Key: var key }:
+            case GeminiAuth.ApiKey or GeminiAuth.StoredApiKey:
+                var key = auth is GeminiAuth.ApiKey direct ? direct.Key
+                    : await ((GeminiAuth.StoredApiKey)auth).Load(cancellationToken).ConfigureAwait(false);
                 if (string.IsNullOrWhiteSpace(key)) throw GeminiException.MissingCredentials();
                 // URL のクエリにキーを載せない
                 request = new HttpRequestMessage(HttpMethod.Post,
