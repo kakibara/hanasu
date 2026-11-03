@@ -36,6 +36,7 @@ extension GeminiClient {
     - 前置き（「以下のとおりです」など）・説明・感想・引用符・コードブロック・タグを付けないでください。
     """
 
+    // 設計判断: DEC-DIC-033
     /// 選択文と指示を、毎回変わる名前のタグで囲む。選択文の中に閉じタグを書いて抜け出す、という手口を防ぐため。
     static func editPrompt(for request: EditRequest, nonce: String = makeNonce()) -> String {
         let selectionTag = "selection_\(nonce)"
@@ -60,10 +61,13 @@ extension GeminiClient {
         return lines.joined(separator: "\n")
     }
 
+    // 設計判断: DEC-DIC-033
     static func makeNonce() -> String {
         String(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(12)).lowercased()
     }
 
+    // 要件: REQ-DIC-050
+    // 設計判断: DEC-DIC-034
     func editSelection(_ request: EditRequest) async throws -> String {
         let output = try await generate(
             systemInstruction: Self.editInstruction,
@@ -72,6 +76,7 @@ extension GeminiClient {
         return Self.stripCodeFence(output, selection: request.selection)
     }
 
+    // 設計判断: DEC-DIC-034
     /// 指示に反してコードブロックで囲んで返されたときは外す（選択文自体がコードブロックなら外さない）
     static func stripCodeFence(_ output: String, selection: String) -> String {
         guard output.hasPrefix("```"), output.hasSuffix("```"), output.count > 6,

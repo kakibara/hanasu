@@ -19,6 +19,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var meetingAutoDetect: MeetingAutoDetect?
     private var cancellables: Set<AnyCancellable> = []
 
+    // 設計判断: DEC-COM-008, DEC-COM-009
     func applicationDidFinishLaunching(_ notification: Notification) {
         controller = DictationController()
         historyUI = DictationHistoryUI(
@@ -67,6 +68,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         _ = Permissions.isAccessibilityTrusted(prompt: true)
     }
 
+    // 要件: REQ-MTG-026
+    // 設計判断: DEC-DIC-017
     private func updateIcon(for state: DictationController.State) {
         guard let button = statusItem.button else { return }
         var (symbol, tint): (String, NSColor?) = switch state {
@@ -91,6 +94,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     // MARK: - Menu
 
+    // 要件: REQ-MTG-026
     func menuNeedsUpdate(_ menu: NSMenu) {
         menu.removeAllItems()
         let settings = AppSettings.shared
@@ -152,6 +156,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     // MARK: - Dock
 
+    // 設計判断: DEC-COM-009
     /// Dock や Finder でアイコンをクリックしたら、設定画面を前に出す
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         openSettings()
@@ -237,6 +242,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         meetingWindow?.makeKeyAndOrderFront(nil)
     }
 
+    // 要件: REQ-MTG-001
     private func registerMeetingHotKey(_ combo: HotKeyCombo) {
         if let id = meetingHotKeyID { meetingHotKeys.unregister(id) }
         meetingHotKeyID = meetingHotKeys.register(combo) { [weak self] event in
@@ -267,6 +273,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         editController.toggleFromMenu()
     }
 
+    // 設計判断: DEC-COM-012
     @objc private func openSettings() {
         if settingsWindow == nil {
             let view = SettingsView(

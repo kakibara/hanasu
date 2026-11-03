@@ -4,6 +4,7 @@ import SwiftUI
 import CoreAudio
 import Foundation
 
+// 確かめ方: REQ-MTG-009
 /// 会議の自動検出を確かめるための CLI モード（main.swift から呼ぶ）
 @MainActor
 enum MeetingDetectorCLI {

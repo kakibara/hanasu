@@ -2,6 +2,7 @@ import AppKit
 import Carbon.HIToolbox
 import SwiftUI
 
+// 設計判断: DEC-COM-010
 /// クリックしてからキーを押すと、そのショートカットを記録するボタン。
 struct ShortcutRecorder: View {
     @Binding var combo: HotKeyCombo

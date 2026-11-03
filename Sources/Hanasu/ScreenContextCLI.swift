@@ -9,6 +9,7 @@ import SwiftUI
 //     ただのテキスト（カーソルより前の文章として扱う）
 //   Hanasu --render-screen-context-settings <出力.png>
 //     設定画面の「画面の文脈」の欄を画像にする
+// 確かめ方: REQ-DIC-040
 enum ScreenContextCLI {
     @MainActor
     static func runIfRequested() {

@@ -1,6 +1,8 @@
 import FluidAudio
 import Foundation
 
+// 要件: REQ-MTG-004, REQ-MTG-023
+// 設計判断: DEC-MTG-010
 /// FluidAudio（pyannote speaker-diarization-community-1 の CoreML 版）による、Mac 上での話者分離。
 /// モデルは初回に Hugging Face からダウンロードされ、以後はキャッシュを使う。
 final class FluidAudioDiarizer: SpeakerDiarizer {

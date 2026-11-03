@@ -2,6 +2,7 @@ import Combine
 import Foundation
 import WhisperKit
 
+// 設計判断: DEC-COM-023
 /// Whisper のモデルのダウンロード・削除と、その状態。設定画面に出す。
 /// 保存先: ~/Library/Application Support/Hanasu/Models/whisper（環境変数 HANASU_MODELS_DIR で変えられる。確認用）
 @MainActor
@@ -63,6 +64,7 @@ final class WhisperModelStore: ObservableObject {
         return total
     }
 
+    // 要件: REQ-COM-003
     /// まだなければダウンロードを始める。終わるまで待つときは await する
     @discardableResult
     func ensureDownloaded(_ model: WhisperModel) -> Task<Void, Never>? {
@@ -132,6 +134,7 @@ final class WhisperModelStore: ObservableObject {
     }
 }
 
+// 設計判断: DEC-COM-021
 /// 読み込んだ Whisper のモデルを持っておき、文字起こしする。読み込みは数秒かかるので使い回す
 actor WhisperEngine {
     static let shared = WhisperEngine()
@@ -149,6 +152,7 @@ actor WhisperEngine {
     /// 無音や雑音のところに付く「(音楽)」「[拍手]」のような注記。かっこを外してこれだけなら捨てる
     static let soundTags: Set<String> = ["音楽", "拍手", "笑", "笑い", "BGM", "music", "Music", "MUSIC", "applause", "laughter"]
 
+    // 設計判断: DEC-COM-026
     static func isNoise(_ text: String) -> Bool {
         if hallucinations.contains(text) { return true }
         let stripped = text.trimmingCharacters(in: CharacterSet(charactersIn: "()（）[]［］【】♪〜~ 　。.、"))
@@ -184,12 +188,14 @@ actor WhisperEngine {
         self.loaded = nil
     }
 
+    // 設計判断: DEC-COM-027
     /// 前もって読み込んでおく（録音を始めたときに呼ぶと、止めてからの待ち時間が短くなる）
     func preload(_ model: WhisperModel) async {
         guard WhisperModelStore.isDownloaded(model) else { return }
         _ = try? await load(model)
     }
 
+    // 設計判断: DEC-COM-025, DEC-COM-026
     /// 16 kHz モノラルの音声を文字に起こす。時刻は音声の先頭からの秒数
     func transcribe(_ samples: [Float], model: WhisperModel, language: String, hints: [String],
                     wordTimestamps: Bool) async throws -> [TimedSegment] {
@@ -268,6 +274,7 @@ actor WhisperEngine {
         return segments.sorted { $0.start < $1.start }
     }
 
+    // 設計判断: DEC-COM-024
     /// 辞書の語から、Whisper に渡す前置きを作る（長すぎると認識に影響するので 30 語まで）
     static func prompt(from hints: [String]) -> String? {
         let words = Array(NSOrderedSet(array: hints.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty })

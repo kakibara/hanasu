@@ -2,6 +2,8 @@ import AppKit
 import Combine
 import SwiftUI
 
+// 要件: REQ-MTG-011
+// 設計判断: DEC-MTG-040, DEC-MTG-042
 /// 記録中の画面の右側: メモ欄と「ここ重要」ボタン。
 struct LiveNotesPanel: View {
     @ObservedObject var recorder: MeetingRecorder
@@ -123,6 +125,7 @@ private struct NoteRow: View {
     }
 }
 
+// 要件: REQ-MTG-013
 /// 会議ノートの「メモ」タブ: 記録後にメモを書き直し、議事録を作り直す。
 struct MeetingNotesEditor: View {
     let meeting: Meeting
@@ -202,6 +205,8 @@ struct MeetingNotesSettingsSection: View {
 
 // MARK: - 前面に出す字幕
 
+// 要件: REQ-MTG-014
+// 設計判断: DEC-MTG-046
 /// 記録中の文字起こしを、会議ツールなどほかのアプリの前面に小さく出す字幕ウインドウ
 @MainActor
 final class MeetingCaptionPanel: ObservableObject {
@@ -255,6 +260,7 @@ final class MeetingCaptionPanel: ObservableObject {
     }
 }
 
+// 要件: REQ-MTG-014
 /// 字幕の中身: 直近の発言と、確定前の途中結果
 struct MeetingCaptionView: View {
     @ObservedObject var recorder: MeetingRecorder

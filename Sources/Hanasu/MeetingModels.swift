@@ -33,6 +33,7 @@ struct Utterance: Codable, Hashable, Identifiable {
     var text: String
 }
 
+// 設計判断: DEC-MTG-017
 struct Meeting: Codable, Identifiable, Hashable {
     enum Status: String, Codable {
         case recording, processing, done, failed
@@ -58,6 +59,7 @@ struct Meeting: Codable, Identifiable, Hashable {
     /// ユーザーのメモと「ここ重要」の印（MeetingNotes.swift）。古い会議の meeting.json にはないので省略可にする
     var notes: [MeetingNote]?
 
+    // 要件: REQ-MTG-008
     func displayName(for speaker: String) -> String {
         if let name = speakerNames[speaker], !name.isEmpty { return name }
         switch speaker {
@@ -77,6 +79,7 @@ struct Meeting: Codable, Identifiable, Hashable {
         return seen
     }
 
+    // 要件: REQ-MTG-005
     /// 文字起こしの Markdown。同じ話者が間を空けずに続く発言はまとめる。
     func transcriptMarkdown() -> String {
         var lines = ["# \(title) — 文字起こし", "", "- 日時: \(Self.dateFormatter.string(from: startedAt))", "- 長さ: \(Self.clock(duration))", ""]
@@ -123,6 +126,7 @@ struct Meeting: Codable, Identifiable, Hashable {
     }()
 }
 
+// 要件: REQ-MTG-025
 /// 会議の記録を ~/Documents/Hanasu/Meetings/<会議>/ に保存する。
 enum MeetingStore {
     static var baseDirectory: URL {
@@ -148,6 +152,8 @@ enum MeetingStore {
         return meeting
     }
 
+    // 要件: REQ-MTG-005
+    // 設計判断: DEC-MTG-017
     static func save(_ meeting: Meeting) throws {
         let dir = directory(for: meeting)
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
@@ -167,6 +173,7 @@ enum MeetingStore {
         }
     }
 
+    // 設計判断: DEC-MTG-018
     /// アプリが落ちたり終了したりして「記録中」「処理中」のまま残った会議を「失敗」にする（起動時に 1 回呼ぶ）
     static func markInterruptedMeetings() {
         for var meeting in loadAll() where meeting.status == .recording || meeting.status == .processing {

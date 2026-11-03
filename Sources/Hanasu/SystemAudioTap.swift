@@ -14,6 +14,7 @@ enum SystemAudioTapError: LocalizedError {
     }
 }
 
+// 要件: REQ-MTG-002, REQ-MTG-020
 /// Core Audio Process Tap で、Mac が再生している音（自分のアプリ以外）を受け取る。
 /// タップを集約デバイスに入れ、その入力として IOProc でバッファを受け取る。
 final class SystemAudioTap {
@@ -24,6 +25,7 @@ final class SystemAudioTap {
     private var rateListener: AudioObjectPropertyListenerBlock?
     private(set) var format: AVAudioFormat?
 
+    // 設計判断: DEC-MTG-002
     /// - Parameter outputDeviceUID: 録音するスピーカー。nil なら Mac 全体の音（自分以外のアプリすべて）。
     /// handler はオーディオスレッドで呼ばれる。渡すバッファはコピー済みなので保持してよい。
     func start(outputDeviceUID: String? = nil, handler: @escaping @Sendable (AVAudioPCMBuffer) -> Void) throws {
@@ -116,6 +118,7 @@ final class SystemAudioTap {
         }
     }
 
+    // 設計判断: DEC-MTG-003
     /// 集約デバイスの入力（＝タップ）の実際の形式
     private static func inputFormat(of device: AudioObjectID, tap: AudioObjectID) throws -> AVAudioFormat {
         var asbd = AudioStreamBasicDescription()
@@ -214,6 +217,7 @@ private final class FormatBox: @unchecked Sendable {
     }
 }
 
+// 設計判断: DEC-MTG-003
 /// IOProc に届くフレーム数と経過時間から、実際のサンプリングレートを測る（オーディオスレッドだけで使う）
 private final class RateMeter: @unchecked Sendable {
     private static let standardRates: [Double] = [8000, 11025, 16000, 22050, 24000, 32000, 44100, 48000, 88200, 96000]

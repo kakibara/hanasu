@@ -1,6 +1,7 @@
 import Foundation
 import Security
 
+// 設計判断: DEC-COM-002
 /// Gemini API キーをキーチェーンに保存する。
 enum Keychain {
     private static let service = "dev.mactypeless.Hanasu"

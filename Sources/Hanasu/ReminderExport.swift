@@ -2,6 +2,8 @@ import AppKit
 import EventKit
 import SwiftUI
 
+// 要件: REQ-MTG-019
+// 設計判断: DEC-MTG-067
 /// アクションアイテムをリマインダー（EventKit）に登録する。
 /// 権限はユーザーが「登録」を押したときに初めて求める（シートを開いただけでは求めない）。
 @MainActor
@@ -73,6 +75,7 @@ enum ReminderExporter {
     }
 }
 
+// 設計判断: DEC-MTG-067
 /// アクションアイテムを選んでリマインダーに登録するシート
 struct ReminderExportSheet: View {
     let meeting: Meeting

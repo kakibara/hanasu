@@ -1,10 +1,10 @@
 # Hanasu ボットモード — 調査・要件定義・実装計画
 
 会議に「Hanasu ノートテイカー」というボットを参加者として入れ、録音・文字起こし・議事録を作るモードの検討。
-現在の会議記録（自分の Mac で録る方式、[MEETING_RECORDER.md](MEETING_RECORDER.md)）と並べて使う前提。
+現在の会議記録（自分の Mac で録る方式、[design/meeting.md](../design/meeting.md)）と並べて使う前提。
 
 - 作成日: 2026-11-02
-- 状態: 計画（未実装）
+- 状態: 計画（未実装）。[roadmap.md](../roadmap.md) の FUT-203
 
 ---
 

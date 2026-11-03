@@ -7,6 +7,7 @@ import SwiftUI
 //   Hanasu --write-sample-meetings <フォルダ>       架空の会議データを書き出す（確認・テスト用）
 //   Hanasu --render-meeting-search <出力.png> [--ask]  架空のデータで検索（--ask なら質問）の画面を画像にする
 // 会議のフォルダの既定は ~/Documents/Hanasu/Meetings。認証は --refine-text と同じ順に探す。
+// 確かめ方: REQ-MTG-015, REQ-MTG-016
 enum MeetingSearchCLI {
     @MainActor
     static func runIfRequested(_ args: [String]) {

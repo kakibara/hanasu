@@ -1,5 +1,7 @@
 import SwiftUI
 
+// 要件: REQ-COM-001
+// 設計判断: DEC-COM-020
 /// 設定の「一般」タブの「文字起こし」欄。音声入力と会議の記録で、エンジンを別々に選ぶ。
 /// Whisper を選ぶとモデルのダウンロードを始め、Gemini を選ぶと音声が送られることを示す。
 struct TranscriptionEngineSettingsSection: View {
@@ -39,6 +41,7 @@ struct TranscriptionEngineSettingsSection: View {
         }
     }
 
+    // 要件: REQ-COM-003
     private func downloadIfNeeded(_ engine: TranscriptionEngine) {
         guard engine == .whisper else { return }
         store.ensureDownloaded(settings.whisperModel)
@@ -117,6 +120,7 @@ private struct WhisperModelRow: View {
     }
 }
 
+// 設計判断: DEC-COM-033
 /// Gemini で文字起こしするときの注意とモデル
 private struct GeminiTranscriptionSection: View {
     @ObservedObject var settings: AppSettings

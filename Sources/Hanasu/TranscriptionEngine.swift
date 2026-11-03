@@ -1,6 +1,7 @@
 @preconcurrency import AVFoundation
 import Foundation
 
+// 要件: REQ-COM-001
 /// 文字起こしのエンジン。音声入力と会議の記録で別々に選べる（設定の「一般」→「文字起こし」）。
 enum TranscriptionEngine: String, CaseIterable, Identifiable, Sendable {
     /// macOS の SpeechAnalyzer（細かい選択は RecognizerEngine）
@@ -16,6 +17,7 @@ enum TranscriptionEngine: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .apple: "Mac 標準（SpeechAnalyzer）"
         case .whisper: "Whisper（この Mac の上で動かす）"
+        // 設計判断: DEC-COM-033
         case .gemini: "Gemini（音声を Google に送る）"
         }
     }
@@ -33,6 +35,7 @@ enum TranscriptionEngine: String, CaseIterable, Identifiable, Sendable {
     var isLive: Bool { self == .apple }
 }
 
+// 設計判断: DEC-COM-022
 /// Whisper のモデル（WhisperKit の CoreML 版。https://huggingface.co/argmaxinc/whisperkit-coreml）
 enum WhisperModel: String, CaseIterable, Identifiable, Sendable {
     case tiny
@@ -135,6 +138,7 @@ enum TranscriptionAudio {
         return (sum / Float(samples.count)).squareRoot()
     }
 
+    // 設計判断: DEC-MTG-008
     /// 長い音声を、だいたい length 秒ごとに分ける。区切りは目安の前 15 秒のうち、いちばん静かなところにする
     /// （語の途中で切らないため）。返すのは開始サンプルの位置。
     static func chunkStarts(_ samples: [Float], length: Double, searchWindow: Double = 15) -> [Int] {
@@ -238,6 +242,7 @@ enum BatchTranscriptionError: LocalizedError {
     }
 }
 
+// 要件: REQ-COM-001
 /// Whisper / Gemini で、録り終えた音声を文字に起こす。
 enum BatchTranscriber {
     /// 音声入力用。全文だけを返す

@@ -1,5 +1,6 @@
 import SwiftUI
 
+// 要件: REQ-DIC-030
 /// 設定画面の「スニペット」タブ。左に一覧、右に選んだスニペットの編集欄。
 struct SnippetsSettingsView: View {
     @ObservedObject var store: SnippetStore

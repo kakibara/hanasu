@@ -151,6 +151,7 @@ struct MeetingSearchField: View {
 
 // MARK: - 検索結果
 
+// 要件: REQ-MTG-015
 /// 検索でヒットした会議と箇所の一覧。箇所を選ぶと、その会議のその位置に飛ぶ。
 struct MeetingSearchResultsList: View {
     @ObservedObject var model: MeetingSearchModel
@@ -244,6 +245,7 @@ enum MeetingSearchHighlight {
 
 // MARK: - 質問
 
+// 要件: REQ-MTG-016
 /// 過去の会議について Gemini に質問する画面
 struct MeetingAskView: View {
     @ObservedObject var model: MeetingAskModel

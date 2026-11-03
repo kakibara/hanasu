@@ -10,6 +10,7 @@ import SwiftUI
 //          [--downloading]   設定の「一般」タブの「文字起こし」欄を PNG にする（--downloading は選んでいるモデルをダウンロード中の見た目にする）
 // -whisperModel / -geminiTranscriptionModel は UserDefaults の引数で、その回だけ設定を上書きする（保存しない）。
 // モデルの保存先は環境変数 HANASU_MODELS_DIR で変えられる（既定は ~/Library/Application Support/Hanasu/Models/whisper）。
+// 確かめ方: REQ-COM-001, REQ-COM-002, REQ-COM-003
 @MainActor
 enum TranscriptionEngineCLI {
     /// --engine の値。apple / dictation / speech は Mac 標準（後ろの 2 つはモジュールの指定）

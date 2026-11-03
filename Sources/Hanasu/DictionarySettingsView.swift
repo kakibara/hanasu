@@ -1,5 +1,6 @@
 import SwiftUI
 
+// 設計判断: DEC-DIC-090
 /// 設定画面の「ユーザー辞書」の欄。表で 1 行ずつ編集するか、テキストでまとめて編集する。
 /// 保存先は今までどおり設定の dictionaryText（1 行 1 項目の文字列）だけにして、表はその見せ方を変えるだけにする。
 struct DictionaryEditorSection: View {
@@ -140,6 +141,8 @@ struct DictionaryEditorSection: View {
     }
 }
 
+// 要件: REQ-DIC-071
+// 設計判断: DEC-DIC-087
 /// 設定画面の「辞書の候補」の欄。ボタンを押したときだけ、過去の音声入力の結果と会議の記録を Gemini に送って候補を挙げてもらう。
 struct DictionarySuggestionSection: View {
     @ObservedObject var settings: AppSettings

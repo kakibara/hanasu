@@ -1,5 +1,6 @@
 import Foundation
 
+// 設計判断: DEC-COM-030
 /// 録った音声（16 kHz モノラル）を inline data で Gemini の generateContent に送り、文字起こしだけをさせる。
 /// 整形は別の呼び出し（GeminiClient.refine）で行う。間に辞書の置き換えとスニペットの照合を挟むため。
 struct GeminiTranscriber {
@@ -41,6 +42,7 @@ struct GeminiTranscriber {
         """
     }
 
+    // 設計判断: DEC-COM-031
     /// 音声入力用。全文を返す。何も話されていなければ空文字
     func transcribe(_ samples: [Float], localeIdentifier: String, hints: [String]) async throws -> String {
         let audio = try TranscriptionAudio.encodeForUpload(samples[...])
@@ -91,6 +93,7 @@ struct GeminiTranscriber {
         "required": ["segments"],
     ]
 
+    // 設計判断: DEC-MTG-008
     /// 会議用。長い音声は meetingChunkSeconds ごとに分けて送り、時刻は区切りの開始時刻を足して全体の時刻にする
     func transcribeSegments(_ samples: [Float], localeIdentifier: String, hints: [String],
                             progress: (@MainActor (String) -> Void)? = nil) async throws -> [TimedSegment] {
@@ -148,6 +151,7 @@ struct GeminiTranscriber {
         return ranges.indices.flatMap { results[$0] ?? [] }
     }
 
+    // 設計判断: DEC-MTG-008
     /// JSON の応答を区間にする。時刻は区切りの長さに収め、終わりが始まりより前にならないようにする
     static func parseSegments(_ json: String, duration: Double) throws -> [TimedSegment] {
         struct Envelope: Decodable {

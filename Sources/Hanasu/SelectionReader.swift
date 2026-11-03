@@ -2,6 +2,8 @@ import AppKit
 import ApplicationServices
 import Carbon.HIToolbox
 
+// 要件: REQ-DIC-050
+// 設計判断: DEC-DIC-031
 /// 最前面アプリで選択中の文章を読み取る（選択を声で編集するモード用）。
 /// まずアクセシビリティ API で読み、読めないアプリでは ⌘C で写し取って読む。どちらもアクセシビリティ権限が要る。
 @MainActor

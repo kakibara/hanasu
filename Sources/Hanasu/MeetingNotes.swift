@@ -32,10 +32,12 @@ struct MeetingNote: Codable, Hashable, Identifiable {
         return parts.joined(separator: " ")
     }
 
+    // 設計判断: DEC-MTG-044
     static func text(from notes: [MeetingNote]) -> String {
         notes.map(\.line).joined(separator: "\n")
     }
 
+    // 設計判断: DEC-MTG-044
     /// テキストを読み取る。空行は無視する。
     static func parse(_ text: String) -> [MeetingNote] {
         text.components(separatedBy: .newlines).compactMap { raw in
@@ -76,6 +78,7 @@ extension Meeting {
     /// 会議ノートで編集するテキスト
     var notesText: String { MeetingNote.text(from: allNotes) }
 
+    // 設計判断: DEC-MTG-043
     /// notes.md の中身
     func notesMarkdown() -> String {
         "# \(title) — メモ\n\n\(notesText)\n"
@@ -85,6 +88,7 @@ extension Meeting {
     static let highlightLeadTime: Double = 30
     static let highlightTrailTime: Double = 15
 
+    // 設計判断: DEC-MTG-041
     /// 発言が「ここ重要」の印の前後に入るか
     func isNearHighlight(_ block: Utterance) -> Bool {
         highlights.contains { h in
@@ -93,6 +97,7 @@ extension Meeting {
         }
     }
 
+    // 要件: REQ-MTG-013
     /// Gemini に渡す文字起こし。印の前後の発言の行頭に ★ を付ける。
     func transcriptForPromptMarkingHighlights() -> String {
         mergedBlocks()
@@ -100,6 +105,8 @@ extension Meeting {
             .joined(separator: "\n")
     }
 
+    // 要件: REQ-MTG-013
+    // 設計判断: DEC-MTG-045
     /// Gemini に渡すメモ（なければ nil）。時刻のないメモは [--:--] にする。
     func notesForPrompt() -> String? {
         let notes = allNotes
@@ -173,6 +180,8 @@ final class MeetingNotesSettings: ObservableObject {
     }
 }
 
+// 要件: REQ-MTG-012
+// 設計判断: DEC-MTG-042
 /// 「ここ重要」のグローバルショートカット。会議の記録中だけ登録する（ほかのアプリのキーを普段は奪わない）。
 @MainActor
 final class MeetingHighlightHotKey: ObservableObject {

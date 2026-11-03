@@ -1,10 +1,18 @@
-# Hanasu 会議記録 — 要件定義・仕様・技術選定
+# Hanasu 会議の記録 — 設計と技術選定
 
 Google Meet・Slack ハドル・Microsoft Teams などのオンライン会議の音声を Mac 上で拾い、
 話者ごとに分けた文字起こしと議事録を残す機能。既存の音声入力アプリ Hanasu に機能として追加する。
 
 - 対象 OS: macOS 26 (Tahoe) 以降 / Apple Silicon
 - 作成日: 2026-11-02
+
+> **この文書は「今こう作られている」の説明（as-is）。** コードと食い違ったら、コードが正しい（気づいたら、この文書を直す）。「こうあるべき」（要件と設計判断）は spec に書く。プロンプトの全文・既定値の一覧・CLI のオプションの一覧のようなコードの写しは置かず、ファイルと型・関数の名前で誘導する。
+
+この文書は実装の説明（事例調査・技術選定・アーキテクチャ・データの流れ・状態遷移・なぜその作りにしたか）。
+
+- 要件（初版の要件定義 F1〜F10・非機能要件・対象外と、あとから足した F11〜F16 など）と設計判断は [spec/meeting.md](../spec/meeting.md)。振る舞いを変えるときは、先に spec を見る（[docs/README.md](../README.md)）。
+- 日付の付いた検証の結果と、過去に起きた問題は [verification/meeting.md](../verification/meeting.md)。
+- まだ作っていないもの（会議アプリだけを録るモード、エコーキャンセル、ボットモード）は [roadmap.md](../roadmap.md)。
 
 ---
 
@@ -34,50 +42,13 @@ Granola のドキュメントでは「マイクを 1 チャンネル、PC で鳴
 - 端末で録れば、3 つのツールすべてに同じ仕組みで対応できる。既存の Hanasu の権限・署名・Gemini 設定もそのまま使える。
 - 話者分離の弱点は、「マイク = 自分」と「システム音声 = 相手側」の 2 チャンネルに分けたうえで、相手側だけを話者分離モデルにかけて補う（後述）。
 
-## 3. 要件定義
+## 3. 要件
 
-### 3.1 機能要件
-
-| ID | 要件 | 優先度 |
-| --- | --- | --- |
-| F1 | メニューバーとショートカットで会議の記録を開始・停止できる | 必須 |
-| F2 | マイク（自分）とシステム音声（相手側）を別々に録音する | 必須 |
-| F3 | 録音中、文字起こしをリアルタイムに表示する（自分／相手の区別つき） | 必須 |
-| F4 | 終了後、相手側の音声を話者分離し、「話者1」「話者2」…に分ける | 必須 |
-| F5 | 話者ごとの発言をまとめた文字起こし（時刻つき）を保存する | 必須 |
-| F6 | Gemini で議事録（要約・決定事項・TODO）を作る | 必須 |
-| F7 | 記録した会議を一覧し、文字起こし・議事録を読める・コピーできる | 必須 |
-| F8 | 話者名を後から付け替えられる（「話者1」→「田中さん」） | あると良い |
-| F9 | 会議アプリがマイクを使い始めたら「記録しますか？」と知らせる（4.8） | あると良い（実装済み） |
-| F10 | 音声ファイルを残すか、処理後に消すかを選べる | あると良い |
-| F11 | 記録中にメモを書ける。1 行ずつ、録音開始からの経過時間つきで保存する（Granola のメモ） | あると良い |
-| F12 | 記録中に「ここ重要」の印を付けられる（ボタンと、設定で変えられるショートカット。Otter / tl;dv のハイライト） | あると良い |
-| F13 | 議事録はメモと印を優先して反映する。記録後にメモを直して、議事録を作り直せる | あると良い |
-| F14 | 文字起こしの字幕を、会議ツールなどほかのアプリの前面に出せる | あると良い |
-| F15 | 過去の会議の文字起こしと議事録を横断して検索し、ヒットした発言の位置に飛べる | あると良い |
-| F16 | 過去の会議について質問すると、関係する会議をもとに Gemini が答える（根拠の会議を引用） | あると良い |
-
-### 3.2 非機能要件
-
-| 項目 | 要件 |
-| --- | --- |
-| 対応ツール | Google Meet（ブラウザ）・Slack ハドル・Microsoft Teams。仕組み上、Zoom など Mac で音が鳴るものは全部対象 |
-| 会議の長さ | 2 時間まで実用に耐えること |
-| 処理時間 | 1 時間の会議で、停止から議事録完成まで数分以内 |
-| プライバシー | 音声認識と話者分離は Mac 上で行う。外部（Gemini）に送るのは文字起こしテキストだけ |
-| 負荷 | 会議中に CPU を使いすぎて会議ツールの音声が途切れないこと |
-| 保存先 | `~/Documents/Hanasu/Meetings/` の下に、会議ごとに 1 フォルダ。Markdown なので他のツールでも読める |
-
-### 3.3 対象外（今回はやらない）
-
-- 会議ツールの画面・映像の記録
-- 会議ツールへのボット参加
-- 参加者の名前の自動取得（会議ツールの参加者一覧は読まない）
-- 複数台の Mac の録音の統合
+要件の一覧は [spec/meeting.md](../spec/meeting.md) に移した（初版の F1〜F10 → REQ-MTG-001〜010、非機能要件 → REQ-MTG-020〜025、対象外 → REQ-MTG-030〜033、F11〜F16 → REQ-MTG-011〜016）。
 
 ### 3.4 運用上の注意
 
-- 録音は相手の同意を得てから行う。アプリは録音中であることをメニューバーに常に表示する。
+- 録音は相手の同意を得てから行う。アプリは録音中であることをメニューバーに常に表示する（REQ-MTG-026）。
 - 社内規程で会議の録音・外部 AI の利用が制限されている場合はそれに従う。
 
 ## 4. 技術選定
@@ -93,7 +64,7 @@ Granola のドキュメントでは「マイクを 1 チャンネル、PC で鳴
 実装の流れ:
 
 1. `CATapDescription(stereoGlobalTapButExcludeProcesses: [自分のプロセス])` で、自分以外が鳴らす音全体のタップを作る（Granola と同じく、アプリを限定しない）。
-   - 設定で「会議アプリだけ」にすると、`kAudioHardwarePropertyProcessObjectList` から Chrome・Safari・Slack・Teams などの音声プロセスを探して `stereoMixdownOfProcesses` で限定する（フェーズ 2）。
+   - 録るアプリは限定しない。会議アプリだけを録るモードは計画（[roadmap.md](../roadmap.md) FUT-201）。
 2. `AudioHardwareCreateProcessTap` → タップを含む非公開の集約デバイスを `AudioHardwareCreateAggregateDevice` で作る。
 3. `AudioDeviceCreateIOProcIDWithBlock` で音声バッファを受け取る。形式は `kAudioTapPropertyFormat` で取得。
 4. Info.plist に `NSAudioCaptureUsageDescription`。初回に「システムオーディオ録音」の許可ダイアログが出る。
@@ -111,7 +82,7 @@ Granola のドキュメントでは「マイクを 1 チャンネル、PC で鳴
 
 ### 4.3.1 Whisper / Gemini を選んだとき（記録のあとに文字起こし）
 
-設定の「一般」→「文字起こし」の「会議の記録」で、エンジンを Mac 標準 / Whisper / Gemini から選べる（音声入力とは別に選ぶ。理由と各エンジンの中身は DESIGN.md 4.10）。
+設定の「一般」→「文字起こし」の「会議の記録」で、エンジンを Mac 標準 / Whisper / Gemini から選べる（音声入力とは別に選ぶ。理由と各エンジンの中身は [design/dictation.md](dictation.md) 4.10）。
 Mac 標準は今までどおり（チャンネルごとの SpeechTranscriber でライブ文字起こし）。Whisper と Gemini は次のようにする。
 
 - **記録中**: `ChannelTranscriber(live: false)` で、文字起こしはせず、チャンネルごとに 16 kHz モノラルの AAC（me.m4a / others.m4a）に書き出すだけにする
@@ -161,8 +132,7 @@ Mac 標準は今までどおり（チャンネルごとの SpeechTranscriber で
 - 1 人で参加するときは、自分の声が 2 人に分かれる誤判定を避けるためオフのままにする。
 - 議事録のプロンプトにも「同席者＝本人と同じ部屋で同じマイクを使う参加者」と説明を加えた。
 
-合成音声での確認（マイク側に Flo と Kyoko、相手側に Kyoko と Eddy）では、マイク側の 2 人が「自分」と「同席者1」に正しく分かれた。
-ただし、同じ音声合成エンジン（Eloquence）の声どうし（Flo と Grandpa）は 1 人にまとめられた。声の特徴が近すぎるためで、実際の人の声ではここまで似ることは少ない。
+合成音声での確認の結果は [verification/meeting.md](../verification/meeting.md) 5。
 
 ### 4.5 話者の割り当て
 
@@ -197,15 +167,7 @@ Granola・Notion AI Meeting Notes の「会議が始まると記録を勧める�
 1. Core Audio のプロセスオブジェクト（`kAudioHardwarePropertyProcessObjectList`）から、各プロセスの `kAudioProcessPropertyBundleID`・`kAudioProcessPropertyPID`・`kAudioProcessPropertyIsRunningInput` を読む。
 2. bundle ID の先頭で会議アプリを判別する。Chrome・Slack・Teams はマイクをヘルパー（`com.google.Chrome.helper` など）で使うので、実行ファイルのパス（`proc_pidpath`）からいちばん外側の `.app` を求め、その bundle ID でも判別する。
 
-| 対象 | bundle ID の先頭 |
-| --- | --- |
-| Zoom | `us.zoom.` |
-| Microsoft Teams | `com.microsoft.teams`（`teams2`・ヘルパー・`modulehost` を含む） |
-| Slack（ハドル） | `com.tinyspeck.slackmacgap` |
-| Webex | `com.cisco.webex`、`Cisco-Systems.Spark`、`com.webex.` |
-| FaceTime | `com.apple.FaceTime`、`com.apple.avconferenced`（通話の音声を扱うデーモン） |
-| Google Chrome / Arc / Microsoft Edge | `com.google.Chrome` / `company.thebrowser.` / `com.microsoft.edgemac` |
-| Safari | `com.apple.Safari`、`com.apple.WebKit.GPU`（Safari のマイクは WebKit の GPU プロセスが扱う） |
+対象のアプリ（Zoom・Teams・Slack・Webex・FaceTime と、ブラウザの Chrome・Arc・Edge・Safari）と、見分けに使う bundle ID の先頭は `MeetingDetector.swift` の `MeetingApp`（DEC-MTG-031）。
 
 - ブラウザは Google Meet かどうかまでは分からない（タブの URL は読まない）。ブラウザがマイクを使い始めたら「ブラウザの会議（Google Meet など）かもしれません」と提案する。
 - `com.apple.WebKit.GPU` は Safari 以外の WebKit を使うアプリとも共通なので、それらがマイクを使っても Safari として提案されることがある。
@@ -249,13 +211,7 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
 
 #### 確認用の CLI
 
-```bash
-.build/debug/Hanasu --list-audio-processes        # 今 Core Audio にいるプロセス（PID・入力中・出力中・会議アプリ・bundle ID）
-.build/debug/Hanasu --watch-audio-processes       # 変化を待って表示（リスナーが届くかの確認。Ctrl-C で終了）
-.build/debug/Hanasu --simulate-meeting-detection  # 検出と記録の状態を台本どおりに動かし、提案の出かたを表示（待ち時間は短縮）
-.build/debug/Hanasu --render-meeting-suggestion out.png [--stop] [--app zoom|teams|slack|webex|facetime|chrome|safari|arc|edge]
-.build/debug/Hanasu --render-meeting-detection-settings out.png
-```
+`MeetingDetectorCLI.swift`（`--list-audio-processes`・`--watch-audio-processes`・`--simulate-meeting-detection`・提案のパネルの描き出し）。
 
 ### 4.9 会議中のメモと「ここ重要」の印（F11〜F14）
 
@@ -274,20 +230,13 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
 - **記録後の編集**: 会議ノートの「メモ」タブでテキストとして直し、「保存」か「保存して議事録を作り直す」。ヘッダーの「議事録を作り直す」でも作り直せる。
 - **字幕（F14）**: 記録中の画面の文字起こし（F3）は前からある。そのデータ（確定した発言と途中結果）をそのまま使い、前面に浮かぶ小さなパネル
   （`NSPanel`、`.floating`、アプリをアクティブにしない）に直近 2 発言と途中結果を出す。パネルにも「ここ重要」ボタンを置いた。記録が終わると閉じる。
-  文字起こしの仕組みに手を入れる必要がなく、手間が小さかったので今回入れた。
+  文字起こしの仕組みに手を入れずに作れる。
 
 ### 4.10 議事録の型（テンプレート）
 
 Granola のテンプレート（1on1・商談・採用面接など）にならい、会議の種類に合わせて議事録の見出しを変えられるようにした（`MinutesTemplate.swift`）。
 
-| 型 | 見出しの構成 | 指示のねらい |
-| --- | --- | --- |
-| 自動（初期値） | 概要／話し合った内容（話題ごと）／決定事項 | 従来の議事録と同じ |
-| 定例 | 概要／進捗（テーマごと）／報告・共有事項／課題・リスク／決定事項／次回までに確認すること | 会議に出ていない人が読んでも状況が分かる |
-| 1on1 | 概要／近況・コンディション／話題と相談事／フィードバック／キャリア・成長／合意したこと／次回話したいこと | 本人の意図が伝わるように。個人的な事情は穏当な言い方で |
-| 商談 | 概要／顧客の課題／提案内容／顧客の反応／懸念・質問／予算・時期・決裁 | 営業の記録としてそのまま使える。予算・時期・決裁者は必ず残す |
-| ブレスト | 概要／出たアイデア（テーマごと）／有望なアイデア／論点・未解決の問い | アイデアはなるべく漏らさず、誰の案かを添える |
-| カスタム | ユーザーが書いた指示に従う | 指示は `<user_template>` で囲んでシステム指示に入れる |
+型は 自動（初期値）・定例・1on1・商談・ブレスト・カスタム。型ごとの見出しの構成と指示の文面は `MinutesTemplate.swift` の `MinutesTemplate` と `MinutesPrompt.systemInstruction`（DEC-MTG-060）。
 
 - どの型でも、最後に「アクションアイテム」（商談は「次のアクション」、ブレストは「次のステップ」）と「話者についてのメモ」の見出しを付ける。
 - 選べる場面は 2 つ。
@@ -323,6 +272,16 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 - タイトルはやること、メモに担当・期限の言い方・会議名と日時を書く。`due` があれば日付だけの期限（終日）を付ける。
 - 登録したアイテムには `reminderID` を保存し、「登録済み」と表示して二重登録を避ける。
 - 権限（リマインダーのフルアクセス）は、シートの「登録」を押したときに初めて求める。Info.plist に `NSRemindersFullAccessUsageDescription`、Hardened Runtime 用に `com.apple.security.personal-information.calendars` の entitlement を足した。許可済みなら登録先のリストを選べる。
+
+### 4.12 録音する機器と、音が入っているかの確認
+
+実機で何も録音されなかった問題（[verification/meeting.md](../verification/meeting.md) 4）を直したときに、次を足した。
+
+- 設定「会議」→「録音するスピーカー」（初期値は Mac 全体の音。特定の出力機器だけをタップすることもできる）と「録音するマイク」（DEC-MTG-019）
+- 記録中の画面に「自分」「相手」の音量メーター。始めてから 10 秒たっても一度も音が入らないチャンネルは警告を出す（DEC-MTG-020）
+- `Hanasu --list-audio-devices` で機器の一覧（UID・サンプリングレート）と、会議の記録と同じ方法で作ったマイクの形式を表示
+- 起動時に、アプリの終了などで「記録中」「処理中」のまま残った会議を「失敗」にする（DEC-MTG-018）
+- タップの実際のサンプリングレートを測って合わせる（DEC-MTG-003）、マイクは機器の構成が変わったら作り直す（DEC-MTG-004）
 
 ## 5. アーキテクチャ
 
@@ -382,133 +341,9 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 | 音声認識 | 文字起こし | 許可済み。Whisper / Gemini を選んだときは求めない |
 | リマインダー | アクションアイテムの登録 | 新規。`NSRemindersFullAccessUsageDescription`。会議ノートで「登録」を押したときだけダイアログ |
 
-## 8. フェーズ分け
+## 9. 検証
 
-| フェーズ | 内容 |
-| --- | --- |
-| 1（実装済み） | F1〜F7・F10、FluidAudio による相手側の話者分離、話者名の付け替え（F8） |
-| 1.5（実装済み） | 会議中のメモと「ここ重要」の印、議事録への反映、記録後の編集と作り直し、字幕パネル（F11〜F14） |
-| 2 | 会議の自動検出（F9、実装済み）、会議アプリだけを録るモード、マイク側のエコーキャンセル |
-
-## 9. 検証方法
-
-- `say` で作った 2 人分（声の違う 2 つの音声）の会話を、「自分」側と「相手」側の音声ファイルとして後処理パイプラインに流す CLI モードを作り、文字起こし→並べ替え→議事録まで確認する。
-- システム音声のタップは、`afplay` で音声を鳴らしながら数秒録音し、文字起こしできることを確認する。
-
-## 10. 検証結果（2026-11-02）
-
-`say` の 3 つの声（相手 2 人＋自分）で 41 秒の会議音声を作り、`--meeting-files` で後処理を確認した。
-
-```bash
-.build/debug/Hanasu --meeting-files me.wav others.wav
-HANASU_DEBUG=1 .build/debug/Hanasu --meeting-files me.wav others.wav   # 語ごとの時刻も表示
-```
-
-| 項目 | 結果 |
-| --- | --- |
-| 文字起こし（2 チャンネル） | 41 秒の音声を 0.8〜1.2 秒で処理 |
-| 自分／相手の並べ替え | 時刻順に正しく並ぶ |
-| 回り込み除去（自分側に相手の声を 30% の音量で混ぜたもの） | 回り込んだ相手の発言は自分側から消えた |
-| 議事録（gemini-3.8-flash、サービスアカウント） | 約 5 秒。誤認識（「オームデバイス」→ オンデバイス、「話し合う分」→ 話者分離）も文脈から補って要約した |
-
-分かった制約:
-
-- **回り込みがあると、自分の発言の認識そのものが崩れる。** 回り込みなしでは自分の発言が全部正しく認識されたが、回り込みありでは「オンデバイスのモデルを使う予定です。来週の金」が認識されなかった。テキストでの除去では取り戻せないので、**イヤホンの利用を前提**にする。マイク側のエコーキャンセル（Voice Processing I/O、または相手側の音声を参照信号にした自前のエコー除去）はフェーズ 2 で検討する。
-- 語の時刻は、無音のあとの最初の語に無音の分まで含まれることがある（例: 「は」が 5.70〜6.78 秒）。重なりの判定は語の終わり寄り 0.4 秒だけで行うようにした。
-- システム音声のタップ（Core Audio Process Tap）は、権限ダイアログ（システムオーディオ録音）を伴うため、実際の会議での確認が必要。
-
-### 10.1 話者分離（FluidAudio 組み込み後）
-
-| 項目 | 結果 |
-| --- | --- |
-| 初回のモデル準備（ダウンロード＋コンパイル） | 49.5 秒（2 回目以降 0.2〜0.8 秒） |
-| 話者分離の処理時間 | 41 秒の音声で 1.0〜2.2 秒 |
-| 精度 | 相手側の 2 人（Kyoko・Eddy の声）を正しく 2 人に分け、6 発言すべての話者が正しかった |
-| 議事録 | 話者1・話者2・自分の発言を区別してまとめ、「話者2 は佐藤さんと呼ばれている可能性がある」と推定した |
-
-最初は「了解です」の「了解」だけが前の話者に付いた。話者分離が 2 人目の話し始めを約 1.4 秒遅れて検出し（実際は 35.1 秒ごろ、検出は 36.50 秒）、
-すき間にある語をいちばん近い区間（前の話者）に割り当てていたため。4.5 の 1 の規則（間があいて始まる語は次の話者）に変えて解消した。
-
-### 10.2 実機で録音されなかった問題（2026-11-02）
-
-Bluetooth イヤホン（LinkBuds Clip）を使った実際の会議で、何も文字起こしされなかった。
-
-| 症状 | 原因 | 対処 |
-| --- | --- | --- |
-| 相手側の音声が 3 分の 1 の長さ（42 秒 → 13.3 秒）の、認識できない音になった | タップが報告する形式（`kAudioTapPropertyFormat`、48kHz）をそのまま使っていたが、集約デバイスの時計は主デバイスの Bluetooth イヤホン（マイク使用中は 16kHz）に合うため、実際は 16kHz のデータが届いていた | 集約デバイスの入力の実際の形式（`kAudioDevicePropertyStreamFormat`）を使う。録音中にサンプリングレートが変わったら読み直す |
-| 自分側が完全な無音（ピーク 0）になった | タップを作ると Bluetooth イヤホンの接続モードが切り替わり、マイクの経路が変わったまま無音を受け取り続けた | `AVAudioEngineConfigurationChange` を受けてマイクを作り直す。入力の形式が変わったら変換器も作り直す |
-
-| 上の修正後も、Teams で相手の音声が 3 分の 1 の長さ（58.8 秒 → 19.5 秒）になった | 集約デバイスの入力形式（`kAudioDevicePropertyStreamFormat`）も 48kHz と返るが、実際に届くのは毎秒約 16,000 サンプル（主デバイスの Bluetooth イヤホンの時計）だった | 「Mac 全体の音」では主デバイスを内蔵スピーカーにする。さらに IOProc で届くフレーム数と経過時間から実際のレートを測り、形式と 10% 以上違えば測った値に合わせる |
-| 録音ボタンでクラッシュした（修正版で発生） | マイクの形式を読むために一時的に作った `AVAudioEngine` が、`inputNode` に触る前に解放されていた（ノードはエンジンを保持しない） | エンジンを変数に持ち、そのまま録音に使う |
-| マイクを指定しても形式が既定の機器のまま | 機器を切り替えても `inputNode.outputFormat` は切り替え前の機器の形式のまま | `inputNode.inputFormat`（機器側の実際の形式）でタップを付ける |
-
-あわせて次を追加した。
-
-- 設定「会議」→「録音するスピーカー」（初期値は Mac 全体の音。特定の出力機器だけをタップすることもできる）と「録音するマイク」
-- 記録中の画面に「自分」「相手」の音量メーター。始めてから 10 秒たっても一度も音が入らないチャンネルは警告を出す
-- `Hanasu --list-audio-devices` で機器の一覧（UID・サンプリングレート）と、会議の記録と同じ方法で作ったマイクの形式を表示
-- 起動時に、アプリの終了などで「記録中」「処理中」のまま残った会議を「失敗」にする
-
-### 10.3 会議の自動検出（2026-11-03）
-
-| 項目 | 結果 |
-| --- | --- |
-| `--list-audio-processes` | 44 件のプロセスを表示。Chrome・Slack・Teams のヘルパーはアプリ本体の bundle ID に戻して判別できた（例: `com.microsoft.teams2.modulehost` → teams）。`com.apple.WebKit.GPU` は safari、`com.apple.avconferenced` は facetime と判別 |
-| リスナー（`--watch-audio-processes` と `afplay`） | `afplay` のプロセスの増減と、出力中になったことが届いた。`IsRunningOutput` そのものの通知は届かず、`IsRunning` の通知で読み直して分かった（4.8） |
-| 負荷 | 監視中の CPU 時間は数秒で 0.04 秒、CPU 使用率 0.0% |
-| 提案の出かた（`--simulate-meeting-detection`） | 開始の提案、「今回はしない」のあとミュート相当で止めて再開しても聞かないこと、ブラウザの提案、「記録する」→ 停止の提案 →「記録を止める」、停止の提案が出る前の再開で取り消すこと、「続ける」、記録を終えた時点で使用中のアプリに聞かないこと、を確認 |
-| 見た目 | 提案のパネル（開始・ブラウザ・停止）と設定の欄を PNG に描き出して確認 |
-
-実際の会議アプリ（Zoom・Meet など）がマイクを使ったときの検出は、マイクの許可が要るため実機で確認する。
-
-### 10.4 会議中のメモと印（2026-11-03）
-
-`say` の 3 つの声で 80 秒の架空の会議（リリース日・β版の対象・ランチの雑談）を作り、メモのファイルと一緒に後処理に流した。
-
-```bash
-# notes.txt の例（会議ノートの「メモ」タブと同じ形式）
-#   [00:08] リリース 11/20 で確定？
-#   [00:50] ★
-#   [00:56] 選定基準は佐藤さん、金曜まで
-#   [01:10] 価格表の更新も次回の議題にする
-#   法務レビューが要るか確認する
-.build/debug/Hanasu --meeting-files me.wav others.wav --notes notes.txt
-.build/debug/Hanasu --render-meeting-notes <出力フォルダ>   # 記録中の画面・メモの編集・字幕・設定を PNG に。後方互換の確認も出す
-```
-
-| 項目 | メモなし | メモと印あり |
-| --- | --- | --- |
-| 「重要とした箇所」 | なし | `[00:50]` の印に、β版を 3 社に絞る話と選定基準の担当・期限をまとめた |
-| メモにしかない内容 | — | 「価格表の更新を次回の議題に」「法務レビューの要否」を「（メモより）」付きで TODO などに残した |
-| 話者名 | 「なし」 | メモの「佐藤さん」から、話者2 を佐藤さんと推測した（推測と明記） |
-| 雑談（ランチ） | 決定事項に入った | 「その他」に下がり、決定事項から外れた |
-
-- メモ機能より前の形式の `meeting.json` と、手元の会議（13 件）がすべて読めることを確かめた。
-- 記録中にメモや印を足すたびに `meeting.json` を保存するので、アプリが落ちてもメモは残る。
-
-### 10.5 議事録の型と書き出し（2026-11-03）
-
-架空の文字起こし（商談・1on1。実際の会議データは使っていない）で確認した。
-
-```bash
-.build/debug/Hanasu --minutes-from-transcript sales.txt --template sales --date "2026-11-03 14:00" --save-json sales.json
-.build/debug/Hanasu --minutes-from-transcript 1on1.txt --template oneOnOne
-.build/debug/Hanasu --minutes-from-transcript sales.txt --custom-prompt "「## 一言まとめ」と「## 宿題」だけで"
-.build/debug/Hanasu --export-minutes sales.json            # Gemini を呼ばずに書き出しだけ
-.build/debug/Hanasu --render-minutes-ui out/ --meeting-json sales.json   # 画面を PNG に
-.build/debug/Hanasu --meeting-files me.wav others.wav --template regular  # 録音からの後処理でも型を指定できる
-```
-
-文字起こしは 1 行 1 発言（`[00:12] 話者: 発言` か `話者: 発言`）。`自分`・`話者1`・`同席者1`・`相手` は会議の話者キーに直す。
-
-| 項目 | 結果（gemini-3.8-flash） |
-| --- | --- |
-| 商談（13 発言） | 8.6 秒。顧客の課題・提案内容・反応・懸念・予算/時期/決裁の見出しで出力。「今週の金曜まで」を 2026-11-06（金）に直し、担当「自分」・「話者1」を正しく付けた |
-| 1on1（10 発言） | 10.2 秒。近況・相談・フィードバック・キャリア・合意の見出しで出力。「明日」→ 11/4、「月末まで」→ 11/30 |
-| カスタム | 4.8 秒。指定した 2 つの見出しのあとに、アクションアイテムと話者のメモが付いた |
-| 応答の読み取り | `<action_items>` をコードブロックで囲んだ応答、日付でない `due`（「来週」→ 期限の言い方へ）、空の `task`（除く）、壊れた JSON（「読み取れませんでした」と表示）を確認 |
-
-## 11. 会議の横断検索と質問（Ask）
+検証のしかたと、日付の付いた結果（後処理・話者分離・実機で録音されなかった問題・自動検出・メモ・議事録の型）は [verification/meeting.md](../verification/meeting.md) に移した。
 
 参考にしたもの: Granola の会議をまたいだチャット（「先週の定例で何が決まった？」）、Otter の検索。
 
@@ -525,7 +360,7 @@ Bluetooth イヤホン（LinkBuds Clip）を使った実際の会議で、何も
 - 日本語は語の区切りがないので、形態素ではなく「隣り合う 2 文字」ごとに、それを含む箇所の番号を持つ。検索語の 2-gram のうち候補がいちばん少ないものから候補を取り、最後に本当に検索語を含むかを確かめる。1 文字だけの検索語は全件を順に調べる。
 - `MeetingRecorder.meetings` はもともと全会議をメモリに読み込んでいるので、索引もメモリに持ち、ファイルには保存しない。保存すると、Finder や他のツールで会議のファイルを直したときに索引とずれる心配が増えるため。
 - 会議の一覧が変わるたびに、会議全体のハッシュを比べて、変わった会議の分だけ作り直す（バックグラウンドの actor で行い、画面は止めない）。消した箇所が半分を超えたら詰め直す。
-- 架空の 1 時間相当の会議 500 件（発言 30 万件、約 1,400 万文字）で、索引づくりが約 4 秒（デバッグビルド）、2 文字以上の検索は 1 ms 未満、1 文字の検索は約 0.5 秒だった。
+- 大量の会議での索引づくりと検索の速さは [verification/meeting.md](../verification/meeting.md) 9。
 
 ### 11.2 会議への質問（Ask）
 
@@ -542,14 +377,7 @@ Bluetooth イヤホン（LinkBuds Clip）を使った実際の会議で、何も
 
 ### 11.3 確認用の CLI
 
-```bash
-.build/debug/Hanasu --search-meetings <語> [--meetings-dir <フォルダ>]
-.build/debug/Hanasu --ask-meetings <質問> [--meetings-dir <フォルダ>] [--limit <会議数>] [--model <id>] [--show-context]
-.build/debug/Hanasu --write-sample-meetings <フォルダ>          # 架空の会議 3 件を書き出す
-.build/debug/Hanasu --render-meeting-search <出力.png> [--ask]   # 架空のデータで検索（質問）の画面を描く
-```
-
-`--meetings-dir` を省くと `~/Documents/Hanasu/Meetings` を使う。`--show-context` は Gemini に渡す本文をそのまま表示する。
+`MeetingSearchCLI.swift`（`--search-meetings`・`--ask-meetings`・`--write-sample-meetings`・画面の描き出し）。`--meetings-dir` を省くと `~/Documents/Hanasu/Meetings` を使うので、確かめるときは `--write-sample-meetings` で作った架空の会議のフォルダを渡す。
 
 ## 参考
 

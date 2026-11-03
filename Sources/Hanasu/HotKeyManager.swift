@@ -1,6 +1,8 @@
 import Carbon.HIToolbox
 import Foundation
 
+// 要件: REQ-DIC-001
+// 設計判断: DEC-COM-010
 /// Carbon の RegisterEventHotKey でグローバルショートカットを扱う。
 /// アクセシビリティ権限なしで、押下と解放の両方を受け取れる。
 final class HotKeyManager {
@@ -12,6 +14,7 @@ final class HotKeyManager {
     }
 
     private static let signature: OSType = 0x484E_5355  // 'HNSU'
+    // 設計判断: DEC-COM-011
     /// ID はインスタンスをまたいで重ならないようにする。どのインスタンスもアプリの同じイベントターゲットにハンドラを置くので、
     /// ID が重なると、後から置いたハンドラがほかのインスタンスのショートカットまで自分のものとして受け取ってしまう
     private static var nextID: UInt32 = 1

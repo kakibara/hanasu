@@ -1,5 +1,6 @@
 import Foundation
 
+// 設計判断: DEC-DIC-088
 /// このセッションで入力した音声入力の結果（辞書の候補を探す材料）。
 /// メモリ上だけに持ち、ファイルには保存しない（「最近の結果」と同じ扱い）。
 @MainActor
@@ -35,6 +36,7 @@ struct DictionaryCandidate: Identifiable, Hashable {
     }
 }
 
+// 要件: REQ-DIC-071
 /// 過去の音声入力の結果と会議の記録から、Gemini に辞書の候補を挙げてもらう。
 /// 設定画面のボタンを押したときだけ動く。候補は自動では辞書に追加しない。
 enum DictionarySuggester {
@@ -65,6 +67,7 @@ enum DictionarySuggester {
 
     static let meetingLimit = 5
 
+    // 設計判断: DEC-DIC-088
     /// 設定画面から使う材料を集める
     @MainActor
     static func corpus(includeDictations: Bool, includeMeetings: Bool) -> Corpus {
@@ -114,6 +117,7 @@ enum DictionarySuggester {
         """
     }
 
+    // 設計判断: DEC-DIC-088
     static func suggest(corpus: Corpus, existing: UserDictionary, client: GeminiClient, model: String) async throws -> [DictionaryCandidate] {
         var client = client
         // 会議の記録は長いので、整形（15 秒）より長く待つ
@@ -148,6 +152,7 @@ enum DictionarySuggester {
         }
     }
 
+    // 設計判断: DEC-DIC-089
     /// 辞書にすでにあるもの・置き換えに使えない読み・材料に出てこないもの（Gemini の思い込み）を除く
     static func filter(_ candidates: [DictionaryCandidate], existing: UserDictionary, material: String) -> [DictionaryCandidate] {
         let key = { (s: String) in String(UserDictionary.matchKey(s)) }
@@ -180,6 +185,7 @@ enum DictionarySuggester {
         return result
     }
 
+    // 設計判断: DEC-DIC-087
     /// 選んだ候補を辞書の末尾に足した文字列を返す
     static func appending(_ candidates: [DictionaryCandidate], to text: String) -> String {
         guard !candidates.isEmpty else { return text }

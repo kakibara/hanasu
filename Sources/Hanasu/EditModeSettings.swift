@@ -8,6 +8,7 @@ extension HotKeyCombo {
         keyCode: UInt32(kVK_ANSI_E), modifiers: UInt32(controlKey | optionKey | cmdKey))
 }
 
+// 設計判断: DEC-DIC-030
 /// 選択を声で編集するモードの設定。ほかの機能の設定（AppSettings）とは分けて持つ。
 final class EditModeSettings: ObservableObject {
     static let shared = EditModeSettings()

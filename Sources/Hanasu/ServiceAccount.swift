@@ -19,6 +19,7 @@ enum ServiceAccountError: LocalizedError {
     }
 }
 
+// 設計判断: DEC-COM-003
 /// Google Cloud のサービスアカウント鍵（JSON）。
 struct ServiceAccountCredentials: Decodable {
     let projectID: String
@@ -46,6 +47,7 @@ struct ServiceAccountCredentials: Decodable {
     }
 }
 
+// 設計判断: DEC-COM-003
 /// サービスアカウント鍵で署名した JWT を OAuth のアクセストークンに交換し、期限まで使い回す。
 actor ServiceAccountTokenProvider {
     static let shared = ServiceAccountTokenProvider()

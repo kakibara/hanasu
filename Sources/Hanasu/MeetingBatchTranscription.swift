@@ -19,6 +19,7 @@ enum MeetingBatchTranscription {
         return phrases(from: segments, channel: channel, offset: offset)
     }
 
+    // 設計判断: DEC-MTG-006
     /// 区間を、録音開始からの時刻の発話にする。語の時刻がない（Gemini）ときは、区間全体を 1 語として持つ
     static func phrases(from segments: [TimedSegment], channel: MeetingChannel, offset: Double) -> [TranscribedPhrase] {
         segments.map { segment in

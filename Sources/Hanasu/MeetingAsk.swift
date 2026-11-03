@@ -1,9 +1,11 @@
 import Foundation
 import NaturalLanguage
 
+// 要件: REQ-MTG-016
 /// 過去の会議への質問（Ask）: 関係しそうな会議を集めて Gemini に渡し、根拠の会議を引用して答えさせる。
 /// 会議の内容を送る先は Gemini だけ。
 enum MeetingAsk {
+    // 設計判断: DEC-MTG-053
     struct Options {
         /// Gemini に渡す会議の上限
         var maxMeetings = 8
@@ -45,6 +47,7 @@ enum MeetingAsk {
 
     // MARK: - 会議を集める
 
+    // 設計判断: DEC-MTG-052
     /// 質問に関係しそうな会議を集め、Gemini に渡す本文を作る。
     /// 1. 質問の語でヒットした会議（ヒットした語の種類が多い順、同じなら新しい順）
     /// 2. 足りなければ直近の会議
@@ -110,6 +113,7 @@ enum MeetingAsk {
         return Context(sources: sources, keywords: keywords, period: period, prompt: prompt)
     }
 
+    // 設計判断: DEC-MTG-053
     /// 会議 1 件分の資料。議事録があれば議事録と、検索でヒットした発言の前後を渡す。
     /// 議事録がなければ文字起こしを渡す（長すぎるときはヒットした発言の前後か、冒頭だけ）。
     static func material(for meeting: Meeting, hitBlocks: Set<UUID>, options: Options) -> String {
@@ -164,6 +168,7 @@ enum MeetingAsk {
     - 簡潔に、日本語で答える。見出しや箇条書き（Markdown）を使ってよい。
     """
 
+    // 設計判断: DEC-MTG-054
     static func ask(question: String, meetings: [Meeting], index: MeetingSearchIndex, client: GeminiClient,
                     model: String, options: Options = Options()) async throws -> Answer {
         let context = await gatherContext(question: question, meetings: meetings, index: index, options: options)
@@ -175,6 +180,7 @@ enum MeetingAsk {
                       keywords: context.keywords)
     }
 
+    // 設計判断: DEC-MTG-054
     /// 答えの中の「M2:」「M2：」を拾い、引用された会議を出てきた順に返す
     static func cited(in text: String, sources: [Source]) -> [Source] {
         guard let regex = try? NSRegularExpression(pattern: "M(\\d+)\\s*[:：]") else { return [] }
@@ -196,6 +202,7 @@ enum MeetingAsk {
         "教え", "決定", "話", "件", "こと", "もの", "ため", "とき", "について",
     ]
 
+    // 設計判断: DEC-MTG-052
     /// 質問から検索語を取り出す。ひらがなだけの語（助詞・活用語尾）、1 文字の語、言い回しの語は除き、
     /// 続いて出てくる語はつなげた複合語（「料金」「プラン」→「料金プラン」）も加える。
     static func keywords(in question: String) -> [String] {
@@ -234,6 +241,7 @@ enum MeetingAsk {
         (0x3040...0x309F).contains(scalar.value)
     }
 
+    // 設計判断: DEC-MTG-052
     /// 質問の中の「今日」「昨日」「先週」「先月」「11月2日」「11/2」などから期間を決める。週は月曜始まり。
     static func period(in question: String, now: Date = Date()) -> DateInterval? {
         var calendar = Calendar(identifier: .gregorian)

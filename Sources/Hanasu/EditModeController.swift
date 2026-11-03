@@ -2,6 +2,7 @@ import AppKit
 import Carbon.HIToolbox
 import Combine
 
+// 要件: REQ-DIC-050
 /// 選択中の文章を、声の指示で書き換える（Wispr Flow の Command Mode にあたる）。
 /// ホットキー → 選択文の読み取り → 指示の録音・文字起こし → Gemini で書き換え → 選択範囲に貼り付け、の流れを管理する。
 /// 録音・HUD・ホットキーは音声入力（DictationController）とは別に持ち、同時には動かさない。
@@ -33,6 +34,7 @@ final class EditModeController {
     private var selectionTask: Task<String?, Never>?
     private var cancellables: Set<AnyCancellable> = []
 
+    // 設計判断: DEC-DIC-035
     init(dictation: DictationController) {
         self.dictation = dictation
         hud.model.editBadge = ""
@@ -120,6 +122,7 @@ final class EditModeController {
 
     // MARK: - 操作
 
+    // 要件: REQ-DIC-012
     /// HUD の「停止」。ショートカットをもう一度押したときと同じく、録音を止めて書き換える
     func stopFromHUD() {
         switch state {
@@ -138,6 +141,7 @@ final class EditModeController {
         }
     }
 
+    // 設計判断: DEC-DIC-032
     func start() {
         guard state == .idle, dictation.state == .idle else { return }
         // 選択の読み取り（アクセシビリティ API・⌘C）にも貼り付け（⌘V）にも要る
@@ -219,6 +223,7 @@ final class EditModeController {
         hud.model.editBadge = "選択 \(text?.count ?? 0) 文字"
     }
 
+    // 設計判断: DEC-DIC-032
     static func selectionError(_ text: String?) -> String? {
         guard let text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return "文章が選択されていません。書き換えたい文章を選択してから、もう一度押してください。"
@@ -280,6 +285,7 @@ final class EditModeController {
         setEscapeHotKey(enabled: false)
     }
 
+    // 設計判断: DEC-DIC-036
     func finish() async {
         guard state == .recording else { return }
         state = .processing

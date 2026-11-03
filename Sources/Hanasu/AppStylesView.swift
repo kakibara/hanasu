@@ -2,6 +2,7 @@ import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 
+// 設計判断: DEC-DIC-047
 /// 設定画面の「アプリ別」タブ。入力先アプリごとに、文体のプリセット・追加ルール・既定の出力言語を決める。
 struct AppStylesTab: View {
     @ObservedObject var store = AppStyleStore.shared

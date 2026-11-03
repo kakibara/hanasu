@@ -23,6 +23,7 @@ final class AudioDeviceList: ObservableObject {
     }
 }
 
+// 設計判断: DEC-MTG-019
 /// 会議で録音するスピーカーとマイクの選択（設定画面と会議ノートで共用）
 struct MeetingDevicePickers: View {
     @ObservedObject var settings = AppSettings.shared

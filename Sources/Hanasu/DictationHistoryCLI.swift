@@ -8,6 +8,7 @@ import SwiftUI
 //   Hanasu --history-check <作業フォルダ> [--gemini]
 //     作業フォルダの中で保存・読み込み・上限・削除を確かめる。--gemini を付けると整形・英訳のやり直しも試す
 // どちらも本物の履歴（~/Library/Application Support/Hanasu/History）には触れない。
+// 確かめ方: REQ-DIC-060, REQ-DIC-061
 @MainActor
 enum DictationHistoryCLI {
     static func runIfRequested() {

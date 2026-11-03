@@ -8,6 +8,7 @@ import SwiftUI
 //     --refine を付けると、スニペットの前後の文を Gemini で整形（--translate なら英訳）してつなぐ。
 //   Hanasu --render-snippets-settings <出力.png> [--empty]
 //     設定画面の「スニペット」タブを例のスニペットで画像にする。--empty で空の状態を描く。
+// 確かめ方: REQ-DIC-030
 @MainActor
 enum SnippetsCLI {
     static func matchSnippet(_ transcript: String, args: [String]) async throws {

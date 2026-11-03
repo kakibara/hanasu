@@ -1,6 +1,7 @@
 import AppKit
 import UniformTypeIdentifiers
 
+// 要件: REQ-MTG-019
 /// 会議ノートの書き出し（Markdown・Slack 向け・テキスト）。
 enum MeetingExport {
     enum FileFormat: String, CaseIterable {
@@ -12,6 +13,7 @@ enum MeetingExport {
 
     // MARK: - Slack 向け（mrkdwn）
 
+    // 設計判断: DEC-MTG-065
     /// Slack に貼る要約。議事録を mrkdwn に直し、見出しの「話者についてのメモ」（推測の内部メモ）は除く。
     /// 貼り付けて送る前提なので、`&` `<` `>` のエスケープ（API 用）はしない。
     static func slack(_ meeting: Meeting) -> String? {
@@ -63,6 +65,7 @@ enum MeetingExport {
     /// 斜体 `*x*`（太字の `**` は先に置き換えておく）
     private static let italicPattern = #"(?<!\*)\*(?![\s\*])(.+?)(?<![\s\*])\*(?!\*)"#
 
+    // 設計判断: DEC-MTG-065
     /// 行内の Markdown を mrkdwn に直す。太字 `**x**` → `*x*`、リンク `[t](u)` → `<u|t>`、斜体は記号を外す。
     /// Slack の太字は前後が空白でないと効かないので、日本語の文中では前後に空白を入れる。
     static func slackInline(_ text: String) -> String {
@@ -89,6 +92,7 @@ enum MeetingExport {
 
     // MARK: - テキスト
 
+    // 設計判断: DEC-MTG-066
     /// Markdown の記号を外した読みやすいテキスト（メールや社内システムに貼る用）
     static func plainText(fromMarkdown markdown: String) -> String {
         var lines: [String] = []

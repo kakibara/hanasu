@@ -12,6 +12,7 @@ import SwiftUI
 //   Hanasu --render-minutes-ui <出力フォルダ> [--meeting-json <meeting.json>]
 //     議事録の型の選択欄・会議ノートの詳細・リマインダー登録・カスタムの指示の画面を PNG にする（見た目の確認用）。
 // --meeting-files にも --template / --custom-prompt を付けられる。
+// 確かめ方: REQ-MTG-006, REQ-MTG-007, REQ-MTG-017, REQ-MTG-018, REQ-MTG-019
 @MainActor
 enum MinutesCLI {
     static func runIfRequested(_ args: [String] = CommandLine.arguments) {

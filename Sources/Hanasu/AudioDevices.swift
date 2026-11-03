@@ -10,6 +10,7 @@ struct AudioDevice: Identifiable, Hashable {
     let outputChannels: Int
 }
 
+// 設計判断: DEC-MTG-019
 enum AudioDevices {
     static func all() -> [AudioDevice] {
         var address = Self.address(kAudioHardwarePropertyDevices)

@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 
+// 要件: REQ-MTG-017
 /// 記録を始める前に議事録の型を選ぶ欄（会議ノートの左下）
 struct MinutesTemplatePicker: View {
     @AppStorage(MinutesTemplateStore.templateKey) private var templateID = MinutesTemplate.auto.rawValue
@@ -32,6 +33,7 @@ struct MinutesTemplatePicker: View {
     }
 }
 
+// 要件: REQ-MTG-017
 /// 会議ノートで議事録の型を選び直して作り直すメニュー
 struct MinutesTemplateMenu: View {
     let meeting: Meeting
@@ -113,6 +115,8 @@ struct CustomMinutesPromptSheet: View {
     }
 }
 
+// 要件: REQ-MTG-019
+// 設計判断: DEC-MTG-066
 /// 会議ノートの「書き出し」メニュー（コピー・ファイルに保存・リマインダー）
 struct MeetingExportMenu: View {
     let meeting: Meeting

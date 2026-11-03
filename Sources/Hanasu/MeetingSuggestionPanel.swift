@@ -1,6 +1,8 @@
 import AppKit
 import SwiftUI
 
+// 要件: REQ-MTG-009
+// 設計判断: DEC-MTG-033
 /// 「会議を記録しますか？」「記録を止めますか？」を出す、前面に出ないパネル（画面の右上）。
 /// 会議アプリのフォーカスを奪わないよう nonactivatingPanel にし、1 回のクリックでボタンが押せるようにする。
 @MainActor

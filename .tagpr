@@ -1,8 +1,10 @@
 # tagpr の設定: https://github.com/Songmu/tagpr
+# 要件: REQ-REL-001
 [tagpr]
 	vPrefix = true
 	releaseBranch = main
 	versionFile = VERSION
 	changelog = true
 	# リリースは下書きで作り、アプリの zip を添付してから公開する（.github/workflows/tagpr.yml）
+	# 設計判断: DEC-REL-001
 	release = draft
