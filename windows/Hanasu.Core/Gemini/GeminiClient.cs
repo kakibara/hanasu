@@ -109,11 +109,13 @@ public sealed class GeminiClient : ITextAiClient
     {
         model = model.Trim();
         var body = BuildRequestBody(systemInstruction, parts, model, thinkingLevel, responseMimeType, responseSchema);
+        // 保存した API キーは、待ち時間を数え始める前に読む（Windows Hello の確認に時間がかかっても、時間切れにしない）
+        var storedKey = auth is GeminiAuth.StoredApiKey stored ? await stored.Load(cancellationToken).ConfigureAwait(false) : null;
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(Timeout);
         try
         {
-            using var request = await BuildHttpRequestAsync(model, body, timeout.Token).ConfigureAwait(false);
+            using var request = await BuildHttpRequestAsync(model, body, timeout.Token, storedKey).ConfigureAwait(false);
             using var response = await http.SendAsync(request, timeout.Token).ConfigureAwait(false);
             var text = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
@@ -128,7 +130,8 @@ public sealed class GeminiClient : ITextAiClient
         }
     }
 
-    internal async Task<HttpRequestMessage> BuildHttpRequestAsync(string model, string body, CancellationToken cancellationToken)
+    internal async Task<HttpRequestMessage> BuildHttpRequestAsync(string model, string body, CancellationToken cancellationToken,
+        string? preloadedKey = null)
     {
         var escapedModel = Uri.EscapeDataString(model);
         HttpRequestMessage request;
@@ -136,7 +139,7 @@ public sealed class GeminiClient : ITextAiClient
         {
             case GeminiAuth.ApiKey or GeminiAuth.StoredApiKey:
                 var key = auth is GeminiAuth.ApiKey direct ? direct.Key
-                    : await ((GeminiAuth.StoredApiKey)auth).Load(cancellationToken).ConfigureAwait(false);
+                    : preloadedKey ?? await ((GeminiAuth.StoredApiKey)auth).Load(cancellationToken).ConfigureAwait(false);
                 if (string.IsNullOrWhiteSpace(key)) throw GeminiException.MissingCredentials();
                 // URL のクエリにキーを載せない
                 request = new HttpRequestMessage(HttpMethod.Post,

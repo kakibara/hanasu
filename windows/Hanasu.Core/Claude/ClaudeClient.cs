@@ -65,11 +65,12 @@ public sealed class ClaudeClient : ITextAiClient
     {
         model = ClaudeModels.Normalize(model, purpose == TextPurpose.Minutes ? ClaudeModels.DefaultMinutesModel : ClaudeModels.DefaultModel);
         var parameters = BuildParams(purpose, systemInstruction, userText, model);
+        // キーは待ち時間を数え始める前に読む（Windows Hello の確認に時間がかかっても、時間切れにしない）
+        var client = await CreateSdkClientAsync(cancellationToken).ConfigureAwait(false);
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(Timeout);
         try
         {
-            var client = await CreateSdkClientAsync(timeout.Token).ConfigureAwait(false);
             var message = await client.Beta.Messages.Create(parameters, timeout.Token).ConfigureAwait(false);
             LastUsage = ReadUsage(message);
             return ReadText(message);
@@ -91,11 +92,11 @@ public sealed class ClaudeClient : ITextAiClient
     public async Task CheckAsync(string model, CancellationToken cancellationToken = default)
     {
         model = ClaudeModels.Normalize(model);
+        var client = await CreateSdkClientAsync(cancellationToken).ConfigureAwait(false);
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(Timeout);
         try
         {
-            var client = await CreateSdkClientAsync(timeout.Token).ConfigureAwait(false);
             await client.Models.Retrieve(model, cancellationToken: timeout.Token).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
