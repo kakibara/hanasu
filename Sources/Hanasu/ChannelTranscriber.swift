@@ -17,6 +17,8 @@ final class ChannelTranscriber: @unchecked Sendable {
     /// このチャンネルの音声が、録音開始から何秒後に始まったか
     private var timeOffset: Double?
     private let meetingStart: Date
+    /// false なら文字起こしはせず、音声ファイルに書き出すだけ（Whisper / Gemini では記録のあとにまとめて文字起こしする）
+    let live: Bool
 
     private var analyzer: SpeechAnalyzer?
     private var analyzerFormat: AVAudioFormat?
@@ -31,8 +33,10 @@ final class ChannelTranscriber: @unchecked Sendable {
     private var phrases: [TranscribedPhrase] = []
 
     /// - Parameter fixedTimeOffset: 録音開始からのずれが分かっている場合（ファイル入力など）に指定する
-    init(channel: MeetingChannel, inputFormat: AVAudioFormat, fileURL: URL?, meetingStart: Date, fixedTimeOffset: Double? = nil) {
+    init(channel: MeetingChannel, inputFormat: AVAudioFormat, fileURL: URL?, meetingStart: Date, fixedTimeOffset: Double? = nil,
+         live: Bool = true) {
         self.channel = channel
+        self.live = live
         self.inputFormat = inputFormat
         self.fileURL = fileURL
         self.meetingStart = meetingStart
@@ -42,6 +46,13 @@ final class ChannelTranscriber: @unchecked Sendable {
 
     /// モデルの準備と解析の開始。append より前に呼ぶ。
     func prepare(localeIdentifier: String, contextualStrings: [String]) async throws {
+        guard live else {
+            // 書き出すだけ。あとで読み直す Whisper / Gemini に合わせて 16 kHz モノラルにする
+            let format = TranscriptionAudio.format
+            file = try fileURL.map { try Self.makeFile(url: $0, format: format) }
+            queue.sync { self.analyzerFormat = format }
+            return
+        }
         guard let locale = await SpeechTranscriber.supportedLocale(equivalentTo: Locale(identifier: localeIdentifier)) else {
             throw SpeechRecognizerError.unsupportedLocale(localeIdentifier)
         }
@@ -85,16 +96,7 @@ final class ChannelTranscriber: @unchecked Sendable {
         try await analyzer.start(inputSequence: stream)
 
         if let fileURL {
-            file = try AVAudioFile(
-                forWriting: fileURL,
-                settings: [
-                    AVFormatIDKey: kAudioFormatMPEG4AAC,
-                    AVSampleRateKey: format.sampleRate,
-                    AVNumberOfChannelsKey: format.channelCount,
-                    AVEncoderBitRateKey: 32000,
-                ],
-                commonFormat: format.commonFormat,
-                interleaved: format.isInterleaved)
+            file = try Self.makeFile(url: fileURL, format: format)
         }
 
         queue.sync {
@@ -104,9 +106,27 @@ final class ChannelTranscriber: @unchecked Sendable {
         }
     }
 
+    private static func makeFile(url: URL, format: AVAudioFormat) throws -> AVAudioFile {
+        try AVAudioFile(
+            forWriting: url,
+            settings: [
+                AVFormatIDKey: kAudioFormatMPEG4AAC,
+                AVSampleRateKey: format.sampleRate,
+                AVNumberOfChannelsKey: format.channelCount,
+                AVEncoderBitRateKey: 32000,
+            ],
+            commonFormat: format.commonFormat,
+            interleaved: format.isInterleaved)
+    }
+
+    /// このチャンネルの音声（音声ファイルの先頭）が、録音開始から何秒後に始まったか。
+    /// 記録のあとに音声ファイルから文字起こしするとき、時刻をそろえるのに使う
+    var audioStartOffset: Double { queue.sync { timeOffset ?? 0 } }
+
     func append(_ buffer: AVAudioPCMBuffer) {
         queue.async { [self] in
-            guard let continuation, let analyzerFormat, let converted = convert(buffer, to: analyzerFormat) else { return }
+            guard live ? continuation != nil : file != nil,
+                  let analyzerFormat, let converted = convert(buffer, to: analyzerFormat) else { return }
             if timeOffset == nil {
                 let duration = Double(buffer.frameLength) / buffer.format.sampleRate
                 timeOffset = max(0, Date().timeIntervalSince(meetingStart) - duration)
@@ -117,7 +137,7 @@ final class ChannelTranscriber: @unchecked Sendable {
                 appLog.error("meeting audio write error: \(error.localizedDescription, privacy: .public)")
             }
             measureLevel(converted)
-            continuation.yield(AnalyzerInput(buffer: converted))
+            continuation?.yield(AnalyzerInput(buffer: converted))
         }
     }
 
@@ -217,6 +237,8 @@ final class ChannelTranscriber: @unchecked Sendable {
             converterInputFormat = buffer.format
             converter = buffer.format == format ? nil : AVAudioConverter(from: buffer.format, to: format)
             converter?.primeMethod = .none
+            // 書き出すだけのときは、相手側（ステレオのことが多い）を左右まとめてモノラルにする
+            if !live { converter?.downmix = true }
         }
         guard let converter else { return buffer }
         let ratio = format.sampleRate / buffer.format.sampleRate

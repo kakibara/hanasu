@@ -2,7 +2,7 @@
 
 話した内容を Gemini で自然な日本語に整えて、カーソル位置に入力する macOS メニューバーアプリ（Typeless 風）。
 
-- 音声認識: macOS 26 内蔵の音声認識エンジン（`SpeechAnalyzer` + `SpeechTranscriber`、`DictationTranscriber` も選択可）。オンデバイスで処理
+- 音声認識: macOS 26 内蔵の音声認識エンジン（`SpeechAnalyzer` + `SpeechTranscriber`、`DictationTranscriber` も選択可）。オンデバイスで処理。設定で Whisper（WhisperKit。Mac の上で動かす）か Gemini（音声を送る）にも切り替えられる
 - 整形: Gemini（初期値 `gemini-3.5-flash-lite`）。Google AI Studio の API キーか、Vertex AI のサービスアカウントで呼ぶ
 - 入力: クリップボード + ⌘V（元のクリップボードは自動で戻す）
 - 英訳して入力: `⌥⇧ Space` で録音するか、録音中の表示で「English」を選ぶと、日本語で話した内容を Gemini が自然な英語に翻訳して入力する
@@ -69,7 +69,9 @@ open build/Hanasu.app
 
 ## 設定できること
 
-ショートカット（音声入力・英訳して入力・選択を声で編集）、トグル／押している間だけ録音、認識エンジン（DictationTranscriber / SpeechTranscriber）、Gemini モデル、ユーザー辞書と置き換えルール、追加の整形ルール、アプリ別の文体（プリセット・追加ルール・既定の出力言語）、スニペット（起動フレーズと本文）、効果音。
+ショートカット（音声入力・英訳して入力・選択を声で編集）、トグル／押している間だけ録音、Gemini モデル、ユーザー辞書と置き換えルール、追加の整形ルール、アプリ別の文体（プリセット・追加ルール・既定の出力言語）、スニペット（起動フレーズと本文）、効果音。
+
+文字起こしのエンジン: 音声入力と会議の記録で別々に、Mac 標準（既定。SpeechTranscriber / DictationTranscriber）・Whisper（Mac の上で動かす。tiny / base / small / large-v3-turbo のモデルを選ぶと、その時点でダウンロード。取り消し・削除も設定から）・Gemini（録った音声を Google に送って文字起こし）から選べます。Whisper と Gemini は録音を止めてからまとめて文字起こしするので、録音中は文字が出ません（HUD には音量の目安を出します）。会議の記録では、記録のあとにチャンネルごとに時刻つきで文字起こしし、話者分離に回します。
 
 履歴: 保存するか、残す件数と期間、録音した音声も残すか（既定はオフ）、「最後の結果をもう一度入力」のショートカット。
 

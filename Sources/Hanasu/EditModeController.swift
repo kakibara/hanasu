@@ -44,6 +44,12 @@ final class EditModeController {
         recognizer.onAssetDownloadProgress = { [weak self] fraction in
             self?.hud.show(.preparing("日本語の音声モデルをダウンロード中… \(Int(fraction * 100))%"))
         }
+        recognizer.onLevel = { [weak self] level in
+            self?.hud.model.level = level
+        }
+        recognizer.onBatchTranscriptionStarted = { [weak self] _ in
+            self?.hud.model.transcribing = true
+        }
         // 編集中は音声入力を始めない（マイクと HUD を取り合わないため）
         dictation.canStart = { [weak self] in self?.state == .idle }
         // 初回の登録は、呼び出し元が onHotKeyRegistrationFailed を設定し終えてから行う
@@ -158,6 +164,8 @@ final class EditModeController {
         cancelRequested = false
         pendingFailure = nil
         hud.model.editBadge = "選択を読み取り中…"
+        // Whisper / Gemini は録音を止めてからまとめて文字起こしするので、HUD の出しかたを変える
+        hud.model.batchEngine = settings.dictationEngine.isLive ? nil : settings.dictationEngine
         hud.show(.preparing("準備中…"))
         setEscapeHotKey(enabled: true)
 
@@ -176,11 +184,12 @@ final class EditModeController {
 
         Task {
             do {
-                try await Permissions.ensureRecordingPermissions()
+                try await Permissions.ensureRecordingPermissions(speechRecognition: settings.dictationEngine == .apple)
                 try await recognizer.start(
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
-                    contextualStrings: settings.dictionaryWords)
+                    contextualStrings: settings.dictionaryWords,
+                    transcription: settings.dictationEngine)
             } catch {
                 selectionTask?.cancel()
                 fail(error.localizedDescription)
@@ -279,6 +288,7 @@ final class EditModeController {
         hud.show(.processing)
 
         let instruction = await recognizer.stop()
+        hud.model.transcribing = false
         appLog.notice("edit: instruction \(instruction.count) chars")
         hud.updateTranscript(instruction)
         // 押している間だけ録音するモードでは、ここで初めて ⌘C で選択を写し取ることがある
@@ -293,7 +303,7 @@ final class EditModeController {
         }
         hud.model.editBadge = "選択 \(selection.count) 文字"
         guard !instruction.isEmpty else {
-            fail("指示が聞き取れませんでした。選択した文章はそのままです。")
+            fail(recognizer.lastError.map { "\($0)。選択した文章はそのままです。" } ?? "指示が聞き取れませんでした。選択した文章はそのままです。")
             return
         }
 

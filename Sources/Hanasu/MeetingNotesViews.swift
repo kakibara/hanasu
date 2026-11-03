@@ -272,7 +272,9 @@ struct MeetingCaptionView: View {
                 if !recorder.volatileMe.isEmpty {
                     row(speaker: "自分", text: recorder.volatileMe, color: .accentColor).opacity(0.6)
                 }
-                if recorder.liveLines.isEmpty, recorder.volatileMe.isEmpty, recorder.volatileOthers.isEmpty {
+                if let engine = recorder.batchEngine {
+                    Text("記録を止めたあとに \(engine.shortName) で文字起こしします").foregroundStyle(.secondary)
+                } else if recorder.liveLines.isEmpty, recorder.volatileMe.isEmpty, recorder.volatileOthers.isEmpty {
                     Text("話し始めると、ここに文字起こしが出ます").foregroundStyle(.secondary)
                 }
             }

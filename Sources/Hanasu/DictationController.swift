@@ -46,6 +46,12 @@ final class DictationController {
         recognizer.onAssetDownloadProgress = { [weak self] fraction in
             self?.hud.show(.preparing("日本語の音声モデルをダウンロード中… \(Int(fraction * 100))%"))
         }
+        recognizer.onLevel = { [weak self] level in
+            self?.hud.model.level = level
+        }
+        recognizer.onBatchTranscriptionStarted = { [weak self] _ in
+            self?.hud.model.transcribing = true
+        }
         hud.model.onSelectTranslating = { [weak self] translating in
             self?.selectOutputLanguage(translating: translating)
         }
@@ -157,17 +163,20 @@ final class DictationController {
         screenContextCapture = ScreenContextCapture.begin()
         pendingAudioURL = DictationHistoryStore.shared.newAudioURL()
         hud.model.translating = self.mode == .translateToEnglish
+        // Whisper / Gemini は録音を止めてからまとめて文字起こしするので、HUD の出しかたを変える
+        hud.model.batchEngine = settings.dictationEngine.isLive ? nil : settings.dictationEngine
         hud.show(.preparing("準備中…"))
         setEscapeHotKey(enabled: true)
 
         Task {
             do {
-                try await Permissions.ensureRecordingPermissions()
+                try await Permissions.ensureRecordingPermissions(speechRecognition: settings.dictationEngine == .apple)
                 try await recognizer.start(
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
                     contextualStrings: settings.userDictionary.contextualStrings + SnippetStore.shared.triggerPhrases,
-                    audioFileURL: pendingAudioURL)
+                    audioFileURL: pendingAudioURL,
+                    transcription: settings.dictationEngine)
             } catch {
                 fail(error.localizedDescription)
                 return
@@ -225,10 +234,11 @@ final class DictationController {
         hud.show(.processing)
 
         let raw = await recognizer.stop()
+        hud.model.transcribing = false
         appLog.notice("recognized \(raw.count) chars")
         hud.updateTranscript(raw)
         guard !raw.isEmpty else {
-            fail("音声が認識されませんでした")
+            fail(recognizer.lastError ?? "音声が認識されませんでした")
             return
         }
 
