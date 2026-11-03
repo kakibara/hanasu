@@ -5,25 +5,20 @@ import SwiftUI
 // 動作確認用の CLI モード:
 //   Hanasu --transcribe-file <音声ファイル> [--engine apple|whisper|gemini|dictation|speech] [--refine [--translate] [--model <id>]]
 //   （Whisper / Gemini の確認の詳細は TranscriptionEngineCLI.swift）
-//   Hanasu --refine-text <文章> [--translate] [--model <id>] [--app <bundle id>] [--show-prompt] [--dictionary <辞書ファイル>]
-// --refine を付けると Gemini 整形も行い、--translate を付けると整形の代わりに英訳する。
+//   Hanasu --refine-text <文章> [--translate] [--ai gemini|claude] [--model <id>] [--app <bundle id>] [--show-prompt] [--show-request] [--dictionary <辞書ファイル>]
+// --refine を付けると AI での整形も行い、--translate を付けると整形の代わりに英訳する。
 // --app を付けると、そのアプリ向けの文体ルール（設定の「アプリ別」）で整形する。既定の出力言語が English なら英訳する。
-// --show-prompt を付けると、Gemini に送る user content も表示する。
-// 認証は GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウント JSON のパス）、設定画面の認証情報、GEMINI_API_KEY の順に使う。
+// --show-prompt を付けると、AI に送る user content も表示する。
+// --ai gemini|claude で AI を選ぶ（省くと設定の「音声入力」の AI）。--model で、その AI のモデルを変える。
+// --show-request を付けると、Claude に送るリクエスト（ヘッダーと JSON。キーの値は伏せる）を表示し、送らずに終える。
+// 認証: Gemini は GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウント JSON のパス）、設定画面の認証情報、GEMINI_API_KEY の順。
+//       Claude は ANTHROPIC_API_KEY、設定（キーチェーン）の順。
 @MainActor
 func cliRefine(_ raw: String, args: [String]) async throws {
     let settings = AppSettings.shared
-    let env = ProcessInfo.processInfo.environment
-    let auth: GeminiClient.Auth
-    if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
-        auth = .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
-    } else {
-        auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
-    }
-    let model = args.firstIndex(of: "--model").flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil } ?? settings.model
+    let model = TextAIClient.cliModel(args: args, settings: settings, for: .dictation)
     let app = cliAppStyle(args: args)
     let translate = args.contains("--translate") || app.style?.outputLanguage == .english
-    let client = GeminiClient(auth: auth)
     // 音声入力と同じく、置き換えルールを当ててから送る（--dictionary <ファイル> で辞書を差し替えられる）
     let dictionary = try DictionaryCLI.dictionary(from: args)
     let request = GeminiClient.Request(
@@ -35,13 +30,24 @@ func cliRefine(_ raw: String, args: [String]) async throws {
         if translate { shown.extraInstructions = "" }  // translateToEnglish と同じく、英訳では共通の追加ルールを外す
         print(GeminiClient.userPrompt(for: shown, translating: translate))
     }
+    // 確かめ方: REQ-COM-020
+    if args.contains("--show-request") {
+        let prompt = translate ? GeminiClient.translationPrompt(request) : GeminiClient.refinePrompt(request)
+        let env = ProcessInfo.processInfo.environment
+        let key = env["ANTHROPIC_API_KEY"].flatMap { $0.isEmpty ? nil : $0 } ?? (try? Keychain.load(.claudeAPIKey)) ?? nil
+        print(ClaudeClient.describeRequest(system: prompt.system, userText: prompt.user, model: model, effort: .low, apiKey: key))
+        return
+    }
+    let client = try TextAIClient.cli(args: args, settings: settings, for: .dictation)
     let started = Date()
     let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
-    print(String(format: "[%@ %@ %.1fs] %@", translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
+    print(String(format: "[%@ %@ %@ %.1fs] %@", translate ? "英訳" : "整形", client.provider.name, model, Date().timeIntervalSince(started), output))
 }
 
 // 文字起こしのエンジンの確認（--download-whisper / --render-engine-settings）。TranscriptionEngineCLI.swift
 MainActor.assumeIsolated { TranscriptionEngineCLI.runIfRequested() }
+// Claude API・キーチェーン・設定の「AI」タブの確認（--claude-test / --keychain-selftest / --render-ai-settings）。ClaudeCLI.swift
+MainActor.assumeIsolated { ClaudeCLI.runIfRequested() }
 // 選択を声で編集するモードの確認（--edit-text / --render-edit-hud / --render-edit-settings）。中身は EditModeCLI.swift
 MainActor.assumeIsolated { EditModeCLI.runIfRequested() }
 // 画面の文脈の確認（--dump-context、--refine-text … --context）。該当しなければ何もしない
@@ -52,7 +58,7 @@ if DictionaryCLI.handles(CommandLine.arguments) {
     MainActor.assumeIsolated { DictionaryCLI.run(CommandLine.arguments) }
 }
 
-// 確かめ方: REQ-DIC-003, REQ-DIC-010, REQ-DIC-020, REQ-DIC-021
+// 確かめ方: REQ-DIC-003, REQ-DIC-010, REQ-DIC-020, REQ-DIC-021, REQ-COM-020
 if let index = CommandLine.arguments.firstIndex(of: "--refine-text"),
    CommandLine.arguments.indices.contains(index + 1)
 {
@@ -276,7 +282,8 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             let minutesStarted = Date()
             let result = await recorder.process(meeting, me: phrases[.me] ?? [], others: phrases[.others] ?? [], keepAudio: keepAudio)
             print(result.transcriptMarkdown())
-            print(String(format: "[議事録 %@ %.1fs]", settings.meetingMinutesModel, Date().timeIntervalSince(minutesStarted)))
+            print(String(format: "[議事録 %@ %@ %.1fs]", settings.aiProvider(for: .meeting).name, settings.textModel(for: .meeting),
+                         Date().timeIntervalSince(minutesStarted)))
             print(result.minutes ?? result.errorMessage ?? "(なし)")
             print("保存先: \(MeetingStore.directory(for: result).path)")
             exit(0)

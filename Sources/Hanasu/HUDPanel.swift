@@ -223,9 +223,9 @@ private struct HUDView: View {
             (model.editBadge == nil ? "録音中" : "編集モード") + (model.batchEngine.map { "（\($0.shortName)）" } ?? "")
         case .processing:
             if model.transcribing, let engine = model.batchEngine { "\(engine.shortName) で文字起こししています…" }
-            else if model.editBadge != nil { "Gemini で書き換えています…" }
-            else if model.translating { "Gemini で英語に翻訳しています…" }
-            else { "Gemini で整えています…" }
+            else if model.editBadge != nil { "AI で書き換えています…" }
+            else if model.translating { "AI で英語に翻訳しています…" }
+            else { "AI で整えています…" }
         case .done(let message): message
         case .error: "エラー"
         }

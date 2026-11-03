@@ -147,7 +147,22 @@ Gemini を通した部分一致（gemini-3.5-flash-lite、`--refine`）:
   Gemini は 5 分ごとの区切り（この長さでは 1 回）で全発言を拾い、時刻のずれは 0.5 秒以内。区切りを 30 秒にすると、先頭が無音の区切りで発話を落とした。
   同じ音声で Mac 標準（ライブ文字起こし）は、相手の 1 文の前半（「ジェミニは精度が…」）を落とした。
 
-## 9. Windows 版の Claude API と API キーの保存（2026-11-04、macOS の上の .NET 10 SDK）
+## 9. Claude API とキーチェーン（2026-11-03〜04、macOS 26.6.2）
+
+関係: REQ-COM-020〜024、DEC-COM-041〜053。くわしい調査は [design/security.md](../design/security.md)。
+
+- 本物の API キーがないので、**本物の Claude の呼び出し（整形・英訳・議事録の中身、プロンプトキャッシュが効くか）は確かめていない**。
+- `--refine-text <文> --ai claude --show-request`: `POST https://api.anthropic.com/v1/messages`、`anthropic-version: 2026-10-21`、`x-api-key` は `sk-ant-…abcd（伏せた 53 文字）` のように伏せて出る。本文は `model: claude-haiku-5-5`、`max_tokens: 8192`、`output_config.effort: low`、`system` に `cache_control`、`temperature` などなし。`--model claude-sonnet-5-5` では `fallbacks: "default"` と `anthropic-beta: server-side-fallback-2026-07-01` が付き、Haiku では付かない。
+- 偽のキー（`ANTHROPIC_API_KEY=sk-ant-api03-FAKE…`）で実際に送ると、`--refine-text … --ai claude` も `--claude-test`（`GET /v1/models/{model}`）も「Claude の API キーが正しくありません（401）。設定 →「AI」でキーを入れ直してください」で終わる（やり直さない）。キーがないときは「Claude の API キーが設定されていません」。
+- キーチェーン（`--keychain-selftest`。名前を変えた一時的な項目で試し、最後に消した）:
+  - Hanasu 自身は確認なしで読める。末尾 4 文字は属性から読める。ACL は復号が Hanasu だけ、ほかのアプリにはパスワードを求める（`security dump-keychain -a` で `require-password`）。
+  - ACL の確認の出し方は、`SecACLSetContents` に 0x0001 を渡すと 0x0100 で保存された（`don't-require-password`）。入れ替えた値で保存するようにした（DEC-COM-048）。
+  - データ保護キーチェーン・`SecAccessControl`・Secure Enclave の永続の鍵は、いずれも -34018。
+  - Apple の `security find-generic-password -w` は確認のダイアログが出た。アドホック署名の別のプログラムは、ACL に関係なく確認なしで読め、上書きもできた（launchd のジョブとして動かしても同じ）。
+- 設定の「AI」タブ（`--render-ai-settings /tmp/ai.png --claude`）: 「使う AI とモデル」に音声入力（Gemini・gemini-3.5-flash-lite）と会議（Claude・Sonnet 5.5）が並び、その下に Claude の API キー（未設定・保存・発行のリンク・料金の目安）、Gemini の認証が出る。
+- Hardened Runtime を付けた版の起動（実機）は確かめていない（このセッションでは `codesign` を使えなかった）。
+
+## 10. Windows 版の Claude API と API キーの保存（2026-11-04、macOS の上の .NET 10 SDK）
 
 関係: REQ-COM-020〜024、DEC-COM-140〜150
 

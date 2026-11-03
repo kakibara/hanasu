@@ -374,20 +374,18 @@ final class DictationHistoryStore: ObservableObject {
 
     // 要件: REQ-DIC-061
     // 設計判断: DEC-DIC-076
-    /// 原文から Gemini を呼び直し、結果でこの履歴を上書きする。失敗したときは履歴を変えずにエラーを投げる
+    /// 原文から AI（音声入力に選んだ Gemini か Claude）を呼び直し、結果でこの履歴を上書きする。失敗したときは履歴を変えずにエラーを投げる
     @discardableResult
-    func retry(_ id: UUID, mode: DictationHistoryEntry.Mode, auth overrideAuth: GeminiClient.Auth? = nil) async throws
+    func retry(_ id: UUID, mode: DictationHistoryEntry.Mode, client overrideClient: TextAIClient? = nil) async throws
         -> DictationHistoryEntry
     {
         guard let entry = entries.first(where: { $0.id == id }) else { throw DictationHistoryError.notFound }
         let settings = AppSettings.shared
-        guard let auth = try overrideAuth ?? GeminiClient.authFromSettings(settings) else {
-            throw GeminiError.missingAPIKey
-        }
-        let client = GeminiClient(auth: auth)
+        let client = try overrideClient ?? TextAIClient.requireFromSettings(settings, for: .dictation)
+        let model = settings.textModel(for: .dictation)
         let request = GeminiClient.Request(
             transcript: entry.raw,
-            model: settings.model,
+            model: model,
             appName: settings.sendAppName ? entry.appName : nil,
             dictionary: settings.dictionaryWords,
             extraInstructions: settings.extraInstructions)
@@ -398,7 +396,7 @@ final class DictationHistoryStore: ObservableObject {
         entries[index].mode = mode
         entries[index].status = .succeeded
         entries[index].errorMessage = nil
-        entries[index].model = settings.model
+        entries[index].model = model
         entries[index].retriedAt = Self.wholeSeconds(Date())
         if !entries[index].transient { save() }
         return entries[index]

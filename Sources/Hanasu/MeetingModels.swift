@@ -148,15 +148,27 @@ enum MeetingStore {
             suffix += 1
         }
         let meeting = Meeting(id: id, title: "会議 \(Meeting.dateFormatter.string(from: date))", startedAt: date)
-        try FileManager.default.createDirectory(at: directory(for: meeting), withIntermediateDirectories: true)
+        try createPrivateDirectory(directory(for: meeting))
         return meeting
+    }
+
+    // 要件: REQ-COM-022
+    // 設計判断: DEC-COM-052
+    /// 会議のフォルダを、本人だけが開ける（0700）ようにして作る。会話の録音・文字起こしが入るため。
+    /// 前の版で作ったフォルダ（0755）も、ここで 0700 に直す
+    static func createPrivateDirectory(_ dir: URL) throws {
+        let fm = FileManager.default
+        try fm.createDirectory(at: dir, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+        for url in [baseDirectory, dir] {
+            try? fm.setAttributes([.posixPermissions: 0o700], ofItemAtPath: url.path)
+        }
     }
 
     // 要件: REQ-MTG-005
     // 設計判断: DEC-MTG-017
     static func save(_ meeting: Meeting) throws {
         let dir = directory(for: meeting)
-        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        try createPrivateDirectory(dir)
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
         encoder.dateEncodingStrategy = .iso8601

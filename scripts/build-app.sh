@@ -4,7 +4,7 @@
 #   ./scripts/build-app.sh debug      デバッグビルド
 #   SIGN_IDENTITY="Apple Development: ..." ./scripts/build-app.sh   証明書を指定して署名
 # バージョンは VERSION（tagpr が更新する）から Info.plist に書き込む。
-# 設計判断: DEC-COM-015, DEC-REL-007
+# 設計判断: DEC-COM-015, DEC-REL-007, DEC-COM-051
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -40,7 +40,11 @@ if [[ "$IDENTITY" == *"Apple Development"* || "$IDENTITY" == *"Developer ID"* ]]
   # Apple の証明書なら Hardened Runtime を付ける（公証に必要）
   codesign --force --options runtime --entitlements Resources/Hanasu.entitlements --sign "$IDENTITY" "$APP"
 elif [[ -n "$IDENTITY" ]]; then
-  codesign --force --entitlements Resources/Hanasu.entitlements --sign "$IDENTITY" "$APP"
+  # 要件: REQ-COM-022
+  # 設計判断: DEC-COM-051
+  # 自己署名でも Hardened Runtime を付ける。ほかのプログラムが DYLD_INSERT_LIBRARIES などで Hanasu にコードを差し込み、
+  # Hanasu として（キーチェーンの確認なしに）API キーを読むのを防ぐため。entitlements はマイクとリマインダーだけ
+  codesign --force --options runtime --entitlements Resources/Hanasu.entitlements --sign "$IDENTITY" "$APP"
 else
   echo "note: 署名用の証明書がないためアドホック署名します（再ビルドするとアクセシビリティ権限の付け直しが必要です）"
   echo "      ./scripts/create-signing-cert.sh を一度実行すると、再ビルドしても権限が保たれます"

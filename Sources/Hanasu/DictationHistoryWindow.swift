@@ -419,11 +419,11 @@ private struct DictationHistoryDetail: View {
         VStack(alignment: .leading, spacing: 4) {
             switch entry.status {
             case .geminiFailed:
-                Text("Gemini での\(entry.mode.label)に失敗したため、原文のまま入力しました。")
+                Text("AI での\(entry.mode.label)に失敗したため、原文のまま入力しました。")
             case .noCredentials:
-                Text("Gemini の認証情報が未設定だったため、原文のまま入力しました。")
+                Text("AI の認証情報が未設定だったため、原文のまま入力しました。")
             case .refineOff:
-                Text("「Gemini で整える」がオフだったため、原文のまま入力しました。")
+                Text("「AI で整える」がオフだったため、原文のまま入力しました。")
             case .succeeded:
                 EmptyView()
             }
@@ -450,11 +450,11 @@ private struct DictationHistoryDetail: View {
                 Button { retry(.translate) } label: { Label("英訳し直す", systemImage: "globe") }
                 if let retrying {
                     ProgressView().controlSize(.small)
-                    Text("Gemini で\(retrying.label)しています…").font(.caption).foregroundStyle(.secondary)
+                    Text("AI で\(retrying.label)しています…").font(.caption).foregroundStyle(.secondary)
                 }
             }
             .disabled(retrying != nil)
-            Text("原文を Gemini に送り直します。結果はこの履歴に上書きし、クリップボードにもコピーします。")
+            Text("原文を AI（音声入力に選んだ Gemini か Claude）に送り直します。結果はこの履歴に上書きし、クリップボードにもコピーします。")
                 .font(.caption).foregroundStyle(.secondary)
             if let message {
                 Label(message.text, systemImage: message.isError ? "exclamationmark.triangle.fill" : "checkmark.circle.fill")

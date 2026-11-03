@@ -1,131 +1,207 @@
+<div align="center">
+
+<img src="docs/images/icon.png" width="112" alt="Hanasu icon">
+
 # Hanasu
 
-話した内容を Gemini で自然な日本語に整えて、カーソル位置に入力する macOS メニューバーアプリ（Typeless 風）。
+**Speak naturally. Get clean, ready-to-send text and meeting minutes that write themselves.**
 
-- 音声認識: macOS 26 内蔵の音声認識エンジン（`SpeechAnalyzer` + `SpeechTranscriber`、`DictationTranscriber` も選択可）。オンデバイスで処理。設定で Whisper（WhisperKit。Mac の上で動かす）か Gemini（音声を送る）にも切り替えられる
-- 整形: Gemini（初期値 `gemini-3.5-flash-lite`）。Google AI Studio の API キーか、Vertex AI のサービスアカウントで呼ぶ
-- 入力: クリップボード + ⌘V（元のクリップボードは自動で戻す）
-- 英訳して入力: `⌥⇧ Space` で録音するか、録音中の表示で「English」を選ぶと、日本語で話した内容を Gemini が自然な英語に翻訳して入力する
-- 選択を声で編集: 文章を選択して `⌃⌥⌘ E` を押し、「もっと丁寧に」「箇条書きにして」「英語にして」のように話すと、Gemini が書き換えて選択範囲に貼り付ける
-- 履歴: 結果と文字起こしの原文を残し、検索・コピーできる。整形に失敗した文は原文から整え直せる。入力先がずれたら `⌥⇧ V` で最後の結果をもう一度入力
+A voice-input and meeting-notes app for macOS and Windows. It uses on-device speech recognition and Gemini or Claude.
 
-会議の記録機能もあります（Google Meet・Slack ハドル・Teams など）。マイクを「自分」、Mac で鳴っている音を「相手」として録り、文字起こしと Gemini の議事録を `~/Documents/Hanasu/Meetings/` に保存します。メニューバー →「会議の記録を開始」か `⌃⌥⌘ M`。イヤホンの利用を推奨します。Zoom・Teams・Slack ハドル・Webex・FaceTime・ブラウザ（Google Meet など）がマイクを使い始めると「会議を記録しますか？」と提案します（自動では記録しません）。
-記録中は会議ノートにメモを書いたり、`⌃⌥⌘ H` かボタンで「ここ重要」の印を付けたりでき、議事録はそれを優先してまとめます（記録後にメモを直して作り直すこともできます）。文字起こしの字幕をほかのアプリの前面に出すこともできます。
-会議ノートでは、過去の会議の文字起こしと議事録を横断して検索でき（`⌘F`）、「先週の定例で何が決まった？」のように質問すると、関係する会議をもとに Gemini が根拠の会議を引用して答えます（✦ ボタン）。
+[![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
+[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
+![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
+[![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
 
-議事録は型（自動・定例・1on1・商談・ブレスト・カスタム）を選んで作れます。記録を始める前に会議ノートの左下で選ぶか、あとから会議ノートで選び直して作り直します。アクションアイテム（担当・内容・期限）は決まった形で取り出し、会議ノートの「書き出し」から Markdown・Slack 向けのコピー、.md / .txt の保存、リマインダーへの登録ができます。
+**English** · [日本語](README.ja.md)
 
-文書の地図は [docs/README.md](docs/README.md)。実装済みの要件・設計判断は [docs/spec/](docs/spec/)、設計・技術選定は [docs/design/dictation.md](docs/design/dictation.md)（音声入力）と [docs/design/meeting.md](docs/design/meeting.md)（会議の記録）、計画は [docs/roadmap.md](docs/roadmap.md)。
+<img src="docs/images/hud.png" width="560" alt="Hanasu recording HUD">
 
-## 必要なもの
+</div>
 
-- macOS 26 (Tahoe) 以降、Apple Silicon
-- Gemini の認証情報: API キー（[Google AI Studio](https://aistudio.google.com/apikey)）か、Vertex AI ユーザー権限のあるサービスアカウントの JSON 鍵
-- 自分でビルドする場合: Xcode Command Line Tools（Swift 6.2）
+> [!NOTE]
+> Hanasu is built for **Japanese** first. The prompts, the UI and the dictionary rules all assume you speak Japanese.
+> It can also translate what you say into natural **English** before typing it.
 
-## インストール（リリース版）
+## Why Hanasu
 
-1. [Releases](https://github.com/kakibara/hanasu/releases) から `Hanasu-<バージョン>-macOS.zip` をダウンロードして展開し、`Hanasu.app` を「アプリケーション」フォルダに入れる。
-2. Apple の公証（notarization）を受けていない自己署名のアプリなので、そのままでは「開発元を確認できない」として開けません。次のどちらかで開いてください。
-   - 一度開こうとして確認が出たら「完了」を押し、システム設定 → プライバシーとセキュリティ の下にある「このまま開く」を押す（macOS 15 以降は、右クリック →「開く」では開けません）
-   - またはターミナルで `xattr -dr com.apple.quarantine /Applications/Hanasu.app` を実行してから開く
-3. 初回起動で設定画面が開きます（以下「使い方」）。
+Built-in dictation gives you a raw transcript. It keeps fillers and homophone mistakes, has no punctuation, and includes every "wait, I mean…".
+Hanasu sends the transcript to Gemini or Claude, which fixes those mistakes and tidies the text. Then Hanasu types the result where your cursor is.
+It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Hanasu is free and open source, and you bring your own Gemini or Claude API key.
 
-## ビルドと起動（ソースから）
+## Features
+
+### 🎙️ Voice input
+
+| | |
+| --- | --- |
+| **Speak → polished text** | Press <kbd>⌥ Space</kbd>, talk, and press it again (or click **■ Stop**). Hanasu removes fillers, fixes homophones, applies your self-corrections, and pastes the text at your cursor. |
+| **Speak Japanese, type English** | Press <kbd>⌥⇧ Space</kbd>, or switch the HUD to **English** while you talk. Set phrases are translated naturally, so お疲れ様です becomes "Hi,". |
+| **Edit by voice** | Select some text, press <kbd>⌃⌥⌘ E</kbd>, and say "make it more polite", "turn it into bullets" or "translate to English". |
+| **Per-app styles** | Text is casual and short in Slack, polite with paragraphs in Mail, and in written style in Pages, Word and Notion. You can change the preset for each app. |
+| **Snippets** | Say "email signature" to insert saved text exactly as you wrote it. Snippets are never sent to Gemini. |
+| **Dictionary** | Add proper nouns and replacement rules such as `ストックマーク => Stockmark`. Gemini can also suggest new entries from your history. |
+| **Screen context** *(opt-in)* | Hanasu reads the window title and the text around your cursor, so names match what is already on screen. Password fields are never read. |
+| **History** | Search past results and retry failed ones. Press <kbd>⌥⇧ V</kbd> to paste the last result again. |
+
+<p align="center">
+  <img src="docs/images/hud-english.png" width="420" alt="English output">
+  <img src="docs/images/edit-mode.png" width="420" alt="Edit by voice">
+</p>
+
+### 📝 Meeting notes
+
+| | |
+| --- | --- |
+| **Records both sides** | Your microphone is recorded as "you". The Mac's audio output (Zoom, Meet, Teams, Slack huddles, and so on) is recorded as "them". No bot joins the call. |
+| **Speaker diarization** | The other side is split into Speaker 1, Speaker 2, and so on, on device. You can rename speakers afterwards. |
+| **Minutes by Gemini** | Choose a template: auto, weekly sync, 1-on-1, sales call, brainstorm, or custom. Action items include an owner and a due date. |
+| **Live notes & highlights** | Type timestamped notes during the call, or press <kbd>⌃⌥⌘ H</kbd> to mark "this matters". The minutes give those parts priority. |
+| **Meeting detection** | When a meeting app starts using the mic, Hanasu asks whether to record. It never starts recording on its own. |
+| **Search & Ask** | Search the text of every meeting, or ask "What did we decide in last week's sync?". The answer cites the meetings it used. |
+| **Export** | Copy as Markdown or as a summary ready for Slack, save as `.md` / `.txt`, or send action items to Reminders. |
+
+<p align="center">
+  <img src="docs/images/meeting-live.png" width="420" alt="Recording with live notes">
+  <img src="docs/images/meeting-ask.png" width="420" alt="Ask your meetings">
+</p>
+<p align="center">
+  <img src="docs/images/meeting-minutes.png" width="420" alt="Minutes with action items">
+  <img src="docs/images/meeting-suggestion.png" width="420" alt="Meeting detection">
+</p>
+
+### 🤖 Choose your AI
+
+Pick the AI that polishes your text, separately for **voice input** and **meetings**.
+
+| AI | Default model | Sign-in |
+| --- | --- | --- |
+| **Gemini** (default) | voice input `gemini-3.5-flash-lite`, meetings `gemini-3.8-flash` | Google AI Studio API key or Vertex AI service account |
+| **Claude** | voice input `claude-haiku-5-5`, meetings `claude-sonnet-5-5` (Opus 5.5 also available) | Anthropic API key |
+
+Claude only handles text. Speech is transcribed by the engine below.
+
+### 🔊 Choose your speech engine
+
+| Engine | Runs on | Live transcript | Notes |
+| --- | --- | --- | --- |
+| **OS standard** (default) | Mac: `SpeechAnalyzer` · Windows: `Windows.Media.SpeechRecognition` | ✅ | On-device on Mac |
+| **Whisper** | On device (WhisperKit on Mac, whisper.cpp on Windows) | — (after you stop) | The model downloads when you select it |
+| **Gemini** | Google | — (after you stop) | The recorded audio is sent to Google |
+
+You can choose a different engine for voice input and for meetings. On Windows, meetings use Whisper or Gemini.
+
+## Download
+
+Get the latest build from [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
+
+| Platform | File | Requirements |
+| --- | --- | --- |
+| macOS | `Hanasu-<version>-macOS.zip` | macOS 26 (Tahoe) or later, Apple Silicon |
+| Windows | `Hanasu-<version>-Windows-x64.zip` | Windows 10 (2004 or later) / 11, x64 |
+
+<details>
+<summary><b>macOS: first launch</b></summary>
+
+1. Unzip the file and move `Hanasu.app` to **Applications**.
+2. The app is self-signed and not notarized, so macOS blocks it the first time. Click **Done**, then open **System Settings → Privacy & Security** and click **Open Anyway**.
+   You can also run `xattr -dr com.apple.quarantine /Applications/Hanasu.app` instead.
+3. When asked, allow **Microphone**, **Speech Recognition** and **Accessibility**. Accessibility is needed to paste with ⌘V.
+
+</details>
+
+<details>
+<summary><b>Windows: first launch</b></summary>
+
+1. Unzip the file, put the `Hanasu` folder anywhere (for example `%LOCALAPPDATA%\Programs`), and run `Hanasu.exe`.
+2. The app is not code-signed, so SmartScreen shows a warning. Click **More info → Run anyway**.
+3. The Windows speech engine needs **Online speech recognition** turned on in Windows settings. Hanasu tells you if it is off.
+
+See [windows/README.md](windows/README.md) for more notes and how the Windows version differs from the Mac version.
+
+</details>
+
+## Quick start
+
+1. **Add an AI credential.** Open **Settings → AI** and choose Gemini or Claude. For Gemini, paste an API key from [Google AI Studio](https://aistudio.google.com/apikey) or select a Vertex AI service-account JSON file. For Claude, paste an API key from the [Claude Console](https://console.anthropic.com/settings/keys). Click the test button to check that it works.
+2. **Dictate.** Put the cursor where you want the text, press the shortcut, speak, and press the shortcut again.
+3. **Record a meeting.** Use the menu-bar (Mac) or tray (Windows) menu, or the shortcut. Headphones help keep the two sides apart.
+
+### Default shortcuts
+
+| Action | macOS | Windows |
+| --- | --- | --- |
+| Voice input (start / stop) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
+| Voice input in English | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Edit selection by voice | <kbd>⌃⌥⌘ E</kbd> | — |
+| Paste last result again | <kbd>⌥⇧ V</kbd> | — |
+| Cancel recording | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
+| Meeting recording (start / stop) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
+| Mark "this matters" in a meeting | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+
+You can change every shortcut in Settings. The full user guide (in Japanese) is [docs/guide.md](docs/guide.md).
+
+## Privacy
+
+- **Audio stays on your device by default.** Speech recognition, Whisper and speaker diarization all run locally.
+- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask.
+- **Audio goes to Google only if you choose it.** If you select the Gemini speech engine, the recorded audio is sent to Google.
+- **Meetings are plain files.** They are saved as JSON and Markdown under `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac and Windows use the same format.
+- **No telemetry.** Hanasu collects no analytics.
+- **API keys are protected by the OS.** On macOS they are kept in the Keychain, and other apps must ask for your login password to read them. On Windows they are encrypted with DPAPI, or with a Windows Hello key if you choose. Neither can fully stop malware running as your user. See [docs/design/security.md](docs/design/security.md).
+
+> [!IMPORTANT]
+> Get consent from everyone in the meeting before you record. Follow your organization's rules on recording and on using AI services.
+
+## Build from source
+
+<details>
+<summary><b>macOS</b> (Xcode Command Line Tools, Swift 6.2)</summary>
 
 ```bash
-./scripts/build-app.sh
+./scripts/build-app.sh             # builds build/Hanasu.app
 open build/Hanasu.app
+./scripts/create-signing-cert.sh   # optional: keeps permissions across rebuilds
 ```
 
-## 使い方
+</details>
 
-1. 初回起動で設定画面が開くので、「Gemini」タブで認証方法を選び、API キーを保存するか、サービスアカウントの JSON ファイルを指定する。「整形を試す」で動作を確かめられる。
-2. 入力したい場所にカーソルを置き、`⌥ Space` を押して話す。
-3. もう一度 `⌥ Space` を押すか、画面下の表示の「■ 停止」をクリックすると、整形された文章が入力される。録音中に `Esc` か「取消」で取り消し。
-4. 英語で入力したいときは、`⌥⇧ Space` で録音を始めるか、録音中に画面下の表示で「English」をクリックしてから止める。英訳した文章が入力される。
-5. 書いた文章を直したいときは、その文章を選択して `⌃⌥⌘ E` を押し、どう直すかを話す（例:「もっと丁寧に」「箇条書きにして」「英語にして」「3 行に要約して」）。もう一度 `⌃⌥⌘ E` を押すと、Gemini が書き換えた文章で選択範囲が置き換わる。元に戻すときは、そのアプリで ⌘Z。メニューバーの「選択を声で編集」からも始められる。
-   - Gemini の認証情報とアクセシビリティの許可が必要です。
-   - 選択した文章は Gemini に送られます。
-   - 選択をアクセシビリティ API で読めないアプリでは、⌘C で写し取って読みます（クリップボードはすぐ元に戻します）。
-6. 入力先のアプリに合わせて文体が変わる（Slack などのチャットはくだけた短い文、メールは丁寧な文で段落を分ける、Pages・Word・Notion は書き言葉）。設定の「アプリ別」タブで、アプリごとのプリセット・追加ルール・既定の出力言語（日本語／English）を変えられる。
-7. 署名・自己紹介・住所・会議 URL のような決まった文章は、設定の「スニペット」タブで起動フレーズと本文を登録しておくと、「メールの署名」と話すだけで本文がそのまま入力される（Gemini には送らない。英訳モードでも訳さない）。「よろしくお願いします、メールの署名」のように区切って言えば、文の途中でも置き換わる。
-8. 入力先がずれて結果が消えたときは、入れたい場所で `⌥⇧ V` を押すと、最後の結果をもう一度入力する。
-9. メニューバー →「履歴を開く…」で、これまでの結果と原文を検索・コピーできる。Gemini が失敗して原文のまま入力したもの（⚠︎）は、「整形し直す」「英訳し直す」で整え直せる。履歴は `~/Library/Application Support/Hanasu/History/` に保存され、初期値では 1000 件・30 日まで残る。
-
-初回は次の許可を求められます。
-
-- マイク・音声認識: 初めて録音するときにダイアログが出る
-- アクセシビリティ: システム設定 → プライバシーとセキュリティ → アクセシビリティで Hanasu をオン（⌘V の自動送信に必要）
-
-署名用の証明書がない環境ではアドホック署名になり、再ビルドのたびにアクセシビリティの許可が外れます（設定でオンに見えても効かない）。最初に一度だけ次を実行しておくと、ローカル用の自己署名証明書で署名するようになり、再ビルドしても許可が保たれます。
+<details>
+<summary><b>Windows</b> (.NET 8 SDK)</summary>
 
 ```bash
-./scripts/create-signing-cert.sh
+cd windows
+dotnet build Hanasu.Windows.sln
+dotnet publish Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o publish/win-x64
 ```
 
-許可が外れてしまった場合は、アクセシビリティの一覧から Hanasu を削除（−）して追加し直してください。
+See [windows/README.md](windows/README.md).
 
-## 設定できること
+</details>
 
-ショートカット（音声入力・英訳して入力・選択を声で編集）、トグル／押している間だけ録音、Gemini モデル、ユーザー辞書と置き換えルール、追加の整形ルール、アプリ別の文体（プリセット・追加ルール・既定の出力言語）、スニペット（起動フレーズと本文）、効果音。
+## Documentation
 
-文字起こしのエンジン: 音声入力と会議の記録で別々に、Mac 標準（既定。SpeechTranscriber / DictationTranscriber）・Whisper（Mac の上で動かす。tiny / base / small / large-v3-turbo のモデルを選ぶと、その時点でダウンロード。取り消し・削除も設定から）・Gemini（録った音声を Google に送って文字起こし）から選べます。Whisper と Gemini は録音を止めてからまとめて文字起こしするので、録音中は文字が出ません（HUD には音量の目安を出します）。会議の記録では、記録のあとにチャンネルごとに時刻つきで文字起こしし、話者分離に回します。
+The documentation is written in Japanese.
 
-履歴: 保存するか、残す件数と期間、録音した音声も残すか（既定はオフ）、「最後の結果をもう一度入力」のショートカット。
+| | |
+| --- | --- |
+| [docs/guide.md](docs/guide.md) | User guide: how to use it, settings, dictionary rules |
+| [docs/spec/](docs/spec/) | Implemented requirements (`REQ-*`) and design decisions (`DEC-*`) |
+| [docs/design/](docs/design/) | How it is built: architecture and data flow |
+| [docs/roadmap.md](docs/roadmap.md) | Plans that are not implemented yet |
+| [docs/releasing.md](docs/releasing.md) | How releases are made (tagpr) |
 
-画面の文脈（既定はオフ）: 「Gemini」タブでオンにすると、録音を始めたときに前面のウインドウのタイトルと入力欄のカーソル前後の文章（各 500 文字まで）を読み、参考情報として Gemini に渡します。画面にある固有名詞の表記（例: 「庄司さん」→ 画面にある「東海林さん」）や書き方に合わせて整えます（英訳でも使います）。パスワード欄と、除外に入れたアプリ（既定で 1Password などのパスワードマネージャー）は読みません。文脈に書かれた指示には従わず、文脈の文章を出力に含めないよう Gemini に指示しています。
+## Contributing
 
-会議の記録: 録音するスピーカーとマイク、マイク側も話者を分ける（会議室など）、議事録のモデル、音声ファイルを残すか、会議の自動検出（オン／オフと対象のアプリ）、「ここ重要」のショートカット。
+Issues and pull requests are welcome.
 
-### ユーザー辞書
+1. Read [docs/README.md](docs/README.md) before you change any behavior.
+2. Code is tagged with `// 要件: REQ-…` (requirement) or `// 設計判断: DEC-…` (design decision). In CI, `scripts/check-spec.py` checks that the spec is updated whenever tagged code changes.
+3. A new feature starts as a requirement in `docs/spec/`. Ideas for later go in `docs/roadmap.md`.
 
-設定の「辞書・ルール」タブで、固有名詞や専門用語を登録できます。表とテキストのどちらでも編集できます。
+## License
 
-```
-Hanasu                              … 語だけ。音声認識と Gemini のヒントにする
-ストックマーク => Stockmark            … 置き換えルール。文字起こしの「ストックマーク」を「Stockmark」にする
-えーにゅーす, エーニュース => Anews     … 読み（聞こえ方・誤認識）は「,」で区切って複数書ける
-```
-
-- 置き換えルールは文字起こしの結果に必ず当てるので、Gemini で整形しないときも効きます。
-- 英字の大文字小文字・全角半角・空白の有無は区別しません。英字やカタカナの語の途中では置き換えません（`マーク => Mark` は「マークダウン」の中では効かない）。細かい規則は [docs/design/dictation.md](docs/design/dictation.md) の 5.4。
-- 「候補を探す」を押すと、今回の起動後の音声入力の結果と会議の文字起こし・議事録から、Gemini が辞書の候補を挙げます。選んだものだけが辞書に入ります。会議の中身を送る外部の送り先は Gemini だけです。
-
-リマインダーへの登録は、会議ノートで「リマインダーに登録」を押したときに初めてアクセスの許可を求めます。
-
-## Windows 版
-
-Windows 10（2004 以降）/ 11 向けの版を [windows/](windows/) で作っている（C# / .NET 8 / WPF）。音声入力と会議の記録の両方がある。
-
-- タスクトレイに常駐し、`Ctrl + Alt + Space` で音声入力、`Ctrl + Alt + Shift + Space` で英訳して入力する（設定で変えられる）
-- 文字起こしは Windows 標準の音声認識（既定）・Whisper（PC の上で動かす）・Gemini から選ぶ。整形と英訳は Mac 版と同じ指示で Gemini が行う
-- 会議の記録は `Ctrl + Alt + Shift + M`（またはタスクトレイのメニュー）で始め・止める。マイクを「自分」、WASAPI ループバックで録った PC の音を「相手」として別々に録り、記録のあとに Whisper（既定）か Gemini で文字起こしし、sherpa-onnx で相手側の話者を分け、Gemini で議事録を作る
-  - 保存先は `ドキュメント\Hanasu\Meetings\<日時>\`。`meeting.json` は Mac 版と同じ形なので、Mac で作った会議のフォルダをそのまま会議ノートで開ける
-- ビルド・配布物の作り方・Mac 版との差は [windows/README.md](windows/README.md)
-
-## リリースの作り方
-
-[tagpr](https://github.com/Songmu/tagpr) で行います（`.tagpr`、`.github/workflows/tagpr.yml`）。
-
-1. `main` に変更が入ると、tagpr が次のバージョンのリリース PR（`VERSION` と `CHANGELOG.md` の更新）を作り・更新します。
-   - 既定はパッチ（0.1.0 → 0.1.1）。リリース PR に `tagpr:minor` / `tagpr:major` ラベルを付けるか、`VERSION` を直接書き換えると上げ幅を変えられます。
-2. リリース PR をマージすると、tagpr がタグと下書きのリリースを作ります。
-3. 続けて macOS 26 のランナーが Mac 版を、Windows のランナーが Windows 版をビルドし、`Hanasu-<バージョン>-macOS.zip` と `Hanasu-<バージョン>-Windows-x64.zip` を添付してリリースを公開します。既存のタグの添付ファイルを作り直すときは、Actions の「tagpr」を tag を指定して手動で実行します。
-
-初回だけ必要な準備:
-
-- リポジトリの Settings → Actions → General → Workflow permissions で「Allow GitHub Actions to create and approve pull requests」をオンにする。
-- リリース用の署名証明書を作って Secrets に登録する（なければアドホック署名になり、アップデートのたびにアクセシビリティの許可が外れます）。
-
-```bash
-./scripts/setup-release-signing.sh
-```
-
-## ライセンス
-
-Copyright 2026 kakibara
-
-[Apache License 2.0](LICENSE)（Apache-2.0）で配布します。改変・再配布・製品への組み込みは自由ですが、ライセンス文と [NOTICE](NOTICE) の表示を残し、改変したファイルにはその旨を書いてください。
-
-組み込んでいる第三者のソフトウェアのライセンスは、Mac 版は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、Windows 版は [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) にあります。配布物にも同梱しています（Mac 版は `Hanasu.app/Contents/Resources`、Windows 版は zip の `Hanasu` フォルダ）。
+[Apache License 2.0](LICENSE) © 2026 kakibara. See [NOTICE](NOTICE).
+Third-party licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) and [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows). Both files are included in the downloads.

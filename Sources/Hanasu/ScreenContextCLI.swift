@@ -94,16 +94,9 @@ enum ScreenContextCLI {
             ?? ScreenContext(textBefore: String(decoding: data, as: UTF8.self))
 
         let settings = AppSettings.shared
-        let env = ProcessInfo.processInfo.environment
-        let auth: GeminiClient.Auth
-        if let path = env["GEMINI_SERVICE_ACCOUNT_JSON"] {
-            auth = .serviceAccount(try ServiceAccountCredentials.load(path: path), location: settings.vertexLocation)
-        } else {
-            auth = try GeminiClient.authFromSettings(settings) ?? .apiKey(env["GEMINI_API_KEY"] ?? "")
-        }
-        let model = args.firstIndex(of: "--model").flatMap { args.indices.contains($0 + 1) ? args[$0 + 1] : nil } ?? settings.model
+        let client = try TextAIClient.cli(args: args, settings: settings, for: .dictation)
+        let model = TextAIClient.cliModel(args: args, settings: settings, for: .dictation)
         let translate = args.contains("--translate")
-        let client = GeminiClient(auth: auth)
 
         print("--- 文脈 ---")
         print(context.promptBlock() ?? "（渡すものなし）")

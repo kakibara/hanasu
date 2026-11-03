@@ -58,7 +58,7 @@ struct DictionaryEditorSection: View {
             }
         } footer: {
             VStack(alignment: .leading, spacing: 4) {
-                Text("「読み・誤認識」を書くと、文字起こしの結果のその部分を「正しい表記」に置き換えます（Gemini で整形しないときも効きます）。空にすると語だけを登録し、音声認識と Gemini のヒントにします。")
+                Text("「読み・誤認識」を書くと、文字起こしの結果のその部分を「正しい表記」に置き換えます（AI で整形しないときも効きます）。空にすると語だけを登録し、音声認識と AI のヒントにします。")
                 Text("英字の大文字小文字・全角半角・空白の有無は区別しません。英字やカタカナの語の途中では置き換えません（例: 「マーク」は「マークダウン」の中では置き換えない）。テキストでは「ストックマーク => Stockmark」のように書き、読みは「,」で区切って複数書けます。")
             }
             .font(.caption).foregroundStyle(.secondary)
@@ -190,7 +190,7 @@ struct DictionarySuggestionSection: View {
         } header: {
             Text("辞書の候補を探す")
         } footer: {
-            Text("固有名詞や誤認識しやすい語を Gemini が挙げます。選んだものだけを辞書に追加し、自動では追加しません。会議の中身を送る外部の送り先は Gemini（「Gemini」タブで設定した API）だけです。音声入力の結果はメモリ上だけにあり、アプリを終了すると消えます。")
+            Text("固有名詞や誤認識しやすい語を AI が挙げます。選んだものだけを辞書に追加し、自動では追加しません。会議の中身を送る外部の送り先は、「AI」タブで会議に選んだ AI（Gemini か Claude）だけです。音声入力の結果はメモリ上だけにあり、アプリを終了すると消えます。")
                 .font(.caption).foregroundStyle(.secondary)
         }
         .onAppear { meetingCount = DictionarySuggester.recentMeetings().count }
@@ -214,12 +214,13 @@ struct DictionarySuggestionSection: View {
         candidates = []
         selected = []
         let existing = settings.userDictionary
-        let model = settings.meetingMinutesModel
+        let model = settings.textModel(for: .meeting)
         Task {
             do {
-                guard let auth = try GeminiClient.authFromSettings(settings) else { throw GeminiError.missingAPIKey }
+                // 辞書の候補探しは会議の記録を読む長い処理なので、会議の AI を使う（DEC-COM-040）
+                let client = try TextAIClient.requireFromSettings(settings, for: .meeting)
                 let found = try await DictionarySuggester.suggest(
-                    corpus: corpus, existing: existing, client: GeminiClient(auth: auth), model: model)
+                    corpus: corpus, existing: existing, client: client, model: model)
                 candidates = found
                 message = found.isEmpty ? "新しい候補は見つかりませんでした。" : "追加したいものを選んでください（\(model)）。"
             } catch {
