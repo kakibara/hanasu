@@ -31,7 +31,7 @@
 - 出典: 2026-11-02 に一度 dmg に変えた（2f0a153）が、2026-11-03 にユーザーが「zip の方が適していた」と言い、次の版から zip に戻した（PR #20）
 - 対象: Mac
 - 実装の場所: `.github/workflows/tagpr.yml`（`mac` ジョブ）
-- 確かめ方: 次のリリースの添付ファイル（まだ実際のリリースでは動かしていない）
+- 確かめ方: リリースの添付ファイル（v1.3.0 で `Hanasu-1.3.0-macOS.zip` が付いたことを確かめた）
 
 ### REQ-REL-004 Windows 版もリリースに添付する
 - 内容: Windows 版を `Hanasu-<バージョン>-Windows-x64.zip` としてリリースに添付する。
@@ -39,7 +39,15 @@
 - 出典: ユーザーの指定（2026-11-03、PR #20）「Windows 版もリリースに添付する」
 - 対象: Windows
 - 実装の場所: `.github/workflows/tagpr.yml`（`windows` ジョブ）
-- 確かめ方: 次のリリースの添付ファイル（Windows 版のコードは PR #19 で main に入った。CI の `windows.yml` で publish まで確かめている）
+- 確かめ方: リリースの添付ファイル（v1.3.0 で `Hanasu-1.3.0-Windows-x64.zip` が付いたことを確かめた。CI の `windows.yml` でも publish の中身を確かめている）
+
+### REQ-REL-005 Apache License 2.0 で配布し、配布物にライセンスと第三者の表示を入れる
+- 内容: Hanasu は Apache License 2.0 で配布する（2026-11-03 までは AGPL-3.0）。Mac 版・Windows 版の配布物には、Hanasu のライセンス（`LICENSE`・`NOTICE`）と、組み込んだ第三者のソフトウェアのライセンス表示を入れる。
+- 受け入れ条件: リポジトリの `LICENSE` が Apache License 2.0 の条文である。`Hanasu.app/Contents/Resources` に `LICENSE`・`NOTICE`・`THIRD_PARTY_NOTICES.md` がある。Windows 版の zip の `Hanasu` フォルダに `LICENSE.txt`・`NOTICE.txt`・`THIRD_PARTY_NOTICES.md`・`dotnet-THIRD-PARTY-NOTICES.txt` がある。
+- 出典: ユーザーの依頼（2026-11-03「Apache-2.0 にして、Windows のライセンスの問題も修正して」）。v1.3.0 の Windows 版の zip にライセンスの表示が入っていなかったことへの対応
+- 対象: Mac / Windows
+- 実装の場所: `LICENSE`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、`windows/THIRD_PARTY_NOTICES.md`、`scripts/build-app.sh`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`（publish の中身の確認）
+- 確かめ方: `./scripts/build-app.sh` のあとの `ls build/Hanasu.app/Contents/Resources`、CI の `windows.yml` の「Check publish output」
 
 ---
 

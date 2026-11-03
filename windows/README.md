@@ -3,7 +3,7 @@
 Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常駐し、ショートカットで録音して文字起こしし、Gemini で自然な日本語に整えて（または英訳して）カーソル位置に入力する。
 
 - **音声入力**（第 1 段階）と、そのための土台（録音・文字起こし・Gemini・設定）
-- **会議の記録**（第 2 段階）: マイク（自分）と PC の音（相手）を別々に録り、記録のあとに文字起こし・話者分離・議事録まで作る。Mac 版の会議の記録（`docs/MEETING_RECORDER.md`）にそろえた
+- **会議の記録**（第 2 段階）: マイク（自分）と PC の音（相手）を別々に録り、記録のあとに文字起こし・話者分離・議事録まで作る。Mac 版の会議の記録（[docs/design/meeting.md](../docs/design/meeting.md)）にそろえた
 
 ## 使い方
 
@@ -255,6 +255,8 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | xunit 2.9.3 / xunit.runner.visualstudio 2.8.2 | テストのみ | Apache-2.0 |
 | Microsoft.NET.Test.Sdk 17.14.1 | テストのみ | MIT |
 | [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（org.k2fsa.sherpa.onnx 1.13.8、ONNX Runtime を含む） | 会議の相手側の話者分離 | Apache-2.0（ONNX Runtime は MIT） |
+
+配布物には、Hanasu のライセンス（`LICENSE.txt`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したら、THIRD_PARTY_NOTICES.md にも足すこと。
 
 Whisper のモデル（`ggml-*.bin`）は配布物に含めず、利用者が選んだときに [Hugging Face の ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp) からダウンロードする（OpenAI の Whisper のモデル、MIT）。
 話者分離のモデルも配布物に含めず、初めて使うときにダウンロードする: [pyannote segmentation-3.0 の ONNX 版](https://huggingface.co/csukuangfj/sherpa-onnx-pyannote-segmentation-3-0)（MIT）、

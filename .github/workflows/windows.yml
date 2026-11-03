@@ -54,7 +54,12 @@ jobs:
             "publish/win-x64/runtimes/win-x64/whisper.dll",
             "publish/win-x64/runtimes/win-x64/ggml-whisper.dll",
             "publish/win-x64/runtimes/win-x64/ggml-base-whisper.dll",
-            "publish/win-x64/runtimes/win-x64/ggml-cpu-whisper.dll"
+            "publish/win-x64/runtimes/win-x64/ggml-cpu-whisper.dll",
+            # 確かめ方: REQ-REL-005
+            "publish/win-x64/LICENSE.txt",
+            "publish/win-x64/NOTICE.txt",
+            "publish/win-x64/THIRD_PARTY_NOTICES.md",
+            "publish/win-x64/dotnet-THIRD-PARTY-NOTICES.txt"
           )
           foreach ($path in $expected) {
             if (-not (Test-Path $path)) { throw "見つかりません: $path" }

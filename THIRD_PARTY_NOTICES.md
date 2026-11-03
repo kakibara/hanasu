@@ -1,6 +1,6 @@
 # Third-party notices
 
-Hanasu は GNU Affero General Public License v3.0（[LICENSE](LICENSE)）で配布します。
+Hanasu は Apache License 2.0（[LICENSE](LICENSE)）で配布します。Windows 版の表示は [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) にあります。
 配布するアプリ（Hanasu.app）には、次の第三者のソフトウェアが組み込まれています。それぞれのライセンスに従って表示します。
 
 - **FluidAudio** v0.17.7（https://github.com/FluidInference/FluidAudio）— Apache License 2.0
