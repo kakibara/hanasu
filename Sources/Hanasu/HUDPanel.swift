@@ -30,7 +30,8 @@ final class HUDModel: ObservableObject {
     @Published var editBadge: String?
     /// 録音を止めてからまとめて文字起こしするエンジン（Whisper / Gemini）。nil なら Mac 標準（途中経過が出る）
     @Published var batchEngine: TranscriptionEngine?
-    /// 録音中の音量（0〜1。batchEngine があるときの音量の目安）
+    // 要件: REQ-DIC-014
+    /// 録音中の音量（RMS、0〜1）。どのエンジンでも、2 行目に音量の目安として出す
     @Published var level: Float = 0
     /// まとめての文字起こしをしている間は true（「Whisper で文字起こししています…」）
     @Published var transcribing = false
@@ -195,28 +196,23 @@ private struct HUDView: View {
                     StopButton { model.onStop?() }
                 }
             }
-            if model.phase == .recording, let engine = model.batchEngine, model.transcript.isEmpty {
-                // 途中経過が出ないエンジンでは、声が届いているかを音量で示す
-                HStack(spacing: 8) {
-                    LevelMeter(level: model.level)
-                    Text(model.editBadge != nil
-                         ? "指示を話してください。止めてから \(engine.shortName) で文字起こしします"
-                         : "止めてから \(engine.shortName) で文字起こしします（録音中は文字が出ません）")
-                        .font(.system(size: 12))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
-                    Spacer(minLength: 0)
-                    microphoneButton
-                }
-            } else if let detail {
+            if let detail {
                 HStack(alignment: .top, spacing: 8) {
                     Text(detail)
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                         .lineLimit(3)
-                        .truncationMode(.head)
+                        // 認識中の文字は末尾（いま話したところ）を残し、案内の文は頭から読めるようにする
+                        .truncationMode(model.transcript.isEmpty ? .tail : .head)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    if model.phase == .recording { microphoneButton }
+                    if model.phase == .recording {
+                        // 要件: REQ-DIC-014
+                        // 設計判断: DEC-DIC-143
+                        // 声がマイクに届いているかを、どのエンジンでも音量で示す（マイクのボタンの隣）
+                        LevelMeter(level: model.level)
+                            .padding(.top, 1)
+                        microphoneButton
+                    }
                 }
             }
         }
@@ -277,6 +273,13 @@ private struct HUDView: View {
         switch model.phase {
         case .recording:
             if !model.transcript.isEmpty { model.transcript }
+            // 設計判断: DEC-DIC-101
+            // 途中経過が出ないエンジンでは、止めてから文字起こしすることを書いておく
+            else if let engine = model.batchEngine {
+                model.editBadge != nil
+                    ? "指示を話してください。止めてから \(engine.shortName) で文字起こしします"
+                    : "止めてから \(engine.shortName) で文字起こしします（録音中は文字が出ません）"
+            }
             else if model.editBadge != nil { "指示を話してください（例: もっと丁寧に／箇条書きにして／英語にして）" }
             else { "話してください…" }
         case .processing: model.transcript.isEmpty ? nil : model.transcript
@@ -376,8 +379,9 @@ private struct LanguageSwitch: View {
     }
 }
 
-// 設計判断: DEC-DIC-101
-/// 音量の目安（Whisper / Gemini で録っているとき）。RMS を dB にして、-60〜-10 dB を 0〜1 に割り当てる
+// 要件: REQ-DIC-014
+// 設計判断: DEC-DIC-143, DEC-DIC-101
+/// 録音中の音量の目安。RMS を dB にして、-60〜-10 dB を 12 本のバーに割り当てる
 private struct LevelMeter: View {
     var level: Float
 

@@ -127,6 +127,17 @@
 - Windows の実装: `windows/Hanasu.Windows/Views/HudWindow.xaml.cs`
 - 確かめ方: `--render-hud`・`--render-edit-hud` で見た目。クリックは実機で確かめる
 
+### REQ-DIC-014 録音中は、マイクの音量を HUD に出す
+- 内容: 録音中の HUD に、マイクから届いている音量の目安を出す。文字起こしのエンジン（Mac 標準・Whisper・Gemini）によらず、選択を声で編集するときの HUD でも出す。声がちゃんとマイクに届いているかを、話しながら見て分かるようにする。
+- 受け入れ条件:
+  - 録音中の HUD の 2 行目に音量のバーがあり、話すと伸び、黙ると縮む（0.1 秒ごとに変わる）。
+  - Mac 標準のエンジンで認識中の文字が出ている間も、音量のバーは出たまま。
+  - 録音中に HUD でマイクを切り替えても（REQ-DIC-140）、新しいマイクの音量に変わる。
+- 出典: 2026-11-04 のユーザーの依頼「音声入力を行っている時に、マイクの音量が表示されていると、ちゃんと（声が）届いているところが分かりやすいので、その機能を追加してください」
+- 対象: Mac（Windows 版は FUT-003 で足すかを決める）
+- 実装の場所: `SpeechRecognizer.onLevel`、`AudioLevelBox`、`BatchCapture`、`HUDModel.level`、`HUDPanel.swift` の `LevelMeter`
+- 確かめ方: `.build/debug/Hanasu --test-dictation-level [秒] [--engine apple|whisper|gemini]`（音声入力と同じ経路で録音し、HUD に渡る音量の回数と最大を出す。マイクの許可が要る）、`--render-hud /tmp/hud.png [--engine whisper]`・`--render-edit-hud` で見た目。話したときのバーの動きは実機で確かめる
+
 ### REQ-DIC-020 入力先アプリに合わせて文体を変える
 - 内容: 入力先アプリ（bundle ID）ごとに、Gemini に渡す文体ルール（プリセット 1 つと、そのアプリ用の追加ルール）を決められる。
 - 受け入れ条件: 同じ発話でも、Slack ではくだけた短い文、メールでは丁寧な文で段落を分けた文になる。
@@ -1000,12 +1011,12 @@
 - 実装の場所: `SpeechRecognizer.startBatch`、`SpeechRecognizer.stopBatch`
 
 ### DEC-DIC-101 Whisper / Gemini では、録音中は途中経過の代わりに音量の目安を出す
-- 決めたこと: HUD に「録音中（Whisper）」と出し、途中経過の代わりに音量の目安（12 本のバー、-60〜-10 dB）と「止めてから Whisper で文字起こしします（録音中は文字が出ません）」を出す。止めたら「Whisper で文字起こししています…」にする。
+- 決めたこと: HUD に「録音中（Whisper）」と出し、途中経過の代わりに「止めてから Whisper で文字起こしします（録音中は文字が出ません）」を出す（音量の目安は、ほかのエンジンと同じく右に出す。DEC-DIC-143）。止めたら「Whisper で文字起こししています…」にする。
 - 理由: Whisper で途中経過を出す（数秒ごとに文字起こしし直す）のは CPU と電池の負担が大きい（[roadmap.md](../roadmap.md) FUT-106）。
-- 決めた場面: PR #17
+- 決めた場面: PR #17。音量の目安をどのエンジンでも出すようにしたのは、録音中にマイクの音量を出す PR（2026-11-04、DEC-DIC-143）
 - 関係する要件: REQ-COM-001, REQ-DIC-002
 - 対象: Mac
-- 実装の場所: `HUDModel.batchEngine`、`LevelMeter`
+- 実装の場所: `HUDModel.batchEngine`、`HUDView.detail`
 
 ### DEC-DIC-102 Whisper / Gemini では、録音を始める前に準備を確かめる
 - 決めたこと: Whisper はモデルがあるか（なければダウンロードを始め、HUD にその旨を出す）、Gemini は認証情報があるかを、録音を始める前に確かめる。
@@ -1134,12 +1145,20 @@
 - 実装の場所: `SpeechRecognizer.switchInput`、`SpeechRecognizer.startInputWithFallback`、`BatchCapture.switchInput`
 
 ### DEC-DIC-142 HUD のマイクのボタンは 2 行目の右端に置き、押すと NSMenu を出す
-- 決めたこと: マイクのボタン（マイクの絵と ▾）は、録音中だけ HUD の 2 行目（認識中の文字・音量の目安の行）の右端に出す。押すと `NSMenu` をマウスの位置に出し、「システムの設定に従う（今の既定のマイク）」、つながっているマイク、外れている選択中のマイクを並べ、今の選択に ✓ を付ける。ボタンそのものは他のボタンと同じく SwiftUI のボタンにする（DEC-DIC-025）。
+- 決めたこと: マイクのボタン（マイクの絵と ▾）は、録音中だけ HUD の 2 行目（認識中の文字・音量の目安の行）の右端に出す（すぐ左が音量の目安。DEC-DIC-143）。押すと `NSMenu` をマウスの位置に出し、「システムの設定に従う（今の既定のマイク）」、つながっているマイク、外れている選択中のマイクを並べ、今の選択に ✓ を付ける。ボタンそのものは他のボタンと同じく SwiftUI のボタンにする（DEC-DIC-025）。
 - 理由: 1 行目は言語の切り替え・経過時間・取消・停止でいっぱいで、足すと Whisper / Gemini のときに言語の切り替えが折り返した。HUD は前面に出ないパネルなので、メニュー型の Picker（AppKit の部品）は使わず、画面の座標に出す `NSMenu` にした。メニューはアプリを前面に出さずに出せる。
 - 決めた場面: 音声入力のマイクを選べるようにした PR（2026-11-04）
 - 関係する要件: REQ-DIC-140
 - 対象: Mac
 - 実装の場所: `MicrophoneButton`、`DictationMicrophoneMenu`
+
+### DEC-DIC-143 音量の目安は、どのエンジンでも 2 行目のマイクのボタンの左に出す
+- 決めたこと: 音量の目安（12 本のバー。RMS を dB にして -60〜-10 dB を割り当てる）は、録音中だけ HUD の 2 行目の、マイクのボタン（DEC-DIC-142）のすぐ左に出す。左には認識中の文字（Mac 標準）か案内の文（Whisper / Gemini・話す前）を置く。音量はマイクから来たままのバッファの 1 チャンネル目で測り、0.1 秒ごとに HUD に渡す。Mac 標準では、認識に渡すタップの中で測る（`AudioLevelBox`）。
+- 理由: 「声がマイクに届いているか」を示すものなので、マイクのボタンと並べると何のバーかが分かる。1 行目は言語の切り替え・経過時間・取消・停止でいっぱい（DEC-DIC-142）。以前は Whisper / Gemini のときだけ 2 行目の左に出していたが、エンジンで場所が変わらないようにそろえた。測る処理は RMS を 1 回計算するだけで、認識の負担にならない。
+- 決めた場面: 録音中にマイクの音量を出す PR（2026-11-04）
+- 関係する要件: REQ-DIC-014, REQ-DIC-140
+- 対象: Mac
+- 実装の場所: `HUDView`、`LevelMeter`、`AudioLevelBox`、`SpeechRecognizer.startLevelTimer`
 
 ---
 

@@ -7,8 +7,11 @@ import SwiftUI
 //   Hanasu --render-dictation-mic-settings <出力.png>  設定の「一般」タブの「マイク」欄を PNG にする
 //   Hanasu --test-dictation-mic-switch [秒]           つながっているマイクへ順に切り替えて、それぞれ音声が届くかを数える
 //                                                     （録音中の切り替えと同じ関数を使う。マイクの許可が要る）
+//   Hanasu --test-dictation-level [秒] [--engine apple|whisper|gemini]
+//                                                     音声入力と同じ経路で録音し、HUD に渡る音量（0.1 秒ごと）を数える
+//                                                     （既定は 3 秒・Mac 標準。マイクの許可が要る。話しかけると最大が上がる）
 // -dictationInputDeviceUID <UID> は UserDefaults の引数で、その回だけ選択を上書きする（保存しない）。
-// 確かめ方: REQ-DIC-140
+// 確かめ方: REQ-DIC-140, REQ-DIC-014
 @MainActor
 enum DictationMicrophoneCLI {
     static func runIfRequested() {
@@ -28,6 +31,36 @@ enum DictationMicrophoneCLI {
             let seconds = args.indices.contains(index + 1) ? Double(args[index + 1]) ?? 0.6 : 0.6
             exit(testSwitch(seconds: seconds) ? 0 : 1)
         }
+        if let index = args.firstIndex(of: "--test-dictation-level") {
+            let seconds = args.indices.contains(index + 1) ? Double(args[index + 1]) ?? 3 : 3
+            let (engine, _) = TranscriptionEngineCLI.parseEngine(args)
+            Task { @MainActor in exit(await testLevel(seconds: seconds, transcription: engine) ? 0 : 1) }
+            RunLoop.main.run()
+        }
+    }
+
+    // 確かめ方: REQ-DIC-014
+    /// 音声入力と同じく SpeechRecognizer で録音し、onLevel に届いた音量を数える。1 回も届かなければ false
+    private static func testLevel(seconds: Double, transcription: TranscriptionEngine) async -> Bool {
+        let settings = AppSettings.shared
+        let recognizer = SpeechRecognizer()
+        var levels: [Float] = []
+        recognizer.onLevel = { levels.append($0) }
+        do {
+            try await recognizer.start(localeIdentifier: settings.localeIdentifier, engine: settings.engine,
+                                       contextualStrings: [], transcription: transcription,
+                                       inputDeviceUID: settings.dictationInputDeviceUID)
+        } catch {
+            print("✗ 録音を始められません: \(error.localizedDescription)")
+            return false
+        }
+        try? await Task.sleep(for: .seconds(seconds))
+        await recognizer.cancel()
+        let peak = levels.max() ?? 0
+        let db = 20 * log10(max(Double(peak), 1e-6))
+        print(String(format: "%@ %@: 音量 %d 回 / 最大 %.4f（%.1f dB）",
+                     levels.isEmpty ? "✗" : "✓", transcription.shortName, levels.count, peak, db))
+        return !levels.isEmpty
     }
 
     /// 設定の「一般」タブの「マイク」欄を PNG にする
