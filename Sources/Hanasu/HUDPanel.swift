@@ -12,6 +12,9 @@ final class HUDModel: ObservableObject {
     }
 
     @Published var phase: Phase = .recording
+    // 設計判断: DEC-COM-016
+    /// パネルを画面に出している間だけ true。隠している間（一度も出していない間も）は中身を描かない
+    @Published var isShown = false
     @Published var transcript = ""
     @Published var startedAt = Date()
     // 要件: REQ-DIC-013
@@ -102,6 +105,7 @@ final class HUDController {
             model.startedAt = Date()
         }
         model.phase = phase
+        model.isShown = true
         // ボタンを押せる間だけクリックを受け取る。パネルは前面に出ないので、入力先のフォーカスは動かない
         panel.ignoresMouseEvents = !model.acceptsClicks
         position()
@@ -131,8 +135,11 @@ final class HUDController {
         hideTask?.cancel()
         hideTask = Task { [weak self] in
             if delay > 0 { try? await Task.sleep(for: .seconds(delay)) }
-            guard !Task.isCancelled else { return }
-            self?.panel.orderOut(nil)
+            guard !Task.isCancelled, let self else { return }
+            self.panel.orderOut(nil)
+            // 設計判断: DEC-COM-016
+            // 隠したパネルの中でも、経過時間（TimelineView）・点滅（symbolEffect）・スピナーは動き続けて CPU を使うので、中身を外す
+            self.model.isShown = false
         }
     }
 
@@ -147,7 +154,12 @@ final class HUDController {
 private struct HUDView: View {
     @ObservedObject var model: HUDModel
 
+    // 設計判断: DEC-COM-016
     var body: some View {
+        if model.isShown { content }
+    }
+
+    private var content: some View {
         VStack(alignment: .leading, spacing: 6) {
             // 1 行目は、Whisper / Gemini で「話した言語／English」を出しても省略・折り返しなしで収まる間隔にする
             HStack(spacing: 6) {
