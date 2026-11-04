@@ -146,7 +146,8 @@ private struct HUDView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 8) {
+            // 1 行目は、Whisper / Gemini で「話した言語／English」を出しても省略・折り返しなしで収まる間隔にする
+            HStack(spacing: 6) {
                 statusIcon
                 Text(title).font(.system(size: 13, weight: .semibold)).lineLimit(1)
                 if let editBadge {
@@ -333,6 +334,8 @@ private struct LanguageSwitch: View {
         }
         .padding(2)
         .background(.quaternary, in: Capsule())
+        // 1 行目が詰まっても折り返さない（詰まったら、左の見出しのほうを省略する）
+        .fixedSize()
         .help("録音を止めたときに選んでいる方で入力します（話した言語は整形の言語の設定に従い、English は英訳）")
     }
 
@@ -341,7 +344,7 @@ private struct LanguageSwitch: View {
             Text(label)
                 .font(.system(size: 11, weight: selected ? .semibold : .regular))
                 .foregroundStyle(selected ? Color.white : Color.secondary)
-                .padding(.horizontal, 8)
+                .padding(.horizontal, 7)
                 .padding(.vertical, 3)
                 .background(selected ? Color.accentColor : Color.clear, in: Capsule())
                 .contentShape(Capsule())
