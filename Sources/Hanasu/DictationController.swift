@@ -31,6 +31,9 @@ final class DictationController {
     // 設計判断: DEC-DIC-035
     /// ほかの録音（選択を声で編集）が動いている間は false を返す
     var canStart: () -> Bool = { true }
+    // 要件: REQ-DIC-084
+    /// 貼り付けが届いたか確かめられなかったとき（設定がオンなら）、その結果の履歴を開く
+    var onOpenHistory: ((UUID) -> Void)?
 
     private let settings = AppSettings.shared
     private let hotKeys = HotKeyManager()
@@ -276,8 +279,8 @@ final class DictationController {
         hud.show(.error(message))
     }
 
-    // 要件: REQ-DIC-007, REQ-DIC-070, REQ-DIC-080
-    // 設計判断: DEC-DIC-014, DEC-DIC-015, DEC-DIC-021, DEC-DIC-052, DEC-DIC-072, DEC-DIC-094
+    // 要件: REQ-DIC-007, REQ-DIC-070, REQ-DIC-080, REQ-DIC-083, REQ-DIC-084
+    // 設計判断: DEC-DIC-014, DEC-DIC-015, DEC-DIC-021, DEC-DIC-052, DEC-DIC-072, DEC-DIC-094, DEC-DIC-099
     func finishDictation() async {
         guard state == .recording else { return }
         state = .processing
@@ -352,7 +355,7 @@ final class DictationController {
         }
 
         // 入力先がずれても取り戻せるよう、貼り付けの前に履歴へ残す
-        DictationHistoryStore.shared.record(
+        let entry = DictationHistoryStore.shared.record(
             raw: raw, output: output, mode: .init(mode), appName: targetAppName, status: historyStatus,
             errorMessage: historyError, model: historyStatus == .succeeded ? settings.textModel(for: .dictation) : nil,
             audioURL: pendingAudioURL)
@@ -370,6 +373,12 @@ final class DictationController {
             // 入力できる場所がない。HUD の代わりに、自動では閉じないパネルで全文を残す（整形の失敗などの知らせも載せる）
             hud.hide()
             PasteFallbackPanel.shared.show(text: output, subject: .result, clipboardKept: clipboardKept, warning: warning)
+        case (.unconfirmed(let clipboardKept), _):
+            // 入力先がずれたなどで、貼り付け先が受け取らなかった。最新の結果をクリップボードに残してある
+            hud.show(.error(TextInserter.unconfirmedMessage(clipboardKept: clipboardKept)))
+            if PasteFallbackSettings.shared.openHistoryWhenUnconfirmed {
+                onOpenHistory?(entry.id)
+            }
         case (.pasted, let warning?):
             hud.show(.error(warning))
         case (.pasted, nil):

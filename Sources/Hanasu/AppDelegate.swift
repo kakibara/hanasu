@@ -52,6 +52,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         updateIcon(for: .idle)
 
         controller.onStateChange = { [weak self] state in self?.updateIcon(for: state) }
+        controller.onOpenHistory = { [weak self] id in self?.historyUI.openWindow(selecting: id) }
         editController = EditModeController(dictation: controller)
         editController.onStateChange = { [weak self] state in
             guard let self else { return }

@@ -266,12 +266,24 @@ final class PasteFallbackSettings: ObservableObject {
         didSet { defaults.set(clipboard.rawValue, forKey: Keys.clipboard) }
     }
 
+    // 要件: REQ-DIC-084
+    // 設計判断: DEC-DIC-099
+    /// 貼り付けが届いたか確かめられなかったとき、音声入力の履歴を開く（既定はオフ）
+    @Published var openHistoryWhenUnconfirmed: Bool {
+        didSet { defaults.set(openHistoryWhenUnconfirmed, forKey: Keys.openHistoryWhenUnconfirmed) }
+    }
+
     private init() {
-        defaults.register(defaults: [Keys.clipboard: PasteFallbackClipboard.keepResult.rawValue])
+        defaults.register(defaults: [
+            Keys.clipboard: PasteFallbackClipboard.keepResult.rawValue,
+            Keys.openHistoryWhenUnconfirmed: false,
+        ])
         clipboard = PasteFallbackClipboard(rawValue: defaults.string(forKey: Keys.clipboard) ?? "") ?? .keepResult
+        openHistoryWhenUnconfirmed = defaults.bool(forKey: Keys.openHistoryWhenUnconfirmed)
     }
 
     private enum Keys {
         static let clipboard = "pasteFallbackClipboard"
+        static let openHistoryWhenUnconfirmed = "pasteUnconfirmedOpenHistory"
     }
 }
