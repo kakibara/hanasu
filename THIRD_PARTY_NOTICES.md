@@ -26,7 +26,7 @@ Whisper のモデル（argmaxinc/whisperkit-coreml。OpenAI Whisper を CoreML �
 - LFM2.5-1.2B-JP（LiquidAI/LFM2.5-1.2B-JP-202606-GGUF、Liquid AI）— LFM Open License v1.0
   （年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されていません）
 - Sarashina2.2 3B（mmnga/sarashina2.2-3b-instruct-v0.1-gguf。元は SB Intuitions の sarashina2.2-3b-instruct-v0.1）— MIT License
-- Qwen3.5-0.8B（ggml-org/Qwen3.5-0.8B-GGUF。元は Alibaba の Qwen/Qwen3.5-0.8B）— Apache License 2.0
+- Qwen3.5-4B（unsloth/Qwen3.5-4B-GGUF。元は Alibaba の Qwen/Qwen3.5-4B）— Apache License 2.0
 
 
 ---

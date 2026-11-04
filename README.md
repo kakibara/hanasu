@@ -99,10 +99,10 @@ With **Local**, Hanasu runs a small language model on your own Mac or PC with th
 | **Gemma 4 E4B** (Google) — **recommended** | 4.59 GB | Apache-2.0 | The most natural results for both clean-up and minutes. 16 GB of memory or more is recommended. The default for both voice input and meetings |
 | LFM2.5-1.2B-JP (Liquid AI) | 1.25 GB | LFM Open License v1.0 | Small and fast. Organizations with annual revenue of US$10M or more may not use it commercially under this license |
 | Sarashina2.2 3B (SB Intuitions) | 2.07 GB | MIT | Trained on Japanese. Its context is 8K, so long meetings are summarized in parts |
-| Qwen3.5-0.8B (Alibaba) | 0.83 GB | Apache-2.0 | The smallest and lightest. For devices with little memory. Lower quality |
+| Qwen3.5-4B (Alibaba) | 2.74 GB | Apache-2.0 | About half the size of Gemma, so it is easier to run on 8 GB of memory. Weaker than Gemma at handling self-corrections |
 
 > [!TIP]
-> We recommend **Gemma 4 E4B**. In our tests, LFM2.5 and Sarashina2.2 sometimes added sentences you didn't say, mixed up who owns an action item, or missed action items entirely. Gemma 4 E4B handled both clean-up and minutes reliably.
+> We recommend **Gemma 4 E4B**. In our tests, the other models sometimes kept the words you meant to take back, added sentences you didn't say, mixed up who owns an action item, or merged or missed action items. Gemma 4 E4B handled both clean-up and minutes reliably.
 
 ### 🔊 Choose your speech engine
 

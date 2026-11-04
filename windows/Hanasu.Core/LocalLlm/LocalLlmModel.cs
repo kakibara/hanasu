@@ -44,19 +44,20 @@ public sealed record LocalLlmModel(
         8_192, new LocalLlmSampling(0.2, 0.95, null, 1.05),
         "MIT", "https://huggingface.co/sbintuitions/sarashina2.2-3b-instruct-v0.1");
 
-    // Qwen3.5 の推奨の presence_penalty 2.0 は、元の言葉を残す整形で語を避けさせてしまうので付けない
-    public static readonly LocalLlmModel Qwen35Small = new(
-        "qwen3.5-0.8b", "Qwen3.5-0.8B", "Alibaba。いちばん小さく軽い（0.8B）。メモリの少ない PC 向け。質は控えめ",
-        "ggml-org/Qwen3.5-0.8B-GGUF", "807dfd9a6fadbf703207aac3bfb0b2b3040d077c", "Qwen3.5-0.8B-Q8_0.gguf",
-        833_592_096, "37ae482d336108d23516fa35e8e0c4126688d81018b87178a18d752a1357814f",
-        32_768, new LocalLlmSampling(1.0, 1.0, 20, null),
-        "Apache-2.0", "https://huggingface.co/Qwen/Qwen3.5-0.8B");
+    // Qwen3.5 の推奨の presence_penalty 1.5 は、元の言葉を残す整形で語を避けさせてしまうので付けない
+    public static readonly LocalLlmModel Qwen35 = new(
+        "qwen3.5-4b", "Qwen3.5-4B", "Alibaba。Gemma の半分ほどの大きさで、メモリが 8 GB の PC でも動かしやすい。言い直しの扱いは Gemma より弱い",
+        "unsloth/Qwen3.5-4B-GGUF", "e87f176479d0855a907a41277aca2f8ee7a09523", "Qwen3.5-4B-Q4_K_M.gguf",
+        2_740_937_888, "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+        32_768, new LocalLlmSampling(0.7, 0.8, 20, null),
+        "Apache-2.0", "https://huggingface.co/Qwen/Qwen3.5-4B");
 
-    public static readonly IReadOnlyList<LocalLlmModel> All = [Gemma4E4B, Lfm25JP, Sarashina22, Qwen35Small];
+    public static readonly IReadOnlyList<LocalLlmModel> All = [Gemma4E4B, Lfm25JP, Sarashina22, Qwen35];
 
     /// <summary>
     /// おすすめのモデル（DEC-COM-067）。実機で比べると、Sarashina2.2 と LFM2.5 は整形で言っていない文を足したり、
     /// 議事録で担当者を取り違えたり同じ議題を繰り返したりして、使い物にならなかった（docs/verification/dictation.md の 13）。
+    /// Qwen3.5-4B も、整形で言い直しの前の文を残し、議事録でアクションアイテムをまとめてしまった（同じく 18）。
     /// Gemma 4 E4B（Google）だけが整形も議事録も安定していたので、これを勧め、音声入力・会議とも既定にする
     /// </summary>
     public static readonly LocalLlmModel Recommended = Gemma4E4B;

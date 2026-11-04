@@ -22,7 +22,7 @@ Hanasu は Apache License 2.0（同梱の `LICENSE.txt`）で配布します。
 
 - Whisper のモデル（`ggml-*.bin`、[ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp)。OpenAI Whisper のモデル、MIT）
 - 話者分離のモデル: [pyannote segmentation-3.0 の ONNX 版](https://huggingface.co/csukuangfj/sherpa-onnx-pyannote-segmentation-3-0)（MIT）、[3D-Speaker の CAM++](https://github.com/k2-fsa/sherpa-onnx/releases/tag/speaker-recongition-models)（Apache-2.0）
-- ローカルの LLM のモデル（設定 → AI で利用者がダウンロード）: [Gemma 4 E4B](https://huggingface.co/ggml-org/gemma-4-E4B-it-GGUF)（Apache-2.0）、[LFM2.5-1.2B-JP](https://huggingface.co/LiquidAI/LFM2.5-1.2B-JP-202606-GGUF)（LFM Open License v1.0。年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されていません）、[Sarashina2.2 3B](https://huggingface.co/mmnga/sarashina2.2-3b-instruct-v0.1-gguf)（MIT）、[Qwen3.5-0.8B](https://huggingface.co/ggml-org/Qwen3.5-0.8B-GGUF)（Apache-2.0）
+- ローカルの LLM のモデル（設定 → AI で利用者がダウンロード）: [Gemma 4 E4B](https://huggingface.co/ggml-org/gemma-4-E4B-it-GGUF)（Apache-2.0）、[LFM2.5-1.2B-JP](https://huggingface.co/LiquidAI/LFM2.5-1.2B-JP-202606-GGUF)（LFM Open License v1.0。年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されていません）、[Sarashina2.2 3B](https://huggingface.co/mmnga/sarashina2.2-3b-instruct-v0.1-gguf)（MIT）、[Qwen3.5-4B](https://huggingface.co/unsloth/Qwen3.5-4B-GGUF)（Apache-2.0）
 
 ---
 
