@@ -122,13 +122,15 @@
 - 確かめ方: 実機で確かめる。印の反映は `--meeting-files … --notes notes.txt`。取り消しは `.build/debug/Hanasu --render-meeting-notes <フォルダ>`（「ここ重要の取り消し」の結果と `live-undo.png`・`caption-undo.png`）、Windows は `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~HighlightUndo|FullyQualifiedName~UndoesARecentHighlight|FullyQualifiedName~HighlightContext"`。前後の会話は `.build/debug/Hanasu --render-minutes-ui <フォルダ>`（`detail-highlights.png` と「ここ重要の前後」）
 
 ### REQ-MTG-013 議事録は、メモと印を優先して反映する。記録後にメモを直して作り直せる（F13）
-- 内容: 議事録はメモと印を優先して反映する。記録後にメモを直して、議事録を作り直せる。
-- 受け入れ条件: 印を付けた箇所が議事録の「重要とした箇所」にまとまり、メモにしかない内容も残る。「保存して議事録を作り直す」で議事録が変わる。
-- 出典: PR #10
-- 対象: Mac / Windows
-- 実装の場所: `Meeting.notesForPrompt`、`Meeting.transcriptForPromptMarkingHighlights`、`MeetingRecorder.regenerateMinutes`、`MeetingNotesEditor`
+- 内容: 議事録はメモと印を優先して反映する。記録後にメモを直して、議事録を作り直せる。作り直しているあいだは、どの会議を作り直しているかがわかり、作り直しても選んでいた会議のままになる。
+- 受け入れ条件:
+  - 印を付けた箇所が議事録の「重要とした箇所」にまとまり、メモにしかない内容も残る。「保存して議事録を作り直す」で議事録が変わる。
+  - Mac の会議ノートで議事録を作り直すと、終わるまで、その会議の詳細の上に「議事録を作り直しています…」と回る印が出て（今の議事録は薄く出したまま）、左の一覧のその会議にも回る印が出る。終わっても、一覧で選んでいた会議のまま（先頭の会議に移らない）。
+- 出典: PR #10。作り直し中の表示と選択はユーザーの依頼（2026-11-04「議事録を再生成したら選択していた会議から先頭の会議に移動してしまうのですが、議事録を再生成しても、同じ会議に留まるようにしてください。また、議事録生成中の場合は生成中であることがわかるようにしてください。」）
+- 対象: Mac / Windows（2 つ目の受け入れ条件は Mac。Windows 版は作り直し中に「〇〇 で議事録を作っています…」と出し、作り直しても選んだ会議のまま）
+- 実装の場所: `Meeting.notesForPrompt`、`Meeting.transcriptForPromptMarkingHighlights`、`MeetingRecorder.regenerateMinutes`、`MeetingRecorder.regeneratingMeetingID`、`MeetingNotesEditor`、`MeetingDetailView`、`MeetingWindowView`
 - Windows の実装: `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
-- 確かめ方: `--meeting-files me.wav others.wav --notes notes.txt`
+- 確かめ方: `--meeting-files me.wav others.wav --notes notes.txt`。作り直し中の表示は `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail-regenerating.png`。選んだ会議のままかは実機で確かめる
 
 ### REQ-MTG-014 文字起こしの字幕を、ほかのアプリの前面に出せる（F14）
 - 内容: 記録中の文字起こしを、会議ツールなどほかのアプリの前面に字幕として出せる。
@@ -718,6 +720,14 @@
 - 対象: Mac / Windows
 - 実装の場所: `SpeakerNameInference.apply`・`cleanName`・`replaceLabel`、`Meeting.renameSpeaker`・`isInferredName`、`SpeakerNamesSheet`
 - Windows の実装: `windows/Hanasu.Core/Meetings/SpeakerNameInference.cs`（`Apply`・`CleanName`・`ReplaceLabel`）、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`InferredSpeakers`・`RenameSpeaker`・`IsInferredName`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+
+### DEC-MTG-070 処理が終わっても会議の選択を変えず、作り直し中は会議ごとに印を出す
+- 決めたこと: 会議ノートの一覧の選択は、記録を始めたときだけその会議に移す。記録のあとの処理や議事録の作り直しが終わっても選び直さない（記録中の会議と保存した会議は同じ ID なので、記録のあとも選んだまま議事録が出る）。作り直している会議は `MeetingRecorder.regeneratingMeetingID` で持ち、その会議の詳細の上に回る印と処理の文言を出し、今の議事録は薄く出したままにする。一覧では、その会議（記録のあとの処理中は記録中の会議）の印を回る印にする。
+- 理由: 以前は処理が終わると一覧の先頭を選んでいて、作り直しのたびに別の会議へ移っていた。記録の状態（`state`）だけでは、どの会議を作り直しているかがわからず、作り直していない会議を開いていても同じ表示になる。今の議事録を消さずに薄く出すのは、作り直しに失敗したときは元の議事録が残る（DEC-MTG-061）ため。
+- 決めた場面: 作り直しで選択が先頭に移る問題の修正（2026-11-04 のユーザーの依頼）
+- 関係する要件: REQ-MTG-013, REQ-MTG-007
+- 対象: Mac
+- 実装の場所: `MeetingWindowView`、`MeetingRow`、`MeetingDetailView`、`MeetingRecorder.regenerateMinutes`
 
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。

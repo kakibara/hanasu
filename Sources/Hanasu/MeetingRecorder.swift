@@ -34,6 +34,9 @@ final class MeetingRecorder: ObservableObject {
     @Published private(set) var warnings: [String] = []
     /// 記録中の会議を、記録のあとにまとめて文字起こしするエンジン（Whisper / Gemini）。nil なら Mac 標準のライブ文字起こし
     @Published private(set) var batchEngine: TranscriptionEngine?
+    // 要件: REQ-MTG-013
+    /// 議事録を作り直している会議の ID。会議ノートで、その会議が作り直し中だとわかるように出す（描き出しの CLI からも入れる）
+    @Published var regeneratingMeetingID: String?
 
     var onStateChange: ((State) -> Void)?
     var diarizer: SpeakerDiarizer = FluidAudioDiarizer()
@@ -314,6 +317,7 @@ final class MeetingRecorder: ObservableObject {
     func regenerateMinutes(_ meeting: Meeting, template: MinutesTemplate? = nil, customPrompt: String? = nil) async {
         guard state == .idle else { return }
         setState(.processing("議事録を作り直しています…"))
+        regeneratingMeetingID = meeting.id
         var updated = meeting
         do {
             let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
@@ -334,6 +338,7 @@ final class MeetingRecorder: ObservableObject {
         }
         try? MeetingStore.save(updated)
         reloadMeetings()
+        regeneratingMeetingID = nil
         setState(.idle)
     }
 
