@@ -191,6 +191,10 @@ final class AppSettings: ObservableObject {
     @Published var diarizeMicChannel: Bool { didSet { defaults.set(diarizeMicChannel, forKey: Keys.diarizeMicChannel) } }
     /// 会議で録音するマイクの UID。空ならシステムの設定に従う
     @Published var meetingInputDeviceUID: String { didSet { defaults.set(meetingInputDeviceUID, forKey: Keys.meetingInputDeviceUID) } }
+    // 要件: REQ-DIC-140
+    // 設計判断: DEC-DIC-140
+    /// 音声入力（と選択を声で編集）で使うマイクの UID。空ならシステムの設定に従う。会議のマイクとは別
+    @Published var dictationInputDeviceUID: String { didSet { defaults.set(dictationInputDeviceUID, forKey: Keys.dictationInputDeviceUID) } }
 
     // 設計判断: DEC-COM-024
     /// Whisper に渡す言語コード（設定の言語 ja-JP → ja）。読めなければ日本語にする
@@ -272,6 +276,7 @@ final class AppSettings: ObservableObject {
             Keys.makeMeetingMinutes: true,
             Keys.meetingOutputDeviceUID: "",
             Keys.meetingInputDeviceUID: "",
+            Keys.dictationInputDeviceUID: "",
             Keys.diarizeMicChannel: false,
         ])
         model = defaults.string(forKey: Keys.model)!
@@ -310,6 +315,7 @@ final class AppSettings: ObservableObject {
         makeMeetingMinutes = defaults.bool(forKey: Keys.makeMeetingMinutes)
         meetingOutputDeviceUID = defaults.string(forKey: Keys.meetingOutputDeviceUID)!
         meetingInputDeviceUID = defaults.string(forKey: Keys.meetingInputDeviceUID)!
+        dictationInputDeviceUID = defaults.string(forKey: Keys.dictationInputDeviceUID)!
         diarizeMicChannel = defaults.bool(forKey: Keys.diarizeMicChannel)
     }
 
@@ -347,6 +353,7 @@ final class AppSettings: ObservableObject {
         static let makeMeetingMinutes = "makeMeetingMinutes"
         static let meetingOutputDeviceUID = "meetingOutputDeviceUID"
         static let meetingInputDeviceUID = "meetingInputDeviceUID"
+        static let dictationInputDeviceUID = "dictationInputDeviceUID"
         static let diarizeMicChannel = "diarizeMicChannel"
     }
 }

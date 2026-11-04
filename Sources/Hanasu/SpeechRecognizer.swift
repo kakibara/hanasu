@@ -50,25 +50,24 @@ final class SpeechRecognizer {
     var isRunning: Bool { analyzer != nil || batch != nil }
 
     /// - Parameter transcription: 文字起こしのエンジン。Mac 標準以外では、engine（SpeechAnalyzer のモジュール）は使わない
+    /// - Parameter inputDeviceUID: 使うマイクの UID。空ならシステムの設定に従う
     func start(localeIdentifier: String, engine: RecognizerEngine, contextualStrings: [String],
-               audioFileURL: URL? = nil, transcription: TranscriptionEngine = .apple) async throws {
+               audioFileURL: URL? = nil, transcription: TranscriptionEngine = .apple,
+               inputDeviceUID: String = "") async throws {
         guard analyzer == nil, batch == nil else { throw SpeechRecognizerError.alreadyRunning }
         finalizedText = ""
         volatileText = ""
         lastError = nil
         if transcription != .apple {
-            try startBatch(engine: transcription, hints: contextualStrings, audioFileURL: audioFileURL)
+            try startBatch(engine: transcription, hints: contextualStrings, audioFileURL: audioFileURL,
+                           inputDeviceUID: inputDeviceUID)
             return
         }
 
         let (module, results) = try await makeModule(localeIdentifier: localeIdentifier, engine: engine)
         try await ensureAssetsInstalled(for: module)
 
-        let audioEngine = AVAudioEngine()
-        let inputFormat = audioEngine.inputNode.outputFormat(forBus: 0)
-        guard inputFormat.sampleRate > 0, inputFormat.channelCount > 0 else {
-            throw SpeechRecognizerError.noInputDevice
-        }
+        let (audioEngine, inputFormat) = try Self.makeInputEngine(uid: inputDeviceUID)
         guard let analyzerFormat = await SpeechAnalyzer.bestAvailableAudioFormat(
             compatibleWith: [module], considering: inputFormat)
         else { throw SpeechRecognizerError.noAudioFormat }
@@ -116,6 +115,26 @@ final class SpeechRecognizer {
         self.inputContinuation = continuation
         self.analyzerFormat = analyzerFormat
         self.audioWriter = writer
+    }
+
+    // 要件: REQ-DIC-140
+    // 設計判断: DEC-DIC-141
+    /// 録音中にマイクを切り替える。それまでの音声と認識の途中経過はそのまま続く。
+    /// 選んだマイクを動かせなければシステムの設定のマイクに戻し、それもだめならエラーにする。
+    func switchInput(to uid: String) throws {
+        if let batch {
+            try batch.switchInput(to: uid)
+            return
+        }
+        guard let audioEngine, let continuation = inputContinuation, let analyzerFormat else { return }
+        audioEngine.inputNode.removeTap(onBus: 0)
+        audioEngine.stop()
+        self.audioEngine = nil
+        let writer = audioWriter
+        let makeTap = { (format: AVAudioFormat) in
+            Self.makeTapBlock(from: format, to: analyzerFormat, continuation: continuation, writer: writer)
+        }
+        self.audioEngine = try Self.startInputWithFallback(uid: uid, makeTap: makeTap)
     }
 
     // 設計判断: DEC-DIC-003
@@ -191,7 +210,7 @@ final class SpeechRecognizer {
     // MARK: - Whisper / Gemini（録音を止めてからまとめて文字起こしする）
 
     // 設計判断: DEC-DIC-100, DEC-DIC-102
-    private func startBatch(engine: TranscriptionEngine, hints: [String], audioFileURL: URL?) throws {
+    private func startBatch(engine: TranscriptionEngine, hints: [String], audioFileURL: URL?, inputDeviceUID: String) throws {
         let settings = AppSettings.shared
         switch engine {
         case .whisper:
@@ -209,7 +228,7 @@ final class SpeechRecognizer {
             break
         }
         let capture = BatchCapture(engine: engine, hints: hints)
-        try capture.start(audioFileURL: audioFileURL) { [weak self] level in self?.onLevel?(level) }
+        try capture.start(inputDeviceUID: inputDeviceUID, audioFileURL: audioFileURL) { [weak self] level in self?.onLevel?(level) }
         batch = capture
     }
 
@@ -231,6 +250,46 @@ final class SpeechRecognizer {
             appLog.error("batch transcription failed: \(String(describing: error), privacy: .public)")
             lastError = "\(batch.engine.shortName) で文字起こしできませんでした: \(error.localizedDescription)"
             return ""
+        }
+    }
+
+    // MARK: - マイク
+
+    // 設計判断: DEC-DIC-140, DEC-MTG-004
+    /// 選んだマイク（空ならシステムの設定）を入力にしたエンジンと、タップに使う形式。
+    /// 選んだマイクがつながっていなければ、システムの設定のマイクになる（MeetingRecorder.makeMicEngine）。
+    nonisolated static func makeInputEngine(uid: String) throws -> (AVAudioEngine, AVAudioFormat) {
+        let engine = MeetingRecorder.makeMicEngine(inputDeviceUID: uid)
+        // 機器を指定すると outputFormat は前の機器のままなので、機器側の実際の形式を使う。
+        // 指定しないときは、これまでどおり outputFormat を使う
+        let format = uid.isEmpty ? engine.inputNode.outputFormat(forBus: 0) : engine.inputNode.inputFormat(forBus: 0)
+        guard format.sampleRate > 0, format.channelCount > 0 else { throw SpeechRecognizerError.noInputDevice }
+        return (engine, format)
+    }
+
+    /// 選んだマイクでタップを付けて動かす
+    nonisolated static func startInput(uid: String, makeTap: (AVAudioFormat) -> AVAudioNodeTapBlock) throws -> AVAudioEngine {
+        let (engine, format) = try makeInputEngine(uid: uid)
+        engine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: format, block: makeTap(format))
+        engine.prepare()
+        do {
+            try engine.start()
+        } catch {
+            engine.inputNode.removeTap(onBus: 0)
+            throw error
+        }
+        appLog.notice("dictation mic: \(uid.isEmpty ? "system" : uid, privacy: .public) \(format.sampleRate, privacy: .public)Hz \(format.channelCount)ch")
+        return engine
+    }
+
+    // 設計判断: DEC-DIC-141
+    /// 録音の途中で切り替えるとき。選んだマイクを動かせなければ、システムの設定のマイクでやり直す
+    nonisolated static func startInputWithFallback(uid: String, makeTap: (AVAudioFormat) -> AVAudioNodeTapBlock) throws -> AVAudioEngine {
+        do {
+            return try startInput(uid: uid, makeTap: makeTap)
+        } catch where !uid.isEmpty {
+            appLog.error("dictation mic switch failed (\(uid, privacy: .public)): \(String(describing: error), privacy: .public); falling back to system")
+            return try startInput(uid: "", makeTap: makeTap)
         }
     }
 
@@ -384,7 +443,7 @@ final class SpeechRecognizer {
 private final class BatchCapture {
     let engine: TranscriptionEngine
     let hints: [String]
-    private let audioEngine = AVAudioEngine()
+    private var audioEngine: AVAudioEngine?
     private let box = SampleBox()
     private var writer: DictationAudioWriter?
     private var levelTimer: Timer?
@@ -394,23 +453,12 @@ private final class BatchCapture {
         self.hints = hints
     }
 
-    func start(audioFileURL: URL?, onLevel: @escaping (Float) -> Void) throws {
-        let inputFormat = audioEngine.inputNode.outputFormat(forBus: 0)
-        guard inputFormat.sampleRate > 0, inputFormat.channelCount > 0 else { throw SpeechRecognizerError.noInputDevice }
+    func start(inputDeviceUID: String, audioFileURL: URL?, onLevel: @escaping (Float) -> Void) throws {
         // 録音を残せなくても、音声入力は続ける
         let writer = audioFileURL.flatMap { try? DictationAudioWriter(url: $0, format: TranscriptionAudio.format) }
-        let box = self.box
-        let converter = BatchSampleConverter()
-        audioEngine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat) { buffer, _ in
-            guard let converted = converter.convertToBuffer(buffer) else { return }
-            writer?.write(converted)
-            box.append(converted)
-        }
-        audioEngine.prepare()
         do {
-            try audioEngine.start()
+            audioEngine = try SpeechRecognizer.startInput(uid: inputDeviceUID, makeTap: makeTap(writer: writer))
         } catch {
-            audioEngine.inputNode.removeTap(onBus: 0)
             writer?.close()
             throw error
         }
@@ -421,13 +469,38 @@ private final class BatchCapture {
         }
     }
 
+    // 設計判断: DEC-DIC-141
+    /// 録音中にマイクを切り替える。ためた音声と書き出し中のファイルは続けて使う
+    func switchInput(to uid: String) throws {
+        stopEngine()
+        audioEngine = try SpeechRecognizer.startInputWithFallback(uid: uid, makeTap: makeTap(writer: writer))
+    }
+
+    /// 16 kHz モノラルに変換してためるタップ。機器ごとに形式が違うので、変換器はタップごとに作る
+    private func makeTap(writer: DictationAudioWriter?) -> (AVAudioFormat) -> AVAudioNodeTapBlock {
+        let box = self.box
+        return { _ in
+            let converter = BatchSampleConverter()
+            return { buffer, _ in
+                guard let converted = converter.convertToBuffer(buffer) else { return }
+                writer?.write(converted)
+                box.append(converted)
+            }
+        }
+    }
+
+    private func stopEngine() {
+        audioEngine?.inputNode.removeTap(onBus: 0)
+        audioEngine?.stop()
+        audioEngine = nil
+    }
+
     /// 録音を止め、ためた音声を返す
     @discardableResult
     func stopAudio() -> [Float] {
         levelTimer?.invalidate()
         levelTimer = nil
-        audioEngine.inputNode.removeTap(onBus: 0)
-        audioEngine.stop()
+        stopEngine()
         writer?.close()
         writer = nil
         return box.samples
