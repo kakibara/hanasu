@@ -140,6 +140,18 @@
 - 実装の場所: `AppleFMClient`、`AppleFMAvailability`、`TextAIClient`（`.appleFM`）、`AIChoiceRow`
 - 確かめ方: `.build/debug/Hanasu --apple-fm-status`（使えるか・理由）、`HANASU_FM_PATH=<偽の fm> .build/debug/Hanasu --refine-text <文> --ai apple`・`--minutes-from-transcript <文字起こし> --ai apple`（偽の fm で、渡す引数と長い会議の分け方を確かめる）、`--render-ai-settings /tmp/ai.png --apple`。本物の `fm` は macOS 27 の実機で確かめる
 
+### REQ-COM-040 アイコンを出す場所を、メニューバー / Dock / 両方から選べる（Mac）
+- 内容: Moom のように、Hanasu のアイコンを出す場所を「メニューバーだけ」「Dock だけ」「メニューバーと Dock の両方」から設定で選べる。既定は両方（今までの出し方）。
+- 受け入れ条件:
+  - 設定の「一般」→「アイコンの表示」で選ぶと、アプリを起動し直さずにすぐ切り替わる。次に起動したときも、選んだ出し方で始まる（起動の途中で Dock のアイコンが一瞬出たりしない）。
+  - 「メニューバーだけ」: Dock にアイコンが出ず、⌘Tab の一覧にも出ない。メニューバーのアイコンとメニューは今までどおり。
+  - 「Dock だけ」: メニューバーにアイコンが出ない。Dock のアイコンを右クリックすると、メニューバーのメニューと同じ操作（録音・英訳・選択を声で編集・会議の記録・会議ノート・最近の結果・履歴・設定）ができる。録音中・会議の記録中は Dock のアイコンに印が付く。
+  - どの出し方でも、Finder や Launchpad からもう一度開くと設定画面が前に出る（DEC-COM-009）。
+- 出典: ユーザーの依頼（2026-11-04「hanasuはmoomと同様にステータスバーモードと、Dockモード、その両方を設定で選べるようにしてください」）
+- 対象: Mac
+- 実装の場所: `AppPresence`、`AppPresenceSettings`、`AppPresenceSettingsSection`、`AppDelegate.applyPresence`、`AppDelegate.applicationDockMenu`
+- 確かめ方: `.build/debug/Hanasu --render-presence-settings /tmp/presence.png`（設定の欄）。切り替えは実機で確かめる（`.app` を起動して 3 つを順に選び、Dock・メニューバー・⌘Tab・Dock のメニューを見る）
+
 ---
 
 ## 設計判断
@@ -200,13 +212,13 @@
 - 対象: Mac
 - 実装の場所: `GeminiClient.generate`
 
-### DEC-COM-008 メニューバーに常駐するアプリにする
-- 決めたこと: `LSUIElement = true` で Dock に出さず、メニューバーに常駐する。対象は macOS 26 (Tahoe) 以降の Apple Silicon。
-- 理由: どのアプリの上でも使う道具なので、ウインドウを持たずに待つ。SpeechAnalyzer が macOS 26 の API。
-- 決めた場面: 初版（a787da8）
-- 関係する要件: REQ-DIC-001
+### DEC-COM-008 メニューバーに常駐し、既定では Dock にも出す
+- 決めたこと: メニューバーにアイコンを置いて常駐する。Dock には、既定では出す（`Info.plist` に `LSUIElement` を置かず、起動時に `NSApp.setActivationPolicy` で決める）。出す場所は設定で変えられる（REQ-COM-040、DEC-COM-080）。対象は macOS 26 (Tahoe) 以降の Apple Silicon。
+- 理由: どのアプリの上でも使う道具なので、ウインドウを持たずに待つ。SpeechAnalyzer が macOS 26 の API。初版の文書は「`LSUIElement = true` で Dock に出さない」だったが、コードは初版から `.regular` で Dock にも出し、Dock のメニュー（`applicationDockMenu`）も持っていた。REQ-COM-040 の既定（両方）で、その出し方を引き継いだ。
+- 決めた場面: 初版（a787da8）。文書とコードの食い違いを直し、出す場所を選べるようにしたのはこの PR（REQ-COM-040）
+- 関係する要件: REQ-DIC-001, REQ-COM-040
 - 対象: Mac
-- 実装の場所: `AppDelegate.applicationDidFinishLaunching`（Info.plist の `LSUIElement`）
+- 実装の場所: `main.swift`（起動時の `setActivationPolicy`）、`AppDelegate.applicationDidFinishLaunching`
 
 ### DEC-COM-009 起動のたびに設定画面を開き、アクセシビリティの許可を求める
 - 決めたこと: 起動したら設定画面を開き、⌘V の送信に要るアクセシビリティの許可を求める。Dock や Finder でアイコンを開いたときも設定画面を前に出す。
@@ -582,6 +594,22 @@
 - 関係する要件: REQ-COM-031
 - 対象: Mac
 - 実装の場所: `AppleFMClient.contextLength`・`estimateTokens`、`LongInputFitter`
+
+### DEC-COM-080 Dock は活性化ポリシー、メニューバーは NSStatusItem.isVisible で出し入れする
+- 決めたこと: 設定は `AppPresenceSettings`（UserDefaults の `appPresence`）に `menuBar` / `dock` / `both` で持ち、既定は `both`。Dock に出すときは `.regular`、出さないときは `.accessory`（Dock・⌘Tab に出ないが、ウインドウとメニューの ⌘C などは使える）。メニューバーのアイコンは作ったまま `isVisible` で隠す。設定を変えたら、その場で両方を当て直し、ポリシーを変えたあとは Hanasu を前に出し直して設定画面を前面に戻す。起動時は `app.run()` の前にポリシーを決める。
+- 理由: ポリシーは実行中に変えられるので、起動し直さずに切り替えられる。`.accessory` に変えた直後はアプリが後ろに回り、設定画面が他のアプリの裏に隠れるので、前に出し直す。アイコンを消して作り直すより、隠すほうが状態（録音中のアイコン）を持ち続けられる。`.regular` で起動してから変えると Dock のアイコンが一瞬出るので、起動前に決める。3 つの選択肢にして、どちらも出ない状態を作れないようにした（Hanasu に戻る道がなくなる）。
+- 決めた場面: この PR（REQ-COM-040）
+- 関係する要件: REQ-COM-040
+- 対象: Mac
+- 実装の場所: `AppPresence`、`AppPresenceSettings`、`AppDelegate.applyPresence`、`main.swift`
+
+### DEC-COM-081 「Dock だけ」のときは、Dock のメニューをメニューバーのメニューと同じにし、録音中は Dock のアイコンに印を付ける
+- 決めたこと: メニューバーのアイコンを出さないときは、Dock のメニューを、メニューバーのメニューと同じ作り（`AppDelegate.populateMenu`）で出す（「Hanasu を終了」は Dock に元からあるので除く）。音声入力の録音中・会議の記録中は、Dock のアイコンのバッジに「●」を出す。メニューバーにも出すとき（両方）は、Dock のメニューは今までどおり会議の操作と設定だけにし、バッジも出さない。
+- 理由: メニューバーのメニューにしかない操作（最近の結果・履歴・英訳など）に辿り着けるようにする。録音していることがひと目で分かるように（DEC-DIC-017、REQ-MTG-026）、メニューバーのアイコンの代わりに Dock で示す。両方のときは今までの見た目を変えない。
+- 決めた場面: この PR（REQ-COM-040）
+- 関係する要件: REQ-COM-040, REQ-MTG-026
+- 対象: Mac
+- 実装の場所: `AppDelegate.applicationDockMenu`、`AppDelegate.populateMenu`、`AppDelegate.updateIcon`
 
 ### DEC-COM-100 Windows 版は C# / .NET 8 / WPF で作り、OS に依存しない部分を分ける
 - 決めたこと: `windows/` に C# 12 / .NET 8（LTS）/ WPF で作る（ターゲットは `net8.0-windows10.0.19041.0`）。プロンプト・Gemini・JWT・辞書・設定・音声の変換・状態遷移は OS に依存しない `Hanasu.Core`（net8.0）に置き、Mac でも `dotnet test` で確かめる。Whisper（`Hanasu.Whisper`）と話者分離（`Hanasu.Diarization`）も net8.0 に分ける。

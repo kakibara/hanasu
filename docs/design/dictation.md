@@ -4,7 +4,7 @@ Typeless のような「話した内容を、自然な日本語に整えて今�
 音声認識は macOS 標準の音声入力エンジン（設定で Whisper・Gemini にも切り替えられる。4.10）、整形は Gemini API で行う。
 
 - 対象 OS: macOS 26 (Tahoe) 以降 / Apple Silicon
-- 形態: メニューバー常駐アプリ（Dock アイコンなし）
+- 形態: 常駐アプリ。アイコンはメニューバーと Dock の両方（既定）か、どちらか一方に出す（REQ-COM-040）
 - 作成日: 2026-11-02
 
 > **この文書は「今こう作られている」の説明（as-is）。** コードと食い違ったら、コードが正しい（気づいたら、この文書を直す）。「こうあるべき」（要件と設計判断）は spec に書く。プロンプトの全文・既定値の一覧・CLI のオプションの一覧のようなコードの写しは置かず、ファイルと型・関数の名前で誘導する。
@@ -156,7 +156,7 @@ Typeless のような「話した内容を、自然な日本語に整えて今�
 - Xcode プロジェクトは使わず **Swift Package Manager** でビルドし、スクリプトで `.app` バンドルに組み立てる。
   - この Mac には Command Line Tools しかなく Xcode がないため。
   - マイクや音声認識の権限ダイアログには `Info.plist` の利用目的文字列が要るので、`.app` として起動する必要がある。
-- `LSUIElement = true`（Dock に出さない）
+- `Info.plist` に `LSUIElement` は置かない。Dock に出すかは `AppPresenceSettings`（`AppPresence.swift`）の設定で、起動前に `main.swift` が活性化ポリシー（`.regular` / `.accessory`）を決め、設定を変えたら `AppDelegate.applyPresence` がその場でポリシーとメニューバーのアイコンの `isVisible` を当て直す。メニューバーに出さないときは、Dock のメニューを `AppDelegate.populateMenu` で同じ作りにし、録音中は Dock のバッジで示す（DEC-COM-080・081）
 - 署名: 環境変数 `SIGN_IDENTITY` か、キーチェーン上の開発用証明書を使う。なければアドホック署名。
   - アドホック署名だとビルドごとに署名が変わり、アクセシビリティ権限を毎回付け直す必要がある（後述）。
 - 外部依存ライブラリ: FluidAudio（会議の話者分離。[design/meeting.md](meeting.md)）、WhisperKit（文字起こしのエンジン「Whisper」。4.10）

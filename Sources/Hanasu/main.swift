@@ -357,11 +357,16 @@ MainActor.assumeIsolated { MeetingSearchCLI.runIfRequested(CommandLine.arguments
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 // 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）
 SpeakerNameInferenceCLI.runIfRequested()
+// アイコンの表示の設定欄の確認（AppPresence.swift）
+MainActor.assumeIsolated { AppPresenceCLI.runIfRequested() }
 
 MainActor.assumeIsolated {
     let app = NSApplication.shared
     let delegate = AppDelegate()
     app.delegate = delegate
-    app.setActivationPolicy(.regular)
+    // 要件: REQ-COM-040
+    // 設計判断: DEC-COM-008, DEC-COM-080
+    // Dock に出すかは起動前に決める（.regular で始めてから変えると、Dock のアイコンが一瞬出る）
+    app.setActivationPolicy(AppPresenceSettings.shared.presence.activationPolicy)
     app.run()
 }
