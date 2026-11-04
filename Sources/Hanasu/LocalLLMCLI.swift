@@ -8,8 +8,11 @@ import Foundation
 ///   Hanasu --local-llm-delete <id>
 ///   Hanasu --local-llm-test-fit
 ///       長い入力の縮め方（LongInputFitter）を、文字数で数える偽のトークン数で確かめる。失敗があれば終了コード 1
-/// 整形・議事録は、ほかの CLI に `--ai local [--model <id>]` を付けて確かめる（--refine-text、--minutes-from-transcript など）。
-// 確かめ方: REQ-COM-030
+///   Hanasu --apple-fm-status
+///       Apple の Foundation Models の CLI（fm）が使えるか、使えなければ理由（macOS の版・見つからない・Apple の署名でない）
+/// 整形・議事録は、ほかの CLI に `--ai local [--model <id>]` か `--ai apple` を付けて確かめる（--refine-text、--minutes-from-transcript など）。
+/// `--ai apple` は、環境変数 HANASU_FM_PATH で偽の fm を指定すると macOS 26 でも動く（渡す引数と長い会議の分け方の確認用）。
+// 確かめ方: REQ-COM-030, REQ-COM-031
 @MainActor
 enum LocalLLMCLI {
     static func runIfRequested(_ args: [String] = CommandLine.arguments) {
@@ -40,6 +43,18 @@ enum LocalLLMCLI {
                 FileHandle.standardError.write(Data("error: \(error.localizedDescription)\n".utf8))
                 exit(1)
             }
+        }
+        if args.contains("--apple-fm-status") {
+            let os = ProcessInfo.processInfo.operatingSystemVersion
+            let availability = AppleFMAvailability.check()
+            print("macOS \(os.majorVersion).\(os.minorVersion).\(os.patchVersion)")
+            if let url = availability.executableURL {
+                print("使えます: \(url.path)\(ProcessInfo.processInfo.environment["HANASU_FM_PATH"] == nil ? "" : "（HANASU_FM_PATH。版と署名は見ていません）")")
+            } else {
+                print("使えません: \(availability.reason ?? "")")
+            }
+            print("文脈 \(AppleFMClient.contextLength) トークン（未確認の値）。例の見積もり: 「明日の会議の資料です。」= \(AppleFMClient.estimateTokens("明日の会議の資料です。")) トークン、\"Hello, world\" = \(AppleFMClient.estimateTokens("Hello, world")) トークン")
+            exit(availability.executableURL == nil ? 1 : 0)
         }
         if args.contains("--local-llm-test-fit") {
             Task { @MainActor in

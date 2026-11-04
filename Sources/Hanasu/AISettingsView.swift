@@ -20,7 +20,7 @@ struct AISettingsTab: View {
             } header: {
                 Text("使う AI とモデル")
             } footer: {
-                Text("文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、Claude には音声を送りません。辞書の候補探しは「会議」の AI を使います。「ローカル」は、この Mac の中で小型の LLM を動かします（文章をネットに送りません）。")
+                Text("文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、Claude には音声を送りません。辞書の候補探しは「会議」の AI を使います。「ローカル」は、この Mac の中で小型の LLM を動かします。「Apple」は macOS 27 の Foundation Models（fm）の、この Mac の中のモデルを使います（どちらも文章をネットに送りません）。")
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {
@@ -137,6 +137,8 @@ private struct AIChoiceRow: View {
                     .font(.caption).foregroundStyle(.secondary)
             case .local:
                 LocalModelChoice(model: localModel)
+            case .appleFM:
+                AppleFMChoice()
             }
         }
         .padding(.vertical, 2)

@@ -61,3 +61,24 @@ struct LocalModelChoice: View {
         }
     }
 }
+
+// 要件: REQ-COM-031
+// 設計判断: DEC-COM-071, DEC-COM-072
+/// 設定の「AI」タブで、用途の AI を「Apple」にしたときの欄。使えるか（使えなければ理由）を出す
+struct AppleFMChoice: View {
+    @State private var availability = AppleFMAvailability.check()
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if let reason = availability.reason {
+                Text("⚠️ \(reason)").font(.caption).foregroundStyle(.orange)
+            } else if let url = availability.executableURL {
+                Label("使えます（\(url.path)）", systemImage: "checkmark.circle.fill").font(.caption).foregroundStyle(.green)
+            }
+            Text("macOS 27 の Apple Intelligence の、この Mac の中のモデルを fm（Foundation Models の CLI）で使います。Private Cloud Compute は使わず、文章をネットに送りません。初めて使う前に、ターミナルで sudo fm license を実行して利用条件に同意する必要があるかもしれません。文脈が短いので、長い会議は分けてまとめます。")
+                .font(.caption).foregroundStyle(.secondary)
+        }
+        .onAppear { availability = AppleFMAvailability.check() }
+    }
+}
+

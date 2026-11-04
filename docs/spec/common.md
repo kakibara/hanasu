@@ -128,6 +128,18 @@
 - 確かめ方: Mac は `.build/debug/Hanasu --local-llm-list`、`--local-llm-download <id>`、`--refine-text <文> --ai local --model <id>`、`--minutes-from-transcript <文字起こし> --ai local --model <id>`、`--local-llm-test-fit`（長い入力の分け方）、`--render-ai-settings /tmp/ai.png --local`
   - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`LocalLlmTests`）、`dotnet run --project Hanasu.Cli -- local-refine "<文章>" --model <id> --server <llama-server のパス>`（Mac の llama-server でも動く）
 
+### REQ-COM-031 整形と議事録に使う AI として、Apple の Foundation Models の CLI（fm）を選べる（Mac）
+- 内容: 整形などと議事録などの文章の処理に使う AI として、macOS 27 から入っている Apple の Foundation Models の CLI（`fm`）を、ローカルの LLM（REQ-COM-030）と並べて選べる。端末の中のモデル（Apple Intelligence のオンデバイスのモデル）で処理し、文章を端末の外に送らない。
+- 受け入れ条件:
+  - Mac: 設定の「AI」タブで、音声入力か会議の AI を「Apple」にできる。macOS 27 以上で、Apple が署名した `fm` が見つかるときだけ使え、そうでないときは選んだ欄に理由（「macOS 27 以降で使えます（この Mac は macOS 26.6）」など）が出る。
+  - Mac: 「Apple」にすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）が `fm` で行われる。使えないまま処理しようとすると、理由を知らせる。
+  - Mac: 文脈（8,192 トークン。未確認）に入らない長い会議でも、議事録ができる（DEC-COM-065 の分け方を使う）。
+  - Windows には出さない（Windows に `fm` はない）。
+- 出典: ユーザーの依頼（2026-11-04「mac os 27で登場したApple Foundation Models CLIも選択肢に加えて」）
+- 対象: Mac
+- 実装の場所: `AppleFMClient`、`AppleFMAvailability`、`TextAIClient`（`.appleFM`）、`AIChoiceRow`
+- 確かめ方: `.build/debug/Hanasu --apple-fm-status`（使えるか・理由）、`HANASU_FM_PATH=<偽の fm> .build/debug/Hanasu --refine-text <文> --ai apple`・`--minutes-from-transcript <文字起こし> --ai apple`（偽の fm で、渡す引数と長い会議の分け方を確かめる）、`--render-ai-settings /tmp/ai.png --apple`。本物の `fm` は macOS 27 の実機で確かめる
+
 ---
 
 ## 設計判断
@@ -537,6 +549,39 @@
 - 対象: Mac / Windows
 - 実装の場所: `LocalLLMModel.defaultDictation`・`defaultMeeting`
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`
+
+### DEC-COM-070 Apple の Foundation Models は、CLI の `fm respond` を 1 回ずつ子プロセスで呼ぶ
+- 決めたこと: 処理のたびに `fm respond --instructions <システムの指示> <入力>` を子プロセスで動かし、標準出力の文章を結果にする（Apple の WWDC26 のセッション 334 の使い方）。プロンプトは Gemini・Claude・ローカルと同じものを使う。終了コードが 0 でなければ、標準エラーの最後の数行を添えて知らせる。待つ時間は、音声入力は 1 回 60 秒、会議は 1 回 10 分で、過ぎたら止める。
+- 理由: ユーザーの指定が CLI（REQ-COM-031）。Apple の公式の文書で確かめられた使い方は、`fm respond` に入力を引数で渡し、`--instructions` で指示を渡す形だけで、標準入力で渡せるかは確かめられなかった。`fm serve`（OpenAI 互換のサーバー）はコミュニティの文書にしかなく、決まったポート（127.0.0.1:1976）で認証もないとされるので使わない。
+- 引数で渡すことの注意: 入力（文字起こし・整えた文章）は、`fm` が動いている数秒〜数分のあいだ、同じ Mac のほかのユーザーにも `ps` で見える。標準入力で渡せると分かったら、そちらに変える。
+- 決めた場面: ローカル LLM に対応した PR（Apple の Foundation Models を足した分）
+- 関係する要件: REQ-COM-031
+- 対象: Mac
+- 実装の場所: `AppleFMClient.respond`
+
+### DEC-COM-071 `fm` は macOS 27 以上で、Apple が署名した /usr/bin/fm だけを使う
+- 決めたこと: macOS 27 以上で、`/usr/bin/fm` があり、その署名が Apple のもの（コードの要件 `anchor apple`）のときだけ「使える」とする。ほかの場所の `fm`（Homebrew などの同じ名前のもの）は使わない。使えないときは、理由（macOS が 27 より前・見つからない・Apple の署名でない）を設定の欄と知らせに出す。利用条件への同意がまだのとき（`fm` がすべてのコマンドを断る。未確認）は、ターミナルで `sudo fm license` を実行するよう案内する。確認用に、環境変数 `HANASU_FM_PATH` で別の実行ファイルを指定でき、そのときは macOS の版と署名を見ない。
+- 理由: 入力の文章を渡すので、同じ名前の別のプログラムに渡さない。`fm` は macOS 27 に初めから入っている（WWDC26 のセッション 334）ので、システムの場所にあるはずだが、場所は Apple の文書で確かめられなかった（未確認。macOS 27 の実機で確かめる）。手元の Mac は macOS 26.6 で本物を動かせないので、偽の `fm` で渡す引数と分け方を確かめられるようにする。
+- 決めた場面: ローカル LLM に対応した PR（Apple の Foundation Models を足した分）
+- 関係する要件: REQ-COM-031, REQ-COM-022
+- 対象: Mac
+- 実装の場所: `AppleFMAvailability.check`
+
+### DEC-COM-072 Apple の Foundation Models は、端末の中のモデルだけを使う
+- 決めたこと: `--model pcc`（Private Cloud Compute）は使わず、既定の端末の中のモデルだけを使う。設定でモデルは選ばない。
+- 理由: ローカルの選択肢として足すもので、文章を端末の外に送らない（REQ-COM-031）。Private Cloud Compute は Apple のサーバーに送り、使用量の上限もある。要るなら別に要件にする。
+- 決めた場面: ローカル LLM に対応した PR（Apple の Foundation Models を足した分）
+- 関係する要件: REQ-COM-031
+- 対象: Mac
+- 実装の場所: `AppleFMClient.arguments`
+
+### DEC-COM-073 `fm` の文脈は 8,192 トークンとし、トークン数は文字の種類から多めに見積もる
+- 決めたこと: 文脈は 8,192 トークン（コミュニティの文書の値。Apple の文書では未確認）として、DEC-COM-065 の分け方（`LongInputFitter`）をそのまま使う。出力の上限は、音声入力は 1,536、会議は 2,048 として入力の分を空ける。`fm` にはトークン数を数える方法がないので、漢字・かな・全角の文字は 1 文字 1 トークン、ほかは 3 文字で 1 トークンと多めに見積もる。見えないシステムの指示（約 54 トークン）は余白（256）に含める。
+- 理由: 1 時間の会議（2〜4 万トークン）は入らないので、文字起こしを部分ごとの要点にしてから議事録にする。見積もりが少なすぎると文脈を超えて失敗するので、多めにとる（日本語の多くのトークナイザーは 1 文字 1 トークン以下）。
+- 決めた場面: ローカル LLM に対応した PR（Apple の Foundation Models を足した分）
+- 関係する要件: REQ-COM-031
+- 対象: Mac
+- 実装の場所: `AppleFMClient.contextLength`・`estimateTokens`、`LongInputFitter`
 
 ### DEC-COM-100 Windows 版は C# / .NET 8 / WPF で作り、OS に依存しない部分を分ける
 - 決めたこと: `windows/` に C# 12 / .NET 8（LTS）/ WPF で作る（ターゲットは `net8.0-windows10.0.19041.0`）。プロンプト・Gemini・JWT・辞書・設定・音声の変換・状態遷移は OS に依存しない `Hanasu.Core`（net8.0）に置き、Mac でも `dotnet test` で確かめる。Whisper（`Hanasu.Whisper`）と話者分離（`Hanasu.Diarization`）も net8.0 に分ける。

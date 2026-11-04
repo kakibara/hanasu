@@ -212,6 +212,7 @@ final class AppSettings: ObservableObject {
         case (.meeting, .gemini): meetingMinutesModel
         case (.meeting, .claude): claudeMinutesModel
         case (_, .local): localModel(for: purpose).rawValue
+        case (_, .appleFM): AppleFMClient.modelName
         }
     }
 

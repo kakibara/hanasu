@@ -232,3 +232,23 @@ Windows の実機がないので、画面とフォーカスの動きはまだ確
 - Windows 版の Core（`LocalLlmClient`・`LocalLlmServer`）: `dotnet run --project Hanasu.Cli -- local-refine … --model sarashina2.2-3b --server build/llama-cpp/macos-arm64/llama-server` で、Mac の llama-server に対して整形できた（4.4 秒）。`dotnet test Hanasu.Core.Tests` は 230 件すべて合格。
 - 確かめていないこと: Windows の実機（CPU の速さ、ジョブオブジェクト、設定画面の操作、`fetch-llama-cpp.ps1` の展開）。アプリの画面からの操作（設定でのダウンロード・削除、音声入力・会議ノートからの呼び出し、5 分たって止まること）。Developer ID での署名（FUT-010）のときは、ライブラリの検証を外さずに動くはず（Team ID がそろうため）。
 - 確認のあと、Gemma 4 E4B のモデルは消した（ディスクの空きを戻すため）。
+
+## 14. Apple の Foundation Models の CLI（fm）（2026-11-04、macOS 26.6.2）
+
+関係: REQ-COM-031、DEC-COM-070〜073
+
+手元の Mac は macOS 26.6 なので、本物の `fm`（macOS 27）は動かせなかった。Apple の文書で確かめたことと、偽の `fm` で確かめたことを分けて書く。
+
+- Apple の文書で確かめたこと（[WWDC26 のセッション 334](https://developer.apple.com/videos/play/wwdc2026/334/)、[Foundation Models framework](https://developer.apple.com/foundation-models-framework/)）: `fm` は macOS 27 に初めから入っている。`fm respond "<プロンプト>"` で 1 回答え、`--instructions` で指示、`--model pcc` で Private Cloud Compute（使用量の上限あり。既定は端末の中のモデル）、`--schema` で決まった形の JSON。結果は標準出力の文章。
+- 確かめられなかったこと（未確認。macOS 27 の実機で確かめる）:
+  - `fm` の場所（`/usr/bin/fm` としている）と、Apple の署名（`anchor apple`）が通るか。
+  - 入力を標準入力で渡せるか（今は引数で渡すので、動いているあいだ `ps` で見える。DEC-COM-070）。
+  - 文脈の長さ（[コミュニティのガイド](https://github.com/llostinthesauce/fm-guide)の 8,192 トークン。見えないシステムの指示が約 54 トークン）と、超えたときの振る舞い。
+  - 利用条件への同意（同じガイドでは、`sudo fm license` を実行するまで `--help` を含むすべてのコマンドを断る）と、そのときの文言（`license`・`terms` を含めば同意を案内する）。
+  - Apple Intelligence をオフにしているときの振る舞い。日本語の整形・議事録の質と時間。
+- 偽の `fm`（引数を記録して決まった文章を返すスクリプト）で確かめたこと:
+  - `--apple-fm-status`: macOS 26.6 では「macOS 27 以降で使えます（この Mac は macOS 26.6）」と出て、終了コード 1。`HANASU_FM_PATH` を付けると使える扱いになる。
+  - 整形（`--refine-text … --ai apple`）: `fm respond --instructions <指示 1,605 字> <入力>` の形で渡り、`--model` は付かない。結果を囲む「」は外れた。
+  - 議事録（作った 2 時間 40 分・2.2 万字の文字起こし）: 4 つの部分に分けて要点にし（部分ごとに 1 回）、要点（490 バイト）から議事録を作った。本文の中のアクションアイテムの JSON も読めた。
+  - 設定の画面（`--render-ai-settings <png> --apple`）: 「Apple」を選ぶと、使えない理由がオレンジで出る。
+

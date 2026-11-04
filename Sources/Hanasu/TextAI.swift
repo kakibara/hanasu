@@ -1,6 +1,6 @@
 import Foundation
 
-// 要件: REQ-COM-020, REQ-COM-030
+// 要件: REQ-COM-020, REQ-COM-030, REQ-COM-031
 // 設計判断: DEC-COM-040
 /// 整形などの文章の処理に使う AI。文字起こしのエンジン（OS 標準 / Whisper / Gemini）とは別に選ぶ
 enum TextAIProvider: String, CaseIterable, Identifiable {
@@ -8,6 +8,8 @@ enum TextAIProvider: String, CaseIterable, Identifiable {
     case claude
     /// 端末の中で動く小型の LLM（llama.cpp）
     case local
+    /// Apple の Foundation Models の CLI（fm。macOS 27 から）
+    case appleFM = "apple"
 
     var id: String { rawValue }
     var label: String {
@@ -15,6 +17,7 @@ enum TextAIProvider: String, CaseIterable, Identifiable {
         case .gemini: "Gemini（Google）"
         case .claude: "Claude（Anthropic）"
         case .local: "ローカル（この Mac の中）"
+        case .appleFM: "Apple（Foundation Models）"
         }
     }
     var name: String {
@@ -22,6 +25,7 @@ enum TextAIProvider: String, CaseIterable, Identifiable {
         case .gemini: "Gemini"
         case .claude: "Claude"
         case .local: "ローカル"
+        case .appleFM: "Apple"
         }
     }
 }
@@ -52,6 +56,7 @@ enum TextAIError: LocalizedError {
         case .missingCredentials(.gemini): "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません（設定 →「AI」）"
         case .missingCredentials(.claude): "Claude の API キーが設定されていません（設定 →「AI」）"
         case .missingCredentials(.local): "ローカルの LLM のモデルがまだダウンロードされていません（設定 →「AI」でダウンロードしてください）"
+        case .missingCredentials(.appleFM): AppleFMAvailability.check().reason ?? "Apple の Foundation Models（fm）を使えません"
         }
     }
 }
@@ -65,6 +70,7 @@ struct TextAIClient {
         case gemini(GeminiClient)
         case claude(ClaudeClient)
         case local(LocalLLMClient)
+        case appleFM(AppleFMClient)
     }
 
     var backend: Backend
@@ -74,6 +80,7 @@ struct TextAIClient {
         case .gemini: .gemini
         case .claude: .claude
         case .local: .local
+        case .appleFM: .appleFM
         }
     }
 
@@ -84,6 +91,7 @@ struct TextAIClient {
             case .gemini(let client): client.timeout
             case .claude(let client): client.timeout
             case .local(let client): client.timeout
+            case .appleFM(let client): client.timeout
             }
         }
         set {
@@ -91,6 +99,7 @@ struct TextAIClient {
             case .gemini(var client): client.timeout = newValue; backend = .gemini(client)
             case .claude(var client): client.timeout = newValue; backend = .claude(client)
             case .local(var client): client.timeout = max(newValue, client.timeout); backend = .local(client)
+            case .appleFM(var client): client.timeout = max(newValue, client.timeout); backend = .appleFM(client)
             }
         }
     }
@@ -107,9 +116,17 @@ struct TextAIClient {
         case .local:
             // 要件: REQ-COM-030
             let model = settings.localModel(for: purpose)
-            guard LocalLLMStore.isDownloaded(model) else { return nil }
+            // 認証情報の「未設定」ではないので、何が足りないかを知らせる
+            guard LocalLLMStore.isDownloaded(model) else { throw LocalLLMServer.Failure.modelNotDownloaded(model) }
             return TextAIClient(.local(LocalLLMClient(
                 model: model, timeout: max(timeout, LocalLLMClient.minimumTimeout(for: purpose)))))
+        case .appleFM:
+            // 要件: REQ-COM-031
+            // 設計判断: DEC-COM-071
+            let availability = AppleFMAvailability.check()
+            guard let url = availability.executableURL else { throw AppleFMError.unavailable(availability.reason ?? "") }
+            return TextAIClient(.appleFM(AppleFMClient(
+                executableURL: url, timeout: max(timeout, AppleFMClient.minimumTimeout(for: purpose)))))
         }
     }
 
@@ -135,6 +152,10 @@ struct TextAIClient {
             let prompt = GeminiClient.refinePrompt(request)
             let output = try await client.generate(system: prompt.system, userText: prompt.user, purpose: .short)
             return LocalLLMClient.cleanUpRewrite(output, input: request.transcript)
+        case .appleFM(let client):
+            let prompt = GeminiClient.refinePrompt(request)
+            let output = try await client.generate(system: prompt.system, userText: prompt.user, purpose: .short)
+            return LocalLLMClient.cleanUpRewrite(output, input: request.transcript)
         }
     }
 
@@ -147,6 +168,10 @@ struct TextAIClient {
             let prompt = GeminiClient.translationPrompt(request)
             return try await client.generate(system: prompt.system, userText: prompt.user, model: request.model, effort: .low)
         case .local(let client):
+            let prompt = GeminiClient.translationPrompt(request)
+            let output = try await client.generate(system: prompt.system, userText: prompt.user, purpose: .short)
+            return LocalLLMClient.cleanUpRewrite(output, input: request.transcript)
+        case .appleFM(let client):
             let prompt = GeminiClient.translationPrompt(request)
             let output = try await client.generate(system: prompt.system, userText: prompt.user, purpose: .short)
             return LocalLLMClient.cleanUpRewrite(output, input: request.transcript)
@@ -167,6 +192,10 @@ struct TextAIClient {
             let output = try await client.generate(
                 system: GeminiClient.editInstruction, userText: GeminiClient.editPrompt(for: request), purpose: .short)
             return GeminiClient.stripCodeFence(output, selection: request.selection)
+        case .appleFM(let client):
+            let output = try await client.generate(
+                system: GeminiClient.editInstruction, userText: GeminiClient.editPrompt(for: request), purpose: .short)
+            return GeminiClient.stripCodeFence(output, selection: request.selection)
         }
     }
 
@@ -183,6 +212,8 @@ struct TextAIClient {
         case .claude(let client):
             return try await client.generate(system: systemInstruction, userText: userText, model: model, effort: effort)
         case .local(let client):
+            return try await client.generate(system: systemInstruction, userText: userText, purpose: effort == .low ? .short : .long)
+        case .appleFM(let client):
             return try await client.generate(system: systemInstruction, userText: userText, purpose: effort == .low ? .short : .long)
         }
     }
@@ -218,6 +249,11 @@ extension TextAIClient {
             }
             guard LocalLLMStore.isDownloaded(model) else { throw LocalLLMServer.Failure.modelNotDownloaded(model) }
             return TextAIClient(.local(LocalLLMClient(model: model, timeout: max(timeout, LocalLLMClient.minimumTimeout(for: purpose)))))
+        case .appleFM:
+            // 確認用に HANASU_FM_PATH で偽の fm を指定できる（AppleFMAvailability）
+            let availability = AppleFMAvailability.check()
+            guard let url = availability.executableURL else { throw AppleFMError.unavailable(availability.reason ?? "") }
+            return TextAIClient(.appleFM(AppleFMClient(executableURL: url, timeout: max(timeout, AppleFMClient.minimumTimeout(for: purpose)))))
         }
     }
 
@@ -237,6 +273,7 @@ extension TextAIClient {
         case (.meeting, .claude): return settings.claudeMinutesModel
         case (.meeting, .gemini): return settings.meetingMinutesModel
         case (_, .local): return settings.localModel(for: purpose).rawValue
+        case (_, .appleFM): return AppleFMClient.modelName
         }
     }
 }
