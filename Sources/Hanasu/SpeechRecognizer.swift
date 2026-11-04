@@ -27,7 +27,8 @@ final class SpeechRecognizer {
     var onPartialText: ((String) -> Void)?
     /// 音声モデルのダウンロード進捗（0...1）
     var onAssetDownloadProgress: ((Double) -> Void)?
-    /// 録音中の音量（0〜1。Whisper / Gemini で録っているときだけ、HUD の音量の目安に使う）
+    // 要件: REQ-DIC-014
+    /// 録音中の音量（RMS、0〜1）。0.1 秒ごとに知らせる。HUD の音量の目安に使う
     var onLevel: ((Float) -> Void)?
     /// 録音を止めたあと、まとめて文字起こしを始めたとき（Whisper / Gemini）
     var onBatchTranscriptionStarted: ((TranscriptionEngine) -> Void)?
@@ -43,6 +44,9 @@ final class SpeechRecognizer {
     private var volatileText = ""
     /// 録音を残すときの書き出し先（履歴の「音声も残す」）
     private var audioWriter: DictationAudioWriter?
+    /// Mac 標準で録っている間の音量（タップで測り、levelTimer で onLevel に知らせる）
+    private var liveLevel: AudioLevelBox?
+    private var levelTimer: Timer?
 
     /// Whisper / Gemini で録っている間の状態。録音を止めてからまとめて文字起こしする
     private var batch: BatchCapture?
@@ -95,7 +99,9 @@ final class SpeechRecognizer {
 
         // 録音を残せなくても、音声入力は続ける
         let writer = audioFileURL.flatMap { try? DictationAudioWriter(url: $0, format: analyzerFormat) }
-        let tap = Self.makeTapBlock(from: inputFormat, to: analyzerFormat, continuation: continuation, writer: writer)
+        let level = AudioLevelBox()
+        let tap = Self.makeTapBlock(from: inputFormat, to: analyzerFormat, continuation: continuation, writer: writer,
+                                    level: level)
         audioEngine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat, block: tap)
         audioEngine.prepare()
         do {
@@ -115,6 +121,18 @@ final class SpeechRecognizer {
         self.inputContinuation = continuation
         self.analyzerFormat = analyzerFormat
         self.audioWriter = writer
+        startLevelTimer(level)
+    }
+
+    // 要件: REQ-DIC-014
+    /// 音量を 0.1 秒ごとに知らせる（Whisper / Gemini の BatchCapture と同じ間隔）
+    private func startLevelTimer(_ level: AudioLevelBox) {
+        liveLevel = level
+        levelTimer?.invalidate()
+        levelTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self, level] _ in
+            let value = level.level
+            MainActor.assumeIsolated { self?.onLevel?(value) }
+        }
     }
 
     // 要件: REQ-DIC-140
@@ -131,8 +149,9 @@ final class SpeechRecognizer {
         audioEngine.stop()
         self.audioEngine = nil
         let writer = audioWriter
+        let level = liveLevel
         let makeTap = { (format: AVAudioFormat) in
-            Self.makeTapBlock(from: format, to: analyzerFormat, continuation: continuation, writer: writer)
+            Self.makeTapBlock(from: format, to: analyzerFormat, continuation: continuation, writer: writer, level: level)
         }
         self.audioEngine = try Self.startInputWithFallback(uid: uid, makeTap: makeTap)
     }
@@ -296,6 +315,9 @@ final class SpeechRecognizer {
     // MARK: - Private
 
     private func stopAudio() {
+        levelTimer?.invalidate()
+        levelTimer = nil
+        liveLevel = nil
         audioEngine?.inputNode.removeTap(onBus: 0)
         audioEngine?.stop()
         audioWriter?.close()
@@ -406,11 +428,13 @@ final class SpeechRecognizer {
         from inputFormat: AVAudioFormat,
         to outputFormat: AVAudioFormat,
         continuation: AsyncStream<AnalyzerInput>.Continuation,
-        writer: DictationAudioWriter? = nil
+        writer: DictationAudioWriter? = nil,
+        level: AudioLevelBox? = nil
     ) -> AVAudioNodeTapBlock {
         let converter = inputFormat == outputFormat ? nil : AVAudioConverter(from: inputFormat, to: outputFormat)
         converter?.primeMethod = .none
         return { buffer, _ in
+            level?.update(from: buffer)
             guard let converter else {
                 writer?.write(buffer)
                 continuation.yield(AnalyzerInput(buffer: buffer))
@@ -524,5 +548,21 @@ private final class SampleBox: @unchecked Sendable {
     }
 
     var samples: [Float] { lock.withLock { _samples } }
+    var level: Float { lock.withLock { _level } }
+}
+
+// 要件: REQ-DIC-014
+/// オーディオスレッドで測った直近の音量（RMS）を、メインスレッドから読めるようにしておく入れ物
+final class AudioLevelBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var _level: Float = 0
+
+    /// マイクから来たままのバッファ（1 チャンネル目）で測る。浮動小数点でない形式なら測らない
+    func update(from buffer: AVAudioPCMBuffer) {
+        guard let data = buffer.floatChannelData?[0], buffer.frameLength > 0 else { return }
+        let rms = TranscriptionAudio.rms(UnsafeBufferPointer(start: data, count: Int(buffer.frameLength)))
+        lock.withLock { _level = rms }
+    }
+
     var level: Float { lock.withLock { _level } }
 }
