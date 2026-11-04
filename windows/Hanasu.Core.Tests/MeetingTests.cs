@@ -730,6 +730,65 @@ public class MeetingControllerTests
         Assert.False(controller.UndoHighlight(undoable.Id));
     }
 
+    // 確かめ方: REQ-MTG-028
+    [Fact]
+    public async Task DeletesMeetingFolderButNotWhileRecording()
+    {
+        var (controller, settings, _) = Make();
+        settings.MakeMeetingMinutes = false;
+        await controller.StartAsync();
+        var live = controller.Current!;
+        // 記録中の会議は消せない
+        Assert.False(controller.CanDelete(live));
+        Assert.Throws<InvalidOperationException>(() => controller.Delete(live));
+        await controller.StopAsync();
+
+        var store = controller.Store(settings);
+        var saved = store.Load(live.Id)!;
+        Assert.True(controller.CanDelete(saved));
+        // ごみ箱に移す処理を渡したときは、それでフォルダを消す
+        var recycled = new List<string>();
+        controller.Delete(saved, dir => { recycled.Add(dir); Directory.Delete(dir, recursive: true); });
+        Assert.Equal([store.DirectoryOf(saved)], recycled);
+        Assert.False(Directory.Exists(store.DirectoryOf(saved)));
+        Assert.Empty(store.LoadAll());
+
+        // 消した会議を書き換えて保存しても、フォルダを作り直さない（DEC-MTG-023）
+        saved.Title = "消したあとに直した題名";
+        controller.Save(saved);
+        Assert.False(Directory.Exists(store.DirectoryOf(saved)));
+        // もうない会議を消しても何も起きない
+        controller.Delete(saved);
+    }
+
+    // 確かめ方: REQ-MTG-028
+    [Fact]
+    public async Task CannotDeleteWhileRegeneratingMinutes()
+    {
+        using var entered = new ManualResetEventSlim();
+        using var release = new ManualResetEventSlim();
+        var handler = new FakeHandler((_, _) =>
+        {
+            entered.Set();
+            release.Wait(TimeSpan.FromSeconds(10));
+            return FakeHandler.Json(FakeHandler.TextResponse("## 概要\nテスト"));
+        });
+        var (controller, settings, _) = Make(minutes: _ => new GeminiClient(new GeminiAuth.ApiKey("k"), new HttpClient(handler)));
+        settings.MakeMeetingMinutes = false;
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        await controller.StopAsync();
+        var saved = controller.Store(settings).Load(meeting.Id)!;
+
+        var regenerating = Task.Run(() => controller.RegenerateMinutesAsync(saved));
+        Assert.True(entered.Wait(TimeSpan.FromSeconds(10)));
+        Assert.False(controller.CanDelete(saved));
+        release.Set();
+        await regenerating;
+        Assert.Contains("テスト", controller.Store(settings).Load(meeting.Id)!.Minutes);
+        Assert.True(controller.CanDelete(saved));
+    }
+
     [Fact]
     public async Task DeletesAudioWhenNotKept()
     {

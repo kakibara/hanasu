@@ -64,8 +64,14 @@
                     <TextBlock x:Name="StartNote" Style="{StaticResource Note}" />
                 </StackPanel>
 
+                <!-- 要件: REQ-MTG-028 -->
                 <ListBox x:Name="MeetingList" SelectionChanged="OnMeetingSelected" BorderThickness="0" Background="Transparent"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled" KeyDown="OnMeetingListKeyDown">
+                    <ListBox.ContextMenu>
+                        <ContextMenu Opened="OnMeetingListMenuOpened">
+                            <MenuItem x:Name="DeleteMenuItem" Header="ごみ箱に移す…" Click="OnDeleteClick" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="2,4">
@@ -83,7 +89,16 @@
                    Text="左の一覧から会議を選ぶか、左下の「会議の記録を開始」で記録を始めます。" TextWrapping="Wrap" Margin="24" />
         <DockPanel x:Name="DetailPanel" Grid.Column="1" Margin="14,10,14,10" Visibility="Collapsed">
             <StackPanel DockPanel.Dock="Top">
-                <TextBox x:Name="TitleBox" FontSize="18" FontWeight="SemiBold" BorderThickness="0,0,0,1" Padding="0,2" LostFocus="OnTitleChanged" />
+                <!-- 要件: REQ-MTG-029 -->
+                <!-- 設計判断: DEC-MTG-024 -->
+                <!-- 書き換えられると見てわかるように、いつも枠と鉛筆の印を出す（マウスを載せる・編集中は、標準の見た目で枠の色が変わる） -->
+                <Grid>
+                    <TextBox x:Name="TitleBox" FontSize="18" FontWeight="SemiBold" BorderThickness="1" BorderBrush="#FFBDBDBD"
+                             Padding="4,3,32,3" LostFocus="OnTitleChanged" KeyDown="OnTitleKeyDown"
+                             ToolTip="クリックしてタイトルを変更（Enter で保存・Esc でやめる）" />
+                    <TextBlock Text="&#xE70F;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14" Foreground="#FF5F6368"
+                               HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsHitTestVisible="False" />
+                </Grid>
                 <TextBlock x:Name="MeetingInfo" Style="{StaticResource Note}" />
                 <WrapPanel x:Name="ActionsPanel" Margin="0,8,0,0">
                     <Button x:Name="RegenerateButton" Content="議事録を作り直す" Click="OnRegenerateClick" />
@@ -91,6 +106,8 @@
                     <ComboBox x:Name="TemplateCombo" MinWidth="110" Margin="0,0,6,0" SelectionChanged="OnTemplateChanged" />
                     <Button x:Name="CopyButton" Content="Markdown をコピー" Click="OnCopyClick" />
                     <Button Content="エクスプローラーで開く" Click="OnOpenFolderClick" />
+                    <!-- 要件: REQ-MTG-028 -->
+                    <Button x:Name="DeleteButton" Content="ごみ箱に移す…" Click="OnDeleteClick" />
                 </WrapPanel>
                 <TextBlock x:Name="ErrorText" Style="{StaticResource Note}" Foreground="#FFC5221F" Visibility="Collapsed" />
                 <TextBlock x:Name="ActionStatus" Style="{StaticResource Note}" />

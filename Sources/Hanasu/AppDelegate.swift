@@ -36,6 +36,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let menu = NSMenu()
         menu.delegate = self
         statusItem.menu = menu
+        applyPresence(AppPresenceSettings.shared.presence, isLaunching: true)
+        AppPresenceSettings.shared.$presence
+            .dropFirst()
+            .removeDuplicates()
+            // @Published は値が変わる前に流れるので、変わったあと（updateIcon が新しい値を読める）に当てる
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] presence in self?.applyPresence(presence, isLaunching: false) }
+            .store(in: &cancellables)
         updateIcon(for: .idle)
 
         controller.onStateChange = { [weak self] state in self?.updateIcon(for: state) }
@@ -71,9 +79,33 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         _ = Permissions.isAccessibilityTrusted(prompt: true)
     }
 
+    // MARK: - アイコンの表示（メニューバー / Dock）
+
+    // 要件: REQ-COM-040
+    // 設計判断: DEC-COM-080
+    /// メニューバーのアイコンと Dock のアイコンを、設定どおりに出し入れする
+    private func applyPresence(_ presence: AppPresence, isLaunching: Bool) {
+        statusItem.isVisible = presence.showsMenuBar
+        if NSApp.activationPolicy() != presence.activationPolicy {
+            NSApp.setActivationPolicy(presence.activationPolicy)
+            // .accessory に変えた直後はアプリが後ろに回り、設定画面が他のアプリの裏に隠れる。
+            // .regular に変えた直後は、前に出し直さないとメニューバーに Hanasu のメニューが出ないことがある
+            if !isLaunching {
+                DispatchQueue.main.async { [weak self] in
+                    NSApp.activate()
+                    self?.settingsWindow?.makeKeyAndOrderFront(nil)
+                }
+            }
+        }
+        updateIcon(for: controller.state)
+    }
+
     // 要件: REQ-MTG-026
-    // 設計判断: DEC-DIC-017
+    // 設計判断: DEC-DIC-017, DEC-COM-081
     private func updateIcon(for state: DictationController.State) {
+        // メニューバーに出さないときは、録音中・記録中を Dock のアイコンの印で示す
+        let recording = state == .recording || meetingRecorder.state == .recording
+        NSApp.dockTile.badgeLabel = !AppPresenceSettings.shared.presence.showsMenuBar && recording ? "●" : nil
         guard let button = statusItem.button else { return }
         var (symbol, tint): (String, NSColor?) = switch state {
         case .idle: ("mic", nil)
@@ -99,6 +131,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     // 要件: REQ-MTG-026
     func menuNeedsUpdate(_ menu: NSMenu) {
+        populateMenu(menu, forDock: false)
+    }
+
+    // 要件: REQ-MTG-026, REQ-COM-040
+    // 設計判断: DEC-COM-081
+    /// メニューバーのメニュー（「Dock だけ」のときは Dock のメニューにも使う。Dock には終了が元からあるので省く）
+    private func populateMenu(_ menu: NSMenu, forDock: Bool) {
         menu.removeAllItems()
         let settings = AppSettings.shared
 
@@ -150,8 +189,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(axItem)
 
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "設定…", action: #selector(openSettings), keyEquivalent: ","))
-        menu.addItem(NSMenuItem(title: "Hanasu を終了", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "設定…", action: #selector(openSettings), keyEquivalent: forDock ? "" : ","))
+        if !forDock {
+            menu.addItem(NSMenuItem(title: "Hanasu を終了", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        }
         for item in menu.items where item.action != nil && item.action != #selector(NSApplication.terminate(_:)) {
             item.target = self
         }
@@ -166,9 +207,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         return true
     }
 
+    // 要件: REQ-COM-040
+    // 設計判断: DEC-COM-081
     /// Dock のアイコンを右クリックしたときのメニュー
     func applicationDockMenu(_ sender: NSApplication) -> NSMenu? {
         let menu = NSMenu()
+        // メニューバーにアイコンを出さないときは、メニューバーのメニューと同じ操作を Dock から使えるようにする
+        if !AppPresenceSettings.shared.presence.showsMenuBar {
+            populateMenu(menu, forDock: true)
+            return menu
+        }
         let meeting = NSMenuItem(
             title: meetingRecorder.state == .recording ? "会議の記録を停止" : "会議の記録を開始",
             action: #selector(toggleMeeting), keyEquivalent: "")

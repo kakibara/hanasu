@@ -75,7 +75,7 @@ public sealed class GeminiClient : ITextAiClient
         GenerateAsync(systemInstruction, [new GeminiPart.Text(userText)], model, cancellationToken: cancellationToken);
 
     public Task<string> RefineAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
-        GenerateAsync(GeminiPrompts.SystemInstruction, [new GeminiPart.Text(GeminiPrompts.UserPrompt(request))], request.Model,
+        GenerateAsync(GeminiPrompts.SystemInstruction(request.OutputLanguage), [new GeminiPart.Text(GeminiPrompts.UserPrompt(request))], request.Model,
             cancellationToken: cancellationToken);
 
     /// <summary>話した内容を英語に翻訳する。追加の整形ルールは日本語の文体向けなので使わない。</summary>

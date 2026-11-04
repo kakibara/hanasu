@@ -128,7 +128,7 @@
   - Mac の会議ノートで議事録を作り直すと、終わるまで、その会議の詳細の上に「議事録を作り直しています…」と回る印が出て（今の議事録は薄く出したまま）、左の一覧のその会議にも回る印が出る。終わっても、一覧で選んでいた会議のまま（先頭の会議に移らない）。
 - 出典: PR #10。作り直し中の表示と選択はユーザーの依頼（2026-11-04「議事録を再生成したら選択していた会議から先頭の会議に移動してしまうのですが、議事録を再生成しても、同じ会議に留まるようにしてください。また、議事録生成中の場合は生成中であることがわかるようにしてください。」）
 - 対象: Mac / Windows（2 つ目の受け入れ条件は Mac。Windows 版は作り直し中に「〇〇 で議事録を作っています…」と出し、作り直しても選んだ会議のまま）
-- 実装の場所: `Meeting.notesForPrompt`、`Meeting.transcriptForPromptMarkingHighlights`、`MeetingRecorder.regenerateMinutes`、`MeetingRecorder.regeneratingMeetingID`、`MeetingNotesEditor`、`MeetingDetailView`、`MeetingWindowView`
+- 実装の場所: `Meeting.notesForPrompt`、`Meeting.transcriptForPromptMarkingHighlights`、`MeetingRecorder.regenerateMinutes`、`MeetingRecorder.regeneratingID`、`MeetingNotesEditor`、`MeetingDetailView`、`MeetingWindowView`
 - Windows の実装: `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `--meeting-files me.wav others.wav --notes notes.txt`。作り直し中の表示は `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail-regenerating.png`。選んだ会議のままかは実機で確かめる
 
@@ -247,7 +247,7 @@
 - 対象: Mac
 - 実装の場所: `AppDelegate.updateIcon`、`AppDelegate.menuNeedsUpdate`
 - 確かめ方: 実機で確かめる
-- 食い違い（ユーザーの確認待ち）: 会議の記録中に音声入力を使うと、その間のアイコンは音声入力の状態（録音中なら赤い `mic.fill`）になり、会議の記録中の印（`record.circle.fill`）は音声入力が終わるまで出ない（DEC-DIC-017）。どちらも赤いが、「常に表示」と言えるかを確かめる
+- 食い違い（ユーザーの確認待ち）: 会議の記録中に音声入力を使うと、その間のアイコンは音声入力の状態（録音中なら赤い `mic.fill`）になり、会議の記録中の印（`record.circle.fill`）は音声入力が終わるまで出ない（DEC-DIC-017）。どちらも赤いが、「常に表示」と言えるかを確かめる。また、REQ-COM-040 で「Dock だけ」を選ぶとメニューバーにアイコンが出ないので、記録中の印は Dock のアイコンのバッジ（「●」）と Dock のメニューの経過時間で示す（DEC-COM-081）。この場合は要件を「メニューバーか Dock に常に表示する」と読んでよいかを確かめる
 
 ### REQ-MTG-027 会話の内容から話者の名前を推測して付ける
 - 内容: 議事録を作るときに、会話の内容（名乗り・自己紹介・名前での呼びかけに本人が応じた、など）から名前がはっきり分かる話者に、その名前を付ける。付けた名前は「推測」と分かるように出し、あとから直せる（REQ-MTG-008）。
@@ -261,6 +261,28 @@
 - 実装の場所: `MinutesPrompt.speakerNamesInstruction`、`SpeakerNameInference`、`Meeting.applyMinutes`、`SpeakerNamesSheet`
 - Windows の実装: `windows/Hanasu.Core/Meetings/SpeakerNameInference.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`（`MinutesPrompt.SpeakerNamesInstruction`）、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`Meeting.ApplyMinutes`・`RenameSpeaker`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `.build/debug/Hanasu --test-speaker-names`（読み取り・名前の検査・当てはめ・置き換え・meeting.json）、`--minutes-from-transcript <文字起こし.txt>`（実際の AI で推測した名前を表示）。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~SpeakerNameInference"`。会議ノートの「推測」の表示は実機で確かめる
+
+### REQ-MTG-028 記録した会議を削除できる
+- 内容: 会議ノートで、記録した会議を削除できる。削除すると、その会議のフォルダ（議事録・文字起こし・メモ・音声）がなくなり、一覧・検索・質問の対象から外れる。
+- 受け入れ条件:
+  - 会議ノートで会議を選んで「削除」を選ぶと、確かめるダイアログが出る。「ゴミ箱に入れる」（Windows は「ごみ箱に移す」）を押すと、一覧からその会議が消え、保存先のフォルダもなくなる。キャンセルすると何も変わらない。
+  - 記録中・処理中（議事録の作り直し中を含む）の会議は削除できない。
+- 出典: ユーザーの依頼（2026-11-04「会議の記録を削除できるようにしてください」）
+- 対象: Mac / Windows
+- 実装の場所: `MeetingStore.moveToTrash`、`MeetingRecorder.delete`・`canDelete`、`MeetingWindowView`、`MeetingDetailView`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingStore.cs`（`Delete`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`Delete`・`CanDelete`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingControllerTests"`（フォルダが消えること、記録中・作り直し中は消せないこと）。Mac: `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail.png` に削除のボタンが出ること。ゴミ箱に移ることは実機で確かめる
+
+### REQ-MTG-029 会議のタイトルを変えられ、変えられることが見てわかる
+- 内容: 会議ノートの上のタイトルを、その場で書き換えられる。書き換えられる欄であることが、触らなくても見た目でわかる。
+- 受け入れ条件:
+  - タイトルの欄に、枠と鉛筆の印（Windows は ✎）が出ている。マウスを載せると枠が濃くなり、「クリックしてタイトルを変更」と出る。
+  - 書き換えて Enter を押すか、ほかの所をクリックすると保存され、一覧のタイトルも変わる。空にしたときは元のタイトルに戻す。Esc で書き換えをやめられる。
+- 出典: ユーザーの依頼（2026-11-04「タイトルが編集できることをUI上でも見ただけでわかるようにしてください」）
+- 対象: Mac / Windows
+- 実装の場所: `EditableTitleField`、`MeetingDetailView`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml`（`TitleBox`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail.png` で、タイトルの欄に枠と鉛筆の印が出ること。保存は実機で確かめる
 
 ### REQ-MTG-030 会議ツールの画面・映像は記録しない（対象外）
 - 内容: 会議ツールの画面・映像は記録しない。
@@ -473,6 +495,33 @@
 - 関係する要件: REQ-MTG-001
 - 対象: Mac
 - 実装の場所: `HotKeyCombo.defaultMeeting`
+
+### DEC-MTG-022 会議の削除は、フォルダごとゴミ箱に移し、先に確かめる
+- 決めたこと: 削除は、会議のフォルダを丸ごと Mac のゴミ箱（Windows のごみ箱）に移す。完全には消さない。押す前に、会議のタイトルと「ゴミ箱から戻せる」ことを書いたダイアログで確かめる。入口は、一覧の右クリックの「削除…」、一覧を選んで ⌫（Windows は Delete キー）、会議の詳細の上のゴミ箱のボタン。消したあとは一覧の次の会議を選ぶ。
+- 理由: 会議の記録は取り直せないので、押し間違えても戻せるようにする。フォルダの中身（音声・メモ）を 1 つずつ消すと、取り残しや、消しかけのフォルダが残るおそれがある。
+- 決めた場面: ユーザーの依頼（2026-11-04）。この PR
+- 関係する要件: REQ-MTG-028
+- 対象: Mac / Windows
+- 実装の場所: `MeetingStore.moveToTrash`、`MeetingWindowView`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（`Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory` の `RecycleOption.SendToRecycleBin`）
+
+### DEC-MTG-023 記録中・処理中・議事録の作り直し中の会議は消せず、消した会議を保存し直さない
+- 決めたこと: 記録中・記録のあとの処理中の会議と、議事録を作り直している会議は、削除の操作を出さない（押せない）。また、会議を書き換えて保存する処理（タイトル・話者名・リマインダーの印など）は、その会議のフォルダがもうなければ保存しない。
+- 理由: 処理の最後の保存は、フォルダがなければ作り直すので、処理中に消すと、消したはずの会議が中途半端な形で戻ってくる。
+- 決めた場面: この PR
+- 関係する要件: REQ-MTG-028
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecorder.canDelete`・`update`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`CanDelete`）
+
+### DEC-MTG-024 タイトルの欄は、いつも枠と鉛筆の印を出し、フォーカスが外れたときも保存する
+- 決めたこと: 会議の詳細の上のタイトルの欄に、いつも薄い枠と鉛筆の印を出す。マウスを載せると枠を濃くし、編集中はアクセントの色の枠にする。Enter・フォーカスが外れたときに保存し、空なら元に戻す。Esc で書き換えをやめる。別の会議を選んだときは、書きかけのタイトルを元の会議に保存してから切り替える。
+- 理由: 前は枠のない文字の欄で、見出しと見分けがつかず、書き換えられることが分からなかった（ユーザーの依頼（2026-11-04））。Mac では Enter のときしか保存しなかったので、書き換えてほかをクリックすると、変えたつもりのタイトルが保存されなかった。
+- 決めた場面: ユーザーの依頼（2026-11-04）。この PR
+- 関係する要件: REQ-MTG-029
+- 対象: Mac / Windows
+- 実装の場所: `EditableTitleField`、`MeetingDetailView.commitTitle`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml`（`TitleBox` のスタイル）
 
 ### DEC-MTG-030 会議の検出は、リスナーを基本にし、マイクが使われている間だけ読み直す
 - 決めたこと: Core Audio のプロセス一覧・機器一覧・会議アプリのプロセスの `IsRunning`・入力機器の `IsRunningSomewhere` にリスナーを付け、入力機器が使われている間だけ 3 秒おきに会議アプリの `IsRunningInput` を読み直す。
@@ -722,7 +771,7 @@
 - Windows の実装: `windows/Hanasu.Core/Meetings/SpeakerNameInference.cs`（`Apply`・`CleanName`・`ReplaceLabel`）、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`InferredSpeakers`・`RenameSpeaker`・`IsInferredName`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 
 ### DEC-MTG-070 処理が終わっても会議の選択を変えず、作り直し中は会議ごとに印を出す
-- 決めたこと: 会議ノートの一覧の選択は、記録を始めたときだけその会議に移す。記録のあとの処理や議事録の作り直しが終わっても選び直さない（記録中の会議と保存した会議は同じ ID なので、記録のあとも選んだまま議事録が出る）。作り直している会議は `MeetingRecorder.regeneratingMeetingID` で持ち、その会議の詳細の上に回る印と処理の文言を出し、今の議事録は薄く出したままにする。一覧では、その会議（記録のあとの処理中は記録中の会議）の印を回る印にする。
+- 決めたこと: 会議ノートの一覧の選択は、記録を始めたときだけその会議に移す。記録のあとの処理や議事録の作り直しが終わっても選び直さない（記録中の会議と保存した会議は同じ ID なので、記録のあとも選んだまま議事録が出る）。作り直している会議は `MeetingRecorder.regeneratingID` で持ち、その会議の詳細の上に回る印と処理の文言を出し、今の議事録は薄く出したままにする。一覧では、その会議（記録のあとの処理中は記録中の会議）の印を回る印にする。
 - 理由: 以前は処理が終わると一覧の先頭を選んでいて、作り直しのたびに別の会議へ移っていた。記録の状態（`state`）だけでは、どの会議を作り直しているかがわからず、作り直していない会議を開いていても同じ表示になる。今の議事録を消さずに薄く出すのは、作り直しに失敗したときは元の議事録が残る（DEC-MTG-061）ため。
 - 決めた場面: 作り直しで選択が先頭に移る問題の修正（2026-11-04 のユーザーの依頼）
 - 関係する要件: REQ-MTG-013, REQ-MTG-007

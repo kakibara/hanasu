@@ -74,7 +74,7 @@ public class ClaudeClientTests
         Assert.False(request.Headers.Contains("anthropic-beta"));
         // システムの指示は Gemini と同じ文面で、キャッシュの印が付く
         var system = json["system"]!.AsArray().Single()!;
-        Assert.Equal(GeminiPrompts.SystemInstruction, system["text"]!.GetValue<string>());
+        Assert.Equal(GeminiPrompts.SystemInstruction(), system["text"]!.GetValue<string>());
         Assert.Equal("ephemeral", system["cache_control"]!["type"]!.GetValue<string>());
         // prefill はしない（最後は user）
         var messages = json["messages"]!.AsArray();

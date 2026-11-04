@@ -19,6 +19,22 @@ public class SettingsTests
         Assert.True(s.SendAppName);
         // 貼り付けられないときは、クリップボードにも入れておく（DEC-DIC-122）
         Assert.Equal(PasteFallbackClipboard.KeepResult, s.PasteFallbackClipboard);
+        // 整形の言語は、話した言語（REQ-DIC-082）
+        Assert.Equal(RefineOutputLanguage.AsSpoken, s.RefineOutputLanguage);
+    }
+
+    // 確かめ方: REQ-DIC-082
+    [Fact]
+    public void RefineOutputLanguageIsSavedByName()
+    {
+        var path = Path.Combine(TestKeys.TempDirectory(), "settings.json");
+        var store = new SettingsStore(path);
+        store.Save(new AppSettings { RefineOutputLanguage = RefineOutputLanguage.Japanese });
+        Assert.Contains("\"refineOutputLanguage\": \"Japanese\"", File.ReadAllText(path));
+        Assert.Equal(RefineOutputLanguage.Japanese, store.Load().RefineOutputLanguage);
+        // 前の版の settings.json（項目がない）は既定値になる
+        File.WriteAllText(path, "{ \"playSounds\": true }");
+        Assert.Equal(RefineOutputLanguage.AsSpoken, store.Load().RefineOutputLanguage);
     }
 
     // 確かめ方: REQ-DIC-081

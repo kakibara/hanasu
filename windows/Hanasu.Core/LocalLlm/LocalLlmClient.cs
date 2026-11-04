@@ -71,7 +71,7 @@ public sealed class LocalLlmClient(LocalLlmModel model, LocalLlmServer server, H
     public string ProviderName => "ローカル";
 
     public async Task<string> RefineAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
-        CleanUpRewrite(await GenerateTextAsync(TextPurpose.Refine, GeminiPrompts.SystemInstruction, GeminiPrompts.UserPrompt(request),
+        CleanUpRewrite(await GenerateTextAsync(TextPurpose.Refine, GeminiPrompts.SystemInstruction(request.OutputLanguage), GeminiPrompts.UserPrompt(request),
             request.Model, cancellationToken).ConfigureAwait(false), request.Transcript);
 
     public async Task<string> TranslateToEnglishAsync(RefineRequest request, CancellationToken cancellationToken = default) =>

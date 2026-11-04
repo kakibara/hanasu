@@ -33,9 +33,9 @@ public interface IHud
 {
     void Show(HudState state);
     void UpdateTranscript(string text);
-    /// <summary>「日本語 / English」の切り替えの表示</summary>
+    /// <summary>「話した言語 / English」の切り替えの表示</summary>
     void SetTranslating(bool translating);
-    /// <summary>HUD の「日本語 / English」が押されたとき（true = English）</summary>
+    /// <summary>HUD の「話した言語 / English」が押されたとき（true = English）</summary>
     event EventHandler<bool>? LanguageSelected;
     /// <summary>HUD の「■ 停止」が押されたとき（ショートカットをもう一度押したのと同じ）</summary>
     event EventHandler? StopRequested;

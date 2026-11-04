@@ -12,7 +12,7 @@ import SwiftUI
 //   Hanasu --render-minutes-ui <出力フォルダ> [--meeting-json <meeting.json>]
 //     議事録の型の選択欄・会議ノートの詳細・リマインダー登録・カスタムの指示の画面を PNG にする（見た目の確認用）。
 // --meeting-files にも --template / --custom-prompt を付けられる。
-// 確かめ方: REQ-MTG-006, REQ-MTG-007, REQ-MTG-017, REQ-MTG-018, REQ-MTG-019, REQ-MTG-027
+// 確かめ方: REQ-MTG-006, REQ-MTG-007, REQ-MTG-017, REQ-MTG-018, REQ-MTG-019, REQ-MTG-027, REQ-MTG-028, REQ-MTG-029
 @MainActor
 enum MinutesCLI {
     static func runIfRequested(_ args: [String] = CommandLine.arguments) {
@@ -181,18 +181,18 @@ enum MinutesCLI {
             .padding(10).frame(width: 260).defaultAppStorage(defaults)
         try render(customPanel, to: dir.appendingPathComponent("record-panel-custom.png"))
 
-        let detail = MeetingDetailView(meeting: meeting, recorder: recorder)
+        let detail = MeetingDetailView(meeting: meeting, recorder: recorder, onDelete: {})
             .frame(width: 600, height: 640)
             .defaultAppStorage(defaults)
         try render(detail, to: dir.appendingPathComponent("detail.png"))
         // 確かめ方: REQ-MTG-013
         // 議事録を作り直している途中（上に「作り直しています」と出て、今の議事録は薄く出る）
-        recorder.regeneratingMeetingID = meeting.id
+        recorder.regeneratingID = meeting.id
         let regenerating = MeetingDetailView(meeting: meeting, recorder: recorder)
             .frame(width: 600, height: 640)
             .defaultAppStorage(defaults)
         try render(regenerating, to: dir.appendingPathComponent("detail-regenerating.png"))
-        recorder.regeneratingMeetingID = nil
+        recorder.regeneratingID = nil
         // 「メモ」タブ（長いメモでも、上のタブの切り替えが見えたままか）
         var noted = meeting
         // 型を書いておく（三項演算子を重ねると、リリースの最適化ビルドで型の推論が時間切れになる）
@@ -242,7 +242,7 @@ enum MinutesCLI {
                 List { Text("会議") }
                     .navigationSplitViewColumnWidth(min: 220, ideal: 260)
             } detail: {
-                MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: tab)
+                MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: tab, onDelete: {})
             })
             window.appearance = NSAppearance(named: .aqua)
             window.orderBack(nil)

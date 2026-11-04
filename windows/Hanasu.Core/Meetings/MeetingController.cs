@@ -64,6 +64,8 @@ public sealed class MeetingController
     private ISegmentTranscriber? transcriber;
     private AppSettings? recordingSettings;
     private Task? processing;
+    /// <summary>議事録を作り直している会議の ID（その間は削除させない。DEC-MTG-023）</summary>
+    private readonly HashSet<string> regenerating = new();
 
     public MeetingController(MeetingServices services)
     {
@@ -297,6 +299,20 @@ public sealed class MeetingController
     public async Task RegenerateMinutesAsync(Meeting meeting, MinutesTemplate? template = null, string? customPrompt = null,
         CancellationToken cancellationToken = default)
     {
+        lock (gate) regenerating.Add(meeting.Id);
+        try
+        {
+            await RegenerateMinutesCoreAsync(meeting, template, customPrompt, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            lock (gate) regenerating.Remove(meeting.Id);
+        }
+    }
+
+    private async Task RegenerateMinutesCoreAsync(Meeting meeting, MinutesTemplate? template, string? customPrompt,
+        CancellationToken cancellationToken)
+    {
         var settings = services.Settings();
         var client = services.CreateMinutesClient(settings)
             ?? throw (settings.MeetingAi switch
@@ -327,11 +343,31 @@ public sealed class MeetingController
         MeetingChanged?.Invoke(this, meeting);
     }
 
-    /// <summary>話者名・メモ・題名を書き換えて保存する（会議ノートから）</summary>
+    // 設計判断: DEC-MTG-023
+    /// <summary>話者名・メモ・題名を書き換えて保存する（会議ノートから）。フォルダがもうない（削除した）会議は保存し直さない</summary>
     public void Save(Meeting meeting)
     {
-        Store(services.Settings()).Save(meeting);
+        var store = Store(services.Settings());
+        if (!store.Exists(meeting)) return;
+        store.Save(meeting);
         MeetingChanged?.Invoke(this, meeting);
+    }
+
+    // 要件: REQ-MTG-028
+    // 設計判断: DEC-MTG-023
+    /// <summary>消してよい会議か。記録中・処理中の会議と、議事録を作り直している会議は消さない</summary>
+    public bool CanDelete(Meeting meeting)
+    {
+        lock (gate) return Current?.Id != meeting.Id && !regenerating.Contains(meeting.Id);
+    }
+
+    // 要件: REQ-MTG-028
+    /// <summary>会議のフォルダを消す（moveToRecycleBin は MeetingStore.Delete を参照）。消せない会議なら InvalidOperationException</summary>
+    public void Delete(Meeting meeting, Action<string>? moveToRecycleBin = null)
+    {
+        if (!CanDelete(meeting)) throw new InvalidOperationException("記録中・処理中・議事録を作り直している会議は削除できません。");
+        Store(services.Settings()).Delete(meeting, moveToRecycleBin);
+        services.Log($"meeting deleted: {meeting.Id}");
     }
 
     // MARK: - Private
