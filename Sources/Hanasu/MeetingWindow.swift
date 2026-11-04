@@ -14,39 +14,19 @@ struct MeetingWindowView: View {
 
     var body: some View {
         NavigationSplitView {
-            Group {
-                if search.isActive {
-                    MeetingSearchResultsList(model: search, selectedHitID: selectedHitID) { id, hit in
-                        showingAsk = false
-                        selection = id
-                        jump = MeetingJump(meetingID: id, location: hit?.location, terms: search.terms)
-                    }
-                } else {
-                    List(selection: $selection) {
-                        if let current = recorder.current {
-                            Section("記録中") {
-                                MeetingRow(meeting: current, live: true).tag(current.id)
-                            }
-                        }
-                        Section("会議") {
-                            ForEach(recorder.meetings.filter { $0.id != recorder.current?.id }) { meeting in
-                                MeetingRow(meeting: meeting, live: false).tag(meeting.id)
-                            }
-                        }
-                    }
-                }
-            }
-            .safeAreaInset(edge: .top, spacing: 0) {
+            // 検索欄・一覧・記録の欄を縦に積む。safeAreaInset で重ねると、一覧が欄の裏に回り込んで透けて見える
+            VStack(spacing: 0) {
                 MeetingSearchField(model: search) {
                     showingAsk = true
                     selection = nil
                 }
-            }
-            .navigationSplitViewColumnWidth(min: 220, ideal: 260)
-            .safeAreaInset(edge: .bottom) {
+                sidebarList
+                    .frame(maxHeight: .infinity)
+                Divider()
                 RecordButton(recorder: recorder)
                     .padding(10)
             }
+            .navigationSplitViewColumnWidth(min: 220, ideal: 260)
         } detail: {
             if showingAsk {
                 MeetingAskView(model: ask, meetings: recorder.meetings, index: search.index) { id in
@@ -78,6 +58,31 @@ struct MeetingWindowView: View {
         .onChange(of: recorder.state) { old, new in
             // 処理が終わったら、その会議を選んだままにする
             if new == .idle, case .processing = old, let first = recorder.meetings.first { selection = first.id }
+        }
+    }
+
+    /// 左の一覧（検索中は検索結果）
+    @ViewBuilder
+    private var sidebarList: some View {
+        if search.isActive {
+            MeetingSearchResultsList(model: search, selectedHitID: selectedHitID) { id, hit in
+                showingAsk = false
+                selection = id
+                jump = MeetingJump(meetingID: id, location: hit?.location, terms: search.terms)
+            }
+        } else {
+            List(selection: $selection) {
+                if let current = recorder.current {
+                    Section("記録中") {
+                        MeetingRow(meeting: current, live: true).tag(current.id)
+                    }
+                }
+                Section("会議") {
+                    ForEach(recorder.meetings.filter { $0.id != recorder.current?.id }) { meeting in
+                        MeetingRow(meeting: meeting, live: false).tag(meeting.id)
+                    }
+                }
+            }
         }
     }
 
