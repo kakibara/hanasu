@@ -6,13 +6,14 @@ param([Parameter(Mandatory = $true)][string]$Destination)
 $ErrorActionPreference = 'Stop'
 
 $lock = @{}
-Get-Content (Join-Path $PSScriptRoot 'llama-cpp.lock') | Where-Object { $_ -match '^[a-z_]+=' } | ForEach-Object {
+Get-Content (Join-Path $PSScriptRoot 'llama-cpp.lock') | Where-Object { $_ -match '^[a-z0-9_]+=' } | ForEach-Object {
     $key, $value = $_ -split '=', 2
     $lock[$key] = $value
 }
 $version = $lock['version']
 $asset = $lock['windows_asset']
 $expected = $lock['windows_sha256']
+if (-not $version -or -not $asset -or -not $expected) { throw 'scripts/llama-cpp.lock を読めませんでした' }
 
 $work = Join-Path ([System.IO.Path]::GetTempPath()) "llama-cpp-$version"
 New-Item -ItemType Directory -Force -Path $work | Out-Null
