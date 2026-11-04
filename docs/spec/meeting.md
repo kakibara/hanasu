@@ -72,7 +72,7 @@
 - 対象: Mac / Windows
 - 実装の場所: `MeetingWindowView`、`MeetingDetailView`
 - Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（書き出しは「Markdown をコピー」だけ）
-- 確かめ方: `--render-minutes-ui <フォルダ> --meeting-json <json>` で画面を PNG にする（「会議ノートのウインドウの高さ」が、どのタブでも開いたときと同じこと）
+- 確かめ方: `--render-minutes-ui <フォルダ> --meeting-json <json>` で画面を PNG にする（「会議ノートのウインドウの高さ」が、どのタブでも開いたときと同じで、中身の高さがウインドウの中身を超えない（NG が出ない）こと。`window-tab2.png` でタイトルとタブが見えること）
 
 ### REQ-MTG-008 話者名を、あとから付け替えられる（F8）
 - 内容: 「話者1」を「田中さん」のように、あとから付け替えられる。
@@ -570,9 +570,10 @@
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingModels.cs`（`Meeting.UndoableHighlight`・`HighlightUndoSeconds`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`UndoableHighlight`・`UndoHighlight`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`MeetingWindow.xaml.cs`（`UndoHighlightButton`）
 
 ### DEC-MTG-048 会議ノートのウインドウ（Mac）は、大きさを中身に合わせない
-- 決めたこと: 会議ノートのウインドウの `NSHostingController` の `sizingOptions` を空にし、ウインドウの最小の大きさ（900×520）は `contentMinSize` で決める。「メモ」タブのテキスト欄には最小の高さ（120）を決め、残りの高さに収めて中でスクロールさせる。
+- 決めたこと: 会議ノートのウインドウの `NSHostingController` の `sizingOptions` を空にし、ウインドウの最小の大きさ（900×520）は `contentMinSize` で決める。「メモ」タブのテキスト欄には最小の高さ（120）を決め、残りの高さに収めて中でスクロールさせる。「メモ」タブの説明文は高さを中身に合わせて固定せず（`fixedSize` にしない）、3 行までにする。
 - 理由: 中身に合わせる設定のままだと、「メモ」タブのテキスト欄がメモの全行ぶんの高さを最小として求め、ウインドウが画面より縦に伸びて（メモ 60 行で高さ 672 → 1441）、タイトルとタブの切り替えが画面の外に出て、議事録・文字起こしに戻れなくなっていた（ユーザーの依頼（2026-11-04「重要の秒数付近の会話をかくにんできるようにして。あと、mac版では会議メモを開くと足袋などが消失して文字起こしや要約のページに戻れないので修正して」））。
-- 決めた場面: 同じ依頼の修正
+- 理由（説明文）: 説明文を `fixedSize`（縦）にしていると、左右に並べる画面（`NavigationSplitView`）が細い幅で最小の高さを測ったとき、1 文字ずつ折り返した高さ（約 1500）を求めた。ウインドウは伸びなくなったが、中身がウインドウより縦に大きくなって（中身 1529／ウインドウ 640）上下が画面の外に出て、タイトル・タブの切り替え・左の検索欄・記録のボタンが見えなくなっていた。メモの行数にはよらない（メモ 2 行の会議でも起きた）（ユーザーの依頼（2026-11-04「メモタブを押したらこうなってしまい、元に戻せません」））。
+- 決めた場面: 同じ依頼の修正。説明文は 2026-11-04 の 2 つめの依頼の修正
 - 関係する要件: REQ-MTG-007
 - 対象: Mac
 - 実装の場所: `AppDelegate.makeMeetingWindow`、`MeetingNotesEditor`
