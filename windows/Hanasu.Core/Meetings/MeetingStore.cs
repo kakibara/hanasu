@@ -153,6 +153,23 @@ public sealed class MeetingStore
         }
     }
 
+    // 要件: REQ-MTG-028
+    // 設計判断: DEC-MTG-022
+    /// <summary>
+    /// 会議のフォルダを丸ごと消す。moveToRecycleBin を渡すと、それでフォルダを消す（Windows のアプリはごみ箱へ移す）。
+    /// 渡さなければ完全に消す（テスト用）
+    /// </summary>
+    public void Delete(Meeting meeting, Action<string>? moveToRecycleBin = null)
+    {
+        var dir = DirectoryOf(meeting);
+        if (!Directory.Exists(dir)) return;
+        if (moveToRecycleBin is not null) moveToRecycleBin(dir);
+        else Directory.Delete(dir, recursive: true);
+    }
+
+    /// <summary>会議のフォルダがあるか（削除した会議を保存し直さないため）</summary>
+    public bool Exists(Meeting meeting) => Directory.Exists(DirectoryOf(meeting));
+
     /// <summary>チャンネルの音声ファイルを消す（設定で「音声を残さない」とき）</summary>
     public void DeleteAudio(Meeting meeting)
     {

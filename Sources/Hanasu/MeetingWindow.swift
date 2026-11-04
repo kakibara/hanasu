@@ -11,6 +11,9 @@ struct MeetingWindowView: View {
     /// 検索結果から開いたときの飛び先
     @State private var jump: MeetingJump?
     @State private var showingAsk = false
+    /// 削除を確かめている会議
+    @State private var pendingDelete: Meeting?
+    @State private var deleteError: String?
 
     var body: some View {
         NavigationSplitView {
@@ -37,7 +40,8 @@ struct MeetingWindowView: View {
             } else if let id = selection, id == recorder.current?.id {
                 LiveTranscriptView(recorder: recorder)
             } else if let id = selection, let meeting = recorder.meetings.first(where: { $0.id == id }) {
-                MeetingDetailView(meeting: meeting, recorder: recorder, jump: jump?.meetingID == id ? jump : nil)
+                MeetingDetailView(meeting: meeting, recorder: recorder, jump: jump?.meetingID == id ? jump : nil,
+                                  onDelete: { pendingDelete = meeting })
             } else {
                 ContentUnavailableView("会議を選んでください", systemImage: "waveform",
                                        description: Text("下のボタンか ⌃⌥⌘M で記録を始められます。"))
@@ -59,6 +63,47 @@ struct MeetingWindowView: View {
             // 処理が終わったら、その会議を選んだままにする
             if new == .idle, case .processing = old, let first = recorder.meetings.first { selection = first.id }
         }
+        // 要件: REQ-MTG-028
+        // 設計判断: DEC-MTG-022
+        .confirmationDialog(pendingDelete.map { "「\($0.title)」を削除しますか？" } ?? "",
+                            isPresented: Binding(get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } }),
+                            presenting: pendingDelete) { meeting in
+            Button("ゴミ箱に入れる", role: .destructive) { delete(meeting) }
+            Button("キャンセル", role: .cancel) {}
+        } message: { _ in
+            Text("議事録・文字起こし・メモ・音声をまとめてゴミ箱に移します。ゴミ箱から戻せます。")
+        }
+        .alert("削除できませんでした", isPresented: Binding(get: { deleteError != nil }, set: { if !$0 { deleteError = nil } })) {
+            Button("OK") {}
+        } message: {
+            Text(deleteError ?? "")
+        }
+    }
+
+    /// 会議をゴミ箱に移し、一覧の次の会議（なければ前の会議）を選ぶ
+    private func delete(_ meeting: Meeting) {
+        let list = recorder.meetings.filter { $0.id != recorder.current?.id }
+        let index = list.firstIndex { $0.id == meeting.id }
+        do {
+            try recorder.delete(meeting)
+        } catch {
+            deleteError = error.localizedDescription
+            return
+        }
+        guard selection == meeting.id || jump?.meetingID == meeting.id else { return }
+        jump = nil
+        if let index {
+            let rest = list.filter { $0.id != meeting.id }
+            selection = rest.isEmpty ? nil : rest[min(index, rest.count - 1)].id
+        } else {
+            selection = nil
+        }
+    }
+
+    /// 一覧の右クリック・⌫ から削除を確かめる
+    private func confirmDelete(_ id: String?) {
+        guard let id, let meeting = recorder.meetings.first(where: { $0.id == id }), recorder.canDelete(meeting) else { return }
+        pendingDelete = meeting
     }
 
     /// 左の一覧（検索中は検索結果）
@@ -80,9 +125,14 @@ struct MeetingWindowView: View {
                 Section("会議") {
                     ForEach(recorder.meetings.filter { $0.id != recorder.current?.id }) { meeting in
                         MeetingRow(meeting: meeting, live: false).tag(meeting.id)
+                            .contextMenu {
+                                Button("削除…", role: .destructive) { confirmDelete(meeting.id) }
+                                    .disabled(!recorder.canDelete(meeting))
+                            }
                     }
                 }
             }
+            .onDeleteCommand { confirmDelete(selection) }
         }
     }
 
@@ -255,27 +305,31 @@ struct MeetingDetailView: View {
     @ObservedObject var recorder: MeetingRecorder
     /// 検索結果から開いたときの飛び先（その位置までスクロールし、検索語に色を付ける）
     var jump: MeetingJump?
+    /// 削除の確かめを出す（会議ノートのウインドウが持つ）。nil なら削除のボタンを出さない
+    var onDelete: (() -> Void)?
     @State private var tab: Int
     @State private var title = ""
+    @FocusState private var titleFocused: Bool
     @State private var editingSpeakers = false
     /// 「ここ重要」タブから「文字起こしで見る」で開いた発言
     @State private var focusedFromHighlight: UUID?
 
     /// initialTab は確認用の描き出し（CLI）で、最初に開くタブを決めるため（0 議事録・1 文字起こし・2 メモ・3 ここ重要）
-    init(meeting: Meeting, recorder: MeetingRecorder, jump: MeetingJump? = nil, initialTab: Int = 0) {
+    init(meeting: Meeting, recorder: MeetingRecorder, jump: MeetingJump? = nil, initialTab: Int = 0,
+         onDelete: (() -> Void)? = nil) {
         self.meeting = meeting
         self.recorder = recorder
         self.jump = jump
+        self.onDelete = onDelete
         _tab = State(initialValue: initialTab)
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 8) {
-                TextField("タイトル", text: $title)
-                    .font(.title2.bold())
-                    .textFieldStyle(.plain)
-                    .onSubmit { recorder.rename(meeting, title: title) }
+                EditableTitleField(title: $title, focused: $titleFocused,
+                                   onCommit: { commitTitle(for: meeting.id) },
+                                   onCancel: { title = meeting.title })
                 HStack(spacing: 12) {
                     Text("\(Meeting.dateFormatter.string(from: meeting.startedAt))・\(Meeting.clock(meeting.duration))")
                         .foregroundStyle(.secondary)
@@ -287,6 +341,15 @@ struct MeetingDetailView: View {
                     MeetingExportMenu(meeting: meeting, recorder: recorder, showingTranscript: tab == 1)
                     Button("Finder で表示") {
                         NSWorkspace.shared.activateFileViewerSelecting([MeetingStore.directory(for: meeting)])
+                    }
+                    // 要件: REQ-MTG-028
+                    if let onDelete {
+                        Button(role: .destructive, action: onDelete) {
+                            Label("削除…", systemImage: "trash")
+                        }
+                        .labelStyle(.iconOnly)
+                        .help(recorder.canDelete(meeting) ? "この会議をゴミ箱に入れる" : "議事録を作り直している間は削除できません")
+                        .disabled(!recorder.canDelete(meeting))
                     }
                 }
                 if let error = meeting.errorMessage {
@@ -359,9 +422,14 @@ struct MeetingDetailView: View {
             }
         }
         .onAppear { title = meeting.title }
-        .onChange(of: meeting.id) {
+        .onChange(of: meeting.id) { oldID, _ in
+            // 書きかけのタイトルは、元の会議に保存してから切り替える
+            if titleFocused { commitTitle(for: oldID) }
             title = meeting.title
             focusedFromHighlight = nil
+        }
+        .onChange(of: meeting.title) { _, newTitle in
+            if !titleFocused { title = newTitle }
         }
         // 「メモ」タブを開いているときに検索の結果を選んだら、飛び先のタブに切り替える（表示されたらスクロールする）
         .onChange(of: jump) { _, newJump in
@@ -375,6 +443,21 @@ struct MeetingDetailView: View {
         .sheet(isPresented: $editingSpeakers) {
             SpeakerNamesSheet(meeting: meeting, recorder: recorder)
         }
+    }
+
+    // 要件: REQ-MTG-029
+    // 設計判断: DEC-MTG-024
+    /// 書き換えたタイトルを保存する。空なら元に戻す。id で会議を引き直す（別の会議を選んだ直後でも、元の会議に保存する）
+    private func commitTitle(for id: String) {
+        guard let target = recorder.meetings.first(where: { $0.id == id }) else { return }
+        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            if id == meeting.id { title = target.title }
+            return
+        }
+        if trimmed != title, id == meeting.id { title = trimmed }
+        guard trimmed != target.title else { return }
+        recorder.rename(target, title: trimmed)
     }
 
     private var focusedBlockID: UUID? {
@@ -419,6 +502,57 @@ struct MeetingDetailView: View {
 // 設計判断: DEC-MTG-049
 /// 会議ノートの「ここ重要」タブ: 印ごとに、前後の発言（30 秒前〜15 秒後）をまとめて出す。
 /// 「文字起こしで見る」で、文字起こしのタブのその位置へ移る
+// 要件: REQ-MTG-029
+// 設計判断: DEC-MTG-024
+/// 会議のタイトルの欄。書き換えられると見てわかるように、いつも薄い枠と鉛筆の印を出す
+/// （マウスを載せると枠を濃く、編集中はアクセントの色にする）。Enter・フォーカスが外れたときに保存し、Esc でやめる
+struct EditableTitleField: View {
+    @Binding var title: String
+    var focused: FocusState<Bool>.Binding
+    var onCommit: () -> Void
+    var onCancel: () -> Void
+    @State private var hovering = false
+
+    var body: some View {
+        HStack(spacing: 8) {
+            TextField("タイトル", text: $title)
+                .font(.title2.bold())
+                .textFieldStyle(.plain)
+                .focused(focused)
+                .onSubmit { focused.wrappedValue = false }
+                .onExitCommand {
+                    onCancel()
+                    focused.wrappedValue = false
+                }
+            Image(systemName: "pencil")
+                .font(.body.weight(.medium))
+                .foregroundStyle(focused.wrappedValue ? Color.accentColor : .secondary)
+                .accessibilityHidden(true)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(RoundedRectangle(cornerRadius: 6)
+            .fill(Color.primary.opacity(hovering && !focused.wrappedValue ? 0.05 : 0)))
+        .overlay(RoundedRectangle(cornerRadius: 6)
+            .strokeBorder(focused.wrappedValue ? Color.accentColor : Color.secondary.opacity(hovering ? 0.6 : 0.3),
+                          lineWidth: focused.wrappedValue ? 2 : 1))
+        .contentShape(Rectangle())
+        .onTapGesture { focused.wrappedValue = true }
+        .onHover { hovering = $0 }
+        .padding(.horizontal, -8)  // 文字の左端を、下の日時の行とそろえる
+        .onChange(of: focused.wrappedValue) { _, isFocused in
+            if !isFocused { onCommit() }
+        }
+        // ウインドウを開いたときに、最初の入力欄としてフォーカスが入り、編集中の見た目で全選択されるのを防ぐ（クリックしたときだけ編集する）
+        .task {
+            try? await Task.sleep(for: .milliseconds(50))
+            if focused.wrappedValue, !hovering { focused.wrappedValue = false }
+        }
+        .help("クリックしてタイトルを変更")
+        .accessibilityHint("タイトルを変更できます")
+    }
+}
+
 private struct HighlightContextsView: View {
     let meeting: Meeting
     var openInTranscript: (UUID) -> Void

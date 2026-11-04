@@ -260,6 +260,28 @@
 - Windows の実装: `windows/Hanasu.Core/Meetings/SpeakerNameInference.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`（`MinutesPrompt.SpeakerNamesInstruction`）、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`Meeting.ApplyMinutes`・`RenameSpeaker`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `.build/debug/Hanasu --test-speaker-names`（読み取り・名前の検査・当てはめ・置き換え・meeting.json）、`--minutes-from-transcript <文字起こし.txt>`（実際の AI で推測した名前を表示）。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~SpeakerNameInference"`。会議ノートの「推測」の表示は実機で確かめる
 
+### REQ-MTG-028 記録した会議を削除できる
+- 内容: 会議ノートで、記録した会議を削除できる。削除すると、その会議のフォルダ（議事録・文字起こし・メモ・音声）がなくなり、一覧・検索・質問の対象から外れる。
+- 受け入れ条件:
+  - 会議ノートで会議を選んで「削除」を選ぶと、確かめるダイアログが出る。「ゴミ箱に入れる」（Windows は「ごみ箱に移す」）を押すと、一覧からその会議が消え、保存先のフォルダもなくなる。キャンセルすると何も変わらない。
+  - 記録中・処理中（議事録の作り直し中を含む）の会議は削除できない。
+- 出典: ユーザーの依頼（2026-11-04「会議の記録を削除できるようにしてください」）
+- 対象: Mac / Windows
+- 実装の場所: `MeetingStore.moveToTrash`、`MeetingRecorder.delete`・`canDelete`、`MeetingWindowView`、`MeetingDetailView`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingStore.cs`（`Delete`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`Delete`・`CanDelete`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingControllerTests"`（フォルダが消えること、記録中・作り直し中は消せないこと）。Mac: `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail.png` に削除のボタンが出ること。ゴミ箱に移ることは実機で確かめる
+
+### REQ-MTG-029 会議のタイトルを変えられ、変えられることが見てわかる
+- 内容: 会議ノートの上のタイトルを、その場で書き換えられる。書き換えられる欄であることが、触らなくても見た目でわかる。
+- 受け入れ条件:
+  - タイトルの欄に、枠と鉛筆の印（Windows は ✎）が出ている。マウスを載せると枠が濃くなり、「クリックしてタイトルを変更」と出る。
+  - 書き換えて Enter を押すか、ほかの所をクリックすると保存され、一覧のタイトルも変わる。空にしたときは元のタイトルに戻す。Esc で書き換えをやめられる。
+- 出典: ユーザーの依頼（2026-11-04「タイトルが編集できることをUI上でも見ただけでわかるようにしてください」）
+- 対象: Mac / Windows
+- 実装の場所: `EditableTitleField`、`MeetingDetailView`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml`（`TitleBox`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail.png` で、タイトルの欄に枠と鉛筆の印が出ること。保存は実機で確かめる
+
 ### REQ-MTG-030 会議ツールの画面・映像は記録しない（対象外）
 - 内容: 会議ツールの画面・映像は記録しない。
 - 受け入れ条件: 画面収録の許可を求めず、映像のファイルを作らない。
@@ -471,6 +493,33 @@
 - 関係する要件: REQ-MTG-001
 - 対象: Mac
 - 実装の場所: `HotKeyCombo.defaultMeeting`
+
+### DEC-MTG-022 会議の削除は、フォルダごとゴミ箱に移し、先に確かめる
+- 決めたこと: 削除は、会議のフォルダを丸ごと Mac のゴミ箱（Windows のごみ箱）に移す。完全には消さない。押す前に、会議のタイトルと「ゴミ箱から戻せる」ことを書いたダイアログで確かめる。入口は、一覧の右クリックの「削除…」、一覧を選んで ⌫（Windows は Delete キー）、会議の詳細の上のゴミ箱のボタン。消したあとは一覧の次の会議を選ぶ。
+- 理由: 会議の記録は取り直せないので、押し間違えても戻せるようにする。フォルダの中身（音声・メモ）を 1 つずつ消すと、取り残しや、消しかけのフォルダが残るおそれがある。
+- 決めた場面: ユーザーの依頼（2026-11-04）。この PR
+- 関係する要件: REQ-MTG-028
+- 対象: Mac / Windows
+- 実装の場所: `MeetingStore.moveToTrash`、`MeetingWindowView`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（`Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory` の `RecycleOption.SendToRecycleBin`）
+
+### DEC-MTG-023 記録中・処理中・議事録の作り直し中の会議は消せず、消した会議を保存し直さない
+- 決めたこと: 記録中・記録のあとの処理中の会議と、議事録を作り直している会議は、削除の操作を出さない（押せない）。また、会議を書き換えて保存する処理（タイトル・話者名・リマインダーの印など）は、その会議のフォルダがもうなければ保存しない。
+- 理由: 処理の最後の保存は、フォルダがなければ作り直すので、処理中に消すと、消したはずの会議が中途半端な形で戻ってくる。
+- 決めた場面: この PR
+- 関係する要件: REQ-MTG-028
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecorder.canDelete`・`update`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`CanDelete`）
+
+### DEC-MTG-024 タイトルの欄は、いつも枠と鉛筆の印を出し、フォーカスが外れたときも保存する
+- 決めたこと: 会議の詳細の上のタイトルの欄に、いつも薄い枠と鉛筆の印を出す。マウスを載せると枠を濃くし、編集中はアクセントの色の枠にする。Enter・フォーカスが外れたときに保存し、空なら元に戻す。Esc で書き換えをやめる。別の会議を選んだときは、書きかけのタイトルを元の会議に保存してから切り替える。
+- 理由: 前は枠のない文字の欄で、見出しと見分けがつかず、書き換えられることが分からなかった（ユーザーの依頼（2026-11-04））。Mac では Enter のときしか保存しなかったので、書き換えてほかをクリックすると、変えたつもりのタイトルが保存されなかった。
+- 決めた場面: ユーザーの依頼（2026-11-04）。この PR
+- 関係する要件: REQ-MTG-029
+- 対象: Mac / Windows
+- 実装の場所: `EditableTitleField`、`MeetingDetailView.commitTitle`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml`（`TitleBox` のスタイル）
 
 ### DEC-MTG-030 会議の検出は、リスナーを基本にし、マイクが使われている間だけ読み直す
 - 決めたこと: Core Audio のプロセス一覧・機器一覧・会議アプリのプロセスの `IsRunning`・入力機器の `IsRunningSomewhere` にリスナーを付け、入力機器が使われている間だけ 3 秒おきに会議アプリの `IsRunningInput` を読み直す。
