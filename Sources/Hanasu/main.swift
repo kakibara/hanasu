@@ -54,6 +54,8 @@ MainActor.assumeIsolated { LocalLLMCLI.runIfRequested() }
 
 // 文字起こしのエンジンの確認（--download-whisper / --render-engine-settings）。TranscriptionEngineCLI.swift
 MainActor.assumeIsolated { TranscriptionEngineCLI.runIfRequested() }
+// 音声入力のマイクの確認（--list-dictation-microphones / --render-dictation-mic-settings / --test-dictation-mic-switch）。DictationMicrophoneCLI.swift
+MainActor.assumeIsolated { DictationMicrophoneCLI.runIfRequested() }
 // Claude API・キーチェーン・設定の「AI」タブの確認（--claude-test / --keychain-selftest / --render-ai-settings）。ClaudeCLI.swift
 MainActor.assumeIsolated { ClaudeCLI.runIfRequested() }
 // 選択を声で編集するモードの確認（--edit-text / --render-edit-hud / --render-edit-settings）。中身は EditModeCLI.swift

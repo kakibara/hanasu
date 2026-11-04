@@ -260,6 +260,18 @@
   - 実機で確かめる（英語と日本語の混ざった発話を、両方の設定で入力する）
   - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~JapaneseOutputLanguage|FullyQualifiedName~RefineOutputLanguage"`（指示の文面が Mac 版と同じこと、設定の保存）
 
+### REQ-DIC-140 音声入力で使うマイクを選べる（録音中の HUD でも切り替えられる）
+- 内容: 音声入力（と選択を声で編集）で使うマイクを、つながっているマイクから選べる。選ばなければシステムの設定のマイクを使う。録音中の HUD のマイクのボタンからも選べ、録音を止めずにそのマイクに切り替わる。
+- 受け入れ条件:
+  - 設定の「一般」→「マイク」で、「システムの設定に従う（今の既定のマイクの名前）」か、つながっているマイクを選べる。選んだマイクが外れているときは「（接続されていない機器）」と出る。
+  - 録音中の HUD の 2 行目の右端にマイクのボタンがあり、押すとマイクの一覧がメニューで出る（今の選択に ✓）。選ぶと、それまでに話した内容を失わずに、そのマイクの音で録音が続く。入力先のフォーカスは動かない。
+  - HUD で選んだマイクは設定に残り、次の音声入力でも使う。
+  - 会議の記録のマイク（設定「会議」→「録音するマイク」）とは別に選ぶ。
+- 出典: 2026-11-04 のユーザーの依頼「音声入力の画面でマイクを選択できるようにしてください」
+- 対象: Mac
+- 実装の場所: `AppSettings.dictationInputDeviceUID`、`DictationMicrophonePicker`、`DictationMicrophoneMenu`、`HUDPanel.swift` の `MicrophoneButton`、`DictationController.selectMicrophone`、`EditModeController.selectMicrophone`、`SpeechRecognizer.switchInput`
+- 確かめ方: `.build/debug/Hanasu --list-dictation-microphones`（選択肢）、`--test-dictation-mic-switch [秒]`（つながっているマイクへ順に切り替えて音声が届くか。マイクの許可が要る）、`--render-dictation-mic-settings /tmp/mic.png`、`--render-hud /tmp/hud.png`。HUD のメニューのクリックは実機で確かめる
+
 ---
 
 ## 設計判断
@@ -1054,6 +1066,30 @@
 - 関係する要件: REQ-DIC-060
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Windows/Views/HistoryWindow.xaml.cs`、`windows/Hanasu.Windows/TrayIcon.cs`
+
+### DEC-DIC-140 音声入力のマイクは会議と別に持ち、外れていればシステムの設定のマイクで録る
+- 決めたこと: 音声入力のマイクは `AppSettings.dictationInputDeviceUID`（空ならシステムの設定に従う。初期値は空）に UID で持ち、会議の `meetingInputDeviceUID` とは分ける。録音のエンジンは会議と同じ `MeetingRecorder.makeMicEngine` で作り、機器を指定したときは機器側の実際の形式（`inputFormat`）でタップを付ける。指定しないときは、これまでどおり `outputFormat` を使う。選んだマイクがつながっていなければ、エラーにせずシステムの設定のマイクで録る。
+- 理由: 会議ではヘッドセット、ふだんの音声入力では内蔵マイクのように、使い分ける場面がある（文字起こしのエンジンを分けた DEC-COM-020 と同じ考え）。機器を指定すると `outputFormat` が前の機器のままになる問題は会議で見つかっている（DEC-MTG-004）。指定しないときの形式を変えないのは、今の動きを崩さないため。イヤホンを外したまま音声入力を始めても、話せないより録れるほうがよい。
+- 決めた場面: 音声入力のマイクを選べるようにした PR（2026-11-04）
+- 関係する要件: REQ-DIC-140
+- 対象: Mac
+- 実装の場所: `SpeechRecognizer.makeInputEngine`、`AppSettings.dictationInputDeviceUID`
+
+### DEC-DIC-141 録音中の切り替えは、エンジンだけを作り直し、認識と書き出しは続ける
+- 決めたこと: 録音中にマイクを選ぶと、マイクのエンジン（`AVAudioEngine`）だけを止めて新しいマイクで作り直し、同じ認識の入力（Mac 標準）・ためた音声（Whisper / Gemini）・録音の書き出しへ流し続ける。形式は機器ごとに違うので、変換器はタップごとに作る。選んだマイクを動かせなければシステムの設定のマイクでやり直し、それも動かせなければ録音を取り消してエラーを出す。
+- 理由: 「声が入っていない」と気づいたときに、話し直さずに続けられるようにする。認識をやり直すと、それまでの途中経過が消える。
+- 決めた場面: 音声入力のマイクを選べるようにした PR（2026-11-04）
+- 関係する要件: REQ-DIC-140
+- 対象: Mac
+- 実装の場所: `SpeechRecognizer.switchInput`、`SpeechRecognizer.startInputWithFallback`、`BatchCapture.switchInput`
+
+### DEC-DIC-142 HUD のマイクのボタンは 2 行目の右端に置き、押すと NSMenu を出す
+- 決めたこと: マイクのボタン（マイクの絵と ▾）は、録音中だけ HUD の 2 行目（認識中の文字・音量の目安の行）の右端に出す。押すと `NSMenu` をマウスの位置に出し、「システムの設定に従う（今の既定のマイク）」、つながっているマイク、外れている選択中のマイクを並べ、今の選択に ✓ を付ける。ボタンそのものは他のボタンと同じく SwiftUI のボタンにする（DEC-DIC-025）。
+- 理由: 1 行目は言語の切り替え・経過時間・取消・停止でいっぱいで、足すと Whisper / Gemini のときに言語の切り替えが折り返した。HUD は前面に出ないパネルなので、メニュー型の Picker（AppKit の部品）は使わず、画面の座標に出す `NSMenu` にした。メニューはアプリを前面に出さずに出せる。
+- 決めた場面: 音声入力のマイクを選べるようにした PR（2026-11-04）
+- 関係する要件: REQ-DIC-140
+- 対象: Mac
+- 実装の場所: `MicrophoneButton`、`DictationMicrophoneMenu`
 
 ---
 

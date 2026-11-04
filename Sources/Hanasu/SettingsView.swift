@@ -70,6 +70,15 @@ private struct GeneralTab: View {
                 Text("日本語で話すと、「英訳して入力」では AI（「AI」タブで音声入力に選んだ Gemini か Claude）が自然な英語に翻訳して入力します。録音中は Esc で取り消せます。")
                     .font(.caption).foregroundStyle(.secondary)
             }
+            // 要件: REQ-DIC-140
+            Section {
+                DictationMicrophonePicker(settings: settings)
+            } header: {
+                Text("マイク")
+            } footer: {
+                Text("音声入力と「選択を声で編集」で使うマイク。録音中の画面（HUD）のマイクのボタンからも切り替えられます。会議の記録のマイクは「会議」タブで選びます。")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
             // 音声入力と会議の記録の文字起こしのエンジン（TranscriptionEngineSettingsView.swift）
             TranscriptionEngineSettingsSection(settings: settings)
             // 入力できる場所がないときのクリップボードの扱い（PasteFallbackPanel.swift）

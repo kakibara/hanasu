@@ -40,6 +40,7 @@ final class EditModeController {
         hud.model.editBadge = ""
         hud.model.onStop = { [weak self] in self?.stopFromHUD() }
         hud.model.onCancel = { [weak self] in self?.cancel() }
+        hud.model.onSelectMicrophone = { [weak self] uid in self?.selectMicrophone(uid) }
         recognizer.onPartialText = { [weak self] text in
             self?.hud.updateTranscript(text)
         }
@@ -122,6 +123,20 @@ final class EditModeController {
 
     // MARK: - 操作
 
+
+    // 要件: REQ-DIC-140
+    // 設計判断: DEC-DIC-141
+    /// HUD でマイクを選んだとき。次の録音でも使うよう設定に残し、録音中ならそのマイクに切り替える
+    func selectMicrophone(_ uid: String) {
+        settings.dictationInputDeviceUID = uid
+        guard state == .recording else { return }
+        do {
+            try recognizer.switchInput(to: uid)
+        } catch {
+            abort("マイクを切り替えられませんでした: \(error.localizedDescription)")
+        }
+    }
+
     // 要件: REQ-DIC-012
     /// HUD の「停止」。ショートカットをもう一度押したときと同じく、録音を止めて書き換える
     func stopFromHUD() {
@@ -198,7 +213,8 @@ final class EditModeController {
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
                     contextualStrings: settings.dictionaryWords,
-                    transcription: settings.dictationEngine)
+                    transcription: settings.dictationEngine,
+                    inputDeviceUID: settings.dictationInputDeviceUID)
             } catch {
                 selectionTask?.cancel()
                 fail(error.localizedDescription)

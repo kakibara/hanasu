@@ -207,6 +207,7 @@ processing 中の hotkey は無視
    - それ以外は「途中結果」として HUD に表示
 6. 停止時: エンジン停止 → 0.6 秒の無音を流す → ストリームを `finish()` → `analyzer.finalizeAndFinishThroughEndOfInput()` → 結果タスクの終了を待つ → 確定テキストを返す。
    - 無音を足すのは、言い終わった直後に止めると最後の語が確定しないことがあるため（検証で「〜です」の「す」が欠けた）。
+7. マイク: 設定の「一般」→「マイク」（`AppSettings.dictationInputDeviceUID`）で選んだ機器を、`SpeechRecognizer.makeInputEngine` が入力ノードに指定する（会議と同じ `MeetingRecorder.makeMicEngine`）。録音中に HUD で選び直すと、`SpeechRecognizer.switchInput` がエンジンだけを作り直して、同じ入力のストリーム（Whisper / Gemini ではためている音声）へ流し続ける（DEC-DIC-140・141）。
 
 ### 4.3 Gemini プロンプト
 
@@ -484,6 +485,7 @@ Mac 標準（SpeechAnalyzer）は速く途中経過も出るが、専門用語�
 - 画面下部中央の小さな角丸パネル。`NSPanel` の `.nonactivatingPanel` で、入力先アプリのフォーカスを奪わない。
 - 表示: 状態（● 録音中 / 整形中… / エラー）、経過秒数、認識中テキストの末尾
 - 録音中は右上に「取消」と「■ 停止」のボタンを出す。停止はショートカットをもう一度押すのと同じ（録音を止めて入力する）、取消は Esc と同じ。準備中・録音中だけクリックを受け取り（`ignoresMouseEvents` を切り替える）、`acceptsFirstMouse` で前面にないパネルでも 1 回で押せる。選択を声で編集するモードの HUD でも同じ。
+- 録音中は 2 行目の右端にマイクのボタンを出す。押すとマイクの一覧を `NSMenu`（`DictationMicrophoneMenu`）で出し、選ぶとその場で切り替えて設定にも残す（REQ-DIC-140、DEC-DIC-142）。
 - 完了は 1.2 秒後、エラーは 4 秒後に自動で消える（DEC-DIC-016）。
 - 入力できる場所がなくて貼り付けなかったときは、HUD を隠して、同じ場所に結果を残すパネル（`PasteFallbackPanel`）を出す。全文を選べる文字で出し（長ければスクロール）、「コピー」「閉じる」を置く。自動では閉じず、Esc・⌘W・「閉じる」か、次に録音を始めたときに閉じる。アプリは前面に出さずにパネルだけキーウインドウにするので、Esc と ⌘C がすぐに効く（DEC-DIC-094）。
 
