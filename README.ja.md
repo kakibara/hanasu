@@ -142,6 +142,8 @@ Windows 版の注意点と Mac 版との違いは、[windows/README.md](windows/
 
 ## はじめかた
 
+Mac 版は、初めて起動すると使い方の案内（オンボーディング）が開きます。使う AI を選び（おすすめのローカルのモデル Gemma 4 E4B は、その場でダウンロードします）、主な機能と設定の Tips を見て、最後に許可を済ませます。案内はメニューの「Hanasu の使い方…」でいつでも開き直せます。
+
 1. **AI を選ぶ。** 設定の「AI」タブで、音声入力と会議に使う AI を選びます。Gemini なら [Google AI Studio](https://aistudio.google.com/apikey) の API キーか Vertex AI のサービスアカウントの JSON、Claude なら [Claude Console](https://console.anthropic.com/settings/keys) の API キーを入れます。ローカルなら、モデル（おすすめは Gemma 4 E4B）をダウンロードするだけで、キーは要りません。「整形を試す」で動作を確かめられます。
 2. **音声入力する。** 入力したい場所にカーソルを置き、ショートカットを押して話し、もう一度押します。
 3. **会議を記録する。** メニューバー（Windows はタスクトレイ）のメニューか、ショートカットで始めます。イヤホンを使うと、自分と相手の音が混ざりにくくなります。

@@ -147,6 +147,8 @@ See [windows/README.md](windows/README.md) for more notes and how the Windows ve
 
 ## Quick start
 
+On Mac, the first launch opens a short guided tour. It lets you pick your AI (Gemma 4 E4B, the recommended local model, downloads right there), shows the main features and settings tips, and asks for the permissions Hanasu needs. Open it again any time from **How to use Hanasu…** in the menu.
+
 1. **Choose an AI.** Open **Settings → AI** and choose an AI for voice input and for meetings. For Gemini, paste an API key from [Google AI Studio](https://aistudio.google.com/apikey) or select a Vertex AI service-account JSON file. For Claude, paste an API key from the [Claude Console](https://console.anthropic.com/settings/keys). For Local, download a model (Gemma 4 E4B is recommended). No key is needed. Click the test button to check that it works.
 2. **Dictate.** Put the cursor where you want the text, press the shortcut, speak, and press the shortcut again.
 3. **Record a meeting.** Use the menu-bar (Mac) or tray (Windows) menu, or the shortcut. Headphones help keep the two sides apart.
