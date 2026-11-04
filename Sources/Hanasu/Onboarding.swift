@@ -85,19 +85,39 @@ final class OnboardingModel: ObservableObject {
 
     // 要件: REQ-COM-050
     // 設計判断: DEC-COM-092
-    /// 既定の AI を選ぶ。音声入力と会議の両方をその AI にし、その場で保存する（モデルは各 AI の既定のまま）
+    /// 既定の AI を選ぶ。音声入力と会議の両方をその AI にし、その場で保存する。
+    /// ローカル（Gemma）なら、両方のモデルを Gemma 4 E4B にする（ダウンロードは 1 つで済む）。
+    /// Gemini・Claude のモデルは各 AI の既定のまま。ダウンロードはここでは始めない（DEC-COM-094）
     func chooseDefaultAI(_ provider: TextAIProvider) {
         chosenAI = provider
         settings.dictationAIProvider = provider
         settings.meetingAIProvider = provider
+        if provider == .local {
+            settings.localDictationModel = OnboardingAIChoice.gemmaModel
+            settings.localMeetingModel = OnboardingAIChoice.gemmaModel
+        }
     }
 
     /// AI のページでは、選ぶまで先に進めない
     var canGoNext: Bool { page != .ai || chosenAI != nil }
     var isLastPage: Bool { page == OnboardingPage.allCases.last }
 
+    // 要件: REQ-COM-050
+    // 設計判断: DEC-COM-094
+    /// AI のページで Gemma を選び、まだダウンロードしていない（途中でもない）とき。「次へ」が「ダウンロードして次へ」になる
+    var startsGemmaDownloadOnNext: Bool {
+        guard page == .ai, chosenAI == .local else { return false }
+        switch LocalLLMStore.shared.status(OnboardingAIChoice.gemmaModel) {
+        case .notDownloaded, .failed: return true
+        case .downloading, .downloaded: return false
+        }
+    }
+
     func next() {
         guard canGoNext else { return }
+        // 設計判断: DEC-COM-094
+        // ダウンロードを始めて、終わるのを待たずに次のページへ進む
+        if startsGemmaDownloadOnNext { LocalLLMStore.shared.ensureDownloaded(OnboardingAIChoice.gemmaModel) }
         if let next = OnboardingPage(rawValue: page.rawValue + 1) { page = next } else { onFinish() }
     }
 
@@ -120,6 +140,8 @@ struct OnboardingView: View {
     static let size = NSSize(width: 640, height: 600)
 
     @ObservedObject var model: OnboardingModel
+    /// 「ダウンロードして次へ」の出し分けのため、Gemma のダウンロードの状態を見る
+    @ObservedObject private var store = LocalLLMStore.shared
 
     var body: some View {
         VStack(spacing: 0) {
@@ -157,7 +179,7 @@ struct OnboardingView: View {
             }
             .accessibilityLabel("\(OnboardingPage.allCases.count) ページ中 \(model.page.rawValue + 1) ページ目")
             Spacer()
-            Button(model.isLastPage ? "はじめる" : "次へ") { model.next() }
+            Button(model.isLastPage ? "はじめる" : model.startsGemmaDownloadOnNext ? "ダウンロードして次へ" : "次へ") { model.next() }
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.defaultAction)
                 .disabled(!model.canGoNext)
@@ -288,6 +310,69 @@ private struct OnboardingWelcomePage: View {
 
 // 要件: REQ-COM-050
 // 設計判断: DEC-COM-092
+/// AI のページのカード。Gemma（ローカル）がおすすめ（既定）
+enum OnboardingAIChoice: CaseIterable, Identifiable {
+    case gemma
+    case gemini
+    case claude
+    case appleFM
+
+    /// おすすめのローカルのモデル
+    static let gemmaModel = LocalLLMModel.gemma4E4B
+
+    var id: Self { self }
+
+    var provider: TextAIProvider {
+        switch self {
+        case .gemma: .local
+        case .gemini: .gemini
+        case .claude: .claude
+        case .appleFM: .appleFM
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .gemma: Self.gemmaModel.name
+        case .gemini: TextAIProvider.gemini.label
+        case .claude: TextAIProvider.claude.label
+        case .appleFM: TextAIProvider.appleFM.label
+        }
+    }
+
+    var isRecommended: Bool { self == .gemma }
+
+    var tagline: String {
+        switch self {
+        case .gemma: "この Mac の中で動く Google の Gemma。無料で、議事録もまとめやすい"
+        case .gemini: "速くて安い。モデルは自由に指定できます"
+        case .claude: "文章の仕上がりがていねい。Haiku・Sonnet・Opus から選べます"
+        case .appleFM: "macOS 27 の Apple Intelligence のモデル。無料"
+        }
+    }
+
+    var sendsText: Bool { self == .gemini || self == .claude }
+
+    var privacy: String {
+        switch self {
+        case .gemini: "文章を Google に送ります"
+        case .claude: "文章を Anthropic に送ります（音声は送りません）"
+        case .gemma, .appleFM: "文章をネットに送りません"
+        }
+    }
+
+    var requirement: String {
+        switch self {
+        case .gemma: "要るもの: ダウンロード（\(Self.gemmaModel.sizeLabel)。このあとすぐ）"
+        case .gemini: "要るもの: API キーかサービスアカウント"
+        case .claude: "要るもの: API キー（Claude Console）"
+        case .appleFM: "要るもの: macOS 27 と Apple Intelligence"
+        }
+    }
+}
+
+// 要件: REQ-COM-050
+// 設計判断: DEC-COM-092
 struct OnboardingAIPage: View {
     @ObservedObject var model: OnboardingModel
     @ObservedObject var settings: AppSettings
@@ -297,10 +382,10 @@ struct OnboardingAIPage: View {
         VStack(spacing: 0) {
             OnboardingHeader(
                 symbol: "sparkles", title: "使う AI を選ぶ",
-                subtitle: "話した内容を整える・翻訳する・議事録をまとめるのに使う AI です。あとから設定の「AI」タブで変えられ、音声入力と会議で別々にもできます。")
+                subtitle: "話した内容を整える・翻訳する・議事録をまとめるのに使う AI です。おすすめは、この Mac の中で動く Gemma です。あとから設定の「AI」タブで変えられます。")
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
-                ForEach(TextAIProvider.allCases) { provider in
-                    card(provider)
+                ForEach(OnboardingAIChoice.allCases) { choice in
+                    card(choice)
                 }
             }
             .padding(.horizontal, 28)
@@ -315,31 +400,39 @@ struct OnboardingAIPage: View {
         }
     }
 
-    private func card(_ provider: TextAIProvider) -> some View {
-        let selected = model.chosenAI == provider
-        let unavailable = provider == .appleFM ? appleFM.reason : nil
+    private func card(_ choice: OnboardingAIChoice) -> some View {
+        let selected = model.chosenAI == choice.provider
+        let unavailable = choice == .appleFM ? appleFM.reason : nil
         return Button {
-            model.chooseDefaultAI(provider)
+            model.chooseDefaultAI(choice.provider)
         } label: {
             VStack(alignment: .leading, spacing: 5) {
-                HStack {
-                    Text(provider.label).font(.headline)
+                HStack(spacing: 6) {
+                    Text(choice.title).font(.headline)
+                    if choice.isRecommended {
+                        Text("おすすめ")
+                            .font(.caption.bold())
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 1)
+                            .background(Capsule().fill(Color.accentColor))
+                    }
                     Spacer()
                     Image(systemName: selected ? "checkmark.circle.fill" : "circle")
                         .foregroundStyle(selected ? Color.accentColor : Color.secondary)
                 }
-                Text(Self.tagline(provider)).font(.callout)
+                Text(choice.tagline).font(.callout)
                     .fixedSize(horizontal: false, vertical: true)
-                Label(Self.privacy(provider), systemImage: Self.sendsText(provider) ? "network" : "lock.laptopcomputer")
+                Label(choice.privacy, systemImage: choice.sendsText ? "network" : "lock.laptopcomputer")
                     .font(.caption).foregroundStyle(.secondary)
-                Label(unavailable == nil ? Self.requirement(provider) : "この Mac では使えません（macOS 27 から）",
-                      systemImage: unavailable == nil ? "key" : "exclamationmark.triangle")
+                Label(unavailable == nil ? choice.requirement : "この Mac では使えません（macOS 27 から）",
+                      systemImage: unavailable == nil ? (choice == .gemma ? "arrow.down.circle" : "key") : "exclamationmark.triangle")
                     .font(.caption)
                     .foregroundStyle(unavailable == nil ? Color.secondary : Color.orange)
                     .lineLimit(2)
             }
             .padding(12)
-            .frame(maxWidth: .infinity, minHeight: 104, alignment: .topLeading)
+            .frame(maxWidth: .infinity, minHeight: 118, alignment: .topLeading)
             .contentShape(RoundedRectangle(cornerRadius: 10))
             .background(RoundedRectangle(cornerRadius: 10)
                 .fill(selected ? Color.accentColor.opacity(0.12) : Color.secondary.opacity(0.06)))
@@ -354,7 +447,7 @@ struct OnboardingAIPage: View {
         .opacity(unavailable == nil ? 1 : 0.55)
     }
 
-    /// 選んだ AI の準備の欄（設定の「AI」タブと同じ部品）
+    /// 選んだ AI の準備の欄（Gemini・Claude・Apple は設定の「AI」タブと同じ部品）
     @ViewBuilder private func preparation(for provider: TextAIProvider) -> some View {
         Form {
             switch provider {
@@ -363,48 +456,72 @@ struct OnboardingAIPage: View {
             case .claude:
                 ClaudeKeySection(settings: settings)
             case .local:
-                Section {
-                    AIChoiceRow(settings: settings, purpose: .dictation, showsProviderPicker: false)
-                    AIChoiceRow(settings: settings, purpose: .meeting, showsProviderPicker: false)
-                } header: {
-                    Text("モデルのダウンロード")
-                }
+                OnboardingGemmaDownload()
             case .appleFM:
                 Section("Apple の Foundation Models") { AppleFMChoice() }
             }
-            Text("準備はあとからでもできます（設定 →「AI」）。")
+            Text(provider == .local
+                 ? "音声入力だけ小さく速いモデル（LFM2.5）にするなどは、このあとの「設定の Tips」か、設定 →「AI」で選べます。"
+                 : "準備はあとからでもできます（設定 →「AI」）。")
                 .font(.caption).foregroundStyle(.secondary)
         }
         .formStyle(.grouped)
     }
+}
 
-    static func tagline(_ provider: TextAIProvider) -> String {
-        switch provider {
-        case .gemini: "速くて安い。迷ったらこれ。モデルは自由に指定できます"
-        case .claude: "文章の仕上がりがていねい。Haiku・Sonnet・Opus から選べます"
-        case .local: "この Mac の中で小型の LLM を動かします。無料"
-        case .appleFM: "macOS 27 の Apple Intelligence のモデル。無料"
-        }
-    }
+// 要件: REQ-COM-050
+// 設計判断: DEC-COM-094
+/// Gemma のダウンロードの欄。ボタンで始め、進み具合と中止を出す（設定の「AI」タブと同じ LocalLLMStore を使う）
+struct OnboardingGemmaDownload: View {
+    @ObservedObject var store = LocalLLMStore.shared
+    private let model = OnboardingAIChoice.gemmaModel
+    /// 「メモリ 16 GB 以上向け」（LocalLLMModel.summary）より少ないか
+    private let hasLittleMemory = ProcessInfo.processInfo.physicalMemory < 16 * 1024 * 1024 * 1024
 
-    static func sendsText(_ provider: TextAIProvider) -> Bool {
-        provider == .gemini || provider == .claude
-    }
-
-    static func privacy(_ provider: TextAIProvider) -> String {
-        switch provider {
-        case .gemini: "文章を Google に送ります"
-        case .claude: "文章を Anthropic に送ります（音声は送りません）"
-        case .local, .appleFM: "文章をネットに送りません"
-        }
-    }
-
-    static func requirement(_ provider: TextAIProvider) -> String {
-        switch provider {
-        case .gemini: "要るもの: API キーかサービスアカウント"
-        case .claude: "要るもの: API キー（Claude Console）"
-        case .local: "要るもの: モデルのダウンロード（1〜5 GB ほど）"
-        case .appleFM: "要るもの: macOS 27 と Apple Intelligence"
+    var body: some View {
+        Section {
+            switch store.status(model) {
+            case .notDownloaded:
+                HStack {
+                    Text("まだダウンロードしていません。「ダウンロードして次へ」でも始められます。")
+                        .font(.callout).foregroundStyle(.secondary)
+                    Spacer()
+                    Button("ダウンロード（\(model.sizeLabel)）") { store.ensureDownloaded(model) }
+                }
+            case .downloading(let fraction):
+                HStack {
+                    if let fraction {
+                        ProgressView(value: fraction)
+                        Text("\(Int(fraction * 100))%").font(.callout).monospacedDigit()
+                    } else {
+                        ProgressView().controlSize(.small)
+                        Text("確かめています…").font(.callout)
+                    }
+                    Button("中止") { store.cancelDownload(model) }
+                }
+                Text("ダウンロードは、次のページへ進んでも、このウインドウを閉じても続きます。")
+                    .font(.caption).foregroundStyle(.secondary)
+            case .downloaded:
+                Label("ダウンロード済み。すぐに使えます", systemImage: "checkmark.circle.fill").foregroundStyle(.green)
+            case .failed(let message):
+                HStack {
+                    Text("⚠️ \(message)").font(.callout).foregroundStyle(.red)
+                    Spacer()
+                    Button("もう一度") { store.ensureDownloaded(model) }
+                }
+            }
+            if hasLittleMemory {
+                Label("この Mac のメモリは 16 GB より少ないので、Gemma は遅いかもしれません。そのときは設定 →「AI」で小さいモデルか、ほかの AI に変えてください。",
+                      systemImage: "memorychip")
+                    .font(.caption).foregroundStyle(.orange)
+            }
+            HStack(spacing: 4) {
+                Text("\(model.summary)。\(model.licenseNote)")
+                Link("ライセンス", destination: model.licenseURL)
+            }
+            .font(.caption).foregroundStyle(.secondary)
+        } header: {
+            Text("\(model.name) をダウンロードする（音声入力と会議の両方で使います）")
         }
     }
 }
@@ -563,7 +680,14 @@ struct OnboardingTipsPage: View {
 /// 最後のページ。自動入力（アクセシビリティ）と録音（マイク・音声認識）の許可を、ここで求める
 struct OnboardingPermissionsPage: View {
     @ObservedObject var settings: AppSettings
+    @ObservedObject var store = LocalLLMStore.shared
     @State private var refresh = 0
+
+    private var usesGemma: Bool {
+        TextAIPurpose.allCases.contains {
+            settings.aiProvider(for: $0) == .local && settings.localModel(for: $0) == OnboardingAIChoice.gemmaModel
+        }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -610,6 +734,11 @@ struct OnboardingPermissionsPage: View {
                     LabeledContent("使う AI") {
                         Text(aiSummary).foregroundStyle(.secondary)
                     }
+                    // 要件: REQ-COM-050
+                    // 設計判断: DEC-COM-094
+                    if usesGemma, store.status(OnboardingAIChoice.gemmaModel) != .downloaded {
+                        OnboardingGemmaDownloadStatus(store: store)
+                    }
                     Label("「はじめる」を押したら、入力したい場所で \(settings.hotKey.displayString) を押して話してみてください。",
                           systemImage: "mic.fill")
                     Label("この説明は、メニューの「Hanasu の使い方…」でいつでも開けます。", systemImage: "book")
@@ -626,9 +755,12 @@ struct OnboardingPermissionsPage: View {
     }
 
     private var aiSummary: String {
-        let dictation = "\(settings.aiProvider(for: .dictation).name)（\(settings.textModel(for: .dictation))）"
-        let meeting = "\(settings.aiProvider(for: .meeting).name)（\(settings.textModel(for: .meeting))）"
-        return "音声入力 \(dictation)・会議 \(meeting)"
+        func label(_ purpose: TextAIPurpose) -> String {
+            let provider = settings.aiProvider(for: purpose)
+            let model = provider == .local ? settings.localModel(for: purpose).name : settings.textModel(for: purpose)
+            return "\(provider.name)（\(model)）"
+        }
+        return "音声入力 \(label(.dictation))・会議 \(label(.meeting))"
     }
 
     private func row(title: String, detail: String, granted: Bool, actionTitle: String,
@@ -647,6 +779,34 @@ struct OnboardingPermissionsPage: View {
                 Text("許可済み").foregroundStyle(.secondary)
             } else {
                 Button(actionTitle, action: action)
+            }
+        }
+    }
+}
+
+/// 最後のページの、Gemma のダウンロードの進み具合（終わっていないときだけ出す）
+private struct OnboardingGemmaDownloadStatus: View {
+    @ObservedObject var store: LocalLLMStore
+    private let model = OnboardingAIChoice.gemmaModel
+
+    var body: some View {
+        LabeledContent("\(model.name) のダウンロード") {
+            switch store.status(model) {
+            case .downloading(let fraction):
+                HStack {
+                    if let fraction {
+                        ProgressView(value: fraction).frame(width: 140)
+                        Text("\(Int(fraction * 100))%").monospacedDigit()
+                    } else {
+                        ProgressView().controlSize(.small)
+                    }
+                }
+            case .failed:
+                Button("もう一度") { store.ensureDownloaded(model) }
+            case .notDownloaded:
+                Button("ダウンロード（\(model.sizeLabel)）") { store.ensureDownloaded(model) }
+            case .downloaded:
+                Text("済み")
             }
         }
     }
@@ -699,9 +859,10 @@ final class OnboardingWindowController: NSObject, NSWindowDelegate {
 
 // 確かめ方: REQ-COM-050, REQ-COM-051
 //   Hanasu --render-onboarding <出力フォルダ> [--page welcome|ai|dictation|meeting|words|tips|permissions]
-//          [--ai gemini|claude|local|apple] [--dark]
+//          [--ai gemini|claude|local|apple] [--downloading] [--dark]
 //     オンボーディングの各ページを <出力フォルダ>/<番号>-<ページ>.png に書き出す（--page でそのページだけ）。
-//     --ai を付けると、その AI を選んだあとの見た目（AI のページの準備の欄など）になる。設定は終わったら元に戻す
+//     --ai を付けると、その AI を選んだあとの見た目（AI のページの準備の欄など）になる。設定は終わったら元に戻す。
+//     --downloading で、Gemma（--ai local）のダウンロード中の見た目にする（ダウンロードはしない）
 @MainActor
 enum OnboardingCLI {
     static func runIfRequested() {
@@ -719,6 +880,10 @@ enum OnboardingCLI {
         let chosen = value(after: "--ai", in: args).flatMap(TextAIProvider.init(rawValue:))
         let settings = AppSettings.shared
         let saved = (settings.dictationAIProvider, settings.meetingAIProvider)
+        let savedLocal = (settings.localDictationModel, settings.localMeetingModel)
+        if args.contains("--downloading") {
+            LocalLLMStore.shared.showDownloadingForRendering(OnboardingAIChoice.gemmaModel, fraction: 0.42)
+        }
         for page in pages {
             let model = OnboardingModel()
             model.page = page
@@ -730,6 +895,8 @@ enum OnboardingCLI {
         }
         settings.dictationAIProvider = saved.0
         settings.meetingAIProvider = saved.1
+        settings.localDictationModel = savedLocal.0
+        settings.localMeetingModel = savedLocal.1
         exit(0)
     }
 

@@ -164,16 +164,17 @@
 - 実装の場所: `AppPresence`、`AppPresenceSettings`、`AppPresenceSettingsSection`、`AppDelegate.applyPresence`、`AppDelegate.applicationDockMenu`
 - 確かめ方: `.build/debug/Hanasu --render-presence-settings /tmp/presence.png`（設定の欄）。切り替えは実機で確かめる（`.app` を起動して 3 つを順に選び、Dock・メニューバー・⌘Tab・Dock のメニューを見る）
 
-### REQ-COM-050 初回起動時に、整形などに使う既定の AI をその場で選ばせる（Mac）
-- 内容: Hanasu を初めて起動したとき、オンボーディングの中で、整形・翻訳・議事録などに使う既定の AI（Gemini / Claude / ローカル / Apple）を選ばせ、その AI を使う準備（API キー・サービスアカウント・ローカルのモデルのダウンロード）もその画面でできるようにする。選んだ AI は設定に保存する。
+### REQ-COM-050 初回起動時に、整形などに使う既定の AI をその場で選ばせる。おすすめ（既定）は Gemma 4 E4B で、チュートリアルの中で選んでダウンロードする（Mac）
+- 内容: Hanasu を初めて起動したとき、オンボーディングの中で、整形・翻訳・議事録などに使う既定の AI を選ばせる。おすすめ（既定）は、この Mac の中で動く Gemma 4 E4B。Gemma はモデルのダウンロードが要るので、黙って最初から選んでおくのではなく、チュートリアルの中でユーザーが Gemma を選び、その場でダウンロードする。ほかの AI（Gemini / Claude / Apple）も選べ、その AI を使う準備（API キー・サービスアカウント）もその画面でできる。選んだ AI は設定に保存する。
 - 受け入れ条件:
-  - 初回起動で開くオンボーディングに「使う AI を選ぶ」ページがあり、4 つの AI がそれぞれの特徴（速さ・費用・文章をネットに送るか・要る準備）とともに並ぶ。どれかを選ぶまで、そのページから先へ進めない。
-  - 選ぶと、音声入力と会議の両方の AI（設定の「AI」→「使う AI とモデル」）がその AI になり、その場で保存される（「AI」タブを開くと同じ選択になっている）。
-  - 選んだ AI に要る準備の欄が同じページに出る: Gemini は API キーかサービスアカウント、Claude は API キー、ローカルはモデルの選択とダウンロード、Apple は使えるかどうかと理由。準備はあとからでもよい（設定の「AI」でできる）。
-- 出典: ユーザーの依頼（2026-11-04「初回起動時にデフォルトのAIを選択させるようにして」）
+  - 初回起動で開くオンボーディングに「使う AI を選ぶ」ページがあり、いちばん上（左上）に「おすすめ」の印を付けた Gemma 4 E4B のカード、続いて Gemini・Claude・Apple のカードが、それぞれの特徴（文章をネットに送るか・要る準備）とともに並ぶ。はじめはどれも選ばれておらず、どれかを選ぶまで、そのページから先へ進めない。
+  - Gemma を選ぶと、音声入力と会議の両方の AI が「ローカル」の Gemma 4 E4B になり、その場で保存される（設定の「AI」タブを開くと同じ選択になっている）。同じページに、ダウンロードの大きさ・進み具合・中止のボタンが出る。まだダウンロードしていなければ「次へ」は「ダウンロードして次へ」になり、押すとダウンロードを始めて次のページへ進む。ダウンロードは、次のページを見ている間も続く。
+  - ほかの AI を選ぶと、音声入力と会議の両方がその AI になり、その AI に要る準備の欄が同じページに出る: Gemini は API キーかサービスアカウント、Claude は API キー、Apple は使えるかどうか。準備はあとからでもよい（設定の「AI」でできる）。
+  - 最後のページで、Gemma のダウンロードがまだ終わっていなければ、その進み具合が分かる。
+- 出典: ユーザーの依頼（2026-11-04「初回起動時にデフォルトのAIを選択させるようにして」）。同じ日の追加の依頼「デフォルトのモデルはgemmaにしてください。ただし、gemmaはモデルをダウンロードする必要があるので、何も言わずに（Gemma を）最初に選択するのではなく、チュートリアルの中で（Gemma を選択）して、ダウンロードするというプロセスを採用してください」（音声入力で「Gemma」が「現場」と書き起こされていたのを直して引いた）
 - 対象: Mac（Windows 版は対象外。FUT-003）
-- 実装の場所: `OnboardingAIPage`、`OnboardingModel.chooseDefaultAI`、`AISettingsTab` の `AIChoiceRow`・`ClaudeKeySection`・`GeminiAuthSection`
-- 確かめ方: `.build/debug/Hanasu --render-onboarding /tmp/onboarding`（各ページの画像。`--ai claude|local|apple` で選んだあとの準備の欄）。初回の表示と保存は実機で確かめる（`defaults delete` で初回の状態に戻して起動する）
+- 実装の場所: `OnboardingAIPage`、`OnboardingAIChoice`、`OnboardingGemmaDownload`、`OnboardingModel.chooseDefaultAI`・`next`、`AISettingsTab` の `ClaudeKeySection`・`GeminiAuthSection`
+- 確かめ方: `.build/debug/Hanasu --render-onboarding /tmp/onboarding`（各ページの画像。`--ai local|gemini|claude` で選んだあとの準備の欄、`--downloading` で Gemma のダウンロード中）。初回の表示・保存・ダウンロードは実機で確かめる
 
 ### REQ-COM-051 初回起動時に、主な機能と設定の Tips を説明するオンボーディングを出す（Mac）
 - 内容: 初めて起動したとき、ページをめくって進むオンボーディングのウインドウを出し、主な機能（音声入力・翻訳して入力・選択を声で編集・最後の結果の再入力・会議の記録・履歴・辞書・スニペット・アプリ別の文体）の使い方と、設定の Tips（AI とモデルを選べる、マイクを選べる、文字起こしのエンジンを選べる など）を見せる。Tips のうち AI とモデルは、その画面の中で選べる。2 回目以降の起動では出さない。
@@ -604,7 +605,7 @@
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
 
 ### DEC-COM-067 ローカルを選んだときの既定のモデルは、音声入力は LFM2.5、会議は Gemma 4 E4B
-- 決めたこと: 用途の AI を初めて「ローカル」にしたときのモデルは、音声入力は LFM2.5-1.2B-JP、会議は Gemma 4 E4B。AI の既定（Gemini）は変えない。
+- 決めたこと: 用途の AI を初めて「ローカル」にしたときのモデルは、音声入力は LFM2.5-1.2B-JP、会議は Gemma 4 E4B。AI の既定（Gemini）は変えない。ただし、Mac のオンボーディングで Gemma を選んだときは、音声入力も Gemma 4 E4B にする（DEC-COM-092）。
 - 理由: 音声入力は待ち時間が短いことを優先し、小さくて日本語の指示に強い LFM2.5（J-MIFEval 79.08）にした。議事録は長い文字起こしをまとめるので、3 つのうちいちばん大きく 128K まで読める Gemma 4 E4B にした。
 - 決めた場面: ローカル LLM に対応した PR
 - 関係する要件: REQ-COM-030
@@ -677,13 +678,13 @@
 - 対象: Mac
 - 実装の場所: `AppDelegate.populateMenu`、`AppDelegate.makeMainMenu`、`AppDelegate.openOnboarding`
 
-### DEC-COM-092 オンボーディングは 7 ページにし、AI の選択は音声入力と会議の両方に当て、どれかを選ぶまで先に進めない
-- 決めたこと: ページは「ようこそ」「使う AI を選ぶ」「音声入力」「会議の記録」「履歴・辞書・スニペット」「設定の Tips」「許可と準備」の 7 つ。大きさを変えられないウインドウ（640×600）で、下に「戻る」「次へ」とページの点を置く。AI のページでは、4 つの AI のカードのうち、そのページで押したものを選んだことにし（今の設定の値は、はじめは選んだ印を付けない）、押すまで「次へ」を押せない。押すと `dictationAIProvider` と `meetingAIProvider` の両方をその AI にする。Apple の Foundation Models が使えない Mac（`AppleFMAvailability` が理由を返す。macOS 27 より前など）では、そのカードを薄くして押せなくし、理由はカードの上に指を置くと出す。モデルは各 AI の既定のまま（REQ-COM-023、DEC-COM-005、DEC-COM-067、DEC-MTG-014）にし、変えたい人には「設定の Tips」のページの欄（設定の「AI」タブと同じ `AIChoiceRow`）で選ばせる。準備の欄は設定の「AI」タブの部品をそのまま使う。
-- 理由: 依頼は「デフォルトの AI を選択させる」なので、今の既定（Gemini）を黙って使わせず、一度は自分で選ばせる。初めての人に用途ごとの選び分けを先に求めると迷うので、まず 1 つ選ばせ、別々にできることは Tips で見せる。部品を共有して、設定画面と見た目・保存先・文言が食い違わないようにする。
-- 決めた場面: オンボーディングを入れた PR（REQ-COM-050・051）
-- 関係する要件: REQ-COM-050, REQ-COM-051, REQ-COM-024
+### DEC-COM-092 オンボーディングは 7 ページにし、AI の選択は音声入力と会議の両方に当て、どれかを選ぶまで先に進めない。Gemma を選んだら両方を Gemma 4 E4B にする
+- 決めたこと: ページは「ようこそ」「使う AI を選ぶ」「音声入力」「会議の記録」「履歴・辞書・スニペット」「設定の Tips」「許可と準備」の 7 つ。大きさを変えられないウインドウ（640×600）で、下に「戻る」「次へ」とページの点を置く。AI のページのカードは「Gemma 4 E4B（おすすめ）」「Gemini」「Claude」「Apple」の 4 つ。そのページで押したものを選んだことにし（今の設定の値には、はじめは選んだ印を付けない）、押すまで「次へ」を押せない。押すと `dictationAIProvider` と `meetingAIProvider` の両方をその AI にする。Gemma のときは `localDictationModel` と `localMeetingModel` も両方 Gemma 4 E4B にする（DEC-COM-067 の音声入力の既定 LFM2.5 より優先する）。Gemini・Claude のモデルは各 AI の既定のまま（REQ-COM-023、DEC-COM-005、DEC-MTG-014）。モデルを変えたい人（音声入力だけ速い LFM2.5 にする など）には「設定の Tips」のページの欄（設定の「AI」タブと同じ `AIChoiceRow`）で選ばせる。準備の欄は設定の「AI」タブの部品をそのまま使う。Apple の Foundation Models が使えない Mac（`AppleFMAvailability` が理由を返す。macOS 27 より前など）では、そのカードを薄くして押せなくし、理由はカードの上に指を置くと出す。アプリの設定の既定（オンボーディングを通らないときの値）は Gemini のまま変えない（DEC-COM-040）。
+- 理由: 依頼が「デフォルトの AI を選択させる」「デフォルトのモデルは Gemma」「黙って最初に選ばず、チュートリアルの中で選んでダウンロードする」なので、Gemma を「おすすめ」としていちばん目立つ場所に置きつつ、選ぶのはユーザーに任せる。用途ごとに別のモデルにすると 2 つ（Gemma と LFM2.5 で約 5.8 GB）をダウンロードすることになるので、両方 Gemma にして 1 回（約 4.6 GB）で済ませる。設定の既定を Gemma に変えると、ダウンロードしていない人（オンボーディングを閉じた人や、以前から既定の Gemini で使っている人）の整形が黙って失敗するようになるので、変えない。初めての人に用途ごとの選び分けを先に求めると迷うので、まず 1 つ選ばせ、別々にできることは Tips で見せる。部品を共有して、設定画面と見た目・保存先・文言が食い違わないようにする。
+- 決めた場面: オンボーディングを入れた PR #53（REQ-COM-050・051）。Gemma をおすすめにしたのも同じ PR
+- 関係する要件: REQ-COM-050, REQ-COM-051, REQ-COM-024, REQ-COM-030
 - 対象: Mac
-- 実装の場所: `OnboardingPage`、`OnboardingAIPage`、`OnboardingTipsPage`、`OnboardingModel`
+- 実装の場所: `OnboardingPage`、`OnboardingAIChoice`、`OnboardingAIPage`、`OnboardingTipsPage`、`OnboardingModel.chooseDefaultAI`
 
 ### DEC-COM-093 初回の起動では、設定画面とアクセシビリティの許可の代わりにオンボーディングを出す
 - 決めたこと: オンボーディングを出す起動では、設定画面を開かず、起動時のアクセシビリティの許可のダイアログも出さない（DEC-COM-009 の例外）。許可は、オンボーディングの最後のページのボタンで求める。2 回目からの起動は DEC-COM-009 のまま。オンボーディングを出している間に Finder や Dock から開き直したときは、設定画面ではなくオンボーディングを前に出す。
@@ -692,6 +693,14 @@
 - 関係する要件: REQ-COM-051, REQ-DIC-004
 - 対象: Mac
 - 実装の場所: `AppDelegate.applicationDidFinishLaunching`、`AppDelegate.applicationShouldHandleReopen`、`OnboardingPermissionsPage`
+
+### DEC-COM-094 Gemma のダウンロードは、ボタンで始め、終わるのを待たずに次へ進める
+- 決めたこと: Gemma のカードを押しただけではダウンロードを始めない。AI のページのダウンロードの欄の「ダウンロード（4.59 GB）」か、「次へ」の代わりに出す「ダウンロードして次へ」を押したときに始める（`LocalLLMStore.ensureDownloaded`。設定の「AI」タブのダウンロードと同じ処理で、同じ進み具合が見える）。始めたら、終わるのを待たずにほかのページへ進め、ダウンロードはウインドウを閉じても続く。進み具合は AI のページと最後のページに出し、中止もできる。この Mac のメモリが 16 GB より少ないときは、Gemma が重いかもしれないことを欄に書く（選べなくはしない）。
+- 理由: 約 4.6 GB を、押した意味の分からないうちに落とし始めないようにする（カードを試しに押す人もいる）。ダウンロードには数分かかるので、待たせずに残りの説明を読んでもらう。メモリの少ない Mac では動くが遅いので、選ぶ前に分かるようにする（LocalLLMModel の説明の「メモリ 16 GB 以上向け」）。
+- 決めた場面: PR #53
+- 関係する要件: REQ-COM-050
+- 対象: Mac
+- 実装の場所: `OnboardingGemmaDownload`、`OnboardingModel.next`、`OnboardingPermissionsPage`
 
 ### DEC-COM-100 Windows 版は C# / .NET 8 / WPF で作り、OS に依存しない部分を分ける
 - 決めたこと: `windows/` に C# 12 / .NET 8（LTS）/ WPF で作る（ターゲットは `net8.0-windows10.0.19041.0`）。プロンプト・Gemini・JWT・辞書・設定・音声の変換・状態遷移は OS に依存しない `Hanasu.Core`（net8.0）に置き、Mac でも `dotnet test` で確かめる。Whisper（`Hanasu.Whisper`）と話者分離（`Hanasu.Diarization`）も net8.0 に分ける。
