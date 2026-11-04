@@ -361,6 +361,14 @@ final class EditModeController {
             // 編集の結果は履歴に残らない（DEC-DIC-036）ので、ここで失わないよう全文を残す
             hud.hide()
             PasteFallbackPanel.shared.show(text: output, subject: .edit, clipboardKept: clipboardKept)
+        case .unconfirmed(let clipboardKept):
+            if clipboardKept {
+                hud.show(.error(TextInserter.unconfirmedMessage(clipboardKept: true, subject: "書き換えた文章")))
+            } else {
+                // 編集の結果は履歴に残らない（DEC-DIC-036）ので、クリップボードにも残せなかったときは全文を残す
+                hud.hide()
+                PasteFallbackPanel.shared.show(text: output, subject: .edit, clipboardKept: false)
+            }
         case .pasted:
             hud.show(.done("書き換えました（⌘Z で元に戻せます）"))
         }

@@ -50,7 +50,7 @@ final class DictationHistoryUI: NSObject {
         if hotKeyID == nil { onHotKeyRegistrationFailed(combo) }
     }
 
-    // 要件: REQ-DIC-062, REQ-DIC-080
+    // 要件: REQ-DIC-062, REQ-DIC-080, REQ-DIC-083, REQ-DIC-084
     // 設計判断: DEC-DIC-077, DEC-DIC-096
     /// 最後の結果を、いま前面にあるアプリへもう一度入力する
     @objc func repasteLast() {
@@ -73,6 +73,11 @@ final class DictationHistoryUI: NSObject {
                 hud.show(.error("アクセシビリティが許可されていないため、クリップボードにコピーしました。⌘V で貼り付けてください。"))
             case .notPasted(let clipboardKept):
                 PasteFallbackPanel.shared.show(text: last.output, subject: .result, clipboardKept: clipboardKept)
+            case .unconfirmed(let clipboardKept):
+                hud.show(.error(TextInserter.unconfirmedMessage(clipboardKept: clipboardKept)))
+                if PasteFallbackSettings.shared.openHistoryWhenUnconfirmed {
+                    openWindow(selecting: last.id)
+                }
             }
         }
     }
@@ -121,9 +126,17 @@ final class DictationHistoryUI: NSObject {
 
     // MARK: - ウインドウ
 
-    func openWindow() {
+    // 要件: REQ-DIC-084
+    // 設計判断: DEC-DIC-099
+    /// 履歴のウインドウを開く。selecting を渡すと、検索と絞り込みを外してその項目を選んだ状態で開く
+    func openWindow(selecting id: UUID? = nil) {
+        if let id, let window {
+            let frame = window.frame
+            window.contentViewController = NSHostingController(rootView: DictationHistoryView(store: store, selection: id))
+            window.setFrame(frame, display: false)
+        }
         if window == nil {
-            let window = NSWindow(contentViewController: NSHostingController(rootView: DictationHistoryView(store: store)))
+            let window = NSWindow(contentViewController: NSHostingController(rootView: DictationHistoryView(store: store, selection: id)))
             window.title = "Hanasu 音声入力の履歴"
             window.styleMask = [.titled, .closable, .resizable, .miniaturizable]
             window.setContentSize(NSSize(width: 900, height: 580))

@@ -286,6 +286,29 @@
   - 実機で確かめる（英語と日本語の混ざった発話を、両方の設定で入力する）
   - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~JapaneseOutputLanguage|FullyQualifiedName~RefineOutputLanguage"`（指示の文面が Mac 版と同じこと、設定の保存）
 
+### REQ-DIC-083 貼り付けが届かなかったときは、最新の結果をクリップボードに残す
+- 内容: ⌘V を送っても貼り付け先がクリップボードを受け取らなかったとき（録音中に別のウインドウへ移った・カーソルが入力欄から外れたなど）は、元のクリップボードに戻さず、最新の結果をクリップボードに入れたままにする。入力したい場所で ⌘V を押せば、その結果が貼れる。貼り付け先が遅れて受け取ったときも、古いクリップボードの中身ではなく最新の結果が入る。
+- 受け入れ条件:
+  - 貼り付けが届かなかったとき、HUD で知らせ、そのあと ⌘V を押すと最新の結果が入る（それまでのクリップボードの中身ではない）。
+  - 貼り付けが届いたときは、今までどおり元のクリップボードに戻す（DEC-DIC-013）。
+  - 待つ間にユーザーが別のものをコピーしたら、そちらを上書きしない。
+  - 音声入力・選択を声で編集・「最後の結果をもう一度入力」のどれでも同じ。
+- 出典: ユーザーの依頼（2026-11-04「カーソルやウィンドウが別のところに行ってうまくいかなかった時に、最新の入力した内容をクリップボードにコピーするようにしてください。今はなんか別のものが入力されてしまっていました」）
+- 対象: Mac
+- 実装の場所: `TextInserter.insert`（`Outcome.unconfirmed`）、`PasteDataProvider`、`DictationController.finishDictation`、`EditModeController.finish`、`DictationHistoryUI.repasteLast`
+- 確かめ方: `.build/debug/Hanasu --test-paste-confirm`（別のプロセスが読んだか・時間切れ・待つ間のコピー。ふだんのクリップボードには触らない）。実際のアプリへの貼り付けは実機で確かめる
+
+### REQ-DIC-084 貼り付けが届かなかったときに、音声入力の履歴を開ける（設定）
+- 内容: REQ-DIC-083 のとき、音声入力の履歴のウインドウを開き、その結果を選んだ状態にするかを設定で選べる。既定はオフ。
+- 受け入れ条件:
+  - 設定の「一般」→「貼り付けが届かなかったとき」→「音声入力の履歴を開く」で選べる。
+  - オンのとき、貼り付けが届かなかったら履歴のウインドウが開き、最新の結果が選ばれている（検索・絞り込みは外れる）。
+  - オフのとき、また貼り付けが届いたときは、ウインドウは開かない。
+- 出典: ユーザーの依頼（2026-11-04「オプションで、入力がうまくいかなかった時に音声入力の履歴を表示するというオプションも作成してください」）
+- 対象: Mac
+- 実装の場所: `PasteFallbackSettings.openHistoryWhenUnconfirmed`、`PasteUnconfirmedSettingsSection`、`DictationController.onOpenHistory`、`DictationHistoryUI.openWindow(selecting:)`、`DictationHistoryUI.repasteLast`
+- 確かめ方: `.build/debug/Hanasu --render-paste-fallback-settings /tmp/fallback-settings.png`（設定の欄）。ウインドウが開くのは実機で確かめる
+
 ### REQ-DIC-140 音声入力で使うマイクを選べる（録音中の HUD でも切り替えられる）
 - 内容: 音声入力（と選択を声で編集）で使うマイクを、つながっているマイクから選べる。選ばなければシステムの設定のマイクを使う。録音中の HUD のマイクのボタンからも選べ、録音を止めずにそのマイクに切り替わる。
 - 受け入れ条件:
@@ -399,7 +422,7 @@
 - 実装の場所: `DictationController.handleHotKey`
 
 ### DEC-DIC-013 入力はクリップボードと ⌘V で行い、元のクリップボードを戻す
-- 決めたこと: クリップボードの中身を退避し、文章を置いて `CGEvent` で ⌘V を送り、約 0.4 秒後に元に戻す（その間にユーザーがコピーしたら戻さない）。置く項目には `org.nspasteboard.TransientType` / `ConcealedType` を付ける。送る前に入力できる場所があるかを確かめ、ないと分かったときは貼り付けずに返す（DEC-DIC-091、REQ-DIC-080）。
+- 決めたこと: クリップボードの中身を退避し、文章を置いて `CGEvent` で ⌘V を送り、貼り付け先が読んだのを確かめてから（⌘V から 0.4 秒以上たってから）元に戻す（その間にユーザーがコピーしたら戻さない）。読まれなかったときは戻さない（DEC-DIC-098、REQ-DIC-083）。置く項目には `org.nspasteboard.TransientType` / `ConcealedType` を付ける。送る前に入力できる場所があるかを確かめ、ないと分かったときは貼り付けずに返す（DEC-DIC-091、REQ-DIC-080）。
 - 理由: Accessibility API での書き込みはアプリによって効かず、1 文字ずつのキー入力は IME と干渉する。ほぼどのアプリでも動く方法にした。印はクリップボード履歴アプリに残りにくくするため。
 - 決めた場面: 初版（a787da8）
 - 関係する要件: REQ-DIC-004
@@ -1001,6 +1024,23 @@
 - 関係する要件: REQ-DIC-080, REQ-DIC-062
 - 対象: Mac
 - 実装の場所: `EditModeController.finish`、`DictationHistoryUI.repasteLast`
+
+### DEC-DIC-098 貼り付けが届いたかは、クリップボードの文字を遅延して渡し、読まれたかで見る
+- 決めたこと: 貼り付けるときは、文字を `NSPasteboardItemDataProvider`（`PasteDataProvider`）で遅延して置き、貼り付け先が読んだとき（provider が呼ばれたとき）に渡す。⌘V から 1.5 秒以内に読まれれば届いたとみなし、⌘V から 0.4 秒以上たってから元のクリップボードに戻す。読まれなければ届かなかったとみなし、元に戻さず、結果を（遅延ではなく）印を付けて置き直して `.unconfirmed(clipboardKept: true)` を返す。待つ間にユーザーがコピーしたら（changeCount が変わったら）そのままにし、読まれていなければ `.unconfirmed(clipboardKept: false)`。届かなかったときは HUD で ⌘V で貼れることを知らせる。選択を声で編集した結果は履歴に残らない（DEC-DIC-036）ので、クリップボードにも残せなかったときは `PasteFallbackPanel` に出す。届かなかったときの扱いは、「入力できる場所がないとき」の設定（REQ-DIC-081）に関わらず、いつもクリップボードに残す。
+- 理由: 入力先がずれたかを AX で前もって見分けるのは、Electron などで当てにならない（DEC-DIC-091・092）。貼り付けた結果そのものを確かめる方が確か。以前の「0.4 秒で戻す」では、ウインドウを移る途中などで貼り付け先が遅れて読むと、戻したあとの古い中身が入っていた（依頼の「別のものが入力されてしまっていました」）。読まれるまで待てば、遅れて読んだときも最新の結果が入る。届かなかったときにクリップボードに残すのは、依頼どおり ⌘V で取り戻せるようにするため。置き直すのは、遅延のままだと Hanasu を終えたときに中身が消えるため。
+- 限界: クリップボード履歴アプリが印（TransientType / ConcealedType）を見ずに中身を読むと、貼り付けが届かなくても「届いた」とみなす（今までと同じく元に戻る）。1.5 秒より遅れて読むアプリでは、届いても「届かなかった」と知らせる（中身は最新の結果なので、貼られるものは正しい）。
+- 決めた場面: このPR（2026-11-04 の依頼）
+- 関係する要件: REQ-DIC-083, REQ-DIC-004
+- 対象: Mac
+- 実装の場所: `TextInserter.insert`、`TextInserter.waitForRead`、`PasteDataProvider`、`EditModeController.finish`
+
+### DEC-DIC-099 届かなかったときに履歴を開く設定は既定でオフにし、「一般」タブに置く
+- 決めたこと: 設定は `PasteFallbackSettings.openHistoryWhenUnconfirmed`（UserDefaults の `pasteUnconfirmedOpenHistory`、既定はオフ）に持ち、「一般」タブの「入力できる場所がないとき」の下の「貼り付けが届かなかったとき」で切り替える。開くときは `DictationHistoryUI.openWindow(selecting:)` で、その結果を選んだ履歴のビューを作り直して（検索と絞り込みは外れる）、アプリを前面に出す。開くのは REQ-DIC-083 のとき（音声入力と「最後の結果をもう一度入力」）だけで、入力できる場所がないとき（REQ-DIC-080）は今までどおりパネルだけを出す。選択を声で編集した結果は履歴に残らない（DEC-DIC-036）ので開かない。
+- 理由: 履歴のウインドウはアプリを前面に出してフォーカスを奪うので、望む人だけが選べるようにした（依頼も「オプションで」）。入力できる場所がないときは、パネルに全文が出ていて履歴まで開くと重なるため。貼り付けの設定と並べた方が見つけやすい。
+- 決めた場面: このPR（2026-11-04 の依頼）
+- 関係する要件: REQ-DIC-084
+- 対象: Mac
+- 実装の場所: `PasteFallbackSettings`、`PasteUnconfirmedSettingsSection`、`DictationHistoryUI.openWindow(selecting:)`、`DictationController.finishDictation`
 
 ### DEC-DIC-100 Whisper / Gemini では、録音を止めてからまとめて文字起こしする
 - 決めたこと: 録音中は `AVAudioEngine` のタップで 16 kHz モノラルに変換してためておき、止めたらまとめて文字起こしする。そのあとは Mac 標準と同じ流れ（辞書の置き換え → スニペット → 整形・英訳 → 履歴 → 入力）。0.3 秒に満たない録音は押し間違いとして扱う。

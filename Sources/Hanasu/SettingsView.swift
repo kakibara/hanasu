@@ -86,6 +86,7 @@ private struct GeneralTab: View {
             TranscriptionEngineSettingsSection(settings: settings)
             // 入力できる場所がないときのクリップボードの扱い（PasteFallbackPanel.swift）
             PasteFallbackSettingsSection()
+            PasteUnconfirmedSettingsSection()
             // 要件: REQ-COM-040
             // アイコンを出す場所（メニューバー / Dock / 両方。AppPresence.swift）
             AppPresenceSettingsSection()
