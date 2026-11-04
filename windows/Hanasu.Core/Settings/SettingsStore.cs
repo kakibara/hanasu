@@ -109,6 +109,8 @@ public sealed class SettingsStore
         {
             s.TranslateHotKey = s.HotKey == HotKeyCombo.DefaultTranslate ? HotKeyCombo.DefaultDictation : HotKeyCombo.DefaultTranslate;
         }
+        // 設計判断: DEC-DIC-027
+        s.TranslationLanguages = Dictation.TranslationLanguages.Normalize(s.TranslationLanguages);
         s.MicrophoneDeviceId ??= "";
         NormalizeMeeting(s);
         s.WhisperModel = Transcription.WhisperModelCatalog.Find(s.WhisperModel)?.Id ?? "small";

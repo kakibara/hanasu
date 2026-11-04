@@ -88,20 +88,35 @@
 ### REQ-DIC-010 話した日本語を、英語に翻訳して入力するモード
 - 内容: 音声入力のモードとして、話した内容を英語に翻訳して入力するモードを持つ。専用のショートカットかメニューで始める。
 - 受け入れ条件: 英訳のモードで日本語で話すと、自然な英語の文章が入力される。
-- 出典: 2026-11-02 のユーザーの依頼「音声入力モードで、話した内容を英語に翻訳して出力するモード」（80d77fc）
+- 出典: 2026-11-02 のユーザーの依頼「音声入力モードで、話した内容を英語に翻訳して出力するモード」（80d77fc）。翻訳先に日本語を足し、言語を設定で選べるようにしたのは REQ-DIC-013
 - 対象: Mac / Windows
-- 実装の場所: `GeminiClient.translateToEnglish`、`GeminiClient.translationInstruction`、`DictationController.Mode`
+- 実装の場所: `GeminiClient.translate`、`GeminiClient.translationInstruction`、`DictationController.Mode`
 - Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`、`windows/Hanasu.Core/Dictation/DictationController.cs`
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>" --translate`
 
-### REQ-DIC-011 録音の終わりに HUD で English を選ぶと、英語で出力する
-- 内容: 録音中の HUD に「話した言語 ／ English」の切り替えを出し、録音を止めた時点で選んでいる言語で入力する。
-- 受け入れ条件: 日本語で始めた録音でも、止める前に HUD の「English」を押せば英訳が入力される（逆も同じ）。
-- 出典: 2026-11-02 のユーザーの依頼「音声入力が終わったときに UI で英語を選ぶと英語で出力される」（80d77fc）
+### REQ-DIC-011 録音の終わりに HUD で翻訳の言語を選ぶと、その言語で出力する
+- 内容: 録音中の HUD に「話した言語」と、設定で選んだ翻訳の言語（REQ-DIC-013。既定は English だけ）の切り替えを出し、録音を止めた時点で選んでいる言語で入力する。
+- 受け入れ条件:
+  - 日本語で始めた録音でも、止める前に HUD の「English」を押せば英訳が入力される（逆も同じ）。
+  - 翻訳の言語に日本語も選んでいると、HUD に「話した言語 ／ English ／ 日本語」が出て、「日本語」を押せば日本語に訳して入力される。
+- 出典: 2026-11-02 のユーザーの依頼「音声入力が終わったときに UI で英語を選ぶと英語で出力される」（80d77fc）。日本語を足したのは 2026-11-04 のユーザーの依頼（REQ-DIC-013）
 - 対象: Mac / Windows
 - 実装の場所: `DictationController.selectOutputLanguage`、`HUDPanel.swift` の `LanguageSwitch`
 - Windows の実装: `windows/Hanasu.Windows/Views/HudWindow.xaml.cs`、`windows/Hanasu.Core/Dictation/DictationController.cs`
-- 確かめ方: `.build/debug/Hanasu --render-hud /tmp/hud.png --translate` で見た目。クリックは実機で確かめる
+- 確かめ方: `.build/debug/Hanasu --render-hud /tmp/hud.png --translate [--translate-to ja] [--languages en,ja]` で見た目。クリックは実機で確かめる。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~DictationControllerTests"`
+
+### REQ-DIC-013 翻訳の言語（英語・日本語）を設定で複数選べ、選んだ言語に翻訳して入力する
+- 内容: 翻訳して入力するときの言語に、英語と日本語を持つ。設定で翻訳の言語を複数選べ、選んだ言語に翻訳できる。既定は英語だけ。
+- 受け入れ条件:
+  - 初めて使うとき（今までの設定から移ったときも）は英語だけが選ばれていて、HUD・メニュー・ショートカットは今までどおり「話した言語 ／ English」で動く。
+  - Mac: 設定の「一般」→「翻訳する言語」で「English（英語）」「日本語」をそれぞれオン・オフできる。Windows: 設定 → 一般 →「翻訳する言語」で同じく選べる。最後の 1 つはオフにできない。
+  - 日本語を選ぶと、HUD に「日本語」が出る。英語で話して「日本語」で止めると、自然な日本語の文章が入力される。
+  - 履歴の「…し直す」（Mac）や設定の「…を試す」にも、選んだ言語が出る。
+- 出典: 2026-11-04 のユーザーの依頼「英語訳だけでなく、日本語訳も追加して。設定で、翻訳言語を複数選べるようにして、そこで選択した言語に翻訳できるようにして。デフォルトは英語のみで。」
+- 対象: Mac / Windows
+- 実装の場所: `TranslationLanguage`、`AppSettings.translationLanguages`、`TranslationSettingsSection`、`GeminiClient.translationPrompt`
+- Windows の実装: `windows/Hanasu.Core/Dictation/TranslationLanguage.cs`、`windows/Hanasu.Core/Settings/AppSettings.cs`（`TranslationLanguages`）、`windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（`JapaneseTranslationInstruction`）、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`、`windows/Hanasu.Windows/Views/HudWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --refine-text "<英語の文>" --translate-to ja`、`--render-hud /tmp/hud.png --translate-to ja --languages en,ja`、`--render-translation-settings /tmp/translation.png`。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~Translation"`
 
 ### REQ-DIC-012 録音中の HUD のボタンで、止める・取り消す
 - 内容: 録音中の HUD に「■ 停止」と「取消」のボタンを出し、マウスのクリックで録音を止めて入力する・取り消す。選択を声で編集するときの HUD でも同じ。
@@ -121,9 +136,9 @@
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>" --app com.tinyspeck.slackmacgap --show-prompt`、`--render-app-styles /tmp/app-styles.png`
 
 ### REQ-DIC-021 入力先アプリごとに、既定の出力言語を決める
-- 内容: アプリごとに既定の出力言語（話した言語 / English）を決められる。English にしたアプリで録音を始めると英訳で始まる。
+- 内容: アプリごとに既定の出力言語（話した言語 / English / 日本語）を決められる。English にしたアプリで録音を始めると英訳で始まる（日本語なら和訳で始まる）。
 - 受け入れ条件: 出力言語を English にしたアプリで `⌥ Space` を押すと、HUD が English の状態で始まり、英訳が入力される。
-- 出典: PR #5
+- 出典: PR #5。日本語を足したのは 2026-11-04 のユーザーの依頼（REQ-DIC-013）
 - 対象: Mac
 - 実装の場所: `AppOutputLanguage`、`DictationController.startDictation`
 - 確かめ方: `--refine-text "<文>" --app <bundle id>`（`-appStyles` 引数で出力言語を一時的に English にする）
@@ -163,7 +178,7 @@
 - 確かめ方: `.build/debug/Hanasu --history-check /tmp/hanasu-history`、`--render-history /tmp/history.png`。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~DictationHistory"`（保存・読み直し・Mac 版の形との互換・検索）。ウインドウの操作は実機で確かめる
 
 ### REQ-DIC-061 整形に失敗した文を、原文から整え直す
-- 内容: 履歴の項目を、原文から「整形し直す」「英訳し直す」ことができる。Gemini に失敗した項目には印を付ける。
+- 内容: 履歴の項目を、原文から「整形し直す」「英訳し直す」（翻訳の言語に日本語を選んでいれば「和訳し直す」も。REQ-DIC-013）ことができる。Gemini に失敗した項目には印を付ける。
 - 受け入れ条件: Gemini に失敗して原文のまま入力した項目に ⚠︎ が付き、「整形し直す」で整えた結果がクリップボードに入る。
 - 出典: PR #9
 - 対象: Mac
@@ -421,7 +436,7 @@
 - 実装の場所: `DictationController.playSound`
 
 ### DEC-DIC-020 英訳のショートカットは ⌥⇧ Space。止めるのはどちらでもよい
-- 決めたこと: 英訳で録音を始めるショートカットの初期値は `⌥⇧ Space`。録音中は、どちらのショートカットでも止まる。始めたショートカットのモードが HUD の切り替えの初期値になる。
+- 決めたこと: 翻訳で録音を始めるショートカット（設定では「翻訳して入力」）の初期値は `⌥⇧ Space`。録音中は、どちらのショートカットでも止まる。始めたショートカットのモードが HUD の切り替えの初期値になる（翻訳の言語は DEC-DIC-027）。
 - 理由: 音声入力と同じキーに ⇧ を足すだけで覚えやすい。
 - 決めた場面: 英訳の追加（80d77fc）
 - 関係する要件: REQ-DIC-010, REQ-DIC-011
@@ -475,6 +490,41 @@
 - 関係する要件: REQ-DIC-012
 - 対象: Mac
 - 実装の場所: `DictationController.stopFromHUD`、`StopButton`
+
+### DEC-DIC-027 翻訳の言語は英語と日本語。1 つ以上を選び、ショートカットは最初の言語で始める
+- 決めたこと:
+  - 翻訳の言語は English（英語）と日本語の 2 つ。並びは English → 日本語で固定し、HUD・メニュー・履歴・設定はこの順に出す。
+  - 設定では 1 つ以上を選ぶ（最後の 1 つはオフにできない）。既定は English だけ。Mac は UserDefaults の `translationLanguages`（`english` / `japanese` の配列）、Windows は settings.json の `TranslationLanguages` に持つ。読めない値は捨て、空なら English に戻す。
+  - 「翻訳して入力」のショートカットとメニューは、選んだ言語のうち最初の言語で始める（English と日本語を選んでいれば English）。メニューの項目名は、選んだ言語が 1 つならその言語（「英訳して入力」「和訳して入力」）、2 つ以上なら「翻訳して入力」。
+  - HUD の切り替えには「話した言語」と選んだ言語を出す。アプリ別の既定（REQ-DIC-021）で選んでいない言語から始めたときは、その言語も出す。
+- 理由: 既定（English だけ）では、見た目も操作も今までと変わらない。言語ごとにショートカットを足すと覚えることが増え、ほかのアプリとのぶつかりも増えるので、1 つのショートカットで始めて HUD で選ぶ今の仕組み（REQ-DIC-011）に乗せる。0 個を許すと「翻訳して入力」の行き先がなくなる。
+- 決めた場面: 日本語への翻訳を足した PR（2026-11-04 の依頼）
+- 関係する要件: REQ-DIC-013, REQ-DIC-011, REQ-DIC-010
+- 対象: Mac / Windows
+- 実装の場所: `TranslationLanguage`、`AppSettings.translationLanguages`、`DictationController.startDictation`、`LanguageSwitch`
+- Windows の実装: `windows/Hanasu.Core/Dictation/TranslationLanguage.cs`、`windows/Hanasu.Core/Settings/SettingsStore.cs`（読み込みの直し）、`windows/Hanasu.Windows/AppHost.cs`、`windows/Hanasu.Windows/TrayIcon.cs`
+
+### DEC-DIC-028 日本語への翻訳は専用の指示で 1 回で行い、日本語の文体のルールを使う
+- 決めたこと:
+  - 日本語への翻訳（和訳）は、英訳とは別の system instruction（`GeminiClient.japaneseTranslationInstruction`）で、誤変換の読み取り・フィラーと言い直しの除去・翻訳を 1 回の呼び出しで行う（DEC-DIC-022 と同じ）。
+  - 出力が日本語なので、共通の追加の整形ルール・アプリ別の日本語の文体ルール（`AppStylePreset.refineRules`）・画面の文脈の整形向けの指示を使う（英訳では使わないもの。DEC-DIC-023・044）。
+  - 指示では、直訳でない自然な日本語にする、口調と丁寧さを保つ（丁寧な英語は です・ます、くだけた英語は くだけた日本語）、人名は話した表記のまま（カタカナにせず、敬称も足さない）、固有名詞・製品名・コードは原語のまま、すでに日本語で話した部分はそのまま整える、を書く。
+  - 「AI で整形する」がオフでも AI に送る（DEC-DIC-021 と同じ）。
+- 理由: 英訳の指示は日本語から英語への誤り（"Good work." の直訳など）を防ぐ内容で、逆向きには使えない。性別や読みは推測しない（DEC-DIC-024 と同じ考え方）。
+- 決めた場面: 日本語への翻訳を足した PR（2026-11-04 の依頼）
+- 関係する要件: REQ-DIC-013
+- 対象: Mac / Windows
+- 実装の場所: `GeminiClient.japaneseTranslationInstruction`、`GeminiClient.translationPrompt`、`AppStyle.promptSection`
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（`JapaneseTranslationInstruction`。Mac 版と同じ文面。DEC-COM-102）
+
+### DEC-DIC-029 履歴では英訳と和訳を別のモードとして残す
+- 決めたこと: 履歴のモードは `refine`（整形）・`translate`（英訳。今までの値のまま）・`translateJapanese`（和訳）。表示は「整形」「英訳」「和訳」。Mac の履歴ウインドウの「…し直す」は、整形と、設定で選んだ翻訳の言語ごとに出す（その項目のモードの言語は、選んでいなくても出す）。
+- 理由: 今までの履歴（`translate`）をそのまま英訳として読める。Windows 版とファイルの形をそろえる（DEC-DIC-130）。
+- 決めた場面: 日本語への翻訳を足した PR（2026-11-04 の依頼）
+- 関係する要件: REQ-DIC-013, REQ-DIC-061
+- 対象: Mac / Windows
+- 実装の場所: `DictationHistoryEntry.Mode`、`DictationHistoryDetail`
+- Windows の実装: `windows/Hanasu.Core/Dictation/DictationHistory.cs`（`HistoryMode`）
 
 ### DEC-DIC-030 選択を声で編集する既定のショートカットは ⌃⌥⌘ E
 - 決めたこと: 初期値は `⌃⌥⌘ E`。設定の「一般 → ショートカット」で変えられる。メニューバーにも「選択を声で編集」を置く。
@@ -573,7 +623,7 @@
 - 実装の場所: `AppStyle.promptSection`
 
 ### DEC-DIC-045 既定の出力言語が English のアプリでは、英訳で始める
-- 決めたこと: 出力言語を English にしたアプリで `⌥ Space` で始めると英訳で始め、HUD も English にする。HUD で「話した言語」を押せばそちらが優先される。`⌥⇧ Space` はどのアプリでも英訳。
+- 決めたこと: 出力言語を English にしたアプリで `⌥ Space` で始めると英訳で始め、HUD も English にする（日本語にしたアプリでは和訳で始め、HUD も日本語にする）。HUD で「話した言語」を押せばそちらが優先される。`⌥⇧ Space` はどのアプリでも、設定で選んだ最初の翻訳の言語（DEC-DIC-027）。
 - 理由: 止めた時点の選択で言語が決まる、という今の仕組み（REQ-DIC-011）のまま使えるようにする。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-021, REQ-DIC-011
@@ -717,7 +767,7 @@
 - 実装の場所: `DictationHistoryStore.save`、`DictationHistoryStore.load`
 
 ### DEC-DIC-071 履歴の 1 件に持つものと、4 つの状態
-- 決めたこと: 日時・原文・結果・モード（整形／英訳）・入力先アプリ・状態・Gemini のエラー内容・モデル・録音のファイル名・やり直した日時を持つ。状態は 成功 ／ Gemini 失敗 ／ 未設定のため原文のまま ／ 整形オフ。失敗の 2 つには ⚠︎ を付け、整形オフも含めて「未整形」の印を付ける。
+- 決めたこと: 日時・原文・結果・モード（整形／英訳／和訳。DEC-DIC-029）・入力先アプリ・状態・Gemini のエラー内容・モデル・録音のファイル名・やり直した日時を持つ。状態は 成功 ／ Gemini 失敗 ／ 未設定のため原文のまま ／ 整形オフ。失敗の 2 つには ⚠︎ を付け、整形オフも含めて「未整形」の印を付ける。
 - 理由: 依頼の 3 つに「整形オフ」を足した。整形をオフにして入力した結果を「成功」と出すのは正しくない。
 - 決めた場面: PR #9
 - 関係する要件: REQ-DIC-060, REQ-DIC-061

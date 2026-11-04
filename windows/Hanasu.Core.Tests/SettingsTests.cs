@@ -1,3 +1,4 @@
+using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
 using Hanasu.Core.Settings;
 
@@ -35,6 +36,43 @@ public class SettingsTests
         // 前の版の settings.json（項目がない）は既定値になる
         File.WriteAllText(path, "{ \"playSounds\": true }");
         Assert.Equal(RefineOutputLanguage.AsSpoken, store.Load().RefineOutputLanguage);
+    }
+
+    // 確かめ方: REQ-DIC-013
+    [Fact]
+    public void TranslationLanguagesDefaultToEnglishAndAreSavedByName()
+    {
+        var path = Path.Combine(TestKeys.TempDirectory(), "settings.json");
+        var store = new SettingsStore(path);
+        // 既定は English だけ（今までの settings.json に項目がなくても）
+        Assert.Equal([TranslationLanguage.English], store.Load().TranslationLanguages);
+        File.WriteAllText(path, "{ \"playSounds\": true }");
+        Assert.Equal([TranslationLanguage.English], store.Load().TranslationLanguages);
+
+        store.Save(new AppSettings { TranslationLanguages = [TranslationLanguage.English, TranslationLanguage.Japanese] });
+        Assert.Contains("\"Japanese\"", File.ReadAllText(path));
+        var loaded = store.Load();
+        Assert.Equal([TranslationLanguage.English, TranslationLanguage.Japanese], loaded.TranslationLanguages);
+        Assert.Equal(TranslationLanguage.English, loaded.PrimaryTranslationLanguage);
+
+        // 知らない値は捨て、並びをそろえ、空なら English に戻す（ファイル全体は読める）
+        File.WriteAllText(path, "{ \"translationLanguages\": [\"Klingon\", \"Japanese\", \"English\", \"Japanese\", 7], \"playSounds\": false }");
+        loaded = store.Load();
+        Assert.Equal([TranslationLanguage.English, TranslationLanguage.Japanese], loaded.TranslationLanguages);
+        Assert.False(loaded.PlaySounds);
+        File.WriteAllText(path, "{ \"translationLanguages\": [] }");
+        Assert.Equal([TranslationLanguage.English], store.Load().TranslationLanguages);
+        File.WriteAllText(path, "{ \"translationLanguages\": [\"Japanese\"] }");
+        Assert.Equal(TranslationLanguage.Japanese, store.Load().PrimaryTranslationLanguage);
+    }
+
+    [Fact]
+    public void CloneCopiesTranslationLanguages()
+    {
+        var original = new AppSettings { TranslationLanguages = [TranslationLanguage.English] };
+        var clone = original.Clone();
+        clone.TranslationLanguages[0] = TranslationLanguage.Japanese;
+        Assert.Equal(TranslationLanguage.English, original.TranslationLanguages[0]);
     }
 
     // 確かめ方: REQ-DIC-081

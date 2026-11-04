@@ -8,7 +8,7 @@
         FontFamily="Yu Gothic UI, Meiryo UI, Segoe UI"
         TextOptions.TextFormattingMode="Display">
     <Window.Resources>
-        <!-- 「話した言語 / English」の切り替え。押してもフォーカスを取らない -->
+        <!-- 「話した言語 / English / 日本語」の切り替え。押してもフォーカスを取らない -->
         <Style x:Key="LanguageOption" TargetType="Button">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="Cursor" Value="Hand" />
@@ -118,8 +118,10 @@
                 <Border x:Name="LanguageSwitch" DockPanel.Dock="Left" Margin="10,0,0,0" Padding="2" CornerRadius="11" Background="#24FFFFFF"
                         VerticalAlignment="Center" ToolTip="録音を止めたときに選んでいる言語で入力します">
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="JapaneseButton" Style="{StaticResource LanguageOption}" Content="話した言語" Click="OnJapaneseClick" />
+                        <Button x:Name="SpokenLanguageButton" Style="{StaticResource LanguageOption}" Content="話した言語" Click="OnSpokenLanguageClick" />
+                        <!-- 翻訳の言語は、設定で選んだものだけを出す（REQ-DIC-013） -->
                         <Button x:Name="EnglishButton" Style="{StaticResource LanguageOption}" Content="English" Click="OnEnglishClick" />
+                        <Button x:Name="JapaneseButton" Style="{StaticResource LanguageOption}" Content="日本語" Click="OnJapaneseClick" Visibility="Collapsed" />
                     </StackPanel>
                 </Border>
 

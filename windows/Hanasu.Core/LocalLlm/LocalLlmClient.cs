@@ -74,9 +74,9 @@ public sealed class LocalLlmClient(LocalLlmModel model, LocalLlmServer server, H
         CleanUpRewrite(await GenerateTextAsync(TextPurpose.Refine, GeminiPrompts.SystemInstruction(request.OutputLanguage), GeminiPrompts.UserPrompt(request),
             request.Model, cancellationToken).ConfigureAwait(false), request.Transcript);
 
-    public async Task<string> TranslateToEnglishAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
-        CleanUpRewrite(await GenerateTextAsync(TextPurpose.Translate, GeminiPrompts.TranslationInstruction,
-            GeminiPrompts.UserPrompt(request, translating: true), request.Model, cancellationToken).ConfigureAwait(false), request.Transcript);
+    public async Task<string> TranslateAsync(RefineRequest request, Dictation.TranslationLanguage language, CancellationToken cancellationToken = default) =>
+        CleanUpRewrite(await GenerateTextAsync(TextPurpose.Translate, GeminiPrompts.TranslationSystemInstruction(language),
+            GeminiPrompts.UserPrompt(request, language), request.Model, cancellationToken).ConfigureAwait(false), request.Transcript);
 
     /// <summary>
     /// 整形・英訳の結果の後始末。小さいモデルは、結果の全体を「」で囲んだり（Sarashina2.2）、行末に Markdown の改行の空白を付けたり（LFM2.5）するので、

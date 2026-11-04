@@ -14,7 +14,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
    - API キーは暗号化して保存する。「API キーを Windows Hello で守る」をオンにすると、使うときに PIN・顔・指紋で確認する（下の「セキュリティ」）
 3. 入力したい場所にカーソルを置き、**Ctrl + Alt + Space** で録音を始める。画面の下に HUD が出る。
 4. もう一度 **Ctrl + Alt + Space**（または HUD の「■ 停止」）で止めると、文字起こし → AI で整形 → 貼り付け まで進む。
-   - **Ctrl + Alt + Shift + Space** で始めると英訳して入力する。録音中に HUD の「話した言語 / English」を押して切り替えてもよい（止めた時点の選択で決まる）。
+   - **Ctrl + Alt + Shift + Space** で始めると翻訳して入力する（既定は英訳。設定 → 一般 →「翻訳する言語」で日本語も選べる）。録音中に HUD の「話した言語 / English（/ 日本語）」を押して切り替えてもよい（止めた時点の選択で決まる）。
    - 録音中は **Esc**（または HUD の「取消」）で取り消す。
    - 「押している間だけ録音」も選べる（設定 → 一般 → 録音のしかた）。
    - 入力できる場所にフォーカスがない（デスクトップが前面にある など）か、管理者として動いているアプリが前面にあって貼り付けられないときは、結果を画面の下に表示して残す（自動では閉じない）。「コピー」か文章を選んでコピーし、「閉じる」で閉じる。既定では結果をクリップボードにも入れておくので、貼りたい場所で Ctrl+V を押すだけでよい（設定 → 一般 →「入力できる場所がないとき」で、クリップボードを元のままにすることもできる）。
@@ -226,7 +226,7 @@ dotnet run --project Hanasu.Cli -- models
 
 # Claude
 dotnet run --project Hanasu.Cli -- claude-request "<文章>" [--translate | --minutes] [--model <id>]   # 送らずに、送る HTTP リクエストを出す（キーは伏せる。キーがなくても動く）
-dotnet run --project Hanasu.Cli -- claude-refine "<文章>" [--translate] [--model <id>] [--app Slack]  # Claude で整形・英訳する（使ったトークンとキャッシュも出す）
+dotnet run --project Hanasu.Cli -- claude-refine "<文章>" [--translate | --translate-to en|ja] [--model <id>] [--app Slack]  # Claude で整形・英訳する（使ったトークンとキャッシュも出す）
 dotnet run --project Hanasu.Cli -- claude-check [--model <id>] [--fake-key]                          # 「接続を試す」と同じ確かめ。--fake-key は偽のキーで 401 の文言を見る
 dotnet run --project Hanasu.Cli -- local-list | local-download <id> | local-refine "<文章>" [--model <id>] [--server <llama-server>] [--models-dir <dir>]  # ローカルの LLM（Mac の llama-server でも動く）
 

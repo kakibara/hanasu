@@ -6,15 +6,34 @@ import Foundation
 // 設計判断: DEC-DIC-071
 /// 音声入力の履歴 1 件。
 struct DictationHistoryEntry: Codable, Identifiable, Equatable {
+    // 設計判断: DEC-DIC-029
+    /// 英訳は今までの値（translate）のまま。和訳は translateJapanese
     enum Mode: String, Codable {
         case refine
         case translate
+        case translateJapanese
 
         init(_ mode: DictationController.Mode) {
-            self = mode == .translateToEnglish ? .translate : .refine
+            self = mode.translation.map(Self.init(translation:)) ?? .refine
         }
 
-        var label: String { self == .translate ? "英訳" : "整形" }
+        init(translation: TranslationLanguage) {
+            switch translation {
+            case .english: self = .translate
+            case .japanese: self = .translateJapanese
+            }
+        }
+
+        /// 翻訳の言語（整形なら nil）
+        var translation: TranslationLanguage? {
+            switch self {
+            case .refine: nil
+            case .translate: .english
+            case .translateJapanese: .japanese
+            }
+        }
+
+        var label: String { translation?.verb ?? "整形" }
     }
 
     enum Status: String, Codable {
@@ -46,7 +65,7 @@ struct DictationHistoryEntry: Codable, Identifiable, Equatable {
     var date: Date
     /// 文字起こしの原文
     var raw: String
-    /// 入力した結果（整形後・英訳後。失敗時は原文と同じ）
+    /// 入力した結果（整形後・翻訳後。失敗時は原文と同じ）
     var output: String
     var mode: Mode
     /// 入力先アプリ
@@ -391,7 +410,11 @@ final class DictationHistoryStore: ObservableObject {
             dictionary: settings.dictionaryWords,
             extraInstructions: settings.extraInstructions,
             outputLanguage: settings.refineOutputLanguage)
-        let output = mode == .translate ? try await client.translateToEnglish(request) : try await client.refine(request)
+        let output = if let translation = mode.translation {
+            try await client.translate(request, to: translation)
+        } else {
+            try await client.refine(request)
+        }
         // 待っている間に消された場合
         guard let index = entries.firstIndex(where: { $0.id == id }) else { throw DictationHistoryError.notFound }
         entries[index].output = output

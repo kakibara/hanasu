@@ -41,8 +41,25 @@ public class GeminiPromptTests
     public void TranslationDropsExtraRulesAndOmitsEmptySections()
     {
         var request = new RefineRequest { Transcript = "テスト", Model = "m", ExtraInstructions = "です・ます調に統一" };
-        Assert.Equal("<transcript>\nテスト\n</transcript>", GeminiPrompts.UserPrompt(request, translating: true));
+        Assert.Equal("<transcript>\nテスト\n</transcript>", GeminiPrompts.UserPrompt(request, Dictation.TranslationLanguage.English));
         Assert.Contains("追加ルール", GeminiPrompts.UserPrompt(request));
+    }
+
+    // 確かめ方: REQ-DIC-013
+    [Fact]
+    public void JapaneseTranslationKeepsExtraRulesAndUsesItsOwnInstruction()
+    {
+        // 和訳は出力が日本語なので、追加の整形ルールを使う（DEC-DIC-028）
+        var request = new RefineRequest { Transcript = "test", Model = "m", ExtraInstructions = "です・ます調に統一" };
+        Assert.Contains("追加ルール:\nです・ます調に統一", GeminiPrompts.UserPrompt(request, Dictation.TranslationLanguage.Japanese));
+        Assert.Equal(GeminiPrompts.JapaneseTranslationInstruction, GeminiPrompts.TranslationSystemInstruction(Dictation.TranslationLanguage.Japanese));
+        Assert.Equal(GeminiPrompts.TranslationInstruction, GeminiPrompts.TranslationSystemInstruction(Dictation.TranslationLanguage.English));
+        // 文面を勝手に変えないための目印（Mac 版の GeminiClient.japaneseTranslationInstruction と同じ）
+        var text = GeminiPrompts.JapaneseTranslationInstruction.ReplaceLineEndings("\n");
+        Assert.StartsWith("あなたは音声入力の後処理を担当する翻訳者です。話された内容（英語など）を、自然な日本語の文章にして返します。\n", text);
+        Assert.Contains("\n- 人名は話された表記のまま書く（カタカナに直さず、「さん」などの敬称も足さない）\n", text);
+        Assert.Contains("\n  例: \"I'll use the slides I made with A, no wait, the ones I made with B\" →「Bで作ったスライドを使います。」\n", text);
+        Assert.EndsWith("出力は日本語に訳した本文だけにしてください。", text);
     }
 
     [Fact]
@@ -113,7 +130,7 @@ public class GeminiClientTests
         var tokens = new ServiceAccountTokenProvider(http);
         var client = new GeminiClient(new GeminiAuth.ServiceAccount(credentials, "us-central1"), http, tokens);
 
-        await client.TranslateToEnglishAsync(new RefineRequest { Transcript = "こんにちは", Model = "gemini-3.8-flash" });
+        await client.TranslateAsync(new RefineRequest { Transcript = "こんにちは", Model = "gemini-3.8-flash" }, Dictation.TranslationLanguage.English);
         await client.RefineAsync(new RefineRequest { Transcript = "こんにちは", Model = "gemini-3.8-flash" });
 
         // トークンは 1 回だけ取り、2 回目は使い回す

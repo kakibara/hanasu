@@ -129,7 +129,7 @@ Windows 版の注意点と Mac 版との違いは、[windows/README.md](windows/
 | 操作 | macOS | Windows |
 | --- | --- | --- |
 | 音声入力（開始・停止） | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| 英訳して入力 | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| 翻訳して入力（英訳・和訳） | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | 選択を声で編集 | <kbd>⌃⌥⌘ E</kbd> | — |
 | 最後の結果をもう一度入力 | <kbd>⌥⇧ V</kbd> | — |
 | 録音を取り消す | <kbd>Esc</kbd> | <kbd>Esc</kbd> |

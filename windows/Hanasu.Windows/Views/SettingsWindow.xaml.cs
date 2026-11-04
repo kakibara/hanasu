@@ -67,6 +67,9 @@ public partial class SettingsWindow : Window
         var s = settings.Current;
         DictationHotKeyBox.Combo = s.HotKey;
         TranslateHotKeyBox.Combo = s.TranslateHotKey;
+        TranslateEnglishCheck.IsChecked = s.TranslationLanguages.Contains(TranslationLanguage.English);
+        TranslateJapaneseCheck.IsChecked = s.TranslationLanguages.Contains(TranslationLanguage.Japanese);
+        UpdateTranslationControls(s.TranslationLanguages);
         ToggleModeRadio.IsChecked = s.RecordingMode == RecordingMode.Toggle;
         PushToTalkRadio.IsChecked = s.RecordingMode == RecordingMode.PushToTalk;
         EngineCombo.SelectedItem = EngineCombo.Items.OfType<ComboBoxItem>().First(i => (string)i.Tag == s.Engine.ToString());
@@ -162,7 +165,7 @@ public partial class SettingsWindow : Window
         var problem = combo.Validate();
         var current = settings.Current;
         var others = new[] { translate ? current.HotKey : current.TranslateHotKey, current.MeetingHotKey, current.HighlightHotKey };
-        if (problem is null && others.Contains(combo)) problem = "ほかのショートカット（音声入力・英訳・会議）と同じです";
+        if (problem is null && others.Contains(combo)) problem = "ほかのショートカット（音声入力・翻訳・会議）と同じです";
         if (problem is not null)
         {
             HotKeyError.Text = problem;
@@ -680,7 +683,38 @@ public partial class SettingsWindow : Window
 
     private void OnTrialTranslate(object sender, RoutedEventArgs e) => _ = RunTrialAsync(DictationMode.TranslateToEnglish);
 
-    /// <summary>今の設定で 1 回整形（英訳）してみる。音声入力と同じ流れ（辞書 → 音声入力の AI）を通す</summary>
+    private void OnTrialTranslateJapanese(object sender, RoutedEventArgs e) => _ = RunTrialAsync(DictationMode.TranslateToJapanese);
+
+    // 要件: REQ-DIC-013
+    // 設計判断: DEC-DIC-027
+    /// <summary>翻訳する言語のチェック。最後の 1 つは外せない</summary>
+    private void OnTranslationLanguageChanged(object sender, RoutedEventArgs e)
+    {
+        if (loading) return;
+        var picked = new List<TranslationLanguage>();
+        if (TranslateEnglishCheck.IsChecked == true) picked.Add(TranslationLanguage.English);
+        if (TranslateJapaneseCheck.IsChecked == true) picked.Add(TranslationLanguage.Japanese);
+        if (picked.Count == 0)
+        {
+            ((CheckBox)sender).IsChecked = true;
+            return;
+        }
+        var languages = TranslationLanguages.Normalize(picked);
+        Save(s => s.TranslationLanguages = languages);
+        UpdateTranslationControls(languages);
+    }
+
+    /// <summary>最後の 1 つのチェックを押せなくし、「…を試す」を選んだ言語だけにする</summary>
+    private void UpdateTranslationControls(IReadOnlyList<TranslationLanguage> languages)
+    {
+        var onlyOne = languages.Count == 1;
+        TranslateEnglishCheck.IsEnabled = !(onlyOne && languages[0] == TranslationLanguage.English);
+        TranslateJapaneseCheck.IsEnabled = !(onlyOne && languages[0] == TranslationLanguage.Japanese);
+        TrialTranslateButton.Visibility = languages.Contains(TranslationLanguage.English) ? Visibility.Visible : Visibility.Collapsed;
+        TrialTranslateJapaneseButton.Visibility = languages.Contains(TranslationLanguage.Japanese) ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    /// <summary>今の設定で 1 回整形（翻訳）してみる。音声入力と同じ流れ（辞書 → 音声入力の AI）を通す</summary>
     private async Task RunTrialAsync(DictationMode mode)
     {
         // 入力中の欄の値を先に保存する
@@ -688,7 +722,7 @@ public partial class SettingsWindow : Window
         OnServiceAccountPathChanged(this, new RoutedEventArgs());
         var s = settings.Current;
         s.RefineWithGemini = true;
-        TrialRefineButton.IsEnabled = TrialTranslateButton.IsEnabled = false;
+        TrialRefineButton.IsEnabled = TrialTranslateButton.IsEnabled = TrialTranslateJapaneseButton.IsEnabled = false;
         TrialStatus.Text = mode == DictationMode.Refine ? "整えています…" : "翻訳しています…";
         var started = Stopwatch.StartNew();
         try
@@ -702,7 +736,7 @@ public partial class SettingsWindow : Window
         }
         finally
         {
-            TrialRefineButton.IsEnabled = TrialTranslateButton.IsEnabled = true;
+            TrialRefineButton.IsEnabled = TrialTranslateButton.IsEnabled = TrialTranslateJapaneseButton.IsEnabled = true;
         }
     }
 
@@ -713,7 +747,7 @@ public partial class SettingsWindow : Window
         var problem = combo.Validate();
         var s = settings.Current;
         var others = new[] { s.HotKey, s.TranslateHotKey, highlight ? s.MeetingHotKey : s.HighlightHotKey };
-        if (problem is null && others.Contains(combo)) problem = "ほかのショートカット（音声入力・英訳・会議）と同じです";
+        if (problem is null && others.Contains(combo)) problem = "ほかのショートカット（音声入力・翻訳・会議）と同じです";
         if (problem is not null)
         {
             MeetingHotKeyError.Text = problem;

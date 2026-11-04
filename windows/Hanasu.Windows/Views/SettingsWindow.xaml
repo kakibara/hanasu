@@ -61,13 +61,24 @@
                             <TextBlock Grid.Row="0" Text="音声入力" VerticalAlignment="Center" />
                             <local:HotKeyBox x:Name="DictationHotKeyBox" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" />
                             <Button Grid.Row="0" Grid.Column="2" Content="既定に戻す" Click="OnResetDictationHotKey" />
-                            <TextBlock Grid.Row="1" Text="英訳して入力" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="1" Text="翻訳して入力" VerticalAlignment="Center" />
                             <local:HotKeyBox x:Name="TranslateHotKeyBox" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" />
                             <Button Grid.Row="1" Grid.Column="2" Content="既定に戻す" Click="OnResetTranslateHotKey" />
                         </Grid>
                         <TextBlock x:Name="HotKeyError" Style="{StaticResource Error}" Visibility="Collapsed" />
                         <TextBlock Style="{StaticResource Note}"
                                    Text="欄をクリックしてから、使いたい組み合わせを押します。録音中は Esc で取り消せます。Alt + Space（ウインドウメニュー）と Win + H（Windows の音声入力）は Windows が使うので避けています。" />
+
+                        <!-- 要件: REQ-DIC-013 -->
+                        <TextBlock Style="{StaticResource Section}" Text="翻訳する言語" />
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox x:Name="TranslateEnglishCheck" Content="English（英語）" Margin="0,0,16,0"
+                                      Checked="OnTranslationLanguageChanged" Unchecked="OnTranslationLanguageChanged" />
+                            <CheckBox x:Name="TranslateJapaneseCheck" Content="日本語"
+                                      Checked="OnTranslationLanguageChanged" Unchecked="OnTranslationLanguageChanged" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="「翻訳して入力」のショートカットでは、選んだ言語のうち左のものに翻訳します。録音中の HUD で「話した言語」と選んだ言語を切り替えられます（止めたときに選んでいる言語で入力）。翻訳は AI（「AI」タブで音声入力に選んだもの）で行います。少なくとも 1 つは選んでください。" />
 
                         <TextBlock Style="{StaticResource Section}" Text="録音のしかた" />
                         <StackPanel Orientation="Horizontal">
@@ -153,7 +164,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="音声入力（整形・英訳）" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="0" Text="音声入力（整形・翻訳）" VerticalAlignment="Center" />
                             <ComboBox x:Name="DictationAiCombo" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" SelectionChanged="OnDictationAiChanged">
                                 <ComboBoxItem Content="Gemini" Tag="Gemini" />
                                 <ComboBoxItem Content="Claude" Tag="Claude" />
@@ -207,7 +218,7 @@
                         </StackPanel>
 
                         <CheckBox x:Name="RefineCheck" Margin="0,12,0,0" Content="AI で整形する（誤変換・フィラー・言い直し・句読点を直す）" Checked="OnRefineChanged" Unchecked="OnRefineChanged" />
-                        <TextBlock Style="{StaticResource Note}" Text="オフにすると、認識結果に辞書の置き換えだけを当てて入力します。英訳は AI でしかできないので、オフでも AI に送ります。" />
+                        <TextBlock Style="{StaticResource Note}" Text="オフにすると、認識結果に辞書の置き換えだけを当てて入力します。翻訳は AI でしかできないので、オフでも AI に送ります。" />
                         <!-- 要件: REQ-DIC-082 整形の出力の言語。整形がオフのときは選べない -->
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <TextBlock Text="整形の言語" VerticalAlignment="Center" Margin="0,0,8,0" />
@@ -272,6 +283,7 @@
                         <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
                             <Button x:Name="TrialRefineButton" Content="整形を試す" Click="OnTrialRefine" />
                             <Button x:Name="TrialTranslateButton" Content="英訳を試す" Click="OnTrialTranslate" />
+                            <Button x:Name="TrialTranslateJapaneseButton" Content="和訳を試す" Click="OnTrialTranslateJapanese" Visibility="Collapsed" />
                             <TextBlock x:Name="TrialStatus" Style="{StaticResource Note}" VerticalAlignment="Center" />
                         </StackPanel>
                         <TextBox x:Name="TrialOutput" IsReadOnly="True" TextWrapping="Wrap" MinHeight="56" Margin="0,6,0,0" Padding="4,3" Background="#FFF7F7F7" />
@@ -407,7 +419,7 @@
                     <TextBlock Grid.Row="6" Style="{StaticResource Section}" Text="追加の整形ルール" />
                     <DockPanel Grid.Row="7">
                         <TextBlock DockPanel.Dock="Top" Style="{StaticResource Note}" Margin="0,0,0,6"
-                                   Text="整形のときに AI（Gemini・Claude）に渡すルール（例: です・ます調に統一）。英訳では使いません。" />
+                                   Text="整形のときに AI（Gemini・Claude）に渡すルール（例: です・ます調に統一）。英訳では使いません（和訳では使います）。" />
                         <TextBox x:Name="ExtraInstructionsBox" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Padding="4,3" TextChanged="OnExtraInstructionsChanged" />
                     </DockPanel>
                 </Grid>

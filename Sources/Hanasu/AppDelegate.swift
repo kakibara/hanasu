@@ -151,7 +151,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         toggle.isEnabled = controller.state != .processing
         menu.addItem(toggle)
         if controller.state == .idle {
-            menu.addItem(NSMenuItem(title: "英訳して入力を開始　\(settings.translateHotKey.displayString)",
+            // 設計判断: DEC-DIC-027
+            let verb = TranslationLanguage.menuVerb(for: settings.translationLanguages)
+            menu.addItem(NSMenuItem(title: "\(verb)して入力を開始　\(settings.translateHotKey.displayString)",
                                     action: #selector(toggleTranslation), keyEquivalent: ""))
             let editItem = NSMenuItem(title: "\(editController.menuTitle)　\(editController.hotKey.displayString)",
                                       action: #selector(toggleEditMode), keyEquivalent: "")
@@ -331,7 +333,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     @objc private func toggleTranslation() {
-        controller.toggleFromMenu(mode: .translateToEnglish)
+        controller.toggleFromMenu(mode: controller.primaryTranslateMode)
     }
 
     @objc private func openHistoryWindow() {

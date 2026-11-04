@@ -9,7 +9,7 @@ struct ScreenContextSettingsSection: View {
         Section {
             Toggle(isOn: $settings.enabled) {
                 Text("画面の文脈を AI に渡す")
-                Text("録音を始めたときに、前面のウインドウのタイトルと、入力欄のカーソルの前後の文章（それぞれ最大 \(ScreenContextReader.maxChars) 文字）を読み取ります。固有名詞の表記や書き方、話の流れを合わせるための参考として、話した内容と一緒に AI（Gemini か Claude）に送ります（英訳でも使います）。パスワード欄と下の除外アプリは読みません。読み取った文章は保存しません。")
+                Text("録音を始めたときに、前面のウインドウのタイトルと、入力欄のカーソルの前後の文章（それぞれ最大 \(ScreenContextReader.maxChars) 文字）を読み取ります。固有名詞の表記や書き方、話の流れを合わせるための参考として、話した内容と一緒に AI（Gemini か Claude）に送ります（翻訳でも使います）。パスワード欄と下の除外アプリは読みません。読み取った文章は保存しません。")
             }
             VStack(alignment: .leading, spacing: 6) {
                 HStack {

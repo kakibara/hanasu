@@ -39,10 +39,13 @@ struct AISettingsTab: View {
                 TextField("認識結果の例", text: $testInput, axis: .vertical)
                     .lineLimit(2...4)
                 HStack {
-                    Button(isTesting ? "送信中…" : "整形を試す") { runTest(translate: false) }
+                    Button(isTesting ? "送信中…" : "整形を試す") { runTest(translation: nil) }
                         .disabled(isTesting || testInput.isEmpty)
-                    Button("英訳を試す") { runTest(translate: true) }
-                        .disabled(isTesting || testInput.isEmpty)
+                    // 要件: REQ-DIC-013
+                    ForEach(settings.translationLanguages) { language in
+                        Button("\(language.verb)を試す") { runTest(translation: language) }
+                            .disabled(isTesting || testInput.isEmpty)
+                    }
                     Spacer()
                 }
                 if !testOutput.isEmpty {
@@ -53,7 +56,7 @@ struct AISettingsTab: View {
         .formStyle(.grouped)
     }
 
-    private func runTest(translate: Bool) {
+    private func runTest(translation: TranslationLanguage?) {
         isTesting = true
         testOutput = ""
         let model = settings.textModel(for: .dictation)
@@ -69,7 +72,11 @@ struct AISettingsTab: View {
             let started = Date()
             do {
                 let client = try TextAIClient.requireFromSettings(settings, for: .dictation)
-                let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
+                let output = if let translation {
+                    try await client.translate(request, to: translation)
+                } else {
+                    try await client.refine(request)
+                }
                 testOutput = output + String(format: "\n\n（%@ %@ %.1f 秒）", client.provider.name, model, Date().timeIntervalSince(started))
             } catch {
                 testOutput = "⚠️ " + error.localizedDescription
@@ -103,7 +110,7 @@ private struct AIChoiceRow: View {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(purpose.label).font(.headline)
-                    Text(purpose == .dictation ? "整形・英訳・選択の編集" : "議事録（作り直しも）・会議への質問・辞書の候補")
+                    Text(purpose == .dictation ? "整形・翻訳・選択の編集" : "議事録（作り直しも）・会議への質問・辞書の候補")
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Spacer()

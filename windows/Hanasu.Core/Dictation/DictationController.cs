@@ -73,7 +73,7 @@ public sealed class DictationController
     public DictationController(DictationServices services)
     {
         this.services = services;
-        services.Hud.LanguageSelected += (_, translating) => SelectOutputLanguage(translating);
+        services.Hud.LanguageSelected += (_, translation) => SelectOutputLanguage(translation);
         services.Hud.StopRequested += (_, _) => RequestStop();
         services.Hud.CancelRequested += (_, _) => Cancel();
     }
@@ -137,13 +137,21 @@ public sealed class DictationController
         }
     }
 
-    /// <summary>録音中に HUD で出力の言語を切り替える。止めた時点の選択で、整形するか英訳するかが決まる</summary>
-    public void SelectOutputLanguage(bool translating)
+    // 要件: REQ-DIC-011, REQ-DIC-013
+    /// <summary>録音中に HUD で出力の言語を切り替える。止めた時点の選択で、整形するか、どの言語に翻訳するかが決まる</summary>
+    public void SelectOutputLanguage(TranslationLanguage? translation)
     {
         if (State is not (DictationState.Preparing or DictationState.Recording)) return;
-        Mode = translating ? DictationMode.TranslateToEnglish : DictationMode.Refine;
-        services.Hud.SetTranslating(translating);
+        Mode = translation?.ToMode() ?? DictationMode.Refine;
+        services.Hud.SetLanguages(translation, languageChoices);
     }
+
+    // 設計判断: DEC-DIC-027
+    /// <summary>「翻訳して入力」のショートカット・メニューで始めるモード（設定で選んだ翻訳の言語のうち最初）</summary>
+    public DictationMode PrimaryTranslateMode => services.Settings().PrimaryTranslationLanguage.ToMode();
+
+    /// <summary>HUD に並べる翻訳の言語（録音を始めたときの設定）</summary>
+    private IReadOnlyList<TranslationLanguage> languageChoices = [TranslationLanguage.English];
 
     public async Task StartAsync(DictationMode mode = DictationMode.Refine)
     {
@@ -153,7 +161,9 @@ public sealed class DictationController
         stopRequested = false;
         cancelRequested = false;
         targetAppName = services.ForegroundAppName();
-        services.Hud.SetTranslating(mode == DictationMode.TranslateToEnglish);
+        // HUD には「話した言語」と設定で選んだ翻訳の言語を出す（設定にない言語で始めたときは、それも出す）
+        languageChoices = TranslationLanguages.Normalize(services.Settings().TranslationLanguages.Concat(mode.Translation() is { } l ? new[] { l } : Array.Empty<TranslationLanguage>()));
+        services.Hud.SetLanguages(mode.Translation(), languageChoices);
         services.Hud.UpdateTranscript("");
         services.Hud.Show(HudState.Preparing("準備中…"));
         services.SetEscapeHotKeyEnabled(true);
@@ -214,7 +224,7 @@ public sealed class DictationController
         var settings = services.Settings();
         var usesGemini = DictationTextProcessor.UsesGemini(settings, Mode);
         services.Hud.Show(HudState.Processing(transcriber.FinishingMessage
-            ?? (usesGemini ? HudText.ProcessingTitle(Mode == DictationMode.TranslateToEnglish, Ai.TextAiFactory.NameOf(settings.DictationAi)) : "仕上げています…")));
+            ?? (usesGemini ? HudText.ProcessingTitle(Mode.Translation(), Ai.TextAiFactory.NameOf(settings.DictationAi)) : "仕上げています…")));
 
         string raw;
         try
@@ -236,7 +246,7 @@ public sealed class DictationController
             return;
         }
 
-        if (usesGemini) services.Hud.Show(HudState.Processing(HudText.ProcessingTitle(Mode == DictationMode.TranslateToEnglish, Ai.TextAiFactory.NameOf(settings.DictationAi))));
+        if (usesGemini) services.Hud.Show(HudState.Processing(HudText.ProcessingTitle(Mode.Translation(), Ai.TextAiFactory.NameOf(settings.DictationAi))));
         var outcome = await services.Processor.ProcessAsync(raw, Mode, targetAppName, settings);
         services.Log($"process: {outcome.Status}, {outcome.Output.Length} chars");
         // 入力先がずれても取り戻せるよう、貼り付けの前に残す
@@ -269,7 +279,7 @@ public sealed class DictationController
         }
         else
         {
-            services.Hud.Show(HudState.Done(Mode == DictationMode.TranslateToEnglish ? "英訳して入力しました" : "入力しました"));
+            services.Hud.Show(HudState.Done(Mode.Translation() is { } translation ? $"{translation.Verb()}して入力しました" : "入力しました"));
         }
     }
 

@@ -9,16 +9,23 @@ internal sealed class FakeHud : IHud
 {
     public List<HudState> Shown { get; } = new();
     public string Transcript { get; private set; } = "";
-    public bool Translating { get; private set; }
-    public event EventHandler<bool>? LanguageSelected;
+    public TranslationLanguage? Translation { get; private set; }
+    public bool Translating => Translation is not null;
+    public IReadOnlyList<TranslationLanguage> Choices { get; private set; } = [];
+    public event EventHandler<TranslationLanguage?>? LanguageSelected;
     public event EventHandler? StopRequested;
     public event EventHandler? CancelRequested;
     public void ClickStop() => StopRequested?.Invoke(this, EventArgs.Empty);
     public void ClickCancel() => CancelRequested?.Invoke(this, EventArgs.Empty);
     public void Show(HudState state) => Shown.Add(state);
     public void UpdateTranscript(string text) => Transcript = text;
-    public void SetTranslating(bool translating) => Translating = translating;
-    public void Click(bool english) => LanguageSelected?.Invoke(this, english);
+    public void SetLanguages(TranslationLanguage? selected, IReadOnlyList<TranslationLanguage> choices)
+    {
+        Translation = selected;
+        Choices = choices;
+    }
+    public void Click(bool english) => LanguageSelected?.Invoke(this, english ? TranslationLanguage.English : null);
+    public void Click(TranslationLanguage? language) => LanguageSelected?.Invoke(this, language);
     public HudState Last => Shown[^1];
 }
 
@@ -71,10 +78,11 @@ internal sealed class FakeRefiner : IDictationRefiner
         return Error is null ? Task.FromResult("整形:" + request.Transcript) : Task.FromException<string>(Error);
     }
 
-    public Task<string> TranslateToEnglishAsync(RefineRequest request, CancellationToken cancellationToken = default)
+    public Task<string> TranslateAsync(RefineRequest request, TranslationLanguage language, CancellationToken cancellationToken = default)
     {
-        Calls.Add(("translate", request));
-        return Error is null ? Task.FromResult("EN:" + request.Transcript) : Task.FromException<string>(Error);
+        var japanese = language == TranslationLanguage.Japanese;
+        Calls.Add((japanese ? "translate-ja" : "translate", request));
+        return Error is null ? Task.FromResult((japanese ? "JA:" : "EN:") + request.Transcript) : Task.FromException<string>(Error);
     }
 }
 
@@ -211,6 +219,51 @@ public class DictationControllerTests
         // 録音が終わったら切り替えは効かない
         h.Hud.Click(english: false);
         Assert.Equal(DictationMode.TranslateToEnglish, h.Controller.Mode);
+    }
+
+    // 確かめ方: REQ-DIC-013
+    [Fact]
+    public async Task DefaultTranslationLanguageIsEnglishOnly()
+    {
+        var h = new Harness();
+        Assert.Equal(DictationMode.TranslateToEnglish, h.Controller.PrimaryTranslateMode);
+        await h.Controller.StartAsync(h.Controller.PrimaryTranslateMode);
+        Assert.Equal([TranslationLanguage.English], h.Hud.Choices);
+        Assert.Equal(TranslationLanguage.English, h.Hud.Translation);
+    }
+
+    // 確かめ方: REQ-DIC-013
+    [Fact]
+    public async Task JapaneseChosenInSettingsAppearsOnTheHudAndTranslatesToJapanese()
+    {
+        var h = new Harness();
+        h.Settings.TranslationLanguages = [TranslationLanguage.Japanese, TranslationLanguage.English];
+        await h.Controller.StartAsync();
+        // 並びは English → 日本語
+        Assert.Equal([TranslationLanguage.English, TranslationLanguage.Japanese], h.Hud.Choices);
+        Assert.Null(h.Hud.Translation);
+        h.Hud.Click(TranslationLanguage.Japanese);
+        Assert.Equal(DictationMode.TranslateToJapanese, h.Controller.Mode);
+        Assert.Equal(TranslationLanguage.Japanese, h.Hud.Translation);
+        await h.Controller.FinishAsync();
+        var call = Assert.Single(h.Refiner.Calls);
+        Assert.Equal("translate-ja", call.Kind);
+        Assert.Equal("和訳して入力しました", h.Hud.Last.Message);
+        Assert.StartsWith("JA:", Assert.Single(h.Inserter.Inserted));
+        Assert.Equal(HistoryMode.TranslateJapanese, h.History.Entries[0].Mode);
+    }
+
+    // 確かめ方: REQ-DIC-013
+    [Fact]
+    public async Task TranslateShortcutStartsWithTheFirstChosenLanguage()
+    {
+        var h = new Harness();
+        h.Settings.TranslationLanguages = [TranslationLanguage.Japanese];
+        Assert.Equal(DictationMode.TranslateToJapanese, h.Controller.PrimaryTranslateMode);
+        h.Controller.HandleHotKey(HotKeyEventKind.Pressed, h.Controller.PrimaryTranslateMode);
+        await WaitState(h, DictationState.Recording);
+        Assert.Equal([TranslationLanguage.Japanese], h.Hud.Choices);
+        Assert.Equal(TranslationLanguage.Japanese, h.Hud.Translation);
     }
 
     [Fact]
@@ -451,6 +504,12 @@ public class DictationControllerTests
         Assert.Empty(h.Hud.Shown);
     }
 
+    private static async Task WaitState(Harness h, DictationState expected)
+    {
+        for (var i = 0; i < 200 && h.Controller.State != expected; i++) await Task.Delay(5);
+        Assert.Equal(expected, h.Controller.State);
+    }
+
     private static async Task WaitIdle(Harness h)
     {
         for (var i = 0; i < 200 && h.Controller.State != DictationState.Idle; i++) await Task.Delay(5);
@@ -467,7 +526,9 @@ public class HudTextTests
         Assert.Equal("話してください…", HudText.Detail(HudState.Recording, ""));
         Assert.Equal("エラー", HudText.Title(HudState.Error("失敗")));
         Assert.Equal("失敗", HudText.Detail(HudState.Error("失敗"), "x"));
-        Assert.Equal("Gemini で英語に翻訳しています…", HudText.ProcessingTitle(true));
+        Assert.Equal("Gemini で英語に翻訳しています…", HudText.ProcessingTitle(TranslationLanguage.English));
+        Assert.Equal("Claude で日本語に翻訳しています…", HudText.ProcessingTitle(TranslationLanguage.Japanese, "Claude"));
+        Assert.Equal("Gemini で整えています…", HudText.ProcessingTitle(null));
         Assert.True(HudText.CanChooseLanguage(HudPhase.Recording));
         Assert.False(HudText.CanChooseLanguage(HudPhase.Processing));
         Assert.True(HudText.ShowsRecordingControls(HudPhase.Recording));

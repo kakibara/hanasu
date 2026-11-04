@@ -96,7 +96,7 @@ enum ScreenContextCLI {
         let settings = AppSettings.shared
         let client = try TextAIClient.cli(args: args, settings: settings, for: .dictation)
         let model = TextAIClient.cliModel(args: args, settings: settings, for: .dictation)
-        let translate = args.contains("--translate")
+        let translation = TranslationLanguage.cli(args)
 
         print("--- 文脈 ---")
         print(context.promptBlock() ?? "（渡すものなし）")
@@ -108,8 +108,8 @@ enum ScreenContextCLI {
                 // 要件: REQ-DIC-082
                 outputLanguage: settings.refineOutputLanguage)
             let started = Date()
-            let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
-            print(String(format: "[%@ %@ %@ %.1fs] %@", label, translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
+            let output = if let translation { try await client.translate(request, to: translation) } else { try await client.refine(request) }
+            print(String(format: "[%@ %@ %@ %.1fs] %@", label, translation?.verb ?? "整形", model, Date().timeIntervalSince(started), output))
         }
     }
 
