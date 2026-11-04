@@ -177,12 +177,14 @@ public class SpeakerNameInferenceTests
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "Sources", "Hanasu", "MinutesTemplate.swift"))) dir = dir.Parent;
         if (dir is null) return;
-        var swift = File.ReadAllText(Path.Combine(dir.FullName, "Sources", "Hanasu", "MinutesTemplate.swift"));
+        // Windows のランナーは CRLF で取り出す（.gitattributes がない）ので、改行をそろえてから比べる。
+        // C# の生文字列リテラルの改行も、ソースのファイルの改行になる
+        var swift = File.ReadAllText(Path.Combine(dir.FullName, "Sources", "Hanasu", "MinutesTemplate.swift")).ReplaceLineEndings("\n");
         var start = swift.IndexOf("static let speakerNamesInstruction = \"\"\"\n", StringComparison.Ordinal);
         Assert.True(start >= 0, "Mac 版に speakerNamesInstruction がない");
         start = swift.IndexOf('\n', start) + 1;
         var end = swift.IndexOf("\n    \"\"\"", start, StringComparison.Ordinal);
         var lines = swift[start..end].Split('\n').Select(l => l.StartsWith("    ", StringComparison.Ordinal) ? l[4..] : l);
-        Assert.Equal(MinutesPrompt.SpeakerNamesInstruction, string.Join("\n", lines));
+        Assert.Equal(MinutesPrompt.SpeakerNamesInstruction.ReplaceLineEndings("\n"), string.Join("\n", lines));
     }
 }
