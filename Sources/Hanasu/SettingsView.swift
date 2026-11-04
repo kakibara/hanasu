@@ -56,7 +56,7 @@ private struct GeneralTab: View {
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
-                LabeledContent("英訳して入力") {
+                LabeledContent("翻訳して入力") {
                     ShortcutRecorder(
                         combo: $settings.translateHotKey,
                         defaultCombo: .defaultTranslate,
@@ -67,9 +67,12 @@ private struct GeneralTab: View {
                 Picker("録音モード", selection: $settings.recordingMode) {
                     ForEach(RecordingMode.allCases) { Text($0.label).tag($0) }
                 }
-                Text("日本語で話すと、「英訳して入力」では AI（「AI」タブで音声入力に選んだ Gemini か Claude）が自然な英語に翻訳して入力します。録音中は Esc で取り消せます。")
+                Text("「翻訳して入力」では、AI（「AI」タブで音声入力に選んだもの）が、話した内容を下の「翻訳する言語」に翻訳して入力します。録音中は Esc で取り消せます。")
                     .font(.caption).foregroundStyle(.secondary)
             }
+            // 要件: REQ-DIC-013
+            // 翻訳する言語（TranslationSettingsView.swift）
+            TranslationSettingsSection(languages: $settings.translationLanguages)
             // 音声入力と会議の記録の文字起こしのエンジン（TranscriptionEngineSettingsView.swift）
             TranscriptionEngineSettingsSection(settings: settings)
             // 入力できる場所がないときのクリップボードの扱い（PasteFallbackPanel.swift）

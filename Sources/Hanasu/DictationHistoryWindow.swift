@@ -99,7 +99,7 @@ final class DictationHistoryUI: NSObject {
             let item = NSMenuItem(title: mark + String(text.prefix(40)) + (text.count > 40 ? "…" : ""),
                                   action: #selector(copyEntry(_:)), keyEquivalent: "")
             item.tag = index
-            let label = entry.status.isUnrefined ? "結果（\(entry.status.label)）" : (entry.mode == .translate ? "英訳" : "整形後")
+            let label = entry.status.isUnrefined ? "結果（\(entry.status.label)）" : (entry.mode.translation?.verb ?? "整形後")
             item.toolTip = "\(label):\n\(entry.output)\n\n認識結果:\n\(entry.raw)"
             menu.addItem(item)
         }
@@ -341,7 +341,7 @@ private struct DictationHistoryRow: View {
             HStack(spacing: 6) {
                 Text(DictationHistoryView.timeFormatter.string(from: entry.date))
                 if let app = entry.appName { Text(app).lineLimit(1) }
-                if entry.mode == .translate { Tag(text: "英訳", color: .blue) }
+                if let translation = entry.mode.translation { Tag(text: translation.verb, color: .blue) }
                 if entry.status.isFailure { Tag(text: entry.status == .geminiFailed ? "失敗" : "未整形", color: .orange) }
                 if entry.status == .refineOff { Tag(text: "未整形", color: .secondary) }
                 if entry.audioFileName != nil { Image(systemName: "waveform") }
@@ -367,9 +367,11 @@ private struct Tag: View {
     }
 }
 
+// 設計判断: DEC-DIC-029
 private struct DictationHistoryDetail: View {
     let entry: DictationHistoryEntry
     @ObservedObject var store: DictationHistoryStore
+    @ObservedObject private var settings = AppSettings.shared
     @State private var retrying: DictationHistoryEntry.Mode?
     @State private var message: (text: String, isError: Bool)?
     @State private var sound: NSSound?
@@ -411,7 +413,7 @@ private struct DictationHistoryDetail: View {
             }
             HStack(spacing: 12) {
                 Label(entry.appName ?? "（不明）", systemImage: "macwindow")
-                Label(entry.mode.label, systemImage: entry.mode == .translate ? "globe" : "text.badge.checkmark")
+                Label(entry.mode.label, systemImage: entry.mode.translation != nil ? "globe" : "text.badge.checkmark")
                 if let model = entry.model { Label(model, systemImage: "sparkles") }
                 if let retried = entry.retriedAt {
                     Text("\(DictationHistoryView.fullFormatter.string(from: retried)) にやり直し")
@@ -447,14 +449,16 @@ private struct DictationHistoryDetail: View {
 
     private var outputTitle: String {
         if entry.status.isUnrefined { return "結果（原文のまま）" }
-        return entry.mode == .translate ? "結果（英訳）" : "結果（整形後）"
+        return entry.mode.translation.map { "結果（\($0.verb)）" } ?? "結果（整形後）"
     }
 
     private var retrySection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 Button { retry(.refine) } label: { Label("整形し直す", systemImage: "wand.and.stars") }
-                Button { retry(.translate) } label: { Label("英訳し直す", systemImage: "globe") }
+                ForEach(retryTranslations) { language in
+                    Button { retry(.init(translation: language)) } label: { Label("\(language.verb)し直す", systemImage: "globe") }
+                }
                 if let retrying {
                     ProgressView().controlSize(.small)
                     Text("AI で\(retrying.label)しています…").font(.caption).foregroundStyle(.secondary)
@@ -470,6 +474,11 @@ private struct DictationHistoryDetail: View {
                     .textSelection(.enabled)
             }
         }
+    }
+
+    /// 「…し直す」に出す翻訳の言語。設定で選んだ言語と、この項目のモードの言語
+    private var retryTranslations: [TranslationLanguage] {
+        TranslationLanguage.normalized(settings.translationLanguages + [entry.mode.translation].compactMap { $0 })
     }
 
     private func audioSection(_ url: URL) -> some View {

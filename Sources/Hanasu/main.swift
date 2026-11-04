@@ -5,9 +5,9 @@ import SwiftUI
 // 動作確認用の CLI モード:
 //   Hanasu --transcribe-file <音声ファイル> [--engine apple|whisper|gemini|dictation|speech] [--refine [--translate] [--model <id>]]
 //   （Whisper / Gemini の確認の詳細は TranscriptionEngineCLI.swift）
-//   Hanasu --refine-text <文章> [--translate] [--ai gemini|claude|local] [--model <id>] [--app <bundle id>] [--show-prompt] [--show-request] [--dictionary <辞書ファイル>]
-// --refine を付けると AI での整形も行い、--translate を付けると整形の代わりに英訳する。
-// --app を付けると、そのアプリ向けの文体ルール（設定の「アプリ別」）で整形する。既定の出力言語が English なら英訳する。
+//   Hanasu --refine-text <文章> [--translate | --translate-to en|ja] [--ai gemini|claude|local] [--model <id>] [--app <bundle id>] [--show-prompt] [--show-request] [--dictionary <辞書ファイル>]
+// --refine を付けると AI での整形も行い、--translate を付けると整形の代わりに英訳する（--translate-to ja なら日本語に訳す）。
+// --app を付けると、そのアプリ向けの文体ルール（設定の「アプリ別」）で整形する。既定の出力言語が English（日本語）なら、その言語に訳す。
 // --show-prompt を付けると、AI に送る user content も表示する。
 // --ai gemini|claude|local で AI を選ぶ（省くと設定の「音声入力」の AI）。--model で、その AI のモデルを変える（local は LocalLLMModel の id）。
 // --show-request を付けると、Claude に送るリクエスト（ヘッダーと JSON。キーの値は伏せる）を表示し、送らずに終える。
@@ -18,7 +18,9 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     let settings = AppSettings.shared
     let model = TextAIClient.cliModel(args: args, settings: settings, for: .dictation)
     let app = cliAppStyle(args: args)
-    let translate = args.contains("--translate") || app.style?.outputLanguage == .english
+    // 確かめ方: REQ-DIC-013
+    // --translate（英訳）/ --translate-to en|ja。アプリ別の既定の出力言語が翻訳なら、その言語に翻訳する
+    let translation = TranslationLanguage.cli(args) ?? app.style?.outputLanguage.translation
     // 音声入力と同じく、置き換えルールを当ててから送る（--dictionary <ファイル> で辞書を差し替えられる）
     let dictionary = try DictionaryCLI.dictionary(from: args)
     let request = GeminiClient.Request(
@@ -29,12 +31,12 @@ func cliRefine(_ raw: String, args: [String]) async throws {
         outputLanguage: settings.refineOutputLanguage)
     if args.contains("--show-prompt") {
         var shown = request
-        if translate { shown.extraInstructions = "" }  // translateToEnglish と同じく、英訳では共通の追加ルールを外す
-        print(GeminiClient.userPrompt(for: shown, translating: translate))
+        if translation == .english { shown.extraInstructions = "" }  // translationPrompt と同じく、英訳では共通の追加ルールを外す
+        print(GeminiClient.userPrompt(for: shown, translation: translation))
     }
     // 確かめ方: REQ-COM-020
     if args.contains("--show-request") {
-        let prompt = translate ? GeminiClient.translationPrompt(request) : GeminiClient.refinePrompt(request)
+        let prompt = translation.map { GeminiClient.translationPrompt(request, to: $0) } ?? GeminiClient.refinePrompt(request)
         let env = ProcessInfo.processInfo.environment
         let key = env["ANTHROPIC_API_KEY"].flatMap { $0.isEmpty ? nil : $0 } ?? (try? Keychain.load(.claudeAPIKey)) ?? nil
         print(ClaudeClient.describeRequest(system: prompt.system, userText: prompt.user, model: model, effort: .low, apiKey: key))
@@ -42,8 +44,8 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     }
     let client = try TextAIClient.cli(args: args, settings: settings, for: .dictation)
     let started = Date()
-    let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
-    print(String(format: "[%@ %@ %@ %.1fs] %@", translate ? "英訳" : "整形", client.provider.name, model, Date().timeIntervalSince(started), output))
+    let output = if let translation { try await client.translate(request, to: translation) } else { try await client.refine(request) }
+    print(String(format: "[%@ %@ %@ %.1fs] %@", translation?.verb ?? "整形", client.provider.name, model, Date().timeIntervalSince(started), output))
 }
 
 // 設計判断: DEC-COM-063
@@ -62,6 +64,8 @@ MainActor.assumeIsolated { EditModeCLI.runIfRequested() }
 MainActor.assumeIsolated { ScreenContextCLI.runIfRequested() }
 // 入力できる場所がないときの確認（--test-paste-target / --probe-paste-target / --render-paste-fallback[-settings]）。PasteFallbackCLI.swift
 MainActor.assumeIsolated { PasteFallbackCLI.runIfRequested() }
+// 翻訳する言語の設定の確認（--render-translation-settings）。TranslationSettingsView.swift
+MainActor.assumeIsolated { TranslationSettingsCLI.runIfRequested() }
 // ユーザー辞書の確認（--apply-dictionary / --test-dictionary / --suggest-dictionary / --render-dictionary-settings）。
 // 使い方は DictionaryCLI.swift を参照
 if DictionaryCLI.handles(CommandLine.arguments) {
@@ -208,7 +212,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-app-styles"),
     exit(0)
 }
 
-// 音声入力の HUD を画像にする（見た目の確認用）:  Hanasu --render-hud <出力.png> [--translate] [--engine whisper|gemini [--processing]]
+// 音声入力の HUD を画像にする（見た目の確認用）:  Hanasu --render-hud <出力.png> [--translate | --translate-to en|ja] [--languages en,ja] [--engine whisper|gemini [--processing]]
 // --engine whisper|gemini は、録音を止めてからまとめて文字起こしするときの見た目（音量の目安）。--processing で文字起こし中
 // 確かめ方: REQ-DIC-002, REQ-DIC-011, REQ-DIC-012
 if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
@@ -225,7 +229,13 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
         hud.model.transcribing = CommandLine.arguments.contains("--processing")
         hud.show(CommandLine.arguments.contains("--processing") ? .processing : .recording)
         hud.model.level = 0.05
-        hud.model.translating = CommandLine.arguments.contains("--translate")
+        // 確かめ方: REQ-DIC-011, REQ-DIC-013
+        // --translate / --translate-to en|ja で選んでいる言語、--languages en,ja で設定で選んだ翻訳の言語
+        hud.model.translation = TranslationLanguage.cli(CommandLine.arguments)
+        if let index = CommandLine.arguments.firstIndex(of: "--languages"), CommandLine.arguments.indices.contains(index + 1) {
+            hud.model.translationChoices = TranslationLanguage.normalized(
+                CommandLine.arguments[index + 1].split(separator: ",").compactMap { TranslationLanguage.cliCode(String($0)) })
+        }
         try? hud.snapshotPNG()?.write(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
         print("wrote")
     }

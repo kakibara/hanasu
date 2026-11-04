@@ -75,8 +75,16 @@ public sealed class AppSettings
 
     // 一般
     public HotKeyCombo HotKey { get; set; } = HotKeyCombo.DefaultDictation;
-    /// <summary>話した内容を英語に翻訳して入力するショートカット</summary>
+    /// <summary>話した内容を翻訳して入力するショートカット（翻訳の言語は TranslationLanguages の最初）</summary>
     public HotKeyCombo TranslateHotKey { get; set; } = HotKeyCombo.DefaultTranslate;
+    // 要件: REQ-DIC-013
+    // 設計判断: DEC-DIC-027
+    /// <summary>翻訳の言語（1 つ以上。並びは TranslationLanguages.All の順）。既定は English だけ。読み込むときに SettingsStore.Normalize で直す</summary>
+    [JsonConverter(typeof(Dictation.TranslationLanguagesJsonConverter))]
+    public Dictation.TranslationLanguage[] TranslationLanguages { get; set; } = [Dictation.TranslationLanguage.English];
+    /// <summary>「翻訳して入力」で始める言語（選んだ言語のうち最初）</summary>
+    [JsonIgnore]
+    public Dictation.TranslationLanguage PrimaryTranslationLanguage => Dictation.TranslationLanguages.Normalize(TranslationLanguages)[0];
     public RecordingMode RecordingMode { get; set; } = RecordingMode.Toggle;
     /// <summary>録音に使うマイクの ID（WASAPI のエンドポイント ID）。空なら Windows の既定のマイク</summary>
     public string MicrophoneDeviceId { get; set; } = "";
@@ -195,5 +203,11 @@ public sealed class AppSettings
     [JsonIgnore]
     public Dictation.HistoryPolicy HistoryPolicy => new(HistoryEnabled, Math.Max(1, HistoryMaxCount), Math.Max(0, HistoryMaxDays));
 
-    public AppSettings Clone() => (AppSettings)MemberwiseClone();
+    public AppSettings Clone()
+    {
+        var clone = (AppSettings)MemberwiseClone();
+        // 配列は書き換えられても元に響かないよう写す
+        clone.TranslationLanguages = [.. TranslationLanguages];
+        return clone;
+    }
 }

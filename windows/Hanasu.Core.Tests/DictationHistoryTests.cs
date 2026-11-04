@@ -111,6 +111,23 @@ public class DictationHistoryTests
         Assert.Equal("6F9619FF-8B86-D011-B42D-00C04FC964FF", entry.Id);
     }
 
+    // 確かめ方: REQ-DIC-013
+    // 設計判断: DEC-DIC-029
+    [Fact]
+    public void JapaneseTranslationIsSavedAsTranslateJapaneseLikeMac()
+    {
+        var dir = TestKeys.TempDirectory();
+        var store = NewStore(dir);
+        store.Record("thanks", "ありがとうございます。", DictationMode.TranslateToJapanese, ProcessStatus.Succeeded, "Slack", date: Now);
+        Assert.Contains("\"mode\": \"translateJapanese\"", File.ReadAllText(Path.Combine(dir, "history.json")).Replace(" : ", ": "));
+        var reloaded = NewStore(dir);
+        reloaded.Load();
+        var entry = Assert.Single(reloaded.Entries);
+        Assert.Equal(HistoryMode.TranslateJapanese, entry.Mode);
+        Assert.Equal("和訳", DictationHistoryEntry.ModeLabel(entry.Mode));
+        Assert.Equal("英訳", DictationHistoryEntry.ModeLabel(HistoryMode.Translate));
+    }
+
     [Fact]
     public void OldEntriesAreRemovedByDays()
     {

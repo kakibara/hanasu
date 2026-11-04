@@ -5,13 +5,21 @@ import os
 
 let appLog = Logger(subsystem: "dev.mactypeless.Hanasu", category: "dictation")
 
-/// ホットキー → 録音 → 文字起こし → Gemini 整形（または英訳） → 入力、の流れを管理する。
+/// ホットキー → 録音 → 文字起こし → Gemini 整形（または翻訳） → 入力、の流れを管理する。
 @MainActor
 final class DictationController {
     enum State { case idle, preparing, recording, processing }
-    // 要件: REQ-DIC-010
-    /// 録音を始めたショートカットで決まる。整形して日本語で入力するか、英語に翻訳して入力するか
-    enum Mode { case refine, translateToEnglish }
+    // 要件: REQ-DIC-010, REQ-DIC-013
+    /// 録音を始めたショートカットで決まる。整形して話した言語で入力するか、翻訳の言語に翻訳して入力するか
+    enum Mode: Equatable {
+        case refine
+        case translate(TranslationLanguage)
+
+        var translation: TranslationLanguage? {
+            if case .translate(let language) = self { return language }
+            return nil
+        }
+    }
 
     private(set) var state: State = .idle {
         didSet { onStateChange?(state) }
@@ -55,18 +63,18 @@ final class DictationController {
         recognizer.onBatchTranscriptionStarted = { [weak self] _ in
             self?.hud.model.transcribing = true
         }
-        hud.model.onSelectTranslating = { [weak self] translating in
-            self?.selectOutputLanguage(translating: translating)
+        hud.model.onSelectTranslation = { [weak self] translation in
+            self?.selectOutputLanguage(translation)
         }
         hud.model.onStop = { [weak self] in self?.stopFromHUD() }
         hud.model.onCancel = { [weak self] in self?.cancelDictation() }
         settings.$hotKey
             .removeDuplicates()
-            .sink { [weak self] combo in self?.registerHotKey(combo, mode: .refine) }
+            .sink { [weak self] combo in self?.registerHotKey(combo, translating: false) }
             .store(in: &cancellables)
         settings.$translateHotKey
             .removeDuplicates()
-            .sink { [weak self] combo in self?.registerHotKey(combo, mode: .translateToEnglish) }
+            .sink { [weak self] combo in self?.registerHotKey(combo, translating: true) }
             .store(in: &cancellables)
     }
 
@@ -80,19 +88,23 @@ final class DictationController {
     }
 
     func resumeHotKey() {
-        registerHotKey(settings.hotKey, mode: .refine)
-        registerHotKey(settings.translateHotKey, mode: .translateToEnglish)
+        registerHotKey(settings.hotKey, translating: false)
+        registerHotKey(settings.translateHotKey, translating: true)
     }
 
-    private func registerHotKey(_ combo: HotKeyCombo, mode: Mode) {
-        let previous = mode == .refine ? mainHotKeyID : translateHotKeyID
+    private func registerHotKey(_ combo: HotKeyCombo, translating: Bool) {
+        let previous = translating ? translateHotKeyID : mainHotKeyID
         if let previous { hotKeys.unregister(previous) }
         let id = hotKeys.register(combo) { [weak self] event in
-            self?.handleHotKey(event, mode: mode)
+            guard let self else { return }
+            // 設計判断: DEC-DIC-027
+            // 翻訳の言語は押したときの設定で決める（設定を変えても登録し直さなくてよい）
+            self.handleHotKey(event, mode: translating ? .translate(self.settings.primaryTranslationLanguage) : .refine)
         }
-        switch mode {
-        case .refine: mainHotKeyID = id
-        case .translateToEnglish: translateHotKeyID = id
+        if translating {
+            translateHotKeyID = id
+        } else {
+            mainHotKeyID = id
         }
         if id == nil {
             onHotKeyRegistrationFailed?(combo)
@@ -129,13 +141,16 @@ final class DictationController {
 
     // MARK: - 操作
 
-    // 要件: REQ-DIC-011
-    /// 録音中に HUD で出力の言語を切り替える。止めた時点の選択で、整形するか英訳するかが決まる
-    func selectOutputLanguage(translating: Bool) {
+    // 要件: REQ-DIC-011, REQ-DIC-013
+    /// 録音中に HUD で出力の言語を切り替える。止めた時点の選択で、整形するか、どの言語に翻訳するかが決まる
+    func selectOutputLanguage(_ translation: TranslationLanguage?) {
         guard state == .preparing || state == .recording else { return }
-        mode = translating ? .translateToEnglish : .refine
-        hud.model.translating = translating
+        mode = translation.map(Mode.translate) ?? .refine
+        hud.model.translation = translation
     }
+
+    /// 翻訳して入力するときの言語。メニューから始めるとき用（ショートカットと同じく、選んだ言語のうち最初）
+    var primaryTranslateMode: Mode { .translate(settings.primaryTranslationLanguage) }
 
     // 要件: REQ-DIC-012
     // 設計判断: DEC-DIC-026
@@ -158,7 +173,7 @@ final class DictationController {
     }
 
     // 要件: REQ-DIC-020, REQ-DIC-021
-    // 設計判断: DEC-DIC-045
+    // 設計判断: DEC-DIC-045, DEC-DIC-027
     func startDictation(mode: Mode = .refine) {
         guard state == .idle, canStart() else { return }
         // 前に貼り付けられずに残した結果の表示は、次の録音を始めたら閉じる（DEC-DIC-094）
@@ -169,13 +184,15 @@ final class DictationController {
         cancelRequested = false
         targetAppName = NSWorkspace.shared.frontmostApplication?.localizedName
         targetAppStyle = AppStyleStore.shared.style(forBundleID: NSWorkspace.shared.frontmostApplication?.bundleIdentifier)
-        // 既定の出力言語が英語のアプリでは English から始める。HUD で切り替えればそちらが優先される
-        if mode == .refine, targetAppStyle?.outputLanguage == .english {
-            self.mode = .translateToEnglish
+        // 既定の出力言語が English（日本語）のアプリでは、その言語への翻訳から始める。HUD で切り替えればそちらが優先される
+        if mode == .refine, let translation = targetAppStyle?.outputLanguage.translation {
+            self.mode = .translate(translation)
         }
         screenContextCapture = ScreenContextCapture.begin()
         pendingAudioURL = DictationHistoryStore.shared.newAudioURL()
-        hud.model.translating = self.mode == .translateToEnglish
+        // HUD には「話した言語」と設定で選んだ翻訳の言語を出す（アプリ別の既定で選んでいない言語から始めたときは、それも出す）
+        hud.model.translationChoices = TranslationLanguage.normalized(settings.translationLanguages + [self.mode.translation].compactMap { $0 })
+        hud.model.translation = self.mode.translation
         // Whisper / Gemini は録音を止めてからまとめて文字起こしするので、HUD の出しかたを変える
         hud.model.batchEngine = settings.dictationEngine.isLive ? nil : settings.dictationEngine
         hud.show(.preparing("準備中…"))
@@ -269,10 +286,10 @@ final class DictationController {
         var warning: String?
         var historyStatus: DictationHistoryEntry.Status = .refineOff
         var historyError: String?
-        let translating = mode == .translateToEnglish
-        // 英訳は AI でしかできないので、整形をオフにしていても AI（Gemini か Claude）に送る。全体がスニペットなら呼ばない
-        if settings.refineWithGemini || translating, snippetMatch?.isWholeUtterance != true {
-            let verb = translating ? "翻訳" : "整形"
+        let translation = mode.translation
+        // 翻訳は AI でしかできないので、整形をオフにしていても AI（Gemini か Claude）に送る。全体がスニペットなら呼ばない
+        if settings.refineWithGemini || translation != nil, snippetMatch?.isWholeUtterance != true {
+            let verb = translation != nil ? "翻訳" : "整形"
             do {
                 // 要件: REQ-COM-020, REQ-COM-024
                 if let client = try TextAIClient.fromSettings(settings, for: .dictation) {
@@ -287,11 +304,12 @@ final class DictationController {
                         appStyle: targetAppStyle,
                         screenContext: await screenContextCapture?.result(),
                         outputLanguage: settings.refineOutputLanguage)
-                    // スニペットがあれば、その前後の文だけを整形（英訳）してつなぐ。本文は送らない
+                    // スニペットがあれば、その前後の文だけを整形（翻訳）してつなぐ。本文は送らない
                     let convert: @Sendable (String) async throws -> String = { text in
                         var request = request
                         request.transcript = text
-                        return translating ? try await client.translateToEnglish(request) : try await client.refine(request)
+                        if let translation { return try await client.translate(request, to: translation) }
+                        return try await client.refine(request)
                     }
                     if let snippetMatch {
                         output = try await snippetMatch.assemble(convert: convert)
@@ -299,7 +317,7 @@ final class DictationController {
                         output = try await convert(corrected)
                     }
                     historyStatus = .succeeded
-                    appLog.notice("\(translating ? "translated" : "refined", privacy: .public) by \(model, privacy: .public): \(output.count) chars")
+                    appLog.notice("\(translation.map { "translated (\($0.rawValue))" } ?? "refined", privacy: .public) by \(model, privacy: .public): \(output.count) chars")
                 } else {
                     let provider = settings.aiProvider(for: .dictation)
                     appLog.notice("\(verb, privacy: .public) skipped: no credentials (ai=\(provider.rawValue, privacy: .public))")
@@ -336,7 +354,7 @@ final class DictationController {
         case (.pasted, let warning?):
             hud.show(.error(warning))
         case (.pasted, nil):
-            hud.show(.done(snippetMatch?.hudMessage ?? (translating ? "英訳して入力しました" : "入力しました")))
+            hud.show(.done(snippetMatch?.hudMessage ?? (translation.map { "\($0.verb)して入力しました" } ?? "入力しました")))
         }
     }
 

@@ -33,10 +33,11 @@ public interface IHud
 {
     void Show(HudState state);
     void UpdateTranscript(string text);
-    /// <summary>「話した言語 / English」の切り替えの表示</summary>
-    void SetTranslating(bool translating);
-    /// <summary>HUD の「話した言語 / English」が押されたとき（true = English）</summary>
-    event EventHandler<bool>? LanguageSelected;
+    // 要件: REQ-DIC-011, REQ-DIC-013
+    /// <summary>「話した言語 / English / 日本語」の切り替えの表示。selected は選んでいる翻訳の言語（null は話した言語）、choices は並べる翻訳の言語</summary>
+    void SetLanguages(TranslationLanguage? selected, IReadOnlyList<TranslationLanguage> choices);
+    /// <summary>HUD の言語の切り替えが押されたとき（null = 話した言語）</summary>
+    event EventHandler<TranslationLanguage?>? LanguageSelected;
     /// <summary>HUD の「■ 停止」が押されたとき（ショートカットをもう一度押したのと同じ）</summary>
     event EventHandler? StopRequested;
     /// <summary>HUD の「取消」が押されたとき（Esc と同じ）</summary>
@@ -93,9 +94,13 @@ public static class HudText
         return warning is null ? how : $"{warning}\n{how}";
     }
 
-    /// <summary>処理中の見出し</summary>
-    public static string ProcessingTitle(bool translating, string provider = "Gemini") =>
-        translating ? $"{provider} で英語に翻訳しています…" : $"{provider} で整えています…";
+    /// <summary>処理中の見出し（translation は翻訳の言語。整形なら null）</summary>
+    public static string ProcessingTitle(TranslationLanguage? translation, string provider = "Gemini") => translation switch
+    {
+        TranslationLanguage.English => $"{provider} で英語に翻訳しています…",
+        TranslationLanguage.Japanese => $"{provider} で日本語に翻訳しています…",
+        _ => $"{provider} で整えています…",
+    };
 
     /// <summary>経過時間（m:ss）</summary>
     public static string Elapsed(TimeSpan elapsed)

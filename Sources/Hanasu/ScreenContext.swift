@@ -61,9 +61,11 @@ extension ScreenContext {
 
     // 設計判断: DEC-DIC-065, DEC-DIC-066
     /// 文脈を渡すときに system instruction の末尾へ足す文。渡さないときは空文字。
-    static func instruction(for context: ScreenContext?, translating: Bool) -> String {
+    // 設計判断: DEC-DIC-028
+    /// 和訳は出力が日本語なので、整形と同じ指示を使う
+    static func instruction(for context: ScreenContext?, translation: TranslationLanguage?) -> String {
         guard context?.promptBlock() != nil else { return "" }
-        return translating ? translationInstruction : refineInstruction
+        return translation == .english ? translationInstruction : refineInstruction
     }
 
     private static let commonRules = """

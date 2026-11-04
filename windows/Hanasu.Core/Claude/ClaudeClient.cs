@@ -56,8 +56,8 @@ public sealed class ClaudeClient : ITextAiClient
     public Task<string> RefineAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
         GenerateTextAsync(TextPurpose.Refine, GeminiPrompts.SystemInstruction(request.OutputLanguage), GeminiPrompts.UserPrompt(request), request.Model, cancellationToken);
 
-    public Task<string> TranslateToEnglishAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
-        GenerateTextAsync(TextPurpose.Translate, GeminiPrompts.TranslationInstruction, GeminiPrompts.UserPrompt(request, translating: true),
+    public Task<string> TranslateAsync(RefineRequest request, Dictation.TranslationLanguage language, CancellationToken cancellationToken = default) =>
+        GenerateTextAsync(TextPurpose.Translate, GeminiPrompts.TranslationSystemInstruction(language), GeminiPrompts.UserPrompt(request, language),
             request.Model, cancellationToken);
 
     public async Task<string> GenerateTextAsync(TextPurpose purpose, string systemInstruction, string userText, string model,

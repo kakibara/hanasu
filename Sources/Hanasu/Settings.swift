@@ -149,13 +149,29 @@ final class AppSettings: ObservableObject {
             defaults.set(Int(hotKey.modifiers), forKey: Keys.hotKeyModifiers)
         }
     }
-    /// 話した内容を英語に翻訳して入力するショートカット
+    /// 話した内容を翻訳して入力するショートカット（翻訳の言語は translationLanguages の最初）
     @Published var translateHotKey: HotKeyCombo {
         didSet {
             defaults.set(Int(translateHotKey.keyCode), forKey: Keys.translateHotKeyCode)
             defaults.set(Int(translateHotKey.modifiers), forKey: Keys.translateHotKeyModifiers)
         }
     }
+    // 要件: REQ-DIC-013
+    // 設計判断: DEC-DIC-027
+    /// 翻訳の言語（1 つ以上。並びは TranslationLanguage.allCases の順）。既定は English だけ
+    @Published var translationLanguages: [TranslationLanguage] {
+        didSet {
+            let normalized = TranslationLanguage.normalized(translationLanguages)
+            if normalized != translationLanguages {
+                translationLanguages = normalized
+                return
+            }
+            defaults.set(translationLanguages.map(\.rawValue), forKey: Keys.translationLanguages)
+        }
+    }
+
+    /// 「翻訳して入力」で始める言語（選んだ言語のうち最初）
+    var primaryTranslationLanguage: TranslationLanguage { translationLanguages.first ?? .english }
     // 要件: REQ-COM-001
     // 設計判断: DEC-COM-020
     // 設計判断: DEC-COM-032
@@ -280,6 +296,8 @@ final class AppSettings: ObservableObject {
             Keys.hotKeyModifiers: Int(HotKeyCombo.default.modifiers),
             Keys.translateHotKeyCode: Int(HotKeyCombo.defaultTranslate.keyCode),
             Keys.translateHotKeyModifiers: Int(HotKeyCombo.defaultTranslate.modifiers),
+            // 設計判断: DEC-DIC-027
+            Keys.translationLanguages: [TranslationLanguage.english.rawValue],
             Keys.recordingMode: RecordingMode.toggle.rawValue,
             // 設計判断: DEC-DIC-002
             Keys.engine: RecognizerEngine.speech.rawValue,
@@ -325,6 +343,8 @@ final class AppSettings: ObservableObject {
         translateHotKey = HotKeyCombo(
             keyCode: UInt32(defaults.integer(forKey: Keys.translateHotKeyCode)),
             modifiers: UInt32(defaults.integer(forKey: Keys.translateHotKeyModifiers)))
+        translationLanguages = TranslationLanguage.normalized(
+            (defaults.stringArray(forKey: Keys.translationLanguages) ?? []).compactMap(TranslationLanguage.init(rawValue:)))
         recordingMode = RecordingMode(rawValue: defaults.string(forKey: Keys.recordingMode)!) ?? .toggle
         engine = RecognizerEngine(rawValue: defaults.string(forKey: Keys.engine)!) ?? .speech
         dictationEngine = TranscriptionEngine(rawValue: defaults.string(forKey: Keys.dictationEngine)!) ?? .apple
@@ -364,6 +384,7 @@ final class AppSettings: ObservableObject {
         static let hotKeyModifiers = "hotKeyModifiers"
         static let translateHotKeyCode = "translateHotKeyCode"
         static let translateHotKeyModifiers = "translateHotKeyModifiers"
+        static let translationLanguages = "translationLanguages"
         static let recordingMode = "recordingMode"
         static let engine = "recognizerEngine"
         static let dictationEngine = "dictationTranscriptionEngine"
