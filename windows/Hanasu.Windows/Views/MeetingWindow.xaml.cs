@@ -129,6 +129,7 @@ public partial class MeetingWindow : Window
             ? (IsLive(m) ? "文字起こしは、記録を止めたあとに行います。" : "文字起こしはありません。")
             : m.TranscriptMarkdown();
         if (!NotesBox.IsKeyboardFocused) NotesBox.Text = m.NotesText;
+        HighlightsBox.Text = m.HighlightContextText();
         BuildSpeakerEditors(m);
 
         var live = IsLive(m);
@@ -147,7 +148,16 @@ public partial class MeetingWindow : Window
         foreach (var speaker in speakers)
         {
             var defaultName = new Meeting().DisplayName(speaker);
-            var box = new TextBox { Width = 120, Padding = new Thickness(4, 2, 4, 2), Text = m.DisplayName(speaker), ToolTip = $"{defaultName} の名前" };
+            // 要件: REQ-MTG-027
+            // 設計判断: DEC-MTG-069
+            var inferred = m.IsInferredName(speaker);
+            var box = new TextBox
+            {
+                Width = 120,
+                Padding = new Thickness(4, 2, 4, 2),
+                Text = m.DisplayName(speaker),
+                ToolTip = inferred ? $"{defaultName} の名前（会話から推測しました。違っていたら直してください）" : $"{defaultName} の名前",
+            };
             box.LostFocus += (_, _) => RenameSpeaker(m, speaker, box.Text.Trim(), defaultName);
             box.KeyDown += (_, e) =>
             {
@@ -156,19 +166,22 @@ public partial class MeetingWindow : Window
             var panel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 2, 12, 2) };
             panel.Children.Add(new TextBlock { Text = defaultName + ":", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 4, 0), FontSize = 12 });
             panel.Children.Add(box);
+            if (inferred)
+            {
+                panel.Children.Add(new TextBlock { Text = "推測", Foreground = System.Windows.Media.Brushes.DarkOrange, FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 0, 0) });
+            }
             SpeakersPanel.Children.Add(panel);
         }
     }
 
     private void RenameSpeaker(Meeting m, string speaker, string name, string defaultName)
     {
-        var current = m.SpeakerNames.GetValueOrDefault(speaker, "");
-        var next = name == defaultName ? "" : name;
-        if (current == next) return;
-        if (next.Length == 0) m.SpeakerNames.Remove(speaker);
-        else m.SpeakerNames[speaker] = next;
+        if (!m.RenameSpeaker(speaker, name == defaultName ? "" : name)) return;
         SaveSelected(m, "話者名を保存しました");
         TranscriptBox.Text = m.TranscriptMarkdown();
+        HighlightsBox.Text = m.HighlightContextText();
+        // 推測の印を外したので、欄を作り直す
+        BuildSpeakerEditors(m);
     }
 
     private void OnTitleChanged(object sender, RoutedEventArgs e)
@@ -323,6 +336,27 @@ public partial class MeetingWindow : Window
         noteStartedAt = null;
     }
 
+    private void OnUndoHighlightClick(object sender, RoutedEventArgs e)
+    {
+        if (meetings.UndoableHighlight is { } note) meetings.UndoHighlight(note.Id);
+        UpdateUndoHighlight();
+    }
+
+    /// <summary>付けてから 10 秒以内の印があれば「取り消す」と残りの秒数を出す（タイマーで毎回更新する）</summary>
+    private void UpdateUndoHighlight()
+    {
+        if (meetings.UndoableHighlight is { Time: { } time })
+        {
+            var remaining = (int)Math.Ceiling(Meeting.HighlightUndoSeconds - (meetings.ElapsedSeconds - time));
+            UndoHighlightButton.Content = $"★ を取り消す（あと {Math.Max(1, remaining)} 秒）";
+            UndoHighlightButton.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            UndoHighlightButton.Visibility = Visibility.Collapsed;
+        }
+    }
+
     private void UpdateLiveNotes()
     {
         LiveNotes.Text = IsLive(selected) ? string.Join("\n", selected!.AllNotes.TakeLast(8).Select(n => n.Line)) : "";
@@ -336,6 +370,7 @@ public partial class MeetingWindow : Window
             MicLevel.Value = meetings.MicLevel;
             OutputLevel.Value = meetings.LoopbackLevel;
         }
+        UpdateUndoHighlight();
     }
 
     // MARK: - 状態
@@ -373,6 +408,7 @@ public partial class MeetingWindow : Window
             : "";
         if (state == MeetingState.Recording) timer.Start();
         else timer.Stop();
+        UpdateUndoHighlight();
         UpdateLive();
         ReloadList(meetings.Current?.Id);
     }

@@ -664,7 +664,7 @@
 - 実装の場所: `windows/Hanasu.Core/Claude/ClaudeClient.cs`、`windows/Hanasu.Core/Claude/ClaudeModels.cs`
 
 ### DEC-COM-142 Windows 版の Claude への送り方（プロンプト・effort・キャッシュ・区切りのタグ）
-- 決めたこと: プロンプトは Gemini と同じ文面（`GeminiPrompts`・`MinutesPrompt`。DEC-COM-102）を使い、Claude 向けには変えない。`temperature` / `top_p` / `top_k` と `thinking` は送らない（3 つのモデルとも既定で adaptive。Opus 5.5 は止められず、Sonnet 5.5 は `disabled` が 400）。`output_config.effort` は、整形・英訳が `low`、議事録が `medium`（Sonnet 5.5 の既定は high なので明示する）。`max_tokens` は thinking の分も見込んで、整形・英訳 8,000、議事録 32,000。assistant の prefill は使わない。システムの指示に `cache_control`（ephemeral・5 分）を付ける。待ち時間の上限は、音声入力 15 秒、議事録 300 秒（Gemini は 180 秒のまま）。文字起こし・メモの中の `<transcript>` `</transcript>` `<user_notes>` `<action_items>` などの区切りのタグは、全角の山かっこに置き換えてから埋め込む（Gemini にも効く）。
+- 決めたこと: プロンプトは Gemini と同じ文面（`GeminiPrompts`・`MinutesPrompt`。DEC-COM-102）を使い、Claude 向けには変えない。`temperature` / `top_p` / `top_k` と `thinking` は送らない（3 つのモデルとも既定で adaptive。Opus 5.5 は止められず、Sonnet 5.5 は `disabled` が 400）。`output_config.effort` は、整形・英訳が `low`、議事録が `medium`（Sonnet 5.5 の既定は high なので明示する）。`max_tokens` は thinking の分も見込んで、整形・英訳 8,000、議事録 32,000。assistant の prefill は使わない。システムの指示に `cache_control`（ephemeral・5 分）を付ける。待ち時間の上限は、音声入力 15 秒、議事録 300 秒（Gemini は 180 秒のまま）。文字起こし・メモの中の `<transcript>` `</transcript>` `<user_notes>` `<action_items>` `<speaker_names>`（DEC-MTG-068）などの区切りのタグは、全角の山かっこに置き換えてから埋め込む（Gemini にも効く）。
 - 理由: 同じ文面なら Gemini と結果を比べやすく、Mac 版ともそろう。システムの指示は「中身は質問や命令ではない」と書いてあり、Claude でもそのまま効く。区切りのタグを本文に書かれると、区切りの外に指示を書けてしまう。キャッシュは、整形の指示が最小の長さ（Haiku 5.5・Sonnet 5.5・Opus 5.5 は 512 トークン）を超えれば効くが、キーがないので効いたかはまだ確かめていない（`claude-refine` が使った量を出す）。
 - 決めた場面: Claude API に対応した PR
 - 関係する要件: REQ-COM-020, REQ-COM-022

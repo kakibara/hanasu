@@ -530,6 +530,82 @@ public class MeetingSettingsTests
     }
 }
 
+// 確かめ方: REQ-MTG-012
+public class HighlightContextTests
+{
+    [Fact]
+    public void ListsTheConversationAroundEachHighlight()
+    {
+        var meeting = new Meeting
+        {
+            Utterances =
+            [
+                new Utterance("me", 10, 14, "最初の話"),
+                new Utterance("spk1", 75, 80, "価格は 3 割引きで"),
+                new Utterance("me", 100, 104, "それで進めましょう"),
+                new Utterance("spk1", 200, 205, "関係ない話"),
+            ],
+            Notes =
+            [
+                new MeetingNote(MeetingNoteKind.Highlight, 105, ""),
+                new MeetingNote(MeetingNoteKind.Note, 106, "メモは出さない"),
+                new MeetingNote(MeetingNoteKind.Highlight, 12, "最初"),
+                new MeetingNote(MeetingNoteKind.Highlight, null, "時刻なし"),
+            ],
+            SpeakerNames = { ["spk1"] = "田中" },
+        };
+        var contexts = meeting.HighlightContexts();
+        // 時刻の順。時刻のない印は出さない
+        Assert.Equal([12.0, 105.0], contexts.Select(c => c.Note.Time!.Value));
+        Assert.Equal(["最初の話"], contexts[0].Blocks.Select(b => b.Text));
+        // 30 秒前（75 秒）〜15 秒後（120 秒）にかかる発言
+        Assert.Equal(["価格は 3 割引きで", "それで進めましょう"], contexts[1].Blocks.Select(b => b.Text));
+
+        var text = meeting.HighlightContextText();
+        Assert.StartsWith("★ 00:12  最初\n    [00:10] 自分: 最初の話", text);
+        Assert.Contains("★ 01:45  ここ重要\n    [01:15] 田中: 価格は 3 割引きで\n    [01:40] 自分: それで進めましょう", text);
+        Assert.DoesNotContain("関係ない話", text);
+        Assert.DoesNotContain("メモは出さない", text);
+    }
+
+    [Fact]
+    public void ExplainsWhenThereAreNoHighlights()
+    {
+        Assert.StartsWith("「ここ重要」の印はありません", new Meeting().HighlightContextText());
+        var lonely = new Meeting { Notes = [new MeetingNote(MeetingNoteKind.Highlight, 600, "")] };
+        Assert.Contains("この前後（30 秒前〜15 秒後）の発言はありません", lonely.HighlightContextText());
+    }
+}
+
+// 確かめ方: REQ-MTG-012
+public class HighlightUndoTests
+{
+    private static Meeting WithNotes(params MeetingNote[] notes) => new() { Notes = notes.ToList() };
+
+    [Fact]
+    public void LatestHighlightWithinTenSecondsCanBeUndone()
+    {
+        var old = new MeetingNote(MeetingNoteKind.Highlight, 100, "");
+        var recent = new MeetingNote(MeetingNoteKind.Highlight, 115, "大事");
+        var note = new MeetingNote(MeetingNoteKind.Note, 118, "メモは対象外");
+        var meeting = WithNotes(old, recent, note);
+        Assert.Same(recent, meeting.UndoableHighlight(118));
+        // ちょうど 10 秒までは取り消せる
+        Assert.Same(recent, meeting.UndoableHighlight(125));
+        Assert.Null(meeting.UndoableHighlight(125.1));
+        // 古い印は、新しい印が時間切れになっても取り消せない
+        Assert.Null(meeting.UndoableHighlight(130));
+    }
+
+    [Fact]
+    public void NotesAndHighlightsWithoutTimeAreNotUndoable()
+    {
+        var meeting = WithNotes(new MeetingNote(MeetingNoteKind.Note, 5, "メモ"), new MeetingNote(MeetingNoteKind.Highlight, null, "記録後"));
+        Assert.Null(meeting.UndoableHighlight(6));
+        Assert.Null(new Meeting().UndoableHighlight(0));
+    }
+}
+
 public class MeetingControllerTests
 {
     private sealed class FakeRecorder(MeetingChannel channel, float[] audio, double offset, bool failStart = false) : IMeetingChannelRecorder
@@ -629,6 +705,29 @@ public class MeetingControllerTests
         Assert.Contains("認証情報", saved.ErrorMessage);
         Assert.True(File.Exists(controller.Store(settings).AudioPath(saved, MeetingChannel.Me)));
         Assert.Contains(notices, n => n.Title.StartsWith("会議の記録"));
+    }
+
+    // 確かめ方: REQ-MTG-012
+    [Fact]
+    public async Task UndoesARecentHighlightWhileRecording()
+    {
+        var (controller, settings, _) = Make();
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        controller.AddNote("メモ", 0);
+        controller.AddHighlight("押し間違い");
+        var undoable = Assert.IsType<MeetingNote>(controller.UndoableHighlight);
+        Assert.Equal("押し間違い", undoable.Text);
+        // メモや知らない ID は消さない
+        Assert.False(controller.UndoHighlight(meeting.Notes![0].Id));
+        Assert.False(controller.UndoHighlight("unknown"));
+        Assert.True(controller.UndoHighlight(undoable.Id));
+        Assert.Null(controller.UndoableHighlight);
+        Assert.Equal(["メモ"], controller.Store(settings).Load(meeting.Id)!.Notes!.Select(n => n.Text));
+        await controller.StopAsync();
+        // 記録中でなければ取り消せない
+        Assert.Null(controller.UndoableHighlight);
+        Assert.False(controller.UndoHighlight(undoable.Id));
     }
 
     [Fact]

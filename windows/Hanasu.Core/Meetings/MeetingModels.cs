@@ -257,6 +257,36 @@ public sealed class Meeting
     /// 音声を文字起こしし直すときに使う。Mac 版は知らないキーを読み飛ばすので、互換性は崩れない
     /// </summary>
     public Dictionary<string, double>? AudioStartOffsets { get; set; }
+    /// <summary>会話から推測して名前を付けた話者キー（SpeakerNameInference）。ユーザーが直すと外す。古い会議にはないので省略可（Mac 版と同じキー）</summary>
+    // 設計判断: DEC-MTG-069
+    public List<string>? InferredSpeakers { get; set; }
+
+    /// <summary>議事録の結果を入れる。応答で分かった話者の名前も、名前のない話者に付ける</summary>
+    // 要件: REQ-MTG-027
+    public void ApplyMinutes(MinutesResult result)
+    {
+        var (minutes, _) = SpeakerNameInference.Apply(result.SpeakerNames, this, result);
+        Minutes = minutes.Markdown;
+        ActionItems = minutes.ActionItems;
+    }
+
+    /// <summary>話者名を手で付け替える。推測で付けた名前を直したら（消したときも）、推測の印を外す。変わったら true</summary>
+    // 要件: REQ-MTG-008
+    // 設計判断: DEC-MTG-069
+    public bool RenameSpeaker(string speaker, string name)
+    {
+        var next = name.Trim();
+        if (SpeakerNames.GetValueOrDefault(speaker, "") == next) return false;
+        if (next.Length == 0) SpeakerNames.Remove(speaker);
+        else SpeakerNames[speaker] = next;
+        InferredSpeakers?.Remove(speaker);
+        if (InferredSpeakers is { Count: 0 }) InferredSpeakers = null;
+        return true;
+    }
+
+    /// <summary>会話から推測して付けた名前か</summary>
+    public bool IsInferredName(string speaker) =>
+        InferredSpeakers?.Contains(speaker) == true && SpeakerNames.GetValueOrDefault(speaker, "").Length > 0;
 
     public string DisplayName(string speaker)
     {
@@ -329,11 +359,57 @@ public sealed class Meeting
     [JsonIgnore]
     public string NotesText => MeetingNote.ToText(AllNotes);
 
+    // 要件: REQ-MTG-012
+    // 設計判断: DEC-MTG-047
+    /// <summary>記録中に「ここ重要」の印を取り消せる時間（秒）。押し間違いのやり直しのため。それより古い印は記録のあとに「メモ」タブで消す</summary>
+    public const double HighlightUndoSeconds = 10;
+
+    /// <summary>今取り消せる印（付けてから 10 秒以内のうち、いちばん新しいもの）。elapsed は録音開始からの秒数。なければ null</summary>
+    public MeetingNote? UndoableHighlight(double elapsed) =>
+        Highlights.Where(h => h.Time is { } t && elapsed - t >= 0 && elapsed - t <= HighlightUndoSeconds)
+            .OrderByDescending(h => h.Time)
+            .FirstOrDefault();
+
     public string NotesMarkdown() => $"# {Title} — メモ\n\n{NotesText}\n";
 
     /// <summary>「ここ重要」の印の前後で強調する範囲（印を押すのは大事な発言を聞いた後なので、前を長めにとる）</summary>
     public const double HighlightLeadTime = 30;
     public const double HighlightTrailTime = 15;
+
+    // 要件: REQ-MTG-012
+    // 設計判断: DEC-MTG-041, DEC-MTG-049
+    /// <summary>「ここ重要」の印ごとの、前後の発言（議事録で重要として扱うのと同じ 30 秒前〜15 秒後）。時刻の順</summary>
+    public IReadOnlyList<(MeetingNote Note, IReadOnlyList<Utterance> Blocks)> HighlightContexts()
+    {
+        var blocks = MergedBlocks();
+        return Highlights.Where(h => h.Time is not null).OrderBy(h => h.Time)
+            .Select(h =>
+            {
+                var t = h.Time!.Value;
+                IReadOnlyList<Utterance> near = blocks.Where(b => b.Start <= t + HighlightTrailTime && t - HighlightLeadTime <= b.End).ToList();
+                return (h, near);
+            })
+            .ToList();
+    }
+
+    /// <summary>会議ノートの「ここ重要」タブに出す文章（印ごとに見出しと前後の発言）</summary>
+    public string HighlightContextText()
+    {
+        var contexts = HighlightContexts();
+        if (contexts.Count == 0)
+        {
+            return "「ここ重要」の印はありません。記録中に「★ ここ重要」かショートカットで付けると、ここに前後の会話をまとめて出します。";
+        }
+        var lines = new List<string>();
+        foreach (var (note, blocks) in contexts)
+        {
+            if (lines.Count > 0) lines.Add("");
+            lines.Add($"★ {Clock(note.Time ?? 0)}  {(note.Text.Length == 0 ? "ここ重要" : note.Text)}");
+            if (blocks.Count == 0) lines.Add("    この前後（30 秒前〜15 秒後）の発言はありません");
+            lines.AddRange(blocks.Select(b => $"    [{Clock(b.Start)}] {DisplayName(b.Speaker)}: {b.Text}"));
+        }
+        return string.Join("\n", lines);
+    }
 
     public bool IsNearHighlight(Utterance block) =>
         Highlights.Any(h => h.Time is { } t && block.Start <= t + HighlightTrailTime && t - HighlightLeadTime <= block.End);

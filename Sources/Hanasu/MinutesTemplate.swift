@@ -322,6 +322,8 @@ enum MinutesTemplateStore {
 struct MinutesResult {
     var markdown: String
     var actionItems: [ActionItem]
+    /// 応答の <speaker_names> で分かった話者の名前（表示ラベル「話者1」など → 名前）。当てはめは SpeakerNameInference
+    var speakerNames: [String: String] = [:]
 }
 
 // 要件: REQ-MTG-006
@@ -385,8 +387,23 @@ enum MinutesPrompt {
         - due_note: 期限について話された言い方（「来週中」「次回の定例まで」など）。話されていなければ null
         アクションアイテムがなければ [] を出力してください。<action_items> の外に説明は書かないでください。
         """)
+        parts.append(speakerNamesInstruction)
         return parts.joined(separator: "\n\n")
     }
+
+    // 要件: REQ-MTG-027
+    // 設計判断: DEC-MTG-068
+    /// 話者の名前を <speaker_names> で出させる指示（Windows 版 MinutesPrompt.SpeakerNamesInstruction と同じ文面。両方を直す）
+    static let speakerNamesInstruction = """
+    最後に、文字起こしの「話者1」「同席者1」「相手」など名前が付いていない話者のうち、会話の内容から名前がはっきり分かる話者だけを、次の形の JSON で出力してください。
+    <speaker_names>
+    {"話者1": "田中"}
+    </speaker_names>
+    - 名前が分かるのは、その話者が名乗った・自己紹介した、名前で呼びかけられて本人が応じた、など会話からはっきり読み取れるときだけです。自信がなければ入れないでください
+    - 「自分」（記録している本人）は入れないでください
+    - 名前には「さん」「様」などの敬称を付けず、文字起こしに出てくる書き方（姓だけでもよい）で書いてください
+    - 名前が分かる話者がいなければ {} を出力してください。<speaker_names> の外に説明は書かないでください。
+    """
 
     static func userText(for meeting: Meeting) -> String {
         // メモか印があれば <user_notes> を足し、印の前後の発言に ★ を付ける（MeetingNotes.swift）
@@ -407,7 +424,9 @@ enum MinutesPrompt {
     // 設計判断: DEC-MTG-062
     /// Gemini の応答を、議事録の Markdown と構造化したアクションアイテムに分ける。
     static func parse(_ response: String, title: String) -> MinutesResult {
-        var body = response
+        // 話者の名前（<speaker_names>）を先に取り出す。<action_items> は後ろから探すので、残っていると本文に混ざる
+        let (withoutNames, speakerNames) = SpeakerNameInference.extract(from: response)
+        var body = withoutNames
         var items: [ActionItem]?
         if let open = body.range(of: "<action_items>", options: .backwards) {
             let rest = body[open.upperBound...]
@@ -438,7 +457,7 @@ enum MinutesPrompt {
                 : (resolved.isEmpty ? "なし" : resolved.map(\.markdownLine).joined(separator: "\n"))
             body = body.replacingOccurrences(of: placeholder, with: list)
         }
-        return MinutesResult(markdown: "# \(title) — 議事録\n\n\(body)\n", actionItems: resolved)
+        return MinutesResult(markdown: "# \(title) — 議事録\n\n\(body)\n", actionItems: resolved, speakerNames: speakerNames)
     }
 
     private struct RawItem: Decodable {

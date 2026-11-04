@@ -10,7 +10,7 @@ namespace Hanasu.Core.Ai;
 // 設計判断: DEC-COM-142
 public static partial class PromptText
 {
-    [GeneratedRegex(@"<\s*(/?)\s*(transcript|user_notes|action_items)\s*>", RegexOptions.IgnoreCase)]
+    [GeneratedRegex(@"<\s*(/?)\s*(transcript|user_notes|action_items|speaker_names)\s*>", RegexOptions.IgnoreCase)]
     private static partial Regex DelimiterTag();
 
     public static string NeutralizeDelimiters(string text) =>

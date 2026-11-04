@@ -287,10 +287,13 @@ static async Task MeetingMinutes(string[] args)
     var sw = Stopwatch.StartNew();
     var result = await MeetingProcessor.MakeMinutesAsync(meeting, MinutesClientFromEnvironment(args),
         Option(args, "--minutes-model") ?? DefaultMinutesModel(args));
-    meeting.Minutes = result.Markdown;
-    meeting.ActionItems = result.ActionItems;
+    // 確かめ方: REQ-MTG-027（会話から分かった話者の名前も付けて表示する）
+    meeting.ApplyMinutes(result);
     store.Save(meeting);
     Console.WriteLine($"[議事録 {sw.Elapsed.TotalSeconds:0.0}s]");
+    var inferred = (meeting.InferredSpeakers ?? new()).Select(k => $"{k}={meeting.SpeakerNames.GetValueOrDefault(k)}").ToList();
+    Console.WriteLine($"[推測した話者の名前] 応答: {(result.SpeakerNames.Count == 0 ? "なし" : string.Join(", ", result.SpeakerNames.OrderBy(p => p.Key, StringComparer.Ordinal).Select(p => $"{p.Key}={p.Value}")))}"
+        + $" / 付けた: {(inferred.Count == 0 ? "なし" : string.Join(", ", inferred))}");
     Console.WriteLine(meeting.Minutes);
 }
 
