@@ -2,10 +2,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Hanasu.Core.Ai;
 using Hanasu.Core.Claude;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
+using Hanasu.Core.LocalLlm;
 using Hanasu.Core.Meetings;
 using Hanasu.Core.Settings;
 using Hanasu.Core.Text;
@@ -46,10 +48,12 @@ public partial class SettingsWindow : Window
             box.RecordingChanged += (_, recording) => host.SuspendHotKeys(recording);
         }
         host.WhisperModels.StateChanged += OnWhisperStateChanged;
+        host.LocalLlmModels.StateChanged += OnLocalModelStateChanged;
         host.Secrets.Changed += OnSecretChanged;
         Closed += (_, _) =>
         {
             host.WhisperModels.StateChanged -= OnWhisperStateChanged;
+            host.LocalLlmModels.StateChanged -= OnLocalModelStateChanged;
             host.Secrets.Changed -= OnSecretChanged;
             // 入力欄に残ったキーを消す
             ApiKeyBox.Clear();
@@ -98,6 +102,12 @@ public partial class SettingsWindow : Window
         ClaudeMinutesModelCombo.ItemsSource = ClaudeModels.All;
         ClaudeMinutesModelCombo.DisplayMemberPath = nameof(ClaudeModelInfo.Label);
         ClaudeMinutesModelCombo.SelectedItem = ClaudeModels.Find(s.ClaudeMinutesModel);
+        LocalModelCombo.ItemsSource = LocalLlmModel.All;
+        LocalModelCombo.DisplayMemberPath = nameof(LocalLlmModel.Label);
+        LocalModelCombo.SelectedItem = LocalLlmModel.Find(s.LocalDictationModel);
+        LocalMinutesModelCombo.ItemsSource = LocalLlmModel.All;
+        LocalMinutesModelCombo.DisplayMemberPath = nameof(LocalLlmModel.Label);
+        LocalMinutesModelCombo.SelectedItem = LocalLlmModel.Find(s.LocalMeetingModel);
         DictationAiCombo.SelectedItem = DictationAiCombo.Items.OfType<ComboBoxItem>().First(i => (string)i.Tag == s.DictationAi.ToString());
         MeetingAiCombo.SelectedItem = MeetingAiCombo.Items.OfType<ComboBoxItem>().First(i => (string)i.Tag == s.MeetingAi.ToString());
         SendAppNameCheck.IsChecked = s.SendAppName;
@@ -312,6 +322,76 @@ public partial class SettingsWindow : Window
         UpdateAiPanels();
     }
 
+    // MARK: - ローカルの LLM（REQ-COM-030）
+
+    private void OnLocalModelChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (LocalModelCombo.SelectedItem is LocalLlmModel model) Save(s => s.LocalDictationModel = model.Id);
+        UpdateAiPanels();
+    }
+
+    private void OnLocalMinutesModelChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (LocalMinutesModelCombo.SelectedItem is LocalLlmModel model) Save(s => s.LocalMeetingModel = model.Id);
+        UpdateAiPanels();
+    }
+
+    private static LocalLlmModel? LocalModelOf(object sender) => (sender as FrameworkElement)?.Tag is string id ? LocalLlmModel.Find(id) : null;
+
+    private void OnLocalDownload(object sender, RoutedEventArgs e)
+    {
+        if (LocalModelOf(sender) is { } model) _ = host.LocalLlmModels.DownloadAsync(model);
+    }
+
+    private void OnLocalCancel(object sender, RoutedEventArgs e)
+    {
+        if (LocalModelOf(sender) is { } model) host.LocalLlmModels.CancelDownload(model);
+    }
+
+    private void OnLocalDelete(object sender, RoutedEventArgs e)
+    {
+        if (LocalModelOf(sender) is not { } model) return;
+        if (MessageBox.Show(this, $"ローカルのモデル {model.Name}（{model.SizeLabel}）を削除しますか？", "Hanasu",
+                MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
+        try
+        {
+            host.LocalLlmModels.Delete(model);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            MessageBox.Show(this, $"削除できませんでした: {ex.Message}", "Hanasu");
+        }
+    }
+
+    private void OnLocalModelStateChanged(object? sender, LocalLlmModelState state) =>
+        Dispatcher.BeginInvoke(() => { UpdateLocalModelList(); UpdateAiPanels(); });
+
+    /// <summary>設定画面の 1 行（モデル・状態・ライセンス）</summary>
+    private sealed record LocalModelRow(string Id, string Title, string Status, string License, Brush LicenseBrush, double Progress,
+        Visibility DownloadVisibility, Visibility CancelVisibility, Visibility DeleteVisibility);
+
+    // 設計判断: DEC-COM-066
+    private void UpdateLocalModelList()
+    {
+        LocalModelList.ItemsSource = LocalLlmModel.All.Select(model =>
+        {
+            var state = host.LocalLlmModels.StateOf(model);
+            static Visibility Show(bool on) => on ? Visibility.Visible : Visibility.Collapsed;
+            var status = state.Status switch
+            {
+                LocalLlmModelStatus.Downloading => $"ダウンロード中… {state.Progress:P0}",
+                LocalLlmModelStatus.Downloaded => "ダウンロード済み",
+                LocalLlmModelStatus.Failed => $"失敗しました: {state.Error}",
+                _ => "まだダウンロードしていません",
+            };
+            return new LocalModelRow(model.Id, model.Label, $"{status}　{model.Summary}", $"{model.LicenseNote}（{model.LicenseUrl}）",
+                model == LocalLlmModel.Lfm25JP ? Brushes.DarkOrange : Brushes.Gray, state.Progress,
+                Show(state.Status is LocalLlmModelStatus.NotDownloaded or LocalLlmModelStatus.Failed),
+                Show(state.Status == LocalLlmModelStatus.Downloading),
+                Show(state.Status == LocalLlmModelStatus.Downloaded));
+        }).ToList();
+    }
+
     /// <summary>選んだ AI のモデルの欄だけを出し、認証情報が足りなければ知らせる</summary>
     private void UpdateAiPanels()
     {
@@ -321,6 +401,11 @@ public partial class SettingsWindow : Window
         ClaudeModelCombo.Visibility = s.DictationAi == TextAiProvider.Claude ? Visibility.Visible : Visibility.Collapsed;
         MinutesModelCombo.Visibility = s.MeetingAi == TextAiProvider.Gemini ? Visibility.Visible : Visibility.Collapsed;
         ClaudeMinutesModelCombo.Visibility = s.MeetingAi == TextAiProvider.Claude ? Visibility.Visible : Visibility.Collapsed;
+        LocalModelCombo.Visibility = s.DictationAi == TextAiProvider.Local ? Visibility.Visible : Visibility.Collapsed;
+        LocalMinutesModelCombo.Visibility = s.MeetingAi == TextAiProvider.Local ? Visibility.Visible : Visibility.Collapsed;
+        var localUsed = s.DictationAi == TextAiProvider.Local || s.MeetingAi == TextAiProvider.Local;
+        LocalLlmPanel.Visibility = localUsed ? Visibility.Visible : Visibility.Collapsed;
+        if (localUsed) UpdateLocalModelList();
         MinutesAiNote.Text = $"議事録は {TextAiFactory.NameOf(s.MeetingAi)}（{s.MinutesModel}）で作ります。";
 
         var missing = new List<string>();
@@ -328,11 +413,19 @@ public partial class SettingsWindow : Window
         var geminiNeeded = s.DictationAi == TextAiProvider.Gemini || s.MeetingAi == TextAiProvider.Gemini
             || s.Engine == TranscriptionEngine.Gemini || s.MeetingEngine == TranscriptionEngine.Gemini;
         if (claudeNeeded && !host.Secrets.Has(SecretKind.ClaudeApiKey)) missing.Add("Claude の API キー");
+        foreach (var model in new[]
+                 {
+                     s.DictationAi == TextAiProvider.Local ? LocalLlmModel.Find(s.LocalDictationModel) : null,
+                     s.MeetingAi == TextAiProvider.Local ? LocalLlmModel.Find(s.LocalMeetingModel) : null,
+                 }.OfType<LocalLlmModel>().Distinct())
+        {
+            if (host.LocalLlmModels.StateOf(model).Status != LocalLlmModelStatus.Downloaded) missing.Add($"ローカルのモデル「{model.Name}」");
+        }
         if (geminiNeeded && (s.AuthMode == GeminiAuthMode.ApiKey ? !host.Secrets.Has(SecretKind.GeminiApiKey) : s.ServiceAccountPath.Trim().Length == 0))
         {
             missing.Add("Gemini の認証情報");
         }
-        AiCredentialNote.Text = missing.Count == 0 ? "" : $"{string.Join("・", missing)}がまだ設定されていません（下で設定します）。";
+        AiCredentialNote.Text = missing.Count == 0 ? "" : $"{string.Join("・", missing)}がまだありません（下で設定・ダウンロードします）。";
         AiCredentialNote.Visibility = missing.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
     }
 

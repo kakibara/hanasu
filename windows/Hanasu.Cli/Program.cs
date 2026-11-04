@@ -9,6 +9,7 @@ using Hanasu.Core.Audio;
 using Hanasu.Core.Claude;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
+using Hanasu.Core.LocalLlm;
 using Hanasu.Core.Meetings;
 using Hanasu.Core.Settings;
 using Hanasu.Core.Text;
@@ -33,6 +34,11 @@ using Hanasu.Whisper;
 //     会議の後処理（チャンネルごとの文字起こし → 話者分離 → 話者の割り当て → 議事録）を、2 つの音声ファイルで通す
 //   hanasu-cli meeting-minutes <会議のフォルダ> [--template <型>] [--minutes-model <id>]   議事録を作り直す
 //   hanasu-cli meeting-show <会議のフォルダ>   meeting.json を読んで中身を出す（Mac で作った会議が読めるかの確認）
+// ローカルの LLM（llama.cpp の llama-server。--server <パス> か環境変数 HANASU_LLAMA_SERVER、なければ exe の隣の llama/。Mac の llama-server でも動く）:
+//   hanasu-cli local-list [--models-dir <dir>]   モデルの一覧（ダウンロード済みか）
+//   hanasu-cli local-download <id> [--models-dir <dir>]   モデルをダウンロードし、大きさと SHA-256 を確かめる
+//   hanasu-cli local-refine "<文章>" [--model <id>] [--translate] [--server <パス>] [--models-dir <dir>]   ローカルで整形・英訳する
+//   meeting-minutes / meeting-files に --minutes-ai local --minutes-model <id> を付けると、議事録をローカルで作る
 
 var command = args.FirstOrDefault();
 try
@@ -51,8 +57,11 @@ try
         case "claude-request": await ClaudeRequest(args); break;
         case "claude-refine": await ClaudeRefine(args); break;
         case "claude-check": await ClaudeCheck(args); break;
+        case "local-list": LocalList(args); break;
+        case "local-download": await LocalDownload(args); break;
+        case "local-refine": await LocalRefine(args); break;
         default:
-            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show|claude-request|claude-refine|claude-check ...（Program.cs の先頭を参照）");
+            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show|claude-request|claude-refine|claude-check|local-list|local-download|local-refine ...（Program.cs の先頭を参照）");
             return 2;
     }
     return 0;
@@ -66,6 +75,8 @@ finally
 {
     // 読み込んだモデルを手放してから終わる（macOS の Metal は、手放さずに終わると終了時に落ちる）
     WhisperBatchTranscriber.ReleaseCachedModel();
+    // 起動したローカルの LLM のサーバーを止める
+    LocalLlmServer.Shared.Stop();
 }
 
 static string? Option(string[] args, string name)
@@ -245,7 +256,7 @@ static async Task MeetingFiles(string[] args)
         Diarizer = Flag(args, "--no-diarize") ? null : new SherpaSpeakerDiarizer(new DiarizationModels(diarizationDir)),
         MinutesClient = Flag(args, "--no-minutes") ? null : () => MinutesClientFromEnvironment(args),
         MinutesModel = Option(args, "--minutes-model") ?? DefaultMinutesModel(args),
-        MinutesProvider = Option(args, "--minutes-ai") == "claude" ? TextAiProvider.Claude : TextAiProvider.Gemini,
+        MinutesProvider = Option(args, "--minutes-ai") switch { "claude" => TextAiProvider.Claude, "local" => TextAiProvider.Local, _ => TextAiProvider.Gemini },
         KeepAudio = !Flag(args, "--delete-audio"),
         Log = m => Console.Error.WriteLine($"[log] {m}"),
     };
@@ -283,14 +294,89 @@ static async Task MeetingMinutes(string[] args)
     Console.WriteLine(meeting.Minutes);
 }
 
-/// <summary>議事録の AI（--minutes-ai gemini|claude。既定は gemini）</summary>
+/// <summary>議事録の AI（--minutes-ai gemini|claude|local。既定は gemini）</summary>
 static ITextGenerator MinutesClientFromEnvironment(string[] args) =>
-    Option(args, "--minutes-ai") == "claude"
-        ? ClaudeFromEnvironment(TimeSpan.FromSeconds(300))
-        : new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(180) };
+    Option(args, "--minutes-ai") switch
+    {
+        "claude" => ClaudeFromEnvironment(TimeSpan.FromSeconds(300)),
+        "local" => LocalClient(args, Option(args, "--minutes-model"), LocalLlmModel.DefaultMeeting, TextAiUse.Meeting),
+        _ => new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(180) },
+    };
 
 static string DefaultMinutesModel(string[] args) =>
-    Option(args, "--minutes-ai") == "claude" ? ClaudeModels.DefaultMinutesModel : "gemini-3.8-flash";
+    Option(args, "--minutes-ai") switch
+    {
+        "claude" => ClaudeModels.DefaultMinutesModel,
+        "local" => LocalLlmModel.DefaultMeeting.Id,
+        _ => "gemini-3.8-flash",
+    };
+
+// MARK: - ローカルの LLM
+
+/// <summary>--server・--models-dir を Shared のサーバーに当てる</summary>
+static LocalLlmServer ConfigureLocalServer(string[] args)
+{
+    var server = LocalLlmServer.Shared;
+    if (Option(args, "--server") is { } path) server.ExecutablePath = Path.GetFullPath(path);
+    if (Option(args, "--models-dir") is { } dir) server.ModelsDirectory = Path.GetFullPath(dir);
+    server.Log = message => Console.Error.WriteLine($"[{message}]");
+    return server;
+}
+
+static LocalLlmModel LocalModelOption(string? id, LocalLlmModel fallback) =>
+    id is null ? fallback : LocalLlmModel.Find(id) ?? throw new IOException($"ローカルのモデルが見つかりません: {id}（{string.Join(" / ", LocalLlmModel.All.Select(m => m.Id))}）");
+
+static LocalLlmClient LocalClient(string[] args, string? id, LocalLlmModel fallback, TextAiUse use)
+{
+    var server = ConfigureLocalServer(args);
+    var model = LocalModelOption(id, fallback);
+    if (!server.IsDownloaded(model)) throw LocalLlmException.ModelNotDownloaded(model);
+    return new LocalLlmClient(model, server) { Timeout = LocalLlmClient.MinimumTimeout(use) };
+}
+
+// 確かめ方: REQ-COM-030
+static void LocalList(string[] args)
+{
+    var server = ConfigureLocalServer(args);
+    foreach (var model in LocalLlmModel.All)
+    {
+        Console.WriteLine($"{(server.IsDownloaded(model) ? "✓" : "-")} {model.Id,-16} {model.Label}  文脈 {model.ContextLength}  {model.License}");
+    }
+    Console.WriteLine($"置き場所: {server.ModelsDirectory}");
+    Console.WriteLine($"llama-server: {server.ExecutablePath ?? LocalLlmServer.ResolveExecutable() ?? "見つかりません（--server か HANASU_LLAMA_SERVER で指定できます）"}");
+}
+
+// 確かめ方: REQ-COM-030
+static async Task LocalDownload(string[] args)
+{
+    var server = ConfigureLocalServer(args);
+    var model = LocalModelOption(args.ElementAtOrDefault(1) ?? throw new IOException("モデルの id を指定してください"), LocalLlmModel.DefaultDictation);
+    var manager = new LocalLlmModelManager(server);
+    var lastStep = -1;
+    var sw = Stopwatch.StartNew();
+    await manager.DownloadAsync(model, (received, total) =>
+    {
+        var step = (int)(received * 10 / Math.Max(1, total));
+        if (step <= lastStep) return;
+        lastStep = step;
+        Console.WriteLine($"  {step * 10}%");
+    });
+    if (manager.LastError(model) is { } error) throw new IOException(error);
+    Console.WriteLine($"確かめました: {server.ModelPath(model)}（{sw.Elapsed.TotalSeconds:0} 秒）");
+}
+
+// 確かめ方: REQ-COM-030
+static async Task LocalRefine(string[] args)
+{
+    var text = args.ElementAtOrDefault(1) ?? throw new IOException("文章を指定してください");
+    var client = LocalClient(args, Option(args, "--model"), LocalLlmModel.DefaultDictation, TextAiUse.Dictation);
+    var request = ClaudeRefineRequest(args, text, client.Model.Id);
+    var translating = Flag(args, "--translate");
+    var sw = Stopwatch.StartNew();
+    var output = translating ? await client.TranslateToEnglishAsync(request) : await client.RefineAsync(request);
+    Console.WriteLine($"[{(translating ? "英訳" : "整形")} ローカル {client.Model.Id} {sw.Elapsed.TotalSeconds:0.0}s]");
+    Console.WriteLine(output);
+}
 
 static void MeetingShow(string[] args)
 {

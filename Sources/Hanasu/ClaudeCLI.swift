@@ -9,8 +9,10 @@ import SwiftUI
 ///       --keep を付けると項目を残し、サービス名を表示する（別のプログラムから読めるかを試すため）
 ///   Hanasu --keychain-selftest-delete <サービス名>
 ///       --keep で残した一時的な項目を消す（selftest- を含む名前だけ）
-///   Hanasu --render-ai-settings <出力.png> [--claude]
-///       設定の「AI」タブを画像にする。--claude で、音声入力は Gemini・会議は Claude の見た目にする
+///   Hanasu --render-ai-settings <出力.png> [--claude | --local | --apple]
+///       設定の「AI」タブを画像にする。--claude で、音声入力は Gemini・会議は Claude の見た目にする。
+///       --local で、音声入力・会議ともローカル（音声入力の LFM2.5 はダウンロード中 42% の見た目）にする。
+///       --apple で、音声入力はローカル・会議は Apple（Foundation Models）にする（この Mac で使えなければ理由が出る）
 @MainActor
 enum ClaudeCLI {
     static func runIfRequested() {
@@ -31,7 +33,9 @@ enum ClaudeCLI {
             exit(0)
         }
         if let output = value(after: "--render-ai-settings", in: args) {
-            renderSettings(to: URL(fileURLWithPath: output), claude: args.contains("--claude"))
+            // 確かめ方: REQ-COM-030
+            renderSettings(to: URL(fileURLWithPath: output), claude: args.contains("--claude"), local: args.contains("--local"),
+                           apple: args.contains("--apple"))
         }
     }
 
@@ -101,13 +105,25 @@ enum ClaudeCLI {
     }
 
     // 確かめ方: REQ-COM-020, REQ-COM-024
-    private static func renderSettings(to url: URL, claude: Bool) -> Never {
+    private static func renderSettings(to url: URL, claude: Bool, local: Bool, apple: Bool) -> Never {
         _ = NSApplication.shared
         let settings = AppSettings.shared
         let saved = (settings.dictationAIProvider, settings.meetingAIProvider)
+        let savedLocal = (settings.localDictationModel, settings.localMeetingModel)
         if claude {
             settings.dictationAIProvider = .gemini
             settings.meetingAIProvider = .claude
+        }
+        if local {
+            settings.dictationAIProvider = .local
+            settings.meetingAIProvider = .local
+            settings.localDictationModel = .lfm25JP
+            settings.localMeetingModel = .gemma4E4B
+            if !LocalLLMStore.isDownloaded(.lfm25JP) { LocalLLMStore.shared.showDownloadingForRendering(.lfm25JP, fraction: 0.42) }
+        }
+        if apple {
+            settings.dictationAIProvider = .local
+            settings.meetingAIProvider = .appleFM
         }
         let view = AISettingsTab(settings: settings)
             .frame(width: 560, height: 2600)
@@ -132,6 +148,8 @@ enum ClaudeCLI {
         }
         settings.dictationAIProvider = saved.0
         settings.meetingAIProvider = saved.1
+        settings.localDictationModel = savedLocal.0
+        settings.localMeetingModel = savedLocal.1
         exit(0)
     }
 

@@ -282,7 +282,12 @@ public sealed class MeetingController
     {
         var settings = services.Settings();
         var client = services.CreateMinutesClient(settings)
-            ?? throw (settings.MeetingAi == TextAiProvider.Claude ? Claude.ClaudeException.MissingCredentials() : GeminiException.MissingCredentials());
+            ?? throw (settings.MeetingAi switch
+            {
+                TextAiProvider.Claude => (Exception)Claude.ClaudeException.MissingCredentials(),
+                TextAiProvider.Local => LocalLlm.LocalLlmException.ModelNotDownloaded(LocalLlm.LocalLlmModel.Find(settings.LocalMeetingModel)),
+                _ => GeminiException.MissingCredentials(),
+            });
         var draft = MeetingJson.Deserialize(MeetingJson.Serialize(meeting));
         draft.Id = meeting.Id;
         if (template is { } t)

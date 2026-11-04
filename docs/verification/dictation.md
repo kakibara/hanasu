@@ -201,3 +201,54 @@ Windows の実機がないので、画面とフォーカスの動きはまだ確
 
 - `dotnet test Hanasu.Core.Tests`: 200 件すべて通った（レビューで UI Automation を問い合わせる場面の絞り込みと Win32 の読み取り専用の Edit を足し、217 件）。貼り付け先の判定（`PasteTargetTests`。デスクトップ・タスクバー・フォーカスなし・読み取り専用・エクスプローラーの一覧は貼らない。デスクトップの名前の変更・キャレットあり・ストアアプリ・ブラウザ・Excel のセル・何も分からないときは貼る）、貼らなかったときの流れ（全文を `HudPhase.Unpasted` で残す・自動では閉じない・設定が入力に渡る・権限の高いウインドウと例外も同じ表示・次の音声入力で置き換わる・「最近の結果」に残る）、設定の保存（`pasteFallbackClipboard`、項目のない前の版の settings.json は既定値）。
 - `dotnet build Hanasu.Windows.sln -c Release`（警告 0）と `dotnet publish … -r win-x64 --self-contained -p:PublishSingleFile=true`（`Hanasu.exe` 約 82 MB と、今までと同じ DLL・ライセンスの表示）が通った。UI Automation（`UIAutomationClient`）は .NET の Windows デスクトップのランタイムに入っているので、依存パッケージは増えていない。
+
+## 13. ローカルの LLM（2026-11-04、macOS 26.6.2、Apple M3・メモリ 24 GB）
+
+関係: REQ-COM-030、DEC-COM-060〜067、DEC-MTG-062
+
+アプリの画面は起動せず、CLI と画像で確かめた。llama.cpp は b11770（`scripts/fetch-llama-cpp.sh` で SHA-256 を確かめて取ったもの）。
+
+- 取得: `--local-llm-download` で 3 つのモデルを Hugging Face から取り、大きさと SHA-256 が決めた値と合った（LFM2.5 1.25 GB は 42 秒、Sarashina2.2 2.07 GB は 68 秒、Gemma 4 E4B 4.59 GB は 148 秒）。
+- 同梱: `scripts/build-app.sh` で `Hanasu.app/Contents/Resources/llama/` に入れ、自己署名（Hanasu Local Signing）と Hardened Runtime で署名した。自己署名には Team ID がないので、ライブラリの検証で同梱の dylib を読めなかった（`different Team IDs`）。llama-server だけ `com.apple.security.cs.disable-library-validation` を付けて署名し直すと動き、`codesign --verify --deep --strict` も通った。
+- 整形（`--refine-text … --ai local`。初回はモデルの読み込みを含む）:
+
+  | モデル | 初回 | 2 回目以降 | 結果 |
+  | --- | --- | --- | --- |
+  | LFM2.5-1.2B-JP | 9.7 秒 | 1.5〜3.3 秒 | 速い。言い直し（「ジェミニで…あ違うグーグルスライド」）を読み違え、言っていない一文を足すことがあった |
+  | Sarashina2.2 3B | 3.5 秒 | 3.2 秒 | 文は自然。結果の全体を「」で囲み、終わりの印 `</s>` を文字で出したので、`stop` と後始末（`cleanUpRewrite`）を足した |
+  | Gemma 4 E4B | 6.2 秒 | 3.8 秒 | 言い直しを正しく扱えた。3 つでいちばん自然 |
+
+- 議事録（`--minutes-from-transcript`、作った 2 時間 40 分・335 行・2.2 万字の文字起こし）:
+
+  | モデル | 時間 | 結果 |
+  | --- | --- | --- |
+  | Sarashina2.2（文脈 8K） | 188 秒 | 文脈に入らないので、部分ごとの要点にまとめてから作った（DEC-COM-065）。議題・決定事項は拾えたが、担当者の取り違えや、型の見本（`[owner]`）の写し、作った期限があった |
+  | LFM2.5（文脈 32K） | 52 秒 | 同じ議題の繰り返しになり、アクションアイテムが出なかった。議事録には向かない |
+  | Gemma 4 E4B（文脈 32K） | 110 秒 | 議題・決定事項・アクションアイテムをよくまとめた。ただしアクションアイテムを `<action_items>` ではなく本文に JSON で書いたので、本文の中の JSON も読むようにした（`MinutesPrompt.inlineItems`。`--export-minutes` で 4 件読めた） |
+
+- 長い入力の縮め方: `--local-llm-test-fit` が 8 件すべて合格（入る入力はそのまま・議事録は要点に置き換え・メモと見出しは残す・ほかは後ろを省く・`<transcript>` が 2 つなら分けない・1 行が長くても分ける）。
+- サーバーの後片付け: CLI を終えると、`atexit` で llama-server が止まる（数秒のうちに `pgrep` から消えた）。
+- 設定の画面（`--render-ai-settings <png> --local`）: 音声入力・会議とも「ローカル」で、モデルの選択、ダウンロード済み／ダウンロードのボタン、LFM2.5 のライセンスの注意（オレンジ）、Gemma のライセンスが出た。
+- Windows 版の Core（`LocalLlmClient`・`LocalLlmServer`）: `dotnet run --project Hanasu.Cli -- local-refine … --model sarashina2.2-3b --server build/llama-cpp/macos-arm64/llama-server` で、Mac の llama-server に対して整形できた（4.4 秒）。`dotnet test Hanasu.Core.Tests` は 230 件すべて合格。
+- 確かめていないこと: Windows の実機（CPU の速さ、ジョブオブジェクト、設定画面の操作、`fetch-llama-cpp.ps1` の展開）。アプリの画面からの操作（設定でのダウンロード・削除、音声入力・会議ノートからの呼び出し、5 分たって止まること）。Developer ID での署名（FUT-010）のときは、ライブラリの検証を外さずに動くはず（Team ID がそろうため）。
+- 確認のあと、Gemma 4 E4B のモデルは消した（ディスクの空きを戻すため）。
+
+## 14. Apple の Foundation Models の CLI（fm）（2026-11-04、macOS 26.6.2）
+
+関係: REQ-COM-031、DEC-COM-070〜073
+
+手元の Mac は macOS 26.6 なので、本物の `fm`（macOS 27）は動かせなかった。Apple の文書で確かめたことと、偽の `fm` で確かめたことを分けて書く。
+
+- Apple の文書で確かめたこと（[WWDC26 のセッション 334](https://developer.apple.com/videos/play/wwdc2026/334/)、[Foundation Models framework](https://developer.apple.com/foundation-models-framework/)）: `fm` は macOS 27 に初めから入っている。`fm respond "<プロンプト>"` で 1 回答え、`--instructions` で指示、`--model pcc` で Private Cloud Compute（使用量の上限あり。既定は端末の中のモデル）、`--schema` で決まった形の JSON。結果は標準出力の文章。
+- 確かめられなかったこと（未確認。macOS 27 の実機で確かめる）:
+  - `fm` の場所（`/usr/bin/fm` としている）と、Apple の署名（`anchor apple`）が通るか。
+  - 入力を標準入力で渡せるか（今は引数で渡すので、動いているあいだ `ps` で見える。DEC-COM-070）。
+  - 文脈の長さ（[コミュニティのガイド](https://github.com/llostinthesauce/fm-guide)の 8,192 トークン。見えないシステムの指示が約 54 トークン）と、超えたときの振る舞い。
+  - 利用条件への同意（同じガイドでは、`sudo fm license` を実行するまで `--help` を含むすべてのコマンドを断る）と、そのときの文言（`license`・`terms` を含めば同意を案内する）。
+  - Apple Intelligence をオフにしているときの振る舞い。日本語の整形・議事録の質と時間。
+- 偽の `fm`（引数を記録して決まった文章を返すスクリプト）で確かめたこと:
+  - `--apple-fm-status`: macOS 26.6 では「macOS 27 以降で使えます（この Mac は macOS 26.6）」と出て、終了コード 1。`HANASU_FM_PATH` を付けると使える扱いになる。
+  - 整形（`--refine-text … --ai apple`）: `fm respond --instructions <指示 1,605 字> <入力>` の形で渡り、`--model` は付かない。結果を囲む「」は外れた。
+  - 議事録（作った 2 時間 40 分・2.2 万字の文字起こし）: 4 つの部分に分けて要点にし（部分ごとに 1 回）、要点（490 バイト）から議事録を作った。本文の中のアクションアイテムの JSON も読めた。
+  - 設定の画面（`--render-ai-settings <png> --apple`）: 「Apple」を選ぶと、使えない理由がオレンジで出る。
+

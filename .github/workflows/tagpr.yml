@@ -135,6 +135,13 @@ jobs:
           dotnet publish windows/Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self-contained `
             -p:PublishSingleFile=true -p:RestoreLockedMode=false -p:Version=$version -o build/windows/Hanasu
 
+      # 要件: REQ-COM-030
+      # 設計判断: DEC-COM-061
+      # ローカルの LLM の llama-server（llama.cpp）を、SHA-256 を確かめてから llama/ に入れる
+      - name: Add llama-server
+        if: steps.check.outputs.exists == 'true'
+        run: ./scripts/fetch-llama-cpp.ps1 -Destination build/windows/Hanasu
+
       - name: Upload zip
         id: upload
         if: steps.check.outputs.exists == 'true'

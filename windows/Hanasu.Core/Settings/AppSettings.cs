@@ -50,6 +50,8 @@ public enum TextAiProvider
     Gemini,
     /// <summary>Claude（Anthropic の Claude API。API キーで使う）</summary>
     Claude,
+    /// <summary>端末の中で動く小型の LLM（llama.cpp の llama-server。REQ-COM-030）</summary>
+    Local,
 }
 
 /// <summary>
@@ -88,6 +90,12 @@ public sealed class AppSettings
     public string ClaudeModel { get; set; } = Claude.ClaudeModels.DefaultModel;
     /// <summary>議事録に使う Claude のモデル（REQ-COM-023）</summary>
     public string ClaudeMinutesModel { get; set; } = Claude.ClaudeModels.DefaultMinutesModel;
+    // 要件: REQ-COM-030
+    // 設計判断: DEC-COM-067
+    /// <summary>ローカルを選んだときの、音声入力のモデル（LocalLlmModel の Id）</summary>
+    public string LocalDictationModel { get; set; } = LocalLlm.LocalLlmModel.DefaultDictation.Id;
+    /// <summary>ローカルを選んだときの、議事録のモデル</summary>
+    public string LocalMeetingModel { get; set; } = LocalLlm.LocalLlmModel.DefaultMeeting.Id;
 
     // Gemini
     public GeminiAuthMode AuthMode { get; set; } = GeminiAuthMode.ApiKey;
@@ -143,11 +151,21 @@ public sealed class AppSettings
 
     /// <summary>音声入力の整形・英訳に使うモデル（選んだ AI のもの）</summary>
     [JsonIgnore]
-    public string DictationModel => DictationAi == TextAiProvider.Claude ? ClaudeModel : Model;
+    public string DictationModel => DictationAi switch
+    {
+        TextAiProvider.Claude => ClaudeModel,
+        TextAiProvider.Local => LocalDictationModel,
+        _ => Model,
+    };
 
     /// <summary>議事録に使うモデル（選んだ AI のもの）</summary>
     [JsonIgnore]
-    public string MinutesModel => MeetingAi == TextAiProvider.Claude ? ClaudeMinutesModel : MeetingMinutesModel;
+    public string MinutesModel => MeetingAi switch
+    {
+        TextAiProvider.Claude => ClaudeMinutesModel,
+        TextAiProvider.Local => LocalMeetingModel,
+        _ => MeetingMinutesModel,
+    };
 
     public AppSettings Clone() => (AppSettings)MemberwiseClone();
 }

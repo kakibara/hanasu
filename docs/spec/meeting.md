@@ -610,11 +610,13 @@
 
 ### DEC-MTG-062 アクションアイテムは、議事録の末尾の JSON で受け取る
 - 決めたこと: 本文の「## アクションアイテム」には目印 `{{ACTION_ITEMS}}` だけを書かせ、Markdown のあとに `<action_items>` で囲んだ JSON（`owner`・`task`・`due`・`due_note`）を出させる。アプリが目印を一覧に置き換え、`meeting.json` の `actionItems` に保存する。JSON モード（`responseSchema`）は使わない。
-- 理由: Markdown と構造化データを 1 回の呼び出しで受け取れ、共有の `GeminiClient` を変えずに済む。一覧をアプリが書くので、議事録と構造化データが食い違わない。
-- 決めた場面: PR #13
+  - `<action_items>` がなく、本文の中に JSON の配列（`[{` から `}]` まで）があって読めれば、それをアクションアイテムとし、本文のその場所を一覧に置き換える。
+- 理由: Markdown と構造化データを 1 回の呼び出しで受け取れ、共有の `GeminiClient` を変えずに済む。一覧をアプリが書くので、議事録と構造化データが食い違わない。小さいモデル（ローカル。REQ-COM-030）は、目印と `<action_items>` を使わずに「## アクションアイテム」の下へ JSON をそのまま書くことがある（Gemma 4 E4B で確かめた）ので、その形も読む。
+- 決めた場面: PR #13。本文の中の JSON を読むのは、ローカル LLM に対応した PR
 - 関係する要件: REQ-MTG-018
-- 対象: Mac
-- 実装の場所: `MinutesPrompt.parse`、`MinutesPrompt.decodeItems`
+- 対象: Mac / Windows
+- 実装の場所: `MinutesPrompt.parse`、`MinutesPrompt.inlineItems`、`MinutesPrompt.decodeItems`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`（`MinutesPrompt.Parse`・`InlineItems`）
 
 ### DEC-MTG-063 期限は、日付と言い方の 2 つで持つ
 - 決めたこと: 会議の日時を基準に日付に直せるものは `due`（YYYY-MM-DD）、話された言い方は `due_note`（「来週中」など）に入れる。

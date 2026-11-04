@@ -114,6 +114,32 @@
 - 確かめ方: Mac は `.build/debug/Hanasu --render-ai-settings /tmp/ai.png --claude`（音声入力は Gemini、会議は Claude の見た目）
   - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`TextAiSelectionTests`）
 
+### REQ-COM-030 整形と議事録に使う AI として、端末の中で動く小型の LLM（Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2）を選べる
+- 内容: 文字起こしのあとの整形などと、議事録などの文章の処理に使う AI として、Gemini・Claude のほかに、端末の中で動く小型の LLM（ローカル）を選べる。モデルは Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2 の 3 つから選ぶ。文章は端末の外に送らない。
+- 受け入れ条件:
+  - Mac: 設定の「AI」タブで、音声入力か会議の AI を「ローカル」にし、モデルを 3 つから選べる。選んだモデルがまだなければ、その場でダウンロードでき、進み具合が出る。ダウンロードしたモデルは消せる。ローカルにすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）がそのモデルで行われ、文章をネットに送らない。モデルがないまま使おうとすると、設定でダウンロードするよう知らせる。
+  - Mac: 文脈に入らない長い会議でも議事録ができる（DEC-COM-065）。
+  - Windows: 設定 → AI で「音声入力」か「会議」の AI を「ローカル」にし、モデルを 3 つから選べる。ダウンロード・削除・進み具合は Mac と同じ。整形・英訳・議事録（作り直しを含む）がそのモデルで行われる。
+  - モデルのライセンス（とくに LFM2.5 の、年間売上 1,000 万ドル以上の組織の商用利用を許さない条件）が、選ぶ画面に出る（DEC-COM-066）。
+- 出典: ユーザーの依頼（2026-11-04「文字起こし後の整形や議事録作成のモデルとしても小型の local LLM をつかえるようにしてください。Gemma 4 E4B, LFM2.5-1.2B-JP, Sarashina2.2 を選択できるようにして」）
+- 対象: Mac / Windows
+- 実装の場所: `LocalLLMModel`、`LocalLLMStore`、`LocalLLMServer`、`LocalLLMClient`、`TextAIClient`（`.local`）、`AIChoiceRow`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/`（`LocalLlmModel`・`LocalLlmClient`・`LongInputFitter`・`LocalLlmServer`）、`windows/Hanasu.Core/Ai/TextAiFactory.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
+- 確かめ方: Mac は `.build/debug/Hanasu --local-llm-list`、`--local-llm-download <id>`、`--refine-text <文> --ai local --model <id>`、`--minutes-from-transcript <文字起こし> --ai local --model <id>`、`--local-llm-test-fit`（長い入力の分け方）、`--render-ai-settings /tmp/ai.png --local`
+  - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`LocalLlmTests`）、`dotnet run --project Hanasu.Cli -- local-refine "<文章>" --model <id> --server <llama-server のパス>`（Mac の llama-server でも動く）
+
+### REQ-COM-031 整形と議事録に使う AI として、Apple の Foundation Models の CLI（fm）を選べる（Mac）
+- 内容: 整形などと議事録などの文章の処理に使う AI として、macOS 27 から入っている Apple の Foundation Models の CLI（`fm`）を、ローカルの LLM（REQ-COM-030）と並べて選べる。端末の中のモデル（Apple Intelligence のオンデバイスのモデル）で処理し、文章を端末の外に送らない。
+- 受け入れ条件:
+  - Mac: 設定の「AI」タブで、音声入力か会議の AI を「Apple」にできる。macOS 27 以上で、Apple が署名した `fm` が見つかるときだけ使え、そうでないときは選んだ欄に理由（「macOS 27 以降で使えます（この Mac は macOS 26.6）」など）が出る。
+  - Mac: 「Apple」にすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）が `fm` で行われる。使えないまま処理しようとすると、理由を知らせる。
+  - Mac: 文脈（8,192 トークン。未確認）に入らない長い会議でも、議事録ができる（DEC-COM-065 の分け方を使う）。
+  - Windows には出さない（Windows に `fm` はない）。
+- 出典: ユーザーの依頼（2026-11-04「mac os 27で登場したApple Foundation Models CLIも選択肢に加えて」）
+- 対象: Mac
+- 実装の場所: `AppleFMClient`、`AppleFMAvailability`、`TextAIClient`（`.appleFM`）、`AIChoiceRow`
+- 確かめ方: `.build/debug/Hanasu --apple-fm-status`（使えるか・理由）、`HANASU_FM_PATH=<偽の fm> .build/debug/Hanasu --refine-text <文> --ai apple`・`--minutes-from-transcript <文字起こし> --ai apple`（偽の fm で、渡す引数と長い会議の分け方を確かめる）、`--render-ai-settings /tmp/ai.png --apple`。本物の `fm` は macOS 27 の実機で確かめる
+
 ---
 
 ## 設計判断
@@ -335,7 +361,7 @@
 - 実装の場所: `TranscriptionEngine.label`、`GeminiTranscriptionSection`
 
 ### DEC-COM-040 AI は用途ごとに 1 つ選び、文字起こしのエンジンとは別にする
-- 決めたこと: 文章の処理に使う AI（Gemini / Claude）を、「音声入力」（整形・英訳・選択の編集・音声入力の履歴のやり直し）と「会議」（議事録とその作り直し・会議への質問・辞書の候補探し）の 2 つの用途で別々に選ぶ。既定はどちらも Gemini（今までの設定を引き継ぐ）。辞書の候補探しは会議の記録を読む長い処理なので、会議の設定（AI とモデル、Gemini なら `meetingMinutesModel`）を使う。文字起こしのエンジン（OS 標準 / Whisper / Gemini）は今までどおり別に選び、Claude には音声を送らない。設定画面は「Gemini」タブを「AI」タブにし、先頭に 2 つの用途を並べる。Gemini の認証の欄は、文字起こしのエンジン「Gemini」でも使うので、AI の選択に関わらず出す。
+- 決めたこと: 文章の処理に使う AI（Gemini / Claude / ローカル。ローカルは REQ-COM-030）を、「音声入力」（整形・英訳・選択の編集・音声入力の履歴のやり直し）と「会議」（議事録とその作り直し・会議への質問・辞書の候補探し）の 2 つの用途で別々に選ぶ。既定はどちらも Gemini（今までの設定を引き継ぐ）。辞書の候補探しは会議の記録を読む長い処理なので、会議の設定（AI とモデル、Gemini なら `meetingMinutesModel`）を使う。文字起こしのエンジン（OS 標準 / Whisper / Gemini）は今までどおり別に選び、Claude には音声を送らない。設定画面は「Gemini」タブを「AI」タブにし、先頭に 2 つの用途を並べる。Gemini の認証の欄は、文字起こしのエンジン「Gemini」でも使うので、AI の選択に関わらず出す。
 - 理由: ユーザーの指示（REQ-COM-024）。音声入力は速さ、会議は長い記録のまとめと、求めるものが違う。辞書の候補探しは、今まで議事録のモデルを使っていた（DEC-DIC-088 の作り）のに合わせた。
 - 決めた場面: この PR（Claude API の対応）
 - 関係する要件: REQ-COM-020, REQ-COM-024
@@ -445,6 +471,117 @@
 - 関係する要件: REQ-COM-022
 - 対象: Mac
 - 実装の場所: `ServiceAccountTokenProvider.isTrustedTokenURL`、`GeminiClient.isValidLocation`
+
+### DEC-COM-060 ローカルの LLM は、llama.cpp の llama-server を同梱し、使うときだけ子プロセスで動かす
+- 決めたこと: Mac・Windows とも、llama.cpp の `llama-server` をアプリに同梱し、ローカルを選んだ処理を始めるときに子プロセスとして起動して、OpenAI 互換の `POST /v1/chat/completions` に送る（streaming は使わない）。チャットの形式は GGUF に入っているテンプレートを llama.cpp の jinja で使う（`--jinja`）。Gemma 4 の考える過程は使わない（`--reasoning off`）。Mac は Metal に全部の層を載せる（`-ngl 99`）。Windows は CPU で動かす。
+- 理由: 3 つのモデルのチャットの形式がばらばら（Gemma 4 は `<|turn>`、LFM2.5 は ChatML 風、Sarashina2.2 は `<|system|>…</s>`）で、llama.cpp の C API の組み込みのテンプレートには Gemma 4 と Sarashina がない。llama-server なら GGUF のテンプレートをそのまま使える。Mac と Windows で同じ作りにでき、クライアントは Gemini・Claude と同じ 1 回送って待つ HTTP にできる。MLX（mlx-swift-lm）は `swift build` で Metal のシェーダーを作れず、Windows の LLamaSharp は中の llama.cpp が古くなりがち（0.30.0 で b10221）なので採らなかった。
+- 決めた場面: ローカル LLM に対応した PR
+- 関係する要件: REQ-COM-030
+- 対象: Mac / Windows
+- 実装の場所: `LocalLLMServer`、`LocalLLMClient`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Core/LocalLlm/LocalLlmClient.cs`
+
+### DEC-COM-061 llama.cpp は b11770 に固定し、配布物の SHA-256 を確かめてから同梱する
+- 決めたこと: llama.cpp の GitHub のリリース b11770（2026-10-21）の `llama-b11770-bin-macos-arm64.tar.gz` と `llama-b11770-bin-win-cpu-x64.zip` を、決めておいた SHA-256 と比べてから展開する（`scripts/fetch-llama-cpp.sh`）。Mac は `llama-server` と、それが読む dylib（`libllama-server-impl`・`libllama`・`libllama-common`・`libmtmd`・`libggml*`。`@loader_path` で読むので同じフォルダに置く）だけを `Hanasu.app/Contents/Resources/llama/` に入れ、本体と同じ証明書・Hardened Runtime で 1 つずつ署名する。自己署名の証明書（Team ID がない）のときだけ、llama-server にライブラリの検証を外す権限（`Resources/llama-server.entitlements` の `com.apple.security.cs.disable-library-validation`）を付ける。Windows は `llama-server.exe` と、それが読む DLL を publish の `llama/` に入れる。llama.cpp のライセンス（MIT）を一緒に入れる。開発中の CLI は、環境変数 `HANASU_LLAMA_SERVER` でサーバーのパスを指定できる。
+- 理由: 決まった版・決まった中身だけを配る（DEC-COM-150 と同じ考え）。公開から 2 週間たった版にした（出てすぐの版を避ける）。Gemma 4 に対応した版（b8637 以降）と、公開直後の修正（2026-04）を含む。Mac の Hardened Runtime では、ほかの証明書で署名されたライブラリを読めないので、同梱するものも同じ証明書で署名し直す。ただし自己署名には Team ID がなく、同じ証明書で署名した dylib も「Team ID が違う」として読めなかった（docs/verification/dictation.md の 13）。llama-server は秘密を持たない別のプロセスなので、そのプロセスだけ検証を外す。Apple の証明書（Team ID あり）では外さない。
+- 決めた場面: ローカル LLM に対応した PR
+- 関係する要件: REQ-COM-030, REQ-REL-005
+- 対象: Mac / Windows
+- 実装の場所: `scripts/llama-cpp.lock`、`scripts/fetch-llama-cpp.sh`、`scripts/build-app.sh`、`Resources/llama-server.entitlements`、`LocalLLMServer.executableURL`
+- Windows の実装: `scripts/fetch-llama-cpp.ps1`、`.github/workflows/tagpr.yml`・`.github/workflows/windows.yml`（publish のあとに `llama/` を入れる）、`windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`（`ResolveExecutable`）
+
+### DEC-COM-062 3 つのモデルは、版・ファイル・SHA-256 を決めておき、設定から初めにダウンロードする
+- 決めたこと: モデルはアプリに入れず、設定の「AI」でダウンロードする。Hugging Face のリポジトリのコミットを決め（`resolve/<コミット>/<ファイル>`）、大きさと SHA-256 を確かめてから置く。
+  - Gemma 4 E4B: `ggml-org/gemma-4-E4B-it-GGUF` の `gemma-4-E4B-it-Q4_0.gguf`（4.59 GB、Apache-2.0）
+  - LFM2.5-1.2B-JP: `LiquidAI/LFM2.5-1.2B-JP-202606-GGUF` の `LFM2.5-1.2B-JP-202606-Q8_0.gguf`（1.25 GB、LFM Open License v1.0）
+  - Sarashina2.2: `mmnga/sarashina2.2-3b-instruct-v0.1-gguf` の `sarashina2.2-3b-instruct-v0.1-Q4_K_M.gguf`（2.07 GB、MIT）
+  - 置き場所: Mac は `~/Library/Application Support/Hanasu/Models/llm/`、Windows は `%LOCALAPPDATA%\Hanasu\Models\llm\`
+- 理由: 3 つで 8 GB あり、使わない人に配らない。差し替えられたファイルを読まない（FUT-011 と同じ考え。Windows は `ModelDownload` の確かめ方をそのまま使う）。Gemma 4 E4B は llama.cpp の開発元が作り直しを追っている ggml-org の Q4_0 にした（Google の QAT 版より小さい）。LFM2.5 は 1.2B と小さいので、質を落とさない Q8_0 にした。Sarashina2.2 は 3 つの大きさのうち日本語の質がいちばんよい 3B（日本語 MT-Bench 6.51）を、4 bit（Q4_K_M、日本語の imatrix 付き）で使う。3 つとも Hugging Face で同意の手続き（gated）が要らず、GGUF にチャットのテンプレートが入っている。
+- 決めた場面: ローカル LLM に対応した PR
+- 関係する要件: REQ-COM-030, REQ-COM-022
+- 対象: Mac / Windows
+- 実装の場所: `LocalLLMModel`、`LocalLLMStore.download`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`、`windows/Hanasu.Core/Net/ModelDownload.cs`
+
+### DEC-COM-063 サーバーは 127.0.0.1 の空いたポートで、起動のたびに作る API キーを付け、5 分使わなければ止める
+- 決めたこと: `--host 127.0.0.1` と、空いているポート（OS に選ばせる）で起動する。起動のたびに乱数の API キーを作り、環境変数 `LLAMA_API_KEY` で渡す（コマンドラインに書かない）。Web の画面は出さない（`--no-webui`）。同時に 1 つの処理だけ（`--parallel 1`）。最後の処理から 5 分たつと止め、モデルを変えたら起動し直し、アプリを終えるときに止める。Mac は、前回落ちたときに残ったサーバー（自分が起動した記録のあるもの）を起動時に止める。Windows は、ジョブオブジェクトで Hanasu が終わると一緒に終わるようにする。
+- 理由: ほかの端末から使われないよう、外に開かない。同じ端末のほかのプロセスに勝手に使われないよう、キーを付ける。コマンドラインは `ps` でほかのユーザーにも見えるので、キーは環境変数で渡す。モデルは数 GB のメモリを使い続けるので、使っていないときは返す（続けて使うときは読み込み済みで速い）。
+- 決めた場面: ローカル LLM に対応した PR
+- 関係する要件: REQ-COM-030, REQ-COM-022
+- 対象: Mac / Windows
+- 実装の場所: `LocalLLMServer`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Windows/Services/ChildProcessJob.cs`
+
+### DEC-COM-064 文脈の長さと生成の設定は、モデルごとに決める
+- 決めたこと: 文脈の長さ（`-c`）は、Gemma 4 E4B と LFM2.5 は 32,768、Sarashina2.2 は 8,192（モデルの上限）。出力の上限は、音声入力（整形・英訳・選択の編集・辞書の候補）は 2,048、会議（議事録・会議への質問）は 4,096 で、どちらも文脈の半分を超えない。サンプリングは開発元の推奨にする（Gemma 4: temperature 1.0・top_p 0.95・top_k 64、LFM2.5: temperature 0.1・top_k 50・repetition_penalty 1.05）。Sarashina2.2 は推奨がないので temperature 0.2・top_p 0.95・repetition_penalty 1.05。待つ時間は、音声入力は 1 回 120 秒、会議は 1 回 30 分（モデルの読み込みを含む）。
+- 理由: Gemma 4 と LFM2.5 は 128K まで読めるが、KV キャッシュのメモリを抑える（32K で 1 時間ほどの会議の文字起こしが入る）。整形は短い文なので、出力の上限は小さくてよい。端末の CPU・GPU で動くので、Gemini・Claude より長く待つ。
+- 決めた場面: ローカル LLM に対応した PR
+- 関係する要件: REQ-COM-030
+- 対象: Mac / Windows
+- 実装の場所: `LocalLLMModel`（`contextLength`・`sampling`）、`LocalLLMClient.maxOutputTokens`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`
+
+### DEC-COM-065 文脈に入らない入力は、文字起こしを部分ごとの要点にまとめてから送り、ほかは後ろを省く
+- 決めたこと: 送る前に、システムの指示と入力の長さを llama-server の `/tokenize` で数える。文脈（出力の上限と余白を引いた分）に入らないとき:
+  - 入力に `<transcript>` が 1 つだけあるとき（議事録）: 文字起こしを行の切れ目で、入る大きさの部分に分け、部分ごとに「話者・決まったこと・数字・日付・依頼（誰が・何を・いつまで）・★の付いた発言を落とさない要点」を書かせる。要点をつないだものを `<transcript>` の中身の代わりに入れ、元の指示で議事録を作る。つないだ要点もまだ入らなければ、要点をもう一度まとめる（3 回まで）。
+  - それ以外（会議への質問・辞書の候補など）: 入る長さまで後ろを省き、「（長いため、以下を省きました）」と書き足す。
+- 理由: Sarashina2.2 は 8K しか読めず、1 時間の会議（2〜4 万トークン）は入らない。議事録は全体を見てまとめる必要があるので、省くより要点にまとめる方がよい。会議への質問は、検索で関係の深い会議から順に並べてあるので、後ろを省いても答えに要る部分は残りやすい。
+- 決めた場面: ローカル LLM に対応した PR
+- 関係する要件: REQ-COM-030
+- 対象: Mac / Windows
+- 実装の場所: `LocalLLMClient.generate`、`LongInputFitter`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LongInputFitter.cs`
+
+### DEC-COM-066 モデルのライセンスを、選ぶところに出す
+- 決めたこと: 設定でローカルのモデルを選ぶ欄に、モデルごとのライセンス（Apache-2.0・LFM Open License v1.0・MIT）と、ライセンスの文へのリンクを出す。LFM2.5 には「年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されない」と書く。THIRD_PARTY_NOTICES に llama.cpp と 3 つのモデルを書く（モデルはアプリに入れないので、ダウンロードしたときのライセンスに従う）。
+- 理由: LFM Open License v1.0 は、年間売上 1,000 万ドル以上の組織の商用利用を許していない。ダウンロードするのは利用者なので、選ぶときに分かるようにする。
+- 決めた場面: ローカル LLM に対応した PR
+- 関係する要件: REQ-COM-030, REQ-REL-005
+- 対象: Mac / Windows
+- 実装の場所: `LocalLLMModel.licenseNote`、`AIChoiceRow`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
+
+### DEC-COM-067 ローカルを選んだときの既定のモデルは、音声入力は LFM2.5、会議は Gemma 4 E4B
+- 決めたこと: 用途の AI を初めて「ローカル」にしたときのモデルは、音声入力は LFM2.5-1.2B-JP、会議は Gemma 4 E4B。AI の既定（Gemini）は変えない。
+- 理由: 音声入力は待ち時間が短いことを優先し、小さくて日本語の指示に強い LFM2.5（J-MIFEval 79.08）にした。議事録は長い文字起こしをまとめるので、3 つのうちいちばん大きく 128K まで読める Gemma 4 E4B にした。
+- 決めた場面: ローカル LLM に対応した PR
+- 関係する要件: REQ-COM-030
+- 対象: Mac / Windows
+- 実装の場所: `LocalLLMModel.defaultDictation`・`defaultMeeting`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`
+
+### DEC-COM-070 Apple の Foundation Models は、CLI の `fm respond` を 1 回ずつ子プロセスで呼ぶ
+- 決めたこと: 処理のたびに `fm respond --instructions <システムの指示> <入力>` を子プロセスで動かし、標準出力の文章を結果にする（Apple の WWDC26 のセッション 334 の使い方）。プロンプトは Gemini・Claude・ローカルと同じものを使う。終了コードが 0 でなければ、標準エラーの最後の数行を添えて知らせる。待つ時間は、音声入力は 1 回 60 秒、会議は 1 回 10 分で、過ぎたら止める。
+- 理由: ユーザーの指定が CLI（REQ-COM-031）。Apple の公式の文書で確かめられた使い方は、`fm respond` に入力を引数で渡し、`--instructions` で指示を渡す形だけで、標準入力で渡せるかは確かめられなかった。`fm serve`（OpenAI 互換のサーバー）はコミュニティの文書にしかなく、決まったポート（127.0.0.1:1976）で認証もないとされるので使わない。
+- 引数で渡すことの注意: 入力（文字起こし・整えた文章）は、`fm` が動いている数秒〜数分のあいだ、同じ Mac のほかのユーザーにも `ps` で見える。標準入力で渡せると分かったら、そちらに変える。
+- 決めた場面: ローカル LLM に対応した PR（Apple の Foundation Models を足した分）
+- 関係する要件: REQ-COM-031
+- 対象: Mac
+- 実装の場所: `AppleFMClient.respond`
+
+### DEC-COM-071 `fm` は macOS 27 以上で、Apple が署名した /usr/bin/fm だけを使う
+- 決めたこと: macOS 27 以上で、`/usr/bin/fm` があり、その署名が Apple のもの（コードの要件 `anchor apple`）のときだけ「使える」とする。ほかの場所の `fm`（Homebrew などの同じ名前のもの）は使わない。使えないときは、理由（macOS が 27 より前・見つからない・Apple の署名でない）を設定の欄と知らせに出す。利用条件への同意がまだのとき（`fm` がすべてのコマンドを断る。未確認）は、ターミナルで `sudo fm license` を実行するよう案内する。確認用に、環境変数 `HANASU_FM_PATH` で別の実行ファイルを指定でき、そのときは macOS の版と署名を見ない。
+- 理由: 入力の文章を渡すので、同じ名前の別のプログラムに渡さない。`fm` は macOS 27 に初めから入っている（WWDC26 のセッション 334）ので、システムの場所にあるはずだが、場所は Apple の文書で確かめられなかった（未確認。macOS 27 の実機で確かめる）。手元の Mac は macOS 26.6 で本物を動かせないので、偽の `fm` で渡す引数と分け方を確かめられるようにする。
+- 決めた場面: ローカル LLM に対応した PR（Apple の Foundation Models を足した分）
+- 関係する要件: REQ-COM-031, REQ-COM-022
+- 対象: Mac
+- 実装の場所: `AppleFMAvailability.check`
+
+### DEC-COM-072 Apple の Foundation Models は、端末の中のモデルだけを使う
+- 決めたこと: `--model pcc`（Private Cloud Compute）は使わず、既定の端末の中のモデルだけを使う。設定でモデルは選ばない。
+- 理由: ローカルの選択肢として足すもので、文章を端末の外に送らない（REQ-COM-031）。Private Cloud Compute は Apple のサーバーに送り、使用量の上限もある。要るなら別に要件にする。
+- 決めた場面: ローカル LLM に対応した PR（Apple の Foundation Models を足した分）
+- 関係する要件: REQ-COM-031
+- 対象: Mac
+- 実装の場所: `AppleFMClient.arguments`
+
+### DEC-COM-073 `fm` の文脈は 8,192 トークンとし、トークン数は文字の種類から多めに見積もる
+- 決めたこと: 文脈は 8,192 トークン（コミュニティの文書の値。Apple の文書では未確認）として、DEC-COM-065 の分け方（`LongInputFitter`）をそのまま使う。出力の上限は、音声入力は 1,536、会議は 2,048 として入力の分を空ける。`fm` にはトークン数を数える方法がないので、漢字・かな・全角の文字は 1 文字 1 トークン、ほかは 3 文字で 1 トークンと多めに見積もる。見えないシステムの指示（約 54 トークン）は余白（256）に含める。
+- 理由: 1 時間の会議（2〜4 万トークン）は入らないので、文字起こしを部分ごとの要点にしてから議事録にする。見積もりが少なすぎると文脈を超えて失敗するので、多めにとる（日本語の多くのトークナイザーは 1 文字 1 トークン以下）。
+- 決めた場面: ローカル LLM に対応した PR（Apple の Foundation Models を足した分）
+- 関係する要件: REQ-COM-031
+- 対象: Mac
+- 実装の場所: `AppleFMClient.contextLength`・`estimateTokens`、`LongInputFitter`
 
 ### DEC-COM-100 Windows 版は C# / .NET 8 / WPF で作り、OS に依存しない部分を分ける
 - 決めたこと: `windows/` に C# 12 / .NET 8（LTS）/ WPF で作る（ターゲットは `net8.0-windows10.0.19041.0`）。プロンプト・Gemini・JWT・辞書・設定・音声の変換・状態遷移は OS に依存しない `Hanasu.Core`（net8.0）に置き、Mac でも `dotnet test` で確かめる。Whisper（`Hanasu.Whisper`）と話者分離（`Hanasu.Diarization`）も net8.0 に分ける。

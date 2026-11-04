@@ -13,10 +13,19 @@ Hanasu は Apache License 2.0（[LICENSE](LICENSE)）で配布します。Window
     （https://github.com/huggingface/swift-transformers、Copyright 2022 Hugging Face SAS）を元にしたもので、
     Apache License 2.0 です（全文は下の FluidAudio の節と同じ）。
 
+- **llama.cpp**（ggml-org）b11770（https://github.com/ggml-org/llama.cpp）— MIT License
+  - ローカルの LLM を動かす `llama-server` と、それが読むライブラリ（libllama・libggml など）を
+    `Hanasu.app/Contents/Resources/llama/` に入れています（同じフォルダに `LICENSE` も入れています）。
+
 話者分離のモデル（pyannote speaker-diarization-community-1 の CoreML 版、FluidInference 配布）はアプリに同梱せず、
 初回の話者分離のときに Hugging Face からダウンロードされます。モデルのライセンスはダウンロード元の表示に従います。
 Whisper のモデル（argmaxinc/whisperkit-coreml。OpenAI Whisper を CoreML にしたもの、MIT）も同梱せず、
 設定で Whisper を選んだときに Hugging Face からダウンロードされます。
+ローカルの LLM のモデルも同梱せず、設定の「AI」で利用者がダウンロードします。ライセンスはダウンロード元の表示に従います。
+- Gemma 4 E4B（ggml-org/gemma-4-E4B-it-GGUF、Google）— Apache License 2.0
+- LFM2.5-1.2B-JP（LiquidAI/LFM2.5-1.2B-JP-202606-GGUF、Liquid AI）— LFM Open License v1.0
+  （年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されていません）
+- Sarashina2.2 3B（mmnga/sarashina2.2-3b-instruct-v0.1-gguf。元は SB Intuitions の sarashina2.2-3b-instruct-v0.1）— MIT License
 
 
 ---
@@ -1294,6 +1303,34 @@ Apache License
 MIT License
 
 Copyright (c) 2024 argmax, inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+````
+
+---
+
+## llama.cpp（ggml-org）— MIT License
+
+````text
+MIT License
+
+Copyright (c) 2023-2026 The ggml authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

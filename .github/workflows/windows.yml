@@ -6,6 +6,8 @@ on:
     paths:
       - "windows/**"
       - ".github/workflows/windows.yml"
+      - "scripts/llama-cpp.lock"
+      - "scripts/fetch-llama-cpp.ps1"
   push:
     branches: ["main"]
   workflow_dispatch:
@@ -48,6 +50,12 @@ jobs:
       - name: Publish (win-x64, self-contained, single file)
         run: dotnet publish Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:RestoreLockedMode=false -o publish/win-x64
 
+      # 設計判断: DEC-COM-061
+      # ローカルの LLM の llama-server（llama.cpp）を、SHA-256 を確かめてから llama/ に入れる
+      - name: Add llama-server
+        shell: pwsh
+        run: ../scripts/fetch-llama-cpp.ps1 -Destination publish/win-x64
+
       - name: Check publish output
         shell: pwsh
         run: |
@@ -63,7 +71,12 @@ jobs:
             "publish/win-x64/LICENSE.txt",
             "publish/win-x64/NOTICE.txt",
             "publish/win-x64/THIRD_PARTY_NOTICES.md",
-            "publish/win-x64/dotnet-THIRD-PARTY-NOTICES.txt"
+            "publish/win-x64/dotnet-THIRD-PARTY-NOTICES.txt",
+            # 確かめ方: REQ-COM-030
+            "publish/win-x64/llama/llama-server.exe",
+            "publish/win-x64/llama/llama-server-impl.dll",
+            "publish/win-x64/llama/llama.dll",
+            "publish/win-x64/llama/ggml-base.dll"
           )
           foreach ($path in $expected) {
             if (-not (Test-Path $path)) { throw "見つかりません: $path" }
