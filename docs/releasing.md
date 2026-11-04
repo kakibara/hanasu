@@ -15,6 +15,12 @@ Claude Code では、スキル `release`（[.claude/skills/release/SKILL.md](../
 4. リリース PR をマージすると、tagpr がタグと下書きのリリースを作ります。
 5. 続けて macOS 26 のランナーが Mac 版を、Windows のランナーが Windows 版をビルドし、`Hanasu-<バージョン>-macOS.zip` と `Hanasu-<バージョン>-Windows-x64.zip` を添付してリリースを公開します。本文は「リリース文 → PR の一覧 → インストールの手順と SHA-256」の順です（`scripts/compose-release-notes.py`。リリース文がなければ PR の一覧から）。既存のタグの添付ファイルや本文を作り直すときは、Actions の「tagpr」を tag を指定して手動で実行します。
 
+リリースが失敗したとき:
+
+- 手動の実行は、ワークフローは `main` のものを使いますが、ビルドするコードとリリース文は**タグの時点のもの**です。一時的な失敗やワークフローの問題なら、手動の実行で作り直せます。
+- タグの時点のコードが原因なら、手動の実行では直りません。公開前の下書きなら、直しを `main` に入れ、下書きとタグを消して、直した `main` にタグを付け直し（下書きはタグを作らないので、タグを先に push）、下書きを作ってから手動で実行します。公開済みの版は消さず、次のパッチで直します。手順は [.claude/skills/release/SKILL.md](../.claude/skills/release/SKILL.md) の「失敗したとき」です。
+- リリースの前に、Mac 版の最適化ビルド（`swift build -c release`）が通るかを確かめます。PR の CI は Mac 版をビルドしません。
+
 初回だけ必要な準備:
 
 - リポジトリの Settings → Actions → General → Workflow permissions で「Allow GitHub Actions to create and approve pull requests」をオンにする。
