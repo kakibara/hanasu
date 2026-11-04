@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.3.4](https://github.com/kakibara/hanasu/compare/v1.3.3...v1.3.4) - 2026-11-04
+## [v1.4.0](https://github.com/kakibara/hanasu/compare/v1.3.3...v1.4.0) - 2026-11-04
 
 - 会議の「ここ重要」の取り消し・前後の会話の確認と、Mac の会議ノートで「メモ」タブを開くとタブが消える不具合の修正 by @kakibara in https://github.com/kakibara/hanasu/pull/34
 - 会議の会話から話者の名前を推測して付ける by @kakibara in https://github.com/kakibara/hanasu/pull/35
