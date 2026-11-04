@@ -87,10 +87,13 @@ struct AISettingsTab: View {
 }
 
 // 要件: REQ-COM-024, REQ-COM-030
-/// 1 つの用途（音声入力 / 会議）の、AI とモデルの選択
-private struct AIChoiceRow: View {
+// 設計判断: DEC-COM-092
+/// 1 つの用途（音声入力 / 会議）の、AI とモデルの選択。オンボーディングの「設定の Tips」でも使う
+struct AIChoiceRow: View {
     @ObservedObject var settings: AppSettings
     var purpose: TextAIPurpose
+    /// AI の切り替え（右上のセグメント）を出すか。オンボーディングの AI のページでは、AI はカードで選ぶので出さない
+    var showsProviderPicker = true
 
     private var provider: Binding<TextAIProvider> {
         purpose == .dictation ? $settings.dictationAIProvider : $settings.meetingAIProvider
@@ -114,12 +117,14 @@ private struct AIChoiceRow: View {
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Spacer()
-                Picker("AI", selection: provider) {
-                    ForEach(TextAIProvider.allCases) { Text($0.name).tag($0) }
+                if showsProviderPicker {
+                    Picker("AI", selection: provider) {
+                        ForEach(TextAIProvider.allCases) { Text($0.name).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .fixedSize()
                 }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .fixedSize()
             }
             switch provider.wrappedValue {
             case .gemini:
@@ -237,8 +242,8 @@ struct ClaudeKeySection: View {
     }
 }
 
-/// Gemini の認証。AI に Gemini を選んだときと、文字起こしのエンジン「Gemini」で使う
-private struct GeminiAuthSection: View {
+/// Gemini の認証。AI に Gemini を選んだときと、文字起こしのエンジン「Gemini」で使う。オンボーディングの AI のページでも使う
+struct GeminiAuthSection: View {
     @ObservedObject var settings: AppSettings
     @State private var newKey = ""
     @State private var hint: String? = Keychain.hint(.geminiAPIKey)
