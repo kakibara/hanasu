@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.3.4](https://github.com/kakibara/hanasu/compare/v1.3.3...v1.3.4) - 2026-11-04
+
+- 会議の「ここ重要」の取り消し・前後の会話の確認と、Mac の会議ノートで「メモ」タブを開くとタブが消える不具合の修正 by @kakibara in https://github.com/kakibara/hanasu/pull/34
+- 会議の会話から話者の名前を推測して付ける by @kakibara in https://github.com/kakibara/hanasu/pull/35
+- 会議ノートの左の欄で、一覧と下の設定欄が重ならないようにする by @kakibara in https://github.com/kakibara/hanasu/pull/37
+- リリースの手順をスキルにし、版の決め方とリリース文のテンプレートを決める by @kakibara in https://github.com/kakibara/hanasu/pull/38
+
 ## [v1.3.3](https://github.com/kakibara/hanasu/compare/v1.3.2...v1.3.3) - 2026-11-04
 
 - 整形と議事録に、端末の中で動く小型の LLM（Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2）と Apple の Foundation Models（fm）を選べるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/31
