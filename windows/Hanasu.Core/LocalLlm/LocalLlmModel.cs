@@ -57,7 +57,7 @@ public sealed record LocalLlmModel(
     /// <summary>
     /// おすすめのモデル（DEC-COM-067）。実機で比べると、Sarashina2.2 と LFM2.5 は整形で言っていない文を足したり、
     /// 議事録で担当者を取り違えたり同じ議題を繰り返したりして、使い物にならなかった（docs/verification/dictation.md の 13）。
-    /// Qwen3.5-4B も、整形で言い直しの前の文を残し、議事録でアクションアイテムをまとめてしまった（同じく 18）。
+    /// Qwen3.5-4B も、整形で言い直しの前の文を残し、議事録でアクションアイテムをまとめてしまった（同じく 19）。
     /// Gemma 4 E4B（Google）だけが整形も議事録も安定していたので、これを勧め、音声入力・会議とも既定にする
     /// </summary>
     public static readonly LocalLlmModel Recommended = Gemma4E4B;
