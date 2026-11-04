@@ -192,6 +192,15 @@ final class AppSettings: ObservableObject {
     /// 会議で録音するマイクの UID。空ならシステムの設定に従う
     @Published var meetingInputDeviceUID: String { didSet { defaults.set(meetingInputDeviceUID, forKey: Keys.meetingInputDeviceUID) } }
 
+    // 要件: REQ-COM-004
+    /// 文字起こしの言語の候補。設定の一覧に出す（保存されている言語がこの中になければ、それも一覧に足す）
+    static let transcriptionLocaleIdentifiers = ["ja-JP", "en-US", "en-GB", "zh-CN", "zh-TW", "ko-KR", "fr-FR", "de-DE", "es-ES", "it-IT", "pt-BR"]
+
+    /// システムの言語。文字起こしの言語の初期値にする。読めなければ ja-JP
+    static var systemLocaleIdentifier: String {
+        Locale.preferredLanguages.first ?? "ja-JP"
+    }
+
     // 設計判断: DEC-COM-024
     /// Whisper に渡す言語コード（設定の言語 ja-JP → ja）。読めなければ日本語にする
     var whisperLanguage: String {
@@ -257,7 +266,8 @@ final class AppSettings: ObservableObject {
             // 設計判断: DEC-COM-022
             Keys.whisperModel: WhisperModel.small.rawValue,
             Keys.geminiTranscriptionModel: Self.suggestedModels[0],
-            Keys.locale: "ja-JP",
+            // 要件: REQ-COM-004
+            Keys.locale: AppSettings.systemLocaleIdentifier,
             Keys.refine: true,
             Keys.extraInstructions: "",
             Keys.dictionary: "",

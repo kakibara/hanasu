@@ -38,6 +38,17 @@
 - Windows の実装: `windows/Hanasu.Core/Transcription/WhisperModels.cs`
 - 確かめ方: `.build/debug/Hanasu --download-whisper base`（保存先は `HANASU_MODELS_DIR` で変えられる）、`--render-engine-settings /tmp/engine.png --downloading`
 
+### REQ-COM-004 文字起こしの言語を一覧から選べ、初期値はシステムの言語にする
+- 内容: 設定の「一般」→「文字起こし」の「言語」を、入力欄から一覧に変える。一覧は日本語・英語（米国・英国）・中国語（簡体・繁体）・韓国語・フランス語・ドイツ語・スペイン語・イタリア語・ポルトガル語（ブラジル）。初期値は macOS のシステムの言語にする。保存されている言語が一覧になければ、その言語も一覧に足す。
+- 受け入れ条件:
+  - 初めて起動したとき、言語はシステムの言語になっている（システムが英語なら English）。
+  - 一覧から言語を変えると、次の音声入力・会議の記録からその言語で文字起こしされる。
+- 出典: ユーザーの依頼（2026-11-04）「音声入力の入力言語を選択できるようにしてください。デフォルトはシステムの言語にしてください」
+- 対象: Mac
+- 実装の場所: `AppSettings.transcriptionLocaleIdentifiers`、`AppSettings.systemLocaleIdentifier`、`TranscriptionEngineSettingsSection.languageOptions`
+- 食い違い（ユーザーの確認待ち）: 言語は音声入力と会議の記録で共有する（従来の設定を一覧にしただけ）。音声入力だけ別の言語にする必要があるかは未確認。
+- 確かめ方: 実機で確かめる（設定の一覧で言語を変え、音声入力を試す）
+
 ### REQ-COM-010 Windows でも音声入力を使える
 - 内容: Windows 10（2004 以降）/ 11 でも、Mac 版と同じ流れの音声入力（ショートカットで録音 → 文字起こし → Gemini で整形・英訳 → カーソル位置に入力）を使える。共通の要件（REQ-DIC-001〜008・010〜012・070、REQ-COM-001〜003）は、それぞれの項目の「対象」に Windows を書いた。
 - 受け入れ条件: Windows の PC で `Hanasu.exe` を起動するとタスクトレイに常駐し、`Ctrl + Alt + Space` で話した内容が整えられてカーソル位置に入る。

@@ -10,6 +10,13 @@ struct TranscriptionEngineSettingsSection: View {
 
     private var engines: [TranscriptionEngine] { [settings.dictationEngine, settings.meetingEngine] }
 
+    // 要件: REQ-COM-004
+    /// 言語の候補。保存されている言語が候補になければ、それも一覧に足す
+    private var languageOptions: [String] {
+        let base = AppSettings.transcriptionLocaleIdentifiers
+        return base.contains(settings.localeIdentifier) ? base : base + [settings.localeIdentifier]
+    }
+
     var body: some View {
         Section {
             Picker("音声入力", selection: $settings.dictationEngine) {
@@ -23,7 +30,12 @@ struct TranscriptionEngineSettingsSection: View {
                     ForEach(RecognizerEngine.allCases) { Text($0.label).tag($0) }
                 }
             }
-            TextField("言語", text: $settings.localeIdentifier, prompt: Text("ja-JP"))
+            // 要件: REQ-COM-004
+            Picker("言語", selection: $settings.localeIdentifier) {
+                ForEach(languageOptions, id: \.self) { id in
+                    Text(Locale(identifier: "ja-JP").localizedString(forIdentifier: id) ?? id).tag(id)
+                }
+            }
         } header: {
             Text("文字起こし")
         } footer: {
