@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.4.1](https://github.com/kakibara/hanasu/compare/v1.4.0...v1.4.1) - 2026-11-04
+
+- リリースのスキルに、v1.4.0 で分かったこと（最適化ビルドの確認とタグの付け直し）を書き足す by @kakibara in https://github.com/kakibara/hanasu/pull/41
+- Mac の会議ノートで「メモ」タブを開くと、中身がウインドウからはみ出して戻れなくなるのを直す by @kakibara in https://github.com/kakibara/hanasu/pull/42
+
 ## [v1.4.0](https://github.com/kakibara/hanasu/compare/v1.3.3...v1.4.0) - 2026-11-04
 
 - 会議の「ここ重要」の取り消し・前後の会話の確認と、Mac の会議ノートで「メモ」タブを開くとタブが消える不具合の修正 by @kakibara in https://github.com/kakibara/hanasu/pull/34
