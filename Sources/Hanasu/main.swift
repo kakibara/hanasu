@@ -5,11 +5,11 @@ import SwiftUI
 // 動作確認用の CLI モード:
 //   Hanasu --transcribe-file <音声ファイル> [--engine apple|whisper|gemini|dictation|speech] [--refine [--translate] [--model <id>]]
 //   （Whisper / Gemini の確認の詳細は TranscriptionEngineCLI.swift）
-//   Hanasu --refine-text <文章> [--translate] [--ai gemini|claude] [--model <id>] [--app <bundle id>] [--show-prompt] [--show-request] [--dictionary <辞書ファイル>]
+//   Hanasu --refine-text <文章> [--translate] [--ai gemini|claude|local] [--model <id>] [--app <bundle id>] [--show-prompt] [--show-request] [--dictionary <辞書ファイル>]
 // --refine を付けると AI での整形も行い、--translate を付けると整形の代わりに英訳する。
 // --app を付けると、そのアプリ向けの文体ルール（設定の「アプリ別」）で整形する。既定の出力言語が English なら英訳する。
 // --show-prompt を付けると、AI に送る user content も表示する。
-// --ai gemini|claude で AI を選ぶ（省くと設定の「音声入力」の AI）。--model で、その AI のモデルを変える。
+// --ai gemini|claude|local で AI を選ぶ（省くと設定の「音声入力」の AI）。--model で、その AI のモデルを変える（local は LocalLLMModel の id）。
 // --show-request を付けると、Claude に送るリクエスト（ヘッダーと JSON。キーの値は伏せる）を表示し、送らずに終える。
 // 認証: Gemini は GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウント JSON のパス）、設定画面の認証情報、GEMINI_API_KEY の順。
 //       Claude は ANTHROPIC_API_KEY、設定（キーチェーン）の順。
@@ -43,6 +43,12 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
     print(String(format: "[%@ %@ %@ %.1fs] %@", translate ? "英訳" : "整形", client.provider.name, model, Date().timeIntervalSince(started), output))
 }
+
+// 設計判断: DEC-COM-063
+// アプリ・CLI を終えるとき（exit も NSApp の終了も）に、起動したローカルの LLM のサーバーを止める
+atexit { LocalLLMServer.terminateRunningServer() }
+// ローカルの LLM の確認（--local-llm-list / --local-llm-download / --local-llm-delete / --local-llm-test-fit）。LocalLLMCLI.swift
+MainActor.assumeIsolated { LocalLLMCLI.runIfRequested() }
 
 // 文字起こしのエンジンの確認（--download-whisper / --render-engine-settings）。TranscriptionEngineCLI.swift
 MainActor.assumeIsolated { TranscriptionEngineCLI.runIfRequested() }

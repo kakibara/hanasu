@@ -134,6 +134,12 @@ final class AppSettings: ObservableObject {
     @Published var claudeModel: String { didSet { defaults.set(claudeModel, forKey: Keys.claudeModel) } }
     /// Claude を選んだときの、会議のモデル
     @Published var claudeMinutesModel: String { didSet { defaults.set(claudeMinutesModel, forKey: Keys.claudeMinutesModel) } }
+    // 要件: REQ-COM-030
+    // 設計判断: DEC-COM-067
+    /// ローカルを選んだときの、音声入力のモデル（LocalLLMModel の rawValue）
+    @Published var localDictationModel: LocalLLMModel { didSet { defaults.set(localDictationModel.rawValue, forKey: Keys.localDictationModel) } }
+    /// ローカルを選んだときの、会議のモデル
+    @Published var localMeetingModel: LocalLLMModel { didSet { defaults.set(localMeetingModel.rawValue, forKey: Keys.localMeetingModel) } }
     @Published var authMode: GeminiAuthMode { didSet { defaults.set(authMode.rawValue, forKey: Keys.authMode) } }
     @Published var serviceAccountPath: String { didSet { defaults.set(serviceAccountPath, forKey: Keys.serviceAccountPath) } }
     @Published var vertexLocation: String { didSet { defaults.set(vertexLocation, forKey: Keys.vertexLocation) } }
@@ -205,7 +211,15 @@ final class AppSettings: ObservableObject {
         case (.dictation, .claude): claudeModel
         case (.meeting, .gemini): meetingMinutesModel
         case (.meeting, .claude): claudeMinutesModel
+        case (_, .local): localModel(for: purpose).rawValue
+        case (_, .appleFM): AppleFMClient.modelName
         }
+    }
+
+    // 要件: REQ-COM-030
+    /// 用途ごとの、ローカルのモデル
+    func localModel(for purpose: TextAIPurpose) -> LocalLLMModel {
+        purpose == .dictation ? localDictationModel : localMeetingModel
     }
 
     /// ユーザー辞書の正しい表記の一覧（語だけの行と、置き換えルールの右側）。書き方は UserDictionary を参照
@@ -223,6 +237,9 @@ final class AppSettings: ObservableObject {
             // 要件: REQ-COM-023
             Keys.claudeModel: ClaudeClient.Model.defaultDictation.rawValue,
             Keys.claudeMinutesModel: ClaudeClient.Model.defaultMeeting.rawValue,
+            // 設計判断: DEC-COM-067
+            Keys.localDictationModel: LocalLLMModel.defaultDictation.rawValue,
+            Keys.localMeetingModel: LocalLLMModel.defaultMeeting.rawValue,
             // ターミナルから起動した場合は環境変数のパスを初期値にする
             Keys.serviceAccountPath: ProcessInfo.processInfo.environment["GEMINI_SERVICE_ACCOUNT_JSON"] ?? "",
             // 設計判断: DEC-COM-004
@@ -263,6 +280,8 @@ final class AppSettings: ObservableObject {
         meetingAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.meetingAIProvider)!) ?? .gemini
         claudeModel = defaults.string(forKey: Keys.claudeModel)!
         claudeMinutesModel = defaults.string(forKey: Keys.claudeMinutesModel)!
+        localDictationModel = LocalLLMModel(rawValue: defaults.string(forKey: Keys.localDictationModel)!) ?? .defaultDictation
+        localMeetingModel = LocalLLMModel(rawValue: defaults.string(forKey: Keys.localMeetingModel)!) ?? .defaultMeeting
         serviceAccountPath = defaults.string(forKey: Keys.serviceAccountPath)!
         vertexLocation = defaults.string(forKey: Keys.vertexLocation)!
         hotKey = HotKeyCombo(
@@ -301,6 +320,8 @@ final class AppSettings: ObservableObject {
         static let meetingAIProvider = "meetingTextAIProvider"
         static let claudeModel = "claudeModel"
         static let claudeMinutesModel = "claudeMinutesModel"
+        static let localDictationModel = "localDictationModel"
+        static let localMeetingModel = "localMeetingModel"
         static let serviceAccountPath = "serviceAccountPath"
         static let vertexLocation = "vertexLocation"
         static let hotKeyCode = "hotKeyCode"

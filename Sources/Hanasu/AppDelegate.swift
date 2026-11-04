@@ -21,6 +21,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     // 設計判断: DEC-COM-008, DEC-COM-009
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // 設計判断: DEC-COM-063
+        // 前回落ちたときに残ったローカルの LLM のサーバーを止める
+        LocalLLMServer.cleanUpStaleServer()
         controller = DictationController()
         historyUI = DictationHistoryUI(
             isDictationBusy: { [weak self] in self?.controller.state != .idle },

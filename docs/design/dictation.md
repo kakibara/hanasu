@@ -97,6 +97,24 @@ Typeless のような「話した内容を、自然な日本語に整えて今�
 - 音声は Claude に送らない。文字起こしのエンジン（4.10）はそのまま。
 - 確認: `--refine-text <文> --ai claude [--show-request]`、`--claude-test`、`--keychain-selftest`、`--render-ai-settings <png>`（`ClaudeCLI.swift`）。
 
+### 3.2.2 整形などの AI をローカルの小型 LLM にする（llama.cpp）
+
+- 「AI」タブの各用途で「ローカル」を選ぶと、Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2 のどれかを、この Mac の中で動かす（REQ-COM-030）。モデルの一覧（版・ファイル・SHA-256・文脈の長さ・サンプリング・ライセンス）は `LocalLLMModel`。選んだモデルは `AppSettings.localDictationModel`・`localMeetingModel`。
+- モデルは設定の欄（`LocalModelChoice`）か `--local-llm-download` で、`LocalLLMStore` が Hugging Face から取る。決めたコミットの URL から取り、大きさと SHA-256 を確かめてから `~/Library/Application Support/Hanasu/Models/llm/` に置く（DEC-COM-062）。
+- 動かすのは同梱の llama.cpp の `llama-server`（`Contents/Resources/llama/`。`scripts/fetch-llama-cpp.sh` が SHA-256 を確かめて取り、`scripts/build-app.sh` が入れて署名する。DEC-COM-061）。`LocalLLMServer`（actor）が、使うときに 127.0.0.1 の空いたポートで起動し、5 分使わなければ止める。API キーは起動のたびに作って環境変数で渡す。アプリ・CLI の終了（`atexit`）で止め、前回落ちて残ったものは起動時に止める（DEC-COM-063）。
+- `TextAIClient` は、ローカルなら Gemini と同じプロンプトを `LocalLLMClient` で `/v1/chat/completions` に送る。整形・英訳の結果は `LocalLLMClient.cleanUpRewrite` で、全体を囲む「」と行末の空白を除く。終わりの印 `</s>` で止める。
+- 文脈に入らない入力は `LongInputFitter` で縮める（DEC-COM-065）。議事録（`<transcript>` が 1 つ）は文字起こしを部分に分けて要点にまとめてから元の指示で作り、ほかは後ろを省く。長さは llama-server の `/tokenize` で数える。
+- 小さいモデルはアクションアイテムを本文の中に JSON で書くことがあるので、`MinutesPrompt.inlineItems` でも読む（DEC-MTG-062）。
+- 確認: `--local-llm-list`・`--local-llm-download <id>`・`--local-llm-test-fit`（`LocalLLMCLI.swift`）、`--refine-text <文> --ai local --model <id>`、`--minutes-from-transcript <ファイル> --ai local --model <id>`、`--render-ai-settings <png> --local`。開発中は `build/llama-cpp/macos-arm64/llama-server` を使う（`./scripts/fetch-llama-cpp.sh` で用意する。環境変数 `HANASU_LLAMA_SERVER` でも指定できる）。
+
+### 3.2.3 整形などの AI を Apple の Foundation Models の CLI にする（macOS 27 の fm）
+
+- 「AI」タブの各用途で「Apple」を選ぶと、macOS 27 に入っている `fm`（Foundation Models の CLI）で、Apple Intelligence の端末の中のモデルを使う（REQ-COM-031）。Mac 版だけ。
+- 使えるかは `AppleFMAvailability.check` が決める。macOS 27 以上で、`/usr/bin/fm` があり、Apple の署名（`anchor apple`）のときだけ使う。使えなければ理由を設定の欄（`AppleFMChoice`）と知らせに出す（DEC-COM-071）。確認用の環境変数 `HANASU_FM_PATH` で偽の `fm` を指定できる。
+- `AppleFMClient` は処理のたびに `fm respond --instructions <指示> <入力>` を子プロセスで動かし、標準出力を結果にする（DEC-COM-070）。`--model pcc` は付けない（DEC-COM-072）。プロンプト・整形の後始末はローカルと同じ。
+- 文脈は 8,192 トークンとして、ローカルと同じ `LongInputFitter` で長い会議を分けてまとめる。トークン数は `AppleFMClient.estimateTokens` で文字の種類から多めに見積もる（DEC-COM-073）。
+- 確認: `--apple-fm-status`、`HANASU_FM_PATH=<偽の fm> --refine-text <文> --ai apple`・`--minutes-from-transcript <ファイル> --ai apple`、`--render-ai-settings <png> --apple`。
+
 ### 3.3 グローバルショートカット: Carbon `RegisterEventHotKey`
 
 - アクセシビリティ権限なしで使える、古くからある安定した API。

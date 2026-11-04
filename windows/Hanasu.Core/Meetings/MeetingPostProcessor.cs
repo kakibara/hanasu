@@ -87,7 +87,7 @@ public sealed class MeetingPostProcessor
             }
             if (client is null)
             {
-                errors.Add(authError ?? $"{TextAiFactory.NameOf(MinutesProvider)} の認証情報が設定されていないため、議事録は作っていません（メニュー → 設定 → AI）。");
+                errors.Add(authError ?? $"{TextAiFactory.NotReadyBecause(MinutesProvider)}、議事録は作っていません（メニュー → 設定 → AI）。");
             }
             else
             {

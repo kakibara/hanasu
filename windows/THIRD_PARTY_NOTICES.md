@@ -15,11 +15,14 @@ Hanasu は Apache License 2.0（同梱の `LICENSE.txt`）で配布します。
 | Microsoft.Extensions.AI.Abstractions（Anthropic SDK の依存） | 10.5.1 | `Hanasu.exe` | MIT |
 | System.Text.Json・System.Text.Encodings.Web・System.IO.Pipelines・System.Net.ServerSentEvents（Anthropic SDK の依存） | 10.0.6・10.0.6・10.0.6・10.0.1 | `Hanasu.exe` | MIT |
 | [ONNX Runtime](https://github.com/microsoft/onnxruntime)（sherpa-onnx に入っている） | sherpa-onnx 1.13.8 に同梱の版 | `onnxruntime.dll` | MIT |
+| [llama.cpp / ggml](https://github.com/ggml-org/llama.cpp)（ローカルの LLM を動かす `llama-server`） | b11770 | `llama/llama-server.exe`、`llama/*.dll` | MIT |
+| [LLVM OpenMP](https://github.com/llvm/llvm-project/tree/main/openmp)（llama.cpp の Windows 版に入っている） | llama.cpp b11770 に同梱の版 | `llama/libomp.dll` | Apache-2.0 WITH LLVM-exception（条文は `llama/LICENSE-LLVM-OpenMP`） |
 
 次のモデルは配布物に含めません。利用者が選んだとき（または初めて使うとき）に、ダウンロード元から取得します。ライセンスはダウンロード元の表示に従います。
 
 - Whisper のモデル（`ggml-*.bin`、[ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp)。OpenAI Whisper のモデル、MIT）
 - 話者分離のモデル: [pyannote segmentation-3.0 の ONNX 版](https://huggingface.co/csukuangfj/sherpa-onnx-pyannote-segmentation-3-0)（MIT）、[3D-Speaker の CAM++](https://github.com/k2-fsa/sherpa-onnx/releases/tag/speaker-recongition-models)（Apache-2.0）
+- ローカルの LLM のモデル（設定 → AI で利用者がダウンロード）: [Gemma 4 E4B](https://huggingface.co/ggml-org/gemma-4-E4B-it-GGUF)（Apache-2.0）、[LFM2.5-1.2B-JP](https://huggingface.co/LiquidAI/LFM2.5-1.2B-JP-202606-GGUF)（LFM Open License v1.0。年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されていません）、[Sarashina2.2 3B](https://huggingface.co/mmnga/sarashina2.2-3b-instruct-v0.1-gguf)（MIT）
 
 ---
 
@@ -31,6 +34,7 @@ Hanasu は Apache License 2.0（同梱の `LICENSE.txt`）で配布します。
 - NAudio: Copyright (c) 2020 Mark Heath
 - Whisper.net: Copyright (c) 2024 sandrohanea
 - whisper.cpp / ggml: Copyright (c) 2023-2024 The ggml authors
+- llama.cpp / ggml: Copyright (c) 2023-2026 The ggml authors
 - ONNX Runtime: Copyright (c) Microsoft Corporation
 - Anthropic C# SDK（13.0.0 で Apache-2.0 に変わる前に入った第三者の貢献の分。パッケージの LICENSE-MIT）: Copyright 2023 Anthropic, PBC.
 

@@ -57,7 +57,7 @@ public sealed class DictationTextProcessor
             if (refiner is null)
             {
                 return new ProcessOutcome(corrected, ProcessStatus.NoCredentials,
-                    $"{TextAiFactory.NameOf(settings.DictationAi)} の認証情報が未設定のため、{verb}せずに入力しました（メニュー → 設定 → AI）。");
+                    $"{TextAiFactory.NotReadyBecause(settings.DictationAi)}、{verb}せずに入力しました（メニュー → 設定 → AI）。");
             }
             var request = new RefineRequest
             {

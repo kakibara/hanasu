@@ -326,6 +326,14 @@ public static class MinutesPrompt
             }
         }
         body = body.Trim();
+        // 小さいモデル（ローカル）は <action_items> を使わず、本文の中に JSON の配列をそのまま書くことがある。
+        // 読めれば、その場所を一覧に置き換える（Mac 版と同じ。両方を直す）
+        if (items is null && InlineItems(body) is { } inline)
+        {
+            items = inline.Items;
+            var list = inline.Items.Count == 0 ? "なし" : string.Join("\n", inline.Items.Select(i => i.MarkdownLine));
+            body = body[..inline.Start] + list + body[inline.End..];
+        }
 
         var resolved = items ?? ActionItem.ParseFromMarkdown(body);
         if (body.Contains(Placeholder, StringComparison.Ordinal))
@@ -336,6 +344,16 @@ public static class MinutesPrompt
             body = body.Replace(Placeholder, list, StringComparison.Ordinal);
         }
         return new MinutesResult($"# {title} — 議事録\n\n{body}\n", resolved);
+    }
+
+    /// <summary>本文の中の、アクションアイテムの JSON の配列（[{ から }] まで）。読めなければ null</summary>
+    internal static (int Start, int End, List<ActionItem> Items)? InlineItems(string body)
+    {
+        var start = body.IndexOf("[{", StringComparison.Ordinal);
+        var end = body.LastIndexOf("}]", StringComparison.Ordinal);
+        if (start < 0 || end < start) return null;
+        end += 2;
+        return DecodeItems(body[start..end]) is { } items ? (start, end, items) : null;
     }
 
     internal static List<ActionItem>? DecodeItems(string json)

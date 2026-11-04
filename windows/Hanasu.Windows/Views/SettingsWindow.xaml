@@ -157,24 +157,54 @@
                             <ComboBox x:Name="DictationAiCombo" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" SelectionChanged="OnDictationAiChanged">
                                 <ComboBoxItem Content="Gemini" Tag="Gemini" />
                                 <ComboBoxItem Content="Claude" Tag="Claude" />
+                                <ComboBoxItem Content="ローカル" Tag="Local" />
                             </ComboBox>
                             <Grid Grid.Row="0" Grid.Column="2" Margin="0,2,0,2">
                                 <ComboBox x:Name="ModelCombo" IsEditable="True" LostFocus="OnModelChanged" SelectionChanged="OnModelSelectionChanged" />
                                 <ComboBox x:Name="ClaudeModelCombo" SelectionChanged="OnClaudeModelChanged" />
+                                <ComboBox x:Name="LocalModelCombo" SelectionChanged="OnLocalModelChanged" />
                             </Grid>
                             <TextBlock Grid.Row="1" Text="会議（議事録）" VerticalAlignment="Center" />
                             <ComboBox x:Name="MeetingAiCombo" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" SelectionChanged="OnMeetingAiChanged">
                                 <ComboBoxItem Content="Gemini" Tag="Gemini" />
                                 <ComboBoxItem Content="Claude" Tag="Claude" />
+                                <ComboBoxItem Content="ローカル" Tag="Local" />
                             </ComboBox>
                             <Grid Grid.Row="1" Grid.Column="2" Margin="0,2,0,2">
                                 <ComboBox x:Name="MinutesModelCombo" IsEditable="True" LostFocus="OnMinutesModelChanged" SelectionChanged="OnMinutesModelSelectionChanged" />
                                 <ComboBox x:Name="ClaudeMinutesModelCombo" SelectionChanged="OnClaudeMinutesModelChanged" />
+                                <ComboBox x:Name="LocalMinutesModelCombo" SelectionChanged="OnLocalMinutesModelChanged" />
                             </Grid>
                         </Grid>
                         <TextBlock Style="{StaticResource Note}"
                                    Text="音声入力と会議で、AI とモデルを別々に選べます。Gemini は gemini-3.5-flash-lite（音声入力）と gemini-3.8-flash（議事録）、Claude は Haiku 5.5（音声入力）と Sonnet 5.5（議事録）が既定です。Claude は文章の処理だけに使い、音声の文字起こしには使いません（文字起こしのエンジンは「一般」・「会議」タブ）。" />
                         <TextBlock x:Name="AiCredentialNote" Style="{StaticResource Error}" Visibility="Collapsed" />
+
+                        <!-- 要件: REQ-COM-030 / 設計判断: DEC-COM-062, DEC-COM-066 -->
+                        <StackPanel x:Name="LocalLlmPanel" Margin="0,10,0,0" Visibility="Collapsed">
+                            <TextBlock Text="ローカルのモデル（この PC の中で動かす小型の LLM）" FontWeight="SemiBold" />
+                            <TextBlock Style="{StaticResource Note}"
+                                       Text="文章はこの PC の中だけで処理し、ネットには送りません。使うモデルを先にダウンロードしてください。CPU で動かすので、整形は数秒〜十数秒、議事録は数分〜十数分かかります。" />
+                            <ItemsControl x:Name="LocalModelList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,6,0,2">
+                                            <DockPanel>
+                                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                                    <Button Content="ダウンロード" Padding="8,1" Tag="{Binding Id}" Click="OnLocalDownload" Visibility="{Binding DownloadVisibility}" />
+                                                    <Button Content="中止" Padding="8,1" Tag="{Binding Id}" Click="OnLocalCancel" Visibility="{Binding CancelVisibility}" />
+                                                    <Button Content="削除" Padding="8,1" Tag="{Binding Id}" Click="OnLocalDelete" Visibility="{Binding DeleteVisibility}" />
+                                                </StackPanel>
+                                                <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+                                            </DockPanel>
+                                            <ProgressBar Height="4" Margin="0,2,0,0" Maximum="1" Value="{Binding Progress}" Visibility="{Binding CancelVisibility}" />
+                                            <TextBlock Style="{StaticResource Note}" Text="{Binding Status}" />
+                                            <TextBlock Style="{StaticResource Note}" Text="{Binding License}" Foreground="{Binding LicenseBrush}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
 
                         <CheckBox x:Name="RefineCheck" Margin="0,12,0,0" Content="AI で整形する（誤変換・フィラー・言い直し・句読点を直す）" Checked="OnRefineChanged" Unchecked="OnRefineChanged" />
                         <TextBlock Style="{StaticResource Note}" Text="オフにすると、認識結果に辞書の置き換えだけを当てて入力します。英訳は AI でしかできないので、オフでも AI に送ります。" />
