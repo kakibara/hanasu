@@ -279,13 +279,50 @@ final class AppSettings: ObservableObject {
         userDictionary.spellings
     }
 
+    // 設計判断: DEC-COM-068
+    /// AI の既定を Gemini からローカル（Gemma 4 E4B）に変えた版に上げた人の AI を変えない。
+    /// 印（aiProviderDefaultsVersion）がなければ、Hanasu の設定が保存されている人（以前から使っている人）の、
+    /// 保存していない AI の選択に Gemini を書く。新しく使い始めた人には何も書かず、既定（ローカル）に従わせる。どちらも印を書く
+    static func preserveAIProviderForExistingUsers(_ defaults: UserDefaults, domainName: String) {
+        guard defaults.object(forKey: Keys.aiProviderDefaultsVersion) == nil else { return }
+        let domain = defaults.persistentDomain(forName: domainName) ?? [:]
+        if hasSavedSettings(domain) {
+            for key in [Keys.dictationAIProvider, Keys.meetingAIProvider] where domain[key] == nil {
+                defaults.set(TextAIProvider.gemini.rawValue, forKey: key)
+            }
+        }
+        defaults.set(1, forKey: Keys.aiProviderDefaultsVersion)
+    }
+
+    /// AI の既定を引き継いだかの印のキー（オンボーディングの「以前から使っている人」の判定では数えない）
+    static let aiProviderDefaultsVersionKey = Keys.aiProviderDefaultsVersion
+
+    // 設計判断: DEC-COM-068, DEC-COM-090
+    /// Hanasu の設定が 1 つでも保存されているか。システムが書くキー（NS…・Apple…）と、ignoring のキーと、
+    /// AI の既定を引き継いだかの印は数えない
+    static func hasSavedSettings(_ domain: [String: Any], ignoring: Set<String> = []) -> Bool {
+        domain.keys.contains { key in
+            key != Keys.aiProviderDefaultsVersion && !ignoring.contains(key)
+                && !key.hasPrefix("NS") && !key.hasPrefix("Apple") && !key.hasPrefix("com.apple")
+        }
+    }
+
+    /// 設定を保存している UserDefaults のドメインの名前
+    static var defaultsDomainName: String {
+        Bundle.main.bundleIdentifier ?? ProcessInfo.processInfo.processName
+    }
+
     private init() {
+        // 設計判断: DEC-COM-068
+        Self.preserveAIProviderForExistingUsers(defaults, domainName: Self.defaultsDomainName)
         defaults.register(defaults: [
             Keys.model: Self.suggestedModels[0],
             Keys.authMode: GeminiAuthMode.apiKey.rawValue,
-            // 設計判断: DEC-COM-040
-            Keys.dictationAIProvider: TextAIProvider.gemini.rawValue,
-            Keys.meetingAIProvider: TextAIProvider.gemini.rawValue,
+            // 要件: REQ-COM-024
+            // 設計判断: DEC-COM-040, DEC-COM-068
+            // 既定はローカル（モデルは Gemma 4 E4B。DEC-COM-067）。以前から使っている人は Gemini のまま（上の preserveAIProviderForExistingUsers）
+            Keys.dictationAIProvider: TextAIProvider.local.rawValue,
+            Keys.meetingAIProvider: TextAIProvider.local.rawValue,
             // 要件: REQ-COM-023
             Keys.claudeModel: ClaudeClient.Model.defaultDictation.rawValue,
             Keys.claudeMinutesModel: ClaudeClient.Model.defaultMeeting.rawValue,
@@ -334,8 +371,8 @@ final class AppSettings: ObservableObject {
         ])
         model = defaults.string(forKey: Keys.model)!
         authMode = GeminiAuthMode(rawValue: defaults.string(forKey: Keys.authMode)!) ?? .apiKey
-        dictationAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.dictationAIProvider)!) ?? .gemini
-        meetingAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.meetingAIProvider)!) ?? .gemini
+        dictationAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.dictationAIProvider)!) ?? .local
+        meetingAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.meetingAIProvider)!) ?? .local
         claudeModel = defaults.string(forKey: Keys.claudeModel)!
         claudeMinutesModel = defaults.string(forKey: Keys.claudeMinutesModel)!
         localDictationModel = LocalLLMModel(rawValue: defaults.string(forKey: Keys.localDictationModel)!) ?? .defaultDictation
@@ -380,6 +417,7 @@ final class AppSettings: ObservableObject {
         static let authMode = "geminiAuthMode"
         static let dictationAIProvider = "dictationTextAIProvider"
         static let meetingAIProvider = "meetingTextAIProvider"
+        static let aiProviderDefaultsVersion = "aiProviderDefaultsVersion"
         static let claudeModel = "claudeModel"
         static let claudeMinutesModel = "claudeMinutesModel"
         static let localDictationModel = "localDictationModel"

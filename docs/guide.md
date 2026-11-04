@@ -79,7 +79,8 @@
 
 設定の「AI」タブで、文章を整える処理に使う AI を、**音声入力**（整形・英訳・選択の編集）と**会議**（議事録・会議への質問・辞書の候補）で別々に選べます。
 
-- Gemini（既定）: モデルは自由に入れられます（音声入力の初期値 `gemini-3.5-flash-lite`、会議の初期値 `gemini-3.8-flash`）。認証は Google AI Studio の API キーか、Vertex AI のサービスアカウント。
+- ローカル（Mac の既定）: Gemma 4 E4B（おすすめ）などのモデルを、この Mac の中で動かします。文章をネットに送りません。モデルがないまま整形・議事録の作成を始めると、ダウンロードするかを尋ね、「ダウンロードする」を選ぶと進み具合のバーを出して取り、終わったら続けて整形します（以前から Gemini で使っていた人は、上げても Gemini のままです）。
+- Gemini（Windows の既定）: モデルは自由に入れられます（音声入力の初期値 `gemini-3.5-flash-lite`、会議の初期値 `gemini-3.8-flash`）。認証は Google AI Studio の API キーか、Vertex AI のサービスアカウント。
 - Claude（Anthropic）: [Claude Console](https://console.anthropic.com/settings/keys) で発行した API キーを入れます。モデルは Claude Haiku 5.5（音声入力の初期値）・Sonnet 5.5（会議の初期値）・Opus 5.5 から選びます。「接続を試す」でキーを確かめられます。キーが正しくないときは「API キーが正しくありません（401）」と出ます。
 - Claude には音声を送りません。文字起こしは「一般」→「文字起こし」で選んだエンジンが行います（Gemini の認証は、文字起こしのエンジンに Gemini を選んだときにも使います）。
 

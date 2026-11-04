@@ -265,6 +265,9 @@ final class MeetingRecorder: ObservableObject {
         if settings.makeMeetingMinutes, !meeting.utterances.isEmpty {
             setState(.processing("議事録を作成しています…"))
             do {
+                // 要件: REQ-COM-032
+                try await LocalModelDownloadPrompt.prepare(
+                    for: .meeting, settings: settings, work: "議事録の作成", whenSkipped: "議事録を作らずに、文字起こしだけを残します")
                 // 要件: REQ-COM-024
                 let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
                 let result = try await MeetingProcessor.makeMinutes(
@@ -322,6 +325,9 @@ final class MeetingRecorder: ObservableObject {
         defer { regeneratingID = nil }
         var updated = meeting
         do {
+            // 要件: REQ-COM-032
+            try await LocalModelDownloadPrompt.prepare(
+                for: .meeting, settings: settings, work: "議事録の作成", whenSkipped: "議事録は作り直しません")
             let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
             var source = meeting
             if let template {

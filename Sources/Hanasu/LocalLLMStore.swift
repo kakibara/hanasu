@@ -108,8 +108,9 @@ final class LocalLLMStore: ObservableObject {
         statuses[model] = .notDownloaded
     }
 
-    /// 設定画面を PNG に描き出す確認用に、ダウンロード中の見た目にする（CLI の --render-ai-settings --local）
-    func showDownloadingForRendering(_ model: LocalLLMModel, fraction: Double) {
+    /// 設定画面を PNG に描き出す確認用に、ダウンロード中の見た目にする（CLI の --render-ai-settings --local・
+    /// --render-local-model-download）。fraction が nil ならハッシュを確かめているところ
+    func showDownloadingForRendering(_ model: LocalLLMModel, fraction: Double?) {
         statuses[model] = .downloading(fraction: fraction)
     }
 
