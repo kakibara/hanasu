@@ -48,6 +48,7 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Hanasu is free a
 | **Choose your mic** *(Mac)* | Pick the microphone in Settings, or switch it from the mic button on the HUD without stopping the recording. |
 | **History** | Search past results and retry failed ones. History is kept for 30 days by default, and you can change that in Settings. On Mac, press <kbd>⌥⇧ V</kbd> to paste the last result again. |
 | **Nowhere to paste?** | If no text field has focus (for example, the desktop is in front), Hanasu keeps the result on screen instead of pasting it. Copy it from there, or just press <kbd>⌘V</kbd> where you want it (you can choose whether the result stays on the clipboard). |
+| **Paste didn't land?** | If the paste never reached an app (for example, you switched windows while recording), Hanasu leaves the latest result on the clipboard and tells you in the HUD. Press <kbd>⌘V</kbd> where you want it. In Settings → General you can also have the dictation history open when this happens. |
 
 <p align="center">
   <img src="docs/images/hud-english.png" width="420" alt="English output">
