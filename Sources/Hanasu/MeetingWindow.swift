@@ -56,12 +56,11 @@ struct MeetingWindowView: View {
             if newID != nil { showingAsk = false }
             if newID != jump?.meetingID { jump = nil }
         }
+        // 設計判断: DEC-MTG-070
+        // 記録を始めたら、その会議を選ぶ。処理（記録のあとの処理・議事録の作り直し）が終わっても選び直さない。
+        // 記録中の会議と保存した会議は同じ ID なので、記録のあとも選んだ会議のまま、議事録が出る
         .onChange(of: recorder.current?.id) { _, newID in
             if let newID { selection = newID }
-        }
-        .onChange(of: recorder.state) { old, new in
-            // 処理が終わったら、その会議を選んだままにする
-            if new == .idle, case .processing = old, let first = recorder.meetings.first { selection = first.id }
         }
         // 要件: REQ-MTG-028
         // 設計判断: DEC-MTG-022
@@ -119,12 +118,13 @@ struct MeetingWindowView: View {
             List(selection: $selection) {
                 if let current = recorder.current {
                     Section("記録中") {
-                        MeetingRow(meeting: current, live: true).tag(current.id)
+                        MeetingRow(meeting: current, live: true, busy: isProcessing).tag(current.id)
                     }
                 }
                 Section("会議") {
                     ForEach(recorder.meetings.filter { $0.id != recorder.current?.id }) { meeting in
-                        MeetingRow(meeting: meeting, live: false).tag(meeting.id)
+                        MeetingRow(meeting: meeting, live: false, busy: meeting.id == recorder.regeneratingID)
+                            .tag(meeting.id)
                             .contextMenu {
                                 Button("削除…", role: .destructive) { confirmDelete(meeting.id) }
                                     .disabled(!recorder.canDelete(meeting))
@@ -136,6 +136,11 @@ struct MeetingWindowView: View {
         }
     }
 
+    private var isProcessing: Bool {
+        if case .processing = recorder.state { return true }
+        return false
+    }
+
     private var selectedHitID: String? {
         guard let jump, let location = jump.location else { return nil }
         return MeetingSearchHit(meetingID: jump.meetingID, location: location, snippet: "").id
@@ -145,11 +150,18 @@ struct MeetingWindowView: View {
 private struct MeetingRow: View {
     let meeting: Meeting
     let live: Bool
+    /// 議事録を作っている（記録のあとの処理か、作り直し）
+    var busy = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 6) {
-                if live { Image(systemName: "record.circle.fill").foregroundStyle(.red) }
+                if busy {
+                    // 要件: REQ-MTG-013
+                    ProgressView().controlSize(.mini).help("議事録を作っています")
+                } else if live {
+                    Image(systemName: "record.circle.fill").foregroundStyle(.red)
+                }
                 Text(meeting.title).lineLimit(1)
             }
             HStack(spacing: 6) {
@@ -352,7 +364,18 @@ struct MeetingDetailView: View {
                         .disabled(!recorder.canDelete(meeting))
                     }
                 }
-                if let error = meeting.errorMessage {
+                if regenerating {
+                    // 要件: REQ-MTG-013
+                    // 設計判断: DEC-MTG-070
+                    HStack(spacing: 8) {
+                        ProgressView().controlSize(.small)
+                        Text(regeneratingMessage)
+                        if meeting.minutes != nil {
+                            Text("終わるまで、今の議事録を出しています。").foregroundStyle(.secondary)
+                        }
+                    }
+                    .font(.callout)
+                } else if let error = meeting.errorMessage {
                     HStack {
                         Text(error).font(.caption).foregroundStyle(.orange)
                         if meeting.minutes == nil, recorder.state == .idle {
@@ -386,8 +409,9 @@ struct MeetingDetailView: View {
                             if tab == 0 {
                                 if let minutes = meeting.minutes {
                                     MarkdownText(markdown: minutes, highlight: jump?.terms ?? [], focusedLine: focusedMinutesLine)
+                                        .opacity(regenerating ? 0.5 : 1)
                                 } else {
-                                    Text(meeting.status == .processing ? "議事録を作成中です…" : "議事録はありません。")
+                                    Text(meeting.status == .processing || regenerating ? "議事録を作成中です…" : "議事録はありません。")
                                         .foregroundStyle(.secondary)
                                 }
                             } else if tab == 3 {
@@ -443,6 +467,14 @@ struct MeetingDetailView: View {
         .sheet(isPresented: $editingSpeakers) {
             SpeakerNamesSheet(meeting: meeting, recorder: recorder)
         }
+    }
+
+    /// この会議の議事録を作り直している
+    private var regenerating: Bool { recorder.regeneratingID == meeting.id }
+
+    private var regeneratingMessage: String {
+        if case .processing(let message) = recorder.state { return message }
+        return "議事録を作り直しています…"
     }
 
     // 要件: REQ-MTG-029

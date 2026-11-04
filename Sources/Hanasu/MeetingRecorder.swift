@@ -34,8 +34,10 @@ final class MeetingRecorder: ObservableObject {
     @Published private(set) var warnings: [String] = []
     /// 記録中の会議を、記録のあとにまとめて文字起こしするエンジン（Whisper / Gemini）。nil なら Mac 標準のライブ文字起こし
     @Published private(set) var batchEngine: TranscriptionEngine?
-    /// 議事録を作り直している会議（その間は削除させない。DEC-MTG-023）
-    @Published private(set) var regeneratingID: String?
+    // 要件: REQ-MTG-013
+    /// 議事録を作り直している会議。その間は削除させず（DEC-MTG-023）、会議ノートで作り直し中だとわかるように出す（DEC-MTG-070）。
+    /// 描き出しの CLI からも入れる
+    @Published var regeneratingID: String?
 
     var onStateChange: ((State) -> Void)?
     var diarizer: SpeakerDiarizer = FluidAudioDiarizer()

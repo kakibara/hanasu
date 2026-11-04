@@ -185,6 +185,14 @@ enum MinutesCLI {
             .frame(width: 600, height: 640)
             .defaultAppStorage(defaults)
         try render(detail, to: dir.appendingPathComponent("detail.png"))
+        // 確かめ方: REQ-MTG-013
+        // 議事録を作り直している途中（上に「作り直しています」と出て、今の議事録は薄く出る）
+        recorder.regeneratingID = meeting.id
+        let regenerating = MeetingDetailView(meeting: meeting, recorder: recorder)
+            .frame(width: 600, height: 640)
+            .defaultAppStorage(defaults)
+        try render(regenerating, to: dir.appendingPathComponent("detail-regenerating.png"))
+        recorder.regeneratingID = nil
         // 「メモ」タブ（長いメモでも、上のタブの切り替えが見えたままか）
         var noted = meeting
         // 型を書いておく（三項演算子を重ねると、リリースの最適化ビルドで型の推論が時間切れになる）
