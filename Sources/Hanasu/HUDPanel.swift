@@ -16,7 +16,7 @@ final class HUDModel: ObservableObject {
     @Published var startedAt = Date()
     /// 英訳モードで録音しているか
     @Published var translating = false
-    /// HUD の「日本語／English」を押したとき。録音を止めた時点の選択で出力の言語が決まる
+    /// HUD の「話した言語／English」を押したとき。録音を止めた時点の選択で出力の言語が決まる
     var onSelectTranslating: ((Bool) -> Void)?
     // 要件: REQ-DIC-012
     // 設計判断: DEC-DIC-101
@@ -288,12 +288,12 @@ private struct LanguageSwitch: View {
 
     var body: some View {
         HStack(spacing: 2) {
-            option("日本語", selected: !translating) { onSelect(false) }
+            option("話した言語", selected: !translating) { onSelect(false) }
             option("English", selected: translating) { onSelect(true) }
         }
         .padding(2)
         .background(.quaternary, in: Capsule())
-        .help("録音を止めたときに選んでいる言語で入力します")
+        .help("録音を止めたときに選んでいる方で入力します（話した言語は整形の言語の設定に従い、English は英訳）")
     }
 
     private func option(_ label: String, selected: Bool, action: @escaping () -> Void) -> some View {

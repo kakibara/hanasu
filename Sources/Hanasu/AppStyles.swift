@@ -101,7 +101,7 @@ enum AppOutputLanguage: String, Codable, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .japanese: "日本語"
+        case .japanese: "話した言語"
         case .english: "English"
         }
     }

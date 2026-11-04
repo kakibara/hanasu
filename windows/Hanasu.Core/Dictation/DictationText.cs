@@ -67,6 +67,8 @@ public sealed class DictationTextProcessor
                 Dictionary = dictionary.Spellings,
                 ExtraInstructions = settings.ExtraInstructions,
                 DictionaryRules = dictionary.Rules,
+                // 要件: REQ-DIC-082
+                OutputLanguage = settings.RefineOutputLanguage,
             };
             var output = translating
                 ? await refiner.TranslateToEnglishAsync(request, cancellationToken).ConfigureAwait(false)

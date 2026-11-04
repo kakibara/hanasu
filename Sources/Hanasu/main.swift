@@ -24,7 +24,9 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     let request = GeminiClient.Request(
         transcript: dictionary.apply(to: raw), model: model, appName: app.name,
         dictionary: dictionary.spellings, extraInstructions: settings.extraInstructions,
-        dictionaryRules: dictionary.rules, appStyle: app.style)
+        dictionaryRules: dictionary.rules, appStyle: app.style,
+        // 要件: REQ-DIC-082
+        outputLanguage: settings.refineOutputLanguage)
     if args.contains("--show-prompt") {
         var shown = request
         if translate { shown.extraInstructions = "" }  // translateToEnglish と同じく、英訳では共通の追加ルールを外す

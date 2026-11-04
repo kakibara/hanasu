@@ -439,7 +439,7 @@ static async Task ClaudeRequest(string[] args)
     {
         TextPurpose.Translate => (GeminiPrompts.TranslationInstruction, GeminiPrompts.UserPrompt(request, translating: true)),
         TextPurpose.Minutes => (MinutesPrompt.SystemInstruction(MinutesTemplate.Regular, null), $"<transcript>\n{PromptText.NeutralizeDelimiters(text)}\n</transcript>"),
-        _ => (GeminiPrompts.SystemInstruction, GeminiPrompts.UserPrompt(request)),
+        _ => (GeminiPrompts.SystemInstruction(request.OutputLanguage), GeminiPrompts.UserPrompt(request)),
     };
     await client.GenerateTextAsync(purpose, system, user, request.Model);
     var sent = capture.Requests.Single();
