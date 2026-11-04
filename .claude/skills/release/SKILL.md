@@ -77,9 +77,12 @@ cd ../release-work
    - `CHANGELOG.md` の先頭の見出しの版と比較のリンクを直す（`## [v1.3.4](…/compare/v1.3.3...v1.3.4)` → `## [v1.4.0](…/compare/v1.3.3...v1.4.0)`）。項目はそのまま。
 2. `docs/releases/v<版>.md` を足す（3 で書いたもの）。
 3. `python3 scripts/check-spec.py` を通す。
-4. コミットして、リリース PR のブランチに push する（`git push origin HEAD:tagpr-from-v1.3.3`）。コミットメッセージは「v1.4.0 のリリース文を書き、版を 1.4.0 にする」のように、何をしたかを書く。
-5. リリース PR のタイトルが古い版のままでも、マージのときは `VERSION` の版になる。分かりやすいように `gh pr edit <番号> --title "Release for v1.4.0"` で直してよい。
-6. PR の CI（`check`）が通るのを待つ。
+4. **リリースと同じビルドが通るかを確かめる。** PR の CI は Mac 版をビルドせず（`spec.yml` と、`windows/` を触ったときの `windows.yml` だけ）、手元の確認もデバッグビルドが多いので、リリースの最適化ビルドでだけ起きる失敗を見落としやすい（v1.4.0 で、Swift の型の推論が最適化ビルドでだけ時間切れになった）。リリース PR の中身（`origin/main` と同じコード）で:
+   - Mac: `swift build -c release`（3 分ほど。リリースの mac ジョブの `scripts/build-app.sh` と同じ最適化ビルド）
+   - Windows: `main` への push で動いた `windows.yml` が通っているか（`gh run list --workflow windows.yml --branch main --limit 1`）。`windows/` を触っていない版は省いてよい
+5. コミットして、リリース PR のブランチに push する（`git push origin HEAD:tagpr-from-v1.3.3`）。コミットメッセージは「v1.4.0 のリリース文を書き、版を 1.4.0 にする」のように、何をしたかを書く。
+6. リリース PR のタイトルが古い版のままでも、マージのときは `VERSION` の版になる。分かりやすいように `gh pr edit <番号> --title "Release for v1.4.0"` で直してよい。
+7. PR の CI（`check`）が通るのを待つ。
 
 **このあと `main` に別の PR をマージすると、tagpr がリリース PR を作り直す。** 足したコミットは引き継がれる見込みだが、マージの直前に `git show origin/tagpr-from-…:VERSION` と `docs/releases/` を見て、残っているかを確かめる。
 
@@ -105,8 +108,37 @@ gh release view v<版> --json body --jq .body | head -40
 
 ### 失敗したとき
 
-- mac か windows のジョブが落ちたら、ログ（`gh run view <RUN> --log-failed`）で原因を見て、`main` に直しを入れてから、Actions の「tagpr」をタグを指定して手動で実行する（`gh workflow run tagpr.yml --ref main -f tag=v<版>`。DEC-REL-006）。下書きのまま残っているリリースに添付し直して公開する。
-- リリース文を公開のあとに直したいときは、`docs/releases/v<版>.md` を直して `main` に入れ、同じ手動の実行で本文を作り直す（`gh release edit` で直接書き換えてもよいが、次の作り直しで戻る）。
+まずログ（`gh run view <RUN> --log-failed`）で原因を見る。**手動の実行（DEC-REL-006）は、ワークフローは `main` のものを使うが、ビルドするコードとリリース文はタグの時点のもの**なので、原因がどこにあるかで直し方が変わる。
+
+- **一時的な失敗**（ランナー・ネットワーク・GitHub の不調）や、**ワークフローの側の問題**（`main` のワークフローを直せば済む）なら、Actions の「tagpr」をタグを指定して手動で実行する。下書きのまま残っているリリースに添付し直して公開する。
+
+  ```bash
+  gh workflow run tagpr.yml --ref main -f tag=v<版>
+  ```
+
+- **タグの時点のコードが原因**（コンパイルエラー・テストの失敗など）なら、手動の実行では直らない（同じコードをビルドするだけ）。ユーザーに確かめてから、**公開前の下書きなら**タグを付け直す（v1.4.0 でこうした）:
+
+  ```bash
+  # 1. 直しを PR にして main に入れる（Spec-Impact を書く）。Mac は swift build -c release で確かめる
+  # 2. 下書きのリリースとタグを消す（公開前の下書きだけ。公開済みの版には使わない）
+  gh release delete v<版> --yes --cleanup-tag
+  # 3. 直しの入った main のコミットにタグを付けて push する（下書きのリリースは、公開するまでタグを作らないので、タグを先に）
+  git fetch origin --tags
+  git tag -a v<版> <直しの入った main のコミット> -m "v<版>"
+  git push origin v<版>
+  # 4. 下書きのリリースを作る（PR の一覧は前の版から作り直す）
+  gh release create v<版> --draft --verify-tag --title v<版> --generate-notes --notes-start-tag <前の版>
+  # 5. 手動の実行で、両方の zip を添付して公開する
+  gh workflow run tagpr.yml --ref main -f tag=v<版>
+  ```
+
+  `main` に直しを入れると、tagpr は古いタグをもとに次の版のリリース PR（例: v<版>.1、中身は直しの PR だけ）を作る。直しはもう付け直した版に入っているので、**このリリース PR はマージしない**（次に `main` に変更が入ると、tagpr が付け直したタグのあとの変更で作り直す）。
+
+- **公開済みの版**は消さない。直しを入れて、次の patch として出す。
+
+### 公開のあとにリリース文を直すとき
+
+publish ジョブはタグの時点の `docs/releases/v<版>.md` を読むので、`main` のファイルを直して手動で実行しても本文は変わらない（タグの時点の文で作り直される）。誤字などは `gh release edit v<版> --notes-file <直した本文>` で直接直し、記録のために `docs/releases/v<版>.md` も `main` で直しておく。そのあとはその版の手動の実行をしない（タグの時点の文に戻る）。
 
 ## 報告
 
