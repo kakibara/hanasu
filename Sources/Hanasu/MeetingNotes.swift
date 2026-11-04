@@ -84,9 +84,34 @@ extension Meeting {
         "# \(title) — メモ\n\n\(notesText)\n"
     }
 
+    // 要件: REQ-MTG-012
+    // 設計判断: DEC-MTG-047
+    /// 記録中に「ここ重要」の印を取り消せる時間（秒）。押し間違いのやり直しのため。それより古い印は記録のあとに「メモ」タブで消す
+    static let highlightUndoSeconds: Double = 10
+
+    /// 今取り消せる印（付けてから 10 秒以内のうち、いちばん新しいもの）。elapsed は録音開始からの秒数
+    func undoableHighlight(at elapsed: Double) -> MeetingNote? {
+        highlights
+            .filter { h in h.time.map { elapsed - $0 >= 0 && elapsed - $0 <= Self.highlightUndoSeconds } ?? false }
+            .max { ($0.time ?? 0) < ($1.time ?? 0) }
+    }
+
     /// 「ここ重要」の印の前後で、強調する範囲（印を押すのは大事な発言を聞いた後なので、前を長めにとる）
     static let highlightLeadTime: Double = 30
     static let highlightTrailTime: Double = 15
+
+    // 要件: REQ-MTG-012
+    // 設計判断: DEC-MTG-041, DEC-MTG-049
+    /// 「ここ重要」の印ごとの、前後の発言（議事録で重要として扱うのと同じ 30 秒前〜15 秒後）。時刻の順
+    func highlightContexts() -> [(note: MeetingNote, blocks: [Utterance])] {
+        let blocks = mergedBlocks()
+        return highlights.compactMap { h -> (note: MeetingNote, blocks: [Utterance])? in
+            guard let t = h.time else { return nil }
+            let near = blocks.filter { $0.start <= t + Self.highlightTrailTime && t - Self.highlightLeadTime <= $0.end }
+            return (h, near)
+        }
+        .sorted { ($0.note.time ?? 0) < ($1.note.time ?? 0) }
+    }
 
     // 設計判断: DEC-MTG-041
     /// 発言が「ここ重要」の印の前後に入るか

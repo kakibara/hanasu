@@ -366,11 +366,35 @@ final class MeetingRecorder: ObservableObject {
         NSSound(named: "Morse")?.play()
     }
 
+    /// 記録中のメモを消す。「ここ重要」の印は、付けてから 10 秒以内のものだけ（undoHighlight）
     func removeNote(id: MeetingNote.ID) {
-        guard state == .recording, var meeting = current else { return }
+        guard state == .recording, var meeting = current,
+              let note = meeting.allNotes.first(where: { $0.id == id }) else { return }
+        if note.kind == .highlight {
+            undoHighlight(id: id)
+            return
+        }
         meeting.notes?.removeAll { $0.id == id }
         current = meeting
         try? MeetingStore.save(meeting)
+    }
+
+    /// 今取り消せる「ここ重要」の印（付けてから 10 秒以内のいちばん新しいもの）。記録中でなければ nil
+    var undoableHighlight: MeetingNote? {
+        guard state == .recording else { return nil }
+        return current?.undoableHighlight(at: elapsed)
+    }
+
+    // 要件: REQ-MTG-012
+    // 設計判断: DEC-MTG-047
+    /// 付けてから 10 秒以内の「ここ重要」の印を取り消す。取り消せたら true
+    @discardableResult
+    func undoHighlight(id: MeetingNote.ID) -> Bool {
+        guard state == .recording, var meeting = current, undoableHighlight?.id == id else { return false }
+        meeting.notes?.removeAll { $0.id == id }
+        current = meeting
+        try? MeetingStore.save(meeting)
+        return true
     }
 
     /// 記録後にメモを書き換える
