@@ -129,6 +129,7 @@ public partial class MeetingWindow : Window
             ? (IsLive(m) ? "文字起こしは、記録を止めたあとに行います。" : "文字起こしはありません。")
             : m.TranscriptMarkdown();
         if (!NotesBox.IsKeyboardFocused) NotesBox.Text = m.NotesText;
+        HighlightsBox.Text = m.HighlightContextText();
         BuildSpeakerEditors(m);
 
         var live = IsLive(m);
@@ -169,6 +170,7 @@ public partial class MeetingWindow : Window
         else m.SpeakerNames[speaker] = next;
         SaveSelected(m, "話者名を保存しました");
         TranscriptBox.Text = m.TranscriptMarkdown();
+        HighlightsBox.Text = m.HighlightContextText();
     }
 
     private void OnTitleChanged(object sender, RoutedEventArgs e)

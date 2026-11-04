@@ -100,6 +100,19 @@ extension Meeting {
     static let highlightLeadTime: Double = 30
     static let highlightTrailTime: Double = 15
 
+    // 要件: REQ-MTG-012
+    // 設計判断: DEC-MTG-041, DEC-MTG-049
+    /// 「ここ重要」の印ごとの、前後の発言（議事録で重要として扱うのと同じ 30 秒前〜15 秒後）。時刻の順
+    func highlightContexts() -> [(note: MeetingNote, blocks: [Utterance])] {
+        let blocks = mergedBlocks()
+        return highlights.compactMap { h -> (note: MeetingNote, blocks: [Utterance])? in
+            guard let t = h.time else { return nil }
+            let near = blocks.filter { $0.start <= t + Self.highlightTrailTime && t - Self.highlightLeadTime <= $0.end }
+            return (h, near)
+        }
+        .sorted { ($0.note.time ?? 0) < ($1.note.time ?? 0) }
+    }
+
     // 設計判断: DEC-MTG-041
     /// 発言が「ここ重要」の印の前後に入るか
     func isNearHighlight(_ block: Utterance) -> Bool {

@@ -67,12 +67,12 @@
 
 ### REQ-MTG-007 記録した会議を一覧し、読める・コピーできる（F7）
 - 内容: 会議ノートのウインドウで、記録した会議を一覧し、文字起こしと議事録を読める・コピーできる。
-- 受け入れ条件: 会議ノートの左に会議の一覧が出て、選ぶと右に「議事録」「文字起こし」が出る。コピー（書き出し）ができる。
+- 受け入れ条件: 会議ノートの左に会議の一覧が出て、選ぶと右に「議事録」「文字起こし」が出る。コピー（書き出し）ができる。どのタブ（「メモ」を含む）を開いても、上のタブの切り替えが見えたままで、ほかのタブに戻れる。
 - 出典: 初版の要件定義 F7（必須）
 - 対象: Mac / Windows
 - 実装の場所: `MeetingWindowView`、`MeetingDetailView`
 - Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（書き出しは「Markdown をコピー」だけ）
-- 確かめ方: `--render-minutes-ui <フォルダ> --meeting-json <json>` で画面を PNG にする
+- 確かめ方: `--render-minutes-ui <フォルダ> --meeting-json <json>` で画面を PNG にする（「会議ノートのウインドウの高さ」が、どのタブでも開いたときと同じこと）
 
 ### REQ-MTG-008 話者名を、あとから付け替えられる（F8）
 - 内容: 「話者1」を「田中さん」のように、あとから付け替えられる。
@@ -110,15 +110,16 @@
 - 確かめ方: `--render-meeting-notes <フォルダ>`、`--meeting-files me.wav others.wav --notes notes.txt`
 
 ### REQ-MTG-012 記録中に「ここ重要」の印を付けられる（F12）
-- 内容: 記録中に、ボタンと設定で変えられるショートカットで「ここ重要」の印を付けられる。付けてから 10 秒のあいだは、その印を取り消せる（押し間違いのやり直し）。
+- 内容: 記録中に、ボタンと設定で変えられるショートカットで「ここ重要」の印を付けられる。付けてから 10 秒のあいだは、その印を取り消せる（押し間違いのやり直し）。記録のあとに、印を付けた時刻の前後の会話を確かめられる。
 - 受け入れ条件:
   - 会議ツールを前面にしたまま `⌃⌥⌘ H` を押すと、その時刻に印が付く。
   - 印を付けてから 10 秒のあいだ、会議ノートのメモ欄（Mac は字幕のパネルにも）に残りの秒数つきの「取り消す」が出て、押すとその印が消え、`meeting.json` からも消える。10 秒を過ぎると「取り消す」は消え、記録中には消せない（記録のあとに「メモ」タブで消す。REQ-MTG-013）。
-- 出典: PR #10。取り消しはユーザーの依頼（2026-11-04「会議のここ重要を削除できないので削除できるようにして。10秒前まで削除できるようにして」。付けてから 10 秒のあいだ取り消せる、という意味だとユーザーに確かめた）
+  - 会議ノートの「ここ重要」タブに、印ごとに時刻・説明と、その前後（30 秒前〜15 秒後）の発言が出る。Mac は「文字起こしで見る」で文字起こしのタブのその位置へ移る。
+- 出典: PR #10。前後の会話の確認はユーザーの依頼（2026-11-04「重要の秒数付近の会話をかくにんできるようにして。あと、mac版では会議メモを開くと足袋などが消失して文字起こしや要約のページに戻れないので修正して」）。取り消しはユーザーの依頼（2026-11-04「会議のここ重要を削除できないので削除できるようにして。10秒前まで削除できるようにして」。付けてから 10 秒のあいだ取り消せる、という意味だとユーザーに確かめた）
 - 対象: Mac / Windows
-- 実装の場所: `MeetingRecorder.addHighlight`、`MeetingHighlightHotKey`、`MeetingRecorder.undoHighlight`、`HighlightUndoButton`
-- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（ショートカットは DEC-MTG-110。取り消しは `UndoHighlight`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（`UpdateUndoHighlight`）
-- 確かめ方: 実機で確かめる。印の反映は `--meeting-files … --notes notes.txt`。取り消しは `.build/debug/Hanasu --render-meeting-notes <フォルダ>`（「ここ重要の取り消し」の結果と `live-undo.png`・`caption-undo.png`）、Windows は `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~HighlightUndo|FullyQualifiedName~UndoesARecentHighlight"`
+- 実装の場所: `MeetingRecorder.addHighlight`、`MeetingHighlightHotKey`、`MeetingRecorder.undoHighlight`、`HighlightUndoButton`、`Meeting.highlightContexts`、`HighlightContextsView`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（ショートカットは DEC-MTG-110。取り消しは `UndoHighlight`）、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`HighlightContexts`・`HighlightContextText`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（`UpdateUndoHighlight`、「ここ重要」タブ）
+- 確かめ方: 実機で確かめる。印の反映は `--meeting-files … --notes notes.txt`。取り消しは `.build/debug/Hanasu --render-meeting-notes <フォルダ>`（「ここ重要の取り消し」の結果と `live-undo.png`・`caption-undo.png`）、Windows は `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~HighlightUndo|FullyQualifiedName~UndoesARecentHighlight|FullyQualifiedName~HighlightContext"`。前後の会話は `.build/debug/Hanasu --render-minutes-ui <フォルダ>`（`detail-highlights.png` と「ここ重要の前後」）
 
 ### REQ-MTG-013 議事録は、メモと印を優先して反映する。記録後にメモを直して作り直せる（F13）
 - 内容: 議事録はメモと印を優先して反映する。記録後にメモを直して、議事録を作り直せる。
@@ -554,6 +555,23 @@
 - 対象: Mac / Windows
 - 実装の場所: `Meeting.undoableHighlight(at:)`、`MeetingRecorder.undoHighlight`・`removeNote`、`HighlightUndoButton`、`LiveNotesPanel`、`MeetingCaptionView`
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingModels.cs`（`Meeting.UndoableHighlight`・`HighlightUndoSeconds`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`UndoableHighlight`・`UndoHighlight`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`MeetingWindow.xaml.cs`（`UndoHighlightButton`）
+
+### DEC-MTG-048 会議ノートのウインドウ（Mac）は、大きさを中身に合わせない
+- 決めたこと: 会議ノートのウインドウの `NSHostingController` の `sizingOptions` を空にし、ウインドウの最小の大きさ（900×520）は `contentMinSize` で決める。「メモ」タブのテキスト欄には最小の高さ（120）を決め、残りの高さに収めて中でスクロールさせる。
+- 理由: 中身に合わせる設定のままだと、「メモ」タブのテキスト欄がメモの全行ぶんの高さを最小として求め、ウインドウが画面より縦に伸びて（メモ 60 行で高さ 672 → 1441）、タイトルとタブの切り替えが画面の外に出て、議事録・文字起こしに戻れなくなっていた（ユーザーの依頼（2026-11-04「重要の秒数付近の会話をかくにんできるようにして。あと、mac版では会議メモを開くと足袋などが消失して文字起こしや要約のページに戻れないので修正して」））。
+- 決めた場面: 同じ依頼の修正
+- 関係する要件: REQ-MTG-007
+- 対象: Mac
+- 実装の場所: `AppDelegate.makeMeetingWindow`、`MeetingNotesEditor`
+
+### DEC-MTG-049 印の前後の会話は「ここ重要」タブにまとめ、範囲は議事録と同じにする
+- 決めたこと: 会議ノートに「ここ重要」タブを足し、印ごとに時刻・説明と、その 30 秒前〜15 秒後にかかる発言（まとめた発言の単位）を時刻の順に出す。範囲は議事録で重要として扱う範囲（DEC-MTG-041）と同じ。時刻のない印（記録後にメモで書き足したもの）は出さない。Mac は印ごとに「文字起こしで見る」を置き、文字起こしのタブのその発言へ移って強調する。Windows は同じ内容を読むだけの文章で出す。
+- 理由: 依頼は印を付けた秒数の付近の会話を確かめること。印ごとにまとまっていれば、文字起こしを探さずに見比べられる。議事録で ★ を付ける範囲と同じにすると、議事録の「重要とした箇所」が何から作られたかを確かめられる。
+- 決めた場面: ユーザーの依頼（2026-11-04「重要の秒数付近の会話をかくにんできるようにして。あと、mac版では会議メモを開くと足袋などが消失して文字起こしや要約のページに戻れないので修正して」）
+- 関係する要件: REQ-MTG-012
+- 対象: Mac / Windows
+- 実装の場所: `Meeting.highlightContexts`、`HighlightContextsView`、`MeetingDetailView`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingModels.cs`（`HighlightContexts`・`HighlightContextText`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`MeetingWindow.xaml.cs`（`HighlightsBox`）
 
 ### DEC-MTG-046 字幕は、記録中の画面と同じデータを前面のパネルに出す
 - 決めたこと: 確定した発言と途中結果を、`.floating` の `NSPanel`（アプリをアクティブにしない）に直近 2 発言だけ出し、「ここ重要」ボタンも置く。記録が終わると閉じる。

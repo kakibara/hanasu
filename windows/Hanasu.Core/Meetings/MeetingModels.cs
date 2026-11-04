@@ -346,6 +346,41 @@ public sealed class Meeting
     public const double HighlightLeadTime = 30;
     public const double HighlightTrailTime = 15;
 
+    // 要件: REQ-MTG-012
+    // 設計判断: DEC-MTG-041, DEC-MTG-049
+    /// <summary>「ここ重要」の印ごとの、前後の発言（議事録で重要として扱うのと同じ 30 秒前〜15 秒後）。時刻の順</summary>
+    public IReadOnlyList<(MeetingNote Note, IReadOnlyList<Utterance> Blocks)> HighlightContexts()
+    {
+        var blocks = MergedBlocks();
+        return Highlights.Where(h => h.Time is not null).OrderBy(h => h.Time)
+            .Select(h =>
+            {
+                var t = h.Time!.Value;
+                IReadOnlyList<Utterance> near = blocks.Where(b => b.Start <= t + HighlightTrailTime && t - HighlightLeadTime <= b.End).ToList();
+                return (h, near);
+            })
+            .ToList();
+    }
+
+    /// <summary>会議ノートの「ここ重要」タブに出す文章（印ごとに見出しと前後の発言）</summary>
+    public string HighlightContextText()
+    {
+        var contexts = HighlightContexts();
+        if (contexts.Count == 0)
+        {
+            return "「ここ重要」の印はありません。記録中に「★ ここ重要」かショートカットで付けると、ここに前後の会話をまとめて出します。";
+        }
+        var lines = new List<string>();
+        foreach (var (note, blocks) in contexts)
+        {
+            if (lines.Count > 0) lines.Add("");
+            lines.Add($"★ {Clock(note.Time ?? 0)}  {(note.Text.Length == 0 ? "ここ重要" : note.Text)}");
+            if (blocks.Count == 0) lines.Add("    この前後（30 秒前〜15 秒後）の発言はありません");
+            lines.AddRange(blocks.Select(b => $"    [{Clock(b.Start)}] {DisplayName(b.Speaker)}: {b.Text}"));
+        }
+        return string.Join("\n", lines);
+    }
+
     public bool IsNearHighlight(Utterance block) =>
         Highlights.Any(h => h.Time is { } t && block.Start <= t + HighlightTrailTime && t - HighlightLeadTime <= block.End);
 

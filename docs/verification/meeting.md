@@ -146,3 +146,11 @@ Bluetooth イヤホン（LinkBuds Clip）を使った実際の会議で、何も
 - Mac: `.build/debug/Hanasu --render-meeting-notes <フォルダ>` の「ここ重要の取り消し」がすべて OK（10 秒以内のいちばん新しい印・ちょうど 10 秒まで・10 秒を過ぎたら取り消せない・古い印は取り消せない・時刻のない印は対象外・記録中のプレビューで取り消せる印がある）。`live-undo.png` でメモ欄に「★ を取り消す（あと 5 秒）」、`caption-undo.png` で字幕のパネルの ★ の下に「取り消す」が出ることを見た。
 - Windows: `dotnet test Hanasu.Core.Tests` が 247 件すべて通った。`HighlightUndoTests`（10 秒以内のいちばん新しい印・境目・古い印・メモと時刻なしの印は対象外）と `UndoesARecentHighlightWhileRecording`（記録中に取り消すと保存した meeting.json からも消える・メモや知らない ID は消さない・記録が終われば取り消せない）。`dotnet build Hanasu.Windows.sln -c Release` は警告 0。
 - 確かめていないこと（実機）: 録音中に実際に押して 10 秒で「取り消す」が消えること、Windows のボタンの表示。
+
+## 11. 印の前後の会話と、Mac の会議ノートのウインドウの高さ（2026-11-04、macOS 26.6.2 と、その上の .NET 10 SDK）
+
+関係: REQ-MTG-007、REQ-MTG-012、DEC-MTG-048、DEC-MTG-049
+
+- Mac の「メモ」タブの不具合: `--render-minutes-ui` で、会議ノートのウインドウ（`AppDelegate.makeMeetingWindow`）に詳細の画面を入れて開き、タブごとの高さを測った。直す前は、メモ 60 行の会議で「メモ」タブだけ 672 → 1441 に伸びた（テキスト欄に最小の高さを決めるだけでは 1561 で直らず、ウインドウの大きさを中身に合わせない設定にして直った）。直したあとは 3 つのタブとも 672 のまま。`detail-notes.png` で、長いメモでもテキスト欄が残りの高さに収まり、上のタブの切り替えが見えることを見た。
+- 「ここ重要」タブ: `--render-minutes-ui` の `detail-highlights.png` で、印ごとに時刻・説明（なければ「ここ重要」）・前後の発言・「文字起こしで見る」が出ることを見た。Windows は `HighlightContextTests`（時刻の順・時刻のない印とメモは出さない・30 秒前〜15 秒後の範囲・話者名・印がないときの案内）を含めて `dotnet test Hanasu.Core.Tests` が 249 件すべて通った。
+- 確かめていないこと（実機）: 本物のウインドウで「メモ」タブを開いたときの見た目と、「文字起こしで見る」で移ったあとのスクロールの位置。Windows の「ここ重要」タブの表示。

@@ -135,6 +135,11 @@
                 <TabItem Header="文字起こし">
                     <TextBox x:Name="TranscriptBox" Style="{StaticResource Reader}" />
                 </TabItem>
+                <!-- 要件: REQ-MTG-012 -->
+                <!-- 設計判断: DEC-MTG-049 -->
+                <TabItem Header="ここ重要">
+                    <TextBox x:Name="HighlightsBox" Style="{StaticResource Reader}" FontFamily="Consolas, Yu Gothic UI" />
+                </TabItem>
                 <TabItem Header="メモ">
                     <DockPanel Margin="6">
                         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,6,0,0">

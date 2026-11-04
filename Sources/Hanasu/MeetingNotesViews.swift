@@ -174,9 +174,13 @@ struct MeetingNotesEditor: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
+            // 設計判断: DEC-MTG-048
+            // テキスト欄は、メモの行数にかかわらず残りの高さに収めて中でスクロールする（最小の高さを決めないと、
+            // 全行ぶんの高さを求めて会議ノートの上のタブの切り替えを押し出す）
             TextEditor(text: $text)
                 .font(.system(.body, design: .monospaced))
                 .scrollContentBackground(.hidden)
+                .frame(minHeight: 120, maxHeight: .infinity)
                 .padding(6)
                 .background(Color(nsColor: .textBackgroundColor))
                 .clipShape(RoundedRectangle(cornerRadius: 6))
