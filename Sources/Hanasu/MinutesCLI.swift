@@ -198,7 +198,7 @@ enum MinutesCLI {
             .frame(width: 600, height: 640)
             .defaultAppStorage(defaults)
         try render(notesTab, to: dir.appendingPathComponent("detail-notes.png"))
-        checkWindowHeight(meeting: noted, recorder: recorder)
+        checkWindowHeight(meeting: noted, recorder: recorder, dir: dir)
         // 「ここ重要」タブ（印の前後の発言）
         var marked = meeting
         let times = marked.mergedBlocks().map(\.start)
@@ -225,17 +225,40 @@ enum MinutesCLI {
     }
 
     // 確かめ方: REQ-MTG-007
-    /// 会議ノートのウインドウで「メモ」タブを開いても、ウインドウが縦に伸びない（タイトルとタブが画面の外に出ない）か
-    private static func checkWindowHeight(meeting: Meeting, recorder: MeetingRecorder) {
+    /// 会議ノートのウインドウで「メモ」タブを開いても、ウインドウが縦に伸びず、中身もウインドウからはみ出さない
+    /// （タイトルとタブが画面の外に出ない）か。window-tab<番号>.png に、そのときのウインドウの中身を描き出す
+    private static func checkWindowHeight(meeting: Meeting, recorder: MeetingRecorder, dir: URL) {
         for tab in [0, 1, 2] {
-            let window = AppDelegate.makeMeetingWindow(
-                rootView: MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: tab))
+            // 本物の会議ノートと同じく、左に一覧・右に詳細の画面を並べて開く
+            let window = AppDelegate.makeMeetingWindow(rootView: NavigationSplitView {
+                List { Text("会議") }
+                    .navigationSplitViewColumnWidth(min: 220, ideal: 260)
+            } detail: {
+                MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: tab)
+            })
+            window.appearance = NSAppearance(named: .aqua)
             window.orderBack(nil)
-            RunLoop.main.run(until: Date().addingTimeInterval(0.4))
+            RunLoop.main.run(until: Date().addingTimeInterval(0.6))
             let height = window.frame.height
-            print("会議ノートのウインドウの高さ（タブ \(tab)）: \(Int(height))（開いたときは \(Int(AppDelegate.meetingWindowSize.height)) 前後）")
+            let contentHeight = window.contentView?.bounds.height ?? 0
+            let splitHeight = window.contentView.flatMap(splitView(in:))?.frame.height ?? 0
+            let fits = splitHeight <= contentHeight + 1
+            print("会議ノートのウインドウの高さ（タブ \(tab)）: \(Int(height))（開いたときは \(Int(AppDelegate.meetingWindowSize.height)) 前後）"
+                  + "・中身の高さ \(Int(splitHeight))／ウインドウの中身 \(Int(contentHeight))"
+                  + (fits ? "" : " → NG: 中身がはみ出し、タイトルとタブが画面の外に出る"))
+            if let content = window.contentView, let rep = content.bitmapImageRepForCachingDisplay(in: content.bounds) {
+                content.cacheDisplay(in: content.bounds, to: rep)
+                try? rep.representation(using: .png, properties: [:])?.write(to: dir.appendingPathComponent("window-tab\(tab).png"))
+            }
             window.close()
         }
+    }
+
+    /// 左右に並べる画面（NavigationSplitView）の中身の NSSplitView
+    private static func splitView(in view: NSView) -> NSSplitView? {
+        if let split = view as? NSSplitView { return split }
+        for sub in view.subviews { if let found = splitView(in: sub) { return found } }
+        return nil
     }
 
     private static func render(_ view: some View, to url: URL) throws {
