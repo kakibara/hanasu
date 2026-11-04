@@ -110,13 +110,15 @@
 - 確かめ方: `--render-meeting-notes <フォルダ>`、`--meeting-files me.wav others.wav --notes notes.txt`
 
 ### REQ-MTG-012 記録中に「ここ重要」の印を付けられる（F12）
-- 内容: 記録中に、ボタンと設定で変えられるショートカットで「ここ重要」の印を付けられる。
-- 受け入れ条件: 会議ツールを前面にしたまま `⌃⌥⌘ H` を押すと、その時刻に印が付く。
-- 出典: PR #10
+- 内容: 記録中に、ボタンと設定で変えられるショートカットで「ここ重要」の印を付けられる。付けてから 10 秒のあいだは、その印を取り消せる（押し間違いのやり直し）。
+- 受け入れ条件:
+  - 会議ツールを前面にしたまま `⌃⌥⌘ H` を押すと、その時刻に印が付く。
+  - 印を付けてから 10 秒のあいだ、会議ノートのメモ欄（Mac は字幕のパネルにも）に残りの秒数つきの「取り消す」が出て、押すとその印が消え、`meeting.json` からも消える。10 秒を過ぎると「取り消す」は消え、記録中には消せない（記録のあとに「メモ」タブで消す。REQ-MTG-013）。
+- 出典: PR #10。取り消しはユーザーの依頼（2026-11-04「会議のここ重要を削除できないので削除できるようにして。10秒前まで削除できるようにして」。付けてから 10 秒のあいだ取り消せる、という意味だとユーザーに確かめた）
 - 対象: Mac / Windows
-- 実装の場所: `MeetingRecorder.addHighlight`、`MeetingHighlightHotKey`
-- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（ショートカットは DEC-MTG-110）
-- 確かめ方: 実機で確かめる。印の反映は `--meeting-files … --notes notes.txt`
+- 実装の場所: `MeetingRecorder.addHighlight`、`MeetingHighlightHotKey`、`MeetingRecorder.undoHighlight`、`HighlightUndoButton`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（ショートカットは DEC-MTG-110。取り消しは `UndoHighlight`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（`UpdateUndoHighlight`）
+- 確かめ方: 実機で確かめる。印の反映は `--meeting-files … --notes notes.txt`。取り消しは `.build/debug/Hanasu --render-meeting-notes <フォルダ>`（「ここ重要の取り消し」の結果と `live-undo.png`・`caption-undo.png`）、Windows は `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~HighlightUndo|FullyQualifiedName~UndoesARecentHighlight"`
 
 ### REQ-MTG-013 議事録は、メモと印を優先して反映する。記録後にメモを直して作り直せる（F13）
 - 内容: 議事録はメモと印を優先して反映する。記録後にメモを直して、議事録を作り直せる。
@@ -543,6 +545,15 @@
 - 関係する要件: REQ-MTG-013
 - 対象: Mac
 - 実装の場所: `Meeting.notesForPrompt`
+
+### DEC-MTG-047 「ここ重要」の取り消しは、付けてから 10 秒以内のいちばん新しい印だけ
+- 決めたこと: 記録中に取り消せるのは、録音開始からの経過時間で付けてから 10 秒以内（ちょうど 10 秒まで）の印のうち、いちばん新しいもの。会議ノートのメモ欄に「★ を取り消す（あと N 秒）」を出し（Mac は字幕のパネルにも「取り消す」）、押すと `meeting.json` から消してすぐ保存する。10 秒を過ぎた印は、記録中には消せない（Mac の右クリックの「削除」もメモだけにし、印は 10 秒以内のときだけ「取り消す」を出す）。記録のあとは「メモ」タブのテキストで消せる（DEC-MTG-044）。ショートカットでの取り消しは作らない。
+- 理由: 依頼は押し間違いのやり直し。古い印まで記録中に消せると、会議ツールを見ながら押したつもりの印を誤って消しやすい。記録のあとならテキストでまとめて直せる。同じショートカットを 2 回押して取り消す形は、続けて 2 つ印を付けたいときと区別できないので採らなかった。
+- 決めた場面: ユーザーの依頼（2026-11-04「会議のここ重要を削除できないので削除できるようにして。10秒前まで削除できるようにして」。付けてから 10 秒のあいだ取り消せる、という意味だとユーザーに確かめた）
+- 関係する要件: REQ-MTG-012
+- 対象: Mac / Windows
+- 実装の場所: `Meeting.undoableHighlight(at:)`、`MeetingRecorder.undoHighlight`・`removeNote`、`HighlightUndoButton`、`LiveNotesPanel`、`MeetingCaptionView`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingModels.cs`（`Meeting.UndoableHighlight`・`HighlightUndoSeconds`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`UndoableHighlight`・`UndoHighlight`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`MeetingWindow.xaml.cs`（`UndoHighlightButton`）
 
 ### DEC-MTG-046 字幕は、記録中の画面と同じデータを前面のパネルに出す
 - 決めたこと: 確定した発言と途中結果を、`.floating` の `NSPanel`（アプリをアクティブにしない）に直近 2 発言だけ出し、「ここ重要」ボタンも置く。記録が終わると閉じる。

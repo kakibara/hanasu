@@ -136,3 +136,13 @@ Bluetooth イヤホン（LinkBuds Clip）を使った実際の会議で、何も
 関係: REQ-MTG-015、DEC-MTG-050
 
 架空の 1 時間相当の会議 500 件（発言 30 万件、約 1,400 万文字）で、索引づくりが約 4 秒（デバッグビルド）、2 文字以上の検索は 1 ms 未満、1 文字の検索は約 0.5 秒だった。
+
+## 10. 「ここ重要」の取り消し（2026-11-04、macOS 26.6.2 と、その上の .NET 10 SDK）
+
+関係: REQ-MTG-012、DEC-MTG-047
+
+アプリでの録音はしておらず、記録中の画面のプレビューとテストで確かめた。
+
+- Mac: `.build/debug/Hanasu --render-meeting-notes <フォルダ>` の「ここ重要の取り消し」がすべて OK（10 秒以内のいちばん新しい印・ちょうど 10 秒まで・10 秒を過ぎたら取り消せない・古い印は取り消せない・時刻のない印は対象外・記録中のプレビューで取り消せる印がある）。`live-undo.png` でメモ欄に「★ を取り消す（あと 5 秒）」、`caption-undo.png` で字幕のパネルの ★ の下に「取り消す」が出ることを見た。
+- Windows: `dotnet test Hanasu.Core.Tests` が 247 件すべて通った。`HighlightUndoTests`（10 秒以内のいちばん新しい印・境目・古い印・メモと時刻なしの印は対象外）と `UndoesARecentHighlightWhileRecording`（記録中に取り消すと保存した meeting.json からも消える・メモや知らない ID は消さない・記録が終われば取り消せない）。`dotnet build Hanasu.Windows.sln -c Release` は警告 0。
+- 確かめていないこと（実機）: 録音中に実際に押して 10 秒で「取り消す」が消えること、Windows のボタンの表示。

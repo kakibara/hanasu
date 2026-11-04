@@ -115,6 +115,10 @@
                     </Grid>
                     <TextBlock x:Name="RecordingNote" Style="{StaticResource Note}" />
                     <DockPanel Margin="0,8,0,0">
+                        <!-- 要件: REQ-MTG-012 -->
+                        <!-- 設計判断: DEC-MTG-047 -->
+                        <Button DockPanel.Dock="Right" x:Name="UndoHighlightButton" Margin="6,0,0,0" Click="OnUndoHighlightClick" Visibility="Collapsed"
+                                ToolTip="付けてから 10 秒のあいだは、押し間違えた印を取り消せます" />
                         <Button DockPanel.Dock="Right" x:Name="HighlightButton" Content="★ ここ重要" Margin="6,0,0,0" Click="OnHighlightClick" />
                         <Button DockPanel.Dock="Right" Content="メモを足す" Margin="6,0,0,0" Click="OnAddNoteClick" />
                         <TextBox x:Name="NoteInput" Padding="4,3" KeyDown="OnNoteInputKeyDown" TextChanged="OnNoteInputChanged" />

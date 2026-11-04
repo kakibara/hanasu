@@ -265,6 +265,23 @@ public sealed class MeetingController
     /// <summary>「ここ重要」の印を今の時刻に付ける。text は印の説明（メモ欄に書きかけの文）</summary>
     public void AddHighlight(string text = "") => AddNoteCore(new MeetingNote(MeetingNoteKind.Highlight, ElapsedSeconds, text.Trim()));
 
+    /// <summary>今取り消せる「ここ重要」の印（付けてから 10 秒以内のいちばん新しいもの）。記録中でなければ null</summary>
+    public MeetingNote? UndoableHighlight =>
+        State == MeetingState.Recording && Current is { } meeting ? meeting.UndoableHighlight(ElapsedSeconds) : null;
+
+    // 要件: REQ-MTG-012
+    // 設計判断: DEC-MTG-047
+    /// <summary>付けてから 10 秒以内の「ここ重要」の印を取り消す。取り消せたら true（時間を過ぎた・記録中でない・見つからないなら false）</summary>
+    public bool UndoHighlight(string id)
+    {
+        if (State != MeetingState.Recording || Current is not { } meeting || recordingSettings is null) return false;
+        if (meeting.UndoableHighlight(ElapsedSeconds) is not { } note || note.Id != id) return false;
+        meeting.Notes!.Remove(note);
+        try { Store(recordingSettings).Save(meeting); } catch (IOException e) { services.Log($"note save failed: {e.Message}"); }
+        MeetingChanged?.Invoke(this, meeting);
+        return true;
+    }
+
     private void AddNoteCore(MeetingNote note)
     {
         if (State != MeetingState.Recording || Current is not { } meeting || recordingSettings is null) return;

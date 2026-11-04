@@ -38,6 +38,9 @@ struct LiveNotesPanel: View {
             }
             .disabled(!isRecording)
             .padding([.horizontal, .top])
+            HighlightUndoButton(recorder: recorder)
+                .padding(.horizontal)
+                .padding(.top, 4)
             if settings.highlightHotKeyEnabled {
                 Text(hotKey.registrationError ?? "「ここ重要」は \(settings.highlightHotKey.displayString) でも付けられます（ほかのアプリを使っていても可）")
                     .font(.caption)
@@ -56,7 +59,12 @@ struct LiveNotesPanel: View {
                         ForEach(notes) { note in
                             NoteRow(note: note)
                                 .contextMenu {
-                                    Button("削除", role: .destructive) { recorder.removeNote(id: note.id) }
+                                    // 印は付けてから 10 秒以内だけ取り消せる（DEC-MTG-047）。それより古い印は記録のあとに「メモ」タブで消す
+                                    if note.kind == .note {
+                                        Button("削除", role: .destructive) { recorder.removeNote(id: note.id) }
+                                    } else if recorder.undoableHighlight?.id == note.id {
+                                        Button("取り消す", role: .destructive) { recorder.undoHighlight(id: note.id) }
+                                    }
                                 }
                         }
                         Color.clear.frame(height: 1).id("bottom")
@@ -101,6 +109,32 @@ struct LiveNotesPanel: View {
         recorder.addHighlight(draft)
         draft = ""
         draftStartedAt = nil
+    }
+}
+
+// 要件: REQ-MTG-012
+// 設計判断: DEC-MTG-047
+/// 付けてから 10 秒以内の「ここ重要」の印があるあいだだけ出る「取り消す」ボタン（残りの秒数つき）
+struct HighlightUndoButton: View {
+    @ObservedObject var recorder: MeetingRecorder
+    var compact = false
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 0.5)) { _ in
+            if let note = recorder.undoableHighlight, let time = note.time {
+                let remaining = max(1, Int((Meeting.highlightUndoSeconds - (recorder.elapsed - time)).rounded(.up)))
+                Button {
+                    recorder.undoHighlight(id: note.id)
+                } label: {
+                    if compact {
+                        Label("取り消す", systemImage: "arrow.uturn.backward")
+                    } else {
+                        Label("★ を取り消す（あと \(remaining) 秒）", systemImage: "arrow.uturn.backward")
+                    }
+                }
+                .help("付けてから 10 秒のあいだは、押し間違えた印を取り消せます")
+            }
+        }
     }
 }
 
@@ -285,13 +319,17 @@ struct MeetingCaptionView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-            Button { recorder.addHighlight() } label: {
-                Image(systemName: "star.fill")
+            VStack(spacing: 4) {
+                Button { recorder.addHighlight() } label: {
+                    Image(systemName: "star.fill")
+                }
+                .tint(.yellow)
+                .buttonStyle(.borderedProminent)
+                .help("ここ重要")
+                .disabled(recorder.state != .recording)
+                HighlightUndoButton(recorder: recorder, compact: true)
+                    .font(.caption)
             }
-            .tint(.yellow)
-            .buttonStyle(.borderedProminent)
-            .help("ここ重要")
-            .disabled(recorder.state != .recording)
         }
         .font(.title3)
         .padding(12)
@@ -342,7 +380,39 @@ enum MeetingNotesPreview {
                   to: directory.appendingPathComponent("caption.png"))
         try write(Form { MeetingNotesSettingsSection() }.formStyle(.grouped).frame(width: 560, height: 220),
                   to: directory.appendingPathComponent("settings.png"))
+        // 付けたばかりの印があるとき（「取り消す」が出る）
+        var recent = meeting
+        recent.notes?.append(MeetingNote(kind: .highlight, time: 750, text: ""))
+        recorder.showPreviewForRendering(recent, lines: lines)
+        try write(LiveTranscriptView(recorder: recorder).frame(width: 640, height: 520),
+                  to: directory.appendingPathComponent("live-undo.png"))
+        try write(MeetingCaptionView(recorder: recorder).frame(width: 560, height: 130)
+                      .environment(\.colorScheme, .dark).background(Color.black.opacity(0.85)),
+                  to: directory.appendingPathComponent("caption-undo.png"))
+        checkHighlightUndo(recorder: recorder)
         checkCompatibility()
+    }
+
+    // 確かめ方: REQ-MTG-012
+    /// 「ここ重要」の取り消し（DEC-MTG-047）の確認。結果だけ出す
+    @MainActor
+    private static func checkHighlightUndo(recorder: MeetingRecorder) {
+        var results: [String] = []
+        func check(_ name: String, _ ok: Bool) { results.append("\(ok ? "OK" : "NG") \(name)") }
+        let meeting = Meeting(id: "u", title: "t", startedAt: Date(), notes: [
+            MeetingNote(kind: .highlight, time: 100, text: ""),
+            MeetingNote(kind: .highlight, time: 115, text: "新しい"),
+            MeetingNote(kind: .note, time: 118, text: "メモ"),
+        ])
+        check("10 秒以内のいちばん新しい印", meeting.undoableHighlight(at: 118)?.text == "新しい")
+        check("ちょうど 10 秒まで", meeting.undoableHighlight(at: 125)?.text == "新しい")
+        check("10 秒を過ぎたら取り消せない", meeting.undoableHighlight(at: 125.1) == nil)
+        check("古い印は取り消せない", meeting.undoableHighlight(at: 130) == nil)
+        check("時刻のない印は対象外", Meeting(id: "v", title: "t", startedAt: Date(),
+                                          notes: [MeetingNote(kind: .highlight, time: nil, text: "")]).undoableHighlight(at: 0) == nil)
+        // 記録中のプレビュー（750 秒の印、今は約 754 秒）で「取り消す」が出る。取り消しそのものは保存を伴うので、ここでは呼ばない
+        check("記録中のプレビューで取り消せる印がある", recorder.undoableHighlight?.time == 750)
+        print("ここ重要の取り消し: " + results.joined(separator: " / "))
     }
 
     /// 後方互換とテキスト形式の確認（中身は出さず、件数と結果だけ出す）

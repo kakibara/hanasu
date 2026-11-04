@@ -84,6 +84,18 @@ extension Meeting {
         "# \(title) — メモ\n\n\(notesText)\n"
     }
 
+    // 要件: REQ-MTG-012
+    // 設計判断: DEC-MTG-047
+    /// 記録中に「ここ重要」の印を取り消せる時間（秒）。押し間違いのやり直しのため。それより古い印は記録のあとに「メモ」タブで消す
+    static let highlightUndoSeconds: Double = 10
+
+    /// 今取り消せる印（付けてから 10 秒以内のうち、いちばん新しいもの）。elapsed は録音開始からの秒数
+    func undoableHighlight(at elapsed: Double) -> MeetingNote? {
+        highlights
+            .filter { h in h.time.map { elapsed - $0 >= 0 && elapsed - $0 <= Self.highlightUndoSeconds } ?? false }
+            .max { ($0.time ?? 0) < ($1.time ?? 0) }
+    }
+
     /// 「ここ重要」の印の前後で、強調する範囲（印を押すのは大事な発言を聞いた後なので、前を長めにとる）
     static let highlightLeadTime: Double = 30
     static let highlightTrailTime: Double = 15
