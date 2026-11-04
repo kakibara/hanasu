@@ -61,7 +61,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 - 会議の記録: 文字起こしは Whisper（既定。モデルは「一般」タブで選んだもの）か Gemini。話者分離のモデル（約 34 MB）は初めて使うときにダウンロードする。議事録には、会議の AI（Gemini か Claude）の認証情報が要る
 - Gemini の認証情報: API キー（[Google AI Studio](https://aistudio.google.com/apikey)）か、Vertex AI ユーザー（`roles/aiplatform.user`）のあるサービスアカウントの JSON 鍵
 - Claude を使うとき: Claude API の API キー。Claude は文章の処理（整形・英訳・議事録）だけに使い、音声は送らない（文字起こしは Windows 標準・Whisper・Gemini）
-- ローカルの LLM を使うとき（REQ-COM-030）: 設定 → AI で「ローカル」にし、モデル（Gemma 4 E4B 4.59 GB・LFM2.5-1.2B-JP 1.25 GB・Sarashina2.2 2.07 GB）をダウンロードする。CPU で動かすので、Gemma 4 E4B はメモリ 16 GB 以上が目安。文章は PC の外に送らない
+- ローカルの LLM を使うとき（REQ-COM-030）: 設定 → AI で「ローカル」にし、モデル（おすすめの Gemma 4 E4B 4.59 GB・LFM2.5-1.2B-JP 1.25 GB・Sarashina2.2 2.07 GB・Qwen3.5-4B 2.74 GB）をダウンロードする。CPU で動かすので、Gemma 4 E4B はメモリ 16 GB 以上が目安。文章は PC の外に送らない
 - Windows Hello で API キーを守るとき: Windows Hello（PIN・顔・指紋）が設定されていること
 
 ## 構成

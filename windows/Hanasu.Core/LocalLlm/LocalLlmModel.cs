@@ -24,7 +24,7 @@ public sealed record LocalLlmModel(
     string LicenseUrl)
 {
     public static readonly LocalLlmModel Gemma4E4B = new(
-        "gemma-4-e4b", "Gemma 4 E4B", "Google。いちばん大きく、長い会議もまとめやすい。メモリ 16 GB 以上向け",
+        "gemma-4-e4b", "Gemma 4 E4B", "おすすめ。Google。いちばん大きく、整形も議事録もいちばん自然。メモリ 16 GB 以上向け",
         "ggml-org/gemma-4-E4B-it-GGUF", "a69f018d7678a2b9f5e705f8903d6fb29b9b25dc", "gemma-4-E4B-it-Q4_0.gguf",
         4_590_807_392, "a555b900214b477d8880e7832e0b8925e139b0159640036b09fe472b6f2097f2",
         32_768, new LocalLlmSampling(1.0, 0.95, 64, null),
@@ -44,11 +44,29 @@ public sealed record LocalLlmModel(
         8_192, new LocalLlmSampling(0.2, 0.95, null, 1.05),
         "MIT", "https://huggingface.co/sbintuitions/sarashina2.2-3b-instruct-v0.1");
 
-    public static readonly IReadOnlyList<LocalLlmModel> All = [Gemma4E4B, Lfm25JP, Sarashina22];
+    // Qwen3.5 の推奨の presence_penalty 1.5 は、元の言葉を残す整形で語を避けさせてしまうので付けない
+    public static readonly LocalLlmModel Qwen35 = new(
+        "qwen3.5-4b", "Qwen3.5-4B", "Alibaba。Gemma の半分ほどの大きさで、メモリが 8 GB の PC でも動かしやすい。言い直しの扱いは Gemma より弱い",
+        "unsloth/Qwen3.5-4B-GGUF", "e87f176479d0855a907a41277aca2f8ee7a09523", "Qwen3.5-4B-Q4_K_M.gguf",
+        2_740_937_888, "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+        32_768, new LocalLlmSampling(0.7, 0.8, 20, null),
+        "Apache-2.0", "https://huggingface.co/Qwen/Qwen3.5-4B");
+
+    public static readonly IReadOnlyList<LocalLlmModel> All = [Gemma4E4B, Lfm25JP, Sarashina22, Qwen35];
+
+    /// <summary>
+    /// おすすめのモデル（DEC-COM-067）。実機で比べると、Sarashina2.2 と LFM2.5 は整形で言っていない文を足したり、
+    /// 議事録で担当者を取り違えたり同じ議題を繰り返したりして、使い物にならなかった（docs/verification/dictation.md の 13）。
+    /// Qwen3.5-4B も、整形で言い直しの前の文を残し、議事録でアクションアイテムをまとめてしまった（同じく 19）。
+    /// Gemma 4 E4B（Google）だけが整形も議事録も安定していたので、これを勧め、音声入力・会議とも既定にする
+    /// </summary>
+    public static readonly LocalLlmModel Recommended = Gemma4E4B;
 
     /// <summary>用途の AI を初めてローカルにしたときのモデル（DEC-COM-067）</summary>
-    public static readonly LocalLlmModel DefaultDictation = Lfm25JP;
-    public static readonly LocalLlmModel DefaultMeeting = Gemma4E4B;
+    public static readonly LocalLlmModel DefaultDictation = Recommended;
+    public static readonly LocalLlmModel DefaultMeeting = Recommended;
+
+    public bool IsRecommended => Id == Recommended.Id;
 
     public static LocalLlmModel? Find(string? id) => All.FirstOrDefault(m => m.Id == id);
 
@@ -62,7 +80,7 @@ public sealed record LocalLlmModel(
     public string SizeLabel => $"{Bytes / 1_000_000_000.0:0.00} GB";
 
     /// <summary>選ぶ欄に出す名前</summary>
-    public string Label => $"{Name}（{SizeLabel}）";
+    public string Label => $"{Name}（{SizeLabel}）{(IsRecommended ? "・おすすめ" : "")}";
 
     /// <summary>出力の上限。文脈の半分を超えない（DEC-COM-064）</summary>
     public int MaxOutputTokens(bool longOutput) => Math.Min(longOutput ? 4096 : 2048, ContextLength / 2);

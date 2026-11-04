@@ -99,7 +99,7 @@ Typeless のような「話した内容を、自然な文章に整えて今カ�
 
 ### 3.2.2 整形などの AI をローカルの小型 LLM にする（llama.cpp）
 
-- 「AI」タブの各用途で「ローカル」を選ぶと、Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2 のどれかを、この Mac の中で動かす（REQ-COM-030）。モデルの一覧（版・ファイル・SHA-256・文脈の長さ・サンプリング・ライセンス）は `LocalLLMModel`。選んだモデルは `AppSettings.localDictationModel`・`localMeetingModel`。
+- 「AI」タブの各用途で「ローカル」を選ぶと、Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-4B のどれかを、この Mac の中で動かす（REQ-COM-030）。おすすめ（選ぶ欄に「おすすめ」と出し、既定にするもの）は `LocalLLMModel.recommended`（DEC-COM-067）。モデルの一覧（版・ファイル・SHA-256・文脈の長さ・サンプリング・ライセンス）は `LocalLLMModel`。選んだモデルは `AppSettings.localDictationModel`・`localMeetingModel`。
 - モデルは設定の欄（`LocalModelChoice`）か `--local-llm-download` で、`LocalLLMStore` が Hugging Face から取る。決めたコミットの URL から取り、大きさと SHA-256 を確かめてから `~/Library/Application Support/Hanasu/Models/llm/` に置く（DEC-COM-062）。
 - 動かすのは同梱の llama.cpp の `llama-server`（`Contents/Resources/llama/`。`scripts/fetch-llama-cpp.sh` が SHA-256 を確かめて取り、`scripts/build-app.sh` が入れて署名する。DEC-COM-061）。`LocalLLMServer`（actor）が、使うときに 127.0.0.1 の空いたポートで起動し、5 分使わなければ止める。API キーは起動のたびに作って環境変数で渡す。アプリ・CLI の終了（`atexit`）で止め、前回落ちて残ったものは起動時に止める（DEC-COM-063）。
 - `TextAIClient` は、ローカルなら Gemini と同じプロンプトを `LocalLLMClient` で `/v1/chat/completions` に送る。整形・英訳の結果は `LocalLLMClient.cleanUpRewrite` で、全体を囲む「」と行末の空白を除く。終わりの印 `</s>` で止める。
