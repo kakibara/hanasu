@@ -77,6 +77,16 @@ public sealed class AppSettings
     /// <summary>入力できる場所がなくて貼り付けなかったとき、結果をクリップボードに入れたままにするか</summary>
     public PasteFallbackClipboard PasteFallbackClipboard { get; set; } = PasteFallbackClipboard.KeepResult;
 
+    // 音声入力の履歴（設定の「履歴」タブ）
+    // 要件: REQ-DIC-063
+    // 設計判断: DEC-DIC-073, DEC-DIC-074
+    /// <summary>履歴をファイルに保存する（オフのときは、メモリ上に直近 10 件だけ置く）</summary>
+    public bool HistoryEnabled { get; set; } = true;
+    /// <summary>残す件数の上限（HistoryPolicy.CountOptions）</summary>
+    public int HistoryMaxCount { get; set; } = 1000;
+    /// <summary>残す日数（HistoryPolicy.DayOptions。0 は無期限）。既定は 30 日</summary>
+    public int HistoryMaxDays { get; set; } = 30;
+
     // AI（文章の処理）。音声入力（整形・英訳）と会議（議事録）で、AI とモデルを別々に選ぶ（REQ-COM-024）
     /// <summary>AI で整形する（名前は前の版のまま。Gemini と Claude のどちらでも使う）</summary>
     public bool RefineWithGemini { get; set; } = true;
@@ -148,6 +158,10 @@ public sealed class AppSettings
     /// <summary>議事録に使うモデル（選んだ AI のもの）</summary>
     [JsonIgnore]
     public string MinutesModel => MeetingAi == TextAiProvider.Claude ? ClaudeMinutesModel : MeetingMinutesModel;
+
+    /// <summary>履歴の保存の方針</summary>
+    [JsonIgnore]
+    public Dictation.HistoryPolicy HistoryPolicy => new(HistoryEnabled, Math.Max(1, HistoryMaxCount), Math.Max(0, HistoryMaxDays));
 
     public AppSettings Clone() => (AppSettings)MemberwiseClone();
 }

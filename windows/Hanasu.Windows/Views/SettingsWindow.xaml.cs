@@ -17,7 +17,7 @@ using Microsoft.Win32;
 namespace Hanasu.Windows.Views;
 
 /// <summary>
-/// 設定画面（一般 / AI / 会議 / 辞書・ルール）。変更はその場で SettingsService に書き、すぐ保存する（Mac 版と同じ）。
+/// 設定画面（一般 / AI / 会議 / 履歴 / 辞書・ルール）。変更はその場で SettingsService に書き、すぐ保存する（Mac 版と同じ）。
 /// AI タブでは、音声入力と会議の AI とモデルを別々に選び（REQ-COM-024）、Gemini の認証と Claude の API キーを設定する。
 /// API キーは入力欄をマスクし、保存したあとは末尾 4 文字だけを見せる（REQ-COM-021）。
 /// </summary>
@@ -115,6 +115,13 @@ public partial class SettingsWindow : Window
         MeetingsDirBox.Text = new MeetingStore(s.MeetingsDirectory).BaseDirectory;
         UpdateMeetingEngineNote(s.MeetingEngine);
 
+        HistoryEnabledCheck.IsChecked = s.HistoryEnabled;
+        HistoryDaysCombo.ItemsSource = LimitItems(HistoryPolicy.DayOptions, s.HistoryMaxDays, HistoryPolicy.DaysLabel);
+        HistoryDaysCombo.SelectedItem = ((List<ComboBoxItem>)HistoryDaysCombo.ItemsSource).First(i => (int)i.Tag == s.HistoryMaxDays);
+        HistoryCountCombo.ItemsSource = LimitItems(HistoryPolicy.CountOptions, s.HistoryMaxCount, n => $"{n:N0} 件");
+        HistoryCountCombo.SelectedItem = ((List<ComboBoxItem>)HistoryCountCombo.ItemsSource).First(i => (int)i.Tag == s.HistoryMaxCount);
+        UpdateHistoryStatus();
+
         DictionaryBox.Text = s.DictionaryText;
         ExtraInstructionsBox.Text = s.ExtraInstructions;
 
@@ -206,6 +213,51 @@ public partial class SettingsWindow : Window
     private void OnOpenSettingsFolder(object sender, RoutedEventArgs e) => OpenFolder(HanasuPaths.SettingsDirectory);
 
     private void OnOpenModelsFolder(object sender, RoutedEventArgs e) => OpenFolder(host.WhisperModels.Directory);
+
+    // MARK: - 履歴
+
+    /// <summary>選択肢の一覧。設定ファイルを手で書き換えた値など、選択肢にない値も出す</summary>
+    private static List<ComboBoxItem> LimitItems(IReadOnlyList<int> options, int current, Func<int, string> label)
+    {
+        var values = options.Contains(current) ? options : options.Append(current);
+        return values.Select(v => new ComboBoxItem { Content = label(v), Tag = v }).ToList();
+    }
+
+    // 要件: REQ-DIC-063
+    // 設計判断: DEC-DIC-073, DEC-DIC-074
+    private void OnHistoryEnabledChanged(object sender, RoutedEventArgs e)
+    {
+        Save(s => s.HistoryEnabled = HistoryEnabledCheck.IsChecked == true);
+        UpdateHistoryStatus();
+    }
+
+    private void OnHistoryLimitChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (HistoryDaysCombo.SelectedItem is not ComboBoxItem days || HistoryCountCombo.SelectedItem is not ComboBoxItem count) return;
+        Save(s =>
+        {
+            s.HistoryMaxDays = (int)days.Tag;
+            s.HistoryMaxCount = (int)count.Tag;
+        });
+        UpdateHistoryStatus();
+    }
+
+    private void OnOpenHistory(object sender, RoutedEventArgs e) => host.ShowHistory();
+
+    private void OnOpenHistoryFolder(object sender, RoutedEventArgs e) => OpenFolder(host.History.Directory);
+
+    private void OnDeleteAllHistory(object sender, RoutedEventArgs e)
+    {
+        var count = host.History.Entries.Count;
+        if (count == 0) return;
+        if (MessageBox.Show(this, $"音声入力の履歴 {count} 件をすべて削除しますか？元に戻せません。", "Hanasu",
+                MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) return;
+        host.History.DeleteAll();
+        UpdateHistoryStatus();
+    }
+
+    private void UpdateHistoryStatus() =>
+        HistoryStatus.Text = $"今の履歴: {host.History.Entries.Count} 件（保存先: {host.History.FilePath}）";
 
     private static void OpenFolder(string path)
     {

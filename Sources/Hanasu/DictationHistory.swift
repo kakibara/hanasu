@@ -73,8 +73,9 @@ extension HotKeyCombo {
     static let defaultRepaste = HotKeyCombo(keyCode: UInt32(kVK_ANSI_V), modifiers: UInt32(optionKey | shiftKey))
 }
 
+// 要件: REQ-DIC-063
 // 設計判断: DEC-DIC-073
-/// 履歴の設定。AppSettings とは別の UserDefaults のキーで持つ。
+/// 履歴の設定。AppSettings とは別の UserDefaults のキーで持つ。既定は 30 日・1000 件
 final class HistorySettings: ObservableObject {
     static let shared = HistorySettings()
 

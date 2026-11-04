@@ -37,7 +37,8 @@ public sealed class DictationServices
     public required DictationTextProcessor Processor { get; init; }
     public required ITextInserter Inserter { get; init; }
     public required IHud Hud { get; init; }
-    public required RecentResults Recent { get; init; }
+    /// <summary>音声入力の履歴（貼り付けの前に残す。タスクトレイの「最近の結果」もここから出す）</summary>
+    public required DictationHistoryStore History { get; init; }
     /// <summary>今の前面アプリの名前（入力先として AI に伝える）</summary>
     public Func<string?> ForegroundAppName { get; init; } = () => null;
     /// <summary>録音中だけ Esc を取り消しのショートカットとして登録する</summary>
@@ -239,7 +240,11 @@ public sealed class DictationController
         var outcome = await services.Processor.ProcessAsync(raw, Mode, targetAppName, settings);
         services.Log($"process: {outcome.Status}, {outcome.Output.Length} chars");
         // 入力先がずれても取り戻せるよう、貼り付けの前に残す
-        services.Recent.Add(raw, outcome.Output, Mode);
+        // 要件: REQ-DIC-060
+        // 設計判断: DEC-DIC-072
+        services.History.Record(raw, outcome.Output, Mode, outcome.Status, targetAppName,
+            errorMessage: outcome.Status is ProcessStatus.AiFailed or ProcessStatus.NoCredentials ? outcome.Warning : null,
+            model: usesGemini ? Ai.TextAiFactory.ModelFor(settings, Ai.TextAiUse.Dictation) : null);
         InsertOutcome inserted;
         try
         {

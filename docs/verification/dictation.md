@@ -201,3 +201,13 @@ Windows の実機がないので、画面とフォーカスの動きはまだ確
 
 - `dotnet test Hanasu.Core.Tests`: 200 件すべて通った（レビューで UI Automation を問い合わせる場面の絞り込みと Win32 の読み取り専用の Edit を足し、217 件）。貼り付け先の判定（`PasteTargetTests`。デスクトップ・タスクバー・フォーカスなし・読み取り専用・エクスプローラーの一覧は貼らない。デスクトップの名前の変更・キャレットあり・ストアアプリ・ブラウザ・Excel のセル・何も分からないときは貼る）、貼らなかったときの流れ（全文を `HudPhase.Unpasted` で残す・自動では閉じない・設定が入力に渡る・権限の高いウインドウと例外も同じ表示・次の音声入力で置き換わる・「最近の結果」に残る）、設定の保存（`pasteFallbackClipboard`、項目のない前の版の settings.json は既定値）。
 - `dotnet build Hanasu.Windows.sln -c Release`（警告 0）と `dotnet publish … -r win-x64 --self-contained -p:PublishSingleFile=true`（`Hanasu.exe` 約 82 MB と、今までと同じ DLL・ライセンスの表示）が通った。UI Automation（`UIAutomationClient`）は .NET の Windows デスクトップのランタイムに入っているので、依存パッケージは増えていない。
+
+## 13. Windows 版の音声入力の履歴（2026-11-04、macOS の上の .NET 10 SDK）
+
+関係: REQ-DIC-060、REQ-DIC-063、DEC-DIC-071〜074・078・079・130・131
+
+Windows の実機がないので、ウインドウ・タスクトレイ・設定の「履歴」タブの操作はまだ確かめていない。Mac の上で確かめたこと:
+
+- `dotnet test Hanasu.Core.Tests`: 231 件すべて通った。足した `DictationHistoryTests`（16 件）で、既定値（保存する・30 日・1000 件。項目のない前の版の settings.json も同じ）、保存と読み直し（秒までの日時・ID・状態・モデル・入力先）、Mac 版の形（`version`・camelCase・`refineOff` などの小文字・大文字の UUID・null を書かない）と Mac 版の history.json（録音・やり直しの項目つき）を読めること、30 日を過ぎたものが追加・起動・日数の変更で消えること、無期限、件数の上限、保存しない設定でメモリに 10 件・ファイルに触らないこと、壊れたファイルを `history.json.broken` に退けて上書きしないこと、削除、「最近の結果」の 10 件、検索（結果・原文・アプリ名、すべての語）と「失敗・未整形」、日ごとの見出し、メニューの 1 行を確かめた。`DictationControllerTests` では、音声入力のあと履歴に状態・モード・入力先・モデルつきで残り、ファイルに書かれることを確かめた。
+- `dotnet build Hanasu.Windows.sln -c Release --no-incremental`: 警告 0・エラー 0（WPF の履歴のウインドウと設定の「履歴」タブはコンパイルだけ）。
+- `python3 scripts/check-spec.py`: エラーなし。

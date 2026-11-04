@@ -18,7 +18,9 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
    - 録音中は **Esc**（または HUD の「取消」）で取り消す。
    - 「押している間だけ録音」も選べる（設定 → 一般 → 録音のしかた）。
    - 入力できる場所にフォーカスがない（デスクトップが前面にある など）か、管理者として動いているアプリが前面にあって貼り付けられないときは、結果を画面の下に表示して残す（自動では閉じない）。「コピー」か文章を選んでコピーし、「閉じる」で閉じる。既定では結果をクリップボードにも入れておくので、貼りたい場所で Ctrl+V を押すだけでよい（設定 → 一般 →「入力できる場所がないとき」で、クリップボードを元のままにすることもできる）。
-5. タスクトレイのメニュー →「最近の結果」から、直近 10 件をクリップボードにコピーできる（メモリ上だけ。終了すると消える）。
+5. 結果と原文は履歴に残る（既定で 30 日。設定 → 履歴 で 7・30・90・365 日・無期限と、件数の上限を選べる）。
+   - タスクトレイのメニュー →「最近の結果」から、直近 10 件をクリップボードにコピーできる。
+   - タスクトレイのメニュー →「履歴を開く…」で、日ごとの一覧から検索（結果・原文・アプリ名）・「失敗・未整形」の絞り込み・結果や原文のコピー・削除（Delete キー）ができる。
 
 ### 会議の記録
 
@@ -74,7 +76,7 @@ windows/
 │   ├── Settings/                設定（settings.json）・ショートカットの組み合わせ・API キーの保存（SecretStore。DPAPI と Windows Hello はインターフェイスで渡す）
 │   ├── Audio/                   16 kHz・モノラルへの変換（窓付き sinc の再サンプリング）・WAV・無音の判定・効果音
 │   ├── Transcription/           文字起こしのインターフェイス・録ってからまとめて文字起こし・Gemini の文字起こし・Whisper のモデル管理
-│   ├── Dictation/               音声入力の流れ（状態遷移）・整形と失敗時の扱い・最近の結果・HUD の文言・貼り付け先の判定（PasteTarget）
+│   ├── Dictation/               音声入力の流れ（状態遷移）・整形と失敗時の扱い・履歴（DictationHistoryStore）・HUD の文言・貼り付け先の判定（PasteTarget）
 │   └── Meetings/                会議の記録: データと meeting.json（Mac 版と同じ形）・保存・議事録の型とプロンプト（Mac 版と共有）・
 │                                話者の割り当てと回り込みの除去・Gemini の時刻つき文字起こし・後処理・記録の流れ（MeetingController）
 ├── Hanasu.Whisper/              net8.0。Whisper.net（whisper.cpp）での文字起こし（会議用に時刻つきの区間も返す）
@@ -84,7 +86,7 @@ windows/
 │   ├── TrayIcon.cs              タスクトレイのメニュー（WinForms の NotifyIcon）
 │   ├── Services/                RegisterHotKey、WASAPI の録音（NAudio。会議はマイクとループバック）、Windows の音声認識（WinRT）、
 │   │                            クリップボード + SendInput の入力、貼り付け先の様子（FocusProbe）、前面アプリ、DPAPI・Windows Hello・DLL の探索・UIPI（WindowsSecurity）、効果音、ログ
-│   └── Views/                   HUD（WS_EX_NOACTIVATE）・設定画面・会議ノート・ショートカットの記録欄
+│   └── Views/                   HUD（WS_EX_NOACTIVATE）・設定画面・会議ノート・音声入力の履歴・ショートカットの記録欄
 ├── Hanasu.Cli/                  net8.0。確認用の CLI（Mac でも動く）
 └── Hanasu.Core.Tests/           xUnit。Mac でも Windows でも dotnet test で動く
 ```
@@ -114,6 +116,12 @@ HotKeyService（RegisterHotKey + 離したかの見張り）
 - UI Automation は、結果で判定が変わりうるとき（デスクトップ・タスクバー・エクスプローラー・フォーカスがない。`PasteTargetJudge.NeedsAutomation`）だけ、スレッドプールで問い合わせて 400 ms で打ち切る。キャレットがあるときも問い合わせない。ブラウザ・Electron で毎回待たず、Chromium のアクセシビリティを有効にさせないため（DEC-DIC-124）。
 - 貼らないとき（権限の高いウインドウ・`SendInput` の失敗・クリップボードを使えない・例外も同じ。DEC-DIC-123）は、`DictationController.ShowUnpasted` が `HudPhase.Unpasted` を出し、`HudWindow` が広がって結果の全文・「コピー」「閉じる」を出す。自動では閉じず、次の音声入力の HUD で消える。文章をクリックしたときだけ前面に出して（選択・Ctrl+C・Esc のため）、閉じるときに入力先だったウインドウにフォーカスを返す（DEC-DIC-121）。
 - クリップボードは `AppSettings.PasteFallbackClipboard` に従う。既定の `KeepResult` は結果を（履歴に残さない印を付けて）入れたままにし、`RestoreOriginal` は初めから触らない（DEC-DIC-122）。
+
+#### 履歴（REQ-DIC-060・063）
+
+- `DictationController` は、整形のあと貼り付けの前に `DictationHistoryStore.Record` で残す（入力先がずれても取り戻せるように。DEC-DIC-072）。状態（成功・AI 失敗・未設定・整形オフ）・入力先のアプリ・モデル・知らせたエラーも持つ。
+- `DictationHistoryStore`（Core）は新しい順に持ち、日数と件数の両方の上限（設定の `HistoryMaxDays` 既定 30・`HistoryMaxCount` 既定 1000）を、追加・起動・設定の変更のときに当てて古いものから消す（DEC-DIC-073）。保存しない設定では、ファイルに書かずメモリに 10 件だけ置く（DEC-DIC-074）。
+- `history.json` は Mac 版と同じ形（DEC-DIC-130）。タスクトレイの「最近の結果」は履歴の新しい順の 10 件（DEC-DIC-078）、`HistoryWindow` は日ごとの一覧・検索・絞り込み・コピー・削除（DEC-DIC-079・131）。
 
 ### 会議の記録の作り
 
@@ -233,7 +241,7 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | サービスアカウント | JSON のパスだけを保存する（鍵の中身は写さない） |
 | Whisper のモデル | `%LOCALAPPDATA%\Hanasu\Models\ggml-*.bin`（ダウンロード中は `.download`） |
 | ログ | `%LOCALAPPDATA%\Hanasu\Logs\hanasu.log`（文字起こしの中身は書かない。API キーに見える文字列は伏せる） |
-| 最近の結果 | メモリ上だけ（10 件） |
+| 音声入力の履歴 | `%LOCALAPPDATA%\Hanasu\History\history.json`（Mac 版と同じ形の JSON。一時ファイルに書いてから置き換える。読めなければ `history.json.broken` に退けて新しく始める）。設定 → 履歴 で保存しないにすると、直近 10 件だけをメモリに置く |
 | 会議の記録 | `ドキュメント\Hanasu\Meetings\<yyyy-MM-dd HHmm>\`（設定 → 会議 で変えられる）。`meeting.json`・`transcript.md`・`minutes.md`・`notes.md`・`me.wav`・`others.wav` |
 | 話者分離のモデル | `%LOCALAPPDATA%\Hanasu\Models\diarization\*.onnx` |
 
@@ -246,7 +254,7 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | アプリ別スタイル | **未実装**（入力先アプリ名を AI に伝えるだけ） |
 | スニペット | **未実装** |
 | 画面の文脈 | **未実装** |
-| 履歴ウインドウ（検索・整え直し・音声の保存） | **未実装**。代わりにメモリ上の「最近の結果」10 件をメニューからコピーできる |
+| 履歴ウインドウ | 検索・絞り込み・コピー・削除はできる。**整え直し（整形し直す・英訳し直す）と録音の保存は未実装** |
 | 最後の結果をもう一度入力（`⌥⇧ V`） | **未実装**（「最近の結果」からコピーして貼る） |
 | 選択を声で編集 | **未実装** |
 | 辞書の候補を探す（AI で提案） | **未実装**（辞書の編集と置き換えの試しはできる） |
