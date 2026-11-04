@@ -1,7 +1,7 @@
 import SwiftUI
 
 // 要件: REQ-COM-030
-// 設計判断: DEC-COM-062, DEC-COM-066
+// 設計判断: DEC-COM-062, DEC-COM-066, DEC-COM-067
 /// 設定の「AI」タブで、用途の AI を「ローカル」にしたときの欄。モデルを選び、ダウンロード・削除し、ライセンスを見せる
 struct LocalModelChoice: View {
     @Binding var model: LocalLLMModel
@@ -11,7 +11,7 @@ struct LocalModelChoice: View {
         VStack(alignment: .leading, spacing: 6) {
             Picker("ローカルのモデル", selection: $model) {
                 ForEach(LocalLLMModel.allCases) { model in
-                    Text("\(model.name)（\(model.sizeLabel)）").tag(model)
+                    Text("\(model.name)（\(model.sizeLabel)）\(model.isRecommended ? "・おすすめ" : "")").tag(model)
                 }
             }
             Text(model.summary).font(.caption).foregroundStyle(.secondary)

@@ -225,7 +225,7 @@ extension TextAIClient {
     /// CLI の確認で使うクライアント。`--ai gemini|claude` で AI を選ぶ（省くと設定のまま）。
     /// - Claude: 環境変数 ANTHROPIC_API_KEY → 設定（キーチェーン）の順
     /// - Gemini: 環境変数 GEMINI_SERVICE_ACCOUNT_JSON → 設定 → 環境変数 GEMINI_API_KEY の順（これまでどおり）
-    /// - ローカル: `--model <id>`（gemma-4-e4b / lfm2.5-1.2b-jp / sarashina2.2-3b）か設定のモデル。ダウンロード済みであること
+    /// - ローカル: `--model <id>`（gemma-4-e4b / lfm2.5-1.2b-jp / sarashina2.2-3b / qwen3.5-0.8b）か設定のモデル。ダウンロード済みであること
     static func cli(args: [String], settings: AppSettings, for purpose: TextAIPurpose, timeout: TimeInterval = 15) throws -> TextAIClient {
         let env = ProcessInfo.processInfo.environment
         switch cliProvider(args: args, settings: settings, for: purpose) {

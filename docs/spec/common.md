@@ -126,14 +126,14 @@
 - 確かめ方: Mac は `.build/debug/Hanasu --render-ai-settings /tmp/ai.png --claude`（音声入力は Gemini、会議は Claude の見た目）
   - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`TextAiSelectionTests`）
 
-### REQ-COM-030 整形と議事録に使う AI として、端末の中で動く小型の LLM（Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2）を選べる
-- 内容: 文字起こしのあとの整形などと、議事録などの文章の処理に使う AI として、Gemini・Claude のほかに、端末の中で動く小型の LLM（ローカル）を選べる。モデルは Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2 の 3 つから選ぶ。文章は端末の外に送らない。
+### REQ-COM-030 整形と議事録に使う AI として、端末の中で動く小型の LLM（Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-0.8B）を選べ、Gemma 4 E4B を勧める
+- 内容: 文字起こしのあとの整形などと、議事録などの文章の処理に使う AI として、Gemini・Claude のほかに、端末の中で動く小型の LLM（ローカル）を選べる。モデルは Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-0.8B の 4 つから選ぶ。おすすめは Gemma 4 E4B（Google）で、選ぶ欄に「おすすめ」と出し、初めてローカルにしたときの既定にする（DEC-COM-067）。文章は端末の外に送らない。
 - 受け入れ条件:
-  - Mac: 設定の「AI」タブで、音声入力か会議の AI を「ローカル」にし、モデルを 3 つから選べる。選んだモデルがまだなければ、その場でダウンロードでき、進み具合が出る。ダウンロードしたモデルは消せる。ローカルにすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）がそのモデルで行われ、文章をネットに送らない。モデルがないまま使おうとすると、設定でダウンロードするよう知らせる。
+  - Mac: 設定の「AI」タブで、音声入力か会議の AI を「ローカル」にし、モデルを 4 つから選べる。Gemma 4 E4B に「おすすめ」と出る。選んだモデルがまだなければ、その場でダウンロードでき、進み具合が出る。ダウンロードしたモデルは消せる。ローカルにすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）がそのモデルで行われ、文章をネットに送らない。モデルがないまま使おうとすると、設定でダウンロードするよう知らせる。
   - Mac: 文脈に入らない長い会議でも議事録ができる（DEC-COM-065）。
-  - Windows: 設定 → AI で「音声入力」か「会議」の AI を「ローカル」にし、モデルを 3 つから選べる。ダウンロード・削除・進み具合は Mac と同じ。整形・英訳・議事録（作り直しを含む）がそのモデルで行われる。
+  - Windows: 設定 → AI で「音声入力」か「会議」の AI を「ローカル」にし、モデルを 4 つから選べる。Gemma 4 E4B に「おすすめ」と出る。ダウンロード・削除・進み具合は Mac と同じ。整形・英訳・議事録（作り直しを含む）がそのモデルで行われる。
   - モデルのライセンス（とくに LFM2.5 の、年間売上 1,000 万ドル以上の組織の商用利用を許さない条件）が、選ぶ画面に出る（DEC-COM-066）。
-- 出典: ユーザーの依頼（2026-11-04「文字起こし後の整形や議事録作成のモデルとしても小型の local LLM をつかえるようにしてください。Gemma 4 E4B, LFM2.5-1.2B-JP, Sarashina2.2 を選択できるようにして」）
+- 出典: ユーザーの依頼（2026-11-04「文字起こし後の整形や議事録作成のモデルとしても小型の local LLM をつかえるようにしてください。Gemma 4 E4B, LFM2.5-1.2B-JP, Sarashina2.2 を選択できるようにして」）。2026-11-04「ローカルモデルに Qwen の一番軽いモデルも追加して。Google の Gemma をレコメンドして。Sarashina などは良くなかった」
 - 対象: Mac / Windows
 - 実装の場所: `LocalLLMModel`、`LocalLLMStore`、`LocalLLMServer`、`LocalLLMClient`、`TextAIClient`（`.local`）、`AIChoiceRow`
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/`（`LocalLlmModel`・`LocalLlmClient`・`LongInputFitter`・`LocalLlmServer`）、`windows/Hanasu.Core/Ai/TextAiFactory.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
@@ -528,13 +528,14 @@
 - 実装の場所: `scripts/llama-cpp.lock`、`scripts/fetch-llama-cpp.sh`、`scripts/build-app.sh`、`Resources/llama-server.entitlements`、`LocalLLMServer.executableURL`
 - Windows の実装: `scripts/fetch-llama-cpp.ps1`、`.github/workflows/tagpr.yml`・`.github/workflows/windows.yml`（publish のあとに `llama/` を入れる）、`windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`（`ResolveExecutable`）
 
-### DEC-COM-062 3 つのモデルは、版・ファイル・SHA-256 を決めておき、設定から初めにダウンロードする
+### DEC-COM-062 4 つのモデルは、版・ファイル・SHA-256 を決めておき、設定から初めにダウンロードする
 - 決めたこと: モデルはアプリに入れず、設定の「AI」でダウンロードする。Hugging Face のリポジトリのコミットを決め（`resolve/<コミット>/<ファイル>`）、大きさと SHA-256 を確かめてから置く。
   - Gemma 4 E4B: `ggml-org/gemma-4-E4B-it-GGUF` の `gemma-4-E4B-it-Q4_0.gguf`（4.59 GB、Apache-2.0）
   - LFM2.5-1.2B-JP: `LiquidAI/LFM2.5-1.2B-JP-202606-GGUF` の `LFM2.5-1.2B-JP-202606-Q8_0.gguf`（1.25 GB、LFM Open License v1.0）
   - Sarashina2.2: `mmnga/sarashina2.2-3b-instruct-v0.1-gguf` の `sarashina2.2-3b-instruct-v0.1-Q4_K_M.gguf`（2.07 GB、MIT）
+  - Qwen3.5-0.8B: `ggml-org/Qwen3.5-0.8B-GGUF` の `Qwen3.5-0.8B-Q8_0.gguf`（0.83 GB、Apache-2.0）
   - 置き場所: Mac は `~/Library/Application Support/Hanasu/Models/llm/`、Windows は `%LOCALAPPDATA%\Hanasu\Models\llm\`
-- 理由: 3 つで 8 GB あり、使わない人に配らない。差し替えられたファイルを読まない（FUT-011 と同じ考え。Windows は `ModelDownload` の確かめ方をそのまま使う）。Gemma 4 E4B は llama.cpp の開発元が作り直しを追っている ggml-org の Q4_0 にした（Google の QAT 版より小さい）。LFM2.5 は 1.2B と小さいので、質を落とさない Q8_0 にした。Sarashina2.2 は 3 つの大きさのうち日本語の質がいちばんよい 3B（日本語 MT-Bench 6.51）を、4 bit（Q4_K_M、日本語の imatrix 付き）で使う。3 つとも Hugging Face で同意の手続き（gated）が要らず、GGUF にチャットのテンプレートが入っている。
+- 理由: 4 つで 9 GB あり、使わない人に配らない。差し替えられたファイルを読まない（FUT-011 と同じ考え。Windows は `ModelDownload` の確かめ方をそのまま使う）。Gemma 4 E4B は llama.cpp の開発元が作り直しを追っている ggml-org の Q4_0 にした（Google の QAT 版より小さい）。LFM2.5 は 1.2B と小さいので、質を落とさない Q8_0 にした。Sarashina2.2 は 3 つの大きさのうち日本語の質がいちばんよい 3B（日本語 MT-Bench 6.51）を、4 bit（Q4_K_M、日本語の imatrix 付き）で使う。Qwen3.5 は、指示に従う版のうちいちばん小さい 0.8B を、小さいので質を落とさない Q8_0 で、llama.cpp の開発元の ggml-org のもの（2026-10-19 の版）を使う（b11770 は Qwen3.5 の形 `qwen35` を読める）。4 つとも Hugging Face で同意の手続き（gated）が要らず、GGUF にチャットのテンプレートが入っている。
 - 決めた場面: ローカル LLM に対応した PR
 - 関係する要件: REQ-COM-030, REQ-COM-022
 - 対象: Mac / Windows
@@ -551,8 +552,8 @@
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Windows/Services/ChildProcessJob.cs`
 
 ### DEC-COM-064 文脈の長さと生成の設定は、モデルごとに決める
-- 決めたこと: 文脈の長さ（`-c`）は、Gemma 4 E4B と LFM2.5 は 32,768、Sarashina2.2 は 8,192（モデルの上限）。出力の上限は、音声入力（整形・英訳・選択の編集・辞書の候補）は 2,048、会議（議事録・会議への質問）は 4,096 で、どちらも文脈の半分を超えない。サンプリングは開発元の推奨にする（Gemma 4: temperature 1.0・top_p 0.95・top_k 64、LFM2.5: temperature 0.1・top_k 50・repetition_penalty 1.05）。Sarashina2.2 は推奨がないので temperature 0.2・top_p 0.95・repetition_penalty 1.05。待つ時間は、音声入力は 1 回 120 秒、会議は 1 回 30 分（モデルの読み込みを含む）。
-- 理由: Gemma 4 と LFM2.5 は 128K まで読めるが、KV キャッシュのメモリを抑える（32K で 1 時間ほどの会議の文字起こしが入る）。整形は短い文なので、出力の上限は小さくてよい。端末の CPU・GPU で動くので、Gemini・Claude より長く待つ。
+- 決めたこと: 文脈の長さ（`-c`）は、Gemma 4 E4B・LFM2.5・Qwen3.5 は 32,768、Sarashina2.2 は 8,192（モデルの上限）。出力の上限は、音声入力（整形・英訳・選択の編集・辞書の候補）は 2,048、会議（議事録・会議への質問）は 4,096 で、どちらも文脈の半分を超えない。サンプリングは開発元の推奨にする（Gemma 4: temperature 1.0・top_p 0.95・top_k 64、LFM2.5: temperature 0.1・top_k 50・repetition_penalty 1.05）。Sarashina2.2 は推奨がないので temperature 0.2・top_p 0.95・repetition_penalty 1.05。Qwen3.5-0.8B は考えない使い方の推奨（temperature 1.0・top_p 1.0・top_k 20）にし、推奨の presence_penalty 2.0 は付けない。待つ時間は、音声入力は 1 回 120 秒、会議は 1 回 30 分（モデルの読み込みを含む）。
+- 理由: Gemma 4 と LFM2.5 は 128K まで（Qwen3.5 は 256K まで）読めるが、KV キャッシュのメモリを抑える（32K で 1 時間ほどの会議の文字起こしが入る）。整形は短い文なので、出力の上限は小さくてよい。端末の CPU・GPU で動くので、Gemini・Claude より長く待つ。presence_penalty は一度出た語を避けさせるので、元の言葉をなるべく残す整形には合わない。
 - 決めた場面: ローカル LLM に対応した PR
 - 関係する要件: REQ-COM-030
 - 対象: Mac / Windows
@@ -571,7 +572,7 @@
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LongInputFitter.cs`
 
 ### DEC-COM-066 モデルのライセンスを、選ぶところに出す
-- 決めたこと: 設定でローカルのモデルを選ぶ欄に、モデルごとのライセンス（Apache-2.0・LFM Open License v1.0・MIT）と、ライセンスの文へのリンクを出す。LFM2.5 には「年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されない」と書く。THIRD_PARTY_NOTICES に llama.cpp と 3 つのモデルを書く（モデルはアプリに入れないので、ダウンロードしたときのライセンスに従う）。
+- 決めたこと: 設定でローカルのモデルを選ぶ欄に、モデルごとのライセンス（Apache-2.0・LFM Open License v1.0・MIT）と、ライセンスの文へのリンクを出す。LFM2.5 には「年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されない」と書く。THIRD_PARTY_NOTICES に llama.cpp と 4 つのモデルを書く（モデルはアプリに入れないので、ダウンロードしたときのライセンスに従う）。
 - 理由: LFM Open License v1.0 は、年間売上 1,000 万ドル以上の組織の商用利用を許していない。ダウンロードするのは利用者なので、選ぶときに分かるようにする。
 - 決めた場面: ローカル LLM に対応した PR
 - 関係する要件: REQ-COM-030, REQ-REL-005
@@ -579,13 +580,13 @@
 - 実装の場所: `LocalLLMModel.licenseNote`、`AIChoiceRow`
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
 
-### DEC-COM-067 ローカルを選んだときの既定のモデルは、音声入力は LFM2.5、会議は Gemma 4 E4B
-- 決めたこと: 用途の AI を初めて「ローカル」にしたときのモデルは、音声入力は LFM2.5-1.2B-JP、会議は Gemma 4 E4B。AI の既定（Gemini）は変えない。
-- 理由: 音声入力は待ち時間が短いことを優先し、小さくて日本語の指示に強い LFM2.5（J-MIFEval 79.08）にした。議事録は長い文字起こしをまとめるので、3 つのうちいちばん大きく 128K まで読める Gemma 4 E4B にした。
-- 決めた場面: ローカル LLM に対応した PR
+### DEC-COM-067 Gemma 4 E4B を勧め、ローカルを選んだときの既定のモデルは、音声入力・会議とも Gemma 4 E4B
+- 決めたこと: Gemma 4 E4B（Google）を「おすすめ」とし、選ぶ欄の名前に「・おすすめ」、説明の頭に「おすすめ。」と出す。用途の AI を初めて「ローカル」にしたときのモデルは、音声入力・会議とも Gemma 4 E4B。前に選んで保存してあるモデルは変えない。AI の既定（Gemini）は変えない。
+- 理由: 実機で比べると（docs/verification/dictation.md の 13）、LFM2.5 は整形で言い直しを読み違えて言っていない文を足し、議事録では同じ議題を繰り返してアクションアイテムを出せなかった。Sarashina2.2 は議事録で担当者を取り違え、期限を作った。利用者の評価も「Sarashina などは良くなかった」（2026-11-04）。Gemma 4 E4B だけが整形も議事録も安定していた。整形の待ち時間も 2 回目以降 4 秒ほどで、LFM2.5 の速さを優先するほどの差はない。前は音声入力の既定を、速さを優先して LFM2.5 にしていた。
+- 決めた場面: ローカル LLM に対応した PR。おすすめと既定の変更は、Qwen3.5-0.8B を足した PR
 - 関係する要件: REQ-COM-030
 - 対象: Mac / Windows
-- 実装の場所: `LocalLLMModel.defaultDictation`・`defaultMeeting`
+- 実装の場所: `LocalLLMModel.recommended`・`defaultDictation`・`defaultMeeting`、`LocalModelChoice`
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`
 
 ### DEC-COM-070 Apple の Foundation Models は、CLI の `fm respond` を 1 回ずつ子プロセスで呼ぶ

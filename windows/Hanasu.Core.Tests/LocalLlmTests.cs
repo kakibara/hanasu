@@ -79,7 +79,7 @@ public class LocalLlmTests
     [Fact]
     public void CatalogMatchesTheMacVersion()
     {
-        Assert.Equal(["gemma-4-e4b", "lfm2.5-1.2b-jp", "sarashina2.2-3b"], LocalLlmModel.All.Select(m => m.Id));
+        Assert.Equal(["gemma-4-e4b", "lfm2.5-1.2b-jp", "sarashina2.2-3b", "qwen3.5-0.8b"], LocalLlmModel.All.Select(m => m.Id));
         foreach (var m in LocalLlmModel.All)
         {
             Assert.Matches("^[0-9a-f]{64}$", m.Sha256);
@@ -90,7 +90,9 @@ public class LocalLlmTests
         }
         Assert.Equal(8192, LocalLlmModel.Sarashina22.ContextLength);
         Assert.Contains("1,000 万ドル", LocalLlmModel.Lfm25JP.LicenseNote);
-        Assert.Equal(LocalLlmModel.Lfm25JP, LocalLlmModel.DefaultDictation);
+        Assert.Equal(LocalLlmModel.Gemma4E4B, LocalLlmModel.DefaultDictation);
+        Assert.EndsWith("・おすすめ", LocalLlmModel.Gemma4E4B.Label);
+        Assert.DoesNotContain("おすすめ", LocalLlmModel.Qwen35Small.Label);
         Assert.Equal(LocalLlmModel.Gemma4E4B, LocalLlmModel.DefaultMeeting);
     }
 
