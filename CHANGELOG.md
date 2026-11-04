@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.6.0](https://github.com/kakibara/hanasu/compare/v1.5.0...v1.6.0) - 2026-11-04
+
+- 初回起動のオンボーディングと既定の AI の選択を足す by @kakibara in https://github.com/kakibara/hanasu/pull/53
+- 録音中の HUD に、どのエンジンでもマイクの音量を出す by @kakibara in https://github.com/kakibara/hanasu/pull/54
+- PR をマージする前に不具合がないことを確かめるスキルを足す by @kakibara in https://github.com/kakibara/hanasu/pull/52
+- 貼り付けが届かなかったときは、最新の結果をクリップボードに残す by @kakibara in https://github.com/kakibara/hanasu/pull/56
+- README を今の実装に合わせ、ローカルのモデルに Qwen3.5-4B を足し、Gemma 4 E4B を勧める by @kakibara in https://github.com/kakibara/hanasu/pull/57
+- README に、貼り付けが届かなかったときの扱いを足す by @kakibara in https://github.com/kakibara/hanasu/pull/58
+- Mac の既定の AI をローカルの Gemma にし、モデルがないときはダウンロードを尋ねる by @kakibara in https://github.com/kakibara/hanasu/pull/59
+
 ## [v1.5.0](https://github.com/kakibara/hanasu/compare/v1.4.1...v1.5.0) - 2026-11-04
 
 - 文字起こしの言語の選択と、整形の出力の言語の設定を追加する by @kakibara in https://github.com/kakibara/hanasu/pull/43
