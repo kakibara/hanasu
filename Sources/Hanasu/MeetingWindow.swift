@@ -250,9 +250,19 @@ struct MeetingDetailView: View {
     @ObservedObject var recorder: MeetingRecorder
     /// 検索結果から開いたときの飛び先（その位置までスクロールし、検索語に色を付ける）
     var jump: MeetingJump?
-    @State private var tab = 0
+    @State private var tab: Int
     @State private var title = ""
     @State private var editingSpeakers = false
+    /// 「ここ重要」タブから「文字起こしで見る」で開いた発言
+    @State private var focusedFromHighlight: UUID?
+
+    /// initialTab は確認用の描き出し（CLI）で、最初に開くタブを決めるため（0 議事録・1 文字起こし・2 メモ・3 ここ重要）
+    init(meeting: Meeting, recorder: MeetingRecorder, jump: MeetingJump? = nil, initialTab: Int = 0) {
+        self.meeting = meeting
+        self.recorder = recorder
+        self.jump = jump
+        _tab = State(initialValue: initialTab)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -288,10 +298,11 @@ struct MeetingDetailView: View {
                         Text("議事録").tag(0)
                         Text("文字起こし").tag(1)
                         Text("メモ").tag(2)
+                        Text("ここ重要").tag(3)
                     }
                     .pickerStyle(.segmented)
                     .labelsHidden()
-                    .frame(width: 300)
+                    .frame(width: 400)
                     Spacer()
                     MinutesTemplateMenu(meeting: meeting, recorder: recorder)
                 }
@@ -311,12 +322,23 @@ struct MeetingDetailView: View {
                                     Text(meeting.status == .processing ? "議事録を作成中です…" : "議事録はありません。")
                                         .foregroundStyle(.secondary)
                                 }
+                            } else if tab == 3 {
+                                HighlightContextsView(meeting: meeting) { blockID in
+                                    // 文字起こしのタブで、その発言の位置を開く
+                                    focusedFromHighlight = blockID
+                                    tab = 1
+                                    Task { @MainActor in
+                                        try? await Task.sleep(for: .milliseconds(80))  // タブの中身ができてから
+                                        withAnimation { proxy.scrollTo(blockID, anchor: .center) }
+                                    }
+                                }
                             } else {
                                 LazyVStack(alignment: .leading, spacing: 10) {
                                     ForEach(meeting.mergedBlocks()) { block in
                                         TranscriptLine(time: block.start, speaker: meeting.displayName(for: block.speaker),
                                                        color: Self.color(for: block.speaker, in: meeting), text: block.text,
-                                                       highlight: jump?.terms ?? [], focused: block.id == focusedBlockID)
+                                                       highlight: jump?.terms ?? [],
+                                                       focused: block.id == focusedBlockID || block.id == focusedFromHighlight)
                                             .id(block.id)
                                     }
                                 }
@@ -332,10 +354,13 @@ struct MeetingDetailView: View {
             }
         }
         .onAppear { title = meeting.title }
-        .onChange(of: meeting.id) { title = meeting.title }
+        .onChange(of: meeting.id) {
+            title = meeting.title
+            focusedFromHighlight = nil
+        }
         // 「メモ」タブを開いているときに検索の結果を選んだら、飛び先のタブに切り替える（表示されたらスクロールする）
         .onChange(of: jump) { _, newJump in
-            guard tab == 2, let location = newJump?.location else { return }
+            guard tab == 2 || tab == 3, let location = newJump?.location else { return }
             switch location {
             case .title: break
             case .minutes: tab = 0
@@ -382,6 +407,49 @@ struct MeetingDetailView: View {
         let palette: [Color] = [.orange, .green, .purple, .pink, .teal, .brown, .indigo, .mint]
         let index = meeting.speakers.filter { $0 != "me" }.firstIndex(of: speaker) ?? 0
         return palette[index % palette.count]
+    }
+}
+
+// 要件: REQ-MTG-012
+// 設計判断: DEC-MTG-049
+/// 会議ノートの「ここ重要」タブ: 印ごとに、前後の発言（30 秒前〜15 秒後）をまとめて出す。
+/// 「文字起こしで見る」で、文字起こしのタブのその位置へ移る
+private struct HighlightContextsView: View {
+    let meeting: Meeting
+    var openInTranscript: (UUID) -> Void
+
+    var body: some View {
+        let contexts = meeting.highlightContexts()
+        LazyVStack(alignment: .leading, spacing: 18) {
+            if contexts.isEmpty {
+                Text("「ここ重要」の印はありません。記録中に「★ ここ重要」かショートカットで付けると、ここに前後の会話をまとめて出します。")
+                    .foregroundStyle(.secondary)
+            }
+            ForEach(contexts, id: \.note.id) { context in
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "star.fill").foregroundStyle(.yellow)
+                        Text(context.note.time.map(Meeting.clock) ?? "--:--")
+                            .font(.system(.body, design: .monospaced))
+                        Text(context.note.text.isEmpty ? "ここ重要" : context.note.text).fontWeight(.semibold)
+                        Spacer()
+                        if let first = context.blocks.first {
+                            Button("文字起こしで見る") { openInTranscript(first.id) }
+                                .controlSize(.small)
+                        }
+                    }
+                    if context.blocks.isEmpty {
+                        Text("この前後（30 秒前〜15 秒後）の発言はありません").font(.callout).foregroundStyle(.secondary)
+                    }
+                    ForEach(context.blocks) { block in
+                        TranscriptLine(time: block.start, speaker: meeting.displayName(for: block.speaker),
+                                       color: MeetingDetailView.color(for: block.speaker, in: meeting), text: block.text)
+                    }
+                }
+                .padding(12)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.yellow.opacity(0.08)))
+            }
+        }
     }
 }
 

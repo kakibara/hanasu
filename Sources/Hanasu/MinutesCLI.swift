@@ -185,6 +185,32 @@ enum MinutesCLI {
             .frame(width: 600, height: 640)
             .defaultAppStorage(defaults)
         try render(detail, to: dir.appendingPathComponent("detail.png"))
+        // 「メモ」タブ（長いメモでも、上のタブの切り替えが見えたままか）
+        var noted = meeting
+        noted.notes = (0..<60).map { i in
+            MeetingNote(kind: i % 7 == 3 ? .highlight : .note, time: Double(i * 40), text: i % 7 == 3 ? "" : "メモ \(i + 1)")
+        }
+        let notesTab = MeetingDetailView(meeting: noted, recorder: recorder, initialTab: 2)
+            .frame(width: 600, height: 640)
+            .defaultAppStorage(defaults)
+        try render(notesTab, to: dir.appendingPathComponent("detail-notes.png"))
+        checkWindowHeight(meeting: noted, recorder: recorder)
+        // 「ここ重要」タブ（印の前後の発言）
+        var marked = meeting
+        let times = marked.mergedBlocks().map(\.start)
+        if let first = times.first, let last = times.last {
+            marked.notes = [
+                MeetingNote(kind: .highlight, time: times[min(2, times.count - 1)] + 5, text: "価格の条件"),
+                MeetingNote(kind: .note, time: first, text: "メモは出さない"),
+                MeetingNote(kind: .highlight, time: last + 3, text: ""),
+            ]
+        }
+        print("ここ重要の前後: " + marked.highlightContexts().map { "\(Meeting.clock($0.note.time ?? 0)) の前後 \($0.blocks.count) 発言" }
+            .joined(separator: " / "))
+        let highlightsTab = MeetingDetailView(meeting: marked, recorder: recorder, initialTab: 3)
+            .frame(width: 600, height: 640)
+            .defaultAppStorage(defaults)
+        try render(highlightsTab, to: dir.appendingPathComponent("detail-highlights.png"))
 
         let reminders = ReminderExportSheet(meeting: meeting, recorder: recorder)
         try render(reminders, to: dir.appendingPathComponent("reminders-sheet.png"))
@@ -192,6 +218,20 @@ enum MinutesCLI {
         let custom = CustomMinutesPromptSheet(prompt: MinutesTemplateStore.defaultCustomPrompt, actionLabel: "作り直す") { _ in }
         try render(custom, to: dir.appendingPathComponent("custom-prompt-sheet.png"))
         print("wrote: \(dir.path)")
+    }
+
+    // 確かめ方: REQ-MTG-007
+    /// 会議ノートのウインドウで「メモ」タブを開いても、ウインドウが縦に伸びない（タイトルとタブが画面の外に出ない）か
+    private static func checkWindowHeight(meeting: Meeting, recorder: MeetingRecorder) {
+        for tab in [0, 1, 2] {
+            let window = AppDelegate.makeMeetingWindow(
+                rootView: MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: tab))
+            window.orderBack(nil)
+            RunLoop.main.run(until: Date().addingTimeInterval(0.4))
+            let height = window.frame.height
+            print("会議ノートのウインドウの高さ（タブ \(tab)）: \(Int(height))（開いたときは \(Int(AppDelegate.meetingWindowSize.height)) 前後）")
+            window.close()
+        }
     }
 
     private static func render(_ view: some View, to url: URL) throws {

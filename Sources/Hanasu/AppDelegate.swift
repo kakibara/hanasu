@@ -229,13 +229,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         meetingRecorder.toggle()
     }
 
+    static let meetingWindowSize = NSSize(width: 980, height: 640)
+    /// MeetingWindowView の .frame(minWidth: 900, minHeight: 520) と同じ
+    static let meetingWindowMinSize = NSSize(width: 900, height: 520)
+
+    // 要件: REQ-MTG-007
+    // 設計判断: DEC-MTG-048
+    /// 会議ノートのウインドウ（確認用の CLI でも同じものを作る）
+    static func makeMeetingWindow(rootView: some View) -> NSWindow {
+        let hosting = NSHostingController(rootView: rootView)
+        // ウインドウの大きさを中身に合わせない（最小の大きさは下の contentMinSize で決める）。
+        // 合わせると、「メモ」タブのテキスト欄がメモの行数ぶんの高さを最小として求め、ウインドウが画面より縦に伸びて、
+        // タイトルとタブの切り替えが画面の外に出て、議事録・文字起こしに戻れなくなっていた
+        hosting.sizingOptions = []
+        let window = NSWindow(contentViewController: hosting)
+        window.title = "Hanasu 会議ノート"
+        window.styleMask = [.titled, .closable, .resizable, .miniaturizable]
+        window.contentMinSize = meetingWindowMinSize
+        window.setContentSize(meetingWindowSize)
+        window.isReleasedWhenClosed = false
+        return window
+    }
+
     @objc private func openMeetingWindow() {
         if meetingWindow == nil {
-            let window = NSWindow(contentViewController: NSHostingController(rootView: MeetingWindowView(recorder: meetingRecorder)))
-            window.title = "Hanasu 会議ノート"
-            window.styleMask = [.titled, .closable, .resizable, .miniaturizable]
-            window.setContentSize(NSSize(width: 980, height: 640))
-            window.isReleasedWhenClosed = false
+            let window = Self.makeMeetingWindow(rootView: MeetingWindowView(recorder: meetingRecorder))
             window.setFrameAutosaveName("HanasuMeetingWindow")
             window.center()
             meetingWindow = window
