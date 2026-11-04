@@ -34,6 +34,8 @@ final class MeetingRecorder: ObservableObject {
     @Published private(set) var warnings: [String] = []
     /// 記録中の会議を、記録のあとにまとめて文字起こしするエンジン（Whisper / Gemini）。nil なら Mac 標準のライブ文字起こし
     @Published private(set) var batchEngine: TranscriptionEngine?
+    /// 議事録を作り直している会議（その間は削除させない。DEC-MTG-023）
+    @Published private(set) var regeneratingID: String?
 
     var onStateChange: ((State) -> Void)?
     var diarizer: SpeakerDiarizer = FluidAudioDiarizer()
@@ -314,6 +316,8 @@ final class MeetingRecorder: ObservableObject {
     func regenerateMinutes(_ meeting: Meeting, template: MinutesTemplate? = nil, customPrompt: String? = nil) async {
         guard state == .idle else { return }
         setState(.processing("議事録を作り直しています…"))
+        regeneratingID = meeting.id
+        defer { regeneratingID = nil }
         var updated = meeting
         do {
             let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
@@ -350,6 +354,25 @@ final class MeetingRecorder: ObservableObject {
 
     func reloadMeetings() {
         meetings = MeetingStore.loadAll()
+    }
+
+    // MARK: - 削除
+
+    // 要件: REQ-MTG-028
+    // 設計判断: DEC-MTG-023
+    /// 消してよい会議か。記録中・処理中の会議と、議事録を作り直している会議は消さない
+    func canDelete(_ meeting: Meeting) -> Bool {
+        meeting.id != current?.id && meeting.id != regeneratingID
+    }
+
+    // 要件: REQ-MTG-028
+    // 設計判断: DEC-MTG-022
+    /// 会議のフォルダをゴミ箱に移し、一覧から外す
+    func delete(_ meeting: Meeting) throws {
+        guard canDelete(meeting) else { return }
+        try MeetingStore.moveToTrash(meeting)
+        appLog.notice("meeting moved to trash: \(meeting.id, privacy: .private)")
+        reloadMeetings()
     }
 
     // MARK: - メモと「ここ重要」の印（MeetingNotes.swift）
@@ -435,7 +458,13 @@ final class MeetingRecorder: ObservableObject {
 
     // MARK: - Private
 
+    // 設計判断: DEC-MTG-023
+    /// 会議を書き換えて保存する。フォルダがもうない（消した）会議は保存し直さない
     private func update(_ meeting: Meeting, _ change: (inout Meeting) -> Void) {
+        guard MeetingStore.exists(meeting) else {
+            reloadMeetings()
+            return
+        }
         var updated = meeting
         change(&updated)
         try? MeetingStore.save(updated)
