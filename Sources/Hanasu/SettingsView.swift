@@ -73,6 +73,15 @@ private struct GeneralTab: View {
             // 要件: REQ-DIC-013
             // 翻訳する言語（TranslationSettingsView.swift）
             TranslationSettingsSection(languages: $settings.translationLanguages)
+            // 要件: REQ-DIC-140
+            Section {
+                DictationMicrophonePicker(settings: settings)
+            } header: {
+                Text("マイク")
+            } footer: {
+                Text("音声入力と「選択を声で編集」で使うマイク。録音中の画面（HUD）のマイクのボタンからも切り替えられます。会議の記録のマイクは「会議」タブで選びます。")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
             // 音声入力と会議の記録の文字起こしのエンジン（TranscriptionEngineSettingsView.swift）
             TranscriptionEngineSettingsSection(settings: settings)
             // 入力できる場所がないときのクリップボードの扱い（PasteFallbackPanel.swift）

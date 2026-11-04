@@ -68,6 +68,7 @@ final class DictationController {
         }
         hud.model.onStop = { [weak self] in self?.stopFromHUD() }
         hud.model.onCancel = { [weak self] in self?.cancelDictation() }
+        hud.model.onSelectMicrophone = { [weak self] uid in self?.selectMicrophone(uid) }
         settings.$hotKey
             .removeDuplicates()
             .sink { [weak self] combo in self?.registerHotKey(combo, translating: false) }
@@ -152,6 +153,23 @@ final class DictationController {
     /// 翻訳して入力するときの言語。メニューから始めるとき用（ショートカットと同じく、選んだ言語のうち最初）
     var primaryTranslateMode: Mode { .translate(settings.primaryTranslationLanguage) }
 
+    // 要件: REQ-DIC-140
+    // 設計判断: DEC-DIC-141
+    /// HUD でマイクを選んだとき。次の録音でも使うよう設定に残し、録音中ならそのマイクに切り替える
+    func selectMicrophone(_ uid: String) {
+        settings.dictationInputDeviceUID = uid
+        guard state == .recording else { return }
+        do {
+            try recognizer.switchInput(to: uid)
+        } catch {
+            state = .processing  // 取り消しの間に止める操作が来ても、入力に進まないように
+            Task {
+                await recognizer.cancel()
+                fail("マイクを切り替えられませんでした: \(error.localizedDescription)")
+            }
+        }
+    }
+
     // 要件: REQ-DIC-012
     // 設計判断: DEC-DIC-026
     /// HUD の「停止」。ショートカットをもう一度押したときと同じく、録音を止めて入力する
@@ -206,7 +224,8 @@ final class DictationController {
                     engine: settings.engine,
                     contextualStrings: settings.userDictionary.contextualStrings + SnippetStore.shared.triggerPhrases,
                     audioFileURL: pendingAudioURL,
-                    transcription: settings.dictationEngine)
+                    transcription: settings.dictationEngine,
+                    inputDeviceUID: settings.dictationInputDeviceUID)
             } catch {
                 fail(error.localizedDescription)
                 return
