@@ -315,8 +315,8 @@ public sealed class MeetingController
         var result = await MeetingProcessor.MakeMinutesAsync(draft, client, settings.MinutesModel, cancellationToken).ConfigureAwait(false);
         meeting.MinutesTemplateId = draft.MinutesTemplateId;
         meeting.CustomMinutesPrompt = draft.CustomMinutesPrompt;
-        meeting.Minutes = result.Markdown;
-        meeting.ActionItems = result.ActionItems;
+        // 要件: REQ-MTG-027
+        meeting.ApplyMinutes(result);
         if (meeting.ErrorMessage?.StartsWith("議事録を作れませんでした", StringComparison.Ordinal) == true
             || meeting.ErrorMessage?.StartsWith("Gemini の認証情報", StringComparison.Ordinal) == true
             || meeting.ErrorMessage?.StartsWith("Claude の認証情報", StringComparison.Ordinal) == true)

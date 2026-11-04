@@ -257,6 +257,36 @@ public sealed class Meeting
     /// 音声を文字起こしし直すときに使う。Mac 版は知らないキーを読み飛ばすので、互換性は崩れない
     /// </summary>
     public Dictionary<string, double>? AudioStartOffsets { get; set; }
+    /// <summary>会話から推測して名前を付けた話者キー（SpeakerNameInference）。ユーザーが直すと外す。古い会議にはないので省略可（Mac 版と同じキー）</summary>
+    // 設計判断: DEC-MTG-069
+    public List<string>? InferredSpeakers { get; set; }
+
+    /// <summary>議事録の結果を入れる。応答で分かった話者の名前も、名前のない話者に付ける</summary>
+    // 要件: REQ-MTG-027
+    public void ApplyMinutes(MinutesResult result)
+    {
+        var (minutes, _) = SpeakerNameInference.Apply(result.SpeakerNames, this, result);
+        Minutes = minutes.Markdown;
+        ActionItems = minutes.ActionItems;
+    }
+
+    /// <summary>話者名を手で付け替える。推測で付けた名前を直したら（消したときも）、推測の印を外す。変わったら true</summary>
+    // 要件: REQ-MTG-008
+    // 設計判断: DEC-MTG-069
+    public bool RenameSpeaker(string speaker, string name)
+    {
+        var next = name.Trim();
+        if (SpeakerNames.GetValueOrDefault(speaker, "") == next) return false;
+        if (next.Length == 0) SpeakerNames.Remove(speaker);
+        else SpeakerNames[speaker] = next;
+        InferredSpeakers?.Remove(speaker);
+        if (InferredSpeakers is { Count: 0 }) InferredSpeakers = null;
+        return true;
+    }
+
+    /// <summary>会話から推測して付けた名前か</summary>
+    public bool IsInferredName(string speaker) =>
+        InferredSpeakers?.Contains(speaker) == true && SpeakerNames.GetValueOrDefault(speaker, "").Length > 0;
 
     public string DisplayName(string speaker)
     {

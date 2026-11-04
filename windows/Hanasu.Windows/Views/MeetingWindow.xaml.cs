@@ -148,7 +148,16 @@ public partial class MeetingWindow : Window
         foreach (var speaker in speakers)
         {
             var defaultName = new Meeting().DisplayName(speaker);
-            var box = new TextBox { Width = 120, Padding = new Thickness(4, 2, 4, 2), Text = m.DisplayName(speaker), ToolTip = $"{defaultName} の名前" };
+            // 要件: REQ-MTG-027
+            // 設計判断: DEC-MTG-069
+            var inferred = m.IsInferredName(speaker);
+            var box = new TextBox
+            {
+                Width = 120,
+                Padding = new Thickness(4, 2, 4, 2),
+                Text = m.DisplayName(speaker),
+                ToolTip = inferred ? $"{defaultName} の名前（会話から推測しました。違っていたら直してください）" : $"{defaultName} の名前",
+            };
             box.LostFocus += (_, _) => RenameSpeaker(m, speaker, box.Text.Trim(), defaultName);
             box.KeyDown += (_, e) =>
             {
@@ -157,20 +166,22 @@ public partial class MeetingWindow : Window
             var panel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 2, 12, 2) };
             panel.Children.Add(new TextBlock { Text = defaultName + ":", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 4, 0), FontSize = 12 });
             panel.Children.Add(box);
+            if (inferred)
+            {
+                panel.Children.Add(new TextBlock { Text = "推測", Foreground = System.Windows.Media.Brushes.DarkOrange, FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 0, 0) });
+            }
             SpeakersPanel.Children.Add(panel);
         }
     }
 
     private void RenameSpeaker(Meeting m, string speaker, string name, string defaultName)
     {
-        var current = m.SpeakerNames.GetValueOrDefault(speaker, "");
-        var next = name == defaultName ? "" : name;
-        if (current == next) return;
-        if (next.Length == 0) m.SpeakerNames.Remove(speaker);
-        else m.SpeakerNames[speaker] = next;
+        if (!m.RenameSpeaker(speaker, name == defaultName ? "" : name)) return;
         SaveSelected(m, "話者名を保存しました");
         TranscriptBox.Text = m.TranscriptMarkdown();
         HighlightsBox.Text = m.HighlightContextText();
+        // 推測の印を外したので、欄を作り直す
+        BuildSpeakerEditors(m);
     }
 
     private void OnTitleChanged(object sender, RoutedEventArgs e)

@@ -12,7 +12,7 @@ import SwiftUI
 //   Hanasu --render-minutes-ui <出力フォルダ> [--meeting-json <meeting.json>]
 //     議事録の型の選択欄・会議ノートの詳細・リマインダー登録・カスタムの指示の画面を PNG にする（見た目の確認用）。
 // --meeting-files にも --template / --custom-prompt を付けられる。
-// 確かめ方: REQ-MTG-006, REQ-MTG-007, REQ-MTG-017, REQ-MTG-018, REQ-MTG-019
+// 確かめ方: REQ-MTG-006, REQ-MTG-007, REQ-MTG-017, REQ-MTG-018, REQ-MTG-019, REQ-MTG-027
 @MainActor
 enum MinutesCLI {
     static func runIfRequested(_ args: [String] = CommandLine.arguments) {
@@ -82,10 +82,13 @@ enum MinutesCLI {
         let started = Date()
         let client = try TextAIClient.cli(args: args, settings: settings, for: .meeting, timeout: 300)
         let result = try await MeetingProcessor.makeMinutes(for: meeting, client: client, model: model)
-        meeting.minutes = result.markdown
-        meeting.actionItems = result.actionItems
+        meeting.applyMinutes(result)
         print(String(format: "[議事録 %@ 型=%@ %.1fs 発言 %d 件]", model, meeting.template.title,
                      Date().timeIntervalSince(started), meeting.utterances.count))
+        // 要件: REQ-MTG-027
+        let inferred = (meeting.inferredSpeakers ?? []).map { "\($0)=\(meeting.speakerNames[$0] ?? "")" }
+        print("[推測した話者の名前] 応答: \(result.speakerNames.isEmpty ? "なし" : result.speakerNames.sorted { $0.key < $1.key }.map { "\($0.key)=\($0.value)" }.joined(separator: ", "))"
+              + " / 付けた: \(inferred.isEmpty ? "なし" : inferred.joined(separator: ", "))")
         printExports(meeting)
         if let out = value(after: "--save-json", in: args) {
             let encoder = JSONEncoder()

@@ -79,8 +79,8 @@
 - 受け入れ条件: 会議ノートで話者名を変えると、文字起こしと議事録の表示がその名前になり、保存される。
 - 出典: 初版の要件定義 F8（あると良い）
 - 対象: Mac / Windows
-- 実装の場所: `MeetingRecorder.renameSpeaker`、`Meeting.displayName`
-- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 実装の場所: `MeetingRecorder.renameSpeaker`・`renameSpeakers`（話者名のシートで変えた話者をまとめて保存する）、`Meeting.renameSpeaker`、`Meeting.displayName`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`Meeting.RenameSpeaker`）
 - 確かめ方: 実機で確かめる
 
 ### REQ-MTG-009 会議アプリがマイクを使い始めたら、記録するかを聞く（F9）
@@ -247,6 +247,19 @@
 - 確かめ方: 実機で確かめる
 - 食い違い（ユーザーの確認待ち）: 会議の記録中に音声入力を使うと、その間のアイコンは音声入力の状態（録音中なら赤い `mic.fill`）になり、会議の記録中の印（`record.circle.fill`）は音声入力が終わるまで出ない（DEC-DIC-017）。どちらも赤いが、「常に表示」と言えるかを確かめる
 
+### REQ-MTG-027 会話の内容から話者の名前を推測して付ける
+- 内容: 議事録を作るときに、会話の内容（名乗り・自己紹介・名前での呼びかけに本人が応じた、など）から名前がはっきり分かる話者に、その名前を付ける。付けた名前は「推測」と分かるように出し、あとから直せる（REQ-MTG-008）。
+- 受け入れ条件:
+  - 相手が「田中です」と名乗ったり、「田中さん、どうですか」に答えたりした会議の記録を止めると、議事録ができたときに、その話者が文字起こし・議事録・アクションアイテムの担当で「田中」と表示される。
+  - 会話から分からない話者は「話者1」などのまま。「自分」には名前を付けない。ユーザーが付けた名前は変えない。
+  - 会議ノートの話者名の欄に「推測」と出る。名前を直すと「推測」が消える。
+  - 議事録を作り直すと、まだ名前のない話者だけを推測し直す。
+- 出典: ユーザーの依頼（2026-11-04「会議の会話内容から話者の名前を推測して名前をつけるようにしてください」）
+- 対象: Mac / Windows
+- 実装の場所: `MinutesPrompt.speakerNamesInstruction`、`SpeakerNameInference`、`Meeting.applyMinutes`、`SpeakerNamesSheet`
+- Windows の実装: `windows/Hanasu.Core/Meetings/SpeakerNameInference.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`（`MinutesPrompt.SpeakerNamesInstruction`）、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`Meeting.ApplyMinutes`・`RenameSpeaker`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-speaker-names`（読み取り・名前の検査・当てはめ・置き換え・meeting.json）、`--minutes-from-transcript <文字起こし.txt>`（実際の AI で推測した名前を表示）。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~SpeakerNameInference"`。会議ノートの「推測」の表示は実機で確かめる
+
 ### REQ-MTG-030 会議ツールの画面・映像は記録しない（対象外）
 - 内容: 会議ツールの画面・映像は記録しない。
 - 受け入れ条件: 画面収録の許可を求めず、映像のファイルを作らない。
@@ -267,10 +280,10 @@
 - コードのタグ: 不要（やらないことの要件）
 - 確かめ方: 該当する機能がないこと
 
-### REQ-MTG-032 参加者の名前は自動では取らない（対象外）
-- 内容: 会議ツールの参加者一覧を読んで名前を取ることはしない。話者名は推定（議事録の「話者についてのメモ」）と、手での付け替え（REQ-MTG-008）だけ。
-- 受け入れ条件: 話者は「話者1」などのまま保存され、自動では名前に変わらない。
-- 出典: 初版の「対象外（今回はやらない）」
+### REQ-MTG-032 会議ツールの参加者一覧から名前は取らない（対象外）
+- 内容: 会議ツールの参加者一覧（画面やAPI）を読んで名前を取ることはしない。話者名は、会話の内容からの推測（REQ-MTG-027）と、手での付け替え（REQ-MTG-008）だけ。
+- 受け入れ条件: 会議ツールの画面や API から参加者の名前を読まない。会話から名前が分からない話者は「話者1」などのまま保存される。
+- 出典: 初版の「対象外（今回はやらない）」。ユーザーの依頼（2026-11-04「会議の会話内容から話者の名前を推測して名前をつけるようにしてください」）で、会話からの推測で名前を付けるようにしたので、「自動では名前に変わらない」を外した
 - 対象: Mac / Windows
 - 実装の場所: なし
 - Windows の実装: なし
@@ -396,7 +409,7 @@
 - 実装の場所: `MeetingProcessor.removeEcho`
 
 ### DEC-MTG-014 議事録のモデルと、出力の構成
-- 決めたこと: 議事録のモデルの初期値は `gemini-3.8-flash`。音声入力と同じ `GeminiClient` と認証を使う。出力は概要・話題ごとの要点・決定事項・アクションアイテム・話者名の推定（推定であることを明記し、自動では書き換えない）。
+- 決めたこと: 議事録のモデルの初期値は `gemini-3.8-flash`。音声入力と同じ `GeminiClient` と認証を使う。出力は概要・話題ごとの要点・決定事項・アクションアイテム・話者についてのメモ（推定であることを明記する）。会話から名前がはっきり分かる話者には、同じ応答で名前も受け取って付ける（REQ-MTG-027、DEC-MTG-068）。
 - 理由: 音声入力と違って待ち時間が問題になりにくいので、要約の質を優先する。1 時間の文字起こし（数万文字）も入力の上限に収まる。
 - 決めた場面: 初版（a787da8）
 - 関係する要件: REQ-MTG-006
@@ -686,6 +699,24 @@
 - 関係する要件: REQ-MTG-019
 - 対象: Mac
 - 実装の場所: `ReminderExporter`、`ReminderExportSheet`
+
+### DEC-MTG-068 話者の名前は、議事録と同じ 1 回の呼び出しで、末尾の <speaker_names> の JSON で受け取る
+- 決めたこと: 議事録の指示（`MinutesPrompt`）の最後に、名前の付いていない話者（「話者N」「同席者N」「相手」）のうち会話から名前がはっきり分かるものだけを `<speaker_names>{"話者1": "田中"}</speaker_names>` で出させる指示を足す。名乗った・自己紹介した・名前で呼びかけられて本人が応じた、などはっきり分かるときだけで、敬称は付けさせない。「自分」は入れさせない。応答を読むときは、`<speaker_names>` を `<action_items>` より先に取り出して本文から消す（壊れていたら名前は付けず、議事録はそのまま使う）。Windows 版は文字起こしとメモの中の `<speaker_names>` も無害にする（DEC-COM-142）。
+- 理由: 議事録を作るときに文字起こし全体を読ませているので、呼び出しを増やさずに済み、料金もローカル LLM の待ち時間も増えない。アクションアイテム（DEC-MTG-062）と同じ形にすると、読み取りの作りをそろえられる。議事録を作らない設定（DEC-MTG-015）では名前も付かないが、名前は議事録の材料と同じ読み取りから出るので、別の呼び出しは作らなかった。
+- 決めた場面: 話者の名前を推測して付ける PR
+- 関係する要件: REQ-MTG-027
+- 対象: Mac / Windows
+- 実装の場所: `MinutesPrompt.speakerNamesInstruction`、`MinutesPrompt.parse`、`SpeakerNameInference.extract`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`（`SpeakerNamesInstruction`・`Parse`）、`windows/Hanasu.Core/Meetings/SpeakerNameInference.cs`（`Extract`）、`windows/Hanasu.Core/Ai/PromptText.cs`
+
+### DEC-MTG-069 推測した名前は、名前のない話者にだけ付け、議事録のラベルも置き換え、推測の印を残す
+- 決めたこと: 応答のラベル（「話者1」など）を、まだ名前のない話者キー（「自分」を除く）に戻して名前を付ける。ユーザーが付けた名前と、前に付けた名前は変えない。名前は前後の空白と末尾の敬称（さん・様・さま・くん・君・ちゃん・氏）を外し、1〜20 文字で、改行・制御文字がなく、「自分」「相手」「話者N」「同席者N」「不明」などそのものでないものだけを使う。同じ名前が 2 人に付くのは許す。付けた話者キーを `meeting.json` の `inferredSpeakers`（省略可。Mac 版と Windows 版で同じキー）に入れ、話者名の画面で「推測」と出す。ユーザーが名前を直すか消すと印を外す。議事録の本文とアクションアイテムの担当の中のラベルも名前に置き換える（「話者1」は後ろに数字が続くとき置き換えない）。「相手」はふつうの言葉でもあるので、本文は置き換えず、担当がちょうど「相手」のときだけ置き換える。
+- 理由: ユーザーが直した名前を AI で上書きしない。議事録は作った時点の名前で書く作り（REQ-MTG-008 の「作り直すと反映」）なので、作った直後から文字起こしと議事録の名前をそろえる。推測は間違えうるので、印を残して直しやすくする。話者分離は 1 人を 2 つに分けることがあるので、同じ名前を許す。Mac 版の話者名の画面は、1 人ずつ保存すると元の会議から書き直して前の変更が消えるので、まとめて保存する（`MeetingRecorder.renameSpeakers`）。
+- 決めた場面: 話者の名前を推測して付ける PR
+- 関係する要件: REQ-MTG-027, REQ-MTG-008
+- 対象: Mac / Windows
+- 実装の場所: `SpeakerNameInference.apply`・`cleanName`・`replaceLabel`、`Meeting.renameSpeaker`・`isInferredName`、`SpeakerNamesSheet`
+- Windows の実装: `windows/Hanasu.Core/Meetings/SpeakerNameInference.cs`（`Apply`・`CleanName`・`ReplaceLabel`）、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`InferredSpeakers`・`RenameSpeaker`・`IsInferredName`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。

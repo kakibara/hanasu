@@ -265,8 +265,8 @@ final class MeetingRecorder: ObservableObject {
                 let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
                 let result = try await MeetingProcessor.makeMinutes(
                     for: meeting, client: client, model: settings.textModel(for: .meeting))
-                meeting.minutes = result.markdown
-                meeting.actionItems = result.actionItems
+                // 要件: REQ-MTG-027
+                meeting.applyMinutes(result)
             } catch {
                 let message = "議事録を作れませんでした: \(error.localizedDescription)"
                 meeting.errorMessage = meeting.errorMessage.map { $0 + "\n" + message } ?? message
@@ -296,7 +296,16 @@ final class MeetingRecorder: ObservableObject {
 
     // 要件: REQ-MTG-008
     func renameSpeaker(_ meeting: Meeting, speaker: String, to name: String) {
-        update(meeting) { $0.speakerNames[speaker] = name }
+        update(meeting) { $0.renameSpeaker(speaker, to: name) }
+    }
+
+    // 要件: REQ-MTG-008
+    /// 複数の話者名を 1 回で付け替える（1 人ずつ保存すると、元の会議から書き直すので前の変更が消える）
+    func renameSpeakers(_ meeting: Meeting, names: [String: String]) {
+        guard !names.isEmpty else { return }
+        update(meeting) { m in
+            for (speaker, name) in names { m.renameSpeaker(speaker, to: name) }
+        }
     }
 
     // 要件: REQ-MTG-013
@@ -317,8 +326,8 @@ final class MeetingRecorder: ObservableObject {
                 for: source, client: client, model: settings.textModel(for: .meeting))
             updated.minutesTemplate = source.minutesTemplate
             updated.customMinutesPrompt = source.customMinutesPrompt
-            updated.minutes = result.markdown
-            updated.actionItems = result.actionItems
+            // 要件: REQ-MTG-027
+            updated.applyMinutes(result)
             updated.errorMessage = nil
         } catch {
             updated.errorMessage = "議事録を作れませんでした: \(error.localizedDescription)"

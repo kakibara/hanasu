@@ -191,7 +191,11 @@ public static class MinutesTemplates
 }
 
 /// <summary>議事録の作成結果</summary>
-public sealed record MinutesResult(string Markdown, List<ActionItem> ActionItems);
+public sealed record MinutesResult(string Markdown, List<ActionItem> ActionItems)
+{
+    /// <summary>応答の &lt;speaker_names&gt; で分かった話者の名前（表示ラベル「話者1」など → 名前）。当てはめは SpeakerNameInference</summary>
+    public Dictionary<string, string> SpeakerNames { get; init; } = new();
+}
 
 /// <summary>議事録のプロンプトの組み立てと、応答の読み取り。Mac 版 MinutesPrompt と同じ（両方を直す）</summary>
 public static class MinutesPrompt
@@ -260,8 +264,23 @@ public static class MinutesPrompt
             - due_note: 期限について話された言い方（「来週中」「次回の定例まで」など）。話されていなければ null
             アクションアイテムがなければ [] を出力してください。<action_items> の外に説明は書かないでください。
             """);
+        parts.Add(SpeakerNamesInstruction);
         return string.Join("\n\n", parts);
     }
+
+    /// <summary>話者の名前を &lt;speaker_names&gt; で出させる指示（Mac 版 MinutesPrompt.speakerNamesInstruction と同じ文面。両方を直す）</summary>
+    // 要件: REQ-MTG-027
+    // 設計判断: DEC-MTG-068
+    public const string SpeakerNamesInstruction = """
+        最後に、文字起こしの「話者1」「同席者1」「相手」など名前が付いていない話者のうち、会話の内容から名前がはっきり分かる話者だけを、次の形の JSON で出力してください。
+        <speaker_names>
+        {"話者1": "田中"}
+        </speaker_names>
+        - 名前が分かるのは、その話者が名乗った・自己紹介した、名前で呼びかけられて本人が応じた、など会話からはっきり読み取れるときだけです。自信がなければ入れないでください
+        - 「自分」（記録している本人）は入れないでください
+        - 名前には「さん」「様」などの敬称を付けず、文字起こしに出てくる書き方（姓だけでもよい）で書いてください
+        - 名前が分かる話者がいなければ {} を出力してください。<speaker_names> の外に説明は書かないでください。
+        """;
 
     /// <summary>メモか印がある会議だけ、議事録の指示に足す（Mac 版 MeetingProcessor.notesInstruction。両方を直す）</summary>
     public const string NotesInstruction = """
@@ -307,7 +326,8 @@ public static class MinutesPrompt
     /// <summary>AI（Gemini・Claude）の応答を、議事録の Markdown と構造化したアクションアイテムに分ける</summary>
     public static MinutesResult Parse(string response, string title)
     {
-        var body = response;
+        // 話者の名前（<speaker_names>）を先に取り出す。<action_items> は後ろから探すので、残っていると本文に混ざる
+        var (body, speakerNames) = SpeakerNameInference.Extract(response);
         List<ActionItem>? items = null;
         var open = body.LastIndexOf("<action_items>", StringComparison.Ordinal);
         if (open >= 0)
@@ -343,7 +363,7 @@ public static class MinutesPrompt
                 : (resolved.Count == 0 ? "なし" : string.Join("\n", resolved.Select(i => i.MarkdownLine)));
             body = body.Replace(Placeholder, list, StringComparison.Ordinal);
         }
-        return new MinutesResult($"# {title} — 議事録\n\n{body}\n", resolved);
+        return new MinutesResult($"# {title} — 議事録\n\n{body}\n", resolved) { SpeakerNames = speakerNames };
     }
 
     /// <summary>本文の中の、アクションアイテムの JSON の配列（[{ から }] まで）。読めなければ null</summary>
