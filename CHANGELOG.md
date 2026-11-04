@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.3.3](https://github.com/kakibara/hanasu/compare/v1.3.2...v1.3.3) - 2026-11-04
+
+- 整形と議事録に、端末の中で動く小型の LLM（Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2）と Apple の Foundation Models（fm）を選べるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/31
+- Windows 版にも音声入力の履歴を残し、既定 30 日・設定で日数を変えられるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/32
+
 ## [v1.3.2](https://github.com/kakibara/hanasu/compare/v1.3.1...v1.3.2) - 2026-11-03
 
 - リリースの Windows 版のビルドでも、publish では lock ファイルの locked mode を外す by @kakibara in https://github.com/kakibara/hanasu/pull/29
