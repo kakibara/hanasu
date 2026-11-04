@@ -373,6 +373,8 @@ MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 SpeakerNameInferenceCLI.runIfRequested()
 // アイコンの表示の設定欄の確認（AppPresence.swift）
 MainActor.assumeIsolated { AppPresenceCLI.runIfRequested() }
+// オンボーディングの各ページの確認（--render-onboarding <出力フォルダ>）。Onboarding.swift
+MainActor.assumeIsolated { OnboardingCLI.runIfRequested() }
 
 MainActor.assumeIsolated {
     let app = NSApplication.shared

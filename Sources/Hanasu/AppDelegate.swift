@@ -17,10 +17,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let meetingHotKeys = HotKeyManager()
     private var meetingHotKeyID: UInt32?
     private var meetingAutoDetect: MeetingAutoDetect?
+    // 要件: REQ-COM-050, REQ-COM-051
+    private let onboarding = OnboardingWindowController()
     private var cancellables: Set<AnyCancellable> = []
 
-    // 設計判断: DEC-COM-008, DEC-COM-009
+    // 設計判断: DEC-COM-008, DEC-COM-009, DEC-COM-093
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // 設計判断: DEC-COM-090
+        // メニューバーのアイコンなど、AppKit が設定に書くものを作る前に、初めての起動かを確かめる
+        let showsOnboarding = OnboardingState.shouldShowOnLaunch()
         // 設計判断: DEC-COM-063
         // 前回落ちたときに残ったローカルの LLM のサーバーを止める
         LocalLLMServer.cleanUpStaleServer()
@@ -73,6 +78,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 "他のアプリやシステムのショートカットと重なっている可能性があります。設定で別のキーを選んでください。")
         }
 
+        // 要件: REQ-COM-050, REQ-COM-051
+        // 設計判断: DEC-COM-093
+        // 初めての起動では、設定画面と許可のダイアログの代わりにオンボーディングを出す（許可はその最後のページで求める）
+        if showsOnboarding {
+            openOnboarding()
+            return
+        }
         // メニューバーのアイコンが隠れていても設定に辿り着けるよう、起動時は設定画面を開く
         openSettings()
         // 自動入力（⌘V の送信）にはアクセシビリティ権限が要る
@@ -191,6 +203,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(axItem)
 
         menu.addItem(.separator())
+        // 設計判断: DEC-COM-091
+        menu.addItem(NSMenuItem(title: "Hanasu の使い方…", action: #selector(openOnboarding), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "設定…", action: #selector(openSettings), keyEquivalent: forDock ? "" : ","))
         if !forDock {
             menu.addItem(NSMenuItem(title: "Hanasu を終了", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
@@ -205,6 +219,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // 設計判断: DEC-COM-009
     /// Dock や Finder でアイコンをクリックしたら、設定画面を前に出す
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        // 設計判断: DEC-COM-093
+        // オンボーディングの途中なら、設定画面ではなくオンボーディングを前に出す
+        if onboarding.isVisible {
+            onboarding.show()
+            return true
+        }
         openSettings()
         return true
     }
@@ -236,6 +256,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let appMenu = NSMenu()
         appMenu.addItem(withTitle: "Hanasu について", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
         appMenu.addItem(.separator())
+        // 設計判断: DEC-COM-091
+        appMenu.addItem(withTitle: "Hanasu の使い方…", action: #selector(openOnboarding), keyEquivalent: "").target = self
         appMenu.addItem(withTitle: "設定…", action: #selector(openSettings), keyEquivalent: ",").target = self
         appMenu.addItem(.separator())
         appMenu.addItem(withTitle: "Hanasu を隠す", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
@@ -342,6 +364,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func toggleEditMode() {
         editController.toggleFromMenu()
+    }
+
+    // 要件: REQ-COM-051
+    // 設計判断: DEC-COM-091
+    @objc private func openOnboarding() {
+        onboarding.show()
     }
 
     // 設計判断: DEC-COM-012
