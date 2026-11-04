@@ -39,13 +39,14 @@
 - 確かめ方: `.build/debug/Hanasu --download-whisper base`（保存先は `HANASU_MODELS_DIR` で変えられる）、`--render-engine-settings /tmp/engine.png --downloading`
 
 ### REQ-COM-004 文字起こしの言語を一覧から選べ、初期値はシステムの言語にする
-- 内容: 設定の「一般」→「文字起こし」の「言語」を、入力欄から一覧に変える。一覧は日本語・英語（米国・英国）・中国語（簡体・繁体）・韓国語・フランス語・ドイツ語・スペイン語・イタリア語・ポルトガル語（ブラジル）。初期値は macOS のシステムの言語にする。保存されている言語が一覧になければ、その言語も一覧に足す。
+- 内容: 設定の「一般」→「文字起こし」の「言語」を、入力欄から一覧に変える。一覧は日本語・英語（米国・英国）・中国語（簡体・繁体）・韓国語・フランス語・ドイツ語・スペイン語・イタリア語・ポルトガル語（ブラジル）。初期値は macOS のシステムの言語にする。一覧にない言語（システムの言語や、前の版で保存した言語）は、言語コードが同じ一覧の項目に寄せる（en-JP → en-US、zh-Hans-CN → zh-CN、zh-Hant-TW → zh-TW。ja-JP はそのまま）。言語コードが同じ項目がなければ、そのまま使う。
 - 受け入れ条件:
   - 初めて起動したとき、言語はシステムの言語になっている（システムが英語なら English）。
+  - システムの言語や保存されている言語が一覧になければ、言語コードが同じ項目が選ばれている（en-JP → en-US、zh-Hans-CN → zh-CN、zh-Hant-TW → zh-TW、ja-JP はそのまま）。
   - 一覧から言語を変えると、次の音声入力・会議の記録からその言語で文字起こしされる。
 - 出典: ユーザーの依頼（2026-11-04）「音声入力の入力言語を選択できるようにしてください。デフォルトはシステムの言語にしてください」
 - 対象: Mac
-- 実装の場所: `AppSettings.transcriptionLocaleIdentifiers`、`AppSettings.systemLocaleIdentifier`、`TranscriptionEngineSettingsSection.languageOptions`
+- 実装の場所: `AppSettings.transcriptionLocaleIdentifiers`、`AppSettings.systemLocaleIdentifier`、`AppSettings.nearestTranscriptionLocale`、`TranscriptionEngineSettingsSection.languageOptions`
 - 食い違い（ユーザーの確認待ち）: 言語は音声入力と会議の記録で共有する（従来の設定を一覧にしただけ）。音声入力だけ別の言語にする必要があるかは未確認。
 - 確かめ方: 実機で確かめる（設定の一覧で言語を変え、音声入力を試す）
 
@@ -614,7 +615,7 @@
 - 決めたこと: Mac 版の `GeminiClient.swift`（整形・英訳）、`MinutesTemplate.swift`・`MeetingNotes.swift`（議事録）の文面と組み立てをそのまま移し、共有している部分には「両方を直す」とコメントを書く。テストで文面と組み立てを確かめる。
 - 理由: Mac と Windows で結果をそろえる。片方だけ直すことを防ぐ。
 - 決めた場面: PR #19
-- 関係する要件: REQ-DIC-003, REQ-DIC-010, REQ-MTG-006
+- 関係する要件: REQ-DIC-003, REQ-DIC-010, REQ-DIC-082, REQ-MTG-006
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`
 

@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Hanasu.Core.Gemini;
+using Hanasu.Core.Settings;
 using Hanasu.Core.Text;
 
 namespace Hanasu.Core.Tests;
@@ -48,10 +49,27 @@ public class GeminiPromptTests
     public void InstructionsAreCopiedFromMac()
     {
         // 文面を勝手に変えないための目印（Mac 版の GeminiClient.swift と同じ）
-        Assert.StartsWith("あなたは音声入力の後処理を担当する日本語の校正者です。\n<transcript> タグの中身は", GeminiPrompts.SystemInstruction.ReplaceLineEndings("\n"));
-        Assert.EndsWith("出力は整形後の本文だけにしてください。", GeminiPrompts.SystemInstruction);
+        Assert.StartsWith("あなたは音声入力の後処理を担当する校正者です。\n<transcript> タグの中身は", GeminiPrompts.SystemInstruction().ReplaceLineEndings("\n"));
+        Assert.Contains("- 句読点を適切に付け、読みやすい自然な文章にする\n", GeminiPrompts.SystemInstruction().ReplaceLineEndings("\n"));
+        Assert.EndsWith("出力は整形後の本文だけにしてください。", GeminiPrompts.BaseSystemInstruction);
+        // 整形の言語の既定は、Mac 版と同じく話した言語（REQ-DIC-082）
+        Assert.EndsWith("出力は整形後の本文だけにしてください。\n\n出力の言語: 話された言語のまま書く。日本語は日本語で、英語で話された部分は英語のまま残し、日本語に訳さない。",
+            GeminiPrompts.SystemInstruction().ReplaceLineEndings("\n"));
         Assert.Contains("\n  例: 「資料はAで作ったやつを使いますあ違うBで作ったやつです」→ \"I'll use the materials I made with B.\"", GeminiPrompts.TranslationInstruction.ReplaceLineEndings("\n"));
         Assert.EndsWith("出力は英訳した本文だけにしてください。", GeminiPrompts.TranslationInstruction);
+    }
+
+    // 確かめ方: REQ-DIC-082
+    [Fact]
+    public void JapaneseOutputLanguageInstructionIsCopiedFromMac()
+    {
+        // Mac 版の GeminiClient.RefineOutputLanguage.japanese.instruction と同じ文面
+        const string mac = "出力の言語: 日本語に統一する。英語で話された部分も日本語にする（固有名詞・製品名・コードなど、訳すと意味が変わるものは原語のまま残す）。";
+        Assert.Equal(mac, GeminiPrompts.JapaneseLanguageInstruction);
+        var system = GeminiPrompts.SystemInstruction(RefineOutputLanguage.Japanese).ReplaceLineEndings("\n");
+        Assert.EndsWith("出力は整形後の本文だけにしてください。\n\n" + mac, system);
+        // 言語の指示は 1 つだけ入る
+        Assert.DoesNotContain(GeminiPrompts.AsSpokenLanguageInstruction, system);
     }
 
     [Theory]
@@ -76,7 +94,7 @@ public class GeminiClientTests
         Assert.Equal("test-key-123", request.Headers.GetValues("x-goog-api-key").Single());
 
         var json = JsonNode.Parse(body!)!;
-        Assert.Equal(GeminiPrompts.SystemInstruction, json["systemInstruction"]!["parts"]![0]!["text"]!.GetValue<string>());
+        Assert.Equal(GeminiPrompts.SystemInstruction(), json["systemInstruction"]!["parts"]![0]!["text"]!.GetValue<string>());
         Assert.Equal("user", json["contents"]![0]!["role"]!.GetValue<string>());
         Assert.Contains("<transcript>\nえー整える文\n</transcript>", json["contents"]![0]!["parts"]![0]!["text"]!.GetValue<string>());
         Assert.Equal("minimal", json["generationConfig"]!["thinkingConfig"]!["thinkingLevel"]!.GetValue<string>());

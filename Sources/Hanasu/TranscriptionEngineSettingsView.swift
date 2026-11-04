@@ -11,11 +11,8 @@ struct TranscriptionEngineSettingsSection: View {
     private var engines: [TranscriptionEngine] { [settings.dictationEngine, settings.meetingEngine] }
 
     // 要件: REQ-COM-004
-    /// 言語の候補。保存されている言語が候補になければ、それも一覧に足す
-    private var languageOptions: [String] {
-        let base = AppSettings.transcriptionLocaleIdentifiers
-        return base.contains(settings.localeIdentifier) ? base : base + [settings.localeIdentifier]
-    }
+    /// 言語の候補。保存されている言語は読み込むときに一覧のものへ寄せてある（`AppSettings.nearestTranscriptionLocale`）
+    private var languageOptions: [String] { AppSettings.transcriptionLocaleIdentifiers }
 
     var body: some View {
         Section {

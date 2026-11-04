@@ -42,6 +42,17 @@ public enum PasteFallbackClipboard
     RestoreOriginal,
 }
 
+// 要件: REQ-DIC-082
+/// <summary>音声入力の AI による整形の出力の言語（Mac 版の GeminiClient.RefineOutputLanguage と同じ）</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<RefineOutputLanguage>))]
+public enum RefineOutputLanguage
+{
+    /// <summary>話した言語（既定）。英語で話した部分は英語のまま残し、日本語に訳さない</summary>
+    AsSpoken,
+    /// <summary>日本語に統一する。英語で話した部分も日本語にする</summary>
+    Japanese,
+}
+
 /// <summary>文章の処理（整形・英訳・議事録）に使う AI</summary>
 [JsonConverter(typeof(JsonStringEnumConverter<TextAiProvider>))]
 public enum TextAiProvider
@@ -92,6 +103,9 @@ public sealed class AppSettings
     // AI（文章の処理）。音声入力（整形・英訳）と会議（議事録）で、AI とモデルを別々に選ぶ（REQ-COM-024）
     /// <summary>AI で整形する（名前は前の版のまま。Gemini と Claude のどちらでも使う）</summary>
     public bool RefineWithGemini { get; set; } = true;
+    // 要件: REQ-DIC-082
+    /// <summary>整形の出力の言語（設定の「AI」→「整形の言語」）。既定は話した言語</summary>
+    public RefineOutputLanguage RefineOutputLanguage { get; set; } = RefineOutputLanguage.AsSpoken;
     /// <summary>音声入力の整形・英訳に使う AI</summary>
     public TextAiProvider DictationAi { get; set; } = TextAiProvider.Gemini;
     /// <summary>会議の議事録（作り直しを含む）に使う AI</summary>

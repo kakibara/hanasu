@@ -104,7 +104,9 @@ enum ScreenContextCLI {
             let request = GeminiClient.Request(
                 transcript: raw, model: model, appName: context.appName,
                 dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions,
-                screenContext: screenContext)
+                screenContext: screenContext,
+                // 要件: REQ-DIC-082
+                outputLanguage: settings.refineOutputLanguage)
             let started = Date()
             let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
             print(String(format: "[%@ %@ %@ %.1fs] %@", label, translate ? "英訳" : "整形", model, Date().timeIntervalSince(started), output))
