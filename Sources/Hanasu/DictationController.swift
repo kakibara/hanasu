@@ -313,6 +313,12 @@ final class DictationController {
         if settings.refineWithGemini || translation != nil, snippetMatch?.isWholeUtterance != true {
             let verb = translation != nil ? "翻訳" : "整形"
             do {
+                // 要件: REQ-COM-032
+                // 設計判断: DEC-COM-069
+                // ローカルのモデルがまだなければ、ダウンロードするか尋ね、終わるのを待つ。ダイアログで前面が変わるので、入力先を前に戻してから続ける
+                try await LocalModelDownloadPrompt.prepare(
+                    for: .dictation, settings: settings, work: verb, whenSkipped: "\(verb)前の文章を入力します",
+                    restoreFrontmostApp: true)
                 // 要件: REQ-COM-020, REQ-COM-024
                 if let client = try TextAIClient.fromSettings(settings, for: .dictation) {
                     let model = settings.textModel(for: .dictation)

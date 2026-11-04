@@ -401,6 +401,11 @@ final class DictationHistoryStore: ObservableObject {
     {
         guard let entry = entries.first(where: { $0.id == id }) else { throw DictationHistoryError.notFound }
         let settings = AppSettings.shared
+        if overrideClient == nil {
+            // 要件: REQ-COM-032
+            try await LocalModelDownloadPrompt.prepare(
+                for: .dictation, settings: settings, work: "やり直し", whenSkipped: "やり直しません")
+        }
         let client = try overrideClient ?? TextAIClient.requireFromSettings(settings, for: .dictation)
         let model = settings.textModel(for: .dictation)
         let request = GeminiClient.Request(

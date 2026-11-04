@@ -31,13 +31,11 @@ enum OnboardingState {
         return true
     }
 
-    /// Hanasu の設定が 1 つでも保存されているか。システムが書くキー（NS…・Apple…）は数えない
+    /// Hanasu の設定が 1 つでも保存されているか。システムが書くキー（NS…・Apple…）と、
+    /// AppSettings が最初に書く AI の既定の印（DEC-COM-068）は数えない
     private static var hasSavedSettings: Bool {
-        let domain = Bundle.main.bundleIdentifier ?? ProcessInfo.processInfo.processName
-        let values = UserDefaults.standard.persistentDomain(forName: domain) ?? [:]
-        return values.keys.contains { key in
-            key != Self.key && !key.hasPrefix("NS") && !key.hasPrefix("Apple") && !key.hasPrefix("com.apple")
-        }
+        let values = UserDefaults.standard.persistentDomain(forName: AppSettings.defaultsDomainName) ?? [:]
+        return AppSettings.hasSavedSettings(values, ignoring: [Self.key])
     }
 }
 

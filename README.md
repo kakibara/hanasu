@@ -84,9 +84,9 @@ Pick the AI that polishes your text, separately for **voice input** and **meetin
 
 | AI | Default model | Sign-in |
 | --- | --- | --- |
-| **Gemini** (default) | voice input `gemini-3.5-flash-lite`, meetings `gemini-3.8-flash` | Google AI Studio API key or Vertex AI service account |
+| **Gemini** (default on Windows) | voice input `gemini-3.5-flash-lite`, meetings `gemini-3.8-flash` | Google AI Studio API key or Vertex AI service account |
 | **Claude** | voice input `claude-haiku-5-5`, meetings `claude-sonnet-5-5` (Opus 5.5 also available) | Anthropic API key |
-| **Local** (on your device) | Gemma 4 E4B (recommended). See the table below | None. Download the model in **Settings → AI** |
+| **Local** (on your device; default on Mac) | Gemma 4 E4B (recommended). See the table below | None. Download the model in **Settings → AI**. On the Mac, if the model is missing when Hanasu starts to polish text, it asks whether to download it |
 | **Apple** *(Mac, macOS 27)* | The on-device Apple Intelligence model, through the `fm` command | None |
 
 These AIs only handle text. Speech is transcribed by the engine below.

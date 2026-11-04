@@ -80,9 +80,9 @@ Typeless・Wispr Flow・Aqua Voice・Granola を参考に作りました。無�
 
 | AI | 既定のモデル | 認証 |
 | --- | --- | --- |
-| **Gemini**（既定） | 音声入力 `gemini-3.5-flash-lite`、会議 `gemini-3.8-flash` | Google AI Studio の API キーか Vertex AI のサービスアカウント |
+| **Gemini**（Windows の既定） | 音声入力 `gemini-3.5-flash-lite`、会議 `gemini-3.8-flash` | Google AI Studio の API キーか Vertex AI のサービスアカウント |
 | **Claude** | 音声入力 `claude-haiku-5-5`、会議 `claude-sonnet-5-5`（Opus 5.5 も選べる） | Anthropic の API キー |
-| **ローカル**（端末の中） | Gemma 4 E4B（おすすめ）。下の表を参照 | 不要。設定の「AI」でモデルをダウンロードする |
+| **ローカル**（端末の中。Mac の既定） | Gemma 4 E4B（おすすめ）。下の表を参照 | 不要。設定の「AI」でモデルをダウンロードする（Mac では、モデルがないまま整形を始めると、ダウンロードするか尋ねる） |
 | **Apple**（Mac、macOS 27） | Apple Intelligence の端末の中のモデル（`fm` コマンドで使う） | 不要 |
 
 どの AI も文章だけを扱います。音声の文字起こしは、下のエンジンが行います。
