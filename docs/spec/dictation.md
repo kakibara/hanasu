@@ -31,13 +31,13 @@
 - 確かめ方: `.build/debug/Hanasu --render-hud /tmp/hud.png` で見た目。途中経過は実機で確かめる
 - 食い違い（ユーザーの確認待ち）: 文字起こしのエンジンに Whisper / Gemini を選ぶと、録音中は文字を出さず、音量の目安だけを出す（DEC-DIC-101、PR #17）。エンジンを選べること（REQ-COM-001）はユーザーの指定だが、途中経過を出さないのは実装したエージェントの判断。要件を「Mac 標準のときだけ」に絞るかを確かめる。Windows 版も、Whisper / Gemini では録音中に文字を出さない（Windows 標準では出す）
 
-### REQ-DIC-003 認識結果を Gemini で自然な日本語に整える
-- 内容: 認識結果の全体を Gemini に送り、誤変換（同音異義語）・フィラー（「えー」「あのー」）・句読点・言い直しを整えた日本語にする。
+### REQ-DIC-003 文字起こしの結果を、AI で自然な文章に整える
+- 内容: 文字起こしの結果の全体を AI に送り、誤変換（同音異義語）・フィラー（「えー」「あのー」）・句読点・言い直しを整えた文章にする。出力の言語は REQ-DIC-082 の設定に従う。
 - 受け入れ条件: 「えーと、明日の会議なんですけど、あのー、資料はジェミニで作ったやつを使います。あ、違う、グーグルスライドで作ったやつです。」が、フィラーを除き言い直しを反映した文（「明日の会議なんですけど、資料はGoogleスライドで作ったやつを使います。」など）になる。
 - 出典: 初版の「目的とユーザー体験」4。Typeless 風の音声入力と Gemini での整形という初版の依頼
 - 対象: Mac / Windows
 - 実装の場所: `GeminiClient.refine`、`GeminiClient.systemInstruction`
-- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（Mac 版と同じ文面）、`windows/Hanasu.Core/Dictation/DictationText.cs`
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（Mac 版と同じ文面。Mac 版と同じ「整形の言語」の設定に従う。REQ-DIC-082）、`windows/Hanasu.Core/Dictation/DictationText.cs`
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>"`（Gemini の認証が要る）
 
 ### REQ-DIC-004 整形した文章を、元のカーソル位置に入力する
@@ -95,7 +95,7 @@
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>" --translate`
 
 ### REQ-DIC-011 録音の終わりに HUD で English を選ぶと、英語で出力する
-- 内容: 録音中の HUD に「日本語 ／ English」の切り替えを出し、録音を止めた時点で選んでいる言語で入力する。
+- 内容: 録音中の HUD に「話した言語 ／ English」の切り替えを出し、録音を止めた時点で選んでいる言語で入力する。
 - 受け入れ条件: 日本語で始めた録音でも、止める前に HUD の「English」を押せば英訳が入力される（逆も同じ）。
 - 出典: 2026-11-02 のユーザーの依頼「音声入力が終わったときに UI で英語を選ぶと英語で出力される」（80d77fc）
 - 対象: Mac / Windows
@@ -121,7 +121,7 @@
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>" --app com.tinyspeck.slackmacgap --show-prompt`、`--render-app-styles /tmp/app-styles.png`
 
 ### REQ-DIC-021 入力先アプリごとに、既定の出力言語を決める
-- 内容: アプリごとに既定の出力言語（日本語 / English）を決められる。English にしたアプリで録音を始めると英訳で始まる。
+- 内容: アプリごとに既定の出力言語（話した言語 / English）を決められる。English にしたアプリで録音を始めると英訳で始まる。
 - 受け入れ条件: 出力言語を English にしたアプリで `⌥ Space` を押すと、HUD が English の状態で始まり、英訳が入力される。
 - 出典: PR #5
 - 対象: Mac
@@ -244,6 +244,21 @@
 - 確かめ方:
   - Mac: `.build/debug/Hanasu --render-paste-fallback-settings /tmp/fallback-settings.png`、`--render-paste-fallback /tmp/fallback.png --display-only`。クリップボードの中身は実機で確かめる
   - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~PasteFallback|FullyQualifiedName~FallbackSetting"`（設定の保存と、入力への渡し方）。クリップボードの中身は実機で確かめる
+
+### REQ-DIC-082 整形の出力の言語を設定で選べ、既定は話した言語にする
+- 内容: 音声入力の AI による整形（「音声入力を AI で整える」）の出力の言語を、「話した言語」（既定）と「日本語に統一」から選べる。既定では、英語で話した部分は英語のまま残し、日本語に訳さない。
+- 受け入れ条件:
+  - 設定の「AI」→「整形の言語」で選べる。整形がオフのときは選べない。
+  - 「話した言語」では、日本語で話した部分は日本語、英語で話した部分は英語のまま出る（英語を日本語に訳さない）。
+  - 「日本語に統一」では、英語で話した部分も日本語になる。固有名詞・製品名・コードなど、訳すと意味が変わるものは原語のまま残す。
+  - 整形の指示（システムプロンプト）に、選んだ言語の指示が 1 つだけ入る。履歴の「整形し直す」も同じ設定に従う。
+- 出典: ユーザーの依頼（2026-11-04）「整形の言語を明示的に設定して意図しない動作がなされないようにする必要がある」
+- 対象: Mac / Windows
+- 実装の場所: `GeminiClient.RefineOutputLanguage`、`GeminiClient.refinePrompt`、`AppSettings.refineOutputLanguage`、`AISettingsView`（「整形の言語」）
+- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`（`RefineOutputLanguage`）、`windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（`SystemInstruction`。Mac 版と同じ文面。DEC-COM-102）、`windows/Hanasu.Core/Dictation/DictationText.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`（「AI」タブの「整形の言語」。選択肢は「話した言語」「日本語に統一」）。履歴の「整形し直す」は Windows 版にはない
+- 確かめ方:
+  - 実機で確かめる（英語と日本語の混ざった発話を、両方の設定で入力する）
+  - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~JapaneseOutputLanguage|FullyQualifiedName~RefineOutputLanguage"`（指示の文面が Mac 版と同じこと、設定の保存）
 
 ### REQ-DIC-140 音声入力で使うマイクを選べる（録音中の HUD でも切り替えられる）
 - 内容: 音声入力（と選択を声で編集）で使うマイクを、つながっているマイクから選べる。選ばなければシステムの設定のマイクを使う。録音中の HUD のマイクのボタンからも選べ、録音を止めずにそのマイクに切り替わる。
@@ -391,7 +406,7 @@
 
 ### DEC-DIC-017 メニューバーのアイコンで状態を出す
 - 決めたこと: アイコンは待機 `mic`、準備中 `mic.badge.ellipsis`、録音中 `mic.fill`（赤）、処理中 `ellipsis.circle`。音声入力をしていない間は、会議の記録の状態（記録中 `record.circle.fill`（赤）、準備中・処理中 `waveform.badge.ellipsis`）を出す。
-- 理由: Dock アイコンのないメニューバーのアプリなので、録音していることがひと目で分かるようにする。
+- 理由: どのアプリの上でも使う常駐のアプリなので、録音していることがひと目で分かるようにする。メニューバーにアイコンを出さない設定（REQ-COM-040 の「Dock だけ」）では、Dock のアイコンのバッジで示す（DEC-COM-081）。
 - 決めた場面: 初版（a787da8）
 - 関係する要件: REQ-DIC-001, REQ-MTG-026
 - 対象: Mac
@@ -558,7 +573,7 @@
 - 実装の場所: `AppStyle.promptSection`
 
 ### DEC-DIC-045 既定の出力言語が English のアプリでは、英訳で始める
-- 決めたこと: 出力言語を English にしたアプリで `⌥ Space` で始めると英訳で始め、HUD も English にする。HUD で「日本語」を押せばそちらが優先される。`⌥⇧ Space` はどのアプリでも英訳。
+- 決めたこと: 出力言語を English にしたアプリで `⌥ Space` で始めると英訳で始め、HUD も English にする。HUD で「話した言語」を押せばそちらが優先される。`⌥⇧ Space` はどのアプリでも英訳。
 - 理由: 止めた時点の選択で言語が決まる、という今の仕組み（REQ-DIC-011）のまま使えるようにする。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-021, REQ-DIC-011

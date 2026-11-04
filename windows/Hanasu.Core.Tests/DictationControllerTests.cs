@@ -200,7 +200,7 @@ public class DictationControllerTests
         var h = new Harness();
         await h.Controller.StartAsync(DictationMode.TranslateToEnglish);
         Assert.True(h.Hud.Translating);
-        // HUD で「日本語」を押すと、止めた時点の選択で入力する
+        // HUD で「話した言語」を押すと、止めた時点の選択で入力する
         h.Hud.Click(english: false);
         Assert.False(h.Hud.Translating);
         Assert.Equal(DictationMode.Refine, h.Controller.Mode);

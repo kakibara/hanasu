@@ -305,7 +305,8 @@ final class DictationController {
                         extraInstructions: settings.extraInstructions,
                         dictionaryRules: settings.userDictionary.rules,
                         appStyle: targetAppStyle,
-                        screenContext: await screenContextCapture?.result())
+                        screenContext: await screenContextCapture?.result(),
+                        outputLanguage: settings.refineOutputLanguage)
                     // スニペットがあれば、その前後の文だけを整形（英訳）してつなぐ。本文は送らない
                     let convert: @Sendable (String) async throws -> String = { text in
                         var request = request

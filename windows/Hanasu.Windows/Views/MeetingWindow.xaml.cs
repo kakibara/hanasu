@@ -136,6 +136,7 @@ public partial class MeetingWindow : Window
         var busy = live || m.Status is MeetingStatus.Recording or MeetingStatus.Processing;
         RecordingPanel.Visibility = live && meetings.State == MeetingState.Recording ? Visibility.Visible : Visibility.Collapsed;
         RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = !busy && m.Utterances.Count > 0;
+        DeleteButton.IsEnabled = !busy && meetings.CanDelete(m);
         RecordingNote.Text = $"文字起こしは、記録を止めたあとに {(host.Settings.Current.MeetingEngine == TranscriptionEngine.Gemini ? "Gemini" : "Whisper")} で行います（会議中の PC の負担を減らすため）。";
         UpdateLiveNotes();
     }
@@ -184,13 +185,41 @@ public partial class MeetingWindow : Window
         BuildSpeakerEditors(m);
     }
 
-    private void OnTitleChanged(object sender, RoutedEventArgs e)
+    // 要件: REQ-MTG-029
+    // 設計判断: DEC-MTG-024
+    private void OnTitleChanged(object sender, RoutedEventArgs e) => CommitTitle();
+
+    private void CommitTitle()
     {
         if (selected is not { } m || loading) return;
         var title = TitleBox.Text.Trim();
-        if (title.Length == 0 || title == m.Title) return;
+        if (title.Length == 0)
+        {
+            // 空にしたときは元に戻す
+            TitleBox.Text = m.Title;
+            return;
+        }
+        if (title != TitleBox.Text) TitleBox.Text = title;
+        if (title == m.Title) return;
         m.Title = title;
         SaveSelected(m, "題名を保存しました");
+    }
+
+    private void OnTitleKeyDown(object sender, KeyEventArgs e)
+    {
+        if (selected is not { } m) return;
+        if (e.Key == Key.Enter)
+        {
+            e.Handled = true;
+            CommitTitle();
+            TitleBox.SelectAll();
+        }
+        else if (e.Key == Key.Escape)
+        {
+            e.Handled = true;
+            TitleBox.Text = m.Title;
+            TitleBox.SelectAll();
+        }
     }
 
     private void SaveSelected(Meeting m, string message)
@@ -226,7 +255,7 @@ public partial class MeetingWindow : Window
 
     private async Task RegenerateAsync(Meeting m, MinutesTemplate? template)
     {
-        RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = false;
+        RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = DeleteButton.IsEnabled = false;
         ActionStatus.Text = $"{Core.Ai.TextAiFactory.NameOf(host.Settings.Current.MeetingAi)} で議事録を作っています…";
         var started = Stopwatch.StartNew();
         try
@@ -277,6 +306,56 @@ public partial class MeetingWindow : Window
         var dir = Path.Combine(meetings.Store(host.Settings.Current).BaseDirectory, m.Id);
         if (!Directory.Exists(dir)) return;
         Process.Start(new ProcessStartInfo("explorer.exe", $"\"{dir}\"") { UseShellExecute = true });
+    }
+
+    // MARK: - 削除
+
+    // 要件: REQ-MTG-028
+    // 設計判断: DEC-MTG-022
+    private void OnDeleteClick(object sender, RoutedEventArgs e) => ConfirmDelete();
+
+    private void OnMeetingListKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Delete) return;
+        e.Handled = true;
+        ConfirmDelete();
+    }
+
+    private void OnMeetingListMenuOpened(object sender, RoutedEventArgs e) =>
+        DeleteMenuItem.IsEnabled = MeetingList.SelectedItem is MeetingRow row && CanDelete(row.Meeting);
+
+    private bool CanDelete(Meeting m) =>
+        meetings.CanDelete(m) && m.Status is not (MeetingStatus.Recording or MeetingStatus.Processing);
+
+    /// <summary>選んだ会議を、確かめてからごみ箱に移し、一覧の次の会議を選ぶ</summary>
+    private void ConfirmDelete()
+    {
+        if (MeetingList.SelectedItem is not MeetingRow row || !CanDelete(row.Meeting)) return;
+        var m = row.Meeting;
+        if (MessageBox.Show(this,
+                $"「{m.Title}」を削除しますか？\n\n議事録・文字起こし・メモ・音声をまとめてごみ箱に移します。ごみ箱から元に戻せます。",
+                "会議の削除 — Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK)
+        {
+            return;
+        }
+        var rows = MeetingList.ItemsSource.OfType<MeetingRow>().ToList();
+        var index = rows.IndexOf(row);
+        try
+        {
+            meetings.Delete(m, dir => Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(
+                dir, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException or OperationCanceledException)
+        {
+            MessageBox.Show(this, $"削除できませんでした: {ex.Message}", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+        var rest = rows.Where(r => r.Meeting.Id != m.Id).ToList();
+        var next = rest.Count == 0 ? null : rest[Math.Min(index, rest.Count - 1)].Meeting;
+        selected = null;
+        ReloadList(next?.Id);
+        if (next is null) Show(null);
+        ActionStatus.Text = $"「{m.Title}」をごみ箱に移しました";
     }
 
     // MARK: - メモ（記録のあと）

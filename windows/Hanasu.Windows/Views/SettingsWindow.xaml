@@ -208,6 +208,14 @@
 
                         <CheckBox x:Name="RefineCheck" Margin="0,12,0,0" Content="AI で整形する（誤変換・フィラー・言い直し・句読点を直す）" Checked="OnRefineChanged" Unchecked="OnRefineChanged" />
                         <TextBlock Style="{StaticResource Note}" Text="オフにすると、認識結果に辞書の置き換えだけを当てて入力します。英訳は AI でしかできないので、オフでも AI に送ります。" />
+                        <!-- 要件: REQ-DIC-082 整形の出力の言語。整形がオフのときは選べない -->
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="整形の言語" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <ComboBox x:Name="RefineLanguageCombo" SelectionChanged="OnRefineLanguageChanged" MinWidth="160">
+                                <ComboBoxItem Content="話した言語" Tag="AsSpoken" />
+                                <ComboBoxItem Content="日本語に統一" Tag="Japanese" />
+                            </ComboBox>
+                        </StackPanel>
                         <CheckBox x:Name="SendAppNameCheck" Margin="0,8,0,0" Content="入力先のアプリ名を AI に伝える（体裁の参考にする）" Checked="OnSendAppNameChanged" Unchecked="OnSendAppNameChanged" />
 
                         <TextBlock Style="{StaticResource Section}" Text="Gemini の認証" />
