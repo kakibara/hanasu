@@ -19,13 +19,13 @@ using Hanasu.Whisper;
 
 // 確認用の CLI。Gemini の認証は環境変数 GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウントの JSON のパス）か GEMINI_API_KEY。
 // Claude の認証は環境変数 ANTHROPIC_API_KEY（claude-request はキーなしで動く。キーは表示しない）。
-//   hanasu-cli claude-request "<文章>" [--translate | --minutes] [--model <id>]   送らずに、送る HTTP リクエスト（ヘッダーと本文）を出す
-//   hanasu-cli claude-refine "<文章>" [--translate] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]   Claude で整形・英訳する
+//   hanasu-cli claude-request "<文章>" [--translate | --translate-to en|ja | --minutes] [--model <id>]   送らずに、送る HTTP リクエスト（ヘッダーと本文）を出す
+//   hanasu-cli claude-refine "<文章>" [--translate | --translate-to en|ja] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]   Claude で整形・英訳する
 //   hanasu-cli claude-check [--model <id>] [--fake-key]   「接続を試す」と同じ確かめ。--fake-key は偽のキーで送り、401 の文言を見る
-//   hanasu-cli refine "<文章>" [--translate] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]
+//   hanasu-cli refine "<文章>" [--translate | --translate-to en|ja] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]
 //   hanasu-cli transcribe-gemini <wav> [--model <id>] [--dict <辞書ファイル>]
 //   hanasu-cli transcribe-whisper <wav> [--model tiny] [--models-dir <dir>] [--download]
-//   hanasu-cli dictation <wav> --engine whisper|gemini [--translate] [--whisper-model tiny] [--models-dir <dir>]
+//   hanasu-cli dictation <wav> --engine whisper|gemini [--translate | --translate-to en|ja] [--whisper-model tiny] [--models-dir <dir>]
 //   hanasu-cli dict <辞書ファイル> "<文章>"
 //   hanasu-cli models
 //   hanasu-cli meeting-files <自分の wav> <相手の wav> --meetings-dir <保存先> [--engine whisper|gemini] [--whisper-model tiny] [--models-dir <dir>]
@@ -37,7 +37,7 @@ using Hanasu.Whisper;
 // ローカルの LLM（llama.cpp の llama-server。--server <パス> か環境変数 HANASU_LLAMA_SERVER、なければ exe の隣の llama/。Mac の llama-server でも動く）:
 //   hanasu-cli local-list [--models-dir <dir>]   モデルの一覧（ダウンロード済みか）
 //   hanasu-cli local-download <id> [--models-dir <dir>]   モデルをダウンロードし、大きさと SHA-256 を確かめる
-//   hanasu-cli local-refine "<文章>" [--model <id>] [--translate] [--server <パス>] [--models-dir <dir>]   ローカルで整形・英訳する
+//   hanasu-cli local-refine "<文章>" [--model <id>] [--translate | --translate-to en|ja] [--server <パス>] [--models-dir <dir>]   ローカルで整形・英訳する
 //   meeting-minutes / meeting-files に --minutes-ai local --minutes-model <id> を付けると、議事録をローカルで作る
 
 var command = args.FirstOrDefault();
@@ -87,6 +87,16 @@ static string? Option(string[] args, string name)
 
 static bool Flag(string[] args, string name) => args.Contains(name);
 
+// 確かめ方: REQ-DIC-013
+/// <summary>--translate（英訳）か --translate-to en|ja。どちらもなければ null</summary>
+static TranslationLanguage? TranslationOption(string[] args) => Option(args, "--translate-to")?.ToLowerInvariant() switch
+{
+    "ja" or "japanese" => TranslationLanguage.Japanese,
+    "en" or "english" => TranslationLanguage.English,
+    null => Flag(args, "--translate") ? TranslationLanguage.English : null,
+    var other => throw new IOException($"--translate-to は en か ja です（{other}）"),
+};
+
 static GeminiAuth AuthFromEnvironment()
 {
     if (Environment.GetEnvironmentVariable("GEMINI_SERVICE_ACCOUNT_JSON") is { Length: > 0 } path)
@@ -121,12 +131,12 @@ static async Task Refine(string[] args)
 {
     var text = args.ElementAtOrDefault(1) ?? throw new IOException("文章を指定してください");
     var settings = CliSettings(args);
-    var translating = Flag(args, "--translate");
+    var translation = TranslationOption(args);
     var processor = new DictationTextProcessor(_ => new GeminiClient(AuthFromEnvironment()));
     var sw = Stopwatch.StartNew();
-    var outcome = await processor.ProcessAsync(text, translating ? DictationMode.TranslateToEnglish : DictationMode.Refine,
+    var outcome = await processor.ProcessAsync(text, translation?.ToMode() ?? DictationMode.Refine,
         Option(args, "--app"), settings);
-    Console.WriteLine($"[{(translating ? "英訳" : "整形")} {settings.Model} {sw.Elapsed.TotalSeconds:0.0}s {outcome.Status}]");
+    Console.WriteLine($"[{translation?.Verb() ?? "整形"} {settings.Model} {sw.Elapsed.TotalSeconds:0.0}s {outcome.Status}]");
     if (outcome.Warning is not null) Console.WriteLine($"警告: {outcome.Warning}");
     Console.WriteLine(outcome.Output);
 }
@@ -194,7 +204,7 @@ static async Task Dictation(string[] args)
     var raw = await transcriber.StopAsync();
     Console.WriteLine($"[文字起こし {engine} {sw.Elapsed.TotalSeconds:0.0}s] {raw}");
     sw.Restart();
-    var mode = Flag(args, "--translate") ? DictationMode.TranslateToEnglish : DictationMode.Refine;
+    var mode = TranslationOption(args)?.ToMode() ?? DictationMode.Refine;
     var outcome = await new DictationTextProcessor(_ => new GeminiClient(AuthFromEnvironment())).ProcessAsync(raw, mode, Option(args, "--app"), settings);
     Console.WriteLine($"[{mode} {settings.Model} {sw.Elapsed.TotalSeconds:0.0}s {outcome.Status}] {outcome.Output}");
 }
@@ -374,10 +384,10 @@ static async Task LocalRefine(string[] args)
     var text = args.ElementAtOrDefault(1) ?? throw new IOException("文章を指定してください");
     var client = LocalClient(args, Option(args, "--model"), LocalLlmModel.DefaultDictation, TextAiUse.Dictation);
     var request = ClaudeRefineRequest(args, text, client.Model.Id);
-    var translating = Flag(args, "--translate");
+    var translation = TranslationOption(args);
     var sw = Stopwatch.StartNew();
-    var output = translating ? await client.TranslateToEnglishAsync(request) : await client.RefineAsync(request);
-    Console.WriteLine($"[{(translating ? "英訳" : "整形")} ローカル {client.Model.Id} {sw.Elapsed.TotalSeconds:0.0}s]");
+    var output = translation is { } language ? await client.TranslateAsync(request, language) : await client.RefineAsync(request);
+    Console.WriteLine($"[{translation?.Verb() ?? "整形"} ローカル {client.Model.Id} {sw.Elapsed.TotalSeconds:0.0}s]");
     Console.WriteLine(output);
 }
 
@@ -430,14 +440,15 @@ static RefineRequest ClaudeRefineRequest(string[] args, string text, string defa
 static async Task ClaudeRequest(string[] args)
 {
     var text = args.ElementAtOrDefault(1) ?? throw new IOException("文章を指定してください");
-    var purpose = Flag(args, "--minutes") ? TextPurpose.Minutes : Flag(args, "--translate") ? TextPurpose.Translate : TextPurpose.Refine;
+    var translation = TranslationOption(args);
+    var purpose = Flag(args, "--minutes") ? TextPurpose.Minutes : translation is not null ? TextPurpose.Translate : TextPurpose.Refine;
     var request = ClaudeRefineRequest(args, text, purpose == TextPurpose.Minutes ? ClaudeModels.DefaultMinutesModel : ClaudeModels.DefaultModel);
     var key = Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") is { Length: > 0 } k ? k : "sk-ant-api03-dry-run-not-a-real-key-0000";
     var capture = new CaptureHandler();
     var client = new ClaudeClient(key, new HttpClient(capture));
     var (system, user) = purpose switch
     {
-        TextPurpose.Translate => (GeminiPrompts.TranslationInstruction, GeminiPrompts.UserPrompt(request, translating: true)),
+        TextPurpose.Translate => (GeminiPrompts.TranslationSystemInstruction(translation!.Value), GeminiPrompts.UserPrompt(request, translation)),
         TextPurpose.Minutes => (MinutesPrompt.SystemInstruction(MinutesTemplate.Regular, null), $"<transcript>\n{PromptText.NeutralizeDelimiters(text)}\n</transcript>"),
         _ => (GeminiPrompts.SystemInstruction(request.OutputLanguage), GeminiPrompts.UserPrompt(request)),
     };
@@ -466,11 +477,11 @@ static async Task ClaudeRefine(string[] args)
     var text = args.ElementAtOrDefault(1) ?? throw new IOException("文章を指定してください");
     var request = ClaudeRefineRequest(args, text, ClaudeModels.DefaultModel);
     var client = ClaudeFromEnvironment(TimeSpan.FromSeconds(60));
-    var translating = Flag(args, "--translate");
+    var translation = TranslationOption(args);
     var sw = Stopwatch.StartNew();
-    var output = translating ? await client.TranslateToEnglishAsync(request) : await client.RefineAsync(request);
+    var output = translation is { } language ? await client.TranslateAsync(request, language) : await client.RefineAsync(request);
     var u = client.LastUsage;
-    Console.WriteLine($"[{(translating ? "英訳" : "整形")} {request.Model} {sw.Elapsed.TotalSeconds:0.0}s 入力 {u?.InputTokens} / 出力 {u?.OutputTokens} / キャッシュ作成 {u?.CacheCreationInputTokens} / キャッシュ読み {u?.CacheReadInputTokens} / 応答したモデル {u?.ServedBy}]");
+    Console.WriteLine($"[{translation?.Verb() ?? "整形"} {request.Model} {sw.Elapsed.TotalSeconds:0.0}s 入力 {u?.InputTokens} / 出力 {u?.OutputTokens} / キャッシュ作成 {u?.CacheCreationInputTokens} / キャッシュ読み {u?.CacheReadInputTokens} / 応答したモデル {u?.ServedBy}]");
     Console.WriteLine(output);
 }
 

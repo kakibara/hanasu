@@ -39,10 +39,13 @@ struct AISettingsTab: View {
                 TextField("認識結果の例", text: $testInput, axis: .vertical)
                     .lineLimit(2...4)
                 HStack {
-                    Button(isTesting ? "送信中…" : "整形を試す") { runTest(translate: false) }
+                    Button(isTesting ? "送信中…" : "整形を試す") { runTest(translation: nil) }
                         .disabled(isTesting || testInput.isEmpty)
-                    Button("英訳を試す") { runTest(translate: true) }
-                        .disabled(isTesting || testInput.isEmpty)
+                    // 要件: REQ-DIC-013
+                    ForEach(settings.translationLanguages) { language in
+                        Button("\(language.verb)を試す") { runTest(translation: language) }
+                            .disabled(isTesting || testInput.isEmpty)
+                    }
                     Spacer()
                 }
                 if !testOutput.isEmpty {
@@ -53,7 +56,7 @@ struct AISettingsTab: View {
         .formStyle(.grouped)
     }
 
-    private func runTest(translate: Bool) {
+    private func runTest(translation: TranslationLanguage?) {
         isTesting = true
         testOutput = ""
         let model = settings.textModel(for: .dictation)
@@ -69,7 +72,11 @@ struct AISettingsTab: View {
             let started = Date()
             do {
                 let client = try TextAIClient.requireFromSettings(settings, for: .dictation)
-                let output = translate ? try await client.translateToEnglish(request) : try await client.refine(request)
+                let output = if let translation {
+                    try await client.translate(request, to: translation)
+                } else {
+                    try await client.refine(request)
+                }
                 testOutput = output + String(format: "\n\n（%@ %@ %.1f 秒）", client.provider.name, model, Date().timeIntervalSince(started))
             } catch {
                 testOutput = "⚠️ " + error.localizedDescription
@@ -80,10 +87,13 @@ struct AISettingsTab: View {
 }
 
 // 要件: REQ-COM-024, REQ-COM-030
-/// 1 つの用途（音声入力 / 会議）の、AI とモデルの選択
-private struct AIChoiceRow: View {
+// 設計判断: DEC-COM-092
+/// 1 つの用途（音声入力 / 会議）の、AI とモデルの選択。オンボーディングの「設定の Tips」でも使う
+struct AIChoiceRow: View {
     @ObservedObject var settings: AppSettings
     var purpose: TextAIPurpose
+    /// AI の切り替え（右上のセグメント）を出すか。オンボーディングの AI のページでは、AI はカードで選ぶので出さない
+    var showsProviderPicker = true
 
     private var provider: Binding<TextAIProvider> {
         purpose == .dictation ? $settings.dictationAIProvider : $settings.meetingAIProvider
@@ -103,16 +113,18 @@ private struct AIChoiceRow: View {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(purpose.label).font(.headline)
-                    Text(purpose == .dictation ? "整形・英訳・選択の編集" : "議事録（作り直しも）・会議への質問・辞書の候補")
+                    Text(purpose == .dictation ? "整形・翻訳・選択の編集" : "議事録（作り直しも）・会議への質問・辞書の候補")
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Spacer()
-                Picker("AI", selection: provider) {
-                    ForEach(TextAIProvider.allCases) { Text($0.name).tag($0) }
+                if showsProviderPicker {
+                    Picker("AI", selection: provider) {
+                        ForEach(TextAIProvider.allCases) { Text($0.name).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .fixedSize()
                 }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .fixedSize()
             }
             switch provider.wrappedValue {
             case .gemini:
@@ -230,8 +242,8 @@ struct ClaudeKeySection: View {
     }
 }
 
-/// Gemini の認証。AI に Gemini を選んだときと、文字起こしのエンジン「Gemini」で使う
-private struct GeminiAuthSection: View {
+/// Gemini の認証。AI に Gemini を選んだときと、文字起こしのエンジン「Gemini」で使う。オンボーディングの AI のページでも使う
+struct GeminiAuthSection: View {
     @ObservedObject var settings: AppSettings
     @State private var newKey = ""
     @State private var hint: String? = Keychain.hint(.geminiAPIKey)

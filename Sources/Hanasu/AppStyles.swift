@@ -92,17 +92,24 @@ enum AppStylePreset: String, Codable, CaseIterable, Identifiable {
     }
 }
 
-// 要件: REQ-DIC-021
-/// アプリごとの既定の出力言語
+// 要件: REQ-DIC-021, REQ-DIC-013
+/// アプリごとの既定の出力言語。保存する値は今までのまま（「話した言語」は "japanese"）
 enum AppOutputLanguage: String, Codable, CaseIterable, Identifiable {
-    case japanese
+    case asSpoken = "japanese"
     case english
+    case japanese = "translateJapanese"
 
     var id: String { rawValue }
     var label: String {
+        translation?.label ?? "話した言語"
+    }
+
+    /// 翻訳して始める言語。「話した言語」なら nil
+    var translation: TranslationLanguage? {
         switch self {
-        case .japanese: "話した言語"
-        case .english: "English"
+        case .asSpoken: nil
+        case .english: .english
+        case .japanese: .japanese
         }
     }
 }
@@ -115,7 +122,7 @@ struct AppStyle: Codable, Identifiable, Equatable {
     var preset: AppStylePreset
     /// このアプリ用の追加ルール（Gemini に渡す）
     var rules: String = ""
-    var outputLanguage: AppOutputLanguage = .japanese
+    var outputLanguage: AppOutputLanguage = .asSpoken
 
     var id: String { bundleID }
 
@@ -125,12 +132,14 @@ struct AppStyle: Codable, Identifiable, Equatable {
     }
 
     // 要件: REQ-DIC-020
-    // 設計判断: DEC-DIC-043, DEC-DIC-044, DEC-DIC-046
+    // 設計判断: DEC-DIC-043, DEC-DIC-044, DEC-DIC-046, DEC-DIC-028
     /// `GeminiClient.userPrompt` に足す節。足すものがなければ nil。
     /// - appName: 入力先アプリ名を Gemini に伝える設定がオフなら nil（名前を出さない）
+    /// - translation: 翻訳の言語（整形なら nil）。和訳は出力が日本語なので、整形と同じ日本語の文体ルールを使う
     /// - hasCommonRules: 共通の追加ルールがプロンプトに入っているか（入っていれば優先順位を書く）
-    func promptSection(appName: String?, translating: Bool, hasCommonRules: Bool) -> String? {
+    func promptSection(appName: String?, translation: TranslationLanguage?, hasCommonRules: Bool) -> String? {
         guard hasRules else { return nil }
+        let translating = translation == .english
         let presetRules = translating ? preset.translationRules : preset.refineRules
         let custom = rules.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -149,7 +158,7 @@ struct AppStyle: Codable, Identifiable, Equatable {
             }
         }
         // system instruction の「口調を保つ」と食い違うので、どちらを優先するかを書いておく
-        let overridden = translating ? "「口調と丁寧さを保つ」" : "「口調を変えない」「言葉は変えない」"
+        let overridden = translation != nil ? "「口調と丁寧さを保つ」" : "「口調を変えない」「言葉は変えない」"
         lines.append("- この文体ルールは、\(overridden)より優先する。語尾・言い回し・改行は変えてよいが、話した内容（事実・用件・意図）は変えない")
         if hasCommonRules {
             lines.append("- 上の「追加ルール」とこの文体ルールが食い違うときは、この文体ルールを優先する")

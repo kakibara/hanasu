@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 // スニペットの動作確認用の CLI モード（main.swift から呼ぶ）:
-//   Hanasu --match-snippet <文字起こし> [--snippets <JSON>] [--refine [--translate] [--model <id>]]
+//   Hanasu --match-snippet <文字起こし> [--snippets <JSON>] [--refine [--translate | --translate-to en|ja] [--model <id>]]
 //     正規化の結果と、一致したスニペット、入力される文章を出す。
 //     スニペットは --snippets の JSON（[{"trigger": "...", "body": "..."}]）、設定に登録したもの、例、の順に使う。
 //     --refine を付けると、スニペットの前後の文を Gemini で整形（--translate なら英訳）してつなぐ。
@@ -39,7 +39,7 @@ enum SnippetsCLI {
         let settings = AppSettings.shared
         let client = try TextAIClient.cli(args: args, settings: settings, for: .dictation)
         let model = TextAIClient.cliModel(args: args, settings: settings, for: .dictation)
-        let translate = args.contains("--translate")
+        let translation = TranslationLanguage.cli(args)
         let request = GeminiClient.Request(
             transcript: "", model: model, appName: nil,
             dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions,
@@ -49,9 +49,10 @@ enum SnippetsCLI {
         let output = try await match.assemble { text in
             var request = request
             request.transcript = text
-            return translate ? try await client.translateToEnglish(request) : try await client.refine(request)
+            if let translation { return try await client.translate(request, to: translation) }
+            return try await client.refine(request)
         }
-        print(String(format: "--- 入力される文章（%@ %@ %.1fs） ---", translate ? "英訳" : "整形", model, Date().timeIntervalSince(started)))
+        print(String(format: "--- 入力される文章（%@ %@ %.1fs） ---", translation?.verb ?? "整形", model, Date().timeIntervalSince(started)))
         print(output)
     }
 

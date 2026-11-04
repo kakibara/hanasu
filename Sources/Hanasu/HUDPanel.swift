@@ -12,12 +12,18 @@ final class HUDModel: ObservableObject {
     }
 
     @Published var phase: Phase = .recording
+    // 設計判断: DEC-COM-016
+    /// パネルを画面に出している間だけ true。隠している間（一度も出していない間も）は中身を描かない
+    @Published var isShown = false
     @Published var transcript = ""
     @Published var startedAt = Date()
-    /// 英訳モードで録音しているか
-    @Published var translating = false
-    /// HUD の「話した言語／English」を押したとき。録音を止めた時点の選択で出力の言語が決まる
-    var onSelectTranslating: ((Bool) -> Void)?
+    // 要件: REQ-DIC-013
+    /// 翻訳して入力するときの言語（整形なら nil）
+    @Published var translation: TranslationLanguage?
+    /// HUD の切り替えに「話した言語」と並べて出す翻訳の言語（設定で選んだもの）
+    @Published var translationChoices: [TranslationLanguage] = [.english]
+    /// HUD の「話した言語／English／日本語」を押したとき（nil は話した言語）。録音を止めた時点の選択で出力の言語が決まる
+    var onSelectTranslation: ((TranslationLanguage?) -> Void)?
     // 要件: REQ-DIC-012
     // 設計判断: DEC-DIC-101
     /// 選択を声で編集しているときの補足（「選択 120 文字」など）。nil なら通常の音声入力
@@ -100,6 +106,7 @@ final class HUDController {
             model.startedAt = Date()
         }
         model.phase = phase
+        model.isShown = true
         // ボタンを押せる間だけクリックを受け取る。パネルは前面に出ないので、入力先のフォーカスは動かない
         panel.ignoresMouseEvents = !model.acceptsClicks
         position()
@@ -129,8 +136,11 @@ final class HUDController {
         hideTask?.cancel()
         hideTask = Task { [weak self] in
             if delay > 0 { try? await Task.sleep(for: .seconds(delay)) }
-            guard !Task.isCancelled else { return }
-            self?.panel.orderOut(nil)
+            guard !Task.isCancelled, let self else { return }
+            self.panel.orderOut(nil)
+            // 設計判断: DEC-COM-016
+            // 隠したパネルの中でも、経過時間（TimelineView）・点滅（symbolEffect）・スピナーは動き続けて CPU を使うので、中身を外す
+            self.model.isShown = false
         }
     }
 
@@ -145,7 +155,12 @@ final class HUDController {
 private struct HUDView: View {
     @ObservedObject var model: HUDModel
 
+    // 設計判断: DEC-COM-016
     var body: some View {
+        if model.isShown { content }
+    }
+
+    private var content: some View {
         VStack(alignment: .leading, spacing: 6) {
             // 1 行目は、Whisper / Gemini で「話した言語／English」を出しても省略・折り返しなしで収まる間隔にする
             HStack(spacing: 6) {
@@ -160,7 +175,7 @@ private struct HUDView: View {
                         .background(.quaternary, in: Capsule())
                 }
                 if model.canChooseLanguage {
-                    LanguageSwitch(translating: model.translating) { model.onSelectTranslating?($0) }
+                    LanguageSwitch(selection: model.translation, choices: model.translationChoices) { model.onSelectTranslation?($0) }
                 }
                 Spacer()
                 if model.phase == .recording {
@@ -168,6 +183,7 @@ private struct HUDView: View {
                         Text(elapsed(at: context.date))
                             .font(.system(size: 12, design: .monospaced))
                             .foregroundStyle(.secondary)
+                            .fixedSize()
                     }
                     Button { model.onCancel?() } label: {
                         Text("取消").font(.system(size: 11)).foregroundStyle(.secondary)
@@ -175,6 +191,7 @@ private struct HUDView: View {
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .fixedSize()
                     .help("録音を取り消します（Esc）")
                     StopButton { model.onStop?() }
                 }
@@ -236,7 +253,7 @@ private struct HUDView: View {
         case .processing:
             if model.transcribing, let engine = model.batchEngine { "\(engine.shortName) で文字起こししています…" }
             else if model.editBadge != nil { "AI で書き換えています…" }
-            else if model.translating { "AI で英語に翻訳しています…" }
+            else if let translation = model.translation { translation.processingTitle }
             else { "AI で整えています…" }
         case .done(let message): message
         case .error: "エラー"
@@ -295,6 +312,7 @@ private struct StopButton: View {
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
+        .fixedSize()
         .help("録音を止めて入力します（ショートカットをもう一度押すのと同じ）")
     }
 }
@@ -324,22 +342,27 @@ private struct MicrophoneButton: View {
     }
 }
 
-// 要件: REQ-DIC-011
-/// 出力の言語を選ぶ小さな切り替え。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
+// 要件: REQ-DIC-011, REQ-DIC-013
+// 設計判断: DEC-DIC-027
+/// 出力の言語を選ぶ小さな切り替え（話した言語と、設定で選んだ翻訳の言語）。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
 private struct LanguageSwitch: View {
-    var translating: Bool
-    var onSelect: (Bool) -> Void
+    var selection: TranslationLanguage?
+    var choices: [TranslationLanguage]
+    var onSelect: (TranslationLanguage?) -> Void
 
     var body: some View {
         HStack(spacing: 2) {
-            option("話した言語", selected: !translating) { onSelect(false) }
-            option("English", selected: translating) { onSelect(true) }
+            option("話した言語", selected: selection == nil) { onSelect(nil) }
+            ForEach(choices) { language in
+                option(language.label, selected: selection == language) { onSelect(language) }
+            }
         }
         .padding(2)
         .background(.quaternary, in: Capsule())
         // 1 行目が詰まっても折り返さない（詰まったら、左の見出しのほうを省略する）
         .fixedSize()
-        .help("録音を止めたときに選んでいる方で入力します（話した言語は整形の言語の設定に従い、English は英訳）")
+        .help("録音を止めたときに選んでいる言語で入力します（話した言語は整形の言語の設定に従い、"
+            + choices.map { "\($0.label) は\($0.verb)" }.joined(separator: "、") + "）")
     }
 
     private func option(_ label: String, selected: Bool, action: @escaping () -> Void) -> some View {
@@ -347,7 +370,7 @@ private struct LanguageSwitch: View {
             Text(label)
                 .font(.system(size: 11, weight: selected ? .semibold : .regular))
                 .foregroundStyle(selected ? Color.white : Color.secondary)
-                .padding(.horizontal, 7)
+                .padding(.horizontal, choices.count > 1 ? 6 : 7)
                 .padding(.vertical, 3)
                 .background(selected ? Color.accentColor : Color.clear, in: Capsule())
                 .contentShape(Capsule())

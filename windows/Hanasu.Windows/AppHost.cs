@@ -139,7 +139,7 @@ internal sealed class AppHost : IDisposable
         }
         RegisterHotKeys();
         tray.ShowBalloon("Hanasu を起動しました",
-            $"{Settings.Current.HotKey.DisplayString} で音声入力、{Settings.Current.TranslateHotKey.DisplayString} で英訳して入力します。");
+            $"{Settings.Current.HotKey.DisplayString} で音声入力、{Settings.Current.TranslateHotKey.DisplayString} で{TranslationLanguages.MenuVerb(Settings.Current.TranslationLanguages)}して入力します。");
         if (firstRun) ShowSettings();
     }
 
@@ -191,7 +191,8 @@ internal sealed class AppHost : IDisposable
         if (hotKeysSuspended) return;
         var s = Settings.Current;
         dictationHotKeyId = hotKeys.Register(s.HotKey, kind => Dictation.HandleHotKey(kind, DictationMode.Refine));
-        translateHotKeyId = hotKeys.Register(s.TranslateHotKey, kind => Dictation.HandleHotKey(kind, DictationMode.TranslateToEnglish));
+        // 設計判断: DEC-DIC-027（翻訳の言語は押したときの設定で決める）
+        translateHotKeyId = hotKeys.Register(s.TranslateHotKey, kind => Dictation.HandleHotKey(kind, Dictation.PrimaryTranslateMode));
         meetingHotKeyId = hotKeys.Register(s.MeetingHotKey, kind =>
         {
             if (kind == HotKeyEventKind.Pressed) _ = Meetings.ToggleAsync();
@@ -268,6 +269,11 @@ internal sealed class AppHost : IDisposable
                 RegisterHotKeys();
                 tray?.UpdateMenuLabels();
             });
+        }
+        // メニューの「英訳して入力」「和訳して入力」「翻訳して入力」を設定に合わせる（REQ-DIC-013）
+        else if (!e.Before.TranslationLanguages.SequenceEqual(e.After.TranslationLanguages))
+        {
+            app.Dispatcher.BeginInvoke(() => tray?.UpdateMenuLabels());
         }
     }
 

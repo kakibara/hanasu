@@ -159,20 +159,20 @@ struct TextAIClient {
         }
     }
 
-    // 要件: REQ-DIC-010
-    func translateToEnglish(_ request: GeminiClient.Request) async throws -> String {
+    // 要件: REQ-DIC-010, REQ-DIC-013
+    func translate(_ request: GeminiClient.Request, to language: TranslationLanguage) async throws -> String {
         switch backend {
         case .gemini(let client):
-            return try await client.translateToEnglish(request)
+            return try await client.translate(request, to: language)
         case .claude(let client):
-            let prompt = GeminiClient.translationPrompt(request)
+            let prompt = GeminiClient.translationPrompt(request, to: language)
             return try await client.generate(system: prompt.system, userText: prompt.user, model: request.model, effort: .low)
         case .local(let client):
-            let prompt = GeminiClient.translationPrompt(request)
+            let prompt = GeminiClient.translationPrompt(request, to: language)
             let output = try await client.generate(system: prompt.system, userText: prompt.user, purpose: .short)
             return LocalLLMClient.cleanUpRewrite(output, input: request.transcript)
         case .appleFM(let client):
-            let prompt = GeminiClient.translationPrompt(request)
+            let prompt = GeminiClient.translationPrompt(request, to: language)
             let output = try await client.generate(system: prompt.system, userText: prompt.user, purpose: .short)
             return LocalLLMClient.cleanUpRewrite(output, input: request.transcript)
         }

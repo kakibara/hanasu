@@ -1,5 +1,16 @@
 # Changelog
 
+## [v1.5.0](https://github.com/kakibara/hanasu/compare/v1.4.1...v1.5.0) - 2026-11-04
+
+- 文字起こしの言語の選択と、整形の出力の言語の設定を追加する by @kakibara in https://github.com/kakibara/hanasu/pull/43
+- Mac のアイコンを出す場所を、メニューバー / Dock / 両方から選べるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/44
+- 会議の記録を削除できるようにし、タイトルの欄が書き換えられると見てわかるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/45
+- Mac の会議ノートで、議事録を作り直しても選んでいた会議のままにし、作り直し中だとわかるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/46
+- 音声入力のマイクを、設定と録音中の HUD から選べるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/47
+- 録音中の HUD で、言語の切り替えが折り返さないようにする by @kakibara in https://github.com/kakibara/hanasu/pull/49
+- 翻訳の言語に日本語を足し、設定で翻訳する言語を複数選べるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/51
+- 使っていない間の Mac 版の CPU を抑える（隠れた HUD などの描き直しを止める） by @kakibara in https://github.com/kakibara/hanasu/pull/50
+
 ## [v1.4.1](https://github.com/kakibara/hanasu/compare/v1.4.0...v1.4.1) - 2026-11-04
 
 - リリースのスキルに、v1.4.0 で分かったこと（最適化ビルドの確認とタグの付け直し）を書き足す by @kakibara in https://github.com/kakibara/hanasu/pull/41

@@ -7,7 +7,7 @@ namespace Hanasu.Windows;
 
 /// <summary>
 /// タスクトレイのアイコンとメニュー（Mac 版のメニューバーにあたる）。
-/// 音声入力の開始 / 英訳して入力 / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / 設定 / 終了。
+/// 音声入力の開始 / 翻訳して入力（英訳・和訳） / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / 設定 / 終了。
 /// </summary>
 internal sealed class TrayIcon : IDisposable
 {
@@ -26,7 +26,8 @@ internal sealed class TrayIcon : IDisposable
         this.host = host;
         var menu = new Forms.ContextMenuStrip();
         dictateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(DictationMode.Refine));
-        translateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(DictationMode.TranslateToEnglish));
+        // 設計判断: DEC-DIC-027（設定で選んだ翻訳の言語のうち最初で始める）
+        translateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(host.Dictation.PrimaryTranslateMode));
         recentItem = new Forms.ToolStripMenuItem("最近の結果");
         meetingItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.ToggleMeetingFromMenu());
         menu.Items.Add(dictateItem);
@@ -84,7 +85,7 @@ internal sealed class TrayIcon : IDisposable
         var busy = state is DictationState.Preparing or DictationState.Recording;
         dictateItem.Text = busy ? "録音を止めて入力" : "音声入力を開始";
         dictateItem.ShortcutKeyDisplayString = s.HotKey.DisplayString;
-        translateItem.Text = "英訳して入力";
+        translateItem.Text = $"{TranslationLanguages.MenuVerb(s.TranslationLanguages)}して入力";
         translateItem.ShortcutKeyDisplayString = s.TranslateHotKey.DisplayString;
         // 処理中はどちらも押せない。録音中は「止める」だけ押せる。会議の記録中は音声入力を使えない
         var meetingIdle = meetingState == MeetingState.Idle;

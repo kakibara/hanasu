@@ -34,11 +34,13 @@ public abstract record GeminiPart
     public sealed record InlineData(string MimeType, byte[] Data) : GeminiPart;
 }
 
-/// <summary>音声入力の整形・英訳。テストや会議の記録から差し替えられるよう、インターフェイスにしておく。</summary>
+/// <summary>音声入力の整形・翻訳。テストや会議の記録から差し替えられるよう、インターフェイスにしておく。</summary>
 public interface IDictationRefiner
 {
     Task<string> RefineAsync(RefineRequest request, CancellationToken cancellationToken = default);
-    Task<string> TranslateToEnglishAsync(RefineRequest request, CancellationToken cancellationToken = default);
+    // 要件: REQ-DIC-010, REQ-DIC-013
+    /// <summary>話した内容を翻訳の言語に翻訳する</summary>
+    Task<string> TranslateAsync(RefineRequest request, Dictation.TranslationLanguage language, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -78,9 +80,9 @@ public sealed class GeminiClient : ITextAiClient
         GenerateAsync(GeminiPrompts.SystemInstruction(request.OutputLanguage), [new GeminiPart.Text(GeminiPrompts.UserPrompt(request))], request.Model,
             cancellationToken: cancellationToken);
 
-    /// <summary>話した内容を英語に翻訳する。追加の整形ルールは日本語の文体向けなので使わない。</summary>
-    public Task<string> TranslateToEnglishAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
-        GenerateAsync(GeminiPrompts.TranslationInstruction, [new GeminiPart.Text(GeminiPrompts.UserPrompt(request, translating: true))], request.Model,
+    /// <summary>話した内容を翻訳する。英訳では、追加の整形ルールは日本語の文体向けなので使わない。</summary>
+    public Task<string> TranslateAsync(RefineRequest request, Dictation.TranslationLanguage language, CancellationToken cancellationToken = default) =>
+        GenerateAsync(GeminiPrompts.TranslationSystemInstruction(language), [new GeminiPart.Text(GeminiPrompts.UserPrompt(request, language))], request.Model,
             cancellationToken: cancellationToken);
 
     /// <summary>音声（WAV など）を inline data で送り、文字起こしだけをさせる。話し声がなければ空文字を返す。</summary>

@@ -5,8 +5,9 @@ using Hanasu.Core.Meetings;
 
 namespace Hanasu.Core.Dictation;
 
-/// <summary>履歴の 1 件のモード（Mac 版の DictationHistoryEntry.Mode と同じ値）</summary>
-public enum HistoryMode { Refine, Translate }
+// 設計判断: DEC-DIC-029
+/// <summary>履歴の 1 件のモード（Mac 版の DictationHistoryEntry.Mode と同じ値）。英訳は今までの値（translate）のまま、和訳は translateJapanese</summary>
+public enum HistoryMode { Refine, Translate, TranslateJapanese }
 
 /// <summary>
 /// 履歴の 1 件の状態（Mac 版の DictationHistoryEntry.Status と同じ値。JSON では camelCase で書く）。
@@ -23,7 +24,7 @@ public sealed class DictationHistoryEntry
     public DateTimeOffset Date { get; init; }
     /// <summary>文字起こしの原文</summary>
     public string Raw { get; init; } = "";
-    /// <summary>入力した結果（整形後・英訳後。失敗したときは辞書だけ当てた原文）</summary>
+    /// <summary>入力した結果（整形後・翻訳後。失敗したときは辞書だけ当てた原文）</summary>
     public string Output { get; init; } = "";
     public HistoryMode Mode { get; init; }
     /// <summary>入力先のアプリ</summary>
@@ -38,7 +39,12 @@ public sealed class DictationHistoryEntry
     [JsonIgnore]
     public bool Transient { get; init; }
 
-    public static HistoryMode ModeOf(DictationMode mode) => mode == DictationMode.TranslateToEnglish ? HistoryMode.Translate : HistoryMode.Refine;
+    public static HistoryMode ModeOf(DictationMode mode) => mode switch
+    {
+        DictationMode.TranslateToEnglish => HistoryMode.Translate,
+        DictationMode.TranslateToJapanese => HistoryMode.TranslateJapanese,
+        _ => HistoryMode.Refine,
+    };
 
     public static HistoryStatus StatusOf(ProcessStatus status) => status switch
     {
@@ -48,7 +54,12 @@ public sealed class DictationHistoryEntry
         _ => HistoryStatus.RefineOff,
     };
 
-    public static string ModeLabel(HistoryMode mode) => mode == HistoryMode.Translate ? "英訳" : "整形";
+    public static string ModeLabel(HistoryMode mode) => mode switch
+    {
+        HistoryMode.Translate => TranslationLanguage.English.Verb(),
+        HistoryMode.TranslateJapanese => TranslationLanguage.Japanese.Verb(),
+        _ => "整形",
+    };
 
     public static string StatusLabel(HistoryStatus status) => status switch
     {

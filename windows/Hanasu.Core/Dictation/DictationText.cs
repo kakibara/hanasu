@@ -4,12 +4,13 @@ using Hanasu.Core.Settings;
 
 namespace Hanasu.Core.Dictation;
 
-/// <summary>録音を始めたショートカットで決まる。整形して日本語で入力するか、英語に翻訳して入力するか</summary>
-public enum DictationMode { Refine, TranslateToEnglish }
+// 要件: REQ-DIC-010, REQ-DIC-013
+/// <summary>録音を始めたショートカットで決まる。整形して話した言語で入力するか、翻訳の言語（英語・日本語）に翻訳して入力するか</summary>
+public enum DictationMode { Refine, TranslateToEnglish, TranslateToJapanese }
 
 public enum ProcessStatus
 {
-    /// <summary>AI（Gemini か Claude）で整形（英訳）した</summary>
+    /// <summary>AI（Gemini か Claude）で整形（翻訳）した</summary>
     Succeeded,
     /// <summary>整形をオフにしていたので、辞書だけ当てた</summary>
     RefineOff,
@@ -23,7 +24,7 @@ public enum ProcessStatus
 public sealed record ProcessOutcome(string Output, ProcessStatus Status, string? Warning = null);
 
 /// <summary>
-/// 認識結果に辞書を当て、AI（設定の「音声入力の AI」。Gemini か Claude）で整形（または英訳）する。
+/// 認識結果に辞書を当て、AI（設定の「音声入力の AI」。Gemini か Claude）で整形（または翻訳）する。
 /// 失敗したら原文を返して知らせる（話した内容を失わない）。
 /// Mac 版の DictationController.finishDictation の中ほどにあたる（スニペット・アプリ別スタイル・画面の文脈は Windows 版にはない）。
 /// </summary>
@@ -37,9 +38,9 @@ public sealed class DictationTextProcessor
         this.refinerFactory = refinerFactory;
     }
 
-    /// <summary>AI に送るか（英訳は AI でしかできないので、整形をオフにしていても送る）</summary>
+    /// <summary>AI に送るか（翻訳は AI でしかできないので、整形をオフにしていても送る）</summary>
     public static bool UsesGemini(AppSettings settings, DictationMode mode) =>
-        settings.RefineWithGemini || mode == DictationMode.TranslateToEnglish;
+        settings.RefineWithGemini || mode.Translation() is not null;
 
     public async Task<ProcessOutcome> ProcessAsync(string raw, DictationMode mode, string? appName, AppSettings settings,
         CancellationToken cancellationToken = default)
@@ -49,8 +50,8 @@ public sealed class DictationTextProcessor
         var corrected = dictionary.Apply(raw);
         if (!UsesGemini(settings, mode)) return new ProcessOutcome(corrected, ProcessStatus.RefineOff);
 
-        var translating = mode == DictationMode.TranslateToEnglish;
-        var verb = translating ? "翻訳" : "整形";
+        var translation = mode.Translation();
+        var verb = translation is not null ? "翻訳" : "整形";
         try
         {
             var refiner = refinerFactory(settings);
@@ -70,8 +71,8 @@ public sealed class DictationTextProcessor
                 // 要件: REQ-DIC-082
                 OutputLanguage = settings.RefineOutputLanguage,
             };
-            var output = translating
-                ? await refiner.TranslateToEnglishAsync(request, cancellationToken).ConfigureAwait(false)
+            var output = translation is { } language
+                ? await refiner.TranslateAsync(request, language, cancellationToken).ConfigureAwait(false)
                 : await refiner.RefineAsync(request, cancellationToken).ConfigureAwait(false);
             return new ProcessOutcome(output, ProcessStatus.Succeeded);
         }

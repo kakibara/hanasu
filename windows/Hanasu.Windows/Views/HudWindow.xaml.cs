@@ -11,7 +11,7 @@ namespace Hanasu.Windows.Views;
 /// <summary>
 /// 画面の下に出る小さな状態表示（Mac 版の HUDPanel）。
 /// WS_EX_NOACTIVATE で、前面に出てもクリックされても入力先アプリのフォーカスを奪わない。
-/// 「話した言語 / English」「取消」「■ 停止」を押せる準備中・録音中だけクリックを受け取り、それ以外は WS_EX_TRANSPARENT でマウスを素通しする。
+/// 「話した言語 / English / 日本語」「取消」「■ 停止」を押せる準備中・録音中だけクリックを受け取り、それ以外は WS_EX_TRANSPARENT でマウスを素通しする。
 /// 貼り付けなかったとき（HudPhase.Unpasted）は、広げて結果の全文・「コピー」「閉じる」を出し、自動では閉じない。
 /// 文章をクリックしたときだけ前面に出して（文字の選択・Ctrl+C・Esc のため）、閉じるときに元のウインドウへフォーカスを返す。
 /// IHud のメソッドはどのスレッドから呼んでもよい（UI スレッドに回す）。
@@ -29,14 +29,15 @@ public partial class HudWindow : Window, IHud
     private readonly DispatcherTimer hideTimer;
     private HudState state = HudState.Recording;
     private string transcript = "";
-    private bool translating;
+    private TranslationLanguage? translation;
+    private IReadOnlyList<TranslationLanguage> translationChoices = [TranslationLanguage.English];
     private DateTime startedAt = DateTime.Now;
     private IntPtr hwnd;
     /// <summary>結果の文章をクリックして、前面に出している（WS_EX_NOACTIVATE を外している）</summary>
     private bool activatedForSelection;
     private readonly DispatcherTimer copyFeedbackTimer;
 
-    public event EventHandler<bool>? LanguageSelected;
+    public event EventHandler<TranslationLanguage?>? LanguageSelected;
     public event EventHandler? StopRequested;
     public event EventHandler? CancelRequested;
 
@@ -117,9 +118,11 @@ public partial class HudWindow : Window, IHud
         DetailText.Text = HudText.Detail(state, transcript) ?? "";
     });
 
-    public void SetTranslating(bool value) => OnUi(() =>
+    // 要件: REQ-DIC-011, REQ-DIC-013
+    public void SetLanguages(TranslationLanguage? selected, IReadOnlyList<TranslationLanguage> choices) => OnUi(() =>
     {
-        translating = value;
+        translation = selected;
+        translationChoices = choices;
         RenderLanguage();
     });
 
@@ -172,13 +175,19 @@ public partial class HudWindow : Window, IHud
     private void RenderLanguage()
     {
         LanguageSwitch.Visibility = HudText.CanChooseLanguage(state.Phase) ? Visibility.Visible : Visibility.Collapsed;
-        JapaneseButton.Tag = translating ? null : "selected";
-        EnglishButton.Tag = translating ? "selected" : null;
+        SpokenLanguageButton.Tag = translation is null ? "selected" : null;
+        foreach (var (button, language) in new[] { (EnglishButton, TranslationLanguage.English), (JapaneseButton, TranslationLanguage.Japanese) })
+        {
+            button.Visibility = translationChoices.Contains(language) ? Visibility.Visible : Visibility.Collapsed;
+            button.Tag = translation == language ? "selected" : null;
+        }
     }
 
-    private void OnJapaneseClick(object sender, RoutedEventArgs e) => LanguageSelected?.Invoke(this, false);
+    private void OnSpokenLanguageClick(object sender, RoutedEventArgs e) => LanguageSelected?.Invoke(this, null);
 
-    private void OnEnglishClick(object sender, RoutedEventArgs e) => LanguageSelected?.Invoke(this, true);
+    private void OnEnglishClick(object sender, RoutedEventArgs e) => LanguageSelected?.Invoke(this, TranslationLanguage.English);
+
+    private void OnJapaneseClick(object sender, RoutedEventArgs e) => LanguageSelected?.Invoke(this, TranslationLanguage.Japanese);
 
     private void OnStopClick(object sender, RoutedEventArgs e) => StopRequested?.Invoke(this, EventArgs.Empty);
 

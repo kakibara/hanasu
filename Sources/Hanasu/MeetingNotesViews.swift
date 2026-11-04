@@ -119,7 +119,16 @@ struct HighlightUndoButton: View {
     @ObservedObject var recorder: MeetingRecorder
     var compact = false
 
+    // 設計判断: DEC-COM-016
+    // 記録中だけ時計を動かす。メモ欄と字幕のパネルは、閉じても記録していなくても残るので、
+    // 常に動かすと 0.5 秒ごとの描き直しが続く
     var body: some View {
+        if recorder.state == .recording {
+            timeline
+        }
+    }
+
+    private var timeline: some View {
         TimelineView(.periodic(from: .now, by: 0.5)) { _ in
             if let note = recorder.undoableHighlight, let time = note.time {
                 let remaining = max(1, Int((Meeting.highlightUndoSeconds - (recorder.elapsed - time)).rounded(.up)))
