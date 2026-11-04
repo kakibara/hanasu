@@ -187,8 +187,12 @@ enum MinutesCLI {
         try render(detail, to: dir.appendingPathComponent("detail.png"))
         // 「メモ」タブ（長いメモでも、上のタブの切り替えが見えたままか）
         var noted = meeting
-        noted.notes = (0..<60).map { i in
-            MeetingNote(kind: i % 7 == 3 ? .highlight : .note, time: Double(i * 40), text: i % 7 == 3 ? "" : "メモ \(i + 1)")
+        // 型を書いておく（三項演算子を重ねると、リリースの最適化ビルドで型の推論が時間切れになる）
+        noted.notes = (0..<60).map { (i: Int) -> MeetingNote in
+            let isHighlight = i % 7 == 3
+            let kind: MeetingNote.Kind = isHighlight ? .highlight : .note
+            let text = isHighlight ? "" : "メモ \(i + 1)"
+            return MeetingNote(kind: kind, time: Double(i * 40), text: text)
         }
         let notesTab = MeetingDetailView(meeting: noted, recorder: recorder, initialTab: 2)
             .frame(width: 600, height: 640)
