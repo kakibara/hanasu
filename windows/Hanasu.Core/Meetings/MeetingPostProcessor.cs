@@ -95,8 +95,8 @@ public sealed class MeetingPostProcessor
                 try
                 {
                     var result = await MeetingProcessor.MakeMinutesAsync(meeting, client, MinutesModel, cancellationToken).ConfigureAwait(false);
-                    meeting.Minutes = result.Markdown;
-                    meeting.ActionItems = result.ActionItems;
+                    // 要件: REQ-MTG-027
+                    meeting.ApplyMinutes(result);
                 }
                 catch (TextAiException e)
                 {

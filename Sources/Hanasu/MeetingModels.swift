@@ -58,6 +58,9 @@ struct Meeting: Codable, Identifiable, Hashable {
     var actionItems: [ActionItem]?
     /// ユーザーのメモと「ここ重要」の印（MeetingNotes.swift）。古い会議の meeting.json にはないので省略可にする
     var notes: [MeetingNote]?
+    // 設計判断: DEC-MTG-069
+    /// 会話から推測して名前を付けた話者キー（SpeakerNameInference）。ユーザーが直すと外す。古い会議にはないので省略可
+    var inferredSpeakers: [String]?
 
     // 要件: REQ-MTG-008
     func displayName(for speaker: String) -> String {

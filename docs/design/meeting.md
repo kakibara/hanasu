@@ -155,7 +155,8 @@ Mac 標準は今までどおり（チャンネルごとの SpeechTranscriber で
 - 音声入力機能と同じ `GeminiClient`（API キー／サービスアカウント）を使う。
 - 長い会議でも入る（1 時間の文字起こしは数万文字。Gemini の入力上限に十分収まる）。
 - モデルは要約の質を優先して `gemini-3.8-flash` を初期値にする（音声入力と違って待ち時間が問題になりにくい）。
-- 出力: 概要／話題ごとの要点／決定事項／TODO（担当・期限が分かれば）／話者名の推定（「話者1 は文中で『田中さん』と呼ばれている」など。推定であることを明記し、自動では書き換えない）。
+- 出力: 概要／話題ごとの要点／決定事項／TODO（担当・期限が分かれば）／話者についてのメモ（「話者1 は文中で『田中さん』と呼ばれている」など。推定であることを明記する）。
+- 話者の名前（REQ-MTG-027）: 同じ応答の末尾の `<speaker_names>` で、会話から名前がはっきり分かる話者の名前を受け取る（`MinutesPrompt.speakerNamesInstruction`、DEC-MTG-068）。`SpeakerNameInference`（Mac: `SpeakerNameInference.swift`、Windows: `Hanasu.Core/Meetings/SpeakerNameInference.cs`）が名前を検査し、名前のない話者（「自分」を除く）にだけ付け、議事録の本文とアクションアイテムの担当のラベルも置き換え、`meeting.json` の `inferredSpeakers` に記録する（DEC-MTG-069）。会議ノートの話者名の欄に「推測」と出し、直すと外す。呼び出すのは `Meeting.applyMinutes`（記録のあとの議事録・作り直し・CLI）。
 
 ### 4.8 会議の自動検出（F9）
 
@@ -315,7 +316,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 
 ```
 ~/Documents/Hanasu/Meetings/2026-11-02 1430 定例/
-├── meeting.json      # メタデータ、話者名の対応表、発言の配列（話者・開始・終了・本文）、議事録の型、アクションアイテム
+├── meeting.json      # メタデータ、話者名の対応表（と、会話から推測した話者 inferredSpeakers）、発言の配列（話者・開始・終了・本文）、議事録の型、アクションアイテム
 ├── transcript.md     # [00:01:23] 話者1: …… の形式
 ├── minutes.md        # Gemini の議事録
 ├── notes.md          # 会議中のメモと「ここ重要」の印（あるときだけ。中身は meeting.json の notes と同じ）

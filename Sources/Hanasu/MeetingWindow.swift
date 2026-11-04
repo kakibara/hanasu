@@ -394,21 +394,30 @@ private struct SpeakerNamesSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("話者名").font(.headline)
-            Text("議事録の「話者についてのメモ」も参考にしてください。変更は文字起こしに反映されます（議事録は作り直すと反映されます）。")
+            Text("議事録の「話者についてのメモ」も参考にしてください。「推測」は、議事録を作るときに会話から推測して付けた名前です。変更は文字起こしに反映されます（議事録は作り直すと反映されます）。")
                 .font(.caption).foregroundStyle(.secondary)
             Form {
                 ForEach(meeting.speakers, id: \.self) { speaker in
-                    TextField(Meeting(id: "", title: "", startedAt: Date()).displayName(for: speaker),
-                              text: Binding(get: { names[speaker] ?? "" }, set: { names[speaker] = $0 }))
+                    HStack {
+                        TextField(Meeting(id: "", title: "", startedAt: Date()).displayName(for: speaker),
+                                  text: Binding(get: { names[speaker] ?? "" }, set: { names[speaker] = $0 }))
+                        // 要件: REQ-MTG-027
+                        // 設計判断: DEC-MTG-069
+                        if meeting.isInferredName(speaker), names[speaker] == meeting.speakerNames[speaker] {
+                            Text("推測")
+                                .font(.caption)
+                                .foregroundStyle(.orange)
+                                .help("会話から推測した名前です。違っていたら直してください")
+                        }
+                    }
                 }
             }
             HStack {
                 Spacer()
                 Button("キャンセル") { dismiss() }
                 Button("保存") {
-                    for (speaker, name) in names {
-                        recorder.renameSpeaker(meeting, speaker: speaker, to: name)
-                    }
+                    // 変えた話者だけを、まとめて保存する（推測の印は、直した話者だけ外す）
+                    recorder.renameSpeakers(meeting, names: names.filter { $0.value != (meeting.speakerNames[$0.key] ?? "") })
                     dismiss()
                 }
                 .keyboardShortcut(.defaultAction)

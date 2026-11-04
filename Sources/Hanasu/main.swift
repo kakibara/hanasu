@@ -355,6 +355,8 @@ MainActor.assumeIsolated { MeetingSearchCLI.runIfRequested(CommandLine.arguments
 
 // 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
+// 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）
+SpeakerNameInferenceCLI.runIfRequested()
 
 MainActor.assumeIsolated {
     let app = NSApplication.shared
