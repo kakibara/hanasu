@@ -100,7 +100,7 @@ internal sealed class Harness
     public FakeRefiner Refiner { get; } = new();
     public bool HasCredentials { get; set; } = true;
     public FakeInserter Inserter { get; } = new();
-    public RecentResults Recent { get; } = new();
+    public DictationHistoryStore History { get; } = new(TestKeys.TempDirectory());
     public List<bool> Escape { get; } = new();
     public List<SoundCue> Sounds { get; } = new();
     public List<string> OpenedHelp { get; } = new();
@@ -115,7 +115,7 @@ internal sealed class Harness
             Processor = new DictationTextProcessor(_ => HasCredentials ? Refiner : null),
             Inserter = Inserter,
             Hud = Hud,
-            Recent = Recent,
+            History = History,
             ForegroundAppName = () => "Slack",
             SetEscapeHotKeyEnabled = Escape.Add,
             PlaySound = Sounds.Add,
@@ -155,7 +155,14 @@ public class DictationControllerTests
         Assert.Equal(HudPhase.Done, h.Hud.Last.Phase);
         Assert.Equal("入力しました", h.Hud.Last.Message);
         Assert.Equal([SoundCue.Start, SoundCue.Stop], h.Sounds);
-        Assert.Equal("えーと資料はジェミニで作りました", Assert.Single(h.Recent.Entries).Raw);
+        var entry = Assert.Single(h.History.Entries);
+        Assert.Equal("えーと資料はジェミニで作りました", entry.Raw);
+        Assert.Equal("整形:えーと資料はGeminiで作りました", entry.Output);
+        Assert.Equal(HistoryStatus.Succeeded, entry.Status);
+        Assert.Equal(HistoryMode.Refine, entry.Mode);
+        Assert.Equal("Slack", entry.AppName);
+        Assert.Equal(h.Settings.Model, entry.Model);
+        Assert.True(File.Exists(h.History.FilePath));
         Assert.Equal([true, false], h.Escape);
     }
 
@@ -364,7 +371,7 @@ public class DictationControllerTests
         Assert.True(HudText.AcceptsClicks(shown.Phase));
         Assert.Equal(DictationState.Idle, h.Controller.State);
         // 履歴（最近の結果）には今までどおり残る
-        Assert.Equal("整形:えーと資料はGeminiで作りました", h.Recent.Entries[0].Output);
+        Assert.Equal("整形:えーと資料はGeminiで作りました", h.History.Entries[0].Output);
     }
 
     // 確かめ方: REQ-DIC-081
@@ -448,29 +455,6 @@ public class DictationControllerTests
     {
         for (var i = 0; i < 200 && h.Controller.State != DictationState.Idle; i++) await Task.Delay(5);
         Assert.Equal(DictationState.Idle, h.Controller.State);
-    }
-}
-
-public class RecentResultsTests
-{
-    [Fact]
-    public void KeepsTheNewestTen()
-    {
-        var recent = new RecentResults();
-        for (var i = 0; i < 12; i++) recent.Add($"raw{i}", $"out{i}", DictationMode.Refine);
-        Assert.Equal(10, recent.Entries.Count);
-        Assert.Equal("out11", recent.Entries[0].Output);
-        Assert.Equal("out2", recent.Entries[^1].Output);
-    }
-
-    [Fact]
-    public void MenuLabelIsShortAndSingleLine()
-    {
-        var entry = new RecentResults.Entry(new DateTimeOffset(2026, 11, 3, 9, 5, 0, TimeSpan.Zero), "r", "一行目\n" + new string('あ', 60), DictationMode.Refine);
-        var label = RecentResults.MenuLabel(entry);
-        Assert.StartsWith("09:05  一行目 あ", label);
-        Assert.EndsWith("…", label);
-        Assert.DoesNotContain('\n', label);
     }
 }
 

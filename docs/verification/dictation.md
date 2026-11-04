@@ -252,3 +252,12 @@ Windows の実機がないので、画面とフォーカスの動きはまだ確
   - 議事録（作った 2 時間 40 分・2.2 万字の文字起こし）: 4 つの部分に分けて要点にし（部分ごとに 1 回）、要点（490 バイト）から議事録を作った。本文の中のアクションアイテムの JSON も読めた。
   - 設定の画面（`--render-ai-settings <png> --apple`）: 「Apple」を選ぶと、使えない理由がオレンジで出る。
 
+## 15. Windows 版の音声入力の履歴（2026-11-04、macOS の上の .NET 10 SDK）
+
+関係: REQ-DIC-060、REQ-DIC-063、DEC-DIC-071〜074・078・079・130・131
+
+Windows の実機がないので、ウインドウ・タスクトレイ・設定の「履歴」タブの操作はまだ確かめていない。Mac の上で確かめたこと:
+
+- `dotnet test Hanasu.Core.Tests`: 231 件すべて通った。足した `DictationHistoryTests`（16 件）で、既定値（保存する・30 日・1000 件。項目のない前の版の settings.json も同じ）、保存と読み直し（秒までの日時・ID・状態・モデル・入力先）、Mac 版の形（`version`・camelCase・`refineOff` などの小文字・大文字の UUID・null を書かない）と Mac 版の history.json（録音・やり直しの項目つき）を読めること、30 日を過ぎたものが追加・起動・日数の変更で消えること、無期限、件数の上限、保存しない設定でメモリに 10 件・ファイルに触らないこと、壊れたファイルを `history.json.broken` に退けて上書きしないこと、削除、「最近の結果」の 10 件、検索（結果・原文・アプリ名、すべての語）と「失敗・未整形」、日ごとの見出し、メニューの 1 行を確かめた。`DictationControllerTests` では、音声入力のあと履歴に状態・モード・入力先・モデルつきで残り、ファイルに書かれることを確かめた。
+- `dotnet build Hanasu.Windows.sln -c Release --no-incremental`: 警告 0・エラー 0（WPF の履歴のウインドウと設定の「履歴」タブはコンパイルだけ）。
+- `python3 scripts/check-spec.py`: エラーなし。

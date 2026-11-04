@@ -332,6 +332,44 @@
                 </ScrollViewer>
             </TabItem>
 
+            <!-- 履歴 -->
+            <!-- 要件: REQ-DIC-063 -->
+            <!-- 設計判断: DEC-DIC-073, DEC-DIC-074 -->
+            <TabItem Header="履歴">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14,4,14,14">
+                        <TextBlock Style="{StaticResource Section}" Text="音声入力の履歴" />
+                        <CheckBox x:Name="HistoryEnabledCheck" Content="履歴をファイルに保存する" Checked="OnHistoryEnabledChanged" Unchecked="OnHistoryEnabledChanged" />
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="音声入力の結果と文字起こしの原文を残し、「履歴を開く」で探してコピーできます。オフにすると、新しい結果はファイルに書かず、タスクトレイの「最近の結果」用に直近 10 件だけをメモリに置きます（保存済みの履歴は消しません）。" />
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="残す日数" VerticalAlignment="Center" />
+                            <ComboBox x:Name="HistoryDaysCombo" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="160" Margin="0,2"
+                                      SelectionChanged="OnHistoryLimitChanged" />
+                            <TextBlock Grid.Row="1" Text="残す件数" VerticalAlignment="Center" />
+                            <ComboBox x:Name="HistoryCountCombo" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" MinWidth="160" Margin="0,2"
+                                      SelectionChanged="OnHistoryLimitChanged" />
+                        </Grid>
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="日数と件数の両方を満たすものだけを残し、古いものから消します（追加したとき・起動したとき・ここを変えたとき）。既定は 30 日・1000 件です。" />
+                        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                            <Button Content="履歴を開く…" Click="OnOpenHistory" />
+                            <Button Content="保存先を開く" Click="OnOpenHistoryFolder" />
+                            <Button Content="履歴をすべて削除…" Click="OnDeleteAllHistory" />
+                        </StackPanel>
+                        <TextBlock x:Name="HistoryStatus" Style="{StaticResource Note}" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
             <!-- 辞書・ルール -->
             <TabItem Header="辞書・ルール">
                 <Grid Margin="14,4,14,14">

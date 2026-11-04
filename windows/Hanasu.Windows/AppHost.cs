@@ -32,6 +32,7 @@ internal sealed class AppHost : IDisposable
     private TrayIcon? tray;
     private SettingsWindow? settingsWindow;
     private MeetingWindow? meetingWindow;
+    private HistoryWindow? historyWindow;
     private int? meetingHotKeyId;
     private int? highlightHotKeyId;
     private int? dictationHotKeyId;
@@ -42,10 +43,11 @@ internal sealed class AppHost : IDisposable
     public SettingsService Settings { get; }
     public SecretStore Secrets { get; }
     public WhisperModelManager WhisperModels { get; } = new(HanasuPaths.ModelsDirectory);
+    /// <summary>音声入力の履歴（%LOCALAPPDATA%\Hanasu\History\history.json。REQ-DIC-060）</summary>
+    public DictationHistoryStore History { get; } = new(DictationHistoryStore.DefaultDirectory);
     // 要件: REQ-COM-030
     /// <summary>ローカルの LLM のモデル（ダウンロード・削除）。サーバーは LocalLlmServer.Shared を使う</summary>
     public LocalLlmModelManager LocalLlmModels { get; } = new(LocalLlmServer.Shared);
-    public RecentResults Recent { get; } = new();
     public DictationController Dictation { get; }
     public MeetingController Meetings { get; }
 
@@ -57,6 +59,9 @@ internal sealed class AppHost : IDisposable
         // API キーは settings.json ではなく %LOCALAPPDATA%\Hanasu\secrets.json に、DPAPI か Windows Hello で暗号化して置く（DEC-COM-144）
         Secrets = new SecretStore(SecretStore.DefaultPath, new DpapiDataProtector(), new WindowsHelloKey());
         Settings = new SettingsService(store, Secrets);
+        History.ApplyPolicy(Settings.Current.HistoryPolicy);
+        History.Load();
+        if (History.LastError is { } historyError) AppLog.Write($"history: {historyError}");
         Dictation = new DictationController(new DictationServices
         {
             Settings = () => Settings.Current,
@@ -64,7 +69,7 @@ internal sealed class AppHost : IDisposable
             Processor = new DictationTextProcessor(s => CreateTextAi(s, TextAiUse.Dictation)),
             Inserter = inserter,
             Hud = hud,
-            Recent = Recent,
+            History = History,
             ForegroundAppName = foreground.ForegroundAppName,
             SetEscapeHotKeyEnabled = SetEscapeHotKey,
             PlaySound = cue =>
@@ -115,7 +120,7 @@ internal sealed class AppHost : IDisposable
         Microsoft.Win32.SystemEvents.PowerModeChanged += OnPowerModeChanged;
         tray = new TrayIcon(this);
         Dictation.StateChanged += (_, state) => tray?.UpdateState(state);
-        Recent.Changed += (_, _) => app.Dispatcher.BeginInvoke(() => tray?.UpdateRecent());
+        History.Changed += (_, _) => app.Dispatcher.BeginInvoke(() => tray?.UpdateRecent());
         Settings.Changed += OnSettingsChanged;
         Meetings.StateChanged += (_, state) => app.Dispatcher.BeginInvoke(() =>
         {
@@ -252,6 +257,8 @@ internal sealed class AppHost : IDisposable
 
     private void OnSettingsChanged(object? sender, SettingsChangedEventArgs e)
     {
+        // 履歴の上限を縮めたら、その場で古いものを消す（DEC-DIC-073）
+        if (e.Before.HistoryPolicy != e.After.HistoryPolicy) History.ApplyPolicy(e.After.HistoryPolicy);
         if (e.Before.HotKey != e.After.HotKey || e.Before.TranslateHotKey != e.After.TranslateHotKey
             || e.Before.MeetingHotKey != e.After.MeetingHotKey || e.Before.HighlightHotKey != e.After.HighlightHotKey
             || e.Before.HighlightHotKeyEnabled != e.After.HighlightHotKeyEnabled)
@@ -299,6 +306,18 @@ internal sealed class AppHost : IDisposable
         }
         if (meetingWindow.WindowState == WindowState.Minimized) meetingWindow.WindowState = WindowState.Normal;
         meetingWindow.Activate();
+    }
+
+    public void ShowHistory()
+    {
+        if (historyWindow is null)
+        {
+            historyWindow = new HistoryWindow(this);
+            historyWindow.Closed += (_, _) => historyWindow = null;
+            historyWindow.Show();
+        }
+        if (historyWindow.WindowState == WindowState.Minimized) historyWindow.WindowState = WindowState.Normal;
+        historyWindow.Activate();
     }
 
     /// <summary>タスクトレイのメニューから会議の記録を始める・止める</summary>

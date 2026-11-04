@@ -155,10 +155,12 @@
 ### REQ-DIC-060 音声入力の履歴を残し、検索・コピー・削除できる
 - 内容: 結果と文字起こしの原文を履歴として残し、履歴ウインドウで検索・コピー・削除できる。
 - 受け入れ条件: 音声入力のあと、履歴ウインドウに結果と原文が出る。アプリを再起動しても残る。
-- 出典: PR #9
-- 対象: Mac
+  - Windows: タスクトレイの「履歴を開く…」（または「最近の結果」→「すべての履歴を開く…」）で履歴のウインドウが開き、日ごとの一覧から検索・「失敗・未整形」の絞り込み・結果と原文のコピー・削除ができる。
+- 出典: PR #9（Mac）、ユーザーの依頼（2026-11-04「音声入力を行った結果の履歴を残すようにして。履歴はデフォルトでは30日保存するようにして、システムで保存日数を変更できるようにして」。Mac 版にはあったので、Windows 版に足した）
+- 対象: Mac / Windows
 - 実装の場所: `DictationHistoryStore`、`DictationHistoryView`
-- 確かめ方: `.build/debug/Hanasu --history-check /tmp/hanasu-history`、`--render-history /tmp/history.png`
+- Windows の実装: `windows/Hanasu.Core/Dictation/DictationHistory.cs`（`DictationHistoryStore`）、`windows/Hanasu.Windows/Views/HistoryWindow.xaml.cs`、`windows/Hanasu.Windows/TrayIcon.cs`
+- 確かめ方: `.build/debug/Hanasu --history-check /tmp/hanasu-history`、`--render-history /tmp/history.png`。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~DictationHistory"`（保存・読み直し・Mac 版の形との互換・検索）。ウインドウの操作は実機で確かめる
 
 ### REQ-DIC-061 整形に失敗した文を、原文から整え直す
 - 内容: 履歴の項目を、原文から「整形し直す」「英訳し直す」ことができる。Gemini に失敗した項目には印を付ける。
@@ -175,6 +177,18 @@
 - 対象: Mac
 - 実装の場所: `DictationHistoryUI.repasteLast`
 - 確かめ方: 実機で確かめる
+
+### REQ-DIC-063 履歴は既定で 30 日残し、残す日数を設定で変えられる
+- 内容: 音声入力の履歴は、既定で 30 日のあいだ残す。残す日数は設定で変えられる。
+- 受け入れ条件:
+  - 初めて使うときの設定で、30 日より前の履歴は消え、30 日以内の履歴は残る（アプリを再起動しても）。
+  - 設定の「履歴」タブで、残す日数を 7・30・90・365 日・無期限から選べる。縮めると、その場で古い履歴が消える。
+  - 件数の上限（既定 1000 件）もある（DEC-DIC-073）。
+- 出典: ユーザーの依頼（2026-11-04「音声入力を行った結果の履歴を残すようにして。履歴はデフォルトでは30日保存するようにして、システムで保存日数を変更できるようにして」。Mac 版にはあったので、Windows 版に足した）
+- 対象: Mac / Windows
+- 実装の場所: `HistorySettings`（`maxDays`）、`DictationHistoryStore.prune`
+- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`（`HistoryMaxDays`）、`windows/Hanasu.Core/Dictation/DictationHistory.cs`（`DictationHistoryStore.ApplyPolicy`・`Prune`）、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`（「履歴」タブ）
+- 確かめ方: Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~DictationHistoryTests"`（既定値・日数での削除・起動時の削除・無期限）。Mac: 実機で確かめる（設定の「履歴」タブ）
 
 ### REQ-DIC-070 辞書に置き換えルールを書き、文字起こしの結果に必ず当てる
 - 内容: ユーザー辞書に `読み・誤認識 => 正しい表記` の置き換えルールを書ける。ルールは文字起こしの結果に決定的に当てるので、Gemini で整形しないときも効く。
@@ -680,32 +694,36 @@
 - 理由: 依頼の 3 つに「整形オフ」を足した。整形をオフにして入力した結果を「成功」と出すのは正しくない。
 - 決めた場面: PR #9
 - 関係する要件: REQ-DIC-060, REQ-DIC-061
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationHistoryEntry`
+- Windows の実装: Windows 版は録音（`audioFileName`）とやり直した日時（`retriedAt`）を持たない（Mac 版のファイルにあれば読み飛ばす）。AI の失敗は Mac 版と同じ `geminiFailed` と書く（Claude で失敗したときも）。`windows/Hanasu.Core/Dictation/DictationHistory.cs`（`DictationHistoryEntry`）
 
 ### DEC-DIC-072 貼り付けの前に履歴へ書く
 - 決めたこと: ⌘V を送る前に履歴へ書く。
 - 理由: 貼り付けがどこに入っても、結果が残るようにする。
 - 決めた場面: PR #9
 - 関係する要件: REQ-DIC-060, REQ-DIC-062
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationController.finishDictation`、`DictationHistoryStore.record`
+- Windows の実装: `DictationController.FinishAsync`（`windows/Hanasu.Core/Dictation/DictationController.cs`）
 
 ### DEC-DIC-073 履歴の上限は、件数と期間の両方でかける
 - 決めたこと: 件数は 100 / 500 / 1000（既定）/ 5000、期間は 7 / 30（既定）/ 90 / 365 日 / 無期限。両方を満たすものだけを残し、追加・起動・設定の変更のときに古い順に消す（録音も消す）。
 - 理由: 容量と、古い発話を残しすぎないことの両方を抑える。
 - 決めた場面: PR #9
 - 関係する要件: REQ-DIC-060
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `HistorySettings`、`DictationHistoryStore.prune`
+- Windows の実装: 設定の `HistoryMaxCount`・`HistoryMaxDays`、`DictationHistoryStore.ApplyPolicy`・`Prune`（`windows/Hanasu.Core/Dictation/DictationHistory.cs`）
 
 ### DEC-DIC-074 履歴を保存しない設定でも、直近 10 件はメモリに置く
 - 決めたこと: 「履歴をファイルに保存する」をオフにすると、新しい結果はファイルに書かず、メモリ上に直近 10 件だけ置く。保存済みの履歴は消さない（「履歴をすべて削除…」で消す）。
 - 理由: 「最近の結果」と再入力はこれまでどおり使えるようにする。勝手に消すと取り戻せない。
 - 決めた場面: PR #9
 - 関係する要件: REQ-DIC-060, REQ-DIC-008
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationHistoryStore.record`
+- Windows の実装: `DictationHistoryStore.Record`（`Transient`）
 
 ### DEC-DIC-075 録音も残せるようにする（既定はオフ）
 - 決めたこと: 音声認識に渡すのと同じ形式を AAC 32 kbps の m4a に書く。取り消し・認識なし・エラーのときは消し、起動時にどの履歴からも参照されていない録音を消す。容量は履歴の上限で一緒に消えるので別の上限は作らず、使用量の表示と「録音だけをすべて削除」を用意する。履歴ウインドウで再生と「Finder で表示」ができる。
@@ -736,16 +754,18 @@
 - 理由: 初版のメモリ上の 10 件と同じ使い勝手のまま、履歴とつなげる。
 - 決めた場面: PR #9
 - 関係する要件: REQ-DIC-008, REQ-DIC-060
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationHistoryUI.makeRecentResultsMenu`
+- Windows の実装: `TrayIcon.UpdateRecent`。整え直し・再入力がないので、先頭の「最後の結果をもう一度入力」は置かない。ツールチップは状態・結果・原文
 
 ### DEC-DIC-079 履歴ウインドウの検索と表示
 - 決めたこと: 検索は結果・原文・アプリ名が対象で、空白で区切った語をすべて含むものを出す。「すべて ／ 失敗・未整形」の切り替えと、日ごと（今日・昨日・日付）の一覧。右クリックでコピー・削除、⌫ で削除。
 - 理由: 失敗したものを探して整え直す、という使い方をしやすくする。
 - 決めた場面: PR #9
 - 関係する要件: REQ-DIC-060
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictationHistoryView`、`DictationHistoryFilter`
+- Windows の実装: `DictationHistoryStore.Filter`・`DayLabel`、`HistoryWindow`。右クリックでコピー・削除、Delete キーで削除、Ctrl+C で結果をコピー
 
 ### DEC-DIC-080 辞書の書き方
 - 決めたこと: 設定の `dictionaryText` に 1 行 1 項目。語だけの行、`読み => 表記`（矢印は `=>`・`＝＞`・`→`）、読みは「,」「、」で区切って複数、`#` で始まる行は無視。保存形式は今までどおり 1 つの文字列。
@@ -1003,6 +1023,22 @@
 - 関係する要件: REQ-DIC-080
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Windows/Services/FocusProbe.cs`、`PasteTargetJudge.NeedsAutomation`・`IsWin32EditClass`（`windows/Hanasu.Core/Dictation/PasteTarget.cs`）
+
+### DEC-DIC-130 Windows 版の履歴は、Mac 版と同じ形の history.json に保存し、読めないファイルは退けて残す
+- 決めたこと: `%LOCALAPPDATA%\Hanasu\History\history.json` に、Mac 版（DEC-DIC-070）と同じ形（`version`・`entries`。キーは camelCase、日時は秒までの UTC、列挙は小文字、ID は大文字の UUID、null は書かない）で保存する。書き込みは一時ファイルに書いてから置き換える。読めない（壊れた）ファイルは `history.json.broken` に名前を変えて残し、空から始めて、履歴のウインドウにそのことを出す。
+- 理由: Mac 版と同じ形にすれば、会議の記録（`meeting.json`）と同じく、どちらの版でも読める。%LOCALAPPDATA% はほかのユーザーから読めない場所なので、Mac 版の 0600 にあたる扱いを別に足さない。Mac 版の「読めないファイルは上書きしない」と同じく話した内容を失わないようにしつつ、Windows 版には履歴の不具合を直す手段がないので、退けて新しく始め、音声入力の流れを止めない（設定の `settings.json.broken` と同じ扱い）。
+- 決めた場面: 音声入力の履歴を Windows 版に足した PR
+- 関係する要件: REQ-DIC-060
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Dictation/DictationHistory.cs`（`DictationHistoryStore.Load`・`Save`）
+
+### DEC-DIC-131 Windows 版の履歴のウインドウは、検索・絞り込み・コピー・削除だけにする
+- 決めたこと: タスクトレイの「履歴を開く…」と「最近の結果」→「すべての履歴を開く…」、設定の「履歴」タブの「履歴を開く…」から開く。左に日ごとの一覧（時刻・結果の 1 行目・モードと入力先・⚠／未整形の印）、右に選んだ項目の日時・状態・モデル・エラーと、結果・原文の全文。整形し直す・英訳し直す（REQ-DIC-061）と録音の保存・再生（DEC-DIC-075）、最後の結果の再入力（REQ-DIC-062）は作らない。まとめて消すときと「すべて削除」だけ確かめる。
+- 理由: 依頼は「履歴を残す・保存日数を変えられる」なので、残したものを探して取り戻せるところまでにした。整え直しと録音は、足すかを FUT-003 で決める。1 件の削除は Mac 版と同じく確かめない。
+- 決めた場面: 音声入力の履歴を Windows 版に足した PR
+- 関係する要件: REQ-DIC-060
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Views/HistoryWindow.xaml.cs`、`windows/Hanasu.Windows/TrayIcon.cs`
 
 ---
 

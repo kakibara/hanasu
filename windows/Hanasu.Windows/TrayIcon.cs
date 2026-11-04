@@ -7,7 +7,7 @@ namespace Hanasu.Windows;
 
 /// <summary>
 /// タスクトレイのアイコンとメニュー（Mac 版のメニューバーにあたる）。
-/// 音声入力の開始 / 英訳して入力 / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 設定 / 終了。
+/// 音声入力の開始 / 英訳して入力 / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / 設定 / 終了。
 /// </summary>
 internal sealed class TrayIcon : IDisposable
 {
@@ -36,6 +36,7 @@ internal sealed class TrayIcon : IDisposable
         menu.Items.Add(new Forms.ToolStripMenuItem("会議ノートを開く", null, (_, _) => host.ShowMeetings()));
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add(recentItem);
+        menu.Items.Add(new Forms.ToolStripMenuItem("履歴を開く…", null, (_, _) => host.ShowHistory()));
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add(new Forms.ToolStripMenuItem("設定…", null, (_, _) => host.ShowSettings()));
         menu.Items.Add(new Forms.ToolStripMenuItem("終了", null, (_, _) => host.Quit()));
@@ -111,28 +112,32 @@ internal sealed class TrayIcon : IDisposable
         icon.Text = text.Length > 63 ? text[..63] : text;  // NotifyIcon.Text は 63 文字まで
     }
 
-    /// <summary>最近の結果（メモリ上の 10 件）。押すとクリップボードにコピーする</summary>
+    // 設計判断: DEC-DIC-078
+    /// <summary>最近の結果（履歴の新しい順に 10 件）。押すとクリップボードにコピーする。最後に「すべての履歴を開く…」</summary>
     public void UpdateRecent()
     {
         recentItem.DropDownItems.Clear();
-        var entries = host.Recent.Entries;
+        var entries = host.History.Recent;
         if (entries.Count == 0)
         {
             recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem("（まだありません）") { Enabled = false });
-            return;
         }
         foreach (var entry in entries)
         {
             var output = entry.Output;
-            var item = new Forms.ToolStripMenuItem(RecentResults.MenuLabel(entry).Replace("&", "&&"), null, (_, _) => host.CopyToClipboard(output))
+            var tip = $"{DictationHistoryEntry.StatusLabel(entry.Status)}\n結果: {Shorten(output)}\n原文: {Shorten(entry.Raw)}";
+            var item = new Forms.ToolStripMenuItem(DictationHistoryStore.MenuLabel(entry).Replace("&", "&&"), null, (_, _) => host.CopyToClipboard(output))
             {
-                ToolTipText = output.Length > 300 ? output[..300] + "…" : output,
+                ToolTipText = tip,
             };
             recentItem.DropDownItems.Add(item);
         }
         recentItem.DropDownItems.Add(new Forms.ToolStripSeparator());
-        recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem("押すとクリップボードにコピーします") { Enabled = false });
+        if (entries.Count > 0) recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem("押すとクリップボードにコピーします") { Enabled = false });
+        recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem("すべての履歴を開く…", null, (_, _) => host.ShowHistory()));
     }
+
+    private static string Shorten(string text) => text.Length > 150 ? text[..150] + "…" : text;
 
     public void ShowBalloon(string title, string text, bool warning = false)
     {
