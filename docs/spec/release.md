@@ -49,6 +49,17 @@
 - 実装の場所: `LICENSE`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、`windows/THIRD_PARTY_NOTICES.md`、`scripts/build-app.sh`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`（publish の中身の確認）
 - 確かめ方: `./scripts/build-app.sh` のあとの `ls build/Hanasu.app/Contents/Resources`、CI の `windows.yml` の「Check publish output」
 
+### REQ-REL-006 版の上げ幅とリリース文を、決まった手順とテンプレートで作る
+- 内容: リリースのたびに、前の版からの変更をまとめて版の上げ幅（major / minor / patch）を決め、テンプレートに沿ったリリース文を書いて、リリースの本文の先頭に入れる。手順はスキル（Claude Code の `release`）にまとめる。
+- 受け入れ条件:
+  - 新しい機能が入った版は minor 以上になる（tagpr の既定の patch のままにしない）。
+  - リリースの本文が「リリース文（ハイライト・新しい機能・改善・不具合の修正・気をつけること）→ PR の一覧 → インストールの手順と SHA-256」の順になる。リリース文のない版は今までどおり（PR の一覧 → インストール）。
+  - 手動の実行で作り直しても、リリース文とインストールの手順が二重にならない。
+- 出典: ユーザーの依頼（2026-11-04「1.4の方が適切では？リリーススキルを作成して、バージョンの判定とリリース内容をまとめてリリース文を作成するのと、そのためのリリース文テンプレートの作成を含めてリリース手順をスキル化して」）
+- 対象: Mac / Windows
+- 実装の場所: `.claude/skills/release/SKILL.md`（手順）、`docs/releases/TEMPLATE.md`（テンプレート）、`scripts/compose-release-notes.py`、`.github/workflows/tagpr.yml`（`publish` ジョブ）
+- 確かめ方: `python3 scripts/compose-release-notes.py --self-test`。リリースのあと `gh release view <タグ>` で本文の順番を見る
+
 ---
 
 ## 設計判断
@@ -91,7 +102,7 @@
 - 決めた場面: PR #20
 - 関係する要件: REQ-REL-002, REQ-REL-003, REQ-REL-004
 - 対象: Mac / Windows
-- 実装の場所: `.github/workflows/tagpr.yml`（`publish` ジョブ）
+- 実装の場所: `.github/workflows/tagpr.yml`（`publish` ジョブ）、`scripts/compose-release-notes.py`（本文の組み立て。DEC-REL-010）
 
 ### DEC-REL-006 既存のタグの添付ファイルを、手動の実行で作り直せる
 - 決めたこと: Actions の「tagpr」をタグを指定して手動で実行すると、tagpr を飛ばして両方の zip を作り直す。
@@ -116,6 +127,23 @@
 - 関係する要件: REQ-REL-004
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`
+
+
+### DEC-REL-009 版の上げ幅は、今の利用者への影響で決める
+- 決めたこと: 上から順に当てはめる。major は、今の利用者が何かしないと使い続けられない変更（動作環境の引き上げ、設定や保存の形が前の版で読めなくなる、機能の廃止）。minor は新しい機能（新しい要件、要件の「対象」に OS が足された、新しい設定や選択肢）。patch はそれ以外（不具合の修正、文言・見た目の調整、文書・CI・内部の整理）。迷ったら大きい方にし、理由をユーザーに見せる。1.x のあいだ、major はユーザーが決める。版を変えるときは、tagpr のリリース PR の `VERSION` と `CHANGELOG.md` の先頭の見出しを直す（tagpr はマージのときに `VERSION` の版を使う）。
+- 理由: tagpr は何もしなければ patch を上げるので、新しい機能が入った版も patch になっていた（v1.3.1〜v1.3.3）。新しい要件が増えたかは spec の差分で機械的に分かるので、判定の手がかりにしやすい。ラベル（`tagpr:minor`）はマージのときに読まれるかが README からは分からず、`VERSION` を直す方は「マージのときに優先する」と書かれている。
+- 決めた場面: ユーザーの依頼（2026-11-04「1.4の方が適切では？リリーススキルを作成して、バージョンの判定とリリース内容をまとめてリリース文を作成するのと、そのためのリリース文テンプレートの作成を含めてリリース手順をスキル化して」）
+- 関係する要件: REQ-REL-001, REQ-REL-006
+- 対象: Mac / Windows
+- 実装の場所: `.claude/skills/release/SKILL.md`（「2. 版の上げ幅を決める」「4. リリース PR を直す」）
+
+### DEC-REL-010 リリース文は docs/releases/<タグ>.md に置き、publish ジョブが本文の先頭に入れる
+- 決めたこと: リリース文はテンプレート（`docs/releases/TEMPLATE.md`）から `docs/releases/v<版>.md` に書き、tagpr のリリース PR のブランチにコミットする。publish ジョブはタグの時点のそのファイルを読み、`scripts/compose-release-notes.py` で「リリース文（`<!-- release-notes -->` で囲む）→ tagpr の PR の一覧 → インストールの手順と SHA-256」の順に組み立てる。テンプレートのコメントと中身のない見出しは除く。作り直すときは、前に入れたリリース文とインストールの手順を除いてから組み立てる。ファイルがなければ今までどおり。
+- 理由: 公開のあとに本文を手で書き換えると、手動の実行（DEC-REL-006）で作り直したときに消える。リポジトリに置けば、レビューでき、作り直しても同じ本文になる。tagpr の本文は GitHub の自動のリリースノート（PR の一覧）だけで、自分で書いた文を入れる設定がない。リリース PR のブランチに足したコミットは、tagpr が PR を更新しても引き継がれる（tagpr の README）。
+- 決めた場面: ユーザーの依頼（2026-11-04「1.4の方が適切では？リリーススキルを作成して、バージョンの判定とリリース内容をまとめてリリース文を作成するのと、そのためのリリース文テンプレートの作成を含めてリリース手順をスキル化して」）
+- 関係する要件: REQ-REL-006
+- 対象: Mac / Windows
+- 実装の場所: `docs/releases/TEMPLATE.md`、`scripts/compose-release-notes.py`、`.github/workflows/tagpr.yml`（`publish` ジョブ）
 
 ---
 

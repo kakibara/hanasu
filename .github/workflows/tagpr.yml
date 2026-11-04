@@ -171,12 +171,22 @@ jobs:
       WIN_SHA256: ${{ needs.windows.outputs.sha256 }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      # 要件: REQ-REL-006
+      # 設計判断: DEC-REL-010
+      # リリース文（docs/releases/<タグ>.md）と組み立てのスクリプトを、タグの時点のものから読む
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.tagpr.outputs.tag || inputs.tag }}
+          persist-credentials: false
+          sparse-checkout: |
+            docs/releases
+            scripts/compose-release-notes.py
+          sparse-checkout-cone-mode: false
+
       - name: Publish release
         run: |
-          # 作り直したときに二重にならないよう、前回付けたインストール手順から後ろを除いてから付け直す
-          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json body --jq .body | awk '/^## インストール$/ {exit} {print}' > notes.md
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json body --jq .body > body.md
           {
-            echo
             echo "## インストール"
             echo
             echo "### macOS"
@@ -201,5 +211,8 @@ jobs:
             if [[ -n "$WIN_ASSET" ]]; then
               echo "- \`${WIN_ASSET}\`: \`${WIN_SHA256}\`"
             fi
-          } >> notes.md
+          } > install.md
+          # リリース文があれば先頭に入れ、PR の一覧・インストールの順に組み立てる。
+          # 作り直したときに二重にならないよう、前に付けたリリース文とインストールの手順は除いてから付け直す
+          python3 scripts/compose-release-notes.py --body body.md --install install.md --notes "docs/releases/${TAG}.md" > notes.md
           gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --notes-file notes.md --draft=false
