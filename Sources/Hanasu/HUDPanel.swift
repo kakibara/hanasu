@@ -19,7 +19,7 @@ final class HUDModel: ObservableObject {
     @Published var startedAt = Date()
     /// 英訳モードで録音しているか
     @Published var translating = false
-    /// HUD の「日本語／English」を押したとき。録音を止めた時点の選択で出力の言語が決まる
+    /// HUD の「話した言語／English」を押したとき。録音を止めた時点の選択で出力の言語が決まる
     var onSelectTranslating: ((Bool) -> Void)?
     // 要件: REQ-DIC-012
     // 設計判断: DEC-DIC-101
@@ -35,6 +35,9 @@ final class HUDModel: ObservableObject {
     var onStop: (() -> Void)?
     /// HUD の「取消」を押したとき（Esc と同じ）
     var onCancel: (() -> Void)?
+    // 要件: REQ-DIC-140
+    /// HUD のマイクのメニューでマイクを選んだとき（UID。空ならシステムの設定）
+    var onSelectMicrophone: ((String) -> Void)?
 
     /// 準備中と録音中は、出力の言語を選べる
     var canChooseLanguage: Bool {
@@ -196,14 +199,19 @@ private struct HUDView: View {
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
+                    Spacer(minLength: 0)
+                    microphoneButton
                 }
             } else if let detail {
-                Text(detail)
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-                    .lineLimit(3)
-                    .truncationMode(.head)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack(alignment: .top, spacing: 8) {
+                    Text(detail)
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(3)
+                        .truncationMode(.head)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    if model.phase == .recording { microphoneButton }
+                }
             }
         }
         .padding(.horizontal, 16)
@@ -211,6 +219,13 @@ private struct HUDView: View {
         .frame(width: 440, height: 112, alignment: .topLeading)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(.white.opacity(0.12)))
+    }
+
+    // 要件: REQ-DIC-140
+    // 設計判断: DEC-DIC-142
+    /// 録音中だけ、2 行目の右端にマイクのボタンを出す（1 行目は言語の切り替えと停止・取消でいっぱいのため）
+    private var microphoneButton: some View {
+        MicrophoneButton { uid in model.onSelectMicrophone?(uid) }
     }
 
     @ViewBuilder private var statusIcon: some View {
@@ -292,6 +307,31 @@ private struct StopButton: View {
     }
 }
 
+// 要件: REQ-DIC-140
+// 設計判断: DEC-DIC-142
+/// 録音中にマイクを選ぶボタン。押すと、つながっているマイクの一覧をメニューで出す
+private struct MicrophoneButton: View {
+    var onSelect: (String) -> Void
+
+    var body: some View {
+        Button {
+            DictationMicrophoneMenu.popUp(selected: AppSettings.shared.dictationInputDeviceUID, onSelect: onSelect)
+        } label: {
+            HStack(spacing: 1) {
+                Image(systemName: "mic").font(.system(size: 11))
+                Image(systemName: "chevron.down").font(.system(size: 7, weight: .semibold))
+            }
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 5)
+            .padding(.vertical, 3)
+            .background(.quaternary, in: Capsule())
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .help("音声入力で使うマイクを切り替えます")
+    }
+}
+
 // 要件: REQ-DIC-011
 /// 出力の言語を選ぶ小さな切り替え。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
 private struct LanguageSwitch: View {
@@ -300,12 +340,12 @@ private struct LanguageSwitch: View {
 
     var body: some View {
         HStack(spacing: 2) {
-            option("日本語", selected: !translating) { onSelect(false) }
+            option("話した言語", selected: !translating) { onSelect(false) }
             option("English", selected: translating) { onSelect(true) }
         }
         .padding(2)
         .background(.quaternary, in: Capsule())
-        .help("録音を止めたときに選んでいる言語で入力します")
+        .help("録音を止めたときに選んでいる方で入力します（話した言語は整形の言語の設定に従い、English は英訳）")
     }
 
     private func option(_ label: String, selected: Bool, action: @escaping () -> Void) -> some View {

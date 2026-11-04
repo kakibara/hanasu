@@ -24,7 +24,9 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     let request = GeminiClient.Request(
         transcript: dictionary.apply(to: raw), model: model, appName: app.name,
         dictionary: dictionary.spellings, extraInstructions: settings.extraInstructions,
-        dictionaryRules: dictionary.rules, appStyle: app.style)
+        dictionaryRules: dictionary.rules, appStyle: app.style,
+        // 要件: REQ-DIC-082
+        outputLanguage: settings.refineOutputLanguage)
     if args.contains("--show-prompt") {
         var shown = request
         if translate { shown.extraInstructions = "" }  // translateToEnglish と同じく、英訳では共通の追加ルールを外す
@@ -52,6 +54,8 @@ MainActor.assumeIsolated { LocalLLMCLI.runIfRequested() }
 
 // 文字起こしのエンジンの確認（--download-whisper / --render-engine-settings）。TranscriptionEngineCLI.swift
 MainActor.assumeIsolated { TranscriptionEngineCLI.runIfRequested() }
+// 音声入力のマイクの確認（--list-dictation-microphones / --render-dictation-mic-settings / --test-dictation-mic-switch）。DictationMicrophoneCLI.swift
+MainActor.assumeIsolated { DictationMicrophoneCLI.runIfRequested() }
 // Claude API・キーチェーン・設定の「AI」タブの確認（--claude-test / --keychain-selftest / --render-ai-settings）。ClaudeCLI.swift
 MainActor.assumeIsolated { ClaudeCLI.runIfRequested() }
 // 選択を声で編集するモードの確認（--edit-text / --render-edit-hud / --render-edit-settings）。中身は EditModeCLI.swift
@@ -357,11 +361,16 @@ MainActor.assumeIsolated { MeetingSearchCLI.runIfRequested(CommandLine.arguments
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 // 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）
 SpeakerNameInferenceCLI.runIfRequested()
+// アイコンの表示の設定欄の確認（AppPresence.swift）
+MainActor.assumeIsolated { AppPresenceCLI.runIfRequested() }
 
 MainActor.assumeIsolated {
     let app = NSApplication.shared
     let delegate = AppDelegate()
     app.delegate = delegate
-    app.setActivationPolicy(.regular)
+    // 要件: REQ-COM-040
+    // 設計判断: DEC-COM-008, DEC-COM-080
+    // Dock に出すかは起動前に決める（.regular で始めてから変えると、Dock のアイコンが一瞬出る）
+    app.setActivationPolicy(AppPresenceSettings.shared.presence.activationPolicy)
     app.run()
 }

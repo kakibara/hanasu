@@ -262,6 +262,16 @@ Windows の実機がないので、ウインドウ・タスクトレイ・設定
 - `dotnet build Hanasu.Windows.sln -c Release --no-incremental`: 警告 0・エラー 0（WPF の履歴のウインドウと設定の「履歴」タブはコンパイルだけ）。
 - `python3 scripts/check-spec.py`: エラーなし。
 
+## 16. 音声入力のマイクの選択（2026-11-04、macOS 26.6.2）
+
+関係: REQ-DIC-140、DEC-DIC-140〜142
+
+- `Hanasu --list-dictation-microphones`: 「システムの設定に従う（Logicool BRIO）」と、つながっている 4 つの入力機器（Logicool BRIO・MacBook Pro のマイク・Microsoft Teams Audio・ZoomAudioDevice）が出た。`-dictationInputDeviceUID missing-xyz` では末尾に「（接続されていない機器）」が出て ✓ が付いた。
+- `Hanasu --test-dictation-mic-switch 0.6`: システムの設定 → 4 つの機器 → つながっていない UID の順に、録音を止めずに切り替えた。すべてで 0.6 秒に 24000 フレーム（48 kHz）が届き、形式は機器ごとに 2ch（BRIO・Zoom）と 1ch（内蔵・Teams）に変わった。つながっていない UID ではシステムの設定のマイク（BRIO）の音が届いた。内蔵マイクの振幅が 0 だったのは、蓋を閉じて使っていたためと見られる。
+- `--render-hud`（Mac 標準・Whisper で English・編集モード・文字起こし中）: マイクのボタンは録音中だけ 2 行目の右端に出る。1 行目に置いたときは、Whisper で English のときに言語の切り替えが折り返したので、2 行目に移した（DEC-DIC-142）。
+- `--render-dictation-mic-settings`: 設定の「一般」の「マイク」欄が出ることを見た。
+- HUD のメニューをクリックして切り替える操作（前面に出ないパネルからメニューが出ること・入力先のフォーカスが動かないこと）と、Mac 標準・Whisper での録音の途中の切り替えは、まだ実機で確かめていない。
+
 ## 17. 使っていない間の CPU（Mac 版、2026-11-04、macOS 26.6.2）
 
 関係: DEC-COM-016

@@ -209,6 +209,20 @@ enum MeetingStore {
         .sorted { $0.startedAt > $1.startedAt }
     }
 
+    // 要件: REQ-MTG-028
+    // 設計判断: DEC-MTG-022
+    /// 会議のフォルダを丸ごとゴミ箱に移す（完全には消さない。Finder のゴミ箱から戻せる）
+    static func moveToTrash(_ meeting: Meeting) throws {
+        let dir = directory(for: meeting)
+        guard FileManager.default.fileExists(atPath: dir.path) else { return }
+        try FileManager.default.trashItem(at: dir, resultingItemURL: nil)
+    }
+
+    /// 会議のフォルダがあるか（削除した会議を保存し直さないため）
+    static func exists(_ meeting: Meeting) -> Bool {
+        FileManager.default.fileExists(atPath: directory(for: meeting).path)
+    }
+
     static func audioURL(for meeting: Meeting, channel: MeetingChannel) -> URL {
         directory(for: meeting).appendingPathComponent(channel == .me ? "me.m4a" : "others.m4a")
     }

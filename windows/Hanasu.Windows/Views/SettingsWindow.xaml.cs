@@ -90,6 +90,9 @@ public partial class SettingsWindow : Window
         FallbackRestoreRadio.IsChecked = s.PasteFallbackClipboard == PasteFallbackClipboard.RestoreOriginal;
 
         RefineCheck.IsChecked = s.RefineWithGemini;
+        // 要件: REQ-DIC-082
+        RefineLanguageCombo.SelectedItem = RefineLanguageCombo.Items.OfType<ComboBoxItem>().First(i => (string)i.Tag == s.RefineOutputLanguage.ToString());
+        RefineLanguageCombo.IsEnabled = s.RefineWithGemini;
         ApiKeyRadio.IsChecked = s.AuthMode == GeminiAuthMode.ApiKey;
         ServiceAccountRadio.IsChecked = s.AuthMode == GeminiAuthMode.ServiceAccount;
         ServiceAccountPathBox.Text = s.ServiceAccountPath;
@@ -481,7 +484,20 @@ public partial class SettingsWindow : Window
         AiCredentialNote.Visibility = missing.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
     }
 
-    private void OnRefineChanged(object sender, RoutedEventArgs e) => Save(s => s.RefineWithGemini = RefineCheck.IsChecked == true);
+    private void OnRefineChanged(object sender, RoutedEventArgs e)
+    {
+        var on = RefineCheck.IsChecked == true;
+        Save(s => s.RefineWithGemini = on);
+        // 要件: REQ-DIC-082（整形がオフのときは、整形の言語を選べない）
+        if (RefineLanguageCombo is not null) RefineLanguageCombo.IsEnabled = on;
+    }
+
+    // 要件: REQ-DIC-082
+    private void OnRefineLanguageChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (RefineLanguageCombo.SelectedItem is not ComboBoxItem { Tag: string tag } || !Enum.TryParse<RefineOutputLanguage>(tag, out var language)) return;
+        Save(s => s.RefineOutputLanguage = language);
+    }
 
     // MARK: - Gemini の認証
 

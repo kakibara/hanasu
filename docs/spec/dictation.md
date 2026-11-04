@@ -31,13 +31,13 @@
 - 確かめ方: `.build/debug/Hanasu --render-hud /tmp/hud.png` で見た目。途中経過は実機で確かめる
 - 食い違い（ユーザーの確認待ち）: 文字起こしのエンジンに Whisper / Gemini を選ぶと、録音中は文字を出さず、音量の目安だけを出す（DEC-DIC-101、PR #17）。エンジンを選べること（REQ-COM-001）はユーザーの指定だが、途中経過を出さないのは実装したエージェントの判断。要件を「Mac 標準のときだけ」に絞るかを確かめる。Windows 版も、Whisper / Gemini では録音中に文字を出さない（Windows 標準では出す）
 
-### REQ-DIC-003 認識結果を Gemini で自然な日本語に整える
-- 内容: 認識結果の全体を Gemini に送り、誤変換（同音異義語）・フィラー（「えー」「あのー」）・句読点・言い直しを整えた日本語にする。
+### REQ-DIC-003 文字起こしの結果を、AI で自然な文章に整える
+- 内容: 文字起こしの結果の全体を AI に送り、誤変換（同音異義語）・フィラー（「えー」「あのー」）・句読点・言い直しを整えた文章にする。出力の言語は REQ-DIC-082 の設定に従う。
 - 受け入れ条件: 「えーと、明日の会議なんですけど、あのー、資料はジェミニで作ったやつを使います。あ、違う、グーグルスライドで作ったやつです。」が、フィラーを除き言い直しを反映した文（「明日の会議なんですけど、資料はGoogleスライドで作ったやつを使います。」など）になる。
 - 出典: 初版の「目的とユーザー体験」4。Typeless 風の音声入力と Gemini での整形という初版の依頼
 - 対象: Mac / Windows
 - 実装の場所: `GeminiClient.refine`、`GeminiClient.systemInstruction`
-- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（Mac 版と同じ文面）、`windows/Hanasu.Core/Dictation/DictationText.cs`
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（Mac 版と同じ文面。Mac 版と同じ「整形の言語」の設定に従う。REQ-DIC-082）、`windows/Hanasu.Core/Dictation/DictationText.cs`
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>"`（Gemini の認証が要る）
 
 ### REQ-DIC-004 整形した文章を、元のカーソル位置に入力する
@@ -95,7 +95,7 @@
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>" --translate`
 
 ### REQ-DIC-011 録音の終わりに HUD で English を選ぶと、英語で出力する
-- 内容: 録音中の HUD に「日本語 ／ English」の切り替えを出し、録音を止めた時点で選んでいる言語で入力する。
+- 内容: 録音中の HUD に「話した言語 ／ English」の切り替えを出し、録音を止めた時点で選んでいる言語で入力する。
 - 受け入れ条件: 日本語で始めた録音でも、止める前に HUD の「English」を押せば英訳が入力される（逆も同じ）。
 - 出典: 2026-11-02 のユーザーの依頼「音声入力が終わったときに UI で英語を選ぶと英語で出力される」（80d77fc）
 - 対象: Mac / Windows
@@ -121,7 +121,7 @@
 - 確かめ方: `.build/debug/Hanasu --refine-text "<文>" --app com.tinyspeck.slackmacgap --show-prompt`、`--render-app-styles /tmp/app-styles.png`
 
 ### REQ-DIC-021 入力先アプリごとに、既定の出力言語を決める
-- 内容: アプリごとに既定の出力言語（日本語 / English）を決められる。English にしたアプリで録音を始めると英訳で始まる。
+- 内容: アプリごとに既定の出力言語（話した言語 / English）を決められる。English にしたアプリで録音を始めると英訳で始まる。
 - 受け入れ条件: 出力言語を English にしたアプリで `⌥ Space` を押すと、HUD が English の状態で始まり、英訳が入力される。
 - 出典: PR #5
 - 対象: Mac
@@ -244,6 +244,33 @@
 - 確かめ方:
   - Mac: `.build/debug/Hanasu --render-paste-fallback-settings /tmp/fallback-settings.png`、`--render-paste-fallback /tmp/fallback.png --display-only`。クリップボードの中身は実機で確かめる
   - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~PasteFallback|FullyQualifiedName~FallbackSetting"`（設定の保存と、入力への渡し方）。クリップボードの中身は実機で確かめる
+
+### REQ-DIC-082 整形の出力の言語を設定で選べ、既定は話した言語にする
+- 内容: 音声入力の AI による整形（「音声入力を AI で整える」）の出力の言語を、「話した言語」（既定）と「日本語に統一」から選べる。既定では、英語で話した部分は英語のまま残し、日本語に訳さない。
+- 受け入れ条件:
+  - 設定の「AI」→「整形の言語」で選べる。整形がオフのときは選べない。
+  - 「話した言語」では、日本語で話した部分は日本語、英語で話した部分は英語のまま出る（英語を日本語に訳さない）。
+  - 「日本語に統一」では、英語で話した部分も日本語になる。固有名詞・製品名・コードなど、訳すと意味が変わるものは原語のまま残す。
+  - 整形の指示（システムプロンプト）に、選んだ言語の指示が 1 つだけ入る。履歴の「整形し直す」も同じ設定に従う。
+- 出典: ユーザーの依頼（2026-11-04）「整形の言語を明示的に設定して意図しない動作がなされないようにする必要がある」
+- 対象: Mac / Windows
+- 実装の場所: `GeminiClient.RefineOutputLanguage`、`GeminiClient.refinePrompt`、`AppSettings.refineOutputLanguage`、`AISettingsView`（「整形の言語」）
+- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`（`RefineOutputLanguage`）、`windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（`SystemInstruction`。Mac 版と同じ文面。DEC-COM-102）、`windows/Hanasu.Core/Dictation/DictationText.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`（「AI」タブの「整形の言語」。選択肢は「話した言語」「日本語に統一」）。履歴の「整形し直す」は Windows 版にはない
+- 確かめ方:
+  - 実機で確かめる（英語と日本語の混ざった発話を、両方の設定で入力する）
+  - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~JapaneseOutputLanguage|FullyQualifiedName~RefineOutputLanguage"`（指示の文面が Mac 版と同じこと、設定の保存）
+
+### REQ-DIC-140 音声入力で使うマイクを選べる（録音中の HUD でも切り替えられる）
+- 内容: 音声入力（と選択を声で編集）で使うマイクを、つながっているマイクから選べる。選ばなければシステムの設定のマイクを使う。録音中の HUD のマイクのボタンからも選べ、録音を止めずにそのマイクに切り替わる。
+- 受け入れ条件:
+  - 設定の「一般」→「マイク」で、「システムの設定に従う（今の既定のマイクの名前）」か、つながっているマイクを選べる。選んだマイクが外れているときは「（接続されていない機器）」と出る。
+  - 録音中の HUD の 2 行目の右端にマイクのボタンがあり、押すとマイクの一覧がメニューで出る（今の選択に ✓）。選ぶと、それまでに話した内容を失わずに、そのマイクの音で録音が続く。入力先のフォーカスは動かない。
+  - HUD で選んだマイクは設定に残り、次の音声入力でも使う。
+  - 会議の記録のマイク（設定「会議」→「録音するマイク」）とは別に選ぶ。
+- 出典: 2026-11-04 のユーザーの依頼「音声入力の画面でマイクを選択できるようにしてください」
+- 対象: Mac
+- 実装の場所: `AppSettings.dictationInputDeviceUID`、`DictationMicrophonePicker`、`DictationMicrophoneMenu`、`HUDPanel.swift` の `MicrophoneButton`、`DictationController.selectMicrophone`、`EditModeController.selectMicrophone`、`SpeechRecognizer.switchInput`
+- 確かめ方: `.build/debug/Hanasu --list-dictation-microphones`（選択肢）、`--test-dictation-mic-switch [秒]`（つながっているマイクへ順に切り替えて音声が届くか。マイクの許可が要る）、`--render-dictation-mic-settings /tmp/mic.png`、`--render-hud /tmp/hud.png`。HUD のメニューのクリックは実機で確かめる
 
 ---
 
@@ -379,7 +406,7 @@
 
 ### DEC-DIC-017 メニューバーのアイコンで状態を出す
 - 決めたこと: アイコンは待機 `mic`、準備中 `mic.badge.ellipsis`、録音中 `mic.fill`（赤）、処理中 `ellipsis.circle`。音声入力をしていない間は、会議の記録の状態（記録中 `record.circle.fill`（赤）、準備中・処理中 `waveform.badge.ellipsis`）を出す。
-- 理由: Dock アイコンのないメニューバーのアプリなので、録音していることがひと目で分かるようにする。
+- 理由: どのアプリの上でも使う常駐のアプリなので、録音していることがひと目で分かるようにする。メニューバーにアイコンを出さない設定（REQ-COM-040 の「Dock だけ」）では、Dock のアイコンのバッジで示す（DEC-COM-081）。
 - 決めた場面: 初版（a787da8）
 - 関係する要件: REQ-DIC-001, REQ-MTG-026
 - 対象: Mac
@@ -546,7 +573,7 @@
 - 実装の場所: `AppStyle.promptSection`
 
 ### DEC-DIC-045 既定の出力言語が English のアプリでは、英訳で始める
-- 決めたこと: 出力言語を English にしたアプリで `⌥ Space` で始めると英訳で始め、HUD も English にする。HUD で「日本語」を押せばそちらが優先される。`⌥⇧ Space` はどのアプリでも英訳。
+- 決めたこと: 出力言語を English にしたアプリで `⌥ Space` で始めると英訳で始め、HUD も English にする。HUD で「話した言語」を押せばそちらが優先される。`⌥⇧ Space` はどのアプリでも英訳。
 - 理由: 止めた時点の選択で言語が決まる、という今の仕組み（REQ-DIC-011）のまま使えるようにする。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-021, REQ-DIC-011
@@ -1039,6 +1066,30 @@
 - 関係する要件: REQ-DIC-060
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Windows/Views/HistoryWindow.xaml.cs`、`windows/Hanasu.Windows/TrayIcon.cs`
+
+### DEC-DIC-140 音声入力のマイクは会議と別に持ち、外れていればシステムの設定のマイクで録る
+- 決めたこと: 音声入力のマイクは `AppSettings.dictationInputDeviceUID`（空ならシステムの設定に従う。初期値は空）に UID で持ち、会議の `meetingInputDeviceUID` とは分ける。録音のエンジンは会議と同じ `MeetingRecorder.makeMicEngine` で作り、機器を指定したときは機器側の実際の形式（`inputFormat`）でタップを付ける。指定しないときは、これまでどおり `outputFormat` を使う。選んだマイクがつながっていなければ、エラーにせずシステムの設定のマイクで録る。
+- 理由: 会議ではヘッドセット、ふだんの音声入力では内蔵マイクのように、使い分ける場面がある（文字起こしのエンジンを分けた DEC-COM-020 と同じ考え）。機器を指定すると `outputFormat` が前の機器のままになる問題は会議で見つかっている（DEC-MTG-004）。指定しないときの形式を変えないのは、今の動きを崩さないため。イヤホンを外したまま音声入力を始めても、話せないより録れるほうがよい。
+- 決めた場面: 音声入力のマイクを選べるようにした PR（2026-11-04）
+- 関係する要件: REQ-DIC-140
+- 対象: Mac
+- 実装の場所: `SpeechRecognizer.makeInputEngine`、`AppSettings.dictationInputDeviceUID`
+
+### DEC-DIC-141 録音中の切り替えは、エンジンだけを作り直し、認識と書き出しは続ける
+- 決めたこと: 録音中にマイクを選ぶと、マイクのエンジン（`AVAudioEngine`）だけを止めて新しいマイクで作り直し、同じ認識の入力（Mac 標準）・ためた音声（Whisper / Gemini）・録音の書き出しへ流し続ける。形式は機器ごとに違うので、変換器はタップごとに作る。選んだマイクを動かせなければシステムの設定のマイクでやり直し、それも動かせなければ録音を取り消してエラーを出す。
+- 理由: 「声が入っていない」と気づいたときに、話し直さずに続けられるようにする。認識をやり直すと、それまでの途中経過が消える。
+- 決めた場面: 音声入力のマイクを選べるようにした PR（2026-11-04）
+- 関係する要件: REQ-DIC-140
+- 対象: Mac
+- 実装の場所: `SpeechRecognizer.switchInput`、`SpeechRecognizer.startInputWithFallback`、`BatchCapture.switchInput`
+
+### DEC-DIC-142 HUD のマイクのボタンは 2 行目の右端に置き、押すと NSMenu を出す
+- 決めたこと: マイクのボタン（マイクの絵と ▾）は、録音中だけ HUD の 2 行目（認識中の文字・音量の目安の行）の右端に出す。押すと `NSMenu` をマウスの位置に出し、「システムの設定に従う（今の既定のマイク）」、つながっているマイク、外れている選択中のマイクを並べ、今の選択に ✓ を付ける。ボタンそのものは他のボタンと同じく SwiftUI のボタンにする（DEC-DIC-025）。
+- 理由: 1 行目は言語の切り替え・経過時間・取消・停止でいっぱいで、足すと Whisper / Gemini のときに言語の切り替えが折り返した。HUD は前面に出ないパネルなので、メニュー型の Picker（AppKit の部品）は使わず、画面の座標に出す `NSMenu` にした。メニューはアプリを前面に出さずに出せる。
+- 決めた場面: 音声入力のマイクを選べるようにした PR（2026-11-04）
+- 関係する要件: REQ-DIC-140
+- 対象: Mac
+- 実装の場所: `MicrophoneButton`、`DictationMicrophoneMenu`
 
 ---
 

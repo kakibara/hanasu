@@ -389,7 +389,8 @@ final class DictationHistoryStore: ObservableObject {
             model: model,
             appName: settings.sendAppName ? entry.appName : nil,
             dictionary: settings.dictionaryWords,
-            extraInstructions: settings.extraInstructions)
+            extraInstructions: settings.extraInstructions,
+            outputLanguage: settings.refineOutputLanguage)
         let output = mode == .translate ? try await client.translateToEnglish(request) : try await client.refine(request)
         // 待っている間に消された場合
         guard let index = entries.firstIndex(where: { $0.id == id }) else { throw DictationHistoryError.notFound }

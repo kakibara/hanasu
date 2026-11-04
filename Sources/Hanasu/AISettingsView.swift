@@ -24,7 +24,12 @@ struct AISettingsTab: View {
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {
-                Toggle("音声入力を AI で自然な日本語に整える", isOn: $settings.refineWithGemini)
+                Toggle("音声入力を AI で整える", isOn: $settings.refineWithGemini)
+                // 要件: REQ-DIC-082
+                Picker("整形の言語", selection: $settings.refineOutputLanguage) {
+                    ForEach(GeminiClient.RefineOutputLanguage.allCases) { Text($0.label).tag($0) }
+                }
+                .disabled(!settings.refineWithGemini)
                 Toggle("入力先のアプリ名を AI に伝える（体裁の参考）", isOn: $settings.sendAppName)
             }
             ScreenContextSettingsSection()
@@ -58,7 +63,8 @@ struct AISettingsTab: View {
             appName: nil,
             dictionary: settings.dictionaryWords,
             extraInstructions: settings.extraInstructions,
-            dictionaryRules: settings.userDictionary.rules)
+            dictionaryRules: settings.userDictionary.rules,
+            outputLanguage: settings.refineOutputLanguage)
         Task {
             let started = Date()
             do {

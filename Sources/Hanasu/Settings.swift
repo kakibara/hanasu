@@ -172,6 +172,8 @@ final class AppSettings: ObservableObject {
     @Published var geminiTranscriptionModel: String { didSet { defaults.set(geminiTranscriptionModel, forKey: Keys.geminiTranscriptionModel) } }
     @Published var localeIdentifier: String { didSet { defaults.set(localeIdentifier, forKey: Keys.locale) } }
     @Published var refineWithGemini: Bool { didSet { defaults.set(refineWithGemini, forKey: Keys.refine) } }
+    // 要件: REQ-DIC-082
+    @Published var refineOutputLanguage: GeminiClient.RefineOutputLanguage { didSet { defaults.set(refineOutputLanguage.rawValue, forKey: Keys.refineOutputLanguage) } }
     @Published var extraInstructions: String { didSet { defaults.set(extraInstructions, forKey: Keys.extraInstructions) } }
     @Published var dictionaryText: String { didSet { defaults.set(dictionaryText, forKey: Keys.dictionary) } }
     @Published var playSounds: Bool { didSet { defaults.set(playSounds, forKey: Keys.sounds) } }
@@ -191,6 +193,40 @@ final class AppSettings: ObservableObject {
     @Published var diarizeMicChannel: Bool { didSet { defaults.set(diarizeMicChannel, forKey: Keys.diarizeMicChannel) } }
     /// 会議で録音するマイクの UID。空ならシステムの設定に従う
     @Published var meetingInputDeviceUID: String { didSet { defaults.set(meetingInputDeviceUID, forKey: Keys.meetingInputDeviceUID) } }
+    // 要件: REQ-DIC-140
+    // 設計判断: DEC-DIC-140
+    /// 音声入力（と選択を声で編集）で使うマイクの UID。空ならシステムの設定に従う。会議のマイクとは別
+    @Published var dictationInputDeviceUID: String { didSet { defaults.set(dictationInputDeviceUID, forKey: Keys.dictationInputDeviceUID) } }
+
+    // 要件: REQ-COM-004
+    /// 文字起こしの言語の候補。設定の一覧に出す（一覧にない言語は `nearestTranscriptionLocale` で近いものに寄せる）
+    static let transcriptionLocaleIdentifiers = ["ja-JP", "en-US", "en-GB", "zh-CN", "zh-TW", "ko-KR", "fr-FR", "de-DE", "es-ES", "it-IT", "pt-BR"]
+
+    /// システムの言語。文字起こしの言語の初期値にする（一覧の近いものに寄せる）。読めなければ ja-JP
+    static var systemLocaleIdentifier: String {
+        nearestTranscriptionLocale(Locale.preferredLanguages.first ?? "ja-JP")
+    }
+
+    // 要件: REQ-COM-004
+    /// 言語の識別子を、言語コードが同じ一覧の項目に寄せる（en-JP → en-US、zh-Hant-TW → zh-TW）。
+    /// 中国語は、繁体字（Hant）か台湾・香港・マカオなら zh-TW、それ以外は zh-CN。
+    /// 同じ言語コードの項目がなければそのまま返す（空なら ja-JP）
+    static func nearestTranscriptionLocale(_ identifier: String) -> String {
+        let trimmed = identifier.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty { return "ja-JP" }
+        if transcriptionLocaleIdentifiers.contains(trimmed) { return trimmed }
+        let language = Locale.Language(identifier: trimmed)
+        guard let code = language.languageCode?.identifier else { return trimmed }
+        if code == "zh" {
+            let script = language.script?.identifier
+            let region = language.region?.identifier
+            let traditional = script == "Hant" || ["TW", "HK", "MO"].contains(region ?? "")
+            return traditional ? "zh-TW" : "zh-CN"
+        }
+        return transcriptionLocaleIdentifiers.first {
+            Locale.Language(identifier: $0).languageCode?.identifier == code
+        } ?? trimmed
+    }
 
     // 設計判断: DEC-COM-024
     /// Whisper に渡す言語コード（設定の言語 ja-JP → ja）。読めなければ日本語にする
@@ -257,8 +293,11 @@ final class AppSettings: ObservableObject {
             // 設計判断: DEC-COM-022
             Keys.whisperModel: WhisperModel.small.rawValue,
             Keys.geminiTranscriptionModel: Self.suggestedModels[0],
-            Keys.locale: "ja-JP",
+            // 要件: REQ-COM-004
+            Keys.locale: AppSettings.systemLocaleIdentifier,
             Keys.refine: true,
+            // 要件: REQ-DIC-082
+            Keys.refineOutputLanguage: GeminiClient.RefineOutputLanguage.asSpoken.rawValue,
             Keys.extraInstructions: "",
             Keys.dictionary: "",
             Keys.sounds: true,
@@ -272,6 +311,7 @@ final class AppSettings: ObservableObject {
             Keys.makeMeetingMinutes: true,
             Keys.meetingOutputDeviceUID: "",
             Keys.meetingInputDeviceUID: "",
+            Keys.dictationInputDeviceUID: "",
             Keys.diarizeMicChannel: false,
         ])
         model = defaults.string(forKey: Keys.model)!
@@ -296,8 +336,9 @@ final class AppSettings: ObservableObject {
         meetingEngine = TranscriptionEngine(rawValue: defaults.string(forKey: Keys.meetingEngine)!) ?? .apple
         whisperModel = WhisperModel(rawValue: defaults.string(forKey: Keys.whisperModel)!) ?? .small
         geminiTranscriptionModel = defaults.string(forKey: Keys.geminiTranscriptionModel)!
-        localeIdentifier = defaults.string(forKey: Keys.locale)!
+        localeIdentifier = AppSettings.nearestTranscriptionLocale(defaults.string(forKey: Keys.locale)!)
         refineWithGemini = defaults.bool(forKey: Keys.refine)
+        refineOutputLanguage = GeminiClient.RefineOutputLanguage(rawValue: defaults.string(forKey: Keys.refineOutputLanguage)!) ?? .asSpoken
         extraInstructions = defaults.string(forKey: Keys.extraInstructions)!
         dictionaryText = defaults.string(forKey: Keys.dictionary)!
         playSounds = defaults.bool(forKey: Keys.sounds)
@@ -310,6 +351,7 @@ final class AppSettings: ObservableObject {
         makeMeetingMinutes = defaults.bool(forKey: Keys.makeMeetingMinutes)
         meetingOutputDeviceUID = defaults.string(forKey: Keys.meetingOutputDeviceUID)!
         meetingInputDeviceUID = defaults.string(forKey: Keys.meetingInputDeviceUID)!
+        dictationInputDeviceUID = defaults.string(forKey: Keys.dictationInputDeviceUID)!
         diarizeMicChannel = defaults.bool(forKey: Keys.diarizeMicChannel)
     }
 
@@ -336,6 +378,7 @@ final class AppSettings: ObservableObject {
         static let geminiTranscriptionModel = "geminiTranscriptionModel"
         static let locale = "localeIdentifier"
         static let refine = "refineWithGemini"
+        static let refineOutputLanguage = "refineOutputLanguage"
         static let extraInstructions = "extraInstructions"
         static let dictionary = "dictionaryText"
         static let sounds = "playSounds"
@@ -347,6 +390,7 @@ final class AppSettings: ObservableObject {
         static let makeMeetingMinutes = "makeMeetingMinutes"
         static let meetingOutputDeviceUID = "meetingOutputDeviceUID"
         static let meetingInputDeviceUID = "meetingInputDeviceUID"
+        static let dictationInputDeviceUID = "dictationInputDeviceUID"
         static let diarizeMicChannel = "diarizeMicChannel"
     }
 }

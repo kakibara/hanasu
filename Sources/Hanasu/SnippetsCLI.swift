@@ -42,7 +42,9 @@ enum SnippetsCLI {
         let translate = args.contains("--translate")
         let request = GeminiClient.Request(
             transcript: "", model: model, appName: nil,
-            dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions)
+            dictionary: settings.dictionaryWords, extraInstructions: settings.extraInstructions,
+            // 要件: REQ-DIC-082
+            outputLanguage: settings.refineOutputLanguage)
         let started = Date()
         let output = try await match.assemble { text in
             var request = request

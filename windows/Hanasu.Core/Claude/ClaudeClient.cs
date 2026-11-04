@@ -54,7 +54,7 @@ public sealed class ClaudeClient : ITextAiClient
 
     // プロンプトは Gemini と同じ文面を使う（Mac 版とも同じ。DEC-COM-102）
     public Task<string> RefineAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
-        GenerateTextAsync(TextPurpose.Refine, GeminiPrompts.SystemInstruction, GeminiPrompts.UserPrompt(request), request.Model, cancellationToken);
+        GenerateTextAsync(TextPurpose.Refine, GeminiPrompts.SystemInstruction(request.OutputLanguage), GeminiPrompts.UserPrompt(request), request.Model, cancellationToken);
 
     public Task<string> TranslateToEnglishAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
         GenerateTextAsync(TextPurpose.Translate, GeminiPrompts.TranslationInstruction, GeminiPrompts.UserPrompt(request, translating: true),
