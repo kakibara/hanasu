@@ -81,6 +81,9 @@ final class MeetingSuggestionPanel {
         timeoutTask = nil
         suggestion = nil
         panel.orderOut(nil)
+        // 設計判断: DEC-COM-016
+        // 「記録を止めますか？」の経過時間（TimelineView）が、隠したパネルの中で動き続けないよう中身も消す
+        model.suggestion = nil
     }
 
     /// 見た目の確認用に、提案を PNG にする（画面には出さない）
