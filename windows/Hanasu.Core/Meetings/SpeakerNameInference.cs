@@ -6,7 +6,7 @@ namespace Hanasu.Core.Meetings;
 /// <summary>
 /// 議事録の応答の &lt;speaker_names&gt; から、会話で分かった話者の名前を読み、名前のない話者に付ける。
 /// 名前を付けた話者は Meeting.InferredSpeakers に入れ、議事録の本文とアクションアイテムの担当の「話者1」なども名前に置き換える。
-/// Mac 版の SpeakerNameInference（Sources/Hanasu/SpeakerNameInference.swift）と同じ決まり（両方を直す）。
+/// Mac 版の SpeakerNameInference（Sources/Hanasu/SpeakerNameInference.swift）と同じ決まり（両方を直す）。ラベルの文面は共有の JSON の speaker.*。
 /// </summary>
 // 要件: REQ-MTG-027
 // 設計判断: DEC-MTG-068, DEC-MTG-069
@@ -59,7 +59,7 @@ public static partial class SpeakerNameInference
     }
 
     /// <summary>名前として使える形にする。使えなければ null（空・長すぎる・改行や制御文字・「話者1」などのラベルそのもの）</summary>
-    public static string? CleanName(string raw)
+    public static string? CleanName(string raw, Ai.PromptLanguage? language = null)
     {
         var name = raw.Trim();
         if (Honorifics.FirstOrDefault(h => name.EndsWith(h, StringComparison.Ordinal) && name.Length > h.Length) is { } honorific)
@@ -67,12 +67,31 @@ public static partial class SpeakerNameInference
             name = name[..^honorific.Length].Trim();
         }
         if (name.Length == 0 || new System.Globalization.StringInfo(name).LengthInTextElements > MaxLength) return null;
-        if (name.Any(char.IsControl) || IsPlaceholder(name)) return null;
+        if (name.Any(char.IsControl) || IsPlaceholder(name, language)) return null;
         return name;
     }
 
-    /// <summary>名前ではない値（「自分」「相手」「話者1」「同席者1」と、分からないことを表す言葉）</summary>
-    public static bool IsPlaceholder(string name) => NotNames.Contains(name) || LabelPattern().IsMatch(name);
+    // 要件: REQ-COM-061
+    /// <summary>
+    /// 名前ではない値（「自分」「相手」「話者1」「同席者1」と、分からないことを表す言葉）。
+    /// 見るのは、議事録を作ったときのプロンプトの言語のラベルと、前から使っている日本語のラベルだけ（Mac 版と同じ）。
+    /// ほかの言語のラベルまで見ると、「Ben」（トルコ語の「自分」）や「Saya」のような実際の名前を捨ててしまう
+    /// </summary>
+    public static bool IsPlaceholder(string name, Ai.PromptLanguage? language = null)
+    {
+        var lang = language ?? Ai.PromptLanguage.Current;
+        if (NotNames.Contains(name) || LabelPattern().IsMatch(name)) return true;
+        if (new[] { "speaker.me", "speaker.others", "minutes.result.none" }.Select(k => Ai.Prompts.Text(k, lang))
+            .Any(t => string.Equals(t, name, StringComparison.OrdinalIgnoreCase)))
+        {
+            return true;
+        }
+        return new[] { "speaker.remote", "speaker.room" }.Select(k => Ai.Prompts.Text(k, lang)).Any(template =>
+        {
+            var pattern = "^" + Regex.Escape(template).Replace(Regex.Escape("${n}"), "[0-9０-９]+", StringComparison.Ordinal) + "$";
+            return Regex.IsMatch(name, pattern, RegexOptions.IgnoreCase);
+        });
+    }
 
     /// <summary>
     /// 名前のない話者（「自分」を除く）に、応答の名前を付ける。付けた話者キー → 名前を返す。
@@ -85,12 +104,13 @@ public static partial class SpeakerNameInference
         var labelToKey = new Dictionary<string, string>();
         foreach (var key in meeting.Speakers)
         {
-            if (key != "me" && meeting.SpeakerNames.GetValueOrDefault(key, "").Length == 0) labelToKey[meeting.DisplayName(key)] = key;
+            // 要件: REQ-COM-061（応答のラベルは、プロンプトに書いたラベルと同じ言語）
+            if (key != "me" && meeting.SpeakerNames.GetValueOrDefault(key, "").Length == 0) labelToKey[meeting.PromptName(key, minutes.Language)] = key;
         }
         var matches = new List<(string Key, string Label, string Name)>();
         foreach (var label in names.Keys.Order(StringComparer.Ordinal))
         {
-            if (labelToKey.TryGetValue(label, out var key) && CleanName(names[label]) is { } name) matches.Add((key, label, name));
+            if (labelToKey.TryGetValue(label, out var key) && CleanName(names[label], minutes.Language) is { } name) matches.Add((key, label, name));
         }
         if (matches.Count == 0) return (minutes, applied);
 

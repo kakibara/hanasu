@@ -216,6 +216,17 @@ processing 中の hotkey は無視
 
 プロンプトは `GeminiClient.systemInstruction`（整形のルール。`GeminiClient.refinePrompt` が、設定の「整形の言語」に応じた `RefineOutputLanguage.instruction` を後ろに足す。REQ-DIC-082）と `GeminiClient.userPrompt`（認識テキストを `<transcript>` で囲み、入力先アプリ名・ユーザー辞書・置き換えルール・追加ルール・アプリ別の文体・画面の文脈を足す）で組み立てる。送る中身は `--refine-text "<文>" --show-prompt` で見られる。決めたこと（指示文を実行させない、内容を足さず口調を変えない、など）は DEC-DIC-005〜009・DEC-DIC-084。
 
+### 4.3.0 プロンプトの言語（17 言語）
+
+プロンプトの文面はコードになく、`Sources/Hanasu/Resources/Prompts/<言語>.json` にある（キー → 文字列か 1 行 1 要素の配列）。コードは `Prompts.text("refine.system")` のようにキーで読み、`${name}` を埋める（`Sources/Hanasu/Prompts.swift`）。上の `GeminiClient.systemInstruction` などは、このキーを読む計算プロパティ。
+
+- どの言語を読むかは `PromptLanguage.current`。設定の文字起こしの言語（REQ-COM-004）を 17 言語のどれかに寄せ、どれでもなければ英語（DEC-COM-161）。その言語にないキーは英語、英語にもなければ日本語を使う。
+- ja.json は多言語化の前の文面と同じ。ほかの言語は、その言語の話し言葉の例（フィラー・言い直し・口頭の記号の指示）に書き直してある（DEC-COM-162）。
+- JSON は SwiftPM のリソース（`Hanasu_Hanasu.bundle`）に入り、`scripts/build-app.sh` が .app の `Contents/Resources` に写す。`Bundle.module` は使わず `HanasuResources` が探す（DEC-COM-160）。
+- Windows 版は同じ JSON を `Hanasu.Core` に埋め込んで読むので、文面は Mac と同じになる。
+- 会議の文字起こしを AI に渡すときの話者名は `Meeting.promptName`（プロンプトの言語のラベル）。議事録の見出し・「担当」「期限」もプロンプトの言語で書き、読むときは全言語の言い方を受け付ける（DEC-COM-163）。
+- 送るプロンプトは `--show-prompts [--prompt-language <言語>]` で、見本の入力からすべて組み立てて見られる（`PromptsCLI.swift`）。訳の漏れは `scripts/check-i18n.py` が見つける。手順は `.claude/skills/i18n/SKILL.md`。
+
 ### 4.3.1 翻訳して入力（英訳・和訳）
 
 もう 1 つのショートカット（初期値 `⌥⇧ Space`。設定では「翻訳して入力」）で録音を始めると、止めたときに整形の代わりに翻訳して入力する。止めるのはどちらのショートカットでもよい。
@@ -613,6 +624,9 @@ mac-typeless/
 │   ├── DictationController.swift  # 状態遷移と全体の流れ
 │   ├── SpeechRecognizer.swift     # AVAudioEngine + SpeechAnalyzer
 │   ├── GeminiClient.swift         # Gemini REST クライアント + プロンプト
+│   ├── Prompts.swift              # プロンプトの言語（PromptLanguage）と、言語ごとの JSON の読み込み（Prompts）
+│   ├── PromptsCLI.swift           # --show-prompts（すべてのプロンプトを表示する）
+│   ├── Resources/Prompts/         # プロンプトの文面（<言語>.json。Windows 版も読む）
 │   ├── ScreenContext.swift        # 画面の文脈の読み取り（AX）・プロンプト・設定
 │   ├── ScreenContextSettingsView.swift # 設定画面の「画面の文脈」の欄
 │   ├── ScreenContextCLI.swift     # 画面の文脈の確認用 CLI

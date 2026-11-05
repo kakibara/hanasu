@@ -157,6 +157,8 @@ public sealed class SettingsService
         this.store = store;
         Secrets = secrets;
         current = store.Load();
+        // 要件: REQ-COM-061（プロンプトの言語は、設定の文字起こしの言語に合わせる）
+        Ai.PromptLanguage.UseSettings(current.LocaleIdentifier);
         MigrateSecrets();
     }
 
@@ -195,6 +197,8 @@ public sealed class SettingsService
             after = current.Clone();
             mutate(after);
             current = after;
+            // 要件: REQ-COM-061
+            Ai.PromptLanguage.UseSettings(after.LocaleIdentifier);
         }
         Exception? error = null;
         try { store.Save(after); } catch (Exception e) when (e is IOException or UnauthorizedAccessException) { error = e; }

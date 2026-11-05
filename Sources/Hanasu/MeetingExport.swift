@@ -34,7 +34,8 @@ enum MeetingExport {
             let trimmed = raw.trimmingCharacters(in: .whitespaces)
             if trimmed.hasPrefix("# ") { continue }  // タイトル（上で書いた）
             if trimmed.hasPrefix("## ") {
-                skipping = trimmed.contains("話者についてのメモ")
+                // 要件: REQ-COM-061（議事録はそのときのプロンプトの言語なので、どの言語の見出しでも外す）
+                skipping = Prompts.allTexts("minutes.speakerNotesHeading").contains { trimmed.contains($0) }
                 if skipping { continue }
                 lines.append("")
                 lines.append("*\(stripInline(String(trimmed.dropFirst(3))))*")

@@ -13,6 +13,13 @@ Hanasu（音声入力と会議の記録。Mac 版は `Sources/Hanasu`、Windows 
 - その振る舞いを決めているコードに、タグを付ける（すべての要件に少なくとも 1 か所）。
 - 実装の説明は [docs/design/](docs/design/)、日付の付いた検証の結果は [docs/verification/](docs/verification/)。
 
+## 多言語（17 言語）
+- 対応言語は README と同じ 17 言語（en, ja, zh-CN, zh-TW, ko, es, fr, de, it, pt-BR, ru, tr, vi, id, pl, ar, hi）。システムの言語がどれでもなければ英語（REQ-COM-061・062）。
+- **UI の文字列か AI へのプロンプトを足す・変えるときは、同じ変更の中で 17 言語すべての訳を入れる。** 日本語だけ・英語だけで入れない。
+- 手順は [.claude/skills/i18n/SKILL.md](.claude/skills/i18n/SKILL.md)。訳は [.claude/agents/i18n.md](.claude/agents/i18n.md) のエージェントに任せてよい。
+- プロンプトは `Sources/Hanasu/Resources/Prompts/<言語>.json`（Mac と Windows で共有）。コードにプロンプトの文面を書かない。
+- `python3 scripts/check-i18n.py` をエラーなしで通す（CI でも動く）。
+
 ## 文書の役割
 - spec は「こうあるべき」（要件・設計判断）。design は「今こう作られている」で、コードと食い違ったらコードが正しい（design を直す）。design にコードの写し（プロンプトの全文・既定値の一覧・CLI のオプション）を置かず、ファイルと型・関数の名前で誘導する。
 

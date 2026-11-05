@@ -23,6 +23,10 @@ jobs:
       # ubuntu-latest の python3（標準ライブラリだけを使う）
       - name: Check spec and tags
         run: python3 scripts/check-spec.py --summary
+      # 確かめ方: REQ-COM-062
+      # 訳の漏れ（17 言語のプロンプトと UI の文字列。手順は .claude/skills/i18n/SKILL.md）
+      - name: Check translations
+        run: python3 scripts/check-i18n.py --summary
       # 確かめ方: REQ-REL-006
       # リリースの本文の組み立て（リリースのときに初めて動くので、ここで毎回確かめる）
       - name: Check release notes composer

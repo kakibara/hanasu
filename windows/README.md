@@ -71,9 +71,9 @@ windows/
 ├── Hanasu.Windows.sln
 ├── Directory.Build.props        共通の設定（C# 12、Nullable、EnableWindowsTargeting など）
 ├── Hanasu.Core/                 net8.0。OS に依存しない部品（Mac でもテストできる）
-│   ├── Ai/                      文章の処理の AI の共通の形（ITextGenerator）・用途ごとの選び方（TextAiFactory）・区切りのタグの無害化・ログの伏せ字
+│   ├── Ai/                      文章の処理の AI の共通の形（ITextGenerator）・用途ごとの選び方（TextAiFactory）・区切りのタグの無害化・ログの伏せ字・プロンプトの言語と文面の読み込み（Prompts.cs）
 │   ├── Claude/                  Claude API（公式の C# SDK）での整形・英訳・議事録・エラーの分類・モデルの一覧
-│   ├── Gemini/                  プロンプト（Mac 版と同じ文面。Claude にも同じものを送る）・REST クライアント・サービスアカウントの JWT（RS256）・認証の決め方
+│   ├── Gemini/                  プロンプト（文面は Mac 版と共有の Sources/Hanasu/Resources/Prompts/<言語>.json を埋め込んで読む。Claude にも同じものを送る）・REST クライアント・サービスアカウントの JWT（RS256）・認証の決め方
 │   ├── Net/                     リダイレクトに従わない HttpClient・モデルのダウンロード（ハッシュの確認）
 │   ├── Text/UserDictionary.cs   ユーザー辞書と置き換えルール（Mac 版の UserDictionary.swift の移植）
 │   ├── Settings/                設定（settings.json）・ショートカットの組み合わせ・API キーの保存（SecretStore。DPAPI と Windows Hello はインターフェイスで渡す）
@@ -165,8 +165,8 @@ MeetingController（Core。idle → starting → recording → processing → id
 - **話者の割り当て**: Mac 版 `MeetingProcessor` の移植（語の終わり寄りの時刻で話者を決める、区間のすき間の扱い、登場順に話者1・話者2…）。Windows 版で 2 つだけ足した:
   - 1 つの発話を話者で分けたとき、端に残った 1 秒未満・4 文字以下のかけらは隣にまとめる（Whisper の語の時刻が少し遅れ、前の人の最後の語が次の人に付きやすいため）。
   - スピーカーからの回り込みの除去は、6 文字以上のかけらだけを対象にする（「ます」「ありますか」がたまたま似て消えるのを防ぐ）。
-- **議事録**: 設定 → AI の「会議（議事録）」で選んだ AI とモデル（既定は Gemini の gemini-3.8-flash。Claude にすると既定は claude-sonnet-5-5）。プロンプト（型ごとの見出しと指示・メモと「ここ重要」の扱い・`{{ACTION_ITEMS}}` と `<action_items>` の JSON）は
-  Mac 版の `MinutesTemplate.swift`・`MeetingNotes.swift` と同じ文面にし、共有している部分には「両方を直す」とコメントを書いた。
+- **議事録**: 設定 → AI の「会議（議事録）」で選んだ AI とモデル（既定は Gemini の gemini-3.8-flash。Claude にすると既定は claude-sonnet-5-5）。プロンプト（型ごとの見出しと指示・メモと「ここ重要」の扱い・`{{ACTION_ITEMS}}` と `<action_items>` の JSON）は、
+  Mac 版と共有の `Sources/Hanasu/Resources/Prompts/<言語>.json` を埋め込んで読む（文面は 1 か所。言語は設定の文字起こしの言語。REQ-COM-061）。組み立ては Mac 版の `MinutesTemplate.swift`・`MeetingNotes.swift` と同じにする。
 - **保存**: `MeetingStore`。`meeting.json` は Mac 版（`MeetingModels.swift`）と同じ JSON（キーは camelCase、列挙は小文字、日時は秒までの UTC、UUID は大文字、null は書かない）。
   Mac で作った会議のフォルダを保存先に置けば、そのまま会議ノートで開ける（`MeetingJsonTests`。Swift の Codable で Windows の `meeting.json` を読めることも確かめた）。
   Windows 版だけが書く `audioStartOffsets` は、Mac 版では読み飛ばされる。

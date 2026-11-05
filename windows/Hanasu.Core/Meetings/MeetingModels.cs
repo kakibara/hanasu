@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json.Serialization;
+using Hanasu.Core.Ai;
 
 namespace Hanasu.Core.Meetings;
 
@@ -173,26 +174,77 @@ public sealed class ActionItem
         }
     }
 
-    /// <summary>議事録に書く 1 行（<c>- [ ] 内容（担当: 〇〇 / 期限: 11/14 (金)）</c>）</summary>
+    // 要件: REQ-COM-061
+    /// <summary>
+    /// 議事録に書く 1 行（<c>- [ ] 内容（担当: 〇〇 / 期限: 11/14 (金)）</c>）。「担当」「期限」と日付はプロンプトの言語で書く
+    /// （minutes.item.*。Mac 版 ActionItem.markdownLine と同じキー）
+    /// </summary>
     [JsonIgnore]
-    public string MarkdownLine
+    public string MarkdownLine => MarkdownLineIn(PromptLanguage.Current);
+
+    // 要件: REQ-COM-061
+    /// <summary>議事録を作ったときのプロンプトの言語で書く（作っている間に設定の言語が変わっても、議事録の中でそろえる）</summary>
+    public string MarkdownLineIn(PromptLanguage language)
     {
-        get
         {
             var notes = new List<string>();
-            if (!string.IsNullOrEmpty(Owner)) notes.Add($"担当: {Owner}");
-            if (DueDisplay is { } due) notes.Add($"期限: {due}");
-            return $"- [ ] {Task}" + (notes.Count == 0 ? "" : $"（{string.Join(" / ", notes)}）");
+            if (!string.IsNullOrEmpty(Owner)) notes.Add($"{Prompts.Text("minutes.item.owner", language)}: {Owner}");
+            var due = DueDate is { } d
+                ? language.FormatDate(d, Prompts.Text("minutes.item.dueDateFormat", language))
+                : string.IsNullOrEmpty(DueNote) ? null : DueNote;
+            if (due is not null) notes.Add($"{Prompts.Text("minutes.item.due", language)}: {due}");
+            if (notes.Count == 0) return $"- [ ] {Task}";
+            return $"- [ ] {Task}" + Prompts.Text("minutes.item.details", language, ("details", string.Join(" / ", notes)));
         }
     }
 
+    // 要件: REQ-COM-061
+    /// <summary>
+    /// 議事録の言語はそのときのプロンプトの言語なので、読むときはすべての言語の言い方を受け付ける（Mac 版と同じ）。
+    /// 前から使っている日本語の語は見出しに含まれていればよいが、各言語の見出しは見出しの全体と一致したときだけにする
+    /// （「## Задачи клиента」のような別の見出しを、アクションアイテムの節と取り違えないように）
+    /// </summary>
+    internal static readonly string[] LegacyActionHeadingWords = ["TODO", "ToDo", "アクション", "次のステップ"];  // skip-tr（前の版の議事録の見出し）
+    internal static IReadOnlyList<string> ActionHeadings =>
+        new[] { "minutes.actionHeading", "minutes.actionHeading.sales", "minutes.actionHeading.brainstorm" }.SelectMany(Prompts.AllTexts).ToList();
+
+    internal static bool IsActionHeading(string heading)
+    {
+        var trimmed = heading.Trim();
+        return LegacyActionHeadingWords.Any(w => trimmed.Contains(w, StringComparison.Ordinal))
+            || ActionHeadings.Any(h => string.Equals(h, trimmed, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>「（担当: …」「(Owner: …」のように、担当か期限の言葉とコロンで始まるかっこの位置。なければ -1</summary>
+    internal static int DetailsOpening(string task, IReadOnlyList<string> keys)
+    {
+        for (var i = 0; i < task.Length; i++)
+        {
+            if (task[i] is not ('（' or '(')) continue;
+            var after = task[(i + 1)..].TrimStart(' ');
+            foreach (var key in keys)
+            {
+                if (!after.StartsWith(key, StringComparison.Ordinal)) continue;
+                var rest = after[key.Length..].TrimStart(' ');
+                if (rest.Length > 0 && rest[0] is ':' or '：') return i;
+            }
+        }
+        return -1;
+    }
+    internal static IReadOnlyList<string> OwnerKeys => Prompts.AllTexts("minutes.item.owner");
+    internal static IReadOnlyList<string> DueKeys => Prompts.AllTexts("minutes.item.due");
+    internal static IReadOnlyList<string> NoneWords => Prompts.AllTexts("minutes.result.none");
+
     /// <summary>
     /// Markdown の議事録のチェックボックスの行から取り出す（JSON が壊れていたとき・古い議事録用）。
-    /// 「TODO」「アクション」「次のステップ」を含む見出しの下の <c>- [ ] 内容（担当: 〇〇 / 期限: △△）</c> を読む。
-    /// Mac 版 ActionItem.parse(fromMarkdown:) と同じ（両方を直す）
+    /// 「TODO」「アクション」「次のステップ」（とすべての言語のアクションアイテムの見出し）を含む見出しの下の
+    /// <c>- [ ] 内容（担当: 〇〇 / 期限: △△）</c> を読む。Mac 版 ActionItem.parse(fromMarkdown:) と同じ（両方を直す）
     /// </summary>
     public static List<ActionItem> ParseFromMarkdown(string markdown)
     {
+        var ownerKeys = OwnerKeys;
+        var dueKeys = DueKeys;
+        var noneWords = NoneWords;
         var items = new List<ActionItem>();
         var inSection = false;
         foreach (var raw in markdown.Split('\n'))
@@ -201,29 +253,30 @@ public sealed class ActionItem
             if (line.StartsWith("## ", StringComparison.Ordinal))
             {
                 var heading = line[3..];
-                inSection = new[] { "TODO", "ToDo", "アクション", "次のステップ" }.Any(heading.Contains);
+                inSection = IsActionHeading(heading);
                 continue;
             }
             if (!inSection || !(line.StartsWith("- [ ] ", StringComparison.Ordinal) || line.StartsWith("- [x] ", StringComparison.Ordinal))) continue;
             var task = line[6..].Trim();
             string? owner = null, dueNote = null;
-            if (task.Length > 0 && task[^1] is '）' or ')' && task.LastIndexOfAny(['（', '(']) is var open and >= 0)
+            // 期限には「11/14 (金)」のようにかっこや / が入るので、「担当」「期限」の言葉で始まるかっこを探し、中を「 / 」で分ける
+            if (task.Length > 0 && task[^1] is '）' or ')' && DetailsOpening(task, ownerKeys.Concat(dueKeys).ToList()) is var open and >= 0)
             {
                 var inner = task[(open + 1)..^1];
                 var recognized = false;
-                foreach (var part in inner.Split('/', '／'))
+                foreach (var part in inner.Split(" / ").SelectMany(p => p.Split('／')))
                 {
                     var pair = part.Split([':', '：'], 2);
                     if (pair.Length != 2) continue;
                     var key = pair[0].Trim();
                     var value = pair[1].Trim();
-                    var unknown = value.Length == 0 || value is "不明" or "なし" or "未定" or "-" || value.StartsWith("分かれば", StringComparison.Ordinal);
-                    if (key == "担当") { recognized = true; owner = unknown ? null : value; }
-                    if (key == "期限") { recognized = true; dueNote = unknown ? null : value; }
+                    var unknown = value.Length == 0 || value is "不明" or "未定" or "-" || noneWords.Contains(value) || value.StartsWith("分かれば", StringComparison.Ordinal);
+                    if (ownerKeys.Contains(key)) { recognized = true; owner = unknown ? null : value; }
+                    if (dueKeys.Contains(key)) { recognized = true; dueNote = unknown ? null : value; }
                 }
                 if (recognized) task = task[..open].Trim();
             }
-            if (task.Length == 0 || task == "なし") continue;
+            if (task.Length == 0 || noneWords.Contains(task)) continue;
             items.Add(new ActionItem { Owner = owner, Task = task, DueNote = dueNote });
         }
         return items;
@@ -304,6 +357,25 @@ public sealed class Meeting
         return speaker;
     }
 
+    // 要件: REQ-COM-061
+    /// <summary>プロンプトに書く話者名。名前を付けていれば名前、なければプロンプトの言語のラベル（「自分」「話者1」など）</summary>
+    public string PromptName(string speaker, PromptLanguage? language = null) =>
+        SpeakerNames.TryGetValue(speaker, out var name) && name.Length > 0 ? name : PromptLabel(speaker, language);
+
+    // 要件: REQ-COM-061
+    /// <summary>名前のない話者の、プロンプトの言語のラベル（speaker.*。Mac 版 Meeting.promptLabel と同じキー）</summary>
+    public static string PromptLabel(string speaker, PromptLanguage? language = null)
+    {
+        switch (speaker)
+        {
+            case "me": return Prompts.Text("speaker.me", language);
+            case "others": return Prompts.Text("speaker.others", language);
+        }
+        if (speaker.StartsWith("spk", StringComparison.Ordinal) && int.TryParse(speaker[3..], out var n)) return Prompts.Text("speaker.remote", language, ("n", n.ToString(CultureInfo.InvariantCulture)));
+        if (speaker.StartsWith("room", StringComparison.Ordinal) && int.TryParse(speaker[4..], out var r)) return Prompts.Text("speaker.room", language, ("n", r.ToString(CultureInfo.InvariantCulture)));
+        return speaker;
+    }
+
     /// <summary>登場順の話者キー</summary>
     [JsonIgnore]
     public IReadOnlyList<string> Speakers
@@ -347,9 +419,13 @@ public sealed class Meeting
         return string.Join("\n", lines);
     }
 
-    /// <summary>Gemini に渡す文字起こし（1 発言 1 行）</summary>
-    public string TranscriptForPrompt() =>
-        string.Join("\n", MergedBlocks().Select(b => $"[{Clock(b.Start)}] {DisplayName(b.Speaker)}: {b.Text}"));
+    // 要件: REQ-COM-061
+    /// <summary>Gemini に渡す文字起こし（1 発言 1 行。話者名はプロンプトの言語）</summary>
+    public string TranscriptForPrompt()
+    {
+        var language = PromptLanguage.Current;
+        return string.Join("\n", MergedBlocks().Select(b => $"[{Clock(b.Start)}] {PromptName(b.Speaker, language)}: {b.Text}"));
+    }
 
     // MARK: - メモと印（Mac 版 MeetingNotes.swift の Meeting の拡張）
 
@@ -417,20 +493,26 @@ public sealed class Meeting
     public bool IsNearHighlight(Utterance block) =>
         Highlights.Any(h => h.Time is { } t && block.Start <= t + HighlightTrailTime && t - HighlightLeadTime <= block.End);
 
-    /// <summary>Gemini に渡す文字起こし。印の前後の発言の行頭に ★ を付ける</summary>
-    public string TranscriptForPromptMarkingHighlights() =>
-        string.Join("\n", MergedBlocks().Select(b => $"{(IsNearHighlight(b) ? "★ " : "")}[{Clock(b.Start)}] {DisplayName(b.Speaker)}: {b.Text}"));
+    // 要件: REQ-COM-061
+    /// <summary>Gemini に渡す文字起こし。印の前後の発言の行頭に ★ を付ける（話者名はプロンプトの言語）</summary>
+    public string TranscriptForPromptMarkingHighlights()
+    {
+        var language = PromptLanguage.Current;
+        return string.Join("\n", MergedBlocks().Select(b => $"{(IsNearHighlight(b) ? "★ " : "")}[{Clock(b.Start)}] {PromptName(b.Speaker, language)}: {b.Text}"));
+    }
 
-    /// <summary>Gemini に渡すメモ（なければ null）。時刻のないメモは [--:--] にする</summary>
+    // 要件: REQ-COM-061
+    /// <summary>Gemini に渡すメモ（なければ null）。時刻のないメモは [--:--] にする。印は minutes.notes.highlight（「★ここ重要」）</summary>
     public string? NotesForPrompt()
     {
         if (AllNotes.Count == 0) return null;
+        var highlight = Prompts.Text("minutes.notes.highlight");
         return string.Join("\n", AllNotes.Select(n =>
         {
             var time = n.Time is { } t ? $"[{Clock(t)}]" : "[--:--]";
             return n.Kind == MeetingNoteKind.Note
                 ? $"{time} {n.Text}"
-                : $"{time} ★ここ重要{(n.Text.Length == 0 ? "" : $": {n.Text}")}";
+                : $"{time} {highlight}{(n.Text.Length == 0 ? "" : $": {n.Text}")}";
         }));
     }
 
@@ -459,6 +541,11 @@ public sealed class Meeting
         var local = date.ToLocalTime();
         return $"{local:yyyy/MM/dd} ({JapaneseWeekday(local.DateTime)}) {local:HH:mm}";
     }
+
+    // 要件: REQ-COM-061
+    /// <summary>プロンプトに書く日時（"2026/11/03 (火) 14:30" の形。曜日はプロンプトの言語で。Mac 版 PromptLanguage.dateFormatter と同じ書式）</summary>
+    public static string FormatDate(DateTimeOffset date, PromptLanguage language) =>
+        language.FormatDate(date.ToLocalTime().DateTime, "yyyy/MM/dd (E) HH:mm");
 
     public static string JapaneseWeekday(DateTime date) => "日月火水木金土"[(int)date.DayOfWeek].ToString();
 }
