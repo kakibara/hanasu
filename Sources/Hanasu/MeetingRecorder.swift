@@ -84,7 +84,7 @@ final class MeetingRecorder: ObservableObject {
             try await Permissions.ensureRecordingPermissions(speechRecognition: engine.isLive)
             // 要件: REQ-MTG-034
             // 会議アプリのウインドウから会議の名前を読む（読めなければ日時のタイトル）。
-            // 状態は .starting なので、読んでいる間に押しても二重には始まらず、止めるボタンも効く
+            // 状態は .starting なので、読んでいる間にもう一度押しても二重には始まらない
             let detectedTitle = await MeetingTitle.detect(apps: titleSourceApps())
             var meeting = try MeetingStore.newMeeting()
             meeting.status = .recording
