@@ -164,6 +164,7 @@ private struct GeneralTab: View {
                 LabeledContent("録音の開始／停止") {
                     ShortcutRecorder(
                         combo: $settings.hotKey,
+                        kind: .dictation,
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
@@ -171,6 +172,7 @@ private struct GeneralTab: View {
                     ShortcutRecorder(
                         combo: $settings.translateHotKey,
                         defaultCombo: .defaultTranslate,
+                        kind: .translate,
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
@@ -258,6 +260,7 @@ private struct MeetingTab: View {
                     ShortcutRecorder(
                         combo: $settings.meetingHotKey,
                         defaultCombo: .defaultMeeting,
+                        kind: .meeting,
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
@@ -293,16 +296,53 @@ private struct PermissionsTab: View {
     var body: some View {
         Form {
             Section {
+                // まだ一度も求めていない（未決定）ときは、システム設定の一覧に Hanasu が載っていないので、
+                // オンボーディングと同じく「許可する」でその場で求める。拒否済みのときだけシステム設定を開く。
                 row("マイク", systemImage: "mic.fill",
-                    granted: Permissions.microphoneStatus == .authorized, anchor: "Privacy_Microphone")
+                    granted: Permissions.microphoneStatus == .authorized,
+                    notDetermined: Permissions.microphoneStatus == .notDetermined,
+                    deniedHint: "システム設定 → プライバシーとセキュリティ → マイク で Hanasu をオンにしてください。",
+                    anchor: "Privacy_Microphone") {
+                    _ = await AVCaptureDevice.requestAccess(for: .audio)
+                }
                 row("音声認識", systemImage: "waveform",
-                    granted: Permissions.speechStatus == .authorized, anchor: "Privacy_SpeechRecognition")
+                    granted: Permissions.speechStatus == .authorized,
+                    notDetermined: Permissions.speechStatus == .notDetermined,
+                    deniedHint: "システム設定 → プライバシーとセキュリティ → 音声認識 で Hanasu をオンにしてください。",
+                    anchor: "Privacy_SpeechRecognition") {
+                    _ = try? await Permissions.ensureRecordingPermissions(speechRecognition: true)
+                }
                 row("アクセシビリティ", detail: "自動入力に必要", systemImage: "accessibility",
                     granted: Permissions.isAccessibilityTrusted(prompt: false),
+                    deniedHint: "システム設定 → プライバシーとセキュリティ → アクセシビリティ で Hanasu をオンにしてください。",
                     anchor: "Privacy_Accessibility")
+                // 設計判断: DEC-MTG-074
+                // システムオーディオ録音（会議の記録の相手の声）は、許可の状態を取る API がないので、状態は出さずに
+                // 「いつ求められるか」と「拒否したときに直す場所」だけを案内する
+                LabeledContent {
+                    HStack(spacing: 8) {
+                        Text("初めて会議の記録を始めるときに macOS が求めます")
+                            .font(.callout).foregroundStyle(.secondary)
+                        Button("システム設定を開く") { Permissions.openPrivacySettings("Privacy_AudioCapture") }
+                            .controlSize(.small)
+                            .accessibilityLabel("システムオーディオ録音のシステム設定を開く")
+                    }
+                } label: {
+                    Label {
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text("システムオーディオ録音")
+                            Text("会議の記録で相手の声に必要").font(.caption).foregroundStyle(.secondary)
+                            Text("拒否した場合は、システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で Hanasu をオンにしてください。")
+                                .font(.caption).foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    } icon: {
+                        Image(systemName: "speaker.wave.2.fill").foregroundStyle(.secondary)
+                    }
+                }
             } footer: {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。")
+                    Text("マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。システムオーディオ録音の許可の状態は、macOS から取れないためここには出ません。")
                         .font(.caption).foregroundStyle(.secondary)
                     Button("再確認", systemImage: "arrow.clockwise") { refresh += 1 }
                 }
@@ -310,23 +350,43 @@ private struct PermissionsTab: View {
         }
         .formStyle(.grouped)
         .id(refresh)
+        // システム設定で許可して戻ってきたら、表示を新しくする
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            refresh += 1
+        }
     }
 
     private func row(_ title: String, detail: String? = nil, systemImage: String,
-                     granted: Bool, anchor: String) -> some View {
-        LabeledContent {
+                     granted: Bool, notDetermined: Bool = false, deniedHint: String,
+                     anchor: String, request: (() async -> Void)? = nil) -> some View {
+        let showHint = !granted && !notDetermined
+        let statusText = granted ? "許可済み" : notDetermined ? "まだ求めていません" : "未許可"
+        let tint: Color = granted ? .green : .orange
+        return LabeledContent {
             HStack(spacing: 8) {
                 if !granted {
-                    Button("システム設定を開く") { Permissions.openPrivacySettings(anchor) }
+                    if notDetermined, let request {
+                        Button("許可する") {
+                            Task {
+                                await request()
+                                refresh += 1
+                            }
+                        }
                         .controlSize(.small)
+                        .accessibilityLabel("\(title)を許可する")
+                    } else {
+                        Button("システム設定を開く") { Permissions.openPrivacySettings(anchor) }
+                            .controlSize(.small)
+                            .accessibilityLabel("\(title)のシステム設定を開く")
+                    }
                 }
-                Label(granted ? "許可済み" : "未許可",
+                Label(statusText,
                       systemImage: granted ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
                     .font(.callout.weight(.medium))
-                    .foregroundStyle(granted ? Color.green : Color.orange)
+                    .foregroundStyle(tint)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
-                    .background((granted ? Color.green : Color.orange).opacity(0.12), in: Capsule())
+                    .background(tint.opacity(0.12), in: Capsule())
             }
         } label: {
             Label {
@@ -334,6 +394,11 @@ private struct PermissionsTab: View {
                     Text(title)
                     if let detail {
                         Text(detail).font(.caption).foregroundStyle(.secondary)
+                    }
+                    if showHint {
+                        Text(deniedHint)
+                            .font(.caption).foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             } icon: {

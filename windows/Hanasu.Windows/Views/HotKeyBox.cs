@@ -55,6 +55,8 @@ public sealed class HotKeyBox : TextBox
 
     protected override void OnPreviewKeyDown(KeyEventArgs e)
     {
+        // Tab / Shift+Tab はショートカットにせず、次の欄へ移れるようにする（キーボードだけで抜けられるように）
+        if (e.Key == Key.Tab && (Keyboard.Modifiers & ~ModifierKeys.Shift) == ModifierKeys.None) return;
         e.Handled = true;
         var key = e.Key switch
         {

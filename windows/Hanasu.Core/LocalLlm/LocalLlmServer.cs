@@ -177,8 +177,11 @@ public sealed class LocalLlmServer : IDisposable
             WorkingDirectory = Path.GetDirectoryName(executable)!,
         };
         foreach (var arg in Arguments(m, port, ModelPath(m))) info.ArgumentList.Add(arg);
-        // Hanasu を起動したときの環境に LLAMA_ARG_* があっても使わない（決めた引数だけで動かす）
-        foreach (var key in info.Environment.Keys.Where(k => k.StartsWith("LLAMA_ARG_", StringComparison.Ordinal)).ToList())
+        // Hanasu を起動したときの環境に LLAMA_ARG_* があっても使わない（決めた引数だけで動かす）。
+        // CLI が環境変数で受け取るほかの API キーは、llama-server には要らないので渡さない
+        foreach (var key in info.Environment.Keys
+                     .Where(k => k.StartsWith("LLAMA_ARG_", StringComparison.OrdinalIgnoreCase) || SecretEnvironmentKeys.Contains(k, StringComparer.OrdinalIgnoreCase))
+                     .ToList())
         {
             info.Environment.Remove(key);
         }
@@ -232,11 +235,20 @@ public sealed class LocalLlmServer : IDisposable
         return started;
     }
 
+    /// <summary>子プロセスに渡さない環境変数（Hanasu の CLI が環境変数で受け取る、ほかのサービスの秘密。Mac 版と同じ一覧）</summary>
+    public static readonly IReadOnlyList<string> SecretEnvironmentKeys =
+    [
+        "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "GEMINI_API_KEY", "GOOGLE_API_KEY",
+        "GEMINI_SERVICE_ACCOUNT_JSON", "GOOGLE_APPLICATION_CREDENTIALS", "HF_TOKEN",
+    ];
+
     public static IReadOnlyList<string> Arguments(LocalLlmModel m, int port, string modelPath)
     {
         var args = new List<string>
         {
             "--model", modelPath,
+            // キーなしで読める /models に、モデルのファイルのパス（ユーザー名を含む）ではなく id を出させる
+            "--alias", m.Id,
             "--host", "127.0.0.1",
             "--port", port.ToString(System.Globalization.CultureInfo.InvariantCulture),
             "--ctx-size", m.ContextLength.ToString(System.Globalization.CultureInfo.InvariantCulture),

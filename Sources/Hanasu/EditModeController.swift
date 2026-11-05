@@ -53,6 +53,12 @@ final class EditModeController {
         recognizer.onBatchTranscriptionStarted = { [weak self] _ in
             self?.hud.model.transcribing = true
         }
+        // 設計判断: DEC-DIC-144
+        // 録音が上限に達したら、止めて、ここまでの音声を処理する（HUD に理由を出す）
+        recognizer.onRecordingLimitReached = { [weak self] in
+            self?.hud.updateTranscript(SpeechRecognizer.recordingLimitNotice)
+            self?.stopFromHUD()
+        }
         // 編集中は音声入力を始めない（マイクと HUD を取り合わないため）
         dictation.canStart = { [weak self] in self?.state == .idle }
         // 初回の登録は、呼び出し元が onHotKeyRegistrationFailed を設定し終えてから行う

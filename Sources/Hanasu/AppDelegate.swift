@@ -29,6 +29,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         // 設計判断: DEC-COM-063
         // 前回落ちたときに残ったローカルの LLM のサーバーを止める
         LocalLLMServer.cleanUpStaleServer()
+        // 設計判断: DEC-DIC-070
+        // 音声入力の履歴は裏で先に読んでおく（先に使われたら、そこで同期で読む）
+        DictationHistoryStore.preloadShared()
         controller = DictationController()
         historyUI = DictationHistoryUI(
             isDictationBusy: { [weak self] in self?.controller.state != .idle },

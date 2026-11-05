@@ -187,6 +187,7 @@ struct CustomMinutesPromptSheet: View {
                 .disabled(emptyPrompt)
                 Spacer()
                 Button("キャンセル") { dismiss() }
+                    .keyboardShortcut(.cancelAction)
                 Button(actionLabel) {
                     onSave(prompt)
                     dismiss()
@@ -218,7 +219,7 @@ struct CustomMinutesPromptSheet: View {
 }
 
 // 要件: REQ-MTG-042
-// 設計判断: DEC-MTG-071
+// 設計判断: DEC-MTG-076
 /// 保存したテンプレートの管理（一覧・追加・名前と指示の編集・複製・削除）。
 /// 名前と指示は、保存できる内容なら直すたびに自動で保存する（保存ボタンはない）。
 struct MinutesTemplateManagerSheet: View {

@@ -128,7 +128,8 @@ enum DictationHistoryCLI {
         expect(!FileManager.default.fileExists(atPath: audioURLs[1].path), "件数の上限で消えた項目の音声も消える")
         expect(store.audioUsage().count == 5, "残っている音声は 5 件（\(store.audioUsage().count) 件）")
 
-        // 2. 読み込み
+        // 2. 読み込み（保存は少し遅れて書くので、読み直す前に書き切る）
+        store.flush()
         let reloaded = DictationHistoryStore(directory: directory)
         reloaded.policy = store.policy
         reloaded.load()
@@ -149,6 +150,7 @@ enum DictationHistoryCLI {
             reloaded.delete([target.id])
             expect(audio.map { !FileManager.default.fileExists(atPath: $0.path) } ?? false, "削除すると音声も消える")
         }
+        reloaded.flush()
         let afterDelete = DictationHistoryStore(directory: directory)
         afterDelete.policy = store.policy
         afterDelete.load()
@@ -163,6 +165,7 @@ enum DictationHistoryCLI {
         expect(afterDelete.newAudioURL() == nil, "保存しない設定では音声の保存先を出さない")
         afterDelete.record(raw: "保存しない原文", output: "保存しない結果", mode: .refine, appName: nil, status: .refineOff)
         expect(afterDelete.entries.first?.output == "保存しない結果", "保存しない設定でも、メモリ上の最新として使える")
+        afterDelete.flush()
         let fileOnly = DictationHistoryStore(directory: directory)
         fileOnly.load()
         expect(!fileOnly.entries.contains { $0.output == "保存しない結果" }, "保存しない設定の項目はファイルに書かれない")
@@ -179,6 +182,7 @@ enum DictationHistoryCLI {
 
         // 7. すべて削除
         fileOnly.deleteAll()
+        fileOnly.flush()
         let empty = DictationHistoryStore(directory: directory)
         empty.load()
         expect(empty.entries.isEmpty && empty.audioUsage().count == 0, "すべて削除で履歴と音声が消える")
@@ -224,6 +228,7 @@ enum DictationHistoryCLI {
                 let translated = try await retryStore.retry(entry.id, mode: .translate, client: client)
                 print("  英訳し直し: \(translated.output)")
                 expect(translated.mode == .translate && translated.status == .succeeded, "英訳し直すとモードが英訳になる")
+                retryStore.flush()
                 let saved = DictationHistoryStore(directory: directory)
                 saved.load()
                 expect(saved.entries.first?.output == translated.output, "やり直した結果がファイルに残る")

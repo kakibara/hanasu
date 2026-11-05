@@ -31,6 +31,10 @@ public interface IDictationTranscriber : IAsyncDisposable
     /// <summary>録音を止めてから結果が出るまでに HUD に出す文言（例:「Whisper で文字起こししています…」）。null なら出さない</summary>
     string? FinishingMessage { get; }
 
+    // 設計判断: DEC-DIC-144
+    /// <summary>録音が上限（AudioFormat.MaxDictationRecording）に達したとき。受け取った側は録音を止めて、ここまでの音声を処理する。どのスレッドから来るかは決めない</summary>
+    event EventHandler? RecordingLimitReached { add { } remove { } }
+
     Task StartAsync(TranscriptionContext context, CancellationToken cancellationToken = default);
 
     /// <summary>録音を止め、確定した文字起こしを返す</summary>
@@ -50,6 +54,10 @@ public interface IAudioRecorder : IAsyncDisposable
 
     /// <summary>録音が思わぬ理由で止まったとき（マイクが抜かれたなど）</summary>
     event EventHandler<Exception>? Faulted;
+
+    // 設計判断: DEC-DIC-144
+    /// <summary>メモリに溜める録音が上限（AudioFormat.MaxDictationRecording）に達したとき（それ以降の音声は溜めない）</summary>
+    event EventHandler? LimitReached { add { } remove { } }
 
     Task StartAsync(string deviceId, CancellationToken cancellationToken = default);
 
@@ -89,20 +97,34 @@ public sealed class RecordThenTranscribe : IDictationTranscriber
 
     public string? FinishingMessage => $"{transcriber.DisplayName} で文字起こししています…";
 
+    public event EventHandler? RecordingLimitReached;
+
     public async Task StartAsync(TranscriptionContext context, CancellationToken cancellationToken = default)
     {
         this.context = context;
         // 使えるかどうかは録音を始める前に確かめる（話し終えてからモデルがないとわかると、話した内容が無駄になる）
         prepareTask = transcriber.PrepareAsync(context, cancellationToken);
         if (prepareTask.IsCompleted) await prepareTask.ConfigureAwait(false);
-        await recorder.StartAsync(context.MicrophoneDeviceId, cancellationToken).ConfigureAwait(false);
+        recorder.LimitReached += OnLimitReached;
+        try
+        {
+            await recorder.StartAsync(context.MicrophoneDeviceId, cancellationToken).ConfigureAwait(false);
+        }
+        catch
+        {
+            recorder.LimitReached -= OnLimitReached;
+            throw;
+        }
         recording = true;
     }
+
+    private void OnLimitReached(object? sender, EventArgs e) => RecordingLimitReached?.Invoke(this, EventArgs.Empty);
 
     public async Task<string> StopAsync(CancellationToken cancellationToken = default)
     {
         if (!recording || context is null) return "";
         recording = false;
+        recorder.LimitReached -= OnLimitReached;
         var samples = await recorder.StopAsync().ConfigureAwait(false);
         if (prepareTask is not null) await prepareTask.ConfigureAwait(false);
         if (AudioAnalysis.IsSilent(samples)) return "";
@@ -113,6 +135,7 @@ public sealed class RecordThenTranscribe : IDictationTranscriber
     {
         if (!recording) return;
         recording = false;
+        recorder.LimitReached -= OnLimitReached;
         await recorder.StopAsync().ConfigureAwait(false);
     }
 
@@ -126,8 +149,9 @@ public sealed class RecordThenTranscribe : IDictationTranscriber
 /// <summary>録った音声を Gemini に inline data で送って文字起こしする。</summary>
 public sealed class GeminiBatchTranscriber : IBatchTranscriber
 {
-    /// <summary>inline data は 1 回 20 MB まで。Base64 で 4/3 倍になるので、16 kHz・16 bit で約 7 分を上限にする</summary>
-    public static readonly TimeSpan MaxDuration = TimeSpan.FromMinutes(7);
+    // 設計判断: DEC-DIC-145
+    /// <summary>inline data は 1 回 20 MB まで。Base64 で 4/3 倍になるので、16 kHz・16 bit の WAV は約 7 分が限界。余裕を見て 5 分ごとに分けて送る</summary>
+    public static readonly TimeSpan ChunkDuration = TimeSpan.FromMinutes(5);
 
     private readonly Func<Gemini.GeminiClient?> clientFactory;
     private readonly Func<string> model;
@@ -164,18 +188,23 @@ public sealed class GeminiBatchTranscriber : IBatchTranscriber
     public async Task<string> TranscribeAsync(float[] samples, TranscriptionContext context, CancellationToken cancellationToken = default)
     {
         if (client is null) await PrepareAsync(context, cancellationToken).ConfigureAwait(false);
-        if (samples.Length > MaxDuration.TotalSeconds * AudioFormat.SampleRate)
-        {
-            throw new TranscriptionException($"録音が長すぎるため Gemini に送れません（{MaxDuration.TotalMinutes:0} 分まで）。");
-        }
-        var wav = WavFile.Encode(samples);
+        // 長い録音は、いちばん静かなところで 5 分ごとに分けて順に送り、つなげる（20 MB の上限を超えないため）
+        var starts = Meetings.MeetingAudio.ChunkStarts(samples, ChunkDuration.TotalSeconds);
+        var parts = new List<string>();
         try
         {
-            return await client!.TranscribeAudioAsync(wav, "audio/wav", model(), dictionary(), cancellationToken).ConfigureAwait(false);
+            for (var i = 0; i < starts.Count; i++)
+            {
+                var end = i + 1 < starts.Count ? starts[i + 1] : samples.Length;
+                var wav = WavFile.Encode(samples.AsSpan(starts[i], end - starts[i]));
+                var text = await client!.TranscribeAudioAsync(wav, "audio/wav", model(), dictionary(), cancellationToken).ConfigureAwait(false);
+                if (!string.IsNullOrWhiteSpace(text)) parts.Add(text.Trim());
+            }
         }
         catch (Ai.TextAiException e)
         {
             throw new TranscriptionException($"Gemini での文字起こしに失敗しました: {e.Message}", inner: e);
         }
+        return string.Join("\n", parts);
     }
 }

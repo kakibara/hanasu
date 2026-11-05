@@ -258,7 +258,7 @@ Granola のテンプレート（1on1・商談・採用面接など）になら�
 
 #### 名前付きテンプレート
 
-見出しの構成や書き方の指示に名前を付けて保存し、組み込みの型と並べて選べる（`SavedMinutesTemplates.swift`、`MinutesTemplateViews.swift`。REQ-MTG-042、DEC-MTG-071）。
+見出しの構成や書き方の指示に名前を付けて保存し、組み込みの型と並べて選べる（`SavedMinutesTemplates.swift`、`MinutesTemplateViews.swift`。REQ-MTG-042、DEC-MTG-076）。
 
 - 保存したものの一覧は UserDefaults の `meetingSavedMinutesTemplates`（JSON）。型の選択欄には `saved:<ID>` の形で入る。
 - 管理は選択欄の右のボタン、または会議ノートの「型」メニューの「テンプレートを管理…」から開く `MinutesTemplateManagerSheet`（追加・複製・削除・名前と指示の編集。保存できる内容なら自動で保存）。カスタムの指示のシートからも「テンプレートとして保存…」で登録できる。

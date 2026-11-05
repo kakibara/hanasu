@@ -66,6 +66,12 @@ final class DictationController {
         recognizer.onBatchTranscriptionStarted = { [weak self] _ in
             self?.hud.model.transcribing = true
         }
+        // 設計判断: DEC-DIC-144
+        // 録音が上限に達したら、止めて、ここまでの音声を処理する（HUD に理由を出す）
+        recognizer.onRecordingLimitReached = { [weak self] in
+            self?.hud.updateTranscript(SpeechRecognizer.recordingLimitNotice)
+            self?.stopFromHUD()
+        }
         hud.model.onSelectTranslation = { [weak self] translation in
             self?.selectOutputLanguage(translation)
         }
