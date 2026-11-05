@@ -154,10 +154,10 @@ internal sealed class UpdateService
         try
         {
             if (!File.Exists(PendingFile)) return;
-            var text = File.ReadAllText(PendingFile).Trim();
+            var lines = File.ReadAllText(PendingFile).Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             try { File.Delete(PendingFile); }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException) { AppLog.Write($"update: pending marker not deleted: {e.Message}"); }
-            var expected = AppVersion.Parse(text);
+            var expected = lines.Length > 0 ? AppVersion.Parse(lines[0]) : null;
             if (expected is null || CurrentVersion >= expected) return;
             AppLog.Write($"update: previous attempt to {expected} did not complete (running {CurrentVersion})");
             var logPath = Path.Combine(HanasuPaths.LocalDataDirectory, "Logs", "update.log");
@@ -167,7 +167,10 @@ internal sealed class UpdateService
                 "Hanasu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (answer == MessageBoxResult.Yes)
             {
-                Shell.Open($"https://github.com/{UpdateHosts.Repository}/releases/tag/v{Uri.EscapeDataString(expected.ToString())}");
+                // 印に書いたリリースのページ（GitHub のものだけ）。なければ最新のリリース
+                var page = lines.Length > 1 && Uri.TryCreate(lines[1], UriKind.Absolute, out var uri) && UpdateHosts.IsAllowed(uri)
+                    ? uri.AbsoluteUri : $"https://github.com/{UpdateHosts.Repository}/releases/latest";
+                Shell.Open(page);
             }
         }
         catch (Exception e)
@@ -245,7 +248,7 @@ internal sealed class UpdateService
             }
             // 入れ替えが失敗したら、次の起動で知らせるための印
             Directory.CreateDirectory(HanasuPaths.LocalDataDirectory);
-            await File.WriteAllTextAsync(PendingFile, release.Version.ToString());
+            await File.WriteAllTextAsync(PendingFile, $"{release.Version}\n{release.ReleaseUrl.AbsoluteUri}\n");
             StartSwapScript(scriptPath, installDir, staged, parent);
         }
         catch (Exception e) when (e is UpdateException or global::Hanasu.Core.ModelVerificationException or IOException or UnauthorizedAccessException
@@ -254,6 +257,7 @@ internal sealed class UpdateService
         {
             AppLog.Write($"update: install failed: {e}");
             TryDeleteDirectory(staging);
+            TryDeletePendingFile();
             var reason = e is UnauthorizedAccessException ? "このフォルダには書き込めません（Program Files などに入れている場合は、管理者として入れ直すか、リリースのページから入れてください）。" : e.Message;
             OfferReleasePage(release, $"アップデートできませんでした。\n{reason}");
         }
@@ -262,8 +266,16 @@ internal sealed class UpdateService
             // 想定していない失敗でも、「アップデート」を押した人に何も出さないことがないように
             AppLog.Write($"update: install failed (unexpected): {e}");
             TryDeleteDirectory(staging);
+            TryDeletePendingFile();
             OfferReleasePage(release, $"アップデートできませんでした。\n{e.Message}");
         }
+    }
+
+    /// <summary>スクリプトを始める前の失敗はその場で知らせるので、次の起動ではもう知らせない</summary>
+    private static void TryDeletePendingFile()
+    {
+        try { if (File.Exists(PendingFile)) File.Delete(PendingFile); }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { AppLog.Write($"update: pending marker not deleted: {e.Message}"); }
     }
 
     /// <summary>作業用フォルダを空の状態で作る（前の失敗の残りは消す）。書き込めなければ UnauthorizedAccessException</summary>

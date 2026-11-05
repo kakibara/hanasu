@@ -90,6 +90,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             let downloading = LocalLLMModel.allCases.contains {
                 if case .downloading = LocalLLMStore.shared.status($0) { return true }
                 return false
+            } || WhisperModel.allCases.contains {
+                if case .downloading = WhisperModelStore.shared.status($0) { return true }
+                return false
             }
             return self.controller.state != .idle || self.editController.state != .idle || self.meetingRecorder.state != .idle
                 || self.meetingRecorder.regeneratingID != nil || downloading

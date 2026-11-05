@@ -308,7 +308,9 @@ public class UpdateTests
     {
         var staged = Make(Path.Combine(TestKeys.TempDirectory(), "new"), "Hanasu.exe", "Hanasu.Core.dll", "llama/server.txt", "ja/x.resources.dll");
         // 古い版にだけあった dll / pdb は、外のものではない。名前の大文字小文字は問わない
-        var install = Make(Path.Combine(TestKeys.TempDirectory(), "cur"), "HANASU.EXE", "Hanasu.Core.dll", "Old.dll", "Old.pdb", "llama/server.txt");
+        var install = Make(Path.Combine(TestKeys.TempDirectory(), "cur"), "HANASU.EXE", "Hanasu.Core.dll", "Old.dll", "Old.pdb", "llama/server.txt",
+            "desktop.ini", "Thumbs.db");
+        // エクスプローラーが作る desktop.ini・Thumbs.db も外のものではない
         Assert.Empty(UpdatePackage.FindForeignEntries(install, staged));
     }
 

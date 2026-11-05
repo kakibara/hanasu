@@ -381,13 +381,14 @@ enum UpdateInstaller {
 
     /// 前の起動で始めた入れ替えの結果を読み、印を消す。版が上がっていなければ（入れ替える版, ページ, 理由）
     static func takeFailedAttempt(current: AppVersion?) -> (version: String, page: URL?, reason: String)? {
-        guard let text = try? String(contentsOf: pendingFile, encoding: .utf8) else { return nil }
+        // 版の分からない起動（swift build の実行ファイル）では、アプリの印を読まない
+        guard let current, let text = try? String(contentsOf: pendingFile, encoding: .utf8) else { return nil }
         let reason = (try? String(contentsOf: resultFile, encoding: .utf8))?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         try? FileManager.default.removeItem(at: pendingFile)
         try? FileManager.default.removeItem(at: resultFile)
         let lines = text.split(separator: "\n").map(String.init)
         guard let first = lines.first, let expected = AppVersion(first) else { return nil }
-        if let current, current >= expected { return nil }
+        if current >= expected { return nil }
         return (expected.description, lines.count > 1 ? URL(string: lines[1]) : nil, reason)
     }
 
@@ -430,11 +431,16 @@ enum UpdateInstaller {
         backup="$work/Hanasu-previous.app"
         if mv "$target" "$backup" 2>> "$result"; then
           if ! mv "$new" "$target" 2>> "$result"; then
-            mv "$backup" "$target"
+            mv "$backup" "$target" 2>> "$result"
           fi
         fi
-        open "$target"
-        rm -rf "$work"
+        if [ -e "$target" ]; then
+          open "$target"
+          rm -rf "$work"
+        else
+          # 元に戻すこともできなかった。前の Hanasu.app を消さずに残し、場所を書いておく
+          echo "前の Hanasu.app は $backup に残っています" >> "$result"
+        fi
         """
 
     /// スクリプトを動かす（このあと Hanasu を終える）
@@ -473,7 +479,10 @@ final class AppUpdater {
     func reportPreviousAttempt() {
         guard let failed = UpdateInstaller.takeFailedAttempt(current: AppVersion.current) else { return }
         appLog.error("update: previous attempt to \(failed.version, privacy: .public) failed: \(failed.reason, privacy: .public)")
+        isPrompting = true
         Task {
+            // 知らせている間は、起動時の確認のダイアログを重ねない
+            defer { isPrompting = false }
             try? await Task.sleep(for: .seconds(1))
             let alert = NSAlert()
             alert.messageText = "Hanasu \(failed.version) へのアップデートができませんでした"
@@ -540,7 +549,10 @@ final class AppUpdater {
         if !manual {
             while isBusy() { try? await Task.sleep(for: .seconds(10)) }
             // 待つ間にメニューから確かめて尋ねた版は、もう尋ねない
-            guard !isPrompting, !offeredTags.contains(release.tag) else { return }
+            guard !isFetching, !isPrompting, !offeredTags.contains(release.tag) else { return }
+        } else if isPrompting {
+            // 問い合わせている間に、起動時の確認が尋ね始めていた
+            return
         }
         offeredTags.insert(release.tag)
         isPrompting = true
@@ -628,6 +640,8 @@ final class AppUpdater {
         } catch {
             closeProgress()
             if let workDirectory { try? FileManager.default.removeItem(at: workDirectory) }
+            // スクリプトを始める前の失敗はここで知らせるので、次の起動ではもう知らせない
+            try? FileManager.default.removeItem(at: UpdateInstaller.pendingFile)
             appLog.error("update failed: \(error.localizedDescription, privacy: .public)")
             let alert = NSAlert()
             alert.messageText = "アップデートできませんでした"
@@ -860,7 +874,7 @@ enum AppUpdateCLI {
         expect(!UpdateHTTP.isAllowed(URL(string: "https://evilgithubusercontent.com/x")!), "githubusercontent.com で終わるだけのホストには従わない")
 
         // 入れ替えのスクリプトは、パスを引数で受け取る（文に埋め込まない）
-        expect(UpdateInstaller.swapScript.contains("result=\"$5\"") && UpdateInstaller.swapScript.contains("target=\"$2\"") && !UpdateInstaller.swapScript.contains("/Applications"),
+        expect(UpdateInstaller.swapScript.contains("result=\"$5\"") && UpdateInstaller.swapScript.contains("if [ -e \"$target\" ]") && UpdateInstaller.swapScript.contains("target=\"$2\"") && !UpdateInstaller.swapScript.contains("/Applications"),
                "スクリプトは引数でパスを受け取る")
 
         print(failures == 0 ? "すべて通りました" : "\(failures) 件の失敗")

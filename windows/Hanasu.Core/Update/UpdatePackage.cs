@@ -31,6 +31,8 @@ public static class UpdatePackage
             var isFile = File.Exists(path) && !Directory.Exists(path);
             var extension = Path.GetExtension(name);
             if (isFile && (extension.Equals(".dll", StringComparison.OrdinalIgnoreCase) || extension.Equals(".pdb", StringComparison.OrdinalIgnoreCase))) continue;
+            // エクスプローラーが勝手に作るもの（フォルダの表示の設定・サムネイル）
+            if (isFile && (name.Equals("desktop.ini", StringComparison.OrdinalIgnoreCase) || name.Equals("Thumbs.db", StringComparison.OrdinalIgnoreCase))) continue;
             foreign.Add(name);
         }
         foreign.Sort(StringComparer.OrdinalIgnoreCase);
