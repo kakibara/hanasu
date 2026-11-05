@@ -69,9 +69,20 @@ enum MeetingTitle {
             let element = AXUIElementCreateApplication(process.processIdentifier)
             // 固まったアプリに引きずられないよう、待つのは短くする
             AXUIElementSetMessagingTimeout(element, 0.5)
-            var value: CFTypeRef?
-            guard AXUIElementCopyAttributeValue(element, kAXWindowsAttribute as CFString, &value) == .success,
-                  let windows = value as? [AXUIElement] else { continue }
+            // 前面（フォーカス・メイン）のウインドウを先に。kAXWindowsAttribute の並びは前から順とは限らない
+            var windows: [AXUIElement] = []
+            for attribute in [kAXFocusedWindowAttribute, kAXMainWindowAttribute] {
+                var focused: CFTypeRef?
+                if AXUIElementCopyAttributeValue(element, attribute as CFString, &focused) == .success,
+                   let focused, CFGetTypeID(focused) == AXUIElementGetTypeID() {
+                    windows.append(focused as! AXUIElement)
+                }
+            }
+            var all: CFTypeRef?
+            if AXUIElementCopyAttributeValue(element, kAXWindowsAttribute as CFString, &all) == .success,
+               let list = all as? [AXUIElement] {
+                windows.append(contentsOf: list)
+            }
             for window in windows {
                 var name: CFTypeRef?
                 if AXUIElementCopyAttributeValue(window, kAXTitleAttribute as CFString, &name) == .success,

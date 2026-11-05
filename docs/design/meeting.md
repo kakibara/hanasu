@@ -213,7 +213,7 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
 
 #### 会議の名前をタイトルにする（REQ-MTG-034）
 
-記録を始めるとき（`AppDelegate.toggleMeeting`）、マイクを使っている会議アプリ（`MeetingAutoDetect.titleSourceApps`）のウインドウのタイトルを `MeetingTitle.detect` で読み、取り出せた名前を `MeetingRecorder.start(title:)` に渡して `Meeting.title` にする。読めなければ今までの日時のタイトル。
+記録の準備中（`MeetingRecorder.start`、状態は `.starting`）に、マイクを使っている会議アプリ（`MeetingAutoDetect.titleSourceApps`。AppDelegate が `MeetingRecorder.titleSourceApps` につなぐ）のウインドウのタイトルを `MeetingTitle.detect` で読み、取り出せた名前を `Meeting.title` にする。どの入口から始めても同じ。読めなければ今までの日時のタイトル。
 取り出す規則と、名前とみなさないもの（DEC-MTG-035）は `MeetingTitle.swift`。ブラウザは、アクティブなタブのタイトルだけが読めるので、Meet のタブが裏にあるときは取れない。
 
 #### 確認用の CLI

@@ -73,6 +73,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             .store(in: &cancellables)
         // 会議アプリがマイクを使い始めたら記録を提案する（記録はユーザーが押してから）
         meetingAutoDetect = MeetingAutoDetect(recorder: meetingRecorder) { [weak self] in self?.toggleMeeting() }
+        // 要件: REQ-MTG-034
+        meetingRecorder.titleSourceApps = { [weak self] in self?.meetingAutoDetect?.titleSourceApps ?? [] }
         controller.onHotKeyRegistrationFailed = { [weak self] combo in
             self?.showAlert(
                 "ショートカット \(combo.displayString) を登録できませんでした",
@@ -297,16 +299,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     // MARK: - 会議
 
-    // 要件: REQ-MTG-034
     @objc private func toggleMeeting() {
-        guard meetingRecorder.state == .idle else { meetingRecorder.toggle(); return }
-        openMeetingWindow()
-        // マイクを使っている会議アプリのウインドウから会議の名前を読む（読めなければ日時のタイトル）
-        let apps = meetingAutoDetect?.titleSourceApps ?? []
-        Task {
-            let title = await MeetingTitle.detect(apps: apps)
-            await meetingRecorder.start(title: title)
-        }
+        if meetingRecorder.state == .idle { openMeetingWindow() }
+        meetingRecorder.toggle()
     }
 
     static let meetingWindowSize = NSSize(width: 980, height: 640)

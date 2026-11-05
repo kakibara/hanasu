@@ -40,6 +40,9 @@ final class MeetingRecorder: ObservableObject {
     @Published var regeneratingID: String?
 
     var onStateChange: ((State) -> Void)?
+    // 要件: REQ-MTG-034
+    /// 会議の名前を読む対象のアプリ（優先順）。記録を始めるときに呼ぶ。AppDelegate が会議の自動検出につなぐ
+    var titleSourceApps: () -> [MeetingApp] = { [] }
     var diarizer: SpeakerDiarizer = FluidAudioDiarizer()
 
     private let settings = AppSettings.shared
@@ -66,8 +69,7 @@ final class MeetingRecorder: ObservableObject {
 
     // 要件: REQ-MTG-002
     // 設計判断: DEC-MTG-001, DEC-DIC-085
-    /// - Parameter title: 会議アプリから読み取った会議の名前（REQ-MTG-034）。nil なら日時のタイトル
-    func start(title: String? = nil) async {
+    func start() async {
         guard state == .idle else { return }
         setState(.starting)
         lastError = nil
@@ -80,9 +82,13 @@ final class MeetingRecorder: ObservableObject {
             let engine = settings.meetingEngine
             try Self.checkReady(engine)
             try await Permissions.ensureRecordingPermissions(speechRecognition: engine.isLive)
+            // 要件: REQ-MTG-034
+            // 会議アプリのウインドウから会議の名前を読む（読めなければ日時のタイトル）。
+            // 状態は .starting なので、読んでいる間に押しても二重には始まらず、止めるボタンも効く
+            let detectedTitle = await MeetingTitle.detect(apps: titleSourceApps())
             var meeting = try MeetingStore.newMeeting()
             meeting.status = .recording
-            if let title, !title.isEmpty { meeting.title = title }
+            if let detectedTitle { meeting.title = detectedTitle }
             MinutesTemplateStore.apply(to: &meeting)
             try MeetingStore.save(meeting)
             current = meeting
