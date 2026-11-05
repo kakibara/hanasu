@@ -49,9 +49,19 @@ enum SpeakerNameInference {
     }
 
     /// 名前ではない値（「自分」「相手」「話者1」「同席者1」と、分からないことを表す言葉）
+    // 要件: REQ-COM-061
+    /// ラベルはプロンプトの言語で書くので、すべての言語のラベルを名前ではないものとして扱う
     static func isPlaceholder(_ name: String) -> Bool {
-        if ["自分", "相手", "不明", "なし", "null", "unknown"].contains(name.lowercased()) { return true }
-        return name.range(of: #"^(話者|同席者)[0-9０-９]+$"#, options: .regularExpression) != nil
+        let lowered = name.lowercased()
+        if ["自分", "相手", "不明", "なし", "null", "unknown"].contains(lowered) { return true }
+        if (Prompts.allTexts("speaker.me") + Prompts.allTexts("speaker.others") + Prompts.allTexts("minutes.result.none"))
+            .contains(where: { $0.lowercased() == lowered }) { return true }
+        if name.range(of: #"^(話者|同席者)[0-9０-９]+$"#, options: .regularExpression) != nil { return true }
+        return (Prompts.allTexts("speaker.remote") + Prompts.allTexts("speaker.room")).contains { template in
+            let pattern = "^" + NSRegularExpression.escapedPattern(for: template)
+                .replacingOccurrences(of: NSRegularExpression.escapedPattern(for: "${n}"), with: "[0-9０-９]+") + "$"
+            return name.range(of: pattern, options: [.regularExpression, .caseInsensitive]) != nil
+        }
     }
 
     /// 名前のない話者（「自分」を除く）に、応答の名前を付ける。付けた話者キー → 名前を返す。
@@ -61,7 +71,8 @@ enum SpeakerNameInference {
         guard !names.isEmpty else { return [:] }
         var labelToKey: [String: String] = [:]
         for key in meeting.speakers where key != "me" && (meeting.speakerNames[key] ?? "").isEmpty {
-            labelToKey[meeting.displayName(for: key)] = key
+            // 要件: REQ-COM-061（応答のラベルは、プロンプトに書いたラベルと同じ言語）
+            labelToKey[meeting.promptName(for: key)] = key
         }
         var applied: [(key: String, label: String, name: String)] = []
         for label in names.keys.sorted() {

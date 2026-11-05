@@ -125,8 +125,9 @@ extension Meeting {
     // 要件: REQ-MTG-013
     /// Gemini に渡す文字起こし。印の前後の発言の行頭に ★ を付ける。
     func transcriptForPromptMarkingHighlights() -> String {
-        mergedBlocks()
-            .map { "\(isNearHighlight($0) ? "★ " : "")[\(Self.clock($0.start))] \(displayName(for: $0.speaker)): \($0.text)" }
+        let language = PromptLanguage.current
+        return mergedBlocks()
+            .map { "\(isNearHighlight($0) ? "★ " : "")[\(Self.clock($0.start))] \(promptName(for: $0.speaker, language: language)): \($0.text)" }
             .joined(separator: "\n")
     }
 
@@ -140,7 +141,7 @@ extension Meeting {
             let time = note.time.map { "[\(Self.clock($0))]" } ?? "[--:--]"
             switch note.kind {
             case .note: return "\(time) \(note.text)"
-            case .highlight: return "\(time) ★ここ重要\(note.text.isEmpty ? "" : ": \(note.text)")"
+            case .highlight: return "\(time) \(Prompts.text("minutes.notes.highlight"))\(note.text.isEmpty ? "" : ": \(note.text)")"
             }
         }
         .joined(separator: "\n")
@@ -149,19 +150,8 @@ extension Meeting {
 
 extension MeetingProcessor {
     /// メモか印がある会議だけ、議事録の指示に足す
-    static let notesInstruction = """
-    # 本人のメモと「ここ重要」の印について
-    入力の <user_notes> は、記録している本人（「自分」）が会議中に書いたメモと、「ここ重要」の印を付けた時刻です。
-    [時刻] は録音開始からの経過時間で、文字起こしの時刻と同じものさしです（[--:--] は会議の後に書き足したメモ）。
-    - 本人のメモは、本人が大事だと考えた点です。どの見出しでも、メモに書かれた点を優先して取り上げ、
-      文字起こしの該当箇所（メモの時刻と、その少し前）の発言で中身を補ってください。
-    - メモにしかない情報（文字起こしにない補足や本人の考え）も落とさず、「（メモより）」と添えて反映してください。
-    - 文字起こしの行頭の「★」は、本人が「ここ重要」の印を付けた時刻の前後の発言です。その話題は省略せず詳しめにまとめ、
-      決定事項やアクションアイテムが含まれていれば必ず拾ってください。
-    - 印が 1 つ以上あるときは「## 概要」の次に「## 重要とした箇所」を置き、印ごとに「- [時刻] 内容（誰が何を言ったか）」の形で書いてください。
-      印がないときは、この見出しは作らないでください。
-    - メモは略語や走り書きのことがあります。文字起こしと照らして、読みやすく直して構いません。
-    """
+    // 要件: REQ-COM-061
+    static var notesInstruction: String { Prompts.text("minutes.notes") }
 }
 
 // MARK: - 設定（「ここ重要」のショートカット）

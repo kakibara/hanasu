@@ -75,6 +75,25 @@ struct Meeting: Codable, Identifiable, Hashable {
         }
     }
 
+    // 要件: REQ-COM-061
+    /// プロンプトに書く話者名。名前を付けていれば名前、なければプロンプトの言語のラベル（「自分」「話者1」など）
+    func promptName(for speaker: String, language: PromptLanguage = .current) -> String {
+        if let name = speakerNames[speaker], !name.isEmpty { return name }
+        return Self.promptLabel(for: speaker, language: language)
+    }
+
+    // 要件: REQ-COM-061
+    static func promptLabel(for speaker: String, language: PromptLanguage = .current) -> String {
+        switch speaker {
+        case "me": return Prompts.text("speaker.me", language: language)
+        case "others": return Prompts.text("speaker.others", language: language)
+        default:
+            if speaker.hasPrefix("spk"), let n = Int(speaker.dropFirst(3)) { return Prompts.text("speaker.remote", ["n": "\(n)"], language: language) }
+            if speaker.hasPrefix("room"), let n = Int(speaker.dropFirst(4)) { return Prompts.text("speaker.room", ["n": "\(n)"], language: language) }
+            return speaker
+        }
+    }
+
     /// 登場順の話者キー
     var speakers: [String] {
         var seen: [String] = []
@@ -93,10 +112,12 @@ struct Meeting: Codable, Identifiable, Hashable {
         return lines.joined(separator: "\n")
     }
 
-    /// Gemini に渡す文字起こし（1 発言 1 行）
+    // 要件: REQ-COM-061
+    /// Gemini に渡す文字起こし（1 発言 1 行。話者名はプロンプトの言語）
     func transcriptForPrompt() -> String {
-        mergedBlocks()
-            .map { "[\(Self.clock($0.start))] \(displayName(for: $0.speaker)): \($0.text)" }
+        let language = PromptLanguage.current
+        return mergedBlocks()
+            .map { "[\(Self.clock($0.start))] \(promptName(for: $0.speaker, language: language)): \($0.text)" }
             .joined(separator: "\n")
     }
 

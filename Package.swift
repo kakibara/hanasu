@@ -20,6 +20,11 @@ let package = Package(
                 .product(name: "WhisperKit", package: "WhisperKit"),
             ],
             path: "Sources/Hanasu",
+            // 設計判断: DEC-COM-160
+            // AI へのプロンプト（言語ごとの JSON。Windows 版も同じファイルを読む）
+            resources: [
+                .copy("Resources/Prompts"),
+            ],
             swiftSettings: [
                 .swiftLanguageMode(.v5),
             ],
