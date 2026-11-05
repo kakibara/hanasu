@@ -24,7 +24,8 @@ Um app de entrada por voz e anotações de reunião para macOS e Windows. Ele us
 </div>
 
 > [!NOTE]
-> O Hanasu foi feito primeiro para o **japonês**. Os prompts, a interface e as regras do dicionário pressupõem que você fala japonês.
+> O Hanasu foi feito primeiro para o **japonês**, e o japonês é o idioma mais testado.
+> As telas do app e as instruções que ele dá à IA estão disponíveis nos mesmos 17 idiomas deste README. As telas seguem o idioma do sistema, e as instruções para a IA seguem o idioma de transcrição nos Ajustes. Para qualquer outro idioma, o Hanasu usa o inglês.
 > Ele também pode traduzir o que você diz para um **inglês** natural (ou para **japonês**) antes de digitar.
 
 ## Por que o Hanasu
@@ -66,6 +67,7 @@ Ele é inspirado no Typeless, Wispr Flow, Aqua Voice e Granola. O Hanasu é grat
 | **Atas com IA** | Geradas pela IA que você escolher para reuniões. Escolha um modelo: automático, reunião semanal, 1:1, chamada de vendas, brainstorming ou personalizado. Os itens de ação incluem um responsável e um prazo. |
 | **Notas ao vivo e destaques** | Digite notas com horário durante a chamada, ou pressione <kbd>⌃⌥⌘ H</kbd> para marcar "isto é importante" (dá para desfazer por 10 segundos). A ata dá prioridade a esses trechos, e depois você pode ler a conversa em torno de cada marcação. |
 | **Legendas flutuantes** *(Mac)* | Mostre a transcrição ao vivo como legendas sobre o app da reunião. |
+| **Chat com IA durante a reunião** *(Mac)* | Enquanto grava, pergunte à IA sobre a conversa até agora (<kbd>⌘J</kbd>). Um clique para "resumo até agora" ou "decisões e tarefas". Faça perguntas de acompanhamento e clique em um horário numa resposta para ir àquele trecho da transcrição. |
 | **Detecção de reuniões** | Quando um app de reunião começa a usar o microfone, o Hanasu pergunta se deve gravar. Ele nunca começa a gravar sozinho. |
 | **Pesquisar e perguntar** | Pesquise o texto de todas as reuniões, ou pergunte "O que decidimos na reunião semanal passada?". A resposta cita as reuniões que usou. |
 | **Exportar** | Copie como Markdown ou como um resumo pronto para o Slack, salve como `.md` / `.txt`, ou envie os itens de ação para o Lembretes. |
@@ -86,9 +88,9 @@ Escolha a IA que refina o seu texto, separadamente para **entrada por voz** e **
 
 | IA | Modelo padrão | Acesso |
 | --- | --- | --- |
-| **Gemini** (padrão) | entrada por voz `gemini-3.5-flash-lite`, reuniões `gemini-3.8-flash` | Chave de API do Google AI Studio ou conta de serviço do Vertex AI |
+| **Gemini** (padrão no Windows) | entrada por voz `gemini-3.5-flash-lite`, reuniões `gemini-3.8-flash` | Chave de API do Google AI Studio ou conta de serviço do Vertex AI |
 | **Claude** | entrada por voz `claude-haiku-5-5`, reuniões `claude-sonnet-5-5` (Opus 5.5 também disponível) | Chave de API da Anthropic |
-| **Local** (no seu dispositivo) | Gemma 4 E4B (recomendado). Veja a tabela abaixo | Nenhum. Baixe o modelo em **Ajustes → IA** |
+| **Local** (no seu dispositivo; padrão no Mac) | Gemma 4 E4B (recomendado). Veja a tabela abaixo | Nenhum. Baixe o modelo em **Ajustes → IA**. No Mac, se o modelo não estiver presente quando o Hanasu começar a refinar o texto, ele pergunta se você quer baixá-lo |
 | **Apple** *(Mac, macOS 27)* | O modelo do Apple Intelligence no dispositivo, pelo comando `fm` | Nenhum |
 
 Essas IAs lidam apenas com texto. A fala é transcrita pelo mecanismo abaixo.
@@ -175,7 +177,7 @@ Você pode mudar todos os atalhos nos Ajustes. O guia completo do usuário (em j
 ## Privacidade
 
 - **Por padrão, o áudio fica no seu dispositivo.** O reconhecimento de fala, o Whisper e a diarização de falantes rodam todos localmente.
-- **A IA recebe texto, não áudio.** O Gemini ou o Claude recebe a transcrição. Dependendo dos seus ajustes, também pode receber o nome do app em que você está digitando, o contexto da tela e as transcrições de reuniões para a função Perguntar.
+- **A IA recebe texto, não áudio.** O Gemini ou o Claude recebe a transcrição. Dependendo dos seus ajustes, também pode receber o nome do app em que você está digitando, o contexto da tela e as transcrições de reuniões para a função Perguntar e para o chat com IA da reunião.
 - **Local e Apple também mantêm o texto no seu dispositivo.** Se você escolher qualquer um dos dois, nada é enviado a um serviço de IA. O único download é o próprio modelo.
 - **O áudio só vai para o Google se você escolher.** Se você selecionar o mecanismo de fala Gemini, o áudio gravado é enviado ao Google.
 - **Reuniões são arquivos comuns.** Elas são salvas como JSON e Markdown em `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac e Windows usam o mesmo formato.

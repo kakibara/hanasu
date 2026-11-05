@@ -24,7 +24,8 @@ Aplikacja do wprowadzania tekstu głosem i notatek ze spotkań dla macOS i Windo
 </div>
 
 > [!NOTE]
-> Hanasu powstaje przede wszystkim z myślą o języku **japońskim**. Prompty, interfejs i reguły słownika zakładają, że mówisz po japońsku.
+> Hanasu powstało przede wszystkim z myślą o języku **japońskim** i to właśnie japoński jest najlepiej przetestowany.
+> Ekrany aplikacji i instrukcje, które przekazuje AI, są dostępne w tych samych 17 językach co ten README. Ekrany są w języku systemu, a instrukcje dla AI w języku transkrypcji wybranym w Ustawieniach. Dla każdego innego języka Hanasu używa angielskiego.
 > Aplikacja potrafi też przetłumaczyć to, co mówisz, na naturalny **angielski** (lub na **japoński**), zanim to wpisze.
 
 ## Dlaczego Hanasu
@@ -66,6 +67,7 @@ Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Hanasu jest darmow
 | **Protokoły AI** | Tworzone przez AI wybrane dla spotkań. Wybierz szablon: automatyczny, cotygodniowe spotkanie, 1-on-1, rozmowa sprzedażowa, burza mózgów lub własny. Zadania do wykonania zawierają osobę odpowiedzialną i termin. |
 | **Notatki na żywo i wyróżnienia** | Pisz notatki ze znacznikiem czasu w trakcie rozmowy albo naciśnij <kbd>⌃⌥⌘ H</kbd>, aby oznaczyć „to ważne” (możesz to cofnąć przez 10 sekund). Protokół traktuje te fragmenty priorytetowo, a później możesz przeczytać rozmowę wokół każdego oznaczenia. |
 | **Pływające napisy** *(Mac)* | Wyświetlaj transkrypcję na żywo jako napisy nad aplikacją do spotkań. |
+| **Czat z AI w trakcie spotkania** *(Mac)* | Podczas nagrywania pytaj AI o dotychczasową rozmowę (<kbd>⌘J</kbd>). Jednym kliknięciem: „podsumuj dotąd” albo „decyzje i zadania”. Zadawaj pytania uzupełniające i kliknij znacznik czasu w odpowiedzi, aby przejść do tego miejsca w transkrypcji. |
 | **Wykrywanie spotkań** | Gdy aplikacja do spotkań zaczyna używać mikrofonu, Hanasu pyta, czy nagrywać. Nigdy nie zaczyna nagrywać samo. |
 | **Wyszukiwanie i pytania** | Przeszukuj tekst wszystkich spotkań albo zapytaj: „Co ustaliliśmy na zeszłotygodniowym spotkaniu?”. Odpowiedź wskazuje spotkania, z których korzystała. |
 | **Eksport** | Kopiuj jako Markdown lub jako podsumowanie gotowe do Slacka, zapisuj jako `.md` / `.txt` albo wysyłaj zadania do Przypomnień. |
@@ -86,9 +88,9 @@ Wybierz AI, które dopracowuje tekst, osobno dla **wprowadzania głosem** i **sp
 
 | AI | Model domyślny | Logowanie |
 | --- | --- | --- |
-| **Gemini** (domyślnie) | wprowadzanie głosem `gemini-3.5-flash-lite`, spotkania `gemini-3.8-flash` | Klucz API Google AI Studio lub konto usługi Vertex AI |
+| **Gemini** (domyślnie na Windows) | wprowadzanie głosem `gemini-3.5-flash-lite`, spotkania `gemini-3.8-flash` | Klucz API Google AI Studio lub konto usługi Vertex AI |
 | **Claude** | wprowadzanie głosem `claude-haiku-5-5`, spotkania `claude-sonnet-5-5` (dostępny też Opus 5.5) | Klucz API Anthropic |
-| **Lokalnie** (na Twoim urządzeniu) | Gemma 4 E4B (zalecany). Zobacz tabelę poniżej | Brak. Pobierz model w **Ustawienia → AI** |
+| **Lokalnie** (na Twoim urządzeniu; domyślnie na Macu) | Gemma 4 E4B (zalecany). Zobacz tabelę poniżej | Brak. Pobierz model w **Ustawienia → AI**. Jeśli na Macu brakuje modelu, gdy Hanasu zaczyna dopracowywać tekst, aplikacja zapyta, czy go pobrać |
 | **Apple** *(Mac, macOS 27)* | Model Apple Intelligence działający na urządzeniu, przez polecenie `fm` | Brak |
 
 Te AI przetwarzają wyłącznie tekst. Mowę transkrybuje silnik opisany poniżej.
@@ -175,7 +177,7 @@ Każdy skrót możesz zmienić w Ustawieniach. Pełny podręcznik użytkownika (
 ## Prywatność
 
 - **Dźwięk domyślnie zostaje na urządzeniu.** Rozpoznawanie mowy, Whisper i rozpoznawanie mówców działają lokalnie.
-- **AI dostaje tekst, nie dźwięk.** Gemini lub Claude otrzymuje transkrypcję. W zależności od ustawień może też otrzymać nazwę aplikacji, w której piszesz, kontekst ekranu oraz transkrypcje spotkań na potrzeby pytań.
+- **AI dostaje tekst, nie dźwięk.** Gemini lub Claude otrzymuje transkrypcję. W zależności od ustawień może też otrzymać nazwę aplikacji, w której piszesz, kontekst ekranu oraz transkrypcje spotkań na potrzeby pytań i czatu z AI w trakcie spotkania.
 - **Tryby Lokalnie i Apple również zatrzymują tekst na urządzeniu.** Jeśli wybierzesz którykolwiek z nich, nic nie jest wysyłane do usługi AI. Jedyne, co się pobiera, to sam model.
 - **Dźwięk trafia do Google tylko wtedy, gdy tak wybierzesz.** Jeśli wybierzesz silnik mowy Gemini, nagrany dźwięk jest wysyłany do Google.
 - **Spotkania to zwykłe pliki.** Są zapisywane jako JSON i Markdown w `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac i Windows używają tego samego formatu.

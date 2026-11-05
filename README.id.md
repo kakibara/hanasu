@@ -24,7 +24,8 @@ Aplikasi input suara dan pencatat rapat untuk macOS dan Windows. Aplikasi ini me
 </div>
 
 > [!NOTE]
-> Hanasu dibuat terutama untuk **bahasa Jepang**. Prompt, antarmuka, dan aturan kamus semuanya mengasumsikan Anda berbicara dalam bahasa Jepang.
+> Hanasu dibuat terutama untuk **bahasa Jepang**, dan bahasa Jepang adalah bahasa yang paling banyak diuji.
+> Layar aplikasi dan instruksi yang diberikannya kepada AI tersedia dalam 17 bahasa yang sama dengan README ini. Layar mengikuti bahasa sistem, sedangkan instruksi AI mengikuti bahasa transkripsi di Pengaturan. Untuk bahasa lainnya, Hanasu memakai bahasa Inggris.
 > Hanasu juga dapat menerjemahkan ucapan Anda ke **bahasa Inggris** (atau ke **bahasa Jepang**) yang alami sebelum mengetikkannya.
 
 ## Mengapa Hanasu
@@ -66,6 +67,7 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Hanasu g
 | **Notulen AI** | Dibuat oleh AI yang Anda pilih untuk rapat. Pilih templat: otomatis, rapat mingguan, 1-on-1, panggilan penjualan, curah gagasan, atau kustom. Butir tindakan dilengkapi penanggung jawab dan tenggat waktu. |
 | **Catatan langsung & sorotan** | Ketik catatan bertanda waktu selama panggilan, atau tekan <kbd>⌃⌥⌘ H</kbd> untuk menandai "ini penting" (dapat dibatalkan dalam 10 detik). Notulen memprioritaskan bagian-bagian tersebut, dan setelahnya Anda dapat membaca percakapan di sekitar setiap tanda. |
 | **Teks terjemahan mengambang** *(Mac)* | Tampilkan transkrip langsung sebagai teks di atas aplikasi rapat Anda. |
+| **Obrolan AI selama rapat** *(Mac)* | Saat merekam, tanyakan kepada AI tentang percakapan sejauh ini (<kbd>⌘J</kbd>). Sekali klik untuk "ringkasan sejauh ini" atau "keputusan & tugas". Ajukan pertanyaan lanjutan, dan klik tanda waktu dalam jawaban untuk melompat ke bagian transkrip tersebut. |
 | **Deteksi rapat** | Saat aplikasi rapat mulai memakai mikrofon, Hanasu bertanya apakah Anda ingin merekam. Hanasu tidak pernah mulai merekam dengan sendirinya. |
 | **Cari & Tanya** | Cari teks di semua rapat, atau tanyakan "Apa yang kita putuskan di rapat mingguan lalu?". Jawabannya mencantumkan rapat yang menjadi sumbernya. |
 | **Ekspor** | Salin sebagai Markdown atau sebagai ringkasan yang siap untuk Slack, simpan sebagai `.md` / `.txt`, atau kirim butir tindakan ke Pengingat. |
@@ -86,9 +88,9 @@ Pilih AI yang merapikan teks Anda, secara terpisah untuk **input suara** dan **r
 
 | AI | Model bawaan | Masuk |
 | --- | --- | --- |
-| **Gemini** (bawaan) | input suara `gemini-3.5-flash-lite`, rapat `gemini-3.8-flash` | Kunci API Google AI Studio atau akun layanan Vertex AI |
+| **Gemini** (bawaan di Windows) | input suara `gemini-3.5-flash-lite`, rapat `gemini-3.8-flash` | Kunci API Google AI Studio atau akun layanan Vertex AI |
 | **Claude** | input suara `claude-haiku-5-5`, rapat `claude-sonnet-5-5` (Opus 5.5 juga tersedia) | Kunci API Anthropic |
-| **Lokal** (di perangkat Anda) | Gemma 4 E4B (disarankan). Lihat tabel di bawah | Tidak perlu. Unduh model di **Pengaturan → AI** |
+| **Lokal** (di perangkat Anda; bawaan di Mac) | Gemma 4 E4B (disarankan). Lihat tabel di bawah | Tidak perlu. Unduh model di **Pengaturan → AI**. Di Mac, jika model belum ada saat Hanasu mulai merapikan teks, Hanasu akan menanyakan apakah model perlu diunduh |
 | **Apple** *(Mac, macOS 27)* | Model Apple Intelligence di perangkat, melalui perintah `fm` | Tidak perlu |
 
 AI ini hanya menangani teks. Ucapan ditranskripsikan oleh mesin di bawah ini.
@@ -175,7 +177,7 @@ Anda dapat mengubah semua pintasan di Pengaturan. Panduan pengguna lengkap (dala
 ## Privasi
 
 - **Secara bawaan, audio tetap di perangkat Anda.** Pengenalan ucapan, Whisper, dan pemisahan pembicara semuanya berjalan secara lokal.
-- **AI menerima teks, bukan audio.** Gemini atau Claude menerima transkrip. Tergantung pengaturan Anda, AI juga dapat menerima nama aplikasi tempat Anda mengetik, konteks layar, dan transkrip rapat untuk fitur Tanya.
+- **AI menerima teks, bukan audio.** Gemini atau Claude menerima transkrip. Tergantung pengaturan Anda, AI juga dapat menerima nama aplikasi tempat Anda mengetik, konteks layar, dan transkrip rapat untuk fitur Tanya dan obrolan AI selama rapat.
 - **Lokal dan Apple juga menyimpan teks di perangkat Anda.** Jika Anda memilih salah satunya, tidak ada yang dikirim ke layanan AI. Satu-satunya yang diunduh adalah model itu sendiri.
 - **Audio dikirim ke Google hanya jika Anda memilihnya.** Jika Anda memilih mesin ucapan Gemini, audio rekaman dikirim ke Google.
 - **Rapat disimpan sebagai berkas biasa.** Rapat disimpan dalam format JSON dan Markdown di `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac dan Windows memakai format yang sama.

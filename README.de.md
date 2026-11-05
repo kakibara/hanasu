@@ -24,7 +24,8 @@ Eine App für Spracheingabe und Besprechungsnotizen für macOS und Windows. Sie 
 </div>
 
 > [!NOTE]
-> Hanasu ist in erster Linie für **Japanisch** gebaut. Die Prompts, die Oberfläche und die Wörterbuchregeln gehen davon aus, dass du Japanisch sprichst.
+> Hanasu wurde in erster Linie für **Japanisch** gebaut, und Japanisch ist die am gründlichsten getestete Sprache.
+> Die Oberfläche der App und die Anweisungen, die sie der KI gibt, gibt es in denselben 17 Sprachen wie diese README. Die Oberfläche folgt deiner Systemsprache, die KI-Anweisungen folgen der Transkriptionssprache in den Einstellungen. Für alle anderen Sprachen verwendet Hanasu Englisch.
 > Es kann das Gesagte vor dem Eintippen auch in natürliches **Englisch** (oder ins **Japanische**) übersetzen.
 
 ## Warum Hanasu
@@ -66,6 +67,7 @@ Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Hanasu ist k
 | **KI-Protokolle** | Erstellt von der KI, die du für Besprechungen wählst. Wähle eine Vorlage: automatisch, wöchentliches Meeting, 1-on-1, Verkaufsgespräch, Brainstorming oder benutzerdefiniert. Aufgaben enthalten eine verantwortliche Person und ein Fälligkeitsdatum. |
 | **Live-Notizen & Markierungen** | Tippe während des Calls Notizen mit Zeitstempel oder drücke <kbd>⌃⌥⌘ H</kbd>, um „das ist wichtig“ zu markieren (10 Sekunden lang rückgängig zu machen). Das Protokoll berücksichtigt diese Stellen bevorzugt, und hinterher kannst du das Gespräch rund um jede Markierung nachlesen. |
 | **Schwebende Untertitel** *(Mac)* | Zeige das Live-Transkript als Untertitel über deiner Besprechungs-App an. |
+| **KI-Chat während der Besprechung** *(Mac)* | Frag die KI während der Aufnahme zum bisherigen Gespräch (<kbd>⌘J</kbd>). „Bisher zusammenfassen“ oder „Entscheidungen & To-dos“ mit einem Klick. Stell Folgefragen und klicke auf einen Zeitstempel in einer Antwort, um zu dieser Stelle im Transkript zu springen. |
 | **Besprechungserkennung** | Sobald eine Besprechungs-App das Mikrofon nutzt, fragt Hanasu, ob aufgenommen werden soll. Es startet nie von selbst eine Aufnahme. |
 | **Suchen & Fragen** | Durchsuche den Text aller Besprechungen oder frage „Was haben wir im Meeting letzte Woche beschlossen?“. Die Antwort nennt die Besprechungen, auf die sie sich stützt. |
 | **Export** | Als Markdown oder als Slack-fertige Zusammenfassung kopieren, als `.md` / `.txt` speichern oder Aufgaben an Erinnerungen senden. |
@@ -86,9 +88,9 @@ Wähle die KI, die deinen Text aufbereitet, getrennt für **Spracheingabe** und 
 
 | KI | Standardmodell | Anmeldung |
 | --- | --- | --- |
-| **Gemini** (Standard) | Spracheingabe `gemini-3.5-flash-lite`, Besprechungen `gemini-3.8-flash` | API-Schlüssel von Google AI Studio oder Vertex-AI-Dienstkonto |
+| **Gemini** (Standard unter Windows) | Spracheingabe `gemini-3.5-flash-lite`, Besprechungen `gemini-3.8-flash` | API-Schlüssel von Google AI Studio oder Vertex-AI-Dienstkonto |
 | **Claude** | Spracheingabe `claude-haiku-5-5`, Besprechungen `claude-sonnet-5-5` (auch Opus 5.5 verfügbar) | Anthropic-API-Schlüssel |
-| **Lokal** (auf deinem Gerät) | Gemma 4 E4B (empfohlen). Siehe Tabelle unten | Keine. Lade das Modell unter **Einstellungen → KI** herunter |
+| **Lokal** (auf deinem Gerät; Standard auf dem Mac) | Gemma 4 E4B (empfohlen). Siehe Tabelle unten | Keine. Lade das Modell unter **Einstellungen → KI** herunter. Fehlt auf dem Mac das Modell, wenn Hanasu mit dem Aufbereiten des Textes beginnt, fragt es, ob es heruntergeladen werden soll |
 | **Apple** *(Mac, macOS 27)* | Das Apple-Intelligence-Modell auf dem Gerät, über den Befehl `fm` | Keine |
 
 Diese KIs verarbeiten nur Text. Die Sprache wird von der unten beschriebenen Engine transkribiert.
@@ -175,7 +177,7 @@ Alle Tastenkürzel lassen sich in den Einstellungen ändern. Das vollständige B
 ## Datenschutz
 
 - **Audio bleibt standardmäßig auf deinem Gerät.** Spracherkennung, Whisper und Sprechertrennung laufen alle lokal.
-- **Die KI erhält Text, kein Audio.** Gemini oder Claude bekommt das Transkript. Je nach Einstellungen kann es außerdem den Namen der App erhalten, in die du tippst, den Bildschirmkontext sowie Besprechungstranskripte für Fragen.
+- **Die KI erhält Text, kein Audio.** Gemini oder Claude bekommt das Transkript. Je nach Einstellungen kann es außerdem den Namen der App erhalten, in die du tippst, den Bildschirmkontext sowie Besprechungstranskripte für Fragen und den KI-Chat in Besprechungen.
 - **Lokal und Apple halten auch den Text auf deinem Gerät.** Wenn du eine der beiden Optionen wählst, wird nichts an einen KI-Dienst gesendet. Heruntergeladen wird nur das Modell selbst.
 - **Audio geht nur an Google, wenn du das so wählst.** Wenn du die Gemini-Sprach-Engine auswählst, wird das aufgenommene Audio an Google gesendet.
 - **Besprechungen sind einfache Dateien.** Sie werden als JSON und Markdown unter `~/Documents/Hanasu/Meetings/` gespeichert (Windows: `Documents\Hanasu\Meetings\`). Mac und Windows verwenden dasselbe Format.

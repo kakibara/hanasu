@@ -22,7 +22,8 @@ A voice-input and meeting-notes app for macOS and Windows. It uses on-device spe
 </div>
 
 > [!NOTE]
-> Hanasu is built for **Japanese** first. The prompts, the UI and the dictionary rules all assume you speak Japanese.
+> Hanasu was built for **Japanese** first, and Japanese is the most tested language.
+> The app's screens and the instructions it gives the AI come in the same 17 languages as this README. The screens follow your system language, and the AI instructions follow the transcription language in Settings. For any other language, Hanasu uses English.
 > It can also translate what you say into natural **English** (or into **Japanese**) before typing it.
 
 ## Why Hanasu

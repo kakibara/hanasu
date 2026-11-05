@@ -24,7 +24,8 @@
 </div>
 
 > [!NOTE]
-> Hanasu được xây dựng trước hết cho **tiếng Nhật**. Prompt, giao diện và quy tắc từ điển đều giả định rằng bạn nói tiếng Nhật.
+> Hanasu được xây dựng trước hết cho **tiếng Nhật**, và tiếng Nhật là ngôn ngữ được kiểm thử kỹ nhất.
+> Giao diện ứng dụng và chỉ dẫn mà ứng dụng gửi cho AI có sẵn bằng 17 ngôn ngữ giống như README này. Giao diện theo ngôn ngữ hệ thống, còn chỉ dẫn cho AI theo ngôn ngữ chép lời trong Cài đặt. Với các ngôn ngữ khác, Hanasu dùng tiếng Anh.
 > Ứng dụng cũng có thể dịch những gì bạn nói sang **tiếng Anh** (hoặc **tiếng Nhật**) một cách tự nhiên trước khi gõ ra.
 
 ## Vì sao chọn Hanasu
@@ -66,6 +67,7 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Han
 | **Biên bản bằng AI** | Được tạo bởi AI bạn chọn cho cuộc họp. Chọn mẫu: tự động, họp định kỳ hằng tuần, 1-1, cuộc gọi bán hàng, động não hoặc tùy chỉnh. Các đầu việc có người phụ trách và hạn chót. |
 | **Ghi chú trực tiếp & đánh dấu** | Gõ ghi chú có dấu thời gian trong cuộc gọi, hoặc nhấn <kbd>⌃⌥⌘ H</kbd> để đánh dấu "chỗ này quan trọng" (có thể hoàn tác trong 10 giây). Biên bản sẽ ưu tiên những phần đó, và sau này bạn có thể đọc lại đoạn hội thoại quanh mỗi dấu. |
 | **Phụ đề nổi** *(Mac)* | Hiển thị bản chép lời trực tiếp dưới dạng phụ đề phía trên ứng dụng họp của bạn. |
+| **Trò chuyện với AI trong cuộc họp** *(Mac)* | Trong lúc ghi âm, hãy hỏi AI về cuộc hội thoại cho đến lúc này (<kbd>⌘J</kbd>). Chỉ một cú nhấp để có "tóm tắt đến giờ" hoặc "quyết định & việc cần làm". Hãy hỏi tiếp, và bấm vào dấu thời gian trong câu trả lời để chuyển đến đoạn đó trong bản chép lời. |
 | **Phát hiện cuộc họp** | Khi một ứng dụng họp bắt đầu dùng micrô, Hanasu hỏi bạn có muốn ghi âm không. Ứng dụng không bao giờ tự bắt đầu ghi âm. |
 | **Tìm kiếm & Hỏi đáp** | Tìm trong nội dung của mọi cuộc họp, hoặc hỏi "Cuộc họp tuần trước chúng ta đã quyết định gì?". Câu trả lời có trích dẫn các cuộc họp được dùng làm nguồn. |
 | **Xuất** | Sao chép dưới dạng Markdown hoặc bản tóm tắt sẵn để gửi lên Slack, lưu thành `.md` / `.txt`, hoặc gửi các đầu việc sang Lời nhắc. |
@@ -86,9 +88,9 @@ Chọn AI dùng để chỉnh sửa văn bản, riêng cho **nhập liệu bằn
 
 | AI | Mô hình mặc định | Đăng nhập |
 | --- | --- | --- |
-| **Gemini** (mặc định) | nhập liệu bằng giọng nói `gemini-3.5-flash-lite`, cuộc họp `gemini-3.8-flash` | Khóa API Google AI Studio hoặc tài khoản dịch vụ Vertex AI |
+| **Gemini** (mặc định trên Windows) | nhập liệu bằng giọng nói `gemini-3.5-flash-lite`, cuộc họp `gemini-3.8-flash` | Khóa API Google AI Studio hoặc tài khoản dịch vụ Vertex AI |
 | **Claude** | nhập liệu bằng giọng nói `claude-haiku-5-5`, cuộc họp `claude-sonnet-5-5` (có cả Opus 5.5) | Khóa API Anthropic |
-| **Cục bộ** (trên thiết bị của bạn) | Gemma 4 E4B (khuyên dùng). Xem bảng bên dưới | Không cần. Tải mô hình trong **Cài đặt → AI** |
+| **Cục bộ** (trên thiết bị của bạn; mặc định trên Mac) | Gemma 4 E4B (khuyên dùng). Xem bảng bên dưới | Không cần. Tải mô hình trong **Cài đặt → AI**. Trên Mac, nếu chưa có mô hình khi Hanasu bắt đầu chỉnh sửa văn bản, ứng dụng sẽ hỏi bạn có muốn tải về không |
 | **Apple** *(Mac, macOS 27)* | Mô hình Apple Intelligence trên thiết bị, thông qua lệnh `fm` | Không cần |
 
 Các AI này chỉ xử lý văn bản. Giọng nói được chép lời bởi công cụ nhận dạng bên dưới.
@@ -175,7 +177,7 @@ Bạn có thể thay đổi mọi phím tắt trong Cài đặt. Hướng dẫn 
 ## Quyền riêng tư
 
 - **Âm thanh mặc định ở lại trên thiết bị của bạn.** Nhận dạng giọng nói, Whisper và phân tách người nói đều chạy cục bộ.
-- **AI nhận văn bản, không nhận âm thanh.** Gemini hoặc Claude nhận bản chép lời. Tùy theo cài đặt, AI cũng có thể nhận tên ứng dụng bạn đang gõ, ngữ cảnh màn hình và bản chép lời cuộc họp cho tính năng Hỏi đáp.
+- **AI nhận văn bản, không nhận âm thanh.** Gemini hoặc Claude nhận bản chép lời. Tùy theo cài đặt, AI cũng có thể nhận tên ứng dụng bạn đang gõ, ngữ cảnh màn hình và bản chép lời cuộc họp cho tính năng Hỏi đáp và trò chuyện với AI trong cuộc họp.
 - **Cục bộ và Apple cũng giữ văn bản trên thiết bị của bạn.** Nếu bạn chọn một trong hai, không có gì được gửi đến dịch vụ AI nào. Thứ duy nhất được tải về là chính mô hình.
 - **Âm thanh chỉ được gửi đến Google nếu bạn chọn.** Nếu bạn chọn công cụ nhận dạng giọng nói Gemini, âm thanh đã ghi sẽ được gửi đến Google.
 - **Cuộc họp là các tệp thông thường.** Chúng được lưu dưới dạng JSON và Markdown trong `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac và Windows dùng cùng một định dạng.

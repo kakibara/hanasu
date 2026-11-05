@@ -24,7 +24,8 @@ macOS ve Windows için bir sesle yazma ve toplantı notu uygulaması. Cihaz üze
 </div>
 
 > [!NOTE]
-> Hanasu öncelikle **Japonca** için geliştirilmiştir. İstemler, arayüz ve sözlük kuralları Japonca konuştuğunuzu varsayar.
+> Hanasu öncelikle **Japonca** için geliştirilmiştir ve en çok test edilen dil Japoncadır.
+> Uygulamanın ekranları ve yapay zekâya verdiği talimatlar, bu README ile aynı 17 dilde sunulur. Ekranlar sistem dilinizi, yapay zekâ talimatları ise Ayarlar'daki döküm dilini izler. Diğer diller için Hanasu İngilizce kullanır.
 > Söylediklerinizi yazmadan önce doğal bir **İngilizceye** (ya da **Japoncaya**) çevirebilir de.
 
 ## Neden Hanasu
@@ -66,6 +67,7 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Hanasu ücretsiz
 | **Yapay zekâ tutanakları** | Toplantılar için seçtiğiniz yapay zekâ tarafından hazırlanır. Bir şablon seçin: otomatik, haftalık toplantı, birebir görüşme, satış görüşmesi, beyin fırtınası ya da özel. Aksiyon maddeleri bir sorumlu ve bir bitiş tarihi içerir. |
 | **Canlı notlar ve önemli anlar** | Görüşme sırasında zaman damgalı notlar yazın ya da "bu önemli" diye işaretlemek için <kbd>⌃⌥⌘ H</kbd> tuşlarına basın (10 saniye içinde geri alabilirsiniz). Tutanaklar bu bölümlere öncelik verir; sonrasında her işaretin çevresindeki konuşmayı okuyabilirsiniz. |
 | **Yüzen altyazılar** *(Mac)* | Canlı dökümü toplantı uygulamanızın üzerinde altyazı olarak gösterin. |
+| **Toplantı sırasında yapay zekâ sohbeti** *(Mac)* | Kayıt sırasında, o ana kadarki konuşma hakkında yapay zekâya soru sorun (<kbd>⌘J</kbd>). "Şu ana kadarki özet" ya da "kararlar ve yapılacaklar" tek tıkla. Ek sorular sorun ve dökümün o bölümüne gitmek için yanıttaki bir zaman damgasına tıklayın. |
 | **Toplantı algılama** | Bir toplantı uygulaması mikrofonu kullanmaya başladığında Hanasu kayıt yapılıp yapılmayacağını sorar. Kaydı asla kendiliğinden başlatmaz. |
 | **Arama ve Sorma** | Tüm toplantıların metninde arama yapın ya da "Geçen haftaki toplantıda ne karar verdik?" diye sorun. Yanıt, kullandığı toplantıları kaynak olarak gösterir. |
 | **Dışa aktarma** | Markdown olarak ya da Slack'e hazır bir özet olarak kopyalayın, `.md` / `.txt` olarak kaydedin veya aksiyon maddelerini Anımsatıcılar'a gönderin. |
@@ -86,9 +88,9 @@ Metninizi düzelten yapay zekâyı **sesle yazma** ve **toplantılar** için ayr
 
 | Yapay zekâ | Varsayılan model | Oturum açma |
 | --- | --- | --- |
-| **Gemini** (varsayılan) | sesle yazma `gemini-3.5-flash-lite`, toplantılar `gemini-3.8-flash` | Google AI Studio API anahtarı veya Vertex AI hizmet hesabı |
+| **Gemini** (Windows'ta varsayılan) | sesle yazma `gemini-3.5-flash-lite`, toplantılar `gemini-3.8-flash` | Google AI Studio API anahtarı veya Vertex AI hizmet hesabı |
 | **Claude** | sesle yazma `claude-haiku-5-5`, toplantılar `claude-sonnet-5-5` (Opus 5.5 de kullanılabilir) | Anthropic API anahtarı |
-| **Yerel** (cihazınızda) | Gemma 4 E4B (önerilen). Aşağıdaki tabloya bakın | Gerekmez. Modeli **Ayarlar → Yapay Zekâ** bölümünden indirin |
+| **Yerel** (cihazınızda; Mac'te varsayılan) | Gemma 4 E4B (önerilen). Aşağıdaki tabloya bakın | Gerekmez. Modeli **Ayarlar → Yapay Zekâ** bölümünden indirin. Mac'te, Hanasu metni düzeltmeye başladığında model yoksa indirmek isteyip istemediğinizi sorar |
 | **Apple** *(Mac, macOS 27)* | `fm` komutu üzerinden cihaz üzerindeki Apple Intelligence modeli | Gerekmez |
 
 Bu yapay zekâlar yalnızca metinle çalışır. Konuşma, aşağıdaki motor tarafından metne dökülür.
@@ -175,7 +177,7 @@ Tüm kısayolları Ayarlar'dan değiştirebilirsiniz. Kullanıcı kılavuzunun t
 ## Gizlilik
 
 - **Ses varsayılan olarak cihazınızda kalır.** Konuşma tanıma, Whisper ve konuşmacı ayrımı tamamen yerel olarak çalışır.
-- **Yapay zekâya ses değil, metin gider.** Gemini veya Claude dökümü alır. Ayarlarınıza bağlı olarak yazı yazdığınız uygulamanın adını, ekran bağlamını ve Sorma özelliği için toplantı dökümlerini de alabilir.
+- **Yapay zekâya ses değil, metin gider.** Gemini veya Claude dökümü alır. Ayarlarınıza bağlı olarak yazı yazdığınız uygulamanın adını, ekran bağlamını ve Sorma özelliği ve toplantı sırasındaki yapay zekâ sohbeti için toplantı dökümlerini de alabilir.
 - **Yerel ve Apple da metni cihazınızda tutar.** Bunlardan birini seçerseniz hiçbir yapay zekâ hizmetine hiçbir şey gönderilmez. İndirilen tek şey modelin kendisidir.
 - **Ses yalnızca siz seçerseniz Google'a gider.** Gemini konuşma motorunu seçerseniz kaydedilen ses Google'a gönderilir.
 - **Toplantılar düz dosyalardır.** `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`) altında JSON ve Markdown olarak kaydedilir. Mac ve Windows aynı biçimi kullanır.
