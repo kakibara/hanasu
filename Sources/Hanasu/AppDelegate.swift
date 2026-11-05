@@ -297,9 +297,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     // MARK: - 会議
 
+    // 要件: REQ-MTG-034
     @objc private func toggleMeeting() {
-        if meetingRecorder.state == .idle { openMeetingWindow() }
-        meetingRecorder.toggle()
+        guard meetingRecorder.state == .idle else { meetingRecorder.toggle(); return }
+        openMeetingWindow()
+        // マイクを使っている会議アプリのウインドウから会議の名前を読む（読めなければ日時のタイトル）
+        let apps = meetingAutoDetect?.titleSourceApps ?? []
+        Task {
+            let title = await MeetingTitle.detect(apps: apps)
+            await meetingRecorder.start(title: title)
+        }
     }
 
     static let meetingWindowSize = NSSize(width: 980, height: 640)

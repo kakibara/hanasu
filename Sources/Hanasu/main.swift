@@ -148,6 +148,8 @@ if CommandLine.arguments.contains("--list-audio-devices") {
 //   Hanasu --render-meeting-suggestion <出力.png> [--stop] [--app zoom|teams|slack|webex|facetime|chrome|safari|arc|edge]
 //   Hanasu --simulate-meeting-detection  検出と記録の状態を台本どおりに動かし、提案の出かたを確かめる
 //   Hanasu --render-meeting-detection-settings <出力.png>  設定の「会議の自動検出」欄
+//   Hanasu --check-meeting-title       ウインドウのタイトルから会議の名前を取り出す規則の確認
+//   Hanasu --detect-meeting-title      今開いている会議アプリから会議の名前を読む（アクセシビリティの許可が要る）
 if CommandLine.arguments.contains("--list-audio-processes") {
     MainActor.assumeIsolated { MeetingDetectorCLI.listProcesses() }
     exit(0)
@@ -158,6 +160,12 @@ if CommandLine.arguments.contains("--watch-audio-processes") {
 // 確かめ方: REQ-MTG-009
 if CommandLine.arguments.contains("--simulate-meeting-detection") {
     MainActor.assumeIsolated { MeetingDetectorCLI.simulate() }
+}
+if CommandLine.arguments.contains("--check-meeting-title") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.checkTitles() }
+}
+if CommandLine.arguments.contains("--detect-meeting-title") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.detectTitleNow() }
 }
 if let index = CommandLine.arguments.firstIndex(of: "--render-meeting-suggestion"),
    CommandLine.arguments.indices.contains(index + 1)

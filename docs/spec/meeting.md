@@ -284,6 +284,17 @@
 - Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml`（`TitleBox`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail.png` で、タイトルの欄に枠と鉛筆の印が出ること。保存は実機で確かめる
 
+### REQ-MTG-034 会議を認識したとき、会議のタイトルを議事録のタイトルにする
+- 内容: Google Meet・Microsoft Teams などの会議を記録するとき、会議アプリのウインドウに出ている会議の名前を読み取り、日時のタイトルの代わりに議事録（会議ノート）のタイトルにする。
+- 受け入れ条件:
+  - マイクを使っている会議アプリ（Teams、ブラウザの Google Meet、Webex）のウインドウから会議の名前が読み取れたとき、記録を始めた会議のタイトルがその名前になる（提案の「記録する」でも、メニュー・ショートカットで始めても同じ）。
+  - 読み取れないとき（Zoom・Slack・FaceTime のようにウインドウに名前が出ないアプリ、Teams のチャットなど会議でない画面、Meet の会議コードだけのタイトル、アクセシビリティが未許可）は、今までどおり「会議 <日時>」にする。記録の開始は妨げない。
+  - 読み取った名前は、あとから REQ-MTG-029 のとおり書き換えられる。
+- 出典: ユーザーの依頼（2026-11-05「google meetやteamsなどの会議を認識したときに会議のタイトルを認識して議事録のタイトルに追加するようにしてください」）
+- 対象: Mac
+- 実装の場所: `MeetingTitle`、`MeetingAutoDetect.titleSourceApps`、`AppDelegate.toggleMeeting`、`MeetingRecorder.start(title:)`
+- 確かめ方: `.build/debug/Hanasu --check-meeting-title`（取り出す規則）、`--detect-meeting-title`（実機のウインドウから読む）。Teams・Meet の会議中に記録を始めてタイトルが変わることは実機で確かめる
+
 ### REQ-MTG-030 会議ツールの画面・映像は記録しない（対象外）
 - 内容: 会議ツールの画面・映像は記録しない。
 - 受け入れ条件: 画面収録の許可を求めず、映像のファイルを作らない。
@@ -562,6 +573,14 @@
 - 関係する要件: REQ-MTG-009
 - 対象: Mac
 - 実装の場所: `MeetingDetectionSettings`
+
+### DEC-MTG-035 会議の名前は、ウインドウのタイトルをアクセシビリティで読んで取り出す
+- 決めたこと: 記録を始めるとき、マイクを使っている会議アプリのウインドウのタイトルを `kAXTitleAttribute` で読み（前面のウインドウから順に）、アプリごとの決まりで名前を取り出す。Teams は末尾の「| Microsoft Teams」を除いた残り、Meet は「<名前> - Google Meet」または「Meet - <名前>」、Webex は末尾の「| Webex」を除いた残り。ブラウザのタイトル末尾（- Google Chrome など）は先に除く。Teams の画面名（Chat・Calendar など）や Meet の会議コード（abc-defg-hij）だけのものは名前とみなさない。Zoom・Slack・FaceTime はウインドウに名前が出ないので対象外。名前は 100 文字までにする。アクセシビリティが未許可なら読まない（許可は求めない）。読むのは別スレッドで、各アプリへの問い合わせは 0.5 秒で切る。
+- 理由: 画面収録の許可（`CGWindowList` のウインドウ名に要る）は REQ-MTG-030 のとおり求めない。アクセシビリティは音声入力の貼り付けのために元から案内している許可で、追加の求めが要らない。タブの URL は読まない（DEC-MTG-031）。会議の名前と言い切れないときは、誤ったタイトルを付けるより日時のタイトルにする。
+- 決めた場面: ユーザーの依頼（2026-11-05）。この PR
+- 関係する要件: REQ-MTG-034
+- 対象: Mac
+- 実装の場所: `MeetingTitle.extract`、`MeetingTitle.detect`
 
 ### DEC-MTG-040 メモの時刻は、書き始めた時刻にする
 - 決めたこと: メモの行の時刻は、Enter を押した時刻ではなく、その行を書き始めた時刻にする。

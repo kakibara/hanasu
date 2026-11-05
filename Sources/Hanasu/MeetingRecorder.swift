@@ -66,7 +66,8 @@ final class MeetingRecorder: ObservableObject {
 
     // 要件: REQ-MTG-002
     // 設計判断: DEC-MTG-001, DEC-DIC-085
-    func start() async {
+    /// - Parameter title: 会議アプリから読み取った会議の名前（REQ-MTG-034）。nil なら日時のタイトル
+    func start(title: String? = nil) async {
         guard state == .idle else { return }
         setState(.starting)
         lastError = nil
@@ -81,6 +82,7 @@ final class MeetingRecorder: ObservableObject {
             try await Permissions.ensureRecordingPermissions(speechRecognition: engine.isLive)
             var meeting = try MeetingStore.newMeeting()
             meeting.status = .recording
+            if let title, !title.isEmpty { meeting.title = title }
             MinutesTemplateStore.apply(to: &meeting)
             try MeetingStore.save(meeting)
             current = meeting
