@@ -150,7 +150,16 @@ enum TextInserter {
 
 `--diff` の「触った」は近似: 変わった行から上へ、インデントの浅い行（宣言の書き出し）をたどり、その直前のタグを拾う。
 
-## 8. 次にやること
+## 8. 多言語
+
+- 対応言語は README と同じ 17 言語（en, ja, zh-CN, zh-TW, ko, es, fr, de, it, pt-BR, ru, tr, vi, id, pl, ar, hi）。どれでもなければ英語（REQ-COM-061）。
+- **UI の文字列と AI へのプロンプトを足す・変えるときは、同じ変更の中で 17 言語すべての訳を入れる**（REQ-COM-062）。訳の質は「その言語の話し手が自然に読める・話せる」ことで、直訳にしない（DEC-COM-162）。
+- AI へのプロンプトは `Sources/Hanasu/Resources/Prompts/<言語>.json` に置き、Mac と Windows で同じファイルを読む（DEC-COM-160）。どの言語のプロンプトを使うかは、文字起こしの言語で決まる（DEC-COM-161）。コードには文面を書かず、キー（`Prompts.text("…")`）で読む。
+- 手順（キーの足し方・訳の入れ方・漏れの確かめ方）は [.claude/skills/i18n/SKILL.md](../.claude/skills/i18n/SKILL.md)。訳は [.claude/agents/i18n.md](../.claude/agents/i18n.md) のエージェントに任せる。
+- `python3 scripts/check-i18n.py` が、キーの漏れ・埋める場所（`${…}`）やタグの食い違いを見つける（エラーなら終了コード 1。PR ごとに `.github/workflows/spec.yml` で動く）。
+- 開発用の CLI の出力とログは訳さない。
+
+## 9. 次にやること
 
 - `windows/` のコードにタグを付ける（[roadmap.md](roadmap.md) FUT-002）。付け終えたら、`check-spec.py` の「対象が Windows だけの要件はタグがなくても報告だけ」を外す。
 - 「食い違い（ユーザーの確認待ち）」の要件を、ユーザーに確かめて直す（`check-spec.py` の出力に一覧が出る）。

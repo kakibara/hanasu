@@ -39,8 +39,14 @@ using Hanasu.Whisper;
 //   hanasu-cli local-download <id> [--models-dir <dir>]   モデルをダウンロードし、大きさと SHA-256 を確かめる
 //   hanasu-cli local-refine "<文章>" [--model <id>] [--translate | --translate-to en|ja] [--server <パス>] [--models-dir <dir>]   ローカルで整形・英訳する
 //   meeting-minutes / meeting-files に --minutes-ai local --minutes-model <id> を付けると、議事録をローカルで作る
+// どのコマンドにも --prompt-language <言語>（en、ja、zh-TW、pt-BR など。ja-JP のような識別子でもよい）を付けると、
+// AI へのプロンプトをその言語で組み立てる（既定は日本語。Mac 版の CLI の --prompt-language と同じ）。例: claude-request "テスト" --prompt-language en
 
 var command = args.FirstOrDefault();
+// 確かめ方: REQ-COM-061
+PromptLanguage.Override = Option(args, "--prompt-language") is { } promptLanguage
+    ? PromptLanguage.FromCode(promptLanguage) ?? PromptLanguage.FromLocaleIdentifier(promptLanguage)
+    : PromptLanguage.Ja;
 try
 {
     switch (command)

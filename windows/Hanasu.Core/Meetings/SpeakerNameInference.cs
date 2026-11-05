@@ -6,7 +6,7 @@ namespace Hanasu.Core.Meetings;
 /// <summary>
 /// 議事録の応答の &lt;speaker_names&gt; から、会話で分かった話者の名前を読み、名前のない話者に付ける。
 /// 名前を付けた話者は Meeting.InferredSpeakers に入れ、議事録の本文とアクションアイテムの担当の「話者1」なども名前に置き換える。
-/// Mac 版の SpeakerNameInference（Sources/Hanasu/SpeakerNameInference.swift）と同じ決まり（両方を直す）。
+/// Mac 版の SpeakerNameInference（Sources/Hanasu/SpeakerNameInference.swift）と同じ決まり（両方を直す）。ラベルの文面は共有の JSON の speaker.*。
 /// </summary>
 // 要件: REQ-MTG-027
 // 設計判断: DEC-MTG-068, DEC-MTG-069
@@ -71,8 +71,25 @@ public static partial class SpeakerNameInference
         return name;
     }
 
-    /// <summary>名前ではない値（「自分」「相手」「話者1」「同席者1」と、分からないことを表す言葉）</summary>
-    public static bool IsPlaceholder(string name) => NotNames.Contains(name) || LabelPattern().IsMatch(name);
+    // 要件: REQ-COM-061
+    /// <summary>
+    /// 名前ではない値（「自分」「相手」「話者1」「同席者1」と、分からないことを表す言葉）。
+    /// ラベルはプロンプトの言語で書くので、すべての言語のラベル（speaker.*）と「なし」（minutes.result.none）も名前ではないものとして扱う（Mac 版と同じ）
+    /// </summary>
+    public static bool IsPlaceholder(string name)
+    {
+        if (NotNames.Contains(name) || LabelPattern().IsMatch(name)) return true;
+        if (Ai.Prompts.AllTexts("speaker.me").Concat(Ai.Prompts.AllTexts("speaker.others")).Concat(Ai.Prompts.AllTexts("minutes.result.none"))
+            .Any(t => string.Equals(t, name, StringComparison.OrdinalIgnoreCase)))
+        {
+            return true;
+        }
+        return Ai.Prompts.AllTexts("speaker.remote").Concat(Ai.Prompts.AllTexts("speaker.room")).Any(template =>
+        {
+            var pattern = "^" + Regex.Escape(template).Replace(Regex.Escape("${n}"), "[0-9０-９]+", StringComparison.Ordinal) + "$";
+            return Regex.IsMatch(name, pattern, RegexOptions.IgnoreCase);
+        });
+    }
 
     /// <summary>
     /// 名前のない話者（「自分」を除く）に、応答の名前を付ける。付けた話者キー → 名前を返す。
@@ -85,7 +102,8 @@ public static partial class SpeakerNameInference
         var labelToKey = new Dictionary<string, string>();
         foreach (var key in meeting.Speakers)
         {
-            if (key != "me" && meeting.SpeakerNames.GetValueOrDefault(key, "").Length == 0) labelToKey[meeting.DisplayName(key)] = key;
+            // 要件: REQ-COM-061（応答のラベルは、プロンプトに書いたラベルと同じ言語）
+            if (key != "me" && meeting.SpeakerNames.GetValueOrDefault(key, "").Length == 0) labelToKey[meeting.PromptName(key)] = key;
         }
         var matches = new List<(string Key, string Label, string Name)>();
         foreach (var label in names.Keys.Order(StringComparer.Ordinal))

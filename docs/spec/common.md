@@ -39,7 +39,7 @@
 - 確かめ方: `.build/debug/Hanasu --download-whisper base`（保存先は `HANASU_MODELS_DIR` で変えられる）、`--render-engine-settings /tmp/engine.png --downloading`
 
 ### REQ-COM-004 文字起こしの言語を一覧から選べ、初期値はシステムの言語にする
-- 内容: 設定の「一般」→「文字起こし」の「言語」を、入力欄から一覧に変える。一覧は日本語・英語（米国・英国）・中国語（簡体・繁体）・韓国語・フランス語・ドイツ語・スペイン語・イタリア語・ポルトガル語（ブラジル）。初期値は macOS のシステムの言語にする。一覧にない言語（システムの言語や、前の版で保存した言語）は、言語コードが同じ一覧の項目に寄せる（en-JP → en-US、zh-Hans-CN → zh-CN、zh-Hant-TW → zh-TW。ja-JP はそのまま）。言語コードが同じ項目がなければ、そのまま使う。
+- 内容: 設定の「一般」→「文字起こし」の「言語」を、入力欄から一覧に変える。一覧は日本語・英語（米国・英国）・中国語（簡体・繁体）・韓国語・フランス語・ドイツ語・スペイン語・イタリア語・ポルトガル語（ブラジル）。初期値は macOS のシステムの言語にする。一覧にない言語（システムの言語や、前の版で保存した言語）は、言語コードが同じ一覧の項目に寄せる（en-JP → en-US、zh-Hans-CN → zh-CN、zh-Hant-TW → zh-TW。ja-JP はそのまま）。言語コードが同じ項目がなければ、そのまま使う。この言語は、AI へのプロンプトの言語にもなる（REQ-COM-061）。
 - 受け入れ条件:
   - 初めて起動したとき、言語はシステムの言語になっている（システムが英語なら English）。
   - システムの言語や保存されている言語が一覧になければ、言語コードが同じ項目が選ばれている（en-JP → en-US、zh-Hans-CN → zh-CN、zh-Hant-TW → zh-TW、ja-JP はそのまま）。
@@ -201,6 +201,30 @@
 - 対象: Mac（Windows 版は対象外。FUT-003）
 - 実装の場所: `OnboardingView`、`OnboardingPage`、`OnboardingModel`、`OnboardingState`、`OnboardingWindowController`、`AppDelegate.applicationDidFinishLaunching`・`openOnboarding`
 - 確かめ方: `.build/debug/Hanasu --render-onboarding /tmp/onboarding`（全ページを PNG にする）。初回だけ出ることとメニューから開けることは実機で確かめる
+
+### REQ-COM-061 AI へのプロンプトの言語を、文字起こしの言語に合わせて切り替える（17 言語）
+- 内容: 整形・翻訳・選択を声で編集・Gemini での文字起こし・議事録・会議への質問・辞書の候補で AI に送る指示（システムプロンプトと、user content の見出しや注記）を、設定の文字起こしの言語（REQ-COM-004。初期値はシステムの言語）に合わせた言語で送る。対応言語は README と同じ 17 言語（英語・日本語・中国語（簡体字・繁体字）・韓国語・スペイン語・フランス語・ドイツ語・イタリア語・ポルトガル語（ブラジル）・ロシア語・トルコ語・ベトナム語・インドネシア語・ポーランド語・アラビア語・ヒンディー語）で、どれでもなければ英語にする。日本語向けの整形のルール（フィラー・言い直し・口頭の記号の指示・誤変換の直し方・文体のプリセット）は、言語ごとに、その言語の話し言葉に合わせて書き直す。議事録の見出し・話者のラベル・アクションアイテムの「担当」「期限」も、その言語で書く。
+- 受け入れ条件:
+  - 文字起こしの言語が日本語のとき、送るプロンプトは今までと一字一句同じ（`--show-prompts` の出力が変わらない）。
+  - 文字起こしの言語を英語（ほかの対応言語）にすると、整形・翻訳・議事録などのプロンプトがその言語になり、議事録の見出しと話者のラベル（「Me」「Speaker 1」など）もその言語で出る。
+  - 対応していない言語（例: スウェーデン語）では英語のプロンプトになる。
+  - Mac と Windows で同じ文面を送る。
+  - 前の言語で作った議事録（見出し・「担当」「期限」・「なし」）も、書き出し・リマインダー・話者名の推定で読める。
+- 出典: ユーザーの依頼（2026-11-05）「アプリの表示言語とプロンプトの言語もシステムの言語に合わせて変更されるようにして。今後の機能追加の際も全ての言語に対応させるようにして」。切り替えの基準を文字起こしの言語にすること、日本語向けのルールは言語ごとに書き直すこと、日本語の文面は変えないことは、同日にユーザーに確かめた
+- 対象: Mac / Windows
+- 実装の場所: `PromptLanguage`、`Prompts`（`Sources/Hanasu/Prompts.swift`）、`Sources/Hanasu/Resources/Prompts/<言語>.json`、`Meeting.promptName`
+- Windows の実装: `windows/Hanasu.Core/Ai/Prompts.cs`（同じ JSON を埋め込んで読む）
+- 確かめ方: `.build/debug/Hanasu --show-prompts --prompt-language en`（すべてのプロンプトを見本の入力で表示する。`ja` なら今までと同じ）、`python3 scripts/check-i18n.py`、Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~Prompt"`
+
+### REQ-COM-062 UI の文字列とプロンプトを足すときは、すべての対応言語に訳を入れる
+- 内容: 新しい機能で UI の文字列か AI へのプロンプトを足すときは、同じ変更の中で 17 言語すべての訳を入れる。訳の漏れはスクリプトで見つけ、CI で落とす。訳を入れる手順はスキル（`.claude/skills/i18n/SKILL.md`）、訳を担当するエージェントは `.claude/agents/i18n.md` に置く。
+- 受け入れ条件:
+  - プロンプトのキーが 1 つの言語にしかない・埋める場所（`${…}`）やタグが言語で食い違う・話者のラベルが指示の中のものと違う、といったときに `python3 scripts/check-i18n.py` が失敗し、PR の CI（`.github/workflows/spec.yml`）も失敗する。
+  - CLAUDE.md と docs/README.md に、この決まりが書いてある。
+- 出典: ユーザーの依頼（2026-11-05）「今後の機能追加の際も全ての言語に対応させるようにして。多言語担当は専用の skill と agent を用意しておくと良さそう」
+- 対象: Mac / Windows
+- 実装の場所: `scripts/check-i18n.py`、`.github/workflows/spec.yml`、`.claude/skills/i18n/SKILL.md`、`.claude/agents/i18n.md`
+- 確かめ方: `python3 scripts/check-i18n.py`
 
 ---
 
@@ -749,9 +773,9 @@
 - 実装の場所: `windows/Hanasu.Windows/TrayIcon.cs`、`windows/Hanasu.Windows/App.xaml.cs`
 
 ### DEC-COM-102 Windows 版の整形・英訳・議事録のプロンプトは、Mac 版と同じ文面にする
-- 決めたこと: Mac 版の `GeminiClient.swift`（整形・英訳）、`MinutesTemplate.swift`・`MeetingNotes.swift`（議事録）の文面と組み立てをそのまま移し、共有している部分には「両方を直す」とコメントを書く。テストで文面と組み立てを確かめる。
+- 決めたこと: Mac 版の `GeminiClient.swift`（整形・英訳）、`MinutesTemplate.swift`・`MeetingNotes.swift`（議事録）の組み立てをそのまま移す。文面は、多言語化の PR から Mac と同じ言語ごとの JSON（`Sources/Hanasu/Resources/Prompts/`。DEC-COM-160）を埋め込んで読むので、文面を 2 か所で直すことはない。組み立てを変えるときは両方を直す。テストで文面と組み立てを確かめる。
 - 理由: Mac と Windows で結果をそろえる。片方だけ直すことを防ぐ。
-- 決めた場面: PR #19
+- 決めた場面: PR #19。文面を JSON に移したのは多言語化の PR（2026-11-05）
 - 関係する要件: REQ-DIC-003, REQ-DIC-010, REQ-DIC-082, REQ-MTG-006
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`
@@ -883,6 +907,46 @@
 - 関係する要件: REQ-COM-022, REQ-REL-005
 - 対象: Windows
 - 実装の場所: `windows/Directory.Build.props`、`.github/workflows/windows.yml`、`.github/workflows/tagpr.yml`（リリースの Windows 版のビルド）
+
+### DEC-COM-160 プロンプトは言語ごとの JSON に置き、Mac と Windows で同じファイルを読む
+- 決めたこと: AI へのプロンプトの文面を `Sources/Hanasu/Resources/Prompts/<言語>.json`（キー → 文字列か 1 行 1 要素の配列。`${name}` はアプリが埋める）に置く。Mac は SwiftPM のリソース（`Hanasu_Hanasu.bundle`）として入れ、`scripts/build-app.sh` が .app の Contents/Resources に写す。SwiftPM が作る `Bundle.module` は、見つからないとビルドしたマシンのパスを見に行って止まるので使わず、`HanasuResources` で .app と実行ファイルの隣を探す。Windows は同じファイルを `Hanasu.Core` に EmbeddedResource として埋め込む。その言語にないキーは英語、英語にもなければ日本語を使う。
+- 理由: 17 言語の文面をコードに埋めると、Mac と Windows で 2 か所ずつ直すことになり、ずれる（DEC-COM-102 の「両方を直す」をなくす）。JSON なら訳の担当がコードを触らずに直せ、`scripts/check-i18n.py` で漏れを機械的に見つけられる。
+- 決めた場面: 多言語化の PR（2026-11-05）
+- 関係する要件: REQ-COM-061
+- 対象: Mac / Windows
+- 実装の場所: `Prompts`、`HanasuResources`（`Sources/Hanasu/Prompts.swift`）、`Package.swift`、`scripts/build-app.sh`、`windows/Hanasu.Core/Hanasu.Core.csproj`
+
+### DEC-COM-161 文字起こしの言語を、プロンプトの言語に寄せる決まり
+- 決めたこと: 文字起こしの言語の識別子の言語コードで決める。中国語は繁体字（Hant）か台湾・香港・マカオなら zh-TW、それ以外は zh-CN。ポルトガル語はすべて pt-BR。古いインドネシア語のコード `in` は id。17 言語のどれでもなければ英語。設定が保存されていなければシステムの言語から決める。日時はその言語の曜日で「2026/11/02 (月) 14:30」の形に書く。CLI では `--prompt-language <言語>` で変えられ、日本語の文面を確かめる self-test は日本語に固定する。
+- 理由: 文字起こしの言語は、ユーザーが話す言語そのもので、初期値はシステムの言語（REQ-COM-004）。表示の言語より、話す言語に合わせた指示の方が整形の質が上がる（英語の画面で日本語を話す人もいる）。
+- 決めた場面: 多言語化の PR（2026-11-05。基準はユーザーに確かめた）
+- 関係する要件: REQ-COM-061, REQ-COM-004
+- 対象: Mac / Windows
+- 実装の場所: `PromptLanguage.from(localeIdentifier:)`、`PromptLanguage.current`
+
+### DEC-COM-162 日本語の文面は変えず、ほかの言語は訳ではなく、その言語の話し言葉に合わせて書き直す
+- 決めたこと: ja.json は今までのプロンプトと一字一句同じにする（Windows の Gemini での文字起こしの指示だけ、「主に日本語で、英語などが」を「主に${language}で、ほかの言語が」にした）。en.json を言語によらない形で書き、ほかの 15 言語はそれをもとに、フィラー・言い直し・口頭の記号の指示・決まり文句・誤認識の例・文体のプリセット（敬語や T–V の区別）をその言語のものに書き直す。整形の言語の「日本語に統一」（REQ-DIC-082）と、翻訳の言語（英語・日本語。REQ-DIC-013）は、プロンプトの言語によらず今のまま（「日本語に統一」はどの言語でも日本語にする）。
+- 理由: 日本語の整形の質を落とさない。直訳したプロンプトでは、日本語の例（「えー」「改行」）がほかの言語の話し方に合わない。要件（REQ-DIC-082・013）は変えない。
+- 決めた場面: 多言語化の PR（2026-11-05。言語ごとに書き直すことはユーザーに確かめた）
+- 関係する要件: REQ-COM-061, REQ-DIC-003, REQ-DIC-082, REQ-DIC-013
+- 対象: Mac / Windows
+- 実装の場所: `Sources/Hanasu/Resources/Prompts/`
+
+### DEC-COM-163 会議の話者のラベル・議事録の見出し・「担当」「期限」は、プロンプトの言語で書き、読むときはすべての言語を受け付ける
+- 決めたこと: AI に渡す文字起こしの話者名は、名前がなければプロンプトの言語のラベル（`speaker.*`。日本語なら「自分」「話者1」「同席者1」「相手」）にする（`Meeting.promptName`）。表示のラベル（`Meeting.displayName`）とは分ける。議事録のタイトル行・「なし」・アクションアイテムの「担当」「期限」と日付の形もプロンプトの言語で書く。議事録を読むところ（チェックボックスの行の読み取り、Slack への書き出しで話者のメモの見出しを外す、リマインダーの初期の選択、話者名の推定でラベルを名前として扱わない）は、17 言語すべての言い方を受け付ける。
+- 理由: 指示に出てくるラベルと、AI が見る文字起こしのラベルが同じ言語でないと、AI が話者を取り違える。言語の設定を変えたあとも、前に作った議事録を読めるようにする。
+- 決めた場面: 多言語化の PR（2026-11-05）
+- 関係する要件: REQ-COM-061, REQ-MTG-006, REQ-MTG-018, REQ-MTG-027
+- 対象: Mac / Windows
+- 実装の場所: `Meeting.promptName`、`Meeting.promptLabel`、`ActionItem.markdownLine`、`ActionItem.parse(fromMarkdown:)`、`SpeakerNameInference.isPlaceholder`、`MeetingExport.slackBody`
+
+### DEC-COM-164 訳の漏れは scripts/check-i18n.py で見つけ、CI で動かす。訳はスキルとエージェントに任せる
+- 決めたこと: `scripts/check-i18n.py`（python3 の標準ライブラリだけ）が、17 言語のプロンプトのファイルがそろっていること、日本語と同じキー・埋める場所・タグ・JSON のキー・残す記号があること、話者のラベルと「なし」が同じ言語の指示の中で使われていることを確かめ、食い違えば失敗する。英語と同じままの値は報告だけする。`.github/workflows/spec.yml` で毎回動かす。文字列やプロンプトを足す手順は `.claude/skills/i18n/SKILL.md`、訳は `.claude/agents/i18n.md` のエージェントに任せる。
+- 理由: 17 言語を人の目だけでそろえるのは無理がある。機械で見られるもの（漏れ・形の食い違い）は CI で止め、訳の質はエージェントの確認の手順で担保する。
+- 決めた場面: 多言語化の PR（2026-11-05）
+- 関係する要件: REQ-COM-062
+- 対象: Mac / Windows
+- 実装の場所: `scripts/check-i18n.py`、`.github/workflows/spec.yml`
 
 ---
 

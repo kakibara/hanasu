@@ -15,7 +15,7 @@
 python3 の標準ライブラリだけを使う。
 """
 # 要件: REQ-COM-062
-# 設計判断: DEC-COM-165
+# 設計判断: DEC-COM-164
 
 from __future__ import annotations
 

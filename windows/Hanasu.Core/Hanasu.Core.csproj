@@ -15,4 +15,12 @@
     <PackageReference Include="Anthropic" Version="13.4.0" />
   </ItemGroup>
 
+  <!-- 要件: REQ-COM-061 -->
+  <!-- 設計判断: DEC-COM-160 -->
+  <!-- AI へのプロンプトの文面（言語ごとの JSON）。Mac 版と同じファイルを、写さずにそのまま埋め込む（Ai/Prompts.cs が読む）。
+       リソース名は Hanasu.Prompts.<言語>.json -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\Sources\Hanasu\Resources\Prompts\*.json" LogicalName="Hanasu.Prompts.%(Filename)%(Extension)" Link="Prompts\%(Filename)%(Extension)" />
+  </ItemGroup>
+
 </Project>
