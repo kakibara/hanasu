@@ -1,0 +1,919 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_AlreadyRunning" xml:space="preserve">
+    <value>Hanasu قيد التشغيل بالفعل. يمكنك استخدامه من الأيقونة في منطقة الإعلامات.</value>
+  </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>النتائج الأخيرة</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>فتح ملاحظات الاجتماعات</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>فتح المحفوظات…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>الإعدادات…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>إنهاء</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>إيقاف التسجيل والكتابة</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>بدء الإملاء</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>إيقاف تسجيل الاجتماع ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>جارٍ بدء تسجيل الاجتماع…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>جارٍ معالجة تسجيل الاجتماع…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>بدء تسجيل الاجتماع</value>
+  </data>
+  <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
+    <value>Hanasu — جارٍ تسجيل الاجتماع {0}</value>
+  </data>
+  <data name="Tray_Tip_MeetingProcessing" xml:space="preserve">
+    <value>Hanasu — جارٍ معالجة الاجتماع</value>
+  </data>
+  <data name="Tray_Tip_Recording" xml:space="preserve">
+    <value>Hanasu — جارٍ التسجيل</value>
+  </data>
+  <data name="Tray_Tip_Processing" xml:space="preserve">
+    <value>Hanasu — جارٍ المعالجة</value>
+  </data>
+  <data name="Tray_RecentEmpty" xml:space="preserve">
+    <value>(لا يوجد شيء بعد)</value>
+  </data>
+  <data name="Tray_RecentTip" xml:space="preserve">
+    <value>{0}
+النتيجة: {1}
+الأصل: {2}</value>
+  </data>
+  <data name="Tray_RecentHint" xml:space="preserve">
+    <value>انقر للنسخ إلى الحافظة</value>
+  </data>
+  <data name="Tray_OpenAllHistory" xml:space="preserve">
+    <value>فتح كل المحفوظات…</value>
+  </data>
+  <data name="Balloon_Started" xml:space="preserve">
+    <value>تم بدء Hanasu</value>
+  </data>
+  <data name="Balloon_StartedBody" xml:space="preserve">
+    <value>اضغط {0} للإملاء. اضغط {1} لـ "{2}".</value>
+  </data>
+  <data name="Balloon_HotKeyFailed" xml:space="preserve">
+    <value>تعذر تسجيل الاختصار</value>
+  </data>
+  <data name="Balloon_HotKeyFailedBody" xml:space="preserve">
+    <value>{0} مستخدم من قِبل تطبيق آخر. اختر مفتاحًا مختلفًا في الإعدادات ← عام.</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailed" xml:space="preserve">
+    <value>تعذر تسجيل اختصار "مهم"</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailedBody" xml:space="preserve">
+    <value>{0} مستخدم من قِبل تطبيق آخر. استخدم زر "★ مهم" في ملاحظات الاجتماعات، أو اختر مفتاحًا مختلفًا في الإعدادات ← الاجتماعات.</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>، </value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>تم النسخ</value>
+  </data>
+  <data name="Quit_MeetingInProgress" xml:space="preserve">
+    <value>يجري تسجيل اجتماع (أو معالجته بعد التسجيل). إذا أنهيت التطبيق، فلن يتم إنشاء نص مكتوب أو محضر لهذا الاجتماع (سيتم الاحتفاظ بالملفات الصوتية). هل تريد الإنهاء على أي حال؟</value>
+  </data>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>لم يتم إعداد Windows Hello (قم بإعداد رقم PIN أو ما شابه في إعدادات Windows ← الحسابات ← خيارات تسجيل الدخول).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>تم إلغاء التحقق من Windows Hello، لذا تعذرت قراءة مفتاح API.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>فشل التحقق من Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>لم يتم العثور على مفتاح Windows Hello (ربما تم إعداد Windows Hello مرة أخرى). أدخل مفتاح API مرة أخرى في الإعدادات ← AI.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>تعذر فتح مفتاح Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>تم إلغاء التحقق من Windows Hello.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>تعذر إنشاء مفتاح Windows Hello ({0}).</value>
+  </data>
+  <data name="Mic_NotFound" xml:space="preserve">
+    <value>لم يتم العثور على ميكروفون. تحقق من توصيل ميكروفون، في إعدادات Windows ← النظام ← الصوت.</value>
+  </data>
+  <data name="Mic_AccessDenied" xml:space="preserve">
+    <value>الوصول إلى الميكروفون غير مسموح. في إعدادات Windows ← الخصوصية والأمان ← الميكروفون، شغّل "السماح لتطبيقات سطح المكتب بالوصول إلى الميكروفون".</value>
+  </data>
+  <data name="Mic_StartFailed" xml:space="preserve">
+    <value>تعذر بدء التسجيل من الميكروفون: {0}</value>
+  </data>
+  <data name="Output_NotFound" xml:space="preserve">
+    <value>لم يتم العثور على جهاز إخراج صوت (سماعات أو سماعات رأس).</value>
+  </data>
+  <data name="Loopback_StartFailed" xml:space="preserve">
+    <value>تعذر بدء تسجيل صوت الكمبيوتر: {0}</value>
+  </data>
+  <data name="Speech_LanguageNotInstalled" xml:space="preserve">
+    <value>التعرف على الكلام للغة {0} غير مثبت في Windows. في إعدادات Windows ← الوقت واللغة ← اللغة والمنطقة، افتح "…" ← "خيارات اللغة" للغة {0} وأضف التعرف على الكلام. أو عيّن محرك النسخ إلى Whisper أو Gemini في الإعدادات.</value>
+  </data>
+  <data name="Speech_LanguageNotSupported" xml:space="preserve">
+    <value>لا يدعم الإملاء في Windows هذه اللغة. عيّن محرك النسخ إلى Whisper أو Gemini في الإعدادات.</value>
+  </data>
+  <data name="Speech_MicUnavailable" xml:space="preserve">
+    <value>لا يمكن استخدام الميكروفون. تحقق من الميكروفون الافتراضي في Windows.</value>
+  </data>
+  <data name="Speech_NetworkFailure" xml:space="preserve">
+    <value>تعذر على التعرف على الكلام في Windows الاتصال بالشبكة. تحقق من اتصالك بالإنترنت.</value>
+  </data>
+  <data name="Speech_StartFailed" xml:space="preserve">
+    <value>تعذر بدء التعرف على الكلام في Windows ({0}).</value>
+  </data>
+  <data name="Speech_OnlineRecognitionOff" xml:space="preserve">
+    <value>لاستخدام التعرف على الكلام في Windows، شغّل "التعرف على الكلام عبر الإنترنت" في إعدادات Windows ← الخصوصية والأمان ← الكلام. إذا كنت لا تريد تشغيله، فعيّن محرك النسخ إلى Whisper في الإعدادات.</value>
+  </data>
+  <data name="Speech_Error" xml:space="preserve">
+    <value>حدث خطأ في التعرف على الكلام في Windows: {0}</value>
+  </data>
+  <data name="Hud_LanguageSwitch_Tip" xml:space="preserve">
+    <value>تتم الكتابة باللغة المحددة عند إيقاف التسجيل</value>
+  </data>
+  <data name="Hud_SpokenLanguage" xml:space="preserve">
+    <value>كما نُطق</value>
+  </data>
+  <data name="Hud_Stop_Tip" xml:space="preserve">
+    <value>يوقف التسجيل ويكتب النص (مثل الضغط على الاختصار مرة أخرى)</value>
+  </data>
+  <data name="Hud_Stop" xml:space="preserve">
+    <value>إيقاف</value>
+  </data>
+  <data name="Hud_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="Hud_Cancel_Tip" xml:space="preserve">
+    <value>يلغي دون كتابة أي شيء (Esc)</value>
+  </data>
+  <data name="Hud_Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="Hud_Close_Tip" xml:space="preserve">
+    <value>يغلق هذه اللوحة (بعد النقر فوق النص، يمكنك أيضًا الضغط على Esc)</value>
+  </data>
+  <data name="Hud_Copy_Tip" xml:space="preserve">
+    <value>ينسخ النص إلى الحافظة</value>
+  </data>
+  <data name="Hud_Copy" xml:space="preserve">
+    <value>نسخ</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>محفوظات الإملاء — Hanasu</value>
+  </data>
+  <data name="History_FilterAll" xml:space="preserve">
+    <value>الكل</value>
+  </data>
+  <data name="History_FilterUnrefined" xml:space="preserve">
+    <value>فشل / غير محسَّن</value>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="History_Search_Tip" xml:space="preserve">
+    <value>يبحث في النتائج والنص الأصلي والتطبيقات المستهدفة. افصل الكلمات بمسافات للعثور على الإدخالات التي تحتوي عليها جميعًا.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="History_DeleteAll" xml:space="preserve">
+    <value>حذف الكل…</value>
+  </data>
+  <data name="OpenSaveFolder" xml:space="preserve">
+    <value>فتح مجلد الحفظ</value>
+  </data>
+  <data name="History_CopyResult" xml:space="preserve">
+    <value>نسخ النتيجة</value>
+  </data>
+  <data name="History_CopyOriginal" xml:space="preserve">
+    <value>نسخ الأصل</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="History_ResultLabel" xml:space="preserve">
+    <value>النتيجة (النص المكتوب)</value>
+  </data>
+  <data name="History_OriginalLabel" xml:space="preserve">
+    <value>الأصل (النص المنسوخ)</value>
+  </data>
+  <data name="Hud_CopyFailed" xml:space="preserve">
+    <value>تعذر النسخ</value>
+  </data>
+  <data name="HotKeyBox_Prompt" xml:space="preserve">
+    <value>اضغط على المفاتيح (Esc للإلغاء)…</value>
+  </data>
+  <data name="Separator" xml:space="preserve">
+    <value> · </value>
+  </data>
+  <data name="WideSeparator" xml:space="preserve">
+    <value>   </value>
+  </data>
+  <data name="History_Unrefined" xml:space="preserve">
+    <value>غير محسَّن</value>
+  </data>
+  <data name="History_Kept" xml:space="preserve">
+    <value>يتم الاحتفاظ بما يصل إلى {0} وبحد أقصى {1} من الإدخالات (الإعدادات ← المحفوظات).</value>
+  </data>
+  <data name="History_NotSaved" xml:space="preserve">
+    <value>لا يتم حفظ المحفوظات في ملف. يتم الاحتفاظ بآخر 10 إدخالات فقط في الذاكرة (الإعدادات ← المحفوظات).</value>
+  </data>
+  <data name="History_Count" xml:space="preserve">
+    <value>عدد الإدخالات: {0}. {1}</value>
+  </data>
+  <data name="History_CountFiltered" xml:space="preserve">
+    <value>عرض {0} من أصل {1}. {2}</value>
+  </data>
+  <data name="History_Selected" xml:space="preserve">
+    <value>عدد الإدخالات المحددة: {0} (اضغط Delete أو انقر فوق "حذف" لحذفها معًا)</value>
+  </data>
+  <data name="History_App" xml:space="preserve">
+    <value>التطبيق: {0}</value>
+  </data>
+  <data name="History_Model" xml:space="preserve">
+    <value>النموذج: {0}</value>
+  </data>
+  <data name="CopyFailedClipboardBusy" xml:space="preserve">
+    <value>تعذر النسخ (تطبيق آخر يستخدم الحافظة)</value>
+  </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>هل تريد حذف إدخالات المحفوظات المحددة (العدد: {0})؟</value>
+  </data>
+  <data name="History_ConfirmDeleteAll" xml:space="preserve">
+    <value>هل تريد حذف جميع إدخالات محفوظات الإملاء (العدد: {0})؟ لا يمكن التراجع عن هذا الإجراء.</value>
+  </data>
+  <data name="Meeting_Title" xml:space="preserve">
+    <value>ملاحظات الاجتماعات — Hanasu</value>
+  </data>
+  <data name="Meeting_Stop" xml:space="preserve">
+    <value>■ إيقاف</value>
+  </data>
+  <data name="Meeting_Recording" xml:space="preserve">
+    <value>● جارٍ التسجيل</value>
+  </data>
+  <data name="Meeting_MicLabel" xml:space="preserve">
+    <value>أنا (الميكروفون)</value>
+  </data>
+  <data name="Meeting_OutputLabel" xml:space="preserve">
+    <value>الطرف الآخر (الصوت الذي يتم تشغيله على هذا الإخراج)</value>
+  </data>
+  <data name="Meeting_TemplateLabel" xml:space="preserve">
+    <value>قالب المحضر</value>
+  </data>
+  <data name="Meeting_Start" xml:space="preserve">
+    <value>● بدء تسجيل الاجتماع</value>
+  </data>
+  <data name="Meeting_MoveToRecycleBin" xml:space="preserve">
+    <value>نقل إلى سلة المحذوفات…</value>
+  </data>
+  <data name="Meeting_Empty" xml:space="preserve">
+    <value>اختر اجتماعًا من القائمة على اليسار، أو انقر فوق "بدء تسجيل الاجتماع" في أسفل اليسار لبدء التسجيل.</value>
+  </data>
+  <data name="Meeting_TitleEdit_Tip" xml:space="preserve">
+    <value>انقر لتغيير العنوان (Enter للحفظ، Esc للإلغاء)</value>
+  </data>
+  <data name="Meeting_Regenerate" xml:space="preserve">
+    <value>إعادة إنشاء المحضر</value>
+  </data>
+  <data name="Meeting_TemplateShort" xml:space="preserve">
+    <value>القالب:</value>
+  </data>
+  <data name="Meeting_CopyMarkdown" xml:space="preserve">
+    <value>نسخ Markdown</value>
+  </data>
+  <data name="Meeting_OpenInExplorer" xml:space="preserve">
+    <value>فتح في مستكشف الملفات</value>
+  </data>
+  <data name="Meeting_SpeakersLabel" xml:space="preserve">
+    <value>أسماء المتحدثين (تُستخدم عند عرض النص المكتوب والمحضر)</value>
+  </data>
+  <data name="Meeting_UndoHighlight_Tip" xml:space="preserve">
+    <value>لمدة 10 ثوانٍ بعد إضافة علامة، يمكنك التراجع عنها إذا كانت خطأً</value>
+  </data>
+  <data name="Meeting_Highlight" xml:space="preserve">
+    <value>★ مهم</value>
+  </data>
+  <data name="Meeting_AddNote" xml:space="preserve">
+    <value>إضافة ملاحظة</value>
+  </data>
+  <data name="Meeting_NoteHint" xml:space="preserve">
+    <value>اضغط Enter لإضافة ملاحظة (الوقت هو وقت بدء الكتابة). إذا ضغطت "مهم" أثناء الكتابة، يصبح النص وصفًا للعلامة.</value>
+  </data>
+  <data name="Meeting_Tab_Minutes" xml:space="preserve">
+    <value>المحضر</value>
+  </data>
+  <data name="Meeting_Tab_Transcript" xml:space="preserve">
+    <value>النص المكتوب</value>
+  </data>
+  <data name="Meeting_Tab_Highlights" xml:space="preserve">
+    <value>مهم</value>
+  </data>
+  <data name="Meeting_Tab_Notes" xml:space="preserve">
+    <value>الملاحظات</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>حفظ</value>
+  </data>
+  <data name="Meeting_SaveAndRegenerate" xml:space="preserve">
+    <value>حفظ وإعادة إنشاء المحضر</value>
+  </data>
+  <data name="Meeting_NotesHint" xml:space="preserve">
+    <value>عنصر واحد في كل سطر. "[12:34] نص" ملاحظة، و"[12:40] ★ وصف" علامة "مهم"، والأسطر التي لا تحتوي على وقت هي ملاحظات أُضيفت بعد التسجيل.</value>
+  </data>
+  <data name="Meeting_Me" xml:space="preserve">
+    <value>أنا</value>
+  </data>
+  <data name="Meeting_Others" xml:space="preserve">
+    <value>الطرف الآخر</value>
+  </data>
+  <data name="Meeting_Status_Processing" xml:space="preserve">
+    <value>قيد المعالجة</value>
+  </data>
+  <data name="Meeting_Status_Failed" xml:space="preserve">
+    <value>فشل</value>
+  </data>
+  <data name="Meeting_Status_Warning" xml:space="preserve">
+    <value>توجد تحذيرات</value>
+  </data>
+  <data name="Meeting_SavedIn" xml:space="preserve">
+    <value>مكان الحفظ: {0}</value>
+  </data>
+  <data name="Meeting_MinutesAfterRecording" xml:space="preserve">
+    <value>عند إيقاف التسجيل، سيتم إنشاء المحضر بعد النسخ.</value>
+  </data>
+  <data name="Meeting_Processing" xml:space="preserve">
+    <value>جارٍ المعالجة…</value>
+  </data>
+  <data name="Meeting_NoMinutesYet" xml:space="preserve">
+    <value>لا يوجد محضر بعد. يمكنك إنشاؤه باستخدام "إعادة إنشاء المحضر" (يتطلب إعدادات AI لـ "الاجتماعات" في الإعدادات ← AI).</value>
+  </data>
+  <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
+    <value>يتم النسخ بعد إيقاف التسجيل.</value>
+  </data>
+  <data name="Meeting_NoTranscriptYet" xml:space="preserve">
+    <value>لا يوجد نص مكتوب.</value>
+  </data>
+  <data name="Meeting_RecordingNote" xml:space="preserve">
+    <value>يتم النسخ باستخدام {0} بعد إيقاف التسجيل (لتقليل الحمل على الكمبيوتر أثناء الاجتماع).</value>
+  </data>
+  <data name="Meeting_SpeakerName_Inferred_Tip" xml:space="preserve">
+    <value>اسم {0} (مُستنتج من المحادثة؛ صححه إذا كان خاطئًا)</value>
+  </data>
+  <data name="Meeting_SpeakerName_Tip" xml:space="preserve">
+    <value>اسم {0}</value>
+  </data>
+  <data name="Meeting_Inferred" xml:space="preserve">
+    <value>مُستنتج</value>
+  </data>
+  <data name="Meeting_SpeakerNamesSaved" xml:space="preserve">
+    <value>تم حفظ أسماء المتحدثين</value>
+  </data>
+  <data name="Meeting_TitleSaved" xml:space="preserve">
+    <value>تم حفظ العنوان</value>
+  </data>
+  <data name="Meeting_SaveFailed" xml:space="preserve">
+    <value>تعذر الحفظ: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>هل تريد تغيير قالب المحضر إلى "{0}" وإعادة إنشاء المحضر؟</value>
+  </data>
+  <data name="Meeting_Regenerated" xml:space="preserve">
+    <value>تمت إعادة إنشاء المحضر ({0} ثانية)</value>
+  </data>
+  <data name="Meeting_NoTranscript" xml:space="preserve">
+    <value>لا يوجد نص مكتوب</value>
+  </data>
+  <data name="Meeting_NoNotes" xml:space="preserve">
+    <value>لا توجد ملاحظات</value>
+  </data>
+  <data name="Meeting_NoMinutes" xml:space="preserve">
+    <value>لا يوجد محضر</value>
+  </data>
+  <data name="Meeting_CopiedTranscript" xml:space="preserve">
+    <value>تم نسخ النص المكتوب بتنسيق Markdown</value>
+  </data>
+  <data name="Meeting_CopiedNotes" xml:space="preserve">
+    <value>تم نسخ الملاحظات بتنسيق Markdown</value>
+  </data>
+  <data name="Meeting_CopiedMinutes" xml:space="preserve">
+    <value>تم نسخ المحضر بتنسيق Markdown</value>
+  </data>
+  <data name="CopyFailed" xml:space="preserve">
+    <value>تعذر النسخ: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmDelete" xml:space="preserve">
+    <value>هل تريد حذف "{0}"؟
+
+سيتم نقل المحضر والنص المكتوب والملاحظات والصوت إلى سلة المحذوفات. يمكنك استعادتها من سلة المحذوفات.</value>
+  </data>
+  <data name="Meeting_ConfirmDelete_Title" xml:space="preserve">
+    <value>حذف الاجتماع — Hanasu</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>تعذر الحذف: {0}</value>
+  </data>
+  <data name="Meeting_MovedToRecycleBin" xml:space="preserve">
+    <value>تم نقل "{0}" إلى سلة المحذوفات</value>
+  </data>
+  <data name="Meeting_NotesWhileRecording" xml:space="preserve">
+    <value>أثناء التسجيل، أضف الملاحظات في مربع الملاحظات أعلاه (يمكنك تحرير علامة التبويب هذه بعد التسجيل).</value>
+  </data>
+  <data name="Meeting_NotesSaved" xml:space="preserve">
+    <value>تم حفظ الملاحظات</value>
+  </data>
+  <data name="Meeting_UndoHighlight" xml:space="preserve">
+    <value>تراجع عن ★ (متبقٍ: {0} ث)</value>
+  </data>
+  <data name="Meeting_Starting" xml:space="preserve">
+    <value>جارٍ بدء التسجيل…</value>
+  </data>
+  <data name="Meeting_PostProcessing" xml:space="preserve">
+    <value>جارٍ المعالجة بعد التسجيل</value>
+  </data>
+  <data name="Meeting_StopHint" xml:space="preserve">
+    <value>يمكنك أيضًا الإيقاف باستخدام {0}</value>
+  </data>
+  <data name="Meeting_StartHint" xml:space="preserve">
+    <value>يمكنك أيضًا البدء باستخدام {0}. أخبر المشاركين الآخرين بأنك تسجّل قبل البدء.</value>
+  </data>
+  <data name="Device_DefaultMic" xml:space="preserve">
+    <value>الميكروفون الافتراضي في Windows</value>
+  </data>
+  <data name="Device_MissingMic" xml:space="preserve">
+    <value>(الميكروفون المحدد سابقًا، غير متصل حاليًا)</value>
+  </data>
+  <data name="Device_DefaultOutput" xml:space="preserve">
+    <value>الإخراج الافتراضي في Windows</value>
+  </data>
+  <data name="Device_MissingOutput" xml:space="preserve">
+    <value>(الإخراج المحدد سابقًا، غير متصل حاليًا)</value>
+  </data>
+  <data name="MeetingMic_StartFailed" xml:space="preserve">
+    <value>تعذر بدء تسجيل الميكروفون: {0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>إعدادات Hanasu</value>
+  </data>
+  <data name="Settings_SavedImmediately" xml:space="preserve">
+    <value>يتم حفظ التغييرات فورًا</value>
+  </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>عام</value>
+  </data>
+  <data name="Settings_Shortcuts" xml:space="preserve">
+    <value>الاختصارات</value>
+  </data>
+  <data name="Settings_Dictation" xml:space="preserve">
+    <value>الإملاء</value>
+  </data>
+  <data name="Settings_ResetToDefault" xml:space="preserve">
+    <value>إعادة التعيين إلى الافتراضي</value>
+  </data>
+  <data name="Settings_TranslateAndType" xml:space="preserve">
+    <value>الترجمة والكتابة</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>انقر فوق مربع، ثم اضغط على تركيبة المفاتيح التي تريدها. أثناء التسجيل، يؤدي Esc إلى الإلغاء. يستخدم Windows كلاً من Alt + Space (قائمة النافذة) وWin + H (الكتابة الصوتية في Windows)، لذا يتم تجنبهما.</value>
+  </data>
+  <data name="Settings_TranslationLanguages" xml:space="preserve">
+    <value>لغات الترجمة</value>
+  </data>
+  <data name="Settings_TranslateEnglish" xml:space="preserve">
+    <value>الإنجليزية</value>
+  </data>
+  <data name="Settings_TranslateJapanese" xml:space="preserve">
+    <value>اليابانية</value>
+  </data>
+  <data name="Settings_TranslationNote" xml:space="preserve">
+    <value>يترجم اختصار "الترجمة والكتابة" إلى أول لغة محددة من اليسار. أثناء التسجيل، يمكنك التبديل بين "كما نُطق" واللغات المحددة في HUD (تتم كتابة النص باللغة المحددة عند الإيقاف). تستخدم الترجمة AI المحدد للإملاء في علامة التبويب "AI". حدد لغة واحدة على الأقل.</value>
+  </data>
+  <data name="Settings_RecordingMode" xml:space="preserve">
+    <value>وضع التسجيل</value>
+  </data>
+  <data name="Settings_Toggle" xml:space="preserve">
+    <value>البدء/الإيقاف مع كل ضغطة (تبديل)</value>
+  </data>
+  <data name="Settings_PushToTalk" xml:space="preserve">
+    <value>التسجيل فقط أثناء الضغط مع الاستمرار</value>
+  </data>
+  <data name="Settings_Engine" xml:space="preserve">
+    <value>محرك النسخ</value>
+  </data>
+  <data name="Settings_Engine_Windows" xml:space="preserve">
+    <value>التعرف على الكلام في Windows (افتراضي)</value>
+  </data>
+  <data name="Settings_Engine_Whisper" xml:space="preserve">
+    <value>Whisper (يعمل على هذا الكمبيوتر)</value>
+  </data>
+  <data name="Settings_Engine_Gemini" xml:space="preserve">
+    <value>Gemini (يرسل الصوت إلى Google)</value>
+  </data>
+  <data name="Settings_Engine_WindowsNote" xml:space="preserve">
+    <value>يتعرف على الكلام باستخدام التعرف على الكلام في Windows (الإملاء) ويعرض نتائج جزئية أثناء التحدث. يستخدم التعرف على الكلام عبر الإنترنت من Microsoft، لذا شغّل "التعرف على الكلام عبر الإنترنت" في إعدادات Windows ← الخصوصية والأمان ← الكلام. يستخدم الميكروفون الافتراضي في Windows (لا يتم استخدام التحديد أدناه).</value>
+  </data>
+  <data name="Settings_OpenSpeechSettings" xml:space="preserve">
+    <value>فتح إعدادات الكلام</value>
+  </data>
+  <data name="Settings_OpenLanguageSettings" xml:space="preserve">
+    <value>فتح إعدادات اللغة</value>
+  </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>ينسخ على هذا الكمبيوتر باستخدام whisper.cpp (لا يغادر الصوت جهازك أبدًا). يتم النسخ بعد إيقاف التسجيل. يؤدي تحديد نموذج إلى تنزيله من Hugging Face. النماذج الأكبر أكثر دقة لكنها أبطأ.</value>
+  </data>
+  <data name="Settings_Model" xml:space="preserve">
+    <value>النموذج</value>
+  </data>
+  <data name="Settings_Download" xml:space="preserve">
+    <value>تنزيل</value>
+  </data>
+  <data name="Settings_CancelDownload" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="Settings_Engine_GeminiNote" xml:space="preserve">
+    <value>يرسل الصوت المسجّل إلى Gemini API من Google (باستخدام بيانات اعتماد Gemini المعيّنة في علامة التبويب AI ونموذج Gemini للإملاء) لنسخه. لاحظ أن صوتك يُرسل إلى Google. يُرسل بعد إيقاف التسجيل (حتى 7 دقائق في كل مرة).</value>
+  </data>
+  <data name="Settings_Microphone" xml:space="preserve">
+    <value>الميكروفون</value>
+  </data>
+  <data name="Settings_NoTarget" xml:space="preserve">
+    <value>عند عدم وجود مكان للكتابة</value>
+  </data>
+  <data name="Settings_NoTargetNote" xml:space="preserve">
+    <value>إذا لم يكن هناك حقل نصي يحظى بالتركيز (على سبيل المثال، سطح المكتب في المقدمة) أو كان التطبيق في المقدمة يعمل كمسؤول ولا يمكن اللصق فيه، فستظهر النتيجة في أسفل الشاشة. تبقى ظاهرة حتى تغلقها، ويمكنك نسخها باستخدام "نسخ" أو بتحديد النص.</value>
+  </data>
+  <data name="Settings_Fallback_Keep" xml:space="preserve">
+    <value>وضعها أيضًا في الحافظة (فقط اضغط Ctrl+V حيث تريدها)</value>
+  </data>
+  <data name="Settings_Fallback_Restore" xml:space="preserve">
+    <value>عرضها فقط وترك الحافظة دون تغيير (انسخ باستخدام "نسخ" في اللوحة)</value>
+  </data>
+  <data name="Settings_Other" xml:space="preserve">
+    <value>أخرى</value>
+  </data>
+  <data name="Settings_PlaySounds" xml:space="preserve">
+    <value>تشغيل أصوات عند بدء التسجيل وإيقافه</value>
+  </data>
+  <data name="Settings_OpenLogs" xml:space="preserve">
+    <value>فتح مجلد السجلات</value>
+  </data>
+  <data name="Settings_OpenSettingsFolder" xml:space="preserve">
+    <value>فتح مجلد الإعدادات</value>
+  </data>
+  <data name="Settings_AiAndModels" xml:space="preserve">
+    <value>AI والنماذج</value>
+  </data>
+  <data name="Settings_Ai_Dictation" xml:space="preserve">
+    <value>الإملاء (التحسين، الترجمة)</value>
+  </data>
+  <data name="Settings_Ai_Local" xml:space="preserve">
+    <value>محلي</value>
+  </data>
+  <data name="Settings_Ai_Meeting" xml:space="preserve">
+    <value>الاجتماعات (المحاضر)</value>
+  </data>
+  <data name="Settings_AiNote" xml:space="preserve">
+    <value>يمكنك اختيار AI والنموذج بشكل منفصل للإملاء والاجتماعات. القيم الافتراضية هي gemini-3.5-flash-lite (الإملاء) وgemini-3.8-flash (المحاضر) لـ Gemini، وHaiku 5.5 (الإملاء) وSonnet 5.5 (المحاضر) لـ Claude. يُستخدم Claude لمعالجة النصوص فقط، وليس لنسخ الصوت (محرك النسخ موجود في علامتي التبويب "عام" و"الاجتماعات").</value>
+  </data>
+  <data name="Settings_LocalModels" xml:space="preserve">
+    <value>النماذج المحلية (نماذج LLM صغيرة تعمل على هذا الكمبيوتر)</value>
+  </data>
+  <data name="Settings_LocalModelsNote" xml:space="preserve">
+    <value>تتم معالجة النص على هذا الكمبيوتر فقط ولا يُرسل أبدًا عبر الإنترنت. قم أولاً بتنزيل النموذج الذي تريد استخدامه. يعمل على وحدة المعالجة المركزية، لذا يستغرق التحسين من بضع ثوانٍ إلى أكثر من عشر ثوانٍ، ويستغرق المحضر من بضع دقائق إلى أكثر من عشر دقائق.</value>
+  </data>
+  <data name="Settings_Stop" xml:space="preserve">
+    <value>إيقاف</value>
+  </data>
+  <data name="Settings_Refine" xml:space="preserve">
+    <value>التحسين باستخدام AI (تصحيح أخطاء التعرف وكلمات الحشو والتصحيحات الذاتية وعلامات الترقيم)</value>
+  </data>
+  <data name="Settings_RefineNote" xml:space="preserve">
+    <value>عند إيقاف التشغيل، يتم تطبيق استبدالات القاموس فقط على النص الذي تم التعرف عليه قبل الكتابة. لا يمكن إجراء الترجمة إلا بواسطة AI، لذا يظل النص يُرسل إلى AI حتى عند إيقاف هذا الخيار.</value>
+  </data>
+  <data name="Settings_RefineLanguage" xml:space="preserve">
+    <value>لغة التحسين</value>
+  </data>
+  <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
+    <value>كما نُطق</value>
+  </data>
+  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
+    <value>اليابانية دائمًا</value>
+  </data>
+  <data name="Settings_SendAppName" xml:space="preserve">
+    <value>إخبار AI باسم التطبيق الذي تكتب فيه (لمطابقة أسلوبه)</value>
+  </data>
+  <data name="Settings_GeminiAuth" xml:space="preserve">
+    <value>مصادقة Gemini</value>
+  </data>
+  <data name="Settings_Auth_ApiKey" xml:space="preserve">
+    <value>مفتاح API (Google AI Studio)</value>
+  </data>
+  <data name="Settings_Auth_ServiceAccount" xml:space="preserve">
+    <value>حساب خدمة (Vertex AI)</value>
+  </data>
+  <data name="Settings_ApiKey" xml:space="preserve">
+    <value>مفتاح API</value>
+  </data>
+  <data name="Settings_KeyJson" xml:space="preserve">
+    <value>المفتاح (JSON)</value>
+  </data>
+  <data name="Settings_Browse" xml:space="preserve">
+    <value>استعراض…</value>
+  </data>
+  <data name="Settings_Region" xml:space="preserve">
+    <value>المنطقة</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>اختر مفتاح حساب خدمة لديه الدور Vertex AI User (roles/aiplatform.user). يتم حفظ موقع ملف المفتاح فقط (لا يتم نسخ محتوياته). احتفظ بملف المفتاح في مكان لا يستطيع الآخرون قراءته. المنطقة الافتراضية هي global.</value>
+  </data>
+  <data name="Settings_ClaudeApiKey" xml:space="preserve">
+    <value>مفتاح API الخاص بـ Claude</value>
+  </data>
+  <data name="Settings_TestConnection" xml:space="preserve">
+    <value>اختبار الاتصال</value>
+  </data>
+  <data name="Settings_ClaudeNote" xml:space="preserve">
+    <value>أدخل مفتاح API تم إنشاؤه في Claude Console (platform.claude.com). لا تُعرض المفاتيح المحفوظة على الشاشة (فقط آخر 4 أحرف). يسترد "اختبار الاتصال" معلومات النموذج فقط ولا يُحتسب عليه أي رسوم.</value>
+  </data>
+  <data name="Settings_KeyProtection" xml:space="preserve">
+    <value>حماية مفتاح API</value>
+  </data>
+  <data name="Settings_UseHello" xml:space="preserve">
+    <value>حماية مفاتيح API باستخدام Windows Hello (التحقق برقم PIN أو الوجه أو بصمة الإصبع عند استخدامها)</value>
+  </data>
+  <data name="Settings_KeyProtectionNote" xml:space="preserve">
+    <value>يتم تخزين المفاتيح مشفرة في %LOCALAPPDATA%\Hanasu\secrets.json، وليس في settings.json. مع DPAPI الافتراضي، لا يمكن قراءتها إلا لمستخدم Windows هذا، لكن التطبيقات الأخرى التي تعمل باسم المستخدم نفسه يمكنها قراءتها دون تأكيد. مع Windows Hello، تؤدي محاولة التطبيقات الأخرى قراءتها إلى ظهور مطالبة Windows Hello (تتحقق مرة واحدة عند أول استخدام بعد البدء، ومرة أخرى بعد قفل الشاشة). لا يمكن لهذا منع التطبيقات التي تعمل باسم المستخدم نفسه من قراءة الذاكرة أثناء تشغيل Hanasu.</value>
+  </data>
+  <data name="Settings_Trial" xml:space="preserve">
+    <value>التجربة (AI الإملاء)</value>
+  </data>
+  <data name="Settings_TrialSample" xml:space="preserve">
+    <value>اممم بالنسبة لاجتماع بكرة يعني راح أستخدم الشرائح اللي عملتها بجيميناي</value>
+  </data>
+  <data name="Settings_TryRefine" xml:space="preserve">
+    <value>تجربة التحسين</value>
+  </data>
+  <data name="Settings_TryEnglish" xml:space="preserve">
+    <value>تجربة الترجمة الإنجليزية</value>
+  </data>
+  <data name="Settings_TryJapanese" xml:space="preserve">
+    <value>تجربة الترجمة اليابانية</value>
+  </data>
+  <data name="Settings_Tab_Meetings" xml:space="preserve">
+    <value>الاجتماعات</value>
+  </data>
+  <data name="Settings_MeetingStartStop" xml:space="preserve">
+    <value>بدء/إيقاف التسجيل</value>
+  </data>
+  <data name="Settings_HighlightMark" xml:space="preserve">
+    <value>علامة "مهم"</value>
+  </data>
+  <data name="Settings_UseHighlightHotKey" xml:space="preserve">
+    <value>استخدام اختصار "مهم" (نشط فقط أثناء التسجيل)</value>
+  </data>
+  <data name="Settings_Transcription" xml:space="preserve">
+    <value>النسخ</value>
+  </data>
+  <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
+    <value>Whisper (يعمل على هذا الكمبيوتر؛ افتراضي)</value>
+  </data>
+  <data name="Settings_MeetingEngineNote" xml:space="preserve">
+    <value>أثناء التسجيل، تتم كتابة الصوت إلى ملفات فقط؛ وبعد الإيقاف، يتم نسخ قناتي "أنا" و"الطرف الآخر" كل على حدة مع طوابع زمنية. لا يمكن للتعرف على الكلام في Windows الاستماع إلا إلى الميكروفون الافتراضي في Windows ولا يمكنه التقاط صوت الكمبيوتر (الطرف الآخر)، لذا لا يمكن استخدامه للاجتماعات.</value>
+  </data>
+  <data name="Settings_Speakers" xml:space="preserve">
+    <value>المتحدثون</value>
+  </data>
+  <data name="Settings_Diarize" xml:space="preserve">
+    <value>فصل المتحدثين الآخرين (المتحدث 1، المتحدث 2…)</value>
+  </data>
+  <data name="Settings_DiarizeNote" xml:space="preserve">
+    <value>يتم فصل المتحدثين على هذا الكمبيوتر باستخدام sherpa-onnx (نماذج pyannote و3D-Speaker). يتم تنزيل النماذج (حوالي 34 MB) في المرة الأولى. عند إيقاف التشغيل، يتم دمج الطرف الآخر في "الطرف الآخر" واحد. يمكنك إعادة تسمية المتحدثين في ملاحظات الاجتماعات.</value>
+  </data>
+  <data name="Settings_Minutes" xml:space="preserve">
+    <value>المحاضر</value>
+  </data>
+  <data name="Settings_MakeMinutes" xml:space="preserve">
+    <value>إنشاء محضر باستخدام AI بعد التسجيل</value>
+  </data>
+  <data name="Settings_MinutesNote" xml:space="preserve">
+    <value>اختر AI والنموذج للمحاضر ضمن "الاجتماعات (المحاضر)" في علامة التبويب "AI". يُرسل نص النسخ فقط (عندما يكون محرك النسخ Gemini، يُرسل الصوت أيضًا إلى Google). اختر قالب المحضر في ملاحظات الاجتماعات.</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>التخزين</value>
+  </data>
+  <data name="Settings_KeepAudio" xml:space="preserve">
+    <value>الاحتفاظ بالملفات الصوتية (me.wav / others.wav) بعد المعالجة</value>
+  </data>
+  <data name="Settings_KeepAudioNote" xml:space="preserve">
+    <value>عند إيقاف التشغيل، يتم حذف الصوت بعد إنشاء النص المكتوب والمحضر (يتم الاحتفاظ به إذا فشل النسخ). التنسيق WAV أحادي 16 kHz، حوالي 115 MB لكل قناة في الساعة.</value>
+  </data>
+  <data name="Settings_SaveLocation" xml:space="preserve">
+    <value>مكان الحفظ</value>
+  </data>
+  <data name="Settings_Open" xml:space="preserve">
+    <value>فتح</value>
+  </data>
+  <data name="Settings_MeetingsFolderNote" xml:space="preserve">
+    <value>يتم إنشاء مجلد باسم التاريخ والوقت لكل اجتماع، يحتوي على meeting.json (بالتنسيق نفسه لإصدار Mac) وtranscript.md وminutes.md وnotes.md والصوت.</value>
+  </data>
+  <data name="Settings_ConsentNote" xml:space="preserve">
+    <value>احصل على موافقة المشاركين الآخرين قبل التسجيل. يمنع استخدام سماعات الأذن تسرب أصواتهم إلى الميكروفون.</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>المحفوظات</value>
+  </data>
+  <data name="Settings_DictationHistory" xml:space="preserve">
+    <value>محفوظات الإملاء</value>
+  </data>
+  <data name="Settings_SaveHistory" xml:space="preserve">
+    <value>حفظ المحفوظات في ملف</value>
+  </data>
+  <data name="Settings_HistoryNote" xml:space="preserve">
+    <value>يحتفظ بنتائج الإملاء والنصوص الأصلية المنسوخة حتى تتمكن من البحث فيها ونسخها باستخدام "فتح المحفوظات". عند إيقاف التشغيل، لا تتم كتابة النتائج الجديدة إلى ملف؛ يتم الاحتفاظ بآخر 10 فقط في الذاكرة لـ "النتائج الأخيرة" في قائمة منطقة الإعلامات (لا يتم حذف المحفوظات المحفوظة).</value>
+  </data>
+  <data name="Settings_KeepDays" xml:space="preserve">
+    <value>الاحتفاظ لمدة</value>
+  </data>
+  <data name="Settings_KeepCount" xml:space="preserve">
+    <value>الاحتفاظ بما يصل إلى</value>
+  </data>
+  <data name="Settings_KeepNote" xml:space="preserve">
+    <value>يتم الاحتفاظ فقط بالإدخالات التي تقع ضمن الحدين؛ ويتم حذف الأقدم أولاً (عند الإضافة، وعند بدء التشغيل، وعند تغيير هذه الإعدادات). القيم الافتراضية هي 30 يومًا و1,000 إدخال.</value>
+  </data>
+  <data name="Settings_OpenHistory" xml:space="preserve">
+    <value>فتح المحفوظات…</value>
+  </data>
+  <data name="Settings_DeleteAllHistory" xml:space="preserve">
+    <value>حذف كل المحفوظات…</value>
+  </data>
+  <data name="Settings_Tab_Dictionary" xml:space="preserve">
+    <value>القاموس والقواعد</value>
+  </data>
+  <data name="Settings_UserDictionary" xml:space="preserve">
+    <value>قاموس المستخدم</value>
+  </data>
+  <data name="Settings_TryReplace" xml:space="preserve">
+    <value>تجربة الاستبدالات</value>
+  </data>
+  <data name="Settings_ExtraRules" xml:space="preserve">
+    <value>قواعد تحسين إضافية</value>
+  </data>
+  <data name="Settings_ExtraRulesNote" xml:space="preserve">
+    <value>قواعد تُمرَّر إلى AI (Gemini، Claude) عند التحسين (على سبيل المثال، "استخدم أسلوبًا رسميًا"). لا تُستخدم عند الترجمة إلى الإنجليزية (تُستخدم عند الترجمة إلى اليابانية).</value>
+  </data>
+  <data name="Settings_DictionaryHelp" xml:space="preserve">
+    <value>عنصر واحد في كل سطر. الكلمة بمفردها تخبر AI بكيفية تهجئتها. "المسموع =&gt; التهجئة" يستبدل ما تم التعرف عليه بالتهجئة (على سبيل المثال، stock mark =&gt; Stockmark؛ افصل بين عدة عناصر على اليسار باستخدام ","). الأسطر التي تبدأ بـ "#" هي تعليقات.</value>
+  </data>
+  <data name="Settings_EntryCount" xml:space="preserve">
+    <value>{0} إدخال</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>تم الحفظ</value>
+  </data>
+  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
+    <value>مطابق لاختصار آخر (الإملاء أو الترجمة أو الاجتماعات)</value>
+  </data>
+  <data name="Settings_MicNote_Windows" xml:space="preserve">
+    <value>يستخدم محرك Windows الميكروفون الافتراضي في Windows (يمكنك تغييره في إعدادات Windows ← النظام ← الصوت).</value>
+  </data>
+  <data name="Settings_MicNote_Selected" xml:space="preserve">
+    <value>يسجّل Whisper وGemini باستخدام الميكروفون المحدد هنا (يتم التحويل إلى أحادي 16 kHz).</value>
+  </data>
+  <data name="Settings_HistoryStatus" xml:space="preserve">
+    <value>عدد إدخالات المحفوظات الحالية: {0} (مكان الحفظ: {1})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteWhisper" xml:space="preserve">
+    <value>هل تريد حذف نموذج Whisper {0} ({1})؟</value>
+  </data>
+  <data name="Settings_Downloading" xml:space="preserve">
+    <value>جارٍ التنزيل… {0}</value>
+  </data>
+  <data name="Settings_Downloaded" xml:space="preserve">
+    <value>تم التنزيل</value>
+  </data>
+  <data name="Settings_DownloadFailed" xml:space="preserve">
+    <value>فشل: {0}</value>
+  </data>
+  <data name="Settings_NotDownloaded" xml:space="preserve">
+    <value>لم يتم التنزيل بعد</value>
+  </data>
+  <data name="Settings_ConfirmDeleteLocal" xml:space="preserve">
+    <value>هل تريد حذف النموذج المحلي {0} ({1})؟</value>
+  </data>
+  <data name="Settings_MinutesAiNote" xml:space="preserve">
+    <value>يتم إنشاء المحاضر باستخدام {0} ({1}).</value>
+  </data>
+  <data name="Settings_Missing_LocalModel" xml:space="preserve">
+    <value>النموذج المحلي "{0}"</value>
+  </data>
+  <data name="Settings_Missing_GeminiCredentials" xml:space="preserve">
+    <value>بيانات اعتماد Gemini</value>
+  </data>
+  <data name="Settings_MissingNote" xml:space="preserve">
+    <value>لم يتم الإعداد بعد: {0} (قم بالإعداد أو التنزيل أدناه).</value>
+  </data>
+  <data name="Settings_EnterApiKey" xml:space="preserve">
+    <value>أدخل مفتاح API</value>
+  </data>
+  <data name="Settings_ClaudeKeyPrefix" xml:space="preserve">
+    <value>تبدأ مفاتيح API الخاصة بـ Claude بـ "sk-ant-". تحقق مما أدخلته.</value>
+  </data>
+  <data name="Settings_ClaudeConnecting" xml:space="preserve">
+    <value>جارٍ الاتصال بـ Claude API…</value>
+  </data>
+  <data name="Settings_ClaudeConnectedUnsaved" xml:space="preserve">
+    <value>تم الاتصال بهذا المفتاح (لم يتم حفظه بعد). {0} متاح. </value>
+  </data>
+  <data name="Settings_ClaudeConnected" xml:space="preserve">
+    <value>تم الاتصال. {0} متاح. </value>
+  </data>
+  <data name="Settings_Hello_On" xml:space="preserve">
+    <value>محمي باستخدام Windows Hello.</value>
+  </data>
+  <data name="Settings_Hello_Off" xml:space="preserve">
+    <value>محمي حاليًا باستخدام DPAPI.</value>
+  </data>
+  <data name="Settings_Hello_Unavailable" xml:space="preserve">
+    <value>لم يتم إعداد Windows Hello على هذا الكمبيوتر، لذا لا يمكن تحديد هذا الخيار (إعدادات Windows ← الحسابات ← خيارات تسجيل الدخول).</value>
+  </data>
+  <data name="Settings_Hello_Enabling" xml:space="preserve">
+    <value>جارٍ طلب التحقق من Windows Hello (يظهر مرتين للتأكيد)…</value>
+  </data>
+  <data name="Settings_Hello_Disabling" xml:space="preserve">
+    <value>جارٍ طلب التحقق من Windows Hello (لقراءة المفاتيح مرة واحدة والعودة إلى DPAPI)…</value>
+  </data>
+  <data name="Settings_Hello_SwitchFailed" xml:space="preserve">
+    <value>تعذر التبديل: {0}</value>
+  </data>
+  <data name="Settings_ServiceAccountFilter" xml:space="preserve">
+    <value>مفتاح حساب الخدمة (*.json)|*.json|كل الملفات (*.*)|*.*</value>
+  </data>
+  <data name="Settings_ServiceAccountDialogTitle" xml:space="preserve">
+    <value>اختيار مفتاح حساب الخدمة (JSON)</value>
+  </data>
+  <data name="Settings_TrialRefining" xml:space="preserve">
+    <value>جارٍ التحسين…</value>
+  </data>
+  <data name="Settings_TrialTranslating" xml:space="preserve">
+    <value>جارٍ الترجمة…</value>
+  </data>
+  <data name="Settings_TrialDone" xml:space="preserve">
+    <value>استغرق {0} ({1}) مدة {2} ث</value>
+  </data>
+  <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
+    <value>يتم تقسيم صوت الاجتماع المسجّل إلى أجزاء مدة كل منها 5 دقائق وإرسالها إلى Gemini (باستخدام بيانات اعتماد Gemini في علامة التبويب AI ونموذج Gemini للإملاء). لاحظ أن صوتك يُرسل إلى Google.</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
+    <value>يستخدم نموذج Whisper المحدد في علامة التبويب "عام" ({0}).</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
+    <value> لم يتم تنزيله بعد (قم بتنزيله في علامة التبويب "عام").</value>
+  </data>
+  <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
+    <value>اختيار مكان حفظ الاجتماعات</value>
+  </data>
+  <data name="Settings_DictionaryLineIssue" xml:space="preserve">
+    <value>السطر {0}: {1}</value>
+  </data>
+  <data name="Settings_NoReplacements" xml:space="preserve">
+    <value>لا توجد استبدالات</value>
+  </data>
+  <data name="Settings_ReplacementResult" xml:space="preserve">
+    <value>→ {0} ({1})</value>
+  </data>
+  <data name="Settings_TrialAppName" xml:space="preserve">
+    <value>إعدادات Hanasu</value>
+  </data>
+  <data name="Mic_UnsupportedFormat" xml:space="preserve">
+    <value>تنسيق تسجيل غير مدعوم ({0})</value>
+  </data>
+</root>

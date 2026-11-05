@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>로컬 LLM을 실행하는 llama-server를 찾을 수 없습니다. Hanasu zip 파일의 압축을 다시 풀거나 HANASU_LLAMA_SERVER 환경 변수에 경로를 지정하세요.</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>로컬 모델을 아직 다운로드하지 않았습니다. 메뉴 → 설정 → AI에서 다운로드하세요.</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>로컬 모델 '{0}'을(를) 아직 다운로드하지 않았습니다. 메뉴 → 설정 → AI에서 다운로드하세요.</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>로컬 LLM을 시작할 수 없습니다(종료 코드 {0}).</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>로컬 LLM이 {0}초 안에 시작을 마치지 못했습니다.</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>로컬 LLM이 오류를 반환했습니다({0})</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>로컬 LLM의 응답이 길이 제한에서 잘려 사용하지 않았습니다.</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>로컬 LLM이 결과를 반환하지 않았습니다.</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>로컬 LLM의 응답을 읽을 수 없습니다.</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>로컬 LLM이 {0}초 안에 응답하지 않았습니다.</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>로컬</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>추천. Google 제작. 가장 크며 다듬기와 회의록이 가장 자연스럽습니다. 메모리 16GB 이상 PC용.</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>Liquid AI 제작. 작고 빠릅니다. 일본어 지시를 잘 따릅니다.</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>SB Intuitions 제작. 일본어로 학습. 컨텍스트 최대 8K(긴 회의는 나누어 요약).</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>Alibaba 제작. Gemma의 절반 정도 크기여서 메모리 8GB PC에서도 비교적 쉽게 실행됩니다. 말을 고쳐 말한 부분의 처리는 Gemma보다 약합니다.</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>라이선스: {0}. 이 라이선스는 연 매출 1,000만 달러 이상인 조직의 상업적 사용을 허용하지 않습니다.</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>라이선스: {0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0} ({1}) · 추천</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>보조 키 외에 키를 하나 더 누르세요.</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc는 녹음 취소에 사용되므로 바로 가기 키로 지정할 수 없습니다.</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>Ctrl, Alt, Shift, Win 중 하나와 함께 누르세요(F1–F24는 단독으로 사용할 수 있습니다).</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>Shift만 사용하는 조합은 문자 입력과 충돌하므로 사용할 수 없습니다.</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0}은(는) {1}에 사용되므로 피하세요.</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>Windows 창 메뉴</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>Windows 음성 입력(Win + H)</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>입력 언어 전환</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>IME 켜기/끄기(IME에 따라 다름)</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>전자/반자 공백 입력</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>창 전환</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>창 닫기</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>화면 잠금</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>바탕 화면 표시</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>변환</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>무변환</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>키 {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>설정 안 됨</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>끝자리 알 수 없음</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>Windows Hello로 보호됨</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>DPAPI로 보호됨</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>저장됨({0}, {1})</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>저장된 API 키가 손상되었습니다. 설정 → AI에서 다시 입력하세요.</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>Windows Hello로 보호된 API 키를 복호화할 수 없습니다(Windows Hello 키가 다시 만들어졌을 수 있습니다). 설정 → AI에서 다시 입력하세요.</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>저장된 API 키를 읽을 수 없습니다(다른 Windows 사용자 또는 다른 PC에서 저장되었을 수 있습니다). 설정 → AI에서 다시 입력하세요.</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>이 PC에서는 Windows Hello를 사용할 수 없습니다.</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>이 PC에서는 Windows Hello를 사용할 수 없어 저장된 API 키를 읽을 수 없습니다. 설정 → AI에서 다시 입력하세요.</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>Windows Hello 키를 만들 수 없습니다.</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>Windows Hello 키에서 같은 값을 만들지 못해 Windows Hello 보호로 전환하지 않았습니다(DPAPI를 계속 사용합니다).</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>Claude API 키가 설정되지 않았습니다(메뉴 → 설정 → AI).</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude가 {0}초 안에 응답하지 않았습니다.</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude가 안전상의 이유로 이 텍스트의 처리를 거부했습니다. 다른 모델(설정 → AI)이나 Gemini로 시도해 보세요.</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude가 안전상의 이유로 이 텍스트의 처리를 거부했습니다({0}). 다른 모델(설정 → AI)이나 Gemini로 시도해 보세요.</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Claude의 응답이 너무 길어 잘렸습니다.</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude가 결과를 반환하지 않았습니다.</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>Claude API 키가 올바르지 않습니다(401). 설정 → AI에서 Claude Console에서 만든 키를 다시 입력하세요.</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>이 API 키로는 Claude를 사용할 수 없습니다(403)</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>모델 {0}을(를) 찾을 수 없거나 이 API 키로는 사용할 수 없습니다(404).</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>Claude API 결제에 문제가 있습니다(402). Claude Console에서 결제 설정을 확인하세요.</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>Claude API 사용 한도에 도달했습니다(429). 잠시 후 다시 시도하세요.</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>Claude API가 과부하 상태입니다(529). 잠시 후 다시 시도하세요.</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>Claude API에서 오류가 발생했습니다({0}). 잠시 후 다시 시도하세요.</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>Claude API가 요청을 받아들이지 않았습니다({0})</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>Claude API에 연결할 수 없습니다. 네트워크 연결을 확인하세요.</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5(빠르고 저렴함, 음성 입력 기본값)</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5(회의록 기본값)</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5(가장 똑똑함, 가장 비쌈)</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>Gemini 자격 증명(API 키 또는 서비스 계정)이 설정되지 않았습니다.</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Gemini API 오류({0}): {1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini가 결과를 반환하지 않았습니다.</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini가 결과를 반환하지 않았습니다({0}).</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>Gemini의 응답을 읽을 수 없습니다.</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini가 {0}초 안에 응답하지 않았습니다.</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>서비스 계정 JSON을 찾을 수 없습니다: {0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>서비스 계정 JSON을 읽을 수 없습니다.</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
+    <value>서비스 계정 JSON의 token_uri가 https가 아닙니다.</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>액세스 토큰을 가져오는 중 시간이 초과되었습니다.</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>액세스 토큰을 가져올 수 없습니다({0}): {1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>서비스 계정의 개인 키를 읽을 수 없습니다.</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>액세스 토큰 요청에 서명할 수 없습니다: {0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>지정된 호스트에서만 다운로드할 수 있습니다: {0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>다운로드하지 못했습니다(HTTP {0}).</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>https가 아닌 위치로 리디렉션되어 다운로드를 중지했습니다.</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>다운로드할 파일의 크기가 예상과 다릅니다({0}바이트, 예상 {1}바이트).</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>파일이 예상보다 커서 다운로드를 중지했습니다.</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>다운로드가 중단되었습니다.</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>다운로드한 파일의 해시(SHA-256)가 일치하지 않아 사용하지 않습니다.</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>{0}(으)로 텍스트 변환 중…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>텍스트 변환 엔진이 Gemini이지만 Gemini 자격 증명이 설정되지 않았습니다(메뉴 → 설정 → AI).</value>
+  </data>
+  <data name="Transcription_GeminiTooLong" xml:space="preserve">
+    <value>녹음이 너무 길어 Gemini로 보낼 수 없습니다(최대 {0}분).</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>Gemini로 텍스트를 변환하지 못했습니다: {0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0} ({1}) — {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>가장 작음. 일본어 정확도가 낮음(테스트용).</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>작음. 일본어 정확도가 낮은 편.</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>일상적인 사용에 적합. 속도와 정확도의 균형이 좋음.</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>정확도 높음. 빠른 CPU용.</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>정확도 높음. 양자화로 크기가 작음. 빠른 CPU용.</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>정확도 높음. 빠른 CPU용.</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>WAV 파일이 아닙니다.</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>WAV 파일에 fmt 청크가 없습니다.</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>지원하지 않는 WAV 형식입니다(format={0}, bits={1}).</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>WAV 파일에 data 청크가 없습니다.</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>영어</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>일본어</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>영어로 번역</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>일본어로 번역</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>번역해서 입력</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>영어로 번역해서 입력</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>일본어로 번역해서 입력</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>영어로 번역해서 입력했습니다</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>일본어로 번역해서 입력했습니다</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>입력했습니다</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>취소했습니다</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>준비 중…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>마무리하는 중…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>음성이 인식되지 않았습니다.</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>녹음 중</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>오류</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>말씀하세요…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>관리자 권한으로 실행 중인 앱에는 붙여 넣을 수 없습니다</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>붙여넣기 키를 보낼 수 없습니다</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>클립보드를 사용할 수 없습니다</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>입력할 수 없습니다</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>입력할 위치를 찾을 수 없습니다</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>클립보드에도 넣어 두었습니다. 입력할 위치를 클릭하고 Ctrl+V를 누르세요.</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>'복사'를 클릭하거나 텍스트를 선택해 복사한 다음, 입력할 위치에서 Ctrl+V를 누르세요.</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>{0}(으)로 영어 번역 중…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>{0}(으)로 일본어 번역 중…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>{0}(으)로 다듬는 중…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>다듬기</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>성공</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>AI 실패(원문)</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>설정 안 됨(원문)</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>다듬기 꺼짐(원문)</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0}일</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>무기한</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>기록 파일을 읽을 수 없어 {0}(으)로 보관하고 새로 시작했습니다.</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>기록 파일을 읽을 수 없습니다: {0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>기록을 저장할 수 없습니다: {0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>오늘</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>어제</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>M월 d일 (ddd)</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>yyyy년 M월 d일 (ddd)</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0} 다듬지 않고 그대로 입력했습니다(메뉴 → 설정 → AI).</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0} 번역하지 않고 그대로 입력했습니다(메뉴 → 설정 → AI).</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>다듬기 전의 텍스트를 입력했습니다.</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>번역 전의 텍스트를 입력했습니다.</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>로컬 LLM 모델을 아직 다운로드하지 않았습니다(메뉴 → 설정 → AI).</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>Gemini 자격 증명(API 키 또는 서비스 계정)이 설정되지 않았습니다(메뉴 → 설정 → AI).</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>로컬 LLM 모델을 아직 다운로드하지 않아</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>{0} 자격 증명이 설정되지 않아</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>자동</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>정기 회의</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>영업 미팅</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>브레인스토밍</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>사용자 지정</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>개요, 논의 내용, 결정 사항, 실행 항목</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>진행 상황, 보고, 과제, 결정 사항, 실행 항목</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>근황, 고민, 피드백, 합의 사항, 실행 항목</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>고객의 과제, 제안 내용, 반응, 우려 사항, 다음 조치</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>나온 아이디어, 유망한 안, 논점, 다음 단계</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>직접 작성한 지시를 따름</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>상대방 화자를 구분하는 중…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>상대방 화자를 구분할 수 없어 하나의 '상대방'으로 묶었습니다({0}).</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>오디오 파일은 보관되어 있습니다.</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>회의록을 만들 수 없습니다: {0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0} 회의록을 만들지 않았습니다(메뉴 → 설정 → AI).</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>{0}(으)로 회의록을 만드는 중…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>{0}(으)로 텍스트 변환 중… ({1})</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>{0}(으)로 텍스트 변환 중… ({1} {2})</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>오디오를 텍스트로 변환할 수 없습니다({0}): {1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>회의 텍스트 변환 엔진이 Gemini이지만 Gemini 자격 증명이 설정되지 않았습니다(메뉴 → 설정 → AI).</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>회의 {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>녹음 중에 앱이 종료되었습니다. 오디오 파일({0} / {1})이 일부 남아 있을 수 있습니다.</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>회의 녹음을 시작할 수 없습니다</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>음성 입력이 녹음 중입니다. 끝난 후 다시 시도하세요.</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>PC 오디오(상대방)를 녹음할 수 없습니다</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>내 목소리(마이크)만 녹음합니다. {0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>녹음을 시작할 수 없습니다: {0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>회의 녹음을 시작하지 못했습니다</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>녹음을 중지하는 중…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>회의 녹음</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>회의를 녹음했습니다</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>녹취록을 저장했습니다.</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>녹취록과 회의록을 저장했습니다.</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>회의를 녹음했습니다(일부 문제 있음)</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>녹음 후 처리에 실패했습니다: {0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>회의 녹음에 실패했습니다</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>녹음 중, 처리 중 또는 회의록을 다시 만드는 중인 회의는 삭제할 수 없습니다.</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>마이크 녹음이 중지되었습니다</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>마이크 연결이 끊기는 등의 이유로 녹음이 중지되어 회의 녹음을 중지합니다.</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>나</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>상대방</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>화자 {0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>동석자 {0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — 녹취록</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- 일시: {0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- 길이: {0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — 메모</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>'중요' 표시가 없습니다. 녹음 중에 '★ 중요' 또는 바로 가기 키로 표시를 추가하면 그 전후의 대화가 여기에 표시됩니다.</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>중요</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>이 표시 전후(30초 전~15초 후)에 발언이 없습니다.</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>올바른 표기가 비어 있어 바꾸지 않습니다.</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>'{0}'은(는) 한 글자이므로 사용하지 않습니다(다른 단어의 일부와 일치하기 쉽기 때문).</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>'{0}'이(가) 위의 줄에도 있으므로 위의 줄을 사용합니다.</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>Whisper 모델({0})을 아직 다운로드하지 않았습니다. 메뉴 → 설정 → 일반에서 다운로드하세요.</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>Whisper를 실행할 수 없습니다. Microsoft Visual C++ 재배포 가능 패키지(2015–2022, x64)를 설치한 후 다시 시도하세요. ({0})</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>Whisper 모델을 불러올 수 없습니다: {0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>화자 분리 모델을 다운로드하는 중… ({0} / {1} MB)</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>화자 분리 모델의 샘플 레이트가 예상과 다릅니다({0} Hz).</value>
+  </data>
+</root>

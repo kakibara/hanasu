@@ -238,7 +238,7 @@
   - CLAUDE.md と docs/README.md に、この決まりが書いてある。
 - 出典: ユーザーの依頼（2026-11-05）「今後の機能追加の際も全ての言語に対応させるようにして。多言語担当は専用の skill と agent を用意しておくと良さそう」
 - 対象: Mac / Windows
-- 実装の場所: `scripts/check-i18n.py`、`scripts/i18n-strings.py`、`.github/workflows/spec.yml`、`.claude/skills/i18n/SKILL.md`、`.claude/agents/i18n.md`
+- 実装の場所: `scripts/check-i18n.py`、`scripts/i18n-strings.py`（Mac の UI）、`scripts/i18n-resx.py`（Windows の UI）、`.github/workflows/spec.yml`、`.claude/skills/i18n/SKILL.md`、`.claude/agents/i18n.md`
 - 確かめ方: `python3 scripts/check-i18n.py`（UI の文字列では、tr() で包んでいない日本語の文字列と、訳のないキーも見つける）
 
 ---

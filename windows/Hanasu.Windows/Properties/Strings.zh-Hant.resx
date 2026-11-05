@@ -1,0 +1,919 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_AlreadyRunning" xml:space="preserve">
+    <value>Hanasu 已在執行中。您可以從通知區域中的圖示使用。</value>
+  </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>最近的結果</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>開啟會議筆記</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>開啟歷程記錄…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>設定…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>結束</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>停止錄音並輸入</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>開始語音輸入</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>停止錄製會議（{0}）</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>正在開始錄製會議…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>正在處理會議錄製…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>開始錄製會議</value>
+  </data>
+  <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
+    <value>Hanasu — 正在錄製會議 {0}</value>
+  </data>
+  <data name="Tray_Tip_MeetingProcessing" xml:space="preserve">
+    <value>Hanasu — 正在處理會議</value>
+  </data>
+  <data name="Tray_Tip_Recording" xml:space="preserve">
+    <value>Hanasu — 錄音中</value>
+  </data>
+  <data name="Tray_Tip_Processing" xml:space="preserve">
+    <value>Hanasu — 處理中</value>
+  </data>
+  <data name="Tray_RecentEmpty" xml:space="preserve">
+    <value>（尚無）</value>
+  </data>
+  <data name="Tray_RecentTip" xml:space="preserve">
+    <value>{0}
+結果：{1}
+原文：{2}</value>
+  </data>
+  <data name="Tray_RecentHint" xml:space="preserve">
+    <value>按一下即可複製到剪貼簿</value>
+  </data>
+  <data name="Tray_OpenAllHistory" xml:space="preserve">
+    <value>開啟所有歷程記錄…</value>
+  </data>
+  <data name="Balloon_Started" xml:space="preserve">
+    <value>Hanasu 已啟動</value>
+  </data>
+  <data name="Balloon_StartedBody" xml:space="preserve">
+    <value>按 {0} 進行語音輸入，按 {1} 進行「{2}」。</value>
+  </data>
+  <data name="Balloon_HotKeyFailed" xml:space="preserve">
+    <value>無法註冊快速鍵</value>
+  </data>
+  <data name="Balloon_HotKeyFailedBody" xml:space="preserve">
+    <value>{0} 已被其他應用程式使用。請在設定 → 一般中選擇其他按鍵。</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailed" xml:space="preserve">
+    <value>無法註冊「重要」快速鍵</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailedBody" xml:space="preserve">
+    <value>{0} 已被其他應用程式使用。請使用會議筆記中的「★ 重要」按鈕，或在設定 → 會議中選擇其他按鍵。</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>、</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>已複製</value>
+  </data>
+  <data name="Quit_MeetingInProgress" xml:space="preserve">
+    <value>正在錄製會議（或正在進行錄製後的處理）。如果結束，將不會為此會議建立逐字稿和會議記錄（音訊檔案會保留）。仍要結束嗎？</value>
+  </data>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>尚未設定 Windows Hello（請在 Windows 設定 → 帳戶 → 登入選項中設定 PIN 等）。</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Windows Hello 驗證已取消，因此無法讀取 API 金鑰。</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Windows Hello 驗證失敗（{0}）。</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>找不到 Windows Hello 金鑰（Windows Hello 可能已重新設定）。請在設定 → AI 中重新輸入 API 金鑰。</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>無法開啟 Windows Hello 金鑰（{0}）。</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Windows Hello 驗證已取消。</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>無法建立 Windows Hello 金鑰（{0}）。</value>
+  </data>
+  <data name="Mic_NotFound" xml:space="preserve">
+    <value>找不到麥克風。請在 Windows 設定 → 系統 → 音效中確認麥克風是否已連接。</value>
+  </data>
+  <data name="Mic_AccessDenied" xml:space="preserve">
+    <value>不允許存取麥克風。請在 Windows 設定 → 隱私權與安全性 → 麥克風中開啟「讓桌面應用程式存取您的麥克風」。</value>
+  </data>
+  <data name="Mic_StartFailed" xml:space="preserve">
+    <value>無法開始使用麥克風錄音：{0}</value>
+  </data>
+  <data name="Output_NotFound" xml:space="preserve">
+    <value>找不到音訊輸出裝置（喇叭或耳機）。</value>
+  </data>
+  <data name="Loopback_StartFailed" xml:space="preserve">
+    <value>無法開始錄製電腦音訊：{0}</value>
+  </data>
+  <data name="Speech_LanguageNotInstalled" xml:space="preserve">
+    <value>Windows 中未安裝{0}的語音辨識。請在 Windows 設定 → 時間與語言 → 語言與地區中，開啟{0}的「…」→「語言選項」，新增語音辨識。或在設定中將轉錄引擎改為 Whisper 或 Gemini。</value>
+  </data>
+  <data name="Speech_LanguageNotSupported" xml:space="preserve">
+    <value>Windows 聽寫不支援此語言。請在設定中將轉錄引擎改為 Whisper 或 Gemini。</value>
+  </data>
+  <data name="Speech_MicUnavailable" xml:space="preserve">
+    <value>無法使用麥克風。請檢查 Windows 的預設麥克風。</value>
+  </data>
+  <data name="Speech_NetworkFailure" xml:space="preserve">
+    <value>Windows 語音辨識無法連線到網路。請檢查網際網路連線。</value>
+  </data>
+  <data name="Speech_StartFailed" xml:space="preserve">
+    <value>無法啟動 Windows 語音辨識（{0}）。</value>
+  </data>
+  <data name="Speech_OnlineRecognitionOff" xml:space="preserve">
+    <value>若要使用 Windows 語音辨識，請在 Windows 設定 → 隱私權與安全性 → 語音中開啟「線上語音辨識」。如果不想開啟，請在設定中將轉錄引擎改為 Whisper。</value>
+  </data>
+  <data name="Speech_Error" xml:space="preserve">
+    <value>Windows 語音辨識發生錯誤：{0}</value>
+  </data>
+  <data name="Hud_LanguageSwitch_Tip" xml:space="preserve">
+    <value>以停止錄音時所選的語言輸入</value>
+  </data>
+  <data name="Hud_SpokenLanguage" xml:space="preserve">
+    <value>原語言</value>
+  </data>
+  <data name="Hud_Stop_Tip" xml:space="preserve">
+    <value>停止錄音並輸入文字（與再按一次快速鍵相同）</value>
+  </data>
+  <data name="Hud_Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="Hud_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Hud_Cancel_Tip" xml:space="preserve">
+    <value>不輸入任何內容並取消（Esc）</value>
+  </data>
+  <data name="Hud_Close" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+  <data name="Hud_Close_Tip" xml:space="preserve">
+    <value>關閉此面板（按一下文字後也可按 Esc 關閉）</value>
+  </data>
+  <data name="Hud_Copy_Tip" xml:space="preserve">
+    <value>將文字複製到剪貼簿</value>
+  </data>
+  <data name="Hud_Copy" xml:space="preserve">
+    <value>複製</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>語音輸入歷程記錄 — Hanasu</value>
+  </data>
+  <data name="History_FilterAll" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="History_FilterUnrefined" xml:space="preserve">
+    <value>失敗/未潤飾</value>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>搜尋</value>
+  </data>
+  <data name="History_Search_Tip" xml:space="preserve">
+    <value>在結果、原文和目標應用程式中搜尋。以空格分隔多個字詞，可找出包含所有字詞的項目。</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+  <data name="History_DeleteAll" xml:space="preserve">
+    <value>全部刪除…</value>
+  </data>
+  <data name="OpenSaveFolder" xml:space="preserve">
+    <value>開啟儲存資料夾</value>
+  </data>
+  <data name="History_CopyResult" xml:space="preserve">
+    <value>複製結果</value>
+  </data>
+  <data name="History_CopyOriginal" xml:space="preserve">
+    <value>複製原文</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="History_ResultLabel" xml:space="preserve">
+    <value>結果（輸入的文字）</value>
+  </data>
+  <data name="History_OriginalLabel" xml:space="preserve">
+    <value>原文（逐字稿）</value>
+  </data>
+  <data name="Hud_CopyFailed" xml:space="preserve">
+    <value>無法複製</value>
+  </data>
+  <data name="HotKeyBox_Prompt" xml:space="preserve">
+    <value>請按下按鍵（按 Esc 取消）…</value>
+  </data>
+  <data name="Separator" xml:space="preserve">
+    <value> · </value>
+  </data>
+  <data name="WideSeparator" xml:space="preserve">
+    <value>   </value>
+  </data>
+  <data name="History_Unrefined" xml:space="preserve">
+    <value>未潤飾</value>
+  </data>
+  <data name="History_Kept" xml:space="preserve">
+    <value>最多保留 {0}、{1} 筆（設定 → 歷程記錄）。</value>
+  </data>
+  <data name="History_NotSaved" xml:space="preserve">
+    <value>歷程記錄不會儲存到檔案。只在記憶體中保留最近 10 筆（設定 → 歷程記錄）。</value>
+  </data>
+  <data name="History_Count" xml:space="preserve">
+    <value>{0} 筆。{1}</value>
+  </data>
+  <data name="History_CountFiltered" xml:space="preserve">
+    <value>{0} / {1} 筆。{2}</value>
+  </data>
+  <data name="History_Selected" xml:space="preserve">
+    <value>已選取 {0} 筆（按 Delete 鍵或按一下「刪除」可一併刪除）</value>
+  </data>
+  <data name="History_App" xml:space="preserve">
+    <value>應用程式：{0}</value>
+  </data>
+  <data name="History_Model" xml:space="preserve">
+    <value>模型：{0}</value>
+  </data>
+  <data name="CopyFailedClipboardBusy" xml:space="preserve">
+    <value>無法複製（其他應用程式正在使用剪貼簿）</value>
+  </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>要刪除選取的 {0} 筆歷程記錄嗎？</value>
+  </data>
+  <data name="History_ConfirmDeleteAll" xml:space="preserve">
+    <value>要刪除全部 {0} 筆語音輸入歷程記錄嗎？此動作無法復原。</value>
+  </data>
+  <data name="Meeting_Title" xml:space="preserve">
+    <value>會議筆記 — Hanasu</value>
+  </data>
+  <data name="Meeting_Stop" xml:space="preserve">
+    <value>■ 停止</value>
+  </data>
+  <data name="Meeting_Recording" xml:space="preserve">
+    <value>● 錄製中</value>
+  </data>
+  <data name="Meeting_MicLabel" xml:space="preserve">
+    <value>我（麥克風）</value>
+  </data>
+  <data name="Meeting_OutputLabel" xml:space="preserve">
+    <value>對方（此輸出裝置播放的聲音）</value>
+  </data>
+  <data name="Meeting_TemplateLabel" xml:space="preserve">
+    <value>會議記錄範本</value>
+  </data>
+  <data name="Meeting_Start" xml:space="preserve">
+    <value>● 開始錄製會議</value>
+  </data>
+  <data name="Meeting_MoveToRecycleBin" xml:space="preserve">
+    <value>移至資源回收筒…</value>
+  </data>
+  <data name="Meeting_Empty" xml:space="preserve">
+    <value>請從左側清單選擇會議，或按一下左下角的「開始錄製會議」開始錄製。</value>
+  </data>
+  <data name="Meeting_TitleEdit_Tip" xml:space="preserve">
+    <value>按一下即可變更標題（按 Enter 儲存，按 Esc 取消）</value>
+  </data>
+  <data name="Meeting_Regenerate" xml:space="preserve">
+    <value>重新建立會議記錄</value>
+  </data>
+  <data name="Meeting_TemplateShort" xml:space="preserve">
+    <value>範本：</value>
+  </data>
+  <data name="Meeting_CopyMarkdown" xml:space="preserve">
+    <value>複製 Markdown</value>
+  </data>
+  <data name="Meeting_OpenInExplorer" xml:space="preserve">
+    <value>在檔案總管中開啟</value>
+  </data>
+  <data name="Meeting_SpeakersLabel" xml:space="preserve">
+    <value>說話者名稱（用於顯示逐字稿和會議記錄）</value>
+  </data>
+  <data name="Meeting_UndoHighlight_Tip" xml:space="preserve">
+    <value>加上標記後的 10 秒內，可以取消誤加的標記</value>
+  </data>
+  <data name="Meeting_Highlight" xml:space="preserve">
+    <value>★ 重要</value>
+  </data>
+  <data name="Meeting_AddNote" xml:space="preserve">
+    <value>新增筆記</value>
+  </data>
+  <data name="Meeting_NoteHint" xml:space="preserve">
+    <value>按 Enter 新增筆記（時間為開始輸入的時刻）。如果在輸入中按「重要」，輸入的文字會成為該標記的說明。</value>
+  </data>
+  <data name="Meeting_Tab_Minutes" xml:space="preserve">
+    <value>會議記錄</value>
+  </data>
+  <data name="Meeting_Tab_Transcript" xml:space="preserve">
+    <value>逐字稿</value>
+  </data>
+  <data name="Meeting_Tab_Highlights" xml:space="preserve">
+    <value>重要</value>
+  </data>
+  <data name="Meeting_Tab_Notes" xml:space="preserve">
+    <value>筆記</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>儲存</value>
+  </data>
+  <data name="Meeting_SaveAndRegenerate" xml:space="preserve">
+    <value>儲存並重新建立會議記錄</value>
+  </data>
+  <data name="Meeting_NotesHint" xml:space="preserve">
+    <value>每行一筆。「[12:34] 內容」是筆記，「[12:40] ★ 說明」是「重要」標記，沒有時間的行是錄製後補充的筆記。</value>
+  </data>
+  <data name="Meeting_Me" xml:space="preserve">
+    <value>我</value>
+  </data>
+  <data name="Meeting_Others" xml:space="preserve">
+    <value>對方</value>
+  </data>
+  <data name="Meeting_Status_Processing" xml:space="preserve">
+    <value>處理中</value>
+  </data>
+  <data name="Meeting_Status_Failed" xml:space="preserve">
+    <value>失敗</value>
+  </data>
+  <data name="Meeting_Status_Warning" xml:space="preserve">
+    <value>有警告</value>
+  </data>
+  <data name="Meeting_SavedIn" xml:space="preserve">
+    <value>儲存位置：{0}</value>
+  </data>
+  <data name="Meeting_MinutesAfterRecording" xml:space="preserve">
+    <value>停止錄製後，會在轉錄完成後建立會議記錄。</value>
+  </data>
+  <data name="Meeting_Processing" xml:space="preserve">
+    <value>正在處理…</value>
+  </data>
+  <data name="Meeting_NoMinutesYet" xml:space="preserve">
+    <value>尚無會議記錄。可以按「重新建立會議記錄」來建立（需要在設定 → AI 中設定「會議」的 AI）。</value>
+  </data>
+  <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
+    <value>停止錄製後才會進行轉錄。</value>
+  </data>
+  <data name="Meeting_NoTranscriptYet" xml:space="preserve">
+    <value>沒有逐字稿。</value>
+  </data>
+  <data name="Meeting_RecordingNote" xml:space="preserve">
+    <value>停止錄製後才會使用 {0} 進行轉錄（以減輕會議期間電腦的負擔）。</value>
+  </data>
+  <data name="Meeting_SpeakerName_Inferred_Tip" xml:space="preserve">
+    <value>{0} 的名稱（根據對話推測；若有錯誤請更正）</value>
+  </data>
+  <data name="Meeting_SpeakerName_Tip" xml:space="preserve">
+    <value>{0} 的名稱</value>
+  </data>
+  <data name="Meeting_Inferred" xml:space="preserve">
+    <value>推測</value>
+  </data>
+  <data name="Meeting_SpeakerNamesSaved" xml:space="preserve">
+    <value>已儲存說話者名稱</value>
+  </data>
+  <data name="Meeting_TitleSaved" xml:space="preserve">
+    <value>已儲存標題</value>
+  </data>
+  <data name="Meeting_SaveFailed" xml:space="preserve">
+    <value>無法儲存：{0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>要將會議記錄範本變更為「{0}」並重新建立會議記錄嗎？</value>
+  </data>
+  <data name="Meeting_Regenerated" xml:space="preserve">
+    <value>已重新建立會議記錄（{0} 秒）</value>
+  </data>
+  <data name="Meeting_NoTranscript" xml:space="preserve">
+    <value>沒有逐字稿</value>
+  </data>
+  <data name="Meeting_NoNotes" xml:space="preserve">
+    <value>沒有筆記</value>
+  </data>
+  <data name="Meeting_NoMinutes" xml:space="preserve">
+    <value>沒有會議記錄</value>
+  </data>
+  <data name="Meeting_CopiedTranscript" xml:space="preserve">
+    <value>已將逐字稿複製為 Markdown</value>
+  </data>
+  <data name="Meeting_CopiedNotes" xml:space="preserve">
+    <value>已將筆記複製為 Markdown</value>
+  </data>
+  <data name="Meeting_CopiedMinutes" xml:space="preserve">
+    <value>已將會議記錄複製為 Markdown</value>
+  </data>
+  <data name="CopyFailed" xml:space="preserve">
+    <value>無法複製：{0}</value>
+  </data>
+  <data name="Meeting_ConfirmDelete" xml:space="preserve">
+    <value>要刪除「{0}」嗎？
+
+會議記錄、逐字稿、筆記和音訊都會移至資源回收筒。您可以從資源回收筒還原。</value>
+  </data>
+  <data name="Meeting_ConfirmDelete_Title" xml:space="preserve">
+    <value>刪除會議 — Hanasu</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>無法刪除：{0}</value>
+  </data>
+  <data name="Meeting_MovedToRecycleBin" xml:space="preserve">
+    <value>已將「{0}」移至資源回收筒</value>
+  </data>
+  <data name="Meeting_NotesWhileRecording" xml:space="preserve">
+    <value>錄製期間，請在上方的筆記欄新增筆記（錄製後可以編輯此索引標籤）。</value>
+  </data>
+  <data name="Meeting_NotesSaved" xml:space="preserve">
+    <value>已儲存筆記</value>
+  </data>
+  <data name="Meeting_UndoHighlight" xml:space="preserve">
+    <value>取消 ★（剩餘 {0} 秒）</value>
+  </data>
+  <data name="Meeting_Starting" xml:space="preserve">
+    <value>正在開始錄製…</value>
+  </data>
+  <data name="Meeting_PostProcessing" xml:space="preserve">
+    <value>正在進行錄製後的處理</value>
+  </data>
+  <data name="Meeting_StopHint" xml:space="preserve">
+    <value>也可以按 {0} 停止</value>
+  </data>
+  <data name="Meeting_StartHint" xml:space="preserve">
+    <value>也可以按 {0} 開始。開始前請先告知其他與會者您將進行錄音。</value>
+  </data>
+  <data name="Device_DefaultMic" xml:space="preserve">
+    <value>Windows 預設麥克風</value>
+  </data>
+  <data name="Device_MissingMic" xml:space="preserve">
+    <value>（先前選擇的麥克風，目前未連接）</value>
+  </data>
+  <data name="Device_DefaultOutput" xml:space="preserve">
+    <value>Windows 預設輸出裝置</value>
+  </data>
+  <data name="Device_MissingOutput" xml:space="preserve">
+    <value>（先前選擇的輸出裝置，目前未連接）</value>
+  </data>
+  <data name="MeetingMic_StartFailed" xml:space="preserve">
+    <value>無法開始麥克風錄音：{0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Hanasu 設定</value>
+  </data>
+  <data name="Settings_SavedImmediately" xml:space="preserve">
+    <value>變更會立即儲存</value>
+  </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="Settings_Shortcuts" xml:space="preserve">
+    <value>快速鍵</value>
+  </data>
+  <data name="Settings_Dictation" xml:space="preserve">
+    <value>語音輸入</value>
+  </data>
+  <data name="Settings_ResetToDefault" xml:space="preserve">
+    <value>還原為預設值</value>
+  </data>
+  <data name="Settings_TranslateAndType" xml:space="preserve">
+    <value>翻譯並輸入</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>按一下欄位，然後按下想使用的按鍵組合。錄音期間按 Esc 可取消。Alt + Space（視窗功能表）和 Win + H（Windows 語音輸入）由 Windows 使用，因此會避開。</value>
+  </data>
+  <data name="Settings_TranslationLanguages" xml:space="preserve">
+    <value>翻譯語言</value>
+  </data>
+  <data name="Settings_TranslateEnglish" xml:space="preserve">
+    <value>英文</value>
+  </data>
+  <data name="Settings_TranslateJapanese" xml:space="preserve">
+    <value>日文</value>
+  </data>
+  <data name="Settings_TranslationNote" xml:space="preserve">
+    <value>「翻譯並輸入」快速鍵會譯為所選語言中最左邊的語言。錄音期間，可以在 HUD 中切換「原語言」與所選語言（以停止時所選的語言輸入）。翻譯會使用「AI」索引標籤中為語音輸入選擇的 AI。請至少選擇一種。</value>
+  </data>
+  <data name="Settings_RecordingMode" xml:space="preserve">
+    <value>錄音方式</value>
+  </data>
+  <data name="Settings_Toggle" xml:space="preserve">
+    <value>每按一次開始/停止（切換）</value>
+  </data>
+  <data name="Settings_PushToTalk" xml:space="preserve">
+    <value>只在按住時錄音</value>
+  </data>
+  <data name="Settings_Engine" xml:space="preserve">
+    <value>轉錄引擎</value>
+  </data>
+  <data name="Settings_Engine_Windows" xml:space="preserve">
+    <value>Windows 語音辨識（預設）</value>
+  </data>
+  <data name="Settings_Engine_Whisper" xml:space="preserve">
+    <value>Whisper（在此電腦上執行）</value>
+  </data>
+  <data name="Settings_Engine_Gemini" xml:space="preserve">
+    <value>Gemini（將音訊傳送給 Google）</value>
+  </data>
+  <data name="Settings_Engine_WindowsNote" xml:space="preserve">
+    <value>使用 Windows 語音辨識（聽寫）辨識語音，並在您說話時顯示中間結果。由於使用 Microsoft 的線上語音辨識，請在 Windows 設定 → 隱私權與安全性 → 語音中開啟「線上語音辨識」。使用 Windows 預設麥克風（不使用下方的選擇）。</value>
+  </data>
+  <data name="Settings_OpenSpeechSettings" xml:space="preserve">
+    <value>開啟語音設定</value>
+  </data>
+  <data name="Settings_OpenLanguageSettings" xml:space="preserve">
+    <value>開啟語言設定</value>
+  </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>使用 whisper.cpp 在此電腦上轉錄（音訊不會離開您的電腦）。停止錄音後才進行轉錄。選擇模型後會從 Hugging Face 下載。模型越大越準確，但速度越慢。</value>
+  </data>
+  <data name="Settings_Model" xml:space="preserve">
+    <value>模型</value>
+  </data>
+  <data name="Settings_Download" xml:space="preserve">
+    <value>下載</value>
+  </data>
+  <data name="Settings_CancelDownload" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Settings_Engine_GeminiNote" xml:space="preserve">
+    <value>將錄製的音訊傳送到 Google 的 Gemini API 進行轉錄（使用「AI」索引標籤中設定的 Gemini 認證資訊和語音輸入的 Gemini 模型）。請注意，您的音訊會傳送給 Google。停止錄音後才傳送（每次最長 7 分鐘）。</value>
+  </data>
+  <data name="Settings_Microphone" xml:space="preserve">
+    <value>麥克風</value>
+  </data>
+  <data name="Settings_NoTarget" xml:space="preserve">
+    <value>沒有可輸入的位置時</value>
+  </data>
+  <data name="Settings_NoTargetNote" xml:space="preserve">
+    <value>如果沒有文字欄位取得焦點（例如桌面在最前面），或最前面的應用程式以系統管理員身分執行而無法貼上，結果會顯示在畫面下方。面板會持續顯示直到您關閉，可按一下「複製」或選取文字來複製。</value>
+  </data>
+  <data name="Settings_Fallback_Keep" xml:space="preserve">
+    <value>同時放入剪貼簿（只要在要輸入的位置按 Ctrl+V）</value>
+  </data>
+  <data name="Settings_Fallback_Restore" xml:space="preserve">
+    <value>只顯示，不變更剪貼簿（用面板上的「複製」來複製）</value>
+  </data>
+  <data name="Settings_Other" xml:space="preserve">
+    <value>其他</value>
+  </data>
+  <data name="Settings_PlaySounds" xml:space="preserve">
+    <value>開始和停止錄音時播放音效</value>
+  </data>
+  <data name="Settings_OpenLogs" xml:space="preserve">
+    <value>開啟記錄檔資料夾</value>
+  </data>
+  <data name="Settings_OpenSettingsFolder" xml:space="preserve">
+    <value>開啟設定資料夾</value>
+  </data>
+  <data name="Settings_AiAndModels" xml:space="preserve">
+    <value>AI 與模型</value>
+  </data>
+  <data name="Settings_Ai_Dictation" xml:space="preserve">
+    <value>語音輸入（潤飾、翻譯）</value>
+  </data>
+  <data name="Settings_Ai_Local" xml:space="preserve">
+    <value>本機</value>
+  </data>
+  <data name="Settings_Ai_Meeting" xml:space="preserve">
+    <value>會議（會議記錄）</value>
+  </data>
+  <data name="Settings_AiNote" xml:space="preserve">
+    <value>可以分別為語音輸入和會議選擇 AI 與模型。預設值：Gemini 為 gemini-3.5-flash-lite（語音輸入）和 gemini-3.8-flash（會議記錄），Claude 為 Haiku 5.5（語音輸入）和 Sonnet 5.5（會議記錄）。Claude 只用於處理文字，不用於轉錄音訊（轉錄引擎位於「一般」和「會議」索引標籤）。</value>
+  </data>
+  <data name="Settings_LocalModels" xml:space="preserve">
+    <value>本機模型（在此電腦上執行的小型 LLM）</value>
+  </data>
+  <data name="Settings_LocalModelsNote" xml:space="preserve">
+    <value>文字只在此電腦上處理，絕不會透過網際網路傳送。請先下載要使用的模型。模型在 CPU 上執行，因此潤飾需要數秒到十幾秒，會議記錄需要數分鐘到十幾分鐘。</value>
+  </data>
+  <data name="Settings_Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="Settings_Refine" xml:space="preserve">
+    <value>使用 AI 潤飾（修正辨識錯誤、贅詞、口誤更正和標點）</value>
+  </data>
+  <data name="Settings_RefineNote" xml:space="preserve">
+    <value>關閉時，只會對辨識出的文字套用字典取代後輸入。翻譯只能由 AI 進行，因此即使關閉此項，翻譯時仍會傳送給 AI。</value>
+  </data>
+  <data name="Settings_RefineLanguage" xml:space="preserve">
+    <value>潤飾語言</value>
+  </data>
+  <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
+    <value>原語言</value>
+  </data>
+  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
+    <value>一律使用日文</value>
+  </data>
+  <data name="Settings_SendAppName" xml:space="preserve">
+    <value>將正在輸入的應用程式名稱告知 AI（以配合其風格）</value>
+  </data>
+  <data name="Settings_GeminiAuth" xml:space="preserve">
+    <value>Gemini 驗證</value>
+  </data>
+  <data name="Settings_Auth_ApiKey" xml:space="preserve">
+    <value>API 金鑰（Google AI Studio）</value>
+  </data>
+  <data name="Settings_Auth_ServiceAccount" xml:space="preserve">
+    <value>服務帳戶（Vertex AI）</value>
+  </data>
+  <data name="Settings_ApiKey" xml:space="preserve">
+    <value>API 金鑰</value>
+  </data>
+  <data name="Settings_KeyJson" xml:space="preserve">
+    <value>金鑰（JSON）</value>
+  </data>
+  <data name="Settings_Browse" xml:space="preserve">
+    <value>瀏覽…</value>
+  </data>
+  <data name="Settings_Region" xml:space="preserve">
+    <value>區域</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>請選擇具有 Vertex AI 使用者角色（roles/aiplatform.user）之服務帳戶的金鑰。只會儲存金鑰檔案的位置（不會複製其內容）。請將金鑰檔案放在他人無法讀取的位置。預設區域為 global。</value>
+  </data>
+  <data name="Settings_ClaudeApiKey" xml:space="preserve">
+    <value>Claude API 金鑰</value>
+  </data>
+  <data name="Settings_TestConnection" xml:space="preserve">
+    <value>測試連線</value>
+  </data>
+  <data name="Settings_ClaudeNote" xml:space="preserve">
+    <value>輸入在 Claude Console（platform.claude.com）建立的 API 金鑰。已儲存的金鑰不會顯示在畫面上（只顯示最後 4 個字元）。「測試連線」只會取得模型資訊，不會產生費用。</value>
+  </data>
+  <data name="Settings_KeyProtection" xml:space="preserve">
+    <value>API 金鑰保護</value>
+  </data>
+  <data name="Settings_UseHello" xml:space="preserve">
+    <value>使用 Windows Hello 保護 API 金鑰（使用時以 PIN、臉部或指紋驗證）</value>
+  </data>
+  <data name="Settings_KeyProtectionNote" xml:space="preserve">
+    <value>金鑰會加密儲存在 %LOCALAPPDATA%\Hanasu\secrets.json，而不是 settings.json。使用預設的 DPAPI 時，只有此 Windows 使用者可以讀取，但以同一使用者身分執行的其他應用程式不需確認即可讀取。使用 Windows Hello 時，其他應用程式嘗試讀取會出現 Windows Hello 驗證（啟動後第一次使用時驗證一次，鎖定畫面後會再次要求）。這無法防止以同一使用者身分執行的應用程式在 Hanasu 執行期間讀取記憶體。</value>
+  </data>
+  <data name="Settings_Trial" xml:space="preserve">
+    <value>試用（語音輸入 AI）</value>
+  </data>
+  <data name="Settings_TrialSample" xml:space="preserve">
+    <value>嗯那個明天的會議喔 呃 我打算用之前拿 gemini 做的那份簡報</value>
+  </data>
+  <data name="Settings_TryRefine" xml:space="preserve">
+    <value>試用潤飾</value>
+  </data>
+  <data name="Settings_TryEnglish" xml:space="preserve">
+    <value>試用英文翻譯</value>
+  </data>
+  <data name="Settings_TryJapanese" xml:space="preserve">
+    <value>試用日文翻譯</value>
+  </data>
+  <data name="Settings_Tab_Meetings" xml:space="preserve">
+    <value>會議</value>
+  </data>
+  <data name="Settings_MeetingStartStop" xml:space="preserve">
+    <value>開始/停止錄製</value>
+  </data>
+  <data name="Settings_HighlightMark" xml:space="preserve">
+    <value>「重要」標記</value>
+  </data>
+  <data name="Settings_UseHighlightHotKey" xml:space="preserve">
+    <value>使用「重要」快速鍵（只在錄製期間有效）</value>
+  </data>
+  <data name="Settings_Transcription" xml:space="preserve">
+    <value>轉錄</value>
+  </data>
+  <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
+    <value>Whisper（在此電腦上執行；預設）</value>
+  </data>
+  <data name="Settings_MeetingEngineNote" xml:space="preserve">
+    <value>錄製期間，音訊只會寫入檔案；停止後，「我」和「對方」聲道會分別附上時間戳記進行轉錄。Windows 語音辨識只能收聽 Windows 預設麥克風，無法取得電腦音訊（對方），因此無法用於會議。</value>
+  </data>
+  <data name="Settings_Speakers" xml:space="preserve">
+    <value>說話者</value>
+  </data>
+  <data name="Settings_Diarize" xml:space="preserve">
+    <value>區分對方的說話者（說話者 1、說話者 2…）</value>
+  </data>
+  <data name="Settings_DiarizeNote" xml:space="preserve">
+    <value>使用 sherpa-onnx（pyannote 與 3D-Speaker 模型）在此電腦上區分說話者。第一次使用時會下載模型（約 34 MB）。關閉時，對方會合併為一位「對方」。您可以在會議筆記中重新命名說話者。</value>
+  </data>
+  <data name="Settings_Minutes" xml:space="preserve">
+    <value>會議記錄</value>
+  </data>
+  <data name="Settings_MakeMinutes" xml:space="preserve">
+    <value>錄製後使用 AI 建立會議記錄</value>
+  </data>
+  <data name="Settings_MinutesNote" xml:space="preserve">
+    <value>在「AI」索引標籤的「會議（會議記錄）」中選擇會議記錄的 AI 與模型。只會傳送逐字稿文字（轉錄引擎為 Gemini 時，音訊也會傳送給 Google）。會議記錄範本請在會議筆記中選擇。</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>儲存</value>
+  </data>
+  <data name="Settings_KeepAudio" xml:space="preserve">
+    <value>處理後保留音訊檔案（me.wav / others.wav）</value>
+  </data>
+  <data name="Settings_KeepAudioNote" xml:space="preserve">
+    <value>關閉時，建立逐字稿和會議記錄後會刪除音訊（轉錄失敗時會保留）。格式為 16 kHz 單聲道 WAV，每個聲道每小時約 115 MB。</value>
+  </data>
+  <data name="Settings_SaveLocation" xml:space="preserve">
+    <value>儲存位置</value>
+  </data>
+  <data name="Settings_Open" xml:space="preserve">
+    <value>開啟</value>
+  </data>
+  <data name="Settings_MeetingsFolderNote" xml:space="preserve">
+    <value>每場會議都會建立一個以日期和時間命名的資料夾，其中包含 meeting.json（與 Mac 版格式相同）、transcript.md、minutes.md、notes.md 和音訊。</value>
+  </data>
+  <data name="Settings_ConsentNote" xml:space="preserve">
+    <value>錄音前請先取得其他與會者的同意。使用耳機可避免對方的聲音傳入您的麥克風。</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>歷程記錄</value>
+  </data>
+  <data name="Settings_DictationHistory" xml:space="preserve">
+    <value>語音輸入歷程記錄</value>
+  </data>
+  <data name="Settings_SaveHistory" xml:space="preserve">
+    <value>將歷程記錄儲存到檔案</value>
+  </data>
+  <data name="Settings_HistoryNote" xml:space="preserve">
+    <value>保留語音輸入結果和原始逐字稿，讓您可以透過「開啟歷程記錄」搜尋和複製。關閉時，新結果不會寫入檔案；只在記憶體中保留最近 10 筆，供通知區域選單中的「最近的結果」使用（已儲存的歷程記錄不會刪除）。</value>
+  </data>
+  <data name="Settings_KeepDays" xml:space="preserve">
+    <value>保留天數</value>
+  </data>
+  <data name="Settings_KeepCount" xml:space="preserve">
+    <value>保留筆數</value>
+  </data>
+  <data name="Settings_KeepNote" xml:space="preserve">
+    <value>只保留同時符合兩項限制的項目，並從最舊的開始刪除（新增時、啟動時以及變更這些設定時）。預設值為 30 天和 1,000 筆。</value>
+  </data>
+  <data name="Settings_OpenHistory" xml:space="preserve">
+    <value>開啟歷程記錄…</value>
+  </data>
+  <data name="Settings_DeleteAllHistory" xml:space="preserve">
+    <value>刪除所有歷程記錄…</value>
+  </data>
+  <data name="Settings_Tab_Dictionary" xml:space="preserve">
+    <value>字典與規則</value>
+  </data>
+  <data name="Settings_UserDictionary" xml:space="preserve">
+    <value>使用者字典</value>
+  </data>
+  <data name="Settings_TryReplace" xml:space="preserve">
+    <value>試用取代</value>
+  </data>
+  <data name="Settings_ExtraRules" xml:space="preserve">
+    <value>額外的潤飾規則</value>
+  </data>
+  <data name="Settings_ExtraRulesNote" xml:space="preserve">
+    <value>潤飾時傳遞給 AI（Gemini、Claude）的規則（例如「使用正式語氣」）。譯為英文時不使用（譯為日文時會使用）。</value>
+  </data>
+  <data name="Settings_DictionaryHelp" xml:space="preserve">
+    <value>每行一個。只寫一個詞時，會告訴 AI 該詞的寫法。「辨識內容 =&gt; 寫法」會將辨識出的內容取代為該寫法（例如 stock mark =&gt; Stockmark；左側可用「,」分隔多個）。以「#」開頭的行是註解。</value>
+  </data>
+  <data name="Settings_EntryCount" xml:space="preserve">
+    <value>{0} 筆</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>已儲存</value>
+  </data>
+  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
+    <value>與其他快速鍵（語音輸入、翻譯或會議）相同</value>
+  </data>
+  <data name="Settings_MicNote_Windows" xml:space="preserve">
+    <value>Windows 引擎使用 Windows 預設麥克風（可在 Windows 設定 → 系統 → 音效中變更）。</value>
+  </data>
+  <data name="Settings_MicNote_Selected" xml:space="preserve">
+    <value>Whisper 和 Gemini 使用此處選擇的麥克風錄音（轉換為 16 kHz 單聲道）。</value>
+  </data>
+  <data name="Settings_HistoryStatus" xml:space="preserve">
+    <value>目前歷程記錄：{0} 筆（儲存位置：{1}）</value>
+  </data>
+  <data name="Settings_ConfirmDeleteWhisper" xml:space="preserve">
+    <value>要刪除 Whisper 模型 {0}（{1}）嗎？</value>
+  </data>
+  <data name="Settings_Downloading" xml:space="preserve">
+    <value>正在下載… {0}</value>
+  </data>
+  <data name="Settings_Downloaded" xml:space="preserve">
+    <value>已下載</value>
+  </data>
+  <data name="Settings_DownloadFailed" xml:space="preserve">
+    <value>失敗：{0}</value>
+  </data>
+  <data name="Settings_NotDownloaded" xml:space="preserve">
+    <value>尚未下載</value>
+  </data>
+  <data name="Settings_ConfirmDeleteLocal" xml:space="preserve">
+    <value>要刪除本機模型 {0}（{1}）嗎？</value>
+  </data>
+  <data name="Settings_MinutesAiNote" xml:space="preserve">
+    <value>會議記錄使用 {0}（{1}）建立。</value>
+  </data>
+  <data name="Settings_Missing_LocalModel" xml:space="preserve">
+    <value>本機模型「{0}」</value>
+  </data>
+  <data name="Settings_Missing_GeminiCredentials" xml:space="preserve">
+    <value>Gemini 認證資訊</value>
+  </data>
+  <data name="Settings_MissingNote" xml:space="preserve">
+    <value>尚未設定：{0}（請在下方設定或下載）。</value>
+  </data>
+  <data name="Settings_EnterApiKey" xml:space="preserve">
+    <value>請輸入 API 金鑰</value>
+  </data>
+  <data name="Settings_ClaudeKeyPrefix" xml:space="preserve">
+    <value>Claude API 金鑰以「sk-ant-」開頭。請檢查您輸入的內容。</value>
+  </data>
+  <data name="Settings_ClaudeConnecting" xml:space="preserve">
+    <value>正在連線到 Claude API…</value>
+  </data>
+  <data name="Settings_ClaudeConnectedUnsaved" xml:space="preserve">
+    <value>已使用此金鑰連線（尚未儲存）。可以使用 {0}。 </value>
+  </data>
+  <data name="Settings_ClaudeConnected" xml:space="preserve">
+    <value>已連線。可以使用 {0}。 </value>
+  </data>
+  <data name="Settings_Hello_On" xml:space="preserve">
+    <value>已使用 Windows Hello 保護。</value>
+  </data>
+  <data name="Settings_Hello_Off" xml:space="preserve">
+    <value>目前使用 DPAPI 保護。</value>
+  </data>
+  <data name="Settings_Hello_Unavailable" xml:space="preserve">
+    <value>此電腦尚未設定 Windows Hello，因此無法選擇（Windows 設定 → 帳戶 → 登入選項）。</value>
+  </data>
+  <data name="Settings_Hello_Enabling" xml:space="preserve">
+    <value>正在要求 Windows Hello 驗證（為了確認會出現兩次）…</value>
+  </data>
+  <data name="Settings_Hello_Disabling" xml:space="preserve">
+    <value>正在要求 Windows Hello 驗證（讀取一次金鑰以切換回 DPAPI）…</value>
+  </data>
+  <data name="Settings_Hello_SwitchFailed" xml:space="preserve">
+    <value>無法切換：{0}</value>
+  </data>
+  <data name="Settings_ServiceAccountFilter" xml:space="preserve">
+    <value>服務帳戶金鑰 (*.json)|*.json|所有檔案 (*.*)|*.*</value>
+  </data>
+  <data name="Settings_ServiceAccountDialogTitle" xml:space="preserve">
+    <value>選擇服務帳戶金鑰（JSON）</value>
+  </data>
+  <data name="Settings_TrialRefining" xml:space="preserve">
+    <value>正在潤飾…</value>
+  </data>
+  <data name="Settings_TrialTranslating" xml:space="preserve">
+    <value>正在翻譯…</value>
+  </data>
+  <data name="Settings_TrialDone" xml:space="preserve">
+    <value>{0}（{1}）耗時 {2} 秒</value>
+  </data>
+  <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
+    <value>錄製的會議音訊會切成每段 5 分鐘傳送給 Gemini（使用「AI」索引標籤中的 Gemini 認證資訊和語音輸入的 Gemini 模型）。請注意，您的音訊會傳送給 Google。</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
+    <value>使用在「一般」索引標籤中選擇的 Whisper 模型（{0}）。</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
+    <value> 該模型尚未下載（請在「一般」索引標籤中下載）。</value>
+  </data>
+  <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
+    <value>選擇會議的儲存位置</value>
+  </data>
+  <data name="Settings_DictionaryLineIssue" xml:space="preserve">
+    <value>第 {0} 行：{1}</value>
+  </data>
+  <data name="Settings_NoReplacements" xml:space="preserve">
+    <value>沒有取代</value>
+  </data>
+  <data name="Settings_ReplacementResult" xml:space="preserve">
+    <value>→ {0}（{1}）</value>
+  </data>
+  <data name="Settings_TrialAppName" xml:space="preserve">
+    <value>Hanasu 設定</value>
+  </data>
+  <data name="Mic_UnsupportedFormat" xml:space="preserve">
+    <value>不支援的錄音格式（{0}）</value>
+  </data>
+</root>

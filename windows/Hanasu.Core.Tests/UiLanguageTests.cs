@@ -89,6 +89,33 @@ public class UiLanguageTests
         }
     }
 
+    // 確かめ方: REQ-COM-060
+    /// <summary>16 言語のサテライトがどれも読め、英語に落ちない（地域つきのカルチャから親をたどっても）</summary>
+    [Theory]
+    [InlineData("ja-JP")]
+    [InlineData("zh-CN")]
+    [InlineData("zh-TW")]
+    [InlineData("zh-HK")]
+    [InlineData("ko-KR")]
+    [InlineData("es-ES")]
+    [InlineData("fr-FR")]
+    [InlineData("de-DE")]
+    [InlineData("it-IT")]
+    [InlineData("pt-BR")]
+    [InlineData("ru-RU")]
+    [InlineData("tr-TR")]
+    [InlineData("vi-VN")]
+    [InlineData("id-ID")]
+    [InlineData("pl-PL")]
+    [InlineData("ar-SA")]
+    [InlineData("hi-IN")]
+    public void EverySupportedLanguageHasItsOwnText(string culture)
+    {
+        var text = UiCultureFixture.With(culture, () => Strings.Hud_Recording);
+        Assert.False(string.IsNullOrWhiteSpace(text));
+        Assert.NotEqual("Recording", text);
+    }
+
     [Fact]
     public void NeutralResourcesAreEnglish()
     {

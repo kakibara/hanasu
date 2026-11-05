@@ -1,0 +1,919 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_AlreadyRunning" xml:space="preserve">
+    <value>Hanasu уже запущен. Его можно использовать через значок в области уведомлений.</value>
+  </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>Последние результаты</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>Открыть заметки встреч</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>Открыть журнал…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Параметры…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>Остановить запись и ввести</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>Начать диктовку</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>Остановить запись встречи ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Запуск записи встречи…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Обработка записи встречи…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>Начать запись встречи</value>
+  </data>
+  <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
+    <value>Hanasu — Запись встречи {0}</value>
+  </data>
+  <data name="Tray_Tip_MeetingProcessing" xml:space="preserve">
+    <value>Hanasu — Обработка встречи</value>
+  </data>
+  <data name="Tray_Tip_Recording" xml:space="preserve">
+    <value>Hanasu — Запись</value>
+  </data>
+  <data name="Tray_Tip_Processing" xml:space="preserve">
+    <value>Hanasu — Обработка</value>
+  </data>
+  <data name="Tray_RecentEmpty" xml:space="preserve">
+    <value>(Пока нет)</value>
+  </data>
+  <data name="Tray_RecentTip" xml:space="preserve">
+    <value>{0}
+Результат: {1}
+Исходный текст: {2}</value>
+  </data>
+  <data name="Tray_RecentHint" xml:space="preserve">
+    <value>Щелкните, чтобы скопировать в буфер обмена</value>
+  </data>
+  <data name="Tray_OpenAllHistory" xml:space="preserve">
+    <value>Открыть весь журнал…</value>
+  </data>
+  <data name="Balloon_Started" xml:space="preserve">
+    <value>Hanasu запущен</value>
+  </data>
+  <data name="Balloon_StartedBody" xml:space="preserve">
+    <value>Нажмите {0} для диктовки. Нажмите {1} для действия «{2}».</value>
+  </data>
+  <data name="Balloon_HotKeyFailed" xml:space="preserve">
+    <value>Не удалось зарегистрировать сочетание клавиш</value>
+  </data>
+  <data name="Balloon_HotKeyFailedBody" xml:space="preserve">
+    <value>{0} уже использует другое приложение. Выберите другое сочетание в разделе Параметры → Общие.</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailed" xml:space="preserve">
+    <value>Не удалось зарегистрировать сочетание клавиш «Важно»</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailedBody" xml:space="preserve">
+    <value>{0} уже использует другое приложение. Используйте кнопку «★ Важно» в заметках встреч или выберите другое сочетание в разделе Параметры → Встречи.</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Скопировано</value>
+  </data>
+  <data name="Quit_MeetingInProgress" xml:space="preserve">
+    <value>Идет запись встречи (или ее обработка после записи). Если выйти, расшифровка и протокол этой встречи не будут созданы (аудиофайлы сохранятся). Все равно выйти?</value>
+  </data>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>Windows Hello не настроен (настройте ПИН-код или другой способ в разделе Параметры Windows → Учетные записи → Варианты входа).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Проверка Windows Hello отменена, поэтому ключ API не удалось прочитать.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Ошибка проверки Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>Ключ Windows Hello не найден (возможно, Windows Hello был настроен заново). Снова введите ключ API в разделе Параметры → AI.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Не удалось открыть ключ Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Проверка Windows Hello отменена.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Не удалось создать ключ Windows Hello ({0}).</value>
+  </data>
+  <data name="Mic_NotFound" xml:space="preserve">
+    <value>Микрофон не найден. Проверьте, подключен ли микрофон, в разделе Параметры Windows → Система → Звук.</value>
+  </data>
+  <data name="Mic_AccessDenied" xml:space="preserve">
+    <value>Доступ к микрофону не разрешен. В разделе Параметры Windows → Конфиденциальность и защита → Микрофон включите «Разрешить классическим приложениям доступ к микрофону».</value>
+  </data>
+  <data name="Mic_StartFailed" xml:space="preserve">
+    <value>Не удалось начать запись с микрофона: {0}</value>
+  </data>
+  <data name="Output_NotFound" xml:space="preserve">
+    <value>Устройство вывода звука (динамики или наушники) не найдено.</value>
+  </data>
+  <data name="Loopback_StartFailed" xml:space="preserve">
+    <value>Не удалось начать запись звука ПК: {0}</value>
+  </data>
+  <data name="Speech_LanguageNotInstalled" xml:space="preserve">
+    <value>Распознавание речи для языка «{0}» не установлено в Windows. В разделе Параметры Windows → Время и язык → Язык и регион откройте «…» → «Параметры языка» для языка «{0}» и добавьте распознавание речи. Или выберите Whisper или Gemini для распознавания в параметрах.</value>
+  </data>
+  <data name="Speech_LanguageNotSupported" xml:space="preserve">
+    <value>Диктовка Windows не поддерживает этот язык. Выберите Whisper или Gemini для распознавания в параметрах.</value>
+  </data>
+  <data name="Speech_MicUnavailable" xml:space="preserve">
+    <value>Микрофон недоступен. Проверьте микрофон по умолчанию в Windows.</value>
+  </data>
+  <data name="Speech_NetworkFailure" xml:space="preserve">
+    <value>Распознаванию речи Windows не удалось подключиться к сети. Проверьте подключение к Интернету.</value>
+  </data>
+  <data name="Speech_StartFailed" xml:space="preserve">
+    <value>Не удалось запустить распознавание речи Windows ({0}).</value>
+  </data>
+  <data name="Speech_OnlineRecognitionOff" xml:space="preserve">
+    <value>Чтобы использовать распознавание речи Windows, включите «Распознавание речи в Интернете» в разделе Параметры Windows → Конфиденциальность и защита → Голосовые функции. Если не хотите его включать, выберите Whisper для распознавания в параметрах.</value>
+  </data>
+  <data name="Speech_Error" xml:space="preserve">
+    <value>Ошибка распознавания речи Windows: {0}</value>
+  </data>
+  <data name="Hud_LanguageSwitch_Tip" xml:space="preserve">
+    <value>Текст вводится на языке, выбранном в момент остановки записи</value>
+  </data>
+  <data name="Hud_SpokenLanguage" xml:space="preserve">
+    <value>Как сказано</value>
+  </data>
+  <data name="Hud_Stop_Tip" xml:space="preserve">
+    <value>Останавливает запись и вводит текст (как повторное нажатие сочетания клавиш)</value>
+  </data>
+  <data name="Hud_Stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="Hud_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Hud_Cancel_Tip" xml:space="preserve">
+    <value>Отменяет без ввода текста (Esc)</value>
+  </data>
+  <data name="Hud_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="Hud_Close_Tip" xml:space="preserve">
+    <value>Закрывает эту панель (после щелчка по тексту можно также нажать Esc)</value>
+  </data>
+  <data name="Hud_Copy_Tip" xml:space="preserve">
+    <value>Копирует текст в буфер обмена</value>
+  </data>
+  <data name="Hud_Copy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>Журнал диктовки — Hanasu</value>
+  </data>
+  <data name="History_FilterAll" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="History_FilterUnrefined" xml:space="preserve">
+    <value>Ошибка / без обработки</value>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="History_Search_Tip" xml:space="preserve">
+    <value>Поиск по результатам, исходному тексту и приложениям. Разделите слова пробелами, чтобы найти записи, содержащие все слова.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="History_DeleteAll" xml:space="preserve">
+    <value>Удалить все…</value>
+  </data>
+  <data name="OpenSaveFolder" xml:space="preserve">
+    <value>Открыть папку сохранения</value>
+  </data>
+  <data name="History_CopyResult" xml:space="preserve">
+    <value>Копировать результат</value>
+  </data>
+  <data name="History_CopyOriginal" xml:space="preserve">
+    <value>Копировать исходный текст</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="History_ResultLabel" xml:space="preserve">
+    <value>Результат (введенный текст)</value>
+  </data>
+  <data name="History_OriginalLabel" xml:space="preserve">
+    <value>Исходный текст (расшифровка)</value>
+  </data>
+  <data name="Hud_CopyFailed" xml:space="preserve">
+    <value>Не удалось скопировать</value>
+  </data>
+  <data name="HotKeyBox_Prompt" xml:space="preserve">
+    <value>Нажмите клавиши (Esc — отмена)…</value>
+  </data>
+  <data name="Separator" xml:space="preserve">
+    <value> · </value>
+  </data>
+  <data name="WideSeparator" xml:space="preserve">
+    <value>   </value>
+  </data>
+  <data name="History_Unrefined" xml:space="preserve">
+    <value>Без обработки</value>
+  </data>
+  <data name="History_Kept" xml:space="preserve">
+    <value>Хранение: {0}, не более записей: {1} (Параметры → Журнал).</value>
+  </data>
+  <data name="History_NotSaved" xml:space="preserve">
+    <value>Журнал не сохраняется в файл. В памяти хранятся только последние 10 записей (Параметры → Журнал).</value>
+  </data>
+  <data name="History_Count" xml:space="preserve">
+    <value>Записей: {0}. {1}</value>
+  </data>
+  <data name="History_CountFiltered" xml:space="preserve">
+    <value>Записей: {0} из {1}. {2}</value>
+  </data>
+  <data name="History_Selected" xml:space="preserve">
+    <value>Выбрано записей: {0} (нажмите Delete или «Удалить», чтобы удалить их вместе)</value>
+  </data>
+  <data name="History_App" xml:space="preserve">
+    <value>Приложение: {0}</value>
+  </data>
+  <data name="History_Model" xml:space="preserve">
+    <value>Модель: {0}</value>
+  </data>
+  <data name="CopyFailedClipboardBusy" xml:space="preserve">
+    <value>Не удалось скопировать (буфер обмена занят другим приложением)</value>
+  </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Удалить выбранные записи журнала (количество: {0})?</value>
+  </data>
+  <data name="History_ConfirmDeleteAll" xml:space="preserve">
+    <value>Удалить все записи журнала диктовки (количество: {0})? Это действие нельзя отменить.</value>
+  </data>
+  <data name="Meeting_Title" xml:space="preserve">
+    <value>Заметки встреч — Hanasu</value>
+  </data>
+  <data name="Meeting_Stop" xml:space="preserve">
+    <value>■ Стоп</value>
+  </data>
+  <data name="Meeting_Recording" xml:space="preserve">
+    <value>● Запись</value>
+  </data>
+  <data name="Meeting_MicLabel" xml:space="preserve">
+    <value>Я (микрофон)</value>
+  </data>
+  <data name="Meeting_OutputLabel" xml:space="preserve">
+    <value>Собеседники (звук, воспроизводимый на этом устройстве)</value>
+  </data>
+  <data name="Meeting_TemplateLabel" xml:space="preserve">
+    <value>Шаблон протокола</value>
+  </data>
+  <data name="Meeting_Start" xml:space="preserve">
+    <value>● Начать запись встречи</value>
+  </data>
+  <data name="Meeting_MoveToRecycleBin" xml:space="preserve">
+    <value>Переместить в корзину…</value>
+  </data>
+  <data name="Meeting_Empty" xml:space="preserve">
+    <value>Выберите встречу в списке слева или нажмите «Начать запись встречи» внизу слева, чтобы начать запись.</value>
+  </data>
+  <data name="Meeting_TitleEdit_Tip" xml:space="preserve">
+    <value>Щелкните, чтобы изменить название (Enter — сохранить, Esc — отмена)</value>
+  </data>
+  <data name="Meeting_Regenerate" xml:space="preserve">
+    <value>Создать протокол заново</value>
+  </data>
+  <data name="Meeting_TemplateShort" xml:space="preserve">
+    <value>Шаблон:</value>
+  </data>
+  <data name="Meeting_CopyMarkdown" xml:space="preserve">
+    <value>Копировать Markdown</value>
+  </data>
+  <data name="Meeting_OpenInExplorer" xml:space="preserve">
+    <value>Открыть в проводнике</value>
+  </data>
+  <data name="Meeting_SpeakersLabel" xml:space="preserve">
+    <value>Имена говорящих (используются в расшифровке и протоколе)</value>
+  </data>
+  <data name="Meeting_UndoHighlight_Tip" xml:space="preserve">
+    <value>В течение 10 секунд после добавления отметки ее можно отменить, если она добавлена по ошибке</value>
+  </data>
+  <data name="Meeting_Highlight" xml:space="preserve">
+    <value>★ Важно</value>
+  </data>
+  <data name="Meeting_AddNote" xml:space="preserve">
+    <value>Добавить заметку</value>
+  </data>
+  <data name="Meeting_NoteHint" xml:space="preserve">
+    <value>Нажмите Enter, чтобы добавить заметку (время — момент начала ввода). Если нажать «Важно» во время ввода, текст станет описанием отметки.</value>
+  </data>
+  <data name="Meeting_Tab_Minutes" xml:space="preserve">
+    <value>Протокол</value>
+  </data>
+  <data name="Meeting_Tab_Transcript" xml:space="preserve">
+    <value>Расшифровка</value>
+  </data>
+  <data name="Meeting_Tab_Highlights" xml:space="preserve">
+    <value>Важно</value>
+  </data>
+  <data name="Meeting_Tab_Notes" xml:space="preserve">
+    <value>Заметки</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Meeting_SaveAndRegenerate" xml:space="preserve">
+    <value>Сохранить и создать протокол заново</value>
+  </data>
+  <data name="Meeting_NotesHint" xml:space="preserve">
+    <value>По одной на строку. «[12:34] текст» — заметка, «[12:40] ★ описание» — отметка «Важно», строки без времени — заметки, добавленные после записи.</value>
+  </data>
+  <data name="Meeting_Me" xml:space="preserve">
+    <value>Я</value>
+  </data>
+  <data name="Meeting_Others" xml:space="preserve">
+    <value>Собеседники</value>
+  </data>
+  <data name="Meeting_Status_Processing" xml:space="preserve">
+    <value>Обработка</value>
+  </data>
+  <data name="Meeting_Status_Failed" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="Meeting_Status_Warning" xml:space="preserve">
+    <value>Есть предупреждения</value>
+  </data>
+  <data name="Meeting_SavedIn" xml:space="preserve">
+    <value>Сохранено в: {0}</value>
+  </data>
+  <data name="Meeting_MinutesAfterRecording" xml:space="preserve">
+    <value>После остановки записи и распознавания будет создан протокол.</value>
+  </data>
+  <data name="Meeting_Processing" xml:space="preserve">
+    <value>Обработка…</value>
+  </data>
+  <data name="Meeting_NoMinutesYet" xml:space="preserve">
+    <value>Протокола пока нет. Его можно создать кнопкой «Создать протокол заново» (нужны параметры ИИ для «Встреч» в разделе Параметры → AI).</value>
+  </data>
+  <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
+    <value>Распознавание выполняется после остановки записи.</value>
+  </data>
+  <data name="Meeting_NoTranscriptYet" xml:space="preserve">
+    <value>Расшифровки нет.</value>
+  </data>
+  <data name="Meeting_RecordingNote" xml:space="preserve">
+    <value>Распознавание с помощью {0} выполняется после остановки записи (чтобы снизить нагрузку на ПК во время встречи).</value>
+  </data>
+  <data name="Meeting_SpeakerName_Inferred_Tip" xml:space="preserve">
+    <value>Имя для «{0}» (определено по разговору; исправьте, если оно неверно)</value>
+  </data>
+  <data name="Meeting_SpeakerName_Tip" xml:space="preserve">
+    <value>Имя для «{0}»</value>
+  </data>
+  <data name="Meeting_Inferred" xml:space="preserve">
+    <value>Предположение</value>
+  </data>
+  <data name="Meeting_SpeakerNamesSaved" xml:space="preserve">
+    <value>Имена говорящих сохранены</value>
+  </data>
+  <data name="Meeting_TitleSaved" xml:space="preserve">
+    <value>Название сохранено</value>
+  </data>
+  <data name="Meeting_SaveFailed" xml:space="preserve">
+    <value>Не удалось сохранить: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Сменить шаблон протокола на «{0}» и создать протокол заново?</value>
+  </data>
+  <data name="Meeting_Regenerated" xml:space="preserve">
+    <value>Протокол создан заново (с: {0})</value>
+  </data>
+  <data name="Meeting_NoTranscript" xml:space="preserve">
+    <value>Расшифровки нет</value>
+  </data>
+  <data name="Meeting_NoNotes" xml:space="preserve">
+    <value>Заметок нет</value>
+  </data>
+  <data name="Meeting_NoMinutes" xml:space="preserve">
+    <value>Протокола нет</value>
+  </data>
+  <data name="Meeting_CopiedTranscript" xml:space="preserve">
+    <value>Расшифровка скопирована в формате Markdown</value>
+  </data>
+  <data name="Meeting_CopiedNotes" xml:space="preserve">
+    <value>Заметки скопированы в формате Markdown</value>
+  </data>
+  <data name="Meeting_CopiedMinutes" xml:space="preserve">
+    <value>Протокол скопирован в формате Markdown</value>
+  </data>
+  <data name="CopyFailed" xml:space="preserve">
+    <value>Не удалось скопировать: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmDelete" xml:space="preserve">
+    <value>Удалить «{0}»?
+
+Протокол, расшифровка, заметки и аудио будут перемещены в корзину. Их можно восстановить из корзины.</value>
+  </data>
+  <data name="Meeting_ConfirmDelete_Title" xml:space="preserve">
+    <value>Удаление встречи — Hanasu</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Не удалось удалить: {0}</value>
+  </data>
+  <data name="Meeting_MovedToRecycleBin" xml:space="preserve">
+    <value>«{0}» перемещено в корзину</value>
+  </data>
+  <data name="Meeting_NotesWhileRecording" xml:space="preserve">
+    <value>Во время записи добавляйте заметки в поле заметок выше (эту вкладку можно изменить после записи).</value>
+  </data>
+  <data name="Meeting_NotesSaved" xml:space="preserve">
+    <value>Заметки сохранены</value>
+  </data>
+  <data name="Meeting_UndoHighlight" xml:space="preserve">
+    <value>Отменить ★ (осталось с: {0})</value>
+  </data>
+  <data name="Meeting_Starting" xml:space="preserve">
+    <value>Запуск записи…</value>
+  </data>
+  <data name="Meeting_PostProcessing" xml:space="preserve">
+    <value>Обработка после записи</value>
+  </data>
+  <data name="Meeting_StopHint" xml:space="preserve">
+    <value>Остановить можно также сочетанием {0}</value>
+  </data>
+  <data name="Meeting_StartHint" xml:space="preserve">
+    <value>Начать можно также сочетанием {0}. Перед началом предупредите других участников о записи.</value>
+  </data>
+  <data name="Device_DefaultMic" xml:space="preserve">
+    <value>Микрофон Windows по умолчанию</value>
+  </data>
+  <data name="Device_MissingMic" xml:space="preserve">
+    <value>(Ранее выбранный микрофон, сейчас не подключен)</value>
+  </data>
+  <data name="Device_DefaultOutput" xml:space="preserve">
+    <value>Устройство вывода Windows по умолчанию</value>
+  </data>
+  <data name="Device_MissingOutput" xml:space="preserve">
+    <value>(Ранее выбранное устройство вывода, сейчас не подключено)</value>
+  </data>
+  <data name="MeetingMic_StartFailed" xml:space="preserve">
+    <value>Не удалось начать запись с микрофона: {0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Параметры Hanasu</value>
+  </data>
+  <data name="Settings_SavedImmediately" xml:space="preserve">
+    <value>Изменения сохраняются сразу</value>
+  </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="Settings_Shortcuts" xml:space="preserve">
+    <value>Сочетания клавиш</value>
+  </data>
+  <data name="Settings_Dictation" xml:space="preserve">
+    <value>Диктовка</value>
+  </data>
+  <data name="Settings_ResetToDefault" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
+  <data name="Settings_TranslateAndType" xml:space="preserve">
+    <value>Перевести и ввести</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>Щелкните поле и нажмите нужное сочетание клавиш. Во время записи Esc отменяет запись. Alt + Space (меню окна) и Win + H (голосовой ввод Windows) используются Windows, поэтому их следует избегать.</value>
+  </data>
+  <data name="Settings_TranslationLanguages" xml:space="preserve">
+    <value>Языки перевода</value>
+  </data>
+  <data name="Settings_TranslateEnglish" xml:space="preserve">
+    <value>Английский</value>
+  </data>
+  <data name="Settings_TranslateJapanese" xml:space="preserve">
+    <value>Японский</value>
+  </data>
+  <data name="Settings_TranslationNote" xml:space="preserve">
+    <value>Сочетание «Перевести и ввести» переводит на крайний левый выбранный язык. Во время записи в HUD можно переключаться между «Как сказано» и выбранными языками (текст вводится на языке, выбранном в момент остановки). Для перевода используется ИИ, выбранный для диктовки на вкладке «AI». Выберите хотя бы один язык.</value>
+  </data>
+  <data name="Settings_RecordingMode" xml:space="preserve">
+    <value>Режим записи</value>
+  </data>
+  <data name="Settings_Toggle" xml:space="preserve">
+    <value>Старт/стоп при каждом нажатии (переключение)</value>
+  </data>
+  <data name="Settings_PushToTalk" xml:space="preserve">
+    <value>Запись только при удержании</value>
+  </data>
+  <data name="Settings_Engine" xml:space="preserve">
+    <value>Модуль распознавания</value>
+  </data>
+  <data name="Settings_Engine_Windows" xml:space="preserve">
+    <value>Распознавание речи Windows (по умолчанию)</value>
+  </data>
+  <data name="Settings_Engine_Whisper" xml:space="preserve">
+    <value>Whisper (работает на этом ПК)</value>
+  </data>
+  <data name="Settings_Engine_Gemini" xml:space="preserve">
+    <value>Gemini (отправляет аудио в Google)</value>
+  </data>
+  <data name="Settings_Engine_WindowsNote" xml:space="preserve">
+    <value>Распознает речь средствами Windows (диктовка) и показывает промежуточные результаты во время речи. Используется сетевое распознавание речи Microsoft, поэтому включите «Распознавание речи в Интернете» в разделе Параметры Windows → Конфиденциальность и защита → Голосовые функции. Используется микрофон Windows по умолчанию (выбор ниже не применяется).</value>
+  </data>
+  <data name="Settings_OpenSpeechSettings" xml:space="preserve">
+    <value>Открыть параметры речи</value>
+  </data>
+  <data name="Settings_OpenLanguageSettings" xml:space="preserve">
+    <value>Открыть параметры языка</value>
+  </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>Распознает речь на этом ПК с помощью whisper.cpp (аудио не покидает ПК). Распознавание выполняется после остановки записи. При выборе модели она скачивается с Hugging Face. Большие модели точнее, но медленнее.</value>
+  </data>
+  <data name="Settings_Model" xml:space="preserve">
+    <value>Модель</value>
+  </data>
+  <data name="Settings_Download" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
+  <data name="Settings_CancelDownload" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Settings_Engine_GeminiNote" xml:space="preserve">
+    <value>Отправляет записанное аудио в Gemini API от Google для распознавания (с учетными данными Gemini, заданными на вкладке «AI», и моделью Gemini для диктовки). Учтите, что ваше аудио отправляется в Google. Оно отправляется после остановки записи (до 7 минут за раз).</value>
+  </data>
+  <data name="Settings_Microphone" xml:space="preserve">
+    <value>Микрофон</value>
+  </data>
+  <data name="Settings_NoTarget" xml:space="preserve">
+    <value>Когда некуда вводить текст</value>
+  </data>
+  <data name="Settings_NoTargetNote" xml:space="preserve">
+    <value>Если ни одно текстовое поле не в фокусе (например, на переднем плане рабочий стол) или активное приложение запущено от имени администратора и в него нельзя вставить текст, результат показывается внизу экрана. Он остается, пока вы его не закроете; скопировать его можно кнопкой «Копировать» или выделив текст.</value>
+  </data>
+  <data name="Settings_Fallback_Keep" xml:space="preserve">
+    <value>Также помещать в буфер обмена (достаточно нажать Ctrl+V в нужном месте)</value>
+  </data>
+  <data name="Settings_Fallback_Restore" xml:space="preserve">
+    <value>Только показывать, не изменяя буфер обмена (копировать кнопкой «Копировать» на панели)</value>
+  </data>
+  <data name="Settings_Other" xml:space="preserve">
+    <value>Прочее</value>
+  </data>
+  <data name="Settings_PlaySounds" xml:space="preserve">
+    <value>Воспроизводить звуки при начале и остановке записи</value>
+  </data>
+  <data name="Settings_OpenLogs" xml:space="preserve">
+    <value>Открыть папку журналов</value>
+  </data>
+  <data name="Settings_OpenSettingsFolder" xml:space="preserve">
+    <value>Открыть папку параметров</value>
+  </data>
+  <data name="Settings_AiAndModels" xml:space="preserve">
+    <value>ИИ и модели</value>
+  </data>
+  <data name="Settings_Ai_Dictation" xml:space="preserve">
+    <value>Диктовка (обработка, перевод)</value>
+  </data>
+  <data name="Settings_Ai_Local" xml:space="preserve">
+    <value>Локальная LLM</value>
+  </data>
+  <data name="Settings_Ai_Meeting" xml:space="preserve">
+    <value>Встречи (протокол)</value>
+  </data>
+  <data name="Settings_AiNote" xml:space="preserve">
+    <value>ИИ и модель можно выбрать отдельно для диктовки и встреч. По умолчанию для Gemini — gemini-3.5-flash-lite (диктовка) и gemini-3.8-flash (протоколы), для Claude — Haiku 5.5 (диктовка) и Sonnet 5.5 (протоколы). Claude используется только для обработки текста, а не для распознавания аудио (модуль распознавания выбирается на вкладках «Общие» и «Встречи»).</value>
+  </data>
+  <data name="Settings_LocalModels" xml:space="preserve">
+    <value>Локальные модели (небольшие LLM, работающие на этом ПК)</value>
+  </data>
+  <data name="Settings_LocalModelsNote" xml:space="preserve">
+    <value>Текст обрабатывается только на этом ПК и никогда не отправляется в Интернет. Сначала скачайте нужную модель. Она работает на процессоре, поэтому обработка текста занимает от нескольких до десятка с лишним секунд, а протокол — от нескольких до десятка с лишним минут.</value>
+  </data>
+  <data name="Settings_Stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="Settings_Refine" xml:space="preserve">
+    <value>Обрабатывать с помощью ИИ (исправлять ошибки распознавания, слова-паразиты, самоисправления и пунктуацию)</value>
+  </data>
+  <data name="Settings_RefineNote" xml:space="preserve">
+    <value>Если выключено, к распознанному тексту перед вводом применяются только замены из словаря. Перевод возможен только с помощью ИИ, поэтому текст все равно отправляется ИИ при переводе.</value>
+  </data>
+  <data name="Settings_RefineLanguage" xml:space="preserve">
+    <value>Язык обработки</value>
+  </data>
+  <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
+    <value>Как сказано</value>
+  </data>
+  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
+    <value>Всегда японский</value>
+  </data>
+  <data name="Settings_SendAppName" xml:space="preserve">
+    <value>Сообщать ИИ название приложения, в которое вводится текст (чтобы подстроить стиль)</value>
+  </data>
+  <data name="Settings_GeminiAuth" xml:space="preserve">
+    <value>Проверка подлинности Gemini</value>
+  </data>
+  <data name="Settings_Auth_ApiKey" xml:space="preserve">
+    <value>Ключ API (Google AI Studio)</value>
+  </data>
+  <data name="Settings_Auth_ServiceAccount" xml:space="preserve">
+    <value>Служебная учетная запись (Vertex AI)</value>
+  </data>
+  <data name="Settings_ApiKey" xml:space="preserve">
+    <value>Ключ API</value>
+  </data>
+  <data name="Settings_KeyJson" xml:space="preserve">
+    <value>Ключ (JSON)</value>
+  </data>
+  <data name="Settings_Browse" xml:space="preserve">
+    <value>Обзор…</value>
+  </data>
+  <data name="Settings_Region" xml:space="preserve">
+    <value>Регион</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Выберите ключ служебной учетной записи с ролью Vertex AI User (roles/aiplatform.user). Сохраняется только расположение файла ключа (его содержимое не копируется). Храните файл ключа там, где его не смогут прочитать другие. Регион по умолчанию — global.</value>
+  </data>
+  <data name="Settings_ClaudeApiKey" xml:space="preserve">
+    <value>Ключ API Claude</value>
+  </data>
+  <data name="Settings_TestConnection" xml:space="preserve">
+    <value>Проверить подключение</value>
+  </data>
+  <data name="Settings_ClaudeNote" xml:space="preserve">
+    <value>Введите ключ API, созданный в Claude Console (platform.claude.com). Сохраненные ключи не отображаются на экране (только последние 4 символа). «Проверить подключение» только получает сведения о моделях и не тарифицируется.</value>
+  </data>
+  <data name="Settings_KeyProtection" xml:space="preserve">
+    <value>Защита ключей API</value>
+  </data>
+  <data name="Settings_UseHello" xml:space="preserve">
+    <value>Защищать ключи API с помощью Windows Hello (подтверждение ПИН-кодом, лицом или отпечатком пальца при использовании)</value>
+  </data>
+  <data name="Settings_KeyProtectionNote" xml:space="preserve">
+    <value>Ключи хранятся в зашифрованном виде в %LOCALAPPDATA%\Hanasu\secrets.json, а не в settings.json. При DPAPI (по умолчанию) их может прочитать только этот пользователь Windows, но другие приложения, запущенные от его имени, могут прочитать их без подтверждения. С Windows Hello попытка другого приложения прочитать их вызывает запрос Windows Hello (подтверждение требуется один раз при первом использовании после запуска и снова после блокировки экрана). Это не защищает от чтения памяти приложениями того же пользователя, пока Hanasu работает.</value>
+  </data>
+  <data name="Settings_Trial" xml:space="preserve">
+    <value>Попробовать (ИИ для диктовки)</value>
+  </data>
+  <data name="Settings_TrialSample" xml:space="preserve">
+    <value>э ну вот на завтрашней встрече я как бы буду использовать слайды которые сделал в gemini</value>
+  </data>
+  <data name="Settings_TryRefine" xml:space="preserve">
+    <value>Попробовать обработку</value>
+  </data>
+  <data name="Settings_TryEnglish" xml:space="preserve">
+    <value>Попробовать перевод на английский</value>
+  </data>
+  <data name="Settings_TryJapanese" xml:space="preserve">
+    <value>Попробовать перевод на японский</value>
+  </data>
+  <data name="Settings_Tab_Meetings" xml:space="preserve">
+    <value>Встречи</value>
+  </data>
+  <data name="Settings_MeetingStartStop" xml:space="preserve">
+    <value>Начать/остановить запись</value>
+  </data>
+  <data name="Settings_HighlightMark" xml:space="preserve">
+    <value>Отметка «Важно»</value>
+  </data>
+  <data name="Settings_UseHighlightHotKey" xml:space="preserve">
+    <value>Использовать сочетание клавиш «Важно» (действует только во время записи)</value>
+  </data>
+  <data name="Settings_Transcription" xml:space="preserve">
+    <value>Распознавание</value>
+  </data>
+  <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
+    <value>Whisper (работает на этом ПК; по умолчанию)</value>
+  </data>
+  <data name="Settings_MeetingEngineNote" xml:space="preserve">
+    <value>Во время записи аудио только записывается в файлы; после остановки каналы «Я» и «Собеседники» распознаются по отдельности с метками времени. Распознавание речи Windows слушает только микрофон Windows по умолчанию и не может принимать звук ПК (собеседников), поэтому для встреч его использовать нельзя.</value>
+  </data>
+  <data name="Settings_Speakers" xml:space="preserve">
+    <value>Говорящие</value>
+  </data>
+  <data name="Settings_Diarize" xml:space="preserve">
+    <value>Разделять собеседников (Говорящий 1, Говорящий 2…)</value>
+  </data>
+  <data name="Settings_DiarizeNote" xml:space="preserve">
+    <value>Говорящие разделяются на этом ПК с помощью sherpa-onnx (модели pyannote и 3D-Speaker). Модели (около 34 МБ) скачиваются при первом использовании. Если выключено, другая сторона объединяется в одних «Собеседников». Переименовать говорящих можно в заметках встреч.</value>
+  </data>
+  <data name="Settings_Minutes" xml:space="preserve">
+    <value>Протокол</value>
+  </data>
+  <data name="Settings_MakeMinutes" xml:space="preserve">
+    <value>Создавать протокол с помощью ИИ после записи</value>
+  </data>
+  <data name="Settings_MinutesNote" xml:space="preserve">
+    <value>ИИ и модель для протоколов выбираются в пункте «Встречи (протокол)» на вкладке «AI». Отправляется только текст расшифровки (если для распознавания выбран Gemini, аудио также отправляется в Google). Шаблон протокола выбирается в заметках встреч.</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>Хранение</value>
+  </data>
+  <data name="Settings_KeepAudio" xml:space="preserve">
+    <value>Сохранять аудиофайлы (me.wav / others.wav) после обработки</value>
+  </data>
+  <data name="Settings_KeepAudioNote" xml:space="preserve">
+    <value>Если выключено, аудио удаляется после создания расшифровки и протокола (при ошибке распознавания оно сохраняется). Формат — WAV 16 кГц моно, около 115 МБ на канал в час.</value>
+  </data>
+  <data name="Settings_SaveLocation" xml:space="preserve">
+    <value>Место сохранения</value>
+  </data>
+  <data name="Settings_Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="Settings_MeetingsFolderNote" xml:space="preserve">
+    <value>Для каждой встречи создается папка с датой и временем в названии, содержащая meeting.json (тот же формат, что и в версии для Mac), transcript.md, minutes.md, notes.md и аудио.</value>
+  </data>
+  <data name="Settings_ConsentNote" xml:space="preserve">
+    <value>Получите согласие других участников перед записью. Наушники не дают их голосам попадать в ваш микрофон.</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>Журнал</value>
+  </data>
+  <data name="Settings_DictationHistory" xml:space="preserve">
+    <value>Журнал диктовки</value>
+  </data>
+  <data name="Settings_SaveHistory" xml:space="preserve">
+    <value>Сохранять журнал в файл</value>
+  </data>
+  <data name="Settings_HistoryNote" xml:space="preserve">
+    <value>Сохраняет результаты диктовки и исходные расшифровки, чтобы их можно было искать и копировать через «Открыть журнал». Если выключено, новые результаты не записываются в файл; в памяти хранятся только последние 10 для меню «Последние результаты» в области уведомлений (сохраненный журнал не удаляется).</value>
+  </data>
+  <data name="Settings_KeepDays" xml:space="preserve">
+    <value>Хранить</value>
+  </data>
+  <data name="Settings_KeepCount" xml:space="preserve">
+    <value>Не более</value>
+  </data>
+  <data name="Settings_KeepNote" xml:space="preserve">
+    <value>Хранятся только записи, укладывающиеся в оба ограничения; сначала удаляются самые старые (при добавлении, при запуске и при изменении этих параметров). По умолчанию — 30 дней и 1000 записей.</value>
+  </data>
+  <data name="Settings_OpenHistory" xml:space="preserve">
+    <value>Открыть журнал…</value>
+  </data>
+  <data name="Settings_DeleteAllHistory" xml:space="preserve">
+    <value>Удалить весь журнал…</value>
+  </data>
+  <data name="Settings_Tab_Dictionary" xml:space="preserve">
+    <value>Словарь и правила</value>
+  </data>
+  <data name="Settings_UserDictionary" xml:space="preserve">
+    <value>Пользовательский словарь</value>
+  </data>
+  <data name="Settings_TryReplace" xml:space="preserve">
+    <value>Проверить замены</value>
+  </data>
+  <data name="Settings_ExtraRules" xml:space="preserve">
+    <value>Дополнительные правила обработки</value>
+  </data>
+  <data name="Settings_ExtraRulesNote" xml:space="preserve">
+    <value>Правила, передаваемые ИИ (Gemini, Claude) при обработке (например, «пиши в официальном стиле»). При переводе на английский не используются (при переводе на японский используются).</value>
+  </data>
+  <data name="Settings_DictionaryHelp" xml:space="preserve">
+    <value>По одному на строку. Слово само по себе подсказывает ИИ, как его писать. «услышанное =&gt; написание» заменяет распознанное на указанное написание (например, сток марк =&gt; Stockmark; несколько вариантов слева разделяйте ","). Строки, начинающиеся с "#", — комментарии.</value>
+  </data>
+  <data name="Settings_EntryCount" xml:space="preserve">
+    <value>Записей: {0}</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>Сохранено</value>
+  </data>
+  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
+    <value>Совпадает с другим сочетанием (диктовка, перевод или встречи)</value>
+  </data>
+  <data name="Settings_MicNote_Windows" xml:space="preserve">
+    <value>Модуль Windows использует микрофон Windows по умолчанию (его можно изменить в разделе Параметры Windows → Система → Звук).</value>
+  </data>
+  <data name="Settings_MicNote_Selected" xml:space="preserve">
+    <value>Whisper и Gemini записывают с микрофона, выбранного здесь (с преобразованием в 16 кГц моно).</value>
+  </data>
+  <data name="Settings_HistoryStatus" xml:space="preserve">
+    <value>Сейчас в журнале записей: {0} (сохранено в: {1})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteWhisper" xml:space="preserve">
+    <value>Удалить модель Whisper {0} ({1})?</value>
+  </data>
+  <data name="Settings_Downloading" xml:space="preserve">
+    <value>Скачивание… {0}</value>
+  </data>
+  <data name="Settings_Downloaded" xml:space="preserve">
+    <value>Скачано</value>
+  </data>
+  <data name="Settings_DownloadFailed" xml:space="preserve">
+    <value>Ошибка: {0}</value>
+  </data>
+  <data name="Settings_NotDownloaded" xml:space="preserve">
+    <value>Еще не скачано</value>
+  </data>
+  <data name="Settings_ConfirmDeleteLocal" xml:space="preserve">
+    <value>Удалить локальную модель {0} ({1})?</value>
+  </data>
+  <data name="Settings_MinutesAiNote" xml:space="preserve">
+    <value>ИИ для протоколов: {0} ({1}).</value>
+  </data>
+  <data name="Settings_Missing_LocalModel" xml:space="preserve">
+    <value>локальная модель «{0}»</value>
+  </data>
+  <data name="Settings_Missing_GeminiCredentials" xml:space="preserve">
+    <value>учетные данные Gemini</value>
+  </data>
+  <data name="Settings_MissingNote" xml:space="preserve">
+    <value>Еще не настроено: {0} (настройте или скачайте ниже).</value>
+  </data>
+  <data name="Settings_EnterApiKey" xml:space="preserve">
+    <value>Введите ключ API</value>
+  </data>
+  <data name="Settings_ClaudeKeyPrefix" xml:space="preserve">
+    <value>Ключи API Claude начинаются с "sk-ant-". Проверьте введенное значение.</value>
+  </data>
+  <data name="Settings_ClaudeConnecting" xml:space="preserve">
+    <value>Подключение к Claude API…</value>
+  </data>
+  <data name="Settings_ClaudeConnectedUnsaved" xml:space="preserve">
+    <value>Подключение с этим ключом выполнено (еще не сохранен). Доступна модель {0}. </value>
+  </data>
+  <data name="Settings_ClaudeConnected" xml:space="preserve">
+    <value>Подключено. Доступна модель {0}. </value>
+  </data>
+  <data name="Settings_Hello_On" xml:space="preserve">
+    <value>Защищено с помощью Windows Hello.</value>
+  </data>
+  <data name="Settings_Hello_Off" xml:space="preserve">
+    <value>Сейчас защищено с помощью DPAPI.</value>
+  </data>
+  <data name="Settings_Hello_Unavailable" xml:space="preserve">
+    <value>Windows Hello не настроен на этом ПК, поэтому этот вариант нельзя выбрать (Параметры Windows → Учетные записи → Варианты входа).</value>
+  </data>
+  <data name="Settings_Hello_Enabling" xml:space="preserve">
+    <value>Запрос проверки Windows Hello (появится дважды для подтверждения)…</value>
+  </data>
+  <data name="Settings_Hello_Disabling" xml:space="preserve">
+    <value>Запрос проверки Windows Hello (чтобы один раз прочитать ключи и вернуться к DPAPI)…</value>
+  </data>
+  <data name="Settings_Hello_SwitchFailed" xml:space="preserve">
+    <value>Не удалось переключить: {0}</value>
+  </data>
+  <data name="Settings_ServiceAccountFilter" xml:space="preserve">
+    <value>Ключ служебной учетной записи (*.json)|*.json|Все файлы (*.*)|*.*</value>
+  </data>
+  <data name="Settings_ServiceAccountDialogTitle" xml:space="preserve">
+    <value>Выбор ключа служебной учетной записи (JSON)</value>
+  </data>
+  <data name="Settings_TrialRefining" xml:space="preserve">
+    <value>Обработка…</value>
+  </data>
+  <data name="Settings_TrialTranslating" xml:space="preserve">
+    <value>Перевод…</value>
+  </data>
+  <data name="Settings_TrialDone" xml:space="preserve">
+    <value>{0} ({1}), с: {2}</value>
+  </data>
+  <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
+    <value>Записанное аудио встречи делится на части по 5 минут и отправляется в Gemini (с учетными данными Gemini на вкладке «AI» и моделью Gemini для диктовки). Учтите, что ваше аудио отправляется в Google.</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
+    <value>Используется модель Whisper, выбранная на вкладке «Общие» ({0}).</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
+    <value> Она еще не скачана (скачайте ее на вкладке «Общие»).</value>
+  </data>
+  <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
+    <value>Выбор места сохранения встреч</value>
+  </data>
+  <data name="Settings_DictionaryLineIssue" xml:space="preserve">
+    <value>Строка {0}: {1}</value>
+  </data>
+  <data name="Settings_NoReplacements" xml:space="preserve">
+    <value>Замен нет</value>
+  </data>
+  <data name="Settings_ReplacementResult" xml:space="preserve">
+    <value>→ {0} ({1})</value>
+  </data>
+  <data name="Settings_TrialAppName" xml:space="preserve">
+    <value>Параметры Hanasu</value>
+  </data>
+  <data name="Mic_UnsupportedFormat" xml:space="preserve">
+    <value>Неподдерживаемый формат записи ({0})</value>
+  </data>
+</root>

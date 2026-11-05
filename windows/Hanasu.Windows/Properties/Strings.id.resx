@@ -1,0 +1,919 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_AlreadyRunning" xml:space="preserve">
+    <value>Hanasu sudah berjalan. Anda dapat menggunakannya dari ikon di area pemberitahuan.</value>
+  </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>Hasil Terbaru</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>Buka Catatan Rapat</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>Buka Riwayat…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Pengaturan…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Keluar</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>Hentikan Perekaman dan Ketik</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>Mulai Dikte</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>Hentikan Perekaman Rapat ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Memulai Perekaman Rapat…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Memproses Perekaman Rapat…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>Mulai Perekaman Rapat</value>
+  </data>
+  <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
+    <value>Hanasu — Merekam rapat {0}</value>
+  </data>
+  <data name="Tray_Tip_MeetingProcessing" xml:space="preserve">
+    <value>Hanasu — Memproses rapat</value>
+  </data>
+  <data name="Tray_Tip_Recording" xml:space="preserve">
+    <value>Hanasu — Merekam</value>
+  </data>
+  <data name="Tray_Tip_Processing" xml:space="preserve">
+    <value>Hanasu — Memproses</value>
+  </data>
+  <data name="Tray_RecentEmpty" xml:space="preserve">
+    <value>(Belum ada)</value>
+  </data>
+  <data name="Tray_RecentTip" xml:space="preserve">
+    <value>{0}
+Hasil: {1}
+Asli: {2}</value>
+  </data>
+  <data name="Tray_RecentHint" xml:space="preserve">
+    <value>Klik untuk menyalin ke papan klip</value>
+  </data>
+  <data name="Tray_OpenAllHistory" xml:space="preserve">
+    <value>Buka Semua Riwayat…</value>
+  </data>
+  <data name="Balloon_Started" xml:space="preserve">
+    <value>Hanasu dimulai</value>
+  </data>
+  <data name="Balloon_StartedBody" xml:space="preserve">
+    <value>Tekan {0} untuk dikte. Tekan {1} untuk "{2}".</value>
+  </data>
+  <data name="Balloon_HotKeyFailed" xml:space="preserve">
+    <value>Tidak dapat mendaftarkan pintasan</value>
+  </data>
+  <data name="Balloon_HotKeyFailedBody" xml:space="preserve">
+    <value>{0} digunakan oleh aplikasi lain. Pilih tombol lain di Pengaturan → Umum.</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailed" xml:space="preserve">
+    <value>Tidak dapat mendaftarkan pintasan "Penting"</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailedBody" xml:space="preserve">
+    <value>{0} digunakan oleh aplikasi lain. Gunakan tombol "★ Penting" di Catatan Rapat, atau pilih tombol lain di Pengaturan → Rapat.</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Disalin</value>
+  </data>
+  <data name="Quit_MeetingInProgress" xml:space="preserve">
+    <value>Rapat sedang direkam (atau diproses setelah perekaman). Jika Anda keluar, transkrip dan notulen untuk rapat ini tidak akan dibuat (file audio tetap disimpan). Tetap keluar?</value>
+  </data>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>Windows Hello belum diatur (atur PIN atau sejenisnya di Pengaturan Windows → Akun → Opsi masuk).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Verifikasi Windows Hello dibatalkan, jadi kunci API tidak dapat dibaca.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Verifikasi Windows Hello gagal ({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>Kunci Windows Hello tidak ditemukan (Windows Hello mungkin telah diatur ulang). Masukkan lagi kunci API di Pengaturan → AI.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Tidak dapat membuka kunci Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Verifikasi Windows Hello dibatalkan.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Tidak dapat membuat kunci Windows Hello ({0}).</value>
+  </data>
+  <data name="Mic_NotFound" xml:space="preserve">
+    <value>Mikrofon tidak ditemukan. Periksa apakah mikrofon tersambung, di Pengaturan Windows → Sistem → Suara.</value>
+  </data>
+  <data name="Mic_AccessDenied" xml:space="preserve">
+    <value>Akses mikrofon tidak diizinkan. Di Pengaturan Windows → Privasi &amp; keamanan → Mikrofon, aktifkan "Izinkan aplikasi desktop mengakses mikrofon Anda".</value>
+  </data>
+  <data name="Mic_StartFailed" xml:space="preserve">
+    <value>Tidak dapat mulai merekam dari mikrofon: {0}</value>
+  </data>
+  <data name="Output_NotFound" xml:space="preserve">
+    <value>Perangkat output audio (speaker atau headphone) tidak ditemukan.</value>
+  </data>
+  <data name="Loopback_StartFailed" xml:space="preserve">
+    <value>Tidak dapat mulai merekam audio PC: {0}</value>
+  </data>
+  <data name="Speech_LanguageNotInstalled" xml:space="preserve">
+    <value>Pengenalan ucapan untuk {0} belum diinstal di Windows. Di Pengaturan Windows → Waktu &amp; bahasa → Bahasa &amp; wilayah, buka "…" → "Opsi bahasa" untuk {0} dan tambahkan pengenalan ucapan. Atau atur mesin transkripsi ke Whisper atau Gemini di Pengaturan.</value>
+  </data>
+  <data name="Speech_LanguageNotSupported" xml:space="preserve">
+    <value>Dikte Windows tidak mendukung bahasa ini. Atur mesin transkripsi ke Whisper atau Gemini di Pengaturan.</value>
+  </data>
+  <data name="Speech_MicUnavailable" xml:space="preserve">
+    <value>Mikrofon tidak dapat digunakan. Periksa mikrofon default di Windows.</value>
+  </data>
+  <data name="Speech_NetworkFailure" xml:space="preserve">
+    <value>Pengenalan ucapan Windows tidak dapat terhubung ke jaringan. Periksa koneksi internet Anda.</value>
+  </data>
+  <data name="Speech_StartFailed" xml:space="preserve">
+    <value>Tidak dapat memulai pengenalan ucapan Windows ({0}).</value>
+  </data>
+  <data name="Speech_OnlineRecognitionOff" xml:space="preserve">
+    <value>Untuk menggunakan pengenalan ucapan Windows, aktifkan "Pengenalan ucapan online" di Pengaturan Windows → Privasi &amp; keamanan → Ucapan. Jika tidak ingin mengaktifkannya, atur mesin transkripsi ke Whisper di Pengaturan.</value>
+  </data>
+  <data name="Speech_Error" xml:space="preserve">
+    <value>Terjadi kesalahan pada pengenalan ucapan Windows: {0}</value>
+  </data>
+  <data name="Hud_LanguageSwitch_Tip" xml:space="preserve">
+    <value>Mengetik dalam bahasa yang dipilih saat Anda menghentikan perekaman</value>
+  </data>
+  <data name="Hud_SpokenLanguage" xml:space="preserve">
+    <value>Sesuai ucapan</value>
+  </data>
+  <data name="Hud_Stop_Tip" xml:space="preserve">
+    <value>Menghentikan perekaman dan mengetik teks (sama dengan menekan pintasan lagi)</value>
+  </data>
+  <data name="Hud_Stop" xml:space="preserve">
+    <value>Hentikan</value>
+  </data>
+  <data name="Hud_Cancel" xml:space="preserve">
+    <value>Batal</value>
+  </data>
+  <data name="Hud_Cancel_Tip" xml:space="preserve">
+    <value>Membatalkan tanpa mengetik apa pun (Esc)</value>
+  </data>
+  <data name="Hud_Close" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="Hud_Close_Tip" xml:space="preserve">
+    <value>Menutup panel ini (setelah mengklik teks, Anda juga dapat menekan Esc)</value>
+  </data>
+  <data name="Hud_Copy_Tip" xml:space="preserve">
+    <value>Menyalin teks ke papan klip</value>
+  </data>
+  <data name="Hud_Copy" xml:space="preserve">
+    <value>Salin</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>Riwayat Dikte — Hanasu</value>
+  </data>
+  <data name="History_FilterAll" xml:space="preserve">
+    <value>Semua</value>
+  </data>
+  <data name="History_FilterUnrefined" xml:space="preserve">
+    <value>Gagal / Tidak dirapikan</value>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>Cari</value>
+  </data>
+  <data name="History_Search_Tip" xml:space="preserve">
+    <value>Mencari di hasil, teks asli, dan aplikasi tujuan. Pisahkan kata dengan spasi untuk menemukan entri yang memuat semuanya.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="History_DeleteAll" xml:space="preserve">
+    <value>Hapus Semua…</value>
+  </data>
+  <data name="OpenSaveFolder" xml:space="preserve">
+    <value>Buka Folder Penyimpanan</value>
+  </data>
+  <data name="History_CopyResult" xml:space="preserve">
+    <value>Salin Hasil</value>
+  </data>
+  <data name="History_CopyOriginal" xml:space="preserve">
+    <value>Salin Asli</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="History_ResultLabel" xml:space="preserve">
+    <value>Hasil (teks yang diketik)</value>
+  </data>
+  <data name="History_OriginalLabel" xml:space="preserve">
+    <value>Asli (transkrip)</value>
+  </data>
+  <data name="Hud_CopyFailed" xml:space="preserve">
+    <value>Tidak dapat menyalin</value>
+  </data>
+  <data name="HotKeyBox_Prompt" xml:space="preserve">
+    <value>Tekan tombol (Esc untuk batal)…</value>
+  </data>
+  <data name="Separator" xml:space="preserve">
+    <value> · </value>
+  </data>
+  <data name="WideSeparator" xml:space="preserve">
+    <value>   </value>
+  </data>
+  <data name="History_Unrefined" xml:space="preserve">
+    <value>Tidak dirapikan</value>
+  </data>
+  <data name="History_Kept" xml:space="preserve">
+    <value>Menyimpan hingga {0} dan {1} entri (Pengaturan → Riwayat).</value>
+  </data>
+  <data name="History_NotSaved" xml:space="preserve">
+    <value>Riwayat tidak disimpan ke file. Hanya 10 entri terakhir yang disimpan di memori (Pengaturan → Riwayat).</value>
+  </data>
+  <data name="History_Count" xml:space="preserve">
+    <value>{0} entri. {1}</value>
+  </data>
+  <data name="History_CountFiltered" xml:space="preserve">
+    <value>{0} dari {1} entri. {2}</value>
+  </data>
+  <data name="History_Selected" xml:space="preserve">
+    <value>{0} entri dipilih (tekan Delete atau klik "Hapus" untuk menghapus semuanya sekaligus)</value>
+  </data>
+  <data name="History_App" xml:space="preserve">
+    <value>Aplikasi: {0}</value>
+  </data>
+  <data name="History_Model" xml:space="preserve">
+    <value>Model: {0}</value>
+  </data>
+  <data name="CopyFailedClipboardBusy" xml:space="preserve">
+    <value>Tidak dapat menyalin (aplikasi lain sedang menggunakan papan klip)</value>
+  </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Hapus {0} entri riwayat yang dipilih?</value>
+  </data>
+  <data name="History_ConfirmDeleteAll" xml:space="preserve">
+    <value>Hapus semua {0} entri riwayat dikte? Tindakan ini tidak dapat dibatalkan.</value>
+  </data>
+  <data name="Meeting_Title" xml:space="preserve">
+    <value>Catatan Rapat — Hanasu</value>
+  </data>
+  <data name="Meeting_Stop" xml:space="preserve">
+    <value>■ Hentikan</value>
+  </data>
+  <data name="Meeting_Recording" xml:space="preserve">
+    <value>● Merekam</value>
+  </data>
+  <data name="Meeting_MicLabel" xml:space="preserve">
+    <value>Saya (mikrofon)</value>
+  </data>
+  <data name="Meeting_OutputLabel" xml:space="preserve">
+    <value>Lawan bicara (suara yang diputar di output ini)</value>
+  </data>
+  <data name="Meeting_TemplateLabel" xml:space="preserve">
+    <value>Templat notulen</value>
+  </data>
+  <data name="Meeting_Start" xml:space="preserve">
+    <value>● Mulai Perekaman Rapat</value>
+  </data>
+  <data name="Meeting_MoveToRecycleBin" xml:space="preserve">
+    <value>Pindahkan ke Keranjang Sampah…</value>
+  </data>
+  <data name="Meeting_Empty" xml:space="preserve">
+    <value>Pilih rapat dari daftar di sebelah kiri, atau klik "Mulai Perekaman Rapat" di kiri bawah untuk mulai merekam.</value>
+  </data>
+  <data name="Meeting_TitleEdit_Tip" xml:space="preserve">
+    <value>Klik untuk mengubah judul (Enter untuk menyimpan, Esc untuk membatalkan)</value>
+  </data>
+  <data name="Meeting_Regenerate" xml:space="preserve">
+    <value>Buat Ulang Notulen</value>
+  </data>
+  <data name="Meeting_TemplateShort" xml:space="preserve">
+    <value>Templat:</value>
+  </data>
+  <data name="Meeting_CopyMarkdown" xml:space="preserve">
+    <value>Salin Markdown</value>
+  </data>
+  <data name="Meeting_OpenInExplorer" xml:space="preserve">
+    <value>Buka di File Explorer</value>
+  </data>
+  <data name="Meeting_SpeakersLabel" xml:space="preserve">
+    <value>Nama pembicara (digunakan saat menampilkan transkrip dan notulen)</value>
+  </data>
+  <data name="Meeting_UndoHighlight_Tip" xml:space="preserve">
+    <value>Selama 10 detik setelah menambahkan tanda, Anda dapat membatalkannya jika keliru</value>
+  </data>
+  <data name="Meeting_Highlight" xml:space="preserve">
+    <value>★ Penting</value>
+  </data>
+  <data name="Meeting_AddNote" xml:space="preserve">
+    <value>Tambah Catatan</value>
+  </data>
+  <data name="Meeting_NoteHint" xml:space="preserve">
+    <value>Tekan Enter untuk menambahkan catatan (waktunya adalah saat Anda mulai mengetik). Jika Anda menekan "Penting" saat mengetik, teks menjadi deskripsi tanda tersebut.</value>
+  </data>
+  <data name="Meeting_Tab_Minutes" xml:space="preserve">
+    <value>Notulen</value>
+  </data>
+  <data name="Meeting_Tab_Transcript" xml:space="preserve">
+    <value>Transkrip</value>
+  </data>
+  <data name="Meeting_Tab_Highlights" xml:space="preserve">
+    <value>Penting</value>
+  </data>
+  <data name="Meeting_Tab_Notes" xml:space="preserve">
+    <value>Catatan</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Simpan</value>
+  </data>
+  <data name="Meeting_SaveAndRegenerate" xml:space="preserve">
+    <value>Simpan dan Buat Ulang Notulen</value>
+  </data>
+  <data name="Meeting_NotesHint" xml:space="preserve">
+    <value>Satu per baris. "[12:34] teks" adalah catatan, "[12:40] ★ deskripsi" adalah tanda "Penting", dan baris tanpa waktu adalah catatan yang ditambahkan setelah perekaman.</value>
+  </data>
+  <data name="Meeting_Me" xml:space="preserve">
+    <value>Saya</value>
+  </data>
+  <data name="Meeting_Others" xml:space="preserve">
+    <value>Lawan bicara</value>
+  </data>
+  <data name="Meeting_Status_Processing" xml:space="preserve">
+    <value>Memproses</value>
+  </data>
+  <data name="Meeting_Status_Failed" xml:space="preserve">
+    <value>Gagal</value>
+  </data>
+  <data name="Meeting_Status_Warning" xml:space="preserve">
+    <value>Ada peringatan</value>
+  </data>
+  <data name="Meeting_SavedIn" xml:space="preserve">
+    <value>Disimpan di: {0}</value>
+  </data>
+  <data name="Meeting_MinutesAfterRecording" xml:space="preserve">
+    <value>Saat Anda menghentikan perekaman, notulen akan dibuat setelah transkripsi.</value>
+  </data>
+  <data name="Meeting_Processing" xml:space="preserve">
+    <value>Memproses…</value>
+  </data>
+  <data name="Meeting_NoMinutesYet" xml:space="preserve">
+    <value>Belum ada notulen. Anda dapat membuatnya dengan "Buat Ulang Notulen" (memerlukan pengaturan AI untuk "Rapat" di Pengaturan → AI).</value>
+  </data>
+  <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
+    <value>Transkripsi dilakukan setelah Anda menghentikan perekaman.</value>
+  </data>
+  <data name="Meeting_NoTranscriptYet" xml:space="preserve">
+    <value>Tidak ada transkrip.</value>
+  </data>
+  <data name="Meeting_RecordingNote" xml:space="preserve">
+    <value>Transkripsi dengan {0} dilakukan setelah Anda menghentikan perekaman (untuk mengurangi beban PC selama rapat).</value>
+  </data>
+  <data name="Meeting_SpeakerName_Inferred_Tip" xml:space="preserve">
+    <value>Nama {0} (ditebak dari percakapan; perbaiki jika salah)</value>
+  </data>
+  <data name="Meeting_SpeakerName_Tip" xml:space="preserve">
+    <value>Nama {0}</value>
+  </data>
+  <data name="Meeting_Inferred" xml:space="preserve">
+    <value>Ditebak</value>
+  </data>
+  <data name="Meeting_SpeakerNamesSaved" xml:space="preserve">
+    <value>Nama pembicara disimpan</value>
+  </data>
+  <data name="Meeting_TitleSaved" xml:space="preserve">
+    <value>Judul disimpan</value>
+  </data>
+  <data name="Meeting_SaveFailed" xml:space="preserve">
+    <value>Tidak dapat menyimpan: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Ubah templat notulen menjadi "{0}" dan buat ulang notulen?</value>
+  </data>
+  <data name="Meeting_Regenerated" xml:space="preserve">
+    <value>Notulen dibuat ulang ({0} detik)</value>
+  </data>
+  <data name="Meeting_NoTranscript" xml:space="preserve">
+    <value>Tidak ada transkrip</value>
+  </data>
+  <data name="Meeting_NoNotes" xml:space="preserve">
+    <value>Tidak ada catatan</value>
+  </data>
+  <data name="Meeting_NoMinutes" xml:space="preserve">
+    <value>Tidak ada notulen</value>
+  </data>
+  <data name="Meeting_CopiedTranscript" xml:space="preserve">
+    <value>Transkrip disalin sebagai Markdown</value>
+  </data>
+  <data name="Meeting_CopiedNotes" xml:space="preserve">
+    <value>Catatan disalin sebagai Markdown</value>
+  </data>
+  <data name="Meeting_CopiedMinutes" xml:space="preserve">
+    <value>Notulen disalin sebagai Markdown</value>
+  </data>
+  <data name="CopyFailed" xml:space="preserve">
+    <value>Tidak dapat menyalin: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmDelete" xml:space="preserve">
+    <value>Hapus "{0}"?
+
+Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. Anda dapat memulihkannya dari Keranjang Sampah.</value>
+  </data>
+  <data name="Meeting_ConfirmDelete_Title" xml:space="preserve">
+    <value>Hapus Rapat — Hanasu</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Tidak dapat menghapus: {0}</value>
+  </data>
+  <data name="Meeting_MovedToRecycleBin" xml:space="preserve">
+    <value>"{0}" dipindahkan ke Keranjang Sampah</value>
+  </data>
+  <data name="Meeting_NotesWhileRecording" xml:space="preserve">
+    <value>Saat merekam, tambahkan catatan di kotak catatan di atas (Anda dapat mengedit tab ini setelah perekaman).</value>
+  </data>
+  <data name="Meeting_NotesSaved" xml:space="preserve">
+    <value>Catatan disimpan</value>
+  </data>
+  <data name="Meeting_UndoHighlight" xml:space="preserve">
+    <value>Urungkan ★ (sisa {0} dtk)</value>
+  </data>
+  <data name="Meeting_Starting" xml:space="preserve">
+    <value>Memulai perekaman…</value>
+  </data>
+  <data name="Meeting_PostProcessing" xml:space="preserve">
+    <value>Memproses setelah perekaman</value>
+  </data>
+  <data name="Meeting_StopHint" xml:space="preserve">
+    <value>Anda juga dapat menghentikan dengan {0}</value>
+  </data>
+  <data name="Meeting_StartHint" xml:space="preserve">
+    <value>Anda juga dapat memulai dengan {0}. Beri tahu peserta lain bahwa Anda merekam sebelum mulai.</value>
+  </data>
+  <data name="Device_DefaultMic" xml:space="preserve">
+    <value>Mikrofon default Windows</value>
+  </data>
+  <data name="Device_MissingMic" xml:space="preserve">
+    <value>(Mikrofon yang dipilih sebelumnya, saat ini tidak tersambung)</value>
+  </data>
+  <data name="Device_DefaultOutput" xml:space="preserve">
+    <value>Output default Windows</value>
+  </data>
+  <data name="Device_MissingOutput" xml:space="preserve">
+    <value>(Output yang dipilih sebelumnya, saat ini tidak tersambung)</value>
+  </data>
+  <data name="MeetingMic_StartFailed" xml:space="preserve">
+    <value>Tidak dapat mulai merekam mikrofon: {0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Pengaturan Hanasu</value>
+  </data>
+  <data name="Settings_SavedImmediately" xml:space="preserve">
+    <value>Perubahan langsung disimpan</value>
+  </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>Umum</value>
+  </data>
+  <data name="Settings_Shortcuts" xml:space="preserve">
+    <value>Pintasan</value>
+  </data>
+  <data name="Settings_Dictation" xml:space="preserve">
+    <value>Dikte</value>
+  </data>
+  <data name="Settings_ResetToDefault" xml:space="preserve">
+    <value>Kembalikan ke Default</value>
+  </data>
+  <data name="Settings_TranslateAndType" xml:space="preserve">
+    <value>Terjemahkan dan Ketik</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>Klik kotak, lalu tekan kombinasi tombol yang diinginkan. Saat merekam, Esc membatalkan. Alt + Space (menu jendela) dan Win + H (pengetikan suara Windows) digunakan oleh Windows, jadi dihindari.</value>
+  </data>
+  <data name="Settings_TranslationLanguages" xml:space="preserve">
+    <value>Bahasa terjemahan</value>
+  </data>
+  <data name="Settings_TranslateEnglish" xml:space="preserve">
+    <value>Inggris</value>
+  </data>
+  <data name="Settings_TranslateJapanese" xml:space="preserve">
+    <value>Jepang</value>
+  </data>
+  <data name="Settings_TranslationNote" xml:space="preserve">
+    <value>Pintasan "Terjemahkan dan Ketik" menerjemahkan ke bahasa terpilih yang paling kiri. Saat merekam, Anda dapat beralih antara "Sesuai ucapan" dan bahasa yang dipilih di HUD (teks diketik dalam bahasa yang dipilih saat Anda berhenti). Terjemahan menggunakan AI yang dipilih untuk dikte di tab "AI". Pilih setidaknya satu.</value>
+  </data>
+  <data name="Settings_RecordingMode" xml:space="preserve">
+    <value>Mode perekaman</value>
+  </data>
+  <data name="Settings_Toggle" xml:space="preserve">
+    <value>Mulai/hentikan setiap kali ditekan (toggle)</value>
+  </data>
+  <data name="Settings_PushToTalk" xml:space="preserve">
+    <value>Rekam hanya selama ditahan</value>
+  </data>
+  <data name="Settings_Engine" xml:space="preserve">
+    <value>Mesin transkripsi</value>
+  </data>
+  <data name="Settings_Engine_Windows" xml:space="preserve">
+    <value>Pengenalan ucapan Windows (default)</value>
+  </data>
+  <data name="Settings_Engine_Whisper" xml:space="preserve">
+    <value>Whisper (berjalan di PC ini)</value>
+  </data>
+  <data name="Settings_Engine_Gemini" xml:space="preserve">
+    <value>Gemini (mengirim audio ke Google)</value>
+  </data>
+  <data name="Settings_Engine_WindowsNote" xml:space="preserve">
+    <value>Mengenali ucapan dengan pengenalan ucapan Windows (dikte) dan menampilkan hasil sementara saat Anda berbicara. Fitur ini menggunakan pengenalan ucapan online Microsoft, jadi aktifkan "Pengenalan ucapan online" di Pengaturan Windows → Privasi &amp; keamanan → Ucapan. Mikrofon default Windows yang digunakan (pilihan di bawah tidak digunakan).</value>
+  </data>
+  <data name="Settings_OpenSpeechSettings" xml:space="preserve">
+    <value>Buka Pengaturan Ucapan</value>
+  </data>
+  <data name="Settings_OpenLanguageSettings" xml:space="preserve">
+    <value>Buka Pengaturan Bahasa</value>
+  </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>Mentranskripsi di PC ini dengan whisper.cpp (audio tidak pernah keluar dari PC Anda). Transkripsi berjalan setelah Anda menghentikan perekaman. Memilih model akan mengunduhnya dari Hugging Face. Model yang lebih besar lebih akurat tetapi lebih lambat.</value>
+  </data>
+  <data name="Settings_Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="Settings_Download" xml:space="preserve">
+    <value>Unduh</value>
+  </data>
+  <data name="Settings_CancelDownload" xml:space="preserve">
+    <value>Batal</value>
+  </data>
+  <data name="Settings_Engine_GeminiNote" xml:space="preserve">
+    <value>Mengirim audio rekaman ke API Gemini Google (menggunakan kredensial Gemini yang diatur di tab AI dan model Gemini untuk dikte) untuk ditranskripsi. Perhatikan bahwa audio Anda dikirim ke Google. Audio dikirim setelah Anda menghentikan perekaman (maksimal 7 menit sekaligus).</value>
+  </data>
+  <data name="Settings_Microphone" xml:space="preserve">
+    <value>Mikrofon</value>
+  </data>
+  <data name="Settings_NoTarget" xml:space="preserve">
+    <value>Saat tidak ada tempat untuk mengetik</value>
+  </data>
+  <data name="Settings_NoTargetNote" xml:space="preserve">
+    <value>Jika tidak ada bidang teks yang memiliki fokus (misalnya, desktop berada di depan) atau aplikasi di depan berjalan sebagai administrator dan tidak dapat ditempeli, hasil ditampilkan di bagian bawah layar. Hasil tetap tampil hingga Anda menutupnya, dan Anda dapat menyalinnya dengan "Salin" atau dengan memilih teks.</value>
+  </data>
+  <data name="Settings_Fallback_Keep" xml:space="preserve">
+    <value>Juga taruh di papan klip (cukup tekan Ctrl+V di tempat yang diinginkan)</value>
+  </data>
+  <data name="Settings_Fallback_Restore" xml:space="preserve">
+    <value>Hanya tampilkan dan biarkan papan klip tidak berubah (salin dengan "Salin" di panel)</value>
+  </data>
+  <data name="Settings_Other" xml:space="preserve">
+    <value>Lainnya</value>
+  </data>
+  <data name="Settings_PlaySounds" xml:space="preserve">
+    <value>Putar suara saat perekaman dimulai dan berhenti</value>
+  </data>
+  <data name="Settings_OpenLogs" xml:space="preserve">
+    <value>Buka Folder Log</value>
+  </data>
+  <data name="Settings_OpenSettingsFolder" xml:space="preserve">
+    <value>Buka Folder Pengaturan</value>
+  </data>
+  <data name="Settings_AiAndModels" xml:space="preserve">
+    <value>AI dan model</value>
+  </data>
+  <data name="Settings_Ai_Dictation" xml:space="preserve">
+    <value>Dikte (perapian, terjemahan)</value>
+  </data>
+  <data name="Settings_Ai_Local" xml:space="preserve">
+    <value>Lokal</value>
+  </data>
+  <data name="Settings_Ai_Meeting" xml:space="preserve">
+    <value>Rapat (notulen)</value>
+  </data>
+  <data name="Settings_AiNote" xml:space="preserve">
+    <value>Anda dapat memilih AI dan model secara terpisah untuk dikte dan rapat. Default-nya adalah gemini-3.5-flash-lite (dikte) dan gemini-3.8-flash (notulen) untuk Gemini, serta Haiku 5.5 (dikte) dan Sonnet 5.5 (notulen) untuk Claude. Claude hanya digunakan untuk memproses teks, bukan untuk mentranskripsi audio (mesin transkripsi ada di tab "Umum" dan "Rapat").</value>
+  </data>
+  <data name="Settings_LocalModels" xml:space="preserve">
+    <value>Model lokal (LLM kecil yang berjalan di PC ini)</value>
+  </data>
+  <data name="Settings_LocalModelsNote" xml:space="preserve">
+    <value>Teks hanya diproses di PC ini dan tidak pernah dikirim melalui internet. Unduh dahulu model yang ingin Anda gunakan. Model berjalan di CPU, jadi perapian memerlukan beberapa hingga lebih dari sepuluh detik, dan notulen memerlukan beberapa hingga lebih dari sepuluh menit.</value>
+  </data>
+  <data name="Settings_Stop" xml:space="preserve">
+    <value>Hentikan</value>
+  </data>
+  <data name="Settings_Refine" xml:space="preserve">
+    <value>Rapikan dengan AI (perbaiki salah kenali, kata pengisi, koreksi diri, dan tanda baca)</value>
+  </data>
+  <data name="Settings_RefineNote" xml:space="preserve">
+    <value>Jika nonaktif, hanya penggantian kamus yang diterapkan pada teks yang dikenali sebelum diketik. Terjemahan hanya dapat dilakukan oleh AI, jadi teks tetap dikirim ke AI meskipun opsi ini nonaktif.</value>
+  </data>
+  <data name="Settings_RefineLanguage" xml:space="preserve">
+    <value>Bahasa perapian</value>
+  </data>
+  <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
+    <value>Sesuai ucapan</value>
+  </data>
+  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
+    <value>Selalu bahasa Jepang</value>
+  </data>
+  <data name="Settings_SendAppName" xml:space="preserve">
+    <value>Beri tahu AI nama aplikasi tempat Anda mengetik (untuk menyesuaikan gayanya)</value>
+  </data>
+  <data name="Settings_GeminiAuth" xml:space="preserve">
+    <value>Autentikasi Gemini</value>
+  </data>
+  <data name="Settings_Auth_ApiKey" xml:space="preserve">
+    <value>Kunci API (Google AI Studio)</value>
+  </data>
+  <data name="Settings_Auth_ServiceAccount" xml:space="preserve">
+    <value>Akun layanan (Vertex AI)</value>
+  </data>
+  <data name="Settings_ApiKey" xml:space="preserve">
+    <value>Kunci API</value>
+  </data>
+  <data name="Settings_KeyJson" xml:space="preserve">
+    <value>Kunci (JSON)</value>
+  </data>
+  <data name="Settings_Browse" xml:space="preserve">
+    <value>Telusuri…</value>
+  </data>
+  <data name="Settings_Region" xml:space="preserve">
+    <value>Wilayah</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Pilih kunci akun layanan yang memiliki peran Vertex AI User (roles/aiplatform.user). Hanya lokasi file kunci yang disimpan (isinya tidak disalin). Simpan file kunci di tempat yang tidak dapat dibaca orang lain. Wilayah default adalah global.</value>
+  </data>
+  <data name="Settings_ClaudeApiKey" xml:space="preserve">
+    <value>Kunci API Claude</value>
+  </data>
+  <data name="Settings_TestConnection" xml:space="preserve">
+    <value>Uji Koneksi</value>
+  </data>
+  <data name="Settings_ClaudeNote" xml:space="preserve">
+    <value>Masukkan kunci API yang dibuat di Claude Console (platform.claude.com). Kunci yang tersimpan tidak ditampilkan di layar (hanya 4 karakter terakhir). "Uji Koneksi" hanya mengambil informasi model dan tidak dikenai biaya.</value>
+  </data>
+  <data name="Settings_KeyProtection" xml:space="preserve">
+    <value>Perlindungan kunci API</value>
+  </data>
+  <data name="Settings_UseHello" xml:space="preserve">
+    <value>Lindungi kunci API dengan Windows Hello (verifikasi dengan PIN, wajah, atau sidik jari saat digunakan)</value>
+  </data>
+  <data name="Settings_KeyProtectionNote" xml:space="preserve">
+    <value>Kunci disimpan terenkripsi di %LOCALAPPDATA%\Hanasu\secrets.json, bukan di settings.json. Dengan DPAPI default, hanya pengguna Windows ini yang dapat membacanya, tetapi aplikasi lain yang berjalan sebagai pengguna yang sama dapat membacanya tanpa konfirmasi. Dengan Windows Hello, aplikasi lain yang mencoba membacanya akan memicu permintaan Windows Hello (Anda memverifikasi sekali saat pertama digunakan setelah memulai, dan lagi setelah mengunci layar). Ini tidak dapat mencegah aplikasi yang berjalan sebagai pengguna yang sama membaca memori saat Hanasu berjalan.</value>
+  </data>
+  <data name="Settings_Trial" xml:space="preserve">
+    <value>Coba (AI dikte)</value>
+  </data>
+  <data name="Settings_TrialSample" xml:space="preserve">
+    <value>eh jadi untuk rapat besok itu eh saya mau pakai slide yang saya bikin pakai gemini</value>
+  </data>
+  <data name="Settings_TryRefine" xml:space="preserve">
+    <value>Coba Rapikan</value>
+  </data>
+  <data name="Settings_TryEnglish" xml:space="preserve">
+    <value>Coba Terjemahan Inggris</value>
+  </data>
+  <data name="Settings_TryJapanese" xml:space="preserve">
+    <value>Coba Terjemahan Jepang</value>
+  </data>
+  <data name="Settings_Tab_Meetings" xml:space="preserve">
+    <value>Rapat</value>
+  </data>
+  <data name="Settings_MeetingStartStop" xml:space="preserve">
+    <value>Mulai/hentikan perekaman</value>
+  </data>
+  <data name="Settings_HighlightMark" xml:space="preserve">
+    <value>Tanda "Penting"</value>
+  </data>
+  <data name="Settings_UseHighlightHotKey" xml:space="preserve">
+    <value>Gunakan pintasan "Penting" (aktif hanya saat merekam)</value>
+  </data>
+  <data name="Settings_Transcription" xml:space="preserve">
+    <value>Transkripsi</value>
+  </data>
+  <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
+    <value>Whisper (berjalan di PC ini; default)</value>
+  </data>
+  <data name="Settings_MeetingEngineNote" xml:space="preserve">
+    <value>Saat merekam, audio hanya ditulis ke file; setelah Anda berhenti, saluran "Saya" dan "Lawan bicara" masing-masing ditranskripsi dengan stempel waktu. Pengenalan ucapan Windows hanya dapat mendengarkan mikrofon default Windows dan tidak dapat mengambil audio PC (lawan bicara), jadi tidak dapat digunakan untuk rapat.</value>
+  </data>
+  <data name="Settings_Speakers" xml:space="preserve">
+    <value>Pembicara</value>
+  </data>
+  <data name="Settings_Diarize" xml:space="preserve">
+    <value>Pisahkan pembicara lain (Pembicara 1, Pembicara 2…)</value>
+  </data>
+  <data name="Settings_DiarizeNote" xml:space="preserve">
+    <value>Pembicara dipisahkan di PC ini dengan sherpa-onnx (model pyannote dan 3D-Speaker). Model (sekitar 34 MB) diunduh saat pertama kali. Jika nonaktif, lawan bicara digabung menjadi satu "Lawan bicara". Anda dapat mengganti nama pembicara di Catatan Rapat.</value>
+  </data>
+  <data name="Settings_Minutes" xml:space="preserve">
+    <value>Notulen</value>
+  </data>
+  <data name="Settings_MakeMinutes" xml:space="preserve">
+    <value>Buat notulen dengan AI setelah perekaman</value>
+  </data>
+  <data name="Settings_MinutesNote" xml:space="preserve">
+    <value>Pilih AI dan model untuk notulen di "Rapat (notulen)" pada tab "AI". Hanya teks transkrip yang dikirim (jika mesin transkripsi adalah Gemini, audio juga dikirim ke Google). Pilih templat notulen di Catatan Rapat.</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>Penyimpanan</value>
+  </data>
+  <data name="Settings_KeepAudio" xml:space="preserve">
+    <value>Simpan file audio (me.wav / others.wav) setelah diproses</value>
+  </data>
+  <data name="Settings_KeepAudioNote" xml:space="preserve">
+    <value>Jika nonaktif, audio dihapus setelah transkrip dan notulen dibuat (tetap disimpan jika transkripsi gagal). Formatnya WAV mono 16 kHz, sekitar 115 MB per saluran per jam.</value>
+  </data>
+  <data name="Settings_SaveLocation" xml:space="preserve">
+    <value>Lokasi penyimpanan</value>
+  </data>
+  <data name="Settings_Open" xml:space="preserve">
+    <value>Buka</value>
+  </data>
+  <data name="Settings_MeetingsFolderNote" xml:space="preserve">
+    <value>Folder yang dinamai sesuai tanggal dan waktu dibuat untuk setiap rapat, berisi meeting.json (format sama dengan versi Mac), transcript.md, minutes.md, notes.md, dan audio.</value>
+  </data>
+  <data name="Settings_ConsentNote" xml:space="preserve">
+    <value>Minta persetujuan peserta lain sebelum merekam. Menggunakan earphone mencegah suara mereka masuk ke mikrofon Anda.</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>Riwayat</value>
+  </data>
+  <data name="Settings_DictationHistory" xml:space="preserve">
+    <value>Riwayat dikte</value>
+  </data>
+  <data name="Settings_SaveHistory" xml:space="preserve">
+    <value>Simpan riwayat ke file</value>
+  </data>
+  <data name="Settings_HistoryNote" xml:space="preserve">
+    <value>Menyimpan hasil dikte dan transkrip asli agar Anda dapat mencari dan menyalinnya dengan "Buka Riwayat". Jika nonaktif, hasil baru tidak ditulis ke file; hanya 10 terakhir yang disimpan di memori untuk "Hasil Terbaru" di menu area pemberitahuan (riwayat yang tersimpan tidak dihapus).</value>
+  </data>
+  <data name="Settings_KeepDays" xml:space="preserve">
+    <value>Simpan selama</value>
+  </data>
+  <data name="Settings_KeepCount" xml:space="preserve">
+    <value>Simpan hingga</value>
+  </data>
+  <data name="Settings_KeepNote" xml:space="preserve">
+    <value>Hanya entri yang memenuhi kedua batas yang disimpan; yang terlama dihapus lebih dulu (saat menambahkan, saat memulai, dan saat Anda mengubah pengaturan ini). Default-nya 30 hari dan 1.000 entri.</value>
+  </data>
+  <data name="Settings_OpenHistory" xml:space="preserve">
+    <value>Buka Riwayat…</value>
+  </data>
+  <data name="Settings_DeleteAllHistory" xml:space="preserve">
+    <value>Hapus Semua Riwayat…</value>
+  </data>
+  <data name="Settings_Tab_Dictionary" xml:space="preserve">
+    <value>Kamus &amp; Aturan</value>
+  </data>
+  <data name="Settings_UserDictionary" xml:space="preserve">
+    <value>Kamus pengguna</value>
+  </data>
+  <data name="Settings_TryReplace" xml:space="preserve">
+    <value>Coba penggantian</value>
+  </data>
+  <data name="Settings_ExtraRules" xml:space="preserve">
+    <value>Aturan perapian tambahan</value>
+  </data>
+  <data name="Settings_ExtraRulesNote" xml:space="preserve">
+    <value>Aturan yang diberikan ke AI (Gemini, Claude) saat merapikan (misalnya, "gunakan nada formal"). Aturan ini tidak digunakan saat menerjemahkan ke bahasa Inggris (digunakan saat menerjemahkan ke bahasa Jepang).</value>
+  </data>
+  <data name="Settings_DictionaryHelp" xml:space="preserve">
+    <value>Satu per baris. Kata saja memberi tahu AI cara mengejanya. "yang terdengar =&gt; ejaan" mengganti hasil pengenalan dengan ejaan tersebut (misalnya, stock mark =&gt; Stockmark; pisahkan beberapa di sebelah kiri dengan ","). Baris yang diawali "#" adalah komentar.</value>
+  </data>
+  <data name="Settings_EntryCount" xml:space="preserve">
+    <value>{0} entri</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>Disimpan</value>
+  </data>
+  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
+    <value>Sama dengan pintasan lain (dikte, terjemahan, atau rapat)</value>
+  </data>
+  <data name="Settings_MicNote_Windows" xml:space="preserve">
+    <value>Mesin Windows menggunakan mikrofon default Windows (Anda dapat mengubahnya di Pengaturan Windows → Sistem → Suara).</value>
+  </data>
+  <data name="Settings_MicNote_Selected" xml:space="preserve">
+    <value>Whisper dan Gemini merekam dengan mikrofon yang dipilih di sini (dikonversi ke mono 16 kHz).</value>
+  </data>
+  <data name="Settings_HistoryStatus" xml:space="preserve">
+    <value>Riwayat saat ini: {0} entri (disimpan di: {1})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteWhisper" xml:space="preserve">
+    <value>Hapus model Whisper {0} ({1})?</value>
+  </data>
+  <data name="Settings_Downloading" xml:space="preserve">
+    <value>Mengunduh… {0}</value>
+  </data>
+  <data name="Settings_Downloaded" xml:space="preserve">
+    <value>Telah diunduh</value>
+  </data>
+  <data name="Settings_DownloadFailed" xml:space="preserve">
+    <value>Gagal: {0}</value>
+  </data>
+  <data name="Settings_NotDownloaded" xml:space="preserve">
+    <value>Belum diunduh</value>
+  </data>
+  <data name="Settings_ConfirmDeleteLocal" xml:space="preserve">
+    <value>Hapus model lokal {0} ({1})?</value>
+  </data>
+  <data name="Settings_MinutesAiNote" xml:space="preserve">
+    <value>Notulen dibuat dengan {0} ({1}).</value>
+  </data>
+  <data name="Settings_Missing_LocalModel" xml:space="preserve">
+    <value>model lokal "{0}"</value>
+  </data>
+  <data name="Settings_Missing_GeminiCredentials" xml:space="preserve">
+    <value>Kredensial Gemini</value>
+  </data>
+  <data name="Settings_MissingNote" xml:space="preserve">
+    <value>Belum diatur: {0} (atur atau unduh di bawah).</value>
+  </data>
+  <data name="Settings_EnterApiKey" xml:space="preserve">
+    <value>Masukkan kunci API</value>
+  </data>
+  <data name="Settings_ClaudeKeyPrefix" xml:space="preserve">
+    <value>Kunci API Claude diawali dengan "sk-ant-". Periksa yang Anda masukkan.</value>
+  </data>
+  <data name="Settings_ClaudeConnecting" xml:space="preserve">
+    <value>Menghubungkan ke API Claude…</value>
+  </data>
+  <data name="Settings_ClaudeConnectedUnsaved" xml:space="preserve">
+    <value>Terhubung dengan kunci ini (belum disimpan). {0} tersedia. </value>
+  </data>
+  <data name="Settings_ClaudeConnected" xml:space="preserve">
+    <value>Terhubung. {0} tersedia. </value>
+  </data>
+  <data name="Settings_Hello_On" xml:space="preserve">
+    <value>Dilindungi dengan Windows Hello.</value>
+  </data>
+  <data name="Settings_Hello_Off" xml:space="preserve">
+    <value>Saat ini dilindungi dengan DPAPI.</value>
+  </data>
+  <data name="Settings_Hello_Unavailable" xml:space="preserve">
+    <value>Windows Hello belum diatur di PC ini, jadi opsi ini tidak dapat dipilih (Pengaturan Windows → Akun → Opsi masuk).</value>
+  </data>
+  <data name="Settings_Hello_Enabling" xml:space="preserve">
+    <value>Meminta verifikasi Windows Hello (muncul dua kali untuk konfirmasi)…</value>
+  </data>
+  <data name="Settings_Hello_Disabling" xml:space="preserve">
+    <value>Meminta verifikasi Windows Hello (untuk membaca kunci sekali dan beralih kembali ke DPAPI)…</value>
+  </data>
+  <data name="Settings_Hello_SwitchFailed" xml:space="preserve">
+    <value>Tidak dapat beralih: {0}</value>
+  </data>
+  <data name="Settings_ServiceAccountFilter" xml:space="preserve">
+    <value>Kunci akun layanan (*.json)|*.json|Semua file (*.*)|*.*</value>
+  </data>
+  <data name="Settings_ServiceAccountDialogTitle" xml:space="preserve">
+    <value>Pilih Kunci Akun Layanan (JSON)</value>
+  </data>
+  <data name="Settings_TrialRefining" xml:space="preserve">
+    <value>Merapikan…</value>
+  </data>
+  <data name="Settings_TrialTranslating" xml:space="preserve">
+    <value>Menerjemahkan…</value>
+  </data>
+  <data name="Settings_TrialDone" xml:space="preserve">
+    <value>{0} ({1}) memerlukan {2} dtk</value>
+  </data>
+  <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
+    <value>Audio rapat yang direkam dibagi menjadi potongan 5 menit dan dikirim ke Gemini (menggunakan kredensial Gemini di tab AI dan model Gemini untuk dikte). Perhatikan bahwa audio Anda dikirim ke Google.</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
+    <value>Menggunakan model Whisper yang dipilih di tab "Umum" ({0}).</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
+    <value> Model belum diunduh (unduh di tab "Umum").</value>
+  </data>
+  <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
+    <value>Pilih Lokasi Penyimpanan Rapat</value>
+  </data>
+  <data name="Settings_DictionaryLineIssue" xml:space="preserve">
+    <value>Baris {0}: {1}</value>
+  </data>
+  <data name="Settings_NoReplacements" xml:space="preserve">
+    <value>Tidak ada penggantian</value>
+  </data>
+  <data name="Settings_ReplacementResult" xml:space="preserve">
+    <value>→ {0} ({1})</value>
+  </data>
+  <data name="Settings_TrialAppName" xml:space="preserve">
+    <value>Pengaturan Hanasu</value>
+  </data>
+  <data name="Mic_UnsupportedFormat" xml:space="preserve">
+    <value>Format perekaman tidak didukung ({0})</value>
+  </data>
+</root>

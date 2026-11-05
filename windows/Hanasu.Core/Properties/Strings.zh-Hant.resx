@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>找不到執行本機 LLM 的 llama-server。請重新解壓縮 Hanasu 的 zip 檔，或在環境變數 HANASU_LLAMA_SERVER 中指定其路徑。</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>尚未下載本機模型。請在選單 → 設定 → AI 中下載。</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>尚未下載本機模型「{0}」。請在選單 → 設定 → AI 中下載。</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>無法啟動本機 LLM（結束代碼 {0}）。</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>本機 LLM 未在 {0} 秒內完成啟動。</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>本機 LLM 傳回錯誤（{0}）</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>本機 LLM 的回應因達到長度上限而被截斷，因此未使用。</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>本機 LLM 未傳回結果。</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>無法讀取本機 LLM 的回應。</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>本機 LLM 未在 {0} 秒內回應。</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>本機</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>推薦。Google 出品。體積最大，潤飾與會議記錄的效果最自然。適合記憶體 16 GB 以上的電腦。</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>Liquid AI 出品。小巧快速。擅長遵循日文指示。</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>SB Intuitions 出品。以日文訓練。上下文最多 8K（較長的會議會分段整理）。</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>阿里巴巴出品。體積約為 Gemma 的一半，在記憶體 8 GB 的電腦上也較容易執行。處理口誤更正的能力不如 Gemma。</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>授權：{0}。此授權不允許年營收 1,000 萬美元以上的組織進行商業使用。</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>授權：{0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0}（{1}）· 推薦</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>除了輔助按鍵之外，請再按一個鍵。</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc 用於取消錄音，因此無法設為快速鍵。</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>請與 Ctrl、Alt、Shift 或 Win 組合使用（F1–F24 可單獨使用）。</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>只有 Shift 的組合會與文字輸入衝突，因此無法使用。</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0} 已用於{1}，請避免使用。</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>Windows 視窗功能表</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>Windows 語音輸入（Win + H）</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>切換輸入語言</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>開啟或關閉輸入法（視輸入法而定）</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>輸入全形/半形空格</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>切換視窗</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>關閉視窗</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>鎖定畫面</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>顯示桌面</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>轉換</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>無轉換</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>按鍵 {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>未設定</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>結尾不明</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>受 Windows Hello 保護</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>受 DPAPI 保護</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>已儲存（{0}，{1}）</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>已儲存的 API 金鑰已損毀。請在設定 → AI 中重新輸入。</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>無法解密受 Windows Hello 保護的 API 金鑰（Windows Hello 金鑰可能已重新建立）。請在設定 → AI 中重新輸入。</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>無法讀取已儲存的 API 金鑰（可能是由其他 Windows 使用者或在其他電腦上儲存的）。請在設定 → AI 中重新輸入。</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>此電腦無法使用 Windows Hello。</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>此電腦無法使用 Windows Hello，因此無法讀取已儲存的 API 金鑰。請在設定 → AI 中重新輸入。</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>無法建立 Windows Hello 金鑰。</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>Windows Hello 金鑰未能產生相同的值，因此未切換為 Windows Hello 保護（仍使用 DPAPI）。</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>尚未設定 Claude API 金鑰（選單 → 設定 → AI）。</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude 未在 {0} 秒內回應。</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude 基於安全考量拒絕處理此文字。請改用其他模型（設定 → AI）或 Gemini。</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude 基於安全考量拒絕處理此文字（{0}）。請改用其他模型（設定 → AI）或 Gemini。</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Claude 的回應過長，已被截斷。</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude 未傳回結果。</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>Claude API 金鑰不正確（401）。請在設定 → AI 中重新輸入您在 Claude Console 建立的金鑰。</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>此 API 金鑰無法使用 Claude（403）</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>找不到模型 {0}，或此 API 金鑰無法使用該模型（404）。</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>Claude API 的付款發生問題（402）。請檢查 Claude Console 中的帳單設定。</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>已達到 Claude API 的使用上限（429）。請稍候再試。</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>Claude API 目前負載過高（529）。請稍候再試。</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>Claude API 發生錯誤（{0}）。請稍候再試。</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>Claude API 未接受要求（{0}）</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>無法連線到 Claude API。請檢查網路連線。</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5（快速、便宜；語音輸入的預設模型）</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5（會議記錄的預設模型）</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5（最聰明、最貴）</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>尚未設定 Gemini 認證資訊（API 金鑰或服務帳戶）。</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Gemini API 錯誤（{0}）：{1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini 未傳回結果。</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini 未傳回結果（{0}）。</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>無法讀取 Gemini 的回應。</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini 未在 {0} 秒內回應。</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>找不到服務帳戶 JSON：{0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>無法讀取服務帳戶 JSON。</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
+    <value>服務帳戶 JSON 中的 token_uri 不是 https。</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>取得存取權杖逾時。</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>無法取得存取權杖（{0}）：{1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>無法讀取服務帳戶的私密金鑰。</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>無法簽署存取權杖要求：{0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>只允許從指定的主機下載：{0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>下載失敗（HTTP {0}）。</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>下載被重新導向至非 https 的位置，因此已停止下載。</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>要下載的檔案大小與預期不符（{0} 位元組；預期 {1} 位元組）。</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>檔案大於預期，因此已停止下載。</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>下載已中斷。</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>下載檔案的雜湊值（SHA-256）不符，因此不會使用。</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>正在使用 {0} 轉錄…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>轉錄引擎為 Gemini，但尚未設定 Gemini 認證資訊（選單 → 設定 → AI）。</value>
+  </data>
+  <data name="Transcription_GeminiTooLong" xml:space="preserve">
+    <value>錄音過長，無法傳送到 Gemini（最長 {0} 分鐘）。</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>使用 Gemini 轉錄失敗：{0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0}（{1}）— {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>最小。日文準確度低（用於測試）。</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>較小。日文準確度較低。</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>適合日常使用。速度與準確度的平衡良好。</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>準確度高。適合高速 CPU。</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>準確度高；經量化後體積較小。適合高速 CPU。</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>準確度高。適合高速 CPU。</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>這不是 WAV 檔案。</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>WAV 檔案中沒有 fmt 區塊。</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>不支援的 WAV 格式（format={0}, bits={1}）。</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>WAV 檔案中沒有 data 區塊。</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>英文</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>日文</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>譯為英文</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>譯為日文</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>翻譯並輸入</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>譯為英文並輸入</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>譯為日文並輸入</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>已譯為英文並輸入</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>已譯為日文並輸入</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>已輸入</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>已取消</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>正在準備…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>正在完成…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>未辨識到語音。</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>錄音中</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>錯誤</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>請開始說話…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>無法貼到以系統管理員身分執行的應用程式</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>無法傳送貼上按鍵</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>無法使用剪貼簿</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>無法輸入文字</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>找不到可以輸入的位置</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>文字也已放入剪貼簿。請按一下要輸入的位置，然後按 Ctrl+V。</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>請按一下「複製」或選取文字並複製，然後在要輸入的位置按 Ctrl+V。</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>正在使用 {0} 譯為英文…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>正在使用 {0} 譯為日文…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>正在使用 {0} 潤飾…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>潤飾</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>AI 失敗（原文）</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>未設定（原文）</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>潤飾已關閉（原文）</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0} 天</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>永久</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>無法讀取歷程記錄檔案，已將其保留為 {0} 並重新開始一個新檔案。</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>無法讀取歷程記錄檔案：{0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>無法儲存歷程記錄：{0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>今天</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>昨天</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>M月d日 ddd</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>yyyy年M月d日 ddd</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}，因此未經潤飾直接輸入（選單 → 設定 → AI）。</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}，因此未經翻譯直接輸入（選單 → 設定 → AI）。</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>已輸入潤飾前的文字。</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>已輸入翻譯前的文字。</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>尚未下載本機 LLM 模型（選單 → 設定 → AI）。</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>尚未設定 Gemini 認證資訊（API 金鑰或服務帳戶）（選單 → 設定 → AI）。</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>尚未下載本機 LLM 模型</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>尚未設定 {0} 認證資訊</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>例行會議</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>商務洽談</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>腦力激盪</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>自訂</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>概要、討論內容、決議事項、待辦事項</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>進度、報告、問題、決議事項、待辦事項</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>近況、煩惱、回饋、共識、待辦事項</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>客戶的課題、提案內容、反應、疑慮、下一步行動</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>提出的點子、有潛力的方案、待議問題、下一步</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>依照您撰寫的指示</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>正在區分對方的說話者…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>無法區分對方的說話者，已將其合併為一位「對方」（{0}）。</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>音訊檔案已保留。</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>無法建立會議記錄：{0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}，因此未建立會議記錄（選單 → 設定 → AI）。</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>正在使用 {0} 建立會議記錄…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>正在使用 {0} 轉錄…（{1}）</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>正在使用 {0} 轉錄…（{1} {2}）</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>無法轉錄音訊（{0}）：{1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>會議的轉錄引擎為 Gemini，但尚未設定 Gemini 認證資訊（選單 → 設定 → AI）。</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>會議 {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>錄製期間應用程式已結束。音訊檔案（{0} / {1}）可能已保留部分內容。</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>無法開始錄製會議</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>語音輸入正在錄音。請在結束後再試一次。</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>無法錄製電腦音訊（對方）</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>將只錄製您的聲音（麥克風）。{0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>無法開始錄製：{0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>未能開始錄製會議</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>正在停止錄製…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>會議錄製</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>會議已錄製</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>逐字稿已儲存。</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>逐字稿與會議記錄已儲存。</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>會議已錄製（部分有問題）</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>錄製後的處理失敗：{0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>會議錄製失敗</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>正在錄製、處理或重新建立會議記錄的會議無法刪除。</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>麥克風錄音已停止</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>錄音已停止（例如麥克風被拔除），因此將停止錄製會議。</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>我</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>對方</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>說話者 {0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>在場者 {0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — 逐字稿</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- 日期：{0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- 長度：{0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — 筆記</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>沒有「重要」標記。錄製時按「★ 重要」或使用快速鍵加上標記後，標記前後的對話會顯示在這裡。</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>重要</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>此標記前後（前 30 秒至後 15 秒）沒有發言。</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>正確寫法是空的，因此不會取代。</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>「{0}」只有一個字元，因此不會使用（容易誤比對到其他詞的一部分）。</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>「{0}」也出現在上方的行，將使用上方的行。</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>尚未下載 Whisper 模型（{0}）。請在選單 → 設定 → 一般中下載。</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>無法執行 Whisper。請安裝 Microsoft Visual C++ 可轉散發套件（2015–2022，x64）後再試一次。（{0}）</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>無法載入 Whisper 模型：{0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>正在下載說話者分離模型…（{0} / {1} MB）</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>說話者分離模型的取樣率與預期不符（{0} Hz）。</value>
+  </data>
+</root>
