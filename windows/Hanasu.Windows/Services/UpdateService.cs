@@ -180,8 +180,8 @@ internal sealed class UpdateService
             }
             StartSwapScript(scriptPath, installDir, staged, parent);
         }
-        catch (Exception e) when (e is UpdateException or ModelVerificationException or IOException or UnauthorizedAccessException
-                                      or HttpRequestException or TaskCanceledException or System.ComponentModel.Win32Exception
+        catch (Exception e) when (e is UpdateException or global::Hanasu.Core.ModelVerificationException or IOException or UnauthorizedAccessException
+                                      or global::System.Net.Http.HttpRequestException or TaskCanceledException or System.ComponentModel.Win32Exception
                                       or InvalidOperationException)
         {
             AppLog.Write($"update: install failed: {e}");
