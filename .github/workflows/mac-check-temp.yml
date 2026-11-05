@@ -1,0 +1,50 @@
+# 一時的なもの（PR #71 の確かめ用）。マージの前に消す。
+# この環境（Linux）では Mac 版をビルドできないので、PR のブランチへの push で macOS のランナーでビルドと自己テストを走らせる
+name: mac-check-temp
+
+on:
+  push:
+    branches: [claude/upbeat-keller-7j3cmu]
+
+permissions:
+  contents: read
+
+jobs:
+  mac:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Debug build
+        run: |
+          swift --version
+          swift build 2>&1 | tee debug.log | tail -40
+          test "${PIPESTATUS[0]}" -eq 0
+          echo "warnings: $(grep -c 'warning:' debug.log || true)"
+          grep 'warning:' debug.log | grep -E 'AppUpdate|AppDelegate|SettingsView|main.swift' || true
+
+      - name: Self tests
+        run: |
+          B=.build/debug/Hanasu
+          $B --update-selftest
+          $B --test-dictionary > /dev/null
+          $B --test-paste-target > /dev/null
+          $B --test-speaker-names > /dev/null
+          $B --check-update --current 1.0.0
+          $B --check-update --current 99.0.0
+
+      - name: Release build
+        run: swift build -c release 2>&1 | tail -20; test "${PIPESTATUS[0]}" -eq 0
+
+      - name: App bundle and verify-update
+        run: |
+          ./scripts/build-app.sh
+          codesign -dvv build/Hanasu.app 2>&1 | grep -E "Identifier|Authority|Signature" || true
+          curl -sSL -o /tmp/Hanasu-1.5.0-macOS.zip https://github.com/kakibara/hanasu/releases/download/v1.5.0/Hanasu-1.5.0-macOS.zip
+          # アドホック署名の Hanasu から確かめるので、「配布用の証明書で署名されていない」で断るのが期待どおり（展開までは通る）
+          set +e
+          build/Hanasu.app/Contents/MacOS/Hanasu --verify-update /tmp/Hanasu-1.5.0-macOS.zip --version 1.5.0
+          echo "exit: $?"
