@@ -102,6 +102,7 @@ struct CustomMinutesPromptSheet: View {
                 Button("例に戻す") { prompt = MinutesTemplateStore.defaultCustomPrompt }
                 Spacer()
                 Button("キャンセル") { dismiss() }
+                    .keyboardShortcut(.cancelAction)
                 Button(actionLabel) {
                     onSave(prompt)
                     dismiss()

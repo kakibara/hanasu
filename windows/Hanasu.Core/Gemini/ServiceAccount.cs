@@ -39,10 +39,12 @@ public sealed record ServiceAccountCredentials(string ProjectId, string ClientEm
                 throw new ServiceAccountException("サービスアカウントの JSON を読み取れません");
             }
             var tokenUri = string.IsNullOrEmpty(raw.TokenUri) ? "https://oauth2.googleapis.com/token" : raw.TokenUri;
-            // 署名した JWT（鍵の代わりになる）を平文の HTTP で送らない
-            if (!Uri.TryCreate(tokenUri, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps)
+            // 署名した JWT（鍵の代わりになる）を送る先なので、Mac 版の isTrustedTokenURL と同じく Google のトークンの窓口に限る（DEC-COM-053）。
+            // 古い鍵ファイルは https://accounts.google.com/o/oauth2/token を書いている
+            if (!IsTrustedTokenUri(tokenUri))
             {
-                throw new ServiceAccountException("サービスアカウントの JSON の token_uri が https ではありません");
+                throw new ServiceAccountException(
+                    $"サービスアカウントの token_uri（{tokenUri}）が Google のトークンの窓口（oauth2.googleapis.com）ではないため、使いません");
             }
             return new ServiceAccountCredentials(raw.ProjectId, raw.ClientEmail, raw.PrivateKey, tokenUri);
         }
@@ -51,6 +53,13 @@ public sealed record ServiceAccountCredentials(string ProjectId, string ClientEm
             throw new ServiceAccountException("サービスアカウントの JSON を読み取れません", e);
         }
     }
+
+    // 設計判断: DEC-COM-053
+    internal static bool IsTrustedTokenUri(string tokenUri) =>
+        Uri.TryCreate(tokenUri, UriKind.Absolute, out var uri)
+        && uri.Scheme == Uri.UriSchemeHttps
+        && uri.Host is "oauth2.googleapis.com" or "accounts.google.com"
+        && uri.IsDefaultPort && string.IsNullOrEmpty(uri.UserInfo);
 
     private sealed class RawKey
     {

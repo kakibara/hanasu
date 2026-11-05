@@ -116,7 +116,7 @@ enum MeetingChat {
     - 日本語で答える。見出し・箇条書き・太字（Markdown）は使ってよいが、表は使わない。
     """
 
-    // 設計判断: DEC-MTG-081, DEC-MTG-082
+    // 設計判断: DEC-MTG-081, DEC-MTG-082, DEC-COM-054
     /// AI に渡す本文を作る。記録は送る時点のものを毎回渡し、それまでの会話は <conversation> に入れる。
     /// 答えのない質問（失敗・取り消し）は会話に入れない
     static func prompt(question: String, material: Material, history: [Message],
@@ -149,14 +149,14 @@ enum MeetingChat {
             : "記録済み（長さ \(Meeting.clock(material.elapsed))）"
         var sections = ["""
         <transcript>
-        \(transcript.joined(separator: "\n"))
+        \(PromptText.neutralizeDelimiters(transcript.joined(separator: "\n")))
         </transcript>
         """]
         if !material.pending.isEmpty {
-            sections.append("<pending_transcript>\n\(material.pending.map(\.formatted).joined(separator: "\n"))\n</pending_transcript>")
+            sections.append("<pending_transcript>\n\(PromptText.neutralizeDelimiters(material.pending.map(\.formatted).joined(separator: "\n")))\n</pending_transcript>")
         }
         if let notes = material.notes, !notes.isEmpty {
-            sections.append("<user_notes>\n\(notes)\n</user_notes>")
+            sections.append("<user_notes>\n\(PromptText.neutralizeDelimiters(notes))\n</user_notes>")
         }
         let title = material.title.replacingOccurrences(of: "\"", with: "'")
         var text = """
@@ -174,11 +174,11 @@ enum MeetingChat {
                 if content.count > options.maxHistoryMessageCharacters {
                     content = String(content.prefix(options.maxHistoryMessageCharacters)) + "（以下省略）"
                 }
-                return "<\(message.role.rawValue)>\n\(content)\n</\(message.role.rawValue)>"
+                return "<\(message.role.rawValue)>\n\(PromptText.neutralizeDelimiters(content))\n</\(message.role.rawValue)>"
             }
             text += "\n\n<conversation>\n\(body.joined(separator: "\n"))\n</conversation>"
         }
-        text += "\n\n<question>\n\(question)\n</question>"
+        text += "\n\n<question>\n\(PromptText.neutralizeDelimiters(question))\n</question>"
         return Prompt(text: text, coveredUntil: material.elapsed, lineCount: material.lines.count, omittedLines: omitted)
     }
 

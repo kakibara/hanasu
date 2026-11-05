@@ -118,10 +118,14 @@ struct LiveHighlightControls: View {
                 Image(systemName: caption.isShown ? "captions.bubble.fill" : "captions.bubble")
             }
             .help("字幕をほかのアプリの前面に表示する")
+            .accessibilityLabel("字幕を前面に表示")
+            .accessibilityValue(caption.isShown ? "オン" : "オフ")
+            // 設計判断: DEC-MTG-075（黄色の上は白ではなく黒の文字にする）
             Button {
                 if let onHighlight { onHighlight() } else { recorder.addHighlight() }
             } label: {
                 Label("ここ重要", systemImage: "star.fill")
+                    .foregroundStyle(.black)
             }
             .tint(.yellow)
             .buttonStyle(.borderedProminent)
@@ -197,6 +201,8 @@ struct MeetingNotesEditor: View {
     let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder
     @State private var text = ""
+    /// 「保存して議事録を作り直す」の確かめ（今の議事録があるときだけ出す。DEC-MTG-072）
+    @State private var confirmRegenerate = false
 
     private var changed: Bool { text != meeting.notesText }
 
@@ -230,17 +236,28 @@ struct MeetingNotesEditor: View {
                     .disabled(!changed)
                 Button("保存") { recorder.updateNotes(meeting, notes: MeetingNote.parse(text)) }
                     .disabled(!changed)
+                // 設計判断: DEC-MTG-072
                 Button("保存して議事録を作り直す") {
-                    let updated = recorder.updateNotes(meeting, notes: MeetingNote.parse(text))
-                    Task { await recorder.regenerateMinutes(updated) }
+                    if meeting.minutes == nil { saveAndRegenerate() } else { confirmRegenerate = true }
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
+                .confirmationDialog("メモを保存して、議事録を作り直しますか？", isPresented: $confirmRegenerate) {
+                    Button("作り直す", action: saveAndRegenerate)
+                    Button("キャンセル", role: .cancel) {}
+                } message: {
+                    Text("今の議事録とアクションアイテムは、メモを反映したものに置き換わります。")
+                }
             }
         }
         .padding()
         .onAppear { text = meeting.notesText }
         .onChange(of: meeting.id) { text = meeting.notesText }
+    }
+
+    private func saveAndRegenerate() {
+        let updated = recorder.updateNotes(meeting, notes: MeetingNote.parse(text))
+        Task { await recorder.regenerateMinutes(updated) }
     }
 }
 
@@ -257,6 +274,7 @@ struct MeetingNotesSettingsSection: View {
                 ShortcutRecorder(
                     combo: $settings.highlightHotKey,
                     defaultCombo: MeetingNotesSettings.defaultHighlightHotKey,
+                    kind: .highlight,
                     onBeginRecording: {
                         MeetingHighlightHotKey.shared.suspend()
                         onBeginShortcutRecording()
@@ -307,8 +325,10 @@ final class MeetingCaptionPanel: ObservableObject {
             panel.isReleasedWhenClosed = false
             panel.contentView = NSHostingView(rootView: MeetingCaptionView(recorder: recorder))
             panel.setFrameAutosaveName("HanasuMeetingCaption")
-            if !panel.setFrameUsingName("HanasuMeetingCaption"), let screen = NSScreen.main {
-                // 初回は画面の下の中央
+            // 設計判断: DEC-COM-017
+            // 初回はマウスのある画面の下の中央（HUD と同じ）。2 回目からは前に置いた位置
+            if !panel.setFrameUsingName("HanasuMeetingCaption"),
+               let screen = NSScreen.screens.first(where: { $0.frame.contains(NSEvent.mouseLocation) }) ?? NSScreen.main {
                 let frame = screen.visibleFrame
                 panel.setFrameOrigin(NSPoint(x: frame.midX - 280, y: frame.minY + 40))
             }
@@ -359,12 +379,15 @@ struct MeetingCaptionView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             VStack(spacing: 4) {
+                // 設計判断: DEC-MTG-075
                 Button { recorder.addHighlight() } label: {
                     Image(systemName: "star.fill")
+                        .foregroundStyle(.black)
                 }
                 .tint(.yellow)
                 .buttonStyle(.borderedProminent)
                 .help("ここ重要")
+                .accessibilityLabel("ここ重要")
                 .disabled(recorder.state != .recording)
                 HighlightUndoButton(recorder: recorder, compact: true)
                     .font(.caption)

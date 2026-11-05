@@ -174,6 +174,7 @@ struct ClaudeKeySection: View {
     @State private var saved = Keychain.exists(.claudeAPIKey)
     @State private var status: String?
     @State private var isTesting = false
+    @State private var confirmDelete = false
 
     var body: some View {
         Section {
@@ -185,7 +186,13 @@ struct ClaudeKeySection: View {
                     if saved {
                         Button(isTesting ? "確かめています…" : "接続を試す", action: testConnection)
                             .disabled(isTesting)
-                        Button("削除", role: .destructive, action: deleteKey)
+                        Button("削除…", role: .destructive) { confirmDelete = true }
+                            .confirmationDialog("保存した Claude の API キーを削除しますか？", isPresented: $confirmDelete) {
+                                Button("削除", role: .destructive, action: deleteKey)
+                                Button("キャンセル", role: .cancel) {}
+                            } message: {
+                                Text("キーチェーンから消えます。使い続けるには、もう一度キーを保存してください。")
+                            }
                     }
                 }
             }
@@ -242,13 +249,17 @@ struct ClaudeKeySection: View {
     }
 }
 
-/// Gemini の認証。AI に Gemini を選んだときと、文字起こしのエンジン「Gemini」で使う。オンボーディングの AI のページでも使う
+// 設計判断: DEC-COM-050
+/// Gemini の認証。AI に Gemini を選んだときと、文字起こしのエンジン「Gemini」で使う。オンボーディングの AI のページでも使う。
+/// 「接続を試す」は Claude と同じく、モデルの情報を取るだけ（トークンを使わない）
 struct GeminiAuthSection: View {
     @ObservedObject var settings: AppSettings
     @State private var newKey = ""
     @State private var hint: String? = Keychain.hint(.geminiAPIKey)
     @State private var saved = Keychain.exists(.geminiAPIKey)
     @State private var savedMessage: String?
+    @State private var confirmDeleteKey = false
+    @State private var isTesting = false
 
     var body: some View {
         Section {
@@ -263,11 +274,19 @@ struct GeminiAuthSection: View {
                             .foregroundStyle(saved ? .primary : .secondary)
                             .monospaced()
                         if saved {
-                            Button("削除", role: .destructive) {
-                                Keychain.delete(.geminiAPIKey)
-                                refresh()
-                                savedMessage = "キーを削除しました"
-                            }
+                            Button(isTesting ? "確かめています…" : "接続を試す", action: testConnection)
+                                .disabled(isTesting)
+                            Button("削除…", role: .destructive) { confirmDeleteKey = true }
+                                .confirmationDialog("保存した Gemini の API キーを削除しますか？", isPresented: $confirmDeleteKey) {
+                                    Button("削除", role: .destructive) {
+                                        Keychain.delete(.geminiAPIKey)
+                                        refresh()
+                                        savedMessage = "キーを削除しました"
+                                    }
+                                    Button("キャンセル", role: .cancel) {}
+                                } message: {
+                                    Text("キーチェーンから消えます。使い続けるには、もう一度キーを保存してください。")
+                                }
                         }
                     }
                 }
@@ -277,7 +296,7 @@ struct GeminiAuthSection: View {
                         let ok = Keychain.save(.geminiAPIKey, key: newKey)
                         newKey = ""
                         refresh()
-                        savedMessage = ok ? "キーチェーンに保存しました" : "保存に失敗しました"
+                        savedMessage = ok ? "キーチェーンに保存しました。「接続を試す」で確かめられます" : "保存に失敗しました"
                     }
                     .disabled(newKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
@@ -292,14 +311,54 @@ struct GeminiAuthSection: View {
                     Button("選択…", action: chooseServiceAccountFile)
                 }
                 TextField("リージョン", text: $settings.vertexLocation, prompt: Text("global"))
-                Text(serviceAccountSummary)
-                    .font(.caption).foregroundStyle(.secondary)
+                HStack(alignment: .firstTextBaseline) {
+                    Text(serviceAccountSummary)
+                        .font(.caption).foregroundStyle(.secondary)
+                    Spacer()
+                    if !settings.serviceAccountPath.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        Button(isTesting ? "確かめています…" : "接続を試す", action: testConnection)
+                            .disabled(isTesting)
+                    }
+                }
+                if let savedMessage {
+                    Text(savedMessage).font(.caption).foregroundStyle(.secondary)
+                }
             }
         } header: {
             Text("Gemini の認証")
         } footer: {
-            Text("AI に Gemini を選んだときと、文字起こしのエンジンに Gemini を選んだときに使います。")
+            Text("AI に Gemini を選んだときと、文字起こしのエンジンに Gemini を選んだときに使います。「接続を試す」はモデルの情報を取るだけで、料金はかかりません。")
                 .font(.caption).foregroundStyle(.secondary)
+        }
+    }
+
+    /// 「接続を試す」。設定の認証（保存したキーかサービスアカウント）で、音声入力か会議に選んでいる Gemini のモデルの情報を取る
+    private func testConnection() {
+        let auth: GeminiClient.Auth?
+        do {
+            auth = try GeminiClient.authFromSettings(settings)
+        } catch {
+            savedMessage = "⚠️ " + error.localizedDescription
+            return
+        }
+        guard let auth else {
+            refresh()
+            savedMessage = "⚠️ " + GeminiError.missingAPIKey.localizedDescription
+            return
+        }
+        // 音声入力に Gemini を選んでいればそのモデル、そうでなければ会議のモデル（どちらでもなければ音声入力の既定）
+        let model = settings.aiProvider(for: .meeting) == .gemini && settings.aiProvider(for: .dictation) != .gemini
+            ? settings.meetingMinutesModel : settings.model
+        isTesting = true
+        savedMessage = nil
+        Task {
+            do {
+                try await GeminiClient(auth: auth).testConnection(model: model)
+                savedMessage = "接続できました（\(model) を使えます）"
+            } catch {
+                savedMessage = "⚠️ " + error.localizedDescription
+            }
+            isTesting = false
         }
     }
 
