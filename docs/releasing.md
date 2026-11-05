@@ -21,6 +21,14 @@ Claude Code では、スキル `release`（[.claude/skills/release/SKILL.md](../
 - タグの時点のコードが原因なら、手動の実行では直りません。公開前の下書きなら、直しを `main` に入れ、下書きとタグを消して、直した `main` にタグを付け直し（下書きはタグを作らないので、タグを先に push）、下書きを作ってから手動で実行します。公開済みの版は消さず、次のパッチで直します。手順は [.claude/skills/release/SKILL.md](../.claude/skills/release/SKILL.md) の「失敗したとき」です。
 - リリースの前に、Mac 版の最適化ビルド（`swift build -c release`）が通るかを確かめます。PR の CI は Mac 版をビルドしません。
 
+アプリの中のアップデート（REQ-REL-010・011）:
+
+- 公開したリリースは、それより前の版の Hanasu が起動時（と、メニューの「アップデートを確認…」）に GitHub の releases/latest で見つけます（DEC-REL-020）。下書きのあいだは見つかりません。
+- 入れ替えに使うのは、リリースに付けた zip（`Hanasu-<版>-macOS.zip` / `Hanasu-<版>-Windows-x64.zip`）と、GitHub が添付ファイルごとに API で返す SHA-256 です（DEC-REL-021）。zip の名前と中身の形（zip の直下に `Hanasu.app`、Windows は `Hanasu` フォルダ）を変えると、前の版からアップデートできなくなります。
+- Mac 版は、新しい `Hanasu.app` が前の版と同じ証明書「Hanasu Release Signing」で署名されているときだけ入れ替えます（DEC-REL-025）。証明書を作り直すと、前の版からはアプリの中でアップデートできず、リリースのページからの手での入れ替えになります。
+- ダイアログに出すのは、リリースの本文のリリース文（`<!-- release-notes -->` の中）です。
+- 作りは Mac が `Sources/Hanasu/AppUpdate.swift`（`AppUpdater`・`UpdateHTTP`・`UpdateSignature`・`UpdateInstaller`）、Windows が `windows/Hanasu.Core/Update/` と `windows/Hanasu.Windows/Services/UpdateService.cs` です。
+
 初回だけ必要な準備:
 
 - リポジトリの Settings → Actions → General → Workflow permissions で「Allow GitHub Actions to create and approve pull requests」をオンにする。

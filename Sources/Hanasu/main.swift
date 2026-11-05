@@ -51,6 +51,8 @@ func cliRefine(_ raw: String, args: [String]) async throws {
 // 設計判断: DEC-COM-063
 // アプリ・CLI を終えるとき（exit も NSApp の終了も）に、起動したローカルの LLM のサーバーを止める
 atexit { LocalLLMServer.terminateRunningServer() }
+// アップデートの確認（--update-selftest / --check-update / --verify-update）。AppUpdate.swift の AppUpdateCLI
+MainActor.assumeIsolated { AppUpdateCLI.runIfRequested() }
 // ローカルの LLM の確認（--local-llm-list / --local-llm-download / --local-llm-delete / --local-llm-test-fit）。LocalLLMCLI.swift
 MainActor.assumeIsolated { LocalLLMCLI.runIfRequested() }
 

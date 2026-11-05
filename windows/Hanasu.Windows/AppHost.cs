@@ -50,10 +50,13 @@ internal sealed class AppHost : IDisposable
     public LocalLlmModelManager LocalLlmModels { get; } = new(LocalLlmServer.Shared);
     public DictationController Dictation { get; }
     public MeetingController Meetings { get; }
+    /// <summary>アップデートの確認と入れ替え（REQ-REL-010, REQ-REL-011）</summary>
+    public UpdateService Updates { get; }
 
     public AppHost(Application app)
     {
         this.app = app;
+        Updates = new UpdateService(this);
         var store = new SettingsStore();
         firstRun = !File.Exists(store.Path);
         // API キーは settings.json ではなく %LOCALAPPDATA%\Hanasu\secrets.json に、DPAPI か Windows Hello で暗号化して置く（DEC-COM-144）
@@ -138,9 +141,14 @@ internal sealed class AppHost : IDisposable
             AppLog.Write($"mark interrupted meetings failed: {e.Message}");
         }
         RegisterHotKeys();
+        // 設計判断: DEC-REL-030（前回の入れ替えが失敗していたら知らせる。起動時の確認より先）
+        Updates.ReportPreviousAttempt();
         tray.ShowBalloon("Hanasu を起動しました",
             $"{Settings.Current.HotKey.DisplayString} で音声入力、{Settings.Current.TranslateHotKey.DisplayString} で{TranslationLanguages.MenuVerb(Settings.Current.TranslationLanguages)}して入力します。");
         if (firstRun) ShowSettings();
+        // 要件: REQ-REL-010
+        // 設計判断: DEC-REL-024（初回の起動では確認しない。設定がオフ・手元のビルドのときは中で何もしない）
+        else _ = Updates.CheckOnLaunchAsync();
     }
 
     // MARK: - 文字起こしと Gemini
@@ -350,6 +358,21 @@ internal sealed class AppHost : IDisposable
         {
             return;
         }
+        Dictation.Cancel();
+        app.Shutdown();
+    }
+
+    /// <summary>アップデートの進み具合をトレイの通知で知らせる</summary>
+    public void NotifyUpdate(string title, string message) => tray?.ShowBalloon(title, message);
+
+    // 設計判断: DEC-REL-030
+    /// <summary>
+    /// アップデートの入れ替えのために終わる。確認は済んでいる（録音中・会議の記録中は入れ替えに進まない）ので、Quit と違って尋ねない。
+    /// 終わるときの後片付け（llama-server のジョブ・多重起動のミューテックス）は OnExit の Dispose に任せる。
+    /// 入れ替えのスクリプトがこのプロセスの終了を待っている
+    /// </summary>
+    public void QuitForUpdate()
+    {
         Dictation.Cancel();
         app.Shutdown();
     }
