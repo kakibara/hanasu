@@ -7,13 +7,15 @@ struct SettingsView: View {
     var onBeginShortcutRecording: () -> Void
     var onEndShortcutRecording: () -> Void
     var onOpenHistory: () -> Void = {}
+    var onCheckForUpdates: () -> Void = {}
 
     var body: some View {
         TabView {
             GeneralTab(
                 settings: settings,
                 onBeginShortcutRecording: onBeginShortcutRecording,
-                onEndShortcutRecording: onEndShortcutRecording)
+                onEndShortcutRecording: onEndShortcutRecording,
+                onCheckForUpdates: onCheckForUpdates)
                 .tabItem { Label("一般", systemImage: "gearshape") }
             // 要件: REQ-COM-020, REQ-COM-024
             AISettingsTab(settings: settings)
@@ -46,6 +48,7 @@ private struct GeneralTab: View {
     @ObservedObject var settings: AppSettings
     var onBeginShortcutRecording: () -> Void
     var onEndShortcutRecording: () -> Void
+    var onCheckForUpdates: () -> Void
 
     var body: some View {
         Form {
@@ -93,6 +96,9 @@ private struct GeneralTab: View {
             Section("その他") {
                 Toggle("開始・終了の効果音を鳴らす", isOn: $settings.playSounds)
             }
+            // 要件: REQ-REL-010, REQ-REL-011
+            // 起動時の確認と「今すぐ確認」（AppUpdate.swift）
+            UpdateSettingsSection(onCheckNow: onCheckForUpdates)
         }
         .formStyle(.grouped)
     }

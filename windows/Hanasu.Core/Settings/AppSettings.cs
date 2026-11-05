@@ -93,6 +93,13 @@ public sealed class AppSettings
     public string WhisperModel { get; set; } = "small";
     public string LocaleIdentifier { get; set; } = "ja-JP";
     public bool PlaySounds { get; set; } = true;
+    // 要件: REQ-REL-010
+    // 設計判断: DEC-REL-024
+    /// <summary>起動したときに、新しい版がないか確かめる</summary>
+    public bool CheckForUpdatesOnLaunch { get; set; } = true;
+    // 設計判断: DEC-REL-022
+    /// <summary>「この版をスキップ」を選んだ版（例 "1.6.0"）。起動時の確認ではこの版を知らせない。空ならスキップなし</summary>
+    public string SkippedUpdateVersion { get; set; } = "";
     // 要件: REQ-DIC-081
     // 設計判断: DEC-DIC-122
     /// <summary>入力できる場所がなくて貼り付けなかったとき、結果をクリップボードに入れたままにするか</summary>

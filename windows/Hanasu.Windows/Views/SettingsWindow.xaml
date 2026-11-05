@@ -141,6 +141,12 @@
 
                         <TextBlock Style="{StaticResource Section}" Text="そのほか" />
                         <CheckBox x:Name="PlaySoundsCheck" Content="録音の開始・停止で音を鳴らす" Checked="OnPlaySoundsChanged" Unchecked="OnPlaySoundsChanged" />
+                        <!-- 要件: REQ-REL-010, REQ-REL-011 -->
+                        <CheckBox x:Name="CheckForUpdatesCheck" Content="起動時にアップデートを確認する" Margin="0,6,0,0" Checked="OnCheckForUpdatesChanged" Unchecked="OnCheckForUpdatesChanged" />
+                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                            <Button Content="今すぐ確認" Click="OnCheckForUpdatesNow" />
+                            <TextBlock x:Name="VersionText" Style="{StaticResource Note}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <Button Content="ログのフォルダを開く" Click="OnOpenLogs" />
                             <Button Content="設定のフォルダを開く" Click="OnOpenSettingsFolder" />

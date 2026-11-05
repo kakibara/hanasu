@@ -23,13 +23,23 @@ public static class ModelDownload
     };
 
     /// <param name="progress">受け取った量（バイト）と全体（分からなければ expectedBytes）</param>
+    public static Task DownloadVerifiedAsync(HttpClient http, Uri uri, string finalPath, string expectedSha256, long expectedBytes,
+        Action<long, long>? progress, CancellationToken cancellationToken) =>
+        DownloadVerifiedAsync(http, uri, finalPath, expectedSha256, expectedBytes, progress,
+            u => AllowedHosts.Contains(u.Host), isAllowedFinal: null, cancellationToken);
+
+    /// <summary>
+    /// 許してよい場所を呼ぶ側が決める版（アップデートの zip は GitHub のホストだけ。UpdateHosts）。
+    /// isAllowedFinal を渡すと、リダイレクトのあとの最終の URL も確かめる（渡さないときは https かどうかだけ）
+    /// </summary>
     public static async Task DownloadVerifiedAsync(HttpClient http, Uri uri, string finalPath, string expectedSha256, long expectedBytes,
-        Action<long, long>? progress, CancellationToken cancellationToken)
+        Action<long, long>? progress, Func<Uri, bool> isAllowedStart, Func<Uri, bool>? isAllowedFinal, CancellationToken cancellationToken)
     {
-        if (uri.Scheme != Uri.UriSchemeHttps || !AllowedHosts.Contains(uri.Host))
+        if (uri.Scheme != Uri.UriSchemeHttps || !isAllowedStart(uri))
         {
             throw new ModelVerificationException($"決めたホスト以外からはダウンロードしません: {uri.Host}");
         }
+        if (expectedBytes <= 0) throw new ModelVerificationException("ダウンロードするファイルの大きさが分かりません");
         var partial = finalPath + ".download";
         try
         {
@@ -41,6 +51,10 @@ public static class ModelDownload
             if (response.RequestMessage?.RequestUri is { } final && final.Scheme != Uri.UriSchemeHttps)
             {
                 throw new ModelVerificationException("https 以外の場所に転送されたので、ダウンロードをやめました");
+            }
+            if (isAllowedFinal is not null && response.RequestMessage?.RequestUri is { } finalUri && !isAllowedFinal(finalUri))
+            {
+                throw new ModelVerificationException($"決めたホスト以外に転送されたので、ダウンロードをやめました: {finalUri.Host}");
             }
             var total = response.Content.Headers.ContentLength ?? expectedBytes;
             if (response.Content.Headers.ContentLength is long length && length != expectedBytes)

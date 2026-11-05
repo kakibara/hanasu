@@ -147,6 +147,8 @@ See [windows/README.md](windows/README.md) for more notes and how the Windows ve
 
 </details>
 
+When a new version is released, Hanasu tells you at launch and asks before it updates itself. You can also choose **アップデートを確認…** (Check for Updates) in the menu (the launch check can be turned off in **Settings → General**). Versions up to v1.6.0 don't have this yet, so update those by hand once.
+
 ## Quick start
 
 On Mac, the first launch opens a short guided tour. It lets you pick your AI (Gemma 4 E4B, the recommended local model, downloads right there), shows the main features and settings tips, and asks for the permissions Hanasu needs. Open it again any time from **How to use Hanasu…** in the menu.

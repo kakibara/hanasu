@@ -19,6 +19,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var meetingAutoDetect: MeetingAutoDetect?
     // 要件: REQ-COM-050, REQ-COM-051
     private let onboarding = OnboardingWindowController()
+    // 要件: REQ-REL-010, REQ-REL-011
+    private let updater = AppUpdater()
     private var cancellables: Set<AnyCancellable> = []
 
     // 設計判断: DEC-COM-008, DEC-COM-009, DEC-COM-093
@@ -79,6 +81,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 "他のアプリやシステムのショートカットと重なっている可能性があります。設定で別のキーを選んでください。")
         }
 
+        // 設計判断: DEC-REL-023
+        updater.isBusy = { [weak self] in
+            guard let self else { return false }
+            return self.controller.state != .idle || self.editController.state != .idle || self.meetingRecorder.state != .idle
+        }
+
         // 要件: REQ-COM-050, REQ-COM-051
         // 設計判断: DEC-COM-093
         // 初めての起動では、設定画面と許可のダイアログの代わりにオンボーディングを出す（許可はその最後のページで求める）
@@ -90,6 +98,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         openSettings()
         // 自動入力（⌘V の送信）にはアクセシビリティ権限が要る
         _ = Permissions.isAccessibilityTrusted(prompt: true)
+        // 要件: REQ-REL-010
+        // 設計判断: DEC-REL-024
+        // 初めての起動（上のオンボーディング）では確かめない
+        updater.checkOnLaunch()
     }
 
     // MARK: - アイコンの表示（メニューバー / Dock）
@@ -206,6 +218,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(.separator())
         // 設計判断: DEC-COM-091
         menu.addItem(NSMenuItem(title: "Hanasu の使い方…", action: #selector(openOnboarding), keyEquivalent: ""))
+        // 要件: REQ-REL-011
+        menu.addItem(NSMenuItem(title: "アップデートを確認…", action: #selector(checkForUpdates), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "設定…", action: #selector(openSettings), keyEquivalent: forDock ? "" : ","))
         if !forDock {
             menu.addItem(NSMenuItem(title: "Hanasu を終了", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
@@ -256,6 +270,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         let appMenu = NSMenu()
         appMenu.addItem(withTitle: "Hanasu について", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        // 要件: REQ-REL-011
+        appMenu.addItem(withTitle: "アップデートを確認…", action: #selector(checkForUpdates), keyEquivalent: "").target = self
         appMenu.addItem(.separator())
         // 設計判断: DEC-COM-091
         appMenu.addItem(withTitle: "Hanasu の使い方…", action: #selector(openOnboarding), keyEquivalent: "").target = self
@@ -367,6 +383,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         editController.toggleFromMenu()
     }
 
+    // 要件: REQ-REL-011
+    @objc private func checkForUpdates() {
+        updater.checkManually()
+    }
+
     // 要件: REQ-COM-051
     // 設計判断: DEC-COM-091
     @objc private func openOnboarding() {
@@ -393,7 +414,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     self.editController.resumeHotKey()
                     self.registerMeetingHotKey(AppSettings.shared.meetingHotKey)
                 },
-                onOpenHistory: { [weak self] in self?.historyUI.openWindow() })
+                onOpenHistory: { [weak self] in self?.historyUI.openWindow() },
+                onCheckForUpdates: { [weak self] in self?.updater.checkManually() })
             let window = NSWindow(contentViewController: NSHostingController(rootView: view))
             window.title = "Hanasu 設定"
             window.styleMask = [.titled, .closable]

@@ -113,3 +113,4 @@ ACL は Hanasu を信頼するので、ほかのプログラムが Hanasu にコ
 - 依存関係: FluidAudio と WhisperKit は `exact:` で版を固定し、`Package.resolved` もリポジトリに入れている。
 - CI: リリースの署名の鍵は GitHub の Secrets に置き、一時のキーチェーンに読み込む（`scripts/ci-import-signing-cert.sh`）。リリースに SHA-256 を載せている（`.github/workflows/tagpr.yml`）。GitHub Actions はタグ（`@v4` など）で指定していて、コミットのハッシュには固定していない（リリースの作りはリードの担当なので、この PR では変えていない）。
 - 配布: 公証もコード署名（Developer ID）もないので、Gatekeeper の確認を外して開いてもらう必要がある。ダウンロードしたものが本物かは、リリースの SHA-256 で確かめるしかない。README の「AI と API キー」に書いた。
+- アプリの中のアップデート（REQ-REL-010・011）: ユーザーが選んだときだけ、https の GitHub のホスト（`api.github.com`・`github.com`・`*.githubusercontent.com`）から zip を取る。GitHub の API が返す SHA-256 と大きさで確かめ（DEC-REL-021）、展開した `Hanasu.app` の署名が壊れていないこと、今の Hanasu と同じ証明書（Hanasu Release Signing）で署名されていることを確かめてから入れ替える（DEC-REL-025）。入れ替えのスクリプトは中身が固定で、パスは引数で渡す（DEC-REL-026）。残る危険: 署名の鍵（GitHub の Secrets）が漏れると、その鍵で署名した偽の版も入る。

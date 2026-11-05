@@ -1,0 +1,326 @@
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
+using Hanasu.Core.Dictation;
+using Hanasu.Core.Meetings;
+using Hanasu.Core.Update;
+using Hanasu.Windows.Views;
+
+namespace Hanasu.Windows.Services;
+
+/// <summary>
+/// アップデート。GitHub の最新のリリースを確かめ（起動時と、メニュー・設定からの手動）、新しい版があればユーザーに確認して、
+/// 同意があればダウンロード → 検証 → 展開 → PowerShell のスクリプトで入れ替えて起動し直す。
+/// 通信・検証・展開の部分は Hanasu.Core.Update にある（テストはそちら）。ここは画面と入れ替えの段取り。
+/// </summary>
+internal sealed class UpdateService
+{
+    /// <summary>起動してから最初の確認までの待ち（起動直後の処理と重ならないように）</summary>
+    private static readonly TimeSpan LaunchDelay = TimeSpan.FromSeconds(5);
+
+    private readonly AppHost host;
+    private bool busy;
+
+    public UpdateService(AppHost host) => this.host = host;
+
+    /// <summary>今の版。リリースのビルドは -p:Version=&lt;版&gt; で作る。取れなければ 0.0.0</summary>
+    public AppVersion CurrentVersion { get; } =
+        typeof(AppHost).Assembly.GetName().Version is { } v ? AppVersion.FromVersion(v) : AppVersion.Parse("0.0.0")!;
+
+    /// <summary>手元のビルド（Directory.Build.props の既定の 0.1.0 など、主版が 0）。起動時の確認はしない</summary>
+    public bool IsDevBuild => CurrentVersion.Major == 0;
+
+    // 要件: REQ-REL-010
+    // 設計判断: DEC-REL-024
+    /// <summary>起動時の確認。設定がオフ・手元のビルドなら何もしない。失敗は黙ってログだけに書く（ユーザーには何も出さない）</summary>
+    public async Task CheckOnLaunchAsync()
+    {
+        try
+        {
+            if (!host.Settings.Current.CheckForUpdatesOnLaunch || IsDevBuild) return;
+            await Task.Delay(LaunchDelay);
+            // 待っている間に設定が変わったかもしれない
+            if (!host.Settings.Current.CheckForUpdatesOnLaunch) return;
+            if (busy) return;
+            busy = true;
+            try
+            {
+                var result = await CheckAsync();
+                if (UpdateChecker.ShouldPrompt(result, host.Settings.Current.SkippedUpdateVersion, manual: false))
+                {
+                    await PromptAndInstallAsync(result);
+                }
+            }
+            finally
+            {
+                busy = false;
+            }
+        }
+        catch (Exception e)
+        {
+            AppLog.Write($"update: launch check failed: {e.Message}");
+        }
+    }
+
+    // 要件: REQ-REL-011
+    // 設計判断: DEC-REL-022
+    /// <summary>手動の確認（メニューの「アップデートを確認…」・設定の「今すぐ確認」）。スキップした版も知らせ、最新なら「最新です」と出す。失敗は理由を出す</summary>
+    public async Task CheckManuallyAsync()
+    {
+        if (busy)
+        {
+            MessageBox.Show("アップデートを確認しています。しばらくお待ちください。", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+        busy = true;
+        try
+        {
+            var result = await CheckAsync();
+            if (UpdateChecker.ShouldPrompt(result, host.Settings.Current.SkippedUpdateVersion, manual: true))
+            {
+                await PromptAndInstallAsync(result);
+            }
+            else
+            {
+                MessageBox.Show($"Hanasu は最新です（{CurrentVersion}）", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+        catch (UpdateException e)
+        {
+            AppLog.Write($"update: manual check failed: {e.Message}");
+            MessageBox.Show($"アップデートを確認できませんでした。\n{e.Message}", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        catch (Exception e)
+        {
+            AppLog.Write($"update: manual check failed: {e}");
+            MessageBox.Show($"アップデートを確認できませんでした。\n{e.Message}", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        finally
+        {
+            busy = false;
+        }
+    }
+
+    // 設計判断: DEC-REL-020
+    private async Task<UpdateCheckResult> CheckAsync()
+    {
+        using var http = UpdateChecker.CreateApiClient(CurrentVersion.ToString());
+        return await UpdateChecker.CheckAsync(http, CurrentVersion, CancellationToken.None);
+    }
+
+    // 設計判断: DEC-REL-022
+    private async Task PromptAndInstallAsync(UpdateCheckResult result)
+    {
+        var release = result.Release!;
+        // 手元のビルドは、フォルダを入れ替えない（リリースのページを案内するだけ）
+        var canInstall = result.Kind == UpdateCheckKind.Available && !IsDevBuild;
+        var window = new UpdatePromptWindow(CurrentVersion, release, canInstall);
+        window.ShowDialog();
+        switch (window.Choice)
+        {
+            case UpdateChoice.Skip:
+                var error = host.Settings.Update(s => s.SkippedUpdateVersion = release.Version.ToString());
+                if (error is not null) AppLog.Write($"update: skip not saved: {error.Message}");
+                break;
+            case UpdateChoice.Update when canInstall:
+                await InstallAsync(release);
+                break;
+            case UpdateChoice.Update:
+                Shell.Open(release.ReleaseUrl.AbsoluteUri);
+                break;
+        }
+    }
+
+    // 設計判断: DEC-REL-023
+    private bool IsRecordingOrProcessing() =>
+        host.Dictation.State != DictationState.Idle || host.Meetings.State != MeetingState.Idle;
+
+    private static void ShowBusyMessage() =>
+        MessageBox.Show("録音中・会議の記録中はアップデートできません。終わってからもう一度、メニューの「アップデートを確認…」を押してください。",
+            "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
+
+    // 設計判断: DEC-REL-021, DEC-REL-030
+    private async Task InstallAsync(ReleaseInfo release)
+    {
+        if (IsRecordingOrProcessing())
+        {
+            ShowBusyMessage();
+            return;
+        }
+        var asset = release.Asset!;
+        // 入れ替えは、いま動いているフォルダ（Hanasu.exe のあるところ）を、隣の作業用フォルダで作った新しいものと取り替える
+        var installDir = Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
+        var parent = Path.GetDirectoryName(installDir);
+        if (parent is null)
+        {
+            OfferReleasePage(release, "Hanasu のフォルダの場所を決められませんでした。");
+            return;
+        }
+        var staging = Path.Combine(parent, "Hanasu.update");
+        try
+        {
+            host.NotifyUpdate("アップデートをダウンロードしています", $"Hanasu {release.Version}（{asset.Size / (1024 * 1024)} MB）");
+            PrepareStagingDirectory(staging);
+            var zipPath = Path.Combine(staging, asset.Name);
+            using (var http = UpdateChecker.CreateDownloadClient(CurrentVersion.ToString()))
+            {
+                await UpdateChecker.DownloadAsync(http, asset, zipPath, null, CancellationToken.None);
+            }
+            host.NotifyUpdate("アップデートを準備しています", "ダウンロードした zip を展開しています。");
+            var staged = await Task.Run(() => UpdatePackage.Extract(zipPath, Path.Combine(staging, "pkg")));
+            var scriptPath = Path.Combine(staging, "apply-update.ps1");
+            await File.WriteAllTextAsync(scriptPath, SwapScript, new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
+
+            // ダウンロードの間に録音が始まったかもしれない
+            if (IsRecordingOrProcessing())
+            {
+                TryDeleteDirectory(staging);
+                ShowBusyMessage();
+                return;
+            }
+            StartSwapScript(scriptPath, installDir, staged, parent);
+        }
+        catch (Exception e) when (e is UpdateException or ModelVerificationException or IOException or UnauthorizedAccessException
+                                      or HttpRequestException or TaskCanceledException or System.ComponentModel.Win32Exception
+                                      or InvalidOperationException)
+        {
+            AppLog.Write($"update: install failed: {e}");
+            TryDeleteDirectory(staging);
+            var reason = e is UnauthorizedAccessException ? "このフォルダには書き込めません（Program Files などに入れている場合は、管理者として入れ直すか、リリースのページから入れてください）。" : e.Message;
+            OfferReleasePage(release, $"アップデートできませんでした。\n{reason}");
+        }
+    }
+
+    /// <summary>作業用フォルダを空の状態で作る（前の失敗の残りは消す）。書き込めなければ UnauthorizedAccessException</summary>
+    private static void PrepareStagingDirectory(string staging)
+    {
+        TryDeleteDirectory(staging);
+        Directory.CreateDirectory(staging);
+        // 書き込めるか、先に確かめる（入れ替えの直前に分かっても遅い）
+        var probe = Path.Combine(staging, ".write-test");
+        File.WriteAllText(probe, "");
+        File.Delete(probe);
+    }
+
+    private static void TryDeleteDirectory(string path)
+    {
+        try { if (Directory.Exists(path)) Directory.Delete(path, recursive: true); }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { AppLog.Write($"update: cleanup failed: {path}: {e.Message}"); }
+    }
+
+    /// <summary>入れ替えに進めないときの案内。リリースのページをブラウザで開くか尋ねる</summary>
+    private static void OfferReleasePage(ReleaseInfo release, string message)
+    {
+        var answer = MessageBox.Show($"{message}\n\nリリースのページをブラウザで開きますか？", "Hanasu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (answer == MessageBoxResult.Yes) Shell.Open(release.ReleaseUrl.AbsoluteUri);
+    }
+
+    // 設計判断: DEC-REL-030
+    /// <summary>
+    /// 入れ替えのスクリプトを別のプロセスで始め、自分は終わる。スクリプトは、このプロセスが終わるのを待ってから
+    /// フォルダを取り替えて Hanasu.exe を起動する。パスは引数だけで渡す（スクリプトの文字列には埋め込まない）
+    /// </summary>
+    private void StartSwapScript(string scriptPath, string installDir, string stagedDir, string workingDirectory)
+    {
+        var info = new ProcessStartInfo("powershell.exe")
+        {
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            // インストール先のフォルダの中を作業場所にすると、フォルダの名前を変えられない
+            WorkingDirectory = workingDirectory,
+        };
+        foreach (var argument in new[]
+                 {
+                     "-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden",
+                     "-File", scriptPath,
+                     "-WaitPid", Environment.ProcessId.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                     "-Install", installDir,
+                     "-Staged", stagedDir,
+                 })
+        {
+            info.ArgumentList.Add(argument);
+        }
+        using var process = Process.Start(info) ?? throw new InvalidOperationException("入れ替えのスクリプトを始められませんでした");
+        AppLog.Write($"update: swap script started (pid {process.Id}), quitting");
+        host.QuitForUpdate();
+    }
+
+    /// <summary>
+    /// 入れ替えのスクリプト（中身は固定。パスは引数で受け取る）。
+    /// Hanasu が終わるのを待つ → 今のフォルダを「.old」に改名（ファイルがまだ放されていないことがあるので数秒リトライ）
+    /// → 新しいフォルダを今の名前に移す。失敗したら「.old」を戻す → Hanasu.exe を起動 → 「.old」と作業用フォルダを消す（消せなくてもよい）。
+    /// 作業用フォルダは、同じドライブで移せるよう、インストール先の隣にある。
+    /// </summary>
+    private const string SwapScript = """
+        param(
+            [Parameter(Mandatory = $true)][int]$WaitPid,
+            [Parameter(Mandatory = $true)][string]$Install,
+            [Parameter(Mandatory = $true)][string]$Staged
+        )
+        $ErrorActionPreference = 'Stop'
+        $Old = $Install + '.old'
+        $LogDir = Join-Path $env:LOCALAPPDATA 'Hanasu\Logs'
+        function Write-Log([string]$Message) {
+            try {
+                New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
+                Add-Content -LiteralPath (Join-Path $LogDir 'update.log') -Value ((Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + ' ' + $Message)
+            } catch { }
+        }
+
+        Write-Log 'update: waiting for Hanasu to exit'
+        $stillRunning = $false
+        try {
+            $process = Get-Process -Id $WaitPid -ErrorAction SilentlyContinue
+            if ($process) {
+                if (-not $process.WaitForExit(60000)) { $stillRunning = $true }
+            }
+        } catch { }
+
+        $swapped = $false
+        if (-not $stillRunning) {
+            try {
+                if (Test-Path -LiteralPath $Old) { Remove-Item -LiteralPath $Old -Recurse -Force -ErrorAction SilentlyContinue }
+                $renamed = $false
+                for ($i = 0; $i -lt 15 -and -not $renamed; $i++) {
+                    try {
+                        [System.IO.Directory]::Move($Install, $Old)
+                        $renamed = $true
+                    } catch {
+                        Start-Sleep -Seconds 1
+                    }
+                }
+                if ($renamed) {
+                    try {
+                        [System.IO.Directory]::Move($Staged, $Install)
+                        $swapped = $true
+                    } catch {
+                        Write-Log ('update: move failed, rolling back: ' + $_.Exception.Message)
+                        if (-not (Test-Path -LiteralPath $Install)) {
+                            [System.IO.Directory]::Move($Old, $Install)
+                        }
+                    }
+                } else {
+                    Write-Log 'update: could not rename the install folder'
+                }
+            } catch {
+                Write-Log ('update: failed: ' + $_.Exception.Message)
+            }
+        } else {
+            Write-Log 'update: Hanasu did not exit in time'
+        }
+
+        if (-not $stillRunning) {
+            $exe = Join-Path $Install 'Hanasu.exe'
+            if (Test-Path -LiteralPath $exe) {
+                Start-Process -FilePath $exe -WorkingDirectory $Install
+            }
+        }
+
+        if ($swapped) {
+            Remove-Item -LiteralPath $Old -Recurse -Force -ErrorAction SilentlyContinue
+        }
+        Set-Location -LiteralPath (Split-Path -Parent $Install)
+        Remove-Item -LiteralPath $PSScriptRoot -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Log ('update: done (swapped=' + $swapped + ')')
+        """;
+}
