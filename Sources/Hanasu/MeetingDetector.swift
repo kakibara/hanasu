@@ -432,6 +432,13 @@ final class MeetingAutoDetect {
             .store(in: &cancellables)
     }
 
+    // 要件: REQ-MTG-034
+    /// 会議の名前を読む対象: マイクを使っている会議アプリ（専用の会議アプリを先に）。
+    /// 自動検出をオフにしているときはマイクの使用が分からないので、対象のアプリすべて（ウインドウが会議の形のものだけが名前になる）
+    var titleSourceApps: [MeetingApp] {
+        settings.enabled ? MeetingApp.allCases.filter(detector.activeApps.contains) : MeetingApp.allCases
+    }
+
     /// 設定でオンにしている対象のうち、マイクを使っているもの
     private var activeTargets: Set<MeetingApp> {
         detector.activeApps.filter(settings.isEnabled)

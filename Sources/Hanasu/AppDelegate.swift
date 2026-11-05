@@ -35,7 +35,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         historyUI = DictationHistoryUI(
             isDictationBusy: { [weak self] in self?.controller.state != .idle },
             onHotKeyRegistrationFailed: { [weak self] combo in
-                self?.showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「履歴」タブで別のキーを選んでください。")
+                self?.showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「履歴」で別のキーを選んでください。")
             })
         NSApp.mainMenu = makeMainMenu()
 
@@ -75,6 +75,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             .store(in: &cancellables)
         // 会議アプリがマイクを使い始めたら記録を提案する（記録はユーザーが押してから）
         meetingAutoDetect = MeetingAutoDetect(recorder: meetingRecorder) { [weak self] in self?.toggleMeeting() }
+        // 要件: REQ-MTG-034
+        meetingRecorder.titleSourceApps = { [weak self] in self?.meetingAutoDetect?.titleSourceApps ?? [] }
         controller.onHotKeyRegistrationFailed = { [weak self] combo in
             self?.showAlert(
                 "ショートカット \(combo.displayString) を登録できませんでした",
@@ -368,7 +370,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             if event == .pressed { self?.toggleMeeting() }
         }
         if meetingHotKeyID == nil {
-            showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「会議」タブで別のキーを選んでください。")
+            showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「会議」で別のキーを選んでください。")
         }
     }
 
@@ -403,6 +405,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         onboarding.show()
     }
 
+    // 設計判断: DEC-COM-151
+    /// 設定のウインドウ。左にサイドバーを置き、大きさを変えられるようにする。
+    /// 大きさを中身に合わせない（会議ノートと同じ。合わせると、中身の長い項目を開いたときにウインドウが縦に伸びる）
+    static func makeSettingsWindow(rootView: some View) -> NSWindow {
+        let hosting = NSHostingController(rootView: rootView)
+        hosting.sizingOptions = []
+        let window = NSWindow(contentViewController: hosting)
+        window.title = "Hanasu 設定"
+        window.styleMask = [.titled, .closable, .miniaturizable, .resizable]
+        window.contentMinSize = settingsWindowMinSize
+        window.setContentSize(settingsWindowSize)
+        window.isReleasedWhenClosed = false
+        return window
+    }
+
+    static let settingsWindowSize = NSSize(width: 780, height: 600)
+    static let settingsWindowMinSize = NSSize(width: 700, height: 480)
+
     // 設計判断: DEC-COM-012
     @objc private func openSettings() {
         if settingsWindow == nil {
@@ -425,11 +445,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 },
                 onOpenHistory: { [weak self] in self?.historyUI.openWindow() },
                 onCheckForUpdates: { [weak self] in self?.updater.checkManually() })
-            let window = NSWindow(contentViewController: NSHostingController(rootView: view))
-            window.title = "Hanasu 設定"
-            window.styleMask = [.titled, .closable]
-            window.isReleasedWhenClosed = false
+            let window = Self.makeSettingsWindow(rootView: view)
             window.center()
+            window.setFrameAutosaveName("HanasuSettingsWindow")
             settingsWindow = window
         }
         NSApp.activate()
