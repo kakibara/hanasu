@@ -52,7 +52,7 @@ public sealed class ClaudeClient : ITextAiClient
         this.http = http ?? SharedHttp;
     }
 
-    // プロンプトは Gemini と同じ文面を使う（Mac 版とも同じ。DEC-COM-102）
+    // プロンプトは Gemini と同じ文面を使う（Mac 版と共有の言語ごとの JSON から読む。DEC-COM-102）
     public Task<string> RefineAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
         GenerateTextAsync(TextPurpose.Refine, GeminiPrompts.SystemInstruction(request.OutputLanguage), GeminiPrompts.UserPrompt(request), request.Model, cancellationToken);
 

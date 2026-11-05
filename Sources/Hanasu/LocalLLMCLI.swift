@@ -74,6 +74,8 @@ enum LocalLLMCLI {
             exit(availability.executableURL == nil ? 1 : 0)
         }
         if args.contains("--local-llm-test-fit") {
+            // 確かめる文面は日本語のプロンプトのもの
+            PromptLanguage.override = PromptLanguage.override ?? .ja
             Task { @MainActor in
                 exit(await testFit() ? 0 : 1)
             }

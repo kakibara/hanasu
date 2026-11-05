@@ -22,6 +22,15 @@ cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 # 要件: REQ-REL-005
 # 設計判断: DEC-REL-011
 cp LICENSE LICENSE-ADDITIONAL-PERMISSION.md NOTICE THIRD_PARTY_NOTICES.md "$APP/Contents/Resources/"
+# 要件: REQ-COM-061
+# 設計判断: DEC-COM-160
+# SwiftPM のリソースのバンドル（AI へのプロンプトの JSON）。ないと AI に空のプロンプトを送ってしまうので止める
+BUNDLE="$(dirname "$BIN")/Hanasu_Hanasu.bundle"
+if [[ ! -f "$BUNDLE/Prompts/ja.json" && ! -f "$BUNDLE/Contents/Resources/Prompts/ja.json" ]]; then
+  echo "error: $BUNDLE にプロンプトがありません" >&2
+  exit 1
+fi
+cp -R "$BUNDLE" "$APP/Contents/Resources/"
 # 要件: REQ-COM-030
 # 設計判断: DEC-COM-061
 # ローカルの LLM を動かす llama-server（llama.cpp）。SHA-256 を確かめてから入れる（ライセンスは llama/LICENSE）

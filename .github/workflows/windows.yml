@@ -5,6 +5,8 @@ on:
   pull_request:
     paths:
       - "windows/**"
+      # Windows 版も同じプロンプトの JSON を埋め込む（DEC-COM-160）
+      - "Sources/Hanasu/Resources/Prompts/**"
       - ".github/workflows/windows.yml"
       - "scripts/llama-cpp.lock"
       - "scripts/fetch-llama-cpp.ps1"
