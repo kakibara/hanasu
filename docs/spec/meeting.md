@@ -338,7 +338,7 @@
 - 関係する要件: REQ-MTG-017
 - 対象: Mac
 - 実装の場所: `SavedMinutesTemplate`、`SavedMinutesTemplateStore`、`MinutesTemplateManagerSheet`、`MinutesTemplatePicker`、`MinutesTemplateMenu`、`CustomMinutesPromptSheet`、`MinutesTemplateStore.apply`
-- 確かめ方: `.build/debug/Hanasu --saved-templates-selftest`（保存・重複の拒否・複製・削除・適用・プロンプトへの反映）、`--render-minutes-ui <出力フォルダ>` の `record-panel-saved.png`・`template-manager-sheet.png`
+- 確かめ方: `.build/debug/Hanasu --test-saved-templates`（保存・重複の拒否・複製・削除・適用・プロンプトへの反映）、`--render-minutes-ui <出力フォルダ>` の `record-panel-saved.png`・`template-manager-sheet.png`
 
 ---
 

@@ -9,7 +9,7 @@ import SwiftUI
 //   Hanasu --export-minutes <meeting.json | minutes.md>
 //     Gemini を呼ばずに、保存済みの議事録の書き出し（Slack 向け・テキスト・アクションアイテム）を表示する。
 //     .md が <action_items> を含む Gemini の応答そのものなら、応答の読み取りから行う。
-//   Hanasu --saved-templates-selftest
+//   Hanasu --test-saved-templates
 //     名前付きテンプレートの保存・名前の重複の拒否・複製・削除・記録への適用・プロンプトへの反映を、
 //     専用の UserDefaults で確かめる（本物の設定は変えない）。失敗があれば終了コード 1。
 //   Hanasu --render-minutes-ui <出力フォルダ> [--meeting-json <meeting.json>]
@@ -31,7 +31,7 @@ enum MinutesCLI {
             }
             RunLoop.main.run()
         }
-        if args.contains("--saved-templates-selftest") {
+        if args.contains("--test-saved-templates") {
             exit(savedTemplatesSelfTest() ? 0 : 1)
         }
         if let path = value(after: "--export-minutes", in: args) {

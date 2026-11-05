@@ -1,0 +1,46 @@
+# Mac 版（Sources/Hanasu）のビルドと、自己テストの CLI。
+# Mac 版を触る PR と、main への push で動く（以前は PR で Mac 版をビルドせず、リリースで初めてコンパイルエラーが見つかった）。
+# テストのターゲットがないので、マイク・キーチェーンなどの許可が要らない `--test-…` だけを走らせる。
+name: mac
+on:
+  pull_request:
+    paths:
+      - "Sources/**"
+      - "Package.swift"
+      - "Package.resolved"
+      - ".github/workflows/mac.yml"
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mac-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Debug build
+        run: |
+          swift --version
+          swift build 2>&1 | tail -40
+
+      - name: Self tests
+        run: |
+          B=.build/debug/Hanasu
+          $B --test-saved-templates
+          $B --test-speaker-names
+          $B --test-dictionary
+          $B --test-paste-target
+
+      # デバッグで通っても、最適化ビルドでだけ落ちることがある（PR #39）
+      - name: Release build
+        run: swift build -c release 2>&1 | tail -40
