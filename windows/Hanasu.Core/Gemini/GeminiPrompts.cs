@@ -72,12 +72,23 @@ public static class GeminiPrompts
     /// 文字起こしのエンジンに Gemini を選んだときの指示（Windows 版で足したもの。transcribe.windows.system）。
     /// 整形は次の呼び出しで行うので、ここでは聞こえたとおりに書き起こすだけにさせる。
     /// </summary>
-    public static string TranscriptionInstruction => TranscriptionInstructionFor(Ai.PromptLanguage.Current);
+    public static string TranscriptionInstruction => TranscriptionInstructionFor(Ai.PromptLanguage.Current,
+        Ai.PromptLanguage.Override is null ? Ai.PromptLanguage.SettingsLocaleIdentifier : null);
 
     // 要件: REQ-COM-061
-    /// <summary>文字起こしの指示。「主に〇〇で」の言語の名前は、プロンプトの言語（＝文字起こしの言語）をその言語で書いたもの</summary>
-    public static string TranscriptionInstructionFor(Ai.PromptLanguage language) =>
-        Ai.Prompts.Text("transcribe.windows.system", language, ("language", Ai.Prompts.Text("languageName." + language.Code, language)));
+    /// <summary>
+    /// 文字起こしの指示。「主に〇〇で」の言語の名前は、文字起こしの言語をプロンプトの言語で書いたもの。
+    /// 文字起こしの言語が対応言語にない（sv-SE など）ときは、英語と書かずに識別子のまま書く
+    /// </summary>
+    public static string TranscriptionInstructionFor(Ai.PromptLanguage language, string? localeIdentifier = null)
+    {
+        var name = localeIdentifier is null
+            ? Ai.Prompts.Text("languageName." + language.Code, language)
+            : Ai.PromptLanguage.SupportedOrNull(localeIdentifier) is { } spoken
+                ? Ai.Prompts.Text("languageName." + spoken.Code, language)
+                : localeIdentifier;
+        return Ai.Prompts.Text("transcribe.windows.system", language, ("language", name));
+    }
 
     /// <summary>思考の度合いはモデル名から決める（lite なら minimal、それ以外は low）</summary>
     public static string ThinkingLevel(string model) => model.Contains("lite", StringComparison.Ordinal) ? "minimal" : "low";

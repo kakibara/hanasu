@@ -171,7 +171,7 @@ struct ReminderExportSheet: View {
         items = meeting.resolvedActionItems
         // 初期値: まだ登録していない、自分の担当か担当が決まっていないもの
         let me = meeting.displayName(for: "me")
-        selected = Set(items.filter { $0.reminderID == nil && ($0.owner == nil || $0.owner == me || Prompts.allTexts("speaker.me").contains($0.owner ?? "")) }.map(\.id))
+        selected = Set(items.filter { $0.reminderID == nil && ($0.owner == nil || $0.owner == me || [Prompts.text("speaker.me"), "自分"].contains($0.owner ?? "")) }.map(\.id))  // skip-tr（前の版の議事録の担当）
         reloadLists()
     }
 

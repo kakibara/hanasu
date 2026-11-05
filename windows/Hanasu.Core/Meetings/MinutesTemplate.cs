@@ -93,6 +93,9 @@ public sealed record MinutesResult(string Markdown, List<ActionItem> ActionItems
 {
     /// <summary>応答の &lt;speaker_names&gt; で分かった話者の名前（表示ラベル「話者1」など → 名前）。当てはめは SpeakerNameInference</summary>
     public Dictionary<string, string> SpeakerNames { get; init; } = new();
+    // 要件: REQ-COM-061
+    /// <summary>議事録を作ったときのプロンプトの言語（応答の中のラベル「Speaker 1」などを、この言語で読む）</summary>
+    public PromptLanguage Language { get; init; } = PromptLanguage.Current;
 }
 
 /// <summary>議事録のプロンプトの組み立てと、応答の読み取り。Mac 版 MinutesPrompt と同じ組み立てで、文面は共有の JSON から読む（組み立てを変えるときは両方を直す）</summary>
@@ -170,8 +173,9 @@ public static class MinutesPrompt
     }
 
     /// <summary>AI（Gemini・Claude）の応答を、議事録の Markdown と構造化したアクションアイテムに分ける</summary>
-    public static MinutesResult Parse(string response, string title)
+    public static MinutesResult Parse(string response, string title, PromptLanguage? language = null)
     {
+        var lang = language ?? PromptLanguage.Current;
         // 話者の名前（<speaker_names>）を先に取り出す。<action_items> は後ろから探すので、残っていると本文に混ざる
         var (body, speakerNames) = SpeakerNameInference.Extract(response);
         List<ActionItem>? items = null;
@@ -197,7 +201,7 @@ public static class MinutesPrompt
         if (items is null && InlineItems(body) is { } inline)
         {
             items = inline.Items;
-            var list = inline.Items.Count == 0 ? Prompts.Text("minutes.result.none") : string.Join("\n", inline.Items.Select(i => i.MarkdownLine));
+            var list = inline.Items.Count == 0 ? Prompts.Text("minutes.result.none", lang) : string.Join("\n", inline.Items.Select(i => i.MarkdownLineIn(lang)));
             body = body[..inline.Start] + list + body[inline.End..];
         }
 
@@ -205,12 +209,12 @@ public static class MinutesPrompt
         if (body.Contains(Placeholder, StringComparison.Ordinal))
         {
             var list = items is null
-                ? Prompts.Text("minutes.result.unreadable")
-                : (resolved.Count == 0 ? Prompts.Text("minutes.result.none") : string.Join("\n", resolved.Select(i => i.MarkdownLine)));
+                ? Prompts.Text("minutes.result.unreadable", lang)
+                : (resolved.Count == 0 ? Prompts.Text("minutes.result.none", lang) : string.Join("\n", resolved.Select(i => i.MarkdownLineIn(lang))));
             body = body.Replace(Placeholder, list, StringComparison.Ordinal);
         }
         // 要件: REQ-COM-061（議事録のタイトルと「なし」などは、プロンプトの言語で書く）
-        return new MinutesResult($"# {Prompts.Text("minutes.result.title", ("title", title))}\n\n{body}\n", resolved) { SpeakerNames = speakerNames };
+        return new MinutesResult($"# {Prompts.Text("minutes.result.title", lang, ("title", title))}\n\n{body}\n", resolved) { SpeakerNames = speakerNames, Language = lang };
     }
 
     /// <summary>本文の中の、アクションアイテムの JSON の配列（[{ から }] まで）。読めなければ null</summary>

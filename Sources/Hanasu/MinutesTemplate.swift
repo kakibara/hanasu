@@ -106,8 +106,11 @@ struct ActionItem: Codable, Hashable, Identifiable {
 
     // 要件: REQ-COM-061
     /// 議事録に書く 1 行（`- [ ] 内容（担当: 〇〇 / 期限: 11/14 (金)）`）。「担当」「期限」と日付はプロンプトの言語で書く
-    var markdownLine: String {
-        let language = PromptLanguage.current
+    var markdownLine: String { markdownLine(language: .current) }
+
+    // 要件: REQ-COM-061
+    /// 議事録を作ったときのプロンプトの言語で書く（作っている間に設定の言語が変わっても、議事録の中でそろえる）
+    func markdownLine(language: PromptLanguage) -> String {
         var notes: [String] = []
         if let owner, !owner.isEmpty { notes.append(Prompts.text("minutes.item.owner", language: language) + ": \(owner)") }
         let due: String? = dueDate.map { date in
@@ -137,10 +140,18 @@ struct ActionItem: Codable, Hashable, Identifiable {
     }()
 
     // 要件: REQ-COM-061
-    /// 議事録の言語はそのときのプロンプトの言語なので、読むときはすべての言語の言い方を受け付ける
-    static var actionHeadingWords: [String] {
-        ["TODO", "ToDo", "アクション", "次のステップ"]  // skip-tr（言語の決まりに使う語。FUT-014）
-            + ["minutes.actionHeading", "minutes.actionHeading.sales", "minutes.actionHeading.brainstorm"].flatMap(Prompts.allTexts)
+    /// 議事録の言語はそのときのプロンプトの言語なので、読むときはすべての言語の言い方を受け付ける。
+    /// 前から使っている日本語の語は見出しに含まれていればよいが、各言語の見出しは見出しの全体と一致したときだけにする
+    /// （「## Задачи клиента」のような別の見出しを、アクションアイテムの節と取り違えないように）
+    static let legacyActionHeadingWords = ["TODO", "ToDo", "アクション", "次のステップ"]  // skip-tr（前の版の議事録の見出し）
+    static var actionHeadings: [String] {
+        ["minutes.actionHeading", "minutes.actionHeading.sales", "minutes.actionHeading.brainstorm"].flatMap(Prompts.allTexts)
+    }
+
+    static func isActionHeading(_ heading: Substring) -> Bool {
+        let trimmed = heading.trimmingCharacters(in: .whitespaces)
+        return legacyActionHeadingWords.contains { trimmed.contains($0) }
+            || actionHeadings.contains { $0.compare(trimmed, options: .caseInsensitive) == .orderedSame }
     }
     static var ownerKeys: [String] { Prompts.allTexts("minutes.item.owner") }
     static var dueKeys: [String] { Prompts.allTexts("minutes.item.due") }
@@ -156,19 +167,20 @@ struct ActionItem: Codable, Hashable, Identifiable {
             let line = raw.trimmingCharacters(in: .whitespaces)
             if line.hasPrefix("## ") {
                 let heading = line.dropFirst(3)
-                inSection = actionHeadingWords.contains { heading.contains($0) }
+                inSection = isActionHeading(heading)
                 continue
             }
             guard inSection, line.hasPrefix("- [ ] ") || line.hasPrefix("- [x] ") else { continue }
             var task = String(line.dropFirst(6)).trimmingCharacters(in: .whitespaces)
             var owner: String?
             var dueNote: String?
-            // 末尾の（担当: … / 期限: …）
+            // 末尾の（担当: … / 期限: …）。期限には「11/14 (金)」のようにかっこや / が入るので、
+            // 「担当」「期限」の言葉で始まるかっこを探し、中を「 / 」で分ける
             if let close = task.last, close == "）" || close == ")",
-               let open = task.lastIndex(where: { $0 == "（" || $0 == "(" }) {
-                let inner = task[task.index(after: open)..<task.index(before: task.endIndex)]
+               let open = detailsOpening(in: task) {
+                let inner = String(task[task.index(after: open)..<task.index(before: task.endIndex)])
                 var recognized = false
-                for part in inner.split(whereSeparator: { $0 == "/" || $0 == "／" }) {
+                for part in inner.components(separatedBy: " / ").flatMap({ $0.components(separatedBy: "／") }) {
                     let pair = part.split(maxSplits: 1, whereSeparator: { $0 == ":" || $0 == "：" })
                     guard pair.count == 2 else { continue }
                     let key = pair[0].trimmingCharacters(in: .whitespaces)
@@ -183,6 +195,25 @@ struct ActionItem: Codable, Hashable, Identifiable {
             items.append(ActionItem(owner: owner, task: task, dueNote: dueNote))
         }
         return items
+    }
+
+    /// 「（担当: …」「(Owner: …」のように、担当か期限の言葉とコロンで始まるかっこの位置
+    static func detailsOpening(in task: String) -> String.Index? {
+        let keys = ownerKeys + dueKeys
+        var index = task.startIndex
+        while index < task.endIndex {
+            if task[index] == "（" || task[index] == "(" {
+                let after = task[task.index(after: index)...].drop { $0 == " " }
+                let startsWithKey = keys.contains { key in
+                    guard after.hasPrefix(key) else { return false }
+                    let rest = after.dropFirst(key.count).drop { $0 == " " }
+                    return rest.first == ":" || rest.first == "："
+                }
+                if startsWithKey { return index }
+            }
+            index = task.index(after: index)
+        }
+        return nil
     }
 }
 
@@ -230,6 +261,9 @@ struct MinutesResult {
     var actionItems: [ActionItem]
     /// 応答の <speaker_names> で分かった話者の名前（表示ラベル「話者1」など → 名前）。当てはめは SpeakerNameInference
     var speakerNames: [String: String] = [:]
+    // 要件: REQ-COM-061
+    /// 議事録を作ったときのプロンプトの言語（応答の中のラベル「Speaker 1」などを、この言語で読む）
+    var language: PromptLanguage = .current
 }
 
 // 要件: REQ-MTG-006
@@ -287,7 +321,7 @@ enum MinutesPrompt {
     // 要件: REQ-MTG-018
     // 設計判断: DEC-MTG-062
     /// Gemini の応答を、議事録の Markdown と構造化したアクションアイテムに分ける。
-    static func parse(_ response: String, title: String) -> MinutesResult {
+    static func parse(_ response: String, title: String, language: PromptLanguage = .current) -> MinutesResult {
         // 話者の名前（<speaker_names>）を先に取り出す。<action_items> は後ろから探すので、残っていると本文に混ざる
         let (withoutNames, speakerNames) = SpeakerNameInference.extract(from: response)
         var body = withoutNames
@@ -310,19 +344,19 @@ enum MinutesPrompt {
         // 読めれば、その場所を一覧に置き換える
         if items == nil, let inline = inlineItems(in: body) {
             items = inline.items
-            let list = inline.items.isEmpty ? Prompts.text("minutes.result.none") : inline.items.map(\.markdownLine).joined(separator: "\n")
+            let list = inline.items.isEmpty ? Prompts.text("minutes.result.none", language: language) : inline.items.map { $0.markdownLine(language: language) }.joined(separator: "\n")
             body.replaceSubrange(inline.range, with: list)
         }
 
         let resolved = items ?? ActionItem.parse(fromMarkdown: body)
         if body.contains(placeholder) {
             let list = items == nil
-                ? Prompts.text("minutes.result.unreadable")
-                : (resolved.isEmpty ? Prompts.text("minutes.result.none") : resolved.map(\.markdownLine).joined(separator: "\n"))
+                ? Prompts.text("minutes.result.unreadable", language: language)
+                : (resolved.isEmpty ? Prompts.text("minutes.result.none", language: language) : resolved.map { $0.markdownLine(language: language) }.joined(separator: "\n"))
             body = body.replacingOccurrences(of: placeholder, with: list)
         }
-        return MinutesResult(markdown: "# " + Prompts.text("minutes.result.title", ["title": title]) + "\n\n\(body)\n",
-                             actionItems: resolved, speakerNames: speakerNames)
+        return MinutesResult(markdown: "# " + Prompts.text("minutes.result.title", ["title": title], language: language) + "\n\n\(body)\n",
+                             actionItems: resolved, speakerNames: speakerNames, language: language)
     }
 
     private struct RawItem: Decodable {

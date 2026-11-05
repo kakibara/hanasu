@@ -51,10 +51,13 @@ public sealed class PromptLanguage
     /// 言語の識別子（ja-JP、zh-Hant-TW、pt_PT など）を、対応言語のどれかに寄せる。
     /// 中国語は繁体字（Hant）か台湾・香港・マカオなら zh-TW、それ以外は zh-CN。ポルトガル語は pt-BR。どれでもなければ英語
     /// </summary>
-    public static PromptLanguage FromLocaleIdentifier(string? localeIdentifier)
+    public static PromptLanguage FromLocaleIdentifier(string? localeIdentifier) => SupportedOrNull(localeIdentifier) ?? En;
+
+    /// <summary>対応言語のどれかに寄せる。どれでもなければ null（Mac 版 PromptLanguage.supported(localeIdentifier:) と同じ）</summary>
+    public static PromptLanguage? SupportedOrNull(string? localeIdentifier)
     {
         var parts = (localeIdentifier ?? "").Trim().Replace('_', '-').Split('-', StringSplitOptions.RemoveEmptyEntries);
-        if (parts.Length == 0) return En;
+        if (parts.Length == 0) return null;
         var code = parts[0].ToLowerInvariant();
         switch (code)
         {
@@ -66,7 +69,7 @@ public sealed class PromptLanguage
             case "in":
                 return Id;
             default:
-                return All.FirstOrDefault(l => l.Code == code) ?? En;
+                return All.FirstOrDefault(l => l.Code == code);
         }
     }
 
@@ -85,7 +88,14 @@ public sealed class PromptLanguage
     public static PromptLanguage Current => overrideLanguage ?? settingsLanguage;
 
     /// <summary>設定の文字起こしの言語を反映する。SettingsService が、読み込んだときと設定を変えたときに呼ぶ</summary>
-    public static void UseSettings(string? localeIdentifier) => settingsLanguage = FromLocaleIdentifier(localeIdentifier);
+    public static void UseSettings(string? localeIdentifier)
+    {
+        settingsLanguage = FromLocaleIdentifier(localeIdentifier);
+        SettingsLocaleIdentifier = localeIdentifier;
+    }
+
+    /// <summary>設定の文字起こしの言語の識別子（対応言語にない sv-SE なども、そのまま持つ）。設定を読む前は null</summary>
+    public static string? SettingsLocaleIdentifier { get; private set; }
 
     /// <summary>日付の曜日や月の名前を、この言語で書くためのカルチャ（暦はグレゴリオ暦にそろえる）</summary>
     public CultureInfo Culture => culture ??= MakeCulture(this == Ja ? "ja-JP" : Code);
