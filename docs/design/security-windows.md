@@ -102,7 +102,8 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 
 - 確かめたこと: 配布物（zip）はコード署名をしていない。Windows の SmartScreen が「認識されないアプリ」と出す。
 - 直したこと: CI で zip の SHA-256 を `Hanasu-windows-x64.zip.sha256` に書いて artifact に入れる（DEC-COM-150）。README に、署名がないこと・SHA-256 で確かめること・専用のフォルダに展開することを書いた。
-- 残る危険: 署名がないので、配布物が途中で差し替えられても Windows は気づかない（SHA-256 を、配布物と別の経路で確かめる必要がある）。自動更新はない。
+- 残る危険: 署名がないので、配布物が途中で差し替えられても Windows は気づかない（SHA-256 を、配布物と別の経路で確かめる必要がある）。
+- アプリの中のアップデート（REQ-REL-010・011）: ユーザーが選んだときだけ、https の GitHub のホスト（`api.github.com`・`github.com`・`*.githubusercontent.com`）から zip を取り、GitHub の API が返す SHA-256 と大きさで確かめてから入れ替える（DEC-REL-021、DEC-REL-030）。zip の展開では、フォルダの外に書くエントリーを断る（`UpdatePackage.Extract`）。残る危険: 確かめる値も同じ GitHub から来るので、GitHub のリポジトリかリリースを書き換えられる人が作った zip は、そのまま入る（署名がないので、Mac 版のような証明書の照合はできない）。
 
 ### 2.10 ローカルの LLM（llama-server）
 

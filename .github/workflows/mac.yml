@@ -41,6 +41,8 @@ jobs:
           $B --test-speaker-names
           $B --test-dictionary
           $B --test-paste-target
+          # 確かめ方: REQ-REL-010, REQ-REL-011（通信しない。版の比べ方・リリースの読み方・スキップ・ホストの制限）
+          $B --update-selftest
 
       # デバッグで通っても、最適化ビルドでだけ落ちることがある（PR #39）
       - name: Release build
