@@ -7,9 +7,10 @@ import SwiftUI
 /// 記録中の画面の右側: メモ欄と「ここ重要」ボタン。
 struct LiveNotesPanel: View {
     @ObservedObject var recorder: MeetingRecorder
+    /// 右側の「メモ」「AI チャット」の切り替え（LiveSidePanel）。nil なら見出しに「メモ」とだけ出す
+    var mode: Binding<LiveSidePanelMode>?
     @ObservedObject private var settings = MeetingNotesSettings.shared
     @ObservedObject private var hotKey = MeetingHighlightHotKey.shared
-    @ObservedObject private var caption = MeetingCaptionPanel.shared
     @State private var draft = ""
     /// 今の行を書き始めた時刻（録音開始からの秒数）
     @State private var draftStartedAt: Double?
@@ -21,22 +22,14 @@ struct LiveNotesPanel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 8) {
-                Text(tr("メモ")).font(.headline)
+                if let mode {
+                    LiveSidePanelModePicker(mode: mode)
+                } else {
+                    Text(tr("メモ")).font(.headline)
+                }
                 Spacer()
-                Button {
-                    caption.toggle(recorder: recorder)
-                } label: {
-                    Image(systemName: caption.isShown ? "captions.bubble.fill" : "captions.bubble")
-                }
-                .help(tr("字幕をほかのアプリの前面に表示する"))
-                Button(action: highlight) {
-                    Label(tr("ここ重要"), systemImage: "star.fill")
-                }
-                .tint(.yellow)
-                .buttonStyle(.borderedProminent)
-                .help(highlightHelp)
+                LiveHighlightControls(recorder: recorder, onHighlight: highlight)
             }
-            .disabled(!isRecording)
             .padding([.horizontal, .top])
             HighlightUndoButton(recorder: recorder)
                 .padding(.horizontal)
@@ -94,10 +87,6 @@ struct LiveNotesPanel: View {
         }
     }
 
-    private var highlightHelp: String {
-        settings.highlightHotKeyEnabled ? tr("今の時刻に印を付ける（%@）", "\(settings.highlightHotKey.displayString)") : tr("今の時刻に印を付ける")
-    }
-
     private func submit() {
         recorder.addNote(draft, at: draftStartedAt)
         draft = ""
@@ -109,6 +98,44 @@ struct LiveNotesPanel: View {
         recorder.addHighlight(draft)
         draft = ""
         draftStartedAt = nil
+    }
+}
+
+// 要件: REQ-MTG-012, REQ-MTG-014
+/// 記録中の画面の右側の上に出す、字幕の切り替えと「ここ重要」のボタン（「メモ」と「AI チャット」のどちらでも出す）
+struct LiveHighlightControls: View {
+    @ObservedObject var recorder: MeetingRecorder
+    /// 「ここ重要」を押したとき。nil なら説明なしで今の時刻に印を付ける（メモ欄では、書きかけの文を印の説明にする）
+    var onHighlight: (() -> Void)?
+    @ObservedObject private var settings = MeetingNotesSettings.shared
+    @ObservedObject private var caption = MeetingCaptionPanel.shared
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Button {
+                caption.toggle(recorder: recorder)
+            } label: {
+                Image(systemName: caption.isShown ? "captions.bubble.fill" : "captions.bubble")
+            }
+            .help(tr("字幕をほかのアプリの前面に表示する"))
+            .accessibilityLabel(tr("字幕を前面に表示"))
+            .accessibilityValue(caption.isShown ? tr("オン") : tr("オフ"))
+            // 設計判断: DEC-MTG-075（黄色の上は白ではなく黒の文字にする）
+            Button {
+                if let onHighlight { onHighlight() } else { recorder.addHighlight() }
+            } label: {
+                Label(tr("ここ重要"), systemImage: "star.fill")
+                    .foregroundStyle(.black)
+            }
+            .tint(.yellow)
+            .buttonStyle(.borderedProminent)
+            .help(highlightHelp)
+        }
+        .disabled(recorder.state != .recording)
+    }
+
+    private var highlightHelp: String {
+        settings.highlightHotKeyEnabled ? tr("今の時刻に印を付ける（%@）", "\(settings.highlightHotKey.displayString)") : tr("今の時刻に印を付ける")
     }
 }
 
@@ -174,6 +201,8 @@ struct MeetingNotesEditor: View {
     let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder
     @State private var text = ""
+    /// 「保存して議事録を作り直す」の確かめ（今の議事録があるときだけ出す。DEC-MTG-072）
+    @State private var confirmRegenerate = false
 
     private var changed: Bool { text != meeting.notesText }
 
@@ -207,21 +236,32 @@ struct MeetingNotesEditor: View {
                     .disabled(!changed)
                 Button(tr("保存")) { recorder.updateNotes(meeting, notes: MeetingNote.parse(text)) }
                     .disabled(!changed)
+                // 設計判断: DEC-MTG-072
                 Button(tr("保存して議事録を作り直す")) {
-                    let updated = recorder.updateNotes(meeting, notes: MeetingNote.parse(text))
-                    Task { await recorder.regenerateMinutes(updated) }
+                    if meeting.minutes == nil { saveAndRegenerate() } else { confirmRegenerate = true }
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
+                .confirmationDialog(tr("メモを保存して、議事録を作り直しますか？"), isPresented: $confirmRegenerate) {
+                    Button(tr("作り直す"), action: saveAndRegenerate)
+                    Button(tr("キャンセル"), role: .cancel) {}
+                } message: {
+                    Text(tr("今の議事録とアクションアイテムは、メモを反映したものに置き換わります。"))
+                }
             }
         }
         .padding()
         .onAppear { text = meeting.notesText }
         .onChange(of: meeting.id) { text = meeting.notesText }
     }
+
+    private func saveAndRegenerate() {
+        let updated = recorder.updateNotes(meeting, notes: MeetingNote.parse(text))
+        Task { await recorder.regenerateMinutes(updated) }
+    }
 }
 
-/// 設定の「会議」タブに置く、「ここ重要」のショートカットの設定
+/// 設定の「会議」に置く、「ここ重要」のショートカットの設定
 struct MeetingNotesSettingsSection: View {
     @ObservedObject private var settings = MeetingNotesSettings.shared
     var onBeginShortcutRecording: () -> Void = {}
@@ -234,6 +274,7 @@ struct MeetingNotesSettingsSection: View {
                 ShortcutRecorder(
                     combo: $settings.highlightHotKey,
                     defaultCombo: MeetingNotesSettings.defaultHighlightHotKey,
+                    kind: .highlight,
                     onBeginRecording: {
                         MeetingHighlightHotKey.shared.suspend()
                         onBeginShortcutRecording()
@@ -284,8 +325,10 @@ final class MeetingCaptionPanel: ObservableObject {
             panel.isReleasedWhenClosed = false
             panel.contentView = NSHostingView(rootView: MeetingCaptionView(recorder: recorder))
             panel.setFrameAutosaveName("HanasuMeetingCaption")
-            if !panel.setFrameUsingName("HanasuMeetingCaption"), let screen = NSScreen.main {
-                // 初回は画面の下の中央
+            // 設計判断: DEC-COM-017
+            // 初回はマウスのある画面の下の中央（HUD と同じ）。2 回目からは前に置いた位置
+            if !panel.setFrameUsingName("HanasuMeetingCaption"),
+               let screen = NSScreen.screens.first(where: { $0.frame.contains(NSEvent.mouseLocation) }) ?? NSScreen.main {
                 let frame = screen.visibleFrame
                 panel.setFrameOrigin(NSPoint(x: frame.midX - 280, y: frame.minY + 40))
             }
@@ -336,12 +379,15 @@ struct MeetingCaptionView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             VStack(spacing: 4) {
+                // 設計判断: DEC-MTG-075
                 Button { recorder.addHighlight() } label: {
                     Image(systemName: "star.fill")
+                        .foregroundStyle(.black)
                 }
                 .tint(.yellow)
                 .buttonStyle(.borderedProminent)
                 .help(tr("ここ重要"))
+                .accessibilityLabel(tr("ここ重要"))
                 .disabled(recorder.state != .recording)
                 HighlightUndoButton(recorder: recorder, compact: true)
                     .font(.caption)

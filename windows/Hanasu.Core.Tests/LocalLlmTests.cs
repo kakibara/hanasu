@@ -105,6 +105,9 @@ public class LocalLlmTests
         Assert.Contains("--jinja", args);
         Assert.Contains("--no-webui", args);
         Assert.DoesNotContain(args, a => a.Contains("api-key", StringComparison.OrdinalIgnoreCase));
+        // キーなしで読める /models に、ファイルのパスではなくモデルの id を出させる
+        Assert.Equal("sarashina2.2-3b", args[args.ToList().IndexOf("--alias") + 1]);
+        Assert.Contains("ANTHROPIC_API_KEY", LocalLlmServer.SecretEnvironmentKeys);
         Assert.InRange(LocalLlmServer.FreePort(), 1, 65535);
     }
 

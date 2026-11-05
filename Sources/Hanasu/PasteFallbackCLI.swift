@@ -9,7 +9,7 @@ import SwiftUI
 //   Hanasu --render-paste-fallback <出力.png> [--long] [--display-only] [--warning] [--edit]
 //     結果を残すパネルを画像にする。--long で長い文章（スクロール）、--display-only で「表示だけにする」のときの案内
 //   Hanasu --render-paste-fallback-settings <出力.png>
-//     設定の「一般」タブに足した「入力できる場所がないとき」「貼り付けが届かなかったとき」の欄を画像にする
+//     設定の「一般」に足した「入力できる場所がないとき」「貼り付けが届かなかったとき」の欄を画像にする
 //   Hanasu --test-paste-confirm
 //     貼り付け先が読んだかの確かめを、専用の名前のクリップボード（ふだんのクリップボードには触らない）と
 //     別のプロセス（自分を --read-pasteboard で起こす）で確かめる（失敗があれば終了コード 1）

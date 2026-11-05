@@ -308,7 +308,7 @@ private struct SelectableText: NSViewRepresentable {
 
 // 要件: REQ-DIC-081
 // 設計判断: DEC-DIC-095
-/// 設定の「一般」タブに置く「入力できる場所がないとき」の欄
+/// 設定の「一般」に置く「入力できる場所がないとき」の欄
 struct PasteFallbackSettingsSection: View {
     @ObservedObject var settings = PasteFallbackSettings.shared
 
@@ -329,7 +329,7 @@ struct PasteFallbackSettingsSection: View {
 
 // 要件: REQ-DIC-083, REQ-DIC-084
 // 設計判断: DEC-DIC-099
-/// 設定の「一般」タブの「貼り付けが届かなかったとき」の欄
+/// 設定の「一般」の「貼り付けが届かなかったとき」の欄
 struct PasteUnconfirmedSettingsSection: View {
     @ObservedObject var settings = PasteFallbackSettings.shared
 

@@ -7,7 +7,7 @@ import SwiftUI
 //     スニペットは --snippets の JSON（[{"trigger": "...", "body": "..."}]）、設定に登録したもの、例、の順に使う。
 //     --refine を付けると、スニペットの前後の文を Gemini で整形（--translate なら英訳）してつなぐ。
 //   Hanasu --render-snippets-settings <出力.png> [--empty]
-//     設定画面の「スニペット」タブを例のスニペットで画像にする。--empty で空の状態を描く。
+//     設定画面の「スニペット」を例のスニペットで画像にする。--empty で空の状態を描く。
 // 確かめ方: REQ-DIC-030
 @MainActor
 enum SnippetsCLI {
@@ -71,7 +71,7 @@ enum SnippetsCLI {
         _ = NSApplication.shared
         let store = SnippetStore(snippets: empty ? [] : SnippetStore.samples)
         let view = SnippetsSettingsView(store: store)
-            // 設定画面（560×460 の TabView）のタブの中身とほぼ同じ大きさ
+            // 設定画面の右側（項目の中身）とほぼ同じ大きさ
             .frame(width: 560, height: 400)
             .background(Color(nsColor: .windowBackgroundColor))
         let hosting = NSHostingView(rootView: view)

@@ -32,6 +32,9 @@ final class SpeechRecognizer {
     var onLevel: ((Float) -> Void)?
     /// 録音を止めたあと、まとめて文字起こしを始めたとき（Whisper / Gemini）
     var onBatchTranscriptionStarted: ((TranscriptionEngine) -> Void)?
+    // 設計判断: DEC-DIC-144
+    /// Whisper / Gemini の録音が上限（maxBatchRecordingSeconds）に達したとき。受け取った側は録音を止めて、ここまでの音声を処理する
+    var onRecordingLimitReached: (() -> Void)?
     /// 直近の stop() で文字起こしに失敗したときの理由（Whisper / Gemini）
     private(set) var lastError: String?
 
@@ -52,6 +55,12 @@ final class SpeechRecognizer {
     private var batch: BatchCapture?
 
     var isRunning: Bool { analyzer != nil || batch != nil }
+
+    // 設計判断: DEC-DIC-144
+    /// Whisper / Gemini で一度に録れる長さ（秒）。16 kHz モノラルの Float で 1 分あたり約 3.8 MB たまるので、上限を置く
+    nonisolated static let maxBatchRecordingSeconds: Double = 600
+    /// 上限に達したことを HUD に出す文（Windows 版と同じ文言）
+    nonisolated static let recordingLimitNotice = tr("録音が上限の 10 分に達したため、ここまでの音声を処理します")
 
     /// - Parameter transcription: 文字起こしのエンジン。Mac 標準以外では、engine（SpeechAnalyzer のモジュール）は使わない
     /// - Parameter inputDeviceUID: 使うマイクの UID。空ならシステムの設定に従う
@@ -95,7 +104,15 @@ final class SpeechRecognizer {
                 appLog.error("speech results error: \(String(describing: error), privacy: .public)")
             }
         }
-        try await analyzer.start(inputSequence: stream)
+        do {
+            try await analyzer.start(inputSequence: stream)
+        } catch {
+            continuation.finish()
+            resultsTask?.cancel()
+            resultsTask = nil
+            await analyzer.cancelAndFinishNow()
+            throw error
+        }
 
         // 録音を残せなくても、音声入力は続ける
         let writer = audioFileURL.flatMap { try? DictationAudioWriter(url: $0, format: analyzerFormat) }
@@ -247,7 +264,13 @@ final class SpeechRecognizer {
             break
         }
         let capture = BatchCapture(engine: engine, hints: hints)
-        try capture.start(inputDeviceUID: inputDeviceUID, audioFileURL: audioFileURL) { [weak self] level in self?.onLevel?(level) }
+        try capture.start(
+            inputDeviceUID: inputDeviceUID, audioFileURL: audioFileURL,
+            onLevel: { [weak self] level in self?.onLevel?(level) },
+            onLimitReached: { [weak self] in
+                appLog.notice("batch recording reached the length limit")
+                self?.onRecordingLimitReached?()
+            })
         batch = capture
     }
 
@@ -477,7 +500,8 @@ private final class BatchCapture {
         self.hints = hints
     }
 
-    func start(inputDeviceUID: String, audioFileURL: URL?, onLevel: @escaping (Float) -> Void) throws {
+    func start(inputDeviceUID: String, audioFileURL: URL?, onLevel: @escaping (Float) -> Void,
+               onLimitReached: @escaping () -> Void) throws {
         // 録音を残せなくても、音声入力は続ける
         let writer = audioFileURL.flatMap { try? DictationAudioWriter(url: $0, format: TranscriptionAudio.format) }
         do {
@@ -489,7 +513,11 @@ private final class BatchCapture {
         self.writer = writer
         levelTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [box] _ in
             let level = box.level
-            MainActor.assumeIsolated { onLevel(level) }
+            let limitReached = box.takeLimitReached()
+            MainActor.assumeIsolated {
+                onLevel(level)
+                if limitReached { onLimitReached() }
+            }
         }
     }
 
@@ -536,14 +564,30 @@ private final class SampleBox: @unchecked Sendable {
     private let lock = NSLock()
     private var _samples: [Float] = []
     private var _level: Float = 0
+    private var _limitReached = false
+    private var _limitNotified = false
+    // 設計判断: DEC-DIC-144
+    private let maxSamples = Int(SpeechRecognizer.maxBatchRecordingSeconds * TranscriptionAudio.sampleRate)
 
     func append(_ buffer: AVAudioPCMBuffer) {
         guard let data = buffer.floatChannelData?[0] else { return }
         let chunk = UnsafeBufferPointer(start: data, count: Int(buffer.frameLength))
         let rms = TranscriptionAudio.rms(chunk)
         lock.withLock {
-            _samples.append(contentsOf: chunk)
             _level = rms
+            // 上限を超える分はためない（止める処理は takeLimitReached を見たメインスレッドが行う）
+            let room = maxSamples - _samples.count
+            if room < chunk.count { _limitReached = true }
+            if room > 0 { _samples.append(contentsOf: chunk.prefix(room)) }
+        }
+    }
+
+    /// 上限に達していて、まだ知らせていなければ true（一度だけ）
+    func takeLimitReached() -> Bool {
+        lock.withLock {
+            guard _limitReached, !_limitNotified else { return false }
+            _limitNotified = true
+            return true
         }
     }
 

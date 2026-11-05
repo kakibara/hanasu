@@ -265,10 +265,13 @@ enum MinutesPrompt {
     /// 話者の名前を <speaker_names> で出させる指示（Windows 版 MinutesPrompt.SpeakerNamesInstruction と同じ文面。どちらも Prompts の JSON を読む）
     static var speakerNamesInstruction: String { Prompts.text("minutes.speakerNames") }
 
+    // 設計判断: DEC-COM-054
     static func userText(for meeting: Meeting) -> String {
-        // メモか印があれば <user_notes> を足し、印の前後の発言に ★ を付ける（MeetingNotes.swift）
-        let userNotes = meeting.notesForPrompt()
-        let transcript = userNotes == nil ? meeting.transcriptForPrompt() : meeting.transcriptForPromptMarkingHighlights()
+        // メモか印があれば <user_notes> を足し、印の前後の発言に ★ を付ける（MeetingNotes.swift）。
+        // 文字起こし・メモの中の区切りのタグは無害にしてから埋め込む（プロンプトインジェクションの対策。DEC-COM-054）
+        let userNotes = meeting.notesForPrompt().map(PromptText.neutralizeDelimiters)
+        let transcript = PromptText.neutralizeDelimiters(
+            userNotes == nil ? meeting.transcriptForPrompt() : meeting.transcriptForPromptMarkingHighlights())
         let notesBlock = userNotes.map { "\n<user_notes>\n\($0)\n</user_notes>\n" } ?? ""
         let date = PromptLanguage.current.dateFormatter.string(from: meeting.startedAt)
         return """

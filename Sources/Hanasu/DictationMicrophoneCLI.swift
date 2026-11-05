@@ -4,7 +4,7 @@ import SwiftUI
 
 // 音声入力のマイクの確認:
 //   Hanasu --list-dictation-microphones              HUD のメニュー・設定に出る選択肢（✓ が今の選択）
-//   Hanasu --render-dictation-mic-settings <出力.png>  設定の「一般」タブの「マイク」欄を PNG にする
+//   Hanasu --render-dictation-mic-settings <出力.png>  設定の「一般」の「マイク」欄を PNG にする
 //   Hanasu --test-dictation-mic-switch [秒]           つながっているマイクへ順に切り替えて、それぞれ音声が届くかを数える
 //                                                     （録音中の切り替えと同じ関数を使う。マイクの許可が要る）
 //   Hanasu --test-dictation-level [秒] [--engine apple|whisper|gemini]
@@ -63,7 +63,7 @@ enum DictationMicrophoneCLI {
         return !levels.isEmpty
     }
 
-    /// 設定の「一般」タブの「マイク」欄を PNG にする
+    /// 設定の「一般」の「マイク」欄を PNG にする
     private static func renderSettings(to url: URL) {
         _ = NSApplication.shared
         let view = Form {
@@ -72,7 +72,7 @@ enum DictationMicrophoneCLI {
             } header: {
                 Text("マイク")
             } footer: {
-                Text("音声入力と「選択を声で編集」で使うマイク。録音中の画面（HUD）のマイクのボタンからも切り替えられます。会議の記録のマイクは「会議」タブで選びます。")
+                Text("音声入力と「選択を声で編集」で使うマイク。録音中の画面（HUD）のマイクのボタンからも切り替えられます。会議の記録のマイクは設定の「会議」で選びます。")
                     .font(.caption).foregroundStyle(.secondary)
             }
         }
