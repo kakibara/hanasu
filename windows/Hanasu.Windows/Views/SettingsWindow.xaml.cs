@@ -36,6 +36,7 @@ public partial class SettingsWindow : Window
         this.host = host;
         settings = host.Settings;
         InitializeComponent();
+        WindowFit.ClampToWorkArea(this);
         LoadValues();
         loading = false;
 
@@ -220,6 +221,8 @@ public partial class SettingsWindow : Window
     private void OnPasteFallbackChanged(object sender, RoutedEventArgs e) =>
         Save(s => s.PasteFallbackClipboard = FallbackRestoreRadio.IsChecked == true ? PasteFallbackClipboard.RestoreOriginal : PasteFallbackClipboard.KeepResult);
 
+    private void OnOpenMicrophonePrivacy(object sender, RoutedEventArgs e) => Shell.Open("ms-settings:privacy-microphone");
+
     private void OnOpenSpeechPrivacy(object sender, RoutedEventArgs e) => Shell.Open("ms-settings:privacy-speech");
 
     private void OnOpenLanguageSettings(object sender, RoutedEventArgs e) => Shell.Open("ms-settings:regionlanguage");
@@ -267,7 +270,7 @@ public partial class SettingsWindow : Window
         var count = host.History.Entries.Count;
         if (count == 0) return;
         if (MessageBox.Show(this, $"音声入力の履歴 {count} 件をすべて削除しますか？元に戻せません。", "Hanasu",
-                MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) return;
+                MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         host.History.DeleteAll();
         UpdateHistoryStatus();
     }
@@ -313,7 +316,7 @@ public partial class SettingsWindow : Window
     {
         if (SelectedWhisperModel is not { } model) return;
         if (MessageBox.Show(this, $"Whisper のモデル {model.Id}（{model.SizeLabel}）を削除しますか？", "Hanasu",
-                MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
+                MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         try
         {
             // 読み込み中のモデルはファイルを開いているので、先に手放す
@@ -410,7 +413,7 @@ public partial class SettingsWindow : Window
     {
         if (LocalModelOf(sender) is not { } model) return;
         if (MessageBox.Show(this, $"ローカルのモデル {model.Name}（{model.SizeLabel}）を削除しますか？", "Hanasu",
-                MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
+                MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         try
         {
             host.LocalLlmModels.Delete(model);
@@ -528,7 +531,7 @@ public partial class SettingsWindow : Window
 
     private bool ConfirmDeleteKey(string name) =>
         MessageBox.Show(this, $"保存した {name} の API キーを削除しますか？使い続けるには、もう一度キーを保存してください。", "Hanasu",
-            MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK;
+            MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) == MessageBoxResult.OK;
 
     private void UpdateApiKeyStatus() => ApiKeyStatus.Text = host.Secrets.Describe(SecretKind.GeminiApiKey).Describe();
 

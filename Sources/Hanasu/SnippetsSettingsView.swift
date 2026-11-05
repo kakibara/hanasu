@@ -5,6 +5,7 @@ import SwiftUI
 struct SnippetsSettingsView: View {
     @ObservedObject var store: SnippetStore
     @State private var selection: Snippet.ID?
+    @State private var confirmRemove = false
 
     init(store: SnippetStore = .shared, initialSelection: Snippet.ID? = nil) {
         self.store = store
@@ -27,6 +28,11 @@ struct SnippetsSettingsView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
+        .confirmationDialog("選んだスニペットを削除しますか？", isPresented: $confirmRemove) {
+            Button("削除", role: .destructive) { removeSelected() }
+        } message: {
+            Text("起動フレーズと本文が消えます。元に戻せません。")
+        }
     }
 
     private var list: some View {
@@ -48,10 +54,12 @@ struct SnippetsSettingsView: View {
             HStack(spacing: 0) {
                 Button(action: add) { Image(systemName: "plus").frame(width: 22, height: 18) }
                     .help("スニペットを追加")
+                    .accessibilityLabel("スニペットを追加")
                 Divider().frame(height: 16)
-                Button(action: removeSelected) { Image(systemName: "minus").frame(width: 22, height: 18) }
+                Button(action: requestRemove) { Image(systemName: "minus").frame(width: 22, height: 18) }
                     .disabled(selection == nil)
                     .help("選んだスニペットを削除")
+                    .accessibilityLabel("選んだスニペットを削除")
                 Spacer()
             }
             .buttonStyle(.borderless)
@@ -134,6 +142,17 @@ struct SnippetsSettingsView: View {
         let snippet = Snippet(trigger: "", body: "")
         store.snippets.append(snippet)
         selection = snippet.id
+    }
+
+    /// 中身のあるスニペットは確かめてから消す（空のものはそのまま消す）
+    private func requestRemove() {
+        guard let id = selection, let snippet = store.snippets.first(where: { $0.id == id }) else { return }
+        if snippet.trigger.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && snippet.body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            removeSelected()
+        } else {
+            confirmRemove = true
+        }
     }
 
     private func removeSelected() {

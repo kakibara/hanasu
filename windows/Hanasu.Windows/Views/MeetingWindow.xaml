@@ -7,7 +7,7 @@
         FontFamily="Yu Gothic UI, Meiryo UI, Segoe UI" FontSize="13">
     <Window.Resources>
         <Style x:Key="Note" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#FF5F6368" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="Margin" Value="0,3,0,0" />
@@ -65,7 +65,7 @@
                 </StackPanel>
 
                 <!-- 要件: REQ-MTG-028 -->
-                <ListBox x:Name="MeetingList" SelectionChanged="OnMeetingSelected" BorderThickness="0" Background="Transparent"
+                <ListBox x:Name="MeetingList" AutomationProperties.Name="会議の一覧" SelectionChanged="OnMeetingSelected" BorderThickness="0" Background="Transparent"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" KeyDown="OnMeetingListKeyDown">
                     <ListBox.ContextMenu>
                         <ContextMenu Opened="OnMeetingListMenuOpened">
@@ -93,7 +93,7 @@
                 <!-- 設計判断: DEC-MTG-024 -->
                 <!-- 書き換えられると見てわかるように、いつも枠と鉛筆の印を出す（マウスを載せる・編集中は、標準の見た目で枠の色が変わる） -->
                 <Grid>
-                    <TextBox x:Name="TitleBox" FontSize="18" FontWeight="SemiBold" BorderThickness="1" BorderBrush="#FFBDBDBD"
+                    <TextBox x:Name="TitleBox" AutomationProperties.Name="会議のタイトル" FontSize="18" FontWeight="SemiBold" BorderThickness="1" BorderBrush="#FFBDBDBD"
                              Padding="4,3,32,3" LostFocus="OnTitleChanged" KeyDown="OnTitleKeyDown"
                              ToolTip="クリックしてタイトルを変更（Enter で保存・Esc でやめる）" />
                     <TextBlock Text="&#xE70F;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14" Foreground="#FF5F6368"
@@ -126,9 +126,9 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="自分" Margin="0,0,6,0" VerticalAlignment="Center" FontSize="12" />
-                        <ProgressBar x:Name="MicLevel" Grid.Column="1" Height="6" Maximum="0.3" />
+                        <ProgressBar x:Name="MicLevel" AutomationProperties.Name="自分のマイクの音量" Grid.Column="1" Height="6" Maximum="0.3" />
                         <TextBlock Grid.Column="2" Text="相手" Margin="12,0,6,0" VerticalAlignment="Center" FontSize="12" />
-                        <ProgressBar x:Name="OutputLevel" Grid.Column="3" Height="6" Maximum="0.3" />
+                        <ProgressBar x:Name="OutputLevel" AutomationProperties.Name="相手の音の大きさ" Grid.Column="3" Height="6" Maximum="0.3" />
                     </Grid>
                     <TextBlock x:Name="RecordingNote" Style="{StaticResource Note}" />
                     <DockPanel Margin="0,8,0,0">
@@ -138,7 +138,7 @@
                                 ToolTip="付けてから 10 秒のあいだは、押し間違えた印を取り消せます" />
                         <Button DockPanel.Dock="Right" x:Name="HighlightButton" Content="★ ここ重要" Margin="6,0,0,0" Click="OnHighlightClick" />
                         <Button DockPanel.Dock="Right" Content="メモを足す" Margin="6,0,0,0" Click="OnAddNoteClick" />
-                        <TextBox x:Name="NoteInput" Padding="4,3" KeyDown="OnNoteInputKeyDown" TextChanged="OnNoteInputChanged" />
+                        <TextBox x:Name="NoteInput" AutomationProperties.Name="メモを入力" Padding="4,3" KeyDown="OnNoteInputKeyDown" TextChanged="OnNoteInputChanged" />
                     </DockPanel>
                     <TextBlock Style="{StaticResource Note}" Text="Enter でメモを足します（時刻は書き始めた時点）。書きかけの文があるときに「ここ重要」を押すと、その文を印の説明にします。" />
                     <TextBlock x:Name="LiveNotes" Margin="0,6,0,0" TextWrapping="Wrap" FontFamily="Consolas, Yu Gothic UI" />
@@ -147,15 +147,15 @@
 
             <TabControl x:Name="Tabs" Margin="0,10,0,0">
                 <TabItem Header="議事録">
-                    <TextBox x:Name="MinutesBox" Style="{StaticResource Reader}" />
+                    <TextBox x:Name="MinutesBox" AutomationProperties.Name="議事録" Style="{StaticResource Reader}" />
                 </TabItem>
                 <TabItem Header="文字起こし">
-                    <TextBox x:Name="TranscriptBox" Style="{StaticResource Reader}" />
+                    <TextBox x:Name="TranscriptBox" AutomationProperties.Name="文字起こし" Style="{StaticResource Reader}" />
                 </TabItem>
                 <!-- 要件: REQ-MTG-012 -->
                 <!-- 設計判断: DEC-MTG-049 -->
                 <TabItem Header="ここ重要">
-                    <TextBox x:Name="HighlightsBox" Style="{StaticResource Reader}" FontFamily="Consolas, Yu Gothic UI" />
+                    <TextBox x:Name="HighlightsBox" AutomationProperties.Name="「ここ重要」の前後" Style="{StaticResource Reader}" FontFamily="Consolas, Yu Gothic UI" />
                 </TabItem>
                 <TabItem Header="メモ">
                     <DockPanel Margin="6">
@@ -165,7 +165,7 @@
                         </StackPanel>
                         <TextBlock DockPanel.Dock="Top" Style="{StaticResource Note}" Margin="0,0,0,4"
                                    Text="1 行に 1 件。「[12:34] 内容」はメモ、「[12:40] ★ 説明」は「ここ重要」の印、時刻のない行は記録のあとに書き足したメモです。" />
-                        <TextBox x:Name="NotesBox" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Padding="4,3"
+                        <TextBox x:Name="NotesBox" AutomationProperties.Name="メモ" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Padding="4,3"
                                  FontFamily="Consolas, Yu Gothic UI" />
                     </DockPanel>
                 </TabItem>

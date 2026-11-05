@@ -96,6 +96,7 @@ struct DictionaryEditorSection: View {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(.yellow)
                                 .help(issue)
+                                .accessibilityLabel(issue)
                         } else {
                             Color.clear
                         }
@@ -108,6 +109,7 @@ struct DictionaryEditorSection: View {
                     }
                     .buttonStyle(.borderless)
                     .help("この行を削除")
+                    .accessibilityLabel("この行を削除")
                 }
             }
         }

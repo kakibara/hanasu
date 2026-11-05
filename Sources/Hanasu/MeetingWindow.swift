@@ -44,7 +44,7 @@ struct MeetingWindowView: View {
                                   onDelete: { pendingDelete = meeting })
             } else {
                 ContentUnavailableView("会議を選んでください", systemImage: "waveform",
-                                       description: Text("下のボタンか ⌃⌥⌘M で記録を始められます。"))
+                                       description: Text("下のボタンか \(AppSettings.shared.meetingHotKey.displayString) で記録を始められます。"))
             }
         }
         .frame(minWidth: 900, minHeight: 520)
@@ -159,6 +159,7 @@ private struct MeetingRow: View {
                 if busy {
                     // 要件: REQ-MTG-013
                     ProgressView().controlSize(.mini).help("議事録を作っています")
+                        .accessibilityLabel("議事録を作っています")
                 } else if live {
                     Image(systemName: "record.circle.fill").foregroundStyle(.red)
                 }
@@ -207,6 +208,8 @@ private struct RecordButton: View {
             }
             if let error = recorder.lastError {
                 Text(error).font(.caption).foregroundStyle(.orange).lineLimit(3)
+                    .help(error)
+                    .textSelection(.enabled)
             }
         }
     }
@@ -302,6 +305,9 @@ private struct LevelMeter: View {
             .frame(width: 70, height: 6)
             .animation(.linear(duration: 0.2), value: normalized)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(label)の音量")
+        .accessibilityValue("\(Int(normalized * 100))%")
     }
 
     private var normalized: CGFloat {
@@ -654,6 +660,7 @@ private struct SpeakerNamesSheet: View {
             HStack {
                 Spacer()
                 Button("キャンセル") { dismiss() }
+                    .keyboardShortcut(.cancelAction)
                 Button("保存") {
                     // 変えた話者だけを、まとめて保存する（推測の印は、直した話者だけ外す）
                     recorder.renameSpeakers(meeting, names: names.filter { $0.value != (meeting.speakerNames[$0.key] ?? "") })
@@ -685,6 +692,9 @@ private struct TranscriptLine: View {
             Text(speaker)
                 .font(.callout.bold())
                 .foregroundStyle(color)
+                .lineLimit(1)
+                .truncationMode(.tail)
+                .help(speaker)
                 .frame(width: 72, alignment: .leading)
             Text(MeetingSearchHighlight.apply(AttributedString(text), terms: highlight))
                 .frame(maxWidth: .infinity, alignment: .leading)

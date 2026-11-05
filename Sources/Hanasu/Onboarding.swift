@@ -439,6 +439,9 @@ struct OnboardingAIPage: View {
         }
         .buttonStyle(.plain)
         .help(unavailable ?? "")
+        // 選んでいるカードを VoiceOver に伝える（見た目はチェックの画像だけなので）
+        .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityHint(unavailable ?? "")
         // 設計判断: DEC-COM-092
         // Apple の Foundation Models が使えない Mac（macOS 27 より前など）では選べない
         .disabled(unavailable != nil)
