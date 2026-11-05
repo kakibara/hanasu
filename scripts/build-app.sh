@@ -20,7 +20,8 @@ cp "$BIN" "$APP/Contents/MacOS/Hanasu"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 # 要件: REQ-REL-005
-cp LICENSE NOTICE THIRD_PARTY_NOTICES.md "$APP/Contents/Resources/"
+# 設計判断: DEC-REL-011
+cp LICENSE LICENSE-ADDITIONAL-PERMISSION.md NOTICE THIRD_PARTY_NOTICES.md "$APP/Contents/Resources/"
 # 要件: REQ-COM-061
 # 設計判断: DEC-COM-160
 # SwiftPM のリソースのバンドル（AI へのプロンプトの JSON）。ないと AI に空のプロンプトを送ってしまうので止める

@@ -2,6 +2,8 @@
 
 <!-- 何をなぜ変えたか -->
 
+- [ ] [CONTRIBUTING.md](../CONTRIBUTING.md) の貢献者ライセンス契約に同意する（I agree to the contributor license agreement in CONTRIBUTING.md）
+
 ## 要件・設計判断との関係（docs/spec）
 
 <!-- 決まりは docs/README.md。`python3 scripts/check-spec.py --diff origin/main` で「触った要件・設計判断」の一覧が出る -->

@@ -10,7 +10,7 @@ A voice-input and meeting-notes app for macOS and Windows. It uses on-device spe
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -29,7 +29,7 @@ A voice-input and meeting-notes app for macOS and Windows. It uses on-device spe
 
 Built-in dictation gives you a raw transcript. It keeps fillers and homophone mistakes, has no punctuation, and includes every "wait, I mean…".
 Hanasu sends the transcript to an AI (Gemini, Claude, or a local model on your device), which fixes those mistakes and tidies the text. Then Hanasu types the result where your cursor is.
-It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Hanasu is free and open source. You bring your own Gemini or Claude API key, or run a local model with no API key and no text leaving your device.
+It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code is public. It is free for personal use and for small businesses; larger companies need a [commercial license](COMMERCIAL.md). You bring your own Gemini or Claude API key, or run a local model with no API key and no text leaving your device.
 
 ## Features
 
@@ -234,5 +234,12 @@ Issues and pull requests are welcome.
 
 ## License
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. See [NOTICE](NOTICE).
+Hanasu is source-available, not open source. © 2026 kakibara. See [NOTICE](NOTICE).
+
+- License: [PolyForm Noncommercial License 1.0.0](LICENSE) plus the [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- Free for personal noncommercial use, education, research, charities and government, and for the internal work of small businesses (fewer than 100 people and under US$1M in revenue). Any company may evaluate Hanasu for 30 days.
+- Larger companies, and anyone who sells Hanasu or builds it into a product or service, need a commercial license. See [COMMERCIAL.md](COMMERCIAL.md).
+- Versions released before this license change were released under the Apache License 2.0 and stay under it.
+- Contributions need the agreement in [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Third-party licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) and [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows). Both files are included in the downloads.

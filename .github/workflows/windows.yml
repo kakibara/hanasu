@@ -71,6 +71,7 @@ jobs:
             "publish/win-x64/runtimes/win-x64/ggml-cpu-whisper.dll",
             # 確かめ方: REQ-REL-005
             "publish/win-x64/LICENSE.txt",
+            "publish/win-x64/LICENSE-ADDITIONAL-PERMISSION.md",
             "publish/win-x64/NOTICE.txt",
             "publish/win-x64/THIRD_PARTY_NOTICES.md",
             "publish/win-x64/dotnet-THIRD-PARTY-NOTICES.txt",

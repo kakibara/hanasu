@@ -314,7 +314,7 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | Microsoft.NET.Test.Sdk 17.14.1 | テストのみ | MIT |
 | [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（org.k2fsa.sherpa.onnx 1.13.8、ONNX Runtime を含む） | 会議の相手側の話者分離 | Apache-2.0（ONNX Runtime は MIT） |
 
-配布物には、Hanasu のライセンス（`LICENSE.txt`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したら、THIRD_PARTY_NOTICES.md にも足すこと。
+配布物には、Hanasu のライセンス（`LICENSE.txt`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したら、THIRD_PARTY_NOTICES.md にも足すこと。
 依存の版とハッシュは各プロジェクトの `packages.lock.json` に固定している（CI は locked mode）。パッケージを足したり版を変えたりしたら、`dotnet restore` で lock ファイルを作り直してコミットする。
 
 Whisper のモデル（`ggml-*.bin`）は配布物に含めず、利用者が選んだときに [Hugging Face の ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp) からダウンロードする（OpenAI の Whisper のモデル、MIT）。
