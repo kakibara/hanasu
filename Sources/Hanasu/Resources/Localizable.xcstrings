@@ -530,7 +530,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ of %@ entries"
+            "value" : "%@ of %@"
           }
         },
         "es" : {
@@ -1022,7 +1022,7 @@
       }
     },
     "%@ で文字起こししています…" : {
-      "comment" : "HUDPanel.swift:254",
+      "comment" : "HUDPanel.swift:263",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1838,7 +1838,7 @@
       }
     },
     "%@ は%@" : {
-      "comment" : "HUDPanel.swift:366",
+      "comment" : "HUDPanel.swift:375",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2570,7 +2570,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ entries"
+            "value" : "Entries: %@"
           }
         },
         "es" : {
@@ -2672,7 +2672,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ meetings · %@ matches"
+            "value" : "Meetings: %@ · Matches: %@"
           }
         },
         "es" : {
@@ -2774,7 +2774,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This deletes %@ history entries and any saved recordings. This can't be undone."
+            "value" : "This deletes the history (entries: %@) and any saved recordings. This can't be undone."
           }
         },
         "es" : {
@@ -2876,7 +2876,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Added %@ items to the “%@” list in Reminders."
+            "value" : "Added to the “%2$@” list in Reminders (items: %1$@)."
           }
         },
         "es" : {
@@ -2978,7 +2978,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add %@ Items"
+            "value" : "Add (%@)"
           }
         },
         "es" : {
@@ -3080,7 +3080,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Added %@ entries to the dictionary."
+            "value" : "Added to the dictionary (entries: %@)."
           }
         },
         "es" : {
@@ -3182,7 +3182,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ characters"
+            "value" : "Characters: %@"
           }
         },
         "es" : {
@@ -3469,6 +3469,108 @@
         }
       }
     },
+    "%@%%（%@）" : {
+      "comment" : "TranscriptionEngineSettingsView.swift:110",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %% (%@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %% (%@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%% (%@)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%%（%@）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@%%（%@）"
+          }
+        }
+      }
+    },
     "%@:\n%@\n\n認識結果:\n%@" : {
       "comment" : "DictationHistoryWindow.swift:111",
       "extractionState" : "manual",
@@ -3590,7 +3692,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@…%@ (%@ characters, hidden)"
+            "value" : "%@…%@ (hidden characters: %@)"
           }
         },
         "es" : {
@@ -3669,6 +3771,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@…%@（已隱藏，共 %@ 個字元）"
+          }
+        }
+      }
+    },
+    "%@。%@" : {
+      "comment" : "Onboarding.swift:520",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@। %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@. %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@。%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@。%@"
           }
         }
       }
@@ -4999,6 +5203,108 @@
         }
       }
     },
+    "%@・%@" : {
+      "comment" : "MeetingExport.swift:22, MeetingWindow.swift:413",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
+          }
+        }
+      }
+    },
     "%@・%@ 件" : {
       "comment" : "MeetingSearchView.swift:187",
       "extractionState" : "manual",
@@ -5018,7 +5324,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · %@ matches"
+            "value" : "%@ · Matches: %@"
           }
         },
         "es" : {
@@ -5222,7 +5528,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ (%@ recordings)"
+            "value" : "%@ (recordings: %@)"
           }
         },
         "es" : {
@@ -5306,7 +5612,7 @@
       }
     },
     "%@（%@）" : {
-      "comment" : "LocalLLMSettingsView.swift:15, Onboarding.swift:767, ScreenContextSettingsView.swift:41",
+      "comment" : "LocalLLMModel.swift:31, LocalLLMSettingsView.swift:15, Onboarding.swift:767",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6224,7 +6530,7 @@
       }
     },
     "AI で整えています…" : {
-      "comment" : "HUDPanel.swift:257",
+      "comment" : "HUDPanel.swift:266",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6428,7 +6734,7 @@
       }
     },
     "AI で書き換えています…" : {
-      "comment" : "HUDPanel.swift:255",
+      "comment" : "HUDPanel.swift:264",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17546,7 +17852,7 @@
       }
     },
     "、" : {
-      "comment" : "HUDPanel.swift:366",
+      "comment" : "HUDPanel.swift:375",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -19377,6 +19683,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "與「%@」的觸發短語相同。將使用列表中排在上面的那一個。"
+          }
+        }
+      }
+    },
+    "【%@】" : {
+      "comment" : "MeetingExport.swift:109",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*%@*"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "【%@】"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "【%@】"
           }
         }
       }
@@ -27746,7 +28154,7 @@
       }
     },
     "エラー" : {
-      "comment" : "HUDPanel.swift:259",
+      "comment" : "HUDPanel.swift:268",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35804,7 +36212,7 @@
       }
     },
     "マイクを選ぶ" : {
-      "comment" : "HUDPanel.swift:341",
+      "comment" : "HUDPanel.swift:350",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36944,7 +37352,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ notes · %@ marks"
+            "value" : "Notes: %@ · Marks: %@"
           }
         },
         "es" : {
@@ -40593,6 +41001,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "本機（在這台 Mac 上）"
+          }
+        }
+      }
+    },
+    "・" : {
+      "comment" : "MeetingExport.swift:116",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• "
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "・"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "・"
           }
         }
       }
@@ -48350,7 +48860,7 @@
       }
     },
     "停止" : {
-      "comment" : "DictationHistoryWindow.swift:524, HUDPanel.swift:306",
+      "comment" : "DictationHistoryWindow.swift:524, HUDPanel.swift:315",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -50084,7 +50594,7 @@
       }
     },
     "処理中" : {
-      "comment" : "HUDPanel.swift:240",
+      "comment" : "HUDPanel.swift:249",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52022,7 +52532,7 @@
       }
     },
     "取消" : {
-      "comment" : "HUDPanel.swift:189",
+      "comment" : "HUDPanel.swift:198",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55694,7 +56204,7 @@
       }
     },
     "指示を話してください。止めてから %@ で文字起こしします" : {
-      "comment" : "HUDPanel.swift:280",
+      "comment" : "HUDPanel.swift:289",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55796,7 +56306,7 @@
       }
     },
     "指示を話してください（例: もっと丁寧に／箇条書きにして／英語にして）" : {
-      "comment" : "HUDPanel.swift:283",
+      "comment" : "HUDPanel.swift:292",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63650,7 +64160,7 @@
       }
     },
     "止めてから %@ で文字起こしします（録音中は文字が出ません）" : {
-      "comment" : "HUDPanel.swift:281",
+      "comment" : "HUDPanel.swift:290",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67238,7 +67748,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Range of the record passed when the answer was created (%@ remarks)"
+            "value" : "Range of the record passed when the answer was created (remarks: %@)"
           }
         },
         "es" : {
@@ -69056,7 +69566,7 @@
       }
     },
     "編集モード" : {
-      "comment" : "HUDPanel.swift:252",
+      "comment" : "HUDPanel.swift:261",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75176,7 +75686,7 @@
       }
     },
     "話した言語" : {
-      "comment" : "AppStyles.swift:62, GeminiClient.swift:56, HUDPanel.swift:356",
+      "comment" : "AppStyles.swift:62, GeminiClient.swift:56, HUDPanel.swift:365",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75278,7 +75788,7 @@
       }
     },
     "話してください…" : {
-      "comment" : "HUDPanel.swift:284",
+      "comment" : "HUDPanel.swift:293",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81416,7 +81926,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add %@ Selected to Dictionary"
+            "value" : "Add Selected to Dictionary (%@)"
           }
         },
         "es" : {
@@ -81722,7 +82232,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ characters selected"
+            "value" : "Selected characters: %@"
           }
         },
         "es" : {
@@ -83642,7 +84152,7 @@
       }
     },
     "録音を取り消します（Esc）" : {
-      "comment" : "HUDPanel.swift:195",
+      "comment" : "HUDPanel.swift:204",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83948,7 +84458,7 @@
       }
     },
     "録音を止めたときに選んでいる言語で入力します（話した言語は整形の言語の設定に従い、%@）" : {
-      "comment" : "HUDPanel.swift:365",
+      "comment" : "HUDPanel.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84050,7 +84560,7 @@
       }
     },
     "録音を止めて入力します（ショートカットをもう一度押すのと同じ）" : {
-      "comment" : "HUDPanel.swift:316",
+      "comment" : "HUDPanel.swift:325",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84356,7 +84866,7 @@
       }
     },
     "録音中" : {
-      "comment" : "HUDPanel.swift:252",
+      "comment" : "HUDPanel.swift:261",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85784,7 +86294,7 @@
       }
     },
     "音声入力で使うマイクを切り替えます" : {
-      "comment" : "HUDPanel.swift:342",
+      "comment" : "HUDPanel.swift:351",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87211,6 +87721,108 @@
         }
       }
     },
+    "（%@）" : {
+      "comment" : "ClaudeClient.swift:24, GeminiClient.swift:20, HUDPanel.swift:261",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%@)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（%@）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（%@）"
+          }
+        }
+      }
+    },
     "（ほかのアプリにはパスワードを求める）" : {
       "comment" : "Keychain.swift:208",
       "extractionState" : "manual",
@@ -87536,7 +88148,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "(%@ characters, hidden)"
+            "value" : "(hidden characters: %@)"
           }
         },
         "es" : {

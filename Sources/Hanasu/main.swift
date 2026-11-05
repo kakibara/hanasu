@@ -54,13 +54,22 @@ func cliRefine(_ raw: String, args: [String]) async throws {
 // CLI では --prompt-language <言語>（en、zh-CN など）でプロンプトの言語を変えられる（省くと設定の文字起こしの言語）
 PromptLanguage.override = PromptLanguage.cli(CommandLine.arguments)
 // 要件: REQ-COM-060
-// --ui-language <言語> で表示の言語を変えられる（画面を PNG にする CLI の確かめ用。省くとシステムの言語）
-if let index = CommandLine.arguments.firstIndex(of: "--ui-language"), CommandLine.arguments.indices.contains(index + 1) {
-    UILanguage.override = PromptLanguage.supported(localeIdentifier: CommandLine.arguments[index + 1]) ?? .en
+// 設計判断: DEC-COM-166
+// 開発用の CLI（-- で始まる引数があるとき）の出力は訳さないので、表示の言語は日本語にする。
+// --ui-language <言語> で変えられる（画面を PNG にする CLI で、ほかの言語の見た目を確かめるとき）。対応していない言語なら止める
+let cliFlags = CommandLine.arguments.dropFirst().filter { $0.hasPrefix("--") }
+if let index = CommandLine.arguments.firstIndex(of: "--ui-language") {
+    let value = CommandLine.arguments.indices.contains(index + 1) ? CommandLine.arguments[index + 1] : ""
+    guard let language = PromptLanguage(rawValue: value) ?? PromptLanguage.supported(localeIdentifier: value) else {
+        FileHandle.standardError.write(Data("error: --ui-language は \(PromptLanguage.allCases.map(\.rawValue).joined(separator: "|")) のどれか（\(value) は対応していない）\n".utf8))
+        exit(2)
+    }
+    UILanguage.override = language
+} else if !cliFlags.isEmpty {
+    UILanguage.override = .ja
 }
-// 自己テストが確かめる文言は日本語のもの（--test-… / --…-test… / --…selftest）
-if CommandLine.arguments.contains(where: { $0.hasPrefix("--test-") || $0.contains("-test") || $0.hasSuffix("selftest") }) {
-    UILanguage.override = UILanguage.override ?? .ja
+// 自己テストが確かめるプロンプトは日本語のもの（--test-… / --…-test… / --…selftest。-- で始まる引数だけを見る）
+if cliFlags.contains(where: { $0.hasPrefix("--test-") || $0.contains("-test") || $0.hasSuffix("selftest") }) {
     PromptLanguage.override = PromptLanguage.override ?? .ja
 }
 

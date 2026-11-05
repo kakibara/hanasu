@@ -79,7 +79,7 @@ final class HUDController {
 
     init() {
         panel = NSPanel(
-            contentRect: NSRect(x: 0, y: 0, width: 440, height: 112),
+            contentRect: NSRect(x: 0, y: 0, width: HUDLayout.width, height: 112),
             styleMask: [.nonactivatingPanel, .borderless],
             backing: .buffered, defer: true)
         panel.isFloatingPanel = true
@@ -152,6 +152,13 @@ final class HUDController {
     }
 }
 
+// 要件: REQ-COM-060
+/// HUD の大きさ。日本語は今までどおり 440。ほかの言語は語が長く、1 行目（見出し・言語の切り替え・取消・停止）が
+/// 収まらないので広げる
+enum HUDLayout {
+    static var width: CGFloat { UILanguage.current == .ja ? 440 : 680 }
+}
+
 private struct HUDView: View {
     @ObservedObject var model: HUDModel
 
@@ -166,6 +173,8 @@ private struct HUDView: View {
             HStack(spacing: 6) {
                 statusIcon
                 Text(title).font(.system(size: 13, weight: .semibold)).lineLimit(1)
+                    // 言語の切り替えや停止のボタンに押されて、見出しが消えないようにする
+                    .layoutPriority(1)
                 if let editBadge {
                     Text(editBadge)
                         .font(.system(size: 11))
@@ -218,7 +227,7 @@ private struct HUDView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .frame(width: 440, height: 112, alignment: .topLeading)
+        .frame(width: HUDLayout.width, height: 112, alignment: .topLeading)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(.white.opacity(0.12)))
     }
@@ -249,7 +258,7 @@ private struct HUDView: View {
         switch model.phase {
         case .preparing(let message): message
         case .recording:
-            (model.editBadge == nil ? tr("録音中") : tr("編集モード")) + (model.batchEngine.map { "（\($0.shortName)）" } ?? "")
+            (model.editBadge == nil ? tr("録音中") : tr("編集モード")) + (model.batchEngine.map { tr("（%@）", $0.shortName) } ?? "")
         case .processing:
             if model.transcribing, let engine = model.batchEngine { tr("%@ で文字起こししています…", "\(engine.shortName)") }
             else if model.editBadge != nil { tr("AI で書き換えています…") }

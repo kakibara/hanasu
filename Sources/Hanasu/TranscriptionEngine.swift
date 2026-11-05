@@ -73,7 +73,7 @@ enum WhisperModel: String, CaseIterable, Identifiable, Sendable {
     var label: String {
         switch self {
         case .tiny: tr("tiny（%@・速いが粗い）", "\(sizeLabel)")
-        case .base: "base（\(sizeLabel)）"
+        case .base: tr("%@（%@）", "base", sizeLabel)
         case .small: tr("small（%@・バランス）", "\(sizeLabel)")
         case .largeV3Turbo: tr("large-v3-turbo（%@・高精度）", "\(sizeLabel)")
         }

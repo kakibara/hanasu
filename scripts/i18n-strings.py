@@ -145,6 +145,17 @@ def translation(entry: dict, language: str) -> str | None:
     return value if value else None
 
 
+def positional_ok(text: str) -> bool:
+    """%1$@ のような番号付きの指定子を使うなら、すべてに番号を付け、1..n をちょうど 1 回ずつ使う"""
+    specs = [m for m in FORMAT.finditer(text) if m.group(0) != "%%"]
+    numbered = [m.group(1) for m in specs if m.group(1)]
+    if not numbered:
+        return True
+    if len(numbered) != len(specs):
+        return False
+    return sorted(int(n[:-1]) for n in numbered) == list(range(1, len(specs) + 1))
+
+
 def formats(text: str) -> list[str]:
     """書式の指定子（順番を変えた %1$@ は %@ と同じに数える）"""
     return sorted("%%" if m.group(0) == "%%" else "%" + m.group(2) for m in FORMAT.finditer(text))
@@ -191,7 +202,7 @@ def cmd_import(language: str, path: str) -> int:
             continue
         if not isinstance(value, str) or not value.strip():
             continue
-        if formats(key) != formats(value):
+        if formats(key) != formats(value) or not positional_ok(value):
             problems.append(f"%@ の数が合わない: {key!r} → {value!r}")
             continue
         strings[key].setdefault("localizations", {})[language] = {"stringUnit": {"state": "translated", "value": value}}

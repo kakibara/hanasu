@@ -107,7 +107,7 @@ private struct WhisperModelRow: View {
                 HStack {
                     if let fraction {
                         ProgressView(value: fraction).frame(width: 140)
-                        Text("\(Int(fraction * 100))%（\(model.sizeLabel)）").monospacedDigit().foregroundStyle(.secondary)
+                        Text(tr("%@%%（%@）", "\(Int(fraction * 100))", model.sizeLabel)).monospacedDigit().foregroundStyle(.secondary)
                     } else {
                         ProgressView().controlSize(.small)
                         Text(tr("初回の最適化中…")).foregroundStyle(.secondary)

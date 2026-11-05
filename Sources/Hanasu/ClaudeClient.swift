@@ -21,7 +21,7 @@ enum ClaudeError: LocalizedError {
         case .http(let status, let type, let message):
             Self.describe(status: status, type: type, message: message)
         case .refusal(let category):
-            tr("Claude が安全のための判定で応答を断りました") + (category.map { "（\($0)）" } ?? "")
+            tr("Claude が安全のための判定で応答を断りました") + (category.map { tr("（%@）", $0) } ?? "")
         case .truncated:
             tr("Claude の応答が長さの上限（max_tokens）で切れたため、使いませんでした")
         case .emptyResponse:

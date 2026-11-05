@@ -26,7 +26,7 @@ struct Snippet: Codable, Identifiable, Equatable {
 
     /// 起動フレーズを区切ったもの（空は除く）
     var phrases: [String] {
-        trigger.split(whereSeparator: { "、,，".contains($0) })
+        trigger.split(whereSeparator: { "、,，".contains($0) })  // skip-tr（照らし合わせ・区切りに使う記号）
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
     }
@@ -298,7 +298,7 @@ enum SnippetMatcher {
     private static func appendText(_ text: Substring, to parts: inout [SnippetMatch.Part]) {
         var trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         // 前の文の末尾の読点（「よろしくお願いします、」の「、」）は落とす。句点・疑問符などは残す
-        while let last = trimmed.last, "、,，".contains(last) { trimmed.removeLast() }
+        while let last = trimmed.last, "、,，".contains(last) { trimmed.removeLast() }  // skip-tr（照らし合わせ・区切りに使う記号）
         // 後ろの文の先頭の区切り（「、以上です」の「、」）は落とす
         while let first = trimmed.unicodeScalars.first, removedCharacters.contains(first) { trimmed.removeFirst() }
         trimmed = trimmed.trimmingCharacters(in: .whitespacesAndNewlines)

@@ -1014,7 +1014,7 @@
 - 実装の場所: `tr`、`L10n`、`scripts/i18n-strings.py`
 
 ### DEC-COM-166 表示の言語は、優先する言語の並びのうち対応している最初の言語。.app は 17 言語の .lproj を持つ
-- 決めたこと: `UILanguage` は `Locale.preferredLanguages` を前から見て、17 言語のどれかに寄せられる最初の言語にする（寄せ方は `PromptLanguage.supported(localeIdentifier:)`。DEC-COM-161 と同じ）。どれにもなければ英語。日付・曜日の表示もこの言語のロケールで書く。.app の Info.plist は開発の言語を en にし、`CFBundleLocalizations` に 17 言語を並べ、`scripts/build-app.sh` が言語ごとの `<言語>.lproj/InfoPlist.strings`（権限を求めるときの説明）を作る。CLI では `--ui-language <言語>` で変えられ、自己テストは日本語に固定する。
+- 決めたこと: `UILanguage` は `Locale.preferredLanguages` を前から見て、17 言語のどれかに寄せられる最初の言語にする（寄せ方は `PromptLanguage.supported(localeIdentifier:)`。DEC-COM-161 と同じ）。どれにもなければ英語。日付・曜日の表示もこの言語のロケールで書く。.app の Info.plist は開発の言語を en にし、`CFBundleLocalizations` に 17 言語を並べ、`scripts/build-app.sh` が言語ごとの `<言語>.lproj/InfoPlist.strings`（権限を求めるときの説明）を作る。開発用の CLI（`--` で始まる引数があるとき）は出力を訳さないので日本語にし、`--ui-language <言語>` で変えられる（画面を PNG にする CLI で、ほかの言語を確かめる）。自己テストのプロンプトは日本語に固定する。
 - 理由: macOS がアプリの言語を選ぶのと同じ決め方にして、AppKit が出す部分（標準のメニュー項目・権限のダイアログ）とアプリの文言の言語をそろえる。.lproj がないと、macOS はアプリが日本語だけだと見なす。
 - 決めた場面: 多言語化の PR（Mac の表示。2026-11-05）
 - 関係する要件: REQ-COM-060

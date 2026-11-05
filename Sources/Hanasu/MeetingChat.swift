@@ -256,7 +256,7 @@ enum MeetingChat {
     static func noteText(from answer: String, limit: Int = 600) -> String {
         let parts = answer.components(separatedBy: .newlines).compactMap { raw -> String? in
             var line = raw.trimmingCharacters(in: .whitespaces)
-            for prefix in ["- [ ] ", "- [x] ", "### ", "## ", "# ", "- ", "* ", "・"] where line.hasPrefix(prefix) {
+            for prefix in ["- [ ] ", "- [x] ", "### ", "## ", "# ", "- ", "* ", "・"] where line.hasPrefix(prefix) {  // skip-tr（照らし合わせ・区切りに使う記号）
                 line = String(line.dropFirst(prefix.count))
                 break
             }

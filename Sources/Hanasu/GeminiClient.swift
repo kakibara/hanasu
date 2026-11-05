@@ -17,7 +17,7 @@ enum GeminiError: LocalizedError {
         case .invalidCredentials(let status): tr("API キー（またはサービスアカウント）が正しくないか、Gemini API を使う権限がありません（%@）", "\(status)")
         case .modelUnavailable(let model): tr("モデル「%@」が見つからないか、この認証では使えません", "\(model)")
         case .http(let status, let message): tr("Gemini API エラー（%@）: %@", "\(status)", "\(message)")
-        case .emptyResponse(let reason): tr("Gemini から結果が返りませんでした") + (reason.map { "（\($0)）" } ?? "")
+        case .emptyResponse(let reason): tr("Gemini から結果が返りませんでした") + (reason.map { tr("（%@）", $0) } ?? "")
         case .invalidResponse: tr("Gemini の応答を読み取れませんでした")
         case .invalidLocation(let location): tr("Vertex AI のリージョン「%@」は使えません（英小文字・数字・ハイフンだけ。例: global、us-central1）", "\(location)")
         }

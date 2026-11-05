@@ -61,7 +61,7 @@ struct UserDictionary: Equatable {
     }
 
     static let arrows = ["=>", "＝＞", "→"]
-    static let sourceSeparators: Set<Character> = [",", "、", "，"]
+    static let sourceSeparators: Set<Character> = [",", "、", "，"]  // skip-tr（照らし合わせ・区切りに使う記号）
     /// これより短い読みは誤爆しやすいので使わない
     static let minimumSourceLength = 2
 

@@ -155,7 +155,7 @@ actor WhisperEngine {
     // 設計判断: DEC-COM-026
     static func isNoise(_ text: String) -> Bool {
         if hallucinations.contains(text) { return true }
-        let stripped = text.trimmingCharacters(in: CharacterSet(charactersIn: "()（）[]［］【】♪〜~ 　。.、"))
+        let stripped = text.trimmingCharacters(in: CharacterSet(charactersIn: "()（）[]［］【】♪〜~ 　。.、"))  // skip-tr（照らし合わせ・区切りに使う記号）
         return stripped.isEmpty || soundTags.contains(stripped)
     }
 
@@ -286,6 +286,6 @@ actor WhisperEngine {
     static func prompt(from hints: [String]) -> String? {
         let words = Array(NSOrderedSet(array: hints.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty })
             .compactMap { $0 as? String }.prefix(30))
-        return words.isEmpty ? nil : words.joined(separator: "、")
+        return words.isEmpty ? nil : words.joined(separator: "、")  // skip-tr（照らし合わせ・区切りに使う記号）
     }
 }

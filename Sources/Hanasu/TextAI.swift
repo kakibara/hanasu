@@ -14,10 +14,10 @@ enum TextAIProvider: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .gemini: "Gemini（Google）"
-        case .claude: "Claude（Anthropic）"
+        case .gemini: tr("%@（%@）", "Gemini", "Google")
+        case .claude: tr("%@（%@）", "Claude", "Anthropic")
         case .local: tr("ローカル（この Mac の中）")
-        case .appleFM: "Apple（Foundation Models）"
+        case .appleFM: tr("%@（%@）", "Apple", "Foundation Models")
         }
     }
     var name: String {

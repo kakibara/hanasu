@@ -517,7 +517,7 @@ struct OnboardingGemmaDownload: View {
                     .font(.caption).foregroundStyle(.orange)
             }
             HStack(spacing: 4) {
-                Text("\(model.summary)。\(model.licenseNote)")
+                Text(tr("%@。%@", model.summary, model.licenseNote))
                 Link(tr("ライセンス"), destination: model.licenseURL)
             }
             .font(.caption).foregroundStyle(.secondary)

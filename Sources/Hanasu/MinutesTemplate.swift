@@ -176,12 +176,12 @@ struct ActionItem: Codable, Hashable, Identifiable {
             var dueNote: String?
             // 末尾の（担当: … / 期限: …）。期限には「11/14 (金)」のようにかっこや / が入るので、
             // 「担当」「期限」の言葉で始まるかっこを探し、中を「 / 」で分ける
-            if let close = task.last, close == "）" || close == ")",
+            if let close = task.last, close == "）" || close == ")",  // skip-tr（照らし合わせ・区切りに使う記号）
                let open = detailsOpening(in: task) {
                 let inner = String(task[task.index(after: open)..<task.index(before: task.endIndex)])
                 var recognized = false
                 for part in inner.components(separatedBy: " / ").flatMap({ $0.components(separatedBy: "／") }) {
-                    let pair = part.split(maxSplits: 1, whereSeparator: { $0 == ":" || $0 == "：" })
+                    let pair = part.split(maxSplits: 1, whereSeparator: { $0 == ":" || $0 == "：" })  // skip-tr（照らし合わせ・区切りに使う記号）
                     guard pair.count == 2 else { continue }
                     let key = pair[0].trimmingCharacters(in: .whitespaces)
                     let value = pair[1].trimmingCharacters(in: .whitespaces)
@@ -202,12 +202,12 @@ struct ActionItem: Codable, Hashable, Identifiable {
         let keys = ownerKeys + dueKeys
         var index = task.startIndex
         while index < task.endIndex {
-            if task[index] == "（" || task[index] == "(" {
+            if task[index] == "（" || task[index] == "(" {  // skip-tr（照らし合わせ・区切りに使う記号）
                 let after = task[task.index(after: index)...].drop { $0 == " " }
                 let startsWithKey = keys.contains { key in
                     guard after.hasPrefix(key) else { return false }
                     let rest = after.dropFirst(key.count).drop { $0 == " " }
-                    return rest.first == ":" || rest.first == "："
+                    return rest.first == ":" || rest.first == "："  // skip-tr（照らし合わせ・区切りに使う記号）
                 }
                 if startsWithKey { return index }
             }
