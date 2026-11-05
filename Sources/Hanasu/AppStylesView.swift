@@ -8,6 +8,7 @@ struct AppStylesTab: View {
     @ObservedObject var store = AppStyleStore.shared
     /// 追加ルールの欄を開いているアプリ
     @State private var expandedID: String?
+    @State private var confirmReset = false
 
     var body: some View {
         Form {
@@ -33,10 +34,7 @@ struct AppStylesTab: View {
                     Text("アプリ")
                     Spacer()
                     addMenu
-                    Button("初期設定に戻す") {
-                        expandedID = nil
-                        store.resetToDefaults()
-                    }
+                    Button("初期設定に戻す…") { confirmReset = true }
                     .controlSize(.small)
                 }
             }
@@ -51,6 +49,14 @@ struct AppStylesTab: View {
             .font(.caption)
         }
         .formStyle(.grouped)
+        .confirmationDialog("アプリ別の設定を初期設定に戻しますか？", isPresented: $confirmReset) {
+            Button("初期設定に戻す", role: .destructive) {
+                expandedID = nil
+                store.resetToDefaults()
+            }
+        } message: {
+            Text("追加したアプリと、アプリごとの追加ルールが消えます。元に戻せません。")
+        }
     }
 
     private var addMenu: some View {
@@ -140,11 +146,14 @@ private struct AppStyleRow: View {
                 }
                 .buttonStyle(.borderless)
                 .help("このアプリ用の追加ルール")
+                .accessibilityLabel("このアプリ用の追加ルール")
+                .accessibilityValue(expanded ? "開いています" : "閉じています")
                 Button(action: onDelete) {
                     Image(systemName: "minus.circle")
                 }
                 .buttonStyle(.borderless)
                 .help("一覧から外す")
+                .accessibilityLabel("\(style.name) を一覧から外す")
             }
             if expanded {
                 Text("このアプリ用の追加ルール（プリセットより優先）")

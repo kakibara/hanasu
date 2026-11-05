@@ -248,6 +248,9 @@ public sealed class Meeting
     public string? MinutesTemplateId { get; set; }
     /// <summary>型が「カスタム」のときの指示</summary>
     public string? CustomMinutesPrompt { get; set; }
+    // 設計判断: DEC-MTG-076
+    /// <summary>Mac 版で保存したテンプレートで作った会議のテンプレート名。Windows 版では使わないが、書き直しても落とさない</summary>
+    public string? MinutesTemplateName { get; set; }
     /// <summary>議事録から取り出したアクションアイテム。null はこの機能より前に作った議事録</summary>
     public List<ActionItem>? ActionItems { get; set; }
     /// <summary>メモと「ここ重要」の印。古い会議にはないので省略可</summary>

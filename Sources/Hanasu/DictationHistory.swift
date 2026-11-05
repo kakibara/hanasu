@@ -1,3 +1,4 @@
+import AppKit
 @preconcurrency import AVFoundation
 import Carbon.HIToolbox
 import Combine
@@ -162,12 +163,41 @@ enum DictationHistoryError: LocalizedError {
 /// 新しい順に持ち、件数と日数の上限を超えたものは古い順に消す（録音した音声も一緒に消す）。
 @MainActor
 final class DictationHistoryStore: ObservableObject {
+    // 設計判断: DEC-DIC-070
+    /// アプリで使う履歴。起動時に `preloadShared()` が裏で読んだ中身があればそれを使い、
+    /// 先読みが終わる前に使われたら（メニュー・再入力・音声入力）、ここで同期で読む
     static let shared: DictationHistoryStore = {
         let store = DictationHistoryStore(directory: defaultDirectory)
         store.bind(to: HistorySettings.shared)
-        store.load()
+        if let preloaded = preloadedFile {
+            store.load(from: preloaded)
+        } else {
+            store.load()
+        }
+        preloadedFile = nil
+        store.flushOnTerminate()
         return store
     }()
+
+    /// `preloadShared()` が裏で読んだ history.json の中身。`shared` を作るときに一度だけ使う
+    private static var preloadedFile: FileReadResult?
+    private static var preloadStarted = false
+
+    // 設計判断: DEC-DIC-070
+    /// 起動時に呼ぶ。history.json の読み込みとデコードを裏で行い、終わったらメインで `shared` を作る。
+    /// それより前に `shared` が使われたときは、そちらが同期で読み、先読みの結果は捨てる
+    /// （`shared` ができるまでは、アプリの中で history.json に書くものはないので、先読みの中身は古くならない）
+    static func preloadShared() {
+        guard !preloadStarted else { return }
+        preloadStarted = true
+        let fileURL = defaultDirectory.appendingPathComponent("history.json")
+        Task { @MainActor in
+            let result = await Task.detached(priority: .utility) { DictationHistoryStore.readFile(at: fileURL) }.value
+            preloadedFile = result
+            _ = shared  // まだ作っていなければ、読んだ中身で作る。作ってあれば何もしない
+            preloadedFile = nil
+        }
+    }
 
     static var defaultDirectory: URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
@@ -192,11 +222,20 @@ final class DictationHistoryStore: ObservableObject {
         didSet { if policy != oldValue, prune() { save() } }
     }
 
+    /// 保存をまとめて遅らせる時間（秒）
+    static let saveDelay: Double = 1
+
     let directory: URL
     var fileURL: URL { directory.appendingPathComponent("history.json") }
     var audioDirectory: URL { directory.appendingPathComponent("Audio", isDirectory: true) }
 
     private var cancellables: Set<AnyCancellable> = []
+    /// 書き込みの順番を守るための直列キュー。エンコードとファイル書き込みはここで行う
+    private let writeQueue = DispatchQueue(label: "dev.hanasu.history-write", qos: .utility)
+    /// まだファイルに書いていない変更がある
+    private var saveDirty = false
+    private var saveTask: Task<Void, Never>?
+    private var terminationObserver: NSObjectProtocol?
 
     init(directory: URL) {
         self.directory = directory
@@ -217,30 +256,108 @@ final class DictationHistoryStore: ObservableObject {
         var entries: [DictationHistoryEntry]
     }
 
+    /// history.json を読んだ結果
+    enum FileReadResult: Sendable {
+        case missing
+        case entries([DictationHistoryEntry])
+        case failed(String)
+    }
+
+    /// history.json を読んでデコードする（どのスレッドからでも呼べる）
+    nonisolated static func readFile(at fileURL: URL) -> FileReadResult {
+        guard FileManager.default.fileExists(atPath: fileURL.path) else { return .missing }
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let contents = try decoder.decode(FileContents.self, from: Data(contentsOf: fileURL))
+            return .entries(contents.entries)
+        } catch {
+            return .failed(error.localizedDescription)
+        }
+    }
+
     // 設計判断: DEC-DIC-070
     func load() {
+        flush()  // 書いていない変更があれば先に書く（読み直しで失わないように）
+        load(from: Self.readFile(at: fileURL))
+    }
+
+    // 設計判断: DEC-DIC-070
+    /// 読んだ中身を当てる。メモリだけの履歴（保存しない設定のもの）は残す
+    private func load(from result: FileReadResult) {
         let transient = entries.filter(\.transient)
-        do {
-            if FileManager.default.fileExists(atPath: fileURL.path) {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                let contents = try decoder.decode(FileContents.self, from: Data(contentsOf: fileURL))
-                entries = (contents.entries + transient).sorted { $0.date > $1.date }
-            } else {
-                entries = transient
-            }
-            lastError = nil
-        } catch {
-            appLog.error("history load error: \(error.localizedDescription, privacy: .public)")
-            lastError = "履歴を読み込めませんでした: \(error.localizedDescription)"
+        switch result {
+        case .missing:
+            entries = transient
+        case .entries(let saved):
+            entries = (saved + transient).sorted { $0.date > $1.date }
+        case .failed(let message):
+            appLog.error("history load error: \(message, privacy: .public)")
+            lastError = "履歴を読み込めませんでした: \(message)"
             return  // 壊れたファイルを上書きしないよう、ここで止める
         }
+        lastError = nil
         if prune() { save() }
         removeOrphanAudio()
     }
 
     // 設計判断: DEC-DIC-070
+    /// 保存を予約する。続けて呼ばれても、`saveDelay` 秒あとに 1 回だけ、その時点の中身を書く
     func save() {
+        saveDirty = true
+        guard saveTask == nil else { return }
+        saveTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(Self.saveDelay))
+            guard !Task.isCancelled else { return }
+            self?.writeNow(wait: false)
+        }
+    }
+
+    /// 予約している保存があれば、今すぐ書き終えてから返す（終了時・読み直しの前・確認用 CLI）
+    func flush() {
+        saveTask?.cancel()
+        saveTask = nil
+        guard saveDirty else {
+            writeQueue.sync {}  // 書き込み中のものがあれば終わるのを待つ
+            return
+        }
+        writeNow(wait: true)
+    }
+
+    /// アプリを終えるときに、予約中の保存を書き切る
+    func flushOnTerminate() {
+        guard terminationObserver == nil else { return }
+        terminationObserver = NotificationCenter.default.addObserver(
+            forName: NSApplication.willTerminateNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated { self?.flush() }
+        }
+    }
+
+    /// 今の中身を書く。エンコードとファイル書き込みは直列キューで行うので、書く順番は予約した順のまま
+    private func writeNow(wait: Bool) {
+        saveTask = nil
+        saveDirty = false
+        let snapshot = entries.filter { !$0.transient }
+        let directory = directory
+        let fileURL = fileURL
+        let work: @Sendable () -> String? = {
+            Self.write(snapshot, directory: directory, fileURL: fileURL)
+        }
+        if wait {
+            lastError = writeQueue.sync(execute: work)
+        } else {
+            writeQueue.async { [weak self] in
+                let error = work()
+                DispatchQueue.main.async {
+                    MainActor.assumeIsolated { self?.lastError = error }
+                }
+            }
+        }
+    }
+
+    /// 書き込み本体（どのスレッドからでも呼べる）。失敗したときはエラーの文を返す
+    private nonisolated static func write(_ entries: [DictationHistoryEntry], directory: URL, fileURL: URL) -> String? {
         let fm = FileManager.default
         do {
             try fm.createDirectory(at: directory, withIntermediateDirectories: true,
@@ -248,14 +365,14 @@ final class DictationHistoryStore: ObservableObject {
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
             encoder.dateEncodingStrategy = .iso8601
-            let data = try encoder.encode(FileContents(entries: entries.filter { !$0.transient }))
+            let data = try encoder.encode(FileContents(entries: entries))
             try data.write(to: fileURL, options: .atomic)
             // 話した内容が入っているので、本人だけが読めるようにする
             try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: fileURL.path)
-            lastError = nil
+            return nil
         } catch {
             appLog.error("history save error: \(error.localizedDescription, privacy: .public)")
-            lastError = "履歴を保存できませんでした: \(error.localizedDescription)"
+            return "履歴を保存できませんでした: \(error.localizedDescription)"
         }
     }
 
@@ -299,8 +416,8 @@ final class DictationHistoryStore: ObservableObject {
             entry.transient = true
             discardAudio(audioURL)
         }
-        entries.insert(entry, at: 0)
-        entries.sort { $0.date > $1.date }
+        // 新しい順を保ったまま、日時の合う位置に入れる（ふつうは先頭）
+        entries.insert(entry, at: entries.firstIndex { $0.date <= entry.date } ?? entries.count)
         prune()
         if !entry.transient { save() }
         return entry

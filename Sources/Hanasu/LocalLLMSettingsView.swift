@@ -6,6 +6,7 @@ import SwiftUI
 struct LocalModelChoice: View {
     @Binding var model: LocalLLMModel
     @ObservedObject var store = LocalLLMStore.shared
+    @State private var confirmDelete = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -50,7 +51,12 @@ struct LocalModelChoice: View {
             HStack {
                 Label("ダウンロード済み", systemImage: "checkmark.circle.fill").font(.caption).foregroundStyle(.green)
                 Spacer()
-                Button("削除") { store.delete(model) }
+                Button("削除…") { confirmDelete = true }
+                    .confirmationDialog("ローカルのモデル「\(model.name)」を削除しますか？", isPresented: $confirmDelete) {
+                        Button("削除", role: .destructive) { store.delete(model) }
+                    } message: {
+                        Text("もう一度使うには、ダウンロードし直します（\(model.sizeLabel)）。")
+                    }
             }
         case .failed(let message):
             HStack {

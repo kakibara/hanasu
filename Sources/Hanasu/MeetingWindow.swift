@@ -44,7 +44,7 @@ struct MeetingWindowView: View {
                                   onDelete: { pendingDelete = meeting })
             } else {
                 ContentUnavailableView("会議を選んでください", systemImage: "waveform",
-                                       description: Text("下のボタンか ⌃⌥⌘M で記録を始められます。"))
+                                       description: Text("下のボタンか \(AppSettings.shared.meetingHotKey.displayString) で記録を始められます。"))
             }
         }
         .frame(minWidth: 900, minHeight: 520)
@@ -160,6 +160,7 @@ private struct MeetingRow: View {
                 if busy {
                     // 要件: REQ-MTG-013
                     ProgressView().controlSize(.mini).help("議事録を作っています")
+                        .accessibilityLabel("議事録を作っています")
                 } else if live {
                     Image(systemName: "record.circle.fill").foregroundStyle(.red)
                 }
@@ -208,6 +209,8 @@ private struct RecordButton: View {
             }
             if let error = recorder.lastError {
                 Text(error).font(.caption).foregroundStyle(.orange).lineLimit(3)
+                    .help(error)
+                    .textSelection(.enabled)
             }
         }
     }
@@ -359,6 +362,9 @@ private struct LevelMeter: View {
             .frame(width: 70, height: 6)
             .animation(.linear(duration: 0.2), value: normalized)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(label)の音量")
+        .accessibilityValue("\(Int(normalized * 100))%")
     }
 
     private var normalized: CGFloat {
@@ -380,6 +386,8 @@ struct MeetingDetailView: View {
     @State private var title = ""
     @FocusState private var titleFocused: Bool
     @State private var editingSpeakers = false
+    /// 「議事録を作り直す」の確かめ（今の議事録があるときだけ出す。DEC-MTG-072）
+    @State private var confirmRegenerate = false
     /// 「ここ重要」タブから「文字起こしで見る」で開いた発言（AI チャットの答えの時刻から開いた発言も）
     @State private var focusedFromHighlight: UUID?
     /// AI チャットの答えの時刻を押したとき、文字起こしのタブを開いてから移る時刻
@@ -407,8 +415,22 @@ struct MeetingDetailView: View {
                     Spacer()
                     Button("話者名…") { editingSpeakers = true }
                         .disabled(meeting.speakers.isEmpty)
-                    Button("議事録を作り直す") { Task { await recorder.regenerateMinutes(meeting) } }
-                        .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
+                    // 設計判断: DEC-MTG-072
+                    // 今の議事録があるときだけ確かめる（置き換わるため）。まだないときは、そのまま作る
+                    Button("議事録を作り直す") {
+                        if meeting.minutes == nil {
+                            Task { await recorder.regenerateMinutes(meeting) }
+                        } else {
+                            confirmRegenerate = true
+                        }
+                    }
+                    .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
+                    .confirmationDialog("議事録を作り直しますか？", isPresented: $confirmRegenerate) {
+                        Button("作り直す") { Task { await recorder.regenerateMinutes(meeting) } }
+                        Button("キャンセル", role: .cancel) {}
+                    } message: {
+                        Text("今の議事録とアクションアイテムは置き換わります。")
+                    }
                     MeetingExportMenu(meeting: meeting, recorder: recorder, showingTranscript: tab == 1)
                     Button("Finder で表示") {
                         NSWorkspace.shared.activateFileViewerSelecting([MeetingStore.directory(for: meeting)])
@@ -758,6 +780,7 @@ private struct SpeakerNamesSheet: View {
             HStack {
                 Spacer()
                 Button("キャンセル") { dismiss() }
+                    .keyboardShortcut(.cancelAction)
                 Button("保存") {
                     // 変えた話者だけを、まとめて保存する（推測の印は、直した話者だけ外す）
                     recorder.renameSpeakers(meeting, names: names.filter { $0.value != (meeting.speakerNames[$0.key] ?? "") })
@@ -789,6 +812,9 @@ private struct TranscriptLine: View {
             Text(speaker)
                 .font(.callout.bold())
                 .foregroundStyle(color)
+                .lineLimit(1)
+                .truncationMode(.tail)
+                .help(speaker)
                 .frame(width: 72, alignment: .leading)
             Text(MeetingSearchHighlight.apply(AttributedString(text), terms: highlight))
                 .frame(maxWidth: .infinity, alignment: .leading)

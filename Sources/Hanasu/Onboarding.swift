@@ -439,6 +439,9 @@ struct OnboardingAIPage: View {
         }
         .buttonStyle(.plain)
         .help(unavailable ?? "")
+        // 選んでいるカードを VoiceOver に伝える（見た目はチェックの画像だけなので）
+        .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityHint(unavailable ?? "")
         // 設計判断: DEC-COM-092
         // Apple の Foundation Models が使えない Mac（macOS 27 より前など）では選べない
         .disabled(unavailable != nil)
@@ -727,6 +730,11 @@ struct OnboardingPermissionsPage: View {
                             Permissions.openPrivacySettings("Privacy_SpeechRecognition")
                         }
                     }
+                    // 設計判断: DEC-MTG-074（状態は取れないので、求められる時機だけを先に知らせる）
+                    Label("会議の記録で相手の声（Mac で再生している音）を録るには、「システムオーディオ録音」の許可も要ります。初めて記録を始めるときに macOS が求めるので、ここでは何もしなくてよいです。",
+                          systemImage: "speaker.wave.2")
+                        .font(.caption).foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 Section("準備ができたら") {
                     LabeledContent("使う AI") {

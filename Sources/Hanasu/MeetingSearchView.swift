@@ -126,6 +126,7 @@ struct MeetingSearchField: View {
                     }
                     .buttonStyle(.plain)
                     .help("検索をやめる")
+                    .accessibilityLabel("検索語を消す")
                 }
             }
             .padding(.horizontal, 7)

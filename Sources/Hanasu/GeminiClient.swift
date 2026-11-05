@@ -6,10 +6,16 @@ enum GeminiError: LocalizedError {
     case emptyResponse(reason: String?)
     case invalidResponse
     case invalidLocation(String)
+    /// 「接続を試す」で、認証が通らなかった（400 API_KEY_INVALID / 401 / 403）
+    case invalidCredentials(status: Int)
+    /// 「接続を試す」で、モデルが見つからなかった（404）
+    case modelUnavailable(String)
 
     var errorDescription: String? {
         switch self {
         case .missingAPIKey: "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません"
+        case .invalidCredentials(let status): "API キー（またはサービスアカウント）が正しくないか、Gemini API を使う権限がありません（\(status)）"
+        case .modelUnavailable(let model): "モデル「\(model)」が見つからないか、この認証では使えません"
         case .http(let status, let message): "Gemini API エラー（\(status)）: \(message)"
         case .emptyResponse(let reason): "Gemini から結果が返りませんでした" + (reason.map { "（\($0)）" } ?? "")
         case .invalidResponse: "Gemini の応答を読み取れませんでした"
@@ -181,7 +187,7 @@ struct GeminiClient {
         model.contains("lite") ? "minimal" : "low"
     }
 
-    // 設計判断: DEC-DIC-007, DEC-DIC-008, DEC-DIC-009, DEC-DIC-084
+    // 設計判断: DEC-DIC-007, DEC-DIC-008, DEC-DIC-009, DEC-DIC-084, DEC-COM-054
     static func userPrompt(for request: Request, translation: TranslationLanguage? = nil) -> String {
         var lines: [String] = []
         if let appName = request.appName, !appName.isEmpty {
@@ -204,7 +210,8 @@ struct GeminiClient {
         if let block = request.screenContext?.promptBlock() {
             lines.append(block)
         }
-        lines.append("<transcript>\n\(request.transcript)\n</transcript>")
+        // 認識結果の中の区切りのタグは無害にしてから埋め込む（プロンプトインジェクションの対策。DEC-COM-054）
+        lines.append("<transcript>\n\(PromptText.neutralizeDelimiters(request.transcript))\n</transcript>")
         return lines.joined(separator: "\n")
     }
 
@@ -285,7 +292,10 @@ struct GeminiClient {
             guard Self.isValidLocation(location) else { throw GeminiError.invalidLocation(location) }
             // global 以外のリージョンはホスト名にリージョンが付く
             let host = location == "global" ? "aiplatform.googleapis.com" : "\(location)-aiplatform.googleapis.com"
-            let url = URL(string: "https://\(host)/v1/projects/\(credentials.projectID)/locations/\(location)/publishers/google/models/\(escapedModel):generateContent")!
+            // project_id は鍵ファイルの値なので、パスの区切りにならないよう（壊れた値で URL が作れず落ちないよう）エスケープする
+            let escapedProject = credentials.projectID.addingPercentEncoding(
+                withAllowedCharacters: .urlPathAllowed.subtracting(CharacterSet(charactersIn: "/"))) ?? credentials.projectID
+            let url = URL(string: "https://\(host)/v1/projects/\(escapedProject)/locations/\(location)/publishers/google/models/\(escapedModel):generateContent")!
             let token = try await ServiceAccountTokenProvider.shared.accessToken(for: credentials)
             urlRequest = URLRequest(url: url, timeoutInterval: timeout)
             urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -294,12 +304,37 @@ struct GeminiClient {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
 
-        // 設計判断: DEC-COM-044
-        let (data, response) = try await SecureHTTP.data(for: urlRequest)
-        guard let http = response as? HTTPURLResponse else { throw GeminiError.invalidResponse }
+        // 設計判断: DEC-COM-044, DEC-COM-055
+        // 429 / 503 と一時的な通信の失敗だけ、2 回までやり直す。全体で timeout の半分を超えるなら、やり直さない
+        let startedAt = Date()
+        var attempt = 0
+        var received: (Data, HTTPURLResponse)
+        while true {
+            do {
+                let (data, response) = try await SecureHTTP.data(for: urlRequest)
+                guard let http = response as? HTTPURLResponse else { throw GeminiError.invalidResponse }
+                received = (data, http)
+            } catch let error as URLError where Self.isTransientNetworkError(error) {
+                guard let wait = Self.retryDelay(attempt: attempt, elapsed: Date().timeIntervalSince(startedAt), timeout: timeout)
+                else { throw error }
+                attempt += 1
+                try await Task.sleep(for: .seconds(wait))
+                urlRequest.timeoutInterval = max(1, timeout - Date().timeIntervalSince(startedAt))
+                continue
+            }
+            let status = received.1.statusCode
+            guard status == 429 || status == 503,
+                  let wait = Self.retryDelay(attempt: attempt, elapsed: Date().timeIntervalSince(startedAt), timeout: timeout)
+            else { break }
+            attempt += 1
+            try await Task.sleep(for: .seconds(wait))
+            urlRequest.timeoutInterval = max(1, timeout - Date().timeIntervalSince(startedAt))
+        }
+        let (data, http) = received
         guard (200..<300).contains(http.statusCode) else {
             let decoded = try? JSONDecoder().decode(ErrorEnvelope.self, from: data)
-            let message = decoded?.error.message ?? String(data: data, encoding: .utf8) ?? ""
+            // 文言は HUD と履歴に出るので、JSON でない応答（HTML のエラーページなど）は先頭だけにする（Windows 版と同じ 500 文字）
+            let message = String((decoded?.error.message ?? String(data: data, encoding: .utf8) ?? "").prefix(500))
             throw GeminiError.http(status: http.statusCode, message: message)
         }
 
@@ -315,6 +350,59 @@ struct GeminiClient {
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { throw GeminiError.emptyResponse(reason: candidate.finishReason) }
         return text
+    }
+
+    // 設計判断: DEC-COM-050
+    /// 「接続を試す」: モデルの情報を GET で取る（トークンを使わない。Claude の testConnection と同じ考え）。
+    /// API キーは generativelanguage の GET /v1beta/models/{model}、サービスアカウントは Vertex AI の
+    /// GET /v1/publishers/google/models/{model}（アクセストークンが取れることも確かめられる）。
+    /// 認証が通らなければ 400（API_KEY_INVALID）/ 401 / 403、モデルがなければ 404 が返る。やり直しはしない
+    func testConnection(model rawModel: String) async throws {
+        let model = rawModel.trimmingCharacters(in: .whitespacesAndNewlines)
+        let escapedModel = model.addingPercentEncoding(
+            withAllowedCharacters: .urlPathAllowed.subtracting(CharacterSet(charactersIn: "/"))) ?? model
+        var urlRequest: URLRequest
+        switch auth {
+        case .apiKey(let apiKey):
+            guard !apiKey.isEmpty else { throw GeminiError.missingAPIKey }
+            let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(escapedModel)")!
+            urlRequest = URLRequest(url: url, timeoutInterval: timeout)
+            urlRequest.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
+        case .serviceAccount(let credentials, let location):
+            // 設計判断: DEC-COM-053（generate と同じ検査）
+            guard Self.isValidLocation(location) else { throw GeminiError.invalidLocation(location) }
+            let host = location == "global" ? "aiplatform.googleapis.com" : "\(location)-aiplatform.googleapis.com"
+            let token = try await ServiceAccountTokenProvider.shared.accessToken(for: credentials)
+            let url = URL(string: "https://\(host)/v1/publishers/google/models/\(escapedModel)")!
+            urlRequest = URLRequest(url: url, timeoutInterval: timeout)
+            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        urlRequest.httpMethod = "GET"
+        let (data, response) = try await SecureHTTP.data(for: urlRequest)
+        guard let http = response as? HTTPURLResponse else { throw GeminiError.invalidResponse }
+        switch http.statusCode {
+        case 200..<300: return
+        case 400, 401, 403: throw GeminiError.invalidCredentials(status: http.statusCode)
+        case 404: throw GeminiError.modelUnavailable(model)
+        default:
+            let decoded = try? JSONDecoder().decode(ErrorEnvelope.self, from: data)
+            let message = String((decoded?.error.message ?? String(data: data, encoding: .utf8) ?? "").prefix(500))
+            throw GeminiError.http(status: http.statusCode, message: message)
+        }
+    }
+
+    // 設計判断: DEC-COM-055
+    /// やり直すまでの待ち（0.5 秒・1 秒）。最大 2 回まで。ここまでにかかった時間と待ちの合計が timeout の半分を超えるなら nil（やり直さない）
+    static func retryDelay(attempt: Int, elapsed: TimeInterval, timeout: TimeInterval) -> TimeInterval? {
+        guard attempt < 2 else { return nil }
+        let wait = 0.5 * pow(2, Double(attempt))
+        return elapsed + wait <= timeout / 2 ? wait : nil
+    }
+
+    // 設計判断: DEC-COM-055
+    /// 一時的な通信の失敗（接続が切れた・つながらない・名前が引けない）。タイムアウトは予算を使い切っているのでやり直さない
+    static func isTransientNetworkError(_ error: URLError) -> Bool {
+        [.networkConnectionLost, .cannotConnectToHost, .cannotFindHost, .dnsLookupFailed].contains(error.code)
     }
 
     // 設計判断: DEC-COM-053
