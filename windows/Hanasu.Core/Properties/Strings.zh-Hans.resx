@@ -639,4 +639,19 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>说话人分离模型的采样率与预期不符（{0} Hz）。</value>
   </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>无法使用 Vertex AI 区域“{0}”（只能使用小写字母、数字和连字符；例如 global、us-central1）。</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>服务账号的 token_uri（{0}）不是 Google 的令牌端点（oauth2.googleapis.com），因此不会使用。</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>录音已达到 10 分钟上限，将处理到目前为止的音频</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>API 密钥（或服务账号）不正确，或者没有使用 Gemini API 的权限（{0}）</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>找不到模型“{0}”，或无法使用此凭据访问该模型</value>
+  </data>
 </root>

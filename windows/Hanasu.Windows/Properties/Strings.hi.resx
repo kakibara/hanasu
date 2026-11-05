@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu पहले से चल रहा है. आप सूचना क्षेत्र में मौजूद आइकन से इसका उपयोग कर सकते हैं.</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>हाल के परिणाम(&amp;E)</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>मीटिंग नोट्स खोलें(&amp;N)…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>इतिहास खोलें(&amp;H)…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>सेटिंग्स(&amp;S)…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Hanasu से बाहर निकलें(&amp;X)</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>रिकॉर्डिंग रोकें और टाइप करें(&amp;R)</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>रिकॉर्डिंग शुरू करें(&amp;R)</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग रोकें(&amp;M) ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग की तैयारी हो रही है…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग प्रोसेस हो रही है…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग शुरू करें(&amp;M)</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — मीटिंग रिकॉर्ड हो रही है {0}</value>
   </data>
@@ -233,6 +266,9 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>कॉपी नहीं हो सका (कोई अन्य ऐप क्लिपबोर्ड का उपयोग कर रहा है)</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>चयनित इतिहास प्रविष्टियाँ ({0}) हटाएँ? इसे पूर्ववत नहीं किया जा सकता.</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>सभी {0} डिक्टेशन इतिहास प्रविष्टियाँ हटाएँ? इसे पूर्ववत नहीं किया जा सकता.</value>
   </data>
@@ -367,6 +403,11 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>सहेजा नहीं जा सका: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>कार्यवृत्त टेम्पलेट को “{0}” में बदलें और कार्यवृत्त फिर से बनाएँ?
+
+मौजूदा कार्यवृत्त और ऐक्शन आइटम बदल दिए जाएँगे.</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>कार्यवृत्त फिर से बनाया गया ({0} सेकंड)</value>
@@ -508,6 +549,9 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>भाषा सेटिंग्स खोलें</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp इसी PC पर ट्रांसक्राइब करता है (ऑडियो कभी इससे बाहर नहीं जाता), रिकॉर्डिंग रोकने के बाद एक साथ. जैसे ही आप इंजन या कोई मॉडल चुनते हैं, चुना गया मॉडल (आकार सूची में दिखाए गए हैं) Hugging Face से डाउनलोड होना शुरू हो जाता है (आप इसे “रद्द करें” से रोक सकते हैं). बड़े मॉडल अधिक सटीक होते हैं, लेकिन धीमे होते हैं.</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>मॉडल</value>
   </data>
@@ -609,6 +653,9 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>क्षेत्र</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Vertex AI User भूमिका (roles/aiplatform.user) वाले सेवा खाते की कुंजी चुनें. केवल कुंजी फ़ाइल का स्थान सहेजा जाता है (उसकी सामग्री कॉपी नहीं की जाती). कुंजी फ़ाइल ऐसी जगह रखें जहाँ अन्य लोग उसे पढ़ न सकें. डिफ़ॉल्ट क्षेत्र global है. “कनेक्शन जाँचें” केवल मॉडल की जानकारी पढ़ता है और इसका कोई शुल्क नहीं लगता.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude API कुंजी</value>
@@ -867,5 +914,175 @@
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>असमर्थित रिकॉर्डिंग स्वरूप ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>अनुवाद और टाइप करना शुरू करें(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>अंग्रेज़ी में अनुवाद और टाइप करना शुरू करें(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>जापानी में अनुवाद और टाइप करना शुरू करें(&amp;T)</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>यह इतिहास प्रविष्टि हटाएँ? इसे पूर्ववत नहीं किया जा सकता.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>इतिहास खोजें</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>परिणाम</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>मूल</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>कोई “महत्वपूर्ण” चिह्न नहीं</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>“महत्वपूर्ण” संदर्भ को Markdown के रूप में कॉपी किया गया</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>मेरे माइक्रोफ़ोन का स्तर</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>अन्य प्रतिभागियों का ऑडियो स्तर</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>नोट दर्ज करें</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>कार्यवृत्त</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>ट्रांसक्रिप्ट</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>“महत्वपूर्ण” चिह्नों के आसपास का संदर्भ</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>नोट्स</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>डिक्टेशन शॉर्टकट</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>डिक्टेशन शॉर्टकट को डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>अनुवाद करके टाइप करने का शॉर्टकट</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>अनुवाद करके टाइप करने का शॉर्टकट डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>चुना गया Whisper मॉडल हटाएँ</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>माइक्रोफ़ोन</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Gemini API कुंजी हटाएँ</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Gemini कनेक्शन जाँचें</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Claude API कुंजी हटाएँ</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग शुरू करने या रोकने का शॉर्टकट</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग शॉर्टकट को डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>“महत्वपूर्ण” चिह्न का शॉर्टकट</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>“महत्वपूर्ण” चिह्न का शॉर्टकट डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>मीटिंग सहेजने का स्थान डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} पहले से “{1}” का शॉर्टकट है. कोई अन्य कुंजी चुनें.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>डाउनलोड हो रहा है… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>इतिहास सूची</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>अभी तक कोई इतिहास नहीं. आपके डिक्टेशन यहाँ दिखाई देंगे.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>आपकी खोज से कोई इतिहास मेल नहीं खाता.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>चयनित</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>मीटिंग सूची</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>मीटिंग लोड हो रही हैं…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>मीटिंग शीर्षक</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>मीटिंग सूची लोड नहीं हो सकी.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>अभी तक कोई मीटिंग रिकॉर्डिंग नहीं. नीचे बाईं ओर “● मीटिंग रिकॉर्डिंग शुरू करें” से एक शुरू करें, और वह यहाँ दिखाई देगी.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>कार्यवृत्त फिर से बनाएँ?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>नोट्स सहेजें और कार्यवृत्त फिर से बनाएँ?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+मौजूदा कार्यवृत्त और ऐक्शन आइटम बदल दिए जाएँगे.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>सहेजने का फ़ोल्डर नहीं मिला</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>माइक्रोफ़ोन गोपनीयता सेटिंग्स खोलें</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>यदि माइक्रोफ़ोन का उपयोग नहीं हो पा रहा है, तो Windows सेटिंग्स → गोपनीयता और सुरक्षा → माइक्रोफ़ोन पर जाएँ और डेस्कटॉप ऐप्स के लिए माइक्रोफ़ोन एक्सेस चालू करें.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>“कनेक्शन जाँचें” केवल मॉडल की जानकारी पढ़ता है और इसका कोई शुल्क नहीं लगता.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Vertex AI कनेक्शन जाँचें</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>डाउनलोड करें ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>सहेजी गई {0} API कुंजी हटाएँ? इसका उपयोग जारी रखने के लिए, कुंजी फिर से सहेजें.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Gemini API से कनेक्ट हो रहा है…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Vertex AI से कनेक्ट हो रहा है…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>इस कुंजी से कनेक्ट हो गया (अभी सहेजी नहीं गई). {0} उपलब्ध है.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>कनेक्ट हो गया. {0} उपलब्ध है. {1}</value>
   </data>
 </root>

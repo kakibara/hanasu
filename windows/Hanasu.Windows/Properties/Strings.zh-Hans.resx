@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu 已在运行。可以通过通知区域中的图标使用。</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>最近的结果(&amp;E)</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>打开会议笔记(&amp;N)…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>打开历史记录(&amp;H)…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>设置(&amp;S)…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>退出 Hanasu(&amp;X)</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>停止录音并输入(&amp;R)</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>开始录音(&amp;R)</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>停止录制会议（{0}）(&amp;M)</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>正在准备录制会议…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>正在处理会议录音…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>开始录制会议(&amp;M)</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — 正在录制会议 {0}</value>
   </data>
@@ -233,6 +266,9 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>无法复制（其他应用正在使用剪贴板）</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>要删除所选的 {0} 条历史记录吗？此操作无法撤消。</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>要删除全部 {0} 条语音输入历史记录吗？此操作无法撤消。</value>
   </data>
@@ -367,6 +403,11 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>无法保存：{0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>要将会议纪要模板改为“{0}”并重新生成会议纪要吗？
+
+当前的会议纪要和待办事项将被替换。</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>已重新生成会议纪要（{0} 秒）</value>
@@ -508,6 +549,9 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>打开语言设置</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp 在此电脑上进行转录（音频不会离开此电脑），并在停止录音后一次性完成转录。选择该引擎或模型后，会立即开始从 Hugging Face 下载所选模型（大小显示在列表中；可以点击“取消”停止）。模型越大越准确，但速度越慢。</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>模型</value>
   </data>
@@ -609,6 +653,9 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>区域</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>请选择具有 Vertex AI 用户角色（roles/aiplatform.user）的服务账号密钥。仅保存密钥文件的位置（不会复制其内容）。请将密钥文件放在其他人无法读取的位置。默认区域为 global。“测试连接”只读取模型信息，不会产生费用。</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude API 密钥</value>
@@ -867,5 +914,175 @@
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>不支持的录音格式（{0}）</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>开始翻译并输入(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>开始译为英语并输入(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>开始译为日语并输入(&amp;T)</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>要删除此历史记录吗？此操作无法撤消。</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>搜索历史记录</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>结果</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>原文</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>没有“重要”标记</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>已将“重要”标记前后的内容复制为 Markdown</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>我的麦克风音量</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>其他参会者的音量</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>输入笔记</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>会议纪要</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>转录稿</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>“重要”标记前后的内容</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>笔记</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>语音输入快捷键</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>将语音输入快捷键恢复为默认值</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>翻译并输入快捷键</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>将翻译并输入快捷键恢复为默认值</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>删除所选的 Whisper 模型</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>麦克风</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>删除 Gemini API 密钥</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>测试 Gemini 连接</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>删除 Claude API 密钥</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>开始或停止录制会议的快捷键</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>将录制会议快捷键恢复为默认值</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>“重要”标记快捷键</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>将“重要”标记快捷键恢复为默认值</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>将会议保存位置恢复为默认值</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} 已是“{1}”的快捷键。请选择其他按键。</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>录制会议</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>正在下载… {0}（{1}）</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>历史记录列表</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>还没有历史记录。语音输入的内容会显示在这里。</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>没有符合搜索条件的历史记录。</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>已选择</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>会议列表</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>正在加载会议…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>会议标题</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>无法加载会议列表。</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>还没有会议录制。点击左下角的“● 开始录制会议”开始录制后，会议会显示在这里。</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>要重新生成会议纪要吗？</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>要保存笔记并重新生成会议纪要吗？</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+当前的会议纪要和待办事项将被替换。</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>找不到保存文件夹</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>打开麦克风隐私设置</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>如果无法使用麦克风，请在 Windows 设置 → 隐私和安全性 → 麦克风中打开“允许桌面应用访问你的麦克风”。</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>“测试连接”只读取模型信息，不会产生费用。</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>测试 Vertex AI 连接</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>下载（{0}）</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>要删除已保存的 {0} API 密钥吗？若要继续使用，请重新保存密钥。</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>正在连接 Gemini API…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>正在连接 Vertex AI…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>已使用此密钥连接成功（尚未保存）。可以使用 {0}。</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>连接成功。可以使用 {0}。{1}</value>
   </data>
 </root>

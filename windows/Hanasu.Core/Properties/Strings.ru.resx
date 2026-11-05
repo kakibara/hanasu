@@ -639,4 +639,19 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Частота дискретизации модели разделения говорящих не соответствует ожидаемой ({0} Гц).</value>
   </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Регион Vertex AI «{0}» нельзя использовать (только строчные буквы, цифры и дефисы; например, global, us-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>token_uri служебной учетной записи ({0}) не является конечной точкой токенов Google (oauth2.googleapis.com), поэтому он не будет использоваться.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Достигнут предел записи в 10 минут, поэтому будет обработано уже записанное аудио</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>Ключ API (или служебная учетная запись) неверен либо не имеет доступа к Gemini API ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>Модель «{0}» не найдена или недоступна с этими учетными данными</value>
+  </data>
 </root>

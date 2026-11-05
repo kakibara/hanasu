@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu zaten çalışıyor. Bildirim alanındaki simgeden kullanabilirsiniz.</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>S&amp;on Sonuçlar</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>Toplantı &amp;Notlarını Aç…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>&amp;Geçmişi Aç…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>&amp;Ayarlar…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Hanasu'dan Çı&amp;k</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>Kaydı &amp;Durdur ve Yaz</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>Kaydı &amp;Başlat</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>&amp;Toplantı Kaydını Durdur ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Toplantı Kaydı Hazırlanıyor…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Toplantı Kaydı İşleniyor…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>&amp;Toplantı Kaydını Başlat</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Toplantı kaydediliyor {0}</value>
   </data>
@@ -233,6 +266,9 @@ Sonuç: {1}
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Kopyalanamadı (pano başka bir uygulama tarafından kullanılıyor)</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Seçili {0} geçmiş kaydı silinsin mi? Bu işlem geri alınamaz.</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Dikte geçmişindeki {0} kaydın tümü silinsin mi? Bu işlem geri alınamaz.</value>
   </data>
@@ -367,6 +403,11 @@ Sonuç: {1}
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Kaydedilemedi: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Tutanak şablonu "{0}" olarak değiştirilip tutanak yeniden oluşturulsun mu?
+
+Geçerli tutanak ve yapılacaklar değiştirilecek.</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Tutanak yeniden oluşturuldu ({0} saniye)</value>
@@ -508,6 +549,9 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Dil Ayarlarını Aç</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp yazıya dökme işlemini bu bilgisayarda yapar (ses bilgisayardan hiç çıkmaz) ve kaydı durdurduktan sonra tümünü bir kerede işler. Motoru veya bir modeli seçtiğiniz anda seçili model (boyutlar listede gösterilir) Hugging Face'ten indirilmeye başlar ("İptal" ile durdurabilirsiniz). Büyük modeller daha doğrudur ancak daha yavaştır.</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Model</value>
   </data>
@@ -609,6 +653,9 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Bölge</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Vertex AI User rolüne (roles/aiplatform.user) sahip bir hizmet hesabının anahtarını seçin. Yalnızca anahtar dosyasının konumu kaydedilir (içeriği kopyalanmaz). Anahtar dosyasını başkalarının okuyamayacağı bir yerde saklayın. Varsayılan bölge global'dir. "Bağlantıyı Sına" yalnızca model bilgilerini okur ve ücretlendirilmez.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude API anahtarı</value>
@@ -867,5 +914,175 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>Desteklenmeyen kayıt biçimi ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>Çevirip &amp;Yazmayı Başlat</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>İngilizceye Çevirip &amp;Yazmayı Başlat</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>Japoncaya Çevirip &amp;Yazmayı Başlat</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>Bu geçmiş kaydı silinsin mi? Bu işlem geri alınamaz.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>Geçmişte ara</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>Sonuç</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>Özgün metin</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>"Önemli" işareti yok</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>"Önemli" bağlamı Markdown olarak kopyalandı</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>Mikrofonumun ses düzeyi</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>Diğer katılımcıların ses düzeyi</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>Not girin</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>Tutanak</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>Döküm</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>"Önemli" işaretlerinin çevresindeki bağlam</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>Notlar</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>Dikte kısayolu</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>Dikte kısayolunu varsayılana sıfırla</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>Çevir ve yaz kısayolu</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>Çevir ve yaz kısayolunu varsayılana sıfırla</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>Seçili Whisper modelini sil</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>Mikrofon</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Gemini API anahtarını sil</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Gemini bağlantısını sına</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Claude API anahtarını sil</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>Toplantı kaydını başlatma veya durdurma kısayolu</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>Toplantı kaydı kısayolunu varsayılana sıfırla</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>"Önemli" işareti kısayolu</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>"Önemli" işareti kısayolunu varsayılana sıfırla</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>Toplantı kayıt konumunu varsayılana sıfırla</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} zaten "{1}" kısayolu. Farklı bir tuş seçin.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>Toplantı kaydı</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>İndiriliyor… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>Geçmiş listesi</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>Henüz geçmiş yok. Dikteleriniz burada görünecek.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>Aramanızla eşleşen geçmiş kaydı yok.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>Seçili</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>Toplantı listesi</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>Toplantılar yükleniyor…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>Toplantı başlığı</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>Toplantı listesi yüklenemedi.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>Henüz toplantı kaydı yok. Sol alttaki "● Toplantı Kaydını Başlat" ile bir kayıt başlatın; kayıt burada görünecek.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>Tutanak yeniden oluşturulsun mu?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>Notlar kaydedilip tutanak yeniden oluşturulsun mu?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+Geçerli tutanak ve yapılacaklar değiştirilecek.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>Kayıt klasörü bulunamadı</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>Mikrofon Gizlilik Ayarlarını Aç</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>Mikrofon kullanılamıyorsa Windows Ayarları → Gizlilik ve güvenlik → Mikrofon bölümüne gidin ve masaüstü uygulamaları için mikrofon erişimini açın.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>"Bağlantıyı Sına" yalnızca model bilgilerini okur ve ücretlendirilmez.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Vertex AI bağlantısını sına</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>İndir ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>Kayıtlı {0} API anahtarı silinsin mi? Kullanmaya devam etmek için anahtarı yeniden kaydedin.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Gemini API'ye bağlanılıyor…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Vertex AI'ye bağlanılıyor…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>Bu anahtarla bağlanıldı (henüz kaydedilmedi). {0} kullanılabilir.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>Bağlanıldı. {0} kullanılabilir. {1}</value>
   </data>
 </root>

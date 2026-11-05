@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu wird bereits ausgeführt. Es kann über das Symbol im Infobereich verwendet werden.</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>&amp;Letzte Ergebnisse</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>Besprechungs&amp;notizen öffnen…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>&amp;Verlauf öffnen…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>&amp;Einstellungen…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Hanasu &amp;beenden</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>&amp;Aufnahme beenden und eingeben</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>&amp;Aufnahme starten</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>Besprechungsaufzeichnung &amp;stoppen ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Besprechungsaufzeichnung wird vorbereitet…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Besprechungsaufzeichnung wird verarbeitet…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>Besprechungsaufzeichnung &amp;starten</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Besprechung wird aufgezeichnet {0}</value>
   </data>
@@ -233,6 +266,9 @@ Original: {2}</value>
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Kopieren fehlgeschlagen (eine andere App verwendet die Zwischenablage)</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Die {0} ausgewählten Verlaufseinträge löschen? Dies kann nicht rückgängig gemacht werden.</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Alle {0} Einträge des Diktatverlaufs löschen? Dies kann nicht rückgängig gemacht werden.</value>
   </data>
@@ -367,6 +403,11 @@ Original: {2}</value>
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Speichern fehlgeschlagen: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Protokollvorlage zu „{0}“ ändern und das Protokoll neu erstellen?
+
+Das aktuelle Protokoll und die Aufgaben werden ersetzt.</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Protokoll neu erstellt ({0} Sekunden)</value>
@@ -508,6 +549,9 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Spracheinstellungen öffnen</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp transkribiert auf diesem PC (das Audio verlässt ihn nie), und zwar vollständig nach dem Beenden der Aufnahme. Sobald die Engine oder ein Modell ausgewählt wird, beginnt der Download des ausgewählten Modells (Größen stehen in der Liste) von Hugging Face (mit „Abbrechen“ lässt er sich stoppen). Größere Modelle sind genauer, aber langsamer.</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Modell</value>
   </data>
@@ -609,6 +653,9 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Region</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Den Schlüssel eines Dienstkontos mit der Rolle „Vertex AI User“ (roles/aiplatform.user) auswählen. Gespeichert wird nur der Speicherort der Schlüsseldatei (ihr Inhalt wird nicht kopiert). Die Schlüsseldatei so aufbewahren, dass andere sie nicht lesen können. Die Standardregion ist global. „Verbindung testen“ ruft nur Modellinformationen ab und ist kostenlos.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude-API-Schlüssel</value>
@@ -867,5 +914,175 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>Nicht unterstütztes Aufnahmeformat ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>&amp;Übersetzen und eingeben starten</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>Ins Englische &amp;übersetzen und eingeben starten</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>Ins Japanische &amp;übersetzen und eingeben starten</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>Diesen Verlaufseintrag löschen? Dies kann nicht rückgängig gemacht werden.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>Verlauf durchsuchen</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>Ergebnis</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>Keine „Wichtig“-Markierungen</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>Kontext der „Wichtig“-Markierungen als Markdown kopiert</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>Pegel meines Mikrofons</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>Audiopegel der anderen Teilnehmer</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>Notiz eingeben</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>Protokoll</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>Transkript</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>Kontext um „Wichtig“-Markierungen</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>Notizen</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>Tastenkombination für Diktat</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>Tastenkombination für Diktat auf Standard zurücksetzen</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>Tastenkombination für Übersetzen und eingeben</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>Tastenkombination für Übersetzen und eingeben auf Standard zurücksetzen</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>Ausgewähltes Whisper-Modell löschen</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>Mikrofon</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Gemini-API-Schlüssel löschen</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Gemini-Verbindung testen</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Claude-API-Schlüssel löschen</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>Tastenkombination zum Starten oder Beenden der Besprechungsaufzeichnung</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>Tastenkombination für Besprechungsaufzeichnung auf Standard zurücksetzen</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>Tastenkombination für „Wichtig“-Markierung</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>Tastenkombination für „Wichtig“-Markierung auf Standard zurücksetzen</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>Speicherort für Besprechungen auf Standard zurücksetzen</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} ist bereits die Tastenkombination für „{1}“. Eine andere Taste wählen.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>Besprechungsaufzeichnung</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>Wird heruntergeladen… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>Verlaufsliste</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>Noch kein Verlauf. Diktate werden hier angezeigt.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>Kein Verlaufseintrag entspricht der Suche.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>Ausgewählt</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>Besprechungsliste</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>Besprechungen werden geladen…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>Besprechungstitel</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>Die Besprechungsliste konnte nicht geladen werden.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>Noch keine Besprechungsaufzeichnungen. Unten links mit „● Besprechungsaufzeichnung starten“ eine starten; sie wird dann hier angezeigt.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>Protokoll neu erstellen?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>Notizen speichern und Protokoll neu erstellen?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+Das aktuelle Protokoll und die Aufgaben werden ersetzt.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>Der Speicherordner wurde nicht gefunden</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>Datenschutzeinstellungen für Mikrofon öffnen</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>Wenn das Mikrofon nicht verwendet werden kann, unter Windows-Einstellungen → Datenschutz und Sicherheit → Mikrofon den Mikrofonzugriff für Desktop-Apps aktivieren.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>„Verbindung testen“ ruft nur Modellinformationen ab und ist kostenlos.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Vertex AI-Verbindung testen</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>Herunterladen ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>Den gespeicherten API-Schlüssel für {0} löschen? Um ihn weiter zu verwenden, den Schlüssel erneut speichern.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Verbindung mit der Gemini API wird hergestellt…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Verbindung mit Vertex AI wird hergestellt…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>Mit diesem Schlüssel verbunden (noch nicht gespeichert). {0} ist verfügbar.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>Verbunden. {0} ist verfügbar. {1}</value>
   </data>
 </root>

@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu è già in esecuzione. Puoi usarlo dall'icona nell'area di notifica.</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>Ris&amp;ultati recenti</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>Apri &amp;note riunioni…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>Apri &amp;cronologia…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Im&amp;postazioni…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>&amp;Esci da Hanasu</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>Interrompi &amp;registrazione e digita</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>Avvia &amp;registrazione</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>&amp;Interrompi registrazione riunione ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Preparazione della registrazione della riunione…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Elaborazione della registrazione della riunione…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>&amp;Avvia registrazione riunione</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Registrazione riunione {0}</value>
   </data>
@@ -233,6 +266,9 @@ Originale: {2}</value>
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Copia non riuscita (un'altra app sta usando gli Appunti)</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Eliminare le {0} voci della cronologia selezionate? L'operazione non può essere annullata.</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Eliminare tutte le {0} voci della cronologia della dettatura? L'operazione non può essere annullata.</value>
   </data>
@@ -367,6 +403,11 @@ Originale: {2}</value>
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Impossibile salvare: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Cambiare il modello di verbale in "{0}" e rigenerare il verbale?
+
+Il verbale e le azioni da svolgere attuali verranno sostituiti.</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Verbale rigenerato ({0} secondi)</value>
@@ -508,6 +549,9 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Apri impostazioni lingua</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp trascrive su questo PC (l'audio non lo lascia mai), tutto in una volta dopo l'interruzione della registrazione. Non appena scegli il motore o un modello, inizia il download del modello selezionato (le dimensioni sono indicate nell'elenco) da Hugging Face (puoi interromperlo con "Annulla"). I modelli più grandi sono più precisi ma più lenti.</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Modello</value>
   </data>
@@ -609,6 +653,9 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Area geografica</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Scegli la chiave di un account di servizio con il ruolo Vertex AI User (roles/aiplatform.user). Viene salvato solo il percorso del file della chiave (il contenuto non viene copiato). Conserva il file della chiave dove altre persone non possano leggerlo. L'area geografica predefinita è global. "Verifica connessione" legge solo le informazioni sul modello e non comporta addebiti.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Chiave API di Claude</value>
@@ -867,5 +914,175 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>Formato di registrazione non supportato ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>Avvia &amp;traduzione e digitazione</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>Avvia &amp;traduzione in inglese e digitazione</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>Avvia &amp;traduzione in giapponese e digitazione</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>Eliminare questa voce della cronologia? L'operazione non può essere annullata.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>Cerca nella cronologia</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>Risultato</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>Originale</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>Nessun contrassegno "Importante"</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>Contesto dei contrassegni "Importante" copiato come Markdown</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>Livello del mio microfono</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>Livello audio degli altri partecipanti</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>Inserisci una nota</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>Verbale</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>Trascrizione</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>Contesto intorno ai contrassegni "Importante"</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>Scelta rapida per la dettatura</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>Ripristina la scelta rapida predefinita per la dettatura</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>Scelta rapida per tradurre e digitare</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>Ripristina la scelta rapida predefinita per tradurre e digitare</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>Elimina il modello Whisper selezionato</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>Microfono</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Elimina la chiave API di Gemini</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Verifica la connessione a Gemini</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Elimina la chiave API di Claude</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>Scelta rapida per avviare o interrompere la registrazione della riunione</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>Ripristina la scelta rapida predefinita per la registrazione della riunione</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>Scelta rapida per il contrassegno "Importante"</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>Ripristina la scelta rapida predefinita per il contrassegno "Importante"</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>Ripristina il percorso di salvataggio predefinito delle riunioni</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} è già la scelta rapida per "{1}". Scegli un altro tasto.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>Registrazione della riunione</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>Download in corso… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>Elenco della cronologia</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>Ancora nessuna cronologia. Le tue dettature verranno visualizzate qui.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>Nessuna voce della cronologia corrisponde alla ricerca.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>Selezionato</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>Elenco delle riunioni</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>Caricamento delle riunioni…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>Titolo della riunione</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>Impossibile caricare l'elenco delle riunioni.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>Ancora nessuna registrazione di riunione. Avviane una con "● Avvia registrazione riunione" in basso a sinistra e verrà visualizzata qui.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>Rigenerare il verbale?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>Salvare le note e rigenerare il verbale?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+Il verbale e le azioni da svolgere attuali verranno sostituiti.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>Cartella di salvataggio non trovata</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>Apri impostazioni privacy del microfono</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>Se il microfono non può essere usato, vai in Impostazioni di Windows → Privacy e sicurezza → Microfono e attiva l'accesso al microfono per le app desktop.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>"Verifica connessione" legge solo le informazioni sul modello e non comporta addebiti.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Verifica la connessione a Vertex AI</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>Scarica ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>Eliminare la chiave API di {0} salvata? Per continuare a usarla, salva di nuovo la chiave.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Connessione alla Gemini API…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Connessione a Vertex AI…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>Connesso con questa chiave (non ancora salvata). {0} è disponibile.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>Connesso. {0} è disponibile. {1}</value>
   </data>
 </root>

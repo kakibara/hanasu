@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu đang chạy. Bạn có thể dùng từ biểu tượng trong vùng thông báo.</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>&amp;Kết quả gần đây</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>&amp;Mở ghi chú cuộc họp…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>Mở &amp;lịch sử…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>&amp;Cài đặt…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>&amp;Thoát Hanasu</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>Dừng &amp;ghi âm và nhập</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>Bắt đầu &amp;ghi âm</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>Dừng ghi âm cuộc &amp;họp ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Đang chuẩn bị ghi âm cuộc họp…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Đang xử lý bản ghi âm cuộc họp…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>Bắt đầu ghi âm cuộc &amp;họp</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Đang ghi âm cuộc họp {0}</value>
   </data>
@@ -233,6 +266,9 @@ Bản gốc: {2}</value>
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Không thể sao chép (ứng dụng khác đang dùng bảng tạm)</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Xóa {0} mục lịch sử đã chọn? Không thể hoàn tác thao tác này.</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Xóa tất cả {0} mục lịch sử đọc chính tả? Không thể hoàn tác thao tác này.</value>
   </data>
@@ -367,6 +403,11 @@ Bản gốc: {2}</value>
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Không thể lưu: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Đổi mẫu biên bản thành “{0}” và tạo lại biên bản?
+
+Biên bản và việc cần làm hiện tại sẽ bị thay thế.</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Đã tạo lại biên bản ({0} giây)</value>
@@ -508,6 +549,9 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Mở cài đặt ngôn ngữ</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp chuyển giọng nói thành văn bản ngay trên PC này (âm thanh không bao giờ rời khỏi máy), một lần sau khi bạn dừng ghi âm. Ngay khi bạn chọn công cụ hoặc một mô hình, mô hình đã chọn (kích thước hiển thị trong danh sách) sẽ bắt đầu tải xuống từ Hugging Face (bạn có thể dừng bằng “Hủy”). Mô hình càng lớn càng chính xác nhưng chậm hơn.</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Mô hình</value>
   </data>
@@ -609,6 +653,9 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Khu vực</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Chọn khóa của tài khoản dịch vụ có vai trò Vertex AI User (roles/aiplatform.user). Chỉ vị trí của tệp khóa được lưu (nội dung không được sao chép). Hãy giữ tệp khóa ở nơi người khác không đọc được. Khu vực mặc định là global. “Kiểm tra kết nối” chỉ đọc thông tin của mô hình và không tốn phí.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Khóa API Claude</value>
@@ -867,5 +914,175 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>Định dạng ghi âm không được hỗ trợ ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>Bắt đầu &amp;dịch rồi nhập</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>Bắt đầu &amp;dịch sang tiếng Anh rồi nhập</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>Bắt đầu &amp;dịch sang tiếng Nhật rồi nhập</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>Xóa mục lịch sử này? Không thể hoàn tác thao tác này.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>Tìm kiếm lịch sử</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>Kết quả</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>Bản gốc</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>Không có dấu “Quan trọng”</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>Đã sao chép ngữ cảnh “Quan trọng” dưới dạng Markdown</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>Mức âm lượng micrô của tôi</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>Mức âm thanh của những người tham gia khác</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>Nhập ghi chú</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>Biên bản</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>Bản ghi lời</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>Ngữ cảnh quanh các dấu “Quan trọng”</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>Phím tắt đọc chính tả</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>Đặt lại phím tắt đọc chính tả về mặc định</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>Phím tắt dịch rồi nhập</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>Đặt lại phím tắt dịch rồi nhập về mặc định</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>Xóa mô hình Whisper đã chọn</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>Micrô</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Xóa khóa API Gemini</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Kiểm tra kết nối Gemini</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Xóa khóa API Claude</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>Phím tắt bắt đầu hoặc dừng ghi âm cuộc họp</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>Đặt lại phím tắt ghi âm cuộc họp về mặc định</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>Phím tắt đánh dấu “Quan trọng”</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>Đặt lại phím tắt đánh dấu “Quan trọng” về mặc định</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>Đặt lại nơi lưu cuộc họp về mặc định</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} đã là phím tắt cho “{1}”. Hãy chọn phím khác.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>Ghi âm cuộc họp</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>Đang tải xuống… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>Danh sách lịch sử</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>Chưa có lịch sử. Các lần đọc chính tả của bạn sẽ hiển thị tại đây.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>Không có mục lịch sử nào khớp với nội dung tìm kiếm.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>Đã chọn</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>Danh sách cuộc họp</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>Đang tải cuộc họp…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>Tiêu đề cuộc họp</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>Không thể tải danh sách cuộc họp.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>Chưa có bản ghi âm cuộc họp nào. Hãy bắt đầu bằng “● Bắt đầu ghi âm cuộc họp” ở góc dưới bên trái và cuộc họp sẽ hiển thị tại đây.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>Tạo lại biên bản?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>Lưu ghi chú và tạo lại biên bản?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+Biên bản và việc cần làm hiện tại sẽ bị thay thế.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>Không tìm thấy thư mục lưu</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>Mở cài đặt quyền riêng tư của micrô</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>Nếu không dùng được micrô, hãy vào Cài đặt Windows → Quyền riêng tư &amp; bảo mật → Micrô và bật quyền truy cập micrô cho ứng dụng trên máy tính.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>“Kiểm tra kết nối” chỉ đọc thông tin của mô hình và không tốn phí.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Kiểm tra kết nối Vertex AI</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>Tải xuống ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>Xóa khóa API {0} đã lưu? Để tiếp tục sử dụng, hãy lưu lại khóa.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Đang kết nối với Gemini API…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Đang kết nối với Vertex AI…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>Đã kết nối bằng khóa này (chưa lưu). Có thể dùng {0}.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>Đã kết nối. Có thể dùng {0}. {1}</value>
   </data>
 </root>

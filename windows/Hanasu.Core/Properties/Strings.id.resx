@@ -639,4 +639,19 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Laju sampel model pemisahan pembicara tidak sesuai harapan ({0} Hz).</value>
   </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Wilayah Vertex AI “{0}” tidak dapat digunakan (hanya huruf kecil, angka, dan tanda hubung; mis. global, us-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>token_uri akun layanan ({0}) bukan endpoint token Google (oauth2.googleapis.com), jadi tidak akan digunakan.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Perekaman mencapai batas 10 menit, jadi audio sejauh ini akan diproses</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>Kunci API (atau akun layanan) salah, atau tidak diizinkan menggunakan API Gemini ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>Model “{0}” tidak ditemukan atau tidak dapat digunakan dengan kredensial ini</value>
+  </data>
 </root>

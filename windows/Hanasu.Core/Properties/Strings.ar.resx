@@ -639,4 +639,19 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>معدل العينات لنموذج فصل المتحدثين ليس كما هو متوقع ({0} Hz).</value>
   </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>لا يمكن استخدام منطقة Vertex AI “{0}” (أحرف صغيرة وأرقام وشرطات فقط؛ مثل global وus-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>قيمة token_uri لحساب الخدمة ({0}) ليست نقطة نهاية الرموز في Google (oauth2.googleapis.com)، لذا لن يتم استخدامها.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>بلغ التسجيل الحد الأقصى البالغ 10 دقائق، لذا ستتم معالجة الصوت المسجَّل حتى الآن</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>مفتاح API (أو حساب الخدمة) غير صحيح، أو غير مسموح له باستخدام Gemini API ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>لم يتم العثور على النموذج “{0}” أو لا يمكن استخدامه مع بيانات الاعتماد هذه</value>
+  </data>
 </root>

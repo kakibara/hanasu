@@ -639,4 +639,19 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Die Abtastrate des Modells für die Sprechertrennung entspricht nicht der erwarteten ({0} Hz).</value>
   </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Die Vertex AI-Region „{0}“ kann nicht verwendet werden (nur Kleinbuchstaben, Ziffern und Bindestriche, z. B. global, us-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>Der token_uri des Dienstkontos ({0}) ist nicht der Token-Endpunkt von Google (oauth2.googleapis.com) und wird daher nicht verwendet.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Die Aufnahme hat das Limit von 10 Minuten erreicht, daher wird das bisherige Audio verarbeitet</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>Der API-Schlüssel (oder das Dienstkonto) ist falsch oder darf die Gemini API nicht verwenden ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>Das Modell „{0}“ wurde nicht gefunden oder kann mit diesen Anmeldedaten nicht verwendet werden</value>
+  </data>
 </root>

@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu sudah berjalan. Anda dapat menggunakannya dari ikon di area pemberitahuan.</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>Hasil T&amp;erbaru</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>Buka &amp;Catatan Rapat…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>Buka R&amp;iwayat…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>&amp;Pengaturan…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>&amp;Keluar dari Hanasu</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>Hentikan Pe&amp;rekaman dan Ketik</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>Mulai Me&amp;rekam</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>Hentikan Perekaman R&amp;apat ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Menyiapkan Perekaman Rapat…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Memproses Rekaman Rapat…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>Mulai Perekaman R&amp;apat</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Merekam rapat {0}</value>
   </data>
@@ -233,6 +266,9 @@ Asli: {2}</value>
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Tidak dapat menyalin (aplikasi lain sedang menggunakan papan klip)</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Hapus {0} entri riwayat yang dipilih? Tindakan ini tidak dapat dibatalkan.</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Hapus semua {0} entri riwayat dikte? Tindakan ini tidak dapat dibatalkan.</value>
   </data>
@@ -367,6 +403,11 @@ Asli: {2}</value>
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Tidak dapat menyimpan: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Ubah templat notulen menjadi “{0}” dan buat ulang notulen?
+
+Notulen dan item tindakan saat ini akan diganti.</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Notulen dibuat ulang ({0} detik)</value>
@@ -508,6 +549,9 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Buka Pengaturan Bahasa</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp mentranskripsikan di PC ini (audio tidak pernah keluar dari PC), sekaligus setelah Anda menghentikan perekaman. Begitu Anda memilih mesin atau model, model yang dipilih (ukurannya ditampilkan di daftar) mulai diunduh dari Hugging Face (Anda dapat menghentikannya dengan “Batal”). Model yang lebih besar lebih akurat tetapi lebih lambat.</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Model</value>
   </data>
@@ -609,6 +653,9 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Wilayah</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Pilih kunci akun layanan yang memiliki peran Vertex AI User (roles/aiplatform.user). Hanya lokasi file kunci yang disimpan (isinya tidak disalin). Simpan file kunci di tempat yang tidak dapat dibaca orang lain. Wilayah default adalah global. “Uji Koneksi” hanya membaca informasi model dan tidak dikenai biaya.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Kunci API Claude</value>
@@ -867,5 +914,175 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>Format perekaman tidak didukung ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>Mulai &amp;Terjemahkan dan Ketik</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>Mulai &amp;Terjemahkan ke Inggris dan Ketik</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>Mulai &amp;Terjemahkan ke Jepang dan Ketik</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>Hapus entri riwayat ini? Tindakan ini tidak dapat dibatalkan.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>Cari riwayat</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>Hasil</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>Asli</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>Tidak ada tanda “Penting”</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>Konteks “Penting” disalin sebagai Markdown</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>Level mikrofon saya</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>Level audio peserta lain</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>Masukkan catatan</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>Notulen</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>Transkrip</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>Konteks di sekitar tanda “Penting”</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>Catatan</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>Pintasan dikte</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>Setel ulang pintasan dikte ke default</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>Pintasan terjemahkan dan ketik</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>Setel ulang pintasan terjemahkan dan ketik ke default</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>Hapus model Whisper yang dipilih</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>Mikrofon</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Hapus kunci API Gemini</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Uji koneksi Gemini</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Hapus kunci API Claude</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>Pintasan untuk memulai atau menghentikan perekaman rapat</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>Setel ulang pintasan perekaman rapat ke default</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>Pintasan tanda “Penting”</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>Setel ulang pintasan tanda “Penting” ke default</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>Setel ulang lokasi penyimpanan rapat ke default</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} sudah menjadi pintasan untuk “{1}”. Pilih tombol lain.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>Perekaman rapat</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>Mengunduh… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>Daftar riwayat</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>Belum ada riwayat. Dikte Anda akan muncul di sini.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>Tidak ada riwayat yang cocok dengan pencarian Anda.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>Dipilih</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>Daftar rapat</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>Memuat rapat…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>Judul rapat</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>Tidak dapat memuat daftar rapat.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>Belum ada rekaman rapat. Mulai dengan “● Mulai Perekaman Rapat” di kiri bawah, dan rekaman akan muncul di sini.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>Buat ulang notulen?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>Simpan catatan dan buat ulang notulen?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+Notulen dan item tindakan saat ini akan diganti.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>Folder penyimpanan tidak ditemukan</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>Buka Pengaturan Privasi Mikrofon</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>Jika mikrofon tidak dapat digunakan, buka Pengaturan Windows → Privasi &amp; keamanan → Mikrofon, lalu aktifkan akses mikrofon untuk aplikasi desktop.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>“Uji Koneksi” hanya membaca informasi model dan tidak dikenai biaya.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Uji koneksi Vertex AI</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>Unduh ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>Hapus kunci API {0} yang disimpan? Untuk terus menggunakannya, simpan kunci lagi.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Menghubungkan ke API Gemini…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Menghubungkan ke Vertex AI…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>Terhubung dengan kunci ini (belum disimpan). {0} tersedia.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>Terhubung. {0} tersedia. {1}</value>
   </data>
 </root>

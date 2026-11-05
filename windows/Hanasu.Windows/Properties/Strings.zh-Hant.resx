@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu 已在執行中。您可以從通知區域中的圖示使用。</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>最近的結果(&amp;E)</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>開啟會議筆記(&amp;N)…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>開啟歷程記錄(&amp;H)…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>設定(&amp;S)…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>結束 Hanasu(&amp;X)</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>停止錄音並輸入(&amp;R)</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>開始錄音(&amp;R)</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>停止錄製會議（{0}）(&amp;M)</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>正在準備錄製會議…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>正在處理會議錄音…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>開始錄製會議(&amp;M)</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — 正在錄製會議 {0}</value>
   </data>
@@ -233,6 +266,9 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>無法複製（其他應用程式正在使用剪貼簿）</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>要刪除選取的 {0} 筆歷程記錄嗎？此動作無法復原。</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>要刪除全部 {0} 筆語音輸入歷程記錄嗎？此動作無法復原。</value>
   </data>
@@ -367,6 +403,11 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>無法儲存：{0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>要將會議記錄範本改為「{0}」並重新建立會議記錄嗎？
+
+目前的會議記錄和待辦事項將會被取代。</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>已重新建立會議記錄（{0} 秒）</value>
@@ -508,6 +549,9 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>開啟語言設定</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp 會在此電腦上進行轉錄（音訊不會傳出此電腦），並在停止錄音後一次完成轉錄。選擇此引擎或模型後，就會立即開始從 Hugging Face 下載所選的模型（大小顯示在清單中；可按「取消」停止）。模型越大越準確，但速度越慢。</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>模型</value>
   </data>
@@ -609,6 +653,9 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>區域</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>請選擇具有 Vertex AI 使用者角色（roles/aiplatform.user）的服務帳戶金鑰。只會儲存金鑰檔案的位置（不會複製其內容）。請將金鑰檔案放在其他人無法讀取的位置。預設區域為 global。「測試連線」只會讀取模型資訊，不會產生費用。</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude API 金鑰</value>
@@ -867,5 +914,175 @@
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>不支援的錄音格式（{0}）</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>開始翻譯並輸入(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>開始譯為英文並輸入(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>開始譯為日文並輸入(&amp;T)</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>要刪除這筆歷程記錄嗎？此動作無法復原。</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>搜尋歷程記錄</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>結果</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>原文</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>沒有「重要」標記</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>已將「重要」標記前後的內容複製為 Markdown</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>我的麥克風音量</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>其他參與者的音量</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>輸入筆記</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>會議記錄</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>逐字稿</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>「重要」標記前後的內容</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>筆記</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>語音輸入快速鍵</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>將語音輸入快速鍵重設為預設值</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>翻譯並輸入快速鍵</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>將翻譯並輸入快速鍵重設為預設值</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>刪除選取的 Whisper 模型</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>麥克風</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>刪除 Gemini API 金鑰</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>測試 Gemini 連線</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>刪除 Claude API 金鑰</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>開始或停止錄製會議的快速鍵</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>將錄製會議快速鍵重設為預設值</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>「重要」標記快速鍵</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>將「重要」標記快速鍵重設為預設值</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>將會議儲存位置重設為預設值</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} 已是「{1}」的快速鍵。請選擇其他按鍵。</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>錄製會議</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>正在下載… {0}（{1}）</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>歷程記錄清單</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>尚無歷程記錄。您的語音輸入內容會顯示在這裡。</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>沒有符合搜尋條件的歷程記錄。</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>已選取</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>會議清單</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>正在載入會議…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>會議標題</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>無法載入會議清單。</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>尚無會議錄製。按左下角的「● 開始錄製會議」開始錄製後，會議就會顯示在這裡。</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>要重新建立會議記錄嗎？</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>要儲存筆記並重新建立會議記錄嗎？</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+目前的會議記錄和待辦事項將會被取代。</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>找不到儲存資料夾</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>開啟麥克風隱私權設定</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>如果無法使用麥克風，請在 Windows 設定 → 隱私權與安全性 → 麥克風中開啟「讓桌面應用程式存取您的麥克風」。</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>「測試連線」只會讀取模型資訊，不會產生費用。</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>測試 Vertex AI 連線</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>下載（{0}）</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>要刪除已儲存的 {0} API 金鑰嗎？若要繼續使用，請再次儲存金鑰。</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>正在連線到 Gemini API…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>正在連線到 Vertex AI…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>已使用此金鑰連線成功（尚未儲存）。可以使用 {0}。</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>已連線。可以使用 {0}。{1}</value>
   </data>
 </root>

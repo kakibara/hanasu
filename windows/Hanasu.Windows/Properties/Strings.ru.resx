@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu уже запущен. Его можно использовать через значок в области уведомлений.</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>Последние &amp;результаты</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>Открыть &amp;заметки встреч…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>Открыть &amp;журнал…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>П&amp;араметры…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>&amp;Выход из Hanasu</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>&amp;Остановить запись и ввести</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>&amp;Начать запись</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>Остановить запись в&amp;стречи ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Подготовка записи встречи…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Обработка записи встречи…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>Начать запись в&amp;стречи</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Запись встречи {0}</value>
   </data>
@@ -233,6 +266,9 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Не удалось скопировать (буфер обмена занят другим приложением)</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Удалить выбранные записи журнала (количество: {0})? Это действие нельзя отменить.</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Удалить все записи журнала диктовки (количество: {0})? Это действие нельзя отменить.</value>
   </data>
@@ -367,6 +403,11 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Не удалось сохранить: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Изменить шаблон протокола на «{0}» и создать протокол заново?
+
+Текущий протокол и задачи будут заменены.</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Протокол создан заново (с: {0})</value>
@@ -508,6 +549,9 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Открыть параметры языка</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp распознает речь на этом ПК (аудио никуда не передается) — целиком после остановки записи. Как только вы выберете этот механизм или модель, начнется скачивание выбранной модели (размеры указаны в списке) с Hugging Face (его можно остановить кнопкой «Отмена»). Более крупные модели точнее, но медленнее.</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Модель</value>
   </data>
@@ -609,6 +653,9 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Регион</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Выберите ключ служебной учетной записи с ролью Vertex AI User (roles/aiplatform.user). Сохраняется только расположение файла ключа (его содержимое не копируется). Храните файл ключа там, где его не смогут прочитать другие. Регион по умолчанию — global. «Проверить подключение» только получает сведения о модели и не тарифицируется.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Ключ API Claude</value>
@@ -867,5 +914,175 @@
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>Неподдерживаемый формат записи ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>Начать &amp;перевод и ввод</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>Начать &amp;перевод на английский и ввод</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>Начать &amp;перевод на японский и ввод</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>Удалить эту запись журнала? Это действие нельзя отменить.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>Поиск в журнале</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>Исходный текст</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>Нет отметок «Важно»</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>Контекст отметок «Важно» скопирован в формате Markdown</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>Уровень моего микрофона</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>Уровень звука других участников</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>Введите заметку</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>Протокол</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>Расшифровка</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>Контекст вокруг отметок «Важно»</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>Заметки</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>Сочетание клавиш для диктовки</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>Сбросить сочетание клавиш для диктовки</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>Сочетание клавиш для перевода и ввода</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>Сбросить сочетание клавиш для перевода и ввода</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>Удалить выбранную модель Whisper</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>Микрофон</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Удалить ключ API Gemini</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Проверить подключение к Gemini</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Удалить ключ API Claude</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>Сочетание клавиш для начала или остановки записи встречи</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>Сбросить сочетание клавиш для записи встречи</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>Сочетание клавиш для отметки «Важно»</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>Сбросить сочетание клавиш для отметки «Важно»</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>Сбросить место сохранения встреч</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} уже назначено для «{1}». Выберите другое сочетание.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>Запись встречи</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>Скачивание… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>Список журнала</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>Журнал пока пуст. Здесь будут появляться ваши диктовки.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>Нет записей журнала, соответствующих поиску.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>Выбрано</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>Список встреч</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>Загрузка встреч…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>Название встречи</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>Не удалось загрузить список встреч.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>Записей встреч пока нет. Начните запись кнопкой «● Начать запись встречи» внизу слева, и она появится здесь.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>Создать протокол заново?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>Сохранить заметки и создать протокол заново?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+Текущий протокол и задачи будут заменены.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>Папка сохранения не найдена</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>Открыть параметры конфиденциальности микрофона</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>Если микрофон нельзя использовать, откройте Параметры Windows → Конфиденциальность и защита → Микрофон и разрешите классическим приложениям доступ к микрофону.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>«Проверить подключение» только получает сведения о модели и не тарифицируется.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Проверить подключение к Vertex AI</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>Скачать ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>Удалить сохраненный ключ API {0}? Чтобы продолжить им пользоваться, сохраните ключ снова.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Подключение к Gemini API…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Подключение к Vertex AI…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>Подключение с этим ключом выполнено (еще не сохранен). Доступна модель {0}.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>Подключено. Доступна модель {0}. {1}</value>
   </data>
 </root>

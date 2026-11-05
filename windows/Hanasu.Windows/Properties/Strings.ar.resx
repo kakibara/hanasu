@@ -15,6 +15,39 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu قيد التشغيل بالفعل. يمكنك استخدامه من الأيقونة في منطقة الإعلامات.</value>
   </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>النتائج الأخيرة(&amp;E)</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>فتح ملاحظات الاجتماعات(&amp;N)…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>فتح المحفوظات(&amp;H)…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>الإعدادات(&amp;S)…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>إنهاء Hanasu(&amp;X)</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>إيقاف التسجيل والكتابة(&amp;R)</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>بدء التسجيل(&amp;R)</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>إيقاف تسجيل الاجتماع(&amp;M) ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>جارٍ تحضير تسجيل الاجتماع…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>جارٍ معالجة تسجيل الاجتماع…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>بدء تسجيل الاجتماع(&amp;M)</value>
+  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — جارٍ تسجيل الاجتماع {0}</value>
   </data>
@@ -233,6 +266,9 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>تعذر النسخ (تطبيق آخر يستخدم الحافظة)</value>
   </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>هل تريد حذف إدخالات المحفوظات المحددة (العدد: {0})؟ لا يمكن التراجع عن هذا الإجراء.</value>
+  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>هل تريد حذف جميع إدخالات محفوظات الإملاء (العدد: {0})؟ لا يمكن التراجع عن هذا الإجراء.</value>
   </data>
@@ -367,6 +403,11 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>تعذر الحفظ: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>هل تريد تغيير قالب المحضر إلى “{0}” وإعادة إنشاء المحضر؟
+
+سيُستبدل المحضر الحالي وعناصر الإجراءات.</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>تمت إعادة إنشاء المحضر ({0} ثانية)</value>
@@ -508,6 +549,9 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>فتح إعدادات اللغة</value>
   </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>يقوم whisper.cpp بالنسخ على هذا الكمبيوتر (لا يغادره الصوت أبدًا)، دفعةً واحدة بعد إيقاف التسجيل. بمجرد اختيار المحرك أو نموذج، يبدأ تنزيل النموذج المحدد (تظهر الأحجام في القائمة) من Hugging Face (يمكنك إيقافه باستخدام “إلغاء”). النماذج الأكبر أكثر دقة لكنها أبطأ.</value>
+  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>النموذج</value>
   </data>
@@ -609,6 +653,9 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>المنطقة</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>اختر مفتاح حساب خدمة لديه الدور Vertex AI User (roles/aiplatform.user). يتم حفظ موقع ملف المفتاح فقط (لا يتم نسخ محتوياته). احتفظ بملف المفتاح في مكان لا يستطيع الآخرون قراءته فيه. المنطقة الافتراضية هي global. “اختبار الاتصال” يقرأ معلومات النموذج فقط ولا يكلّف شيئًا.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>مفتاح API الخاص بـ Claude</value>
@@ -867,5 +914,175 @@
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>تنسيق تسجيل غير مدعوم ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>بدء الترجمة والكتابة(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>بدء الترجمة إلى الإنجليزية والكتابة(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>بدء الترجمة إلى اليابانية والكتابة(&amp;T)</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>هل تريد حذف إدخال المحفوظات هذا؟ لا يمكن التراجع عن هذا الإجراء.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>البحث في المحفوظات</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>النتيجة</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>الأصل</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>لا توجد علامات “مهم”</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>تم نسخ سياق “مهم” بتنسيق Markdown</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>مستوى الميكروفون الخاص بي</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>مستوى صوت المشاركين الآخرين</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>أدخل ملاحظة</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>المحضر</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>النص المكتوب</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>السياق حول علامات “مهم”</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>الملاحظات</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>اختصار الإملاء</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>إعادة تعيين اختصار الإملاء إلى الافتراضي</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>اختصار الترجمة والكتابة</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>إعادة تعيين اختصار الترجمة والكتابة إلى الافتراضي</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>حذف نموذج Whisper المحدد</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>الميكروفون</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>حذف مفتاح API الخاص بـ Gemini</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>اختبار الاتصال بـ Gemini</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>حذف مفتاح API الخاص بـ Claude</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>اختصار بدء تسجيل الاجتماع أو إيقافه</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>إعادة تعيين اختصار تسجيل الاجتماع إلى الافتراضي</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>اختصار علامة “مهم”</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>إعادة تعيين اختصار علامة “مهم” إلى الافتراضي</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>إعادة تعيين مكان حفظ الاجتماعات إلى الافتراضي</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} مستخدم بالفعل كاختصار لـ “{1}”. اختر مفتاحًا مختلفًا.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>تسجيل الاجتماع</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>جارٍ التنزيل… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>قائمة المحفوظات</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>لا توجد محفوظات بعد. ستظهر عمليات الإملاء هنا.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>لا توجد محفوظات تطابق بحثك.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>محدد</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>قائمة الاجتماعات</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>جارٍ تحميل الاجتماعات…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>عنوان الاجتماع</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>تعذر تحميل قائمة الاجتماعات.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>لا توجد تسجيلات اجتماعات بعد. ابدأ تسجيلًا باستخدام “● بدء تسجيل الاجتماع” في أسفل اليسار وسيظهر هنا.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>هل تريد إعادة إنشاء المحضر؟</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>هل تريد حفظ الملاحظات وإعادة إنشاء المحضر؟</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+سيُستبدل المحضر الحالي وعناصر الإجراءات.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>لم يتم العثور على مجلد الحفظ</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>فتح إعدادات خصوصية الميكروفون</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>إذا تعذر استخدام الميكروفون، فانتقل إلى إعدادات Windows ← الخصوصية والأمان ← الميكروفون وشغّل وصول تطبيقات سطح المكتب إلى الميكروفون.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>“اختبار الاتصال” يقرأ معلومات النموذج فقط ولا يكلّف شيئًا.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>اختبار الاتصال بـ Vertex AI</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>تنزيل ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>هل تريد حذف مفتاح API المحفوظ الخاص بـ {0}؟ لمواصلة استخدامه، احفظ المفتاح مرة أخرى.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>جارٍ الاتصال بـ Gemini API…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>جارٍ الاتصال بـ Vertex AI…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>تم الاتصال بهذا المفتاح (لم يتم حفظه بعد). {0} متاح.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>تم الاتصال. {0} متاح. {1}</value>
   </data>
 </root>
