@@ -410,7 +410,7 @@ struct MeetingDetailView: View {
                                    onCommit: { commitTitle(for: meeting.id) },
                                    onCancel: { title = meeting.title })
                 HStack(spacing: 12) {
-                    Text("\(Meeting.dateFormatter.string(from: meeting.startedAt))・\(Meeting.clock(meeting.duration))")
+                    Text(tr("%@・%@", Meeting.dateFormatter.string(from: meeting.startedAt), Meeting.clock(meeting.duration)))
                         .foregroundStyle(.secondary)
                     Spacer()
                     Button(tr("話者名…")) { editingSpeakers = true }

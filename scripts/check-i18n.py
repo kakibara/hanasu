@@ -146,6 +146,8 @@ def load_strings_tool():
 
 
 JA_TEXT = re.compile(r"[ぁ-んァ-ヶ一-龯ー々]")
+# つなぎに使う日本語の約物（「（…）」「、」「・」など）も、UI に出るなら訳す（tr("（%@）", …) のように）
+JA_PUNCT = re.compile(r"[（）「」、。・【】『』]")
 STRING_LITERAL = re.compile(r'"(?:[^"\\\n]|\\.)*"')
 # 包まなくてよい行（ログ・標準出力・開発者向けのエラー）と、文字列の前に来ると包まなくてよいもの（比較・照合・正規表現）
 LEAK_SKIP_LINE = re.compile(r"appLog\.|logger\.|\bprint\(|NSLog\(|os_log|fatalError\(|assertionFailure\(|preconditionFailure\(|precondition\(|// skip-tr|FileHandle\.standardError|^\s*//|^\s*///")
@@ -177,7 +179,7 @@ def check_mac_strings(errors: list[str], warnings: list[str], counts: dict[str, 
                 errors.append(f"strings/{language}: 訳がない {key!r}（{keys[key][0]}）")
                 continue
             done += 1
-            if tool.formats(key) != tool.formats(value):
+            if tool.formats(key) != tool.formats(value) or not tool.positional_ok(value):
                 errors.append(f"strings/{language}: %@ などが原文と合わない {key!r} → {value!r}")
             if language not in ("zh-CN", "zh-TW") and re.search(r"[ぁ-んァ-ヶ]", value):
                 errors.append(f"strings/{language}: 訳に日本語のかなが残っている {key!r} → {value!r}")
@@ -194,7 +196,7 @@ def check_mac_strings(errors: list[str], warnings: list[str], counts: dict[str, 
             if in_multiline or LEAK_SKIP_LINE.search(line):
                 continue
             for m in STRING_LITERAL.finditer(line):
-                if JA_TEXT.search(m.group(0)) and not LEAK_SKIP_BEFORE.search(line[:m.start()]) and "\\(" not in line[:m.start()][-3:]:
+                if (JA_TEXT.search(m.group(0)) or JA_PUNCT.search(m.group(0))) and not LEAK_SKIP_BEFORE.search(line[:m.start()]) and "\\(" not in line[:m.start()][-3:]:
                     errors.append(f"strings: {path.relative_to(ROOT)}:{number}: 日本語の文字列が tr() で包まれていない: {m.group(0)[:40]}"
                                   "（UI なら tr(\"…\") にする。言語の決まりに使う語なら行末に // skip-tr）")
 

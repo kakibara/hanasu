@@ -28,7 +28,7 @@ enum LocalLLMModel: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .gemma4E4B: "Gemma 4 E4B"
         case .lfm25JP: "LFM2.5-1.2B-JP"
-        case .sarashina22: "Sarashina2.2（3B）"
+        case .sarashina22: tr("%@（%@）", "Sarashina2.2", "3B")
         case .qwen35: "Qwen3.5-4B"
         }
     }
