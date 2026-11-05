@@ -1,8 +1,10 @@
 namespace Hanasu.Core.Update;
 
+// 設計判断: DEC-REL-021
 /// <summary>インストールできる zip（Hanasu-&lt;版&gt;-Windows-x64.zip）。大きさと SHA-256 は API の値</summary>
 public sealed record UpdateAsset(string Name, Uri DownloadUrl, long Size, string Sha256);
 
+// 設計判断: DEC-REL-020, DEC-REL-021
 /// <summary>公開された最新のリリース（GitHub の releases/latest の応答から取り出したもの）</summary>
 public sealed record ReleaseInfo(AppVersion Version, string Tag, Uri ReleaseUrl, string Notes, UpdateAsset? Asset);
 
