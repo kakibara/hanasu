@@ -1,5 +1,10 @@
 Hanasu
-Copyright 2026 kakibara
+
+Required Notice: Copyright 2026 kakibara (https://github.com/kakibara/hanasu)
+
+Required Notice: Hanasu is licensed under the PolyForm Noncommercial License 1.0.0 (LICENSE) and is also offered under the Hanasu Additional Permission 1.0 (LICENSE-ADDITIONAL-PERMISSION.md). Commercial licenses: see COMMERCIAL.md (https://github.com/kakibara/hanasu/blob/main/COMMERCIAL.md).
+
+Versions released before this license change were released under the Apache License 2.0.
 
 This product includes software developed by third parties.
 See THIRD_PARTY_NOTICES.md (macOS) and windows/THIRD_PARTY_NOTICES.md (Windows).

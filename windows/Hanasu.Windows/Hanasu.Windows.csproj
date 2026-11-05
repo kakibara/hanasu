@@ -50,6 +50,7 @@
        .NET ランタイムの第三者の表示は、ProtectedData のパッケージに入っている dotnet/runtime のものを使う -->
   <ItemGroup>
     <None Include="..\..\LICENSE" Link="LICENSE.txt" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Include="..\..\LICENSE-ADDITIONAL-PERMISSION.md" Link="LICENSE-ADDITIONAL-PERMISSION.md" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <None Include="..\..\NOTICE" Link="NOTICE.txt" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <None Include="..\THIRD_PARTY_NOTICES.md" Link="THIRD_PARTY_NOTICES.md" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <None Include="$(NuGetPackageRoot)system.security.cryptography.protecteddata/8.0.0/THIRD-PARTY-NOTICES.TXT" Link="dotnet-THIRD-PARTY-NOTICES.txt" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
