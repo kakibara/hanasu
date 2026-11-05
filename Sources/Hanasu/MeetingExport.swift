@@ -8,7 +8,7 @@ enum MeetingExport {
         case markdown = "md"
         case text = "txt"
 
-        var title: String { self == .markdown ? "Markdown" : "テキスト" }
+        var title: String { self == .markdown ? "Markdown" : tr("テキスト") }
     }
 
     // MARK: - Slack 向け（mrkdwn）
@@ -136,7 +136,7 @@ enum MeetingExport {
 
     static func suggestedFileName(for meeting: Meeting, transcript: Bool, format: FileFormat) -> String {
         let base = meeting.title.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ":", with: "-")
-        return "\(base) \(transcript ? "文字起こし" : "議事録").\(format.rawValue)"
+        return "\(base) \(transcript ? tr("文字起こし") : tr("議事録")).\(format.rawValue)"
     }
 
     static func fileContents(_ markdown: String, format: FileFormat) -> String {

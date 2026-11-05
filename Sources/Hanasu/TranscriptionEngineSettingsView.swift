@@ -16,27 +16,27 @@ struct TranscriptionEngineSettingsSection: View {
 
     var body: some View {
         Section {
-            Picker("音声入力", selection: $settings.dictationEngine) {
+            Picker(tr("音声入力"), selection: $settings.dictationEngine) {
                 ForEach(TranscriptionEngine.allCases) { Text($0.label).tag($0) }
             }
-            Picker("会議の記録", selection: $settings.meetingEngine) {
+            Picker(tr("会議の記録"), selection: $settings.meetingEngine) {
                 ForEach(TranscriptionEngine.allCases) { Text($0.label).tag($0) }
             }
             if engines.contains(.apple) {
-                Picker("Mac 標準の認識モデル", selection: $settings.engine) {
+                Picker(tr("Mac 標準の認識モデル"), selection: $settings.engine) {
                     ForEach(RecognizerEngine.allCases) { Text($0.label).tag($0) }
                 }
             }
             // 要件: REQ-COM-004
-            Picker("言語", selection: $settings.localeIdentifier) {
+            Picker(tr("言語"), selection: $settings.localeIdentifier) {
                 ForEach(languageOptions, id: \.self) { id in
-                    Text(Locale(identifier: "ja-JP").localizedString(forIdentifier: id) ?? id).tag(id)
+                    Text(UILanguage.locale.localizedString(forIdentifier: id) ?? id).tag(id)
                 }
             }
         } header: {
-            Text("文字起こし")
+            Text(tr("文字起こし"))
         } footer: {
-            Text("Mac 標準は、話している途中から文字が出ます。Whisper と Gemini は、録音を止めてからまとめて文字起こしします（会議の記録では、記録中の文字起こしは出ず、記録のあとに行います）。「選択を声で編集」も、音声入力と同じエンジンを使います。")
+            Text(tr("Mac 標準は、話している途中から文字が出ます。Whisper と Gemini は、録音を止めてからまとめて文字起こしします（会議の記録では、記録中の文字起こしは出ず、記録のあとに行います）。「選択を声で編集」も、音声入力と同じエンジンを使います。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
         .onChange(of: settings.dictationEngine) { _, engine in downloadIfNeeded(engine) }
@@ -64,7 +64,7 @@ private struct WhisperModelSection: View {
 
     var body: some View {
         Section {
-            Picker("モデル", selection: $settings.whisperModel) {
+            Picker(tr("モデル"), selection: $settings.whisperModel) {
                 ForEach(WhisperModel.allCases) { Text($0.label).tag($0) }
             }
             .onChange(of: settings.whisperModel) { _, model in
@@ -80,7 +80,7 @@ private struct WhisperModelSection: View {
         } header: {
             Text("Whisper")
         } footer: {
-            Text("WhisperKit（CoreML 版の Whisper）を、この Mac の上で動かします。音声は Mac の外に送られません。日本語は small 以上がおすすめです。モデルの保存先: ~/Library/Application Support/Hanasu/Models/whisper")
+            Text(tr("WhisperKit（CoreML 版の Whisper）を、この Mac の上で動かします。音声は Mac の外に送られません。日本語は small 以上がおすすめです。モデルの保存先: ~/Library/Application Support/Hanasu/Models/whisper"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }
@@ -92,12 +92,12 @@ private struct WhisperModelRow: View {
     let isSelected: Bool
 
     var body: some View {
-        LabeledContent(isSelected ? "状態" : model.rawValue) {
+        LabeledContent(isSelected ? tr("状態") : model.rawValue) {
             switch store.status(model) {
             case .notDownloaded:
                 HStack {
-                    Text("未ダウンロード").foregroundStyle(.secondary)
-                    Button("ダウンロード") { store.ensureDownloaded(model) }
+                    Text(tr("未ダウンロード")).foregroundStyle(.secondary)
+                    Button(tr("ダウンロード")) { store.ensureDownloaded(model) }
                 }
             case .downloading(let fraction):
                 HStack {
@@ -106,23 +106,23 @@ private struct WhisperModelRow: View {
                         Text("\(Int(fraction * 100))%").monospacedDigit().foregroundStyle(.secondary)
                     } else {
                         ProgressView().controlSize(.small)
-                        Text("初回の最適化中…").foregroundStyle(.secondary)
+                        Text(tr("初回の最適化中…")).foregroundStyle(.secondary)
                     }
-                    Button("取り消す") { store.cancelDownload(model) }
+                    Button(tr("取り消す")) { store.cancelDownload(model) }
                 }
             case .downloaded:
                 HStack {
-                    Label("ダウンロード済み", systemImage: "checkmark.circle.fill")
+                    Label(tr("ダウンロード済み"), systemImage: "checkmark.circle.fill")
                         .foregroundStyle(.green)
                     if let size = store.diskUsage(model) {
                         Text(ByteCountFormatter.string(fromByteCount: size, countStyle: .file)).foregroundStyle(.secondary)
                     }
-                    Button("削除", role: .destructive) { store.delete(model) }
+                    Button(tr("削除"), role: .destructive) { store.delete(model) }
                 }
             case .failed(let message):
                 HStack {
                     Text("⚠️ \(message)").foregroundStyle(.secondary).lineLimit(2).help(message)
-                    Button("再試行") { store.ensureDownloaded(model) }
+                    Button(tr("再試行")) { store.ensureDownloaded(model) }
                 }
             }
         }
@@ -137,13 +137,13 @@ private struct GeminiTranscriptionSection: View {
     var body: some View {
         Section {
             Label {
-                Text("録った音声を Google（Gemini API / Vertex AI）に送って文字起こしします。会議の記録では、会議の音声（自分と相手の声）がすべて送られます。")
+                Text(tr("録った音声を Google（Gemini API / Vertex AI）に送って文字起こしします。会議の記録では、会議の音声（自分と相手の声）がすべて送られます。"))
             } icon: {
                 Image(systemName: "exclamationmark.icloud.fill").foregroundStyle(.orange)
             }
             HStack {
-                TextField("文字起こしのモデル", text: $settings.geminiTranscriptionModel)
-                Menu("候補") {
+                TextField(tr("文字起こしのモデル"), text: $settings.geminiTranscriptionModel)
+                Menu(tr("候補")) {
                     ForEach(AppSettings.suggestedModels, id: \.self) { model in
                         Button(model) { settings.geminiTranscriptionModel = model }
                     }
@@ -151,9 +151,9 @@ private struct GeminiTranscriptionSection: View {
                 .fixedSize()
             }
         } header: {
-            Text("Gemini で文字起こし")
+            Text(tr("Gemini で文字起こし"))
         } footer: {
-            Text("認証は「Gemini」タブの設定を使います。音声入力では、文字起こしのあとに辞書・スニペットを当ててから、いつもどおり整形します（Gemini を 2 回呼びます）。長い会議は 5 分ごとに分けて送ります。")
+            Text(tr("認証は「Gemini」タブの設定を使います。音声入力では、文字起こしのあとに辞書・スニペットを当ててから、いつもどおり整形します（Gemini を 2 回呼びます）。長い会議は 5 分ごとに分けて送ります。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }

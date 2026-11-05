@@ -164,7 +164,7 @@ struct OnboardingView: View {
 
     private var footer: some View {
         HStack {
-            Button("戻る") { model.back() }
+            Button(tr("戻る")) { model.back() }
                 .opacity(model.page == .welcome ? 0 : 1)
                 .disabled(model.page == .welcome)
             Spacer()
@@ -175,9 +175,9 @@ struct OnboardingView: View {
                         .frame(width: 7, height: 7)
                 }
             }
-            .accessibilityLabel("\(OnboardingPage.allCases.count) ページ中 \(model.page.rawValue + 1) ページ目")
+            .accessibilityLabel(tr("%@ ページ中 %@ ページ目", "\(OnboardingPage.allCases.count)", "\(model.page.rawValue + 1)"))
             Spacer()
-            Button(model.isLastPage ? "はじめる" : model.startsGemmaDownloadOnNext ? "ダウンロードして次へ" : "次へ") { model.next() }
+            Button(model.isLastPage ? tr("はじめる") : model.startsGemmaDownloadOnNext ? tr("ダウンロードして次へ") : tr("次へ")) { model.next() }
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.defaultAction)
                 .disabled(!model.canGoNext)
@@ -285,16 +285,16 @@ private struct OnboardingWelcomePage: View {
                     .foregroundStyle(.white)
             }
             VStack(spacing: 6) {
-                Text("Hanasu へようこそ").font(.largeTitle.bold())
-                Text("話すだけで、整った文章をカーソルの場所に入力します。\n会議を記録して、文字起こしと議事録も作ります。")
+                Text(tr("Hanasu へようこそ")).font(.largeTitle.bold())
+                Text(tr("話すだけで、整った文章をカーソルの場所に入力します。\n会議を記録して、文字起こしと議事録も作ります。"))
                     .font(.title3).foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
             VStack(alignment: .leading, spacing: 12) {
-                OnboardingFeatureRow(symbol: "sparkles", title: "まず、使う AI を選びます",
-                                     detail: "話した内容を整える・翻訳する・議事録をまとめるのに使います。")
-                OnboardingFeatureRow(symbol: "book", title: "次に、主な機能と設定の Tips を紹介します",
-                                     detail: "1 分ほどで終わります。あとからメニューの「Hanasu の使い方…」でいつでも開けます。")
+                OnboardingFeatureRow(symbol: "sparkles", title: tr("まず、使う AI を選びます"),
+                                     detail: tr("話した内容を整える・翻訳する・議事録をまとめるのに使います。"))
+                OnboardingFeatureRow(symbol: "book", title: tr("次に、主な機能と設定の Tips を紹介します"),
+                                     detail: tr("1 分ほどで終わります。あとからメニューの「Hanasu の使い方…」でいつでも開けます。"))
             }
             .padding(.horizontal, 90)
             .padding(.top, 8)
@@ -342,10 +342,10 @@ enum OnboardingAIChoice: CaseIterable, Identifiable {
 
     var tagline: String {
         switch self {
-        case .gemma: "この Mac の中で動く Google の Gemma。無料で、議事録もまとめやすい"
-        case .gemini: "速くて安い。モデルは自由に指定できます"
-        case .claude: "文章の仕上がりがていねい。Haiku・Sonnet・Opus から選べます"
-        case .appleFM: "macOS 27 の Apple Intelligence のモデル。無料"
+        case .gemma: tr("この Mac の中で動く Google の Gemma。無料で、議事録もまとめやすい")
+        case .gemini: tr("速くて安い。モデルは自由に指定できます")
+        case .claude: tr("文章の仕上がりがていねい。Haiku・Sonnet・Opus から選べます")
+        case .appleFM: tr("macOS 27 の Apple Intelligence のモデル。無料")
         }
     }
 
@@ -353,18 +353,18 @@ enum OnboardingAIChoice: CaseIterable, Identifiable {
 
     var privacy: String {
         switch self {
-        case .gemini: "文章を Google に送ります"
-        case .claude: "文章を Anthropic に送ります（音声は送りません）"
-        case .gemma, .appleFM: "文章をネットに送りません"
+        case .gemini: tr("文章を Google に送ります")
+        case .claude: tr("文章を Anthropic に送ります（音声は送りません）")
+        case .gemma, .appleFM: tr("文章をネットに送りません")
         }
     }
 
     var requirement: String {
         switch self {
-        case .gemma: "要るもの: ダウンロード（\(Self.gemmaModel.sizeLabel)。このあとすぐ）"
-        case .gemini: "要るもの: API キーかサービスアカウント"
-        case .claude: "要るもの: API キー（Claude Console）"
-        case .appleFM: "要るもの: macOS 27 と Apple Intelligence"
+        case .gemma: tr("要るもの: ダウンロード（%@。このあとすぐ）", "\(Self.gemmaModel.sizeLabel)")
+        case .gemini: tr("要るもの: API キーかサービスアカウント")
+        case .claude: tr("要るもの: API キー（Claude Console）")
+        case .appleFM: tr("要るもの: macOS 27 と Apple Intelligence")
         }
     }
 }
@@ -379,8 +379,8 @@ struct OnboardingAIPage: View {
     var body: some View {
         VStack(spacing: 0) {
             OnboardingHeader(
-                symbol: "sparkles", title: "使う AI を選ぶ",
-                subtitle: "話した内容を整える・翻訳する・議事録をまとめるのに使う AI です。おすすめは、この Mac の中で動く Gemma です。あとから設定の「AI」タブで変えられます。")
+                symbol: "sparkles", title: tr("使う AI を選ぶ"),
+                subtitle: tr("話した内容を整える・翻訳する・議事録をまとめるのに使う AI です。おすすめは、この Mac の中で動く Gemma です。あとから設定の「AI」タブで変えられます。"))
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
                 ForEach(OnboardingAIChoice.allCases) { choice in
                     card(choice)
@@ -390,7 +390,7 @@ struct OnboardingAIPage: View {
             if let chosen = model.chosenAI {
                 preparation(for: chosen)
             } else {
-                Text("どれか 1 つを選ぶと、次へ進めます。")
+                Text(tr("どれか 1 つを選ぶと、次へ進めます。"))
                     .font(.callout).foregroundStyle(.secondary)
                     .padding(.top, 18)
                 Spacer(minLength: 0)
@@ -408,7 +408,7 @@ struct OnboardingAIPage: View {
                 HStack(spacing: 6) {
                     Text(choice.title).font(.headline)
                     if choice.isRecommended {
-                        Text("おすすめ")
+                        Text(tr("おすすめ"))
                             .font(.caption.bold())
                             .foregroundStyle(.white)
                             .padding(.horizontal, 6)
@@ -423,7 +423,7 @@ struct OnboardingAIPage: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Label(choice.privacy, systemImage: choice.sendsText ? "network" : "lock.laptopcomputer")
                     .font(.caption).foregroundStyle(.secondary)
-                Label(unavailable == nil ? choice.requirement : "この Mac では使えません（macOS 27 から）",
+                Label(unavailable == nil ? choice.requirement : tr("この Mac では使えません（macOS 27 から）"),
                       systemImage: unavailable == nil ? (choice == .gemma ? "arrow.down.circle" : "key") : "exclamationmark.triangle")
                     .font(.caption)
                     .foregroundStyle(unavailable == nil ? Color.secondary : Color.orange)
@@ -456,11 +456,11 @@ struct OnboardingAIPage: View {
             case .local:
                 OnboardingGemmaDownload()
             case .appleFM:
-                Section("Apple の Foundation Models") { AppleFMChoice() }
+                Section(tr("Apple の Foundation Models")) { AppleFMChoice() }
             }
             Text(provider == .local
-                 ? "音声入力だけ小さく速いモデル（LFM2.5）にするなどは、このあとの「設定の Tips」か、設定 →「AI」で選べます。"
-                 : "準備はあとからでもできます（設定 →「AI」）。")
+                 ? tr("音声入力だけ小さく速いモデル（LFM2.5）にするなどは、このあとの「設定の Tips」か、設定 →「AI」で選べます。")
+                 : tr("準備はあとからでもできます（設定 →「AI」）。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
         .formStyle(.grouped)
@@ -481,10 +481,10 @@ struct OnboardingGemmaDownload: View {
             switch store.status(model) {
             case .notDownloaded:
                 HStack {
-                    Text("まだダウンロードしていません。「ダウンロードして次へ」でも始められます。")
+                    Text(tr("まだダウンロードしていません。「ダウンロードして次へ」でも始められます。"))
                         .font(.callout).foregroundStyle(.secondary)
                     Spacer()
-                    Button("ダウンロード（\(model.sizeLabel)）") { store.ensureDownloaded(model) }
+                    Button(tr("ダウンロード（%@）", "\(model.sizeLabel)")) { store.ensureDownloaded(model) }
                 }
             case .downloading(let fraction):
                 HStack {
@@ -493,33 +493,33 @@ struct OnboardingGemmaDownload: View {
                         Text("\(Int(fraction * 100))%").font(.callout).monospacedDigit()
                     } else {
                         ProgressView().controlSize(.small)
-                        Text("確かめています…").font(.callout)
+                        Text(tr("確かめています…")).font(.callout)
                     }
-                    Button("中止") { store.cancelDownload(model) }
+                    Button(tr("中止")) { store.cancelDownload(model) }
                 }
-                Text("ダウンロードは、次のページへ進んでも、このウインドウを閉じても続きます。")
+                Text(tr("ダウンロードは、次のページへ進んでも、このウインドウを閉じても続きます。"))
                     .font(.caption).foregroundStyle(.secondary)
             case .downloaded:
-                Label("ダウンロード済み。すぐに使えます", systemImage: "checkmark.circle.fill").foregroundStyle(.green)
+                Label(tr("ダウンロード済み。すぐに使えます"), systemImage: "checkmark.circle.fill").foregroundStyle(.green)
             case .failed(let message):
                 HStack {
                     Text("⚠️ \(message)").font(.callout).foregroundStyle(.red)
                     Spacer()
-                    Button("もう一度") { store.ensureDownloaded(model) }
+                    Button(tr("もう一度")) { store.ensureDownloaded(model) }
                 }
             }
             if hasLittleMemory {
-                Label("この Mac のメモリは 16 GB より少ないので、Gemma は遅いかもしれません。そのときは設定 →「AI」で小さいモデルか、ほかの AI に変えてください。",
+                Label(tr("この Mac のメモリは 16 GB より少ないので、Gemma は遅いかもしれません。そのときは設定 →「AI」で小さいモデルか、ほかの AI に変えてください。"),
                       systemImage: "memorychip")
                     .font(.caption).foregroundStyle(.orange)
             }
             HStack(spacing: 4) {
                 Text("\(model.summary)。\(model.licenseNote)")
-                Link("ライセンス", destination: model.licenseURL)
+                Link(tr("ライセンス"), destination: model.licenseURL)
             }
             .font(.caption).foregroundStyle(.secondary)
         } header: {
-            Text("\(model.name) をダウンロードする（音声入力と会議の両方で使います）")
+            Text(tr("%@ をダウンロードする（音声入力と会議の両方で使います）", "\(model.name)"))
         }
     }
 }
@@ -533,27 +533,27 @@ private struct OnboardingDictationPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            OnboardingHeader(symbol: "mic", title: "音声入力",
-                             subtitle: "どのアプリでも、カーソルのある場所に、話した内容を整えて入力します。")
+            OnboardingHeader(symbol: "mic", title: tr("音声入力"),
+                             subtitle: tr("どのアプリでも、カーソルのある場所に、話した内容を整えて入力します。"))
             OnboardingFeatureList {
                 OnboardingFeatureRow(
-                    symbol: "mic.fill", title: "話して入力", detail: "入力したい場所で押して話し、もう一度押す（画面下の表示の「■ 停止」でも）と、AI が整えた文章を入力します。Esc で取り消し。押している間だけ録音する使い方も選べます。",
+                    symbol: "mic.fill", title: tr("話して入力"), detail: tr("入力したい場所で押して話し、もう一度押す（画面下の表示の「■ 停止」でも）と、AI が整えた文章を入力します。Esc で取り消し。押している間だけ録音する使い方も選べます。"),
                     shortcut: settings.hotKey.displayString)
                 OnboardingFeatureRow(
-                    symbol: "globe", title: "翻訳して入力",
-                    detail: "話した内容を\(TranslationLanguage.menuVerb(for: settings.translationLanguages))して入力します。録音中に画面下の表示で言語を選んでも切り替えられます。",
+                    symbol: "globe", title: tr("翻訳して入力"),
+                    detail: tr("話した内容を%@して入力します。録音中に画面下の表示で言語を選んでも切り替えられます。", "\(TranslationLanguage.menuVerb(for: settings.translationLanguages))"),
                     shortcut: settings.translateHotKey.displayString)
                 OnboardingFeatureRow(
-                    symbol: "wand.and.stars", title: "選択を声で編集",
-                    detail: "文章を選んで押し、「もっと丁寧に」「箇条書きにして」「英語にして」のように話してもう一度押すと、書き換えた文章で置き換えます。",
+                    symbol: "wand.and.stars", title: tr("選択を声で編集"),
+                    detail: tr("文章を選んで押し、「もっと丁寧に」「箇条書きにして」「英語にして」のように話してもう一度押すと、書き換えた文章で置き換えます。"),
                     shortcut: editSettings.hotKey.displayString)
                 OnboardingFeatureRow(
-                    symbol: "arrow.uturn.backward", title: "最後の結果をもう一度入力",
-                    detail: "入力先がずれて結果が消えたときは、入れたい場所で押します。メニューの「最近の結果」からコピーもできます。",
+                    symbol: "arrow.uturn.backward", title: tr("最後の結果をもう一度入力"),
+                    detail: tr("入力先がずれて結果が消えたときは、入れたい場所で押します。メニューの「最近の結果」からコピーもできます。"),
                     shortcut: historySettings.repasteHotKey.displayString)
                 OnboardingFeatureRow(
-                    symbol: "menubar.arrow.up.rectangle", title: "メニューからも",
-                    detail: "メニューバーの Hanasu のアイコンから、どれも始められます。録音中はアイコンが赤くなります。")
+                    symbol: "menubar.arrow.up.rectangle", title: tr("メニューからも"),
+                    detail: tr("メニューバーの Hanasu のアイコンから、どれも始められます。録音中はアイコンが赤くなります。"))
             }
         }
     }
@@ -567,26 +567,26 @@ private struct OnboardingMeetingPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            OnboardingHeader(symbol: "person.2.wave.2", title: "会議の記録",
-                             subtitle: "Meet・Zoom・Teams・Slack ハドルなどの会議を録って、文字起こしと議事録を作ります。")
+            OnboardingHeader(symbol: "person.2.wave.2", title: tr("会議の記録"),
+                             subtitle: tr("Meet・Zoom・Teams・Slack ハドルなどの会議を録って、文字起こしと議事録を作ります。"))
             OnboardingFeatureList {
                 OnboardingFeatureRow(
-                    symbol: "record.circle", title: "記録の開始／停止",
-                    detail: "マイクを「自分」、Mac で鳴っている音を「相手」として録ります。イヤホンがおすすめです。記録は「書類」フォルダの Hanasu/Meetings に保存します。",
+                    symbol: "record.circle", title: tr("記録の開始／停止"),
+                    detail: tr("マイクを「自分」、Mac で鳴っている音を「相手」として録ります。イヤホンがおすすめです。記録は「書類」フォルダの Hanasu/Meetings に保存します。"),
                     shortcut: settings.meetingHotKey.displayString)
                 OnboardingFeatureRow(
-                    symbol: "bell.badge", title: "会議の自動検出",
-                    detail: "会議のアプリがマイクを使い始めると「記録しますか？」と提案します。勝手には録りません。")
+                    symbol: "bell.badge", title: tr("会議の自動検出"),
+                    detail: tr("会議のアプリがマイクを使い始めると「記録しますか？」と提案します。勝手には録りません。"))
                 OnboardingFeatureRow(
-                    symbol: "star", title: "メモと「ここ重要」",
-                    detail: "記録中に会議ノートへメモを書いたり、重要なところに印を付けたりすると、議事録がそこを優先してまとめます。",
+                    symbol: "star", title: tr("メモと「ここ重要」"),
+                    detail: tr("記録中に会議ノートへメモを書いたり、重要なところに印を付けたりすると、議事録がそこを優先してまとめます。"),
                     shortcut: notesSettings.highlightHotKey.displayString)
                 OnboardingFeatureRow(
-                    symbol: "doc.text", title: "議事録の型と書き出し",
-                    detail: "定例・1on1・商談などの型を選べます。アクションアイテムは Markdown・Slack 向けのコピー・リマインダーに書き出せます。")
+                    symbol: "doc.text", title: tr("議事録の型と書き出し"),
+                    detail: tr("定例・1on1・商談などの型を選べます。アクションアイテムは Markdown・Slack 向けのコピー・リマインダーに書き出せます。"))
                 OnboardingFeatureRow(
-                    symbol: "magnifyingglass", title: "過去の会議を検索・質問",
-                    detail: "会議ノートで過去の会議を横断して検索し（⌘F）、「先週の定例で何が決まった？」と質問すると、根拠の会議を引いて答えます。")
+                    symbol: "magnifyingglass", title: tr("過去の会議を検索・質問"),
+                    detail: tr("会議ノートで過去の会議を横断して検索し（⌘F）、「先週の定例で何が決まった？」と質問すると、根拠の会議を引いて答えます。"))
             }
         }
     }
@@ -597,21 +597,21 @@ private struct OnboardingMeetingPage: View {
 private struct OnboardingWordsPage: View {
     var body: some View {
         VStack(spacing: 0) {
-            OnboardingHeader(symbol: "character.book.closed", title: "履歴・辞書・スニペット",
-                             subtitle: "使うほど、あなたの言葉に合わせて入力できるようになります。")
+            OnboardingHeader(symbol: "character.book.closed", title: tr("履歴・辞書・スニペット"),
+                             subtitle: tr("使うほど、あなたの言葉に合わせて入力できるようになります。"))
             OnboardingFeatureList {
                 OnboardingFeatureRow(
-                    symbol: "clock.arrow.circlepath", title: "履歴",
-                    detail: "結果と元の文字起こしを残し、検索・コピーできます。整形に失敗した文は、原文から整え直せます（メニュー →「履歴を開く…」）。")
+                    symbol: "clock.arrow.circlepath", title: tr("履歴"),
+                    detail: tr("結果と元の文字起こしを残し、検索・コピーできます。整形に失敗した文は、原文から整え直せます（メニュー →「履歴を開く…」）。"))
                 OnboardingFeatureRow(
-                    symbol: "character.book.closed", title: "辞書と置き換えルール",
-                    detail: "人の名前や社内の用語を登録すると、認識と整形に効きます。「じぇみに → Gemini」のような置き換えルールも書け、会議の記録から候補を挙げてもらうこともできます（設定 →「辞書・ルール」）。")
+                    symbol: "character.book.closed", title: tr("辞書と置き換えルール"),
+                    detail: tr("人の名前や社内の用語を登録すると、認識と整形に効きます。「じぇみに → Gemini」のような置き換えルールも書け、会議の記録から候補を挙げてもらうこともできます（設定 →「辞書・ルール」）。"))
                 OnboardingFeatureRow(
-                    symbol: "text.badge.plus", title: "スニペット",
-                    detail: "「メールの署名」と話すだけで、登録した定型文をそのまま入力します（設定 →「スニペット」）。")
+                    symbol: "text.badge.plus", title: tr("スニペット"),
+                    detail: tr("「メールの署名」と話すだけで、登録した定型文をそのまま入力します（設定 →「スニペット」）。"))
                 OnboardingFeatureRow(
-                    symbol: "square.grid.2x2", title: "アプリ別の文体",
-                    detail: "Slack ならくだけた短い文、メールなら丁寧な文のように、入力先のアプリに合わせて文体を変えます。アプリごとに出力の言語も決められます（設定 →「アプリ別」）。")
+                    symbol: "square.grid.2x2", title: tr("アプリ別の文体"),
+                    detail: tr("Slack ならくだけた短い文、メールなら丁寧な文のように、入力先のアプリに合わせて文体を変えます。アプリごとに出力の言語も決められます（設定 →「アプリ別」）。"))
             }
         }
     }
@@ -627,31 +627,31 @@ struct OnboardingTipsPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            OnboardingHeader(symbol: "lightbulb", title: "設定の Tips",
-                             subtitle: "よく変える設定です。AI とモデルは、ここで選べます。")
+            OnboardingHeader(symbol: "lightbulb", title: tr("設定の Tips"),
+                             subtitle: tr("よく変える設定です。AI とモデルは、ここで選べます。"))
             Form {
                 Section {
                     AIChoiceRow(settings: settings, purpose: .dictation)
                     AIChoiceRow(settings: settings, purpose: .meeting)
                 } header: {
-                    Text("AI とモデルを選べる（設定 →「AI」）")
+                    Text(tr("AI とモデルを選べる（設定 →「AI」）"))
                 } footer: {
-                    Text("音声入力は速いモデル、会議は賢いモデル、のように分けられます。選ぶとすぐに保存します。")
+                    Text(tr("音声入力は速いモデル、会議は賢いモデル、のように分けられます。選ぶとすぐに保存します。"))
                         .font(.caption).foregroundStyle(.secondary)
                 }
-                Section("ほかの Tips") {
-                    tip("mic", "マイクを選べる",
-                        "設定 →「一般」→「マイク」。録音中の画面下の表示のマイクのボタンでも切り替えられます。")
-                    tip("waveform", "文字起こしのエンジンを選べる",
-                        "Mac 標準（既定）・Whisper（Mac の中で動かす）・Gemini（音声を送る）から、音声入力と会議で別々に選べます（設定 →「一般」）。")
-                    tip("keyboard", "ショートカットを変えられる",
-                        "ほかのアプリと重なるときは、設定の「一般」「会議」「履歴」で別のキーにできます。")
-                    tip("globe", "翻訳する言語を足せる",
-                        "設定 →「一般」→「翻訳する言語」で日本語も選ぶと、英語で話して日本語で入力できます。")
-                    tip("text.viewfinder", "画面の文脈を参考にできる",
-                        "設定 →「AI」でオンにすると、画面にある名前の表記に合わせて整えます（既定はオフ）。")
-                    tip("menubar.rectangle", "アイコンを出す場所",
-                        "メニューバー・Dock・両方から選べます（設定 →「一般」→「アイコンの表示」）。")
+                Section(tr("ほかの Tips")) {
+                    tip("mic", tr("マイクを選べる"),
+                        tr("設定 →「一般」→「マイク」。録音中の画面下の表示のマイクのボタンでも切り替えられます。"))
+                    tip("waveform", tr("文字起こしのエンジンを選べる"),
+                        tr("Mac 標準（既定）・Whisper（Mac の中で動かす）・Gemini（音声を送る）から、音声入力と会議で別々に選べます（設定 →「一般」）。"))
+                    tip("keyboard", tr("ショートカットを変えられる"),
+                        tr("ほかのアプリと重なるときは、設定の「一般」「会議」「履歴」で別のキーにできます。"))
+                    tip("globe", tr("翻訳する言語を足せる"),
+                        tr("設定 →「一般」→「翻訳する言語」で日本語も選ぶと、英語で話して日本語で入力できます。"))
+                    tip("text.viewfinder", tr("画面の文脈を参考にできる"),
+                        tr("設定 →「AI」でオンにすると、画面にある名前の表記に合わせて整えます（既定はオフ）。"))
+                    tip("menubar.rectangle", tr("アイコンを出す場所"),
+                        tr("メニューバー・Dock・両方から選べます（設定 →「一般」→「アイコンの表示」）。"))
                 }
             }
             .formStyle(.grouped)
@@ -689,22 +689,22 @@ struct OnboardingPermissionsPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            OnboardingHeader(symbol: "checkmark.shield", title: "最後に、許可をお願いします",
-                             subtitle: "Hanasu が動くのに要る許可です。あとから設定の「権限」タブでもできます。")
+            OnboardingHeader(symbol: "checkmark.shield", title: tr("最後に、許可をお願いします"),
+                             subtitle: tr("Hanasu が動くのに要る許可です。あとから設定の「権限」タブでもできます。"))
             Form {
                 Section {
-                    row(title: "アクセシビリティ",
-                        detail: "整えた文章を ⌘V で入力するのに要ります。システム設定で Hanasu をオンにしてください。",
+                    row(title: tr("アクセシビリティ"),
+                        detail: tr("整えた文章を ⌘V で入力するのに要ります。システム設定で Hanasu をオンにしてください。"),
                         granted: Permissions.isAccessibilityTrusted(prompt: false),
-                        actionTitle: "許可する…") {
+                        actionTitle: tr("許可する…")) {
                         if !Permissions.isAccessibilityTrusted(prompt: true) {
                             Permissions.openPrivacySettings("Privacy_Accessibility")
                         }
                     }
-                    row(title: "マイク",
-                        detail: "話した声を録るのに要ります。",
+                    row(title: tr("マイク"),
+                        detail: tr("話した声を録るのに要ります。"),
                         granted: Permissions.microphoneStatus == .authorized,
-                        actionTitle: Permissions.microphoneStatus == .notDetermined ? "許可する" : "開く…") {
+                        actionTitle: Permissions.microphoneStatus == .notDetermined ? tr("許可する") : tr("開く…")) {
                         if Permissions.microphoneStatus == .notDetermined {
                             Task {
                                 _ = await AVCaptureDevice.requestAccess(for: .audio)
@@ -714,10 +714,10 @@ struct OnboardingPermissionsPage: View {
                             Permissions.openPrivacySettings("Privacy_Microphone")
                         }
                     }
-                    row(title: "音声認識",
-                        detail: "文字起こしのエンジンが Mac 標準のときに要ります。",
+                    row(title: tr("音声認識"),
+                        detail: tr("文字起こしのエンジンが Mac 標準のときに要ります。"),
                         granted: Permissions.speechStatus == .authorized,
-                        actionTitle: Permissions.speechStatus == .notDetermined ? "許可する" : "開く…") {
+                        actionTitle: Permissions.speechStatus == .notDetermined ? tr("許可する") : tr("開く…")) {
                         if Permissions.speechStatus == .notDetermined {
                             Task {
                                 try? await Permissions.ensureRecordingPermissions(speechRecognition: true)
@@ -728,8 +728,8 @@ struct OnboardingPermissionsPage: View {
                         }
                     }
                 }
-                Section("準備ができたら") {
-                    LabeledContent("使う AI") {
+                Section(tr("準備ができたら")) {
+                    LabeledContent(tr("使う AI")) {
                         Text(aiSummary).foregroundStyle(.secondary)
                     }
                     // 要件: REQ-COM-050
@@ -737,9 +737,9 @@ struct OnboardingPermissionsPage: View {
                     if usesGemma, store.status(OnboardingAIChoice.gemmaModel) != .downloaded {
                         OnboardingGemmaDownloadStatus(store: store)
                     }
-                    Label("「はじめる」を押したら、入力したい場所で \(settings.hotKey.displayString) を押して話してみてください。",
+                    Label(tr("「はじめる」を押したら、入力したい場所で %@ を押して話してみてください。", "\(settings.hotKey.displayString)"),
                           systemImage: "mic.fill")
-                    Label("この説明は、メニューの「Hanasu の使い方…」でいつでも開けます。", systemImage: "book")
+                    Label(tr("この説明は、メニューの「Hanasu の使い方…」でいつでも開けます。"), systemImage: "book")
                         .foregroundStyle(.secondary)
                 }
             }
@@ -758,7 +758,7 @@ struct OnboardingPermissionsPage: View {
             let model = provider == .local ? settings.localModel(for: purpose).name : settings.textModel(for: purpose)
             return "\(provider.name)（\(model)）"
         }
-        return "音声入力 \(label(.dictation))・会議 \(label(.meeting))"
+        return tr("音声入力 %@・会議 %@", "\(label(.dictation))", "\(label(.meeting))")
     }
 
     private func row(title: String, detail: String, granted: Bool, actionTitle: String,
@@ -774,7 +774,7 @@ struct OnboardingPermissionsPage: View {
             }
             Spacer()
             if granted {
-                Text("許可済み").foregroundStyle(.secondary)
+                Text(tr("許可済み")).foregroundStyle(.secondary)
             } else {
                 Button(actionTitle, action: action)
             }
@@ -788,7 +788,7 @@ private struct OnboardingGemmaDownloadStatus: View {
     private let model = OnboardingAIChoice.gemmaModel
 
     var body: some View {
-        LabeledContent("\(model.name) のダウンロード") {
+        LabeledContent(tr("%@ のダウンロード", "\(model.name)")) {
             switch store.status(model) {
             case .downloading(let fraction):
                 HStack {
@@ -800,11 +800,11 @@ private struct OnboardingGemmaDownloadStatus: View {
                     }
                 }
             case .failed:
-                Button("もう一度") { store.ensureDownloaded(model) }
+                Button(tr("もう一度")) { store.ensureDownloaded(model) }
             case .notDownloaded:
-                Button("ダウンロード（\(model.sizeLabel)）") { store.ensureDownloaded(model) }
+                Button(tr("ダウンロード（%@）", "\(model.sizeLabel)")) { store.ensureDownloaded(model) }
             case .downloaded:
-                Text("済み")
+                Text(tr("済み"))
             }
         }
     }
@@ -845,7 +845,7 @@ final class OnboardingWindowController: NSObject, NSWindowDelegate {
         let hosting = NSHostingController(rootView: OnboardingView(model: model))
         hosting.sizingOptions = []
         let window = NSWindow(contentViewController: hosting)
-        window.title = "Hanasu の使い方"
+        window.title = tr("Hanasu の使い方")
         window.styleMask = [.titled, .closable]
         window.setContentSize(OnboardingView.size)
         window.isReleasedWhenClosed = false

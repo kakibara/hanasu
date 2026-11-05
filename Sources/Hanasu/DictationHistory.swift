@@ -33,7 +33,7 @@ struct DictationHistoryEntry: Codable, Identifiable, Equatable {
             }
         }
 
-        var label: String { translation?.verb ?? "整形" }
+        var label: String { translation?.verb ?? tr("整形") }
     }
 
     enum Status: String, Codable {
@@ -48,10 +48,10 @@ struct DictationHistoryEntry: Codable, Identifiable, Equatable {
 
         var label: String {
             switch self {
-            case .succeeded: "成功"
-            case .geminiFailed: "Gemini 失敗"
-            case .noCredentials: "未設定のため原文のまま"
-            case .refineOff: "整形オフ（原文のまま）"
+            case .succeeded: tr("成功")
+            case .geminiFailed: tr("Gemini 失敗")
+            case .noCredentials: tr("未設定のため原文のまま")
+            case .refineOff: tr("整形オフ（原文のまま）")
             }
         }
 
@@ -152,7 +152,7 @@ enum DictationHistoryError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .notFound: "履歴が見つかりません（削除された可能性があります）"
+        case .notFound: tr("履歴が見つかりません（削除された可能性があります）")
         }
     }
 }
@@ -232,7 +232,7 @@ final class DictationHistoryStore: ObservableObject {
             lastError = nil
         } catch {
             appLog.error("history load error: \(error.localizedDescription, privacy: .public)")
-            lastError = "履歴を読み込めませんでした: \(error.localizedDescription)"
+            lastError = tr("履歴を読み込めませんでした: %@", "\(error.localizedDescription)")
             return  // 壊れたファイルを上書きしないよう、ここで止める
         }
         if prune() { save() }
@@ -255,7 +255,7 @@ final class DictationHistoryStore: ObservableObject {
             lastError = nil
         } catch {
             appLog.error("history save error: \(error.localizedDescription, privacy: .public)")
-            lastError = "履歴を保存できませんでした: \(error.localizedDescription)"
+            lastError = tr("履歴を保存できませんでした: %@", "\(error.localizedDescription)")
         }
     }
 
@@ -404,7 +404,7 @@ final class DictationHistoryStore: ObservableObject {
         if overrideClient == nil {
             // 要件: REQ-COM-032
             try await LocalModelDownloadPrompt.prepare(
-                for: .dictation, settings: settings, work: "やり直し", whenSkipped: "やり直しません")
+                for: .dictation, settings: settings, work: tr("やり直し"), whenSkipped: tr("やり直しません"))
         }
         let client = try overrideClient ?? TextAIClient.requireFromSettings(settings, for: .dictation)
         let model = settings.textModel(for: .dictation)

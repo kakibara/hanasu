@@ -89,7 +89,7 @@ final class MeetingAskModel: ObservableObject {
                     question: question, meetings: meetings, index: index,
                     client: client, model: settings.textModel(for: .meeting))
             } catch {
-                self.error = "答えを作れませんでした: \(error.localizedDescription)"
+                self.error = tr("答えを作れませんでした: %@", "\(error.localizedDescription)")
             }
         }
     }
@@ -116,7 +116,7 @@ struct MeetingSearchField: View {
         HStack(spacing: 6) {
             HStack(spacing: 4) {
                 Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
-                TextField("会議を検索", text: $model.query)
+                TextField(tr("会議を検索"), text: $model.query)
                     .textFieldStyle(.plain)
                     .focused($focused)
                     .onExitCommand { model.query = "" }
@@ -125,7 +125,7 @@ struct MeetingSearchField: View {
                         Image(systemName: "xmark.circle.fill").foregroundStyle(.secondary)
                     }
                     .buttonStyle(.plain)
-                    .help("検索をやめる")
+                    .help(tr("検索をやめる"))
                 }
             }
             .padding(.horizontal, 7)
@@ -134,7 +134,7 @@ struct MeetingSearchField: View {
             Button(action: onAsk) {
                 Image(systemName: "sparkles")
             }
-            .help("過去の会議について AI に質問する")
+            .help(tr("過去の会議について AI に質問する"))
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
@@ -161,7 +161,7 @@ struct MeetingSearchResultsList: View {
     var body: some View {
         List {
             if model.results.isEmpty {
-                Text(model.searching ? "検索しています…" : "見つかりませんでした")
+                Text(model.searching ? tr("検索しています…") : tr("見つかりませんでした"))
                     .foregroundStyle(.secondary)
             } else {
                 Text(summary).font(.caption).foregroundStyle(.secondary)
@@ -177,13 +177,13 @@ struct MeetingSearchResultsList: View {
                         .listRowBackground(selectedHitID == hit.id ? Color.accentColor.opacity(0.18) : Color.clear)
                     }
                     if result.totalHits > result.hits.count {
-                        Text("ほか \(result.totalHits - result.hits.count) 件").font(.caption).foregroundStyle(.secondary)
+                        Text(tr("ほか %@ 件", "\(result.totalHits - result.hits.count)")).font(.caption).foregroundStyle(.secondary)
                     }
                 } header: {
                     Button { onOpen(result.meetingID, nil) } label: {
                         VStack(alignment: .leading, spacing: 1) {
                             Text(result.title).font(.callout.bold()).foregroundStyle(.primary).lineLimit(1)
-                            Text("\(Meeting.dateFormatter.string(from: result.startedAt))・\(result.totalHits) 件")
+                            Text(tr("%@・%@ 件", "\(Meeting.dateFormatter.string(from: result.startedAt))", "\(result.totalHits)"))
                                 .font(.caption).foregroundStyle(.secondary)
                         }
                         .contentShape(Rectangle())
@@ -195,7 +195,7 @@ struct MeetingSearchResultsList: View {
     }
 
     private var summary: String {
-        "\(model.results.count) 件の会議・\(model.results.reduce(0) { $0 + $1.totalHits }) か所"
+        tr("%@ 件の会議・%@ か所", "\(model.results.count)", "\(model.results.reduce(0) { $0 + $1.totalHits })")
     }
 }
 
@@ -208,9 +208,9 @@ private struct MeetingSearchHitRow: View {
             HStack(spacing: 4) {
                 switch hit.location {
                 case .title:
-                    Label("タイトル", systemImage: "textformat")
+                    Label(tr("タイトル"), systemImage: "textformat")
                 case .minutes:
-                    Label("議事録", systemImage: "doc.text")
+                    Label(tr("議事録"), systemImage: "doc.text")
                 case .transcript(_, let start, let speaker):
                     Label("\(Meeting.clock(start)) \(speaker)", systemImage: "text.bubble")
                 }
@@ -256,14 +256,14 @@ struct MeetingAskView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 8) {
-                Label("会議に質問", systemImage: "sparkles").font(.title2.bold())
-                Text("検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を AI（「AI」タブで会議に選んだ Gemini か Claude）に渡して答えさせます。会議の内容はその AI にだけ送ります。")
+                Label(tr("会議に質問"), systemImage: "sparkles").font(.title2.bold())
+                Text(tr("検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を AI（「AI」タブで会議に選んだ Gemini か Claude）に渡して答えさせます。会議の内容はその AI にだけ送ります。"))
                     .font(.caption).foregroundStyle(.secondary)
                 HStack {
-                    TextField("例: 先週の定例で何が決まった？", text: $model.question)
+                    TextField(tr("例: 先週の定例で何が決まった？"), text: $model.question)
                         .textFieldStyle(.roundedBorder)
                         .onSubmit { model.ask(meetings: meetings, index: index) }
-                    Button("質問") { model.ask(meetings: meetings, index: index) }
+                    Button(tr("質問")) { model.ask(meetings: meetings, index: index) }
                         .keyboardShortcut(.defaultAction)
                         .disabled(model.running || model.question.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
@@ -273,7 +273,7 @@ struct MeetingAskView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
                     if model.running {
-                        ProgressView("会議の記録を集めて答えを作っています…").controlSize(.small)
+                        ProgressView(tr("会議の記録を集めて答えを作っています…")).controlSize(.small)
                     }
                     if let error = model.error {
                         Text(error).foregroundStyle(.orange)
@@ -284,7 +284,7 @@ struct MeetingAskView: View {
                             .textSelection(.enabled)
                         sources(answer)
                     } else if !model.running, model.error == nil {
-                        Text("会議の記録から答えます。「先週」「昨日」「11月2日」のように期間を書くと、その期間の会議に絞ります。")
+                        Text(tr("会議の記録から答えます。「先週」「昨日」「11月2日」のように期間を書くと、その期間の会議に絞ります。"))
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -298,21 +298,21 @@ struct MeetingAskView: View {
         if !answer.sources.isEmpty {
             Divider()
             VStack(alignment: .leading, spacing: 6) {
-                Text("渡した会議（\(answer.sources.count) 件）").font(.caption.bold()).foregroundStyle(.secondary)
+                Text(tr("渡した会議（%@ 件）", "\(answer.sources.count)")).font(.caption.bold()).foregroundStyle(.secondary)
                 ForEach(answer.sources) { source in
                     Button { onOpen(source.meetingID) } label: {
                         HStack(spacing: 6) {
                             Image(systemName: answer.cited.contains(source) ? "quote.bubble.fill" : "doc.text")
                                 .foregroundStyle(answer.cited.contains(source) ? Color.accentColor : .secondary)
                             Text(source.label)
-                            if answer.cited.contains(source) { Text("引用").font(.caption).foregroundStyle(Color.accentColor) }
-                            if !source.matched { Text("直近").font(.caption).foregroundStyle(.secondary) }
+                            if answer.cited.contains(source) { Text(tr("引用")).font(.caption).foregroundStyle(Color.accentColor) }
+                            if !source.matched { Text(tr("直近")).font(.caption).foregroundStyle(.secondary) }
                         }
                     }
                     .buttonStyle(.link)
                 }
                 if !answer.keywords.isEmpty {
-                    Text("検索した語: \(answer.keywords.joined(separator: "、"))").font(.caption).foregroundStyle(.secondary)
+                    Text(tr("検索した語: %@", "\(answer.keywords.joined(separator: "、"))")).font(.caption).foregroundStyle(.secondary)
                 }
             }
         }

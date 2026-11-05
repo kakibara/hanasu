@@ -8,8 +8,8 @@ enum SystemAudioTapError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .coreAudio(let call, let status): "システム音声を取得できませんでした（\(call): \(status)）"
-        case .unsupportedFormat: "システム音声の形式を読み取れませんでした"
+        case .coreAudio(let call, let status): tr("システム音声を取得できませんでした（%@: %@）", "\(call)", "\(status)")
+        case .unsupportedFormat: tr("システム音声の形式を読み取れませんでした")
         }
     }
 }

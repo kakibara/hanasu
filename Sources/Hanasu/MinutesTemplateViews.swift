@@ -12,23 +12,23 @@ struct MinutesTemplatePicker: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Label("議事録の型", systemImage: "doc.text")
+            Label(tr("議事録の型"), systemImage: "doc.text")
                 .font(.caption)
                 .foregroundStyle(.secondary)
             HStack(spacing: 6) {
-                Picker("議事録の型", selection: $templateID) {
+                Picker(tr("議事録の型"), selection: $templateID) {
                     ForEach(MinutesTemplate.allCases) { Text($0.title).tag($0.rawValue) }
                 }
                 .labelsHidden()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 if template == .custom {
-                    Button("指示…") { editing = true }
+                    Button(tr("指示…")) { editing = true }
                 }
             }
             .help(template.summary)
         }
         .sheet(isPresented: $editing) {
-            CustomMinutesPromptSheet(prompt: customPrompt, actionLabel: "保存") { customPrompt = $0 }
+            CustomMinutesPromptSheet(prompt: customPrompt, actionLabel: tr("保存")) { customPrompt = $0 }
         }
     }
 }
@@ -44,36 +44,36 @@ struct MinutesTemplateMenu: View {
 
     var body: some View {
         Menu {
-            Section("この型で議事録を作り直す") {
+            Section(tr("この型で議事録を作り直す")) {
                 ForEach(MinutesTemplate.allCases) { template in
                     Button {
                         if template == .custom { editingCustom = true } else { pending = template }
                     } label: {
-                        Label(template == meeting.template ? "\(template.title)（今の型）" : template.title,
+                        Label(template == meeting.template ? tr("%@（今の型）", "\(template.title)") : template.title,
                               systemImage: template.systemImage)
                     }
                 }
             }
         } label: {
-            Label("型: \(meeting.template.title)", systemImage: meeting.template.systemImage)
+            Label(tr("型: %@", "\(meeting.template.title)"), systemImage: meeting.template.systemImage)
         }
         .fixedSize()
         .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
-        .help("議事録の型を選び直して、議事録を作り直します")
+        .help(tr("議事録の型を選び直して、議事録を作り直します"))
         .confirmationDialog(
-            "議事録を「\(pending?.title ?? "")」の型で作り直しますか？",
+            tr("議事録を「%@」の型で作り直しますか？", "\(pending?.title ?? "")"),
             isPresented: Binding(get: { pending != nil }, set: { if !$0 { pending = nil } })
         ) {
-            Button("作り直す") {
+            Button(tr("作り直す")) {
                 if let template = pending { Task { await recorder.regenerateMinutes(meeting, template: template) } }
                 pending = nil
             }
-            Button("キャンセル", role: .cancel) { pending = nil }
+            Button(tr("キャンセル"), role: .cancel) { pending = nil }
         } message: {
-            Text("今の議事録とアクションアイテムは置き換わります。")
+            Text(tr("今の議事録とアクションアイテムは置き換わります。"))
         }
         .sheet(isPresented: $editingCustom) {
-            CustomMinutesPromptSheet(prompt: meeting.customMinutesPrompt ?? customPrompt, actionLabel: "作り直す") { prompt in
+            CustomMinutesPromptSheet(prompt: meeting.customMinutesPrompt ?? customPrompt, actionLabel: tr("作り直す")) { prompt in
                 customPrompt = prompt
                 Task { await recorder.regenerateMinutes(meeting, template: .custom, customPrompt: prompt) }
             }
@@ -90,8 +90,8 @@ struct CustomMinutesPromptSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("カスタムの議事録の型").font(.headline)
-            Text("見出しの構成や書き方を自由に書いてください（例: 「## 顧客の要望」「## 宿題」の見出しで、箇条書きで短く）。アクションアイテム（担当・内容・期限）と話者のメモは、自動で最後に付きます。")
+            Text(tr("カスタムの議事録の型")).font(.headline)
+            Text(tr("見出しの構成や書き方を自由に書いてください（例: 「## 顧客の要望」「## 宿題」の見出しで、箇条書きで短く）。アクションアイテム（担当・内容・期限）と話者のメモは、自動で最後に付きます。"))
                 .font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             TextEditor(text: $prompt)
@@ -99,9 +99,9 @@ struct CustomMinutesPromptSheet: View {
                 .frame(minHeight: 180)
                 .overlay(RoundedRectangle(cornerRadius: 4).stroke(.quaternary))
             HStack {
-                Button("例に戻す") { prompt = MinutesTemplateStore.defaultCustomPrompt }
+                Button(tr("例に戻す")) { prompt = MinutesTemplateStore.defaultCustomPrompt }
                 Spacer()
-                Button("キャンセル") { dismiss() }
+                Button(tr("キャンセル")) { dismiss() }
                 Button(actionLabel) {
                     onSave(prompt)
                     dismiss()
@@ -127,28 +127,28 @@ struct MeetingExportMenu: View {
     @State private var showingReminders = false
 
     private var markdown: String { showingTranscript ? meeting.transcriptMarkdown() : (meeting.minutes ?? "") }
-    private var kind: String { showingTranscript ? "文字起こし" : "議事録" }
+    private var kind: String { showingTranscript ? tr("文字起こし") : tr("議事録") }
 
     var body: some View {
         Menu {
             Section(kind) {
-                Button("Markdown でコピー") { copy(markdown, note: "コピーしました") }
+                Button(tr("Markdown でコピー")) { copy(markdown, note: tr("コピーしました")) }
                     .disabled(markdown.isEmpty)
-                Button("Markdown ファイルとして保存…") { save(.markdown) }
+                Button(tr("Markdown ファイルとして保存…")) { save(.markdown) }
                     .disabled(markdown.isEmpty)
-                Button("テキストファイルとして保存…") { save(.text) }
+                Button(tr("テキストファイルとして保存…")) { save(.text) }
                     .disabled(markdown.isEmpty)
             }
-            Section("議事録の共有") {
-                Button("Slack 向けにコピー") {
-                    if let text = MeetingExport.slack(meeting) { copy(text, note: "Slack 向けにコピーしました") }
+            Section(tr("議事録の共有")) {
+                Button(tr("Slack 向けにコピー")) {
+                    if let text = MeetingExport.slack(meeting) { copy(text, note: tr("Slack 向けにコピーしました")) }
                 }
                 .disabled(meeting.minutes == nil)
-                Button("アクションアイテムをリマインダーに登録…") { showingReminders = true }
+                Button(tr("アクションアイテムをリマインダーに登録…")) { showingReminders = true }
                     .disabled(meeting.resolvedActionItems.isEmpty)
             }
         } label: {
-            Label(copied ?? "書き出し", systemImage: copied == nil ? "square.and.arrow.up" : "checkmark")
+            Label(copied ?? tr("書き出し"), systemImage: copied == nil ? "square.and.arrow.up" : "checkmark")
         }
         .fixedSize()
         .sheet(isPresented: $showingReminders) {

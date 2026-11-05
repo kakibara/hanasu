@@ -16,7 +16,7 @@ enum TextAIProvider: String, CaseIterable, Identifiable {
         switch self {
         case .gemini: "Gemini（Google）"
         case .claude: "Claude（Anthropic）"
-        case .local: "ローカル（この Mac の中）"
+        case .local: tr("ローカル（この Mac の中）")
         case .appleFM: "Apple（Foundation Models）"
         }
     }
@@ -24,7 +24,7 @@ enum TextAIProvider: String, CaseIterable, Identifiable {
         switch self {
         case .gemini: "Gemini"
         case .claude: "Claude"
-        case .local: "ローカル"
+        case .local: tr("ローカル")
         case .appleFM: "Apple"
         }
     }
@@ -42,8 +42,8 @@ enum TextAIPurpose: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .dictation: "音声入力"
-        case .meeting: "会議"
+        case .dictation: tr("音声入力")
+        case .meeting: tr("会議")
         }
     }
 }
@@ -53,10 +53,10 @@ enum TextAIError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .missingCredentials(.gemini): "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません（設定 →「AI」）"
-        case .missingCredentials(.claude): "Claude の API キーが設定されていません（設定 →「AI」）"
-        case .missingCredentials(.local): "ローカルの LLM のモデルがまだダウンロードされていません（設定 →「AI」でダウンロードしてください）"
-        case .missingCredentials(.appleFM): AppleFMAvailability.check().reason ?? "Apple の Foundation Models（fm）を使えません"
+        case .missingCredentials(.gemini): tr("Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません（設定 →「AI」）")
+        case .missingCredentials(.claude): tr("Claude の API キーが設定されていません（設定 →「AI」）")
+        case .missingCredentials(.local): tr("ローカルの LLM のモデルがまだダウンロードされていません（設定 →「AI」でダウンロードしてください）")
+        case .missingCredentials(.appleFM): AppleFMAvailability.check().reason ?? tr("Apple の Foundation Models（fm）を使えません")
         }
     }
 }

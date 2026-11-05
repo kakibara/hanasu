@@ -23,9 +23,9 @@ enum AppleFMAvailability: Equatable {
     var reason: String? {
         switch self {
         case .available: nil
-        case .unsupportedOS(let version): "Apple の Foundation Models の CLI（fm）は macOS 27 以降で使えます（この Mac は macOS \(version)）"
-        case .notFound: "Apple の Foundation Models の CLI（\(Self.systemPath)）が見つかりません"
-        case .untrustedSignature(let path): "\(path) が Apple の署名ではないため、使いません"
+        case .unsupportedOS(let version): tr("Apple の Foundation Models の CLI（fm）は macOS 27 以降で使えます（この Mac は macOS %@）", "\(version)")
+        case .notFound: tr("Apple の Foundation Models の CLI（%@）が見つかりません", "\(Self.systemPath)")
+        case .untrustedSignature(let path): tr("%@ が Apple の署名ではないため、使いません", "\(path)")
         }
     }
 
@@ -65,9 +65,9 @@ enum AppleFMError: LocalizedError {
         case .unavailable(let reason): reason
         case .failed(let status, let message):
             Self.licenseHint(message)
-                ?? "Apple の Foundation Models（fm）がエラーで終わりました（終了コード \(status)）" + (message.isEmpty ? "" : "\n" + message)
-        case .timedOut(let seconds): "Apple の Foundation Models（fm）が \(Int(seconds)) 秒以内に応答しませんでした"
-        case .emptyResponse: "Apple の Foundation Models（fm）から結果が返りませんでした"
+                ?? tr("Apple の Foundation Models（fm）がエラーで終わりました（終了コード %@）", "\(status)") + (message.isEmpty ? "" : "\n" + message)
+        case .timedOut(let seconds): tr("Apple の Foundation Models（fm）が %@ 秒以内に応答しませんでした", "\(Int(seconds))")
+        case .emptyResponse: tr("Apple の Foundation Models（fm）から結果が返りませんでした")
         }
     }
 
@@ -75,7 +75,7 @@ enum AppleFMError: LocalizedError {
     private static func licenseHint(_ message: String) -> String? {
         let lower = message.lowercased()
         guard lower.contains("license") || lower.contains("terms") else { return nil }
-        return "Apple の Foundation Models（fm）の利用条件にまだ同意していないようです。ターミナルで sudo fm license を実行してから、もう一度試してください\n" + message
+        return tr("Apple の Foundation Models（fm）の利用条件にまだ同意していないようです。ターミナルで sudo fm license を実行してから、もう一度試してください\n") + message
     }
 }
 

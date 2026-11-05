@@ -45,7 +45,7 @@ final class EditModeController {
             self?.hud.updateTranscript(text)
         }
         recognizer.onAssetDownloadProgress = { [weak self] fraction in
-            self?.hud.show(.preparing("日本語の音声モデルをダウンロード中… \(Int(fraction * 100))%"))
+            self?.hud.show(.preparing(tr("日本語の音声モデルをダウンロード中… %@%%", "\(Int(fraction * 100))")))
         }
         recognizer.onLevel = { [weak self] level in
             self?.hud.model.level = level
@@ -68,9 +68,9 @@ final class EditModeController {
     /// メニューバーに出す文言
     var menuTitle: String {
         switch state {
-        case .idle: "選択を声で編集"
-        case .preparing, .recording: "編集の指示を止めて書き換え"
-        case .processing: "書き換え中…"
+        case .idle: tr("選択を声で編集")
+        case .preparing, .recording: tr("編集の指示を止めて書き換え")
+        case .processing: tr("書き換え中…")
         }
     }
 
@@ -133,7 +133,7 @@ final class EditModeController {
         do {
             try recognizer.switchInput(to: uid)
         } catch {
-            abort("マイクを切り替えられませんでした: \(error.localizedDescription)")
+            abort(tr("マイクを切り替えられませんでした: %@", "\(error.localizedDescription)"))
         }
     }
 
@@ -164,7 +164,7 @@ final class EditModeController {
         PasteFallbackPanel.shared.close()
         // 選択の読み取り（アクセシビリティ API・⌘C）にも貼り付け（⌘V）にも要る
         guard Permissions.isAccessibilityTrusted(prompt: false) else {
-            fail("選択を声で編集するには、アクセシビリティの許可が必要です（選択した文章の読み取りと貼り付けに使います）。")
+            fail(tr("選択を声で編集するには、アクセシビリティの許可が必要です（選択した文章の読み取りと貼り付けに使います）。"))
             _ = Permissions.isAccessibilityTrusted(prompt: true)
             return
         }
@@ -172,7 +172,7 @@ final class EditModeController {
             // キーそのものは持たない（Claude は送るときにキーチェーンから読む）
             guard let client = try TextAIClient.fromSettings(settings, for: .dictation, timeout: 60) else {
                 let provider = settings.aiProvider(for: .dictation)
-                fail("\(provider.name) の認証情報が未設定のため、選択を声で編集できません（メニュー → 設定 →「AI」）。")
+                fail(tr("%@ の認証情報が未設定のため、選択を声で編集できません（メニュー → 設定 →「AI」）。", "\(provider.name)"))
                 return
             }
             self.client = client
@@ -187,10 +187,10 @@ final class EditModeController {
         stopRequested = false
         cancelRequested = false
         pendingFailure = nil
-        hud.model.editBadge = "選択を読み取り中…"
+        hud.model.editBadge = tr("選択を読み取り中…")
         // Whisper / Gemini は録音を止めてからまとめて文字起こしするので、HUD の出しかたを変える
         hud.model.batchEngine = settings.dictationEngine.isLive ? nil : settings.dictationEngine
-        hud.show(.preparing("準備中…"))
+        hud.show(.preparing(tr("準備中…")))
         setEscapeHotKey(enabled: true)
 
         // 選択の読み取りは録音と並行して進める。⌘C で写し取るときは、ショートカットの修飾キーが離されるまで待つため
@@ -241,16 +241,16 @@ final class EditModeController {
             abort(error)
             return
         }
-        hud.model.editBadge = "選択 \(text?.count ?? 0) 文字"
+        hud.model.editBadge = tr("選択 %@ 文字", "\(text?.count ?? 0)")
     }
 
     // 設計判断: DEC-DIC-032
     static func selectionError(_ text: String?) -> String? {
         guard let text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return "文章が選択されていません。書き換えたい文章を選択してから、もう一度押してください。"
+            return tr("文章が選択されていません。書き換えたい文章を選択してから、もう一度押してください。")
         }
         if text.count > EditModeSettings.maxSelectionLength {
-            return "選択が長すぎます（\(text.count) 文字）。\(EditModeSettings.maxSelectionLength) 文字以内にしてください。"
+            return tr("選択が長すぎます（%@ 文字）。%@ 文字以内にしてください。", "\(text.count)", "\(EditModeSettings.maxSelectionLength)")
         }
         return nil
     }
@@ -289,7 +289,7 @@ final class EditModeController {
 
     private func finishCancelled() {
         endSession()
-        hud.show(.done("取り消しました"))
+        hud.show(.done(tr("取り消しました")))
     }
 
     private func fail(_ message: String) {
@@ -326,12 +326,12 @@ final class EditModeController {
             return
         }
         guard let selection, let client else {
-            fail("AI の認証情報を読み込めませんでした。")
+            fail(tr("AI の認証情報を読み込めませんでした。"))
             return
         }
-        hud.model.editBadge = "選択 \(selection.count) 文字"
+        hud.model.editBadge = tr("選択 %@ 文字", "\(selection.count)")
         guard !instruction.isEmpty else {
-            fail(recognizer.lastError.map { "\($0)。選択した文章はそのままです。" } ?? "指示が聞き取れませんでした。選択した文章はそのままです。")
+            fail(recognizer.lastError.map { tr("%@。選択した文章はそのままです。", "\($0)") } ?? tr("指示が聞き取れませんでした。選択した文章はそのままです。"))
             return
         }
 
@@ -347,7 +347,7 @@ final class EditModeController {
             appLog.notice("edit: rewritten by \(self.settings.textModel(for: .dictation), privacy: .public): \(selection.count) → \(output.count) chars")
         } catch {
             appLog.error("edit failed: \(error.localizedDescription, privacy: .public)")
-            fail("\(error.localizedDescription)\n選択した文章はそのままです。")
+            fail(tr("%@\n選択した文章はそのままです。", "\(error.localizedDescription)"))
             return
         }
 
@@ -356,21 +356,21 @@ final class EditModeController {
         endSession()
         switch outcome {
         case .copiedOnly:
-            hud.show(.error("アクセシビリティが許可されていないため、書き換えた文章をクリップボードにコピーしました。⌘V で貼り付けてください。"))
+            hud.show(.error(tr("アクセシビリティが許可されていないため、書き換えた文章をクリップボードにコピーしました。⌘V で貼り付けてください。")))
         case .notPasted(let clipboardKept):
             // 編集の結果は履歴に残らない（DEC-DIC-036）ので、ここで失わないよう全文を残す
             hud.hide()
             PasteFallbackPanel.shared.show(text: output, subject: .edit, clipboardKept: clipboardKept)
         case .unconfirmed(let clipboardKept):
             if clipboardKept {
-                hud.show(.error(TextInserter.unconfirmedMessage(clipboardKept: true, subject: "書き換えた文章")))
+                hud.show(.error(TextInserter.unconfirmedMessage(clipboardKept: true, subject: tr("書き換えた文章"))))
             } else {
                 // 編集の結果は履歴に残らない（DEC-DIC-036）ので、クリップボードにも残せなかったときは全文を残す
                 hud.hide()
                 PasteFallbackPanel.shared.show(text: output, subject: .edit, clipboardKept: false)
             }
         case .pasted:
-            hud.show(.done("書き換えました（⌘Z で元に戻せます）"))
+            hud.show(.done(tr("書き換えました（⌘Z で元に戻せます）")))
         }
     }
 

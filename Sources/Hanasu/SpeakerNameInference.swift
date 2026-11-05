@@ -9,7 +9,7 @@ enum SpeakerNameInference {
     static let openTag = "<speaker_names>"
     static let closeTag = "</speaker_names>"
     /// 名前の末尾から外す敬称（長いものから見る）
-    static let honorifics = ["ちゃん", "さん", "さま", "くん", "様", "君", "氏"]
+    static let honorifics = ["ちゃん", "さん", "さま", "くん", "様", "君", "氏"]  // skip-tr（言語の決まりに使う語。FUT-014）
     static let maxLength = 20
 
     /// 応答から <speaker_names> を取り出して本文から消す。表示ラベル（「話者1」など）→ 名前。読めなければ空
@@ -53,7 +53,7 @@ enum SpeakerNameInference {
     /// ラベルはプロンプトの言語で書くので、すべての言語のラベルを名前ではないものとして扱う
     static func isPlaceholder(_ name: String) -> Bool {
         let lowered = name.lowercased()
-        if ["自分", "相手", "不明", "なし", "null", "unknown"].contains(lowered) { return true }
+        if ["自分", "相手", "不明", "なし", "null", "unknown"].contains(lowered) { return true }  // skip-tr（言語の決まりに使う語。FUT-014）
         if (Prompts.allTexts("speaker.me") + Prompts.allTexts("speaker.others") + Prompts.allTexts("minutes.result.none"))
             .contains(where: { $0.lowercased() == lowered }) { return true }
         if name.range(of: #"^(話者|同席者)[0-9０-９]+$"#, options: .regularExpression) != nil { return true }

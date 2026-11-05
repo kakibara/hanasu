@@ -46,11 +46,11 @@ struct DictionaryEditorSection: View {
             }
         } header: {
             HStack {
-                Text("ユーザー辞書")
+                Text(tr("ユーザー辞書"))
                 Spacer()
-                Picker("編集のしかた", selection: $editsAsText) {
-                    Text("表").tag(false)
-                    Text("テキスト").tag(true)
+                Picker(tr("編集のしかた"), selection: $editsAsText) {
+                    Text(tr("表")).tag(false)
+                    Text(tr("テキスト")).tag(true)
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
@@ -58,8 +58,8 @@ struct DictionaryEditorSection: View {
             }
         } footer: {
             VStack(alignment: .leading, spacing: 4) {
-                Text("「読み・誤認識」を書くと、文字起こしの結果のその部分を「正しい表記」に置き換えます（AI で整形しないときも効きます）。空にすると語だけを登録し、音声認識と AI のヒントにします。")
-                Text("英字の大文字小文字・全角半角・空白の有無は区別しません。英字やカタカナの語の途中では置き換えません（例: 「マーク」は「マークダウン」の中では置き換えない）。テキストでは「ストックマーク => Stockmark」のように書き、読みは「,」で区切って複数書けます。")
+                Text(tr("「読み・誤認識」を書くと、文字起こしの結果のその部分を「正しい表記」に置き換えます（AI で整形しないときも効きます）。空にすると語だけを登録し、音声認識と AI のヒントにします。"))
+                Text(tr("英字の大文字小文字・全角半角・空白の有無は区別しません。英字やカタカナの語の途中では置き換えません（例: 「マーク」は「マークダウン」の中では置き換えない）。テキストでは「ストックマーク => Stockmark」のように書き、読みは「,」で区切って複数書けます。"))
             }
             .font(.caption).foregroundStyle(.secondary)
         }
@@ -78,18 +78,18 @@ struct DictionaryEditorSection: View {
     private var table: some View {
         let issues = UserDictionary(text: rows.map(\.line).joined(separator: "\n")).issues
         HStack {
-            Text("読み・誤認識（空なら語だけ）").frame(maxWidth: .infinity, alignment: .leading)
-            Text("正しい表記").frame(maxWidth: .infinity, alignment: .leading)
+            Text(tr("読み・誤認識（空なら語だけ）")).frame(maxWidth: .infinity, alignment: .leading)
+            Text(tr("正しい表記")).frame(maxWidth: .infinity, alignment: .leading)
             Color.clear.frame(width: 44, height: 1)
         }
         .font(.caption).foregroundStyle(.secondary)
         ForEach($rows) { $row in
             if row.other == nil {
                 HStack(spacing: 6) {
-                    TextField("読み・誤認識", text: $row.reading, prompt: Text("（語だけ）"))
+                    TextField(tr("読み・誤認識"), text: $row.reading, prompt: Text(tr("（語だけ）")))
                         .labelsHidden()
                     Image(systemName: "arrow.right").foregroundStyle(.tertiary)
-                    TextField("正しい表記", text: $row.spelling, prompt: Text("正しい表記"))
+                    TextField(tr("正しい表記"), text: $row.spelling, prompt: Text(tr("正しい表記")))
                         .labelsHidden()
                     Group {
                         if let index = rows.firstIndex(where: { $0.id == row.id }), let issue = issues[index] {
@@ -107,12 +107,12 @@ struct DictionaryEditorSection: View {
                         Image(systemName: "minus.circle")
                     }
                     .buttonStyle(.borderless)
-                    .help("この行を削除")
+                    .help(tr("この行を削除"))
                 }
             }
         }
         if rows.allSatisfy({ $0.other != nil }) {
-            Text("まだ登録がありません。「行を追加」か、下の「候補を探す」から追加できます。")
+            Text(tr("まだ登録がありません。「行を追加」か、下の「候補を探す」から追加できます。"))
                 .font(.callout).foregroundStyle(.secondary)
         }
         Button {
@@ -122,7 +122,7 @@ struct DictionaryEditorSection: View {
             }
             rows.append(Row())
         } label: {
-            Label("行を追加", systemImage: "plus")
+            Label(tr("行を追加"), systemImage: "plus")
         }
         .buttonStyle(.borderless)
     }
@@ -163,15 +163,15 @@ struct DictionarySuggestionSection: View {
 
     var body: some View {
         Section {
-            Toggle("音声入力の結果（今回の起動後の \(RecentDictations.entries.count) 件）", isOn: $includeDictations)
-            Toggle("会議の文字起こしと議事録（新しい順に \(meetingCount) 件）", isOn: $includeMeetings)
+            Toggle(tr("音声入力の結果（今回の起動後の %@ 件）", "\(RecentDictations.entries.count)"), isOn: $includeDictations)
+            Toggle(tr("会議の文字起こしと議事録（新しい順に %@ 件）", "\(meetingCount)"), isOn: $includeMeetings)
             HStack {
-                Button(isSearching ? "探しています…" : "候補を探す", action: search)
+                Button(isSearching ? tr("探しています…") : tr("候補を探す"), action: search)
                     .disabled(isSearching || (!includeDictations && !includeMeetings))
                 if isSearching { ProgressView().controlSize(.small) }
                 Spacer()
                 if !candidates.isEmpty {
-                    Button("選んだ \(selected.count) 件を辞書に追加", action: addSelected)
+                    Button(tr("選んだ %@ 件を辞書に追加", "\(selected.count)"), action: addSelected)
                         .disabled(selected.isEmpty)
                 }
             }
@@ -188,9 +188,9 @@ struct DictionarySuggestionSection: View {
                 .toggleStyle(.checkbox)
             }
         } header: {
-            Text("辞書の候補を探す")
+            Text(tr("辞書の候補を探す"))
         } footer: {
-            Text("固有名詞や誤認識しやすい語を AI が挙げます。選んだものだけを辞書に追加し、自動では追加しません。会議の中身を送る外部の送り先は、「AI」タブで会議に選んだ AI（Gemini か Claude）だけです。音声入力の結果はメモリ上だけにあり、アプリを終了すると消えます。")
+            Text(tr("固有名詞や誤認識しやすい語を AI が挙げます。選んだものだけを辞書に追加し、自動では追加しません。会議の中身を送る外部の送り先は、「AI」タブで会議に選んだ AI（Gemini か Claude）だけです。音声入力の結果はメモリ上だけにあり、アプリを終了すると消えます。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
         .onAppear { meetingCount = DictionarySuggester.recentMeetings().count }
@@ -206,7 +206,7 @@ struct DictionarySuggestionSection: View {
         let corpus = DictionarySuggester.corpus(includeDictations: includeDictations, includeMeetings: includeMeetings)
         meetingCount = DictionarySuggester.recentMeetings().count
         guard !corpus.isEmpty else {
-            message = "材料がありません。音声入力をするか、会議を記録してからもう一度試してください。"
+            message = tr("材料がありません。音声入力をするか、会議を記録してからもう一度試してください。")
             return
         }
         isSearching = true
@@ -222,7 +222,7 @@ struct DictionarySuggestionSection: View {
                 let found = try await DictionarySuggester.suggest(
                     corpus: corpus, existing: existing, client: client, model: model)
                 candidates = found
-                message = found.isEmpty ? "新しい候補は見つかりませんでした。" : "追加したいものを選んでください（\(model)）。"
+                message = found.isEmpty ? tr("新しい候補は見つかりませんでした。") : tr("追加したいものを選んでください（%@）。", "\(model)")
             } catch {
                 message = "⚠️ " + error.localizedDescription
             }
@@ -235,6 +235,6 @@ struct DictionarySuggestionSection: View {
         settings.dictionaryText = DictionarySuggester.appending(chosen, to: settings.dictionaryText)
         candidates.removeAll { selected.contains($0.id) }
         selected = []
-        message = "\(chosen.count) 件を辞書に追加しました。"
+        message = tr("%@ 件を辞書に追加しました。", "\(chosen.count)")
     }
 }

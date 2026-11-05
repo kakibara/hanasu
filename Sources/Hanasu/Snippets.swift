@@ -74,15 +74,15 @@ final class SnippetStore: ObservableObject {
 
     /// CLI と画面の描き出しで使う例（架空の内容）
     static let samples: [Snippet] = [
-        Snippet(trigger: "メールの署名、署名", body: """
+        Snippet(trigger: tr("メールの署名、署名"), body: tr("""
             --
             山田 太郎
             株式会社サンプル 開発部
             taro.yamada@example.com
-            """),
-        Snippet(trigger: "自己紹介", body: "はじめまして、株式会社サンプルの山田です。社内向けの業務アプリの開発を担当しています。"),
-        Snippet(trigger: "住所", body: "〒100-0000 東京都千代田区サンプル町1-2-3 サンプルビル5階"),
-        Snippet(trigger: "会議URL、会議のリンク", body: "https://meet.example.com/abc-defg-hij"),
+            """)),
+        Snippet(trigger: tr("自己紹介"), body: tr("はじめまして、株式会社サンプルの山田です。社内向けの業務アプリの開発を担当しています。")),
+        Snippet(trigger: tr("住所"), body: tr("〒100-0000 東京都千代田区サンプル町1-2-3 サンプルビル5階")),
+        Snippet(trigger: tr("会議URL、会議のリンク"), body: "https://meet.example.com/abc-defg-hij"),
     ]
 }
 
@@ -107,7 +107,7 @@ struct SnippetMatch {
     // 設計判断: DEC-DIC-052
     /// HUD の表示。例: 「スニペット『メールの署名』を入力しました」
     var hudMessage: String {
-        "スニペット" + snippets.map { "『\($0.displayName)』" }.joined() + "を入力しました"
+        tr("スニペット%@を入力しました", snippets.map { tr("『%@』", $0.displayName) }.joined())
     }
 
     /// 文の部分をそのまま使ってつないだもの（整形しないとき・Gemini が失敗したとき）
@@ -172,10 +172,10 @@ struct SnippetMatch {
 /// 文字起こしと起動フレーズを照合する。
 enum SnippetMatcher {
     /// 文頭のフィラー（正規化した形）。長いものから順に試す
-    static let leadingFillers = ["えーと", "ええと", "えっと", "あのー", "うーん", "えー", "んー"]
+    static let leadingFillers = ["えーと", "ええと", "えっと", "あのー", "うーん", "えー", "んー"]  // skip-tr（言語の決まりに使う語。FUT-014）
     /// 文末の言い回し（正規化した形）。長いものから順に試す。
     /// 「〜をお願いします」「〜を入力して」は相手に頼む文（「自己紹介をお願いします」）と区別できないので含めない
-    static let trailingSuffixes = ["ですね", "ですよ", "でした", "です"]
+    static let trailingSuffixes = ["ですね", "ですよ", "でした", "です"]  // skip-tr（言語の決まりに使う語。FUT-014）
 
     private static let removedCharacters = CharacterSet.whitespacesAndNewlines
         .union(.punctuationCharacters)

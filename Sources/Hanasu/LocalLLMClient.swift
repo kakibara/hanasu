@@ -10,10 +10,10 @@ enum LocalLLMError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .http(let status, let message):
-            "ローカルの LLM がエラーを返しました（\(status)）" + (message.isEmpty ? "" : ": \(message)")
-        case .truncated: "ローカルの LLM の応答が長さの上限で切れたため、使いませんでした"
-        case .emptyResponse: "ローカルの LLM から結果が返りませんでした"
-        case .invalidResponse: "ローカルの LLM の応答を読み取れませんでした"
+            tr("ローカルの LLM がエラーを返しました（%@）", "\(status)") + (message.isEmpty ? "" : ": \(message)")
+        case .truncated: tr("ローカルの LLM の応答が長さの上限で切れたため、使いませんでした")
+        case .emptyResponse: tr("ローカルの LLM から結果が返りませんでした")
+        case .invalidResponse: tr("ローカルの LLM の応答を読み取れませんでした")
         }
     }
 }

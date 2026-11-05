@@ -164,7 +164,7 @@ enum MeetingAsk {
                     model: String, options: Options = Options()) async throws -> Answer {
         let context = await gatherContext(question: question, meetings: meetings, index: index, options: options)
         guard !context.sources.isEmpty else {
-            return Answer(text: "質問に使える会議の記録がありません。", sources: [], cited: [], keywords: context.keywords)
+            return Answer(text: tr("質問に使える会議の記録がありません。"), sources: [], cited: [], keywords: context.keywords)
         }
         let text = try await client.generate(systemInstruction: instruction, userText: context.prompt, model: model, effort: .medium)
         return Answer(text: text, sources: context.sources, cited: cited(in: text, sources: context.sources),
@@ -188,9 +188,9 @@ enum MeetingAsk {
 
     /// 検索に使わない語（質問の言い回しや、期間で扱う語）
     private static let stopWords: Set<String> = [
-        "会議", "ミーティング", "mtg", "打ち合わせ", "打合せ", "内容", "何", "なに", "誰", "だれ", "いつ", "どこ", "どう",
-        "今日", "本日", "昨日", "一昨日", "明日", "今週", "先週", "先々週", "来週", "今月", "先月", "来月", "前回", "最近", "直近",
-        "教え", "決定", "話", "件", "こと", "もの", "ため", "とき", "について",
+        "会議", "ミーティング", "mtg", "打ち合わせ", "打合せ", "内容", "何", "なに", "誰", "だれ", "いつ", "どこ", "どう",  // skip-tr（言語の決まりに使う語。FUT-014）
+        "今日", "本日", "昨日", "一昨日", "明日", "今週", "先週", "先々週", "来週", "今月", "先月", "来月", "前回", "最近", "直近",  // skip-tr（言語の決まりに使う語。FUT-014）
+        "教え", "決定", "話", "件", "こと", "もの", "ため", "とき", "について",  // skip-tr（言語の決まりに使う語。FUT-014）
     ]
 
     // 設計判断: DEC-MTG-052

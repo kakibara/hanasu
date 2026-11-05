@@ -13,31 +13,31 @@ enum TranslationLanguage: String, CaseIterable, Codable, Identifiable {
     var label: String {
         switch self {
         case .english: "English"
-        case .japanese: "日本語"
+        case .japanese: tr("日本語")
         }
     }
 
     /// 設定のトグルに出す名前
     var settingsLabel: String {
         switch self {
-        case .english: "English（英語）"
-        case .japanese: "日本語"
+        case .english: tr("English（英語）")
+        case .japanese: tr("日本語")
         }
     }
 
     /// 「英訳」「和訳」
     var verb: String {
         switch self {
-        case .english: "英訳"
-        case .japanese: "和訳"
+        case .english: tr("英訳")
+        case .japanese: tr("和訳")
         }
     }
 
     /// 処理中の HUD の見出し
     var processingTitle: String {
         switch self {
-        case .english: "AI で英語に翻訳しています…"
-        case .japanese: "AI で日本語に翻訳しています…"
+        case .english: tr("AI で英語に翻訳しています…")
+        case .japanese: tr("AI で日本語に翻訳しています…")
         }
     }
 
@@ -49,7 +49,7 @@ enum TranslationLanguage: String, CaseIterable, Codable, Identifiable {
 
     /// 選んだ言語が 1 つならその言語の動詞、2 つ以上なら「翻訳」（メニュー・設定の項目名）
     static func menuVerb(for languages: [TranslationLanguage]) -> String {
-        languages.count == 1 ? languages[0].verb : "翻訳"
+        languages.count == 1 ? languages[0].verb : tr("翻訳")
     }
 
     /// CLI の `--translate-to en|ja`（`--translate` だけなら English）。どちらもなければ nil

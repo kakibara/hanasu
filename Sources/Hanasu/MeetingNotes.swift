@@ -81,7 +81,7 @@ extension Meeting {
     // 設計判断: DEC-MTG-043
     /// notes.md の中身
     func notesMarkdown() -> String {
-        "# \(title) — メモ\n\n\(notesText)\n"
+        tr("# %@ — メモ\n\n%@\n", "\(title)", "\(notesText)")
     }
 
     // 要件: REQ-MTG-012
@@ -256,7 +256,7 @@ final class MeetingHighlightHotKey: ObservableObject {
             MainActor.assumeIsolated { self?.handler?() }
         }
         if hotKeyID == nil {
-            registrationError = "ショートカット \(combo.displayString) を登録できませんでした（ほかのショートカットと重なっている可能性があります）"
+            registrationError = tr("ショートカット %@ を登録できませんでした（ほかのショートカットと重なっている可能性があります）", "\(combo.displayString)")
             appLog.error("highlight hot key registration failed")
         }
     }

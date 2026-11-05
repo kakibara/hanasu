@@ -158,7 +158,7 @@ enum ScreenContextReader {
     static func read(_ target: Target, maxChars: Int = maxChars) -> ScreenContext {
         var context = ScreenContext(appName: target.appName, bundleID: target.bundleID)
         guard AXIsProcessTrusted() else {
-            context.notes.append("アクセシビリティの許可がないため、ウインドウと入力欄を読めません")
+            context.notes.append(tr("アクセシビリティの許可がないため、ウインドウと入力欄を読めません"))
             return context
         }
         let app = AXUIElementCreateApplication(target.pid)
@@ -178,7 +178,7 @@ enum ScreenContextReader {
             }
         }
         guard let focused else {
-            context.notes.append("フォーカスしている要素を取れませんでした")
+            context.notes.append(tr("フォーカスしている要素を取れませんでした"))
             return context
         }
         AXUIElementSetMessagingTimeout(focused, messagingTimeout)
@@ -188,13 +188,13 @@ enum ScreenContextReader {
         context.focusedRole = [role, subrole].compactMap { $0 }.joined(separator: "/")
         // パスワード欄は中身を読まない
         if role == "AXSecureTextField" || subrole == (kAXSecureTextFieldSubrole as String) {
-            context.notes.append("パスワード欄なので入力欄の文章は読みません")
+            context.notes.append(tr("パスワード欄なので入力欄の文章は読みません"))
             return context
         }
 
         readText(of: focused, into: &context, maxChars: maxChars)
         if context.textBefore == nil, context.textAfter == nil {
-            context.notes.append("入力欄の文章を取れませんでした（\(context.focusedRole ?? "役割不明")）")
+            context.notes.append(tr("入力欄の文章を取れませんでした（%@）", "\(context.focusedRole ?? "役割不明")"))
         }
         return context
     }

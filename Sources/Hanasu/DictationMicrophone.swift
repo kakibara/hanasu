@@ -17,13 +17,13 @@ enum DictationMicrophones {
         var result = [Option(uid: "", title: systemTitle)]
         result += inputs.map { Option(uid: $0.uid, title: $0.name) }
         if !selected.isEmpty, !inputs.contains(where: { $0.uid == selected }) {
-            result.append(Option(uid: selected, title: "（接続されていない機器）"))
+            result.append(Option(uid: selected, title: tr("（接続されていない機器）")))
         }
         return result
     }
 
     static var systemTitle: String {
-        defaultInputName.map { "システムの設定に従う（\($0)）" } ?? "システムの設定に従う"
+        defaultInputName.map { tr("システムの設定に従う（%@）", "\($0)") } ?? tr("システムの設定に従う")
     }
 
     /// 今のシステムの既定の入力機器の名前
@@ -40,7 +40,7 @@ struct DictationMicrophonePicker: View {
     @ObservedObject var devices = AudioDeviceList.shared
 
     var body: some View {
-        Picker("マイク", selection: $settings.dictationInputDeviceUID) {
+        Picker(tr("マイク"), selection: $settings.dictationInputDeviceUID) {
             ForEach(DictationMicrophones.options(selected: settings.dictationInputDeviceUID, inputs: devices.inputs),
                     id: \.uid) { Text($0.title).tag($0.uid) }
         }
@@ -65,7 +65,7 @@ final class DictationMicrophoneMenu: NSObject {
         current = handler
         let menu = NSMenu()
         menu.autoenablesItems = false
-        let header = NSMenuItem(title: "音声入力で使うマイク", action: nil, keyEquivalent: "")
+        let header = NSMenuItem(title: tr("音声入力で使うマイク"), action: nil, keyEquivalent: "")
         header.isEnabled = false
         menu.addItem(header)
         for (index, option) in DictationMicrophones.options(selected: selected, inputs: AudioDevices.inputs).enumerated() {

@@ -139,16 +139,16 @@ struct UserDictionary: Equatable {
         for (index, line) in lines.enumerated() {
             guard case .entry(let entry) = line, entry.isRule else { continue }
             if entry.spelling.trimmingCharacters(in: .whitespaces).isEmpty {
-                result[index] = "正しい表記が空なので、置き換えません"
+                result[index] = tr("正しい表記が空なので、置き換えません")
                 continue
             }
             var notes: [String] = []
             for source in entry.sources {
                 let key = Self.matchKey(source)
                 if key.count < Self.minimumSourceLength {
-                    notes.append("「\(source)」は 1 文字なので使いません（ほかの語の一部に当たりやすいため）")
+                    notes.append(tr("「%@」は 1 文字なので使いません（ほかの語の一部に当たりやすいため）", "\(source)"))
                 } else if seen.contains(key) {
-                    notes.append("「\(source)」は上の行にもあるので、上の行を使います")
+                    notes.append(tr("「%@」は上の行にもあるので、上の行を使います", "\(source)"))
                 } else {
                     seen.insert(key)
                 }

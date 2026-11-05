@@ -43,8 +43,8 @@ struct MeetingWindowView: View {
                 MeetingDetailView(meeting: meeting, recorder: recorder, jump: jump?.meetingID == id ? jump : nil,
                                   onDelete: { pendingDelete = meeting })
             } else {
-                ContentUnavailableView("会議を選んでください", systemImage: "waveform",
-                                       description: Text("下のボタンか ⌃⌥⌘M で記録を始められます。"))
+                ContentUnavailableView(tr("会議を選んでください"), systemImage: "waveform",
+                                       description: Text(tr("下のボタンか ⌃⌥⌘M で記録を始められます。")))
             }
         }
         .frame(minWidth: 900, minHeight: 520)
@@ -64,15 +64,15 @@ struct MeetingWindowView: View {
         }
         // 要件: REQ-MTG-028
         // 設計判断: DEC-MTG-022
-        .confirmationDialog(pendingDelete.map { "「\($0.title)」を削除しますか？" } ?? "",
+        .confirmationDialog(pendingDelete.map { tr("「%@」を削除しますか？", "\($0.title)") } ?? "",
                             isPresented: Binding(get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } }),
                             presenting: pendingDelete) { meeting in
-            Button("ゴミ箱に入れる", role: .destructive) { delete(meeting) }
-            Button("キャンセル", role: .cancel) {}
+            Button(tr("ゴミ箱に入れる"), role: .destructive) { delete(meeting) }
+            Button(tr("キャンセル"), role: .cancel) {}
         } message: { _ in
-            Text("議事録・文字起こし・メモ・音声をまとめてゴミ箱に移します。ゴミ箱から戻せます。")
+            Text(tr("議事録・文字起こし・メモ・音声をまとめてゴミ箱に移します。ゴミ箱から戻せます。"))
         }
-        .alert("削除できませんでした", isPresented: Binding(get: { deleteError != nil }, set: { if !$0 { deleteError = nil } })) {
+        .alert(tr("削除できませんでした"), isPresented: Binding(get: { deleteError != nil }, set: { if !$0 { deleteError = nil } })) {
             Button("OK") {}
         } message: {
             Text(deleteError ?? "")
@@ -117,16 +117,16 @@ struct MeetingWindowView: View {
         } else {
             List(selection: $selection) {
                 if let current = recorder.current {
-                    Section("記録中") {
+                    Section(tr("記録中")) {
                         MeetingRow(meeting: current, live: true, busy: isProcessing).tag(current.id)
                     }
                 }
-                Section("会議") {
+                Section(tr("会議")) {
                     ForEach(recorder.meetings.filter { $0.id != recorder.current?.id }) { meeting in
                         MeetingRow(meeting: meeting, live: false, busy: meeting.id == recorder.regeneratingID)
                             .tag(meeting.id)
                             .contextMenu {
-                                Button("削除…", role: .destructive) { confirmDelete(meeting.id) }
+                                Button(tr("削除…"), role: .destructive) { confirmDelete(meeting.id) }
                                     .disabled(!recorder.canDelete(meeting))
                             }
                     }
@@ -158,7 +158,7 @@ private struct MeetingRow: View {
             HStack(spacing: 6) {
                 if busy {
                     // 要件: REQ-MTG-013
-                    ProgressView().controlSize(.mini).help("議事録を作っています")
+                    ProgressView().controlSize(.mini).help(tr("議事録を作っています"))
                 } else if live {
                     Image(systemName: "record.circle.fill").foregroundStyle(.red)
                 }
@@ -167,7 +167,7 @@ private struct MeetingRow: View {
             HStack(spacing: 6) {
                 Text(Meeting.dateFormatter.string(from: meeting.startedAt))
                 if meeting.duration > 0 { Text(Meeting.clock(meeting.duration)) }
-                if meeting.status == .failed { Text("失敗").foregroundStyle(.orange) }
+                if meeting.status == .failed { Text(tr("失敗")).foregroundStyle(.orange) }
             }
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -189,15 +189,15 @@ private struct RecordButton: View {
             switch recorder.state {
             case .idle:
                 Button { recorder.toggle() } label: {
-                    Label("会議の記録を開始", systemImage: "record.circle").frame(maxWidth: .infinity)
+                    Label(tr("会議の記録を開始"), systemImage: "record.circle").frame(maxWidth: .infinity)
                 }
                 .controlSize(.large)
                 .buttonStyle(.borderedProminent)
             case .starting:
-                ProgressView("準備中…").controlSize(.small)
+                ProgressView(tr("準備中…")).controlSize(.small)
             case .recording:
                 Button { recorder.toggle() } label: {
-                    Label("記録を停止", systemImage: "stop.circle.fill").frame(maxWidth: .infinity)
+                    Label(tr("記録を停止"), systemImage: "stop.circle.fill").frame(maxWidth: .infinity)
                 }
                 .controlSize(.large)
                 .buttonStyle(.borderedProminent)
@@ -220,7 +220,7 @@ struct LiveTranscriptView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Image(systemName: "record.circle.fill").foregroundStyle(.red)
-                Text("記録中").font(.headline)
+                Text(tr("記録中")).font(.headline)
                 if let start = recorder.current?.startedAt {
                     TimelineView(.periodic(from: start, by: 1)) { context in
                         Text(Meeting.clock(context.date.timeIntervalSince(start)))
@@ -229,8 +229,8 @@ struct LiveTranscriptView: View {
                     }
                 }
                 Spacer()
-                LevelMeter(label: "自分", level: recorder.meLevel, color: .accentColor)
-                LevelMeter(label: "相手", level: recorder.othersLevel, color: .orange)
+                LevelMeter(label: tr("自分"), level: recorder.meLevel, color: .accentColor)
+                LevelMeter(label: tr("相手"), level: recorder.othersLevel, color: .orange)
             }
             .padding([.horizontal, .top])
             VStack(alignment: .leading, spacing: 4) {
@@ -239,7 +239,7 @@ struct LiveTranscriptView: View {
                         .font(.caption)
                         .foregroundStyle(.orange)
                 }
-                Text("話者の区別（話者1・話者2…）は記録の停止後に行います")
+                Text(tr("話者の区別（話者1・話者2…）は記録の停止後に行います"))
                     .font(.caption).foregroundStyle(.secondary)
             }
             .padding([.horizontal, .bottom])
@@ -250,21 +250,21 @@ struct LiveTranscriptView: View {
                     LazyVStack(alignment: .leading, spacing: 10) {
                         if let engine = recorder.batchEngine {
                             // Whisper / Gemini では、記録中は文字起こししない
-                            Label("文字起こしは、記録を止めたあとに \(engine.shortName) で行います。記録中はここに文字が出ません。",
+                            Label(tr("文字起こしは、記録を止めたあとに %@ で行います。記録中はここに文字が出ません。", "\(engine.shortName)"),
                                   systemImage: "waveform")
                                 .font(.callout)
                                 .foregroundStyle(.secondary)
                         }
                         ForEach(recorder.liveLines) { line in
-                            TranscriptLine(time: line.start, speaker: line.channel == .me ? "自分" : "相手",
+                            TranscriptLine(time: line.start, speaker: line.channel == .me ? tr("自分") : tr("相手"),
                                            color: line.channel == .me ? .accentColor : .orange, text: line.text)
                         }
                         if !recorder.volatileOthers.isEmpty {
-                            TranscriptLine(time: nil, speaker: "相手", color: .orange, text: recorder.volatileOthers)
+                            TranscriptLine(time: nil, speaker: tr("相手"), color: .orange, text: recorder.volatileOthers)
                                 .opacity(0.5)
                         }
                         if !recorder.volatileMe.isEmpty {
-                            TranscriptLine(time: nil, speaker: "自分", color: .accentColor, text: recorder.volatileMe)
+                            TranscriptLine(time: nil, speaker: tr("自分"), color: .accentColor, text: recorder.volatileMe)
                                 .opacity(0.5)
                         }
                         Color.clear.frame(height: 1).id("bottom")
@@ -346,21 +346,21 @@ struct MeetingDetailView: View {
                     Text("\(Meeting.dateFormatter.string(from: meeting.startedAt))・\(Meeting.clock(meeting.duration))")
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Button("話者名…") { editingSpeakers = true }
+                    Button(tr("話者名…")) { editingSpeakers = true }
                         .disabled(meeting.speakers.isEmpty)
-                    Button("議事録を作り直す") { Task { await recorder.regenerateMinutes(meeting) } }
+                    Button(tr("議事録を作り直す")) { Task { await recorder.regenerateMinutes(meeting) } }
                         .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
                     MeetingExportMenu(meeting: meeting, recorder: recorder, showingTranscript: tab == 1)
-                    Button("Finder で表示") {
+                    Button(tr("Finder で表示")) {
                         NSWorkspace.shared.activateFileViewerSelecting([MeetingStore.directory(for: meeting)])
                     }
                     // 要件: REQ-MTG-028
                     if let onDelete {
                         Button(role: .destructive, action: onDelete) {
-                            Label("削除…", systemImage: "trash")
+                            Label(tr("削除…"), systemImage: "trash")
                         }
                         .labelStyle(.iconOnly)
-                        .help(recorder.canDelete(meeting) ? "この会議をゴミ箱に入れる" : "議事録を作り直している間は削除できません")
+                        .help(recorder.canDelete(meeting) ? tr("この会議をゴミ箱に入れる") : tr("議事録を作り直している間は削除できません"))
                         .disabled(!recorder.canDelete(meeting))
                     }
                 }
@@ -371,7 +371,7 @@ struct MeetingDetailView: View {
                         ProgressView().controlSize(.small)
                         Text(regeneratingMessage)
                         if meeting.minutes != nil {
-                            Text("終わるまで、今の議事録を出しています。").foregroundStyle(.secondary)
+                            Text(tr("終わるまで、今の議事録を出しています。")).foregroundStyle(.secondary)
                         }
                     }
                     .font(.callout)
@@ -379,17 +379,17 @@ struct MeetingDetailView: View {
                     HStack {
                         Text(error).font(.caption).foregroundStyle(.orange)
                         if meeting.minutes == nil, recorder.state == .idle {
-                            Button("議事録を作り直す") { Task { await recorder.regenerateMinutes(meeting) } }
+                            Button(tr("議事録を作り直す")) { Task { await recorder.regenerateMinutes(meeting) } }
                                 .controlSize(.small)
                         }
                     }
                 }
                 HStack {
                     Picker("", selection: $tab) {
-                        Text("議事録").tag(0)
-                        Text("文字起こし").tag(1)
-                        Text("メモ").tag(2)
-                        Text("ここ重要").tag(3)
+                        Text(tr("議事録")).tag(0)
+                        Text(tr("文字起こし")).tag(1)
+                        Text(tr("メモ")).tag(2)
+                        Text(tr("ここ重要")).tag(3)
                     }
                     .pickerStyle(.segmented)
                     .labelsHidden()
@@ -411,7 +411,7 @@ struct MeetingDetailView: View {
                                     MarkdownText(markdown: minutes, highlight: jump?.terms ?? [], focusedLine: focusedMinutesLine)
                                         .opacity(regenerating ? 0.5 : 1)
                                 } else {
-                                    Text(meeting.status == .processing || regenerating ? "議事録を作成中です…" : "議事録はありません。")
+                                    Text(meeting.status == .processing || regenerating ? tr("議事録を作成中です…") : tr("議事録はありません。"))
                                         .foregroundStyle(.secondary)
                                 }
                             } else if tab == 3 {
@@ -474,7 +474,7 @@ struct MeetingDetailView: View {
 
     private var regeneratingMessage: String {
         if case .processing(let message) = recorder.state { return message }
-        return "議事録を作り直しています…"
+        return tr("議事録を作り直しています…")
     }
 
     // 要件: REQ-MTG-029
@@ -547,7 +547,7 @@ struct EditableTitleField: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            TextField("タイトル", text: $title)
+            TextField(tr("タイトル"), text: $title)
                 .font(.title2.bold())
                 .textFieldStyle(.plain)
                 .focused(focused)
@@ -580,8 +580,8 @@ struct EditableTitleField: View {
             try? await Task.sleep(for: .milliseconds(50))
             if focused.wrappedValue, !hovering { focused.wrappedValue = false }
         }
-        .help("クリックしてタイトルを変更")
-        .accessibilityHint("タイトルを変更できます")
+        .help(tr("クリックしてタイトルを変更"))
+        .accessibilityHint(tr("タイトルを変更できます"))
     }
 }
 
@@ -593,7 +593,7 @@ private struct HighlightContextsView: View {
         let contexts = meeting.highlightContexts()
         LazyVStack(alignment: .leading, spacing: 18) {
             if contexts.isEmpty {
-                Text("「ここ重要」の印はありません。記録中に「★ ここ重要」かショートカットで付けると、ここに前後の会話をまとめて出します。")
+                Text(tr("「ここ重要」の印はありません。記録中に「★ ここ重要」かショートカットで付けると、ここに前後の会話をまとめて出します。"))
                     .foregroundStyle(.secondary)
             }
             ForEach(contexts, id: \.note.id) { context in
@@ -602,15 +602,15 @@ private struct HighlightContextsView: View {
                         Image(systemName: "star.fill").foregroundStyle(.yellow)
                         Text(context.note.time.map(Meeting.clock) ?? "--:--")
                             .font(.system(.body, design: .monospaced))
-                        Text(context.note.text.isEmpty ? "ここ重要" : context.note.text).fontWeight(.semibold)
+                        Text(context.note.text.isEmpty ? tr("ここ重要") : context.note.text).fontWeight(.semibold)
                         Spacer()
                         if let first = context.blocks.first {
-                            Button("文字起こしで見る") { openInTranscript(first.id) }
+                            Button(tr("文字起こしで見る")) { openInTranscript(first.id) }
                                 .controlSize(.small)
                         }
                     }
                     if context.blocks.isEmpty {
-                        Text("この前後（30 秒前〜15 秒後）の発言はありません").font(.callout).foregroundStyle(.secondary)
+                        Text(tr("この前後（30 秒前〜15 秒後）の発言はありません")).font(.callout).foregroundStyle(.secondary)
                     }
                     ForEach(context.blocks) { block in
                         TranscriptLine(time: block.start, speaker: meeting.displayName(for: block.speaker),
@@ -632,8 +632,8 @@ private struct SpeakerNamesSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("話者名").font(.headline)
-            Text("議事録の「話者についてのメモ」も参考にしてください。「推測」は、議事録を作るときに会話から推測して付けた名前です。変更は文字起こしに反映されます（議事録は作り直すと反映されます）。")
+            Text(tr("話者名")).font(.headline)
+            Text(tr("議事録の「話者についてのメモ」も参考にしてください。「推測」は、議事録を作るときに会話から推測して付けた名前です。変更は文字起こしに反映されます（議事録は作り直すと反映されます）。"))
                 .font(.caption).foregroundStyle(.secondary)
             Form {
                 ForEach(meeting.speakers, id: \.self) { speaker in
@@ -643,18 +643,18 @@ private struct SpeakerNamesSheet: View {
                         // 要件: REQ-MTG-027
                         // 設計判断: DEC-MTG-069
                         if meeting.isInferredName(speaker), names[speaker] == meeting.speakerNames[speaker] {
-                            Text("推測")
+                            Text(tr("推測"))
                                 .font(.caption)
                                 .foregroundStyle(.orange)
-                                .help("会話から推測した名前です。違っていたら直してください")
+                                .help(tr("会話から推測した名前です。違っていたら直してください"))
                         }
                     }
                 }
             }
             HStack {
                 Spacer()
-                Button("キャンセル") { dismiss() }
-                Button("保存") {
+                Button(tr("キャンセル")) { dismiss() }
+                Button(tr("保存")) {
                     // 変えた話者だけを、まとめて保存する（推測の印は、直した話者だけ外す）
                     recorder.renameSpeakers(meeting, names: names.filter { $0.value != (meeting.speakerNames[$0.key] ?? "") })
                     dismiss()

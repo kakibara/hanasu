@@ -19,8 +19,8 @@ final class PasteFallbackPanel {
 
         var noun: String {
             switch self {
-            case .result: "結果"
-            case .edit: "書き換えた文章"
+            case .result: tr("結果")
+            case .edit: tr("書き換えた文章")
             }
         }
     }
@@ -212,7 +212,7 @@ private struct PasteFallbackView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
                 Image(systemName: "doc.on.clipboard").foregroundStyle(.orange)
-                Text("入力できる場所が見つからないため、貼り付けていません")
+                Text(tr("入力できる場所が見つからないため、貼り付けていません"))
                     .font(.system(size: 13, weight: .semibold))
                     .lineLimit(1)
                 Spacer(minLength: 0)
@@ -233,19 +233,19 @@ private struct PasteFallbackView: View {
                 .background(Color(nsColor: .textBackgroundColor).opacity(0.6), in: RoundedRectangle(cornerRadius: 8))
                 .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.secondary.opacity(0.25)))
             HStack(spacing: 8) {
-                Text("\(model.text.count) 文字")
+                Text(tr("%@ 文字", "\(model.text.count)"))
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
                 Spacer()
                 if model.copied {
-                    Label("コピーしました", systemImage: "checkmark")
+                    Label(tr("コピーしました"), systemImage: "checkmark")
                         .font(.system(size: 11))
                         .foregroundStyle(.green)
                 }
-                Button("コピー") { model.onCopy?() }
-                    .help("文章をすべてクリップボードにコピーします（⌘C。一部を選んでいるときは、その部分）")
-                Button("閉じる") { model.onClose?() }
-                    .help("この表示を閉じます（Esc）。次に録音を始めたときも閉じます")
+                Button(tr("コピー")) { model.onCopy?() }
+                    .help(tr("文章をすべてクリップボードにコピーします（⌘C。一部を選んでいるときは、その部分）"))
+                Button(tr("閉じる")) { model.onClose?() }
+                    .help(tr("この表示を閉じます（Esc）。次に録音を始めたときも閉じます"))
             }
             .controlSize(.small)
         }
@@ -259,8 +259,8 @@ private struct PasteFallbackView: View {
     private var guidance: String {
         let noun = model.subject.noun
         return model.clipboardKept
-            ? "\(noun)はクリップボードにも入っています。入力したい場所をクリックして ⌘V で貼り付けてください。"
-            : "\(noun)を選んでコピーするか「コピー」を押してから、入力したい場所に貼り付けてください。"
+            ? tr("%@はクリップボードにも入っています。入力したい場所をクリックして ⌘V で貼り付けてください。", "\(noun)")
+            : tr("%@を選んでコピーするか「コピー」を押してから、入力したい場所に貼り付けてください。", "\(noun)")
     }
 }
 
@@ -314,14 +314,14 @@ struct PasteFallbackSettingsSection: View {
 
     var body: some View {
         Section {
-            Picker("クリップボード", selection: $settings.clipboard) {
+            Picker(tr("クリップボード"), selection: $settings.clipboard) {
                 ForEach(PasteFallbackClipboard.allCases) { Text($0.label).tag($0) }
             }
             .pickerStyle(.radioGroup)
         } header: {
-            Text("入力できる場所がないとき")
+            Text(tr("入力できる場所がないとき"))
         } footer: {
-            Text("デスクトップや Finder の一覧が前面にある・ボタンやリンクを選んでいる・Web ページの入力欄の外をクリックしたあとなど、入力欄にカーソルがないと分かったときは、貼り付けずに結果を画面に表示します。表示は「閉じる」か Esc で閉じるか、次に録音を始めるまで残ります。分からないときは、これまでどおり貼り付けます。")
+            Text(tr("デスクトップや Finder の一覧が前面にある・ボタンやリンクを選んでいる・Web ページの入力欄の外をクリックしたあとなど、入力欄にカーソルがないと分かったときは、貼り付けずに結果を画面に表示します。表示は「閉じる」か Esc で閉じるか、次に録音を始めるまで残ります。分からないときは、これまでどおり貼り付けます。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }
@@ -335,11 +335,11 @@ struct PasteUnconfirmedSettingsSection: View {
 
     var body: some View {
         Section {
-            Toggle("音声入力の履歴を開く", isOn: $settings.openHistoryWhenUnconfirmed)
+            Toggle(tr("音声入力の履歴を開く"), isOn: $settings.openHistoryWhenUnconfirmed)
         } header: {
-            Text("貼り付けが届かなかったとき")
+            Text(tr("貼り付けが届かなかったとき"))
         } footer: {
-            Text("録音中に別のウインドウへ移ったなどで、⌘V を送っても貼り付け先が受け取らなかったときは、最新の結果をクリップボードに入れたままにします。入力したい場所で ⌘V を押せば貼れます。オンにすると、あわせて履歴のウインドウを開き、最新の結果を選んだ状態にします。")
+            Text(tr("録音中に別のウインドウへ移ったなどで、⌘V を送っても貼り付け先が受け取らなかったときは、最新の結果をクリップボードに入れたままにします。入力したい場所で ⌘V を押せば貼れます。オンにすると、あわせて履歴のウインドウを開き、最新の結果を選んだ状態にします。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }

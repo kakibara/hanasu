@@ -58,7 +58,7 @@ final class DictationController {
             self?.hud.updateTranscript(text)
         }
         recognizer.onAssetDownloadProgress = { [weak self] fraction in
-            self?.hud.show(.preparing("日本語の音声モデルをダウンロード中… \(Int(fraction * 100))%"))
+            self?.hud.show(.preparing(tr("日本語の音声モデルをダウンロード中… %@%%", "\(Int(fraction * 100))")))
         }
         recognizer.onLevel = { [weak self] level in
             self?.hud.model.level = level
@@ -168,7 +168,7 @@ final class DictationController {
             state = .processing  // 取り消しの間に止める操作が来ても、入力に進まないように
             Task {
                 await recognizer.cancel()
-                fail("マイクを切り替えられませんでした: \(error.localizedDescription)")
+                fail(tr("マイクを切り替えられませんでした: %@", "\(error.localizedDescription)"))
             }
         }
     }
@@ -216,7 +216,7 @@ final class DictationController {
         hud.model.translation = self.mode.translation
         // Whisper / Gemini は録音を止めてからまとめて文字起こしするので、HUD の出しかたを変える
         hud.model.batchEngine = settings.dictationEngine.isLive ? nil : settings.dictationEngine
-        hud.show(.preparing("準備中…"))
+        hud.show(.preparing(tr("準備中…")))
         setEscapeHotKey(enabled: true)
 
         Task {
@@ -267,7 +267,7 @@ final class DictationController {
         DictationHistoryStore.shared.discardAudio(pendingAudioURL)
         pendingAudioURL = nil
         setEscapeHotKey(enabled: false)
-        hud.show(.done("取り消しました"))
+        hud.show(.done(tr("取り消しました")))
     }
 
     private func fail(_ message: String) {
@@ -293,7 +293,7 @@ final class DictationController {
         appLog.notice("recognized \(raw.count) chars")
         hud.updateTranscript(raw)
         guard !raw.isEmpty else {
-            fail(recognizer.lastError ?? "音声が認識されませんでした")
+            fail(recognizer.lastError ?? tr("音声が認識されませんでした"))
             return
         }
 
@@ -311,13 +311,13 @@ final class DictationController {
         let translation = mode.translation
         // 翻訳は AI でしかできないので、整形をオフにしていても AI（Gemini か Claude）に送る。全体がスニペットなら呼ばない
         if settings.refineWithGemini || translation != nil, snippetMatch?.isWholeUtterance != true {
-            let verb = translation != nil ? "翻訳" : "整形"
+            let verb = translation != nil ? tr("翻訳") : tr("整形")
             do {
                 // 要件: REQ-COM-032
                 // 設計判断: DEC-COM-069
                 // ローカルのモデルがまだなければ、ダウンロードするか尋ね、終わるのを待つ。ダイアログで前面が変わるので、入力先を前に戻してから続ける
                 try await LocalModelDownloadPrompt.prepare(
-                    for: .dictation, settings: settings, work: verb, whenSkipped: "\(verb)前の文章を入力します",
+                    for: .dictation, settings: settings, work: verb, whenSkipped: tr("%@前の文章を入力します", "\(verb)"),
                     restoreFrontmostApp: true)
                 // 要件: REQ-COM-020, REQ-COM-024
                 if let client = try TextAIClient.fromSettings(settings, for: .dictation) {
@@ -349,12 +349,12 @@ final class DictationController {
                 } else {
                     let provider = settings.aiProvider(for: .dictation)
                     appLog.notice("\(verb, privacy: .public) skipped: no credentials (ai=\(provider.rawValue, privacy: .public))")
-                    warning = "\(provider.name) の認証情報が未設定のため、\(verb)せずに入力しました（メニュー → 設定 →「AI」）。"
+                    warning = tr("%@ の認証情報が未設定のため、%@せずに入力しました（メニュー → 設定 →「AI」）。", "\(provider.name)", "\(verb)")
                     historyStatus = .noCredentials
                 }
             } catch {
                 appLog.error("\(verb, privacy: .public) failed: \(error.localizedDescription, privacy: .public)")
-                warning = "\(error.localizedDescription)\n\(verb)前の文章を入力しました。"
+                warning = tr("%@\n%@前の文章を入力しました。", "\(error.localizedDescription)", "\(verb)")
                 historyStatus = .geminiFailed
                 historyError = error.localizedDescription
             }
@@ -373,7 +373,7 @@ final class DictationController {
 
         switch (outcome, warning) {
         case (.copiedOnly, _):
-            hud.show(.error("アクセシビリティが許可されていないため、クリップボードにコピーしました。⌘V で貼り付けてください。設定でオンになっている場合は、一覧から Hanasu を削除（−）して追加し直してください。"))
+            hud.show(.error(tr("アクセシビリティが許可されていないため、クリップボードにコピーしました。⌘V で貼り付けてください。設定でオンになっている場合は、一覧から Hanasu を削除（−）して追加し直してください。")))
             _ = Permissions.isAccessibilityTrusted(prompt: true)
         case (.notPasted(let clipboardKept), _):
             // 入力できる場所がない。HUD の代わりに、自動では閉じないパネルで全文を残す（整形の失敗などの知らせも載せる）
@@ -388,7 +388,7 @@ final class DictationController {
         case (.pasted, let warning?):
             hud.show(.error(warning))
         case (.pasted, nil):
-            hud.show(.done(snippetMatch?.hudMessage ?? (translation.map { "\($0.verb)して入力しました" } ?? "入力しました")))
+            hud.show(.done(snippetMatch?.hudMessage ?? (translation.map { tr("%@して入力しました", "\($0.verb)") } ?? tr("入力しました"))))
         }
     }
 

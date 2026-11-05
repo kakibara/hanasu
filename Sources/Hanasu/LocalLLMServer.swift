@@ -31,15 +31,15 @@ actor LocalLLMServer {
         var errorDescription: String? {
             switch self {
             case .serverNotFound:
-                "ローカルの LLM を動かす llama-server が見つかりません（アプリを入れ直すか、環境変数 HANASU_LLAMA_SERVER でパスを指定してください）"
+                tr("ローカルの LLM を動かす llama-server が見つかりません（アプリを入れ直すか、環境変数 HANASU_LLAMA_SERVER でパスを指定してください）")
             case .unknownModel(let id):
-                "ローカルのモデル「\(id)」はありません（\(LocalLLMModel.allCases.map(\.rawValue).joined(separator: " / "))）"
+                tr("ローカルのモデル「%@」はありません（%@）", "\(id)", "\(LocalLLMModel.allCases.map(\.rawValue).joined(separator: " / "))")
             case .modelNotDownloaded(let model):
-                "ローカルのモデル「\(model.name)」がまだダウンロードされていません（設定 →「AI」でダウンロードしてください）"
+                tr("ローカルのモデル「%@」がまだダウンロードされていません（設定 →「AI」でダウンロードしてください）", "\(model.name)")
             case .exited(let status, let log):
-                "ローカルの LLM が起動できませんでした（終了コード \(status)）" + (log.isEmpty ? "" : "\n" + log)
+                tr("ローカルの LLM が起動できませんでした（終了コード %@）", "\(status)") + (log.isEmpty ? "" : "\n" + log)
             case .startupTimedOut:
-                "ローカルの LLM の起動が \(Int(LocalLLMServer.startupTimeout)) 秒たっても終わりませんでした"
+                tr("ローカルの LLM の起動が %@ 秒たっても終わりませんでした", "\(Int(LocalLLMServer.startupTimeout))")
             }
         }
     }

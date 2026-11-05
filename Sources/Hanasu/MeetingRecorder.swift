@@ -154,7 +154,7 @@ final class MeetingRecorder: ObservableObject {
     func stop() async {
         guard state == .recording, var meeting = current, let me = meTranscriber, let others = othersTranscriber else { return }
         NSSound(named: "Pop")?.play()
-        setState(.processing("文字起こしを確定しています…"))
+        setState(.processing(tr("文字起こしを確定しています…")))
         await teardownAudio()
         async let mePhrases = me.finish()
         async let otherPhrases = others.finish()
@@ -219,10 +219,10 @@ final class MeetingRecorder: ObservableObject {
                     progress: { [weak self] message in self?.setState(.processing(message)) })
             } catch {
                 appLog.error("meeting batch transcription failed (\(channel.rawValue, privacy: .public)): \(String(describing: error), privacy: .public)")
-                errors.append("\(channel == .me ? "自分" : "相手")の音声: \(error.localizedDescription)")
+                errors.append(tr("%@の音声: %@", "\(channel == .me ? "自分" : "相手")", "\(error.localizedDescription)"))
             }
         }
-        let error = errors.isEmpty ? nil : "\(engine.shortName) で文字起こしできなかった部分があります（音声ファイルは残しています）。" + errors.joined(separator: " / ")
+        let error = errors.isEmpty ? nil : tr("%@ で文字起こしできなかった部分があります（音声ファイルは残しています）。", "\(engine.shortName)") + errors.joined(separator: " / ")
         return (phrases[.me] ?? [], phrases[.others] ?? [], error)
     }
 
@@ -236,7 +236,7 @@ final class MeetingRecorder: ObservableObject {
         var turns: [SpeakerTurn] = []
         let othersAudio = MeetingStore.audioURL(for: meeting, channel: .others)
         if !theirs.isEmpty, FileManager.default.fileExists(atPath: othersAudio.path) {
-            setState(.processing("話者を分けています…（初回はモデルをダウンロードします）"))
+            setState(.processing(tr("話者を分けています…（初回はモデルをダウンロードします）")))
             do {
                 turns = try await diarizer.diarize(audioURL: othersAudio)
             } catch {
@@ -247,7 +247,7 @@ final class MeetingRecorder: ObservableObject {
         var micTurns: [SpeakerTurn] = []
         let meAudio = MeetingStore.audioURL(for: meeting, channel: .me)
         if settings.diarizeMicChannel, !mine.isEmpty, FileManager.default.fileExists(atPath: meAudio.path) {
-            setState(.processing("同じ部屋の話者を分けています…"))
+            setState(.processing(tr("同じ部屋の話者を分けています…")))
             do {
                 micTurns = try await diarizer.diarize(audioURL: meAudio)
             } catch {
@@ -263,11 +263,11 @@ final class MeetingRecorder: ObservableObject {
         appLog.notice("meeting transcribed: me=\(mine.count) others=\(theirs.count) utterances=\(meeting.utterances.count) speakers=\(meeting.speakers.count)")
 
         if settings.makeMeetingMinutes, !meeting.utterances.isEmpty {
-            setState(.processing("議事録を作成しています…"))
+            setState(.processing(tr("議事録を作成しています…")))
             do {
                 // 要件: REQ-COM-032
                 try await LocalModelDownloadPrompt.prepare(
-                    for: .meeting, settings: settings, work: "議事録の作成", whenSkipped: "議事録を作らずに、文字起こしだけを残します")
+                    for: .meeting, settings: settings, work: tr("議事録の作成"), whenSkipped: tr("議事録を作らずに、文字起こしだけを残します"))
                 // 要件: REQ-COM-024
                 let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
                 let result = try await MeetingProcessor.makeMinutes(
@@ -275,7 +275,7 @@ final class MeetingRecorder: ObservableObject {
                 // 要件: REQ-MTG-027
                 meeting.applyMinutes(result)
             } catch {
-                let message = "議事録を作れませんでした: \(error.localizedDescription)"
+                let message = tr("議事録を作れませんでした: %@", "\(error.localizedDescription)")
                 meeting.errorMessage = meeting.errorMessage.map { $0 + "\n" + message } ?? message
                 appLog.error("minutes failed: \(error.localizedDescription, privacy: .public)")
             }
@@ -290,7 +290,7 @@ final class MeetingRecorder: ObservableObject {
         do {
             try MeetingStore.save(meeting)
         } catch {
-            lastError = "保存できませんでした: \(error.localizedDescription)"
+            lastError = tr("保存できませんでした: %@", "\(error.localizedDescription)")
         }
         return meeting
     }
@@ -320,14 +320,14 @@ final class MeetingRecorder: ObservableObject {
     /// 議事録を作り直す。template を渡すと、その型に変えて作る（失敗したら型も元のまま）。
     func regenerateMinutes(_ meeting: Meeting, template: MinutesTemplate? = nil, customPrompt: String? = nil) async {
         guard state == .idle else { return }
-        setState(.processing("議事録を作り直しています…"))
+        setState(.processing(tr("議事録を作り直しています…")))
         regeneratingID = meeting.id
         defer { regeneratingID = nil }
         var updated = meeting
         do {
             // 要件: REQ-COM-032
             try await LocalModelDownloadPrompt.prepare(
-                for: .meeting, settings: settings, work: "議事録の作成", whenSkipped: "議事録は作り直しません")
+                for: .meeting, settings: settings, work: tr("議事録の作成"), whenSkipped: tr("議事録は作り直しません"))
             let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
             var source = meeting
             if let template {
@@ -342,7 +342,7 @@ final class MeetingRecorder: ObservableObject {
             updated.applyMinutes(result)
             updated.errorMessage = nil
         } catch {
-            updated.errorMessage = "議事録を作れませんでした: \(error.localizedDescription)"
+            updated.errorMessage = tr("議事録を作れませんでした: %@", "\(error.localizedDescription)")
         }
         try? MeetingStore.save(updated)
         reloadMeetings()
@@ -536,7 +536,7 @@ final class MeetingRecorder: ObservableObject {
                 do {
                     try self.startMic(for: me)
                 } catch {
-                    self.lastError = "マイクを再開できませんでした: \(error.localizedDescription)"
+                    self.lastError = tr("マイクを再開できませんでした: %@", "\(error.localizedDescription)")
                 }
             }
         }
@@ -568,10 +568,10 @@ final class MeetingRecorder: ObservableObject {
         var notes: [String] = []
         if Date().timeIntervalSince(recordingStartedAt) > 10 {
             if me.lastSoundAt == nil {
-                notes.append("マイク（自分）の音が入っていません。設定の「会議」→「録音するマイク」を確認してください。")
+                notes.append(tr("マイク（自分）の音が入っていません。設定の「会議」→「録音するマイク」を確認してください。"))
             }
             if others.lastSoundAt == nil {
-                notes.append("相手側（スピーカー）の音が入っていません。会議の音が出ている機器を、設定の「会議」→「録音するスピーカー」で選んでください。")
+                notes.append(tr("相手側（スピーカー）の音が入っていません。会議の音が出ている機器を、設定の「会議」→「録音するスピーカー」で選んでください。"))
             }
         }
         if notes != warnings { warnings = notes }

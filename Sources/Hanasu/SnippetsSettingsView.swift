@@ -13,7 +13,7 @@ struct SnippetsSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("決まった言葉（起動フレーズ）だけを話すと、登録した文章をそのまま入力します。本文は Gemini に送らず、翻訳して入力するときも訳しません。")
+            Text(tr("決まった言葉（起動フレーズ）だけを話すと、登録した文章をそのまま入力します。本文は Gemini に送らず、翻訳して入力するときも訳しません。"))
                 .font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             HStack(alignment: .top, spacing: 12) {
@@ -22,7 +22,7 @@ struct SnippetsSettingsView: View {
                 editor
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
-            Text("文の途中でも、「よろしくお願いします、メールの署名」のように読点や間で区切って言えば、その部分だけを本文に置き換え、残りを整えます。区切らずに言った「住所を教えて」の「住所」などは置き換えません。")
+            Text(tr("文の途中でも、「よろしくお願いします、メールの署名」のように読点や間で区切って言えば、その部分だけを本文に置き換え、残りを整えます。区切らずに言った「住所を教えて」の「住所」などは置き換えません。"))
                 .font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -34,7 +34,7 @@ struct SnippetsSettingsView: View {
             List(selection: $selection) {
                 ForEach(store.snippets) { snippet in
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(snippet.displayName.isEmpty ? "（起動フレーズなし）" : snippet.displayName)
+                        Text(snippet.displayName.isEmpty ? tr("（起動フレーズなし）") : snippet.displayName)
                             .lineLimit(1)
                             .foregroundStyle(snippet.displayName.isEmpty ? .secondary : .primary)
                         Text(firstLine(of: snippet.body))
@@ -47,11 +47,11 @@ struct SnippetsSettingsView: View {
             .listStyle(.bordered(alternatesRowBackgrounds: false))
             HStack(spacing: 0) {
                 Button(action: add) { Image(systemName: "plus").frame(width: 22, height: 18) }
-                    .help("スニペットを追加")
+                    .help(tr("スニペットを追加"))
                 Divider().frame(height: 16)
                 Button(action: removeSelected) { Image(systemName: "minus").frame(width: 22, height: 18) }
                     .disabled(selection == nil)
-                    .help("選んだスニペットを削除")
+                    .help(tr("選んだスニペットを削除"))
                 Spacer()
             }
             .buttonStyle(.borderless)
@@ -64,18 +64,18 @@ struct SnippetsSettingsView: View {
     @ViewBuilder private var editor: some View {
         if let id = selection, let snippet = store.snippets.first(where: { $0.id == id }) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("起動フレーズ").font(.headline)
-                TextField("例: メールの署名", text: binding(id, \.trigger))
+                Text(tr("起動フレーズ")).font(.headline)
+                TextField(tr("例: メールの署名"), text: binding(id, \.trigger))
                     .textFieldStyle(.roundedBorder)
-                Text("「、」で区切ると、別の言い方も登録できます（例: 会議URL、会議のリンク）。")
+                Text(tr("「、」で区切ると、別の言い方も登録できます（例: 会議URL、会議のリンク）。"))
                     .font(.caption).foregroundStyle(.secondary)
                 if !snippet.phrases.isEmpty {
-                    Text("照合する形: " + snippet.phrases.map(SnippetMatcher.normalize).joined(separator: " / "))
+                    Text(tr("照合する形: ") + snippet.phrases.map(SnippetMatcher.normalize).joined(separator: " / "))
                         .font(.caption.monospaced()).foregroundStyle(.secondary)
                         .lineLimit(1).truncationMode(.tail)
-                        .help("空白・句読点を除き、カタカナはひらがなに、英字は小文字にそろえて照合します。話したときの末尾の「です」なども除きます。")
+                        .help(tr("空白・句読点を除き、カタカナはひらがなに、英字は小文字にそろえて照合します。話したときの末尾の「です」なども除きます。"))
                 }
-                Text("本文").font(.headline).padding(.top, 6)
+                Text(tr("本文")).font(.headline).padding(.top, 6)
                 TextEditor(text: binding(id, \.body))
                     .font(.body)
                     .scrollContentBackground(.hidden)
@@ -90,9 +90,9 @@ struct SnippetsSettingsView: View {
             }
         } else {
             ContentUnavailableView {
-                Label("スニペットがありません", systemImage: "text.badge.plus")
+                Label(tr("スニペットがありません"), systemImage: "text.badge.plus")
             } description: {
-                Text("＋ で追加し、起動フレーズと本文を\n入力してください。\n例: メールの署名、自己紹介、住所、会議URL")
+                Text(tr("＋ で追加し、起動フレーズと本文を\n入力してください。\n例: メールの署名、自己紹介、住所、会議URL"))
             }
         }
     }
@@ -110,16 +110,16 @@ struct SnippetsSettingsView: View {
     /// 使えない・紛らわしい設定の知らせ
     private func problem(of snippet: Snippet) -> String? {
         if snippet.phrases.allSatisfy({ SnippetMatcher.normalize($0).isEmpty }) {
-            return "起動フレーズを入力してください。"
+            return tr("起動フレーズを入力してください。")
         }
         if snippet.body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return "本文が空のあいだは使われません。"
+            return tr("本文が空のあいだは使われません。")
         }
         let mine = Set(snippet.phrases.map(SnippetMatcher.normalize))
         if let earlier = store.snippets.prefix(while: { $0.id != snippet.id })
             .first(where: { !mine.isDisjoint(with: $0.phrases.map(SnippetMatcher.normalize)) })
         {
-            return "『\(earlier.displayName)』と同じ起動フレーズがあります。一覧で上にある方が使われます。"
+            return tr("『%@』と同じ起動フレーズがあります。一覧で上にある方が使われます。", "\(earlier.displayName)")
         }
         return nil
     }

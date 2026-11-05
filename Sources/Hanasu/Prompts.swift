@@ -17,9 +17,14 @@ enum PromptLanguage: String, CaseIterable, Sendable {
     /// 言語の識別子（ja-JP、zh-Hant-TW、pt_PT など）を、対応言語のどれかに寄せる。
     /// 中国語は繁体字（Hant）か台湾・香港・マカオなら zh-TW、それ以外は zh-CN。ポルトガル語は pt-BR。どれでもなければ英語
     static func from(localeIdentifier: String) -> PromptLanguage {
+        supported(localeIdentifier: localeIdentifier) ?? .en
+    }
+
+    /// 対応言語のどれかに寄せる。どれでもなければ nil（表示の言語で、優先する言語の並びの次を見るのに使う）
+    static func supported(localeIdentifier: String) -> PromptLanguage? {
         let trimmed = localeIdentifier.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "_", with: "-")
         let language = Locale.Language(identifier: trimmed)
-        guard let code = language.languageCode?.identifier.lowercased() else { return .en }
+        guard let code = language.languageCode?.identifier.lowercased() else { return nil }
         switch code {
         case "zh":
             let script = language.script?.identifier
@@ -27,7 +32,7 @@ enum PromptLanguage: String, CaseIterable, Sendable {
             return script == "Hant" || ["TW", "HK", "MO"].contains(region ?? "") ? .zhTW : .zhCN
         case "pt": return .ptBR
         case "in": return .id
-        default: return PromptLanguage(rawValue: code) ?? .en
+        default: return PromptLanguage(rawValue: code)
         }
     }
 

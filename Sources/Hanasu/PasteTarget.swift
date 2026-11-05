@@ -71,45 +71,45 @@ enum PasteTargetJudge {
     static let webAreaTrustedBundleIDs: Set<String> = ["com.apple.Safari", "com.apple.SafariTechnologyPreview"]
 
     static func decide(_ s: PasteFocusSnapshot) -> (decision: PasteTargetDecision, reason: String) {
-        guard s.hasApp else { return (.unknown, "フォーカスのあるアプリが分からない") }
+        guard s.hasApp else { return (.unknown, tr("フォーカスのあるアプリが分からない")) }
         let isFinder = s.bundleID == finderBundleID
 
         switch s.element {
         case .failed:
-            return (.unknown, "フォーカスのある要素を読めなかった")
+            return (.unknown, tr("フォーカスのある要素を読めなかった"))
         case .none:
-            if isFinder { return (.show, "Finder（デスクトップ）にフォーカスがある") }
-            if s.window == .none { return (.show, "前面のアプリにウインドウがない") }
+            if isFinder { return (.show, tr("Finder（デスクトップ）にフォーカスがある")) }
+            if s.window == .none { return (.show, tr("前面のアプリにウインドウがない")) }
             // ウインドウはあるのに要素がない: 自前で描くアプリ（ターミナルなど）や、AX を出していない Electron がありうる
-            return (.unknown, s.window == .found ? "ウインドウはあるが、フォーカスのある要素がない" : "ウインドウがあるか分からず、フォーカスのある要素もない")
+            return (.unknown, s.window == .found ? tr("ウインドウはあるが、フォーカスのある要素がない") : tr("ウインドウがあるか分からず、フォーカスのある要素もない"))
         case .found:
             break
         }
 
         let role = s.role ?? ""
         if textRoles.contains(role) || textSubroles.contains(s.subrole ?? "") {
-            return (.paste, "入力欄（\(describe(s))）")
+            return (.paste, tr("入力欄（%@）", "\(describe(s))"))
         }
         if s.hasEditableAncestor {
-            return (.paste, "Web の編集できる領域（\(describe(s))）")
+            return (.paste, tr("Web の編集できる領域（%@）", "\(describe(s))"))
         }
         if !controlRoles.contains(role), s.valueSettable || s.hasSelectedTextRange {
-            return (.paste, "文字を持つ要素（\(describe(s))）")
+            return (.paste, tr("文字を持つ要素（%@）", "\(describe(s))"))
         }
         // Electron は AX の出しかたがアプリごとにまちまちで、何も選んでいなくても ⌘V を入力欄へ回すアプリもある
-        if s.isElectron { return (.unknown, "Electron 製のアプリ（\(describe(s))）") }
+        if s.isElectron { return (.unknown, tr("Electron 製のアプリ（%@）", "\(describe(s))")) }
         // Chromium（Chrome・Edge・Arc など）は支援技術に頼まれるまで Web の中身を出さないので、入力欄にフォーカスがあっても
         // AXWebArea が返り続けることがある。Safari のほかでは、AXWebArea だけでは入力欄の外と決めない
         if role == "AXWebArea", !webAreaTrustedBundleIDs.contains(s.bundleID ?? "") {
-            return (.unknown, "Safari のほかの Web の領域（\(describe(s))）")
+            return (.unknown, tr("Safari のほかの Web の領域（%@）", "\(describe(s))"))
         }
-        if isFinder { return (.show, "Finder のファイルの一覧など（\(describe(s))）") }
-        if nonTextRoles.contains(role) { return (.show, "文字を入れられない要素（\(describe(s))）") }
-        return (.unknown, "入力欄かどうか分からない要素（\(describe(s))）")
+        if isFinder { return (.show, tr("Finder のファイルの一覧など（%@）", "\(describe(s))")) }
+        if nonTextRoles.contains(role) { return (.show, tr("文字を入れられない要素（%@）", "\(describe(s))")) }
+        return (.unknown, tr("入力欄かどうか分からない要素（%@）", "\(describe(s))"))
     }
 
     private static func describe(_ s: PasteFocusSnapshot) -> String {
-        [s.role, s.subrole].compactMap { $0 }.joined(separator: "/").nonEmpty ?? "役割不明"
+        [s.role, s.subrole].compactMap { $0 }.joined(separator: "/").nonEmpty ?? tr("役割不明")
     }
 }
 
@@ -250,8 +250,8 @@ enum PasteFallbackClipboard: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .keepResult: "クリップボードにも入れておく（⌘V で貼り付けるだけで済む）"
-        case .restore: "表示だけにする（クリップボードは元のまま。表示からコピーする）"
+        case .keepResult: tr("クリップボードにも入れておく（⌘V で貼り付けるだけで済む）")
+        case .restore: tr("表示だけにする（クリップボードは元のまま。表示からコピーする）")
         }
     }
 }

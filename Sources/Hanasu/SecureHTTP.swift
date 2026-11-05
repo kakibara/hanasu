@@ -13,8 +13,8 @@ enum SecureHTTP {
 
         var errorDescription: String? {
             switch self {
-            case .insecureURL: "HTTPS ではない宛先には送りません"
-            case .redirected(let status): "API の応答がリダイレクト（\(status)）だったため、従わずに止めました"
+            case .insecureURL: tr("HTTPS ではない宛先には送りません")
+            case .redirected(let status): tr("API の応答がリダイレクト（%@）だったため、従わずに止めました", "\(status)")
             }
         }
     }

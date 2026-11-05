@@ -14,22 +14,22 @@ enum AppStylePreset: String, Codable, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .none: "なし"
-        case .chat: "チャット"
-        case .email: "メール"
-        case .documentPolite: "文書（です・ます）"
-        case .documentPlain: "文書（である）"
+        case .none: tr("なし")
+        case .chat: tr("チャット")
+        case .email: tr("メール")
+        case .documentPolite: tr("文書（です・ます）")
+        case .documentPlain: tr("文書（である）")
         }
     }
 
     /// 設定画面に出す短い説明
     var summary: String {
         switch self {
-        case .none: "プリセットを使わない（このアプリ用の追加ルールだけを使う）"
-        case .chat: "くだけた短い文。段落は作らない"
-        case .email: "丁寧な文体（です・ます調）。まとまりごとに段落を分ける"
-        case .documentPolite: "書き言葉の です・ます調 に統一し、段落を分ける"
-        case .documentPlain: "書き言葉の である調 に統一し、段落を分ける"
+        case .none: tr("プリセットを使わない（このアプリ用の追加ルールだけを使う）")
+        case .chat: tr("くだけた短い文。段落は作らない")
+        case .email: tr("丁寧な文体（です・ます調）。まとまりごとに段落を分ける")
+        case .documentPolite: tr("書き言葉の です・ます調 に統一し、段落を分ける")
+        case .documentPlain: tr("書き言葉の である調 に統一し、段落を分ける")
         }
     }
 
@@ -59,7 +59,7 @@ enum AppOutputLanguage: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
     var label: String {
-        translation?.label ?? "話した言語"
+        translation?.label ?? tr("話した言語")
     }
 
     /// 翻訳して始める言語。「話した言語」なら nil
@@ -139,9 +139,9 @@ final class AppStyleStore: ObservableObject {
         AppStyle(bundleID: "com.microsoft.teams", name: "Microsoft Teams (classic)", preset: .chat),
         AppStyle(bundleID: "com.hnc.Discord", name: "Discord", preset: .chat),
         AppStyle(bundleID: "jp.naver.line.mac", name: "LINE", preset: .chat),
-        AppStyle(bundleID: "com.apple.MobileSMS", name: "メッセージ", preset: .chat),
+        AppStyle(bundleID: "com.apple.MobileSMS", name: tr("メッセージ"), preset: .chat),
         // メール
-        AppStyle(bundleID: "com.apple.mail", name: "メール", preset: .email),
+        AppStyle(bundleID: "com.apple.mail", name: tr("メール"), preset: .email),
         AppStyle(bundleID: "com.microsoft.Outlook", name: "Microsoft Outlook", preset: .email),
         AppStyle(bundleID: "com.readdle.SparkDesktop", name: "Spark", preset: .email),
         AppStyle(bundleID: "com.readdle.smartemail-Mac", name: "Spark (classic)", preset: .email),

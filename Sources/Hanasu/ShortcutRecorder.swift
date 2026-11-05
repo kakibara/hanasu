@@ -16,13 +16,13 @@ struct ShortcutRecorder: View {
     var body: some View {
         HStack {
             Button(action: toggle) {
-                Text(isRecording ? "キーを押してください（Esc で取消）" : combo.displayString)
+                Text(isRecording ? tr("キーを押してください（Esc で取消）") : combo.displayString)
                     .frame(minWidth: 180)
             }
             .buttonStyle(.bordered)
             .tint(isRecording ? .accentColor : nil)
             if combo != defaultCombo {
-                Button("初期値に戻す") { combo = defaultCombo }
+                Button(tr("初期値に戻す")) { combo = defaultCombo }
                     .buttonStyle(.link)
             }
         }

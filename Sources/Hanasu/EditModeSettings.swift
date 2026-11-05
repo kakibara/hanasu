@@ -48,14 +48,14 @@ struct EditModeShortcutRow: View {
     var onEndRecording: () -> Void
 
     var body: some View {
-        LabeledContent("選択を声で編集") {
+        LabeledContent(tr("選択を声で編集")) {
             ShortcutRecorder(
                 combo: $settings.hotKey,
                 defaultCombo: .defaultEdit,
                 onBeginRecording: onBeginRecording,
                 onEndRecording: onEndRecording)
         }
-        Text("文章を選択してから押し、「もっと丁寧に」「箇条書きにして」「英語にして」のように話すと、AI（「AI」タブで音声入力に選んだ Gemini か Claude）が書き換えて選択範囲に貼り付けます（その AI の認証情報が必要です）。")
+        Text(tr("文章を選択してから押し、「もっと丁寧に」「箇条書きにして」「英語にして」のように話すと、AI（「AI」タブで音声入力に選んだ Gemini か Claude）が書き換えて選択範囲に貼り付けます（その AI の認証情報が必要です）。"))
             .font(.caption).foregroundStyle(.secondary)
     }
 }

@@ -15,19 +15,19 @@ enum ClaudeError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingAPIKey:
-            "Claude の API キーが設定されていません（設定 →「AI」）"
+            tr("Claude の API キーが設定されていません（設定 →「AI」）")
         case .unauthorized:
-            "Claude の API キーが正しくありません（401）。設定 →「AI」でキーを入れ直してください"
+            tr("Claude の API キーが正しくありません（401）。設定 →「AI」でキーを入れ直してください")
         case .http(let status, let type, let message):
             Self.describe(status: status, type: type, message: message)
         case .refusal(let category):
-            "Claude が安全のための判定で応答を断りました" + (category.map { "（\($0)）" } ?? "")
+            tr("Claude が安全のための判定で応答を断りました") + (category.map { "（\($0)）" } ?? "")
         case .truncated:
-            "Claude の応答が長さの上限（max_tokens）で切れたため、使いませんでした"
+            tr("Claude の応答が長さの上限（max_tokens）で切れたため、使いませんでした")
         case .emptyResponse:
-            "Claude から結果が返りませんでした"
+            tr("Claude から結果が返りませんでした")
         case .invalidResponse:
-            "Claude の応答を読み取れませんでした"
+            tr("Claude の応答を読み取れませんでした")
         }
     }
 
@@ -35,15 +35,15 @@ enum ClaudeError: LocalizedError {
     private static func describe(status: Int, type: String?, message: String) -> String {
         let detail = message.isEmpty ? "" : ": \(message)"
         switch status {
-        case 400: return "Claude API がリクエストを受け付けませんでした（400）\(detail)"
-        case 402: return "Claude API の支払いの設定に問題があります（402）。Anthropic の Console を確かめてください"
-        case 403: return "この API キーでは許可されていない操作です（403）\(detail)"
-        case 404: return "Claude のモデルが見つからないか、この API キーでは使えません（404）\(detail)"
-        case 413: return "Claude に送る文章が長すぎます（413）"
-        case 429: return "Claude API の利用の上限に達しました（429）。しばらく待ってから試してください"
-        case 529: return "Claude API が混み合っています（529）。しばらく待ってから試してください"
-        case 500..<600: return "Claude API でエラーが起きました（\(status)）\(detail)"
-        default: return "Claude API エラー（\(status)\(type.map { " \($0)" } ?? "")）\(detail)"
+        case 400: return tr("Claude API がリクエストを受け付けませんでした（400）%@", "\(detail)")
+        case 402: return tr("Claude API の支払いの設定に問題があります（402）。Anthropic の Console を確かめてください")
+        case 403: return tr("この API キーでは許可されていない操作です（403）%@", "\(detail)")
+        case 404: return tr("Claude のモデルが見つからないか、この API キーでは使えません（404）%@", "\(detail)")
+        case 413: return tr("Claude に送る文章が長すぎます（413）")
+        case 429: return tr("Claude API の利用の上限に達しました（429）。しばらく待ってから試してください")
+        case 529: return tr("Claude API が混み合っています（529）。しばらく待ってから試してください")
+        case 500..<600: return tr("Claude API でエラーが起きました（%@）%@", "\(status)", "\(detail)")
+        default: return tr("Claude API エラー（%@%@）%@", "\(status)", "\(type.map { " \($0)" } ?? "")", "\(detail)")
         }
     }
 }
@@ -73,9 +73,9 @@ struct ClaudeClient {
         var id: String { rawValue }
         var label: String {
             switch self {
-            case .haiku: "Claude Haiku 5.5（速い・安い。音声入力の既定）"
-            case .sonnet: "Claude Sonnet 5.5（会議の既定）"
-            case .opus: "Claude Opus 5.5（いちばん賢い・遅い）"
+            case .haiku: tr("Claude Haiku 5.5（速い・安い。音声入力の既定）")
+            case .sonnet: tr("Claude Sonnet 5.5（会議の既定）")
+            case .opus: tr("Claude Opus 5.5（いちばん賢い・遅い）")
             }
         }
 
@@ -157,9 +157,9 @@ struct ClaudeClient {
     // 要件: REQ-COM-021
     /// 表示用に、キーを伏せる（先頭の「sk-ant-」と末尾 4 文字だけ残す）
     static func redacted(_ key: String) -> String {
-        guard key.count > 12 else { return "（伏せた \(key.count) 文字）" }
+        guard key.count > 12 else { return tr("（伏せた %@ 文字）", "\(key.count)") }
         let prefix = key.hasPrefix("sk-ant-") ? "sk-ant-" : ""
-        return "\(prefix)…\(key.suffix(4))（伏せた \(key.count) 文字）"
+        return tr("%@…%@（伏せた %@ 文字）", "\(prefix)", "\(key.suffix(4))", "\(key.count)")
     }
 
     /// 送る内容の確認用（CLI の --show-request）。キーの値は伏せる
@@ -167,7 +167,7 @@ struct ClaudeClient {
         let body = requestBody(system: system, userText: userText, model: model, effort: effort)
         let json = (try? JSONSerialization.data(withJSONObject: body, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]))
             .map { String(decoding: $0, as: UTF8.self) } ?? "{}"
-        let shownKey = apiKey.map(redacted) ?? "（未設定）"
+        let shownKey = apiKey.map(redacted) ?? tr("（未設定）")
         let headerLines = headers(apiKey: shownKey, model: model).sorted { $0.key < $1.key }.map { "\($0.key): \($0.value)" }
         return (["POST \(endpoint.absoluteString)"] + headerLines + ["", json]).joined(separator: "\n")
     }
