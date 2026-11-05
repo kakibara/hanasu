@@ -884,6 +884,16 @@
 - 対象: Windows
 - 実装の場所: `windows/Directory.Build.props`、`.github/workflows/windows.yml`、`.github/workflows/tagpr.yml`（リリースの Windows 版のビルド）
 
+
+### DEC-COM-151 Mac の設定画面は、左のサイドバーで項目を切り替える
+- 決めたこと: 設定のウインドウを、上のタブ（`TabView`）から、システム設定と同じ左のサイドバー（`NavigationSplitView`）に変える。項目（一般・AI・辞書・ルール・アプリ別・スニペット・会議・履歴・権限）と順番は変えず、それぞれに色付きの角丸のアイコンを付け、右側の上に項目の名前を出す。ウインドウは大きさを変えられ（最小 700×480、初めは 780×600）、位置と大きさを覚える。最後に開いていた項目を、次に開いたときも出す（UserDefaults の `settingsPane`）。ショートカットの欄は、キーの欄の幅を変えず、「初期値に戻す」をその左の小さなボタンにする。権限の欄は、許可済み・未許可を色付きの印で出す。画面の文言の「「AI」タブ」などは「設定の「AI」」にした。
+- 理由: ユーザーの依頼（2026-11-05「Mac の設定画面をもう少しモダンにして」）。8 つのタブが上に詰まって並び、窓が 560×460 の固定で、長い「一般」などが狭かった。サイドバーなら項目が増えても並べられ、今の macOS の設定画面と同じ見た目と操作になる。ウインドウの大きさを中身に合わせないのは、会議ノート（`AppDelegate.makeMeetingWindow`）と同じ理由（長い項目を開くと縦に伸びる）。
+- 決めた場面: 設定画面をサイドバーにした PR
+- 関係する要件: REQ-COM-040
+- 対象: Mac
+- 実装の場所: `SettingsView`、`SettingsPane`、`SettingsPaneIcon`、`AppDelegate.makeSettingsWindow`、`ShortcutRecorder`
+- 確かめ方: `.build/debug/Hanasu --render-settings /tmp/settings [--pane ai] [--dark]`
+
 ---
 
 ## 廃止

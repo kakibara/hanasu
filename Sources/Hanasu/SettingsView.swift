@@ -1,44 +1,155 @@
 import AVFoundation
 import SwiftUI
 
+// 設計判断: DEC-COM-151
+/// 設定画面の項目（左のサイドバーに並べる）
+enum SettingsPane: String, CaseIterable, Identifiable {
+    case general, ai, words, appStyles, snippets, meeting, history, permissions
+
+    var id: Self { self }
+
+    var title: String {
+        switch self {
+        case .general: "一般"
+        case .ai: "AI"
+        case .words: "辞書・ルール"
+        case .appStyles: "アプリ別"
+        case .snippets: "スニペット"
+        case .meeting: "会議"
+        case .history: "履歴"
+        case .permissions: "権限"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .general: "gearshape.fill"
+        case .ai: "sparkles"
+        case .words: "character.book.closed.fill"
+        case .appStyles: "square.grid.2x2.fill"
+        case .snippets: "text.badge.plus"
+        case .meeting: "person.2.wave.2.fill"
+        case .history: "clock.arrow.circlepath"
+        case .permissions: "lock.shield.fill"
+        }
+    }
+
+    /// サイドバーのアイコンの下地の色（システム設定と同じく、項目ごとに色を分けて見分けやすくする）
+    var tint: Color {
+        switch self {
+        case .general: .gray
+        case .ai: .purple
+        case .words: .orange
+        case .appStyles: .blue
+        case .snippets: .teal
+        case .meeting: .green
+        case .history: .indigo
+        case .permissions: .red
+        }
+    }
+}
+
+/// 角の丸い色付きの下地に白い記号を載せたアイコン（システム設定のサイドバーと同じ形）
+struct SettingsPaneIcon: View {
+    let pane: SettingsPane
+    var size: CGFloat = 22
+
+    var body: some View {
+        Image(systemName: pane.systemImage)
+            .font(.system(size: size * 0.52, weight: .semibold))
+            .foregroundStyle(.white)
+            .frame(width: size, height: size)
+            .background(pane.tint.gradient, in: RoundedRectangle(cornerRadius: size * 0.26, style: .continuous))
+    }
+}
+
+// 設計判断: DEC-COM-151
 struct SettingsView: View {
     @ObservedObject var settings = AppSettings.shared
     var onOpenMeetingNotes: () -> Void
     var onBeginShortcutRecording: () -> Void
     var onEndShortcutRecording: () -> Void
     var onOpenHistory: () -> Void = {}
+    /// 最初に開く項目（確認用の描き出しで使う。nil なら前に開いていた項目）
+    var initialPane: SettingsPane? = nil
+
+    /// 選んでいる項目。前に開いていた項目を次に開いたときも出す
+    @AppStorage("settingsPane") private var storedPane: SettingsPane = .general
+    @State private var selection: SettingsPane?
 
     var body: some View {
-        TabView {
+        NavigationSplitView {
+            List(SettingsPane.allCases, selection: $selection) { pane in
+                Label {
+                    Text(pane.title)
+                } icon: {
+                    SettingsPaneIcon(pane: pane)
+                }
+                .padding(.vertical, 2)
+                .tag(pane)
+            }
+            .listStyle(.sidebar)
+            .navigationSplitViewColumnWidth(min: 170, ideal: 190, max: 240)
+            .toolbar(removing: .sidebarToggle)
+        } detail: {
+            let pane = selection ?? initialPane ?? storedPane
+            VStack(spacing: 0) {
+                header(for: pane)
+                Divider()
+                content(for: pane)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+        }
+        .frame(minWidth: 700, minHeight: 480)
+        .onAppear { if selection == nil { selection = initialPane ?? storedPane } }
+        .onChange(of: selection) { _, newValue in
+            if let newValue, initialPane == nil { storedPane = newValue }
+        }
+    }
+
+    /// 右側の上に出す、項目の名前
+    private func header(for pane: SettingsPane) -> some View {
+        HStack(spacing: 10) {
+            SettingsPaneIcon(pane: pane, size: 28)
+            Text(pane.title)
+                .font(.title2.weight(.semibold))
+            Spacer()
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
+    }
+
+    @ViewBuilder
+    private func content(for pane: SettingsPane) -> some View {
+        switch pane {
+        case .general:
             GeneralTab(
                 settings: settings,
                 onBeginShortcutRecording: onBeginShortcutRecording,
                 onEndShortcutRecording: onEndShortcutRecording)
-                .tabItem { Label("一般", systemImage: "gearshape") }
+        case .ai:
             // 要件: REQ-COM-020, REQ-COM-024
             AISettingsTab(settings: settings)
-                .tabItem { Label("AI", systemImage: "sparkles") }
+        case .words:
             WordsTab(settings: settings)
-                .tabItem { Label("辞書・ルール", systemImage: "character.book.closed") }
+        case .appStyles:
             AppStylesTab()
-                .tabItem { Label("アプリ別", systemImage: "square.grid.2x2") }
+        case .snippets:
             SnippetsSettingsView()
-                .tabItem { Label("スニペット", systemImage: "text.badge.plus") }
+        case .meeting:
             MeetingTab(
                 settings: settings,
                 onOpenMeetingNotes: onOpenMeetingNotes,
                 onBeginShortcutRecording: onBeginShortcutRecording,
                 onEndShortcutRecording: onEndShortcutRecording)
-                .tabItem { Label("会議", systemImage: "person.2.wave.2") }
+        case .history:
             HistorySettingsTab(
                 onOpenHistory: onOpenHistory,
                 onBeginShortcutRecording: onBeginShortcutRecording,
                 onEndShortcutRecording: onEndShortcutRecording)
-                .tabItem { Label("履歴", systemImage: "clock.arrow.circlepath") }
+        case .permissions:
             PermissionsTab()
-                .tabItem { Label("権限", systemImage: "lock.shield") }
         }
-        .frame(width: 560, height: 460)
     }
 }
 
@@ -182,30 +293,52 @@ private struct PermissionsTab: View {
     var body: some View {
         Form {
             Section {
-                row("マイク", granted: Permissions.microphoneStatus == .authorized, anchor: "Privacy_Microphone")
-                row("音声認識", granted: Permissions.speechStatus == .authorized, anchor: "Privacy_SpeechRecognition")
-                row("アクセシビリティ（自動入力に必要）",
+                row("マイク", systemImage: "mic.fill",
+                    granted: Permissions.microphoneStatus == .authorized, anchor: "Privacy_Microphone")
+                row("音声認識", systemImage: "waveform",
+                    granted: Permissions.speechStatus == .authorized, anchor: "Privacy_SpeechRecognition")
+                row("アクセシビリティ", detail: "自動入力に必要", systemImage: "accessibility",
                     granted: Permissions.isAccessibilityTrusted(prompt: false),
                     anchor: "Privacy_Accessibility")
             } footer: {
-                Text("マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。")
-                    .font(.caption).foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。")
+                        .font(.caption).foregroundStyle(.secondary)
+                    Button("再確認", systemImage: "arrow.clockwise") { refresh += 1 }
+                }
             }
-            Button("再確認") { refresh += 1 }
         }
         .formStyle(.grouped)
         .id(refresh)
     }
 
-    private func row(_ title: String, granted: Bool, anchor: String) -> some View {
-        LabeledContent(title) {
-            HStack {
-                Image(systemName: granted ? "checkmark.circle.fill" : "xmark.circle")
-                    .foregroundStyle(granted ? .green : .secondary)
-                Text(granted ? "許可済み" : "未許可")
+    private func row(_ title: String, detail: String? = nil, systemImage: String,
+                     granted: Bool, anchor: String) -> some View {
+        LabeledContent {
+            HStack(spacing: 8) {
                 if !granted {
-                    Button("開く") { Permissions.openPrivacySettings(anchor) }
+                    Button("システム設定を開く") { Permissions.openPrivacySettings(anchor) }
+                        .controlSize(.small)
                 }
+                Label(granted ? "許可済み" : "未許可",
+                      systemImage: granted ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(granted ? Color.green : Color.orange)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background((granted ? Color.green : Color.orange).opacity(0.12), in: Capsule())
+            }
+        } label: {
+            Label {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(title)
+                    if let detail {
+                        Text(detail).font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+            } icon: {
+                Image(systemName: systemImage)
+                    .foregroundStyle(.secondary)
             }
         }
     }
