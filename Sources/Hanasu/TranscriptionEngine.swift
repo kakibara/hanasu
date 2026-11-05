@@ -56,12 +56,26 @@ enum WhisperModel: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    // 設計判断: DEC-COM-028
+    /// ダウンロードの大きさの目安（バイト）。選ぶ前と、ダウンロードの途中・削除の確かめで見せる
+    var approximateBytes: Int64 {
+        switch self {
+        case .tiny: 75_000_000
+        case .base: 145_000_000
+        case .small: 485_000_000
+        case .largeV3Turbo: 630_000_000
+        }
+    }
+
+    /// 「約 485 MB」のような表記
+    var sizeLabel: String { "約 " + ByteCountFormatter.string(fromByteCount: approximateBytes, countStyle: .file) }
+
     var label: String {
         switch self {
-        case .tiny: "tiny（約 75 MB・速いが粗い）"
-        case .base: "base（約 145 MB）"
-        case .small: "small（約 485 MB・バランス）"
-        case .largeV3Turbo: "large-v3-turbo（約 630 MB・高精度）"
+        case .tiny: "tiny（\(sizeLabel)・速いが粗い）"
+        case .base: "base（\(sizeLabel)）"
+        case .small: "small（\(sizeLabel)・バランス）"
+        case .largeV3Turbo: "large-v3-turbo（\(sizeLabel)・高精度）"
         }
     }
 }
@@ -235,7 +249,7 @@ enum BatchTranscriptionError: LocalizedError {
         case .whisperModelMissing(let model):
             "Whisper のモデル（\(model.rawValue)）がまだダウンロードされていません。設定の「一般」→「文字起こし」でダウンロードしてください"
         case .noCredentials:
-            "Gemini で文字起こしするには、Gemini の認証情報（設定の「Gemini」タブ）が必要です"
+            "Gemini で文字起こしするには、Gemini の認証情報（設定の「AI」）が必要です"
         case .appleNotBatch:
             "Mac 標準のエンジンは、まとめての文字起こしに使えません"
         }

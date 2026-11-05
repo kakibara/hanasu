@@ -21,7 +21,9 @@ final class MeetingRecorder: ObservableObject {
     }
 
     @Published private(set) var state: State = .idle
-    @Published private(set) var meetings: [Meeting] = MeetingStore.loadAll()
+    // 設計判断: DEC-MTG-071
+    /// 会議の一覧。ディスクからの読み込みは裏で行うので、起動直後は空で、読み終えたら入る（reloadMeetings）
+    @Published private(set) var meetings: [Meeting] = []
     @Published private(set) var current: Meeting?
     @Published private(set) var liveLines: [LiveLine] = []
     @Published private(set) var volatileMe = ""
@@ -40,6 +42,9 @@ final class MeetingRecorder: ObservableObject {
     @Published var regeneratingID: String?
 
     var onStateChange: ((State) -> Void)?
+    // 要件: REQ-MTG-034
+    /// 会議の名前を読む対象のアプリ（優先順）。記録を始めるときに呼ぶ。AppDelegate が会議の自動検出につなぐ
+    var titleSourceApps: () -> [MeetingApp] = { [] }
     var diarizer: SpeakerDiarizer = FluidAudioDiarizer()
 
     private let settings = AppSettings.shared
@@ -50,6 +55,13 @@ final class MeetingRecorder: ObservableObject {
     private var micObserver: NSObjectProtocol?
     private var levelTimer: Timer?
     private var recordingStartedAt = Date()
+
+    /// reloadMeetings を呼ぶたびに増やす。古い読み込みの結果が、新しいものを上書きしないための番号
+    private var reloadGeneration = 0
+
+    init() {
+        reloadMeetings()
+    }
 
     var isRecording: Bool { state == .recording }
 
@@ -73,14 +85,21 @@ final class MeetingRecorder: ObservableObject {
         liveLines = []
         volatileMe = ""
         volatileOthers = ""
+        // prepare の途中で失敗したときに止めるための、まだ meTranscriber / othersTranscriber に入れていない文字起こし
+        var preparing: [ChannelTranscriber] = []
 
         do {
             // 文字起こしのエンジンは、記録を始めたときの設定で決める（記録中に設定を変えても混ざらない）
             let engine = settings.meetingEngine
             try Self.checkReady(engine)
             try await Permissions.ensureRecordingPermissions(speechRecognition: engine.isLive)
+            // 要件: REQ-MTG-034
+            // 会議アプリのウインドウから会議の名前を読む（読めなければ日時のタイトル）。
+            // 状態は .starting なので、読んでいる間にもう一度押しても二重には始まらない
+            let detectedTitle = await MeetingTitle.detect(apps: titleSourceApps())
             var meeting = try MeetingStore.newMeeting()
             meeting.status = .recording
+            if let detectedTitle { meeting.title = detectedTitle }
             MinutesTemplateStore.apply(to: &meeting)
             try MeetingStore.save(meeting)
             current = meeting
@@ -92,6 +111,8 @@ final class MeetingRecorder: ObservableObject {
             try tap.start(outputDeviceUID: outputUID.isEmpty ? nil : outputUID) { buffer in
                 othersBox.transcriber?.append(buffer)
             }
+            // 以降で失敗しても teardownAudio で止められるよう、開始した時点で保持する
+            systemTap = tap
             guard let tapFormat = tap.format else { throw SystemAudioTapError.unsupportedFormat }
             let others = ChannelTranscriber(
                 channel: .others, inputFormat: tapFormat,
@@ -115,14 +136,15 @@ final class MeetingRecorder: ObservableObject {
                 }
             }
             let words = settings.userDictionary.contextualStrings
+            preparing = [me, others]
             async let preparedMe: Void = me.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: words)
             async let preparedOthers: Void = others.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: words)
             _ = try await (preparedMe, preparedOthers)
 
             othersBox.transcriber = others
-            systemTap = tap
             meTranscriber = me
             othersTranscriber = others
+            preparing = []
             try startMic(for: me, engine: micEngine)
 
             batchEngine = engine.isLive ? nil : engine
@@ -137,6 +159,7 @@ final class MeetingRecorder: ObservableObject {
             await teardownAudio()
             await meTranscriber?.cancel()
             await othersTranscriber?.cancel()
+            for transcriber in preparing { await transcriber.cancel() }
             meTranscriber = nil
             othersTranscriber = nil
             if var meeting = current {
@@ -265,6 +288,9 @@ final class MeetingRecorder: ObservableObject {
         if settings.makeMeetingMinutes, !meeting.utterances.isEmpty {
             setState(.processing("議事録を作成しています…"))
             do {
+                // 要件: REQ-COM-032
+                try await LocalModelDownloadPrompt.prepare(
+                    for: .meeting, settings: settings, work: "議事録の作成", whenSkipped: "議事録を作らずに、文字起こしだけを残します")
                 // 要件: REQ-COM-024
                 let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
                 let result = try await MeetingProcessor.makeMinutes(
@@ -322,6 +348,9 @@ final class MeetingRecorder: ObservableObject {
         defer { regeneratingID = nil }
         var updated = meeting
         do {
+            // 要件: REQ-COM-032
+            try await LocalModelDownloadPrompt.prepare(
+                for: .meeting, settings: settings, work: "議事録の作成", whenSkipped: "議事録は作り直しません")
             let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 300)
             var source = meeting
             if let template {
@@ -354,8 +383,17 @@ final class MeetingRecorder: ObservableObject {
         }
     }
 
+    // 設計判断: DEC-MTG-071
+    /// 会議の一覧を読み直す。ファイルの読み込みと復号はメインスレッドの外で行い、結果だけをメインに戻す。
+    /// 読み終えるまでは前の一覧を出したままにする（空にしない）。続けて呼ばれたら、最後の呼び出しの結果だけを使う
     func reloadMeetings() {
-        meetings = MeetingStore.loadAll()
+        reloadGeneration += 1
+        let generation = reloadGeneration
+        Task { [weak self] in
+            let loaded = await Task.detached(priority: .userInitiated) { MeetingStore.loadAll() }.value
+            guard let self, generation == self.reloadGeneration else { return }
+            self.meetings = loaded
+        }
     }
 
     // MARK: - 削除

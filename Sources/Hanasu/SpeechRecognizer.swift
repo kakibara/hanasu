@@ -27,10 +27,14 @@ final class SpeechRecognizer {
     var onPartialText: ((String) -> Void)?
     /// 音声モデルのダウンロード進捗（0...1）
     var onAssetDownloadProgress: ((Double) -> Void)?
-    /// 録音中の音量（0〜1。Whisper / Gemini で録っているときだけ、HUD の音量の目安に使う）
+    // 要件: REQ-DIC-014
+    /// 録音中の音量（RMS、0〜1）。0.1 秒ごとに知らせる。HUD の音量の目安に使う
     var onLevel: ((Float) -> Void)?
     /// 録音を止めたあと、まとめて文字起こしを始めたとき（Whisper / Gemini）
     var onBatchTranscriptionStarted: ((TranscriptionEngine) -> Void)?
+    // 設計判断: DEC-DIC-144
+    /// Whisper / Gemini の録音が上限（maxBatchRecordingSeconds）に達したとき。受け取った側は録音を止めて、ここまでの音声を処理する
+    var onRecordingLimitReached: (() -> Void)?
     /// 直近の stop() で文字起こしに失敗したときの理由（Whisper / Gemini）
     private(set) var lastError: String?
 
@@ -43,11 +47,20 @@ final class SpeechRecognizer {
     private var volatileText = ""
     /// 録音を残すときの書き出し先（履歴の「音声も残す」）
     private var audioWriter: DictationAudioWriter?
+    /// Mac 標準で録っている間の音量（タップで測り、levelTimer で onLevel に知らせる）
+    private var liveLevel: AudioLevelBox?
+    private var levelTimer: Timer?
 
     /// Whisper / Gemini で録っている間の状態。録音を止めてからまとめて文字起こしする
     private var batch: BatchCapture?
 
     var isRunning: Bool { analyzer != nil || batch != nil }
+
+    // 設計判断: DEC-DIC-144
+    /// Whisper / Gemini で一度に録れる長さ（秒）。16 kHz モノラルの Float で 1 分あたり約 3.8 MB たまるので、上限を置く
+    nonisolated static let maxBatchRecordingSeconds: Double = 600
+    /// 上限に達したことを HUD に出す文（Windows 版と同じ文言）
+    nonisolated static let recordingLimitNotice = "録音が上限の 10 分に達したため、ここまでの音声を処理します"
 
     /// - Parameter transcription: 文字起こしのエンジン。Mac 標準以外では、engine（SpeechAnalyzer のモジュール）は使わない
     /// - Parameter inputDeviceUID: 使うマイクの UID。空ならシステムの設定に従う
@@ -91,11 +104,21 @@ final class SpeechRecognizer {
                 appLog.error("speech results error: \(String(describing: error), privacy: .public)")
             }
         }
-        try await analyzer.start(inputSequence: stream)
+        do {
+            try await analyzer.start(inputSequence: stream)
+        } catch {
+            continuation.finish()
+            resultsTask?.cancel()
+            resultsTask = nil
+            await analyzer.cancelAndFinishNow()
+            throw error
+        }
 
         // 録音を残せなくても、音声入力は続ける
         let writer = audioFileURL.flatMap { try? DictationAudioWriter(url: $0, format: analyzerFormat) }
-        let tap = Self.makeTapBlock(from: inputFormat, to: analyzerFormat, continuation: continuation, writer: writer)
+        let level = AudioLevelBox()
+        let tap = Self.makeTapBlock(from: inputFormat, to: analyzerFormat, continuation: continuation, writer: writer,
+                                    level: level)
         audioEngine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat, block: tap)
         audioEngine.prepare()
         do {
@@ -115,6 +138,18 @@ final class SpeechRecognizer {
         self.inputContinuation = continuation
         self.analyzerFormat = analyzerFormat
         self.audioWriter = writer
+        startLevelTimer(level)
+    }
+
+    // 要件: REQ-DIC-014
+    /// 音量を 0.1 秒ごとに知らせる（Whisper / Gemini の BatchCapture と同じ間隔）
+    private func startLevelTimer(_ level: AudioLevelBox) {
+        liveLevel = level
+        levelTimer?.invalidate()
+        levelTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self, level] _ in
+            let value = level.level
+            MainActor.assumeIsolated { self?.onLevel?(value) }
+        }
     }
 
     // 要件: REQ-DIC-140
@@ -131,8 +166,9 @@ final class SpeechRecognizer {
         audioEngine.stop()
         self.audioEngine = nil
         let writer = audioWriter
+        let level = liveLevel
         let makeTap = { (format: AVAudioFormat) in
-            Self.makeTapBlock(from: format, to: analyzerFormat, continuation: continuation, writer: writer)
+            Self.makeTapBlock(from: format, to: analyzerFormat, continuation: continuation, writer: writer, level: level)
         }
         self.audioEngine = try Self.startInputWithFallback(uid: uid, makeTap: makeTap)
     }
@@ -228,7 +264,13 @@ final class SpeechRecognizer {
             break
         }
         let capture = BatchCapture(engine: engine, hints: hints)
-        try capture.start(inputDeviceUID: inputDeviceUID, audioFileURL: audioFileURL) { [weak self] level in self?.onLevel?(level) }
+        try capture.start(
+            inputDeviceUID: inputDeviceUID, audioFileURL: audioFileURL,
+            onLevel: { [weak self] level in self?.onLevel?(level) },
+            onLimitReached: { [weak self] in
+                appLog.notice("batch recording reached the length limit")
+                self?.onRecordingLimitReached?()
+            })
         batch = capture
     }
 
@@ -296,6 +338,9 @@ final class SpeechRecognizer {
     // MARK: - Private
 
     private func stopAudio() {
+        levelTimer?.invalidate()
+        levelTimer = nil
+        liveLevel = nil
         audioEngine?.inputNode.removeTap(onBus: 0)
         audioEngine?.stop()
         audioWriter?.close()
@@ -406,11 +451,13 @@ final class SpeechRecognizer {
         from inputFormat: AVAudioFormat,
         to outputFormat: AVAudioFormat,
         continuation: AsyncStream<AnalyzerInput>.Continuation,
-        writer: DictationAudioWriter? = nil
+        writer: DictationAudioWriter? = nil,
+        level: AudioLevelBox? = nil
     ) -> AVAudioNodeTapBlock {
         let converter = inputFormat == outputFormat ? nil : AVAudioConverter(from: inputFormat, to: outputFormat)
         converter?.primeMethod = .none
         return { buffer, _ in
+            level?.update(from: buffer)
             guard let converter else {
                 writer?.write(buffer)
                 continuation.yield(AnalyzerInput(buffer: buffer))
@@ -453,7 +500,8 @@ private final class BatchCapture {
         self.hints = hints
     }
 
-    func start(inputDeviceUID: String, audioFileURL: URL?, onLevel: @escaping (Float) -> Void) throws {
+    func start(inputDeviceUID: String, audioFileURL: URL?, onLevel: @escaping (Float) -> Void,
+               onLimitReached: @escaping () -> Void) throws {
         // 録音を残せなくても、音声入力は続ける
         let writer = audioFileURL.flatMap { try? DictationAudioWriter(url: $0, format: TranscriptionAudio.format) }
         do {
@@ -465,7 +513,11 @@ private final class BatchCapture {
         self.writer = writer
         levelTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [box] _ in
             let level = box.level
-            MainActor.assumeIsolated { onLevel(level) }
+            let limitReached = box.takeLimitReached()
+            MainActor.assumeIsolated {
+                onLevel(level)
+                if limitReached { onLimitReached() }
+            }
         }
     }
 
@@ -512,17 +564,49 @@ private final class SampleBox: @unchecked Sendable {
     private let lock = NSLock()
     private var _samples: [Float] = []
     private var _level: Float = 0
+    private var _limitReached = false
+    private var _limitNotified = false
+    // 設計判断: DEC-DIC-144
+    private let maxSamples = Int(SpeechRecognizer.maxBatchRecordingSeconds * TranscriptionAudio.sampleRate)
 
     func append(_ buffer: AVAudioPCMBuffer) {
         guard let data = buffer.floatChannelData?[0] else { return }
         let chunk = UnsafeBufferPointer(start: data, count: Int(buffer.frameLength))
         let rms = TranscriptionAudio.rms(chunk)
         lock.withLock {
-            _samples.append(contentsOf: chunk)
             _level = rms
+            // 上限を超える分はためない（止める処理は takeLimitReached を見たメインスレッドが行う）
+            let room = maxSamples - _samples.count
+            if room < chunk.count { _limitReached = true }
+            if room > 0 { _samples.append(contentsOf: chunk.prefix(room)) }
+        }
+    }
+
+    /// 上限に達していて、まだ知らせていなければ true（一度だけ）
+    func takeLimitReached() -> Bool {
+        lock.withLock {
+            guard _limitReached, !_limitNotified else { return false }
+            _limitNotified = true
+            return true
         }
     }
 
     var samples: [Float] { lock.withLock { _samples } }
+    var level: Float { lock.withLock { _level } }
+}
+
+// 要件: REQ-DIC-014
+/// オーディオスレッドで測った直近の音量（RMS）を、メインスレッドから読めるようにしておく入れ物
+final class AudioLevelBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var _level: Float = 0
+
+    /// マイクから来たままのバッファ（1 チャンネル目）で測る。浮動小数点でない形式なら測らない
+    func update(from buffer: AVAudioPCMBuffer) {
+        guard let data = buffer.floatChannelData?[0], buffer.frameLength > 0 else { return }
+        let rms = TranscriptionAudio.rms(UnsafeBufferPointer(start: data, count: Int(buffer.frameLength)))
+        lock.withLock { _level = rms }
+    }
+
     var level: Float { lock.withLock { _level } }
 }

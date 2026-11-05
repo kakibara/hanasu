@@ -36,7 +36,9 @@ struct TranscriptionEngineSettingsSection: View {
         } header: {
             Text("文字起こし")
         } footer: {
-            Text("Mac 標準は、話している途中から文字が出ます。Whisper と Gemini は、録音を止めてからまとめて文字起こしします（会議の記録では、記録中の文字起こしは出ず、記録のあとに行います）。「選択を声で編集」も、音声入力と同じエンジンを使います。")
+            // 設計判断: DEC-COM-028
+            // Whisper を選ぶとすぐダウンロードが始まる（REQ-COM-003）ので、何がどれだけ落ちてくるかを選ぶ前に見せる
+            Text("Mac 標準は、話している途中から文字が出ます。Whisper と Gemini は、録音を止めてからまとめて文字起こしします（会議の記録では、記録中の文字起こしは出ず、記録のあとに行います）。「選択を声で編集」も、音声入力と同じエンジンを使います。Whisper を選ぶと、モデル（\(settings.whisperModel.rawValue)・\(settings.whisperModel.sizeLabel)）のダウンロードがすぐ始まります。下の「Whisper」の欄で取り消したり、ほかのモデルに変えたりできます。")
                 .font(.caption).foregroundStyle(.secondary)
         }
         .onChange(of: settings.dictationEngine) { _, engine in downloadIfNeeded(engine) }
@@ -90,6 +92,7 @@ private struct WhisperModelRow: View {
     let model: WhisperModel
     @ObservedObject var store: WhisperModelStore
     let isSelected: Bool
+    @State private var confirmDelete = false
 
     var body: some View {
         LabeledContent(isSelected ? "状態" : model.rawValue) {
@@ -97,13 +100,14 @@ private struct WhisperModelRow: View {
             case .notDownloaded:
                 HStack {
                     Text("未ダウンロード").foregroundStyle(.secondary)
-                    Button("ダウンロード") { store.ensureDownloaded(model) }
+                    // 設計判断: DEC-COM-028（大きさを先に見せる）
+                    Button("ダウンロード（\(model.sizeLabel)）") { store.ensureDownloaded(model) }
                 }
             case .downloading(let fraction):
                 HStack {
                     if let fraction {
                         ProgressView(value: fraction).frame(width: 140)
-                        Text("\(Int(fraction * 100))%").monospacedDigit().foregroundStyle(.secondary)
+                        Text("\(Int(fraction * 100))%（\(model.sizeLabel)）").monospacedDigit().foregroundStyle(.secondary)
                     } else {
                         ProgressView().controlSize(.small)
                         Text("初回の最適化中…").foregroundStyle(.secondary)
@@ -117,11 +121,17 @@ private struct WhisperModelRow: View {
                     if let size = store.diskUsage(model) {
                         Text(ByteCountFormatter.string(fromByteCount: size, countStyle: .file)).foregroundStyle(.secondary)
                     }
-                    Button("削除", role: .destructive) { store.delete(model) }
+                    Button("削除…", role: .destructive) { confirmDelete = true }
+                        .confirmationDialog("Whisper のモデル「\(model.rawValue)」を削除しますか？", isPresented: $confirmDelete) {
+                            Button("削除", role: .destructive) { store.delete(model) }
+                        } message: {
+                            Text("もう一度使うには、ダウンロードし直します（\(model.sizeLabel)）。")
+                        }
                 }
             case .failed(let message):
                 HStack {
                     Text("⚠️ \(message)").foregroundStyle(.secondary).lineLimit(2).help(message)
+                        .textSelection(.enabled)
                     Button("再試行") { store.ensureDownloaded(model) }
                 }
             }

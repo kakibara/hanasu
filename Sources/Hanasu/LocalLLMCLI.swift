@@ -1,4 +1,6 @@
+import AppKit
 import Foundation
+import SwiftUI
 
 /// ローカルの LLM の確認用の CLI モード:
 ///   Hanasu --local-llm-list
@@ -8,6 +10,10 @@ import Foundation
 ///   Hanasu --local-llm-delete <id>
 ///   Hanasu --local-llm-test-fit
 ///       長い入力の縮め方（LongInputFitter）を、文字数で数える偽のトークン数で確かめる。失敗があれば終了コード 1
+///   Hanasu --render-local-model-download <出力.png> [--model <id>] [--fraction 0.42 | --verifying]
+///       整形の前にモデルがないとき出す、ダウンロードの進み具合のウインドウの見た目（ダウンロードはしない）
+///   Hanasu --test-ai-defaults
+///       AI の既定（ローカル）と、以前から使っている人を Gemini のままにする引き継ぎを、使い捨ての UserDefaults で確かめる
 ///   Hanasu --apple-fm-status
 ///       Apple の Foundation Models の CLI（fm）が使えるか、使えなければ理由（macOS の版・見つからない・Apple の署名でない）
 /// 整形・議事録は、ほかの CLI に `--ai local [--model <id>]` か `--ai apple` を付けて確かめる（--refine-text、--minutes-from-transcript など）。
@@ -43,6 +49,17 @@ enum LocalLLMCLI {
                 FileHandle.standardError.write(Data("error: \(error.localizedDescription)\n".utf8))
                 exit(1)
             }
+        }
+        // 確かめ方: REQ-COM-032
+        if let output = value(after: "--render-local-model-download", in: args) {
+            renderDownloadWindow(
+                to: URL(fileURLWithPath: output),
+                model: value(after: "--model", in: args).flatMap(LocalLLMModel.init(rawValue:)) ?? .recommended,
+                fraction: args.contains("--verifying") ? nil : (value(after: "--fraction", in: args).flatMap(Double.init) ?? 0.42))
+        }
+        // 確かめ方: REQ-COM-024
+        if args.contains("--test-ai-defaults") {
+            exit(testAIDefaults() ? 0 : 1)
         }
         if args.contains("--apple-fm-status") {
             let os = ProcessInfo.processInfo.operatingSystemVersion
@@ -102,6 +119,88 @@ enum LocalLLMCLI {
                 return true
             }
         }
+    }
+
+    // MARK: - モデルがないときのダウンロードのウインドウ・AI の既定
+
+    private static func renderDownloadWindow(to url: URL, model: LocalLLMModel, fraction: Double?) -> Never {
+        _ = NSApplication.shared
+        LocalLLMStore.shared.showDownloadingForRendering(model, fraction: fraction)
+        let hosting = NSHostingView(rootView: LocalModelDownloadView(model: model, work: "整形")
+            .background(Color(nsColor: .windowBackgroundColor)))
+        hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
+        let window = NSWindow(contentRect: hosting.frame, styleMask: [.borderless], backing: .buffered, defer: false)
+        window.contentView = hosting
+        hosting.layoutSubtreeIfNeeded()
+        guard let rep = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) else { exit(1) }
+        hosting.cacheDisplay(in: hosting.bounds, to: rep)
+        do {
+            try rep.representation(using: .png, properties: [:])?.write(to: url)
+            print("書き出しました: \(url.path)")
+            exit(0)
+        } catch {
+            FileHandle.standardError.write(Data("error: \(error.localizedDescription)\n".utf8))
+            exit(1)
+        }
+    }
+
+    /// 使い捨ての UserDefaults で、新しく使い始めた人・以前から使っている人・2 回目の起動の AI の選択を確かめる
+    private static func testAIDefaults() -> Bool {
+        var failures = 0
+        func check(_ name: String, _ condition: Bool) {
+            print("\(condition ? "OK  " : "FAIL") \(name)")
+            if !condition { failures += 1 }
+        }
+        func fresh() -> (UserDefaults, String) {
+            let name = "dev.mactypeless.Hanasu.test-ai-defaults.\(UUID().uuidString)"
+            return (UserDefaults(suiteName: name)!, name)
+        }
+
+        // 1. 新しく使い始めた人: 何も書かない（既定のローカルに従う）。印だけ書く
+        do {
+            let (defaults, name) = fresh()
+            defer { defaults.removePersistentDomain(forName: name) }
+            AppSettings.preserveAIProviderForExistingUsers(defaults, domainName: name)
+            check("新しく使い始めた人の音声入力の AI は保存しない", defaults.string(forKey: "dictationTextAIProvider") == nil)
+            check("新しく使い始めた人の会議の AI は保存しない", defaults.string(forKey: "meetingTextAIProvider") == nil)
+            check("印を書く", defaults.object(forKey: AppSettings.aiProviderDefaultsVersionKey) != nil)
+            check("印だけでは「設定が保存されている」と数えない",
+                  !AppSettings.hasSavedSettings(defaults.persistentDomain(forName: name) ?? [:]))
+            // 2 回目の起動（オンボーディングを閉じて、何かの設定を保存したあと）でも Gemini を書かない
+            defaults.set(true, forKey: "playSounds")
+            AppSettings.preserveAIProviderForExistingUsers(defaults, domainName: name)
+            check("2 回目の起動でも AI は保存しない", defaults.string(forKey: "dictationTextAIProvider") == nil)
+        }
+        // 2. 以前から使っている人（AI を選んでいない）: Gemini を書く
+        do {
+            let (defaults, name) = fresh()
+            defer { defaults.removePersistentDomain(forName: name) }
+            defaults.set("ja-JP", forKey: "localeIdentifier")
+            defaults.set(true, forKey: "NSSomeSystemKey")
+            AppSettings.preserveAIProviderForExistingUsers(defaults, domainName: name)
+            check("以前から使っている人の音声入力は Gemini のまま", defaults.string(forKey: "dictationTextAIProvider") == "gemini")
+            check("以前から使っている人の会議は Gemini のまま", defaults.string(forKey: "meetingTextAIProvider") == "gemini")
+        }
+        // 3. 以前から使っていて、片方を選んでいる人: 選んだほうは変えない
+        do {
+            let (defaults, name) = fresh()
+            defer { defaults.removePersistentDomain(forName: name) }
+            defaults.set("claude", forKey: "meetingTextAIProvider")
+            AppSettings.preserveAIProviderForExistingUsers(defaults, domainName: name)
+            check("選んでいない音声入力は Gemini", defaults.string(forKey: "dictationTextAIProvider") == "gemini")
+            check("選んだ会議（Claude）は変えない", defaults.string(forKey: "meetingTextAIProvider") == "claude")
+        }
+        // 4. システムのキーだけがある（初回の起動で AppKit が先に書いた）: 新しく使い始めた人として扱う
+        do {
+            let (defaults, name) = fresh()
+            defer { defaults.removePersistentDomain(forName: name) }
+            defaults.set(true, forKey: "NSWindow Frame Hanasu")
+            defaults.set(1, forKey: "AppleSomething")
+            AppSettings.preserveAIProviderForExistingUsers(defaults, domainName: name)
+            check("システムのキーだけなら AI は保存しない", defaults.string(forKey: "dictationTextAIProvider") == nil)
+        }
+        print(failures == 0 ? "すべて OK" : "\(failures) 件が NG")
+        return failures == 0
     }
 
     private static func model(_ id: String) throws -> LocalLLMModel {

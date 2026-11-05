@@ -124,6 +124,53 @@ enum MeetingDetectorCLI {
         withExtendedLifetime((auto, activity)) { RunLoop.main.run() }
     }
 
+    // 確かめ方: REQ-MTG-034
+    /// --check-meeting-title: ウインドウのタイトルから会議の名前を取り出す規則の確認。1 つでも違えば終了コード 1
+    static func checkTitles() {
+        let cases: [(String, MeetingApp, String?)] = [
+            ("週次定例 | Microsoft Teams", .teams, "週次定例"),
+            ("Sprint review | Microsoft Teams", .chrome, "Sprint review"),
+            ("Chat | Microsoft Teams", .teams, nil),
+            ("Calendar | Microsoft Teams", .teams, nil),
+            ("田中 | Chat | Microsoft Teams", .teams, nil),
+            ("Microsoft Teams", .teams, nil),
+            ("Weekly Sync - Google Meet - Google Chrome", .chrome, "Weekly Sync"),
+            ("Weekly Sync – Google Meet", .safari, "Weekly Sync"),
+            ("Meet - Weekly Sync - Google Chrome", .chrome, "Weekly Sync"),
+            ("Meet - abc-defg-hij - Google Chrome", .chrome, nil),
+            ("Google Meet - Google Chrome", .chrome, nil),
+            ("Gmail - Google Chrome", .chrome, nil),
+            ("Roadmap | Webex", .webex, "Roadmap"),
+            ("Zoom Meeting", .zoom, nil),
+            ("Huddle", .slack, nil),
+            ("Weekly Sync | Microsoft Teams", .zoom, nil),
+        ]
+        var failed = 0
+        for (raw, app, expected) in cases {
+            let actual = MeetingTitle.extract(from: raw, app: app)
+            let ok = actual == expected
+            if !ok { failed += 1 }
+            print("\(ok ? "OK  " : "NG  ") [\(app.rawValue)] \(raw) → \(actual ?? "(なし)")" + (ok ? "" : "（期待: \(expected ?? "(なし)")）"))
+        }
+        print(failed == 0 ? "すべて通りました" : "\(failed) 件が違います")
+        exit(failed == 0 ? 0 : 1)
+    }
+
+    /// --detect-meeting-title: 今開いている会議アプリのウインドウから、会議の名前を読む（アクセシビリティの許可が要る）
+    static func detectTitleNow() {
+        _ = NSApplication.shared
+        guard Permissions.isAccessibilityTrusted(prompt: false) else {
+            print("アクセシビリティが許可されていません（システム設定 → プライバシーとセキュリティ → アクセシビリティ）")
+            exit(1)
+        }
+        Task {
+            let title = await MeetingTitle.detect(apps: MeetingApp.allCases)
+            print(title.map { "会議の名前: \($0)" } ?? "会議の名前は見つかりませんでした")
+            exit(0)
+        }
+        RunLoop.main.run()
+    }
+
     /// --render-meeting-detection-settings <png>: 設定の「会議の自動検出」欄を PNG にする
     static func renderSettings(to path: String) {
         _ = NSApplication.shared

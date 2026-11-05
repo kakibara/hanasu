@@ -9,11 +9,23 @@ import SwiftUI
 //   Hanasu --render-paste-fallback <出力.png> [--long] [--display-only] [--warning] [--edit]
 //     結果を残すパネルを画像にする。--long で長い文章（スクロール）、--display-only で「表示だけにする」のときの案内
 //   Hanasu --render-paste-fallback-settings <出力.png>
-//     設定の「一般」タブに足した「入力できる場所がないとき」の欄を画像にする
+//     設定の「一般」に足した「入力できる場所がないとき」「貼り付けが届かなかったとき」の欄を画像にする
+//   Hanasu --test-paste-confirm
+//     貼り付け先が読んだかの確かめを、専用の名前のクリップボード（ふだんのクリップボードには触らない）と
+//     別のプロセス（自分を --read-pasteboard で起こす）で確かめる（失敗があれば終了コード 1）
 @MainActor
 enum PasteFallbackCLI {
     static func runIfRequested() {
         let args = CommandLine.arguments
+        if args.contains("--test-paste-confirm") {
+            Task { exit(await confirmSelfTest() ? 0 : 1) }
+            RunLoop.main.run()
+        }
+        if let index = args.firstIndex(of: "--read-pasteboard"), args.indices.contains(index + 1) {
+            let pasteboard = NSPasteboard(name: .init(args[index + 1]))
+            print(pasteboard.string(forType: .string) ?? "")
+            exit(0)
+        }
         if args.contains("--test-paste-target") {
             exit(selfTest() ? 0 : 1)
         }
@@ -27,6 +39,68 @@ enum PasteFallbackCLI {
         if let index = args.firstIndex(of: "--render-paste-fallback-settings"), args.indices.contains(index + 1) {
             renderSettings(to: URL(fileURLWithPath: args[index + 1]))
         }
+    }
+
+    // MARK: --test-paste-confirm
+
+    // 確かめ方: REQ-DIC-083
+    /// 別のプロセスが読んだら「読まれた」、誰も読まなければ時間切れ、になるかを確かめる
+    static func confirmSelfTest() async -> Bool {
+        let name = NSPasteboard.Name("dev.mactypeless.Hanasu.paste-confirm-test.\(getpid())")
+        let pasteboard = NSPasteboard(name: name)
+        defer { pasteboard.releaseGlobally() }
+        var ok = true
+
+        // 1. 別のプロセスが読む → 読まれた、と分かり、読んだ側には文字が届く
+        let text = "貼り付けの確かめ \(UUID().uuidString.prefix(8))"
+        let read = PasteDataProvider(text: text)
+        pasteboard.clearContents()
+        pasteboard.writeObjects([TextInserter.transientItem(provider: read)])
+        let reader = Process()
+        reader.executableURL = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL
+        reader.arguments = ["--read-pasteboard", name.rawValue]
+        let pipe = Pipe()
+        reader.standardOutput = pipe
+        do { try reader.run() } catch {
+            print("FAIL 読む側のプロセスを起こせなかった: \(error.localizedDescription)")
+            return false
+        }
+        await TextInserter.waitForRead(read, on: pasteboard, changeCount: pasteboard.changeCount, timeout: .seconds(10))
+        while reader.isRunning { try? await Task.sleep(for: .milliseconds(20)) }
+        let output = String(decoding: pipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
+            .trimmingCharacters(in: .newlines)
+        ok = check("別のプロセスが読んだら、読まれたと分かる", read.delivered) && ok
+        ok = check("読んだ側に文字が届く", output == text, detail: "got \"\(output)\"") && ok
+
+        // 2. 誰も読まない → 時間切れまで待って、読まれていないと分かる
+        let unread = PasteDataProvider(text: "読まれない")
+        pasteboard.clearContents()
+        pasteboard.writeObjects([TextInserter.transientItem(provider: unread)])
+        let clock = ContinuousClock()
+        let start = clock.now
+        await TextInserter.waitForRead(unread, on: pasteboard, changeCount: pasteboard.changeCount, timeout: .milliseconds(300))
+        let waited = clock.now - start
+        ok = check("誰も読まなければ、読まれていないと分かる", !unread.delivered) && ok
+        ok = check("時間切れまで待つ", waited >= .milliseconds(300), detail: "\(waited)") && ok
+
+        // 3. 待つ間にほかのものがコピーされた → すぐにやめる
+        let replaced = PasteDataProvider(text: "上書きされる")
+        pasteboard.clearContents()
+        pasteboard.writeObjects([TextInserter.transientItem(provider: replaced)])
+        let changeCount = pasteboard.changeCount
+        pasteboard.clearContents()
+        pasteboard.setString("ユーザーがコピーしたもの", forType: .string)
+        let start2 = clock.now
+        await TextInserter.waitForRead(replaced, on: pasteboard, changeCount: changeCount, timeout: .seconds(5))
+        ok = check("ほかのものがコピーされたら待たない", clock.now - start2 < .seconds(1)) && ok
+
+        print(ok ? "すべて通りました" : "失敗があります")
+        return ok
+    }
+
+    private static func check(_ name: String, _ passed: Bool, detail: String = "") -> Bool {
+        print("\(passed ? "ok  " : "FAIL") \(name)\(passed || detail.isEmpty ? "" : "（\(detail)）")")
+        return passed
     }
 
     // MARK: --test-paste-target
@@ -148,11 +222,11 @@ enum PasteFallbackCLI {
     // 確かめ方: REQ-DIC-081
     private static func renderSettings(to url: URL) -> Never {
         _ = NSApplication.shared
-        let view = Form { PasteFallbackSettingsSection() }
+        let view = Form { PasteFallbackSettingsSection(); PasteUnconfirmedSettingsSection() }
             .formStyle(.grouped)
-            .frame(width: 560, height: 220)
+            .frame(width: 560, height: 400)
         let hosting = NSHostingView(rootView: view)
-        hosting.frame = NSRect(x: 0, y: 0, width: 560, height: 220)
+        hosting.frame = NSRect(x: 0, y: 0, width: 560, height: 400)
         let window = NSWindow(contentRect: hosting.frame, styleMask: [.borderless], backing: .buffered, defer: false)
         window.contentView = hosting
         hosting.layoutSubtreeIfNeeded()

@@ -93,9 +93,9 @@ internal static class TestKeys
             ["project_id"] = "example-project",
             ["client_email"] = "hanasu-test@example-project.iam.gserviceaccount.com",
             ["private_key"] = pem,
-            ["token_uri"] = tokenUri,
         });
-        return (ServiceAccountCredentials.Parse(json), rsa);
+        // Parse は token_uri を Google の窓口に限る（DEC-COM-053）ので、テスト用の偽の窓口は Parse のあとで差し込む
+        return (ServiceAccountCredentials.Parse(json) with { TokenUri = tokenUri }, rsa);
     }
 
     public static SecretStore Secrets(string? dir = null, IUserPresenceKey? presence = null, string user = "alice") =>

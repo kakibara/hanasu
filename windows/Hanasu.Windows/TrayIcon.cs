@@ -7,8 +7,10 @@ namespace Hanasu.Windows;
 
 /// <summary>
 /// タスクトレイのアイコンとメニュー（Mac 版のメニューバーにあたる）。
-/// 音声入力の開始 / 翻訳して入力（英訳・和訳） / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / 設定 / 終了。
+/// 録音を開始 / 翻訳して入力を開始（英訳・和訳） / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / 設定 / Hanasu を終了。
+/// 文言と並びは Mac 版のメニューバー（AppDelegate の statusMenu）にそろえ、各項目にアクセスキー（&amp;）を付ける。
 /// </summary>
+// 設計判断: DEC-COM-152
 internal sealed class TrayIcon : IDisposable
 {
     private readonly AppHost host;
@@ -28,19 +30,19 @@ internal sealed class TrayIcon : IDisposable
         dictateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(DictationMode.Refine));
         // 設計判断: DEC-DIC-027（設定で選んだ翻訳の言語のうち最初で始める）
         translateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(host.Dictation.PrimaryTranslateMode));
-        recentItem = new Forms.ToolStripMenuItem("最近の結果");
+        recentItem = new Forms.ToolStripMenuItem("最近の結果(&E)");
         meetingItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.ToggleMeetingFromMenu());
         menu.Items.Add(dictateItem);
         menu.Items.Add(translateItem);
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add(meetingItem);
-        menu.Items.Add(new Forms.ToolStripMenuItem("会議ノートを開く", null, (_, _) => host.ShowMeetings()));
+        menu.Items.Add(new Forms.ToolStripMenuItem("会議ノートを開く(&N)…", null, (_, _) => host.ShowMeetings()));
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add(recentItem);
-        menu.Items.Add(new Forms.ToolStripMenuItem("履歴を開く…", null, (_, _) => host.ShowHistory()));
+        menu.Items.Add(new Forms.ToolStripMenuItem("履歴を開く(&H)…", null, (_, _) => host.ShowHistory()));
         menu.Items.Add(new Forms.ToolStripSeparator());
-        menu.Items.Add(new Forms.ToolStripMenuItem("設定…", null, (_, _) => host.ShowSettings()));
-        menu.Items.Add(new Forms.ToolStripMenuItem("終了", null, (_, _) => host.Quit()));
+        menu.Items.Add(new Forms.ToolStripMenuItem("設定(&S)…", null, (_, _) => host.ShowSettings()));
+        menu.Items.Add(new Forms.ToolStripMenuItem("Hanasu を終了(&X)", null, (_, _) => host.Quit()));
 
         icon = new Forms.NotifyIcon
         {
@@ -83,9 +85,10 @@ internal sealed class TrayIcon : IDisposable
     {
         var s = host.Settings.Current;
         var busy = state is DictationState.Preparing or DictationState.Recording;
-        dictateItem.Text = busy ? "録音を止めて入力" : "音声入力を開始";
+        // 文言は Mac 版のメニューバーと同じ（DEC-COM-152）
+        dictateItem.Text = busy ? "録音を停止して入力(&R)" : "録音を開始(&R)";
         dictateItem.ShortcutKeyDisplayString = s.HotKey.DisplayString;
-        translateItem.Text = $"{TranslationLanguages.MenuVerb(s.TranslationLanguages)}して入力";
+        translateItem.Text = $"{TranslationLanguages.MenuVerb(s.TranslationLanguages)}して入力を開始(&T)";
         translateItem.ShortcutKeyDisplayString = s.TranslateHotKey.DisplayString;
         // 処理中はどちらも押せない。録音中は「止める」だけ押せる。会議の記録中は音声入力を使えない
         var meetingIdle = meetingState == MeetingState.Idle;
@@ -95,10 +98,10 @@ internal sealed class TrayIcon : IDisposable
         var elapsed = Meeting.Clock(host.Meetings.ElapsedSeconds);
         meetingItem.Text = meetingState switch
         {
-            MeetingState.Recording => $"会議の記録を停止（{elapsed}）",
-            MeetingState.Starting => "会議の記録を始めています…",
-            MeetingState.Processing => "会議の記録を処理しています…",
-            _ => "会議の記録を開始",
+            MeetingState.Recording => $"会議の記録を停止（{elapsed}）(&M)",
+            MeetingState.Starting => "会議の記録を準備中…",
+            MeetingState.Processing => "会議の記録を処理中…",
+            _ => "会議の記録を開始(&M)",
         };
         meetingItem.ShortcutKeyDisplayString = s.MeetingHotKey.DisplayString;
         meetingItem.Enabled = meetingState is MeetingState.Idle or MeetingState.Recording && state == DictationState.Idle;

@@ -53,6 +53,12 @@ final class EditModeController {
         recognizer.onBatchTranscriptionStarted = { [weak self] _ in
             self?.hud.model.transcribing = true
         }
+        // 設計判断: DEC-DIC-144
+        // 録音が上限に達したら、止めて、ここまでの音声を処理する（HUD に理由を出す）
+        recognizer.onRecordingLimitReached = { [weak self] in
+            self?.hud.updateTranscript(SpeechRecognizer.recordingLimitNotice)
+            self?.stopFromHUD()
+        }
         // 編集中は音声入力を始めない（マイクと HUD を取り合わないため）
         dictation.canStart = { [weak self] in self?.state == .idle }
         // 初回の登録は、呼び出し元が onHotKeyRegistrationFailed を設定し終えてから行う
@@ -361,6 +367,14 @@ final class EditModeController {
             // 編集の結果は履歴に残らない（DEC-DIC-036）ので、ここで失わないよう全文を残す
             hud.hide()
             PasteFallbackPanel.shared.show(text: output, subject: .edit, clipboardKept: clipboardKept)
+        case .unconfirmed(let clipboardKept):
+            if clipboardKept {
+                hud.show(.error(TextInserter.unconfirmedMessage(clipboardKept: true, subject: "書き換えた文章")))
+            } else {
+                // 編集の結果は履歴に残らない（DEC-DIC-036）ので、クリップボードにも残せなかったときは全文を残す
+                hud.hide()
+                PasteFallbackPanel.shared.show(text: output, subject: .edit, clipboardKept: false)
+            }
         case .pasted:
             hud.show(.done("書き換えました（⌘Z で元に戻せます）"))
         }

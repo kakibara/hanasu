@@ -6,7 +6,7 @@
 
 **Speak naturally. Get clean, ready-to-send text and meeting minutes that write themselves.**
 
-A voice-input and meeting-notes app for macOS and Windows. It uses on-device speech recognition and Gemini or Claude.
+A voice-input and meeting-notes app for macOS and Windows. It uses on-device speech recognition, and Gemini, Claude, or an AI model that runs on your own device.
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
@@ -23,13 +23,13 @@ A voice-input and meeting-notes app for macOS and Windows. It uses on-device spe
 
 > [!NOTE]
 > Hanasu is built for **Japanese** first. The prompts, the UI and the dictionary rules all assume you speak Japanese.
-> It can also translate what you say into natural **English** before typing it.
+> It can also translate what you say into natural **English** (or into **Japanese**) before typing it.
 
 ## Why Hanasu
 
 Built-in dictation gives you a raw transcript. It keeps fillers and homophone mistakes, has no punctuation, and includes every "wait, I mean…".
-Hanasu sends the transcript to Gemini or Claude, which fixes those mistakes and tidies the text. Then Hanasu types the result where your cursor is.
-It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code is public. It is free for personal use and for small businesses; larger companies need a [commercial license](COMMERCIAL.md). You bring your own Gemini or Claude API key.
+Hanasu sends the transcript to an AI (Gemini, Claude, or a local model on your device), which fixes those mistakes and tidies the text. Then Hanasu types the result where your cursor is.
+It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code is public. It is free for personal use and for small businesses; larger companies need a [commercial license](COMMERCIAL.md). You bring your own Gemini or Claude API key, or run a local model with no API key and no text leaving your device.
 
 ## Features
 
@@ -38,14 +38,17 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 | | |
 | --- | --- |
 | **Speak → polished text** | Press <kbd>⌥ Space</kbd>, talk, and press it again (or click **■ Stop**). Hanasu removes fillers, fixes homophones, applies your self-corrections, and pastes the text at your cursor. |
-| **Speak Japanese, type English** | Press <kbd>⌥⇧ Space</kbd>, or switch the HUD to **English** while you talk. Set phrases are translated naturally, so お疲れ様です becomes "Hi,". |
+| **Speak, type it translated** | Press <kbd>⌥⇧ Space</kbd>, or switch the HUD to **English** or **日本語** while you talk. Set phrases are translated naturally, so お疲れ様です becomes "Hi,". Pick the languages to offer (English, Japanese, or both) in **Settings → General**. English is the default. |
+| **Mixed languages stay as spoken** | By default, the parts you say in English stay in English. You can choose to unify the output into Japanese instead. |
 | **Edit by voice** | Select some text, press <kbd>⌃⌥⌘ E</kbd>, and say "make it more polite", "turn it into bullets" or "translate to English". |
 | **Per-app styles** | Text is casual and short in Slack, polite with paragraphs in Mail, and in written style in Pages, Word and Notion. You can change the preset for each app. |
-| **Snippets** | Say "email signature" to insert saved text exactly as you wrote it. Snippets are never sent to Gemini. |
-| **Dictionary** | Add proper nouns and replacement rules such as `ストックマーク => Stockmark`. Gemini can also suggest new entries from your history. |
+| **Snippets** | Say "email signature" to insert saved text exactly as you wrote it. Snippets are never sent to the AI. |
+| **Dictionary** | Add proper nouns and replacement rules such as `ストックマーク => Stockmark`. On Mac, the AI can also suggest new entries from your history and meetings, and you add only the ones you pick. |
 | **Screen context** *(opt-in)* | Hanasu reads the window title and the text around your cursor, so names match what is already on screen. Password fields are never read. |
-| **History** | Search past results and retry failed ones. Press <kbd>⌥⇧ V</kbd> to paste the last result again. |
+| **Choose your mic** *(Mac)* | Pick the microphone in Settings, or switch it from the mic button on the HUD without stopping the recording. |
+| **History** | Search past results and retry failed ones. History is kept for 30 days by default, and you can change that in Settings. On Mac, press <kbd>⌥⇧ V</kbd> to paste the last result again. |
 | **Nowhere to paste?** | If no text field has focus (for example, the desktop is in front), Hanasu keeps the result on screen instead of pasting it. Copy it from there, or just press <kbd>⌘V</kbd> where you want it (you can choose whether the result stays on the clipboard). |
+| **Paste didn't land?** | If the paste never reached an app (for example, you switched windows while recording), Hanasu leaves the latest result on the clipboard and tells you in the HUD. Press <kbd>⌘V</kbd> where you want it. In Settings → General you can also have the dictation history open when this happens. |
 
 <p align="center">
   <img src="docs/images/hud-english.png" width="420" alt="English output">
@@ -57,12 +60,15 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 | | |
 | --- | --- |
 | **Records both sides** | Your microphone is recorded as "you". The Mac's audio output (Zoom, Meet, Teams, Slack huddles, and so on) is recorded as "them". No bot joins the call. |
-| **Speaker diarization** | The other side is split into Speaker 1, Speaker 2, and so on, on device. You can rename speakers afterwards. |
-| **Minutes by Gemini** | Choose a template: auto, weekly sync, 1-on-1, sales call, brainstorm, or custom. Action items include an owner and a due date. |
-| **Live notes & highlights** | Type timestamped notes during the call, or press <kbd>⌃⌥⌘ H</kbd> to mark "this matters". The minutes give those parts priority. |
+| **Speaker diarization** | The other side is split into Speaker 1, Speaker 2, and so on, on device. When the conversation makes a name clear (someone introduces themselves, for example), the AI fills it in and marks it as a guess. You can rename speakers afterwards. |
+| **AI minutes** | Made by the AI you choose for meetings. Choose a template: auto, weekly sync, 1-on-1, sales call, brainstorm, or custom. Action items include an owner and a due date. |
+| **Live notes & highlights** | Type timestamped notes during the call, or press <kbd>⌃⌥⌘ H</kbd> to mark "this matters" (you can undo it for 10 seconds). The minutes give those parts priority, and afterwards you can read the conversation around each mark. |
+| **Floating captions** *(Mac)* | Show the live transcript as captions on top of your meeting app. |
+| **AI chat during the meeting** *(Mac)* | While recording, ask the AI about the conversation so far (<kbd>⌘J</kbd>). One click for "summarize so far" or "decisions & to-dos". Ask follow-ups, and click a timestamp in an answer to jump to that part of the transcript. |
 | **Meeting detection** | When a meeting app starts using the mic, Hanasu asks whether to record. It never starts recording on its own. |
 | **Search & Ask** | Search the text of every meeting, or ask "What did we decide in last week's sync?". The answer cites the meetings it used. |
 | **Export** | Copy as Markdown or as a summary ready for Slack, save as `.md` / `.txt`, or send action items to Reminders. |
+| **Organize** | Rename a meeting by editing its title in place, or delete a meeting you no longer need. |
 
 <p align="center">
   <img src="docs/images/meeting-live.png" width="420" alt="Recording with live notes">
@@ -79,10 +85,26 @@ Pick the AI that polishes your text, separately for **voice input** and **meetin
 
 | AI | Default model | Sign-in |
 | --- | --- | --- |
-| **Gemini** (default) | voice input `gemini-3.5-flash-lite`, meetings `gemini-3.8-flash` | Google AI Studio API key or Vertex AI service account |
+| **Gemini** (default on Windows) | voice input `gemini-3.5-flash-lite`, meetings `gemini-3.8-flash` | Google AI Studio API key or Vertex AI service account |
 | **Claude** | voice input `claude-haiku-5-5`, meetings `claude-sonnet-5-5` (Opus 5.5 also available) | Anthropic API key |
+| **Local** (on your device; default on Mac) | Gemma 4 E4B (recommended). See the table below | None. Download the model in **Settings → AI**. On the Mac, if the model is missing when Hanasu starts to polish text, it asks whether to download it |
+| **Apple** *(Mac, macOS 27)* | The on-device Apple Intelligence model, through the `fm` command | None |
 
-Claude only handles text. Speech is transcribed by the engine below.
+These AIs only handle text. Speech is transcribed by the engine below.
+
+#### 💻 Local models
+
+With **Local**, Hanasu runs a small language model on your own Mac or PC with the bundled [llama.cpp](https://github.com/ggml-org/llama.cpp), so your text never leaves the device. The Mac uses the GPU (Metal), and Windows uses the CPU. You download a model once from **Settings → AI**. Hanasu checks its size and SHA-256 before using it.
+
+| Model | Size | License | Notes |
+| --- | --- | --- | --- |
+| **Gemma 4 E4B** (Google) — **recommended** | 4.59 GB | Apache-2.0 | The most natural results for both clean-up and minutes. 16 GB of memory or more is recommended. The default for both voice input and meetings |
+| LFM2.5-1.2B-JP (Liquid AI) | 1.25 GB | LFM Open License v1.0 | Small and fast. Organizations with annual revenue of US$10M or more may not use it commercially under this license |
+| Sarashina2.2 3B (SB Intuitions) | 2.07 GB | MIT | Trained on Japanese. Its context is 8K, so long meetings are summarized in parts |
+| Qwen3.5-4B (Alibaba) | 2.74 GB | Apache-2.0 | About half the size of Gemma, so it is easier to run on 8 GB of memory. Weaker than Gemma at handling self-corrections |
+
+> [!TIP]
+> We recommend **Gemma 4 E4B**. In our tests, the other models sometimes kept the words you meant to take back, added sentences you didn't say, mixed up who owns an action item, or merged or missed action items. Gemma 4 E4B handled both clean-up and minutes reliably.
 
 ### 🔊 Choose your speech engine
 
@@ -93,6 +115,7 @@ Claude only handles text. Speech is transcribed by the engine below.
 | **Gemini** | Google | — (after you stop) | The recorded audio is sent to Google |
 
 You can choose a different engine for voice input and for meetings. On Windows, meetings use Whisper or Gemini.
+On Mac, pick the transcription language from a list (Japanese, English, Chinese, Korean, French, German, Spanish, Italian, Portuguese). It starts as your system language.
 
 ## Download
 
@@ -126,16 +149,20 @@ See [windows/README.md](windows/README.md) for more notes and how the Windows ve
 
 ## Quick start
 
-1. **Add an AI credential.** Open **Settings → AI** and choose Gemini or Claude. For Gemini, paste an API key from [Google AI Studio](https://aistudio.google.com/apikey) or select a Vertex AI service-account JSON file. For Claude, paste an API key from the [Claude Console](https://console.anthropic.com/settings/keys). Click the test button to check that it works.
+On Mac, the first launch opens a short guided tour. It lets you pick your AI (Gemma 4 E4B, the recommended local model, downloads right there), shows the main features and settings tips, and asks for the permissions Hanasu needs. Open it again any time from **How to use Hanasu…** in the menu.
+
+1. **Choose an AI.** Open **Settings → AI** and choose an AI for voice input and for meetings. For Gemini, paste an API key from [Google AI Studio](https://aistudio.google.com/apikey) or select a Vertex AI service-account JSON file. For Claude, paste an API key from the [Claude Console](https://console.anthropic.com/settings/keys). For Local, download a model (Gemma 4 E4B is recommended). No key is needed. Click the test button to check that it works.
 2. **Dictate.** Put the cursor where you want the text, press the shortcut, speak, and press the shortcut again.
 3. **Record a meeting.** Use the menu-bar (Mac) or tray (Windows) menu, or the shortcut. Headphones help keep the two sides apart.
+
+On Mac, you can show the Hanasu icon in the menu bar, in the Dock, or in both (Settings → General).
 
 ### Default shortcuts
 
 | Action | macOS | Windows |
 | --- | --- | --- |
 | Voice input (start / stop) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Voice input in English | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Voice input, translated (English / Japanese) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Edit selection by voice | <kbd>⌃⌥⌘ E</kbd> | — |
 | Paste last result again | <kbd>⌥⇧ V</kbd> | — |
 | Cancel recording | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
@@ -147,7 +174,8 @@ You can change every shortcut in Settings. The full user guide (in Japanese) is 
 ## Privacy
 
 - **Audio stays on your device by default.** Speech recognition, Whisper and speaker diarization all run locally.
-- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask.
+- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask and the meeting AI chat.
+- **Local and Apple keep text on your device too.** If you choose either one, nothing is sent to an AI service. The only download is the model itself.
 - **Audio goes to Google only if you choose it.** If you select the Gemini speech engine, the recorded audio is sent to Google.
 - **Meetings are plain files.** They are saved as JSON and Markdown under `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac and Windows use the same format.
 - **No telemetry.** Hanasu collects no analytics.

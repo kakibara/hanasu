@@ -308,7 +308,7 @@ private struct SelectableText: NSViewRepresentable {
 
 // 要件: REQ-DIC-081
 // 設計判断: DEC-DIC-095
-/// 設定の「一般」タブに置く「入力できる場所がないとき」の欄
+/// 設定の「一般」に置く「入力できる場所がないとき」の欄
 struct PasteFallbackSettingsSection: View {
     @ObservedObject var settings = PasteFallbackSettings.shared
 
@@ -322,6 +322,24 @@ struct PasteFallbackSettingsSection: View {
             Text("入力できる場所がないとき")
         } footer: {
             Text("デスクトップや Finder の一覧が前面にある・ボタンやリンクを選んでいる・Web ページの入力欄の外をクリックしたあとなど、入力欄にカーソルがないと分かったときは、貼り付けずに結果を画面に表示します。表示は「閉じる」か Esc で閉じるか、次に録音を始めるまで残ります。分からないときは、これまでどおり貼り付けます。")
+                .font(.caption).foregroundStyle(.secondary)
+        }
+    }
+}
+
+// 要件: REQ-DIC-083, REQ-DIC-084
+// 設計判断: DEC-DIC-099
+/// 設定の「一般」の「貼り付けが届かなかったとき」の欄
+struct PasteUnconfirmedSettingsSection: View {
+    @ObservedObject var settings = PasteFallbackSettings.shared
+
+    var body: some View {
+        Section {
+            Toggle("音声入力の履歴を開く", isOn: $settings.openHistoryWhenUnconfirmed)
+        } header: {
+            Text("貼り付けが届かなかったとき")
+        } footer: {
+            Text("録音中に別のウインドウへ移ったなどで、⌘V を送っても貼り付け先が受け取らなかったときは、最新の結果をクリップボードに入れたままにします。入力したい場所で ⌘V を押せば貼れます。オンにすると、あわせて履歴のウインドウを開き、最新の結果を選んだ状態にします。")
                 .font(.caption).foregroundStyle(.secondary)
         }
     }

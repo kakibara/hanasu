@@ -205,15 +205,20 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
 - 提案を出すときは、効果音の設定がオンなら `Glass` を鳴らす。
 - 隠すときは、出していた提案も消す（「記録を止めますか？」の経過時間が、隠れたパネルの中で動き続けないように。DEC-COM-016）。
 
-#### 設定（「会議」タブ →「会議の自動検出」）
+#### 設定（設定の「会議」→「会議の自動検出」）
 
 - 「会議が始まったら記録を提案する」: **既定はオン。** 提案するだけで勝手に録音はしないこと、目的が「記録の始め忘れ」を防ぐことで、オフが既定だと気づかれないまま役に立たないこと、待っている間の負荷がほぼないこと、から。不要なら「今回はしない」か設定でオフにできる。
 - 対象のアプリ（会議アプリ 5 つ、ブラウザ 4 つ）をそれぞれ選べる。既定はすべてオン。外したアプリを保存するので、あとで対象を足したときは既定でオンになる。
 - 設定は共有の `AppSettings` を大きく変えないよう、`MeetingDetectionSettings`（UserDefaults の `meetingAutoDetect`、`meetingAutoDetectDisabledApps`）に分けた。
 
+#### 会議の名前をタイトルにする（REQ-MTG-034）
+
+記録の準備中（`MeetingRecorder.start`、状態は `.starting`）に、マイクを使っている会議アプリ（`MeetingAutoDetect.titleSourceApps`。AppDelegate が `MeetingRecorder.titleSourceApps` につなぐ）のウインドウのタイトルを `MeetingTitle.detect` で読み、取り出せた名前を `Meeting.title` にする。どの入口から始めても同じ。読めなければ今までの日時のタイトル。
+取り出す規則と、名前とみなさないもの（DEC-MTG-035）は `MeetingTitle.swift`。ブラウザは、アクティブなタブのタイトルだけが読めるので、Meet のタブが裏にあるときは取れない。
+
 #### 確認用の CLI
 
-`MeetingDetectorCLI.swift`（`--list-audio-processes`・`--watch-audio-processes`・`--simulate-meeting-detection`・提案のパネルの描き出し）。
+`MeetingDetectorCLI.swift`（`--check-meeting-title`・`--detect-meeting-title`・`--list-audio-processes`・`--watch-audio-processes`・`--simulate-meeting-detection`・提案のパネルの描き出し）。
 
 ### 4.9 会議中のメモと「ここ重要」の印（F11〜F14）
 
@@ -290,6 +295,22 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 - 起動時に、アプリの終了などで「記録中」「処理中」のまま残った会議を「失敗」にする（DEC-MTG-018）
 - タップの実際のサンプリングレートを測って合わせる（DEC-MTG-003）、マイクは機器の構成が変わったら作り直す（DEC-MTG-004）
 
+### 4.13 会議中の AI チャット
+
+記録中に、その時点までの記録をもとに AI と会話する機能（REQ-MTG-040・041）。ロジックは `MeetingChat.swift`（`MeetingChat`）、状態と画面は `MeetingChatView.swift`（`MeetingChatModel`・`MeetingChatStore`・`MeetingChatView`・`LiveSidePanel`）、確認用の CLI は `MeetingChatCLI.swift`。
+
+- **画面の置き場所**: 記録中の画面（`LiveTranscriptView`）の右側のパネルを `LiveSidePanel` にし、上の切り替え（`LiveSidePanelModePicker`）で「メモ」（`LiveNotesPanel`）と「AI チャット」（`MeetingChatView`）を出し分ける。字幕と「ここ重要」のボタン（`LiveHighlightControls`）はどちらでも上に出す。選んだほうは `@AppStorage("meetingLiveSidePanel")` で覚える。⌘J で AI チャットにして入力欄にフォーカスする（DEC-MTG-080）。
+- **チャットの欄**（上から）:
+  - 会話を始める前: 何ができるかの説明と、よく使う質問のボタン（`MeetingChat.quickPrompts`。DEC-MTG-083）。
+  - 会話: 質問は右に吹き出し、答えは左に `MarkdownText` で出す。答えの下に「12:34 までの記録から」（渡した記録の範囲）と「コピー」「メモに残す」。待っている間は「ここまでの記録を読んでいます…」と「止める」。失敗したらその理由と「もう一度」。
+  - 入力欄: ↩ で送る（`TextField` の縦に伸びる形）。待っている間は送信のボタンが止めるボタンに変わる。会話のあとは、入力欄の上によく使う質問を小さく並べる。下に送り先の AI とモデルと「会話は保存しません」、「新しい会話」。
+- **送るもの**: 送るたびに `MeetingChat.liveMaterial` で、そのときの `MeetingRecorder.liveLines`（確定した発言）・`volatileMe`／`volatileOthers`（確定前の途中結果）・`Meeting.notesForPrompt()`（メモと印）を集め、`MeetingChat.prompt` でそれまでの会話と今の質問を足した 1 つの本文にして、会議に選んだ AI に `TextAIClient.generate`（effort は low）で送る（DEC-MTG-081）。答えの付かなかった質問は `MeetingChat.answeredTurns` で除く。長さの上限は `MeetingChat.Options`（DEC-MTG-082）。
+- **Whisper / Gemini のとき**: 記録中は文字起こしがないので、メモと印だけで答えることを欄の上に出し、本文にもそう書く。
+- **答えの中の時刻**: `MeetingChat.linkingTimes` で [12:34] を `hanasu-time://<秒>` のリンクにし、`OpenURLAction` で受けて、`MeetingChat.lineIndex` で探した発言へスクロールする。記録中は `followLatest` を止めて「最新の発言へ」のボタンを出す（DEC-MTG-084）。
+- **会話の持ち方**: `MeetingChatStore.shared` が会議の ID ごとに `MeetingChatModel` を持つ（メモリだけ）。同じ ID なので、記録を止めて会議の詳細に変わっても、「AI チャット」タブ（`MeetingDetailView` の 5 つめのタブ）で同じ会話が続く。記録のあとは `MeetingChat.material(for:)` で確定した文字起こしと話者名を渡す（DEC-MTG-086）。取り消し（「止める」）は、送った質問を会話から外して入力欄に戻す。
+- **メモに残す**: `MeetingChat.noteText` で答えを「AI: …」の 1 行にし、記録中は `MeetingRecorder.addNote`（質問した時刻）、記録のあとは `MeetingRecorder.updateNotes`（時刻なし）で足す（DEC-MTG-085）。
+- **確認**: `--test-meeting-chat` は本文の組み立て・時刻のリンク・メモへの変換を AI なしで確かめる。`--chat-meeting <会議のフォルダ> --ask … --ask …` は保存した会議で実際の AI と会話し（`--at <時刻>` でその時刻までを記録中として渡す）、`--render-meeting-chat` は画面を PNG にする。
+
 ## 5. アーキテクチャ
 
 ```
@@ -333,7 +354,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 ## 6. 画面
 
 - **メニューバー**: 「会議の記録を開始／停止」（録音中は経過時間を表示し、アイコンを赤い丸にする）、「会議ノートを開く」。
-- **会議ノート ウィンドウ**: 左に会議の一覧、右に選んだ会議の「議事録」「文字起こし」「メモ」タブ。録音中の会議はライブの文字起こしと、右側にメモ欄・「ここ重要」ボタン・字幕の切り替えを表示。話者名の変更、議事録の作り直し、書き出し（4.11）、議事録の型の選び直し（4.10）、Finder で開く。左下で録音する機器と議事録の型を選んでから記録を始める。
+- **会議ノート ウィンドウ**: 左に会議の一覧、右に選んだ会議の「議事録」「文字起こし」「メモ」「ここ重要」「AI チャット」タブ。録音中の会議はライブの文字起こしと、右側にメモ欄（「AI チャット」に切り替えられる。4.13）・「ここ重要」ボタン・字幕の切り替えを表示。話者名の変更、議事録の作り直し、書き出し（4.11）、議事録の型の選び直し（4.10）、Finder で開く。左下で録音する機器と議事録の型を選んでから記録を始める。
   - タイトルは詳細の上の欄（`EditableTitleField`）で書き換える。いつも薄い枠と鉛筆の印を出し、マウスを載せると枠を濃く、編集中はアクセントの色にする。Enter・フォーカスが外れたときに `MeetingRecorder.rename` で保存し、空なら元に戻す。Esc でやめる。別の会議を選んだときは、書きかけのタイトルを元の会議に保存してから切り替える（`MeetingDetailView.commitTitle`）。ウインドウを開いたときに最初の入力欄としてフォーカスが入らないよう、すぐ外す。
   - 削除: 一覧の右クリックの「削除…」、一覧で ⌫、詳細の上のゴミ箱のボタンから。確かめのダイアログのあと、`MeetingRecorder.delete` → `MeetingStore.moveToTrash` で会議のフォルダを丸ごとゴミ箱に移し（`FileManager.trashItem`）、一覧を読み直す（検索の索引も `recorder.$meetings` から更新される）。消したあとは一覧の次の会議を選ぶ。記録中・処理中の会議（`current`）と、議事録を作り直している会議（`regeneratingID`）は消せない。会議を書き換える `MeetingRecorder.update` は、フォルダがもうない会議を保存し直さない。
 - **字幕パネル**: 記録中、ほかのアプリの前面に直近の発言を出す小さなパネル（記録中の画面のメモ欄の上のボタンで出す）。

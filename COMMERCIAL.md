@@ -40,9 +40,10 @@ If you are not sure which applies to you, ask us through the form below.
 - **Term:** yearly.
 - **Price:** please contact us. Volume discounts are available.
 - **Payment:** quotes and invoices are available.
-- **AI costs:** Hanasu uses your own Gemini, Claude or Vertex AI API key. AI usage is not
-  included in the commercial license; you pay the AI provider directly. With your company's
-  Vertex AI, text is processed inside your own Google Cloud.
+- **AI costs:** Hanasu uses your own Gemini, Claude or Vertex AI API key, or a local model on
+  your device. AI usage is not included in the commercial license; you pay the AI provider
+  directly. With your company's Vertex AI, text is processed inside your own Google Cloud. With a
+  local model, text never leaves your device (each model has its own license from its publisher).
 
 ## How to buy or ask
 

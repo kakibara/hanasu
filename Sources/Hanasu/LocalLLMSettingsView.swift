@@ -1,17 +1,18 @@
 import SwiftUI
 
 // 要件: REQ-COM-030
-// 設計判断: DEC-COM-062, DEC-COM-066
+// 設計判断: DEC-COM-062, DEC-COM-066, DEC-COM-067
 /// 設定の「AI」タブで、用途の AI を「ローカル」にしたときの欄。モデルを選び、ダウンロード・削除し、ライセンスを見せる
 struct LocalModelChoice: View {
     @Binding var model: LocalLLMModel
     @ObservedObject var store = LocalLLMStore.shared
+    @State private var confirmDelete = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Picker("ローカルのモデル", selection: $model) {
                 ForEach(LocalLLMModel.allCases) { model in
-                    Text("\(model.name)（\(model.sizeLabel)）").tag(model)
+                    Text("\(model.name)（\(model.sizeLabel)）\(model.isRecommended ? "・おすすめ" : "")").tag(model)
                 }
             }
             Text(model.summary).font(.caption).foregroundStyle(.secondary)
@@ -50,7 +51,12 @@ struct LocalModelChoice: View {
             HStack {
                 Label("ダウンロード済み", systemImage: "checkmark.circle.fill").font(.caption).foregroundStyle(.green)
                 Spacer()
-                Button("削除") { store.delete(model) }
+                Button("削除…") { confirmDelete = true }
+                    .confirmationDialog("ローカルのモデル「\(model.name)」を削除しますか？", isPresented: $confirmDelete) {
+                        Button("削除", role: .destructive) { store.delete(model) }
+                    } message: {
+                        Text("もう一度使うには、ダウンロードし直します（\(model.sizeLabel)）。")
+                    }
             }
         case .failed(let message):
             HStack {

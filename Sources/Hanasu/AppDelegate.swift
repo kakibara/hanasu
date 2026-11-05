@@ -17,18 +17,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let meetingHotKeys = HotKeyManager()
     private var meetingHotKeyID: UInt32?
     private var meetingAutoDetect: MeetingAutoDetect?
+    // 要件: REQ-COM-050, REQ-COM-051
+    private let onboarding = OnboardingWindowController()
     private var cancellables: Set<AnyCancellable> = []
 
-    // 設計判断: DEC-COM-008, DEC-COM-009
+    // 設計判断: DEC-COM-008, DEC-COM-009, DEC-COM-093
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // 設計判断: DEC-COM-090
+        // メニューバーのアイコンなど、AppKit が設定に書くものを作る前に、初めての起動かを確かめる
+        let showsOnboarding = OnboardingState.shouldShowOnLaunch()
         // 設計判断: DEC-COM-063
         // 前回落ちたときに残ったローカルの LLM のサーバーを止める
         LocalLLMServer.cleanUpStaleServer()
+        // 設計判断: DEC-DIC-070
+        // 音声入力の履歴は裏で先に読んでおく（先に使われたら、そこで同期で読む）
+        DictationHistoryStore.preloadShared()
         controller = DictationController()
         historyUI = DictationHistoryUI(
             isDictationBusy: { [weak self] in self?.controller.state != .idle },
             onHotKeyRegistrationFailed: { [weak self] combo in
-                self?.showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「履歴」タブで別のキーを選んでください。")
+                self?.showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「履歴」で別のキーを選んでください。")
             })
         NSApp.mainMenu = makeMainMenu()
 
@@ -47,6 +55,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         updateIcon(for: .idle)
 
         controller.onStateChange = { [weak self] state in self?.updateIcon(for: state) }
+        controller.onOpenHistory = { [weak self] id in self?.historyUI.openWindow(selecting: id) }
         editController = EditModeController(dictation: controller)
         editController.onStateChange = { [weak self] state in
             guard let self else { return }
@@ -67,12 +76,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             .store(in: &cancellables)
         // 会議アプリがマイクを使い始めたら記録を提案する（記録はユーザーが押してから）
         meetingAutoDetect = MeetingAutoDetect(recorder: meetingRecorder) { [weak self] in self?.toggleMeeting() }
+        // 要件: REQ-MTG-034
+        meetingRecorder.titleSourceApps = { [weak self] in self?.meetingAutoDetect?.titleSourceApps ?? [] }
         controller.onHotKeyRegistrationFailed = { [weak self] combo in
             self?.showAlert(
                 "ショートカット \(combo.displayString) を登録できませんでした",
                 "他のアプリやシステムのショートカットと重なっている可能性があります。設定で別のキーを選んでください。")
         }
 
+        // 要件: REQ-COM-050, REQ-COM-051
+        // 設計判断: DEC-COM-093
+        // 初めての起動では、設定画面と許可のダイアログの代わりにオンボーディングを出す（許可はその最後のページで求める）
+        if showsOnboarding {
+            openOnboarding()
+            return
+        }
         // メニューバーのアイコンが隠れていても設定に辿り着けるよう、起動時は設定画面を開く
         openSettings()
         // 自動入力（⌘V の送信）にはアクセシビリティ権限が要る
@@ -191,6 +209,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(axItem)
 
         menu.addItem(.separator())
+        // 設計判断: DEC-COM-091
+        menu.addItem(NSMenuItem(title: "Hanasu の使い方…", action: #selector(openOnboarding), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "設定…", action: #selector(openSettings), keyEquivalent: forDock ? "" : ","))
         if !forDock {
             menu.addItem(NSMenuItem(title: "Hanasu を終了", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
@@ -205,6 +225,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // 設計判断: DEC-COM-009
     /// Dock や Finder でアイコンをクリックしたら、設定画面を前に出す
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        // 設計判断: DEC-COM-093
+        // オンボーディングの途中なら、設定画面ではなくオンボーディングを前に出す
+        if onboarding.isVisible {
+            onboarding.show()
+            return true
+        }
         openSettings()
         return true
     }
@@ -236,6 +262,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let appMenu = NSMenu()
         appMenu.addItem(withTitle: "Hanasu について", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
         appMenu.addItem(.separator())
+        // 設計判断: DEC-COM-091
+        appMenu.addItem(withTitle: "Hanasu の使い方…", action: #selector(openOnboarding), keyEquivalent: "").target = self
         appMenu.addItem(withTitle: "設定…", action: #selector(openSettings), keyEquivalent: ",").target = self
         appMenu.addItem(.separator())
         appMenu.addItem(withTitle: "Hanasu を隠す", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
@@ -320,7 +348,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             if event == .pressed { self?.toggleMeeting() }
         }
         if meetingHotKeyID == nil {
-            showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「会議」タブで別のキーを選んでください。")
+            showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「会議」で別のキーを選んでください。")
         }
     }
 
@@ -344,6 +372,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         editController.toggleFromMenu()
     }
 
+    // 要件: REQ-COM-051
+    // 設計判断: DEC-COM-091
+    @objc private func openOnboarding() {
+        onboarding.show()
+    }
+
+    // 設計判断: DEC-COM-151
+    /// 設定のウインドウ。左にサイドバーを置き、大きさを変えられるようにする。
+    /// 大きさを中身に合わせない（会議ノートと同じ。合わせると、中身の長い項目を開いたときにウインドウが縦に伸びる）
+    static func makeSettingsWindow(rootView: some View) -> NSWindow {
+        let hosting = NSHostingController(rootView: rootView)
+        hosting.sizingOptions = []
+        let window = NSWindow(contentViewController: hosting)
+        window.title = "Hanasu 設定"
+        window.styleMask = [.titled, .closable, .miniaturizable, .resizable]
+        window.contentMinSize = settingsWindowMinSize
+        window.setContentSize(settingsWindowSize)
+        window.isReleasedWhenClosed = false
+        return window
+    }
+
+    static let settingsWindowSize = NSSize(width: 780, height: 600)
+    static let settingsWindowMinSize = NSSize(width: 700, height: 480)
+
     // 設計判断: DEC-COM-012
     @objc private func openSettings() {
         if settingsWindow == nil {
@@ -365,11 +417,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     self.registerMeetingHotKey(AppSettings.shared.meetingHotKey)
                 },
                 onOpenHistory: { [weak self] in self?.historyUI.openWindow() })
-            let window = NSWindow(contentViewController: NSHostingController(rootView: view))
-            window.title = "Hanasu 設定"
-            window.styleMask = [.titled, .closable]
-            window.isReleasedWhenClosed = false
+            let window = Self.makeSettingsWindow(rootView: view)
             window.center()
+            window.setFrameAutosaveName("HanasuSettingsWindow")
             settingsWindow = window
         }
         NSApp.activate()

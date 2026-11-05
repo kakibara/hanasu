@@ -5,7 +5,10 @@ import SwiftUI
 /// 音声入力の履歴ウインドウ、メニューの「最近の結果」、「最後の結果をもう一度入力」のショートカットを受け持つ。
 @MainActor
 final class DictationHistoryUI: NSObject {
-    private let store: DictationHistoryStore
+    private let injectedStore: DictationHistoryStore?
+    // 設計判断: DEC-DIC-070
+    /// 使うときに初めて `shared` を取る（起動時に履歴の読み込みでメインを止めない。先読みは `DictationHistoryStore.preloadShared`）
+    private var store: DictationHistoryStore { injectedStore ?? .shared }
     private let isDictationBusy: () -> Bool
     private let onHotKeyRegistrationFailed: (HotKeyCombo) -> Void
     private let hotKeys = HotKeyManager()
@@ -20,7 +23,7 @@ final class DictationHistoryUI: NSObject {
          isDictationBusy: @escaping () -> Bool,
          onHotKeyRegistrationFailed: @escaping (HotKeyCombo) -> Void)
     {
-        self.store = store ?? .shared
+        injectedStore = store
         self.isDictationBusy = isDictationBusy
         self.onHotKeyRegistrationFailed = onHotKeyRegistrationFailed
         super.init()
@@ -50,7 +53,7 @@ final class DictationHistoryUI: NSObject {
         if hotKeyID == nil { onHotKeyRegistrationFailed(combo) }
     }
 
-    // 要件: REQ-DIC-062, REQ-DIC-080
+    // 要件: REQ-DIC-062, REQ-DIC-080, REQ-DIC-083, REQ-DIC-084
     // 設計判断: DEC-DIC-077, DEC-DIC-096
     /// 最後の結果を、いま前面にあるアプリへもう一度入力する
     @objc func repasteLast() {
@@ -73,6 +76,11 @@ final class DictationHistoryUI: NSObject {
                 hud.show(.error("アクセシビリティが許可されていないため、クリップボードにコピーしました。⌘V で貼り付けてください。"))
             case .notPasted(let clipboardKept):
                 PasteFallbackPanel.shared.show(text: last.output, subject: .result, clipboardKept: clipboardKept)
+            case .unconfirmed(let clipboardKept):
+                hud.show(.error(TextInserter.unconfirmedMessage(clipboardKept: clipboardKept)))
+                if PasteFallbackSettings.shared.openHistoryWhenUnconfirmed {
+                    openWindow(selecting: last.id)
+                }
             }
         }
     }
@@ -121,9 +129,17 @@ final class DictationHistoryUI: NSObject {
 
     // MARK: - ウインドウ
 
-    func openWindow() {
+    // 要件: REQ-DIC-084
+    // 設計判断: DEC-DIC-099
+    /// 履歴のウインドウを開く。selecting を渡すと、検索と絞り込みを外してその項目を選んだ状態で開く
+    func openWindow(selecting id: UUID? = nil) {
+        if let id, let window {
+            let frame = window.frame
+            window.contentViewController = NSHostingController(rootView: DictationHistoryView(store: store, selection: id))
+            window.setFrame(frame, display: false)
+        }
         if window == nil {
-            let window = NSWindow(contentViewController: NSHostingController(rootView: DictationHistoryView(store: store)))
+            let window = NSWindow(contentViewController: NSHostingController(rootView: DictationHistoryView(store: store, selection: id)))
             window.title = "Hanasu 音声入力の履歴"
             window.styleMask = [.titled, .closable, .resizable, .miniaturizable]
             window.setContentSize(NSSize(width: 900, height: 580))
@@ -155,6 +171,8 @@ struct DictationHistoryView: View {
     @State var selection: UUID?
     @State private var query = ""
     @State private var filter: DictationHistoryFilter = .all
+    /// 削除の確認を待っている 1 件（設計判断: DEC-DIC-079）
+    @State private var pendingDelete: UUID?
 
     init(store: DictationHistoryStore, selection: UUID? = nil, query: String = "") {
         self.store = store
@@ -171,6 +189,16 @@ struct DictationHistoryView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .frame(minWidth: 760, minHeight: 460)
+        .confirmationDialog("この履歴を削除しますか？", isPresented: Binding(
+            get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } })
+        ) {
+            Button("削除", role: .destructive) {
+                if let id = pendingDelete { store.delete([id]) }
+                pendingDelete = nil
+            }
+        } message: {
+            Text("元に戻せません。")
+        }
     }
 
     private var filtered: [DictationHistoryEntry] {
@@ -209,6 +237,8 @@ struct DictationHistoryView: View {
                     Button { query = "" } label: { Image(systemName: "xmark.circle.fill") }
                         .buttonStyle(.plain)
                         .foregroundStyle(.secondary)
+                        .help("検索語を消す")
+                        .accessibilityLabel("検索語を消す")
                 }
             }
             .padding(.horizontal, 8)
@@ -234,7 +264,7 @@ struct DictationHistoryView: View {
             }
             .listStyle(.sidebar)
             .onDeleteCommand {
-                if let selection { store.delete([selection]) }
+                if let selection { pendingDelete = selection }
             }
             Divider()
             HStack {
@@ -258,12 +288,12 @@ struct DictationHistoryView: View {
         Button("結果をコピー") { Self.copy(entry.output) }
         Button("原文をコピー") { Self.copy(entry.raw) }
         Divider()
-        Button("削除", role: .destructive) { store.delete([entry.id]) }
+        Button("削除", role: .destructive) { pendingDelete = entry.id }
     }
 
     @ViewBuilder private var detail: some View {
         if let selection, let entry = store.entries.first(where: { $0.id == selection }) {
-            DictationHistoryDetail(entry: entry, store: store)
+            DictationHistoryDetail(entry: entry, store: store, onDelete: { pendingDelete = entry.id })
                 .id(entry.id)
         } else {
             ContentUnavailableView(
@@ -371,6 +401,7 @@ private struct Tag: View {
 private struct DictationHistoryDetail: View {
     let entry: DictationHistoryEntry
     @ObservedObject var store: DictationHistoryStore
+    let onDelete: () -> Void
     @ObservedObject private var settings = AppSettings.shared
     @State private var retrying: DictationHistoryEntry.Mode?
     @State private var message: (text: String, isError: Bool)?
@@ -394,7 +425,7 @@ private struct DictationHistoryDetail: View {
                 Divider()
                 HStack {
                     Spacer()
-                    Button("この履歴を削除", role: .destructive) { store.delete([entry.id]) }
+                    Button("この履歴を削除", role: .destructive, action: onDelete)
                 }
             }
             .padding(20)
@@ -533,7 +564,7 @@ private struct TextSection: View {
     }
 }
 
-// MARK: - 設定画面の「履歴」タブ
+// MARK: - 設定画面の「履歴」
 
 struct HistorySettingsTab: View {
     @ObservedObject var settings = HistorySettings.shared
@@ -542,6 +573,7 @@ struct HistorySettingsTab: View {
     var onBeginShortcutRecording: () -> Void
     var onEndShortcutRecording: () -> Void
     @State private var confirmDeleteAll = false
+    @State private var confirmDeleteAudio = false
 
     init(store: DictationHistoryStore? = nil,
          onOpenHistory: @escaping () -> Void,
@@ -575,6 +607,7 @@ struct HistorySettingsTab: View {
                     ShortcutRecorder(
                         combo: $settings.repasteHotKey,
                         defaultCombo: .defaultRepaste,
+                        kind: .repaste,
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
@@ -613,7 +646,7 @@ struct HistorySettingsTab: View {
                     Text("\(Self.byteFormatter.string(fromByteCount: usage.bytes))（\(usage.count) 件）")
                 }
                 HStack {
-                    Button("録音だけをすべて削除") { store.deleteAllAudio() }
+                    Button("録音だけをすべて削除…") { confirmDeleteAudio = true }
                         .disabled(usage.count == 0)
                     Spacer()
                     Button("履歴をすべて削除…", role: .destructive) { confirmDeleteAll = true }
@@ -626,6 +659,11 @@ struct HistorySettingsTab: View {
             Button("すべて削除", role: .destructive) { store.deleteAll() }
         } message: {
             Text("\(store.entries.count) 件の履歴と、残している録音を削除します。元に戻せません。")
+        }
+        .confirmationDialog("残している録音をすべて削除しますか？", isPresented: $confirmDeleteAudio) {
+            Button("録音をすべて削除", role: .destructive) { store.deleteAllAudio() }
+        } message: {
+            Text("履歴の文章は残り、録音（音声ファイル）だけを削除します。元に戻せません。")
         }
     }
 }

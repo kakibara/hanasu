@@ -94,9 +94,9 @@
 ### REQ-COM-022 セキュリティの調査の結果を、実装と文書に入れる
 - 内容: 通信・秘密の扱い・ダウンロード・保存するファイル・クリップボード・プロンプトインジェクション・権限・依存関係・配布について調べ、直せるものは直し、残る危険は文書に書く。
 - 受け入れ条件:
-  - Mac: [design/security.md](../design/security.md) に、項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの: AI の通信はリダイレクトに従わずキャッシュを残さない（DEC-COM-044）、サービスアカウントの `token_uri` と Vertex AI のリージョンを確かめる（DEC-COM-053）、会議のフォルダを 0700 にする（DEC-COM-052）、自己署名でも Hardened Runtime を付ける（DEC-COM-051）。
-  - Windows: [design/security-windows.md](../design/security-windows.md) に項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの（モデルのハッシュの確認、リダイレクトでキーを送らない、DLL の探索の場所、権限の高いウインドウに貼らない、区切りのタグの無害化、ログの伏せ字、NuGet の lock ファイル、配布物の SHA-256）は、DEC-COM-142・145〜150 のとおりに動く。
-- 出典: ユーザーの依頼（2026-11-03「その他セキュリティで気をつけるべきところを調査してその結果を盛り込んで」）
+  - Mac: [design/security.md](../design/security.md) に、項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの: AI の通信はリダイレクトに従わずキャッシュを残さない（DEC-COM-044）、サービスアカウントの `token_uri` と Vertex AI のリージョンを確かめる（DEC-COM-053）、会議のフォルダを 0700 にする（DEC-COM-052）、自己署名でも Hardened Runtime を付ける（DEC-COM-051）、文字起こし・メモ・議事録の中の区切りのタグを無害にしてから埋め込む（DEC-COM-054）。
+  - Windows: [design/security-windows.md](../design/security-windows.md) に項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの（モデルのハッシュの確認、リダイレクトでキーを送らない、DLL の探索の場所、権限の高いウインドウに貼らない、区切りのタグの無害化、ログの伏せ字、NuGet の lock ファイル、配布物の SHA-256）は、DEC-COM-142・145〜150 のとおりに動く。加えて、サービスアカウントの `token_uri` を Google の窓口に限ることと、Vertex AI のリージョンの確認（DEC-COM-053）も動く。
+- 出典: ユーザーの依頼（2026-11-03「その他セキュリティで気をつけるべきところを調査してその結果を盛り込んで」）。固定する項目に DEC-COM-054（Mac の区切りのタグ）と DEC-COM-053（Windows の `token_uri` とリージョンの確認）を加えたのは、ユーザーの依頼（2026-11-05、PR #65）
 - 対象: Mac / Windows
 - 実装の場所: `SecureHTTP`、`ServiceAccountTokenProvider.isTrustedTokenURL`、`GeminiClient.isValidLocation`、`MeetingStore.createPrivateDirectory`、`scripts/build-app.sh`
 - Windows の実装: `windows/Hanasu.Core/Net/ModelDownload.cs`、`windows/Hanasu.Core/Net/SafeHttp.cs`、`windows/Hanasu.Core/Ai/PromptText.cs`、`windows/Hanasu.Core/Ai/SecretRedactor.cs`、`windows/Hanasu.Windows/Services/WindowsSecurity.cs`
@@ -117,23 +117,23 @@
 ### REQ-COM-024 音声入力と会議で、使う AI とモデルを別々に選べる
 - 内容: 音声入力（整形・英訳・選択の編集）と会議（議事録・会議への質問）のそれぞれで、AI（Gemini / Claude）とモデルを別々に選べる。
 - 受け入れ条件:
-  - Mac: 設定の「AI」タブの「使う AI とモデル」に「音声入力」と「会議」が並び、それぞれで Gemini / Claude とモデルを選べる（例: 音声入力は Gemini の flash-lite、会議は Claude Sonnet 5.5）。既定は、今までの設定を引き継いで両方 Gemini（音声入力は `geminiModel`、会議は `meetingMinutesModel`）。辞書の候補探しは会議の設定を使う（DEC-COM-040）。
+  - Mac: 設定の「AI」タブの「使う AI とモデル」に「音声入力」と「会議」が並び、それぞれで Gemini / Claude とモデルを選べる（例: 音声入力は Gemini の flash-lite、会議は Claude Sonnet 5.5）。既定は、両方ローカルの Gemma 4 E4B（REQ-COM-030。2026-11-04 の依頼で Gemini から変えた）。以前から使っている人で、AI を選んで保存していない人は、今までどおり Gemini のまま（DEC-COM-068）。辞書の候補探しは会議の設定を使う（DEC-COM-040）。
   - Windows: 設定 → AI の「使う AI とモデル」に「音声入力（整形・英訳）」と「会議（議事録）」の 2 行があり、行ごとに AI とモデルを選べる。既定は今までどおり（どちらも Gemini、モデルは gemini-3.5-flash-lite と gemini-3.8-flash）。Windows 版には選択の編集・会議への質問がないので、音声入力は整形・英訳、会議は議事録（作り直しを含む）に効く。
-- 出典: ユーザーの指示（2026-11-03「会議の要約モデルと音声入力モデルは個別に指定できるようにして」）
+- 出典: ユーザーの指示（2026-11-03「会議の要約モデルと音声入力モデルは個別に指定できるようにして」）。Mac の既定をローカルの Gemma にしたのは 2026-11-04 の依頼「デフォルトの文字起こしモデルを Google のローカルモデルの Gemma にして」
 - 対象: Mac / Windows
 - 実装の場所: `TextAIPurpose`、`AppSettings`（`dictationAIProvider`・`meetingAIProvider`・`aiProvider(for:)`・`textModel(for:)`）、`AIChoiceRow`
 - Windows の実装: `windows/Hanasu.Core/Ai/TextAiFactory.cs`、`windows/Hanasu.Core/Settings/AppSettings.cs`（`DictationAi` / `MeetingAi`）、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
-- 確かめ方: Mac は `.build/debug/Hanasu --render-ai-settings /tmp/ai.png --claude`（音声入力は Gemini、会議は Claude の見た目）
+- 確かめ方: Mac は `.build/debug/Hanasu --render-ai-settings /tmp/ai.png --claude`（音声入力は Gemini、会議は Claude の見た目）、`--test-ai-defaults`（既定のローカルと、以前から使っている人を Gemini のままにする引き継ぎ）
   - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`TextAiSelectionTests`）
 
-### REQ-COM-030 整形と議事録に使う AI として、端末の中で動く小型の LLM（Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2）を選べる
-- 内容: 文字起こしのあとの整形などと、議事録などの文章の処理に使う AI として、Gemini・Claude のほかに、端末の中で動く小型の LLM（ローカル）を選べる。モデルは Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2 の 3 つから選ぶ。文章は端末の外に送らない。
+### REQ-COM-030 整形と議事録に使う AI として、端末の中で動く小型の LLM（Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-4B）を選べ、Gemma 4 E4B を勧める
+- 内容: 文字起こしのあとの整形などと、議事録などの文章の処理に使う AI として、Gemini・Claude のほかに、端末の中で動く小型の LLM（ローカル）を選べる。モデルは Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-4B の 4 つから選ぶ。おすすめは Gemma 4 E4B（Google）で、選ぶ欄に「おすすめ」と出し、初めてローカルにしたときの既定にする（DEC-COM-067）。文章は端末の外に送らない。
 - 受け入れ条件:
-  - Mac: 設定の「AI」タブで、音声入力か会議の AI を「ローカル」にし、モデルを 3 つから選べる。選んだモデルがまだなければ、その場でダウンロードでき、進み具合が出る。ダウンロードしたモデルは消せる。ローカルにすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）がそのモデルで行われ、文章をネットに送らない。モデルがないまま使おうとすると、設定でダウンロードするよう知らせる。
+  - Mac: 設定の「AI」タブで、音声入力か会議の AI を「ローカル」にし、モデルを 4 つから選べる。Gemma 4 E4B に「おすすめ」と出る。選んだモデルがまだなければ、その場でダウンロードでき、進み具合が出る。ダウンロードしたモデルは消せる。ローカルにすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）がそのモデルで行われ、文章をネットに送らない。音声入力の整形・英訳と議事録の作成（作り直しを含む）・音声入力の履歴のやり直しでは、モデルがないとダウンロードするかを尋ねる（REQ-COM-032）。そのほかの処理（選択の編集・会議への質問・辞書の候補）でモデルがないまま使おうとすると、設定でダウンロードするよう知らせる。
   - Mac: 文脈に入らない長い会議でも議事録ができる（DEC-COM-065）。
-  - Windows: 設定 → AI で「音声入力」か「会議」の AI を「ローカル」にし、モデルを 3 つから選べる。ダウンロード・削除・進み具合は Mac と同じ。整形・英訳・議事録（作り直しを含む）がそのモデルで行われる。
+  - Windows: 設定 → AI で「音声入力」か「会議」の AI を「ローカル」にし、モデルを 4 つから選べる。Gemma 4 E4B に「おすすめ」と出る。ダウンロード・削除・進み具合は Mac と同じ。整形・英訳・議事録（作り直しを含む）がそのモデルで行われる。
   - モデルのライセンス（とくに LFM2.5 の、年間売上 1,000 万ドル以上の組織の商用利用を許さない条件）が、選ぶ画面に出る（DEC-COM-066）。
-- 出典: ユーザーの依頼（2026-11-04「文字起こし後の整形や議事録作成のモデルとしても小型の local LLM をつかえるようにしてください。Gemma 4 E4B, LFM2.5-1.2B-JP, Sarashina2.2 を選択できるようにして」）
+- 出典: ユーザーの依頼（2026-11-04「文字起こし後の整形や議事録作成のモデルとしても小型の local LLM をつかえるようにしてください。Gemma 4 E4B, LFM2.5-1.2B-JP, Sarashina2.2 を選択できるようにして」）。2026-11-04「ローカルモデルに Qwen の一番軽いモデルも追加して。Google の Gemma をレコメンドして。Sarashina などは良くなかった」。同じ日に、Qwen の小さいモデルの能力を調べた結果を見て「4B に替えて試して」（いちばん軽い 0.8B は、指示に従う力・多言語の知識が足りないため）
 - 対象: Mac / Windows
 - 実装の場所: `LocalLLMModel`、`LocalLLMStore`、`LocalLLMServer`、`LocalLLMClient`、`TextAIClient`（`.local`）、`AIChoiceRow`
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/`（`LocalLlmModel`・`LocalLlmClient`・`LongInputFitter`・`LocalLlmServer`）、`windows/Hanasu.Core/Ai/TextAiFactory.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
@@ -152,6 +152,19 @@
 - 実装の場所: `AppleFMClient`、`AppleFMAvailability`、`TextAIClient`（`.appleFM`）、`AIChoiceRow`
 - 確かめ方: `.build/debug/Hanasu --apple-fm-status`（使えるか・理由）、`HANASU_FM_PATH=<偽の fm> .build/debug/Hanasu --refine-text <文> --ai apple`・`--minutes-from-transcript <文字起こし> --ai apple`（偽の fm で、渡す引数と長い会議の分け方を確かめる）、`--render-ai-settings /tmp/ai.png --apple`。本物の `fm` は macOS 27 の実機で確かめる
 
+### REQ-COM-032 ローカルのモデルがまだないまま整形・議事録を始めたら、ダウンロードするかを尋ね、ダウンロードしたら続けて処理する（Mac）
+- 内容: 用途の AI をローカルにしていて、選んだモデル（既定は Gemma 4 E4B）がまだダウンロードされていないまま、実際に整形・英訳や議事録の作成をしようとしたとき、「ローカルのモデルがないのでダウンロードしますか」と尋ねるダイアログを出す。「ダウンロードする」を選ぶと、ダウンロードを始めて進み具合のバーを出し、終わったらそのまま整形（議事録の作成）を続ける。
+- 受け入れ条件:
+  - 音声入力の AI をローカルにし、モデルがないまま録音を止めると、ダイアログに、モデルの名前と大きさ、終わったら続けて整形（英訳）すること、ダウンロードしないときにどうなるか（整形前の文章を入力する）が出る。
+  - 「ダウンロードする」を押すと、進み具合のバー（割合とダウンロードした大きさ）と「中止」のボタンを出した小さなウインドウが出る。ダウンロードが終わるとウインドウが閉じ、録音を始めたときのアプリを前に戻して、整形した文章を入力する。
+  - 「今回はしない」か「中止」を選ぶと、整形せずに認識結果を入力し、モデルがないことを知らせる（今までどおり）。ダウンロードに失敗したら、その理由を知らせて整形前の文章を入力する。
+  - 会議の記録を止めたとき・議事録を作り直すときも、会議の AI がローカルでモデルがなければ同じダイアログを出し、ダウンロードしたら続けて議事録を作る。ダウンロードしないときは、議事録を作らずに文字起こしを残し、理由を知らせる。音声入力の履歴の「やり直し」でも同じように尋ねる。
+  - 設定やオンボーディングで始めたダウンロードの途中なら、尋ねずに進み具合のウインドウを出し、終わるのを待って続ける。
+- 出典: ユーザーの依頼（2026-11-04「選択したローカルモデルがダウンロードされてないのに文字起こしモデルとして選択されていたときは、実際に文字起こしして整形するという風になった時に、ローカルモデルがないのでダウンロードしますかというダイアログを出現させて。ダウンロードするという風にしたらダウンロードが始まって、終わったら解析するという風にしてください。ダウンロードは進捗バーを出してください」）
+- 対象: Mac（Windows 版は今までどおり、設定でダウンロードするよう知らせる）
+- 実装の場所: `LocalModelDownloadPrompt`、`LocalModelDownloadView`、`DictationController.finishDictation`、`MeetingRecorder`（議事録の作成と作り直し）、`DictationHistoryStore.retry`
+- 確かめ方: `.build/debug/Hanasu --render-local-model-download /tmp/download.png`（進み具合のウインドウの見た目）。ダイアログ・ダウンロード・続けて整形することは実機で確かめる（`HANASU_MODELS_DIR` を空のフォルダにして起動し、音声入力の AI をローカルにして録音する）
+
 ### REQ-COM-040 アイコンを出す場所を、メニューバー / Dock / 両方から選べる（Mac）
 - 内容: Moom のように、Hanasu のアイコンを出す場所を「メニューバーだけ」「Dock だけ」「メニューバーと Dock の両方」から設定で選べる。既定は両方（今までの出し方）。
 - 受け入れ条件:
@@ -163,6 +176,31 @@
 - 対象: Mac
 - 実装の場所: `AppPresence`、`AppPresenceSettings`、`AppPresenceSettingsSection`、`AppDelegate.applyPresence`、`AppDelegate.applicationDockMenu`
 - 確かめ方: `.build/debug/Hanasu --render-presence-settings /tmp/presence.png`（設定の欄）。切り替えは実機で確かめる（`.app` を起動して 3 つを順に選び、Dock・メニューバー・⌘Tab・Dock のメニューを見る）
+
+### REQ-COM-050 初回起動時に、整形などに使う既定の AI をその場で選ばせる。おすすめ（既定）は Gemma 4 E4B で、チュートリアルの中で選んでダウンロードする（Mac）
+- 内容: Hanasu を初めて起動したとき、オンボーディングの中で、整形・翻訳・議事録などに使う既定の AI を選ばせる。おすすめ（既定）は、この Mac の中で動く Gemma 4 E4B。Gemma はモデルのダウンロードが要るので、黙って最初から選んでおくのではなく、チュートリアルの中でユーザーが Gemma を選び、その場でダウンロードする。ほかの AI（Gemini / Claude / Apple）も選べ、その AI を使う準備（API キー・サービスアカウント）もその画面でできる。選んだ AI は設定に保存する。
+- 受け入れ条件:
+  - 初回起動で開くオンボーディングに「使う AI を選ぶ」ページがあり、いちばん上（左上）に「おすすめ」の印を付けた Gemma 4 E4B のカード、続いて Gemini・Claude・Apple のカードが、それぞれの特徴（文章をネットに送るか・要る準備）とともに並ぶ。はじめはどれも選ばれておらず、どれかを選ぶまで、そのページから先へ進めない。
+  - Gemma を選ぶと、音声入力と会議の両方の AI が「ローカル」の Gemma 4 E4B になり、その場で保存される（設定の「AI」タブを開くと同じ選択になっている）。同じページに、ダウンロードの大きさ・進み具合・中止のボタンが出る。まだダウンロードしていなければ「次へ」は「ダウンロードして次へ」になり、押すとダウンロードを始めて次のページへ進む。ダウンロードは、次のページを見ている間も続く。
+  - ほかの AI を選ぶと、音声入力と会議の両方がその AI になり、その AI に要る準備の欄が同じページに出る: Gemini は API キーかサービスアカウント、Claude は API キー、Apple は使えるかどうか。準備はあとからでもよい（設定の「AI」でできる）。
+  - 最後のページで、Gemma のダウンロードがまだ終わっていなければ、その進み具合が分かる。
+- 出典: ユーザーの依頼（2026-11-04「初回起動時にデフォルトのAIを選択させるようにして」）。同じ日の追加の依頼「デフォルトのモデルはgemmaにしてください。ただし、gemmaはモデルをダウンロードする必要があるので、何も言わずに（Gemma を）最初に選択するのではなく、チュートリアルの中で（Gemma を選択）して、ダウンロードするというプロセスを採用してください」（音声入力で「Gemma」が「現場」と書き起こされていたのを直して引いた）
+- 対象: Mac（Windows 版は対象外。FUT-003）
+- 実装の場所: `OnboardingAIPage`、`OnboardingAIChoice`、`OnboardingGemmaDownload`、`OnboardingModel.chooseDefaultAI`・`next`、`AISettingsTab` の `ClaudeKeySection`・`GeminiAuthSection`
+- 確かめ方: `.build/debug/Hanasu --render-onboarding /tmp/onboarding`（各ページの画像。`--ai local|gemini|claude` で選んだあとの準備の欄、`--downloading` で Gemma のダウンロード中）。初回の表示・保存・ダウンロードは実機で確かめる
+
+### REQ-COM-051 初回起動時に、主な機能と設定の Tips を説明するオンボーディングを出す（Mac）
+- 内容: 初めて起動したとき、ページをめくって進むオンボーディングのウインドウを出し、主な機能（音声入力・翻訳して入力・選択を声で編集・最後の結果の再入力・会議の記録・履歴・辞書・スニペット・アプリ別の文体）の使い方と、設定の Tips（AI とモデルを選べる、マイクを選べる、文字起こしのエンジンを選べる など）を見せる。Tips のうち AI とモデルは、その画面の中で選べる。2 回目以降の起動では出さない。
+- 受け入れ条件:
+  - 初回起動でオンボーディングのウインドウが前面に出る。「次へ」「戻る」でページを移り、今のページが分かる印がある。最後のページの「はじめる」かウインドウを閉じると終わり、次からの起動では出ない。
+  - 機能の説明には、今の設定のショートカット（音声入力・翻訳・選択を声で編集・会議の記録・「ここ重要」・最後の結果の再入力）を出す。
+  - 「設定の Tips」のページで、音声入力と会議のそれぞれの AI とモデルを選べ、選ぶとその場で設定に保存される。ほかの Tips には、設定のどのタブのどこで変えるかを書く。
+  - 最後のページで、自動入力に要るアクセシビリティと、録音に要るマイク・音声認識の許可の状態を見られ、その場で許可を求められる。
+  - メニューから、いつでももう一度開ける（DEC-COM-091）。
+- 出典: ユーザーの依頼（2026-11-04「チュートリアルを作成して、アプリのオンボーディングを実施するようにして。主だった機能の説明と、設定のTips(AIモデルが選択できる(その場で選択させる)、など)」）
+- 対象: Mac（Windows 版は対象外。FUT-003）
+- 実装の場所: `OnboardingView`、`OnboardingPage`、`OnboardingModel`、`OnboardingState`、`OnboardingWindowController`、`AppDelegate.applicationDidFinishLaunching`・`openOnboarding`
+- 確かめ方: `.build/debug/Hanasu --render-onboarding /tmp/onboarding`（全ページを PNG にする）。初回だけ出ることとメニューから開けることは実機で確かめる
 
 ---
 
@@ -233,7 +271,7 @@
 - 実装の場所: `main.swift`（起動時の `setActivationPolicy`）、`AppDelegate.applicationDidFinishLaunching`
 
 ### DEC-COM-009 起動のたびに設定画面を開き、アクセシビリティの許可を求める
-- 決めたこと: 起動したら設定画面を開き、⌘V の送信に要るアクセシビリティの許可を求める。Dock や Finder でアイコンを開いたときも設定画面を前に出す。
+- 決めたこと: 起動したら設定画面を開き、⌘V の送信に要るアクセシビリティの許可を求める。Dock や Finder でアイコンを開いたときも設定画面を前に出す。ただし、オンボーディングを出す初回の起動では、どちらもせずにオンボーディングを出す（DEC-COM-093）。
 - 理由: メニューバーのアイコンが隠れていても設定に辿り着けるようにする。README には「初回起動で設定画面が開く」とあるが、コードは毎回開く。今回、暗黙の振る舞いから設計判断に格上げして記録した。
 - 決めた場面: 初版（a787da8）のコード。記録はこの PR
 - 関係する要件: REQ-DIC-004
@@ -302,6 +340,24 @@
 - 対象: Mac
 - 実装の場所: `HUDModel.isShown`、`HUDController.hide`、`MeetingSuggestionPanel.hide`、`HighlightUndoButton`
 
+### DEC-COM-017 ウインドウとパネルは、マウスのある画面に開く
+- 決めたこと: 複数のディスプレイで、Windows 版の設定・会議ノート・履歴のウインドウは、初めて開くときにマウスのある画面の作業領域の中央に出す（XAML の `CenterScreen` はメインの画面に出すので使わず、ハンドルができた時点で物理ピクセルで置く。作業領域に収める縮め方も、その画面の DPI で行う）。2 回目以降に前に出すときは、前の位置のまま。Mac 版の会議の提案パネル（右上）と字幕（初回の下の中央）も、マウスのある画面に出す。字幕の 2 回目以降は前に置いた位置。Mac 版の設定・会議ノート・履歴は、今までどおり `NSWindow.center()`（macOS の標準）。
+- 理由: 音声入力の HUD と貼り付けのパネルは、もともとマウスのある画面に出している（`HUDPanel.position`）。会議の提案は会議アプリを使っている画面、設定・会議・履歴はトレイのアイコンを押した画面にいることが多く、メインの画面に出すとサブの画面で作業している人が見失う。前面のアプリの画面（アクティブウインドウの画面）は、常駐アプリからは取りにくく、マウスの位置のほうが素直。
+- 決めた場面: PR #65 の判断事項の対応（2026-11-05 のユーザーの依頼「判断して実装して」）
+- 関係する要件: REQ-MTG-009, REQ-MTG-014, REQ-COM-010, REQ-COM-011
+- 対象: Mac / Windows
+- 実装の場所: `MeetingSuggestionPanel.position`、`MeetingCaptionPanel`（`MeetingNotesViews.swift`）
+- Windows の実装: `windows/Hanasu.Windows/Views/WindowFit.cs`（`FitToMouseScreen`。`SettingsWindow` / `MeetingWindow` / `HistoryWindow` のコンストラクタから呼ぶ）
+
+### DEC-COM-018 ショートカットがほかと重なるときは保存せず、どれと重なるかを出す
+- 決めたこと: 設定のショートカットの欄で記録したキー（と「初期値に戻す」）が、ほかのショートカット（Mac: 録音の開始／停止・翻訳して入力・選択を声で編集・会議の記録・「ここ重要」の印・最後の結果をもう一度入力。Windows: 音声入力・翻訳して入力・会議の記録・「ここ重要」の印）と同じなら、保存せずに、欄の下に「⌃⌥⌘M は「会議の記録の開始／停止」のショートカットと同じです。別のキーを選んでください。」のように、どれと重なるかを出す。「ここ重要」のショートカットをオフにしていても重なりとして扱う。
+- 理由: 同じキーを 2 つの機能に登録すると、どちらが動くか（Mac では登録に失敗してアラートが出るか）が分からない。Windows 版は PR #19 から重なりを弾いていたが、文言が「ほかのショートカット（音声入力・翻訳・会議）と同じです」でどれかが分からず、Mac 版は確かめていなかった。
+- 決めた場面: PR #65 の判断事項の対応（2026-11-05）
+- 関係する要件: REQ-DIC-001, REQ-DIC-050, REQ-MTG-001, REQ-MTG-012
+- 対象: Mac / Windows
+- 実装の場所: `ShortcutKind`、`ShortcutRecorder.apply`
+- Windows の実装: `windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`（`ConflictingShortcut`）
+
 ### DEC-COM-020 エンジンは、音声入力と会議の記録で別々に選ぶ
 - 決めたこと: 「音声入力」と「会議の記録」でエンジンを別々に選ぶ。「選択を声で編集」は音声入力と同じエンジンを使う。Mac 標準を選んでいる間だけ「Mac 標準の認識モデル」を出す。言語（`ja-JP`）は共通。設定は「一般」タブの「文字起こし」欄に置き、タブは増やさない。
 - 理由: 音声入力は待ち時間と途中経過が大事で、会議は記録のあとに待てるので精度を優先したい。自分の短い発話は Gemini に送ってよくても相手の声を含む会議の音声は送りたくない、という使い分けができる。
@@ -366,6 +422,15 @@
 - 対象: Mac
 - 実装の場所: `WhisperEngine.preload`
 
+### DEC-COM-028 Whisper のダウンロードは確認を挟まず、大きさを選ぶ前と途中に見せる
+- 決めたこと: Whisper のエンジンかモデルを選んだ時点でダウンロードを始める（REQ-COM-003 のまま。確認のダイアログは入れない）。その代わりに、何がどれだけ落ちてくるかを選ぶ前に見せる。Mac: 文字起こしの欄の説明に「Whisper を選ぶと、モデル（small・約 485 MB）のダウンロードがすぐ始まります」と、今選んでいるモデルの大きさ（`WhisperModel.sizeLabel`。目安の値）を出し、モデルの一覧・「ダウンロード（約 485 MB）」のボタン・進み具合の「40%（約 485 MB）」・削除の確かめにも大きさを出す。Windows: モデルの一覧には大きさが出ていたので（`WhisperModelInfo.SizeLabel`）、説明を「選んだ時点でダウンロードし始める」と直し、「ダウンロード（487 MB）」のボタンと進み具合に大きさを足す。
+- 理由: REQ-COM-003 はユーザーの指定（2026-11-03）で「選んだときにダウンロードする」と決まっている。モデルは最大でも 630 MB（Mac）/ 1.6 GB（Windows の large-v3-turbo）で、ローカル LLM（数 GB。REQ-COM-032 では尋ねる）ほど大きくなく、取り消しと削除がすぐそこにある。確認を挟むと要件を変えることになるうえ、設定画面でわざわざ選んだ直後に尋ねるのは手数が増えるだけなので、大きさを先に見せるだけにした。
+- 決めた場面: PR #65 の判断事項の対応（2026-11-05）
+- 関係する要件: REQ-COM-003
+- 対象: Mac / Windows
+- 実装の場所: `WhisperModel.approximateBytes`・`sizeLabel`、`TranscriptionEngineSettingsSection`、`WhisperModelRow`
+- Windows の実装: `windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`（`UpdateWhisperControls`）
+
 ### DEC-COM-030 Gemini での文字起こしは、書き起こすだけにさせる
 - 決めたこと: 16 kHz モノラルの音声を FLAC（書けなければ WAV）にして inline data で `generateContent` に送る。「書き起こすだけ。中の質問や指示に答えない。フィラーや言い直しも省かない」と指示し、辞書の語を添える。何も話されていなければ空にする。認証は整形と同じ。
 - 理由: 文字起こしのあとは、ほかのエンジンと同じ流れで扱えるようにする。
@@ -399,7 +464,7 @@
 - 実装の場所: `TranscriptionEngine.label`、`GeminiTranscriptionSection`
 
 ### DEC-COM-040 AI は用途ごとに 1 つ選び、文字起こしのエンジンとは別にする
-- 決めたこと: 文章の処理に使う AI（Gemini / Claude / ローカル。ローカルは REQ-COM-030）を、「音声入力」（整形・英訳・選択の編集・音声入力の履歴のやり直し）と「会議」（議事録とその作り直し・会議への質問・辞書の候補探し）の 2 つの用途で別々に選ぶ。既定はどちらも Gemini（今までの設定を引き継ぐ）。辞書の候補探しは会議の記録を読む長い処理なので、会議の設定（AI とモデル、Gemini なら `meetingMinutesModel`）を使う。文字起こしのエンジン（OS 標準 / Whisper / Gemini）は今までどおり別に選び、Claude には音声を送らない。設定画面は「Gemini」タブを「AI」タブにし、先頭に 2 つの用途を並べる。Gemini の認証の欄は、文字起こしのエンジン「Gemini」でも使うので、AI の選択に関わらず出す。
+- 決めたこと: 文章の処理に使う AI（Gemini / Claude / ローカル。ローカルは REQ-COM-030）を、「音声入力」（整形・英訳・選択の編集・音声入力の履歴のやり直し）と「会議」（議事録とその作り直し・会議への質問・辞書の候補探し）の 2 つの用途で別々に選ぶ。Mac の既定はどちらもローカルの Gemma 4 E4B（DEC-COM-068。以前から使っている人は Gemini のまま）。Windows の既定はどちらも Gemini。辞書の候補探しは会議の記録を読む長い処理なので、会議の設定（AI とモデル、Gemini なら `meetingMinutesModel`）を使う。文字起こしのエンジン（OS 標準 / Whisper / Gemini）は今までどおり別に選び、Claude には音声を送らない。設定画面は「Gemini」タブを「AI」タブにし、先頭に 2 つの用途を並べる。Gemini の認証の欄は、文字起こしのエンジン「Gemini」でも使うので、AI の選択に関わらず出す。
 - 理由: ユーザーの指示（REQ-COM-024）。音声入力は速さ、会議は長い記録のまとめと、求めるものが違う。辞書の候補探しは、今まで議事録のモデルを使っていた（DEC-DIC-088 の作り）のに合わせた。
 - 決めた場面: この PR（Claude API の対応）
 - 関係する要件: REQ-COM-020, REQ-COM-024
@@ -479,12 +544,12 @@
 - 実装の場所: `Keychain.hint`・`exists`、`ClaudeClient.fromKeychain`、`ClaudeKeySection`、`GeminiAuthSection`
 
 ### DEC-COM-050 「接続を試す」は GET /v1/models/{model} で確かめる
-- 決めたこと: 「接続を試す」は、選んでいるモデルの `GET https://api.anthropic.com/v1/models/{model}` を送る。200 なら「接続できました」、401 なら「キーが正しくありません」、404 なら「モデルが見つからないか、このキーでは使えません」。
-- 理由: トークンを使わずに、キーの正しさとモデルを使えることを確かめられる。
-- 決めた場面: この PR
-- 関係する要件: REQ-COM-020
+- 決めたこと: 「接続を試す」は、選んでいるモデルの `GET https://api.anthropic.com/v1/models/{model}` を送る。200 なら「接続できました」、401 なら「キーが正しくありません」、404 なら「モデルが見つからないか、このキーでは使えません」。Gemini にも同じボタンを置く（API キー: `GET https://generativelanguage.googleapis.com/v1beta/models/{model}`、サービスアカウント: `GET https://{host}/v1/publishers/google/models/{model}` にアクセストークンを付ける）。400（API_KEY_INVALID）/ 401 / 403 は「API キー（またはサービスアカウント）が正しくないか、Gemini API を使う権限がありません」、404 は「モデルが見つからないか、この認証では使えません」。モデルは、音声入力に Gemini を選んでいればそのモデル、そうでなければ会議のモデル。やり直しはしない。
+- 理由: トークンを使わずに、キーの正しさとモデルを使えることを確かめられる。Gemini は Claude より先からあったのに「接続を試す」がなく、キーの入れ間違いに録音のあとで気づいていた（PR #65 のレビュー）。サービスアカウントでも、トークンが取れること（鍵の形・時刻・権限）をその場で確かめられる。
+- 決めた場面: Claude API に対応した PR。Gemini は PR #65 の判断事項の対応（2026-11-05）
+- 関係する要件: REQ-COM-020, REQ-DIC-003
 - 対象: Mac
-- 実装の場所: `ClaudeClient.testConnection`、`ClaudeKeySection.testConnection`
+- 実装の場所: `ClaudeClient.testConnection`、`ClaudeKeySection.testConnection`、`GeminiClient.testConnection`、`GeminiAuthSection.testConnection`
 
 ### DEC-COM-051 自己署名でも Hardened Runtime を付ける
 - 決めたこと: `scripts/build-app.sh` で自己署名の証明書（Hanasu Local Signing / Hanasu Release Signing）で署名するときも `--options runtime` を付ける。entitlements はマイク（`device.audio-input`）とリマインダー（`personal-information.calendars`）だけのまま。
@@ -503,12 +568,30 @@
 - 実装の場所: `MeetingStore.createPrivateDirectory`
 
 ### DEC-COM-053 サービスアカウントの token_uri と Vertex AI のリージョンを確かめてから送る
-- 決めたこと: 鍵ファイルの `token_uri` が `https://oauth2.googleapis.com`（古い鍵の `https://accounts.google.com`）でなければ、署名した JWT を送らない。Vertex AI のリージョンは英小文字・数字・ハイフンだけを受け付ける（ホスト名に入るため）。
-- 理由: 鍵ファイルや設定（UserDefaults）を書き換えられると、署名した JWT やアクセストークンを別のホストに送らされうる。
-- 決めた場面: この PR（セキュリティの調査）
+- 決めたこと: 鍵ファイルの `token_uri` が `https://oauth2.googleapis.com`（古い鍵の `https://accounts.google.com`）でなければ、署名した JWT を送らない。Vertex AI のリージョンは英小文字・数字・ハイフンだけ（40 文字まで）を受け付ける（ホスト名に入るため）。Windows 版も、リージョンは同じ形だけを、`token_uri` は同じ Google の窓口（`oauth2.googleapis.com`・`accounts.google.com`、https、ポートとユーザー情報なし）だけを受け付ける。
+- 理由: 鍵ファイルや設定（UserDefaults・settings.json）を書き換えられると、署名した JWT やアクセストークンを別のホストに送らされうる。リージョンはホスト名の一部になるので、確かめないと `evil.example/#` のような値で送り先そのものを変えられる。
+- 決めた場面: この PR（セキュリティの調査）。Windows のリージョンの確認はセキュリティの見直し（2026-11-05）。Windows の `token_uri` を Google の窓口に限ったのはユーザーの依頼（2026-11-05、PR #65。それまでは https の確認だけで、テストが偽の窓口を使うために緩めていた。テストは `Parse` のあとで窓口を差し替える）
 - 関係する要件: REQ-COM-022
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `ServiceAccountTokenProvider.isTrustedTokenURL`、`GeminiClient.isValidLocation`
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiClient.cs`（`IsValidLocation`）、`windows/Hanasu.Core/Gemini/ServiceAccount.cs`（`Parse`・`IsTrustedTokenUri`）
+
+### DEC-COM-054 Mac 版も、文字起こし・メモ・議事録の中の区切りのタグを無害にしてから埋め込む
+- 決めたこと: プロンプトの区切りに使うタグ（`<transcript>` `<transcript_excerpts>` `<user_notes>` `<action_items>` `<speaker_names>` と、会議への質問の `<meeting>` `<minutes>` `<question>`）が、埋め込むユーザー由来の文章（音声入力の認識結果、会議の文字起こし、本人のメモ、会議への質問に渡す議事録と文字起こし）に含まれていたら、全角の山かっこ（`＜/transcript＞`）に置き換えてから埋め込む。閉じタグ・空白入り・大文字・属性つきも拾う。選択を声で編集するモードは、毎回変わる名前のタグ（DEC-DIC-033）のままにする。画面の文脈は `<` をすべて全角にする（DEC-DIC-065）のままにする。
+- 理由: Windows 版の DEC-COM-142 と同じ。区切りのタグを本文に書かれると、区切りの外（指示の側）に文を置けてしまう。ローカルの LLM の `LongInputFitter` も `<transcript>` が 1 つずつあることを前提に分けるので、本文に同じタグがあると分けられず、後ろを省く動きになっていた。Windows 版より対象のタグが多いのは、会議への質問（`MeetingAsk`）が Mac だけにあるため。出力は入力欄に貼るか会議ノートに書くだけで、Hanasu が命令として実行することはないので、被害は「変な文章が入る」までだが、守りを Windows とそろえる。
+- 決めた場面: セキュリティの見直し（2026-11-05）
+- 関係する要件: REQ-COM-022, REQ-DIC-003, REQ-MTG-006
+- 対象: Mac
+- 実装の場所: `PromptText.neutralizeDelimiters`、`GeminiClient.userPrompt`、`MinutesPrompt.userText`、`MeetingAsk.material`、`MeetingChat.prompt`（会議中の AI チャット。PR #68 のあとに足した。`<pending_transcript>` `<conversation>` と会話の役割のタグ `<user>` `<assistant>` も対象）
+
+### DEC-COM-055 Gemini の呼び出しは、429 / 503 と一時的な通信の失敗だけ、時間の予算の中で 2 回までやり直す
+- 決めたこと: Gemini の 429 と 503、および一時的な通信の失敗（Mac: 接続が切れた・つながらない・名前が引けない。Windows: `HttpRequestException`）は、0.5 秒・1 秒待って 2 回までやり直す。ここまでにかかった時間と待ちの合計が、タイムアウトの半分を超えるときはやり直さない（15 秒なら 7.5 秒まで）。やり直しの送信のタイムアウトは、残りの時間にする。タイムアウト自体と、400 / 401 / 403 などはやり直さない。
+- 理由: 一瞬の混雑（429 / 503）で整形が失敗して、認識結果がそのまま入力されるのを減らす。音声入力は待たされないことが大事（DEC-DIC-010 の 15 秒）なので、全体の予算を超えない。Claude は DEC-COM-046 でやり直していたが、Gemini はやり直さず、Mac と Windows の両方で食い違っていたので、両方にそろえて入れた。
+- 決めた場面: ユーザーの依頼（2026-11-05、PR #65）
+- 関係する要件: REQ-DIC-007
+- 対象: Mac / Windows
+- 実装の場所: `GeminiClient.generate`・`retryDelay`・`isTransientNetworkError`
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiClient.cs`（`GenerateAsync`・`RetryDelay`・`MaxRetries`・`RetryBaseDelay`）
 
 ### DEC-COM-060 ローカルの LLM は、llama.cpp の llama-server を同梱し、使うときだけ子プロセスで動かす
 - 決めたこと: Mac・Windows とも、llama.cpp の `llama-server` をアプリに同梱し、ローカルを選んだ処理を始めるときに子プロセスとして起動して、OpenAI 互換の `POST /v1/chat/completions` に送る（streaming は使わない）。チャットの形式は GGUF に入っているテンプレートを llama.cpp の jinja で使う（`--jinja`）。Gemma 4 の考える過程は使わない（`--reasoning off`）。Mac は Metal に全部の層を載せる（`-ngl 99`）。Windows は CPU で動かす。
@@ -528,13 +611,14 @@
 - 実装の場所: `scripts/llama-cpp.lock`、`scripts/fetch-llama-cpp.sh`、`scripts/build-app.sh`、`Resources/llama-server.entitlements`、`LocalLLMServer.executableURL`
 - Windows の実装: `scripts/fetch-llama-cpp.ps1`、`.github/workflows/tagpr.yml`・`.github/workflows/windows.yml`（publish のあとに `llama/` を入れる）、`windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`（`ResolveExecutable`）
 
-### DEC-COM-062 3 つのモデルは、版・ファイル・SHA-256 を決めておき、設定から初めにダウンロードする
+### DEC-COM-062 4 つのモデルは、版・ファイル・SHA-256 を決めておき、設定から初めにダウンロードする
 - 決めたこと: モデルはアプリに入れず、設定の「AI」でダウンロードする。Hugging Face のリポジトリのコミットを決め（`resolve/<コミット>/<ファイル>`）、大きさと SHA-256 を確かめてから置く。
   - Gemma 4 E4B: `ggml-org/gemma-4-E4B-it-GGUF` の `gemma-4-E4B-it-Q4_0.gguf`（4.59 GB、Apache-2.0）
   - LFM2.5-1.2B-JP: `LiquidAI/LFM2.5-1.2B-JP-202606-GGUF` の `LFM2.5-1.2B-JP-202606-Q8_0.gguf`（1.25 GB、LFM Open License v1.0）
   - Sarashina2.2: `mmnga/sarashina2.2-3b-instruct-v0.1-gguf` の `sarashina2.2-3b-instruct-v0.1-Q4_K_M.gguf`（2.07 GB、MIT）
+  - Qwen3.5-4B: `unsloth/Qwen3.5-4B-GGUF` の `Qwen3.5-4B-Q4_K_M.gguf`（2.74 GB、Apache-2.0）
   - 置き場所: Mac は `~/Library/Application Support/Hanasu/Models/llm/`、Windows は `%LOCALAPPDATA%\Hanasu\Models\llm\`
-- 理由: 3 つで 8 GB あり、使わない人に配らない。差し替えられたファイルを読まない（FUT-011 と同じ考え。Windows は `ModelDownload` の確かめ方をそのまま使う）。Gemma 4 E4B は llama.cpp の開発元が作り直しを追っている ggml-org の Q4_0 にした（Google の QAT 版より小さい）。LFM2.5 は 1.2B と小さいので、質を落とさない Q8_0 にした。Sarashina2.2 は 3 つの大きさのうち日本語の質がいちばんよい 3B（日本語 MT-Bench 6.51）を、4 bit（Q4_K_M、日本語の imatrix 付き）で使う。3 つとも Hugging Face で同意の手続き（gated）が要らず、GGUF にチャットのテンプレートが入っている。
+- 理由: 4 つで 11 GB あり、使わない人に配らない。差し替えられたファイルを読まない（FUT-011 と同じ考え。Windows は `ModelDownload` の確かめ方をそのまま使う）。Gemma 4 E4B は llama.cpp の開発元が作り直しを追っている ggml-org の Q4_0 にした（Google の QAT 版より小さい）。LFM2.5 は 1.2B と小さいので、質を落とさない Q8_0 にした。Sarashina2.2 は 3 つの大きさのうち日本語の質がいちばんよい 3B（日本語 MT-Bench 6.51）を、4 bit（Q4_K_M、日本語の imatrix 付き）で使う。Qwen3.5 は 4 つの小さい大きさ（0.8B・2B・4B・9B）のうち 4B にした。0.8B は考えない使い方で IFEval 52.1・MMMLU 34.1、2B は 61.2・56.9 と、指示に従う力と多言語の知識が足りず、2B は開発元が「考える過程が止まらなくなりやすい」と注意している。4B は MMMLU 76.1 で Gemma 4 E4B（76.6）と同じくらいで、大きさは半分強。9B は Gemma より重い。llama.cpp の開発元の ggml-org は 4B の GGUF を出していないので、unsloth の Q4_K_M（2026-03-02 の版）を使う（b11770 は Qwen3.5 の形 `qwen35` を読める）。4 つとも Hugging Face で同意の手続き（gated）が要らず、GGUF にチャットのテンプレートが入っている。
 - 決めた場面: ローカル LLM に対応した PR
 - 関係する要件: REQ-COM-030, REQ-COM-022
 - 対象: Mac / Windows
@@ -542,17 +626,17 @@
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`、`windows/Hanasu.Core/Net/ModelDownload.cs`
 
 ### DEC-COM-063 サーバーは 127.0.0.1 の空いたポートで、起動のたびに作る API キーを付け、5 分使わなければ止める
-- 決めたこと: `--host 127.0.0.1` と、空いているポート（OS に選ばせる）で起動する。起動のたびに乱数の API キーを作り、環境変数 `LLAMA_API_KEY` で渡す（コマンドラインに書かない）。Web の画面は出さない（`--no-webui`）。同時に 1 つの処理だけ（`--parallel 1`）。最後の処理から 5 分たつと止め、モデルを変えたら起動し直し、アプリを終えるときに止める。Mac は、前回落ちたときに残ったサーバー（自分が起動した記録のあるもの）を起動時に止める。Windows は、ジョブオブジェクトで Hanasu が終わると一緒に終わるようにする。
-- 理由: ほかの端末から使われないよう、外に開かない。同じ端末のほかのプロセスに勝手に使われないよう、キーを付ける。コマンドラインは `ps` でほかのユーザーにも見えるので、キーは環境変数で渡す。モデルは数 GB のメモリを使い続けるので、使っていないときは返す（続けて使うときは読み込み済みで速い）。
-- 決めた場面: ローカル LLM に対応した PR
+- 決めたこと: `--host 127.0.0.1` と、空いているポート（OS に選ばせる）で起動する。起動のたびに乱数の API キーを作り、環境変数 `LLAMA_API_KEY` で渡す（コマンドラインに書かない）。Hanasu の CLI が環境変数で受け取るほかのサービスの秘密（`ANTHROPIC_API_KEY`・`GEMINI_API_KEY`・`GEMINI_SERVICE_ACCOUNT_JSON` など。`secretEnvironmentKeys` の一覧）と `LLAMA_ARG_*` は、子プロセスの環境から外す。モデルの名前は `--alias <モデルの id>` で付ける。Web の画面は出さない（`--no-webui`）。同時に 1 つの処理だけ（`--parallel 1`）。最後の処理から 5 分たつと止め、モデルを変えたら起動し直し、アプリを終えるときに止める。Mac は、前回落ちたときに残ったサーバー（自分が起動した記録のあるもの）を起動時に止める。Windows は、ジョブオブジェクトで Hanasu が終わると一緒に終わるようにする。
+- 理由: ほかの端末から使われないよう、外に開かない。同じ端末のほかのプロセスに勝手に使われないよう、キーを付ける。コマンドラインは `ps` でほかのユーザーにも見えるので、キーは環境変数で渡す。llama-server はキーなしでも `/health` と `/models` に応えるので（ブラウザから DNS リバインディングで 127.0.0.1 のポートを叩かれると読める）、`/models` にモデルのファイルのパス（ユーザー名を含む）が出ないよう別名を付ける。llama-server は自己署名の Mac ではライブラリの検証を外したプロセス（DEC-COM-061）なので、要らない秘密を持たせない。モデルは数 GB のメモリを使い続けるので、使っていないときは返す（続けて使うときは読み込み済みで速い）。
+- 決めた場面: ローカル LLM に対応した PR。環境変数の整理と `--alias` はセキュリティの見直し（2026-11-05）
 - 関係する要件: REQ-COM-030, REQ-COM-022
 - 対象: Mac / Windows
 - 実装の場所: `LocalLLMServer`
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Windows/Services/ChildProcessJob.cs`
 
 ### DEC-COM-064 文脈の長さと生成の設定は、モデルごとに決める
-- 決めたこと: 文脈の長さ（`-c`）は、Gemma 4 E4B と LFM2.5 は 32,768、Sarashina2.2 は 8,192（モデルの上限）。出力の上限は、音声入力（整形・英訳・選択の編集・辞書の候補）は 2,048、会議（議事録・会議への質問）は 4,096 で、どちらも文脈の半分を超えない。サンプリングは開発元の推奨にする（Gemma 4: temperature 1.0・top_p 0.95・top_k 64、LFM2.5: temperature 0.1・top_k 50・repetition_penalty 1.05）。Sarashina2.2 は推奨がないので temperature 0.2・top_p 0.95・repetition_penalty 1.05。待つ時間は、音声入力は 1 回 120 秒、会議は 1 回 30 分（モデルの読み込みを含む）。
-- 理由: Gemma 4 と LFM2.5 は 128K まで読めるが、KV キャッシュのメモリを抑える（32K で 1 時間ほどの会議の文字起こしが入る）。整形は短い文なので、出力の上限は小さくてよい。端末の CPU・GPU で動くので、Gemini・Claude より長く待つ。
+- 決めたこと: 文脈の長さ（`-c`）は、Gemma 4 E4B・LFM2.5・Qwen3.5 は 32,768、Sarashina2.2 は 8,192（モデルの上限）。出力の上限は、音声入力（整形・英訳・選択の編集・辞書の候補）は 2,048、会議（議事録・会議への質問）は 4,096 で、どちらも文脈の半分を超えない。サンプリングは開発元の推奨にする（Gemma 4: temperature 1.0・top_p 0.95・top_k 64、LFM2.5: temperature 0.1・top_k 50・repetition_penalty 1.05）。Sarashina2.2 は推奨がないので temperature 0.2・top_p 0.95・repetition_penalty 1.05。Qwen3.5-4B は考えない使い方の推奨（temperature 0.7・top_p 0.8・top_k 20）にし、推奨の presence_penalty 1.5 は付けない。待つ時間は、音声入力は 1 回 120 秒、会議は 1 回 30 分（モデルの読み込みを含む）。
+- 理由: Gemma 4 と LFM2.5 は 128K まで（Qwen3.5 は 256K まで）読めるが、KV キャッシュのメモリを抑える（32K で 1 時間ほどの会議の文字起こしが入る）。整形は短い文なので、出力の上限は小さくてよい。端末の CPU・GPU で動くので、Gemini・Claude より長く待つ。presence_penalty は一度出た語を避けさせるので、元の言葉をなるべく残す整形には合わない。
 - 決めた場面: ローカル LLM に対応した PR
 - 関係する要件: REQ-COM-030
 - 対象: Mac / Windows
@@ -571,7 +655,7 @@
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LongInputFitter.cs`
 
 ### DEC-COM-066 モデルのライセンスを、選ぶところに出す
-- 決めたこと: 設定でローカルのモデルを選ぶ欄に、モデルごとのライセンス（Apache-2.0・LFM Open License v1.0・MIT）と、ライセンスの文へのリンクを出す。LFM2.5 には「年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されない」と書く。THIRD_PARTY_NOTICES に llama.cpp と 3 つのモデルを書く（モデルはアプリに入れないので、ダウンロードしたときのライセンスに従う）。
+- 決めたこと: 設定でローカルのモデルを選ぶ欄に、モデルごとのライセンス（Apache-2.0・LFM Open License v1.0・MIT）と、ライセンスの文へのリンクを出す。LFM2.5 には「年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されない」と書く。THIRD_PARTY_NOTICES に llama.cpp と 4 つのモデルを書く（モデルはアプリに入れないので、ダウンロードしたときのライセンスに従う）。
 - 理由: LFM Open License v1.0 は、年間売上 1,000 万ドル以上の組織の商用利用を許していない。ダウンロードするのは利用者なので、選ぶときに分かるようにする。
 - 決めた場面: ローカル LLM に対応した PR
 - 関係する要件: REQ-COM-030, REQ-REL-005
@@ -579,14 +663,30 @@
 - 実装の場所: `LocalLLMModel.licenseNote`、`AIChoiceRow`
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
 
-### DEC-COM-067 ローカルを選んだときの既定のモデルは、音声入力は LFM2.5、会議は Gemma 4 E4B
-- 決めたこと: 用途の AI を初めて「ローカル」にしたときのモデルは、音声入力は LFM2.5-1.2B-JP、会議は Gemma 4 E4B。AI の既定（Gemini）は変えない。
-- 理由: 音声入力は待ち時間が短いことを優先し、小さくて日本語の指示に強い LFM2.5（J-MIFEval 79.08）にした。議事録は長い文字起こしをまとめるので、3 つのうちいちばん大きく 128K まで読める Gemma 4 E4B にした。
-- 決めた場面: ローカル LLM に対応した PR
+### DEC-COM-067 Gemma 4 E4B を勧め、ローカルを選んだときの既定のモデルは、音声入力・会議とも Gemma 4 E4B
+- 決めたこと: Gemma 4 E4B（Google）を「おすすめ」とし、選ぶ欄の名前に「・おすすめ」、説明の頭に「おすすめ。」と出す。用途の AI を初めて「ローカル」にしたときのモデルは、音声入力・会議とも Gemma 4 E4B。前に選んで保存してあるモデルは変えない。Mac では AI の既定もローカルにしたので、新しく使い始めた人は音声入力・会議とも Gemma 4 E4B になる（DEC-COM-068。Windows の AI の既定は Gemini のまま）。Mac のオンボーディングで Gemma を選んだときに、音声入力・会議とも Gemma 4 E4B にするのは DEC-COM-092。
+- 理由: 実機で比べると（docs/verification/dictation.md の 13）、LFM2.5 は整形で言い直しを読み違えて言っていない文を足し、議事録では同じ議題を繰り返してアクションアイテムを出せなかった。Sarashina2.2 は議事録で担当者を取り違え、期限を作った。利用者の評価も「Sarashina などは良くなかった」（2026-11-04）。あとから足した Qwen3.5-4B も、整形で言い直しの前の文を残し、議事録でアクションアイテムを 1 件にまとめて期限を落とした（同じく 19）。Gemma 4 E4B だけが整形も議事録も安定していた。整形の待ち時間も 2 回目以降 4 秒ほどで、LFM2.5 の速さを優先するほどの差はない。前は音声入力の既定を、速さを優先して LFM2.5 にしていた。
+- 決めた場面: ローカル LLM に対応した PR。おすすめと既定の変更は、Qwen3.5-4B を足した PR
 - 関係する要件: REQ-COM-030
 - 対象: Mac / Windows
-- 実装の場所: `LocalLLMModel.defaultDictation`・`defaultMeeting`
+- 実装の場所: `LocalLLMModel.recommended`・`defaultDictation`・`defaultMeeting`、`LocalModelChoice`
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`
+
+### DEC-COM-068 Mac の AI の既定は、音声入力・会議ともローカルの Gemma 4 E4B。以前から使っている人は Gemini のままにする
+- 決めたこと: `dictationAIProvider`・`meetingAIProvider` の既定（`UserDefaults.register`）を `local` にする（モデルの既定は DEC-COM-067 で Gemma 4 E4B）。ただし、この版に上げた人の AI は変えない: 起動して最初に `AppSettings` を作るとき、印（UserDefaults の `aiProviderDefaultsVersion`）がなければ、Hanasu の設定が 1 つでも保存されている人（以前から使っている人。数え方は DEC-COM-090 と同じで、システムが書くキーは数えない）の、保存していない AI の選択に `gemini` を書く。新しく使い始めた人には何も書かない。どちらも印を書き、次からは見ない。オンボーディングの「以前から使っている人」の判定（DEC-COM-090）は、この印を数えない。
+- 理由: ユーザーの依頼（REQ-COM-024 の出典）。既定を変えるだけだと、AI を選ばずに既定の Gemini で使っていた人（オンボーディングを入れる前から使っている人）が、上げた途端にローカルに変わり、4.6 GB のダウンロードを求められる。印を書くのは、新しく使い始めた人がオンボーディングを閉じたあとの 2 回目の起動で、「設定が保存されている人」と取り違えて Gemini を書いてしまわないようにするため。モデルがないまま整形を始めても、ダウンロードするかを尋ねる（REQ-COM-032）ので、黙って失敗することはない。
+- 決めた場面: 既定を Gemma にした PR（2026-11-04 の依頼）
+- 関係する要件: REQ-COM-024, REQ-COM-030, REQ-COM-032
+- 対象: Mac（Windows の既定は Gemini のまま）
+- 実装の場所: `AppSettings.init`、`AppSettings.preserveAIProviderForExistingUsers`、`AppSettings.hasSavedSettings`、`OnboardingState`
+
+### DEC-COM-069 モデルがないときの確認は NSAlert で尋ね、進み具合は小さなウインドウに出し、終わったら入力先のアプリを前に戻す
+- 決めたこと: 整形などの処理の直前（`TextAIClient` を作る前）に `LocalModelDownloadPrompt.prepare` を呼ぶ。用途の AI がローカルで、モデルがなければ、Hanasu を前に出して NSAlert（「ダウンロードする」「今回はしない」）で尋ねる。ダウンロードは設定と同じ `LocalLLMStore.ensureDownloaded` で行い（大きさと SHA-256 を確かめる。DEC-COM-062）、進み具合は閉じるボタンのない小さなウインドウ（`LocalModelDownloadView`。バー・割合・ダウンロードした大きさ・「中止」。ハッシュを確かめる間は動き続けるバー）に出す。すでにダウンロード中なら尋ねずにウインドウを出す。同じモデルを 2 つの処理が同時に待つときは、尋ねるのを 1 回にする。音声入力では、尋ねる前に前面にあったアプリを覚えておき、ダイアログとウインドウを閉じたら（ダウンロードしなかったときも）そのアプリを前に戻してから整形・入力に進む。ダウンロードしなかったとき・中止したときは今までと同じ「モデルがない」エラーで、失敗したときはその理由のエラーで、呼び出し元が今までどおり整形前の文章を入力する（議事録は作らずに知らせる）。選択の編集・会議への質問・辞書の候補には入れない。
+- 理由: 録音を止めたあとに数 GB を黙って取り始めないよう、ユーザーに選ばせる（依頼の「ダウンロードしますかというダイアログ」）。HUD は前面に出ないパネル（入力先のフォーカスを動かさない）でボタンも小さいので、確認と中止にはふつうのダイアログとウインドウを使う。その代わりに前面が Hanasu に移るので、入力先のアプリを前に戻さないと、整形した文章を貼る先がなくなる。選択の編集は、録音の前に選択を読むので、ダイアログで前面が変わると選択の読み取りと置き換えが崩れる。会議への質問と辞書の候補は、設定や会議ノートのウインドウの中の操作で、すぐ横の設定でダウンロードできる。
+- 決めた場面: 既定を Gemma にした PR（2026-11-04 の依頼）
+- 関係する要件: REQ-COM-032
+- 対象: Mac
+- 実装の場所: `LocalModelDownloadPrompt`、`LocalModelDownloadView`、`DictationController.finishDictation`、`MeetingRecorder`、`DictationHistoryStore.retry`
 
 ### DEC-COM-070 Apple の Foundation Models は、CLI の `fm respond` を 1 回ずつ子プロセスで呼ぶ
 - 決めたこと: 処理のたびに `fm respond --instructions <システムの指示> <入力>` を子プロセスで動かし、標準出力の文章を結果にする（Apple の WWDC26 のセッション 334 の使い方）。プロンプトは Gemini・Claude・ローカルと同じものを使う。終了コードが 0 でなければ、標準エラーの最後の数行を添えて知らせる。待つ時間は、音声入力は 1 回 60 秒、会議は 1 回 10 分で、過ぎたら止める。
@@ -637,6 +737,46 @@
 - 対象: Mac
 - 実装の場所: `AppDelegate.applicationDockMenu`、`AppDelegate.populateMenu`、`AppDelegate.updateIcon`
 
+### DEC-COM-090 オンボーディングは一度だけ出し、閉じても終わったことにする。以前から使っている人には自動では出さない
+- 決めたこと: 終わったかどうかを UserDefaults の `onboardingCompletedVersion`（今は 1）に持つ。起動時にこれがなければオンボーディングを出す。最後のページの「はじめる」だけでなく、途中でウインドウを閉じても終わったことにする。ただし、この値がなくても、すでに Hanasu の設定が保存されている（UserDefaults の Hanasu のドメインに何かの値がある）なら、以前から使っている人として、出さずに終わったことにする。
+- 理由: 依頼が「初回起動時」で、2 回目以降に出すと邪魔になる。閉じた人に毎回出し直すと、同じ説明を何度も見せることになる（メニューから開き直せる。DEC-COM-091）。この機能を入れた版に上げただけの人は「初回」ではなく、すでに AI を選んで使っているので、起動のたびの流れを変えない。版の番号で持つのは、内容を大きく変えたときに、もう一度見せられるようにするため。
+- 決めた場面: オンボーディングを入れた PR（REQ-COM-050・051）
+- 関係する要件: REQ-COM-050, REQ-COM-051
+- 対象: Mac
+- 実装の場所: `OnboardingState`
+
+### DEC-COM-091 オンボーディングは、メニューバー（と Dock だけのときの Dock）のメニューと、アプリのメニューから開き直せる
+- 決めたこと: メニューバーのメニューの「設定…」の上と、アプリのメニュー（「Hanasu」）の「設定…」の上に「Hanasu の使い方…」を置き、オンボーディングを最初のページから開く。開き直したときも AI のページは同じ（選ぶと保存する）。
+- 理由: 一度閉じたら二度と見られないと、あとで機能を探すときに困る。AI の選び直しも設定の「AI」タブと同じ結果になるので、開き直しても害がない。Dock だけのときは Dock のメニューがメニューバーのメニューと同じ作りなので（DEC-COM-081）、そこにも出る。
+- 決めた場面: オンボーディングを入れた PR（REQ-COM-051）
+- 関係する要件: REQ-COM-051
+- 対象: Mac
+- 実装の場所: `AppDelegate.populateMenu`、`AppDelegate.makeMainMenu`、`AppDelegate.openOnboarding`
+
+### DEC-COM-092 オンボーディングは 7 ページにし、AI の選択は音声入力と会議の両方に当て、どれかを選ぶまで先に進めない。Gemma を選んだら両方を Gemma 4 E4B にする
+- 決めたこと: ページは「ようこそ」「使う AI を選ぶ」「音声入力」「会議の記録」「履歴・辞書・スニペット」「設定の Tips」「許可と準備」の 7 つ。大きさを変えられないウインドウ（640×600）で、下に「戻る」「次へ」とページの点を置く。AI のページのカードは「Gemma 4 E4B（おすすめ）」「Gemini」「Claude」「Apple」の 4 つ。そのページで押したものを選んだことにし（今の設定の値には、はじめは選んだ印を付けない）、押すまで「次へ」を押せない。押すと `dictationAIProvider` と `meetingAIProvider` の両方をその AI にする。Gemma のときは `localDictationModel` と `localMeetingModel` も両方 Gemma 4 E4B にする（前に保存してあるモデルがあっても書き換える。既定も Gemma 4 E4B。DEC-COM-067）。Gemini・Claude のモデルは各 AI の既定のまま（REQ-COM-023、DEC-COM-005、DEC-MTG-014）。モデルを変えたい人（音声入力だけ速い LFM2.5 にする など）には「設定の Tips」のページの欄（設定の「AI」タブと同じ `AIChoiceRow`）で選ばせる。準備の欄は設定の「AI」タブの部品をそのまま使う。Apple の Foundation Models が使えない Mac（`AppleFMAvailability` が理由を返す。macOS 27 より前など）では、そのカードを薄くして押せなくし、理由はカードの上に指を置くと出す。アプリの設定の既定（オンボーディングを通らないときの値）は、両方ローカルの Gemma 4 E4B（DEC-COM-068）。
+- 理由: 依頼が「デフォルトの AI を選択させる」「デフォルトのモデルは Gemma」「黙って最初に選ばず、チュートリアルの中で選んでダウンロードする」なので、Gemma を「おすすめ」としていちばん目立つ場所に置きつつ、選ぶのはユーザーに任せる。用途ごとに別のモデルにすると 2 つ（Gemma と LFM2.5 で約 5.8 GB）をダウンロードすることになるので、両方 Gemma にして 1 回（約 4.6 GB）で済ませる。設定の既定は、はじめ Gemini のままにしていた（ダウンロードしていない人の整形が黙って失敗するため）が、モデルがないときにダウンロードするかを尋ねるようにした（REQ-COM-032）ので、Gemma に変えた（DEC-COM-068）。初めての人に用途ごとの選び分けを先に求めると迷うので、まず 1 つ選ばせ、別々にできることは Tips で見せる。部品を共有して、設定画面と見た目・保存先・文言が食い違わないようにする。
+- 決めた場面: オンボーディングを入れた PR #53（REQ-COM-050・051）。Gemma をおすすめにしたのも同じ PR
+- 関係する要件: REQ-COM-050, REQ-COM-051, REQ-COM-024, REQ-COM-030
+- 対象: Mac
+- 実装の場所: `OnboardingPage`、`OnboardingAIChoice`、`OnboardingAIPage`、`OnboardingTipsPage`、`OnboardingModel.chooseDefaultAI`
+
+### DEC-COM-093 初回の起動では、設定画面とアクセシビリティの許可の代わりにオンボーディングを出す
+- 決めたこと: オンボーディングを出す起動では、設定画面を開かず、起動時のアクセシビリティの許可のダイアログも出さない（DEC-COM-009 の例外）。許可は、オンボーディングの最後のページのボタンで求める。2 回目からの起動は DEC-COM-009 のまま。オンボーディングを出している間に Finder や Dock から開き直したときは、設定画面ではなくオンボーディングを前に出す。
+- 理由: 設定画面とシステムの許可のダイアログがオンボーディングに重なると、どれを見ればよいか分からなくなる。許可が要る理由（自動入力に要る）を説明してから求めたほうが、許可してもらいやすい。許可しないまま閉じても、次の起動で今までどおり求める。
+- 決めた場面: オンボーディングを入れた PR（REQ-COM-051）
+- 関係する要件: REQ-COM-051, REQ-DIC-004
+- 対象: Mac
+- 実装の場所: `AppDelegate.applicationDidFinishLaunching`、`AppDelegate.applicationShouldHandleReopen`、`OnboardingPermissionsPage`
+
+### DEC-COM-094 Gemma のダウンロードは、ボタンで始め、終わるのを待たずに次へ進める
+- 決めたこと: Gemma のカードを押しただけではダウンロードを始めない。AI のページのダウンロードの欄の「ダウンロード（4.59 GB）」か、「次へ」の代わりに出す「ダウンロードして次へ」を押したときに始める（`LocalLLMStore.ensureDownloaded`。設定の「AI」タブのダウンロードと同じ処理で、同じ進み具合が見える）。始めたら、終わるのを待たずにほかのページへ進め、ダウンロードはウインドウを閉じても続く。進み具合は AI のページと最後のページに出し、中止もできる。この Mac のメモリが 16 GB より少ないときは、Gemma が重いかもしれないことを欄に書く（選べなくはしない）。
+- 理由: 約 4.6 GB を、押した意味の分からないうちに落とし始めないようにする（カードを試しに押す人もいる）。ダウンロードには数分かかるので、待たせずに残りの説明を読んでもらう。メモリの少ない Mac では動くが遅いので、選ぶ前に分かるようにする（LocalLLMModel の説明の「メモリ 16 GB 以上向け」）。
+- 決めた場面: PR #53
+- 関係する要件: REQ-COM-050
+- 対象: Mac
+- 実装の場所: `OnboardingGemmaDownload`、`OnboardingModel.next`、`OnboardingPermissionsPage`
+
 ### DEC-COM-100 Windows 版は C# / .NET 8 / WPF で作り、OS に依存しない部分を分ける
 - 決めたこと: `windows/` に C# 12 / .NET 8（LTS）/ WPF で作る（ターゲットは `net8.0-windows10.0.19041.0`）。プロンプト・Gemini・JWT・辞書・設定・音声の変換・状態遷移は OS に依存しない `Hanasu.Core`（net8.0）に置き、Mac でも `dotnet test` で確かめる。Whisper（`Hanasu.Whisper`）と話者分離（`Hanasu.Diarization`）も net8.0 に分ける。
 - 理由: WinRT の音声認識に 19041 が要る。Windows の実機がない環境でも、UI 以外を Mac の上でテストし、CLI で実際に確かめられるようにする。
@@ -686,7 +826,7 @@
 - 実装の場所: `windows/Hanasu.Whisper/WhisperBatchTranscriber.cs`、`windows/Hanasu.Core/Transcription/WhisperModels.cs`
 
 ### DEC-COM-106 Windows 版の Gemini での文字起こし
-- 決めたこと: 録った音声を WAV にして inline data で送り、文字起こしだけをさせる（指示は `GeminiPrompts.TranscriptionInstruction` に新しく書いた。整形は次の呼び出しで行うので「聞こえたとおり」に書き起こさせる）。音声入力では 1 回 7 分まで。タイムアウトは、整形・英訳が 15 秒（Mac 版と同じ）、音声の文字起こしが 60 秒。設定画面に「音声が Google に送られる」と書く。
+- 決めたこと: 録った音声を WAV にして inline data で送り、文字起こしだけをさせる（指示は `GeminiPrompts.TranscriptionInstruction` に新しく書いた。整形は次の呼び出しで行うので「聞こえたとおり」に書き起こさせる）。音声入力では、Windows は 5 分ごとに分けて送る（DEC-DIC-145）。タイムアウトは、整形・英訳が 15 秒（Mac 版と同じ）、音声の文字起こしが 60 秒。設定画面に「音声が Google に送られる」と書く。
 - 理由: inline data の上限に収める。文字起こしと整形を分けるのは Mac 版と同じ理由（DEC-COM-031）。
 - 決めた場面: PR #19
 - 関係する要件: REQ-COM-001
@@ -726,12 +866,12 @@
 - 実装の場所: `windows/Hanasu.Core/Claude/ClaudeClient.cs`（`BuildParams`）、`windows/Hanasu.Core/Ai/PromptText.cs`
 
 ### DEC-COM-143 Windows 版の Claude のエラーの文言とやり直し、「接続を試す」
-- 決めたこと: SDK の例外を `ClaudeException` に分け、HUD・会議ノートにそのまま出せる日本語にする（401「API キーが正しくありません」、403、404「モデルが見つからないか、このキーでは使えない」、402 支払い、429 上限、529 混雑、5xx、つながらない、時間切れ）。SDK の例外の本文はそのまま出さず、API の `error.message` を 200 文字までだけ添える。429・5xx（529 を含む）・つながらないときは SDK が `retry-after` を見て 2 回までやり直し、400・401・403・404 はやり直さない。「接続を試す」は `GET /v1/models/{モデル}` で確かめる（トークンを使わず、キーとモデルの両方を確かめられる）。入力欄にキーがあれば保存せずにそのキーで試す。
+- 決めたこと: SDK の例外を `ClaudeException` に分け、HUD・会議ノートにそのまま出せる日本語にする（401「API キーが正しくありません」、403、404「モデルが見つからないか、このキーでは使えない」、402 支払い、429 上限、529 混雑、5xx、つながらない、時間切れ）。SDK の例外の本文はそのまま出さず、API の `error.message` を 200 文字までだけ添える。429・5xx（529 を含む）・つながらないときは SDK が `retry-after` を見て 2 回までやり直し、400・401・403・404 はやり直さない。「接続を試す」は `GET /v1/models/{モデル}` で確かめる（トークンを使わず、キーとモデルの両方を確かめられる）。入力欄にキーがあれば保存せずにそのキーで試す。Gemini にも同じ「接続を試す」を置く（API キーの欄とサービスアカウントの欄。URL と文言は Mac 版の DEC-COM-050 と同じ。モデルは音声入力の Gemini のモデル。入力欄にキーがあれば保存せずにそのキーで試す）。
 - 理由: 401 をそのまま「エラー」と出すと、キーの入れ間違いだと分からない。SDK のやり直しは指数的に待ち、API の指示（retry-after）も見る。
-- 決めた場面: Claude API に対応した PR
-- 関係する要件: REQ-COM-020
+- 決めた場面: Claude API に対応した PR。Gemini は PR #65 の判断事項の対応（2026-11-05）
+- 関係する要件: REQ-COM-020, REQ-DIC-003
 - 対象: Windows
-- 実装の場所: `windows/Hanasu.Core/Claude/ClaudeException.cs`、`windows/Hanasu.Core/Claude/ClaudeClient.cs`（`CheckAsync`）
+- 実装の場所: `windows/Hanasu.Core/Claude/ClaudeException.cs`、`windows/Hanasu.Core/Claude/ClaudeClient.cs`（`CheckAsync`）、`windows/Hanasu.Core/Gemini/GeminiClient.cs`（`CheckAsync`）、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`（`OnCheckGemini`）
 
 ### DEC-COM-144 Windows 版の API キーは secrets.json に置き、既定は DPAPI、選べば Windows Hello で守る
 - 決めたこと: Gemini と Claude の API キーを `%LOCALAPPDATA%\Hanasu\secrets.json` に置く。既定は DPAPI（CurrentUser・キーの種類ごとのエントロピー）。設定で「Windows Hello で守る」を選ぶと、Windows Hello（`KeyCredentialManager`）の鍵で決まった文字列に署名し、その SHA-256 を鍵にして AES-256-GCM で暗号化する。Windows Hello の確認は、起動してから最初に使うとき 1 回で、作った鍵は画面のロック・ログオフ・スリープまでメモリに置く。切り替えるときは、2 回署名して同じ鍵が出ることを確かめてから書き換える（出なければ DPAPI のまま）。画面には末尾 4 文字（`hint`）だけを出し、入力欄はマスクして、保存したら空にする。キーは送るたびに secrets.json から読み、クライアントは持ち続けない。PR #19 の settings.json の `protectedApiKey` は、復号せずにそのまま secrets.json に移し（`dpapiLegacy`）、移せたときだけ settings.json から消す。読めない値（別のユーザーで保存した、Windows Hello の鍵が作り直された）は消さずに、入れ直すよう知らせる。
@@ -788,6 +928,31 @@
 - 関係する要件: REQ-COM-022, REQ-REL-005
 - 対象: Windows
 - 実装の場所: `windows/Directory.Build.props`、`.github/workflows/windows.yml`、`.github/workflows/tagpr.yml`（リリースの Windows 版のビルド）
+
+### DEC-COM-151 Mac の設定画面は、左のサイドバーで項目を切り替える
+- 決めたこと: 設定のウインドウを、上のタブ（`TabView`）から、システム設定と同じ左のサイドバー（`NavigationSplitView`）に変える。項目（一般・AI・辞書・ルール・アプリ別・スニペット・会議・履歴・権限）と順番は変えず、それぞれに色付きの角丸のアイコンを付け、右側の上に項目の名前を出す。ウインドウは大きさを変えられ（最小 700×480、初めは 780×600）、位置と大きさを覚える。最後に開いていた項目を、次に開いたときも出す（UserDefaults の `settingsPane`）。ショートカットの欄は、キーの欄の幅を変えず、「初期値に戻す」をその左の小さなボタンにする。権限の欄は、許可済み・未許可を色付きの印で出す。画面の文言の「「AI」タブ」などは「設定の「AI」」にした。
+- 理由: ユーザーの依頼（2026-11-05「Mac の設定画面をもう少しモダンにして」）。8 つのタブが上に詰まって並び、窓が 560×460 の固定で、長い「一般」などが狭かった。サイドバーなら項目が増えても並べられ、今の macOS の設定画面と同じ見た目と操作になる。ウインドウの大きさを中身に合わせないのは、会議ノート（`AppDelegate.makeMeetingWindow`）と同じ理由（長い項目を開くと縦に伸びる）。
+- 決めた場面: 設定画面をサイドバーにした PR
+- 関係する要件: REQ-COM-040
+- 対象: Mac
+- 実装の場所: `SettingsView`、`SettingsPane`、`SettingsPaneIcon`、`AppDelegate.makeSettingsWindow`、`ShortcutRecorder`
+- 確かめ方: `.build/debug/Hanasu --render-settings /tmp/settings [--pane ai] [--dark]`
+
+### DEC-COM-153 Windows 版の固定色の面は、ハイコントラストのテーマでは OS の色に差し替える。HUD はそのまま
+- 決めたこと: 会議ノートの左の欄（`#FAFAFA`）・「● 記録中」の表示（`#FDECEA`）・記録中のメモ欄（`#F6F8FC`）・設定の試し書きの出力（`#F7F7F7`）は、通常のテーマでは今までの色のまま、ハイコントラストのテーマ（`SystemParameters.HighContrast`）では背景を OS の `Window` / `Control` の色、枠を `WindowFrame`（記録中は `Highlight`）の色に差し替える（`App.xaml` の `SidePane` / `LivePane` / `LiveTitle` / `InnerPane` / `ReadOnlyOutput` のスタイル。ウインドウを作るときに読むので、テーマを変えたあとは開き直す）。会議の一覧の補足と鉛筆の印の灰色（`#5F6368`）も `GrayText` にする。音声入力の HUD（濃い半透明の背景に白い文字）は変えない。
+- 理由: 補足の文は PR #65 で `GrayText` にしたが、面の色が固定のままだと、ハイコントラスト（黒い背景に白い文字）で白っぽい面に白い文字が載って読めない。HUD は Mac 版と同じ、前面に浮かぶ独自の見た目で、背景（`#1E2126`、不透明度 95%）と白い文字のコントラストは十分にあり、OS の色に差し替えると録音中の赤い停止ボタンなどの意味の色も失う。
+- 決めた場面: PR #65 の判断事項の対応（2026-11-05）
+- 関係する要件: REQ-COM-010, REQ-COM-011
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/App.xaml`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`
+
+### DEC-COM-152 Windows 版のトレイのメニューは、Mac 版のメニューバーと同じ文言にし、アクセスキーを付ける
+- 決めたこと: 「録音を開始(R)」/「録音を停止して入力(R)」、「英訳して入力を開始(T)」、「会議の記録を開始(M)」/「会議の記録を停止（mm:ss）(M)」/「会議の記録を準備中…」/「会議の記録を処理中…」、「会議ノートを開く(N)…」、「最近の結果(E)」、「履歴を開く(H)…」、「設定(S)…」、「Hanasu を終了(X)」。並びと区切りは Mac 版の `AppDelegate` のメニューと同じ。Mac 版だけの項目（選択を声で編集・自動入力の状態・Hanasu の使い方）は、Windows 版にその機能がないので置かない。
+- 理由: 以前は「音声入力を開始」「録音を止めて入力」「会議ノートを開く」「終了」と、Mac 版と言い回しが違っていた（UX-095）。アクセスキーは Windows のメニューの慣習で、キーボードだけで操作する人（UX-090）に要る。
+- 決めた場面: PR #65 の判断事項の対応（2026-11-05）
+- 関係する要件: REQ-COM-010, REQ-COM-011
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/TrayIcon.cs`
 
 ---
 

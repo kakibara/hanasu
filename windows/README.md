@@ -25,7 +25,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 ### 会議の記録
 
 1. 録音することを相手に伝える（同意を得る）。イヤホンを使うと、相手の声がマイクに回り込みにくい。
-2. タスクトレイのメニュー →「会議ノートを開く」。左下で「自分（マイク）」「相手（この出力で鳴る音）」と「議事録の型」を選ぶ（初期値は Windows の既定の機器と「自動」）。
+2. タスクトレイのメニュー →「会議ノートを開く…」。左下で「自分（マイク）」「相手（この出力で鳴る音）」と「議事録の型」を選ぶ（初期値は Windows の既定の機器と「自動」）。
 3. 「● 会議の記録を開始」か **Ctrl + Alt + Shift + M**（タスクトレイのメニュー「会議の記録を開始」でもよい）で始める。
    - 記録中は、会議ノートの左上に経過時間と「■ 停止」、右にメモ欄と「★ ここ重要」が出る。メモは Enter で足す（時刻は書き始めた時点）。
      「ここ重要」は **Ctrl + Alt + Shift + H**（記録中だけ有効）でも付けられる。書きかけのメモがあれば、その文を印の説明にする。
@@ -61,7 +61,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 - 会議の記録: 文字起こしは Whisper（既定。モデルは「一般」タブで選んだもの）か Gemini。話者分離のモデル（約 34 MB）は初めて使うときにダウンロードする。議事録には、会議の AI（Gemini か Claude）の認証情報が要る
 - Gemini の認証情報: API キー（[Google AI Studio](https://aistudio.google.com/apikey)）か、Vertex AI ユーザー（`roles/aiplatform.user`）のあるサービスアカウントの JSON 鍵
 - Claude を使うとき: Claude API の API キー。Claude は文章の処理（整形・英訳・議事録）だけに使い、音声は送らない（文字起こしは Windows 標準・Whisper・Gemini）
-- ローカルの LLM を使うとき（REQ-COM-030）: 設定 → AI で「ローカル」にし、モデル（Gemma 4 E4B 4.59 GB・LFM2.5-1.2B-JP 1.25 GB・Sarashina2.2 2.07 GB）をダウンロードする。CPU で動かすので、Gemma 4 E4B はメモリ 16 GB 以上が目安。文章は PC の外に送らない
+- ローカルの LLM を使うとき（REQ-COM-030）: 設定 → AI で「ローカル」にし、モデル（おすすめの Gemma 4 E4B 4.59 GB・LFM2.5-1.2B-JP 1.25 GB・Sarashina2.2 2.07 GB・Qwen3.5-4B 2.74 GB）をダウンロードする。CPU で動かすので、Gemma 4 E4B はメモリ 16 GB 以上が目安。文章は PC の外に送らない
 - Windows Hello で API キーを守るとき: Windows Hello（PIN・顔・指紋）が設定されていること
 
 ## 構成
