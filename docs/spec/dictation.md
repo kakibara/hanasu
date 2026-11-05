@@ -398,7 +398,7 @@
 - 実装の場所: `UserDictionary.contextualStrings`、`GeminiClient.userPrompt`
 
 ### DEC-DIC-010 整形のタイムアウトは 15 秒
-- 決めたこと: 整形・英訳の AI（Gemini・Claude）の呼び出しは 15 秒で打ち切り、認識結果をそのまま入力する。Claude の 429 / 5xx のやり直しも、この中で待てる長さのときだけ行う（DEC-COM-046）。
+- 決めたこと: 整形・英訳の AI（Gemini・Claude）の呼び出しは 15 秒で打ち切り、認識結果をそのまま入力する。Claude の 429 / 5xx と Gemini の 429 / 503 のやり直しも、この中で待てる長さのときだけ行う（DEC-COM-046・DEC-COM-055）。
 - 理由: 音声入力は待たされないことが大事。
 - 決めた場面: 初版（a787da8）
 - 関係する要件: REQ-DIC-007
@@ -793,12 +793,12 @@
 - 実装の場所: `ScreenContextReader.read`
 
 ### DEC-DIC-070 履歴は 1 つの JSON ファイルに、本人だけが読める権限で保存する
-- 決めたこと: `~/Library/Application Support/Hanasu/History/history.json` に新しい順で保存する。フォルダは 0700、ファイルは 0600、書き込みは atomic。読めないファイルは上書きせず、ウインドウにエラーを出す。
-- 理由: 1000 件でも 1 MB 前後で、毎回書き直しても一瞬で済む。件数と日数の両方で上限をかけやすい。話した内容が入るので本人だけが読めるようにする。
-- 決めた場面: PR #9
+- 決めたこと: `~/Library/Application Support/Hanasu/History/history.json` に新しい順で保存する。フォルダは 0700、ファイルは 0600、書き込みは atomic。読めないファイルは上書きせず、ウインドウにエラーを出す。Mac 版は、変更のたびに書かず、1 秒まとめてから 1 回書く。エンコードとファイル書き込みはバックグラウンドの直列キューで行い（書く順番は予約した順）、アプリの終了時・読み直しの前には、まとまっていない変更を先に書き切る。追加は日時の合う位置に挿入し、全件の並べ替えはしない。
+- 理由: 1000 件でも 1 MB 前後で、1 ファイルのままで足りる。ただし 1 件ごとに全件をメインスレッドでエンコードして書くと、音声入力のたびに止まりうるため、遅らせて裏で書く。強制終了などで失いうるのは直近 1 秒の変更だけで、通常の終了では失わない。話した内容が入るので本人だけが読めるようにする。
+- 決めた場面: PR #9、PR #65（書き込みを遅らせて裏で行う）
 - 関係する要件: REQ-DIC-060
 - 対象: Mac
-- 実装の場所: `DictationHistoryStore.save`、`DictationHistoryStore.load`
+- 実装の場所: `DictationHistoryStore.save`（予約）、`DictationHistoryStore.flush`、`DictationHistoryStore.flushOnTerminate`、`DictationHistoryStore.load`、`DictationHistoryStore.record`
 
 ### DEC-DIC-071 履歴の 1 件に持つものと、4 つの状態
 - 決めたこと: 日時・原文・結果・モード（整形／英訳／和訳。DEC-DIC-029）・入力先アプリ・状態・Gemini のエラー内容・モデル・録音のファイル名・やり直した日時を持つ。状態は 成功 ／ Gemini 失敗 ／ 未設定のため原文のまま ／ 整形オフ。失敗の 2 つには ⚠︎ を付け、整形オフも含めて「未整形」の印を付ける。
@@ -870,13 +870,13 @@
 - Windows の実装: `TrayIcon.UpdateRecent`。整え直し・再入力がないので、先頭の「最後の結果をもう一度入力」は置かない。ツールチップは状態・結果・原文
 
 ### DEC-DIC-079 履歴ウインドウの検索と表示
-- 決めたこと: 検索は結果・原文・アプリ名が対象で、空白で区切った語をすべて含むものを出す。「すべて ／ 失敗・未整形」の切り替えと、日ごと（今日・昨日・日付）の一覧。右クリックでコピー・削除、⌫ で削除。
-- 理由: 失敗したものを探して整え直す、という使い方をしやすくする。
-- 決めた場面: PR #9
+- 決めたこと: 検索は結果・原文・アプリ名が対象で、空白で区切った語をすべて含むものを出す。「すべて ／ 失敗・未整形」の切り替えと、日ごと（今日・昨日・日付）の一覧。右クリックでコピー・削除、⌫ で削除。1 件の削除（右クリック・⌫・詳細の「この履歴を削除」）は、「この履歴を削除しますか？」と確かめてから消す。
+- 理由: 失敗したものを探して整え直す、という使い方をしやすくする。1 件の削除も元に戻せず、⌫ の押し間違いで消えやすいため、「すべて削除」と同じく確かめる（ユーザーの依頼、PR #65）。
+- 決めた場面: PR #9、PR #65（1 件の削除の確認）
 - 関係する要件: REQ-DIC-060
 - 対象: Mac / Windows
 - 実装の場所: `DictationHistoryView`、`DictationHistoryFilter`
-- Windows の実装: `DictationHistoryStore.Filter`・`DayLabel`、`HistoryWindow`。右クリックでコピー・削除、Delete キーで削除、Ctrl+C で結果をコピー
+- Windows の実装: `DictationHistoryStore.Filter`・`DayLabel`、`HistoryWindow`。右クリックでコピー・削除、Delete キーで削除（1 件でも確かめる。文言は Mac 版と同じ「この履歴を削除しますか？」）、Ctrl+C で結果をコピー
 
 ### DEC-DIC-080 辞書の書き方
 - 決めたこと: 設定の `dictionaryText` に 1 行 1 項目。語だけの行、`読み => 表記`（矢印は `=>`・`＝＞`・`→`）、読みは「,」「、」で区切って複数、`#` で始まる行は無視。保存形式は今までどおり 1 つの文字列。
@@ -1161,8 +1161,8 @@
 - 実装の場所: `windows/Hanasu.Core/Dictation/DictationHistory.cs`（`DictationHistoryStore.Load`・`Save`）
 
 ### DEC-DIC-131 Windows 版の履歴のウインドウは、検索・絞り込み・コピー・削除だけにする
-- 決めたこと: タスクトレイの「履歴を開く…」と「最近の結果」→「すべての履歴を開く…」、設定の「履歴」タブの「履歴を開く…」から開く。左に日ごとの一覧（時刻・結果の 1 行目・モードと入力先・⚠／未整形の印）、右に選んだ項目の日時・状態・モデル・エラーと、結果・原文の全文。整形し直す・英訳し直す（REQ-DIC-061）と録音の保存・再生（DEC-DIC-075）、最後の結果の再入力（REQ-DIC-062）は作らない。まとめて消すときと「すべて削除」だけ確かめる。
-- 理由: 依頼は「履歴を残す・保存日数を変えられる」なので、残したものを探して取り戻せるところまでにした。整え直しと録音は、足すかを FUT-003 で決める。1 件の削除は Mac 版と同じく確かめない。
+- 決めたこと: タスクトレイの「履歴を開く…」と「最近の結果」→「すべての履歴を開く…」、設定の「履歴」タブの「履歴を開く…」から開く。左に日ごとの一覧（時刻・結果の 1 行目・モードと入力先・⚠／未整形の印）、右に選んだ項目の日時・状態・モデル・エラーと、結果・原文の全文。整形し直す・英訳し直す（REQ-DIC-061）と録音の保存・再生（DEC-DIC-075）、最後の結果の再入力（REQ-DIC-062）は作らない。削除（1 件でもまとめてでも）と「すべて削除」は確かめる。
+- 理由: 依頼は「履歴を残す・保存日数を変えられる」なので、残したものを探して取り戻せるところまでにした。整え直しと録音は、足すかを FUT-003 で決める。1 件の削除の確認は Mac 版と同じ（PR #65）。
 - 決めた場面: 音声入力の履歴を Windows 版に足した PR
 - 関係する要件: REQ-DIC-060
 - 対象: Windows
@@ -1199,6 +1199,15 @@
 - 関係する要件: REQ-DIC-014, REQ-DIC-140
 - 対象: Mac
 - 実装の場所: `HUDView`、`LevelMeter`、`AudioLevelBox`、`SpeechRecognizer.startLevelTimer`
+
+### DEC-DIC-144 Whisper / Gemini の録音には上限（10 分）を置き、達したら止めてそこまでを処理し、HUD に知らせる
+- 決めたこと: Whisper / Gemini で録る音声（メモリにためる 16 kHz モノラルの Float）は、一度に 10 分までにする。上限に達したら、ためるのをやめ、ショートカットをもう一度押したのと同じく録音を止めて、それまでの音声を文字起こし・整形・入力に進める。HUD には「録音が上限の 10 分に達したため、ここまでの音声を処理します」と出す（Mac 版・Windows 版で同じ文言）。上限は Mac 版は `SpeechRecognizer.maxBatchRecordingSeconds`、Windows 版は `AudioFormat.MaxDictationRecording` に置く。Mac 標準・Windows 標準のエンジンは対象外（録りながら認識するので音声をためない）。
+- 理由: 止め忘れたときに、メモリが増え続け（16 kHz の Float で 1 分あたり約 3.8 MB）、止めたあとの文字起こしも長くなりすぎる。黙って音声を捨てたり、録音を黙って止めたりせず、理由を HUD に出して、録れた分は入力する（話した内容を失わない）。10 分は音声入力として十分に長く、メモリは約 38 MB に収まる。
+- 決めた場面: PR #65
+- 関係する要件: REQ-DIC-001
+- 対象: Mac / Windows
+- 実装の場所: `SampleBox`・`BatchCapture`・`SpeechRecognizer.onRecordingLimitReached`、`DictationController`・`EditModeController`（Mac）。`WasapiRecorder.LimitReached`、`RecordThenTranscribe.RecordingLimitReached`、`DictationController.OnRecordingLimitReached`（Windows）
+- 確かめ方: 実機で確かめる（10 分の録音が要る。CLI では確かめられない）
 
 ---
 

@@ -31,6 +31,10 @@ public interface IDictationTranscriber : IAsyncDisposable
     /// <summary>録音を止めてから結果が出るまでに HUD に出す文言（例:「Whisper で文字起こししています…」）。null なら出さない</summary>
     string? FinishingMessage { get; }
 
+    // 設計判断: DEC-DIC-144
+    /// <summary>録音が上限（AudioFormat.MaxDictationRecording）に達したとき。受け取った側は録音を止めて、ここまでの音声を処理する。どのスレッドから来るかは決めない</summary>
+    event EventHandler? RecordingLimitReached { add { } remove { } }
+
     Task StartAsync(TranscriptionContext context, CancellationToken cancellationToken = default);
 
     /// <summary>録音を止め、確定した文字起こしを返す</summary>
@@ -50,6 +54,10 @@ public interface IAudioRecorder : IAsyncDisposable
 
     /// <summary>録音が思わぬ理由で止まったとき（マイクが抜かれたなど）</summary>
     event EventHandler<Exception>? Faulted;
+
+    // 設計判断: DEC-DIC-144
+    /// <summary>メモリに溜める録音が上限（AudioFormat.MaxDictationRecording）に達したとき（それ以降の音声は溜めない）</summary>
+    event EventHandler? LimitReached { add { } remove { } }
 
     Task StartAsync(string deviceId, CancellationToken cancellationToken = default);
 
@@ -89,20 +97,34 @@ public sealed class RecordThenTranscribe : IDictationTranscriber
 
     public string? FinishingMessage => $"{transcriber.DisplayName} で文字起こししています…";
 
+    public event EventHandler? RecordingLimitReached;
+
     public async Task StartAsync(TranscriptionContext context, CancellationToken cancellationToken = default)
     {
         this.context = context;
         // 使えるかどうかは録音を始める前に確かめる（話し終えてからモデルがないとわかると、話した内容が無駄になる）
         prepareTask = transcriber.PrepareAsync(context, cancellationToken);
         if (prepareTask.IsCompleted) await prepareTask.ConfigureAwait(false);
-        await recorder.StartAsync(context.MicrophoneDeviceId, cancellationToken).ConfigureAwait(false);
+        recorder.LimitReached += OnLimitReached;
+        try
+        {
+            await recorder.StartAsync(context.MicrophoneDeviceId, cancellationToken).ConfigureAwait(false);
+        }
+        catch
+        {
+            recorder.LimitReached -= OnLimitReached;
+            throw;
+        }
         recording = true;
     }
+
+    private void OnLimitReached(object? sender, EventArgs e) => RecordingLimitReached?.Invoke(this, EventArgs.Empty);
 
     public async Task<string> StopAsync(CancellationToken cancellationToken = default)
     {
         if (!recording || context is null) return "";
         recording = false;
+        recorder.LimitReached -= OnLimitReached;
         var samples = await recorder.StopAsync().ConfigureAwait(false);
         if (prepareTask is not null) await prepareTask.ConfigureAwait(false);
         if (AudioAnalysis.IsSilent(samples)) return "";
@@ -113,6 +135,7 @@ public sealed class RecordThenTranscribe : IDictationTranscriber
     {
         if (!recording) return;
         recording = false;
+        recorder.LimitReached -= OnLimitReached;
         await recorder.StopAsync().ConfigureAwait(false);
     }
 

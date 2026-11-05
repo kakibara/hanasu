@@ -94,9 +94,9 @@
 ### REQ-COM-022 セキュリティの調査の結果を、実装と文書に入れる
 - 内容: 通信・秘密の扱い・ダウンロード・保存するファイル・クリップボード・プロンプトインジェクション・権限・依存関係・配布について調べ、直せるものは直し、残る危険は文書に書く。
 - 受け入れ条件:
-  - Mac: [design/security.md](../design/security.md) に、項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの: AI の通信はリダイレクトに従わずキャッシュを残さない（DEC-COM-044）、サービスアカウントの `token_uri` と Vertex AI のリージョンを確かめる（DEC-COM-053）、会議のフォルダを 0700 にする（DEC-COM-052）、自己署名でも Hardened Runtime を付ける（DEC-COM-051）。
-  - Windows: [design/security-windows.md](../design/security-windows.md) に項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの（モデルのハッシュの確認、リダイレクトでキーを送らない、DLL の探索の場所、権限の高いウインドウに貼らない、区切りのタグの無害化、ログの伏せ字、NuGet の lock ファイル、配布物の SHA-256）は、DEC-COM-142・145〜150 のとおりに動く。
-- 出典: ユーザーの依頼（2026-11-03「その他セキュリティで気をつけるべきところを調査してその結果を盛り込んで」）
+  - Mac: [design/security.md](../design/security.md) に、項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの: AI の通信はリダイレクトに従わずキャッシュを残さない（DEC-COM-044）、サービスアカウントの `token_uri` と Vertex AI のリージョンを確かめる（DEC-COM-053）、会議のフォルダを 0700 にする（DEC-COM-052）、自己署名でも Hardened Runtime を付ける（DEC-COM-051）、文字起こし・メモ・議事録の中の区切りのタグを無害にしてから埋め込む（DEC-COM-054）。
+  - Windows: [design/security-windows.md](../design/security-windows.md) に項目ごとの「確かめたこと・直したこと・残る危険」がある。直したもの（モデルのハッシュの確認、リダイレクトでキーを送らない、DLL の探索の場所、権限の高いウインドウに貼らない、区切りのタグの無害化、ログの伏せ字、NuGet の lock ファイル、配布物の SHA-256）は、DEC-COM-142・145〜150 のとおりに動く。加えて、サービスアカウントの `token_uri` を Google の窓口に限ることと、Vertex AI のリージョンの確認（DEC-COM-053）も動く。
+- 出典: ユーザーの依頼（2026-11-03「その他セキュリティで気をつけるべきところを調査してその結果を盛り込んで」）。固定する項目に DEC-COM-054（Mac の区切りのタグ）と DEC-COM-053（Windows の `token_uri` とリージョンの確認）を加えたのは、ユーザーの依頼（2026-11-05、PR #65）
 - 対象: Mac / Windows
 - 実装の場所: `SecureHTTP`、`ServiceAccountTokenProvider.isTrustedTokenURL`、`GeminiClient.isValidLocation`、`MeetingStore.createPrivateDirectory`、`scripts/build-app.sh`
 - Windows の実装: `windows/Hanasu.Core/Net/ModelDownload.cs`、`windows/Hanasu.Core/Net/SafeHttp.cs`、`windows/Hanasu.Core/Ai/PromptText.cs`、`windows/Hanasu.Core/Ai/SecretRedactor.cs`、`windows/Hanasu.Windows/Services/WindowsSecurity.cs`
@@ -541,13 +541,13 @@
 - 実装の場所: `MeetingStore.createPrivateDirectory`
 
 ### DEC-COM-053 サービスアカウントの token_uri と Vertex AI のリージョンを確かめてから送る
-- 決めたこと: 鍵ファイルの `token_uri` が `https://oauth2.googleapis.com`（古い鍵の `https://accounts.google.com`）でなければ、署名した JWT を送らない。Vertex AI のリージョンは英小文字・数字・ハイフンだけ（40 文字まで）を受け付ける（ホスト名に入るため）。Windows 版もリージョンは同じ形だけを受け付ける。`token_uri` は https であることだけを確かめる（Google の窓口に限るのは Mac だけ。テストが別のホストの偽の窓口を使うため）。
+- 決めたこと: 鍵ファイルの `token_uri` が `https://oauth2.googleapis.com`（古い鍵の `https://accounts.google.com`）でなければ、署名した JWT を送らない。Vertex AI のリージョンは英小文字・数字・ハイフンだけ（40 文字まで）を受け付ける（ホスト名に入るため）。Windows 版も、リージョンは同じ形だけを、`token_uri` は同じ Google の窓口（`oauth2.googleapis.com`・`accounts.google.com`、https、ポートとユーザー情報なし）だけを受け付ける。
 - 理由: 鍵ファイルや設定（UserDefaults・settings.json）を書き換えられると、署名した JWT やアクセストークンを別のホストに送らされうる。リージョンはホスト名の一部になるので、確かめないと `evil.example/#` のような値で送り先そのものを変えられる。
-- 決めた場面: この PR（セキュリティの調査）。Windows のリージョンの確認はセキュリティの見直し（2026-11-05）
+- 決めた場面: この PR（セキュリティの調査）。Windows のリージョンの確認はセキュリティの見直し（2026-11-05）。Windows の `token_uri` を Google の窓口に限ったのはユーザーの依頼（2026-11-05、PR #65。それまでは https の確認だけで、テストが偽の窓口を使うために緩めていた。テストは `Parse` のあとで窓口を差し替える）
 - 関係する要件: REQ-COM-022
 - 対象: Mac / Windows
 - 実装の場所: `ServiceAccountTokenProvider.isTrustedTokenURL`、`GeminiClient.isValidLocation`
-- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiClient.cs`（`IsValidLocation`）、`windows/Hanasu.Core/Gemini/ServiceAccount.cs`（`Parse` の https の確認）
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiClient.cs`（`IsValidLocation`）、`windows/Hanasu.Core/Gemini/ServiceAccount.cs`（`Parse`・`IsTrustedTokenUri`）
 
 ### DEC-COM-054 Mac 版も、文字起こし・メモ・議事録の中の区切りのタグを無害にしてから埋め込む
 - 決めたこと: プロンプトの区切りに使うタグ（`<transcript>` `<transcript_excerpts>` `<user_notes>` `<action_items>` `<speaker_names>` と、会議への質問の `<meeting>` `<minutes>` `<question>`）が、埋め込むユーザー由来の文章（音声入力の認識結果、会議の文字起こし、本人のメモ、会議への質問に渡す議事録と文字起こし）に含まれていたら、全角の山かっこ（`＜/transcript＞`）に置き換えてから埋め込む。閉じタグ・空白入り・大文字・属性つきも拾う。選択を声で編集するモードは、毎回変わる名前のタグ（DEC-DIC-033）のままにする。画面の文脈は `<` をすべて全角にする（DEC-DIC-065）のままにする。
@@ -556,6 +556,15 @@
 - 関係する要件: REQ-COM-022, REQ-DIC-003, REQ-MTG-006
 - 対象: Mac
 - 実装の場所: `PromptText.neutralizeDelimiters`、`GeminiClient.userPrompt`、`MinutesPrompt.userText`、`MeetingAsk.material`
+
+### DEC-COM-055 Gemini の呼び出しは、429 / 503 と一時的な通信の失敗だけ、時間の予算の中で 2 回までやり直す
+- 決めたこと: Gemini の 429 と 503、および一時的な通信の失敗（Mac: 接続が切れた・つながらない・名前が引けない。Windows: `HttpRequestException`）は、0.5 秒・1 秒待って 2 回までやり直す。ここまでにかかった時間と待ちの合計が、タイムアウトの半分を超えるときはやり直さない（15 秒なら 7.5 秒まで）。やり直しの送信のタイムアウトは、残りの時間にする。タイムアウト自体と、400 / 401 / 403 などはやり直さない。
+- 理由: 一瞬の混雑（429 / 503）で整形が失敗して、認識結果がそのまま入力されるのを減らす。音声入力は待たされないことが大事（DEC-DIC-010 の 15 秒）なので、全体の予算を超えない。Claude は DEC-COM-046 でやり直していたが、Gemini はやり直さず、Mac と Windows の両方で食い違っていたので、両方にそろえて入れた。
+- 決めた場面: ユーザーの依頼（2026-11-05、PR #65）
+- 関係する要件: REQ-DIC-007
+- 対象: Mac / Windows
+- 実装の場所: `GeminiClient.generate`・`retryDelay`・`isTransientNetworkError`
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiClient.cs`（`GenerateAsync`・`RetryDelay`・`MaxRetries`・`RetryBaseDelay`）
 
 ### DEC-COM-060 ローカルの LLM は、llama.cpp の llama-server を同梱し、使うときだけ子プロセスで動かす
 - 決めたこと: Mac・Windows とも、llama.cpp の `llama-server` をアプリに同梱し、ローカルを選んだ処理を始めるときに子プロセスとして起動して、OpenAI 互換の `POST /v1/chat/completions` に送る（streaming は使わない）。チャットの形式は GGUF に入っているテンプレートを llama.cpp の jinja で使う（`--jinja`）。Gemma 4 の考える過程は使わない（`--reasoning off`）。Mac は Metal に全部の層を載せる（`-ngl 99`）。Windows は CPU で動かす。

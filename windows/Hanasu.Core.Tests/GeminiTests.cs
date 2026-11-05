@@ -242,6 +242,60 @@ public class GeminiClientTests
         Assert.Equal(GeminiErrorKind.Timeout, e.Kind);
     }
 
+    private static GeminiClient RetryClient(FakeHandler handler, TimeSpan? timeout = null, TimeSpan? baseDelay = null) =>
+        new(new GeminiAuth.ApiKey("k"), new HttpClient(handler))
+        {
+            Timeout = timeout ?? TimeSpan.FromSeconds(15),
+            RetryBaseDelay = baseDelay ?? TimeSpan.FromMilliseconds(1),
+        };
+
+    // 設計判断: DEC-COM-055
+    [Fact]
+    public async Task RetriesOn503ThenSucceeds()
+    {
+        var calls = 0;
+        var handler = new FakeHandler((_, _) => ++calls < 3
+            ? FakeHandler.Json("""{"error":{"message":"busy"}}""", HttpStatusCode.ServiceUnavailable)
+            : FakeHandler.Json(FakeHandler.TextResponse("整形後")));
+        var result = await RetryClient(handler).RefineAsync(new RefineRequest { Transcript = "a", Model = "m" });
+        Assert.Equal("整形後", result);
+        Assert.Equal(3, handler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task GivesUpAfterTwoRetriesOn429()
+    {
+        var handler = new FakeHandler((_, _) => FakeHandler.Json("""{"error":{"message":"slow down"}}""", HttpStatusCode.TooManyRequests));
+        var e = await Assert.ThrowsAsync<GeminiException>(() => RetryClient(handler).RefineAsync(new RefineRequest { Transcript = "a", Model = "m" }));
+        Assert.Equal(429, e.StatusCode);
+        Assert.Equal(3, handler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task DoesNotRetryOtherErrorsOrWhenOverBudget()
+    {
+        var forbidden = new FakeHandler((_, _) => FakeHandler.Json("""{"error":{"message":"no"}}""", HttpStatusCode.Forbidden));
+        await Assert.ThrowsAsync<GeminiException>(() => RetryClient(forbidden).RefineAsync(new RefineRequest { Transcript = "a", Model = "m" }));
+        Assert.Single(forbidden.Requests);
+
+        // 待ちが Timeout の半分を超えるなら、やり直さない
+        var busy = new FakeHandler((_, _) => FakeHandler.Json("{}", HttpStatusCode.ServiceUnavailable));
+        var client = RetryClient(busy, timeout: TimeSpan.FromSeconds(2), baseDelay: TimeSpan.FromSeconds(5));
+        await Assert.ThrowsAsync<GeminiException>(() => client.RefineAsync(new RefineRequest { Transcript = "a", Model = "m" }));
+        Assert.Single(busy.Requests);
+    }
+
+    [Fact]
+    public async Task RetriesTransientNetworkErrors()
+    {
+        var calls = 0;
+        var handler = new FakeHandler((_, _) => ++calls < 2
+            ? throw new HttpRequestException("connection reset")
+            : FakeHandler.Json(FakeHandler.TextResponse("ok")));
+        Assert.Equal("ok", await RetryClient(handler).RefineAsync(new RefineRequest { Transcript = "a", Model = "m" }));
+        Assert.Equal(2, handler.Requests.Count);
+    }
+
     [Fact]
     public async Task MissingApiKeyIsReported()
     {
@@ -335,6 +389,21 @@ public class ServiceAccountTests
         Assert.Throws<ServiceAccountException>(() => ServiceAccountCredentials.Load(Path.Combine(dir, "missing.json")));
         Assert.Throws<ServiceAccountException>(() => ServiceAccountCredentials.Parse("{"));
         Assert.Throws<ServiceAccountException>(() => ServiceAccountCredentials.Parse("""{"project_id":"p"}"""));
+
+        // token_uri は Google のトークンの窓口に限る（DEC-COM-053）
+        string KeyWith(string tokenUri) =>
+            $$"""{"project_id":"p","client_email":"e@example.test","private_key":"x","token_uri":"{{tokenUri}}"}""";
+        Assert.Equal("https://accounts.google.com/o/oauth2/token",
+            ServiceAccountCredentials.Parse(KeyWith("https://accounts.google.com/o/oauth2/token")).TokenUri);
+        foreach (var untrusted in new[]
+        {
+            "https://evil.example.test/token", "http://oauth2.googleapis.com/token", "https://oauth2.googleapis.com.evil.example.test/token",
+            "https://oauth2.googleapis.com:8443/token", "https://user@oauth2.googleapis.com/token",
+        })
+        {
+            var rejected = Assert.Throws<ServiceAccountException>(() => ServiceAccountCredentials.Parse(KeyWith(untrusted)));
+            Assert.Contains("token_uri", rejected.Message);
+        }
         var bad = credentials with { PrivateKey = "-----BEGIN PRIVATE KEY-----\nAAAA\n-----END PRIVATE KEY-----" };
         Assert.Throws<ServiceAccountException>(() => ServiceAccountTokenProvider.MakeJwt(bad, DateTimeOffset.UtcNow));
     }

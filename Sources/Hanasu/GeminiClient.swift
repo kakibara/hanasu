@@ -298,9 +298,33 @@ struct GeminiClient {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
 
-        // 設計判断: DEC-COM-044
-        let (data, response) = try await SecureHTTP.data(for: urlRequest)
-        guard let http = response as? HTTPURLResponse else { throw GeminiError.invalidResponse }
+        // 設計判断: DEC-COM-044, DEC-COM-055
+        // 429 / 503 と一時的な通信の失敗だけ、2 回までやり直す。全体で timeout の半分を超えるなら、やり直さない
+        let startedAt = Date()
+        var attempt = 0
+        var received: (Data, HTTPURLResponse)
+        while true {
+            do {
+                let (data, response) = try await SecureHTTP.data(for: urlRequest)
+                guard let http = response as? HTTPURLResponse else { throw GeminiError.invalidResponse }
+                received = (data, http)
+            } catch let error as URLError where Self.isTransientNetworkError(error) {
+                guard let wait = Self.retryDelay(attempt: attempt, elapsed: Date().timeIntervalSince(startedAt), timeout: timeout)
+                else { throw error }
+                attempt += 1
+                try await Task.sleep(for: .seconds(wait))
+                urlRequest.timeoutInterval = max(1, timeout - Date().timeIntervalSince(startedAt))
+                continue
+            }
+            let status = received.1.statusCode
+            guard status == 429 || status == 503,
+                  let wait = Self.retryDelay(attempt: attempt, elapsed: Date().timeIntervalSince(startedAt), timeout: timeout)
+            else { break }
+            attempt += 1
+            try await Task.sleep(for: .seconds(wait))
+            urlRequest.timeoutInterval = max(1, timeout - Date().timeIntervalSince(startedAt))
+        }
+        let (data, http) = received
         guard (200..<300).contains(http.statusCode) else {
             let decoded = try? JSONDecoder().decode(ErrorEnvelope.self, from: data)
             // 文言は HUD と履歴に出るので、JSON でない応答（HTML のエラーページなど）は先頭だけにする（Windows 版と同じ 500 文字）
@@ -320,6 +344,20 @@ struct GeminiClient {
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { throw GeminiError.emptyResponse(reason: candidate.finishReason) }
         return text
+    }
+
+    // 設計判断: DEC-COM-055
+    /// やり直すまでの待ち（0.5 秒・1 秒）。最大 2 回まで。ここまでにかかった時間と待ちの合計が timeout の半分を超えるなら nil（やり直さない）
+    static func retryDelay(attempt: Int, elapsed: TimeInterval, timeout: TimeInterval) -> TimeInterval? {
+        guard attempt < 2 else { return nil }
+        let wait = 0.5 * pow(2, Double(attempt))
+        return elapsed + wait <= timeout / 2 ? wait : nil
+    }
+
+    // 設計判断: DEC-COM-055
+    /// 一時的な通信の失敗（接続が切れた・つながらない・名前が引けない）。タイムアウトは予算を使い切っているのでやり直さない
+    static func isTransientNetworkError(_ error: URLError) -> Bool {
+        [.networkConnectionLost, .cannotConnectToHost, .cannotFindHost, .dnsLookupFailed].contains(error.code)
     }
 
     // 設計判断: DEC-COM-053

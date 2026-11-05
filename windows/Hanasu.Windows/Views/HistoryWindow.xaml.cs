@@ -147,8 +147,9 @@ public partial class HistoryWindow : Window
     {
         var selected = SelectedEntries;
         if (selected.Count == 0) return;
-        // 1 件ならすぐ消す。まとめて消すときだけ確かめる
-        if (selected.Count > 1 && MessageBox.Show(this, $"選んだ {selected.Count} 件の履歴を削除しますか？", "Hanasu",
+        // 1 件でも確かめる（DEC-DIC-079）
+        var question = selected.Count > 1 ? $"選んだ {selected.Count} 件の履歴を削除しますか？" : "この履歴を削除しますか？";
+        if (MessageBox.Show(this, $"{question}元に戻せません。", "Hanasu",
                 MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
         history.Delete(selected.Select(s => s.Id));
     }

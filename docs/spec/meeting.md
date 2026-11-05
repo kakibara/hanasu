@@ -778,6 +778,14 @@
 - 対象: Mac
 - 実装の場所: `MeetingWindowView`、`MeetingRow`、`MeetingDetailView`、`MeetingRecorder.regenerateMinutes`
 
+### DEC-MTG-071 会議の一覧の読み込みは、メインスレッドの外で行う
+- 決めたこと: `MeetingRecorder.meetings` の元になる `MeetingStore.loadAll()`（全会議の `meeting.json` の読み込みと復号）は、起動時と `reloadMeetings()`（名前の変更・編集・削除など）のたびに、裏のタスクで行い、結果だけをメインに戻す。読み終えるまでは前の一覧を出したままにする（空にしない。起動直後だけ空で、読み終えたら入る）。続けて呼ばれたときは、呼び出しごとの番号（`reloadGeneration`）が最新のものの結果だけを使い、古い読み込みが新しい一覧を上書きしないようにする。
+- 理由: 会議が増えると、読み込みがメインスレッドを止めて、会議ノートの操作や起動が引っかかる。一覧が少し遅れて出ても、使い方は変わらない。
+- 決めた場面: PR #65
+- 関係する要件: REQ-MTG-007
+- 対象: Mac
+- 実装の場所: `MeetingRecorder.reloadMeetings`
+
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。
 - 理由: Mac 版の Process Tap（DEC-MTG-002）にあたる、ドライバーの要らない方法。効果音を鳴らすとループバックに入る。

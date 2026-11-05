@@ -62,6 +62,9 @@ public sealed class GeminiClient : ITextAiClient
 
     /// <summary>1 回の呼び出しの待ち時間の上限。音声入力は 15 秒（Mac 版と同じ）</summary>
     public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(15);
+    /// <summary>429 / 503 と一時的な通信の失敗のやり直しの回数と、最初の待ち（DEC-COM-055）</summary>
+    public int MaxRetries { get; init; } = 2;
+    public TimeSpan RetryBaseDelay { get; init; } = TimeSpan.FromSeconds(0.5);
 
     public GeminiClient(GeminiAuth auth, HttpClient? http = null, ServiceAccountTokenProvider? tokenProvider = null)
     {
@@ -115,21 +118,41 @@ public sealed class GeminiClient : ITextAiClient
         var storedKey = auth is GeminiAuth.StoredApiKey stored ? await stored.Load(cancellationToken).ConfigureAwait(false) : null;
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(Timeout);
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         try
         {
-            using var request = await BuildHttpRequestAsync(model, body, timeout.Token, storedKey).ConfigureAwait(false);
-            using var response = await http.SendAsync(request, timeout.Token).ConfigureAwait(false);
-            var text = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
-            if (!response.IsSuccessStatusCode)
+            // 設計判断: DEC-COM-055（Mac 版と同じ。429 / 503 と一時的な通信の失敗だけ 2 回までやり直す）
+            for (var attempt = 0; ; attempt++)
             {
-                throw GeminiException.Http((int)response.StatusCode, ErrorMessage(text));
+                try
+                {
+                    using var request = await BuildHttpRequestAsync(model, body, timeout.Token, storedKey).ConfigureAwait(false);
+                    using var response = await http.SendAsync(request, timeout.Token).ConfigureAwait(false);
+                    var text = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode) return ParseResponseText(text);
+                    var status = (int)response.StatusCode;
+                    TimeSpan? delay = status is 429 or 503 ? RetryDelay(attempt, stopwatch.Elapsed) : null;
+                    if (delay is not { } wait) throw GeminiException.Http(status, ErrorMessage(text));
+                    await Task.Delay(wait, timeout.Token).ConfigureAwait(false);
+                }
+                catch (HttpRequestException) when (RetryDelay(attempt, stopwatch.Elapsed) is { } retryWait)
+                {
+                    await Task.Delay(retryWait, timeout.Token).ConfigureAwait(false);
+                }
             }
-            return ParseResponseText(text);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
             throw GeminiException.Timeout(Timeout);
         }
+    }
+
+    /// <summary>やり直すまでの待ち（既定は 0.5 秒・1 秒）。最大 2 回まで。ここまでの時間と待ちの合計が Timeout の半分を超えるなら null（やり直さない）</summary>
+    internal TimeSpan? RetryDelay(int attempt, TimeSpan elapsed)
+    {
+        if (attempt >= MaxRetries) return null;
+        var wait = RetryBaseDelay * Math.Pow(2, attempt);
+        return elapsed + wait <= Timeout / 2 ? wait : null;
     }
 
     internal async Task<HttpRequestMessage> BuildHttpRequestAsync(string model, string body, CancellationToken cancellationToken,

@@ -52,10 +52,10 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 - 確かめたこと: 送り先はすべて https（`generativelanguage.googleapis.com`・`aiplatform.googleapis.com`・`oauth2.googleapis.com`・`api.anthropic.com`・`huggingface.co`）。証明書の検証を外すコードはない。タイムアウトは、整形・英訳 15 秒、Gemini の文字起こし 60 秒、議事録 180 秒（Claude は 300 秒）。
 - 直したこと（DEC-COM-145）:
   - API の HttpClient はリダイレクトに従わない（`SafeHttp.Create`）。Gemini のキーは独自のヘッダー（`x-goog-api-key`）なので、.NET はリダイレクト先が別のホストでも付けたまま送ってしまうため。
-  - サービスアカウントの `token_uri` が https でなければ使わない（署名した JWT を平文で送らない）。
+  - サービスアカウントの `token_uri` が Google の窓口（`oauth2.googleapis.com`・`accounts.google.com`、https、ポートとユーザー情報なし）でなければ使わない（`ServiceAccountCredentials.IsTrustedTokenUri`。Mac 版の `isTrustedTokenURL` と同じ。DEC-COM-053、PR #65）。
   - Claude の送り先は `https://api.anthropic.com` に固定し、キーは明示して渡す（SDK が環境変数 `ANTHROPIC_BASE_URL`・`ANTHROPIC_API_KEY`・`ANTHROPIC_AUTH_TOKEN` を読まない）。SDK 13 はキーを `Authorization: Bearer` で送り、.NET はリダイレクトのときにこのヘッダーを外す。
   - 2026-11-05 の見直し（DEC-COM-053）: Vertex AI のリージョンはホスト名に入る（`<リージョン>-aiplatform.googleapis.com`）のに確かめていなかったので、Mac 版と同じく英小文字・数字・ハイフン（40 文字まで）だけを受け付ける（`GeminiClient.IsValidLocation`）。settings.json や環境変数 `GEMINI_VERTEX_LOCATION` を書き換えられても、アクセストークンを別のホストに送らされない。
-- 残る危険: プロキシや社内の TLS 検査がある環境では、その経路を信頼することになる（OS の証明書ストアに従う）。サービスアカウントの `token_uri` は https であることだけを確かめ、Google の窓口（`oauth2.googleapis.com`）には限っていない（Mac 版は限る。テストが偽の窓口を使うため）。別の窓口に送られる JWT の `aud` はその窓口の URL になるので、Google では使えない。
+- 残る危険: プロキシや社内の TLS 検査がある環境では、その経路を信頼することになる（OS の証明書ストアに従う）。サービスアカウントの `token_uri` は Google の窓口に限る。テストは `TestKeys.MakeServiceAccount` で `Parse` のあとに偽の窓口へ差し替える。
 
 ### 2.3 モデルのダウンロード
 

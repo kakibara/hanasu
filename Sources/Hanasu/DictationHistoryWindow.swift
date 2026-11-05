@@ -168,6 +168,8 @@ struct DictationHistoryView: View {
     @State var selection: UUID?
     @State private var query = ""
     @State private var filter: DictationHistoryFilter = .all
+    /// 削除の確認を待っている 1 件（設計判断: DEC-DIC-079）
+    @State private var pendingDelete: UUID?
 
     init(store: DictationHistoryStore, selection: UUID? = nil, query: String = "") {
         self.store = store
@@ -184,6 +186,16 @@ struct DictationHistoryView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .frame(minWidth: 760, minHeight: 460)
+        .confirmationDialog("この履歴を削除しますか？", isPresented: Binding(
+            get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } })
+        ) {
+            Button("削除", role: .destructive) {
+                if let id = pendingDelete { store.delete([id]) }
+                pendingDelete = nil
+            }
+        } message: {
+            Text("元に戻せません。")
+        }
     }
 
     private var filtered: [DictationHistoryEntry] {
@@ -249,7 +261,7 @@ struct DictationHistoryView: View {
             }
             .listStyle(.sidebar)
             .onDeleteCommand {
-                if let selection { store.delete([selection]) }
+                if let selection { pendingDelete = selection }
             }
             Divider()
             HStack {
@@ -273,12 +285,12 @@ struct DictationHistoryView: View {
         Button("結果をコピー") { Self.copy(entry.output) }
         Button("原文をコピー") { Self.copy(entry.raw) }
         Divider()
-        Button("削除", role: .destructive) { store.delete([entry.id]) }
+        Button("削除", role: .destructive) { pendingDelete = entry.id }
     }
 
     @ViewBuilder private var detail: some View {
         if let selection, let entry = store.entries.first(where: { $0.id == selection }) {
-            DictationHistoryDetail(entry: entry, store: store)
+            DictationHistoryDetail(entry: entry, store: store, onDelete: { pendingDelete = entry.id })
                 .id(entry.id)
         } else {
             ContentUnavailableView(
@@ -386,6 +398,7 @@ private struct Tag: View {
 private struct DictationHistoryDetail: View {
     let entry: DictationHistoryEntry
     @ObservedObject var store: DictationHistoryStore
+    let onDelete: () -> Void
     @ObservedObject private var settings = AppSettings.shared
     @State private var retrying: DictationHistoryEntry.Mode?
     @State private var message: (text: String, isError: Bool)?
@@ -409,7 +422,7 @@ private struct DictationHistoryDetail: View {
                 Divider()
                 HStack {
                     Spacer()
-                    Button("この履歴を削除", role: .destructive) { store.delete([entry.id]) }
+                    Button("この履歴を削除", role: .destructive, action: onDelete)
                 }
             }
             .padding(20)
