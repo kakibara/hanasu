@@ -163,13 +163,41 @@ enum DictationHistoryError: LocalizedError {
 /// 新しい順に持ち、件数と日数の上限を超えたものは古い順に消す（録音した音声も一緒に消す）。
 @MainActor
 final class DictationHistoryStore: ObservableObject {
+    // 設計判断: DEC-DIC-070
+    /// アプリで使う履歴。起動時に `preloadShared()` が裏で読んだ中身があればそれを使い、
+    /// 先読みが終わる前に使われたら（メニュー・再入力・音声入力）、ここで同期で読む
     static let shared: DictationHistoryStore = {
         let store = DictationHistoryStore(directory: defaultDirectory)
         store.bind(to: HistorySettings.shared)
-        store.load()
+        if let preloaded = preloadedFile {
+            store.load(from: preloaded)
+        } else {
+            store.load()
+        }
+        preloadedFile = nil
         store.flushOnTerminate()
         return store
     }()
+
+    /// `preloadShared()` が裏で読んだ history.json の中身。`shared` を作るときに一度だけ使う
+    private static var preloadedFile: FileReadResult?
+    private static var preloadStarted = false
+
+    // 設計判断: DEC-DIC-070
+    /// 起動時に呼ぶ。history.json の読み込みとデコードを裏で行い、終わったらメインで `shared` を作る。
+    /// それより前に `shared` が使われたときは、そちらが同期で読み、先読みの結果は捨てる
+    /// （`shared` ができるまでは、アプリの中で history.json に書くものはないので、先読みの中身は古くならない）
+    static func preloadShared() {
+        guard !preloadStarted else { return }
+        preloadStarted = true
+        let fileURL = defaultDirectory.appendingPathComponent("history.json")
+        Task { @MainActor in
+            let result = await Task.detached(priority: .utility) { DictationHistoryStore.readFile(at: fileURL) }.value
+            preloadedFile = result
+            _ = shared  // まだ作っていなければ、読んだ中身で作る。作ってあれば何もしない
+            preloadedFile = nil
+        }
+    }
 
     static var defaultDirectory: URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
@@ -228,25 +256,47 @@ final class DictationHistoryStore: ObservableObject {
         var entries: [DictationHistoryEntry]
     }
 
+    /// history.json を読んだ結果
+    enum FileReadResult: Sendable {
+        case missing
+        case entries([DictationHistoryEntry])
+        case failed(String)
+    }
+
+    /// history.json を読んでデコードする（どのスレッドからでも呼べる）
+    nonisolated static func readFile(at fileURL: URL) -> FileReadResult {
+        guard FileManager.default.fileExists(atPath: fileURL.path) else { return .missing }
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let contents = try decoder.decode(FileContents.self, from: Data(contentsOf: fileURL))
+            return .entries(contents.entries)
+        } catch {
+            return .failed(error.localizedDescription)
+        }
+    }
+
     // 設計判断: DEC-DIC-070
     func load() {
         flush()  // 書いていない変更があれば先に書く（読み直しで失わないように）
+        load(from: Self.readFile(at: fileURL))
+    }
+
+    // 設計判断: DEC-DIC-070
+    /// 読んだ中身を当てる。メモリだけの履歴（保存しない設定のもの）は残す
+    private func load(from result: FileReadResult) {
         let transient = entries.filter(\.transient)
-        do {
-            if FileManager.default.fileExists(atPath: fileURL.path) {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                let contents = try decoder.decode(FileContents.self, from: Data(contentsOf: fileURL))
-                entries = (contents.entries + transient).sorted { $0.date > $1.date }
-            } else {
-                entries = transient
-            }
-            lastError = nil
-        } catch {
-            appLog.error("history load error: \(error.localizedDescription, privacy: .public)")
-            lastError = "履歴を読み込めませんでした: \(error.localizedDescription)"
+        switch result {
+        case .missing:
+            entries = transient
+        case .entries(let saved):
+            entries = (saved + transient).sorted { $0.date > $1.date }
+        case .failed(let message):
+            appLog.error("history load error: \(message, privacy: .public)")
+            lastError = "履歴を読み込めませんでした: \(message)"
             return  // 壊れたファイルを上書きしないよう、ここで止める
         }
+        lastError = nil
         if prune() { save() }
         removeOrphanAudio()
     }

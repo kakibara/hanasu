@@ -5,7 +5,10 @@ import SwiftUI
 /// 音声入力の履歴ウインドウ、メニューの「最近の結果」、「最後の結果をもう一度入力」のショートカットを受け持つ。
 @MainActor
 final class DictationHistoryUI: NSObject {
-    private let store: DictationHistoryStore
+    private let injectedStore: DictationHistoryStore?
+    // 設計判断: DEC-DIC-070
+    /// 使うときに初めて `shared` を取る（起動時に履歴の読み込みでメインを止めない。先読みは `DictationHistoryStore.preloadShared`）
+    private var store: DictationHistoryStore { injectedStore ?? .shared }
     private let isDictationBusy: () -> Bool
     private let onHotKeyRegistrationFailed: (HotKeyCombo) -> Void
     private let hotKeys = HotKeyManager()
@@ -20,7 +23,7 @@ final class DictationHistoryUI: NSObject {
          isDictationBusy: @escaping () -> Bool,
          onHotKeyRegistrationFailed: @escaping (HotKeyCombo) -> Void)
     {
-        self.store = store ?? .shared
+        injectedStore = store
         self.isDictationBusy = isDictationBusy
         self.onHotKeyRegistrationFailed = onHotKeyRegistrationFailed
         super.init()

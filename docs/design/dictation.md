@@ -386,7 +386,7 @@ Wispr Flow の Context Awareness、Aqua Voice の画面コンテキスト、Will
   - 日別ファイルにしなかったのは、上限が 1000 件程度なら 1 ファイルでも 1 MB 前後で足りるため。件数と日数の両方で上限をかけるには、1 ファイルの方が扱いやすい。
   - フォルダは 0700、`history.json` は 0600 にする（話した内容が入っているため）。書き込みは atomic。
   - 読めないファイル（壊れた JSON など）は上書きせず、ウインドウの下にエラーを出す。
-  - Mac 版の保存は遅らせて裏で行う（DEC-DIC-070）。`DictationHistoryStore.save` は予約するだけで、`writeNow` が直列キュー `writeQueue` に書き込み（`write`）を流す。`flush` で書き切り、`flushOnTerminate`（終了の通知）・`load`・確認用 CLI が使う。起動時の `load` は `DictationHistoryStore.shared` の初回アクセスで同期的に読む（メニューや再入力が最初から履歴を要るため）。
+  - Mac 版の保存は遅らせて裏で行う（DEC-DIC-070）。`DictationHistoryStore.save` は予約するだけで、`writeNow` が直列キュー `writeQueue` に書き込み（`write`）を流す。`flush` で書き切り、`flushOnTerminate`（終了の通知）・`load`・確認用 CLI が使う。起動時は `AppDelegate` が `DictationHistoryStore.preloadShared` を呼び、`readFile`（読み込みとデコード）を裏で行ってから、メインで `shared` を作って中身を当てる（`load(from:)`）。`DictationHistoryUI` は `shared` を使うときに初めて取る。先読みが終わる前にメニュー・再入力・音声入力が `shared` を使ったら、そこで同期で `load` し、先読みの結果は捨てる。
 - 1 件に持つもの: 日時、文字起こしの原文、結果、モード（整形／英訳／和訳。`refine` / `translate` / `translateJapanese`）、入力先アプリ、状態、Gemini のエラー内容、使ったモデル、録音のファイル名、やり直した日時。
 - 状態は 4 つ: 成功 ／ Gemini 失敗 ／ 未設定のため原文のまま ／ 整形オフ（原文のまま）。前の 2 つ（失敗）は ⚠︎、後ろ 2 つも含めて「未整形」の印を付ける。
 - 貼り付け（⌘V）の**前に**履歴へ書く。貼り付けがどうなっても結果が残るようにするため。

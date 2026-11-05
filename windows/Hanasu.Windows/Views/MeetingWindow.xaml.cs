@@ -53,6 +53,7 @@ public partial class MeetingWindow : Window
         timer.Tick += (_, _) => UpdateLive();
         Closed += (_, _) =>
         {
+            reloadGeneration++; // 閉じたあとに読み終えた一覧は出さない
             timer.Stop();
             meetings.StateChanged -= OnStateChanged;
             meetings.MeetingChanged -= OnMeetingChanged;
@@ -64,11 +65,29 @@ public partial class MeetingWindow : Window
 
     // MARK: - 一覧
 
-    private void ReloadList(string? selectId = null)
+    /// <summary>一覧の読み込みの番号。最後に始めた読み込みの結果だけを使う（DEC-MTG-071）</summary>
+    private int reloadGeneration;
+
+    // 設計判断: DEC-MTG-071
+    /// <summary>
+    /// 一覧を読み直す。全会議の meeting.json の読み込みと解析は UI スレッドの外で行い、結果だけを UI スレッドで出す。
+    /// 読み終えるまでは前の一覧を出したままにする。続けて呼ばれたら、最後の呼び出しの結果だけを使う
+    /// </summary>
+    private async void ReloadList(string? selectId = null)
     {
-        selectId ??= selected?.Id;
+        var generation = ++reloadGeneration;
         var store = meetings.Store(host.Settings.Current);
-        var all = store.LoadAll();
+        List<Meeting> all;
+        try
+        {
+            all = await Task.Run(() => store.LoadAll());
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            return; // 読めなかったら前の一覧のままにする
+        }
+        if (generation != reloadGeneration) return;
+        selectId ??= selected?.Id;
         // 記録中・処理中の会議はメモリ上のものを使う（ファイルより新しい）
         if (meetings.Current is { } current)
         {

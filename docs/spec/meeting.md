@@ -783,8 +783,9 @@
 - 理由: 会議が増えると、読み込みがメインスレッドを止めて、会議ノートの操作や起動が引っかかる。一覧が少し遅れて出ても、使い方は変わらない。
 - 決めた場面: PR #65
 - 関係する要件: REQ-MTG-007
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MeetingRecorder.reloadMeetings`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（`ReloadList`。`MeetingStore.LoadAll` を `Task.Run` で読み、番号 `reloadGeneration` が最新のときだけ一覧に出す。会議ノートを開いた直後だけ空。読めなかったときは前の一覧のまま。ウィンドウを閉じたあとに読み終えた結果は出さない。起動時の `MeetingStore.MarkInterruptedMeetings` は、記録を始める前に済ませる書き込みなので同期のまま）
 
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。
