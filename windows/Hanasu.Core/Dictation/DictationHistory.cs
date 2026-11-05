@@ -197,7 +197,7 @@ public sealed class DictationHistoryStore
                         LastError = $"履歴のファイルを読めませんでした: {moveError.Message}";
                     }
                 }
-                catch (IOException e)
+                catch (Exception e) when (e is IOException or UnauthorizedAccessException)
                 {
                     LastError = $"履歴のファイルを読めませんでした: {e.Message}";
                 }

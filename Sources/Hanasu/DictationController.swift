@@ -66,6 +66,12 @@ final class DictationController {
         recognizer.onBatchTranscriptionStarted = { [weak self] _ in
             self?.hud.model.transcribing = true
         }
+        // 設計判断: DEC-DIC-144
+        // 録音が上限に達したら、止めて、ここまでの音声を処理する（HUD に理由を出す）
+        recognizer.onRecordingLimitReached = { [weak self] in
+            self?.hud.updateTranscript(SpeechRecognizer.recordingLimitNotice)
+            self?.stopFromHUD()
+        }
         hud.model.onSelectTranslation = { [weak self] translation in
             self?.selectOutputLanguage(translation)
         }
@@ -313,6 +319,12 @@ final class DictationController {
         if settings.refineWithGemini || translation != nil, snippetMatch?.isWholeUtterance != true {
             let verb = translation != nil ? "翻訳" : "整形"
             do {
+                // 要件: REQ-COM-032
+                // 設計判断: DEC-COM-069
+                // ローカルのモデルがまだなければ、ダウンロードするか尋ね、終わるのを待つ。ダイアログで前面が変わるので、入力先を前に戻してから続ける
+                try await LocalModelDownloadPrompt.prepare(
+                    for: .dictation, settings: settings, work: verb, whenSkipped: "\(verb)前の文章を入力します",
+                    restoreFrontmostApp: true)
                 // 要件: REQ-COM-020, REQ-COM-024
                 if let client = try TextAIClient.fromSettings(settings, for: .dictation) {
                     let model = settings.textModel(for: .dictation)

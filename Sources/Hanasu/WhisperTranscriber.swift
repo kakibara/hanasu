@@ -225,16 +225,23 @@ actor WhisperEngine {
             .map { i in starts[i]..<(i + 1 < starts.count ? starts[i + 1] : samples.count) }
             .filter { TranscriptionAudio.rms(samples[$0]) > 0.0005 }
         guard !chunks.isEmpty else { return [] }
-        // 区切りをまとめて渡すと、WhisperKit が並行して処理する
-        let arrays = chunks.map { Array(samples[$0]) }
-        var results = await kit.transcribeWithResults(audioArrays: arrays, decodeOptions: options)
-        for i in results.indices {
-            // 声があるのに何も返らないことがたまにある（小さいモデルで多い）ので、1 回だけやり直す
-            let empty = (try? results[i].get())?.allSatisfy { $0.segments.allSatisfy { $0.text.trimmingCharacters(in: .whitespaces).isEmpty } } ?? true
-            if empty, TranscriptionAudio.rms(arrays[i]) > 0.003 {
-                appLog.notice("whisper chunk \(i) returned nothing; retrying once")
-                results[i] = await kit.transcribeWithResults(audioArrays: [arrays[i]], decodeOptions: options).first ?? results[i]
+        // 区切りをまとめて渡すと、WhisperKit が並行して処理する。長い会議で音声のコピーが全体の大きさになるのを避けるため、
+        // 一度に渡すのは 16 区切りまでにする
+        var results: [Result<[TranscriptionResult], Swift.Error>] = []
+        results.reserveCapacity(chunks.count)
+        for batchStart in stride(from: 0, to: chunks.count, by: 16) {
+            try Task.checkCancellation()
+            let arrays = chunks[batchStart..<min(batchStart + 16, chunks.count)].map { Array(samples[$0]) }
+            var batch = await kit.transcribeWithResults(audioArrays: arrays, decodeOptions: options)
+            for i in batch.indices where i < arrays.count {
+                // 声があるのに何も返らないことがたまにある（小さいモデルで多い）ので、1 回だけやり直す
+                let empty = (try? batch[i].get())?.allSatisfy { $0.segments.allSatisfy { $0.text.trimmingCharacters(in: .whitespaces).isEmpty } } ?? true
+                if empty, TranscriptionAudio.rms(arrays[i]) > 0.003 {
+                    appLog.notice("whisper chunk \(batchStart + i) returned nothing; retrying once")
+                    batch[i] = await kit.transcribeWithResults(audioArrays: [arrays[i]], decodeOptions: options).first ?? batch[i]
+                }
             }
+            results.append(contentsOf: batch)
         }
 
         let debug = ProcessInfo.processInfo.environment["HANASU_DEBUG"] != nil

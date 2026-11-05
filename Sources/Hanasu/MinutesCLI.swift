@@ -9,10 +9,13 @@ import SwiftUI
 //   Hanasu --export-minutes <meeting.json | minutes.md>
 //     Gemini を呼ばずに、保存済みの議事録の書き出し（Slack 向け・テキスト・アクションアイテム）を表示する。
 //     .md が <action_items> を含む Gemini の応答そのものなら、応答の読み取りから行う。
+//   Hanasu --test-saved-templates
+//     名前付きテンプレートの保存・名前の重複の拒否・複製・削除・記録への適用・プロンプトへの反映を、
+//     専用の UserDefaults で確かめる（本物の設定は変えない）。失敗があれば終了コード 1。
 //   Hanasu --render-minutes-ui <出力フォルダ> [--meeting-json <meeting.json>]
-//     議事録の型の選択欄・会議ノートの詳細・リマインダー登録・カスタムの指示の画面を PNG にする（見た目の確認用）。
+//     議事録の型の選択欄（保存したテンプレート入りも）・テンプレートの管理・会議ノートの詳細・リマインダー登録・カスタムの指示の画面を PNG にする（見た目の確認用）。
 // --meeting-files にも --template / --custom-prompt を付けられる。
-// 確かめ方: REQ-MTG-006, REQ-MTG-007, REQ-MTG-017, REQ-MTG-018, REQ-MTG-019, REQ-MTG-027, REQ-MTG-028, REQ-MTG-029
+// 確かめ方: REQ-MTG-006, REQ-MTG-007, REQ-MTG-017, REQ-MTG-018, REQ-MTG-019, REQ-MTG-027, REQ-MTG-028, REQ-MTG-029, REQ-MTG-042
 @MainActor
 enum MinutesCLI {
     static func runIfRequested(_ args: [String] = CommandLine.arguments) {
@@ -27,6 +30,9 @@ enum MinutesCLI {
                 }
             }
             RunLoop.main.run()
+        }
+        if args.contains("--test-saved-templates") {
+            exit(savedTemplatesSelfTest() ? 0 : 1)
         }
         if let path = value(after: "--export-minutes", in: args) {
             do {
@@ -63,6 +69,101 @@ enum MinutesCLI {
             meeting.minutesTemplate = MinutesTemplate.custom.rawValue
             meeting.customMinutesPrompt = prompt
         }
+    }
+
+    // MARK: - 名前付きテンプレート
+
+    // 確かめ方: REQ-MTG-042
+    /// 名前付きテンプレートの保存まわりを、専用の UserDefaults で確かめる。全部通れば true
+    private static func savedTemplatesSelfTest() -> Bool {
+        let suite = "dev.mactypeless.Hanasu.saved-templates-selftest"
+        let defaults = UserDefaults(suiteName: suite)!
+        defaults.removePersistentDomain(forName: suite)
+        defer { defaults.removePersistentDomain(forName: suite) }
+        var failures = 0
+        func check(_ ok: Bool, _ what: String) {
+            print((ok ? "OK  " : "NG  ") + what)
+            if !ok { failures += 1 }
+        }
+        typealias Store = SavedMinutesTemplateStore
+
+        var list = Store.load(defaults)
+        check(list.isEmpty, "最初は 1 つもない")
+
+        check(Store.add(name: "  営業定例  ", instructions: "## 数字\n## 課題", to: &list) == nil, "名前を付けて追加できる")
+        check(list.first?.name == "営業定例", "名前の前後の空白は取る")
+        check(Store.add(name: "営業定例", instructions: "x", to: &list) == .duplicateName, "同じ名前は追加できない")
+        check(Store.add(name: "営業定例 ", instructions: "x", to: &list) == .duplicateName, "空白だけ違う名前も重複")
+        check(Store.add(name: "", instructions: "x", to: &list) == .emptyName, "名前が空は追加できない")
+        check(Store.add(name: "採用面接", instructions: "  \n", to: &list) == .emptyInstructions, "指示が空は追加できない")
+        check(Store.add(name: "採用面接", instructions: "## 評価\n## 懸念", to: &list) == nil, "2 つ目を追加できる")
+        check(list.count == 2, "2 つある")
+
+        Store.save(list, to: defaults)
+        let reloaded = Store.load(defaults)
+        check(reloaded == list, "保存して読み直すと同じ（UserDefaults の JSON）")
+
+        let first = reloaded[0], second = reloaded[1]
+        var edited = reloaded
+        check(Store.update(id: first.id, name: "採用面接", instructions: "y", in: &edited) == .duplicateName,
+              "ほかと同じ名前には直せない")
+        check(Store.update(id: first.id, name: "営業定例", instructions: "## 変更後", in: &edited) == nil
+              && edited[0].instructions == "## 変更後", "自分の名前のままなら指示を直せる")
+        check(Store.update(id: first.id, name: "営業定例 週次", instructions: "## 変更後", in: &edited) == nil
+              && edited[0].name == "営業定例 週次", "名前を直せる")
+
+        var duplicated = reloaded
+        let copyID = Store.duplicate(id: first.id, in: &duplicated)
+        check(duplicated.count == 3 && duplicated[1].id == copyID && duplicated[1].name == "営業定例 2"
+              && duplicated[1].instructions == first.instructions, "複製は「名前 2」で、元の下に入る")
+
+        // 記録への適用
+        defaults.set(Store.selection(for: second), forKey: MinutesTemplateStore.templateKey)
+        var meeting = Meeting(id: "t", title: "t", startedAt: Date())
+        MinutesTemplateStore.apply(to: &meeting, defaults: defaults)
+        check(meeting.template == .custom && meeting.customMinutesPrompt == second.instructions
+              && meeting.minutesTemplateName == "採用面接" && meeting.templateTitle == "採用面接",
+              "保存したテンプレートを選ぶと、会議に型（カスタム）・指示・名前が付く")
+
+        let system = MinutesPrompt.systemInstruction(template: meeting.template, customPrompt: meeting.customMinutesPrompt)
+        check(system.contains("<user_template>\n\(second.instructions)\n</user_template>") && system.contains(MinutesPrompt.placeholder),
+              "議事録の指示にテンプレートの指示が入り、アクションアイテムの目印も付く")
+
+        // この会議に写した指示は、あとでテンプレートを直しても変わらない
+        var changed = reloaded
+        _ = Store.update(id: second.id, name: "採用面接", instructions: "## 別の指示", in: &changed)
+        check(meeting.customMinutesPrompt == second.instructions, "あとでテンプレートを直しても、記録済みの会議は変わらない")
+
+        // meeting.json に残り、読み直せる
+        if let data = try? JSONEncoder().encode(meeting), let back = try? JSONDecoder().decode(Meeting.self, from: data) {
+            check(back.minutesTemplateName == "採用面接" && back.customMinutesPrompt == second.instructions, "meeting.json に名前と指示が残る")
+        } else {
+            check(false, "meeting.json に書いて読み直せる")
+        }
+        // 名前のない古い会議
+        var old = Meeting(id: "o", title: "o", startedAt: Date())
+        old.minutesTemplate = MinutesTemplate.custom.rawValue
+        check(old.templateTitle == "カスタム", "名前のない古いカスタムの会議は「カスタム」と出す")
+
+        // 削除・選んでいたテンプレートが消えたとき
+        Store.save(Store.load(defaults).filter { $0.id != second.id }, to: defaults)
+        var after = Meeting(id: "a", title: "a", startedAt: Date())
+        MinutesTemplateStore.apply(to: &after, defaults: defaults)
+        check(after.template == .auto && after.customMinutesPrompt == nil && after.minutesTemplateName == nil,
+              "選んでいたテンプレートを消すと、次の記録は「自動」になる")
+
+        // 組み込みの型を選んだとき
+        defaults.set(MinutesTemplate.sales.rawValue, forKey: MinutesTemplateStore.templateKey)
+        var builtin = Meeting(id: "b", title: "b", startedAt: Date())
+        MinutesTemplateStore.apply(to: &builtin, defaults: defaults)
+        check(builtin.template == .sales && builtin.minutesTemplateName == nil, "組み込みの型は今まで通り")
+
+        // 壊れた JSON
+        defaults.set("{broken", forKey: Store.listKey)
+        check(Store.load(defaults).isEmpty, "保存した JSON が壊れていても、空として読む")
+
+        print(failures == 0 ? "saved-templates-selftest: 全部 OK" : "saved-templates-selftest: \(failures) 件 NG")
+        return failures == 0
     }
 
     // MARK: - 文字起こしから議事録
@@ -229,6 +330,19 @@ enum MinutesCLI {
 
         let custom = CustomMinutesPromptSheet(prompt: MinutesTemplateStore.defaultCustomPrompt, actionLabel: "作り直す") { _ in }
         try render(custom, to: dir.appendingPathComponent("custom-prompt-sheet.png"))
+
+        // 要件: REQ-MTG-042
+        // 保存したテンプレートを入れた選択欄と、管理のシート
+        var samples: [SavedMinutesTemplate] = []
+        _ = SavedMinutesTemplateStore.add(name: "営業定例", instructions: "## 数字の共有\n## 課題\n## 来週やること", to: &samples)
+        _ = SavedMinutesTemplateStore.add(name: "採用面接", instructions: "## 候補者の印象\n## 評価\n## 懸念", to: &samples)
+        defaults.set(SavedMinutesTemplateStore.encode(samples), forKey: SavedMinutesTemplateStore.listKey)
+        defaults.set(SavedMinutesTemplateStore.selection(for: samples[0]), forKey: MinutesTemplateStore.templateKey)
+        let savedPanel = VStack(spacing: 10) { MinutesTemplatePicker() }
+            .padding(10).frame(width: 260).defaultAppStorage(defaults)
+        try render(savedPanel, to: dir.appendingPathComponent("record-panel-saved.png"))
+        let manager = MinutesTemplateManagerSheet().defaultAppStorage(defaults)
+        try render(manager, to: dir.appendingPathComponent("template-manager-sheet.png"))
         print("wrote: \(dir.path)")
     }
 

@@ -95,8 +95,12 @@ public class TranscriptionTests
         Assert.Equal("明日の会議です", await gemini.TranscribeAsync(Voice(0.5), Context));
         Assert.Contains("\"mimeType\":\"audio/wav\"", handler.Requests[0].Body);
 
-        var tooLong = new float[(int)(GeminiBatchTranscriber.MaxDuration.TotalSeconds * 16000) + 1];
-        await Assert.ThrowsAsync<TranscriptionException>(() => gemini.TranscribeAsync(tooLong, Context));
+        // 10 分（上限いっぱい）は、5 分ごとに分けて送る。1 回の WAV が 20 MB（Base64 で 4/3 倍）を超えない
+        handler.Requests.Clear();
+        var text = await gemini.TranscribeAsync(Voice(600), Context);
+        Assert.True(handler.Requests.Count >= 2);
+        Assert.All(handler.Requests, r => Assert.True(r.Body!.Length < 20 * 1024 * 1024));
+        Assert.Equal(handler.Requests.Count, text.Split('\n').Length);
     }
 
     [Fact]

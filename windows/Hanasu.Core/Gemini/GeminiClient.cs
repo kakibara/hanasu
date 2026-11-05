@@ -62,6 +62,9 @@ public sealed class GeminiClient : ITextAiClient
 
     /// <summary>1 回の呼び出しの待ち時間の上限。音声入力は 15 秒（Mac 版と同じ）</summary>
     public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(15);
+    /// <summary>429 / 503 と一時的な通信の失敗のやり直しの回数と、最初の待ち（DEC-COM-055）</summary>
+    public int MaxRetries { get; init; } = 2;
+    public TimeSpan RetryBaseDelay { get; init; } = TimeSpan.FromSeconds(0.5);
 
     public GeminiClient(GeminiAuth auth, HttpClient? http = null, ServiceAccountTokenProvider? tokenProvider = null)
     {
@@ -115,16 +118,28 @@ public sealed class GeminiClient : ITextAiClient
         var storedKey = auth is GeminiAuth.StoredApiKey stored ? await stored.Load(cancellationToken).ConfigureAwait(false) : null;
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(Timeout);
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         try
         {
-            using var request = await BuildHttpRequestAsync(model, body, timeout.Token, storedKey).ConfigureAwait(false);
-            using var response = await http.SendAsync(request, timeout.Token).ConfigureAwait(false);
-            var text = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
-            if (!response.IsSuccessStatusCode)
+            // 設計判断: DEC-COM-055（Mac 版と同じ。429 / 503 と一時的な通信の失敗だけ 2 回までやり直す）
+            for (var attempt = 0; ; attempt++)
             {
-                throw GeminiException.Http((int)response.StatusCode, ErrorMessage(text));
+                try
+                {
+                    using var request = await BuildHttpRequestAsync(model, body, timeout.Token, storedKey).ConfigureAwait(false);
+                    using var response = await http.SendAsync(request, timeout.Token).ConfigureAwait(false);
+                    var text = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode) return ParseResponseText(text);
+                    var status = (int)response.StatusCode;
+                    TimeSpan? delay = status is 429 or 503 ? RetryDelay(attempt, stopwatch.Elapsed) : null;
+                    if (delay is not { } wait) throw GeminiException.Http(status, ErrorMessage(text));
+                    await Task.Delay(wait, timeout.Token).ConfigureAwait(false);
+                }
+                catch (HttpRequestException) when (RetryDelay(attempt, stopwatch.Elapsed) is { } retryWait)
+                {
+                    await Task.Delay(retryWait, timeout.Token).ConfigureAwait(false);
+                }
             }
-            return ParseResponseText(text);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
@@ -132,10 +147,56 @@ public sealed class GeminiClient : ITextAiClient
         }
     }
 
-    internal async Task<HttpRequestMessage> BuildHttpRequestAsync(string model, string body, CancellationToken cancellationToken,
+    // 設計判断: DEC-COM-143
+    /// <summary>
+    /// 「接続を試す」: モデルの情報を GET で取る（トークンを使わない。Claude の CheckAsync と同じ考え）。
+    /// API キーは generativelanguage の GET /v1beta/models/{model}、サービスアカウントは Vertex AI の
+    /// GET /v1/publishers/google/models/{model}（アクセストークンが取れることも確かめられる）。
+    /// 認証が通らなければ 400（API_KEY_INVALID）/ 401 / 403、モデルがなければ 404 が返る。やり直しはしない
+    /// </summary>
+    public async Task CheckAsync(string model, CancellationToken cancellationToken = default)
+    {
+        model = model.Trim();
+        var storedKey = auth is GeminiAuth.StoredApiKey stored ? await stored.Load(cancellationToken).ConfigureAwait(false) : null;
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeout.CancelAfter(Timeout);
+        try
+        {
+            using var request = await BuildHttpRequestAsync(model, body: null, timeout.Token, storedKey).ConfigureAwait(false);
+            using var response = await http.SendAsync(request, timeout.Token).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode) return;
+            var status = (int)response.StatusCode;
+            var text = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
+            throw status switch
+            {
+                400 or 401 or 403 => GeminiException.InvalidCredentials(status),
+                404 => GeminiException.ModelUnavailable(model),
+                _ => GeminiException.Http(status, ErrorMessage(text)),
+            };
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            throw GeminiException.Timeout(Timeout);
+        }
+    }
+
+    /// <summary>やり直すまでの待ち（既定は 0.5 秒・1 秒）。最大 2 回まで。ここまでの時間と待ちの合計が Timeout の半分を超えるなら null（やり直さない）</summary>
+    internal TimeSpan? RetryDelay(int attempt, TimeSpan elapsed)
+    {
+        if (attempt >= MaxRetries) return null;
+        var wait = RetryBaseDelay * Math.Pow(2, attempt);
+        return elapsed + wait <= Timeout / 2 ? wait : null;
+    }
+
+    /// <summary>
+    /// generateContent の POST（body あり）か、「接続を試す」のモデルの情報の GET（body が null）を作る。
+    /// </summary>
+    internal async Task<HttpRequestMessage> BuildHttpRequestAsync(string model, string? body, CancellationToken cancellationToken,
         string? preloadedKey = null)
     {
         var escapedModel = Uri.EscapeDataString(model);
+        var method = body is null ? HttpMethod.Get : HttpMethod.Post;
+        var action = body is null ? "" : ":generateContent";
         HttpRequestMessage request;
         switch (auth)
         {
@@ -144,25 +205,35 @@ public sealed class GeminiClient : ITextAiClient
                     : preloadedKey ?? await ((GeminiAuth.StoredApiKey)auth).Load(cancellationToken).ConfigureAwait(false);
                 if (string.IsNullOrWhiteSpace(key)) throw GeminiException.MissingCredentials();
                 // URL のクエリにキーを載せない
-                request = new HttpRequestMessage(HttpMethod.Post,
-                    $"https://generativelanguage.googleapis.com/v1beta/models/{escapedModel}:generateContent");
+                request = new HttpRequestMessage(method,
+                    $"https://generativelanguage.googleapis.com/v1beta/models/{escapedModel}{action}");
                 request.Headers.Add("x-goog-api-key", key.Trim());
                 break;
             case GeminiAuth.ServiceAccount { Credentials: var credentials, Location: var location }:
                 location = string.IsNullOrWhiteSpace(location) ? "global" : location.Trim();
+                // リージョンはホスト名に入るので、英小文字・数字・ハイフンだけを受け付ける（設定を書き換えられても、
+                // アクセストークンを別のホストに送らされないように。Mac 版の isValidLocation と同じ。DEC-COM-053）
+                if (!IsValidLocation(location)) throw GeminiException.InvalidLocation(location);
                 // global 以外のリージョンはホスト名にリージョンが付く
                 var host = location == "global" ? "aiplatform.googleapis.com" : $"{location}-aiplatform.googleapis.com";
-                request = new HttpRequestMessage(HttpMethod.Post,
-                    $"https://{host}/v1/projects/{Uri.EscapeDataString(credentials.ProjectId)}/locations/{Uri.EscapeDataString(location)}/publishers/google/models/{escapedModel}:generateContent");
+                // モデルの情報の GET は、プロジェクトを含まない publishers/google/models/{model}
+                request = new HttpRequestMessage(method, body is null
+                    ? $"https://{host}/v1/publishers/google/models/{escapedModel}"
+                    : $"https://{host}/v1/projects/{Uri.EscapeDataString(credentials.ProjectId)}/locations/{Uri.EscapeDataString(location)}/publishers/google/models/{escapedModel}:generateContent");
                 var token = await tokenProvider.GetAccessTokenAsync(credentials, cancellationToken).ConfigureAwait(false);
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 break;
             default:
                 throw GeminiException.MissingCredentials();
         }
-        request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+        if (body is not null) request.Content = new StringContent(body, Encoding.UTF8, "application/json");
         return request;
     }
+
+    // 設計判断: DEC-COM-053
+    /// <summary>Vertex AI のリージョンとして使える形か（英小文字・数字・ハイフンで 40 文字まで。ホスト名に入るため）</summary>
+    public static bool IsValidLocation(string location) =>
+        location.Length is > 0 and <= 40 && location.All(c => c is (>= 'a' and <= 'z') or (>= '0' and <= '9') or '-');
 
     internal static string BuildRequestBody(string systemInstruction, IReadOnlyList<GeminiPart> parts, string model,
         string? thinkingLevel, string responseMimeType = "text/plain", JsonNode? responseSchema = null)
