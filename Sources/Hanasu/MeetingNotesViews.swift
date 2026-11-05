@@ -244,7 +244,7 @@ struct MeetingNotesEditor: View {
     }
 }
 
-/// 設定の「会議」タブに置く、「ここ重要」のショートカットの設定
+/// 設定の「会議」に置く、「ここ重要」のショートカットの設定
 struct MeetingNotesSettingsSection: View {
     @ObservedObject private var settings = MeetingNotesSettings.shared
     var onBeginShortcutRecording: () -> Void = {}

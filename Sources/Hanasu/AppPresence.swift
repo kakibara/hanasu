@@ -41,7 +41,7 @@ final class AppPresenceSettings: ObservableObject {
 }
 
 // 要件: REQ-COM-040
-/// 設定の「一般」タブの「アイコンの表示」の欄
+/// 設定の「一般」の「アイコンの表示」の欄
 struct AppPresenceSettingsSection: View {
     @ObservedObject var settings = AppPresenceSettings.shared
 
@@ -62,7 +62,7 @@ struct AppPresenceSettingsSection: View {
 
 // 確かめ方: REQ-COM-040
 //   Hanasu --render-presence-settings <出力.png>
-//     設定の「一般」タブの「アイコンの表示」の欄を画像にする
+//     設定の「一般」の「アイコンの表示」の欄を画像にする
 @MainActor
 enum AppPresenceCLI {
     static func runIfRequested() {
