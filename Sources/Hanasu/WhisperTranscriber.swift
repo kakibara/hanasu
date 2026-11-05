@@ -143,14 +143,14 @@ actor WhisperEngine {
 
     /// 無音のときなどに Whisper が出しがちな決まり文句。区間の全体がこれなら捨てる
     static let hallucinations: Set<String> = [
-        tr("ご視聴ありがとうございました"), tr("ご視聴ありがとうございました。"),
-        tr("最後までご視聴いただきありがとうございました"), tr("最後までご視聴いただきありがとうございました。"),
-        tr("チャンネル登録よろしくお願いします"), tr("チャンネル登録よろしくお願いします。"),
-        tr("チャンネル登録お願いします"), tr("チャンネル登録お願いします。"),
+        "ご視聴ありがとうございました", "ご視聴ありがとうございました。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "最後までご視聴いただきありがとうございました", "最後までご視聴いただきありがとうございました。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "チャンネル登録よろしくお願いします", "チャンネル登録よろしくお願いします。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "チャンネル登録お願いします", "チャンネル登録お願いします。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
     ]
 
     /// 無音や雑音のところに付く「(音楽)」「[拍手]」のような注記。かっこを外してこれだけなら捨てる
-    static let soundTags: Set<String> = [tr("音楽"), tr("拍手"), tr("笑"), tr("笑い"), "BGM", "music", "Music", "MUSIC", "applause", "laughter"]
+    static let soundTags: Set<String> = ["音楽", "拍手", "笑", "笑い", "BGM", "music", "Music", "MUSIC", "applause", "laughter"]  // skip-tr（Whisper の出力と照らす語。UI ではない）
 
     // 設計判断: DEC-COM-026
     static func isNoise(_ text: String) -> Bool {

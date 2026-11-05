@@ -219,7 +219,7 @@ final class MeetingRecorder: ObservableObject {
                     progress: { [weak self] message in self?.setState(.processing(message)) })
             } catch {
                 appLog.error("meeting batch transcription failed (\(channel.rawValue, privacy: .public)): \(String(describing: error), privacy: .public)")
-                errors.append(tr("%@の音声: %@", "\(channel == .me ? "自分" : "相手")", "\(error.localizedDescription)"))
+                errors.append(tr("%@の音声: %@", channel == .me ? tr("自分") : tr("相手"), "\(error.localizedDescription)"))
             }
         }
         let error = errors.isEmpty ? nil : tr("%@ で文字起こしできなかった部分があります（音声ファイルは残しています）。", "\(engine.shortName)") + errors.joined(separator: " / ")

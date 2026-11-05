@@ -45,7 +45,7 @@ final class EditModeController {
             self?.hud.updateTranscript(text)
         }
         recognizer.onAssetDownloadProgress = { [weak self] fraction in
-            self?.hud.show(.preparing(tr("日本語の音声モデルをダウンロード中… %@%%", "\(Int(fraction * 100))")))
+            self?.hud.show(.preparing(tr("音声認識のモデルをダウンロード中… %@%%", "\(Int(fraction * 100))")))
         }
         recognizer.onLevel = { [weak self] level in
             self?.hud.model.level = level

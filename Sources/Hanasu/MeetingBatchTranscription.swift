@@ -15,7 +15,7 @@ enum MeetingBatchTranscription {
         progress?(tr("%@ で文字起こししています…（%@）", "\(engine.shortName)", "\(label)"))
         let segments = try await BatchTranscriber.transcribeSegments(
             samples, engine: engine, settings: settings, hints: settings.userDictionary.contextualStrings,
-            progress: { message in progress?(message.replacingOccurrences(of: "…（", with: "…（\(label) ")) })
+            progress: { message in progress?("\(label): \(message)") })
         return phrases(from: segments, channel: channel, offset: offset)
     }
 
