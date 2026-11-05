@@ -291,6 +291,11 @@ struct LiveTranscriptView: View {
                 .onChange(of: recorder.liveLines.count) {
                     if followLatest { proxy.scrollTo("bottom") }
                 }
+                // 新しい記録では、また下までスクロールする
+                .onChange(of: recorder.current?.id) {
+                    followLatest = true
+                    focusedLine = nil
+                }
                 // 設計判断: DEC-MTG-084
                 // AI チャットの答えの時刻を押したら、その時刻の発言へ移り、新しい発言が来ても下へ戻らない
                 .onChange(of: timeJump) { _, jump in

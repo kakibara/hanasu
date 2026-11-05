@@ -407,10 +407,10 @@ private struct MeetingChatMessageRow: View {
 /// 会話を始める前の、よく使う質問のボタン
 private struct MeetingChatSuggestionButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
-        Body(configuration: configuration)
+        SuggestionLabel(configuration: configuration)
     }
 
-    private struct Body: View {
+    private struct SuggestionLabel: View {
         let configuration: ButtonStyleConfiguration
         @Environment(\.isEnabled) private var isEnabled
 
@@ -429,10 +429,10 @@ private struct MeetingChatSuggestionButtonStyle: ButtonStyle {
 /// 入力欄の上の、小さな質問のボタン
 private struct MeetingChatChipButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
-        Body(configuration: configuration)
+        ChipLabel(configuration: configuration)
     }
 
-    private struct Body: View {
+    private struct ChipLabel: View {
         let configuration: ButtonStyleConfiguration
         @Environment(\.isEnabled) private var isEnabled
 
