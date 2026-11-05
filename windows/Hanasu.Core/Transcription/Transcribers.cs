@@ -87,7 +87,7 @@ public sealed class RecordThenTranscribe : IDictationTranscriber
     // 録り終えてからまとめて出すので、途中経過はない
     public event EventHandler<string>? PartialTextChanged { add { } remove { } }
 
-    public string? FinishingMessage => $"{transcriber.DisplayName} で文字起こししています…";
+    public string? FinishingMessage => string.Format(Strings.Transcribing_With, transcriber.DisplayName);
 
     public async Task StartAsync(TranscriptionContext context, CancellationToken cancellationToken = default)
     {
@@ -156,7 +156,7 @@ public sealed class GeminiBatchTranscriber : IBatchTranscriber
         }
         if (client is null)
         {
-            throw new TranscriptionException("文字起こしのエンジンが Gemini ですが、Gemini の認証情報が設定されていません（メニュー → 設定 → AI）。");
+            throw new TranscriptionException(Strings.Transcription_GeminiNotConfigured);
         }
         return Task.CompletedTask;
     }
@@ -166,7 +166,7 @@ public sealed class GeminiBatchTranscriber : IBatchTranscriber
         if (client is null) await PrepareAsync(context, cancellationToken).ConfigureAwait(false);
         if (samples.Length > MaxDuration.TotalSeconds * AudioFormat.SampleRate)
         {
-            throw new TranscriptionException($"録音が長すぎるため Gemini に送れません（{MaxDuration.TotalMinutes:0} 分まで）。");
+            throw new TranscriptionException(string.Format(Strings.Transcription_GeminiTooLong, MaxDuration.TotalMinutes.ToString("0")));
         }
         var wav = WavFile.Encode(samples);
         try
@@ -175,7 +175,7 @@ public sealed class GeminiBatchTranscriber : IBatchTranscriber
         }
         catch (Ai.TextAiException e)
         {
-            throw new TranscriptionException($"Gemini での文字起こしに失敗しました: {e.Message}", inner: e);
+            throw new TranscriptionException(string.Format(Strings.Transcription_GeminiFailed, e.Message), inner: e);
         }
     }
 }

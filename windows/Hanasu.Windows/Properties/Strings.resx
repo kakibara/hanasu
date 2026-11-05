@@ -1,0 +1,1219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_AlreadyRunning" xml:space="preserve">
+    <value>Hanasu is already running. You can use it from the icon in the notification area.</value>
+    <comment>Message box when a second instance is started</comment>
+  </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>Recent Results</value>
+    <comment>Tray menu: submenu</comment>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>Open Meeting Notes</value>
+    <comment>Tray menu item</comment>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>Open History…</value>
+    <comment>Tray menu item</comment>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Settings…</value>
+    <comment>Tray menu item</comment>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Quit</value>
+    <comment>Tray menu item</comment>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>Stop Recording and Type</value>
+    <comment>Tray menu item while dictating</comment>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>Start Dictation</value>
+    <comment>Tray menu item</comment>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>Stop Meeting Recording ({0})</value>
+    <comment>Tray menu item. {0} = elapsed time m:ss</comment>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Starting Meeting Recording…</value>
+    <comment>Tray menu item (disabled)</comment>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Processing Meeting Recording…</value>
+    <comment>Tray menu item (disabled)</comment>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>Start Meeting Recording</value>
+    <comment>Tray menu item</comment>
+  </data>
+  <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
+    <value>Hanasu — Recording meeting {0}</value>
+    <comment>Tray icon tooltip (max 63 characters). {0} = elapsed time</comment>
+  </data>
+  <data name="Tray_Tip_MeetingProcessing" xml:space="preserve">
+    <value>Hanasu — Processing meeting</value>
+    <comment>Tray icon tooltip</comment>
+  </data>
+  <data name="Tray_Tip_Recording" xml:space="preserve">
+    <value>Hanasu — Recording</value>
+    <comment>Tray icon tooltip</comment>
+  </data>
+  <data name="Tray_Tip_Processing" xml:space="preserve">
+    <value>Hanasu — Processing</value>
+    <comment>Tray icon tooltip</comment>
+  </data>
+  <data name="Tray_RecentEmpty" xml:space="preserve">
+    <value>(None yet)</value>
+    <comment>Tray menu: Recent Results when empty</comment>
+  </data>
+  <data name="Tray_RecentTip" xml:space="preserve">
+    <value>{0}
+Result: {1}
+Original: {2}</value>
+    <comment>Tray menu tooltip of a recent result. {0} = status, {1} = typed text, {2} = raw transcript</comment>
+  </data>
+  <data name="Tray_RecentHint" xml:space="preserve">
+    <value>Click to copy to the clipboard</value>
+    <comment>Tray menu: hint under recent results</comment>
+  </data>
+  <data name="Tray_OpenAllHistory" xml:space="preserve">
+    <value>Open All History…</value>
+    <comment>Tray menu item</comment>
+  </data>
+  <data name="Balloon_Started" xml:space="preserve">
+    <value>Hanasu started</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Balloon_StartedBody" xml:space="preserve">
+    <value>Press {0} to dictate. Press {1} for "{2}".</value>
+    <comment>Notification body. {0}, {1} = shortcuts, {2} = Translation_MenuTitle* (e.g. 英訳して入力 / Translate to English and Type)</comment>
+  </data>
+  <data name="Balloon_HotKeyFailed" xml:space="preserve">
+    <value>Couldn't register the shortcut</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Balloon_HotKeyFailedBody" xml:space="preserve">
+    <value>{0} is used by another app. Choose a different key in Settings → General.</value>
+    <comment>Notification body. {0} = shortcut(s) joined with ListSeparator</comment>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailed" xml:space="preserve">
+    <value>Couldn't register the "Important" shortcut</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailedBody" xml:space="preserve">
+    <value>{0} is used by another app. Use the "★ Important" button in Meeting Notes, or choose a different key in Settings → Meetings.</value>
+    <comment>Notification body. {0} = shortcut</comment>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>, </value>
+    <comment>Separator between items in a list (e.g. several shortcuts)</comment>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Copied</value>
+    <comment>Notification / status after copying</comment>
+  </data>
+  <data name="Quit_MeetingInProgress" xml:space="preserve">
+    <value>A meeting is being recorded (or processed after recording). If you quit, no transcript or minutes will be created for this meeting (the audio files are kept). Quit anyway?</value>
+    <comment>Confirmation when quitting</comment>
+  </data>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>Windows Hello isn't set up (set up a PIN or similar in Windows Settings → Accounts → Sign-in options).</value>
+    <comment>Error; use the names shown in Windows Settings</comment>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Windows Hello verification was canceled, so the API key couldn't be read.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Windows Hello verification failed ({0}).</value>
+    <comment>Error. {0} = status code</comment>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>The Windows Hello key wasn't found (Windows Hello may have been set up again). Enter the API key again in Settings → AI.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Couldn't open the Windows Hello key ({0}).</value>
+    <comment>Error. {0} = status code</comment>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Windows Hello verification was canceled.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Couldn't create the Windows Hello key ({0}).</value>
+    <comment>Error. {0} = status code</comment>
+  </data>
+  <data name="Mic_NotFound" xml:space="preserve">
+    <value>No microphone was found. Check that a microphone is connected, in Windows Settings → System → Sound.</value>
+    <comment>Error; use the names shown in Windows Settings</comment>
+  </data>
+  <data name="Mic_AccessDenied" xml:space="preserve">
+    <value>Microphone access isn't allowed. In Windows Settings → Privacy &amp; security → Microphone, turn on "Let desktop apps access your microphone".</value>
+    <comment>Error; use the exact names shown in Windows Settings in this language</comment>
+  </data>
+  <data name="Mic_StartFailed" xml:space="preserve">
+    <value>Couldn't start recording from the microphone: {0}</value>
+    <comment>Error. {0} = system message</comment>
+  </data>
+  <data name="Output_NotFound" xml:space="preserve">
+    <value>No audio output device (speakers or headphones) was found.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Loopback_StartFailed" xml:space="preserve">
+    <value>Couldn't start recording the PC audio: {0}</value>
+    <comment>Error. {0} = system message</comment>
+  </data>
+  <data name="Speech_LanguageNotInstalled" xml:space="preserve">
+    <value>Speech recognition for {0} isn't installed in Windows. In Windows Settings → Time &amp; language → Language &amp; region, open "…" → "Language options" for {0} and add speech recognition. Or set the transcription engine to Whisper or Gemini in Settings.</value>
+    <comment>Error. {0} = language name; use the names shown in Windows Settings</comment>
+  </data>
+  <data name="Speech_LanguageNotSupported" xml:space="preserve">
+    <value>Windows dictation doesn't support this language. Set the transcription engine to Whisper or Gemini in Settings.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Speech_MicUnavailable" xml:space="preserve">
+    <value>The microphone can't be used. Check the default microphone in Windows.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Speech_NetworkFailure" xml:space="preserve">
+    <value>Windows speech recognition couldn't connect to the network. Check your internet connection.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Speech_StartFailed" xml:space="preserve">
+    <value>Couldn't start Windows speech recognition ({0}).</value>
+    <comment>Error. {0} = status code</comment>
+  </data>
+  <data name="Speech_OnlineRecognitionOff" xml:space="preserve">
+    <value>To use Windows speech recognition, turn on "Online speech recognition" in Windows Settings → Privacy &amp; security → Speech. If you don't want to turn it on, set the transcription engine to Whisper in Settings.</value>
+    <comment>Error; use the exact names shown in Windows Settings</comment>
+  </data>
+  <data name="Speech_Error" xml:space="preserve">
+    <value>An error occurred in Windows speech recognition: {0}</value>
+    <comment>Error. {0} = system message</comment>
+  </data>
+  <data name="Hud_LanguageSwitch_Tip" xml:space="preserve">
+    <value>Types in the language selected when you stop recording</value>
+    <comment>HUD tooltip of the language switch</comment>
+  </data>
+  <data name="Hud_SpokenLanguage" xml:space="preserve">
+    <value>As spoken</value>
+    <comment>HUD language switch: type in the language you spoke (no translation)</comment>
+  </data>
+  <data name="Hud_Stop_Tip" xml:space="preserve">
+    <value>Stops recording and types the text (same as pressing the shortcut again)</value>
+    <comment>HUD tooltip</comment>
+  </data>
+  <data name="Hud_Stop" xml:space="preserve">
+    <value>Stop</value>
+    <comment>HUD button</comment>
+  </data>
+  <data name="Hud_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>HUD button</comment>
+  </data>
+  <data name="Hud_Cancel_Tip" xml:space="preserve">
+    <value>Cancels without typing anything (Esc)</value>
+    <comment>HUD tooltip</comment>
+  </data>
+  <data name="Hud_Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>HUD button</comment>
+  </data>
+  <data name="Hud_Close_Tip" xml:space="preserve">
+    <value>Closes this panel (after clicking the text, you can also press Esc)</value>
+    <comment>HUD tooltip</comment>
+  </data>
+  <data name="Hud_Copy_Tip" xml:space="preserve">
+    <value>Copies the text to the clipboard</value>
+    <comment>HUD tooltip</comment>
+  </data>
+  <data name="Hud_Copy" xml:space="preserve">
+    <value>Copy</value>
+    <comment>HUD button</comment>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>Dictation History — Hanasu</value>
+    <comment>Window title</comment>
+  </data>
+  <data name="History_FilterAll" xml:space="preserve">
+    <value>All</value>
+    <comment>History window: filter radio button</comment>
+  </data>
+  <data name="History_FilterUnrefined" xml:space="preserve">
+    <value>Failed / Not refined</value>
+    <comment>History window: filter radio button</comment>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>Search</value>
+    <comment>History window: label of the search box</comment>
+  </data>
+  <data name="History_Search_Tip" xml:space="preserve">
+    <value>Searches results, original text, and target apps. Separate words with spaces to find entries containing all of them.</value>
+    <comment>History window tooltip</comment>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>Button</comment>
+  </data>
+  <data name="History_DeleteAll" xml:space="preserve">
+    <value>Delete All…</value>
+    <comment>History window button</comment>
+  </data>
+  <data name="OpenSaveFolder" xml:space="preserve">
+    <value>Open Save Folder</value>
+    <comment>Button: opens the folder where files are saved</comment>
+  </data>
+  <data name="History_CopyResult" xml:space="preserve">
+    <value>Copy Result</value>
+    <comment>History window: button/menu item (copies the typed text)</comment>
+  </data>
+  <data name="History_CopyOriginal" xml:space="preserve">
+    <value>Copy Original</value>
+    <comment>History window: button/menu item (copies the raw transcript)</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Button / menu item</comment>
+  </data>
+  <data name="History_ResultLabel" xml:space="preserve">
+    <value>Result (typed text)</value>
+    <comment>History window: label</comment>
+  </data>
+  <data name="History_OriginalLabel" xml:space="preserve">
+    <value>Original (transcript)</value>
+    <comment>History window: label</comment>
+  </data>
+  <data name="Hud_CopyFailed" xml:space="preserve">
+    <value>Couldn't copy</value>
+    <comment>HUD button text after a failed copy</comment>
+  </data>
+  <data name="HotKeyBox_Prompt" xml:space="preserve">
+    <value>Press keys (Esc to cancel)…</value>
+    <comment>Settings: shortcut box while waiting for keys</comment>
+  </data>
+  <data name="Separator" xml:space="preserve">
+    <value> · </value>
+    <comment>Separator between short items (e.g. mode · app)</comment>
+  </data>
+  <data name="WideSeparator" xml:space="preserve">
+    <value>   </value>
+    <comment>Separator between fields in a detail line</comment>
+  </data>
+  <data name="History_Unrefined" xml:space="preserve">
+    <value>Not refined</value>
+    <comment>History list: mark for entries that weren't refined</comment>
+  </data>
+  <data name="History_Kept" xml:space="preserve">
+    <value>Keeping up to {0} and {1} entries (Settings → History).</value>
+    <comment>History window. {0} = History_Days or History_DaysUnlimited (e.g. '30 days'), {1} = max count</comment>
+  </data>
+  <data name="History_NotSaved" xml:space="preserve">
+    <value>History isn't saved to a file. Only the last 10 entries are kept in memory (Settings → History).</value>
+    <comment>History window</comment>
+  </data>
+  <data name="History_Count" xml:space="preserve">
+    <value>{0} entries. {1}</value>
+    <comment>History window. {0} = count, {1} = History_Kept or History_NotSaved</comment>
+  </data>
+  <data name="History_CountFiltered" xml:space="preserve">
+    <value>{0} of {1} entries. {2}</value>
+    <comment>History window. {0} = shown count, {1} = total, {2} = History_Kept or History_NotSaved</comment>
+  </data>
+  <data name="History_Selected" xml:space="preserve">
+    <value>{0} entries selected (press Delete or click "Delete" to delete them together)</value>
+    <comment>History window. {0} = count (2 or more)</comment>
+  </data>
+  <data name="History_App" xml:space="preserve">
+    <value>App: {0}</value>
+    <comment>History window detail. {0} = target app name</comment>
+  </data>
+  <data name="History_Model" xml:space="preserve">
+    <value>Model: {0}</value>
+    <comment>History window detail. {0} = AI model</comment>
+  </data>
+  <data name="CopyFailedClipboardBusy" xml:space="preserve">
+    <value>Couldn't copy (another app is using the clipboard)</value>
+    <comment>Status after a failed copy</comment>
+  </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Delete the {0} selected history entries?</value>
+    <comment>Confirmation. {0} = count</comment>
+  </data>
+  <data name="History_ConfirmDeleteAll" xml:space="preserve">
+    <value>Delete all {0} dictation history entries? This can't be undone.</value>
+    <comment>Confirmation. {0} = count</comment>
+  </data>
+  <data name="Meeting_Title" xml:space="preserve">
+    <value>Meeting Notes — Hanasu</value>
+    <comment>Window title</comment>
+  </data>
+  <data name="Meeting_Stop" xml:space="preserve">
+    <value>■ Stop</value>
+    <comment>Meeting window button (stop recording)</comment>
+  </data>
+  <data name="Meeting_Recording" xml:space="preserve">
+    <value>● Recording</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="Meeting_MicLabel" xml:space="preserve">
+    <value>Me (microphone)</value>
+    <comment>Meeting window: label of the microphone list</comment>
+  </data>
+  <data name="Meeting_OutputLabel" xml:space="preserve">
+    <value>Others (sound played on this output)</value>
+    <comment>Meeting window: label of the output device list (PC audio to record)</comment>
+  </data>
+  <data name="Meeting_TemplateLabel" xml:space="preserve">
+    <value>Minutes template</value>
+    <comment>Meeting window: label</comment>
+  </data>
+  <data name="Meeting_Start" xml:space="preserve">
+    <value>● Start Meeting Recording</value>
+    <comment>Meeting window button</comment>
+  </data>
+  <data name="Meeting_MoveToRecycleBin" xml:space="preserve">
+    <value>Move to Recycle Bin…</value>
+    <comment>Meeting window: button/menu item</comment>
+  </data>
+  <data name="Meeting_Empty" xml:space="preserve">
+    <value>Choose a meeting from the list on the left, or click "Start Meeting Recording" at the bottom left to start recording.</value>
+    <comment>Meeting window placeholder</comment>
+  </data>
+  <data name="Meeting_TitleEdit_Tip" xml:space="preserve">
+    <value>Click to change the title (Enter to save, Esc to cancel)</value>
+    <comment>Meeting window tooltip</comment>
+  </data>
+  <data name="Meeting_Regenerate" xml:space="preserve">
+    <value>Regenerate Minutes</value>
+    <comment>Meeting window button</comment>
+  </data>
+  <data name="Meeting_TemplateShort" xml:space="preserve">
+    <value>Template:</value>
+    <comment>Meeting window: label before the template list</comment>
+  </data>
+  <data name="Meeting_CopyMarkdown" xml:space="preserve">
+    <value>Copy Markdown</value>
+    <comment>Meeting window button</comment>
+  </data>
+  <data name="Meeting_OpenInExplorer" xml:space="preserve">
+    <value>Open in File Explorer</value>
+    <comment>Meeting window button</comment>
+  </data>
+  <data name="Meeting_SpeakersLabel" xml:space="preserve">
+    <value>Speaker names (used when showing the transcript and minutes)</value>
+    <comment>Meeting window label</comment>
+  </data>
+  <data name="Meeting_UndoHighlight_Tip" xml:space="preserve">
+    <value>For 10 seconds after adding a mark, you can undo it if it was a mistake</value>
+    <comment>Meeting window tooltip</comment>
+  </data>
+  <data name="Meeting_Highlight" xml:space="preserve">
+    <value>★ Important</value>
+    <comment>Meeting window button: adds an 'Important' mark during recording</comment>
+  </data>
+  <data name="Meeting_AddNote" xml:space="preserve">
+    <value>Add Note</value>
+    <comment>Meeting window button</comment>
+  </data>
+  <data name="Meeting_NoteHint" xml:space="preserve">
+    <value>Press Enter to add a note (the time is when you started typing). If you press "Important" while typing, the text becomes the mark's description.</value>
+    <comment>Meeting window hint</comment>
+  </data>
+  <data name="Meeting_Tab_Minutes" xml:space="preserve">
+    <value>Minutes</value>
+    <comment>Meeting window tab</comment>
+  </data>
+  <data name="Meeting_Tab_Transcript" xml:space="preserve">
+    <value>Transcript</value>
+    <comment>Meeting window tab</comment>
+  </data>
+  <data name="Meeting_Tab_Highlights" xml:space="preserve">
+    <value>Important</value>
+    <comment>Meeting window tab listing 'Important' marks</comment>
+  </data>
+  <data name="Meeting_Tab_Notes" xml:space="preserve">
+    <value>Notes</value>
+    <comment>Meeting window tab</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+    <comment>Button</comment>
+  </data>
+  <data name="Meeting_SaveAndRegenerate" xml:space="preserve">
+    <value>Save and Regenerate Minutes</value>
+    <comment>Meeting window button</comment>
+  </data>
+  <data name="Meeting_NotesHint" xml:space="preserve">
+    <value>One per line. "[12:34] text" is a note, "[12:40] ★ description" is an "Important" mark, and lines without a time are notes added after recording.</value>
+    <comment>Meeting window hint; keep [12:34] and ★ as they are (the app reads them)</comment>
+  </data>
+  <data name="Meeting_Me" xml:space="preserve">
+    <value>Me</value>
+    <comment>Meeting window: speaker name field label</comment>
+  </data>
+  <data name="Meeting_Others" xml:space="preserve">
+    <value>Others</value>
+    <comment>Meeting window: speaker name field label (PC audio)</comment>
+  </data>
+  <data name="Meeting_Status_Processing" xml:space="preserve">
+    <value>Processing</value>
+    <comment>Meeting list status</comment>
+  </data>
+  <data name="Meeting_Status_Failed" xml:space="preserve">
+    <value>Failed</value>
+    <comment>Meeting list status</comment>
+  </data>
+  <data name="Meeting_Status_Warning" xml:space="preserve">
+    <value>Has warnings</value>
+    <comment>Meeting list status</comment>
+  </data>
+  <data name="Meeting_SavedIn" xml:space="preserve">
+    <value>Saved in: {0}</value>
+    <comment>Meeting window. {0} = folder path</comment>
+  </data>
+  <data name="Meeting_MinutesAfterRecording" xml:space="preserve">
+    <value>When you stop recording, minutes will be created after transcription.</value>
+    <comment>Meeting window placeholder</comment>
+  </data>
+  <data name="Meeting_Processing" xml:space="preserve">
+    <value>Processing…</value>
+    <comment>Meeting window placeholder</comment>
+  </data>
+  <data name="Meeting_NoMinutesYet" xml:space="preserve">
+    <value>No minutes yet. You can create them with "Regenerate Minutes" (requires the AI settings for "Meetings" in Settings → AI).</value>
+    <comment>Meeting window placeholder</comment>
+  </data>
+  <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
+    <value>Transcription happens after you stop recording.</value>
+    <comment>Meeting window placeholder</comment>
+  </data>
+  <data name="Meeting_NoTranscriptYet" xml:space="preserve">
+    <value>No transcript.</value>
+    <comment>Meeting window placeholder</comment>
+  </data>
+  <data name="Meeting_RecordingNote" xml:space="preserve">
+    <value>Transcription with {0} happens after you stop recording (to reduce the load on your PC during the meeting).</value>
+    <comment>Meeting window. {0} = Whisper or Gemini</comment>
+  </data>
+  <data name="Meeting_SpeakerName_Inferred_Tip" xml:space="preserve">
+    <value>Name of {0} (guessed from the conversation; correct it if it's wrong)</value>
+    <comment>Meeting window tooltip. {0} = speaker label</comment>
+  </data>
+  <data name="Meeting_SpeakerName_Tip" xml:space="preserve">
+    <value>Name of {0}</value>
+    <comment>Meeting window tooltip. {0} = speaker label</comment>
+  </data>
+  <data name="Meeting_Inferred" xml:space="preserve">
+    <value>Guessed</value>
+    <comment>Meeting window: small tag next to a speaker name guessed by AI</comment>
+  </data>
+  <data name="Meeting_SpeakerNamesSaved" xml:space="preserve">
+    <value>Speaker names saved</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="Meeting_TitleSaved" xml:space="preserve">
+    <value>Title saved</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="Meeting_SaveFailed" xml:space="preserve">
+    <value>Couldn't save: {0}</value>
+    <comment>Meeting window status. {0} = error</comment>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Change the minutes template to "{0}" and regenerate the minutes?</value>
+    <comment>Confirmation. {0} = template name</comment>
+  </data>
+  <data name="Meeting_Regenerated" xml:space="preserve">
+    <value>Minutes regenerated ({0} seconds)</value>
+    <comment>Meeting window status. {0} = seconds</comment>
+  </data>
+  <data name="Meeting_NoTranscript" xml:space="preserve">
+    <value>There's no transcript</value>
+    <comment>Meeting window status when copying an empty tab</comment>
+  </data>
+  <data name="Meeting_NoNotes" xml:space="preserve">
+    <value>There are no notes</value>
+    <comment>Meeting window status when copying an empty tab</comment>
+  </data>
+  <data name="Meeting_NoMinutes" xml:space="preserve">
+    <value>There are no minutes</value>
+    <comment>Meeting window status when copying an empty tab</comment>
+  </data>
+  <data name="Meeting_CopiedTranscript" xml:space="preserve">
+    <value>Copied the transcript as Markdown</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="Meeting_CopiedNotes" xml:space="preserve">
+    <value>Copied the notes as Markdown</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="Meeting_CopiedMinutes" xml:space="preserve">
+    <value>Copied the minutes as Markdown</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="CopyFailed" xml:space="preserve">
+    <value>Couldn't copy: {0}</value>
+    <comment>Status. {0} = error</comment>
+  </data>
+  <data name="Meeting_ConfirmDelete" xml:space="preserve">
+    <value>Delete "{0}"?
+
+The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. You can restore them from the Recycle Bin.</value>
+    <comment>Confirmation. {0} = meeting title</comment>
+  </data>
+  <data name="Meeting_ConfirmDelete_Title" xml:space="preserve">
+    <value>Delete Meeting — Hanasu</value>
+    <comment>Message box title</comment>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Couldn't delete: {0}</value>
+    <comment>Error. {0} = error</comment>
+  </data>
+  <data name="Meeting_MovedToRecycleBin" xml:space="preserve">
+    <value>Moved "{0}" to the Recycle Bin</value>
+    <comment>Meeting window status. {0} = meeting title</comment>
+  </data>
+  <data name="Meeting_NotesWhileRecording" xml:space="preserve">
+    <value>While recording, add notes in the note box above (you can edit this tab after recording).</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="Meeting_NotesSaved" xml:space="preserve">
+    <value>Notes saved</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="Meeting_UndoHighlight" xml:space="preserve">
+    <value>Undo ★ ({0} s left)</value>
+    <comment>Meeting window button. {0} = seconds</comment>
+  </data>
+  <data name="Meeting_Starting" xml:space="preserve">
+    <value>Starting recording…</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="Meeting_PostProcessing" xml:space="preserve">
+    <value>Processing after recording</value>
+    <comment>Meeting window status</comment>
+  </data>
+  <data name="Meeting_StopHint" xml:space="preserve">
+    <value>You can also stop with {0}</value>
+    <comment>Meeting window. {0} = shortcut</comment>
+  </data>
+  <data name="Meeting_StartHint" xml:space="preserve">
+    <value>You can also start with {0}. Tell the other participants you're recording before you start.</value>
+    <comment>Meeting window. {0} = shortcut</comment>
+  </data>
+  <data name="Device_DefaultMic" xml:space="preserve">
+    <value>Windows default microphone</value>
+    <comment>Device list item</comment>
+  </data>
+  <data name="Device_MissingMic" xml:space="preserve">
+    <value>(Previously selected microphone, not connected now)</value>
+    <comment>Device list item</comment>
+  </data>
+  <data name="Device_DefaultOutput" xml:space="preserve">
+    <value>Windows default output</value>
+    <comment>Device list item</comment>
+  </data>
+  <data name="Device_MissingOutput" xml:space="preserve">
+    <value>(Previously selected output, not connected now)</value>
+    <comment>Device list item</comment>
+  </data>
+  <data name="MeetingMic_StartFailed" xml:space="preserve">
+    <value>Couldn't start recording the microphone: {0}</value>
+    <comment>Error. {0} = system message</comment>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Hanasu Settings</value>
+    <comment>Window title</comment>
+  </data>
+  <data name="Settings_SavedImmediately" xml:space="preserve">
+    <value>Changes are saved immediately</value>
+    <comment>Settings: status at the bottom</comment>
+  </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>General</value>
+    <comment>Settings: tab</comment>
+  </data>
+  <data name="Settings_Shortcuts" xml:space="preserve">
+    <value>Shortcuts</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_Dictation" xml:space="preserve">
+    <value>Dictation</value>
+    <comment>Settings: shortcut row label</comment>
+  </data>
+  <data name="Settings_ResetToDefault" xml:space="preserve">
+    <value>Reset to Default</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_TranslateAndType" xml:space="preserve">
+    <value>Translate and Type</value>
+    <comment>Settings: shortcut row label</comment>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>Click a box, then press the key combination you want. During recording, Esc cancels. Alt + Space (window menu) and Win + H (Windows voice typing) are used by Windows, so they're avoided.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_TranslationLanguages" xml:space="preserve">
+    <value>Translation languages</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_TranslateEnglish" xml:space="preserve">
+    <value>English</value>
+    <comment>Settings: checkbox: translate into English</comment>
+  </data>
+  <data name="Settings_TranslateJapanese" xml:space="preserve">
+    <value>Japanese</value>
+    <comment>Settings: checkbox: translate into Japanese</comment>
+  </data>
+  <data name="Settings_TranslationNote" xml:space="preserve">
+    <value>The "Translate and Type" shortcut translates into the leftmost selected language. While recording, you can switch between "As spoken" and the selected languages in the HUD (the text is typed in the language selected when you stop). Translation uses the AI selected for dictation on the "AI" tab. Select at least one.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_RecordingMode" xml:space="preserve">
+    <value>Recording mode</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_Toggle" xml:space="preserve">
+    <value>Start/stop with each press (toggle)</value>
+    <comment>Settings: radio button</comment>
+  </data>
+  <data name="Settings_PushToTalk" xml:space="preserve">
+    <value>Record only while held down</value>
+    <comment>Settings: radio button</comment>
+  </data>
+  <data name="Settings_Engine" xml:space="preserve">
+    <value>Transcription engine</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_Engine_Windows" xml:space="preserve">
+    <value>Windows speech recognition (default)</value>
+    <comment>Settings: engine list item</comment>
+  </data>
+  <data name="Settings_Engine_Whisper" xml:space="preserve">
+    <value>Whisper (runs on this PC)</value>
+    <comment>Settings: engine list item</comment>
+  </data>
+  <data name="Settings_Engine_Gemini" xml:space="preserve">
+    <value>Gemini (sends audio to Google)</value>
+    <comment>Settings: engine list item</comment>
+  </data>
+  <data name="Settings_Engine_WindowsNote" xml:space="preserve">
+    <value>Recognizes speech with Windows speech recognition (dictation) and shows partial results while you speak. It uses Microsoft's online speech recognition, so turn on "Online speech recognition" in Windows Settings → Privacy &amp; security → Speech. It uses the Windows default microphone (the selection below isn't used).</value>
+    <comment>Settings: note; use the names shown in Windows Settings</comment>
+  </data>
+  <data name="Settings_OpenSpeechSettings" xml:space="preserve">
+    <value>Open Speech Settings</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_OpenLanguageSettings" xml:space="preserve">
+    <value>Open Language Settings</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>Transcribes on this PC with whisper.cpp (audio never leaves your PC). Transcription runs after you stop recording. Selecting a model downloads it from Hugging Face. Larger models are more accurate but slower.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_Model" xml:space="preserve">
+    <value>Model</value>
+    <comment>Settings: label</comment>
+  </data>
+  <data name="Settings_Download" xml:space="preserve">
+    <value>Download</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_CancelDownload" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Settings: button: cancel the download</comment>
+  </data>
+  <data name="Settings_Engine_GeminiNote" xml:space="preserve">
+    <value>Sends the recorded audio to Google's Gemini API (using the Gemini credentials set on the AI tab and the Gemini model for dictation) for transcription. Note that your audio is sent to Google. It's sent after you stop recording (up to 7 minutes at a time).</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_Microphone" xml:space="preserve">
+    <value>Microphone</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_NoTarget" xml:space="preserve">
+    <value>When there's nowhere to type</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_NoTargetNote" xml:space="preserve">
+    <value>If no text field has focus (for example, the desktop is in front) or the app in front runs as administrator and can't be pasted into, the result is shown at the bottom of the screen. It stays until you close it, and you can copy it with "Copy" or by selecting the text.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_Fallback_Keep" xml:space="preserve">
+    <value>Also put it on the clipboard (just press Ctrl+V where you want it)</value>
+    <comment>Settings: radio button</comment>
+  </data>
+  <data name="Settings_Fallback_Restore" xml:space="preserve">
+    <value>Only show it and leave the clipboard unchanged (copy with "Copy" on the panel)</value>
+    <comment>Settings: radio button</comment>
+  </data>
+  <data name="Settings_Other" xml:space="preserve">
+    <value>Other</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_PlaySounds" xml:space="preserve">
+    <value>Play sounds when recording starts and stops</value>
+    <comment>Settings: checkbox</comment>
+  </data>
+  <data name="Settings_OpenLogs" xml:space="preserve">
+    <value>Open Log Folder</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_OpenSettingsFolder" xml:space="preserve">
+    <value>Open Settings Folder</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_AiAndModels" xml:space="preserve">
+    <value>AI and models</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_Ai_Dictation" xml:space="preserve">
+    <value>Dictation (refining, translation)</value>
+    <comment>Settings: row label</comment>
+  </data>
+  <data name="Settings_Ai_Local" xml:space="preserve">
+    <value>Local</value>
+    <comment>Settings: AI list item: local LLM on this PC</comment>
+  </data>
+  <data name="Settings_Ai_Meeting" xml:space="preserve">
+    <value>Meetings (minutes)</value>
+    <comment>Settings: row label</comment>
+  </data>
+  <data name="Settings_AiNote" xml:space="preserve">
+    <value>You can choose the AI and model separately for dictation and meetings. The defaults are gemini-3.5-flash-lite (dictation) and gemini-3.8-flash (minutes) for Gemini, and Haiku 5.5 (dictation) and Sonnet 5.5 (minutes) for Claude. Claude is used only for processing text, not for transcribing audio (the transcription engine is on the "General" and "Meetings" tabs).</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_LocalModels" xml:space="preserve">
+    <value>Local models (small LLMs that run on this PC)</value>
+    <comment>Settings: heading</comment>
+  </data>
+  <data name="Settings_LocalModelsNote" xml:space="preserve">
+    <value>Text is processed only on this PC and never sent over the internet. Download the model you want to use first. It runs on the CPU, so refining takes a few to over ten seconds, and minutes take a few to over ten minutes.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_Stop" xml:space="preserve">
+    <value>Stop</value>
+    <comment>Settings: button: stop the download</comment>
+  </data>
+  <data name="Settings_Refine" xml:space="preserve">
+    <value>Refine with AI (fix misrecognitions, filler words, self-corrections, and punctuation)</value>
+    <comment>Settings: checkbox</comment>
+  </data>
+  <data name="Settings_RefineNote" xml:space="preserve">
+    <value>When off, only the dictionary replacements are applied to the recognized text before typing. Translation can only be done by AI, so it's still sent to the AI when this is off.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_RefineLanguage" xml:space="preserve">
+    <value>Refining language</value>
+    <comment>Settings: label</comment>
+  </data>
+  <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
+    <value>As spoken</value>
+    <comment>Settings: list item: keep the spoken language</comment>
+  </data>
+  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
+    <value>Always Japanese</value>
+    <comment>Settings: list item: unify the output into Japanese</comment>
+  </data>
+  <data name="Settings_SendAppName" xml:space="preserve">
+    <value>Tell the AI the name of the app you're typing into (to match its style)</value>
+    <comment>Settings: checkbox</comment>
+  </data>
+  <data name="Settings_GeminiAuth" xml:space="preserve">
+    <value>Gemini authentication</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_Auth_ApiKey" xml:space="preserve">
+    <value>API key (Google AI Studio)</value>
+    <comment>Settings: radio button</comment>
+  </data>
+  <data name="Settings_Auth_ServiceAccount" xml:space="preserve">
+    <value>Service account (Vertex AI)</value>
+    <comment>Settings: radio button</comment>
+  </data>
+  <data name="Settings_ApiKey" xml:space="preserve">
+    <value>API key</value>
+    <comment>Settings: label</comment>
+  </data>
+  <data name="Settings_KeyJson" xml:space="preserve">
+    <value>Key (JSON)</value>
+    <comment>Settings: label: service account key file</comment>
+  </data>
+  <data name="Settings_Browse" xml:space="preserve">
+    <value>Browse…</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_Region" xml:space="preserve">
+    <value>Region</value>
+    <comment>Settings: label</comment>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Choose the key of a service account with the Vertex AI User role (roles/aiplatform.user). Only the key file's location is saved (its contents aren't copied). Keep the key file where others can't read it. The default region is global.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_ClaudeApiKey" xml:space="preserve">
+    <value>Claude API key</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_TestConnection" xml:space="preserve">
+    <value>Test Connection</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_ClaudeNote" xml:space="preserve">
+    <value>Enter an API key created in the Claude Console (platform.claude.com). Saved keys aren't shown on screen (only the last 4 characters). "Test Connection" only retrieves model information and isn't charged.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_KeyProtection" xml:space="preserve">
+    <value>API key protection</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_UseHello" xml:space="preserve">
+    <value>Protect API keys with Windows Hello (verify with your PIN, face, or fingerprint when they're used)</value>
+    <comment>Settings: checkbox</comment>
+  </data>
+  <data name="Settings_KeyProtectionNote" xml:space="preserve">
+    <value>Keys are stored encrypted in %LOCALAPPDATA%\Hanasu\secrets.json, not in settings.json. With the default DPAPI, only this Windows user can read them, but other apps running as the same user can read them without confirmation. With Windows Hello, other apps trying to read them trigger a Windows Hello prompt (you verify once on first use after starting, and again after locking the screen). This can't prevent apps running as the same user from reading memory while Hanasu is running.</value>
+    <comment>Settings: note; keep the file paths</comment>
+  </data>
+  <data name="Settings_Trial" xml:space="preserve">
+    <value>Try it (dictation AI)</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_TrialSample" xml:space="preserve">
+    <value>um so for tomorrow's meeting uh I'm going to use the slides I made with gemini</value>
+    <comment>Settings: sample raw transcript to try refining; write a natural spoken sentence with filler words and no punctuation, like speech recognition output</comment>
+  </data>
+  <data name="Settings_TryRefine" xml:space="preserve">
+    <value>Try Refining</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_TryEnglish" xml:space="preserve">
+    <value>Try English Translation</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_TryJapanese" xml:space="preserve">
+    <value>Try Japanese Translation</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_Tab_Meetings" xml:space="preserve">
+    <value>Meetings</value>
+    <comment>Settings: tab</comment>
+  </data>
+  <data name="Settings_MeetingStartStop" xml:space="preserve">
+    <value>Start/stop recording</value>
+    <comment>Settings: shortcut row label</comment>
+  </data>
+  <data name="Settings_HighlightMark" xml:space="preserve">
+    <value>"Important" mark</value>
+    <comment>Settings: shortcut row label</comment>
+  </data>
+  <data name="Settings_UseHighlightHotKey" xml:space="preserve">
+    <value>Use the "Important" shortcut (active only while recording)</value>
+    <comment>Settings: checkbox</comment>
+  </data>
+  <data name="Settings_Transcription" xml:space="preserve">
+    <value>Transcription</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
+    <value>Whisper (runs on this PC; default)</value>
+    <comment>Settings: engine list item</comment>
+  </data>
+  <data name="Settings_MeetingEngineNote" xml:space="preserve">
+    <value>During recording, audio is only written to files; after you stop, the "Me" and "Others" channels are each transcribed with timestamps. Windows speech recognition can only listen to the Windows default microphone and can't take the PC audio (others), so it can't be used for meetings.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_Speakers" xml:space="preserve">
+    <value>Speakers</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_Diarize" xml:space="preserve">
+    <value>Separate the other speakers (Speaker 1, Speaker 2…)</value>
+    <comment>Settings: checkbox</comment>
+  </data>
+  <data name="Settings_DiarizeNote" xml:space="preserve">
+    <value>Speakers are separated on this PC with sherpa-onnx (pyannote and 3D-Speaker models). The models (about 34 MB) are downloaded the first time. When off, the other side is combined into a single "Others". You can rename speakers in Meeting Notes.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_Minutes" xml:space="preserve">
+    <value>Minutes</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_MakeMinutes" xml:space="preserve">
+    <value>Create minutes with AI after recording</value>
+    <comment>Settings: checkbox</comment>
+  </data>
+  <data name="Settings_MinutesNote" xml:space="preserve">
+    <value>Choose the AI and model for minutes under "Meetings (minutes)" on the "AI" tab. Only the transcript text is sent (when the transcription engine is Gemini, the audio is also sent to Google). Choose the minutes template in Meeting Notes.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>Storage</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_KeepAudio" xml:space="preserve">
+    <value>Keep the audio files (me.wav / others.wav) after processing</value>
+    <comment>Settings: checkbox</comment>
+  </data>
+  <data name="Settings_KeepAudioNote" xml:space="preserve">
+    <value>When off, the audio is deleted after the transcript and minutes are created (it's kept if transcription fails). It's 16 kHz mono WAV, about 115 MB per channel per hour.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_SaveLocation" xml:space="preserve">
+    <value>Save location</value>
+    <comment>Settings: label</comment>
+  </data>
+  <data name="Settings_Open" xml:space="preserve">
+    <value>Open</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_MeetingsFolderNote" xml:space="preserve">
+    <value>A folder named after the date and time is created for each meeting, containing meeting.json (same format as the Mac version), transcript.md, minutes.md, notes.md, and the audio.</value>
+    <comment>Settings: note; keep the file names</comment>
+  </data>
+  <data name="Settings_ConsentNote" xml:space="preserve">
+    <value>Get the other participants' consent before recording. Using earphones keeps their voices from leaking into your microphone.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>History</value>
+    <comment>Settings: tab</comment>
+  </data>
+  <data name="Settings_DictationHistory" xml:space="preserve">
+    <value>Dictation history</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_SaveHistory" xml:space="preserve">
+    <value>Save history to a file</value>
+    <comment>Settings: checkbox</comment>
+  </data>
+  <data name="Settings_HistoryNote" xml:space="preserve">
+    <value>Keeps dictation results and the original transcripts so you can search and copy them with "Open History". When off, new results aren't written to a file; only the last 10 are kept in memory for "Recent Results" in the notification area menu (saved history isn't deleted).</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_KeepDays" xml:space="preserve">
+    <value>Keep for</value>
+    <comment>Settings: label: retention period</comment>
+  </data>
+  <data name="Settings_KeepCount" xml:space="preserve">
+    <value>Keep up to</value>
+    <comment>Settings: label: number of entries to keep</comment>
+  </data>
+  <data name="Settings_KeepNote" xml:space="preserve">
+    <value>Only entries within both limits are kept; the oldest are deleted first (when adding, at startup, and when you change these settings). The defaults are 30 days and 1,000 entries.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_OpenHistory" xml:space="preserve">
+    <value>Open History…</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_DeleteAllHistory" xml:space="preserve">
+    <value>Delete All History…</value>
+    <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_Tab_Dictionary" xml:space="preserve">
+    <value>Dictionary &amp; Rules</value>
+    <comment>Settings: tab</comment>
+  </data>
+  <data name="Settings_UserDictionary" xml:space="preserve">
+    <value>User dictionary</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_TryReplace" xml:space="preserve">
+    <value>Try replacements</value>
+    <comment>Settings: label of a test input box</comment>
+  </data>
+  <data name="Settings_ExtraRules" xml:space="preserve">
+    <value>Additional refining rules</value>
+    <comment>Settings: section heading</comment>
+  </data>
+  <data name="Settings_ExtraRulesNote" xml:space="preserve">
+    <value>Rules passed to the AI (Gemini, Claude) when refining (for example, "use a formal tone"). They aren't used when translating into English (they are used when translating into Japanese).</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_DictionaryHelp" xml:space="preserve">
+    <value>One per line. A word on its own tells the AI how to spell it. "heard =&gt; spelling" replaces what was recognized with the spelling (for example, stock mark =&gt; Stockmark; separate several on the left with ","). Lines starting with "#" are comments.</value>
+    <comment>Settings: note; keep '=&gt;', ',' and '#' (the app reads them)</comment>
+  </data>
+  <data name="Settings_EntryCount" xml:space="preserve">
+    <value>{0} entries</value>
+    <comment>Settings: history count option. {0} = number</comment>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>Saved</value>
+    <comment>Settings: status</comment>
+  </data>
+  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
+    <value>Same as another shortcut (dictation, translation, or meetings)</value>
+    <comment>Settings: shortcut validation</comment>
+  </data>
+  <data name="Settings_MicNote_Windows" xml:space="preserve">
+    <value>The Windows engine uses the Windows default microphone (you can change it in Windows Settings → System → Sound).</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_MicNote_Selected" xml:space="preserve">
+    <value>Whisper and Gemini record with the microphone selected here (converted to 16 kHz mono).</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_HistoryStatus" xml:space="preserve">
+    <value>Current history: {0} entries (saved in: {1})</value>
+    <comment>Settings: {0} = count, {1} = file path</comment>
+  </data>
+  <data name="Settings_ConfirmDeleteWhisper" xml:space="preserve">
+    <value>Delete the Whisper model {0} ({1})?</value>
+    <comment>Confirmation. {0} = model ID, {1} = size</comment>
+  </data>
+  <data name="Settings_Downloading" xml:space="preserve">
+    <value>Downloading… {0}</value>
+    <comment>Settings: {0} = percentage</comment>
+  </data>
+  <data name="Settings_Downloaded" xml:space="preserve">
+    <value>Downloaded</value>
+    <comment>Settings: model status</comment>
+  </data>
+  <data name="Settings_DownloadFailed" xml:space="preserve">
+    <value>Failed: {0}</value>
+    <comment>Settings: model status. {0} = error</comment>
+  </data>
+  <data name="Settings_NotDownloaded" xml:space="preserve">
+    <value>Not downloaded yet</value>
+    <comment>Settings: model status</comment>
+  </data>
+  <data name="Settings_ConfirmDeleteLocal" xml:space="preserve">
+    <value>Delete the local model {0} ({1})?</value>
+    <comment>Confirmation. {0} = model name, {1} = size</comment>
+  </data>
+  <data name="Settings_MinutesAiNote" xml:space="preserve">
+    <value>Minutes are created with {0} ({1}).</value>
+    <comment>Settings: {0} = AI name, {1} = model</comment>
+  </data>
+  <data name="Settings_Missing_LocalModel" xml:space="preserve">
+    <value>the local model "{0}"</value>
+    <comment>Settings: item in Settings_MissingNote. {0} = model name</comment>
+  </data>
+  <data name="Settings_Missing_GeminiCredentials" xml:space="preserve">
+    <value>Gemini credentials</value>
+    <comment>Settings: item in Settings_MissingNote</comment>
+  </data>
+  <data name="Settings_MissingNote" xml:space="preserve">
+    <value>Not set up yet: {0} (set up or download below).</value>
+    <comment>Settings: {0} = missing items joined with Separator</comment>
+  </data>
+  <data name="Settings_EnterApiKey" xml:space="preserve">
+    <value>Enter an API key</value>
+    <comment>Settings: validation</comment>
+  </data>
+  <data name="Settings_ClaudeKeyPrefix" xml:space="preserve">
+    <value>Claude API keys start with "sk-ant-". Check what you entered.</value>
+    <comment>Settings: validation</comment>
+  </data>
+  <data name="Settings_ClaudeConnecting" xml:space="preserve">
+    <value>Connecting to the Claude API…</value>
+    <comment>Settings: status</comment>
+  </data>
+  <data name="Settings_ClaudeConnectedUnsaved" xml:space="preserve">
+    <value>Connected with this key (not saved yet). {0} is available. </value>
+    <comment>Settings: status. {0} = model ID</comment>
+  </data>
+  <data name="Settings_ClaudeConnected" xml:space="preserve">
+    <value>Connected. {0} is available. </value>
+    <comment>Settings: status. {0} = model ID; the saved key status follows directly</comment>
+  </data>
+  <data name="Settings_Hello_On" xml:space="preserve">
+    <value>Protected with Windows Hello.</value>
+    <comment>Settings: status</comment>
+  </data>
+  <data name="Settings_Hello_Off" xml:space="preserve">
+    <value>Currently protected with DPAPI.</value>
+    <comment>Settings: status</comment>
+  </data>
+  <data name="Settings_Hello_Unavailable" xml:space="preserve">
+    <value>Windows Hello isn't set up on this PC, so this can't be selected (Windows Settings → Accounts → Sign-in options).</value>
+    <comment>Settings: status</comment>
+  </data>
+  <data name="Settings_Hello_Enabling" xml:space="preserve">
+    <value>Asking for Windows Hello verification (it appears twice to confirm)…</value>
+    <comment>Settings: status</comment>
+  </data>
+  <data name="Settings_Hello_Disabling" xml:space="preserve">
+    <value>Asking for Windows Hello verification (to read the keys once and switch back to DPAPI)…</value>
+    <comment>Settings: status</comment>
+  </data>
+  <data name="Settings_Hello_SwitchFailed" xml:space="preserve">
+    <value>Couldn't switch: {0}</value>
+    <comment>Settings: status. {0} = error</comment>
+  </data>
+  <data name="Settings_ServiceAccountFilter" xml:space="preserve">
+    <value>Service account key (*.json)|*.json|All files (*.*)|*.*</value>
+    <comment>File dialog filter; keep the '|' structure and the patterns</comment>
+  </data>
+  <data name="Settings_ServiceAccountDialogTitle" xml:space="preserve">
+    <value>Choose a Service Account Key (JSON)</value>
+    <comment>File dialog title</comment>
+  </data>
+  <data name="Settings_TrialRefining" xml:space="preserve">
+    <value>Refining…</value>
+    <comment>Settings: status</comment>
+  </data>
+  <data name="Settings_TrialTranslating" xml:space="preserve">
+    <value>Translating…</value>
+    <comment>Settings: status</comment>
+  </data>
+  <data name="Settings_TrialDone" xml:space="preserve">
+    <value>{0} ({1}) took {2} s</value>
+    <comment>Settings: status. {0} = AI name, {1} = model, {2} = seconds</comment>
+  </data>
+  <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
+    <value>The recorded meeting audio is split into 5-minute pieces and sent to Gemini (using the Gemini credentials on the AI tab and the Gemini model for dictation). Note that your audio is sent to Google.</value>
+    <comment>Settings: note</comment>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
+    <value>Uses the Whisper model selected on the "General" tab ({0}).</value>
+    <comment>Settings: note. {0} = model ID</comment>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
+    <value> It hasn't been downloaded yet (download it on the "General" tab).</value>
+    <comment>Settings: note appended to Settings_MeetingEngine_WhisperNote (starts with a space)</comment>
+  </data>
+  <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
+    <value>Choose Where to Save Meetings</value>
+    <comment>Folder dialog title</comment>
+  </data>
+  <data name="Settings_DictionaryLineIssue" xml:space="preserve">
+    <value>Line {0}: {1}</value>
+    <comment>Settings: dictionary issue. {0} = line number, {1} = message</comment>
+  </data>
+  <data name="Settings_NoReplacements" xml:space="preserve">
+    <value>No replacements</value>
+    <comment>Settings: dictionary test result</comment>
+  </data>
+  <data name="Settings_ReplacementResult" xml:space="preserve">
+    <value>→ {0} ({1})</value>
+    <comment>Settings: dictionary test result. {0} = result text, {1} = replacements joined with ListSeparator</comment>
+  </data>
+  <data name="Settings_TrialAppName" xml:space="preserve">
+    <value>Hanasu Settings</value>
+    <comment>App name told to the AI when trying refining in Settings (the 'app being typed into')</comment>
+  </data>
+  <data name="Mic_UnsupportedFormat" xml:space="preserve">
+    <value>Unsupported recording format ({0})</value>
+    <comment>Error. {0} = audio format</comment>
+  </data>
+</root>

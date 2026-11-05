@@ -57,7 +57,18 @@ README と同じ 17 言語。並びも同じにする（`scripts/check-i18n.py` 
 
 ## UI の文字列
 
-UI の文字列の多言語化は FUT-012（[docs/roadmap.md](../../../docs/roadmap.md)）で進めている。入ったら、この節に手順（Mac の String Catalog、Windows の `.resx`）を書く。
+Mac の UI の文字列の多言語化は FUT-012（[docs/roadmap.md](../../../docs/roadmap.md)）で進めている。入ったら、この節に Mac の手順（String Catalog）を書く。
+
+### Windows（.resx。REQ-COM-060・DEC-COM-165）
+- 置き場所: `windows/Hanasu.Core/Properties/Strings.resx`（エラー・進み具合・HUD・テンプレートの名前など、Core が出す文言）と `windows/Hanasu.Windows/Properties/Strings.resx`（画面・トレイ・知らせ）。どちらも**英語がニュートラル**。各言語は同じフォルダの `Strings.<カルチャ>.resx`（ja・ko・pt-BR…。中国語だけ `zh-Hans`・`zh-Hant`）。
+- 足す手順:
+  1. `Strings.resx` に名前（`Settings_Title`・`Error_…` のように、どこの何かが分かる名前）と英語の値、`<comment>` にどこで使うか・`{0}` が何かを書く。
+  2. `Strings.ja.resx` に日本語を書く。埋める値は `{0}` `{1}`（英語と同じ組）。
+  3. コードは `Strings.名前`、埋めるものは `string.Format(Strings.名前, …)`。XAML は `{x:Static p:Strings.名前}`（`xmlns:p="clr-namespace:Hanasu.Windows.Properties"`）。日本語の語順に頼って文をつなげない（「{0}して入力」ではなく、文ごとに名前を分ける）。
+  4. ほかの 15 言語: `python3 scripts/i18n-resx.py export <言語>` で訳のない名前を JSON で出し、エージェントに訳を入れてもらい、`python3 scripts/i18n-resx.py import <言語> <JSON>` で書き戻す（`{0}` の組が英語と違う値は受け付けない）。
+  5. `python3 scripts/i18n-resx.py check` が通ることを確かめる。
+- 訳さないもの: ログ（`AppLog`）、開発用の CLI（`windows/Hanasu.Cli`）、テスト、言語の決まりとして読む語（敬称・議事録の見出しの読み取り・Whisper の幻聴の文）、AI へのプロンプト（上の JSON）。
+- テストは表示の言語を日本語に固定している（`UiCultureFixture`）。英語などを見るときは `UiCultureFixture.With("en", …)`。
 
 ## 確かめる
 
@@ -74,6 +85,11 @@ swift build && .build/debug/Hanasu --show-prompts --prompt-language en
 ```bash
 cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~Prompt"
 ```
+
+```bash
+python3 scripts/i18n-resx.py check
+```
+- Windows の UI の文字列（.resx）で、どの言語にも全部の名前の訳があり、`{0}` などの組が英語と同じかを確かめる（漏れがあれば終了コード 1）。
 - Windows が同じ JSON を読み、全言語のキーがそろっていることを確かめる。
 
 - 実際の AI の結果を見るなら `.build/debug/Hanasu --refine-text "<その言語の文>" --prompt-language <言語>`（AI の認証が要る）。

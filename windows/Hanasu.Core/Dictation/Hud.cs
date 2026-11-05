@@ -58,15 +58,15 @@ public static class HudText
 
     public static string Title(HudState state) => state.Phase switch
     {
-        HudPhase.Recording => "録音中",
-        HudPhase.Error => "エラー",
+        HudPhase.Recording => Strings.Hud_Recording,
+        HudPhase.Error => Strings.Hud_Error,
         _ => state.Message ?? "",
     };
 
     /// <summary>2 行目。録音中・処理中は文字起こし（長ければ末尾）、エラーは本文</summary>
     public static string? Detail(HudState state, string transcript) => state.Phase switch
     {
-        HudPhase.Recording => transcript.Length > 0 ? Tail(transcript) : "話してください…",
+        HudPhase.Recording => transcript.Length > 0 ? Tail(transcript) : Strings.Hud_SpeakNow,
         HudPhase.Processing => transcript.Length > 0 ? Tail(transcript) : null,
         HudPhase.Error => state.Message,
         HudPhase.Unpasted => state.Note,
@@ -77,11 +77,11 @@ public static class HudText
     // 設計判断: DEC-DIC-123
     public static string UnpastedTitle(NotPastedReason reason) => reason switch
     {
-        NotPastedReason.HigherIntegrity => "管理者として動いているアプリには貼り付けられません",
-        NotPastedReason.SendFailed => "貼り付けのキーを送れませんでした",
-        NotPastedReason.ClipboardUnavailable => "クリップボードを使えませんでした",
-        NotPastedReason.Failed => "入力できませんでした",
-        _ => "入力できる場所が見つかりませんでした",
+        NotPastedReason.HigherIntegrity => Strings.Hud_Unpasted_HigherIntegrity,
+        NotPastedReason.SendFailed => Strings.Hud_Unpasted_SendFailed,
+        NotPastedReason.ClipboardUnavailable => Strings.Hud_Unpasted_ClipboardUnavailable,
+        NotPastedReason.Failed => Strings.Hud_Unpasted_Failed,
+        _ => Strings.Hud_Unpasted_NoTarget,
     };
 
     /// <summary>貼り方の案内。整形の失敗などの警告があれば先に出す</summary>
@@ -89,17 +89,17 @@ public static class HudText
     public static string UnpastedNote(bool clipboardHasText, string? warning = null)
     {
         var how = clipboardHasText
-            ? "クリップボードにも入れてあります。貼りたい場所をクリックして Ctrl+V を押してください。"
-            : "「コピー」を押すか文章を選んでコピーし、貼りたい場所で Ctrl+V を押してください。";
+            ? Strings.Hud_Unpasted_InClipboard
+            : Strings.Hud_Unpasted_CopyManually;
         return warning is null ? how : $"{warning}\n{how}";
     }
 
     /// <summary>処理中の見出し（translation は翻訳の言語。整形なら null）</summary>
     public static string ProcessingTitle(TranslationLanguage? translation, string provider = "Gemini") => translation switch
     {
-        TranslationLanguage.English => $"{provider} で英語に翻訳しています…",
-        TranslationLanguage.Japanese => $"{provider} で日本語に翻訳しています…",
-        _ => $"{provider} で整えています…",
+        TranslationLanguage.English => string.Format(Strings.Hud_TranslatingToEnglish, provider),
+        TranslationLanguage.Japanese => string.Format(Strings.Hud_TranslatingToJapanese, provider),
+        _ => string.Format(Strings.Hud_Refining, provider),
     };
 
     /// <summary>経過時間（m:ss）</summary>

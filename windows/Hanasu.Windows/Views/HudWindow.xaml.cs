@@ -59,7 +59,7 @@ public partial class HudWindow : Window, IHud
         copyFeedbackTimer.Tick += (_, _) =>
         {
             copyFeedbackTimer.Stop();
-            CopyButtonText.Text = "コピー";
+            CopyButtonText.Text = Strings.Hud_Copy;
         };
         SourceInitialized += OnSourceInitialized;
         DpiChanged += (_, _) => PlaceAtBottom();
@@ -147,7 +147,7 @@ public partial class HudWindow : Window, IHud
             ResultBox.Text = state.ResultText ?? "";
             ResultBox.ScrollToHome();
             copyFeedbackTimer.Stop();
-            CopyButtonText.Text = "コピー";
+            CopyButtonText.Text = Strings.Hud_Copy;
         }
         else
         {
@@ -196,7 +196,7 @@ public partial class HudWindow : Window, IHud
     private void OnCopyClick(object sender, RoutedEventArgs e)
     {
         // ユーザーが自分でコピーする操作なので、履歴に残さない印は付けない（DEC-COM-149）
-        CopyButtonText.Text = TryCopy(state.ResultText ?? "") ? "コピーしました" : "コピーできませんでした";
+        CopyButtonText.Text = TryCopy(state.ResultText ?? "") ? Strings.Copied : Strings.Hud_CopyFailed;
         copyFeedbackTimer.Stop();
         copyFeedbackTimer.Start();
     }

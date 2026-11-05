@@ -227,6 +227,16 @@ processing 中の hotkey は無視
 - 会議の文字起こしを AI に渡すときの話者名は `Meeting.promptName`（プロンプトの言語のラベル）。議事録の見出し・「担当」「期限」もプロンプトの言語で書き、読むときは全言語の言い方を受け付ける（DEC-COM-163）。
 - 送るプロンプトは `--show-prompts [--prompt-language <言語>]` で、見本の入力からすべて組み立てて見られる（`PromptsCLI.swift`）。訳の漏れは `scripts/check-i18n.py` が見つける。手順は `.claude/skills/i18n/SKILL.md`。
 
+### 4.3.0.1 Windows の表示の言語（UI の文字列）
+
+プロンプトとは別に、Windows 版の画面・メニュー・知らせ・エラーの文言は .resx にある（REQ-COM-060、DEC-COM-165）。
+
+- `windows/Hanasu.Core/Properties/Strings.resx`（Core が出す文言）と `windows/Hanasu.Windows/Properties/Strings.resx`（画面）が英語（ニュートラル）。`Strings.ja.resx` などが各言語で、ビルドするとサテライトアセンブリ（`ja/Hanasu.resources.dll` など。単一ファイルの配布では exe の中）になる。
+- コードはビルドのときに作られる `Strings` クラスのプロパティで読み、XAML は `{x:Static p:Strings.…}`。WPF のマークアップの一時プロジェクトにも作ったクラスを渡す（`Hanasu.Windows.csproj` の `HanasuStringsForMarkup`）。
+- 起動のとき `App.OnStartup` が `UiLanguage.Apply` で表示のカルチャを決める。曜日・月の名前（`Meeting.FormatDate`、`DictationHistoryStore.DayLabel`）も表示の言語で書く。前に保存した会議のエラーは、日本語・英語・今の言語の文言で見分ける（`MeetingController.IsMinutesError`）。
+- 文字起こしの言語の初期値（設定のファイルがないとき）は、`UiLanguage.Apply` が置き換える前の Windows の表示の言語を `TranscriptionLocales.Nearest` で一覧に寄せたもの（REQ-COM-004）。
+- 訳の出し入れと漏れの確かめは `scripts/i18n-resx.py`。
+
 ### 4.3.1 翻訳して入力（英訳・和訳）
 
 もう 1 つのショートカット（初期値 `⌥⇧ Space`。設定では「翻訳して入力」）で録音を始めると、止めたときに整形の代わりに翻訳して入力する。止めるのはどちらのショートカットでもよい。

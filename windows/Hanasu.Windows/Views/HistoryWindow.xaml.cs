@@ -48,8 +48,8 @@ public partial class HistoryWindow : Window
             DictationHistoryStore.DayLabel(e.Date, now),
             e.Date.ToLocalTime().ToString("HH:mm"),
             e.Output.ReplaceLineEndings(" ").Trim(),
-            string.Join("・", new[] { DictationHistoryEntry.ModeLabel(e.Mode), e.AppName }.Where(s => !string.IsNullOrEmpty(s))),
-            e.IsFailure ? "⚠" : e.IsUnrefined ? "未整形" : "")).ToList();
+            string.Join(Strings.Separator, new[] { DictationHistoryEntry.ModeLabel(e.Mode), e.AppName }.Where(s => !string.IsNullOrEmpty(s))),
+            e.IsFailure ? "⚠" : e.IsUnrefined ? Strings.History_Unrefined : "")).ToList();
 
         var view = new ListCollectionView(rows);
         view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Row.Day)));
@@ -59,9 +59,9 @@ public partial class HistoryWindow : Window
 
         var policy = history.Policy;
         var kept = policy.Enabled
-            ? $"{HistoryPolicy.DaysLabel(policy.MaxDays)}・{policy.MaxCount} 件まで残します（設定 → 履歴）"
-            : "履歴をファイルに保存しない設定です。直近 10 件だけをメモリに置いています（設定 → 履歴）";
-        CountText.Text = shown.Count == all.Count ? $"{all.Count} 件。{kept}" : $"{shown.Count} 件 / {all.Count} 件。{kept}";
+            ? string.Format(Strings.History_Kept, HistoryPolicy.DaysLabel(policy.MaxDays), policy.MaxCount)
+            : Strings.History_NotSaved;
+        CountText.Text = shown.Count == all.Count ? string.Format(Strings.History_Count, all.Count, kept) : string.Format(Strings.History_CountFiltered, shown.Count, all.Count, kept);
         ErrorText.Text = history.LastError ?? "";
         ErrorText.Visibility = history.LastError is null ? Visibility.Collapsed : Visibility.Visible;
         ShowDetail();
@@ -80,7 +80,7 @@ public partial class HistoryWindow : Window
         CopyStatus.Text = "";
         if (entry is null)
         {
-            DetailInfo.Text = selected.Count > 1 ? $"{selected.Count} 件を選んでいます（Delete キーか「削除」でまとめて消せます）" : "";
+            DetailInfo.Text = selected.Count > 1 ? string.Format(Strings.History_Selected, selected.Count) : "";
             return;
         }
         var parts = new List<string>
@@ -89,9 +89,9 @@ public partial class HistoryWindow : Window
             DictationHistoryEntry.ModeLabel(entry.Mode),
             DictationHistoryEntry.StatusLabel(entry.Status),
         };
-        if (entry.AppName is { } app) parts.Add($"入力先: {app}");
-        if (entry.Model is { } model) parts.Add($"モデル: {model}");
-        DetailInfo.Text = string.Join("　", parts) + (entry.ErrorMessage is { } error ? $"\n{error}" : "");
+        if (entry.AppName is { } app) parts.Add(string.Format(Strings.History_App, app));
+        if (entry.Model is { } model) parts.Add(string.Format(Strings.History_Model, model));
+        DetailInfo.Text = string.Join(Strings.WideSeparator, parts) + (entry.ErrorMessage is { } error ? $"\n{error}" : "");
     }
 
     private void OnSearchChanged(object sender, TextChangedEventArgs e) => Reload();
@@ -132,12 +132,12 @@ public partial class HistoryWindow : Window
         try
         {
             Clipboard.SetText(text);
-            CopyStatus.Text = "コピーしました";
+            CopyStatus.Text = Strings.Copied;
         }
         catch (System.Runtime.InteropServices.ExternalException ex)
         {
             AppLog.Write($"history copy failed: {ex.Message}");
-            CopyStatus.Text = "コピーできませんでした（ほかのアプリがクリップボードを使っています）";
+            CopyStatus.Text = Strings.CopyFailedClipboardBusy;
         }
     }
 
@@ -148,7 +148,7 @@ public partial class HistoryWindow : Window
         var selected = SelectedEntries;
         if (selected.Count == 0) return;
         // 1 件ならすぐ消す。まとめて消すときだけ確かめる
-        if (selected.Count > 1 && MessageBox.Show(this, $"選んだ {selected.Count} 件の履歴を削除しますか？", "Hanasu",
+        if (selected.Count > 1 && MessageBox.Show(this, string.Format(Strings.History_ConfirmDeleteSelected, selected.Count), "Hanasu",
                 MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
         history.Delete(selected.Select(s => s.Id));
     }
@@ -156,7 +156,7 @@ public partial class HistoryWindow : Window
     private void OnDeleteAllClick(object sender, RoutedEventArgs e)
     {
         if (history.Entries.Count == 0) return;
-        if (MessageBox.Show(this, $"音声入力の履歴 {history.Entries.Count} 件をすべて削除しますか？元に戻せません。", "Hanasu",
+        if (MessageBox.Show(this, string.Format(Strings.History_ConfirmDeleteAll, history.Entries.Count), "Hanasu",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) return;
         history.DeleteAll();
     }

@@ -165,7 +165,7 @@ public sealed class DictationController
         languageChoices = TranslationLanguages.Normalize(services.Settings().TranslationLanguages.Concat(mode.Translation() is { } l ? new[] { l } : Array.Empty<TranslationLanguage>()));
         services.Hud.SetLanguages(mode.Translation(), languageChoices);
         services.Hud.UpdateTranscript("");
-        services.Hud.Show(HudState.Preparing("準備中…"));
+        services.Hud.Show(HudState.Preparing(Strings.Hud_Preparing));
         services.SetEscapeHotKeyEnabled(true);
 
         var settings = services.Settings();
@@ -224,7 +224,7 @@ public sealed class DictationController
         var settings = services.Settings();
         var usesGemini = DictationTextProcessor.UsesGemini(settings, Mode);
         services.Hud.Show(HudState.Processing(transcriber.FinishingMessage
-            ?? (usesGemini ? HudText.ProcessingTitle(Mode.Translation(), Ai.TextAiFactory.NameOf(settings.DictationAi)) : "仕上げています…")));
+            ?? (usesGemini ? HudText.ProcessingTitle(Mode.Translation(), Ai.TextAiFactory.NameOf(settings.DictationAi)) : Strings.Hud_Finishing)));
 
         string raw;
         try
@@ -242,7 +242,7 @@ public sealed class DictationController
         services.Hud.UpdateTranscript(raw);
         if (raw.Length == 0)
         {
-            Fail("音声が認識されませんでした");
+            Fail(Strings.Hud_NoSpeech);
             return;
         }
 
@@ -279,7 +279,7 @@ public sealed class DictationController
         }
         else
         {
-            services.Hud.Show(HudState.Done(Mode.Translation() is { } translation ? $"{translation.Verb()}して入力しました" : "入力しました"));
+            services.Hud.Show(HudState.Done(Mode.Translation() is { } translation ? translation.DoneMessage() : Strings.Hud_Typed));
         }
     }
 
@@ -302,7 +302,7 @@ public sealed class DictationController
     {
         State = DictationState.Idle;
         services.SetEscapeHotKeyEnabled(false);
-        services.Hud.Show(HudState.Done("取り消しました"));
+        services.Hud.Show(HudState.Done(Strings.Hud_Canceled));
     }
 
     private void Fail(Exception e)

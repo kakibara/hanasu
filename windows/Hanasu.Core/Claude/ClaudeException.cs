@@ -61,21 +61,20 @@ public sealed class ClaudeException : TextAiException
         or ClaudeErrorKind.Network or ClaudeErrorKind.Timeout;
 
     public static ClaudeException MissingCredentials() =>
-        new(ClaudeErrorKind.MissingCredentials, "Claude の API キーが設定されていません（メニュー → 設定 → AI）");
+        new(ClaudeErrorKind.MissingCredentials, Strings.Claude_MissingCredentials);
 
     public static ClaudeException Timeout(TimeSpan timeout) =>
-        new(ClaudeErrorKind.Timeout, $"Claude の応答が {timeout.TotalSeconds:0} 秒以内に返りませんでした");
+        new(ClaudeErrorKind.Timeout, string.Format(Strings.Claude_Timeout, timeout.TotalSeconds.ToString("0")));
 
     public static ClaudeException Refusal(string? category) =>
         new(ClaudeErrorKind.Refusal,
-            "Claude が安全の判定でこの文章の処理を断りました" + (string.IsNullOrEmpty(category) ? "" : $"（{category}）")
-            + "。別のモデル（設定 → AI）か Gemini で試してください", category: category);
+            string.IsNullOrEmpty(category) ? Strings.Claude_Refusal : string.Format(Strings.Claude_RefusalWithCategory, category), category: category);
 
     public static ClaudeException MaxTokens() =>
-        new(ClaudeErrorKind.MaxTokens, "Claude の応答が長すぎて途中で切れました");
+        new(ClaudeErrorKind.MaxTokens, Strings.Claude_MaxTokens);
 
     public static ClaudeException EmptyResponse() =>
-        new(ClaudeErrorKind.EmptyResponse, "Claude から結果が返りませんでした");
+        new(ClaudeErrorKind.EmptyResponse, Strings.Claude_EmptyResponse);
 
     /// <summary>HTTP の状態番号から、分かる文言にする。detail は API の error.message（短いものだけ）</summary>
     public static ClaudeException FromStatus(int status, string model, string? detail = null, Exception? inner = null)
@@ -84,14 +83,14 @@ public sealed class ClaudeException : TextAiException
         return status switch
         {
             401 => new(ClaudeErrorKind.Unauthorized,
-                "Claude の API キーが正しくありません（401）。設定 → AI で、Claude Console で作ったキーを入れ直してください", status, inner: inner),
-            403 => new(ClaudeErrorKind.Forbidden, $"この API キーでは Claude を使えません（403）{suffix}", status, inner: inner),
-            404 => new(ClaudeErrorKind.NotFound, $"モデル {model} が見つからないか、この API キーでは使えません（404）", status, inner: inner),
-            402 => new(ClaudeErrorKind.Billing, $"Claude API の支払いに問題があります（402）。Claude Console の請求の設定を確かめてください", status, inner: inner),
-            429 => new(ClaudeErrorKind.RateLimited, "Claude API の利用の上限に達しました（429）。少し待ってから試してください", status, inner: inner),
-            529 => new(ClaudeErrorKind.Overloaded, "Claude API が混み合っています（529）。少し待ってから試してください", status, inner: inner),
-            >= 500 => new(ClaudeErrorKind.Server, $"Claude API でエラーが起きました（{status}）。少し待ってから試してください", status, inner: inner),
-            _ => new(ClaudeErrorKind.BadRequest, $"Claude API がリクエストを受け付けませんでした（{status}）{suffix}", status, inner: inner),
+                Strings.Claude_Unauthorized, status, inner: inner),
+            403 => new(ClaudeErrorKind.Forbidden, Strings.Claude_Forbidden + suffix, status, inner: inner),
+            404 => new(ClaudeErrorKind.NotFound, string.Format(Strings.Claude_NotFound, model), status, inner: inner),
+            402 => new(ClaudeErrorKind.Billing, Strings.Claude_Billing, status, inner: inner),
+            429 => new(ClaudeErrorKind.RateLimited, Strings.Claude_RateLimited, status, inner: inner),
+            529 => new(ClaudeErrorKind.Overloaded, Strings.Claude_Overloaded, status, inner: inner),
+            >= 500 => new(ClaudeErrorKind.Server, string.Format(Strings.Claude_Server, status), status, inner: inner),
+            _ => new(ClaudeErrorKind.BadRequest, string.Format(Strings.Claude_BadRequest, status) + suffix, status, inner: inner),
         };
     }
 
@@ -100,8 +99,8 @@ public sealed class ClaudeException : TextAiException
     {
         ClaudeException c => c,
         AnthropicApiException api => FromStatus((int)api.StatusCode, model, ApiErrorMessage(api), api),
-        AnthropicIOException io => new(ClaudeErrorKind.Network, "Claude API につながりませんでした。ネットワークを確かめてください", inner: io),
-        HttpRequestException http => new(ClaudeErrorKind.Network, "Claude API につながりませんでした。ネットワークを確かめてください", inner: http),
+        AnthropicIOException io => new(ClaudeErrorKind.Network, Strings.Claude_Network, inner: io),
+        HttpRequestException http => new(ClaudeErrorKind.Network, Strings.Claude_Network, inner: http),
         _ => null,
     };
 

@@ -30,17 +30,17 @@ public sealed class GeminiException : TextAiException
     public override bool IsCredentialProblem => Kind == GeminiErrorKind.MissingCredentials || StatusCode is 401 or 403;
 
     public static GeminiException MissingCredentials() =>
-        new(GeminiErrorKind.MissingCredentials, "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません");
+        new(GeminiErrorKind.MissingCredentials, Strings.Gemini_MissingCredentials);
 
     public static GeminiException Http(int status, string message) =>
-        new(GeminiErrorKind.Http, $"Gemini API エラー（{status}）: {message}", status);
+        new(GeminiErrorKind.Http, string.Format(Strings.Gemini_Http, status, message), status);
 
     public static GeminiException EmptyResponse(string? reason) =>
-        new(GeminiErrorKind.EmptyResponse, "Gemini から結果が返りませんでした" + (reason is null ? "" : $"（{reason}）"), reason: reason);
+        new(GeminiErrorKind.EmptyResponse, reason is null ? Strings.Gemini_EmptyResponse : string.Format(Strings.Gemini_EmptyResponseWithReason, reason), reason: reason);
 
     public static GeminiException InvalidResponse(Exception? inner = null) =>
-        new(GeminiErrorKind.InvalidResponse, "Gemini の応答を読み取れませんでした", inner: inner);
+        new(GeminiErrorKind.InvalidResponse, Strings.Gemini_InvalidResponse, inner: inner);
 
     public static GeminiException Timeout(TimeSpan timeout) =>
-        new(GeminiErrorKind.Timeout, $"Gemini の応答が {timeout.TotalSeconds:0} 秒以内に返りませんでした");
+        new(GeminiErrorKind.Timeout, string.Format(Strings.Gemini_Timeout, timeout.TotalSeconds.ToString("0")));
 }

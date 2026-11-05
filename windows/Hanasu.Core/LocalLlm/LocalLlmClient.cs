@@ -7,7 +7,7 @@ using Hanasu.Core.Gemini;
 
 namespace Hanasu.Core.LocalLlm;
 
-/// <summary>ローカルの LLM の失敗。Message はそのまま HUD・会議ノートに出せる日本語にする（文章の中身は入れない）</summary>
+/// <summary>ローカルの LLM の失敗。Message はそのまま HUD・会議ノートに出せる文（表示の言語。REQ-COM-060）にする（文章の中身は入れない）</summary>
 public sealed class LocalLlmException : TextAiException
 {
     private LocalLlmException(string message, bool credentialProblem = false, Exception? inner = null) : base(message, inner)
@@ -19,27 +19,27 @@ public sealed class LocalLlmException : TextAiException
     public override bool IsCredentialProblem { get; }
 
     public static LocalLlmException ServerNotFound() =>
-        new("ローカルの LLM を動かす llama-server が見つかりません（Hanasu の zip を展開し直すか、環境変数 HANASU_LLAMA_SERVER でパスを指定してください）", true);
+        new(Strings.LocalLlm_ServerNotFound, true);
 
     public static LocalLlmException ModelNotDownloaded(LocalLlmModel? model) =>
-        new($"ローカルのモデル{(model is null ? "" : $"「{model.Name}」")}がまだダウンロードされていません（メニュー → 設定 → AI でダウンロードしてください）", true);
+        new(model is null ? Strings.LocalLlm_ModelNotDownloaded : string.Format(Strings.LocalLlm_NamedModelNotDownloaded, model.Name), true);
 
     public static LocalLlmException Exited(int code, string log) =>
-        new($"ローカルの LLM が起動できませんでした（終了コード {code}）" + (log.Length == 0 ? "" : "\n" + log));
+        new(string.Format(Strings.LocalLlm_Exited, code) + (log.Length == 0 ? "" : "\n" + log));
 
     public static LocalLlmException StartupTimedOut(TimeSpan timeout) =>
-        new($"ローカルの LLM の起動が {timeout.TotalSeconds:0} 秒たっても終わりませんでした");
+        new(string.Format(Strings.LocalLlm_StartupTimedOut, timeout.TotalSeconds.ToString("0")));
 
     public static LocalLlmException Http(int status, string message) =>
-        new($"ローカルの LLM がエラーを返しました（{status}）" + (message.Length == 0 ? "" : $": {message}"));
+        new(string.Format(Strings.LocalLlm_Http, status) + (message.Length == 0 ? "" : $": {message}"));
 
-    public static LocalLlmException Truncated() => new("ローカルの LLM の応答が長さの上限で切れたため、使いませんでした");
+    public static LocalLlmException Truncated() => new(Strings.LocalLlm_Truncated);
 
-    public static LocalLlmException Empty() => new("ローカルの LLM から結果が返りませんでした");
+    public static LocalLlmException Empty() => new(Strings.LocalLlm_Empty);
 
-    public static LocalLlmException Invalid() => new("ローカルの LLM の応答を読み取れませんでした");
+    public static LocalLlmException Invalid() => new(Strings.LocalLlm_Invalid);
 
-    public static LocalLlmException Timeout(TimeSpan timeout) => new($"ローカルの LLM が {timeout.TotalSeconds:0} 秒以内に応答しませんでした");
+    public static LocalLlmException Timeout(TimeSpan timeout) => new(string.Format(Strings.LocalLlm_Timeout, timeout.TotalSeconds.ToString("0")));
 }
 
 /// <summary>
@@ -68,7 +68,7 @@ public sealed class LocalLlmClient(LocalLlmModel model, LocalLlmServer server, H
     /// <summary>1 回の呼び出しの待ち時間の上限（サーバーの起動を含む）</summary>
     public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(120);
 
-    public string ProviderName => "ローカル";
+    public string ProviderName => Strings.Ai_Local;
 
     public async Task<string> RefineAsync(RefineRequest request, CancellationToken cancellationToken = default) =>
         CleanUpRewrite(await GenerateTextAsync(TextPurpose.Refine, GeminiPrompts.SystemInstruction(request.OutputLanguage), GeminiPrompts.UserPrompt(request),

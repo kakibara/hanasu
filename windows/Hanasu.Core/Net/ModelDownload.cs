@@ -28,7 +28,7 @@ public static class ModelDownload
     {
         if (uri.Scheme != Uri.UriSchemeHttps || !AllowedHosts.Contains(uri.Host))
         {
-            throw new ModelVerificationException($"決めたホスト以外からはダウンロードしません: {uri.Host}");
+            throw new ModelVerificationException(string.Format(Strings.Download_HostNotAllowed, uri.Host));
         }
         var partial = finalPath + ".download";
         try
@@ -36,16 +36,16 @@ public static class ModelDownload
             using var response = await http.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
-                throw new HttpRequestException($"ダウンロードに失敗しました（HTTP {(int)response.StatusCode}）");
+                throw new HttpRequestException(string.Format(Strings.Download_HttpFailed, (int)response.StatusCode));
             }
             if (response.RequestMessage?.RequestUri is { } final && final.Scheme != Uri.UriSchemeHttps)
             {
-                throw new ModelVerificationException("https 以外の場所に転送されたので、ダウンロードをやめました");
+                throw new ModelVerificationException(Strings.Download_RedirectedToNonHttps);
             }
             var total = response.Content.Headers.ContentLength ?? expectedBytes;
             if (response.Content.Headers.ContentLength is long length && length != expectedBytes)
             {
-                throw new ModelVerificationException($"ダウンロードするファイルの大きさが想定と違います（{length} バイト、想定は {expectedBytes} バイト）");
+                throw new ModelVerificationException(string.Format(Strings.Download_SizeMismatch, length, expectedBytes));
             }
             using var sha = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
             long received = 0;
@@ -57,18 +57,18 @@ public static class ModelDownload
                 while ((read = await source.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) > 0)
                 {
                     // 想定より大きいものを書き続けない（ディスクを埋められないように）
-                    if (received + read > expectedBytes) throw new ModelVerificationException("ダウンロードしたファイルが想定より大きいので、やめました");
+                    if (received + read > expectedBytes) throw new ModelVerificationException(Strings.Download_TooLarge);
                     await target.WriteAsync(buffer.AsMemory(0, read), cancellationToken).ConfigureAwait(false);
                     sha.AppendData(buffer, 0, read);
                     received += read;
                     progress?.Invoke(received, total);
                 }
             }
-            if (received != expectedBytes) throw new IOException("ダウンロードが途中で切れました");
+            if (received != expectedBytes) throw new IOException(Strings.Download_Interrupted);
             var actual = Convert.ToHexString(sha.GetHashAndReset());
             if (!string.Equals(actual, expectedSha256, StringComparison.OrdinalIgnoreCase))
             {
-                throw new ModelVerificationException("ダウンロードしたファイルのハッシュ（SHA-256）が想定と違うので、使いません");
+                throw new ModelVerificationException(Strings.Download_HashMismatch);
             }
             File.Move(partial, finalPath, overwrite: true);
         }

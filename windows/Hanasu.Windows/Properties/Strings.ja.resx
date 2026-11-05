@@ -1,0 +1,919 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_AlreadyRunning" xml:space="preserve">
+    <value>Hanasu はすでに起動しています。タスクトレイのアイコンから使えます。</value>
+  </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>最近の結果</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>会議ノートを開く</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>履歴を開く…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>設定…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>録音を止めて入力</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>音声入力を開始</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>会議の記録を停止（{0}）</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>会議の記録を始めています…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>会議の記録を処理しています…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>会議の記録を開始</value>
+  </data>
+  <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
+    <value>Hanasu — 会議を記録中 {0}</value>
+  </data>
+  <data name="Tray_Tip_MeetingProcessing" xml:space="preserve">
+    <value>Hanasu — 会議の記録を処理中</value>
+  </data>
+  <data name="Tray_Tip_Recording" xml:space="preserve">
+    <value>Hanasu — 録音中</value>
+  </data>
+  <data name="Tray_Tip_Processing" xml:space="preserve">
+    <value>Hanasu — 処理中</value>
+  </data>
+  <data name="Tray_RecentEmpty" xml:space="preserve">
+    <value>（まだありません）</value>
+  </data>
+  <data name="Tray_RecentTip" xml:space="preserve">
+    <value>{0}
+結果: {1}
+原文: {2}</value>
+  </data>
+  <data name="Tray_RecentHint" xml:space="preserve">
+    <value>押すとクリップボードにコピーします</value>
+  </data>
+  <data name="Tray_OpenAllHistory" xml:space="preserve">
+    <value>すべての履歴を開く…</value>
+  </data>
+  <data name="Balloon_Started" xml:space="preserve">
+    <value>Hanasu を起動しました</value>
+  </data>
+  <data name="Balloon_StartedBody" xml:space="preserve">
+    <value>{0} で音声入力、{1} で{2}します。</value>
+  </data>
+  <data name="Balloon_HotKeyFailed" xml:space="preserve">
+    <value>ショートカットを登録できませんでした</value>
+  </data>
+  <data name="Balloon_HotKeyFailedBody" xml:space="preserve">
+    <value>{0} はほかのアプリが使っています。設定 → 一般 で別のキーにしてください。</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailed" xml:space="preserve">
+    <value>「ここ重要」のショートカットを登録できませんでした</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailedBody" xml:space="preserve">
+    <value>{0} はほかのアプリが使っています。会議ノートの「★ ここ重要」ボタンを使うか、設定 → 会議 で別のキーにしてください。</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>、</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>コピーしました</value>
+  </data>
+  <data name="Quit_MeetingInProgress" xml:space="preserve">
+    <value>会議の記録中（または記録のあとの処理中）です。終了すると、この会議の文字起こしと議事録は作られません（音声ファイルは残ります）。終了しますか？</value>
+  </data>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>Windows Hello が設定されていません（Windows の設定 → アカウント → サインイン オプション で PIN などを設定してください）</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Windows Hello の確認が取り消されたため、API キーを読めませんでした</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Windows Hello で確認できませんでした（{0}）</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>Windows Hello の鍵が見つかりません（Windows Hello を設定し直した可能性があります）。設定 → AI で API キーを入れ直してください</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Windows Hello の鍵を開けませんでした（{0}）</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Windows Hello の確認が取り消されました</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Windows Hello の鍵を作れませんでした（{0}）</value>
+  </data>
+  <data name="Mic_NotFound" xml:space="preserve">
+    <value>マイクが見つかりません。マイクがつながっているか、Windows の設定 → システム → サウンド で確かめてください。</value>
+  </data>
+  <data name="Mic_AccessDenied" xml:space="preserve">
+    <value>マイクの使用が許可されていません。Windows の設定 → プライバシーとセキュリティ → マイク で「デスクトップ アプリがマイクにアクセスできるようにする」をオンにしてください。</value>
+  </data>
+  <data name="Mic_StartFailed" xml:space="preserve">
+    <value>マイクで録音を始められませんでした: {0}</value>
+  </data>
+  <data name="Output_NotFound" xml:space="preserve">
+    <value>音の出力の機器（スピーカー・ヘッドホン）が見つかりません。</value>
+  </data>
+  <data name="Loopback_StartFailed" xml:space="preserve">
+    <value>PC の音の録音を始められませんでした: {0}</value>
+  </data>
+  <data name="Speech_LanguageNotInstalled" xml:space="preserve">
+    <value>Windows に {0} の音声認識が入っていません。Windows の設定 → 時刻と言語 → 言語と地域 で {0} の「…」→「言語のオプション」から音声認識を追加してください。または、設定で文字起こしのエンジンを Whisper か Gemini にしてください。</value>
+  </data>
+  <data name="Speech_LanguageNotSupported" xml:space="preserve">
+    <value>Windows のディクテーションが日本語に対応していません。設定で文字起こしのエンジンを Whisper か Gemini にしてください。</value>
+  </data>
+  <data name="Speech_MicUnavailable" xml:space="preserve">
+    <value>マイクを使えません。Windows の既定のマイクを確かめてください。</value>
+  </data>
+  <data name="Speech_NetworkFailure" xml:space="preserve">
+    <value>Windows の音声認識がネットワークにつながりませんでした。インターネット接続を確かめてください。</value>
+  </data>
+  <data name="Speech_StartFailed" xml:space="preserve">
+    <value>Windows の音声認識を始められませんでした（{0}）。</value>
+  </data>
+  <data name="Speech_OnlineRecognitionOff" xml:space="preserve">
+    <value>Windows の音声認識を使うには、Windows の設定 → プライバシーとセキュリティ → 音声認識 で「オンライン音声認識」をオンにしてください。オンにしたくない場合は、設定で文字起こしのエンジンを Whisper にしてください。</value>
+  </data>
+  <data name="Speech_Error" xml:space="preserve">
+    <value>Windows の音声認識でエラーが起きました: {0}</value>
+  </data>
+  <data name="Hud_LanguageSwitch_Tip" xml:space="preserve">
+    <value>録音を止めたときに選んでいる言語で入力します</value>
+  </data>
+  <data name="Hud_SpokenLanguage" xml:space="preserve">
+    <value>話した言語</value>
+  </data>
+  <data name="Hud_Stop_Tip" xml:space="preserve">
+    <value>録音を止めて入力します（ショートカットをもう一度押すのと同じ）</value>
+  </data>
+  <data name="Hud_Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="Hud_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Hud_Cancel_Tip" xml:space="preserve">
+    <value>何も入力せずに取り消します（Esc）</value>
+  </data>
+  <data name="Hud_Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="Hud_Close_Tip" xml:space="preserve">
+    <value>この表示を閉じます（文章をクリックしたあとは Esc でも閉じられます）</value>
+  </data>
+  <data name="Hud_Copy_Tip" xml:space="preserve">
+    <value>文章をクリップボードにコピーします</value>
+  </data>
+  <data name="Hud_Copy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>音声入力の履歴 — Hanasu</value>
+  </data>
+  <data name="History_FilterAll" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="History_FilterUnrefined" xml:space="preserve">
+    <value>失敗・未整形</value>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="History_Search_Tip" xml:space="preserve">
+    <value>結果・原文・入力先のアプリから探します。空白で区切ると、すべての語を含むものを出します</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="History_DeleteAll" xml:space="preserve">
+    <value>すべて削除…</value>
+  </data>
+  <data name="OpenSaveFolder" xml:space="preserve">
+    <value>保存先を開く</value>
+  </data>
+  <data name="History_CopyResult" xml:space="preserve">
+    <value>結果をコピー</value>
+  </data>
+  <data name="History_CopyOriginal" xml:space="preserve">
+    <value>原文をコピー</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="History_ResultLabel" xml:space="preserve">
+    <value>結果（入力した文章）</value>
+  </data>
+  <data name="History_OriginalLabel" xml:space="preserve">
+    <value>原文（文字起こし）</value>
+  </data>
+  <data name="Hud_CopyFailed" xml:space="preserve">
+    <value>コピーできませんでした</value>
+  </data>
+  <data name="HotKeyBox_Prompt" xml:space="preserve">
+    <value>キーを押してください（Esc でやめる）…</value>
+  </data>
+  <data name="Separator" xml:space="preserve">
+    <value>・</value>
+  </data>
+  <data name="WideSeparator" xml:space="preserve">
+    <value>　</value>
+  </data>
+  <data name="History_Unrefined" xml:space="preserve">
+    <value>未整形</value>
+  </data>
+  <data name="History_Kept" xml:space="preserve">
+    <value>{0}・{1} 件まで残します（設定 → 履歴）</value>
+  </data>
+  <data name="History_NotSaved" xml:space="preserve">
+    <value>履歴をファイルに保存しない設定です。直近 10 件だけをメモリに置いています（設定 → 履歴）</value>
+  </data>
+  <data name="History_Count" xml:space="preserve">
+    <value>{0} 件。{1}</value>
+  </data>
+  <data name="History_CountFiltered" xml:space="preserve">
+    <value>{0} 件 / {1} 件。{2}</value>
+  </data>
+  <data name="History_Selected" xml:space="preserve">
+    <value>{0} 件を選んでいます（Delete キーか「削除」でまとめて消せます）</value>
+  </data>
+  <data name="History_App" xml:space="preserve">
+    <value>入力先: {0}</value>
+  </data>
+  <data name="History_Model" xml:space="preserve">
+    <value>モデル: {0}</value>
+  </data>
+  <data name="CopyFailedClipboardBusy" xml:space="preserve">
+    <value>コピーできませんでした（ほかのアプリがクリップボードを使っています）</value>
+  </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>選んだ {0} 件の履歴を削除しますか？</value>
+  </data>
+  <data name="History_ConfirmDeleteAll" xml:space="preserve">
+    <value>音声入力の履歴 {0} 件をすべて削除しますか？元に戻せません。</value>
+  </data>
+  <data name="Meeting_Title" xml:space="preserve">
+    <value>会議ノート — Hanasu</value>
+  </data>
+  <data name="Meeting_Stop" xml:space="preserve">
+    <value>■ 停止</value>
+  </data>
+  <data name="Meeting_Recording" xml:space="preserve">
+    <value>● 記録中</value>
+  </data>
+  <data name="Meeting_MicLabel" xml:space="preserve">
+    <value>自分（マイク）</value>
+  </data>
+  <data name="Meeting_OutputLabel" xml:space="preserve">
+    <value>相手（この出力で鳴る音）</value>
+  </data>
+  <data name="Meeting_TemplateLabel" xml:space="preserve">
+    <value>議事録の型</value>
+  </data>
+  <data name="Meeting_Start" xml:space="preserve">
+    <value>● 会議の記録を開始</value>
+  </data>
+  <data name="Meeting_MoveToRecycleBin" xml:space="preserve">
+    <value>ごみ箱に移す…</value>
+  </data>
+  <data name="Meeting_Empty" xml:space="preserve">
+    <value>左の一覧から会議を選ぶか、左下の「会議の記録を開始」で記録を始めます。</value>
+  </data>
+  <data name="Meeting_TitleEdit_Tip" xml:space="preserve">
+    <value>クリックしてタイトルを変更（Enter で保存・Esc でやめる）</value>
+  </data>
+  <data name="Meeting_Regenerate" xml:space="preserve">
+    <value>議事録を作り直す</value>
+  </data>
+  <data name="Meeting_TemplateShort" xml:space="preserve">
+    <value>型:</value>
+  </data>
+  <data name="Meeting_CopyMarkdown" xml:space="preserve">
+    <value>Markdown をコピー</value>
+  </data>
+  <data name="Meeting_OpenInExplorer" xml:space="preserve">
+    <value>エクスプローラーで開く</value>
+  </data>
+  <data name="Meeting_SpeakersLabel" xml:space="preserve">
+    <value>話者名（変えると文字起こしと議事録の表示に使います）</value>
+  </data>
+  <data name="Meeting_UndoHighlight_Tip" xml:space="preserve">
+    <value>付けてから 10 秒のあいだは、押し間違えた印を取り消せます</value>
+  </data>
+  <data name="Meeting_Highlight" xml:space="preserve">
+    <value>★ ここ重要</value>
+  </data>
+  <data name="Meeting_AddNote" xml:space="preserve">
+    <value>メモを足す</value>
+  </data>
+  <data name="Meeting_NoteHint" xml:space="preserve">
+    <value>Enter でメモを足します（時刻は書き始めた時点）。書きかけの文があるときに「ここ重要」を押すと、その文を印の説明にします。</value>
+  </data>
+  <data name="Meeting_Tab_Minutes" xml:space="preserve">
+    <value>議事録</value>
+  </data>
+  <data name="Meeting_Tab_Transcript" xml:space="preserve">
+    <value>文字起こし</value>
+  </data>
+  <data name="Meeting_Tab_Highlights" xml:space="preserve">
+    <value>ここ重要</value>
+  </data>
+  <data name="Meeting_Tab_Notes" xml:space="preserve">
+    <value>メモ</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Meeting_SaveAndRegenerate" xml:space="preserve">
+    <value>保存して議事録を作り直す</value>
+  </data>
+  <data name="Meeting_NotesHint" xml:space="preserve">
+    <value>1 行に 1 件。「[12:34] 内容」はメモ、「[12:40] ★ 説明」は「ここ重要」の印、時刻のない行は記録のあとに書き足したメモです。</value>
+  </data>
+  <data name="Meeting_Me" xml:space="preserve">
+    <value>自分</value>
+  </data>
+  <data name="Meeting_Others" xml:space="preserve">
+    <value>相手</value>
+  </data>
+  <data name="Meeting_Status_Processing" xml:space="preserve">
+    <value>処理中</value>
+  </data>
+  <data name="Meeting_Status_Failed" xml:space="preserve">
+    <value>失敗</value>
+  </data>
+  <data name="Meeting_Status_Warning" xml:space="preserve">
+    <value>注意あり</value>
+  </data>
+  <data name="Meeting_SavedIn" xml:space="preserve">
+    <value>保存先: {0}</value>
+  </data>
+  <data name="Meeting_MinutesAfterRecording" xml:space="preserve">
+    <value>記録を止めると、文字起こしのあとに議事録を作ります。</value>
+  </data>
+  <data name="Meeting_Processing" xml:space="preserve">
+    <value>処理中です…</value>
+  </data>
+  <data name="Meeting_NoMinutesYet" xml:space="preserve">
+    <value>議事録はまだありません。「議事録を作り直す」で作れます（設定 → AI の「会議」の AI の設定が要ります）。</value>
+  </data>
+  <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
+    <value>文字起こしは、記録を止めたあとに行います。</value>
+  </data>
+  <data name="Meeting_NoTranscriptYet" xml:space="preserve">
+    <value>文字起こしはありません。</value>
+  </data>
+  <data name="Meeting_RecordingNote" xml:space="preserve">
+    <value>文字起こしは、記録を止めたあとに {0} で行います（会議中の PC の負担を減らすため）。</value>
+  </data>
+  <data name="Meeting_SpeakerName_Inferred_Tip" xml:space="preserve">
+    <value>{0} の名前（会話から推測しました。違っていたら直してください）</value>
+  </data>
+  <data name="Meeting_SpeakerName_Tip" xml:space="preserve">
+    <value>{0} の名前</value>
+  </data>
+  <data name="Meeting_Inferred" xml:space="preserve">
+    <value>推測</value>
+  </data>
+  <data name="Meeting_SpeakerNamesSaved" xml:space="preserve">
+    <value>話者名を保存しました</value>
+  </data>
+  <data name="Meeting_TitleSaved" xml:space="preserve">
+    <value>題名を保存しました</value>
+  </data>
+  <data name="Meeting_SaveFailed" xml:space="preserve">
+    <value>保存できませんでした: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>議事録の型を「{0}」にして、議事録を作り直しますか？</value>
+  </data>
+  <data name="Meeting_Regenerated" xml:space="preserve">
+    <value>議事録を作り直しました（{0} 秒）</value>
+  </data>
+  <data name="Meeting_NoTranscript" xml:space="preserve">
+    <value>文字起こしがありません</value>
+  </data>
+  <data name="Meeting_NoNotes" xml:space="preserve">
+    <value>メモがありません</value>
+  </data>
+  <data name="Meeting_NoMinutes" xml:space="preserve">
+    <value>議事録がありません</value>
+  </data>
+  <data name="Meeting_CopiedTranscript" xml:space="preserve">
+    <value>文字起こしを Markdown でコピーしました</value>
+  </data>
+  <data name="Meeting_CopiedNotes" xml:space="preserve">
+    <value>メモを Markdown でコピーしました</value>
+  </data>
+  <data name="Meeting_CopiedMinutes" xml:space="preserve">
+    <value>議事録を Markdown でコピーしました</value>
+  </data>
+  <data name="CopyFailed" xml:space="preserve">
+    <value>コピーできませんでした: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmDelete" xml:space="preserve">
+    <value>「{0}」を削除しますか？
+
+議事録・文字起こし・メモ・音声をまとめてごみ箱に移します。ごみ箱から元に戻せます。</value>
+  </data>
+  <data name="Meeting_ConfirmDelete_Title" xml:space="preserve">
+    <value>会議の削除 — Hanasu</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>削除できませんでした: {0}</value>
+  </data>
+  <data name="Meeting_MovedToRecycleBin" xml:space="preserve">
+    <value>「{0}」をごみ箱に移しました</value>
+  </data>
+  <data name="Meeting_NotesWhileRecording" xml:space="preserve">
+    <value>記録中は、上のメモ欄から足してください（このタブでの編集は記録のあとにできます）</value>
+  </data>
+  <data name="Meeting_NotesSaved" xml:space="preserve">
+    <value>メモを保存しました</value>
+  </data>
+  <data name="Meeting_UndoHighlight" xml:space="preserve">
+    <value>★ を取り消す（あと {0} 秒）</value>
+  </data>
+  <data name="Meeting_Starting" xml:space="preserve">
+    <value>記録を始めています…</value>
+  </data>
+  <data name="Meeting_PostProcessing" xml:space="preserve">
+    <value>記録のあとの処理中</value>
+  </data>
+  <data name="Meeting_StopHint" xml:space="preserve">
+    <value>{0} でも止められます</value>
+  </data>
+  <data name="Meeting_StartHint" xml:space="preserve">
+    <value>{0} でも始められます。録音することを相手に伝えてから始めてください。</value>
+  </data>
+  <data name="Device_DefaultMic" xml:space="preserve">
+    <value>Windows の既定のマイク</value>
+  </data>
+  <data name="Device_MissingMic" xml:space="preserve">
+    <value>（前に選んだマイク・今はつながっていません）</value>
+  </data>
+  <data name="Device_DefaultOutput" xml:space="preserve">
+    <value>Windows の既定の出力</value>
+  </data>
+  <data name="Device_MissingOutput" xml:space="preserve">
+    <value>（前に選んだ出力・今はつながっていません）</value>
+  </data>
+  <data name="MeetingMic_StartFailed" xml:space="preserve">
+    <value>マイクの録音を始められませんでした: {0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Hanasu の設定</value>
+  </data>
+  <data name="Settings_SavedImmediately" xml:space="preserve">
+    <value>変更はすぐに保存されます</value>
+  </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="Settings_Shortcuts" xml:space="preserve">
+    <value>ショートカット</value>
+  </data>
+  <data name="Settings_Dictation" xml:space="preserve">
+    <value>音声入力</value>
+  </data>
+  <data name="Settings_ResetToDefault" xml:space="preserve">
+    <value>既定に戻す</value>
+  </data>
+  <data name="Settings_TranslateAndType" xml:space="preserve">
+    <value>翻訳して入力</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>欄をクリックしてから、使いたい組み合わせを押します。録音中は Esc で取り消せます。Alt + Space（ウインドウメニュー）と Win + H（Windows の音声入力）は Windows が使うので避けています。</value>
+  </data>
+  <data name="Settings_TranslationLanguages" xml:space="preserve">
+    <value>翻訳する言語</value>
+  </data>
+  <data name="Settings_TranslateEnglish" xml:space="preserve">
+    <value>English（英語）</value>
+  </data>
+  <data name="Settings_TranslateJapanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Settings_TranslationNote" xml:space="preserve">
+    <value>「翻訳して入力」のショートカットでは、選んだ言語のうち左のものに翻訳します。録音中の HUD で「話した言語」と選んだ言語を切り替えられます（止めたときに選んでいる言語で入力）。翻訳は AI（「AI」タブで音声入力に選んだもの）で行います。少なくとも 1 つは選んでください。</value>
+  </data>
+  <data name="Settings_RecordingMode" xml:space="preserve">
+    <value>録音のしかた</value>
+  </data>
+  <data name="Settings_Toggle" xml:space="preserve">
+    <value>押すたびに開始／停止（トグル）</value>
+  </data>
+  <data name="Settings_PushToTalk" xml:space="preserve">
+    <value>押している間だけ録音</value>
+  </data>
+  <data name="Settings_Engine" xml:space="preserve">
+    <value>文字起こしのエンジン</value>
+  </data>
+  <data name="Settings_Engine_Windows" xml:space="preserve">
+    <value>Windows 標準の音声認識（既定）</value>
+  </data>
+  <data name="Settings_Engine_Whisper" xml:space="preserve">
+    <value>Whisper（この PC の上で動かす）</value>
+  </data>
+  <data name="Settings_Engine_Gemini" xml:space="preserve">
+    <value>Gemini（音声を Google に送る）</value>
+  </data>
+  <data name="Settings_Engine_WindowsNote" xml:space="preserve">
+    <value>Windows の音声認識（ディクテーション）で日本語を認識し、話している間に途中経過を出します。Microsoft のオンライン音声認識を使うため、Windows の設定 → プライバシーとセキュリティ → 音声認識 で「オンライン音声認識」をオンにしてください。マイクは Windows の既定のマイクを使います（下の選択は使いません）。</value>
+  </data>
+  <data name="Settings_OpenSpeechSettings" xml:space="preserve">
+    <value>音声認識の設定を開く</value>
+  </data>
+  <data name="Settings_OpenLanguageSettings" xml:space="preserve">
+    <value>言語の設定を開く</value>
+  </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp でこの PC の上で文字起こしします（音声は外に出ません）。録音を止めてからまとめて文字起こしします。モデルを選ぶと Hugging Face からダウンロードします。大きいモデルほど精度は上がりますが、遅くなります。</value>
+  </data>
+  <data name="Settings_Model" xml:space="preserve">
+    <value>モデル</value>
+  </data>
+  <data name="Settings_Download" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="Settings_CancelDownload" xml:space="preserve">
+    <value>取り消し</value>
+  </data>
+  <data name="Settings_Engine_GeminiNote" xml:space="preserve">
+    <value>録音した音声を Google の Gemini API（AI タブで設定した Gemini の認証と、音声入力の Gemini のモデル）に送って文字起こしします。音声が Google に送られることに注意してください。録音を止めてからまとめて送ります（1 回 7 分まで）。</value>
+  </data>
+  <data name="Settings_Microphone" xml:space="preserve">
+    <value>マイク</value>
+  </data>
+  <data name="Settings_NoTarget" xml:space="preserve">
+    <value>入力できる場所がないとき</value>
+  </data>
+  <data name="Settings_NoTargetNote" xml:space="preserve">
+    <value>フォーカスが入力欄にない（デスクトップが前面にある など）か、管理者として動いているアプリが前面にあって貼り付けられないときは、結果を画面の下に表示します。表示は閉じるまで残り、「コピー」か文章を選んでコピーできます。</value>
+  </data>
+  <data name="Settings_Fallback_Keep" xml:space="preserve">
+    <value>クリップボードにも入れておく（貼りたい場所で Ctrl+V を押すだけで済む）</value>
+  </data>
+  <data name="Settings_Fallback_Restore" xml:space="preserve">
+    <value>表示だけにして、クリップボードは元のままにする（表示の「コピー」で写す）</value>
+  </data>
+  <data name="Settings_Other" xml:space="preserve">
+    <value>そのほか</value>
+  </data>
+  <data name="Settings_PlaySounds" xml:space="preserve">
+    <value>録音の開始・停止で音を鳴らす</value>
+  </data>
+  <data name="Settings_OpenLogs" xml:space="preserve">
+    <value>ログのフォルダを開く</value>
+  </data>
+  <data name="Settings_OpenSettingsFolder" xml:space="preserve">
+    <value>設定のフォルダを開く</value>
+  </data>
+  <data name="Settings_AiAndModels" xml:space="preserve">
+    <value>使う AI とモデル</value>
+  </data>
+  <data name="Settings_Ai_Dictation" xml:space="preserve">
+    <value>音声入力（整形・翻訳）</value>
+  </data>
+  <data name="Settings_Ai_Local" xml:space="preserve">
+    <value>ローカル</value>
+  </data>
+  <data name="Settings_Ai_Meeting" xml:space="preserve">
+    <value>会議（議事録）</value>
+  </data>
+  <data name="Settings_AiNote" xml:space="preserve">
+    <value>音声入力と会議で、AI とモデルを別々に選べます。Gemini は gemini-3.5-flash-lite（音声入力）と gemini-3.8-flash（議事録）、Claude は Haiku 5.5（音声入力）と Sonnet 5.5（議事録）が既定です。Claude は文章の処理だけに使い、音声の文字起こしには使いません（文字起こしのエンジンは「一般」・「会議」タブ）。</value>
+  </data>
+  <data name="Settings_LocalModels" xml:space="preserve">
+    <value>ローカルのモデル（この PC の中で動かす小型の LLM）</value>
+  </data>
+  <data name="Settings_LocalModelsNote" xml:space="preserve">
+    <value>文章はこの PC の中だけで処理し、ネットには送りません。使うモデルを先にダウンロードしてください。CPU で動かすので、整形は数秒〜十数秒、議事録は数分〜十数分かかります。</value>
+  </data>
+  <data name="Settings_Stop" xml:space="preserve">
+    <value>中止</value>
+  </data>
+  <data name="Settings_Refine" xml:space="preserve">
+    <value>AI で整形する（誤変換・フィラー・言い直し・句読点を直す）</value>
+  </data>
+  <data name="Settings_RefineNote" xml:space="preserve">
+    <value>オフにすると、認識結果に辞書の置き換えだけを当てて入力します。翻訳は AI でしかできないので、オフでも AI に送ります。</value>
+  </data>
+  <data name="Settings_RefineLanguage" xml:space="preserve">
+    <value>整形の言語</value>
+  </data>
+  <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
+    <value>話した言語</value>
+  </data>
+  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
+    <value>日本語に統一</value>
+  </data>
+  <data name="Settings_SendAppName" xml:space="preserve">
+    <value>入力先のアプリ名を AI に伝える（体裁の参考にする）</value>
+  </data>
+  <data name="Settings_GeminiAuth" xml:space="preserve">
+    <value>Gemini の認証</value>
+  </data>
+  <data name="Settings_Auth_ApiKey" xml:space="preserve">
+    <value>API キー（Google AI Studio）</value>
+  </data>
+  <data name="Settings_Auth_ServiceAccount" xml:space="preserve">
+    <value>サービスアカウント（Vertex AI）</value>
+  </data>
+  <data name="Settings_ApiKey" xml:space="preserve">
+    <value>API キー</value>
+  </data>
+  <data name="Settings_KeyJson" xml:space="preserve">
+    <value>鍵（JSON）</value>
+  </data>
+  <data name="Settings_Browse" xml:space="preserve">
+    <value>参照…</value>
+  </data>
+  <data name="Settings_Region" xml:space="preserve">
+    <value>リージョン</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Vertex AI ユーザー（roles/aiplatform.user）の権限があるサービスアカウントの鍵を選びます。鍵のファイルの場所だけを保存します（中身は写しません）。鍵のファイルはほかの人が読めない場所に置いてください。リージョンは global が既定です。</value>
+  </data>
+  <data name="Settings_ClaudeApiKey" xml:space="preserve">
+    <value>Claude の API キー</value>
+  </data>
+  <data name="Settings_TestConnection" xml:space="preserve">
+    <value>接続を試す</value>
+  </data>
+  <data name="Settings_ClaudeNote" xml:space="preserve">
+    <value>Claude Console（platform.claude.com）で作った API キーを入れます。保存したキーは画面に出しません（末尾 4 文字だけ）。「接続を試す」はモデルの情報を取るだけで、料金はかかりません。</value>
+  </data>
+  <data name="Settings_KeyProtection" xml:space="preserve">
+    <value>API キーの保護</value>
+  </data>
+  <data name="Settings_UseHello" xml:space="preserve">
+    <value>API キーを Windows Hello で守る（使うときに PIN・顔・指紋で確認する）</value>
+  </data>
+  <data name="Settings_KeyProtectionNote" xml:space="preserve">
+    <value>キーは %LOCALAPPDATA%\Hanasu\secrets.json に暗号化して置き、settings.json には入れません。既定の DPAPI は、この Windows ユーザーでしか読めませんが、同じユーザーで動くほかのアプリは確認なしに読めます。Windows Hello にすると、ほかのアプリが読もうとしても Windows Hello の確認が出ます（確認は起動してから最初に使うとき 1 回で、画面をロックするとまた求めます）。Hanasu が動いている間に同じユーザーのアプリがメモリを読むことまでは防げません。</value>
+  </data>
+  <data name="Settings_Trial" xml:space="preserve">
+    <value>試す（音声入力の AI）</value>
+  </data>
+  <data name="Settings_TrialSample" xml:space="preserve">
+    <value>えーと明日の会議なんですけど あの 資料はジェミニで作ったやつを使います</value>
+  </data>
+  <data name="Settings_TryRefine" xml:space="preserve">
+    <value>整形を試す</value>
+  </data>
+  <data name="Settings_TryEnglish" xml:space="preserve">
+    <value>英訳を試す</value>
+  </data>
+  <data name="Settings_TryJapanese" xml:space="preserve">
+    <value>和訳を試す</value>
+  </data>
+  <data name="Settings_Tab_Meetings" xml:space="preserve">
+    <value>会議</value>
+  </data>
+  <data name="Settings_MeetingStartStop" xml:space="preserve">
+    <value>記録の開始／停止</value>
+  </data>
+  <data name="Settings_HighlightMark" xml:space="preserve">
+    <value>「ここ重要」の印</value>
+  </data>
+  <data name="Settings_UseHighlightHotKey" xml:space="preserve">
+    <value>「ここ重要」のショートカットを使う（記録中だけ有効になります）</value>
+  </data>
+  <data name="Settings_Transcription" xml:space="preserve">
+    <value>文字起こし</value>
+  </data>
+  <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
+    <value>Whisper（この PC の上で動かす。既定）</value>
+  </data>
+  <data name="Settings_MeetingEngineNote" xml:space="preserve">
+    <value>記録中は音声をファイルに書くだけにして、記録を止めたあとに「自分」「相手」のチャンネルごとに時刻つきで文字起こしします。Windows 標準の音声認識は、Windows の既定のマイクからしか聞けず PC の音（相手）を渡せないため、会議では選べません。</value>
+  </data>
+  <data name="Settings_Speakers" xml:space="preserve">
+    <value>話者</value>
+  </data>
+  <data name="Settings_Diarize" xml:space="preserve">
+    <value>相手側の話者を分ける（話者1・話者2…）</value>
+  </data>
+  <data name="Settings_DiarizeNote" xml:space="preserve">
+    <value>sherpa-onnx（pyannote と 3D-Speaker のモデル）でこの PC の上で分けます。初めて使うときにモデル（約 34 MB）をダウンロードします。オフにすると、相手側は「相手」1 人にまとめます。話者名は会議ノートで付け替えられます。</value>
+  </data>
+  <data name="Settings_Minutes" xml:space="preserve">
+    <value>議事録</value>
+  </data>
+  <data name="Settings_MakeMinutes" xml:space="preserve">
+    <value>記録のあとに AI で議事録を作る</value>
+  </data>
+  <data name="Settings_MinutesNote" xml:space="preserve">
+    <value>議事録の AI とモデルは「AI」タブの「会議（議事録）」で選びます。文字起こしのテキストだけを送ります（文字起こしのエンジンが Gemini のときは、音声も Google に送ります）。議事録の型は会議ノートで選びます。</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Settings_KeepAudio" xml:space="preserve">
+    <value>処理のあとも音声ファイル（me.wav / others.wav）を残す</value>
+  </data>
+  <data name="Settings_KeepAudioNote" xml:space="preserve">
+    <value>オフにすると、文字起こしと議事録のあとで音声を消します（文字起こしに失敗したときは残します）。16 kHz・モノラルの WAV で、1 時間あたり 1 チャンネル約 115 MB です。</value>
+  </data>
+  <data name="Settings_SaveLocation" xml:space="preserve">
+    <value>保存先</value>
+  </data>
+  <data name="Settings_Open" xml:space="preserve">
+    <value>開く</value>
+  </data>
+  <data name="Settings_MeetingsFolderNote" xml:space="preserve">
+    <value>会議ごとに「日時」のフォルダを作り、meeting.json（Mac 版と同じ形）・transcript.md・minutes.md・notes.md と音声を置きます。</value>
+  </data>
+  <data name="Settings_ConsentNote" xml:space="preserve">
+    <value>録音するときは、相手の同意を得てください。イヤホンを使うと、相手の声がマイクに回り込みにくくなります。</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>履歴</value>
+  </data>
+  <data name="Settings_DictationHistory" xml:space="preserve">
+    <value>音声入力の履歴</value>
+  </data>
+  <data name="Settings_SaveHistory" xml:space="preserve">
+    <value>履歴をファイルに保存する</value>
+  </data>
+  <data name="Settings_HistoryNote" xml:space="preserve">
+    <value>音声入力の結果と文字起こしの原文を残し、「履歴を開く」で探してコピーできます。オフにすると、新しい結果はファイルに書かず、タスクトレイの「最近の結果」用に直近 10 件だけをメモリに置きます（保存済みの履歴は消しません）。</value>
+  </data>
+  <data name="Settings_KeepDays" xml:space="preserve">
+    <value>残す日数</value>
+  </data>
+  <data name="Settings_KeepCount" xml:space="preserve">
+    <value>残す件数</value>
+  </data>
+  <data name="Settings_KeepNote" xml:space="preserve">
+    <value>日数と件数の両方を満たすものだけを残し、古いものから消します（追加したとき・起動したとき・ここを変えたとき）。既定は 30 日・1000 件です。</value>
+  </data>
+  <data name="Settings_OpenHistory" xml:space="preserve">
+    <value>履歴を開く…</value>
+  </data>
+  <data name="Settings_DeleteAllHistory" xml:space="preserve">
+    <value>履歴をすべて削除…</value>
+  </data>
+  <data name="Settings_Tab_Dictionary" xml:space="preserve">
+    <value>辞書・ルール</value>
+  </data>
+  <data name="Settings_UserDictionary" xml:space="preserve">
+    <value>ユーザー辞書</value>
+  </data>
+  <data name="Settings_TryReplace" xml:space="preserve">
+    <value>置き換えを試す</value>
+  </data>
+  <data name="Settings_ExtraRules" xml:space="preserve">
+    <value>追加の整形ルール</value>
+  </data>
+  <data name="Settings_ExtraRulesNote" xml:space="preserve">
+    <value>整形のときに AI（Gemini・Claude）に渡すルール（例: です・ます調に統一）。英訳では使いません（和訳では使います）。</value>
+  </data>
+  <data name="Settings_DictionaryHelp" xml:space="preserve">
+    <value>1 行に 1 つ。語だけ書くと、AI にその表記を伝えます。「読み =&gt; 表記」と書くと、認識結果のその読みを表記に置き換えます（例: ストックマーク =&gt; Stockmark、左は「,」で区切って複数書ける）。「#」で始まる行はメモです。</value>
+  </data>
+  <data name="Settings_EntryCount" xml:space="preserve">
+    <value>{0} 件</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>保存しました</value>
+  </data>
+  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
+    <value>ほかのショートカット（音声入力・翻訳・会議）と同じです</value>
+  </data>
+  <data name="Settings_MicNote_Windows" xml:space="preserve">
+    <value>Windows 標準のエンジンは、Windows の既定のマイクを使います（Windows の設定 → システム → サウンド で変えられます）。</value>
+  </data>
+  <data name="Settings_MicNote_Selected" xml:space="preserve">
+    <value>Whisper と Gemini は、ここで選んだマイクで録音します（16 kHz・モノラルに変換）。</value>
+  </data>
+  <data name="Settings_HistoryStatus" xml:space="preserve">
+    <value>今の履歴: {0} 件（保存先: {1}）</value>
+  </data>
+  <data name="Settings_ConfirmDeleteWhisper" xml:space="preserve">
+    <value>Whisper のモデル {0}（{1}）を削除しますか？</value>
+  </data>
+  <data name="Settings_Downloading" xml:space="preserve">
+    <value>ダウンロード中… {0}</value>
+  </data>
+  <data name="Settings_Downloaded" xml:space="preserve">
+    <value>ダウンロード済み</value>
+  </data>
+  <data name="Settings_DownloadFailed" xml:space="preserve">
+    <value>失敗しました: {0}</value>
+  </data>
+  <data name="Settings_NotDownloaded" xml:space="preserve">
+    <value>まだダウンロードしていません</value>
+  </data>
+  <data name="Settings_ConfirmDeleteLocal" xml:space="preserve">
+    <value>ローカルのモデル {0}（{1}）を削除しますか？</value>
+  </data>
+  <data name="Settings_MinutesAiNote" xml:space="preserve">
+    <value>議事録は {0}（{1}）で作ります。</value>
+  </data>
+  <data name="Settings_Missing_LocalModel" xml:space="preserve">
+    <value>ローカルのモデル「{0}」</value>
+  </data>
+  <data name="Settings_Missing_GeminiCredentials" xml:space="preserve">
+    <value>Gemini の認証情報</value>
+  </data>
+  <data name="Settings_MissingNote" xml:space="preserve">
+    <value>{0}がまだありません（下で設定・ダウンロードします）。</value>
+  </data>
+  <data name="Settings_EnterApiKey" xml:space="preserve">
+    <value>API キーを入力してください</value>
+  </data>
+  <data name="Settings_ClaudeKeyPrefix" xml:space="preserve">
+    <value>Claude の API キーは「sk-ant-」で始まります。入力を確かめてください</value>
+  </data>
+  <data name="Settings_ClaudeConnecting" xml:space="preserve">
+    <value>Claude API に接続しています…</value>
+  </data>
+  <data name="Settings_ClaudeConnectedUnsaved" xml:space="preserve">
+    <value>このキーで接続できました（まだ保存していません）。 {0} を使えます。</value>
+  </data>
+  <data name="Settings_ClaudeConnected" xml:space="preserve">
+    <value>接続できました。 {0} を使えます。</value>
+  </data>
+  <data name="Settings_Hello_On" xml:space="preserve">
+    <value>Windows Hello で守っています。</value>
+  </data>
+  <data name="Settings_Hello_Off" xml:space="preserve">
+    <value>今は DPAPI で守っています。</value>
+  </data>
+  <data name="Settings_Hello_Unavailable" xml:space="preserve">
+    <value>この PC では Windows Hello が設定されていないため、選べません（Windows の設定 → アカウント → サインイン オプション）。</value>
+  </data>
+  <data name="Settings_Hello_Enabling" xml:space="preserve">
+    <value>Windows Hello の確認を求めています（確かめのため 2 回出ます）…</value>
+  </data>
+  <data name="Settings_Hello_Disabling" xml:space="preserve">
+    <value>Windows Hello の確認を求めています（DPAPI に戻すため、いったん読みます）…</value>
+  </data>
+  <data name="Settings_Hello_SwitchFailed" xml:space="preserve">
+    <value>切り替えられませんでした: {0}</value>
+  </data>
+  <data name="Settings_ServiceAccountFilter" xml:space="preserve">
+    <value>サービスアカウントの鍵 (*.json)|*.json|すべてのファイル (*.*)|*.*</value>
+  </data>
+  <data name="Settings_ServiceAccountDialogTitle" xml:space="preserve">
+    <value>サービスアカウントの鍵（JSON）を選ぶ</value>
+  </data>
+  <data name="Settings_TrialRefining" xml:space="preserve">
+    <value>整えています…</value>
+  </data>
+  <data name="Settings_TrialTranslating" xml:space="preserve">
+    <value>翻訳しています…</value>
+  </data>
+  <data name="Settings_TrialDone" xml:space="preserve">
+    <value>{0}（{1}）で {2} 秒</value>
+  </data>
+  <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
+    <value>録音した会議の音声を 5 分ごとに区切って Gemini（AI タブの Gemini の認証と、音声入力の Gemini のモデル）に送ります。音声が Google に送られることに注意してください。</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
+    <value>Whisper のモデルは「一般」タブで選んだもの（{0}）を使います。</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
+    <value> まだダウンロードしていません（「一般」タブでダウンロードしてください）。</value>
+  </data>
+  <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
+    <value>会議の保存先を選ぶ</value>
+  </data>
+  <data name="Settings_DictionaryLineIssue" xml:space="preserve">
+    <value>{0} 行目: {1}</value>
+  </data>
+  <data name="Settings_NoReplacements" xml:space="preserve">
+    <value>置き換えはありません</value>
+  </data>
+  <data name="Settings_ReplacementResult" xml:space="preserve">
+    <value>→ {0}（{1}）</value>
+  </data>
+  <data name="Settings_TrialAppName" xml:space="preserve">
+    <value>Hanasu の設定画面</value>
+  </data>
+  <data name="Mic_UnsupportedFormat" xml:space="preserve">
+    <value>対応していない録音の形式です（{0}）</value>
+  </data>
+</root>

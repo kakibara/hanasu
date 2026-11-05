@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using Hanasu.Core.Settings;
 using Hanasu.Windows.Services;
 
 namespace Hanasu.Windows;
@@ -16,12 +17,21 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        // 要件: REQ-COM-060
+        // 表示の言語を、ウインドウ・メニュー・知らせを作る前に決める（Windows の表示の言語が 17 言語のどれでもなければ英語）
+        var culture = UiLanguage.Apply();
+        if (culture.TextInfo.IsRightToLeft)
+        {
+            // アラビア語などは、ウインドウを右から左に並べる
+            EventManager.RegisterClassHandler(typeof(Window), FrameworkElement.LoadedEvent,
+                new RoutedEventHandler((sender, _) => ((Window)sender).FlowDirection = FlowDirection.RightToLeft));
+        }
         base.OnStartup(e);
         // 2 つ目を起動したら、知らせて終わる（ホットキーを取り合わないため）
         singleInstance = new Mutex(initiallyOwned: true, @"Local\Hanasu.Windows.SingleInstance", out var createdNew);
         if (!createdNew)
         {
-            MessageBox.Show("Hanasu はすでに起動しています。タスクトレイのアイコンから使えます。", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Strings.App_AlreadyRunning, "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
             Shutdown();
             return;
         }

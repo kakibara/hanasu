@@ -88,12 +88,12 @@ public partial class MeetingWindow : Window
     {
         var status = m.Status switch
         {
-            MeetingStatus.Recording => "● 記録中",
-            MeetingStatus.Processing => "処理中",
-            MeetingStatus.Failed => "失敗",
-            _ => m.ErrorMessage is null ? "" : "注意あり",
+            MeetingStatus.Recording => Strings.Meeting_Recording,
+            MeetingStatus.Processing => Strings.Meeting_Status_Processing,
+            MeetingStatus.Failed => Strings.Meeting_Status_Failed,
+            _ => m.ErrorMessage is null ? "" : Strings.Meeting_Status_Warning,
         };
-        return $"{Meeting.FormatDate(m.StartedAt)}・{Meeting.Clock(m.Duration)}{(status.Length > 0 ? "・" + status : "")}";
+        return $"{Meeting.FormatDate(m.StartedAt)}{Strings.Separator}{Meeting.Clock(m.Duration)}{(status.Length > 0 ? Strings.Separator + status : "")}";
     }
 
     private void OnMeetingSelected(object sender, SelectionChangedEventArgs e)
@@ -114,19 +114,20 @@ public partial class MeetingWindow : Window
         if (m is null) return;
         loading = true;
         TitleBox.Text = m.Title;
-        MeetingInfo.Text = $"{Meeting.FormatDate(m.StartedAt)}・{Meeting.Clock(m.Duration)}・保存先: {Path.Combine(meetings.Store(host.Settings.Current).BaseDirectory, m.Id)}";
+        MeetingInfo.Text = $"{Meeting.FormatDate(m.StartedAt)}{Strings.Separator}{Meeting.Clock(m.Duration)}{Strings.Separator}"
+            + string.Format(Strings.Meeting_SavedIn, Path.Combine(meetings.Store(host.Settings.Current).BaseDirectory, m.Id));
         TemplateCombo.SelectedItem = TemplateCombo.Items.OfType<ComboBoxItem>().First(i => (MinutesTemplate)i.Tag == m.Template);
         loading = false;
         ErrorText.Text = m.ErrorMessage ?? "";
         ErrorText.Visibility = m.ErrorMessage is null ? Visibility.Collapsed : Visibility.Visible;
         MinutesBox.Text = m.Minutes ?? (m.Status switch
         {
-            MeetingStatus.Recording => "記録を止めると、文字起こしのあとに議事録を作ります。",
-            MeetingStatus.Processing => "処理中です…",
-            _ => "議事録はまだありません。「議事録を作り直す」で作れます（設定 → AI の「会議」の AI の設定が要ります）。",
+            MeetingStatus.Recording => Strings.Meeting_MinutesAfterRecording,
+            MeetingStatus.Processing => Strings.Meeting_Processing,
+            _ => Strings.Meeting_NoMinutesYet,
         });
         TranscriptBox.Text = m.Utterances.Count == 0
-            ? (IsLive(m) ? "文字起こしは、記録を止めたあとに行います。" : "文字起こしはありません。")
+            ? (IsLive(m) ? Strings.Meeting_TranscriptAfterRecording : Strings.Meeting_NoTranscriptYet)
             : m.TranscriptMarkdown();
         if (!NotesBox.IsKeyboardFocused) NotesBox.Text = m.NotesText;
         HighlightsBox.Text = m.HighlightContextText();
@@ -137,7 +138,7 @@ public partial class MeetingWindow : Window
         RecordingPanel.Visibility = live && meetings.State == MeetingState.Recording ? Visibility.Visible : Visibility.Collapsed;
         RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = !busy && m.Utterances.Count > 0;
         DeleteButton.IsEnabled = !busy && meetings.CanDelete(m);
-        RecordingNote.Text = $"文字起こしは、記録を止めたあとに {(host.Settings.Current.MeetingEngine == TranscriptionEngine.Gemini ? "Gemini" : "Whisper")} で行います（会議中の PC の負担を減らすため）。";
+        RecordingNote.Text = string.Format(Strings.Meeting_RecordingNote, host.Settings.Current.MeetingEngine == TranscriptionEngine.Gemini ? "Gemini" : "Whisper");
         UpdateLiveNotes();
     }
 
@@ -157,7 +158,7 @@ public partial class MeetingWindow : Window
                 Width = 120,
                 Padding = new Thickness(4, 2, 4, 2),
                 Text = m.DisplayName(speaker),
-                ToolTip = inferred ? $"{defaultName} の名前（会話から推測しました。違っていたら直してください）" : $"{defaultName} の名前",
+                ToolTip = inferred ? string.Format(Strings.Meeting_SpeakerName_Inferred_Tip, defaultName) : string.Format(Strings.Meeting_SpeakerName_Tip, defaultName),
             };
             box.LostFocus += (_, _) => RenameSpeaker(m, speaker, box.Text.Trim(), defaultName);
             box.KeyDown += (_, e) =>
@@ -169,7 +170,7 @@ public partial class MeetingWindow : Window
             panel.Children.Add(box);
             if (inferred)
             {
-                panel.Children.Add(new TextBlock { Text = "推測", Foreground = System.Windows.Media.Brushes.DarkOrange, FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 0, 0) });
+                panel.Children.Add(new TextBlock { Text = Strings.Meeting_Inferred, Foreground = System.Windows.Media.Brushes.DarkOrange, FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 0, 0) });
             }
             SpeakersPanel.Children.Add(panel);
         }
@@ -178,7 +179,7 @@ public partial class MeetingWindow : Window
     private void RenameSpeaker(Meeting m, string speaker, string name, string defaultName)
     {
         if (!m.RenameSpeaker(speaker, name == defaultName ? "" : name)) return;
-        SaveSelected(m, "話者名を保存しました");
+        SaveSelected(m, Strings.Meeting_SpeakerNamesSaved);
         TranscriptBox.Text = m.TranscriptMarkdown();
         HighlightsBox.Text = m.HighlightContextText();
         // 推測の印を外したので、欄を作り直す
@@ -202,7 +203,7 @@ public partial class MeetingWindow : Window
         if (title != TitleBox.Text) TitleBox.Text = title;
         if (title == m.Title) return;
         m.Title = title;
-        SaveSelected(m, "題名を保存しました");
+        SaveSelected(m, Strings.Meeting_TitleSaved);
     }
 
     private void OnTitleKeyDown(object sender, KeyEventArgs e)
@@ -231,7 +232,7 @@ public partial class MeetingWindow : Window
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            ActionStatus.Text = $"保存できませんでした: {ex.Message}";
+            ActionStatus.Text = string.Format(Strings.Meeting_SaveFailed, ex.Message);
         }
     }
 
@@ -245,7 +246,7 @@ public partial class MeetingWindow : Window
     private void OnTemplateChanged(object sender, SelectionChangedEventArgs e)
     {
         if (loading || selected is not { } m || TemplateCombo.SelectedItem is not ComboBoxItem { Tag: MinutesTemplate t } || t == m.Template) return;
-        if (MessageBox.Show(this, $"議事録の型を「{t.Title()}」にして、議事録を作り直しますか？", "Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+        if (MessageBox.Show(this, string.Format(Strings.Meeting_ConfirmRegenerate, t.Title()), "Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
         {
             Show(m);
             return;
@@ -256,18 +257,18 @@ public partial class MeetingWindow : Window
     private async Task RegenerateAsync(Meeting m, MinutesTemplate? template)
     {
         RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = DeleteButton.IsEnabled = false;
-        ActionStatus.Text = $"{Core.Ai.TextAiFactory.NameOf(host.Settings.Current.MeetingAi)} で議事録を作っています…";
+        ActionStatus.Text = string.Format(Core.Properties.Strings.Meeting_MakingMinutes, Core.Ai.TextAiFactory.NameOf(host.Settings.Current.MeetingAi));
         var started = Stopwatch.StartNew();
         try
         {
             await meetings.RegenerateMinutesAsync(m, template);
-            ActionStatus.Text = $"議事録を作り直しました（{started.Elapsed.TotalSeconds:0} 秒）";
+            ActionStatus.Text = string.Format(Strings.Meeting_Regenerated, started.Elapsed.TotalSeconds.ToString("0"));
             Tabs.SelectedIndex = 0;
         }
         catch (Exception ex) when (ex is Core.Ai.TextAiException or Core.Gemini.ServiceAccountException or IOException)
         {
             // 失敗したときは、型も議事録も元のまま
-            ActionStatus.Text = $"議事録を作れませんでした: {ex.Message}";
+            ActionStatus.Text = string.Format(Core.Properties.Strings.Meeting_MinutesFailed, ex.Message);
         }
         finally
         {
@@ -278,25 +279,25 @@ public partial class MeetingWindow : Window
     private void OnCopyClick(object sender, RoutedEventArgs e)
     {
         if (selected is not { } m) return;
-        var (text, label) = Tabs.SelectedIndex switch
+        var (text, empty, copied) = Tabs.SelectedIndex switch
         {
-            1 => (m.TranscriptMarkdown(), "文字起こし"),
-            2 => (m.NotesMarkdown(), "メモ"),
-            _ => (m.Minutes ?? "", "議事録"),
+            1 => (m.TranscriptMarkdown(), Strings.Meeting_NoTranscript, Strings.Meeting_CopiedTranscript),
+            2 => (m.NotesMarkdown(), Strings.Meeting_NoNotes, Strings.Meeting_CopiedNotes),
+            _ => (m.Minutes ?? "", Strings.Meeting_NoMinutes, Strings.Meeting_CopiedMinutes),
         };
         if (text.Length == 0)
         {
-            ActionStatus.Text = $"{label}がありません";
+            ActionStatus.Text = empty;
             return;
         }
         try
         {
             Clipboard.SetText(text);
-            ActionStatus.Text = $"{label}を Markdown でコピーしました";
+            ActionStatus.Text = copied;
         }
         catch (System.Runtime.InteropServices.ExternalException ex)
         {
-            ActionStatus.Text = $"コピーできませんでした: {ex.Message}";
+            ActionStatus.Text = string.Format(Strings.CopyFailed, ex.Message);
         }
     }
 
@@ -333,8 +334,8 @@ public partial class MeetingWindow : Window
         if (MeetingList.SelectedItem is not MeetingRow row || !CanDelete(row.Meeting)) return;
         var m = row.Meeting;
         if (MessageBox.Show(this,
-                $"「{m.Title}」を削除しますか？\n\n議事録・文字起こし・メモ・音声をまとめてごみ箱に移します。ごみ箱から元に戻せます。",
-                "会議の削除 — Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK)
+                string.Format(Strings.Meeting_ConfirmDelete, m.Title),
+                Strings.Meeting_ConfirmDelete_Title, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK)
         {
             return;
         }
@@ -347,7 +348,7 @@ public partial class MeetingWindow : Window
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException or OperationCanceledException)
         {
-            MessageBox.Show(this, $"削除できませんでした: {ex.Message}", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, string.Format(Strings.DeleteFailed, ex.Message), "Hanasu", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
         var rest = rows.Where(r => r.Meeting.Id != m.Id).ToList();
@@ -355,7 +356,7 @@ public partial class MeetingWindow : Window
         selected = null;
         ReloadList(next?.Id);
         if (next is null) Show(null);
-        ActionStatus.Text = $"「{m.Title}」をごみ箱に移しました";
+        ActionStatus.Text = string.Format(Strings.Meeting_MovedToRecycleBin, m.Title);
     }
 
     // MARK: - メモ（記録のあと）
@@ -369,12 +370,12 @@ public partial class MeetingWindow : Window
         if (selected is not { } m) return;
         if (IsLive(m))
         {
-            ActionStatus.Text = "記録中は、上のメモ欄から足してください（このタブでの編集は記録のあとにできます）";
+            ActionStatus.Text = Strings.Meeting_NotesWhileRecording;
             return;
         }
         var notes = MeetingNote.Parse(NotesBox.Text);
         m.Notes = notes.Count == 0 ? null : notes;
-        SaveSelected(m, "メモを保存しました");
+        SaveSelected(m, Strings.Meeting_NotesSaved);
         if (regenerate) _ = RegenerateAsync(m, null);
         else Show(m);
     }
@@ -427,7 +428,7 @@ public partial class MeetingWindow : Window
         if (meetings.UndoableHighlight is { Time: { } time })
         {
             var remaining = (int)Math.Ceiling(Meeting.HighlightUndoSeconds - (meetings.ElapsedSeconds - time));
-            UndoHighlightButton.Content = $"★ を取り消す（あと {Math.Max(1, remaining)} 秒）";
+            UndoHighlightButton.Content = string.Format(Strings.Meeting_UndoHighlight, Math.Max(1, remaining));
             UndoHighlightButton.Visibility = Visibility.Visible;
         }
         else
@@ -474,16 +475,16 @@ public partial class MeetingWindow : Window
         LiveBox.Visibility = state is MeetingState.Recording or MeetingState.Processing or MeetingState.Starting ? Visibility.Visible : Visibility.Collapsed;
         LiveTitle.Text = state switch
         {
-            MeetingState.Starting => "記録を始めています…",
-            MeetingState.Processing => "記録のあとの処理中",
-            _ => "● 記録中",
+            MeetingState.Starting => Strings.Meeting_Starting,
+            MeetingState.Processing => Strings.Meeting_PostProcessing,
+            _ => Strings.Meeting_Recording,
         };
         StopButton.Visibility = state == MeetingState.Recording ? Visibility.Visible : Visibility.Collapsed;
-        LiveProgress.Text = state == MeetingState.Processing ? meetings.ProgressMessage ?? "" : $"{host.Settings.Current.MeetingHotKey.DisplayString} でも止められます";
+        LiveProgress.Text = state == MeetingState.Processing ? meetings.ProgressMessage ?? "" : string.Format(Strings.Meeting_StopHint, host.Settings.Current.MeetingHotKey.DisplayString);
         StartButton.IsEnabled = state == MeetingState.Idle;
         MicCombo.IsEnabled = OutputCombo.IsEnabled = NextTemplateCombo.IsEnabled = CustomPromptBox.IsEnabled = state == MeetingState.Idle;
         StartNote.Text = state == MeetingState.Idle
-            ? $"{host.Settings.Current.MeetingHotKey.DisplayString} でも始められます。録音することを相手に伝えてから始めてください。"
+            ? string.Format(Strings.Meeting_StartHint, host.Settings.Current.MeetingHotKey.DisplayString)
             : "";
         if (state == MeetingState.Recording) timer.Start();
         else timer.Stop();
@@ -497,16 +498,16 @@ public partial class MeetingWindow : Window
     private void LoadDevices()
     {
         var s = host.Settings.Current;
-        var mics = new List<MicrophoneInfo> { new("", "Windows の既定のマイク") };
+        var mics = new List<MicrophoneInfo> { new("", Strings.Device_DefaultMic) };
         mics.AddRange(WasapiRecorder.ListMicrophones());
-        if (s.MeetingMicrophoneDeviceId.Length > 0 && mics.All(m => m.Id != s.MeetingMicrophoneDeviceId)) mics.Add(new(s.MeetingMicrophoneDeviceId, "（前に選んだマイク・今はつながっていません）"));
+        if (s.MeetingMicrophoneDeviceId.Length > 0 && mics.All(m => m.Id != s.MeetingMicrophoneDeviceId)) mics.Add(new(s.MeetingMicrophoneDeviceId, Strings.Device_MissingMic));
         MicCombo.ItemsSource = mics;
         MicCombo.DisplayMemberPath = nameof(MicrophoneInfo.Name);
         MicCombo.SelectedItem = mics.First(m => m.Id == s.MeetingMicrophoneDeviceId);
 
-        var outputs = new List<OutputDeviceInfo> { new("", "Windows の既定の出力") };
+        var outputs = new List<OutputDeviceInfo> { new("", Strings.Device_DefaultOutput) };
         outputs.AddRange(MeetingChannelRecorder.ListOutputs());
-        if (s.MeetingOutputDeviceId.Length > 0 && outputs.All(o => o.Id != s.MeetingOutputDeviceId)) outputs.Add(new(s.MeetingOutputDeviceId, "（前に選んだ出力・今はつながっていません）"));
+        if (s.MeetingOutputDeviceId.Length > 0 && outputs.All(o => o.Id != s.MeetingOutputDeviceId)) outputs.Add(new(s.MeetingOutputDeviceId, Strings.Device_MissingOutput));
         OutputCombo.ItemsSource = outputs;
         OutputCombo.DisplayMemberPath = nameof(OutputDeviceInfo.Name);
         OutputCombo.SelectedItem = outputs.First(o => o.Id == s.MeetingOutputDeviceId);

@@ -30,22 +30,22 @@ public static class TextAiFactory
     public static string NameOf(TextAiProvider provider) => provider switch
     {
         TextAiProvider.Claude => "Claude",
-        TextAiProvider.Local => "ローカル",
+        TextAiProvider.Local => Strings.Ai_Local,
         _ => "Gemini",
     };
 
     /// <summary>認証情報がないときの文言</summary>
     public static string MissingCredentialsMessage(TextAiProvider provider) => provider switch
     {
-        TextAiProvider.Claude => "Claude の API キーが設定されていません（メニュー → 設定 → AI）",
-        TextAiProvider.Local => "ローカルの LLM のモデルがまだダウンロードされていません（メニュー → 設定 → AI）",
-        _ => "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません（メニュー → 設定 → AI）",
+        TextAiProvider.Claude => Strings.Claude_MissingCredentials,
+        TextAiProvider.Local => Strings.Ai_LocalModelMissing,
+        _ => Strings.Ai_GeminiMissingCredentials,
     };
 
-    /// <summary>使える状態でないときの理由（「〜ため、整形せずに入力しました」の前半）</summary>
+    /// <summary>使える状態でないときの理由（「〜ため、整形せずに入力しました」の前半。Dictation_NoAi_* などの {0} に入れる）</summary>
     public static string NotReadyBecause(TextAiProvider provider) => provider == TextAiProvider.Local
-        ? "ローカルの LLM のモデルがまだダウンロードされていないため"
-        : $"{NameOf(provider)} の認証情報が未設定のため";
+        ? Strings.Ai_NotReady_LocalModel
+        : string.Format(Strings.Ai_NotReady_Credentials, NameOf(provider));
 
     /// <summary>ローカルのクライアント（モデルがまだダウンロードされていなければ null）</summary>
     public static LocalLlmClient? CreateLocal(AppSettings settings, TextAiUse use, TimeSpan timeout, LocalLlmServer? server = null)

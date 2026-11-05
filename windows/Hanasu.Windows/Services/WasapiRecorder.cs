@@ -57,7 +57,7 @@ internal sealed class WasapiRecorder : IAudioRecorder
         }
         catch (System.Runtime.InteropServices.COMException e)
         {
-            throw new TranscriptionException("マイクが見つかりません。マイクがつながっているか、Windows の設定 → システム → サウンド で確かめてください。",
+            throw new TranscriptionException(Strings.Mic_NotFound,
                 "ms-settings:sound", e);
         }
 
@@ -81,10 +81,10 @@ internal sealed class WasapiRecorder : IAudioRecorder
             if (e is UnauthorizedAccessException || (uint)e.HResult == 0x80070005)
             {
                 throw new TranscriptionException(
-                    "マイクの使用が許可されていません。Windows の設定 → プライバシーとセキュリティ → マイク で「デスクトップ アプリがマイクにアクセスできるようにする」をオンにしてください。",
+                    Strings.Mic_AccessDenied,
                     "ms-settings:privacy-microphone", e);
             }
-            throw new TranscriptionException($"マイクで録音を始められませんでした: {e.Message}", inner: e);
+            throw new TranscriptionException(string.Format(Strings.Mic_StartFailed, e.Message), inner: e);
         }
         return Task.CompletedTask;
     }
@@ -168,7 +168,7 @@ internal sealed class WasapiRecorder : IAudioRecorder
             16 => SampleConversion.Encoding.Pcm16,
             24 => SampleConversion.Encoding.Pcm24,
             32 => SampleConversion.Encoding.Pcm32,
-            _ => throw new ArgumentException($"対応していない録音の形式です（{format}）"),
+            _ => throw new ArgumentException(string.Format(Strings.Mic_UnsupportedFormat, format)),
         };
     }
 }

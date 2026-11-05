@@ -1,4 +1,5 @@
 using Hanasu.Core.Meetings;
+using Hanasu.Core.Properties;
 using SherpaOnnx;
 
 namespace Hanasu.Diarization;
@@ -61,7 +62,7 @@ public sealed class DiarizationModels
                     var sum = done + received;
                     if (sum - lastReport <= 2_000_000) return;
                     lastReport = sum;
-                    progress?.Report($"話者分離のモデルをダウンロードしています…（{sum / 1_000_000} / {total / 1_000_000} MB）");
+                    progress?.Report(string.Format(Strings.Diarization_Downloading, sum / 1_000_000, total / 1_000_000));
                 }, cancellationToken).ConfigureAwait(false);
                 done += model.Bytes;
             }
@@ -98,7 +99,7 @@ public sealed class SherpaSpeakerDiarizer : ISpeakerDiarizer
         CancellationToken cancellationToken = default)
     {
         if (!models.IsReady) await models.EnsureDownloadedAsync(progress, cancellationToken).ConfigureAwait(false);
-        progress?.Report("相手側の話者を分けています…");
+        progress?.Report(Strings.Meeting_Diarizing);
         return await Task.Run(() => Diarize(samples, cancellationToken), cancellationToken).ConfigureAwait(false);
     }
 
@@ -116,7 +117,7 @@ public sealed class SherpaSpeakerDiarizer : ISpeakerDiarizer
         using var diarizer = new OfflineSpeakerDiarization(config);
         if (diarizer.SampleRate != Core.Audio.AudioFormat.SampleRate)
         {
-            throw new InvalidOperationException($"話者分離のモデルの周波数が想定と違います（{diarizer.SampleRate} Hz）");
+            throw new InvalidOperationException(string.Format(Strings.Diarization_SampleRateMismatch, diarizer.SampleRate));
         }
         cancellationToken.ThrowIfCancellationRequested();
         var segments = diarizer.Process(samples);

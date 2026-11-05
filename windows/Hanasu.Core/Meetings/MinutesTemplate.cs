@@ -42,23 +42,23 @@ public static class MinutesTemplates
 
     public static string Title(this MinutesTemplate t) => t switch
     {
-        MinutesTemplate.Regular => "定例",
-        MinutesTemplate.OneOnOne => "1on1",
-        MinutesTemplate.Sales => "商談",
-        MinutesTemplate.Brainstorm => "ブレスト",
-        MinutesTemplate.Custom => "カスタム",
-        _ => "自動",
+        MinutesTemplate.Regular => Strings.Template_Regular,
+        MinutesTemplate.OneOnOne => Strings.Template_OneOnOne,
+        MinutesTemplate.Sales => Strings.Template_Sales,
+        MinutesTemplate.Brainstorm => Strings.Template_Brainstorm,
+        MinutesTemplate.Custom => Strings.Template_Custom,
+        _ => Strings.Template_Auto,
     };
 
     /// <summary>選ぶときに出す短い説明</summary>
     public static string Summary(this MinutesTemplate t) => t switch
     {
-        MinutesTemplate.Regular => "進捗・報告・課題・決定事項・アクションアイテム",
-        MinutesTemplate.OneOnOne => "近況・相談・フィードバック・合意・アクションアイテム",
-        MinutesTemplate.Sales => "顧客の課題・提案内容・反応・懸念・次のアクション",
-        MinutesTemplate.Brainstorm => "出たアイデア・有望な案・論点・次のステップ",
-        MinutesTemplate.Custom => "自分で書いた指示に従う",
-        _ => "概要・話し合った内容・決定事項・アクションアイテム",
+        MinutesTemplate.Regular => Strings.Template_Regular_Summary,
+        MinutesTemplate.OneOnOne => Strings.Template_OneOnOne_Summary,
+        MinutesTemplate.Sales => Strings.Template_Sales_Summary,
+        MinutesTemplate.Brainstorm => Strings.Template_Brainstorm_Summary,
+        MinutesTemplate.Custom => Strings.Template_Custom_Summary,
+        _ => Strings.Template_Auto_Summary,
     };
 
     // 要件: REQ-COM-061

@@ -91,7 +91,7 @@ public sealed class MeetingStore
         for (var suffix = 2; Directory.Exists(Path.Combine(BaseDirectory, id)); suffix++) id = $"{baseId} ({suffix})";
         // Swift の .iso8601 に合わせて秒までにする（保存して読み直したときに値が変わらないように）
         var started = new DateTimeOffset(date.UtcDateTime.Ticks - date.UtcDateTime.Ticks % TimeSpan.TicksPerSecond, TimeSpan.Zero);
-        var meeting = new Meeting { Id = id, Title = $"会議 {Meeting.FormatDate(date)}", StartedAt = started };
+        var meeting = new Meeting { Id = id, Title = string.Format(Strings.Meeting_DefaultTitle, Meeting.FormatDate(date)), StartedAt = started };
         Directory.CreateDirectory(DirectoryOf(meeting));
         return meeting;
     }
@@ -148,7 +148,7 @@ public sealed class MeetingStore
         foreach (var meeting in LoadAll().Where(m => m.Status is MeetingStatus.Recording or MeetingStatus.Processing))
         {
             meeting.Status = MeetingStatus.Failed;
-            meeting.ErrorMessage = $"記録の途中でアプリが終了しました。音声ファイル（{MeAudioFile} / {OthersAudioFile}）は途中まで残っている場合があります。";
+            meeting.ErrorMessage = string.Format(Strings.Meeting_Interrupted, MeAudioFile, OthersAudioFile);
             try { Save(meeting); } catch (IOException) { }
         }
     }
