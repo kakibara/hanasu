@@ -227,6 +227,10 @@ processing 中の hotkey は無視
 - 会議の文字起こしを AI に渡すときの話者名は `Meeting.promptName`（プロンプトの言語のラベル）。議事録の見出し・「担当」「期限」もプロンプトの言語で書き、読むときは全言語の言い方を受け付ける（DEC-COM-163）。
 - 送るプロンプトは `--show-prompts [--prompt-language <言語>]` で、見本の入力からすべて組み立てて見られる（`PromptsCLI.swift`）。訳の漏れは `scripts/check-i18n.py` が見つける。手順は `.claude/skills/i18n/SKILL.md`。
 
+### 4.3.0.1 表示の言語（UI の文字列）
+
+利用者に見える文字列は `tr("日本語の原文")` で引く（`Sources/Hanasu/L10n.swift`）。訳は `Sources/Hanasu/Resources/Localizable.xcstrings` にあり、`L10n.load` が起動後に一度だけ JSON として読む（`xcstringstool` を使わない。DEC-COM-165）。表示の言語は `UILanguage.current`（システムの優先する言語のうち、対応している最初の言語。なければ英語。DEC-COM-166）で、プロンプトの言語とは別。.app は `CFBundleLocalizations` に 17 言語を並べ、`build-app.sh` が `<言語>.lproj/InfoPlist.strings`（権限の説明）を作る。カタログのキーは `scripts/i18n-strings.py sync` でコードにそろえる。
+
 ### 4.3.1 翻訳して入力（英訳・和訳）
 
 もう 1 つのショートカット（初期値 `⌥⇧ Space`。設定では「翻訳して入力」）で録音を始めると、止めたときに整形の代わりに翻訳して入力する。止めるのはどちらのショートカットでもよい。

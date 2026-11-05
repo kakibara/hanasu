@@ -8,10 +8,10 @@ import os
 enum UILanguage {
     nonisolated(unsafe) static var override: PromptLanguage?
 
-    static let current: PromptLanguage = {
-        if let override { return override }
-        return resolve(Locale.preferredLanguages)
-    }()
+    /// CLI の --ui-language か self-test が決めた言語。なければシステムの言語から決めたもの
+    static var current: PromptLanguage { override ?? system }
+
+    private static let system: PromptLanguage = resolve(Locale.preferredLanguages)
 
     /// 優先する言語の並びから、対応している最初の言語を選ぶ（なければ英語）
     static func resolve(_ preferred: [String]) -> PromptLanguage {

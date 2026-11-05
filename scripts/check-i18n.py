@@ -11,6 +11,11 @@
   - 埋める場所（${name}）・区切りのタグ（<transcript> など）・JSON のキー（"owner": など）が、日本語と同じ
   - 話者のラベル（speaker.*）や「なし」（minutes.result.none）が、同じ言語の議事録の指示の中で使われている
 - 英語と同じ文面のままの値（訳し忘れの疑い）は、報告だけする
+- Mac の UI の文字列（Sources/Hanasu/Resources/Localizable.xcstrings。scripts/i18n-strings.py）
+  - Swift の tr("…") のキーとカタログのキーが一致している（足りない・余っているキーがない）
+  - すべてのキーに、日本語以外の 16 言語の訳があり、%@ などの数が同じ
+  - アプリのソース（開発用の CLI・自己テストを除く）に、tr() で包んでいない日本語の文字列がない
+    （ログ・print、言語の決まりに使う語（行に // skip-tr）、比較・正規表現の文字列は除く）
 
 python3 の標準ライブラリだけを使う。
 """
@@ -119,14 +124,78 @@ def check_prompts(errors: list[str], warnings: list[str], counts: dict[str, int]
                         errors.append(f"{rel}: {key} に、この言語のラベル「{needle}」が出てこない（speaker.* / minutes.result.none と合わせる）")
 
 
+def load_strings_tool():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("i18n_strings", ROOT / "scripts/i18n-strings.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+JA_TEXT = re.compile(r"[ぁ-んァ-ヶ一-龯ー々]")
+STRING_LITERAL = re.compile(r'"(?:[^"\\\n]|\\.)*"')
+# 包まなくてよい行（ログ・標準出力・開発者向けのエラー）と、文字列の前に来ると包まなくてよいもの（比較・照合・正規表現）
+LEAK_SKIP_LINE = re.compile(r"appLog\.|logger\.|\bprint\(|NSLog\(|os_log|fatalError\(|assertionFailure\(|preconditionFailure\(|precondition\(|// skip-tr|FileHandle\.standardError|^\s*//|^\s*///")
+LEAK_SKIP_BEFORE = re.compile(r"(\btr\(|case|==|!=|\.contains\(|hasPrefix\(|hasSuffix\(|range\(of:|replacingOccurrences\(of:|with:|pattern:|forKey:)\s*$")
+
+
+def check_mac_strings(errors: list[str], warnings: list[str], counts: dict[str, int]) -> None:
+    tool = load_strings_tool()
+    if not tool.CATALOG.exists():
+        errors.append("strings: Sources/Hanasu/Resources/Localizable.xcstrings がない")
+        return
+    try:
+        keys = tool.all_keys()
+    except ValueError as e:
+        errors.append(f"strings: {e}")
+        return
+    strings = tool.load_catalog()["strings"]
+    for key in sorted(set(keys) - set(strings)):
+        errors.append(f"strings: カタログにないキー {key!r}（{keys[key][0]}）→ python3 scripts/i18n-strings.py sync で足し、訳を入れる")
+    for key in sorted(set(strings) - set(keys)):
+        errors.append(f"strings: 使っていないキー {key!r} がカタログにある → python3 scripts/i18n-strings.py sync で消す")
+    for language in LANGUAGES:
+        if language == tool.SOURCE_LANGUAGE:
+            continue
+        done = 0
+        for key in sorted(set(keys) & set(strings)):
+            value = tool.translation(strings[key], language)
+            if value is None:
+                errors.append(f"strings/{language}: 訳がない {key!r}（{keys[key][0]}）")
+                continue
+            done += 1
+            if tool.formats(key) != tool.formats(value):
+                errors.append(f"strings/{language}: %@ などが原文と合わない {key!r} → {value!r}")
+            if language not in ("zh-CN", "zh-TW") and re.search(r"[ぁ-んァ-ヶ]", value):
+                errors.append(f"strings/{language}: 訳に日本語のかなが残っている {key!r} → {value!r}")
+        counts[f"strings:{language}"] = done
+
+    # 包み忘れ（新しい機能で、UI の文字列を tr() なしで書いた）
+    for path in tool.swift_files():
+        in_multiline = False
+        for number, line in enumerate(path.read_text(encoding="utf-8").split("\n"), start=1):
+            if line.count('"""') % 2 == 1:
+                in_multiline = not in_multiline
+                if not in_multiline:
+                    continue
+            if in_multiline or LEAK_SKIP_LINE.search(line):
+                continue
+            for m in STRING_LITERAL.finditer(line):
+                if JA_TEXT.search(m.group(0)) and not LEAK_SKIP_BEFORE.search(line[:m.start()]) and "\\(" not in line[:m.start()][-3:]:
+                    errors.append(f"strings: {path.relative_to(ROOT)}:{number}: 日本語の文字列が tr() で包まれていない: {m.group(0)[:40]}"
+                                  "（UI なら tr(\"…\") にする。言語の決まりに使う語なら行末に // skip-tr）")
+
+
 def main(argv: list[str]) -> int:
     errors: list[str] = []
     warnings: list[str] = []
     counts: dict[str, int] = {}
     check_prompts(errors, warnings, counts)
+    check_mac_strings(errors, warnings, counts)
 
     if "--summary" in argv:
-        print("プロンプトのキーの数: " + ", ".join(f"{k} {v}" for k, v in counts.items()))
+        print("プロンプトのキーの数: " + ", ".join(f"{k} {v}" for k, v in counts.items() if not k.startswith("strings:")))
+        print("Mac の UI の訳の数: " + ", ".join(f"{k[8:]} {v}" for k, v in counts.items() if k.startswith("strings:")))
     for w in warnings:
         print(f"warning: {w}")
     for e in errors:

@@ -53,6 +53,16 @@ func cliRefine(_ raw: String, args: [String]) async throws {
 // 要件: REQ-COM-061
 // CLI では --prompt-language <言語>（en、zh-CN など）でプロンプトの言語を変えられる（省くと設定の文字起こしの言語）
 PromptLanguage.override = PromptLanguage.cli(CommandLine.arguments)
+// 要件: REQ-COM-060
+// --ui-language <言語> で表示の言語を変えられる（画面を PNG にする CLI の確かめ用。省くとシステムの言語）
+if let index = CommandLine.arguments.firstIndex(of: "--ui-language"), CommandLine.arguments.indices.contains(index + 1) {
+    UILanguage.override = PromptLanguage.supported(localeIdentifier: CommandLine.arguments[index + 1]) ?? .en
+}
+// 自己テストが確かめる文言は日本語のもの（--test-… / --…-test… / --…selftest）
+if CommandLine.arguments.contains(where: { $0.hasPrefix("--test-") || $0.contains("-test") || $0.hasSuffix("selftest") }) {
+    UILanguage.override = UILanguage.override ?? .ja
+    PromptLanguage.override = PromptLanguage.override ?? .ja
+}
 
 atexit { LocalLLMServer.terminateRunningServer() }
 // ローカルの LLM の確認（--local-llm-list / --local-llm-download / --local-llm-delete / --local-llm-test-fit）。LocalLLMCLI.swift

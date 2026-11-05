@@ -56,7 +56,7 @@ enum SpeakerNameInference {
         if ["自分", "相手", "不明", "なし", "null", "unknown"].contains(lowered) { return true }  // skip-tr（言語の決まりに使う語。FUT-014）
         if (Prompts.allTexts("speaker.me") + Prompts.allTexts("speaker.others") + Prompts.allTexts("minutes.result.none"))
             .contains(where: { $0.lowercased() == lowered }) { return true }
-        if name.range(of: #"^(話者|同席者)[0-9０-９]+$"#, options: .regularExpression) != nil { return true }
+        if name.range(of: #"^(話者|同席者)[0-9０-９]+$"#, options: .regularExpression) != nil { return true }  // skip-tr（ラベルの形。FUT-014）
         return (Prompts.allTexts("speaker.remote") + Prompts.allTexts("speaker.room")).contains { template in
             let pattern = "^" + NSRegularExpression.escapedPattern(for: template)
                 .replacingOccurrences(of: NSRegularExpression.escapedPattern(for: "${n}"), with: "[0-9０-９]+") + "$"

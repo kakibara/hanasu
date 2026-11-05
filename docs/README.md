@@ -157,6 +157,7 @@ enum TextInserter {
 - AI へのプロンプトは `Sources/Hanasu/Resources/Prompts/<言語>.json` に置き、Mac と Windows で同じファイルを読む（DEC-COM-160）。どの言語のプロンプトを使うかは、文字起こしの言語で決まる（DEC-COM-161）。コードには文面を書かず、キー（`Prompts.text("…")`）で読む。
 - 手順（キーの足し方・訳の入れ方・漏れの確かめ方）は [.claude/skills/i18n/SKILL.md](../.claude/skills/i18n/SKILL.md)。訳は [.claude/agents/i18n.md](../.claude/agents/i18n.md) のエージェントに任せる。
 - `python3 scripts/check-i18n.py` が、キーの漏れ・埋める場所（`${…}`）やタグの食い違いを見つける（エラーなら終了コード 1。PR ごとに `.github/workflows/spec.yml` で動く）。
+- 表示の言語はシステムの言語で決まる（REQ-COM-060）。Mac の UI の文字列は `tr("日本語の原文")` で書き、訳は `Sources/Hanasu/Resources/Localizable.xcstrings` に入れる（DEC-COM-165）。
 - 開発用の CLI の出力とログは訳さない。
 
 ## 9. 次にやること

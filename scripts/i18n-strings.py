@@ -6,6 +6,8 @@
   python3 scripts/i18n-strings.py export <言語>        その言語の訳がないキーを JSON（キー → ""）で標準出力に出す
   python3 scripts/i18n-strings.py export <言語> --all  訳のあるキーも含めて出す（キー → 今の訳）
   python3 scripts/i18n-strings.py import <言語> <JSON> JSON（キー → 訳）を取り込む
+  python3 scripts/i18n-strings.py infoplist <Resources>  .app の Contents/Resources に、言語ごとの <言語>.lproj/InfoPlist.strings を書く
+                                                       （権限を求めるときの説明。.lproj があることで AppKit も表示の言語を選べる）
 
 キーは日本語の原文（ソースの言語は ja）。補間は %@（訳では %1$@ のように順番を変えてよい）。
 python3 の標準ライブラリだけを使う。check-i18n.py もこのファイルの関数を使う。
@@ -201,6 +203,34 @@ def cmd_import(language: str, path: str) -> int:
     return 1 if problems else 0
 
 
+# Apple の .lproj の名前（中国語は書き方の名前にする）
+LPROJ = {"zh-CN": "zh-Hans", "zh-TW": "zh-Hant"}
+
+
+def strings_escape(text: str) -> str:
+    return text.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+
+
+def cmd_infoplist(resources: str) -> int:
+    catalog = load_catalog()["strings"]
+    texts = plist_texts()
+    missing = []
+    for language in LANGUAGES:
+        lines = []
+        for name, source in sorted(texts.items()):
+            value = source if language == SOURCE_LANGUAGE else translation(catalog.get(source, {}), language)
+            if value is None:
+                missing.append(f"{language}: {name}")
+                value = translation(catalog.get(source, {}), "en") or source
+            lines.append(f'"{name}" = "{strings_escape(value)}";')
+        folder = Path(resources) / f"{LPROJ.get(language, language)}.lproj"
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / "InfoPlist.strings").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    for m in missing:
+        print(f"warning: 訳がない: {m}", file=sys.stderr)
+    return 0
+
+
 def main(argv: list[str]) -> int:
     if not argv:
         print(__doc__)
@@ -211,6 +241,8 @@ def main(argv: list[str]) -> int:
         return cmd_export(argv[1], "--all" in argv)
     if argv[0] == "import" and len(argv) == 3:
         return cmd_import(argv[1], argv[2])
+    if argv[0] == "infoplist" and len(argv) == 2:
+        return cmd_infoplist(argv[1])
     print(__doc__)
     return 2
 
