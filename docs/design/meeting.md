@@ -251,6 +251,14 @@ Granola のテンプレート（1on1・商談・採用面接など）になら�
   - **あとから**: 会議ノートの「型: 〇〇」メニューで型を選び直すと、確認のあと議事録を作り直す。失敗したときは型も議事録も元のまま。
 - 選んだ型とカスタムの指示は UserDefaults（`meetingMinutesTemplate` / `meetingCustomMinutesPrompt`）に置く。設定画面には出さず、会議ノートだけで選ぶ。
 
+#### 名前付きテンプレート
+
+見出しの構成や書き方の指示に名前を付けて保存し、組み込みの型と並べて選べる（`SavedMinutesTemplates.swift`、`MinutesTemplateViews.swift`。REQ-MTG-034、DEC-MTG-071）。
+
+- 保存したものの一覧は UserDefaults の `meetingSavedMinutesTemplates`（JSON）。型の選択欄には `saved:<ID>` の形で入る。
+- 管理は選択欄の右のボタン、または会議ノートの「型」メニューの「テンプレートを管理…」から開く `MinutesTemplateManagerSheet`（追加・複製・削除・名前と指示の編集。保存できる内容なら自動で保存）。カスタムの指示のシートからも「テンプレートとして保存…」で登録できる。
+- 記録を始めるとき、会議には型「カスタム」と、そのときの指示・名前（`meeting.json` の `customMinutesPrompt` / `minutesTemplateName`）を写す。以降は既存のカスタムと同じ流れで議事録を作る。テンプレートを直す・消しても記録済みの会議は変わらない。
+
 #### アクションアイテムの取り出し
 
 あとで書き出しやリマインダーに使うため、アクションアイテムは Markdown とは別に構造化して受け取る。

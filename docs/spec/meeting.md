@@ -324,6 +324,22 @@
 - コードのタグ: 不要（やらないことの要件）
 - 確かめ方: 該当する機能がないこと
 
+### REQ-MTG-034 議事録のテンプレートに名前を付けて保存し、管理できる
+- 内容: 議事録の見出しの構成や書き方の指示に名前を付けてテンプレートとして保存し、一覧から追加・名前と指示の編集・複製・削除ができる。保存したテンプレートは、記録の前の型の選択欄と、会議ノートの「型」メニュー（作り直し）で、組み込みの型と並べて選べる。
+- 受け入れ条件:
+  - 会議ノートの型の選択欄の「管理」から、名前と指示を入れてテンプレートを追加できる。アプリを再起動しても残る。
+  - 同じ名前のテンプレートは作れない（前後の空白と大文字小文字は区別しない）。名前か指示が空のテンプレートも作れない。
+  - 保存したテンプレートを選んで記録すると、その指示で議事録ができる。会議ノートの「型: 〇〇」には、そのテンプレートの名前が出る。
+  - 会議ノートの「型」メニューから保存したテンプレートを選ぶと、確認のあと、その指示で議事録を作り直す。
+  - 保存したテンプレートを直す・消しても、すでに記録した会議の議事録や、その会議に写した指示は変わらない。
+  - 選んでいたテンプレートを消したときは、次の記録の型は「自動」になる。
+  - カスタムの指示のシートから、書いた指示をそのままテンプレートとして保存できる。
+- 出典: ユーザーの依頼（2026-11-05「MTGの議事録のテンプレートを名前付きで作成保存して管理できるようにしてください」）
+- 関係する要件: REQ-MTG-017
+- 対象: Mac
+- 実装の場所: `SavedMinutesTemplate`、`SavedMinutesTemplateStore`、`MinutesTemplateManagerSheet`、`MinutesTemplatePicker`、`MinutesTemplateMenu`、`CustomMinutesPromptSheet`、`MinutesTemplateStore.apply`
+- 確かめ方: `.build/debug/Hanasu --saved-templates-selftest`（保存・重複の拒否・複製・削除・適用・プロンプトへの反映）、`--render-minutes-ui <出力フォルダ>` の `record-panel-saved.png`・`template-manager-sheet.png`
+
 ---
 
 ## 設計判断
@@ -777,6 +793,14 @@
 - 関係する要件: REQ-MTG-013, REQ-MTG-007
 - 対象: Mac
 - 実装の場所: `MeetingWindowView`、`MeetingRow`、`MeetingDetailView`、`MeetingRecorder.regenerateMinutes`
+
+### DEC-MTG-071 保存したテンプレートは UserDefaults に JSON で置き、会議には指示を写して「カスタム」の型で作る
+- 決めたこと: 保存したテンプレート（ID・名前・指示）は、UserDefaults の `meetingSavedMinutesTemplates` に JSON の配列で置く。記録の前の選択は、既存の `meetingMinutesTemplate` に `saved:<ID>` の形で入れる。記録を始めるとき、会議には型「カスタム」・その時点の指示（`customMinutesPrompt`）・テンプレートの名前（`minutesTemplateName`）を写す。議事録の作り方は、既存のカスタムの型（DEC-MTG-060）と同じ。名前は前後の空白を取り、大文字小文字を区別せず重複を禁止する。管理のシートは、保存できる内容になったときに自動で保存し、保存できない間は理由を出して保存しない。
+- 理由: 選んだ型の保管場所と同じ UserDefaults にそろえ、共有の設定ファイルを変えずに済む（DEC-MTG-061）。会議に指示を写すので、あとでテンプレートを直したり消したりしても、その会議の作り直しや記録済みの議事録が変わらず、`meeting.json` だけで再現できる。作り方を「カスタム」と同じにしたので、プロンプトの組み立てと読み取りは変えていない。型は ID で持つので、名前を直しても選択は外れない。
+- 決めた場面: 名前付きテンプレートの依頼（2026-11-05）
+- 関係する要件: REQ-MTG-034
+- 対象: Mac
+- 実装の場所: `SavedMinutesTemplateStore`、`MinutesTemplateStore.resolve`・`apply`、`Meeting.minutesTemplateName`・`templateTitle`、`MeetingRecorder.regenerateMinutes`
 
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。
