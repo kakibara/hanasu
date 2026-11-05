@@ -211,9 +211,14 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
 - 対象のアプリ（会議アプリ 5 つ、ブラウザ 4 つ）をそれぞれ選べる。既定はすべてオン。外したアプリを保存するので、あとで対象を足したときは既定でオンになる。
 - 設定は共有の `AppSettings` を大きく変えないよう、`MeetingDetectionSettings`（UserDefaults の `meetingAutoDetect`、`meetingAutoDetectDisabledApps`）に分けた。
 
+#### 会議の名前をタイトルにする（REQ-MTG-034）
+
+記録の準備中（`MeetingRecorder.start`、状態は `.starting`）に、マイクを使っている会議アプリ（`MeetingAutoDetect.titleSourceApps`。AppDelegate が `MeetingRecorder.titleSourceApps` につなぐ）のウインドウのタイトルを `MeetingTitle.detect` で読み、取り出せた名前を `Meeting.title` にする。どの入口から始めても同じ。読めなければ今までの日時のタイトル。
+取り出す規則と、名前とみなさないもの（DEC-MTG-035）は `MeetingTitle.swift`。ブラウザは、アクティブなタブのタイトルだけが読めるので、Meet のタブが裏にあるときは取れない。
+
 #### 確認用の CLI
 
-`MeetingDetectorCLI.swift`（`--list-audio-processes`・`--watch-audio-processes`・`--simulate-meeting-detection`・提案のパネルの描き出し）。
+`MeetingDetectorCLI.swift`（`--check-meeting-title`・`--detect-meeting-title`・`--list-audio-processes`・`--watch-audio-processes`・`--simulate-meeting-detection`・提案のパネルの描き出し）。
 
 ### 4.9 会議中のメモと「ここ重要」の印（F11〜F14）
 

@@ -73,6 +73,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             .store(in: &cancellables)
         // 会議アプリがマイクを使い始めたら記録を提案する（記録はユーザーが押してから）
         meetingAutoDetect = MeetingAutoDetect(recorder: meetingRecorder) { [weak self] in self?.toggleMeeting() }
+        // 要件: REQ-MTG-034
+        meetingRecorder.titleSourceApps = { [weak self] in self?.meetingAutoDetect?.titleSourceApps ?? [] }
         controller.onHotKeyRegistrationFailed = { [weak self] combo in
             self?.showAlert(
                 "ショートカット \(combo.displayString) を登録できませんでした",
