@@ -329,6 +329,8 @@ struct MeetingDetailView: View {
     @State private var title = ""
     @FocusState private var titleFocused: Bool
     @State private var editingSpeakers = false
+    /// 「議事録を作り直す」の確かめ（今の議事録があるときだけ出す。DEC-MTG-072）
+    @State private var confirmRegenerate = false
     /// 「ここ重要」タブから「文字起こしで見る」で開いた発言
     @State private var focusedFromHighlight: UUID?
 
@@ -354,8 +356,22 @@ struct MeetingDetailView: View {
                     Spacer()
                     Button("話者名…") { editingSpeakers = true }
                         .disabled(meeting.speakers.isEmpty)
-                    Button("議事録を作り直す") { Task { await recorder.regenerateMinutes(meeting) } }
-                        .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
+                    // 設計判断: DEC-MTG-072
+                    // 今の議事録があるときだけ確かめる（置き換わるため）。まだないときは、そのまま作る
+                    Button("議事録を作り直す") {
+                        if meeting.minutes == nil {
+                            Task { await recorder.regenerateMinutes(meeting) }
+                        } else {
+                            confirmRegenerate = true
+                        }
+                    }
+                    .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
+                    .confirmationDialog("議事録を作り直しますか？", isPresented: $confirmRegenerate) {
+                        Button("作り直す") { Task { await recorder.regenerateMinutes(meeting) } }
+                        Button("キャンセル", role: .cancel) {}
+                    } message: {
+                        Text("今の議事録とアクションアイテムは置き換わります。")
+                    }
                     MeetingExportMenu(meeting: meeting, recorder: recorder, showingTranscript: tab == 1)
                     Button("Finder で表示") {
                         NSWorkspace.shared.activateFileViewerSelecting([MeetingStore.directory(for: meeting)])

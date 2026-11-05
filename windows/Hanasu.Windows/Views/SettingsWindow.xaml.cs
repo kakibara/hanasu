@@ -36,7 +36,7 @@ public partial class SettingsWindow : Window
         this.host = host;
         settings = host.Settings;
         InitializeComponent();
-        WindowFit.ClampToWorkArea(this);
+        WindowFit.FitToMouseScreen(this);
         LoadValues();
         loading = false;
 
@@ -161,12 +161,25 @@ public partial class SettingsWindow : Window
 
     // MARK: - 一般
 
+    // 設計判断: DEC-COM-018
+    /// <summary>
+    /// combo が、self 以外のショートカットと同じなら、その説明（「… は「会議の記録」のショートカットと同じです…」）。重なっていなければ null。
+    /// Mac 版の ShortcutKind.conflict と同じ考え
+    /// </summary>
+    private string? ConflictingShortcut(HotKeyCombo combo, string self)
+    {
+        var s = settings.Current;
+        var all = new (string Name, HotKeyCombo Combo)[]
+        {
+            ("音声入力", s.HotKey), ("翻訳して入力", s.TranslateHotKey), ("会議の記録", s.MeetingHotKey), ("「ここ重要」の印", s.HighlightHotKey),
+        };
+        var other = all.FirstOrDefault(x => x.Name != self && x.Combo == combo);
+        return other.Name is null ? null : $"{combo.DisplayString} は「{other.Name}」のショートカットと同じです。別のキーを選んでください。";
+    }
+
     private void SetHotKey(HotKeyCombo combo, bool translate)
     {
-        var problem = combo.Validate();
-        var current = settings.Current;
-        var others = new[] { translate ? current.HotKey : current.TranslateHotKey, current.MeetingHotKey, current.HighlightHotKey };
-        if (problem is null && others.Contains(combo)) problem = "ほかのショートカット（音声入力・翻訳・会議）と同じです";
+        var problem = combo.Validate() ?? ConflictingShortcut(combo, translate ? "翻訳して入力" : "音声入力");
         if (problem is not null)
         {
             HotKeyError.Text = problem;
@@ -344,9 +357,11 @@ public partial class SettingsWindow : Window
         WhisperDeleteButton.Visibility = state.Status == WhisperModelStatus.Downloaded ? Visibility.Visible : Visibility.Collapsed;
         WhisperProgress.Visibility = state.Status == WhisperModelStatus.Downloading ? Visibility.Visible : Visibility.Collapsed;
         WhisperProgress.Value = state.Progress;
+        // 設計判断: DEC-COM-028（大きさを先に見せる。Mac 版と同じ）
+        WhisperDownloadButton.Content = $"ダウンロード（{model.SizeLabel}）";
         WhisperStatus.Text = state.Status switch
         {
-            WhisperModelStatus.Downloading => $"ダウンロード中… {state.Progress:P0}",
+            WhisperModelStatus.Downloading => $"ダウンロード中… {state.Progress:P0}（{model.SizeLabel}）",
             WhisperModelStatus.Downloaded => "ダウンロード済み",
             WhisperModelStatus.Failed => $"失敗しました: {state.Error}",
             _ => "まだダウンロードしていません",
@@ -534,6 +549,39 @@ public partial class SettingsWindow : Window
             MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) == MessageBoxResult.OK;
 
     private void UpdateApiKeyStatus() => ApiKeyStatus.Text = host.Secrets.Describe(SecretKind.GeminiApiKey).Describe();
+
+    // 設計判断: DEC-COM-143
+    /// <summary>
+    /// Gemini の「接続を試す」（Claude の OnCheckClaude と同じ）。API キーの入力欄にキーがあればそのキーで（保存はしない）、
+    /// なければ設定の認証（保存したキーかサービスアカウント）で、音声入力の Gemini のモデルの情報を取る
+    /// </summary>
+    private async void OnCheckGemini(object sender, RoutedEventArgs e)
+    {
+        var s = settings.Current;
+        var apiKeyMode = s.AuthMode == GeminiAuthMode.ApiKey;
+        var typed = apiKeyMode ? ApiKeyBox.Password.Trim() : "";
+        var status = apiKeyMode ? ApiKeyStatus : ServiceAccountStatus;
+        var model = s.Model;
+        GeminiCheckButton.IsEnabled = GeminiCheckServiceAccountButton.IsEnabled = false;
+        status.Text = apiKeyMode ? "Gemini API に接続しています…" : "Vertex AI に接続しています…";
+        try
+        {
+            GeminiAuth auth = typed.Length > 0
+                ? new GeminiAuth.ApiKey(typed)
+                : GeminiAuthResolver.Resolve(s, host.Secrets) ?? throw GeminiException.MissingCredentials();
+            await new GeminiClient(auth).CheckAsync(model);
+            status.Text = (typed.Length > 0 ? "このキーで接続できました（まだ保存していません）。" : "接続できました。")
+                + $" {model} を使えます。{(typed.Length > 0 || !apiKeyMode ? "" : host.Secrets.Describe(SecretKind.GeminiApiKey).Describe())}";
+        }
+        catch (Exception ex) when (ex is TextAiException or ServiceAccountException or HttpRequestException or IOException)
+        {
+            status.Text = ex.Message;
+        }
+        finally
+        {
+            GeminiCheckButton.IsEnabled = GeminiCheckServiceAccountButton.IsEnabled = true;
+        }
+    }
 
     // MARK: - Claude の API キー
 
@@ -759,10 +807,7 @@ public partial class SettingsWindow : Window
 
     private void SetMeetingHotKey(HotKeyCombo combo, bool highlight)
     {
-        var problem = combo.Validate();
-        var s = settings.Current;
-        var others = new[] { s.HotKey, s.TranslateHotKey, highlight ? s.MeetingHotKey : s.HighlightHotKey };
-        if (problem is null && others.Contains(combo)) problem = "ほかのショートカット（音声入力・翻訳・会議）と同じです";
+        var problem = combo.Validate() ?? ConflictingShortcut(combo, highlight ? "「ここ重要」の印" : "会議の記録");
         if (problem is not null)
         {
             MeetingHotKeyError.Text = problem;

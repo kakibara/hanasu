@@ -52,6 +52,7 @@ struct EditModeShortcutRow: View {
             ShortcutRecorder(
                 combo: $settings.hotKey,
                 defaultCombo: .defaultEdit,
+                kind: .edit,
                 onBeginRecording: onBeginRecording,
                 onEndRecording: onEndRecording)
         }

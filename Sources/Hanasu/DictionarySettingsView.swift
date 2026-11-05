@@ -94,7 +94,7 @@ struct DictionaryEditorSection: View {
                     Group {
                         if let index = rows.firstIndex(where: { $0.id == row.id }), let issue = issues[index] {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.yellow)
+                                .foregroundStyle(.orange)  // 黄は白い背景で見えにくい（DEC-MTG-075 と同じ考え）
                                 .help(issue)
                                 .accessibilityLabel(issue)
                         } else {

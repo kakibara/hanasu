@@ -106,7 +106,7 @@
                         <!-- Whisper -->
                         <StackPanel x:Name="WhisperEnginePanel" Margin="0,6,0,0">
                             <TextBlock Style="{StaticResource Note}"
-                                       Text="whisper.cpp でこの PC の上で文字起こしします（音声は外に出ません）。録音を止めてからまとめて文字起こしします。モデルを選ぶと Hugging Face からダウンロードします。大きいモデルほど精度は上がりますが、遅くなります。" />
+                                       Text="whisper.cpp でこの PC の上で文字起こしします（音声は外に出ません）。録音を止めてからまとめて文字起こしします。エンジンかモデルを選んだ時点で、選んでいるモデル（大きさは一覧に出ています）を Hugging Face からダウンロードし始めます（「取り消し」で止められます）。大きいモデルほど精度は上がりますが、遅くなります。" />
                             <DockPanel Margin="0,6,0,0">
                                 <TextBlock Text="モデル" Width="60" VerticalAlignment="Center" />
                                 <ComboBox x:Name="WhisperModelCombo" SelectionChanged="OnWhisperModelChanged" />
@@ -241,10 +241,14 @@
                             <DockPanel>
                                 <TextBlock Text="API キー" Width="110" VerticalAlignment="Center" />
                                 <Button DockPanel.Dock="Right" Content="削除" AutomationProperties.Name="Gemini の API キーを削除" Click="OnDeleteApiKey" Margin="8,0,0,0" />
+                                <!-- 設計判断: DEC-COM-143（Claude と同じ「接続を試す」） -->
+                                <Button DockPanel.Dock="Right" x:Name="GeminiCheckButton" Content="接続を試す" AutomationProperties.Name="Gemini の接続を試す" Click="OnCheckGemini" Margin="8,0,0,0" />
                                 <Button DockPanel.Dock="Right" Content="保存" Click="OnSaveApiKey" Margin="8,0,0,0" />
                                 <PasswordBox x:Name="ApiKeyBox" Padding="4,3" />
                             </DockPanel>
                             <TextBlock x:Name="ApiKeyStatus" Style="{StaticResource Note}" Margin="110,3,0,0" />
+                            <TextBlock Style="{StaticResource Note}" Margin="110,0,0,0"
+                                       Text="「接続を試す」はモデルの情報を取るだけで、料金はかかりません。" />
                         </StackPanel>
 
                         <StackPanel x:Name="ServiceAccountPanel" Margin="0,8,0,0">
@@ -257,8 +261,12 @@
                                 <TextBlock Text="リージョン" Width="110" VerticalAlignment="Center" />
                                 <TextBox x:Name="VertexLocationBox" Width="160" HorizontalAlignment="Left" Padding="4,3" LostFocus="OnVertexLocationChanged" />
                             </DockPanel>
+                            <DockPanel Margin="110,6,0,0">
+                                <Button x:Name="GeminiCheckServiceAccountButton" DockPanel.Dock="Left" Content="接続を試す" AutomationProperties.Name="Vertex AI の接続を試す" Click="OnCheckGemini" />
+                                <TextBlock x:Name="ServiceAccountStatus" Style="{StaticResource Note}" Margin="0" VerticalAlignment="Center" />
+                            </DockPanel>
                             <TextBlock Style="{StaticResource Note}" Margin="110,3,0,0"
-                                       Text="Vertex AI ユーザー（roles/aiplatform.user）の権限があるサービスアカウントの鍵を選びます。鍵のファイルの場所だけを保存します（中身は写しません）。鍵のファイルはほかの人が読めない場所に置いてください。リージョンは global が既定です。" />
+                                       Text="Vertex AI ユーザー（roles/aiplatform.user）の権限があるサービスアカウントの鍵を選びます。鍵のファイルの場所だけを保存します（中身は写しません）。鍵のファイルはほかの人が読めない場所に置いてください。リージョンは global が既定です。「接続を試す」はモデルの情報を取るだけで、料金はかかりません。" />
                         </StackPanel>
 
                         <TextBlock Style="{StaticResource Section}" Text="Claude の API キー" />
@@ -288,7 +296,8 @@
                             <Button x:Name="TrialTranslateJapaneseButton" Content="和訳を試す" Click="OnTrialTranslateJapanese" Visibility="Collapsed" />
                             <TextBlock x:Name="TrialStatus" Style="{StaticResource Note}" VerticalAlignment="Center" />
                         </StackPanel>
-                        <TextBox x:Name="TrialOutput" IsReadOnly="True" TextWrapping="Wrap" MinHeight="56" Margin="0,6,0,0" Padding="4,3" Background="#FFF7F7F7" />
+                        <!-- 設計判断: DEC-COM-151（ハイコントラストでは OS の色。App.xaml） -->
+                        <TextBox x:Name="TrialOutput" IsReadOnly="True" TextWrapping="Wrap" MinHeight="56" Margin="0,6,0,0" Padding="4,3" Style="{StaticResource ReadOnlyOutput}" />
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>

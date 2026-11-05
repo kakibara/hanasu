@@ -607,6 +607,7 @@ struct HistorySettingsTab: View {
                     ShortcutRecorder(
                         combo: $settings.repasteHotKey,
                         defaultCombo: .defaultRepaste,
+                        kind: .repaste,
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }

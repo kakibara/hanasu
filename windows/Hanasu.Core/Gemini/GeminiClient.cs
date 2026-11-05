@@ -147,6 +147,39 @@ public sealed class GeminiClient : ITextAiClient
         }
     }
 
+    // 設計判断: DEC-COM-143
+    /// <summary>
+    /// 「接続を試す」: モデルの情報を GET で取る（トークンを使わない。Claude の CheckAsync と同じ考え）。
+    /// API キーは generativelanguage の GET /v1beta/models/{model}、サービスアカウントは Vertex AI の
+    /// GET /v1/publishers/google/models/{model}（アクセストークンが取れることも確かめられる）。
+    /// 認証が通らなければ 400（API_KEY_INVALID）/ 401 / 403、モデルがなければ 404 が返る。やり直しはしない
+    /// </summary>
+    public async Task CheckAsync(string model, CancellationToken cancellationToken = default)
+    {
+        model = model.Trim();
+        var storedKey = auth is GeminiAuth.StoredApiKey stored ? await stored.Load(cancellationToken).ConfigureAwait(false) : null;
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeout.CancelAfter(Timeout);
+        try
+        {
+            using var request = await BuildHttpRequestAsync(model, body: null, timeout.Token, storedKey).ConfigureAwait(false);
+            using var response = await http.SendAsync(request, timeout.Token).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode) return;
+            var status = (int)response.StatusCode;
+            var text = await response.Content.ReadAsStringAsync(timeout.Token).ConfigureAwait(false);
+            throw status switch
+            {
+                400 or 401 or 403 => GeminiException.InvalidCredentials(status),
+                404 => GeminiException.ModelUnavailable(model),
+                _ => GeminiException.Http(status, ErrorMessage(text)),
+            };
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            throw GeminiException.Timeout(Timeout);
+        }
+    }
+
     /// <summary>やり直すまでの待ち（既定は 0.5 秒・1 秒）。最大 2 回まで。ここまでの時間と待ちの合計が Timeout の半分を超えるなら null（やり直さない）</summary>
     internal TimeSpan? RetryDelay(int attempt, TimeSpan elapsed)
     {
@@ -155,10 +188,15 @@ public sealed class GeminiClient : ITextAiClient
         return elapsed + wait <= Timeout / 2 ? wait : null;
     }
 
-    internal async Task<HttpRequestMessage> BuildHttpRequestAsync(string model, string body, CancellationToken cancellationToken,
+    /// <summary>
+    /// generateContent の POST（body あり）か、「接続を試す」のモデルの情報の GET（body が null）を作る。
+    /// </summary>
+    internal async Task<HttpRequestMessage> BuildHttpRequestAsync(string model, string? body, CancellationToken cancellationToken,
         string? preloadedKey = null)
     {
         var escapedModel = Uri.EscapeDataString(model);
+        var method = body is null ? HttpMethod.Get : HttpMethod.Post;
+        var action = body is null ? "" : ":generateContent";
         HttpRequestMessage request;
         switch (auth)
         {
@@ -167,8 +205,8 @@ public sealed class GeminiClient : ITextAiClient
                     : preloadedKey ?? await ((GeminiAuth.StoredApiKey)auth).Load(cancellationToken).ConfigureAwait(false);
                 if (string.IsNullOrWhiteSpace(key)) throw GeminiException.MissingCredentials();
                 // URL のクエリにキーを載せない
-                request = new HttpRequestMessage(HttpMethod.Post,
-                    $"https://generativelanguage.googleapis.com/v1beta/models/{escapedModel}:generateContent");
+                request = new HttpRequestMessage(method,
+                    $"https://generativelanguage.googleapis.com/v1beta/models/{escapedModel}{action}");
                 request.Headers.Add("x-goog-api-key", key.Trim());
                 break;
             case GeminiAuth.ServiceAccount { Credentials: var credentials, Location: var location }:
@@ -178,15 +216,17 @@ public sealed class GeminiClient : ITextAiClient
                 if (!IsValidLocation(location)) throw GeminiException.InvalidLocation(location);
                 // global 以外のリージョンはホスト名にリージョンが付く
                 var host = location == "global" ? "aiplatform.googleapis.com" : $"{location}-aiplatform.googleapis.com";
-                request = new HttpRequestMessage(HttpMethod.Post,
-                    $"https://{host}/v1/projects/{Uri.EscapeDataString(credentials.ProjectId)}/locations/{Uri.EscapeDataString(location)}/publishers/google/models/{escapedModel}:generateContent");
+                // モデルの情報の GET は、プロジェクトを含まない publishers/google/models/{model}
+                request = new HttpRequestMessage(method, body is null
+                    ? $"https://{host}/v1/publishers/google/models/{escapedModel}"
+                    : $"https://{host}/v1/projects/{Uri.EscapeDataString(credentials.ProjectId)}/locations/{Uri.EscapeDataString(location)}/publishers/google/models/{escapedModel}:generateContent");
                 var token = await tokenProvider.GetAccessTokenAsync(credentials, cancellationToken).ConfigureAwait(false);
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 break;
             default:
                 throw GeminiException.MissingCredentials();
         }
-        request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+        if (body is not null) request.Content = new StringContent(body, Encoding.UTF8, "application/json");
         return request;
     }
 

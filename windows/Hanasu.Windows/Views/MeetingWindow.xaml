@@ -38,13 +38,14 @@
         </Grid.ColumnDefinitions>
 
         <!-- 左: 記録中の表示・会議の一覧・記録の開始 -->
-        <Border Grid.Column="0" BorderBrush="#FFE0E0E0" BorderThickness="0,0,1,0" Background="#FFFAFAFA">
+        <!-- 設計判断: DEC-COM-151（固定色の面はハイコントラストで OS の色に差し替える。App.xaml） -->
+        <Border Grid.Column="0" Style="{StaticResource SidePane}" BorderThickness="0,0,1,0">
             <DockPanel Margin="10">
-                <Border x:Name="LiveBox" DockPanel.Dock="Top" Background="#FFFDECEA" CornerRadius="6" Padding="10,8" Margin="0,0,0,8" Visibility="Collapsed">
+                <Border x:Name="LiveBox" DockPanel.Dock="Top" Style="{StaticResource LivePane}" CornerRadius="6" Padding="10,8" Margin="0,0,0,8" Visibility="Collapsed">
                     <StackPanel>
                         <DockPanel>
                             <Button x:Name="StopButton" DockPanel.Dock="Right" Content="■ 停止" Margin="0" Click="OnStopClick" />
-                            <TextBlock x:Name="LiveTitle" FontWeight="SemiBold" Foreground="#FFC5221F" VerticalAlignment="Center" Text="● 記録中" />
+                            <TextBlock x:Name="LiveTitle" Style="{StaticResource LiveTitle}" FontWeight="SemiBold" VerticalAlignment="Center" Text="● 記録中" />
                         </DockPanel>
                         <TextBlock x:Name="LiveElapsed" FontSize="22" FontFamily="Consolas, Segoe UI" Margin="0,4,0,0" Text="00:00" />
                         <TextBlock x:Name="LiveProgress" Style="{StaticResource Note}" />
@@ -64,6 +65,7 @@
                     <TextBlock x:Name="StartNote" Style="{StaticResource Note}" />
                 </StackPanel>
 
+                <Grid>
                 <!-- 要件: REQ-MTG-028 -->
                 <ListBox x:Name="MeetingList" AutomationProperties.Name="会議の一覧" SelectionChanged="OnMeetingSelected" BorderThickness="0" Background="Transparent"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" KeyDown="OnMeetingListKeyDown">
@@ -76,16 +78,22 @@
                         <DataTemplate>
                             <StackPanel Margin="2,4">
                                 <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
-                                <TextBlock Text="{Binding Detail}" FontSize="11.5" Foreground="#FF5F6368" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Detail}" FontSize="11.5" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                <!-- 設計判断: DEC-MTG-073 -->
+                <!-- 一覧が空のとき（読み込み中・まだ 0 件）の案内。履歴の EmptyText と同じ作り -->
+                <TextBlock x:Name="ListEmptyText" Style="{StaticResource Note}" Margin="12" TextAlignment="Center"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"
+                           Text="会議の一覧を読み込んでいます…" />
+                </Grid>
             </DockPanel>
         </Border>
 
         <!-- 右: 選んだ会議 -->
-        <TextBlock x:Name="EmptyText" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF5F6368"
+        <TextBlock x:Name="EmptyText" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
                    Text="左の一覧から会議を選ぶか、左下の「会議の記録を開始」で記録を始めます。" TextWrapping="Wrap" Margin="24" />
         <DockPanel x:Name="DetailPanel" Grid.Column="1" Margin="14,10,14,10" Visibility="Collapsed">
             <StackPanel DockPanel.Dock="Top">
@@ -96,7 +104,7 @@
                     <TextBox x:Name="TitleBox" AutomationProperties.Name="会議のタイトル" FontSize="18" FontWeight="SemiBold" BorderThickness="1" BorderBrush="#FFBDBDBD"
                              Padding="4,3,32,3" LostFocus="OnTitleChanged" KeyDown="OnTitleKeyDown"
                              ToolTip="クリックしてタイトルを変更（Enter で保存・Esc でやめる）" />
-                    <TextBlock Text="&#xE70F;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14" Foreground="#FF5F6368"
+                    <TextBlock Text="&#xE70F;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsHitTestVisible="False" />
                 </Grid>
                 <TextBlock x:Name="MeetingInfo" Style="{StaticResource Note}" />
@@ -116,7 +124,7 @@
             </StackPanel>
 
             <!-- 記録中: メモと「ここ重要」 -->
-            <Border x:Name="RecordingPanel" DockPanel.Dock="Top" Margin="0,10,0,0" Padding="10" Background="#FFF6F8FC" CornerRadius="6" Visibility="Collapsed">
+            <Border x:Name="RecordingPanel" DockPanel.Dock="Top" Margin="0,10,0,0" Padding="10" Style="{StaticResource InnerPane}" CornerRadius="6" Visibility="Collapsed">
                 <StackPanel>
                     <Grid>
                         <Grid.ColumnDefinitions>

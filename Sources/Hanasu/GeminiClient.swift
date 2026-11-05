@@ -6,10 +6,16 @@ enum GeminiError: LocalizedError {
     case emptyResponse(reason: String?)
     case invalidResponse
     case invalidLocation(String)
+    /// 「接続を試す」で、認証が通らなかった（400 API_KEY_INVALID / 401 / 403）
+    case invalidCredentials(status: Int)
+    /// 「接続を試す」で、モデルが見つからなかった（404）
+    case modelUnavailable(String)
 
     var errorDescription: String? {
         switch self {
         case .missingAPIKey: "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません"
+        case .invalidCredentials(let status): "API キー（またはサービスアカウント）が正しくないか、Gemini API を使う権限がありません（\(status)）"
+        case .modelUnavailable(let model): "モデル「\(model)」が見つからないか、この認証では使えません"
         case .http(let status, let message): "Gemini API エラー（\(status)）: \(message)"
         case .emptyResponse(let reason): "Gemini から結果が返りませんでした" + (reason.map { "（\($0)）" } ?? "")
         case .invalidResponse: "Gemini の応答を読み取れませんでした"
@@ -344,6 +350,45 @@ struct GeminiClient {
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { throw GeminiError.emptyResponse(reason: candidate.finishReason) }
         return text
+    }
+
+    // 設計判断: DEC-COM-050
+    /// 「接続を試す」: モデルの情報を GET で取る（トークンを使わない。Claude の testConnection と同じ考え）。
+    /// API キーは generativelanguage の GET /v1beta/models/{model}、サービスアカウントは Vertex AI の
+    /// GET /v1/publishers/google/models/{model}（アクセストークンが取れることも確かめられる）。
+    /// 認証が通らなければ 400（API_KEY_INVALID）/ 401 / 403、モデルがなければ 404 が返る。やり直しはしない
+    func testConnection(model rawModel: String) async throws {
+        let model = rawModel.trimmingCharacters(in: .whitespacesAndNewlines)
+        let escapedModel = model.addingPercentEncoding(
+            withAllowedCharacters: .urlPathAllowed.subtracting(CharacterSet(charactersIn: "/"))) ?? model
+        var urlRequest: URLRequest
+        switch auth {
+        case .apiKey(let apiKey):
+            guard !apiKey.isEmpty else { throw GeminiError.missingAPIKey }
+            let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/\(escapedModel)")!
+            urlRequest = URLRequest(url: url, timeoutInterval: timeout)
+            urlRequest.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
+        case .serviceAccount(let credentials, let location):
+            // 設計判断: DEC-COM-053（generate と同じ検査）
+            guard Self.isValidLocation(location) else { throw GeminiError.invalidLocation(location) }
+            let host = location == "global" ? "aiplatform.googleapis.com" : "\(location)-aiplatform.googleapis.com"
+            let token = try await ServiceAccountTokenProvider.shared.accessToken(for: credentials)
+            let url = URL(string: "https://\(host)/v1/publishers/google/models/\(escapedModel)")!
+            urlRequest = URLRequest(url: url, timeoutInterval: timeout)
+            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        urlRequest.httpMethod = "GET"
+        let (data, response) = try await SecureHTTP.data(for: urlRequest)
+        guard let http = response as? HTTPURLResponse else { throw GeminiError.invalidResponse }
+        switch http.statusCode {
+        case 200..<300: return
+        case 400, 401, 403: throw GeminiError.invalidCredentials(status: http.statusCode)
+        case 404: throw GeminiError.modelUnavailable(model)
+        default:
+            let decoded = try? JSONDecoder().decode(ErrorEnvelope.self, from: data)
+            let message = String((decoded?.error.message ?? String(data: data, encoding: .utf8) ?? "").prefix(500))
+            throw GeminiError.http(status: http.statusCode, message: message)
+        }
     }
 
     // 設計判断: DEC-COM-055

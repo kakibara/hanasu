@@ -28,7 +28,7 @@ public partial class HistoryWindow : Window
     {
         history = host.History;
         InitializeComponent();
-        WindowFit.ClampToWorkArea(this);
+        WindowFit.FitToMouseScreen(this);
         history.Changed += OnHistoryChanged;
         Closed += (_, _) => history.Changed -= OnHistoryChanged;
         Reload();

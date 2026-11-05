@@ -22,6 +22,8 @@ namespace Hanasu.Windows.Views;
 public partial class HudWindow : Window, IHud
 {
     private const double NormalWidth = 500;
+    /// <summary>翻訳の言語を 2 つ（English・日本語）出すときの幅。500 では右のボタンと題名が入らない（DEC-DIC-146）</summary>
+    private const double WideWidth = 580;
     private const double NormalHeight = 136;
     private const double UnpastedWidth = 600;
     private const double UnpastedHeight = 330;
@@ -96,9 +98,7 @@ public partial class HudWindow : Window, IHud
         if (newState.Phase != HudPhase.Unpasted) ReturnFocus();
         if (newState.Phase == HudPhase.Recording && state.Phase != HudPhase.Recording) startedAt = DateTime.Now;
         state = newState;
-        var unpasted = state.Phase == HudPhase.Unpasted;
-        Width = unpasted ? UnpastedWidth : NormalWidth;
-        Height = unpasted ? UnpastedHeight : NormalHeight;
+        UpdateSize();
         Render();
         if (!IsVisible)
         {
@@ -125,7 +125,21 @@ public partial class HudWindow : Window, IHud
         translation = selected;
         translationChoices = choices;
         RenderLanguage();
+        // 言語の数で幅が変わる（DEC-DIC-146）。出ている間に変わったら置き直す
+        var width = Width;
+        UpdateSize();
+        if (IsVisible && Width != width) PlaceAtBottom();
     });
+
+    // 設計判断: DEC-DIC-146
+    /// <summary>結果の表示は広く（DEC-DIC-121）、言語の切り替えに English と日本語の両方を出すときは少し広く、それ以外は 500</summary>
+    private void UpdateSize()
+    {
+        var unpasted = state.Phase == HudPhase.Unpasted;
+        var wide = !unpasted && HudText.CanChooseLanguage(state.Phase) && translationChoices.Count >= 2;
+        Width = unpasted ? UnpastedWidth : wide ? WideWidth : NormalWidth;
+        Height = unpasted ? UnpastedHeight : NormalHeight;
+    }
 
     private void Render()
     {
@@ -140,7 +154,10 @@ public partial class HudWindow : Window, IHud
         ErrorMark.Visibility = state.Phase is HudPhase.Error or HudPhase.Unpasted ? Visibility.Visible : Visibility.Collapsed;
 
         var unpasted = state.Phase == HudPhase.Unpasted;
-        TitleText.MaxWidth = unpasted ? 400 : 190;
+        // 言語の切り替えを出している間は、題名を短く（録音中の題名は短い）して切り替えと右のボタンの場所を空ける（DEC-DIC-146）
+        TitleText.MaxWidth = unpasted ? 400
+            : !HudText.CanChooseLanguage(state.Phase) ? 190
+            : translationChoices.Count >= 2 ? 130 : 100;
         DetailText.MaxHeight = unpasted ? 70 : 52;
         ResultBox.Visibility = CopyButton.Visibility = CloseButton.Visibility = unpasted ? Visibility.Visible : Visibility.Collapsed;
         if (unpasted)

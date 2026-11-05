@@ -11,6 +11,10 @@ public enum GeminiErrorKind
     Timeout,
     /// <summary>Vertex AI のリージョンの設定が、ホスト名に入れられる形ではない（設定を直すまで通らない）</summary>
     InvalidLocation,
+    /// <summary>「接続を試す」で、認証が通らなかった（400 API_KEY_INVALID / 401 / 403）</summary>
+    InvalidCredentials,
+    /// <summary>「接続を試す」で、モデルが見つからなかった（404）</summary>
+    ModelUnavailable,
 }
 
 /// <summary>Gemini の呼び出しの失敗。Message はそのまま HUD に出せる日本語にする。</summary>
@@ -30,7 +34,16 @@ public sealed class GeminiException : TextAiException
     }
 
     public override bool IsCredentialProblem =>
-        Kind is GeminiErrorKind.MissingCredentials or GeminiErrorKind.InvalidLocation || StatusCode is 401 or 403;
+        Kind is GeminiErrorKind.MissingCredentials or GeminiErrorKind.InvalidLocation or GeminiErrorKind.InvalidCredentials
+        || StatusCode is 401 or 403;
+
+    // 設計判断: DEC-COM-143
+    /// <summary>「接続を試す」の文言（Mac 版の GeminiError.invalidCredentials / modelUnavailable と同じ）</summary>
+    public static GeminiException InvalidCredentials(int status) =>
+        new(GeminiErrorKind.InvalidCredentials, $"API キー（またはサービスアカウント）が正しくないか、Gemini API を使う権限がありません（{status}）", status);
+
+    public static GeminiException ModelUnavailable(string model) =>
+        new(GeminiErrorKind.ModelUnavailable, $"モデル「{model}」が見つからないか、この認証では使えません", 404);
 
     public static GeminiException MissingCredentials() =>
         new(GeminiErrorKind.MissingCredentials, "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません");

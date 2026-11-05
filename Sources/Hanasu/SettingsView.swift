@@ -53,6 +53,7 @@ private struct GeneralTab: View {
                 LabeledContent("録音の開始／停止") {
                     ShortcutRecorder(
                         combo: $settings.hotKey,
+                        kind: .dictation,
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
@@ -60,6 +61,7 @@ private struct GeneralTab: View {
                     ShortcutRecorder(
                         combo: $settings.translateHotKey,
                         defaultCombo: .defaultTranslate,
+                        kind: .translate,
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
@@ -147,6 +149,7 @@ private struct MeetingTab: View {
                     ShortcutRecorder(
                         combo: $settings.meetingHotKey,
                         defaultCombo: .defaultMeeting,
+                        kind: .meeting,
                         onBeginRecording: onBeginShortcutRecording,
                         onEndRecording: onEndShortcutRecording)
                 }
@@ -201,8 +204,24 @@ private struct PermissionsTab: View {
                     notDetermined: false,
                     deniedHint: "システム設定 → プライバシーとセキュリティ → アクセシビリティ で Hanasu をオンにしてください。",
                     anchor: "Privacy_Accessibility", request: nil)
+                // 設計判断: DEC-MTG-074
+                // システムオーディオ録音（会議の記録の相手の声）は、許可の状態を取る API がないので、状態は出さずに
+                // 「いつ求められるか」と「拒否したときに直す場所」だけを案内する
+                LabeledContent("システムオーディオ録音（会議の記録で相手の声に必要）") {
+                    VStack(alignment: .trailing, spacing: 2) {
+                        HStack {
+                            Text("初めて会議の記録を始めるときに macOS が求めます")
+                            Button("開く…") { Permissions.openPrivacySettings("Privacy_AudioCapture") }
+                                .accessibilityLabel("システムオーディオ録音のシステム設定を開く")
+                        }
+                        Text("拒否した場合は、システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で Hanasu をオンにしてください。")
+                            .font(.caption).foregroundStyle(.secondary)
+                            .multilineTextAlignment(.trailing)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
             } footer: {
-                Text("マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。")
+                Text("マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。システムオーディオ録音の許可の状態は、macOS から取れないためここには出ません。")
                     .font(.caption).foregroundStyle(.secondary)
             }
             Button("再確認") { refresh += 1 }

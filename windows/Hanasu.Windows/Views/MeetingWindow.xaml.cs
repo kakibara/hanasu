@@ -33,7 +33,7 @@ public partial class MeetingWindow : Window
         this.host = host;
         meetings = host.Meetings;
         InitializeComponent();
-        WindowFit.ClampToWorkArea(this);
+        WindowFit.FitToMouseScreen(this);
         loading = true;
         LoadDevices();
         foreach (var t in MinutesTemplates.All)
@@ -85,7 +85,9 @@ public partial class MeetingWindow : Window
         }
         catch (Exception e) when (e is IOException or UnauthorizedAccessException)
         {
-            return; // 読めなかったら前の一覧のままにする
+            // 読めなかったら前の一覧のままにする（最初の読み込みなら、読み込み中の案内を失敗の案内に変える）
+            if (MeetingList.Items.Count == 0) ListEmptyText.Text = "会議の一覧を読み込めませんでした。";
+            return;
         }
         if (generation != reloadGeneration) return;
         selectId ??= selected?.Id;
@@ -98,6 +100,9 @@ public partial class MeetingWindow : Window
         var rows = all.Select(m => new MeetingRow(m, m.Title, Detail(m))).ToList();
         loading = true;
         MeetingList.ItemsSource = rows;
+        // 設計判断: DEC-MTG-073（読み終えてから 0 件のときだけ出す。読み込み中に「まだありません」と見せない）
+        ListEmptyText.Text = "まだ会議の記録がありません。左下の「● 会議の記録を開始」で記録を始めると、ここに並びます。";
+        ListEmptyText.Visibility = rows.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         MeetingList.SelectedItem = rows.FirstOrDefault(r => r.Meeting.Id == selectId);
         loading = false;
         if (MeetingList.SelectedItem is MeetingRow row) Show(row.Meeting);
@@ -259,13 +264,25 @@ public partial class MeetingWindow : Window
 
     private void OnRegenerateClick(object sender, RoutedEventArgs e)
     {
-        if (selected is { } m) _ = RegenerateAsync(m, null);
+        if (selected is { } m && ConfirmRegenerate(m, "議事録を作り直しますか？")) _ = RegenerateAsync(m, null);
     }
+
+    // 設計判断: DEC-MTG-072
+    /// <summary>
+    /// 議事録を作り直す前の確かめ。今の議事録があるときだけ尋ねる（置き換わるため。既定のボタンはキャンセル。DEC-DIC-079）。
+    /// まだ議事録がないときは尋ねずに true
+    /// </summary>
+    private bool ConfirmRegenerate(Meeting m, string question) =>
+        m.Minutes is null
+        || MessageBox.Show(this, $"{question}\n\n今の議事録とアクションアイテムは置き換わります。", "Hanasu",
+            MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) == MessageBoxResult.OK;
 
     private void OnTemplateChanged(object sender, SelectionChangedEventArgs e)
     {
         if (loading || selected is not { } m || TemplateCombo.SelectedItem is not ComboBoxItem { Tag: MinutesTemplate t } || t == m.Template) return;
-        if (MessageBox.Show(this, $"議事録の型を「{t.Title()}」にして、議事録を作り直しますか？", "Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+        // 設計判断: DEC-MTG-072（既定のボタンはキャンセル）
+        if (MessageBox.Show(this, $"議事録の型を「{t.Title()}」にして、議事録を作り直しますか？\n\n今の議事録とアクションアイテムは置き換わります。", "Hanasu",
+                MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK)
         {
             Show(m);
             return;
@@ -397,6 +414,8 @@ public partial class MeetingWindow : Window
             ActionStatus.Text = "記録中は、上のメモ欄から足してください（このタブでの編集は記録のあとにできます）";
             return;
         }
+        // 設計判断: DEC-MTG-072（確かめてから保存する。キャンセルなら保存もしない）
+        if (regenerate && !ConfirmRegenerate(m, "メモを保存して、議事録を作り直しますか？")) return;
         var notes = MeetingNote.Parse(NotesBox.Text);
         m.Notes = notes.Count == 0 ? null : notes;
         SaveSelected(m, "メモを保存しました");
