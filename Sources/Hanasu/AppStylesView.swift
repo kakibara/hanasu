@@ -3,7 +3,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 // 設計判断: DEC-DIC-047
-/// 設定画面の「アプリ別」タブ。入力先アプリごとに、文体のプリセット・追加ルール・既定の出力言語を決める。
+/// 設定画面の「アプリ別」。入力先アプリごとに、文体のプリセット・追加ルール・既定の出力言語を決める。
 struct AppStylesTab: View {
     @ObservedObject var store = AppStyleStore.shared
     /// 追加ルールの欄を開いているアプリ
@@ -186,7 +186,7 @@ enum AppIconCache {
     }
 }
 
-/// 「アプリ別」タブを画像にする（見た目の確認用）。main.swift の --render-app-styles から呼ぶ
+/// 設定の「アプリ別」を画像にする（見た目の確認用）。main.swift の --render-app-styles から呼ぶ
 @MainActor
 func renderAppStylesPNG(to url: URL, expandedFirst: Bool) {
     _ = NSApplication.shared

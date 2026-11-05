@@ -205,15 +205,20 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
 - 提案を出すときは、効果音の設定がオンなら `Glass` を鳴らす。
 - 隠すときは、出していた提案も消す（「記録を止めますか？」の経過時間が、隠れたパネルの中で動き続けないように。DEC-COM-016）。
 
-#### 設定（「会議」タブ →「会議の自動検出」）
+#### 設定（設定の「会議」→「会議の自動検出」）
 
 - 「会議が始まったら記録を提案する」: **既定はオン。** 提案するだけで勝手に録音はしないこと、目的が「記録の始め忘れ」を防ぐことで、オフが既定だと気づかれないまま役に立たないこと、待っている間の負荷がほぼないこと、から。不要なら「今回はしない」か設定でオフにできる。
 - 対象のアプリ（会議アプリ 5 つ、ブラウザ 4 つ）をそれぞれ選べる。既定はすべてオン。外したアプリを保存するので、あとで対象を足したときは既定でオンになる。
 - 設定は共有の `AppSettings` を大きく変えないよう、`MeetingDetectionSettings`（UserDefaults の `meetingAutoDetect`、`meetingAutoDetectDisabledApps`）に分けた。
 
+#### 会議の名前をタイトルにする（REQ-MTG-034）
+
+記録の準備中（`MeetingRecorder.start`、状態は `.starting`）に、マイクを使っている会議アプリ（`MeetingAutoDetect.titleSourceApps`。AppDelegate が `MeetingRecorder.titleSourceApps` につなぐ）のウインドウのタイトルを `MeetingTitle.detect` で読み、取り出せた名前を `Meeting.title` にする。どの入口から始めても同じ。読めなければ今までの日時のタイトル。
+取り出す規則と、名前とみなさないもの（DEC-MTG-035）は `MeetingTitle.swift`。ブラウザは、アクティブなタブのタイトルだけが読めるので、Meet のタブが裏にあるときは取れない。
+
 #### 確認用の CLI
 
-`MeetingDetectorCLI.swift`（`--list-audio-processes`・`--watch-audio-processes`・`--simulate-meeting-detection`・提案のパネルの描き出し）。
+`MeetingDetectorCLI.swift`（`--check-meeting-title`・`--detect-meeting-title`・`--list-audio-processes`・`--watch-audio-processes`・`--simulate-meeting-detection`・提案のパネルの描き出し）。
 
 ### 4.9 会議中のメモと「ここ重要」の印（F11〜F14）
 

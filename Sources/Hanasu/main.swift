@@ -58,7 +58,7 @@ MainActor.assumeIsolated { LocalLLMCLI.runIfRequested() }
 MainActor.assumeIsolated { TranscriptionEngineCLI.runIfRequested() }
 // 音声入力のマイクの確認（--list-dictation-microphones / --render-dictation-mic-settings / --test-dictation-mic-switch）。DictationMicrophoneCLI.swift
 MainActor.assumeIsolated { DictationMicrophoneCLI.runIfRequested() }
-// Claude API・キーチェーン・設定の「AI」タブの確認（--claude-test / --keychain-selftest / --render-ai-settings）。ClaudeCLI.swift
+// Claude API・キーチェーン・設定の「AI」の確認（--claude-test / --keychain-selftest / --render-ai-settings）。ClaudeCLI.swift
 MainActor.assumeIsolated { ClaudeCLI.runIfRequested() }
 // 選択を声で編集するモードの確認（--edit-text / --render-edit-hud / --render-edit-settings）。中身は EditModeCLI.swift
 MainActor.assumeIsolated { EditModeCLI.runIfRequested() }
@@ -148,6 +148,8 @@ if CommandLine.arguments.contains("--list-audio-devices") {
 //   Hanasu --render-meeting-suggestion <出力.png> [--stop] [--app zoom|teams|slack|webex|facetime|chrome|safari|arc|edge]
 //   Hanasu --simulate-meeting-detection  検出と記録の状態を台本どおりに動かし、提案の出かたを確かめる
 //   Hanasu --render-meeting-detection-settings <出力.png>  設定の「会議の自動検出」欄
+//   Hanasu --check-meeting-title       ウインドウのタイトルから会議の名前を取り出す規則の確認
+//   Hanasu --detect-meeting-title      今開いている会議アプリから会議の名前を読む（アクセシビリティの許可が要る）
 if CommandLine.arguments.contains("--list-audio-processes") {
     MainActor.assumeIsolated { MeetingDetectorCLI.listProcesses() }
     exit(0)
@@ -158,6 +160,12 @@ if CommandLine.arguments.contains("--watch-audio-processes") {
 // 確かめ方: REQ-MTG-009
 if CommandLine.arguments.contains("--simulate-meeting-detection") {
     MainActor.assumeIsolated { MeetingDetectorCLI.simulate() }
+}
+if CommandLine.arguments.contains("--check-meeting-title") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.checkTitles() }
+}
+if CommandLine.arguments.contains("--detect-meeting-title") {
+    MainActor.assumeIsolated { MeetingDetectorCLI.detectTitleNow() }
 }
 if let index = CommandLine.arguments.firstIndex(of: "--render-meeting-suggestion"),
    CommandLine.arguments.indices.contains(index + 1)
@@ -202,7 +210,18 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-device-pickers"),
     exit(0)
 }
 
-// 設定の「アプリ別」タブを画像にする（見た目の確認用）:  Hanasu --render-app-styles <出力.png> [--expanded]
+// 設定のウインドウを項目ごとに画像にする（見た目の確認用）:
+//   Hanasu --render-settings <出力フォルダ> [--pane <項目>] [--dark]。SettingsCLI.swift
+if let index = CommandLine.arguments.firstIndex(of: "--render-settings"),
+   CommandLine.arguments.indices.contains(index + 1)
+{
+    MainActor.assumeIsolated {
+        SettingsCLI.run(CommandLine.arguments, outputIndex: index + 1)
+    }
+    exit(0)
+}
+
+// 設定の「アプリ別」を画像にする（見た目の確認用）:  Hanasu --render-app-styles <出力.png> [--expanded]
 // 確かめ方: REQ-DIC-020
 if let index = CommandLine.arguments.firstIndex(of: "--render-app-styles"),
    CommandLine.arguments.indices.contains(index + 1)
@@ -335,7 +354,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--match-snippet"),
     RunLoop.main.run()
 }
 
-// 設定画面の「スニペット」タブを画像にする:  Hanasu --render-snippets-settings <出力.png> [--empty]
+// 設定画面の「スニペット」を画像にする:  Hanasu --render-snippets-settings <出力.png> [--empty]
 if let index = CommandLine.arguments.firstIndex(of: "--render-snippets-settings"),
    CommandLine.arguments.indices.contains(index + 1)
 {
