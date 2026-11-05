@@ -80,7 +80,7 @@ README と同じ 17 言語。並びも同じにする（`scripts/check-i18n.py` 
   3. コードは `Strings.名前`、埋めるものは `string.Format(Strings.名前, …)`。XAML は `{x:Static p:Strings.名前}`（`xmlns:p="clr-namespace:Hanasu.Windows.Properties"`）。日本語の語順に頼って文をつなげない（「{0}して入力」ではなく、文ごとに名前を分ける）。
   4. ほかの 15 言語: `python3 scripts/i18n-resx.py export <言語>` で訳のない名前を JSON で出し、エージェントに訳を入れてもらい、`python3 scripts/i18n-resx.py import <言語> <JSON>` で書き戻す（`{0}` の組が英語と違う値は受け付けない）。
   5. `python3 scripts/i18n-resx.py check` が通ることを確かめる。
-- 訳さないもの: ログ（`AppLog`）、開発用の CLI（`windows/Hanasu.Cli`）、テスト、言語の決まりとして読む語（敬称・議事録の見出しの読み取り・Whisper の幻聴の文）、AI へのプロンプト（上の JSON）。
+- 訳さないもの: ログ（`AppLog`）、開発用の CLI（`windows/Hanasu.Cli`）、テスト、言語の決まりとして読む語（敬称・議事録の見出しの読み取り・Whisper の幻聴の文）、AI へのプロンプト（上の JSON）。残す日本語の文字列には、行末に `// skip-tr（理由）`（XAML は前の行に `<!-- skip-tr（理由） -->`）を書く。`check-i18n.py` が、移し忘れた日本語の文字列を見つける。
 - テストは表示の言語を日本語に固定している（`UiCultureFixture`）。英語などを見るときは `UiCultureFixture.With("en", …)`。
 
 ## 確かめる

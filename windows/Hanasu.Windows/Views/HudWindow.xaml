@@ -122,6 +122,7 @@
                         <Button x:Name="SpokenLanguageButton" Style="{StaticResource LanguageOption}" Content="{x:Static p:Strings.Hud_SpokenLanguage}" Click="OnSpokenLanguageClick" />
                         <!-- 翻訳の言語は、設定で選んだものだけを出す（REQ-DIC-013） -->
                         <Button x:Name="EnglishButton" Style="{StaticResource LanguageOption}" Content="English" Click="OnEnglishClick" />
+                        <!-- skip-tr（言語名はその言語で書く） -->
                         <Button x:Name="JapaneseButton" Style="{StaticResource LanguageOption}" Content="日本語" Click="OnJapaneseClick" Visibility="Collapsed" />
                     </StackPanel>
                 </Border>

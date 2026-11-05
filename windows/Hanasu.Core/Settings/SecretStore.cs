@@ -195,7 +195,7 @@ public sealed class SecretStore
     /// </summary>
     public async Task ChangeProtectionAsync(SecretProtection protection, CancellationToken cancellationToken = default)
     {
-        if (protection == SecretProtection.DpapiLegacy) throw new ArgumentException("古い形には変えられない", nameof(protection));
+        if (protection == SecretProtection.DpapiLegacy) throw new ArgumentException("古い形には変えられない", nameof(protection));  // skip-tr（開発者向けの例外）
         if (protection == SecretProtection.WindowsHello && presence is null)
         {
             throw new SecretAccessException(Strings.Secret_HelloUnavailable);

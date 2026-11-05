@@ -30,7 +30,7 @@ public static class MeetingJson
 
     public static Meeting Deserialize(string json)
     {
-        var meeting = JsonSerializer.Deserialize<Meeting>(json, Options) ?? throw new JsonException("meeting.json が空です");
+        var meeting = JsonSerializer.Deserialize<Meeting>(json, Options) ?? throw new JsonException("meeting.json が空です");  // skip-tr（開発者向けの例外）
         // 足りない値を補う（Mac 版では必ずあるキーだが、手で直したファイルなどに備える）
         meeting.SpeakerNames ??= new();
         meeting.Utterances ??= new();
@@ -48,7 +48,7 @@ public static class MeetingJson
     {
         public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var s = reader.GetString() ?? throw new JsonException("日時がありません");
+            var s = reader.GetString() ?? throw new JsonException("日時がありません");  // skip-tr（開発者向けの例外）
             return DateTimeOffset.Parse(s, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
         }
 

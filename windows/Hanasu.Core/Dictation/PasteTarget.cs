@@ -111,12 +111,12 @@ public static class PasteTargetJudge
     public static PasteTargetDecision Judge(FocusSnapshot s)
     {
         // 1. 前面にウインドウがない（すべて最小化した直後 など）
-        if (!s.HasForegroundWindow) return PasteTargetDecision.NoTarget(NotPastedReason.NoForegroundWindow, "前面のウインドウがない");
+        if (!s.HasForegroundWindow) return PasteTargetDecision.NoTarget(NotPastedReason.NoForegroundWindow, "前面のウインドウがない");  // skip-tr（ログだけに書く理由）
 
         // 2. 入力欄にフォーカスがあるが、読み取り専用（貼っても入らない）
         if (s.FocusedControl == FocusedControlKind.Edit && s.IsReadOnly == true)
         {
-            return PasteTargetDecision.NoTarget(NotPastedReason.ReadOnly, "読み取り専用の入力欄");
+            return PasteTargetDecision.NoTarget(NotPastedReason.ReadOnly, "読み取り専用の入力欄");  // skip-tr（ログだけに書く理由）
         }
 
         // 3. 文字を入れられる場所だと分かった。デスクトップの上でも（アイコンの名前の変更など）貼る
@@ -124,27 +124,27 @@ public static class PasteTargetJudge
         {
             return PasteTargetDecision.Paste($"UI Automation: {s.FocusedControl}");
         }
-        if (s.HasCaret == true) return PasteTargetDecision.Paste("キャレットがある");
+        if (s.HasCaret == true) return PasteTargetDecision.Paste("キャレットがある");  // skip-tr（ログだけに書く理由）
 
         // 4. デスクトップ・タスクバーが前面（入力欄を見つけられなかった）。
         //    エクスプローラーは、UI Automation で入力欄でない（ファイルの一覧など）と分かったときだけ。アドレスバー・検索欄は 3 で貼る
         if (s.ForegroundClass is { } cls)
         {
-            if (DesktopClasses.Contains(cls)) return PasteTargetDecision.NoTarget(NotPastedReason.Desktop, $"デスクトップ（{cls}）");
-            if (TaskbarClasses.Contains(cls)) return PasteTargetDecision.NoTarget(NotPastedReason.Taskbar, $"タスクバー（{cls}）");
+            if (DesktopClasses.Contains(cls)) return PasteTargetDecision.NoTarget(NotPastedReason.Desktop, $"デスクトップ（{cls}）");  // skip-tr（ログだけに書く理由）
+            if (TaskbarClasses.Contains(cls)) return PasteTargetDecision.NoTarget(NotPastedReason.Taskbar, $"タスクバー（{cls}）");  // skip-tr（ログだけに書く理由）
             if (FileExplorerClasses.Contains(cls) && s.FocusedControl == FocusedControlKind.Other)
             {
-                return PasteTargetDecision.NoTarget(NotPastedReason.FileExplorer, $"エクスプローラー（{cls}）の入力欄でない場所");
+                return PasteTargetDecision.NoTarget(NotPastedReason.FileExplorer, $"エクスプローラー（{cls}）の入力欄でない場所");  // skip-tr（ログだけに書く理由）
             }
         }
 
         // 5. 前面のウインドウの中にフォーカスがない。ストアアプリは別のスレッドにフォーカスがあるので除く
         if (s.HasFocusWindow == false && !(s.ForegroundClass is { } c && CrossThreadFocusClasses.Contains(c)))
         {
-            return PasteTargetDecision.NoTarget(NotPastedReason.NoFocus, $"フォーカスがない（{s.ForegroundClass ?? "?"}）");
+            return PasteTargetDecision.NoTarget(NotPastedReason.NoFocus, $"フォーカスがない（{s.ForegroundClass ?? "?"}）");  // skip-tr（ログだけに書く理由）
         }
 
         // 6. 分からない（ブラウザ・Electron・独自に描くアプリ・Excel のセルなど）。今までどおり貼る
-        return PasteTargetDecision.Paste($"分からない（{s.ForegroundClass ?? "?"}・{s.FocusedControl}）");
+        return PasteTargetDecision.Paste($"分からない（{s.ForegroundClass ?? "?"}・{s.FocusedControl}）");  // skip-tr（ログだけに書く理由）
     }
 }

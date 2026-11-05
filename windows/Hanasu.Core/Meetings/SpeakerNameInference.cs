@@ -17,11 +17,11 @@ public static partial class SpeakerNameInference
     public const int MaxLength = 20;
 
     /// <summary>名前の末尾から外す敬称（長いものから見る）</summary>
-    public static readonly IReadOnlyList<string> Honorifics = ["ちゃん", "さん", "さま", "くん", "様", "君", "氏"];
+    public static readonly IReadOnlyList<string> Honorifics = ["ちゃん", "さん", "さま", "くん", "様", "君", "氏"];  // skip-tr（言語の決まりに使う語。FUT-014）
 
-    private static readonly HashSet<string> NotNames = new(StringComparer.OrdinalIgnoreCase) { "自分", "相手", "不明", "なし", "null", "unknown" };
+    private static readonly HashSet<string> NotNames = new(StringComparer.OrdinalIgnoreCase) { "自分", "相手", "不明", "なし", "null", "unknown" };  // skip-tr（言語の決まりに使う語。FUT-014）
 
-    [GeneratedRegex(@"^(話者|同席者)[0-9０-９]+$")]
+    [GeneratedRegex(@"^(話者|同席者)[0-9０-９]+$")]  // skip-tr（言語の決まりに使う語。FUT-014）
     private static partial Regex LabelPattern();
 
     /// <summary>応答から &lt;speaker_names&gt; を取り出して本文から消す。表示ラベル（「話者1」など）→ 名前。読めなければ空</summary>

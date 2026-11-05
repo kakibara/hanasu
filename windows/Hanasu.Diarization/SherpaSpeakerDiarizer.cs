@@ -19,12 +19,12 @@ public sealed class DiarizationModels
     public static readonly DiarizationModelFile Segmentation = new(
         "pyannote-segmentation-3.0.onnx",
         new Uri("https://huggingface.co/csukuangfj/sherpa-onnx-pyannote-segmentation-3-0/resolve/main/model.onnx"),
-        5_992_913, "220ad67ca923bef2fa91f2390c786097bf305bceb5e261d4af67b38e938e1079", "話している区間の検出（pyannote segmentation-3.0）");
+        5_992_913, "220ad67ca923bef2fa91f2390c786097bf305bceb5e261d4af67b38e938e1079", "話している区間の検出（pyannote segmentation-3.0）");  // skip-tr（画面に出さないモデルの説明）
 
     public static readonly DiarizationModelFile Embedding = new(
         "3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx",
         new Uri("https://huggingface.co/csukuangfj/speaker-embedding-models/resolve/main/3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx"),
-        28_281_164, "aa3cfc16963a10586a9393f5035d6d6b57e98d358b347f80c2a30bf4f00ceba2", "話者の声の特徴（3D-Speaker CAM++）");
+        28_281_164, "aa3cfc16963a10586a9393f5035d6d6b57e98d358b347f80c2a30bf4f00ceba2", "話者の声の特徴（3D-Speaker CAM++）");  // skip-tr（画面に出さないモデルの説明）
 
     public static IReadOnlyList<DiarizationModelFile> All { get; } = [Segmentation, Embedding];
 

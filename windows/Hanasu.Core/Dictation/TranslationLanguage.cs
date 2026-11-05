@@ -16,7 +16,7 @@ public static class TranslationLanguages
     /// <summary>HUD の切り替えに出す名前（その言語での言語名なので、表示の言語によらない）</summary>
     public static string Label(this TranslationLanguage language) => language switch
     {
-        TranslationLanguage.Japanese => "日本語",
+        TranslationLanguage.Japanese => "日本語",  // skip-tr（言語名はその言語で書く）
         _ => "English",
     };
 

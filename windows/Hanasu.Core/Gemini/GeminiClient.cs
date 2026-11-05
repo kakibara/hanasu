@@ -177,7 +177,7 @@ public sealed class GeminiClient : ITextAiClient
                 {
                     ["inlineData"] = new JsonObject { ["mimeType"] = d.MimeType, ["data"] = Convert.ToBase64String(d.Data) },
                 },
-                _ => throw new ArgumentException("未知のパート", nameof(parts)),
+                _ => throw new ArgumentException("未知のパート", nameof(parts)),  // skip-tr（開発者向けの例外）
             });
         }
         // temperature などのサンプリングパラメータは非推奨になったため送らない（Mac 版と同じ）

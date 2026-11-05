@@ -200,7 +200,7 @@ public sealed class ActionItem
     // 要件: REQ-COM-061
     /// <summary>議事録の言語はそのときのプロンプトの言語なので、読むときはすべての言語の言い方を受け付ける（Mac 版と同じ）</summary>
     internal static IReadOnlyList<string> ActionHeadingWords =>
-        new[] { "TODO", "ToDo", "アクション", "次のステップ" }
+        new[] { "TODO", "ToDo", "アクション", "次のステップ" }  // skip-tr（議事録を読むときの語）
             .Concat(new[] { "minutes.actionHeading", "minutes.actionHeading.sales", "minutes.actionHeading.brainstorm" }.SelectMany(Prompts.AllTexts))
             .ToList();
     internal static IReadOnlyList<string> OwnerKeys => Prompts.AllTexts("minutes.item.owner");
@@ -242,7 +242,7 @@ public sealed class ActionItem
                     if (pair.Length != 2) continue;
                     var key = pair[0].Trim();
                     var value = pair[1].Trim();
-                    var unknown = value.Length == 0 || value is "不明" or "未定" or "-" || noneWords.Contains(value) || value.StartsWith("分かれば", StringComparison.Ordinal);
+                    var unknown = value.Length == 0 || value is "不明" or "未定" or "-" || noneWords.Contains(value) || value.StartsWith("分かれば", StringComparison.Ordinal);  // skip-tr（議事録を読むときの語）
                     if (ownerKeys.Contains(key)) { recognized = true; owner = unknown ? null : value; }
                     if (dueKeys.Contains(key)) { recognized = true; dueNote = unknown ? null : value; }
                 }

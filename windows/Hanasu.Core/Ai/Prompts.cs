@@ -255,7 +255,7 @@ public static class Prompts
         {
             if (Tables[candidate].Value.TryGetValue(key, out var value)) return value;
         }
-        throw new KeyNotFoundException($"プロンプトのキーがありません: {key}");
+        throw new KeyNotFoundException($"プロンプトのキーがありません: {key}");  // skip-tr（開発者向けの例外）
     }
 
     private static IReadOnlyDictionary<string, string[]> Load(PromptLanguage language)

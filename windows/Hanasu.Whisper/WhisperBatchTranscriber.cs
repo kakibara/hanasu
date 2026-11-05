@@ -249,12 +249,12 @@ public static class WhisperText
     /// <summary>無音や雑音に Whisper が書きがちな決まり文句（YouTube の字幕から覚えたもの）</summary>
     private static readonly string[] Hallucinations =
     [
-        "ご視聴ありがとうございました",
-        "ご視聴ありがとうございました。",
-        "最後までご視聴いただきありがとうございました",
-        "チャンネル登録よろしくお願いします",
-        "[音楽]",
-        "(音楽)",
+        "ご視聴ありがとうございました",  // skip-tr（Whisper の出力と照らす語）
+        "ご視聴ありがとうございました。",  // skip-tr（Whisper の出力と照らす語）
+        "最後までご視聴いただきありがとうございました",  // skip-tr（Whisper の出力と照らす語）
+        "チャンネル登録よろしくお願いします",  // skip-tr（Whisper の出力と照らす語）
+        "[音楽]",  // skip-tr（Whisper の出力と照らす語）
+        "(音楽)",  // skip-tr（Whisper の出力と照らす語）
         "[BLANK_AUDIO]",
     ];
 
