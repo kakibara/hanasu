@@ -29,6 +29,7 @@ jobs:
           persist-credentials: false
 
       - name: Debug build
+        shell: bash
         run: |
           swift --version
           swift build 2>&1 | tail -40
@@ -43,4 +44,5 @@ jobs:
 
       # デバッグで通っても、最適化ビルドでだけ落ちることがある（PR #39）
       - name: Release build
+        shell: bash
         run: swift build -c release 2>&1 | tail -40

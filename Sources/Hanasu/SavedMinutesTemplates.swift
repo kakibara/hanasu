@@ -85,11 +85,15 @@ enum SavedMinutesTemplateStore {
 
     /// 「名前 2」「名前 3」…と、重複しない名前を作る（複製・新規用）
     static func uniqueName(from base: String, in list: [SavedMinutesTemplate]) -> String {
-        let base = trimmedName(base).isEmpty ? "新しいテンプレート" : trimmedName(base)
-        if !isNameTaken(base, in: list) { return base }
+        var stem = trimmedName(base).isEmpty ? "新しいテンプレート" : trimmedName(base)
+        if !isNameTaken(stem, in: list) { return stem }
+        // 「営業定例 2」を複製して「営業定例 2 2」にならないよう、末尾の番号は外す
+        if let space = stem.lastIndex(of: " "), Int(stem[stem.index(after: space)...]) != nil {
+            stem = String(stem[..<space])
+        }
         var n = 2
-        while isNameTaken("\(base) \(n)", in: list) { n += 1 }
-        return "\(base) \(n)"
+        while isNameTaken("\(stem) \(n)", in: list) { n += 1 }
+        return "\(stem) \(n)"
     }
 
     /// 追加する。問題があれば追加せず理由を返す
