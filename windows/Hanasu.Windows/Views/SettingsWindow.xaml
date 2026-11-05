@@ -238,7 +238,7 @@
                         <StackPanel x:Name="ApiKeyPanel" Margin="0,8,0,0">
                             <DockPanel>
                                 <TextBlock Text="API キー" Width="110" VerticalAlignment="Center" />
-                                <Button DockPanel.Dock="Right" Content="削除" Click="OnDeleteApiKey" Margin="8,0,0,0" />
+                                <Button DockPanel.Dock="Right" Content="削除" AutomationProperties.Name="Gemini の API キーを削除" Click="OnDeleteApiKey" Margin="8,0,0,0" />
                                 <Button DockPanel.Dock="Right" Content="保存" Click="OnSaveApiKey" Margin="8,0,0,0" />
                                 <PasswordBox x:Name="ApiKeyBox" Padding="4,3" />
                             </DockPanel>
@@ -262,7 +262,7 @@
                         <TextBlock Style="{StaticResource Section}" Text="Claude の API キー" />
                         <DockPanel>
                             <TextBlock Text="API キー" Width="110" VerticalAlignment="Center" />
-                            <Button DockPanel.Dock="Right" Content="削除" Click="OnDeleteClaudeKey" Margin="8,0,0,0" />
+                            <Button DockPanel.Dock="Right" Content="削除" AutomationProperties.Name="Claude の API キーを削除" Click="OnDeleteClaudeKey" Margin="8,0,0,0" />
                             <Button DockPanel.Dock="Right" x:Name="ClaudeCheckButton" Content="接続を試す" Click="OnCheckClaude" Margin="8,0,0,0" />
                             <Button DockPanel.Dock="Right" Content="保存" Click="OnSaveClaudeKey" Margin="8,0,0,0" />
                             <PasswordBox x:Name="ClaudeKeyBox" Padding="4,3" />

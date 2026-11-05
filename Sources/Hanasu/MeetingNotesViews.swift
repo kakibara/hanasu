@@ -29,6 +29,8 @@ struct LiveNotesPanel: View {
                     Image(systemName: caption.isShown ? "captions.bubble.fill" : "captions.bubble")
                 }
                 .help("字幕をほかのアプリの前面に表示する")
+                .accessibilityLabel("字幕を前面に表示")
+                .accessibilityValue(caption.isShown ? "オン" : "オフ")
                 Button(action: highlight) {
                     Label("ここ重要", systemImage: "star.fill")
                 }

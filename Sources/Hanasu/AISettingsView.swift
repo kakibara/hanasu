@@ -174,6 +174,7 @@ struct ClaudeKeySection: View {
     @State private var saved = Keychain.exists(.claudeAPIKey)
     @State private var status: String?
     @State private var isTesting = false
+    @State private var confirmDelete = false
 
     var body: some View {
         Section {
@@ -185,7 +186,13 @@ struct ClaudeKeySection: View {
                     if saved {
                         Button(isTesting ? "確かめています…" : "接続を試す", action: testConnection)
                             .disabled(isTesting)
-                        Button("削除", role: .destructive, action: deleteKey)
+                        Button("削除…", role: .destructive) { confirmDelete = true }
+                            .confirmationDialog("保存した Claude の API キーを削除しますか？", isPresented: $confirmDelete) {
+                                Button("削除", role: .destructive, action: deleteKey)
+                                Button("キャンセル", role: .cancel) {}
+                            } message: {
+                                Text("キーチェーンから消えます。使い続けるには、もう一度キーを保存してください。")
+                            }
                     }
                 }
             }
@@ -249,6 +256,7 @@ struct GeminiAuthSection: View {
     @State private var hint: String? = Keychain.hint(.geminiAPIKey)
     @State private var saved = Keychain.exists(.geminiAPIKey)
     @State private var savedMessage: String?
+    @State private var confirmDeleteKey = false
 
     var body: some View {
         Section {
@@ -263,11 +271,17 @@ struct GeminiAuthSection: View {
                             .foregroundStyle(saved ? .primary : .secondary)
                             .monospaced()
                         if saved {
-                            Button("削除", role: .destructive) {
-                                Keychain.delete(.geminiAPIKey)
-                                refresh()
-                                savedMessage = "キーを削除しました"
-                            }
+                            Button("削除…", role: .destructive) { confirmDeleteKey = true }
+                                .confirmationDialog("保存した Gemini の API キーを削除しますか？", isPresented: $confirmDeleteKey) {
+                                    Button("削除", role: .destructive) {
+                                        Keychain.delete(.geminiAPIKey)
+                                        refresh()
+                                        savedMessage = "キーを削除しました"
+                                    }
+                                    Button("キャンセル", role: .cancel) {}
+                                } message: {
+                                    Text("キーチェーンから消えます。使い続けるには、もう一度キーを保存してください。")
+                                }
                         }
                     }
                 }

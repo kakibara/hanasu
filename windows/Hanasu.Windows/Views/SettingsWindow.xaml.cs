@@ -520,7 +520,15 @@ public partial class SettingsWindow : Window
 
     private void OnSaveApiKey(object sender, RoutedEventArgs e) => _ = SaveKeyAsync(SecretKind.GeminiApiKey, ApiKeyBox, ApiKeyStatus);
 
-    private void OnDeleteApiKey(object sender, RoutedEventArgs e) => _ = DeleteKeyAsync(SecretKind.GeminiApiKey, ApiKeyBox, ApiKeyStatus);
+    private void OnDeleteApiKey(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmDeleteKey("Gemini")) return;
+        _ = DeleteKeyAsync(SecretKind.GeminiApiKey, ApiKeyBox, ApiKeyStatus);
+    }
+
+    private bool ConfirmDeleteKey(string name) =>
+        MessageBox.Show(this, $"保存した {name} の API キーを削除しますか？使い続けるには、もう一度キーを保存してください。", "Hanasu",
+            MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK;
 
     private void UpdateApiKeyStatus() => ApiKeyStatus.Text = host.Secrets.Describe(SecretKind.GeminiApiKey).Describe();
 
@@ -528,7 +536,11 @@ public partial class SettingsWindow : Window
 
     private void OnSaveClaudeKey(object sender, RoutedEventArgs e) => _ = SaveKeyAsync(SecretKind.ClaudeApiKey, ClaudeKeyBox, ClaudeKeyStatus);
 
-    private void OnDeleteClaudeKey(object sender, RoutedEventArgs e) => _ = DeleteKeyAsync(SecretKind.ClaudeApiKey, ClaudeKeyBox, ClaudeKeyStatus);
+    private void OnDeleteClaudeKey(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmDeleteKey("Claude")) return;
+        _ = DeleteKeyAsync(SecretKind.ClaudeApiKey, ClaudeKeyBox, ClaudeKeyStatus);
+    }
 
     private void UpdateClaudeKeyStatus() => ClaudeKeyStatus.Text = host.Secrets.Describe(SecretKind.ClaudeApiKey).Describe();
 

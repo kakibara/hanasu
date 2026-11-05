@@ -222,6 +222,8 @@ struct DictationHistoryView: View {
                     Button { query = "" } label: { Image(systemName: "xmark.circle.fill") }
                         .buttonStyle(.plain)
                         .foregroundStyle(.secondary)
+                        .help("検索語を消す")
+                        .accessibilityLabel("検索語を消す")
                 }
             }
             .padding(.horizontal, 8)
