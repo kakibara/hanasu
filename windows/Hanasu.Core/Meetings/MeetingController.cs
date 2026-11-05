@@ -295,6 +295,9 @@ public sealed class MeetingController
 
     // MARK: - 記録のあとの操作
 
+    /// <summary>議事録を作り直している会議があるか（State は変わらないので、アップデートの入れ替え前の確認に使う）</summary>
+    public bool IsRegenerating { get { lock (gate) return regenerating.Count > 0; } }
+
     /// <summary>議事録を作り直す（型を変えるときは template を渡す）。失敗したら例外を投げ、会議は元のまま</summary>
     public async Task RegenerateMinutesAsync(Meeting meeting, MinutesTemplate? template = null, string? customPrompt = null,
         CancellationToken cancellationToken = default)

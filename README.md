@@ -147,7 +147,7 @@ See [windows/README.md](windows/README.md) for more notes and how the Windows ve
 
 </details>
 
-When a new version is released, Hanasu tells you at launch and asks before it updates itself. You can also choose **アップデートを確認…** (Check for Updates) in the menu (the launch check can be turned off in **Settings → General**). Versions up to v1.6.0 don't have this yet, so update those by hand once.
+When a new version is released, Hanasu tells you at launch and asks before it updates itself. You can also choose **アップデートを確認…** (Check for Updates) in the menu (the launch check can be turned off in **Settings → General**). Versions up to v1.5.0 don't have this yet, so update those by hand once.
 
 ## Quick start
 

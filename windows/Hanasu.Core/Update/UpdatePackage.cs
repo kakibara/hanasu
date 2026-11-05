@@ -14,6 +14,29 @@ public static class UpdatePackage
     /// <summary>展開したあとの大きさの上限（zip 爆弾を避ける）</summary>
     public const long MaxExtractedBytes = 4L * 1024 * 1024 * 1024;
 
+    /// <summary>
+    /// 入れ替えで消してよいか確かめる。今のインストール先の最上位の項目（ファイル・フォルダ）のうち、
+    /// 新しい版の最上位に無く、古い版が置いたかもしれない .dll / .pdb のファイルでもないものの名前を返す（空なら入れ替えてよい）。
+    /// 入れ替えは今のフォルダごと取り替えて消すので、Desktop や C:\Tools のように Hanasu 専用でないフォルダでは、利用者のほかのファイルが消える
+    /// </summary>
+    public static IReadOnlyList<string> FindForeignEntries(string installDir, string stagedDir)
+    {
+        var known = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var path in Directory.EnumerateFileSystemEntries(stagedDir)) known.Add(Path.GetFileName(path));
+        var foreign = new List<string>();
+        foreach (var path in Directory.EnumerateFileSystemEntries(installDir))
+        {
+            var name = Path.GetFileName(path);
+            if (known.Contains(name)) continue;
+            var isFile = File.Exists(path) && !Directory.Exists(path);
+            var extension = Path.GetExtension(name);
+            if (isFile && (extension.Equals(".dll", StringComparison.OrdinalIgnoreCase) || extension.Equals(".pdb", StringComparison.OrdinalIgnoreCase))) continue;
+            foreign.Add(name);
+        }
+        foreign.Sort(StringComparer.OrdinalIgnoreCase);
+        return foreign;
+    }
+
     /// <summary>展開して、新しい Hanasu のフォルダ（stagingDirectory\Hanasu）を返す。形が違えば UpdateException</summary>
     public static string Extract(string zipPath, string stagingDirectory)
     {

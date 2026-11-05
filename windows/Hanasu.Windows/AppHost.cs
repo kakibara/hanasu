@@ -141,6 +141,8 @@ internal sealed class AppHost : IDisposable
             AppLog.Write($"mark interrupted meetings failed: {e.Message}");
         }
         RegisterHotKeys();
+        // 設計判断: DEC-REL-030（前回の入れ替えが失敗していたら知らせる。起動時の確認より先）
+        Updates.ReportPreviousAttempt();
         tray.ShowBalloon("Hanasu を起動しました",
             $"{Settings.Current.HotKey.DisplayString} で音声入力、{Settings.Current.TranslateHotKey.DisplayString} で{TranslationLanguages.MenuVerb(Settings.Current.TranslationLanguages)}して入力します。");
         if (firstRun) ShowSettings();

@@ -42,8 +42,29 @@ public static partial class ReleaseParser
             if (version is null || tag is null) return null;
 
             var releaseUrl = ReleasePage(Str(root, "html_url"), tag);
-            return new ReleaseInfo(version, tag, releaseUrl, Str(root, "body") ?? "", FindAsset(root, tag));
+            return new ReleaseInfo(version, tag, releaseUrl, ExtractNotes(Str(root, "body") ?? ""), FindAsset(root, tag));
         }
+    }
+
+    private const string NotesStart = "<!-- release-notes -->";
+    private const string NotesEnd = "<!-- /release-notes -->";
+    private const string InstallHeading = "## インストール";
+
+    /// <summary>
+    /// リリースの本文から、利用者に見せる部分だけ取り出す（Mac 版と同じ）。
+    /// 「&lt;!-- release-notes --&gt;」と「&lt;!-- /release-notes --&gt;」の間があればそれ、なければ「## インストール」より前。前後の空白は除く。
+    /// </summary>
+    public static string ExtractNotes(string body)
+    {
+        var start = body.IndexOf(NotesStart, StringComparison.Ordinal);
+        if (start >= 0)
+        {
+            var from = start + NotesStart.Length;
+            var end = body.IndexOf(NotesEnd, from, StringComparison.Ordinal);
+            if (end >= 0) return body[from..end].Trim();
+        }
+        var install = body.IndexOf(InstallHeading, StringComparison.Ordinal);
+        return (install >= 0 ? body[..install] : body).Trim();
     }
 
     private static UpdateAsset? FindAsset(JsonElement root, string tag)

@@ -288,4 +288,67 @@ public class UpdateTests
         Assert.False(File.Exists(Path.Combine(Path.GetDirectoryName(staging)!, "evil.txt")));
         Assert.Throws<UpdateException>(() => UpdatePackage.Extract(MakeZip(("Other/Hanasu.exe", "x")), Path.Combine(TestKeys.TempDirectory(), "s2")));
     }
+
+    // MARK: - 入れ替えてよいフォルダか
+
+    private static string Make(string root, params string[] files)
+    {
+        foreach (var f in files)
+        {
+            var path = Path.Combine(root, f);
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            File.WriteAllText(path, "x");
+        }
+        Directory.CreateDirectory(root);
+        return root;
+    }
+
+    [Fact]
+    public void DedicatedFolderHasNoForeignEntries()
+    {
+        var staged = Make(Path.Combine(TestKeys.TempDirectory(), "new"), "Hanasu.exe", "Hanasu.Core.dll", "llama/server.txt", "ja/x.resources.dll");
+        // 古い版にだけあった dll / pdb は、外のものではない。名前の大文字小文字は問わない
+        var install = Make(Path.Combine(TestKeys.TempDirectory(), "cur"), "HANASU.EXE", "Hanasu.Core.dll", "Old.dll", "Old.pdb", "llama/server.txt");
+        Assert.Empty(UpdatePackage.FindForeignEntries(install, staged));
+    }
+
+    [Fact]
+    public void ForeignFilesAndFoldersAreReported()
+    {
+        var staged = Make(Path.Combine(TestKeys.TempDirectory(), "new"), "Hanasu.exe", "llama/server.txt");
+        var install = Make(Path.Combine(TestKeys.TempDirectory(), "cur"), "Hanasu.exe", "memo.txt", "report.docx", "Photos/a.jpg", "tool.exe");
+        Directory.CreateDirectory(Path.Combine(install, "EmptyFolder"));
+        Assert.Equal(new[] { "EmptyFolder", "memo.txt", "Photos", "report.docx", "tool.exe" }, UpdatePackage.FindForeignEntries(install, staged));
+    }
+
+    [Fact]
+    public void ADirectoryNamedLikeADllIsForeign()
+    {
+        var staged = Make(Path.Combine(TestKeys.TempDirectory(), "new"), "Hanasu.exe");
+        var install = Make(Path.Combine(TestKeys.TempDirectory(), "cur"), "Hanasu.exe", "stuff.dll/inner.txt");
+        Assert.Equal(new[] { "stuff.dll" }, UpdatePackage.FindForeignEntries(install, staged));
+    }
+
+    // MARK: - リリース本文の取り出し
+
+    private const string RealBody =
+        "<!-- release-notes -->\n## ハイライト\n- 音声入力が速くなりました\n<!-- /release-notes -->\n\n## What's Changed\n* PR by @someone\n\n## インストール\n- Windows: zip を展開";
+
+    [Fact]
+    public void NotesAreTheTextBetweenMarkers()
+    {
+        Assert.Equal("## ハイライト\n- 音声入力が速くなりました", ReleaseParser.ExtractNotes(RealBody));
+        var json = System.Text.Json.JsonSerializer.Serialize(new { tag_name = "v1.5.0", body = RealBody });
+        Assert.Equal("## ハイライト\n- 音声入力が速くなりました", ReleaseParser.Parse(json)!.Notes);
+    }
+
+    [Fact]
+    public void NotesFallBackToTextBeforeInstallHeading()
+    {
+        Assert.Equal("## 変更\n- 例", ReleaseParser.ExtractNotes("\n## 変更\n- 例\n\n## インストール\n手順"));
+        Assert.Equal("## 変更\n- 例", ReleaseParser.ExtractNotes("## 変更\n- 例\n"));
+        // 終わりの印がないときも、本文全体は出さない
+        Assert.Equal("a", ReleaseParser.ExtractNotes("a\n## インストール\nb"));
+        Assert.Equal("", ReleaseParser.ExtractNotes(""));
+    }
 }

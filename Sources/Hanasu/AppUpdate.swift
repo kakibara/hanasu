@@ -9,7 +9,10 @@ import SwiftUI
 // 設計判断: DEC-REL-020
 /// 「1.6.0」「v1.6.0」「1.6」の形の版。数字の部分ごとに比べる（1.10.0 は 1.9.0 より新しい）
 struct AppVersion: Comparable, CustomStringConvertible {
+    /// 比べるための数字（末尾の 0 を除いたもの）
     let components: [Int]
+    /// 出すための形（少なくとも 3 つの数字。「1.7」は「1.7.0」、「v2」は「2.0.0」）
+    let description: String
 
     init?(_ text: String) {
         var trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -21,10 +24,15 @@ struct AppVersion: Comparable, CustomStringConvertible {
             guard !part.isEmpty, part.allSatisfy(\.isASCII), part.allSatisfy(\.isNumber), let number = Int(part) else { return nil }
             numbers.append(number)
         }
+        var shown = numbers
+        while shown.count < 3 { shown.append(0) }
+        description = shown.map(String.init).joined(separator: ".")
         // 末尾の 0 を除いて比べる（1.6 と 1.6.0 を同じにする）
         while numbers.count > 1, numbers.last == 0 { numbers.removeLast() }
         components = numbers
     }
+
+    static func == (lhs: AppVersion, rhs: AppVersion) -> Bool { lhs.components == rhs.components }
 
     static func < (lhs: AppVersion, rhs: AppVersion) -> Bool {
         for index in 0..<max(lhs.components.count, rhs.components.count) {
@@ -34,8 +42,6 @@ struct AppVersion: Comparable, CustomStringConvertible {
         }
         return false
     }
-
-    var description: String { components.map(String.init).joined(separator: ".") }
 
     /// 動いている Hanasu の版（Info.plist の CFBundleShortVersionString。build-app.sh が VERSION から書く）
     static var current: AppVersion? {
@@ -107,7 +113,8 @@ struct UpdateRelease: Equatable {
         guard let page = URL(string: response.html_url), UpdateHTTP.isAllowed(page) else {
             throw ParseError.invalid("リリースのページが GitHub ではありません")
         }
-        let versionText = response.tag_name.hasPrefix("v") ? String(response.tag_name.dropFirst()) : response.tag_name
+        let versionText = response.tag_name.hasPrefix("v") || response.tag_name.hasPrefix("V")
+            ? String(response.tag_name.dropFirst()) : response.tag_name
         let name = macAssetName(for: versionText)
         var asset: Asset?
         if let found = response.assets?.first(where: { $0.name == name }),
@@ -352,6 +359,36 @@ enum UpdateInstaller {
         guard FileManager.default.isWritableFile(atPath: parent.path),
               FileManager.default.isWritableFile(atPath: app.path)
         else { throw Failure.notWritable(parent.path) }
+        // 証明書のない（手元でビルドした）Hanasu は、ダウンロードしても verify で断るので、先に断る
+        guard UpdateSignature.leafCertificate(of: app) != nil else { throw UpdateSignature.Failure.unsignedCurrent }
+    }
+
+    // 設計判断: DEC-REL-026
+    /// 入れ替えを始めた印（入れ替える版とリリースのページ）と、スクリプトが失敗の理由を書くファイル。
+    /// 次の起動で、版が上がっていなければ知らせる（スクリプトの失敗は、Hanasu が終わったあとなので画面に出せない）
+    static var pendingFile: URL { stateDirectory.appendingPathComponent("update-pending") }
+    static var resultFile: URL { stateDirectory.appendingPathComponent("update-result") }
+    private static var stateDirectory: URL {
+        let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        return caches.appendingPathComponent(Bundle.main.bundleIdentifier ?? "dev.mactypeless.Hanasu", isDirectory: true)
+    }
+
+    static func recordPending(_ release: UpdateRelease) throws {
+        try FileManager.default.createDirectory(at: stateDirectory, withIntermediateDirectories: true)
+        try? FileManager.default.removeItem(at: resultFile)
+        try "\(release.version)\n\(release.pageURL.absoluteString)\n".write(to: pendingFile, atomically: true, encoding: .utf8)
+    }
+
+    /// 前の起動で始めた入れ替えの結果を読み、印を消す。版が上がっていなければ（入れ替える版, ページ, 理由）
+    static func takeFailedAttempt(current: AppVersion?) -> (version: String, page: URL?, reason: String)? {
+        guard let text = try? String(contentsOf: pendingFile, encoding: .utf8) else { return nil }
+        let reason = (try? String(contentsOf: resultFile, encoding: .utf8))?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        try? FileManager.default.removeItem(at: pendingFile)
+        try? FileManager.default.removeItem(at: resultFile)
+        let lines = text.split(separator: "\n").map(String.init)
+        guard let first = lines.first, let expected = AppVersion(first) else { return nil }
+        if let current, current >= expected { return nil }
+        return (expected.description, lines.count > 1 ? URL(string: lines[1]) : nil, reason)
     }
 
     /// 入れ替えのための作業フォルダ（入れ替える .app と同じボリュームに作る。mv がコピーにならないように）
@@ -378,17 +415,21 @@ enum UpdateInstaller {
     static let swapScript = """
         #!/bin/sh
         # Hanasu のアップデート: Hanasu が終わるのを待ってから、.app を入れ替えて開き直す
-        # 引数: <待つ PID> <入れ替える .app> <新しい .app> <作業フォルダ>
-        pid="$1"; target="$2"; new="$3"; work="$4"
+        # 引数: <待つ PID> <入れ替える .app> <新しい .app> <作業フォルダ> <失敗の理由を書くファイル>
+        pid="$1"; target="$2"; new="$3"; work="$4"; result="$5"
         i=0
         while kill -0 "$pid" 2>/dev/null; do
           i=$((i + 1))
-          if [ "$i" -gt 600 ]; then exit 1; fi
+          if [ "$i" -gt 600 ]; then
+            echo "Hanasu が 60 秒たっても終わらなかったので、入れ替えませんでした" > "$result"
+            rm -rf "$work"
+            exit 1
+          fi
           sleep 0.1
         done
         backup="$work/Hanasu-previous.app"
-        if mv "$target" "$backup"; then
-          if ! mv "$new" "$target"; then
+        if mv "$target" "$backup" 2>> "$result"; then
+          if ! mv "$new" "$target" 2>> "$result"; then
             mv "$backup" "$target"
           fi
         fi
@@ -402,7 +443,8 @@ enum UpdateInstaller {
         try swapScript.write(to: script, atomically: true, encoding: .utf8)
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/sh")
-        process.arguments = [script.path, String(ProcessInfo.processInfo.processIdentifier), target.path, newApp.path, workDirectory.path]
+        process.arguments = [script.path, String(ProcessInfo.processInfo.processIdentifier), target.path, newApp.path, workDirectory.path,
+                             resultFile.path]
         process.standardInput = FileHandle.nullDevice
         process.standardOutput = FileHandle.nullDevice
         process.standardError = FileHandle.nullDevice
@@ -418,8 +460,33 @@ enum UpdateInstaller {
 final class AppUpdater {
     /// 録音中・会議の記録中・処理中なら true（AppDelegate が渡す）
     var isBusy: () -> Bool = { false }
-    private var isRunning = false
+    /// GitHub に問い合わせている間
+    private var isFetching = false
+    /// 尋ねている・入れ替えている間（ダイアログを 2 つ出さない）
+    private var isPrompting = false
+    /// この起動で尋ねた版（起動時の確認が録音の終わりを待つ間に、メニューから尋ねた版をもう一度尋ねない）
+    private var offeredTags: Set<String> = []
     private var progressWindow: NSWindow?
+
+    // 設計判断: DEC-REL-026
+    /// 前の起動で始めた入れ替えが済んでいなければ、理由を出してリリースのページを案内する（起動のたびに呼ぶ）
+    func reportPreviousAttempt() {
+        guard let failed = UpdateInstaller.takeFailedAttempt(current: AppVersion.current) else { return }
+        appLog.error("update: previous attempt to \(failed.version, privacy: .public) failed: \(failed.reason, privacy: .public)")
+        Task {
+            try? await Task.sleep(for: .seconds(1))
+            let alert = NSAlert()
+            alert.messageText = "Hanasu \(failed.version) へのアップデートができませんでした"
+            alert.informativeText = (failed.reason.isEmpty ? "" : "\(failed.reason)\n\n")
+                + "Hanasu.app を入れ替えられませんでした（macOS がアプリの書き換えを止めたときなど）。リリースのページから zip をダウンロードして、手で入れ替えてください。"
+            alert.addButton(withTitle: "リリースのページを開く")
+            alert.addButton(withTitle: "閉じる")
+            NSApp.activate()
+            if alert.runModal() == .alertFirstButtonReturn {
+                NSWorkspace.shared.open(failed.page ?? URL(string: "https://github.com/kakibara/hanasu/releases/latest")!)
+            }
+        }
+    }
 
     // 要件: REQ-REL-010
     // 設計判断: DEC-REL-024
@@ -441,17 +508,21 @@ final class AppUpdater {
     }
 
     private func check(manual: Bool) async {
-        guard !isRunning else { return }
-        isRunning = true
-        defer { isRunning = false }
+        if isFetching || isPrompting {
+            if manual { alert("アップデートを確かめています", "いま確かめているか、アップデートの確認を出しているところです。") }
+            return
+        }
         guard let current = AppVersion.current else {
             if manual { alert("今の版が分かりません", "Hanasu.app として動いていないため、アップデートを確かめられません。") }
             return
         }
         let release: UpdateRelease?
+        isFetching = true
         do {
             release = try await UpdateHTTP.fetchLatestRelease()
+            isFetching = false
         } catch {
+            isFetching = false
             appLog.notice("update check failed: \(error.localizedDescription, privacy: .public)")
             if manual { alert("アップデートを確かめられませんでした", error.localizedDescription) }
             return
@@ -468,7 +539,12 @@ final class AppUpdater {
         // 起動時の確認は、録音・記録が終わるまで尋ねるのを待つ
         if !manual {
             while isBusy() { try? await Task.sleep(for: .seconds(10)) }
+            // 待つ間にメニューから確かめて尋ねた版は、もう尋ねない
+            guard !isPrompting, !offeredTags.contains(release.tag) else { return }
         }
+        offeredTags.insert(release.tag)
+        isPrompting = true
+        defer { isPrompting = false }
         switch ask(release, current: current) {
         case .update: await install(release)
         case .later: break
@@ -499,18 +575,18 @@ final class AppUpdater {
 
     /// リリース文を、スクロールできる欄に出す（Markdown は解釈せず、太字の印だけを外す）
     private static func notesView(_ notes: String) -> NSView {
-        let scroll = NSScrollView(frame: NSRect(x: 0, y: 0, width: 420, height: 220))
-        scroll.hasVerticalScroller = true
+        // scrollableTextView は、中の文が長ければ縦に伸びてスクロールできる組み合わせを作る
+        let scroll = NSTextView.scrollableTextView()
+        scroll.frame = NSRect(x: 0, y: 0, width: 420, height: 220)
         scroll.borderType = .bezelBorder
-        let text = NSTextView(frame: scroll.bounds)
-        text.isEditable = false
-        text.isSelectable = true
-        text.autoresizingMask = [.width]
-        text.textContainerInset = NSSize(width: 6, height: 6)
-        text.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-        text.textColor = NSColor.labelColor
-        text.string = notes.replacingOccurrences(of: "**", with: "")
-        scroll.documentView = text
+        if let text = scroll.documentView as? NSTextView {
+            text.isEditable = false
+            text.isSelectable = true
+            text.textContainerInset = NSSize(width: 6, height: 6)
+            text.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+            text.textColor = NSColor.labelColor
+            text.string = notes.replacingOccurrences(of: "**", with: "")
+        }
         return scroll
     }
 
@@ -531,8 +607,13 @@ final class AppUpdater {
             workDirectory = work
             showProgress("Hanasu \(release.version) をダウンロードしています…")
             let zip = try await UpdateHTTP.download(asset, into: work)
-            let newApp = try UpdateInstaller.extract(zip, into: work)
-            try UpdateSignature.verify(newApp: newApp, current: Bundle.main.bundleURL, expectedVersion: release.version)
+            // 展開と署名の確認は数秒かかるので、UI のスレッドの外で行う
+            let current = Bundle.main.bundleURL, version = release.version
+            let newApp = try await Task.detached {
+                let app = try UpdateInstaller.extract(zip, into: work)
+                try UpdateSignature.verify(newApp: app, current: current, expectedVersion: version)
+                return app
+            }.value
             closeProgress()
             // ダウンロードの間に録音・記録を始めていたら、入れ替えない
             guard !isBusy() else {
@@ -540,6 +621,7 @@ final class AppUpdater {
                 alert("今はアップデートできません", "録音中・会議の記録中・処理中は入れ替えません。終わってから、メニューの「アップデートを確認…」でもう一度選んでください。")
                 return
             }
+            try UpdateInstaller.recordPending(release)
             try UpdateInstaller.launchSwap(newApp: newApp, workDirectory: work)
             appLog.notice("update: installing \(release.tag, privacy: .public), terminating")
             NSApp.terminate(nil)
@@ -666,18 +748,20 @@ enum AppUpdateCLI {
                 print("--version <版> を付けてください")
                 exit(1)
             }
+            var work: URL?
+            var ok = false
             do {
-                try UpdateInstaller.checkInstallLocation()
-                let work = try UpdateInstaller.makeWorkDirectory()
-                defer { try? FileManager.default.removeItem(at: work) }
-                let app = try UpdateInstaller.extract(URL(fileURLWithPath: zip), into: work)
+                let directory = try UpdateInstaller.makeWorkDirectory()
+                work = directory
+                let app = try UpdateInstaller.extract(URL(fileURLWithPath: zip), into: directory)
                 try UpdateSignature.verify(newApp: app, current: Bundle.main.bundleURL, expectedVersion: version)
                 print("ok: \(app.lastPathComponent) は今の Hanasu と同じ証明書で署名されていて、版は \(version) です")
-                exit(0)
+                ok = true
             } catch {
                 print("ng: \(error.localizedDescription)")
-                exit(1)
             }
+            if let work { try? FileManager.default.removeItem(at: work) }
+            exit(ok ? 0 : 1)
         }
     }
 
@@ -713,6 +797,8 @@ enum AppUpdateCLI {
         expect(v("v1.6.0") == v("1.6"), "v1.6.0 と 1.6 は同じ")
         expect(v("2.0.0") > v("1.99.99"), "2.0.0 は 1.99.99 より新しい")
         expect(!(v("1.6.0") > v("1.6.0")), "同じ版は新しくない")
+        expect(v("1.7").description == "1.7.0" && v("v2").description == "2.0.0" && v("1.10.0").description == "1.10.0",
+               "版は 3 つの数字で出す")
         expect(AppVersion("1.6.0-beta") == nil && AppVersion("") == nil && AppVersion("1..0") == nil, "形の違う版は読まない")
 
         // リリースの情報
@@ -774,7 +860,7 @@ enum AppUpdateCLI {
         expect(!UpdateHTTP.isAllowed(URL(string: "https://evilgithubusercontent.com/x")!), "githubusercontent.com で終わるだけのホストには従わない")
 
         // 入れ替えのスクリプトは、パスを引数で受け取る（文に埋め込まない）
-        expect(UpdateInstaller.swapScript.contains("target=\"$2\"") && !UpdateInstaller.swapScript.contains("/Applications"),
+        expect(UpdateInstaller.swapScript.contains("result=\"$5\"") && UpdateInstaller.swapScript.contains("target=\"$2\"") && !UpdateInstaller.swapScript.contains("/Applications"),
                "スクリプトは引数でパスを受け取る")
 
         print(failures == 0 ? "すべて通りました" : "\(failures) 件の失敗")

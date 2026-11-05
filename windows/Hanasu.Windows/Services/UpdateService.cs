@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Meetings;
+using Hanasu.Core.Settings;
 using Hanasu.Core.Update;
 using Hanasu.Windows.Views;
 
@@ -132,8 +133,48 @@ internal sealed class UpdateService
     }
 
     // 設計判断: DEC-REL-023
+    /// <summary>録音中・会議の記録中・処理中のほか、議事録の作り直しとモデルのダウンロードも「忙しい」に含める（途中で終わると失われるため）</summary>
     private bool IsRecordingOrProcessing() =>
-        host.Dictation.State != DictationState.Idle || host.Meetings.State != MeetingState.Idle;
+        host.Dictation.State != DictationState.Idle || host.Meetings.State != MeetingState.Idle
+        || host.Meetings.IsRegenerating || host.WhisperModels.IsAnyDownloading || host.LocalLlmModels.IsAnyDownloading;
+
+    /// <summary>ダウンロード全体の上限（これを過ぎたらやめる）</summary>
+    private static readonly TimeSpan DownloadTimeout = TimeSpan.FromMinutes(10);
+
+    /// <summary>入れ替えを始める前に書く印（中身は入れ替えたい版）。入れ替えが失敗すると、次の起動まで残る</summary>
+    private static string PendingFile => Path.Combine(HanasuPaths.LocalDataDirectory, "update-pending.txt");
+
+    // 設計判断: DEC-REL-030
+    /// <summary>
+    /// 起動のたびに呼ぶ。前回、入れ替えを始めたのに版が上がっていなければ（スクリプトが入れ替えられなかった）、理由の手がかりと
+    /// リリースのページを案内する。印のファイルは読んだら消す
+    /// </summary>
+    public void ReportPreviousAttempt()
+    {
+        try
+        {
+            if (!File.Exists(PendingFile)) return;
+            var text = File.ReadAllText(PendingFile).Trim();
+            try { File.Delete(PendingFile); }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException) { AppLog.Write($"update: pending marker not deleted: {e.Message}"); }
+            var expected = AppVersion.Parse(text);
+            if (expected is null || CurrentVersion >= expected) return;
+            AppLog.Write($"update: previous attempt to {expected} did not complete (running {CurrentVersion})");
+            var logPath = Path.Combine(HanasuPaths.LocalDataDirectory, "Logs", "update.log");
+            var answer = MessageBox.Show(
+                $"Hanasu {expected} へのアップデートができませんでした。今は {CurrentVersion} のままです。\n\n詳しくは {logPath} に書いてあります。" +
+                "\n\nリリースのページから入れ直すこともできます。ブラウザで開きますか？",
+                "Hanasu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (answer == MessageBoxResult.Yes)
+            {
+                Shell.Open($"https://github.com/{UpdateHosts.Repository}/releases/tag/v{Uri.EscapeDataString(expected.ToString())}");
+            }
+        }
+        catch (Exception e)
+        {
+            AppLog.Write($"update: report previous attempt failed: {e.Message}");
+        }
+    }
 
     private static void ShowBusyMessage() =>
         MessageBox.Show("録音中・会議の記録中はアップデートできません。終わってからもう一度、メニューの「アップデートを確認…」を押してください。",
@@ -151,9 +192,10 @@ internal sealed class UpdateService
         // 入れ替えは、いま動いているフォルダ（Hanasu.exe のあるところ）を、隣の作業用フォルダで作った新しいものと取り替える
         var installDir = Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
         var parent = Path.GetDirectoryName(installDir);
-        if (parent is null)
+        // ドライブの直下（C:\ など）に置いてあるときは、フォルダごとの入れ替えができない
+        if (parent is null || string.Equals(Path.GetPathRoot(installDir), installDir + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
         {
-            OfferReleasePage(release, "Hanasu のフォルダの場所を決められませんでした。");
+            OfferReleasePage(release, "Hanasu がドライブの直下に置かれているので、アプリの中からはアップデートできません。専用のフォルダに入れてください。");
             return;
         }
         var staging = Path.Combine(parent, "Hanasu.update");
@@ -162,12 +204,35 @@ internal sealed class UpdateService
             host.NotifyUpdate("アップデートをダウンロードしています", $"Hanasu {release.Version}（{asset.Size / (1024 * 1024)} MB）");
             PrepareStagingDirectory(staging);
             var zipPath = Path.Combine(staging, asset.Name);
+            // 設計判断: DEC-REL-030（通信が止まったまま待ち続けないよう、全体で 10 分に区切る）
             using (var http = UpdateChecker.CreateDownloadClient(CurrentVersion.ToString()))
+            using (var timeout = new CancellationTokenSource(DownloadTimeout))
             {
-                await UpdateChecker.DownloadAsync(http, asset, zipPath, null, CancellationToken.None);
+                try
+                {
+                    await UpdateChecker.DownloadAsync(http, asset, zipPath, null, timeout.Token);
+                }
+                catch (OperationCanceledException) when (timeout.IsCancellationRequested)
+                {
+                    throw new UpdateException("ダウンロードが 10 分で終わらなかったので、やめました");
+                }
             }
             host.NotifyUpdate("アップデートを準備しています", "ダウンロードした zip を展開しています。");
             var staged = await Task.Run(() => UpdatePackage.Extract(zipPath, Path.Combine(staging, "pkg")));
+
+            // 設計判断: DEC-REL-030（入れ替えは今のフォルダごと消すので、Hanasu 専用のフォルダでなければ進まない）
+            var foreign = UpdatePackage.FindForeignEntries(installDir, staged);
+            if (foreign.Count > 0)
+            {
+                AppLog.Write($"update: install folder has foreign entries: {string.Join(", ", foreign)}");
+                TryDeleteDirectory(staging);
+                var shown = string.Join("\n", foreign.Take(5).Select(n => $"・{n}"));
+                var more = foreign.Count > 5 ? $"\n…ほか {foreign.Count - 5} 件" : "";
+                OfferReleasePage(release,
+                    $"Hanasu のフォルダ（{installDir}）に、Hanasu のものではないファイルやフォルダがあります。\n{shown}{more}\n\n" +
+                    "アプリの中からのアップデートは、フォルダごと入れ替えるため、Hanasu 専用のフォルダに入れているときだけできます。専用のフォルダに入れ直してください。");
+                return;
+            }
             var scriptPath = Path.Combine(staging, "apply-update.ps1");
             await File.WriteAllTextAsync(scriptPath, SwapScript, new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
 
@@ -178,6 +243,9 @@ internal sealed class UpdateService
                 ShowBusyMessage();
                 return;
             }
+            // 入れ替えが失敗したら、次の起動で知らせるための印
+            Directory.CreateDirectory(HanasuPaths.LocalDataDirectory);
+            await File.WriteAllTextAsync(PendingFile, release.Version.ToString());
             StartSwapScript(scriptPath, installDir, staged, parent);
         }
         catch (Exception e) when (e is UpdateException or global::Hanasu.Core.ModelVerificationException or IOException or UnauthorizedAccessException
@@ -188,6 +256,13 @@ internal sealed class UpdateService
             TryDeleteDirectory(staging);
             var reason = e is UnauthorizedAccessException ? "このフォルダには書き込めません（Program Files などに入れている場合は、管理者として入れ直すか、リリースのページから入れてください）。" : e.Message;
             OfferReleasePage(release, $"アップデートできませんでした。\n{reason}");
+        }
+        catch (Exception e)
+        {
+            // 想定していない失敗でも、「アップデート」を押した人に何も出さないことがないように
+            AppLog.Write($"update: install failed (unexpected): {e}");
+            TryDeleteDirectory(staging);
+            OfferReleasePage(release, $"アップデートできませんでした。\n{e.Message}");
         }
     }
 
@@ -290,11 +365,22 @@ internal sealed class UpdateService
                     }
                 }
                 if ($renamed) {
-                    try {
-                        [System.IO.Directory]::Move($Staged, $Install)
+                    # 展開したばかりのファイルはウイルス対策ソフトが開いていることがあるので、こちらも数秒リトライ
+                    $moved = $false
+                    $moveError = ''
+                    for ($i = 0; $i -lt 15 -and -not $moved; $i++) {
+                        try {
+                            [System.IO.Directory]::Move($Staged, $Install)
+                            $moved = $true
+                        } catch {
+                            $moveError = $_.Exception.Message
+                            Start-Sleep -Seconds 1
+                        }
+                    }
+                    if ($moved) {
                         $swapped = $true
-                    } catch {
-                        Write-Log ('update: move failed, rolling back: ' + $_.Exception.Message)
+                    } else {
+                        Write-Log ('update: move failed, rolling back: ' + $moveError)
                         if (-not (Test-Path -LiteralPath $Install)) {
                             [System.IO.Directory]::Move($Old, $Install)
                         }

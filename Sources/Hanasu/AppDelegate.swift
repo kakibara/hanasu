@@ -82,10 +82,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
 
         // 設計判断: DEC-REL-023
+        // 録音・会議の記録・議事録の作り直し・ローカルのモデルのダウンロードの間は入れ替えない（終えると途中で切れる）
         updater.isBusy = { [weak self] in
             guard let self else { return false }
+            let downloading = LocalLLMModel.allCases.contains {
+                if case .downloading = LocalLLMStore.shared.status($0) { return true }
+                return false
+            }
             return self.controller.state != .idle || self.editController.state != .idle || self.meetingRecorder.state != .idle
+                || self.meetingRecorder.regeneratingID != nil || downloading
         }
+        // 設計判断: DEC-REL-026
+        // 前の起動で始めた入れ替えができていなければ知らせる
+        updater.reportPreviousAttempt()
 
         // 要件: REQ-COM-050, REQ-COM-051
         // 設計判断: DEC-COM-093
