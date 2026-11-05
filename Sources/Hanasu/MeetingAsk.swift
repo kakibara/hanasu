@@ -113,9 +113,10 @@ enum MeetingAsk {
         return Context(sources: sources, keywords: keywords, period: period, prompt: prompt)
     }
 
-    // 設計判断: DEC-MTG-053
+    // 設計判断: DEC-MTG-053, DEC-COM-054
     /// 会議 1 件分の資料。議事録があれば議事録と、検索でヒットした発言の前後を渡す。
     /// 議事録がなければ文字起こしを渡す（長すぎるときはヒットした発言の前後か、冒頭だけ）。
+    /// 記録の中の区切りのタグ（<meeting> <minutes> <transcript> など）は無害にしてから埋め込む（DEC-COM-054）
     static func material(for meeting: Meeting, hitBlocks: Set<UUID>, options: Options) -> String {
         let blocks = meeting.mergedBlocks()
         func line(_ b: Utterance) -> String { "[\(Meeting.clock(b.start))] \(meeting.displayName(for: b.speaker)): \(b.text)" }
@@ -135,14 +136,15 @@ enum MeetingAsk {
                 count += text.count
                 previous = i
             }
-            return lines.joined(separator: "\n")
+            return PromptText.neutralizeDelimiters(lines.joined(separator: "\n"))
         }
 
         if let minutes = meeting.minutes?.trimmingCharacters(in: .whitespacesAndNewlines), !minutes.isEmpty {
-            guard !hitBlocks.isEmpty else { return "<minutes>\n\(minutes)\n</minutes>" }
-            return "<minutes>\n\(minutes)\n</minutes>\n<transcript_excerpts>\n\(excerpts(limit: 6_000))\n</transcript_excerpts>"
+            let safeMinutes = PromptText.neutralizeDelimiters(minutes)
+            guard !hitBlocks.isEmpty else { return "<minutes>\n\(safeMinutes)\n</minutes>" }
+            return "<minutes>\n\(safeMinutes)\n</minutes>\n<transcript_excerpts>\n\(excerpts(limit: 6_000))\n</transcript_excerpts>"
         }
-        let transcript = meeting.transcriptForPrompt()
+        let transcript = PromptText.neutralizeDelimiters(meeting.transcriptForPrompt())
         if transcript.count <= options.maxTranscriptCharacters {
             return "<transcript>\n\(transcript)\n</transcript>"
         }

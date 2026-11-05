@@ -541,12 +541,21 @@
 - 実装の場所: `MeetingStore.createPrivateDirectory`
 
 ### DEC-COM-053 サービスアカウントの token_uri と Vertex AI のリージョンを確かめてから送る
-- 決めたこと: 鍵ファイルの `token_uri` が `https://oauth2.googleapis.com`（古い鍵の `https://accounts.google.com`）でなければ、署名した JWT を送らない。Vertex AI のリージョンは英小文字・数字・ハイフンだけを受け付ける（ホスト名に入るため）。
-- 理由: 鍵ファイルや設定（UserDefaults）を書き換えられると、署名した JWT やアクセストークンを別のホストに送らされうる。
-- 決めた場面: この PR（セキュリティの調査）
+- 決めたこと: 鍵ファイルの `token_uri` が `https://oauth2.googleapis.com`（古い鍵の `https://accounts.google.com`）でなければ、署名した JWT を送らない。Vertex AI のリージョンは英小文字・数字・ハイフンだけ（40 文字まで）を受け付ける（ホスト名に入るため）。Windows 版もリージョンは同じ形だけを受け付ける。`token_uri` は https であることだけを確かめる（Google の窓口に限るのは Mac だけ。テストが別のホストの偽の窓口を使うため）。
+- 理由: 鍵ファイルや設定（UserDefaults・settings.json）を書き換えられると、署名した JWT やアクセストークンを別のホストに送らされうる。リージョンはホスト名の一部になるので、確かめないと `evil.example/#` のような値で送り先そのものを変えられる。
+- 決めた場面: この PR（セキュリティの調査）。Windows のリージョンの確認はセキュリティの見直し（2026-11-05）
 - 関係する要件: REQ-COM-022
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `ServiceAccountTokenProvider.isTrustedTokenURL`、`GeminiClient.isValidLocation`
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiClient.cs`（`IsValidLocation`）、`windows/Hanasu.Core/Gemini/ServiceAccount.cs`（`Parse` の https の確認）
+
+### DEC-COM-054 Mac 版も、文字起こし・メモ・議事録の中の区切りのタグを無害にしてから埋め込む
+- 決めたこと: プロンプトの区切りに使うタグ（`<transcript>` `<transcript_excerpts>` `<user_notes>` `<action_items>` `<speaker_names>` と、会議への質問の `<meeting>` `<minutes>` `<question>`）が、埋め込むユーザー由来の文章（音声入力の認識結果、会議の文字起こし、本人のメモ、会議への質問に渡す議事録と文字起こし）に含まれていたら、全角の山かっこ（`＜/transcript＞`）に置き換えてから埋め込む。閉じタグ・空白入り・大文字・属性つきも拾う。選択を声で編集するモードは、毎回変わる名前のタグ（DEC-DIC-033）のままにする。画面の文脈は `<` をすべて全角にする（DEC-DIC-065）のままにする。
+- 理由: Windows 版の DEC-COM-142 と同じ。区切りのタグを本文に書かれると、区切りの外（指示の側）に文を置けてしまう。ローカルの LLM の `LongInputFitter` も `<transcript>` が 1 つずつあることを前提に分けるので、本文に同じタグがあると分けられず、後ろを省く動きになっていた。Windows 版より対象のタグが多いのは、会議への質問（`MeetingAsk`）が Mac だけにあるため。出力は入力欄に貼るか会議ノートに書くだけで、Hanasu が命令として実行することはないので、被害は「変な文章が入る」までだが、守りを Windows とそろえる。
+- 決めた場面: セキュリティの見直し（2026-11-05）
+- 関係する要件: REQ-COM-022, REQ-DIC-003, REQ-MTG-006
+- 対象: Mac
+- 実装の場所: `PromptText.neutralizeDelimiters`、`GeminiClient.userPrompt`、`MinutesPrompt.userText`、`MeetingAsk.material`
 
 ### DEC-COM-060 ローカルの LLM は、llama.cpp の llama-server を同梱し、使うときだけ子プロセスで動かす
 - 決めたこと: Mac・Windows とも、llama.cpp の `llama-server` をアプリに同梱し、ローカルを選んだ処理を始めるときに子プロセスとして起動して、OpenAI 互換の `POST /v1/chat/completions` に送る（streaming は使わない）。チャットの形式は GGUF に入っているテンプレートを llama.cpp の jinja で使う（`--jinja`）。Gemma 4 の考える過程は使わない（`--reasoning off`）。Mac は Metal に全部の層を載せる（`-ngl 99`）。Windows は CPU で動かす。
@@ -581,9 +590,9 @@
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`、`windows/Hanasu.Core/Net/ModelDownload.cs`
 
 ### DEC-COM-063 サーバーは 127.0.0.1 の空いたポートで、起動のたびに作る API キーを付け、5 分使わなければ止める
-- 決めたこと: `--host 127.0.0.1` と、空いているポート（OS に選ばせる）で起動する。起動のたびに乱数の API キーを作り、環境変数 `LLAMA_API_KEY` で渡す（コマンドラインに書かない）。Web の画面は出さない（`--no-webui`）。同時に 1 つの処理だけ（`--parallel 1`）。最後の処理から 5 分たつと止め、モデルを変えたら起動し直し、アプリを終えるときに止める。Mac は、前回落ちたときに残ったサーバー（自分が起動した記録のあるもの）を起動時に止める。Windows は、ジョブオブジェクトで Hanasu が終わると一緒に終わるようにする。
-- 理由: ほかの端末から使われないよう、外に開かない。同じ端末のほかのプロセスに勝手に使われないよう、キーを付ける。コマンドラインは `ps` でほかのユーザーにも見えるので、キーは環境変数で渡す。モデルは数 GB のメモリを使い続けるので、使っていないときは返す（続けて使うときは読み込み済みで速い）。
-- 決めた場面: ローカル LLM に対応した PR
+- 決めたこと: `--host 127.0.0.1` と、空いているポート（OS に選ばせる）で起動する。起動のたびに乱数の API キーを作り、環境変数 `LLAMA_API_KEY` で渡す（コマンドラインに書かない）。Hanasu の CLI が環境変数で受け取るほかのサービスの秘密（`ANTHROPIC_API_KEY`・`GEMINI_API_KEY`・`GEMINI_SERVICE_ACCOUNT_JSON` など。`secretEnvironmentKeys` の一覧）と `LLAMA_ARG_*` は、子プロセスの環境から外す。モデルの名前は `--alias <モデルの id>` で付ける。Web の画面は出さない（`--no-webui`）。同時に 1 つの処理だけ（`--parallel 1`）。最後の処理から 5 分たつと止め、モデルを変えたら起動し直し、アプリを終えるときに止める。Mac は、前回落ちたときに残ったサーバー（自分が起動した記録のあるもの）を起動時に止める。Windows は、ジョブオブジェクトで Hanasu が終わると一緒に終わるようにする。
+- 理由: ほかの端末から使われないよう、外に開かない。同じ端末のほかのプロセスに勝手に使われないよう、キーを付ける。コマンドラインは `ps` でほかのユーザーにも見えるので、キーは環境変数で渡す。llama-server はキーなしでも `/health` と `/models` に応えるので（ブラウザから DNS リバインディングで 127.0.0.1 のポートを叩かれると読める）、`/models` にモデルのファイルのパス（ユーザー名を含む）が出ないよう別名を付ける。llama-server は自己署名の Mac ではライブラリの検証を外したプロセス（DEC-COM-061）なので、要らない秘密を持たせない。モデルは数 GB のメモリを使い続けるので、使っていないときは返す（続けて使うときは読み込み済みで速い）。
+- 決めた場面: ローカル LLM に対応した PR。環境変数の整理と `--alias` はセキュリティの見直し（2026-11-05）
 - 関係する要件: REQ-COM-030, REQ-COM-022
 - 対象: Mac / Windows
 - 実装の場所: `LocalLLMServer`

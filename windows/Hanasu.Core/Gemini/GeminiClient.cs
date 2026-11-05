@@ -150,6 +150,9 @@ public sealed class GeminiClient : ITextAiClient
                 break;
             case GeminiAuth.ServiceAccount { Credentials: var credentials, Location: var location }:
                 location = string.IsNullOrWhiteSpace(location) ? "global" : location.Trim();
+                // リージョンはホスト名に入るので、英小文字・数字・ハイフンだけを受け付ける（設定を書き換えられても、
+                // アクセストークンを別のホストに送らされないように。Mac 版の isValidLocation と同じ。DEC-COM-053）
+                if (!IsValidLocation(location)) throw GeminiException.InvalidLocation(location);
                 // global 以外のリージョンはホスト名にリージョンが付く
                 var host = location == "global" ? "aiplatform.googleapis.com" : $"{location}-aiplatform.googleapis.com";
                 request = new HttpRequestMessage(HttpMethod.Post,
@@ -163,6 +166,11 @@ public sealed class GeminiClient : ITextAiClient
         request.Content = new StringContent(body, Encoding.UTF8, "application/json");
         return request;
     }
+
+    // 設計判断: DEC-COM-053
+    /// <summary>Vertex AI のリージョンとして使える形か（英小文字・数字・ハイフンで 40 文字まで。ホスト名に入るため）</summary>
+    public static bool IsValidLocation(string location) =>
+        location.Length is > 0 and <= 40 && location.All(c => c is (>= 'a' and <= 'z') or (>= '0' and <= '9') or '-');
 
     internal static string BuildRequestBody(string systemInstruction, IReadOnlyList<GeminiPart> parts, string model,
         string? thinkingLevel, string responseMimeType = "text/plain", JsonNode? responseSchema = null)

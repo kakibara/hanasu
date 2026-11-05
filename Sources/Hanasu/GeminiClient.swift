@@ -181,7 +181,7 @@ struct GeminiClient {
         model.contains("lite") ? "minimal" : "low"
     }
 
-    // 設計判断: DEC-DIC-007, DEC-DIC-008, DEC-DIC-009, DEC-DIC-084
+    // 設計判断: DEC-DIC-007, DEC-DIC-008, DEC-DIC-009, DEC-DIC-084, DEC-COM-054
     static func userPrompt(for request: Request, translation: TranslationLanguage? = nil) -> String {
         var lines: [String] = []
         if let appName = request.appName, !appName.isEmpty {
@@ -204,7 +204,8 @@ struct GeminiClient {
         if let block = request.screenContext?.promptBlock() {
             lines.append(block)
         }
-        lines.append("<transcript>\n\(request.transcript)\n</transcript>")
+        // 認識結果の中の区切りのタグは無害にしてから埋め込む（プロンプトインジェクションの対策。DEC-COM-054）
+        lines.append("<transcript>\n\(PromptText.neutralizeDelimiters(request.transcript))\n</transcript>")
         return lines.joined(separator: "\n")
     }
 
@@ -285,7 +286,10 @@ struct GeminiClient {
             guard Self.isValidLocation(location) else { throw GeminiError.invalidLocation(location) }
             // global 以外のリージョンはホスト名にリージョンが付く
             let host = location == "global" ? "aiplatform.googleapis.com" : "\(location)-aiplatform.googleapis.com"
-            let url = URL(string: "https://\(host)/v1/projects/\(credentials.projectID)/locations/\(location)/publishers/google/models/\(escapedModel):generateContent")!
+            // project_id は鍵ファイルの値なので、パスの区切りにならないよう（壊れた値で URL が作れず落ちないよう）エスケープする
+            let escapedProject = credentials.projectID.addingPercentEncoding(
+                withAllowedCharacters: .urlPathAllowed.subtracting(CharacterSet(charactersIn: "/"))) ?? credentials.projectID
+            let url = URL(string: "https://\(host)/v1/projects/\(escapedProject)/locations/\(location)/publishers/google/models/\(escapedModel):generateContent")!
             let token = try await ServiceAccountTokenProvider.shared.accessToken(for: credentials)
             urlRequest = URLRequest(url: url, timeoutInterval: timeout)
             urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -299,7 +303,8 @@ struct GeminiClient {
         guard let http = response as? HTTPURLResponse else { throw GeminiError.invalidResponse }
         guard (200..<300).contains(http.statusCode) else {
             let decoded = try? JSONDecoder().decode(ErrorEnvelope.self, from: data)
-            let message = decoded?.error.message ?? String(data: data, encoding: .utf8) ?? ""
+            // 文言は HUD と履歴に出るので、JSON でない応答（HTML のエラーページなど）は先頭だけにする（Windows 版と同じ 500 文字）
+            let message = String((decoded?.error.message ?? String(data: data, encoding: .utf8) ?? "").prefix(500))
             throw GeminiError.http(status: http.statusCode, message: message)
         }
 

@@ -54,7 +54,8 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
   - API の HttpClient はリダイレクトに従わない（`SafeHttp.Create`）。Gemini のキーは独自のヘッダー（`x-goog-api-key`）なので、.NET はリダイレクト先が別のホストでも付けたまま送ってしまうため。
   - サービスアカウントの `token_uri` が https でなければ使わない（署名した JWT を平文で送らない）。
   - Claude の送り先は `https://api.anthropic.com` に固定し、キーは明示して渡す（SDK が環境変数 `ANTHROPIC_BASE_URL`・`ANTHROPIC_API_KEY`・`ANTHROPIC_AUTH_TOKEN` を読まない）。SDK 13 はキーを `Authorization: Bearer` で送り、.NET はリダイレクトのときにこのヘッダーを外す。
-- 残る危険: プロキシや社内の TLS 検査がある環境では、その経路を信頼することになる（OS の証明書ストアに従う）。
+  - 2026-11-05 の見直し（DEC-COM-053）: Vertex AI のリージョンはホスト名に入る（`<リージョン>-aiplatform.googleapis.com`）のに確かめていなかったので、Mac 版と同じく英小文字・数字・ハイフン（40 文字まで）だけを受け付ける（`GeminiClient.IsValidLocation`）。settings.json や環境変数 `GEMINI_VERTEX_LOCATION` を書き換えられても、アクセストークンを別のホストに送らされない。
+- 残る危険: プロキシや社内の TLS 検査がある環境では、その経路を信頼することになる（OS の証明書ストアに従う）。サービスアカウントの `token_uri` は https であることだけを確かめ、Google の窓口（`oauth2.googleapis.com`）には限っていない（Mac 版は限る。テストが偽の窓口を使うため）。別の窓口に送られる JWT の `aud` はその窓口の URL になるので、Google では使えない。
 
 ### 2.3 モデルのダウンロード
 
@@ -102,3 +103,11 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 - 確かめたこと: 配布物（zip）はコード署名をしていない。Windows の SmartScreen が「認識されないアプリ」と出す。
 - 直したこと: CI で zip の SHA-256 を `Hanasu-windows-x64.zip.sha256` に書いて artifact に入れる（DEC-COM-150）。README に、署名がないこと・SHA-256 で確かめること・専用のフォルダに展開することを書いた。
 - 残る危険: 署名がないので、配布物が途中で差し替えられても Windows は気づかない（SHA-256 を、配布物と別の経路で確かめる必要がある）。自動更新はない。
+
+### 2.10 ローカルの LLM（llama-server）
+
+2026-11-05 に見直した（REQ-COM-030、DEC-COM-060〜063）。Mac 版の [security.md](security.md) の 10 章と同じ考え。
+
+- 確かめたこと: `llama-server.exe` は `--host 127.0.0.1` の空いたポートで、起動のたびに作る乱数のキー（環境変数 `LLAMA_API_KEY`）を付けて動き、Hanasu と一緒に終わるジョブオブジェクトに入れる（`ChildProcessJob`）。クライアント（`LocalLlmClient.CreateHttp`）はプロキシを通さず、リダイレクトに従わない。llama.cpp の配布物は版と SHA-256 を固定して取る（`scripts/fetch-llama-cpp.ps1`）。モデルは `ModelDownload` で取る（2.3）。
+- 直したこと（DEC-COM-063）: キーなしで読める `/models` にモデルのファイルのパス（ユーザー名を含む）が出ていたので、`--alias <モデルの id>` を付けた。子プロセスの環境から、CLI が環境変数で受け取るほかのサービスの秘密（`ANTHROPIC_API_KEY`・`GEMINI_API_KEY` など。`LocalLlmServer.SecretEnvironmentKeys`）を外した。
+- 残る危険: 同じユーザーのプロセスは、llama-server の環境からキーとポートを読める（1 章の表のとおり）。環境変数 `HANASU_LLAMA_SERVER` で動かす実行ファイルを差し替えられる（開発と確認に要るので残している）。置いてあるモデルは大きさだけで確かめる（2.3）。

@@ -9,6 +9,8 @@ public enum GeminiErrorKind
     EmptyResponse,
     InvalidResponse,
     Timeout,
+    /// <summary>Vertex AI のリージョンの設定が、ホスト名に入れられる形ではない（設定を直すまで通らない）</summary>
+    InvalidLocation,
 }
 
 /// <summary>Gemini の呼び出しの失敗。Message はそのまま HUD に出せる日本語にする。</summary>
@@ -27,7 +29,8 @@ public sealed class GeminiException : TextAiException
         Reason = reason;
     }
 
-    public override bool IsCredentialProblem => Kind == GeminiErrorKind.MissingCredentials || StatusCode is 401 or 403;
+    public override bool IsCredentialProblem =>
+        Kind is GeminiErrorKind.MissingCredentials or GeminiErrorKind.InvalidLocation || StatusCode is 401 or 403;
 
     public static GeminiException MissingCredentials() =>
         new(GeminiErrorKind.MissingCredentials, "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません");
@@ -43,4 +46,8 @@ public sealed class GeminiException : TextAiException
 
     public static GeminiException Timeout(TimeSpan timeout) =>
         new(GeminiErrorKind.Timeout, $"Gemini の応答が {timeout.TotalSeconds:0} 秒以内に返りませんでした");
+
+    /// <summary>Mac 版の GeminiError.invalidLocation と同じ文言</summary>
+    public static GeminiException InvalidLocation(string location) =>
+        new(GeminiErrorKind.InvalidLocation, $"Vertex AI のリージョン「{location}」は使えません（英小文字・数字・ハイフンだけ。例: global、us-central1）");
 }

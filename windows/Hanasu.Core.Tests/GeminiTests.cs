@@ -156,6 +156,28 @@ public class GeminiClientTests
         Assert.StartsWith("https://aiplatform.googleapis.com/v1/projects/example-project/locations/global/", handler.Requests[1].Request.RequestUri!.ToString());
     }
 
+    // 確かめ方: REQ-COM-022
+    [Fact]
+    public async Task VertexLocationMustBeAHostNameLabel()
+    {
+        var (credentials, rsa) = TestKeys.MakeServiceAccount();
+        using var _ = rsa;
+        var handler = new FakeHandler((_, _) => FakeHandler.Json(FakeHandler.TextResponse("ok")));
+        var http = new HttpClient(handler);
+        // リージョンはホスト名に入るので、別のホストに向けられる形は送る前に断る（トークンも取らない）
+        var client = new GeminiClient(new GeminiAuth.ServiceAccount(credentials, "evil.example.test/#"), http, new ServiceAccountTokenProvider(http));
+        var e = await Assert.ThrowsAsync<GeminiException>(() => client.RefineAsync(new RefineRequest { Transcript = "a", Model = "m" }));
+        Assert.Equal(GeminiErrorKind.InvalidLocation, e.Kind);
+        Assert.True(e.IsCredentialProblem);
+        Assert.Empty(handler.Requests);
+
+        Assert.True(GeminiClient.IsValidLocation("global"));
+        Assert.True(GeminiClient.IsValidLocation("asia-northeast1"));
+        Assert.False(GeminiClient.IsValidLocation(""));
+        Assert.False(GeminiClient.IsValidLocation("US-CENTRAL1"));
+        Assert.False(GeminiClient.IsValidLocation("us-central1.example.test"));
+    }
+
     [Fact]
     public async Task AudioIsSentAsInlineData()
     {
