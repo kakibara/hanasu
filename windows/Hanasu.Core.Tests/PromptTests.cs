@@ -248,3 +248,67 @@ public class EnglishPromptTests
         Assert.Equal(("見積もりを送る", "話者1", "来週"), (items[1].Task, items[1].Owner, items[1].DueNote));
     }
 }
+
+// 確かめ方: REQ-COM-061
+/// <summary>議事録を読むときに、言語ごとのラベルや見出しを取り違えないこと（レビューの指摘）</summary>
+[Collection(PromptLanguageCollection.Name)]
+public class MinutesLanguageReadingTests
+{
+    [Fact]
+    public void OtherLanguagesLabelsAreRealNames()
+    {
+        // トルコ語の「自分」は Ben、インドネシア語は Saya。英語の議事録では、どちらも実際の名前として残す
+        Assert.Equal("Ben", SpeakerNameInference.CleanName("Ben", PromptLanguage.En));
+        Assert.Equal("Saya", SpeakerNameInference.CleanName("Saya", PromptLanguage.En));
+        Assert.Null(SpeakerNameInference.CleanName("Me", PromptLanguage.En));
+        Assert.Null(SpeakerNameInference.CleanName("Speaker 2", PromptLanguage.En));
+        Assert.Null(SpeakerNameInference.CleanName("Ben", PromptLanguage.FromCode("tr")));
+        // 前からの日本語のラベルは、どの言語でも名前ではない
+        Assert.Null(SpeakerNameInference.CleanName("話者1", PromptLanguage.En));
+    }
+
+    [Fact]
+    public void ResponseIsReadInTheLanguageOfTheRequest()
+    {
+        // 作っている間に設定が日本語に変わっても、英語で送った議事録は英語のラベルで読む
+        var result = MinutesPrompt.Parse("## Action items\n{{ACTION_ITEMS}}\n<action_items>\n[]\n</action_items>", "Weekly", PromptLanguage.En);
+        Assert.Equal(PromptLanguage.En, result.Language);
+        Assert.Contains("None", result.Markdown);
+        Assert.StartsWith("# Weekly — Minutes", result.Markdown);
+    }
+
+    [Fact]
+    public void HeadingThatOnlyContainsTheActionHeadingIsNotTheActionSection()
+    {
+        // ロシア語の「Задачи」（アクションアイテム）を含む「Задачи клиента」（顧客の課題）は、アクションアイテムの節ではない
+        var markdown = "## Задачи клиента\n- [ ] не задача\n## Задачи\n- [ ] задача";
+        var items = ActionItem.ParseFromMarkdown(markdown);
+        Assert.Equal(["задача"], items.Select(i => i.Task));
+        // 前からの日本語の見出しは、含まれていればよい
+        Assert.Single(ActionItem.ParseFromMarkdown("## アクションアイテム（今週）\n- [ ] 資料を送る"));
+    }
+
+    [Fact]
+    public void DueDatesWithParenthesesAndSlashesAreRead()
+    {
+        // 期限の「11/14 (金)」の / と () があっても、担当と期限を読める
+        var ja = ActionItem.ParseFromMarkdown("## アクションアイテム\n- [ ] 資料を送る（担当: 田中 / 期限: 11/14 (金)）").Single();
+        Assert.Equal(("資料を送る", "田中", "11/14 (金)"), (ja.Task, ja.Owner, ja.DueNote));
+        var en = ActionItem.ParseFromMarkdown("## Action items\n- [ ] Send the deck (to the team) (Owner: Tanaka / Due: Nov 14 (Fri))").Single();
+        Assert.Equal(("Send the deck (to the team)", "Tanaka", "Nov 14 (Fri)"), (en.Task, en.Owner, en.DueNote));
+        // 書いたものを読み戻せる（pt-BR の d/M (E)）
+        var line = new ActionItem { Owner = "Silva", Task = "Enviar", Due = "2026-11-14" }.MarkdownLineIn(PromptLanguage.PtBR);
+        var back = ActionItem.ParseFromMarkdown("## " + Prompts.Text("minutes.actionHeading", PromptLanguage.PtBR) + "\n" + line).Single();
+        Assert.Equal(("Enviar", "Silva"), (back.Task, back.Owner));
+        Assert.NotNull(back.DueNote);
+    }
+
+    [Fact]
+    public void UnsupportedTranscriptionLanguageIsWrittenAsIs()
+    {
+        // 対応言語にない文字起こしの言語（sv-SE）は、英語と書かずに識別子のまま書く
+        Assert.Contains("sv-SE", GeminiSegmentTranscriber.LanguageNote("sv-SE"));
+        Assert.Contains("sv-SE", GeminiPrompts.TranscriptionInstructionFor(PromptLanguage.En, "sv-SE"));
+        Assert.Contains("日本語", GeminiPrompts.TranscriptionInstructionFor(PromptLanguage.Ja, "ja-JP"));
+    }
+}

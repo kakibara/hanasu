@@ -126,6 +126,22 @@ enum SpeakerNameInferenceCLI {
         check("指示: 議事録の指示に <speaker_names> がある",
               MinutesPrompt.systemInstruction(template: .auto, customPrompt: nil).hasSuffix(MinutesPrompt.speakerNamesInstruction))
 
+        // 確かめ方: REQ-COM-061
+        // 6. 言語ごとのラベル（ほかの言語の「自分」は実際の名前でもある）と、送った言語での読み取り
+        check("言語: 英語の議事録では Ben・Saya を名前として残す",
+              SpeakerNameInference.cleanName("Ben", language: .en) == "Ben"
+                  && SpeakerNameInference.cleanName("Saya", language: .en) == "Saya"
+                  && SpeakerNameInference.cleanName("Me", language: .en) == nil
+                  && SpeakerNameInference.cleanName("Speaker 2", language: .en) == nil
+                  && SpeakerNameInference.cleanName("話者1", language: .en) == nil)
+        let english = MinutesPrompt.parse("## Action items\n{{ACTION_ITEMS}}\n<action_items>\n[]\n</action_items>", title: "Weekly", language: .en)
+        check("言語: 応答は送ったときの言語で読む", english.language == .en && english.markdown.hasPrefix("# Weekly — Minutes") && english.markdown.contains("None"))
+        let russian = ActionItem.parse(fromMarkdown: "## Задачи клиента\n- [ ] не задача\n## Задачи\n- [ ] задача")
+        check("言語: 見出しを含むだけの別の見出しは、アクションアイテムの節ではない", russian.map(\.task) == ["задача"])
+        let dated = ActionItem.parse(fromMarkdown: "## アクションアイテム\n- [ ] 資料を送る（担当: 田中 / 期限: 11/14 (金)）")
+        check("言語: 期限の / と () があっても担当と期限を読む",
+              dated.first?.task == "資料を送る" && dated.first?.owner == "田中" && dated.first?.dueNote == "11/14 (金)")
+
         print(failures == 0 ? "\nすべて合格" : "\n\(failures) 件の失敗")
         return failures == 0
     }

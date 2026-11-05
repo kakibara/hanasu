@@ -198,10 +198,12 @@ enum MeetingProcessor {
     /// 議事録を作る。見出しの構成は会議の型（meeting.template）で決まる（MinutesTemplate.swift）。
     /// メモか印があれば、それを優先するよう指示を足す（MeetingNotes.swift）。
     static func makeMinutes(for meeting: Meeting, client: TextAIClient, model: String) async throws -> MinutesResult {
+        // 要件: REQ-COM-061（応答は、送ったときのプロンプトの言語で読む。作っている間に設定が変わってもずれないように）
+        let language = PromptLanguage.current
         var instruction = MinutesPrompt.systemInstruction(template: meeting.template, customPrompt: meeting.customMinutesPrompt)
         if meeting.notesForPrompt() != nil { instruction += "\n" + notesInstruction }
         let body = try await client.generate(
             systemInstruction: instruction, userText: MinutesPrompt.userText(for: meeting), model: model, effort: .medium)
-        return MinutesPrompt.parse(body, title: meeting.title)
+        return MinutesPrompt.parse(body, title: meeting.title, language: language)
     }
 }

@@ -17,9 +17,14 @@ enum PromptLanguage: String, CaseIterable, Sendable {
     /// 言語の識別子（ja-JP、zh-Hant-TW、pt_PT など）を、対応言語のどれかに寄せる。
     /// 中国語は繁体字（Hant）か台湾・香港・マカオなら zh-TW、それ以外は zh-CN。ポルトガル語は pt-BR。どれでもなければ英語
     static func from(localeIdentifier: String) -> PromptLanguage {
+        supported(localeIdentifier: localeIdentifier) ?? .en
+    }
+
+    /// 対応言語のどれかに寄せる。どれでもなければ nil
+    static func supported(localeIdentifier: String) -> PromptLanguage? {
         let trimmed = localeIdentifier.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "_", with: "-")
         let language = Locale.Language(identifier: trimmed)
-        guard let code = language.languageCode?.identifier.lowercased() else { return .en }
+        guard let code = language.languageCode?.identifier.lowercased() else { return nil }
         switch code {
         case "zh":
             let script = language.script?.identifier
@@ -27,7 +32,7 @@ enum PromptLanguage: String, CaseIterable, Sendable {
             return script == "Hant" || ["TW", "HK", "MO"].contains(region ?? "") ? .zhTW : .zhCN
         case "pt": return .ptBR
         case "in": return .id
-        default: return PromptLanguage(rawValue: code) ?? .en
+        default: return PromptLanguage(rawValue: code)
         }
     }
 
@@ -54,10 +59,14 @@ enum PromptLanguage: String, CaseIterable, Sendable {
         return f
     }
 
-    /// CLI の引数（--prompt-language <言語>）
+    /// CLI の引数（--prompt-language <言語>）。省くと設定の文字起こしの言語。対応していない言語を書いたら止める
+    /// （黙って英語にすると、確かめたつもりの言語と違うプロンプトを見てしまうため）
     static func cli(_ args: [String]) -> PromptLanguage? {
-        guard let index = args.firstIndex(of: "--prompt-language"), args.indices.contains(index + 1) else { return nil }
-        return PromptLanguage(rawValue: args[index + 1]) ?? from(localeIdentifier: args[index + 1])
+        guard let index = args.firstIndex(of: "--prompt-language") else { return nil }
+        let value = args.indices.contains(index + 1) ? args[index + 1] : ""
+        if let language = PromptLanguage(rawValue: value) ?? supported(localeIdentifier: value) { return language }
+        FileHandle.standardError.write(Data("error: --prompt-language は \(allCases.map(\.rawValue).joined(separator: "|")) のどれか（\(value) は対応していない）\n".utf8))
+        exit(2)
     }
 }
 

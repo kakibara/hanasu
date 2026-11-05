@@ -59,7 +59,7 @@ public static partial class SpeakerNameInference
     }
 
     /// <summary>名前として使える形にする。使えなければ null（空・長すぎる・改行や制御文字・「話者1」などのラベルそのもの）</summary>
-    public static string? CleanName(string raw)
+    public static string? CleanName(string raw, Ai.PromptLanguage? language = null)
     {
         var name = raw.Trim();
         if (Honorifics.FirstOrDefault(h => name.EndsWith(h, StringComparison.Ordinal) && name.Length > h.Length) is { } honorific)
@@ -67,24 +67,26 @@ public static partial class SpeakerNameInference
             name = name[..^honorific.Length].Trim();
         }
         if (name.Length == 0 || new System.Globalization.StringInfo(name).LengthInTextElements > MaxLength) return null;
-        if (name.Any(char.IsControl) || IsPlaceholder(name)) return null;
+        if (name.Any(char.IsControl) || IsPlaceholder(name, language)) return null;
         return name;
     }
 
     // 要件: REQ-COM-061
     /// <summary>
     /// 名前ではない値（「自分」「相手」「話者1」「同席者1」と、分からないことを表す言葉）。
-    /// ラベルはプロンプトの言語で書くので、すべての言語のラベル（speaker.*）と「なし」（minutes.result.none）も名前ではないものとして扱う（Mac 版と同じ）
+    /// 見るのは、議事録を作ったときのプロンプトの言語のラベルと、前から使っている日本語のラベルだけ（Mac 版と同じ）。
+    /// ほかの言語のラベルまで見ると、「Ben」（トルコ語の「自分」）や「Saya」のような実際の名前を捨ててしまう
     /// </summary>
-    public static bool IsPlaceholder(string name)
+    public static bool IsPlaceholder(string name, Ai.PromptLanguage? language = null)
     {
+        var lang = language ?? Ai.PromptLanguage.Current;
         if (NotNames.Contains(name) || LabelPattern().IsMatch(name)) return true;
-        if (Ai.Prompts.AllTexts("speaker.me").Concat(Ai.Prompts.AllTexts("speaker.others")).Concat(Ai.Prompts.AllTexts("minutes.result.none"))
+        if (new[] { "speaker.me", "speaker.others", "minutes.result.none" }.Select(k => Ai.Prompts.Text(k, lang))
             .Any(t => string.Equals(t, name, StringComparison.OrdinalIgnoreCase)))
         {
             return true;
         }
-        return Ai.Prompts.AllTexts("speaker.remote").Concat(Ai.Prompts.AllTexts("speaker.room")).Any(template =>
+        return new[] { "speaker.remote", "speaker.room" }.Select(k => Ai.Prompts.Text(k, lang)).Any(template =>
         {
             var pattern = "^" + Regex.Escape(template).Replace(Regex.Escape("${n}"), "[0-9０-９]+", StringComparison.Ordinal) + "$";
             return Regex.IsMatch(name, pattern, RegexOptions.IgnoreCase);
@@ -103,12 +105,12 @@ public static partial class SpeakerNameInference
         foreach (var key in meeting.Speakers)
         {
             // 要件: REQ-COM-061（応答のラベルは、プロンプトに書いたラベルと同じ言語）
-            if (key != "me" && meeting.SpeakerNames.GetValueOrDefault(key, "").Length == 0) labelToKey[meeting.PromptName(key)] = key;
+            if (key != "me" && meeting.SpeakerNames.GetValueOrDefault(key, "").Length == 0) labelToKey[meeting.PromptName(key, minutes.Language)] = key;
         }
         var matches = new List<(string Key, string Label, string Name)>();
         foreach (var label in names.Keys.Order(StringComparer.Ordinal))
         {
-            if (labelToKey.TryGetValue(label, out var key) && CleanName(names[label]) is { } name) matches.Add((key, label, name));
+            if (labelToKey.TryGetValue(label, out var key) && CleanName(names[label], minutes.Language) is { } name) matches.Add((key, label, name));
         }
         if (matches.Count == 0) return (minutes, applied);
 
