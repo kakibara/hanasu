@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
@@ -176,10 +177,12 @@ public partial class HudWindow : Window, IHud
     {
         LanguageSwitch.Visibility = HudText.CanChooseLanguage(state.Phase) ? Visibility.Visible : Visibility.Collapsed;
         SpokenLanguageButton.Tag = translation is null ? "selected" : null;
+        AutomationProperties.SetItemStatus(SpokenLanguageButton, translation is null ? "選択中" : "");
         foreach (var (button, language) in new[] { (EnglishButton, TranslationLanguage.English), (JapaneseButton, TranslationLanguage.Japanese) })
         {
             button.Visibility = translationChoices.Contains(language) ? Visibility.Visible : Visibility.Collapsed;
             button.Tag = translation == language ? "selected" : null;
+            AutomationProperties.SetItemStatus(button, translation == language ? "選択中" : "");
         }
     }
 

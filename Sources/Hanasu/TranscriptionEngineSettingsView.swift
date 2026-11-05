@@ -90,6 +90,7 @@ private struct WhisperModelRow: View {
     let model: WhisperModel
     @ObservedObject var store: WhisperModelStore
     let isSelected: Bool
+    @State private var confirmDelete = false
 
     var body: some View {
         LabeledContent(isSelected ? "状態" : model.rawValue) {
@@ -117,11 +118,17 @@ private struct WhisperModelRow: View {
                     if let size = store.diskUsage(model) {
                         Text(ByteCountFormatter.string(fromByteCount: size, countStyle: .file)).foregroundStyle(.secondary)
                     }
-                    Button("削除", role: .destructive) { store.delete(model) }
+                    Button("削除…", role: .destructive) { confirmDelete = true }
+                        .confirmationDialog("Whisper のモデル「\(model.rawValue)」を削除しますか？", isPresented: $confirmDelete) {
+                            Button("削除", role: .destructive) { store.delete(model) }
+                        } message: {
+                            Text("もう一度使うには、ダウンロードし直します。")
+                        }
                 }
             case .failed(let message):
                 HStack {
                     Text("⚠️ \(message)").foregroundStyle(.secondary).lineLimit(2).help(message)
+                        .textSelection(.enabled)
                     Button("再試行") { store.ensureDownloaded(model) }
                 }
             }

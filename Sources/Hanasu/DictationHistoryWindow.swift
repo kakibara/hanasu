@@ -573,6 +573,7 @@ struct HistorySettingsTab: View {
     var onBeginShortcutRecording: () -> Void
     var onEndShortcutRecording: () -> Void
     @State private var confirmDeleteAll = false
+    @State private var confirmDeleteAudio = false
 
     init(store: DictationHistoryStore? = nil,
          onOpenHistory: @escaping () -> Void,
@@ -644,7 +645,7 @@ struct HistorySettingsTab: View {
                     Text("\(Self.byteFormatter.string(fromByteCount: usage.bytes))（\(usage.count) 件）")
                 }
                 HStack {
-                    Button("録音だけをすべて削除") { store.deleteAllAudio() }
+                    Button("録音だけをすべて削除…") { confirmDeleteAudio = true }
                         .disabled(usage.count == 0)
                     Spacer()
                     Button("履歴をすべて削除…", role: .destructive) { confirmDeleteAll = true }
@@ -657,6 +658,11 @@ struct HistorySettingsTab: View {
             Button("すべて削除", role: .destructive) { store.deleteAll() }
         } message: {
             Text("\(store.entries.count) 件の履歴と、残している録音を削除します。元に戻せません。")
+        }
+        .confirmationDialog("残している録音をすべて削除しますか？", isPresented: $confirmDeleteAudio) {
+            Button("録音をすべて削除", role: .destructive) { store.deleteAllAudio() }
+        } message: {
+            Text("履歴の文章は残り、録音（音声ファイル）だけを削除します。元に戻せません。")
         }
     }
 }

@@ -182,11 +182,25 @@ private struct PermissionsTab: View {
     var body: some View {
         Form {
             Section {
-                row("マイク", granted: Permissions.microphoneStatus == .authorized, anchor: "Privacy_Microphone")
-                row("音声認識", granted: Permissions.speechStatus == .authorized, anchor: "Privacy_SpeechRecognition")
+                // まだ一度も求めていない（未決定）ときは、システム設定の一覧に Hanasu が載っていないので、
+                // オンボーディングと同じく「許可する」でその場で求める。拒否済みのときだけシステム設定を開く。
+                row("マイク", granted: Permissions.microphoneStatus == .authorized,
+                    notDetermined: Permissions.microphoneStatus == .notDetermined,
+                    deniedHint: "システム設定 → プライバシーとセキュリティ → マイク で Hanasu をオンにしてください。",
+                    anchor: "Privacy_Microphone") {
+                    _ = await AVCaptureDevice.requestAccess(for: .audio)
+                }
+                row("音声認識", granted: Permissions.speechStatus == .authorized,
+                    notDetermined: Permissions.speechStatus == .notDetermined,
+                    deniedHint: "システム設定 → プライバシーとセキュリティ → 音声認識 で Hanasu をオンにしてください。",
+                    anchor: "Privacy_SpeechRecognition") {
+                    _ = try? await Permissions.ensureRecordingPermissions(speechRecognition: true)
+                }
                 row("アクセシビリティ（自動入力に必要）",
                     granted: Permissions.isAccessibilityTrusted(prompt: false),
-                    anchor: "Privacy_Accessibility")
+                    notDetermined: false,
+                    deniedHint: "システム設定 → プライバシーとセキュリティ → アクセシビリティ で Hanasu をオンにしてください。",
+                    anchor: "Privacy_Accessibility", request: nil)
             } footer: {
                 Text("マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。")
                     .font(.caption).foregroundStyle(.secondary)
@@ -195,16 +209,41 @@ private struct PermissionsTab: View {
         }
         .formStyle(.grouped)
         .id(refresh)
+        // システム設定で許可して戻ってきたら、表示を新しくする
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            refresh += 1
+        }
     }
 
-    private func row(_ title: String, granted: Bool, anchor: String) -> some View {
+    private func row(_ title: String, granted: Bool, notDetermined: Bool, deniedHint: String,
+                     anchor: String, request: (() async -> Void)?) -> some View {
         LabeledContent(title) {
-            HStack {
-                Image(systemName: granted ? "checkmark.circle.fill" : "xmark.circle")
-                    .foregroundStyle(granted ? .green : .secondary)
-                Text(granted ? "許可済み" : "未許可")
-                if !granted {
-                    Button("開く") { Permissions.openPrivacySettings(anchor) }
+            VStack(alignment: .trailing, spacing: 2) {
+                HStack {
+                    Image(systemName: granted ? "checkmark.circle.fill" : "xmark.circle")
+                        .foregroundStyle(granted ? .green : .secondary)
+                        .accessibilityHidden(true)
+                    Text(granted ? "許可済み" : notDetermined ? "まだ求めていません" : "未許可")
+                    if !granted {
+                        if notDetermined, let request {
+                            Button("許可する") {
+                                Task {
+                                    await request()
+                                    refresh += 1
+                                }
+                            }
+                            .accessibilityLabel("\(title)を許可する")
+                        } else {
+                            Button("開く…") { Permissions.openPrivacySettings(anchor) }
+                                .accessibilityLabel("\(title)のシステム設定を開く")
+                        }
+                    }
+                }
+                if !granted && !notDetermined {
+                    Text(deniedHint)
+                        .font(.caption).foregroundStyle(.secondary)
+                        .multilineTextAlignment(.trailing)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }

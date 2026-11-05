@@ -28,6 +28,7 @@ public partial class HistoryWindow : Window
     {
         history = host.History;
         InitializeComponent();
+        WindowFit.ClampToWorkArea(this);
         history.Changed += OnHistoryChanged;
         Closed += (_, _) => history.Changed -= OnHistoryChanged;
         Reload();
@@ -56,6 +57,10 @@ public partial class HistoryWindow : Window
         EntryList.ItemsSource = view;
         foreach (var row in rows.Where(r => selected.Contains(r.Entry.Id))) EntryList.SelectedItems.Add(row);
         if (EntryList.SelectedItems.Count == 0 && rows.Count > 0) EntryList.SelectedIndex = 0;
+        EmptyText.Text = all.Count == 0
+            ? "まだ履歴がありません。音声入力をすると、ここに残ります。"
+            : "条件に一致する履歴がありません。";
+        EmptyText.Visibility = rows.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
 
         var policy = history.Policy;
         var kept = policy.Enabled
@@ -150,7 +155,7 @@ public partial class HistoryWindow : Window
         // 1 件でも確かめる（DEC-DIC-079）
         var question = selected.Count > 1 ? $"選んだ {selected.Count} 件の履歴を削除しますか？" : "この履歴を削除しますか？";
         if (MessageBox.Show(this, $"{question}元に戻せません。", "Hanasu",
-                MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
+                MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         history.Delete(selected.Select(s => s.Id));
     }
 
@@ -158,7 +163,7 @@ public partial class HistoryWindow : Window
     {
         if (history.Entries.Count == 0) return;
         if (MessageBox.Show(this, $"音声入力の履歴 {history.Entries.Count} 件をすべて削除しますか？元に戻せません。", "Hanasu",
-                MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) return;
+                MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         history.DeleteAll();
     }
 

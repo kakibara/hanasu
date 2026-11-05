@@ -33,6 +33,7 @@ public partial class MeetingWindow : Window
         this.host = host;
         meetings = host.Meetings;
         InitializeComponent();
+        WindowFit.ClampToWorkArea(this);
         loading = true;
         LoadDevices();
         foreach (var t in MinutesTemplates.All)
@@ -300,7 +301,8 @@ public partial class MeetingWindow : Window
         var (text, label) = Tabs.SelectedIndex switch
         {
             1 => (m.TranscriptMarkdown(), "文字起こし"),
-            2 => (m.NotesMarkdown(), "メモ"),
+            2 => (m.HighlightContextText(), "「ここ重要」"),
+            3 => (m.NotesMarkdown(), "メモ"),
             _ => (m.Minutes ?? "", "議事録"),
         };
         if (text.Length == 0)
@@ -323,7 +325,11 @@ public partial class MeetingWindow : Window
     {
         if (selected is not { } m) return;
         var dir = Path.Combine(meetings.Store(host.Settings.Current).BaseDirectory, m.Id);
-        if (!Directory.Exists(dir)) return;
+        if (!Directory.Exists(dir))
+        {
+            ActionStatus.Text = "保存先のフォルダが見つかりません";
+            return;
+        }
         Process.Start(new ProcessStartInfo("explorer.exe", $"\"{dir}\"") { UseShellExecute = true });
     }
 

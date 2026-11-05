@@ -344,6 +344,7 @@ struct MeetingCaptionView: View {
                 .tint(.yellow)
                 .buttonStyle(.borderedProminent)
                 .help("ここ重要")
+                .accessibilityLabel("ここ重要")
                 .disabled(recorder.state != .recording)
                 HighlightUndoButton(recorder: recorder, compact: true)
                     .font(.caption)
