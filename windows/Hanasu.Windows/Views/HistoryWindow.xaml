@@ -7,7 +7,7 @@
         FontFamily="Yu Gothic UI, Meiryo UI, Segoe UI" FontSize="13">
     <Window.Resources>
         <Style x:Key="Note" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#FF5F6368" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="Margin" Value="0,3,0,0" />
@@ -44,7 +44,7 @@
                 <RadioButton x:Name="UnrefinedRadio" GroupName="Filter" Content="失敗・未整形" Checked="OnFilterChanged" />
             </StackPanel>
             <TextBlock Text="検索" VerticalAlignment="Center" Margin="0,0,8,0" />
-            <TextBox x:Name="SearchBox" Padding="4,3" TextChanged="OnSearchChanged"
+            <TextBox x:Name="SearchBox" AutomationProperties.Name="履歴を検索" Padding="4,3" TextChanged="OnSearchChanged"
                      ToolTip="結果・原文・入力先のアプリから探します。空白で区切ると、すべての語を含むものを出します" />
         </DockPanel>
 
@@ -67,7 +67,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- 左: 日ごとの一覧 -->
-            <ListBox x:Name="EntryList" Grid.Column="0" SelectionMode="Extended" SelectionChanged="OnSelectionChanged"
+            <ListBox x:Name="EntryList" AutomationProperties.Name="履歴の一覧" Grid.Column="0" SelectionMode="Extended" SelectionChanged="OnSelectionChanged"
                      KeyDown="OnListKeyDown" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      VirtualizingPanel.IsVirtualizingWhenGrouping="True">
                 <ListBox.GroupStyle>
@@ -101,6 +101,11 @@
                 </ListBox.ContextMenu>
             </ListBox>
 
+            <!-- 一覧が空のとき（0 件・検索に一致しない）の案内 -->
+            <TextBlock x:Name="EmptyText" Grid.Column="0" Style="{StaticResource Note}" Margin="12" TextWrapping="Wrap"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                       IsHitTestVisible="False" Visibility="Collapsed" />
+
             <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" Background="Transparent" />
 
             <!-- 右: 選んだ項目 -->
@@ -115,9 +120,9 @@
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="DetailInfo" Grid.Row="0" Style="{StaticResource Note}" Margin="0" />
                 <TextBlock Grid.Row="1" Style="{StaticResource Label}" Text="結果（入力した文章）" />
-                <TextBox x:Name="OutputBox" Grid.Row="2" Style="{StaticResource Reader}" />
+                <TextBox x:Name="OutputBox" AutomationProperties.Name="結果" Grid.Row="2" Style="{StaticResource Reader}" />
                 <TextBlock Grid.Row="3" Style="{StaticResource Label}" Text="原文（文字起こし）" />
-                <TextBox x:Name="RawBox" Grid.Row="4" Style="{StaticResource Reader}" />
+                <TextBox x:Name="RawBox" AutomationProperties.Name="原文" Grid.Row="4" Style="{StaticResource Reader}" />
                 <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0,8,0,0">
                     <Button x:Name="CopyOutputButton" Content="結果をコピー" Click="OnCopyOutputClick" />
                     <Button x:Name="CopyRawButton" Content="原文をコピー" Click="OnCopyRawClick" />

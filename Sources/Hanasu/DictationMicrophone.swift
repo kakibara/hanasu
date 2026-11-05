@@ -34,7 +34,7 @@ enum DictationMicrophones {
 }
 
 // 要件: REQ-DIC-140
-/// 設定の「一般」タブの、音声入力で使うマイクの選択
+/// 設定の「一般」の、音声入力で使うマイクの選択
 struct DictationMicrophonePicker: View {
     @ObservedObject var settings = AppSettings.shared
     @ObservedObject var devices = AudioDeviceList.shared

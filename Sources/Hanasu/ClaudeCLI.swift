@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-/// Claude API・キーチェーン・設定の「AI」タブの確認用の CLI モード:
+/// Claude API・キーチェーン・設定の「AI」の確認用の CLI モード:
 ///   Hanasu --claude-test [--model <id>]
 ///       「接続を試す」と同じ確認（GET /v1/models/{model}）。キーは ANTHROPIC_API_KEY → 設定（キーチェーン）の順
 ///   Hanasu --keychain-selftest [--keep]
@@ -10,7 +10,7 @@ import SwiftUI
 ///   Hanasu --keychain-selftest-delete <サービス名>
 ///       --keep で残した一時的な項目を消す（selftest- を含む名前だけ）
 ///   Hanasu --render-ai-settings <出力.png> [--claude | --local | --apple]
-///       設定の「AI」タブを画像にする。--claude で、音声入力は Gemini・会議は Claude の見た目にする。
+///       設定の「AI」を画像にする。--claude で、音声入力は Gemini・会議は Claude の見た目にする。
 ///       --local で、音声入力・会議ともローカル（音声入力の LFM2.5 はダウンロード中 42% の見た目）にする。
 ///       --apple で、音声入力はローカル・会議は Apple（Foundation Models）にする（この Mac で使えなければ理由が出る）
 @MainActor

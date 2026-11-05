@@ -113,6 +113,7 @@ def check_prompts(errors: list[str], warnings: list[str], counts: dict[str, int]
                                  ("minutes.speakerNames", [me, remote1, others]),
                                  ("minutes.actionItems", [me, remote1]),
                                  ("ask.system", [me, remote1]),
+                                 ("chat.system", [me, remote1, others]),
                                  ("minutes.format", [text(table["minutes.result.none"])])):
                 for needle in needles:
                     if needle not in text(table.get(key, "")):

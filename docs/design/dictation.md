@@ -90,7 +90,7 @@ Typeless のような「話した内容を、自然な文章に整えて今カ�
 
 ### 3.2.1 整形などの AI を Claude にする（Claude API）
 
-- 設定の「AI」タブで、**音声入力**（整形・英訳・選択の編集）と**会議**（議事録・会議への質問・辞書の候補）のそれぞれに、Gemini か Claude とモデルを選ぶ（`AppSettings.aiProvider(for:)`・`textModel(for:)`、DEC-COM-040）。呼び出し側は `TextAIClient.fromSettings(_:for:)` でクライアントを受け取り、送り先を意識しない。
+- 設定の「AI」で、**音声入力**（整形・英訳・選択の編集）と**会議**（議事録・会議への質問・辞書の候補）のそれぞれに、Gemini か Claude とモデルを選ぶ（`AppSettings.aiProvider(for:)`・`textModel(for:)`、DEC-COM-040）。呼び出し側は `TextAIClient.fromSettings(_:for:)` でクライアントを受け取り、送り先を意識しない。
 - `TextAIClient` は、Gemini なら `GeminiClient` に任せ、Claude なら同じプロンプト（`GeminiClient.refinePrompt`・`translationPrompt`・`editPrompt` など）を `ClaudeClient` で送る（DEC-COM-047）。
 - `ClaudeClient` は REST の Messages API を直接呼ぶ（DEC-COM-041）。考える量は `output_config.effort` だけで決め、音声入力は low、会議は medium（DEC-COM-043）。応答は `stop_reason` を先に見る（refusal・max_tokens はエラー。DEC-COM-045）。429 / 5xx だけ少しやり直す（DEC-COM-046）。
 - API キーはキーチェーンに入れ、送るたびに読む（`Keychain`、`ClaudeClient.fromKeychain`。DEC-COM-048・DEC-COM-049）。設定画面は `AISettingsTab`・`ClaudeKeySection`。
@@ -99,7 +99,7 @@ Typeless のような「話した内容を、自然な文章に整えて今カ�
 
 ### 3.2.2 整形などの AI をローカルの小型 LLM にする（llama.cpp）
 
-- 「AI」タブの各用途で「ローカル」を選ぶと、Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-4B のどれかを、この Mac の中で動かす（REQ-COM-030）。おすすめ（選ぶ欄に「おすすめ」と出し、既定にするもの）は `LocalLLMModel.recommended`（DEC-COM-067）。AI の既定も音声入力・会議ともローカル（`AppSettings.init` の `register`）で、以前から使っている人は `AppSettings.preserveAIProviderForExistingUsers` が Gemini のままにする（DEC-COM-068）。モデルの一覧（版・ファイル・SHA-256・文脈の長さ・サンプリング・ライセンス）は `LocalLLMModel`。選んだモデルは `AppSettings.localDictationModel`・`localMeetingModel`。
+- 設定の「AI」の各用途で「ローカル」を選ぶと、Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-4B のどれかを、この Mac の中で動かす（REQ-COM-030）。おすすめ（選ぶ欄に「おすすめ」と出し、既定にするもの）は `LocalLLMModel.recommended`（DEC-COM-067）。AI の既定も音声入力・会議ともローカル（`AppSettings.init` の `register`）で、以前から使っている人は `AppSettings.preserveAIProviderForExistingUsers` が Gemini のままにする（DEC-COM-068）。モデルの一覧（版・ファイル・SHA-256・文脈の長さ・サンプリング・ライセンス）は `LocalLLMModel`。選んだモデルは `AppSettings.localDictationModel`・`localMeetingModel`。
 - モデルは設定の欄（`LocalModelChoice`）か `--local-llm-download` で、`LocalLLMStore` が Hugging Face から取る。決めたコミットの URL から取り、大きさと SHA-256 を確かめてから `~/Library/Application Support/Hanasu/Models/llm/` に置く（DEC-COM-062）。
 - モデルがないまま整形・英訳・議事録の作成・履歴のやり直しを始めると、`TextAIClient` を作る前に `LocalModelDownloadPrompt.prepare` が NSAlert でダウンロードするか尋ね、`LocalLLMStore.ensureDownloaded` で取りながら進み具合のウインドウ（`LocalModelDownloadView`）を出し、終わるのを待つ。音声入力では、そのあと入力先のアプリを前に戻してから整形・入力に進む（REQ-COM-032、DEC-COM-069）。
 - 動かすのは同梱の llama.cpp の `llama-server`（`Contents/Resources/llama/`。`scripts/fetch-llama-cpp.sh` が SHA-256 を確かめて取り、`scripts/build-app.sh` が入れて署名する。DEC-COM-061）。`LocalLLMServer`（actor）が、使うときに 127.0.0.1 の空いたポートで起動し、5 分使わなければ止める。API キーは起動のたびに作って環境変数で渡す。アプリ・CLI の終了（`atexit`）で止め、前回落ちて残ったものは起動時に止める（DEC-COM-063）。
@@ -110,7 +110,7 @@ Typeless のような「話した内容を、自然な文章に整えて今カ�
 
 ### 3.2.3 整形などの AI を Apple の Foundation Models の CLI にする（macOS 27 の fm）
 
-- 「AI」タブの各用途で「Apple」を選ぶと、macOS 27 に入っている `fm`（Foundation Models の CLI）で、Apple Intelligence の端末の中のモデルを使う（REQ-COM-031）。Mac 版だけ。
+- 設定の「AI」の各用途で「Apple」を選ぶと、macOS 27 に入っている `fm`（Foundation Models の CLI）で、Apple Intelligence の端末の中のモデルを使う（REQ-COM-031）。Mac 版だけ。
 - 使えるかは `AppleFMAvailability.check` が決める。macOS 27 以上で、`/usr/bin/fm` があり、Apple の署名（`anchor apple`）のときだけ使う。使えなければ理由を設定の欄（`AppleFMChoice`）と知らせに出す（DEC-COM-071）。確認用の環境変数 `HANASU_FM_PATH` で偽の `fm` を指定できる。
 - `AppleFMClient` は処理のたびに `fm respond --instructions <指示> <入力>` を子プロセスで動かし、標準出力を結果にする（DEC-COM-070）。`--model pcc` は付けない（DEC-COM-072）。プロンプト・整形の後始末はローカルと同じ。
 - 文脈は 8,192 トークンとして、ローカルと同じ `LongInputFitter` で長い会議を分けてまとめる。トークン数は `AppleFMClient.estimateTokens` で文字の種類から多めに見積もる（DEC-COM-073）。
@@ -302,7 +302,7 @@ HUD とメニュー:
 
 ### 4.6 アプリ別の整形スタイル
 
-Wispr Flow や Typeless の「アプリに合わせて文体を変える」機能にならい、入力先アプリ（bundle ID）ごとに次の 2 つを決められるようにした。設定画面の「アプリ別」タブで編集する（`AppStylesView.swift`）。
+Wispr Flow や Typeless の「アプリに合わせて文体を変える」機能にならい、入力先アプリ（bundle ID）ごとに次の 2 つを決められるようにした。設定画面の「アプリ別」で編集する（`AppStylesView.swift`）。
 
 - Gemini に渡す文体ルール: プリセット 1 つ ＋ このアプリ用の追加ルール（自由記述）
 - 既定の出力言語: 話した言語 / English
@@ -318,13 +318,13 @@ Wispr Flow や Typeless の「アプリに合わせて文体を変える」機�
 
 節の文面は `AppStyle.promptSection`。
 
-- **優先順位**: アプリ別の追加ルール ＞ プリセット ＞ 共通の追加ルール（「辞書・ルール」タブ）＞ system instruction の「口調を変えない」。より狭い対象に向けて書いたものを優先する。最後の 2 行はそれをプロンプトに明記するもので、共通の追加ルールが空なら最後の行は入れない。
+- **優先順位**: アプリ別の追加ルール ＞ プリセット ＞ 共通の追加ルール（設定の「辞書・ルール」）＞ system instruction の「口調を変えない」。より狭い対象に向けて書いたものを優先する。最後の 2 行はそれをプロンプトに明記するもので、共通の追加ルールが空なら最後の行は入れない。
 - system instruction には「指定がない限り口調を変えない」とあり、最初はプリセットを足してもほとんど文体が変わらなかった。「口調を変えない」より優先すると書き、プリセットに言い換えの例（「〜なんですけど → 〜ですが」など）を入れて効くようにした。
 - 「入力先アプリ名を Gemini に伝える」をオフにしているときは、見出しにアプリ名を入れない（ルールの本文だけを送る）。
 - **英訳のとき**: プリセットは英訳向けのルール（チャットはカジュアルで短い英語、メールは丁寧でプロフェッショナルな英語、文書は書き言葉の英語）に切り替える。このアプリ用の追加ルールも渡す（出力を English にしたアプリでは、英語の出力を前提に書かれるため）。日本語の語尾や敬語についてのルールは「英語の丁寧さの度合いとして読み替える」と添える。共通の追加ルールは、これまでどおり英訳では使わない。
 - **和訳のとき**: 出力が日本語なので、整形と同じ日本語向けのプリセットのルールと、共通の追加ルールを使う（DEC-DIC-028）。
 - **出力言語**: 既定の出力言語を English（日本語）にしたアプリで、`⌥ Space`（整形）で録音を始めると、英訳（和訳）で始める（HUD もその言語）。HUD で「話した言語」を押せばそちらが優先される（止めた時点の選択で決まる、4.3.1 と同じ）。`⌥⇧ Space` はどのアプリでも、設定で選んだ最初の翻訳の言語。
-- 「アプリ別」タブのスイッチをオフにすると、どのアプリでも使わない。
+- 設定の「アプリ別」のスイッチをオフにすると、どのアプリでも使わない。
 
 Slack とメールで同じ文を整形した結果は [verification/dictation.md](../verification/dictation.md) 5。
 
@@ -376,7 +376,7 @@ Wispr Flow の Context Awareness、Aqua Voice の画面コンテキスト、Will
 
 安全とプライバシー:
 
-- 設定（Gemini タブ →「画面の文脈を Gemini に渡す」）は既定でオフ。説明文を付けた。
+- 設定（設定の「AI」→「画面の文脈を Gemini に渡す」）は既定でオフ。説明文を付けた。
 - `AXSecureTextField`（ロールかサブロール）の入力欄は中身を読まない。
 - 除外するアプリ（バンドル ID かアプリ名、1 行に 1 つ）を設定できる。既定で 1Password・Bitwarden・パスワード（Apple）・キーチェーンアクセス・KeePassXC・Dashlane・Enpass・LastPass を入れてある。除外アプリと Hanasu 自身は、ウインドウのタイトルも読まない。
 - AX の呼び出しには `AXUIElementSetMessagingTimeout` で 0.2 秒のタイムアウトを付ける（応答しないアプリで固まらないようにする）。さらに読み取りは `Task.detached` で別スレッドで行い、録音の開始は待たせない。止めたときにまだ読み終わっていなければ最大 0.3 秒だけ待ち、間に合わなければ文脈なしで整形する。
@@ -389,20 +389,21 @@ Wispr Flow の Context Awareness、Aqua Voice の画面コンテキスト、Will
 
 ### 4.9 音声入力の履歴
 
-類似製品の口コミで多い不満「入力先がずれて結果が消えた」「整形に失敗した文を取り戻したい」への対応（Wispr Flow・VoiceInk の History を参考にした）。コードは `DictationHistory.swift`（保存）、`DictationHistoryWindow.swift`（ウインドウ・メニュー・再入力・設定タブ）、`DictationHistoryCLI.swift`（確認用 CLI）にまとめ、既存のファイルからは呼び出すだけにしている。
+類似製品の口コミで多い不満「入力先がずれて結果が消えた」「整形に失敗した文を取り戻したい」への対応（Wispr Flow・VoiceInk の History を参考にした）。コードは `DictationHistory.swift`（保存）、`DictationHistoryWindow.swift`（ウインドウ・メニュー・再入力・設定の「履歴」）、`DictationHistoryCLI.swift`（確認用 CLI）にまとめ、既存のファイルからは呼び出すだけにしている。
 
 **保存**
 
 - 置き場所: `~/Library/Application Support/Hanasu/History/history.json`（1 ファイル、新しい順）。録音を残すときは `History/Audio/<UUID>.m4a`。
-  - 日別ファイルにしなかったのは、上限が 1000 件程度なら 1 ファイルでも 1 MB 前後で、書き直しが一瞬で済むため。件数と日数の両方で上限をかけるには、1 ファイルの方が扱いやすい。
+  - 日別ファイルにしなかったのは、上限が 1000 件程度なら 1 ファイルでも 1 MB 前後で足りるため。件数と日数の両方で上限をかけるには、1 ファイルの方が扱いやすい。
   - フォルダは 0700、`history.json` は 0600 にする（話した内容が入っているため）。書き込みは atomic。
   - 読めないファイル（壊れた JSON など）は上書きせず、ウインドウの下にエラーを出す。
+  - Mac 版の保存は遅らせて裏で行う（DEC-DIC-070）。`DictationHistoryStore.save` は予約するだけで、`writeNow` が直列キュー `writeQueue` に書き込み（`write`）を流す。`flush` で書き切り、`flushOnTerminate`（終了の通知）・`load`・確認用 CLI が使う。起動時は `AppDelegate` が `DictationHistoryStore.preloadShared` を呼び、`readFile`（読み込みとデコード）を裏で行ってから、メインで `shared` を作って中身を当てる（`load(from:)`）。`DictationHistoryUI` は `shared` を使うときに初めて取る。先読みが終わる前にメニュー・再入力・音声入力が `shared` を使ったら、そこで同期で `load` し、先読みの結果は捨てる。
 - 1 件に持つもの: 日時、文字起こしの原文、結果、モード（整形／英訳／和訳。`refine` / `translate` / `translateJapanese`）、入力先アプリ、状態、Gemini のエラー内容、使ったモデル、録音のファイル名、やり直した日時。
 - 状態は 4 つ: 成功 ／ Gemini 失敗 ／ 未設定のため原文のまま ／ 整形オフ（原文のまま）。前の 2 つ（失敗）は ⚠︎、後ろ 2 つも含めて「未整形」の印を付ける。
 - 貼り付け（⌘V）の**前に**履歴へ書く。貼り付けがどうなっても結果が残るようにするため。
 - 上限: 件数（100 / 500 / **1000** / 5000）と期間（7 / **30** / 90 / 365 日 / 無期限）。両方を満たすものだけを残し、追加時・起動時・設定の変更時に古い順に消す（録音も一緒に消す）。
 - 「履歴をファイルに保存する」をオフにすると、新しい結果はファイルに書かず、メモリ上に直近 10 件だけ置く（「最近の結果」と再入力のため。今までの動きと同じ）。保存済みの履歴は消さない（設定の「履歴をすべて削除…」で消す）。
-- 設定は `AppSettings` とは別の `HistorySettings`（UserDefaults のキー `historyEnabled` / `historyMaxCount` / `historyMaxDays` / `historyKeepAudio` / `repasteHotKeyCode` / `repasteHotKeyModifiers`）。設定画面の「履歴」タブで変える。
+- 設定は `AppSettings` とは別の `HistorySettings`（UserDefaults のキー `historyEnabled` / `historyMaxCount` / `historyMaxDays` / `historyKeepAudio` / `repasteHotKeyCode` / `repasteHotKeyModifiers`）。設定画面の「履歴」で変える。
 
 **録音を残す（既定はオフ）**
 
@@ -413,14 +414,14 @@ Wispr Flow の Context Awareness、Aqua Voice の画面コンテキスト、Will
 
 **履歴ウインドウ**
 
-- メニューバーの「履歴を開く…」、「最近の結果」の中の「すべての履歴を開く…」、設定の「履歴」タブのボタンから開く。
-- 左: 検索欄（結果・原文・アプリ名。空白区切りの語をすべて含むもの）、「すべて ／ 失敗・未整形」の切り替え、日ごと（今日・昨日・日付）の一覧。右クリックでコピー・削除、⌫ で削除。
+- メニューバーの「履歴を開く…」、「最近の結果」の中の「すべての履歴を開く…」、設定の「履歴」のボタンから開く。
+- 左: 検索欄（結果・原文・アプリ名。空白区切りの語をすべて含むもの）、「すべて ／ 失敗・未整形」の切り替え、日ごと（今日・昨日・日付）の一覧。右クリックでコピー・削除、⌫ で削除（1 件でも `DictationHistoryView` の確認ダイアログを経る。DEC-DIC-079）。
 - 右: 日時・入力先・モード・状態、失敗の内容、結果と原文（それぞれコピー）、「整形し直す」と、設定で選んだ翻訳の言語ごとの「英訳し直す」「和訳し直す」、録音の再生、削除。
 - 整形し直す・英訳し直す: 原文と今の設定（モデル・辞書・追加ルール・アプリ名を送るか）で Gemini を呼び直し、結果でその履歴を上書きして、クリップボードにもコピーする。失敗したときは履歴を変えずにエラーを出す。新しい項目にせず上書きにしたのは、同じ発話が何件も並ぶと探しにくいため（原文は残るので、何度でもやり直せる）。
 
 **最後の結果をもう一度入力**
 
-- ショートカット（初期値 `⌥⇧ V`、設定の「履歴」タブで変えられる）か、「最近の結果」の先頭の項目で、履歴のいちばん新しい結果を、いま前面にあるアプリへ ⌘V で入力し直す。失敗して原文のまま入力したものも、そのまま入力する。
+- ショートカット（初期値 `⌥⇧ V`、設定の「履歴」で変えられる）か、「最近の結果」の先頭の項目で、履歴のいちばん新しい結果を、いま前面にあるアプリへ ⌘V で入力し直す。失敗して原文のまま入力したものも、そのまま入力する。
 - 録音中・整形中は何もしない。アクセシビリティが未許可ならクリップボードにコピーして知らせる。
 - `⌥⇧ V` は US 配列で「◊」を打つキーなので、使う人は設定で変える。
 
@@ -441,7 +442,7 @@ Mac 標準（SpeechAnalyzer）は速く途中経過も出るが、専門用語�
 | Whisper | Mac の上（WhisperKit、CoreML） | 出ない | 選んだときにモデルをダウンロードする |
 | Gemini | Google（Gemini API / Vertex AI） | 出ない | 録った音声を送る。認証は整形と同じ |
 
-**設定（「一般」タブの「文字起こし」欄。タブは増やさない）**
+**設定（設定の「一般」の「文字起こし」欄。項目は増やさない）**
 
 - 「音声入力」と「会議の記録」で、エンジンを**別々に**選ぶ。理由:
   - 音声入力は数秒の発話をすぐ入力したいので、待ち時間と途中経過が大事。会議は記録のあとに待てるので、精度を優先したい。
@@ -516,13 +517,14 @@ Mac 標準（SpeechAnalyzer）は速く途中経過も出るが、専門用語�
 
 - 初めて起動したとき、設定画面の代わりにオンボーディングのウインドウ（`OnboardingWindowController`・`OnboardingView`。`Onboarding.swift`）を出す。起動時のアクセシビリティの許可のダイアログも出さず、最後のページのボタンで求める（DEC-COM-093）。
 - 出すかどうかは `OnboardingState.shouldShowOnLaunch` が、`applicationDidFinishLaunching` の最初（メニューバーのアイコンを作る前）に決める。UserDefaults の `onboardingCompletedVersion` がなく、Hanasu の設定もまだ保存されていないときだけ出す。閉じたら（「はじめる」でも途中でも）`onboardingCompletedVersion` を書く（DEC-COM-090）。
-- ページは `OnboardingPage` の 7 つ。状態（今のページ・AI のページで選んだ AI）は `OnboardingModel` が持つ。AI のページ（`OnboardingAIPage`）のカードは `OnboardingAIChoice`（おすすめの Gemma 4 E4B・Gemini・Claude・Apple）。押すと `OnboardingModel.chooseDefaultAI` が音声入力と会議の両方の AI を書き換え（Gemma なら両方のローカルのモデルも Gemma 4 E4B に）、その AI の準備の欄を出す。Gemma は `OnboardingGemmaDownload`（`LocalLLMStore` のダウンロードをボタンで始め、進み具合と中止を出す）、ほかは設定の「AI」タブの部品（`GeminiAuthSection`・`ClaudeKeySection`・`AppleFMChoice`）。Gemma をまだダウンロードしていなければ「次へ」が「ダウンロードして次へ」になり、ダウンロードを始めて待たずに進む（`OnboardingModel.next`。DEC-COM-094）。最後のページにも、終わっていなければ進み具合を出す。「設定の Tips」のページ（`OnboardingTipsPage`）も `AIChoiceRow` を使う（REQ-COM-050・051、DEC-COM-092）。
+- ページは `OnboardingPage` の 7 つ。状態（今のページ・AI のページで選んだ AI）は `OnboardingModel` が持つ。AI のページ（`OnboardingAIPage`）のカードは `OnboardingAIChoice`（おすすめの Gemma 4 E4B・Gemini・Claude・Apple）。押すと `OnboardingModel.chooseDefaultAI` が音声入力と会議の両方の AI を書き換え（Gemma なら両方のローカルのモデルも Gemma 4 E4B に）、その AI の準備の欄を出す。Gemma は `OnboardingGemmaDownload`（`LocalLLMStore` のダウンロードをボタンで始め、進み具合と中止を出す）、ほかは設定の「AI」の部品（`GeminiAuthSection`・`ClaudeKeySection`・`AppleFMChoice`）。Gemma をまだダウンロードしていなければ「次へ」が「ダウンロードして次へ」になり、ダウンロードを始めて待たずに進む（`OnboardingModel.next`。DEC-COM-094）。最後のページにも、終わっていなければ進み具合を出す。「設定の Tips」のページ（`OnboardingTipsPage`）も `AIChoiceRow` を使う（REQ-COM-050・051、DEC-COM-092）。
 - メニューバーのメニューとアプリのメニューの「Hanasu の使い方…」で、最初のページから開き直せる（DEC-COM-091）。オンボーディングを出している間に Finder から開き直すと、設定画面ではなくオンボーディングを前に出す。
 
 ### 5.3 設定（UserDefaults、API キーのみキーチェーン）
 
 - 初版の設定は `AppSettings`（`Settings.swift`。既定値は `init` の `defaults.register`）。あとから足した機能の設定は、それぞれのストア（`AppStyleStore`・`SnippetStore`・`ScreenContextSettings`・`HistorySettings`・`EditModeSettings`・`PasteFallbackSettings`・`MeetingNotesSettings`・`MeetingDetectionSettings`・`MinutesTemplateStore`）に分けてある（DEC-COM-013）。
 - 設定画面は `SettingsView.swift` と、機能ごとの `*SettingsView.swift`・`*Settings*` の View。
+- 設定のウインドウは、左のサイドバー（`SettingsPane` の項目と色付きのアイコン `SettingsPaneIcon`）と、右の項目の中身の 2 段（`NavigationSplitView`）。ウインドウは `AppDelegate.makeSettingsWindow` で作る（DEC-COM-151）。確認用の描き出しは `--render-settings <フォルダ>`（`SettingsCLI.swift`）。
 - 決めた既定値のうち理由のあるものは、spec の設計判断に書いてある（例: DEC-DIC-002、DEC-DIC-060、DEC-DIC-073、DEC-COM-005、DEC-COM-022）。
 
 ### 5.4 ユーザー辞書と置き換えルール
@@ -570,7 +572,7 @@ Hanasu                                  … 語だけ。認識のヒントと Ge
 
 音声認識そのものに辞書を効かせるのは `AnalysisContext.contextualStrings[.general]` だけで、音声入力（`SpeechRecognizer`）と会議（`ChannelTranscriber`）の両方で設定している。語・ルールの表記に加えて、ルールの読みも渡す。カスタム言語モデル（`DictationTranscriber.ContentHint.customizedLanguage`）は使っていない（調べた結果は [roadmap.md](../roadmap.md) FUT-103）。
 
-設定画面（「辞書・ルール」タブ、`DictionarySettingsView.swift`）:
+設定の「辞書・ルール」（`DictionarySettingsView.swift`）:
 
 - 「表」と「テキスト」を切り替えて編集する。表は「読み・誤認識（空なら語だけ）」→「正しい表記」の 2 列で、行の追加・削除ができる。テキストは今までの欄と同じで、まとめて貼り付けたいときに使う。
 - 表は `dictionaryText` の見せ方を変えるだけで、保存先は 1 つ。コメントと空行は表に出さないが、並びごと残す。編集していない行は書かれたまま書き戻す（書き方の揺れを勝手に直さない）。
@@ -579,7 +581,7 @@ Hanasu                                  … 語だけ。認識のヒントと Ge
 
 Wispr Flow や Typeless は辞書を自動で学習する。Hanasu では、自動で辞書に足すと誤爆するルールが黙って増えるので、**ボタンを押したときだけ候補を挙げ、ユーザーが選んだものだけを足す**。
 
-- 「辞書・ルール」タブの「候補を探す」を押すと、次の材料を Gemini に送る（実装は `DictionarySuggester.swift`）。
+- 設定の「辞書・ルール」の「候補を探す」を押すと、次の材料を Gemini に送る（実装は `DictionarySuggester.swift`）。
   - 音声入力の結果: 今回の起動後のもの（最大 50 件、メモリ上だけ。認識結果と、実際に入力した文章の組）
   - 会議の記録: 文字起こしのある会議を新しい順に 5 件。文字起こし（`transcriptForPrompt()`）と議事録。1 件 15,000 字、全体 60,000 字まで
   - 既存の辞書（同じ語を挙げないように）
@@ -638,7 +640,7 @@ mac-typeless/
 │   ├── Settings.swift             # 設定値（UserDefaults）
 │   ├── SettingsView.swift         # 設定画面（SwiftUI）
 │   ├── AppStyles.swift            # アプリ別の整形スタイル（プリセット・保存・プロンプトの節）
-│   ├── AppStylesView.swift        # 設定画面の「アプリ別」タブ
+│   ├── AppStylesView.swift        # 設定画面の「アプリ別」
 │   ├── ShortcutRecorder.swift     # ショートカット記録 UI
 │   ├── Keychain.swift             # API キー保存
 │   ├── UserDictionary.swift       # ユーザー辞書の読み込みと置き換えルール
@@ -648,10 +650,10 @@ mac-typeless/
 │   ├── DictionaryCLI.swift        # 辞書まわりの CLI モード
 │   ├── Permissions.swift          # 権限確認
 │   ├── Snippets.swift             # スニペットの保存・照合・組み立て
-│   ├── SnippetsSettingsView.swift # 設定画面の「スニペット」タブ
+│   ├── SnippetsSettingsView.swift # 設定画面の「スニペット」
 │   ├── SnippetsCLI.swift          # スニペットの確認用 CLI
 │   ├── DictationHistory.swift     # 音声入力の履歴の保存・上限・やり直し、録音の書き出し
-│   ├── DictationHistoryWindow.swift # 履歴ウインドウ・「最近の結果」・再入力・設定の「履歴」タブ
+│   ├── DictationHistoryWindow.swift # 履歴ウインドウ・「最近の結果」・再入力・設定の「履歴」
 │   ├── DictationHistoryCLI.swift  # 履歴の確認用 CLI
 │   ├── EditModeController.swift   # 選択を声で編集の流れ（4.5）
 │   ├── SelectionReader.swift      # 選択の読み取り（AX → ⌘C）
@@ -676,7 +678,7 @@ open build/Hanasu.app
 
 初回起動時:
 
-1. メニューバーの 🎙 → 設定… →「Gemini」タブで認証を設定する。API キー（[Google AI Studio](https://aistudio.google.com/apikey) で発行）か、サービスアカウントの JSON ファイルを指定する。
+1. メニューバーの 🎙 → 設定… →「AI」で認証を設定する。API キー（[Google AI Studio](https://aistudio.google.com/apikey) で発行）か、サービスアカウントの JSON ファイルを指定する。
 2. ショートカットを押すと、マイク・音声認識の許可ダイアログが出るので許可。
 3. 初回入力時にアクセシビリティの許可を求められるので、システム設定 → プライバシーとセキュリティ → アクセシビリティで Hanasu をオンにする。
 4. 日本語の音声モデルが未インストールなら自動でダウンロードされる。

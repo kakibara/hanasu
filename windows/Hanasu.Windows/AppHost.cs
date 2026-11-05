@@ -119,7 +119,7 @@ internal sealed class AppHost : IDisposable
         Microsoft.Win32.SystemEvents.SessionSwitch += OnSessionSwitch;
         Microsoft.Win32.SystemEvents.PowerModeChanged += OnPowerModeChanged;
         tray = new TrayIcon(this);
-        Dictation.StateChanged += (_, state) => tray?.UpdateState(state);
+        Dictation.StateChanged += (_, state) => app.Dispatcher.BeginInvoke(() => tray?.UpdateState(state));
         History.Changed += (_, _) => app.Dispatcher.BeginInvoke(() => tray?.UpdateRecent());
         Settings.Changed += OnSettingsChanged;
         Meetings.StateChanged += (_, state) => app.Dispatcher.BeginInvoke(() =>
@@ -346,7 +346,7 @@ internal sealed class AppHost : IDisposable
     {
         if (Meetings.State != MeetingState.Idle
             && MessageBox.Show("会議の記録中（または記録のあとの処理中）です。終了すると、この会議の文字起こしと議事録は作られません（音声ファイルは残ります）。終了しますか？",
-                "Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK)
+                "Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK)
         {
             return;
         }
