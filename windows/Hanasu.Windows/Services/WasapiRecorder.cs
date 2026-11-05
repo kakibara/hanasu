@@ -142,7 +142,14 @@ internal sealed class WasapiRecorder : IAudioRecorder
             else if (room > 0) samples.AddRange(converted.AsSpan(0, room).ToArray());
         }
         if (converted.Length > 0) SamplesAvailable?.Invoke(this, converted);
-        if (limitReached) LimitReached?.Invoke(this, EventArgs.Empty);
+        // 受けた側（DictationController）は UI スレッドで動く前提（クリップボードは STA、トレイも UI スレッド）。
+        // DataAvailable は録音のスレッドで来るので、UI スレッドに渡してから知らせる（DEC-DIC-144）
+        if (limitReached)
+        {
+            var dispatcher = System.Windows.Application.Current?.Dispatcher;
+            if (dispatcher is null || dispatcher.CheckAccess()) LimitReached?.Invoke(this, EventArgs.Empty);
+            else dispatcher.BeginInvoke(() => LimitReached?.Invoke(this, EventArgs.Empty));
+        }
     }
 
     private void OnRecordingStopped(object? sender, StoppedEventArgs e)
