@@ -17,7 +17,7 @@ struct ScreenContextSettingsSection: View {
                     Spacer()
                     Menu(tr("起動中のアプリから追加")) {
                         ForEach(runningApps, id: \.bundleID) { app in
-                            Button("\(app.name)（\(app.bundleID)）") { add(app.bundleID) }
+                            Button(tr("%@（%@）", app.name, app.bundleID)) { add(app.bundleID) }
                         }
                     }
                     .fixedSize()

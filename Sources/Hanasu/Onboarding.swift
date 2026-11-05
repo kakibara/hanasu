@@ -756,7 +756,7 @@ struct OnboardingPermissionsPage: View {
         func label(_ purpose: TextAIPurpose) -> String {
             let provider = settings.aiProvider(for: purpose)
             let model = provider == .local ? settings.localModel(for: purpose).name : settings.textModel(for: purpose)
-            return "\(provider.name)（\(model)）"
+            return tr("%@（%@）", provider.name, model)
         }
         return tr("音声入力 %@・会議 %@", "\(label(.dictation))", "\(label(.meeting))")
     }

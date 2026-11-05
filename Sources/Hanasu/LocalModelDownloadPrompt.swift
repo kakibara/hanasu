@@ -144,7 +144,7 @@ struct LocalModelDownloadView: View {
         switch store.status(model) {
         case .downloading(let fraction?):
             ProgressView(value: fraction)
-            Text("\(Int(fraction * 100))%（\(byteLabel(fraction)) / \(model.sizeLabel)）")
+            Text(tr("%@%%（%@ / %@）", "\(Int(fraction * 100))", byteLabel(fraction), model.sizeLabel))
                 .font(.caption).monospacedDigit().foregroundStyle(.secondary)
         case .downloading(nil):
             ProgressView().progressViewStyle(.linear)

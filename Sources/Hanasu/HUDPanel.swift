@@ -361,8 +361,8 @@ private struct LanguageSwitch: View {
         .background(.quaternary, in: Capsule())
         // 1 行目が詰まっても折り返さない（詰まったら、左の見出しのほうを省略する）
         .fixedSize()
-        .help(tr("録音を止めたときに選んでいる言語で入力します（話した言語は整形の言語の設定に従い、")
-            + choices.map { tr("%@ は%@", "\($0.label)", "\($0.verb)") }.joined(separator: "、") + "）")
+        .help(tr("録音を止めたときに選んでいる言語で入力します（話した言語は整形の言語の設定に従い、%@）",
+                 choices.map { tr("%@ は%@", "\($0.label)", "\($0.verb)") }.joined(separator: tr("、"))))
     }
 
     private func option(_ label: String, selected: Bool, action: @escaping () -> Void) -> some View {
