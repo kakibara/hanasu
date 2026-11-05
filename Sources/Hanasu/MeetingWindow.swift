@@ -89,6 +89,7 @@ struct MeetingWindowView: View {
             deleteError = error.localizedDescription
             return
         }
+        MeetingChatStore.shared.remove(meeting.id)
         guard selection == meeting.id || jump?.meetingID == meeting.id else { return }
         jump = nil
         if let index {
@@ -215,6 +216,20 @@ private struct RecordButton: View {
 // 要件: REQ-MTG-003
 struct LiveTranscriptView: View {
     @ObservedObject var recorder: MeetingRecorder
+    // 設計判断: DEC-MTG-080
+    /// 右側に出すもの（メモか AI チャット）。次の記録でも同じものを出す
+    @AppStorage("meetingLiveSidePanel") private var sideMode: LiveSidePanelMode = .notes
+    /// 新しい発言が来たら下までスクロールするか（AI チャットの答えの時刻から前の発言へ移ったら止める）
+    @State private var followLatest = true
+    /// AI チャットの答えの時刻から移った発言
+    @State private var focusedLine: UUID?
+    @State private var timeJump: TimeJump?
+
+    /// 答えの時刻を押したときの飛び先（同じ時刻をもう一度押しても移るように、押すたびに token を変える）
+    struct TimeJump: Equatable {
+        var seconds: Double
+        var token = UUID()
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -257,7 +272,9 @@ struct LiveTranscriptView: View {
                         }
                         ForEach(recorder.liveLines) { line in
                             TranscriptLine(time: line.start, speaker: line.channel == .me ? "自分" : "相手",
-                                           color: line.channel == .me ? .accentColor : .orange, text: line.text)
+                                           color: line.channel == .me ? .accentColor : .orange, text: line.text,
+                                           focused: line.id == focusedLine)
+                                .id(line.id)
                         }
                         if !recorder.volatileOthers.isEmpty {
                             TranscriptLine(time: nil, speaker: "相手", color: .orange, text: recorder.volatileOthers)
@@ -271,13 +288,48 @@ struct LiveTranscriptView: View {
                     }
                     .padding()
                 }
-                .onChange(of: recorder.liveLines.count) { proxy.scrollTo("bottom") }
+                .onChange(of: recorder.liveLines.count) {
+                    if followLatest { proxy.scrollTo("bottom") }
+                }
+                // 設計判断: DEC-MTG-084
+                // AI チャットの答えの時刻を押したら、その時刻の発言へ移り、新しい発言が来ても下へ戻らない
+                .onChange(of: timeJump) { _, jump in
+                    guard let jump, let index = MeetingChat.lineIndex(
+                        at: jump.seconds, starts: recorder.liveLines.map(\.start)) else { return }
+                    let id = recorder.liveLines[index].id
+                    followLatest = false
+                    focusedLine = id
+                    withAnimation { proxy.scrollTo(id, anchor: .center) }
+                }
+                .overlay(alignment: .bottom) {
+                    if !followLatest {
+                        Button {
+                            followLatest = true
+                            focusedLine = nil
+                            withAnimation { proxy.scrollTo("bottom") }
+                        } label: {
+                            Label("最新の発言へ", systemImage: "arrow.down")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
+                        .clipShape(Capsule())
+                        .padding(.bottom, 10)
+                        .shadow(radius: 2)
+                    }
+                }
             }
             .safeAreaInset(edge: .trailing, spacing: 0) {
-                // メモと「ここ重要」（MeetingNotesViews.swift）
+                // メモと「ここ重要」（MeetingNotesViews.swift）と、AI チャット（MeetingChatView.swift）
                 HStack(spacing: 0) {
                     Divider()
-                    LiveNotesPanel(recorder: recorder).frame(width: 280)
+                    if let id = recorder.current?.id {
+                        LiveSidePanel(recorder: recorder, chat: MeetingChatStore.shared.model(for: id), mode: $sideMode) { seconds in
+                            timeJump = TimeJump(seconds: seconds)
+                        }
+                        .frame(width: 320)
+                    } else {
+                        LiveNotesPanel(recorder: recorder).frame(width: 320)
+                    }
                 }
             }
         }
@@ -323,10 +375,12 @@ struct MeetingDetailView: View {
     @State private var title = ""
     @FocusState private var titleFocused: Bool
     @State private var editingSpeakers = false
-    /// 「ここ重要」タブから「文字起こしで見る」で開いた発言
+    /// 「ここ重要」タブから「文字起こしで見る」で開いた発言（AI チャットの答えの時刻から開いた発言も）
     @State private var focusedFromHighlight: UUID?
+    /// AI チャットの答えの時刻を押したとき、文字起こしのタブを開いてから移る時刻
+    @State private var pendingTimeJump: Double?
 
-    /// initialTab は確認用の描き出し（CLI）で、最初に開くタブを決めるため（0 議事録・1 文字起こし・2 メモ・3 ここ重要）
+    /// initialTab は確認用の描き出し（CLI）で、最初に開くタブを決めるため（0 議事録・1 文字起こし・2 メモ・3 ここ重要・4 AI チャット）
     init(meeting: Meeting, recorder: MeetingRecorder, jump: MeetingJump? = nil, initialTab: Int = 0,
          onDelete: (() -> Void)? = nil) {
         self.meeting = meeting
@@ -390,10 +444,11 @@ struct MeetingDetailView: View {
                         Text("文字起こし").tag(1)
                         Text("メモ").tag(2)
                         Text("ここ重要").tag(3)
+                        Text("AI チャット").tag(4)
                     }
                     .pickerStyle(.segmented)
                     .labelsHidden()
-                    .frame(width: 400)
+                    .frame(width: 500)
                     Spacer()
                     MinutesTemplateMenu(meeting: meeting, recorder: recorder)
                 }
@@ -402,6 +457,18 @@ struct MeetingDetailView: View {
             Divider()
             if tab == 2 {
                 MeetingNotesEditor(meeting: meeting, recorder: recorder)
+            } else if tab == 4 {
+                // 設計判断: DEC-MTG-086
+                // 記録中に始めた会話を、記録のあとも確定した文字起こしで続ける
+                MeetingChatView(
+                    model: MeetingChatStore.shared.model(for: meeting.id),
+                    material: { MeetingChat.material(for: meeting) },
+                    live: false,
+                    onJump: { seconds in
+                        pendingTimeJump = seconds
+                        tab = 1
+                    },
+                    onSaveNote: saveChatAnswerToNotes)
             } else {
                 ScrollViewReader { proxy in
                     ScrollView {
@@ -440,7 +507,10 @@ struct MeetingDetailView: View {
                         .padding()
                         .textSelection(.enabled)
                     }
-                    .onAppear { scroll(to: jump, proxy: proxy) }
+                    .onAppear {
+                        scroll(to: jump, proxy: proxy)
+                        scrollToPendingTime(proxy)
+                    }
                     .onChange(of: jump) { _, newJump in scroll(to: newJump, proxy: proxy) }
                 }
             }
@@ -455,9 +525,9 @@ struct MeetingDetailView: View {
         .onChange(of: meeting.title) { _, newTitle in
             if !titleFocused { title = newTitle }
         }
-        // 「メモ」タブを開いているときに検索の結果を選んだら、飛び先のタブに切り替える（表示されたらスクロールする）
+        // 「メモ」「ここ重要」「AI チャット」タブを開いているときに検索の結果を選んだら、飛び先のタブに切り替える（表示されたらスクロールする）
         .onChange(of: jump) { _, newJump in
-            guard tab == 2 || tab == 3, let location = newJump?.location else { return }
+            guard tab >= 2, let location = newJump?.location else { return }
             switch location {
             case .title: break
             case .minutes: tab = 0
@@ -519,6 +589,35 @@ struct MeetingDetailView: View {
                 try? await Task.sleep(for: .milliseconds(80))
                 withAnimation { proxy.scrollTo(blockID, anchor: .center) }
             }
+        }
+    }
+
+    // 設計判断: DEC-MTG-084
+    /// AI チャットの答えの時刻から、文字起こしのその時刻の発言へ移る
+    private func scrollToPendingTime(_ proxy: ScrollViewProxy) {
+        guard let seconds = pendingTimeJump else { return }
+        pendingTimeJump = nil
+        let blocks = meeting.mergedBlocks()
+        guard let index = MeetingChat.lineIndex(at: seconds, starts: blocks.map(\.start)) else { return }
+        let id = blocks[index].id
+        focusedFromHighlight = id
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(80))  // タブの中身ができてから
+            withAnimation { proxy.scrollTo(id, anchor: .center) }
+        }
+    }
+
+    // 設計判断: DEC-MTG-085
+    /// AI チャットの答えを、時刻なしのメモ（記録のあとに書き足したメモ）として足す。処理中・作り直し中は足さない
+    private var saveChatAnswerToNotes: ((MeetingChat.Message) -> Void)? {
+        guard meeting.status != .processing, recorder.current?.id != meeting.id, !regenerating else { return nil }
+        let recorder = self.recorder
+        let id = meeting.id
+        return { message in
+            guard let latest = recorder.meetings.first(where: { $0.id == id }) else { return }
+            recorder.updateNotes(latest, notes: latest.allNotes + [
+                MeetingNote(kind: .note, time: nil, text: MeetingChat.noteText(from: message.text)),
+            ])
         }
     }
 
