@@ -375,6 +375,9 @@ MainActor.assumeIsolated { DictationHistoryCLI.runIfRequested() }
 // 会議の横断検索・質問の確認（--search-meetings / --ask-meetings など。MeetingSearchCLI.swift）
 MainActor.assumeIsolated { MeetingSearchCLI.runIfRequested(CommandLine.arguments) }
 
+// 会議の AI チャットの確認（--test-meeting-chat / --chat-meeting / --render-meeting-chat。MeetingChatCLI.swift）
+MainActor.assumeIsolated { MeetingChatCLI.runIfRequested() }
+
 // 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 // 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）
