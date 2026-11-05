@@ -582,7 +582,7 @@
 - 決めた場面: セキュリティの見直し（2026-11-05）
 - 関係する要件: REQ-COM-022, REQ-DIC-003, REQ-MTG-006
 - 対象: Mac
-- 実装の場所: `PromptText.neutralizeDelimiters`、`GeminiClient.userPrompt`、`MinutesPrompt.userText`、`MeetingAsk.material`
+- 実装の場所: `PromptText.neutralizeDelimiters`、`GeminiClient.userPrompt`、`MinutesPrompt.userText`、`MeetingAsk.material`、`MeetingChat.prompt`（会議中の AI チャット。PR #68 のあとに足した。`<pending_transcript>` `<conversation>` と会話の役割のタグ `<user>` `<assistant>` も対象）
 
 ### DEC-COM-055 Gemini の呼び出しは、429 / 503 と一時的な通信の失敗だけ、時間の予算の中で 2 回までやり直す
 - 決めたこと: Gemini の 429 と 503、および一時的な通信の失敗（Mac: 接続が切れた・つながらない・名前が引けない。Windows: `HttpRequestException`）は、0.5 秒・1 秒待って 2 回までやり直す。ここまでにかかった時間と待ちの合計が、タイムアウトの半分を超えるときはやり直さない（15 秒なら 7.5 秒まで）。やり直しの送信のタイムアウトは、残りの時間にする。タイムアウト自体と、400 / 401 / 403 などはやり直さない。

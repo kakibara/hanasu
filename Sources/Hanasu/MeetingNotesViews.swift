@@ -7,9 +7,10 @@ import SwiftUI
 /// 記録中の画面の右側: メモ欄と「ここ重要」ボタン。
 struct LiveNotesPanel: View {
     @ObservedObject var recorder: MeetingRecorder
+    /// 右側の「メモ」「AI チャット」の切り替え（LiveSidePanel）。nil なら見出しに「メモ」とだけ出す
+    var mode: Binding<LiveSidePanelMode>?
     @ObservedObject private var settings = MeetingNotesSettings.shared
     @ObservedObject private var hotKey = MeetingHighlightHotKey.shared
-    @ObservedObject private var caption = MeetingCaptionPanel.shared
     @State private var draft = ""
     /// 今の行を書き始めた時刻（録音開始からの秒数）
     @State private var draftStartedAt: Double?
@@ -21,26 +22,14 @@ struct LiveNotesPanel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 8) {
-                Text("メモ").font(.headline)
+                if let mode {
+                    LiveSidePanelModePicker(mode: mode)
+                } else {
+                    Text("メモ").font(.headline)
+                }
                 Spacer()
-                Button {
-                    caption.toggle(recorder: recorder)
-                } label: {
-                    Image(systemName: caption.isShown ? "captions.bubble.fill" : "captions.bubble")
-                }
-                .help("字幕をほかのアプリの前面に表示する")
-                .accessibilityLabel("字幕を前面に表示")
-                .accessibilityValue(caption.isShown ? "オン" : "オフ")
-                // 設計判断: DEC-MTG-075（黄色の上は白ではなく黒の文字にする）
-                Button(action: highlight) {
-                    Label("ここ重要", systemImage: "star.fill")
-                        .foregroundStyle(.black)
-                }
-                .tint(.yellow)
-                .buttonStyle(.borderedProminent)
-                .help(highlightHelp)
+                LiveHighlightControls(recorder: recorder, onHighlight: highlight)
             }
-            .disabled(!isRecording)
             .padding([.horizontal, .top])
             HighlightUndoButton(recorder: recorder)
                 .padding(.horizontal)
@@ -98,10 +87,6 @@ struct LiveNotesPanel: View {
         }
     }
 
-    private var highlightHelp: String {
-        settings.highlightHotKeyEnabled ? "今の時刻に印を付ける（\(settings.highlightHotKey.displayString)）" : "今の時刻に印を付ける"
-    }
-
     private func submit() {
         recorder.addNote(draft, at: draftStartedAt)
         draft = ""
@@ -113,6 +98,44 @@ struct LiveNotesPanel: View {
         recorder.addHighlight(draft)
         draft = ""
         draftStartedAt = nil
+    }
+}
+
+// 要件: REQ-MTG-012, REQ-MTG-014
+/// 記録中の画面の右側の上に出す、字幕の切り替えと「ここ重要」のボタン（「メモ」と「AI チャット」のどちらでも出す）
+struct LiveHighlightControls: View {
+    @ObservedObject var recorder: MeetingRecorder
+    /// 「ここ重要」を押したとき。nil なら説明なしで今の時刻に印を付ける（メモ欄では、書きかけの文を印の説明にする）
+    var onHighlight: (() -> Void)?
+    @ObservedObject private var settings = MeetingNotesSettings.shared
+    @ObservedObject private var caption = MeetingCaptionPanel.shared
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Button {
+                caption.toggle(recorder: recorder)
+            } label: {
+                Image(systemName: caption.isShown ? "captions.bubble.fill" : "captions.bubble")
+            }
+            .help("字幕をほかのアプリの前面に表示する")
+            .accessibilityLabel("字幕を前面に表示")
+            .accessibilityValue(caption.isShown ? "オン" : "オフ")
+            // 設計判断: DEC-MTG-075（黄色の上は白ではなく黒の文字にする）
+            Button {
+                if let onHighlight { onHighlight() } else { recorder.addHighlight() }
+            } label: {
+                Label("ここ重要", systemImage: "star.fill")
+                    .foregroundStyle(.black)
+            }
+            .tint(.yellow)
+            .buttonStyle(.borderedProminent)
+            .help(highlightHelp)
+        }
+        .disabled(recorder.state != .recording)
+    }
+
+    private var highlightHelp: String {
+        settings.highlightHotKeyEnabled ? "今の時刻に印を付ける（\(settings.highlightHotKey.displayString)）" : "今の時刻に印を付ける"
     }
 }
 
@@ -474,7 +497,7 @@ enum MeetingNotesPreview {
     }
 
     @MainActor
-    private static func write<V: View>(_ view: V, to url: URL) throws {
+    static func write<V: View>(_ view: V, to url: URL) throws {
         let hosting = NSHostingView(rootView: view.background(Color(nsColor: .windowBackgroundColor)))
         hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
         // TextField などは AppKit の部品なので、画面外のウインドウに置いて描く
