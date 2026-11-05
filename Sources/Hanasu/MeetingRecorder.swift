@@ -92,6 +92,8 @@ final class MeetingRecorder: ObservableObject {
             try tap.start(outputDeviceUID: outputUID.isEmpty ? nil : outputUID) { buffer in
                 othersBox.transcriber?.append(buffer)
             }
+            // 以降で失敗しても teardownAudio で止められるよう、開始した時点で保持する
+            systemTap = tap
             guard let tapFormat = tap.format else { throw SystemAudioTapError.unsupportedFormat }
             let others = ChannelTranscriber(
                 channel: .others, inputFormat: tapFormat,
@@ -120,7 +122,6 @@ final class MeetingRecorder: ObservableObject {
             _ = try await (preparedMe, preparedOthers)
 
             othersBox.transcriber = others
-            systemTap = tap
             meTranscriber = me
             othersTranscriber = others
             try startMic(for: me, engine: micEngine)

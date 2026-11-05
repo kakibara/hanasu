@@ -28,6 +28,9 @@ enum SecureHTTP {
         configuration.httpCookieAcceptPolicy = .never
         configuration.urlCredentialStorage = nil
         configuration.tlsMinimumSupportedProtocolVersion = .TLSv12
+        // リクエストごとの timeoutInterval は「データが来ない時間」なので、少しずつ送り続ける相手で終わらなくならないよう、全体の上限も置く
+        // （Claude の medium は 600 秒まで待つので、それより長くする）
+        configuration.timeoutIntervalForResource = 900
         return URLSession(configuration: configuration, delegate: NoRedirectDelegate(), delegateQueue: nil)
     }()
 
