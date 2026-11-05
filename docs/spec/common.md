@@ -979,6 +979,14 @@
 - 対象: Mac / Windows
 - 実装の場所: `UILanguage`、`Resources/Info.plist`、`scripts/build-app.sh`
 
+### DEC-COM-167 Windows の UI の文字列は .resx（ニュートラルは英語）に置き、起動のときに表示のカルチャを 17 言語のどれかに決める
+- 決めたこと: Windows 版の UI の文字列を `Properties/Strings.resx`（`Hanasu.Core` と `Hanasu.Windows` に 1 つずつ。ニュートラルの言語は英語で `NeutralLanguage` を en にする）と、言語ごとのサテライト `Strings.<カルチャ>.resx` に置く。ビルドのときに MSBuild が名前ごとのプロパティを持つ `Strings` クラスを作り、コードは `Strings.名前`、XAML は `{x:Static p:Strings.名前}` で読む（WPF のマークアップの一時プロジェクトにも、作ったクラスを渡す）。埋める値は `{0}` にして `string.Format` で入れ、日本語の語順に頼った文のつなぎ（「〜して入力」など）はやめて、文ごとにリソースにする。サテライトのカルチャ名は言語のコード（ja・ko・pt-BR など）で、中国語だけ zh-Hans・zh-Hant にする（.NET は zh-CN・zh-SG を zh-Hans、zh-TW・zh-HK・zh-MO を zh-Hant にたどる）。起動のとき（`App.OnStartup`、ウインドウを作る前）に `UiLanguage.Apply` が、Windows の表示の言語とその親をたどって 17 言語のどれかに寄せ（中国語は zh-CN・zh-TW、ポルトガル語は pt-BR に。ほかは地域つきのカルチャのまま）、どれでもなければ en にして、`CultureInfo.CurrentUICulture` と `DefaultThreadCurrentUICulture` に入れる。右から左に書く言語（アラビア語）では、ウインドウを右から左に並べる。日付の曜日・月の名前も表示の言語で書く。日本語のサテライトは多言語化の前の文言と一字一句同じにする。訳の出し入れと漏れの確かめは `scripts/i18n-resx.py`（export・import・check）。
+- 理由: .resx とサテライトアセンブリは .NET の標準の仕組みで、単一ファイルの配布（PublishSingleFile）でも exe の中に入る。ニュートラルを英語にすれば、訳がない言語でも英語で出る。表示のカルチャを 17 言語のどれかにそろえておけば、香港やポルトガルの設定でも、訳のある地域の文言を読める。
+- 決めた場面: Windows の UI の多言語化の PR（2026-11-05）
+- 関係する要件: REQ-COM-060, REQ-COM-062
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Settings/UiLanguage.cs`、`windows/Hanasu.Core/Hanasu.Core.csproj`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`scripts/i18n-resx.py`
+
 ---
 
 ## 廃止
