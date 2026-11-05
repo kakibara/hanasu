@@ -54,6 +54,9 @@ struct Meeting: Codable, Identifiable, Hashable {
     var minutesTemplate: String?
     /// 型が「カスタム」のときの指示
     var customMinutesPrompt: String?
+    // 要件: REQ-MTG-042
+    /// 保存したテンプレートで作ったときの、そのテンプレートの名前（型は「カスタム」で、指示は customMinutesPrompt に写す）。古い会議にはないので省略可
+    var minutesTemplateName: String?
     /// 議事録から取り出したアクションアイテム。nil はこの機能より前に作った議事録
     var actionItems: [ActionItem]?
     /// ユーザーのメモと「ここ重要」の印（MeetingNotes.swift）。古い会議の meeting.json にはないので省略可にする

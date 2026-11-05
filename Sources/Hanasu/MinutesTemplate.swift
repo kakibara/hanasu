@@ -223,6 +223,13 @@ extension Meeting {
         minutesTemplate.flatMap(MinutesTemplate.init(rawValue:)) ?? .auto
     }
 
+    // 要件: REQ-MTG-042
+    /// 表示用の型の名前（保存したテンプレートで作ったときはその名前）
+    var templateTitle: String {
+        if template == .custom, let name = minutesTemplateName, !name.isEmpty { return name }
+        return template.title
+    }
+
     /// 書き出し・リマインダー用のアクションアイテム。古い議事録は Markdown から読み取る。
     var resolvedActionItems: [ActionItem] {
         actionItems ?? minutes.map(ActionItem.parse(fromMarkdown:)) ?? []
@@ -240,18 +247,44 @@ enum MinutesTemplateStore {
     /// カスタムの指示の例（プロンプトの言語）
     static var defaultCustomPrompt: String { Prompts.text("minutes.customDefault") }
 
-    static var selected: MinutesTemplate {
-        UserDefaults.standard.string(forKey: templateKey).flatMap(MinutesTemplate.init(rawValue:)) ?? .auto
-    }
+    /// 選んでいる組み込みの型（保存したテンプレートを選んでいるときは .custom）
+    static var selected: MinutesTemplate { resolve().template }
+
+    // 要件: REQ-MTG-042
+    /// 選んでいる保存済みのテンプレート（選んでいない・消した・見つからないときは nil）
+    static var selectedSaved: SavedMinutesTemplate? { resolve().saved }
 
     static var customPrompt: String {
         UserDefaults.standard.string(forKey: customPromptKey) ?? defaultCustomPrompt
     }
 
+    // 要件: REQ-MTG-042
+    /// 選んでいる型を読む。保存したテンプレートを選んでいて、それが見つかれば「カスタム」と、そのテンプレート。
+    /// 消されていたら「自動」に戻す。
+    static func resolve(_ defaults: UserDefaults = .standard) -> (template: MinutesTemplate, saved: SavedMinutesTemplate?) {
+        guard let value = defaults.string(forKey: templateKey) else { return (.auto, nil) }
+        if value.hasPrefix(SavedMinutesTemplateStore.selectionPrefix) {
+            guard let saved = SavedMinutesTemplateStore.template(
+                forSelection: value, in: SavedMinutesTemplateStore.load(defaults)) else { return (.auto, nil) }
+            return (.custom, saved)
+        }
+        return (MinutesTemplate(rawValue: value) ?? .auto, nil)
+    }
+
     /// 新しく記録する会議に、今選んでいる型を付ける
-    static func apply(to meeting: inout Meeting) {
-        meeting.minutesTemplate = selected.rawValue
-        meeting.customMinutesPrompt = selected == .custom ? customPrompt : nil
+    static func apply(to meeting: inout Meeting, defaults: UserDefaults = .standard) {
+        let (template, saved) = resolve(defaults)
+        meeting.minutesTemplate = template.rawValue
+        if let saved {
+            // 要件: REQ-MTG-042
+            // 保存したテンプレートは、その時点の指示を会議に写す（あとでテンプレートを直しても、この会議は変わらない）
+            meeting.customMinutesPrompt = saved.instructions
+            meeting.minutesTemplateName = saved.name
+        } else {
+            meeting.customMinutesPrompt = template == .custom
+                ? (defaults.string(forKey: customPromptKey) ?? defaultCustomPrompt) : nil
+            meeting.minutesTemplateName = nil
+        }
     }
 }
 

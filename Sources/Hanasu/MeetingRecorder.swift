@@ -341,7 +341,8 @@ final class MeetingRecorder: ObservableObject {
     // 要件: REQ-MTG-013
     // 設計判断: DEC-MTG-061
     /// 議事録を作り直す。template を渡すと、その型に変えて作る（失敗したら型も元のまま）。
-    func regenerateMinutes(_ meeting: Meeting, template: MinutesTemplate? = nil, customPrompt: String? = nil) async {
+    func regenerateMinutes(_ meeting: Meeting, template: MinutesTemplate? = nil, customPrompt: String? = nil,
+                           templateName: String? = nil) async {
         guard state == .idle else { return }
         setState(.processing(tr("議事録を作り直しています…")))
         regeneratingID = meeting.id
@@ -356,11 +357,14 @@ final class MeetingRecorder: ObservableObject {
             if let template {
                 source.minutesTemplate = template.rawValue
                 source.customMinutesPrompt = template == .custom ? customPrompt : nil
+                // 要件: REQ-MTG-042
+                source.minutesTemplateName = template == .custom ? templateName : nil
             }
             let result = try await MeetingProcessor.makeMinutes(
                 for: source, client: client, model: settings.textModel(for: .meeting))
             updated.minutesTemplate = source.minutesTemplate
             updated.customMinutesPrompt = source.customMinutesPrompt
+            updated.minutesTemplateName = source.minutesTemplateName
             // 要件: REQ-MTG-027
             updated.applyMinutes(result)
             updated.errorMessage = nil

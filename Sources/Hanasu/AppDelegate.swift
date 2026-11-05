@@ -19,6 +19,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var meetingAutoDetect: MeetingAutoDetect?
     // 要件: REQ-COM-050, REQ-COM-051
     private let onboarding = OnboardingWindowController()
+    // 要件: REQ-REL-010, REQ-REL-011
+    private let updater = AppUpdater()
     private var cancellables: Set<AnyCancellable> = []
 
     // 設計判断: DEC-COM-008, DEC-COM-009, DEC-COM-093
@@ -84,6 +86,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 tr("他のアプリやシステムのショートカットと重なっている可能性があります。設定で別のキーを選んでください。"))
         }
 
+        // 設計判断: DEC-REL-023
+        // 録音・会議の記録・議事録の作り直し・ローカルのモデルのダウンロードの間は入れ替えない（終えると途中で切れる）
+        updater.isBusy = { [weak self] in
+            guard let self else { return false }
+            let downloading = LocalLLMModel.allCases.contains {
+                if case .downloading = LocalLLMStore.shared.status($0) { return true }
+                return false
+            } || WhisperModel.allCases.contains {
+                if case .downloading = WhisperModelStore.shared.status($0) { return true }
+                return false
+            }
+            return self.controller.state != .idle || self.editController.state != .idle || self.meetingRecorder.state != .idle
+                || self.meetingRecorder.regeneratingID != nil || downloading
+        }
+        // 設計判断: DEC-REL-026
+        // 前の起動で始めた入れ替えができていなければ知らせる
+        updater.reportPreviousAttempt()
+
         // 要件: REQ-COM-050, REQ-COM-051
         // 設計判断: DEC-COM-093
         // 初めての起動では、設定画面と許可のダイアログの代わりにオンボーディングを出す（許可はその最後のページで求める）
@@ -95,6 +115,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         openSettings()
         // 自動入力（⌘V の送信）にはアクセシビリティ権限が要る
         _ = Permissions.isAccessibilityTrusted(prompt: true)
+        // 要件: REQ-REL-010
+        // 設計判断: DEC-REL-024
+        // 初めての起動（上のオンボーディング）では確かめない
+        updater.checkOnLaunch()
     }
 
     // MARK: - アイコンの表示（メニューバー / Dock）
@@ -211,6 +235,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(.separator())
         // 設計判断: DEC-COM-091
         menu.addItem(NSMenuItem(title: tr("Hanasu の使い方…"), action: #selector(openOnboarding), keyEquivalent: ""))
+        // 要件: REQ-REL-011
+        menu.addItem(NSMenuItem(title: tr("アップデートを確認…"), action: #selector(checkForUpdates), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: tr("設定…"), action: #selector(openSettings), keyEquivalent: forDock ? "" : ","))
         if !forDock {
             menu.addItem(NSMenuItem(title: tr("Hanasu を終了"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
@@ -261,6 +287,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         let appMenu = NSMenu()
         appMenu.addItem(withTitle: tr("Hanasu について"), action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        // 要件: REQ-REL-011
+        appMenu.addItem(withTitle: tr("アップデートを確認…"), action: #selector(checkForUpdates), keyEquivalent: "").target = self
         appMenu.addItem(.separator())
         // 設計判断: DEC-COM-091
         appMenu.addItem(withTitle: tr("Hanasu の使い方…"), action: #selector(openOnboarding), keyEquivalent: "").target = self
@@ -372,6 +400,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         editController.toggleFromMenu()
     }
 
+    // 要件: REQ-REL-011
+    @objc private func checkForUpdates() {
+        updater.checkManually()
+    }
+
     // 要件: REQ-COM-051
     // 設計判断: DEC-COM-091
     @objc private func openOnboarding() {
@@ -416,7 +449,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     self.editController.resumeHotKey()
                     self.registerMeetingHotKey(AppSettings.shared.meetingHotKey)
                 },
-                onOpenHistory: { [weak self] in self?.historyUI.openWindow() })
+                onOpenHistory: { [weak self] in self?.historyUI.openWindow() },
+                onCheckForUpdates: { [weak self] in self?.updater.checkManually() })
             let window = Self.makeSettingsWindow(rootView: view)
             window.center()
             window.setFrameAutosaveName("HanasuSettingsWindow")
