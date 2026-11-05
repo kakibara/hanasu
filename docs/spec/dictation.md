@@ -1209,6 +1209,15 @@
 - 実装の場所: `SampleBox`・`BatchCapture`・`SpeechRecognizer.onRecordingLimitReached`、`DictationController`・`EditModeController`（Mac）。`WasapiRecorder.LimitReached`、`RecordThenTranscribe.RecordingLimitReached`、`DictationController.OnRecordingLimitReached`（Windows）
 - 確かめ方: 実機で確かめる（10 分の録音が要る。CLI では確かめられない）
 
+### DEC-DIC-145 Windows の Gemini の文字起こしは、長い録音を 5 分ごとに分けて送る
+- 決めたこと: Windows 版で文字起こしのエンジンに Gemini を選んだとき、録音が 5 分（`GeminiBatchTranscriber.ChunkDuration`）より長ければ、いちばん静かなところで 5 分ごとに分けて順に送り、結果を改行でつなげる。以前の「7 分を超えたら失敗」は廃止する。
+- 理由: inline data は 1 回 20 MB までで、WAV（16 kHz・16 bit）は Base64 で 4/3 倍になり約 7 分が限界。DEC-DIC-144 の上限（10 分）まで録れるようにするため。Mac 版は FLAC で送るので 10 分でも収まる。区切り方は会議（`MeetingAudio.ChunkStarts`）と同じ
+- 決めた場面: PR #65（ユーザーの依頼 2026-11-05「Gemini の最大を伸ばして」）
+- 関係する要件: REQ-COM-001
+- 対象: Windows
+- 実装の場所: `GeminiBatchTranscriber.TranscribeAsync`（Windows）
+- 確かめ方: `GeminiTranscriberNeedsCredentialsAndSendsWav`（10 分の音声が複数回に分かれて送られること）
+
 ---
 
 ## 廃止

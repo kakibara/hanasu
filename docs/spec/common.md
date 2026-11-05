@@ -799,7 +799,7 @@
 - 実装の場所: `windows/Hanasu.Whisper/WhisperBatchTranscriber.cs`、`windows/Hanasu.Core/Transcription/WhisperModels.cs`
 
 ### DEC-COM-106 Windows 版の Gemini での文字起こし
-- 決めたこと: 録った音声を WAV にして inline data で送り、文字起こしだけをさせる（指示は `GeminiPrompts.TranscriptionInstruction` に新しく書いた。整形は次の呼び出しで行うので「聞こえたとおり」に書き起こさせる）。音声入力では 1 回 7 分まで。タイムアウトは、整形・英訳が 15 秒（Mac 版と同じ）、音声の文字起こしが 60 秒。設定画面に「音声が Google に送られる」と書く。
+- 決めたこと: 録った音声を WAV にして inline data で送り、文字起こしだけをさせる（指示は `GeminiPrompts.TranscriptionInstruction` に新しく書いた。整形は次の呼び出しで行うので「聞こえたとおり」に書き起こさせる）。音声入力では、Windows は 5 分ごとに分けて送る（DEC-DIC-145）。タイムアウトは、整形・英訳が 15 秒（Mac 版と同じ）、音声の文字起こしが 60 秒。設定画面に「音声が Google に送られる」と書く。
 - 理由: inline data の上限に収める。文字起こしと整形を分けるのは Mac 版と同じ理由（DEC-COM-031）。
 - 決めた場面: PR #19
 - 関係する要件: REQ-COM-001

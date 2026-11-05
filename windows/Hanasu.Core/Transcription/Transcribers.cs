@@ -149,8 +149,9 @@ public sealed class RecordThenTranscribe : IDictationTranscriber
 /// <summary>録った音声を Gemini に inline data で送って文字起こしする。</summary>
 public sealed class GeminiBatchTranscriber : IBatchTranscriber
 {
-    /// <summary>inline data は 1 回 20 MB まで。Base64 で 4/3 倍になるので、16 kHz・16 bit で約 7 分を上限にする</summary>
-    public static readonly TimeSpan MaxDuration = TimeSpan.FromMinutes(7);
+    // 設計判断: DEC-DIC-145
+    /// <summary>inline data は 1 回 20 MB まで。Base64 で 4/3 倍になるので、16 kHz・16 bit の WAV は約 7 分が限界。余裕を見て 5 分ごとに分けて送る</summary>
+    public static readonly TimeSpan ChunkDuration = TimeSpan.FromMinutes(5);
 
     private readonly Func<Gemini.GeminiClient?> clientFactory;
     private readonly Func<string> model;
@@ -187,18 +188,23 @@ public sealed class GeminiBatchTranscriber : IBatchTranscriber
     public async Task<string> TranscribeAsync(float[] samples, TranscriptionContext context, CancellationToken cancellationToken = default)
     {
         if (client is null) await PrepareAsync(context, cancellationToken).ConfigureAwait(false);
-        if (samples.Length > MaxDuration.TotalSeconds * AudioFormat.SampleRate)
-        {
-            throw new TranscriptionException($"録音が長すぎるため Gemini に送れません（{MaxDuration.TotalMinutes:0} 分まで）。");
-        }
-        var wav = WavFile.Encode(samples);
+        // 長い録音は、いちばん静かなところで 5 分ごとに分けて順に送り、つなげる（20 MB の上限を超えないため）
+        var starts = Meetings.MeetingAudio.ChunkStarts(samples, ChunkDuration.TotalSeconds);
+        var parts = new List<string>();
         try
         {
-            return await client!.TranscribeAudioAsync(wav, "audio/wav", model(), dictionary(), cancellationToken).ConfigureAwait(false);
+            for (var i = 0; i < starts.Count; i++)
+            {
+                var end = i + 1 < starts.Count ? starts[i + 1] : samples.Length;
+                var wav = WavFile.Encode(samples.AsSpan(starts[i], end - starts[i]));
+                var text = await client!.TranscribeAudioAsync(wav, "audio/wav", model(), dictionary(), cancellationToken).ConfigureAwait(false);
+                if (!string.IsNullOrWhiteSpace(text)) parts.Add(text.Trim());
+            }
         }
         catch (Ai.TextAiException e)
         {
             throw new TranscriptionException($"Gemini での文字起こしに失敗しました: {e.Message}", inner: e);
         }
+        return string.Join("\n", parts);
     }
 }
