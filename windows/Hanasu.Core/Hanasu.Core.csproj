@@ -5,10 +5,28 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Hanasu.Core</RootNamespace>
+    <!-- 要件: REQ-COM-060 -->
+    <!-- UI の文字列のニュートラルの言語（Properties/Strings.resx）は英語。ほかの言語はサテライトアセンブリ -->
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="Hanasu.Core.Tests" />
+    <!-- UI の文字列（Properties/Strings.resx から作る Strings）をどこからでも読めるように -->
+    <Using Include="Hanasu.Core.Properties" />
+  </ItemGroup>
+
+  <!-- 要件: REQ-COM-060 -->
+  <!-- ユーザーに見せる文字列（エラー・進み具合・HUD・テンプレートの名前など）。Strings.resx は英語、Strings.<カルチャ>.resx が各言語。
+       ビルドのときに Hanasu.Core.Properties.Strings（名前ごとのプロパティ）を作る。訳の出し入れは scripts/i18n-resx.py -->
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Strings.resx">
+      <StronglyTypedFileName>$(IntermediateOutputPath)Strings.Designer.cs</StronglyTypedFileName>
+      <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+      <StronglyTypedNamespace>Hanasu.Core.Properties</StronglyTypedNamespace>
+      <StronglyTypedClassName>Strings</StronglyTypedClassName>
+      <PublicClass>true</PublicClass>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

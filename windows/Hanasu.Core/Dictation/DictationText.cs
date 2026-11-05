@@ -51,14 +51,13 @@ public sealed class DictationTextProcessor
         if (!UsesGemini(settings, mode)) return new ProcessOutcome(corrected, ProcessStatus.RefineOff);
 
         var translation = mode.Translation();
-        var verb = translation is not null ? "翻訳" : "整形";
         try
         {
             var refiner = refinerFactory(settings);
             if (refiner is null)
             {
                 return new ProcessOutcome(corrected, ProcessStatus.NoCredentials,
-                    $"{TextAiFactory.NotReadyBecause(settings.DictationAi)}、{verb}せずに入力しました（メニュー → 設定 → AI）。");
+                    string.Format(translation is not null ? Strings.Dictation_NoAi_Translate : Strings.Dictation_NoAi_Refine, TextAiFactory.NotReadyBecause(settings.DictationAi)));
             }
             var request = new RefineRequest
             {
@@ -78,7 +77,7 @@ public sealed class DictationTextProcessor
         }
         catch (Exception e) when (e is TextAiException or ServiceAccountException or HttpRequestException)
         {
-            return new ProcessOutcome(corrected, ProcessStatus.AiFailed, $"{e.Message}\n{verb}前の文章を入力しました。");
+            return new ProcessOutcome(corrected, ProcessStatus.AiFailed, e.Message + "\n" + (translation is not null ? Strings.Dictation_AiFailed_Translate : Strings.Dictation_AiFailed_Refine));
         }
     }
 }

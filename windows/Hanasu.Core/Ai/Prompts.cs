@@ -51,10 +51,16 @@ public sealed class PromptLanguage
     /// 言語の識別子（ja-JP、zh-Hant-TW、pt_PT など）を、対応言語のどれかに寄せる。
     /// 中国語は繁体字（Hant）か台湾・香港・マカオなら zh-TW、それ以外は zh-CN。ポルトガル語は pt-BR。どれでもなければ英語
     /// </summary>
-    public static PromptLanguage FromLocaleIdentifier(string? localeIdentifier)
+    public static PromptLanguage FromLocaleIdentifier(string? localeIdentifier) => SupportedOrNull(localeIdentifier) ?? En;
+
+    // 要件: REQ-COM-060
+    /// <summary>
+    /// FromLocaleIdentifier と同じ寄せ方で、対応言語に当たらなければ null（表示の言語を決める UiLanguage が、親のカルチャをたどるのに使う）
+    /// </summary>
+    public static PromptLanguage? SupportedOrNull(string? localeIdentifier)
     {
         var parts = (localeIdentifier ?? "").Trim().Replace('_', '-').Split('-', StringSplitOptions.RemoveEmptyEntries);
-        if (parts.Length == 0) return En;
+        if (parts.Length == 0) return null;
         var code = parts[0].ToLowerInvariant();
         switch (code)
         {
@@ -66,7 +72,7 @@ public sealed class PromptLanguage
             case "in":
                 return Id;
             default:
-                return All.FirstOrDefault(l => l.Code == code) ?? En;
+                return All.FirstOrDefault(l => l.Code == code);
         }
     }
 

@@ -51,7 +51,7 @@ public static class WavFile
     {
         if (wav.Length < 12 || Encoding.ASCII.GetString(wav[..4]) != "RIFF" || Encoding.ASCII.GetString(wav[8..12]) != "WAVE")
         {
-            throw new InvalidDataException("WAV ファイルではありません");
+            throw new InvalidDataException(Strings.Wav_NotWav);
         }
         int format = 0, channels = 0, rate = 0, bits = 0;
         var offset = 12;
@@ -73,7 +73,7 @@ public static class WavFile
             }
             else if (id == "data")
             {
-                if (channels == 0) throw new InvalidDataException("WAV の fmt チャンクがありません");
+                if (channels == 0) throw new InvalidDataException(Strings.Wav_NoFmt);
                 var length = Math.Min(size, wav.Length - body);
                 var encoding = (format, bits) switch
                 {
@@ -81,13 +81,13 @@ public static class WavFile
                     (1, 16) => SampleConversion.Encoding.Pcm16,
                     (1, 24) => SampleConversion.Encoding.Pcm24,
                     (1, 32) => SampleConversion.Encoding.Pcm32,
-                    _ => throw new InvalidDataException($"対応していない WAV の形式です（format={format}, bits={bits}）"),
+                    _ => throw new InvalidDataException(string.Format(Strings.Wav_Unsupported, format, bits)),
                 };
                 return (SampleConversion.ToMonoFloat(wav.Slice(body, length), encoding, channels), rate);
             }
             offset = body + size + (size & 1);
         }
-        throw new InvalidDataException("WAV の data チャンクがありません");
+        throw new InvalidDataException(Strings.Wav_NoData);
     }
 }
 

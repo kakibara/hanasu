@@ -158,7 +158,7 @@ public sealed class UserDictionary
                 if (Lines[index] is not Line.EntryLine { Entry: var entry } || !entry.IsRule) continue;
                 if (entry.Spelling.Trim().Length == 0)
                 {
-                    result[index] = "正しい表記が空なので、置き換えません";
+                    result[index] = Strings.Dictionary_EmptySpelling;
                     continue;
                 }
                 var notes = new List<string>();
@@ -167,11 +167,11 @@ public sealed class UserDictionary
                     var key = MatchKey(source);
                     if (key.Length < MinimumSourceLength)
                     {
-                        notes.Add($"「{source}」は 1 文字なので使いません（ほかの語の一部に当たりやすいため）");
+                        notes.Add(string.Format(Strings.Dictionary_SourceTooShort, source));
                     }
                     else if (!seen.Add(string.Concat(key)))
                     {
-                        notes.Add($"「{source}」は上の行にもあるので、上の行を使います");
+                        notes.Add(string.Format(Strings.Dictionary_SourceDuplicate, source));
                     }
                 }
                 if (notes.Count > 0) result[index] = string.Join("\n", notes);
