@@ -41,12 +41,12 @@
 - 実装の場所: `.github/workflows/tagpr.yml`（`windows` ジョブ）
 - 確かめ方: リリースの添付ファイル（v1.3.0 で `Hanasu-1.3.0-Windows-x64.zip` が付いたことを確かめた。CI の `windows.yml` でも publish の中身を確かめている）
 
-### REQ-REL-005 Apache License 2.0 で配布し、配布物にライセンスと第三者の表示を入れる
-- 内容: Hanasu は Apache License 2.0 で配布する（2026-11-03 までは AGPL-3.0）。Mac 版・Windows 版の配布物には、Hanasu のライセンス（`LICENSE`・`NOTICE`）と、組み込んだ第三者のソフトウェアのライセンス表示を入れる。
-- 受け入れ条件: リポジトリの `LICENSE` が Apache License 2.0 の条文である。`Hanasu.app/Contents/Resources` に `LICENSE`・`NOTICE`・`THIRD_PARTY_NOTICES.md` がある。Windows 版の zip の `Hanasu` フォルダに `LICENSE.txt`・`NOTICE.txt`・`THIRD_PARTY_NOTICES.md`・`dotnet-THIRD-PARTY-NOTICES.txt` がある。
-- 出典: ユーザーの依頼（2026-11-03「Apache-2.0 にして、Windows のライセンスの問題も修正して」）。v1.3.0 の Windows 版の zip にライセンスの表示が入っていなかったことへの対応
+### REQ-REL-005 PolyForm Noncommercial と追加の許可で配布し、大きい会社には商用ライセンスを求める。配布物にライセンスと第三者の表示を入れる
+- 内容: Hanasu は PolyForm Noncommercial License 1.0.0 と「Hanasu 追加の許可 1.0」で配布する（ソース公開。オープンソースではない）。個人の非商用の利用と小規模事業者の社内の業務は無料で、それより大きい会社の業務での利用と、規模にかかわらず Hanasu を売る・製品やサービスに組み込む・ホスティングで提供することには、商用ライセンスが必要になる。このライセンスに変える前の版は Apache License 2.0（2026-11-03 までは AGPL-3.0）で、その版は Apache License 2.0 のまま。Mac 版・Windows 版の配布物には、Hanasu のライセンス（`LICENSE`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE`）と、組み込んだ第三者のソフトウェアのライセンス表示を入れる。
+- 受け入れ条件: リポジトリの `LICENSE` が PolyForm Noncommercial License 1.0.0 の条文で、`LICENSE-ADDITIONAL-PERMISSION.md`・`COMMERCIAL.md`・`COMMERCIAL.ja.md`・`CONTRIBUTING.md` がある。`Hanasu.app/Contents/Resources` に `LICENSE`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE`・`THIRD_PARTY_NOTICES.md` がある。Windows 版の zip の `Hanasu` フォルダに `LICENSE.txt`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE.txt`・`THIRD_PARTY_NOTICES.md`・`dotnet-THIRD-PARTY-NOTICES.txt` がある。
+- 出典: ユーザーの依頼（2026-11-03「Apache-2.0 にして、Windows のライセンスの問題も修正して」）。v1.3.0 の Windows 版の zip にライセンスの表示が入っていなかったことへの対応。ユーザーの依頼（2026-11-04「大企業などに無制限にこのオープンソースのプロジェクトに乗っ取られることを防ぐべきです。安定度以上の企業が商用利用する場合は契約が必要である、という形で進めたい」）と、そのヒアリングでの合意（看板は手放してよい・線は会社の規模・組み込んで売るなら小さい会社も契約・期限付きの開放はしない）、2026-11-05「ライセンスを書き換え」
 - 対象: Mac / Windows
-- 実装の場所: `LICENSE`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、`windows/THIRD_PARTY_NOTICES.md`、`scripts/build-app.sh`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`（publish の中身の確認）
+- 実装の場所: `LICENSE`、`LICENSE-ADDITIONAL-PERMISSION.md`、`COMMERCIAL.md`、`COMMERCIAL.ja.md`、`CONTRIBUTING.md`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、`windows/THIRD_PARTY_NOTICES.md`、`scripts/build-app.sh`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`（publish の中身の確認）
 - 確かめ方: `./scripts/build-app.sh` のあとの `ls build/Hanasu.app/Contents/Resources`、CI の `windows.yml` の「Check publish output」
 
 ### REQ-REL-006 版の上げ幅とリリース文を、決まった手順とテンプレートで作る
@@ -163,6 +163,14 @@
 - 関係する要件: REQ-REL-006
 - 対象: Mac / Windows
 - 実装の場所: `docs/releases/TEMPLATE.md`、`scripts/compose-release-notes.py`、`.github/workflows/tagpr.yml`（`publish` ジョブ）
+
+### DEC-REL-011 商用ライセンスの線引きは「100 人未満かつ売上 100 万米ドル未満」で、評価 30 日・猶予 90 日を付け、強制の仕組みは入れない
+- 決めたこと: 土台は標準の PolyForm Noncommercial License 1.0.0 で、条文は変えない。小規模事業者の社内の業務・評価・猶予は、許可を足すだけの別の文書（`LICENSE-ADDITIONAL-PERMISSION.md`。英語が正文、日本語は参考訳）に書く。小規模事業者は、グループを合わせて 100 人未満（従業員と業務委託）かつ前の事業年度の売上 100 万米ドル未満で、個人事業主を含む。小規模事業者でも、売る・製品やサービスに組み込む・ホスティングで提供するのは許可に含めない。どの会社も、会社全体で 30 日は評価のために業務で使える。小規模事業者でなくなったら、その事業年度の終わりから 90 日は使い続けられる。商用ライセンスは実際に使う人の数で数える年額で、価格は当面「問い合わせ」。アプリにライセンスの確認や利用の監視は入れない。外部からのコードの貢献には `CONTRIBUTING.md` の貢献者ライセンス契約（CLA）への同意を求め、PR のテンプレートに同意のチェックを置く。
+- 理由: 標準の条文に制限を足すと、その名前のライセンスとは呼べず解釈もぶれるので、許可を足す形にした（BSL の Additional Use Grant と同じ考え方）。PolyForm Small Business そのままでは、小さい会社が組み込んで売るのを止められない。線は PolyForm Small Business と同じ数字にし、企業の法務が読み慣れた形にした。評価と猶予は、大きい会社の社員が試し始められるようにし（個人から会社へ広がる流れ）、線を越えた会社が契約の手続きをする時間を取るため（Docker Desktop の有料化の猶予）。会社の人数全体での課金と監査は利用者を逃がす（Oracle Java）ので、実際に使う人数で数え、強制はしない（秀丸エディタ・Yaak は名誉の仕組みで会社に売れている）。CLA がないと、貢献されたコードを商用ライセンスで売れない。利用者が増えてからライセンスを変えるとフォークされる（HashiCorp・Redis）ので、フォークがない今のうちに変えた。
+- 決めた場面: ユーザーの依頼（2026-11-04「大企業などに無制限にこのオープンソースのプロジェクトに乗っ取られることを防ぐべきです」）のヒアリング、2026-11-05 のヒアリング（窓口は Google フォーム・価格はまだ載せない・評価 30 日と猶予 90 日・CLA に同意してもらう）と「ライセンスを書き換え」
+- 関係する要件: REQ-REL-005
+- 対象: Mac / Windows
+- 実装の場所: `LICENSE-ADDITIONAL-PERMISSION.md`、`COMMERCIAL.md`、`COMMERCIAL.ja.md`、`CONTRIBUTING.md`、`.github/pull_request_template.md`
 
 ### DEC-REL-020 新しい版は GitHub の releases/latest で知り、版は数字ごとに比べる
 - 決めたこと: `https://api.github.com/repos/kakibara/hanasu/releases/latest` を、認証なしで 1 回呼ぶ。下書きとプレリリースは知らせない。`tag_name`（`v1.6.0`）と今の版（Mac は Info.plist の `CFBundleShortVersionString`、Windows はアセンブリの版）を、`.` で区切った数字ごとに比べ、新しいときだけ知らせる。リリース文は本文の `<!-- release-notes -->` の中（なければ「## インストール」の前まで）を出す。

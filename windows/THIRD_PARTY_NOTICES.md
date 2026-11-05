@@ -1,6 +1,6 @@
 # Third-party notices（Windows 版）
 
-Hanasu は Apache License 2.0（同梱の `LICENSE.txt`）で配布します。
+Hanasu は PolyForm Noncommercial License 1.0.0（同梱の `LICENSE.txt`）と Hanasu 追加の許可 1.0（同梱の `LICENSE-ADDITIONAL-PERMISSION.md`）で配布します（このライセンスに変える前の版は Apache License 2.0）。
 配布する Windows 版（`Hanasu-<版>-Windows-x64.zip` の `Hanasu` フォルダ）には、次の第三者のソフトウェアが組み込まれています。それぞれのライセンスに従って表示します。
 
 | ソフトウェア | 版 | 配布物の中 | ライセンス |
