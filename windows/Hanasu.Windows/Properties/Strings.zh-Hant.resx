@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu 已在執行中。您可以從通知區域中的圖示使用。</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>最近的結果</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>開啟會議筆記</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>開啟歷程記錄…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>設定…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>結束</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>停止錄音並輸入</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>開始語音輸入</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>停止錄製會議（{0}）</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>正在開始錄製會議…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>正在處理會議錄製…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>開始錄製會議</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — 正在錄製會議 {0}</value>
   </data>
@@ -266,9 +233,6 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>無法複製（其他應用程式正在使用剪貼簿）</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>要刪除選取的 {0} 筆歷程記錄嗎？</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>要刪除全部 {0} 筆語音輸入歷程記錄嗎？此動作無法復原。</value>
   </data>
@@ -403,9 +367,6 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>無法儲存：{0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>要將會議記錄範本變更為「{0}」並重新建立會議記錄嗎？</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>已重新建立會議記錄（{0} 秒）</value>
@@ -547,9 +508,6 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>開啟語言設定</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>使用 whisper.cpp 在此電腦上轉錄（音訊不會離開您的電腦）。停止錄音後才進行轉錄。選擇模型後會從 Hugging Face 下載。模型越大越準確，但速度越慢。</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>模型</value>
   </data>
@@ -651,9 +609,6 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>區域</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>請選擇具有 Vertex AI 使用者角色（roles/aiplatform.user）之服務帳戶的金鑰。只會儲存金鑰檔案的位置（不會複製其內容）。請將金鑰檔案放在他人無法讀取的位置。預設區域為 global。</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude API 金鑰</value>
@@ -798,9 +753,6 @@
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>已儲存</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>與其他快速鍵（語音輸入、翻譯或會議）相同</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>Windows 引擎使用 Windows 預設麥克風（可在 Windows 設定 → 系統 → 音效中變更）。</value>

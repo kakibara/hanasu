@@ -116,6 +116,20 @@ public class UiLanguageTests
         Assert.NotEqual("Recording", text);
     }
 
+    // 確かめ方: REQ-COM-060
+    /// <summary>ar-SA の既定の暦（ウンム・アル＝クラー暦）でも、履歴の日の見出しはグレゴリオ暦で書く（Meeting.FormatDate とそろえる）</summary>
+    [Fact]
+    public void DayLabelUsesGregorianCalendarForArabic()
+    {
+        var now = new DateTimeOffset(2026, 11, 10, 12, 0, 0, TimeSpan.Zero);
+        var label = UiCultureFixture.With("ar-SA", () => DictationHistoryStore.DayLabel(new DateTimeOffset(2026, 11, 2, 12, 0, 0, TimeSpan.Zero), now));
+        Assert.DoesNotContain("جمادى", label);
+        Assert.Contains("نوفمبر", label);
+        // 年が違うときだけ年を付ける（暦がずれると、同じ年でも年が付いてしまう）
+        Assert.DoesNotContain("2026", label);
+        Assert.DoesNotContain("1448", label);
+    }
+
     [Fact]
     public void NeutralResourcesAreEnglish()
     {
@@ -192,6 +206,16 @@ public class UiLanguageTests
     [InlineData("", false)]
     public void MinutesErrorsAreRecognizedInJapaneseAndEnglish(string message, bool expected) =>
         Assert.Equal(expected, UiCultureFixture.With("en", () => MeetingController.IsMinutesError(message)));
+
+    /// <summary>議事録を作り直せたら、議事録のエラーの行だけを消し、文字起こしの失敗などほかの行は残す</summary>
+    [Fact]
+    public void OnlyMinutesErrorLinesAreRemoved()
+    {
+        var joined = "自分の音声を文字起こしできませんでした: x\n音声ファイルは残しています。\nGemini の認証情報が未設定のため、議事録は作っていません（メニュー → 設定 → AI）。";
+        Assert.Equal("自分の音声を文字起こしできませんでした: x\n音声ファイルは残しています。", MeetingController.WithoutMinutesErrors(joined));
+        Assert.Null(MeetingController.WithoutMinutesErrors("議事録を作れませんでした: 429"));
+        Assert.Null(MeetingController.WithoutMinutesErrors(null));
+    }
 }
 
 // 確かめ方: REQ-COM-004

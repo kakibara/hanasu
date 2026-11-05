@@ -119,7 +119,7 @@ internal sealed class AppHost : IDisposable
         Microsoft.Win32.SystemEvents.SessionSwitch += OnSessionSwitch;
         Microsoft.Win32.SystemEvents.PowerModeChanged += OnPowerModeChanged;
         tray = new TrayIcon(this);
-        Dictation.StateChanged += (_, state) => tray?.UpdateState(state);
+        Dictation.StateChanged += (_, state) => app.Dispatcher.BeginInvoke(() => tray?.UpdateState(state));
         History.Changed += (_, _) => app.Dispatcher.BeginInvoke(() => tray?.UpdateRecent());
         Settings.Changed += OnSettingsChanged;
         Meetings.StateChanged += (_, state) => app.Dispatcher.BeginInvoke(() =>
@@ -347,7 +347,7 @@ internal sealed class AppHost : IDisposable
     {
         if (Meetings.State != MeetingState.Idle
             && MessageBox.Show(Strings.Quit_MeetingInProgress,
-                "Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK)
+                "Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK)
         {
             return;
         }

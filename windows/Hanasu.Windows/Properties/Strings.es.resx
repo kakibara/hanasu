@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu ya se está ejecutando. Puedes usarlo desde el icono del área de notificación.</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>Resultados recientes</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>Abrir notas de reuniones</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>Abrir historial…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>Configuración…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>Salir</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>Detener la grabación y escribir</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>Iniciar dictado</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>Detener la grabación de la reunión ({0})</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>Iniciando la grabación de la reunión…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>Procesando la grabación de la reunión…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>Iniciar la grabación de la reunión</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Grabando reunión {0}</value>
   </data>
@@ -266,9 +233,6 @@ Original: {2}</value>
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>No se pudo copiar (otra aplicación está usando el portapapeles)</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>¿Eliminar las {0} entradas seleccionadas del historial?</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>¿Eliminar las {0} entradas del historial de dictado? Esta acción no se puede deshacer.</value>
   </data>
@@ -403,9 +367,6 @@ Original: {2}</value>
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>No se pudo guardar: {0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>¿Cambiar la plantilla del acta a "{0}" y regenerar el acta?</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Acta regenerada ({0} segundos)</value>
@@ -547,9 +508,6 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Abrir la configuración de idioma</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>Transcribe en este equipo con whisper.cpp (el audio nunca sale del equipo). La transcripción se hace después de detener la grabación. Al seleccionar un modelo, se descarga de Hugging Face. Los modelos más grandes son más precisos, pero más lentos.</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Modelo</value>
   </data>
@@ -651,9 +609,6 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Región</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>Elige la clave de una cuenta de servicio con el rol Usuario de Vertex AI (roles/aiplatform.user). Solo se guarda la ubicación del archivo de clave (no se copia su contenido). Guarda el archivo de clave donde otros no puedan leerlo. La región predeterminada es global.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Clave de API de Claude</value>
@@ -798,9 +753,6 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>Guardado</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>Igual que otro acceso directo (dictado, traducción o reuniones)</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>El motor de Windows usa el micrófono predeterminado de Windows (puedes cambiarlo en Configuración de Windows → Sistema → Sonido).</value>

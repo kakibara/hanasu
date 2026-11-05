@@ -237,7 +237,7 @@ private struct HUDView: View {
                 .foregroundStyle(.red)
                 .symbolEffect(.pulse)
         case .preparing, .processing:
-            ProgressView().controlSize(.small)
+            ProgressView().controlSize(.small).accessibilityLabel(tr("処理中"))
         case .done:
             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
         case .error:
@@ -338,6 +338,7 @@ private struct MicrophoneButton: View {
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(tr("マイクを選ぶ"))
         .help(tr("音声入力で使うマイクを切り替えます"))
     }
 }

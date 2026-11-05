@@ -1,3 +1,4 @@
+using Hanasu.Core.Audio;
 using Hanasu.Core.Settings;
 using Hanasu.Core.Transcription;
 
@@ -173,6 +174,7 @@ public sealed class DictationController
         {
             transcriber = services.CreateTranscriber(settings);
             transcriber.PartialTextChanged += OnPartialText;
+            transcriber.RecordingLimitReached += OnRecordingLimitReached;
             var context = new TranscriptionContext(settings.LocaleIdentifier, settings.UserDictionary.ContextualStrings, settings.MicrophoneDeviceId);
             await transcriber.StartAsync(context);
         }
@@ -298,6 +300,15 @@ public sealed class DictationController
 
     private void OnPartialText(object? sender, string text) => services.Hud.UpdateTranscript(text);
 
+    // 設計判断: DEC-DIC-144
+    /// <summary>録音が上限に達したら、止めて、ここまでの音声を処理する（HUD に理由を出す）</summary>
+    private void OnRecordingLimitReached(object? sender, EventArgs e)
+    {
+        services.Log("recording reached the length limit");
+        services.Hud.UpdateTranscript(AudioFormat.RecordingLimitNotice);
+        RequestStop();
+    }
+
     private void FinishCancelled()
     {
         State = DictationState.Idle;
@@ -334,6 +345,7 @@ public sealed class DictationController
         transcriber = null;
         if (t is null) return;
         t.PartialTextChanged -= OnPartialText;
+        t.RecordingLimitReached -= OnRecordingLimitReached;
         try { await t.DisposeAsync(); }
         catch (Exception e) { services.Log($"dispose failed: {e.Message}"); }
     }

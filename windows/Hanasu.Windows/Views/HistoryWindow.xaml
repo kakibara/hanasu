@@ -8,7 +8,7 @@
         FontFamily="Yu Gothic UI, Meiryo UI, Segoe UI" FontSize="13">
     <Window.Resources>
         <Style x:Key="Note" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#FF5F6368" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="Margin" Value="0,3,0,0" />
@@ -45,7 +45,7 @@
                 <RadioButton x:Name="UnrefinedRadio" GroupName="Filter" Content="{x:Static p:Strings.History_FilterUnrefined}" Checked="OnFilterChanged" />
             </StackPanel>
             <TextBlock Text="{x:Static p:Strings.History_Search}" VerticalAlignment="Center" Margin="0,0,8,0" />
-            <TextBox x:Name="SearchBox" Padding="4,3" TextChanged="OnSearchChanged"
+            <TextBox x:Name="SearchBox" AutomationProperties.Name="{x:Static p:Strings.History_Search_A11y}" Padding="4,3" TextChanged="OnSearchChanged"
                      ToolTip="{x:Static p:Strings.History_Search_Tip}" />
         </DockPanel>
 
@@ -68,7 +68,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- 左: 日ごとの一覧 -->
-            <ListBox x:Name="EntryList" Grid.Column="0" SelectionMode="Extended" SelectionChanged="OnSelectionChanged"
+            <ListBox x:Name="EntryList" AutomationProperties.Name="{x:Static p:Strings.History_List_A11y}" Grid.Column="0" SelectionMode="Extended" SelectionChanged="OnSelectionChanged"
                      KeyDown="OnListKeyDown" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      VirtualizingPanel.IsVirtualizingWhenGrouping="True">
                 <ListBox.GroupStyle>
@@ -102,6 +102,11 @@
                 </ListBox.ContextMenu>
             </ListBox>
 
+            <!-- 一覧が空のとき（0 件・検索に一致しない）の案内 -->
+            <TextBlock x:Name="EmptyText" Grid.Column="0" Style="{StaticResource Note}" Margin="12" TextWrapping="Wrap"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                       IsHitTestVisible="False" Visibility="Collapsed" />
+
             <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" Background="Transparent" />
 
             <!-- 右: 選んだ項目 -->
@@ -116,9 +121,9 @@
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="DetailInfo" Grid.Row="0" Style="{StaticResource Note}" Margin="0" />
                 <TextBlock Grid.Row="1" Style="{StaticResource Label}" Text="{x:Static p:Strings.History_ResultLabel}" />
-                <TextBox x:Name="OutputBox" Grid.Row="2" Style="{StaticResource Reader}" />
+                <TextBox x:Name="OutputBox" AutomationProperties.Name="{x:Static p:Strings.History_Result_A11y}" Grid.Row="2" Style="{StaticResource Reader}" />
                 <TextBlock Grid.Row="3" Style="{StaticResource Label}" Text="{x:Static p:Strings.History_OriginalLabel}" />
-                <TextBox x:Name="RawBox" Grid.Row="4" Style="{StaticResource Reader}" />
+                <TextBox x:Name="RawBox" AutomationProperties.Name="{x:Static p:Strings.History_Original_A11y}" Grid.Row="4" Style="{StaticResource Reader}" />
                 <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0,8,0,0">
                     <Button x:Name="CopyOutputButton" Content="{x:Static p:Strings.History_CopyResult}" Click="OnCopyOutputClick" />
                     <Button x:Name="CopyRawButton" Content="{x:Static p:Strings.History_CopyOriginal}" Click="OnCopyRawClick" />

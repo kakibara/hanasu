@@ -101,7 +101,13 @@ def write_resx(path: Path, entries: list[tuple[str, str, str]]) -> None:
 
 
 def placeholders(text: str) -> set[str]:
-    return set(PLACEHOLDER.findall(text.replace("{{", "").replace("}}", "")))
+    """埋める場所。{0:N0} のような書式も含めて比べる（英語と書式が違うと、数の書き方が変わってしまう）。
+    閉じていない { や } があれば "!unbalanced" を入れる（string.Format が例外を出すため）"""
+    body = text.replace("{{", "").replace("}}", "")
+    found = {m.group(0) for m in PLACEHOLDER.finditer(body)}
+    if "{" in PLACEHOLDER.sub("", body) or "}" in PLACEHOLDER.sub("", body):
+        found.add("!unbalanced")
+    return found
 
 
 def check_lang(lang: str) -> None:

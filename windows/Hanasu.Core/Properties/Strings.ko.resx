@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>서비스 계정 JSON을 읽을 수 없습니다.</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>서비스 계정 JSON의 token_uri가 https가 아닙니다.</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>액세스 토큰을 가져오는 중 시간이 초과되었습니다.</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>텍스트 변환 엔진이 Gemini이지만 Gemini 자격 증명이 설정되지 않았습니다(메뉴 → 설정 → AI).</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>녹음이 너무 길어 Gemini로 보낼 수 없습니다(최대 {0}분).</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>Gemini로 텍스트를 변환하지 못했습니다: {0}</value>

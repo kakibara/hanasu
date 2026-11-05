@@ -222,8 +222,10 @@ public static class MeetingProcessor
     public static async Task<MinutesResult> MakeMinutesAsync(Meeting meeting, Ai.ITextGenerator client, string model,
         CancellationToken cancellationToken = default)
     {
+        // 要件: REQ-COM-061（応答は、送ったときのプロンプトの言語で読む。作っている間に設定が変わってもずれないように）
+        var language = Ai.PromptLanguage.Current;
         var body = await client.GenerateTextAsync(Ai.TextPurpose.Minutes, MinutesPrompt.FullInstruction(meeting), MinutesPrompt.UserText(meeting),
             model, cancellationToken).ConfigureAwait(false);
-        return MinutesPrompt.Parse(body, meeting.Title);
+        return MinutesPrompt.Parse(body, meeting.Title, language);
     }
 }

@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>Не удается прочитать JSON служебной учетной записи.</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>token_uri в JSON служебной учетной записи не использует https.</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>Истекло время ожидания маркера доступа.</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>Для распознавания выбран Gemini, но учетные данные Gemini не заданы (меню → Параметры → AI).</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>Запись слишком длинная для отправки в Gemini (максимум минут: {0}).</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>Не удалось распознать речь с помощью Gemini: {0}</value>

@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>सेवा खाते का JSON पढ़ा नहीं जा सकता.</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>सेवा खाते के JSON में token_uri https नहीं है.</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>एक्सेस टोकन प्राप्त करने का समय समाप्त हो गया.</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>ट्रांसक्रिप्शन इंजन Gemini है, लेकिन Gemini क्रेडेंशियल सेट नहीं हैं (मेनू → सेटिंग्स → AI).</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>रिकॉर्डिंग Gemini को भेजने के लिए बहुत लंबी है (अधिकतम {0} मिनट).</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>Gemini से ट्रांसक्रिप्शन विफल रहा: {0}</value>

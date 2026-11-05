@@ -92,7 +92,7 @@ enum MeetingNotesPreview {
     }
 
     @MainActor
-    private static func write<V: View>(_ view: V, to url: URL) throws {
+    static func write<V: View>(_ view: V, to url: URL) throws {
         let hosting = NSHostingView(rootView: view.background(Color(nsColor: .windowBackgroundColor)))
         hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
         // TextField などは AppKit の部品なので、画面外のウインドウに置いて描く

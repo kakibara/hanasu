@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu уже запущен. Его можно использовать через значок в области уведомлений.</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>Последние результаты</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>Открыть заметки встреч</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>Открыть журнал…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>Параметры…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>Выход</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>Остановить запись и ввести</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>Начать диктовку</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>Остановить запись встречи ({0})</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>Запуск записи встречи…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>Обработка записи встречи…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>Начать запись встречи</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Запись встречи {0}</value>
   </data>
@@ -266,9 +233,6 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Не удалось скопировать (буфер обмена занят другим приложением)</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>Удалить выбранные записи журнала (количество: {0})?</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Удалить все записи журнала диктовки (количество: {0})? Это действие нельзя отменить.</value>
   </data>
@@ -403,9 +367,6 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Не удалось сохранить: {0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>Сменить шаблон протокола на «{0}» и создать протокол заново?</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Протокол создан заново (с: {0})</value>
@@ -547,9 +508,6 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Открыть параметры языка</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>Распознает речь на этом ПК с помощью whisper.cpp (аудио не покидает ПК). Распознавание выполняется после остановки записи. При выборе модели она скачивается с Hugging Face. Большие модели точнее, но медленнее.</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Модель</value>
   </data>
@@ -651,9 +609,6 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Регион</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>Выберите ключ служебной учетной записи с ролью Vertex AI User (roles/aiplatform.user). Сохраняется только расположение файла ключа (его содержимое не копируется). Храните файл ключа там, где его не смогут прочитать другие. Регион по умолчанию — global.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Ключ API Claude</value>
@@ -798,9 +753,6 @@
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>Сохранено</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>Совпадает с другим сочетанием (диктовка, перевод или встречи)</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>Модуль Windows использует микрофон Windows по умолчанию (его можно изменить в разделе Параметры Windows → Система → Звук).</value>

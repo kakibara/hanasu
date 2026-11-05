@@ -9,6 +9,12 @@ public enum GeminiErrorKind
     EmptyResponse,
     InvalidResponse,
     Timeout,
+    /// <summary>Vertex AI のリージョンの設定が、ホスト名に入れられる形ではない（設定を直すまで通らない）</summary>
+    InvalidLocation,
+    /// <summary>「接続を試す」で、認証が通らなかった（400 API_KEY_INVALID / 401 / 403）</summary>
+    InvalidCredentials,
+    /// <summary>「接続を試す」で、モデルが見つからなかった（404）</summary>
+    ModelUnavailable,
 }
 
 /// <summary>Gemini の呼び出しの失敗。Message はそのまま HUD に出せる日本語にする。</summary>
@@ -27,7 +33,17 @@ public sealed class GeminiException : TextAiException
         Reason = reason;
     }
 
-    public override bool IsCredentialProblem => Kind == GeminiErrorKind.MissingCredentials || StatusCode is 401 or 403;
+    public override bool IsCredentialProblem =>
+        Kind is GeminiErrorKind.MissingCredentials or GeminiErrorKind.InvalidLocation or GeminiErrorKind.InvalidCredentials
+        || StatusCode is 401 or 403;
+
+    // 設計判断: DEC-COM-143
+    /// <summary>「接続を試す」の文言（Mac 版の GeminiError.invalidCredentials / modelUnavailable と同じ）</summary>
+    public static GeminiException InvalidCredentials(int status) =>
+        new(GeminiErrorKind.InvalidCredentials, string.Format(Strings.Gemini_InvalidCredentials, status), status);
+
+    public static GeminiException ModelUnavailable(string model) =>
+        new(GeminiErrorKind.ModelUnavailable, string.Format(Strings.Gemini_ModelUnavailable, model), 404);
 
     public static GeminiException MissingCredentials() =>
         new(GeminiErrorKind.MissingCredentials, Strings.Gemini_MissingCredentials);
@@ -43,4 +59,8 @@ public sealed class GeminiException : TextAiException
 
     public static GeminiException Timeout(TimeSpan timeout) =>
         new(GeminiErrorKind.Timeout, string.Format(Strings.Gemini_Timeout, timeout.TotalSeconds.ToString("0")));
+
+    /// <summary>Mac 版の GeminiError.invalidLocation と同じ文言</summary>
+    public static GeminiException InvalidLocation(string location) =>
+        new(GeminiErrorKind.InvalidLocation, string.Format(Strings.Gemini_InvalidLocation, location));
 }

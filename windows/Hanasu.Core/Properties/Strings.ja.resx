@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>サービスアカウントの JSON を読み取れません</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>サービスアカウントの JSON の token_uri が https ではありません</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>アクセストークンの取得がタイムアウトしました</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>文字起こしのエンジンが Gemini ですが、Gemini の認証情報が設定されていません（メニュー → 設定 → AI）。</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>録音が長すぎるため Gemini に送れません（{0} 分まで）。</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>Gemini での文字起こしに失敗しました: {0}</value>
@@ -644,5 +638,20 @@
   </data>
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>話者分離のモデルの周波数が想定と違います（{0} Hz）</value>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Vertex AI のリージョン「{0}」は使えません（英小文字・数字・ハイフンだけ。例: global、us-central1）</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>サービスアカウントの token_uri（{0}）が Google のトークンの窓口（oauth2.googleapis.com）ではないため、使いません</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>録音が上限の 10 分に達したため、ここまでの音声を処理します</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>API キー（またはサービスアカウント）が正しくないか、Gemini API を使う権限がありません（{0}）</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>モデル「{0}」が見つからないか、この認証では使えません</value>
   </data>
 </root>

@@ -80,6 +80,30 @@
             </Grid.RowDefinitions>
 
             <DockPanel Grid.Row="0" LastChildFill="False">
+                <!-- 設計判断: DEC-DIC-146 -->
+                <!-- 右側は「経過時間・取消・■ 停止」の順（DockPanel の Right は先に書いたものほど右に来る）。
+                     左の題名・言語の切り替えより先に書き、先に幅を確保する（DockPanel は書いた順に測るので、
+                     後に書いた右のボタンが幅 500 で切れることがあった。題名のほうが … で省略される） -->
+                <Button x:Name="StopButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#FFE5352B" Margin="6,0,0,0"
+                        Click="OnStopClick" ToolTip="{x:Static p:Strings.Hud_Stop_Tip}">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="8" Height="8" Fill="White" RadiusX="1" RadiusY="1" VerticalAlignment="Center" Margin="0,0,5,0" />
+                        <TextBlock Text="{x:Static p:Strings.Hud_Stop}" FontWeight="SemiBold" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="CancelButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#30FFFFFF" Margin="8,0,0,0"
+                        Content="{x:Static p:Strings.Hud_Cancel}" Click="OnCancelClick" ToolTip="{x:Static p:Strings.Hud_Cancel_Tip}" />
+                <!-- 要件: REQ-DIC-080 -->
+                <!-- 設計判断: DEC-DIC-121 -->
+                <!-- 貼り付けなかった結果の表示。右から「閉じる・コピー」 -->
+                <Button x:Name="CloseButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#30FFFFFF" Margin="6,0,0,0"
+                        Content="{x:Static p:Strings.Hud_Close}" Click="OnCloseClick" Visibility="Collapsed"
+                        ToolTip="{x:Static p:Strings.Hud_Close_Tip}" />
+                <Button x:Name="CopyButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#FF2F7DF6" Margin="8,0,0,0"
+                        Click="OnCopyClick" Visibility="Collapsed" ToolTip="{x:Static p:Strings.Hud_Copy_Tip}">
+                    <TextBlock x:Name="CopyButtonText" Text="{x:Static p:Strings.Hud_Copy}" FontWeight="SemiBold" />
+                </Button>
+                <TextBlock x:Name="ElapsedText" DockPanel.Dock="Right" Foreground="#B8FFFFFF" FontFamily="Consolas" FontSize="12" VerticalAlignment="Center" />
                 <!-- 状態のアイコン -->
                 <Grid DockPanel.Dock="Left" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center">
                     <Ellipse x:Name="RecordingDot" Width="12" Height="12" Fill="#FFFF453A" Visibility="Collapsed">
@@ -127,27 +151,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- 右側は「経過時間・取消・■ 停止」の順（DockPanel の Right は先に書いたものほど右に来る） -->
-                <Button x:Name="StopButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#FFE5352B" Margin="6,0,0,0"
-                        Click="OnStopClick" ToolTip="{x:Static p:Strings.Hud_Stop_Tip}">
-                    <StackPanel Orientation="Horizontal">
-                        <Rectangle Width="8" Height="8" Fill="White" RadiusX="1" RadiusY="1" VerticalAlignment="Center" Margin="0,0,5,0" />
-                        <TextBlock Text="{x:Static p:Strings.Hud_Stop}" FontWeight="SemiBold" />
-                    </StackPanel>
-                </Button>
-                <Button x:Name="CancelButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#30FFFFFF" Margin="8,0,0,0"
-                        Content="{x:Static p:Strings.Hud_Cancel}" Click="OnCancelClick" ToolTip="{x:Static p:Strings.Hud_Cancel_Tip}" />
-                <!-- 要件: REQ-DIC-080 -->
-                <!-- 設計判断: DEC-DIC-121 -->
-                <!-- 貼り付けなかった結果の表示。右から「閉じる・コピー」 -->
-                <Button x:Name="CloseButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#30FFFFFF" Margin="6,0,0,0"
-                        Content="{x:Static p:Strings.Hud_Close}" Click="OnCloseClick" Visibility="Collapsed"
-                        ToolTip="{x:Static p:Strings.Hud_Close_Tip}" />
-                <Button x:Name="CopyButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#FF2F7DF6" Margin="8,0,0,0"
-                        Click="OnCopyClick" Visibility="Collapsed" ToolTip="{x:Static p:Strings.Hud_Copy_Tip}">
-                    <TextBlock x:Name="CopyButtonText" Text="{x:Static p:Strings.Hud_Copy}" FontWeight="SemiBold" />
-                </Button>
-                <TextBlock x:Name="ElapsedText" DockPanel.Dock="Right" Foreground="#B8FFFFFF" FontFamily="Consolas" FontSize="12" VerticalAlignment="Center" />
             </DockPanel>
 
             <TextBlock x:Name="DetailText" Grid.Row="1" Margin="0,6,0,0" Foreground="#C8FFFFFF" FontSize="12"

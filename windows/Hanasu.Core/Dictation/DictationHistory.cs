@@ -197,7 +197,7 @@ public sealed class DictationHistoryStore
                         LastError = string.Format(Strings.History_ReadFailed, moveError.Message);
                     }
                 }
-                catch (IOException e)
+                catch (Exception e) when (e is IOException or UnauthorizedAccessException)
                 {
                     LastError = string.Format(Strings.History_ReadFailed, e.Message);
                 }
@@ -339,7 +339,8 @@ public sealed class DictationHistoryStore
         if (day == today.AddDays(-1)) return Strings.History_Yesterday;
         // 要件: REQ-COM-060（書式は言語ごとのリソース。月・曜日の名前は表示の言語のカルチャ）
         var pattern = day.Year == today.Year ? Strings.History_DayFormat : Strings.History_DayFormatWithYear;
-        return day.ToString(pattern, CultureInfo.CurrentUICulture);
+        // 暦はグレゴリオ暦にそろえる（ar-SA の既定のウンム・アル＝クラー暦で見出しがヒジュラ暦になるのを防ぐ。Meeting.FormatDate と同じ）
+        return day.ToString(pattern, Meetings.Meeting.DisplayLanguage.Culture);
     }
 
     /// <summary>メニューに出す 1 行（失敗したものには ⚠ を付け、長ければ途中で切る）</summary>

@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu sudah berjalan. Anda dapat menggunakannya dari ikon di area pemberitahuan.</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>Hasil Terbaru</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>Buka Catatan Rapat</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>Buka Riwayat…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>Pengaturan…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>Keluar</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>Hentikan Perekaman dan Ketik</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>Mulai Dikte</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>Hentikan Perekaman Rapat ({0})</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>Memulai Perekaman Rapat…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>Memproses Perekaman Rapat…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>Mulai Perekaman Rapat</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Merekam rapat {0}</value>
   </data>
@@ -266,9 +233,6 @@ Asli: {2}</value>
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Tidak dapat menyalin (aplikasi lain sedang menggunakan papan klip)</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>Hapus {0} entri riwayat yang dipilih?</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Hapus semua {0} entri riwayat dikte? Tindakan ini tidak dapat dibatalkan.</value>
   </data>
@@ -403,9 +367,6 @@ Asli: {2}</value>
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Tidak dapat menyimpan: {0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>Ubah templat notulen menjadi "{0}" dan buat ulang notulen?</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Notulen dibuat ulang ({0} detik)</value>
@@ -547,9 +508,6 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Buka Pengaturan Bahasa</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>Mentranskripsi di PC ini dengan whisper.cpp (audio tidak pernah keluar dari PC Anda). Transkripsi berjalan setelah Anda menghentikan perekaman. Memilih model akan mengunduhnya dari Hugging Face. Model yang lebih besar lebih akurat tetapi lebih lambat.</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Model</value>
   </data>
@@ -651,9 +609,6 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Wilayah</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>Pilih kunci akun layanan yang memiliki peran Vertex AI User (roles/aiplatform.user). Hanya lokasi file kunci yang disimpan (isinya tidak disalin). Simpan file kunci di tempat yang tidak dapat dibaca orang lain. Wilayah default adalah global.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Kunci API Claude</value>
@@ -798,9 +753,6 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>Disimpan</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>Sama dengan pintasan lain (dikte, terjemahan, atau rapat)</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>Mesin Windows menggunakan mikrofon default Windows (Anda dapat mengubahnya di Pengaturan Windows → Sistem → Suara).</value>

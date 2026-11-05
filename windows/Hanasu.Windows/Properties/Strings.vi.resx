@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu đang chạy. Bạn có thể dùng từ biểu tượng trong vùng thông báo.</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>Kết quả gần đây</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>Mở ghi chú cuộc họp</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>Mở lịch sử…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>Cài đặt…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>Thoát</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>Dừng ghi âm và nhập</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>Bắt đầu đọc chính tả</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>Dừng ghi âm cuộc họp ({0})</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>Đang bắt đầu ghi âm cuộc họp…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>Đang xử lý bản ghi cuộc họp…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>Bắt đầu ghi âm cuộc họp</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Đang ghi âm cuộc họp {0}</value>
   </data>
@@ -266,9 +233,6 @@ Bản gốc: {2}</value>
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Không thể sao chép (ứng dụng khác đang dùng bảng tạm)</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>Xóa {0} mục lịch sử đã chọn?</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Xóa tất cả {0} mục lịch sử đọc chính tả? Không thể hoàn tác thao tác này.</value>
   </data>
@@ -403,9 +367,6 @@ Bản gốc: {2}</value>
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Không thể lưu: {0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>Đổi mẫu biên bản thành "{0}" và tạo lại biên bản?</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Đã tạo lại biên bản ({0} giây)</value>
@@ -547,9 +508,6 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Mở cài đặt ngôn ngữ</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>Chuyển thành văn bản trên PC này bằng whisper.cpp (âm thanh không rời khỏi PC của bạn). Việc chuyển thành văn bản diễn ra sau khi bạn dừng ghi âm. Khi chọn một mô hình, mô hình đó sẽ được tải xuống từ Hugging Face. Mô hình lớn hơn chính xác hơn nhưng chậm hơn.</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Mô hình</value>
   </data>
@@ -651,9 +609,6 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Khu vực</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>Chọn khóa của tài khoản dịch vụ có vai trò Vertex AI User (roles/aiplatform.user). Chỉ vị trí tệp khóa được lưu (nội dung không được sao chép). Hãy để tệp khóa ở nơi người khác không đọc được. Khu vực mặc định là global.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Khóa API Claude</value>
@@ -798,9 +753,6 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>Đã lưu</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>Trùng với phím tắt khác (đọc chính tả, dịch hoặc cuộc họp)</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>Công cụ Windows dùng micrô mặc định của Windows (bạn có thể thay đổi trong Cài đặt Windows → Hệ thống → Âm thanh).</value>

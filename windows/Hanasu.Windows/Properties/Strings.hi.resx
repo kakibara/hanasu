@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu पहले से चल रहा है. आप सूचना क्षेत्र में मौजूद आइकन से इसका उपयोग कर सकते हैं.</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>हाल के परिणाम</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>मीटिंग नोट्स खोलें</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>इतिहास खोलें…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>सेटिंग्स…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>बाहर निकलें</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>रिकॉर्डिंग रोकें और टाइप करें</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>डिक्टेशन शुरू करें</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>मीटिंग रिकॉर्डिंग रोकें ({0})</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>मीटिंग रिकॉर्डिंग शुरू हो रही है…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>मीटिंग रिकॉर्डिंग प्रोसेस हो रही है…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>मीटिंग रिकॉर्डिंग शुरू करें</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — मीटिंग रिकॉर्ड हो रही है {0}</value>
   </data>
@@ -266,9 +233,6 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>कॉपी नहीं हो सका (कोई अन्य ऐप क्लिपबोर्ड का उपयोग कर रहा है)</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>चुनी गई {0} इतिहास प्रविष्टियाँ हटाएँ?</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>सभी {0} डिक्टेशन इतिहास प्रविष्टियाँ हटाएँ? इसे पूर्ववत नहीं किया जा सकता.</value>
   </data>
@@ -403,9 +367,6 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>सहेजा नहीं जा सका: {0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>कार्यवृत्त टेम्पलेट को "{0}" में बदलें और कार्यवृत्त फिर से बनाएँ?</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>कार्यवृत्त फिर से बनाया गया ({0} सेकंड)</value>
@@ -547,9 +508,6 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>भाषा सेटिंग्स खोलें</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>whisper.cpp से इसी PC पर ट्रांसक्राइब करता है (ऑडियो कभी आपके PC से बाहर नहीं जाता). ट्रांसक्रिप्शन रिकॉर्डिंग रोकने के बाद होता है. मॉडल चुनने पर वह Hugging Face से डाउनलोड होता है. बड़े मॉडल अधिक सटीक लेकिन धीमे होते हैं.</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>मॉडल</value>
   </data>
@@ -651,9 +609,6 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>क्षेत्र</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>Vertex AI User भूमिका (roles/aiplatform.user) वाले सेवा खाते की कुंजी चुनें. केवल कुंजी फ़ाइल का स्थान सहेजा जाता है (इसकी सामग्री कॉपी नहीं की जाती). कुंजी फ़ाइल ऐसी जगह रखें जहाँ दूसरे उसे पढ़ न सकें. डिफ़ॉल्ट क्षेत्र global है.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude API कुंजी</value>
@@ -798,9 +753,6 @@
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>सहेजा गया</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>किसी अन्य शॉर्टकट (डिक्टेशन, अनुवाद या मीटिंग) के समान</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>Windows इंजन Windows डिफ़ॉल्ट माइक्रोफ़ोन का उपयोग करता है (आप इसे Windows सेटिंग्स → सिस्टम → ध्वनि में बदल सकते हैं).</value>

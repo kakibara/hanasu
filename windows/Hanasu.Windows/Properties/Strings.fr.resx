@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu est déjà en cours d'exécution. Vous pouvez l'utiliser depuis son icône dans la zone de notification.</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>Résultats récents</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>Ouvrir les notes de réunion</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>Ouvrir l'historique…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>Paramètres…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>Quitter</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>Arrêter l'enregistrement et saisir</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>Démarrer la dictée</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>Arrêter l'enregistrement de la réunion ({0})</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>Démarrage de l'enregistrement de la réunion…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>Traitement de l'enregistrement de la réunion…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>Démarrer l'enregistrement de la réunion</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Enregistrement de réunion {0}</value>
   </data>
@@ -266,9 +233,6 @@ Original : {2}</value>
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Échec de la copie (une autre application utilise le Presse-papiers)</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>Supprimer les {0} entrées d'historique sélectionnées ?</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Supprimer les {0} entrées de l'historique des dictées ? Cette action est irréversible.</value>
   </data>
@@ -403,9 +367,6 @@ Original : {2}</value>
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Impossible d'enregistrer : {0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>Remplacer le modèle de compte rendu par « {0} » et régénérer le compte rendu ?</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Compte rendu régénéré ({0} secondes)</value>
@@ -547,9 +508,6 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Ouvrir les paramètres de langue</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>Transcrit sur ce PC avec whisper.cpp (l'audio ne quitte jamais votre PC). La transcription a lieu après l'arrêt de l'enregistrement. Sélectionner un modèle le télécharge depuis Hugging Face. Les modèles plus grands sont plus précis, mais plus lents.</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Modèle</value>
   </data>
@@ -651,9 +609,6 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Région</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>Choisissez la clé d'un compte de service disposant du rôle Utilisateur Vertex AI (roles/aiplatform.user). Seul l'emplacement du fichier de clé est enregistré (son contenu n'est pas copié). Conservez le fichier de clé dans un emplacement que les autres ne peuvent pas lire. La région par défaut est global.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Clé API Claude</value>
@@ -798,9 +753,6 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>Enregistré</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>Identique à un autre raccourci (dictée, traduction ou réunions)</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>Le moteur Windows utilise le microphone par défaut de Windows (modifiable dans Paramètres Windows → Système → Son).</value>

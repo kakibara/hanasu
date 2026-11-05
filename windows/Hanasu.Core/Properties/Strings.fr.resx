@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>Impossible de lire le JSON du compte de service.</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>Le token_uri du JSON du compte de service n'est pas en https.</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>L'obtention d'un jeton d'accès a expiré.</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>Le moteur de transcription est Gemini, mais les identifiants Gemini ne sont pas définis (menu → Paramètres → AI).</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>L'enregistrement est trop long pour être envoyé à Gemini ({0} minutes maximum).</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>La transcription avec Gemini a échoué : {0}</value>

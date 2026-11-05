@@ -127,9 +127,13 @@ actor LocalLLMServer {
         process.executableURL = executable
         process.arguments = Self.arguments(model: model, port: port)
         var environment = ProcessInfo.processInfo.environment
+        // Hanasu を起動したときの環境に LLAMA_ARG_* があっても使わない（決めた引数だけで動かす）。
+        // CLI が環境変数で受け取るほかの API キーは、llama-server には要らないので渡さない（自己署名のときは
+        // ライブラリの検証を外したプロセスなので、要らない秘密を持たせない）
+        for key in environment.keys where key.hasPrefix("LLAMA_ARG_") || Self.secretEnvironmentKeys.contains(key) {
+            environment[key] = nil
+        }
         environment["LLAMA_API_KEY"] = apiKey
-        // Hanasu を起動したときの環境に LLAMA_ARG_* があっても使わない（決めた引数だけで動かす）
-        for key in environment.keys where key.hasPrefix("LLAMA_ARG_") { environment[key] = nil }
         process.environment = environment
         process.standardInput = FileHandle.nullDevice
         process.standardOutput = FileHandle.nullDevice
@@ -167,9 +171,17 @@ actor LocalLLMServer {
         return endpoint
     }
 
+    /// 子プロセスに渡さない環境変数（Hanasu の CLI が環境変数で受け取る、ほかのサービスの秘密）
+    static let secretEnvironmentKeys: Set<String> = [
+        "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "GEMINI_API_KEY", "GOOGLE_API_KEY",
+        "GEMINI_SERVICE_ACCOUNT_JSON", "GOOGLE_APPLICATION_CREDENTIALS", "HF_TOKEN",
+    ]
+
     static func arguments(model: LocalLLMModel, port: Int) -> [String] {
         [
             "--model", LocalLLMStore.fileURL(model).path,
+            // キーなしで読める /models に、モデルのファイルのパス（ユーザー名を含む）ではなく id を出させる
+            "--alias", model.rawValue,
             "--host", "127.0.0.1",
             "--port", String(port),
             "--ctx-size", String(model.contextLength),

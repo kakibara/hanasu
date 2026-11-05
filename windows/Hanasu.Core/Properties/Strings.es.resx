@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>No se puede leer el JSON de la cuenta de servicio.</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>El token_uri del JSON de la cuenta de servicio no es https.</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>Se agotó el tiempo para obtener un token de acceso.</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>El motor de transcripción es Gemini, pero las credenciales de Gemini no están configuradas (menú → Configuración → AI).</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>La grabación es demasiado larga para enviarla a Gemini (máximo {0} minutos).</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>Error en la transcripción con Gemini: {0}</value>

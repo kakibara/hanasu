@@ -312,10 +312,6 @@
     <value>Can't read the service account JSON.</value>
     <comment>Error</comment>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>The token_uri in the service account JSON isn't https.</value>
-    <comment>Error; token_uri is a JSON key, keep as is</comment>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>Getting an access token timed out.</value>
     <comment>Error</comment>
@@ -367,10 +363,6 @@
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>The transcription engine is Gemini, but Gemini credentials aren't set (menu → Settings → AI).</value>
     <comment>Error</comment>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>The recording is too long to send to Gemini (up to {0} minutes).</value>
-    <comment>Error. {0} = minutes</comment>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>Transcription with Gemini failed: {0}</value>
@@ -855,5 +847,25 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>The speaker separation model's sample rate isn't what was expected ({0} Hz).</value>
     <comment>Error. {0} = sample rate</comment>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>The Vertex AI region “{0}” can't be used (lowercase letters, digits, and hyphens only; e.g. global, us-central1).</value>
+    <comment>Error. {0} = region</comment>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>The service account's token_uri ({0}) isn't Google's token endpoint (oauth2.googleapis.com), so it won't be used.</value>
+    <comment>Error. {0} = token_uri from the service account JSON</comment>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Recording reached the 10-minute limit, so the audio so far will be processed</value>
+    <comment>HUD message</comment>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>The API key (or service account) is wrong, or it isn't allowed to use the Gemini API ({0})</value>
+    <comment>Error. {0} = HTTP status</comment>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>The model “{0}” wasn't found or can't be used with these credentials</value>
+    <comment>Error. {0} = model ID</comment>
   </data>
 </root>

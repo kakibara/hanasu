@@ -334,8 +334,10 @@ public sealed class GeminiSegmentTranscriber : ISegmentTranscriber
     internal static string LanguageNote(string localeIdentifier)
     {
         var language = Ai.PromptLanguage.Current;
-        var spoken = Ai.PromptLanguage.FromLocaleIdentifier(localeIdentifier);
-        var name = Ai.Prompts.Text("languageName." + spoken.Code, language);
+        // 対応言語にない文字起こしの言語（sv-SE など）は、英語と書かずに識別子のまま書く（前の版と同じ）
+        var name = Ai.PromptLanguage.SupportedOrNull(localeIdentifier) is { } spoken
+            ? Ai.Prompts.Text("languageName." + spoken.Code, language)
+            : localeIdentifier;
         return Ai.Prompts.Text("transcribe.languageNote", language, ("language", name));
     }
 }

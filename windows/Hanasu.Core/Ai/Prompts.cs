@@ -91,7 +91,14 @@ public sealed class PromptLanguage
     public static PromptLanguage Current => overrideLanguage ?? settingsLanguage;
 
     /// <summary>設定の文字起こしの言語を反映する。SettingsService が、読み込んだときと設定を変えたときに呼ぶ</summary>
-    public static void UseSettings(string? localeIdentifier) => settingsLanguage = FromLocaleIdentifier(localeIdentifier);
+    public static void UseSettings(string? localeIdentifier)
+    {
+        settingsLanguage = FromLocaleIdentifier(localeIdentifier);
+        SettingsLocaleIdentifier = localeIdentifier;
+    }
+
+    /// <summary>設定の文字起こしの言語の識別子（対応言語にない sv-SE なども、そのまま持つ）。設定を読む前は null</summary>
+    public static string? SettingsLocaleIdentifier { get; private set; }
 
     /// <summary>日付の曜日や月の名前を、この言語で書くためのカルチャ（暦はグレゴリオ暦にそろえる）</summary>
     public CultureInfo Culture => culture ??= MakeCulture(this == Ja ? "ja-JP" : Code);

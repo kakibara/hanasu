@@ -33,6 +33,7 @@ public partial class MeetingWindow : Window
         this.host = host;
         meetings = host.Meetings;
         InitializeComponent();
+        WindowFit.FitToMouseScreen(this);
         loading = true;
         LoadDevices();
         foreach (var t in MinutesTemplates.All)
@@ -53,6 +54,7 @@ public partial class MeetingWindow : Window
         timer.Tick += (_, _) => UpdateLive();
         Closed += (_, _) =>
         {
+            reloadGeneration++; // 閉じたあとに読み終えた一覧は出さない
             timer.Stop();
             meetings.StateChanged -= OnStateChanged;
             meetings.MeetingChanged -= OnMeetingChanged;
@@ -64,11 +66,31 @@ public partial class MeetingWindow : Window
 
     // MARK: - 一覧
 
-    private void ReloadList(string? selectId = null)
+    /// <summary>一覧の読み込みの番号。最後に始めた読み込みの結果だけを使う（DEC-MTG-071）</summary>
+    private int reloadGeneration;
+
+    // 設計判断: DEC-MTG-071
+    /// <summary>
+    /// 一覧を読み直す。全会議の meeting.json の読み込みと解析は UI スレッドの外で行い、結果だけを UI スレッドで出す。
+    /// 読み終えるまでは前の一覧を出したままにする。続けて呼ばれたら、最後の呼び出しの結果だけを使う
+    /// </summary>
+    private async void ReloadList(string? selectId = null)
     {
-        selectId ??= selected?.Id;
+        var generation = ++reloadGeneration;
         var store = meetings.Store(host.Settings.Current);
-        var all = store.LoadAll();
+        List<Meeting> all;
+        try
+        {
+            all = await Task.Run(() => store.LoadAll());
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            // 読めなかったら前の一覧のままにする（最初の読み込みなら、読み込み中の案内を失敗の案内に変える）
+            if (MeetingList.Items.Count == 0) ListEmptyText.Text = Strings.Meeting_ListLoadFailed;
+            return;
+        }
+        if (generation != reloadGeneration) return;
+        selectId ??= selected?.Id;
         // 記録中・処理中の会議はメモリ上のものを使う（ファイルより新しい）
         if (meetings.Current is { } current)
         {
@@ -78,6 +100,9 @@ public partial class MeetingWindow : Window
         var rows = all.Select(m => new MeetingRow(m, m.Title, Detail(m))).ToList();
         loading = true;
         MeetingList.ItemsSource = rows;
+        // 設計判断: DEC-MTG-073（読み終えてから 0 件のときだけ出す。読み込み中に「まだありません」と見せない）
+        ListEmptyText.Text = Strings.Meeting_ListEmpty;
+        ListEmptyText.Visibility = rows.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         MeetingList.SelectedItem = rows.FirstOrDefault(r => r.Meeting.Id == selectId);
         loading = false;
         if (MeetingList.SelectedItem is MeetingRow row) Show(row.Meeting);
@@ -240,13 +265,25 @@ public partial class MeetingWindow : Window
 
     private void OnRegenerateClick(object sender, RoutedEventArgs e)
     {
-        if (selected is { } m) _ = RegenerateAsync(m, null);
+        if (selected is { } m && ConfirmRegenerate(m, Strings.Meeting_ConfirmRegenerateQuestion)) _ = RegenerateAsync(m, null);
     }
+
+    // 設計判断: DEC-MTG-072
+    /// <summary>
+    /// 議事録を作り直す前の確かめ。今の議事録があるときだけ尋ねる（置き換わるため。既定のボタンはキャンセル。DEC-DIC-079）。
+    /// まだ議事録がないときは尋ねずに true
+    /// </summary>
+    private bool ConfirmRegenerate(Meeting m, string question) =>
+        m.Minutes is null
+        || MessageBox.Show(this, string.Format(Strings.Meeting_RegenerateWillReplace, question), "Hanasu",
+            MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) == MessageBoxResult.OK;
 
     private void OnTemplateChanged(object sender, SelectionChangedEventArgs e)
     {
         if (loading || selected is not { } m || TemplateCombo.SelectedItem is not ComboBoxItem { Tag: MinutesTemplate t } || t == m.Template) return;
-        if (MessageBox.Show(this, string.Format(Strings.Meeting_ConfirmRegenerate, t.Title()), "Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+        // 設計判断: DEC-MTG-072（既定のボタンはキャンセル）
+        if (MessageBox.Show(this, string.Format(Strings.Meeting_ConfirmRegenerate, t.Title()), "Hanasu",
+                MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK)
         {
             Show(m);
             return;
@@ -282,7 +319,8 @@ public partial class MeetingWindow : Window
         var (text, empty, copied) = Tabs.SelectedIndex switch
         {
             1 => (m.TranscriptMarkdown(), Strings.Meeting_NoTranscript, Strings.Meeting_CopiedTranscript),
-            2 => (m.NotesMarkdown(), Strings.Meeting_NoNotes, Strings.Meeting_CopiedNotes),
+            2 => (m.HighlightContextText(), Strings.Meeting_NoHighlights, Strings.Meeting_CopiedHighlights),
+            3 => (m.NotesMarkdown(), Strings.Meeting_NoNotes, Strings.Meeting_CopiedNotes),
             _ => (m.Minutes ?? "", Strings.Meeting_NoMinutes, Strings.Meeting_CopiedMinutes),
         };
         if (text.Length == 0)
@@ -305,7 +343,11 @@ public partial class MeetingWindow : Window
     {
         if (selected is not { } m) return;
         var dir = Path.Combine(meetings.Store(host.Settings.Current).BaseDirectory, m.Id);
-        if (!Directory.Exists(dir)) return;
+        if (!Directory.Exists(dir))
+        {
+            ActionStatus.Text = Strings.Meeting_FolderNotFound;
+            return;
+        }
         Process.Start(new ProcessStartInfo("explorer.exe", $"\"{dir}\"") { UseShellExecute = true });
     }
 
@@ -373,6 +415,8 @@ public partial class MeetingWindow : Window
             ActionStatus.Text = Strings.Meeting_NotesWhileRecording;
             return;
         }
+        // 設計判断: DEC-MTG-072（確かめてから保存する。キャンセルなら保存もしない）
+        if (regenerate && !ConfirmRegenerate(m, Strings.Meeting_ConfirmSaveNotesAndRegenerate)) return;
         var notes = MeetingNote.Parse(NotesBox.Text);
         m.Notes = notes.Count == 0 ? null : notes;
         SaveSelected(m, Strings.Meeting_NotesSaved);

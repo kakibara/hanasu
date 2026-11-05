@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>Không thể đọc JSON của tài khoản dịch vụ.</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>token_uri trong JSON của tài khoản dịch vụ không phải https.</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>Hết thời gian chờ khi lấy mã thông báo truy cập.</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>Công cụ chuyển văn bản là Gemini nhưng chưa đặt thông tin xác thực Gemini (menu → Cài đặt → AI).</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>Bản ghi quá dài để gửi đến Gemini (tối đa {0} phút).</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>Chuyển thành văn bản bằng Gemini không thành công: {0}</value>

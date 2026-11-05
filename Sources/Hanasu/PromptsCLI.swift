@@ -104,5 +104,25 @@ enum PromptsCLI {
         section("dictionary suggest", DictionarySuggester.instruction)
         section("dictionary suggest user", DictionarySuggester.userPrompt(material: "（材料）", existing: UserDictionary(text: "")))
         section("dictionary corpus", DictionarySuggester.Corpus(meetings: [meeting]).promptText())
+
+        // 会議の AI チャット
+        section("chat / system", MeetingChat.instruction)
+        let chatMaterial = MeetingChat.material(for: meeting)
+        let now = Date(timeIntervalSince1970: 1_793_001_000)
+        let history = [MeetingChat.Message(role: .user, text: "決まったことは？"), MeetingChat.Message(role: .assistant, text: String(repeating: "あ", count: 20))]
+        section("chat / user done", MeetingChat.prompt(question: "誰が資料を送る？", material: chatMaterial, history: history,
+                                                       options: .init(maxHistoryMessageCharacters: 10), now: now).text)
+        var live = chatMaterial
+        live.live = true
+        live.elapsed = 75
+        live.pending = [MeetingChat.Line(time: 75, speaker: Meeting.promptLabel(for: "others"), text: "えーと")]
+        section("chat / user live", MeetingChat.prompt(question: "今の話は？", material: live, history: [],
+                                                       options: .init(maxTranscriptCharacters: 40), now: now).text)
+        live.lines = []
+        live.batchEngineName = "Whisper"
+        section("chat / user live batch", MeetingChat.prompt(question: "今の話は？", material: live, history: [], now: now).text)
+        live.batchEngineName = nil
+        section("chat / user empty", MeetingChat.prompt(question: "今の話は？", material: live, history: [], now: now).text)
+        section("chat / quick", MeetingChat.quickPrompts.map { "\($0.id): \($0.question)" }.joined(separator: "\n"))
     }
 }

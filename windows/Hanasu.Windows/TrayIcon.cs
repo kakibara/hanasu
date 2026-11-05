@@ -7,8 +7,10 @@ namespace Hanasu.Windows;
 
 /// <summary>
 /// タスクトレイのアイコンとメニュー（Mac 版のメニューバーにあたる）。
-/// 音声入力の開始 / 翻訳して入力（英訳・和訳） / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / 設定 / 終了。
+/// 録音を開始 / 翻訳して入力を開始（英訳・和訳） / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / 設定 / Hanasu を終了。
+/// 文言と並びは Mac 版のメニューバー（AppDelegate の statusMenu）にそろえ、各項目にアクセスキー（&amp;）を付ける。
 /// </summary>
+// 設計判断: DEC-COM-152
 internal sealed class TrayIcon : IDisposable
 {
     private readonly AppHost host;
@@ -25,6 +27,8 @@ internal sealed class TrayIcon : IDisposable
     {
         this.host = host;
         var menu = new Forms.ContextMenuStrip();
+        // 要件: REQ-COM-060（アラビア語などは、メニューも右から左に並べる）
+        if (System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft) menu.RightToLeft = Forms.RightToLeft.Yes;
         dictateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(DictationMode.Refine));
         // 設計判断: DEC-DIC-027（設定で選んだ翻訳の言語のうち最初で始める）
         translateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(host.Dictation.PrimaryTranslateMode));
@@ -85,7 +89,10 @@ internal sealed class TrayIcon : IDisposable
         var busy = state is DictationState.Preparing or DictationState.Recording;
         dictateItem.Text = busy ? Strings.Tray_StopAndType : Strings.Tray_StartDictation;
         dictateItem.ShortcutKeyDisplayString = s.HotKey.DisplayString;
-        translateItem.Text = TranslationLanguages.MenuTitle(s.TranslationLanguages);
+        // 文言は Mac 版のメニューバーと同じ（DEC-COM-152）
+        translateItem.Text = s.TranslationLanguages.Length != 1 ? Strings.Tray_StartTranslate
+            : s.TranslationLanguages[0] == TranslationLanguage.Japanese ? Strings.Tray_StartTranslate_Japanese
+            : Strings.Tray_StartTranslate_English;
         translateItem.ShortcutKeyDisplayString = s.TranslateHotKey.DisplayString;
         // 処理中はどちらも押せない。録音中は「止める」だけ押せる。会議の記録中は音声入力を使えない
         var meetingIdle = meetingState == MeetingState.Idle;

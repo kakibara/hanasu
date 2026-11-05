@@ -40,13 +40,27 @@ using Hanasu.Whisper;
 //   hanasu-cli local-refine "<文章>" [--model <id>] [--translate | --translate-to en|ja] [--server <パス>] [--models-dir <dir>]   ローカルで整形・英訳する
 //   meeting-minutes / meeting-files に --minutes-ai local --minutes-model <id> を付けると、議事録をローカルで作る
 // どのコマンドにも --prompt-language <言語>（en、ja、zh-TW、pt-BR など。ja-JP のような識別子でもよい）を付けると、
-// AI へのプロンプトをその言語で組み立てる（既定は日本語。Mac 版の CLI の --prompt-language と同じ）。例: claude-request "テスト" --prompt-language en
+// AI へのプロンプトをその言語で組み立てる（省くと設定の文字起こしの言語。Mac 版の CLI の --prompt-language と同じ）。
+// 対応していない言語を書いたら止める。例: claude-request "テスト" --prompt-language en
 
 var command = args.FirstOrDefault();
+// 要件: REQ-COM-060（Core が出すエラーなどの文言を、アプリと同じ表示の言語にする）
+UiLanguage.Apply();
 // 確かめ方: REQ-COM-061
-PromptLanguage.Override = Option(args, "--prompt-language") is { } promptLanguage
-    ? PromptLanguage.FromCode(promptLanguage) ?? PromptLanguage.FromLocaleIdentifier(promptLanguage)
-    : PromptLanguage.Ja;
+if (Option(args, "--prompt-language") is { } promptLanguage)
+{
+    PromptLanguage.Override = PromptLanguage.FromCode(promptLanguage) ?? PromptLanguage.SupportedOrNull(promptLanguage);
+    if (PromptLanguage.Override is null)
+    {
+        Console.Error.WriteLine($"error: --prompt-language は {string.Join("|", PromptLanguage.All.Select(l => l.Code))} のどれか（{promptLanguage} は対応していない）");
+        return 2;
+    }
+}
+else
+{
+    // 省いたときは、アプリと同じく設定の文字起こしの言語（設定のファイルがなければ設定の既定）
+    PromptLanguage.UseSettings(new SettingsStore().Load().LocaleIdentifier);
+}
 try
 {
     switch (command)

@@ -181,11 +181,13 @@ public sealed class ActionItem
     /// （minutes.item.*。Mac 版 ActionItem.markdownLine と同じキー）
     /// </summary>
     [JsonIgnore]
-    public string MarkdownLine
+    public string MarkdownLine => MarkdownLineIn(PromptLanguage.Current);
+
+    // 要件: REQ-COM-061
+    /// <summary>議事録を作ったときのプロンプトの言語で書く（作っている間に設定の言語が変わっても、議事録の中でそろえる）</summary>
+    public string MarkdownLineIn(PromptLanguage language)
     {
-        get
         {
-            var language = PromptLanguage.Current;
             var notes = new List<string>();
             if (!string.IsNullOrEmpty(Owner)) notes.Add($"{Prompts.Text("minutes.item.owner", language)}: {Owner}");
             var due = DueDate is { } d
@@ -198,11 +200,38 @@ public sealed class ActionItem
     }
 
     // 要件: REQ-COM-061
-    /// <summary>議事録の言語はそのときのプロンプトの言語なので、読むときはすべての言語の言い方を受け付ける（Mac 版と同じ）</summary>
-    internal static IReadOnlyList<string> ActionHeadingWords =>
-        new[] { "TODO", "ToDo", "アクション", "次のステップ" }  // skip-tr（議事録を読むときの語）
-            .Concat(new[] { "minutes.actionHeading", "minutes.actionHeading.sales", "minutes.actionHeading.brainstorm" }.SelectMany(Prompts.AllTexts))
-            .ToList();
+    /// <summary>
+    /// 議事録の言語はそのときのプロンプトの言語なので、読むときはすべての言語の言い方を受け付ける（Mac 版と同じ）。
+    /// 前から使っている日本語の語は見出しに含まれていればよいが、各言語の見出しは見出しの全体と一致したときだけにする
+    /// （「## Задачи клиента」のような別の見出しを、アクションアイテムの節と取り違えないように）
+    /// </summary>
+    internal static readonly string[] LegacyActionHeadingWords = ["TODO", "ToDo", "アクション", "次のステップ"];  // skip-tr（前の版の議事録の見出し）
+    internal static IReadOnlyList<string> ActionHeadings =>
+        new[] { "minutes.actionHeading", "minutes.actionHeading.sales", "minutes.actionHeading.brainstorm" }.SelectMany(Prompts.AllTexts).ToList();
+
+    internal static bool IsActionHeading(string heading)
+    {
+        var trimmed = heading.Trim();
+        return LegacyActionHeadingWords.Any(w => trimmed.Contains(w, StringComparison.Ordinal))
+            || ActionHeadings.Any(h => string.Equals(h, trimmed, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>「（担当: …」「(Owner: …」のように、担当か期限の言葉とコロンで始まるかっこの位置。なければ -1</summary>
+    internal static int DetailsOpening(string task, IReadOnlyList<string> keys)
+    {
+        for (var i = 0; i < task.Length; i++)
+        {
+            if (task[i] is not ('（' or '(')) continue;
+            var after = task[(i + 1)..].TrimStart(' ');
+            foreach (var key in keys)
+            {
+                if (!after.StartsWith(key, StringComparison.Ordinal)) continue;
+                var rest = after[key.Length..].TrimStart(' ');
+                if (rest.Length > 0 && rest[0] is ':' or '：') return i;
+            }
+        }
+        return -1;
+    }
     internal static IReadOnlyList<string> OwnerKeys => Prompts.AllTexts("minutes.item.owner");
     internal static IReadOnlyList<string> DueKeys => Prompts.AllTexts("minutes.item.due");
     internal static IReadOnlyList<string> NoneWords => Prompts.AllTexts("minutes.result.none");
@@ -214,7 +243,6 @@ public sealed class ActionItem
     /// </summary>
     public static List<ActionItem> ParseFromMarkdown(string markdown)
     {
-        var headingWords = ActionHeadingWords;
         var ownerKeys = OwnerKeys;
         var dueKeys = DueKeys;
         var noneWords = NoneWords;
@@ -226,17 +254,18 @@ public sealed class ActionItem
             if (line.StartsWith("## ", StringComparison.Ordinal))
             {
                 var heading = line[3..];
-                inSection = headingWords.Any(w => heading.Contains(w, StringComparison.Ordinal));
+                inSection = IsActionHeading(heading);
                 continue;
             }
             if (!inSection || !(line.StartsWith("- [ ] ", StringComparison.Ordinal) || line.StartsWith("- [x] ", StringComparison.Ordinal))) continue;
             var task = line[6..].Trim();
             string? owner = null, dueNote = null;
-            if (task.Length > 0 && task[^1] is '）' or ')' && task.LastIndexOfAny(['（', '(']) is var open and >= 0)
+            // 期限には「11/14 (金)」のようにかっこや / が入るので、「担当」「期限」の言葉で始まるかっこを探し、中を「 / 」で分ける
+            if (task.Length > 0 && task[^1] is '）' or ')' && DetailsOpening(task, ownerKeys.Concat(dueKeys).ToList()) is var open and >= 0)
             {
                 var inner = task[(open + 1)..^1];
                 var recognized = false;
-                foreach (var part in inner.Split('/', '／'))
+                foreach (var part in inner.Split(" / ").SelectMany(p => p.Split('／')))
                 {
                     var pair = part.Split([':', '：'], 2);
                     if (pair.Length != 2) continue;

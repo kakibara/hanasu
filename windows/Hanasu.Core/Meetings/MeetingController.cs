@@ -333,10 +333,8 @@ public sealed class MeetingController
         meeting.CustomMinutesPrompt = draft.CustomMinutesPrompt;
         // 要件: REQ-MTG-027
         meeting.ApplyMinutes(result);
-        if (IsMinutesError(meeting.ErrorMessage))
-        {
-            meeting.ErrorMessage = null;
-        }
+        // 議事録のエラーの行だけを消す（文字起こしの失敗などほかの行は残す）
+        meeting.ErrorMessage = WithoutMinutesErrors(meeting.ErrorMessage);
         Store(settings).Save(meeting);
         MeetingChanged?.Invoke(this, meeting);
     }
@@ -345,6 +343,18 @@ public sealed class MeetingController
     /// 議事録を作れなかったときのエラー（作り直せたら消す）か。エラーは書いたときの表示の言語なので、
     /// 今の言語・日本語（前の版で保存したもの）・英語の文言の、どれとも比べる
     /// </summary>
+    /// <summary>
+    /// 会議のエラーから、議事録のエラーの行だけを除く。残りがなければ null。
+    /// エラーは「文字起こしの失敗…\n…議事録は作っていません…」のように行をつないだものなので、行ごとに見る
+    /// </summary>
+    internal static string? WithoutMinutesErrors(string? message)
+    {
+        if (string.IsNullOrEmpty(message)) return message;
+        var kept = message.Split('\n').Where(line => !IsMinutesError(line)).ToList();
+        var text = string.Join("\n", kept).Trim();
+        return text.Length == 0 ? null : text;
+    }
+
     internal static bool IsMinutesError(string? message)
     {
         if (string.IsNullOrEmpty(message)) return false;

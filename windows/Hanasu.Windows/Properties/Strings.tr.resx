@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu zaten çalışıyor. Bildirim alanındaki simgeden kullanabilirsiniz.</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>Son Sonuçlar</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>Toplantı Notlarını Aç</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>Geçmişi Aç…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>Ayarlar…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>Çıkış</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>Kaydı Durdur ve Yaz</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>Dikteyi Başlat</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>Toplantı Kaydını Durdur ({0})</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>Toplantı Kaydı Başlatılıyor…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>Toplantı Kaydı İşleniyor…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>Toplantı Kaydını Başlat</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — Toplantı kaydediliyor {0}</value>
   </data>
@@ -266,9 +233,6 @@ Sonuç: {1}
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>Kopyalanamadı (pano başka bir uygulama tarafından kullanılıyor)</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>Seçili {0} geçmiş kaydı silinsin mi?</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>Dikte geçmişindeki {0} kaydın tümü silinsin mi? Bu işlem geri alınamaz.</value>
   </data>
@@ -403,9 +367,6 @@ Sonuç: {1}
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>Kaydedilemedi: {0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>Tutanak şablonu "{0}" olarak değiştirilip tutanak yeniden oluşturulsun mu?</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>Tutanak yeniden oluşturuldu ({0} saniye)</value>
@@ -547,9 +508,6 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>Dil Ayarlarını Aç</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>Bu bilgisayarda whisper.cpp ile yazıya döker (ses bilgisayarınızdan çıkmaz). Yazıya dökme, kaydı durdurduktan sonra yapılır. Bir model seçildiğinde Hugging Face'ten indirilir. Büyük modeller daha doğrudur ancak daha yavaştır.</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>Model</value>
   </data>
@@ -651,9 +609,6 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>Bölge</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>Vertex AI User rolüne (roles/aiplatform.user) sahip bir hizmet hesabının anahtarını seçin. Yalnızca anahtar dosyasının konumu kaydedilir (içeriği kopyalanmaz). Anahtar dosyasını başkalarının okuyamayacağı bir yerde tutun. Varsayılan bölge global'dir.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude API anahtarı</value>
@@ -798,9 +753,6 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>Kaydedildi</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>Başka bir kısayolla aynı (dikte, çeviri veya toplantılar)</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>Windows motoru, Windows varsayılan mikrofonunu kullanır (Windows Ayarları → Sistem → Ses bölümünden değiştirebilirsiniz).</value>

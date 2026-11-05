@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu가 이미 실행 중입니다. 알림 영역의 아이콘에서 사용할 수 있습니다.</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>최근 결과</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>회의 노트 열기</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>기록 열기…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>설정…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>종료</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>녹음 중지 후 입력</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>음성 입력 시작</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>회의 녹음 중지({0})</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>회의 녹음을 시작하는 중…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>회의 녹음을 처리하는 중…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>회의 녹음 시작</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — 회의 녹음 중 {0}</value>
   </data>
@@ -266,9 +233,6 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>복사할 수 없음(다른 앱이 클립보드를 사용 중)</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>선택한 기록 {0}건을 삭제하시겠습니까?</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>음성 입력 기록 {0}건을 모두 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</value>
   </data>
@@ -403,9 +367,6 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>저장할 수 없습니다: {0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>회의록 템플릿을 '{0}'(으)로 바꾸고 회의록을 다시 만드시겠습니까?</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>회의록을 다시 만들었습니다({0}초)</value>
@@ -547,9 +508,6 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>언어 설정 열기</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>whisper.cpp로 이 PC에서 텍스트로 변환합니다(오디오가 PC 밖으로 나가지 않음). 텍스트 변환은 녹음을 중지한 후에 진행됩니다. 모델을 선택하면 Hugging Face에서 다운로드합니다. 큰 모델일수록 정확하지만 느립니다.</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>모델</value>
   </data>
@@ -651,9 +609,6 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>리전</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>Vertex AI 사용자 역할(roles/aiplatform.user)이 있는 서비스 계정의 키를 선택하세요. 키 파일의 위치만 저장됩니다(내용은 복사하지 않음). 키 파일은 다른 사람이 읽을 수 없는 곳에 두세요. 기본 리전은 global입니다.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude API 키</value>
@@ -798,9 +753,6 @@
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>저장했습니다</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>다른 바로 가기 키(음성 입력, 번역, 회의)와 같습니다</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>Windows 엔진은 Windows 기본 마이크를 사용합니다(Windows 설정 → 시스템 → 소리에서 변경 가능).</value>

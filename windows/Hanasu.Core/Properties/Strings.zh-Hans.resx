@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>无法读取服务账号 JSON。</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>服务账号 JSON 中的 token_uri 不是 https。</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>获取访问令牌超时。</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>转录引擎为 Gemini，但未设置 Gemini 凭据（菜单 → 设置 → AI）。</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>录音过长，无法发送到 Gemini（最长 {0} 分钟）。</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>使用 Gemini 转录失败：{0}</value>

@@ -14,7 +14,7 @@
             <Setter Property="Margin" Value="0,14,0,6" />
         </Style>
         <Style x:Key="Note" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#FF5F6368" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="Margin" Value="0,3,0,0" />
@@ -51,7 +51,7 @@
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Shortcuts}" />
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="Auto" MinWidth="140" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
@@ -60,11 +60,11 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Text="{x:Static p:Strings.Settings_Dictation}" VerticalAlignment="Center" />
-                            <local:HotKeyBox x:Name="DictationHotKeyBox" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" />
-                            <Button Grid.Row="0" Grid.Column="2" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetDictationHotKey" />
+                            <local:HotKeyBox x:Name="DictationHotKeyBox" AutomationProperties.Name="{x:Static p:Strings.Settings_DictationHotKey_A11y}" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" />
+                            <Button Grid.Row="0" Grid.Column="2" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetDictationHotKey" AutomationProperties.Name="{x:Static p:Strings.Settings_DictationHotKeyReset_A11y}" />
                             <TextBlock Grid.Row="1" Text="{x:Static p:Strings.Settings_TranslateAndType}" VerticalAlignment="Center" />
-                            <local:HotKeyBox x:Name="TranslateHotKeyBox" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" />
-                            <Button Grid.Row="1" Grid.Column="2" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetTranslateHotKey" />
+                            <local:HotKeyBox x:Name="TranslateHotKeyBox" AutomationProperties.Name="{x:Static p:Strings.Settings_TranslateHotKey_A11y}" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" />
+                            <Button Grid.Row="1" Grid.Column="2" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetTranslateHotKey" AutomationProperties.Name="{x:Static p:Strings.Settings_TranslateHotKeyReset_A11y}" />
                         </Grid>
                         <TextBlock x:Name="HotKeyError" Style="{StaticResource Error}" Visibility="Collapsed" />
                         <TextBlock Style="{StaticResource Note}"
@@ -115,7 +115,7 @@
                             <DockPanel Margin="60,6,0,0">
                                 <Button x:Name="WhisperDownloadButton" Content="{x:Static p:Strings.Settings_Download}" Click="OnWhisperDownload" />
                                 <Button x:Name="WhisperCancelButton" Content="{x:Static p:Strings.Settings_CancelDownload}" Click="OnWhisperCancel" />
-                                <Button x:Name="WhisperDeleteButton" Content="{x:Static p:Strings.Delete}" Click="OnWhisperDelete" />
+                                <Button x:Name="WhisperDeleteButton" Content="{x:Static p:Strings.Delete}" AutomationProperties.Name="{x:Static p:Strings.Settings_WhisperDelete_A11y}" Click="OnWhisperDelete" />
                                 <Button Content="{x:Static p:Strings.OpenSaveFolder}" Click="OnOpenModelsFolder" />
                                 <TextBlock x:Name="WhisperStatus" VerticalAlignment="Center" TextWrapping="Wrap" />
                             </DockPanel>
@@ -130,8 +130,10 @@
                         </StackPanel>
 
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Microphone}" />
-                        <ComboBox x:Name="MicrophoneCombo" SelectionChanged="OnMicrophoneChanged" HorizontalAlignment="Left" MinWidth="320" />
+                        <ComboBox x:Name="MicrophoneCombo" AutomationProperties.Name="{x:Static p:Strings.Settings_Microphone_A11y}" SelectionChanged="OnMicrophoneChanged" HorizontalAlignment="Left" MinWidth="320" />
                         <TextBlock x:Name="MicrophoneNote" Style="{StaticResource Note}" />
+                        <Button Content="{x:Static p:Strings.Settings_OpenMicrophonePrivacy}" Click="OnOpenMicrophonePrivacy" HorizontalAlignment="Left" Margin="0,4,0,0"
+                                ToolTip="{x:Static p:Strings.Settings_OpenMicrophonePrivacy_Tip}" />
 
                         <!-- 要件: REQ-DIC-081 -->
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_NoTarget}" />
@@ -157,7 +159,7 @@
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_AiAndModels}" />
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="Auto" MinWidth="150" />
                                 <ColumnDefinition Width="110" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
@@ -165,7 +167,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="{x:Static p:Strings.Settings_Ai_Dictation}" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="0" Text="{x:Static p:Strings.Settings_Ai_Dictation}" TextWrapping="Wrap" MaxWidth="240" VerticalAlignment="Center" />
                             <ComboBox x:Name="DictationAiCombo" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" SelectionChanged="OnDictationAiChanged">
                                 <ComboBoxItem Content="Gemini" Tag="Gemini" />
                                 <ComboBoxItem Content="Claude" Tag="Claude" />
@@ -176,7 +178,7 @@
                                 <ComboBox x:Name="ClaudeModelCombo" SelectionChanged="OnClaudeModelChanged" />
                                 <ComboBox x:Name="LocalModelCombo" SelectionChanged="OnLocalModelChanged" />
                             </Grid>
-                            <TextBlock Grid.Row="1" Text="{x:Static p:Strings.Settings_Ai_Meeting}" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="1" Text="{x:Static p:Strings.Settings_Ai_Meeting}" TextWrapping="Wrap" MaxWidth="240" VerticalAlignment="Center" />
                             <ComboBox x:Name="MeetingAiCombo" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" SelectionChanged="OnMeetingAiChanged">
                                 <ComboBoxItem Content="Gemini" Tag="Gemini" />
                                 <ComboBoxItem Content="Claude" Tag="Claude" />
@@ -238,23 +240,31 @@
 
                         <StackPanel x:Name="ApiKeyPanel" Margin="0,8,0,0">
                             <DockPanel>
-                                <TextBlock Text="{x:Static p:Strings.Settings_ApiKey}" Width="110" VerticalAlignment="Center" />
-                                <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Delete}" Click="OnDeleteApiKey" Margin="8,0,0,0" />
+                                <TextBlock Text="{x:Static p:Strings.Settings_ApiKey}" Width="110" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Delete}" AutomationProperties.Name="{x:Static p:Strings.Settings_GeminiKeyDelete_A11y}" Click="OnDeleteApiKey" Margin="8,0,0,0" />
+                                <!-- 設計判断: DEC-COM-143（Claude と同じ「接続を試す」） -->
+                                <Button DockPanel.Dock="Right" x:Name="GeminiCheckButton" Content="{x:Static p:Strings.Settings_TestConnection}" AutomationProperties.Name="{x:Static p:Strings.Settings_GeminiCheck_A11y}" Click="OnCheckGemini" Margin="8,0,0,0" />
                                 <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Save}" Click="OnSaveApiKey" Margin="8,0,0,0" />
                                 <PasswordBox x:Name="ApiKeyBox" Padding="4,3" />
                             </DockPanel>
                             <TextBlock x:Name="ApiKeyStatus" Style="{StaticResource Note}" Margin="110,3,0,0" />
+                            <TextBlock Style="{StaticResource Note}" Margin="110,0,0,0"
+                                       Text="{x:Static p:Strings.Settings_TestConnectionNote}" />
                         </StackPanel>
 
                         <StackPanel x:Name="ServiceAccountPanel" Margin="0,8,0,0">
                             <DockPanel>
-                                <TextBlock Text="{x:Static p:Strings.Settings_KeyJson}" Width="110" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Static p:Strings.Settings_KeyJson}" Width="110" TextWrapping="Wrap" VerticalAlignment="Center" />
                                 <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Settings_Browse}" Click="OnBrowseServiceAccount" Margin="8,0,0,0" />
                                 <TextBox x:Name="ServiceAccountPathBox" Padding="4,3" LostFocus="OnServiceAccountPathChanged" />
                             </DockPanel>
                             <DockPanel Margin="0,6,0,0">
-                                <TextBlock Text="{x:Static p:Strings.Settings_Region}" Width="110" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Static p:Strings.Settings_Region}" Width="110" TextWrapping="Wrap" VerticalAlignment="Center" />
                                 <TextBox x:Name="VertexLocationBox" Width="160" HorizontalAlignment="Left" Padding="4,3" LostFocus="OnVertexLocationChanged" />
+                            </DockPanel>
+                            <DockPanel Margin="110,6,0,0">
+                                <Button x:Name="GeminiCheckServiceAccountButton" DockPanel.Dock="Left" Content="{x:Static p:Strings.Settings_TestConnection}" AutomationProperties.Name="{x:Static p:Strings.Settings_VertexCheck_A11y}" Click="OnCheckGemini" />
+                                <TextBlock x:Name="ServiceAccountStatus" Style="{StaticResource Note}" Margin="0" VerticalAlignment="Center" />
                             </DockPanel>
                             <TextBlock Style="{StaticResource Note}" Margin="110,3,0,0"
                                        Text="{x:Static p:Strings.Settings_ServiceAccountNote}" />
@@ -262,8 +272,8 @@
 
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_ClaudeApiKey}" />
                         <DockPanel>
-                            <TextBlock Text="{x:Static p:Strings.Settings_ApiKey}" Width="110" VerticalAlignment="Center" />
-                            <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Delete}" Click="OnDeleteClaudeKey" Margin="8,0,0,0" />
+                            <TextBlock Text="{x:Static p:Strings.Settings_ApiKey}" Width="110" TextWrapping="Wrap" VerticalAlignment="Center" />
+                            <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Delete}" AutomationProperties.Name="{x:Static p:Strings.Settings_ClaudeKeyDelete_A11y}" Click="OnDeleteClaudeKey" Margin="8,0,0,0" />
                             <Button DockPanel.Dock="Right" x:Name="ClaudeCheckButton" Content="{x:Static p:Strings.Settings_TestConnection}" Click="OnCheckClaude" Margin="8,0,0,0" />
                             <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Save}" Click="OnSaveClaudeKey" Margin="8,0,0,0" />
                             <PasswordBox x:Name="ClaudeKeyBox" Padding="4,3" />
@@ -287,7 +297,8 @@
                             <Button x:Name="TrialTranslateJapaneseButton" Content="{x:Static p:Strings.Settings_TryJapanese}" Click="OnTrialTranslateJapanese" Visibility="Collapsed" />
                             <TextBlock x:Name="TrialStatus" Style="{StaticResource Note}" VerticalAlignment="Center" />
                         </StackPanel>
-                        <TextBox x:Name="TrialOutput" IsReadOnly="True" TextWrapping="Wrap" MinHeight="56" Margin="0,6,0,0" Padding="4,3" Background="#FFF7F7F7" />
+                        <!-- 設計判断: DEC-COM-153（ハイコントラストでは OS の色。App.xaml） -->
+                        <TextBox x:Name="TrialOutput" IsReadOnly="True" TextWrapping="Wrap" MinHeight="56" Margin="0,6,0,0" Padding="4,3" Style="{StaticResource ReadOnlyOutput}" />
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
@@ -299,7 +310,7 @@
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Shortcuts}" />
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="Auto" MinWidth="140" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
@@ -308,11 +319,11 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Text="{x:Static p:Strings.Settings_MeetingStartStop}" VerticalAlignment="Center" />
-                            <local:HotKeyBox x:Name="MeetingHotKeyBox" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" />
-                            <Button Grid.Row="0" Grid.Column="2" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetMeetingHotKey" />
+                            <local:HotKeyBox x:Name="MeetingHotKeyBox" AutomationProperties.Name="{x:Static p:Strings.Settings_MeetingHotKey_A11y}" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" />
+                            <Button Grid.Row="0" Grid.Column="2" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetMeetingHotKey" AutomationProperties.Name="{x:Static p:Strings.Settings_MeetingHotKeyReset_A11y}" />
                             <TextBlock Grid.Row="1" Text="{x:Static p:Strings.Settings_HighlightMark}" VerticalAlignment="Center" />
-                            <local:HotKeyBox x:Name="HighlightHotKeyBox" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" />
-                            <Button Grid.Row="1" Grid.Column="2" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetHighlightHotKey" />
+                            <local:HotKeyBox x:Name="HighlightHotKeyBox" AutomationProperties.Name="{x:Static p:Strings.Settings_HighlightHotKey_A11y}" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" />
+                            <Button Grid.Row="1" Grid.Column="2" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetHighlightHotKey" AutomationProperties.Name="{x:Static p:Strings.Settings_HighlightHotKeyReset_A11y}" />
                         </Grid>
                         <TextBlock x:Name="MeetingHotKeyError" Style="{StaticResource Error}" Visibility="Collapsed" />
                         <CheckBox x:Name="HighlightHotKeyCheck" Content="{x:Static p:Strings.Settings_UseHighlightHotKey}" Checked="OnHighlightHotKeyEnabledChanged" Unchecked="OnHighlightHotKeyEnabledChanged" />
@@ -340,9 +351,9 @@
                         <CheckBox x:Name="KeepAudioCheck" Content="{x:Static p:Strings.Settings_KeepAudio}" Checked="OnKeepAudioChanged" Unchecked="OnKeepAudioChanged" />
                         <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_KeepAudioNote}" />
                         <DockPanel Margin="0,8,0,0">
-                            <TextBlock Text="{x:Static p:Strings.Settings_SaveLocation}" Width="110" VerticalAlignment="Center" />
+                            <TextBlock Text="{x:Static p:Strings.Settings_SaveLocation}" Width="110" TextWrapping="Wrap" VerticalAlignment="Center" />
                             <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Settings_Open}" Click="OnOpenMeetingsFolder" Margin="8,0,0,0" />
-                            <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetMeetingsFolder" Margin="8,0,0,0" />
+                            <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Settings_ResetToDefault}" Click="OnResetMeetingsFolder" AutomationProperties.Name="{x:Static p:Strings.Settings_MeetingsFolderReset_A11y}" Margin="8,0,0,0" />
                             <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Settings_Browse}" Click="OnBrowseMeetingsFolder" Margin="8,0,0,0" />
                             <TextBox x:Name="MeetingsDirBox" Padding="4,3" IsReadOnly="True" />
                         </DockPanel>
@@ -365,7 +376,7 @@
                                    Text="{x:Static p:Strings.Settings_HistoryNote}" />
                         <Grid Margin="0,10,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="Auto" MinWidth="140" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -411,7 +422,7 @@
                              FontFamily="Consolas, Yu Gothic UI" Padding="4,3" TextChanged="OnDictionaryChanged" />
                     <TextBlock x:Name="DictionaryIssues" Grid.Row="3" Style="{StaticResource Error}" Visibility="Collapsed" />
                     <DockPanel Grid.Row="4" Margin="0,6,0,0">
-                        <TextBlock Text="{x:Static p:Strings.Settings_TryReplace}" Width="110" VerticalAlignment="Center" />
+                        <TextBlock Text="{x:Static p:Strings.Settings_TryReplace}" Width="110" TextWrapping="Wrap" VerticalAlignment="Center" />
                         <TextBox x:Name="DictionaryTrialBox" Padding="4,3" TextChanged="OnDictionaryTrialChanged" />
                     </DockPanel>
                     <TextBlock x:Name="DictionaryTrialResult" Grid.Row="5" Style="{StaticResource Note}" Margin="110,3,0,0" />

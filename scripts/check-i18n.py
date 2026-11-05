@@ -112,6 +112,14 @@ def check_prompts(errors: list[str], warnings: list[str], counts: dict[str, int]
                     and key not in SAME_AS_ENGLISH_OK and re.search(r"[A-Za-z]{3,}", PLACEHOLDER.sub("", val)):
                 warnings.append(f"{rel}: {key} が英語と同じ（訳し忘れ？）")
 
+        # 期限の日付の書式（ICU の形）: 引用符の外の英字は、日付の書式の文字（d M E y L c）だけ。
+        # 「d de MMM」のように語をそのまま書くと、e などが書式の文字として読まれてしまう（'de' と引用符で囲む）
+        if "minutes.item.dueDateFormat" in table:
+            pattern = re.sub(r"'[^']*'", "", text(table["minutes.item.dueDateFormat"]))
+            stray = sorted(set(re.findall(r"[A-Za-z]", pattern)) - set("dMEyLc"))
+            if stray:
+                errors.append(f"{rel}: minutes.item.dueDateFormat に引用符で囲んでいない文字 {stray} がある（語は 'de' のように ' で囲む）")
+
         # 同じ言語の中で、話者のラベルと「なし」が議事録の指示に使われているか
         if all(k in table for k in ("speaker.me", "speaker.remote", "speaker.others", "minutes.intro", "minutes.speakerNames",
                                     "minutes.format", "minutes.result.none", "ask.system")):
@@ -122,6 +130,7 @@ def check_prompts(errors: list[str], warnings: list[str], counts: dict[str, int]
                                  ("minutes.speakerNames", [me, remote1, others]),
                                  ("minutes.actionItems", [me, remote1]),
                                  ("ask.system", [me, remote1]),
+                                 ("chat.system", [me, remote1, others]),
                                  ("minutes.format", [text(table["minutes.result.none"])])):
                 for needle in needles:
                     if needle not in text(table.get(key, "")):
@@ -210,7 +219,7 @@ def check_windows_strings(errors: list[str]) -> None:
             previous = ""
             for number, line in enumerate(path.read_text(encoding="utf-8").split("\n"), start=1):
                 stripped = line.lstrip()
-                skip = ("skip-tr" in line or "skip-tr" in previous or stripped.startswith("//")
+                skip = ("skip-tr" in line or (path.suffix == ".xaml" and "skip-tr" in previous) or stripped.startswith("//")
                         or stripped.startswith("<!--") or "AppLog." in line)
                 previous = line
                 if skip:

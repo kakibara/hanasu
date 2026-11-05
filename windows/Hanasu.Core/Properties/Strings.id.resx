@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>Tidak dapat membaca JSON akun layanan.</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>token_uri dalam JSON akun layanan bukan https.</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>Waktu habis saat mendapatkan token akses.</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>Mesin transkripsi adalah Gemini, tetapi kredensial Gemini belum diatur (menu → Pengaturan → AI).</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>Rekaman terlalu panjang untuk dikirim ke Gemini (maksimal {0} menit).</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>Transkripsi dengan Gemini gagal: {0}</value>

@@ -105,9 +105,11 @@ final class MeetingSuggestionPanel {
         view.frame = NSRect(origin: .zero, size: panel.frame.size)
     }
 
-    /// 通知と同じく、メインの画面の右上に出す
+    // 設計判断: DEC-COM-017
+    /// 通知と同じく画面の右上に出す。画面は HUD と同じく、マウスのある画面（会議アプリを使っている画面にいることが多い）
     private func position() {
-        guard let visible = (NSScreen.main ?? NSScreen.screens.first)?.visibleFrame else { return }
+        let screen = NSScreen.screens.first { $0.frame.contains(NSEvent.mouseLocation) } ?? NSScreen.main ?? NSScreen.screens.first
+        guard let visible = screen?.visibleFrame else { return }
         let size = panel.frame.size
         panel.setFrameOrigin(NSPoint(x: visible.maxX - size.width - 16, y: visible.maxY - size.height - 12))
     }

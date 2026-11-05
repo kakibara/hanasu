@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>Hizmet hesabı JSON dosyası okunamıyor.</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>Hizmet hesabı JSON dosyasındaki token_uri https değil.</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>Erişim belirteci alınırken zaman aşımı oluştu.</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>Yazıya dökme motoru Gemini, ancak Gemini kimlik bilgileri ayarlanmadı (menü → Ayarlar → AI).</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>Kayıt, Gemini'ye gönderilemeyecek kadar uzun (en fazla {0} dakika).</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>Gemini ile yazıya dökme başarısız oldu: {0}</value>

@@ -23,9 +23,15 @@ internal sealed class WasapiRecorder : IAudioRecorder
     private SampleConversion.Encoding encoding;
     private int channels;
     private TaskCompletionSource? stopped;
+    private bool limitNotified;
+    private static readonly int MaxSamples = (int)(AudioFormat.MaxDictationRecording.TotalSeconds * AudioFormat.SampleRate);
 
     public event EventHandler<float[]>? SamplesAvailable;
     public event EventHandler<Exception>? Faulted;
+
+    // 設計判断: DEC-DIC-144
+    /// <summary>溜めた音声が上限（AudioFormat.MaxDictationRecording）に達したとき。一度だけ呼ぶ</summary>
+    public event EventHandler? LimitReached;
 
     /// <summary>使えるマイクの一覧</summary>
     public static IReadOnlyList<MicrophoneInfo> ListMicrophones()
@@ -68,7 +74,11 @@ internal sealed class WasapiRecorder : IAudioRecorder
             encoding = EncodingOf(format);
             channels = format.Channels;
             resampler = new StreamingResampler(format.SampleRate, AudioFormat.SampleRate);
-            lock (gate) samples.Clear();
+            lock (gate)
+            {
+                samples.Clear();
+                limitNotified = false;
+            }
             stopped = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
             capture.DataAvailable += OnDataAvailable;
             capture.RecordingStopped += OnRecordingStopped;
@@ -117,12 +127,29 @@ internal sealed class WasapiRecorder : IAudioRecorder
         if (e.BytesRecorded == 0 || resampler is null) return;
         var mono = SampleConversion.ToMonoFloat(e.Buffer.AsSpan(0, e.BytesRecorded), encoding, channels);
         float[] converted;
+        var limitReached = false;
         lock (gate)
         {
             converted = resampler.Process(mono);
-            samples.AddRange(converted);
+            // 上限を超える分は溜めない（止める処理は LimitReached を受けた側が行う）
+            var room = MaxSamples - samples.Count;
+            if (room < converted.Length && !limitNotified)
+            {
+                limitNotified = true;
+                limitReached = true;
+            }
+            if (room >= converted.Length) samples.AddRange(converted);
+            else if (room > 0) samples.AddRange(converted.AsSpan(0, room).ToArray());
         }
         if (converted.Length > 0) SamplesAvailable?.Invoke(this, converted);
+        // 受けた側（DictationController）は UI スレッドで動く前提（クリップボードは STA、トレイも UI スレッド）。
+        // DataAvailable は録音のスレッドで来るので、UI スレッドに渡してから知らせる（DEC-DIC-144）
+        if (limitReached)
+        {
+            var dispatcher = System.Windows.Application.Current?.Dispatcher;
+            if (dispatcher is null || dispatcher.CheckAccess()) LimitReached?.Invoke(this, EventArgs.Empty);
+            else dispatcher.BeginInvoke(() => LimitReached?.Invoke(this, EventArgs.Empty));
+        }
     }
 
     private void OnRecordingStopped(object? sender, StoppedEventArgs e)

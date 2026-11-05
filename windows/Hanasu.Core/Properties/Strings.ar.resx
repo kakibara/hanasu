@@ -237,9 +237,6 @@
   <data name="ServiceAccount_Unreadable" xml:space="preserve">
     <value>تتعذر قراءة ملف JSON لحساب الخدمة.</value>
   </data>
-  <data name="ServiceAccount_TokenUriNotHttps" xml:space="preserve">
-    <value>قيمة token_uri في ملف JSON لحساب الخدمة ليست https.</value>
-  </data>
   <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
     <value>انتهت مهلة الحصول على رمز الوصول.</value>
   </data>
@@ -278,9 +275,6 @@
   </data>
   <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
     <value>محرك النسخ هو Gemini، لكن لم يتم تعيين بيانات اعتماد Gemini (القائمة ← الإعدادات ← AI).</value>
-  </data>
-  <data name="Transcription_GeminiTooLong" xml:space="preserve">
-    <value>التسجيل طويل جدًا لإرساله إلى Gemini (الحد الأقصى بالدقائق: {0}).</value>
   </data>
   <data name="Transcription_GeminiFailed" xml:space="preserve">
     <value>فشل النسخ باستخدام Gemini: {0}</value>

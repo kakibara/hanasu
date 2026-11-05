@@ -15,39 +15,6 @@
   <data name="App_AlreadyRunning" xml:space="preserve">
     <value>Hanasu قيد التشغيل بالفعل. يمكنك استخدامه من الأيقونة في منطقة الإعلامات.</value>
   </data>
-  <data name="Tray_Recent" xml:space="preserve">
-    <value>النتائج الأخيرة</value>
-  </data>
-  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>فتح ملاحظات الاجتماعات</value>
-  </data>
-  <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>فتح المحفوظات…</value>
-  </data>
-  <data name="Tray_Settings" xml:space="preserve">
-    <value>الإعدادات…</value>
-  </data>
-  <data name="Tray_Quit" xml:space="preserve">
-    <value>إنهاء</value>
-  </data>
-  <data name="Tray_StopAndType" xml:space="preserve">
-    <value>إيقاف التسجيل والكتابة</value>
-  </data>
-  <data name="Tray_StartDictation" xml:space="preserve">
-    <value>بدء الإملاء</value>
-  </data>
-  <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>إيقاف تسجيل الاجتماع ({0})</value>
-  </data>
-  <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>جارٍ بدء تسجيل الاجتماع…</value>
-  </data>
-  <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>جارٍ معالجة تسجيل الاجتماع…</value>
-  </data>
-  <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>بدء تسجيل الاجتماع</value>
-  </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — جارٍ تسجيل الاجتماع {0}</value>
   </data>
@@ -266,9 +233,6 @@
   <data name="CopyFailedClipboardBusy" xml:space="preserve">
     <value>تعذر النسخ (تطبيق آخر يستخدم الحافظة)</value>
   </data>
-  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>هل تريد حذف إدخالات المحفوظات المحددة (العدد: {0})؟</value>
-  </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>هل تريد حذف جميع إدخالات محفوظات الإملاء (العدد: {0})؟ لا يمكن التراجع عن هذا الإجراء.</value>
   </data>
@@ -403,9 +367,6 @@
   </data>
   <data name="Meeting_SaveFailed" xml:space="preserve">
     <value>تعذر الحفظ: {0}</value>
-  </data>
-  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>هل تريد تغيير قالب المحضر إلى "{0}" وإعادة إنشاء المحضر؟</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>تمت إعادة إنشاء المحضر ({0} ثانية)</value>
@@ -547,9 +508,6 @@
   <data name="Settings_OpenLanguageSettings" xml:space="preserve">
     <value>فتح إعدادات اللغة</value>
   </data>
-  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>ينسخ على هذا الكمبيوتر باستخدام whisper.cpp (لا يغادر الصوت جهازك أبدًا). يتم النسخ بعد إيقاف التسجيل. يؤدي تحديد نموذج إلى تنزيله من Hugging Face. النماذج الأكبر أكثر دقة لكنها أبطأ.</value>
-  </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>النموذج</value>
   </data>
@@ -651,9 +609,6 @@
   </data>
   <data name="Settings_Region" xml:space="preserve">
     <value>المنطقة</value>
-  </data>
-  <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>اختر مفتاح حساب خدمة لديه الدور Vertex AI User (roles/aiplatform.user). يتم حفظ موقع ملف المفتاح فقط (لا يتم نسخ محتوياته). احتفظ بملف المفتاح في مكان لا يستطيع الآخرون قراءته. المنطقة الافتراضية هي global.</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>مفتاح API الخاص بـ Claude</value>
@@ -798,9 +753,6 @@
   </data>
   <data name="Settings_Saved" xml:space="preserve">
     <value>تم الحفظ</value>
-  </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>مطابق لاختصار آخر (الإملاء أو الترجمة أو الاجتماعات)</value>
   </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>يستخدم محرك Windows الميكروفون الافتراضي في Windows (يمكنك تغييره في إعدادات Windows ← النظام ← الصوت).</value>

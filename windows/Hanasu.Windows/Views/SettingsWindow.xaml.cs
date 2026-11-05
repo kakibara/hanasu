@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -36,6 +37,7 @@ public partial class SettingsWindow : Window
         this.host = host;
         settings = host.Settings;
         InitializeComponent();
+        WindowFit.FitToMouseScreen(this);
         LoadValues();
         loading = false;
 
@@ -160,12 +162,27 @@ public partial class SettingsWindow : Window
 
     // MARK: - 一般
 
+    // 設計判断: DEC-COM-018
+    /// <summary>
+    /// combo が、self 以外のショートカットと同じなら、その説明（「… は「会議の記録」のショートカットと同じです…」）。重なっていなければ null。
+    /// Mac 版の ShortcutKind.conflict と同じ考え
+    /// </summary>
+    /// <summary>ほかのショートカットと同じなら、その知らせ（self は自分の種類: dictation / translate / meeting / highlight）</summary>
+    private string? ConflictingShortcut(HotKeyCombo combo, string self)
+    {
+        var s = settings.Current;
+        var all = new (string Id, string Name, HotKeyCombo Combo)[]
+        {
+            ("dictation", Strings.Settings_Dictation, s.HotKey), ("translate", Strings.Settings_TranslateAndType, s.TranslateHotKey),
+            ("meeting", Strings.Settings_MeetingRecordingName, s.MeetingHotKey), ("highlight", Strings.Settings_HighlightMark, s.HighlightHotKey),
+        };
+        var other = all.FirstOrDefault(x => x.Id != self && x.Combo == combo);
+        return other.Id is null ? null : string.Format(Strings.Settings_HotKeyConflict, combo.DisplayString, other.Name);
+    }
+
     private void SetHotKey(HotKeyCombo combo, bool translate)
     {
-        var problem = combo.Validate();
-        var current = settings.Current;
-        var others = new[] { translate ? current.HotKey : current.TranslateHotKey, current.MeetingHotKey, current.HighlightHotKey };
-        if (problem is null && others.Contains(combo)) problem = Strings.Settings_HotKeyDuplicate;
+        var problem = combo.Validate() ?? ConflictingShortcut(combo, translate ? "translate" : "dictation");
         if (problem is not null)
         {
             HotKeyError.Text = problem;
@@ -220,6 +237,8 @@ public partial class SettingsWindow : Window
     private void OnPasteFallbackChanged(object sender, RoutedEventArgs e) =>
         Save(s => s.PasteFallbackClipboard = FallbackRestoreRadio.IsChecked == true ? PasteFallbackClipboard.RestoreOriginal : PasteFallbackClipboard.KeepResult);
 
+    private void OnOpenMicrophonePrivacy(object sender, RoutedEventArgs e) => Shell.Open("ms-settings:privacy-microphone");
+
     private void OnOpenSpeechPrivacy(object sender, RoutedEventArgs e) => Shell.Open("ms-settings:privacy-speech");
 
     private void OnOpenLanguageSettings(object sender, RoutedEventArgs e) => Shell.Open("ms-settings:regionlanguage");
@@ -267,7 +286,7 @@ public partial class SettingsWindow : Window
         var count = host.History.Entries.Count;
         if (count == 0) return;
         if (MessageBox.Show(this, string.Format(Strings.History_ConfirmDeleteAll, count), "Hanasu",
-                MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) return;
+                MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         host.History.DeleteAll();
         UpdateHistoryStatus();
     }
@@ -313,7 +332,7 @@ public partial class SettingsWindow : Window
     {
         if (SelectedWhisperModel is not { } model) return;
         if (MessageBox.Show(this, string.Format(Strings.Settings_ConfirmDeleteWhisper, model.Id, model.SizeLabel), "Hanasu",
-                MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
+                MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         try
         {
             // 読み込み中のモデルはファイルを開いているので、先に手放す
@@ -341,9 +360,11 @@ public partial class SettingsWindow : Window
         WhisperDeleteButton.Visibility = state.Status == WhisperModelStatus.Downloaded ? Visibility.Visible : Visibility.Collapsed;
         WhisperProgress.Visibility = state.Status == WhisperModelStatus.Downloading ? Visibility.Visible : Visibility.Collapsed;
         WhisperProgress.Value = state.Progress;
+        // 設計判断: DEC-COM-028（大きさを先に見せる。Mac 版と同じ）
+        WhisperDownloadButton.Content = string.Format(Strings.Settings_DownloadWithSize, model.SizeLabel);
         WhisperStatus.Text = state.Status switch
         {
-            WhisperModelStatus.Downloading => string.Format(Strings.Settings_Downloading, state.Progress.ToString("P0")),
+            WhisperModelStatus.Downloading => string.Format(Strings.Settings_DownloadingWithSize, state.Progress.ToString("P0"), model.SizeLabel),
             WhisperModelStatus.Downloaded => Strings.Settings_Downloaded,
             WhisperModelStatus.Failed => string.Format(Strings.Settings_DownloadFailed, state.Error),
             _ => Strings.Settings_NotDownloaded,
@@ -410,7 +431,7 @@ public partial class SettingsWindow : Window
     {
         if (LocalModelOf(sender) is not { } model) return;
         if (MessageBox.Show(this, string.Format(Strings.Settings_ConfirmDeleteLocal, model.Name, model.SizeLabel), "Hanasu",
-                MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
+                MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         try
         {
             host.LocalLlmModels.Delete(model);
@@ -520,15 +541,61 @@ public partial class SettingsWindow : Window
 
     private void OnSaveApiKey(object sender, RoutedEventArgs e) => _ = SaveKeyAsync(SecretKind.GeminiApiKey, ApiKeyBox, ApiKeyStatus);
 
-    private void OnDeleteApiKey(object sender, RoutedEventArgs e) => _ = DeleteKeyAsync(SecretKind.GeminiApiKey, ApiKeyBox, ApiKeyStatus);
+    private void OnDeleteApiKey(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmDeleteKey("Gemini")) return;
+        _ = DeleteKeyAsync(SecretKind.GeminiApiKey, ApiKeyBox, ApiKeyStatus);
+    }
+
+    private bool ConfirmDeleteKey(string name) =>
+        MessageBox.Show(this, string.Format(Strings.Settings_ConfirmDeleteKey, name), "Hanasu",
+            MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) == MessageBoxResult.OK;
 
     private void UpdateApiKeyStatus() => ApiKeyStatus.Text = host.Secrets.Describe(SecretKind.GeminiApiKey).Describe();
+
+    // 設計判断: DEC-COM-143
+    /// <summary>
+    /// Gemini の「接続を試す」（Claude の OnCheckClaude と同じ）。API キーの入力欄にキーがあればそのキーで（保存はしない）、
+    /// なければ設定の認証（保存したキーかサービスアカウント）で、音声入力の Gemini のモデルの情報を取る
+    /// </summary>
+    private async void OnCheckGemini(object sender, RoutedEventArgs e)
+    {
+        var s = settings.Current;
+        var apiKeyMode = s.AuthMode == GeminiAuthMode.ApiKey;
+        var typed = apiKeyMode ? ApiKeyBox.Password.Trim() : "";
+        var status = apiKeyMode ? ApiKeyStatus : ServiceAccountStatus;
+        var model = s.Model;
+        GeminiCheckButton.IsEnabled = GeminiCheckServiceAccountButton.IsEnabled = false;
+        status.Text = apiKeyMode ? Strings.Settings_ConnectingGemini : Strings.Settings_ConnectingVertex;
+        try
+        {
+            GeminiAuth auth = typed.Length > 0
+                ? new GeminiAuth.ApiKey(typed)
+                : GeminiAuthResolver.Resolve(s, host.Secrets) ?? throw GeminiException.MissingCredentials();
+            await new GeminiClient(auth).CheckAsync(model);
+            status.Text = typed.Length > 0
+                ? string.Format(Strings.Settings_ConnectedUnsavedKey, model)
+                : string.Format(Strings.Settings_ConnectedModel, model, apiKeyMode ? host.Secrets.Describe(SecretKind.GeminiApiKey).Describe() : "").TrimEnd();
+        }
+        catch (Exception ex) when (ex is TextAiException or ServiceAccountException or HttpRequestException or IOException)
+        {
+            status.Text = ex.Message;
+        }
+        finally
+        {
+            GeminiCheckButton.IsEnabled = GeminiCheckServiceAccountButton.IsEnabled = true;
+        }
+    }
 
     // MARK: - Claude の API キー
 
     private void OnSaveClaudeKey(object sender, RoutedEventArgs e) => _ = SaveKeyAsync(SecretKind.ClaudeApiKey, ClaudeKeyBox, ClaudeKeyStatus);
 
-    private void OnDeleteClaudeKey(object sender, RoutedEventArgs e) => _ = DeleteKeyAsync(SecretKind.ClaudeApiKey, ClaudeKeyBox, ClaudeKeyStatus);
+    private void OnDeleteClaudeKey(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmDeleteKey("Claude")) return;
+        _ = DeleteKeyAsync(SecretKind.ClaudeApiKey, ClaudeKeyBox, ClaudeKeyStatus);
+    }
 
     private void UpdateClaudeKeyStatus() => ClaudeKeyStatus.Text = host.Secrets.Describe(SecretKind.ClaudeApiKey).Describe();
 
@@ -744,10 +811,7 @@ public partial class SettingsWindow : Window
 
     private void SetMeetingHotKey(HotKeyCombo combo, bool highlight)
     {
-        var problem = combo.Validate();
-        var s = settings.Current;
-        var others = new[] { s.HotKey, s.TranslateHotKey, highlight ? s.MeetingHotKey : s.HighlightHotKey };
-        if (problem is null && others.Contains(combo)) problem = Strings.Settings_HotKeyDuplicate;
+        var problem = combo.Validate() ?? ConflictingShortcut(combo, highlight ? "highlight" : "meeting");
         if (problem is not null)
         {
             MeetingHotKeyError.Text = problem;

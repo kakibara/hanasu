@@ -16,37 +16,37 @@
     <value>Hanasu はすでに起動しています。タスクトレイのアイコンから使えます。</value>
   </data>
   <data name="Tray_Recent" xml:space="preserve">
-    <value>最近の結果</value>
+    <value>最近の結果(&amp;E)</value>
   </data>
   <data name="Tray_OpenMeetingNotes" xml:space="preserve">
-    <value>会議ノートを開く</value>
+    <value>会議ノートを開く(&amp;N)…</value>
   </data>
   <data name="Tray_OpenHistory" xml:space="preserve">
-    <value>履歴を開く…</value>
+    <value>履歴を開く(&amp;H)…</value>
   </data>
   <data name="Tray_Settings" xml:space="preserve">
-    <value>設定…</value>
+    <value>設定(&amp;S)…</value>
   </data>
   <data name="Tray_Quit" xml:space="preserve">
-    <value>終了</value>
+    <value>Hanasu を終了(&amp;X)</value>
   </data>
   <data name="Tray_StopAndType" xml:space="preserve">
-    <value>録音を止めて入力</value>
+    <value>録音を停止して入力(&amp;R)</value>
   </data>
   <data name="Tray_StartDictation" xml:space="preserve">
-    <value>音声入力を開始</value>
+    <value>録音を開始(&amp;R)</value>
   </data>
   <data name="Tray_StopMeeting" xml:space="preserve">
-    <value>会議の記録を停止（{0}）</value>
+    <value>会議の記録を停止（{0}）(&amp;M)</value>
   </data>
   <data name="Tray_MeetingStarting" xml:space="preserve">
-    <value>会議の記録を始めています…</value>
+    <value>会議の記録を準備中…</value>
   </data>
   <data name="Tray_MeetingProcessing" xml:space="preserve">
-    <value>会議の記録を処理しています…</value>
+    <value>会議の記録を処理中…</value>
   </data>
   <data name="Tray_StartMeeting" xml:space="preserve">
-    <value>会議の記録を開始</value>
+    <value>会議の記録を開始(&amp;M)</value>
   </data>
   <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
     <value>Hanasu — 会議を記録中 {0}</value>
@@ -267,7 +267,7 @@
     <value>コピーできませんでした（ほかのアプリがクリップボードを使っています）</value>
   </data>
   <data name="History_ConfirmDeleteSelected" xml:space="preserve">
-    <value>選んだ {0} 件の履歴を削除しますか？</value>
+    <value>選んだ {0} 件の履歴を削除しますか？元に戻せません。</value>
   </data>
   <data name="History_ConfirmDeleteAll" xml:space="preserve">
     <value>音声入力の履歴 {0} 件をすべて削除しますか？元に戻せません。</value>
@@ -405,7 +405,9 @@
     <value>保存できませんでした: {0}</value>
   </data>
   <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
-    <value>議事録の型を「{0}」にして、議事録を作り直しますか？</value>
+    <value>議事録の型を「{0}」にして、議事録を作り直しますか？
+
+今の議事録とアクションアイテムは置き換わります。</value>
   </data>
   <data name="Meeting_Regenerated" xml:space="preserve">
     <value>議事録を作り直しました（{0} 秒）</value>
@@ -548,7 +550,7 @@
     <value>言語の設定を開く</value>
   </data>
   <data name="Settings_Engine_WhisperNote" xml:space="preserve">
-    <value>whisper.cpp でこの PC の上で文字起こしします（音声は外に出ません）。録音を止めてからまとめて文字起こしします。モデルを選ぶと Hugging Face からダウンロードします。大きいモデルほど精度は上がりますが、遅くなります。</value>
+    <value>whisper.cpp でこの PC の上で文字起こしします（音声は外に出ません）。録音を止めてからまとめて文字起こしします。エンジンかモデルを選んだ時点で、選んでいるモデル（大きさは一覧に出ています）を Hugging Face からダウンロードし始めます（「取り消し」で止められます）。大きいモデルほど精度は上がりますが、遅くなります。</value>
   </data>
   <data name="Settings_Model" xml:space="preserve">
     <value>モデル</value>
@@ -653,7 +655,7 @@
     <value>リージョン</value>
   </data>
   <data name="Settings_ServiceAccountNote" xml:space="preserve">
-    <value>Vertex AI ユーザー（roles/aiplatform.user）の権限があるサービスアカウントの鍵を選びます。鍵のファイルの場所だけを保存します（中身は写しません）。鍵のファイルはほかの人が読めない場所に置いてください。リージョンは global が既定です。</value>
+    <value>Vertex AI ユーザー（roles/aiplatform.user）の権限があるサービスアカウントの鍵を選びます。鍵のファイルの場所だけを保存します（中身は写しません）。鍵のファイルはほかの人が読めない場所に置いてください。リージョンは global が既定です。「接続を試す」はモデルの情報を取るだけで、料金はかかりません。</value>
   </data>
   <data name="Settings_ClaudeApiKey" xml:space="preserve">
     <value>Claude の API キー</value>
@@ -799,9 +801,6 @@
   <data name="Settings_Saved" xml:space="preserve">
     <value>保存しました</value>
   </data>
-  <data name="Settings_HotKeyDuplicate" xml:space="preserve">
-    <value>ほかのショートカット（音声入力・翻訳・会議）と同じです</value>
-  </data>
   <data name="Settings_MicNote_Windows" xml:space="preserve">
     <value>Windows 標準のエンジンは、Windows の既定のマイクを使います（Windows の設定 → システム → サウンド で変えられます）。</value>
   </data>
@@ -915,5 +914,175 @@
   </data>
   <data name="Mic_UnsupportedFormat" xml:space="preserve">
     <value>対応していない録音の形式です（{0}）</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>翻訳して入力を開始(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>英訳して入力を開始(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>和訳して入力を開始(&amp;T)</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>この履歴を削除しますか？元に戻せません。</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>履歴を検索</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>結果</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>原文</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>「ここ重要」がありません</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>「ここ重要」を Markdown でコピーしました</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>自分のマイクの音量</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>相手の音の大きさ</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>メモを入力</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>議事録</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>文字起こし</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>「ここ重要」の前後</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>メモ</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>音声入力のショートカット</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>音声入力のショートカットを既定に戻す</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>翻訳して入力のショートカット</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>翻訳して入力のショートカットを既定に戻す</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>選んだ Whisper のモデルを削除</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>マイク</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Gemini の API キーを削除</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Gemini の接続を試す</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Claude の API キーを削除</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>会議の記録の開始・停止のショートカット</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>会議の記録のショートカットを既定に戻す</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>「ここ重要」のショートカット</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>「ここ重要」のショートカットを既定に戻す</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>会議の保存先を既定に戻す</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} は「{1}」のショートカットと同じです。別のキーを選んでください。</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>会議の記録</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>ダウンロード中… {0}（{1}）</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>履歴の一覧</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>まだ履歴がありません。音声入力をすると、ここに残ります。</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>条件に一致する履歴がありません。</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>選択中</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>会議の一覧</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>会議の一覧を読み込んでいます…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>会議のタイトル</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>会議の一覧を読み込めませんでした。</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>まだ会議の記録がありません。左下の「● 会議の記録を開始」で記録を始めると、ここに並びます。</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>議事録を作り直しますか？</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>メモを保存して、議事録を作り直しますか？</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+今の議事録とアクションアイテムは置き換わります。</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>保存先のフォルダが見つかりません</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>マイクのプライバシー設定を開く</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>マイクを使えないときは、Windows の設定 → プライバシーとセキュリティ → マイク で、デスクトップ アプリのマイクへのアクセスをオンにしてください</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>「接続を試す」はモデルの情報を取るだけで、料金はかかりません。</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Vertex AI の接続を試す</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>ダウンロード（{0}）</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>保存した {0} の API キーを削除しますか？使い続けるには、もう一度キーを保存してください。</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Gemini API に接続しています…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Vertex AI に接続しています…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>このキーで接続できました（まだ保存していません）。{0} を使えます。</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>接続できました。{0} を使えます。{1}</value>
   </data>
 </root>
