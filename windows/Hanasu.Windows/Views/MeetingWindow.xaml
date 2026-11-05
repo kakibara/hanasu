@@ -38,7 +38,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- 左: 記録中の表示・会議の一覧・記録の開始 -->
-        <!-- 設計判断: DEC-COM-151（固定色の面はハイコントラストで OS の色に差し替える。App.xaml） -->
+        <!-- 設計判断: DEC-COM-153（固定色の面はハイコントラストで OS の色に差し替える。App.xaml） -->
         <Border Grid.Column="0" Style="{StaticResource SidePane}" BorderThickness="0,0,1,0">
             <DockPanel Margin="10">
                 <Border x:Name="LiveBox" DockPanel.Dock="Top" Style="{StaticResource LivePane}" CornerRadius="6" Padding="10,8" Margin="0,0,0,8" Visibility="Collapsed">

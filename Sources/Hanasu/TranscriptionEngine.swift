@@ -249,7 +249,7 @@ enum BatchTranscriptionError: LocalizedError {
         case .whisperModelMissing(let model):
             "Whisper のモデル（\(model.rawValue)）がまだダウンロードされていません。設定の「一般」→「文字起こし」でダウンロードしてください"
         case .noCredentials:
-            "Gemini で文字起こしするには、Gemini の認証情報（設定の「Gemini」タブ）が必要です"
+            "Gemini で文字起こしするには、Gemini の認証情報（設定の「AI」）が必要です"
         case .appleNotBatch:
             "Mac 標準のエンジンは、まとめての文字起こしに使えません"
         }

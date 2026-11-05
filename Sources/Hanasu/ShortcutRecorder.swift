@@ -55,17 +55,26 @@ struct ShortcutRecorder: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            HStack {
+            HStack(spacing: 6) {
+                // 初期値に戻すボタンは左に置き、キーの欄の幅と位置が変わらないようにする
+                if combo != defaultCombo && !isRecording {
+                    Button {
+                        apply(defaultCombo)
+                    } label: {
+                        Image(systemName: "arrow.uturn.backward.circle.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.borderless)
+                    .help("初期値（\(defaultCombo.displayString)）に戻す")
+                    .accessibilityLabel("初期値に戻す")
+                }
                 Button(action: toggle) {
                     Text(isRecording ? "キーを押してください（Esc で取消）" : combo.displayString)
-                        .frame(minWidth: 180)
+                        .fontWeight(isRecording ? .regular : .medium)
+                        .frame(minWidth: 150)
                 }
                 .buttonStyle(.bordered)
                 .tint(isRecording ? .accentColor : nil)
-                if combo != defaultCombo {
-                    Button("初期値に戻す") { apply(defaultCombo) }
-                        .buttonStyle(.link)
-                }
             }
             if let conflictMessage {
                 Label(conflictMessage, systemImage: "exclamationmark.triangle.fill")

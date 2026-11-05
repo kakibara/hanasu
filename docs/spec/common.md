@@ -929,7 +929,16 @@
 - 対象: Windows
 - 実装の場所: `windows/Directory.Build.props`、`.github/workflows/windows.yml`、`.github/workflows/tagpr.yml`（リリースの Windows 版のビルド）
 
-### DEC-COM-151 Windows 版の固定色の面は、ハイコントラストのテーマでは OS の色に差し替える。HUD はそのまま
+### DEC-COM-151 Mac の設定画面は、左のサイドバーで項目を切り替える
+- 決めたこと: 設定のウインドウを、上のタブ（`TabView`）から、システム設定と同じ左のサイドバー（`NavigationSplitView`）に変える。項目（一般・AI・辞書・ルール・アプリ別・スニペット・会議・履歴・権限）と順番は変えず、それぞれに色付きの角丸のアイコンを付け、右側の上に項目の名前を出す。ウインドウは大きさを変えられ（最小 700×480、初めは 780×600）、位置と大きさを覚える。最後に開いていた項目を、次に開いたときも出す（UserDefaults の `settingsPane`）。ショートカットの欄は、キーの欄の幅を変えず、「初期値に戻す」をその左の小さなボタンにする。権限の欄は、許可済み・未許可を色付きの印で出す。画面の文言の「「AI」タブ」などは「設定の「AI」」にした。
+- 理由: ユーザーの依頼（2026-11-05「Mac の設定画面をもう少しモダンにして」）。8 つのタブが上に詰まって並び、窓が 560×460 の固定で、長い「一般」などが狭かった。サイドバーなら項目が増えても並べられ、今の macOS の設定画面と同じ見た目と操作になる。ウインドウの大きさを中身に合わせないのは、会議ノート（`AppDelegate.makeMeetingWindow`）と同じ理由（長い項目を開くと縦に伸びる）。
+- 決めた場面: 設定画面をサイドバーにした PR
+- 関係する要件: REQ-COM-040
+- 対象: Mac
+- 実装の場所: `SettingsView`、`SettingsPane`、`SettingsPaneIcon`、`AppDelegate.makeSettingsWindow`、`ShortcutRecorder`
+- 確かめ方: `.build/debug/Hanasu --render-settings /tmp/settings [--pane ai] [--dark]`
+
+### DEC-COM-153 Windows 版の固定色の面は、ハイコントラストのテーマでは OS の色に差し替える。HUD はそのまま
 - 決めたこと: 会議ノートの左の欄（`#FAFAFA`）・「● 記録中」の表示（`#FDECEA`）・記録中のメモ欄（`#F6F8FC`）・設定の試し書きの出力（`#F7F7F7`）は、通常のテーマでは今までの色のまま、ハイコントラストのテーマ（`SystemParameters.HighContrast`）では背景を OS の `Window` / `Control` の色、枠を `WindowFrame`（記録中は `Highlight`）の色に差し替える（`App.xaml` の `SidePane` / `LivePane` / `LiveTitle` / `InnerPane` / `ReadOnlyOutput` のスタイル。ウインドウを作るときに読むので、テーマを変えたあとは開き直す）。会議の一覧の補足と鉛筆の印の灰色（`#5F6368`）も `GrayText` にする。音声入力の HUD（濃い半透明の背景に白い文字）は変えない。
 - 理由: 補足の文は PR #65 で `GrayText` にしたが、面の色が固定のままだと、ハイコントラスト（黒い背景に白い文字）で白っぽい面に白い文字が載って読めない。HUD は Mac 版と同じ、前面に浮かぶ独自の見た目で、背景（`#1E2126`、不透明度 95%）と白い文字のコントラストは十分にあり、OS の色に差し替えると録音中の赤い停止ボタンなどの意味の色も失う。
 - 決めた場面: PR #65 の判断事項の対応（2026-11-05）

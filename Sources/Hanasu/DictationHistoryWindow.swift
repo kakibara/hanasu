@@ -564,7 +564,7 @@ private struct TextSection: View {
     }
 }
 
-// MARK: - 設定画面の「履歴」タブ
+// MARK: - 設定画面の「履歴」
 
 struct HistorySettingsTab: View {
     @ObservedObject var settings = HistorySettings.shared

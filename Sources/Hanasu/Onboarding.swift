@@ -380,7 +380,7 @@ struct OnboardingAIPage: View {
         VStack(spacing: 0) {
             OnboardingHeader(
                 symbol: "sparkles", title: "使う AI を選ぶ",
-                subtitle: "話した内容を整える・翻訳する・議事録をまとめるのに使う AI です。おすすめは、この Mac の中で動く Gemma です。あとから設定の「AI」タブで変えられます。")
+                subtitle: "話した内容を整える・翻訳する・議事録をまとめるのに使う AI です。おすすめは、この Mac の中で動く Gemma です。あとから設定の「AI」で変えられます。")
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
                 ForEach(OnboardingAIChoice.allCases) { choice in
                     card(choice)
@@ -448,7 +448,7 @@ struct OnboardingAIPage: View {
         .opacity(unavailable == nil ? 1 : 0.55)
     }
 
-    /// 選んだ AI の準備の欄（Gemini・Claude・Apple は設定の「AI」タブと同じ部品）
+    /// 選んだ AI の準備の欄（Gemini・Claude・Apple は設定の「AI」と同じ部品）
     @ViewBuilder private func preparation(for provider: TextAIProvider) -> some View {
         Form {
             switch provider {
@@ -472,7 +472,7 @@ struct OnboardingAIPage: View {
 
 // 要件: REQ-COM-050
 // 設計判断: DEC-COM-094
-/// Gemma のダウンロードの欄。ボタンで始め、進み具合と中止を出す（設定の「AI」タブと同じ LocalLLMStore を使う）
+/// Gemma のダウンロードの欄。ボタンで始め、進み具合と中止を出す（設定の「AI」と同じ LocalLLMStore を使う）
 struct OnboardingGemmaDownload: View {
     @ObservedObject var store = LocalLLMStore.shared
     private let model = OnboardingAIChoice.gemmaModel
@@ -624,7 +624,7 @@ private struct OnboardingWordsPage: View {
 
 // 要件: REQ-COM-051
 // 設計判断: DEC-COM-092
-/// 設定の Tips。AI とモデルは、この画面の中で選べる（設定の「AI」タブと同じ部品）
+/// 設定の Tips。AI とモデルは、この画面の中で選べる（設定の「AI」と同じ部品）
 struct OnboardingTipsPage: View {
     @ObservedObject var settings: AppSettings
 
@@ -693,7 +693,7 @@ struct OnboardingPermissionsPage: View {
     var body: some View {
         VStack(spacing: 0) {
             OnboardingHeader(symbol: "checkmark.shield", title: "最後に、許可をお願いします",
-                             subtitle: "Hanasu が動くのに要る許可です。あとから設定の「権限」タブでもできます。")
+                             subtitle: "Hanasu が動くのに要る許可です。あとから設定の「権限」でもできます。")
             Form {
                 Section {
                     row(title: "アクセシビリティ",

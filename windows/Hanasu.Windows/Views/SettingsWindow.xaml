@@ -296,7 +296,7 @@
                             <Button x:Name="TrialTranslateJapaneseButton" Content="和訳を試す" Click="OnTrialTranslateJapanese" Visibility="Collapsed" />
                             <TextBlock x:Name="TrialStatus" Style="{StaticResource Note}" VerticalAlignment="Center" />
                         </StackPanel>
-                        <!-- 設計判断: DEC-COM-151（ハイコントラストでは OS の色。App.xaml） -->
+                        <!-- 設計判断: DEC-COM-153（ハイコントラストでは OS の色。App.xaml） -->
                         <TextBox x:Name="TrialOutput" IsReadOnly="True" TextWrapping="Wrap" MinHeight="56" Margin="0,6,0,0" Padding="4,3" Style="{StaticResource ReadOnlyOutput}" />
                     </StackPanel>
                 </ScrollViewer>

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
-        <!-- 設計判断: DEC-COM-151 -->
+        <!-- 設計判断: DEC-COM-153 -->
         <!-- 固定の色で塗る面（会議ノートの左の欄・記録中の表示・記録中のメモ欄・設定の試し書きの出力）。
              通常のテーマでは今までの色、ハイコントラストのテーマでは OS の色（背景は Window / Control、枠は WindowFrame）に差し替えて、
              文字（OS の色）と背景のコントラストを保つ。SystemParameters.HighContrast はウインドウを作るときに読む -->
