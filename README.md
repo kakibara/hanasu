@@ -64,6 +64,7 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Hanasu is free a
 | **AI minutes** | Made by the AI you choose for meetings. Choose a template: auto, weekly sync, 1-on-1, sales call, brainstorm, or custom. Action items include an owner and a due date. |
 | **Live notes & highlights** | Type timestamped notes during the call, or press <kbd>⌃⌥⌘ H</kbd> to mark "this matters" (you can undo it for 10 seconds). The minutes give those parts priority, and afterwards you can read the conversation around each mark. |
 | **Floating captions** *(Mac)* | Show the live transcript as captions on top of your meeting app. |
+| **AI chat during the meeting** *(Mac)* | While recording, ask the AI about the conversation so far (<kbd>⌘J</kbd>). One click for "summarize so far" or "decisions & to-dos". Ask follow-ups, and click a timestamp in an answer to jump to that part of the transcript. |
 | **Meeting detection** | When a meeting app starts using the mic, Hanasu asks whether to record. It never starts recording on its own. |
 | **Search & Ask** | Search the text of every meeting, or ask "What did we decide in last week's sync?". The answer cites the meetings it used. |
 | **Export** | Copy as Markdown or as a summary ready for Slack, save as `.md` / `.txt`, or send action items to Reminders. |
@@ -173,7 +174,7 @@ You can change every shortcut in Settings. The full user guide (in Japanese) is 
 ## Privacy
 
 - **Audio stays on your device by default.** Speech recognition, Whisper and speaker diarization all run locally.
-- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask.
+- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask and the meeting AI chat.
 - **Local and Apple keep text on your device too.** If you choose either one, nothing is sent to an AI service. The only download is the model itself.
 - **Audio goes to Google only if you choose it.** If you select the Gemini speech engine, the recorded audio is sent to Google.
 - **Meetings are plain files.** They are saved as JSON and Markdown under `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac and Windows use the same format.
