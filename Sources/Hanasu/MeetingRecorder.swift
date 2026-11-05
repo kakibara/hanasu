@@ -342,7 +342,7 @@ final class MeetingRecorder: ObservableObject {
             if let template {
                 source.minutesTemplate = template.rawValue
                 source.customMinutesPrompt = template == .custom ? customPrompt : nil
-                // 要件: REQ-MTG-034
+                // 要件: REQ-MTG-042
                 source.minutesTemplateName = template == .custom ? templateName : nil
             }
             let result = try await MeetingProcessor.makeMinutes(

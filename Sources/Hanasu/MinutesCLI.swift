@@ -15,7 +15,7 @@ import SwiftUI
 //   Hanasu --render-minutes-ui <出力フォルダ> [--meeting-json <meeting.json>]
 //     議事録の型の選択欄（保存したテンプレート入りも）・テンプレートの管理・会議ノートの詳細・リマインダー登録・カスタムの指示の画面を PNG にする（見た目の確認用）。
 // --meeting-files にも --template / --custom-prompt を付けられる。
-// 確かめ方: REQ-MTG-006, REQ-MTG-007, REQ-MTG-017, REQ-MTG-018, REQ-MTG-019, REQ-MTG-027, REQ-MTG-028, REQ-MTG-029, REQ-MTG-034
+// 確かめ方: REQ-MTG-006, REQ-MTG-007, REQ-MTG-017, REQ-MTG-018, REQ-MTG-019, REQ-MTG-027, REQ-MTG-028, REQ-MTG-029, REQ-MTG-042
 @MainActor
 enum MinutesCLI {
     static func runIfRequested(_ args: [String] = CommandLine.arguments) {
@@ -73,7 +73,7 @@ enum MinutesCLI {
 
     // MARK: - 名前付きテンプレート
 
-    // 確かめ方: REQ-MTG-034
+    // 確かめ方: REQ-MTG-042
     /// 名前付きテンプレートの保存まわりを、専用の UserDefaults で確かめる。全部通れば true
     private static func savedTemplatesSelfTest() -> Bool {
         let suite = "dev.mactypeless.Hanasu.saved-templates-selftest"
@@ -331,7 +331,7 @@ enum MinutesCLI {
         let custom = CustomMinutesPromptSheet(prompt: MinutesTemplateStore.defaultCustomPrompt, actionLabel: "作り直す") { _ in }
         try render(custom, to: dir.appendingPathComponent("custom-prompt-sheet.png"))
 
-        // 要件: REQ-MTG-034
+        // 要件: REQ-MTG-042
         // 保存したテンプレートを入れた選択欄と、管理のシート
         var samples: [SavedMinutesTemplate] = []
         _ = SavedMinutesTemplateStore.add(name: "営業定例", instructions: "## 数字の共有\n## 課題\n## 来週やること", to: &samples)

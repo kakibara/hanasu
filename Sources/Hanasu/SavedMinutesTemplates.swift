@@ -1,6 +1,6 @@
 import Foundation
 
-// 要件: REQ-MTG-034
+// 要件: REQ-MTG-042
 // 設計判断: DEC-MTG-071
 /// 名前を付けて保存した議事録のテンプレート（見出しの構成や書き方の指示）。
 struct SavedMinutesTemplate: Codable, Identifiable, Hashable {

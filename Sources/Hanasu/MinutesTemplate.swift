@@ -282,7 +282,7 @@ extension Meeting {
         minutesTemplate.flatMap(MinutesTemplate.init(rawValue:)) ?? .auto
     }
 
-    // 要件: REQ-MTG-034
+    // 要件: REQ-MTG-042
     /// 表示用の型の名前（保存したテンプレートで作ったときはその名前）
     var templateTitle: String {
         if template == .custom, let name = minutesTemplateName, !name.isEmpty { return name }
@@ -313,7 +313,7 @@ enum MinutesTemplateStore {
     /// 選んでいる組み込みの型（保存したテンプレートを選んでいるときは .custom）
     static var selected: MinutesTemplate { resolve().template }
 
-    // 要件: REQ-MTG-034
+    // 要件: REQ-MTG-042
     /// 選んでいる保存済みのテンプレート（選んでいない・消した・見つからないときは nil）
     static var selectedSaved: SavedMinutesTemplate? { resolve().saved }
 
@@ -321,7 +321,7 @@ enum MinutesTemplateStore {
         UserDefaults.standard.string(forKey: customPromptKey) ?? defaultCustomPrompt
     }
 
-    // 要件: REQ-MTG-034
+    // 要件: REQ-MTG-042
     /// 選んでいる型を読む。保存したテンプレートを選んでいて、それが見つかれば「カスタム」と、そのテンプレート。
     /// 消されていたら「自動」に戻す。
     static func resolve(_ defaults: UserDefaults = .standard) -> (template: MinutesTemplate, saved: SavedMinutesTemplate?) {
@@ -339,7 +339,7 @@ enum MinutesTemplateStore {
         let (template, saved) = resolve(defaults)
         meeting.minutesTemplate = template.rawValue
         if let saved {
-            // 要件: REQ-MTG-034
+            // 要件: REQ-MTG-042
             // 保存したテンプレートは、その時点の指示を会議に写す（あとでテンプレートを直しても、この会議は変わらない）
             meeting.customMinutesPrompt = saved.instructions
             meeting.minutesTemplateName = saved.name

@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-// 要件: REQ-MTG-017, REQ-MTG-034
+// 要件: REQ-MTG-017, REQ-MTG-042
 /// 記録を始める前に議事録の型を選ぶ欄（会議ノートの左下）。保存したテンプレートも選べる
 struct MinutesTemplatePicker: View {
     @AppStorage(MinutesTemplateStore.templateKey) private var templateID = MinutesTemplate.auto.rawValue
@@ -63,7 +63,7 @@ struct MinutesTemplatePicker: View {
     }
 }
 
-// 要件: REQ-MTG-017, REQ-MTG-034
+// 要件: REQ-MTG-017, REQ-MTG-042
 /// 会議ノートで議事録の型を選び直して作り直すメニュー
 struct MinutesTemplateMenu: View {
     let meeting: Meeting
@@ -150,7 +150,7 @@ struct MinutesTemplateMenu: View {
     }
 }
 
-// 要件: REQ-MTG-034
+// 要件: REQ-MTG-042
 /// カスタムの型の指示を書くシート。書いた指示は、名前を付けてテンプレートとして保存できる
 struct CustomMinutesPromptSheet: View {
     @State var prompt: String
@@ -217,7 +217,7 @@ struct CustomMinutesPromptSheet: View {
     }
 }
 
-// 要件: REQ-MTG-034
+// 要件: REQ-MTG-042
 // 設計判断: DEC-MTG-071
 /// 保存したテンプレートの管理（一覧・追加・名前と指示の編集・複製・削除）。
 /// 名前と指示は、保存できる内容なら直すたびに自動で保存する（保存ボタンはない）。
