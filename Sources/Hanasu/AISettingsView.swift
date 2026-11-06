@@ -118,6 +118,7 @@ struct AIChoiceRow: View {
                 }
                 Spacer()
                 if showsProviderPicker {
+                    // 設計判断: DEC-COM-168（並びは TextAIProvider の case の順）
                     Picker("AI", selection: provider) {
                         ForEach(TextAIProvider.allCases) { Text($0.name).tag($0) }
                     }

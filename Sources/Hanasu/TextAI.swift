@@ -1,15 +1,16 @@
 import Foundation
 
 // 要件: REQ-COM-020, REQ-COM-030, REQ-COM-031
-// 設計判断: DEC-COM-040
-/// 整形などの文章の処理に使う AI。文字起こしのエンジン（OS 標準 / Whisper / Gemini）とは別に選ぶ
+// 設計判断: DEC-COM-040, DEC-COM-168
+/// 整形などの文章の処理に使う AI。文字起こしのエンジン（OS 標準 / Whisper / Gemini）とは別に選ぶ。
+/// case の順が設定画面の並び。この Mac の中で動くものを左に、外部の API に送るものを右に置く
 enum TextAIProvider: String, CaseIterable, Identifiable {
-    case gemini
-    case claude
     /// 端末の中で動く小型の LLM（llama.cpp）
     case local
     /// Apple の Foundation Models の CLI（fm。macOS 27 から）
     case appleFM = "apple"
+    case gemini
+    case claude
 
     var id: String { rawValue }
     var label: String {
