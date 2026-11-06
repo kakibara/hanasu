@@ -48,7 +48,7 @@ If you are not sure which applies to you, ask us through the form below.
 ## How to buy or ask
 
 Send your company name, the number of users, which OS you use (Mac / Windows), and whether you
-need a quote or invoice through the [commercial license form](TODO-FORM-URL).
+need a quote or invoice through the [commercial license form](https://docs.google.com/forms/d/e/1FAIpQLSdtbtvhn8JtaxxhN9z_TLd-fK384P8qDtpy1O1O1DYtgTeX_g/viewform?usp=header).
 
 ## A request
 

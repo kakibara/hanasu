@@ -40,7 +40,7 @@ Hanasu はソースを公開していますが、オープンソースではあ�
 
 ## 申し込み・相談
 
-[商用ライセンスの申し込みフォーム](TODO-FORM-URL) に、会社名・使う人数・使う OS（Mac / Windows）・見積書や請求書の要否を書いて送ってください。
+[商用ライセンスの申し込みフォーム](https://docs.google.com/forms/d/e/1FAIpQLSdtbtvhn8JtaxxhN9z_TLd-fK384P8qDtpy1O1O1DYtgTeX_g/viewform?usp=header) に、会社名・使う人数・使う OS（Mac / Windows）・見積書や請求書の要否を書いて送ってください。
 
 ## お願い
 
