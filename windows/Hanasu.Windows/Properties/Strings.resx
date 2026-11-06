@@ -1572,4 +1572,140 @@ Open the release page in your browser?</value>
     <value>Skip This Version</value>
     <comment>Update window button</comment>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>Recording after sleep</value>
+    <comment>Title of the window shown after the PC wakes from sleep during a meeting recording</comment>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>Your PC went to sleep while recording a meeting</value>
+    <comment>Heading of the sleep prompt</comment>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>Recording has continued since the computer went to sleep at {0}. Choose whether to stop the recording at the point before sleep, or keep recording.</value>
+    <comment>Body of the sleep prompt. {0} = time the PC went to sleep (short time)</comment>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>Stop at the point before sleep</value>
+    <comment>Sleep prompt button (default): stop the meeting recording as of when the PC went to sleep</comment>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>Keep recording</value>
+    <comment>Sleep prompt button: continue recording</comment>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>Off the record</value>
+    <comment>Live meeting button: start an off-the-record span (speech is not used for minutes; recording continues)</comment>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>End off the record</value>
+    <comment>Live meeting button while off the record: end the span</comment>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>Off the record (since {0})</value>
+    <comment>Live meeting status line. {0} = elapsed time when it started (m:ss)</comment>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>What is said until you end it won't be used for the minutes. Recording continues.</value>
+    <comment>Tooltip of the off-the-record button</comment>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>You changed which utterances are used for the minutes. Regenerate the minutes to apply the change.</value>
+    <comment>Shown on the minutes and transcript tabs after the selection of utterances changed</comment>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>Reset all</value>
+    <comment>Transcript bar button: clear the range, excluded utterances/speakers and off-the-record spans</comment>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>Utterances used for the minutes: {0} / {1}</value>
+    <comment>Transcript bar. {0} = used utterances, {1} = all utterances</comment>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>Range: {0} – {1}</value>
+    <comment>Transcript bar: the range used for minutes. {0} = start time or 'start', {1} = end time or 'end'</comment>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>start</value>
+    <comment>Open start of the range (from the beginning of the transcript)</comment>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>end</value>
+    <comment>Open end of the range (to the end of the transcript)</comment>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>Clear</value>
+    <comment>Small button that removes the range or an off-the-record span</comment>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>Excluded speaker: {0}</value>
+    <comment>Transcript bar. {0} = speaker name</comment>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>Restore</value>
+    <comment>Small button that uses an excluded speaker's utterances again</comment>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>Off the record: {0} – {1}</value>
+    <comment>Transcript bar: an off-the-record span. {0} = start, {1} = end (m:ss)</comment>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>Uncheck an utterance to leave it out of the minutes (Shift+click switches everything from the one you clicked before). Right-click to set the range or exclude a speaker. Ctrl+C copies the selected utterances.</value>
+    <comment>Hint under the transcript bar</comment>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>Excluded</value>
+    <comment>Short label on an utterance excluded from the minutes</comment>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>Off the record</value>
+    <comment>Short label on an utterance inside an off-the-record span</comment>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>Speaker excluded</value>
+    <comment>Short label on an utterance whose speaker is excluded</comment>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>Out of range</value>
+    <comment>Short label on an utterance outside the range used for minutes</comment>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>Use for the minutes</value>
+    <comment>Checkbox on each utterance (accessible name and tooltip)</comment>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>Not used for the minutes ({0}). Restore it from the bar above.</value>
+    <comment>Tooltip of a disabled checkbox. {0} = reason label (Speaker excluded / Off the record)</comment>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>Exclude from the minutes</value>
+    <comment>Transcript context menu</comment>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>Use for the minutes again</value>
+    <comment>Transcript context menu</comment>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>Use for the minutes from here</value>
+    <comment>Transcript context menu: set the start of the range</comment>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>Use for the minutes up to here</value>
+    <comment>Transcript context menu: set the end of the range</comment>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>Exclude everything {0} said</value>
+    <comment>Transcript context menu. {0} = speaker name</comment>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>Restore everything {0} said</value>
+    <comment>Transcript context menu. {0} = speaker name</comment>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>Copy</value>
+    <comment>Transcript context menu: copy the selected utterances</comment>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>Copied {0} utterances</value>
+    <comment>Status after copying utterances. {0} = count</comment>
+  </data>
 </root>

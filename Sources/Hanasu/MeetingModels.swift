@@ -64,6 +64,20 @@ struct Meeting: Codable, Identifiable, Hashable {
     // 設計判断: DEC-MTG-069
     /// 会話から推測して名前を付けた話者キー（SpeakerNameInference）。ユーザーが直すと外す。古い会議にはないので省略可
     var inferredSpeakers: [String]?
+    // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+    // 設計判断: DEC-MTG-090
+    /// 議事録に使う範囲（発言の開始時刻の秒）。nil は端まで（MinutesSelection.swift）
+    var minutesFrom: Double?
+    var minutesTo: Double?
+    /// 議事録から除いた発言の ID
+    var excludedUtterances: [UUID]?
+    /// 議事録から除いた話者キー
+    var excludedSpeakers: [String]?
+    /// 記録中に「オフレコ」にした区間
+    var offRecord: [OffRecordSpan]?
+    // 設計判断: DEC-MTG-092
+    /// 議事録に使う発言を変えたあと、議事録をまだ作り直していない
+    var minutesOutdated: Bool?
 
     // 要件: REQ-MTG-008
     func displayName(for speaker: String) -> String {
@@ -108,7 +122,13 @@ struct Meeting: Codable, Identifiable, Hashable {
     /// 文字起こしの Markdown。同じ話者が間を空けずに続く発言はまとめる。
     func transcriptMarkdown() -> String {
         var lines = [tr("# %@ — 文字起こし", "\(title)"), "", tr("- 日時: %@", "\(Self.dateFormatter.string(from: startedAt))"), tr("- 長さ: %@", "\(Self.clock(duration))"), ""]
-        for block in mergedBlocks() {
+        // 要件: REQ-MTG-045
+        // 設計判断: DEC-MTG-091
+        let unused = utterances.count - usedUtterances.count
+        if unused > 0 {
+            lines.insert(tr("- 議事録に使わない発言（%@ 件）は含めていません", "\(unused)"), at: lines.count - 1)
+        }
+        for block in blocksForMinutes() {
             lines.append("**[\(Self.clock(block.start))] \(displayName(for: block.speaker))**: \(block.text)")
             lines.append("")
         }
@@ -119,7 +139,8 @@ struct Meeting: Codable, Identifiable, Hashable {
     /// Gemini に渡す文字起こし（1 発言 1 行。話者名はプロンプトの言語）
     func transcriptForPrompt() -> String {
         let language = PromptLanguage.current
-        return mergedBlocks()
+        // 設計判断: DEC-MTG-091
+        return blocksForMinutes()
             .map { "[\(Self.clock($0.start))] \(promptName(for: $0.speaker, language: language)): \($0.text)" }
             .joined(separator: "\n")
     }

@@ -1187,4 +1187,106 @@
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>تخطي هذا الإصدار</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>التسجيل بعد السكون</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>دخل الكمبيوتر في وضع السكون أثناء تسجيل اجتماع</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>دخل الجهاز في وضع السكون عند {0}، واستمر التسجيل منذ ذلك الحين. اختر إيقاف التسجيل عند النقطة السابقة للسكون أو متابعة التسجيل.</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>إيقاف عند ما قبل السكون</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>متابعة التسجيل</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>خارج المحضر</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>إنهاء خارج المحضر</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>خارج المحضر (منذ {0})</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>ما يُقال حتى تنهيه لن يُستخدم في المحضر. يستمر التسجيل.</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>غيّرت المداخلات المستخدمة في المحضر. أعد إنشاء المحضر لتطبيق التغيير.</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>إعادة تعيين الكل</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>المداخلات المستخدمة في المحضر: {0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>النطاق: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>البداية</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>النهاية</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>إزالة</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>متحدث مستبعد: {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>استعادة</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>خارج المحضر: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>ألغِ تحديد مداخلة لاستبعادها من المحضر (Shift+نقر يبدّل كل ما يلي المداخلة التي نقرتها قبلها). انقر بزر الماوس الأيمن لتحديد النطاق أو استبعاد متحدث. Ctrl+C ينسخ المداخلات المحددة.</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>مستبعدة</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>خارج المحضر</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>متحدث مستبعد</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>خارج النطاق</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>استخدام في المحضر</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>غير مستخدمة في المحضر ({0}). يمكنك استعادتها من الشريط أعلاه.</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>استبعاد من المحضر</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>استخدام في المحضر مجددًا</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>استخدام في المحضر من هنا</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>استخدام في المحضر حتى هنا</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>استبعاد كل ما قاله {0}</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>استعادة كل ما قاله {0}</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>نسخ</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>تم نسخ {0} من المداخلات</value>
+  </data>
 </root>

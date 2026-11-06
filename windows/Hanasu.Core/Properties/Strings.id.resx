@@ -687,4 +687,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>Zip tidak berisi {0}, jadi tidak digunakan</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- {0} ucapan yang tidak dipakai untuk notulen tidak disertakan</value>
+  </data>
 </root>

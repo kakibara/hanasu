@@ -1187,4 +1187,106 @@
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>跳过此版本</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>睡眠后的录制</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>录制会议时电脑进入了睡眠</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>自 {0} 进入睡眠以来，录制一直在继续。请选择在睡眠前的位置停止录制，还是继续录制。</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>停止于睡眠之前</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>继续录制</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>不记录</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>结束不记录</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>不记录中（从 {0} 起）</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>结束前说的话不会用于会议纪要。录音会继续。</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>已更改用于会议纪要的发言。重新生成后才会生效</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>全部恢复</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>用于会议纪要的发言：{0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>范围：{0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>开头</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>结尾</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>已排除的发言人：{0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>不记录：{0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>取消勾选的发言不会用于会议纪要（按住 Shift 点击，可从上次点击的发言起一并切换）。右键可设置范围或排除发言人。按 Ctrl+C 复制所选发言。</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>已排除</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>不记录</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>已排除发言人</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>范围外</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>用于会议纪要</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>不用于会议纪要（{0}）。可在上方栏中恢复</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>从会议纪要中排除</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>重新用于会议纪要</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>从这里开始用于会议纪要</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>到这里为止用于会议纪要</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>排除“{0}”的所有发言</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>恢复“{0}”的所有发言</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>已复制 {0} 条发言</value>
+  </data>
 </root>

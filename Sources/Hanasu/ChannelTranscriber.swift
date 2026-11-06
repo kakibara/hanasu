@@ -33,6 +33,8 @@ final class ChannelTranscriber: @unchecked Sendable {
     private var resultsTask: Task<Void, Never>?
     private var file: AVAudioFile?
     private var phrases: [TranscribedPhrase] = []
+    /// 書いた（文字起こしに渡した）音声の長さ（秒）
+    private var writtenSeconds: Double = 0
 
     /// - Parameter fixedTimeOffset: 録音開始からのずれが分かっている場合（ファイル入力など）に指定する
     init(channel: MeetingChannel, inputFormat: AVAudioFormat, fileURL: URL?, meetingStart: Date, fixedTimeOffset: Double? = nil,
@@ -125,6 +127,11 @@ final class ChannelTranscriber: @unchecked Sendable {
     /// 記録のあとに音声ファイルから文字起こしするとき、時刻をそろえるのに使う
     var audioStartOffset: Double { queue.sync { timeOffset ?? 0 } }
 
+    // 設計判断: DEC-MTG-088
+    /// ここまでに書いた音声の終わりが、録音開始からの時刻で何秒か（音声の時間軸。スリープの時間は入らない）。
+    /// まだ音声が届いていなければ nil
+    var audioEnd: Double? { queue.sync { timeOffset.map { $0 + writtenSeconds } } }
+
     // 設計判断: DEC-MTG-006
     func append(_ buffer: AVAudioPCMBuffer) {
         queue.async { [self] in
@@ -139,6 +146,7 @@ final class ChannelTranscriber: @unchecked Sendable {
             } catch {
                 appLog.error("meeting audio write error: \(error.localizedDescription, privacy: .public)")
             }
+            writtenSeconds += Double(converted.frameLength) / converted.format.sampleRate
             measureLevel(converted)
             continuation?.yield(AnalyzerInput(buffer: converted))
         }
