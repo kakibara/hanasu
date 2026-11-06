@@ -258,7 +258,7 @@ struct MeetingAskView: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 8) {
                 Label(tr("会議に質問"), systemImage: "sparkles").font(.title2.bold())
-                Text(tr("検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を AI（設定の「AI」で会議に選んだ Gemini か Claude）に渡して答えさせます。会議の内容はその AI にだけ送ります。"))
+                Text(tr("検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を AI（設定の「AI」で会議に選んだもの）に渡して答えさせます。会議の内容はその AI にだけ渡します（「ローカル」か「Apple」なら、この Mac の外には送りません）。"))
                     .font(.caption).foregroundStyle(.secondary)
                 HStack {
                     TextField(tr("例: 先週の定例で何が決まった？"), text: $model.question)

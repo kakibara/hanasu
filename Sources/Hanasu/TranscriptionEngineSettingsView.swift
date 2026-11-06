@@ -163,7 +163,7 @@ private struct GeminiTranscriptionSection: View {
         } header: {
             Text(tr("Gemini で文字起こし"))
         } footer: {
-            Text(tr("認証は「Gemini」タブの設定を使います。音声入力では、文字起こしのあとに辞書・スニペットを当ててから、いつもどおり整形します（Gemini を 2 回呼びます）。長い会議は 5 分ごとに分けて送ります。"))
+            Text(tr("認証は設定の「AI」にある Gemini の認証情報を使います。音声入力では、文字起こしのあとに辞書・スニペットを当ててから、いつもどおり整形します（整形の AI も Gemini なら、Gemini を 2 回呼びます）。長い会議は 5 分ごとに分けて送ります。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }
