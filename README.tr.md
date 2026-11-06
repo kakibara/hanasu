@@ -10,7 +10,7 @@ macOS ve Windows için bir sesle yazma ve toplantı notu uygulaması. Cihaz üze
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@ macOS ve Windows için bir sesle yazma ve toplantı notu uygulaması. Cihaz üze
 
 Yerleşik dikte özelliği size ham bir döküm verir. Dolgu sözcükleri ve sesteş kelime hatalarını olduğu gibi bırakır, noktalama içermez ve her "dur, yani…" ifadesini de yazar.
 Hanasu dökümü bir yapay zekâya (Gemini, Claude ya da cihazınızdaki yerel bir model) gönderir; yapay zekâ bu hataları düzeltir ve metni toparlar. Ardından Hanasu sonucu imlecin bulunduğu yere yazar.
-Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Hanasu ücretsiz ve açık kaynaktır. Kendi Gemini veya Claude API anahtarınızı kullanırsınız ya da API anahtarı gerektirmeyen ve metninizin cihazınızdan hiç çıkmadığı yerel bir model çalıştırırsınız.
+Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herkese açıktır. Kişisel kullanım ve küçük işletmeler için ücretsizdir; daha büyük şirketlerin [ticari lisansa](COMMERCIAL.md) ihtiyacı vardır. Kendi Gemini veya Claude API anahtarınızı kullanırsınız ya da API anahtarı gerektirmeyen ve metninizin cihazınızdan hiç çıkmadığı yerel bir model çalıştırırsınız.
 
 ## Özellikler
 
@@ -150,6 +150,8 @@ Daha fazla not ve Windows sürümünün Mac sürümünden farkları için [windo
 
 </details>
 
+Yeni bir sürüm yayımlandığında Hanasu bunu açılışta size bildirir ve kendini güncellemeden önce sorar. Menüden **アップデートを確認…** (Güncellemeleri Denetle) öğesini de seçebilirsiniz (açılıştaki denetim **Ayarlar → Genel** bölümünden kapatılabilir). v1.5.0 ve önceki sürümlerde bu özellik henüz yok; bu yüzden onları bir kez elle güncelleyin.
+
 ## Hızlı başlangıç
 
 Mac'te ilk açılışta kısa bir rehberli tur başlar. Tur, yapay zekânızı seçmenizi sağlar (önerilen yerel model Gemma 4 E4B orada hemen indirilir), ana özellikleri ve ayar ipuçlarını gösterir ve Hanasu'nun ihtiyaç duyduğu izinleri ister. Turu istediğiniz zaman menüdeki **Hanasu nasıl kullanılır…** öğesinden yeniden açabilirsiniz.
@@ -235,5 +237,12 @@ Issue'lar ve pull request'ler memnuniyetle karşılanır.
 
 ## Lisans
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. Bkz. [NOTICE](NOTICE).
+Hanasu kaynağı erişilebilir (source-available) bir yazılımdır, açık kaynak değildir. © 2026 kakibara. Bkz. [NOTICE](NOTICE).
+
+- Lisans: [PolyForm Noncommercial License 1.0.0](LICENSE) ile birlikte [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- Kişisel ve ticari olmayan kullanım, eğitim, araştırma, hayır kurumları ve devlet kurumları ile küçük işletmelerin (100 kişiden az ve geliri US$1M'nin altında) şirket içi işleri için ücretsizdir. Her şirket Hanasu'yu 30 gün boyunca değerlendirebilir.
+- Daha büyük şirketlerin ve Hanasu'yu satan ya da bir ürün veya hizmete yerleştiren herkesin ticari lisansa ihtiyacı vardır. Bkz. [COMMERCIAL.md](COMMERCIAL.md).
+- Bu lisans değişikliğinden önce yayımlanan sürümler Apache License 2.0 altında yayımlanmıştır ve bu lisans altında kalır.
+- Katkılar için [CONTRIBUTING.md](CONTRIBUTING.md) dosyasındaki sözleşmenin kabul edilmesi gerekir.
+
 Üçüncü taraf lisansları [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) ve [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows) dosyalarında listelenmiştir. Her iki dosya da indirilen paketlere dahildir.

@@ -10,7 +10,7 @@ macOS와 Windows용 음성 입력·회의 기록 앱입니다. 온디바이스 �
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@ macOS와 Windows용 음성 입력·회의 기록 앱입니다. 온디바이스 �
 
 OS에 내장된 받아쓰기는 가공되지 않은 전사 결과만 줍니다. 군말과 동음이의어 오류가 그대로 남고, 문장 부호가 없으며, "아, 그러니까…" 같은 말까지 전부 들어갑니다.
 Hanasu는 전사 결과를 AI(Gemini, Claude 또는 기기 내 로컬 모델)에 보내 이런 오류를 고치고 문장을 다듬은 뒤, 그 결과를 커서 위치에 입력합니다.
-Typeless, Wispr Flow, Aqua Voice, Granola에서 영감을 받았습니다. Hanasu는 무료 오픈 소스입니다. 직접 발급한 Gemini 또는 Claude API 키를 쓰거나, API 키 없이 텍스트가 기기 밖으로 나가지 않는 로컬 모델을 실행할 수 있습니다.
+Typeless, Wispr Flow, Aqua Voice, Granola에서 영감을 받았습니다. Hanasu의 소스 코드는 공개되어 있습니다. 개인 용도와 소규모 사업자는 무료로 사용할 수 있으며, 그보다 큰 회사는 [상용 라이선스](COMMERCIAL.md)가 필요합니다. 직접 발급한 Gemini 또는 Claude API 키를 쓰거나, API 키 없이 텍스트가 기기 밖으로 나가지 않는 로컬 모델을 실행할 수 있습니다.
 
 ## 기능
 
@@ -150,6 +150,8 @@ Mac에서는 목록(일본어, 영어, 중국어, 한국어, 프랑스어, 독�
 
 </details>
 
+새 버전이 나오면 Hanasu가 실행할 때 알려 주고, 스스로 업데이트하기 전에 먼저 묻습니다. 메뉴에서 **アップデートを確認…**(업데이트 확인)을 선택할 수도 있습니다(실행 시 확인은 **설정 → 일반**에서 끌 수 있습니다). v1.5.0까지의 버전에는 아직 이 기능이 없으므로, 그 버전은 한 번만 직접 업데이트하세요.
+
 ## 빠른 시작
 
 Mac에서는 처음 실행할 때 짧은 안내 투어가 열립니다. 여기서 AI를 고르고(권장 로컬 모델인 Gemma 4 E4B는 그 자리에서 다운로드됩니다), 주요 기능과 설정 팁을 확인하고, Hanasu에 필요한 권한을 요청합니다. 메뉴의 **Hanasu 사용법…**에서 언제든 다시 열 수 있습니다.
@@ -235,5 +237,12 @@ dotnet publish Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self
 
 ## 라이선스
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. [NOTICE](NOTICE)를 참고하세요.
+Hanasu는 소스 공개(source-available) 소프트웨어이며, 오픈 소스가 아닙니다. © 2026 kakibara. [NOTICE](NOTICE)를 참고하세요.
+
+- 라이선스: [PolyForm Noncommercial License 1.0.0](LICENSE) 및 [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- 개인의 비상업적 사용, 교육, 연구, 자선 단체와 정부, 그리고 소규모 사업자(100명 미만이며 매출 US$1M 미만)의 내부 업무에는 무료입니다. 어느 회사든 30일 동안 Hanasu를 평가할 수 있습니다.
+- 그보다 큰 회사, 그리고 Hanasu를 판매하거나 제품 또는 서비스에 포함하는 모든 사람은 상용 라이선스가 필요합니다. [COMMERCIAL.md](COMMERCIAL.md)를 참고하세요.
+- 이 라이선스 변경 이전에 출시된 버전은 Apache License 2.0으로 출시되었으며, 계속 Apache License 2.0을 따릅니다.
+- 기여하려면 [CONTRIBUTING.md](CONTRIBUTING.md)에 있는 약정에 동의해야 합니다.
+
 서드 파티 라이선스는 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)(macOS)와 [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md)(Windows)에 정리되어 있습니다. 두 파일 모두 다운로드에 포함되어 있습니다.

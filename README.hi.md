@@ -10,7 +10,7 @@ macOS और Windows के लिए वॉइस इनपुट और मी
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@ macOS और Windows के लिए वॉइस इनपुट और मी
 
 बिल्ट-इन डिक्टेशन आपको कच्चा ट्रांसक्रिप्ट देता है। उसमें फ़िलर शब्द और समध्वनि शब्दों (homophones) की गलतियाँ रह जाती हैं, विराम चिह्न नहीं होते, और हर "रुको, मेरा मतलब…" भी उसमें आ जाता है।
 Hanasu ट्रांसक्रिप्ट को AI (Gemini, Claude, या आपके डिवाइस पर चलने वाला लोकल मॉडल) को भेजता है, जो इन गलतियों को ठीक करके टेक्स्ट को सुव्यवस्थित करता है। फिर Hanasu नतीजे को वहीं टाइप करता है जहाँ आपका कर्सर है।
-यह Typeless, Wispr Flow, Aqua Voice और Granola से प्रेरित है। Hanasu मुफ़्त और ओपन सोर्स है। आप अपनी Gemini या Claude API key इस्तेमाल करते हैं, या लोकल मॉडल चलाते हैं, जिसमें न API key चाहिए और न कोई टेक्स्ट आपके डिवाइस से बाहर जाता है।
+यह Typeless, Wispr Flow, Aqua Voice और Granola से प्रेरित है। Hanasu का सोर्स कोड सार्वजनिक है। यह निजी इस्तेमाल और छोटे व्यवसायों के लिए मुफ़्त है; बड़ी कंपनियों को [कमर्शियल लाइसेंस](COMMERCIAL.md) चाहिए। आप अपनी Gemini या Claude API key इस्तेमाल करते हैं, या लोकल मॉडल चलाते हैं, जिसमें न API key चाहिए और न कोई टेक्स्ट आपके डिवाइस से बाहर जाता है।
 
 ## सुविधाएँ
 
@@ -150,6 +150,8 @@ Mac पर, ट्रांसक्रिप्शन की भाषा स�
 
 </details>
 
+जब नया संस्करण रिलीज़ होता है, तो Hanasu लॉन्च होने पर आपको बताता है और खुद को अपडेट करने से पहले पूछता है। आप मेनू में **アップデートを確認…** (अपडेट जाँचें) भी चुन सकते हैं (लॉन्च पर होने वाली जाँच को **सेटिंग्स → सामान्य** में बंद किया जा सकता है)। v1.5.0 तक के संस्करणों में यह सुविधा अभी नहीं है, इसलिए उन्हें एक बार हाथ से अपडेट करें।
+
 ## जल्दी शुरू करें
 
 Mac पर, पहली बार चलाने पर एक छोटा गाइडेड टूर खुलता है। इसमें आप अपना AI चुन सकते हैं (अनुशंसित लोकल मॉडल Gemma 4 E4B वहीं डाउनलोड हो जाता है), यह मुख्य सुविधाएँ और सेटिंग्स से जुड़े सुझाव दिखाता है, और Hanasu को ज़रूरी अनुमतियाँ माँगता है। इसे कभी भी मेनू में **Hanasu का उपयोग कैसे करें…** से फिर खोला जा सकता है।
@@ -235,5 +237,12 @@ Issues और pull requests का स्वागत है।
 
 ## लाइसेंस
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. देखें [NOTICE](NOTICE)।
+Hanasu सोर्स-अवेलेबल (source-available) है, ओपन सोर्स नहीं। © 2026 kakibara. देखें [NOTICE](NOTICE)।
+
+- लाइसेंस: [PolyForm Noncommercial License 1.0.0](LICENSE) के साथ [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md)।
+- निजी गैर-व्यावसायिक इस्तेमाल, शिक्षा, शोध, चैरिटी संस्थाओं और सरकार के लिए, और छोटे व्यवसायों (100 से कम लोग और US$1M से कम राजस्व) के आंतरिक काम के लिए मुफ़्त है। कोई भी कंपनी 30 दिनों तक Hanasu का मूल्यांकन कर सकती है।
+- बड़ी कंपनियों को, और Hanasu को बेचने वाले या उसे किसी प्रोडक्ट या सर्विस में शामिल करने वाले किसी भी व्यक्ति को, कमर्शियल लाइसेंस चाहिए। देखें [COMMERCIAL.md](COMMERCIAL.md)।
+- इस लाइसेंस बदलाव से पहले रिलीज़ हुए संस्करण Apache License 2.0 के तहत रिलीज़ किए गए थे और उसी के तहत रहेंगे।
+- योगदान के लिए [CONTRIBUTING.md](CONTRIBUTING.md) में दिए गए समझौते पर सहमति ज़रूरी है।
+
 थर्ड-पार्टी लाइसेंस [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) और [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows) में सूचीबद्ध हैं। दोनों फ़ाइलें डाउनलोड में शामिल हैं।

@@ -10,7 +10,7 @@
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@
 
 Tính năng đọc chính tả có sẵn chỉ cho bạn bản chép lời thô. Nó giữ nguyên các từ đệm và lỗi từ đồng âm, không có dấu câu, và chép cả mọi câu kiểu "khoan, ý tôi là…".
 Hanasu gửi bản chép lời đến một AI (Gemini, Claude hoặc một mô hình cục bộ trên thiết bị của bạn) để sửa những lỗi đó và chỉnh lại văn bản. Sau đó Hanasu gõ kết quả vào vị trí con trỏ.
-Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Hanasu miễn phí và mã nguồn mở. Bạn tự dùng khóa API Gemini hoặc Claude của mình, hoặc chạy một mô hình cục bộ không cần khóa API và không để văn bản nào rời khỏi thiết bị.
+Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã nguồn của Hanasu được công khai. Hanasu miễn phí cho mục đích cá nhân và cho doanh nghiệp nhỏ; các công ty lớn hơn cần [giấy phép thương mại](COMMERCIAL.md). Bạn tự dùng khóa API Gemini hoặc Claude của mình, hoặc chạy một mô hình cục bộ không cần khóa API và không để văn bản nào rời khỏi thiết bị.
 
 ## Tính năng
 
@@ -150,6 +150,8 @@ Xem [windows/README.md](windows/README.md) để biết thêm ghi chú và nhữ
 
 </details>
 
+Khi có phiên bản mới, Hanasu sẽ báo cho bạn lúc khởi động và hỏi trước khi tự cập nhật. Bạn cũng có thể chọn **アップデートを確認…** (Kiểm tra cập nhật) trong menu (có thể tắt việc kiểm tra lúc khởi động trong **Cài đặt → Chung**). Các phiên bản đến v1.5.0 chưa có tính năng này, nên hãy tự cập nhật các phiên bản đó một lần.
+
 ## Bắt đầu nhanh
 
 Trên Mac, lần mở đầu tiên sẽ hiện một phần hướng dẫn ngắn. Phần này cho bạn chọn AI (Gemma 4 E4B, mô hình cục bộ được khuyên dùng, có thể tải ngay tại đó), giới thiệu các tính năng chính và mẹo cài đặt, đồng thời xin các quyền mà Hanasu cần. Bạn có thể mở lại bất cứ lúc nào từ mục **Cách dùng Hanasu…** trong menu.
@@ -235,5 +237,12 @@ Chúng tôi hoan nghênh issue và pull request.
 
 ## Giấy phép
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. Xem [NOTICE](NOTICE).
+Hanasu là phần mềm công khai mã nguồn (source-available), không phải mã nguồn mở. © 2026 kakibara. Xem [NOTICE](NOTICE).
+
+- Giấy phép: [PolyForm Noncommercial License 1.0.0](LICENSE) cùng với [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- Miễn phí cho mục đích cá nhân phi thương mại, giáo dục, nghiên cứu, tổ chức từ thiện và cơ quan nhà nước, và cho công việc nội bộ của doanh nghiệp nhỏ (dưới 100 người và doanh thu dưới US$1M). Mọi công ty đều có thể đánh giá Hanasu trong 30 ngày.
+- Các công ty lớn hơn, và bất kỳ ai bán Hanasu hoặc tích hợp nó vào một sản phẩm hay dịch vụ, cần có giấy phép thương mại. Xem [COMMERCIAL.md](COMMERCIAL.md).
+- Các phiên bản phát hành trước lần thay đổi giấy phép này đã được phát hành theo Apache License 2.0 và vẫn theo giấy phép đó.
+- Việc đóng góp cần đồng ý với thỏa thuận trong [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Giấy phép của bên thứ ba được liệt kê trong [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) và [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows). Cả hai tệp đều có trong gói tải về.

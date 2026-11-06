@@ -10,7 +10,7 @@
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@
 
 系统自带的听写只会给你原始的转写结果：口头禅和同音字错误都还在，没有标点，每一句"等等，我是说……"也都原样保留。
 Hanasu 会把转写结果交给 AI（Gemini、Claude，或你设备上的本地模型），由它修正这些错误并整理文字，然后在光标处输入结果。
-它的灵感来自 Typeless、Wispr Flow、Aqua Voice 和 Granola。Hanasu 免费且开源。你可以使用自己的 Gemini 或 Claude API 密钥，也可以运行本地模型——无需 API 密钥，文字也不会离开你的设备。
+它的灵感来自 Typeless、Wispr Flow、Aqua Voice 和 Granola。Hanasu 的源代码是公开的。个人使用和小型企业使用均免费；规模更大的公司需要[商业许可](COMMERCIAL.md)。你可以使用自己的 Gemini 或 Claude API 密钥，也可以运行本地模型——无需 API 密钥，文字也不会离开你的设备。
 
 ## 功能
 
@@ -150,6 +150,8 @@ Hanasu 会把转写结果交给 AI（Gemini、Claude，或你设备上的本地�
 
 </details>
 
+有新版本发布时，Hanasu 会在启动时告诉你，并在自行更新之前先询问你。你也可以在菜单中选择 **アップデートを確認…**（检查更新）（启动时的检查可以在 **设置 → 通用** 中关闭）。v1.5.0 及更早的版本还没有这个功能，因此请手动更新这些版本一次。
+
 ## 快速开始
 
 在 Mac 上，首次启动时会打开一个简短的引导。你可以在其中选择 AI（推荐的本地模型 Gemma 4 E4B 可以当场下载），了解主要功能和设置技巧，并授予 Hanasu 所需的权限。随时可以从菜单中的 **Hanasu 使用方法…** 再次打开。
@@ -235,5 +237,12 @@ dotnet publish Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self
 
 ## 许可证
 
-[Apache License 2.0](LICENSE) © 2026 kakibara。参见 [NOTICE](NOTICE)。
+Hanasu 是源代码可用（source-available）的软件，而不是开源软件。© 2026 kakibara。参见 [NOTICE](NOTICE)。
+
+- 许可证：[PolyForm Noncommercial License 1.0.0](LICENSE) 加上 [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md)。
+- 个人非商业用途、教育、研究、慈善机构和政府，以及小型企业（少于 100 人且收入低于 US$1M）的内部工作，均可免费使用。任何公司都可以评估 Hanasu 30 天。
+- 规模更大的公司，以及任何销售 Hanasu 或将其集成到产品或服务中的人，都需要商业许可。参见 [COMMERCIAL.md](COMMERCIAL.md)。
+- 在此次许可证变更之前发布的版本，是在 Apache License 2.0 下发布的，并继续适用该许可证。
+- 贡献需要同意 [CONTRIBUTING.md](CONTRIBUTING.md) 中的协议。
+
 第三方许可证列在 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)（macOS）和 [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md)（Windows）中。下载包中包含这两个文件。

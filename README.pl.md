@@ -10,7 +10,7 @@ Aplikacja do wprowadzania tekstu głosem i notatek ze spotkań dla macOS i Windo
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@ Aplikacja do wprowadzania tekstu głosem i notatek ze spotkań dla macOS i Windo
 
 Wbudowane dyktowanie daje surową transkrypcję. Zostawia wtrącenia i błędy w homofonach, nie ma interpunkcji i zawiera każde „czekaj, chodziło mi o…”.
 Hanasu wysyła transkrypcję do AI (Gemini, Claude lub lokalnego modelu na Twoim urządzeniu), które poprawia te błędy i porządkuje tekst. Następnie Hanasu wpisuje wynik tam, gdzie jest kursor.
-Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Hanasu jest darmowe i ma otwarty kod źródłowy. Używasz własnego klucza API Gemini lub Claude albo uruchamiasz lokalny model — bez klucza API i bez wysyłania tekstu poza urządzenie.
+Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Kod źródłowy Hanasu jest publiczny. Hanasu jest darmowe do użytku osobistego i dla małych firm; większe firmy potrzebują [licencji komercyjnej](COMMERCIAL.md). Używasz własnego klucza API Gemini lub Claude albo uruchamiasz lokalny model — bez klucza API i bez wysyłania tekstu poza urządzenie.
 
 ## Funkcje
 
@@ -150,6 +150,8 @@ Więcej uwag oraz różnice między wersją na Windows a wersją na Maca znajdzi
 
 </details>
 
+Gdy pojawi się nowa wersja, Hanasu poinformuje cię o tym przy uruchomieniu i zapyta, zanim się zaktualizuje. Możesz też wybrać w menu **アップデートを確認…** (Sprawdź aktualizacje) (sprawdzanie przy uruchomieniu można wyłączyć w **Ustawienia → Ogólne**). Wersje do v1.5.0 włącznie jeszcze tego nie mają, więc zaktualizuj je raz ręcznie.
+
 ## Szybki start
 
 Na Macu przy pierwszym uruchomieniu otwiera się krótki przewodnik. Pozwala wybrać AI (Gemma 4 E4B, zalecany model lokalny, pobiera się od razu na miejscu), pokazuje główne funkcje i wskazówki dotyczące ustawień oraz prosi o uprawnienia potrzebne Hanasu. W każdej chwili możesz go otworzyć ponownie z menu, wybierając **Jak używać Hanasu…**.
@@ -235,5 +237,12 @@ Zgłoszenia (issues) i pull requesty są mile widziane.
 
 ## Licencja
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. Zobacz [NOTICE](NOTICE).
+Hanasu ma dostępny kod źródłowy (source-available), ale nie jest oprogramowaniem open source. © 2026 kakibara. Zobacz [NOTICE](NOTICE).
+
+- Licencja: [PolyForm Noncommercial License 1.0.0](LICENSE) wraz z [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- Darmowe do osobistego użytku niekomercyjnego, w edukacji, badaniach, organizacjach charytatywnych i administracji publicznej oraz do wewnętrznej pracy małych firm (mniej niż 100 osób i przychody poniżej US$1M). Każda firma może oceniać Hanasu przez 30 dni.
+- Większe firmy, a także każdy, kto sprzedaje Hanasu lub wbudowuje je w produkt albo usługę, potrzebują licencji komercyjnej. Zobacz [COMMERCIAL.md](COMMERCIAL.md).
+- Wersje wydane przed tą zmianą licencji zostały wydane na licencji Apache License 2.0 i pozostają na niej.
+- Wkład w projekt wymaga zaakceptowania umowy opisanej w [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Licencje zewnętrzne są wymienione w [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) i [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows). Oba pliki są dołączone do pobieranych paczek.

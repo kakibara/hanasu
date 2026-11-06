@@ -10,7 +10,7 @@
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@
 
 يمنحك الإملاء المدمج في النظام نصًا خامًا: يُبقي على كلمات الحشو وأخطاء الكلمات المتجانسة لفظًا، ويخلو من علامات الترقيم، ويحتفظ بكل «انتظر، أقصد…».
 يرسل Hanasu النص المُفرَّغ إلى ذكاء اصطناعي (Gemini أو Claude أو نموذج محلي على جهازك)، فيصحّح تلك الأخطاء وينظّم النص، ثم يكتب Hanasu النتيجة في موضع المؤشر.
-استُلهم من Typeless وWispr Flow وAqua Voice وGranola. وHanasu مجاني ومفتوح المصدر. تستخدم مفتاح API الخاص بك لـ Gemini أو Claude، أو تشغّل نموذجًا محليًا دون مفتاح API ودون أن يغادر أي نص جهازك.
+استُلهم من Typeless وWispr Flow وAqua Voice وGranola. والكود المصدري لـ Hanasu متاح للعموم. وهو مجاني للاستخدام الشخصي وللشركات الصغيرة؛ أما الشركات الأكبر فتحتاج إلى [ترخيص تجاري](COMMERCIAL.md). تستخدم مفتاح API الخاص بك لـ Gemini أو Claude، أو تشغّل نموذجًا محليًا دون مفتاح API ودون أن يغادر أي نص جهازك.
 
 ## الميزات
 
@@ -150,6 +150,8 @@
 
 </details>
 
+عند صدور إصدار جديد، يُعلمك Hanasu بذلك عند التشغيل ويسألك قبل أن يحدّث نفسه. ويمكنك أيضًا اختيار **アップデートを確認…** ‏(التحقق من وجود تحديثات) من القائمة (ويمكن إيقاف التحقق عند التشغيل من **الإعدادات ← عام**). أما الإصدارات حتى v1.5.0 فلا تتضمن هذه الميزة بعد، لذا حدّثها يدويًا مرة واحدة.
+
 ## البدء السريع
 
 على Mac، تُفتح جولة إرشادية قصيرة عند التشغيل الأول. تتيح لك اختيار الذكاء الاصطناعي (ويُنزَّل Gemma 4 E4B، النموذج المحلي الموصى به، في الحال)، وتعرض الميزات الرئيسية ونصائح الإعدادات، وتطلب الأذونات التي يحتاجها Hanasu. ويمكنك فتحها مجددًا في أي وقت من **كيفية استخدام Hanasu…** في القائمة.
@@ -235,5 +237,12 @@ dotnet publish Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self
 
 ## الترخيص
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. راجع [NOTICE](NOTICE).
+Hanasu برنامج متاح المصدر (source-available)، وليس مفتوح المصدر. © 2026 kakibara. راجع [NOTICE](NOTICE).
+
+- الترخيص: [PolyForm Noncommercial License 1.0.0](LICENSE) مع [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- مجاني للاستخدام الشخصي غير التجاري، والتعليم، والبحث، والمؤسسات الخيرية، والجهات الحكومية، وللعمل الداخلي للشركات الصغيرة (أقل من 100 شخص وإيرادات أقل من US$1M). ويمكن لأي شركة تقييم Hanasu لمدة 30 يومًا.
+- تحتاج الشركات الأكبر، وكل من يبيع Hanasu أو يدمجه في منتج أو خدمة، إلى ترخيص تجاري. راجع [COMMERCIAL.md](COMMERCIAL.md).
+- الإصدارات التي صدرت قبل تغيير الترخيص هذا صدرت بموجب Apache License 2.0 وتبقى خاضعة له.
+- تتطلب المساهمات الموافقة على الاتفاقية الواردة في [CONTRIBUTING.md](CONTRIBUTING.md).
+
 تُدرَج تراخيص الأطراف الثالثة في [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) ‏(macOS) و[windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) ‏(Windows). والملفان كلاهما مضمَّنان في حزم التنزيل.

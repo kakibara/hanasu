@@ -10,7 +10,7 @@ Eine App für Spracheingabe und Besprechungsnotizen für macOS und Windows. Sie 
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@ Eine App für Spracheingabe und Besprechungsnotizen für macOS und Windows. Sie 
 
 Die eingebaute Diktierfunktion liefert dir ein rohes Transkript. Es enthält Füllwörter und Homophon-Fehler, hat keine Satzzeichen und jedes „Moment, ich meine …“ bleibt drin.
 Hanasu schickt das Transkript an eine KI (Gemini, Claude oder ein lokales Modell auf deinem Gerät), die diese Fehler korrigiert und den Text glättet. Danach tippt Hanasu das Ergebnis dort ein, wo dein Cursor steht.
-Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Hanasu ist kostenlos und Open Source. Du verwendest deinen eigenen API-Schlüssel für Gemini oder Claude – oder du nutzt ein lokales Modell, ganz ohne API-Schlüssel und ohne dass Text dein Gerät verlässt.
+Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Der Quellcode ist öffentlich. Für die private Nutzung und für kleine Unternehmen ist Hanasu kostenlos; größere Unternehmen brauchen eine [kommerzielle Lizenz](COMMERCIAL.md). Du verwendest deinen eigenen API-Schlüssel für Gemini oder Claude – oder du nutzt ein lokales Modell, ganz ohne API-Schlüssel und ohne dass Text dein Gerät verlässt.
 
 ## Funktionen
 
@@ -150,6 +150,8 @@ Weitere Hinweise und die Unterschiede zwischen der Windows- und der Mac-Version 
 
 </details>
 
+Wenn eine neue Version erscheint, informiert dich Hanasu beim Start und fragt nach, bevor es sich selbst aktualisiert. Du kannst auch im Menü **アップデートを確認…** (Nach Updates suchen) wählen (die Prüfung beim Start lässt sich unter **Einstellungen → Allgemein** ausschalten). Versionen bis v1.5.0 haben das noch nicht; aktualisiere sie daher einmal von Hand.
+
 ## Schnellstart
 
 Auf dem Mac öffnet sich beim ersten Start eine kurze Einführung. Dort wählst du deine KI aus (Gemma 4 E4B, das empfohlene lokale Modell, wird direkt dort heruntergeladen), siehst die wichtigsten Funktionen und Tipps zu den Einstellungen und erteilst die Berechtigungen, die Hanasu braucht. Du kannst sie jederzeit über **So verwendest du Hanasu …** im Menü erneut öffnen.
@@ -235,5 +237,12 @@ Issues und Pull Requests sind willkommen.
 
 ## Lizenz
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. Siehe [NOTICE](NOTICE).
+Hanasu ist Source-Available-Software, nicht Open Source. © 2026 kakibara. Siehe [NOTICE](NOTICE).
+
+- Lizenz: [PolyForm Noncommercial License 1.0.0](LICENSE) plus die [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- Kostenlos für die private, nicht kommerzielle Nutzung, für Bildung, Forschung, gemeinnützige Organisationen und staatliche Stellen sowie für die interne Arbeit kleiner Unternehmen (weniger als 100 Personen und unter US$1M Umsatz). Jedes Unternehmen darf Hanasu 30 Tage lang evaluieren.
+- Größere Unternehmen sowie alle, die Hanasu verkaufen oder in ein Produkt oder einen Dienst einbauen, brauchen eine kommerzielle Lizenz. Siehe [COMMERCIAL.md](COMMERCIAL.md).
+- Versionen, die vor dieser Lizenzänderung veröffentlicht wurden, wurden unter der Apache License 2.0 veröffentlicht und bleiben unter ihr.
+- Beiträge setzen die Vereinbarung in [CONTRIBUTING.md](CONTRIBUTING.md) voraus.
+
 Lizenzen von Drittanbietern sind in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) und [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows) aufgeführt. Beide Dateien sind in den Downloads enthalten.

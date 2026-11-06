@@ -10,7 +10,7 @@ Una app de dictado por voz y notas de reuniones para macOS y Windows. Usa recono
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@ Una app de dictado por voz y notas de reuniones para macOS y Windows. Usa recono
 
 El dictado integrado te da una transcripción en bruto. Conserva las muletillas y los errores de homófonos, no tiene puntuación e incluye cada «espera, quiero decir…».
 Hanasu envía la transcripción a una IA (Gemini, Claude o un modelo local en tu dispositivo), que corrige esos errores y pule el texto. Después, Hanasu escribe el resultado donde está tu cursor.
-Está inspirado en Typeless, Wispr Flow, Aqua Voice y Granola. Hanasu es gratuito y de código abierto. Usas tu propia clave de API de Gemini o Claude, o ejecutas un modelo local sin clave de API y sin que ningún texto salga de tu dispositivo.
+Está inspirado en Typeless, Wispr Flow, Aqua Voice y Granola. Su código fuente es público. Es gratuito para uso personal y para pequeñas empresas; las empresas más grandes necesitan una [licencia comercial](COMMERCIAL.md). Usas tu propia clave de API de Gemini o Claude, o ejecutas un modelo local sin clave de API y sin que ningún texto salga de tu dispositivo.
 
 ## Funciones
 
@@ -150,6 +150,8 @@ Consulta [windows/README.md](windows/README.md) para más notas y para ver en qu
 
 </details>
 
+Cuando se publica una versión nueva, Hanasu te avisa al iniciarse y te pregunta antes de actualizarse. También puedes elegir **アップデートを確認…** (Buscar actualizaciones) en el menú (la comprobación al iniciar se puede desactivar en **Ajustes → General**). Las versiones hasta la v1.5.0 aún no tienen esta función, así que actualízalas a mano una vez.
+
 ## Inicio rápido
 
 En Mac, el primer inicio abre un breve recorrido guiado. Te permite elegir tu IA (Gemma 4 E4B, el modelo local recomendado, se descarga ahí mismo), muestra las funciones principales y consejos de configuración, y pide los permisos que Hanasu necesita. Vuelve a abrirlo cuando quieras desde **Cómo usar Hanasu…** en el menú.
@@ -235,5 +237,12 @@ Los issues y las pull requests son bienvenidos.
 
 ## Licencia
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. Consulta [NOTICE](NOTICE).
+Hanasu es de código fuente disponible (source-available), no de código abierto. © 2026 kakibara. Consulta [NOTICE](NOTICE).
+
+- Licencia: [PolyForm Noncommercial License 1.0.0](LICENSE) más la [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- Gratuito para uso personal no comercial, educación, investigación, organizaciones benéficas y gobierno, y para el trabajo interno de pequeñas empresas (menos de 100 personas y menos de US$1M de ingresos). Cualquier empresa puede evaluar Hanasu durante 30 días.
+- Las empresas más grandes, y cualquiera que venda Hanasu o lo integre en un producto o servicio, necesitan una licencia comercial. Consulta [COMMERCIAL.md](COMMERCIAL.md).
+- Las versiones publicadas antes de este cambio de licencia se publicaron bajo la Apache License 2.0 y siguen bajo ella.
+- Las contribuciones requieren el acuerdo que figura en [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Las licencias de terceros se enumeran en [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) y [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows). Ambos archivos se incluyen en las descargas.

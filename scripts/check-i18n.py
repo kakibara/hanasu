@@ -20,6 +20,9 @@
   - 16 言語のサテライトがそろい、英語と同じ名前・{0} の組がある
   - アプリのコード（windows/Hanasu.Windows・Hanasu.Core・Hanasu.Whisper・Hanasu.Diarization の .cs と .xaml）に、
     .resx に移していない日本語の文字列がない（ログ、行に skip-tr のもの（XAML は前の行のコメント）は除く）
+- README（README.md と README.<言語>.md）
+  - 17 言語のファイルがそろい、どれにも言語の切り替えのリンクがある
+  - 訳の表の行・<kbd>・<img>・コードブロック・<details>・リンクの数が README.md と同じ（README.md の変更の入れ忘れ）
 
 python3 の標準ライブラリだけを使う。
 """
@@ -232,6 +235,46 @@ def check_windows_strings(errors: list[str]) -> None:
                                       "（UI なら Strings.resx に。言語の決まりに使う語なら行に skip-tr）")
 
 
+README_NAMES = {"en": "README.md", **{lang: f"README.{lang}.md" for lang in LANGUAGES if lang != "en"}}
+# 訳が README.md と同じ形かを見る印（表の行・キー・画像・コードブロック・折りたたみ・リンク）
+README_MARKS = {
+    "表の行": re.compile(r"^\|", re.M),
+    "<kbd>": re.compile(r"<kbd>"),
+    "<img": re.compile(r"<img"),
+    "```": re.compile(r"^```", re.M),
+    "<details>": re.compile(r"<details>"),
+    "リンク": re.compile(r"\]\((?!README)[^)]+\)"),
+}
+
+
+def check_readmes(errors: list[str]) -> None:
+    """README の 17 言語がそろい、言語の切り替えがあり、README.md と同じ形か（docs/README.md の 8 章）"""
+    texts: dict[str, str] = {}
+    for language, name in README_NAMES.items():
+        path = ROOT / name
+        if not path.exists():
+            errors.append(f"readme: {name} がない")
+            continue
+        texts[language] = path.read_text(encoding="utf-8")
+    base = texts.get("en")
+    if base is None:
+        return
+    want = {label: len(p.findall(base)) for label, p in README_MARKS.items()}
+    for language, body in texts.items():
+        name = README_NAMES[language]
+        switcher = next((line for line in body.splitlines() if "README.zh-CN.md" in line or "(README.md)" in line), "")
+        for other, other_name in README_NAMES.items():
+            if other != language and f"]({other_name})" not in switcher:
+                errors.append(f"readme: {name} の言語の切り替えに {other_name} へのリンクがない")
+        if language == "en":
+            continue
+        for label, pattern in README_MARKS.items():
+            got = len(pattern.findall(body))
+            if got != want[label]:
+                errors.append(f"readme: {name} の{label}の数が README.md と違う（README.md: {want[label]}、{name}: {got}）"
+                              " → README.md の変更を訳に入れる")
+
+
 def main(argv: list[str]) -> int:
     errors: list[str] = []
     warnings: list[str] = []
@@ -239,6 +282,7 @@ def main(argv: list[str]) -> int:
     check_prompts(errors, warnings, counts)
     check_mac_strings(errors, warnings, counts)
     check_windows_strings(errors)
+    check_readmes(errors)
 
     if "--summary" in argv:
         print("プロンプトのキーの数: " + ", ".join(f"{k} {v}" for k, v in counts.items() if not k.startswith("strings:")))

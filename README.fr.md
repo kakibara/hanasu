@@ -10,7 +10,7 @@ Une application de saisie vocale et de notes de réunion pour macOS et Windows. 
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@ Une application de saisie vocale et de notes de réunion pour macOS et Windows. 
 
 La dictée intégrée vous donne une transcription brute. Elle garde les mots de remplissage et les erreurs d'homophones, n'a pas de ponctuation et inclut chaque « attends, je veux dire… ».
 Hanasu envoie la transcription à une IA (Gemini, Claude ou un modèle local sur votre appareil), qui corrige ces erreurs et met le texte au propre. Hanasu saisit ensuite le résultat là où se trouve votre curseur.
-Il s'inspire de Typeless, Wispr Flow, Aqua Voice et Granola. Hanasu est gratuit et open source. Vous utilisez votre propre clé d'API Gemini ou Claude, ou vous faites tourner un modèle local, sans clé d'API et sans qu'aucun texte ne quitte votre appareil.
+Il s'inspire de Typeless, Wispr Flow, Aqua Voice et Granola. Son code source est public. Il est gratuit pour un usage personnel et pour les petites entreprises ; les entreprises plus grandes ont besoin d'une [licence commerciale](COMMERCIAL.md). Vous utilisez votre propre clé d'API Gemini ou Claude, ou vous faites tourner un modèle local, sans clé d'API et sans qu'aucun texte ne quitte votre appareil.
 
 ## Fonctionnalités
 
@@ -150,6 +150,8 @@ Consultez [windows/README.md](windows/README.md) pour plus de détails et pour l
 
 </details>
 
+Quand une nouvelle version sort, Hanasu vous prévient au lancement et vous pose la question avant de se mettre à jour. Vous pouvez aussi choisir **アップデートを確認…** (Rechercher les mises à jour) dans le menu (la vérification au lancement peut être désactivée dans **Réglages → Général**). Les versions jusqu'à la v1.5.0 n'ont pas encore cette fonction : mettez-les donc à jour à la main une fois.
+
 ## Démarrage rapide
 
 Sur Mac, le premier lancement ouvre une courte visite guidée. Elle vous permet de choisir votre IA (Gemma 4 E4B, le modèle local recommandé, se télécharge directement), présente les principales fonctionnalités et des conseils de réglage, et demande les autorisations dont Hanasu a besoin. Rouvrez-la à tout moment via **Comment utiliser Hanasu…** dans le menu.
@@ -235,5 +237,12 @@ Les issues et les pull requests sont les bienvenues.
 
 ## Licence
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. Voir [NOTICE](NOTICE).
+Hanasu est à source disponible (source-available), et non open source. © 2026 kakibara. Voir [NOTICE](NOTICE).
+
+- Licence : [PolyForm Noncommercial License 1.0.0](LICENSE) plus la [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- Gratuit pour un usage personnel non commercial, l'enseignement, la recherche, les organisations caritatives et les administrations publiques, ainsi que pour le travail interne des petites entreprises (moins de 100 personnes et moins de US$1M de chiffre d'affaires). Toute entreprise peut évaluer Hanasu pendant 30 jours.
+- Les entreprises plus grandes, ainsi que quiconque vend Hanasu ou l'intègre à un produit ou à un service, ont besoin d'une licence commerciale. Voir [COMMERCIAL.md](COMMERCIAL.md).
+- Les versions publiées avant ce changement de licence ont été publiées sous l'Apache License 2.0 et restent sous cette licence.
+- Les contributions nécessitent l'accord décrit dans [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Les licences tierces sont listées dans [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) et [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows). Les deux fichiers sont inclus dans les téléchargements.

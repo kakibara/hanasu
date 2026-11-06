@@ -10,7 +10,7 @@
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@
 
 Встроенная диктовка выдаёт сырую расшифровку. В ней остаются слова-паразиты и ошибки в омофонах, нет пунктуации, и сохраняется каждое «стоп, то есть…».
 Hanasu отправляет расшифровку ИИ (Gemini, Claude или локальной модели на вашем устройстве), который исправляет эти ошибки и приводит текст в порядок. Затем Hanasu вводит результат туда, где стоит курсор.
-Проект вдохновлён Typeless, Wispr Flow, Aqua Voice и Granola. Hanasu бесплатен и имеет открытый исходный код. Вы используете собственный API-ключ Gemini или Claude либо запускаете локальную модель — без API-ключа и без того, чтобы текст покидал ваше устройство.
+Проект вдохновлён Typeless, Wispr Flow, Aqua Voice и Granola. Исходный код Hanasu общедоступен. Hanasu бесплатен для личного использования и для малого бизнеса; более крупным компаниям нужна [коммерческая лицензия](COMMERCIAL.md). Вы используете собственный API-ключ Gemini или Claude либо запускаете локальную модель — без API-ключа и без того, чтобы текст покидал ваше устройство.
 
 ## Возможности
 
@@ -150,6 +150,8 @@ Hanasu отправляет расшифровку ИИ (Gemini, Claude или �
 
 </details>
 
+Когда выходит новая версия, Hanasu сообщает об этом при запуске и спрашивает, прежде чем обновиться. Также можно выбрать в меню **アップデートを確認…** (Проверить обновления) (проверку при запуске можно отключить в **Настройки → Основные**). В версиях до v1.5.0 включительно этого ещё нет, поэтому их нужно один раз обновить вручную.
+
 ## Быстрый старт
 
 На Mac при первом запуске открывается короткий вводный тур. В нём можно выбрать ИИ (Gemma 4 E4B, рекомендуемая локальная модель, скачивается прямо там), он показывает основные возможности и советы по настройке и запрашивает нужные Hanasu разрешения. Открыть его снова можно в любой момент через пункт меню **Как пользоваться Hanasu…**.
@@ -235,5 +237,12 @@ Issues и pull requests приветствуются.
 
 ## Лицензия
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. См. [NOTICE](NOTICE).
+Hanasu распространяется с доступным исходным кодом (source-available), но не является открытым ПО (open source). © 2026 kakibara. См. [NOTICE](NOTICE).
+
+- Лицензия: [PolyForm Noncommercial License 1.0.0](LICENSE) плюс [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- Бесплатно для личного некоммерческого использования, образования, исследований, благотворительных организаций и государственных учреждений, а также для внутренней работы малого бизнеса (менее 100 человек и выручка менее US$1M). Любая компания может оценивать Hanasu в течение 30 дней.
+- Более крупным компаниям, а также всем, кто продаёт Hanasu или встраивает его в продукт или сервис, нужна коммерческая лицензия. См. [COMMERCIAL.md](COMMERCIAL.md).
+- Версии, выпущенные до этой смены лицензии, были выпущены под Apache License 2.0 и остаются под ней.
+- Для участия в разработке нужно принять соглашение из [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Сторонние лицензии перечислены в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) и [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows). Оба файла входят в загружаемые архивы.

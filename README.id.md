@@ -10,7 +10,7 @@ Aplikasi input suara dan pencatat rapat untuk macOS dan Windows. Aplikasi ini me
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -32,7 +32,7 @@ Aplikasi input suara dan pencatat rapat untuk macOS dan Windows. Aplikasi ini me
 
 Fitur dikte bawaan hanya memberi Anda transkrip mentah. Kata pengisi dan salah tulis homofon tetap ada, tidak ada tanda baca, dan setiap "eh, maksud saya…" ikut tertulis.
 Hanasu mengirim transkrip ke AI (Gemini, Claude, atau model lokal di perangkat Anda), yang memperbaiki kesalahan tersebut dan merapikan teksnya. Lalu Hanasu mengetikkan hasilnya di posisi kursor Anda.
-Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Hanasu gratis dan open source. Anda memakai kunci API Gemini atau Claude milik sendiri, atau menjalankan model lokal tanpa kunci API dan tanpa ada teks yang keluar dari perangkat Anda.
+Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sumber Hanasu bersifat publik. Hanasu gratis untuk penggunaan pribadi dan untuk usaha kecil; perusahaan yang lebih besar memerlukan [lisensi komersial](COMMERCIAL.md). Anda memakai kunci API Gemini atau Claude milik sendiri, atau menjalankan model lokal tanpa kunci API dan tanpa ada teks yang keluar dari perangkat Anda.
 
 ## Fitur
 
@@ -150,6 +150,8 @@ Lihat [windows/README.md](windows/README.md) untuk catatan lainnya dan perbedaan
 
 </details>
 
+Saat versi baru dirilis, Hanasu memberi tahu Anda ketika dibuka dan bertanya sebelum memperbarui dirinya sendiri. Anda juga dapat memilih **アップデートを確認…** (Periksa Pembaruan) di menu (pemeriksaan saat dibuka dapat dimatikan di **Pengaturan → Umum**). Versi hingga v1.5.0 belum memiliki fitur ini, jadi perbarui versi tersebut secara manual sekali.
+
 ## Mulai cepat
 
 Di Mac, saat pertama kali dibuka akan muncul tur panduan singkat. Tur ini memungkinkan Anda memilih AI (Gemma 4 E4B, model lokal yang disarankan, langsung diunduh di sana), menunjukkan fitur utama dan tips pengaturan, serta meminta izin yang dibutuhkan Hanasu. Buka kembali kapan saja dari **Cara menggunakan Hanasu…** di menu.
@@ -235,5 +237,12 @@ Issue dan pull request sangat diterima.
 
 ## Lisensi
 
-[Apache License 2.0](LICENSE) © 2026 kakibara. Lihat [NOTICE](NOTICE).
+Hanasu bersifat source-available (kode sumber tersedia), bukan open source. © 2026 kakibara. Lihat [NOTICE](NOTICE).
+
+- Lisensi: [PolyForm Noncommercial License 1.0.0](LICENSE) ditambah [Hanasu Additional Permission 1.0](LICENSE-ADDITIONAL-PERMISSION.md).
+- Gratis untuk penggunaan pribadi nonkomersial, pendidikan, penelitian, lembaga amal dan pemerintah, serta untuk pekerjaan internal usaha kecil (kurang dari 100 orang dan pendapatan di bawah US$1M). Perusahaan mana pun boleh mengevaluasi Hanasu selama 30 hari.
+- Perusahaan yang lebih besar, serta siapa pun yang menjual Hanasu atau memasukkannya ke dalam produk atau layanan, memerlukan lisensi komersial. Lihat [COMMERCIAL.md](COMMERCIAL.md).
+- Versi yang dirilis sebelum perubahan lisensi ini dirilis di bawah Apache License 2.0 dan tetap berada di bawah lisensi tersebut.
+- Kontribusi memerlukan persetujuan atas perjanjian di [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Lisensi pihak ketiga tercantum di [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (macOS) dan [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) (Windows). Kedua berkas tersebut disertakan dalam unduhan.
