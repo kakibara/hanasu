@@ -1,0 +1,1190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_AlreadyRunning" xml:space="preserve">
+    <value>Hanasu पहले से चल रहा है. आप सूचना क्षेत्र में मौजूद आइकन से इसका उपयोग कर सकते हैं.</value>
+  </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>हाल के परिणाम(&amp;E)</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>मीटिंग नोट्स खोलें(&amp;N)…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>इतिहास खोलें(&amp;H)…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>सेटिंग्स(&amp;S)…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Hanasu से बाहर निकलें(&amp;X)</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>रिकॉर्डिंग रोकें और टाइप करें(&amp;R)</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>रिकॉर्डिंग शुरू करें(&amp;R)</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग रोकें(&amp;M) ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग की तैयारी हो रही है…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग प्रोसेस हो रही है…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग शुरू करें(&amp;M)</value>
+  </data>
+  <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
+    <value>Hanasu — मीटिंग रिकॉर्ड हो रही है {0}</value>
+  </data>
+  <data name="Tray_Tip_MeetingProcessing" xml:space="preserve">
+    <value>Hanasu — मीटिंग प्रोसेस हो रही है</value>
+  </data>
+  <data name="Tray_Tip_Recording" xml:space="preserve">
+    <value>Hanasu — रिकॉर्डिंग</value>
+  </data>
+  <data name="Tray_Tip_Processing" xml:space="preserve">
+    <value>Hanasu — प्रोसेस हो रहा है</value>
+  </data>
+  <data name="Tray_RecentEmpty" xml:space="preserve">
+    <value>(अभी तक कुछ नहीं)</value>
+  </data>
+  <data name="Tray_RecentTip" xml:space="preserve">
+    <value>{0}
+परिणाम: {1}
+मूल: {2}</value>
+  </data>
+  <data name="Tray_RecentHint" xml:space="preserve">
+    <value>क्लिपबोर्ड पर कॉपी करने के लिए क्लिक करें</value>
+  </data>
+  <data name="Tray_OpenAllHistory" xml:space="preserve">
+    <value>पूरा इतिहास खोलें…</value>
+  </data>
+  <data name="Balloon_Started" xml:space="preserve">
+    <value>Hanasu शुरू हो गया</value>
+  </data>
+  <data name="Balloon_StartedBody" xml:space="preserve">
+    <value>डिक्टेट करने के लिए {0} दबाएँ. "{2}" के लिए {1} दबाएँ.</value>
+  </data>
+  <data name="Balloon_HotKeyFailed" xml:space="preserve">
+    <value>शॉर्टकट पंजीकृत नहीं हो सका</value>
+  </data>
+  <data name="Balloon_HotKeyFailedBody" xml:space="preserve">
+    <value>{0} का उपयोग कोई अन्य ऐप कर रहा है. सेटिंग्स → सामान्य में कोई अन्य कुंजी चुनें.</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailed" xml:space="preserve">
+    <value>"महत्वपूर्ण" शॉर्टकट पंजीकृत नहीं हो सका</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailedBody" xml:space="preserve">
+    <value>{0} का उपयोग कोई अन्य ऐप कर रहा है. मीटिंग नोट्स में "★ महत्वपूर्ण" बटन का उपयोग करें, या सेटिंग्स → मीटिंग में कोई अन्य कुंजी चुनें.</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>कॉपी किया गया</value>
+  </data>
+  <data name="Quit_MeetingInProgress" xml:space="preserve">
+    <value>एक मीटिंग रिकॉर्ड हो रही है (या रिकॉर्डिंग के बाद प्रोसेस हो रही है). यदि आप बाहर निकलते हैं, तो इस मीटिंग की कोई ट्रांसक्रिप्ट या कार्यवृत्त नहीं बनेगा (ऑडियो फ़ाइलें रखी जाएँगी). फिर भी बाहर निकलें?</value>
+  </data>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>Windows Hello सेट अप नहीं है (Windows सेटिंग्स → खाते → साइन-इन विकल्प में PIN या ऐसा कुछ सेट अप करें).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Windows Hello सत्यापन रद्द कर दिया गया, इसलिए API कुंजी पढ़ी नहीं जा सकी.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Windows Hello सत्यापन विफल रहा ({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>Windows Hello कुंजी नहीं मिली (हो सकता है Windows Hello फिर से सेट अप किया गया हो). सेटिंग्स → AI में API कुंजी फिर से दर्ज करें.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Windows Hello कुंजी खोली नहीं जा सकी ({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Windows Hello सत्यापन रद्द कर दिया गया.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Windows Hello कुंजी नहीं बनाई जा सकी ({0}).</value>
+  </data>
+  <data name="Mic_NotFound" xml:space="preserve">
+    <value>कोई माइक्रोफ़ोन नहीं मिला. Windows सेटिंग्स → सिस्टम → ध्वनि में जाँचें कि माइक्रोफ़ोन कनेक्ट है.</value>
+  </data>
+  <data name="Mic_AccessDenied" xml:space="preserve">
+    <value>माइक्रोफ़ोन एक्सेस की अनुमति नहीं है. Windows सेटिंग्स → गोपनीयता और सुरक्षा → माइक्रोफ़ोन में, "डेस्कटॉप ऐप्स को अपने माइक्रोफ़ोन तक पहुँचने दें" चालू करें.</value>
+  </data>
+  <data name="Mic_StartFailed" xml:space="preserve">
+    <value>माइक्रोफ़ोन से रिकॉर्डिंग शुरू नहीं हो सकी: {0}</value>
+  </data>
+  <data name="Output_NotFound" xml:space="preserve">
+    <value>कोई ऑडियो आउटपुट डिवाइस (स्पीकर या हेडफ़ोन) नहीं मिला.</value>
+  </data>
+  <data name="Loopback_StartFailed" xml:space="preserve">
+    <value>PC ऑडियो की रिकॉर्डिंग शुरू नहीं हो सकी: {0}</value>
+  </data>
+  <data name="Speech_LanguageNotInstalled" xml:space="preserve">
+    <value>Windows में {0} के लिए वाक् पहचान इंस्टॉल नहीं है. Windows सेटिंग्स → समय और भाषा → भाषा और क्षेत्र में, {0} के लिए "…" → "भाषा विकल्प" खोलें और वाक् पहचान जोड़ें. या सेटिंग्स में ट्रांसक्रिप्शन इंजन को Whisper या Gemini पर सेट करें.</value>
+  </data>
+  <data name="Speech_LanguageNotSupported" xml:space="preserve">
+    <value>Windows डिक्टेशन इस भाषा का समर्थन नहीं करता. सेटिंग्स में ट्रांसक्रिप्शन इंजन को Whisper या Gemini पर सेट करें.</value>
+  </data>
+  <data name="Speech_MicUnavailable" xml:space="preserve">
+    <value>माइक्रोफ़ोन का उपयोग नहीं किया जा सकता. Windows में डिफ़ॉल्ट माइक्रोफ़ोन जाँचें.</value>
+  </data>
+  <data name="Speech_NetworkFailure" xml:space="preserve">
+    <value>Windows वाक् पहचान नेटवर्क से कनेक्ट नहीं हो सकी. अपना इंटरनेट कनेक्शन जाँचें.</value>
+  </data>
+  <data name="Speech_StartFailed" xml:space="preserve">
+    <value>Windows वाक् पहचान शुरू नहीं हो सकी ({0}).</value>
+  </data>
+  <data name="Speech_OnlineRecognitionOff" xml:space="preserve">
+    <value>Windows वाक् पहचान का उपयोग करने के लिए, Windows सेटिंग्स → गोपनीयता और सुरक्षा → वाक् में "ऑनलाइन वाक् पहचान" चालू करें. यदि आप इसे चालू नहीं करना चाहते, तो सेटिंग्स में ट्रांसक्रिप्शन इंजन को Whisper पर सेट करें.</value>
+  </data>
+  <data name="Speech_Error" xml:space="preserve">
+    <value>Windows वाक् पहचान में एक त्रुटि हुई: {0}</value>
+  </data>
+  <data name="Hud_LanguageSwitch_Tip" xml:space="preserve">
+    <value>रिकॉर्डिंग रोकते समय चुनी गई भाषा में टाइप करता है</value>
+  </data>
+  <data name="Hud_SpokenLanguage" xml:space="preserve">
+    <value>जैसा बोला गया</value>
+  </data>
+  <data name="Hud_Stop_Tip" xml:space="preserve">
+    <value>रिकॉर्डिंग रोकता है और टेक्स्ट टाइप करता है (शॉर्टकट दोबारा दबाने के समान)</value>
+  </data>
+  <data name="Hud_Stop" xml:space="preserve">
+    <value>रोकें</value>
+  </data>
+  <data name="Hud_Cancel" xml:space="preserve">
+    <value>रद्द करें</value>
+  </data>
+  <data name="Hud_Cancel_Tip" xml:space="preserve">
+    <value>कुछ भी टाइप किए बिना रद्द करता है (Esc)</value>
+  </data>
+  <data name="Hud_Close" xml:space="preserve">
+    <value>बंद करें</value>
+  </data>
+  <data name="Hud_Close_Tip" xml:space="preserve">
+    <value>यह पैनल बंद करता है (टेक्स्ट पर क्लिक करने के बाद आप Esc भी दबा सकते हैं)</value>
+  </data>
+  <data name="Hud_Copy_Tip" xml:space="preserve">
+    <value>टेक्स्ट को क्लिपबोर्ड पर कॉपी करता है</value>
+  </data>
+  <data name="Hud_Copy" xml:space="preserve">
+    <value>कॉपी करें</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>डिक्टेशन इतिहास — Hanasu</value>
+  </data>
+  <data name="History_FilterAll" xml:space="preserve">
+    <value>सभी</value>
+  </data>
+  <data name="History_FilterUnrefined" xml:space="preserve">
+    <value>विफल / बिना सुधार</value>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>खोजें</value>
+  </data>
+  <data name="History_Search_Tip" xml:space="preserve">
+    <value>परिणाम, मूल टेक्स्ट और लक्ष्य ऐप्स में खोजता है. सभी शब्दों वाली प्रविष्टियाँ ढूँढने के लिए शब्दों को स्पेस से अलग करें.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>बंद करें</value>
+  </data>
+  <data name="History_DeleteAll" xml:space="preserve">
+    <value>सभी हटाएँ…</value>
+  </data>
+  <data name="OpenSaveFolder" xml:space="preserve">
+    <value>सहेजने का फ़ोल्डर खोलें</value>
+  </data>
+  <data name="History_CopyResult" xml:space="preserve">
+    <value>परिणाम कॉपी करें</value>
+  </data>
+  <data name="History_CopyOriginal" xml:space="preserve">
+    <value>मूल कॉपी करें</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>हटाएँ</value>
+  </data>
+  <data name="History_ResultLabel" xml:space="preserve">
+    <value>परिणाम (टाइप किया गया टेक्स्ट)</value>
+  </data>
+  <data name="History_OriginalLabel" xml:space="preserve">
+    <value>मूल (ट्रांसक्रिप्ट)</value>
+  </data>
+  <data name="Hud_CopyFailed" xml:space="preserve">
+    <value>कॉपी नहीं हो सका</value>
+  </data>
+  <data name="HotKeyBox_Prompt" xml:space="preserve">
+    <value>कुंजियाँ दबाएँ (रद्द करने के लिए Esc)…</value>
+  </data>
+  <data name="Separator" xml:space="preserve">
+    <value> · </value>
+  </data>
+  <data name="WideSeparator" xml:space="preserve">
+    <value>   </value>
+  </data>
+  <data name="History_Unrefined" xml:space="preserve">
+    <value>बिना सुधार</value>
+  </data>
+  <data name="History_Kept" xml:space="preserve">
+    <value>{0} तक और अधिकतम {1} प्रविष्टियाँ रखी जा रही हैं (सेटिंग्स → इतिहास).</value>
+  </data>
+  <data name="History_NotSaved" xml:space="preserve">
+    <value>इतिहास फ़ाइल में सहेजा नहीं जाता. केवल अंतिम 10 प्रविष्टियाँ मेमोरी में रखी जाती हैं (सेटिंग्स → इतिहास).</value>
+  </data>
+  <data name="History_Count" xml:space="preserve">
+    <value>{0} प्रविष्टियाँ. {1}</value>
+  </data>
+  <data name="History_CountFiltered" xml:space="preserve">
+    <value>{1} में से {0} प्रविष्टियाँ. {2}</value>
+  </data>
+  <data name="History_Selected" xml:space="preserve">
+    <value>{0} प्रविष्टियाँ चुनी गईं (इन्हें एक साथ हटाने के लिए Delete दबाएँ या "हटाएँ" पर क्लिक करें)</value>
+  </data>
+  <data name="History_App" xml:space="preserve">
+    <value>ऐप: {0}</value>
+  </data>
+  <data name="History_Model" xml:space="preserve">
+    <value>मॉडल: {0}</value>
+  </data>
+  <data name="CopyFailedClipboardBusy" xml:space="preserve">
+    <value>कॉपी नहीं हो सका (कोई अन्य ऐप क्लिपबोर्ड का उपयोग कर रहा है)</value>
+  </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>चयनित इतिहास प्रविष्टियाँ ({0}) हटाएँ? इसे पूर्ववत नहीं किया जा सकता.</value>
+  </data>
+  <data name="History_ConfirmDeleteAll" xml:space="preserve">
+    <value>सभी {0} डिक्टेशन इतिहास प्रविष्टियाँ हटाएँ? इसे पूर्ववत नहीं किया जा सकता.</value>
+  </data>
+  <data name="Meeting_Title" xml:space="preserve">
+    <value>मीटिंग नोट्स — Hanasu</value>
+  </data>
+  <data name="Meeting_Stop" xml:space="preserve">
+    <value>■ रोकें</value>
+  </data>
+  <data name="Meeting_Recording" xml:space="preserve">
+    <value>● रिकॉर्डिंग</value>
+  </data>
+  <data name="Meeting_MicLabel" xml:space="preserve">
+    <value>मैं (माइक्रोफ़ोन)</value>
+  </data>
+  <data name="Meeting_OutputLabel" xml:space="preserve">
+    <value>दूसरा पक्ष (इस आउटपुट पर चलने वाली ध्वनि)</value>
+  </data>
+  <data name="Meeting_TemplateLabel" xml:space="preserve">
+    <value>कार्यवृत्त टेम्पलेट</value>
+  </data>
+  <data name="Meeting_Start" xml:space="preserve">
+    <value>● मीटिंग रिकॉर्डिंग शुरू करें</value>
+  </data>
+  <data name="Meeting_MoveToRecycleBin" xml:space="preserve">
+    <value>रीसायकल बिन में ले जाएँ…</value>
+  </data>
+  <data name="Meeting_Empty" xml:space="preserve">
+    <value>बाईं ओर की सूची से कोई मीटिंग चुनें, या रिकॉर्डिंग शुरू करने के लिए नीचे बाईं ओर "मीटिंग रिकॉर्डिंग शुरू करें" पर क्लिक करें.</value>
+  </data>
+  <data name="Meeting_TitleEdit_Tip" xml:space="preserve">
+    <value>शीर्षक बदलने के लिए क्लिक करें (सहेजने के लिए Enter, रद्द करने के लिए Esc)</value>
+  </data>
+  <data name="Meeting_Regenerate" xml:space="preserve">
+    <value>कार्यवृत्त फिर से बनाएँ</value>
+  </data>
+  <data name="Meeting_TemplateShort" xml:space="preserve">
+    <value>टेम्पलेट:</value>
+  </data>
+  <data name="Meeting_CopyMarkdown" xml:space="preserve">
+    <value>Markdown कॉपी करें</value>
+  </data>
+  <data name="Meeting_OpenInExplorer" xml:space="preserve">
+    <value>फ़ाइल एक्सप्लोरर में खोलें</value>
+  </data>
+  <data name="Meeting_SpeakersLabel" xml:space="preserve">
+    <value>वक्ताओं के नाम (ट्रांसक्रिप्ट और कार्यवृत्त दिखाते समय उपयोग होते हैं)</value>
+  </data>
+  <data name="Meeting_UndoHighlight_Tip" xml:space="preserve">
+    <value>चिह्न जोड़ने के बाद 10 सेकंड तक, गलती होने पर आप उसे पूर्ववत कर सकते हैं</value>
+  </data>
+  <data name="Meeting_Highlight" xml:space="preserve">
+    <value>★ महत्वपूर्ण</value>
+  </data>
+  <data name="Meeting_AddNote" xml:space="preserve">
+    <value>नोट जोड़ें</value>
+  </data>
+  <data name="Meeting_NoteHint" xml:space="preserve">
+    <value>नोट जोड़ने के लिए Enter दबाएँ (समय वह है जब आपने टाइप करना शुरू किया). टाइप करते समय "महत्वपूर्ण" दबाने पर टेक्स्ट उस चिह्न का विवरण बन जाता है.</value>
+  </data>
+  <data name="Meeting_Tab_Minutes" xml:space="preserve">
+    <value>कार्यवृत्त</value>
+  </data>
+  <data name="Meeting_Tab_Transcript" xml:space="preserve">
+    <value>ट्रांसक्रिप्ट</value>
+  </data>
+  <data name="Meeting_Tab_Highlights" xml:space="preserve">
+    <value>महत्वपूर्ण</value>
+  </data>
+  <data name="Meeting_Tab_Notes" xml:space="preserve">
+    <value>नोट्स</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>सहेजें</value>
+  </data>
+  <data name="Meeting_SaveAndRegenerate" xml:space="preserve">
+    <value>सहेजें और कार्यवृत्त फिर से बनाएँ</value>
+  </data>
+  <data name="Meeting_NotesHint" xml:space="preserve">
+    <value>प्रति पंक्ति एक. "[12:34] टेक्स्ट" एक नोट है, "[12:40] ★ विवरण" एक "महत्वपूर्ण" चिह्न है, और बिना समय वाली पंक्तियाँ रिकॉर्डिंग के बाद जोड़े गए नोट हैं.</value>
+  </data>
+  <data name="Meeting_Me" xml:space="preserve">
+    <value>मैं</value>
+  </data>
+  <data name="Meeting_Others" xml:space="preserve">
+    <value>दूसरा पक्ष</value>
+  </data>
+  <data name="Meeting_Status_Processing" xml:space="preserve">
+    <value>प्रोसेस हो रहा है</value>
+  </data>
+  <data name="Meeting_Status_Failed" xml:space="preserve">
+    <value>विफल</value>
+  </data>
+  <data name="Meeting_Status_Warning" xml:space="preserve">
+    <value>चेतावनियाँ हैं</value>
+  </data>
+  <data name="Meeting_SavedIn" xml:space="preserve">
+    <value>सहेजने का स्थान: {0}</value>
+  </data>
+  <data name="Meeting_MinutesAfterRecording" xml:space="preserve">
+    <value>रिकॉर्डिंग रोकने पर, ट्रांसक्रिप्शन के बाद कार्यवृत्त बनाया जाएगा.</value>
+  </data>
+  <data name="Meeting_Processing" xml:space="preserve">
+    <value>प्रोसेस हो रहा है…</value>
+  </data>
+  <data name="Meeting_NoMinutesYet" xml:space="preserve">
+    <value>अभी तक कोई कार्यवृत्त नहीं. आप इसे "कार्यवृत्त फिर से बनाएँ" से बना सकते हैं (इसके लिए सेटिंग्स → AI में "मीटिंग" के लिए AI सेटिंग्स आवश्यक हैं).</value>
+  </data>
+  <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
+    <value>रिकॉर्डिंग रोकने के बाद ट्रांसक्रिप्शन होता है.</value>
+  </data>
+  <data name="Meeting_NoTranscriptYet" xml:space="preserve">
+    <value>कोई ट्रांसक्रिप्ट नहीं.</value>
+  </data>
+  <data name="Meeting_RecordingNote" xml:space="preserve">
+    <value>{0} से ट्रांसक्रिप्शन रिकॉर्डिंग रोकने के बाद होता है (मीटिंग के दौरान आपके PC पर लोड कम करने के लिए).</value>
+  </data>
+  <data name="Meeting_SpeakerName_Inferred_Tip" xml:space="preserve">
+    <value>{0} का नाम (बातचीत से अनुमानित; गलत हो तो सुधारें)</value>
+  </data>
+  <data name="Meeting_SpeakerName_Tip" xml:space="preserve">
+    <value>{0} का नाम</value>
+  </data>
+  <data name="Meeting_Inferred" xml:space="preserve">
+    <value>अनुमानित</value>
+  </data>
+  <data name="Meeting_SpeakerNamesSaved" xml:space="preserve">
+    <value>वक्ताओं के नाम सहेजे गए</value>
+  </data>
+  <data name="Meeting_TitleSaved" xml:space="preserve">
+    <value>शीर्षक सहेजा गया</value>
+  </data>
+  <data name="Meeting_SaveFailed" xml:space="preserve">
+    <value>सहेजा नहीं जा सका: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>कार्यवृत्त टेम्पलेट को “{0}” में बदलें और कार्यवृत्त फिर से बनाएँ?
+
+मौजूदा कार्यवृत्त और ऐक्शन आइटम बदल दिए जाएँगे.</value>
+  </data>
+  <data name="Meeting_Regenerated" xml:space="preserve">
+    <value>कार्यवृत्त फिर से बनाया गया ({0} सेकंड)</value>
+  </data>
+  <data name="Meeting_NoTranscript" xml:space="preserve">
+    <value>कोई ट्रांसक्रिप्ट नहीं है</value>
+  </data>
+  <data name="Meeting_NoNotes" xml:space="preserve">
+    <value>कोई नोट्स नहीं हैं</value>
+  </data>
+  <data name="Meeting_NoMinutes" xml:space="preserve">
+    <value>कोई कार्यवृत्त नहीं है</value>
+  </data>
+  <data name="Meeting_CopiedTranscript" xml:space="preserve">
+    <value>ट्रांसक्रिप्ट को Markdown के रूप में कॉपी किया गया</value>
+  </data>
+  <data name="Meeting_CopiedNotes" xml:space="preserve">
+    <value>नोट्स को Markdown के रूप में कॉपी किया गया</value>
+  </data>
+  <data name="Meeting_CopiedMinutes" xml:space="preserve">
+    <value>कार्यवृत्त को Markdown के रूप में कॉपी किया गया</value>
+  </data>
+  <data name="CopyFailed" xml:space="preserve">
+    <value>कॉपी नहीं हो सका: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmDelete" xml:space="preserve">
+    <value>"{0}" हटाएँ?
+
+कार्यवृत्त, ट्रांसक्रिप्ट, नोट्स और ऑडियो सभी रीसायकल बिन में ले जाए जाएँगे. आप उन्हें रीसायकल बिन से पुनर्स्थापित कर सकते हैं.</value>
+  </data>
+  <data name="Meeting_ConfirmDelete_Title" xml:space="preserve">
+    <value>मीटिंग हटाएँ — Hanasu</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>हटाया नहीं जा सका: {0}</value>
+  </data>
+  <data name="Meeting_MovedToRecycleBin" xml:space="preserve">
+    <value>"{0}" को रीसायकल बिन में ले जाया गया</value>
+  </data>
+  <data name="Meeting_NotesWhileRecording" xml:space="preserve">
+    <value>रिकॉर्डिंग के दौरान, ऊपर दिए गए नोट बॉक्स में नोट्स जोड़ें (रिकॉर्डिंग के बाद आप इस टैब को संपादित कर सकते हैं).</value>
+  </data>
+  <data name="Meeting_NotesSaved" xml:space="preserve">
+    <value>नोट्स सहेजे गए</value>
+  </data>
+  <data name="Meeting_UndoHighlight" xml:space="preserve">
+    <value>★ पूर्ववत करें ({0} से. शेष)</value>
+  </data>
+  <data name="Meeting_Starting" xml:space="preserve">
+    <value>रिकॉर्डिंग शुरू हो रही है…</value>
+  </data>
+  <data name="Meeting_PostProcessing" xml:space="preserve">
+    <value>रिकॉर्डिंग के बाद प्रोसेसिंग</value>
+  </data>
+  <data name="Meeting_StopHint" xml:space="preserve">
+    <value>आप {0} से भी रोक सकते हैं</value>
+  </data>
+  <data name="Meeting_StartHint" xml:space="preserve">
+    <value>आप {0} से भी शुरू कर सकते हैं. शुरू करने से पहले अन्य प्रतिभागियों को बताएँ कि आप रिकॉर्ड कर रहे हैं.</value>
+  </data>
+  <data name="Device_DefaultMic" xml:space="preserve">
+    <value>Windows डिफ़ॉल्ट माइक्रोफ़ोन</value>
+  </data>
+  <data name="Device_MissingMic" xml:space="preserve">
+    <value>(पहले चुना गया माइक्रोफ़ोन, अभी कनेक्ट नहीं है)</value>
+  </data>
+  <data name="Device_DefaultOutput" xml:space="preserve">
+    <value>Windows डिफ़ॉल्ट आउटपुट</value>
+  </data>
+  <data name="Device_MissingOutput" xml:space="preserve">
+    <value>(पहले चुना गया आउटपुट, अभी कनेक्ट नहीं है)</value>
+  </data>
+  <data name="MeetingMic_StartFailed" xml:space="preserve">
+    <value>माइक्रोफ़ोन की रिकॉर्डिंग शुरू नहीं हो सकी: {0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Hanasu सेटिंग्स</value>
+  </data>
+  <data name="Settings_SavedImmediately" xml:space="preserve">
+    <value>परिवर्तन तुरंत सहेजे जाते हैं</value>
+  </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>सामान्य</value>
+  </data>
+  <data name="Settings_Shortcuts" xml:space="preserve">
+    <value>शॉर्टकट</value>
+  </data>
+  <data name="Settings_Dictation" xml:space="preserve">
+    <value>डिक्टेशन</value>
+  </data>
+  <data name="Settings_ResetToDefault" xml:space="preserve">
+    <value>डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_TranslateAndType" xml:space="preserve">
+    <value>अनुवाद करें और टाइप करें</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>किसी बॉक्स पर क्लिक करें, फिर अपनी पसंद का कुंजी संयोजन दबाएँ. रिकॉर्डिंग के दौरान Esc रद्द करता है. Alt + Space (विंडो मेनू) और Win + H (Windows वॉइस टाइपिंग) का उपयोग Windows करता है, इसलिए इनसे बचा जाता है.</value>
+  </data>
+  <data name="Settings_TranslationLanguages" xml:space="preserve">
+    <value>अनुवाद भाषाएँ</value>
+  </data>
+  <data name="Settings_TranslateEnglish" xml:space="preserve">
+    <value>अंग्रेज़ी</value>
+  </data>
+  <data name="Settings_TranslateJapanese" xml:space="preserve">
+    <value>जापानी</value>
+  </data>
+  <data name="Settings_TranslationNote" xml:space="preserve">
+    <value>"अनुवाद करें और टाइप करें" शॉर्टकट सबसे बाईं ओर की चुनी गई भाषा में अनुवाद करता है. रिकॉर्डिंग के दौरान, आप HUD में "जैसा बोला गया" और चुनी गई भाषाओं के बीच बदल सकते हैं (टेक्स्ट उस भाषा में टाइप होता है जो रोकते समय चुनी गई हो). अनुवाद "AI" टैब पर डिक्टेशन के लिए चुने गए AI का उपयोग करता है. कम से कम एक चुनें.</value>
+  </data>
+  <data name="Settings_RecordingMode" xml:space="preserve">
+    <value>रिकॉर्डिंग मोड</value>
+  </data>
+  <data name="Settings_Toggle" xml:space="preserve">
+    <value>हर बार दबाने पर शुरू/बंद (टॉगल)</value>
+  </data>
+  <data name="Settings_PushToTalk" xml:space="preserve">
+    <value>केवल दबाए रखने तक रिकॉर्ड करें</value>
+  </data>
+  <data name="Settings_Engine" xml:space="preserve">
+    <value>ट्रांसक्रिप्शन इंजन</value>
+  </data>
+  <data name="Settings_Engine_Windows" xml:space="preserve">
+    <value>Windows वाक् पहचान (डिफ़ॉल्ट)</value>
+  </data>
+  <data name="Settings_Engine_Whisper" xml:space="preserve">
+    <value>Whisper (इस PC पर चलता है)</value>
+  </data>
+  <data name="Settings_Engine_Gemini" xml:space="preserve">
+    <value>Gemini (ऑडियो Google को भेजता है)</value>
+  </data>
+  <data name="Settings_Engine_WindowsNote" xml:space="preserve">
+    <value>Windows वाक् पहचान (डिक्टेशन) से वाक् पहचानता है और बोलते समय आंशिक परिणाम दिखाता है. यह Microsoft की ऑनलाइन वाक् पहचान का उपयोग करता है, इसलिए Windows सेटिंग्स → गोपनीयता और सुरक्षा → वाक् में "ऑनलाइन वाक् पहचान" चालू करें. यह Windows डिफ़ॉल्ट माइक्रोफ़ोन का उपयोग करता है (नीचे का चयन उपयोग नहीं होता).</value>
+  </data>
+  <data name="Settings_OpenSpeechSettings" xml:space="preserve">
+    <value>वाक् सेटिंग्स खोलें</value>
+  </data>
+  <data name="Settings_OpenLanguageSettings" xml:space="preserve">
+    <value>भाषा सेटिंग्स खोलें</value>
+  </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp इसी PC पर ट्रांसक्राइब करता है (ऑडियो कभी इससे बाहर नहीं जाता), रिकॉर्डिंग रोकने के बाद एक साथ. जैसे ही आप इंजन या कोई मॉडल चुनते हैं, चुना गया मॉडल (आकार सूची में दिखाए गए हैं) Hugging Face से डाउनलोड होना शुरू हो जाता है (आप इसे “रद्द करें” से रोक सकते हैं). बड़े मॉडल अधिक सटीक होते हैं, लेकिन धीमे होते हैं.</value>
+  </data>
+  <data name="Settings_Model" xml:space="preserve">
+    <value>मॉडल</value>
+  </data>
+  <data name="Settings_Download" xml:space="preserve">
+    <value>डाउनलोड करें</value>
+  </data>
+  <data name="Settings_CancelDownload" xml:space="preserve">
+    <value>रद्द करें</value>
+  </data>
+  <data name="Settings_Engine_GeminiNote" xml:space="preserve">
+    <value>रिकॉर्ड किया गया ऑडियो ट्रांसक्रिप्शन के लिए Google के Gemini API को भेजता है (AI टैब पर सेट Gemini क्रेडेंशियल और डिक्टेशन के Gemini मॉडल का उपयोग करके). ध्यान दें कि आपका ऑडियो Google को भेजा जाता है. यह रिकॉर्डिंग रोकने के बाद भेजा जाता है (एक बार में अधिकतम 7 मिनट).</value>
+  </data>
+  <data name="Settings_Microphone" xml:space="preserve">
+    <value>माइक्रोफ़ोन</value>
+  </data>
+  <data name="Settings_NoTarget" xml:space="preserve">
+    <value>जब टाइप करने के लिए कोई स्थान न हो</value>
+  </data>
+  <data name="Settings_NoTargetNote" xml:space="preserve">
+    <value>यदि किसी टेक्स्ट फ़ील्ड पर फ़ोकस नहीं है (उदाहरण के लिए, डेस्कटॉप सामने है) या सामने का ऐप व्यवस्थापक के रूप में चल रहा है और उसमें पेस्ट नहीं किया जा सकता, तो परिणाम स्क्रीन के नीचे दिखाया जाता है. यह तब तक रहता है जब तक आप इसे बंद नहीं करते, और आप इसे "कॉपी करें" से या टेक्स्ट चुनकर कॉपी कर सकते हैं.</value>
+  </data>
+  <data name="Settings_Fallback_Keep" xml:space="preserve">
+    <value>इसे क्लिपबोर्ड पर भी रखें (बस जहाँ चाहिए वहाँ Ctrl+V दबाएँ)</value>
+  </data>
+  <data name="Settings_Fallback_Restore" xml:space="preserve">
+    <value>केवल दिखाएँ और क्लिपबोर्ड को अपरिवर्तित रखें (पैनल पर "कॉपी करें" से कॉपी करें)</value>
+  </data>
+  <data name="Settings_Other" xml:space="preserve">
+    <value>अन्य</value>
+  </data>
+  <data name="Settings_PlaySounds" xml:space="preserve">
+    <value>रिकॉर्डिंग शुरू और बंद होने पर ध्वनि चलाएँ</value>
+  </data>
+  <data name="Settings_OpenLogs" xml:space="preserve">
+    <value>लॉग फ़ोल्डर खोलें</value>
+  </data>
+  <data name="Settings_OpenSettingsFolder" xml:space="preserve">
+    <value>सेटिंग्स फ़ोल्डर खोलें</value>
+  </data>
+  <data name="Settings_AiAndModels" xml:space="preserve">
+    <value>AI और मॉडल</value>
+  </data>
+  <data name="Settings_Ai_Dictation" xml:space="preserve">
+    <value>डिक्टेशन (सुधार, अनुवाद)</value>
+  </data>
+  <data name="Settings_Ai_Local" xml:space="preserve">
+    <value>स्थानीय</value>
+  </data>
+  <data name="Settings_Ai_Meeting" xml:space="preserve">
+    <value>मीटिंग (कार्यवृत्त)</value>
+  </data>
+  <data name="Settings_AiNote" xml:space="preserve">
+    <value>आप डिक्टेशन और मीटिंग के लिए AI और मॉडल अलग-अलग चुन सकते हैं. डिफ़ॉल्ट Gemini के लिए gemini-3.5-flash-lite (डिक्टेशन) और gemini-3.8-flash (कार्यवृत्त), और Claude के लिए Haiku 5.5 (डिक्टेशन) और Sonnet 5.5 (कार्यवृत्त) हैं. Claude का उपयोग केवल टेक्स्ट प्रोसेस करने के लिए होता है, ऑडियो ट्रांसक्राइब करने के लिए नहीं (ट्रांसक्रिप्शन इंजन "सामान्य" और "मीटिंग" टैब पर है).</value>
+  </data>
+  <data name="Settings_LocalModels" xml:space="preserve">
+    <value>स्थानीय मॉडल (इस PC पर चलने वाले छोटे LLM)</value>
+  </data>
+  <data name="Settings_LocalModelsNote" xml:space="preserve">
+    <value>टेक्स्ट केवल इसी PC पर प्रोसेस होता है और कभी इंटरनेट पर नहीं भेजा जाता. पहले वह मॉडल डाउनलोड करें जिसका आप उपयोग करना चाहते हैं. यह CPU पर चलता है, इसलिए सुधार में कुछ से लेकर दस से अधिक सेकंड, और कार्यवृत्त में कुछ से लेकर दस से अधिक मिनट लगते हैं.</value>
+  </data>
+  <data name="Settings_Stop" xml:space="preserve">
+    <value>रोकें</value>
+  </data>
+  <data name="Settings_Refine" xml:space="preserve">
+    <value>AI से सुधारें (गलत पहचान, भराव शब्द, स्व-सुधार और विराम चिह्न ठीक करें)</value>
+  </data>
+  <data name="Settings_RefineNote" xml:space="preserve">
+    <value>बंद होने पर, टाइप करने से पहले पहचाने गए टेक्स्ट पर केवल शब्दकोश प्रतिस्थापन लागू होते हैं. अनुवाद केवल AI से हो सकता है, इसलिए यह बंद होने पर भी अनुवाद के लिए टेक्स्ट AI को भेजा जाता है.</value>
+  </data>
+  <data name="Settings_RefineLanguage" xml:space="preserve">
+    <value>सुधार की भाषा</value>
+  </data>
+  <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
+    <value>जैसा बोला गया</value>
+  </data>
+  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
+    <value>हमेशा जापानी</value>
+  </data>
+  <data name="Settings_SendAppName" xml:space="preserve">
+    <value>AI को उस ऐप का नाम बताएँ जिसमें आप टाइप कर रहे हैं (उसकी शैली से मेल खाने के लिए)</value>
+  </data>
+  <data name="Settings_GeminiAuth" xml:space="preserve">
+    <value>Gemini प्रमाणीकरण</value>
+  </data>
+  <data name="Settings_Auth_ApiKey" xml:space="preserve">
+    <value>API कुंजी (Google AI Studio)</value>
+  </data>
+  <data name="Settings_Auth_ServiceAccount" xml:space="preserve">
+    <value>सेवा खाता (Vertex AI)</value>
+  </data>
+  <data name="Settings_ApiKey" xml:space="preserve">
+    <value>API कुंजी</value>
+  </data>
+  <data name="Settings_KeyJson" xml:space="preserve">
+    <value>कुंजी (JSON)</value>
+  </data>
+  <data name="Settings_Browse" xml:space="preserve">
+    <value>ब्राउज़ करें…</value>
+  </data>
+  <data name="Settings_Region" xml:space="preserve">
+    <value>क्षेत्र</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Vertex AI User भूमिका (roles/aiplatform.user) वाले सेवा खाते की कुंजी चुनें. केवल कुंजी फ़ाइल का स्थान सहेजा जाता है (उसकी सामग्री कॉपी नहीं की जाती). कुंजी फ़ाइल ऐसी जगह रखें जहाँ अन्य लोग उसे पढ़ न सकें. डिफ़ॉल्ट क्षेत्र global है. “कनेक्शन जाँचें” केवल मॉडल की जानकारी पढ़ता है और इसका कोई शुल्क नहीं लगता.</value>
+  </data>
+  <data name="Settings_ClaudeApiKey" xml:space="preserve">
+    <value>Claude API कुंजी</value>
+  </data>
+  <data name="Settings_TestConnection" xml:space="preserve">
+    <value>कनेक्शन जाँचें</value>
+  </data>
+  <data name="Settings_ClaudeNote" xml:space="preserve">
+    <value>Claude Console (platform.claude.com) में बनाई गई API कुंजी दर्ज करें. सहेजी गई कुंजियाँ स्क्रीन पर नहीं दिखाई जातीं (केवल अंतिम 4 अक्षर). "कनेक्शन जाँचें" केवल मॉडल की जानकारी प्राप्त करता है और इसका कोई शुल्क नहीं लगता.</value>
+  </data>
+  <data name="Settings_KeyProtection" xml:space="preserve">
+    <value>API कुंजी सुरक्षा</value>
+  </data>
+  <data name="Settings_UseHello" xml:space="preserve">
+    <value>API कुंजियों को Windows Hello से सुरक्षित करें (उपयोग के समय अपने PIN, चेहरे या फ़िंगरप्रिंट से सत्यापित करें)</value>
+  </data>
+  <data name="Settings_KeyProtectionNote" xml:space="preserve">
+    <value>कुंजियाँ settings.json में नहीं, बल्कि %LOCALAPPDATA%\Hanasu\secrets.json में एन्क्रिप्ट करके संग्रहीत की जाती हैं. डिफ़ॉल्ट DPAPI के साथ, केवल यही Windows उपयोगकर्ता उन्हें पढ़ सकता है, लेकिन उसी उपयोगकर्ता के रूप में चलने वाले अन्य ऐप्स उन्हें बिना पुष्टि के पढ़ सकते हैं. Windows Hello के साथ, अन्य ऐप्स के उन्हें पढ़ने का प्रयास करने पर Windows Hello संकेत दिखाई देता है (शुरू होने के बाद पहले उपयोग पर एक बार, और स्क्रीन लॉक करने के बाद फिर से सत्यापन होता है). यह Hanasu के चलते समय उसी उपयोगकर्ता के रूप में चलने वाले ऐप्स को मेमोरी पढ़ने से नहीं रोक सकता.</value>
+  </data>
+  <data name="Settings_Trial" xml:space="preserve">
+    <value>आज़माएँ (डिक्टेशन AI)</value>
+  </data>
+  <data name="Settings_TrialSample" xml:space="preserve">
+    <value>अम्म तो कल की मीटिंग के लिए वो मैं जेमिनी से बनाई हुई स्लाइड्स इस्तेमाल करूँगा</value>
+  </data>
+  <data name="Settings_TryRefine" xml:space="preserve">
+    <value>सुधार आज़माएँ</value>
+  </data>
+  <data name="Settings_TryEnglish" xml:space="preserve">
+    <value>अंग्रेज़ी अनुवाद आज़माएँ</value>
+  </data>
+  <data name="Settings_TryJapanese" xml:space="preserve">
+    <value>जापानी अनुवाद आज़माएँ</value>
+  </data>
+  <data name="Settings_Tab_Meetings" xml:space="preserve">
+    <value>मीटिंग</value>
+  </data>
+  <data name="Settings_MeetingStartStop" xml:space="preserve">
+    <value>रिकॉर्डिंग शुरू/बंद करें</value>
+  </data>
+  <data name="Settings_HighlightMark" xml:space="preserve">
+    <value>"महत्वपूर्ण" चिह्न</value>
+  </data>
+  <data name="Settings_UseHighlightHotKey" xml:space="preserve">
+    <value>"महत्वपूर्ण" शॉर्टकट का उपयोग करें (केवल रिकॉर्डिंग के दौरान सक्रिय)</value>
+  </data>
+  <data name="Settings_Transcription" xml:space="preserve">
+    <value>ट्रांसक्रिप्शन</value>
+  </data>
+  <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
+    <value>Whisper (इस PC पर चलता है; डिफ़ॉल्ट)</value>
+  </data>
+  <data name="Settings_MeetingEngineNote" xml:space="preserve">
+    <value>रिकॉर्डिंग के दौरान ऑडियो केवल फ़ाइलों में लिखा जाता है; रोकने के बाद "मैं" और "दूसरा पक्ष" चैनल अलग-अलग टाइमस्टैम्प के साथ ट्रांसक्राइब किए जाते हैं. Windows वाक् पहचान केवल Windows डिफ़ॉल्ट माइक्रोफ़ोन को सुन सकती है और PC ऑडियो (दूसरा पक्ष) नहीं ले सकती, इसलिए इसका उपयोग मीटिंग के लिए नहीं किया जा सकता.</value>
+  </data>
+  <data name="Settings_Speakers" xml:space="preserve">
+    <value>वक्ता</value>
+  </data>
+  <data name="Settings_Diarize" xml:space="preserve">
+    <value>अन्य वक्ताओं को अलग करें (वक्ता 1, वक्ता 2…)</value>
+  </data>
+  <data name="Settings_DiarizeNote" xml:space="preserve">
+    <value>वक्ताओं को इसी PC पर sherpa-onnx (pyannote और 3D-Speaker मॉडल) से अलग किया जाता है. मॉडल (लगभग 34 MB) पहली बार डाउनलोड होते हैं. बंद होने पर, दूसरे पक्ष को एक ही "दूसरा पक्ष" में मिला दिया जाता है. आप मीटिंग नोट्स में वक्ताओं के नाम बदल सकते हैं.</value>
+  </data>
+  <data name="Settings_Minutes" xml:space="preserve">
+    <value>कार्यवृत्त</value>
+  </data>
+  <data name="Settings_MakeMinutes" xml:space="preserve">
+    <value>रिकॉर्डिंग के बाद AI से कार्यवृत्त बनाएँ</value>
+  </data>
+  <data name="Settings_MinutesNote" xml:space="preserve">
+    <value>"AI" टैब पर "मीटिंग (कार्यवृत्त)" में कार्यवृत्त के लिए AI और मॉडल चुनें. केवल ट्रांसक्रिप्ट का टेक्स्ट भेजा जाता है (जब ट्रांसक्रिप्शन इंजन Gemini हो, तो ऑडियो भी Google को भेजा जाता है). कार्यवृत्त टेम्पलेट मीटिंग नोट्स में चुनें.</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>संग्रहण</value>
+  </data>
+  <data name="Settings_KeepAudio" xml:space="preserve">
+    <value>प्रोसेसिंग के बाद ऑडियो फ़ाइलें (me.wav / others.wav) रखें</value>
+  </data>
+  <data name="Settings_KeepAudioNote" xml:space="preserve">
+    <value>बंद होने पर, ट्रांसक्रिप्ट और कार्यवृत्त बनने के बाद ऑडियो हटा दिया जाता है (ट्रांसक्रिप्शन विफल होने पर रखा जाता है). यह 16 kHz मोनो WAV है, प्रति चैनल प्रति घंटा लगभग 115 MB.</value>
+  </data>
+  <data name="Settings_SaveLocation" xml:space="preserve">
+    <value>सहेजने का स्थान</value>
+  </data>
+  <data name="Settings_Open" xml:space="preserve">
+    <value>खोलें</value>
+  </data>
+  <data name="Settings_MeetingsFolderNote" xml:space="preserve">
+    <value>प्रत्येक मीटिंग के लिए दिनांक और समय के नाम से एक फ़ोल्डर बनाया जाता है, जिसमें meeting.json (Mac संस्करण के समान स्वरूप), transcript.md, minutes.md, notes.md और ऑडियो होते हैं.</value>
+  </data>
+  <data name="Settings_ConsentNote" xml:space="preserve">
+    <value>रिकॉर्ड करने से पहले अन्य प्रतिभागियों की सहमति लें. ईयरफ़ोन का उपयोग करने से उनकी आवाज़ आपके माइक्रोफ़ोन में नहीं आती.</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>इतिहास</value>
+  </data>
+  <data name="Settings_DictationHistory" xml:space="preserve">
+    <value>डिक्टेशन इतिहास</value>
+  </data>
+  <data name="Settings_SaveHistory" xml:space="preserve">
+    <value>इतिहास फ़ाइल में सहेजें</value>
+  </data>
+  <data name="Settings_HistoryNote" xml:space="preserve">
+    <value>डिक्टेशन के परिणाम और मूल ट्रांसक्रिप्ट रखता है ताकि आप उन्हें "इतिहास खोलें" से खोज और कॉपी कर सकें. बंद होने पर, नए परिणाम फ़ाइल में नहीं लिखे जाते; सूचना क्षेत्र मेनू के "हाल के परिणाम" के लिए केवल अंतिम 10 मेमोरी में रखे जाते हैं (सहेजा गया इतिहास हटाया नहीं जाता).</value>
+  </data>
+  <data name="Settings_KeepDays" xml:space="preserve">
+    <value>इतने समय तक रखें</value>
+  </data>
+  <data name="Settings_KeepCount" xml:space="preserve">
+    <value>अधिकतम इतनी रखें</value>
+  </data>
+  <data name="Settings_KeepNote" xml:space="preserve">
+    <value>केवल वे प्रविष्टियाँ रखी जाती हैं जो दोनों सीमाओं के भीतर हों; सबसे पुरानी पहले हटाई जाती हैं (जोड़ते समय, शुरू होने पर, और इन सेटिंग्स को बदलने पर). डिफ़ॉल्ट 30 दिन और 1,000 प्रविष्टियाँ हैं.</value>
+  </data>
+  <data name="Settings_OpenHistory" xml:space="preserve">
+    <value>इतिहास खोलें…</value>
+  </data>
+  <data name="Settings_DeleteAllHistory" xml:space="preserve">
+    <value>पूरा इतिहास हटाएँ…</value>
+  </data>
+  <data name="Settings_Tab_Dictionary" xml:space="preserve">
+    <value>शब्दकोश और नियम</value>
+  </data>
+  <data name="Settings_UserDictionary" xml:space="preserve">
+    <value>उपयोगकर्ता शब्दकोश</value>
+  </data>
+  <data name="Settings_TryReplace" xml:space="preserve">
+    <value>प्रतिस्थापन आज़माएँ</value>
+  </data>
+  <data name="Settings_ExtraRules" xml:space="preserve">
+    <value>अतिरिक्त सुधार नियम</value>
+  </data>
+  <data name="Settings_ExtraRulesNote" xml:space="preserve">
+    <value>सुधार करते समय AI (Gemini, Claude) को दिए जाने वाले नियम (उदाहरण के लिए, "औपचारिक लहजे का उपयोग करें"). अंग्रेज़ी में अनुवाद करते समय इनका उपयोग नहीं होता (जापानी में अनुवाद करते समय होता है).</value>
+  </data>
+  <data name="Settings_DictionaryHelp" xml:space="preserve">
+    <value>प्रति पंक्ति एक. अकेला शब्द AI को बताता है कि उसकी वर्तनी कैसे लिखें. "सुना गया =&gt; वर्तनी" पहचाने गए शब्द को उस वर्तनी से बदलता है (उदाहरण के लिए, stock mark =&gt; Stockmark; बाईं ओर कई शब्दों को "," से अलग करें). "#" से शुरू होने वाली पंक्तियाँ टिप्पणियाँ हैं.</value>
+  </data>
+  <data name="Settings_EntryCount" xml:space="preserve">
+    <value>{0} प्रविष्टियाँ</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>सहेजा गया</value>
+  </data>
+  <data name="Settings_MicNote_Windows" xml:space="preserve">
+    <value>Windows इंजन Windows डिफ़ॉल्ट माइक्रोफ़ोन का उपयोग करता है (आप इसे Windows सेटिंग्स → सिस्टम → ध्वनि में बदल सकते हैं).</value>
+  </data>
+  <data name="Settings_MicNote_Selected" xml:space="preserve">
+    <value>Whisper और Gemini यहाँ चुने गए माइक्रोफ़ोन से रिकॉर्ड करते हैं (16 kHz मोनो में बदलकर).</value>
+  </data>
+  <data name="Settings_HistoryStatus" xml:space="preserve">
+    <value>वर्तमान इतिहास: {0} प्रविष्टियाँ (सहेजने का स्थान: {1})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteWhisper" xml:space="preserve">
+    <value>Whisper मॉडल {0} ({1}) हटाएँ?</value>
+  </data>
+  <data name="Settings_Downloading" xml:space="preserve">
+    <value>डाउनलोड हो रहा है… {0}</value>
+  </data>
+  <data name="Settings_Downloaded" xml:space="preserve">
+    <value>डाउनलोड हो गया</value>
+  </data>
+  <data name="Settings_DownloadFailed" xml:space="preserve">
+    <value>विफल: {0}</value>
+  </data>
+  <data name="Settings_NotDownloaded" xml:space="preserve">
+    <value>अभी तक डाउनलोड नहीं हुआ</value>
+  </data>
+  <data name="Settings_ConfirmDeleteLocal" xml:space="preserve">
+    <value>स्थानीय मॉडल {0} ({1}) हटाएँ?</value>
+  </data>
+  <data name="Settings_MinutesAiNote" xml:space="preserve">
+    <value>कार्यवृत्त {0} ({1}) से बनाए जाते हैं.</value>
+  </data>
+  <data name="Settings_Missing_LocalModel" xml:space="preserve">
+    <value>स्थानीय मॉडल "{0}"</value>
+  </data>
+  <data name="Settings_Missing_GeminiCredentials" xml:space="preserve">
+    <value>Gemini क्रेडेंशियल</value>
+  </data>
+  <data name="Settings_MissingNote" xml:space="preserve">
+    <value>अभी सेट अप नहीं: {0} (नीचे सेट अप या डाउनलोड करें).</value>
+  </data>
+  <data name="Settings_EnterApiKey" xml:space="preserve">
+    <value>API कुंजी दर्ज करें</value>
+  </data>
+  <data name="Settings_ClaudeKeyPrefix" xml:space="preserve">
+    <value>Claude API कुंजियाँ "sk-ant-" से शुरू होती हैं. आपने जो दर्ज किया है उसे जाँचें.</value>
+  </data>
+  <data name="Settings_ClaudeConnecting" xml:space="preserve">
+    <value>Claude API से कनेक्ट हो रहा है…</value>
+  </data>
+  <data name="Settings_ClaudeConnectedUnsaved" xml:space="preserve">
+    <value>इस कुंजी से कनेक्ट हो गया (अभी सहेजी नहीं गई). {0} उपलब्ध है. </value>
+  </data>
+  <data name="Settings_ClaudeConnected" xml:space="preserve">
+    <value>कनेक्ट हो गया. {0} उपलब्ध है. </value>
+  </data>
+  <data name="Settings_Hello_On" xml:space="preserve">
+    <value>Windows Hello से सुरक्षित.</value>
+  </data>
+  <data name="Settings_Hello_Off" xml:space="preserve">
+    <value>वर्तमान में DPAPI से सुरक्षित.</value>
+  </data>
+  <data name="Settings_Hello_Unavailable" xml:space="preserve">
+    <value>इस PC पर Windows Hello सेट अप नहीं है, इसलिए इसे चुना नहीं जा सकता (Windows सेटिंग्स → खाते → साइन-इन विकल्प).</value>
+  </data>
+  <data name="Settings_Hello_Enabling" xml:space="preserve">
+    <value>Windows Hello सत्यापन माँगा जा रहा है (पुष्टि के लिए यह दो बार दिखाई देता है)…</value>
+  </data>
+  <data name="Settings_Hello_Disabling" xml:space="preserve">
+    <value>Windows Hello सत्यापन माँगा जा रहा है (कुंजियों को एक बार पढ़कर DPAPI पर वापस जाने के लिए)…</value>
+  </data>
+  <data name="Settings_Hello_SwitchFailed" xml:space="preserve">
+    <value>बदला नहीं जा सका: {0}</value>
+  </data>
+  <data name="Settings_ServiceAccountFilter" xml:space="preserve">
+    <value>सेवा खाता कुंजी (*.json)|*.json|सभी फ़ाइलें (*.*)|*.*</value>
+  </data>
+  <data name="Settings_ServiceAccountDialogTitle" xml:space="preserve">
+    <value>सेवा खाता कुंजी (JSON) चुनें</value>
+  </data>
+  <data name="Settings_TrialRefining" xml:space="preserve">
+    <value>सुधारा जा रहा है…</value>
+  </data>
+  <data name="Settings_TrialTranslating" xml:space="preserve">
+    <value>अनुवाद किया जा रहा है…</value>
+  </data>
+  <data name="Settings_TrialDone" xml:space="preserve">
+    <value>{0} ({1}) ने {2} से. लिए</value>
+  </data>
+  <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
+    <value>रिकॉर्ड किया गया मीटिंग ऑडियो 5-मिनट के हिस्सों में बाँटकर Gemini को भेजा जाता है (AI टैब पर सेट Gemini क्रेडेंशियल और डिक्टेशन के Gemini मॉडल का उपयोग करके). ध्यान दें कि आपका ऑडियो Google को भेजा जाता है.</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
+    <value>"सामान्य" टैब पर चुने गए Whisper मॉडल का उपयोग करता है ({0}).</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
+    <value> यह अभी तक डाउनलोड नहीं हुआ है (इसे "सामान्य" टैब पर डाउनलोड करें).</value>
+  </data>
+  <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
+    <value>मीटिंग सहेजने का स्थान चुनें</value>
+  </data>
+  <data name="Settings_DictionaryLineIssue" xml:space="preserve">
+    <value>पंक्ति {0}: {1}</value>
+  </data>
+  <data name="Settings_NoReplacements" xml:space="preserve">
+    <value>कोई प्रतिस्थापन नहीं</value>
+  </data>
+  <data name="Settings_ReplacementResult" xml:space="preserve">
+    <value>→ {0} ({1})</value>
+  </data>
+  <data name="Settings_TrialAppName" xml:space="preserve">
+    <value>Hanasu सेटिंग्स</value>
+  </data>
+  <data name="Mic_UnsupportedFormat" xml:space="preserve">
+    <value>असमर्थित रिकॉर्डिंग स्वरूप ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>अनुवाद और टाइप करना शुरू करें(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>अंग्रेज़ी में अनुवाद और टाइप करना शुरू करें(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>जापानी में अनुवाद और टाइप करना शुरू करें(&amp;T)</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>यह इतिहास प्रविष्टि हटाएँ? इसे पूर्ववत नहीं किया जा सकता.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>इतिहास खोजें</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>परिणाम</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>मूल</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>कोई “महत्वपूर्ण” चिह्न नहीं</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>“महत्वपूर्ण” संदर्भ को Markdown के रूप में कॉपी किया गया</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>मेरे माइक्रोफ़ोन का स्तर</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>अन्य प्रतिभागियों का ऑडियो स्तर</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>नोट दर्ज करें</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>कार्यवृत्त</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>ट्रांसक्रिप्ट</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>“महत्वपूर्ण” चिह्नों के आसपास का संदर्भ</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>नोट्स</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>डिक्टेशन शॉर्टकट</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>डिक्टेशन शॉर्टकट को डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>अनुवाद करके टाइप करने का शॉर्टकट</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>अनुवाद करके टाइप करने का शॉर्टकट डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>चुना गया Whisper मॉडल हटाएँ</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>माइक्रोफ़ोन</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Gemini API कुंजी हटाएँ</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Gemini कनेक्शन जाँचें</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Claude API कुंजी हटाएँ</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग शुरू करने या रोकने का शॉर्टकट</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग शॉर्टकट को डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>“महत्वपूर्ण” चिह्न का शॉर्टकट</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>“महत्वपूर्ण” चिह्न का शॉर्टकट डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>मीटिंग सहेजने का स्थान डिफ़ॉल्ट पर रीसेट करें</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} पहले से “{1}” का शॉर्टकट है. कोई अन्य कुंजी चुनें.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>डाउनलोड हो रहा है… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>इतिहास सूची</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>अभी तक कोई इतिहास नहीं. आपके डिक्टेशन यहाँ दिखाई देंगे.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>आपकी खोज से कोई इतिहास मेल नहीं खाता.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>चयनित</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>मीटिंग सूची</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>मीटिंग लोड हो रही हैं…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>मीटिंग शीर्षक</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>मीटिंग सूची लोड नहीं हो सकी.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>अभी तक कोई मीटिंग रिकॉर्डिंग नहीं. नीचे बाईं ओर “● मीटिंग रिकॉर्डिंग शुरू करें” से एक शुरू करें, और वह यहाँ दिखाई देगी.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>कार्यवृत्त फिर से बनाएँ?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>नोट्स सहेजें और कार्यवृत्त फिर से बनाएँ?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+मौजूदा कार्यवृत्त और ऐक्शन आइटम बदल दिए जाएँगे.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>सहेजने का फ़ोल्डर नहीं मिला</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>माइक्रोफ़ोन गोपनीयता सेटिंग्स खोलें</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>यदि माइक्रोफ़ोन का उपयोग नहीं हो पा रहा है, तो Windows सेटिंग्स → गोपनीयता और सुरक्षा → माइक्रोफ़ोन पर जाएँ और डेस्कटॉप ऐप्स के लिए माइक्रोफ़ोन एक्सेस चालू करें.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>“कनेक्शन जाँचें” केवल मॉडल की जानकारी पढ़ता है और इसका कोई शुल्क नहीं लगता.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Vertex AI कनेक्शन जाँचें</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>डाउनलोड करें ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>सहेजी गई {0} API कुंजी हटाएँ? इसका उपयोग जारी रखने के लिए, कुंजी फिर से सहेजें.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Gemini API से कनेक्ट हो रहा है…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Vertex AI से कनेक्ट हो रहा है…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>इस कुंजी से कनेक्ट हो गया (अभी सहेजी नहीं गई). {0} उपलब्ध है.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>कनेक्ट हो गया. {0} उपलब्ध है. {1}</value>
+  </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>अपडेट की जाँच करें(&amp;U)…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>शुरू होने पर अपडेट की जाँच करें</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>अभी जाँचें</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>अपडेट की जाँच हो रही है। कृपया थोड़ा इंतज़ार करें।</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu अप-टू-डेट है ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>अपडेट की जाँच नहीं हो सकी।
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Hanasu {0} पर अपडेट नहीं हो सका। अभी भी {1} ही है।
+
+विवरण {2} में लिखा है।
+
+आप रिलीज़ पेज से दोबारा भी इंस्टॉल कर सकते हैं। क्या उसे ब्राउज़र में खोलें?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>रिकॉर्डिंग या मीटिंग रिकॉर्ड करते समय अपडेट नहीं हो सकता। ख़त्म होने के बाद मेनू से “अपडेट की जाँच करें…” फिर से चुनें।</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu ड्राइव के रूट में रखा है, इसलिए ऐप के अंदर से अपडेट नहीं हो सकता। इसे अपने अलग फ़ोल्डर में रखें।</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>अपडेट डाउनलोड हो रहा है</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>डाउनलोड 10 मिनट में पूरा नहीं हुआ, इसलिए रोक दिया गया</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>अपडेट तैयार हो रहा है</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>डाउनलोड किया गया zip खोला जा रहा है।</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…और {0} अन्य</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Hanasu के फ़ोल्डर ({0}) में ऐसी फ़ाइलें या फ़ोल्डर हैं जो Hanasu के नहीं हैं।
+{1}{2}
+
+ऐप के अंदर से अपडेट पूरे फ़ोल्डर को बदलता है, इसलिए यह तभी हो सकता है जब Hanasu अपने अलग फ़ोल्डर में हो। इसे अलग फ़ोल्डर में रखें।</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>इस फ़ोल्डर में लिखा नहीं जा सकता (अगर Hanasu, Program Files जैसी जगह पर है तो एडमिनिस्ट्रेटर के रूप में दोबारा इंस्टॉल करें या रिलीज़ पेज से इंस्टॉल करें)।</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>अपडेट नहीं हो सका।
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+क्या रिलीज़ पेज ब्राउज़र में खोलें?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>अपडेट स्क्रिप्ट शुरू नहीं हो सकी</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Hanasu अपडेट</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} उपलब्ध है (अभी {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>“अपडेट करें” दबाने पर नया वर्ज़न डाउनलोड होकर लग जाएगा और Hanasu फिर से शुरू होगा।</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>यह वर्ज़न ऐप के अंदर से इंस्टॉल नहीं हो सकता। रिलीज़ पेज से इंस्टॉल करें।</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>रिलीज़ पेज खोलें</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>अपडेट करें</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>पेज खोलें</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>बाद में</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>यह वर्ज़न छोड़ें</value>
+  </data>
+</root>

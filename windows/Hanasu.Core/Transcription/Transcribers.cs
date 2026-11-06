@@ -95,7 +95,7 @@ public sealed class RecordThenTranscribe : IDictationTranscriber
     // 録り終えてからまとめて出すので、途中経過はない
     public event EventHandler<string>? PartialTextChanged { add { } remove { } }
 
-    public string? FinishingMessage => $"{transcriber.DisplayName} で文字起こししています…";
+    public string? FinishingMessage => string.Format(Strings.Transcribing_With, transcriber.DisplayName);
 
     public event EventHandler? RecordingLimitReached;
 
@@ -180,7 +180,7 @@ public sealed class GeminiBatchTranscriber : IBatchTranscriber
         }
         if (client is null)
         {
-            throw new TranscriptionException("文字起こしのエンジンが Gemini ですが、Gemini の認証情報が設定されていません（メニュー → 設定 → AI）。");
+            throw new TranscriptionException(Strings.Transcription_GeminiNotConfigured);
         }
         return Task.CompletedTask;
     }
@@ -203,7 +203,7 @@ public sealed class GeminiBatchTranscriber : IBatchTranscriber
         }
         catch (Ai.TextAiException e)
         {
-            throw new TranscriptionException($"Gemini での文字起こしに失敗しました: {e.Message}", inner: e);
+            throw new TranscriptionException(string.Format(Strings.Transcription_GeminiFailed, e.Message), inner: e);
         }
         return string.Join("\n", parts);
     }

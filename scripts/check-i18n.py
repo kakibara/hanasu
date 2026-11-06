@@ -16,6 +16,10 @@
   - すべてのキーに、日本語以外の 16 言語の訳があり、%@ などの数が同じ
   - アプリのソース（開発用の CLI・自己テストを除く）に、tr() で包んでいない日本語の文字列がない
     （ログ・print、言語の決まりに使う語（行に // skip-tr）、比較・正規表現の文字列は除く）
+- Windows の UI の文字列（windows/**/Properties/Strings*.resx。scripts/i18n-resx.py check）
+  - 16 言語のサテライトがそろい、英語と同じ名前・{0} の組がある
+  - アプリのコード（windows/Hanasu.Windows・Hanasu.Core・Hanasu.Whisper・Hanasu.Diarization の .cs と .xaml）に、
+    .resx に移していない日本語の文字列がない（ログ、行に skip-tr のもの（XAML は前の行のコメント）は除く）
 
 python3 の標準ライブラリだけを使う。
 """
@@ -197,12 +201,44 @@ def check_mac_strings(errors: list[str], warnings: list[str], counts: dict[str, 
                                   "（UI なら tr(\"…\") にする。言語の決まりに使う語なら行末に // skip-tr）")
 
 
+WINDOWS_APP_DIRS = ["windows/Hanasu.Windows", "windows/Hanasu.Core", "windows/Hanasu.Whisper", "windows/Hanasu.Diarization"]
+
+
+def check_windows_strings(errors: list[str]) -> None:
+    import subprocess
+    result = subprocess.run([sys.executable, str(ROOT / "scripts/i18n-resx.py"), "check"], capture_output=True, text=True)
+    if result.returncode != 0:
+        for line in (result.stdout + result.stderr).splitlines():
+            if line.startswith("error"):
+                errors.append("resx: " + line.removeprefix("error:").strip())
+        if not any(e.startswith("resx: ") for e in errors):
+            errors.append("resx: scripts/i18n-resx.py check が失敗した")
+    literal = re.compile(r'"(?:[^"\\\n]|\\.)*"')
+    for folder in WINDOWS_APP_DIRS:
+        for path in sorted((ROOT / folder).rglob("*")):
+            if path.suffix not in (".cs", ".xaml") or "/obj/" in str(path) or "/bin/" in str(path):
+                continue
+            previous = ""
+            for number, line in enumerate(path.read_text(encoding="utf-8").split("\n"), start=1):
+                stripped = line.lstrip()
+                skip = ("skip-tr" in line or (path.suffix == ".xaml" and "skip-tr" in previous) or stripped.startswith("//")
+                        or stripped.startswith("<!--") or "AppLog." in line)
+                previous = line
+                if skip:
+                    continue
+                for m in literal.finditer(line):
+                    if JA_TEXT.search(m.group(0)):
+                        errors.append(f"resx: {path.relative_to(ROOT)}:{number}: 日本語の文字列が .resx に移されていない: {m.group(0)[:40]}"
+                                      "（UI なら Strings.resx に。言語の決まりに使う語なら行に skip-tr）")
+
+
 def main(argv: list[str]) -> int:
     errors: list[str] = []
     warnings: list[str] = []
     counts: dict[str, int] = {}
     check_prompts(errors, warnings, counts)
     check_mac_strings(errors, warnings, counts)
+    check_windows_strings(errors)
 
     if "--summary" in argv:
         print("プロンプトのキーの数: " + ", ".join(f"{k} {v}" for k, v in counts.items() if not k.startswith("strings:")))

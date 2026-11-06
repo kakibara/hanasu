@@ -58,15 +58,15 @@ public sealed class DictationHistoryEntry
     {
         HistoryMode.Translate => TranslationLanguage.English.Verb(),
         HistoryMode.TranslateJapanese => TranslationLanguage.Japanese.Verb(),
-        _ => "整形",
+        _ => Strings.History_Mode_Refine,
     };
 
     public static string StatusLabel(HistoryStatus status) => status switch
     {
-        HistoryStatus.Succeeded => "成功",
-        HistoryStatus.GeminiFailed => "AI 失敗（原文のまま）",
-        HistoryStatus.NoCredentials => "未設定のため原文のまま",
-        _ => "整形オフ（原文のまま）",
+        HistoryStatus.Succeeded => Strings.History_Status_Succeeded,
+        HistoryStatus.GeminiFailed => Strings.History_Status_AiFailed,
+        HistoryStatus.NoCredentials => Strings.History_Status_NoCredentials,
+        _ => Strings.History_Status_RefineOff,
     };
 
     /// <summary>一覧で「失敗・未整形」として印を付ける</summary>
@@ -88,7 +88,7 @@ public sealed record HistoryPolicy(bool Enabled = true, int MaxCount = 1000, int
     /// <summary>日数の選択肢。0 は無期限（Mac 版と同じ）</summary>
     public static readonly IReadOnlyList<int> DayOptions = [7, 30, 90, 365, 0];
 
-    public static string DaysLabel(int days) => days > 0 ? $"{days} 日" : "無期限";
+    public static string DaysLabel(int days) => days > 0 ? string.Format(Strings.History_Days, days) : Strings.History_DaysUnlimited;
 }
 
 /// <summary>
@@ -190,16 +190,16 @@ public sealed class DictationHistoryStore
                     try
                     {
                         File.Move(FilePath, broken, overwrite: true);
-                        LastError = $"履歴のファイルを読めなかったので、{Path.GetFileName(broken)} として残し、新しく始めました";
+                        LastError = string.Format(Strings.History_BrokenFileKept, Path.GetFileName(broken));
                     }
                     catch (IOException moveError)
                     {
-                        LastError = $"履歴のファイルを読めませんでした: {moveError.Message}";
+                        LastError = string.Format(Strings.History_ReadFailed, moveError.Message);
                     }
                 }
                 catch (Exception e) when (e is IOException or UnauthorizedAccessException)
                 {
-                    LastError = $"履歴のファイルを読めませんでした: {e.Message}";
+                    LastError = string.Format(Strings.History_ReadFailed, e.Message);
                 }
             }
             entries = loaded.Concat(transient).OrderByDescending(e => e.Date).ToList();
@@ -304,7 +304,7 @@ public sealed class DictationHistoryStore
         }
         catch (Exception e) when (e is IOException or UnauthorizedAccessException)
         {
-            LastError = $"履歴を保存できませんでした: {e.Message}";
+            LastError = string.Format(Strings.History_SaveFailed, e.Message);
         }
     }
 
@@ -330,16 +330,17 @@ public sealed class DictationHistoryStore
                 || (e.AppName?.Contains(w, StringComparison.CurrentCultureIgnoreCase) ?? false))).ToArray();
     }
 
-    /// <summary>日ごとの見出し（今日・昨日・「11月2日（月）」）。年が違えば年も付ける</summary>
+    /// <summary>日ごとの見出し（今日・昨日・「11月2日（月）」）。年が違えば年も付ける。月・曜日の名前は表示の言語で書く</summary>
     public static string DayLabel(DateTimeOffset date, DateTimeOffset now)
     {
         var day = date.ToLocalTime().Date;
         var today = now.ToLocalTime().Date;
-        if (day == today) return "今日";
-        if (day == today.AddDays(-1)) return "昨日";
-        var culture = CultureInfo.GetCultureInfo("ja-JP");
-        var weekday = culture.DateTimeFormat.GetShortestDayName(day.DayOfWeek);
-        return day.Year == today.Year ? $"{day.Month}月{day.Day}日（{weekday}）" : $"{day.Year}年{day.Month}月{day.Day}日（{weekday}）";
+        if (day == today) return Strings.History_Today;
+        if (day == today.AddDays(-1)) return Strings.History_Yesterday;
+        // 要件: REQ-COM-060（書式は言語ごとのリソース。月・曜日の名前は表示の言語のカルチャ）
+        var pattern = day.Year == today.Year ? Strings.History_DayFormat : Strings.History_DayFormatWithYear;
+        // 暦はグレゴリオ暦にそろえる（ar-SA の既定のウンム・アル＝クラー暦で見出しがヒジュラ暦になるのを防ぐ。Meeting.FormatDate と同じ）
+        return day.ToString(pattern, Meetings.Meeting.DisplayLanguage.Culture);
     }
 
     /// <summary>メニューに出す 1 行（失敗したものには ⚠ を付け、長ければ途中で切る）</summary>

@@ -39,14 +39,15 @@
 - 確かめ方: `.build/debug/Hanasu --download-whisper base`（保存先は `HANASU_MODELS_DIR` で変えられる）、`--render-engine-settings /tmp/engine.png --downloading`
 
 ### REQ-COM-004 文字起こしの言語を一覧から選べ、初期値はシステムの言語にする
-- 内容: 設定の「一般」→「文字起こし」の「言語」を、入力欄から一覧に変える。一覧は日本語・英語（米国・英国）・中国語（簡体・繁体）・韓国語・フランス語・ドイツ語・スペイン語・イタリア語・ポルトガル語（ブラジル）。初期値は macOS のシステムの言語にする。一覧にない言語（システムの言語や、前の版で保存した言語）は、言語コードが同じ一覧の項目に寄せる（en-JP → en-US、zh-Hans-CN → zh-CN、zh-Hant-TW → zh-TW。ja-JP はそのまま）。言語コードが同じ項目がなければ、そのまま使う。この言語は、AI へのプロンプトの言語にもなる（REQ-COM-061）。
+- 内容: 設定の「一般」→「文字起こし」の「言語」を、入力欄から一覧に変える。一覧は日本語・英語（米国・英国）・中国語（簡体・繁体）・韓国語・フランス語・ドイツ語・スペイン語・イタリア語・ポルトガル語（ブラジル）。初期値は macOS のシステムの言語にする（Windows は、設定のファイルがまだないときに Windows の表示の言語にする。保存してある設定の言語は変えない）。一覧にない言語（システムの言語や、前の版で保存した言語）は、言語コードが同じ一覧の項目に寄せる（en-JP → en-US、zh-Hans-CN → zh-CN、zh-Hant-TW → zh-TW。ja-JP はそのまま）。言語コードが同じ項目がなければ、そのまま使う。この言語は、AI へのプロンプトの言語にもなる（REQ-COM-061）。
 - 受け入れ条件:
   - 初めて起動したとき、言語はシステムの言語になっている（システムが英語なら English）。
   - システムの言語や保存されている言語が一覧になければ、言語コードが同じ項目が選ばれている（en-JP → en-US、zh-Hans-CN → zh-CN、zh-Hant-TW → zh-TW、ja-JP はそのまま）。
   - 一覧から言語を変えると、次の音声入力・会議の記録からその言語で文字起こしされる。
-- 出典: ユーザーの依頼（2026-11-04）「音声入力の入力言語を選択できるようにしてください。デフォルトはシステムの言語にしてください」
-- 対象: Mac
+- 出典: ユーザーの依頼（2026-11-04）「音声入力の入力言語を選択できるようにしてください。デフォルトはシステムの言語にしてください」。Windows の初期値は、多言語化の依頼（2026-11-05）で FUT-012 に入れたもの
+- 対象: Mac / Windows（Windows は初期値だけ。設定の画面に言語の一覧はまだなく、settings.json の `localeIdentifier` で変える）
 - 実装の場所: `AppSettings.transcriptionLocaleIdentifiers`、`AppSettings.systemLocaleIdentifier`、`AppSettings.nearestTranscriptionLocale`、`TranscriptionEngineSettingsSection.languageOptions`
+- Windows の実装: `windows/Hanasu.Core/Settings/TranscriptionLocales.cs`、`SettingsStore.Load`（`windows/Hanasu.Core/Settings/SettingsStore.cs`）
 - 食い違い（ユーザーの確認待ち）: 言語は音声入力と会議の記録で共有する（従来の設定を一覧にしただけ）。音声入力だけ別の言語にする必要があるかは未確認。
 - 確かめ方: 実機で確かめる（設定の一覧で言語を変え、音声入力を試す）
 
@@ -208,11 +209,13 @@
   - システムの言語が日本語なら、今までと同じ日本語で出る。
   - システムの言語を英語（ほかの対応言語）にするか、`-AppleLanguages "(en)"` を付けて起動すると、メニュー・設定・HUD・オンボーディングがその言語で出る。
   - 対応していない言語（例: スウェーデン語）だけのときは英語で出る。
-  - マイク・音声認識・画面の音声・リマインダーの許可を求める説明も、その言語で出る。
+  - マイク・音声認識・画面の音声・リマインダーの許可を求める説明も、その言語で出る（Mac）。
+  - Windows: Windows の表示の言語が日本語なら今までと同じ日本語、17 言語のどれかならその言語、どれでもなければ英語で出る。前の版で保存した会議のエラー（「議事録を作れませんでした: …」）も、議事録を作り直せたら消える。
 - 出典: ユーザーの依頼（2026-11-05）「アプリの表示言語とプロンプトの言語もシステムの言語に合わせて変更されるようにして」。開発用の CLI とログを訳さないことは、同日にユーザーに確かめた
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `UILanguage`、`tr`、`L10n`（`Sources/Hanasu/L10n.swift`）、`Sources/Hanasu/Resources/Localizable.xcstrings`、`scripts/i18n-strings.py`（`infoplist`）
-- 確かめ方: `.build/debug/Hanasu --render-onboarding /tmp/onboarding --ui-language en`（画面を PNG にする CLI は `--ui-language <言語>` で言語を変えられる）、`python3 scripts/check-i18n.py`。システムの言語での切り替えは実機で確かめる（`open -a build/Hanasu.app --args -AppleLanguages "(en)"`）
+- Windows の実装: `windows/Hanasu.Core/Settings/UiLanguage.cs`、`windows/Hanasu.Windows/App.xaml.cs`（起動のときに `UiLanguage.Apply`）、`windows/Hanasu.Core/Properties/Strings.resx`・`windows/Hanasu.Windows/Properties/Strings.resx`（英語）と `Strings.<カルチャ>.resx`（各言語）
+- 確かめ方: `.build/debug/Hanasu --render-onboarding /tmp/onboarding --ui-language en`（画面を PNG にする CLI は `--ui-language <言語>` で言語を変えられる）、`python3 scripts/check-i18n.py`。システムの言語での切り替えは実機で確かめる（`open -a build/Hanasu.app --args -AppleLanguages "(en)"`）。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~UiLanguage"`、`python3 scripts/i18n-resx.py check`
 
 ### REQ-COM-061 AI へのプロンプトの言語を、文字起こしの言語に合わせて切り替える（17 言語）
 - 内容: 整形・翻訳・選択を声で編集・Gemini での文字起こし・議事録・会議への質問・会議中の AI チャット（よく使う質問を含む）・辞書の候補で AI に送る指示（システムプロンプトと、user content の見出しや注記）を、設定の文字起こしの言語（REQ-COM-004。初期値はシステムの言語）に合わせた言語で送る。対応言語は README と同じ 17 言語（英語・日本語・中国語（簡体字・繁体字）・韓国語・スペイン語・フランス語・ドイツ語・イタリア語・ポルトガル語（ブラジル）・ロシア語・トルコ語・ベトナム語・インドネシア語・ポーランド語・アラビア語・ヒンディー語）で、どれでもなければ英語にする。日本語向けの整形のルール（フィラー・言い直し・口頭の記号の指示・誤変換の直し方・文体のプリセット）は、言語ごとに、その言語の話し言葉に合わせて書き直す。議事録の見出し・話者のラベル・アクションアイテムの「担当」「期限」も、その言語で書く。
@@ -235,7 +238,7 @@
   - CLAUDE.md と docs/README.md に、この決まりが書いてある。
 - 出典: ユーザーの依頼（2026-11-05）「今後の機能追加の際も全ての言語に対応させるようにして。多言語担当は専用の skill と agent を用意しておくと良さそう」
 - 対象: Mac / Windows
-- 実装の場所: `scripts/check-i18n.py`、`scripts/i18n-strings.py`、`.github/workflows/spec.yml`、`.claude/skills/i18n/SKILL.md`、`.claude/agents/i18n.md`
+- 実装の場所: `scripts/check-i18n.py`、`scripts/i18n-strings.py`（Mac の UI）、`scripts/i18n-resx.py`（Windows の UI）、`.github/workflows/spec.yml`、`.claude/skills/i18n/SKILL.md`、`.claude/agents/i18n.md`
 - 確かめ方: `python3 scripts/check-i18n.py`（UI の文字列では、tr() で包んでいない日本語の文字列と、訳のないキーも見つける）
 
 ---
@@ -1020,6 +1023,14 @@
 - 関係する要件: REQ-COM-060
 - 対象: Mac
 - 実装の場所: `UILanguage`、`Resources/Info.plist`、`scripts/build-app.sh`
+
+### DEC-COM-167 Windows の UI の文字列は .resx（ニュートラルは英語）に置き、起動のときに表示のカルチャを 17 言語のどれかに決める
+- 決めたこと: Windows 版の UI の文字列を `Properties/Strings.resx`（`Hanasu.Core` と `Hanasu.Windows` に 1 つずつ。ニュートラルの言語は英語で `NeutralLanguage` を en にする）と、言語ごとのサテライト `Strings.<カルチャ>.resx` に置く。ビルドのときに MSBuild が名前ごとのプロパティを持つ `Strings` クラスを作り、コードは `Strings.名前`、XAML は `{x:Static p:Strings.名前}` で読む（WPF のマークアップの一時プロジェクトにも、作ったクラスを渡す）。埋める値は `{0}` にして `string.Format` で入れ、日本語の語順に頼った文のつなぎ（「〜して入力」など）はやめて、文ごとにリソースにする。サテライトのカルチャ名は言語のコード（ja・ko・pt-BR など）で、中国語だけ zh-Hans・zh-Hant にする（.NET は zh-CN・zh-SG を zh-Hans、zh-TW・zh-HK・zh-MO を zh-Hant にたどる）。起動のとき（`App.OnStartup`、ウインドウを作る前）に `UiLanguage.Apply` が、Windows の表示の言語とその親をたどって 17 言語のどれかに寄せ（中国語は zh-CN・zh-TW、ポルトガル語は pt-BR に。ほかは地域つきのカルチャのまま）、どれでもなければ en にして、`CultureInfo.CurrentUICulture` と `DefaultThreadCurrentUICulture` に入れる。右から左に書く言語（アラビア語）では、ウインドウを作る前に既定の並びを右から左にし（タスクトレイのメニューも）、文字の言語（xml:lang）も表示の言語にする（中国語などの字形を選ぶため）。日付の曜日・月の名前も表示の言語で書き、暦はグレゴリオ暦にそろえる（ar-SA の既定の暦はヒジュラ暦）。議事録を作り直せたら、会議のエラーのうち議事録のエラーの行だけを消す（日本語・英語・今の言語の文言で見分ける）。日本語のサテライトは多言語化の前の文言と一字一句同じにする。訳の出し入れと漏れの確かめは `scripts/i18n-resx.py`（export・import・check）。
+- 理由: .resx とサテライトアセンブリは .NET の標準の仕組みで、単一ファイルの配布（PublishSingleFile）でも exe の中に入る。ニュートラルを英語にすれば、訳がない言語でも英語で出る。表示のカルチャを 17 言語のどれかにそろえておけば、香港やポルトガルの設定でも、訳のある地域の文言を読める。
+- 決めた場面: Windows の UI の多言語化の PR（2026-11-05）
+- 関係する要件: REQ-COM-060, REQ-COM-062
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Settings/UiLanguage.cs`、`windows/Hanasu.Core/Hanasu.Core.csproj`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`scripts/i18n-resx.py`
 
 ### DEC-COM-151 Mac の設定画面は、左のサイドバーで項目を切り替える
 - 決めたこと: 設定のウインドウを、上のタブ（`TabView`）から、システム設定と同じ左のサイドバー（`NavigationSplitView`）に変える。項目（一般・AI・辞書・ルール・アプリ別・スニペット・会議・履歴・権限）と順番は変えず、それぞれに色付きの角丸のアイコンを付け、右側の上に項目の名前を出す。ウインドウは大きさを変えられ（最小 700×480、初めは 780×600）、位置と大きさを覚える。最後に開いていた項目を、次に開いたときも出す（UserDefaults の `settingsPane`）。ショートカットの欄は、キーの欄の幅を変えず、「初期値に戻す」をその左の小さなボタンにする。権限の欄は、許可済み・未許可を色付きの印で出す。画面の文言の「「AI」タブ」などは「設定の「AI」」にした。

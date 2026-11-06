@@ -70,7 +70,7 @@ internal sealed class UpdateService
     {
         if (busy)
         {
-            MessageBox.Show("アップデートを確認しています。しばらくお待ちください。", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Strings.Update_Checking, "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         busy = true;
@@ -83,18 +83,18 @@ internal sealed class UpdateService
             }
             else
             {
-                MessageBox.Show($"Hanasu は最新です（{CurrentVersion}）", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(string.Format(Strings.Update_UpToDate, CurrentVersion), "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
         catch (UpdateException e)
         {
             AppLog.Write($"update: manual check failed: {e.Message}");
-            MessageBox.Show($"アップデートを確認できませんでした。\n{e.Message}", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(string.Format(Strings.Update_CheckFailed, e.Message), "Hanasu", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         catch (Exception e)
         {
             AppLog.Write($"update: manual check failed: {e}");
-            MessageBox.Show($"アップデートを確認できませんでした。\n{e.Message}", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(string.Format(Strings.Update_CheckFailed, e.Message), "Hanasu", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         finally
         {
@@ -162,8 +162,7 @@ internal sealed class UpdateService
             AppLog.Write($"update: previous attempt to {expected} did not complete (running {CurrentVersion})");
             var logPath = Path.Combine(HanasuPaths.LocalDataDirectory, "Logs", "update.log");
             var answer = MessageBox.Show(
-                $"Hanasu {expected} へのアップデートができませんでした。今は {CurrentVersion} のままです。\n\n詳しくは {logPath} に書いてあります。" +
-                "\n\nリリースのページから入れ直すこともできます。ブラウザで開きますか？",
+                string.Format(Strings.Update_PreviousAttemptFailed, expected, CurrentVersion, logPath),
                 "Hanasu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (answer == MessageBoxResult.Yes)
             {
@@ -180,7 +179,7 @@ internal sealed class UpdateService
     }
 
     private static void ShowBusyMessage() =>
-        MessageBox.Show("録音中・会議の記録中はアップデートできません。終わってからもう一度、メニューの「アップデートを確認…」を押してください。",
+        MessageBox.Show(Strings.Update_Busy,
             "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
 
     // 設計判断: DEC-REL-021, DEC-REL-030
@@ -198,13 +197,13 @@ internal sealed class UpdateService
         // ドライブの直下（C:\ など）に置いてあるときは、フォルダごとの入れ替えができない
         if (parent is null || string.Equals(Path.GetPathRoot(installDir), installDir + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
         {
-            OfferReleasePage(release, "Hanasu がドライブの直下に置かれているので、アプリの中からはアップデートできません。専用のフォルダに入れてください。");
+            OfferReleasePage(release, Strings.Update_DriveRoot);
             return;
         }
         var staging = Path.Combine(parent, "Hanasu.update");
         try
         {
-            host.NotifyUpdate("アップデートをダウンロードしています", $"Hanasu {release.Version}（{asset.Size / (1024 * 1024)} MB）");
+            host.NotifyUpdate(Strings.Update_Downloading, string.Format(Strings.Update_DownloadingBody, release.Version, asset.Size / (1024 * 1024)));
             PrepareStagingDirectory(staging);
             var zipPath = Path.Combine(staging, asset.Name);
             // 設計判断: DEC-REL-030（通信が止まったまま待ち続けないよう、全体で 10 分に区切る）
@@ -217,10 +216,10 @@ internal sealed class UpdateService
                 }
                 catch (OperationCanceledException) when (timeout.IsCancellationRequested)
                 {
-                    throw new UpdateException("ダウンロードが 10 分で終わらなかったので、やめました");
+                    throw new UpdateException(Strings.Update_DownloadTimeout);
                 }
             }
-            host.NotifyUpdate("アップデートを準備しています", "ダウンロードした zip を展開しています。");
+            host.NotifyUpdate(Strings.Update_Preparing, Strings.Update_PreparingBody);
             var staged = await Task.Run(() => UpdatePackage.Extract(zipPath, Path.Combine(staging, "pkg")));
 
             // 設計判断: DEC-REL-030（入れ替えは今のフォルダごと消すので、Hanasu 専用のフォルダでなければ進まない）
@@ -229,11 +228,10 @@ internal sealed class UpdateService
             {
                 AppLog.Write($"update: install folder has foreign entries: {string.Join(", ", foreign)}");
                 TryDeleteDirectory(staging);
-                var shown = string.Join("\n", foreign.Take(5).Select(n => $"・{n}"));
-                var more = foreign.Count > 5 ? $"\n…ほか {foreign.Count - 5} 件" : "";
+                var shown = string.Join("\n", foreign.Take(5).Select(n => string.Format(Strings.Update_ForeignItem, n)));
+                var more = foreign.Count > 5 ? string.Format(Strings.Update_ForeignMore, foreign.Count - 5) : "";
                 OfferReleasePage(release,
-                    $"Hanasu のフォルダ（{installDir}）に、Hanasu のものではないファイルやフォルダがあります。\n{shown}{more}\n\n" +
-                    "アプリの中からのアップデートは、フォルダごと入れ替えるため、Hanasu 専用のフォルダに入れているときだけできます。専用のフォルダに入れ直してください。");
+                    string.Format(Strings.Update_ForeignEntries, installDir, shown, more));
                 return;
             }
             var scriptPath = Path.Combine(staging, "apply-update.ps1");
@@ -258,8 +256,8 @@ internal sealed class UpdateService
             AppLog.Write($"update: install failed: {e}");
             TryDeleteDirectory(staging);
             TryDeletePendingFile();
-            var reason = e is UnauthorizedAccessException ? "このフォルダには書き込めません（Program Files などに入れている場合は、管理者として入れ直すか、リリースのページから入れてください）。" : e.Message;
-            OfferReleasePage(release, $"アップデートできませんでした。\n{reason}");
+            var reason = e is UnauthorizedAccessException ? Strings.Update_FolderNotWritable : e.Message;
+            OfferReleasePage(release, string.Format(Strings.Update_Failed, reason));
         }
         catch (Exception e)
         {
@@ -267,7 +265,7 @@ internal sealed class UpdateService
             AppLog.Write($"update: install failed (unexpected): {e}");
             TryDeleteDirectory(staging);
             TryDeletePendingFile();
-            OfferReleasePage(release, $"アップデートできませんでした。\n{e.Message}");
+            OfferReleasePage(release, string.Format(Strings.Update_Failed, e.Message));
         }
     }
 
@@ -298,7 +296,7 @@ internal sealed class UpdateService
     /// <summary>入れ替えに進めないときの案内。リリースのページをブラウザで開くか尋ねる</summary>
     private static void OfferReleasePage(ReleaseInfo release, string message)
     {
-        var answer = MessageBox.Show($"{message}\n\nリリースのページをブラウザで開きますか？", "Hanasu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        var answer = MessageBox.Show(string.Format(Strings.Update_OpenReleasePageQuestion, message), "Hanasu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
         if (answer == MessageBoxResult.Yes) Shell.Open(release.ReleaseUrl.AbsoluteUri);
     }
 
@@ -327,7 +325,7 @@ internal sealed class UpdateService
         {
             info.ArgumentList.Add(argument);
         }
-        using var process = Process.Start(info) ?? throw new InvalidOperationException("入れ替えのスクリプトを始められませんでした");
+        using var process = Process.Start(info) ?? throw new InvalidOperationException(Strings.Update_ScriptStartFailed);
         AppLog.Write($"update: swap script started (pid {process.Id}), quitting");
         host.QuitForUpdate();
     }

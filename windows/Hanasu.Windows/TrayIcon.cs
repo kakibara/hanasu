@@ -27,24 +27,26 @@ internal sealed class TrayIcon : IDisposable
     {
         this.host = host;
         var menu = new Forms.ContextMenuStrip();
+        // 要件: REQ-COM-060（アラビア語などは、メニューも右から左に並べる）
+        if (System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft) menu.RightToLeft = Forms.RightToLeft.Yes;
         dictateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(DictationMode.Refine));
         // 設計判断: DEC-DIC-027（設定で選んだ翻訳の言語のうち最初で始める）
         translateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(host.Dictation.PrimaryTranslateMode));
-        recentItem = new Forms.ToolStripMenuItem("最近の結果(&E)");
+        recentItem = new Forms.ToolStripMenuItem(Strings.Tray_Recent);
         meetingItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.ToggleMeetingFromMenu());
         menu.Items.Add(dictateItem);
         menu.Items.Add(translateItem);
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add(meetingItem);
-        menu.Items.Add(new Forms.ToolStripMenuItem("会議ノートを開く(&N)…", null, (_, _) => host.ShowMeetings()));
+        menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_OpenMeetingNotes, null, (_, _) => host.ShowMeetings()));
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add(recentItem);
-        menu.Items.Add(new Forms.ToolStripMenuItem("履歴を開く(&H)…", null, (_, _) => host.ShowHistory()));
+        menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_OpenHistory, null, (_, _) => host.ShowHistory()));
         menu.Items.Add(new Forms.ToolStripSeparator());
         // 要件: REQ-REL-011
-        menu.Items.Add(new Forms.ToolStripMenuItem("アップデートを確認(&U)…", null, async (_, _) => await host.Updates.CheckManuallyAsync()));
-        menu.Items.Add(new Forms.ToolStripMenuItem("設定(&S)…", null, (_, _) => host.ShowSettings()));
-        menu.Items.Add(new Forms.ToolStripMenuItem("Hanasu を終了(&X)", null, (_, _) => host.Quit()));
+        menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_CheckForUpdates, null, async (_, _) => await host.Updates.CheckManuallyAsync()));
+        menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_Settings, null, (_, _) => host.ShowSettings()));
+        menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_Quit, null, (_, _) => host.Quit()));
 
         icon = new Forms.NotifyIcon
         {
@@ -87,10 +89,12 @@ internal sealed class TrayIcon : IDisposable
     {
         var s = host.Settings.Current;
         var busy = state is DictationState.Preparing or DictationState.Recording;
-        // 文言は Mac 版のメニューバーと同じ（DEC-COM-152）
-        dictateItem.Text = busy ? "録音を停止して入力(&R)" : "録音を開始(&R)";
+        dictateItem.Text = busy ? Strings.Tray_StopAndType : Strings.Tray_StartDictation;
         dictateItem.ShortcutKeyDisplayString = s.HotKey.DisplayString;
-        translateItem.Text = $"{TranslationLanguages.MenuVerb(s.TranslationLanguages)}して入力を開始(&T)";
+        // 文言は Mac 版のメニューバーと同じ（DEC-COM-152）
+        translateItem.Text = s.TranslationLanguages.Length != 1 ? Strings.Tray_StartTranslate
+            : s.TranslationLanguages[0] == TranslationLanguage.Japanese ? Strings.Tray_StartTranslate_Japanese
+            : Strings.Tray_StartTranslate_English;
         translateItem.ShortcutKeyDisplayString = s.TranslateHotKey.DisplayString;
         // 処理中はどちらも押せない。録音中は「止める」だけ押せる。会議の記録中は音声入力を使えない
         var meetingIdle = meetingState == MeetingState.Idle;
@@ -100,19 +104,19 @@ internal sealed class TrayIcon : IDisposable
         var elapsed = Meeting.Clock(host.Meetings.ElapsedSeconds);
         meetingItem.Text = meetingState switch
         {
-            MeetingState.Recording => $"会議の記録を停止（{elapsed}）(&M)",
-            MeetingState.Starting => "会議の記録を準備中…",
-            MeetingState.Processing => "会議の記録を処理中…",
-            _ => "会議の記録を開始(&M)",
+            MeetingState.Recording => string.Format(Strings.Tray_StopMeeting, elapsed),
+            MeetingState.Starting => Strings.Tray_MeetingStarting,
+            MeetingState.Processing => Strings.Tray_MeetingProcessing,
+            _ => Strings.Tray_StartMeeting,
         };
         meetingItem.ShortcutKeyDisplayString = s.MeetingHotKey.DisplayString;
         meetingItem.Enabled = meetingState is MeetingState.Idle or MeetingState.Recording && state == DictationState.Idle;
         var text = (state, meetingState) switch
         {
-            (_, MeetingState.Recording) => $"Hanasu — 会議を記録中 {elapsed}",
-            (_, MeetingState.Processing) => "Hanasu — 会議の記録を処理中",
-            (DictationState.Recording, _) => "Hanasu — 録音中",
-            (DictationState.Processing, _) => "Hanasu — 処理中",
+            (_, MeetingState.Recording) => string.Format(Strings.Tray_Tip_MeetingRecording, elapsed),
+            (_, MeetingState.Processing) => Strings.Tray_Tip_MeetingProcessing,
+            (DictationState.Recording, _) => Strings.Tray_Tip_Recording,
+            (DictationState.Processing, _) => Strings.Tray_Tip_Processing,
             _ => "Hanasu",
         };
         icon.Text = text.Length > 63 ? text[..63] : text;  // NotifyIcon.Text は 63 文字まで
@@ -126,12 +130,12 @@ internal sealed class TrayIcon : IDisposable
         var entries = host.History.Recent;
         if (entries.Count == 0)
         {
-            recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem("（まだありません）") { Enabled = false });
+            recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem(Strings.Tray_RecentEmpty) { Enabled = false });
         }
         foreach (var entry in entries)
         {
             var output = entry.Output;
-            var tip = $"{DictationHistoryEntry.StatusLabel(entry.Status)}\n結果: {Shorten(output)}\n原文: {Shorten(entry.Raw)}";
+            var tip = string.Format(Strings.Tray_RecentTip, DictationHistoryEntry.StatusLabel(entry.Status), Shorten(output), Shorten(entry.Raw));
             var item = new Forms.ToolStripMenuItem(DictationHistoryStore.MenuLabel(entry).Replace("&", "&&"), null, (_, _) => host.CopyToClipboard(output))
             {
                 ToolTipText = tip,
@@ -139,8 +143,8 @@ internal sealed class TrayIcon : IDisposable
             recentItem.DropDownItems.Add(item);
         }
         recentItem.DropDownItems.Add(new Forms.ToolStripSeparator());
-        if (entries.Count > 0) recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem("押すとクリップボードにコピーします") { Enabled = false });
-        recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem("すべての履歴を開く…", null, (_, _) => host.ShowHistory()));
+        if (entries.Count > 0) recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem(Strings.Tray_RecentHint) { Enabled = false });
+        recentItem.DropDownItems.Add(new Forms.ToolStripMenuItem(Strings.Tray_OpenAllHistory, null, (_, _) => host.ShowHistory()));
     }
 
     private static string Shorten(string text) => text.Length > 150 ? text[..150] + "…" : text;

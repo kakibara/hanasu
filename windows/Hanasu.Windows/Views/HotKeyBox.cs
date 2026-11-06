@@ -42,7 +42,7 @@ public sealed class HotKeyBox : TextBox
     protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
     {
         base.OnGotKeyboardFocus(e);
-        Text = "キーを押してください（Esc でやめる）…";
+        Text = Strings.HotKeyBox_Prompt;
         RecordingChanged?.Invoke(this, true);
     }
 
@@ -78,7 +78,7 @@ public sealed class HotKeyBox : TextBox
         if (HotKeyCombo.IsModifierKey(vk))
         {
             // 修飾キーだけのうちは、押している組み合わせを見せて待つ
-            Text = new HotKeyCombo(modifiers, 0).DisplayString.Replace("キー 0x00", "…");
+            Text = new HotKeyCombo(modifiers, 0).DisplayString.Replace(string.Format(Core.Properties.Strings.Key_Unknown, "0x00"), "…");
             return;
         }
         var recorded = new HotKeyCombo(modifiers, vk);

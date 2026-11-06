@@ -53,7 +53,10 @@ public sealed class PromptLanguage
     /// </summary>
     public static PromptLanguage FromLocaleIdentifier(string? localeIdentifier) => SupportedOrNull(localeIdentifier) ?? En;
 
-    /// <summary>対応言語のどれかに寄せる。どれでもなければ null（Mac 版 PromptLanguage.supported(localeIdentifier:) と同じ）</summary>
+    // 要件: REQ-COM-060
+    /// <summary>
+    /// FromLocaleIdentifier と同じ寄せ方で、対応言語に当たらなければ null（表示の言語を決める UiLanguage が、親のカルチャをたどるのに使う）
+    /// </summary>
     public static PromptLanguage? SupportedOrNull(string? localeIdentifier)
     {
         var parts = (localeIdentifier ?? "").Trim().Replace('_', '-').Split('-', StringSplitOptions.RemoveEmptyEntries);
@@ -259,7 +262,7 @@ public static class Prompts
         {
             if (Tables[candidate].Value.TryGetValue(key, out var value)) return value;
         }
-        throw new KeyNotFoundException($"プロンプトのキーがありません: {key}");
+        throw new KeyNotFoundException($"プロンプトのキーがありません: {key}");  // skip-tr（開発者向けの例外）
     }
 
     private static IReadOnlyDictionary<string, string[]> Load(PromptLanguage language)

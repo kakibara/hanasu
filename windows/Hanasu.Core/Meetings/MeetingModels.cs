@@ -163,13 +163,14 @@ public sealed class ActionItem
     public DateTime? DueDate =>
         Due is not null && DateTime.TryParseExact(Due, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var d) ? d : null;
 
-    /// <summary>表示用の期限（日付が決まっていれば「11/14 (金)」、なければ話された言い方）</summary>
+    // 要件: REQ-COM-060
+    /// <summary>表示用の期限（日付が決まっていれば「11/14 (金)」、なければ話された言い方）。曜日は表示の言語で書く</summary>
     [JsonIgnore]
     public string? DueDisplay
     {
         get
         {
-            if (DueDate is { } d) return $"{d.Month}/{d.Day} ({Meeting.JapaneseWeekday(d)})";
+            if (DueDate is { } d) return Meeting.DisplayLanguage.FormatDate(d, "M/d (E)");
             return string.IsNullOrEmpty(DueNote) ? null : DueNote;
         }
     }
@@ -270,7 +271,7 @@ public sealed class ActionItem
                     if (pair.Length != 2) continue;
                     var key = pair[0].Trim();
                     var value = pair[1].Trim();
-                    var unknown = value.Length == 0 || value is "不明" or "未定" or "-" || noneWords.Contains(value) || value.StartsWith("分かれば", StringComparison.Ordinal);
+                    var unknown = value.Length == 0 || value is "不明" or "未定" or "-" || noneWords.Contains(value) || value.StartsWith("分かれば", StringComparison.Ordinal);  // skip-tr（議事録を読むときの語）
                     if (ownerKeys.Contains(key)) { recognized = true; owner = unknown ? null : value; }
                     if (dueKeys.Contains(key)) { recognized = true; dueNote = unknown ? null : value; }
                 }
@@ -349,11 +350,11 @@ public sealed class Meeting
         if (SpeakerNames.TryGetValue(speaker, out var name) && name.Length > 0) return name;
         switch (speaker)
         {
-            case "me": return "自分";
-            case "others": return "相手";
+            case "me": return Strings.Speaker_Me;
+            case "others": return Strings.Speaker_Others;
         }
-        if (speaker.StartsWith("spk", StringComparison.Ordinal) && int.TryParse(speaker[3..], out var n)) return $"話者{n}";
-        if (speaker.StartsWith("room", StringComparison.Ordinal) && int.TryParse(speaker[4..], out var r)) return $"同席者{r}";
+        if (speaker.StartsWith("spk", StringComparison.Ordinal) && int.TryParse(speaker[3..], out var n)) return string.Format(Strings.Speaker_Remote, n);
+        if (speaker.StartsWith("room", StringComparison.Ordinal) && int.TryParse(speaker[4..], out var r)) return string.Format(Strings.Speaker_Room, r);
         return speaker;
     }
 
@@ -410,7 +411,12 @@ public sealed class Meeting
     /// <summary>文字起こしの Markdown（transcript.md）</summary>
     public string TranscriptMarkdown()
     {
-        var lines = new List<string> { $"# {Title} — 文字起こし", "", $"- 日時: {FormatDate(StartedAt)}", $"- 長さ: {Clock(Duration)}", "" };
+        var lines = new List<string>
+        {
+            string.Format(Strings.Transcript_Heading, Title), "",
+            string.Format(Strings.Transcript_Date, FormatDate(StartedAt)),
+            string.Format(Strings.Transcript_Duration, Clock(Duration)), "",
+        };
         foreach (var block in MergedBlocks())
         {
             lines.Add($"**[{Clock(block.Start)}] {DisplayName(block.Speaker)}**: {block.Text}");
@@ -449,7 +455,7 @@ public sealed class Meeting
             .OrderByDescending(h => h.Time)
             .FirstOrDefault();
 
-    public string NotesMarkdown() => $"# {Title} — メモ\n\n{NotesText}\n";
+    public string NotesMarkdown() => string.Format(Strings.Notes_Heading, Title) + $"\n\n{NotesText}\n";
 
     /// <summary>「ここ重要」の印の前後で強調する範囲（印を押すのは大事な発言を聞いた後なので、前を長めにとる）</summary>
     public const double HighlightLeadTime = 30;
@@ -477,14 +483,14 @@ public sealed class Meeting
         var contexts = HighlightContexts();
         if (contexts.Count == 0)
         {
-            return "「ここ重要」の印はありません。記録中に「★ ここ重要」かショートカットで付けると、ここに前後の会話をまとめて出します。";
+            return Strings.Highlights_None;
         }
         var lines = new List<string>();
         foreach (var (note, blocks) in contexts)
         {
             if (lines.Count > 0) lines.Add("");
-            lines.Add($"★ {Clock(note.Time ?? 0)}  {(note.Text.Length == 0 ? "ここ重要" : note.Text)}");
-            if (blocks.Count == 0) lines.Add("    この前後（30 秒前〜15 秒後）の発言はありません");
+            lines.Add($"★ {Clock(note.Time ?? 0)}  {(note.Text.Length == 0 ? Strings.Highlight_Default : note.Text)}");
+            if (blocks.Count == 0) lines.Add("    " + Strings.Highlights_NoUtterances);
             lines.AddRange(blocks.Select(b => $"    [{Clock(b.Start)}] {DisplayName(b.Speaker)}: {b.Text}"));
         }
         return string.Join("\n", lines);
@@ -535,19 +541,20 @@ public sealed class Meeting
         return s >= 3600 ? $"{s / 3600}:{s / 60 % 60:00}:{s % 60:00}" : $"{s / 60:00}:{s % 60:00}";
     }
 
-    /// <summary>"2026/11/03 (火) 14:30"（Mac 版の Meeting.dateFormatter と同じ形。端末の時刻で出す）</summary>
-    public static string FormatDate(DateTimeOffset date)
-    {
-        var local = date.ToLocalTime();
-        return $"{local:yyyy/MM/dd} ({JapaneseWeekday(local.DateTime)}) {local:HH:mm}";
-    }
+    // 要件: REQ-COM-060
+    /// <summary>"2026/11/03 (火) 14:30"（Mac 版の Meeting.dateFormatter と同じ形。端末の時刻で出す。曜日は表示の言語で書く）</summary>
+    public static string FormatDate(DateTimeOffset date) =>
+        DisplayLanguage.FormatDate(date.ToLocalTime().DateTime, "yyyy/MM/dd (E) HH:mm");
+
+    // 要件: REQ-COM-060
+    /// <summary>画面に出す日付の曜日を書く言語（表示の言語。起動のときに UiLanguage.Apply で 17 言語のどれかにしてある）</summary>
+    internal static PromptLanguage DisplayLanguage => PromptLanguage.FromLocaleIdentifier(CultureInfo.CurrentUICulture.Name);
 
     // 要件: REQ-COM-061
     /// <summary>プロンプトに書く日時（"2026/11/03 (火) 14:30" の形。曜日はプロンプトの言語で。Mac 版 PromptLanguage.dateFormatter と同じ書式）</summary>
     public static string FormatDate(DateTimeOffset date, PromptLanguage language) =>
         language.FormatDate(date.ToLocalTime().DateTime, "yyyy/MM/dd (E) HH:mm");
 
-    public static string JapaneseWeekday(DateTime date) => "日月火水木金土"[(int)date.DayOfWeek].ToString();
 }
 
 internal static class MeetingIds

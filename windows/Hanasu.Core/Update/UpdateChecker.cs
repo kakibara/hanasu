@@ -41,18 +41,19 @@ public static class UpdateChecker
             if (response.StatusCode == HttpStatusCode.NotFound) return Evaluate(null, current);
             if (!response.IsSuccessStatusCode)
             {
-                var hint = response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.TooManyRequests ? "（GitHub の呼び出しの上限に達したかもしれません。しばらくしてからもう一度試してください）" : "";
-                throw new UpdateException($"GitHub から最新の版を取れませんでした（HTTP {(int)response.StatusCode}）{hint}");
+                var rateLimited = response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.TooManyRequests;
+                throw new UpdateException(string.Format(
+                    rateLimited ? Strings.Update_LatestHttpFailedRateLimited : Strings.Update_LatestHttpFailed, (int)response.StatusCode));
             }
             json = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (HttpRequestException e)
         {
-            throw new UpdateException($"GitHub に接続できませんでした: {e.Message}", e);
+            throw new UpdateException(string.Format(Strings.Update_ConnectFailed, e.Message), e);
         }
         catch (TaskCanceledException e) when (!cancellationToken.IsCancellationRequested)
         {
-            throw new UpdateException("GitHub からの応答が時間内に返りませんでした", e);
+            throw new UpdateException(Strings.Update_Timeout, e);
         }
         return Evaluate(ReleaseParser.Parse(json), current);
     }

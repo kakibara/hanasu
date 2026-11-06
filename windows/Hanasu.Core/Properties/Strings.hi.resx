@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>llama-server नहीं मिला, जो स्थानीय LLM चलाता है. Hanasu की zip फ़ाइल फिर से एक्सट्रैक्ट करें, या HANASU_LLAMA_SERVER एनवायरनमेंट वेरिएबल में इसका पथ सेट करें.</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>स्थानीय मॉडल अभी तक डाउनलोड नहीं हुआ है. इसे मेनू → सेटिंग्स → AI में डाउनलोड करें.</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>स्थानीय मॉडल "{0}" अभी तक डाउनलोड नहीं हुआ है. इसे मेनू → सेटिंग्स → AI में डाउनलोड करें.</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>स्थानीय LLM शुरू नहीं हो सका (निकास कोड {0}).</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>स्थानीय LLM {0} सेकंड में शुरू नहीं हो पाया.</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>स्थानीय LLM ने एक त्रुटि लौटाई ({0})</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>स्थानीय LLM का जवाब लंबाई की सीमा पर कट गया, इसलिए इसका उपयोग नहीं किया गया.</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>स्थानीय LLM ने कोई परिणाम नहीं लौटाया.</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>स्थानीय LLM का जवाब पढ़ा नहीं जा सका.</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>स्थानीय LLM ने {0} सेकंड में जवाब नहीं दिया.</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>स्थानीय</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>अनुशंसित. Google द्वारा. सबसे बड़ा; सबसे स्वाभाविक सुधार और कार्यवृत्त. 16 GB या अधिक मेमोरी वाले PC के लिए.</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>Liquid AI द्वारा. छोटा और तेज़. जापानी निर्देशों का पालन करने में अच्छा.</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>SB Intuitions द्वारा. जापानी पर प्रशिक्षित. 8K तक का संदर्भ (लंबी मीटिंग का सारांश हिस्सों में बनता है).</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>Alibaba द्वारा. Gemma से लगभग आधा आकार, इसलिए 8 GB मेमोरी वाले PC पर आसानी से चलता है. स्व-सुधारों को Gemma से कम अच्छी तरह संभालता है.</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>लाइसेंस: {0}. यह लाइसेंस US$10 मिलियन या उससे अधिक वार्षिक राजस्व वाले संगठनों को व्यावसायिक उपयोग की अनुमति नहीं देता.</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>लाइसेंस: {0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0} ({1}) · अनुशंसित</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>संशोधक कुंजियों के अलावा एक कुंजी दबाएँ.</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc का उपयोग रिकॉर्डिंग रद्द करने के लिए होता है, इसलिए यह शॉर्टकट नहीं हो सकता.</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>इसे Ctrl, Alt, Shift या Win के साथ मिलाएँ (F1–F24 अकेले उपयोग किए जा सकते हैं).</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>केवल Shift वाले संयोजन टाइपिंग से टकराते हैं, इसलिए उनका उपयोग नहीं किया जा सकता.</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0} का उपयोग {1} के लिए होता है, इसलिए कृपया इससे बचें.</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>Windows विंडो मेनू</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>Windows वॉइस टाइपिंग (Win + H)</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>इनपुट भाषा बदलने</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>IME चालू या बंद करने (IME पर निर्भर)</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>पूर्ण-चौड़ाई/अर्ध-चौड़ाई स्पेस टाइप करने</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>विंडो बदलने</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>विंडो बंद करने</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>स्क्रीन लॉक करने</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>डेस्कटॉप दिखाने</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>Nonconvert</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>कुंजी {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>सेट नहीं है</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>अंतिम अक्षर अज्ञात</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>Windows Hello से सुरक्षित</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>DPAPI से सुरक्षित</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>सहेजा गया ({0}, {1})</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>सहेजी गई API कुंजी दूषित है. इसे सेटिंग्स → AI में फिर से दर्ज करें.</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>Windows Hello से सुरक्षित API कुंजी डिक्रिप्ट नहीं हो सकी (हो सकता है Windows Hello कुंजी फिर से बनाई गई हो). इसे सेटिंग्स → AI में फिर से दर्ज करें.</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>सहेजी गई API कुंजी पढ़ी नहीं जा सकती (हो सकता है इसे किसी अन्य Windows उपयोगकर्ता ने या किसी अन्य PC पर सहेजा हो). इसे सेटिंग्स → AI में फिर से दर्ज करें.</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>इस PC पर Windows Hello उपलब्ध नहीं है.</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>इस PC पर Windows Hello उपलब्ध नहीं है, इसलिए सहेजी गई API कुंजी पढ़ी नहीं जा सकती. इसे सेटिंग्स → AI में फिर से दर्ज करें.</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>Windows Hello कुंजी नहीं बनाई जा सकी.</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>Windows Hello कुंजी ने समान मान नहीं दिया, इसलिए सुरक्षा को Windows Hello पर नहीं बदला गया (DPAPI का उपयोग जारी है).</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>Claude API कुंजी सेट नहीं है (मेनू → सेटिंग्स → AI).</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude ने {0} सेकंड में जवाब नहीं दिया.</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude ने सुरक्षा कारणों से इस टेक्स्ट को प्रोसेस करने से मना कर दिया. कोई अन्य मॉडल (सेटिंग्स → AI) या Gemini आज़माएँ.</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude ने सुरक्षा कारणों से इस टेक्स्ट को प्रोसेस करने से मना कर दिया ({0}). कोई अन्य मॉडल (सेटिंग्स → AI) या Gemini आज़माएँ.</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Claude का जवाब बहुत लंबा था और कट गया.</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude ने कोई परिणाम नहीं लौटाया.</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>Claude API कुंजी गलत है (401). सेटिंग्स → AI में, Claude Console में बनाई गई कुंजी फिर से दर्ज करें.</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>यह API कुंजी Claude का उपयोग नहीं कर सकती (403)</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>मॉडल {0} नहीं मिला, या यह API कुंजी इसका उपयोग नहीं कर सकती (404).</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>Claude API बिलिंग में समस्या है (402). Claude Console में बिलिंग सेटिंग्स जाँचें.</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>Claude API उपयोग सीमा पूरी हो गई (429). थोड़ी देर बाद फिर से प्रयास करें.</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>Claude API पर अत्यधिक लोड है (529). थोड़ी देर बाद फिर से प्रयास करें.</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>Claude API में एक त्रुटि हुई ({0}). थोड़ी देर बाद फिर से प्रयास करें.</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>Claude API ने अनुरोध स्वीकार नहीं किया ({0})</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>Claude API से कनेक्ट नहीं हो सका. अपना नेटवर्क कनेक्शन जाँचें.</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5 (तेज़, सस्ता; डिक्टेशन के लिए डिफ़ॉल्ट)</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5 (कार्यवृत्त के लिए डिफ़ॉल्ट)</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5 (सबसे स्मार्ट, सबसे महँगा)</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>Gemini क्रेडेंशियल (API कुंजी या सेवा खाता) सेट नहीं हैं.</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Gemini API त्रुटि ({0}): {1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini ने कोई परिणाम नहीं लौटाया.</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini ने कोई परिणाम नहीं लौटाया ({0}).</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>Gemini का जवाब पढ़ा नहीं जा सका.</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini ने {0} सेकंड में जवाब नहीं दिया.</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>सेवा खाते का JSON नहीं मिला: {0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>सेवा खाते का JSON पढ़ा नहीं जा सकता.</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>एक्सेस टोकन प्राप्त करने का समय समाप्त हो गया.</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>एक्सेस टोकन प्राप्त नहीं हो सका ({0}): {1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>सेवा खाते की निजी कुंजी पढ़ी नहीं जा सकती.</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>एक्सेस टोकन अनुरोध पर हस्ताक्षर नहीं हो सका: {0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>डाउनलोड केवल अपेक्षित होस्ट से ही अनुमत हैं: {0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>डाउनलोड विफल रहा (HTTP {0}).</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>डाउनलोड रोक दिया गया क्योंकि इसे गैर-https स्थान पर रीडायरेक्ट किया गया था.</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>डाउनलोड की जाने वाली फ़ाइल अपेक्षित आकार की नहीं है ({0} बाइट; अपेक्षित {1} बाइट).</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>डाउनलोड रोक दिया गया क्योंकि फ़ाइल अपेक्षा से बड़ी है.</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>डाउनलोड बाधित हो गया.</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>डाउनलोड की गई फ़ाइल का हैश (SHA-256) मेल नहीं खाता, इसलिए इसका उपयोग नहीं किया जाएगा.</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>{0} से ट्रांसक्राइब किया जा रहा है…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>ट्रांसक्रिप्शन इंजन Gemini है, लेकिन Gemini क्रेडेंशियल सेट नहीं हैं (मेनू → सेटिंग्स → AI).</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>Gemini से ट्रांसक्रिप्शन विफल रहा: {0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0} ({1}) — {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>सबसे छोटा. जापानी के लिए कम सटीकता (परीक्षण के लिए).</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>छोटा. जापानी के लिए कम सटीकता.</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>रोज़मर्रा के उपयोग के लिए अच्छा. गति और सटीकता का अच्छा संतुलन.</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>उच्च सटीकता. तेज़ CPU के लिए.</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>उच्च सटीकता; क्वांटाइज़ेशन के कारण छोटा. तेज़ CPU के लिए.</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>उच्च सटीकता. तेज़ CPU के लिए.</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>यह WAV फ़ाइल नहीं है.</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>WAV फ़ाइल में fmt चंक नहीं है.</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>असमर्थित WAV स्वरूप (format={0}, bits={1}).</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>WAV फ़ाइल में data चंक नहीं है.</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>अंग्रेज़ी</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>जापानी</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>अंग्रेज़ी में</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>जापानी में</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>अनुवाद करें और टाइप करें</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>अंग्रेज़ी में अनुवाद करें और टाइप करें</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>जापानी में अनुवाद करें और टाइप करें</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>अंग्रेज़ी में अनुवाद करके टाइप किया गया</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>जापानी में अनुवाद करके टाइप किया गया</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>टाइप किया गया</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>रद्द किया गया</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>तैयारी हो रही है…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>पूरा किया जा रहा है…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>कोई वाक् पहचानी नहीं गई.</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>रिकॉर्डिंग</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>त्रुटि</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>बोलना शुरू करें…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>व्यवस्थापक के रूप में चल रहे ऐप्स में पेस्ट नहीं किया जा सकता</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>पेस्ट कीस्ट्रोक नहीं भेजा जा सका</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>क्लिपबोर्ड का उपयोग नहीं हो सका</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>टेक्स्ट टाइप नहीं हो सका</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>टाइप करने के लिए कोई स्थान नहीं मिला</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>यह क्लिपबोर्ड पर भी है. जहाँ चाहिए वहाँ क्लिक करें और Ctrl+V दबाएँ.</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>"कॉपी करें" पर क्लिक करें या टेक्स्ट चुनकर कॉपी करें, फिर जहाँ चाहिए वहाँ Ctrl+V दबाएँ.</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>{0} से अंग्रेज़ी में अनुवाद किया जा रहा है…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>{0} से जापानी में अनुवाद किया जा रहा है…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>{0} से सुधारा जा रहा है…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>सुधार</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>सफल</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>AI विफल (मूल टेक्स्ट)</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>सेट अप नहीं (मूल टेक्स्ट)</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>सुधार बंद (मूल टेक्स्ट)</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0} दिन</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>हमेशा</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>इतिहास फ़ाइल पढ़ी नहीं जा सकी, इसलिए उसे {0} के रूप में रखा गया और एक नई फ़ाइल शुरू की गई.</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>इतिहास फ़ाइल पढ़ी नहीं जा सकी: {0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>इतिहास सहेजा नहीं जा सका: {0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>आज</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>कल</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>ddd, d MMM</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>ddd, d MMM yyyy</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}, इसलिए टेक्स्ट बिना सुधार के टाइप किया गया (मेनू → सेटिंग्स → AI).</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}, इसलिए टेक्स्ट बिना अनुवाद के टाइप किया गया (मेनू → सेटिंग्स → AI).</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>टेक्स्ट सुधार से पहले जैसा था वैसा ही टाइप किया गया.</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>टेक्स्ट अनुवाद से पहले जैसा था वैसा ही टाइप किया गया.</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>स्थानीय LLM मॉडल अभी तक डाउनलोड नहीं हुआ है (मेनू → सेटिंग्स → AI).</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>Gemini क्रेडेंशियल (API कुंजी या सेवा खाता) सेट नहीं हैं (मेनू → सेटिंग्स → AI).</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>स्थानीय LLM मॉडल अभी तक डाउनलोड नहीं हुआ है</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>{0} क्रेडेंशियल सेट नहीं हैं</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>स्वचालित</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>नियमित मीटिंग</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>बिक्री मीटिंग</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>विचार-मंथन</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>कस्टम</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>अवलोकन, चर्चा, निर्णय, कार्य बिंदु</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>प्रगति, रिपोर्ट, समस्याएँ, निर्णय, कार्य बिंदु</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>अपडेट, चिंताएँ, फ़ीडबैक, सहमतियाँ, कार्य बिंदु</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>ग्राहक की चुनौतियाँ, प्रस्ताव, प्रतिक्रियाएँ, चिंताएँ, अगली कार्रवाइयाँ</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>रखे गए विचार, आशाजनक विचार, खुले प्रश्न, अगले कदम</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>आपके लिखे निर्देशों का पालन करता है</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>अन्य वक्ताओं को अलग किया जा रहा है…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>अन्य वक्ताओं को अलग नहीं किया जा सका, इसलिए उन्हें एक ही "दूसरा पक्ष" में मिला दिया गया ({0}).</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>ऑडियो फ़ाइलें रख ली गई हैं.</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>कार्यवृत्त नहीं बनाया जा सका: {0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}, इसलिए कोई कार्यवृत्त नहीं बनाया गया (मेनू → सेटिंग्स → AI).</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>{0} से कार्यवृत्त बनाया जा रहा है…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>{0} से ट्रांसक्राइब किया जा रहा है… ({1})</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>{0} से ट्रांसक्राइब किया जा रहा है… ({1} {2})</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>ऑडियो ट्रांसक्राइब नहीं हो सका ({0}): {1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>मीटिंग ट्रांसक्रिप्शन इंजन Gemini है, लेकिन Gemini क्रेडेंशियल सेट नहीं हैं (मेनू → सेटिंग्स → AI).</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>मीटिंग {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>रिकॉर्डिंग के दौरान ऐप बंद हो गया. ऑडियो फ़ाइलें ({0} / {1}) आंशिक रूप से रखी गई हो सकती हैं.</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>मीटिंग की रिकॉर्डिंग शुरू नहीं की जा सकती</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>डिक्टेशन रिकॉर्ड हो रहा है. उसके पूरा होने के बाद फिर से प्रयास करें.</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>PC ऑडियो (अन्य प्रतिभागी) रिकॉर्ड नहीं किया जा सकता</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>केवल आपकी आवाज़ (माइक्रोफ़ोन) रिकॉर्ड की जाएगी. {0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>रिकॉर्डिंग शुरू नहीं हो सकी: {0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>मीटिंग की रिकॉर्डिंग शुरू नहीं हो सकी</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>रिकॉर्डिंग रोकी जा रही है…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>मीटिंग रिकॉर्ड हो गई</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>ट्रांसक्रिप्ट सहेज ली गई है.</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>ट्रांसक्रिप्ट और कार्यवृत्त सहेज लिए गए हैं.</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>मीटिंग रिकॉर्ड हो गई (कुछ समस्याओं के साथ)</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>रिकॉर्डिंग के बाद की प्रोसेसिंग विफल रही: {0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग विफल रही</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>जो मीटिंग रिकॉर्ड, प्रोसेस हो रही हों या जिनका कार्यवृत्त फिर से बन रहा हो, उन्हें हटाया नहीं जा सकता.</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>माइक्रोफ़ोन रिकॉर्डिंग रुक गई</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>रिकॉर्डिंग रुक गई (उदाहरण के लिए, माइक्रोफ़ोन निकाल दिया गया), इसलिए मीटिंग रिकॉर्डिंग रोक दी जाएगी.</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>मैं</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>दूसरा पक्ष</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>वक्ता {0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>कमरे में मौजूद {0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — ट्रांसक्रिप्ट</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- दिनांक: {0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- अवधि: {0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — नोट्स</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>कोई "महत्वपूर्ण" चिह्न नहीं है. रिकॉर्डिंग के दौरान "★ महत्वपूर्ण" या शॉर्टकट से एक जोड़ें, और उसके आसपास की बातचीत यहाँ दिखाई देगी.</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>महत्वपूर्ण</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>इस चिह्न के आसपास कुछ नहीं कहा गया (30 सेकंड पहले से 15 सेकंड बाद तक).</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>सही वर्तनी खाली है, इसलिए कुछ भी नहीं बदला जाएगा.</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>"{0}" एक ही अक्षर है, इसलिए इसका उपयोग नहीं होगा (यह दूसरे शब्दों के हिस्सों से बहुत आसानी से मेल खा जाएगा).</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>"{0}" ऊपर की एक पंक्ति में भी है, इसलिए उस पंक्ति का उपयोग होगा.</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>Whisper मॉडल ({0}) अभी तक डाउनलोड नहीं हुआ है. इसे मेनू → सेटिंग्स → सामान्य में डाउनलोड करें.</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>Whisper नहीं चल सका. Microsoft Visual C++ Redistributable (2015–2022, x64) इंस्टॉल करें और फिर से प्रयास करें. ({0})</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>Whisper मॉडल लोड नहीं हो सका: {0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>वक्ता पृथक्करण मॉडल डाउनलोड किए जा रहे हैं… ({0} / {1} MB)</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>वक्ता पृथक्करण मॉडल की सैंपल दर अपेक्षित नहीं है ({0} Hz).</value>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Vertex AI क्षेत्र “{0}” का उपयोग नहीं किया जा सकता (केवल छोटे अक्षर, अंक और हाइफ़न; जैसे global, us-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>सेवा खाते का token_uri ({0}) Google का टोकन एंडपॉइंट (oauth2.googleapis.com) नहीं है, इसलिए इसका उपयोग नहीं किया जाएगा.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>रिकॉर्डिंग 10 मिनट की सीमा तक पहुँच गई, इसलिए अब तक का ऑडियो प्रोसेस किया जाएगा</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>API कुंजी (या सेवा खाता) गलत है, या उसे Gemini API का उपयोग करने की अनुमति नहीं है ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>मॉडल “{0}” नहीं मिला या इन क्रेडेंशियल के साथ इसका उपयोग नहीं किया जा सकता</value>
+  </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>डाउनलोड होने वाली फ़ाइल का आकार पता नहीं है</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>अनपेक्षित होस्ट पर रीडायरेक्ट होने के कारण डाउनलोड रोक दिया गया: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>रिलीज़ की जानकारी पढ़ी नहीं जा सकी</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>GitHub से नया वर्ज़न नहीं मिल सका (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>GitHub से नया वर्ज़न नहीं मिल सका (HTTP {0})। हो सकता है GitHub की अनुरोध सीमा पूरी हो गई हो; थोड़ी देर बाद फिर कोशिश करें।</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>GitHub से कनेक्ट नहीं हो सका: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub ने समय पर जवाब नहीं दिया</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>zip में ऐसा आइटम है जो खोलने के फ़ोल्डर के बाहर जाता है, इसलिए इसका इस्तेमाल नहीं होगा: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>खोलने पर zip अपेक्षा से बड़ा निकला, इसलिए इसका इस्तेमाल नहीं होगा</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>डाउनलोड किया गया zip खोला नहीं जा सका</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>zip में {0} नहीं है, इसलिए इसका इस्तेमाल नहीं होगा</value>
+  </data>
+</root>

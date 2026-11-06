@@ -143,8 +143,9 @@ internal sealed class AppHost : IDisposable
         RegisterHotKeys();
         // 設計判断: DEC-REL-030（前回の入れ替えが失敗していたら知らせる。起動時の確認より先）
         Updates.ReportPreviousAttempt();
-        tray.ShowBalloon("Hanasu を起動しました",
-            $"{Settings.Current.HotKey.DisplayString} で音声入力、{Settings.Current.TranslateHotKey.DisplayString} で{TranslationLanguages.MenuVerb(Settings.Current.TranslationLanguages)}して入力します。");
+        tray.ShowBalloon(Strings.Balloon_Started,
+            string.Format(Strings.Balloon_StartedBody, Settings.Current.HotKey.DisplayString, Settings.Current.TranslateHotKey.DisplayString,
+                TranslationLanguages.MenuTitle(Settings.Current.TranslationLanguages)));
         if (firstRun) ShowSettings();
         // 要件: REQ-REL-010
         // 設計判断: DEC-REL-024（初回の起動では確認しない。設定がオフ・手元のビルドのときは中で何もしない）
@@ -212,8 +213,8 @@ internal sealed class AppHost : IDisposable
         if (failed.Count > 0)
         {
             AppLog.Write($"hotkey registration failed: {string.Join(", ", failed)}");
-            tray?.ShowBalloon("ショートカットを登録できませんでした",
-                $"{string.Join("、", failed)} はほかのアプリが使っています。設定 → 一般 で別のキーにしてください。", warning: true);
+            tray?.ShowBalloon(Strings.Balloon_HotKeyFailed,
+                string.Format(Strings.Balloon_HotKeyFailedBody, string.Join(Strings.ListSeparator, failed)), warning: true);
         }
     }
 
@@ -230,8 +231,8 @@ internal sealed class AppHost : IDisposable
         });
         if (highlightHotKeyId is null)
         {
-            tray?.ShowBalloon("「ここ重要」のショートカットを登録できませんでした",
-                $"{s.HighlightHotKey.DisplayString} はほかのアプリが使っています。会議ノートの「★ ここ重要」ボタンを使うか、設定 → 会議 で別のキーにしてください。", warning: true);
+            tray?.ShowBalloon(Strings.Balloon_HighlightHotKeyFailed,
+                string.Format(Strings.Balloon_HighlightHotKeyFailedBody, s.HighlightHotKey.DisplayString), warning: true);
         }
     }
 
@@ -342,7 +343,7 @@ internal sealed class AppHost : IDisposable
         try
         {
             Clipboard.SetText(text);
-            tray?.ShowBalloon("コピーしました", text.Length > 80 ? text[..80] + "…" : text);
+            tray?.ShowBalloon(Strings.Copied, text.Length > 80 ? text[..80] + "…" : text);
         }
         catch (System.Runtime.InteropServices.ExternalException e)
         {
@@ -353,7 +354,7 @@ internal sealed class AppHost : IDisposable
     public void Quit()
     {
         if (Meetings.State != MeetingState.Idle
-            && MessageBox.Show("会議の記録中（または記録のあとの処理中）です。終了すると、この会議の文字起こしと議事録は作られません（音声ファイルは残ります）。終了しますか？",
+            && MessageBox.Show(Strings.Quit_MeetingInProgress,
                 "Hanasu", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK)
         {
             return;

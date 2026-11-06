@@ -44,6 +44,8 @@ using Hanasu.Whisper;
 // 対応していない言語を書いたら止める。例: claude-request "テスト" --prompt-language en
 
 var command = args.FirstOrDefault();
+// 要件: REQ-COM-060（Core が出すエラーなどの文言を、アプリと同じ表示の言語にする）
+UiLanguage.Apply();
 // 確かめ方: REQ-COM-061
 if (Option(args, "--prompt-language") is { } promptLanguage)
 {

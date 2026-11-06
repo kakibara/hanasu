@@ -91,6 +91,10 @@ public sealed class AppSettings
     public TranscriptionEngine Engine { get; set; } = TranscriptionEngine.Windows;
     /// <summary>Whisper のモデル（<see cref="Transcription.WhisperModelCatalog"/> の Id）</summary>
     public string WhisperModel { get; set; } = "small";
+    /// <summary>
+    /// 文字起こしの言語。設定のファイルがないとき（初めて起動したとき）は Windows の表示の言語（SettingsStore.Load。REQ-COM-004）。
+    /// 前の版で保存した設定にこの項目がなければ ja-JP（前の版の既定）
+    /// </summary>
     public string LocaleIdentifier { get; set; } = "ja-JP";
     public bool PlaySounds { get; set; } = true;
     // 要件: REQ-REL-010

@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>Nie znaleziono programu llama-server, który uruchamia lokalny LLM. Rozpakuj ponownie archiwum zip Hanasu lub ustaw jego ścieżkę w zmiennej środowiskowej HANASU_LLAMA_SERVER.</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>Model lokalny nie został jeszcze pobrany. Pobierz go w menu → Ustawienia → AI.</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>Model lokalny „{0}” nie został jeszcze pobrany. Pobierz go w menu → Ustawienia → AI.</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>Nie udało się uruchomić lokalnego LLM (kod wyjścia {0}).</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>Lokalny LLM nie uruchomił się w ciągu {0} s.</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>Lokalny LLM zwrócił błąd ({0})</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>Odpowiedź lokalnego LLM została ucięta na limicie długości, więc nie została użyta.</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>Lokalny LLM nie zwrócił wyniku.</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>Nie udało się odczytać odpowiedzi lokalnego LLM.</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>Lokalny LLM nie odpowiedział w ciągu {0} s.</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>Lokalny</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>Zalecany. Od Google. Największy; najbardziej naturalne dopracowanie i protokoły. Dla komputerów z co najmniej 16 GB pamięci.</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>Od Liquid AI. Mały i szybki. Dobrze wykonuje polecenia w języku japońskim.</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>Od SB Intuitions. Trenowany na języku japońskim. Kontekst do 8K (długie spotkania są podsumowywane w częściach).</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>Od Alibaba. Mniej więcej o połowę mniejszy od Gemmy, więc łatwiej działa na komputerach z 8 GB pamięci. Gorzej niż Gemma radzi sobie z autopoprawkami.</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>Licencja: {0}. Ta licencja nie zezwala na użytek komercyjny organizacjom o rocznych przychodach co najmniej 10 mln USD.</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>Licencja: {0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0} ({1}) · Zalecany</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>Oprócz klawiszy modyfikujących naciśnij jeszcze jeden klawisz.</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc służy do anulowania nagrywania, więc nie może być skrótem.</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>Połącz z Ctrl, Alt, Shift lub Win (F1–F24 mogą być używane samodzielnie).</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>Kombinacje tylko z Shift kolidują z pisaniem, więc nie można ich używać.</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0} służy do: {1}. Wybierz inną kombinację.</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>menu okna systemu Windows</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>pisanie głosowe w systemie Windows (Win + H)</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>przełączanie języka wprowadzania</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>włączanie i wyłączanie IME (zależnie od IME)</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>wpisywanie spacji o pełnej/połowicznej szerokości</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>przełączanie okien</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>zamykanie okien</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>blokowanie ekranu</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>pokazywanie pulpitu</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>Konwertuj</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>Bez konwersji</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>Klawisz {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>Nie ustawiono</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>końcówka nieznana</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>chroniony przez Windows Hello</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>chroniony przez DPAPI</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>Zapisano ({0}, {1})</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>Zapisany klucz API jest uszkodzony. Wprowadź go ponownie w Ustawienia → AI.</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>Nie udało się odszyfrować klucza API chronionego przez Windows Hello (klucz Windows Hello mógł zostać utworzony ponownie). Wprowadź go ponownie w Ustawienia → AI.</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>Nie można odczytać zapisanego klucza API (mógł zostać zapisany przez innego użytkownika systemu Windows lub na innym komputerze). Wprowadź go ponownie w Ustawienia → AI.</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>Windows Hello nie jest dostępne na tym komputerze.</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>Windows Hello nie jest dostępne na tym komputerze, więc nie można odczytać zapisanego klucza API. Wprowadź go ponownie w Ustawienia → AI.</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>Nie udało się utworzyć klucza Windows Hello.</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>Klucz Windows Hello nie dał tej samej wartości, więc ochrona nie została przełączona na Windows Hello (nadal używane jest DPAPI).</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>Klucz API Claude nie jest ustawiony (menu → Ustawienia → AI).</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude nie odpowiedział w ciągu {0} s.</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude odmówił przetworzenia tego tekstu ze względów bezpieczeństwa. Spróbuj innego modelu (Ustawienia → AI) lub Gemini.</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude odmówił przetworzenia tego tekstu ze względów bezpieczeństwa ({0}). Spróbuj innego modelu (Ustawienia → AI) lub Gemini.</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Odpowiedź Claude była zbyt długa i została ucięta.</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude nie zwrócił wyniku.</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>Klucz API Claude jest nieprawidłowy (401). W Ustawienia → AI wprowadź ponownie klucz utworzony w Claude Console.</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>Ten klucz API nie może używać Claude (403)</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>Nie znaleziono modelu {0} lub ten klucz API nie może go używać (404).</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>Wystąpił problem z rozliczeniami Claude API (402). Sprawdź ustawienia rozliczeń w Claude Console.</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>Osiągnięto limit użycia Claude API (429). Odczekaj chwilę i spróbuj ponownie.</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>Claude API jest przeciążone (529). Odczekaj chwilę i spróbuj ponownie.</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>W Claude API wystąpił błąd ({0}). Odczekaj chwilę i spróbuj ponownie.</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>Claude API nie przyjęło żądania ({0})</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>Nie udało się połączyć z Claude API. Sprawdź połączenie sieciowe.</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5 (szybki, tani; domyślny dla dyktowania)</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5 (domyślny dla protokołów)</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5 (najinteligentniejszy, najdroższy)</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>Poświadczenia Gemini (klucz API lub konto usługi) nie są ustawione.</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Błąd Gemini API ({0}): {1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini nie zwrócił wyniku.</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini nie zwrócił wyniku ({0}).</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>Nie udało się odczytać odpowiedzi Gemini.</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini nie odpowiedział w ciągu {0} s.</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>Nie znaleziono pliku JSON konta usługi: {0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>Nie można odczytać pliku JSON konta usługi.</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>Przekroczono limit czasu pobierania tokenu dostępu.</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>Nie udało się uzyskać tokenu dostępu ({0}): {1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>Nie można odczytać klucza prywatnego konta usługi.</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>Nie udało się podpisać żądania tokenu dostępu: {0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>Pobieranie jest dozwolone tylko z oczekiwanych hostów: {0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>Pobieranie nie powiodło się (HTTP {0}).</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>Pobieranie zostało zatrzymane, ponieważ nastąpiło przekierowanie do lokalizacji bez https.</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>Pobierany plik nie ma oczekiwanego rozmiaru (bajty: {0}; oczekiwano: {1}).</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>Pobieranie zostało zatrzymane, ponieważ plik jest większy niż oczekiwano.</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>Pobieranie zostało przerwane.</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>Skrót (SHA-256) pobranego pliku się nie zgadza, więc plik nie zostanie użyty.</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>Transkrypcja ({0})…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>Silnikiem transkrypcji jest Gemini, ale poświadczenia Gemini nie są ustawione (menu → Ustawienia → AI).</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>Transkrypcja za pomocą Gemini nie powiodła się: {0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0} ({1}) — {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>Najmniejszy. Niska dokładność dla japońskiego (do testów).</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>Mały. Niższa dokładność dla japońskiego.</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>Dobry do codziennego użytku. Dobra równowaga szybkości i dokładności.</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>Wysoka dokładność. Dla szybkich procesorów.</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>Wysoka dokładność; mniejszy dzięki kwantyzacji. Dla szybkich procesorów.</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>Wysoka dokładność. Dla szybkich procesorów.</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>To nie jest plik WAV.</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>Plik WAV nie zawiera fragmentu fmt.</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>Nieobsługiwany format WAV (format={0}, bits={1}).</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>Plik WAV nie zawiera fragmentu data.</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>Angielski</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>Japoński</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>Na angielski</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>Na japoński</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>Przetłumacz i wpisz</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>Przetłumacz na angielski i wpisz</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>Przetłumacz na japoński i wpisz</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>Przetłumaczono na angielski i wpisano</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>Przetłumaczono na japoński i wpisano</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>Wpisano</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>Anulowano</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>Przygotowywanie…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>Kończenie…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>Nie rozpoznano mowy.</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>Nagrywanie</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>Błąd</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>Zacznij mówić…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>Nie można wklejać do aplikacji uruchomionych jako administrator</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>Nie udało się wysłać skrótu wklejania</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>Nie udało się użyć schowka</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>Nie udało się wpisać tekstu</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>Nie znaleziono miejsca do wpisania</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>Tekst jest też w schowku. Kliknij w wybranym miejscu i naciśnij Ctrl+V.</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>Kliknij „Kopiuj” lub zaznacz tekst i skopiuj go, a następnie naciśnij Ctrl+V w wybranym miejscu.</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>Tłumaczenie na angielski ({0})…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>Tłumaczenie na japoński ({0})…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>Dopracowywanie ({0})…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>Dopracowanie</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>Powodzenie</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>Błąd AI (tekst oryginalny)</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>Nie skonfigurowano (tekst oryginalny)</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>Dopracowanie wyłączone (tekst oryginalny)</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0} dni</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>Bez limitu</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>Nie udało się odczytać pliku historii, więc zachowano go jako {0} i rozpoczęto nowy.</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>Nie udało się odczytać pliku historii: {0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>Nie udało się zapisać historii: {0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>Dzisiaj</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>Wczoraj</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>ddd, d MMM</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>ddd, d MMM yyyy</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}, więc tekst został wpisany bez dopracowania (menu → Ustawienia → AI).</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}, więc tekst został wpisany bez tłumaczenia (menu → Ustawienia → AI).</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>Wpisano tekst w postaci sprzed dopracowania.</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>Wpisano tekst w postaci sprzed tłumaczenia.</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>Model lokalnego LLM nie został jeszcze pobrany (menu → Ustawienia → AI).</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>Poświadczenia Gemini (klucz API lub konto usługi) nie są ustawione (menu → Ustawienia → AI).</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>Model lokalnego LLM nie został jeszcze pobrany</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>Poświadczenia {0} nie są ustawione</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>Automatyczny</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>Spotkanie cykliczne</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>Spotkanie handlowe</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>Burza mózgów</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>Niestandardowy</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>Przegląd, dyskusja, decyzje, zadania</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>Postępy, raporty, problemy, decyzje, zadania</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>Aktualności, obawy, informacje zwrotne, ustalenia, zadania</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>Wyzwania klienta, propozycja, reakcje, obawy, kolejne działania</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>Zgłoszone pomysły, obiecujące pomysły, otwarte pytania, kolejne kroki</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>Według napisanych przez Ciebie instrukcji</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>Rozdzielanie pozostałych mówców…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>Nie udało się rozdzielić pozostałych mówców, więc połączono ich jako „Inni” ({0}).</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>Pliki audio zostały zachowane.</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>Nie udało się utworzyć protokołu: {0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}, więc nie utworzono protokołu (menu → Ustawienia → AI).</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>Tworzenie protokołu ({0})…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>Transkrypcja ({0}, {1})…</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>Transkrypcja ({0}, {1} {2})…</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>Nie udało się przetranskrybować audio ({0}): {1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>Silnikiem transkrypcji spotkań jest Gemini, ale poświadczenia Gemini nie są ustawione (menu → Ustawienia → AI).</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>Spotkanie {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>Aplikacja została zamknięta podczas nagrywania. Pliki audio ({0} / {1}) mogły zostać częściowo zachowane.</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>Nie można rozpocząć nagrywania spotkania</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>Trwa nagrywanie dyktowania. Spróbuj ponownie po jego zakończeniu.</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>Nie można nagrać dźwięku komputera (pozostali uczestnicy)</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>Nagrywany będzie tylko Twój głos (mikrofon). {0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>Nie udało się rozpocząć nagrywania: {0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>Nie udało się rozpocząć nagrywania spotkania</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>Zatrzymywanie nagrywania…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>Nagrywanie spotkania</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>Spotkanie nagrane</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>Transkrypcja została zapisana.</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>Transkrypcja i protokół zostały zapisane.</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>Spotkanie nagrane (z pewnymi problemami)</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>Przetwarzanie po nagraniu nie powiodło się: {0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>Nagrywanie spotkania nie powiodło się</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>Nie można usuwać spotkań, które są nagrywane, przetwarzane lub dla których ponownie generowany jest protokół.</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>Nagrywanie z mikrofonu zatrzymane</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>Nagrywanie zostało zatrzymane (np. odłączono mikrofon), więc nagrywanie spotkania zostanie zakończone.</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>Inni</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>Mówca {0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>W sali {0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — Transkrypcja</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- Data: {0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- Czas trwania: {0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — Notatki</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>Brak znaczników „Ważne”. Dodaj je podczas nagrywania przyciskiem „★ Ważne” lub skrótem, a rozmowa wokół nich pojawi się tutaj.</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>Ważne</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>W pobliżu tego znacznika nic nie zostało powiedziane (od 30 sekund przed do 15 sekund po).</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>Poprawna pisownia jest pusta, więc nic nie zostanie zastąpione.</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>„{0}” ma tylko jeden znak, więc nie będzie używane (zbyt łatwo pasowałoby do fragmentów innych słów).</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>„{0}” występuje też w wierszu powyżej; zostanie użyty tamten wiersz.</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>Model Whisper ({0}) nie został jeszcze pobrany. Pobierz go w menu → Ustawienia → Ogólne.</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>Nie udało się uruchomić Whisper. Zainstaluj Microsoft Visual C++ Redistributable (2015–2022, x64) i spróbuj ponownie. ({0})</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>Nie udało się załadować modelu Whisper: {0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>Pobieranie modeli rozdzielania mówców… ({0} / {1} MB)</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>Częstotliwość próbkowania modelu rozdzielania mówców jest inna niż oczekiwana ({0} Hz).</value>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Nie można użyć regionu Vertex AI „{0}” (dozwolone są tylko małe litery, cyfry i łączniki, np. global, us-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>Wartość token_uri konta usługi ({0}) nie jest punktem końcowym tokenów Google (oauth2.googleapis.com), więc nie zostanie użyta.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Nagranie osiągnęło limit 10 minut, więc dotychczasowy dźwięk zostanie przetworzony</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>Klucz API (lub konto usługi) jest nieprawidłowy albo nie ma uprawnień do korzystania z Gemini API ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>Nie znaleziono modelu „{0}” lub nie można go używać z tymi poświadczeniami</value>
+  </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>Rozmiar pliku do pobrania jest nieznany</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>Pobieranie przerwano, bo nastąpiło przekierowanie do nieoczekiwanego hosta: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Nie udało się odczytać informacji o wydaniu</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>Nie udało się pobrać najnowszej wersji z GitHuba (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>Nie udało się pobrać najnowszej wersji z GitHuba (HTTP {0}). Być może osiągnięto limit zapytań GitHuba; odczekaj chwilę i spróbuj ponownie.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Nie udało się połączyć z GitHubem: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub nie odpowiedział na czas</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>Plik zip zawiera element wskazujący poza folder rozpakowania, więc nie zostanie użyty: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>Rozpakowany plik zip jest większy niż oczekiwano, więc nie zostanie użyty</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>Nie udało się otworzyć pobranego pliku zip</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>Plik zip nie zawiera {0}, więc nie zostanie użyty</value>
+  </data>
+</root>

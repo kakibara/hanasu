@@ -54,10 +54,10 @@ public static class UpdatePackage
                 var target = Path.GetFullPath(Path.Combine(root, entry.FullName));
                 if (!target.StartsWith(rootWithSeparator, StringComparison.OrdinalIgnoreCase))
                 {
-                    throw new UpdateException($"zip の中に、展開先の外を指す項目があるので、使いません: {entry.FullName}");
+                    throw new UpdateException(string.Format(Strings.Update_ZipEntryOutside, entry.FullName));
                 }
                 total += entry.Length;
-                if (total > MaxExtractedBytes) throw new UpdateException("zip を展開した大きさが想定より大きいので、使いません");
+                if (total > MaxExtractedBytes) throw new UpdateException(Strings.Update_ZipTooLarge);
                 if (entry.FullName.EndsWith('/') || entry.FullName.EndsWith('\\'))
                 {
                     Directory.CreateDirectory(target);
@@ -69,12 +69,12 @@ public static class UpdatePackage
         }
         catch (InvalidDataException e)
         {
-            throw new UpdateException("ダウンロードした zip を開けませんでした", e);
+            throw new UpdateException(Strings.Update_ZipUnreadable, e);
         }
         var staged = Path.Combine(root, RootFolderName);
         if (!File.Exists(Path.Combine(staged, ExecutableName)))
         {
-            throw new UpdateException($"zip の中に {RootFolderName}\\{ExecutableName} がないので、使いません");
+            throw new UpdateException(string.Format(Strings.Update_ZipMissingExe, $"{RootFolderName}\\{ExecutableName}"));
         }
         return staged;
     }

@@ -154,7 +154,7 @@ public sealed class GeminiSegmentTranscriber : ISegmentTranscriber
         }
         if (client is null)
         {
-            throw new TranscriptionException("会議の文字起こしのエンジンが Gemini ですが、Gemini の認証情報が設定されていません（メニュー → 設定 → AI）。");
+            throw new TranscriptionException(Strings.Meeting_GeminiNotConfigured);
         }
         return Task.CompletedTask;
     }
@@ -256,7 +256,7 @@ public sealed class GeminiSegmentTranscriber : ISegmentTranscriber
             }
             catch (Ai.TextAiException e)
             {
-                throw new TranscriptionException($"Gemini での文字起こしに失敗しました: {e.Message}", inner: e);
+                throw new TranscriptionException(string.Format(Strings.Transcription_GeminiFailed, e.Message), inner: e);
             }
             finally
             {

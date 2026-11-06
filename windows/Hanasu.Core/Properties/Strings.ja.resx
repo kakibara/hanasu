@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>ローカルの LLM を動かす llama-server が見つかりません（Hanasu の zip を展開し直すか、環境変数 HANASU_LLAMA_SERVER でパスを指定してください）</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>ローカルのモデルがまだダウンロードされていません（メニュー → 設定 → AI でダウンロードしてください）</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>ローカルのモデル「{0}」がまだダウンロードされていません（メニュー → 設定 → AI でダウンロードしてください）</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>ローカルの LLM が起動できませんでした（終了コード {0}）</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>ローカルの LLM の起動が {0} 秒たっても終わりませんでした</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>ローカルの LLM がエラーを返しました（{0}）</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>ローカルの LLM の応答が長さの上限で切れたため、使いませんでした</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>ローカルの LLM から結果が返りませんでした</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>ローカルの LLM の応答を読み取れませんでした</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>ローカルの LLM が {0} 秒以内に応答しませんでした</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>ローカル</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>おすすめ。Google。いちばん大きく、整形も議事録もいちばん自然。メモリ 16 GB 以上向け</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>Liquid AI。小さく速い。日本語の指示に強い</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>SB Intuitions。日本語で学習。文脈は 8K まで（長い会議は分けてまとめる）</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>Alibaba。Gemma の半分ほどの大きさで、メモリが 8 GB の PC でも動かしやすい。言い直しの扱いは Gemma より弱い</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>ライセンス: {0}。年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されていません</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>ライセンス: {0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0}（{1}）・おすすめ</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>修飾キーのほかに、キーを 1 つ押してください</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc は録音の取り消しに使うので、ショートカットにできません</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>Ctrl・Alt・Shift・Win のどれかと組み合わせてください（F1〜F24 は単独でも使えます）</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>Shift だけの組み合わせは文字の入力とぶつかるので使えません</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0} は {1}に使われているので避けてください</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>Windows のウインドウメニュー</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>Windows の音声入力（Win + H）</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>入力言語の切り替え</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>日本語入力のオン／オフ（IME によって）</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>全角／半角スペースの入力</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>ウインドウの切り替え</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>ウインドウを閉じる操作</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>画面のロック</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>デスクトップの表示</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>変換</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>無変換</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\（ろ）</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>キー {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>未設定</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>末尾は不明</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>Windows Hello で保護</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>DPAPI で保護</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>保存済み（{0}、{1}）</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>保存した API キーが壊れています。設定 → AI で入れ直してください</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>Windows Hello で保護した API キーを復号できませんでした（Windows Hello の鍵が作り直された可能性があります）。設定 → AI で入れ直してください</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>保存した API キーを読めません（別の Windows ユーザーか別の PC で保存した可能性があります）。設定 → AI で入れ直してください</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>この PC では Windows Hello を使えません</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>この PC では Windows Hello を使えないため、保存した API キーを読めません。設定 → AI で入れ直してください</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>Windows Hello の鍵を作れませんでした</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>Windows Hello の鍵から同じ値を作れなかったため、Windows Hello での保護に切り替えませんでした（今の DPAPI のままです）</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>Claude の API キーが設定されていません（メニュー → 設定 → AI）</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude の応答が {0} 秒以内に返りませんでした</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude が安全の判定でこの文章の処理を断りました。別のモデル（設定 → AI）か Gemini で試してください</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude が安全の判定でこの文章の処理を断りました（{0}）。別のモデル（設定 → AI）か Gemini で試してください</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Claude の応答が長すぎて途中で切れました</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude から結果が返りませんでした</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>Claude の API キーが正しくありません（401）。設定 → AI で、Claude Console で作ったキーを入れ直してください</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>この API キーでは Claude を使えません（403）</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>モデル {0} が見つからないか、この API キーでは使えません（404）</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>Claude API の支払いに問題があります（402）。Claude Console の請求の設定を確かめてください</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>Claude API の利用の上限に達しました（429）。少し待ってから試してください</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>Claude API が混み合っています（529）。少し待ってから試してください</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>Claude API でエラーが起きました（{0}）。少し待ってから試してください</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>Claude API がリクエストを受け付けませんでした（{0}）</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>Claude API につながりませんでした。ネットワークを確かめてください</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5（速い・安い。音声入力の既定）</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5（議事録の既定）</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5（いちばん賢い・高い）</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Gemini API エラー（{0}）: {1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini から結果が返りませんでした</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini から結果が返りませんでした（{0}）</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>Gemini の応答を読み取れませんでした</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini の応答が {0} 秒以内に返りませんでした</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>サービスアカウントの JSON が見つかりません: {0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>サービスアカウントの JSON を読み取れません</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>アクセストークンの取得がタイムアウトしました</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>アクセストークンの取得に失敗しました（{0}）: {1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>サービスアカウントの秘密鍵を読み取れません</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>アクセストークン用の署名に失敗しました: {0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>決めたホスト以外からはダウンロードしません: {0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>ダウンロードに失敗しました（HTTP {0}）</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>https 以外の場所に転送されたので、ダウンロードをやめました</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>ダウンロードするファイルの大きさが想定と違います（{0} バイト、想定は {1} バイト）</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>ダウンロードしたファイルが想定より大きいので、やめました</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>ダウンロードが途中で切れました</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>ダウンロードしたファイルのハッシュ（SHA-256）が想定と違うので、使いません</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>{0} で文字起こししています…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>文字起こしのエンジンが Gemini ですが、Gemini の認証情報が設定されていません（メニュー → 設定 → AI）。</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>Gemini での文字起こしに失敗しました: {0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0}（{1}）— {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>いちばん小さい。日本語の精度は低い（動作確認向け）</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>小さい。日本語の精度は低め</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>普段使いの目安。速さと精度のつり合いがよい</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>精度が高い。速い CPU 向け</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>高精度・量子化で小さめ。速い CPU 向け</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>高精度。速い CPU 向け</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>WAV ファイルではありません</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>WAV の fmt チャンクがありません</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>対応していない WAV の形式です（format={0}, bits={1}）</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>WAV の data チャンクがありません</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>English（英語）</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>英訳</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>和訳</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>翻訳して入力</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>英訳して入力</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>和訳して入力</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>英訳して入力しました</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>和訳して入力しました</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>入力しました</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>取り消しました</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>準備中…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>仕上げています…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>音声が認識されませんでした</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>録音中</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>話してください…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>管理者として動いているアプリには貼り付けられません</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>貼り付けのキーを送れませんでした</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>クリップボードを使えませんでした</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>入力できませんでした</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>入力できる場所が見つかりませんでした</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>クリップボードにも入れてあります。貼りたい場所をクリックして Ctrl+V を押してください。</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>「コピー」を押すか文章を選んでコピーし、貼りたい場所で Ctrl+V を押してください。</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>{0} で英語に翻訳しています…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>{0} で日本語に翻訳しています…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>{0} で整えています…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>整形</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>AI 失敗（原文のまま）</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>未設定のため原文のまま</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>整形オフ（原文のまま）</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0} 日</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>無期限</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>履歴のファイルを読めなかったので、{0} として残し、新しく始めました</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>履歴のファイルを読めませんでした: {0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>履歴を保存できませんでした: {0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>今日</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>昨日</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>M月d日（ddd）</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>yyyy年M月d日（ddd）</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}、整形せずに入力しました（メニュー → 設定 → AI）。</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}、翻訳せずに入力しました（メニュー → 設定 → AI）。</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>整形前の文章を入力しました。</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>翻訳前の文章を入力しました。</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>ローカルの LLM のモデルがまだダウンロードされていません（メニュー → 設定 → AI）</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません（メニュー → 設定 → AI）</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>ローカルの LLM のモデルがまだダウンロードされていないため</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>{0} の認証情報が未設定のため</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>定例</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1on1</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>商談</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>ブレスト</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>カスタム</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>概要・話し合った内容・決定事項・アクションアイテム</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>進捗・報告・課題・決定事項・アクションアイテム</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>近況・相談・フィードバック・合意・アクションアイテム</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>顧客の課題・提案内容・反応・懸念・次のアクション</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>出たアイデア・有望な案・論点・次のステップ</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>自分で書いた指示に従う</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>相手側の話者を分けています…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>相手側の話者を分けられなかったので、「相手」1 人としてまとめました（{0}）</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>音声ファイルは残しています。</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>議事録を作れませんでした: {0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}、議事録は作っていません（メニュー → 設定 → AI）。</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>{0} で議事録を作っています…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>{0} で文字起こししています…（{1}）</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>{0} で文字起こししています…（{1} {2}）</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>{0}の音声を文字起こしできませんでした: {1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>会議の文字起こしのエンジンが Gemini ですが、Gemini の認証情報が設定されていません（メニュー → 設定 → AI）。</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>会議 {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>記録の途中でアプリが終了しました。音声ファイル（{0} / {1}）は途中まで残っている場合があります。</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>会議の記録を始められません</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>音声入力の録音中です。終わってからもう一度試してください。</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>PC の音（相手）を録音できません</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>自分の声（マイク）だけを記録します。{0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>記録を始められませんでした: {0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>会議の記録を始められませんでした</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>記録を止めています…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>会議の記録</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>会議の記録ができました</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>文字起こしを保存しました。</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>文字起こしと議事録を保存しました。</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>会議の記録（一部に問題があります）</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>記録のあとの処理に失敗しました: {0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>会議の記録に失敗しました</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>記録中・処理中・議事録を作り直している会議は削除できません。</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>マイクの録音が止まりました</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>マイクが抜かれたなどの理由で録音が止まったので、会議の記録を止めます。</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>自分</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>相手</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>話者{0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>同席者{0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — 文字起こし</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- 日時: {0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- 長さ: {0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — メモ</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>「ここ重要」の印はありません。記録中に「★ ここ重要」かショートカットで付けると、ここに前後の会話をまとめて出します。</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>ここ重要</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>この前後（30 秒前〜15 秒後）の発言はありません</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>正しい表記が空なので、置き換えません</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>「{0}」は 1 文字なので使いません（ほかの語の一部に当たりやすいため）</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>「{0}」は上の行にもあるので、上の行を使います</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>Whisper のモデル（{0}）がまだダウンロードされていません。メニュー → 設定 → 一般 でダウンロードしてください。</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>Whisper を動かせませんでした。Microsoft Visual C++ 再頒布可能パッケージ（2015〜2022, x64）を入れてから、もう一度試してください。（{0}）</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>Whisper のモデルを読み込めませんでした: {0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>話者分離のモデルをダウンロードしています…（{0} / {1} MB）</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>話者分離のモデルの周波数が想定と違います（{0} Hz）</value>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Vertex AI のリージョン「{0}」は使えません（英小文字・数字・ハイフンだけ。例: global、us-central1）</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>サービスアカウントの token_uri（{0}）が Google のトークンの窓口（oauth2.googleapis.com）ではないため、使いません</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>録音が上限の 10 分に達したため、ここまでの音声を処理します</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>API キー（またはサービスアカウント）が正しくないか、Gemini API を使う権限がありません（{0}）</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>モデル「{0}」が見つからないか、この認証では使えません</value>
+  </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>ダウンロードするファイルの大きさが分かりません</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>決めたホスト以外に転送されたので、ダウンロードをやめました: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>リリースの情報を読めませんでした</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>GitHub から最新の版を取れませんでした（HTTP {0}）</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>GitHub から最新の版を取れませんでした（HTTP {0}）（GitHub の呼び出しの上限に達したかもしれません。しばらくしてからもう一度試してください）</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>GitHub に接続できませんでした: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub からの応答が時間内に返りませんでした</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>zip の中に、展開先の外を指す項目があるので、使いません: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>zip を展開した大きさが想定より大きいので、使いません</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>ダウンロードした zip を開けませんでした</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>zip の中に {0} がないので、使いません</value>
+  </data>
+</root>

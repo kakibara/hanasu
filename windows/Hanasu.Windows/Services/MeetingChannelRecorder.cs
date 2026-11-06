@@ -81,8 +81,8 @@ internal sealed class MeetingChannelRecorder : IMeetingChannelRecorder
         catch (System.Runtime.InteropServices.COMException e)
         {
             throw new TranscriptionException(Channel == MeetingChannel.Me
-                ? "マイクが見つかりません。マイクがつながっているか、Windows の設定 → システム → サウンド で確かめてください。"
-                : "音の出力の機器（スピーカー・ヘッドホン）が見つかりません。", "ms-settings:sound", e);
+                ? Strings.Mic_NotFound
+                : Strings.Output_NotFound, "ms-settings:sound", e);
         }
 
         try
@@ -108,10 +108,10 @@ internal sealed class MeetingChannelRecorder : IMeetingChannelRecorder
             if (Channel == MeetingChannel.Me && (e is UnauthorizedAccessException || (uint)e.HResult == 0x80070005))
             {
                 throw new TranscriptionException(
-                    "マイクの使用が許可されていません。Windows の設定 → プライバシーとセキュリティ → マイク で「デスクトップ アプリがマイクにアクセスできるようにする」をオンにしてください。",
+                    Strings.Mic_AccessDenied,
                     "ms-settings:privacy-microphone", e);
             }
-            throw new TranscriptionException($"{(Channel == MeetingChannel.Me ? "マイク" : "PC の音")}の録音を始められませんでした: {e.Message}", inner: e);
+            throw new TranscriptionException(string.Format(Channel == MeetingChannel.Me ? Strings.MeetingMic_StartFailed : Strings.Loopback_StartFailed, e.Message), inner: e);
         }
         return Task.CompletedTask;
     }

@@ -18,12 +18,13 @@ public static class ClaudeModels
     /// <summary>会議（議事録）の既定のモデル（ユーザーの指示「Claude は議事録は sonnet にして」。REQ-COM-023）</summary>
     public const string DefaultMinutesModel = "claude-sonnet-5-5";
 
-    public static readonly IReadOnlyList<ClaudeModelInfo> All =
+    // 名前は表示の言語で書くので、読むたびに作る
+    public static IReadOnlyList<ClaudeModelInfo> All =>
     [
         // Haiku 5.5 にはサーバー側の fallbacks がない（"default" は断られたまま、一覧を送ると 400）
-        new(DefaultModel, "Claude Haiku 5.5（速い・安い。音声入力の既定）", SupportsServerSideFallback: false),
-        new(DefaultMinutesModel, "Claude Sonnet 5.5（議事録の既定）", SupportsServerSideFallback: true),
-        new("claude-opus-5-5", "Claude Opus 5.5（いちばん賢い・高い）", SupportsServerSideFallback: true),
+        new(DefaultModel, Strings.ClaudeModel_Haiku, SupportsServerSideFallback: false),
+        new(DefaultMinutesModel, Strings.ClaudeModel_Sonnet, SupportsServerSideFallback: true),
+        new("claude-opus-5-5", Strings.ClaudeModel_Opus, SupportsServerSideFallback: true),
     ];
 
     public static ClaudeModelInfo? Find(string? id) =>

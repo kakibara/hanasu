@@ -30,7 +30,7 @@ public static partial class ReleaseParser
         }
         catch (JsonException e)
         {
-            throw new UpdateException("リリースの情報を読めませんでした", e);
+            throw new UpdateException(Strings.Update_ReleaseUnreadable, e);
         }
         using (document)
         {
@@ -48,7 +48,7 @@ public static partial class ReleaseParser
 
     private const string NotesStart = "<!-- release-notes -->";
     private const string NotesEnd = "<!-- /release-notes -->";
-    private const string InstallHeading = "## インストール";
+    private const string InstallHeading = "## インストール"; // skip-tr（リリース文の見出しを探す語）
 
     /// <summary>
     /// リリースの本文から、利用者に見せる部分だけ取り出す（Mac 版と同じ）。

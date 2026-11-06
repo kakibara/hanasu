@@ -36,8 +36,7 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
         if (!SpeechRecognizer.SupportedTopicLanguages.Any(l => string.Equals(l.LanguageTag, language.LanguageTag, StringComparison.OrdinalIgnoreCase)))
         {
             throw new TranscriptionException(
-                $"Windows に {language.DisplayName} の音声認識が入っていません。Windows の設定 → 時刻と言語 → 言語と地域 で {language.DisplayName} の「…」→「言語のオプション」から音声認識を追加してください。" +
-                "または、設定で文字起こしのエンジンを Whisper か Gemini にしてください。",
+                string.Format(Strings.Speech_LanguageNotInstalled, language.DisplayName),
                 "ms-settings:regionlanguage");
         }
 
@@ -148,12 +147,12 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
     private static TranscriptionException StatusError(SpeechRecognitionResultStatus status) => status switch
     {
         SpeechRecognitionResultStatus.TopicLanguageNotSupported or SpeechRecognitionResultStatus.GrammarLanguageMismatch =>
-            new TranscriptionException("Windows のディクテーションが日本語に対応していません。設定で文字起こしのエンジンを Whisper か Gemini にしてください。"),
+            new TranscriptionException(Strings.Speech_LanguageNotSupported),
         SpeechRecognitionResultStatus.MicrophoneUnavailable =>
-            new TranscriptionException("マイクを使えません。Windows の既定のマイクを確かめてください。", "ms-settings:sound"),
+            new TranscriptionException(Strings.Speech_MicUnavailable, "ms-settings:sound"),
         SpeechRecognitionResultStatus.NetworkFailure =>
-            new TranscriptionException("Windows の音声認識がネットワークにつながりませんでした。インターネット接続を確かめてください。"),
-        _ => new TranscriptionException($"Windows の音声認識を始められませんでした（{status}）。"),
+            new TranscriptionException(Strings.Speech_NetworkFailure),
+        _ => new TranscriptionException(string.Format(Strings.Speech_StartFailed, status)),
     };
 
     private static TranscriptionException Translate(Exception e)
@@ -162,16 +161,15 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
         if (hr == PrivacyPolicyNotAccepted)
         {
             return new TranscriptionException(
-                "Windows の音声認識を使うには、Windows の設定 → プライバシーとセキュリティ → 音声認識 で「オンライン音声認識」をオンにしてください。" +
-                "オンにしたくない場合は、設定で文字起こしのエンジンを Whisper にしてください。",
+                Strings.Speech_OnlineRecognitionOff,
                 "ms-settings:privacy-speech", e);
         }
         if (e is UnauthorizedAccessException || hr == 0x80070005)
         {
             return new TranscriptionException(
-                "マイクの使用が許可されていません。Windows の設定 → プライバシーとセキュリティ → マイク で「デスクトップ アプリがマイクにアクセスできるようにする」をオンにしてください。",
+                Strings.Mic_AccessDenied,
                 "ms-settings:privacy-microphone", e);
         }
-        return new TranscriptionException($"Windows の音声認識でエラーが起きました: {e.Message}", inner: e);
+        return new TranscriptionException(string.Format(Strings.Speech_Error, e.Message), inner: e);
     }
 }

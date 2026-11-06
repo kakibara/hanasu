@@ -13,25 +13,32 @@ public static class TranslationLanguages
     /// <summary>すべての翻訳の言語（English → 日本語）</summary>
     public static IReadOnlyList<TranslationLanguage> All { get; } = [TranslationLanguage.English, TranslationLanguage.Japanese];
 
-    /// <summary>HUD の切り替えに出す名前</summary>
+    /// <summary>HUD の切り替えに出す名前（その言語での言語名なので、表示の言語によらない）</summary>
     public static string Label(this TranslationLanguage language) => language switch
     {
-        TranslationLanguage.Japanese => "日本語",
+        TranslationLanguage.Japanese => "日本語",  // skip-tr（言語名はその言語で書く）
         _ => "English",
     };
 
     /// <summary>設定のチェックボックスに出す名前</summary>
     public static string SettingsLabel(this TranslationLanguage language) => language switch
     {
-        TranslationLanguage.Japanese => "日本語",
-        _ => "English（英語）",
+        TranslationLanguage.Japanese => Strings.TranslationLanguage_Japanese,
+        _ => Strings.TranslationLanguage_English,
     };
 
-    /// <summary>「英訳」「和訳」</summary>
+    /// <summary>「英訳」「和訳」（履歴のモードの名前）</summary>
     public static string Verb(this TranslationLanguage language) => language switch
     {
-        TranslationLanguage.Japanese => "和訳",
-        _ => "英訳",
+        TranslationLanguage.Japanese => Strings.Translation_ToJapanese,
+        _ => Strings.Translation_ToEnglish,
+    };
+
+    /// <summary>この言語に翻訳して入力したときの HUD の知らせ（「英訳して入力しました」）</summary>
+    public static string DoneMessage(this TranslationLanguage language) => language switch
+    {
+        TranslationLanguage.Japanese => Strings.Hud_TranslatedToJapanese,
+        _ => Strings.Hud_TranslatedToEnglish,
     };
 
     /// <summary>この言語に翻訳して入力するモード</summary>
@@ -57,9 +64,11 @@ public static class TranslationLanguages
         return picked.Length == 0 ? [TranslationLanguage.English] : picked;
     }
 
-    /// <summary>選んだ言語が 1 つならその言語の動詞、2 つ以上なら「翻訳」（メニューの項目名）</summary>
-    public static string MenuVerb(IReadOnlyList<TranslationLanguage> languages) =>
-        languages.Count == 1 ? languages[0].Verb() : "翻訳";
+    /// <summary>メニューの項目名。選んだ言語が 1 つなら「英訳して入力」「和訳して入力」、2 つ以上なら「翻訳して入力」</summary>
+    public static string MenuTitle(IReadOnlyList<TranslationLanguage> languages) =>
+        languages.Count != 1 ? Strings.Translation_MenuTitle
+        : languages[0] == TranslationLanguage.Japanese ? Strings.Translation_MenuTitle_Japanese
+        : Strings.Translation_MenuTitle_English;
 }
 
 /// <summary>

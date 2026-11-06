@@ -24,7 +24,7 @@ public sealed record ServiceAccountCredentials(string ProjectId, string ClientEm
         }
         if (!File.Exists(expanded))
         {
-            throw new ServiceAccountException($"サービスアカウントの JSON が見つかりません: {path}");
+            throw new ServiceAccountException(string.Format(Strings.ServiceAccount_NotFound, path));
         }
         return Parse(File.ReadAllText(expanded));
     }
@@ -36,21 +36,20 @@ public sealed record ServiceAccountCredentials(string ProjectId, string ClientEm
             var raw = JsonSerializer.Deserialize<RawKey>(json);
             if (raw is null || string.IsNullOrEmpty(raw.ProjectId) || string.IsNullOrEmpty(raw.ClientEmail) || string.IsNullOrEmpty(raw.PrivateKey))
             {
-                throw new ServiceAccountException("サービスアカウントの JSON を読み取れません");
+                throw new ServiceAccountException(Strings.ServiceAccount_Unreadable);
             }
             var tokenUri = string.IsNullOrEmpty(raw.TokenUri) ? "https://oauth2.googleapis.com/token" : raw.TokenUri;
             // 署名した JWT（鍵の代わりになる）を送る先なので、Mac 版の isTrustedTokenURL と同じく Google のトークンの窓口に限る（DEC-COM-053）。
             // 古い鍵ファイルは https://accounts.google.com/o/oauth2/token を書いている
             if (!IsTrustedTokenUri(tokenUri))
             {
-                throw new ServiceAccountException(
-                    $"サービスアカウントの token_uri（{tokenUri}）が Google のトークンの窓口（oauth2.googleapis.com）ではないため、使いません");
+                throw new ServiceAccountException(string.Format(Strings.ServiceAccount_TokenUriNotGoogle, tokenUri));
             }
             return new ServiceAccountCredentials(raw.ProjectId, raw.ClientEmail, raw.PrivateKey, tokenUri);
         }
         catch (JsonException e)
         {
-            throw new ServiceAccountException("サービスアカウントの JSON を読み取れません", e);
+            throw new ServiceAccountException(Strings.ServiceAccount_Unreadable, e);
         }
     }
 
@@ -117,7 +116,7 @@ public sealed class ServiceAccountTokenProvider
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
-            throw new ServiceAccountException("アクセストークンの取得がタイムアウトしました");
+            throw new ServiceAccountException(Strings.ServiceAccount_TokenTimeout);
         }
         using (response)
         {
@@ -129,7 +128,7 @@ public sealed class ServiceAccountTokenProvider
             }
             if (token?.AccessToken is not { Length: > 0 } accessToken)
             {
-                throw new ServiceAccountException($"アクセストークンの取得に失敗しました（{(int)response.StatusCode}）: {body}");
+                throw new ServiceAccountException(string.Format(Strings.ServiceAccount_TokenFailed, (int)response.StatusCode, body));
             }
             cache[credentials.ClientEmail] = (accessToken, now().AddSeconds(token.ExpiresIn));
             return accessToken;
@@ -165,7 +164,7 @@ public sealed class ServiceAccountTokenProvider
         }
         catch (Exception e) when (e is ArgumentException or CryptographicException)
         {
-            throw new ServiceAccountException("サービスアカウントの秘密鍵を読み取れません", e);
+            throw new ServiceAccountException(Strings.ServiceAccount_KeyUnreadable, e);
         }
         byte[] signature;
         try
@@ -174,7 +173,7 @@ public sealed class ServiceAccountTokenProvider
         }
         catch (CryptographicException e)
         {
-            throw new ServiceAccountException($"アクセストークン用の署名に失敗しました: {e.Message}", e);
+            throw new ServiceAccountException(string.Format(Strings.ServiceAccount_SignFailed, e.Message), e);
         }
         return signingInput + "." + Base64Url(signature);
     }

@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>Không tìm thấy llama-server, chương trình chạy LLM cục bộ. Hãy giải nén lại tệp zip của Hanasu hoặc đặt đường dẫn của nó trong biến môi trường HANASU_LLAMA_SERVER.</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>Chưa tải xuống mô hình cục bộ. Hãy tải xuống trong menu → Cài đặt → AI.</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>Chưa tải xuống mô hình cục bộ "{0}". Hãy tải xuống trong menu → Cài đặt → AI.</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>Không thể khởi động LLM cục bộ (mã thoát {0}).</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>LLM cục bộ không khởi động xong trong vòng {0} giây.</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>LLM cục bộ trả về lỗi ({0})</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>Phản hồi của LLM cục bộ bị cắt ở giới hạn độ dài nên không được dùng.</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>LLM cục bộ không trả về kết quả.</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>Không thể đọc phản hồi của LLM cục bộ.</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>LLM cục bộ không phản hồi trong vòng {0} giây.</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>Cục bộ</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>Khuyên dùng. Của Google. Lớn nhất; chỉnh sửa văn bản và biên bản tự nhiên nhất. Dành cho PC có từ 16 GB bộ nhớ trở lên.</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>Của Liquid AI. Nhỏ và nhanh. Làm theo hướng dẫn bằng tiếng Nhật tốt.</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>Của SB Intuitions. Được huấn luyện bằng tiếng Nhật. Ngữ cảnh tối đa 8K (cuộc họp dài được tóm tắt theo từng phần).</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>Của Alibaba. Kích thước khoảng một nửa Gemma nên chạy dễ hơn trên PC có 8 GB bộ nhớ. Xử lý việc tự sửa lời kém hơn Gemma.</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>Giấy phép: {0}. Giấy phép này không cho phép tổ chức có doanh thu hằng năm từ 10 triệu USD trở lên sử dụng cho mục đích thương mại.</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>Giấy phép: {0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0} ({1}) · Khuyên dùng</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>Nhấn thêm một phím ngoài các phím bổ trợ.</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc được dùng để hủy ghi âm nên không thể làm phím tắt.</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>Hãy kết hợp với Ctrl, Alt, Shift hoặc Win (F1–F24 có thể dùng riêng).</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>Tổ hợp chỉ có Shift xung đột với việc gõ phím nên không thể dùng.</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0} được dùng cho {1}, vui lòng tránh dùng tổ hợp này.</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>menu cửa sổ của Windows</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>nhập bằng giọng nói của Windows (Win + H)</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>chuyển ngôn ngữ nhập</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>bật/tắt IME (tùy IME)</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>nhập dấu cách toàn độ rộng/nửa độ rộng</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>chuyển cửa sổ</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>đóng cửa sổ</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>khóa màn hình</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>hiển thị màn hình nền</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>Nonconvert</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>Phím {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>Chưa đặt</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>không rõ ký tự cuối</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>được bảo vệ bằng Windows Hello</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>được bảo vệ bằng DPAPI</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>Đã lưu ({0}, {1})</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>Khóa API đã lưu bị hỏng. Hãy nhập lại trong Cài đặt → AI.</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>Không thể giải mã khóa API được bảo vệ bằng Windows Hello (có thể khóa Windows Hello đã được tạo lại). Hãy nhập lại trong Cài đặt → AI.</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>Không thể đọc khóa API đã lưu (có thể khóa được lưu bởi người dùng Windows khác hoặc trên PC khác). Hãy nhập lại trong Cài đặt → AI.</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>Windows Hello không khả dụng trên PC này.</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>Windows Hello không khả dụng trên PC này nên không thể đọc khóa API đã lưu. Hãy nhập lại trong Cài đặt → AI.</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>Không thể tạo khóa Windows Hello.</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>Khóa Windows Hello không tạo ra cùng một giá trị nên chế độ bảo vệ chưa được chuyển sang Windows Hello (vẫn dùng DPAPI).</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>Chưa đặt khóa API Claude (menu → Cài đặt → AI).</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude không phản hồi trong vòng {0} giây.</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude đã từ chối xử lý văn bản này vì lý do an toàn. Hãy thử mô hình khác (Cài đặt → AI) hoặc Gemini.</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude đã từ chối xử lý văn bản này vì lý do an toàn ({0}). Hãy thử mô hình khác (Cài đặt → AI) hoặc Gemini.</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Phản hồi của Claude quá dài và đã bị cắt.</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude không trả về kết quả.</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>Khóa API Claude không đúng (401). Trong Cài đặt → AI, hãy nhập lại khóa bạn đã tạo trong Claude Console.</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>Khóa API này không dùng được Claude (403)</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>Không tìm thấy mô hình {0}, hoặc khóa API này không dùng được mô hình đó (404).</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>Có vấn đề về thanh toán Claude API (402). Hãy kiểm tra cài đặt thanh toán trong Claude Console.</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>Đã đạt giới hạn sử dụng Claude API (429). Hãy đợi một lát rồi thử lại.</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>Claude API đang quá tải (529). Hãy đợi một lát rồi thử lại.</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>Đã xảy ra lỗi trong Claude API ({0}). Hãy đợi một lát rồi thử lại.</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>Claude API không chấp nhận yêu cầu ({0})</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>Không thể kết nối với Claude API. Hãy kiểm tra kết nối mạng.</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5 (nhanh, rẻ; mặc định cho đọc chính tả)</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5 (mặc định cho biên bản)</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5 (thông minh nhất, đắt nhất)</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>Chưa đặt thông tin xác thực Gemini (khóa API hoặc tài khoản dịch vụ).</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Lỗi Gemini API ({0}): {1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini không trả về kết quả.</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini không trả về kết quả ({0}).</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>Không thể đọc phản hồi của Gemini.</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini không phản hồi trong vòng {0} giây.</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>Không tìm thấy JSON của tài khoản dịch vụ: {0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>Không thể đọc JSON của tài khoản dịch vụ.</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>Hết thời gian chờ khi lấy mã thông báo truy cập.</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>Không thể lấy mã thông báo truy cập ({0}): {1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>Không thể đọc khóa riêng của tài khoản dịch vụ.</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>Không thể ký yêu cầu mã thông báo truy cập: {0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>Chỉ cho phép tải xuống từ các máy chủ dự kiến: {0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>Tải xuống không thành công (HTTP {0}).</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>Đã dừng tải xuống vì bị chuyển hướng đến địa chỉ không phải https.</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>Tệp tải xuống không đúng kích thước dự kiến ({0} byte; dự kiến {1} byte).</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>Đã dừng tải xuống vì tệp lớn hơn dự kiến.</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>Quá trình tải xuống bị gián đoạn.</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>Hàm băm (SHA-256) của tệp đã tải xuống không khớp nên tệp sẽ không được dùng.</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>Đang chuyển thành văn bản bằng {0}…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>Công cụ chuyển văn bản là Gemini nhưng chưa đặt thông tin xác thực Gemini (menu → Cài đặt → AI).</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>Chuyển thành văn bản bằng Gemini không thành công: {0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0} ({1}) — {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>Nhỏ nhất. Độ chính xác thấp với tiếng Nhật (để thử nghiệm).</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>Nhỏ. Độ chính xác với tiếng Nhật thấp hơn.</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>Phù hợp dùng hằng ngày. Cân bằng tốt giữa tốc độ và độ chính xác.</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>Độ chính xác cao. Dành cho CPU nhanh.</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>Độ chính xác cao; nhỏ hơn nhờ lượng tử hóa. Dành cho CPU nhanh.</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>Độ chính xác cao. Dành cho CPU nhanh.</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>Đây không phải tệp WAV.</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>Tệp WAV không có khối fmt.</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>Định dạng WAV không được hỗ trợ (format={0}, bits={1}).</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>Tệp WAV không có khối data.</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>Tiếng Anh</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>Tiếng Nhật</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>Sang tiếng Anh</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>Sang tiếng Nhật</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>Dịch rồi nhập</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>Dịch sang tiếng Anh rồi nhập</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>Dịch sang tiếng Nhật rồi nhập</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>Đã dịch sang tiếng Anh và nhập</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>Đã dịch sang tiếng Nhật và nhập</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>Đã nhập</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>Đã hủy</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>Đang chuẩn bị…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>Đang hoàn tất…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>Không nhận dạng được lời nói.</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>Đang ghi âm</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>Hãy bắt đầu nói…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>Không thể dán vào ứng dụng chạy với quyền quản trị</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>Không thể gửi tổ hợp phím dán</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>Không thể dùng bảng tạm</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>Không thể nhập văn bản</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>Không tìm thấy chỗ để nhập</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>Văn bản cũng đã có trong bảng tạm. Hãy bấm vào chỗ bạn muốn rồi nhấn Ctrl+V.</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>Bấm "Sao chép" hoặc chọn văn bản rồi sao chép, sau đó nhấn Ctrl+V ở chỗ bạn muốn.</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>Đang dịch sang tiếng Anh bằng {0}…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>Đang dịch sang tiếng Nhật bằng {0}…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>Đang chỉnh sửa bằng {0}…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>Chỉnh sửa</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>Thành công</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>AI lỗi (văn bản gốc)</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>Chưa thiết lập (văn bản gốc)</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>Đã tắt chỉnh sửa (văn bản gốc)</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0} ngày</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>Vĩnh viễn</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>Không thể đọc tệp lịch sử nên đã giữ lại dưới tên {0} và tạo tệp mới.</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>Không thể đọc tệp lịch sử: {0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>Không thể lưu lịch sử: {0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>Hôm nay</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>Hôm qua</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>dddd, d 'tháng' M</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>dddd, d 'tháng' M, yyyy</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}, nên văn bản đã được nhập mà không chỉnh sửa (menu → Cài đặt → AI).</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}, nên văn bản đã được nhập mà không dịch (menu → Cài đặt → AI).</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>Văn bản đã được nhập nguyên trạng trước khi chỉnh sửa.</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>Văn bản đã được nhập nguyên trạng trước khi dịch.</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>Chưa tải xuống mô hình LLM cục bộ (menu → Cài đặt → AI).</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>Chưa đặt thông tin xác thực Gemini (khóa API hoặc tài khoản dịch vụ) (menu → Cài đặt → AI).</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>Chưa tải xuống mô hình LLM cục bộ</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>Chưa đặt thông tin xác thực {0}</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>Tự động</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>Họp định kỳ</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>Gặp gỡ khách hàng</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>Động não</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>Tùy chỉnh</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>Tổng quan, thảo luận, quyết định, việc cần làm</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>Tiến độ, báo cáo, vấn đề, quyết định, việc cần làm</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>Cập nhật, mối lo ngại, phản hồi, thỏa thuận, việc cần làm</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>Thách thức của khách hàng, đề xuất, phản ứng, băn khoăn, hành động tiếp theo</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>Ý tưởng được nêu, ý tưởng triển vọng, câu hỏi còn mở, bước tiếp theo</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>Làm theo hướng dẫn bạn đã viết</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>Đang tách người nói phía bên kia…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>Không thể tách người nói phía bên kia nên đã gộp thành một "Bên kia" ({0}).</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>Các tệp âm thanh đã được giữ lại.</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>Không thể tạo biên bản: {0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}, nên chưa tạo biên bản (menu → Cài đặt → AI).</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>Đang tạo biên bản bằng {0}…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>Đang chuyển thành văn bản bằng {0}… ({1})</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>Đang chuyển thành văn bản bằng {0}… ({1} {2})</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>Không thể chuyển âm thanh thành văn bản ({0}): {1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>Công cụ chuyển văn bản cho cuộc họp là Gemini nhưng chưa đặt thông tin xác thực Gemini (menu → Cài đặt → AI).</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>Cuộc họp {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>Ứng dụng đã thoát trong khi ghi âm. Các tệp âm thanh ({0} / {1}) có thể đã được giữ lại một phần.</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>Không thể bắt đầu ghi âm cuộc họp</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>Đang ghi âm đọc chính tả. Hãy thử lại khi xong.</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>Không thể ghi âm thanh của PC (người tham gia khác)</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>Chỉ ghi giọng của bạn (micrô). {0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>Không thể bắt đầu ghi âm: {0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>Không thể bắt đầu ghi âm cuộc họp</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>Đang dừng ghi âm…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>Ghi âm cuộc họp</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>Đã ghi âm cuộc họp</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>Đã lưu bản ghi lời.</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>Đã lưu bản ghi lời và biên bản.</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>Đã ghi âm cuộc họp (có một số vấn đề)</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>Xử lý sau khi ghi âm không thành công: {0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>Ghi âm cuộc họp không thành công</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>Không thể xóa cuộc họp đang ghi âm, đang xử lý hoặc đang tạo lại biên bản.</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>Đã dừng ghi âm từ micrô</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>Quá trình ghi âm đã dừng (ví dụ: micrô bị rút ra) nên việc ghi âm cuộc họp sẽ dừng.</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>Tôi</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>Bên kia</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>Người nói {0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>Người cùng phòng {0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — Bản ghi lời</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- Ngày: {0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- Thời lượng: {0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — Ghi chú</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>Chưa có dấu "Quan trọng" nào. Hãy thêm trong khi ghi âm bằng nút "★ Quan trọng" hoặc phím tắt, đoạn hội thoại xung quanh sẽ xuất hiện ở đây.</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>Quan trọng</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>Không có lời nói nào quanh dấu này (từ 30 giây trước đến 15 giây sau).</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>Cách viết đúng đang trống nên sẽ không thay thế gì.</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>"{0}" chỉ có một ký tự nên sẽ không được dùng (quá dễ khớp với một phần của từ khác).</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>"{0}" cũng có ở một dòng phía trên nên dòng đó sẽ được dùng.</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>Chưa tải xuống mô hình Whisper ({0}). Hãy tải xuống trong menu → Cài đặt → Chung.</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>Không thể chạy Whisper. Hãy cài đặt Microsoft Visual C++ Redistributable (2015–2022, x64) rồi thử lại. ({0})</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>Không thể tải mô hình Whisper: {0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>Đang tải xuống mô hình tách người nói… ({0} / {1} MB)</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>Tần số lấy mẫu của mô hình tách người nói không như dự kiến ({0} Hz).</value>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Không thể dùng khu vực Vertex AI “{0}” (chỉ gồm chữ thường, chữ số và dấu gạch nối; ví dụ: global, us-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>token_uri của tài khoản dịch vụ ({0}) không phải là điểm cuối mã thông báo của Google (oauth2.googleapis.com) nên sẽ không được sử dụng.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Bản ghi âm đã đạt giới hạn 10 phút nên âm thanh đến thời điểm này sẽ được xử lý</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>Khóa API (hoặc tài khoản dịch vụ) không đúng hoặc không được phép dùng Gemini API ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>Không tìm thấy mô hình “{0}” hoặc không thể dùng mô hình này với thông tin xác thực hiện tại</value>
+  </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>Không biết kích thước của tệp cần tải về</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>Đã dừng tải về vì bị chuyển hướng đến máy chủ không mong đợi: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Không thể đọc thông tin bản phát hành</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>Không thể lấy phiên bản mới nhất từ GitHub (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>Không thể lấy phiên bản mới nhất từ GitHub (HTTP {0}). Có thể đã vượt giới hạn truy vấn của GitHub; hãy đợi một lúc rồi thử lại.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Không thể kết nối với GitHub: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub không phản hồi kịp thời</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>Tệp zip có mục trỏ ra ngoài thư mục giải nén nên sẽ không được dùng: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>Tệp zip sau khi giải nén lớn hơn dự kiến nên sẽ không được dùng</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>Không thể mở tệp zip đã tải về</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>Tệp zip không có {0} nên sẽ không được dùng</value>
+  </data>
+</root>

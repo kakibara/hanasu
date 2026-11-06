@@ -27,7 +27,7 @@ internal sealed class UpdatePromptWindow : Window
 
     public UpdatePromptWindow(AppVersion current, ReleaseInfo release, bool canInstall)
     {
-        Title = "Hanasu のアップデート";
+        Title = Strings.UpdatePrompt_Title;
         SizeToContent = SizeToContent.Height;
         Width = 460;
         MaxHeight = 560;
@@ -39,7 +39,7 @@ internal sealed class UpdatePromptWindow : Window
         var panel = new StackPanel { Margin = new Thickness(16) };
         panel.Children.Add(new TextBlock
         {
-            Text = $"Hanasu {release.Version} があります（今は {current}）",
+            Text = string.Format(Strings.UpdatePrompt_Available, release.Version, current),
             FontSize = 16,
             FontWeight = FontWeights.SemiBold,
             TextWrapping = TextWrapping.Wrap,
@@ -47,8 +47,8 @@ internal sealed class UpdatePromptWindow : Window
         panel.Children.Add(new TextBlock
         {
             Text = canInstall
-                ? "「アップデート」を押すと、新しい版をダウンロードして入れ替え、Hanasu を起動し直します。"
-                : "この版は、アプリの中からは入れられません。リリースのページから入れてください。",
+                ? Strings.UpdatePrompt_CanInstall
+                : Strings.UpdatePrompt_CannotInstall,
             Margin = new Thickness(0, 8, 0, 0),
             TextWrapping = TextWrapping.Wrap,
         });
@@ -70,7 +70,7 @@ internal sealed class UpdatePromptWindow : Window
 
         var link = new Button
         {
-            Content = "リリースのページを開く",
+            Content = Strings.UpdatePrompt_OpenReleasePage,
             HorizontalAlignment = HorizontalAlignment.Left,
             Padding = new Thickness(8, 3, 8, 3),
             Margin = new Thickness(0, 10, 0, 0),
@@ -79,9 +79,9 @@ internal sealed class UpdatePromptWindow : Window
         panel.Children.Add(link);
 
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 16, 0, 0) };
-        buttons.Children.Add(MakeButton(canInstall ? "アップデート" : "ページを開く", UpdateChoice.Update, isDefault: true));
-        buttons.Children.Add(MakeButton("あとで", UpdateChoice.Later, isCancel: true));
-        buttons.Children.Add(MakeButton("この版をスキップ", UpdateChoice.Skip));
+        buttons.Children.Add(MakeButton(canInstall ? Strings.UpdatePrompt_Update : Strings.UpdatePrompt_OpenPage, UpdateChoice.Update, isDefault: true));
+        buttons.Children.Add(MakeButton(Strings.UpdatePrompt_Later, UpdateChoice.Later, isCancel: true));
+        buttons.Children.Add(MakeButton(Strings.UpdatePrompt_Skip, UpdateChoice.Skip));
         panel.Children.Add(buttons);
         Content = panel;
     }

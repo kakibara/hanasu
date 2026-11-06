@@ -3,6 +3,7 @@ namespace Hanasu.Core.Transcription;
 /// <summary>Whisper の ggml モデル 1 つ。Bytes と Sha256 は Hugging Face の LFS の値（ダウンロードしたものと比べる）</summary>
 public sealed record WhisperModelInfo(string Id, string FileName, long Bytes, string Sha256, string Description)
 {
+
     public long ApproximateBytes => Bytes;
 
     /// <summary>whisper.cpp の作者が Hugging Face で配っているモデル</summary>
@@ -12,25 +13,26 @@ public sealed record WhisperModelInfo(string Id, string FileName, long Bytes, st
         ? $"{ApproximateBytes / 1_000_000_000.0:0.0} GB"
         : $"{ApproximateBytes / 1_000_000.0:0} MB";
 
-    public string Label => $"{Id}（{SizeLabel}）— {Description}";
+    public string Label => string.Format(Strings.WhisperModel_Label, Id, SizeLabel, Description);
 }
 
 public static class WhisperModelCatalog
 {
+    // 説明は表示の言語（起動のときに決めた UI のカルチャで、初めて使うときに読む。REQ-COM-060）
     public static readonly IReadOnlyList<WhisperModelInfo> Models =
     [
         new("tiny", "ggml-tiny.bin", 77_691_713, "be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21",
-            "いちばん小さい。日本語の精度は低い（動作確認向け）"),
+            Strings.WhisperModel_Tiny),
         new("base", "ggml-base.bin", 147_951_465, "60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe",
-            "小さい。日本語の精度は低め"),
+            Strings.WhisperModel_Base),
         new("small", "ggml-small.bin", 487_601_967, "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b",
-            "普段使いの目安。速さと精度のつり合いがよい"),
+            Strings.WhisperModel_Small),
         new("medium", "ggml-medium.bin", 1_533_763_059, "6c14d5adee5f86394037b4e4e8b59f1673b6cee10e3cf0b11bbdbee79c156208",
-            "精度が高い。速い CPU 向け"),
+            Strings.WhisperModel_Medium),
         new("large-v3-turbo-q5_0", "ggml-large-v3-turbo-q5_0.bin", 574_041_195, "394221709cd5ad1f40c46e6031ca61bce88931e6e088c188294c6d5a55ffa7e2",
-            "高精度・量子化で小さめ。速い CPU 向け"),
+            Strings.WhisperModel_LargeTurboQ5),
         new("large-v3-turbo", "ggml-large-v3-turbo.bin", 1_624_555_275, "1fc70f774d38eb169993ac391eea357ef47c88757ef72ee5943879b7e8e2bc69",
-            "高精度。速い CPU 向け"),
+            Strings.WhisperModel_LargeTurbo),
     ];
 
     public static WhisperModelInfo? Find(string? id) =>

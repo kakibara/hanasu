@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>Yerel LLM'yi çalıştıran llama-server bulunamadı. Hanasu zip dosyasını yeniden ayıklayın veya yolunu HANASU_LLAMA_SERVER ortam değişkeninde belirtin.</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>Yerel model henüz indirilmedi. Menü → Ayarlar → AI bölümünden indirin.</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>"{0}" yerel modeli henüz indirilmedi. Menü → Ayarlar → AI bölümünden indirin.</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>Yerel LLM başlatılamadı (çıkış kodu {0}).</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>Yerel LLM {0} saniye içinde başlatılamadı.</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>Yerel LLM bir hata döndürdü ({0})</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>Yerel LLM'nin yanıtı uzunluk sınırında kesildiği için kullanılmadı.</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>Yerel LLM sonuç döndürmedi.</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>Yerel LLM'nin yanıtı okunamadı.</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>Yerel LLM {0} saniye içinde yanıt vermedi.</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>Yerel</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>Önerilen. Google tarafından. En büyük model; en doğal düzenleme ve toplantı tutanakları. 16 GB veya daha fazla belleği olan bilgisayarlar için.</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>Liquid AI tarafından. Küçük ve hızlı. Japonca talimatları iyi izler.</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>SB Intuitions tarafından. Japonca ile eğitilmiştir. Bağlam en fazla 8K (uzun toplantılar parça parça özetlenir).</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>Alibaba tarafından. Gemma'nın yaklaşık yarısı boyutunda olduğundan 8 GB belleği olan bilgisayarlarda daha rahat çalışır. Konuşmadaki kendini düzeltmeleri Gemma kadar iyi işleyemez.</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>Lisans: {0}. Bu lisans, yıllık geliri 10 milyon ABD doları veya üzeri olan kuruluşların ticari kullanımına izin vermez.</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>Lisans: {0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0} ({1}) · Önerilen</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>Değiştirici tuşlara ek olarak bir tuşa basın.</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc kaydı iptal etmek için kullanıldığından kısayol olamaz.</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>Ctrl, Alt, Shift veya Win ile birlikte kullanın (F1–F24 tek başına kullanılabilir).</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>Yalnızca Shift içeren birleşimler yazmayla çakıştığından kullanılamaz.</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0}, {1} için kullanılıyor; lütfen başka bir kısayol seçin.</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>Windows pencere menüsü</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>Windows sesle yazma (Win + H)</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>giriş dilini değiştirme</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>IME'yi açıp kapatma (IME'ye bağlı olarak)</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>tam genişlikte/yarım genişlikte boşluk yazma</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>pencereler arasında geçiş</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>pencereleri kapatma</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>ekranı kilitleme</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>masaüstünü gösterme</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>Nonconvert</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>Tuş {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>Ayarlanmadı</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>son karakterler bilinmiyor</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>Windows Hello ile korunuyor</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>DPAPI ile korunuyor</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>Kaydedildi ({0}, {1})</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>Kayıtlı API anahtarı bozuk. Ayarlar → AI bölümünde yeniden girin.</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>Windows Hello ile korunan API anahtarının şifresi çözülemedi (Windows Hello anahtarı yeniden oluşturulmuş olabilir). Ayarlar → AI bölümünde yeniden girin.</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>Kayıtlı API anahtarı okunamıyor (başka bir Windows kullanıcısı tarafından veya başka bir bilgisayarda kaydedilmiş olabilir). Ayarlar → AI bölümünde yeniden girin.</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>Windows Hello bu bilgisayarda kullanılamıyor.</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>Windows Hello bu bilgisayarda kullanılamadığından kayıtlı API anahtarı okunamıyor. Ayarlar → AI bölümünde yeniden girin.</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>Windows Hello anahtarı oluşturulamadı.</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>Windows Hello anahtarı aynı değeri üretmediğinden koruma Windows Hello'ya geçirilmedi (DPAPI kullanılmaya devam ediyor).</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>Claude API anahtarı ayarlanmadı (menü → Ayarlar → AI).</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude {0} saniye içinde yanıt vermedi.</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude bu metni güvenlik nedeniyle işlemeyi reddetti. Başka bir model (Ayarlar → AI) veya Gemini deneyin.</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude bu metni güvenlik nedeniyle işlemeyi reddetti ({0}). Başka bir model (Ayarlar → AI) veya Gemini deneyin.</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Claude'un yanıtı çok uzun olduğu için kesildi.</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude sonuç döndürmedi.</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>Claude API anahtarı yanlış (401). Ayarlar → AI bölümünde Claude Console'da oluşturduğunuz anahtarı yeniden girin.</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>Bu API anahtarı Claude'u kullanamıyor (403)</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>{0} modeli bulunamadı veya bu API anahtarı onu kullanamıyor (404).</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>Claude API faturalandırmasında bir sorun var (402). Claude Console'daki faturalandırma ayarlarını kontrol edin.</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>Claude API kullanım sınırına ulaşıldı (429). Biraz bekleyip yeniden deneyin.</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>Claude API aşırı yüklü (529). Biraz bekleyip yeniden deneyin.</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>Claude API'de bir hata oluştu ({0}). Biraz bekleyip yeniden deneyin.</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>Claude API isteği kabul etmedi ({0})</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>Claude API'ye bağlanılamadı. Ağ bağlantınızı kontrol edin.</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5 (hızlı, ucuz; dikte için varsayılan)</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5 (tutanaklar için varsayılan)</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5 (en akıllı, en pahalı)</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>Gemini kimlik bilgileri (API anahtarı veya hizmet hesabı) ayarlanmadı.</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Gemini API hatası ({0}): {1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini sonuç döndürmedi.</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini sonuç döndürmedi ({0}).</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>Gemini'nin yanıtı okunamadı.</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini {0} saniye içinde yanıt vermedi.</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>Hizmet hesabı JSON dosyası bulunamadı: {0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>Hizmet hesabı JSON dosyası okunamıyor.</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>Erişim belirteci alınırken zaman aşımı oluştu.</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>Erişim belirteci alınamadı ({0}): {1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>Hizmet hesabının özel anahtarı okunamıyor.</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>Erişim belirteci isteği imzalanamadı: {0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>İndirmelere yalnızca beklenen sunuculardan izin verilir: {0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>İndirme başarısız oldu (HTTP {0}).</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>https olmayan bir konuma yönlendirildiği için indirme durduruldu.</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>İndirilecek dosya beklenen boyutta değil ({0} bayt; beklenen {1} bayt).</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>Dosya beklenenden büyük olduğu için indirme durduruldu.</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>İndirme yarıda kesildi.</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>İndirilen dosyanın karması (SHA-256) eşleşmediği için kullanılmayacak.</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>{0} ile yazıya dökülüyor…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>Yazıya dökme motoru Gemini, ancak Gemini kimlik bilgileri ayarlanmadı (menü → Ayarlar → AI).</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>Gemini ile yazıya dökme başarısız oldu: {0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0} ({1}) — {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>En küçük. Japonca için doğruluk düşük (deneme amaçlı).</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>Küçük. Japonca için doğruluk daha düşük.</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>Günlük kullanım için iyi. Hız ve doğruluk dengesi iyi.</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>Yüksek doğruluk. Hızlı işlemciler için.</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>Yüksek doğruluk; nicemleme sayesinde daha küçük. Hızlı işlemciler için.</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>Yüksek doğruluk. Hızlı işlemciler için.</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>Bu bir WAV dosyası değil.</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>WAV dosyasında fmt öbeği yok.</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>Desteklenmeyen WAV biçimi (format={0}, bits={1}).</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>WAV dosyasında data öbeği yok.</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>İngilizce</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>Japonca</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>İngilizceye</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>Japoncaya</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>Çevir ve Yaz</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>İngilizceye Çevir ve Yaz</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>Japoncaya Çevir ve Yaz</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>İngilizceye çevrildi ve yazıldı</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>Japoncaya çevrildi ve yazıldı</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>Yazıldı</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>İptal edildi</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>Hazırlanıyor…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>Tamamlanıyor…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>Konuşma algılanmadı.</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>Kaydediliyor</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>Hata</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>Konuşmaya başlayın…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>Yönetici olarak çalışan uygulamalara yapıştırılamıyor</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>Yapıştırma tuş vuruşu gönderilemedi</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>Pano kullanılamadı</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>Metin yazılamadı</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>Yazılacak yer bulunamadı</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>Metin panoya da kopyalandı. İstediğiniz yere tıklayıp Ctrl+V tuşlarına basın.</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>"Kopyala"ya tıklayın veya metni seçip kopyalayın, ardından istediğiniz yerde Ctrl+V tuşlarına basın.</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>{0} ile İngilizceye çevriliyor…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>{0} ile Japoncaya çevriliyor…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>{0} ile düzenleniyor…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>Düzenleme</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>Başarılı</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>Yapay zeka başarısız (özgün metin)</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>Ayarlanmadı (özgün metin)</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>Düzenleme kapalı (özgün metin)</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0} gün</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>Süresiz</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>Geçmiş dosyası okunamadığından {0} olarak saklandı ve yeni bir dosya başlatıldı.</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>Geçmiş dosyası okunamadı: {0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>Geçmiş kaydedilemedi: {0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>Bugün</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>Dün</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>d MMMM ddd</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>d MMMM yyyy ddd</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}; bu nedenle metin düzenlenmeden yazıldı (menü → Ayarlar → AI).</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}; bu nedenle metin çevrilmeden yazıldı (menü → Ayarlar → AI).</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>Metin, düzenlenmeden önceki haliyle yazıldı.</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>Metin, çevrilmeden önceki haliyle yazıldı.</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>Yerel LLM modeli henüz indirilmedi (menü → Ayarlar → AI).</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>Gemini kimlik bilgileri (API anahtarı veya hizmet hesabı) ayarlanmadı (menü → Ayarlar → AI).</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>Yerel LLM modeli henüz indirilmedi</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>{0} kimlik bilgileri ayarlanmadı</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>Otomatik</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>Düzenli toplantı</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>Bire bir</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>Satış görüşmesi</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>Beyin fırtınası</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>Genel bakış, tartışma, kararlar, yapılacaklar</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>İlerleme, raporlar, sorunlar, kararlar, yapılacaklar</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>Gelişmeler, endişeler, geri bildirim, mutabakatlar, yapılacaklar</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>Müşterinin sorunları, teklif, tepkiler, endişeler, sonraki adımlar</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>Ortaya çıkan fikirler, umut vadeden fikirler, açık sorular, sonraki adımlar</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>Yazdığınız talimatlara uyar</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>Karşı taraftaki konuşmacılar ayrılıyor…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>Karşı taraftaki konuşmacılar ayrılamadığından tek bir "Karşı taraf" olarak birleştirildi ({0}).</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>Ses dosyaları saklandı.</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>Tutanak oluşturulamadı: {0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}; bu nedenle tutanak oluşturulmadı (menü → Ayarlar → AI).</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>{0} ile tutanak oluşturuluyor…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>{0} ile yazıya dökülüyor… ({1})</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>{0} ile yazıya dökülüyor… ({1} {2})</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>Ses yazıya dökülemedi ({0}): {1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>Toplantı yazıya dökme motoru Gemini, ancak Gemini kimlik bilgileri ayarlanmadı (menü → Ayarlar → AI).</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>Toplantı {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>Uygulama kayıt sırasında kapandı. Ses dosyaları ({0} / {1}) kısmen saklanmış olabilir.</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>Toplantı kaydı başlatılamıyor</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>Dikte kaydediliyor. Bittiğinde yeniden deneyin.</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>Bilgisayar sesi (diğer katılımcılar) kaydedilemiyor</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>Yalnızca sizin sesiniz (mikrofon) kaydedilecek. {0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>Kayıt başlatılamadı: {0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>Toplantı kaydı başlatılamadı</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>Kayıt durduruluyor…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>Toplantı kaydı</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>Toplantı kaydedildi</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>Döküm kaydedildi.</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>Döküm ve tutanak kaydedildi.</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>Toplantı kaydedildi (bazı sorunlarla)</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>Kayıt sonrası işleme başarısız oldu: {0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>Toplantı kaydı başarısız oldu</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>Kaydedilen, işlenen veya tutanağı yeniden oluşturulan toplantılar silinemez.</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>Mikrofon kaydı durdu</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>Kayıt durdu (örneğin mikrofon çıkarıldı); bu nedenle toplantı kaydı durdurulacak.</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>Ben</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>Karşı taraf</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>Konuşmacı {0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>Odadaki kişi {0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — Döküm</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- Tarih: {0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- Süre: {0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — Notlar</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>"Önemli" işareti yok. Kayıt sırasında "★ Önemli" düğmesiyle veya kısayolla ekleyin; çevresindeki konuşma burada görünür.</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>Önemli</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>Bu işaretin çevresinde (30 saniye öncesinden 15 saniye sonrasına kadar) konuşma yok.</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>Doğru yazım boş olduğundan hiçbir şey değiştirilmeyecek.</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>"{0}" tek bir karakter olduğundan kullanılmayacak (diğer kelimelerin parçalarıyla çok kolay eşleşir).</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>"{0}" yukarıdaki bir satırda da var; o satır kullanılacak.</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>Whisper modeli ({0}) henüz indirilmedi. Menü → Ayarlar → Genel bölümünden indirin.</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>Whisper çalıştırılamadı. Microsoft Visual C++ Redistributable (2015–2022, x64) yükleyip yeniden deneyin. ({0})</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>Whisper modeli yüklenemedi: {0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>Konuşmacı ayırma modelleri indiriliyor… ({0} / {1} MB)</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>Konuşmacı ayırma modelinin örnekleme hızı beklenen değerde değil ({0} Hz).</value>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>"{0}" Vertex AI bölgesi kullanılamaz (yalnızca küçük harf, rakam ve kısa çizgi; ör. global, us-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>Hizmet hesabının token_uri değeri ({0}) Google'ın belirteç uç noktası (oauth2.googleapis.com) değil, bu nedenle kullanılmayacak.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Kayıt 10 dakikalık sınıra ulaştı, bu nedenle şimdiye kadarki ses işlenecek</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>API anahtarı (veya hizmet hesabı) yanlış ya da Gemini API'yi kullanma izni yok ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>"{0}" modeli bulunamadı veya bu kimlik bilgileriyle kullanılamıyor</value>
+  </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>İndirilecek dosyanın boyutu bilinmiyor</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>Beklenmeyen bir ana bilgisayara yönlendirildiği için indirme durduruldu: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Sürüm bilgisi okunamadı</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>En yeni sürüm GitHub'dan alınamadı (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>En yeni sürüm GitHub'dan alınamadı (HTTP {0}). GitHub istek sınırına ulaşılmış olabilir; bir süre bekleyip yeniden deneyin.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>GitHub'a bağlanılamadı: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub zamanında yanıt vermedi</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>Zip dosyasında, açılacak klasörün dışını gösteren bir öğe olduğu için kullanılmayacak: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>Açılan zip dosyası beklenenden büyük olduğu için kullanılmayacak</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>İndirilen zip dosyası açılamadı</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>Zip dosyasında {0} olmadığı için kullanılmayacak</value>
+  </data>
+</root>

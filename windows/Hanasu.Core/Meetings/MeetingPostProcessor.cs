@@ -47,7 +47,7 @@ public sealed class MeetingPostProcessor
         IReadOnlyList<SpeakerTurn> turns = Array.Empty<SpeakerTurn>();
         if (Diarizer is not null && others.Count > 0 && othersSamples is not null)
         {
-            progress?.Report("相手側の話者を分けています…");
+            progress?.Report(Strings.Meeting_Diarizing);
             try
             {
                 var offset = offsets.GetValueOrDefault("others");
@@ -60,7 +60,7 @@ public sealed class MeetingPostProcessor
             {
                 // 話者分離に失敗しても、相手側を「相手」1 人として続ける（Mac 版と同じ）
                 Log?.Invoke($"diarization failed: {e.GetType().Name}: {e.Message}");
-                warnings.Add($"相手側の話者を分けられなかったので、「相手」1 人としてまとめました（{e.Message}）");
+                warnings.Add(string.Format(Strings.Meeting_DiarizationFailed, e.Message));
             }
         }
         othersSamples = null;
@@ -69,7 +69,7 @@ public sealed class MeetingPostProcessor
         var errors = new List<string>();
         if (failures.Count > 0)
         {
-            errors.Add(string.Join("\n", failures) + "\n音声ファイルは残しています。");
+            errors.Add(string.Join("\n", failures) + "\n" + Strings.Meeting_AudioKept);
         }
         Store.Save(meeting);
 
@@ -83,15 +83,15 @@ public sealed class MeetingPostProcessor
             }
             catch (ServiceAccountException e)
             {
-                authError = $"議事録を作れませんでした: {e.Message}";
+                authError = string.Format(Strings.Meeting_MinutesFailed, e.Message);
             }
             if (client is null)
             {
-                errors.Add(authError ?? $"{TextAiFactory.NotReadyBecause(MinutesProvider)}、議事録は作っていません（メニュー → 設定 → AI）。");
+                errors.Add(authError ?? string.Format(Strings.Meeting_MinutesNotCreated, TextAiFactory.NotReadyBecause(MinutesProvider)));
             }
             else
             {
-                progress?.Report($"{client.ProviderName} で議事録を作っています…");
+                progress?.Report(string.Format(Strings.Meeting_MakingMinutes, client.ProviderName));
                 try
                 {
                     var result = await MeetingProcessor.MakeMinutesAsync(meeting, client, MinutesModel, cancellationToken).ConfigureAwait(false);
@@ -101,7 +101,7 @@ public sealed class MeetingPostProcessor
                 catch (TextAiException e)
                 {
                     Log?.Invoke($"minutes failed: {e.GetType().Name}");
-                    errors.Add($"議事録を作れませんでした: {e.Message}");
+                    errors.Add(string.Format(Strings.Meeting_MinutesFailed, e.Message));
                 }
             }
         }
@@ -119,15 +119,15 @@ public sealed class MeetingPostProcessor
         double offset, List<string> failures, IProgress<string>? progress, CancellationToken cancellationToken)
     {
         var path = Store.AudioPath(meeting, channel);
-        var label = channel == MeetingChannel.Me ? "自分" : "相手";
+        var label = channel == MeetingChannel.Me ? Strings.Speaker_Me : Strings.Speaker_Others;
         if (!File.Exists(path)) return (new(), null);
         try
         {
             var samples = await Task.Run(() => WavFile.DecodeTo16kMono(File.ReadAllBytes(path)), cancellationToken).ConfigureAwait(false);
             // ほぼ無音のチャンネル（相手がいない、マイクを切っていた）は送らない
             if (MeetingAudio.IsNearlySilent(samples)) return (new(), null);
-            progress?.Report($"{Transcriber.DisplayName} で文字起こししています…（{label}）");
-            var inner = progress is null ? null : new InlineProgress<string>(p => progress.Report($"{Transcriber.DisplayName} で文字起こししています…（{label} {p}）"));
+            progress?.Report(string.Format(Strings.Meeting_TranscribingChannel, Transcriber.DisplayName, label));
+            var inner = progress is null ? null : new InlineProgress<string>(p => progress.Report(string.Format(Strings.Meeting_TranscribingChannelProgress, Transcriber.DisplayName, label, p)));
             IReadOnlyList<TimedSegment> segments = await Transcriber.TranscribeSegmentsAsync(samples, Context, inner, cancellationToken).ConfigureAwait(false);
             segments = MeetingAudio.SnapToSpeech(segments, samples);
             Log?.Invoke($"transcribed {channel}: {segments.Count} segments");
@@ -136,7 +136,7 @@ public sealed class MeetingPostProcessor
         catch (Exception e) when (e is TranscriptionException or InvalidDataException or IOException)
         {
             Log?.Invoke($"transcription failed ({channel}): {e.GetType().Name}");
-            failures.Add($"{label}の音声を文字起こしできませんでした: {e.Message}");
+            failures.Add(string.Format(Strings.Meeting_ChannelTranscriptionFailed, label, e.Message));
             return (new(), null);
         }
     }

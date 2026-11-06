@@ -159,6 +159,7 @@ enum TextInserter {
 - `python3 scripts/check-i18n.py` が、キーの漏れ・埋める場所（`${…}`）やタグの食い違いを見つける（エラーなら終了コード 1。PR ごとに `.github/workflows/spec.yml` で動く）。
 - 表示の言語はシステムの言語で決まる（REQ-COM-060）。Mac の UI の文字列は `tr("日本語の原文")` で書き、訳は `Sources/Hanasu/Resources/Localizable.xcstrings` に入れる（DEC-COM-165）。
 - 開発用の CLI の出力とログは訳さない。
+- Windows の UI の文字列は `Properties/Strings.resx`（英語）と言語ごとの `Strings.<カルチャ>.resx` に置き、起動のときに Windows の表示の言語から 17 言語のどれかに決める（REQ-COM-060、DEC-COM-167）。訳の出し入れと漏れの確かめは `scripts/i18n-resx.py`。
 
 ## 9. 次にやること
 
