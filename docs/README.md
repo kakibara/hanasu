@@ -20,7 +20,7 @@
 | REL 配布・リリース | [spec/release.md](spec/release.md) | [releasing.md](releasing.md)（手順）、[.claude/skills/release/SKILL.md](../.claude/skills/release/SKILL.md)（リリースのスキル）、[releases/](releases/)（リリース文とテンプレート） | — |
 | Windows 版（DIC・MTG・COM の「対象: Windows」） | 各 spec の「対象」と「Windows の実装」 | [windows/README.md](../windows/README.md)（Windows 版の作り・Mac 版との差） | windows/README.md と PR #19 |
 
-計画: [roadmap.md](roadmap.md)、ボットモード: [plans/bot-mode.md](plans/bot-mode.md)。
+計画: [roadmap.md](roadmap.md)、ボットモード: [plans/bot-mode.md](plans/bot-mode.md)、`hanasu` コマンド: [plans/cli.md](plans/cli.md)。
 
 ## 2. 振る舞いの 3 つの区分
 
