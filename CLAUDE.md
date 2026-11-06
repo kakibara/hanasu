@@ -19,6 +19,7 @@ Hanasu（音声入力と会議の記録。Mac 版は `Sources/Hanasu`、Windows 
 - 手順は [.claude/skills/i18n/SKILL.md](.claude/skills/i18n/SKILL.md)。訳は [.claude/agents/i18n.md](.claude/agents/i18n.md) のエージェントに任せてよい。
 - プロンプトは `Sources/Hanasu/Resources/Prompts/<言語>.json`（Mac と Windows で共有）。コードにプロンプトの文面を書かない。
 - Mac の UI の文字列は `tr("日本語の原文")` で書き、`python3 scripts/i18n-strings.py sync` でカタログ（`Localizable.xcstrings`）にそろえて訳を入れる。
+- **README（`README.md`）を直すときは、同じ変更の中で 15 の訳（`README.<言語>.md`）にも同じ変更を入れる**（決まりは docs/README.md の 8 章）。
 - `python3 scripts/check-i18n.py` をエラーなしで通す（CI でも動く）。
 
 ## 文書の役割

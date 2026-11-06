@@ -107,7 +107,7 @@ enum TextInserter {
    - **要件**: ユーザーの合意を取ってから、spec の要件を先に直す（出典に合意の日付と要旨を足す）。
    - **設計判断**: 理由を読み、その理由がもう当てはまらないことを確かめてから変える。spec の「決めたこと」「理由」「決めた場面」を直す。
    - **暗黙の振る舞い**（タグがない）: 変える前に、その振る舞いを要件か設計判断として spec に書いて（格上げして）タグを付けるか、暗黙のままでよい（記録するほどの振る舞いではない）と判断する。要件に当たりそうなら、ユーザーに確かめる。
-3. design・README の説明を直す。検証の記録（verification）は書き換えず、新しい結果を足す。
+3. design・README の説明を直す（README の訳も。8 章）。検証の記録（verification）は書き換えず、新しい結果を足す。
 4. `python3 scripts/check-spec.py` を通す。
 
 ### 機能をなくすとき
@@ -159,6 +159,7 @@ enum TextInserter {
 - `python3 scripts/check-i18n.py` が、キーの漏れ・埋める場所（`${…}`）やタグの食い違いを見つける（エラーなら終了コード 1。PR ごとに `.github/workflows/spec.yml` で動く）。
 - 表示の言語はシステムの言語で決まる（REQ-COM-060）。Mac の UI の文字列は `tr("日本語の原文")` で書き、訳は `Sources/Hanasu/Resources/Localizable.xcstrings` に入れる（DEC-COM-165）。
 - 開発用の CLI の出力とログは訳さない。
+- README も 17 言語。英語（`README.md`）と日本語（`README.ja.md`）を正とし、ほかの 15 言語（`README.<言語>.md`）は `README.md` から訳す（冒頭に「英語版と食い違ったら英語版が新しい」と書いてある）。**`README.md` を直すときは、同じ変更の中で 15 の訳にも同じ変更を入れる**（訳は [.claude/agents/i18n.md](../.claude/agents/i18n.md) のエージェントに任せてよい）。表の行・`<kbd>`・リンクの数が `README.md` とそろっていることを確かめる。言語を足すときは、すべての README の言語の切り替え（18 行目あたり）に足す。
 - Windows の UI の文字列は `Properties/Strings.resx`（英語）と言語ごとの `Strings.<カルチャ>.resx` に置き、起動のときに Windows の表示の言語から 17 言語のどれかに決める（REQ-COM-060、DEC-COM-167）。訳の出し入れと漏れの確かめは `scripts/i18n-resx.py`。
 
 ## 9. 次にやること

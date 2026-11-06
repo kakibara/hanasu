@@ -232,11 +232,12 @@
 - 確かめ方: `.build/debug/Hanasu --show-prompts --prompt-language en`（すべてのプロンプトを見本の入力で表示する。`ja` なら今までと同じ）、`python3 scripts/check-i18n.py`、Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~Prompt"`
 
 ### REQ-COM-062 UI の文字列とプロンプトを足すときは、すべての対応言語に訳を入れる
-- 内容: 新しい機能で UI の文字列か AI へのプロンプトを足すときは、同じ変更の中で 17 言語すべての訳を入れる。訳の漏れはスクリプトで見つけ、CI で落とす（プロンプトと UI の文字列の漏れ・包み忘れを見つける。REQ-COM-060）。訳を入れる手順はスキル（`.claude/skills/i18n/SKILL.md`）、訳を担当するエージェントは `.claude/agents/i18n.md` に置く。
+- 内容: 新しい機能で UI の文字列か AI へのプロンプトを足すときは、同じ変更の中で 17 言語すべての訳を入れる。README（`README.md`）を直すときも、同じ変更の中でほかの言語の README（`README.<言語>.md`）に同じ変更を入れる。訳の漏れはスクリプトで見つけ、CI で落とす（プロンプトと UI の文字列の漏れ・包み忘れを見つける。REQ-COM-060）。訳を入れる手順はスキル（`.claude/skills/i18n/SKILL.md`）、訳を担当するエージェントは `.claude/agents/i18n.md` に置く。
 - 受け入れ条件:
   - プロンプトのキーが 1 つの言語にしかない・埋める場所（`${…}`）やタグが言語で食い違う・話者のラベルが指示の中のものと違う、といったときに `python3 scripts/check-i18n.py` が失敗し、PR の CI（`.github/workflows/spec.yml`）も失敗する。
+  - 17 言語の README のどれかがない・言語の切り替えのリンクが欠けている・表の行や `<kbd>`・リンクの数が `README.md` と違う、といったときにも `python3 scripts/check-i18n.py` が失敗する。
   - CLAUDE.md と docs/README.md に、この決まりが書いてある。
-- 出典: ユーザーの依頼（2026-11-05）「今後の機能追加の際も全ての言語に対応させるようにして。多言語担当は専用の skill と agent を用意しておくと良さそう」
+- 出典: ユーザーの依頼（2026-11-05）「今後の機能追加の際も全ての言語に対応させるようにして。多言語担当は専用の skill と agent を用意しておくと良さそう」。README を足したのは、同じ日の依頼「readme に中国語やフランス語、イタリア語など、主要な oss で載せている言語をすべて載せて」（PR #61）
 - 対象: Mac / Windows
 - 実装の場所: `scripts/check-i18n.py`、`scripts/i18n-strings.py`（Mac の UI）、`scripts/i18n-resx.py`（Windows の UI）、`.github/workflows/spec.yml`、`.claude/skills/i18n/SKILL.md`、`.claude/agents/i18n.md`
 - 確かめ方: `python3 scripts/check-i18n.py`（UI の文字列では、tr() で包んでいない日本語の文字列と、訳のないキーも見つける）
@@ -1001,7 +1002,7 @@
 - 実装の場所: `Meeting.promptName`、`Meeting.promptLabel`、`ActionItem.markdownLine`、`ActionItem.parse(fromMarkdown:)`、`SpeakerNameInference.isPlaceholder`、`MeetingExport.slackBody`
 
 ### DEC-COM-164 訳の漏れは scripts/check-i18n.py で見つけ、CI で動かす。訳はスキルとエージェントに任せる
-- 決めたこと: `scripts/check-i18n.py`（python3 の標準ライブラリだけ）が、17 言語のプロンプトのファイルがそろっていること、日本語と同じキー・埋める場所・タグ・JSON のキー・残す記号があること、話者のラベルと「なし」が同じ言語の指示の中で使われていることを確かめ、食い違えば失敗する。英語と同じままの値は報告だけする。`.github/workflows/spec.yml` で毎回動かす。文字列やプロンプトを足す手順は `.claude/skills/i18n/SKILL.md`、訳は `.claude/agents/i18n.md` のエージェントに任せる。
+- 決めたこと: `scripts/check-i18n.py`（python3 の標準ライブラリだけ）が、17 言語のプロンプトのファイルがそろっていること、日本語と同じキー・埋める場所・タグ・JSON のキー・残す記号があること、話者のラベルと「なし」が同じ言語の指示の中で使われていること、17 言語の README がそろって言語の切り替えがあり、表の行・`<kbd>`・画像・リンクなどの数が `README.md` と同じであることを確かめ、食い違えば失敗する（README の訳の中身までは見ない。数が同じなら、文面の変更の取り込み漏れは見逃す）。英語と同じままの値は報告だけする。`.github/workflows/spec.yml` で毎回動かす。文字列やプロンプトを足す手順は `.claude/skills/i18n/SKILL.md`、訳は `.claude/agents/i18n.md` のエージェントに任せる。
 - 理由: 17 言語を人の目だけでそろえるのは無理がある。機械で見られるもの（漏れ・形の食い違い）は CI で止め、訳の質はエージェントの確認の手順で担保する。
 - 決めた場面: 多言語化の PR（2026-11-05）
 - 関係する要件: REQ-COM-062
