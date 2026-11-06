@@ -511,6 +511,15 @@
 - 対象: Mac
 - 実装の場所: `TextAIProvider`、`TextAIPurpose`、`TextAIClient.fromSettings`、`AppSettings.aiProvider(for:)`・`textModel(for:)`、`AISettingsTab`
 
+### DEC-COM-168 AI の選択肢は、この端末の中で動くものを左（上）に、外部の API に送るものを右（下）に並べる
+- 決めたこと: 「使う AI とモデル」の AI の選択肢を、Mac は「ローカル・Apple・Gemini・Claude」、Windows は「ローカル・Gemini・Claude」の順に並べる。Mac は `TextAIProvider` の case の順がそのまま並びになる。Windows は `SettingsWindow.xaml` の `DictationAiCombo`・`MeetingAiCombo` の項目の順（選択は `Tag` で合わせるので、順を変えても保存した値は変わらない）。
+- 理由: ユーザーの依頼（2026-11-06「local を一番左にして、外部 API を利用するものを右にするようにしてください」）。文章をネットに送らない選択肢を先に見せ、既定（Mac はローカル。DEC-COM-068）とも並びを合わせる。
+- 決めた場面: AI の選択肢の並びを変えた PR
+- 関係する要件: REQ-COM-024
+- 対象: Mac / Windows
+- 実装の場所: `TextAIProvider`、`AIChoiceRow`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`
+- 確かめ方: `.build/debug/Hanasu --render-settings /tmp/settings --pane ai`
+
 ### DEC-COM-041 Claude は SDK を使わず、REST の Messages API を直接呼ぶ
 - 決めたこと: `POST https://api.anthropic.com/v1/messages` に、`x-api-key`・`anthropic-version: 2026-10-21`・`content-type: application/json` を付けて送る。`temperature` / `top_p` / `top_k`（この版では 400）と assistant の prefill（400）は送らない。出力の形はシステムプロンプトの指示で決める。応答は `type` が `text` のブロックだけをつなぐ（`thinking`・`fallback` のブロックは除く）。streaming は使わない。
 - 理由: Swift には公式 SDK がない。Gemini と同じく 1 回送って結果を待つ形（DEC-COM-007）にそろえる。議事録は長いが、max_tokens とタイムアウトを大きくして待つ（DEC-COM-043）。

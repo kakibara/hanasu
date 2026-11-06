@@ -175,9 +175,9 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Text="{x:Static p:Strings.Settings_Ai_Dictation}" TextWrapping="Wrap" MaxWidth="240" VerticalAlignment="Center" />
                             <ComboBox x:Name="DictationAiCombo" Grid.Row="0" Grid.Column="1" Margin="0,2,8,2" SelectionChanged="OnDictationAiChanged">
+                                <ComboBoxItem Content="{x:Static p:Strings.Settings_Ai_Local}" Tag="Local" />
                                 <ComboBoxItem Content="Gemini" Tag="Gemini" />
                                 <ComboBoxItem Content="Claude" Tag="Claude" />
-                                <ComboBoxItem Content="{x:Static p:Strings.Settings_Ai_Local}" Tag="Local" />
                             </ComboBox>
                             <Grid Grid.Row="0" Grid.Column="2" Margin="0,2,0,2">
                                 <ComboBox x:Name="ModelCombo" IsEditable="True" LostFocus="OnModelChanged" SelectionChanged="OnModelSelectionChanged" />
@@ -186,9 +186,9 @@
                             </Grid>
                             <TextBlock Grid.Row="1" Text="{x:Static p:Strings.Settings_Ai_Meeting}" TextWrapping="Wrap" MaxWidth="240" VerticalAlignment="Center" />
                             <ComboBox x:Name="MeetingAiCombo" Grid.Row="1" Grid.Column="1" Margin="0,2,8,2" SelectionChanged="OnMeetingAiChanged">
+                                <ComboBoxItem Content="{x:Static p:Strings.Settings_Ai_Local}" Tag="Local" />
                                 <ComboBoxItem Content="Gemini" Tag="Gemini" />
                                 <ComboBoxItem Content="Claude" Tag="Claude" />
-                                <ComboBoxItem Content="{x:Static p:Strings.Settings_Ai_Local}" Tag="Local" />
                             </ComboBox>
                             <Grid Grid.Row="1" Grid.Column="2" Margin="0,2,0,2">
                                 <ComboBox x:Name="MinutesModelCombo" IsEditable="True" LostFocus="OnMinutesModelChanged" SelectionChanged="OnMinutesModelSelectionChanged" />
