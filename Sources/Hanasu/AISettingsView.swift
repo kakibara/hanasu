@@ -4,7 +4,7 @@ import UniformTypeIdentifiers
 
 // 要件: REQ-COM-020, REQ-COM-024
 // 設計判断: DEC-COM-040
-/// 設定の「AI」タブ。音声入力と会議のそれぞれで、使う AI（Gemini / Claude）とモデルを選ぶ。
+/// 設定の「AI」。音声入力と会議のそれぞれで、使う AI（Gemini / Claude）とモデルを選ぶ。
 /// 認証は、Claude は API キー、Gemini は API キーかサービスアカウント。
 struct AISettingsTab: View {
     @ObservedObject var settings: AppSettings

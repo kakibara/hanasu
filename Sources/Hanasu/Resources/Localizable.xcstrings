@@ -6584,7 +6584,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "한 줄에 하나씩 씁니다. \"[12:34] 내용\"으로 시간(녹음 시작부터)을, \"★\"로 \"여기 중요\" 표시를 나타냅니다. 시간이 없는 줄도 쓸 수 있습니다. 회의록을 만들 때 메모와 표시 전후의 발언을 우선 반영합니다."
+            "value" : "한 줄에 하나씩 씁니다. \"[12:34] 내용\"으로 시간(녹음 시작부터)을, \"★\"로 \"중요\" 표시를 나타냅니다. 시간이 없는 줄도 쓸 수 있습니다. 회의록을 만들 때 메모와 표시 전후의 발언을 우선 반영합니다."
           }
         },
         "pl" : {
@@ -6620,13 +6620,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "每行写一条。用“[12:34] 内容”表示时间（从录音开始算起），用“★”表示“这里重要”标记。也可以写没有时间的行。生成会议纪要时，会优先反映备注和标记前后的发言。"
+            "value" : "每行写一条。用“[12:34] 内容”表示时间（从录音开始算起），用“★”表示“重要”标记。也可以写没有时间的行。生成会议纪要时，会优先反映备注和标记前后的发言。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "每行寫一則。用「[12:34] 內容」表示時間（從錄音開始起算），用「★」表示「這裡重要」標記。也可以寫沒有時間的行。製作會議紀錄時，會優先反映備註與標記前後的發言。"
+            "value" : "每行寫一則。用「[12:34] 內容」表示時間（從錄音開始起算），用「★」表示「重要」標記。也可以寫沒有時間的行。製作會議紀錄時，會優先反映備註與標記前後的發言。"
           }
         }
       }
@@ -20354,7 +20354,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"여기 중요\" 표시"
+            "value" : "\"중요\" 표시"
           }
         },
         "pl" : {
@@ -20390,13 +20390,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“这里重要”标记"
+            "value" : "“重要”标记"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "「這裡重要」標記"
+            "value" : "「重要」標記"
           }
         }
       }
@@ -20456,7 +20456,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"여기 중요\" 표시가 없습니다. 기록 중에 \"★ 여기 중요\"나 단축키로 표시하면 여기에 전후 대화를 모아서 보여 줍니다."
+            "value" : "\"중요\" 표시가 없습니다. 기록 중에 \"★ 중요\"나 단축키로 표시하면 여기에 전후 대화를 모아서 보여 줍니다."
           }
         },
         "pl" : {
@@ -20492,13 +20492,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有“这里重要”标记。录制时用“★ 这里重要”或快捷键添加后，会在这里汇总显示前后的对话。"
+            "value" : "没有“重要”标记。录制时用“★ 重要”或快捷键添加后，会在这里汇总显示前后的对话。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "沒有「這裡重要」標記。錄製時用「★ 這裡重要」或快速鍵加上後，會在這裡彙整顯示前後的對話。"
+            "value" : "沒有「重要」標記。錄製時用「★ 重要」或快速鍵加上後，會在這裡彙整顯示前後的對話。"
           }
         }
       }
@@ -20558,7 +20558,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"여기 중요\"는 %@로도 표시할 수 있습니다(다른 앱을 사용 중이어도 가능)"
+            "value" : "\"중요\"는 %@로도 표시할 수 있습니다(다른 앱을 사용 중이어도 가능)"
           }
         },
         "pl" : {
@@ -20594,13 +20594,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "也可以用 %@ 添加“这里重要”（即使正在使用其他应用）"
+            "value" : "也可以用 %@ 添加“重要”（即使正在使用其他应用）"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "也可以用 %@ 加上「這裡重要」（即使正在使用其他 App）"
+            "value" : "也可以用 %@ 加上「重要」（即使正在使用其他 App）"
           }
         }
       }
@@ -20911,206 +20911,206 @@
         }
       }
     },
-    "「翻訳して入力」では、AI（「AI」タブで音声入力に選んだもの）が、話した内容を下の「翻訳する言語」に翻訳して入力します。録音中は Esc で取り消せます。" : {
+    "「翻訳して入力」では、AI（設定の「AI」で音声入力に選んだもの）が、話した内容を下の「翻訳する言語」に翻訳して入力します。録音中は Esc で取り消せます。" : {
       "comment" : "SettingsView.swift:186",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "في «ترجمة وإدخال»، يترجم AI (المختار للإدخال الصوتي في علامة التبويب «AI») ما تقوله إلى «لغات الترجمة» أدناه ويُدخله. أثناء التسجيل يمكنك الإلغاء بـ Esc."
+            "value" : "في «ترجمة وإدخال»، يترجم AI (المختار للإدخال الصوتي في قسم «AI» في الإعدادات) ما تقوله إلى «لغات الترجمة» أدناه ويُدخله. أثناء التسجيل يمكنك الإلغاء بـ Esc."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bei „Übersetzen & eingeben“ übersetzt die KI (die im Tab „AI“ für Diktat gewählte) das Gesprochene in die unten gewählten „Übersetzungssprachen“ und gibt es ein. Mit Esc brichst du die Aufnahme ab."
+            "value" : "Bei „Übersetzen & eingeben“ übersetzt die KI (die unter „AI“ in den Einstellungen für Diktat gewählte) das Gesprochene in die unten gewählten „Übersetzungssprachen“ und gibt es ein. Mit Esc brichst du die Aufnahme ab."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "With “Translate & Enter”, the AI (the one chosen for dictation in the “AI” tab) translates what you say into the “Translation Languages” below and enters it. Press Esc during recording to cancel."
+            "value" : "With “Translate & Enter”, the AI (the one chosen for dictation in “AI” in Settings) translates what you say into the “Translation Languages” below and enters it. Press Esc during recording to cancel."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Con «Dictado con traducción», la IA (la elegida para el dictado en la pestaña «AI») traduce lo que dices al idioma de «Idiomas de traducción» de abajo y lo introduce. Pulsa Esc durante la grabación para cancelar."
+            "value" : "Con «Dictado con traducción», la IA (la elegida para el dictado en «AI» de Ajustes) traduce lo que dices al idioma de «Idiomas de traducción» de abajo y lo introduce. Pulsa Esc durante la grabación para cancelar."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Avec « Traduire et saisir », l’IA (celle choisie pour la dictée dans l’onglet « AI ») traduit ce que vous dites dans les « Langues de traduction » ci-dessous, puis le saisit. Appuyez sur Échap pendant l’enregistrement pour annuler."
+            "value" : "Avec « Traduire et saisir », l’IA (celle choisie pour la dictée dans « AI » des Réglages) traduit ce que vous dites dans les « Langues de traduction » ci-dessous, puis le saisit. Appuyez sur Échap pendant l’enregistrement pour annuler."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“अनुवाद करके इनपुट” में AI (“AI” टैब में वॉइस इनपुट के लिए चुना गया) आपकी बोली गई बात का नीचे दी गई “अनुवाद की भाषाएँ” में अनुवाद करके दर्ज करता है। रिकॉर्डिंग के दौरान Esc से रद्द कर सकते हैं।"
+            "value" : "“अनुवाद करके इनपुट” में AI (सेटिंग्ज़ के “AI” में वॉइस इनपुट के लिए चुना गया) आपकी बोली गई बात का नीचे दी गई “अनुवाद की भाषाएँ” में अनुवाद करके दर्ज करता है। रिकॉर्डिंग के दौरान Esc से रद्द कर सकते हैं।"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dengan “Terjemahkan dan masukkan”, AI (yang dipilih untuk dikte di tab “AI”) menerjemahkan ucapan Anda ke “Bahasa terjemahan” di bawah, lalu memasukkannya. Saat merekam, tekan Esc untuk membatalkan."
+            "value" : "Dengan “Terjemahkan dan masukkan”, AI (yang dipilih untuk dikte di “AI” pada Pengaturan) menerjemahkan ucapan Anda ke “Bahasa terjemahan” di bawah, lalu memasukkannya. Saat merekam, tekan Esc untuk membatalkan."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Con «Dettatura con traduzione», l'IA (quella scelta per la dettatura nel pannello «AI») traduce ciò che dici nella lingua di «Lingue di traduzione» qui sotto e lo inserisce. Premi Esc durante la registrazione per annullare."
+            "value" : "Con «Dettatura con traduzione», l'IA (quella scelta per la dettatura in Impostazioni → «AI») traduce ciò che dici nella lingua di «Lingue di traduzione» qui sotto e lo inserisce. Premi Esc durante la registrazione per annullare."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"번역하여 입력\"에서는 AI(\"AI\" 탭에서 음성 입력용으로 선택한 AI)가 말한 내용을 아래 \"번역할 언어\"로 번역하여 입력합니다. 녹음 중에는 Esc로 취소할 수 있습니다."
+            "value" : "\"번역하여 입력\"에서는 AI(설정의 \"AI\"에서 음성 입력용으로 선택한 AI)가 말한 내용을 아래 \"번역할 언어\"로 번역하여 입력합니다. 녹음 중에는 Esc로 취소할 수 있습니다."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "W trybie „Wprowadzanie z tłumaczeniem” AI (wybrane dla dyktowania na karcie „AI”) tłumaczy wypowiedź na język z listy „Języki tłumaczenia” poniżej i wprowadza wynik. Podczas nagrywania można anulować klawiszem Esc."
+            "value" : "W trybie „Wprowadzanie z tłumaczeniem” AI (wybrane dla dyktowania w Ustawieniach → „AI”) tłumaczy wypowiedź na język z listy „Języki tłumaczenia” poniżej i wprowadza wynik. Podczas nagrywania można anulować klawiszem Esc."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Com “Ditado com tradução”, a IA (a escolhida para o ditado na aba “AI”) traduz o que você fala para o idioma de “Idiomas de tradução” abaixo e o insere. Pressione Esc durante a gravação para cancelar."
+            "value" : "Com “Ditado com tradução”, a IA (a escolhida para o ditado em Ajustes → “AI”) traduz o que você fala para o idioma de “Idiomas de tradução” abaixo e o insere. Pressione Esc durante a gravação para cancelar."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "В режиме «Ввод с переводом» AI (выбранный для диктовки на вкладке «AI») переводит сказанное на язык из списка «Языки перевода» ниже и вводит результат. Во время записи можно отменить клавишей Esc."
+            "value" : "В режиме «Ввод с переводом» AI (выбранный для диктовки в разделе «AI» в Настройках) переводит сказанное на язык из списка «Языки перевода» ниже и вводит результат. Во время записи можно отменить клавишей Esc."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“Çevirerek gir” modunda AI (“AI” sekmesinde dikte için seçilen), konuştuklarınızı aşağıdaki “Çeviri dilleri”ndeki dile çevirip girer. Kayıt sırasında Esc ile iptal edebilirsiniz."
+            "value" : "“Çevirerek gir” modunda AI (Ayarlar’daki “AI” bölümünde dikte için seçilen), konuştuklarınızı aşağıdaki “Çeviri dilleri”ndeki dile çevirip girer. Kayıt sırasında Esc ile iptal edebilirsiniz."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Với “Dịch rồi nhập”, AI (AI đã chọn cho nhập bằng giọng nói trong tab “AI”) sẽ dịch nội dung bạn nói sang “Ngôn ngữ dịch” bên dưới rồi nhập. Trong lúc ghi âm, nhấn Esc để hủy."
+            "value" : "Với “Dịch rồi nhập”, AI (AI đã chọn cho nhập bằng giọng nói ở mục “AI” trong Cài đặt) sẽ dịch nội dung bạn nói sang “Ngôn ngữ dịch” bên dưới rồi nhập. Trong lúc ghi âm, nhấn Esc để hủy."
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在“翻译并输入”中，AI（在“AI”标签页中为语音输入选择的 AI）会将说话内容翻译成下方“翻译语言”中的语言后输入。录音时可按 Esc 取消。"
+            "value" : "在“翻译并输入”中，AI（在设置的“AI”中为语音输入选择的 AI）会将说话内容翻译成下方“翻译语言”中的语言后输入。录音时可按 Esc 取消。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在「翻譯並輸入」中，AI（在「AI」標籤頁中為語音輸入選擇的 AI）會將說話內容翻譯成下方「翻譯語言」中的語言後輸入。錄音時可按 Esc 取消。"
+            "value" : "在「翻譯並輸入」中，AI（在設定的「AI」中為語音輸入選擇的 AI）會將說話內容翻譯成下方「翻譯語言」中的語言後輸入。錄音時可按 Esc 取消。"
           }
         }
       }
     },
-    "「翻訳して入力」のショートカットでは、選んだ言語のうち上のものに翻訳します。録音中の HUD で「話した言語」と選んだ言語を切り替えられます（止めたときに選んでいる言語で入力）。翻訳は AI（「AI」タブで音声入力に選んだもの）で行います。少なくとも 1 つは選んでください。" : {
+    "「翻訳して入力」のショートカットでは、選んだ言語のうち上のものに翻訳します。録音中の HUD で「話した言語」と選んだ言語を切り替えられます（止めたときに選んでいる言語で入力）。翻訳は AI（設定の「AI」で音声入力に選んだもの）で行います。少なくとも 1 つは選んでください。" : {
       "comment" : "TranslationSettingsView.swift:24",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "مع اختصار «ترجمة وإدخال» تتم الترجمة إلى أعلى لغة في القائمة من اللغات المختارة. في HUD أثناء التسجيل يمكنك التبديل بين «اللغة المنطوقة» واللغات المختارة (يتم الإدخال باللغة المختارة لحظة الإيقاف). تتم الترجمة بواسطة AI (المختار للإدخال الصوتي في علامة التبويب «AI»). اختر لغة واحدة على الأقل."
+            "value" : "مع اختصار «ترجمة وإدخال» تتم الترجمة إلى أعلى لغة في القائمة من اللغات المختارة. في HUD أثناء التسجيل يمكنك التبديل بين «اللغة المنطوقة» واللغات المختارة (يتم الإدخال باللغة المختارة لحظة الإيقاف). تتم الترجمة بواسطة AI (المختار للإدخال الصوتي في قسم «AI» في الإعدادات). اختر لغة واحدة على الأقل."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Kurzbefehl für „Übersetzen & eingeben“ übersetzt in die oberste der ausgewählten Sprachen. Im HUD kannst du während der Aufnahme zwischen „Gesprochene Sprache“ und den ausgewählten Sprachen wechseln (eingegeben wird in der Sprache, die beim Beenden gewählt ist). Die Übersetzung erfolgt durch die KI (die im Tab „AI“ für Diktat gewählte). Wähle mindestens eine Sprache."
+            "value" : "Der Kurzbefehl für „Übersetzen & eingeben“ übersetzt in die oberste der ausgewählten Sprachen. Im HUD kannst du während der Aufnahme zwischen „Gesprochene Sprache“ und den ausgewählten Sprachen wechseln (eingegeben wird in der Sprache, die beim Beenden gewählt ist). Die Übersetzung erfolgt durch die KI (die unter „AI“ in den Einstellungen für Diktat gewählte). Wähle mindestens eine Sprache."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The “Translate & Enter” shortcut translates into the topmost of the selected languages. In the HUD during recording, you can switch between “Spoken Language” and the selected languages (text is entered in the language selected when you stop). Translation is done by the AI (the one chosen for dictation in the “AI” tab). Select at least one."
+            "value" : "The “Translate & Enter” shortcut translates into the topmost of the selected languages. In the HUD during recording, you can switch between “Spoken Language” and the selected languages (text is entered in the language selected when you stop). Translation is done by the AI (the one chosen for dictation in “AI” in Settings). Select at least one."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El atajo de «Dictado con traducción» traduce al primero de los idiomas elegidos. En el HUD de grabación puedes cambiar entre «Idioma hablado» y los idiomas elegidos (se introduce en el idioma seleccionado al detener). La traducción la hace la IA (la elegida para el dictado en la pestaña «AI»). Elige al menos uno."
+            "value" : "El atajo de «Dictado con traducción» traduce al primero de los idiomas elegidos. En el HUD de grabación puedes cambiar entre «Idioma hablado» y los idiomas elegidos (se introduce en el idioma seleccionado al detener). La traducción la hace la IA (la elegida para el dictado en «AI» de Ajustes). Elige al menos uno."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le raccourci « Traduire et saisir » traduit dans la première des langues sélectionnées. Dans le HUD, pendant l’enregistrement, vous pouvez basculer entre « Langue parlée » et les langues sélectionnées (le texte est saisi dans la langue choisie au moment de l’arrêt). La traduction est faite par l’IA (celle choisie pour la dictée dans l’onglet « AI »). Sélectionnez-en au moins une."
+            "value" : "Le raccourci « Traduire et saisir » traduit dans la première des langues sélectionnées. Dans le HUD, pendant l’enregistrement, vous pouvez basculer entre « Langue parlée » et les langues sélectionnées (le texte est saisi dans la langue choisie au moment de l’arrêt). La traduction est faite par l’IA (celle choisie pour la dictée dans « AI » des Réglages). Sélectionnez-en au moins une."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“अनुवाद करके इनपुट” शॉर्टकट से, चुनी गई भाषाओं में से सबसे ऊपर वाली भाषा में अनुवाद होता है। रिकॉर्डिंग के दौरान HUD में “बोली गई भाषा” और चुनी गई भाषाओं के बीच बदल सकते हैं (रोकते समय जो भाषा चुनी हो, उसी में दर्ज होता है)। अनुवाद AI (“AI” टैब में वॉइस इनपुट के लिए चुना गया) करता है। कम से कम 1 भाषा चुनें।"
+            "value" : "“अनुवाद करके इनपुट” शॉर्टकट से, चुनी गई भाषाओं में से सबसे ऊपर वाली भाषा में अनुवाद होता है। रिकॉर्डिंग के दौरान HUD में “बोली गई भाषा” और चुनी गई भाषाओं के बीच बदल सकते हैं (रोकते समय जो भाषा चुनी हो, उसी में दर्ज होता है)। अनुवाद AI (सेटिंग्ज़ के “AI” में वॉइस इनपुट के लिए चुना गया) करता है। कम से कम 1 भाषा चुनें।"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pintasan “Terjemahkan dan masukkan” menerjemahkan ke bahasa teratas di antara bahasa yang dipilih. Saat merekam, Anda bisa beralih antara “Bahasa yang diucapkan” dan bahasa yang dipilih di HUD (teks dimasukkan dalam bahasa yang terpilih saat berhenti). Terjemahan dilakukan oleh AI (yang dipilih untuk dikte di tab “AI”). Pilih setidaknya satu bahasa."
+            "value" : "Pintasan “Terjemahkan dan masukkan” menerjemahkan ke bahasa teratas di antara bahasa yang dipilih. Saat merekam, Anda bisa beralih antara “Bahasa yang diucapkan” dan bahasa yang dipilih di HUD (teks dimasukkan dalam bahasa yang terpilih saat berhenti). Terjemahan dilakukan oleh AI (yang dipilih untuk dikte di “AI” pada Pengaturan). Pilih setidaknya satu bahasa."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'abbreviazione di «Dettatura con traduzione» traduce nella prima delle lingue scelte. Nell'HUD di registrazione puoi passare da «Lingua parlata» alle lingue scelte (il testo viene inserito nella lingua selezionata quando ti fermi). La traduzione è fatta dall'IA (quella scelta per la dettatura nel pannello «AI»). Scegline almeno una."
+            "value" : "L'abbreviazione di «Dettatura con traduzione» traduce nella prima delle lingue scelte. Nell'HUD di registrazione puoi passare da «Lingua parlata» alle lingue scelte (il testo viene inserito nella lingua selezionata quando ti fermi). La traduzione è fatta dall'IA (quella scelta per la dettatura in Impostazioni → «AI»). Scegline almeno una."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"번역하여 입력\" 단축키로는 선택한 언어 중 위쪽 언어로 번역합니다. 녹음 중 HUD에서 \"말한 언어\"와 선택한 언어를 전환할 수 있습니다(중지할 때 선택된 언어로 입력). 번역은 AI(\"AI\" 탭에서 음성 입력용으로 선택한 AI)가 합니다. 하나 이상 선택하세요."
+            "value" : "\"번역하여 입력\" 단축키로는 선택한 언어 중 위쪽 언어로 번역합니다. 녹음 중 HUD에서 \"말한 언어\"와 선택한 언어를 전환할 수 있습니다(중지할 때 선택된 언어로 입력). 번역은 AI(설정의 \"AI\"에서 음성 입력용으로 선택한 AI)가 합니다. 하나 이상 선택하세요."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Skrót „Wprowadzanie z tłumaczeniem” tłumaczy na pierwszy z wybranych języków. W HUD podczas nagrywania można przełączać między „Językiem mowy” a wybranymi językami (tekst jest wprowadzany w języku wybranym w chwili zatrzymania). Tłumaczy AI (wybrane dla dyktowania na karcie „AI”). Wybierz co najmniej jeden język."
+            "value" : "Skrót „Wprowadzanie z tłumaczeniem” tłumaczy na pierwszy z wybranych języków. W HUD podczas nagrywania można przełączać między „Językiem mowy” a wybranymi językami (tekst jest wprowadzany w języku wybranym w chwili zatrzymania). Tłumaczy AI (wybrane dla dyktowania w Ustawieniach → „AI”). Wybierz co najmniej jeden język."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O atalho de “Ditado com tradução” traduz para o primeiro dos idiomas escolhidos. No HUD de gravação, você pode alternar entre “Idioma falado” e os idiomas escolhidos (o texto é inserido no idioma selecionado ao parar). A tradução é feita pela IA (a escolhida para o ditado na aba “AI”). Escolha pelo menos um."
+            "value" : "O atalho de “Ditado com tradução” traduz para o primeiro dos idiomas escolhidos. No HUD de gravação, você pode alternar entre “Idioma falado” e os idiomas escolhidos (o texto é inserido no idioma selecionado ao parar). A tradução é feita pela IA (a escolhida para o ditado em Ajustes → “AI”). Escolha pelo menos um."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сочетание клавиш «Ввод с переводом» переводит на первый из выбранных языков. В HUD во время записи можно переключаться между «Язык речи» и выбранными языками (вводится на языке, выбранном в момент остановки). Перевод выполняет AI (выбранный для диктовки на вкладке «AI»). Выберите хотя бы один язык."
+            "value" : "Сочетание клавиш «Ввод с переводом» переводит на первый из выбранных языков. В HUD во время записи можно переключаться между «Язык речи» и выбранными языками (вводится на языке, выбранном в момент остановки). Перевод выполняет AI (выбранный для диктовки в разделе «AI» в Настройках). Выберите хотя бы один язык."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“Çevirerek gir” kısayolu, seçilen diller arasında en üstteki dile çevirir. Kayıt sırasında HUD’da “Konuşulan dil” ile seçili diller arasında geçiş yapabilirsiniz (durdurduğunuz anda seçili olan dilde girilir). Çeviriyi AI (“AI” sekmesinde dikte için seçilen) yapar. En az bir dil seçin."
+            "value" : "“Çevirerek gir” kısayolu, seçilen diller arasında en üstteki dile çevirir. Kayıt sırasında HUD’da “Konuşulan dil” ile seçili diller arasında geçiş yapabilirsiniz (durdurduğunuz anda seçili olan dilde girilir). Çeviriyi AI (Ayarlar’daki “AI” bölümünde dikte için seçilen) yapar. En az bir dil seçin."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Phím tắt “Dịch rồi nhập” dịch sang ngôn ngữ đứng trên cùng trong các ngôn ngữ đã chọn. Trong lúc ghi âm, có thể chuyển giữa “Ngôn ngữ đã nói” và các ngôn ngữ đã chọn trên HUD (văn bản được nhập theo ngôn ngữ đang chọn khi dừng). Việc dịch do AI (AI đã chọn cho nhập bằng giọng nói trong tab “AI”) thực hiện. Hãy chọn ít nhất một ngôn ngữ."
+            "value" : "Phím tắt “Dịch rồi nhập” dịch sang ngôn ngữ đứng trên cùng trong các ngôn ngữ đã chọn. Trong lúc ghi âm, có thể chuyển giữa “Ngôn ngữ đã nói” và các ngôn ngữ đã chọn trên HUD (văn bản được nhập theo ngôn ngữ đang chọn khi dừng). Việc dịch do AI (AI đã chọn cho nhập bằng giọng nói ở mục “AI” trong Cài đặt) thực hiện. Hãy chọn ít nhất một ngôn ngữ."
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用“翻译并输入”的快捷键时，会翻译成所选语言中靠上的那一个。录音时可在 HUD 中切换“说话语言”和所选语言（按停止时选中的语言输入）。翻译由 AI（在“AI”标签页中为语音输入选择的 AI）完成。请至少选择 1 种。"
+            "value" : "使用“翻译并输入”的快捷键时，会翻译成所选语言中靠上的那一个。录音时可在 HUD 中切换“说话语言”和所选语言（按停止时选中的语言输入）。翻译由 AI（在设置的“AI”中为语音输入选择的 AI）完成。请至少选择 1 种。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用「翻譯並輸入」的快速鍵時，會翻譯成所選語言中排在上面的那一個。錄音時可在 HUD 中切換「說話語言」和所選語言（以停止時選取的語言輸入）。翻譯由 AI（在「AI」標籤頁中為語音輸入選擇的 AI）完成。請至少選擇 1 種。"
+            "value" : "使用「翻譯並輸入」的快速鍵時，會翻譯成所選語言中排在上面的那一個。錄音時可在 HUD 中切換「說話語言」和所選語言（以停止時選取的語言輸入）。翻譯由 AI（在設定的「AI」中為語音輸入選擇的 AI）完成。請至少選擇 1 種。"
           }
         }
       }
@@ -22700,7 +22700,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "여기 중요"
+            "value" : "중요"
           }
         },
         "pl" : {
@@ -22736,13 +22736,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这里重要"
+            "value" : "重要"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "這裡重要"
+            "value" : "重要"
           }
         }
       }
@@ -41264,7 +41264,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "메모와 \"여기 중요\""
+            "value" : "메모와 \"중요\""
           }
         },
         "pl" : {
@@ -41300,13 +41300,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "备注与“这里重要”"
+            "value" : "备注与“重要”"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "備註與「這裡重要」"
+            "value" : "備註與「重要」"
           }
         }
       }
@@ -50750,7 +50750,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "회의 노트의 기록 중 화면에서 메모를 쓰거나 \"여기 중요\" 표시를 하면 회의록에서 우선적으로 다룹니다. 단축키는 기록 중에만 유효하며 다른 앱을 사용 중이어도 표시할 수 있습니다."
+            "value" : "회의 노트의 기록 중 화면에서 메모를 쓰거나 \"중요\" 표시를 하면 회의록에서 우선적으로 다룹니다. 단축키는 기록 중에만 유효하며 다른 앱을 사용 중이어도 표시할 수 있습니다."
           }
         },
         "pl" : {
@@ -50786,13 +50786,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在会议笔记的录制画面中写备注或添加“这里重要”标记，会议纪要会优先涵盖这些内容。快捷键仅在录制时有效，即使正在使用其他应用也能添加标记。"
+            "value" : "在会议笔记的录制画面中写备注或添加“重要”标记，会议纪要会优先涵盖这些内容。快捷键仅在录制时有效，即使正在使用其他应用也能添加标记。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在會議筆記的錄製畫面中寫備註或加上「這裡重要」標記，會議紀錄會優先涵蓋這些內容。快速鍵僅在錄製時有效，即使正在使用其他 App 也能加上標記。"
+            "value" : "在會議筆記的錄製畫面中寫備註或加上「重要」標記，會議紀錄會優先涵蓋這些內容。快速鍵僅在錄製時有效，即使正在使用其他 App 也能加上標記。"
           }
         }
       }
@@ -58549,104 +58549,104 @@
         }
       }
     },
-    "固有名詞や誤認識しやすい語を AI が挙げます。選んだものだけを辞書に追加し、自動では追加しません。会議の中身を送る外部の送り先は、「AI」タブで会議に選んだ AI（Gemini か Claude）だけです。音声入力の結果はメモリ上だけにあり、アプリを終了すると消えます。" : {
+    "固有名詞や誤認識しやすい語を AI が挙げます。選んだものだけを辞書に追加し、自動では追加しません。会議の中身を送る外部の送り先は、設定の「AI」で会議に選んだ AI（Gemini か Claude）だけです。音声入力の結果はメモリ上だけにあり、アプリを終了すると消えます。" : {
       "comment" : "DictionarySettingsView.swift:195",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "يقترح AI أسماء العلم والكلمات التي يكثر الخطأ في التعرّف عليها. تُضاف إلى القاموس فقط الكلمات التي تختارها، ولا يُضاف شيء تلقائيًا. الوجهة الخارجية الوحيدة التي يُرسل إليها محتوى الاجتماعات هي AI المختار للاجتماعات في علامة التبويب «AI» (Gemini أو Claude). نتائج الإدخال الصوتي موجودة في الذاكرة فقط وتختفي عند إنهاء التطبيق."
+            "value" : "يقترح AI أسماء العلم والكلمات التي يكثر الخطأ في التعرّف عليها. تُضاف إلى القاموس فقط الكلمات التي تختارها، ولا يُضاف شيء تلقائيًا. الوجهة الخارجية الوحيدة التي يُرسل إليها محتوى الاجتماعات هي AI المختار للاجتماعات في قسم «AI» في الإعدادات (Gemini أو Claude). نتائج الإدخال الصوتي موجودة في الذاكرة فقط وتختفي عند إنهاء التطبيق."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die KI schlägt Eigennamen und leicht falsch erkannte Wörter vor. Nur die von dir ausgewählten werden zum Wörterbuch hinzugefügt, nichts automatisch. Meeting-Inhalte werden extern nur an die KI gesendet, die im Tab „AI“ für Meetings gewählt ist (Gemini oder Claude). Diktatergebnisse liegen nur im Arbeitsspeicher und verschwinden beim Beenden der App."
+            "value" : "Die KI schlägt Eigennamen und leicht falsch erkannte Wörter vor. Nur die von dir ausgewählten werden zum Wörterbuch hinzugefügt, nichts automatisch. Meeting-Inhalte werden extern nur an die KI gesendet, die unter „AI“ in den Einstellungen für Meetings gewählt ist (Gemini oder Claude). Diktatergebnisse liegen nur im Arbeitsspeicher und verschwinden beim Beenden der App."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The AI suggests proper nouns and easily misrecognized words. Only the ones you select are added to the dictionary; nothing is added automatically. Meeting content is sent externally only to the AI chosen for meetings in the “AI” tab (Gemini or Claude). Dictation results are kept only in memory and disappear when you quit the app."
+            "value" : "The AI suggests proper nouns and easily misrecognized words. Only the ones you select are added to the dictionary; nothing is added automatically. Meeting content is sent externally only to the AI chosen for meetings in “AI” in Settings (Gemini or Claude). Dictation results are kept only in memory and disappear when you quit the app."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La IA propone nombres propios y palabras que suelen reconocerse mal. Solo se añaden al diccionario las que elijas; nada se añade automáticamente. El único destino externo que recibe el contenido de las reuniones es la IA elegida para reuniones en la pestaña «AI» (Gemini o Claude). Los resultados de dictado solo están en memoria y se borran al salir de la app."
+            "value" : "La IA propone nombres propios y palabras que suelen reconocerse mal. Solo se añaden al diccionario las que elijas; nada se añade automáticamente. El único destino externo que recibe el contenido de las reuniones es la IA elegida para reuniones en «AI» de Ajustes (Gemini o Claude). Los resultados de dictado solo están en memoria y se borran al salir de la app."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L’IA propose des noms propres et des mots souvent mal reconnus. Seuls ceux que vous sélectionnez sont ajoutés au dictionnaire ; rien n’est ajouté automatiquement. Le contenu des réunions n’est envoyé à l’extérieur qu’à l’IA choisie pour les réunions dans l’onglet « AI » (Gemini ou Claude). Les résultats de dictée restent uniquement en mémoire et disparaissent quand vous quittez l’app."
+            "value" : "L’IA propose des noms propres et des mots souvent mal reconnus. Seuls ceux que vous sélectionnez sont ajoutés au dictionnaire ; rien n’est ajouté automatiquement. Le contenu des réunions n’est envoyé à l’extérieur qu’à l’IA choisie pour les réunions dans « AI » des Réglages (Gemini ou Claude). Les résultats de dictée restent uniquement en mémoire et disparaissent quand vous quittez l’app."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI व्यक्तिवाचक नाम और ऐसे शब्द सुझाता है जिनकी गलत पहचान आसानी से होती है। सिर्फ़ आपके चुने गए शब्द शब्दकोश में जुड़ते हैं, अपने आप कुछ नहीं जुड़ता। मीटिंग की सामग्री जिस एकमात्र बाहरी गंतव्य को भेजी जाती है, वह “AI” टैब में मीटिंग के लिए चुना गया AI (Gemini या Claude) है। वॉइस इनपुट के परिणाम सिर्फ़ मेमोरी में रहते हैं और ऐप बंद करने पर मिट जाते हैं।"
+            "value" : "AI व्यक्तिवाचक नाम और ऐसे शब्द सुझाता है जिनकी गलत पहचान आसानी से होती है। सिर्फ़ आपके चुने गए शब्द शब्दकोश में जुड़ते हैं, अपने आप कुछ नहीं जुड़ता। मीटिंग की सामग्री जिस एकमात्र बाहरी गंतव्य को भेजी जाती है, वह सेटिंग्ज़ के “AI” में मीटिंग के लिए चुना गया AI (Gemini या Claude) है। वॉइस इनपुट के परिणाम सिर्फ़ मेमोरी में रहते हैं और ऐप बंद करने पर मिट जाते हैं।"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI akan menyebutkan nama diri dan kata yang mudah salah dikenali. Hanya yang Anda pilih yang ditambahkan ke kamus, tidak ada yang ditambahkan otomatis. Satu-satunya pihak eksternal yang menerima isi rapat adalah AI yang dipilih untuk rapat di tab “AI” (Gemini atau Claude). Hasil dikte hanya ada di memori dan hilang saat app ditutup."
+            "value" : "AI akan menyebutkan nama diri dan kata yang mudah salah dikenali. Hanya yang Anda pilih yang ditambahkan ke kamus, tidak ada yang ditambahkan otomatis. Satu-satunya pihak eksternal yang menerima isi rapat adalah AI yang dipilih untuk rapat di “AI” pada Pengaturan (Gemini atau Claude). Hasil dikte hanya ada di memori dan hilang saat app ditutup."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "L'IA propone nomi propri e parole che vengono spesso riconosciute male. Al dizionario vengono aggiunte solo quelle che scegli; nulla viene aggiunto automaticamente. L'unica destinazione esterna che riceve il contenuto delle riunioni è l'IA scelta per le riunioni nel pannello «AI» (Gemini o Claude). I risultati della dettatura restano solo in memoria e vengono eliminati quando esci dall'app."
+            "value" : "L'IA propone nomi propri e parole che vengono spesso riconosciute male. Al dizionario vengono aggiunte solo quelle che scegli; nulla viene aggiunto automaticamente. L'unica destinazione esterna che riceve il contenuto delle riunioni è l'IA scelta per le riunioni in Impostazioni → «AI» (Gemini o Claude). I risultati della dettatura restano solo in memoria e vengono eliminati quando esci dall'app."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI가 고유 명사와 잘못 인식하기 쉬운 단어를 찾아 줍니다. 선택한 것만 사전에 추가하며 자동으로 추가하지 않습니다. 회의 내용을 보내는 외부 대상은 \"AI\" 탭에서 회의용으로 선택한 AI(Gemini 또는 Claude)뿐입니다. 음성 입력 결과는 메모리에만 있으며 앱을 종료하면 사라집니다."
+            "value" : "AI가 고유 명사와 잘못 인식하기 쉬운 단어를 찾아 줍니다. 선택한 것만 사전에 추가하며 자동으로 추가하지 않습니다. 회의 내용을 보내는 외부 대상은 설정의 \"AI\"에서 회의용으로 선택한 AI(Gemini 또는 Claude)뿐입니다. 음성 입력 결과는 메모리에만 있으며 앱을 종료하면 사라집니다."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI proponuje nazwy własne i słowa często błędnie rozpoznawane. Do słownika trafiają tylko te, które wybierzesz — nic nie jest dodawane automatycznie. Treść spotkań jest wysyłana na zewnątrz wyłącznie do AI wybranego dla spotkań na karcie „AI” (Gemini lub Claude). Wyniki dyktowania są przechowywane tylko w pamięci i znikają po zakończeniu aplikacji."
+            "value" : "AI proponuje nazwy własne i słowa często błędnie rozpoznawane. Do słownika trafiają tylko te, które wybierzesz — nic nie jest dodawane automatycznie. Treść spotkań jest wysyłana na zewnątrz wyłącznie do AI wybranego dla spotkań w Ustawieniach → „AI” (Gemini lub Claude). Wyniki dyktowania są przechowywane tylko w pamięci i znikają po zakończeniu aplikacji."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A IA sugere nomes próprios e palavras que costumam ser mal reconhecidas. Só as que você escolher são adicionadas ao dicionário; nada é adicionado automaticamente. O único destino externo que recebe o conteúdo das reuniões é a IA escolhida para reuniões na aba “AI” (Gemini ou Claude). Os resultados do ditado ficam só na memória e são apagados quando você encerra o app."
+            "value" : "A IA sugere nomes próprios e palavras que costumam ser mal reconhecidas. Só as que você escolher são adicionadas ao dicionário; nada é adicionado automaticamente. O único destino externo que recebe o conteúdo das reuniões é a IA escolhida para reuniões em Ajustes → “AI” (Gemini ou Claude). Os resultados do ditado ficam só na memória e são apagados quando você encerra o app."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI предлагает имена собственные и слова, которые часто распознаются неверно. В словарь добавляются только выбранные вами — автоматически ничего не добавляется. Содержимое встреч отправляется вовне только в AI, выбранный для встреч на вкладке «AI» (Gemini или Claude). Результаты диктовки хранятся только в памяти и удаляются при завершении приложения."
+            "value" : "AI предлагает имена собственные и слова, которые часто распознаются неверно. В словарь добавляются только выбранные вами — автоматически ничего не добавляется. Содержимое встреч отправляется вовне только в AI, выбранный для встреч в разделе «AI» в Настройках (Gemini или Claude). Результаты диктовки хранятся только в памяти и удаляются при завершении приложения."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI özel adları ve yanlış tanınmaya yatkın sözcükleri önerir. Yalnızca seçtikleriniz sözlüğe eklenir; otomatik ekleme yapılmaz. Toplantı içeriğinin gönderildiği tek dış hedef, “AI” sekmesinde toplantılar için seçilen AI’dır (Gemini veya Claude). Dikte sonuçları yalnızca bellekte tutulur ve uygulamadan çıkınca silinir."
+            "value" : "AI özel adları ve yanlış tanınmaya yatkın sözcükleri önerir. Yalnızca seçtikleriniz sözlüğe eklenir; otomatik ekleme yapılmaz. Toplantı içeriğinin gönderildiği tek dış hedef, Ayarlar’daki “AI” bölümünde toplantılar için seçilen AI’dır (Gemini veya Claude). Dikte sonuçları yalnızca bellekte tutulur ve uygulamadan çıkınca silinir."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI sẽ liệt kê các danh từ riêng và từ dễ bị nhận nhầm. Chỉ những từ bạn chọn mới được thêm vào từ điển, không tự động thêm. Nơi bên ngoài duy nhất nhận nội dung cuộc họp là AI đã chọn cho cuộc họp trong tab “AI” (Gemini hoặc Claude). Kết quả nhập bằng giọng nói chỉ nằm trong bộ nhớ và mất đi khi thoát ứng dụng."
+            "value" : "AI sẽ liệt kê các danh từ riêng và từ dễ bị nhận nhầm. Chỉ những từ bạn chọn mới được thêm vào từ điển, không tự động thêm. Nơi bên ngoài duy nhất nhận nội dung cuộc họp là AI đã chọn cho cuộc họp ở mục “AI” trong Cài đặt (Gemini hoặc Claude). Kết quả nhập bằng giọng nói chỉ nằm trong bộ nhớ và mất đi khi thoát ứng dụng."
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI 会列出专有名词和容易误识别的词。只有你选中的才会添加到词典，不会自动添加。会议内容只会发送给在“AI”标签页中为会议选择的 AI（Gemini 或 Claude）这一个外部目标。语音输入的结果只保存在内存中，退出应用后就会消失。"
+            "value" : "AI 会列出专有名词和容易误识别的词。只有你选中的才会添加到词典，不会自动添加。会议内容只会发送给在设置的“AI”中为会议选择的 AI（Gemini 或 Claude）这一个外部目标。语音输入的结果只保存在内存中，退出应用后就会消失。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AI 會列出專有名詞和容易誤辨識的詞。只有你選取的才會加入辭典，不會自動加入。會議內容只會傳送給在「AI」標籤頁中為會議選擇的 AI（Gemini 或 Claude）這一個外部目的地。語音輸入的結果只保存在記憶體中，結束 App 後就會消失。"
+            "value" : "AI 會列出專有名詞和容易誤辨識的詞。只有你選取的才會加入辭典，不會自動加入。會議內容只會傳送給在設定的「AI」中為會議選擇的 AI（Gemini 或 Claude）這一個外部目的地。語音輸入的結果只保存在記憶體中，結束 App 後就會消失。"
           }
         }
       }
@@ -67478,7 +67478,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "쓰기 시작한 시각과 함께 저장합니다. 입력 중에 \"여기 중요\"를 누르면 그 문장을 표시의 설명으로 합니다."
+            "value" : "쓰기 시작한 시각과 함께 저장합니다. 입력 중에 \"중요\"를 누르면 그 문장을 표시의 설명으로 합니다."
           }
         },
         "pl" : {
@@ -67514,13 +67514,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "会连同开始书写的时间一起存储。输入时按“这里重要”，会把这句话作为标记的说明。"
+            "value" : "会连同开始书写的时间一起存储。输入时按“重要”，会把这句话作为标记的说明。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "會連同開始書寫的時間一起儲存。輸入時按「這裡重要」，會把這句話作為標記的說明。"
+            "value" : "會連同開始書寫的時間一起儲存。輸入時按「重要」，會把這句話作為標記的說明。"
           }
         }
       }
@@ -80330,7 +80330,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "기록 중 \"여기 중요\" 단축키 사용"
+            "value" : "기록 중 \"중요\" 단축키 사용"
           }
         },
         "pl" : {
@@ -80366,13 +80366,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "录制时使用“这里重要”快捷键"
+            "value" : "录制时使用“重要”快捷键"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "錄製時使用「這裡重要」快速鍵"
+            "value" : "錄製時使用「重要」快速鍵"
           }
         }
       }
@@ -84355,104 +84355,104 @@
         }
       }
     },
-    "議事録のモデル: %@ · %@（「AI」タブで、音声入力とは別に選べます）" : {
+    "議事録のモデル: %@ · %@（設定の「AI」で、音声入力とは別に選べます）" : {
       "comment" : "SettingsView.swift:280",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "نموذج المحضر: %@ · %@ (يمكن اختياره في علامة التبويب «AI» بشكل منفصل عن الإدخال الصوتي)"
+            "value" : "نموذج المحضر: %@ · %@ (يمكن اختياره في قسم «AI» في الإعدادات بشكل منفصل عن الإدخال الصوتي)"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modell für Protokolle: %@ · %@ (im Tab „AI“ getrennt vom Diktat wählbar)"
+            "value" : "Modell für Protokolle: %@ · %@ (unter „AI“ in den Einstellungen getrennt vom Diktat wählbar)"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Minutes model: %@ · %@ (can be chosen separately from dictation in the “AI” tab)"
+            "value" : "Minutes model: %@ · %@ (can be chosen separately from dictation in “AI” in Settings)"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modelo del acta: %@ · %@ (en la pestaña «AI» se elige por separado del dictado)"
+            "value" : "Modelo del acta: %@ · %@ (en «AI» de Ajustes se elige por separado del dictado)"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modèle du compte rendu : %@ · %@ (réglable séparément de la dictée dans l’onglet « AI »)"
+            "value" : "Modèle du compte rendu : %@ · %@ (réglable séparément de la dictée dans « AI » des Réglages)"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "मिनट्स का मॉडल: %@ · %@ (“AI” टैब में वॉइस इनपुट से अलग चुन सकते हैं)"
+            "value" : "मिनट्स का मॉडल: %@ · %@ (सेटिंग्ज़ के “AI” में वॉइस इनपुट से अलग चुन सकते हैं)"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Model notulen: %@ · %@ (bisa dipilih terpisah dari dikte di tab “AI”)"
+            "value" : "Model notulen: %@ · %@ (bisa dipilih terpisah dari dikte di “AI” pada Pengaturan)"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modello del verbale: %@ · %@ (nel pannello «AI» si sceglie separatamente dalla dettatura)"
+            "value" : "Modello del verbale: %@ · %@ (in Impostazioni → «AI» si sceglie separatamente dalla dettatura)"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "회의록 모델: %@ · %@(\"AI\" 탭에서 음성 입력과 따로 선택할 수 있음)"
+            "value" : "회의록 모델: %@ · %@(설정의 \"AI\"에서 음성 입력과 따로 선택할 수 있음)"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Model protokołów: %@ · %@ (na karcie „AI” wybierany osobno od dyktowania)"
+            "value" : "Model protokołów: %@ · %@ (w Ustawieniach → „AI” wybierany osobno od dyktowania)"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modelo da ata: %@ · %@ (na aba “AI”, é escolhido separadamente do ditado)"
+            "value" : "Modelo da ata: %@ · %@ (em Ajustes → “AI”, é escolhido separadamente do ditado)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Модель для протоколов: %@ · %@ (на вкладке «AI» выбирается отдельно от диктовки)"
+            "value" : "Модель для протоколов: %@ · %@ (в разделе «AI» в Настройках выбирается отдельно от диктовки)"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tutanak modeli: %@ · %@ (“AI” sekmesinde dikteden ayrı seçilebilir)"
+            "value" : "Tutanak modeli: %@ · %@ (Ayarlar’daki “AI” bölümünde dikteden ayrı seçilebilir)"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mô hình cho biên bản họp: %@ · %@ (có thể chọn riêng với nhập bằng giọng nói trong tab “AI”)"
+            "value" : "Mô hình cho biên bản họp: %@ · %@ (có thể chọn riêng với nhập bằng giọng nói ở mục “AI” trong Cài đặt)"
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "会议纪要的模型：%@ · %@（可在“AI”标签页中与语音输入分开选择）"
+            "value" : "会议纪要的模型：%@ · %@（可在设置的“AI”中与语音输入分开选择）"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "會議紀錄的模型：%@ · %@（可在「AI」標籤頁中與語音輸入分開選擇）"
+            "value" : "會議紀錄的模型：%@ · %@（可在設定的「AI」中與語音輸入分開選擇）"
           }
         }
       }

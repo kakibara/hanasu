@@ -183,7 +183,7 @@ private struct GeneralTab: View {
                 Picker(tr("録音モード"), selection: $settings.recordingMode) {
                     ForEach(RecordingMode.allCases) { Text($0.label).tag($0) }
                 }
-                Text(tr("「翻訳して入力」では、AI（「AI」タブで音声入力に選んだもの）が、話した内容を下の「翻訳する言語」に翻訳して入力します。録音中は Esc で取り消せます。"))
+                Text(tr("「翻訳して入力」では、AI（設定の「AI」で音声入力に選んだもの）が、話した内容を下の「翻訳する言語」に翻訳して入力します。録音中は Esc で取り消せます。"))
                     .font(.caption).foregroundStyle(.secondary)
             }
             // 要件: REQ-DIC-013
@@ -277,7 +277,7 @@ private struct MeetingTab: View {
                 Toggle(isOn: $settings.makeMeetingMinutes) {
                     Text(tr("記録後に AI で議事録を作る"))
                     // 要件: REQ-COM-024
-                    Text(tr("議事録のモデル: %@ · %@（「AI」タブで、音声入力とは別に選べます）", "\(settings.aiProvider(for: .meeting).name)", "\(settings.textModel(for: .meeting))"))
+                    Text(tr("議事録のモデル: %@ · %@（設定の「AI」で、音声入力とは別に選べます）", "\(settings.aiProvider(for: .meeting).name)", "\(settings.textModel(for: .meeting))"))
                 }
                 Toggle(tr("音声ファイル（me.m4a / others.m4a）を残す"), isOn: $settings.keepMeetingAudio)
             }
