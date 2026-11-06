@@ -1,5 +1,6 @@
 using System.Text;
 using Hanasu.Core.Meetings;
+using Hanasu.Core.Properties;
 using Hanasu.Core.Transcription;
 using Whisper.net;
 
@@ -35,7 +36,7 @@ public sealed class WhisperBatchTranscriber : IBatchTranscriber, ISegmentTranscr
         if (!File.Exists(path))
         {
             throw new TranscriptionException(
-                $"Whisper のモデル（{modelLabel()}）がまだダウンロードされていません。メニュー → 設定 → 一般 でダウンロードしてください。");
+                string.Format(Strings.Whisper_ModelNotDownloaded, modelLabel()));
         }
         // 読み込みは録音と並行して進める
         loading = Task.Run(() => LoadFactoryAsync(path, cancellationToken), cancellationToken);
@@ -67,12 +68,11 @@ public sealed class WhisperBatchTranscriber : IBatchTranscriber, ISegmentTranscr
         {
             // whisper.dll が読めない: Visual C++ ランタイムがない、CPU が AVX2 に対応していない、など
             throw new TranscriptionException(
-                "Whisper を動かせませんでした。Microsoft Visual C++ 再頒布可能パッケージ（2015〜2022, x64）を入れてから、もう一度試してください。" +
-                $"（{e.GetBaseException().Message}）", inner: e);
+                string.Format(Strings.Whisper_CannotRun, e.GetBaseException().Message), inner: e);
         }
         catch (Exception e) when (e is not OperationCanceledException and not TranscriptionException)
         {
-            throw new TranscriptionException($"Whisper のモデルを読み込めませんでした: {e.Message}", inner: e);
+            throw new TranscriptionException(string.Format(Strings.Whisper_LoadFailed, e.Message), inner: e);
         }
         return factory;
     }
@@ -249,12 +249,12 @@ public static class WhisperText
     /// <summary>無音や雑音に Whisper が書きがちな決まり文句（YouTube の字幕から覚えたもの）</summary>
     private static readonly string[] Hallucinations =
     [
-        "ご視聴ありがとうございました",
-        "ご視聴ありがとうございました。",
-        "最後までご視聴いただきありがとうございました",
-        "チャンネル登録よろしくお願いします",
-        "[音楽]",
-        "(音楽)",
+        "ご視聴ありがとうございました",  // skip-tr（Whisper の出力と照らす語）
+        "ご視聴ありがとうございました。",  // skip-tr（Whisper の出力と照らす語）
+        "最後までご視聴いただきありがとうございました",  // skip-tr（Whisper の出力と照らす語）
+        "チャンネル登録よろしくお願いします",  // skip-tr（Whisper の出力と照らす語）
+        "[音楽]",  // skip-tr（Whisper の出力と照らす語）
+        "(音楽)",  // skip-tr（Whisper の出力と照らす語）
         "[BLANK_AUDIO]",
     ];
 

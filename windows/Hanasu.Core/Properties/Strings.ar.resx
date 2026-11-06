@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>تعذر العثور على llama-server، الذي يشغّل نموذج LLM المحلي. استخرج ملف zip الخاص بـ Hanasu مرة أخرى، أو عيّن مساره في متغير البيئة HANASU_LLAMA_SERVER.</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>لم يتم تنزيل النموذج المحلي بعد. قم بتنزيله من القائمة ← الإعدادات ← AI.</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>لم يتم تنزيل النموذج المحلي "{0}" بعد. قم بتنزيله من القائمة ← الإعدادات ← AI.</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>تعذر بدء تشغيل LLM المحلي (رمز الخروج {0}).</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>لم يكتمل بدء تشغيل LLM المحلي خلال {0} ثانية.</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>أرجع LLM المحلي خطأً ({0})</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>تم اقتطاع استجابة LLM المحلي عند حد الطول، لذا لم يتم استخدامها.</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>لم يُرجع LLM المحلي أي نتيجة.</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>تعذرت قراءة استجابة LLM المحلي.</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>لم يستجب LLM المحلي خلال {0} ثانية.</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>محلي</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>مستحسن. من Google. الأكبر حجمًا؛ أكثر تحسين ومحاضر طبيعية. لأجهزة الكمبيوتر التي تحتوي على ذاكرة 16 GB أو أكثر.</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>من Liquid AI. صغير وسريع. جيد في اتباع التعليمات باللغة اليابانية.</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>من SB Intuitions. مدرَّب على اللغة اليابانية. سياق يصل إلى 8K (يتم تلخيص الاجتماعات الطويلة على أجزاء).</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>من Alibaba. حوالي نصف حجم Gemma، لذا يعمل بسهولة أكبر على أجهزة الكمبيوتر ذات ذاكرة 8 GB. يتعامل مع التصحيحات الذاتية بشكل أقل جودة من Gemma.</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>الترخيص: {0}. لا يسمح هذا الترخيص بالاستخدام التجاري من قِبل المؤسسات التي تبلغ إيراداتها السنوية 10 ملايين دولار أمريكي أو أكثر.</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>الترخيص: {0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0} ({1}) · مستحسن</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>اضغط على مفتاح واحد بالإضافة إلى مفاتيح التعديل.</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>يُستخدم Esc لإلغاء التسجيل، لذا لا يمكن استخدامه كاختصار.</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>استخدمه مع Ctrl أو Alt أو Shift أو Win (يمكن استخدام F1–F24 بمفردها).</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>التركيبات التي تستخدم Shift فقط تتعارض مع الكتابة، لذا لا يمكن استخدامها.</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>يُستخدم {0} من أجل {1}، لذا يُرجى تجنبه.</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>قائمة النافذة في Windows</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>الكتابة الصوتية في Windows (Win + H)</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>تبديل لغة الإدخال</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>تشغيل IME أو إيقاف تشغيله (حسب IME)</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>كتابة مسافات كاملة العرض/نصف العرض</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>التبديل بين النوافذ</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>إغلاق النوافذ</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>قفل الشاشة</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>إظهار سطح المكتب</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>Nonconvert</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>المفتاح {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>غير معيّن</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>النهاية غير معروفة</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>محمي بواسطة Windows Hello</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>محمي بواسطة DPAPI</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>محفوظ ({0}، {1})</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>مفتاح API المحفوظ تالف. أدخله مرة أخرى في الإعدادات ← AI.</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>تعذر فك تشفير مفتاح API المحمي بواسطة Windows Hello (ربما تمت إعادة إنشاء مفتاح Windows Hello). أدخله مرة أخرى في الإعدادات ← AI.</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>تتعذر قراءة مفتاح API المحفوظ (ربما تم حفظه بواسطة مستخدم Windows آخر أو على كمبيوتر آخر). أدخله مرة أخرى في الإعدادات ← AI.</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>Windows Hello غير متوفر على هذا الكمبيوتر.</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>Windows Hello غير متوفر على هذا الكمبيوتر، لذا تتعذر قراءة مفتاح API المحفوظ. أدخله مرة أخرى في الإعدادات ← AI.</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>تعذر إنشاء مفتاح Windows Hello.</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>لم يُنتج مفتاح Windows Hello القيمة نفسها، لذا لم يتم تبديل الحماية إلى Windows Hello (لا يزال DPAPI مستخدمًا).</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>لم يتم تعيين مفتاح API الخاص بـ Claude (القائمة ← الإعدادات ← AI).</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>لم يستجب Claude خلال {0} ثانية.</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>رفض Claude معالجة هذا النص لأسباب تتعلق بالسلامة. جرّب نموذجًا آخر (الإعدادات ← AI) أو Gemini.</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>رفض Claude معالجة هذا النص لأسباب تتعلق بالسلامة ({0}). جرّب نموذجًا آخر (الإعدادات ← AI) أو Gemini.</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>كانت استجابة Claude طويلة جدًا وتم اقتطاعها.</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>لم يُرجع Claude أي نتيجة.</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>مفتاح API الخاص بـ Claude غير صحيح (401). في الإعدادات ← AI، أدخل مرة أخرى المفتاح الذي أنشأته في Claude Console.</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>لا يمكن لمفتاح API هذا استخدام Claude (403)</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>لم يتم العثور على النموذج {0}، أو لا يمكن لمفتاح API هذا استخدامه (404).</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>توجد مشكلة في الفوترة الخاصة بـ Claude API (402). تحقق من إعدادات الفوترة في Claude Console.</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>تم الوصول إلى حد استخدام Claude API (429). انتظر قليلاً ثم حاول مرة أخرى.</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>Claude API محمّل بشكل زائد (529). انتظر قليلاً ثم حاول مرة أخرى.</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>حدث خطأ في Claude API ({0}). انتظر قليلاً ثم حاول مرة أخرى.</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>لم يقبل Claude API الطلب ({0})</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>تعذر الاتصال بـ Claude API. تحقق من اتصال الشبكة.</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5 (سريع وغير مكلف؛ الافتراضي للإملاء)</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5 (الافتراضي للمحاضر)</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5 (الأذكى والأعلى تكلفة)</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>لم يتم تعيين بيانات اعتماد Gemini (مفتاح API أو حساب خدمة).</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>خطأ في Gemini API ({0}): {1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>لم يُرجع Gemini أي نتيجة.</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>لم يُرجع Gemini أي نتيجة ({0}).</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>تعذرت قراءة استجابة Gemini.</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>لم يستجب Gemini خلال {0} ثانية.</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>لم يتم العثور على ملف JSON لحساب الخدمة: {0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>تتعذر قراءة ملف JSON لحساب الخدمة.</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>انتهت مهلة الحصول على رمز الوصول.</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>تعذر الحصول على رمز الوصول ({0}): {1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>تتعذر قراءة المفتاح الخاص لحساب الخدمة.</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>تعذر توقيع طلب رمز الوصول: {0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>لا يُسمح بالتنزيل إلا من المضيفين المتوقعين: {0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>فشل التنزيل (HTTP {0}).</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>تم إيقاف التنزيل لأنه تمت إعادة توجيهه إلى موقع غير https.</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>حجم الملف المراد تنزيله ليس الحجم المتوقع (الحجم بالبايت: {0}؛ المتوقع: {1}).</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>تم إيقاف التنزيل لأن الملف أكبر من المتوقع.</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>تمت مقاطعة التنزيل.</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>لا تتطابق قيمة التجزئة (SHA-256) للملف الذي تم تنزيله، لذا لن يتم استخدامه.</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>جارٍ النسخ باستخدام {0}…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>محرك النسخ هو Gemini، لكن لم يتم تعيين بيانات اعتماد Gemini (القائمة ← الإعدادات ← AI).</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>فشل النسخ باستخدام Gemini: {0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0} ({1}) — {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>الأصغر. دقة منخفضة للغة اليابانية (للاختبار).</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>صغير. دقة أقل للغة اليابانية.</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>مناسب للاستخدام اليومي. توازن جيد بين السرعة والدقة.</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>دقة عالية. لوحدات المعالجة المركزية السريعة.</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>دقة عالية؛ أصغر حجمًا بفضل التكميم. لوحدات المعالجة المركزية السريعة.</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>دقة عالية. لوحدات المعالجة المركزية السريعة.</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>هذا ليس ملف WAV.</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>لا يحتوي ملف WAV على مقطع fmt.</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>تنسيق WAV غير مدعوم (format={0}، bits={1}).</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>لا يحتوي ملف WAV على مقطع data.</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>الإنجليزية</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>اليابانية</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>إلى الإنجليزية</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>إلى اليابانية</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>الترجمة والكتابة</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>الترجمة إلى الإنجليزية والكتابة</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>الترجمة إلى اليابانية والكتابة</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>تمت الترجمة إلى الإنجليزية والكتابة</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>تمت الترجمة إلى اليابانية والكتابة</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>تمت الكتابة</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>تم الإلغاء</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>جارٍ التحضير…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>جارٍ الإنهاء…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>لم يتم التعرف على أي كلام.</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>جارٍ التسجيل</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>خطأ</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>ابدأ التحدث…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>يتعذر اللصق في التطبيقات التي تعمل كمسؤول</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>تعذر إرسال ضغطة مفتاح اللصق</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>تعذر استخدام الحافظة</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>تعذرت كتابة النص</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>تعذر العثور على مكان للكتابة</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>النص موجود أيضًا في الحافظة. انقر حيث تريده واضغط Ctrl+V.</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>انقر فوق "نسخ" أو حدد النص وانسخه، ثم اضغط Ctrl+V حيث تريده.</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>جارٍ الترجمة إلى الإنجليزية باستخدام {0}…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>جارٍ الترجمة إلى اليابانية باستخدام {0}…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>جارٍ التحسين باستخدام {0}…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>تحسين</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>نجح</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>فشل AI (النص الأصلي)</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>غير مُعد (النص الأصلي)</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>التحسين متوقف (النص الأصلي)</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0} يوم</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>بلا حد</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>تعذرت قراءة ملف المحفوظات، لذا تم الاحتفاظ به باسم {0} وبدء ملف جديد.</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>تعذرت قراءة ملف المحفوظات: {0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>تعذر حفظ المحفوظات: {0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>اليوم</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>أمس</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>dddd، d MMMM</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>dddd، d MMMM yyyy</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}، لذا تمت كتابة النص دون تحسين (القائمة ← الإعدادات ← AI).</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}، لذا تمت كتابة النص دون ترجمة (القائمة ← الإعدادات ← AI).</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>تمت كتابة النص كما كان قبل التحسين.</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>تمت كتابة النص كما كان قبل الترجمة.</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>لم يتم تنزيل نموذج LLM المحلي بعد (القائمة ← الإعدادات ← AI).</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>لم يتم تعيين بيانات اعتماد Gemini (مفتاح API أو حساب خدمة) (القائمة ← الإعدادات ← AI).</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>لم يتم تنزيل نموذج LLM المحلي بعد</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>لم يتم تعيين بيانات اعتماد {0}</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>تلقائي</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>اجتماع دوري</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>اجتماع مبيعات</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>عصف ذهني</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>مخصص</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>نظرة عامة، المناقشة، القرارات، بنود العمل</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>التقدم، التقارير، المشكلات، القرارات، بنود العمل</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>المستجدات، المخاوف، الملاحظات، الاتفاقات، بنود العمل</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>تحديات العميل، المقترح، ردود الفعل، المخاوف، الإجراءات التالية</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>الأفكار المطروحة، الأفكار الواعدة، الأسئلة المفتوحة، الخطوات التالية</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>يتبع التعليمات التي كتبتها</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>جارٍ فصل المتحدثين الآخرين…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>تعذر فصل المتحدثين الآخرين، لذا تم دمجهم في "الطرف الآخر" واحد ({0}).</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>تم الاحتفاظ بالملفات الصوتية.</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>تعذر إنشاء المحضر: {0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}، لذا لم يتم إنشاء محضر (القائمة ← الإعدادات ← AI).</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>جارٍ إنشاء المحضر باستخدام {0}…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>جارٍ النسخ باستخدام {0}… ({1})</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>جارٍ النسخ باستخدام {0}… ({1} {2})</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>تعذر نسخ الصوت ({0}): {1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>محرك نسخ الاجتماعات هو Gemini، لكن لم يتم تعيين بيانات اعتماد Gemini (القائمة ← الإعدادات ← AI).</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>اجتماع {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>تم إغلاق التطبيق أثناء التسجيل. ربما تم الاحتفاظ بالملفات الصوتية ({0} / {1}) جزئيًا.</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>يتعذر بدء تسجيل الاجتماع</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>الإملاء قيد التسجيل. حاول مرة أخرى عند انتهائه.</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>يتعذر تسجيل صوت الكمبيوتر (المشاركون الآخرون)</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>سيتم تسجيل صوتك فقط (الميكروفون). {0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>تعذر بدء التسجيل: {0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>تعذر بدء تسجيل الاجتماع</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>جارٍ إيقاف التسجيل…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>تسجيل الاجتماع</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>تم تسجيل الاجتماع</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>تم حفظ النص المكتوب.</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>تم حفظ النص المكتوب والمحضر.</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>تم تسجيل الاجتماع (مع بعض المشكلات)</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>فشلت المعالجة بعد التسجيل: {0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>فشل تسجيل الاجتماع</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>لا يمكن حذف الاجتماعات قيد التسجيل أو المعالجة أو إعادة إنشاء المحضر.</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>توقف تسجيل الميكروفون</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>توقف التسجيل (على سبيل المثال، تم فصل الميكروفون)، لذا سيتوقف تسجيل الاجتماع.</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>أنا</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>الطرف الآخر</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>المتحدث {0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>في الغرفة {0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — النص المكتوب</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- التاريخ: {0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- المدة: {0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — الملاحظات</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>لا توجد علامات "مهم". أضف علامة أثناء التسجيل باستخدام "★ مهم" أو الاختصار، وستظهر المحادثة المحيطة بها هنا.</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>مهم</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>لم يُقل شيء حول هذه العلامة (من 30 ثانية قبلها إلى 15 ثانية بعدها).</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>التهجئة الصحيحة فارغة، لذا لن يتم استبدال أي شيء.</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>"{0}" حرف واحد، لذا لن يتم استخدامه (قد يطابق أجزاء من كلمات أخرى بسهولة).</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>"{0}" موجود أيضًا في سطر سابق، لذا سيتم استخدام ذلك السطر.</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>لم يتم تنزيل نموذج Whisper ({0}) بعد. قم بتنزيله من القائمة ← الإعدادات ← عام.</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>تعذر تشغيل Whisper. ثبّت Microsoft Visual C++ Redistributable (2015–2022، x64) ثم حاول مرة أخرى. ({0})</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>تعذر تحميل نموذج Whisper: {0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>جارٍ تنزيل نماذج فصل المتحدثين… ({0} / {1} MB)</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>معدل العينات لنموذج فصل المتحدثين ليس كما هو متوقع ({0} Hz).</value>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>لا يمكن استخدام منطقة Vertex AI “{0}” (أحرف صغيرة وأرقام وشرطات فقط؛ مثل global وus-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>قيمة token_uri لحساب الخدمة ({0}) ليست نقطة نهاية الرموز في Google (oauth2.googleapis.com)، لذا لن يتم استخدامها.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>بلغ التسجيل الحد الأقصى البالغ 10 دقائق، لذا ستتم معالجة الصوت المسجَّل حتى الآن</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>مفتاح API (أو حساب الخدمة) غير صحيح، أو غير مسموح له باستخدام Gemini API ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>لم يتم العثور على النموذج “{0}” أو لا يمكن استخدامه مع بيانات الاعتماد هذه</value>
+  </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>حجم الملف المطلوب تنزيله غير معروف</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>أُوقف التنزيل لأنه أُعيد توجيهه إلى مضيف غير متوقع: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>تعذّرت قراءة معلومات الإصدار</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>تعذّر جلب أحدث إصدار من GitHub (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>تعذّر جلب أحدث إصدار من GitHub (HTTP {0}). ربما تم بلوغ حد الطلبات في GitHub؛ انتظر قليلًا ثم حاول مرة أخرى.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>تعذّر الاتصال بـ GitHub: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>لم يستجب GitHub في الوقت المحدد</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>يحتوي ملف zip على عنصر يشير إلى خارج مجلد فك الضغط، لذا لن يُستخدم: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>حجم ملف zip بعد فك الضغط أكبر من المتوقع، لذا لن يُستخدم</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>تعذّر فتح ملف zip الذي تم تنزيله</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>لا يحتوي ملف zip على {0}، لذا لن يُستخدم</value>
+  </data>
+</root>

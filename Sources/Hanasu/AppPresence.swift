@@ -12,9 +12,9 @@ enum AppPresence: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .menuBar: "メニューバーだけ"
-        case .dock: "Dock だけ"
-        case .both: "メニューバーと Dock の両方"
+        case .menuBar: tr("メニューバーだけ")
+        case .dock: tr("Dock だけ")
+        case .both: tr("メニューバーと Dock の両方")
         }
     }
 
@@ -47,14 +47,14 @@ struct AppPresenceSettingsSection: View {
 
     var body: some View {
         Section {
-            Picker("アイコンを出す場所", selection: $settings.presence) {
+            Picker(tr("アイコンを出す場所"), selection: $settings.presence) {
                 ForEach(AppPresence.allCases) { Text($0.label).tag($0) }
             }
             .pickerStyle(.radioGroup)
         } header: {
-            Text("アイコンの表示")
+            Text(tr("アイコンの表示"))
         } footer: {
-            Text("「メニューバーだけ」では Dock と ⌘Tab に出ません。「Dock だけ」では、Dock のアイコンを右クリックするとメニューバーと同じメニューが出て、録音中はアイコンに ● が付きます。どの場合も、Finder から Hanasu をもう一度開くと設定画面が出ます。")
+            Text(tr("「メニューバーだけ」では Dock と ⌘Tab に出ません。「Dock だけ」では、Dock のアイコンを右クリックするとメニューバーと同じメニューが出て、録音中はアイコンに ● が付きます。どの場合も、Finder から Hanasu をもう一度開くと設定画面が出ます。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }

@@ -39,7 +39,7 @@ enum ReminderExporter {
     /// 選んだアクションアイテムを登録し、アイテムの ID → リマインダーの識別子を返す
     static func add(_ items: [ActionItem], meeting: Meeting, to list: EKCalendar?) throws -> [UUID: String] {
         guard let calendar = list ?? store.defaultCalendarForNewReminders() else {
-            throw NSError(domain: "Hanasu", code: 1, userInfo: [NSLocalizedDescriptionKey: "登録先のリマインダーのリストがありません"])
+            throw NSError(domain: "Hanasu", code: 1, userInfo: [NSLocalizedDescriptionKey: tr("登録先のリマインダーのリストがありません")])
         }
         var ids: [UUID: String] = [:]
         var reminders: [EKReminder] = []
@@ -62,9 +62,9 @@ enum ReminderExporter {
 
     static func notes(for item: ActionItem, meeting: Meeting) -> String {
         var lines: [String] = []
-        if let owner = item.owner { lines.append("担当: \(owner)") }
-        if let note = item.dueNote { lines.append("期限: \(note)") }
-        lines.append("会議: \(meeting.title)（\(Meeting.dateFormatter.string(from: meeting.startedAt))）")
+        if let owner = item.owner { lines.append(tr("担当: %@", "\(owner)")) }
+        if let note = item.dueNote { lines.append(tr("期限: %@", "\(note)")) }
+        lines.append(tr("会議: %@（%@）", "\(meeting.title)", "\(Meeting.dateFormatter.string(from: meeting.startedAt))"))
         return lines.joined(separator: "\n")
     }
 
@@ -92,12 +92,12 @@ struct ReminderExportSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("リマインダーに登録").font(.headline)
-            Text("登録するアクションアイテムを選んでください。期限の日付が分かるものは期限付きで登録します。")
+            Text(tr("リマインダーに登録")).font(.headline)
+            Text(tr("登録するアクションアイテムを選んでください。期限の日付が分かるものは期限付きで登録します。"))
                 .font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             if items.isEmpty {
-                Text("この議事録にはアクションアイテムがありません。").foregroundStyle(.secondary)
+                Text(tr("この議事録にはアクションアイテムがありません。")).foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, minHeight: 60)
             } else {
                 ScrollView {
@@ -110,7 +110,7 @@ struct ReminderExportSheet: View {
                                         if let owner = item.owner { Label(owner, systemImage: "person") }
                                         if let due = item.dueDisplay { Label(due, systemImage: "calendar") }
                                         if item.reminderID != nil {
-                                            Label("登録済み", systemImage: "checkmark.circle").foregroundStyle(.green)
+                                            Label(tr("登録済み"), systemImage: "checkmark.circle").foregroundStyle(.green)
                                         }
                                     }
                                     .font(.caption)
@@ -127,12 +127,12 @@ struct ReminderExportSheet: View {
                 .scrollBounceBehavior(.basedOnSize)
             }
             if !lists.isEmpty {
-                Picker("登録先", selection: $listID) {
+                Picker(tr("登録先"), selection: $listID) {
                     ForEach(lists, id: \.id) { Text($0.title).tag($0.id) }
                 }
                 .frame(maxWidth: 280)
             } else if !denied {
-                Text("初めて登録するときは、リマインダーへのアクセスの許可を求めます。登録先は既定のリストです。")
+                Text(tr("初めて登録するときは、リマインダーへのアクセスの許可を求めます。登録先は既定のリストです。"))
                     .font(.caption).foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -141,17 +141,17 @@ struct ReminderExportSheet: View {
                     Text(message).font(.caption).foregroundStyle(denied ? .orange : .secondary)
                         .fixedSize(horizontal: false, vertical: true)
                     if denied {
-                        Button("システム設定を開く") { ReminderExporter.openPrivacySettings() }.controlSize(.small)
+                        Button(tr("システム設定を開く")) { ReminderExporter.openPrivacySettings() }.controlSize(.small)
                     }
                 }
             }
             HStack {
                 Spacer()
                 if done {
-                    Button("閉じる") { dismiss() }.keyboardShortcut(.defaultAction)
+                    Button(tr("閉じる")) { dismiss() }.keyboardShortcut(.defaultAction)
                 } else {
-                    Button("キャンセル") { dismiss() }
-                    Button("\(selected.count) 件を登録") { Task { await register() } }
+                    Button(tr("キャンセル")) { dismiss() }
+                    Button(tr("%@ 件を登録", "\(selected.count)")) { Task { await register() } }
                         .keyboardShortcut(.defaultAction)
                         .disabled(selected.isEmpty || working)
                 }
@@ -171,7 +171,7 @@ struct ReminderExportSheet: View {
         items = meeting.resolvedActionItems
         // 初期値: まだ登録していない、自分の担当か担当が決まっていないもの
         let me = meeting.displayName(for: "me")
-        selected = Set(items.filter { $0.reminderID == nil && ($0.owner == nil || $0.owner == me || $0.owner == "自分") }.map(\.id))
+        selected = Set(items.filter { $0.reminderID == nil && ($0.owner == nil || $0.owner == me || [Prompts.text("speaker.me"), "自分"].contains($0.owner ?? "")) }.map(\.id))  // skip-tr（前の版の議事録の担当）
         reloadLists()
     }
 
@@ -188,7 +188,7 @@ struct ReminderExportSheet: View {
         do {
             guard try await ReminderExporter.ensureAccess() else {
                 denied = true
-                message = "リマインダーへのアクセスが許可されていません。システム設定 → プライバシーとセキュリティ → リマインダー で Hanasu をオンにしてください。"
+                message = tr("リマインダーへのアクセスが許可されていません。システム設定 → プライバシーとセキュリティ → リマインダー で Hanasu をオンにしてください。")
                 return
             }
             let list = ReminderExporter.list(withID: listID)
@@ -198,11 +198,11 @@ struct ReminderExportSheet: View {
             for index in items.indices { if let id = ids[items[index].id] { items[index].reminderID = id } }
             selected = []
             reloadLists()
-            let listName = (list ?? ReminderExporter.defaultList)?.title ?? "既定のリスト"
-            message = "\(ids.count) 件をリマインダー「\(listName)」に登録しました。"
+            let listName = (list ?? ReminderExporter.defaultList)?.title ?? tr("既定のリスト")
+            message = tr("%@ 件をリマインダー「%@」に登録しました。", "\(ids.count)", "\(listName)")
             done = true
         } catch {
-            message = "登録できませんでした: \(error.localizedDescription)"
+            message = tr("登録できませんでした: %@", "\(error.localizedDescription)")
         }
     }
 }

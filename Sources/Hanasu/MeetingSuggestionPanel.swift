@@ -142,12 +142,12 @@ struct MeetingSuggestionView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 switch model.suggestion {
                 case .start?:
-                    Text("録音する前に、参加者の了承を得てください。")
+                    Text(tr("録音する前に、参加者の了承を得てください。"))
                         .font(.system(size: 11))
                         .foregroundStyle(.tertiary)
                 case .stop(_, let startedAt)?:
                     TimelineView(.periodic(from: startedAt, by: 1)) { context in
-                        Text("記録中 \(Meeting.clock(context.date.timeIntervalSince(startedAt)))")
+                        Text(tr("記録中 %@", "\(Meeting.clock(context.date.timeIntervalSince(startedAt)))"))
                             .font(.system(size: 11).monospacedDigit())
                             .foregroundStyle(.tertiary)
                     }
@@ -176,24 +176,24 @@ struct MeetingSuggestionView: View {
     }
 
     private var title: String {
-        model.suggestion?.kind == .stop ? "記録を止めますか？" : "会議を記録しますか？"
+        model.suggestion?.kind == .stop ? tr("記録を止めますか？") : tr("会議を記録しますか？")
     }
 
     @ViewBuilder private var detail: some View {
         switch model.suggestion {
         case .start(let app)?:
             Text(app.isBrowser
-                 ? "\(app.label) がマイクを使い始めました。ブラウザの会議（Google Meet など）かもしれません。"
-                 : "\(app.label) がマイクを使い始めました。")
+                 ? tr("%@ がマイクを使い始めました。ブラウザの会議（Google Meet など）かもしれません。", "\(app.label)")
+                 : tr("%@ がマイクを使い始めました。", "\(app.label)"))
         case .stop(let app, _)?:
-            Text("\(app.label) がマイクを使い終えました。止めると議事録を作ります。")
+            Text(tr("%@ がマイクを使い終えました。止めると議事録を作ります。", "\(app.label)"))
         case nil:
             EmptyView()
         }
     }
 
-    private var primaryLabel: String { model.suggestion?.kind == .stop ? "記録を止める" : "記録する" }
-    private var secondaryLabel: String { model.suggestion?.kind == .stop ? "続ける" : "今回はしない" }
+    private var primaryLabel: String { model.suggestion?.kind == .stop ? tr("記録を止める") : tr("記録する") }
+    private var secondaryLabel: String { model.suggestion?.kind == .stop ? tr("続ける") : tr("今回はしない") }
 
     private var icon: some View {
         ZStack(alignment: .bottomTrailing) {

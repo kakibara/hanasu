@@ -19,6 +19,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var meetingAutoDetect: MeetingAutoDetect?
     // 要件: REQ-COM-050, REQ-COM-051
     private let onboarding = OnboardingWindowController()
+    // 要件: REQ-REL-010, REQ-REL-011
+    private let updater = AppUpdater()
     private var cancellables: Set<AnyCancellable> = []
 
     // 設計判断: DEC-COM-008, DEC-COM-009, DEC-COM-093
@@ -36,7 +38,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         historyUI = DictationHistoryUI(
             isDictationBusy: { [weak self] in self?.controller.state != .idle },
             onHotKeyRegistrationFailed: { [weak self] combo in
-                self?.showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「履歴」で別のキーを選んでください。")
+                self?.showAlert(tr("ショートカット %@ を登録できませんでした", "\(combo.displayString)"), tr("設定の「履歴」で別のキーを選んでください。"))
             })
         NSApp.mainMenu = makeMainMenu()
 
@@ -63,8 +65,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
         editController.onHotKeyRegistrationFailed = { [weak self] combo in
             self?.showAlert(
-                "ショートカット \(combo.displayString) を登録できませんでした",
-                "他のアプリやシステムのショートカットと重なっている可能性があります。設定で「選択を声で編集」に別のキーを選んでください。")
+                tr("ショートカット %@ を登録できませんでした", "\(combo.displayString)"),
+                tr("他のアプリやシステムのショートカットと重なっている可能性があります。設定で「選択を声で編集」に別のキーを選んでください。"))
         }
         meetingRecorder.onStateChange = { [weak self] _ in
             guard let self else { return }
@@ -80,9 +82,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         meetingRecorder.titleSourceApps = { [weak self] in self?.meetingAutoDetect?.titleSourceApps ?? [] }
         controller.onHotKeyRegistrationFailed = { [weak self] combo in
             self?.showAlert(
-                "ショートカット \(combo.displayString) を登録できませんでした",
-                "他のアプリやシステムのショートカットと重なっている可能性があります。設定で別のキーを選んでください。")
+                tr("ショートカット %@ を登録できませんでした", "\(combo.displayString)"),
+                tr("他のアプリやシステムのショートカットと重なっている可能性があります。設定で別のキーを選んでください。"))
         }
+
+        // 設計判断: DEC-REL-023
+        // 録音・会議の記録・議事録の作り直し・ローカルのモデルのダウンロードの間は入れ替えない（終えると途中で切れる）
+        updater.isBusy = { [weak self] in
+            guard let self else { return false }
+            let downloading = LocalLLMModel.allCases.contains {
+                if case .downloading = LocalLLMStore.shared.status($0) { return true }
+                return false
+            } || WhisperModel.allCases.contains {
+                if case .downloading = WhisperModelStore.shared.status($0) { return true }
+                return false
+            }
+            return self.controller.state != .idle || self.editController.state != .idle || self.meetingRecorder.state != .idle
+                || self.meetingRecorder.regeneratingID != nil || downloading
+        }
+        // 設計判断: DEC-REL-026
+        // 前の起動で始めた入れ替えができていなければ知らせる
+        updater.reportPreviousAttempt()
 
         // 要件: REQ-COM-050, REQ-COM-051
         // 設計判断: DEC-COM-093
@@ -95,6 +115,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         openSettings()
         // 自動入力（⌘V の送信）にはアクセシビリティ権限が要る
         _ = Permissions.isAccessibilityTrusted(prompt: true)
+        // 要件: REQ-REL-010
+        // 設計判断: DEC-REL-024
+        // 初めての起動（上のオンボーディング）では確かめない
+        updater.checkOnLaunch()
     }
 
     // MARK: - アイコンの表示（メニューバー / Dock）
@@ -160,9 +184,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let settings = AppSettings.shared
 
         let toggleTitle: String = switch controller.state {
-        case .idle: "録音を開始"
-        case .preparing, .recording: "録音を停止して入力"
-        case .processing: "整形中…"
+        case .idle: tr("録音を開始")
+        case .preparing, .recording: tr("録音を停止して入力")
+        case .processing: tr("整形中…")
         }
         let toggle = NSMenuItem(title: "\(toggleTitle)　\(settings.hotKey.displayString)",
                                 action: #selector(toggleDictation), keyEquivalent: "")
@@ -171,7 +195,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         if controller.state == .idle {
             // 設計判断: DEC-DIC-027
             let verb = TranslationLanguage.menuVerb(for: settings.translationLanguages)
-            menu.addItem(NSMenuItem(title: "\(verb)して入力を開始　\(settings.translateHotKey.displayString)",
+            menu.addItem(NSMenuItem(title: tr("%@して入力を開始　%@", "\(verb)", "\(settings.translateHotKey.displayString)"),
                                     action: #selector(toggleTranslation), keyEquivalent: ""))
             let editItem = NSMenuItem(title: "\(editController.menuTitle)　\(editController.hotKey.displayString)",
                                       action: #selector(toggleEditMode), keyEquivalent: "")
@@ -182,38 +206,40 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         let meetingTitle: String
         switch meetingRecorder.state {
-        case .idle: meetingTitle = "会議の記録を開始"
-        case .starting: meetingTitle = "会議の記録を準備中…"
+        case .idle: meetingTitle = tr("会議の記録を開始")
+        case .starting: meetingTitle = tr("会議の記録を準備中…")
         case .recording:
             let elapsed = meetingRecorder.current.map { Date().timeIntervalSince($0.startedAt) } ?? 0
-            meetingTitle = "会議の記録を停止（\(Meeting.clock(elapsed))）"
+            meetingTitle = tr("会議の記録を停止（%@）", "\(Meeting.clock(elapsed))")
         case .processing(let message): meetingTitle = message
         }
         let meetingItem = NSMenuItem(title: "\(meetingTitle)　\(settings.meetingHotKey.displayString)",
                                      action: #selector(toggleMeeting), keyEquivalent: "")
         meetingItem.isEnabled = meetingRecorder.state == .idle || meetingRecorder.state == .recording
         menu.addItem(meetingItem)
-        menu.addItem(NSMenuItem(title: "会議ノートを開く…", action: #selector(openMeetingWindow), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: tr("会議ノートを開く…"), action: #selector(openMeetingWindow), keyEquivalent: ""))
         menu.addItem(.separator())
 
-        let historyItem = NSMenuItem(title: "最近の結果", action: nil, keyEquivalent: "")
+        let historyItem = NSMenuItem(title: tr("最近の結果"), action: nil, keyEquivalent: "")
         historyItem.submenu = historyUI.makeRecentResultsMenu()
         menu.addItem(historyItem)
-        menu.addItem(NSMenuItem(title: "履歴を開く…", action: #selector(openHistoryWindow), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: tr("履歴を開く…"), action: #selector(openHistoryWindow), keyEquivalent: ""))
 
         let trusted = Permissions.isAccessibilityTrusted(prompt: false)
         let axItem = NSMenuItem(
-            title: trusted ? "自動入力: 有効（アクセシビリティ許可済み）" : "自動入力: 無効 — アクセシビリティを許可…",
+            title: trusted ? tr("自動入力: 有効（アクセシビリティ許可済み）") : tr("自動入力: 無効 — アクセシビリティを許可…"),
             action: trusted ? nil : #selector(openAccessibilitySettings), keyEquivalent: "")
         axItem.isEnabled = !trusted
         menu.addItem(axItem)
 
         menu.addItem(.separator())
         // 設計判断: DEC-COM-091
-        menu.addItem(NSMenuItem(title: "Hanasu の使い方…", action: #selector(openOnboarding), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "設定…", action: #selector(openSettings), keyEquivalent: forDock ? "" : ","))
+        menu.addItem(NSMenuItem(title: tr("Hanasu の使い方…"), action: #selector(openOnboarding), keyEquivalent: ""))
+        // 要件: REQ-REL-011
+        menu.addItem(NSMenuItem(title: tr("アップデートを確認…"), action: #selector(checkForUpdates), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: tr("設定…"), action: #selector(openSettings), keyEquivalent: forDock ? "" : ","))
         if !forDock {
-            menu.addItem(NSMenuItem(title: "Hanasu を終了", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+            menu.addItem(NSMenuItem(title: tr("Hanasu を終了"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         }
         for item in menu.items where item.action != nil && item.action != #selector(NSApplication.terminate(_:)) {
             item.target = self
@@ -246,12 +272,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             return menu
         }
         let meeting = NSMenuItem(
-            title: meetingRecorder.state == .recording ? "会議の記録を停止" : "会議の記録を開始",
+            title: meetingRecorder.state == .recording ? tr("会議の記録を停止") : tr("会議の記録を開始"),
             action: #selector(toggleMeeting), keyEquivalent: "")
         meeting.isEnabled = meetingRecorder.state == .idle || meetingRecorder.state == .recording
         menu.addItem(meeting)
-        menu.addItem(NSMenuItem(title: "会議ノートを開く", action: #selector(openMeetingWindow), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "設定…", action: #selector(openSettings), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: tr("会議ノートを開く"), action: #selector(openMeetingWindow), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: tr("設定…"), action: #selector(openSettings), keyEquivalent: ""))
         for item in menu.items { item.target = self }
         return menu
     }
@@ -260,41 +286,43 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let main = NSMenu()
 
         let appMenu = NSMenu()
-        appMenu.addItem(withTitle: "Hanasu について", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        appMenu.addItem(withTitle: tr("Hanasu について"), action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        // 要件: REQ-REL-011
+        appMenu.addItem(withTitle: tr("アップデートを確認…"), action: #selector(checkForUpdates), keyEquivalent: "").target = self
         appMenu.addItem(.separator())
         // 設計判断: DEC-COM-091
-        appMenu.addItem(withTitle: "Hanasu の使い方…", action: #selector(openOnboarding), keyEquivalent: "").target = self
-        appMenu.addItem(withTitle: "設定…", action: #selector(openSettings), keyEquivalent: ",").target = self
+        appMenu.addItem(withTitle: tr("Hanasu の使い方…"), action: #selector(openOnboarding), keyEquivalent: "").target = self
+        appMenu.addItem(withTitle: tr("設定…"), action: #selector(openSettings), keyEquivalent: ",").target = self
         appMenu.addItem(.separator())
-        appMenu.addItem(withTitle: "Hanasu を隠す", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
-        appMenu.addItem(withTitle: "ほかを隠す", action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
+        appMenu.addItem(withTitle: tr("Hanasu を隠す"), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        appMenu.addItem(withTitle: tr("ほかを隠す"), action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
             .keyEquivalentModifierMask = [.command, .option]
-        appMenu.addItem(withTitle: "すべてを表示", action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: "")
+        appMenu.addItem(withTitle: tr("すべてを表示"), action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: "")
         appMenu.addItem(.separator())
-        appMenu.addItem(withTitle: "Hanasu を終了", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        appMenu.addItem(withTitle: tr("Hanasu を終了"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         main.addItem(withTitle: "Hanasu", action: nil, keyEquivalent: "").submenu = appMenu
 
-        let meetingMenu = NSMenu(title: "会議")
-        meetingMenu.addItem(withTitle: "記録の開始／停止", action: #selector(toggleMeeting), keyEquivalent: "").target = self
-        meetingMenu.addItem(withTitle: "会議ノートを開く", action: #selector(openMeetingWindow), keyEquivalent: "").target = self
-        main.addItem(withTitle: "会議", action: nil, keyEquivalent: "").submenu = meetingMenu
+        let meetingMenu = NSMenu(title: tr("会議"))
+        meetingMenu.addItem(withTitle: tr("記録の開始／停止"), action: #selector(toggleMeeting), keyEquivalent: "").target = self
+        meetingMenu.addItem(withTitle: tr("会議ノートを開く"), action: #selector(openMeetingWindow), keyEquivalent: "").target = self
+        main.addItem(withTitle: tr("会議"), action: nil, keyEquivalent: "").submenu = meetingMenu
 
         // テキスト欄でのコピー＆ペーストなどに必要
-        let editMenu = NSMenu(title: "編集")
-        editMenu.addItem(withTitle: "取り消す", action: Selector(("undo:")), keyEquivalent: "z")
-        editMenu.addItem(withTitle: "やり直す", action: Selector(("redo:")), keyEquivalent: "z")
+        let editMenu = NSMenu(title: tr("編集"))
+        editMenu.addItem(withTitle: tr("取り消す"), action: Selector(("undo:")), keyEquivalent: "z")
+        editMenu.addItem(withTitle: tr("やり直す"), action: Selector(("redo:")), keyEquivalent: "z")
             .keyEquivalentModifierMask = [.command, .shift]
         editMenu.addItem(.separator())
-        editMenu.addItem(withTitle: "カット", action: #selector(NSText.cut(_:)), keyEquivalent: "x")
-        editMenu.addItem(withTitle: "コピー", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
-        editMenu.addItem(withTitle: "ペースト", action: #selector(NSText.paste(_:)), keyEquivalent: "v")
-        editMenu.addItem(withTitle: "すべてを選択", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
-        main.addItem(withTitle: "編集", action: nil, keyEquivalent: "").submenu = editMenu
+        editMenu.addItem(withTitle: tr("カット"), action: #selector(NSText.cut(_:)), keyEquivalent: "x")
+        editMenu.addItem(withTitle: tr("コピー"), action: #selector(NSText.copy(_:)), keyEquivalent: "c")
+        editMenu.addItem(withTitle: tr("ペースト"), action: #selector(NSText.paste(_:)), keyEquivalent: "v")
+        editMenu.addItem(withTitle: tr("すべてを選択"), action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
+        main.addItem(withTitle: tr("編集"), action: nil, keyEquivalent: "").submenu = editMenu
 
-        let windowMenu = NSMenu(title: "ウインドウ")
-        windowMenu.addItem(withTitle: "しまう", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
-        windowMenu.addItem(withTitle: "閉じる", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
-        main.addItem(withTitle: "ウインドウ", action: nil, keyEquivalent: "").submenu = windowMenu
+        let windowMenu = NSMenu(title: tr("ウインドウ"))
+        windowMenu.addItem(withTitle: tr("しまう"), action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
+        windowMenu.addItem(withTitle: tr("閉じる"), action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
+        main.addItem(withTitle: tr("ウインドウ"), action: nil, keyEquivalent: "").submenu = windowMenu
         NSApp.windowsMenu = windowMenu
 
         return main
@@ -321,7 +349,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         // タイトルとタブの切り替えが画面の外に出て、議事録・文字起こしに戻れなくなっていた
         hosting.sizingOptions = []
         let window = NSWindow(contentViewController: hosting)
-        window.title = "Hanasu 会議ノート"
+        window.title = tr("Hanasu 会議ノート")
         window.styleMask = [.titled, .closable, .resizable, .miniaturizable]
         window.contentMinSize = meetingWindowMinSize
         window.setContentSize(meetingWindowSize)
@@ -348,7 +376,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             if event == .pressed { self?.toggleMeeting() }
         }
         if meetingHotKeyID == nil {
-            showAlert("ショートカット \(combo.displayString) を登録できませんでした", "設定の「会議」で別のキーを選んでください。")
+            showAlert(tr("ショートカット %@ を登録できませんでした", "\(combo.displayString)"), tr("設定の「会議」で別のキーを選んでください。"))
         }
     }
 
@@ -372,6 +400,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         editController.toggleFromMenu()
     }
 
+    // 要件: REQ-REL-011
+    @objc private func checkForUpdates() {
+        updater.checkManually()
+    }
+
     // 要件: REQ-COM-051
     // 設計判断: DEC-COM-091
     @objc private func openOnboarding() {
@@ -385,7 +418,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let hosting = NSHostingController(rootView: rootView)
         hosting.sizingOptions = []
         let window = NSWindow(contentViewController: hosting)
-        window.title = "Hanasu 設定"
+        window.title = tr("Hanasu 設定")
         window.styleMask = [.titled, .closable, .miniaturizable, .resizable]
         window.contentMinSize = settingsWindowMinSize
         window.setContentSize(settingsWindowSize)
@@ -416,7 +449,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     self.editController.resumeHotKey()
                     self.registerMeetingHotKey(AppSettings.shared.meetingHotKey)
                 },
-                onOpenHistory: { [weak self] in self?.historyUI.openWindow() })
+                onOpenHistory: { [weak self] in self?.historyUI.openWindow() },
+                onCheckForUpdates: { [weak self] in self?.updater.checkManually() })
             let window = Self.makeSettingsWindow(rootView: view)
             window.center()
             window.setFrameAutosaveName("HanasuSettingsWindow")

@@ -7,17 +7,17 @@ struct MeetingDetectionSettingsSection: View {
     var body: some View {
         Section {
             Toggle(isOn: $settings.enabled) {
-                Text("会議が始まったら記録を提案する")
-                Text("会議アプリがマイクを使い始めたら「会議を記録しますか？」と画面の右上に出します。自動では記録を始めません。")
+                Text(tr("会議が始まったら記録を提案する"))
+                Text(tr("会議アプリがマイクを使い始めたら「会議を記録しますか？」と画面の右上に出します。自動では記録を始めません。"))
             }
             if settings.enabled {
-                LabeledContent("会議アプリ") {
+                LabeledContent(tr("会議アプリ")) {
                     VStack(alignment: .leading, spacing: 4) {
                         ForEach(MeetingApp.allCases.filter { !$0.isBrowser }) { toggle(for: $0) }
                     }
                     .frame(width: 180, alignment: .leading)
                 }
-                LabeledContent("ブラウザ") {
+                LabeledContent(tr("ブラウザ")) {
                     VStack(alignment: .leading, spacing: 4) {
                         ForEach(MeetingApp.allCases.filter(\.isBrowser)) { toggle(for: $0) }
                     }
@@ -25,9 +25,9 @@ struct MeetingDetectionSettingsSection: View {
                 }
             }
         } header: {
-            Text("会議の自動検出")
+            Text(tr("会議の自動検出"))
         } footer: {
-            Text("ブラウザは Google Meet かどうかまでは分からないので、マイクを使い始めたら「ブラウザの会議かもしれない」として提案します。記録中に会議アプリがマイクを止めたら「記録を止めますか？」と聞きます。")
+            Text(tr("ブラウザは Google Meet かどうかまでは分からないので、マイクを使い始めたら「ブラウザの会議かもしれない」として提案します。記録中に会議アプリがマイクを止めたら「記録を止めますか？」と聞きます。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }

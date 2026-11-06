@@ -41,12 +41,12 @@
 - 実装の場所: `.github/workflows/tagpr.yml`（`windows` ジョブ）
 - 確かめ方: リリースの添付ファイル（v1.3.0 で `Hanasu-1.3.0-Windows-x64.zip` が付いたことを確かめた。CI の `windows.yml` でも publish の中身を確かめている）
 
-### REQ-REL-005 Apache License 2.0 で配布し、配布物にライセンスと第三者の表示を入れる
-- 内容: Hanasu は Apache License 2.0 で配布する（2026-11-03 までは AGPL-3.0）。Mac 版・Windows 版の配布物には、Hanasu のライセンス（`LICENSE`・`NOTICE`）と、組み込んだ第三者のソフトウェアのライセンス表示を入れる。
-- 受け入れ条件: リポジトリの `LICENSE` が Apache License 2.0 の条文である。`Hanasu.app/Contents/Resources` に `LICENSE`・`NOTICE`・`THIRD_PARTY_NOTICES.md` がある。Windows 版の zip の `Hanasu` フォルダに `LICENSE.txt`・`NOTICE.txt`・`THIRD_PARTY_NOTICES.md`・`dotnet-THIRD-PARTY-NOTICES.txt` がある。
-- 出典: ユーザーの依頼（2026-11-03「Apache-2.0 にして、Windows のライセンスの問題も修正して」）。v1.3.0 の Windows 版の zip にライセンスの表示が入っていなかったことへの対応
+### REQ-REL-005 PolyForm Noncommercial と追加の許可で配布し、大きい会社には商用ライセンスを求める。配布物にライセンスと第三者の表示を入れる
+- 内容: Hanasu は PolyForm Noncommercial License 1.0.0 と「Hanasu 追加の許可 1.0」で配布する（ソース公開。オープンソースではない）。個人の非商用の利用と小規模事業者の社内の業務は無料で、それより大きい会社の業務での利用と、規模にかかわらず Hanasu を売る・製品やサービスに組み込む・ホスティングで提供することには、商用ライセンスが必要になる。このライセンスに変える前の版は Apache License 2.0（2026-11-03 までは AGPL-3.0）で、その版は Apache License 2.0 のまま。Mac 版・Windows 版の配布物には、Hanasu のライセンス（`LICENSE`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE`）と、組み込んだ第三者のソフトウェアのライセンス表示を入れる。
+- 受け入れ条件: リポジトリの `LICENSE` が PolyForm Noncommercial License 1.0.0 の条文で、`LICENSE-ADDITIONAL-PERMISSION.md`・`COMMERCIAL.md`・`COMMERCIAL.ja.md`・`CONTRIBUTING.md` がある。`Hanasu.app/Contents/Resources` に `LICENSE`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE`・`THIRD_PARTY_NOTICES.md` がある。Windows 版の zip の `Hanasu` フォルダに `LICENSE.txt`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE.txt`・`THIRD_PARTY_NOTICES.md`・`dotnet-THIRD-PARTY-NOTICES.txt` がある。
+- 出典: ユーザーの依頼（2026-11-03「Apache-2.0 にして、Windows のライセンスの問題も修正して」）。v1.3.0 の Windows 版の zip にライセンスの表示が入っていなかったことへの対応。ユーザーの依頼（2026-11-04「大企業などに無制限にこのオープンソースのプロジェクトに乗っ取られることを防ぐべきです。安定度以上の企業が商用利用する場合は契約が必要である、という形で進めたい」）と、そのヒアリングでの合意（看板は手放してよい・線は会社の規模・組み込んで売るなら小さい会社も契約・期限付きの開放はしない）、2026-11-05「ライセンスを書き換え」
 - 対象: Mac / Windows
-- 実装の場所: `LICENSE`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、`windows/THIRD_PARTY_NOTICES.md`、`scripts/build-app.sh`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`（publish の中身の確認）
+- 実装の場所: `LICENSE`、`LICENSE-ADDITIONAL-PERMISSION.md`、`COMMERCIAL.md`、`COMMERCIAL.ja.md`、`CONTRIBUTING.md`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、`windows/THIRD_PARTY_NOTICES.md`、`scripts/build-app.sh`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`（publish の中身の確認）
 - 確かめ方: `./scripts/build-app.sh` のあとの `ls build/Hanasu.app/Contents/Resources`、CI の `windows.yml` の「Check publish output」
 
 ### REQ-REL-006 版の上げ幅とリリース文を、決まった手順とテンプレートで作る
@@ -59,6 +59,25 @@
 - 対象: Mac / Windows
 - 実装の場所: `.claude/skills/release/SKILL.md`（手順）、`docs/releases/TEMPLATE.md`（テンプレート）、`scripts/compose-release-notes.py`、`.github/workflows/tagpr.yml`（`publish` ジョブ）
 - 確かめ方: `python3 scripts/compose-release-notes.py --self-test`。リリースのあと `gh release view <タグ>` で本文の順番を見る
+
+### REQ-REL-010 起動時に新しい版を確かめ、ユーザーが選んだときだけアップデートする
+- 内容: 起動したときに、GitHub の最新のリリースが今の版より新しいかを確かめる。新しければ、入れ替えてよいかを尋ね、ユーザーが「アップデート」を選んだときだけ、新しい版をダウンロードして入れ替え、開き直す。
+- 受け入れ条件:
+  - 新しい版があると、版とリリース文を出して「アップデート」「あとで」「この版をスキップ」を尋ねる。尋ねずにダウンロード・入れ替えはしない。
+  - 「アップデート」を選ぶと、その OS の zip をダウンロードし、確かめてから今のアプリと入れ替えて開き直す。入れ替えられないときは理由を出し、リリースのページを開けるようにする。
+  - 新しい版がない・確かめられない（通信できない）ときは、起動時には何も出さない。
+- 出典: ユーザーの依頼（2026-11-05「起動時にアップデートを確認してアップデートがあったらユーザーへの確認の上でアップデートを行う仕組みを作成して」）
+- 対象: Mac / Windows
+- 実装の場所: Mac は `AppUpdater`（`Sources/Hanasu/AppUpdate.swift`）と `AppDelegate.applicationDidFinishLaunching`。Windows は `UpdateService.CheckOnLaunchAsync`（`windows/Hanasu.Windows/Services/UpdateService.cs`）と `Hanasu.Core.Update`
+- 確かめ方: Mac は `Hanasu --update-selftest`（版の比べ方・リリースの読み方・スキップ）、`Hanasu --check-update --current 1.0.0`（GitHub への問い合わせ）、`Hanasu.app/Contents/MacOS/Hanasu --verify-update <zip> --version <版>`（入れ替えの前の確認）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`UpdateTests`）。入れ替えと開き直しは実機で確かめる
+
+### REQ-REL-011 メニューから、いつでもアップデートを確かめられる
+- 内容: メニューの「アップデートを確認…」（と設定の「今すぐ確認」）で、新しい版があるかをいつでも確かめられる。新しい版があれば REQ-REL-010 と同じく尋ねる。
+- 受け入れ条件: 新しい版がなければ「最新です」と今の版を出す。確かめられなければ理由を出す。「この版をスキップ」を選んだ版も知らせる。
+- 出典: ユーザーの依頼（2026-11-05「また、アップデートを確認するという機能も追加して」）
+- 対象: Mac / Windows
+- 実装の場所: Mac は `AppDelegate.checkForUpdates`（メニューバーとアプリのメニュー）、`UpdateSettingsSection`（設定の「一般」）。Windows は `TrayIcon`（タスクトレイのメニュー）、`SettingsWindow`（「一般」）、`UpdateService.CheckManuallyAsync`
+- 確かめ方: `Hanasu --check-update`、`Hanasu --update-selftest`、`cd windows && dotnet test Hanasu.Core.Tests`。ダイアログは実機で確かめる
 
 ---
 
@@ -144,6 +163,78 @@
 - 関係する要件: REQ-REL-006
 - 対象: Mac / Windows
 - 実装の場所: `docs/releases/TEMPLATE.md`、`scripts/compose-release-notes.py`、`.github/workflows/tagpr.yml`（`publish` ジョブ）
+
+### DEC-REL-011 商用ライセンスの線引きは「100 人未満かつ売上 100 万米ドル未満」で、評価 30 日・猶予 90 日を付け、強制の仕組みは入れない
+- 決めたこと: 土台は標準の PolyForm Noncommercial License 1.0.0 で、条文は変えない。小規模事業者の社内の業務・評価・猶予は、許可を足すだけの別の文書（`LICENSE-ADDITIONAL-PERMISSION.md`。英語が正文、日本語は参考訳）に書く。小規模事業者は、グループを合わせて 100 人未満（従業員と業務委託）かつ前の事業年度の売上 100 万米ドル未満で、個人事業主を含む。小規模事業者でも、売る・製品やサービスに組み込む・ホスティングで提供するのは許可に含めない。どの会社も、会社全体で 30 日は評価のために業務で使える。小規模事業者でなくなったら、その事業年度の終わりから 90 日は使い続けられる。商用ライセンスは実際に使う人の数で数える年額で、価格は当面「問い合わせ」。アプリにライセンスの確認や利用の監視は入れない。外部からのコードの貢献には `CONTRIBUTING.md` の貢献者ライセンス契約（CLA）への同意を求め、PR のテンプレートに同意のチェックを置く。
+- 理由: 標準の条文に制限を足すと、その名前のライセンスとは呼べず解釈もぶれるので、許可を足す形にした（BSL の Additional Use Grant と同じ考え方）。PolyForm Small Business そのままでは、小さい会社が組み込んで売るのを止められない。線は PolyForm Small Business と同じ数字にし、企業の法務が読み慣れた形にした。評価と猶予は、大きい会社の社員が試し始められるようにし（個人から会社へ広がる流れ）、線を越えた会社が契約の手続きをする時間を取るため（Docker Desktop の有料化の猶予）。会社の人数全体での課金と監査は利用者を逃がす（Oracle Java）ので、実際に使う人数で数え、強制はしない（秀丸エディタ・Yaak は名誉の仕組みで会社に売れている）。CLA がないと、貢献されたコードを商用ライセンスで売れない。利用者が増えてからライセンスを変えるとフォークされる（HashiCorp・Redis）ので、フォークがない今のうちに変えた。
+- 決めた場面: ユーザーの依頼（2026-11-04「大企業などに無制限にこのオープンソースのプロジェクトに乗っ取られることを防ぐべきです」）のヒアリング、2026-11-05 のヒアリング（窓口は Google フォーム・価格はまだ載せない・評価 30 日と猶予 90 日・CLA に同意してもらう）と「ライセンスを書き換え」
+- 関係する要件: REQ-REL-005
+- 対象: Mac / Windows
+- 実装の場所: `LICENSE-ADDITIONAL-PERMISSION.md`、`COMMERCIAL.md`、`COMMERCIAL.ja.md`、`CONTRIBUTING.md`、`.github/pull_request_template.md`
+
+### DEC-REL-020 新しい版は GitHub の releases/latest で知り、版は数字ごとに比べる
+- 決めたこと: `https://api.github.com/repos/kakibara/hanasu/releases/latest` を、認証なしで 1 回呼ぶ。下書きとプレリリースは知らせない。`tag_name`（`v1.6.0`）と今の版（Mac は Info.plist の `CFBundleShortVersionString`、Windows はアセンブリの版）を、`.` で区切った数字ごとに比べ、新しいときだけ知らせる。リリース文は本文の `<!-- release-notes -->` の中（なければ「## インストール」の前まで）を出す。
+- 理由: リリースは tagpr が GitHub に作る（REQ-REL-001）ので、別の置き場（appcast など）を持たずに済む。releases/latest は公開済みの最新の版だけを返す（DEC-REL-001 の下書きを拾わない）。文字列の比較では 1.10.0 が 1.9.0 より古くなる。認証なしの API は 1 時間に 60 回までなので、起動時に 1 回だけ呼ぶ。
+- 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認）
+- 関係する要件: REQ-REL-010, REQ-REL-011
+- 対象: Mac / Windows
+- 実装の場所: Mac は `AppVersion`、`UpdateRelease.parse`、`UpdateHTTP.fetchLatestRelease`。Windows は `AppVersion`、`ReleaseParser`、`UpdateChecker`
+
+### DEC-REL-021 zip は https の GitHub のホストからだけ取り、API の SHA-256 と大きさで確かめる
+- 決めたこと: 問い合わせとダウンロードは https だけで、ホストは `github.com`・`api.github.com`・`*.githubusercontent.com`（zip の転送先の CDN）に限る。転送もそのホストへだけ従う。zip は名前（`Hanasu-<版>-macOS.zip` / `Hanasu-<版>-Windows-x64.zip`）で選び、API が返す `digest`（`sha256:…`）と `size` に合わなければ使わない。`digest` がなければ入れ替えず、リリースのページを開くだけにする。秘密のヘッダーは送らない。
+- 理由: 通信の途中や転送先で差し替えられた zip を入れないため。GitHub はアップロードされたファイルの SHA-256 を API で返す（リリースの本文の SHA-256（DEC-REL-005）と同じ値）。
+- 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認）
+- 関係する要件: REQ-REL-010
+- 対象: Mac / Windows
+- 実装の場所: Mac は `UpdateHTTP`（`isAllowed`・`download`）。Windows は `UpdateHosts`、`UpdateChecker.DownloadAsync`、`ModelDownload.DownloadVerifiedAsync`
+
+### DEC-REL-022 尋ねるのは「アップデート / あとで / この版をスキップ」。スキップした版は起動時には知らせない
+- 決めたこと: 新しい版の確認では、版・今の版・リリース文を出し、「アップデート」「あとで」「この版をスキップ」から選ばせる。スキップした版は設定に覚え、起動時の確認ではその版を知らせない（もっと新しい版が出れば知らせる）。メニューからの確認はスキップを見ずに知らせ、新しい版がなければ「最新です」と出す。確かめている・尋ねている途中にメニューから確かめると、「確かめています」と出す（ダイアログを 2 つ出さない）。起動時の確認が録音の終わりを待つ間にメニューから尋ねた版は、待ち終えてももう尋ねない（Mac）。
+- 理由: ユーザーの確認なしに入れ替えないため（REQ-REL-010）。起動のたびに同じ版を尋ねられ続けないようにしつつ、自分で確かめたときは必ず答える。
+- 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認と、アップデートを確認する機能）
+- 関係する要件: REQ-REL-010, REQ-REL-011
+- 対象: Mac / Windows
+- 実装の場所: Mac は `AppUpdater.ask`、`UpdateSettings.shouldOffer`。Windows は `UpdatePromptWindow`、`UpdateChecker.ShouldPrompt`
+
+### DEC-REL-023 録音中・会議の記録中・処理中は入れ替えない
+- 決めたこと: 音声入力（と Mac の「選択を声で編集」）・会議の記録・議事録の作り直し・モデルのダウンロード（Whisper とローカルの LLM のモデル）が止まっているときだけ入れ替える。起動時の確認は、それらが終わるまで尋ねるのを待つ（Mac）か、入れ替えの直前に断って、終わってから選び直すよう伝える。ダウンロードのあとにもう一度確かめる。
+- 理由: 入れ替えるにはアプリを終えるので、録音や会議の記録が途中で切れ、文字起こし・議事録が作られなくなる。数 GB のモデルのダウンロードもやり直しになる。
+- 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認）
+- 関係する要件: REQ-REL-010
+- 対象: Mac / Windows
+- 実装の場所: Mac は `AppUpdater.isBusy`（`AppDelegate` が渡す）。Windows は `UpdateService.IsRecordingOrProcessing`
+
+### DEC-REL-024 起動時の確認は設定で切れ、初めての起動ではしない。失敗は知らせない
+- 決めたこと: 設定の「一般」に「起動時にアップデートを確認する」（既定はオン）を置く。起動の 5 秒あとに確かめる。初めての起動（Mac はオンボーディング、Windows は設定がまだないとき）では確かめない。Mac は版の分からない起動（`swift build` の実行ファイル）、Windows は手元のビルド（版の先頭が 0）でも確かめない。起動時の確認で通信などに失敗しても、ログに書くだけで何も出さない。
+- 理由: 通信を望まない人が止められるようにする。初めての起動は最新の版を入れた直後で、オンボーディングと重ねたくない。起動直後の設定画面などと重ならないよう少し待つ。オフラインのたびにエラーを出さない（メニューからの確認では理由を出す。REQ-REL-011）。
+- 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認）
+- 関係する要件: REQ-REL-010
+- 対象: Mac / Windows
+- 実装の場所: Mac は `UpdateSettings`、`AppUpdater.checkOnLaunch`、`UpdateSettingsSection`。Windows は `AppSettings.CheckForUpdatesOnLaunch`、`UpdateService.CheckOnLaunchAsync`、`SettingsWindow`
+
+### DEC-REL-025 Mac では、新しい Hanasu.app が今と同じ証明書で署名されているときだけ入れ替える
+- 決めたこと: 展開した `Hanasu.app` の署名を（入れ子のコードまで）確かめ、署名の葉の証明書が今動いている `Hanasu.app` と同じこと、bundle ID が同じこと、版がリリースの版と同じことを確かめる。今の Hanasu がアドホック署名（証明書がない）なら入れ替えない。
+- 理由: 公証のない自己署名（REQ-REL-002）なので、Gatekeeper に中身の確かさを頼れない。同じ証明書で署名されていれば、配布用の鍵を持つ人が作ったものだと分かり、入れ替えてもアクセシビリティなどの許可が外れない。手元でビルドした Hanasu（ローカル用の証明書かアドホック。DEC-REL-007）は配布物と証明書が違うので、入れ替えるとかえって許可が外れる。
+- 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認）
+- 関係する要件: REQ-REL-002, REQ-REL-010
+- 対象: Mac
+- 実装の場所: `UpdateSignature`（`Sources/Hanasu/AppUpdate.swift`）
+
+### DEC-REL-026 Mac の入れ替えは、Hanasu が終わるのを待つシェルスクリプトで行う
+- 決めたこと: 今の Hanasu が証明書で署名されていない（DEC-REL-025）・`.app` でない・App Translocation（隔離されたまま開いた）・書き込めないフォルダなら、ダウンロードの前に断ってリリースのページを案内する。zip は `Hanasu.app` と同じボリュームの作業フォルダ（`itemReplacementDirectory`）に落として `ditto -x -k` で展開する（展開と署名の確認は UI のスレッドの外で行う）。固定の中身のスクリプト（パスは引数で渡す）を `/bin/sh` で動かしてから Hanasu を終える。スクリプトは Hanasu の終了を待ち（60 秒まで）、今の `.app` を作業フォルダへ移し、新しい `.app` を同じ場所に移す（失敗したら元に戻す）。そのあと `open` で開き直し、作業フォルダを消す。スクリプトを動かす前に、入れ替える版を `~/Library/Caches/<bundle ID>/update-pending` に書き、スクリプトは失敗の理由を `update-result` に書く（理由の文は表示の言語のものを Hanasu が引数で渡す。DEC-COM-165。元に戻すこともできなければ、前の `.app` を消さずに作業フォルダに残し、その場所も書く）。スクリプトを始める前に失敗したときはその場で知らせ、印を消す。次の起動で版が上がっていなければ、理由を出してリリースのページを案内する。
+- 理由: 動いているアプリは自分を置き換えられない。同じボリュームなら移動が一瞬で終わり、途中で壊れた `.app` が残りにくい。URLSession で落としたファイルには隔離の属性が付かないので、入れ替えたあとに「開けない」確認が出ない。スクリプトの失敗は Hanasu が終わったあとに起きるので、その場では画面に出せない（macOS のアプリの保護が書き換えを止めることもある）。次の起動で知らせれば、黙って古い版のままにならない（REQ-REL-010 の「理由を出す」）。
+- 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認）。失敗の理由の文を表示の言語で渡すのは PR #63（多言語化）
+- 関係する要件: REQ-REL-010
+- 対象: Mac
+- 実装の場所: `UpdateInstaller`（`Sources/Hanasu/AppUpdate.swift`）
+
+### DEC-REL-030 Windows の入れ替えは、隣のフォルダに展開し、PowerShell のスクリプトでフォルダごと取り替える
+- 決めたこと: zip は `Hanasu.exe` のあるフォルダの隣の `Hanasu.update` に落として展開する（どのエントリーもそのフォルダの外に書かない。`Hanasu\Hanasu.exe` がなければ使わない。ダウンロードは 10 分で打ち切る）。今のフォルダの直下に、新しい `Hanasu` フォルダにないもの（`.dll`・`.pdb` のファイルと、エクスプローラーが作る `desktop.ini`・`Thumbs.db` を除く）があれば、Hanasu 専用のフォルダではないので入れ替えず、名前を挙げてリリースのページを案内する（ドライブの直下も断る）。固定の中身の PowerShell のスクリプト（パスは引数で渡す）を動かしてから Hanasu を終える。スクリプトは Hanasu の終了を待ち（60 秒まで）、今のフォルダを `<フォルダ>.old` に改名し（ファイルがまだ放されていなければ数秒やり直す）、新しいフォルダを今の名前に移す（これも数秒やり直し、失敗したら元に戻す）。`Hanasu.exe` を起動し直し、`.old` と作業フォルダを消す。経過は `%LOCALAPPDATA%\Hanasu\Logs\update.log` に書く。スクリプトを動かす前に入れ替える版を `%LOCALAPPDATA%\Hanasu\update-pending.txt` に書き、次の起動で版が上がっていなければ、ログの場所とリリースのページを案内する。フォルダに書き込めない（Program Files など）ときは、リリースのページを案内する。手元のビルド（版の先頭が 0）は入れ替えず、リリースのページを開く。
+- 理由: 動いている exe と DLL は上書きできない。隣のフォルダなら同じドライブなので改名で取り替えられ、途中で壊れたフォルダが残りにくい。フォルダごと取り替えて古いものを消すので、デスクトップなど共有のフォルダに `Hanasu.exe` を置いていると、ほかのファイルまで消してしまう（PR #71 のレビュー）。Windows Defender は展開したばかりのファイルを数秒つかむので、移動はやり直す。Windows 版は署名していない（README の「初めて開くとき」）ので、確かめるのは SHA-256（DEC-REL-021）だけになる。
+- 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認）
+- 関係する要件: REQ-REL-010
+- 対象: Windows
+- 実装の場所: `UpdateService.InstallAsync`・`SwapScript`（`windows/Hanasu.Windows/Services/UpdateService.cs`）、`UpdatePackage.Extract`
 
 ---
 

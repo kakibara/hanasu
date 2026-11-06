@@ -28,7 +28,7 @@ enum LocalLLMModel: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .gemma4E4B: "Gemma 4 E4B"
         case .lfm25JP: "LFM2.5-1.2B-JP"
-        case .sarashina22: "Sarashina2.2（3B）"
+        case .sarashina22: tr("%@（%@）", "Sarashina2.2", "3B")
         case .qwen35: "Qwen3.5-4B"
         }
     }
@@ -36,10 +36,10 @@ enum LocalLLMModel: String, CaseIterable, Identifiable, Sendable {
     /// 選ぶ欄に出す説明
     var summary: String {
         switch self {
-        case .gemma4E4B: "おすすめ。Google。いちばん大きく、整形も議事録もいちばん自然。メモリ 16 GB 以上向け"
-        case .lfm25JP: "Liquid AI。小さく速い。日本語の指示に強い"
-        case .sarashina22: "SB Intuitions。日本語で学習。文脈は 8K まで（長い会議は分けてまとめる）"
-        case .qwen35: "Alibaba。Gemma の半分ほどの大きさで、メモリが 8 GB の Mac でも動かしやすい。言い直しの扱いは Gemma より弱い"
+        case .gemma4E4B: tr("おすすめ。Google。いちばん大きく、整形も議事録もいちばん自然。メモリ 16 GB 以上向け")
+        case .lfm25JP: tr("Liquid AI。小さく速い。日本語の指示に強い")
+        case .sarashina22: tr("SB Intuitions。日本語で学習。文脈は 8K まで（長い会議は分けてまとめる）")
+        case .qwen35: tr("Alibaba。Gemma の半分ほどの大きさで、メモリが 8 GB の Mac でも動かしやすい。言い直しの扱いは Gemma より弱い")
         }
     }
 
@@ -140,9 +140,9 @@ enum LocalLLMModel: String, CaseIterable, Identifiable, Sendable {
     var licenseNote: String {
         switch self {
         case .lfm25JP:
-            "ライセンス: \(license)。年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されていません"
+            tr("ライセンス: %@。年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されていません", "\(license)")
         default:
-            "ライセンス: \(license)"
+            tr("ライセンス: %@", "\(license)")
         }
     }
 

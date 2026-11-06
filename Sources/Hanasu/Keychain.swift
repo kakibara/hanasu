@@ -9,9 +9,9 @@ enum KeychainError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .accessDenied:
-            "キーチェーンの API キーを読めませんでした。アプリの署名が変わった（作り直した・別の版に替えた）ときに起きます。設定 →「AI」でキーを入れ直してください"
+            tr("キーチェーンの API キーを読めませんでした。アプリの署名が変わった（作り直した・別の版に替えた）ときに起きます。設定 →「AI」でキーを入れ直してください")
         case .unexpected(let status):
-            "キーチェーンを使えませんでした（\(status)）"
+            tr("キーチェーンを使えませんでした（%@）", "\(status)")
         }
     }
 }
@@ -34,8 +34,8 @@ enum Keychain {
 
         var label: String {
             switch self {
-            case .geminiAPIKey: "Hanasu: Gemini API キー"
-            case .claudeAPIKey: "Hanasu: Claude API キー"
+            case .geminiAPIKey: tr("Hanasu: Gemini API キー")
+            case .claudeAPIKey: tr("Hanasu: Claude API キー")
             }
         }
     }
@@ -98,7 +98,7 @@ enum Keychain {
         var attrs = baseQuery(item, service: service)
         attrs[kSecValueData as String] = Data(key.utf8)
         attrs[kSecAttrLabel as String] = item.label
-        attrs[kSecAttrComment as String] = key.count > 12 ? "…\(key.suffix(4))" : "保存済み"
+        attrs[kSecAttrComment as String] = key.count > 12 ? "…\(key.suffix(4))" : tr("保存済み")
         // macOS 26.6 で試すと、ACL の確認の出し方（prompt selector）は、保存のときにバイト順が入れ替わった
         // （requirePassphase の 0x0001 を渡すと 0x0100 で保存され、パスワードを求めない設定になる）。
         // 入れ替えた値で保存し、保存された項目を読み返して違っていれば、そのままの値で作り直す（OS が直ったとき）
@@ -178,7 +178,7 @@ enum Keychain {
 
     /// 項目の ACL を読みやすい形にする（信頼するアプリ・確認の出し方・パーティション）。中身は読まない
     static func describeAccess(_ item: Item, service: String) -> [String] {
-        guard let access = storedAccess(item, service: service) else { return ["（項目がないか、ACL を読めません）"] }
+        guard let access = storedAccess(item, service: service) else { return [tr("（項目がないか、ACL を読めません）")] }
         var list: CFArray?
         SecAccessCopyACLList(access, &list)
         var lines: [String] = []
@@ -194,7 +194,7 @@ enum Keychain {
             }
             let appNames: String
             if let apps = apps as? [SecTrustedApplication] {
-                appNames = apps.isEmpty ? "なし（どのアプリにも確認を出す）" : apps.map { app -> String in
+                appNames = apps.isEmpty ? tr("なし（どのアプリにも確認を出す）") : apps.map { app -> String in
                     var data: CFData?
                     SecTrustedApplicationCopyData(app, &data)
                     let path = String(decoding: (data as Data?) ?? Data(), as: UTF8.self)
@@ -202,10 +202,10 @@ enum Keychain {
                     return (path as NSString).lastPathComponent
                 }.joined(separator: ", ")
             } else {
-                appNames = "すべてのアプリ"
+                appNames = tr("すべてのアプリ")
             }
             var line = "\(authorizations.joined(separator: "/")): \(appNames)"
-            if prompt.contains(.requirePassphase) { line += "（ほかのアプリにはパスワードを求める）" }
+            if prompt.contains(.requirePassphase) { line += tr("（ほかのアプリにはパスワードを求める）") }
             lines.append(line)
         }
         return lines

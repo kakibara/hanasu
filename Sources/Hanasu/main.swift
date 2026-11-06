@@ -50,7 +50,32 @@ func cliRefine(_ raw: String, args: [String]) async throws {
 
 // 設計判断: DEC-COM-063
 // アプリ・CLI を終えるとき（exit も NSApp の終了も）に、起動したローカルの LLM のサーバーを止める
+// 要件: REQ-COM-061
+// CLI では --prompt-language <言語>（en、zh-CN など）でプロンプトの言語を変えられる（省くと設定の文字起こしの言語）
+PromptLanguage.override = PromptLanguage.cli(CommandLine.arguments)
+// 要件: REQ-COM-060
+// 設計判断: DEC-COM-166
+// 開発用の CLI（-- で始まる引数があるとき）の出力は訳さないので、表示の言語は日本語にする。
+// --ui-language <言語> で変えられる（画面を PNG にする CLI で、ほかの言語の見た目を確かめるとき）。対応していない言語なら止める
+let cliFlags = CommandLine.arguments.dropFirst().filter { $0.hasPrefix("--") }
+if let index = CommandLine.arguments.firstIndex(of: "--ui-language") {
+    let value = CommandLine.arguments.indices.contains(index + 1) ? CommandLine.arguments[index + 1] : ""
+    guard let language = PromptLanguage(rawValue: value) ?? PromptLanguage.supported(localeIdentifier: value) else {
+        FileHandle.standardError.write(Data("error: --ui-language は \(PromptLanguage.allCases.map(\.rawValue).joined(separator: "|")) のどれか（\(value) は対応していない）\n".utf8))
+        exit(2)
+    }
+    UILanguage.override = language
+} else if !cliFlags.isEmpty {
+    UILanguage.override = .ja
+}
+// 自己テストが確かめるプロンプトは日本語のもの（--test-… / --…-test… / --…selftest。-- で始まる引数だけを見る）
+if cliFlags.contains(where: { $0.hasPrefix("--test-") || $0.contains("-test") || $0.hasSuffix("selftest") }) {
+    PromptLanguage.override = PromptLanguage.override ?? .ja
+}
+
 atexit { LocalLLMServer.terminateRunningServer() }
+// アップデートの確認（--update-selftest / --check-update / --verify-update）。AppUpdateCLI.swift の AppUpdateCLI
+MainActor.assumeIsolated { AppUpdateCLI.runIfRequested() }
 // ローカルの LLM の確認（--local-llm-list / --local-llm-download / --local-llm-delete / --local-llm-test-fit）。LocalLLMCLI.swift
 MainActor.assumeIsolated { LocalLLMCLI.runIfRequested() }
 
@@ -72,6 +97,13 @@ MainActor.assumeIsolated { TranslationSettingsCLI.runIfRequested() }
 // 使い方は DictionaryCLI.swift を参照
 if DictionaryCLI.handles(CommandLine.arguments) {
     MainActor.assumeIsolated { DictionaryCLI.run(CommandLine.arguments) }
+}
+
+// 確かめ方: REQ-COM-061
+// AI に送るプロンプトを全部表示する（PromptsCLI.swift。--prompt-language <言語> でその言語）
+if CommandLine.arguments.contains("--show-prompts") {
+    MainActor.assumeIsolated { PromptsCLI.run() }
+    exit(0)
 }
 
 // 確かめ方: REQ-DIC-003, REQ-DIC-010, REQ-DIC-020, REQ-DIC-021, REQ-COM-020

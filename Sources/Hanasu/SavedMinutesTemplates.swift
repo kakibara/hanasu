@@ -68,9 +68,9 @@ enum SavedMinutesTemplateStore {
 
         var message: String {
             switch self {
-            case .emptyName: "名前を入力してください"
-            case .duplicateName: "同じ名前のテンプレートがあります"
-            case .emptyInstructions: "指示を入力してください"
+            case .emptyName: tr("名前を入力してください")
+            case .duplicateName: tr("同じ名前のテンプレートがあります")
+            case .emptyInstructions: tr("指示を入力してください")
             }
         }
     }
@@ -85,7 +85,7 @@ enum SavedMinutesTemplateStore {
 
     /// 「名前 2」「名前 3」…と、重複しない名前を作る（複製・新規用）
     static func uniqueName(from base: String, in list: [SavedMinutesTemplate]) -> String {
-        var stem = trimmedName(base).isEmpty ? "新しいテンプレート" : trimmedName(base)
+        var stem = trimmedName(base).isEmpty ? tr("新しいテンプレート") : trimmedName(base)
         if !isNameTaken(stem, in: list) { return stem }
         // 「営業定例 2」を複製して「営業定例 2 2」にならないよう、末尾の番号は外す
         if let space = stem.lastIndex(of: " "), Int(stem[stem.index(after: space)...]) != nil {

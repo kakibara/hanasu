@@ -14,80 +14,38 @@ enum AppStylePreset: String, Codable, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .none: "なし"
-        case .chat: "チャット"
-        case .email: "メール"
-        case .documentPolite: "文書（です・ます）"
-        case .documentPlain: "文書（である）"
+        case .none: tr("なし")
+        case .chat: tr("チャット")
+        case .email: tr("メール")
+        case .documentPolite: tr("文書（です・ます）")
+        case .documentPlain: tr("文書（である）")
         }
     }
 
     /// 設定画面に出す短い説明
     var summary: String {
         switch self {
-        case .none: "プリセットを使わない（このアプリ用の追加ルールだけを使う）"
-        case .chat: "くだけた短い文。段落は作らない"
-        case .email: "丁寧な文体（です・ます調）。まとまりごとに段落を分ける"
-        case .documentPolite: "書き言葉の です・ます調 に統一し、段落を分ける"
-        case .documentPlain: "書き言葉の である調 に統一し、段落を分ける"
+        case .none: tr("プリセットを使わない（このアプリ用の追加ルールだけを使う）")
+        case .chat: tr("くだけた短い文。段落は作らない")
+        case .email: tr("丁寧な文体（です・ます調）。まとまりごとに段落を分ける")
+        case .documentPolite: tr("書き言葉の です・ます調 に統一し、段落を分ける")
+        case .documentPlain: tr("書き言葉の である調 に統一し、段落を分ける")
         }
     }
 
-    /// 日本語に整えるときのルール
+    // 要件: REQ-COM-061
+    /// 話した言語で整えるときのルール（文面は Resources/Prompts/<言語>.json の style.<プリセット>.refine）
     var refineRules: [String] {
-        switch self {
-        case .none:
-            []
-        case .chat:
-            [
-                "チャットのメッセージとして、くだけた短い文にする。硬い書き言葉（〜いたします、〜でございます、〜である 等）は使わない",
-                "敬語（です・ます）で話している場合は、丁寧語は残したまま、堅苦しくない言い方にする",
-                "つなぎの言葉や前置き（〜なんですけど、ちょっと、あの 等）は、意味が変わらなければ削って短くする。用件や情報は省かない",
-                "例: 「来週のリリースなんですけど、ちょっと確認したいことがあって」→「来週のリリース、確認したいことがあって」",
-                "段落は作らず、話題が変わるところだけ改行する",
-            ]
-        case .email:
-            [
-                "メールの本文として、丁寧な書き言葉（です・ます調、相手への依頼は敬語）にする",
-                "くだけた言い方・話し言葉は、意味を変えずにビジネスメールにふさわしい言い方に直す（例: 〜なんですけど → 〜ですが、ちょっと → 少し、〜してもらってもいいですか → 〜していただけますでしょうか）",
-                "宛名・挨拶・本題・お願い・結びなど、内容のまとまりごとに空行を入れて段落を分ける",
-                "話していない宛名・挨拶・署名は足さない",
-            ]
-        case .documentPolite:
-            [
-                "文書として、書き言葉の です・ます調 に統一する。話し言葉の言い回しも書き言葉にする（例: 〜なんですけど → 〜ですが、ちょっと → 少し、〜って → 〜という）",
-                "内容のまとまりごとに空行を入れて段落を分ける",
-            ]
-        case .documentPlain:
-            [
-                "文書として、書き言葉の である調（だ・である）に統一する。話し言葉の言い回しも書き言葉にする（例: 〜なんですけど → 〜だが、ちょっと → 少し、〜って → 〜という）",
-                "内容のまとまりごとに空行を入れて段落を分ける",
-            ]
-        }
+        self == .none ? [] : Prompts.list("style.\(rawValue).refine")
     }
 
+    // 要件: REQ-COM-061
     /// 英訳するときのルール。日本語の語尾の違い（です・ます／である）は英語では区別しない
     var translationRules: [String] {
         switch self {
-        case .none:
-            []
-        case .chat:
-            [
-                "チャット向けの、カジュアルで短い英語にする（丁寧に話していても、堅すぎない丁寧さにとどめる）",
-                "前置きや同じことの繰り返しは削って簡潔にする。ただし用件や情報は省かない",
-                "段落は作らず、話題が変わるところだけ改行する",
-            ]
-        case .email:
-            [
-                "丁寧でプロフェッショナルな英語のメール文にする",
-                "内容のまとまりごとに空行を入れて段落を分ける",
-                "話していない宛名・挨拶・署名は足さない",
-            ]
-        case .documentPolite, .documentPlain:
-            [
-                "文書向けの、書き言葉の自然な英語にする",
-                "内容のまとまりごとに空行を入れて段落を分ける",
-            ]
+        case .none: []
+        case .chat, .email: Prompts.list("style.\(rawValue).translation")
+        case .documentPolite, .documentPlain: Prompts.list("style.document.translation")
         }
     }
 }
@@ -101,7 +59,7 @@ enum AppOutputLanguage: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
     var label: String {
-        translation?.label ?? "話した言語"
+        translation?.label ?? tr("話した言語")
     }
 
     /// 翻訳して始める言語。「話した言語」なら nil
@@ -145,23 +103,23 @@ struct AppStyle: Codable, Identifiable, Equatable {
 
         var lines: [String] = []
         if let appName, !appName.isEmpty {
-            lines.append("入力先アプリ向けの文体ルール（\(appName)）:")
+            lines.append(Prompts.text("style.headerWithApp", ["app": appName]))
         } else {
-            lines.append("入力先アプリ向けの文体ルール:")
+            lines.append(Prompts.text("style.header"))
         }
         lines += presetRules.map { "- \($0)" }
         if !custom.isEmpty {
-            lines.append(presetRules.isEmpty ? "- このアプリ用の追加ルール:" : "- このアプリ用の追加ルール（上の項目と食い違うときはこちらを優先）:")
+            lines.append(Prompts.text(presetRules.isEmpty ? "style.custom" : "style.customOverridesPreset"))
             lines += custom.split(whereSeparator: \.isNewline).map { "  \($0)" }
             if translating {
-                lines.append("  （日本語の語尾や敬語についてのルールは、英語の丁寧さの度合いとして読み替える）")
+                lines.append(Prompts.text("style.customTranslationNote"))
             }
         }
         // system instruction の「口調を保つ」と食い違うので、どちらを優先するかを書いておく
-        let overridden = translation != nil ? "「口調と丁寧さを保つ」" : "「口調を変えない」「言葉は変えない」"
-        lines.append("- この文体ルールは、\(overridden)より優先する。語尾・言い回し・改行は変えてよいが、話した内容（事実・用件・意図）は変えない")
+        let overridden = Prompts.text(translation != nil ? "style.overrides.translation" : "style.overrides.refine")
+        lines.append(Prompts.text("style.priority", ["overridden": overridden]))
         if hasCommonRules {
-            lines.append("- 上の「追加ルール」とこの文体ルールが食い違うときは、この文体ルールを優先する")
+            lines.append(Prompts.text("style.priorityOverCommonRules"))
         }
         return lines.joined(separator: "\n")
     }
@@ -181,9 +139,9 @@ final class AppStyleStore: ObservableObject {
         AppStyle(bundleID: "com.microsoft.teams", name: "Microsoft Teams (classic)", preset: .chat),
         AppStyle(bundleID: "com.hnc.Discord", name: "Discord", preset: .chat),
         AppStyle(bundleID: "jp.naver.line.mac", name: "LINE", preset: .chat),
-        AppStyle(bundleID: "com.apple.MobileSMS", name: "メッセージ", preset: .chat),
+        AppStyle(bundleID: "com.apple.MobileSMS", name: tr("メッセージ"), preset: .chat),
         // メール
-        AppStyle(bundleID: "com.apple.mail", name: "メール", preset: .email),
+        AppStyle(bundleID: "com.apple.mail", name: tr("メール"), preset: .email),
         AppStyle(bundleID: "com.microsoft.Outlook", name: "Microsoft Outlook", preset: .email),
         AppStyle(bundleID: "com.readdle.SparkDesktop", name: "Spark", preset: .email),
         AppStyle(bundleID: "com.readdle.smartemail-Mac", name: "Spark (classic)", preset: .email),

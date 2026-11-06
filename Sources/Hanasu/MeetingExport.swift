@@ -8,7 +8,7 @@ enum MeetingExport {
         case markdown = "md"
         case text = "txt"
 
-        var title: String { self == .markdown ? "Markdown" : "テキスト" }
+        var title: String { self == .markdown ? "Markdown" : tr("テキスト") }
     }
 
     // MARK: - Slack 向け（mrkdwn）
@@ -19,7 +19,7 @@ enum MeetingExport {
     static func slack(_ meeting: Meeting) -> String? {
         guard let minutes = meeting.minutes else { return nil }
         var lines = ["*\(meeting.title)*",
-                     "\(Meeting.dateFormatter.string(from: meeting.startedAt))・\(Meeting.clock(meeting.duration))"]
+                     tr("%@・%@", Meeting.dateFormatter.string(from: meeting.startedAt), Meeting.clock(meeting.duration))]
         lines.append(contentsOf: slackBody(fromMarkdown: minutes))
         // 空行の連続をまとめる
         var result: [String] = []
@@ -34,7 +34,8 @@ enum MeetingExport {
             let trimmed = raw.trimmingCharacters(in: .whitespaces)
             if trimmed.hasPrefix("# ") { continue }  // タイトル（上で書いた）
             if trimmed.hasPrefix("## ") {
-                skipping = trimmed.contains("話者についてのメモ")
+                // 要件: REQ-COM-061（議事録はそのときのプロンプトの言語なので、どの言語の見出しでも外す）
+                skipping = Prompts.allTexts("minutes.speakerNotesHeading").contains { trimmed.contains($0) }
                 if skipping { continue }
                 lines.append("")
                 lines.append("*\(stripInline(String(trimmed.dropFirst(3))))*")
@@ -105,14 +106,14 @@ enum MeetingExport {
                 lines.append(title)
                 lines.append(String(repeating: "=", count: min(40, title.count * 2)))
             } else if trimmed.hasPrefix("## ") {
-                lines.append("【\(stripInline(String(trimmed.dropFirst(3))))】")
+                lines.append(tr("【%@】", stripInline(String(trimmed.dropFirst(3)))))
             } else if trimmed.hasPrefix("### ") {
                 lines.append("■ \(stripInline(String(trimmed.dropFirst(4))))")
             } else if let (mark, rest) = listItem(trimmed) {
                 let bullet = switch mark {
                 case .unchecked: "□"
                 case .checked: "☑"
-                case .bullet: "・"
+                case .bullet: tr("・")
                 }
                 lines.append("\(indent)\(bullet)\(bullet == "・" ? "" : " ")\(stripInline(rest))")
             } else {
@@ -135,7 +136,7 @@ enum MeetingExport {
 
     static func suggestedFileName(for meeting: Meeting, transcript: Bool, format: FileFormat) -> String {
         let base = meeting.title.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ":", with: "-")
-        return "\(base) \(transcript ? "文字起こし" : "議事録").\(format.rawValue)"
+        return "\(base) \(transcript ? tr("文字起こし") : tr("議事録")).\(format.rawValue)"
     }
 
     static func fileContents(_ markdown: String, format: FileFormat) -> String {

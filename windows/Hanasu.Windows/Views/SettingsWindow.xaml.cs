@@ -79,18 +79,20 @@ public partial class SettingsWindow : Window
         WhisperModelCombo.ItemsSource = WhisperModelCatalog.Models;
         WhisperModelCombo.DisplayMemberPath = nameof(WhisperModelInfo.Label);
         WhisperModelCombo.SelectedItem = WhisperModelCatalog.Find(s.WhisperModel);
-        WhisperFolderNote.Text = $"保存先: {host.WhisperModels.Directory}";
+        WhisperFolderNote.Text = string.Format(Strings.Meeting_SavedIn, host.WhisperModels.Directory);
 
-        var microphones = new List<MicrophoneInfo> { new("", "Windows の既定のマイク") };
+        var microphones = new List<MicrophoneInfo> { new("", Strings.Device_DefaultMic) };
         microphones.AddRange(WasapiRecorder.ListMicrophones());
         if (s.MicrophoneDeviceId.Length > 0 && microphones.All(m => m.Id != s.MicrophoneDeviceId))
         {
-            microphones.Add(new MicrophoneInfo(s.MicrophoneDeviceId, "（前に選んだマイク・今はつながっていません）"));
+            microphones.Add(new MicrophoneInfo(s.MicrophoneDeviceId, Strings.Device_MissingMic));
         }
         MicrophoneCombo.ItemsSource = microphones;
         MicrophoneCombo.DisplayMemberPath = nameof(MicrophoneInfo.Name);
         MicrophoneCombo.SelectedItem = microphones.First(m => m.Id == s.MicrophoneDeviceId);
         PlaySoundsCheck.IsChecked = s.PlaySounds;
+        CheckForUpdatesCheck.IsChecked = s.CheckForUpdatesOnLaunch;
+        VersionText.Text = $"Hanasu {host.Updates.CurrentVersion}";
         FallbackKeepRadio.IsChecked = s.PasteFallbackClipboard == PasteFallbackClipboard.KeepResult;
         FallbackRestoreRadio.IsChecked = s.PasteFallbackClipboard == PasteFallbackClipboard.RestoreOriginal;
 
@@ -136,7 +138,7 @@ public partial class SettingsWindow : Window
         HistoryEnabledCheck.IsChecked = s.HistoryEnabled;
         HistoryDaysCombo.ItemsSource = LimitItems(HistoryPolicy.DayOptions, s.HistoryMaxDays, HistoryPolicy.DaysLabel);
         HistoryDaysCombo.SelectedItem = ((List<ComboBoxItem>)HistoryDaysCombo.ItemsSource).First(i => (int)i.Tag == s.HistoryMaxDays);
-        HistoryCountCombo.ItemsSource = LimitItems(HistoryPolicy.CountOptions, s.HistoryMaxCount, n => $"{n:N0} 件");
+        HistoryCountCombo.ItemsSource = LimitItems(HistoryPolicy.CountOptions, s.HistoryMaxCount, n => string.Format(Strings.Settings_EntryCount, n.ToString("N0")));
         HistoryCountCombo.SelectedItem = ((List<ComboBoxItem>)HistoryCountCombo.ItemsSource).First(i => (int)i.Tag == s.HistoryMaxCount);
         UpdateHistoryStatus();
 
@@ -157,7 +159,7 @@ public partial class SettingsWindow : Window
     {
         if (loading) return;
         var error = settings.Update(mutate);
-        SaveStatus.Text = error is null ? "保存しました" : $"保存できませんでした: {error.Message}";
+        SaveStatus.Text = error is null ? Strings.Settings_Saved : string.Format(Strings.Meeting_SaveFailed, error.Message);
     }
 
     // MARK: - 一般
@@ -167,20 +169,22 @@ public partial class SettingsWindow : Window
     /// combo が、self 以外のショートカットと同じなら、その説明（「… は「会議の記録」のショートカットと同じです…」）。重なっていなければ null。
     /// Mac 版の ShortcutKind.conflict と同じ考え
     /// </summary>
+    /// <summary>ほかのショートカットと同じなら、その知らせ（self は自分の種類: dictation / translate / meeting / highlight）</summary>
     private string? ConflictingShortcut(HotKeyCombo combo, string self)
     {
         var s = settings.Current;
-        var all = new (string Name, HotKeyCombo Combo)[]
+        var all = new (string Id, string Name, HotKeyCombo Combo)[]
         {
-            ("音声入力", s.HotKey), ("翻訳して入力", s.TranslateHotKey), ("会議の記録", s.MeetingHotKey), ("「ここ重要」の印", s.HighlightHotKey),
+            ("dictation", Strings.Settings_Dictation, s.HotKey), ("translate", Strings.Settings_TranslateAndType, s.TranslateHotKey),
+            ("meeting", Strings.Settings_MeetingRecordingName, s.MeetingHotKey), ("highlight", Strings.Settings_HighlightMark, s.HighlightHotKey),
         };
-        var other = all.FirstOrDefault(x => x.Name != self && x.Combo == combo);
-        return other.Name is null ? null : $"{combo.DisplayString} は「{other.Name}」のショートカットと同じです。別のキーを選んでください。";
+        var other = all.FirstOrDefault(x => x.Id != self && x.Combo == combo);
+        return other.Id is null ? null : string.Format(Strings.Settings_HotKeyConflict, combo.DisplayString, other.Name);
     }
 
     private void SetHotKey(HotKeyCombo combo, bool translate)
     {
-        var problem = combo.Validate() ?? ConflictingShortcut(combo, translate ? "翻訳して入力" : "音声入力");
+        var problem = combo.Validate() ?? ConflictingShortcut(combo, translate ? "translate" : "dictation");
         if (problem is not null)
         {
             HotKeyError.Text = problem;
@@ -220,8 +224,8 @@ public partial class SettingsWindow : Window
         GeminiEnginePanel.Visibility = engine == TranscriptionEngine.Gemini ? Visibility.Visible : Visibility.Collapsed;
         MicrophoneCombo.IsEnabled = engine != TranscriptionEngine.Windows;
         MicrophoneNote.Text = engine == TranscriptionEngine.Windows
-            ? "Windows 標準のエンジンは、Windows の既定のマイクを使います（Windows の設定 → システム → サウンド で変えられます）。"
-            : "Whisper と Gemini は、ここで選んだマイクで録音します（16 kHz・モノラルに変換）。";
+            ? Strings.Settings_MicNote_Windows
+            : Strings.Settings_MicNote_Selected;
     }
 
     private void OnMicrophoneChanged(object sender, SelectionChangedEventArgs e)
@@ -230,6 +234,12 @@ public partial class SettingsWindow : Window
     }
 
     private void OnPlaySoundsChanged(object sender, RoutedEventArgs e) => Save(s => s.PlaySounds = PlaySoundsCheck.IsChecked == true);
+
+    // 要件: REQ-REL-010
+    private void OnCheckForUpdatesChanged(object sender, RoutedEventArgs e) => Save(s => s.CheckForUpdatesOnLaunch = CheckForUpdatesCheck.IsChecked == true);
+
+    // 要件: REQ-REL-011
+    private async void OnCheckForUpdatesNow(object sender, RoutedEventArgs e) => await host.Updates.CheckManuallyAsync();
 
     // 要件: REQ-DIC-081
     private void OnPasteFallbackChanged(object sender, RoutedEventArgs e) =>
@@ -283,14 +293,14 @@ public partial class SettingsWindow : Window
     {
         var count = host.History.Entries.Count;
         if (count == 0) return;
-        if (MessageBox.Show(this, $"音声入力の履歴 {count} 件をすべて削除しますか？元に戻せません。", "Hanasu",
+        if (MessageBox.Show(this, string.Format(Strings.History_ConfirmDeleteAll, count), "Hanasu",
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         host.History.DeleteAll();
         UpdateHistoryStatus();
     }
 
     private void UpdateHistoryStatus() =>
-        HistoryStatus.Text = $"今の履歴: {host.History.Entries.Count} 件（保存先: {host.History.FilePath}）";
+        HistoryStatus.Text = string.Format(Strings.Settings_HistoryStatus, host.History.Entries.Count, host.History.FilePath);
 
     private static void OpenFolder(string path)
     {
@@ -329,7 +339,7 @@ public partial class SettingsWindow : Window
     private void OnWhisperDelete(object sender, RoutedEventArgs e)
     {
         if (SelectedWhisperModel is not { } model) return;
-        if (MessageBox.Show(this, $"Whisper のモデル {model.Id}（{model.SizeLabel}）を削除しますか？", "Hanasu",
+        if (MessageBox.Show(this, string.Format(Strings.Settings_ConfirmDeleteWhisper, model.Id, model.SizeLabel), "Hanasu",
                 MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         try
         {
@@ -339,7 +349,7 @@ public partial class SettingsWindow : Window
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            WhisperStatus.Text = $"削除できませんでした: {ex.Message}";
+            WhisperStatus.Text = string.Format(Strings.DeleteFailed, ex.Message);
         }
     }
 
@@ -359,13 +369,13 @@ public partial class SettingsWindow : Window
         WhisperProgress.Visibility = state.Status == WhisperModelStatus.Downloading ? Visibility.Visible : Visibility.Collapsed;
         WhisperProgress.Value = state.Progress;
         // 設計判断: DEC-COM-028（大きさを先に見せる。Mac 版と同じ）
-        WhisperDownloadButton.Content = $"ダウンロード（{model.SizeLabel}）";
+        WhisperDownloadButton.Content = string.Format(Strings.Settings_DownloadWithSize, model.SizeLabel);
         WhisperStatus.Text = state.Status switch
         {
-            WhisperModelStatus.Downloading => $"ダウンロード中… {state.Progress:P0}（{model.SizeLabel}）",
-            WhisperModelStatus.Downloaded => "ダウンロード済み",
-            WhisperModelStatus.Failed => $"失敗しました: {state.Error}",
-            _ => "まだダウンロードしていません",
+            WhisperModelStatus.Downloading => string.Format(Strings.Settings_DownloadingWithSize, state.Progress.ToString("P0"), model.SizeLabel),
+            WhisperModelStatus.Downloaded => Strings.Settings_Downloaded,
+            WhisperModelStatus.Failed => string.Format(Strings.Settings_DownloadFailed, state.Error),
+            _ => Strings.Settings_NotDownloaded,
         };
     }
 
@@ -428,7 +438,7 @@ public partial class SettingsWindow : Window
     private void OnLocalDelete(object sender, RoutedEventArgs e)
     {
         if (LocalModelOf(sender) is not { } model) return;
-        if (MessageBox.Show(this, $"ローカルのモデル {model.Name}（{model.SizeLabel}）を削除しますか？", "Hanasu",
+        if (MessageBox.Show(this, string.Format(Strings.Settings_ConfirmDeleteLocal, model.Name, model.SizeLabel), "Hanasu",
                 MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
         try
         {
@@ -436,7 +446,7 @@ public partial class SettingsWindow : Window
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            MessageBox.Show(this, $"削除できませんでした: {ex.Message}", "Hanasu");
+            MessageBox.Show(this, string.Format(Strings.DeleteFailed, ex.Message), "Hanasu");
         }
     }
 
@@ -456,10 +466,10 @@ public partial class SettingsWindow : Window
             static Visibility Show(bool on) => on ? Visibility.Visible : Visibility.Collapsed;
             var status = state.Status switch
             {
-                LocalLlmModelStatus.Downloading => $"ダウンロード中… {state.Progress:P0}",
-                LocalLlmModelStatus.Downloaded => "ダウンロード済み",
-                LocalLlmModelStatus.Failed => $"失敗しました: {state.Error}",
-                _ => "まだダウンロードしていません",
+                LocalLlmModelStatus.Downloading => string.Format(Strings.Settings_Downloading, state.Progress.ToString("P0")),
+                LocalLlmModelStatus.Downloaded => Strings.Settings_Downloaded,
+                LocalLlmModelStatus.Failed => string.Format(Strings.Settings_DownloadFailed, state.Error),
+                _ => Strings.Settings_NotDownloaded,
             };
             return new LocalModelRow(model.Id, model.Label, $"{status}　{model.Summary}", $"{model.LicenseNote}（{model.LicenseUrl}）",
                 model == LocalLlmModel.Lfm25JP ? Brushes.DarkOrange : Brushes.Gray, state.Progress,
@@ -483,26 +493,26 @@ public partial class SettingsWindow : Window
         var localUsed = s.DictationAi == TextAiProvider.Local || s.MeetingAi == TextAiProvider.Local;
         LocalLlmPanel.Visibility = localUsed ? Visibility.Visible : Visibility.Collapsed;
         if (localUsed) UpdateLocalModelList();
-        MinutesAiNote.Text = $"議事録は {TextAiFactory.NameOf(s.MeetingAi)}（{s.MinutesModel}）で作ります。";
+        MinutesAiNote.Text = string.Format(Strings.Settings_MinutesAiNote, TextAiFactory.NameOf(s.MeetingAi), s.MinutesModel);
 
         var missing = new List<string>();
         var claudeNeeded = s.DictationAi == TextAiProvider.Claude || s.MeetingAi == TextAiProvider.Claude;
         var geminiNeeded = s.DictationAi == TextAiProvider.Gemini || s.MeetingAi == TextAiProvider.Gemini
             || s.Engine == TranscriptionEngine.Gemini || s.MeetingEngine == TranscriptionEngine.Gemini;
-        if (claudeNeeded && !host.Secrets.Has(SecretKind.ClaudeApiKey)) missing.Add("Claude の API キー");
+        if (claudeNeeded && !host.Secrets.Has(SecretKind.ClaudeApiKey)) missing.Add(Strings.Settings_ClaudeApiKey);
         foreach (var model in new[]
                  {
                      s.DictationAi == TextAiProvider.Local ? LocalLlmModel.Find(s.LocalDictationModel) : null,
                      s.MeetingAi == TextAiProvider.Local ? LocalLlmModel.Find(s.LocalMeetingModel) : null,
                  }.OfType<LocalLlmModel>().Distinct())
         {
-            if (host.LocalLlmModels.StateOf(model).Status != LocalLlmModelStatus.Downloaded) missing.Add($"ローカルのモデル「{model.Name}」");
+            if (host.LocalLlmModels.StateOf(model).Status != LocalLlmModelStatus.Downloaded) missing.Add(string.Format(Strings.Settings_Missing_LocalModel, model.Name));
         }
         if (geminiNeeded && (s.AuthMode == GeminiAuthMode.ApiKey ? !host.Secrets.Has(SecretKind.GeminiApiKey) : s.ServiceAccountPath.Trim().Length == 0))
         {
-            missing.Add("Gemini の認証情報");
+            missing.Add(Strings.Settings_Missing_GeminiCredentials);
         }
-        AiCredentialNote.Text = missing.Count == 0 ? "" : $"{string.Join("・", missing)}がまだありません（下で設定・ダウンロードします）。";
+        AiCredentialNote.Text = missing.Count == 0 ? "" : string.Format(Strings.Settings_MissingNote, string.Join(Strings.Separator, missing));
         AiCredentialNote.Visibility = missing.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
     }
 
@@ -546,7 +556,7 @@ public partial class SettingsWindow : Window
     }
 
     private bool ConfirmDeleteKey(string name) =>
-        MessageBox.Show(this, $"保存した {name} の API キーを削除しますか？使い続けるには、もう一度キーを保存してください。", "Hanasu",
+        MessageBox.Show(this, string.Format(Strings.Settings_ConfirmDeleteKey, name), "Hanasu",
             MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) == MessageBoxResult.OK;
 
     private void UpdateApiKeyStatus() => ApiKeyStatus.Text = host.Secrets.Describe(SecretKind.GeminiApiKey).Describe();
@@ -564,15 +574,16 @@ public partial class SettingsWindow : Window
         var status = apiKeyMode ? ApiKeyStatus : ServiceAccountStatus;
         var model = s.Model;
         GeminiCheckButton.IsEnabled = GeminiCheckServiceAccountButton.IsEnabled = false;
-        status.Text = apiKeyMode ? "Gemini API に接続しています…" : "Vertex AI に接続しています…";
+        status.Text = apiKeyMode ? Strings.Settings_ConnectingGemini : Strings.Settings_ConnectingVertex;
         try
         {
             GeminiAuth auth = typed.Length > 0
                 ? new GeminiAuth.ApiKey(typed)
                 : GeminiAuthResolver.Resolve(s, host.Secrets) ?? throw GeminiException.MissingCredentials();
             await new GeminiClient(auth).CheckAsync(model);
-            status.Text = (typed.Length > 0 ? "このキーで接続できました（まだ保存していません）。" : "接続できました。")
-                + $" {model} を使えます。{(typed.Length > 0 || !apiKeyMode ? "" : host.Secrets.Describe(SecretKind.GeminiApiKey).Describe())}";
+            status.Text = typed.Length > 0
+                ? string.Format(Strings.Settings_ConnectedUnsavedKey, model)
+                : string.Format(Strings.Settings_ConnectedModel, model, apiKeyMode ? host.Secrets.Describe(SecretKind.GeminiApiKey).Describe() : "").TrimEnd();
         }
         catch (Exception ex) when (ex is TextAiException or ServiceAccountException or HttpRequestException or IOException)
         {
@@ -602,12 +613,12 @@ public partial class SettingsWindow : Window
         var value = box.Password.Trim();
         if (value.Length == 0)
         {
-            status.Text = "API キーを入力してください";
+            status.Text = Strings.Settings_EnterApiKey;
             return;
         }
         if (kind == SecretKind.ClaudeApiKey && !value.StartsWith("sk-ant-", StringComparison.Ordinal))
         {
-            status.Text = "Claude の API キーは「sk-ant-」で始まります。入力を確かめてください";
+            status.Text = Strings.Settings_ClaudeKeyPrefix;
             return;
         }
         try
@@ -618,7 +629,7 @@ public partial class SettingsWindow : Window
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or SecretAccessException or System.Security.Cryptography.CryptographicException)
         {
-            status.Text = $"保存できませんでした: {ex.Message}";
+            status.Text = string.Format(Strings.Meeting_SaveFailed, ex.Message);
         }
         UpdateAiPanels();
     }
@@ -633,7 +644,7 @@ public partial class SettingsWindow : Window
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            status.Text = $"削除できませんでした: {ex.Message}";
+            status.Text = string.Format(Strings.DeleteFailed, ex.Message);
         }
         UpdateAiPanels();
     }
@@ -651,15 +662,15 @@ public partial class SettingsWindow : Window
         var typed = ClaudeKeyBox.Password.Trim();
         var model = settings.Current.ClaudeModel;
         ClaudeCheckButton.IsEnabled = false;
-        ClaudeKeyStatus.Text = "Claude API に接続しています…";
+        ClaudeKeyStatus.Text = Strings.Settings_ClaudeConnecting;
         try
         {
             var client = typed.Length > 0
                 ? new ClaudeClient(typed)
                 : TextAiFactory.CreateClaude(host.Secrets, TimeSpan.FromSeconds(15)) ?? throw ClaudeException.MissingCredentials();
             await client.CheckAsync(model);
-            ClaudeKeyStatus.Text = (typed.Length > 0 ? "このキーで接続できました（まだ保存していません）。" : "接続できました。")
-                + $" {model} を使えます。{(typed.Length > 0 ? "" : host.Secrets.Describe(SecretKind.ClaudeApiKey).Describe())}";
+            ClaudeKeyStatus.Text = string.Format(typed.Length > 0 ? Strings.Settings_ClaudeConnectedUnsaved : Strings.Settings_ClaudeConnected, model)
+                + (typed.Length > 0 ? "" : host.Secrets.Describe(SecretKind.ClaudeApiKey).Describe());
         }
         catch (TextAiException ex)
         {
@@ -683,8 +694,8 @@ public partial class SettingsWindow : Window
         loading = wasLoading;
         HelloCheck.IsEnabled = available || on;
         HelloStatus.Text = available
-            ? (on ? "Windows Hello で守っています。" : "今は DPAPI で守っています。")
-            : "この PC では Windows Hello が設定されていないため、選べません（Windows の設定 → アカウント → サインイン オプション）。";
+            ? (on ? Strings.Settings_Hello_On : Strings.Settings_Hello_Off)
+            : Strings.Settings_Hello_Unavailable;
     }
 
     private async void OnHelloChanged(object sender, RoutedEventArgs e)
@@ -694,17 +705,17 @@ public partial class SettingsWindow : Window
         if (want == host.Secrets.PreferredProtection) return;
         HelloCheck.IsEnabled = false;
         HelloStatus.Text = want == SecretProtection.WindowsHello
-            ? "Windows Hello の確認を求めています（確かめのため 2 回出ます）…"
-            : "Windows Hello の確認を求めています（DPAPI に戻すため、いったん読みます）…";
+            ? Strings.Settings_Hello_Enabling
+            : Strings.Settings_Hello_Disabling;
         try
         {
             await host.Secrets.ChangeProtectionAsync(want);
         }
         catch (Exception ex) when (ex is SecretAccessException or IOException or UnauthorizedAccessException)
         {
-            HelloStatus.Text = $"切り替えられませんでした: {ex.Message}";
+            HelloStatus.Text = string.Format(Strings.Settings_Hello_SwitchFailed, ex.Message);
             await UpdateHelloAsync();
-            HelloStatus.Text = $"切り替えられませんでした: {ex.Message}";
+            HelloStatus.Text = string.Format(Strings.Settings_Hello_SwitchFailed, ex.Message);
             return;
         }
         await UpdateHelloAsync();
@@ -712,7 +723,7 @@ public partial class SettingsWindow : Window
 
     private void OnBrowseServiceAccount(object sender, RoutedEventArgs e)
     {
-        var dialog = new OpenFileDialog { Filter = "サービスアカウントの鍵 (*.json)|*.json|すべてのファイル (*.*)|*.*", Title = "サービスアカウントの鍵（JSON）を選ぶ" };
+        var dialog = new OpenFileDialog { Filter = Strings.Settings_ServiceAccountFilter, Title = Strings.Settings_ServiceAccountDialogTitle };
         if (dialog.ShowDialog(this) != true) return;
         ServiceAccountPathBox.Text = dialog.FileName;
         OnServiceAccountPathChanged(sender, e);
@@ -787,15 +798,15 @@ public partial class SettingsWindow : Window
         var s = settings.Current;
         s.RefineWithGemini = true;
         TrialRefineButton.IsEnabled = TrialTranslateButton.IsEnabled = TrialTranslateJapaneseButton.IsEnabled = false;
-        TrialStatus.Text = mode == DictationMode.Refine ? "整えています…" : "翻訳しています…";
+        TrialStatus.Text = mode == DictationMode.Refine ? Strings.Settings_TrialRefining : Strings.Settings_TrialTranslating;
         var started = Stopwatch.StartNew();
         try
         {
             var processor = new DictationTextProcessor(x => host.CreateTextAi(x, TextAiUse.Dictation));
-            var outcome = await processor.ProcessAsync(TrialInput.Text, mode, "Hanasu の設定画面", s);
+            var outcome = await processor.ProcessAsync(TrialInput.Text, mode, Strings.Settings_TrialAppName, s);
             TrialOutput.Text = outcome.Output;
             TrialStatus.Text = outcome.Warning is null
-                ? $"{TextAiFactory.NameOf(s.DictationAi)}（{s.DictationModel}）で {started.Elapsed.TotalSeconds:0.0} 秒"
+                ? string.Format(Strings.Settings_TrialDone, TextAiFactory.NameOf(s.DictationAi), s.DictationModel, started.Elapsed.TotalSeconds.ToString("0.0"))
                 : outcome.Warning.ReplaceLineEndings(" ");
         }
         finally
@@ -808,7 +819,7 @@ public partial class SettingsWindow : Window
 
     private void SetMeetingHotKey(HotKeyCombo combo, bool highlight)
     {
-        var problem = combo.Validate() ?? ConflictingShortcut(combo, highlight ? "「ここ重要」の印" : "会議の記録");
+        var problem = combo.Validate() ?? ConflictingShortcut(combo, highlight ? "highlight" : "meeting");
         if (problem is not null)
         {
             MeetingHotKeyError.Text = problem;
@@ -843,12 +854,12 @@ public partial class SettingsWindow : Window
     {
         if (engine == TranscriptionEngine.Gemini)
         {
-            MeetingEngineNote.Text = "録音した会議の音声を 5 分ごとに区切って Gemini（AI タブの Gemini の認証と、音声入力の Gemini のモデル）に送ります。音声が Google に送られることに注意してください。";
+            MeetingEngineNote.Text = Strings.Settings_MeetingEngine_GeminiNote;
             return;
         }
         var model = WhisperModelCatalog.Find(settings.Current.WhisperModel);
         var ready = model is not null && host.WhisperModels.IsDownloaded(model);
-        MeetingEngineNote.Text = $"Whisper のモデルは「一般」タブで選んだもの（{model?.Id}）を使います。" + (ready ? "" : " まだダウンロードしていません（「一般」タブでダウンロードしてください）。");
+        MeetingEngineNote.Text = string.Format(Strings.Settings_MeetingEngine_WhisperNote, model?.Id) + (ready ? "" : Strings.Settings_MeetingEngine_WhisperMissing);
     }
 
     private void OnDiarizeChanged(object sender, RoutedEventArgs e) => Save(s => s.DiarizeOthers = DiarizeCheck.IsChecked == true);
@@ -872,7 +883,7 @@ public partial class SettingsWindow : Window
 
     private void OnBrowseMeetingsFolder(object sender, RoutedEventArgs e)
     {
-        var dialog = new OpenFolderDialog { Title = "会議の保存先を選ぶ", InitialDirectory = MeetingsDirBox.Text };
+        var dialog = new OpenFolderDialog { Title = Strings.Settings_MeetingsFolderDialogTitle, InitialDirectory = MeetingsDirBox.Text };
         if (dialog.ShowDialog(this) != true) return;
         Save(s => s.MeetingsDirectory = dialog.FolderName);
         MeetingsDirBox.Text = dialog.FolderName;
@@ -899,7 +910,7 @@ public partial class SettingsWindow : Window
     {
         var issues = new UserDictionary(DictionaryBox.Text).Issues;
         DictionaryIssues.Visibility = issues.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
-        DictionaryIssues.Text = string.Join("\n", issues.OrderBy(p => p.Key).Select(p => $"{p.Key + 1} 行目: {p.Value.ReplaceLineEndings(" ／ ")}"));
+        DictionaryIssues.Text = string.Join("\n", issues.OrderBy(p => p.Key).Select(p => string.Format(Strings.Settings_DictionaryLineIssue, p.Key + 1, p.Value.ReplaceLineEndings(" ／ "))));
     }
 
     private void OnDictionaryTrialChanged(object sender, TextChangedEventArgs e)
@@ -913,8 +924,8 @@ public partial class SettingsWindow : Window
         }
         var (text, replacements) = new UserDictionary(DictionaryBox.Text).ApplyWithLog(input);
         DictionaryTrialResult.Text = replacements.Count == 0
-            ? "置き換えはありません"
-            : $"→ {text}（{string.Join("、", replacements.Select(r => $"{r.Matched} → {r.Target}"))}）";
+            ? Strings.Settings_NoReplacements
+            : string.Format(Strings.Settings_ReplacementResult, text, string.Join(Strings.ListSeparator, replacements.Select(r => $"{r.Matched} → {r.Target}")));
     }
 
     private void OnExtraInstructionsChanged(object sender, TextChangedEventArgs e) => Save(s => s.ExtraInstructions = ExtraInstructionsBox.Text);

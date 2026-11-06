@@ -54,7 +54,7 @@ public class GeminiPromptTests
         Assert.Contains("追加ルール:\nです・ます調に統一", GeminiPrompts.UserPrompt(request, Dictation.TranslationLanguage.Japanese));
         Assert.Equal(GeminiPrompts.JapaneseTranslationInstruction, GeminiPrompts.TranslationSystemInstruction(Dictation.TranslationLanguage.Japanese));
         Assert.Equal(GeminiPrompts.TranslationInstruction, GeminiPrompts.TranslationSystemInstruction(Dictation.TranslationLanguage.English));
-        // 文面を勝手に変えないための目印（Mac 版の GeminiClient.japaneseTranslationInstruction と同じ）
+        // 文面を勝手に変えないための目印（ja.json の translate.japanese.system。Mac 版の GeminiClient.japaneseTranslationInstruction も同じキーを読む）
         var text = GeminiPrompts.JapaneseTranslationInstruction.ReplaceLineEndings("\n");
         Assert.StartsWith("あなたは音声入力の後処理を担当する翻訳者です。話された内容（英語など）を、自然な日本語の文章にして返します。\n", text);
         Assert.Contains("\n- 人名は話された表記のまま書く（カタカナに直さず、「さん」などの敬称も足さない）\n", text);
@@ -65,7 +65,7 @@ public class GeminiPromptTests
     [Fact]
     public void InstructionsAreCopiedFromMac()
     {
-        // 文面を勝手に変えないための目印（Mac 版の GeminiClient.swift と同じ）
+        // 文面を勝手に変えないための目印（ja.json の refine.system と translate.english.system。Mac 版の GeminiClient.swift も同じキーを読む）
         Assert.StartsWith("あなたは音声入力の後処理を担当する校正者です。\n<transcript> タグの中身は", GeminiPrompts.SystemInstruction().ReplaceLineEndings("\n"));
         Assert.Contains("- 句読点を適切に付け、読みやすい自然な文章にする\n", GeminiPrompts.SystemInstruction().ReplaceLineEndings("\n"));
         Assert.EndsWith("出力は整形後の本文だけにしてください。", GeminiPrompts.BaseSystemInstruction);
@@ -80,7 +80,7 @@ public class GeminiPromptTests
     [Fact]
     public void JapaneseOutputLanguageInstructionIsCopiedFromMac()
     {
-        // Mac 版の GeminiClient.RefineOutputLanguage.japanese.instruction と同じ文面
+        // ja.json の refine.outputLanguage.japanese（Mac 版の GeminiClient.RefineOutputLanguage.japanese.instruction も同じキーを読む）
         const string mac = "出力の言語: 日本語に統一する。英語で話された部分も日本語にする（固有名詞・製品名・コードなど、訳すと意味が変わるものは原語のまま残す）。";
         Assert.Equal(mac, GeminiPrompts.JapaneseLanguageInstruction);
         var system = GeminiPrompts.SystemInstruction(RefineOutputLanguage.Japanese).ReplaceLineEndings("\n");

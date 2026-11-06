@@ -39,7 +39,7 @@ internal sealed class WindowsHelloKey : IUserPresenceKey
     {
         if (!await IsAvailableAsync())
         {
-            throw new SecretAccessException("Windows Hello が設定されていません（Windows の設定 → アカウント → サインイン オプション で PIN などを設定してください）");
+            throw new SecretAccessException(Strings.Hello_NotSetUp);
         }
         var credential = await OpenAsync(create);
         cancellationToken.ThrowIfCancellationRequested();
@@ -58,8 +58,8 @@ internal sealed class WindowsHelloKey : IUserPresenceKey
         if (signed.Status != KeyCredentialStatus.Success)
         {
             throw new SecretAccessException(signed.Status == KeyCredentialStatus.UserCanceled
-                ? "Windows Hello の確認が取り消されたため、API キーを読めませんでした"
-                : $"Windows Hello で確認できませんでした（{signed.Status}）");
+                ? Strings.Hello_CanceledCannotRead
+                : string.Format(Strings.Hello_VerifyFailed, signed.Status));
         }
         CryptographicBuffer.CopyToByteArray(signed.Result, out var signature);
         try
@@ -79,15 +79,15 @@ internal sealed class WindowsHelloKey : IUserPresenceKey
         if (opened.Status != KeyCredentialStatus.NotFound || !create)
         {
             throw new SecretAccessException(opened.Status == KeyCredentialStatus.NotFound
-                ? "Windows Hello の鍵が見つかりません（Windows Hello を設定し直した可能性があります）。設定 → AI で API キーを入れ直してください"
-                : $"Windows Hello の鍵を開けませんでした（{opened.Status}）");
+                ? Strings.Hello_KeyNotFound
+                : string.Format(Strings.Hello_OpenFailed, opened.Status));
         }
         var created = await KeyCredentialManager.RequestCreateAsync(CredentialName, KeyCredentialCreationOption.FailIfExists);
         if (created.Status != KeyCredentialStatus.Success)
         {
             throw new SecretAccessException(created.Status == KeyCredentialStatus.UserCanceled
-                ? "Windows Hello の確認が取り消されました"
-                : $"Windows Hello の鍵を作れませんでした（{created.Status}）");
+                ? Strings.Hello_Canceled
+                : string.Format(Strings.Hello_CreateFailed, created.Status));
         }
         return created.Credential;
     }

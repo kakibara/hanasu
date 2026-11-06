@@ -22,12 +22,17 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!-- WFAC010 は WinForms のアプリ向けの警告。WPF は manifest で DPI を決めるのが推奨なので抑える -->
     <NoWarn>$(NoWarn);WFAC010</NoWarn>
+    <!-- 要件: REQ-COM-060 -->
+    <!-- UI の文字列のニュートラルの言語（Properties/Strings.resx）は英語。ほかの言語はサテライトアセンブリ（<カルチャ>/Hanasu.resources.dll） -->
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- WPF と WinForms の両方を使うと Application などの名前がぶつかるので、WinForms の既定の using は外す -->
     <Using Remove="System.Windows.Forms" />
     <Using Remove="System.Drawing" />
+    <!-- 画面の文字列（Properties/Strings.resx から作る Strings） -->
+    <Using Include="Hanasu.Windows.Properties" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,11 +50,30 @@
     <Resource Include="Assets\Hanasu.ico" />
   </ItemGroup>
 
+  <!-- 要件: REQ-COM-060 -->
+  <!-- 画面の文字列。Strings.resx は英語、Strings.<カルチャ>.resx が各言語。ビルドのときに Hanasu.Windows.Properties.Strings を作り、
+       XAML からは {x:Static p:Strings.名前}、コードからは Strings.名前 で読む。訳の出し入れは scripts/i18n-resx.py -->
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Strings.resx">
+      <StronglyTypedFileName>$(IntermediateOutputPath)Strings.Designer.cs</StronglyTypedFileName>
+      <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+      <StronglyTypedNamespace>Hanasu.Windows.Properties</StronglyTypedNamespace>
+      <StronglyTypedClassName>Strings</StronglyTypedClassName>
+      <PublicClass>true</PublicClass>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Target Name="HanasuStringsForMarkup" BeforeTargets="GenerateTemporaryTargetAssembly" DependsOnTargets="PrepareResourceNames;ResGen">
+    <ItemGroup>
+      <_GeneratedCodeFiles Include="$(IntermediateOutputPath)Strings.Designer.cs" />
+    </ItemGroup>
+  </Target>
+
   <!-- 要件: REQ-REL-005 -->
   <!-- 配布物（publish のフォルダ）に、Hanasu のライセンスと第三者のライセンスの表示を入れる。
        .NET ランタイムの第三者の表示は、ProtectedData のパッケージに入っている dotnet/runtime のものを使う -->
   <ItemGroup>
     <None Include="..\..\LICENSE" Link="LICENSE.txt" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Include="..\..\LICENSE-ADDITIONAL-PERMISSION.md" Link="LICENSE-ADDITIONAL-PERMISSION.md" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <None Include="..\..\NOTICE" Link="NOTICE.txt" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <None Include="..\THIRD_PARTY_NOTICES.md" Link="THIRD_PARTY_NOTICES.md" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <None Include="$(NuGetPackageRoot)system.security.cryptography.protecteddata/8.0.0/THIRD-PARTY-NOTICES.TXT" Link="dotnet-THIRD-PARTY-NOTICES.txt" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />

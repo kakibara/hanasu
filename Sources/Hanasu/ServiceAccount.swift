@@ -11,12 +11,12 @@ enum ServiceAccountError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .fileNotFound(let path): "サービスアカウントの JSON が見つかりません: \(path)"
-        case .invalidJSON: "サービスアカウントの JSON を読み取れません"
-        case .invalidPrivateKey: "サービスアカウントの秘密鍵を読み取れません"
-        case .signingFailed(let message): "アクセストークン用の署名に失敗しました: \(message)"
-        case .tokenRequestFailed(let status, let message): "アクセストークンの取得に失敗しました（\(status)）: \(message)"
-        case .untrustedTokenURI(let uri): "サービスアカウントの token_uri（\(uri)）が Google のトークンの窓口（oauth2.googleapis.com）ではないため、使いません"
+        case .fileNotFound(let path): tr("サービスアカウントの JSON が見つかりません: %@", "\(path)")
+        case .invalidJSON: tr("サービスアカウントの JSON を読み取れません")
+        case .invalidPrivateKey: tr("サービスアカウントの秘密鍵を読み取れません")
+        case .signingFailed(let message): tr("アクセストークン用の署名に失敗しました: %@", "\(message)")
+        case .tokenRequestFailed(let status, let message): tr("アクセストークンの取得に失敗しました（%@）: %@", "\(status)", "\(message)")
+        case .untrustedTokenURI(let uri): tr("サービスアカウントの token_uri（%@）が Google のトークンの窓口（oauth2.googleapis.com）ではないため、使いません", "\(uri)")
         }
     }
 }

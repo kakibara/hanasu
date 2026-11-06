@@ -14,7 +14,7 @@ enum MeetingTitle {
     private static let generic: Set<String> = [
         "microsoft teams", "teams", "chat", "calendar", "activity", "calls", "files", "apps", "communities",
         "meet", "google meet", "webex", "home", "new meeting", "meeting", "meetings", "join", "lobby",
-        "チャット", "カレンダー", "アクティビティ", "通話", "ファイル", "アプリ", "チーム",
+        "チャット", "カレンダー", "アクティビティ", "通話", "ファイル", "アプリ", "チーム",  // skip-tr（Teams のウインドウのタイトルと照らす語）
     ]
 
     private static let dash = #"[-–—]"#

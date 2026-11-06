@@ -62,7 +62,7 @@ public partial class HudWindow : Window, IHud
         copyFeedbackTimer.Tick += (_, _) =>
         {
             copyFeedbackTimer.Stop();
-            CopyButtonText.Text = "コピー";
+            CopyButtonText.Text = Strings.Hud_Copy;
         };
         SourceInitialized += OnSourceInitialized;
         DpiChanged += (_, _) => PlaceAtBottom();
@@ -165,7 +165,7 @@ public partial class HudWindow : Window, IHud
             ResultBox.Text = state.ResultText ?? "";
             ResultBox.ScrollToHome();
             copyFeedbackTimer.Stop();
-            CopyButtonText.Text = "コピー";
+            CopyButtonText.Text = Strings.Hud_Copy;
         }
         else
         {
@@ -194,12 +194,12 @@ public partial class HudWindow : Window, IHud
     {
         LanguageSwitch.Visibility = HudText.CanChooseLanguage(state.Phase) ? Visibility.Visible : Visibility.Collapsed;
         SpokenLanguageButton.Tag = translation is null ? "selected" : null;
-        AutomationProperties.SetItemStatus(SpokenLanguageButton, translation is null ? "選択中" : "");
+        AutomationProperties.SetItemStatus(SpokenLanguageButton, translation is null ? Strings.Hud_Selected_A11y : "");
         foreach (var (button, language) in new[] { (EnglishButton, TranslationLanguage.English), (JapaneseButton, TranslationLanguage.Japanese) })
         {
             button.Visibility = translationChoices.Contains(language) ? Visibility.Visible : Visibility.Collapsed;
             button.Tag = translation == language ? "selected" : null;
-            AutomationProperties.SetItemStatus(button, translation == language ? "選択中" : "");
+            AutomationProperties.SetItemStatus(button, translation == language ? Strings.Hud_Selected_A11y : "");
         }
     }
 
@@ -216,7 +216,7 @@ public partial class HudWindow : Window, IHud
     private void OnCopyClick(object sender, RoutedEventArgs e)
     {
         // ユーザーが自分でコピーする操作なので、履歴に残さない印は付けない（DEC-COM-149）
-        CopyButtonText.Text = TryCopy(state.ResultText ?? "") ? "コピーしました" : "コピーできませんでした";
+        CopyButtonText.Text = TryCopy(state.ResultText ?? "") ? Strings.Copied : Strings.Hud_CopyFailed;
         copyFeedbackTimer.Stop();
         copyFeedbackTimer.Start();
     }

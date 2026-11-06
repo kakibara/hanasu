@@ -125,7 +125,7 @@ public sealed class MeetingController
         }
         if (!CanStart())
         {
-            Notice?.Invoke(this, new MeetingNotice("会議の記録を始められません", "音声入力の録音中です。終わってからもう一度試してください。", true));
+            Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_CannotStart, Strings.Meeting_DictationInProgress, true));
             return;
         }
         State = MeetingState.Starting;
@@ -163,7 +163,7 @@ public sealed class MeetingController
                 services.Log($"meeting loopback start failed: {e.Message}");
                 await loopback.DisposeAsync().ConfigureAwait(false);
                 loopback = null;
-                Notice?.Invoke(this, new MeetingNotice("PC の音（相手）を録音できません", $"自分の声（マイク）だけを記録します。{e.Message}", true, e.HelpUri));
+                Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_LoopbackUnavailable, string.Format(Strings.Meeting_MicOnly, e.Message), true, e.HelpUri));
             }
             services.Log("meeting started");
             State = MeetingState.Recording;
@@ -177,13 +177,13 @@ public sealed class MeetingController
             if (meeting is not null)
             {
                 meeting.Status = MeetingStatus.Failed;
-                meeting.ErrorMessage = $"記録を始められませんでした: {e.Message}";
+                meeting.ErrorMessage = string.Format(Strings.Meeting_StartFailedDetail, e.Message);
                 try { store.Save(meeting); } catch (IOException) { }
                 MeetingChanged?.Invoke(this, meeting);
             }
             Current = null;
             State = MeetingState.Idle;
-            Notice?.Invoke(this, new MeetingNotice("会議の記録を始められませんでした", e.Message, true, (e as TranscriptionException)?.HelpUri));
+            Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_StartFailed, e.Message, true, (e as TranscriptionException)?.HelpUri));
         }
     }
 
@@ -197,7 +197,7 @@ public sealed class MeetingController
         var meeting = Current!;
         var settings = recordingSettings!;
         State = MeetingState.Processing;
-        SetProgress("記録を止めています…");
+        SetProgress(Strings.Meeting_Stopping);
         var micOffset = mic?.StartOffset;
         var loopbackOffset = loopback?.StartOffset;
         await StopRecordersAsync().ConfigureAwait(false);
@@ -230,18 +230,18 @@ public sealed class MeetingController
         try
         {
             var result = await processor.ProcessAsync(meeting, new InlineProgress<string>(SetProgress)).ConfigureAwait(false);
-            foreach (var warning in result.Warnings) Notice?.Invoke(this, new MeetingNotice("会議の記録", warning, true));
+            foreach (var warning in result.Warnings) Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_NoticeTitle, warning, true));
             Notice?.Invoke(this, meeting.ErrorMessage is null
-                ? new MeetingNotice("会議の記録ができました", meeting.Minutes is null ? "文字起こしを保存しました。" : "文字起こしと議事録を保存しました。")
-                : new MeetingNotice("会議の記録（一部に問題があります）", meeting.ErrorMessage, true));
+                ? new MeetingNotice(Strings.Meeting_Done, meeting.Minutes is null ? Strings.Meeting_TranscriptSaved : Strings.Meeting_TranscriptAndMinutesSaved)
+                : new MeetingNotice(Strings.Meeting_DoneWithProblems, meeting.ErrorMessage, true));
         }
         catch (Exception e) when (e is IOException or UnauthorizedAccessException or InvalidOperationException)
         {
             services.Log($"meeting processing failed: {e.GetType().Name}: {e.Message}");
             meeting.Status = MeetingStatus.Failed;
-            meeting.ErrorMessage = $"記録のあとの処理に失敗しました: {e.Message}";
+            meeting.ErrorMessage = string.Format(Strings.Meeting_PostProcessFailedDetail, e.Message);
             try { Store(settings).Save(meeting); } catch (IOException) { }
-            Notice?.Invoke(this, new MeetingNotice("会議の記録に失敗しました", e.Message, true));
+            Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_Failed, e.Message, true));
         }
         finally
         {
@@ -295,6 +295,9 @@ public sealed class MeetingController
 
     // MARK: - 記録のあとの操作
 
+    /// <summary>議事録を作り直している会議があるか（State は変わらないので、アップデートの入れ替え前の確認に使う）</summary>
+    public bool IsRegenerating { get { lock (gate) return regenerating.Count > 0; } }
+
     /// <summary>議事録を作り直す（型を変えるときは template を渡す）。失敗したら例外を投げ、会議は元のまま</summary>
     public async Task RegenerateMinutesAsync(Meeting meeting, MinutesTemplate? template = null, string? customPrompt = null,
         CancellationToken cancellationToken = default)
@@ -333,14 +336,43 @@ public sealed class MeetingController
         meeting.CustomMinutesPrompt = draft.CustomMinutesPrompt;
         // 要件: REQ-MTG-027
         meeting.ApplyMinutes(result);
-        if (meeting.ErrorMessage?.StartsWith("議事録を作れませんでした", StringComparison.Ordinal) == true
-            || meeting.ErrorMessage?.StartsWith("Gemini の認証情報", StringComparison.Ordinal) == true
-            || meeting.ErrorMessage?.StartsWith("Claude の認証情報", StringComparison.Ordinal) == true)
-        {
-            meeting.ErrorMessage = null;
-        }
+        // 議事録のエラーの行だけを消す（文字起こしの失敗などほかの行は残す）
+        meeting.ErrorMessage = WithoutMinutesErrors(meeting.ErrorMessage);
         Store(settings).Save(meeting);
         MeetingChanged?.Invoke(this, meeting);
+    }
+
+    /// <summary>
+    /// 議事録を作れなかったときのエラー（作り直せたら消す）か。エラーは書いたときの表示の言語なので、
+    /// 今の言語・日本語（前の版で保存したもの）・英語の文言の、どれとも比べる
+    /// </summary>
+    /// <summary>
+    /// 会議のエラーから、議事録のエラーの行だけを除く。残りがなければ null。
+    /// エラーは「文字起こしの失敗…\n…議事録は作っていません…」のように行をつないだものなので、行ごとに見る
+    /// </summary>
+    internal static string? WithoutMinutesErrors(string? message)
+    {
+        if (string.IsNullOrEmpty(message)) return message;
+        var kept = message.Split('\n').Where(line => !IsMinutesError(line)).ToList();
+        var text = string.Join("\n", kept).Trim();
+        return text.Length == 0 ? null : text;
+    }
+
+    internal static bool IsMinutesError(string? message)
+    {
+        if (string.IsNullOrEmpty(message)) return false;
+        foreach (var culture in new[] { Strings.Culture ?? System.Globalization.CultureInfo.CurrentUICulture, System.Globalization.CultureInfo.GetCultureInfo("ja"), System.Globalization.CultureInfo.InvariantCulture })
+        {
+            // 「議事録を作れませんでした: …」の前半
+            if (Strings.ResourceManager.GetString(nameof(Strings.Meeting_MinutesFailed), culture) is { } failed
+                && failed.Split("{0}")[0] is { Length: > 0 } failedPrefix
+                && message.StartsWith(failedPrefix, StringComparison.Ordinal)) return true;
+            // 「… の認証情報が未設定のため、議事録は作っていません（…）。」の後半
+            if (Strings.ResourceManager.GetString(nameof(Strings.Meeting_MinutesNotCreated), culture) is { } notCreated
+                && notCreated.Split("{0}") is [_, { Length: > 0 } notCreatedSuffix]
+                && message.EndsWith(notCreatedSuffix, StringComparison.Ordinal)) return true;
+        }
+        return false;
     }
 
     // 設計判断: DEC-MTG-023
@@ -365,7 +397,7 @@ public sealed class MeetingController
     /// <summary>会議のフォルダを消す（moveToRecycleBin は MeetingStore.Delete を参照）。消せない会議なら InvalidOperationException</summary>
     public void Delete(Meeting meeting, Action<string>? moveToRecycleBin = null)
     {
-        if (!CanDelete(meeting)) throw new InvalidOperationException("記録中・処理中・議事録を作り直している会議は削除できません。");
+        if (!CanDelete(meeting)) throw new InvalidOperationException(Strings.Meeting_CannotDeleteBusy);
         Store(services.Settings()).Delete(meeting, moveToRecycleBin);
         services.Log($"meeting deleted: {meeting.Id}");
     }
@@ -384,7 +416,7 @@ public sealed class MeetingController
     private void OnMicFaulted(object? sender, Exception e)
     {
         services.Log($"meeting mic faulted: {e.Message}");
-        Notice?.Invoke(this, new MeetingNotice("マイクの録音が止まりました", "マイクが抜かれたなどの理由で録音が止まったので、会議の記録を止めます。", true));
+        Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_MicStopped, Strings.Meeting_MicStoppedDetail, true));
         _ = StopAsync();
     }
 

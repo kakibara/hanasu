@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using Hanasu.Core.Settings;
 using Hanasu.Windows.Services;
 
 namespace Hanasu.Windows;
@@ -16,12 +17,24 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        // 要件: REQ-COM-060
+        // 表示の言語を、ウインドウ・メニュー・知らせを作る前に決める（Windows の表示の言語が 17 言語のどれでもなければ英語）
+        var culture = UiLanguage.Apply();
+        // 文字の言語（xml:lang）も表示の言語にする（中国語などで、その言語の字形とフォントの代替が選ばれるように）
+        FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(System.Windows.Markup.XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
+        if (culture.TextInfo.IsRightToLeft)
+        {
+            // アラビア語などは、ウインドウを右から左に並べる。ウインドウを作る前に既定値を変え、表示してから並びが変わらないようにする
+            FrameworkElement.FlowDirectionProperty.OverrideMetadata(typeof(Window),
+                new FrameworkPropertyMetadata(FlowDirection.RightToLeft, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.Inherits));
+        }
         base.OnStartup(e);
         // 2 つ目を起動したら、知らせて終わる（ホットキーを取り合わないため）
         singleInstance = new Mutex(initiallyOwned: true, @"Local\Hanasu.Windows.SingleInstance", out var createdNew);
         if (!createdNew)
         {
-            MessageBox.Show("Hanasu はすでに起動しています。タスクトレイのアイコンから使えます。", "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Strings.App_AlreadyRunning, "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
             Shutdown();
             return;
         }

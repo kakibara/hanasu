@@ -56,33 +56,33 @@ public sealed record HotKeyCombo(HotKeyModifiers Modifiers, int VirtualKey)
     /// <summary>ショートカットとして使えないときは理由を返す（使えるなら null）</summary>
     public string? Validate()
     {
-        if (VirtualKey <= 0 || IsModifierKey(VirtualKey)) return "修飾キーのほかに、キーを 1 つ押してください";
-        if (VirtualKey == VkEscape) return "Esc は録音の取り消しに使うので、ショートカットにできません";
+        if (VirtualKey <= 0 || IsModifierKey(VirtualKey)) return Strings.HotKey_NeedKey;
+        if (VirtualKey == VkEscape) return Strings.HotKey_EscReserved;
         var isFunctionKey = VirtualKey is >= 0x70 and <= 0x87;  // F1〜F24
         if (Modifiers == HotKeyModifiers.None && !isFunctionKey)
         {
-            return "Ctrl・Alt・Shift・Win のどれかと組み合わせてください（F1〜F24 は単独でも使えます）";
+            return Strings.HotKey_NeedModifier;
         }
-        if (Modifiers == HotKeyModifiers.Shift && !isFunctionKey) return "Shift だけの組み合わせは文字の入力とぶつかるので使えません";
+        if (Modifiers == HotKeyModifiers.Shift && !isFunctionKey) return Strings.HotKey_ShiftOnly;
         foreach (var (combo, reason) in ReservedCombos)
         {
-            if (combo == this) return $"{DisplayString} は {reason}に使われているので避けてください";
+            if (combo == this) return string.Format(Strings.HotKey_Reserved, DisplayString, reason);
         }
         return null;
     }
 
-    /// <summary>Windows や日本語入力が使っている組み合わせ</summary>
-    public static readonly IReadOnlyList<(HotKeyCombo Combo, string Reason)> ReservedCombos =
+    /// <summary>Windows や日本語入力が使っている組み合わせ（理由は表示の言語で書くので、読むたびに作る）</summary>
+    public static IReadOnlyList<(HotKeyCombo Combo, string Reason)> ReservedCombos =>
     [
-        (new(HotKeyModifiers.Alt, VkSpace), "Windows のウインドウメニュー"),
-        (new(HotKeyModifiers.Win, 0x48), "Windows の音声入力（Win + H）"),
-        (new(HotKeyModifiers.Win, VkSpace), "入力言語の切り替え"),
-        (new(HotKeyModifiers.Control, VkSpace), "日本語入力のオン／オフ（IME によって）"),
-        (new(HotKeyModifiers.Shift, VkSpace), "全角／半角スペースの入力"),
-        (new(HotKeyModifiers.Alt, 0x09), "ウインドウの切り替え"),
-        (new(HotKeyModifiers.Alt, 0x73), "ウインドウを閉じる操作"),
-        (new(HotKeyModifiers.Win, 0x4C), "画面のロック"),
-        (new(HotKeyModifiers.Win, 0x44), "デスクトップの表示"),
+        (new(HotKeyModifiers.Alt, VkSpace), Strings.HotKey_Reserved_WindowMenu),
+        (new(HotKeyModifiers.Win, 0x48), Strings.HotKey_Reserved_WindowsVoiceTyping),
+        (new(HotKeyModifiers.Win, VkSpace), Strings.HotKey_Reserved_SwitchInputLanguage),
+        (new(HotKeyModifiers.Control, VkSpace), Strings.HotKey_Reserved_ImeToggle),
+        (new(HotKeyModifiers.Shift, VkSpace), Strings.HotKey_Reserved_SpaceWidth),
+        (new(HotKeyModifiers.Alt, 0x09), Strings.HotKey_Reserved_SwitchWindows),
+        (new(HotKeyModifiers.Alt, 0x73), Strings.HotKey_Reserved_CloseWindow),
+        (new(HotKeyModifiers.Win, 0x4C), Strings.HotKey_Reserved_LockScreen),
+        (new(HotKeyModifiers.Win, 0x44), Strings.HotKey_Reserved_ShowDesktop),
     ];
 }
 
@@ -117,8 +117,8 @@ public static class KeyNames
         0x6E => "Num.",
         0x6F => "Num/",
         >= 0x70 and <= 0x87 => $"F{vk - 0x6F}",
-        0x1C => "変換",
-        0x1D => "無変換",
+        0x1C => Strings.Key_Convert,
+        0x1D => Strings.Key_NonConvert,
         0xBA => ":",
         0xBB => ";",
         0xBC => ",",
@@ -130,7 +130,7 @@ public static class KeyNames
         0xDC => "\\",
         0xDD => "]",
         0xDE => "^",
-        0xE2 => "\\（ろ）",
-        _ => $"キー 0x{vk:X2}",
+        0xE2 => Strings.Key_Ro,
+        _ => string.Format(Strings.Key_Unknown, $"0x{vk:X2}"),
     };
 }

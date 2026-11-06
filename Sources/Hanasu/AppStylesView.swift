@@ -13,14 +13,14 @@ struct AppStylesTab: View {
     var body: some View {
         Form {
             Section {
-                Toggle("入力先アプリに合わせて文体を変える", isOn: $store.enabled)
+                Toggle(tr("入力先アプリに合わせて文体を変える"), isOn: $store.enabled)
             } footer: {
-                Text("録音を始めたときに前面にあるアプリで決まります。「辞書・ルール」の追加ルールと食い違うときは、アプリ別のルールを優先します。出力言語を English にしたアプリでは、画面下の表示が English で始まります（そこで切り替えればそちらが優先）。")
+                Text(tr("録音を始めたときに前面にあるアプリで決まります。「辞書・ルール」の追加ルールと食い違うときは、アプリ別のルールを優先します。出力言語を English にしたアプリでは、画面下の表示が English で始まります（そこで切り替えればそちらが優先）。"))
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {
                 if store.styles.isEmpty {
-                    Text("アプリが登録されていません").foregroundStyle(.secondary)
+                    Text(tr("アプリが登録されていません")).foregroundStyle(.secondary)
                 }
                 ForEach($store.styles) { $style in
                     AppStyleRow(
@@ -31,15 +31,15 @@ struct AppStylesTab: View {
                 }
             } header: {
                 HStack {
-                    Text("アプリ")
+                    Text(tr("アプリ"))
                     Spacer()
                     addMenu
-                    Button("初期設定に戻す…") { confirmReset = true }
+                    Button(tr("初期設定に戻す…")) { confirmReset = true }
                     .controlSize(.small)
                 }
             }
             .disabled(!store.enabled)
-            Section("プリセット") {
+            Section(tr("プリセット")) {
                 ForEach(AppStylePreset.allCases.filter { $0 != .none }) { preset in
                     LabeledContent(preset.label) {
                         Text(preset.summary).foregroundStyle(.secondary)
@@ -49,27 +49,27 @@ struct AppStylesTab: View {
             .font(.caption)
         }
         .formStyle(.grouped)
-        .confirmationDialog("アプリ別の設定を初期設定に戻しますか？", isPresented: $confirmReset) {
-            Button("初期設定に戻す", role: .destructive) {
+        .confirmationDialog(tr("アプリ別の設定を初期設定に戻しますか？"), isPresented: $confirmReset) {
+            Button(tr("初期設定に戻す"), role: .destructive) {
                 expandedID = nil
                 store.resetToDefaults()
             }
         } message: {
-            Text("追加したアプリと、アプリごとの追加ルールが消えます。元に戻せません。")
+            Text(tr("追加したアプリと、アプリごとの追加ルールが消えます。元に戻せません。"))
         }
     }
 
     private var addMenu: some View {
         Menu {
-            Section("実行中のアプリ") {
+            Section(tr("実行中のアプリ")) {
                 ForEach(runningApps, id: \.bundleID) { app in
                     Button(app.name) { add(bundleID: app.bundleID, name: app.name) }
                 }
             }
             Divider()
-            Button("アプリケーションを選ぶ…", action: chooseApplications)
+            Button(tr("アプリケーションを選ぶ…"), action: chooseApplications)
         } label: {
-            Label("追加", systemImage: "plus")
+            Label(tr("追加"), systemImage: "plus")
         }
         .controlSize(.small)
         .fixedSize()
@@ -105,7 +105,7 @@ struct AppStylesTab: View {
         panel.directoryURL = URL(fileURLWithPath: "/Applications")
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true
-        panel.prompt = "追加"
+        panel.prompt = tr("追加")
         guard panel.runModal() == .OK else { return }
         for url in panel.urls {
             guard let id = Bundle(url: url)?.bundleIdentifier else { continue }
@@ -130,12 +130,12 @@ private struct AppStyleRow: View {
                     .lineLimit(1)
                     .help(style.bundleID)
                 Spacer()
-                Picker("プリセット", selection: $style.preset) {
+                Picker(tr("プリセット"), selection: $style.preset) {
                     ForEach(AppStylePreset.allCases) { Text($0.label).tag($0) }
                 }
                 .labelsHidden()
                 .frame(width: 150)
-                Picker("出力言語", selection: $style.outputLanguage) {
+                Picker(tr("出力言語"), selection: $style.outputLanguage) {
                     ForEach(AppOutputLanguage.allCases) { Text($0.label).tag($0) }
                 }
                 .labelsHidden()
@@ -145,21 +145,21 @@ private struct AppStyleRow: View {
                           ? "text.badge.plus" : "text.badge.checkmark")
                 }
                 .buttonStyle(.borderless)
-                .help("このアプリ用の追加ルール")
-                .accessibilityLabel("このアプリ用の追加ルール")
-                .accessibilityValue(expanded ? "開いています" : "閉じています")
+                .help(tr("このアプリ用の追加ルール"))
+                .accessibilityLabel(tr("このアプリ用の追加ルール"))
+                .accessibilityValue(expanded ? tr("開いています") : tr("閉じています"))
                 Button(action: onDelete) {
                     Image(systemName: "minus.circle")
                 }
                 .buttonStyle(.borderless)
-                .help("一覧から外す")
-                .accessibilityLabel("\(style.name) を一覧から外す")
+                .help(tr("一覧から外す"))
+                .accessibilityLabel(tr("%@ を一覧から外す", "\(style.name)"))
             }
             if expanded {
-                Text("このアプリ用の追加ルール（プリセットより優先）")
+                Text(tr("このアプリ用の追加ルール（プリセットより優先）"))
                     .font(.caption)
-                TextField("このアプリ用の追加ルール", text: $style.rules,
-                          prompt: Text("例: 絵文字は使わない／箇条書きにしない"), axis: .vertical)
+                TextField(tr("このアプリ用の追加ルール"), text: $style.rules,
+                          prompt: Text(tr("例: 絵文字は使わない／箇条書きにしない")), axis: .vertical)
                     .labelsHidden()
                     .multilineTextAlignment(.leading)
                     .lineLimit(2...5)

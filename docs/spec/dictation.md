@@ -278,7 +278,7 @@
   - 「話した言語」では、日本語で話した部分は日本語、英語で話した部分は英語のまま出る（英語を日本語に訳さない）。
   - 「日本語に統一」では、英語で話した部分も日本語になる。固有名詞・製品名・コードなど、訳すと意味が変わるものは原語のまま残す。
   - 整形の指示（システムプロンプト）に、選んだ言語の指示が 1 つだけ入る。履歴の「整形し直す」も同じ設定に従う。
-- 出典: ユーザーの依頼（2026-11-04）「整形の言語を明示的に設定して意図しない動作がなされないようにする必要がある」
+- 出典: ユーザーの依頼（2026-11-04）「整形の言語を明示的に設定して意図しない動作がなされないようにする必要がある」。プロンプトの言語が日本語でないとき（REQ-COM-061）も、「日本語に統一」は日本語にする（DEC-COM-162）
 - 対象: Mac / Windows
 - 実装の場所: `GeminiClient.RefineOutputLanguage`、`GeminiClient.refinePrompt`、`AppSettings.refineOutputLanguage`、`AISettingsView`（「整形の言語」）
 - Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`（`RefineOutputLanguage`）、`windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（`SystemInstruction`。Mac 版と同じ文面。DEC-COM-102）、`windows/Hanasu.Core/Dictation/DictationText.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`（「AI」タブの「整形の言語」。選択肢は「話した言語」「日本語に統一」）。履歴の「整形し直す」は Windows 版にはない

@@ -15,7 +15,7 @@ public static class AudioFormat
     public static readonly TimeSpan MaxDictationRecording = TimeSpan.FromMinutes(10);
 
     /// <summary>上限に達したことを HUD に出す文（Mac 版と同じ文言）</summary>
-    public const string RecordingLimitNotice = "録音が上限の 10 分に達したため、ここまでの音声を処理します";
+    public static string RecordingLimitNotice => Strings.Audio_RecordingLimitNotice;
 }
 
 /// <summary>

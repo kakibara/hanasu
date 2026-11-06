@@ -58,14 +58,14 @@ public sealed record SecretInfo(bool Exists, string? Hint, SecretProtection? Pro
     /// <summary>「保存済み（…abcd、Windows Hello）」のような 1 行</summary>
     public string Describe()
     {
-        if (!Exists) return "未設定";
-        var hint = Hint is { Length: > 0 } h ? $"…{h}" : "末尾は不明";
+        if (!Exists) return Strings.Secret_NotSet;
+        var hint = Hint is { Length: > 0 } h ? $"…{h}" : Strings.Secret_HintUnknown;
         var how = Protection switch
         {
-            SecretProtection.WindowsHello => "Windows Hello で保護",
-            _ => "DPAPI で保護",
+            SecretProtection.WindowsHello => Strings.Secret_ProtectedByHello,
+            _ => Strings.Secret_ProtectedByDpapi,
         };
-        return $"保存済み（{hint}、{how}）";
+        return string.Format(Strings.Secret_Saved, hint, how);
     }
 }
 
@@ -142,7 +142,7 @@ public sealed class SecretStore
         if (entry is null || entry.Data.Length == 0) return null;
         byte[] data;
         try { data = Convert.FromBase64String(entry.Data); }
-        catch (FormatException e) { throw new SecretAccessException("保存した API キーが壊れています。設定 → AI で入れ直してください", e); }
+        catch (FormatException e) { throw new SecretAccessException(Strings.Secret_Corrupted, e); }
 
         byte[]? plain;
         switch (entry.Protection)
@@ -158,7 +158,7 @@ public sealed class SecretStore
                 plain = AesGcmBox.Open(key, data, Aad(kind));
                 if (plain is null)
                 {
-                    throw new SecretAccessException("Windows Hello で保護した API キーを復号できませんでした（Windows Hello の鍵が作り直された可能性があります）。設定 → AI で入れ直してください");
+                    throw new SecretAccessException(Strings.Secret_HelloDecryptFailed);
                 }
                 break;
             default:
@@ -167,7 +167,7 @@ public sealed class SecretStore
         }
         if (plain is null)
         {
-            throw new SecretAccessException("保存した API キーを読めません（別の Windows ユーザーか別の PC で保存した可能性があります）。設定 → AI で入れ直してください");
+            throw new SecretAccessException(Strings.Secret_DpapiDecryptFailed);
         }
         try { return Encoding.UTF8.GetString(plain); }
         finally { CryptographicOperations.ZeroMemory(plain); }
@@ -195,10 +195,10 @@ public sealed class SecretStore
     /// </summary>
     public async Task ChangeProtectionAsync(SecretProtection protection, CancellationToken cancellationToken = default)
     {
-        if (protection == SecretProtection.DpapiLegacy) throw new ArgumentException("古い形には変えられない", nameof(protection));
+        if (protection == SecretProtection.DpapiLegacy) throw new ArgumentException("古い形には変えられない", nameof(protection));  // skip-tr（開発者向けの例外）
         if (protection == SecretProtection.WindowsHello && presence is null)
         {
-            throw new SecretAccessException("この PC では Windows Hello を使えません");
+            throw new SecretAccessException(Strings.Secret_HelloUnavailable);
         }
         var plains = new Dictionary<SecretKind, string>();
         foreach (var kind in Enum.GetValues<SecretKind>())
@@ -287,7 +287,7 @@ public sealed class SecretStore
 
     private async Task<byte[]> PresenceKeyAsync(bool create, CancellationToken cancellationToken)
     {
-        if (presence is null) throw new SecretAccessException("この PC では Windows Hello を使えないため、保存した API キーを読めません。設定 → AI で入れ直してください");
+        if (presence is null) throw new SecretAccessException(Strings.Secret_HelloUnavailableCannotRead);
         lock (gate)
         {
             if (presenceKey is not null) return presenceKey;
@@ -301,7 +301,7 @@ public sealed class SecretStore
                 if (presenceKey is not null) return presenceKey;
             }
             var key = await presence.DeriveKeyAsync(create, cancellationToken).ConfigureAwait(false);
-            if (key.Length != 32) throw new SecretAccessException("Windows Hello の鍵を作れませんでした");
+            if (key.Length != 32) throw new SecretAccessException(Strings.Secret_HelloKeyFailed);
             lock (gate) presenceKey = key;
             return key;
         }
@@ -323,7 +323,7 @@ public sealed class SecretStore
         if (!same)
         {
             Lock();
-            throw new SecretAccessException("Windows Hello の鍵から同じ値を作れなかったため、Windows Hello での保護に切り替えませんでした（今の DPAPI のままです）");
+            throw new SecretAccessException(Strings.Secret_HelloKeyMismatch);
         }
     }
 

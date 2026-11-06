@@ -9,8 +9,8 @@ enum PermissionError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .microphoneDenied: "マイクの使用が許可されていません（システム設定 → プライバシーとセキュリティ → マイク）"
-        case .speechRecognitionDenied: "音声認識が許可されていません（システム設定 → プライバシーとセキュリティ → 音声認識）"
+        case .microphoneDenied: tr("マイクの使用が許可されていません（システム設定 → プライバシーとセキュリティ → マイク）")
+        case .speechRecognitionDenied: tr("音声認識が許可されていません（システム設定 → プライバシーとセキュリティ → 音声認識）")
         }
     }
 }

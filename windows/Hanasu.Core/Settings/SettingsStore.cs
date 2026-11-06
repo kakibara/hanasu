@@ -37,18 +37,26 @@ public sealed class SettingsStore
 
     public string Path { get; }
 
-    public SettingsStore(string? path = null)
+    /// <summary>設定がまだないときの文字起こしの言語（Windows の表示の言語から。テストで差し替える）</summary>
+    private readonly Func<string> systemLocale;
+
+    public SettingsStore(string? path = null, Func<string>? systemLocale = null)
     {
         Path = path ?? HanasuPaths.SettingsFile;
+        this.systemLocale = systemLocale ?? (() => TranscriptionLocales.SystemDefault);
     }
 
-    /// <summary>読み込む。ファイルがなければ既定値。壊れていれば .broken として残し、既定値で始める</summary>
+    /// <summary>
+    /// 読み込む。ファイルがなければ既定値。壊れていれば .broken として残し、既定値で始める。
+    /// 新しく始めるときの文字起こしの言語は、Windows の表示の言語にする（保存してある設定の言語は変えない）
+    /// </summary>
+    // 要件: REQ-COM-004
     public AppSettings Load()
     {
         AppSettings settings;
         if (!File.Exists(Path))
         {
-            settings = new AppSettings();
+            settings = new AppSettings { LocaleIdentifier = systemLocale() };
         }
         else
         {
@@ -59,7 +67,7 @@ public sealed class SettingsStore
             catch (JsonException)
             {
                 try { File.Copy(Path, Path + ".broken", overwrite: true); } catch (IOException) { }
-                settings = new AppSettings();
+                settings = new AppSettings { LocaleIdentifier = systemLocale() };
             }
         }
         Normalize(settings);
@@ -157,6 +165,8 @@ public sealed class SettingsService
         this.store = store;
         Secrets = secrets;
         current = store.Load();
+        // 要件: REQ-COM-061（プロンプトの言語は、設定の文字起こしの言語に合わせる）
+        Ai.PromptLanguage.UseSettings(current.LocaleIdentifier);
         MigrateSecrets();
     }
 
@@ -195,6 +205,8 @@ public sealed class SettingsService
             after = current.Clone();
             mutate(after);
             current = after;
+            // 要件: REQ-COM-061
+            Ai.PromptLanguage.UseSettings(after.LocaleIdentifier);
         }
         Exception? error = null;
         try { store.Save(after); } catch (Exception e) when (e is IOException or UnauthorizedAccessException) { error = e; }

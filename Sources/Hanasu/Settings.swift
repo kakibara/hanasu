@@ -9,8 +9,8 @@ enum RecordingMode: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .toggle: "押すたびに開始／停止（トグル）"
-        case .pushToTalk: "押している間だけ録音"
+        case .toggle: tr("押すたびに開始／停止（トグル）")
+        case .pushToTalk: tr("押している間だけ録音")
         }
     }
 }
@@ -22,8 +22,8 @@ enum GeminiAuthMode: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .apiKey: "API キー（Google AI Studio）"
-        case .serviceAccount: "サービスアカウント（Vertex AI）"
+        case .apiKey: tr("API キー（Google AI Studio）")
+        case .serviceAccount: tr("サービスアカウント（Vertex AI）")
         }
     }
 }
@@ -36,8 +36,8 @@ enum RecognizerEngine: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .dictation: "DictationTranscriber（システムの音声入力と同系統）"
-        case .speech: "SpeechTranscriber（新しい汎用モデル・推奨）"
+        case .dictation: tr("DictationTranscriber（システムの音声入力と同系統）")
+        case .speech: tr("SpeechTranscriber（新しい汎用モデル・推奨）")
         }
     }
 }

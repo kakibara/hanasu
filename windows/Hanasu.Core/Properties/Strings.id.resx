@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>Tidak dapat menemukan llama-server, yang menjalankan LLM lokal. Ekstrak lagi file zip Hanasu, atau atur jalurnya di variabel lingkungan HANASU_LLAMA_SERVER.</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>Model lokal belum diunduh. Unduh di menu → Pengaturan → AI.</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>Model lokal "{0}" belum diunduh. Unduh di menu → Pengaturan → AI.</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>LLM lokal tidak dapat dimulai (kode keluar {0}).</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>LLM lokal tidak selesai dimulai dalam {0} detik.</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>LLM lokal mengembalikan kesalahan ({0})</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>Respons LLM lokal terpotong pada batas panjang, jadi tidak digunakan.</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>LLM lokal tidak mengembalikan hasil.</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>Tidak dapat membaca respons LLM lokal.</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>LLM lokal tidak merespons dalam {0} detik.</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>Lokal</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>Direkomendasikan. Dari Google. Yang terbesar; hasil perapian dan notulen paling alami. Untuk PC dengan memori 16 GB atau lebih.</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>Dari Liquid AI. Kecil dan cepat. Baik dalam mengikuti instruksi berbahasa Jepang.</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>Dari SB Intuitions. Dilatih dengan bahasa Jepang. Konteks hingga 8K (rapat panjang diringkas per bagian).</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>Dari Alibaba. Sekitar setengah ukuran Gemma, jadi lebih mudah berjalan di PC dengan memori 8 GB. Kurang baik menangani koreksi diri dibanding Gemma.</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>Lisensi: {0}. Lisensi ini tidak mengizinkan penggunaan komersial oleh organisasi dengan pendapatan tahunan US$10 juta atau lebih.</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>Lisensi: {0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0} ({1}) · Direkomendasikan</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>Tekan satu tombol selain tombol pengubah.</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc digunakan untuk membatalkan perekaman, jadi tidak dapat dijadikan pintasan.</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>Gabungkan dengan Ctrl, Alt, Shift, atau Win (F1–F24 dapat digunakan sendiri).</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>Kombinasi dengan Shift saja bentrok dengan pengetikan, jadi tidak dapat digunakan.</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0} digunakan untuk {1}, jadi sebaiknya hindari.</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>menu jendela Windows</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>pengetikan suara Windows (Win + H)</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>mengganti bahasa input</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>mengaktifkan atau menonaktifkan IME (tergantung IME)</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>mengetik spasi lebar penuh/setengah lebar</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>beralih jendela</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>menutup jendela</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>mengunci layar</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>menampilkan desktop</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>Nonconvert</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>Tombol {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>Belum diatur</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>akhiran tidak diketahui</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>dilindungi oleh Windows Hello</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>dilindungi oleh DPAPI</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>Tersimpan ({0}, {1})</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>Kunci API yang tersimpan rusak. Masukkan lagi di Pengaturan → AI.</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>Tidak dapat mendekripsi kunci API yang dilindungi Windows Hello (kunci Windows Hello mungkin telah dibuat ulang). Masukkan lagi di Pengaturan → AI.</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>Tidak dapat membaca kunci API yang tersimpan (mungkin disimpan oleh pengguna Windows lain atau di PC lain). Masukkan lagi di Pengaturan → AI.</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>Windows Hello tidak tersedia di PC ini.</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>Windows Hello tidak tersedia di PC ini, jadi kunci API yang tersimpan tidak dapat dibaca. Masukkan lagi di Pengaturan → AI.</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>Tidak dapat membuat kunci Windows Hello.</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>Kunci Windows Hello tidak menghasilkan nilai yang sama, jadi perlindungan tidak dialihkan ke Windows Hello (DPAPI tetap digunakan).</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>Kunci API Claude belum diatur (menu → Pengaturan → AI).</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude tidak merespons dalam {0} detik.</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude menolak memproses teks ini karena alasan keamanan. Coba model lain (Pengaturan → AI) atau Gemini.</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude menolak memproses teks ini karena alasan keamanan ({0}). Coba model lain (Pengaturan → AI) atau Gemini.</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Respons Claude terlalu panjang dan terpotong.</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude tidak mengembalikan hasil.</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>Kunci API Claude salah (401). Di Pengaturan → AI, masukkan lagi kunci yang Anda buat di Claude Console.</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>Kunci API ini tidak dapat menggunakan Claude (403)</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>Model {0} tidak ditemukan, atau kunci API ini tidak dapat menggunakannya (404).</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>Ada masalah dengan penagihan API Claude (402). Periksa pengaturan penagihan di Claude Console.</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>Batas penggunaan API Claude tercapai (429). Tunggu sebentar lalu coba lagi.</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>API Claude sedang kelebihan beban (529). Tunggu sebentar lalu coba lagi.</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>Terjadi kesalahan di API Claude ({0}). Tunggu sebentar lalu coba lagi.</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>API Claude tidak menerima permintaan ({0})</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>Tidak dapat terhubung ke API Claude. Periksa koneksi jaringan Anda.</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5 (cepat, murah; default untuk dikte)</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5 (default untuk notulen)</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5 (paling cerdas, paling mahal)</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>Kredensial Gemini (kunci API atau akun layanan) belum diatur.</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Kesalahan API Gemini ({0}): {1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini tidak mengembalikan hasil.</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini tidak mengembalikan hasil ({0}).</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>Tidak dapat membaca respons Gemini.</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini tidak merespons dalam {0} detik.</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>JSON akun layanan tidak ditemukan: {0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>Tidak dapat membaca JSON akun layanan.</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>Waktu habis saat mendapatkan token akses.</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>Tidak dapat memperoleh token akses ({0}): {1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>Tidak dapat membaca kunci privat akun layanan.</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>Tidak dapat menandatangani permintaan token akses: {0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>Unduhan hanya diizinkan dari host yang diharapkan: {0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>Unduhan gagal (HTTP {0}).</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>Unduhan dihentikan karena dialihkan ke lokasi non-https.</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>File yang akan diunduh tidak sesuai ukuran yang diharapkan ({0} byte; seharusnya {1} byte).</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>Unduhan dihentikan karena file lebih besar dari yang diharapkan.</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>Unduhan terputus.</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>Hash (SHA-256) file yang diunduh tidak cocok, jadi file tidak akan digunakan.</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>Mentranskripsi dengan {0}…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>Mesin transkripsi adalah Gemini, tetapi kredensial Gemini belum diatur (menu → Pengaturan → AI).</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>Transkripsi dengan Gemini gagal: {0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0} ({1}) — {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>Terkecil. Akurasi rendah untuk bahasa Jepang (untuk pengujian).</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>Kecil. Akurasi lebih rendah untuk bahasa Jepang.</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>Cocok untuk penggunaan sehari-hari. Keseimbangan baik antara kecepatan dan akurasi.</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>Akurasi tinggi. Untuk CPU yang cepat.</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>Akurasi tinggi; lebih kecil berkat kuantisasi. Untuk CPU yang cepat.</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>Akurasi tinggi. Untuk CPU yang cepat.</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>Ini bukan file WAV.</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>File WAV tidak memiliki chunk fmt.</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>Format WAV tidak didukung (format={0}, bits={1}).</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>File WAV tidak memiliki chunk data.</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>Inggris</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>Jepang</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>Ke Inggris</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>Ke Jepang</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>Terjemahkan dan Ketik</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>Terjemahkan ke Inggris dan Ketik</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>Terjemahkan ke Jepang dan Ketik</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>Diterjemahkan ke Inggris dan diketik</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>Diterjemahkan ke Jepang dan diketik</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>Diketik</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>Dibatalkan</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>Menyiapkan…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>Menyelesaikan…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>Tidak ada ucapan yang dikenali.</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>Merekam</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>Kesalahan</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>Mulailah berbicara…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>Tidak dapat menempel ke aplikasi yang berjalan sebagai administrator</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>Tidak dapat mengirim penekanan tombol tempel</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>Tidak dapat menggunakan papan klip</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>Tidak dapat mengetik teks</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>Tidak menemukan tempat untuk mengetik</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>Teks juga ada di papan klip. Klik tempat yang diinginkan lalu tekan Ctrl+V.</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>Klik "Salin" atau pilih teks lalu salin, kemudian tekan Ctrl+V di tempat yang diinginkan.</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>Menerjemahkan ke Inggris dengan {0}…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>Menerjemahkan ke Jepang dengan {0}…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>Merapikan dengan {0}…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>Rapikan</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>Berhasil</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>AI gagal (teks asli)</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>Belum diatur (teks asli)</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>Perapian nonaktif (teks asli)</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0} hari</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>Selamanya</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>Tidak dapat membaca file riwayat, jadi file disimpan sebagai {0} dan file baru dimulai.</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>Tidak dapat membaca file riwayat: {0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>Tidak dapat menyimpan riwayat: {0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>Hari ini</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>Kemarin</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>ddd, d MMM</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>ddd, d MMM yyyy</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}, jadi teks diketik tanpa dirapikan (menu → Pengaturan → AI).</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}, jadi teks diketik tanpa diterjemahkan (menu → Pengaturan → AI).</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>Teks diketik apa adanya sebelum dirapikan.</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>Teks diketik apa adanya sebelum diterjemahkan.</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>Model LLM lokal belum diunduh (menu → Pengaturan → AI).</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>Kredensial Gemini (kunci API atau akun layanan) belum diatur (menu → Pengaturan → AI).</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>Model LLM lokal belum diunduh</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>Kredensial {0} belum diatur</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>Otomatis</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>Rapat rutin</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>Rapat penjualan</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>Curah gagasan</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>Kustom</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>Ringkasan, diskusi, keputusan, item tindakan</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>Kemajuan, laporan, masalah, keputusan, item tindakan</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>Kabar terbaru, kekhawatiran, umpan balik, kesepakatan, item tindakan</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>Tantangan pelanggan, proposal, tanggapan, kekhawatiran, tindakan berikutnya</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>Ide yang diajukan, ide yang menjanjikan, pertanyaan terbuka, langkah berikutnya</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>Mengikuti instruksi yang Anda tulis</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>Memisahkan pembicara lain…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>Tidak dapat memisahkan pembicara lain, jadi mereka digabung menjadi satu "Lawan bicara" ({0}).</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>File audio telah disimpan.</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>Tidak dapat membuat notulen: {0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}, jadi notulen tidak dibuat (menu → Pengaturan → AI).</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>Membuat notulen dengan {0}…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>Mentranskripsi dengan {0}… ({1})</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>Mentranskripsi dengan {0}… ({1} {2})</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>Tidak dapat mentranskripsi audio ({0}): {1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>Mesin transkripsi rapat adalah Gemini, tetapi kredensial Gemini belum diatur (menu → Pengaturan → AI).</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>Rapat {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>Aplikasi keluar saat merekam. File audio ({0} / {1}) mungkin tersimpan sebagian.</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>Tidak dapat mulai merekam rapat</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>Dikte sedang merekam. Coba lagi setelah selesai.</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>Tidak dapat merekam audio PC (peserta lain)</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>Hanya suara Anda (mikrofon) yang akan direkam. {0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>Tidak dapat mulai merekam: {0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>Tidak dapat mulai merekam rapat</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>Menghentikan perekaman…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>Perekaman rapat</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>Rapat direkam</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>Transkrip telah disimpan.</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>Transkrip dan notulen telah disimpan.</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>Rapat direkam (dengan beberapa masalah)</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>Pemrosesan setelah perekaman gagal: {0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>Perekaman rapat gagal</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>Rapat yang sedang direkam, diproses, atau dibuat ulang notulennya tidak dapat dihapus.</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>Perekaman mikrofon berhenti</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>Perekaman berhenti (misalnya, mikrofon dicabut), jadi perekaman rapat akan dihentikan.</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>Saya</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>Lawan bicara</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>Pembicara {0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>Di ruangan {0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — Transkrip</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- Tanggal: {0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- Durasi: {0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — Catatan</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>Belum ada tanda "Penting". Tambahkan saat merekam dengan "★ Penting" atau pintasan, dan percakapan di sekitarnya akan muncul di sini.</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>Penting</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>Tidak ada yang berbicara di sekitar tanda ini (30 detik sebelum hingga 15 detik sesudah).</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>Ejaan yang benar kosong, jadi tidak ada yang diganti.</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>"{0}" hanya satu karakter, jadi tidak digunakan (terlalu mudah cocok dengan bagian kata lain).</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>"{0}" juga ada di baris sebelumnya, jadi baris itu yang digunakan.</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>Model Whisper ({0}) belum diunduh. Unduh di menu → Pengaturan → Umum.</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>Tidak dapat menjalankan Whisper. Instal Microsoft Visual C++ Redistributable (2015–2022, x64) lalu coba lagi. ({0})</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>Tidak dapat memuat model Whisper: {0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>Mengunduh model pemisahan pembicara… ({0} / {1} MB)</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>Laju sampel model pemisahan pembicara tidak sesuai harapan ({0} Hz).</value>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Wilayah Vertex AI “{0}” tidak dapat digunakan (hanya huruf kecil, angka, dan tanda hubung; mis. global, us-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>token_uri akun layanan ({0}) bukan endpoint token Google (oauth2.googleapis.com), jadi tidak akan digunakan.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Perekaman mencapai batas 10 menit, jadi audio sejauh ini akan diproses</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>Kunci API (atau akun layanan) salah, atau tidak diizinkan menggunakan API Gemini ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>Model “{0}” tidak ditemukan atau tidak dapat digunakan dengan kredensial ini</value>
+  </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>Ukuran file yang akan diunduh tidak diketahui</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>Unduhan dihentikan karena dialihkan ke host yang tidak diharapkan: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Tidak dapat membaca informasi rilis</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>Tidak dapat mengambil versi terbaru dari GitHub (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>Tidak dapat mengambil versi terbaru dari GitHub (HTTP {0}). Batas permintaan GitHub mungkin telah tercapai; tunggu sebentar lalu coba lagi.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Tidak dapat terhubung ke GitHub: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub tidak merespons tepat waktu</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>Zip berisi item yang menunjuk ke luar folder ekstraksi, jadi tidak digunakan: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>Zip yang diekstrak lebih besar dari yang diharapkan, jadi tidak digunakan</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>Tidak dapat membuka zip yang diunduh</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>Zip tidak berisi {0}, jadi tidak digunakan</value>
+  </data>
+</root>

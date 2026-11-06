@@ -91,8 +91,19 @@ public sealed class AppSettings
     public TranscriptionEngine Engine { get; set; } = TranscriptionEngine.Windows;
     /// <summary>Whisper のモデル（<see cref="Transcription.WhisperModelCatalog"/> の Id）</summary>
     public string WhisperModel { get; set; } = "small";
+    /// <summary>
+    /// 文字起こしの言語。設定のファイルがないとき（初めて起動したとき）は Windows の表示の言語（SettingsStore.Load。REQ-COM-004）。
+    /// 前の版で保存した設定にこの項目がなければ ja-JP（前の版の既定）
+    /// </summary>
     public string LocaleIdentifier { get; set; } = "ja-JP";
     public bool PlaySounds { get; set; } = true;
+    // 要件: REQ-REL-010
+    // 設計判断: DEC-REL-024
+    /// <summary>起動したときに、新しい版がないか確かめる</summary>
+    public bool CheckForUpdatesOnLaunch { get; set; } = true;
+    // 設計判断: DEC-REL-022
+    /// <summary>「この版をスキップ」を選んだ版（例 "1.6.0"）。起動時の確認ではこの版を知らせない。空ならスキップなし</summary>
+    public string SkippedUpdateVersion { get; set; } = "";
     // 要件: REQ-DIC-081
     // 設計判断: DEC-DIC-122
     /// <summary>入力できる場所がなくて貼り付けなかったとき、結果をクリップボードに入れたままにするか</summary>

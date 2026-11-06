@@ -18,7 +18,7 @@ enum MeetingApp: String, CaseIterable, Identifiable {
         switch self {
         case .zoom: "Zoom"
         case .teams: "Microsoft Teams"
-        case .slack: "Slack（ハドル）"
+        case .slack: tr("Slack（ハドル）")
         case .webex: "Webex"
         case .facetime: "FaceTime"
         case .chrome: "Google Chrome"

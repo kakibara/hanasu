@@ -1,0 +1,1190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_AlreadyRunning" xml:space="preserve">
+    <value>Hanasu è già in esecuzione. Puoi usarlo dall'icona nell'area di notifica.</value>
+  </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>Ris&amp;ultati recenti</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>Apri &amp;note riunioni…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>Apri &amp;cronologia…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Im&amp;postazioni…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>&amp;Esci da Hanasu</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>Interrompi &amp;registrazione e digita</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>Avvia &amp;registrazione</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>&amp;Interrompi registrazione riunione ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Preparazione della registrazione della riunione…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Elaborazione della registrazione della riunione…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>&amp;Avvia registrazione riunione</value>
+  </data>
+  <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
+    <value>Hanasu — Registrazione riunione {0}</value>
+  </data>
+  <data name="Tray_Tip_MeetingProcessing" xml:space="preserve">
+    <value>Hanasu — Elaborazione riunione</value>
+  </data>
+  <data name="Tray_Tip_Recording" xml:space="preserve">
+    <value>Hanasu — Registrazione</value>
+  </data>
+  <data name="Tray_Tip_Processing" xml:space="preserve">
+    <value>Hanasu — Elaborazione</value>
+  </data>
+  <data name="Tray_RecentEmpty" xml:space="preserve">
+    <value>(Ancora nessuno)</value>
+  </data>
+  <data name="Tray_RecentTip" xml:space="preserve">
+    <value>{0}
+Risultato: {1}
+Originale: {2}</value>
+  </data>
+  <data name="Tray_RecentHint" xml:space="preserve">
+    <value>Fai clic per copiare negli Appunti</value>
+  </data>
+  <data name="Tray_OpenAllHistory" xml:space="preserve">
+    <value>Apri tutta la cronologia…</value>
+  </data>
+  <data name="Balloon_Started" xml:space="preserve">
+    <value>Hanasu è avviato</value>
+  </data>
+  <data name="Balloon_StartedBody" xml:space="preserve">
+    <value>Premi {0} per dettare. Premi {1} per "{2}".</value>
+  </data>
+  <data name="Balloon_HotKeyFailed" xml:space="preserve">
+    <value>Impossibile registrare la scelta rapida</value>
+  </data>
+  <data name="Balloon_HotKeyFailedBody" xml:space="preserve">
+    <value>{0} è usato da un'altra app. Scegli un altro tasto in Impostazioni → Generale.</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailed" xml:space="preserve">
+    <value>Impossibile registrare la scelta rapida "Importante"</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailedBody" xml:space="preserve">
+    <value>{0} è usato da un'altra app. Usa il pulsante "★ Importante" in Note riunioni oppure scegli un altro tasto in Impostazioni → Riunioni.</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Copiato</value>
+  </data>
+  <data name="Quit_MeetingInProgress" xml:space="preserve">
+    <value>È in corso la registrazione di una riunione (o la sua elaborazione dopo la registrazione). Se esci, per questa riunione non verranno creati né la trascrizione né il verbale (i file audio vengono conservati). Uscire comunque?</value>
+  </data>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>Windows Hello non è configurato (configura un PIN o un metodo simile in Impostazioni di Windows → Account → Opzioni di accesso).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>La verifica di Windows Hello è stata annullata, quindi non è stato possibile leggere la chiave API.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Verifica di Windows Hello non riuscita ({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>La chiave di Windows Hello non è stata trovata (Windows Hello potrebbe essere stato configurato di nuovo). Immetti di nuovo la chiave API in Impostazioni → AI.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Impossibile aprire la chiave di Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>La verifica di Windows Hello è stata annullata.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Impossibile creare la chiave di Windows Hello ({0}).</value>
+  </data>
+  <data name="Mic_NotFound" xml:space="preserve">
+    <value>Nessun microfono trovato. Verifica che sia collegato un microfono in Impostazioni di Windows → Sistema → Audio.</value>
+  </data>
+  <data name="Mic_AccessDenied" xml:space="preserve">
+    <value>L'accesso al microfono non è consentito. In Impostazioni di Windows → Privacy e sicurezza → Microfono, attiva "Consenti alle app desktop di accedere al microfono".</value>
+  </data>
+  <data name="Mic_StartFailed" xml:space="preserve">
+    <value>Impossibile avviare la registrazione dal microfono: {0}</value>
+  </data>
+  <data name="Output_NotFound" xml:space="preserve">
+    <value>Nessun dispositivo di output audio (altoparlanti o cuffie) trovato.</value>
+  </data>
+  <data name="Loopback_StartFailed" xml:space="preserve">
+    <value>Impossibile avviare la registrazione dell'audio del PC: {0}</value>
+  </data>
+  <data name="Speech_LanguageNotInstalled" xml:space="preserve">
+    <value>Il riconoscimento vocale per {0} non è installato in Windows. In Impostazioni di Windows → Data/ora e lingua → Lingua e area geografica, apri "…" → "Opzioni lingua" per {0} e aggiungi il riconoscimento vocale. In alternativa, imposta il motore di trascrizione su Whisper o Gemini in Impostazioni.</value>
+  </data>
+  <data name="Speech_LanguageNotSupported" xml:space="preserve">
+    <value>La dettatura di Windows non supporta questa lingua. Imposta il motore di trascrizione su Whisper o Gemini in Impostazioni.</value>
+  </data>
+  <data name="Speech_MicUnavailable" xml:space="preserve">
+    <value>Impossibile usare il microfono. Controlla il microfono predefinito di Windows.</value>
+  </data>
+  <data name="Speech_NetworkFailure" xml:space="preserve">
+    <value>Il riconoscimento vocale di Windows non è riuscito a connettersi alla rete. Controlla la connessione a Internet.</value>
+  </data>
+  <data name="Speech_StartFailed" xml:space="preserve">
+    <value>Impossibile avviare il riconoscimento vocale di Windows ({0}).</value>
+  </data>
+  <data name="Speech_OnlineRecognitionOff" xml:space="preserve">
+    <value>Per usare il riconoscimento vocale di Windows, attiva "Riconoscimento vocale online" in Impostazioni di Windows → Privacy e sicurezza → Voce. Se non vuoi attivarlo, imposta il motore di trascrizione su Whisper in Impostazioni.</value>
+  </data>
+  <data name="Speech_Error" xml:space="preserve">
+    <value>Si è verificato un errore nel riconoscimento vocale di Windows: {0}</value>
+  </data>
+  <data name="Hud_LanguageSwitch_Tip" xml:space="preserve">
+    <value>Digita nella lingua selezionata quando interrompi la registrazione</value>
+  </data>
+  <data name="Hud_SpokenLanguage" xml:space="preserve">
+    <value>Come parlato</value>
+  </data>
+  <data name="Hud_Stop_Tip" xml:space="preserve">
+    <value>Interrompe la registrazione e digita il testo (come premere di nuovo la scelta rapida)</value>
+  </data>
+  <data name="Hud_Stop" xml:space="preserve">
+    <value>Interrompi</value>
+  </data>
+  <data name="Hud_Cancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="Hud_Cancel_Tip" xml:space="preserve">
+    <value>Annulla senza digitare nulla (Esc)</value>
+  </data>
+  <data name="Hud_Close" xml:space="preserve">
+    <value>Chiudi</value>
+  </data>
+  <data name="Hud_Close_Tip" xml:space="preserve">
+    <value>Chiude questo pannello (dopo aver fatto clic sul testo, puoi anche premere Esc)</value>
+  </data>
+  <data name="Hud_Copy_Tip" xml:space="preserve">
+    <value>Copia il testo negli Appunti</value>
+  </data>
+  <data name="Hud_Copy" xml:space="preserve">
+    <value>Copia</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>Cronologia dettatura — Hanasu</value>
+  </data>
+  <data name="History_FilterAll" xml:space="preserve">
+    <value>Tutto</value>
+  </data>
+  <data name="History_FilterUnrefined" xml:space="preserve">
+    <value>Non riuscito / Non rifinito</value>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>Cerca</value>
+  </data>
+  <data name="History_Search_Tip" xml:space="preserve">
+    <value>Cerca nei risultati, nel testo originale e nelle app di destinazione. Separa le parole con spazi per trovare le voci che le contengono tutte.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Chiudi</value>
+  </data>
+  <data name="History_DeleteAll" xml:space="preserve">
+    <value>Elimina tutto…</value>
+  </data>
+  <data name="OpenSaveFolder" xml:space="preserve">
+    <value>Apri cartella di salvataggio</value>
+  </data>
+  <data name="History_CopyResult" xml:space="preserve">
+    <value>Copia risultato</value>
+  </data>
+  <data name="History_CopyOriginal" xml:space="preserve">
+    <value>Copia originale</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="History_ResultLabel" xml:space="preserve">
+    <value>Risultato (testo digitato)</value>
+  </data>
+  <data name="History_OriginalLabel" xml:space="preserve">
+    <value>Originale (trascrizione)</value>
+  </data>
+  <data name="Hud_CopyFailed" xml:space="preserve">
+    <value>Copia non riuscita</value>
+  </data>
+  <data name="HotKeyBox_Prompt" xml:space="preserve">
+    <value>Premi i tasti (Esc per annullare)…</value>
+  </data>
+  <data name="Separator" xml:space="preserve">
+    <value> · </value>
+  </data>
+  <data name="WideSeparator" xml:space="preserve">
+    <value>   </value>
+  </data>
+  <data name="History_Unrefined" xml:space="preserve">
+    <value>Non rifinito</value>
+  </data>
+  <data name="History_Kept" xml:space="preserve">
+    <value>Vengono conservate fino a {0} e {1} voci (Impostazioni → Cronologia).</value>
+  </data>
+  <data name="History_NotSaved" xml:space="preserve">
+    <value>La cronologia non viene salvata in un file. In memoria vengono conservate solo le ultime 10 voci (Impostazioni → Cronologia).</value>
+  </data>
+  <data name="History_Count" xml:space="preserve">
+    <value>{0} voci. {1}</value>
+  </data>
+  <data name="History_CountFiltered" xml:space="preserve">
+    <value>{0} di {1} voci. {2}</value>
+  </data>
+  <data name="History_Selected" xml:space="preserve">
+    <value>{0} voci selezionate (premi Canc o fai clic su "Elimina" per eliminarle insieme)</value>
+  </data>
+  <data name="History_App" xml:space="preserve">
+    <value>App: {0}</value>
+  </data>
+  <data name="History_Model" xml:space="preserve">
+    <value>Modello: {0}</value>
+  </data>
+  <data name="CopyFailedClipboardBusy" xml:space="preserve">
+    <value>Copia non riuscita (un'altra app sta usando gli Appunti)</value>
+  </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Eliminare le {0} voci della cronologia selezionate? L'operazione non può essere annullata.</value>
+  </data>
+  <data name="History_ConfirmDeleteAll" xml:space="preserve">
+    <value>Eliminare tutte le {0} voci della cronologia della dettatura? L'operazione non può essere annullata.</value>
+  </data>
+  <data name="Meeting_Title" xml:space="preserve">
+    <value>Note riunioni — Hanasu</value>
+  </data>
+  <data name="Meeting_Stop" xml:space="preserve">
+    <value>■ Interrompi</value>
+  </data>
+  <data name="Meeting_Recording" xml:space="preserve">
+    <value>● Registrazione</value>
+  </data>
+  <data name="Meeting_MicLabel" xml:space="preserve">
+    <value>Io (microfono)</value>
+  </data>
+  <data name="Meeting_OutputLabel" xml:space="preserve">
+    <value>Altri (audio riprodotto su questa uscita)</value>
+  </data>
+  <data name="Meeting_TemplateLabel" xml:space="preserve">
+    <value>Modello di verbale</value>
+  </data>
+  <data name="Meeting_Start" xml:space="preserve">
+    <value>● Avvia registrazione riunione</value>
+  </data>
+  <data name="Meeting_MoveToRecycleBin" xml:space="preserve">
+    <value>Sposta nel Cestino…</value>
+  </data>
+  <data name="Meeting_Empty" xml:space="preserve">
+    <value>Scegli una riunione dall'elenco a sinistra oppure fai clic su "Avvia registrazione riunione" in basso a sinistra per avviare la registrazione.</value>
+  </data>
+  <data name="Meeting_TitleEdit_Tip" xml:space="preserve">
+    <value>Fai clic per modificare il titolo (Invio per salvare, Esc per annullare)</value>
+  </data>
+  <data name="Meeting_Regenerate" xml:space="preserve">
+    <value>Rigenera verbale</value>
+  </data>
+  <data name="Meeting_TemplateShort" xml:space="preserve">
+    <value>Modello:</value>
+  </data>
+  <data name="Meeting_CopyMarkdown" xml:space="preserve">
+    <value>Copia Markdown</value>
+  </data>
+  <data name="Meeting_OpenInExplorer" xml:space="preserve">
+    <value>Apri in Esplora file</value>
+  </data>
+  <data name="Meeting_SpeakersLabel" xml:space="preserve">
+    <value>Nomi dei parlanti (usati per mostrare la trascrizione e il verbale)</value>
+  </data>
+  <data name="Meeting_UndoHighlight_Tip" xml:space="preserve">
+    <value>Per 10 secondi dopo aver aggiunto un contrassegno, puoi annullarlo se è stato un errore</value>
+  </data>
+  <data name="Meeting_Highlight" xml:space="preserve">
+    <value>★ Importante</value>
+  </data>
+  <data name="Meeting_AddNote" xml:space="preserve">
+    <value>Aggiungi nota</value>
+  </data>
+  <data name="Meeting_NoteHint" xml:space="preserve">
+    <value>Premi Invio per aggiungere una nota (l'ora è quella in cui hai iniziato a digitare). Se premi "Importante" mentre digiti, il testo diventa la descrizione del contrassegno.</value>
+  </data>
+  <data name="Meeting_Tab_Minutes" xml:space="preserve">
+    <value>Verbale</value>
+  </data>
+  <data name="Meeting_Tab_Transcript" xml:space="preserve">
+    <value>Trascrizione</value>
+  </data>
+  <data name="Meeting_Tab_Highlights" xml:space="preserve">
+    <value>Importante</value>
+  </data>
+  <data name="Meeting_Tab_Notes" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salva</value>
+  </data>
+  <data name="Meeting_SaveAndRegenerate" xml:space="preserve">
+    <value>Salva e rigenera verbale</value>
+  </data>
+  <data name="Meeting_NotesHint" xml:space="preserve">
+    <value>Una per riga. "[12:34] testo" è una nota, "[12:40] ★ descrizione" è un contrassegno "Importante" e le righe senza ora sono note aggiunte dopo la registrazione.</value>
+  </data>
+  <data name="Meeting_Me" xml:space="preserve">
+    <value>Io</value>
+  </data>
+  <data name="Meeting_Others" xml:space="preserve">
+    <value>Altri</value>
+  </data>
+  <data name="Meeting_Status_Processing" xml:space="preserve">
+    <value>Elaborazione</value>
+  </data>
+  <data name="Meeting_Status_Failed" xml:space="preserve">
+    <value>Non riuscita</value>
+  </data>
+  <data name="Meeting_Status_Warning" xml:space="preserve">
+    <value>Con avvisi</value>
+  </data>
+  <data name="Meeting_SavedIn" xml:space="preserve">
+    <value>Salvato in: {0}</value>
+  </data>
+  <data name="Meeting_MinutesAfterRecording" xml:space="preserve">
+    <value>Quando interrompi la registrazione, il verbale verrà creato dopo la trascrizione.</value>
+  </data>
+  <data name="Meeting_Processing" xml:space="preserve">
+    <value>Elaborazione…</value>
+  </data>
+  <data name="Meeting_NoMinutesYet" xml:space="preserve">
+    <value>Nessun verbale. Puoi crearlo con "Rigenera verbale" (richiede le impostazioni dell'IA per "Riunioni" in Impostazioni → AI).</value>
+  </data>
+  <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
+    <value>La trascrizione avviene dopo che interrompi la registrazione.</value>
+  </data>
+  <data name="Meeting_NoTranscriptYet" xml:space="preserve">
+    <value>Nessuna trascrizione.</value>
+  </data>
+  <data name="Meeting_RecordingNote" xml:space="preserve">
+    <value>La trascrizione con {0} avviene dopo che interrompi la registrazione (per ridurre il carico sul PC durante la riunione).</value>
+  </data>
+  <data name="Meeting_SpeakerName_Inferred_Tip" xml:space="preserve">
+    <value>Nome di {0} (dedotto dalla conversazione; correggilo se è sbagliato)</value>
+  </data>
+  <data name="Meeting_SpeakerName_Tip" xml:space="preserve">
+    <value>Nome di {0}</value>
+  </data>
+  <data name="Meeting_Inferred" xml:space="preserve">
+    <value>Dedotto</value>
+  </data>
+  <data name="Meeting_SpeakerNamesSaved" xml:space="preserve">
+    <value>Nomi dei parlanti salvati</value>
+  </data>
+  <data name="Meeting_TitleSaved" xml:space="preserve">
+    <value>Titolo salvato</value>
+  </data>
+  <data name="Meeting_SaveFailed" xml:space="preserve">
+    <value>Impossibile salvare: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Cambiare il modello di verbale in "{0}" e rigenerare il verbale?
+
+Il verbale e le azioni da svolgere attuali verranno sostituiti.</value>
+  </data>
+  <data name="Meeting_Regenerated" xml:space="preserve">
+    <value>Verbale rigenerato ({0} secondi)</value>
+  </data>
+  <data name="Meeting_NoTranscript" xml:space="preserve">
+    <value>Non c'è alcuna trascrizione</value>
+  </data>
+  <data name="Meeting_NoNotes" xml:space="preserve">
+    <value>Non ci sono note</value>
+  </data>
+  <data name="Meeting_NoMinutes" xml:space="preserve">
+    <value>Non c'è alcun verbale</value>
+  </data>
+  <data name="Meeting_CopiedTranscript" xml:space="preserve">
+    <value>Trascrizione copiata come Markdown</value>
+  </data>
+  <data name="Meeting_CopiedNotes" xml:space="preserve">
+    <value>Note copiate come Markdown</value>
+  </data>
+  <data name="Meeting_CopiedMinutes" xml:space="preserve">
+    <value>Verbale copiato come Markdown</value>
+  </data>
+  <data name="CopyFailed" xml:space="preserve">
+    <value>Copia non riuscita: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmDelete" xml:space="preserve">
+    <value>Eliminare "{0}"?
+
+Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristinarli dal Cestino.</value>
+  </data>
+  <data name="Meeting_ConfirmDelete_Title" xml:space="preserve">
+    <value>Elimina riunione — Hanasu</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Impossibile eliminare: {0}</value>
+  </data>
+  <data name="Meeting_MovedToRecycleBin" xml:space="preserve">
+    <value>"{0}" spostato nel Cestino</value>
+  </data>
+  <data name="Meeting_NotesWhileRecording" xml:space="preserve">
+    <value>Durante la registrazione, aggiungi le note nella casella delle note in alto (puoi modificare questa scheda dopo la registrazione).</value>
+  </data>
+  <data name="Meeting_NotesSaved" xml:space="preserve">
+    <value>Note salvate</value>
+  </data>
+  <data name="Meeting_UndoHighlight" xml:space="preserve">
+    <value>Annulla ★ (ancora {0} s)</value>
+  </data>
+  <data name="Meeting_Starting" xml:space="preserve">
+    <value>Avvio della registrazione…</value>
+  </data>
+  <data name="Meeting_PostProcessing" xml:space="preserve">
+    <value>Elaborazione dopo la registrazione</value>
+  </data>
+  <data name="Meeting_StopHint" xml:space="preserve">
+    <value>Puoi interrompere anche con {0}</value>
+  </data>
+  <data name="Meeting_StartHint" xml:space="preserve">
+    <value>Puoi avviare anche con {0}. Prima di iniziare, avvisa gli altri partecipanti che stai registrando.</value>
+  </data>
+  <data name="Device_DefaultMic" xml:space="preserve">
+    <value>Microfono predefinito di Windows</value>
+  </data>
+  <data name="Device_MissingMic" xml:space="preserve">
+    <value>(Microfono selezionato in precedenza, ora non collegato)</value>
+  </data>
+  <data name="Device_DefaultOutput" xml:space="preserve">
+    <value>Uscita predefinita di Windows</value>
+  </data>
+  <data name="Device_MissingOutput" xml:space="preserve">
+    <value>(Uscita selezionata in precedenza, ora non collegata)</value>
+  </data>
+  <data name="MeetingMic_StartFailed" xml:space="preserve">
+    <value>Impossibile avviare la registrazione dal microfono: {0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Impostazioni di Hanasu</value>
+  </data>
+  <data name="Settings_SavedImmediately" xml:space="preserve">
+    <value>Le modifiche vengono salvate subito</value>
+  </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>Generale</value>
+  </data>
+  <data name="Settings_Shortcuts" xml:space="preserve">
+    <value>Scelte rapide</value>
+  </data>
+  <data name="Settings_Dictation" xml:space="preserve">
+    <value>Dettatura</value>
+  </data>
+  <data name="Settings_ResetToDefault" xml:space="preserve">
+    <value>Ripristina predefinito</value>
+  </data>
+  <data name="Settings_TranslateAndType" xml:space="preserve">
+    <value>Traduci e digita</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>Fai clic su una casella, poi premi la combinazione di tasti desiderata. Durante la registrazione, Esc annulla. Alt + Space (menu finestra) e Win + H (digitazione vocale di Windows) sono usati da Windows, quindi vengono evitati.</value>
+  </data>
+  <data name="Settings_TranslationLanguages" xml:space="preserve">
+    <value>Lingue di traduzione</value>
+  </data>
+  <data name="Settings_TranslateEnglish" xml:space="preserve">
+    <value>Inglese</value>
+  </data>
+  <data name="Settings_TranslateJapanese" xml:space="preserve">
+    <value>Giapponese</value>
+  </data>
+  <data name="Settings_TranslationNote" xml:space="preserve">
+    <value>La scelta rapida "Traduci e digita" traduce nella lingua selezionata più a sinistra. Durante la registrazione puoi passare da "Come parlato" alle lingue selezionate nel pannello di registrazione (il testo viene digitato nella lingua selezionata quando interrompi). La traduzione usa l'IA scelta per la dettatura nella scheda "AI". Selezionane almeno una.</value>
+  </data>
+  <data name="Settings_RecordingMode" xml:space="preserve">
+    <value>Modalità di registrazione</value>
+  </data>
+  <data name="Settings_Toggle" xml:space="preserve">
+    <value>Avvia/interrompi a ogni pressione (attiva/disattiva)</value>
+  </data>
+  <data name="Settings_PushToTalk" xml:space="preserve">
+    <value>Registra solo tenendo premuto</value>
+  </data>
+  <data name="Settings_Engine" xml:space="preserve">
+    <value>Motore di trascrizione</value>
+  </data>
+  <data name="Settings_Engine_Windows" xml:space="preserve">
+    <value>Riconoscimento vocale di Windows (predefinito)</value>
+  </data>
+  <data name="Settings_Engine_Whisper" xml:space="preserve">
+    <value>Whisper (in esecuzione su questo PC)</value>
+  </data>
+  <data name="Settings_Engine_Gemini" xml:space="preserve">
+    <value>Gemini (invia l'audio a Google)</value>
+  </data>
+  <data name="Settings_Engine_WindowsNote" xml:space="preserve">
+    <value>Riconosce il parlato con il riconoscimento vocale di Windows (dettatura) e mostra risultati parziali mentre parli. Usa il riconoscimento vocale online di Microsoft, quindi attiva "Riconoscimento vocale online" in Impostazioni di Windows → Privacy e sicurezza → Voce. Usa il microfono predefinito di Windows (la selezione qui sotto non viene usata).</value>
+  </data>
+  <data name="Settings_OpenSpeechSettings" xml:space="preserve">
+    <value>Apri impostazioni vocali</value>
+  </data>
+  <data name="Settings_OpenLanguageSettings" xml:space="preserve">
+    <value>Apri impostazioni lingua</value>
+  </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp trascrive su questo PC (l'audio non lo lascia mai), tutto in una volta dopo l'interruzione della registrazione. Non appena scegli il motore o un modello, inizia il download del modello selezionato (le dimensioni sono indicate nell'elenco) da Hugging Face (puoi interromperlo con "Annulla"). I modelli più grandi sono più precisi ma più lenti.</value>
+  </data>
+  <data name="Settings_Model" xml:space="preserve">
+    <value>Modello</value>
+  </data>
+  <data name="Settings_Download" xml:space="preserve">
+    <value>Scarica</value>
+  </data>
+  <data name="Settings_CancelDownload" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="Settings_Engine_GeminiNote" xml:space="preserve">
+    <value>Invia l'audio registrato all'API Gemini di Google per la trascrizione (usando le credenziali di Gemini impostate nella scheda AI e il modello Gemini per la dettatura). Tieni presente che il tuo audio viene inviato a Google. Viene inviato dopo che interrompi la registrazione (fino a 7 minuti alla volta).</value>
+  </data>
+  <data name="Settings_Microphone" xml:space="preserve">
+    <value>Microfono</value>
+  </data>
+  <data name="Settings_NoTarget" xml:space="preserve">
+    <value>Quando non c'è dove digitare</value>
+  </data>
+  <data name="Settings_NoTargetNote" xml:space="preserve">
+    <value>Se nessun campo di testo ha lo stato attivo (ad esempio, il desktop è in primo piano) o l'app in primo piano viene eseguita come amministratore e non è possibile incollarvi, il risultato viene mostrato nella parte inferiore dello schermo. Rimane visibile finché non lo chiudi e puoi copiarlo con "Copia" o selezionando il testo.</value>
+  </data>
+  <data name="Settings_Fallback_Keep" xml:space="preserve">
+    <value>Mettilo anche negli Appunti (basta premere Ctrl+V dove vuoi inserirlo)</value>
+  </data>
+  <data name="Settings_Fallback_Restore" xml:space="preserve">
+    <value>Mostralo soltanto e lascia invariati gli Appunti (copialo con "Copia" nel pannello)</value>
+  </data>
+  <data name="Settings_Other" xml:space="preserve">
+    <value>Altro</value>
+  </data>
+  <data name="Settings_PlaySounds" xml:space="preserve">
+    <value>Riproduci suoni all'avvio e all'arresto della registrazione</value>
+  </data>
+  <data name="Settings_OpenLogs" xml:space="preserve">
+    <value>Apri cartella log</value>
+  </data>
+  <data name="Settings_OpenSettingsFolder" xml:space="preserve">
+    <value>Apri cartella impostazioni</value>
+  </data>
+  <data name="Settings_AiAndModels" xml:space="preserve">
+    <value>IA e modelli</value>
+  </data>
+  <data name="Settings_Ai_Dictation" xml:space="preserve">
+    <value>Dettatura (rifinitura, traduzione)</value>
+  </data>
+  <data name="Settings_Ai_Local" xml:space="preserve">
+    <value>Locale</value>
+  </data>
+  <data name="Settings_Ai_Meeting" xml:space="preserve">
+    <value>Riunioni (verbali)</value>
+  </data>
+  <data name="Settings_AiNote" xml:space="preserve">
+    <value>Puoi scegliere l'IA e il modello separatamente per la dettatura e le riunioni. I valori predefiniti sono gemini-3.5-flash-lite (dettatura) e gemini-3.8-flash (verbali) per Gemini, e Haiku 5.5 (dettatura) e Sonnet 5.5 (verbali) per Claude. Claude viene usato solo per elaborare testo, non per trascrivere l'audio (il motore di trascrizione si trova nelle schede "Generale" e "Riunioni").</value>
+  </data>
+  <data name="Settings_LocalModels" xml:space="preserve">
+    <value>Modelli locali (piccoli LLM in esecuzione su questo PC)</value>
+  </data>
+  <data name="Settings_LocalModelsNote" xml:space="preserve">
+    <value>Il testo viene elaborato solo su questo PC e non viene mai inviato su Internet. Scarica prima il modello che vuoi usare. Viene eseguito sulla CPU, quindi la rifinitura richiede da pochi secondi a più di dieci secondi e i verbali da pochi minuti a più di dieci minuti.</value>
+  </data>
+  <data name="Settings_Stop" xml:space="preserve">
+    <value>Interrompi</value>
+  </data>
+  <data name="Settings_Refine" xml:space="preserve">
+    <value>Rifinisci con l'IA (corregge errori di riconoscimento, intercalari, autocorrezioni e punteggiatura)</value>
+  </data>
+  <data name="Settings_RefineNote" xml:space="preserve">
+    <value>Se disattivato, al testo riconosciuto vengono applicate solo le sostituzioni del dizionario prima di digitarlo. La traduzione può essere fatta solo dall'IA, quindi il testo viene comunque inviato all'IA anche se questa opzione è disattivata.</value>
+  </data>
+  <data name="Settings_RefineLanguage" xml:space="preserve">
+    <value>Lingua della rifinitura</value>
+  </data>
+  <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
+    <value>Come parlato</value>
+  </data>
+  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
+    <value>Sempre giapponese</value>
+  </data>
+  <data name="Settings_SendAppName" xml:space="preserve">
+    <value>Comunica all'IA il nome dell'app in cui stai digitando (per adattarne lo stile)</value>
+  </data>
+  <data name="Settings_GeminiAuth" xml:space="preserve">
+    <value>Autenticazione di Gemini</value>
+  </data>
+  <data name="Settings_Auth_ApiKey" xml:space="preserve">
+    <value>Chiave API (Google AI Studio)</value>
+  </data>
+  <data name="Settings_Auth_ServiceAccount" xml:space="preserve">
+    <value>Account di servizio (Vertex AI)</value>
+  </data>
+  <data name="Settings_ApiKey" xml:space="preserve">
+    <value>Chiave API</value>
+  </data>
+  <data name="Settings_KeyJson" xml:space="preserve">
+    <value>Chiave (JSON)</value>
+  </data>
+  <data name="Settings_Browse" xml:space="preserve">
+    <value>Sfoglia…</value>
+  </data>
+  <data name="Settings_Region" xml:space="preserve">
+    <value>Area geografica</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Scegli la chiave di un account di servizio con il ruolo Vertex AI User (roles/aiplatform.user). Viene salvato solo il percorso del file della chiave (il contenuto non viene copiato). Conserva il file della chiave dove altre persone non possano leggerlo. L'area geografica predefinita è global. "Verifica connessione" legge solo le informazioni sul modello e non comporta addebiti.</value>
+  </data>
+  <data name="Settings_ClaudeApiKey" xml:space="preserve">
+    <value>Chiave API di Claude</value>
+  </data>
+  <data name="Settings_TestConnection" xml:space="preserve">
+    <value>Verifica connessione</value>
+  </data>
+  <data name="Settings_ClaudeNote" xml:space="preserve">
+    <value>Immetti una chiave API creata in Claude Console (platform.claude.com). Le chiavi salvate non vengono mostrate sullo schermo (solo gli ultimi 4 caratteri). "Verifica connessione" recupera solo le informazioni sui modelli e non comporta addebiti.</value>
+  </data>
+  <data name="Settings_KeyProtection" xml:space="preserve">
+    <value>Protezione delle chiavi API</value>
+  </data>
+  <data name="Settings_UseHello" xml:space="preserve">
+    <value>Proteggi le chiavi API con Windows Hello (verifica con PIN, volto o impronta digitale quando vengono usate)</value>
+  </data>
+  <data name="Settings_KeyProtectionNote" xml:space="preserve">
+    <value>Le chiavi vengono archiviate crittografate in %LOCALAPPDATA%\Hanasu\secrets.json, non in settings.json. Con DPAPI (predefinito), solo questo utente di Windows può leggerle, ma altre app eseguite con lo stesso utente possono leggerle senza conferma. Con Windows Hello, se altre app tentano di leggerle compare una richiesta di Windows Hello (la verifica avviene una volta al primo utilizzo dopo l'avvio e di nuovo dopo il blocco dello schermo). Questo non impedisce alle app eseguite con lo stesso utente di leggere la memoria mentre Hanasu è in esecuzione.</value>
+  </data>
+  <data name="Settings_Trial" xml:space="preserve">
+    <value>Prova (IA della dettatura)</value>
+  </data>
+  <data name="Settings_TrialSample" xml:space="preserve">
+    <value>ehm allora per la riunione di domani cioè uso le slide che ho fatto con gemini</value>
+  </data>
+  <data name="Settings_TryRefine" xml:space="preserve">
+    <value>Prova la rifinitura</value>
+  </data>
+  <data name="Settings_TryEnglish" xml:space="preserve">
+    <value>Prova la traduzione in inglese</value>
+  </data>
+  <data name="Settings_TryJapanese" xml:space="preserve">
+    <value>Prova la traduzione in giapponese</value>
+  </data>
+  <data name="Settings_Tab_Meetings" xml:space="preserve">
+    <value>Riunioni</value>
+  </data>
+  <data name="Settings_MeetingStartStop" xml:space="preserve">
+    <value>Avvia/interrompi registrazione</value>
+  </data>
+  <data name="Settings_HighlightMark" xml:space="preserve">
+    <value>Contrassegno "Importante"</value>
+  </data>
+  <data name="Settings_UseHighlightHotKey" xml:space="preserve">
+    <value>Usa la scelta rapida "Importante" (attiva solo durante la registrazione)</value>
+  </data>
+  <data name="Settings_Transcription" xml:space="preserve">
+    <value>Trascrizione</value>
+  </data>
+  <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
+    <value>Whisper (in esecuzione su questo PC; predefinito)</value>
+  </data>
+  <data name="Settings_MeetingEngineNote" xml:space="preserve">
+    <value>Durante la registrazione, l'audio viene solo scritto su file; dopo l'arresto, i canali "Io" e "Altri" vengono trascritti ciascuno con indicazioni temporali. Il riconoscimento vocale di Windows può ascoltare solo il microfono predefinito di Windows e non può acquisire l'audio del PC (gli altri), quindi non può essere usato per le riunioni.</value>
+  </data>
+  <data name="Settings_Speakers" xml:space="preserve">
+    <value>Parlanti</value>
+  </data>
+  <data name="Settings_Diarize" xml:space="preserve">
+    <value>Separa gli altri parlanti (Parlante 1, Parlante 2…)</value>
+  </data>
+  <data name="Settings_DiarizeNote" xml:space="preserve">
+    <value>I parlanti vengono separati su questo PC con sherpa-onnx (modelli pyannote e 3D-Speaker). I modelli (circa 34 MB) vengono scaricati la prima volta. Se disattivato, l'altra parte viene raggruppata in un unico "Altri". Puoi rinominare i parlanti in Note riunioni.</value>
+  </data>
+  <data name="Settings_Minutes" xml:space="preserve">
+    <value>Verbali</value>
+  </data>
+  <data name="Settings_MakeMinutes" xml:space="preserve">
+    <value>Crea il verbale con l'IA dopo la registrazione</value>
+  </data>
+  <data name="Settings_MinutesNote" xml:space="preserve">
+    <value>Scegli l'IA e il modello per i verbali in "Riunioni (verbali)" nella scheda "AI". Viene inviato solo il testo della trascrizione (se il motore di trascrizione è Gemini, anche l'audio viene inviato a Google). Scegli il modello di verbale in Note riunioni.</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>Archiviazione</value>
+  </data>
+  <data name="Settings_KeepAudio" xml:space="preserve">
+    <value>Conserva i file audio (me.wav / others.wav) dopo l'elaborazione</value>
+  </data>
+  <data name="Settings_KeepAudioNote" xml:space="preserve">
+    <value>Se disattivato, l'audio viene eliminato dopo la creazione della trascrizione e del verbale (viene conservato se la trascrizione non riesce). È in formato WAV mono a 16 kHz, circa 115 MB per canale all'ora.</value>
+  </data>
+  <data name="Settings_SaveLocation" xml:space="preserve">
+    <value>Percorso di salvataggio</value>
+  </data>
+  <data name="Settings_Open" xml:space="preserve">
+    <value>Apri</value>
+  </data>
+  <data name="Settings_MeetingsFolderNote" xml:space="preserve">
+    <value>Per ogni riunione viene creata una cartella con il nome della data e dell'ora, contenente meeting.json (stesso formato della versione per Mac), transcript.md, minutes.md, notes.md e l'audio.</value>
+  </data>
+  <data name="Settings_ConsentNote" xml:space="preserve">
+    <value>Prima di registrare, ottieni il consenso degli altri partecipanti. Usando gli auricolari, le loro voci non finiscono nel tuo microfono.</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>Cronologia</value>
+  </data>
+  <data name="Settings_DictationHistory" xml:space="preserve">
+    <value>Cronologia dettatura</value>
+  </data>
+  <data name="Settings_SaveHistory" xml:space="preserve">
+    <value>Salva la cronologia in un file</value>
+  </data>
+  <data name="Settings_HistoryNote" xml:space="preserve">
+    <value>Conserva i risultati della dettatura e le trascrizioni originali, così puoi cercarli e copiarli con "Apri cronologia". Se disattivato, i nuovi risultati non vengono scritti in un file; in memoria vengono conservati solo gli ultimi 10 per "Risultati recenti" nel menu dell'area di notifica (la cronologia salvata non viene eliminata).</value>
+  </data>
+  <data name="Settings_KeepDays" xml:space="preserve">
+    <value>Conserva per</value>
+  </data>
+  <data name="Settings_KeepCount" xml:space="preserve">
+    <value>Conserva fino a</value>
+  </data>
+  <data name="Settings_KeepNote" xml:space="preserve">
+    <value>Vengono conservate solo le voci che rientrano in entrambi i limiti; le più vecchie vengono eliminate per prime (quando se ne aggiunge una, all'avvio e quando modifichi queste impostazioni). I valori predefiniti sono 30 giorni e 1000 voci.</value>
+  </data>
+  <data name="Settings_OpenHistory" xml:space="preserve">
+    <value>Apri cronologia…</value>
+  </data>
+  <data name="Settings_DeleteAllHistory" xml:space="preserve">
+    <value>Elimina tutta la cronologia…</value>
+  </data>
+  <data name="Settings_Tab_Dictionary" xml:space="preserve">
+    <value>Dizionario e regole</value>
+  </data>
+  <data name="Settings_UserDictionary" xml:space="preserve">
+    <value>Dizionario utente</value>
+  </data>
+  <data name="Settings_TryReplace" xml:space="preserve">
+    <value>Prova le sostituzioni</value>
+  </data>
+  <data name="Settings_ExtraRules" xml:space="preserve">
+    <value>Regole di rifinitura aggiuntive</value>
+  </data>
+  <data name="Settings_ExtraRulesNote" xml:space="preserve">
+    <value>Regole passate all'IA (Gemini, Claude) durante la rifinitura (ad esempio, "usa un tono formale"). Non vengono usate per la traduzione in inglese (vengono usate per la traduzione in giapponese).</value>
+  </data>
+  <data name="Settings_DictionaryHelp" xml:space="preserve">
+    <value>Una per riga. Una parola da sola indica all'IA come scriverla. "sentito =&gt; grafia" sostituisce ciò che è stato riconosciuto con la grafia (ad esempio, stock mark =&gt; Stockmark; separa più voci a sinistra con ","). Le righe che iniziano con "#" sono commenti.</value>
+  </data>
+  <data name="Settings_EntryCount" xml:space="preserve">
+    <value>{0} voci</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>Salvato</value>
+  </data>
+  <data name="Settings_MicNote_Windows" xml:space="preserve">
+    <value>Il motore di Windows usa il microfono predefinito di Windows (puoi cambiarlo in Impostazioni di Windows → Sistema → Audio).</value>
+  </data>
+  <data name="Settings_MicNote_Selected" xml:space="preserve">
+    <value>Whisper e Gemini registrano con il microfono selezionato qui (convertito in mono a 16 kHz).</value>
+  </data>
+  <data name="Settings_HistoryStatus" xml:space="preserve">
+    <value>Cronologia attuale: {0} voci (salvata in: {1})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteWhisper" xml:space="preserve">
+    <value>Eliminare il modello Whisper {0} ({1})?</value>
+  </data>
+  <data name="Settings_Downloading" xml:space="preserve">
+    <value>Download in corso… {0}</value>
+  </data>
+  <data name="Settings_Downloaded" xml:space="preserve">
+    <value>Scaricato</value>
+  </data>
+  <data name="Settings_DownloadFailed" xml:space="preserve">
+    <value>Non riuscito: {0}</value>
+  </data>
+  <data name="Settings_NotDownloaded" xml:space="preserve">
+    <value>Non ancora scaricato</value>
+  </data>
+  <data name="Settings_ConfirmDeleteLocal" xml:space="preserve">
+    <value>Eliminare il modello locale {0} ({1})?</value>
+  </data>
+  <data name="Settings_MinutesAiNote" xml:space="preserve">
+    <value>I verbali vengono creati con {0} ({1}).</value>
+  </data>
+  <data name="Settings_Missing_LocalModel" xml:space="preserve">
+    <value>il modello locale "{0}"</value>
+  </data>
+  <data name="Settings_Missing_GeminiCredentials" xml:space="preserve">
+    <value>credenziali di Gemini</value>
+  </data>
+  <data name="Settings_MissingNote" xml:space="preserve">
+    <value>Non ancora configurato: {0} (configura o scarica qui sotto).</value>
+  </data>
+  <data name="Settings_EnterApiKey" xml:space="preserve">
+    <value>Immetti una chiave API</value>
+  </data>
+  <data name="Settings_ClaudeKeyPrefix" xml:space="preserve">
+    <value>Le chiavi API di Claude iniziano con "sk-ant-". Controlla ciò che hai immesso.</value>
+  </data>
+  <data name="Settings_ClaudeConnecting" xml:space="preserve">
+    <value>Connessione all'API di Claude…</value>
+  </data>
+  <data name="Settings_ClaudeConnectedUnsaved" xml:space="preserve">
+    <value>Connesso con questa chiave (non ancora salvata). {0} è disponibile. </value>
+  </data>
+  <data name="Settings_ClaudeConnected" xml:space="preserve">
+    <value>Connesso. {0} è disponibile. </value>
+  </data>
+  <data name="Settings_Hello_On" xml:space="preserve">
+    <value>Protetta con Windows Hello.</value>
+  </data>
+  <data name="Settings_Hello_Off" xml:space="preserve">
+    <value>Attualmente protetta con DPAPI.</value>
+  </data>
+  <data name="Settings_Hello_Unavailable" xml:space="preserve">
+    <value>Windows Hello non è configurato su questo PC, quindi non è possibile selezionare questa opzione (Impostazioni di Windows → Account → Opzioni di accesso).</value>
+  </data>
+  <data name="Settings_Hello_Enabling" xml:space="preserve">
+    <value>Richiesta della verifica di Windows Hello (compare due volte per conferma)…</value>
+  </data>
+  <data name="Settings_Hello_Disabling" xml:space="preserve">
+    <value>Richiesta della verifica di Windows Hello (per leggere le chiavi una volta e tornare a DPAPI)…</value>
+  </data>
+  <data name="Settings_Hello_SwitchFailed" xml:space="preserve">
+    <value>Impossibile cambiare: {0}</value>
+  </data>
+  <data name="Settings_ServiceAccountFilter" xml:space="preserve">
+    <value>Chiave dell'account di servizio (*.json)|*.json|Tutti i file (*.*)|*.*</value>
+  </data>
+  <data name="Settings_ServiceAccountDialogTitle" xml:space="preserve">
+    <value>Scegli una chiave dell'account di servizio (JSON)</value>
+  </data>
+  <data name="Settings_TrialRefining" xml:space="preserve">
+    <value>Rifinitura…</value>
+  </data>
+  <data name="Settings_TrialTranslating" xml:space="preserve">
+    <value>Traduzione…</value>
+  </data>
+  <data name="Settings_TrialDone" xml:space="preserve">
+    <value>{0} ({1}) ha impiegato {2} s</value>
+  </data>
+  <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
+    <value>L'audio registrato della riunione viene diviso in parti da 5 minuti e inviato a Gemini (usando le credenziali di Gemini della scheda AI e il modello Gemini per la dettatura). Tieni presente che il tuo audio viene inviato a Google.</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
+    <value>Usa il modello Whisper selezionato nella scheda "Generale" ({0}).</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
+    <value> Non è ancora stato scaricato (scaricalo nella scheda "Generale").</value>
+  </data>
+  <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
+    <value>Scegli dove salvare le riunioni</value>
+  </data>
+  <data name="Settings_DictionaryLineIssue" xml:space="preserve">
+    <value>Riga {0}: {1}</value>
+  </data>
+  <data name="Settings_NoReplacements" xml:space="preserve">
+    <value>Nessuna sostituzione</value>
+  </data>
+  <data name="Settings_ReplacementResult" xml:space="preserve">
+    <value>→ {0} ({1})</value>
+  </data>
+  <data name="Settings_TrialAppName" xml:space="preserve">
+    <value>Impostazioni di Hanasu</value>
+  </data>
+  <data name="Mic_UnsupportedFormat" xml:space="preserve">
+    <value>Formato di registrazione non supportato ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>Avvia &amp;traduzione e digitazione</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>Avvia &amp;traduzione in inglese e digitazione</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>Avvia &amp;traduzione in giapponese e digitazione</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>Eliminare questa voce della cronologia? L'operazione non può essere annullata.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>Cerca nella cronologia</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>Risultato</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>Originale</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>Nessun contrassegno "Importante"</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>Contesto dei contrassegni "Importante" copiato come Markdown</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>Livello del mio microfono</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>Livello audio degli altri partecipanti</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>Inserisci una nota</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>Verbale</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>Trascrizione</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>Contesto intorno ai contrassegni "Importante"</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>Scelta rapida per la dettatura</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>Ripristina la scelta rapida predefinita per la dettatura</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>Scelta rapida per tradurre e digitare</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>Ripristina la scelta rapida predefinita per tradurre e digitare</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>Elimina il modello Whisper selezionato</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>Microfono</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Elimina la chiave API di Gemini</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Verifica la connessione a Gemini</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Elimina la chiave API di Claude</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>Scelta rapida per avviare o interrompere la registrazione della riunione</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>Ripristina la scelta rapida predefinita per la registrazione della riunione</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>Scelta rapida per il contrassegno "Importante"</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>Ripristina la scelta rapida predefinita per il contrassegno "Importante"</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>Ripristina il percorso di salvataggio predefinito delle riunioni</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} è già la scelta rapida per "{1}". Scegli un altro tasto.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>Registrazione della riunione</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>Download in corso… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>Elenco della cronologia</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>Ancora nessuna cronologia. Le tue dettature verranno visualizzate qui.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>Nessuna voce della cronologia corrisponde alla ricerca.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>Selezionato</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>Elenco delle riunioni</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>Caricamento delle riunioni…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>Titolo della riunione</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>Impossibile caricare l'elenco delle riunioni.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>Ancora nessuna registrazione di riunione. Avviane una con "● Avvia registrazione riunione" in basso a sinistra e verrà visualizzata qui.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>Rigenerare il verbale?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>Salvare le note e rigenerare il verbale?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+Il verbale e le azioni da svolgere attuali verranno sostituiti.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>Cartella di salvataggio non trovata</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>Apri impostazioni privacy del microfono</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>Se il microfono non può essere usato, vai in Impostazioni di Windows → Privacy e sicurezza → Microfono e attiva l'accesso al microfono per le app desktop.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>"Verifica connessione" legge solo le informazioni sul modello e non comporta addebiti.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Verifica la connessione a Vertex AI</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>Scarica ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>Eliminare la chiave API di {0} salvata? Per continuare a usarla, salva di nuovo la chiave.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Connessione alla Gemini API…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Connessione a Vertex AI…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>Connesso con questa chiave (non ancora salvata). {0} è disponibile.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>Connesso. {0} è disponibile. {1}</value>
+  </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Verifica a&amp;ggiornamenti…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Verifica aggiornamenti all’avvio</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Verifica ora</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Ricerca di aggiornamenti in corso. Attendi.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu è aggiornato ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Impossibile cercare aggiornamenti.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Impossibile aggiornare a Hanasu {0}. È ancora installata la versione {1}.
+
+I dettagli sono in {2}.
+
+Puoi anche reinstallarlo dalla pagina della release. Vuoi aprirla nel browser?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Non è possibile aggiornare durante la registrazione o la registrazione di una riunione. Al termine, scegli di nuovo «Verifica aggiornamenti…» dal menu.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu si trova nella radice di un’unità, quindi non può aggiornarsi dall’app. Mettilo in una cartella dedicata.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Download dell’aggiornamento</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>Il download non è terminato entro 10 minuti, quindi è stato interrotto</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Preparazione dell’aggiornamento</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Estrazione dello zip scaricato.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…e altri ({0})</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>La cartella di Hanasu ({0}) contiene file o cartelle che non appartengono a Hanasu.
+{1}{2}
+
+Gli aggiornamenti dall’app sostituiscono l’intera cartella, quindi funzionano solo se Hanasu si trova in una cartella dedicata. Spostalo in una cartella dedicata.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>Impossibile scrivere in questa cartella (se Hanasu è in Programmi o simili, reinstallalo come amministratore o installalo dalla pagina della release).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Impossibile aggiornare.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Vuoi aprire la pagina della release nel browser?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Impossibile avviare lo script di aggiornamento</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Aggiornamento di Hanasu</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>È disponibile Hanasu {0} (versione attuale: {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Fai clic su «Aggiorna» per scaricare e installare la nuova versione e riavviare Hanasu.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Questa versione non può essere installata dall’app. Installala dalla pagina della release.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Apri la pagina della release</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Aggiorna</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Apri la pagina</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Più tardi</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Salta questa versione</value>
+  </data>
+</root>

@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>Не найден llama-server, который запускает локальную LLM. Распакуйте ZIP-архив Hanasu заново или укажите путь в переменной среды HANASU_LLAMA_SERVER.</value>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>Локальная модель еще не скачана. Скачайте ее в меню → Параметры → AI.</value>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>Локальная модель «{0}» еще не скачана. Скачайте ее в меню → Параметры → AI.</value>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>Не удалось запустить локальную LLM (код выхода {0}).</value>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>Локальная LLM не запустилась за отведенное время (с: {0}).</value>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>Локальная LLM вернула ошибку ({0})</value>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>Ответ локальной LLM был обрезан из-за ограничения длины, поэтому он не использован.</value>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>Локальная LLM не вернула результат.</value>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>Не удалось прочитать ответ локальной LLM.</value>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>Локальная LLM не ответила за отведенное время (с: {0}).</value>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>Локальная LLM</value>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>Рекомендуется. От Google. Самая большая; самая естественная обработка текста и протоколы. Для ПК с памятью от 16 ГБ.</value>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>От Liquid AI. Маленькая и быстрая. Хорошо следует инструкциям на японском.</value>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>От SB Intuitions. Обучена на японском. Контекст до 8K (длинные встречи обрабатываются частями).</value>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>От Alibaba. Примерно вдвое меньше Gemma, поэтому легче работает на ПК с 8 ГБ памяти. Хуже Gemma справляется с самоисправлениями в речи.</value>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>Лицензия: {0}. Эта лицензия не разрешает коммерческое использование организациями с годовой выручкой от 10 млн долларов США.</value>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>Лицензия: {0}</value>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0} ({1}) · Рекомендуется</value>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>Нажмите одну клавишу в дополнение к клавишам-модификаторам.</value>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc отменяет запись, поэтому ее нельзя назначить сочетанием клавиш.</value>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>Используйте вместе с Ctrl, Alt, Shift или Win (F1–F24 можно использовать отдельно).</value>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>Сочетания только с Shift мешают вводу текста, поэтому их нельзя использовать.</value>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0} используется для действия «{1}», поэтому выберите другое сочетание.</value>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>меню окна Windows</value>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>голосовой ввод Windows (Win + H)</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>переключение языка ввода</value>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>включение и выключение IME (зависит от IME)</value>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>ввод полноширинных и полуширинных пробелов</value>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>переключение окон</value>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>закрытие окон</value>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>блокировка экрана</value>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>показ рабочего стола</value>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>Nonconvert</value>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>Клавиша {0}</value>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>Не задан</value>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>окончание неизвестно</value>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>защищен Windows Hello</value>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>защищен DPAPI</value>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>Сохранен ({0}, {1})</value>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>Сохраненный ключ API поврежден. Введите его заново в разделе Параметры → AI.</value>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>Не удалось расшифровать ключ API, защищенный Windows Hello (возможно, ключ Windows Hello был создан заново). Введите его заново в разделе Параметры → AI.</value>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>Не удается прочитать сохраненный ключ API (возможно, он был сохранен другим пользователем Windows или на другом ПК). Введите его заново в разделе Параметры → AI.</value>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>Windows Hello недоступен на этом ПК.</value>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>Windows Hello недоступен на этом ПК, поэтому сохраненный ключ API не удается прочитать. Введите его заново в разделе Параметры → AI.</value>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>Не удалось создать ключ Windows Hello.</value>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>Ключ Windows Hello не выдал то же значение, поэтому защита не переключена на Windows Hello (по-прежнему используется DPAPI).</value>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>Ключ API Claude не задан (меню → Параметры → AI).</value>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude не ответил за отведенное время (с: {0}).</value>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude отказался обрабатывать этот текст по соображениям безопасности. Попробуйте другую модель (Параметры → AI) или Gemini.</value>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude отказался обрабатывать этот текст по соображениям безопасности ({0}). Попробуйте другую модель (Параметры → AI) или Gemini.</value>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Ответ Claude оказался слишком длинным и был обрезан.</value>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude не вернул результат.</value>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>Неверный ключ API Claude (401). В разделе Параметры → AI снова введите ключ, созданный в Claude Console.</value>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>С этим ключом API нельзя использовать Claude (403)</value>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>Модель {0} не найдена или недоступна для этого ключа API (404).</value>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>Проблема с оплатой Claude API (402). Проверьте параметры оплаты в Claude Console.</value>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>Достигнут лимит использования Claude API (429). Подождите немного и повторите попытку.</value>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>Claude API перегружен (529). Подождите немного и повторите попытку.</value>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>В Claude API произошла ошибка ({0}). Подождите немного и повторите попытку.</value>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>Claude API не принял запрос ({0})</value>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>Не удалось подключиться к Claude API. Проверьте подключение к сети.</value>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5 (быстрая, недорогая; по умолчанию для диктовки)</value>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5 (по умолчанию для протоколов)</value>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5 (самая умная, самая дорогая)</value>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>Учетные данные Gemini (ключ API или служебная учетная запись) не заданы.</value>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Ошибка Gemini API ({0}): {1}</value>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini не вернул результат.</value>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini не вернул результат ({0}).</value>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>Не удалось прочитать ответ Gemini.</value>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini не ответил за отведенное время (с: {0}).</value>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>JSON служебной учетной записи не найден: {0}</value>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>Не удается прочитать JSON служебной учетной записи.</value>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>Истекло время ожидания маркера доступа.</value>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>Не удалось получить маркер доступа ({0}): {1}</value>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>Не удается прочитать закрытый ключ служебной учетной записи.</value>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>Не удалось подписать запрос маркера доступа: {0}</value>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>Скачивание разрешено только с ожидаемых узлов: {0}</value>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>Не удалось скачать (HTTP {0}).</value>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>Скачивание остановлено: произошло перенаправление на адрес без https.</value>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>Размер скачиваемого файла не совпадает с ожидаемым (байт: {0}; ожидалось байт: {1}).</value>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>Скачивание остановлено: файл больше ожидаемого.</value>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>Скачивание прервано.</value>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>Хэш (SHA-256) скачанного файла не совпадает, поэтому файл не будет использован.</value>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>Распознавание с помощью {0}…</value>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>Для распознавания выбран Gemini, но учетные данные Gemini не заданы (меню → Параметры → AI).</value>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>Не удалось распознать речь с помощью Gemini: {0}</value>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0} ({1}) — {2}</value>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>Самая маленькая. Низкая точность для японского (для проверки).</value>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>Маленькая. Невысокая точность для японского.</value>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>Для повседневного использования. Хороший баланс скорости и точности.</value>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>Высокая точность. Для быстрых процессоров.</value>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>Высокая точность; меньше благодаря квантованию. Для быстрых процессоров.</value>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>Высокая точность. Для быстрых процессоров.</value>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>Это не WAV-файл.</value>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>В WAV-файле нет блока fmt.</value>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>Неподдерживаемый формат WAV (format={0}, bits={1}).</value>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>В WAV-файле нет блока data.</value>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>Английский</value>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>Японский</value>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>На английский</value>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>На японский</value>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>Перевести и ввести</value>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>Перевести на английский и ввести</value>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>Перевести на японский и ввести</value>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>Переведено на английский и введено</value>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>Переведено на японский и введено</value>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>Введено</value>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>Отменено</value>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>Подготовка…</value>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>Завершение…</value>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>Речь не распознана.</value>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>Запись</value>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>Говорите…</value>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>Нельзя вставить текст в приложение, запущенное от имени администратора</value>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>Не удалось отправить нажатие клавиш для вставки</value>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>Не удалось использовать буфер обмена</value>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>Не удалось ввести текст</value>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>Не найдено место для ввода</value>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>Текст также скопирован в буфер обмена. Щелкните нужное место и нажмите Ctrl+V.</value>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>Нажмите «Копировать» или выделите и скопируйте текст, затем нажмите Ctrl+V в нужном месте.</value>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>Перевод на английский ({0})…</value>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>Перевод на японский ({0})…</value>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>Обработка ({0})…</value>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>Обработка</value>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>Успешно</value>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>Ошибка ИИ (исходный текст)</value>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>Не настроено (исходный текст)</value>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>Обработка выключена (исходный текст)</value>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>Дней: {0}</value>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>Бессрочно</value>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>Не удалось прочитать файл журнала, поэтому он сохранен как {0} и начат новый.</value>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>Не удалось прочитать файл журнала: {0}</value>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>Не удалось сохранить журнал: {0}</value>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>Сегодня</value>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>Вчера</value>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>ddd, d MMMM</value>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>ddd, d MMMM yyyy</value>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}, поэтому текст введен без обработки (меню → Параметры → AI).</value>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}, поэтому текст введен без перевода (меню → Параметры → AI).</value>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>Введен текст до обработки.</value>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>Введен текст без перевода.</value>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>Модель локальной LLM еще не скачана (меню → Параметры → AI).</value>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>Учетные данные Gemini (ключ API или служебная учетная запись) не заданы (меню → Параметры → AI).</value>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>Модель локальной LLM еще не скачана</value>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>Учетные данные {0} не заданы</value>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>Авто</value>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>Регулярная встреча</value>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>Переговоры с клиентом</value>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>Мозговой штурм</value>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>Свой</value>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>Обзор, обсуждение, решения, задачи</value>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>Ход работ, отчеты, проблемы, решения, задачи</value>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>Новости, беспокойства, обратная связь, договоренности, задачи</value>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>Проблемы клиента, предложение, реакция, опасения, следующие шаги</value>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>Высказанные идеи, перспективные идеи, открытые вопросы, следующие шаги</value>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>По вашим собственным инструкциям</value>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>Разделение собеседников…</value>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>Не удалось разделить собеседников, поэтому все они объединены как «Собеседники» ({0}).</value>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>Аудиофайлы сохранены.</value>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>Не удалось создать протокол: {0}</value>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}, поэтому протокол не создан (меню → Параметры → AI).</value>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>Создание протокола ({0})…</value>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>Распознавание с помощью {0}… ({1})</value>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>Распознавание с помощью {0}… ({1} {2})</value>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>Не удалось распознать аудио ({0}): {1}</value>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>Для распознавания встреч выбран Gemini, но учетные данные Gemini не заданы (меню → Параметры → AI).</value>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>Встреча {0}</value>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>Приложение закрылось во время записи. Аудиофайлы ({0} / {1}) могли частично сохраниться.</value>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>Не удается начать запись встречи</value>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>Идет запись диктовки. Повторите попытку после ее завершения.</value>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>Не удается записать звук ПК (других участников)</value>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>Будет записан только ваш голос (микрофон). {0}</value>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>Не удалось начать запись: {0}</value>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>Не удалось начать запись встречи</value>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>Остановка записи…</value>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>Запись встречи</value>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>Встреча записана</value>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>Расшифровка сохранена.</value>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>Расшифровка и протокол сохранены.</value>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>Встреча записана (с некоторыми проблемами)</value>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>Ошибка обработки после записи: {0}</value>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>Не удалось записать встречу</value>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>Нельзя удалить встречу, которая записывается, обрабатывается или для которой заново создается протокол.</value>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>Запись с микрофона остановлена</value>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>Запись прервалась (например, микрофон был отключен), поэтому запись встречи будет остановлена.</value>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>Я</value>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>Собеседники</value>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>Говорящий {0}</value>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>В комнате {0}</value>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — Расшифровка</value>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- Дата: {0}</value>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- Длительность: {0}</value>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — Заметки</value>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>Отметок «Важно» нет. Добавьте отметку во время записи кнопкой «★ Важно» или сочетанием клавиш — здесь появится разговор вокруг нее.</value>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>Важно</value>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>Рядом с этой отметкой (от 30 секунд до и до 15 секунд после) ничего не было сказано.</value>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>Правильное написание пустое, поэтому замена не выполняется.</value>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>«{0}» состоит из одного символа, поэтому не используется (слишком легко совпадает с частями других слов).</value>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>«{0}» также есть в строке выше, поэтому используется та строка.</value>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>Модель Whisper ({0}) еще не скачана. Скачайте ее в меню → Параметры → Общие.</value>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>Не удалось запустить Whisper. Установите Microsoft Visual C++ Redistributable (2015–2022, x64) и повторите попытку. ({0})</value>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>Не удалось загрузить модель Whisper: {0}</value>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>Скачивание моделей разделения говорящих… ({0} / {1} МБ)</value>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>Частота дискретизации модели разделения говорящих не соответствует ожидаемой ({0} Гц).</value>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>Регион Vertex AI «{0}» нельзя использовать (только строчные буквы, цифры и дефисы; например, global, us-central1).</value>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>token_uri служебной учетной записи ({0}) не является конечной точкой токенов Google (oauth2.googleapis.com), поэтому он не будет использоваться.</value>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Достигнут предел записи в 10 минут, поэтому будет обработано уже записанное аудио</value>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>Ключ API (или служебная учетная запись) неверен либо не имеет доступа к Gemini API ({0})</value>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>Модель «{0}» не найдена или недоступна с этими учетными данными</value>
+  </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>Размер загружаемого файла неизвестен</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>Загрузка остановлена: произошло перенаправление на непредусмотренный узел: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Не удалось прочитать сведения о выпуске</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>Не удалось получить последнюю версию с GitHub (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>Не удалось получить последнюю версию с GitHub (HTTP {0}). Возможно, исчерпан лимит запросов к GitHub — подождите немного и повторите попытку.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Не удалось подключиться к GitHub: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub не ответил вовремя</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>В zip есть элемент, указывающий за пределы папки распаковки, поэтому он не будет использован: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>Распакованный zip больше ожидаемого, поэтому он не будет использован</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>Не удалось открыть скачанный zip</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>В zip нет {0}, поэтому он не будет использован</value>
+  </data>
+</root>

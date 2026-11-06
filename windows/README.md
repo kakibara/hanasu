@@ -71,9 +71,9 @@ windows/
 ├── Hanasu.Windows.sln
 ├── Directory.Build.props        共通の設定（C# 12、Nullable、EnableWindowsTargeting など）
 ├── Hanasu.Core/                 net8.0。OS に依存しない部品（Mac でもテストできる）
-│   ├── Ai/                      文章の処理の AI の共通の形（ITextGenerator）・用途ごとの選び方（TextAiFactory）・区切りのタグの無害化・ログの伏せ字
+│   ├── Ai/                      文章の処理の AI の共通の形（ITextGenerator）・用途ごとの選び方（TextAiFactory）・区切りのタグの無害化・ログの伏せ字・プロンプトの言語と文面の読み込み（Prompts.cs）
 │   ├── Claude/                  Claude API（公式の C# SDK）での整形・英訳・議事録・エラーの分類・モデルの一覧
-│   ├── Gemini/                  プロンプト（Mac 版と同じ文面。Claude にも同じものを送る）・REST クライアント・サービスアカウントの JWT（RS256）・認証の決め方
+│   ├── Gemini/                  プロンプト（文面は Mac 版と共有の Sources/Hanasu/Resources/Prompts/<言語>.json を埋め込んで読む。Claude にも同じものを送る）・REST クライアント・サービスアカウントの JWT（RS256）・認証の決め方
 │   ├── Net/                     リダイレクトに従わない HttpClient・モデルのダウンロード（ハッシュの確認）
 │   ├── Text/UserDictionary.cs   ユーザー辞書と置き換えルール（Mac 版の UserDictionary.swift の移植）
 │   ├── Settings/                設定（settings.json）・ショートカットの組み合わせ・API キーの保存（SecretStore。DPAPI と Windows Hello はインターフェイスで渡す）
@@ -165,13 +165,21 @@ MeetingController（Core。idle → starting → recording → processing → id
 - **話者の割り当て**: Mac 版 `MeetingProcessor` の移植（語の終わり寄りの時刻で話者を決める、区間のすき間の扱い、登場順に話者1・話者2…）。Windows 版で 2 つだけ足した:
   - 1 つの発話を話者で分けたとき、端に残った 1 秒未満・4 文字以下のかけらは隣にまとめる（Whisper の語の時刻が少し遅れ、前の人の最後の語が次の人に付きやすいため）。
   - スピーカーからの回り込みの除去は、6 文字以上のかけらだけを対象にする（「ます」「ありますか」がたまたま似て消えるのを防ぐ）。
-- **議事録**: 設定 → AI の「会議（議事録）」で選んだ AI とモデル（既定は Gemini の gemini-3.8-flash。Claude にすると既定は claude-sonnet-5-5）。プロンプト（型ごとの見出しと指示・メモと「ここ重要」の扱い・`{{ACTION_ITEMS}}` と `<action_items>` の JSON）は
-  Mac 版の `MinutesTemplate.swift`・`MeetingNotes.swift` と同じ文面にし、共有している部分には「両方を直す」とコメントを書いた。
+- **議事録**: 設定 → AI の「会議（議事録）」で選んだ AI とモデル（既定は Gemini の gemini-3.8-flash。Claude にすると既定は claude-sonnet-5-5）。プロンプト（型ごとの見出しと指示・メモと「ここ重要」の扱い・`{{ACTION_ITEMS}}` と `<action_items>` の JSON）は、
+  Mac 版と共有の `Sources/Hanasu/Resources/Prompts/<言語>.json` を埋め込んで読む（文面は 1 か所。言語は設定の文字起こしの言語。REQ-COM-061）。組み立ては Mac 版の `MinutesTemplate.swift`・`MeetingNotes.swift` と同じにする。
 - **保存**: `MeetingStore`。`meeting.json` は Mac 版（`MeetingModels.swift`）と同じ JSON（キーは camelCase、列挙は小文字、日時は秒までの UTC、UUID は大文字、null は書かない）。
   Mac で作った会議のフォルダを保存先に置けば、そのまま会議ノートで開ける（`MeetingJsonTests`。Swift の Codable で Windows の `meeting.json` を読めることも確かめた）。
   Windows 版だけが書く `audioStartOffsets` は、Mac 版では読み飛ばされる。
 - 音声入力と会議の記録は同時に動かさない（`DictationController.CanStart` / `MeetingController.CanStart`）。
 - 起動時に、記録中・処理中のまま残った会議を「失敗」にする（音声は残る）。
+
+## アップデート
+
+- 起動して数秒後に、GitHub の最新のリリースを確かめる（初回の起動と、手元のビルド＝版の先頭が 0 のときはしない。設定 → 一般 →「起動時にアップデートを確認する」で切れる）。失敗しても何も出さない（ログだけ）。
+- タスクトレイのメニュー →「アップデートを確認…」（設定 → 一般 →「今すぐ確認」も同じ）で、いつでも確かめられる。最新なら「Hanasu は最新です」と出し、失敗したときは理由を出す。
+- 新しい版があると、「アップデート」「あとで」「この版をスキップ」を選ぶ確認が出る。スキップした版は起動時には知らせない（手動の確認では知らせる。もっと新しい版が出れば、また知らせる）。
+- 「アップデート」を選ぶと、zip（`Hanasu-<版>-Windows-x64.zip`）をダウンロードし、API の SHA-256 と大きさで確かめ、Hanasu のフォルダの隣の `Hanasu.update` に展開して、PowerShell のスクリプトで入れ替えて起動し直す（失敗すれば元に戻す）。録音中・会議の記録中は入れ替えない。フォルダに書き込めないとき（Program Files など）や zip が見つからないときは、リリースのページを開く案内になる。フォルダごと取り替えるので、Hanasu のフォルダに Hanasu のものでないファイルやフォルダがあるとき（デスクトップに `Hanasu.exe` を置いたときなど）も入れ替えず、名前を挙げて案内する。入れ替えが終わらなかったときは、次の起動で知らせる（`update-pending.txt`）。
+- 通信は https の GitHub のホストだけ。コードは `Hanasu.Core/Update/`（`AppVersion`・`ReleaseParser`・`UpdateChecker`・`UpdateHosts`・`UpdatePackage`。テストは `UpdateTests`）と、`Hanasu.Windows` の `Services/UpdateService.cs`・`Views/UpdatePromptWindow.cs`。ダウンロードは `ModelDownload` を使う。設定は `AppSettings.CheckForUpdatesOnLaunch`・`SkippedUpdateVersion`。
 
 ## ビルド・テスト・配布
 
@@ -306,7 +314,7 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | Microsoft.NET.Test.Sdk 17.14.1 | テストのみ | MIT |
 | [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（org.k2fsa.sherpa.onnx 1.13.8、ONNX Runtime を含む） | 会議の相手側の話者分離 | Apache-2.0（ONNX Runtime は MIT） |
 
-配布物には、Hanasu のライセンス（`LICENSE.txt`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したら、THIRD_PARTY_NOTICES.md にも足すこと。
+配布物には、Hanasu のライセンス（`LICENSE.txt`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したら、THIRD_PARTY_NOTICES.md にも足すこと。
 依存の版とハッシュは各プロジェクトの `packages.lock.json` に固定している（CI は locked mode）。パッケージを足したり版を変えたりしたら、`dotnet restore` で lock ファイルを作り直してコミットする。
 
 Whisper のモデル（`ggml-*.bin`）は配布物に含めず、利用者が選んだときに [Hugging Face の ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp) からダウンロードする（OpenAI の Whisper のモデル、MIT）。

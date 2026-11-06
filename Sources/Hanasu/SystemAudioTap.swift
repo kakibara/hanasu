@@ -10,8 +10,8 @@ enum SystemAudioTapError: LocalizedError {
         switch self {
         // 設計判断: DEC-MTG-074（許可の状態は API で取れないので、失敗したときに確かめる場所を添える）
         case .coreAudio(let call, let status):
-            "システム音声を取得できませんでした（\(call): \(status)）。システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で Hanasu が許可されているか確かめてください。"
-        case .unsupportedFormat: "システム音声の形式を読み取れませんでした"
+            tr("システム音声を取得できませんでした（%@: %@）。システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で Hanasu が許可されているか確かめてください。", "\(call)", "\(status)")
+        case .unsupportedFormat: tr("システム音声の形式を読み取れませんでした")
         }
     }
 }

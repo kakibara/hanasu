@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LocalLlm_ServerNotFound" xml:space="preserve">
+    <value>Couldn't find llama-server, which runs the local LLM. Extract the Hanasu zip again, or set its path in the HANASU_LLAMA_SERVER environment variable.</value>
+    <comment>Error: local LLM server executable missing</comment>
+  </data>
+  <data name="LocalLlm_ModelNotDownloaded" xml:space="preserve">
+    <value>The local model hasn't been downloaded yet. Download it in menu → Settings → AI.</value>
+    <comment>Error: local model not downloaded (model unknown)</comment>
+  </data>
+  <data name="LocalLlm_NamedModelNotDownloaded" xml:space="preserve">
+    <value>The local model "{0}" hasn't been downloaded yet. Download it in menu → Settings → AI.</value>
+    <comment>Error: local model not downloaded. {0} = model name</comment>
+  </data>
+  <data name="LocalLlm_Exited" xml:space="preserve">
+    <value>The local LLM couldn't start (exit code {0}).</value>
+    <comment>Error. {0} = process exit code</comment>
+  </data>
+  <data name="LocalLlm_StartupTimedOut" xml:space="preserve">
+    <value>The local LLM didn't finish starting within {0} seconds.</value>
+    <comment>Error. {0} = seconds</comment>
+  </data>
+  <data name="LocalLlm_Http" xml:space="preserve">
+    <value>The local LLM returned an error ({0})</value>
+    <comment>Error. {0} = HTTP status; the server's message may follow after ': '</comment>
+  </data>
+  <data name="LocalLlm_Truncated" xml:space="preserve">
+    <value>The local LLM's response was cut off at the length limit, so it wasn't used.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="LocalLlm_Empty" xml:space="preserve">
+    <value>The local LLM returned no result.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="LocalLlm_Invalid" xml:space="preserve">
+    <value>Couldn't read the local LLM's response.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="LocalLlm_Timeout" xml:space="preserve">
+    <value>The local LLM didn't respond within {0} seconds.</value>
+    <comment>Error. {0} = seconds</comment>
+  </data>
+  <data name="Ai_Local" xml:space="preserve">
+    <value>Local</value>
+    <comment>Name of the AI provider that runs on this PC (local LLM), e.g. 'Refining with Local…'</comment>
+  </data>
+  <data name="LocalModel_Gemma4E4B_Summary" xml:space="preserve">
+    <value>Recommended. By Google. The largest; the most natural refining and minutes. For PCs with 16 GB of memory or more.</value>
+    <comment>Settings → AI: description of the local model Gemma 4 E4B</comment>
+  </data>
+  <data name="LocalModel_Lfm25JP_Summary" xml:space="preserve">
+    <value>By Liquid AI. Small and fast. Good at following Japanese instructions.</value>
+    <comment>Settings → AI: description of the local model LFM2.5-1.2B-JP</comment>
+  </data>
+  <data name="LocalModel_Sarashina22_Summary" xml:space="preserve">
+    <value>By SB Intuitions. Trained on Japanese. Context up to 8K (long meetings are summarized in parts).</value>
+    <comment>Settings → AI: description of the local model Sarashina2.2</comment>
+  </data>
+  <data name="LocalModel_Qwen35_Summary" xml:space="preserve">
+    <value>By Alibaba. About half the size of Gemma, so it runs more easily on PCs with 8 GB of memory. Handles self-corrections less well than Gemma.</value>
+    <comment>Settings → AI: description of the local model Qwen3.5-4B</comment>
+  </data>
+  <data name="LocalModel_LicenseRevenueLimit" xml:space="preserve">
+    <value>License: {0}. This license doesn't allow commercial use by organizations with annual revenue of US$10 million or more.</value>
+    <comment>Settings → AI: license note. {0} = license name</comment>
+  </data>
+  <data name="LocalModel_License" xml:space="preserve">
+    <value>License: {0}</value>
+    <comment>Settings → AI: license note. {0} = license name</comment>
+  </data>
+  <data name="LocalModel_Label" xml:space="preserve">
+    <value>{0} ({1})</value>
+    <comment>Settings → AI: model list item. {0} = model name, {1} = size like '4.59 GB'</comment>
+  </data>
+  <data name="LocalModel_LabelRecommended" xml:space="preserve">
+    <value>{0} ({1}) · Recommended</value>
+    <comment>Settings → AI: model list item for the recommended model. {0} = model name, {1} = size</comment>
+  </data>
+  <data name="HotKey_NeedKey" xml:space="preserve">
+    <value>Press one key in addition to the modifier keys.</value>
+    <comment>Shortcut validation message (Settings)</comment>
+  </data>
+  <data name="HotKey_EscReserved" xml:space="preserve">
+    <value>Esc is used to cancel recording, so it can't be a shortcut.</value>
+    <comment>Shortcut validation message</comment>
+  </data>
+  <data name="HotKey_NeedModifier" xml:space="preserve">
+    <value>Combine it with Ctrl, Alt, Shift, or Win (F1–F24 can be used on their own).</value>
+    <comment>Shortcut validation message</comment>
+  </data>
+  <data name="HotKey_ShiftOnly" xml:space="preserve">
+    <value>Shift-only combinations conflict with typing, so they can't be used.</value>
+    <comment>Shortcut validation message</comment>
+  </data>
+  <data name="HotKey_Reserved" xml:space="preserve">
+    <value>{0} is used for {1}, so please avoid it.</value>
+    <comment>Shortcut validation. {0} = shortcut like 'Alt + Space', {1} = what Windows uses it for (HotKey_Reserved_*)</comment>
+  </data>
+  <data name="HotKey_Reserved_WindowMenu" xml:space="preserve">
+    <value>the Windows window menu</value>
+    <comment>Inserted into HotKey_Reserved as {1}</comment>
+  </data>
+  <data name="HotKey_Reserved_WindowsVoiceTyping" xml:space="preserve">
+    <value>Windows voice typing (Win + H)</value>
+    <comment>Inserted into HotKey_Reserved as {1}</comment>
+  </data>
+  <data name="HotKey_Reserved_SwitchInputLanguage" xml:space="preserve">
+    <value>switching the input language</value>
+    <comment>Inserted into HotKey_Reserved as {1}</comment>
+  </data>
+  <data name="HotKey_Reserved_ImeToggle" xml:space="preserve">
+    <value>turning the IME on or off (depending on the IME)</value>
+    <comment>Inserted into HotKey_Reserved as {1}; Ctrl+Space</comment>
+  </data>
+  <data name="HotKey_Reserved_SpaceWidth" xml:space="preserve">
+    <value>typing full-width/half-width spaces</value>
+    <comment>Inserted into HotKey_Reserved as {1}; Shift+Space in East Asian IMEs</comment>
+  </data>
+  <data name="HotKey_Reserved_SwitchWindows" xml:space="preserve">
+    <value>switching windows</value>
+    <comment>Inserted into HotKey_Reserved as {1}; Alt+Tab</comment>
+  </data>
+  <data name="HotKey_Reserved_CloseWindow" xml:space="preserve">
+    <value>closing windows</value>
+    <comment>Inserted into HotKey_Reserved as {1}; Alt+F4</comment>
+  </data>
+  <data name="HotKey_Reserved_LockScreen" xml:space="preserve">
+    <value>locking the screen</value>
+    <comment>Inserted into HotKey_Reserved as {1}; Win+L</comment>
+  </data>
+  <data name="HotKey_Reserved_ShowDesktop" xml:space="preserve">
+    <value>showing the desktop</value>
+    <comment>Inserted into HotKey_Reserved as {1}; Win+D</comment>
+  </data>
+  <data name="Key_Convert" xml:space="preserve">
+    <value>Convert</value>
+    <comment>Key name of the Japanese keyboard's Convert key (VK_CONVERT), shown in shortcuts</comment>
+  </data>
+  <data name="Key_NonConvert" xml:space="preserve">
+    <value>Nonconvert</value>
+    <comment>Key name of the Japanese keyboard's Nonconvert key (VK_NONCONVERT)</comment>
+  </data>
+  <data name="Key_Ro" xml:space="preserve">
+    <value>\ (Ro)</value>
+    <comment>Key name of the Japanese keyboard's backslash/Ro key (VK_OEM_102)</comment>
+  </data>
+  <data name="Key_Unknown" xml:space="preserve">
+    <value>Key {0}</value>
+    <comment>Name of a key without a known name. {0} = hex code like 0x9A</comment>
+  </data>
+  <data name="Secret_NotSet" xml:space="preserve">
+    <value>Not set</value>
+    <comment>Settings → AI: API key status</comment>
+  </data>
+  <data name="Secret_HintUnknown" xml:space="preserve">
+    <value>ending unknown</value>
+    <comment>Settings → AI: API key status, used as {0} in Secret_Saved when the last characters are unknown</comment>
+  </data>
+  <data name="Secret_ProtectedByHello" xml:space="preserve">
+    <value>protected by Windows Hello</value>
+    <comment>Used as {1} in Secret_Saved</comment>
+  </data>
+  <data name="Secret_ProtectedByDpapi" xml:space="preserve">
+    <value>protected by DPAPI</value>
+    <comment>Used as {1} in Secret_Saved</comment>
+  </data>
+  <data name="Secret_Saved" xml:space="preserve">
+    <value>Saved ({0}, {1})</value>
+    <comment>Settings → AI: API key status. {0} = '…abcd' (last characters) or Secret_HintUnknown, {1} = protection</comment>
+  </data>
+  <data name="Secret_Corrupted" xml:space="preserve">
+    <value>The saved API key is corrupted. Enter it again in Settings → AI.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Secret_HelloDecryptFailed" xml:space="preserve">
+    <value>Couldn't decrypt the API key protected by Windows Hello (the Windows Hello key may have been recreated). Enter it again in Settings → AI.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Secret_DpapiDecryptFailed" xml:space="preserve">
+    <value>Can't read the saved API key (it may have been saved by another Windows user or on another PC). Enter it again in Settings → AI.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Secret_HelloUnavailable" xml:space="preserve">
+    <value>Windows Hello isn't available on this PC.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Secret_HelloUnavailableCannotRead" xml:space="preserve">
+    <value>Windows Hello isn't available on this PC, so the saved API key can't be read. Enter it again in Settings → AI.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Secret_HelloKeyFailed" xml:space="preserve">
+    <value>Couldn't create the Windows Hello key.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Secret_HelloKeyMismatch" xml:space="preserve">
+    <value>The Windows Hello key didn't produce the same value, so protection wasn't switched to Windows Hello (DPAPI is still used).</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Claude_MissingCredentials" xml:space="preserve">
+    <value>The Claude API key isn't set (menu → Settings → AI).</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Claude_Timeout" xml:space="preserve">
+    <value>Claude didn't respond within {0} seconds.</value>
+    <comment>Error. {0} = seconds</comment>
+  </data>
+  <data name="Claude_Refusal" xml:space="preserve">
+    <value>Claude declined to process this text for safety reasons. Try another model (Settings → AI) or Gemini.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Claude_RefusalWithCategory" xml:space="preserve">
+    <value>Claude declined to process this text for safety reasons ({0}). Try another model (Settings → AI) or Gemini.</value>
+    <comment>Error. {0} = refusal category from the API</comment>
+  </data>
+  <data name="Claude_MaxTokens" xml:space="preserve">
+    <value>Claude's response was too long and was cut off.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Claude_EmptyResponse" xml:space="preserve">
+    <value>Claude returned no result.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Claude_Unauthorized" xml:space="preserve">
+    <value>The Claude API key is incorrect (401). In Settings → AI, enter the key you created in the Claude Console again.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Claude_Forbidden" xml:space="preserve">
+    <value>This API key can't use Claude (403)</value>
+    <comment>Error; the API's message may follow after ': '</comment>
+  </data>
+  <data name="Claude_NotFound" xml:space="preserve">
+    <value>The model {0} wasn't found, or this API key can't use it (404).</value>
+    <comment>Error. {0} = model ID</comment>
+  </data>
+  <data name="Claude_Billing" xml:space="preserve">
+    <value>There's a problem with Claude API billing (402). Check the billing settings in the Claude Console.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Claude_RateLimited" xml:space="preserve">
+    <value>The Claude API usage limit was reached (429). Wait a moment and try again.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Claude_Overloaded" xml:space="preserve">
+    <value>The Claude API is overloaded (529). Wait a moment and try again.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Claude_Server" xml:space="preserve">
+    <value>An error occurred in the Claude API ({0}). Wait a moment and try again.</value>
+    <comment>Error. {0} = HTTP status</comment>
+  </data>
+  <data name="Claude_BadRequest" xml:space="preserve">
+    <value>The Claude API didn't accept the request ({0})</value>
+    <comment>Error. {0} = HTTP status; the API's message may follow after ': '</comment>
+  </data>
+  <data name="Claude_Network" xml:space="preserve">
+    <value>Couldn't connect to the Claude API. Check your network connection.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="ClaudeModel_Haiku" xml:space="preserve">
+    <value>Claude Haiku 5.5 (fast, inexpensive; default for dictation)</value>
+    <comment>Settings → AI: Claude model list</comment>
+  </data>
+  <data name="ClaudeModel_Sonnet" xml:space="preserve">
+    <value>Claude Sonnet 5.5 (default for minutes)</value>
+    <comment>Settings → AI: Claude model list</comment>
+  </data>
+  <data name="ClaudeModel_Opus" xml:space="preserve">
+    <value>Claude Opus 5.5 (smartest, most expensive)</value>
+    <comment>Settings → AI: Claude model list</comment>
+  </data>
+  <data name="Gemini_MissingCredentials" xml:space="preserve">
+    <value>Gemini credentials (an API key or a service account) aren't set.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Gemini_Http" xml:space="preserve">
+    <value>Gemini API error ({0}): {1}</value>
+    <comment>Error. {0} = HTTP status, {1} = API message</comment>
+  </data>
+  <data name="Gemini_EmptyResponse" xml:space="preserve">
+    <value>Gemini returned no result.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Gemini_EmptyResponseWithReason" xml:space="preserve">
+    <value>Gemini returned no result ({0}).</value>
+    <comment>Error. {0} = finish reason from the API</comment>
+  </data>
+  <data name="Gemini_InvalidResponse" xml:space="preserve">
+    <value>Couldn't read Gemini's response.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Gemini_Timeout" xml:space="preserve">
+    <value>Gemini didn't respond within {0} seconds.</value>
+    <comment>Error. {0} = seconds</comment>
+  </data>
+  <data name="ServiceAccount_NotFound" xml:space="preserve">
+    <value>Service account JSON not found: {0}</value>
+    <comment>Error. {0} = file path</comment>
+  </data>
+  <data name="ServiceAccount_Unreadable" xml:space="preserve">
+    <value>Can't read the service account JSON.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="ServiceAccount_TokenTimeout" xml:space="preserve">
+    <value>Getting an access token timed out.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="ServiceAccount_TokenFailed" xml:space="preserve">
+    <value>Couldn't get an access token ({0}): {1}</value>
+    <comment>Error. {0} = HTTP status, {1} = response body</comment>
+  </data>
+  <data name="ServiceAccount_KeyUnreadable" xml:space="preserve">
+    <value>Can't read the service account's private key.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="ServiceAccount_SignFailed" xml:space="preserve">
+    <value>Couldn't sign the access token request: {0}</value>
+    <comment>Error. {0} = system error message</comment>
+  </data>
+  <data name="Download_HostNotAllowed" xml:space="preserve">
+    <value>Downloads are only allowed from the expected hosts: {0}</value>
+    <comment>Model download error. {0} = host name</comment>
+  </data>
+  <data name="Download_HttpFailed" xml:space="preserve">
+    <value>The download failed (HTTP {0}).</value>
+    <comment>Model download error. {0} = HTTP status</comment>
+  </data>
+  <data name="Download_RedirectedToNonHttps" xml:space="preserve">
+    <value>The download was stopped because it was redirected to a non-https location.</value>
+    <comment>Model download error</comment>
+  </data>
+  <data name="Download_SizeMismatch" xml:space="preserve">
+    <value>The file to download isn't the expected size ({0} bytes; expected {1} bytes).</value>
+    <comment>Model download error. {0} = actual bytes, {1} = expected bytes</comment>
+  </data>
+  <data name="Download_TooLarge" xml:space="preserve">
+    <value>The download was stopped because the file is larger than expected.</value>
+    <comment>Model download error</comment>
+  </data>
+  <data name="Download_Interrupted" xml:space="preserve">
+    <value>The download was interrupted.</value>
+    <comment>Model download error</comment>
+  </data>
+  <data name="Download_HashMismatch" xml:space="preserve">
+    <value>The downloaded file's hash (SHA-256) doesn't match, so it won't be used.</value>
+    <comment>Model download error</comment>
+  </data>
+  <data name="Transcribing_With" xml:space="preserve">
+    <value>Transcribing with {0}…</value>
+    <comment>HUD progress. {0} = engine name (Whisper, Gemini…)</comment>
+  </data>
+  <data name="Transcription_GeminiNotConfigured" xml:space="preserve">
+    <value>The transcription engine is Gemini, but Gemini credentials aren't set (menu → Settings → AI).</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Transcription_GeminiFailed" xml:space="preserve">
+    <value>Transcription with Gemini failed: {0}</value>
+    <comment>Error. {0} = underlying error message</comment>
+  </data>
+  <data name="WhisperModel_Label" xml:space="preserve">
+    <value>{0} ({1}) — {2}</value>
+    <comment>Settings: Whisper model list item. {0} = model ID, {1} = size, {2} = description</comment>
+  </data>
+  <data name="WhisperModel_Tiny" xml:space="preserve">
+    <value>Smallest. Low accuracy for Japanese (for testing).</value>
+    <comment>Settings: Whisper model description (tiny)</comment>
+  </data>
+  <data name="WhisperModel_Base" xml:space="preserve">
+    <value>Small. Lower accuracy for Japanese.</value>
+    <comment>Settings: Whisper model description (base)</comment>
+  </data>
+  <data name="WhisperModel_Small" xml:space="preserve">
+    <value>Good for everyday use. A good balance of speed and accuracy.</value>
+    <comment>Settings: Whisper model description (small)</comment>
+  </data>
+  <data name="WhisperModel_Medium" xml:space="preserve">
+    <value>High accuracy. For fast CPUs.</value>
+    <comment>Settings: Whisper model description (medium)</comment>
+  </data>
+  <data name="WhisperModel_LargeTurboQ5" xml:space="preserve">
+    <value>High accuracy; smaller thanks to quantization. For fast CPUs.</value>
+    <comment>Settings: Whisper model description (large-v3-turbo-q5_0)</comment>
+  </data>
+  <data name="WhisperModel_LargeTurbo" xml:space="preserve">
+    <value>High accuracy. For fast CPUs.</value>
+    <comment>Settings: Whisper model description (large-v3-turbo)</comment>
+  </data>
+  <data name="Wav_NotWav" xml:space="preserve">
+    <value>This isn't a WAV file.</value>
+    <comment>Audio file error</comment>
+  </data>
+  <data name="Wav_NoFmt" xml:space="preserve">
+    <value>The WAV file has no fmt chunk.</value>
+    <comment>Audio file error</comment>
+  </data>
+  <data name="Wav_Unsupported" xml:space="preserve">
+    <value>Unsupported WAV format (format={0}, bits={1}).</value>
+    <comment>Audio file error. {0} = format code, {1} = bits per sample</comment>
+  </data>
+  <data name="Wav_NoData" xml:space="preserve">
+    <value>The WAV file has no data chunk.</value>
+    <comment>Audio file error</comment>
+  </data>
+  <data name="TranslationLanguage_English" xml:space="preserve">
+    <value>English</value>
+    <comment>Settings → Dictation: checkbox for translating into English</comment>
+  </data>
+  <data name="TranslationLanguage_Japanese" xml:space="preserve">
+    <value>Japanese</value>
+    <comment>Settings → Dictation: checkbox for translating into Japanese</comment>
+  </data>
+  <data name="Translation_ToEnglish" xml:space="preserve">
+    <value>To English</value>
+    <comment>History: mode name of 'translate into English and type'</comment>
+  </data>
+  <data name="Translation_ToJapanese" xml:space="preserve">
+    <value>To Japanese</value>
+    <comment>History: mode name of 'translate into Japanese and type'</comment>
+  </data>
+  <data name="Translation_MenuTitle" xml:space="preserve">
+    <value>Translate and Type</value>
+    <comment>Tray menu item (two or more translation languages selected)</comment>
+  </data>
+  <data name="Translation_MenuTitle_English" xml:space="preserve">
+    <value>Translate to English and Type</value>
+    <comment>Tray menu item</comment>
+  </data>
+  <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
+    <value>Translate to Japanese and Type</value>
+    <comment>Tray menu item</comment>
+  </data>
+  <data name="Hud_TranslatedToEnglish" xml:space="preserve">
+    <value>Translated to English and typed</value>
+    <comment>HUD: done</comment>
+  </data>
+  <data name="Hud_TranslatedToJapanese" xml:space="preserve">
+    <value>Translated to Japanese and typed</value>
+    <comment>HUD: done</comment>
+  </data>
+  <data name="Hud_Typed" xml:space="preserve">
+    <value>Typed</value>
+    <comment>HUD: dictated text was typed into the app</comment>
+  </data>
+  <data name="Hud_Canceled" xml:space="preserve">
+    <value>Canceled</value>
+    <comment>HUD: recording canceled</comment>
+  </data>
+  <data name="Hud_Preparing" xml:space="preserve">
+    <value>Preparing…</value>
+    <comment>HUD</comment>
+  </data>
+  <data name="Hud_Finishing" xml:space="preserve">
+    <value>Finishing…</value>
+    <comment>HUD: processing without AI</comment>
+  </data>
+  <data name="Hud_NoSpeech" xml:space="preserve">
+    <value>No speech was recognized.</value>
+    <comment>HUD error</comment>
+  </data>
+  <data name="Hud_Recording" xml:space="preserve">
+    <value>Recording</value>
+    <comment>HUD title</comment>
+  </data>
+  <data name="Hud_Error" xml:space="preserve">
+    <value>Error</value>
+    <comment>HUD title</comment>
+  </data>
+  <data name="Hud_SpeakNow" xml:space="preserve">
+    <value>Start speaking…</value>
+    <comment>HUD while recording before any text</comment>
+  </data>
+  <data name="Hud_Unpasted_HigherIntegrity" xml:space="preserve">
+    <value>Can't paste into apps running as administrator</value>
+    <comment>HUD title when the text couldn't be pasted</comment>
+  </data>
+  <data name="Hud_Unpasted_SendFailed" xml:space="preserve">
+    <value>Couldn't send the paste keystroke</value>
+    <comment>HUD title when the text couldn't be pasted</comment>
+  </data>
+  <data name="Hud_Unpasted_ClipboardUnavailable" xml:space="preserve">
+    <value>Couldn't use the clipboard</value>
+    <comment>HUD title when the text couldn't be pasted</comment>
+  </data>
+  <data name="Hud_Unpasted_Failed" xml:space="preserve">
+    <value>Couldn't type the text</value>
+    <comment>HUD title when the text couldn't be pasted</comment>
+  </data>
+  <data name="Hud_Unpasted_NoTarget" xml:space="preserve">
+    <value>Couldn't find a place to type</value>
+    <comment>HUD title when no text field had focus</comment>
+  </data>
+  <data name="Hud_Unpasted_InClipboard" xml:space="preserve">
+    <value>It's also on the clipboard. Click where you want it and press Ctrl+V.</value>
+    <comment>HUD note</comment>
+  </data>
+  <data name="Hud_Unpasted_CopyManually" xml:space="preserve">
+    <value>Click "Copy" or select the text and copy it, then press Ctrl+V where you want it.</value>
+    <comment>HUD note; "Copy" is the HUD button Hud_Copy</comment>
+  </data>
+  <data name="Hud_TranslatingToEnglish" xml:space="preserve">
+    <value>Translating into English with {0}…</value>
+    <comment>HUD. {0} = AI name (Gemini, Claude, Local)</comment>
+  </data>
+  <data name="Hud_TranslatingToJapanese" xml:space="preserve">
+    <value>Translating into Japanese with {0}…</value>
+    <comment>HUD. {0} = AI name</comment>
+  </data>
+  <data name="Hud_Refining" xml:space="preserve">
+    <value>Refining with {0}…</value>
+    <comment>HUD. {0} = AI name</comment>
+  </data>
+  <data name="History_Mode_Refine" xml:space="preserve">
+    <value>Refine</value>
+    <comment>History: mode name of normal dictation (refined by AI)</comment>
+  </data>
+  <data name="History_Status_Succeeded" xml:space="preserve">
+    <value>Succeeded</value>
+    <comment>History: status</comment>
+  </data>
+  <data name="History_Status_AiFailed" xml:space="preserve">
+    <value>AI failed (original text)</value>
+    <comment>History: status</comment>
+  </data>
+  <data name="History_Status_NoCredentials" xml:space="preserve">
+    <value>Not set up (original text)</value>
+    <comment>History: status; the AI wasn't configured, so the raw transcript was used</comment>
+  </data>
+  <data name="History_Status_RefineOff" xml:space="preserve">
+    <value>Refining off (original text)</value>
+    <comment>History: status</comment>
+  </data>
+  <data name="History_Days" xml:space="preserve">
+    <value>{0} days</value>
+    <comment>Settings → History: retention period. {0} = number of days (7 or more)</comment>
+  </data>
+  <data name="History_DaysUnlimited" xml:space="preserve">
+    <value>Forever</value>
+    <comment>Settings → History: no retention limit</comment>
+  </data>
+  <data name="History_BrokenFileKept" xml:space="preserve">
+    <value>Couldn't read the history file, so it was kept as {0} and a new one was started.</value>
+    <comment>Error. {0} = file name</comment>
+  </data>
+  <data name="History_ReadFailed" xml:space="preserve">
+    <value>Couldn't read the history file: {0}</value>
+    <comment>Error. {0} = system message</comment>
+  </data>
+  <data name="History_SaveFailed" xml:space="preserve">
+    <value>Couldn't save the history: {0}</value>
+    <comment>Error. {0} = system message</comment>
+  </data>
+  <data name="History_Today" xml:space="preserve">
+    <value>Today</value>
+    <comment>History: day heading</comment>
+  </data>
+  <data name="History_Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+    <comment>History: day heading</comment>
+  </data>
+  <data name="History_DayFormat" xml:space="preserve">
+    <value>ddd, MMM d</value>
+    <comment>History: day heading in the current year. A .NET custom date format (d = day, M = month number, MMM = month name, ddd = weekday); quote literal letters with '…'</comment>
+  </data>
+  <data name="History_DayFormatWithYear" xml:space="preserve">
+    <value>ddd, MMM d, yyyy</value>
+    <comment>History: day heading in another year. A .NET custom date format (yyyy = year)</comment>
+  </data>
+  <data name="Dictation_NoAi_Refine" xml:space="preserve">
+    <value>{0}, so the text was typed without refining (menu → Settings → AI).</value>
+    <comment>HUD warning. {0} = Ai_NotReady_* reason</comment>
+  </data>
+  <data name="Dictation_NoAi_Translate" xml:space="preserve">
+    <value>{0}, so the text was typed without translating (menu → Settings → AI).</value>
+    <comment>HUD warning. {0} = Ai_NotReady_* reason</comment>
+  </data>
+  <data name="Dictation_AiFailed_Refine" xml:space="preserve">
+    <value>The text was typed as it was before refining.</value>
+    <comment>HUD warning shown after an AI error message</comment>
+  </data>
+  <data name="Dictation_AiFailed_Translate" xml:space="preserve">
+    <value>The text was typed as it was before translating.</value>
+    <comment>HUD warning shown after an AI error message</comment>
+  </data>
+  <data name="Ai_LocalModelMissing" xml:space="preserve">
+    <value>The local LLM model hasn't been downloaded yet (menu → Settings → AI).</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Ai_GeminiMissingCredentials" xml:space="preserve">
+    <value>Gemini credentials (an API key or a service account) aren't set (menu → Settings → AI).</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Ai_NotReady_LocalModel" xml:space="preserve">
+    <value>The local LLM model hasn't been downloaded yet</value>
+    <comment>Reason clause inserted as {0} into Dictation_NoAi_* and Meeting_MinutesNotCreated</comment>
+  </data>
+  <data name="Ai_NotReady_Credentials" xml:space="preserve">
+    <value>{0} credentials aren't set</value>
+    <comment>Reason clause inserted as {0} into Dictation_NoAi_* and Meeting_MinutesNotCreated. {0} = AI name (Gemini, Claude)</comment>
+  </data>
+  <data name="Template_Auto" xml:space="preserve">
+    <value>Auto</value>
+    <comment>Minutes template name</comment>
+  </data>
+  <data name="Template_Regular" xml:space="preserve">
+    <value>Regular meeting</value>
+    <comment>Minutes template name (recurring team meeting)</comment>
+  </data>
+  <data name="Template_OneOnOne" xml:space="preserve">
+    <value>1:1</value>
+    <comment>Minutes template name (one-on-one meeting)</comment>
+  </data>
+  <data name="Template_Sales" xml:space="preserve">
+    <value>Sales meeting</value>
+    <comment>Minutes template name (business/sales negotiation)</comment>
+  </data>
+  <data name="Template_Brainstorm" xml:space="preserve">
+    <value>Brainstorm</value>
+    <comment>Minutes template name</comment>
+  </data>
+  <data name="Template_Custom" xml:space="preserve">
+    <value>Custom</value>
+    <comment>Minutes template name (user-written instructions)</comment>
+  </data>
+  <data name="Template_Auto_Summary" xml:space="preserve">
+    <value>Overview, discussion, decisions, action items</value>
+    <comment>Minutes template description: the sections it produces</comment>
+  </data>
+  <data name="Template_Regular_Summary" xml:space="preserve">
+    <value>Progress, reports, issues, decisions, action items</value>
+    <comment>Minutes template description</comment>
+  </data>
+  <data name="Template_OneOnOne_Summary" xml:space="preserve">
+    <value>Updates, concerns, feedback, agreements, action items</value>
+    <comment>Minutes template description</comment>
+  </data>
+  <data name="Template_Sales_Summary" xml:space="preserve">
+    <value>Customer's challenges, proposal, reactions, concerns, next actions</value>
+    <comment>Minutes template description</comment>
+  </data>
+  <data name="Template_Brainstorm_Summary" xml:space="preserve">
+    <value>Ideas raised, promising ideas, open questions, next steps</value>
+    <comment>Minutes template description</comment>
+  </data>
+  <data name="Template_Custom_Summary" xml:space="preserve">
+    <value>Follows the instructions you wrote</value>
+    <comment>Minutes template description</comment>
+  </data>
+  <data name="Meeting_Diarizing" xml:space="preserve">
+    <value>Separating the other speakers…</value>
+    <comment>Meeting progress (speaker diarization of the PC audio)</comment>
+  </data>
+  <data name="Meeting_DiarizationFailed" xml:space="preserve">
+    <value>Couldn't separate the other speakers, so they were combined as a single "Others" ({0}).</value>
+    <comment>Meeting warning. {0} = error message; "Others" = Speaker_Others</comment>
+  </data>
+  <data name="Meeting_AudioKept" xml:space="preserve">
+    <value>The audio files have been kept.</value>
+    <comment>Meeting error, appended after transcription failures</comment>
+  </data>
+  <data name="Meeting_MinutesFailed" xml:space="preserve">
+    <value>Couldn't create the minutes: {0}</value>
+    <comment>Meeting error. {0} = error message. The part before {0} is also used to recognize this error later</comment>
+  </data>
+  <data name="Meeting_MinutesNotCreated" xml:space="preserve">
+    <value>{0}, so no minutes were created (menu → Settings → AI).</value>
+    <comment>Meeting error. {0} = Ai_NotReady_* reason. The part after {0} is also used to recognize this error later</comment>
+  </data>
+  <data name="Meeting_MakingMinutes" xml:space="preserve">
+    <value>Creating minutes with {0}…</value>
+    <comment>Meeting progress. {0} = AI name</comment>
+  </data>
+  <data name="Meeting_TranscribingChannel" xml:space="preserve">
+    <value>Transcribing with {0}… ({1})</value>
+    <comment>Meeting progress. {0} = engine name, {1} = Speaker_Me or Speaker_Others</comment>
+  </data>
+  <data name="Meeting_TranscribingChannelProgress" xml:space="preserve">
+    <value>Transcribing with {0}… ({1} {2})</value>
+    <comment>Meeting progress. {0} = engine name, {1} = Speaker_Me or Speaker_Others, {2} = progress like 40%</comment>
+  </data>
+  <data name="Meeting_ChannelTranscriptionFailed" xml:space="preserve">
+    <value>Couldn't transcribe the audio ({0}): {1}</value>
+    <comment>Meeting error. {0} = Speaker_Me or Speaker_Others, {1} = error message</comment>
+  </data>
+  <data name="Meeting_GeminiNotConfigured" xml:space="preserve">
+    <value>The meeting transcription engine is Gemini, but Gemini credentials aren't set (menu → Settings → AI).</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Meeting_DefaultTitle" xml:space="preserve">
+    <value>Meeting {0}</value>
+    <comment>Default meeting title. {0} = date like 2026/11/03 (Tue) 14:30</comment>
+  </data>
+  <data name="Meeting_Interrupted" xml:space="preserve">
+    <value>The app quit during recording. The audio files ({0} / {1}) may have been partly kept.</value>
+    <comment>Meeting error. {0}, {1} = audio file names</comment>
+  </data>
+  <data name="Meeting_CannotStart" xml:space="preserve">
+    <value>Can't start recording the meeting</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Meeting_DictationInProgress" xml:space="preserve">
+    <value>Dictation is recording. Try again when it's finished.</value>
+    <comment>Notification body</comment>
+  </data>
+  <data name="Meeting_LoopbackUnavailable" xml:space="preserve">
+    <value>Can't record the PC audio (other participants)</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Meeting_MicOnly" xml:space="preserve">
+    <value>Only your voice (microphone) will be recorded. {0}</value>
+    <comment>Notification body. {0} = system error message</comment>
+  </data>
+  <data name="Meeting_StartFailedDetail" xml:space="preserve">
+    <value>Couldn't start recording: {0}</value>
+    <comment>Meeting error. {0} = error message</comment>
+  </data>
+  <data name="Meeting_StartFailed" xml:space="preserve">
+    <value>Couldn't start recording the meeting</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Meeting_Stopping" xml:space="preserve">
+    <value>Stopping the recording…</value>
+    <comment>Meeting progress</comment>
+  </data>
+  <data name="Meeting_NoticeTitle" xml:space="preserve">
+    <value>Meeting recording</value>
+    <comment>Notification title for warnings</comment>
+  </data>
+  <data name="Meeting_Done" xml:space="preserve">
+    <value>Meeting recorded</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Meeting_TranscriptSaved" xml:space="preserve">
+    <value>The transcript has been saved.</value>
+    <comment>Notification body</comment>
+  </data>
+  <data name="Meeting_TranscriptAndMinutesSaved" xml:space="preserve">
+    <value>The transcript and minutes have been saved.</value>
+    <comment>Notification body</comment>
+  </data>
+  <data name="Meeting_DoneWithProblems" xml:space="preserve">
+    <value>Meeting recorded (with some problems)</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Meeting_PostProcessFailedDetail" xml:space="preserve">
+    <value>Processing after recording failed: {0}</value>
+    <comment>Meeting error. {0} = error message</comment>
+  </data>
+  <data name="Meeting_Failed" xml:space="preserve">
+    <value>Meeting recording failed</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Meeting_CannotDeleteBusy" xml:space="preserve">
+    <value>Meetings that are recording, processing, or regenerating minutes can't be deleted.</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Meeting_MicStopped" xml:space="preserve">
+    <value>Microphone recording stopped</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Meeting_MicStoppedDetail" xml:space="preserve">
+    <value>Recording stopped (for example, the microphone was unplugged), so the meeting recording will stop.</value>
+    <comment>Notification body</comment>
+  </data>
+  <data name="Speaker_Me" xml:space="preserve">
+    <value>Me</value>
+    <comment>Speaker label for the user's own microphone channel</comment>
+  </data>
+  <data name="Speaker_Others" xml:space="preserve">
+    <value>Others</value>
+    <comment>Speaker label for the PC audio (remote participants) channel</comment>
+  </data>
+  <data name="Speaker_Remote" xml:space="preserve">
+    <value>Speaker {0}</value>
+    <comment>Speaker label for a remote participant. {0} = number</comment>
+  </data>
+  <data name="Speaker_Room" xml:space="preserve">
+    <value>In-room {0}</value>
+    <comment>Speaker label for a person in the same room (microphone side). {0} = number</comment>
+  </data>
+  <data name="Transcript_Heading" xml:space="preserve">
+    <value># {0} — Transcript</value>
+    <comment>Markdown heading of transcript.md (keep '# '). {0} = meeting title</comment>
+  </data>
+  <data name="Transcript_Date" xml:space="preserve">
+    <value>- Date: {0}</value>
+    <comment>Markdown list item of transcript.md (keep '- '). {0} = date</comment>
+  </data>
+  <data name="Transcript_Duration" xml:space="preserve">
+    <value>- Duration: {0}</value>
+    <comment>Markdown list item of transcript.md (keep '- '). {0} = m:ss</comment>
+  </data>
+  <data name="Notes_Heading" xml:space="preserve">
+    <value># {0} — Notes</value>
+    <comment>Markdown heading of notes.md (keep '# '). {0} = meeting title</comment>
+  </data>
+  <data name="Highlights_None" xml:space="preserve">
+    <value>There are no "Important" marks. Add one during recording with "★ Important" or the shortcut, and the conversation around it will appear here.</value>
+    <comment>Meeting notes window, Highlights tab. "Important" must match Highlight_Default and the meeting window button</comment>
+  </data>
+  <data name="Highlight_Default" xml:space="preserve">
+    <value>Important</value>
+    <comment>Name of a highlight mark added during recording ('this is important')</comment>
+  </data>
+  <data name="Highlights_NoUtterances" xml:space="preserve">
+    <value>Nothing was said around this mark (30 seconds before to 15 seconds after).</value>
+    <comment>Meeting notes window, Highlights tab</comment>
+  </data>
+  <data name="Dictionary_EmptySpelling" xml:space="preserve">
+    <value>The correct spelling is empty, so nothing will be replaced.</value>
+    <comment>Settings → Dictionary: rule issue</comment>
+  </data>
+  <data name="Dictionary_SourceTooShort" xml:space="preserve">
+    <value>"{0}" is a single character, so it won't be used (it would match parts of other words too easily).</value>
+    <comment>Settings → Dictionary: rule issue. {0} = word</comment>
+  </data>
+  <data name="Dictionary_SourceDuplicate" xml:space="preserve">
+    <value>"{0}" also appears on a line above, so that line will be used.</value>
+    <comment>Settings → Dictionary: rule issue. {0} = word</comment>
+  </data>
+  <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
+    <value>The Whisper model ({0}) hasn't been downloaded yet. Download it in menu → Settings → General.</value>
+    <comment>Error. {0} = model label</comment>
+  </data>
+  <data name="Whisper_CannotRun" xml:space="preserve">
+    <value>Couldn't run Whisper. Install the Microsoft Visual C++ Redistributable (2015–2022, x64) and try again. ({0})</value>
+    <comment>Error. {0} = system error message</comment>
+  </data>
+  <data name="Whisper_LoadFailed" xml:space="preserve">
+    <value>Couldn't load the Whisper model: {0}</value>
+    <comment>Error. {0} = error message</comment>
+  </data>
+  <data name="Diarization_Downloading" xml:space="preserve">
+    <value>Downloading the speaker separation models… ({0} / {1} MB)</value>
+    <comment>Meeting progress. {0} = downloaded MB, {1} = total MB</comment>
+  </data>
+  <data name="Diarization_SampleRateMismatch" xml:space="preserve">
+    <value>The speaker separation model's sample rate isn't what was expected ({0} Hz).</value>
+    <comment>Error. {0} = sample rate</comment>
+  </data>
+  <data name="Gemini_InvalidLocation" xml:space="preserve">
+    <value>The Vertex AI region “{0}” can't be used (lowercase letters, digits, and hyphens only; e.g. global, us-central1).</value>
+    <comment>Error. {0} = region</comment>
+  </data>
+  <data name="ServiceAccount_TokenUriNotGoogle" xml:space="preserve">
+    <value>The service account's token_uri ({0}) isn't Google's token endpoint (oauth2.googleapis.com), so it won't be used.</value>
+    <comment>Error. {0} = token_uri from the service account JSON</comment>
+  </data>
+  <data name="Audio_RecordingLimitNotice" xml:space="preserve">
+    <value>Recording reached the 10-minute limit, so the audio so far will be processed</value>
+    <comment>HUD message</comment>
+  </data>
+  <data name="Gemini_InvalidCredentials" xml:space="preserve">
+    <value>The API key (or service account) is wrong, or it isn't allowed to use the Gemini API ({0})</value>
+    <comment>Error. {0} = HTTP status</comment>
+  </data>
+  <data name="Gemini_ModelUnavailable" xml:space="preserve">
+    <value>The model “{0}” wasn't found or can't be used with these credentials</value>
+    <comment>Error. {0} = model ID</comment>
+  </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>The size of the file to download is unknown</value>
+    <comment>Download error</comment>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>The download was stopped because it was redirected to an unexpected host: {0}</value>
+    <comment>Download error. {0} = host name</comment>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Couldn't read the release information</value>
+    <comment>Update check error</comment>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>Couldn't get the latest version from GitHub (HTTP {0})</value>
+    <comment>Update check error. {0} = HTTP status</comment>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>Couldn't get the latest version from GitHub (HTTP {0}). GitHub's request limit may have been reached; wait a while and try again.</value>
+    <comment>Update check error (HTTP 403/429). {0} = HTTP status</comment>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Couldn't connect to GitHub: {0}</value>
+    <comment>Update check error. {0} = system error message</comment>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub didn't respond in time</value>
+    <comment>Update check error</comment>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>The zip has an entry that points outside the extraction folder, so it won't be used: {0}</value>
+    <comment>Update package error. {0} = entry path in the zip</comment>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>The extracted zip is larger than expected, so it won't be used</value>
+    <comment>Update package error</comment>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>Couldn't open the downloaded zip</value>
+    <comment>Update package error</comment>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>The zip doesn't contain {0}, so it won't be used</value>
+    <comment>Update package error. {0} = path such as Hanasu\Hanasu.exe</comment>
+  </data>
+</root>

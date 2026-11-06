@@ -1,0 +1,1190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_AlreadyRunning" xml:space="preserve">
+    <value>Hanasu đang chạy. Bạn có thể dùng từ biểu tượng trong vùng thông báo.</value>
+  </data>
+  <data name="Tray_Recent" xml:space="preserve">
+    <value>&amp;Kết quả gần đây</value>
+  </data>
+  <data name="Tray_OpenMeetingNotes" xml:space="preserve">
+    <value>&amp;Mở ghi chú cuộc họp…</value>
+  </data>
+  <data name="Tray_OpenHistory" xml:space="preserve">
+    <value>Mở &amp;lịch sử…</value>
+  </data>
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>&amp;Cài đặt…</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>&amp;Thoát Hanasu</value>
+  </data>
+  <data name="Tray_StopAndType" xml:space="preserve">
+    <value>Dừng &amp;ghi âm và nhập</value>
+  </data>
+  <data name="Tray_StartDictation" xml:space="preserve">
+    <value>Bắt đầu &amp;ghi âm</value>
+  </data>
+  <data name="Tray_StopMeeting" xml:space="preserve">
+    <value>Dừng ghi âm cuộc &amp;họp ({0})</value>
+  </data>
+  <data name="Tray_MeetingStarting" xml:space="preserve">
+    <value>Đang chuẩn bị ghi âm cuộc họp…</value>
+  </data>
+  <data name="Tray_MeetingProcessing" xml:space="preserve">
+    <value>Đang xử lý bản ghi âm cuộc họp…</value>
+  </data>
+  <data name="Tray_StartMeeting" xml:space="preserve">
+    <value>Bắt đầu ghi âm cuộc &amp;họp</value>
+  </data>
+  <data name="Tray_Tip_MeetingRecording" xml:space="preserve">
+    <value>Hanasu — Đang ghi âm cuộc họp {0}</value>
+  </data>
+  <data name="Tray_Tip_MeetingProcessing" xml:space="preserve">
+    <value>Hanasu — Đang xử lý cuộc họp</value>
+  </data>
+  <data name="Tray_Tip_Recording" xml:space="preserve">
+    <value>Hanasu — Đang ghi âm</value>
+  </data>
+  <data name="Tray_Tip_Processing" xml:space="preserve">
+    <value>Hanasu — Đang xử lý</value>
+  </data>
+  <data name="Tray_RecentEmpty" xml:space="preserve">
+    <value>(Chưa có)</value>
+  </data>
+  <data name="Tray_RecentTip" xml:space="preserve">
+    <value>{0}
+Kết quả: {1}
+Bản gốc: {2}</value>
+  </data>
+  <data name="Tray_RecentHint" xml:space="preserve">
+    <value>Bấm để sao chép vào bảng tạm</value>
+  </data>
+  <data name="Tray_OpenAllHistory" xml:space="preserve">
+    <value>Mở toàn bộ lịch sử…</value>
+  </data>
+  <data name="Balloon_Started" xml:space="preserve">
+    <value>Hanasu đã khởi động</value>
+  </data>
+  <data name="Balloon_StartedBody" xml:space="preserve">
+    <value>Nhấn {0} để đọc chính tả. Nhấn {1} để "{2}".</value>
+  </data>
+  <data name="Balloon_HotKeyFailed" xml:space="preserve">
+    <value>Không thể đăng ký phím tắt</value>
+  </data>
+  <data name="Balloon_HotKeyFailedBody" xml:space="preserve">
+    <value>{0} đang được ứng dụng khác sử dụng. Hãy chọn phím khác trong Cài đặt → Chung.</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailed" xml:space="preserve">
+    <value>Không thể đăng ký phím tắt "Quan trọng"</value>
+  </data>
+  <data name="Balloon_HighlightHotKeyFailedBody" xml:space="preserve">
+    <value>{0} đang được ứng dụng khác sử dụng. Hãy dùng nút "★ Quan trọng" trong Ghi chú cuộc họp, hoặc chọn phím khác trong Cài đặt → Cuộc họp.</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Đã sao chép</value>
+  </data>
+  <data name="Quit_MeetingInProgress" xml:space="preserve">
+    <value>Đang ghi âm cuộc họp (hoặc đang xử lý sau khi ghi). Nếu thoát, bản ghi lời và biên bản của cuộc họp này sẽ không được tạo (các tệp âm thanh vẫn được giữ lại). Vẫn thoát?</value>
+  </data>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>Chưa thiết lập Windows Hello (hãy thiết lập mã PIN hoặc phương thức khác trong Cài đặt Windows → Tài khoản → Tùy chọn đăng nhập).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Đã hủy xác minh Windows Hello nên không thể đọc khóa API.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Xác minh Windows Hello không thành công ({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>Không tìm thấy khóa Windows Hello (có thể Windows Hello đã được thiết lập lại). Hãy nhập lại khóa API trong Cài đặt → AI.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Không thể mở khóa Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Đã hủy xác minh Windows Hello.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Không thể tạo khóa Windows Hello ({0}).</value>
+  </data>
+  <data name="Mic_NotFound" xml:space="preserve">
+    <value>Không tìm thấy micrô. Hãy kiểm tra micrô đã được kết nối chưa trong Cài đặt Windows → Hệ thống → Âm thanh.</value>
+  </data>
+  <data name="Mic_AccessDenied" xml:space="preserve">
+    <value>Chưa cho phép truy cập micrô. Trong Cài đặt Windows → Quyền riêng tư &amp; bảo mật → Micrô, hãy bật "Cho phép ứng dụng trên máy tính truy cập micrô của bạn".</value>
+  </data>
+  <data name="Mic_StartFailed" xml:space="preserve">
+    <value>Không thể bắt đầu ghi âm từ micrô: {0}</value>
+  </data>
+  <data name="Output_NotFound" xml:space="preserve">
+    <value>Không tìm thấy thiết bị đầu ra âm thanh (loa hoặc tai nghe).</value>
+  </data>
+  <data name="Loopback_StartFailed" xml:space="preserve">
+    <value>Không thể bắt đầu ghi âm thanh của PC: {0}</value>
+  </data>
+  <data name="Speech_LanguageNotInstalled" xml:space="preserve">
+    <value>Chưa cài đặt nhận dạng giọng nói cho {0} trong Windows. Trong Cài đặt Windows → Thời gian &amp; ngôn ngữ → Ngôn ngữ &amp; khu vực, mở "…" → "Tùy chọn ngôn ngữ" của {0} và thêm nhận dạng giọng nói. Hoặc đặt công cụ chuyển văn bản thành Whisper hoặc Gemini trong Cài đặt.</value>
+  </data>
+  <data name="Speech_LanguageNotSupported" xml:space="preserve">
+    <value>Tính năng đọc chính tả của Windows không hỗ trợ ngôn ngữ này. Hãy đặt công cụ chuyển văn bản thành Whisper hoặc Gemini trong Cài đặt.</value>
+  </data>
+  <data name="Speech_MicUnavailable" xml:space="preserve">
+    <value>Không thể dùng micrô. Hãy kiểm tra micrô mặc định trong Windows.</value>
+  </data>
+  <data name="Speech_NetworkFailure" xml:space="preserve">
+    <value>Nhận dạng giọng nói của Windows không thể kết nối mạng. Hãy kiểm tra kết nối Internet.</value>
+  </data>
+  <data name="Speech_StartFailed" xml:space="preserve">
+    <value>Không thể khởi động nhận dạng giọng nói của Windows ({0}).</value>
+  </data>
+  <data name="Speech_OnlineRecognitionOff" xml:space="preserve">
+    <value>Để dùng nhận dạng giọng nói của Windows, hãy bật "Nhận dạng giọng nói trực tuyến" trong Cài đặt Windows → Quyền riêng tư &amp; bảo mật → Giọng nói. Nếu không muốn bật, hãy đặt công cụ chuyển văn bản thành Whisper trong Cài đặt.</value>
+  </data>
+  <data name="Speech_Error" xml:space="preserve">
+    <value>Đã xảy ra lỗi trong nhận dạng giọng nói của Windows: {0}</value>
+  </data>
+  <data name="Hud_LanguageSwitch_Tip" xml:space="preserve">
+    <value>Nhập bằng ngôn ngữ được chọn khi bạn dừng ghi âm</value>
+  </data>
+  <data name="Hud_SpokenLanguage" xml:space="preserve">
+    <value>Như đã nói</value>
+  </data>
+  <data name="Hud_Stop_Tip" xml:space="preserve">
+    <value>Dừng ghi âm và nhập văn bản (giống như nhấn lại phím tắt)</value>
+  </data>
+  <data name="Hud_Stop" xml:space="preserve">
+    <value>Dừng</value>
+  </data>
+  <data name="Hud_Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="Hud_Cancel_Tip" xml:space="preserve">
+    <value>Hủy mà không nhập gì (Esc)</value>
+  </data>
+  <data name="Hud_Close" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="Hud_Close_Tip" xml:space="preserve">
+    <value>Đóng bảng này (sau khi bấm vào văn bản, bạn cũng có thể nhấn Esc)</value>
+  </data>
+  <data name="Hud_Copy_Tip" xml:space="preserve">
+    <value>Sao chép văn bản vào bảng tạm</value>
+  </data>
+  <data name="Hud_Copy" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>Lịch sử đọc chính tả — Hanasu</value>
+  </data>
+  <data name="History_FilterAll" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
+  <data name="History_FilterUnrefined" xml:space="preserve">
+    <value>Lỗi / Chưa chỉnh sửa</value>
+  </data>
+  <data name="History_Search" xml:space="preserve">
+    <value>Tìm kiếm</value>
+  </data>
+  <data name="History_Search_Tip" xml:space="preserve">
+    <value>Tìm trong kết quả, văn bản gốc và ứng dụng đích. Tách các từ bằng dấu cách để tìm mục chứa tất cả các từ đó.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="History_DeleteAll" xml:space="preserve">
+    <value>Xóa tất cả…</value>
+  </data>
+  <data name="OpenSaveFolder" xml:space="preserve">
+    <value>Mở thư mục lưu</value>
+  </data>
+  <data name="History_CopyResult" xml:space="preserve">
+    <value>Sao chép kết quả</value>
+  </data>
+  <data name="History_CopyOriginal" xml:space="preserve">
+    <value>Sao chép bản gốc</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="History_ResultLabel" xml:space="preserve">
+    <value>Kết quả (văn bản đã nhập)</value>
+  </data>
+  <data name="History_OriginalLabel" xml:space="preserve">
+    <value>Bản gốc (bản ghi lời)</value>
+  </data>
+  <data name="Hud_CopyFailed" xml:space="preserve">
+    <value>Không thể sao chép</value>
+  </data>
+  <data name="HotKeyBox_Prompt" xml:space="preserve">
+    <value>Nhấn phím (Esc để hủy)…</value>
+  </data>
+  <data name="Separator" xml:space="preserve">
+    <value> · </value>
+  </data>
+  <data name="WideSeparator" xml:space="preserve">
+    <value>   </value>
+  </data>
+  <data name="History_Unrefined" xml:space="preserve">
+    <value>Chưa chỉnh sửa</value>
+  </data>
+  <data name="History_Kept" xml:space="preserve">
+    <value>Giữ trong {0} và tối đa {1} mục (Cài đặt → Lịch sử).</value>
+  </data>
+  <data name="History_NotSaved" xml:space="preserve">
+    <value>Lịch sử không được lưu vào tệp. Chỉ 10 mục gần nhất được giữ trong bộ nhớ (Cài đặt → Lịch sử).</value>
+  </data>
+  <data name="History_Count" xml:space="preserve">
+    <value>{0} mục. {1}</value>
+  </data>
+  <data name="History_CountFiltered" xml:space="preserve">
+    <value>{0} / {1} mục. {2}</value>
+  </data>
+  <data name="History_Selected" xml:space="preserve">
+    <value>Đã chọn {0} mục (nhấn Delete hoặc bấm "Xóa" để xóa cùng lúc)</value>
+  </data>
+  <data name="History_App" xml:space="preserve">
+    <value>Ứng dụng: {0}</value>
+  </data>
+  <data name="History_Model" xml:space="preserve">
+    <value>Mô hình: {0}</value>
+  </data>
+  <data name="CopyFailedClipboardBusy" xml:space="preserve">
+    <value>Không thể sao chép (ứng dụng khác đang dùng bảng tạm)</value>
+  </data>
+  <data name="History_ConfirmDeleteSelected" xml:space="preserve">
+    <value>Xóa {0} mục lịch sử đã chọn? Không thể hoàn tác thao tác này.</value>
+  </data>
+  <data name="History_ConfirmDeleteAll" xml:space="preserve">
+    <value>Xóa tất cả {0} mục lịch sử đọc chính tả? Không thể hoàn tác thao tác này.</value>
+  </data>
+  <data name="Meeting_Title" xml:space="preserve">
+    <value>Ghi chú cuộc họp — Hanasu</value>
+  </data>
+  <data name="Meeting_Stop" xml:space="preserve">
+    <value>■ Dừng</value>
+  </data>
+  <data name="Meeting_Recording" xml:space="preserve">
+    <value>● Đang ghi âm</value>
+  </data>
+  <data name="Meeting_MicLabel" xml:space="preserve">
+    <value>Tôi (micrô)</value>
+  </data>
+  <data name="Meeting_OutputLabel" xml:space="preserve">
+    <value>Bên kia (âm thanh phát trên đầu ra này)</value>
+  </data>
+  <data name="Meeting_TemplateLabel" xml:space="preserve">
+    <value>Mẫu biên bản</value>
+  </data>
+  <data name="Meeting_Start" xml:space="preserve">
+    <value>● Bắt đầu ghi âm cuộc họp</value>
+  </data>
+  <data name="Meeting_MoveToRecycleBin" xml:space="preserve">
+    <value>Chuyển vào Thùng rác…</value>
+  </data>
+  <data name="Meeting_Empty" xml:space="preserve">
+    <value>Chọn một cuộc họp trong danh sách bên trái, hoặc bấm "Bắt đầu ghi âm cuộc họp" ở góc dưới bên trái để bắt đầu ghi âm.</value>
+  </data>
+  <data name="Meeting_TitleEdit_Tip" xml:space="preserve">
+    <value>Bấm để đổi tiêu đề (Enter để lưu, Esc để hủy)</value>
+  </data>
+  <data name="Meeting_Regenerate" xml:space="preserve">
+    <value>Tạo lại biên bản</value>
+  </data>
+  <data name="Meeting_TemplateShort" xml:space="preserve">
+    <value>Mẫu:</value>
+  </data>
+  <data name="Meeting_CopyMarkdown" xml:space="preserve">
+    <value>Sao chép Markdown</value>
+  </data>
+  <data name="Meeting_OpenInExplorer" xml:space="preserve">
+    <value>Mở trong File Explorer</value>
+  </data>
+  <data name="Meeting_SpeakersLabel" xml:space="preserve">
+    <value>Tên người nói (dùng khi hiển thị bản ghi lời và biên bản)</value>
+  </data>
+  <data name="Meeting_UndoHighlight_Tip" xml:space="preserve">
+    <value>Trong 10 giây sau khi thêm dấu, bạn có thể hoàn tác nếu thêm nhầm</value>
+  </data>
+  <data name="Meeting_Highlight" xml:space="preserve">
+    <value>★ Quan trọng</value>
+  </data>
+  <data name="Meeting_AddNote" xml:space="preserve">
+    <value>Thêm ghi chú</value>
+  </data>
+  <data name="Meeting_NoteHint" xml:space="preserve">
+    <value>Nhấn Enter để thêm ghi chú (thời điểm là lúc bạn bắt đầu gõ). Nếu nhấn "Quan trọng" trong khi gõ, văn bản sẽ thành mô tả của dấu.</value>
+  </data>
+  <data name="Meeting_Tab_Minutes" xml:space="preserve">
+    <value>Biên bản</value>
+  </data>
+  <data name="Meeting_Tab_Transcript" xml:space="preserve">
+    <value>Bản ghi lời</value>
+  </data>
+  <data name="Meeting_Tab_Highlights" xml:space="preserve">
+    <value>Quan trọng</value>
+  </data>
+  <data name="Meeting_Tab_Notes" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="Meeting_SaveAndRegenerate" xml:space="preserve">
+    <value>Lưu và tạo lại biên bản</value>
+  </data>
+  <data name="Meeting_NotesHint" xml:space="preserve">
+    <value>Mỗi dòng một mục. "[12:34] văn bản" là ghi chú, "[12:40] ★ mô tả" là dấu "Quan trọng", còn các dòng không có thời gian là ghi chú thêm sau khi ghi âm.</value>
+  </data>
+  <data name="Meeting_Me" xml:space="preserve">
+    <value>Tôi</value>
+  </data>
+  <data name="Meeting_Others" xml:space="preserve">
+    <value>Bên kia</value>
+  </data>
+  <data name="Meeting_Status_Processing" xml:space="preserve">
+    <value>Đang xử lý</value>
+  </data>
+  <data name="Meeting_Status_Failed" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="Meeting_Status_Warning" xml:space="preserve">
+    <value>Có cảnh báo</value>
+  </data>
+  <data name="Meeting_SavedIn" xml:space="preserve">
+    <value>Lưu tại: {0}</value>
+  </data>
+  <data name="Meeting_MinutesAfterRecording" xml:space="preserve">
+    <value>Khi bạn dừng ghi âm, biên bản sẽ được tạo sau khi chuyển thành văn bản.</value>
+  </data>
+  <data name="Meeting_Processing" xml:space="preserve">
+    <value>Đang xử lý…</value>
+  </data>
+  <data name="Meeting_NoMinutesYet" xml:space="preserve">
+    <value>Chưa có biên bản. Bạn có thể tạo bằng "Tạo lại biên bản" (cần cài đặt AI cho "Cuộc họp" trong Cài đặt → AI).</value>
+  </data>
+  <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
+    <value>Việc chuyển thành văn bản diễn ra sau khi bạn dừng ghi âm.</value>
+  </data>
+  <data name="Meeting_NoTranscriptYet" xml:space="preserve">
+    <value>Không có bản ghi lời.</value>
+  </data>
+  <data name="Meeting_RecordingNote" xml:space="preserve">
+    <value>Việc chuyển thành văn bản bằng {0} diễn ra sau khi bạn dừng ghi âm (để giảm tải cho PC trong cuộc họp).</value>
+  </data>
+  <data name="Meeting_SpeakerName_Inferred_Tip" xml:space="preserve">
+    <value>Tên của {0} (đoán từ cuộc hội thoại; hãy sửa nếu sai)</value>
+  </data>
+  <data name="Meeting_SpeakerName_Tip" xml:space="preserve">
+    <value>Tên của {0}</value>
+  </data>
+  <data name="Meeting_Inferred" xml:space="preserve">
+    <value>Phỏng đoán</value>
+  </data>
+  <data name="Meeting_SpeakerNamesSaved" xml:space="preserve">
+    <value>Đã lưu tên người nói</value>
+  </data>
+  <data name="Meeting_TitleSaved" xml:space="preserve">
+    <value>Đã lưu tiêu đề</value>
+  </data>
+  <data name="Meeting_SaveFailed" xml:space="preserve">
+    <value>Không thể lưu: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerate" xml:space="preserve">
+    <value>Đổi mẫu biên bản thành “{0}” và tạo lại biên bản?
+
+Biên bản và việc cần làm hiện tại sẽ bị thay thế.</value>
+  </data>
+  <data name="Meeting_Regenerated" xml:space="preserve">
+    <value>Đã tạo lại biên bản ({0} giây)</value>
+  </data>
+  <data name="Meeting_NoTranscript" xml:space="preserve">
+    <value>Không có bản ghi lời</value>
+  </data>
+  <data name="Meeting_NoNotes" xml:space="preserve">
+    <value>Không có ghi chú</value>
+  </data>
+  <data name="Meeting_NoMinutes" xml:space="preserve">
+    <value>Không có biên bản</value>
+  </data>
+  <data name="Meeting_CopiedTranscript" xml:space="preserve">
+    <value>Đã sao chép bản ghi lời dưới dạng Markdown</value>
+  </data>
+  <data name="Meeting_CopiedNotes" xml:space="preserve">
+    <value>Đã sao chép ghi chú dưới dạng Markdown</value>
+  </data>
+  <data name="Meeting_CopiedMinutes" xml:space="preserve">
+    <value>Đã sao chép biên bản dưới dạng Markdown</value>
+  </data>
+  <data name="CopyFailed" xml:space="preserve">
+    <value>Không thể sao chép: {0}</value>
+  </data>
+  <data name="Meeting_ConfirmDelete" xml:space="preserve">
+    <value>Xóa "{0}"?
+
+Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuyển vào Thùng rác. Bạn có thể khôi phục chúng từ Thùng rác.</value>
+  </data>
+  <data name="Meeting_ConfirmDelete_Title" xml:space="preserve">
+    <value>Xóa cuộc họp — Hanasu</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Không thể xóa: {0}</value>
+  </data>
+  <data name="Meeting_MovedToRecycleBin" xml:space="preserve">
+    <value>Đã chuyển "{0}" vào Thùng rác</value>
+  </data>
+  <data name="Meeting_NotesWhileRecording" xml:space="preserve">
+    <value>Trong khi ghi âm, hãy thêm ghi chú vào ô ghi chú phía trên (bạn có thể sửa tab này sau khi ghi âm).</value>
+  </data>
+  <data name="Meeting_NotesSaved" xml:space="preserve">
+    <value>Đã lưu ghi chú</value>
+  </data>
+  <data name="Meeting_UndoHighlight" xml:space="preserve">
+    <value>Hoàn tác ★ (còn {0} giây)</value>
+  </data>
+  <data name="Meeting_Starting" xml:space="preserve">
+    <value>Đang bắt đầu ghi âm…</value>
+  </data>
+  <data name="Meeting_PostProcessing" xml:space="preserve">
+    <value>Đang xử lý sau khi ghi âm</value>
+  </data>
+  <data name="Meeting_StopHint" xml:space="preserve">
+    <value>Bạn cũng có thể dừng bằng {0}</value>
+  </data>
+  <data name="Meeting_StartHint" xml:space="preserve">
+    <value>Bạn cũng có thể bắt đầu bằng {0}. Hãy báo cho những người tham gia khác rằng bạn đang ghi âm trước khi bắt đầu.</value>
+  </data>
+  <data name="Device_DefaultMic" xml:space="preserve">
+    <value>Micrô mặc định của Windows</value>
+  </data>
+  <data name="Device_MissingMic" xml:space="preserve">
+    <value>(Micrô đã chọn trước đây, hiện không kết nối)</value>
+  </data>
+  <data name="Device_DefaultOutput" xml:space="preserve">
+    <value>Đầu ra mặc định của Windows</value>
+  </data>
+  <data name="Device_MissingOutput" xml:space="preserve">
+    <value>(Đầu ra đã chọn trước đây, hiện không kết nối)</value>
+  </data>
+  <data name="MeetingMic_StartFailed" xml:space="preserve">
+    <value>Không thể bắt đầu ghi âm từ micrô: {0}</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Cài đặt Hanasu</value>
+  </data>
+  <data name="Settings_SavedImmediately" xml:space="preserve">
+    <value>Thay đổi được lưu ngay</value>
+  </data>
+  <data name="Settings_Tab_General" xml:space="preserve">
+    <value>Chung</value>
+  </data>
+  <data name="Settings_Shortcuts" xml:space="preserve">
+    <value>Phím tắt</value>
+  </data>
+  <data name="Settings_Dictation" xml:space="preserve">
+    <value>Đọc chính tả</value>
+  </data>
+  <data name="Settings_ResetToDefault" xml:space="preserve">
+    <value>Khôi phục mặc định</value>
+  </data>
+  <data name="Settings_TranslateAndType" xml:space="preserve">
+    <value>Dịch rồi nhập</value>
+  </data>
+  <data name="Settings_ShortcutsNote" xml:space="preserve">
+    <value>Bấm vào một ô, rồi nhấn tổ hợp phím bạn muốn. Trong khi ghi âm, Esc sẽ hủy. Alt + Space (menu cửa sổ) và Win + H (nhập bằng giọng nói của Windows) được Windows sử dụng nên cần tránh.</value>
+  </data>
+  <data name="Settings_TranslationLanguages" xml:space="preserve">
+    <value>Ngôn ngữ dịch</value>
+  </data>
+  <data name="Settings_TranslateEnglish" xml:space="preserve">
+    <value>Tiếng Anh</value>
+  </data>
+  <data name="Settings_TranslateJapanese" xml:space="preserve">
+    <value>Tiếng Nhật</value>
+  </data>
+  <data name="Settings_TranslationNote" xml:space="preserve">
+    <value>Phím tắt "Dịch rồi nhập" dịch sang ngôn ngữ được chọn ở ngoài cùng bên trái. Trong khi ghi âm, bạn có thể chuyển giữa "Như đã nói" và các ngôn ngữ đã chọn trên HUD (văn bản được nhập bằng ngôn ngữ được chọn khi bạn dừng). Việc dịch dùng AI được chọn cho đọc chính tả trên tab "AI". Hãy chọn ít nhất một ngôn ngữ.</value>
+  </data>
+  <data name="Settings_RecordingMode" xml:space="preserve">
+    <value>Chế độ ghi âm</value>
+  </data>
+  <data name="Settings_Toggle" xml:space="preserve">
+    <value>Bắt đầu/dừng mỗi lần nhấn (bật/tắt)</value>
+  </data>
+  <data name="Settings_PushToTalk" xml:space="preserve">
+    <value>Chỉ ghi âm khi giữ phím</value>
+  </data>
+  <data name="Settings_Engine" xml:space="preserve">
+    <value>Công cụ chuyển văn bản</value>
+  </data>
+  <data name="Settings_Engine_Windows" xml:space="preserve">
+    <value>Nhận dạng giọng nói của Windows (mặc định)</value>
+  </data>
+  <data name="Settings_Engine_Whisper" xml:space="preserve">
+    <value>Whisper (chạy trên PC này)</value>
+  </data>
+  <data name="Settings_Engine_Gemini" xml:space="preserve">
+    <value>Gemini (gửi âm thanh đến Google)</value>
+  </data>
+  <data name="Settings_Engine_WindowsNote" xml:space="preserve">
+    <value>Nhận dạng lời nói bằng nhận dạng giọng nói của Windows (đọc chính tả) và hiển thị kết quả tạm thời trong khi bạn nói. Tính năng này dùng nhận dạng giọng nói trực tuyến của Microsoft, nên hãy bật "Nhận dạng giọng nói trực tuyến" trong Cài đặt Windows → Quyền riêng tư &amp; bảo mật → Giọng nói. Tính năng này dùng micrô mặc định của Windows (lựa chọn bên dưới không được dùng).</value>
+  </data>
+  <data name="Settings_OpenSpeechSettings" xml:space="preserve">
+    <value>Mở cài đặt giọng nói</value>
+  </data>
+  <data name="Settings_OpenLanguageSettings" xml:space="preserve">
+    <value>Mở cài đặt ngôn ngữ</value>
+  </data>
+  <data name="Settings_Engine_WhisperNote" xml:space="preserve">
+    <value>whisper.cpp chuyển giọng nói thành văn bản ngay trên PC này (âm thanh không bao giờ rời khỏi máy), một lần sau khi bạn dừng ghi âm. Ngay khi bạn chọn công cụ hoặc một mô hình, mô hình đã chọn (kích thước hiển thị trong danh sách) sẽ bắt đầu tải xuống từ Hugging Face (bạn có thể dừng bằng “Hủy”). Mô hình càng lớn càng chính xác nhưng chậm hơn.</value>
+  </data>
+  <data name="Settings_Model" xml:space="preserve">
+    <value>Mô hình</value>
+  </data>
+  <data name="Settings_Download" xml:space="preserve">
+    <value>Tải xuống</value>
+  </data>
+  <data name="Settings_CancelDownload" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="Settings_Engine_GeminiNote" xml:space="preserve">
+    <value>Gửi âm thanh đã ghi đến Gemini API của Google để chuyển thành văn bản (dùng thông tin xác thực Gemini đặt trên tab AI và mô hình Gemini cho đọc chính tả). Lưu ý rằng âm thanh của bạn được gửi đến Google. Âm thanh được gửi sau khi bạn dừng ghi âm (tối đa 7 phút mỗi lần).</value>
+  </data>
+  <data name="Settings_Microphone" xml:space="preserve">
+    <value>Micrô</value>
+  </data>
+  <data name="Settings_NoTarget" xml:space="preserve">
+    <value>Khi không có chỗ để nhập</value>
+  </data>
+  <data name="Settings_NoTargetNote" xml:space="preserve">
+    <value>Nếu không có ô văn bản nào đang được chọn (ví dụ: màn hình nền ở phía trước) hoặc ứng dụng phía trước chạy với quyền quản trị nên không thể dán vào, kết quả sẽ hiển thị ở cuối màn hình. Kết quả sẽ ở đó cho đến khi bạn đóng, và bạn có thể sao chép bằng "Sao chép" hoặc bằng cách chọn văn bản.</value>
+  </data>
+  <data name="Settings_Fallback_Keep" xml:space="preserve">
+    <value>Đồng thời đưa vào bảng tạm (chỉ cần nhấn Ctrl+V ở chỗ bạn muốn)</value>
+  </data>
+  <data name="Settings_Fallback_Restore" xml:space="preserve">
+    <value>Chỉ hiển thị và giữ nguyên bảng tạm (sao chép bằng "Sao chép" trên bảng)</value>
+  </data>
+  <data name="Settings_Other" xml:space="preserve">
+    <value>Khác</value>
+  </data>
+  <data name="Settings_PlaySounds" xml:space="preserve">
+    <value>Phát âm thanh khi bắt đầu và dừng ghi âm</value>
+  </data>
+  <data name="Settings_OpenLogs" xml:space="preserve">
+    <value>Mở thư mục nhật ký</value>
+  </data>
+  <data name="Settings_OpenSettingsFolder" xml:space="preserve">
+    <value>Mở thư mục cài đặt</value>
+  </data>
+  <data name="Settings_AiAndModels" xml:space="preserve">
+    <value>AI và mô hình</value>
+  </data>
+  <data name="Settings_Ai_Dictation" xml:space="preserve">
+    <value>Đọc chính tả (chỉnh sửa, dịch)</value>
+  </data>
+  <data name="Settings_Ai_Local" xml:space="preserve">
+    <value>Cục bộ</value>
+  </data>
+  <data name="Settings_Ai_Meeting" xml:space="preserve">
+    <value>Cuộc họp (biên bản)</value>
+  </data>
+  <data name="Settings_AiNote" xml:space="preserve">
+    <value>Bạn có thể chọn AI và mô hình riêng cho đọc chính tả và cuộc họp. Mặc định là gemini-3.5-flash-lite (đọc chính tả) và gemini-3.8-flash (biên bản) với Gemini, và Haiku 5.5 (đọc chính tả) và Sonnet 5.5 (biên bản) với Claude. Claude chỉ được dùng để xử lý văn bản, không dùng để chuyển âm thanh thành văn bản (công cụ chuyển văn bản nằm trên tab "Chung" và "Cuộc họp").</value>
+  </data>
+  <data name="Settings_LocalModels" xml:space="preserve">
+    <value>Mô hình cục bộ (LLM nhỏ chạy trên PC này)</value>
+  </data>
+  <data name="Settings_LocalModelsNote" xml:space="preserve">
+    <value>Văn bản chỉ được xử lý trên PC này và không bao giờ được gửi qua Internet. Hãy tải xuống mô hình bạn muốn dùng trước. Mô hình chạy trên CPU nên việc chỉnh sửa mất từ vài đến hơn mười giây, còn biên bản mất từ vài đến hơn mười phút.</value>
+  </data>
+  <data name="Settings_Stop" xml:space="preserve">
+    <value>Dừng</value>
+  </data>
+  <data name="Settings_Refine" xml:space="preserve">
+    <value>Chỉnh sửa bằng AI (sửa lỗi nhận dạng, từ đệm, tự sửa lời và dấu câu)</value>
+  </data>
+  <data name="Settings_RefineNote" xml:space="preserve">
+    <value>Khi tắt, chỉ các thay thế trong từ điển được áp dụng cho văn bản nhận dạng trước khi nhập. Việc dịch chỉ có thể thực hiện bằng AI, nên văn bản vẫn được gửi đến AI khi dịch dù tùy chọn này tắt.</value>
+  </data>
+  <data name="Settings_RefineLanguage" xml:space="preserve">
+    <value>Ngôn ngữ chỉnh sửa</value>
+  </data>
+  <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
+    <value>Như đã nói</value>
+  </data>
+  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
+    <value>Luôn là tiếng Nhật</value>
+  </data>
+  <data name="Settings_SendAppName" xml:space="preserve">
+    <value>Cho AI biết tên ứng dụng bạn đang nhập vào (để phù hợp với văn phong)</value>
+  </data>
+  <data name="Settings_GeminiAuth" xml:space="preserve">
+    <value>Xác thực Gemini</value>
+  </data>
+  <data name="Settings_Auth_ApiKey" xml:space="preserve">
+    <value>Khóa API (Google AI Studio)</value>
+  </data>
+  <data name="Settings_Auth_ServiceAccount" xml:space="preserve">
+    <value>Tài khoản dịch vụ (Vertex AI)</value>
+  </data>
+  <data name="Settings_ApiKey" xml:space="preserve">
+    <value>Khóa API</value>
+  </data>
+  <data name="Settings_KeyJson" xml:space="preserve">
+    <value>Khóa (JSON)</value>
+  </data>
+  <data name="Settings_Browse" xml:space="preserve">
+    <value>Duyệt…</value>
+  </data>
+  <data name="Settings_Region" xml:space="preserve">
+    <value>Khu vực</value>
+  </data>
+  <data name="Settings_ServiceAccountNote" xml:space="preserve">
+    <value>Chọn khóa của tài khoản dịch vụ có vai trò Vertex AI User (roles/aiplatform.user). Chỉ vị trí của tệp khóa được lưu (nội dung không được sao chép). Hãy giữ tệp khóa ở nơi người khác không đọc được. Khu vực mặc định là global. “Kiểm tra kết nối” chỉ đọc thông tin của mô hình và không tốn phí.</value>
+  </data>
+  <data name="Settings_ClaudeApiKey" xml:space="preserve">
+    <value>Khóa API Claude</value>
+  </data>
+  <data name="Settings_TestConnection" xml:space="preserve">
+    <value>Kiểm tra kết nối</value>
+  </data>
+  <data name="Settings_ClaudeNote" xml:space="preserve">
+    <value>Nhập khóa API đã tạo trong Claude Console (platform.claude.com). Khóa đã lưu không hiển thị trên màn hình (chỉ 4 ký tự cuối). "Kiểm tra kết nối" chỉ lấy thông tin mô hình và không bị tính phí.</value>
+  </data>
+  <data name="Settings_KeyProtection" xml:space="preserve">
+    <value>Bảo vệ khóa API</value>
+  </data>
+  <data name="Settings_UseHello" xml:space="preserve">
+    <value>Bảo vệ khóa API bằng Windows Hello (xác minh bằng mã PIN, khuôn mặt hoặc vân tay khi dùng)</value>
+  </data>
+  <data name="Settings_KeyProtectionNote" xml:space="preserve">
+    <value>Khóa được lưu ở dạng mã hóa trong %LOCALAPPDATA%\Hanasu\secrets.json, không phải trong settings.json. Với DPAPI mặc định, chỉ người dùng Windows này đọc được, nhưng các ứng dụng khác chạy dưới cùng người dùng có thể đọc mà không cần xác nhận. Với Windows Hello, ứng dụng khác cố đọc khóa sẽ kích hoạt lời nhắc Windows Hello (bạn xác minh một lần khi dùng lần đầu sau khi khởi động, và lại sau khi khóa màn hình). Điều này không ngăn được các ứng dụng chạy dưới cùng người dùng đọc bộ nhớ trong khi Hanasu đang chạy.</value>
+  </data>
+  <data name="Settings_Trial" xml:space="preserve">
+    <value>Dùng thử (AI đọc chính tả)</value>
+  </data>
+  <data name="Settings_TrialSample" xml:space="preserve">
+    <value>à ừm cuộc họp ngày mai ấy thì tôi sẽ dùng mấy cái slide làm bằng gemini</value>
+  </data>
+  <data name="Settings_TryRefine" xml:space="preserve">
+    <value>Thử chỉnh sửa</value>
+  </data>
+  <data name="Settings_TryEnglish" xml:space="preserve">
+    <value>Thử dịch sang tiếng Anh</value>
+  </data>
+  <data name="Settings_TryJapanese" xml:space="preserve">
+    <value>Thử dịch sang tiếng Nhật</value>
+  </data>
+  <data name="Settings_Tab_Meetings" xml:space="preserve">
+    <value>Cuộc họp</value>
+  </data>
+  <data name="Settings_MeetingStartStop" xml:space="preserve">
+    <value>Bắt đầu/dừng ghi âm</value>
+  </data>
+  <data name="Settings_HighlightMark" xml:space="preserve">
+    <value>Dấu "Quan trọng"</value>
+  </data>
+  <data name="Settings_UseHighlightHotKey" xml:space="preserve">
+    <value>Dùng phím tắt "Quan trọng" (chỉ hoạt động khi đang ghi âm)</value>
+  </data>
+  <data name="Settings_Transcription" xml:space="preserve">
+    <value>Chuyển thành văn bản</value>
+  </data>
+  <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
+    <value>Whisper (chạy trên PC này; mặc định)</value>
+  </data>
+  <data name="Settings_MeetingEngineNote" xml:space="preserve">
+    <value>Trong khi ghi âm, âm thanh chỉ được ghi vào tệp; sau khi bạn dừng, kênh "Tôi" và "Bên kia" được chuyển thành văn bản riêng, kèm mốc thời gian. Nhận dạng giọng nói của Windows chỉ nghe được micrô mặc định của Windows và không thể lấy âm thanh của PC (bên kia), nên không dùng được cho cuộc họp.</value>
+  </data>
+  <data name="Settings_Speakers" xml:space="preserve">
+    <value>Người nói</value>
+  </data>
+  <data name="Settings_Diarize" xml:space="preserve">
+    <value>Tách người nói phía bên kia (Người nói 1, Người nói 2…)</value>
+  </data>
+  <data name="Settings_DiarizeNote" xml:space="preserve">
+    <value>Người nói được tách trên PC này bằng sherpa-onnx (mô hình pyannote và 3D-Speaker). Các mô hình (khoảng 34 MB) được tải xuống trong lần đầu. Khi tắt, phía bên kia được gộp thành một "Bên kia". Bạn có thể đổi tên người nói trong Ghi chú cuộc họp.</value>
+  </data>
+  <data name="Settings_Minutes" xml:space="preserve">
+    <value>Biên bản</value>
+  </data>
+  <data name="Settings_MakeMinutes" xml:space="preserve">
+    <value>Tạo biên bản bằng AI sau khi ghi âm</value>
+  </data>
+  <data name="Settings_MinutesNote" xml:space="preserve">
+    <value>Chọn AI và mô hình cho biên bản ở mục "Cuộc họp (biên bản)" trên tab "AI". Chỉ văn bản của bản ghi lời được gửi đi (khi công cụ chuyển văn bản là Gemini, âm thanh cũng được gửi đến Google). Chọn mẫu biên bản trong Ghi chú cuộc họp.</value>
+  </data>
+  <data name="Settings_Storage" xml:space="preserve">
+    <value>Lưu trữ</value>
+  </data>
+  <data name="Settings_KeepAudio" xml:space="preserve">
+    <value>Giữ các tệp âm thanh (me.wav / others.wav) sau khi xử lý</value>
+  </data>
+  <data name="Settings_KeepAudioNote" xml:space="preserve">
+    <value>Khi tắt, âm thanh sẽ bị xóa sau khi tạo bản ghi lời và biên bản (vẫn được giữ nếu chuyển văn bản không thành công). Định dạng WAV mono 16 kHz, khoảng 115 MB mỗi kênh mỗi giờ.</value>
+  </data>
+  <data name="Settings_SaveLocation" xml:space="preserve">
+    <value>Vị trí lưu</value>
+  </data>
+  <data name="Settings_Open" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+  <data name="Settings_MeetingsFolderNote" xml:space="preserve">
+    <value>Mỗi cuộc họp có một thư mục đặt tên theo ngày giờ, chứa meeting.json (cùng định dạng với phiên bản Mac), transcript.md, minutes.md, notes.md và âm thanh.</value>
+  </data>
+  <data name="Settings_ConsentNote" xml:space="preserve">
+    <value>Hãy xin sự đồng ý của những người tham gia khác trước khi ghi âm. Dùng tai nghe giúp giọng của họ không lọt vào micrô của bạn.</value>
+  </data>
+  <data name="Settings_Tab_History" xml:space="preserve">
+    <value>Lịch sử</value>
+  </data>
+  <data name="Settings_DictationHistory" xml:space="preserve">
+    <value>Lịch sử đọc chính tả</value>
+  </data>
+  <data name="Settings_SaveHistory" xml:space="preserve">
+    <value>Lưu lịch sử vào tệp</value>
+  </data>
+  <data name="Settings_HistoryNote" xml:space="preserve">
+    <value>Giữ kết quả đọc chính tả và bản ghi lời gốc để bạn có thể tìm kiếm và sao chép bằng "Mở lịch sử". Khi tắt, kết quả mới không được ghi vào tệp; chỉ 10 kết quả gần nhất được giữ trong bộ nhớ cho "Kết quả gần đây" trong menu vùng thông báo (lịch sử đã lưu không bị xóa).</value>
+  </data>
+  <data name="Settings_KeepDays" xml:space="preserve">
+    <value>Giữ trong</value>
+  </data>
+  <data name="Settings_KeepCount" xml:space="preserve">
+    <value>Giữ tối đa</value>
+  </data>
+  <data name="Settings_KeepNote" xml:space="preserve">
+    <value>Chỉ giữ các mục nằm trong cả hai giới hạn; mục cũ nhất bị xóa trước (khi thêm, khi khởi động và khi bạn thay đổi các cài đặt này). Mặc định là 30 ngày và 1.000 mục.</value>
+  </data>
+  <data name="Settings_OpenHistory" xml:space="preserve">
+    <value>Mở lịch sử…</value>
+  </data>
+  <data name="Settings_DeleteAllHistory" xml:space="preserve">
+    <value>Xóa toàn bộ lịch sử…</value>
+  </data>
+  <data name="Settings_Tab_Dictionary" xml:space="preserve">
+    <value>Từ điển &amp; quy tắc</value>
+  </data>
+  <data name="Settings_UserDictionary" xml:space="preserve">
+    <value>Từ điển người dùng</value>
+  </data>
+  <data name="Settings_TryReplace" xml:space="preserve">
+    <value>Thử thay thế</value>
+  </data>
+  <data name="Settings_ExtraRules" xml:space="preserve">
+    <value>Quy tắc chỉnh sửa bổ sung</value>
+  </data>
+  <data name="Settings_ExtraRulesNote" xml:space="preserve">
+    <value>Các quy tắc được chuyển cho AI (Gemini, Claude) khi chỉnh sửa (ví dụ: "dùng giọng văn trang trọng"). Không dùng khi dịch sang tiếng Anh (có dùng khi dịch sang tiếng Nhật).</value>
+  </data>
+  <data name="Settings_DictionaryHelp" xml:space="preserve">
+    <value>Mỗi dòng một mục. Một từ đứng riêng cho AI biết cách viết từ đó. "nghe được =&gt; cách viết" thay thế phần được nhận dạng bằng cách viết đó (ví dụ: stóc mác =&gt; Stockmark; tách nhiều từ bên trái bằng ","). Dòng bắt đầu bằng "#" là chú thích.</value>
+  </data>
+  <data name="Settings_EntryCount" xml:space="preserve">
+    <value>{0} mục</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>Đã lưu</value>
+  </data>
+  <data name="Settings_MicNote_Windows" xml:space="preserve">
+    <value>Công cụ Windows dùng micrô mặc định của Windows (bạn có thể thay đổi trong Cài đặt Windows → Hệ thống → Âm thanh).</value>
+  </data>
+  <data name="Settings_MicNote_Selected" xml:space="preserve">
+    <value>Whisper và Gemini ghi âm bằng micrô được chọn ở đây (chuyển thành mono 16 kHz).</value>
+  </data>
+  <data name="Settings_HistoryStatus" xml:space="preserve">
+    <value>Lịch sử hiện tại: {0} mục (lưu tại: {1})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteWhisper" xml:space="preserve">
+    <value>Xóa mô hình Whisper {0} ({1})?</value>
+  </data>
+  <data name="Settings_Downloading" xml:space="preserve">
+    <value>Đang tải xuống… {0}</value>
+  </data>
+  <data name="Settings_Downloaded" xml:space="preserve">
+    <value>Đã tải xuống</value>
+  </data>
+  <data name="Settings_DownloadFailed" xml:space="preserve">
+    <value>Lỗi: {0}</value>
+  </data>
+  <data name="Settings_NotDownloaded" xml:space="preserve">
+    <value>Chưa tải xuống</value>
+  </data>
+  <data name="Settings_ConfirmDeleteLocal" xml:space="preserve">
+    <value>Xóa mô hình cục bộ {0} ({1})?</value>
+  </data>
+  <data name="Settings_MinutesAiNote" xml:space="preserve">
+    <value>Biên bản được tạo bằng {0} ({1}).</value>
+  </data>
+  <data name="Settings_Missing_LocalModel" xml:space="preserve">
+    <value>mô hình cục bộ "{0}"</value>
+  </data>
+  <data name="Settings_Missing_GeminiCredentials" xml:space="preserve">
+    <value>thông tin xác thực Gemini</value>
+  </data>
+  <data name="Settings_MissingNote" xml:space="preserve">
+    <value>Chưa thiết lập: {0} (thiết lập hoặc tải xuống bên dưới).</value>
+  </data>
+  <data name="Settings_EnterApiKey" xml:space="preserve">
+    <value>Hãy nhập khóa API</value>
+  </data>
+  <data name="Settings_ClaudeKeyPrefix" xml:space="preserve">
+    <value>Khóa API Claude bắt đầu bằng "sk-ant-". Hãy kiểm tra lại giá trị đã nhập.</value>
+  </data>
+  <data name="Settings_ClaudeConnecting" xml:space="preserve">
+    <value>Đang kết nối với Claude API…</value>
+  </data>
+  <data name="Settings_ClaudeConnectedUnsaved" xml:space="preserve">
+    <value>Đã kết nối bằng khóa này (chưa lưu). Có thể dùng {0}. </value>
+  </data>
+  <data name="Settings_ClaudeConnected" xml:space="preserve">
+    <value>Đã kết nối. Có thể dùng {0}. </value>
+  </data>
+  <data name="Settings_Hello_On" xml:space="preserve">
+    <value>Đang được bảo vệ bằng Windows Hello.</value>
+  </data>
+  <data name="Settings_Hello_Off" xml:space="preserve">
+    <value>Hiện đang được bảo vệ bằng DPAPI.</value>
+  </data>
+  <data name="Settings_Hello_Unavailable" xml:space="preserve">
+    <value>Windows Hello chưa được thiết lập trên PC này nên không thể chọn (Cài đặt Windows → Tài khoản → Tùy chọn đăng nhập).</value>
+  </data>
+  <data name="Settings_Hello_Enabling" xml:space="preserve">
+    <value>Đang yêu cầu xác minh Windows Hello (xuất hiện hai lần để xác nhận)…</value>
+  </data>
+  <data name="Settings_Hello_Disabling" xml:space="preserve">
+    <value>Đang yêu cầu xác minh Windows Hello (để đọc khóa một lần và chuyển về DPAPI)…</value>
+  </data>
+  <data name="Settings_Hello_SwitchFailed" xml:space="preserve">
+    <value>Không thể chuyển: {0}</value>
+  </data>
+  <data name="Settings_ServiceAccountFilter" xml:space="preserve">
+    <value>Khóa tài khoản dịch vụ (*.json)|*.json|Tất cả tệp (*.*)|*.*</value>
+  </data>
+  <data name="Settings_ServiceAccountDialogTitle" xml:space="preserve">
+    <value>Chọn khóa tài khoản dịch vụ (JSON)</value>
+  </data>
+  <data name="Settings_TrialRefining" xml:space="preserve">
+    <value>Đang chỉnh sửa…</value>
+  </data>
+  <data name="Settings_TrialTranslating" xml:space="preserve">
+    <value>Đang dịch…</value>
+  </data>
+  <data name="Settings_TrialDone" xml:space="preserve">
+    <value>{0} ({1}) mất {2} giây</value>
+  </data>
+  <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
+    <value>Âm thanh cuộc họp đã ghi được chia thành các đoạn 5 phút và gửi đến Gemini (dùng thông tin xác thực Gemini trên tab AI và mô hình Gemini cho đọc chính tả). Lưu ý rằng âm thanh của bạn được gửi đến Google.</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
+    <value>Dùng mô hình Whisper được chọn trên tab "Chung" ({0}).</value>
+  </data>
+  <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
+    <value> Mô hình này chưa được tải xuống (hãy tải xuống trên tab "Chung").</value>
+  </data>
+  <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
+    <value>Chọn nơi lưu cuộc họp</value>
+  </data>
+  <data name="Settings_DictionaryLineIssue" xml:space="preserve">
+    <value>Dòng {0}: {1}</value>
+  </data>
+  <data name="Settings_NoReplacements" xml:space="preserve">
+    <value>Không có thay thế</value>
+  </data>
+  <data name="Settings_ReplacementResult" xml:space="preserve">
+    <value>→ {0} ({1})</value>
+  </data>
+  <data name="Settings_TrialAppName" xml:space="preserve">
+    <value>Cài đặt Hanasu</value>
+  </data>
+  <data name="Mic_UnsupportedFormat" xml:space="preserve">
+    <value>Định dạng ghi âm không được hỗ trợ ({0})</value>
+  </data>
+  <data name="Tray_StartTranslate" xml:space="preserve">
+    <value>Bắt đầu &amp;dịch rồi nhập</value>
+  </data>
+  <data name="Tray_StartTranslate_English" xml:space="preserve">
+    <value>Bắt đầu &amp;dịch sang tiếng Anh rồi nhập</value>
+  </data>
+  <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
+    <value>Bắt đầu &amp;dịch sang tiếng Nhật rồi nhập</value>
+  </data>
+  <data name="History_ConfirmDeleteOne" xml:space="preserve">
+    <value>Xóa mục lịch sử này? Không thể hoàn tác thao tác này.</value>
+  </data>
+  <data name="History_Search_A11y" xml:space="preserve">
+    <value>Tìm kiếm lịch sử</value>
+  </data>
+  <data name="History_Result_A11y" xml:space="preserve">
+    <value>Kết quả</value>
+  </data>
+  <data name="History_Original_A11y" xml:space="preserve">
+    <value>Bản gốc</value>
+  </data>
+  <data name="Meeting_NoHighlights" xml:space="preserve">
+    <value>Không có dấu “Quan trọng”</value>
+  </data>
+  <data name="Meeting_CopiedHighlights" xml:space="preserve">
+    <value>Đã sao chép ngữ cảnh “Quan trọng” dưới dạng Markdown</value>
+  </data>
+  <data name="Meeting_MicLevel_A11y" xml:space="preserve">
+    <value>Mức âm lượng micrô của tôi</value>
+  </data>
+  <data name="Meeting_OutputLevel_A11y" xml:space="preserve">
+    <value>Mức âm thanh của những người tham gia khác</value>
+  </data>
+  <data name="Meeting_NoteInput_A11y" xml:space="preserve">
+    <value>Nhập ghi chú</value>
+  </data>
+  <data name="Meeting_Minutes_A11y" xml:space="preserve">
+    <value>Biên bản</value>
+  </data>
+  <data name="Meeting_Transcript_A11y" xml:space="preserve">
+    <value>Bản ghi lời</value>
+  </data>
+  <data name="Meeting_Highlights_A11y" xml:space="preserve">
+    <value>Ngữ cảnh quanh các dấu “Quan trọng”</value>
+  </data>
+  <data name="Meeting_Notes_A11y" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="Settings_DictationHotKey_A11y" xml:space="preserve">
+    <value>Phím tắt đọc chính tả</value>
+  </data>
+  <data name="Settings_DictationHotKeyReset_A11y" xml:space="preserve">
+    <value>Đặt lại phím tắt đọc chính tả về mặc định</value>
+  </data>
+  <data name="Settings_TranslateHotKey_A11y" xml:space="preserve">
+    <value>Phím tắt dịch rồi nhập</value>
+  </data>
+  <data name="Settings_TranslateHotKeyReset_A11y" xml:space="preserve">
+    <value>Đặt lại phím tắt dịch rồi nhập về mặc định</value>
+  </data>
+  <data name="Settings_WhisperDelete_A11y" xml:space="preserve">
+    <value>Xóa mô hình Whisper đã chọn</value>
+  </data>
+  <data name="Settings_Microphone_A11y" xml:space="preserve">
+    <value>Micrô</value>
+  </data>
+  <data name="Settings_GeminiKeyDelete_A11y" xml:space="preserve">
+    <value>Xóa khóa API Gemini</value>
+  </data>
+  <data name="Settings_GeminiCheck_A11y" xml:space="preserve">
+    <value>Kiểm tra kết nối Gemini</value>
+  </data>
+  <data name="Settings_ClaudeKeyDelete_A11y" xml:space="preserve">
+    <value>Xóa khóa API Claude</value>
+  </data>
+  <data name="Settings_MeetingHotKey_A11y" xml:space="preserve">
+    <value>Phím tắt bắt đầu hoặc dừng ghi âm cuộc họp</value>
+  </data>
+  <data name="Settings_MeetingHotKeyReset_A11y" xml:space="preserve">
+    <value>Đặt lại phím tắt ghi âm cuộc họp về mặc định</value>
+  </data>
+  <data name="Settings_HighlightHotKey_A11y" xml:space="preserve">
+    <value>Phím tắt đánh dấu “Quan trọng”</value>
+  </data>
+  <data name="Settings_HighlightHotKeyReset_A11y" xml:space="preserve">
+    <value>Đặt lại phím tắt đánh dấu “Quan trọng” về mặc định</value>
+  </data>
+  <data name="Settings_MeetingsFolderReset_A11y" xml:space="preserve">
+    <value>Đặt lại nơi lưu cuộc họp về mặc định</value>
+  </data>
+  <data name="Settings_HotKeyConflict" xml:space="preserve">
+    <value>{0} đã là phím tắt cho “{1}”. Hãy chọn phím khác.</value>
+  </data>
+  <data name="Settings_MeetingRecordingName" xml:space="preserve">
+    <value>Ghi âm cuộc họp</value>
+  </data>
+  <data name="Settings_DownloadingWithSize" xml:space="preserve">
+    <value>Đang tải xuống… {0} ({1})</value>
+  </data>
+  <data name="History_List_A11y" xml:space="preserve">
+    <value>Danh sách lịch sử</value>
+  </data>
+  <data name="History_EmptyAll" xml:space="preserve">
+    <value>Chưa có lịch sử. Các lần đọc chính tả của bạn sẽ hiển thị tại đây.</value>
+  </data>
+  <data name="History_EmptyFiltered" xml:space="preserve">
+    <value>Không có mục lịch sử nào khớp với nội dung tìm kiếm.</value>
+  </data>
+  <data name="Hud_Selected_A11y" xml:space="preserve">
+    <value>Đã chọn</value>
+  </data>
+  <data name="Meeting_List_A11y" xml:space="preserve">
+    <value>Danh sách cuộc họp</value>
+  </data>
+  <data name="Meeting_ListLoading" xml:space="preserve">
+    <value>Đang tải cuộc họp…</value>
+  </data>
+  <data name="Meeting_Title_A11y" xml:space="preserve">
+    <value>Tiêu đề cuộc họp</value>
+  </data>
+  <data name="Meeting_ListLoadFailed" xml:space="preserve">
+    <value>Không thể tải danh sách cuộc họp.</value>
+  </data>
+  <data name="Meeting_ListEmpty" xml:space="preserve">
+    <value>Chưa có bản ghi âm cuộc họp nào. Hãy bắt đầu bằng “● Bắt đầu ghi âm cuộc họp” ở góc dưới bên trái và cuộc họp sẽ hiển thị tại đây.</value>
+  </data>
+  <data name="Meeting_ConfirmRegenerateQuestion" xml:space="preserve">
+    <value>Tạo lại biên bản?</value>
+  </data>
+  <data name="Meeting_ConfirmSaveNotesAndRegenerate" xml:space="preserve">
+    <value>Lưu ghi chú và tạo lại biên bản?</value>
+  </data>
+  <data name="Meeting_RegenerateWillReplace" xml:space="preserve">
+    <value>{0}
+
+Biên bản và việc cần làm hiện tại sẽ bị thay thế.</value>
+  </data>
+  <data name="Meeting_FolderNotFound" xml:space="preserve">
+    <value>Không tìm thấy thư mục lưu</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy" xml:space="preserve">
+    <value>Mở cài đặt quyền riêng tư của micrô</value>
+  </data>
+  <data name="Settings_OpenMicrophonePrivacy_Tip" xml:space="preserve">
+    <value>Nếu không dùng được micrô, hãy vào Cài đặt Windows → Quyền riêng tư &amp; bảo mật → Micrô và bật quyền truy cập micrô cho ứng dụng trên máy tính.</value>
+  </data>
+  <data name="Settings_TestConnectionNote" xml:space="preserve">
+    <value>“Kiểm tra kết nối” chỉ đọc thông tin của mô hình và không tốn phí.</value>
+  </data>
+  <data name="Settings_VertexCheck_A11y" xml:space="preserve">
+    <value>Kiểm tra kết nối Vertex AI</value>
+  </data>
+  <data name="Settings_DownloadWithSize" xml:space="preserve">
+    <value>Tải xuống ({0})</value>
+  </data>
+  <data name="Settings_ConfirmDeleteKey" xml:space="preserve">
+    <value>Xóa khóa API {0} đã lưu? Để tiếp tục sử dụng, hãy lưu lại khóa.</value>
+  </data>
+  <data name="Settings_ConnectingGemini" xml:space="preserve">
+    <value>Đang kết nối với Gemini API…</value>
+  </data>
+  <data name="Settings_ConnectingVertex" xml:space="preserve">
+    <value>Đang kết nối với Vertex AI…</value>
+  </data>
+  <data name="Settings_ConnectedUnsavedKey" xml:space="preserve">
+    <value>Đã kết nối bằng khóa này (chưa lưu). Có thể dùng {0}.</value>
+  </data>
+  <data name="Settings_ConnectedModel" xml:space="preserve">
+    <value>Đã kết nối. Có thể dùng {0}. {1}</value>
+  </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Kiểm tra &amp;bản cập nhật…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Kiểm tra bản cập nhật khi khởi động</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Kiểm tra ngay</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Đang kiểm tra bản cập nhật. Vui lòng đợi.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu đã là bản mới nhất ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Không thể kiểm tra bản cập nhật.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Không thể cập nhật lên Hanasu {0}. Hiện vẫn là phiên bản {1}.
+
+Chi tiết được ghi trong {2}.
+
+Bạn cũng có thể cài lại từ trang phát hành. Mở trong trình duyệt?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Không thể cập nhật trong khi đang ghi âm hoặc ghi cuộc họp. Khi xong, hãy chọn lại “Kiểm tra bản cập nhật…” trong menu.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu đang nằm ở thư mục gốc của ổ đĩa nên không thể cập nhật từ trong ứng dụng. Hãy đặt nó vào một thư mục riêng.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Đang tải bản cập nhật</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>Tải về không xong trong 10 phút nên đã dừng</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Đang chuẩn bị bản cập nhật</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Đang giải nén tệp zip đã tải về.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…và {0} mục khác</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Thư mục của Hanasu ({0}) có tệp hoặc thư mục không thuộc về Hanasu.
+{1}{2}
+
+Cập nhật từ trong ứng dụng sẽ thay thế toàn bộ thư mục nên chỉ thực hiện được khi Hanasu nằm trong thư mục riêng. Hãy đặt lại Hanasu vào một thư mục riêng.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>Không thể ghi vào thư mục này (nếu Hanasu nằm trong Program Files hoặc tương tự, hãy cài lại với quyền quản trị viên hoặc cài từ trang phát hành).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Không thể cập nhật.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Mở trang phát hành trong trình duyệt?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Không thể khởi chạy tập lệnh cập nhật</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Cập nhật Hanasu</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Đã có Hanasu {0} (hiện tại: {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Bấm “Cập nhật” để tải về, thay thế bằng phiên bản mới và khởi động lại Hanasu.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Không thể cài phiên bản này từ trong ứng dụng. Hãy cài từ trang phát hành.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Mở trang phát hành</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Cập nhật</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Mở trang</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Để sau</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Bỏ qua phiên bản này</value>
+  </data>
+</root>

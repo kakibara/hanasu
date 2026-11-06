@@ -28,6 +28,9 @@ public sealed class LocalLlmModelManager(LocalLlmServer server, HttpClient? http
 
     public string Directory => server.ModelsDirectory;
 
+    /// <summary>どれかのモデルをダウンロード中か（アップデートの入れ替え前の確認に使う）</summary>
+    public bool IsAnyDownloading { get { lock (gate) return downloads.Count > 0; } }
+
     public LocalLlmModelState StateOf(LocalLlmModel model)
     {
         lock (gate)

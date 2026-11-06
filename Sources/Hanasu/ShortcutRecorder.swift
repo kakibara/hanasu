@@ -11,12 +11,12 @@ enum ShortcutKind: CaseIterable {
     /// 設定画面での呼び名
     var title: String {
         switch self {
-        case .dictation: "録音の開始／停止"
-        case .translate: "翻訳して入力"
-        case .edit: "選択を声で編集"
-        case .meeting: "会議の記録の開始／停止"
-        case .highlight: "「ここ重要」の印"
-        case .repaste: "最後の結果をもう一度入力"
+        case .dictation: tr("録音の開始／停止")
+        case .translate: tr("翻訳して入力")
+        case .edit: tr("選択を声で編集")
+        case .meeting: tr("会議の記録の開始／停止")
+        case .highlight: tr("「ここ重要」の印")
+        case .repaste: tr("最後の結果をもう一度入力")
         }
     }
 
@@ -65,11 +65,11 @@ struct ShortcutRecorder: View {
                             .foregroundStyle(.secondary)
                     }
                     .buttonStyle(.borderless)
-                    .help("初期値（\(defaultCombo.displayString)）に戻す")
-                    .accessibilityLabel("初期値に戻す")
+                    .help(tr("初期値（%@）に戻す", "\(defaultCombo.displayString)"))
+                    .accessibilityLabel(tr("初期値に戻す"))
                 }
                 Button(action: toggle) {
-                    Text(isRecording ? "キーを押してください（Esc で取消）" : combo.displayString)
+                    Text(isRecording ? tr("キーを押してください（Esc で取消）") : combo.displayString)
                         .fontWeight(isRecording ? .regular : .medium)
                         .frame(minWidth: 150)
                 }
@@ -88,7 +88,7 @@ struct ShortcutRecorder: View {
     /// ほかのショートカットと重なっていなければ記録する。重なっていれば記録せず、どれと重なるかを出す
     private func apply(_ candidate: HotKeyCombo) {
         if let kind, let other = ShortcutKind.conflict(candidate, excluding: kind) {
-            conflictMessage = "\(candidate.displayString) は「\(other.title)」のショートカットと同じです。別のキーを選んでください。"
+            conflictMessage = tr("%@ は「%@」のショートカットと同じです。別のキーを選んでください。", "\(candidate.displayString)", "\(other.title)")
             NSSound.beep()
             return
         }
