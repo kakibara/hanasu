@@ -77,7 +77,7 @@
 - 出典: ユーザーの依頼（2026-11-05「また、アップデートを確認するという機能も追加して」）
 - 対象: Mac / Windows
 - 実装の場所: Mac は `AppDelegate.checkForUpdates`（メニューバーとアプリのメニュー）、`UpdateSettingsSection`（設定の「一般」）。Windows は `TrayIcon`（タスクトレイのメニュー）、`SettingsWindow`（「一般」）、`UpdateService.CheckManuallyAsync`
-- 確かめ方: `Hanasu --check-update`、`Hanasu --update-selftest`、`cd windows && dotnet test Hanasu.Core.Tests`。ダイアログは実機で確かめる
+- 確かめ方: `Hanasu --check-update`、`Hanasu --update-selftest`、`cd windows && dotnet test Hanasu.Core.Tests`。Mac のダイアログの見た目は `Hanasu --preview-update-dialog [<リリース文の .md>]` で出せる。ダイアログは実機で確かめる
 
 ---
 
@@ -227,6 +227,14 @@
 - 関係する要件: REQ-REL-010
 - 対象: Mac
 - 実装の場所: `UpdateInstaller`（`Sources/Hanasu/AppUpdate.swift`）
+
+### DEC-REL-027 リリース文は見出し・箇条書きを整えて先頭から出し、ダイアログは Task の外から出す（Mac）
+- 決めたこと: 新しい版を尋ねるダイアログのリリース文は、Markdown の記号をそのまま出さず、見出しは太い大きめの字、箇条書き（番号付きも）は印のあとを字下げして折り返し、太字・斜体・コード・リンクは字の形にして出す（`ReleaseNotesFormatter`。HTML のコメントは出さない）。欄は開いたときに先頭が見える位置にする。アップデートのダイアログ（尋ねる・最新です・失敗した、など）は、Swift の Task の中で `runModal` を呼ばず、`RunLoop.main.perform` で Task の外から出して、結果を待つ。出している間も画面は動くので、起動時の確認のダイアログと重ならないよう、知らせのダイアログを出す間も「尋ねている」扱いにする。
+- 理由: 記号のままでは読みにくい（ユーザーの指摘）。リリース文は docs/releases/TEMPLATE.md の形（見出しと箇条書き）で書くので、それだけ整えれば足りる。Task の中で `runModal` を呼ぶと、出している間メインのディスパッチキューが回らず（手元の実験で、1.5 秒の間に 0 回。Task の外からなら 31 回）、スクロールが重くなり、ほかの画面の更新も止まる。並べ終えた欄は終わりが見えた状態になり、リリース文の頭（ハイライト）が見えなかった。
+- 決めた場面: ユーザーの依頼（2026-11-07「スクロールが重いのと markdown をそのまま表示しているので読みにくいです」）
+- 関係する要件: REQ-REL-010, REQ-REL-011
+- 対象: Mac
+- 実装の場所: `AppUpdater.presentAsk`・`AppUpdater.runModal`、`ReleaseNotesFormatter`（`Sources/Hanasu/AppUpdate.swift`）。確かめるのは `Hanasu --preview-update-dialog [<リリース文の .md>]` と `Hanasu --update-selftest`
 
 ### DEC-REL-030 Windows の入れ替えは、隣のフォルダに展開し、PowerShell のスクリプトでフォルダごと取り替える
 - 決めたこと: zip は `Hanasu.exe` のあるフォルダの隣の `Hanasu.update` に落として展開する（どのエントリーもそのフォルダの外に書かない。`Hanasu\Hanasu.exe` がなければ使わない。ダウンロードは 10 分で打ち切る）。今のフォルダの直下に、新しい `Hanasu` フォルダにないもの（`.dll`・`.pdb` のファイルと、エクスプローラーが作る `desktop.ini`・`Thumbs.db` を除く）があれば、Hanasu 専用のフォルダではないので入れ替えず、名前を挙げてリリースのページを案内する（ドライブの直下も断る）。固定の中身の PowerShell のスクリプト（パスは引数で渡す）を動かしてから Hanasu を終える。スクリプトは Hanasu の終了を待ち（60 秒まで）、今のフォルダを `<フォルダ>.old` に改名し（ファイルがまだ放されていなければ数秒やり直す）、新しいフォルダを今の名前に移す（これも数秒やり直し、失敗したら元に戻す）。`Hanasu.exe` を起動し直し、`.old` と作業フォルダを消す。経過は `%LOCALAPPDATA%\Hanasu\Logs\update.log` に書く。スクリプトを動かす前に入れ替える版を `%LOCALAPPDATA%\Hanasu\update-pending.txt` に書き、次の起動で版が上がっていなければ、ログの場所とリリースのページを案内する。フォルダに書き込めない（Program Files など）ときは、リリースのページを案内する。手元のビルド（版の先頭が 0）は入れ替えず、リリースのページを開く。
