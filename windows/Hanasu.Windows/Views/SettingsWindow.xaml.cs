@@ -91,6 +91,8 @@ public partial class SettingsWindow : Window
         MicrophoneCombo.DisplayMemberPath = nameof(MicrophoneInfo.Name);
         MicrophoneCombo.SelectedItem = microphones.First(m => m.Id == s.MicrophoneDeviceId);
         PlaySoundsCheck.IsChecked = s.PlaySounds;
+        CheckForUpdatesCheck.IsChecked = s.CheckForUpdatesOnLaunch;
+        VersionText.Text = $"Hanasu {host.Updates.CurrentVersion}";
         FallbackKeepRadio.IsChecked = s.PasteFallbackClipboard == PasteFallbackClipboard.KeepResult;
         FallbackRestoreRadio.IsChecked = s.PasteFallbackClipboard == PasteFallbackClipboard.RestoreOriginal;
 
@@ -232,6 +234,12 @@ public partial class SettingsWindow : Window
     }
 
     private void OnPlaySoundsChanged(object sender, RoutedEventArgs e) => Save(s => s.PlaySounds = PlaySoundsCheck.IsChecked == true);
+
+    // 要件: REQ-REL-010
+    private void OnCheckForUpdatesChanged(object sender, RoutedEventArgs e) => Save(s => s.CheckForUpdatesOnLaunch = CheckForUpdatesCheck.IsChecked == true);
+
+    // 要件: REQ-REL-011
+    private async void OnCheckForUpdatesNow(object sender, RoutedEventArgs e) => await host.Updates.CheckManuallyAsync();
 
     // 要件: REQ-DIC-081
     private void OnPasteFallbackChanged(object sender, RoutedEventArgs e) =>

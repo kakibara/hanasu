@@ -654,4 +654,37 @@
   <data name="Gemini_ModelUnavailable" xml:space="preserve">
     <value>لم يتم العثور على النموذج “{0}” أو لا يمكن استخدامه مع بيانات الاعتماد هذه</value>
   </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>حجم الملف المطلوب تنزيله غير معروف</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>أُوقف التنزيل لأنه أُعيد توجيهه إلى مضيف غير متوقع: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>تعذّرت قراءة معلومات الإصدار</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>تعذّر جلب أحدث إصدار من GitHub (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>تعذّر جلب أحدث إصدار من GitHub (HTTP {0}). ربما تم بلوغ حد الطلبات في GitHub؛ انتظر قليلًا ثم حاول مرة أخرى.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>تعذّر الاتصال بـ GitHub: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>لم يستجب GitHub في الوقت المحدد</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>يحتوي ملف zip على عنصر يشير إلى خارج مجلد فك الضغط، لذا لن يُستخدم: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>حجم ملف zip بعد فك الضغط أكبر من المتوقع، لذا لن يُستخدم</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>تعذّر فتح ملف zip الذي تم تنزيله</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>لا يحتوي ملف zip على {0}، لذا لن يُستخدم</value>
+  </data>
 </root>

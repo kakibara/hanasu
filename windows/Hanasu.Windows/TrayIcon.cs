@@ -7,7 +7,7 @@ namespace Hanasu.Windows;
 
 /// <summary>
 /// タスクトレイのアイコンとメニュー（Mac 版のメニューバーにあたる）。
-/// 録音を開始 / 翻訳して入力を開始（英訳・和訳） / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / 設定 / Hanasu を終了。
+/// 録音を開始 / 翻訳して入力を開始（英訳・和訳） / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / アップデートを確認 / 設定 / Hanasu を終了。
 /// 文言と並びは Mac 版のメニューバー（AppDelegate の statusMenu）にそろえ、各項目にアクセスキー（&amp;）を付ける。
 /// </summary>
 // 設計判断: DEC-COM-152
@@ -43,6 +43,8 @@ internal sealed class TrayIcon : IDisposable
         menu.Items.Add(recentItem);
         menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_OpenHistory, null, (_, _) => host.ShowHistory()));
         menu.Items.Add(new Forms.ToolStripSeparator());
+        // 要件: REQ-REL-011
+        menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_CheckForUpdates, null, async (_, _) => await host.Updates.CheckManuallyAsync()));
         menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_Settings, null, (_, _) => host.ShowSettings()));
         menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_Quit, null, (_, _) => host.Quit()));
 

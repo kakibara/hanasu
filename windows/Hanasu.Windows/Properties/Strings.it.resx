@@ -1085,4 +1085,106 @@ Il verbale e le azioni da svolgere attuali verranno sostituiti.</value>
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>Connesso. {0} è disponibile. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Verifica a&amp;ggiornamenti…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Verifica aggiornamenti all’avvio</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Verifica ora</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Ricerca di aggiornamenti in corso. Attendi.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu è aggiornato ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Impossibile cercare aggiornamenti.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Impossibile aggiornare a Hanasu {0}. È ancora installata la versione {1}.
+
+I dettagli sono in {2}.
+
+Puoi anche reinstallarlo dalla pagina della release. Vuoi aprirla nel browser?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Non è possibile aggiornare durante la registrazione o la registrazione di una riunione. Al termine, scegli di nuovo «Verifica aggiornamenti…» dal menu.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu si trova nella radice di un’unità, quindi non può aggiornarsi dall’app. Mettilo in una cartella dedicata.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Download dell’aggiornamento</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>Il download non è terminato entro 10 minuti, quindi è stato interrotto</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Preparazione dell’aggiornamento</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Estrazione dello zip scaricato.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…e altri ({0})</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>La cartella di Hanasu ({0}) contiene file o cartelle che non appartengono a Hanasu.
+{1}{2}
+
+Gli aggiornamenti dall’app sostituiscono l’intera cartella, quindi funzionano solo se Hanasu si trova in una cartella dedicata. Spostalo in una cartella dedicata.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>Impossibile scrivere in questa cartella (se Hanasu è in Programmi o simili, reinstallalo come amministratore o installalo dalla pagina della release).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Impossibile aggiornare.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Vuoi aprire la pagina della release nel browser?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Impossibile avviare lo script di aggiornamento</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Aggiornamento di Hanasu</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>È disponibile Hanasu {0} (versione attuale: {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Fai clic su «Aggiorna» per scaricare e installare la nuova versione e riavviare Hanasu.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Questa versione non può essere installata dall’app. Installala dalla pagina della release.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Apri la pagina della release</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Aggiorna</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Apri la pagina</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Più tardi</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Salta questa versione</value>
+  </data>
 </root>

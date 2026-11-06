@@ -1085,4 +1085,106 @@
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>कनेक्ट हो गया. {0} उपलब्ध है. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>अपडेट की जाँच करें(&amp;U)…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>शुरू होने पर अपडेट की जाँच करें</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>अभी जाँचें</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>अपडेट की जाँच हो रही है। कृपया थोड़ा इंतज़ार करें।</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu अप-टू-डेट है ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>अपडेट की जाँच नहीं हो सकी।
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Hanasu {0} पर अपडेट नहीं हो सका। अभी भी {1} ही है।
+
+विवरण {2} में लिखा है।
+
+आप रिलीज़ पेज से दोबारा भी इंस्टॉल कर सकते हैं। क्या उसे ब्राउज़र में खोलें?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>रिकॉर्डिंग या मीटिंग रिकॉर्ड करते समय अपडेट नहीं हो सकता। ख़त्म होने के बाद मेनू से “अपडेट की जाँच करें…” फिर से चुनें।</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu ड्राइव के रूट में रखा है, इसलिए ऐप के अंदर से अपडेट नहीं हो सकता। इसे अपने अलग फ़ोल्डर में रखें।</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>अपडेट डाउनलोड हो रहा है</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>डाउनलोड 10 मिनट में पूरा नहीं हुआ, इसलिए रोक दिया गया</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>अपडेट तैयार हो रहा है</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>डाउनलोड किया गया zip खोला जा रहा है।</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…और {0} अन्य</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Hanasu के फ़ोल्डर ({0}) में ऐसी फ़ाइलें या फ़ोल्डर हैं जो Hanasu के नहीं हैं।
+{1}{2}
+
+ऐप के अंदर से अपडेट पूरे फ़ोल्डर को बदलता है, इसलिए यह तभी हो सकता है जब Hanasu अपने अलग फ़ोल्डर में हो। इसे अलग फ़ोल्डर में रखें।</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>इस फ़ोल्डर में लिखा नहीं जा सकता (अगर Hanasu, Program Files जैसी जगह पर है तो एडमिनिस्ट्रेटर के रूप में दोबारा इंस्टॉल करें या रिलीज़ पेज से इंस्टॉल करें)।</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>अपडेट नहीं हो सका।
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+क्या रिलीज़ पेज ब्राउज़र में खोलें?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>अपडेट स्क्रिप्ट शुरू नहीं हो सकी</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Hanasu अपडेट</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} उपलब्ध है (अभी {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>“अपडेट करें” दबाने पर नया वर्ज़न डाउनलोड होकर लग जाएगा और Hanasu फिर से शुरू होगा।</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>यह वर्ज़न ऐप के अंदर से इंस्टॉल नहीं हो सकता। रिलीज़ पेज से इंस्टॉल करें।</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>रिलीज़ पेज खोलें</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>अपडेट करें</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>पेज खोलें</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>बाद में</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>यह वर्ज़न छोड़ें</value>
+  </data>
 </root>

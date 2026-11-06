@@ -1085,4 +1085,106 @@
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>연결되었습니다. {0}을(를) 사용할 수 있습니다. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>업데이트 확인(&amp;U)…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>시작할 때 업데이트 확인</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>지금 확인</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>업데이트를 확인하고 있습니다. 잠시 기다려 주세요.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu가 최신 버전입니다({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>업데이트를 확인할 수 없습니다.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Hanasu {0}(으)로 업데이트할 수 없었습니다. 현재 {1} 그대로입니다.
+
+자세한 내용은 {2}에 있습니다.
+
+릴리스 페이지에서 다시 설치할 수도 있습니다. 브라우저에서 여시겠습니까?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>녹음 중이거나 회의를 기록하는 중에는 업데이트할 수 없습니다. 끝난 후 메뉴에서 '업데이트 확인…'을 다시 선택하세요.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu가 드라이브의 루트에 있어 앱 안에서 업데이트할 수 없습니다. 전용 폴더에 넣으세요.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>업데이트 다운로드 중</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0}({1}MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>다운로드가 10분 안에 끝나지 않아 중지했습니다</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>업데이트 준비 중</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>다운로드한 zip의 압축을 풀고 있습니다.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…외 {0}개</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Hanasu 폴더({0})에 Hanasu의 것이 아닌 파일이나 폴더가 있습니다.
+{1}{2}
+
+앱 안에서의 업데이트는 폴더 전체를 교체하므로 Hanasu 전용 폴더에 있을 때만 할 수 있습니다. 전용 폴더에 다시 넣으세요.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>이 폴더에 쓸 수 없습니다(Program Files 등에 설치한 경우 관리자로 다시 설치하거나 릴리스 페이지에서 설치하세요).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>업데이트할 수 없습니다.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+브라우저에서 릴리스 페이지를 여시겠습니까?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>교체 스크립트를 시작할 수 없습니다</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Hanasu 업데이트</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} 사용 가능(현재 {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>'업데이트'를 누르면 새 버전을 다운로드하여 교체하고 Hanasu를 다시 시작합니다.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>이 버전은 앱 안에서 설치할 수 없습니다. 릴리스 페이지에서 설치하세요.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>릴리스 페이지 열기</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>업데이트</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>페이지 열기</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>나중에</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>이 버전 건너뛰기</value>
+  </data>
 </root>

@@ -654,4 +654,37 @@
   <data name="Gemini_ModelUnavailable" xml:space="preserve">
     <value>मॉडल “{0}” नहीं मिला या इन क्रेडेंशियल के साथ इसका उपयोग नहीं किया जा सकता</value>
   </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>डाउनलोड होने वाली फ़ाइल का आकार पता नहीं है</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>अनपेक्षित होस्ट पर रीडायरेक्ट होने के कारण डाउनलोड रोक दिया गया: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>रिलीज़ की जानकारी पढ़ी नहीं जा सकी</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>GitHub से नया वर्ज़न नहीं मिल सका (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>GitHub से नया वर्ज़न नहीं मिल सका (HTTP {0})। हो सकता है GitHub की अनुरोध सीमा पूरी हो गई हो; थोड़ी देर बाद फिर कोशिश करें।</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>GitHub से कनेक्ट नहीं हो सका: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub ने समय पर जवाब नहीं दिया</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>zip में ऐसा आइटम है जो खोलने के फ़ोल्डर के बाहर जाता है, इसलिए इसका इस्तेमाल नहीं होगा: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>खोलने पर zip अपेक्षा से बड़ा निकला, इसलिए इसका इस्तेमाल नहीं होगा</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>डाउनलोड किया गया zip खोला नहीं जा सका</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>zip में {0} नहीं है, इसलिए इसका इस्तेमाल नहीं होगा</value>
+  </data>
 </root>

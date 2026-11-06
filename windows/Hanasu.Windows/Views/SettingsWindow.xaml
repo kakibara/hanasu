@@ -144,6 +144,12 @@
 
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Other}" />
                         <CheckBox x:Name="PlaySoundsCheck" Content="{x:Static p:Strings.Settings_PlaySounds}" Checked="OnPlaySoundsChanged" Unchecked="OnPlaySoundsChanged" />
+                        <!-- 要件: REQ-REL-010, REQ-REL-011 -->
+                        <CheckBox x:Name="CheckForUpdatesCheck" Content="{x:Static p:Strings.Settings_CheckForUpdatesOnLaunch}" Margin="0,6,0,0" Checked="OnCheckForUpdatesChanged" Unchecked="OnCheckForUpdatesChanged" />
+                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                            <Button Content="{x:Static p:Strings.Settings_CheckForUpdatesNow}" Click="OnCheckForUpdatesNow" />
+                            <TextBlock x:Name="VersionText" Style="{StaticResource Note}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <Button Content="{x:Static p:Strings.Settings_OpenLogs}" Click="OnOpenLogs" />
                             <Button Content="{x:Static p:Strings.Settings_OpenSettingsFolder}" Click="OnOpenSettingsFolder" />

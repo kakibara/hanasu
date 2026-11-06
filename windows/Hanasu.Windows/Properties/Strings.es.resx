@@ -1085,4 +1085,106 @@ Se reemplazarán el acta y las tareas pendientes actuales.</value>
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>Conectado. {0} está disponible. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Buscar &amp;actualizaciones…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Buscar actualizaciones al iniciar</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Comprobar ahora</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Se están buscando actualizaciones. Espera un momento.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu está actualizado ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>No se pudieron buscar actualizaciones.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>No se pudo actualizar a Hanasu {0}. Sigues con la versión {1}.
+
+Tienes los detalles en {2}.
+
+También puedes reinstalarlo desde la página de la versión. ¿Quieres abrirla en el navegador?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>No se puede actualizar mientras se graba o se registra una reunión. Cuando termine, vuelve a elegir «Buscar actualizaciones…» en el menú.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu está en la raíz de una unidad, así que no se puede actualizar desde la app. Ponlo en una carpeta propia.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Descargando la actualización</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>La descarga no terminó en 10 minutos, así que se detuvo</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Preparando la actualización</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Descomprimiendo el zip descargado.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…y otros más ({0})</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>La carpeta de Hanasu ({0}) contiene archivos o carpetas que no son de Hanasu.
+{1}{2}
+
+Las actualizaciones desde la app reemplazan la carpeta entera, así que solo funcionan si Hanasu está en una carpeta propia. Muévelo a una carpeta propia.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>No se puede escribir en esta carpeta (si Hanasu está en Archivos de programa o similar, reinstálalo como administrador o instálalo desde la página de la versión).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>No se pudo actualizar.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+¿Quieres abrir la página de la versión en el navegador?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>No se pudo iniciar el script de actualización</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Actualización de Hanasu</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} está disponible (tienes la {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Si haces clic en «Actualizar», se descargará e instalará la nueva versión y Hanasu se reiniciará.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Esta versión no se puede instalar desde la app. Instálala desde la página de la versión.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Abrir la página de la versión</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Actualizar</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Abrir la página</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Más tarde</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Omitir esta versión</value>
+  </data>
 </root>

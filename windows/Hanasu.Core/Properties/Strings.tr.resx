@@ -654,4 +654,37 @@
   <data name="Gemini_ModelUnavailable" xml:space="preserve">
     <value>"{0}" modeli bulunamadı veya bu kimlik bilgileriyle kullanılamıyor</value>
   </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>İndirilecek dosyanın boyutu bilinmiyor</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>Beklenmeyen bir ana bilgisayara yönlendirildiği için indirme durduruldu: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Sürüm bilgisi okunamadı</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>En yeni sürüm GitHub'dan alınamadı (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>En yeni sürüm GitHub'dan alınamadı (HTTP {0}). GitHub istek sınırına ulaşılmış olabilir; bir süre bekleyip yeniden deneyin.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>GitHub'a bağlanılamadı: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub zamanında yanıt vermedi</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>Zip dosyasında, açılacak klasörün dışını gösteren bir öğe olduğu için kullanılmayacak: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>Açılan zip dosyası beklenenden büyük olduğu için kullanılmayacak</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>İndirilen zip dosyası açılamadı</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>Zip dosyasında {0} olmadığı için kullanılmayacak</value>
+  </data>
 </root>

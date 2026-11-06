@@ -868,4 +868,48 @@
     <value>The model “{0}” wasn't found or can't be used with these credentials</value>
     <comment>Error. {0} = model ID</comment>
   </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>The size of the file to download is unknown</value>
+    <comment>Download error</comment>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>The download was stopped because it was redirected to an unexpected host: {0}</value>
+    <comment>Download error. {0} = host name</comment>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Couldn't read the release information</value>
+    <comment>Update check error</comment>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>Couldn't get the latest version from GitHub (HTTP {0})</value>
+    <comment>Update check error. {0} = HTTP status</comment>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>Couldn't get the latest version from GitHub (HTTP {0}). GitHub's request limit may have been reached; wait a while and try again.</value>
+    <comment>Update check error (HTTP 403/429). {0} = HTTP status</comment>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Couldn't connect to GitHub: {0}</value>
+    <comment>Update check error. {0} = system error message</comment>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub didn't respond in time</value>
+    <comment>Update check error</comment>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>The zip has an entry that points outside the extraction folder, so it won't be used: {0}</value>
+    <comment>Update package error. {0} = entry path in the zip</comment>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>The extracted zip is larger than expected, so it won't be used</value>
+    <comment>Update package error</comment>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>Couldn't open the downloaded zip</value>
+    <comment>Update package error</comment>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>The zip doesn't contain {0}, so it won't be used</value>
+    <comment>Update package error. {0} = path such as Hanasu\Hanasu.exe</comment>
+  </data>
 </root>

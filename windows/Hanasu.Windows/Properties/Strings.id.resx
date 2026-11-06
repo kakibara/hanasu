@@ -1085,4 +1085,106 @@ Notulen dan item tindakan saat ini akan diganti.</value>
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>Terhubung. {0} tersedia. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Periksa Pemb&amp;aruan…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Periksa pembaruan saat dimulai</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Periksa sekarang</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Sedang memeriksa pembaruan. Harap tunggu.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu sudah versi terbaru ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Tidak dapat memeriksa pembaruan.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Tidak dapat memperbarui ke Hanasu {0}. Versi saat ini masih {1}.
+
+Detailnya ada di {2}.
+
+Anda juga dapat memasang ulang dari halaman rilis. Buka di browser?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Tidak dapat memperbarui selama merekam atau merekam rapat. Setelah selesai, pilih lagi “Periksa Pembaruan…” dari menu.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu berada di root drive, jadi tidak dapat diperbarui dari dalam aplikasi. Letakkan di folder tersendiri.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Mengunduh pembaruan</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>Unduhan tidak selesai dalam 10 menit, jadi dihentikan</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Menyiapkan pembaruan</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Mengekstrak zip yang diunduh.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…dan {0} lainnya</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Folder Hanasu ({0}) berisi file atau folder yang bukan milik Hanasu.
+{1}{2}
+
+Pembaruan dari dalam aplikasi mengganti seluruh folder, jadi hanya dapat dilakukan jika Hanasu berada di folder tersendiri. Pindahkan Hanasu ke folder tersendiri.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>Tidak dapat menulis ke folder ini (jika Hanasu berada di Program Files atau sejenisnya, pasang ulang sebagai administrator atau pasang dari halaman rilis).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Tidak dapat memperbarui.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Buka halaman rilis di browser?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Tidak dapat memulai skrip pembaruan</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Pembaruan Hanasu</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} tersedia (saat ini {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Klik “Perbarui” untuk mengunduh dan memasang versi baru, lalu memulai ulang Hanasu.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Versi ini tidak dapat dipasang dari dalam aplikasi. Pasang dari halaman rilis.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Buka halaman rilis</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Perbarui</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Buka halaman</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Nanti</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Lewati versi ini</value>
+  </data>
 </root>

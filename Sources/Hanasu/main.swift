@@ -74,6 +74,8 @@ if cliFlags.contains(where: { $0.hasPrefix("--test-") || $0.contains("-test") ||
 }
 
 atexit { LocalLLMServer.terminateRunningServer() }
+// アップデートの確認（--update-selftest / --check-update / --verify-update）。AppUpdateCLI.swift の AppUpdateCLI
+MainActor.assumeIsolated { AppUpdateCLI.runIfRequested() }
 // ローカルの LLM の確認（--local-llm-list / --local-llm-download / --local-llm-delete / --local-llm-test-fit）。LocalLLMCLI.swift
 MainActor.assumeIsolated { LocalLLMCLI.runIfRequested() }
 

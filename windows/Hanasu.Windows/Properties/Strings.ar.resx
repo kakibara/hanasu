@@ -1085,4 +1085,106 @@
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>تم الاتصال. {0} متاح. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>التحقق من وجود تحديثات(&amp;U)…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>التحقق من وجود تحديثات عند التشغيل</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>التحقق الآن</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>جارٍ التحقق من التحديثات. يُرجى الانتظار.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu محدَّث ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>تعذّر التحقق من التحديثات.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>تعذّر التحديث إلى Hanasu {0}. لا يزال الإصدار الحالي {1}.
+
+التفاصيل مكتوبة في {2}.
+
+يمكنك أيضًا إعادة التثبيت من صفحة الإصدار. هل تريد فتحها في المتصفح؟</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>لا يمكن التحديث أثناء التسجيل أو تسجيل الاجتماع. بعد الانتهاء، اختر «التحقق من وجود تحديثات…» من القائمة مرة أخرى.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>يوجد Hanasu في جذر محرك الأقراص، لذا لا يمكن تحديثه من داخل التطبيق. ضعه في مجلد خاص به.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>جارٍ تنزيل التحديث</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} م.ب)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>لم يكتمل التنزيل خلال 10 دقائق، لذا أُوقف</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>جارٍ تجهيز التحديث</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>جارٍ فك ضغط ملف zip الذي تم تنزيله.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…وغيرها ({0})</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>يحتوي مجلد Hanasu ({0}) على ملفات أو مجلدات لا تخص Hanasu.
+{1}{2}
+
+يستبدل التحديث من داخل التطبيق المجلد بالكامل، لذا لا يعمل إلا عندما يكون Hanasu في مجلد خاص به. انقله إلى مجلد خاص به.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>لا يمكن الكتابة في هذا المجلد (إذا كان Hanasu في Program Files أو ما شابه، فأعد تثبيته كمسؤول أو ثبّته من صفحة الإصدار).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>تعذّر التحديث.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+هل تريد فتح صفحة الإصدار في المتصفح؟</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>تعذّر بدء برنامج التحديث النصي</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>تحديث Hanasu</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>يتوفر Hanasu {0} (الحالي {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>انقر على «تحديث» لتنزيل الإصدار الجديد وتثبيته وإعادة تشغيل Hanasu.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>لا يمكن تثبيت هذا الإصدار من داخل التطبيق. ثبّته من صفحة الإصدار.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>فتح صفحة الإصدار</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>فتح الصفحة</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>لاحقًا</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>تخطي هذا الإصدار</value>
+  </data>
 </root>

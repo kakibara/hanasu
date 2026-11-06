@@ -1085,4 +1085,106 @@
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>连接成功。可以使用 {0}。{1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>检查更新(&amp;U)…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>启动时检查更新</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>立即检查</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>正在检查更新，请稍候。</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu 已是最新版本（{0}）</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>无法检查更新。
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>无法更新到 Hanasu {0}。当前仍为 {1}。
+
+详细信息记录在 {2}。
+
+也可以从发布页面重新安装。要在浏览器中打开吗？</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>录音或会议录制期间无法更新。完成后，请再次从菜单中选择“检查更新…”。</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu 位于驱动器的根目录，因此无法在应用内更新。请将它放入专用文件夹。</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>正在下载更新</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0}（{1} MB）</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>下载未在 10 分钟内完成，因此已停止</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>正在准备更新</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>正在解压下载的 zip。</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>・{0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…另有 {0} 项</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Hanasu 的文件夹（{0}）中有不属于 Hanasu 的文件或文件夹。
+{1}{2}
+
+应用内更新会替换整个文件夹，因此只有在 Hanasu 位于专用文件夹中时才能进行。请将它重新放入专用文件夹。</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>无法写入此文件夹（如果放在 Program Files 等位置，请以管理员身份重新安装，或从发布页面安装）。</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>无法更新。
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+要在浏览器中打开发布页面吗？</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>无法启动替换脚本</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Hanasu 更新</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} 现已推出（当前为 {1}）</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>点击“更新”后，将下载新版本并替换，然后重新启动 Hanasu。</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>此版本无法在应用内安装。请从发布页面安装。</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>打开发布页面</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>打开页面</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>稍后</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>跳过此版本</value>
+  </data>
 </root>

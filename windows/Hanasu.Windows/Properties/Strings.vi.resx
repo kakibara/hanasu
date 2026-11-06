@@ -1085,4 +1085,106 @@ Biên bản và việc cần làm hiện tại sẽ bị thay thế.</value>
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>Đã kết nối. Có thể dùng {0}. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Kiểm tra &amp;bản cập nhật…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Kiểm tra bản cập nhật khi khởi động</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Kiểm tra ngay</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Đang kiểm tra bản cập nhật. Vui lòng đợi.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu đã là bản mới nhất ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Không thể kiểm tra bản cập nhật.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Không thể cập nhật lên Hanasu {0}. Hiện vẫn là phiên bản {1}.
+
+Chi tiết được ghi trong {2}.
+
+Bạn cũng có thể cài lại từ trang phát hành. Mở trong trình duyệt?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Không thể cập nhật trong khi đang ghi âm hoặc ghi cuộc họp. Khi xong, hãy chọn lại “Kiểm tra bản cập nhật…” trong menu.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu đang nằm ở thư mục gốc của ổ đĩa nên không thể cập nhật từ trong ứng dụng. Hãy đặt nó vào một thư mục riêng.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Đang tải bản cập nhật</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>Tải về không xong trong 10 phút nên đã dừng</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Đang chuẩn bị bản cập nhật</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Đang giải nén tệp zip đã tải về.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…và {0} mục khác</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Thư mục của Hanasu ({0}) có tệp hoặc thư mục không thuộc về Hanasu.
+{1}{2}
+
+Cập nhật từ trong ứng dụng sẽ thay thế toàn bộ thư mục nên chỉ thực hiện được khi Hanasu nằm trong thư mục riêng. Hãy đặt lại Hanasu vào một thư mục riêng.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>Không thể ghi vào thư mục này (nếu Hanasu nằm trong Program Files hoặc tương tự, hãy cài lại với quyền quản trị viên hoặc cài từ trang phát hành).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Không thể cập nhật.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Mở trang phát hành trong trình duyệt?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Không thể khởi chạy tập lệnh cập nhật</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Cập nhật Hanasu</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Đã có Hanasu {0} (hiện tại: {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Bấm “Cập nhật” để tải về, thay thế bằng phiên bản mới và khởi động lại Hanasu.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Không thể cài phiên bản này từ trong ứng dụng. Hãy cài từ trang phát hành.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Mở trang phát hành</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Cập nhật</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Mở trang</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Để sau</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Bỏ qua phiên bản này</value>
+  </data>
 </root>

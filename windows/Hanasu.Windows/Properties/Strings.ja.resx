@@ -1085,4 +1085,106 @@
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>接続できました。{0} を使えます。{1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>アップデートを確認(&amp;U)…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>起動時にアップデートを確認する</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>今すぐ確認</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>アップデートを確認しています。しばらくお待ちください。</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu は最新です（{0}）</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>アップデートを確認できませんでした。
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Hanasu {0} へのアップデートができませんでした。今は {1} のままです。
+
+詳しくは {2} に書いてあります。
+
+リリースのページから入れ直すこともできます。ブラウザで開きますか？</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>録音中・会議の記録中はアップデートできません。終わってからもう一度、メニューの「アップデートを確認…」を押してください。</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu がドライブの直下に置かれているので、アプリの中からはアップデートできません。専用のフォルダに入れてください。</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>アップデートをダウンロードしています</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0}（{1} MB）</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>ダウンロードが 10 分で終わらなかったので、やめました</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>アップデートを準備しています</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>ダウンロードした zip を展開しています。</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>・{0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…ほか {0} 件</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Hanasu のフォルダ（{0}）に、Hanasu のものではないファイルやフォルダがあります。
+{1}{2}
+
+アプリの中からのアップデートは、フォルダごと入れ替えるため、Hanasu 専用のフォルダに入れているときだけできます。専用のフォルダに入れ直してください。</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>このフォルダには書き込めません（Program Files などに入れている場合は、管理者として入れ直すか、リリースのページから入れてください）。</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>アップデートできませんでした。
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+リリースのページをブラウザで開きますか？</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>入れ替えのスクリプトを始められませんでした</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Hanasu のアップデート</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} があります（今は {1}）</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>「アップデート」を押すと、新しい版をダウンロードして入れ替え、Hanasu を起動し直します。</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>この版は、アプリの中からは入れられません。リリースのページから入れてください。</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>リリースのページを開く</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>アップデート</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>ページを開く</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>あとで</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>この版をスキップ</value>
+  </data>
 </root>

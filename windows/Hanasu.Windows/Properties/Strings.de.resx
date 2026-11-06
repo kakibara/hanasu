@@ -1085,4 +1085,106 @@ Das aktuelle Protokoll und die Aufgaben werden ersetzt.</value>
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>Verbunden. {0} ist verfügbar. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Nach &amp;Updates suchen…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Beim Start nach Updates suchen</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Jetzt prüfen</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Es wird bereits nach Updates gesucht. Bitte warte einen Moment.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu ist auf dem neuesten Stand ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Die Suche nach Updates ist fehlgeschlagen.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Das Update auf Hanasu {0} ist fehlgeschlagen. Es ist weiterhin {1} installiert.
+
+Details stehen in {2}.
+
+Du kannst Hanasu auch von der Release-Seite neu installieren. Im Browser öffnen?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Während einer Aufnahme oder Meeting-Aufzeichnung ist kein Update möglich. Wähle danach im Menü erneut „Nach Updates suchen…“.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu liegt im Stammverzeichnis eines Laufwerks und kann sich daher nicht selbst aktualisieren. Lege es in einen eigenen Ordner.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Update wird heruntergeladen</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>Der Download wurde nicht innerhalb von 10 Minuten abgeschlossen und daher abgebrochen</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Update wird vorbereitet</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Das heruntergeladene ZIP wird entpackt.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…und weitere ({0})</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Der Ordner von Hanasu ({0}) enthält Dateien oder Ordner, die nicht zu Hanasu gehören.
+{1}{2}
+
+Updates aus der App ersetzen den ganzen Ordner und funktionieren daher nur, wenn Hanasu in einem eigenen Ordner liegt. Lege Hanasu in einen eigenen Ordner.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>In diesen Ordner kann nicht geschrieben werden (liegt Hanasu z. B. unter „Programme“, installiere es als Administrator neu oder über die Release-Seite).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Das Update ist fehlgeschlagen.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Release-Seite im Browser öffnen?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Das Update-Skript konnte nicht gestartet werden</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Hanasu-Update</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} ist verfügbar (installiert: {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Klicke auf „Aktualisieren“, um die neue Version herunterzuladen, zu installieren und Hanasu neu zu starten.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Diese Version kann nicht aus der App installiert werden. Installiere sie über die Release-Seite.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Release-Seite öffnen</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Seite öffnen</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Später</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Diese Version überspringen</value>
+  </data>
 </root>

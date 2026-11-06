@@ -654,4 +654,37 @@
   <data name="Gemini_ModelUnavailable" xml:space="preserve">
     <value>找不到模型「{0}」，或無法以此認證使用該模型</value>
   </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>不知道要下載的檔案大小</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>下載被重新導向至預期以外的主機，因此已停止：{0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>無法讀取發布資訊</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>無法從 GitHub 取得最新版本（HTTP {0}）</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>無法從 GitHub 取得最新版本（HTTP {0}）（可能已達到 GitHub 的呼叫上限。請稍後再試）</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>無法連線至 GitHub：{0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub 未在時間內回應</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>zip 中有指向解壓縮位置之外的項目，因此不會使用：{0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>zip 解壓縮後的大小超出預期，因此不會使用</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>無法打開下載的 zip</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>zip 中沒有 {0}，因此不會使用</value>
+  </data>
 </root>

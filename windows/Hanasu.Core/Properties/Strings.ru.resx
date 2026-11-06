@@ -654,4 +654,37 @@
   <data name="Gemini_ModelUnavailable" xml:space="preserve">
     <value>Модель «{0}» не найдена или недоступна с этими учетными данными</value>
   </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>Размер загружаемого файла неизвестен</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>Загрузка остановлена: произошло перенаправление на непредусмотренный узел: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Не удалось прочитать сведения о выпуске</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>Не удалось получить последнюю версию с GitHub (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>Не удалось получить последнюю версию с GitHub (HTTP {0}). Возможно, исчерпан лимит запросов к GitHub — подождите немного и повторите попытку.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Не удалось подключиться к GitHub: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub не ответил вовремя</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>В zip есть элемент, указывающий за пределы папки распаковки, поэтому он не будет использован: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>Распакованный zip больше ожидаемого, поэтому он не будет использован</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>Не удалось открыть скачанный zip</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>В zip нет {0}, поэтому он не будет использован</value>
+  </data>
 </root>

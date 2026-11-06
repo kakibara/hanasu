@@ -10,7 +10,7 @@ macOS と Windows で使える、音声入力と会議の記録のアプリで�
 
 [![Release](https://img.shields.io/github/v/release/kakibara/hanasu?sort=semver&label=release)](https://github.com/kakibara/hanasu/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/kakibara/hanasu/total)](https://github.com/kakibara/hanasu/releases)
-[![License](https://img.shields.io/github/license/kakibara/hanasu)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%20%2B%20small%20business-blue)](COMMERCIAL.ja.md)
 ![macOS 26+](https://img.shields.io/badge/macOS-26%2B-000000?logo=apple)
 ![Windows 10/11](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?logo=windows)
 [![Windows build](https://github.com/kakibara/hanasu/actions/workflows/windows.yml/badge.svg)](https://github.com/kakibara/hanasu/actions/workflows/windows.yml)
@@ -25,7 +25,7 @@ macOS と Windows で使える、音声入力と会議の記録のアプリで�
 
 OS の音声入力では、言いよどみや同音異義語の誤変換、「あ、違う」と言い直す前の文が、そのまま残ります。
 Hanasu は文字起こしを AI（Gemini・Claude、または端末の中のローカルのモデル）に渡し、そうした部分を整えた日本語にしてから、カーソルの位置に入力します。
-Typeless・Wispr Flow・Aqua Voice・Granola を参考に作りました。無料のオープンソースで、Gemini か Claude の API キーは自分のものを使います。ローカルのモデルなら API キーは要らず、文章も端末の外に出ません。
+Typeless・Wispr Flow・Aqua Voice・Granola を参考に作りました。ソースを公開していて、個人と小規模事業者は無料で使えます。それより大きい会社が業務で使うには[商用ライセンス](COMMERCIAL.ja.md)が必要です。Gemini か Claude の API キーは自分のものを使います。ローカルのモデルなら API キーは要らず、文章も端末の外に出ません。
 
 ## できること
 
@@ -142,6 +142,8 @@ Windows 版の注意点と Mac 版との違いは、[windows/README.md](windows/
 
 </details>
 
+新しい版が出ると、起動したときに Hanasu が知らせ、入れ替えてよいかを尋ねます。メニューの「アップデートを確認…」でも確かめられます（設定の「一般」で、起動時の確認を切れます）。この仕組みが入る前の版（v1.5.0 まで）からは、一度だけ手で入れ替えてください。
+
 ## はじめかた
 
 Mac 版は、初めて起動すると使い方の案内（オンボーディング）が開きます。使う AI を選び（おすすめのローカルのモデル Gemma 4 E4B は、その場でダウンロードします）、主な機能と設定の Tips を見て、最後に許可を済ませます。案内はメニューの「Hanasu の使い方…」でいつでも開き直せます。
@@ -225,5 +227,12 @@ Issue と Pull Request を歓迎します。
 
 ## ライセンス
 
-[Apache License 2.0](LICENSE) © 2026 kakibara（[NOTICE](NOTICE)）。
+Hanasu はソース公開のソフトウェアで、オープンソースではありません。© 2026 kakibara（[NOTICE](NOTICE)）。
+
+- ライセンス: [PolyForm Noncommercial License 1.0.0](LICENSE) と、[Hanasu 追加の許可 1.0](LICENSE-ADDITIONAL-PERMISSION.md)。
+- 個人の非商用の利用、教育・研究・非営利・行政、小規模事業者（100 人未満かつ売上 100 万米ドル未満）の社内の業務は無料です。どの会社も 30 日間は評価のために使えます。
+- それより大きい会社が業務で使うとき、または規模にかかわらず Hanasu を売ったり製品・サービスに組み込んだりするときは、商用ライセンスが必要です。[COMMERCIAL.ja.md](COMMERCIAL.ja.md) を見てください。
+- このライセンスに変える前に Apache License 2.0 で公開した版は、Apache License 2.0 のままです。
+- コードの貢献には [CONTRIBUTING.md](CONTRIBUTING.md) の同意が必要です。
+
 第三者のソフトウェアのライセンスは、Mac 版は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、Windows 版は [windows/THIRD_PARTY_NOTICES.md](windows/THIRD_PARTY_NOTICES.md) にあります。どちらも配布物に同梱しています。

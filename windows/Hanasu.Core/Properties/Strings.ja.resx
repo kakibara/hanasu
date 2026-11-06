@@ -654,4 +654,37 @@
   <data name="Gemini_ModelUnavailable" xml:space="preserve">
     <value>モデル「{0}」が見つからないか、この認証では使えません</value>
   </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>ダウンロードするファイルの大きさが分かりません</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>決めたホスト以外に転送されたので、ダウンロードをやめました: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>リリースの情報を読めませんでした</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>GitHub から最新の版を取れませんでした（HTTP {0}）</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>GitHub から最新の版を取れませんでした（HTTP {0}）（GitHub の呼び出しの上限に達したかもしれません。しばらくしてからもう一度試してください）</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>GitHub に接続できませんでした: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub からの応答が時間内に返りませんでした</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>zip の中に、展開先の外を指す項目があるので、使いません: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>zip を展開した大きさが想定より大きいので、使いません</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>ダウンロードした zip を開けませんでした</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>zip の中に {0} がないので、使いません</value>
+  </data>
 </root>

@@ -1085,4 +1085,106 @@ Geçerli tutanak ve yapılacaklar değiştirilecek.</value>
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>Bağlanıldı. {0} kullanılabilir. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>G&amp;üncellemeleri Denetle…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Açılışta güncellemeleri denetle</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Şimdi denetle</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Güncellemeler denetleniyor. Lütfen bekleyin.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu güncel ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Güncellemeler denetlenemedi.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Hanasu {0} sürümüne güncellenemedi. Şu anda hâlâ {1} sürümü kullanılıyor.
+
+Ayrıntılar {2} dosyasında.
+
+Sürüm sayfasından yeniden de yükleyebilirsiniz. Tarayıcıda açılsın mı?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Kayıt veya toplantı kaydı sırasında güncelleme yapılamaz. Bittiğinde menüden “Güncellemeleri Denetle…” öğesini yeniden seçin.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu bir sürücünün kök dizininde olduğu için uygulama içinden güncellenemiyor. Kendine ait bir klasöre koyun.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Güncelleme indiriliyor</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>İndirme 10 dakika içinde bitmediği için durduruldu</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Güncelleme hazırlanıyor</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>İndirilen zip dosyası açılıyor.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…ve diğerleri ({0})</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Hanasu klasöründe ({0}) Hanasu'ya ait olmayan dosya veya klasörler var.
+{1}{2}
+
+Uygulama içinden güncelleme tüm klasörü değiştirdiği için yalnızca Hanasu kendine ait bir klasördeyken yapılabilir. Hanasu'yu kendine ait bir klasöre taşıyın.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>Bu klasöre yazılamıyor (Hanasu Program Files gibi bir konumdaysa yönetici olarak yeniden yükleyin ya da sürüm sayfasından yükleyin).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Güncellenemedi.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Sürüm sayfası tarayıcıda açılsın mı?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Güncelleme betiği başlatılamadı</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Hanasu güncellemesi</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} kullanılabilir (şu anki: {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Yeni sürümü indirip yüklemek ve Hanasu'yu yeniden başlatmak için “Güncelle”ye tıklayın.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Bu sürüm uygulama içinden yüklenemez. Sürüm sayfasından yükleyin.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Sürüm sayfasını aç</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Güncelle</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Sayfayı aç</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Daha sonra</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Bu sürümü atla</value>
+  </data>
 </root>

@@ -1085,4 +1085,106 @@ Le compte rendu et les actions à mener actuels seront remplacés.</value>
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>Connecté. {0} est disponible. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Rechercher des mises à &amp;jour…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Rechercher des mises à jour au démarrage</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Vérifier maintenant</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Recherche de mises à jour en cours. Veuillez patienter.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu est à jour ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Impossible de rechercher des mises à jour.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Impossible de mettre à jour vers Hanasu {0}. La version {1} est toujours installée.
+
+Les détails se trouvent dans {2}.
+
+Vous pouvez aussi le réinstaller depuis la page de la version. L’ouvrir dans le navigateur ?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Impossible de mettre à jour pendant un enregistrement ou l’enregistrement d’une réunion. Une fois terminé, choisissez à nouveau « Rechercher des mises à jour… » dans le menu.</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu se trouve à la racine d’un lecteur : il ne peut pas se mettre à jour depuis l’app. Placez-le dans un dossier dédié.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Téléchargement de la mise à jour</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} Mo)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>Le téléchargement ne s’est pas terminé en 10 minutes : il a été arrêté</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Préparation de la mise à jour</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Décompression du zip téléchargé.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…et d’autres encore ({0})</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Le dossier de Hanasu ({0}) contient des fichiers ou dossiers qui n’appartiennent pas à Hanasu.
+{1}{2}
+
+Les mises à jour depuis l’app remplacent tout le dossier : elles ne fonctionnent que si Hanasu se trouve dans un dossier dédié. Placez-le dans un dossier dédié.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>Impossible d’écrire dans ce dossier (si Hanasu se trouve dans Program Files ou un emplacement similaire, réinstallez-le en tant qu’administrateur ou depuis la page de la version).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Échec de la mise à jour.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Ouvrir la page de la version dans le navigateur ?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Impossible de lancer le script de mise à jour</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Mise à jour de Hanasu</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} est disponible (version actuelle : {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Cliquez sur « Mettre à jour » pour télécharger et installer la nouvelle version, puis redémarrer Hanasu.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Cette version ne peut pas être installée depuis l’app. Installez-la depuis la page de la version.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Ouvrir la page de la version</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Mettre à jour</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Ouvrir la page</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Plus tard</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Ignorer cette version</value>
+  </data>
 </root>

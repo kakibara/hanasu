@@ -1085,4 +1085,106 @@
   <data name="Settings_ConnectedModel" xml:space="preserve">
     <value>Подключено. Доступна модель {0}. {1}</value>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Проверить &amp;обновления…</value>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Проверять обновления при запуске</value>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Проверить сейчас</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Идёт проверка обновлений. Подождите немного.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Установлена последняя версия Hanasu ({0})</value>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Не удалось проверить обновления.
+{0}</value>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Не удалось обновить до Hanasu {0}. Сейчас по-прежнему установлена версия {1}.
+
+Подробности — в {2}.
+
+Можно также переустановить со страницы выпуска. Открыть её в браузере?</value>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Во время записи или записи встречи обновление невозможно. Когда всё закончится, снова выберите в меню «Проверить обновления…».</value>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu находится в корне диска, поэтому обновиться из приложения нельзя. Поместите его в отдельную папку.</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Загрузка обновления</value>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} МБ)</value>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>Загрузка не завершилась за 10 минут, поэтому остановлена</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Подготовка обновления</value>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Распаковка скачанного zip.</value>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…и другие (ещё {0})</value>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>В папке Hanasu ({0}) есть файлы или папки, не относящиеся к Hanasu.
+{1}{2}
+
+Обновление из приложения заменяет всю папку, поэтому оно возможно, только если Hanasu лежит в отдельной папке. Переместите его в отдельную папку.</value>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>Нет доступа на запись в эту папку (если Hanasu находится в Program Files и т. п., переустановите его от имени администратора или со страницы выпуска).</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Не удалось обновить.
+{0}</value>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Открыть страницу выпуска в браузере?</value>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Не удалось запустить сценарий обновления</value>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Обновление Hanasu</value>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Доступна версия Hanasu {0} (сейчас {1})</value>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Нажмите «Обновить», чтобы скачать и установить новую версию и перезапустить Hanasu.</value>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>Эту версию нельзя установить из приложения. Установите её со страницы выпуска.</value>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Открыть страницу выпуска</value>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Открыть страницу</value>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Позже</value>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Пропустить эту версию</value>
+  </data>
 </root>

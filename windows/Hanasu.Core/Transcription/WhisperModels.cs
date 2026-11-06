@@ -67,6 +67,9 @@ public sealed class WhisperModelManager
         this.http = http ?? SafeHttp.CreateForDownloads();
     }
 
+    /// <summary>どれかのモデルをダウンロード中か（アップデートの入れ替え前の確認に使う）</summary>
+    public bool IsAnyDownloading { get { lock (gate) return downloads.Count > 0; } }
+
     public string PathFor(WhisperModelInfo model) => Path.Combine(Directory, model.FileName);
 
     /// <summary>置いてあり、大きさが合っているか（ハッシュはダウンロードのときに確かめている。毎回は計算しない）</summary>

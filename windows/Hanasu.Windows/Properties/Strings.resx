@@ -1440,4 +1440,136 @@ The current minutes and action items will be replaced.</value>
     <value>Connected. {0} is available. {1}</value>
     <comment>Status. {0} = model ID, {1} = description of the saved key (may be empty)</comment>
   </data>
+  <data name="Tray_CheckForUpdates" xml:space="preserve">
+    <value>Check for &amp;Updates…</value>
+    <comment>Tray menu item. &amp; = access key</comment>
+  </data>
+  <data name="Settings_CheckForUpdatesOnLaunch" xml:space="preserve">
+    <value>Check for updates at launch</value>
+    <comment>Settings &gt; General check box</comment>
+  </data>
+  <data name="Settings_CheckForUpdatesNow" xml:space="preserve">
+    <value>Check Now</value>
+    <comment>Settings &gt; General button (checks for updates)</comment>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Hanasu is already checking for updates. Please wait.</value>
+    <comment>Message box</comment>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>Hanasu is up to date ({0})</value>
+    <comment>Message box. {0} = current version</comment>
+  </data>
+  <data name="Update_CheckFailed" xml:space="preserve">
+    <value>Couldn't check for updates.
+{0}</value>
+    <comment>Message box. {0} = reason</comment>
+  </data>
+  <data name="Update_PreviousAttemptFailed" xml:space="preserve">
+    <value>Couldn't update to Hanasu {0}. You're still on {1}.
+
+Details are in {2}.
+
+You can also reinstall from the release page. Open it in your browser?</value>
+    <comment>Message box (Yes/No). {0} = version tried, {1} = current version, {2} = log file path</comment>
+  </data>
+  <data name="Update_Busy" xml:space="preserve">
+    <value>Hanasu can't update while dictating or recording a meeting. When it's done, choose “Check for Updates…” from the menu again.</value>
+    <comment>Message box</comment>
+  </data>
+  <data name="Update_DriveRoot" xml:space="preserve">
+    <value>Hanasu is in the root of a drive, so it can't update itself. Put it in a folder of its own.</value>
+    <comment>Message box text (followed by Update_OpenReleasePageQuestion)</comment>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>Downloading the update</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Update_DownloadingBody" xml:space="preserve">
+    <value>Hanasu {0} ({1} MB)</value>
+    <comment>Notification body. {0} = version, {1} = size in MB</comment>
+  </data>
+  <data name="Update_DownloadTimeout" xml:space="preserve">
+    <value>The download didn't finish within 10 minutes, so it was stopped</value>
+    <comment>Update error</comment>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>Preparing the update</value>
+    <comment>Notification title</comment>
+  </data>
+  <data name="Update_PreparingBody" xml:space="preserve">
+    <value>Extracting the downloaded zip.</value>
+    <comment>Notification body</comment>
+  </data>
+  <data name="Update_ForeignItem" xml:space="preserve">
+    <value>• {0}</value>
+    <comment>One line of a list of file or folder names. {0} = name</comment>
+  </data>
+  <data name="Update_ForeignMore" xml:space="preserve">
+    <value>
+…and {0} more</value>
+    <comment>After the first 5 names. {0} = number of the rest (phrase it so any number reads naturally)</comment>
+  </data>
+  <data name="Update_ForeignEntries" xml:space="preserve">
+    <value>Hanasu's folder ({0}) contains files or folders that don't belong to Hanasu.
+{1}{2}
+
+In-app updates replace the whole folder, so they only work when Hanasu is in a folder of its own. Move Hanasu into its own folder.</value>
+    <comment>Message box text. {0} = folder path, {1} = list of names (Update_ForeignItem lines), {2} = Update_ForeignMore or empty</comment>
+  </data>
+  <data name="Update_FolderNotWritable" xml:space="preserve">
+    <value>Can't write to this folder. (If Hanasu is in Program Files or a similar location, reinstall it as an administrator or install it from the release page.)</value>
+    <comment>Update error</comment>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>Couldn't update.
+{0}</value>
+    <comment>Message box text. {0} = reason</comment>
+  </data>
+  <data name="Update_OpenReleasePageQuestion" xml:space="preserve">
+    <value>{0}
+
+Open the release page in your browser?</value>
+    <comment>Message box (Yes/No). {0} = reason</comment>
+  </data>
+  <data name="Update_ScriptStartFailed" xml:space="preserve">
+    <value>Couldn't start the update script</value>
+    <comment>Update error</comment>
+  </data>
+  <data name="UpdatePrompt_Title" xml:space="preserve">
+    <value>Hanasu Update</value>
+    <comment>Update window title</comment>
+  </data>
+  <data name="UpdatePrompt_Available" xml:space="preserve">
+    <value>Hanasu {0} is available (you have {1})</value>
+    <comment>Update window heading. {0} = new version, {1} = current version</comment>
+  </data>
+  <data name="UpdatePrompt_CanInstall" xml:space="preserve">
+    <value>Click “Update” to download and install the new version and restart Hanasu.</value>
+    <comment>Update window text</comment>
+  </data>
+  <data name="UpdatePrompt_CannotInstall" xml:space="preserve">
+    <value>This version can't be installed from within the app. Install it from the release page.</value>
+    <comment>Update window text</comment>
+  </data>
+  <data name="UpdatePrompt_OpenReleasePage" xml:space="preserve">
+    <value>Open the Release Page</value>
+    <comment>Update window link button</comment>
+  </data>
+  <data name="UpdatePrompt_Update" xml:space="preserve">
+    <value>Update</value>
+    <comment>Update window button</comment>
+  </data>
+  <data name="UpdatePrompt_OpenPage" xml:space="preserve">
+    <value>Open Page</value>
+    <comment>Update window button (when the version can't be installed in-app)</comment>
+  </data>
+  <data name="UpdatePrompt_Later" xml:space="preserve">
+    <value>Later</value>
+    <comment>Update window button</comment>
+  </data>
+  <data name="UpdatePrompt_Skip" xml:space="preserve">
+    <value>Skip This Version</value>
+    <comment>Update window button</comment>
+  </data>
 </root>

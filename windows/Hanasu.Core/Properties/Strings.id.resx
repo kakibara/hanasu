@@ -654,4 +654,37 @@
   <data name="Gemini_ModelUnavailable" xml:space="preserve">
     <value>Model “{0}” tidak ditemukan atau tidak dapat digunakan dengan kredensial ini</value>
   </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>Ukuran file yang akan diunduh tidak diketahui</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>Unduhan dihentikan karena dialihkan ke host yang tidak diharapkan: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Tidak dapat membaca informasi rilis</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>Tidak dapat mengambil versi terbaru dari GitHub (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>Tidak dapat mengambil versi terbaru dari GitHub (HTTP {0}). Batas permintaan GitHub mungkin telah tercapai; tunggu sebentar lalu coba lagi.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Tidak dapat terhubung ke GitHub: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub tidak merespons tepat waktu</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>Zip berisi item yang menunjuk ke luar folder ekstraksi, jadi tidak digunakan: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>Zip yang diekstrak lebih besar dari yang diharapkan, jadi tidak digunakan</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>Tidak dapat membuka zip yang diunduh</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>Zip tidak berisi {0}, jadi tidak digunakan</value>
+  </data>
 </root>

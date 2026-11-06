@@ -654,4 +654,37 @@
   <data name="Gemini_ModelUnavailable" xml:space="preserve">
     <value>Không tìm thấy mô hình “{0}” hoặc không thể dùng mô hình này với thông tin xác thực hiện tại</value>
   </data>
+  <data name="Download_SizeUnknown" xml:space="preserve">
+    <value>Không biết kích thước của tệp cần tải về</value>
+  </data>
+  <data name="Download_RedirectedToOtherHost" xml:space="preserve">
+    <value>Đã dừng tải về vì bị chuyển hướng đến máy chủ không mong đợi: {0}</value>
+  </data>
+  <data name="Update_ReleaseUnreadable" xml:space="preserve">
+    <value>Không thể đọc thông tin bản phát hành</value>
+  </data>
+  <data name="Update_LatestHttpFailed" xml:space="preserve">
+    <value>Không thể lấy phiên bản mới nhất từ GitHub (HTTP {0})</value>
+  </data>
+  <data name="Update_LatestHttpFailedRateLimited" xml:space="preserve">
+    <value>Không thể lấy phiên bản mới nhất từ GitHub (HTTP {0}). Có thể đã vượt giới hạn truy vấn của GitHub; hãy đợi một lúc rồi thử lại.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Không thể kết nối với GitHub: {0}</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>GitHub không phản hồi kịp thời</value>
+  </data>
+  <data name="Update_ZipEntryOutside" xml:space="preserve">
+    <value>Tệp zip có mục trỏ ra ngoài thư mục giải nén nên sẽ không được dùng: {0}</value>
+  </data>
+  <data name="Update_ZipTooLarge" xml:space="preserve">
+    <value>Tệp zip sau khi giải nén lớn hơn dự kiến nên sẽ không được dùng</value>
+  </data>
+  <data name="Update_ZipUnreadable" xml:space="preserve">
+    <value>Không thể mở tệp zip đã tải về</value>
+  </data>
+  <data name="Update_ZipMissingExe" xml:space="preserve">
+    <value>Tệp zip không có {0} nên sẽ không được dùng</value>
+  </data>
 </root>
