@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.0.1](https://github.com/kakibara/hanasu/compare/v2.0.0...v2.0.1) - 2026-11-06
+
+- AI の選択肢を、ローカルを左に、外部 API を右に並べる by @kakibara in https://github.com/kakibara/hanasu/pull/74
+- 設定の「スニペット」画面が崩れるのを直す by @kakibara in https://github.com/kakibara/hanasu/pull/75
+- 設定の文言の古い言い方（「「AI」タブ」「Gemini か Claude」）を直し、韓国語・中国語の「ここ重要」をそろえる by @kakibara in https://github.com/kakibara/hanasu/pull/73
+
 ## [v2.0.0](https://github.com/kakibara/hanasu/compare/v1.5.0...v2.0.0) - 2026-11-06
 
 - 初回起動のオンボーディングと既定の AI の選択を足す by @kakibara in https://github.com/kakibara/hanasu/pull/53
