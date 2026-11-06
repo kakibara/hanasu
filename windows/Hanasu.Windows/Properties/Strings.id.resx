@@ -1187,4 +1187,106 @@ Buka halaman rilis di browser?</value>
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>Lewati versi ini</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>Rekaman setelah mode tidur</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>PC masuk mode tidur saat merekam rapat</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>Perangkat masuk mode tidur pada {0} dan perekaman terus berlanjut sejak itu. Pilih apakah akan menghentikan rekaman pada titik sebelum tidur atau terus merekam.</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>Hentikan sebelum tidur</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>Terus merekam</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>Tidak untuk dicatat</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>Akhiri tidak untuk dicatat</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>Tidak untuk dicatat (sejak {0})</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>Apa yang diucapkan sampai kamu mengakhirinya tidak akan dipakai untuk notulen. Perekaman tetap berjalan.</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>Kamu mengubah ucapan yang dipakai untuk notulen. Buat ulang notulen untuk menerapkan perubahan.</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>Kembalikan semua</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>Ucapan yang dipakai untuk notulen: {0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>Rentang: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>awal</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>akhir</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>Pembicara dikecualikan: {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>Kembalikan</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>Tidak untuk dicatat: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>Hapus centang ucapan agar tidak dipakai untuk notulen (Shift+klik mengubah semuanya mulai dari ucapan yang kamu klik sebelumnya). Klik kanan untuk mengatur rentang atau mengecualikan pembicara. Ctrl+C menyalin ucapan yang dipilih.</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>Dikecualikan</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>Tidak untuk dicatat</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>Pembicara dikecualikan</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>Di luar rentang</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>Pakai untuk notulen</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>Tidak dipakai untuk notulen ({0}). Kembalikan dari bilah di atas.</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>Kecualikan dari notulen</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>Pakai lagi untuk notulen</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>Pakai untuk notulen mulai dari sini</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>Pakai untuk notulen sampai sini</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>Kecualikan semua ucapan {0}</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>Kembalikan semua ucapan {0}</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>Salin</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>{0} ucapan disalin</value>
+  </data>
 </root>

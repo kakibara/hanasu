@@ -1187,4 +1187,106 @@ Mở trang phát hành trong trình duyệt?</value>
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>Bỏ qua phiên bản này</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>Ghi sau khi ngủ</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>Máy tính đã chuyển sang chế độ ngủ khi đang ghi cuộc họp</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>Máy đã ngủ lúc {0} và việc ghi vẫn tiếp tục từ đó. Hãy chọn dừng ghi tại thời điểm trước khi ngủ hoặc tiếp tục ghi.</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>Dừng tại thời điểm trước khi ngủ</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>Tiếp tục ghi</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>Không ghi biên bản</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>Kết thúc không ghi biên bản</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>Đang không ghi biên bản (từ {0})</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>Những gì nói cho đến khi kết thúc sẽ không được dùng cho biên bản. Việc ghi âm vẫn tiếp tục.</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>Bạn đã thay đổi các lời nói dùng cho biên bản. Hãy tạo lại biên bản để áp dụng thay đổi.</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>Khôi phục tất cả</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>Lời nói dùng cho biên bản: {0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>Phạm vi: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>đầu</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>cuối</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>Bỏ</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>Người nói bị loại: {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>Khôi phục</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>Không ghi biên bản: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>Bỏ chọn một lời nói để không đưa vào biên bản (Shift+nhấp sẽ chuyển tất cả từ lời nói bạn đã nhấp trước đó). Nhấp chuột phải để đặt phạm vi hoặc loại một người nói. Ctrl+C sao chép các lời nói đã chọn.</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>Đã loại</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>Không ghi biên bản</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>Đã loại người nói</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>Ngoài phạm vi</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>Dùng cho biên bản</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>Không dùng cho biên bản ({0}). Có thể khôi phục từ thanh phía trên.</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>Loại khỏi biên bản</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>Dùng lại cho biên bản</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>Dùng cho biên bản từ đây</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>Dùng cho biên bản đến đây</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>Loại mọi lời của {0}</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>Khôi phục mọi lời của {0}</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>Đã sao chép {0} lời nói</value>
+  </data>
 </root>

@@ -421,6 +421,10 @@ MainActor.assumeIsolated { MeetingSearchCLI.runIfRequested(CommandLine.arguments
 // 会議の AI チャットの確認（--test-meeting-chat / --chat-meeting / --render-meeting-chat。MeetingChatCLI.swift）
 MainActor.assumeIsolated { MeetingChatCLI.runIfRequested() }
 
+// 記録中のスリープでの切り詰めの確認（--test-meeting-sleep-cut。MeetingSleepCLI.swift）
+MeetingSleepCLI.runSelfTestIfRequested()
+// 議事録に使う発言の選び方の確認（--test-minutes-selection / --render-minutes-selection。MinutesSelectionCLI.swift）
+MainActor.assumeIsolated { MinutesSelectionCLI.runIfRequested() }
 // 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 // 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）

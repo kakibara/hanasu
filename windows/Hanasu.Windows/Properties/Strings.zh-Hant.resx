@@ -1187,4 +1187,106 @@ App 內更新會替換整個資料夾，因此只有在 Hanasu 位於專用資�
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>略過此版本</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>睡眠後的錄製</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>錄製會議時電腦進入了睡眠</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>自 {0} 進入睡眠以來，錄製一直在繼續。請選擇在睡眠前的位置停止錄製，還是繼續錄製。</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>停止於睡眠之前</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>繼續錄製</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>不列入紀錄</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>結束不列入紀錄</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>不列入紀錄中（從 {0} 起）</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>結束前說的話不會用於會議記錄。錄音會繼續。</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>已變更用於會議記錄的發言。重新建立後才會反映</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>全部還原</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>用於會議記錄的發言：{0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>範圍：{0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>開頭</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>結尾</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>解除</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>已排除的發言者：{0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>還原</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>不列入紀錄：{0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>取消勾選的發言不會用於會議記錄（按住 Shift 點按，可從上次點按的發言起一併切換）。按右鍵可設定範圍或排除發言者。按 Ctrl+C 複製所選發言。</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>已排除</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>不列入紀錄</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>已排除發言者</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>範圍外</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>用於會議記錄</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>不用於會議記錄（{0}）。可從上方的列還原</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>從會議記錄中排除</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>重新用於會議記錄</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>從這裡開始用於會議記錄</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>到這裡為止用於會議記錄</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>排除「{0}」的所有發言</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>還原「{0}」的所有發言</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>複製</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>已複製 {0} 則發言</value>
+  </data>
 </root>

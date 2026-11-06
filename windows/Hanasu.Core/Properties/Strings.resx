@@ -912,4 +912,8 @@
     <value>The zip doesn't contain {0}, so it won't be used</value>
     <comment>Update package error. {0} = path such as Hanasu\Hanasu.exe</comment>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- {0} utterances not used for the minutes are not included</value>
+    <comment>Markdown list item of transcript.md (keep '- '). {0} = number of utterances left out</comment>
+  </data>
 </root>

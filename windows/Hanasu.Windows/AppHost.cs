@@ -131,6 +131,8 @@ internal sealed class AppHost : IDisposable
             RegisterHighlightHotKey();
         });
         Meetings.Notice += (_, notice) => app.Dispatcher.BeginInvoke(() => tray?.ShowBalloon(notice.Title, notice.Message, notice.IsWarning));
+        // 要件: REQ-MTG-043
+        Meetings.ResumedFromSleep += (_, point) => app.Dispatcher.BeginInvoke(() => AskAboutSleep(point));
         try
         {
             // 前回、記録中・処理中のまま終わった会議を「失敗」にする
@@ -389,7 +391,34 @@ internal sealed class AppHost : IDisposable
 
     private void OnPowerModeChanged(object? sender, Microsoft.Win32.PowerModeChangedEventArgs e)
     {
-        if (e.Mode == Microsoft.Win32.PowerModes.Suspend) Secrets.Lock();
+        if (e.Mode == Microsoft.Win32.PowerModes.Suspend)
+        {
+            Secrets.Lock();
+            // 要件: REQ-MTG-043
+            Meetings.OnSystemSuspend();
+        }
+        else if (e.Mode == Microsoft.Win32.PowerModes.Resume)
+        {
+            Meetings.OnSystemResume();
+        }
+    }
+
+    // 要件: REQ-MTG-043
+    // 設計判断: DEC-MTG-111
+    /// <summary>記録中にスリープして戻ったとき、スリープ前までで止めるか、記録を続けるかを聞く</summary>
+    private async void AskAboutSleep(MeetingSleepPoint point)
+    {
+        try
+        {
+            var window = new SleepPromptWindow(point.At);
+            window.Loaded += (_, _) => window.Activate();
+            window.ShowDialog();
+            await Meetings.ResolveSleepAsync(window.StopAtSleep);
+        }
+        catch (Exception e) when (e is InvalidOperationException or IOException or UnauthorizedAccessException)
+        {
+            AppLog.Write($"sleep prompt failed: {e.GetType().Name}: {e.Message}");
+        }
     }
 
     public void Dispose()

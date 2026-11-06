@@ -687,4 +687,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>Tệp zip không có {0} nên sẽ không được dùng</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- Không bao gồm {0} lời nói không dùng cho biên bản</value>
+  </data>
 </root>

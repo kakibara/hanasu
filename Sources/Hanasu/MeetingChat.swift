@@ -72,7 +72,9 @@ enum MeetingChat {
     @MainActor
     static func liveMaterial(recorder: MeetingRecorder) -> Material? {
         guard let meeting = recorder.current else { return nil }
-        let lines = recorder.liveLines.map {
+        // 要件: REQ-MTG-046
+        // 設計判断: DEC-MTG-091
+        let lines = recorder.liveLines.filter { !meeting.isOffRecord(at: $0.start) }.map {
             Line(time: $0.start, speaker: Meeting.promptLabel(for: $0.channel == .me ? "me" : "others"), text: $0.text)
         }
         let elapsed = meeting.duration > 0 ? meeting.duration : recorder.elapsed
@@ -86,7 +88,8 @@ enum MeetingChat {
 
     /// 記録のあとの会議の記録（確定した文字起こしと、付け替えた話者名）
     static func material(for meeting: Meeting) -> Material {
-        let lines = meeting.mergedBlocks().map {
+        // 設計判断: DEC-MTG-091
+        let lines = meeting.blocksForMinutes().map {
             Line(time: $0.start, speaker: meeting.promptName(for: $0.speaker), text: $0.text)
         }
         return Material(title: meeting.title, startedAt: meeting.startedAt, live: false, elapsed: meeting.duration,

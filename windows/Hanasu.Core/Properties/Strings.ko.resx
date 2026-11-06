@@ -687,4 +687,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>zip에 {0}이(가) 없어 사용하지 않습니다</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- 회의록에 쓰지 않는 발언({0}개)은 넣지 않았습니다</value>
+  </data>
 </root>

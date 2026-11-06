@@ -687,4 +687,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>O zip não contém {0}, então não será usado</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- {0} falas não usadas na ata não foram incluídas</value>
+  </data>
 </root>

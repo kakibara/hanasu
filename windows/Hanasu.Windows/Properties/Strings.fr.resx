@@ -1187,4 +1187,106 @@ Ouvrir la page de la version dans le navigateur ?</value>
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>Ignorer cette version</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>Enregistrement après la veille</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>Le PC s’est mis en veille pendant l’enregistrement d’une réunion</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>La mise en veille a eu lieu à {0} et l’enregistrement s’est poursuivi depuis. Choisissez d’arrêter l’enregistrement avant la mise en veille ou de continuer à enregistrer.</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>Arrêter avant la mise en veille</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>Continuer l’enregistrement</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>Hors micro</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>Terminer le hors micro</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>Hors micro (depuis {0})</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>Ce qui est dit jusqu'à la fin ne sera pas utilisé pour le compte rendu. L'enregistrement continue.</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>Vous avez modifié les interventions utilisées pour le compte rendu. Régénérez-le pour appliquer la modification.</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>Tout réinitialiser</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>Interventions utilisées pour le compte rendu : {0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>Plage : {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>début</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>fin</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>Retirer</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>Intervenant exclu : {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>Rétablir</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>Hors micro : {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>Décochez une intervention pour l'écarter du compte rendu (Maj+clic bascule tout depuis celle cliquée avant). Clic droit pour définir la plage ou exclure un intervenant. Ctrl+C copie les interventions sélectionnées.</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>Exclue</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>Hors micro</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>Intervenant exclu</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>Hors plage</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>Utiliser pour le compte rendu</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>Non utilisée pour le compte rendu ({0}). Rétablissez-la depuis la barre ci-dessus.</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>Exclure du compte rendu</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>Réutiliser pour le compte rendu</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>Utiliser pour le compte rendu à partir d'ici</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>Utiliser pour le compte rendu jusqu'ici</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>Exclure tout ce qu'a dit {0}</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>Rétablir tout ce qu'a dit {0}</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>Copier</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>{0} interventions copiées</value>
+  </data>
 </root>

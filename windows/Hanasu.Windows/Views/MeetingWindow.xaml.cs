@@ -13,7 +13,8 @@ namespace Hanasu.Windows.Views;
 /// <summary>
 /// 会議ノート（Mac 版の MeetingWindow にあたる）。左に記録中の表示・会議の一覧・記録の開始、右に選んだ会議の議事録・文字起こし・メモ。
 /// 話者名の変更、議事録の作り直し（型の選び直し）、Markdown のコピー、エクスプローラーで開く ができる。
-/// 記録中は経過時間・停止ボタン・メモ欄・「ここ重要」ボタンを出す。
+/// 記録中は経過時間・停止ボタン・メモ欄・「ここ重要」ボタン・「オフレコ」ボタンを出す。
+/// 文字起こしのタブは発言ごとの一覧で、議事録に使う発言を選べる（DEC-MTG-112）。
 /// </summary>
 public partial class MeetingWindow : Window
 {
@@ -27,6 +28,10 @@ public partial class MeetingWindow : Window
     private bool loading;
     /// <summary>記録中のメモ欄を書き始めた時刻（メモの時刻はこれにする）</summary>
     private double? noteStartedAt;
+    /// <summary>文字起こしの一覧に出している会議の ID（同じ会議を出し直すときは、スクロールの位置と選んだ発言を保つ）</summary>
+    private string? transcriptShownId;
+    /// <summary>最後にチェックボックスを押した発言のまとまりの、先頭の発言の ID（Shift で、ここからまとめて切り替える）</summary>
+    private string? lastCheckedId;
 
     internal MeetingWindow(AppHost host)
     {
@@ -151,9 +156,7 @@ public partial class MeetingWindow : Window
             MeetingStatus.Processing => Strings.Meeting_Processing,
             _ => Strings.Meeting_NoMinutesYet,
         });
-        TranscriptBox.Text = m.Utterances.Count == 0
-            ? (IsLive(m) ? Strings.Meeting_TranscriptAfterRecording : Strings.Meeting_NoTranscriptYet)
-            : m.TranscriptMarkdown();
+        ShowTranscript(m);
         if (!NotesBox.IsKeyboardFocused) NotesBox.Text = m.NotesText;
         HighlightsBox.Text = m.HighlightContextText();
         BuildSpeakerEditors(m);
@@ -162,9 +165,13 @@ public partial class MeetingWindow : Window
         var busy = live || m.Status is MeetingStatus.Recording or MeetingStatus.Processing;
         RecordingPanel.Visibility = live && meetings.State == MeetingState.Recording ? Visibility.Visible : Visibility.Collapsed;
         RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = !busy && m.Utterances.Count > 0;
+        // 設計判断: DEC-MTG-092
+        MinutesOutdatedPanel.Visibility = m.MinutesOutdated == true ? Visibility.Visible : Visibility.Collapsed;
+        MinutesOutdatedRegenerateButton.IsEnabled = TranscriptOutdatedRegenerateButton.IsEnabled = RegenerateButton.IsEnabled;
         DeleteButton.IsEnabled = !busy && meetings.CanDelete(m);
         RecordingNote.Text = string.Format(Strings.Meeting_RecordingNote, host.Settings.Current.MeetingEngine == TranscriptionEngine.Gemini ? "Gemini" : "Whisper");
         UpdateLiveNotes();
+        UpdateOffRecord();
     }
 
     private void BuildSpeakerEditors(Meeting m)
@@ -205,7 +212,7 @@ public partial class MeetingWindow : Window
     {
         if (!m.RenameSpeaker(speaker, name == defaultName ? "" : name)) return;
         SaveSelected(m, Strings.Meeting_SpeakerNamesSaved);
-        TranscriptBox.Text = m.TranscriptMarkdown();
+        ShowTranscript(m);
         HighlightsBox.Text = m.HighlightContextText();
         // 推測の印を外したので、欄を作り直す
         BuildSpeakerEditors(m);
@@ -261,6 +268,284 @@ public partial class MeetingWindow : Window
         }
     }
 
+    // MARK: - 文字起こし（議事録に使う発言を選ぶ）
+
+    /// <summary>文字起こしの一覧の 1 行（同じ話者の続く発言のまとまり 1 つ）</summary>
+    private sealed class TranscriptRow
+    {
+        public required TranscriptDisplayBlock Block { get; init; }
+        public required string Time { get; init; }
+        public required string Speaker { get; init; }
+        public required string Text { get; init; }
+        public required string Reason { get; init; }
+        public required bool CanToggle { get; init; }
+        public required string CheckTip { get; init; }
+        public bool IsUsed => Block.IsUsed;
+        public Visibility ReasonVisibility => Reason.Length == 0 ? Visibility.Collapsed : Visibility.Visible;
+        // 設計判断: DEC-MTG-091（使わない発言は薄く、除いた発言とオフレコは取り消し線も）
+        public double Opacity => Block.IsUsed ? 1.0 : 0.45;
+        public TextDecorationCollection? Decorations =>
+            Block.Use is MinutesUse.Excluded or MinutesUse.OffRecord ? TextDecorations.Strikethrough : null;
+        /// <summary>コピーするときの 1 行（表示どおり）</summary>
+        public string Line => $"[{Time}] {Speaker}: {Text}";
+    }
+
+    // 要件: REQ-MTG-045
+    /// <summary>使わない発言に添える短い理由</summary>
+    private static string ReasonLabel(MinutesUse use) => use switch
+    {
+        MinutesUse.Excluded => Strings.Meeting_Use_Excluded,
+        MinutesUse.OffRecord => Strings.Meeting_Use_OffRecord,
+        MinutesUse.SpeakerExcluded => Strings.Meeting_Use_SpeakerExcluded,
+        MinutesUse.OutsideRange => Strings.Meeting_Use_OutsideRange,
+        _ => "",
+    };
+
+    /// <summary>チェックボックスで切り替えられる発言か（話者・オフレコで除いた発言は、帯のボタンで戻す）</summary>
+    private static bool IsToggleable(MinutesUse use) => use is MinutesUse.Used or MinutesUse.Excluded or MinutesUse.OutsideRange;
+
+    private bool CanEditSelection(Meeting m) => meetings.CanEditMinutesSelection(m);
+
+    // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+    // 設計判断: DEC-MTG-091, DEC-MTG-112
+    /// <summary>文字起こしの一覧と上の帯を出す。同じ会議を出し直すときは、スクロールの位置と選んだ発言を保つ</summary>
+    private void ShowTranscript(Meeting m)
+    {
+        if (m.Utterances.Count == 0)
+        {
+            TranscriptEmptyText.Text = IsLive(m) ? Strings.Meeting_TranscriptAfterRecording : Strings.Meeting_NoTranscriptYet;
+            TranscriptEmptyText.Visibility = Visibility.Visible;
+            SelectionBar.Visibility = Visibility.Collapsed;
+            TranscriptList.Visibility = Visibility.Collapsed;
+            TranscriptList.ItemsSource = null;
+            transcriptShownId = m.Id;
+            return;
+        }
+        TranscriptEmptyText.Visibility = Visibility.Collapsed;
+        SelectionBar.Visibility = Visibility.Visible;
+        TranscriptList.Visibility = Visibility.Visible;
+
+        var canEdit = CanEditSelection(m);
+        var same = transcriptShownId == m.Id;
+        var scroll = same ? TranscriptScrollViewer()?.VerticalOffset : null;
+        var selectedIds = same ? TranscriptList.SelectedItems.OfType<TranscriptRow>().SelectMany(r => r.Block.Members).ToHashSet() : new HashSet<string>();
+        if (!same) lastCheckedId = null;
+        transcriptShownId = m.Id;
+
+        var rows = m.DisplayBlocks().Select(b => new TranscriptRow
+        {
+            Block = b,
+            Time = Meeting.Clock(b.Block.Start),
+            Speaker = m.DisplayName(b.Block.Speaker),
+            Text = b.Block.Text,
+            Reason = ReasonLabel(b.Use),
+            CanToggle = canEdit && IsToggleable(b.Use),
+            CheckTip = IsToggleable(b.Use) ? Strings.Meeting_UseForMinutes : string.Format(Strings.Meeting_UseForMinutes_Locked, ReasonLabel(b.Use)),
+        }).ToList();
+        TranscriptList.ItemsSource = rows;
+        foreach (var row in rows.Where(r => r.Block.Members.Any(selectedIds.Contains))) TranscriptList.SelectedItems.Add(row);
+        if (scroll is { } offset)
+        {
+            // 一覧を入れ替えると先頭に戻るので、並べ終えてから元の位置に戻す
+            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, () => TranscriptScrollViewer()?.ScrollToVerticalOffset(offset));
+        }
+
+        UpdateSelectionBar(m, canEdit);
+    }
+
+    private ScrollViewer? TranscriptScrollViewer() => FindScrollViewer(TranscriptList);
+
+    private static ScrollViewer? FindScrollViewer(DependencyObject parent)
+    {
+        for (var i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = System.Windows.Media.VisualTreeHelper.GetChild(parent, i);
+            if (child is ScrollViewer viewer) return viewer;
+            if (FindScrollViewer(child) is { } found) return found;
+        }
+        return null;
+    }
+
+    // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+    // 設計判断: DEC-MTG-092, DEC-MTG-112
+    /// <summary>上の帯: 使う発言の数・範囲・除いた話者・オフレコの区間（それぞれ解除のボタン）・すべて元に戻す・作り直しの案内</summary>
+    private void UpdateSelectionBar(Meeting m, bool canEdit)
+    {
+        UsedCountText.Text = string.Format(Strings.Meeting_Selection_Count, m.UsedUtterances.Count, m.Utterances.Count);
+        ResetSelectionButton.Visibility = m.HasMinutesSelection ? Visibility.Visible : Visibility.Collapsed;
+        ResetSelectionButton.IsEnabled = canEdit;
+        TranscriptOutdatedPanel.Visibility = m.MinutesOutdated == true ? Visibility.Visible : Visibility.Collapsed;
+
+        SelectionChips.Children.Clear();
+        if (m.MinutesFrom is not null || m.MinutesTo is not null)
+        {
+            var from = m.MinutesFrom is { } f ? Meeting.Clock(f) : Strings.Meeting_Selection_RangeStart;
+            var to = m.MinutesTo is { } t ? Meeting.Clock(t) : Strings.Meeting_Selection_RangeEnd;
+            AddChip(string.Format(Strings.Meeting_Selection_Range, from, to), Strings.Meeting_Selection_Clear, canEdit, x =>
+            {
+                x.SetMinutesFrom(null);
+                x.SetMinutesTo(null);
+            });
+        }
+        foreach (var speaker in m.ExcludedSpeakers ?? [])
+        {
+            AddChip(string.Format(Strings.Meeting_Selection_ExcludedSpeaker, m.DisplayName(speaker)), Strings.Meeting_Selection_Restore, canEdit,
+                x => x.SetSpeakerExcluded(speaker, excluded: false));
+        }
+        foreach (var span in m.OffRecord ?? [])
+        {
+            var id = span.Id;
+            AddChip(string.Format(Strings.Meeting_Selection_OffRecord, Meeting.Clock(span.Start), Meeting.Clock(span.End ?? m.Duration)),
+                Strings.Meeting_Selection_Clear, canEdit, x => x.RemoveOffRecord(id));
+        }
+        SelectionChips.Visibility = SelectionChips.Children.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    private void AddChip(string text, string buttonText, bool canEdit, Action<Meeting> change)
+    {
+        var panel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 2, 14, 2) };
+        panel.Children.Add(new TextBlock { Text = text, VerticalAlignment = VerticalAlignment.Center, FontSize = 12 });
+        var button = new Button { Content = buttonText, Style = (Style)FindResource("ChipButton"), IsEnabled = canEdit };
+        button.Click += (_, _) => ChangeSelection(change);
+        panel.Children.Add(button);
+        SelectionChips.Children.Add(panel);
+    }
+
+    // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+    // 設計判断: DEC-MTG-090, DEC-MTG-092
+    /// <summary>選んだ会議の、議事録に使う発言の選び方を変えて保存する（議事録は作り直さない）</summary>
+    private void ChangeSelection(Action<Meeting> change)
+    {
+        if (selected is not { } m) return;
+        try
+        {
+            if (!meetings.ChangeMinutesSelection(m, change)) return;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            ActionStatus.Text = string.Format(Strings.Meeting_SaveFailed, ex.Message);
+        }
+        ShowTranscript(m);
+        MinutesOutdatedPanel.Visibility = m.MinutesOutdated == true ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void OnResetSelectionClick(object sender, RoutedEventArgs e) => ChangeSelection(x => x.ClearMinutesSelection());
+
+    // 要件: REQ-MTG-045
+    // 設計判断: DEC-MTG-112
+    /// <summary>チェックボックス（オンが使う）。Shift を押しながらなら、前に押した発言からこの発言までを同じ状態にする</summary>
+    private void OnUseCheckClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is not CheckBox { DataContext: TranscriptRow row } box || TranscriptList.ItemsSource is not List<TranscriptRow> rows) return;
+        var use = box.IsChecked == true;
+        var targets = new List<TranscriptRow> { row };
+        var index = rows.IndexOf(row);
+        if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && lastCheckedId is { } anchorId
+            && rows.FindIndex(r => r.Block.Members.Contains(anchorId)) is var anchor and >= 0 && index >= 0)
+        {
+            targets = rows.GetRange(Math.Min(anchor, index), Math.Abs(anchor - index) + 1);
+        }
+        lastCheckedId = row.Block.Id;
+        SetUse(targets, use);
+    }
+
+    /// <summary>発言のまとまりを使う・使わないにする（話者・オフレコで除いたものは変えない）</summary>
+    private void SetUse(IEnumerable<TranscriptRow> rows, bool use)
+    {
+        var ids = rows.Where(r => IsToggleable(r.Block.Use)).SelectMany(r => r.Block.Members).ToList();
+        if (ids.Count == 0) return;
+        ChangeSelection(x =>
+        {
+            if (use) x.Include(ids);
+            else x.SetExcluded(ids, excluded: true);
+        });
+    }
+
+    /// <summary>右クリックのメニューの対象（選んだ発言。時刻の順）</summary>
+    private List<TranscriptRow> MenuTargets() => TranscriptList.SelectedItems.OfType<TranscriptRow>().OrderBy(r => r.Block.Block.Start).ToList();
+
+    // 要件: REQ-MTG-044, REQ-MTG-045
+    // 設計判断: DEC-MTG-112
+    private void OnTranscriptMenuOpened(object sender, RoutedEventArgs e)
+    {
+        var targets = MenuTargets();
+        var canEdit = selected is { } m && CanEditSelection(m) && targets.Count > 0;
+        var toggleable = targets.Where(r => IsToggleable(r.Block.Use)).ToList();
+        ExcludeMenuItem.Visibility = toggleable.Any(r => r.IsUsed) || toggleable.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+        IncludeMenuItem.Visibility = toggleable.Any(r => !r.IsUsed) ? Visibility.Visible : Visibility.Collapsed;
+        ExcludeMenuItem.IsEnabled = IncludeMenuItem.IsEnabled = canEdit && toggleable.Count > 0;
+        FromHereMenuItem.IsEnabled = ToHereMenuItem.IsEnabled = canEdit;
+        if (targets.Count > 0 && selected is { } meeting)
+        {
+            // 右クリックした（最初に選んだ）発言の話者
+            var speaker = targets[0].Block.Block.Speaker;
+            var excluded = meeting.ExcludedSpeakers?.Contains(speaker) == true;
+            // 話者名の「_」がアクセスキーにならないように重ねる
+            SpeakerMenuItem.Header = string.Format(excluded ? Strings.Meeting_Menu_IncludeSpeaker : Strings.Meeting_Menu_ExcludeSpeaker,
+                meeting.DisplayName(speaker).Replace("_", "__"));
+            SpeakerMenuItem.Tag = speaker;
+            SpeakerMenuItem.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            SpeakerMenuItem.Visibility = Visibility.Collapsed;
+        }
+        SpeakerMenuItem.IsEnabled = canEdit;
+        CopyRowsMenuItem.IsEnabled = targets.Count > 0;
+    }
+
+    private void OnExcludeMenuClick(object sender, RoutedEventArgs e) => SetUse(MenuTargets(), use: false);
+
+    private void OnIncludeMenuClick(object sender, RoutedEventArgs e) => SetUse(MenuTargets(), use: true);
+
+    // 要件: REQ-MTG-044
+    private void OnFromHereMenuClick(object sender, RoutedEventArgs e)
+    {
+        if (MenuTargets() is [var first, ..]) ChangeSelection(x => x.SetMinutesFrom(first.Block.Block.Start));
+    }
+
+    // 要件: REQ-MTG-044
+    private void OnToHereMenuClick(object sender, RoutedEventArgs e)
+    {
+        // まとめた最後の発言まで入れる
+        if (MenuTargets() is [.., var last]) ChangeSelection(x => x.SetMinutesTo(last.Block.LastStart));
+    }
+
+    // 要件: REQ-MTG-045
+    private void OnSpeakerMenuClick(object sender, RoutedEventArgs e)
+    {
+        if (SpeakerMenuItem.Tag is not string speaker || selected is not { } m) return;
+        var excluded = m.ExcludedSpeakers?.Contains(speaker) == true;
+        ChangeSelection(x => x.SetSpeakerExcluded(speaker, excluded: !excluded));
+    }
+
+    // 設計判断: DEC-MTG-112
+    /// <summary>選んだ発言を、表示どおり 1 行 1 発言でコピーする（使う発言・使わない発言とも）</summary>
+    private void CopyRows()
+    {
+        var rows = MenuTargets();
+        if (rows.Count == 0) return;
+        try
+        {
+            Clipboard.SetText(string.Join(Environment.NewLine, rows.Select(r => r.Line)));
+            ActionStatus.Text = string.Format(Strings.Meeting_CopiedUtterances, rows.Count);
+        }
+        catch (System.Runtime.InteropServices.ExternalException ex)
+        {
+            ActionStatus.Text = string.Format(Strings.CopyFailed, ex.Message);
+        }
+    }
+
+    private void OnCopyRowsExecuted(object sender, ExecutedRoutedEventArgs e) => CopyRows();
+
+    private void OnCopyRowsCanExecute(object sender, CanExecuteRoutedEventArgs e)
+    {
+        e.CanExecute = TranscriptList.SelectedItems.Count > 0;
+        e.Handled = true;
+    }
+
+    private void OnCopyRowsMenuClick(object sender, RoutedEventArgs e) => CopyRows();
+
     // MARK: - 議事録
 
     private void OnRegenerateClick(object sender, RoutedEventArgs e)
@@ -294,11 +579,16 @@ public partial class MeetingWindow : Window
     private async Task RegenerateAsync(Meeting m, MinutesTemplate? template)
     {
         RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = DeleteButton.IsEnabled = false;
+        // 作り直している間は、議事録に使う発言を変えさせない（CanEditMinutesSelection）
+        MinutesOutdatedRegenerateButton.IsEnabled = TranscriptOutdatedRegenerateButton.IsEnabled = false;
         ActionStatus.Text = string.Format(Core.Properties.Strings.Meeting_MakingMinutes, Core.Ai.TextAiFactory.NameOf(host.Settings.Current.MeetingAi));
         var started = Stopwatch.StartNew();
         try
         {
-            await meetings.RegenerateMinutesAsync(m, template);
+            // 作り直しの印は呼んだときに付くので、そのあとで一覧を出し直すと選べなくなる
+            var regenerating = meetings.RegenerateMinutesAsync(m, template);
+            if (selected?.Id == m.Id) ShowTranscript(m);
+            await regenerating;
             ActionStatus.Text = string.Format(Strings.Meeting_Regenerated, started.Elapsed.TotalSeconds.ToString("0"));
             Tabs.SelectedIndex = 0;
         }
@@ -460,6 +750,31 @@ public partial class MeetingWindow : Window
         noteStartedAt = null;
     }
 
+    // 要件: REQ-MTG-046
+    // 設計判断: DEC-MTG-094
+    private void OnOffRecordClick(object sender, RoutedEventArgs e)
+    {
+        meetings.ToggleOffRecord();
+        UpdateOffRecord();
+    }
+
+    // 要件: REQ-MTG-046
+    /// <summary>オフレコ中なら、ボタンを「オフレコを終える」にし、「オフレコ中（12:34 から）」を出す</summary>
+    private void UpdateOffRecord()
+    {
+        if (meetings.OpenOffRecord is { } open)
+        {
+            OffRecordButton.Content = Strings.Meeting_OffRecordEnd;
+            OffRecordStatus.Text = string.Format(Strings.Meeting_OffRecordActive, Meeting.Clock(open.Start));
+            OffRecordStatus.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            OffRecordButton.Content = Strings.Meeting_OffRecord;
+            OffRecordStatus.Visibility = Visibility.Collapsed;
+        }
+    }
+
     private void OnUndoHighlightClick(object sender, RoutedEventArgs e)
     {
         if (meetings.UndoableHighlight is { } note) meetings.UndoHighlight(note.Id);
@@ -495,6 +810,7 @@ public partial class MeetingWindow : Window
             OutputLevel.Value = meetings.LoopbackLevel;
         }
         UpdateUndoHighlight();
+        UpdateOffRecord();
     }
 
     // MARK: - 状態
@@ -508,6 +824,7 @@ public partial class MeetingWindow : Window
         if (selected?.Id == m.Id && IsLive(m))
         {
             UpdateLiveNotes();
+            UpdateOffRecord();
             return;
         }
         ReloadList(m.Id == meetings.Current?.Id || selected is null ? m.Id : null);

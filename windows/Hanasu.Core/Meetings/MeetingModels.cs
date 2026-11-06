@@ -284,8 +284,8 @@ public sealed class ActionItem
     }
 }
 
-/// <summary>会議 1 つ。保存先のフォルダ名が Id</summary>
-public sealed class Meeting
+/// <summary>会議 1 つ。保存先のフォルダ名が Id（議事録に使う発言の選び方は MinutesSelection.cs）</summary>
+public sealed partial class Meeting
 {
     public string Id { get; set; } = "";
     public string Title { get; set; } = "";
@@ -317,6 +317,20 @@ public sealed class Meeting
     /// <summary>会話から推測して名前を付けた話者キー（SpeakerNameInference）。ユーザーが直すと外す。古い会議にはないので省略可（Mac 版と同じキー）</summary>
     // 設計判断: DEC-MTG-069
     public List<string>? InferredSpeakers { get; set; }
+    // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+    // 設計判断: DEC-MTG-090
+    /// <summary>議事録に使う範囲（発言の開始時刻の秒）。null は端まで（MinutesSelection.cs。Mac 版と同じキー）</summary>
+    public double? MinutesFrom { get; set; }
+    public double? MinutesTo { get; set; }
+    /// <summary>議事録から除いた発言の ID</summary>
+    public List<string>? ExcludedUtterances { get; set; }
+    /// <summary>議事録から除いた話者キー</summary>
+    public List<string>? ExcludedSpeakers { get; set; }
+    /// <summary>記録中に「オフレコ」にした区間</summary>
+    public List<OffRecordSpan>? OffRecord { get; set; }
+    // 設計判断: DEC-MTG-092
+    /// <summary>議事録に使う発言を変えたあと、議事録をまだ作り直していない</summary>
+    public bool? MinutesOutdated { get; set; }
 
     /// <summary>議事録の結果を入れる。応答で分かった話者の名前も、名前のない話者に付ける</summary>
     // 要件: REQ-MTG-027
@@ -408,7 +422,7 @@ public sealed class Meeting
         return blocks;
     }
 
-    /// <summary>文字起こしの Markdown（transcript.md）</summary>
+    /// <summary>文字起こしの Markdown（transcript.md・コピー）。議事録に使う発言だけを書く</summary>
     public string TranscriptMarkdown()
     {
         var lines = new List<string>
@@ -417,7 +431,11 @@ public sealed class Meeting
             string.Format(Strings.Transcript_Date, FormatDate(StartedAt)),
             string.Format(Strings.Transcript_Duration, Clock(Duration)), "",
         };
-        foreach (var block in MergedBlocks())
+        // 要件: REQ-MTG-045
+        // 設計判断: DEC-MTG-091
+        var unused = Utterances.Count - UsedUtterances.Count;
+        if (unused > 0) lines.Insert(lines.Count - 1, string.Format(Strings.Transcript_UnusedOmitted, unused));
+        foreach (var block in BlocksForMinutes())
         {
             lines.Add($"**[{Clock(block.Start)}] {DisplayName(block.Speaker)}**: {block.Text}");
             lines.Add("");
@@ -426,11 +444,12 @@ public sealed class Meeting
     }
 
     // 要件: REQ-COM-061
-    /// <summary>Gemini に渡す文字起こし（1 発言 1 行。話者名はプロンプトの言語）</summary>
+    /// <summary>Gemini に渡す文字起こし（1 発言 1 行。話者名はプロンプトの言語）。議事録に使う発言だけ</summary>
     public string TranscriptForPrompt()
     {
         var language = PromptLanguage.Current;
-        return string.Join("\n", MergedBlocks().Select(b => $"[{Clock(b.Start)}] {PromptName(b.Speaker, language)}: {b.Text}"));
+        // 設計判断: DEC-MTG-091
+        return string.Join("\n", BlocksForMinutes().Select(b => $"[{Clock(b.Start)}] {PromptName(b.Speaker, language)}: {b.Text}"));
     }
 
     // MARK: - メモと印（Mac 版 MeetingNotes.swift の Meeting の拡張）
@@ -504,7 +523,8 @@ public sealed class Meeting
     public string TranscriptForPromptMarkingHighlights()
     {
         var language = PromptLanguage.Current;
-        return string.Join("\n", MergedBlocks().Select(b => $"{(IsNearHighlight(b) ? "★ " : "")}[{Clock(b.Start)}] {PromptName(b.Speaker, language)}: {b.Text}"));
+        // 設計判断: DEC-MTG-091
+        return string.Join("\n", BlocksForMinutes().Select(b => $"{(IsNearHighlight(b) ? "★ " : "")}[{Clock(b.Start)}] {PromptName(b.Speaker, language)}: {b.Text}"));
     }
 
     // 要件: REQ-COM-061

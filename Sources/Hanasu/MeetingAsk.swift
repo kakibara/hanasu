@@ -120,7 +120,8 @@ enum MeetingAsk {
     /// 議事録がなければ文字起こしを渡す（長すぎるときはヒットした発言の前後か、冒頭だけ）。
     /// 記録の中の区切りのタグ（<meeting> <minutes> <transcript> など）は無害にしてから埋め込む（DEC-COM-054）
     static func material(for meeting: Meeting, hitBlocks: Set<UUID>, options: Options) -> String {
-        let blocks = meeting.mergedBlocks()
+        // 設計判断: DEC-MTG-091
+        let blocks = meeting.blocksForMinutes()
         func line(_ b: Utterance) -> String { "[\(Meeting.clock(b.start))] \(meeting.promptName(for: b.speaker)): \(b.text)" }
         func excerpts(limit: Int) -> String {
             var indices = Set<Int>()

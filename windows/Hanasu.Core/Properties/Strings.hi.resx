@@ -687,4 +687,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>zip में {0} नहीं है, इसलिए इसका इस्तेमाल नहीं होगा</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- कार्यवृत्त में इस्तेमाल न होने वाले {0} कथन शामिल नहीं हैं</value>
+  </data>
 </root>

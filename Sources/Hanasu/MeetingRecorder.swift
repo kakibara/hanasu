@@ -56,11 +56,23 @@ final class MeetingRecorder: ObservableObject {
     private var levelTimer: Timer?
     private var recordingStartedAt = Date()
 
+    // 要件: REQ-MTG-043
+    /// 記録中に最初にスリープした時点（確認に答えるまで持つ）
+    private var sleepPoint: MeetingSleepPoint?
+    /// 今スリープしている間の、スリープした時刻
+    private var sleptAt: Date?
+    /// 記録を始めてから、スリープしていた時間の合計（秒。DEC-MTG-089）
+    private var sleepGap: Double = 0
+    /// スリープのあとの確認を出している
+    private var askingAboutSleep = false
+    private var powerObservers: [NSObjectProtocol] = []
+
     /// reloadMeetings を呼ぶたびに増やす。古い読み込みの結果が、新しいものを上書きしないための番号
     private var reloadGeneration = 0
 
     init() {
         reloadMeetings()
+        observeSleep()
     }
 
     var isRecording: Bool { state == .recording }
@@ -85,6 +97,9 @@ final class MeetingRecorder: ObservableObject {
         liveLines = []
         volatileMe = ""
         volatileOthers = ""
+        sleepPoint = nil
+        sleptAt = nil
+        sleepGap = 0
         // prepare の途中で失敗したときに止めるための、まだ meTranscriber / othersTranscriber に入れていない文字起こし
         var preparing: [ChannelTranscriber] = []
 
@@ -174,8 +189,11 @@ final class MeetingRecorder: ObservableObject {
         }
     }
 
-    func stop() async {
+    // 要件: REQ-MTG-043
+    /// 記録を止めて後処理に進む。cutAt を渡すと、そのスリープした時点で記録が終わったものとして、それより後に録った分を除く
+    func stop(cutAt point: MeetingSleepPoint? = nil) async {
         guard state == .recording, var meeting = current, let me = meTranscriber, let others = othersTranscriber else { return }
+        sleepPoint = nil
         NSSound(named: "Pop")?.play()
         setState(.processing(tr("文字起こしを確定しています…")))
         await teardownAudio()
@@ -185,8 +203,28 @@ final class MeetingRecorder: ObservableObject {
         meTranscriber = nil
         othersTranscriber = nil
 
-        meeting.duration = Date().timeIntervalSince(meeting.startedAt)
+        // 設計判断: DEC-MTG-089
+        meeting.duration = elapsed
         meeting.status = .processing
+        // 設計判断: DEC-MTG-094
+        // オフレコのまま止めたら、記録の終わりまでをオフレコにする
+        if let index = meeting.offRecord?.lastIndex(where: { $0.end == nil }) {
+            meeting.offRecord?[index].end = meeting.duration
+        }
+        if let point {
+            // 設計判断: DEC-MTG-088
+            MeetingSleepCut.apply(to: &meeting, point: point)
+            for channel in [MeetingChannel.me, .others] {
+                let offset = channel == .me ? me.audioStartOffset : others.audioStartOffset
+                do {
+                    try await MeetingSleepCut.trimAudio(
+                        at: MeetingStore.audioURL(for: meeting, channel: channel), toSeconds: point.cutoff(for: channel) - offset)
+                } catch {
+                    appLog.error("meeting audio trim failed (\(channel.rawValue, privacy: .public)): \(error.localizedDescription, privacy: .public)")
+                }
+            }
+            appLog.notice("meeting cut at sleep: \(point.elapsed, privacy: .public)s")
+        }
         current = meeting
         var transcriptionFailed = false
         if let engine = batchEngine {
@@ -199,6 +237,10 @@ final class MeetingRecorder: ObservableObject {
                 meeting.errorMessage = error
                 transcriptionFailed = true
             }
+        }
+        if let point {
+            mine = MeetingSleepCut.phrases(mine, before: point)
+            theirs = MeetingSleepCut.phrases(theirs, before: point)
         }
         // 文字起こしに失敗したときは、音声を残さない設定でも消さない（あとで文字起こしし直せるように）
         meeting = await process(meeting, me: mine, others: theirs, keepAudio: transcriptionFailed)
@@ -368,12 +410,53 @@ final class MeetingRecorder: ObservableObject {
             // 要件: REQ-MTG-027
             updated.applyMinutes(result)
             updated.errorMessage = nil
+            // 設計判断: DEC-MTG-092
+            updated.minutesOutdated = nil
         } catch {
             updated.errorMessage = tr("議事録を作れませんでした: %@", "\(error.localizedDescription)")
         }
         try? MeetingStore.save(updated)
         reloadMeetings()
         setState(.idle)
+    }
+
+    // MARK: - 議事録に使う発言（MinutesSelection.swift）
+
+    // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+    /// 議事録に使う発言の選び方を変えられるか。記録中・処理中・議事録の作り直し中の会議は変えない（処理の保存で消えるため）
+    func canEditMinutesSelection(_ meeting: Meeting) -> Bool {
+        meeting.id != current?.id && meeting.id != regeneratingID && meeting.status != .processing
+    }
+
+    // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+    // 設計判断: DEC-MTG-090, DEC-MTG-092
+    /// 議事録に使う発言の選び方を変えて保存する（議事録は作り直さない）
+    func changeMinutesSelection(_ meeting: Meeting, _ change: (inout Meeting) -> Void) {
+        guard canEditMinutesSelection(meeting) else { return }
+        update(meeting, change)
+    }
+
+    // 要件: REQ-MTG-046
+    /// 記録中のオフレコの区間（終わっていないもの）。オフレコでなければ nil
+    var openOffRecord: OffRecordSpan? {
+        guard state == .recording else { return nil }
+        return current?.offRecord?.last(where: { $0.end == nil })
+    }
+
+    // 要件: REQ-MTG-046
+    // 設計判断: DEC-MTG-094
+    /// 記録中に「オフレコ」を始める・終える。押すたびに保存する
+    func toggleOffRecord() {
+        guard state == .recording, var meeting = current else { return }
+        var spans = meeting.offRecord ?? []
+        if let index = spans.lastIndex(where: { $0.end == nil }) {
+            spans[index].end = max(spans[index].start, elapsed)
+        } else {
+            spans.append(OffRecordSpan(start: elapsed))
+        }
+        meeting.offRecord = spans
+        current = meeting
+        try? MeetingStore.save(meeting)
     }
 
     /// リマインダーに登録したアクションアイテムに印を付ける（古い議事録は、読み取った一覧ごと保存する）
@@ -421,9 +504,10 @@ final class MeetingRecorder: ObservableObject {
 
     // MARK: - メモと「ここ重要」の印（MeetingNotes.swift）
 
-    /// 録音開始からの経過秒数
+    // 設計判断: DEC-MTG-089
+    /// 録音開始からの経過秒数。スリープしていた時間は除く（音声と文字起こしの時刻に合わせる）
     var elapsed: Double {
-        current.map { Date().timeIntervalSince($0.startedAt) } ?? 0
+        current.map { max(0, Date().timeIntervalSince($0.startedAt) - sleepGap) } ?? 0
     }
 
     // 要件: REQ-MTG-011
@@ -584,6 +668,74 @@ final class MeetingRecorder: ObservableObject {
         micEngine?.inputNode.removeTap(onBus: 0)
         micEngine?.stop()
         micEngine = nil
+    }
+
+    // MARK: - スリープ
+
+    // 要件: REQ-MTG-043
+    // 設計判断: DEC-MTG-087
+    private func observeSleep() {
+        let center = NSWorkspace.shared.notificationCenter
+        powerObservers = [
+            center.addObserver(forName: NSWorkspace.willSleepNotification, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.systemWillSleep() }
+            },
+            center.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.systemDidWake() }
+            },
+        ]
+    }
+
+    // 設計判断: DEC-MTG-087, DEC-MTG-088
+    /// スリープする直前。記録中なら、どこまで録ったかを覚える（答える前に繰り返しスリープしたら、最初の時点のまま）
+    private func systemWillSleep() {
+        guard state == .recording, let me = meTranscriber, let others = othersTranscriber else { return }
+        let now = Date()
+        sleptAt = now
+        guard sleepPoint == nil else { return }
+        var ends: [MeetingChannel: Double] = [:]
+        ends[.me] = me.audioEnd
+        ends[.others] = others.audioEnd
+        sleepPoint = MeetingSleepPoint(at: now, elapsed: elapsed, audioEnds: ends)
+        appLog.notice("meeting: system will sleep while recording (\(self.elapsed, privacy: .public)s)")
+    }
+
+    // 設計判断: DEC-MTG-087, DEC-MTG-089
+    /// スリープから戻った。スリープしていた時間を経過時間から除き、記録中なら止めるか続けるかを聞く
+    private func systemDidWake() {
+        if let sleptAt {
+            sleepGap += max(0, Date().timeIntervalSince(sleptAt))
+            self.sleptAt = nil
+        }
+        guard state == .recording, let point = sleepPoint, !askingAboutSleep else { return }
+        appLog.notice("meeting: woke while recording; asking whether to stop at the sleep point")
+        // 通知を返してから出す（runModal の間、ほかの通知も受け取れるように）
+        Task { @MainActor [weak self] in await self?.askAboutSleep(point) }
+    }
+
+    // 要件: REQ-MTG-043
+    // 設計判断: DEC-MTG-087
+    /// 「スリープ前までで止める」か「記録を続ける」かを聞く。確認を出している間も記録は続ける
+    private func askAboutSleep(_ point: MeetingSleepPoint) async {
+        askingAboutSleep = true
+        let time = DateFormatter.localizedString(from: point.at, dateStyle: .none, timeStyle: .short)
+        let alert = NSAlert()
+        alert.messageText = tr("会議の記録中に Mac がスリープしました")
+        alert.informativeText = tr("%@ にスリープしてから、記録を続けています。スリープする前までで記録を止めるか、このまま記録を続けるかを選んでください。", time)
+        alert.addButton(withTitle: tr("スリープ前までで止める"))
+        alert.addButton(withTitle: tr("記録を続ける"))
+        NSApp.activate()
+        let response = alert.runModal()
+        askingAboutSleep = false
+        // 確認の間に、ほかの手段で記録を止めていたら何もしない
+        guard state == .recording, let latest = sleepPoint else { return }
+        if response == .alertFirstButtonReturn {
+            appLog.notice("meeting: stopping at the sleep point")
+            await stop(cutAt: latest)
+        } else {
+            appLog.notice("meeting: continuing after sleep")
+            sleepPoint = nil
+        }
     }
 
     // MARK: - 音量と注意
