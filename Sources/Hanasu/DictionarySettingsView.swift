@@ -192,7 +192,7 @@ struct DictionarySuggestionSection: View {
         } header: {
             Text(tr("辞書の候補を探す"))
         } footer: {
-            Text(tr("固有名詞や誤認識しやすい語を AI が挙げます。選んだものだけを辞書に追加し、自動では追加しません。会議の中身を送る外部の送り先は、「AI」タブで会議に選んだ AI（Gemini か Claude）だけです。音声入力の結果はメモリ上だけにあり、アプリを終了すると消えます。"))
+            Text(tr("固有名詞や誤認識しやすい語を AI が挙げます。選んだものだけを辞書に追加し、自動では追加しません。会議の中身は、設定の「AI」で会議に選んだ AI にだけ渡します（「ローカル」か「Apple」なら、この Mac の外には送りません）。音声入力の結果はメモリ上だけにあり、アプリを終了すると消えます。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
         .onAppear { meetingCount = DictionarySuggester.recentMeetings().count }

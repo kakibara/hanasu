@@ -511,7 +511,7 @@ final class DictationHistoryStore: ObservableObject {
 
     // 要件: REQ-DIC-061
     // 設計判断: DEC-DIC-076
-    /// 原文から AI（音声入力に選んだ Gemini か Claude）を呼び直し、結果でこの履歴を上書きする。失敗したときは履歴を変えずにエラーを投げる
+    /// 原文から AI（音声入力に選んだもの）を呼び直し、結果でこの履歴を上書きする。失敗したときは履歴を変えずにエラーを投げる
     @discardableResult
     func retry(_ id: UUID, mode: DictationHistoryEntry.Mode, client overrideClient: TextAIClient? = nil) async throws
         -> DictationHistoryEntry

@@ -13,7 +13,7 @@ struct ScreenContextSettingsSection: View {
         Section {
             Toggle(isOn: $settings.enabled) {
                 Text(tr("画面の文脈を AI に渡す"))
-                Text(tr("録音を始めたときに、前面のウインドウのタイトルと、入力欄のカーソルの前後の文章（それぞれ最大 %@ 文字）を読み取ります。固有名詞の表記や書き方、話の流れを合わせるための参考として、話した内容と一緒に AI（Gemini か Claude）に送ります（翻訳でも使います）。パスワード欄と下の除外アプリは読みません。読み取った文章は保存しません。", "\(ScreenContextReader.maxChars)"))
+                Text(tr("録音を始めたときに、前面のウインドウのタイトルと、入力欄のカーソルの前後の文章（それぞれ最大 %@ 文字）を読み取ります。固有名詞の表記や書き方、話の流れを合わせるための参考として、話した内容と一緒に AI（設定の「AI」で音声入力に選んだもの）に渡します（翻訳でも使います）。パスワード欄と下の除外アプリは読みません。読み取った文章は保存しません。", "\(ScreenContextReader.maxChars)"))
             }
             if settings.enabled && !accessibilityTrusted {
                 HStack(alignment: .firstTextBaseline) {

@@ -2,7 +2,7 @@ import SwiftUI
 
 // 要件: REQ-COM-030
 // 設計判断: DEC-COM-062, DEC-COM-066, DEC-COM-067
-/// 設定の「AI」タブで、用途の AI を「ローカル」にしたときの欄。モデルを選び、ダウンロード・削除し、ライセンスを見せる
+/// 設定の「AI」で、用途の AI を「ローカル」にしたときの欄。モデルを選び、ダウンロード・削除し、ライセンスを見せる
 struct LocalModelChoice: View {
     @Binding var model: LocalLLMModel
     @ObservedObject var store = LocalLLMStore.shared
@@ -70,7 +70,7 @@ struct LocalModelChoice: View {
 
 // 要件: REQ-COM-031
 // 設計判断: DEC-COM-071, DEC-COM-072
-/// 設定の「AI」タブで、用途の AI を「Apple」にしたときの欄。使えるか（使えなければ理由）を出す
+/// 設定の「AI」で、用途の AI を「Apple」にしたときの欄。使えるか（使えなければ理由）を出す
 struct AppleFMChoice: View {
     @State private var availability = AppleFMAvailability.check()
 

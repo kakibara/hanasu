@@ -17,7 +17,7 @@ struct SnippetsSettingsView: View {
     // （サイドバーの項目も見えなくなる）。付けなくても VStack の中で折り返して出る。
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(tr("決まった言葉（起動フレーズ）だけを話すと、登録した文章をそのまま入力します。本文は Gemini に送らず、翻訳して入力するときも訳しません。"))
+            Text(tr("決まった言葉（起動フレーズ）だけを話すと、登録した文章をそのまま入力します。本文は AI に渡さず、翻訳して入力するときも訳しません。"))
                 .font(.caption).foregroundStyle(.secondary)
             HStack(alignment: .top, spacing: 12) {
                 list
