@@ -1,5 +1,28 @@
 # Changelog
 
+## [v1.6.0](https://github.com/kakibara/hanasu/compare/v1.5.0...v1.6.0) - 2026-11-06
+
+- 初回起動のオンボーディングと既定の AI の選択を足す by @kakibara in https://github.com/kakibara/hanasu/pull/53
+- 録音中の HUD に、どのエンジンでもマイクの音量を出す by @kakibara in https://github.com/kakibara/hanasu/pull/54
+- PR をマージする前に不具合がないことを確かめるスキルを足す by @kakibara in https://github.com/kakibara/hanasu/pull/52
+- 貼り付けが届かなかったときは、最新の結果をクリップボードに残す by @kakibara in https://github.com/kakibara/hanasu/pull/56
+- README を今の実装に合わせ、ローカルのモデルに Qwen3.5-4B を足し、Gemma 4 E4B を勧める by @kakibara in https://github.com/kakibara/hanasu/pull/57
+- README に、貼り付けが届かなかったときの扱いを足す by @kakibara in https://github.com/kakibara/hanasu/pull/58
+- Mac の既定の AI をローカルの Gemma にし、モデルがないときはダウンロードを尋ねる by @kakibara in https://github.com/kakibara/hanasu/pull/59
+- Release for v1.6.0 by @github-actions[bot] in https://github.com/kakibara/hanasu/pull/55
+- 会議の記録中に、それまでの会話をもとに AI とチャットできるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/68
+- PR #65 の判断事項 12 件の対応（#65 に積む） by @kakibara in https://github.com/kakibara/hanasu/pull/69
+- 会議アプリから会議の名前を読み取り、議事録のタイトルにする by @kakibara in https://github.com/kakibara/hanasu/pull/66
+- Mac の設定画面を、左のサイドバーで項目を切り替える形にする by @kakibara in https://github.com/kakibara/hanasu/pull/70
+- 包括レビューに基づく改善（セキュリティ・パフォーマンス・UI/UX） by @kakibara in https://github.com/kakibara/hanasu/pull/65
+- 議事録のテンプレートに名前を付けて保存・管理できるようにする（Mac 版） by @kakibara in https://github.com/kakibara/hanasu/pull/67
+- 起動時とメニューからアップデートを確かめ、ユーザーが選んだときだけ入れ替える by @kakibara in https://github.com/kakibara/hanasu/pull/71
+- AI へのプロンプトを 17 言語にし、文字起こしの言語で切り替える（多言語化 1/3） by @kakibara in https://github.com/kakibara/hanasu/pull/62
+- ライセンスを PolyForm Noncommercial と追加の許可にし、大きい会社には商用ライセンスを求める by @kakibara in https://github.com/kakibara/hanasu/pull/72
+- Mac の表示を 17 言語にし、システムの言語で切り替える（多言語化 2/3） by @kakibara in https://github.com/kakibara/hanasu/pull/63
+- Windows の表示を 17 言語にし、Windows の表示の言語で切り替える（多言語化 3/3） by @kakibara in https://github.com/kakibara/hanasu/pull/64
+- README を 15 の言語に訳し、すべての README に言語の切り替えを付ける by @kakibara in https://github.com/kakibara/hanasu/pull/61
+
 ## [v1.6.0](https://github.com/kakibara/hanasu/compare/v1.5.0...v1.6.0) - 2026-11-04
 
 - 初回起動のオンボーディングと既定の AI の選択を足す by @kakibara in https://github.com/kakibara/hanasu/pull/53
