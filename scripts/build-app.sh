@@ -30,7 +30,17 @@ if [[ ! -f "$BUNDLE/Prompts/ja.json" && ! -f "$BUNDLE/Contents/Resources/Prompts
   echo "error: $BUNDLE にプロンプトがありません" >&2
   exit 1
 fi
+# 要件: REQ-COM-060
+# UI の文字列の訳（String Catalog）。ないとすべて日本語のまま出てしまうので止める
+if [[ ! -f "$BUNDLE/Localizable.xcstrings" && ! -f "$BUNDLE/Contents/Resources/Localizable.xcstrings" ]]; then
+  echo "error: $BUNDLE に Localizable.xcstrings がありません" >&2
+  exit 1
+fi
 cp -R "$BUNDLE" "$APP/Contents/Resources/"
+# 要件: REQ-COM-060
+# 設計判断: DEC-COM-166
+# 言語ごとの .lproj（権限を求めるときの説明の訳）。.lproj があることで、macOS がこのアプリの表示の言語を選べる
+python3 scripts/i18n-strings.py infoplist "$APP/Contents/Resources"
 # 要件: REQ-COM-030
 # 設計判断: DEC-COM-061
 # ローカルの LLM を動かす llama-server（llama.cpp）。SHA-256 を確かめてから入れる（ライセンスは llama/LICENSE）

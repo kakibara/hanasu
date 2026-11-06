@@ -18,6 +18,7 @@ Hanasu（音声入力と会議の記録。Mac 版は `Sources/Hanasu`、Windows 
 - **UI の文字列か AI へのプロンプトを足す・変えるときは、同じ変更の中で 17 言語すべての訳を入れる。** 日本語だけ・英語だけで入れない。
 - 手順は [.claude/skills/i18n/SKILL.md](.claude/skills/i18n/SKILL.md)。訳は [.claude/agents/i18n.md](.claude/agents/i18n.md) のエージェントに任せてよい。
 - プロンプトは `Sources/Hanasu/Resources/Prompts/<言語>.json`（Mac と Windows で共有）。コードにプロンプトの文面を書かない。
+- Mac の UI の文字列は `tr("日本語の原文")` で書き、`python3 scripts/i18n-strings.py sync` でカタログ（`Localizable.xcstrings`）にそろえて訳を入れる。
 - `python3 scripts/check-i18n.py` をエラーなしで通す（CI でも動く）。
 
 ## 文書の役割

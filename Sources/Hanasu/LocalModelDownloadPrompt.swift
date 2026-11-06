@@ -23,7 +23,7 @@ enum LocalModelDownloadPrompt {
 
         var errorDescription: String? {
             switch self {
-            case .downloadFailed(let model, let message): "ローカルのモデル「\(model.name)」をダウンロードできませんでした: \(message)"
+            case .downloadFailed(let model, let message): tr("ローカルのモデル「%@」をダウンロードできませんでした: %@", "\(model.name)", "\(message)")
             }
         }
     }
@@ -80,13 +80,13 @@ enum LocalModelDownloadPrompt {
     /// 「ダウンロードしますか」のダイアログ。ダウンロードするなら true
     private static func ask(_ model: LocalLLMModel, work: String, whenSkipped: String) -> Bool {
         let alert = NSAlert()
-        alert.messageText = "ローカルのモデルをダウンロードしますか？"
-        alert.informativeText = """
-            \(work)に使うローカルのモデル「\(model.name)」（\(model.sizeLabel)）が、まだこの Mac にありません。\
-            ダウンロードすると、終わったら続けて\(work)を始めます。ダウンロードしないときは、\(whenSkipped)。
-            """
-        alert.addButton(withTitle: "ダウンロードする")
-        alert.addButton(withTitle: "今回はしない")
+        alert.messageText = tr("ローカルのモデルをダウンロードしますか？")
+        alert.informativeText = tr("""
+            %@に使うローカルのモデル「%@」（%@）が、まだこの Mac にありません。\
+            ダウンロードすると、終わったら続けて%@を始めます。ダウンロードしないときは、%@。
+            """, "\(work)", "\(model.name)", "\(model.sizeLabel)", "\(work)", "\(whenSkipped)")
+        alert.addButton(withTitle: tr("ダウンロードする"))
+        alert.addButton(withTitle: tr("今回はしない"))
         NSApp.activate()
         return alert.runModal() == .alertFirstButtonReturn
     }
@@ -94,7 +94,7 @@ enum LocalModelDownloadPrompt {
     private static func showProgress(_ model: LocalLLMModel, work: String) {
         let hosting = NSHostingController(rootView: LocalModelDownloadView(model: model, work: work))
         let window = NSWindow(contentViewController: hosting)
-        window.title = "モデルのダウンロード"
+        window.title = tr("モデルのダウンロード")
         // 閉じるボタンは付けない（止めるときは「中止」）
         window.styleMask = [.titled]
         window.isReleasedWhenClosed = false
@@ -126,13 +126,13 @@ struct LocalModelDownloadView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label("\(model.name) をダウンロードしています", systemImage: "arrow.down.circle")
+            Label(tr("%@ をダウンロードしています", "\(model.name)"), systemImage: "arrow.down.circle")
                 .font(.headline)
-            Text("終わったら、続けて\(work)を始めます。").font(.callout).foregroundStyle(.secondary)
+            Text(tr("終わったら、続けて%@を始めます。", "\(work)")).font(.callout).foregroundStyle(.secondary)
             progress
             HStack {
                 Spacer()
-                Button("中止") { store.cancelDownload(model) }
+                Button(tr("中止")) { store.cancelDownload(model) }
                     .keyboardShortcut(.cancelAction)
             }
         }
@@ -144,14 +144,14 @@ struct LocalModelDownloadView: View {
         switch store.status(model) {
         case .downloading(let fraction?):
             ProgressView(value: fraction)
-            Text("\(Int(fraction * 100))%（\(byteLabel(fraction)) / \(model.sizeLabel)）")
+            Text(tr("%@%%（%@ / %@）", "\(Int(fraction * 100))", byteLabel(fraction), model.sizeLabel))
                 .font(.caption).monospacedDigit().foregroundStyle(.secondary)
         case .downloading(nil):
             ProgressView().progressViewStyle(.linear)
-            Text("ダウンロードしたファイルを確かめています…").font(.caption).foregroundStyle(.secondary)
+            Text(tr("ダウンロードしたファイルを確かめています…")).font(.caption).foregroundStyle(.secondary)
         default:
             ProgressView(value: 0)
-            Text("準備しています…").font(.caption).foregroundStyle(.secondary)
+            Text(tr("準備しています…")).font(.caption).foregroundStyle(.secondary)
         }
     }
 

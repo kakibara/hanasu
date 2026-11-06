@@ -10,20 +10,20 @@ struct LocalModelChoice: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Picker("ローカルのモデル", selection: $model) {
+            Picker(tr("ローカルのモデル"), selection: $model) {
                 ForEach(LocalLLMModel.allCases) { model in
-                    Text("\(model.name)（\(model.sizeLabel)）\(model.isRecommended ? "・おすすめ" : "")").tag(model)
+                    Text(tr("%@（%@）", model.name, model.sizeLabel) + (model.isRecommended ? tr("・おすすめ") : "")).tag(model)
                 }
             }
             Text(model.summary).font(.caption).foregroundStyle(.secondary)
             status
             HStack(spacing: 4) {
                 Text(model.licenseNote)
-                Link("ライセンス", destination: model.licenseURL)
+                Link(tr("ライセンス"), destination: model.licenseURL)
             }
             .font(.caption)
             .foregroundStyle(model == .lfm25JP ? Color.orange : Color.secondary)
-            Text("文章はこの Mac の中だけで処理し、ネットには送りません。初めて使うときはモデルの読み込みに数十秒かかります。")
+            Text(tr("文章はこの Mac の中だけで処理し、ネットには送りません。初めて使うときはモデルの読み込みに数十秒かかります。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }
@@ -32,9 +32,9 @@ struct LocalModelChoice: View {
         switch store.status(model) {
         case .notDownloaded:
             HStack {
-                Text("まだダウンロードしていません").font(.caption).foregroundStyle(.orange)
+                Text(tr("まだダウンロードしていません")).font(.caption).foregroundStyle(.orange)
                 Spacer()
-                Button("ダウンロード（\(model.sizeLabel)）") { store.ensureDownloaded(model) }
+                Button(tr("ダウンロード（%@）", "\(model.sizeLabel)")) { store.ensureDownloaded(model) }
             }
         case .downloading(let fraction):
             HStack {
@@ -43,26 +43,26 @@ struct LocalModelChoice: View {
                     Text("\(Int(fraction * 100))%").font(.caption).monospacedDigit()
                 } else {
                     ProgressView().controlSize(.small)
-                    Text("確かめています…").font(.caption)
+                    Text(tr("確かめています…")).font(.caption)
                 }
-                Button("中止") { store.cancelDownload(model) }
+                Button(tr("中止")) { store.cancelDownload(model) }
             }
         case .downloaded:
             HStack {
-                Label("ダウンロード済み", systemImage: "checkmark.circle.fill").font(.caption).foregroundStyle(.green)
+                Label(tr("ダウンロード済み"), systemImage: "checkmark.circle.fill").font(.caption).foregroundStyle(.green)
                 Spacer()
-                Button("削除…") { confirmDelete = true }
-                    .confirmationDialog("ローカルのモデル「\(model.name)」を削除しますか？", isPresented: $confirmDelete) {
-                        Button("削除", role: .destructive) { store.delete(model) }
+                Button(tr("削除…")) { confirmDelete = true }
+                    .confirmationDialog(tr("ローカルのモデル「%@」を削除しますか？", "\(model.name)"), isPresented: $confirmDelete) {
+                        Button(tr("削除"), role: .destructive) { store.delete(model) }
                     } message: {
-                        Text("もう一度使うには、ダウンロードし直します（\(model.sizeLabel)）。")
+                        Text(tr("もう一度使うには、ダウンロードし直します（%@）。", "\(model.sizeLabel)"))
                     }
             }
         case .failed(let message):
             HStack {
                 Text("⚠️ \(message)").font(.caption).foregroundStyle(.red)
                 Spacer()
-                Button("もう一度") { store.ensureDownloaded(model) }
+                Button(tr("もう一度")) { store.ensureDownloaded(model) }
             }
         }
     }
@@ -79,9 +79,9 @@ struct AppleFMChoice: View {
             if let reason = availability.reason {
                 Text("⚠️ \(reason)").font(.caption).foregroundStyle(.orange)
             } else if let url = availability.executableURL {
-                Label("使えます（\(url.path)）", systemImage: "checkmark.circle.fill").font(.caption).foregroundStyle(.green)
+                Label(tr("使えます（%@）", "\(url.path)"), systemImage: "checkmark.circle.fill").font(.caption).foregroundStyle(.green)
             }
-            Text("macOS 27 の Apple Intelligence の、この Mac の中のモデルを fm（Foundation Models の CLI）で使います。Private Cloud Compute は使わず、文章をネットに送りません。初めて使う前に、ターミナルで sudo fm license を実行して利用条件に同意する必要があるかもしれません。文脈が短いので、長い会議は分けてまとめます。")
+            Text(tr("macOS 27 の Apple Intelligence の、この Mac の中のモデルを fm（Foundation Models の CLI）で使います。Private Cloud Compute は使わず、文章をネットに送りません。初めて使う前に、ターミナルで sudo fm license を実行して利用条件に同意する必要があるかもしれません。文脈が短いので、長い会議は分けてまとめます。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
         .onAppear { availability = AppleFMAvailability.check() }

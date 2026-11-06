@@ -55,9 +55,24 @@ README と同じ 17 言語。並びも同じにする（`scripts/check-i18n.py` 
 - エージェントは自分の言語のファイルだけを直し、`python3 scripts/check-i18n.py` を通してから返す。ほかのファイル・ビルド・コミットは任せない（並べて走らせると取り合うため）。
 - 戻ってきたら、親が `--show-prompts --prompt-language <言語>` で 1 つ 2 つ目で確かめる。
 
-## UI の文字列
+## UI の文字列（Mac）
 
-UI の文字列の多言語化は FUT-012（[docs/roadmap.md](../../../docs/roadmap.md)）で進めている。入ったら、この節に手順（Mac の String Catalog、Windows の `.resx`）を書く。
+### 仕組み
+- 利用者に見える文字列は `tr("日本語の原文")`、補間があれば `tr("…%@…", 値1, 値2)`（`Sources/Hanasu/L10n.swift`。DEC-COM-165）。`Text("…")`・`Button("…")` に日本語を直接書かない（`Text(tr("…"))`）。
+- 訳は `Sources/Hanasu/Resources/Localizable.xcstrings`（String Catalog。キーは日本語の原文）。アプリは起動後に JSON のまま読む。表示の言語は `UILanguage.current`（システムの言語。DEC-COM-166）。
+- 訳さないもの: 開発用の CLI（`*CLI.swift`・`main.swift`・自己テスト）の出力、ログ（`appLog`・`print`）、言語の決まりに使う日本語の語（行末に `// skip-tr` を書く。例: 会議への質問の「先週」、スニペットのフィラー）。
+- 権限を求めるときの説明（`Resources/Info.plist` の `…UsageDescription`）もカタログのキーになる。`build-app.sh` が `<言語>.lproj/InfoPlist.strings` を作る。
+
+### 文字列を足す・変える手順
+1. コードに `tr("日本語の原文")` と書く（文の一部をつなぎ合わせず、文ごとに 1 つのキーにする。数や名前は `%@` で入れる）。
+2. `python3 scripts/i18n-strings.py sync`（カタログのキーをコードにそろえる。原文を変えたら、古いキーは消え、新しいキーが足される）。
+3. 訳を入れる: `python3 scripts/i18n-strings.py export <言語> > <作業用>/<言語>.json`（訳のないキーが値 "" で出る）→ 値を訳す → `python3 scripts/i18n-strings.py import <言語> <作業用>/<言語>.json`。16 言語（ja 以外）すべてに入れる。量が多ければ i18n エージェントに、言語を分けて並べて任せる（作業用のファイルだけを書かせ、import は親がまとめてする。カタログは 1 つのファイルなので、並べて import すると取り合う）。
+4. 訳の決まり: Apple のその言語の用語（設定・アクセシビリティ・メニューバーなど）に合わせる。`%@` などの数は原文と同じ（順番を変えるなら全部 `%1$@` の形）。製品名・キーの記号（⌥ ⌘）・ファイル名は変えない。「日本語」「和訳」「日本語に統一」はどの言語でも日本語の意味のまま。見本のデータ（署名・住所）はその言語の架空のものにする。
+5. 確かめる（下の「確かめる」）。画面は `.build/debug/Hanasu --render-… <出力> --ui-language <言語>` で PNG にして見る。
+
+## UI の文字列（Windows）
+
+Windows 版の UI の文字列の多言語化は FUT-012（[docs/roadmap.md](../../../docs/roadmap.md)）で進めている。入ったら、この節に手順（`.resx`）を書く。
 
 ## 確かめる
 
@@ -65,6 +80,7 @@ UI の文字列の多言語化は FUT-012（[docs/roadmap.md](../../../docs/road
 python3 scripts/check-i18n.py --summary
 ```
 - キーの漏れ・余分、空の値、`${…}`・タグ・JSON のキー・残す記号の食い違い、話者のラベルと「なし」のずれがあれば `error:` で終了コード 1。英語と同じままの値は `warning:`（訳し忘れでないか見る）。
+- Mac の UI では、`tr("…")` とカタログのキーのずれ、訳のないキー、`%@` の数の違い、`tr()` で包んでいない日本語の文字列もエラーにする。
 
 ```bash
 swift build && .build/debug/Hanasu --show-prompts --prompt-language en

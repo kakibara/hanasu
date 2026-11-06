@@ -10,10 +10,10 @@ enum LocalLLMError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .http(let status, let message):
-            "ローカルの LLM がエラーを返しました（\(status)）" + (message.isEmpty ? "" : ": \(message)")
-        case .truncated: "ローカルの LLM の応答が長さの上限で切れたため、使いませんでした"
-        case .emptyResponse: "ローカルの LLM から結果が返りませんでした"
-        case .invalidResponse: "ローカルの LLM の応答を読み取れませんでした"
+            tr("ローカルの LLM がエラーを返しました（%@）", "\(status)") + (message.isEmpty ? "" : ": \(message)")
+        case .truncated: tr("ローカルの LLM の応答が長さの上限で切れたため、使いませんでした")
+        case .emptyResponse: tr("ローカルの LLM から結果が返りませんでした")
+        case .invalidResponse: tr("ローカルの LLM の応答を読み取れませんでした")
         }
     }
 }
@@ -176,8 +176,8 @@ struct LocalLLMClient {
             .map { $0.replacingOccurrences(of: "[ \t]+$", with: "", options: .regularExpression) }
             .joined(separator: "\n")
         let source = input.trimmingCharacters(in: .whitespacesAndNewlines)
-        if text.hasPrefix("「"), text.hasSuffix("」"), !source.hasPrefix("「"),
-           text.dropFirst().dropLast().allSatisfy({ $0 != "「" && $0 != "」" }) {
+        if text.hasPrefix("「"), text.hasSuffix("」"), !source.hasPrefix("「"),  // skip-tr（照らし合わせ・区切りに使う記号）
+           text.dropFirst().dropLast().allSatisfy({ $0 != "「" && $0 != "」" }) {  // skip-tr（照らし合わせ・区切りに使う記号）
             text = String(text.dropFirst().dropLast())
         }
         return text

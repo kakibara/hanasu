@@ -15,17 +15,17 @@ enum TranscriptionEngine: String, CaseIterable, Identifiable, Sendable {
 
     var label: String {
         switch self {
-        case .apple: "Mac 標準（SpeechAnalyzer）"
-        case .whisper: "Whisper（この Mac の上で動かす）"
+        case .apple: tr("Mac 標準（SpeechAnalyzer）")
+        case .whisper: tr("Whisper（この Mac の上で動かす）")
         // 設計判断: DEC-COM-033
-        case .gemini: "Gemini（音声を Google に送る）"
+        case .gemini: tr("Gemini（音声を Google に送る）")
         }
     }
 
     /// HUD などに出す短い名前
     var shortName: String {
         switch self {
-        case .apple: "Mac 標準"
+        case .apple: tr("Mac 標準")
         case .whisper: "Whisper"
         case .gemini: "Gemini"
         }
@@ -68,14 +68,14 @@ enum WhisperModel: String, CaseIterable, Identifiable, Sendable {
     }
 
     /// 「約 485 MB」のような表記
-    var sizeLabel: String { "約 " + ByteCountFormatter.string(fromByteCount: approximateBytes, countStyle: .file) }
+    var sizeLabel: String { tr("約 ") + ByteCountFormatter.string(fromByteCount: approximateBytes, countStyle: .file) }
 
     var label: String {
         switch self {
-        case .tiny: "tiny（\(sizeLabel)・速いが粗い）"
-        case .base: "base（\(sizeLabel)）"
-        case .small: "small（\(sizeLabel)・バランス）"
-        case .largeV3Turbo: "large-v3-turbo（\(sizeLabel)・高精度）"
+        case .tiny: tr("tiny（%@・速いが粗い）", "\(sizeLabel)")
+        case .base: tr("%@（%@）", "base", sizeLabel)
+        case .small: tr("small（%@・バランス）", "\(sizeLabel)")
+        case .largeV3Turbo: tr("large-v3-turbo（%@・高精度）", "\(sizeLabel)")
         }
     }
 }
@@ -247,11 +247,11 @@ enum BatchTranscriptionError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .whisperModelMissing(let model):
-            "Whisper のモデル（\(model.rawValue)）がまだダウンロードされていません。設定の「一般」→「文字起こし」でダウンロードしてください"
+            tr("Whisper のモデル（%@）がまだダウンロードされていません。設定の「一般」→「文字起こし」でダウンロードしてください", "\(model.rawValue)")
         case .noCredentials:
-            "Gemini で文字起こしするには、Gemini の認証情報（設定の「AI」）が必要です"
+            tr("Gemini で文字起こしするには、Gemini の認証情報（設定の「AI」）が必要です")
         case .appleNotBatch:
-            "Mac 標準のエンジンは、まとめての文字起こしに使えません"
+            tr("Mac 標準のエンジンは、まとめての文字起こしに使えません")
         }
     }
 }

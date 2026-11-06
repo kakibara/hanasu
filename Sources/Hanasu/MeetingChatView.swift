@@ -52,7 +52,7 @@ final class MeetingChatModel: ObservableObject {
                 self.finish()
             } catch {
                 guard let self, self.pending?.token == token else { return }
-                self.error = "答えを作れませんでした: \(error.localizedDescription)"
+                self.error = tr("答えを作れませんでした: %@", "\(error.localizedDescription)")
                 self.finish()
             }
         }
@@ -147,7 +147,7 @@ struct MeetingChatView: View {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 12) {
                         if let batchEngineName, live {
-                            Label("記録中の文字起こしがないため（\(batchEngineName)）、メモと印だけをもとに答えます。",
+                            Label(tr("記録中の文字起こしがないため（%@）、メモと印だけをもとに答えます。", "\(batchEngineName)"),
                                   systemImage: "info.circle")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
@@ -165,10 +165,10 @@ struct MeetingChatView: View {
                         if model.running {
                             HStack(spacing: 8) {
                                 ProgressView().controlSize(.small)
-                                Text(live ? "ここまでの記録を読んでいます…" : "記録を読んでいます…")
+                                Text(live ? tr("ここまでの記録を読んでいます…") : tr("記録を読んでいます…"))
                                     .font(.callout).foregroundStyle(.secondary)
                                 Spacer()
-                                Button("止める") { model.cancel() }
+                                Button(tr("止める")) { model.cancel() }
                                     .controlSize(.small)
                             }
                         }
@@ -179,7 +179,7 @@ struct MeetingChatView: View {
                                     .foregroundStyle(.orange)
                                     .textSelection(.enabled)
                                 if model.lastQuestionFailed {
-                                    Button("もう一度") {
+                                    Button(tr("もう一度")) {
                                         if let current = material() { model.retry(material: current) }
                                     }
                                         .controlSize(.small)
@@ -208,11 +208,11 @@ struct MeetingChatView: View {
     /// 会話を始める前: 何ができるかと、1 回押すだけの質問
     private var emptyState: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label(live ? "ここまでの会話について AI に聞けます" : "この会議について AI に聞けます", systemImage: "sparkles")
+            Label(live ? tr("ここまでの会話について AI に聞けます") : tr("この会議について AI に聞けます"), systemImage: "sparkles")
                 .font(.headline)
             Text(live
-                 ? "聞き逃した話の確認や、決まったことの整理に。続けて質問すると、前のやりとりを踏まえて答えます。"
-                 : "文字起こしとメモをもとに答えます。続けて質問すると、前のやりとりを踏まえて答えます。")
+                 ? tr("聞き逃した話の確認や、決まったことの整理に。続けて質問すると、前のやりとりを踏まえて答えます。")
+                 : tr("文字起こしとメモをもとに答えます。続けて質問すると、前のやりとりを踏まえて答えます。"))
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -253,7 +253,7 @@ struct MeetingChatView: View {
     private var inputArea: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .bottom, spacing: 6) {
-                TextField(live ? "ここまでの会話について質問（↩ で送信）" : "この会議について質問（↩ で送信）",
+                TextField(live ? tr("ここまでの会話について質問（↩ で送信）") : tr("この会議について質問（↩ で送信）"),
                           text: $model.draft, axis: .vertical)
                     .textFieldStyle(.plain)
                     .lineLimit(1...5)
@@ -265,7 +265,7 @@ struct MeetingChatView: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundStyle(.secondary)
-                    .help("答えを待つのをやめる")
+                    .help(tr("答えを待つのをやめる"))
                 } else {
                     Button { send(model.draft) } label: {
                         Image(systemName: "arrow.up.circle.fill").font(.title2)
@@ -273,7 +273,7 @@ struct MeetingChatView: View {
                     .buttonStyle(.plain)
                     .foregroundStyle(canSend ? Color.accentColor : Color.secondary)
                     .disabled(!canSend)
-                    .help("送信（↩）")
+                    .help(tr("送信（↩）"))
                 }
             }
             .padding(.leading, 10)
@@ -289,10 +289,10 @@ struct MeetingChatView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 4)
                 if !model.messages.isEmpty {
-                    Button("新しい会話") { model.clear() }
+                    Button(tr("新しい会話")) { model.clear() }
                         .buttonStyle(.link)
                         .font(.caption)
-                        .help("今の会話を消して、新しく始める")
+                        .help(tr("今の会話を消して、新しく始める"))
                 }
             }
         }
@@ -302,7 +302,7 @@ struct MeetingChatView: View {
     // 設計判断: DEC-MTG-085
     private var privacyNote: String {
         let provider = settings.aiProvider(for: .meeting).name
-        return "文字起こしとメモを \(provider)（\(settings.textModel(for: .meeting))）に送ります。会話は保存しません。"
+        return tr("文字起こしとメモを %@（%@）に送ります。会話は保存しません。", "\(provider)", "\(settings.textModel(for: .meeting))")
     }
 
     private var canSend: Bool {
@@ -366,10 +366,10 @@ private struct MeetingChatMessageRow: View {
                     .fixedSize(horizontal: false, vertical: true)
                 HStack(spacing: 10) {
                     if let covered = message.coveredUntil {
-                        Text("\(Meeting.clock(covered)) までの記録から")
+                        Text(tr("%@ までの記録から", "\(Meeting.clock(covered))"))
                             .font(.caption2)
                             .foregroundStyle(.secondary)
-                            .help("答えを作ったときに渡した記録の範囲（発言 \(message.lineCount ?? 0) 件）")
+                            .help(tr("答えを作ったときに渡した記録の範囲（発言 %@ 件）", "\(message.lineCount ?? 0)"))
                     }
                     Spacer(minLength: 0)
                     Button {
@@ -381,16 +381,16 @@ private struct MeetingChatMessageRow: View {
                             copied = false
                         }
                     } label: {
-                        Label(copied ? "コピーしました" : "コピー", systemImage: copied ? "checkmark" : "doc.on.doc")
+                        Label(copied ? tr("コピーしました") : tr("コピー"), systemImage: copied ? "checkmark" : "doc.on.doc")
                     }
-                    .help("答えをコピーする")
+                    .help(tr("答えをコピーする"))
                     if let onSaveNote {
                         Button(action: onSaveNote) {
-                            Label(saved ? "メモに残しました" : "メモに残す",
+                            Label(saved ? tr("メモに残しました") : tr("メモに残す"),
                                   systemImage: saved ? "checkmark" : "note.text.badge.plus")
                         }
                         .disabled(saved)
-                        .help("この答えをメモに足す（議事録で優先して取り上げます）")
+                        .help(tr("この答えをメモに足す（議事録で優先して取り上げます）"))
                     }
                 }
                 .buttonStyle(.borderless)
@@ -523,12 +523,12 @@ struct LiveSidePanelModePicker: View {
 
     var body: some View {
         Picker("", selection: $mode) {
-            Text("メモ").tag(LiveSidePanelMode.notes)
-            Text("AI チャット").tag(LiveSidePanelMode.chat)
+            Text(tr("メモ")).tag(LiveSidePanelMode.notes)
+            Text(tr("AI チャット")).tag(LiveSidePanelMode.chat)
         }
         .pickerStyle(.segmented)
         .labelsHidden()
         .fixedSize()
-        .help("メモと AI チャットを切り替える（AI チャットは ⌘J）")
+        .help(tr("メモと AI チャットを切り替える（AI チャットは ⌘J）"))
     }
 }

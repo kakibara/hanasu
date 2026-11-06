@@ -60,7 +60,7 @@ final class DictationHistoryUI: NSObject {
         guard !isDictationBusy() else { return }
         guard let last = store.entries.first else {
             NSSound.beep()
-            hud.show(.error("まだ音声入力の結果がありません"))
+            hud.show(.error(tr("まだ音声入力の結果がありません")))
             return
         }
         Task {
@@ -71,9 +71,9 @@ final class DictationHistoryUI: NSObject {
             }
             switch await TextInserter.insert(last.output) {
             case .pasted:
-                hud.show(.done("最後の結果をもう一度入力しました"))
+                hud.show(.done(tr("最後の結果をもう一度入力しました")))
             case .copiedOnly:
-                hud.show(.error("アクセシビリティが許可されていないため、クリップボードにコピーしました。⌘V で貼り付けてください。"))
+                hud.show(.error(tr("アクセシビリティが許可されていないため、クリップボードにコピーしました。⌘V で貼り付けてください。")))
             case .notPasted(let clipboardKept):
                 PasteFallbackPanel.shared.show(text: last.output, subject: .result, clipboardKept: clipboardKept)
             case .unconfirmed(let clipboardKept):
@@ -94,12 +94,12 @@ final class DictationHistoryUI: NSObject {
         let menu = NSMenu()
         menuEntries = Array(store.entries.prefix(10))
         let repaste = NSMenuItem(
-            title: "最後の結果をもう一度入力　\(HistorySettings.shared.repasteHotKey.displayString)",
+            title: tr("最後の結果をもう一度入力　%@", "\(HistorySettings.shared.repasteHotKey.displayString)"),
             action: menuEntries.isEmpty ? nil : #selector(repasteLast), keyEquivalent: "")
         menu.addItem(repaste)
         menu.addItem(.separator())
         if menuEntries.isEmpty {
-            menu.addItem(withTitle: "（まだありません）", action: nil, keyEquivalent: "")
+            menu.addItem(withTitle: tr("（まだありません）"), action: nil, keyEquivalent: "")
         }
         for (index, entry) in menuEntries.enumerated() {
             let text = entry.output.replacingOccurrences(of: "\n", with: " ")
@@ -107,12 +107,12 @@ final class DictationHistoryUI: NSObject {
             let item = NSMenuItem(title: mark + String(text.prefix(40)) + (text.count > 40 ? "…" : ""),
                                   action: #selector(copyEntry(_:)), keyEquivalent: "")
             item.tag = index
-            let label = entry.status.isUnrefined ? "結果（\(entry.status.label)）" : (entry.mode.translation?.verb ?? "整形後")
-            item.toolTip = "\(label):\n\(entry.output)\n\n認識結果:\n\(entry.raw)"
+            let label = entry.status.isUnrefined ? tr("結果（%@）", "\(entry.status.label)") : (entry.mode.translation?.verb ?? tr("整形後"))
+            item.toolTip = tr("%@:\n%@\n\n認識結果:\n%@", "\(label)", "\(entry.output)", "\(entry.raw)")
             menu.addItem(item)
         }
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "すべての履歴を開く…", action: #selector(openWindowFromMenu), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: tr("すべての履歴を開く…"), action: #selector(openWindowFromMenu), keyEquivalent: ""))
         for item in menu.items where item.action != nil { item.target = self }
         return menu
     }
@@ -140,7 +140,7 @@ final class DictationHistoryUI: NSObject {
         }
         if window == nil {
             let window = NSWindow(contentViewController: NSHostingController(rootView: DictationHistoryView(store: store, selection: id)))
-            window.title = "Hanasu 音声入力の履歴"
+            window.title = tr("Hanasu 音声入力の履歴")
             window.styleMask = [.titled, .closable, .resizable, .miniaturizable]
             window.setContentSize(NSSize(width: 900, height: 580))
             window.isReleasedWhenClosed = false
@@ -161,7 +161,7 @@ enum DictationHistoryFilter: String, CaseIterable, Identifiable {
     case unrefined
 
     var id: String { rawValue }
-    var label: String { self == .all ? "すべて" : "失敗・未整形" }
+    var label: String { self == .all ? tr("すべて") : tr("失敗・未整形") }
 }
 
 // 要件: REQ-DIC-060
@@ -189,15 +189,15 @@ struct DictationHistoryView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .frame(minWidth: 760, minHeight: 460)
-        .confirmationDialog("この履歴を削除しますか？", isPresented: Binding(
+        .confirmationDialog(tr("この履歴を削除しますか？"), isPresented: Binding(
             get: { pendingDelete != nil }, set: { if !$0 { pendingDelete = nil } })
         ) {
-            Button("削除", role: .destructive) {
+            Button(tr("削除"), role: .destructive) {
                 if let id = pendingDelete { store.delete([id]) }
                 pendingDelete = nil
             }
         } message: {
-            Text("元に戻せません。")
+            Text(tr("元に戻せません。"))
         }
     }
 
@@ -231,21 +231,21 @@ struct DictationHistoryView: View {
         VStack(spacing: 0) {
             HStack(spacing: 6) {
                 Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
-                TextField("結果・原文・アプリ名で検索", text: $query)
+                TextField(tr("結果・原文・アプリ名で検索"), text: $query)
                     .textFieldStyle(.plain)
                 if !query.isEmpty {
                     Button { query = "" } label: { Image(systemName: "xmark.circle.fill") }
                         .buttonStyle(.plain)
                         .foregroundStyle(.secondary)
-                        .help("検索語を消す")
-                        .accessibilityLabel("検索語を消す")
+                        .help(tr("検索語を消す"))
+                        .accessibilityLabel(tr("検索語を消す"))
                 }
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 6)
             .background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 7))
             .padding([.horizontal, .top], 10)
-            Picker("表示", selection: $filter) {
+            Picker(tr("表示"), selection: $filter) {
                 ForEach(DictationHistoryFilter.allCases) { Text($0.label).tag($0) }
             }
             .pickerStyle(.segmented)
@@ -268,7 +268,7 @@ struct DictationHistoryView: View {
             }
             Divider()
             HStack {
-                Text(query.isEmpty && filter == .all ? "\(store.entries.count) 件" : "\(filtered.count) / \(store.entries.count) 件")
+                Text(query.isEmpty && filter == .all ? tr("%@ 件", "\(store.entries.count)") : tr("%@ / %@ 件", "\(filtered.count)", "\(store.entries.count)"))
                 Spacer()
                 if let error = store.lastError {
                     Label(error, systemImage: "exclamationmark.triangle.fill")
@@ -285,10 +285,10 @@ struct DictationHistoryView: View {
     }
 
     @ViewBuilder private func rowMenu(_ entry: DictationHistoryEntry) -> some View {
-        Button("結果をコピー") { Self.copy(entry.output) }
-        Button("原文をコピー") { Self.copy(entry.raw) }
+        Button(tr("結果をコピー")) { Self.copy(entry.output) }
+        Button(tr("原文をコピー")) { Self.copy(entry.raw) }
         Divider()
-        Button("削除", role: .destructive) { pendingDelete = entry.id }
+        Button(tr("削除"), role: .destructive) { pendingDelete = entry.id }
     }
 
     @ViewBuilder private var detail: some View {
@@ -297,9 +297,9 @@ struct DictationHistoryView: View {
                 .id(entry.id)
         } else {
             ContentUnavailableView(
-                store.entries.isEmpty ? "まだ履歴がありません" : "履歴を選んでください",
+                store.entries.isEmpty ? tr("まだ履歴がありません") : tr("履歴を選んでください"),
                 systemImage: "clock.arrow.circlepath",
-                description: Text("音声入力の結果と文字起こしの原文がここに残ります。整形に失敗した文も、原文から整え直せます。"))
+                description: Text(tr("音声入力の結果と文字起こしの原文がここに残ります。整形に失敗した文も、原文から整え直せます。")))
         }
     }
 
@@ -310,28 +310,28 @@ struct DictationHistoryView: View {
 
     static func dayTitle(_ day: Date) -> String {
         let calendar = Calendar.current
-        if calendar.isDateInToday(day) { return "今日" }
-        if calendar.isDateInYesterday(day) { return "昨日" }
+        if calendar.isDateInToday(day) { return tr("今日") }
+        if calendar.isDateInYesterday(day) { return tr("昨日") }
         return dayFormatter.string(from: day)
     }
 
     static let dayFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.locale = Locale(identifier: "ja_JP")
+        f.locale = UILanguage.locale
         f.dateFormat = "yyyy/MM/dd (E)"
         return f
     }()
 
     static let timeFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.locale = Locale(identifier: "ja_JP")
+        f.locale = UILanguage.locale
         f.dateFormat = "HH:mm"
         return f
     }()
 
     static let fullFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.locale = Locale(identifier: "ja_JP")
+        f.locale = UILanguage.locale
         f.dateFormat = "yyyy/MM/dd (E) HH:mm:ss"
         return f
     }()
@@ -372,8 +372,8 @@ private struct DictationHistoryRow: View {
                 Text(DictationHistoryView.timeFormatter.string(from: entry.date))
                 if let app = entry.appName { Text(app).lineLimit(1) }
                 if let translation = entry.mode.translation { Tag(text: translation.verb, color: .blue) }
-                if entry.status.isFailure { Tag(text: entry.status == .geminiFailed ? "失敗" : "未整形", color: .orange) }
-                if entry.status == .refineOff { Tag(text: "未整形", color: .secondary) }
+                if entry.status.isFailure { Tag(text: entry.status == .geminiFailed ? tr("失敗") : tr("未整形"), color: .orange) }
+                if entry.status == .refineOff { Tag(text: tr("未整形"), color: .secondary) }
                 if entry.audioFileName != nil { Image(systemName: "waveform") }
             }
             .font(.caption)
@@ -414,18 +414,18 @@ private struct DictationHistoryDetail: View {
                 if entry.status.isUnrefined { statusCallout }
                 TextSection(title: outputTitle, text: entry.output) {
                     DictationHistoryView.copy(entry.output)
-                    message = ("結果をクリップボードにコピーしました", false)
+                    message = (tr("結果をクリップボードにコピーしました"), false)
                 }
-                TextSection(title: "文字起こしの原文", text: entry.raw) {
+                TextSection(title: tr("文字起こしの原文"), text: entry.raw) {
                     DictationHistoryView.copy(entry.raw)
-                    message = ("原文をクリップボードにコピーしました", false)
+                    message = (tr("原文をクリップボードにコピーしました"), false)
                 }
                 retrySection
                 if let url = store.audioURL(for: entry) { audioSection(url) }
                 Divider()
                 HStack {
                     Spacer()
-                    Button("この履歴を削除", role: .destructive, action: onDelete)
+                    Button(tr("この履歴を削除"), role: .destructive, action: onDelete)
                 }
             }
             .padding(20)
@@ -443,11 +443,11 @@ private struct DictationHistoryDetail: View {
                 Text(entry.status.label).font(.callout).foregroundStyle(entry.status.isFailure ? .orange : .secondary)
             }
             HStack(spacing: 12) {
-                Label(entry.appName ?? "（不明）", systemImage: "macwindow")
+                Label(entry.appName ?? tr("（不明）"), systemImage: "macwindow")
                 Label(entry.mode.label, systemImage: entry.mode.translation != nil ? "globe" : "text.badge.checkmark")
                 if let model = entry.model { Label(model, systemImage: "sparkles") }
                 if let retried = entry.retriedAt {
-                    Text("\(DictationHistoryView.fullFormatter.string(from: retried)) にやり直し")
+                    Text(tr("%@ にやり直し", "\(DictationHistoryView.fullFormatter.string(from: retried))"))
                 }
             }
             .font(.caption)
@@ -459,11 +459,11 @@ private struct DictationHistoryDetail: View {
         VStack(alignment: .leading, spacing: 4) {
             switch entry.status {
             case .geminiFailed:
-                Text("AI での\(entry.mode.label)に失敗したため、原文のまま入力しました。")
+                Text(tr("AI での%@に失敗したため、原文のまま入力しました。", "\(entry.mode.label)"))
             case .noCredentials:
-                Text("AI の認証情報が未設定だったため、原文のまま入力しました。")
+                Text(tr("AI の認証情報が未設定だったため、原文のまま入力しました。"))
             case .refineOff:
-                Text("「AI で整える」がオフだったため、原文のまま入力しました。")
+                Text(tr("「AI で整える」がオフだったため、原文のまま入力しました。"))
             case .succeeded:
                 EmptyView()
             }
@@ -479,24 +479,24 @@ private struct DictationHistoryDetail: View {
     }
 
     private var outputTitle: String {
-        if entry.status.isUnrefined { return "結果（原文のまま）" }
-        return entry.mode.translation.map { "結果（\($0.verb)）" } ?? "結果（整形後）"
+        if entry.status.isUnrefined { return tr("結果（原文のまま）") }
+        return entry.mode.translation.map { tr("結果（%@）", "\($0.verb)") } ?? tr("結果（整形後）")
     }
 
     private var retrySection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
-                Button { retry(.refine) } label: { Label("整形し直す", systemImage: "wand.and.stars") }
+                Button { retry(.refine) } label: { Label(tr("整形し直す"), systemImage: "wand.and.stars") }
                 ForEach(retryTranslations) { language in
-                    Button { retry(.init(translation: language)) } label: { Label("\(language.verb)し直す", systemImage: "globe") }
+                    Button { retry(.init(translation: language)) } label: { Label(tr("%@し直す", "\(language.verb)"), systemImage: "globe") }
                 }
                 if let retrying {
                     ProgressView().controlSize(.small)
-                    Text("AI で\(retrying.label)しています…").font(.caption).foregroundStyle(.secondary)
+                    Text(tr("AI で%@しています…", "\(retrying.label)")).font(.caption).foregroundStyle(.secondary)
                 }
             }
             .disabled(retrying != nil)
-            Text("原文を AI（音声入力に選んだ Gemini か Claude）に送り直します。結果はこの履歴に上書きし、クリップボードにもコピーします。")
+            Text(tr("原文を AI（音声入力に選んだ Gemini か Claude）に送り直します。結果はこの履歴に上書きし、クリップボードにもコピーします。"))
                 .font(.caption).foregroundStyle(.secondary)
             if let message {
                 Label(message.text, systemImage: message.isError ? "exclamationmark.triangle.fill" : "checkmark.circle.fill")
@@ -515,14 +515,14 @@ private struct DictationHistoryDetail: View {
     private func audioSection(_ url: URL) -> some View {
         HStack(spacing: 8) {
             Image(systemName: "waveform").foregroundStyle(.secondary)
-            Text("録音").font(.subheadline.weight(.semibold))
-            Button("再生") {
+            Text(tr("録音")).font(.subheadline.weight(.semibold))
+            Button(tr("再生")) {
                 sound?.stop()
                 sound = NSSound(contentsOf: url, byReference: true)
                 sound?.play()
             }
-            Button("停止") { sound?.stop() }
-            Button("Finder で表示") { NSWorkspace.shared.activateFileViewerSelecting([url]) }
+            Button(tr("停止")) { sound?.stop() }
+            Button(tr("Finder で表示")) { NSWorkspace.shared.activateFileViewerSelecting([url]) }
         }
     }
 
@@ -533,7 +533,7 @@ private struct DictationHistoryDetail: View {
             do {
                 let updated = try await store.retry(entry.id, mode: mode)
                 DictationHistoryView.copy(updated.output)
-                message = ("\(mode.label)し直して、クリップボードにコピーしました", false)
+                message = (tr("%@し直して、クリップボードにコピーしました", "\(mode.label)"), false)
             } catch {
                 message = (error.localizedDescription, true)
             }
@@ -552,7 +552,7 @@ private struct TextSection: View {
             HStack {
                 Text(title).font(.subheadline.weight(.semibold))
                 Spacer()
-                Button("コピー", action: onCopy).controlSize(.small)
+                Button(tr("コピー"), action: onCopy).controlSize(.small)
             }
             Text(text)
                 .textSelection(.enabled)
@@ -597,13 +597,13 @@ struct HistorySettingsTab: View {
         Form {
             Section {
                 HStack {
-                    Text("音声入力の結果と文字起こしの原文（\(store.entries.count) 件）")
+                    Text(tr("音声入力の結果と文字起こしの原文（%@ 件）", "\(store.entries.count)"))
                     Spacer()
-                    Button("履歴を開く", action: onOpenHistory)
+                    Button(tr("履歴を開く"), action: onOpenHistory)
                 }
             }
             Section {
-                LabeledContent("最後の結果をもう一度入力") {
+                LabeledContent(tr("最後の結果をもう一度入力")) {
                     ShortcutRecorder(
                         combo: $settings.repasteHotKey,
                         defaultCombo: .defaultRepaste,
@@ -612,58 +612,58 @@ struct HistorySettingsTab: View {
                         onEndRecording: onEndShortcutRecording)
                 }
             } footer: {
-                Text("入力先がずれて結果が消えたときに、いま前面にあるアプリへ最後の結果を入力し直します。")
+                Text(tr("入力先がずれて結果が消えたときに、いま前面にあるアプリへ最後の結果を入力し直します。"))
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {
-                Toggle("履歴をファイルに保存する", isOn: $settings.enabled)
-                Picker("残す件数", selection: $settings.maxCount) {
-                    ForEach(HistorySettings.countOptions, id: \.self) { Text("\($0) 件").tag($0) }
+                Toggle(tr("履歴をファイルに保存する"), isOn: $settings.enabled)
+                Picker(tr("残す件数"), selection: $settings.maxCount) {
+                    ForEach(HistorySettings.countOptions, id: \.self) { Text(tr("%@ 件", "\($0)")).tag($0) }
                 }
                 .disabled(!settings.enabled)
-                Picker("残す期間", selection: $settings.maxDays) {
+                Picker(tr("残す期間"), selection: $settings.maxDays) {
                     ForEach(HistorySettings.dayOptions, id: \.self) { days in
-                        Text(days == 0 ? "無期限" : "\(days) 日").tag(days)
+                        Text(days == 0 ? tr("無期限") : tr("%@ 日", "\(days)")).tag(days)
                     }
                 }
                 .disabled(!settings.enabled)
                 Toggle(isOn: $settings.keepAudio) {
-                    Text("録音した音声も残す")
-                    Text("m4a（32 kbps）で 1 分あたり約 0.25 MB。履歴と一緒に、件数・期間の上限で消えます。")
+                    Text(tr("録音した音声も残す"))
+                    Text(tr("m4a（32 kbps）で 1 分あたり約 0.25 MB。履歴と一緒に、件数・期間の上限で消えます。"))
                 }
                 .disabled(!settings.enabled)
             } header: {
-                Text("保存")
+                Text(tr("保存"))
             } footer: {
                 Text(settings.enabled
-                     ? "保存先: ~/Library/Application Support/Hanasu/History（本人だけが読めるファイル）。上限を超えたものは古い順に消えます。"
-                     : "保存しない間も、直近 \(DictationHistoryStore.transientLimit) 件はアプリを終了するまでメニューと再入力に使えます。保存済みの履歴は残るので、消すには下の「すべて削除」を使ってください。")
+                     ? tr("保存先: ~/Library/Application Support/Hanasu/History（本人だけが読めるファイル）。上限を超えたものは古い順に消えます。")
+                     : tr("保存しない間も、直近 %@ 件はアプリを終了するまでメニューと再入力に使えます。保存済みの履歴は残るので、消すには下の「すべて削除」を使ってください。", "\(DictationHistoryStore.transientLimit)"))
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {
                 let usage = store.audioUsage()
-                LabeledContent("録音の使用量") {
-                    Text("\(Self.byteFormatter.string(fromByteCount: usage.bytes))（\(usage.count) 件）")
+                LabeledContent(tr("録音の使用量")) {
+                    Text(tr("%@（%@ 件）", "\(Self.byteFormatter.string(fromByteCount: usage.bytes))", "\(usage.count)"))
                 }
                 HStack {
-                    Button("録音だけをすべて削除…") { confirmDeleteAudio = true }
+                    Button(tr("録音だけをすべて削除…")) { confirmDeleteAudio = true }
                         .disabled(usage.count == 0)
                     Spacer()
-                    Button("履歴をすべて削除…", role: .destructive) { confirmDeleteAll = true }
+                    Button(tr("履歴をすべて削除…"), role: .destructive) { confirmDeleteAll = true }
                         .disabled(store.entries.isEmpty)
                 }
             }
         }
         .formStyle(.grouped)
-        .confirmationDialog("音声入力の履歴をすべて削除しますか？", isPresented: $confirmDeleteAll) {
-            Button("すべて削除", role: .destructive) { store.deleteAll() }
+        .confirmationDialog(tr("音声入力の履歴をすべて削除しますか？"), isPresented: $confirmDeleteAll) {
+            Button(tr("すべて削除"), role: .destructive) { store.deleteAll() }
         } message: {
-            Text("\(store.entries.count) 件の履歴と、残している録音を削除します。元に戻せません。")
+            Text(tr("%@ 件の履歴と、残している録音を削除します。元に戻せません。", "\(store.entries.count)"))
         }
-        .confirmationDialog("残している録音をすべて削除しますか？", isPresented: $confirmDeleteAudio) {
-            Button("録音をすべて削除", role: .destructive) { store.deleteAllAudio() }
+        .confirmationDialog(tr("残している録音をすべて削除しますか？"), isPresented: $confirmDeleteAudio) {
+            Button(tr("録音をすべて削除"), role: .destructive) { store.deleteAllAudio() }
         } message: {
-            Text("履歴の文章は残り、録音（音声ファイル）だけを削除します。元に戻せません。")
+            Text(tr("履歴の文章は残り、録音（音声ファイル）だけを削除します。元に戻せません。"))
         }
     }
 }

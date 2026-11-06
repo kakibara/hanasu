@@ -69,11 +69,11 @@ struct Meeting: Codable, Identifiable, Hashable {
     func displayName(for speaker: String) -> String {
         if let name = speakerNames[speaker], !name.isEmpty { return name }
         switch speaker {
-        case "me": return "自分"
-        case "others": return "相手"
+        case "me": return tr("自分")
+        case "others": return tr("相手")
         default:
-            if speaker.hasPrefix("spk"), let n = Int(speaker.dropFirst(3)) { return "話者\(n)" }
-            if speaker.hasPrefix("room"), let n = Int(speaker.dropFirst(4)) { return "同席者\(n)" }
+            if speaker.hasPrefix("spk"), let n = Int(speaker.dropFirst(3)) { return tr("話者%@", "\(n)") }
+            if speaker.hasPrefix("room"), let n = Int(speaker.dropFirst(4)) { return tr("同席者%@", "\(n)") }
             return speaker
         }
     }
@@ -107,7 +107,7 @@ struct Meeting: Codable, Identifiable, Hashable {
     // 要件: REQ-MTG-005
     /// 文字起こしの Markdown。同じ話者が間を空けずに続く発言はまとめる。
     func transcriptMarkdown() -> String {
-        var lines = ["# \(title) — 文字起こし", "", "- 日時: \(Self.dateFormatter.string(from: startedAt))", "- 長さ: \(Self.clock(duration))", ""]
+        var lines = [tr("# %@ — 文字起こし", "\(title)"), "", tr("- 日時: %@", "\(Self.dateFormatter.string(from: startedAt))"), tr("- 長さ: %@", "\(Self.clock(duration))"), ""]
         for block in mergedBlocks() {
             lines.append("**[\(Self.clock(block.start))] \(displayName(for: block.speaker))**: \(block.text)")
             lines.append("")
@@ -147,7 +147,7 @@ struct Meeting: Codable, Identifiable, Hashable {
 
     static let dateFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.locale = Locale(identifier: "ja_JP")
+        f.locale = UILanguage.locale
         f.dateFormat = "yyyy/MM/dd (E) HH:mm"
         return f
     }()
@@ -174,7 +174,7 @@ enum MeetingStore {
             id = f.string(from: date) + " (\(suffix))"
             suffix += 1
         }
-        let meeting = Meeting(id: id, title: "会議 \(Meeting.dateFormatter.string(from: date))", startedAt: date)
+        let meeting = Meeting(id: id, title: tr("会議 %@", "\(Meeting.dateFormatter.string(from: date))"), startedAt: date)
         try createPrivateDirectory(directory(for: meeting))
         return meeting
     }
@@ -217,7 +217,7 @@ enum MeetingStore {
     static func markInterruptedMeetings() {
         for var meeting in loadAll() where meeting.status == .recording || meeting.status == .processing {
             meeting.status = .failed
-            meeting.errorMessage = "記録の途中でアプリが終了しました。音声ファイル（me.m4a / others.m4a）は途中まで残っている場合があります。"
+            meeting.errorMessage = tr("記録の途中でアプリが終了しました。音声ファイル（me.m4a / others.m4a）は途中まで残っている場合があります。")
             try? save(meeting)
         }
     }

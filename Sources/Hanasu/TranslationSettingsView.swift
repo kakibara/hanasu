@@ -19,9 +19,9 @@ struct TranslationSettingsSection: View {
                     .disabled(isOn && languages.count == 1)
             }
         } header: {
-            Text("翻訳する言語")
+            Text(tr("翻訳する言語"))
         } footer: {
-            Text("「翻訳して入力」のショートカットでは、選んだ言語のうち上のものに翻訳します。録音中の HUD で「話した言語」と選んだ言語を切り替えられます（止めたときに選んでいる言語で入力）。翻訳は AI（「AI」タブで音声入力に選んだもの）で行います。少なくとも 1 つは選んでください。")
+            Text(tr("「翻訳して入力」のショートカットでは、選んだ言語のうち上のものに翻訳します。録音中の HUD で「話した言語」と選んだ言語を切り替えられます（止めたときに選んでいる言語で入力）。翻訳は AI（「AI」タブで音声入力に選んだもの）で行います。少なくとも 1 つは選んでください。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }

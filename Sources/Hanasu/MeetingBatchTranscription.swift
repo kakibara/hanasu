@@ -11,11 +11,11 @@ enum MeetingBatchTranscription {
         let samples = try await Task.detached { try TranscriptionAudio.loadSamples(from: audioURL) }.value
         // ほぼ無音のチャンネル（相手がいない、マイクを切っていた）は送らない
         guard !samples.isEmpty, TranscriptionAudio.rms(samples) > 0.0003 else { return [] }
-        let label = channel == .me ? "自分" : "相手"
-        progress?("\(engine.shortName) で文字起こししています…（\(label)）")
+        let label = channel == .me ? tr("自分") : tr("相手")
+        progress?(tr("%@ で文字起こししています…（%@）", "\(engine.shortName)", "\(label)"))
         let segments = try await BatchTranscriber.transcribeSegments(
             samples, engine: engine, settings: settings, hints: settings.userDictionary.contextualStrings,
-            progress: { message in progress?(message.replacingOccurrences(of: "…（", with: "…（\(label) ")) })
+            progress: { message in progress?("\(label): \(message)") })
         return phrases(from: segments, channel: channel, offset: offset)
     }
 

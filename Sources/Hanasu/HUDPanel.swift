@@ -79,7 +79,7 @@ final class HUDController {
 
     init() {
         panel = NSPanel(
-            contentRect: NSRect(x: 0, y: 0, width: 440, height: 112),
+            contentRect: NSRect(x: 0, y: 0, width: HUDLayout.width, height: 112),
             styleMask: [.nonactivatingPanel, .borderless],
             backing: .buffered, defer: true)
         panel.isFloatingPanel = true
@@ -152,6 +152,13 @@ final class HUDController {
     }
 }
 
+// 要件: REQ-COM-060
+/// HUD の大きさ。日本語は今までどおり 440。ほかの言語は語が長く、1 行目（見出し・言語の切り替え・取消・停止）が
+/// 収まらないので広げる
+enum HUDLayout {
+    static var width: CGFloat { UILanguage.current == .ja ? 440 : 680 }
+}
+
 private struct HUDView: View {
     @ObservedObject var model: HUDModel
 
@@ -166,6 +173,8 @@ private struct HUDView: View {
             HStack(spacing: 6) {
                 statusIcon
                 Text(title).font(.system(size: 13, weight: .semibold)).lineLimit(1)
+                    // 言語の切り替えや停止のボタンに押されて、見出しが消えないようにする
+                    .layoutPriority(1)
                 if let editBadge {
                     Text(editBadge)
                         .font(.system(size: 11))
@@ -186,13 +195,13 @@ private struct HUDView: View {
                             .fixedSize()
                     }
                     Button { model.onCancel?() } label: {
-                        Text("取消").font(.system(size: 11)).foregroundStyle(.secondary)
+                        Text(tr("取消")).font(.system(size: 11)).foregroundStyle(.secondary)
                             .padding(.horizontal, 4)
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .fixedSize()
-                    .help("録音を取り消します（Esc）")
+                    .help(tr("録音を取り消します（Esc）"))
                     StopButton { model.onStop?() }
                 }
             }
@@ -218,7 +227,7 @@ private struct HUDView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .frame(width: 440, height: 112, alignment: .topLeading)
+        .frame(width: HUDLayout.width, height: 112, alignment: .topLeading)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(.white.opacity(0.12)))
     }
@@ -237,7 +246,7 @@ private struct HUDView: View {
                 .foregroundStyle(.red)
                 .symbolEffect(.pulse)
         case .preparing, .processing:
-            ProgressView().controlSize(.small).accessibilityLabel("処理中")
+            ProgressView().controlSize(.small).accessibilityLabel(tr("処理中"))
         case .done:
             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
         case .error:
@@ -249,14 +258,14 @@ private struct HUDView: View {
         switch model.phase {
         case .preparing(let message): message
         case .recording:
-            (model.editBadge == nil ? "録音中" : "編集モード") + (model.batchEngine.map { "（\($0.shortName)）" } ?? "")
+            (model.editBadge == nil ? tr("録音中") : tr("編集モード")) + (model.batchEngine.map { tr("（%@）", $0.shortName) } ?? "")
         case .processing:
-            if model.transcribing, let engine = model.batchEngine { "\(engine.shortName) で文字起こししています…" }
-            else if model.editBadge != nil { "AI で書き換えています…" }
+            if model.transcribing, let engine = model.batchEngine { tr("%@ で文字起こししています…", "\(engine.shortName)") }
+            else if model.editBadge != nil { tr("AI で書き換えています…") }
             else if let translation = model.translation { translation.processingTitle }
-            else { "AI で整えています…" }
+            else { tr("AI で整えています…") }
         case .done(let message): message
-        case .error: "エラー"
+        case .error: tr("エラー")
         }
     }
 
@@ -277,11 +286,11 @@ private struct HUDView: View {
             // 途中経過が出ないエンジンでは、止めてから文字起こしすることを書いておく
             else if let engine = model.batchEngine {
                 model.editBadge != nil
-                    ? "指示を話してください。止めてから \(engine.shortName) で文字起こしします"
-                    : "止めてから \(engine.shortName) で文字起こしします（録音中は文字が出ません）"
+                    ? tr("指示を話してください。止めてから %@ で文字起こしします", "\(engine.shortName)")
+                    : tr("止めてから %@ で文字起こしします（録音中は文字が出ません）", "\(engine.shortName)")
             }
-            else if model.editBadge != nil { "指示を話してください（例: もっと丁寧に／箇条書きにして／英語にして）" }
-            else { "話してください…" }
+            else if model.editBadge != nil { tr("指示を話してください（例: もっと丁寧に／箇条書きにして／英語にして）") }
+            else { tr("話してください…") }
         case .processing: model.transcript.isEmpty ? nil : model.transcript
         case .error(let message): message
         case .preparing, .done: nil
@@ -303,7 +312,7 @@ private struct StopButton: View {
         Button(action: action) {
             HStack(spacing: 4) {
                 Image(systemName: "stop.fill").font(.system(size: 9))
-                Text("停止").font(.system(size: 11, weight: .semibold))
+                Text(tr("停止")).font(.system(size: 11, weight: .semibold))
             }
             .foregroundStyle(.white)
             .padding(.horizontal, 9)
@@ -313,7 +322,7 @@ private struct StopButton: View {
         }
         .buttonStyle(.plain)
         .fixedSize()
-        .help("録音を止めて入力します（ショートカットをもう一度押すのと同じ）")
+        .help(tr("録音を止めて入力します（ショートカットをもう一度押すのと同じ）"))
     }
 }
 
@@ -338,8 +347,8 @@ private struct MicrophoneButton: View {
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("マイクを選ぶ")
-        .help("音声入力で使うマイクを切り替えます")
+        .accessibilityLabel(tr("マイクを選ぶ"))
+        .help(tr("音声入力で使うマイクを切り替えます"))
     }
 }
 
@@ -353,7 +362,7 @@ private struct LanguageSwitch: View {
 
     var body: some View {
         HStack(spacing: 2) {
-            option("話した言語", selected: selection == nil) { onSelect(nil) }
+            option(tr("話した言語"), selected: selection == nil) { onSelect(nil) }
             ForEach(choices) { language in
                 option(language.label, selected: selection == language) { onSelect(language) }
             }
@@ -362,8 +371,8 @@ private struct LanguageSwitch: View {
         .background(.quaternary, in: Capsule())
         // 1 行目が詰まっても折り返さない（詰まったら、左の見出しのほうを省略する）
         .fixedSize()
-        .help("録音を止めたときに選んでいる言語で入力します（話した言語は整形の言語の設定に従い、"
-            + choices.map { "\($0.label) は\($0.verb)" }.joined(separator: "、") + "）")
+        .help(tr("録音を止めたときに選んでいる言語で入力します（話した言語は整形の言語の設定に従い、%@）",
+                 choices.map { tr("%@ は%@", "\($0.label)", "\($0.verb)") }.joined(separator: tr("、"))))
     }
 
     private func option(_ label: String, selected: Bool, action: @escaping () -> Void) -> some View {

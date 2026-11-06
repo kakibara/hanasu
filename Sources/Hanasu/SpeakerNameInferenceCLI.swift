@@ -15,6 +15,7 @@ enum SpeakerNameInferenceCLI {
     static func selfTest() -> Bool {
         // 確かめる文面は日本語のプロンプトのもの
         PromptLanguage.override = PromptLanguage.override ?? .ja
+        UILanguage.override = UILanguage.override ?? .ja
         var failures = 0
         func check(_ name: String, _ ok: Bool, _ detail: @autoclosure () -> String = "") {
             print("\(ok ? "OK  " : "NG  ") \(name)\(ok ? "" : " — \(detail())")")

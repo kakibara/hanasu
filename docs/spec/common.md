@@ -202,6 +202,18 @@
 - 実装の場所: `OnboardingView`、`OnboardingPage`、`OnboardingModel`、`OnboardingState`、`OnboardingWindowController`、`AppDelegate.applicationDidFinishLaunching`・`openOnboarding`
 - 確かめ方: `.build/debug/Hanasu --render-onboarding /tmp/onboarding`（全ページを PNG にする）。初回だけ出ることとメニューから開けることは実機で確かめる
 
+### REQ-COM-060 表示の言語を、システムの言語に合わせて切り替える（17 言語）
+- 内容: メニュー・設定・HUD・ウインドウ・通知・エラーの文言・オンボーディング・権限を求めるときの説明など、利用者に見える文字列を、システムの言語（優先する言語の並びのうち、対応している最初の言語）で出す。対応言語は REQ-COM-061 と同じ 17 言語で、どれにも対応していなければ英語。表示の言語と AI へのプロンプトの言語（文字起こしの言語。REQ-COM-061）は別に決まる。開発用の CLI の出力とログは訳さない。
+- 受け入れ条件:
+  - システムの言語が日本語なら、今までと同じ日本語で出る。
+  - システムの言語を英語（ほかの対応言語）にするか、`-AppleLanguages "(en)"` を付けて起動すると、メニュー・設定・HUD・オンボーディングがその言語で出る。
+  - 対応していない言語（例: スウェーデン語）だけのときは英語で出る。
+  - マイク・音声認識・画面の音声・リマインダーの許可を求める説明も、その言語で出る。
+- 出典: ユーザーの依頼（2026-11-05）「アプリの表示言語とプロンプトの言語もシステムの言語に合わせて変更されるようにして」。開発用の CLI とログを訳さないことは、同日にユーザーに確かめた
+- 対象: Mac
+- 実装の場所: `UILanguage`、`tr`、`L10n`（`Sources/Hanasu/L10n.swift`）、`Sources/Hanasu/Resources/Localizable.xcstrings`、`scripts/i18n-strings.py`（`infoplist`）
+- 確かめ方: `.build/debug/Hanasu --render-onboarding /tmp/onboarding --ui-language en`（画面を PNG にする CLI は `--ui-language <言語>` で言語を変えられる）、`python3 scripts/check-i18n.py`。システムの言語での切り替えは実機で確かめる（`open -a build/Hanasu.app --args -AppleLanguages "(en)"`）
+
 ### REQ-COM-061 AI へのプロンプトの言語を、文字起こしの言語に合わせて切り替える（17 言語）
 - 内容: 整形・翻訳・選択を声で編集・Gemini での文字起こし・議事録・会議への質問・会議中の AI チャット（よく使う質問を含む）・辞書の候補で AI に送る指示（システムプロンプトと、user content の見出しや注記）を、設定の文字起こしの言語（REQ-COM-004。初期値はシステムの言語）に合わせた言語で送る。対応言語は README と同じ 17 言語（英語・日本語・中国語（簡体字・繁体字）・韓国語・スペイン語・フランス語・ドイツ語・イタリア語・ポルトガル語（ブラジル）・ロシア語・トルコ語・ベトナム語・インドネシア語・ポーランド語・アラビア語・ヒンディー語）で、どれでもなければ英語にする。日本語向けの整形のルール（フィラー・言い直し・口頭の記号の指示・誤変換の直し方・文体のプリセット）は、言語ごとに、その言語の話し言葉に合わせて書き直す。議事録の見出し・話者のラベル・アクションアイテムの「担当」「期限」も、その言語で書く。
 - 受け入れ条件:
@@ -217,14 +229,14 @@
 - 確かめ方: `.build/debug/Hanasu --show-prompts --prompt-language en`（すべてのプロンプトを見本の入力で表示する。`ja` なら今までと同じ）、`python3 scripts/check-i18n.py`、Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~Prompt"`
 
 ### REQ-COM-062 UI の文字列とプロンプトを足すときは、すべての対応言語に訳を入れる
-- 内容: 新しい機能で UI の文字列か AI へのプロンプトを足すときは、同じ変更の中で 17 言語すべての訳を入れる。訳の漏れはスクリプトで見つけ、CI で落とす（この PR ではプロンプトの漏れを見つける。UI の文字列の漏れの検査は、表示の多言語化（FUT-012）で足す）。訳を入れる手順はスキル（`.claude/skills/i18n/SKILL.md`）、訳を担当するエージェントは `.claude/agents/i18n.md` に置く。
+- 内容: 新しい機能で UI の文字列か AI へのプロンプトを足すときは、同じ変更の中で 17 言語すべての訳を入れる。訳の漏れはスクリプトで見つけ、CI で落とす（プロンプトと UI の文字列の漏れ・包み忘れを見つける。REQ-COM-060）。訳を入れる手順はスキル（`.claude/skills/i18n/SKILL.md`）、訳を担当するエージェントは `.claude/agents/i18n.md` に置く。
 - 受け入れ条件:
   - プロンプトのキーが 1 つの言語にしかない・埋める場所（`${…}`）やタグが言語で食い違う・話者のラベルが指示の中のものと違う、といったときに `python3 scripts/check-i18n.py` が失敗し、PR の CI（`.github/workflows/spec.yml`）も失敗する。
   - CLAUDE.md と docs/README.md に、この決まりが書いてある。
 - 出典: ユーザーの依頼（2026-11-05）「今後の機能追加の際も全ての言語に対応させるようにして。多言語担当は専用の skill と agent を用意しておくと良さそう」
 - 対象: Mac / Windows
-- 実装の場所: `scripts/check-i18n.py`、`.github/workflows/spec.yml`、`.claude/skills/i18n/SKILL.md`、`.claude/agents/i18n.md`
-- 確かめ方: `python3 scripts/check-i18n.py`
+- 実装の場所: `scripts/check-i18n.py`、`scripts/i18n-strings.py`、`.github/workflows/spec.yml`、`.claude/skills/i18n/SKILL.md`、`.claude/agents/i18n.md`
+- 確かめ方: `python3 scripts/check-i18n.py`（UI の文字列では、tr() で包んでいない日本語の文字列と、訳のないキーも見つける）
 
 ---
 
@@ -992,6 +1004,22 @@
 - 関係する要件: REQ-COM-062
 - 対象: Mac / Windows
 - 実装の場所: `scripts/check-i18n.py`、`.github/workflows/spec.yml`
+
+### DEC-COM-165 UI の文字列は、日本語の原文をキーにして tr() で引き、String Catalog を起動後に JSON のまま読む
+- 決めたこと: 利用者に見える文字列は `tr("日本語の原文", 引数…)` で引く（補間は `%@`。訳では `%1$@` のように順番を変えてよい）。訳は `Sources/Hanasu/Resources/Localizable.xcstrings`（String Catalog。ソースの言語は ja）に置き、SwiftPM のリソースとしてそのまま入れて、起動後に一度だけ JSON として読む。日本語ではキーをそのまま出し、その言語に訳がなければ英語、英語にもなければ日本語を出す。カタログのキーは `scripts/i18n-strings.py sync` で Swift の `tr("…")` にそろえ、訳は `export` / `import` で出し入れする。言語の決まりに使う日本語の語（会議への質問の期間の語、スニペットのフィラー、敬称、議事録を読むときの語）は UI ではないので包まず、行末に `// skip-tr` を書く。開発用の CLI（`*CLI.swift`・`main.swift`・自己テスト）とログは訳さない。
+- 理由: Xcode がなくても（Command Line Tools と SwiftPM だけで）ビルドできるようにする。`xcstringstool` は Xcode にしかなく、SwiftPM は .xcstrings を変換せずに写すだけなので、.lproj の Localizable.strings を作れない。String Catalog の形にしておけば、Xcode でも開ける。原文をキーにすると、日本語のコードが読みやすいままで、キーの付け忘れもない。
+- 決めた場面: 多言語化の PR（Mac の表示。2026-11-05）
+- 関係する要件: REQ-COM-060, REQ-COM-062
+- 対象: Mac
+- 実装の場所: `tr`、`L10n`、`scripts/i18n-strings.py`
+
+### DEC-COM-166 表示の言語は、優先する言語の並びのうち対応している最初の言語。.app は 17 言語の .lproj を持つ
+- 決めたこと: `UILanguage` は `Locale.preferredLanguages` を前から見て、17 言語のどれかに寄せられる最初の言語にする（寄せ方は `PromptLanguage.supported(localeIdentifier:)`。DEC-COM-161 と同じ）。どれにもなければ英語。日付・曜日の表示もこの言語のロケールで書く。.app の Info.plist は開発の言語を en にし、`CFBundleLocalizations` に 17 言語を並べ、`scripts/build-app.sh` が言語ごとの `<言語>.lproj/InfoPlist.strings`（権限を求めるときの説明）を作る。開発用の CLI（`--` で始まる引数があるとき）は出力を訳さないので日本語にし、`--ui-language <言語>` で変えられる（画面を PNG にする CLI で、ほかの言語を確かめる）。自己テストのプロンプトは日本語に固定する。
+- 理由: macOS がアプリの言語を選ぶのと同じ決め方にして、AppKit が出す部分（標準のメニュー項目・権限のダイアログ）とアプリの文言の言語をそろえる。.lproj がないと、macOS はアプリが日本語だけだと見なす。
+- 決めた場面: 多言語化の PR（Mac の表示。2026-11-05）
+- 関係する要件: REQ-COM-060
+- 対象: Mac
+- 実装の場所: `UILanguage`、`Resources/Info.plist`、`scripts/build-app.sh`
 
 ### DEC-COM-151 Mac の設定画面は、左のサイドバーで項目を切り替える
 - 決めたこと: 設定のウインドウを、上のタブ（`TabView`）から、システム設定と同じ左のサイドバー（`NavigationSplitView`）に変える。項目（一般・AI・辞書・ルール・アプリ別・スニペット・会議・履歴・権限）と順番は変えず、それぞれに色付きの角丸のアイコンを付け、右側の上に項目の名前を出す。ウインドウは大きさを変えられ（最小 700×480、初めは 780×600）、位置と大きさを覚える。最後に開いていた項目を、次に開いたときも出す（UserDefaults の `settingsPane`）。ショートカットの欄は、キーの欄の幅を変えず、「初期値に戻す」をその左の小さなボタンにする。権限の欄は、許可済み・未許可を色付きの印で出す。画面の文言の「「AI」タブ」などは「設定の「AI」」にした。

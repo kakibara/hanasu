@@ -34,8 +34,8 @@ struct MeetingDevicePickers: View {
     var body: some View {
         if compact {
             VStack(alignment: .leading, spacing: 6) {
-                labeled("スピーカー", systemImage: "speaker.wave.2") { outputPicker.labelsHidden() }
-                labeled("マイク", systemImage: "mic") { inputPicker.labelsHidden() }
+                labeled(tr("スピーカー"), systemImage: "speaker.wave.2") { outputPicker.labelsHidden() }
+                labeled(tr("マイク"), systemImage: "mic") { inputPicker.labelsHidden() }
             }
         } else {
             outputPicker
@@ -44,21 +44,21 @@ struct MeetingDevicePickers: View {
     }
 
     private var outputPicker: some View {
-        Picker("録音するスピーカー", selection: $settings.meetingOutputDeviceUID) {
-            Text("Mac 全体の音（おすすめ）").tag("")
+        Picker(tr("録音するスピーカー"), selection: $settings.meetingOutputDeviceUID) {
+            Text(tr("Mac 全体の音（おすすめ）")).tag("")
             ForEach(devices.outputs) { Text($0.name).tag($0.uid) }
             if isMissing(settings.meetingOutputDeviceUID, in: devices.outputs) {
-                Text("（接続されていない機器）").tag(settings.meetingOutputDeviceUID)
+                Text(tr("（接続されていない機器）")).tag(settings.meetingOutputDeviceUID)
             }
         }
     }
 
     private var inputPicker: some View {
-        Picker("録音するマイク", selection: $settings.meetingInputDeviceUID) {
-            Text("システムの設定に従う").tag("")
+        Picker(tr("録音するマイク"), selection: $settings.meetingInputDeviceUID) {
+            Text(tr("システムの設定に従う")).tag("")
             ForEach(devices.inputs) { Text($0.name).tag($0.uid) }
             if isMissing(settings.meetingInputDeviceUID, in: devices.inputs) {
-                Text("（接続されていない機器）").tag(settings.meetingInputDeviceUID)
+                Text(tr("（接続されていない機器）")).tag(settings.meetingInputDeviceUID)
             }
         }
     }

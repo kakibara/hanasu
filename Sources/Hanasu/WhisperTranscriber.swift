@@ -143,19 +143,19 @@ actor WhisperEngine {
 
     /// 無音のときなどに Whisper が出しがちな決まり文句。区間の全体がこれなら捨てる
     static let hallucinations: Set<String> = [
-        "ご視聴ありがとうございました", "ご視聴ありがとうございました。",
-        "最後までご視聴いただきありがとうございました", "最後までご視聴いただきありがとうございました。",
-        "チャンネル登録よろしくお願いします", "チャンネル登録よろしくお願いします。",
-        "チャンネル登録お願いします", "チャンネル登録お願いします。",
+        "ご視聴ありがとうございました", "ご視聴ありがとうございました。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "最後までご視聴いただきありがとうございました", "最後までご視聴いただきありがとうございました。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "チャンネル登録よろしくお願いします", "チャンネル登録よろしくお願いします。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "チャンネル登録お願いします", "チャンネル登録お願いします。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
     ]
 
     /// 無音や雑音のところに付く「(音楽)」「[拍手]」のような注記。かっこを外してこれだけなら捨てる
-    static let soundTags: Set<String> = ["音楽", "拍手", "笑", "笑い", "BGM", "music", "Music", "MUSIC", "applause", "laughter"]
+    static let soundTags: Set<String> = ["音楽", "拍手", "笑", "笑い", "BGM", "music", "Music", "MUSIC", "applause", "laughter"]  // skip-tr（Whisper の出力と照らす語。UI ではない）
 
     // 設計判断: DEC-COM-026
     static func isNoise(_ text: String) -> Bool {
         if hallucinations.contains(text) { return true }
-        let stripped = text.trimmingCharacters(in: CharacterSet(charactersIn: "()（）[]［］【】♪〜~ 　。.、"))
+        let stripped = text.trimmingCharacters(in: CharacterSet(charactersIn: "()（）[]［］【】♪〜~ 　。.、"))  // skip-tr（照らし合わせ・区切りに使う記号）
         return stripped.isEmpty || soundTags.contains(stripped)
     }
 
@@ -286,6 +286,6 @@ actor WhisperEngine {
     static func prompt(from hints: [String]) -> String? {
         let words = Array(NSOrderedSet(array: hints.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty })
             .compactMap { $0 as? String }.prefix(30))
-        return words.isEmpty ? nil : words.joined(separator: "、")
+        return words.isEmpty ? nil : words.joined(separator: "、")  // skip-tr（照らし合わせ・区切りに使う記号）
     }
 }

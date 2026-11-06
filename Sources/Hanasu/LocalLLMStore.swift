@@ -29,10 +29,10 @@ final class LocalLLMStore: ObservableObject {
 
         var errorDescription: String? {
             switch self {
-            case .notAllowed(let host): "決めた場所以外からはダウンロードしません（\(host)）"
-            case .sizeMismatch(let expected, let actual): "ダウンロードしたモデルの大きさが想定と違います（\(actual) バイト、想定は \(expected) バイト）"
-            case .hashMismatch: "ダウンロードしたモデルのハッシュ（SHA-256）が想定と違うので、使いません"
-            case .http(let status): "モデルをダウンロードできませんでした（HTTP \(status)）"
+            case .notAllowed(let host): tr("決めた場所以外からはダウンロードしません（%@）", "\(host)")
+            case .sizeMismatch(let expected, let actual): tr("ダウンロードしたモデルの大きさが想定と違います（%@ バイト、想定は %@ バイト）", "\(actual)", "\(expected)")
+            case .hashMismatch: tr("ダウンロードしたモデルのハッシュ（SHA-256）が想定と違うので、使いません")
+            case .http(let status): tr("モデルをダウンロードできませんでした（HTTP %@）", "\(status)")
             }
         }
     }

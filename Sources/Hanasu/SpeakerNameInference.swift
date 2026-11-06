@@ -9,7 +9,7 @@ enum SpeakerNameInference {
     static let openTag = "<speaker_names>"
     static let closeTag = "</speaker_names>"
     /// 名前の末尾から外す敬称（長いものから見る）
-    static let honorifics = ["ちゃん", "さん", "さま", "くん", "様", "君", "氏"]
+    static let honorifics = ["ちゃん", "さん", "さま", "くん", "様", "君", "氏"]  // skip-tr（言語の決まりに使う語。FUT-014）
     static let maxLength = 20
 
     /// 応答から <speaker_names> を取り出して本文から消す。表示ラベル（「話者1」など）→ 名前。読めなければ空

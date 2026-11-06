@@ -19,12 +19,12 @@ enum MinutesTemplate: String, CaseIterable, Identifiable, Codable {
 
     var title: String {
         switch self {
-        case .auto: "自動"
-        case .regular: "定例"
+        case .auto: tr("自動")
+        case .regular: tr("定例")
         case .oneOnOne: "1on1"
-        case .sales: "商談"
-        case .brainstorm: "ブレスト"
-        case .custom: "カスタム"
+        case .sales: tr("商談")
+        case .brainstorm: tr("ブレスト")
+        case .custom: tr("カスタム")
         }
     }
 
@@ -42,12 +42,12 @@ enum MinutesTemplate: String, CaseIterable, Identifiable, Codable {
     /// 選ぶときに出す短い説明
     var summary: String {
         switch self {
-        case .auto: "概要・話し合った内容・決定事項・アクションアイテム"
-        case .regular: "進捗・報告・課題・決定事項・アクションアイテム"
-        case .oneOnOne: "近況・相談・フィードバック・合意・アクションアイテム"
-        case .sales: "顧客の課題・提案内容・反応・懸念・次のアクション"
-        case .brainstorm: "出たアイデア・有望な案・論点・次のステップ"
-        case .custom: "自分で書いた指示に従う"
+        case .auto: tr("概要・話し合った内容・決定事項・アクションアイテム")
+        case .regular: tr("進捗・報告・課題・決定事項・アクションアイテム")
+        case .oneOnOne: tr("近況・相談・フィードバック・合意・アクションアイテム")
+        case .sales: tr("顧客の課題・提案内容・反応・懸念・次のアクション")
+        case .brainstorm: tr("出たアイデア・有望な案・論点・次のステップ")
+        case .custom: tr("自分で書いた指示に従う")
         }
     }
 
@@ -134,7 +134,7 @@ struct ActionItem: Codable, Hashable, Identifiable {
 
     static let shortFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.locale = Locale(identifier: "ja_JP")
+        f.locale = UILanguage.locale
         f.dateFormat = "M/d (E)"
         return f
     }()
@@ -143,7 +143,7 @@ struct ActionItem: Codable, Hashable, Identifiable {
     /// 議事録の言語はそのときのプロンプトの言語なので、読むときはすべての言語の言い方を受け付ける。
     /// 前から使っている日本語の語は見出しに含まれていればよいが、各言語の見出しは見出しの全体と一致したときだけにする
     /// （「## Задачи клиента」のような別の見出しを、アクションアイテムの節と取り違えないように）
-    static let legacyActionHeadingWords = ["TODO", "ToDo", "アクション", "次のステップ"]
+    static let legacyActionHeadingWords = ["TODO", "ToDo", "アクション", "次のステップ"]  // skip-tr（前の版の議事録の見出し）
     static var actionHeadings: [String] {
         ["minutes.actionHeading", "minutes.actionHeading.sales", "minutes.actionHeading.brainstorm"].flatMap(Prompts.allTexts)
     }
@@ -176,16 +176,16 @@ struct ActionItem: Codable, Hashable, Identifiable {
             var dueNote: String?
             // 末尾の（担当: … / 期限: …）。期限には「11/14 (金)」のようにかっこや / が入るので、
             // 「担当」「期限」の言葉で始まるかっこを探し、中を「 / 」で分ける
-            if let close = task.last, close == "）" || close == ")",
+            if let close = task.last, close == "）" || close == ")",  // skip-tr（照らし合わせ・区切りに使う記号）
                let open = detailsOpening(in: task) {
                 let inner = String(task[task.index(after: open)..<task.index(before: task.endIndex)])
                 var recognized = false
                 for part in inner.components(separatedBy: " / ").flatMap({ $0.components(separatedBy: "／") }) {
-                    let pair = part.split(maxSplits: 1, whereSeparator: { $0 == ":" || $0 == "：" })
+                    let pair = part.split(maxSplits: 1, whereSeparator: { $0 == ":" || $0 == "：" })  // skip-tr（照らし合わせ・区切りに使う記号）
                     guard pair.count == 2 else { continue }
                     let key = pair[0].trimmingCharacters(in: .whitespaces)
                     let value = pair[1].trimmingCharacters(in: .whitespaces)
-                    let unknown = value.isEmpty || ["不明", "未定", "-"].contains(value) || noneWords.contains(value) || value.hasPrefix("分かれば")
+                    let unknown = value.isEmpty || ["不明", "未定", "-"].contains(value) || noneWords.contains(value) || value.hasPrefix("分かれば")  // skip-tr（言語の決まりに使う語。FUT-014）
                     if ownerKeys.contains(key) { recognized = true; owner = unknown ? nil : value }
                     if dueKeys.contains(key) { recognized = true; dueNote = unknown ? nil : value }
                 }
@@ -202,12 +202,12 @@ struct ActionItem: Codable, Hashable, Identifiable {
         let keys = ownerKeys + dueKeys
         var index = task.startIndex
         while index < task.endIndex {
-            if task[index] == "（" || task[index] == "(" {
+            if task[index] == "（" || task[index] == "(" {  // skip-tr（照らし合わせ・区切りに使う記号）
                 let after = task[task.index(after: index)...].drop { $0 == " " }
                 let startsWithKey = keys.contains { key in
                     guard after.hasPrefix(key) else { return false }
                     let rest = after.dropFirst(key.count).drop { $0 == " " }
-                    return rest.first == ":" || rest.first == "："
+                    return rest.first == ":" || rest.first == "："  // skip-tr（照らし合わせ・区切りに使う記号）
                 }
                 if startsWithKey { return index }
             }

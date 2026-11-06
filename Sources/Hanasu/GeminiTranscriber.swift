@@ -86,7 +86,7 @@ struct GeminiTranscriber {
         let language = PromptLanguage.current
         let model = self.model
         var done = 0
-        await progress?("Gemini で文字起こししています…（0/\(total)）")
+        await progress?(tr("Gemini で文字起こししています…（0/%@）", "\(total)"))
 
         var results: [Int: [TimedSegment]] = [:]
         try await withThrowingTaskGroup(of: (Int, [TimedSegment]).self) { group in
@@ -125,7 +125,7 @@ struct GeminiTranscriber {
             while let (index, segments) = try await group.next() {
                 results[index] = segments
                 done += 1
-                await progress?("Gemini で文字起こししています…（\(done)/\(total)）")
+                await progress?(tr("Gemini で文字起こししています…（%@/%@）", "\(done)", "\(total)"))
                 addNext()
             }
         }

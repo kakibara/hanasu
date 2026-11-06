@@ -25,7 +25,7 @@ struct LiveNotesPanel: View {
                 if let mode {
                     LiveSidePanelModePicker(mode: mode)
                 } else {
-                    Text("メモ").font(.headline)
+                    Text(tr("メモ")).font(.headline)
                 }
                 Spacer()
                 LiveHighlightControls(recorder: recorder, onHighlight: highlight)
@@ -35,7 +35,7 @@ struct LiveNotesPanel: View {
                 .padding(.horizontal)
                 .padding(.top, 4)
             if settings.highlightHotKeyEnabled {
-                Text(hotKey.registrationError ?? "「ここ重要」は \(settings.highlightHotKey.displayString) でも付けられます（ほかのアプリを使っていても可）")
+                Text(hotKey.registrationError ?? tr("「ここ重要」は %@ でも付けられます（ほかのアプリを使っていても可）", "\(settings.highlightHotKey.displayString)"))
                     .font(.caption)
                     .foregroundStyle(hotKey.registrationError == nil ? Color.secondary : Color.orange)
                     .padding(.horizontal)
@@ -45,7 +45,7 @@ struct LiveNotesPanel: View {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 8) {
                         if notes.isEmpty {
-                            Text("気になったことを書くと、議事録で優先して取り上げます。")
+                            Text(tr("気になったことを書くと、議事録で優先して取り上げます。"))
                                 .font(.callout)
                                 .foregroundStyle(.secondary)
                         }
@@ -54,9 +54,9 @@ struct LiveNotesPanel: View {
                                 .contextMenu {
                                     // 印は付けてから 10 秒以内だけ取り消せる（DEC-MTG-047）。それより古い印は記録のあとに「メモ」タブで消す
                                     if note.kind == .note {
-                                        Button("削除", role: .destructive) { recorder.removeNote(id: note.id) }
+                                        Button(tr("削除"), role: .destructive) { recorder.removeNote(id: note.id) }
                                     } else if recorder.undoableHighlight?.id == note.id {
-                                        Button("取り消す", role: .destructive) { recorder.undoHighlight(id: note.id) }
+                                        Button(tr("取り消す"), role: .destructive) { recorder.undoHighlight(id: note.id) }
                                     }
                                 }
                         }
@@ -68,7 +68,7 @@ struct LiveNotesPanel: View {
             }
             Divider()
             VStack(alignment: .leading, spacing: 4) {
-                TextField("メモを入力して ↩", text: $draft, axis: .vertical)
+                TextField(tr("メモを入力して ↩"), text: $draft, axis: .vertical)
                     .lineLimit(1...4)
                     .textFieldStyle(.roundedBorder)
                     .focused($focused)
@@ -78,7 +78,7 @@ struct LiveNotesPanel: View {
                         if old.isEmpty, !new.isEmpty { draftStartedAt = recorder.elapsed }
                         if new.isEmpty { draftStartedAt = nil }
                     }
-                Text("書き始めた時刻つきで保存します。入力中に「ここ重要」を押すと、その文を印の説明にします。")
+                Text(tr("書き始めた時刻つきで保存します。入力中に「ここ重要」を押すと、その文を印の説明にします。"))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -117,14 +117,14 @@ struct LiveHighlightControls: View {
             } label: {
                 Image(systemName: caption.isShown ? "captions.bubble.fill" : "captions.bubble")
             }
-            .help("字幕をほかのアプリの前面に表示する")
-            .accessibilityLabel("字幕を前面に表示")
-            .accessibilityValue(caption.isShown ? "オン" : "オフ")
+            .help(tr("字幕をほかのアプリの前面に表示する"))
+            .accessibilityLabel(tr("字幕を前面に表示"))
+            .accessibilityValue(caption.isShown ? tr("オン") : tr("オフ"))
             // 設計判断: DEC-MTG-075（黄色の上は白ではなく黒の文字にする）
             Button {
                 if let onHighlight { onHighlight() } else { recorder.addHighlight() }
             } label: {
-                Label("ここ重要", systemImage: "star.fill")
+                Label(tr("ここ重要"), systemImage: "star.fill")
                     .foregroundStyle(.black)
             }
             .tint(.yellow)
@@ -135,7 +135,7 @@ struct LiveHighlightControls: View {
     }
 
     private var highlightHelp: String {
-        settings.highlightHotKeyEnabled ? "今の時刻に印を付ける（\(settings.highlightHotKey.displayString)）" : "今の時刻に印を付ける"
+        settings.highlightHotKeyEnabled ? tr("今の時刻に印を付ける（%@）", "\(settings.highlightHotKey.displayString)") : tr("今の時刻に印を付ける")
     }
 }
 
@@ -163,12 +163,12 @@ struct HighlightUndoButton: View {
                     recorder.undoHighlight(id: note.id)
                 } label: {
                     if compact {
-                        Label("取り消す", systemImage: "arrow.uturn.backward")
+                        Label(tr("取り消す"), systemImage: "arrow.uturn.backward")
                     } else {
-                        Label("★ を取り消す（あと \(remaining) 秒）", systemImage: "arrow.uturn.backward")
+                        Label(tr("★ を取り消す（あと %@ 秒）", "\(remaining)"), systemImage: "arrow.uturn.backward")
                     }
                 }
-                .help("付けてから 10 秒のあいだは、押し間違えた印を取り消せます")
+                .help(tr("付けてから 10 秒のあいだは、押し間違えた印を取り消せます"))
             }
         }
     }
@@ -184,7 +184,7 @@ private struct NoteRow: View {
                 .foregroundStyle(.secondary)
             if note.kind == .highlight {
                 Image(systemName: "star.fill").foregroundStyle(.yellow)
-                Text(note.text.isEmpty ? "ここ重要" : note.text)
+                Text(note.text.isEmpty ? tr("ここ重要") : note.text)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else {
@@ -208,7 +208,7 @@ struct MeetingNotesEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("1 行に 1 つ書きます。「[12:34] 内容」で時刻（録音開始から）を、「★」で「ここ重要」の印を表します。時刻のない行も書けます。議事録を作るとき、メモと印の前後の発言を優先して反映します。")
+            Text(tr("1 行に 1 つ書きます。「[12:34] 内容」で時刻（録音開始から）を、「★」で「ここ重要」の印を表します。時刻のない行も書けます。議事録を作るとき、メモと印の前後の発言を優先して反映します。"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 // 設計判断: DEC-MTG-048
@@ -228,25 +228,25 @@ struct MeetingNotesEditor: View {
                 .overlay(RoundedRectangle(cornerRadius: 6).stroke(.quaternary))
             HStack {
                 let count = MeetingNote.parse(text)
-                Text("メモ \(count.filter { $0.kind == .note }.count) 件・印 \(count.filter { $0.kind == .highlight }.count) 件")
+                Text(tr("メモ %@ 件・印 %@ 件", "\(count.filter { $0.kind == .note }.count)", "\(count.filter { $0.kind == .highlight }.count)"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Button("元に戻す") { text = meeting.notesText }
+                Button(tr("元に戻す")) { text = meeting.notesText }
                     .disabled(!changed)
-                Button("保存") { recorder.updateNotes(meeting, notes: MeetingNote.parse(text)) }
+                Button(tr("保存")) { recorder.updateNotes(meeting, notes: MeetingNote.parse(text)) }
                     .disabled(!changed)
                 // 設計判断: DEC-MTG-072
-                Button("保存して議事録を作り直す") {
+                Button(tr("保存して議事録を作り直す")) {
                     if meeting.minutes == nil { saveAndRegenerate() } else { confirmRegenerate = true }
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
-                .confirmationDialog("メモを保存して、議事録を作り直しますか？", isPresented: $confirmRegenerate) {
-                    Button("作り直す", action: saveAndRegenerate)
-                    Button("キャンセル", role: .cancel) {}
+                .confirmationDialog(tr("メモを保存して、議事録を作り直しますか？"), isPresented: $confirmRegenerate) {
+                    Button(tr("作り直す"), action: saveAndRegenerate)
+                    Button(tr("キャンセル"), role: .cancel) {}
                 } message: {
-                    Text("今の議事録とアクションアイテムは、メモを反映したものに置き換わります。")
+                    Text(tr("今の議事録とアクションアイテムは、メモを反映したものに置き換わります。"))
                 }
             }
         }
@@ -269,8 +269,8 @@ struct MeetingNotesSettingsSection: View {
 
     var body: some View {
         Section {
-            Toggle("記録中に「ここ重要」のショートカットを使う", isOn: $settings.highlightHotKeyEnabled)
-            LabeledContent("「ここ重要」の印") {
+            Toggle(tr("記録中に「ここ重要」のショートカットを使う"), isOn: $settings.highlightHotKeyEnabled)
+            LabeledContent(tr("「ここ重要」の印")) {
                 ShortcutRecorder(
                     combo: $settings.highlightHotKey,
                     defaultCombo: MeetingNotesSettings.defaultHighlightHotKey,
@@ -286,9 +286,9 @@ struct MeetingNotesSettingsSection: View {
             }
             .disabled(!settings.highlightHotKeyEnabled)
         } header: {
-            Text("会議中のメモ")
+            Text(tr("会議中のメモ"))
         } footer: {
-            Text("会議ノートの記録中の画面でメモを書いたり「ここ重要」の印を付けたりすると、議事録で優先して取り上げます。ショートカットは記録中だけ有効になり、ほかのアプリを使っていても印を付けられます。")
+            Text(tr("会議ノートの記録中の画面でメモを書いたり「ここ重要」の印を付けたりすると、議事録で優先して取り上げます。ショートカットは記録中だけ有効になり、ほかのアプリを使っていても印を付けられます。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }
@@ -318,7 +318,7 @@ final class MeetingCaptionPanel: ObservableObject {
                 contentRect: NSRect(x: 0, y: 0, width: 560, height: 130),
                 styleMask: [.titled, .closable, .resizable, .utilityWindow, .nonactivatingPanel, .hudWindow],
                 backing: .buffered, defer: false)
-            panel.title = "Hanasu 字幕"
+            panel.title = tr("Hanasu 字幕")
             panel.level = .floating
             panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
             panel.hidesOnDeactivate = false
@@ -362,19 +362,19 @@ struct MeetingCaptionView: View {
         HStack(alignment: .bottom, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 ForEach(recorder.liveLines.suffix(2)) { line in
-                    row(speaker: line.channel == .me ? "自分" : "相手", text: line.text,
+                    row(speaker: line.channel == .me ? tr("自分") : tr("相手"), text: line.text,
                         color: line.channel == .me ? .accentColor : .orange)
                 }
                 if !recorder.volatileOthers.isEmpty {
-                    row(speaker: "相手", text: recorder.volatileOthers, color: .orange).opacity(0.6)
+                    row(speaker: tr("相手"), text: recorder.volatileOthers, color: .orange).opacity(0.6)
                 }
                 if !recorder.volatileMe.isEmpty {
-                    row(speaker: "自分", text: recorder.volatileMe, color: .accentColor).opacity(0.6)
+                    row(speaker: tr("自分"), text: recorder.volatileMe, color: .accentColor).opacity(0.6)
                 }
                 if let engine = recorder.batchEngine {
-                    Text("記録を止めたあとに \(engine.shortName) で文字起こしします").foregroundStyle(.secondary)
+                    Text(tr("記録を止めたあとに %@ で文字起こしします", "\(engine.shortName)")).foregroundStyle(.secondary)
                 } else if recorder.liveLines.isEmpty, recorder.volatileMe.isEmpty, recorder.volatileOthers.isEmpty {
-                    Text("話し始めると、ここに文字起こしが出ます").foregroundStyle(.secondary)
+                    Text(tr("話し始めると、ここに文字起こしが出ます")).foregroundStyle(.secondary)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
@@ -386,8 +386,8 @@ struct MeetingCaptionView: View {
                 }
                 .tint(.yellow)
                 .buttonStyle(.borderedProminent)
-                .help("ここ重要")
-                .accessibilityLabel("ここ重要")
+                .help(tr("ここ重要"))
+                .accessibilityLabel(tr("ここ重要"))
                 .disabled(recorder.state != .recording)
                 HighlightUndoButton(recorder: recorder, compact: true)
                     .font(.caption)
@@ -404,110 +404,5 @@ struct MeetingCaptionView: View {
             // 長い発言は最後のほう（いま話している部分）を見せる
             Text(text).lineLimit(2).truncationMode(.head)
         }
-    }
-}
-
-// MARK: - 見た目の確認用の描き出し
-
-/// `Hanasu --render-meeting-notes <出力フォルダ>`: 架空の会議で、記録中の画面・メモの編集・字幕を PNG にする
-enum MeetingNotesPreview {
-    @MainActor
-    static func render(to directory: URL) throws {
-        _ = NSApplication.shared
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        var meeting = Meeting(id: "preview", title: "週次定例（サンプル）", startedAt: Date().addingTimeInterval(-754))
-        meeting.notes = [
-            MeetingNote(kind: .note, time: 65, text: "リリースは 11/20 で確定？"),
-            MeetingNote(kind: .highlight, time: 312, text: ""),
-            MeetingNote(kind: .note, time: 420, text: "価格表の更新 → 佐藤さん"),
-            MeetingNote(kind: .highlight, time: 690, text: "β版の対象を 3 社に絞る"),
-        ]
-        let lines: [MeetingRecorder.LiveLine] = [
-            .init(channel: .others, start: 640, text: "β版はまず 3 社に絞って出したいと思っています。"),
-            .init(channel: .me, start: 652, text: "3 社だとどこを想定していますか？"),
-            .init(channel: .others, start: 660, text: "既存のお客さまのうち、利用頻度が高いところからです。"),
-            .init(channel: .me, start: 701, text: "分かりました。選び方の基準を来週までにまとめましょう。"),
-        ]
-        let recorder = MeetingRecorder()
-        recorder.showPreviewForRendering(meeting, lines: lines, volatileOthers: "そうですね、基準は利用頻度と")
-
-        try write(LiveTranscriptView(recorder: recorder).frame(width: 640, height: 520),
-                  to: directory.appendingPathComponent("live.png"))
-        var done = meeting
-        done.status = .done
-        try write(MeetingNotesEditor(meeting: done, recorder: recorder).frame(width: 560, height: 320),
-                  to: directory.appendingPathComponent("notes-editor.png"))
-        try write(MeetingCaptionView(recorder: recorder).frame(width: 560, height: 130)
-                      .environment(\.colorScheme, .dark).background(Color.black.opacity(0.85)),
-                  to: directory.appendingPathComponent("caption.png"))
-        try write(Form { MeetingNotesSettingsSection() }.formStyle(.grouped).frame(width: 560, height: 220),
-                  to: directory.appendingPathComponent("settings.png"))
-        // 付けたばかりの印があるとき（「取り消す」が出る）
-        var recent = meeting
-        recent.notes?.append(MeetingNote(kind: .highlight, time: 750, text: ""))
-        recorder.showPreviewForRendering(recent, lines: lines)
-        try write(LiveTranscriptView(recorder: recorder).frame(width: 640, height: 520),
-                  to: directory.appendingPathComponent("live-undo.png"))
-        try write(MeetingCaptionView(recorder: recorder).frame(width: 560, height: 130)
-                      .environment(\.colorScheme, .dark).background(Color.black.opacity(0.85)),
-                  to: directory.appendingPathComponent("caption-undo.png"))
-        checkHighlightUndo(recorder: recorder)
-        checkCompatibility()
-    }
-
-    // 確かめ方: REQ-MTG-012
-    /// 「ここ重要」の取り消し（DEC-MTG-047）の確認。結果だけ出す
-    @MainActor
-    private static func checkHighlightUndo(recorder: MeetingRecorder) {
-        var results: [String] = []
-        func check(_ name: String, _ ok: Bool) { results.append("\(ok ? "OK" : "NG") \(name)") }
-        let meeting = Meeting(id: "u", title: "t", startedAt: Date(), notes: [
-            MeetingNote(kind: .highlight, time: 100, text: ""),
-            MeetingNote(kind: .highlight, time: 115, text: "新しい"),
-            MeetingNote(kind: .note, time: 118, text: "メモ"),
-        ])
-        check("10 秒以内のいちばん新しい印", meeting.undoableHighlight(at: 118)?.text == "新しい")
-        check("ちょうど 10 秒まで", meeting.undoableHighlight(at: 125)?.text == "新しい")
-        check("10 秒を過ぎたら取り消せない", meeting.undoableHighlight(at: 125.1) == nil)
-        check("古い印は取り消せない", meeting.undoableHighlight(at: 130) == nil)
-        check("時刻のない印は対象外", Meeting(id: "v", title: "t", startedAt: Date(),
-                                          notes: [MeetingNote(kind: .highlight, time: nil, text: "")]).undoableHighlight(at: 0) == nil)
-        // 記録中のプレビュー（750 秒の印、今は約 754 秒）で「取り消す」が出る。取り消しそのものは保存を伴うので、ここでは呼ばない
-        check("記録中のプレビューで取り消せる印がある", recorder.undoableHighlight?.time == 750)
-        print("ここ重要の取り消し: " + results.joined(separator: " / "))
-    }
-
-    /// 後方互換とテキスト形式の確認（中身は出さず、件数と結果だけ出す）
-    @MainActor
-    private static func checkCompatibility() {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        // メモ機能より前の meeting.json（notes がない）
-        let legacy = #"{"id":"x","title":"t","startedAt":"2026-11-02T05:30:00Z","duration":60,"status":"done","speakerNames":{},"utterances":[]}"#
-        let old = try? decoder.decode(Meeting.self, from: Data(legacy.utf8))
-        print("古い形式の meeting.json: \(old != nil && old?.notes == nil ? "読めた（メモなし）" : "読めなかった")")
-        // テキスト形式の往復
-        let text = "[01:05] メモ\n[05:12] ★\n[1:02:03] ★ 説明\n時刻なし"
-        let parsed = MeetingNote.parse(text)
-        print("テキスト形式の往復: \(MeetingNote.text(from: parsed) == text ? "一致" : "不一致: \(MeetingNote.text(from: parsed))")")
-        // 手元の会議がすべて読めるか
-        let dirs = (try? FileManager.default.contentsOfDirectory(at: MeetingStore.baseDirectory, includingPropertiesForKeys: nil)) ?? []
-        let withJSON = dirs.filter { FileManager.default.fileExists(atPath: $0.appendingPathComponent("meeting.json").path) }.count
-        print("手元の会議: meeting.json \(withJSON) 件中 \(MeetingStore.loadAll().count) 件を読めた")
-    }
-
-    @MainActor
-    static func write<V: View>(_ view: V, to url: URL) throws {
-        let hosting = NSHostingView(rootView: view.background(Color(nsColor: .windowBackgroundColor)))
-        hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
-        // TextField などは AppKit の部品なので、画面外のウインドウに置いて描く
-        let window = NSWindow(contentRect: hosting.frame, styleMask: [.borderless], backing: .buffered, defer: false)
-        window.contentView = hosting
-        hosting.layoutSubtreeIfNeeded()
-        RunLoop.main.run(until: Date().addingTimeInterval(0.3))
-        guard let rep = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) else { return }
-        hosting.cacheDisplay(in: hosting.bounds, to: rep)
-        try rep.representation(using: .png, properties: [:])?.write(to: url)
-        print("wrote \(url.path)")
     }
 }

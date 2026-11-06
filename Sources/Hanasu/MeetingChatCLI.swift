@@ -165,3 +165,68 @@ enum MeetingChatPreview {
         """, coveredUntil: 752, lineCount: 6),
     ]
 }
+
+extension MeetingChat {
+    // MARK: - 確認用
+
+    // 確かめ方: REQ-MTG-040, REQ-MTG-041
+    /// プロンプトの組み立て・時刻のリンク・メモへの変換を確かめる（AI は呼ばない）。結果の行を返す
+    static func selfTest() -> [String] {
+        var results: [String] = []
+        func check(_ name: String, _ ok: Bool) { results.append("\(ok ? "OK" : "NG") \(name)") }
+
+        let lines = (0..<10).map { Line(time: Double($0 * 30), speaker: $0 % 2 == 0 ? "自分" : "相手", text: "発言\($0)") }
+        let material = Material(title: "定例 \"週次\"", startedAt: Date(timeIntervalSince1970: 0), live: true, elapsed: 305,
+                                lines: lines, pending: [Line(time: 305, speaker: "相手", text: "途中")],
+                                notes: "[01:00] メモ")
+        let history: [Message] = [
+            Message(role: .user, text: "最初の質問"),
+            Message(role: .assistant, text: "最初の答え"),
+            Message(role: .user, text: "失敗した質問"),
+        ]
+        let prompt = MeetingChat.prompt(question: "今の質問", material: material, history: history)
+        check("記録中の時点を書く", prompt.text.contains("status=\"記録中（録音開始から 05:05 の時点）\""))
+        check("文字起こしを全部渡す", prompt.text.contains("[04:30] 相手: 発言9") && prompt.omittedLines == 0)
+        check("確定前の発言を分けて渡す", prompt.text.contains("<pending_transcript>\n[05:05] 相手: 途中"))
+        check("メモを渡す", prompt.text.contains("<user_notes>\n[01:00] メモ"))
+        check("それまでの会話を渡す", prompt.text.contains("<user>\n最初の質問\n</user>\n<assistant>\n最初の答え\n</assistant>"))
+        check("答えのない質問は渡さない", !prompt.text.contains("失敗した質問"))
+        check("今の質問は最後", prompt.text.hasSuffix("<question>\n今の質問\n</question>"))
+        check("タイトルの引用符を置き換える", prompt.text.contains("title=\"定例 '週次'\""))
+
+        var small = Options()
+        small.maxTranscriptCharacters = 40
+        let truncated = MeetingChat.prompt(question: "q", material: material, history: [], options: small)
+        check("上限を超えたら古い発言を省く", truncated.omittedLines > 0 && truncated.text.contains("[04:30] 相手: 発言9")
+              && !truncated.text.contains("[00:00] 自分: 発言0") && truncated.text.contains("最初の \(truncated.omittedLines) 発言は省略"))
+        check("会話がなければ <conversation> を付けない", !truncated.text.contains("<conversation>"))
+
+        var limited = Options()
+        limited.maxHistoryMessages = 2
+        let many = (0..<6).map { Message(role: $0 % 2 == 0 ? .user : .assistant, text: "やりとり\($0)") }
+        let recent = MeetingChat.prompt(question: "q", material: material, history: many, options: limited)
+        check("会話は新しいものだけ渡す", recent.text.contains("やりとり4") && recent.text.contains("やりとり5") && !recent.text.contains("やりとり3"))
+
+        var batch = material
+        batch.lines = []
+        batch.pending = []
+        batch.batchEngineName = "Whisper"
+        check("記録中に文字起こしがないエンジンを知らせる", MeetingChat.prompt(question: "q", material: batch, history: []).text
+              .contains("記録を止めたあとに Whisper で行う"))
+
+        let linked = linkingTimes(in: "決定 [12:34]、補足 ［1:02:03］、リンク済み [05:00](https://example.com)")
+        check("時刻をリンクにする", linked.contains("[12:34](hanasu-time://754)") && linked.contains("[1:02:03](hanasu-time://3723)"))
+        check("リンク済みの [ ] はそのまま", linked.contains("[05:00](https://example.com)"))
+        check("リンクから秒数を読む", URL(string: "hanasu-time://754").flatMap(seconds(from:)) == 754
+              && URL(string: "https://example.com").flatMap(seconds(from:)) == nil)
+
+        check("時刻の発言を探す", lineIndex(at: 95, starts: [0, 30, 60, 90, 120]) == 3
+              && lineIndex(at: 5, starts: [10, 20]) == 0 && lineIndex(at: 59.5, starts: [0, 60]) == 1
+              && lineIndex(at: 10, starts: []) == nil)
+
+        let note = noteText(from: "## 決まったこと\n- **リリースは 11/20** [12:34]\n- 価格表は佐藤さん\n")
+        check("答えをメモの 1 行にする", note == "AI: 決まったこと / リリースは 11/20 [12:34] / 価格表は佐藤さん")
+        check("メモの長さを抑える", noteText(from: String(repeating: "あ", count: 1000), limit: 50).count == 51)
+        return results
+    }
+}

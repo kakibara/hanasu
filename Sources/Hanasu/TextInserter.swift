@@ -104,10 +104,10 @@ enum TextInserter {
     }
 
     /// 貼り付けが届いたか確かめられなかったときの案内（HUD に出す）
-    static func unconfirmedMessage(clipboardKept: Bool, subject: String = "結果") -> String {
+    static func unconfirmedMessage(clipboardKept: Bool, subject: String = tr("結果")) -> String {
         clipboardKept
-            ? "貼り付け先が受け取らなかったようです。\(subject)をクリップボードに入れたので、入力したい場所で ⌘V を押してください。"
-            : "貼り付け先が受け取らなかったようです。\(subject)は「最近の結果」から取り出せます。"
+            ? tr("貼り付け先が受け取らなかったようです。%@をクリップボードに入れたので、入力したい場所で ⌘V を押してください。", "\(subject)")
+            : tr("貼り付け先が受け取らなかったようです。%@は「最近の結果」から取り出せます。", "\(subject)")
     }
 
     /// クリップボード履歴アプリに記録しないよう印を付けた項目

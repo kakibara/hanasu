@@ -10,10 +10,10 @@ enum SpeechRecognizerError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .unsupportedLocale(let id): "この言語（\(id)）は音声認識に対応していません"
-        case .noAudioFormat: "音声認識モデルに合う音声形式が見つかりません"
-        case .noInputDevice: "マイクが見つかりません"
-        case .alreadyRunning: "すでに録音中です"
+        case .unsupportedLocale(let id): tr("この言語（%@）は音声認識に対応していません", "\(id)")
+        case .noAudioFormat: tr("音声認識モデルに合う音声形式が見つかりません")
+        case .noInputDevice: tr("マイクが見つかりません")
+        case .alreadyRunning: tr("すでに録音中です")
         }
     }
 }
@@ -60,7 +60,7 @@ final class SpeechRecognizer {
     /// Whisper / Gemini で一度に録れる長さ（秒）。16 kHz モノラルの Float で 1 分あたり約 3.8 MB たまるので、上限を置く
     nonisolated static let maxBatchRecordingSeconds: Double = 600
     /// 上限に達したことを HUD に出す文（Windows 版と同じ文言）
-    nonisolated static let recordingLimitNotice = "録音が上限の 10 分に達したため、ここまでの音声を処理します"
+    nonisolated static let recordingLimitNotice = tr("録音が上限の 10 分に達したため、ここまでの音声を処理します")
 
     /// - Parameter transcription: 文字起こしのエンジン。Mac 標準以外では、engine（SpeechAnalyzer のモジュール）は使わない
     /// - Parameter inputDeviceUID: 使うマイクの UID。空ならシステムの設定に従う
@@ -290,7 +290,7 @@ final class SpeechRecognizer {
             return text
         } catch {
             appLog.error("batch transcription failed: \(String(describing: error), privacy: .public)")
-            lastError = "\(batch.engine.shortName) で文字起こしできませんでした: \(error.localizedDescription)"
+            lastError = tr("%@ で文字起こしできませんでした: %@", "\(batch.engine.shortName)", "\(error.localizedDescription)")
             return ""
         }
     }

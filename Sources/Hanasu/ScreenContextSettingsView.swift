@@ -12,33 +12,33 @@ struct ScreenContextSettingsSection: View {
     var body: some View {
         Section {
             Toggle(isOn: $settings.enabled) {
-                Text("画面の文脈を AI に渡す")
-                Text("録音を始めたときに、前面のウインドウのタイトルと、入力欄のカーソルの前後の文章（それぞれ最大 \(ScreenContextReader.maxChars) 文字）を読み取ります。固有名詞の表記や書き方、話の流れを合わせるための参考として、話した内容と一緒に AI（Gemini か Claude）に送ります（翻訳でも使います）。パスワード欄と下の除外アプリは読みません。読み取った文章は保存しません。")
+                Text(tr("画面の文脈を AI に渡す"))
+                Text(tr("録音を始めたときに、前面のウインドウのタイトルと、入力欄のカーソルの前後の文章（それぞれ最大 %@ 文字）を読み取ります。固有名詞の表記や書き方、話の流れを合わせるための参考として、話した内容と一緒に AI（Gemini か Claude）に送ります（翻訳でも使います）。パスワード欄と下の除外アプリは読みません。読み取った文章は保存しません。", "\(ScreenContextReader.maxChars)"))
             }
             if settings.enabled && !accessibilityTrusted {
                 HStack(alignment: .firstTextBaseline) {
-                    Label("アクセシビリティがまだ許可されていないので、画面の文脈は読み取れません（音声入力そのものは使えます）。",
+                    Label(tr("アクセシビリティがまだ許可されていないので、画面の文脈は読み取れません（音声入力そのものは使えます）。"),
                           systemImage: "exclamationmark.triangle.fill")
                         .font(.caption).foregroundStyle(.orange)
                         .fixedSize(horizontal: false, vertical: true)
                     Spacer()
-                    Button("許可する…") {
+                    Button(tr("許可する…")) {
                         // 未許可なら macOS のダイアログが出る。出ないとき（以前に拒否した）はシステム設定を開く
                         if !Permissions.isAccessibilityTrusted(prompt: true) {
                             Permissions.openPrivacySettings("Privacy_Accessibility")
                         }
                         refreshTrust()
                     }
-                    .accessibilityLabel("アクセシビリティを許可する")
+                    .accessibilityLabel(tr("アクセシビリティを許可する"))
                 }
             }
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
-                    Text("除外するアプリ（バンドル ID かアプリ名を 1 行に 1 つ）")
+                    Text(tr("除外するアプリ（バンドル ID かアプリ名を 1 行に 1 つ）"))
                     Spacer()
-                    Menu("起動中のアプリから追加") {
+                    Menu(tr("起動中のアプリから追加")) {
                         ForEach(runningApps, id: \.bundleID) { app in
-                            Button("\(app.name)（\(app.bundleID)）") { add(app.bundleID) }
+                            Button(tr("%@（%@）", app.name, app.bundleID)) { add(app.bundleID) }
                         }
                     }
                     .fixedSize()
@@ -49,9 +49,9 @@ struct ScreenContextSettingsSection: View {
             }
             .disabled(!settings.enabled)
         } header: {
-            Text("画面の文脈")
+            Text(tr("画面の文脈"))
         } footer: {
-            Text("読み取りにはアクセシビリティの許可（自動入力と同じもの）を使います。画面に表示されている他人のメッセージも AI に送られることがあるので、社外秘の画面などでは除外に入れるか、オフにしてください。")
+            Text(tr("読み取りにはアクセシビリティの許可（自動入力と同じもの）を使います。画面に表示されている他人のメッセージも AI に送られることがあるので、社外秘の画面などでは除外に入れるか、オフにしてください。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
         .onChange(of: settings.enabled) { _, _ in refreshTrust() }

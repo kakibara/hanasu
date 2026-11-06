@@ -24,6 +24,10 @@ let package = Package(
             // AI へのプロンプト（言語ごとの JSON。Windows 版も同じファイルを読む）
             resources: [
                 .copy("Resources/Prompts"),
+                // 要件: REQ-COM-060
+                // 設計判断: DEC-COM-165
+                // UI の文字列（String Catalog）。xcstringstool で変換せず、起動後に JSON のまま読む
+                .copy("Resources/Localizable.xcstrings"),
             ],
             swiftSettings: [
                 .swiftLanguageMode(.v5),
