@@ -1,0 +1,476 @@
+{
+  "order": 80,
+  "title": "横断（アクセシビリティ・文言・見た目・言語）",
+  "cases": [
+    {
+      "id": "UX-090",
+      "steps": "すべての画面をキーボードだけで操作する（Tab / Shift+Tab / Space / Enter / Esc）",
+      "expected": "焦点の順序が自然で、すべての操作に届く。Esc で閉じられる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "キーボードだけで全画面を操作する必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-091",
+      "steps": "VoiceOver / ナレーターで、アイコンだけのボタンをすべて読む",
+      "expected": "すべてに名前がある（「検索語を消す」「マイクを選ぶ」など）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "VoiceOver で読み上げを聞く必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-092",
+      "steps": "ダークモードとライトモード、ハイコントラストで主要画面を見る",
+      "expected": "文字と背景のコントラストが足りている。ボタンの境界が分かる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-history",
+              "{out}/history-light.png",
+              "--light"
+            ],
+            [
+              "--render-history",
+              "{out}/history-dark.png",
+              "--dark"
+            ],
+            [
+              "--render-meeting-notes",
+              "{out}/meeting"
+            ]
+          ],
+          "look": "履歴のウインドウ（ライト・ダーク）と会議の記録中の画面（ダーク）で、文字と背景のコントラストが足りていて、ボタンの境界が分かる",
+          "remaining": "設定の画面のダーク（描画ではウインドウの背景が描かれず判定できない）と、ハイコントラスト（コントラストを上げる）の設定"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-093",
+      "steps": "文字サイズ（Dynamic Type / Windows の拡大）を大きくする",
+      "expected": "切れ・重なりがない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "OS の文字サイズを変える必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-094",
+      "steps": "エラーの文言を一覧で読む（キー無効・通信失敗・権限拒否・ディスク不足・モデル未取得）",
+      "expected": "何が起きたか・次に何をすればよいかが書いてある。専門用語と生のエラー文を出さない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "エラーを起こして文言を集める必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-095",
+      "steps": "Mac と Windows で同じ機能の文言を比べる（削除確認、エラー、設定の名前）",
+      "expected": "同じ言い回しになっている",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "Windows の画面と並べて比べる必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-096",
+      "steps": "破壊的な操作（削除・上書き・リセット）の確認を洗い出す",
+      "expected": "すべてに確認があり、既定のボタンが安全側（キャンセル）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "すべての破壊的な操作を洗い出す必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-097",
+      "steps": "初回起動から 1 日使うまでの流れを通しで試す（新規ユーザー）",
+      "expected": "つまずく点（権限・モデル・キー）が案内されている",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "新規ユーザーで 1 日使う必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-098",
+      "steps": "日本語以外の OS 言語・英語の発話で使う",
+      "expected": "想定した言語で文字起こし・整形される。UI が欠けない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P3",
+      "refs": [
+        "REQ-COM-060"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-onboarding",
+              "{out}/onboarding"
+            ],
+            [
+              "--render-settings",
+              "{out}/settings"
+            ],
+            [
+              "--render-hud",
+              "{out}/hud.png"
+            ],
+            [
+              "--render-history",
+              "{out}/history.png"
+            ]
+          ],
+          "look": "その言語で表示され、日本語が残っていない。文字が切れたり重なったり、ボタンからはみ出したりしていない",
+          "remaining": "その言語の発話で文字起こし・整形されること",
+          "languages": "all"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-099",
+      "steps": "スリープから復帰・デバイス（マイク）の抜き差し・ネットワークの切り替え",
+      "expected": "録音と HUD が壊れない。復帰後に再度使える",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "スリープ・デバイスの抜き差し・ネットワークの切り替えが要る"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-106",
+      "steps": "Windows で、履歴の削除・すべて削除・モデルの削除・API キーの削除・会議中の終了の確認で、そのまま Enter を押す",
+      "expected": "どれも「キャンセル」が既定で、Enter では消えない（終了しない）",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-DIC-079"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-107",
+      "steps": "VoiceOver で、辞書の行の「−」と警告、アプリ別の「追加ルール」「一覧から外す」、スニペットの「＋」「−」、字幕の「★」、会議一覧の議事録作成中の表示、音量のメーターを読む",
+      "expected": "すべて目的が読まれる（「この行を削除」「Slack を一覧から外す」「自分の音量 40%」など）。追加ルールは開いている・閉じているも読まれる",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "VoiceOver で読み上げを聞く必要がある"
+        }
+      }
+    },
+    {
+      "id": "UX-114",
+      "steps": "ナレーターで、設定のショートカットの欄・「既定に戻す」・マイク・Whisper の「削除」、会議の一覧・タイトル・メモ・音量のバー、履歴の検索・一覧・結果・原文を読む",
+      "expected": "それぞれの名前が読まれる（「音声入力のショートカットを既定に戻す」など、同じ文字のボタンも区別できる）",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-117",
+      "steps": "1366×768・拡大 125% の Windows で、設定・会議・履歴のウインドウを開く",
+      "expected": "ウインドウが作業領域に収まり、下の「閉じる」などのボタンが画面の外に出ない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-119",
+      "steps": "Windows でハイコントラストのテーマにして、設定・会議・履歴の補足の文（灰色の小さい文字）を見る",
+      "expected": "テーマの色で読める（白い背景に白い文字にならない）。会議の左の欄・記録中の欄・設定の試し書きの背景は UX-124 で見る",
+      "os": [
+        "windows"
+      ],
+      "priority": "P3",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-123",
+      "steps": "2 台のディスプレイで、サブの画面にマウスを置いて、トレイから設定・会議ノート・履歴を開く（Windows）。サブの画面で会議アプリのマイクをオンにして提案パネルを出す。字幕を初めて出す（Mac）",
+      "expected": "マウスのある画面に開く（中央 / 右上 / 下の中央）。DPI の違う画面でも大きさが崩れない。閉じて開き直したときは前の位置（Windows は 2 回目以降、Mac の字幕は 2 回目以降）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "DEC-COM-017"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "2 台のディスプレイが要る"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-124",
+      "steps": "Windows でハイコントラストのテーマ（黒）にして、会議ノート（記録中の表示を含む）と設定の AI タブの試し書きを開く",
+      "expected": "左の欄・「● 記録中」・記録中のメモ欄・試し書きの出力の背景がテーマの色になり、文字が読める。記録中の枠は強調の色。通常のテーマでは以前と同じ色。HUD は変わらない（濃い背景に白い文字）",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "DEC-COM-153"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-131",
+      "steps": "会議ノートの記録中と字幕の「★ ここ重要」のボタンを見る。辞書の警告の三角を見る",
+      "expected": "黄色のボタンの文字と星が黒で読める。三角は橙",
+      "os": [
+        "mac"
+      ],
+      "priority": "P3",
+      "refs": [
+        "DEC-MTG-075"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-meeting-notes",
+              "{out}"
+            ]
+          ],
+          "look": "記録中の画面と字幕の「★ ここ重要」のボタンで、黄色の上の文字と星が黒で読める",
+          "remaining": "辞書の警告の三角が橙であること"
+        }
+      }
+    },
+    {
+      "id": "UX-132",
+      "steps": "Windows のトレイのメニューを開く。Alt キーでアクセスキーを使う",
+      "expected": "「録音を開始(R)」「英訳して入力を開始(T)」「会議の記録を開始(M)」「会議ノートを開く(N)…」「最近の結果(E)」「履歴を開く(H)…」「設定(S)…」「Hanasu を終了(X)」。Mac のメニューバーと同じ言い回し。R / T / M / N / E / H / S / X で選べる",
+      "os": [
+        "windows"
+      ],
+      "priority": "P3",
+      "refs": [
+        "DEC-COM-152"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-142",
+      "steps": "システムの表示の言語を英語にして起動する（Mac は `open -a build/Hanasu.app --args -AppleLanguages \"(en)\"` でもよい）。スウェーデン語だけにしても起動する。メニュー・設定・HUD・オンボーディング・許可を求める説明を見る",
+      "expected": "英語のときは英語で出る。対応していない言語（スウェーデン語）だけのときは英語で出る。日本語のときは今までどおりの日本語",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-060"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "-AppleLanguages \"(en)\" と \"(sv)\" を付けて .app を起動し、メニューと設定の文言の言語を確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-148",
+      "steps": "Mac: scripts/build-app.sh で作った .app を codesign -dvv で見て、会議の保存先のフォルダの権限を ls -ld で見る。Windows: 管理者として動くメモ帳を前面にして音声入力を終える",
+      "expected": "Mac: flags に runtime があり、会議のフォルダは drwx------。Windows: 管理者のウインドウには貼り付けず、結果を画面に残す",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-022"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "build-app.sh で作った .app と、ターミナルでの確認が要る"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    }
+  ]
+}

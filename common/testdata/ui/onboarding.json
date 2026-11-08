@@ -1,0 +1,161 @@
+{
+  "order": 10,
+  "title": "初回起動・オンボーディング",
+  "cases": [
+    {
+      "id": "UX-001",
+      "steps": "初回起動する",
+      "expected": "オンボーディングが開き、主な機能と Tips の説明が出る。途中で閉じても次回に再開できる（または続きから始められる）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-051"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-onboarding",
+              "{out}"
+            ]
+          ],
+          "look": "オンボーディングの各ページが描け、最初のページに主な機能の説明があり、Tips のページがある",
+          "remaining": "途中で閉じて次回に再開できること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-002",
+      "steps": "既定の AI の選択画面を見る",
+      "expected": "おすすめが分かる形で示され、選ぶまで先に進めない（または既定が決まっている）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-050"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-onboarding",
+              "{out}",
+              "--page",
+              "ai"
+            ]
+          ],
+          "look": "AI の選択のページで、おすすめが分かる形で示されている（または既定が選ばれている）",
+          "remaining": "選ぶまで先に進めないこと"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-003",
+      "steps": "マイク・アクセシビリティなどの権限を **拒否** して進む",
+      "expected": "何が使えなくなるか、どこで許可し直せるかが書いてある。行き止まりにならない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-onboarding",
+              "{out}",
+              "--page",
+              "permissions"
+            ]
+          ],
+          "look": "許可のページに、許可しないと何が使えなくなるか・どこで許可し直せるかが書いてある",
+          "remaining": "実際に拒否して進み、行き止まりにならないこと"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-004",
+      "steps": "権限を拒否した状態で録音を試みる",
+      "expected": "黙って失敗せず、原因と設定の場所を案内する",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-001"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "権限を拒否した状態で本物の録音が要る"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-005",
+      "steps": "画面を最大・最小サイズにする、文字サイズを大きくする",
+      "expected": "文字が切れない、ボタンが隠れない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "ウインドウの大きさと OS の文字サイズを変える必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-108",
+      "steps": "VoiceOver でオンボーディングの AI のカードを移動する",
+      "expected": "選んでいるカードが「選択済み」と読まれる。使えない Apple のカードは理由がヒントとして読まれる",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-050"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "VoiceOver で読み上げを聞く必要がある"
+        }
+      }
+    }
+  ]
+}

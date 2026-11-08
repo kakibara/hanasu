@@ -11,6 +11,7 @@
 | [verification/](verification/) | 日付の付いた検証の結果と、過去に起きた問題の記録 | いまの仕様（spec に書く） |
 | [roadmap.md](roadmap.md) | **まだ main に入っていない**計画だけ（`FUT-<番号>`） | 実装済みのもの |
 | [plans/](plans/) | 大きな計画の調査・要件定義・実装計画（roadmap から参照する） | 実装済みのもの |
+| [../common/testdata/ui/](../common/testdata/ui/) | **画面を見て確かめる UI のテスト項目**（UX-…）のデータ。一覧 [verification/ui-ux-test-cases.md](verification/ui-ux-test-cases.md) はここから `scripts/ui-cases.py md` で作る。Mac では画面を PNG に描いて確かめる（`.claude/skills/ui-test/SKILL.md`、DEC-COM-170）。結果は [verification/ui-runs.md](verification/ui-runs.md) | 結果（verification に書く） |
 
 | 領域 | spec | design | verification |
 | --- | --- | --- | --- |
@@ -20,7 +21,7 @@
 | REL 配布・リリース | [spec/release.md](spec/release.md) | [releasing.md](releasing.md)（手順）、[.claude/skills/release/SKILL.md](../.claude/skills/release/SKILL.md)（リリースのスキル）、[releases/](releases/)（リリース文とテンプレート） | — |
 | Windows 版（DIC・MTG・COM の「対象: Windows」） | 各 spec の「対象」と「Windows の実装」 | [windows/README.md](../windows/README.md)（Windows 版の作り・Mac 版との差） | windows/README.md と PR #19 |
 
-計画: [roadmap.md](roadmap.md)、ボットモード: [plans/bot-mode.md](plans/bot-mode.md)。
+計画: [roadmap.md](roadmap.md)、ボットモード: [plans/bot-mode.md](plans/bot-mode.md)、Mac と Windows で共有するデータとテストデータ: [plans/common-shared-data.md](plans/common-shared-data.md)。
 
 ## 2. 振る舞いの 3 つの区分
 
