@@ -148,6 +148,195 @@ struct UpdateRelease: Equatable {
         }
         return text.trimmingCharacters(in: .whitespacesAndNewlines)
     }
+
+    enum Platform { case mac, windows }
+
+    /// ダイアログに出す節（リリース文の書き方 docs/releases/TEMPLATE.md の見出し）
+    static let appSections: Set<String> = ["ハイライト", "新しい機能", "改善", "不具合の修正"] // skip-tr（リリース文の見出しを探す語）
+
+    // 設計判断: DEC-REL-027
+    /// リリース文を、ダイアログに出す分（アプリの機能の節と、その OS の項目）に絞る。
+    /// 4 つの見出しがどれもなければ、絞らずに返す
+    static func appNotes(from notes: String, platform: Platform = .mac) -> String {
+        let lines = notes.components(separatedBy: "\n")
+        func sectionTitle(_ line: String) -> String? {
+            guard let match = line.firstMatch(of: #/^##(?!#)\s+(.*?)\s*$/#) else { return nil }
+            return String(match.1)
+        }
+        guard lines.contains(where: { sectionTitle($0).map(appSections.contains) == true }) else { return notes }
+
+        // 節ごとに分ける（最初の見出しより前は、見出しのない節として出す）
+        var sections: [(title: String?, body: [String])] = [(nil, [])]
+        for line in lines {
+            if let title = sectionTitle(line) {
+                sections.append((title, []))
+            } else {
+                sections[sections.count - 1].body.append(line)
+            }
+        }
+
+        var output: [String] = []
+        for section in sections {
+            if let title = section.title, !appSections.contains(title) { continue }
+            var kept: [String] = []
+            // 出さない行の字下げ（その下の一段深い行も出さない）
+            var droppedIndent: Int?
+            for line in section.body {
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                let indent = line.prefix { $0 == " " || $0 == "\t" }.reduce(0) { $0 + ($1 == "\t" ? 4 : 1) }
+                if trimmed.isEmpty {
+                    kept.append("")
+                    continue
+                }
+                if let dropped = droppedIndent {
+                    if indent > dropped { continue }
+                    droppedIndent = nil
+                }
+                guard let tag = line.firstMatch(of: #/\s*[（(]\s*(Mac|Windows)(?:\s*/\s*(Mac|Windows))?\s*[）)]\s*([。.]?)\s*$/#) else {
+                    kept.append(line)
+                    continue
+                }
+                let platforms = [tag.1, tag.2].compactMap { $0 }.map(String.init)
+                let mine = platform == .mac ? "Mac" : "Windows"
+                if platforms.contains(mine) {
+                    // 印は外し、文の終わりの「。」は残す
+                    kept.append(String(line[..<tag.range.lowerBound]) + tag.3)
+                } else {
+                    droppedIndent = indent
+                }
+            }
+            guard kept.contains(where: { !$0.isEmpty }) else { continue }
+            if let title = section.title { output.append("## \(title)") }
+            output.append(contentsOf: kept)
+        }
+        return output.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+// 設計判断: DEC-REL-027
+/// リリース文（Markdown）を、ダイアログの欄に出す形にする。
+/// 使うのは、リリース文の書き方（docs/releases/TEMPLATE.md）に出てくるもの: 見出し・箇条書き・番号付きの箇条書き・太字・斜体・コード・リンク。
+/// 表やコードのブロックは使わないので、そのまま 1 行ずつ出す
+enum ReleaseNotesFormatter {
+    static let bodySize: CGFloat = 12
+
+    static func attributed(_ markdown: String) -> NSAttributedString {
+        let result = NSMutableAttributedString()
+        var previousWasBlank = true
+        for rawLine in markdown.components(separatedBy: .newlines) {
+            let line = rawLine.trimmingCharacters(in: .whitespaces)
+            // HTML のコメント（release-notes の印など）は出さない
+            if line.hasPrefix("<!--") && line.hasSuffix("-->") { continue }
+            if line.isEmpty {
+                previousWasBlank = true
+                continue
+            }
+            let block = Block(rawLine)
+            let paragraph = NSMutableParagraphStyle()
+            paragraph.lineSpacing = 2
+            paragraph.paragraphSpacingBefore = result.length == 0 ? 0 : block.spacingBefore(afterBlank: previousWasBlank)
+            let piece = NSMutableAttributedString()
+            if let marker = block.marker {
+                // 印のあとを、印の幅だけ字下げして折り返す。印は行の中の Markdown の解釈に通さない（"1." が読み替えられないように）
+                let indent = CGFloat(block.level) * 14
+                let markerWidth: CGFloat = 16
+                paragraph.firstLineHeadIndent = indent
+                paragraph.headIndent = indent + markerWidth
+                paragraph.tabStops = [NSTextTab(textAlignment: .left, location: indent + markerWidth)]
+                piece.append(NSAttributedString(string: "\(marker)\t", attributes: [
+                    .font: NSFont.systemFont(ofSize: bodySize), .foregroundColor: NSColor.secondaryLabelColor,
+                ]))
+            }
+            piece.append(inline(block.text, font: block.font))
+            piece.addAttribute(.paragraphStyle, value: paragraph, range: NSRange(location: 0, length: piece.length))
+            if result.length > 0 { result.append(NSAttributedString(string: "\n")) }
+            result.append(piece)
+            previousWasBlank = false
+        }
+        return result
+    }
+
+    /// 1 行の種類
+    struct Block {
+        enum Kind { case heading(Int), bullet, numbered(String), paragraph }
+        let kind: Kind
+        let text: String
+        let level: Int
+
+        /// line は行頭の空白を残したもの（字下げの深さを数える。空白 2 つかタブ 1 つで 1 段）
+        init(_ line: String) {
+            let indent = line.prefix { $0 == " " || $0 == "\t" }.reduce(0) { $0 + ($1 == "\t" ? 4 : 1) }
+            level = indent / 2
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            if let match = trimmed.firstMatch(of: #/^(#{1,6})\s+(.*)$/#) {
+                kind = .heading(match.1.count)
+                text = String(match.2)
+            } else if let match = trimmed.firstMatch(of: #/^[-*+]\s+(.*)$/#) {
+                kind = .bullet
+                text = String(match.1)
+            } else if let match = trimmed.firstMatch(of: #/^(\d+)[.)]\s+(.*)$/#) {
+                kind = .numbered(String(match.1))
+                text = String(match.2)
+            } else {
+                kind = .paragraph
+                text = trimmed
+            }
+        }
+
+        var marker: String? {
+            switch kind {
+            case .bullet: "•"
+            case .numbered(let number): "\(number)."
+            default: nil
+            }
+        }
+
+        var font: NSFont {
+            switch kind {
+            case .heading(1): .boldSystemFont(ofSize: ReleaseNotesFormatter.bodySize + 4)
+            case .heading(2): .boldSystemFont(ofSize: ReleaseNotesFormatter.bodySize + 2)
+            case .heading: .boldSystemFont(ofSize: ReleaseNotesFormatter.bodySize)
+            default: .systemFont(ofSize: ReleaseNotesFormatter.bodySize)
+            }
+        }
+
+        func spacingBefore(afterBlank: Bool) -> CGFloat {
+            switch kind {
+            case .heading: 12
+            case .bullet, .numbered: afterBlank ? 6 : 3
+            case .paragraph: afterBlank ? 6 : 0
+            }
+        }
+    }
+
+    /// 行の中の Markdown（太字・斜体・コード・リンク）を、字の形にする
+    static func inline(_ text: String, font: NSFont) -> NSAttributedString {
+        let parsed = (try? AttributedString(markdown: text, options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace)))
+            ?? AttributedString(text)
+        let result = NSMutableAttributedString()
+        for run in parsed.runs {
+            let piece = String(parsed[run.range].characters)
+            var runFont = font
+            var attributes: [NSAttributedString.Key: Any] = [.foregroundColor: NSColor.labelColor]
+            let intent = run.inlinePresentationIntent ?? []
+            if intent.contains(.stronglyEmphasized) {
+                runFont = NSFontManager.shared.convert(runFont, toHaveTrait: .boldFontMask)
+            }
+            if intent.contains(.emphasized) {
+                runFont = NSFontManager.shared.convert(runFont, toHaveTrait: .italicFontMask)
+            }
+            if intent.contains(.code) {
+                runFont = .monospacedSystemFont(ofSize: font.pointSize - 1, weight: .regular)
+            }
+            // 押して開くのは http / https だけ（ほかは字だけ出す）
+            if let link = run.link, let scheme = link.scheme?.lowercased(), scheme == "https" || scheme == "http" {
+                attributes[.link] = link
+            }
+            attributes[.font] = runFont
+            result.append(NSAttributedString(string: piece, attributes: attributes))
+        }
+        return result
+    }
 }
 
 // MARK: - 通信
@@ -494,8 +683,7 @@ final class AppUpdater {
                 + tr("Hanasu.app を入れ替えられませんでした（macOS がアプリの書き換えを止めたときなど）。リリースのページから zip をダウンロードして、手で入れ替えてください。")
             alert.addButton(withTitle: tr("リリースのページを開く"))
             alert.addButton(withTitle: tr("閉じる"))
-            NSApp.activate()
-            if alert.runModal() == .alertFirstButtonReturn {
+            if await Self.runModal(alert) == .alertFirstButtonReturn {
                 NSWorkspace.shared.open(failed.page ?? URL(string: "https://github.com/kakibara/hanasu/releases/latest")!)
             }
         }
@@ -522,11 +710,11 @@ final class AppUpdater {
 
     private func check(manual: Bool) async {
         if isFetching || isPrompting {
-            if manual { alert(tr("アップデートを確かめています"), tr("いま確かめているか、アップデートの確認を出しているところです。")) }
+            if manual { await alert(tr("アップデートを確かめています"), tr("いま確かめているか、アップデートの確認を出しているところです。")) }
             return
         }
         guard let current = AppVersion.current else {
-            if manual { alert(tr("今の版が分かりません"), tr("Hanasu.app として動いていないため、アップデートを確かめられません。")) }
+            if manual { await alert(tr("今の版が分かりません"), tr("Hanasu.app として動いていないため、アップデートを確かめられません。")) }
             return
         }
         let release: UpdateRelease?
@@ -537,14 +725,14 @@ final class AppUpdater {
         } catch {
             isFetching = false
             appLog.notice("update check failed: \(error.localizedDescription, privacy: .public)")
-            if manual { alert(tr("アップデートを確かめられませんでした"), error.localizedDescription) }
+            if manual { await alert(tr("アップデートを確かめられませんでした"), error.localizedDescription) }
             return
         }
         guard let release,
               UpdateSettings.shared.shouldOffer(release, current: current, manual: manual)
         else {
             appLog.notice("update check: up to date (\(current.description, privacy: .public))")
-            if manual { alert(tr("Hanasu は最新です"), tr("今の版（%@）が最新です。", "\(current)")) }
+            if manual { await alert(tr("Hanasu は最新です"), tr("今の版（%@）が最新です。", "\(current)")) }
             return
         }
         appLog.notice("update available: \(release.tag, privacy: .public)")
@@ -552,6 +740,9 @@ final class AppUpdater {
         // 起動時の確認は、録音・記録が終わるまで尋ねるのを待つ
         if !manual {
             while isBusy() { try? await Task.sleep(for: .seconds(10)) }
+            // メニューからの確認の知らせ（「確かめています」など）を出している間は、閉じるまで待つ
+            // （ダイアログを出している間も画面は動くので、ここで止めると、この起動ではもう知らせなくなる）
+            while isPrompting, !offeredTags.contains(release.tag) { try? await Task.sleep(for: .seconds(1)) }
             // 待つ間にメニューから確かめて尋ねた版は、もう尋ねない
             guard !isFetching, !isPrompting, !offeredTags.contains(release.tag) else { return }
         } else if isPrompting {
@@ -561,17 +752,22 @@ final class AppUpdater {
         offeredTags.insert(release.tag)
         isPrompting = true
         defer { isPrompting = false }
-        switch ask(release, current: current) {
+        switch await ask(release, current: current) {
         case .update: await install(release)
         case .later: break
         case .skip: UpdateSettings.shared.skippedVersion = release.version.description
         }
     }
 
-    private enum Choice { case update, later, skip }
+    enum Choice { case update, later, skip }
 
     // 設計判断: DEC-REL-022
-    private func ask(_ release: UpdateRelease, current: AppVersion) -> Choice {
+    private func ask(_ release: UpdateRelease, current: AppVersion) async -> Choice {
+        await Self.presentAsk(release, current: current)
+    }
+
+    /// 尋ねるダイアログ（確認用の CLI からも出す）
+    static func presentAsk(_ release: UpdateRelease, current: AppVersion) async -> Choice {
         let alert = NSAlert()
         alert.messageText = tr("Hanasu %@ があります", "\(release.version)")
         alert.informativeText = release.asset == nil
@@ -580,28 +776,67 @@ final class AppUpdater {
         alert.addButton(withTitle: tr("アップデート"))
         alert.addButton(withTitle: tr("あとで"))
         alert.addButton(withTitle: tr("この版をスキップ"))
-        if !release.notes.isEmpty { alert.accessoryView = Self.notesView(release.notes) }
-        NSApp.activate()
-        return switch alert.runModal() {
+        if !release.notes.isEmpty {
+            let notes = notesView(UpdateRelease.appNotes(from: release.notes), page: release.pageURL)
+            alert.accessoryView = notes
+            // 並べ終えると欄の終わりが見えた状態になるので、先頭から読めるように戻す
+            alert.layout()
+            if let scroll = notes as? NSScrollView {
+                scroll.documentView?.scroll(.zero)
+            }
+        }
+        return switch await runModal(alert) {
         case .alertFirstButtonReturn: .update
         case .alertThirdButtonReturn: .skip
         default: .later
         }
     }
 
-    /// リリース文を、スクロールできる欄に出す（Markdown は解釈せず、太字の印だけを外す）
-    private static func notesView(_ notes: String) -> NSView {
+    // 設計判断: DEC-REL-027
+    /// ダイアログを、Task の外（RunLoop）から出す。
+    /// Task の中で runModal を呼ぶと、出している間メインのディスパッチキューが回らず、スクロールが重くなり、ほかの画面の更新も止まる
+    static func runModal(_ alert: NSAlert) async -> NSApplication.ModalResponse {
+        await withCheckedContinuation { continuation in
+            RunLoop.main.perform(inModes: [.default, .modalPanel]) {
+                MainActor.assumeIsolated {
+                    NSApp.activate()
+                    continuation.resume(returning: alert.runModal())
+                }
+            }
+        }
+    }
+
+    // 設計判断: DEC-REL-027
+    /// リリース文を、スクロールできる欄に整えて出す（見出し・箇条書き・太字・リンク）。
+    /// 終わりに、全文を読むためのリリースのページへのリンクを付ける。短ければ欄も低くする
+    private static func notesView(_ notes: String, page: URL) -> NSView {
+        let content = NSMutableAttributedString(attributedString: ReleaseNotesFormatter.attributed(notes))
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.paragraphSpacingBefore = content.length == 0 ? 0 : 12
+        if content.length > 0 { content.append(NSAttributedString(string: "\n")) }
+        content.append(NSAttributedString(string: tr("リリースのページで全文を見る"), attributes: [
+            .font: NSFont.systemFont(ofSize: ReleaseNotesFormatter.bodySize),
+            .link: page,
+            .paragraphStyle: paragraph,
+        ]))
+
+        let width: CGFloat = 440, inset = NSSize(width: 8, height: 8), maxHeight: CGFloat = 260
+        // 中身の高さ（枠・余白・スクロールバーの分を引いた幅で測る）
+        let textWidth = width - inset.width * 2 - 10 - NSScroller.scrollerWidth(for: .regular, scrollerStyle: .overlay)
+        let needed = content.boundingRect(with: NSSize(width: textWidth, height: .greatestFiniteMagnitude),
+                                          options: [.usesLineFragmentOrigin, .usesFontLeading]).height
+        let height = min(maxHeight, ceil(needed) + inset.height * 2 + 6)
+
         // scrollableTextView は、中の文が長ければ縦に伸びてスクロールできる組み合わせを作る
         let scroll = NSTextView.scrollableTextView()
-        scroll.frame = NSRect(x: 0, y: 0, width: 420, height: 220)
+        scroll.frame = NSRect(x: 0, y: 0, width: width, height: height)
         scroll.borderType = .bezelBorder
         if let text = scroll.documentView as? NSTextView {
             text.isEditable = false
             text.isSelectable = true
-            text.textContainerInset = NSSize(width: 6, height: 6)
-            text.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
-            text.textColor = NSColor.labelColor
-            text.string = notes.replacingOccurrences(of: "**", with: "")
+            text.isRichText = true
+            text.textContainerInset = inset
+            text.textStorage?.setAttributedString(content)
         }
         return scroll
     }
@@ -613,7 +848,7 @@ final class AppUpdater {
             return
         }
         guard !isBusy() else {
-            alert(tr("今はアップデートできません"), tr("録音中・会議の記録中・処理中は入れ替えません。終わってから、メニューの「アップデートを確認…」でもう一度選んでください。"))
+            await alert(tr("今はアップデートできません"), tr("録音中・会議の記録中・処理中は入れ替えません。終わってから、メニューの「アップデートを確認…」でもう一度選んでください。"))
             return
         }
         var workDirectory: URL?
@@ -634,7 +869,7 @@ final class AppUpdater {
             // ダウンロードの間に録音・記録を始めていたら、入れ替えない
             guard !isBusy() else {
                 try? FileManager.default.removeItem(at: work)
-                alert(tr("今はアップデートできません"), tr("録音中・会議の記録中・処理中は入れ替えません。終わってから、メニューの「アップデートを確認…」でもう一度選んでください。"))
+                await alert(tr("今はアップデートできません"), tr("録音中・会議の記録中・処理中は入れ替えません。終わってから、メニューの「アップデートを確認…」でもう一度選んでください。"))
                 return
             }
             try UpdateInstaller.recordPending(release)
@@ -652,8 +887,7 @@ final class AppUpdater {
             alert.informativeText = tr("%@\n\nリリースのページから zip をダウンロードして、手で入れ替えることもできます。", "\(error.localizedDescription)")
             alert.addButton(withTitle: tr("リリースのページを開く"))
             alert.addButton(withTitle: tr("閉じる"))
-            NSApp.activate()
-            if alert.runModal() == .alertFirstButtonReturn { NSWorkspace.shared.open(release.pageURL) }
+            if await Self.runModal(alert) == .alertFirstButtonReturn { NSWorkspace.shared.open(release.pageURL) }
         }
     }
 
@@ -680,12 +914,15 @@ final class AppUpdater {
         progressWindow = nil
     }
 
-    private func alert(_ message: String, _ info: String) {
+    private func alert(_ message: String, _ info: String) async {
+        // 出している間も画面は動くので、起動時の確認のダイアログを重ねない
+        let wasPrompting = isPrompting
+        isPrompting = true
+        defer { isPrompting = wasPrompting }
         let alert = NSAlert()
         alert.messageText = message
         alert.informativeText = info
-        NSApp.activate()
-        alert.runModal()
+        _ = await Self.runModal(alert)
     }
 }
 

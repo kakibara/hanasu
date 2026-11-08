@@ -10,6 +10,8 @@ import Foundation
 ///       GitHub に問い合わせ、最新の版・zip・SHA-256 と、知らせるかを出す（ダウンロードはしない）
 ///   Hanasu --verify-update <Hanasu-<版>-macOS.zip> --version <版>
 ///       zip を展開し、入れ替えの前と同じ確認（署名・証明書・bundle ID・版）をする。Hanasu.app の中の実行ファイルで動かす
+///   Hanasu --preview-update-dialog [<リリース文の .md>]
+///       新しい版を尋ねるダイアログを、そのリリース文で出す（通信もダウンロードもしない。ダイアログに出す分に絞った文と、選んだボタンを出して終わる）
 // 確かめ方: REQ-REL-010, REQ-REL-011
 @MainActor
 enum AppUpdateCLI {
@@ -38,6 +40,21 @@ enum AppUpdateCLI {
                     print("今の版: 不明（--current <版> で指定できます）")
                 }
                 print("リリース文:\n\(release.notes)")
+            }
+        }
+        if args.contains("--preview-update-dialog") {
+            let path = value(after: "--preview-update-dialog", in: args).flatMap { $0.hasPrefix("--") ? nil : $0 }
+            let notes = path.flatMap { try? String(contentsOfFile: $0, encoding: .utf8) }
+                ?? "## ハイライト\n\n**太字**と`コード`と[リンク](https://github.com/kakibara/hanasu)。\n\n## 改善\n\n- 1 つめ（Mac / Windows）。\n- 2 つめ。長い行は、印の幅だけ字下げして折り返します。長い行は、印の幅だけ字下げして折り返します。\n  - 入れ子\n- Windows だけの項目（Windows）。\n1. 番号付き\n\n## 気をつけること\n\n- 出さない節"
+            NSApplication.shared.setActivationPolicy(.accessory)
+            let release = UpdateRelease(version: AppVersion("99.0.0")!, tag: "v99.0.0",
+                                        pageURL: URL(string: "https://github.com/kakibara/hanasu/releases")!,
+                                        notes: UpdateRelease.releaseNotes(from: notes), asset: nil)
+            print("ダイアログに出すリリース文:\n\(UpdateRelease.appNotes(from: release.notes))\n")
+            fflush(stdout)
+            run {
+                let choice = await AppUpdater.presentAsk(release, current: AppVersion.current ?? AppVersion("2.0.0")!)
+                print("選んだもの: \(choice)")
             }
         }
         if let zip = value(after: "--verify-update", in: args) {
@@ -138,6 +155,56 @@ enum AppUpdateCLI {
         expect(parsed(Data("{}".utf8)).outcome == "error", "形の違う応答はエラー")
         expect(UpdateRelease.releaseNotes(from: "## What's Changed\n- a\n\n## インストール\n- b") == "## What's Changed\n- a",
                "印がなければ「## インストール」の前まで")
+
+        // リリース文の整形（DEC-REL-027）
+        let formatted = ReleaseNotesFormatter.attributed("<!-- release-notes -->\n## 改善\n\n- **太字**の項目\n1. 番号\n\nふつうの文")
+        expect(formatted.string == "改善\n•\t太字の項目\n1.\t番号\nふつうの文", "見出し・箇条書きの印を外し、太字の記号を出さない")
+        let boldFont = formatted.attribute(.font, at: (formatted.string as NSString).range(of: "太字").location, effectiveRange: nil) as? NSFont
+        expect(boldFont?.fontDescriptor.symbolicTraits.contains(.bold) == true, "太字は太い字で出す")
+        let headingFont = formatted.attribute(.font, at: 0, effectiveRange: nil) as? NSFont
+        expect(headingFont.map { $0.pointSize > ReleaseNotesFormatter.bodySize } == true, "見出しは大きい字で出す")
+        let linked = ReleaseNotesFormatter.attributed("[ページ](https://github.com/kakibara/hanasu)")
+        expect(linked.string == "ページ" && linked.attribute(.link, at: 0, effectiveRange: nil) != nil, "リンクは押せる文字で出す")
+        let fileLink = ReleaseNotesFormatter.attributed("[開く](file:///Applications/Calculator.app)")
+        expect(fileLink.string == "開く" && fileLink.attribute(.link, at: 0, effectiveRange: nil) == nil, "http / https でないリンクは押せない字で出す")
+        let nested = ReleaseNotesFormatter.attributed("- 外\n  - 中")
+        let outerIndent = (nested.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle)?.headIndent ?? 0
+        let innerIndent = (nested.attribute(.paragraphStyle, at: nested.length - 1, effectiveRange: nil) as? NSParagraphStyle)?.headIndent ?? 0
+        expect(innerIndent > outerIndent, "入れ子の箇条書きは一段深く字下げする")
+
+        // ダイアログに出す分に絞る（DEC-REL-027）
+        let fullNotes = """
+            ## ハイライト
+
+            設定の直しの版です。
+
+            ## 改善
+
+            - 両方の直し（Mac / Windows）。
+            - Windows だけの直し（Windows）。
+              - その続き
+            - Mac だけの直し（Mac）。
+
+            ## 不具合の修正
+
+            - Windows だけの不具合（Windows）。
+
+            ## 気をつけること
+
+            - 実機ではまだ確かめていません。
+
+            ## アップデートのしかた
+
+            下のインストールの手順のとおりに入れ替えてください。
+            """
+        let macNotes = UpdateRelease.appNotes(from: fullNotes, platform: .mac)
+        expect(macNotes == "## ハイライト\n\n設定の直しの版です。\n\n## 改善\n\n- 両方の直し。\n- Mac だけの直し。",
+               "機能の 4 節と Mac の項目だけを出し、OS の印を外す（中身のない節は見出しも出さない）")
+        let windowsNotes = UpdateRelease.appNotes(from: fullNotes, platform: .windows)
+        expect(windowsNotes.contains("- Windows だけの直し。\n  - その続き") && !windowsNotes.contains("Mac だけ")
+               && windowsNotes.contains("## 不具合の修正"), "Windows では Windows の項目と、その下の行を出す")
+        expect(UpdateRelease.appNotes(from: "## What's Changed\n- a（Mac）") == "## What's Changed\n- a（Mac）",
+               "4 つの見出しがどれもなければ絞らない")
 
         // 知らせるか
         if let release {
