@@ -439,7 +439,9 @@ final class TranslationLanguageMenu: NSObject {
             item.state = language == selected ? .on : .off
             menu.addItem(item)
         }
+        // popUp はメニューが閉じるまで戻らない。選ばずに閉じたときも送り先を離す
         menu.popUp(positioning: nil, at: NSEvent.mouseLocation, in: nil)
+        current = nil
     }
 
     @objc private func choose(_ item: NSMenuItem) {

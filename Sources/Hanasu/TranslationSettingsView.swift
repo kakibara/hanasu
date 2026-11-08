@@ -46,7 +46,8 @@ enum TranslationSettingsCLI {
         if let i = args.firstIndex(of: "--languages"), args.indices.contains(i + 1) {
             languages = TranslationLanguage.normalized(args[i + 1].split(separator: ",").compactMap { TranslationLanguage.cliCode(String($0)) })
         }
-        let size = NSSize(width: 560, height: 260)
+        // 17 言語のトグル（2 行のものもある）が全部入る高さ
+        let size = NSSize(width: 560, height: CGFloat(140 + 60 * TranslationLanguage.allCases.count))
         let view = Form { TranslationSettingsSection(languages: .constant(languages)) }
             .formStyle(.grouped)
             .frame(width: size.width, height: size.height)
