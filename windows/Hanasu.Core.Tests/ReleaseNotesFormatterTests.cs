@@ -133,16 +133,81 @@ public class ReleaseNotesFormatterTests
         Assert.Equal(expected, block.PlainText);
     }
 
+    private static string ReleaseDoc(string name)
+    {
+        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "docs", "releases", name))) dir = dir.Parent;
+        Assert.NotNull(dir);
+        return File.ReadAllText(Path.Combine(dir.FullName, "docs", "releases", name));
+    }
+
     [Fact]
     public void ReleaseTemplateShowsOnlyHeadings()
     {
         // docs/releases/TEMPLATE.md をそのまま出しても、コメント（書き方の説明）は出ない
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "docs", "releases", "TEMPLATE.md"))) dir = dir.Parent;
-        Assert.NotNull(dir);
-        var path = Path.Combine(dir.FullName, "docs", "releases", "TEMPLATE.md");
-        var blocks = ReleaseNotesFormatter.Parse(File.ReadAllText(path));
+        var blocks = ReleaseNotesFormatter.Parse(ReleaseDoc("TEMPLATE.md"));
         Assert.NotEmpty(blocks);
         Assert.All(blocks, b => Assert.Equal(ReleaseNotesBlockKind.Heading, b.Kind));
+    }
+
+    // MARK: - アプリに出す分だけにする
+
+    [Fact]
+    public void ForAppKeepsOnlyAppSectionsAndWindowsItems()
+    {
+        var notes = ReleaseNotesFormatter.ForApp(ReleaseDoc("v2.0.1.md"), ReleasePlatform.Windows);
+        var blocks = ReleaseNotesFormatter.Parse(notes);
+        var headings = blocks.Where(b => b.Kind == ReleaseNotesBlockKind.Heading).Select(b => b.PlainText).ToList();
+        // 「不具合の修正」は（Mac）の項目だけなので、見出しごと消える
+        Assert.Equal(["ハイライト", "改善"], headings);
+        Assert.DoesNotContain("気をつけること", notes);
+        Assert.DoesNotContain("アップデートのしかた", notes);
+        Assert.DoesNotContain("（Mac）", notes);
+        Assert.DoesNotContain("韓国語", notes);
+        var bullet = Assert.Single(blocks, b => b.Kind == ReleaseNotesBlockKind.Bullet);
+        Assert.StartsWith("設定の「AI」の選択肢を", bullet.PlainText);
+        Assert.EndsWith("選んでいた AI はそのままです。", bullet.PlainText);
+    }
+
+    [Fact]
+    public void ForAppOnMacKeepsMacItems()
+    {
+        var notes = ReleaseNotesFormatter.ForApp(ReleaseDoc("v2.0.1.md"), ReleasePlatform.Mac);
+        Assert.Contains("## 不具合の修正", notes);
+        Assert.Contains("画面全体が崩れていました。", notes);
+        Assert.DoesNotContain("（Mac", notes);
+        Assert.DoesNotContain("気をつけること", notes);
+    }
+
+    [Fact]
+    public void ForAppWithoutAppSectionsKeepsEverything()
+    {
+        const string notes = "## 変更\n\n- Mac だけの項目（Mac）\n\n## 気をつけること\n\n- 注意";
+        Assert.Equal(notes, ReleaseNotesFormatter.ForApp(notes, ReleasePlatform.Windows));
+    }
+
+    [Fact]
+    public void ForAppDropsDeeperLinesUnderOtherPlatformItems()
+    {
+        const string notes = """
+            前置きの文。
+
+            ## 新しい機能
+
+            - **会議**: 録れるようになりました (Mac)
+              - 細かい点
+                - さらに細かい点
+            - 共通の項目 ( Mac/Windows ).
+              - 共通の細かい点
+            ### 小見出し
+            - Windows の項目（Windows）
+
+            ## その他
+
+            - 出さない
+            """;
+        Assert.Equal(
+            "前置きの文。\n\n## 新しい機能\n\n- 共通の項目.\n  - 共通の細かい点\n### 小見出し\n- Windows の項目",
+            ReleaseNotesFormatter.ForApp(notes, ReleasePlatform.Windows));
     }
 }

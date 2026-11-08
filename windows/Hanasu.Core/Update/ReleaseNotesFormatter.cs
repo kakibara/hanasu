@@ -3,6 +3,13 @@ using System.Text.RegularExpressions;
 
 namespace Hanasu.Core.Update;
 
+/// <summary>リリース文を絞り込むときの OS</summary>
+public enum ReleasePlatform
+{
+    Mac,
+    Windows,
+}
+
 /// <summary>リリース文の 1 行（ブロック）の種類</summary>
 public enum ReleaseNotesBlockKind
 {
@@ -56,6 +63,82 @@ public static partial class ReleaseNotesFormatter
     [GeneratedRegex("<!--.*?(-->|$)", RegexOptions.Singleline)]
     private static partial Regex HtmlComment();
 
+    /// <summary>アプリの中で出す節（リリース文の書き方 docs/releases/TEMPLATE.md の見出し）</summary>
+    private static readonly HashSet<string> AppSections = ["ハイライト", "新しい機能", "改善", "不具合の修正"]; // skip-tr（リリース文の見出しを探す語）
+
+    /// <summary>行の終わりの OS の印（「（Mac）」「(Windows)」「（Mac / Windows）」。あとに「。」か「.」が続いてもよい）</summary>
+    [GeneratedRegex(@"\s*[（(]\s*(Mac|Windows)\s*(?:/\s*(Mac|Windows)\s*)?[）)](\s*[。.])?\s*$")]
+    private static partial Regex PlatformMark();
+
+    /// <summary>
+    /// 更新の知らせに出す分だけにする。出す節は「ハイライト」「新しい機能」「改善」「不具合の修正」だけで、ほかの節は見出しごと除く
+    /// （最初の「## 」より前の文は残す。「### 」は節の区切りにしない）。4 つの見出しがどれもなければ、絞らずに全部返す。
+    /// 行の終わりの OS の印がこの OS を含まない行は、その下の一段深い行ごと除き、残す行の印は外す。中身がなくなった節は見出しも除く。
+    /// 全文はリリースのページで読む
+    /// </summary>
+    public static string ForApp(string notes, ReleasePlatform platform)
+    {
+        var lines = HtmlComment().Replace(notes.Replace("\r\n", "\n").Replace('\r', '\n'), "").Split('\n');
+        // 節に分ける。Heading が null なのは最初の「## 」より前
+        var sections = new List<(string? Heading, List<string> Body)> { (null, []) };
+        foreach (var line in lines)
+        {
+            if (line.StartsWith("## ", StringComparison.Ordinal)) sections.Add((line, []));
+            else sections[^1].Body.Add(line);
+        }
+        bool IsAppSection(string heading) => AppSections.Contains(HeadingText(heading[3..]));
+        if (!sections.Any(s => s.Heading is not null && IsAppSection(s.Heading))) return notes.Trim();
+
+        var wanted = platform == ReleasePlatform.Mac ? "Mac" : "Windows";
+        var output = new List<string>();
+        foreach (var (heading, body) in sections)
+        {
+            if (heading is not null && !IsAppSection(heading)) continue;
+            var kept = new List<string>();
+            int? skipDeeperThan = null;
+            foreach (var line in body)
+            {
+                var indent = IndentOf(line);
+                if (skipDeeperThan is { } limit)
+                {
+                    if (line.Trim().Length > 0 && indent > limit) continue;
+                    skipDeeperThan = null;
+                }
+                var mark = PlatformMark().Match(line);
+                if (!mark.Success)
+                {
+                    kept.Add(line);
+                    continue;
+                }
+                var forThis = string.Equals(mark.Groups[1].Value, wanted, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(mark.Groups[2].Value, wanted, StringComparison.OrdinalIgnoreCase);
+                if (!forThis)
+                {
+                    skipDeeperThan = indent;
+                    continue;
+                }
+                kept.Add(line[..mark.Index] + mark.Groups[3].Value.Trim());
+            }
+            if (heading is not null && kept.All(l => l.Trim().Length == 0)) continue;
+            if (heading is not null) output.Add(heading);
+            output.AddRange(kept);
+        }
+        // 空行が 3 つ以上続かないようにする
+        return Regex.Replace(string.Join("\n", output), "\n{3,}", "\n\n").Trim();
+    }
+
+    private static int IndentOf(string line)
+    {
+        var indent = 0;
+        foreach (var c in line)
+        {
+            if (c == ' ') indent += 1;
+            else if (c == '\t') indent += 4;
+            else break;
+        }
+        return indent;
+    }
+
     public static IReadOnlyList<ReleaseNotesBlock> Parse(string markdown)
     {
         var blocks = new List<ReleaseNotesBlock>();
@@ -78,14 +161,7 @@ public static partial class ReleaseNotesFormatter
 
     private static ReleaseNotesBlock ParseBlock(string rawLine, string line, bool afterBlank)
     {
-        var indent = 0;
-        foreach (var c in rawLine)
-        {
-            if (c == ' ') indent += 1;
-            else if (c == '\t') indent += 4;
-            else break;
-        }
-        var level = indent / 2;
+        var level = IndentOf(rawLine) / 2;
 
         var hashes = line.TakeWhile(c => c == '#').Count();
         if (hashes is >= 1 and <= 6 && hashes < line.Length && char.IsWhiteSpace(line[hashes]))

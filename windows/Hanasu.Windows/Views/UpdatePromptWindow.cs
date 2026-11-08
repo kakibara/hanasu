@@ -55,7 +55,8 @@ internal sealed class UpdatePromptWindow : Window
             TextWrapping = TextWrapping.Wrap,
         });
 
-        var notes = ReleaseNotesFormatter.Parse(release.Notes);
+        // アプリの機能の節と Windows の項目だけ出す（全文は「リリースのページを開く」で読む）
+        var notes = ReleaseNotesFormatter.Parse(ReleaseNotesFormatter.ForApp(release.Notes, ReleasePlatform.Windows));
         if (notes.Count > 0)
         {
             // 切り詰めずに全文を出し、長ければ欄の中でスクロールする（開いたときは先頭が見える）。
