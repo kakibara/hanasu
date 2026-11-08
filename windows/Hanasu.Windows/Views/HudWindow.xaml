@@ -9,7 +9,7 @@
         FontFamily="Yu Gothic UI, Meiryo UI, Segoe UI"
         TextOptions.TextFormattingMode="Display">
     <Window.Resources>
-        <!-- 「話した言語 / English / 日本語」の切り替え。押してもフォーカスを取らない -->
+        <!-- 「話した言語 / English / 日本語 / …」の切り替え。押してもフォーカスを取らない -->
         <Style x:Key="LanguageOption" TargetType="Button">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="Cursor" Value="Hand" />
@@ -144,10 +144,14 @@
                         VerticalAlignment="Center" ToolTip="{x:Static p:Strings.Hud_LanguageSwitch_Tip}">
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="SpokenLanguageButton" Style="{StaticResource LanguageOption}" Content="{x:Static p:Strings.Hud_SpokenLanguage}" Click="OnSpokenLanguageClick" />
-                        <!-- 翻訳の言語は、設定で選んだものだけを出す（REQ-DIC-013） -->
-                        <Button x:Name="EnglishButton" Style="{StaticResource LanguageOption}" Content="English" Click="OnEnglishClick" />
-                        <!-- skip-tr（言語名はその言語で書く） -->
-                        <Button x:Name="JapaneseButton" Style="{StaticResource LanguageOption}" Content="日本語" Click="OnJapaneseClick" Visibility="Collapsed" />
+                        <!-- 要件: REQ-DIC-013 -->
+                        <!-- 設計判断: DEC-DIC-152 -->
+                        <!-- 翻訳の言語は、設定で選んだものだけを出す。ボタンはコードで作る（HudWindow.RenderLanguage）。
+                             3 つ以上のときは 2 つ（選んでいる言語を含む）にして、残りは「…」のメニューから選ぶ -->
+                        <StackPanel x:Name="LanguageButtons" Orientation="Horizontal" />
+                        <Button x:Name="MoreLanguagesButton" Style="{StaticResource LanguageOption}" Content="…" Click="OnMoreLanguagesClick"
+                                Visibility="Collapsed" ToolTip="{x:Static p:Strings.Hud_MoreLanguages}"
+                                AutomationProperties.Name="{x:Static p:Strings.Hud_MoreLanguages}" />
                     </StackPanel>
                 </Border>
 

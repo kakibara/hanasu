@@ -34,7 +34,7 @@ public interface IHud
     void Show(HudState state);
     void UpdateTranscript(string text);
     // 要件: REQ-DIC-011, REQ-DIC-013
-    /// <summary>「話した言語 / English / 日本語」の切り替えの表示。selected は選んでいる翻訳の言語（null は話した言語）、choices は並べる翻訳の言語</summary>
+    /// <summary>「話した言語 / English / 日本語 / …」の切り替えの表示。selected は選んでいる翻訳の言語（null は話した言語）、choices は並べる翻訳の言語</summary>
     void SetLanguages(TranslationLanguage? selected, IReadOnlyList<TranslationLanguage> choices);
     /// <summary>HUD の言語の切り替えが押されたとき（null = 話した言語）</summary>
     event EventHandler<TranslationLanguage?>? LanguageSelected;
@@ -95,12 +95,36 @@ public static class HudText
     }
 
     /// <summary>処理中の見出し（translation は翻訳の言語。整形なら null）</summary>
-    public static string ProcessingTitle(TranslationLanguage? translation, string provider = "Gemini") => translation switch
+    // 要件: REQ-DIC-013
+    // 設計判断: DEC-DIC-152
+    /// <summary>HUD に翻訳の言語のボタンを並べる数の上限。翻訳の言語がこれより多い（3 つ以上）ときは、この数のボタンと「…」（全部の言語のメニュー）を出す</summary>
+    public const int MaxLanguageButtons = 2;
+
+    // 要件: REQ-DIC-013
+    // 設計判断: DEC-DIC-152
+    /// <summary>
+    /// HUD にボタンとして並べる翻訳の言語。choices が MaxLanguageButtons 以下なら全部。3 つ以上なら 2 つ（選んでいる言語は必ず入れ、並びは choices の順）にして、
+    /// Overflow を true にする（残りは「…」のメニューから選ぶ）
+    /// </summary>
+    public static (IReadOnlyList<TranslationLanguage> Buttons, bool Overflow) LanguageButtons(TranslationLanguage? selected, IReadOnlyList<TranslationLanguage> choices)
     {
-        TranslationLanguage.English => string.Format(Strings.Hud_TranslatingToEnglish, provider),
-        TranslationLanguage.Japanese => string.Format(Strings.Hud_TranslatingToJapanese, provider),
-        _ => string.Format(Strings.Hud_Refining, provider),
-    };
+        if (choices.Count <= MaxLanguageButtons) return (choices, false);
+        var shown = choices.Take(MaxLanguageButtons).ToList();
+        if (selected is { } language && choices.Contains(language) && !shown.Contains(language))
+        {
+            // 選んでいる言語は、並びの後ろにあるので最後のボタンと入れ替える（choices の順のまま）
+            shown[^1] = language;
+        }
+        return (shown, true);
+    }
+
+    // 要件: REQ-DIC-013
+    // 設計判断: DEC-DIC-150（言語の名前は languageName.<コード> を表示の言語で）
+    public static string ProcessingTitle(TranslationLanguage? translation, string provider = "Gemini") =>
+        translation is not { } language ? string.Format(Strings.Hud_Refining, provider)
+        : language == TranslationLanguage.English ? string.Format(Strings.Hud_TranslatingToEnglish, provider)
+        : language == TranslationLanguage.Japanese ? string.Format(Strings.Hud_TranslatingToJapanese, provider)
+        : string.Format(Strings.Hud_TranslatingToOther, provider, language.NameInUiLanguage());
 
     /// <summary>経過時間（m:ss）</summary>
     public static string Elapsed(TimeSpan elapsed)

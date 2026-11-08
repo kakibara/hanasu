@@ -164,6 +164,9 @@
   <data name="Hud_SpokenLanguage" xml:space="preserve">
     <value>Как сказано</value>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>Другие языки</value>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>Останавливает запись и вводит текст (как повторное нажатие сочетания клавиш)</value>
   </data>
@@ -510,14 +513,8 @@
   <data name="Settings_TranslationLanguages" xml:space="preserve">
     <value>Языки перевода</value>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>Английский</value>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>Японский</value>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>Сочетание «Перевести и ввести» переводит на крайний левый выбранный язык. Во время записи в HUD можно переключаться между «Как сказано» и выбранными языками (текст вводится на языке, выбранном в момент остановки). Для перевода используется ИИ, выбранный для диктовки на вкладке «AI». Выберите хотя бы один язык.</value>
+    <value>Сочетание «Перевести и ввести» переводит на первый выбранный язык в списке. Во время записи в HUD можно переключаться между «Как сказано» и выбранными языками (текст вводится на языке, выбранном в момент остановки). Для перевода используется ИИ, выбранный для диктовки на вкладке «AI». Выберите хотя бы один язык.</value>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
     <value>Режим записи</value>
@@ -689,6 +686,9 @@
   </data>
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>Попробовать перевод на японский</value>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>Попробовать перевод на {0}</value>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>Встречи</value>
@@ -923,6 +923,9 @@
   </data>
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>Начать &amp;перевод на японский и ввод</value>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>Начать &amp;перевод на {0} и ввод</value>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>Удалить эту запись журнала? Это действие нельзя отменить.</value>

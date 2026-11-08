@@ -164,6 +164,9 @@
   <data name="Hud_SpokenLanguage" xml:space="preserve">
     <value>原语言</value>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>其他语言</value>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>停止录音并输入文本（与再次按快捷键相同）</value>
   </data>
@@ -510,14 +513,8 @@
   <data name="Settings_TranslationLanguages" xml:space="preserve">
     <value>翻译语言</value>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>英语</value>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>日语</value>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>“翻译并输入”快捷键会译为所选语言中最左侧的语言。录音期间，可以在 HUD 中在“原语言”和所选语言之间切换（以停止时所选的语言输入）。翻译使用“AI”选项卡中为语音输入选择的 AI。请至少选择一种。</value>
+    <value>“翻译并输入”快捷键会译为所选语言中列表里的第一种语言。录音期间，可以在 HUD 中在“原语言”和所选语言之间切换（以停止时所选的语言输入）。翻译使用“AI”选项卡中为语音输入选择的 AI。请至少选择一种。</value>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
     <value>录音方式</value>
@@ -689,6 +686,9 @@
   </data>
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>试用日语翻译</value>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>试用{0}翻译</value>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>会议</value>
@@ -923,6 +923,9 @@
   </data>
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>开始译为日语并输入(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>开始译为{0}并输入(&amp;T)</value>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>要删除此历史记录吗？此操作无法撤消。</value>

@@ -29,7 +29,9 @@ enum PromptsCLI {
             pair("refine \(language.rawValue)", GeminiClient.refinePrompt(request))
         }
         request.outputLanguage = .asSpoken
-        for language in TranslationLanguage.allCases {
+        // 翻訳は、専用の指示がある English・日本語と、共通の指示（translate.other.system）を使う言語の例として韓国語を出す
+        let shownTranslations: [TranslationLanguage] = [.english, .japanese, TranslationLanguage(.ko)]
+        for language in shownTranslations {
             pair("translate \(language.rawValue)", GeminiClient.translationPrompt(request, to: language))
         }
         var plain = request
@@ -38,7 +40,7 @@ enum PromptsCLI {
         plain.screenContext = nil
         plain.extraInstructions = ""
         pair("refine plain", GeminiClient.refinePrompt(plain))
-        for language in TranslationLanguage.allCases {
+        for language in shownTranslations {
             pair("translate plain \(language.rawValue)", GeminiClient.translationPrompt(plain, to: language))
         }
 
@@ -46,7 +48,7 @@ enum PromptsCLI {
         for preset in AppStylePreset.allCases {
             for rules in ["", "絵文字は使わない"] {
                 let style = AppStyle(bundleID: "x", name: "X", preset: preset, rules: rules)
-                for translation in [nil] + TranslationLanguage.allCases.map(Optional.some) {
+                for translation in [nil] + shownTranslations.map(Optional.some) {
                     for common in [false, true] {
                         let text = style.promptSection(appName: common ? "X" : nil, translation: translation, hasCommonRules: common)
                         section("style \(preset.rawValue) rules=\(!rules.isEmpty) translation=\(translation?.rawValue ?? "nil") common=\(common)",

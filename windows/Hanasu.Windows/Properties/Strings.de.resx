@@ -164,6 +164,9 @@ Original: {2}</value>
   <data name="Hud_SpokenLanguage" xml:space="preserve">
     <value>Wie gesprochen</value>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>Weitere Sprachen</value>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>Beendet die Aufnahme und gibt den Text ein (wie erneutes Drücken der Tastenkombination)</value>
   </data>
@@ -510,14 +513,8 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   <data name="Settings_TranslationLanguages" xml:space="preserve">
     <value>Übersetzungssprachen</value>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>Englisch</value>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>Japanisch</value>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>Die Tastenkombination „Übersetzen und eingeben“ übersetzt in die am weitesten links ausgewählte Sprache. Während der Aufnahme kann im HUD zwischen „Wie gesprochen“ und den ausgewählten Sprachen gewechselt werden (eingegeben wird in der beim Beenden ausgewählten Sprache). Für die Übersetzung wird die KI verwendet, die im Tab „AI“ für das Diktat ausgewählt ist. Mindestens eine auswählen.</value>
+    <value>Die Tastenkombination „Übersetzen und eingeben“ übersetzt in die erste ausgewählte Sprache der Liste. Während der Aufnahme kann im HUD zwischen „Wie gesprochen“ und den ausgewählten Sprachen gewechselt werden (eingegeben wird in der beim Beenden ausgewählten Sprache). Für die Übersetzung wird die KI verwendet, die im Tab „AI“ für das Diktat ausgewählt ist. Mindestens eine auswählen.</value>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
     <value>Aufnahmemodus</value>
@@ -689,6 +686,9 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   </data>
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>Japanische Übersetzung testen</value>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>Übersetzung auf {0} testen</value>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>Besprechungen</value>
@@ -923,6 +923,9 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   </data>
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>Ins Japanische &amp;übersetzen und eingeben starten</value>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>Auf {0} &amp;übersetzen und eingeben starten</value>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>Diesen Verlaufseintrag löschen? Dies kann nicht rückgängig gemacht werden.</value>

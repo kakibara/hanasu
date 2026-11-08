@@ -5,8 +5,21 @@ using Hanasu.Core.Settings;
 namespace Hanasu.Core.Dictation;
 
 // 要件: REQ-DIC-010, REQ-DIC-013
-/// <summary>録音を始めたショートカットで決まる。整形して話した言語で入力するか、翻訳の言語（英語・日本語）に翻訳して入力するか</summary>
-public enum DictationMode { Refine, TranslateToEnglish, TranslateToJapanese }
+/// <summary>
+/// 録音を始めたショートカットで決まる。整形して話した言語で入力するか、翻訳の言語（TranslationLanguages.All のどれか）に翻訳して入力するか。
+/// Translation が null なら整形。default は Refine（省略できる引数に default と書ける）
+/// </summary>
+public readonly record struct DictationMode(TranslationLanguage? Translation)
+{
+    public static DictationMode Refine => default;
+    public static DictationMode TranslateToEnglish => new(TranslationLanguage.English);
+    public static DictationMode TranslateToJapanese => new(TranslationLanguage.Japanese);
+
+    /// <summary>この言語に翻訳して入力するモード</summary>
+    public static DictationMode Translate(TranslationLanguage language) => new(language);
+
+    public override string ToString() => Translation is { } language ? "Translate:" + language.Code : "Refine";
+}
 
 public enum ProcessStatus
 {
@@ -40,7 +53,7 @@ public sealed class DictationTextProcessor
 
     /// <summary>AI に送るか（翻訳は AI でしかできないので、整形をオフにしていても送る）</summary>
     public static bool UsesGemini(AppSettings settings, DictationMode mode) =>
-        settings.RefineWithGemini || mode.Translation() is not null;
+        settings.RefineWithGemini || mode.Translation is not null;
 
     public async Task<ProcessOutcome> ProcessAsync(string raw, DictationMode mode, string? appName, AppSettings settings,
         CancellationToken cancellationToken = default)
@@ -50,7 +63,7 @@ public sealed class DictationTextProcessor
         var corrected = dictionary.Apply(raw);
         if (!UsesGemini(settings, mode)) return new ProcessOutcome(corrected, ProcessStatus.RefineOff);
 
-        var translation = mode.Translation();
+        var translation = mode.Translation;
         try
         {
             var refiner = refinerFactory(settings);

@@ -2,6 +2,9 @@
 
 Hanasu（音声入力と会議の記録。Mac 版は `Sources/Hanasu`、Windows 版は `windows/`）。文書の地図と決まりは [docs/README.md](docs/README.md)。
 
+## 依頼を受けたら
+- 機能を足す・変える・なくす依頼は、コードを書く前に [.claude/skills/requirements/SKILL.md](.claude/skills/requirements/SKILL.md) の手順で要件定義を詰め、計画（要件の案・設計判断の案・やらないこと・手順・確かめ方）をユーザーと合意してから実装に入る。誤字や振る舞いを変えない直しは除く。
+
 ## 機能を変える前に
 - 変える場所のコードのタグ（`// 要件: REQ-…`、`// 設計判断: DEC-…`）と、[docs/spec/](docs/spec/) のその項目を読む。
 - **要件（REQ）を変えるときは、ユーザーの合意を取る。** 合意なしに要件を書き換えない。合わないところは、その要件に「食い違い（ユーザーの確認待ち）」と書いて残す。

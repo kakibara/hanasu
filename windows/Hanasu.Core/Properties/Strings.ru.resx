@@ -312,17 +312,17 @@
   <data name="Wav_NoData" xml:space="preserve">
     <value>В WAV-файле нет блока data.</value>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>Английский</value>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>Японский</value>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>На английский</value>
   </data>
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>На японский</value>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>На {0}</value>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>Перевести и ввести</value>
@@ -333,11 +333,17 @@
   <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
     <value>Перевести на японский и ввести</value>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>Перевести на {0} и ввести</value>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>Переведено на английский и введено</value>
   </data>
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>Переведено на японский и введено</value>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>Переведено на {0} и введено</value>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>Введено</value>
@@ -389,6 +395,9 @@
   </data>
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>Перевод на японский ({0})…</value>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>Перевод на {1} ({0})…</value>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>Обработка ({0})…</value>

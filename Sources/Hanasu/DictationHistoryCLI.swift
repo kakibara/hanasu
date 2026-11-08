@@ -44,9 +44,9 @@ enum DictationHistoryCLI {
              "あの来週の水曜日って空いてますかえっと新しい機能のデモをしたいので 30分くらい時間をもらえると助かります",
              .refine, "Mail", .geminiFailed, "Gemini API エラー（503）: The model is overloaded. Please try again later."),
             (40, "お疲れ様です 先日の件ですが来週の火曜日って空いてますか",
-             "Hi, about the other day, are you available next Tuesday?", .translate, "Google Chrome", .succeeded, nil),
+             "Hi, about the other day, are you available next Tuesday?", .translation(.english), "Google Chrome", .succeeded, nil),
             (70, "Thanks for the update. Could you send me the slides by Friday?",
-             "ご連絡ありがとうございます。金曜日までにスライドを送っていただけますか？", .translateJapanese, "Slack", .succeeded, nil),
+             "ご連絡ありがとうございます。金曜日までにスライドを送っていただけますか？", .translation(.japanese), "Slack", .succeeded, nil),
             (95, "それ田中さんに確認してもらってもいいですか じゃなくて佐藤さんでした",
              "それ田中さんに確認してもらってもいいですか じゃなくて佐藤さんでした", .refine, "メモ", .noCredentials, nil),
             (60 * 24 + 30, "部長から来週までに出してって頼まれてるんですけど間に合いそうにないです",
@@ -117,7 +117,7 @@ enum DictationHistoryCLI {
             }
             // 0 番目は 40 日前（期間の上限で消える）、ほかは i 時間前
             let date = i == 0 ? now.addingTimeInterval(-40 * 86400) : now.addingTimeInterval(-Double(7 - i) * 3600)
-            store.record(raw: "原文 \(i)", output: "結果 \(i)", mode: [.refine, .translate, .translateJapanese][i % 3],
+            store.record(raw: "原文 \(i)", output: "結果 \(i)", mode: [.refine, .translation(.english), .translation(.japanese), .translation(TranslationLanguage(.ko))][i % 4],
                          appName: "App\(i)", status: i == 3 ? .geminiFailed : .succeeded,
                          errorMessage: i == 3 ? "テスト用のエラー" : nil, model: "test-model", audioURL: audio, date: date)
         }
@@ -136,9 +136,10 @@ enum DictationHistoryCLI {
         expect(reloaded.entries == store.entries, "保存した内容をそのまま読み込める")
         // 設計判断: DEC-DIC-029
         let savedJSON = (try? String(contentsOf: store.fileURL, encoding: .utf8)) ?? ""
-        expect(savedJSON.contains("\"translate\"") && savedJSON.contains("\"translateJapanese\""),
-               "英訳は translate、和訳は translateJapanese として保存される")
-        expect(reloaded.entries.contains { $0.mode == .translateJapanese && $0.mode.label == "和訳" }, "和訳のモードを読み込める")
+        expect(savedJSON.contains("\"translate\"") && savedJSON.contains("\"translateJapanese\"") && savedJSON.contains("\"translate:ko\""),
+               "英訳は translate、和訳は translateJapanese、ほかの言語への翻訳は translate:<言語のコード> として保存される")
+        expect(reloaded.entries.contains { $0.mode == .translation(.japanese) && $0.mode.label == "和訳" }, "和訳のモードを読み込める")
+        expect(reloaded.entries.contains { $0.mode == .translation(TranslationLanguage(.ko)) }, "ほかの言語への翻訳のモードを読み込める")
         expect(reloaded.entries.first { $0.output == "結果 3" }?.status == .geminiFailed, "状態（Gemini 失敗）とエラー内容が残る")
         let attributes = try? FileManager.default.attributesOfItem(atPath: store.fileURL.path)
         let permissions = (attributes?[.posixPermissions] as? NSNumber)?.intValue ?? 0
@@ -225,9 +226,9 @@ enum DictationHistoryCLI {
                 print("  整形し直し: \(refined.output)")
                 expect(refined.status == .succeeded && refined.errorMessage == nil && refined.retriedAt != nil
                        && refined.output != entry.raw, "整形し直すと結果と状態が更新される")
-                let translated = try await retryStore.retry(entry.id, mode: .translate, client: client)
+                let translated = try await retryStore.retry(entry.id, mode: .translation(.english), client: client)
                 print("  英訳し直し: \(translated.output)")
-                expect(translated.mode == .translate && translated.status == .succeeded, "英訳し直すとモードが英訳になる")
+                expect(translated.mode == .translation(.english) && translated.status == .succeeded, "英訳し直すとモードが英訳になる")
                 retryStore.flush()
                 let saved = DictationHistoryStore(directory: directory)
                 saved.load()

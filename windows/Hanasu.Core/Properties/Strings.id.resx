@@ -312,17 +312,17 @@
   <data name="Wav_NoData" xml:space="preserve">
     <value>File WAV tidak memiliki chunk data.</value>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>Inggris</value>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>Jepang</value>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>Ke Inggris</value>
   </data>
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>Ke Jepang</value>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>Ke {0}</value>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>Terjemahkan dan Ketik</value>
@@ -333,11 +333,17 @@
   <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
     <value>Terjemahkan ke Jepang dan Ketik</value>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>Terjemahkan ke {0} dan Ketik</value>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>Diterjemahkan ke Inggris dan diketik</value>
   </data>
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>Diterjemahkan ke Jepang dan diketik</value>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>Diterjemahkan ke {0} dan diketik</value>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>Diketik</value>
@@ -389,6 +395,9 @@
   </data>
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>Menerjemahkan ke Jepang dengan {0}…</value>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>Menerjemahkan ke {1} dengan {0}…</value>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>Merapikan dengan {0}…</value>

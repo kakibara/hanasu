@@ -164,6 +164,9 @@
   <data name="Hud_SpokenLanguage" xml:space="preserve">
     <value>जैसा बोला गया</value>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>अन्य भाषाएँ</value>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>रिकॉर्डिंग रोकता है और टेक्स्ट टाइप करता है (शॉर्टकट दोबारा दबाने के समान)</value>
   </data>
@@ -510,14 +513,8 @@
   <data name="Settings_TranslationLanguages" xml:space="preserve">
     <value>अनुवाद भाषाएँ</value>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>अंग्रेज़ी</value>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>जापानी</value>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>"अनुवाद करें और टाइप करें" शॉर्टकट सबसे बाईं ओर की चुनी गई भाषा में अनुवाद करता है. रिकॉर्डिंग के दौरान, आप HUD में "जैसा बोला गया" और चुनी गई भाषाओं के बीच बदल सकते हैं (टेक्स्ट उस भाषा में टाइप होता है जो रोकते समय चुनी गई हो). अनुवाद "AI" टैब पर डिक्टेशन के लिए चुने गए AI का उपयोग करता है. कम से कम एक चुनें.</value>
+    <value>"अनुवाद करें और टाइप करें" शॉर्टकट सूची में चुनी गई पहली भाषा में अनुवाद करता है. रिकॉर्डिंग के दौरान, आप HUD में "जैसा बोला गया" और चुनी गई भाषाओं के बीच बदल सकते हैं (टेक्स्ट उस भाषा में टाइप होता है जो रोकते समय चुनी गई हो). अनुवाद "AI" टैब पर डिक्टेशन के लिए चुने गए AI का उपयोग करता है. कम से कम एक चुनें.</value>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
     <value>रिकॉर्डिंग मोड</value>
@@ -689,6 +686,9 @@
   </data>
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>जापानी अनुवाद आज़माएँ</value>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>{0} अनुवाद आज़माएँ</value>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>मीटिंग</value>
@@ -923,6 +923,9 @@
   </data>
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>जापानी में अनुवाद और टाइप करना शुरू करें(&amp;T)</value>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>{0} में अनुवाद और टाइप करना शुरू करें(&amp;T)</value>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>यह इतिहास प्रविष्टि हटाएँ? इसे पूर्ववत नहीं किया जा सकता.</value>

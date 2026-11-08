@@ -26,7 +26,7 @@ Une application de saisie vocale et de notes de réunion pour macOS et Windows. 
 > [!NOTE]
 > Hanasu a été conçu avant tout pour le **japonais**, et le japonais est la langue la plus testée.
 > Les écrans de l'application et les instructions qu'elle donne à l'IA existent dans les 17 mêmes langues que ce README. Les écrans suivent la langue du système, et les instructions à l'IA suivent la langue de transcription choisie dans les Réglages. Pour toute autre langue, Hanasu utilise l'anglais.
-> Il peut aussi traduire ce que vous dites en un **anglais** naturel (ou en **japonais**) avant de le saisir.
+> Il peut aussi traduire ce que vous dites en un **anglais** naturel, en **japonais** ou dans l'une des 17 langues prises en charge avant de le saisir.
 
 ## Pourquoi Hanasu
 
@@ -41,7 +41,7 @@ Il s'inspire de Typeless, Wispr Flow, Aqua Voice et Granola. Son code source est
 | | |
 | --- | --- |
 | **Parlez → texte soigné** | Appuyez sur <kbd>⌥ Space</kbd>, parlez, puis appuyez à nouveau (ou cliquez sur **■ Arrêter**). Hanasu supprime les mots de remplissage, corrige les homophones, applique vos autocorrections et colle le texte au niveau du curseur. |
-| **Parlez, saisissez la traduction** | Appuyez sur <kbd>⌥⇧ Space</kbd>, ou basculez le HUD sur **English** ou **日本語** pendant que vous parlez. Les formules toutes faites sont traduites naturellement : お疲れ様です devient "Hi,". Choisissez les langues proposées (anglais, japonais ou les deux) dans **Réglages → Général**. L'anglais est la valeur par défaut. |
+| **Parlez, saisissez la traduction** | Appuyez sur <kbd>⌥⇧ Space</kbd>, ou basculez le HUD sur **English**, **日本語** ou une autre langue pendant que vous parlez. Les formules toutes faites sont traduites naturellement : お疲れ様です devient "Hi,". Choisissez les langues proposées (n'importe laquelle des 17 langues prises en charge) dans **Réglages → Général**. L'anglais est la valeur par défaut. Sur Mac, **Réglages → Par app** permet de faire démarrer une application dans l'une de ces langues. |
 | **Les langues mélangées restent telles quelles** | Par défaut, les passages que vous dites en anglais restent en anglais. Vous pouvez choisir d'unifier la sortie en japonais. |
 | **Modifier à la voix** | Sélectionnez du texte, appuyez sur <kbd>⌃⌥⌘ E</kbd> et dites « rends-le plus poli », « transforme-le en liste à puces » ou « traduis en anglais ». |
 | **Styles par application** | Le texte est décontracté et court dans Slack, poli et en paragraphes dans Mail, et dans un style écrit dans Pages, Word et Notion. Vous pouvez changer le préréglage de chaque application. |
@@ -167,7 +167,7 @@ Sur Mac, vous pouvez afficher l'icône de Hanasu dans la barre des menus, dans l
 | Action | macOS | Windows |
 | --- | --- | --- |
 | Saisie vocale (démarrer / arrêter) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Saisie vocale traduite (anglais / japonais) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Saisie vocale traduite (vers les langues choisies) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Modifier la sélection à la voix | <kbd>⌃⌥⌘ E</kbd> | — |
 | Coller à nouveau le dernier résultat | <kbd>⌥⇧ V</kbd> | — |
 | Annuler l'enregistrement | <kbd>Esc</kbd> | <kbd>Esc</kbd> |

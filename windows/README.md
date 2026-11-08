@@ -234,7 +234,7 @@ dotnet run --project Hanasu.Cli -- models
 
 # Claude
 dotnet run --project Hanasu.Cli -- claude-request "<文章>" [--translate | --minutes] [--model <id>]   # 送らずに、送る HTTP リクエストを出す（キーは伏せる。キーがなくても動く）
-dotnet run --project Hanasu.Cli -- claude-refine "<文章>" [--translate | --translate-to en|ja] [--model <id>] [--app Slack]  # Claude で整形・英訳する（使ったトークンとキャッシュも出す）
+dotnet run --project Hanasu.Cli -- claude-refine "<文章>" [--translate | --translate-to <言語>] [--model <id>] [--app Slack]  # Claude で整形・英訳する（使ったトークンとキャッシュも出す）
 dotnet run --project Hanasu.Cli -- claude-check [--model <id>] [--fake-key]                          # 「接続を試す」と同じ確かめ。--fake-key は偽のキーで 401 の文言を見る
 dotnet run --project Hanasu.Cli -- local-list | local-download <id> | local-refine "<文章>" [--model <id>] [--server <llama-server>] [--models-dir <dir>]  # ローカルの LLM（Mac の llama-server でも動く）
 

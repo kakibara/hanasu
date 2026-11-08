@@ -2042,7 +2042,7 @@
       }
     },
     "%@ は%@" : {
-      "comment" : "HUDPanel.swift:375",
+      "comment" : "HUDPanel.swift:401",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5713,6 +5713,108 @@
         }
       }
     },
+    "%@訳" : {
+      "comment" : "TranslationLanguage.swift:85",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الترجمة إلى %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übersetzung: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ translation"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "traducción al %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "traduction en %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ अनुवाद"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "menerjemahkan ke %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "traduzione in %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 번역"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tłumaczenie na %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tradução para o %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевод на %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ çeviri"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dịch sang %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "译成%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "譯成%@"
+          }
+        }
+      }
+    },
     "%@（%@ 件）" : {
       "comment" : "DictationHistoryWindow.swift:646",
       "extractionState" : "manual",
@@ -6733,6 +6835,108 @@
         }
       }
     },
+    "AI で%@に翻訳しています…" : {
+      "comment" : "TranslationLanguage.swift:94",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ الترجمة إلى %@ باستخدام AI…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI übersetzt (Zielsprache: %@) …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Translating into %@ with AI…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traduciendo al %@ con IA…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traduction en %@ par l’IA…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI से %@ में अनुवाद हो रहा है…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI sedang menerjemahkan ke %@…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traduzione in %@ con IA…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI로 %@로 번역하는 중…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI tłumaczy na %@…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traduzindo para o %@ com IA…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI переводит на %@…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI ile çevriliyor (hedef dil: %@)…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI đang dịch sang %@…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 正在翻译成%@…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 正在翻譯成%@…"
+          }
+        }
+      }
+    },
     "AI での%@に失敗したため、原文のまま入力しました。" : {
       "comment" : "DictationHistoryWindow.swift:462",
       "extractionState" : "manual",
@@ -6938,7 +7142,7 @@
       }
     },
     "AI で日本語に翻訳しています…" : {
-      "comment" : "TranslationLanguage.swift:40",
+      "comment" : "TranslationLanguage.swift:93",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7142,7 +7346,7 @@
       }
     },
     "AI で英語に翻訳しています…" : {
-      "comment" : "TranslationLanguage.swift:39",
+      "comment" : "TranslationLanguage.swift:92",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11527,108 +11731,6 @@
         }
       }
     },
-    "English（英語）" : {
-      "comment" : "TranslationLanguage.swift:23",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "الإنجليزية"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Englisch"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inglés"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anglais"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "अंग्रेज़ी"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bahasa Inggris"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inglese"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "영어"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inglês"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tiếng Anh"
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "英语"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "英文"
-          }
-        }
-      }
-    },
     "Finder で表示" : {
       "comment" : "DictationHistoryWindow.swift:525, MeetingWindow.swift:435",
       "extractionState" : "manual",
@@ -13058,7 +13160,7 @@
       }
     },
     "Gemini 失敗" : {
-      "comment" : "DictationHistory.swift:53",
+      "comment" : "DictationHistory.swift:83",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -19484,7 +19586,7 @@
       }
     },
     "、" : {
-      "comment" : "HUDPanel.swift:375",
+      "comment" : "HUDPanel.swift:401",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26827,6 +26929,108 @@
         }
       }
     },
+    "ほかの言語を選ぶ" : {
+      "comment" : "HUDPanel.swift:393",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختيار لغة أخرى"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andere Sprache auswählen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Another Language"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir otro idioma"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir une autre langue"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "दूसरी भाषा चुनें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih bahasa lain"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli un’altra lingua"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다른 언어 선택"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz inny język"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolher outro idioma"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбрать другой язык"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başka bir dil seç"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chọn ngôn ngữ khác"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择其他语言"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇其他語言"
+          }
+        }
+      }
+    },
     "ほかを隠す" : {
       "comment" : "AppDelegate.swift:298",
       "extractionState" : "manual",
@@ -27950,7 +28154,7 @@
       }
     },
     "やり直し" : {
-      "comment" : "DictationHistory.swift:524",
+      "comment" : "DictationHistory.swift:554",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28052,7 +28256,7 @@
       }
     },
     "やり直しません" : {
-      "comment" : "DictationHistory.swift:524",
+      "comment" : "DictationHistory.swift:554",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29174,7 +29378,7 @@
       }
     },
     "アクセシビリティの許可がないため、ウインドウと入力欄を読めません" : {
-      "comment" : "ScreenContext.swift:161",
+      "comment" : "ScreenContext.swift:169",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37946,7 +38150,7 @@
       }
     },
     "パスワード欄なので入力欄の文章は読みません" : {
-      "comment" : "ScreenContext.swift:191",
+      "comment" : "ScreenContext.swift:199",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -38048,7 +38252,7 @@
       }
     },
     "フォーカスしている要素を取れませんでした" : {
-      "comment" : "ScreenContext.swift:181",
+      "comment" : "ScreenContext.swift:189",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40292,7 +40496,7 @@
       }
     },
     "メッセージ" : {
-      "comment" : "AppStyles.swift:142",
+      "comment" : "AppStyles.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41720,7 +41924,7 @@
       }
     },
     "メール" : {
-      "comment" : "AppStyles.swift:19, AppStyles.swift:144",
+      "comment" : "AppStyles.swift:19, AppStyles.swift:185",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55286,7 +55490,7 @@
       }
     },
     "入力欄の文章を取れませんでした（%@）" : {
-      "comment" : "ScreenContext.swift:197",
+      "comment" : "ScreenContext.swift:205",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58448,7 +58652,7 @@
       }
     },
     "和訳" : {
-      "comment" : "TranslationLanguage.swift:32",
+      "comment" : "TranslationLanguage.swift:84",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59774,7 +59978,7 @@
       }
     },
     "履歴が見つかりません（削除された可能性があります）" : {
-      "comment" : "DictationHistory.swift:156",
+      "comment" : "DictationHistory.swift:186",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60182,7 +60386,7 @@
       }
     },
     "履歴を保存できませんでした: %@" : {
-      "comment" : "DictationHistory.swift:375",
+      "comment" : "DictationHistory.swift:405",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60284,7 +60488,7 @@
       }
     },
     "履歴を読み込めませんでした: %@" : {
-      "comment" : "DictationHistory.swift:296",
+      "comment" : "DictationHistory.swift:326",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61202,7 +61406,7 @@
       }
     },
     "成功" : {
-      "comment" : "DictationHistory.swift:52",
+      "comment" : "DictationHistory.swift:82",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62834,7 +63038,7 @@
       }
     },
     "整形" : {
-      "comment" : "DictationController.swift:320, DictationHistory.swift:37",
+      "comment" : "DictationController.swift:320, DictationHistory.swift:67",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63242,7 +63446,7 @@
       }
     },
     "整形オフ（原文のまま）" : {
-      "comment" : "DictationHistory.swift:55",
+      "comment" : "DictationHistory.swift:85",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67117,108 +67321,6 @@
         }
       }
     },
-    "日本語" : {
-      "comment" : "TranslationLanguage.swift:16, TranslationLanguage.swift:24",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اليابانية"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japanisch"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japanese"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japonés"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japonais"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "जापानी"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bahasa Jepang"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Giapponese"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "일본어"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japoński"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japonês"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Японский"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japonca"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tiếng Nhật"
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "日语"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "日文"
-          }
-        }
-      }
-    },
     "日本語に統一" : {
       "comment" : "GeminiClient.swift:57",
       "extractionState" : "manual",
@@ -69158,7 +69260,7 @@
       }
     },
     "未設定のため原文のまま" : {
-      "comment" : "DictationHistory.swift:54",
+      "comment" : "DictationHistory.swift:84",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76298,7 +76400,7 @@
       }
     },
     "翻訳" : {
-      "comment" : "DictationController.swift:320, TranslationLanguage.swift:52",
+      "comment" : "DictationController.swift:320, TranslationLanguage.swift:110",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77930,7 +78032,7 @@
       }
     },
     "英訳" : {
-      "comment" : "TranslationLanguage.swift:31",
+      "comment" : "TranslationLanguage.swift:83",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82418,7 +82520,7 @@
       }
     },
     "話した言語" : {
-      "comment" : "AppStyles.swift:62, GeminiClient.swift:56, HUDPanel.swift:365",
+      "comment" : "AppStyles.swift:101, GeminiClient.swift:56, HUDPanel.swift:377",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91700,7 +91802,7 @@
       }
     },
     "録音を止めたときに選んでいる言語で入力します（話した言語は整形の言語の設定に従い、%@）" : {
-      "comment" : "HUDPanel.swift:374",
+      "comment" : "HUDPanel.swift:400",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

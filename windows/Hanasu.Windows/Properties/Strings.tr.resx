@@ -164,6 +164,9 @@ Sonuç: {1}
   <data name="Hud_SpokenLanguage" xml:space="preserve">
     <value>Konuşulduğu gibi</value>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>Diğer diller</value>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>Kaydı durdurur ve metni yazar (kısayola yeniden basmakla aynı)</value>
   </data>
@@ -510,14 +513,8 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   <data name="Settings_TranslationLanguages" xml:space="preserve">
     <value>Çeviri dilleri</value>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>İngilizce</value>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>Japonca</value>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>"Çevir ve Yaz" kısayolu, seçili dillerden en soldakine çevirir. Kayıt sırasında HUD'da "Konuşulduğu gibi" ile seçili diller arasında geçiş yapabilirsiniz (metin, durdurduğunuzda seçili olan dilde yazılır). Çeviri, "AI" sekmesinde dikte için seçilen yapay zekayı kullanır. En az birini seçin.</value>
+    <value>"Çevir ve Yaz" kısayolu, seçili dillerden listedeki ilkine çevirir. Kayıt sırasında HUD'da "Konuşulduğu gibi" ile seçili diller arasında geçiş yapabilirsiniz (metin, durdurduğunuzda seçili olan dilde yazılır). Çeviri, "AI" sekmesinde dikte için seçilen yapay zekayı kullanır. En az birini seçin.</value>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
     <value>Kayıt modu</value>
@@ -689,6 +686,9 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   </data>
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>Japonca Çeviriyi Dene</value>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>{0} Çeviriyi Dene</value>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>Toplantılar</value>
@@ -923,6 +923,9 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   </data>
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>Japoncaya Çevirip &amp;Yazmayı Başlat</value>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>Çevirip &amp;Yazmayı Başlat ({0})</value>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>Bu geçmiş kaydı silinsin mi? Bu işlem geri alınamaz.</value>

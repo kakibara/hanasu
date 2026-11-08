@@ -26,7 +26,7 @@ macOS ve Windows için bir sesle yazma ve toplantı notu uygulaması. Cihaz üze
 > [!NOTE]
 > Hanasu öncelikle **Japonca** için geliştirilmiştir ve en çok test edilen dil Japoncadır.
 > Uygulamanın ekranları ve yapay zekâya verdiği talimatlar, bu README ile aynı 17 dilde sunulur. Ekranlar sistem dilinizi, yapay zekâ talimatları ise Ayarlar'daki döküm dilini izler. Diğer diller için Hanasu İngilizce kullanır.
-> Söylediklerinizi yazmadan önce doğal bir **İngilizceye** (ya da **Japoncaya**) çevirebilir de.
+> Söylediklerinizi yazmadan önce doğal bir **İngilizceye**, **Japoncaya** ya da desteklenen 17 dilden herhangi birine çevirebilir de.
 
 ## Neden Hanasu
 
@@ -41,7 +41,7 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herk
 | | |
 | --- | --- |
 | **Konuşun → derli toplu metin** | <kbd>⌥ Space</kbd> tuşuna basın, konuşun ve tekrar basın (ya da **■ Durdur**'a tıklayın). Hanasu dolgu sözcüklerini çıkarır, sesteş kelimeleri düzeltir, konuşurken yaptığınız düzeltmeleri uygular ve metni imlecin olduğu yere yapıştırır. |
-| **Konuşun, çevrilmiş olarak yazılsın** | <kbd>⌥⇧ Space</kbd> tuşlarına basın ya da konuşurken HUD'u **English** veya **日本語** olarak değiştirin. Kalıp ifadeler doğal biçimde çevrilir; örneğin お疲れ様です "Hi," olur. Sunulacak dilleri (İngilizce, Japonca ya da ikisi) **Ayarlar → Genel** bölümünden seçin. Varsayılan İngilizcedir. |
+| **Konuşun, çevrilmiş olarak yazılsın** | <kbd>⌥⇧ Space</kbd> tuşlarına basın ya da konuşurken HUD'u **English**, **日本語** veya başka bir dil olarak değiştirin. Kalıp ifadeler doğal biçimde çevrilir; örneğin お疲れ様です "Hi," olur. Sunulacak dilleri (desteklenen 17 dilden herhangi biri) **Ayarlar → Genel** bölümünden seçin. Varsayılan İngilizcedir. Mac'te **Ayarlar → Uygulamalar** bölümünden bir uygulamanın bu dillerden biriyle başlamasını sağlayabilirsiniz. |
 | **Karışık diller söylendiği gibi kalır** | Varsayılan olarak İngilizce söylediğiniz kısımlar İngilizce kalır. Bunun yerine çıktının tamamını Japonca yapmayı da seçebilirsiniz. |
 | **Sesle düzenleme** | Bir metin seçin, <kbd>⌃⌥⌘ E</kbd> tuşlarına basın ve "daha kibar yap", "madde işaretlerine dönüştür" ya da "İngilizceye çevir" deyin. |
 | **Uygulamaya göre stiller** | Metin Slack'te samimi ve kısa, Mail'de paragraflı ve kibar; Pages, Word ve Notion'da ise yazı dilindedir. Her uygulamanın ön ayarını değiştirebilirsiniz. |
@@ -167,7 +167,7 @@ Mac'te Hanasu simgesini menü çubuğunda, Dock'ta ya da her ikisinde gösterebi
 | Eylem | macOS | Windows |
 | --- | --- | --- |
 | Sesle yazma (başlat / durdur) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Çevirili sesle yazma (İngilizce / Japonca) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Çevirili sesle yazma (seçtiğiniz dillere) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Seçimi sesle düzenleme | <kbd>⌃⌥⌘ E</kbd> | — |
 | Son sonucu yeniden yapıştırma | <kbd>⌥⇧ V</kbd> | — |
 | Kaydı iptal etme | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
