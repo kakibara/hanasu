@@ -210,4 +210,47 @@ public class ReleaseNotesFormatterTests
             "前置きの文。\n\n## 新しい機能\n\n- 共通の項目.\n  - 共通の細かい点\n### 小見出し\n- Windows の項目",
             ReleaseNotesFormatter.ForApp(notes, ReleasePlatform.Windows));
     }
+
+    /// <summary>Mac の見本（AppUpdateCLI.selfTest の「ダイアログに出す分に絞る」）と同じ本文</summary>
+    private const string SharedSample = """
+        ## ハイライト
+
+        設定の直しの版です。
+
+        ## 改善
+
+        - 両方の直し（Mac / Windows）。
+        - Windows だけの直し（Windows）。
+          - その続き
+        - Mac だけの直し（Mac）。
+
+        ## 不具合の修正
+
+        - Windows だけの不具合（Windows）。
+
+        ## 気をつけること
+
+        - 実機ではまだ確かめていません。
+
+        ## アップデートのしかた
+
+        下のインストールの手順のとおりに入れ替えてください。
+        """;
+
+    [Fact]
+    public void ForAppMatchesTheMacSample()
+    {
+        Assert.Equal("## ハイライト\n\n設定の直しの版です。\n\n## 改善\n\n- 両方の直し。\n- Mac だけの直し。",
+            ReleaseNotesFormatter.ForApp(SharedSample, ReleasePlatform.Mac));
+        Assert.Equal("## ハイライト\n\n設定の直しの版です。\n\n## 改善\n\n- 両方の直し。\n- Windows だけの直し。\n  - その続き\n\n## 不具合の修正\n\n- Windows だけの不具合。",
+            ReleaseNotesFormatter.ForApp(SharedSample, ReleasePlatform.Windows));
+        Assert.Equal("## What's Changed\n- a（Mac）", ReleaseNotesFormatter.ForApp("## What's Changed\n- a（Mac）", ReleasePlatform.Windows));
+    }
+
+    [Fact]
+    public void ForAppKeepsDroppingDeeperLinesAcrossBlankLines()
+    {
+        const string notes = "## 改善\n\n- Mac の項目（Mac）\n\n  - 続きの段落\n- 共通（Mac / Windows）";
+        Assert.Equal("## 改善\n\n- 共通", ReleaseNotesFormatter.ForApp(notes, ReleasePlatform.Windows));
+    }
 }

@@ -70,6 +70,10 @@ public static partial class ReleaseNotesFormatter
     [GeneratedRegex(@"\s*[（(]\s*(Mac|Windows)\s*(?:/\s*(Mac|Windows)\s*)?[）)](\s*[。.])?\s*$")]
     private static partial Regex PlatformMark();
 
+    /// <summary>節の見出し（「## 」。「### 」は節の区切りにしない）</summary>
+    [GeneratedRegex(@"^##(?!#)\s+\S")]
+    private static partial Regex SectionHeading();
+
     /// <summary>
     /// 更新の知らせに出す分だけにする。出す節は「ハイライト」「新しい機能」「改善」「不具合の修正」だけで、ほかの節は見出しごと除く
     /// （最初の「## 」より前の文は残す。「### 」は節の区切りにしない）。4 つの見出しがどれもなければ、絞らずに全部返す。
@@ -83,10 +87,10 @@ public static partial class ReleaseNotesFormatter
         var sections = new List<(string? Heading, List<string> Body)> { (null, []) };
         foreach (var line in lines)
         {
-            if (line.StartsWith("## ", StringComparison.Ordinal)) sections.Add((line, []));
+            if (SectionHeading().IsMatch(line)) sections.Add((line, []));
             else sections[^1].Body.Add(line);
         }
-        bool IsAppSection(string heading) => AppSections.Contains(HeadingText(heading[3..]));
+        bool IsAppSection(string heading) => AppSections.Contains(HeadingText(heading[2..]));
         if (!sections.Any(s => s.Heading is not null && IsAppSection(s.Heading))) return notes.Trim();
 
         var wanted = platform == ReleasePlatform.Mac ? "Mac" : "Windows";
@@ -99,9 +103,15 @@ public static partial class ReleaseNotesFormatter
             foreach (var line in body)
             {
                 var indent = IndentOf(line);
+                // 空行は残し、出さない行の下の深い行を除くのも続ける（Mac の UpdateRelease.appNotes と同じ）
+                if (line.Trim().Length == 0)
+                {
+                    kept.Add("");
+                    continue;
+                }
                 if (skipDeeperThan is { } limit)
                 {
-                    if (line.Trim().Length > 0 && indent > limit) continue;
+                    if (indent > limit) continue;
                     skipDeeperThan = null;
                 }
                 var mark = PlatformMark().Match(line);
