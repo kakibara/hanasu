@@ -26,7 +26,7 @@
 > [!NOTE]
 > Hanasu được xây dựng trước hết cho **tiếng Nhật**, và tiếng Nhật là ngôn ngữ được kiểm thử kỹ nhất.
 > Giao diện ứng dụng và chỉ dẫn mà ứng dụng gửi cho AI có sẵn bằng 17 ngôn ngữ giống như README này. Giao diện theo ngôn ngữ hệ thống, còn chỉ dẫn cho AI theo ngôn ngữ chép lời trong Cài đặt. Với các ngôn ngữ khác, Hanasu dùng tiếng Anh.
-> Ứng dụng cũng có thể dịch những gì bạn nói sang **tiếng Anh** (hoặc **tiếng Nhật**) một cách tự nhiên trước khi gõ ra.
+> Ứng dụng cũng có thể dịch những gì bạn nói sang **tiếng Anh**, **tiếng Nhật** hoặc bất kỳ ngôn ngữ nào trong 17 ngôn ngữ được hỗ trợ một cách tự nhiên trước khi gõ ra.
 
 ## Vì sao chọn Hanasu
 
@@ -41,7 +41,7 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 | | |
 | --- | --- |
 | **Nói → văn bản chỉn chu** | Nhấn <kbd>⌥ Space</kbd>, nói, rồi nhấn lại lần nữa (hoặc bấm **■ Dừng**). Hanasu loại bỏ từ đệm, sửa từ đồng âm, áp dụng những chỗ bạn tự sửa lời và dán văn bản vào vị trí con trỏ. |
-| **Nói và gõ ra bản dịch** | Nhấn <kbd>⌥⇧ Space</kbd>, hoặc chuyển HUD sang **English** hay **日本語** trong lúc nói. Các câu nói quen thuộc được dịch tự nhiên, nên お疲れ様です sẽ thành "Hi,". Chọn các ngôn ngữ muốn hiển thị (tiếng Anh, tiếng Nhật hoặc cả hai) trong **Cài đặt → Chung**. Mặc định là tiếng Anh. |
+| **Nói và gõ ra bản dịch** | Nhấn <kbd>⌥⇧ Space</kbd>, hoặc chuyển HUD sang **English**, **日本語** hay một ngôn ngữ khác trong lúc nói. Các câu nói quen thuộc được dịch tự nhiên, nên お疲れ様です sẽ thành "Hi,". Chọn các ngôn ngữ muốn hiển thị (bất kỳ ngôn ngữ nào trong 17 ngôn ngữ được hỗ trợ) trong **Cài đặt → Chung**. Mặc định là tiếng Anh. Trên Mac, **Cài đặt → Theo ứng dụng** có thể cho một ứng dụng bắt đầu bằng một trong các ngôn ngữ này. |
 | **Giữ nguyên ngôn ngữ trộn lẫn như khi nói** | Theo mặc định, những phần bạn nói bằng tiếng Anh sẽ được giữ nguyên tiếng Anh. Bạn cũng có thể chọn thống nhất toàn bộ đầu ra sang tiếng Nhật. |
 | **Chỉnh sửa bằng giọng nói** | Chọn một đoạn văn bản, nhấn <kbd>⌃⌥⌘ E</kbd> và nói "viết lịch sự hơn", "chuyển thành gạch đầu dòng" hoặc "dịch sang tiếng Anh". |
 | **Văn phong theo từng ứng dụng** | Trong Slack, văn bản thân mật và ngắn gọn; trong Mail, lịch sự và chia đoạn; trong Pages, Word và Notion, theo văn viết. Bạn có thể đổi thiết lập sẵn cho từng ứng dụng. |
@@ -167,7 +167,7 @@ Trên Mac, bạn có thể hiện biểu tượng Hanasu trên thanh menu, trên
 | Thao tác | macOS | Windows |
 | --- | --- | --- |
 | Nhập liệu bằng giọng nói (bắt đầu / dừng) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Nhập liệu bằng giọng nói kèm dịch (tiếng Anh / tiếng Nhật) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Nhập liệu bằng giọng nói kèm dịch (sang các ngôn ngữ bạn đã chọn) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Chỉnh sửa vùng chọn bằng giọng nói | <kbd>⌃⌥⌘ E</kbd> | — |
 | Dán lại kết quả gần nhất | <kbd>⌥⇧ V</kbd> | — |
 | Hủy ghi âm | <kbd>Esc</kbd> | <kbd>Esc</kbd> |

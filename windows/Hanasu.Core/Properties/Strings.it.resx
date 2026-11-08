@@ -312,17 +312,17 @@
   <data name="Wav_NoData" xml:space="preserve">
     <value>Il file WAV non ha un chunk data.</value>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>Inglese</value>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>Giapponese</value>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>In inglese</value>
   </data>
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>In giapponese</value>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>In {0}</value>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>Traduci e digita</value>
@@ -333,11 +333,17 @@
   <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
     <value>Traduci in giapponese e digita</value>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>Traduci in {0} e digita</value>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>Tradotto in inglese e digitato</value>
   </data>
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>Tradotto in giapponese e digitato</value>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>Tradotto in {0} e digitato</value>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>Digitato</value>
@@ -389,6 +395,9 @@
   </data>
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>Traduzione in giapponese con {0}…</value>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>Traduzione in {1} con {0}…</value>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>Rifinitura con {0}…</value>

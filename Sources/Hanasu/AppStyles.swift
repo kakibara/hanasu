@@ -40,22 +40,61 @@ enum AppStylePreset: String, Codable, CaseIterable, Identifiable {
     }
 
     // 要件: REQ-COM-061
-    /// 英訳するときのルール。日本語の語尾の違い（です・ます／である）は英語では区別しない
-    var translationRules: [String] {
+    /// 日本語以外に訳すときのルール。日本語の語尾の違い（です・ます／である）は区別しない。
+    /// 英訳は英語向けの style.<プリセット>.translation、ほかの言語は言語を名指ししない style.<プリセット>.translationOther
+    func translationRules(for language: TranslationLanguage) -> [String] {
+        let suffix = language == .english ? "translation" : "translationOther"
         switch self {
-        case .none: []
-        case .chat, .email: Prompts.list("style.\(rawValue).translation")
-        case .documentPolite, .documentPlain: Prompts.list("style.document.translation")
+        case .none: return []
+        case .chat, .email: return Prompts.list("style.\(rawValue).\(suffix)")
+        case .documentPolite, .documentPlain: return Prompts.list("style.document.\(suffix)")
         }
     }
 }
 
 // 要件: REQ-DIC-021, REQ-DIC-013
-/// アプリごとの既定の出力言語。保存する値は今までのまま（「話した言語」は "japanese"）
-enum AppOutputLanguage: String, Codable, CaseIterable, Identifiable {
-    case asSpoken = "japanese"
-    case english
-    case japanese = "translateJapanese"
+// 設計判断: DEC-DIC-153
+/// アプリごとの既定の出力言語。「話した言語」か、翻訳の言語（TranslationLanguage.allCases。対応言語の一覧から作る）のどれか
+enum AppOutputLanguage: Hashable, Codable, Identifiable {
+    case asSpoken
+    case translate(TranslationLanguage)
+
+    static var allCases: [AppOutputLanguage] { [.asSpoken] + TranslationLanguage.allCases.map(AppOutputLanguage.translate) }
+
+    // 設計判断: DEC-DIC-153
+    /// 保存する値。今までの値（話した言語は "japanese"、English は "english"、日本語は "translateJapanese"）はそのまま、
+    /// ほかの言語は "translate:<言語のコード>"
+    var rawValue: String {
+        switch self {
+        case .asSpoken: "japanese"
+        case .translate(.english): "english"
+        case .translate(.japanese): "translateJapanese"
+        case .translate(let language): "translate:\(language.language.rawValue)"
+        }
+    }
+
+    /// 保存した値から戻す。知らない値（新しい版で足した言語など）は「話した言語」にする（アプリ別の設定全体を読めなくしない）
+    init(rawValue: String) {
+        switch rawValue {
+        case "english": self = .translate(.english)
+        case "translateJapanese": self = .translate(.japanese)
+        default:
+            if rawValue.hasPrefix("translate:"), let language = PromptLanguage(rawValue: String(rawValue.dropFirst("translate:".count))) {
+                self = .translate(TranslationLanguage(language))
+            } else {
+                self = .asSpoken
+            }
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        self.init(rawValue: try decoder.singleValueContainer().decode(String.self))
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
 
     var id: String { rawValue }
     var label: String {
@@ -66,8 +105,7 @@ enum AppOutputLanguage: String, Codable, CaseIterable, Identifiable {
     var translation: TranslationLanguage? {
         switch self {
         case .asSpoken: nil
-        case .english: .english
-        case .japanese: .japanese
+        case .translate(let language): language
         }
     }
 }
@@ -97,8 +135,9 @@ struct AppStyle: Codable, Identifiable, Equatable {
     /// - hasCommonRules: 共通の追加ルールがプロンプトに入っているか（入っていれば優先順位を書く）
     func promptSection(appName: String?, translation: TranslationLanguage?, hasCommonRules: Bool) -> String? {
         guard hasRules else { return nil }
-        let translating = translation == .english
-        let presetRules = translating ? preset.translationRules : preset.refineRules
+        // 日本語以外に訳すときは、訳す先の言語向けのルールにする（和訳は整形と同じ日本語のルール）
+        let target = translation.flatMap { $0.outputsJapanese ? nil : $0 }
+        let presetRules = target.map(preset.translationRules(for:)) ?? preset.refineRules
         let custom = rules.trimmingCharacters(in: .whitespacesAndNewlines)
 
         var lines: [String] = []
@@ -111,8 +150,10 @@ struct AppStyle: Codable, Identifiable, Equatable {
         if !custom.isEmpty {
             lines.append(Prompts.text(presetRules.isEmpty ? "style.custom" : "style.customOverridesPreset"))
             lines += custom.split(whereSeparator: \.isNewline).map { "  \($0)" }
-            if translating {
-                lines.append(Prompts.text("style.customTranslationNote"))
+            if let target {
+                lines.append(target == .english
+                    ? Prompts.text("style.customTranslationNote")
+                    : Prompts.text("style.customTranslationNoteOther", ["language": target.nameInPromptLanguage]))
             }
         }
         // system instruction の「口調を保つ」と食い違うので、どちらを優先するかを書いておく

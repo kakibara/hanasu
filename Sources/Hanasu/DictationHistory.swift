@@ -8,29 +8,59 @@ import Foundation
 /// 音声入力の履歴 1 件。
 struct DictationHistoryEntry: Codable, Identifiable, Equatable {
     // 設計判断: DEC-DIC-029
-    /// 英訳は今までの値（translate）のまま。和訳は translateJapanese
-    enum Mode: String, Codable {
+    /// 保存する値は、整形が refine、英訳が今までの値（translate）、和訳が translateJapanese、ほかの言語への翻訳が translate:<言語のコード>
+    enum Mode: Hashable, Codable {
         case refine
-        case translate
-        case translateJapanese
+        case translation(TranslationLanguage)
 
         init(_ mode: DictationController.Mode) {
             self = mode.translation.map(Self.init(translation:)) ?? .refine
         }
 
         init(translation: TranslationLanguage) {
-            switch translation {
-            case .english: self = .translate
-            case .japanese: self = .translateJapanese
+            self = .translation(translation)
+        }
+
+        /// 保存した値から戻す。知らない値なら nil
+        init?(rawValue: String) {
+            switch rawValue {
+            case "refine": self = .refine
+            case "translate": self = .translation(.english)
+            case "translateJapanese": self = .translation(.japanese)
+            default:
+                guard rawValue.hasPrefix("translate:"),
+                      let language = PromptLanguage(rawValue: String(rawValue.dropFirst("translate:".count))) else { return nil }
+                self = .translation(TranslationLanguage(language))
             }
+        }
+
+        var rawValue: String {
+            switch self {
+            case .refine: "refine"
+            case .translation(.english): "translate"
+            case .translation(.japanese): "translateJapanese"
+            case .translation(let language): "translate:\(language.language.rawValue)"
+            }
+        }
+
+        init(from decoder: Decoder) throws {
+            let value = try decoder.singleValueContainer().decode(String.self)
+            guard let mode = Mode(rawValue: value) else {
+                throw DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath, debugDescription: "unknown mode: \(value)"))
+            }
+            self = mode
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            try container.encode(rawValue)
         }
 
         /// 翻訳の言語（整形なら nil）
         var translation: TranslationLanguage? {
             switch self {
             case .refine: nil
-            case .translate: .english
-            case .translateJapanese: .japanese
+            case .translation(let language): language
             }
         }
 

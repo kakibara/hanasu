@@ -19,13 +19,13 @@ using Hanasu.Whisper;
 
 // 確認用の CLI。Gemini の認証は環境変数 GEMINI_SERVICE_ACCOUNT_JSON（サービスアカウントの JSON のパス）か GEMINI_API_KEY。
 // Claude の認証は環境変数 ANTHROPIC_API_KEY（claude-request はキーなしで動く。キーは表示しない）。
-//   hanasu-cli claude-request "<文章>" [--translate | --translate-to en|ja | --minutes] [--model <id>]   送らずに、送る HTTP リクエスト（ヘッダーと本文）を出す
-//   hanasu-cli claude-refine "<文章>" [--translate | --translate-to en|ja] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]   Claude で整形・英訳する
+//   hanasu-cli claude-request "<文章>" [--translate | --translate-to <言語> | --minutes] [--model <id>]   送らずに、送る HTTP リクエスト（ヘッダーと本文）を出す
+//   hanasu-cli claude-refine "<文章>" [--translate | --translate-to <言語>] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]   Claude で整形・英訳する
 //   hanasu-cli claude-check [--model <id>] [--fake-key]   「接続を試す」と同じ確かめ。--fake-key は偽のキーで送り、401 の文言を見る
-//   hanasu-cli refine "<文章>" [--translate | --translate-to en|ja] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]
+//   hanasu-cli refine "<文章>" [--translate | --translate-to <言語>] [--model <id>] [--app <アプリ名>] [--dict <辞書ファイル>]
 //   hanasu-cli transcribe-gemini <wav> [--model <id>] [--dict <辞書ファイル>]
 //   hanasu-cli transcribe-whisper <wav> [--model tiny] [--models-dir <dir>] [--download]
-//   hanasu-cli dictation <wav> --engine whisper|gemini [--translate | --translate-to en|ja] [--whisper-model tiny] [--models-dir <dir>]
+//   hanasu-cli dictation <wav> --engine whisper|gemini [--translate | --translate-to <言語>] [--whisper-model tiny] [--models-dir <dir>]
 //   hanasu-cli dict <辞書ファイル> "<文章>"
 //   hanasu-cli models
 //   hanasu-cli meeting-files <自分の wav> <相手の wav> --meetings-dir <保存先> [--engine whisper|gemini] [--whisper-model tiny] [--models-dir <dir>]
@@ -37,7 +37,7 @@ using Hanasu.Whisper;
 // ローカルの LLM（llama.cpp の llama-server。--server <パス> か環境変数 HANASU_LLAMA_SERVER、なければ exe の隣の llama/。Mac の llama-server でも動く）:
 //   hanasu-cli local-list [--models-dir <dir>]   モデルの一覧（ダウンロード済みか）
 //   hanasu-cli local-download <id> [--models-dir <dir>]   モデルをダウンロードし、大きさと SHA-256 を確かめる
-//   hanasu-cli local-refine "<文章>" [--model <id>] [--translate | --translate-to en|ja] [--server <パス>] [--models-dir <dir>]   ローカルで整形・英訳する
+//   hanasu-cli local-refine "<文章>" [--model <id>] [--translate | --translate-to <言語>] [--server <パス>] [--models-dir <dir>]   ローカルで整形・英訳する
 //   meeting-minutes / meeting-files に --minutes-ai local --minutes-model <id> を付けると、議事録をローカルで作る
 // どのコマンドにも --prompt-language <言語>（en、ja、zh-TW、pt-BR など。ja-JP のような識別子でもよい）を付けると、
 // AI へのプロンプトをその言語で組み立てる（省くと設定の文字起こしの言語。Mac 版の CLI の --prompt-language と同じ）。
@@ -108,13 +108,15 @@ static string? Option(string[] args, string name)
 static bool Flag(string[] args, string name) => args.Contains(name);
 
 // 確かめ方: REQ-DIC-013
-/// <summary>--translate（英訳）か --translate-to en|ja。どちらもなければ null</summary>
-static TranslationLanguage? TranslationOption(string[] args) => Option(args, "--translate-to")?.ToLowerInvariant() switch
+/// <summary>
+/// --translate（英訳）か --translate-to &lt;言語&gt;（en・ja・zh-CN・ko … の 17 言語のコードと english・japanese。大文字と小文字は区別しない）。
+/// どちらもなければ null。知らない言語ならエラー
+/// </summary>
+static TranslationLanguage? TranslationOption(string[] args) => Option(args, "--translate-to") switch
 {
-    "ja" or "japanese" => TranslationLanguage.Japanese,
-    "en" or "english" => TranslationLanguage.English,
     null => Flag(args, "--translate") ? TranslationLanguage.English : null,
-    var other => throw new IOException($"--translate-to は en か ja です（{other}）"),
+    var value => TranslationLanguage.FromStoredValue(value)
+        ?? throw new IOException($"--translate-to は {string.Join(", ", TranslationLanguages.All.Select(l => l.Code))} のどれかです（{value}）"),
 };
 
 static GeminiAuth AuthFromEnvironment()

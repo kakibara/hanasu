@@ -164,6 +164,9 @@ Original : {2}</value>
   <data name="Hud_SpokenLanguage" xml:space="preserve">
     <value>Tel que parlé</value>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>Autres langues</value>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>Arrête l'enregistrement et saisit le texte (comme appuyer à nouveau sur le raccourci)</value>
   </data>
@@ -510,14 +513,8 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   <data name="Settings_TranslationLanguages" xml:space="preserve">
     <value>Langues de traduction</value>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>Anglais</value>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>Japonais</value>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>Le raccourci « Traduire et saisir » traduit dans la langue sélectionnée la plus à gauche. Pendant l'enregistrement, vous pouvez basculer entre « Tel que parlé » et les langues sélectionnées dans le panneau d'enregistrement (le texte est saisi dans la langue sélectionnée au moment de l'arrêt). La traduction utilise l'IA choisie pour la dictée dans l'onglet « AI ». Sélectionnez-en au moins une.</value>
+    <value>Le raccourci « Traduire et saisir » traduit dans la première langue sélectionnée de la liste. Pendant l'enregistrement, vous pouvez basculer entre « Tel que parlé » et les langues sélectionnées dans le panneau d'enregistrement (le texte est saisi dans la langue sélectionnée au moment de l'arrêt). La traduction utilise l'IA choisie pour la dictée dans l'onglet « AI ». Sélectionnez-en au moins une.</value>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
     <value>Mode d'enregistrement</value>
@@ -689,6 +686,9 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   </data>
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>Essayer la traduction en japonais</value>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>Essayer la traduction en {0}</value>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>Réunions</value>
@@ -923,6 +923,9 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   </data>
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>Démarrer la &amp;traduction en japonais et la saisie</value>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>Démarrer la &amp;traduction en {0} et la saisie</value>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>Supprimer cette entrée de l'historique ? Cette action est irréversible.</value>

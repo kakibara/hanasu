@@ -26,7 +26,7 @@ Eine App für Spracheingabe und Besprechungsnotizen für macOS und Windows. Sie 
 > [!NOTE]
 > Hanasu wurde in erster Linie für **Japanisch** gebaut, und Japanisch ist die am gründlichsten getestete Sprache.
 > Die Oberfläche der App und die Anweisungen, die sie der KI gibt, gibt es in denselben 17 Sprachen wie diese README. Die Oberfläche folgt deiner Systemsprache, die KI-Anweisungen folgen der Transkriptionssprache in den Einstellungen. Für alle anderen Sprachen verwendet Hanasu Englisch.
-> Es kann das Gesagte vor dem Eintippen auch in natürliches **Englisch** (oder ins **Japanische**) übersetzen.
+> Es kann das Gesagte vor dem Eintippen auch in natürliches **Englisch**, ins **Japanische** oder in jede der 17 unterstützten Sprachen übersetzen.
 
 ## Warum Hanasu
 
@@ -41,7 +41,7 @@ Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Der Quellcod
 | | |
 | --- | --- |
 | **Sprechen → ausgefeilter Text** | Drücke <kbd>⌥ Space</kbd>, sprich und drücke die Taste erneut (oder klicke auf **■ Stopp**). Hanasu entfernt Füllwörter, korrigiert Homophone, übernimmt deine Selbstkorrekturen und fügt den Text an der Cursorposition ein. |
-| **Sprechen, übersetzt eintippen** | Drücke <kbd>⌥⇧ Space</kbd> oder stelle das HUD während des Sprechens auf **English** oder **日本語** um. Feste Wendungen werden natürlich übersetzt, so wird お疲れ様です zu "Hi,". Welche Sprachen angeboten werden (Englisch, Japanisch oder beide), wählst du unter **Einstellungen → Allgemein**. Standard ist Englisch. |
+| **Sprechen, übersetzt eintippen** | Drücke <kbd>⌥⇧ Space</kbd> oder stelle das HUD während des Sprechens auf **English**, **日本語** oder eine andere Sprache um. Feste Wendungen werden natürlich übersetzt, so wird お疲れ様です zu "Hi,". Welche Sprachen angeboten werden (jede der 17 unterstützten Sprachen), wählst du unter **Einstellungen → Allgemein**. Standard ist Englisch. Auf dem Mac kannst du unter **Einstellungen → Pro App** festlegen, dass eine App in einer dieser Sprachen startet. |
 | **Gemischte Sprachen bleiben wie gesprochen** | Standardmäßig bleiben Teile, die du auf Englisch sagst, auf Englisch. Du kannst die Ausgabe stattdessen auch einheitlich auf Japanisch ausgeben lassen. |
 | **Per Sprache bearbeiten** | Markiere einen Text, drücke <kbd>⌃⌥⌘ E</kbd> und sage „formuliere es höflicher“, „mach eine Aufzählung daraus“ oder „übersetze ins Englische“. |
 | **Stile pro App** | In Slack ist der Text locker und kurz, in Mail höflich und in Absätzen, in Pages, Word und Notion im Schriftstil. Die Voreinstellung lässt sich für jede App ändern. |
@@ -167,7 +167,7 @@ Auf dem Mac kannst du das Hanasu-Symbol in der Menüleiste, im Dock oder an beid
 | Aktion | macOS | Windows |
 | --- | --- | --- |
 | Spracheingabe (Start / Stopp) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Spracheingabe mit Übersetzung (Englisch / Japanisch) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Spracheingabe mit Übersetzung (in die gewählten Sprachen) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Auswahl per Sprache bearbeiten | <kbd>⌃⌥⌘ E</kbd> | — |
 | Letztes Ergebnis erneut einfügen | <kbd>⌥⇧ V</kbd> | — |
 | Aufnahme abbrechen | <kbd>Esc</kbd> | <kbd>Esc</kbd> |

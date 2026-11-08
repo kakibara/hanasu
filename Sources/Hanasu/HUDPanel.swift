@@ -360,11 +360,37 @@ private struct LanguageSwitch: View {
     var choices: [TranslationLanguage]
     var onSelect: (TranslationLanguage?) -> Void
 
+    // 設計判断: DEC-DIC-152
+    /// ボタンで並べる言語。2 つまでは全部、3 つ以上なら 2 つ（選んでいる言語は必ず入れる。並びは choices の順）で、残りはメニューから選ぶ
+    static func visibleChoices(_ choices: [TranslationLanguage], selection: TranslationLanguage?) -> [TranslationLanguage] {
+        guard choices.count > 2 else { return choices }
+        var shown = Array(choices.prefix(2))
+        if let selection, choices.contains(selection), !shown.contains(selection) {
+            shown[1] = selection
+        }
+        return shown
+    }
+
     var body: some View {
+        let visible = Self.visibleChoices(choices, selection: selection)
         HStack(spacing: 2) {
             option(tr("話した言語"), selected: selection == nil) { onSelect(nil) }
-            ForEach(choices) { language in
+            ForEach(visible) { language in
                 option(language.label, selected: selection == language) { onSelect(language) }
+            }
+            if visible.count < choices.count {
+                Button {
+                    TranslationLanguageMenu.popUp(choices: choices, selected: selection, onSelect: onSelect)
+                } label: {
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 8, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 5)
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(tr("ほかの言語を選ぶ"))
             }
         }
         .padding(2)
@@ -386,6 +412,40 @@ private struct LanguageSwitch: View {
                 .contentShape(Capsule())
         }
         .buttonStyle(.plain)
+    }
+}
+
+// 設計判断: DEC-DIC-152
+/// HUD の言語の切り替えに入りきらない翻訳の言語を、メニューで選ぶ（マイクの選択と同じく、前面にないパネルからでも開ける）
+@MainActor
+final class TranslationLanguageMenu: NSObject {
+    /// メニューを閉じるまで、項目の送り先を持っておく
+    private static var current: TranslationLanguageMenu?
+    private let onSelect: (TranslationLanguage?) -> Void
+
+    private init(onSelect: @escaping (TranslationLanguage?) -> Void) {
+        self.onSelect = onSelect
+    }
+
+    static func popUp(choices: [TranslationLanguage], selected: TranslationLanguage?, onSelect: @escaping (TranslationLanguage?) -> Void) {
+        let handler = TranslationLanguageMenu(onSelect: onSelect)
+        current = handler
+        let menu = NSMenu()
+        menu.autoenablesItems = false
+        for language in choices {
+            let item = NSMenuItem(title: language.label, action: #selector(choose(_:)), keyEquivalent: "")
+            item.target = handler
+            item.representedObject = language.rawValue
+            item.state = language == selected ? .on : .off
+            menu.addItem(item)
+        }
+        menu.popUp(positioning: nil, at: NSEvent.mouseLocation, in: nil)
+    }
+
+    @objc private func choose(_ item: NSMenuItem) {
+        guard let raw = item.representedObject as? String, let language = TranslationLanguage(rawValue: raw) else { return }
+        onSelect(language)
+        Self.current = nil
     }
 }
 

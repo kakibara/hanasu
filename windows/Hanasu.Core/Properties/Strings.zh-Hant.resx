@@ -312,17 +312,17 @@
   <data name="Wav_NoData" xml:space="preserve">
     <value>WAV 檔案中沒有 data 區塊。</value>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>英文</value>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>日文</value>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0}（{1}）</value>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>譯為英文</value>
   </data>
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>譯為日文</value>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>譯為{0}</value>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>翻譯並輸入</value>
@@ -333,11 +333,17 @@
   <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
     <value>譯為日文並輸入</value>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>譯為{0}並輸入</value>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>已譯為英文並輸入</value>
   </data>
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>已譯為日文並輸入</value>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>已譯為{0}並輸入</value>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>已輸入</value>
@@ -389,6 +395,9 @@
   </data>
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>正在使用 {0} 譯為日文…</value>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>正在使用 {0} 譯為{1}…</value>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>正在使用 {0} 潤飾…</value>

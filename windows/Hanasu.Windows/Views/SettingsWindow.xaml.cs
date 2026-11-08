@@ -69,8 +69,7 @@ public partial class SettingsWindow : Window
         var s = settings.Current;
         DictationHotKeyBox.Combo = s.HotKey;
         TranslateHotKeyBox.Combo = s.TranslateHotKey;
-        TranslateEnglishCheck.IsChecked = s.TranslationLanguages.Contains(TranslationLanguage.English);
-        TranslateJapaneseCheck.IsChecked = s.TranslationLanguages.Contains(TranslationLanguage.Japanese);
+        BuildTranslationLanguageChecks(s.TranslationLanguages);
         UpdateTranslationControls(s.TranslationLanguages);
         ToggleModeRadio.IsChecked = s.RecordingMode == RecordingMode.Toggle;
         PushToTalkRadio.IsChecked = s.RecordingMode == RecordingMode.PushToTalk;
@@ -756,9 +755,35 @@ public partial class SettingsWindow : Window
 
     private void OnTrialRefine(object sender, RoutedEventArgs e) => _ = RunTrialAsync(DictationMode.Refine);
 
-    private void OnTrialTranslate(object sender, RoutedEventArgs e) => _ = RunTrialAsync(DictationMode.TranslateToEnglish);
+    // 要件: REQ-DIC-013
+    /// <summary>翻訳の言語のチェックボックス（TranslationLanguages.All の順。Tag は言語）</summary>
+    private readonly List<CheckBox> translationChecks = new();
 
-    private void OnTrialTranslateJapanese(object sender, RoutedEventArgs e) => _ = RunTrialAsync(DictationMode.TranslateToJapanese);
+    /// <summary>「…を試す」の翻訳のボタン（選んだ翻訳の言語ごと）</summary>
+    private readonly List<Button> trialTranslateButtons = new();
+
+    // 要件: REQ-DIC-013
+    // 設計判断: DEC-DIC-150
+    /// <summary>翻訳の言語のチェックボックスを、TranslationLanguages.All から作る（言語の一覧はここに書かない）</summary>
+    private void BuildTranslationLanguageChecks(IReadOnlyList<TranslationLanguage> selected)
+    {
+        TranslationLanguagesPanel.Children.Clear();
+        translationChecks.Clear();
+        foreach (var language in TranslationLanguages.All)
+        {
+            var check = new CheckBox
+            {
+                Content = language.SettingsLabel(),
+                Tag = language,
+                IsChecked = selected.Contains(language),
+                Margin = new Thickness(0, 4, 16, 0),
+            };
+            check.Checked += OnTranslationLanguageChanged;
+            check.Unchecked += OnTranslationLanguageChanged;
+            translationChecks.Add(check);
+            TranslationLanguagesPanel.Children.Add(check);
+        }
+    }
 
     // 要件: REQ-DIC-013
     // 設計判断: DEC-DIC-027
@@ -766,9 +791,7 @@ public partial class SettingsWindow : Window
     private void OnTranslationLanguageChanged(object sender, RoutedEventArgs e)
     {
         if (loading) return;
-        var picked = new List<TranslationLanguage>();
-        if (TranslateEnglishCheck.IsChecked == true) picked.Add(TranslationLanguage.English);
-        if (TranslateJapaneseCheck.IsChecked == true) picked.Add(TranslationLanguage.Japanese);
+        var picked = translationChecks.Where(c => c.IsChecked == true).Select(c => (TranslationLanguage)c.Tag).ToList();
         if (picked.Count == 0)
         {
             ((CheckBox)sender).IsChecked = true;
@@ -779,14 +802,36 @@ public partial class SettingsWindow : Window
         UpdateTranslationControls(languages);
     }
 
-    /// <summary>最後の 1 つのチェックを押せなくし、「…を試す」を選んだ言語だけにする</summary>
+    /// <summary>最後の 1 つのチェックを押せなくし、「…を試す」の翻訳のボタンを選んだ言語の分だけ作る</summary>
     private void UpdateTranslationControls(IReadOnlyList<TranslationLanguage> languages)
     {
         var onlyOne = languages.Count == 1;
-        TranslateEnglishCheck.IsEnabled = !(onlyOne && languages[0] == TranslationLanguage.English);
-        TranslateJapaneseCheck.IsEnabled = !(onlyOne && languages[0] == TranslationLanguage.Japanese);
-        TrialTranslateButton.Visibility = languages.Contains(TranslationLanguage.English) ? Visibility.Visible : Visibility.Collapsed;
-        TrialTranslateJapaneseButton.Visibility = languages.Contains(TranslationLanguage.Japanese) ? Visibility.Visible : Visibility.Collapsed;
+        foreach (var check in translationChecks)
+        {
+            check.IsEnabled = !(onlyOne && languages[0] == (TranslationLanguage)check.Tag);
+        }
+        foreach (var button in trialTranslateButtons) TrialButtonsPanel.Children.Remove(button);
+        trialTranslateButtons.Clear();
+        var index = TrialButtonsPanel.Children.IndexOf(TrialRefineButton) + 1;
+        foreach (var language in languages)
+        {
+            var button = new Button { Content = TrialButtonLabel(language), Margin = new Thickness(0, 0, 8, 4) };
+            button.Click += (_, _) => _ = RunTrialAsync(language.ToMode());
+            trialTranslateButtons.Add(button);
+            TrialButtonsPanel.Children.Insert(index++, button);
+        }
+    }
+
+    /// <summary>「英訳を試す」「和訳を試す」「韓国語訳を試す」</summary>
+    private static string TrialButtonLabel(TranslationLanguage language) =>
+        language == TranslationLanguage.English ? Strings.Settings_TryEnglish
+        : language == TranslationLanguage.Japanese ? Strings.Settings_TryJapanese
+        : string.Format(Strings.Settings_TryOther, language.NameInUiLanguage());
+
+    private void SetTrialButtonsEnabled(bool enabled)
+    {
+        TrialRefineButton.IsEnabled = enabled;
+        foreach (var button in trialTranslateButtons) button.IsEnabled = enabled;
     }
 
     /// <summary>今の設定で 1 回整形（翻訳）してみる。音声入力と同じ流れ（辞書 → 音声入力の AI）を通す</summary>
@@ -797,7 +842,7 @@ public partial class SettingsWindow : Window
         OnServiceAccountPathChanged(this, new RoutedEventArgs());
         var s = settings.Current;
         s.RefineWithGemini = true;
-        TrialRefineButton.IsEnabled = TrialTranslateButton.IsEnabled = TrialTranslateJapaneseButton.IsEnabled = false;
+        SetTrialButtonsEnabled(false);
         TrialStatus.Text = mode == DictationMode.Refine ? Strings.Settings_TrialRefining : Strings.Settings_TrialTranslating;
         var started = Stopwatch.StartNew();
         try
@@ -811,7 +856,7 @@ public partial class SettingsWindow : Window
         }
         finally
         {
-            TrialRefineButton.IsEnabled = TrialTranslateButton.IsEnabled = TrialTranslateJapaneseButton.IsEnabled = true;
+            SetTrialButtonsEnabled(true);
         }
     }
 

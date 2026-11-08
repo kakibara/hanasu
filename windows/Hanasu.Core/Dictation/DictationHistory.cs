@@ -6,8 +6,90 @@ using Hanasu.Core.Meetings;
 namespace Hanasu.Core.Dictation;
 
 // 設計判断: DEC-DIC-029
-/// <summary>履歴の 1 件のモード（Mac 版の DictationHistoryEntry.Mode と同じ値）。英訳は今までの値（translate）のまま、和訳は translateJapanese</summary>
-public enum HistoryMode { Refine, Translate, TranslateJapanese }
+/// <summary>
+/// 履歴の 1 件のモード（Mac 版の DictationHistoryEntry.Mode と同じ値）。JSON に書く値は、整形は refine、英訳は今までの値（translate）のまま、
+/// 和訳は translateJapanese、ほかの言語への翻訳は translate:&lt;言語のコード&gt;（translate:ko、translate:zh-CN など）。
+/// 知らない値も、履歴のファイルを読めなくしないよう、そのまま持って書き戻す
+/// </summary>
+[JsonConverter(typeof(HistoryModeJsonConverter))]
+public readonly record struct HistoryMode
+{
+    private const string RefineValue = "refine";
+    private const string TranslateValue = "translate";
+    private const string TranslateJapaneseValue = "translateJapanese";
+    private const string TranslatePrefix = "translate:";
+
+    private readonly string? value;
+
+    private HistoryMode(string value) => this.value = value;
+
+    public static HistoryMode Refine { get; } = new(RefineValue);
+    public static HistoryMode Translate { get; } = new(TranslateValue);
+    public static HistoryMode TranslateJapanese { get; } = new(TranslateJapaneseValue);
+
+    /// <summary>JSON に書く値（default は refine）</summary>
+    public string Value => value ?? RefineValue;
+
+    /// <summary>この言語に翻訳したときのモード</summary>
+    public static HistoryMode Of(TranslationLanguage language) =>
+        language == TranslationLanguage.English ? Translate
+        : language == TranslationLanguage.Japanese ? TranslateJapanese
+        : new(TranslatePrefix + language.Code);
+
+    /// <summary>JSON の値から。今までの値（refine・translate・translateJapanese）は大文字と小文字を区別せずに読み、ほかの値はそのまま持つ</summary>
+    public static HistoryMode FromValue(string? value)
+    {
+        foreach (var known in new[] { Refine, Translate, TranslateJapanese })
+        {
+            if (string.Equals(value, known.Value, StringComparison.OrdinalIgnoreCase)) return known;
+        }
+        if (value is not null && value.StartsWith(TranslatePrefix, StringComparison.OrdinalIgnoreCase)
+            && TranslationLanguage.FromStoredValue(value[TranslatePrefix.Length..]) is { } language)
+        {
+            return Of(language);
+        }
+        return string.IsNullOrEmpty(value) ? Refine : new(value);
+    }
+
+    /// <summary>翻訳の言語（整形と、知らない値なら null）</summary>
+    public TranslationLanguage? Translation =>
+        this == Translate ? TranslationLanguage.English
+        : this == TranslateJapanese ? TranslationLanguage.Japanese
+        : Value.StartsWith(TranslatePrefix, StringComparison.Ordinal) ? TranslationLanguage.FromStoredValue(Value[TranslatePrefix.Length..])
+        : null;
+
+    public bool Equals(HistoryMode other) => Value == other.Value;
+
+    public override int GetHashCode() => Value.GetHashCode();
+
+    public override string ToString() => Value;
+}
+
+/// <summary>HistoryMode を文字列で読み書きする。古い形の数（0・1・2）も読む。それ以外の形は整形として読む（履歴のファイル全体を読めなくしない）</summary>
+public sealed class HistoryModeJsonConverter : JsonConverter<HistoryMode>
+{
+    public override HistoryMode Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        switch (reader.TokenType)
+        {
+            case JsonTokenType.String:
+                return HistoryMode.FromValue(reader.GetString());
+            case JsonTokenType.Number when reader.TryGetInt32(out var number):
+                return number switch
+                {
+                    1 => HistoryMode.Translate,
+                    2 => HistoryMode.TranslateJapanese,
+                    _ => HistoryMode.Refine,
+                };
+            default:
+                reader.Skip();
+                return HistoryMode.Refine;
+        }
+    }
+
+    public override void Write(Utf8JsonWriter writer, HistoryMode value, JsonSerializerOptions options) =>
+        writer.WriteStringValue(value.Value);
+}
 
 /// <summary>
 /// 履歴の 1 件の状態（Mac 版の DictationHistoryEntry.Status と同じ値。JSON では camelCase で書く）。
@@ -39,12 +121,9 @@ public sealed class DictationHistoryEntry
     [JsonIgnore]
     public bool Transient { get; init; }
 
-    public static HistoryMode ModeOf(DictationMode mode) => mode switch
-    {
-        DictationMode.TranslateToEnglish => HistoryMode.Translate,
-        DictationMode.TranslateToJapanese => HistoryMode.TranslateJapanese,
-        _ => HistoryMode.Refine,
-    };
+    // 設計判断: DEC-DIC-029
+    public static HistoryMode ModeOf(DictationMode mode) =>
+        mode.Translation is { } language ? HistoryMode.Of(language) : HistoryMode.Refine;
 
     public static HistoryStatus StatusOf(ProcessStatus status) => status switch
     {
@@ -54,12 +133,11 @@ public sealed class DictationHistoryEntry
         _ => HistoryStatus.RefineOff,
     };
 
-    public static string ModeLabel(HistoryMode mode) => mode switch
-    {
-        HistoryMode.Translate => TranslationLanguage.English.Verb(),
-        HistoryMode.TranslateJapanese => TranslationLanguage.Japanese.Verb(),
-        _ => Strings.History_Mode_Refine,
-    };
+    /// <summary>モードの名前（「整形」「英訳」「韓国語訳」）。知らない値は、そのまま出す</summary>
+    public static string ModeLabel(HistoryMode mode) =>
+        mode.Translation is { } language ? language.Verb()
+        : mode == HistoryMode.Refine ? Strings.History_Mode_Refine
+        : mode.Value;
 
     public static string StatusLabel(HistoryStatus status) => status switch
     {
