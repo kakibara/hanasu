@@ -64,9 +64,21 @@ public static class GeminiPrompts
     /// <summary>日本語に翻訳するときの指示（translate.japanese.system。Mac 版の GeminiClient.japaneseTranslationInstruction と同じキー）</summary>
     public static string JapaneseTranslationInstruction => Ai.Prompts.Text("translate.japanese.system");
 
-    /// <summary>翻訳の言語ごとの指示</summary>
+    // 要件: REQ-DIC-013, REQ-COM-061
+    // 設計判断: DEC-DIC-151
+    /// <summary>
+    /// 英語・日本語以外に翻訳するときの指示（translate.other.system。Mac 版と同じキー）。
+    /// ${language} は翻訳の言語の名前を、プロンプトの言語で書いたもの（languageName.&lt;コード&gt;）
+    /// </summary>
+    public static string OtherTranslationInstruction(Dictation.TranslationLanguage language) =>
+        Ai.Prompts.Text("translate.other.system", ("language", language.NameIn(Ai.PromptLanguage.Current)));
+
+    // 設計判断: DEC-DIC-151
+    /// <summary>翻訳の言語ごとの指示（英語と日本語は専用の指示、ほかの言語は共通の指示に言語の名前を埋める）</summary>
     public static string TranslationSystemInstruction(Dictation.TranslationLanguage language) =>
-        language == Dictation.TranslationLanguage.Japanese ? JapaneseTranslationInstruction : TranslationInstruction;
+        language == Dictation.TranslationLanguage.English ? TranslationInstruction
+        : language == Dictation.TranslationLanguage.Japanese ? JapaneseTranslationInstruction
+        : OtherTranslationInstruction(language);
 
     /// <summary>
     /// 文字起こしのエンジンに Gemini を選んだときの指示（Windows 版で足したもの。transcribe.windows.system）。
@@ -114,8 +126,9 @@ public static class GeminiPrompts
             var rules = request.DictionaryRules.Select(r => $"- {string.Join(separator, r.Sources)} → {r.Target}");
             lines.Add(Ai.Prompts.Text("user.dictionaryRules", language) + "\n" + string.Join("\n", rules));
         }
-        // 追加ルールは日本語の文体向けなので、英訳では使わない（和訳は出力が日本語なので使う。DEC-DIC-028）
-        var extra = translation == Dictation.TranslationLanguage.English ? "" : request.ExtraInstructions.Trim();
+        // 設計判断: DEC-DIC-028, DEC-DIC-151
+        // 追加ルールは日本語の文体向けなので、整形と和訳（出力が日本語）だけで使い、ほかの言語への翻訳では使わない
+        var extra = translation is { } target && target != Dictation.TranslationLanguage.Japanese ? "" : request.ExtraInstructions.Trim();
         if (extra.Length > 0)
         {
             lines.Add(Ai.Prompts.Text("user.extraRules", language) + "\n" + extra);

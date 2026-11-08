@@ -72,12 +72,8 @@
 
                         <!-- 要件: REQ-DIC-013 -->
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_TranslationLanguages}" />
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox x:Name="TranslateEnglishCheck" Content="{x:Static p:Strings.Settings_TranslateEnglish}" Margin="0,0,16,0"
-                                      Checked="OnTranslationLanguageChanged" Unchecked="OnTranslationLanguageChanged" />
-                            <CheckBox x:Name="TranslateJapaneseCheck" Content="{x:Static p:Strings.Settings_TranslateJapanese}"
-                                      Checked="OnTranslationLanguageChanged" Unchecked="OnTranslationLanguageChanged" />
-                        </StackPanel>
+                        <!-- 翻訳の言語のチェックボックスは、TranslationLanguages.All からコードで作る（SettingsWindow.BuildTranslationLanguageChecks） -->
+                        <WrapPanel x:Name="TranslationLanguagesPanel" Orientation="Horizontal" />
                         <TextBlock Style="{StaticResource Note}"
                                    Text="{x:Static p:Strings.Settings_TranslationNote}" />
 
@@ -297,12 +293,12 @@
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Trial}" />
                         <TextBox x:Name="TrialInput" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="56" Padding="4,3"
                                  Text="{x:Static p:Strings.Settings_TrialSample}" />
-                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                            <Button x:Name="TrialRefineButton" Content="{x:Static p:Strings.Settings_TryRefine}" Click="OnTrialRefine" />
-                            <Button x:Name="TrialTranslateButton" Content="{x:Static p:Strings.Settings_TryEnglish}" Click="OnTrialTranslate" />
-                            <Button x:Name="TrialTranslateJapaneseButton" Content="{x:Static p:Strings.Settings_TryJapanese}" Click="OnTrialTranslateJapanese" Visibility="Collapsed" />
+                        <!-- 要件: REQ-DIC-013 -->
+                        <!-- 「…を試す」の翻訳のボタンは、設定で選んだ翻訳の言語ごとにコードで作り、整形のボタンの後ろに入れる（SettingsWindow.UpdateTranslationControls） -->
+                        <WrapPanel x:Name="TrialButtonsPanel" Orientation="Horizontal" Margin="0,6,0,0">
+                            <Button x:Name="TrialRefineButton" Content="{x:Static p:Strings.Settings_TryRefine}" Click="OnTrialRefine" Margin="0,0,8,4" />
                             <TextBlock x:Name="TrialStatus" Style="{StaticResource Note}" VerticalAlignment="Center" />
-                        </StackPanel>
+                        </WrapPanel>
                         <!-- 設計判断: DEC-COM-153（ハイコントラストでは OS の色。App.xaml） -->
                         <TextBox x:Name="TrialOutput" IsReadOnly="True" TextWrapping="Wrap" MinHeight="56" Margin="0,6,0,0" Padding="4,3" Style="{StaticResource ReadOnlyOutput}" />
                     </StackPanel>

@@ -17,6 +17,14 @@ public static class UiLanguage
     /// <summary>Apply で置き換える前の、Windows の表示の言語の名前（"ja-JP"、"sv-SE" など）。Apply の前は今の UI のカルチャ</summary>
     public static string SystemCultureName => systemCultureName ?? CultureInfo.CurrentUICulture.Name;
 
+    // 要件: REQ-DIC-013
+    // 設計判断: DEC-DIC-150
+    /// <summary>
+    /// 今の表示の言語（CultureInfo.CurrentUICulture）を対応言語に寄せたもの。どれでもなければ英語。
+    /// 翻訳の言語の名前を、表示の言語で書くのに使う（プロンプトの JSON の languageName.&lt;コード&gt;）
+    /// </summary>
+    public static PromptLanguage PromptLanguage => PromptLanguage.SupportedOrNull(CultureInfo.CurrentUICulture.Name) ?? PromptLanguage.En;
+
     /// <summary>
     /// 表示に使うカルチャを決める。カルチャとその親をたどり、対応言語に当たればそれを使う。
     /// 中国語は繁体字（Hant）か台湾・香港・マカオなら zh-TW、それ以外は zh-CN、ポルトガル語は pt-BR に寄せる（訳がその地域のものなので）。

@@ -26,7 +26,7 @@ Aplikacja do wprowadzania tekstu głosem i notatek ze spotkań dla macOS i Windo
 > [!NOTE]
 > Hanasu powstało przede wszystkim z myślą o języku **japońskim** i to właśnie japoński jest najlepiej przetestowany.
 > Ekrany aplikacji i instrukcje, które przekazuje AI, są dostępne w tych samych 17 językach co ten README. Ekrany są w języku systemu, a instrukcje dla AI w języku transkrypcji wybranym w Ustawieniach. Dla każdego innego języka Hanasu używa angielskiego.
-> Aplikacja potrafi też przetłumaczyć to, co mówisz, na naturalny **angielski** (lub na **japoński**), zanim to wpisze.
+> Aplikacja potrafi też przetłumaczyć to, co mówisz, na naturalny **angielski**, **japoński** lub dowolny z 17 obsługiwanych języków, zanim to wpisze.
 
 ## Dlaczego Hanasu
 
@@ -41,7 +41,7 @@ Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Kod źródłowy Ha
 | | |
 | --- | --- |
 | **Mowa → dopracowany tekst** | Naciśnij <kbd>⌥ Space</kbd>, mów i naciśnij ponownie (lub kliknij **■ Zatrzymaj**). Hanasu usuwa wtrącenia, poprawia homofony, uwzględnia Twoje autopoprawki i wkleja tekst w miejscu kursora. |
-| **Mów, wpisuj w tłumaczeniu** | Naciśnij <kbd>⌥⇧ Space</kbd> albo przełącz HUD na **English** lub **日本語** w trakcie mówienia. Utarte zwroty są tłumaczone naturalnie, więc お疲れ様です staje się „Hi,”. Języki do wyboru (angielski, japoński lub oba) ustawisz w **Ustawienia → Ogólne**. Domyślnie jest to angielski. |
+| **Mów, wpisuj w tłumaczeniu** | Naciśnij <kbd>⌥⇧ Space</kbd> albo przełącz HUD na **English**, **日本語** lub inny język w trakcie mówienia. Utarte zwroty są tłumaczone naturalnie, więc お疲れ様です staje się „Hi,”. Języki do wyboru (dowolne z 17 obsługiwanych) ustawisz w **Ustawienia → Ogólne**. Domyślnie jest to angielski. Na Macu w **Ustawienia → Aplikacje** możesz sprawić, że dana aplikacja będzie startować w jednym z tych języków. |
 | **Mieszane języki zostają tak, jak je wypowiedziano** | Domyślnie fragmenty wypowiedziane po angielsku pozostają po angielsku. Możesz zamiast tego ujednolicić wynik do japońskiego. |
 | **Edycja głosem** | Zaznacz tekst, naciśnij <kbd>⌃⌥⌘ E</kbd> i powiedz „napisz to uprzejmiej”, „zamień na punkty” albo „przetłumacz na angielski”. |
 | **Style dla aplikacji** | W Slacku tekst jest swobodny i krótki, w Mailu uprzejmy i podzielony na akapity, a w Pages, Wordzie i Notion — w stylu pisanym. Ustawienie wstępne możesz zmienić dla każdej aplikacji. |
@@ -167,7 +167,7 @@ Na Macu ikonę Hanasu możesz wyświetlać na pasku menu, w Docku lub w obu miej
 | Czynność | macOS | Windows |
 | --- | --- | --- |
 | Wprowadzanie głosem (start / stop) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Wprowadzanie głosem z tłumaczeniem (angielski / japoński) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Wprowadzanie głosem z tłumaczeniem (na wybrane języki) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Edycja zaznaczenia głosem | <kbd>⌃⌥⌘ E</kbd> | — |
 | Ponowne wklejenie ostatniego wyniku | <kbd>⌥⇧ V</kbd> | — |
 | Anulowanie nagrania | <kbd>Esc</kbd> | <kbd>Esc</kbd> |

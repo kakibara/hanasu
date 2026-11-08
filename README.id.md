@@ -26,7 +26,7 @@ Aplikasi input suara dan pencatat rapat untuk macOS dan Windows. Aplikasi ini me
 > [!NOTE]
 > Hanasu dibuat terutama untuk **bahasa Jepang**, dan bahasa Jepang adalah bahasa yang paling banyak diuji.
 > Layar aplikasi dan instruksi yang diberikannya kepada AI tersedia dalam 17 bahasa yang sama dengan README ini. Layar mengikuti bahasa sistem, sedangkan instruksi AI mengikuti bahasa transkripsi di Pengaturan. Untuk bahasa lainnya, Hanasu memakai bahasa Inggris.
-> Hanasu juga dapat menerjemahkan ucapan Anda ke **bahasa Inggris** (atau ke **bahasa Jepang**) yang alami sebelum mengetikkannya.
+> Hanasu juga dapat menerjemahkan ucapan Anda ke **bahasa Inggris**, **bahasa Jepang**, atau salah satu dari 17 bahasa yang didukung secara alami sebelum mengetikkannya.
 
 ## Mengapa Hanasu
 
@@ -41,7 +41,7 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 | | |
 | --- | --- |
 | **Bicara → teks yang rapi** | Tekan <kbd>⌥ Space</kbd>, bicara, lalu tekan lagi (atau klik **■ Berhenti**). Hanasu menghapus kata pengisi, memperbaiki homofon, menerapkan koreksi yang Anda ucapkan sendiri, dan menempelkan teks di posisi kursor. |
-| **Bicara, ketik hasil terjemahan** | Tekan <kbd>⌥⇧ Space</kbd>, atau ubah HUD ke **English** atau **日本語** saat Anda berbicara. Ungkapan baku diterjemahkan secara alami, jadi お疲れ様です menjadi "Hi,". Pilih bahasa yang ditawarkan (Inggris, Jepang, atau keduanya) di **Pengaturan → Umum**. Bawaannya adalah bahasa Inggris. |
+| **Bicara, ketik hasil terjemahan** | Tekan <kbd>⌥⇧ Space</kbd>, atau ubah HUD ke **English**, **日本語**, atau bahasa lain saat Anda berbicara. Ungkapan baku diterjemahkan secara alami, jadi お疲れ様です menjadi "Hi,". Pilih bahasa yang ditawarkan (mana saja dari 17 bahasa yang didukung) di **Pengaturan → Umum**. Bawaannya adalah bahasa Inggris. Di Mac, **Pengaturan → Per App** dapat membuat sebuah aplikasi dimulai dalam salah satu bahasa ini. |
 | **Campuran bahasa tetap seperti yang diucapkan** | Secara bawaan, bagian yang Anda ucapkan dalam bahasa Inggris tetap dalam bahasa Inggris. Anda bisa memilih untuk menyeragamkan seluruh keluaran ke bahasa Jepang. |
 | **Edit dengan suara** | Pilih teks, tekan <kbd>⌃⌥⌘ E</kbd>, lalu ucapkan "buat lebih sopan", "ubah jadi poin-poin", atau "terjemahkan ke bahasa Inggris". |
 | **Gaya per aplikasi** | Di Slack teks dibuat santai dan singkat, di Mail sopan dan berparagraf, dan di Pages, Word, serta Notion memakai gaya bahasa tulis. Anda dapat mengubah preset untuk setiap aplikasi. |
@@ -167,7 +167,7 @@ Di Mac, Anda dapat menampilkan ikon Hanasu di bilah menu, di Dock, atau di kedua
 | Tindakan | macOS | Windows |
 | --- | --- | --- |
 | Input suara (mulai / berhenti) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Input suara dengan terjemahan (Inggris / Jepang) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Input suara dengan terjemahan (ke bahasa yang Anda pilih) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Edit pilihan dengan suara | <kbd>⌃⌥⌘ E</kbd> | — |
 | Tempel lagi hasil terakhir | <kbd>⌥⇧ V</kbd> | — |
 | Batalkan perekaman | <kbd>Esc</kbd> | <kbd>Esc</kbd> |

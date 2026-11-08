@@ -214,6 +214,10 @@ Original: {2}</value>
     <value>As spoken</value>
     <comment>HUD language switch: type in the language you spoke (no translation)</comment>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>Other languages</value>
+    <comment>HUD language switch: tooltip and accessible name of the "…" button that opens a menu of all translation languages</comment>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>Stops recording and types the text (same as pressing the shortcut again)</value>
     <comment>HUD tooltip</comment>
@@ -674,16 +678,8 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <value>Translation languages</value>
     <comment>Settings: section heading</comment>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>English</value>
-    <comment>Settings: checkbox: translate into English</comment>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>Japanese</value>
-    <comment>Settings: checkbox: translate into Japanese</comment>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>The "Translate and Type" shortcut translates into the leftmost selected language. While recording, you can switch between "As spoken" and the selected languages in the HUD (the text is typed in the language selected when you stop). Translation uses the AI selected for dictation on the "AI" tab. Select at least one.</value>
+    <value>The "Translate and Type" shortcut translates into the first selected language in the list. While recording, you can switch between "As spoken" and the selected languages in the HUD (the text is typed in the language selected when you stop). Translation uses the AI selected for dictation on the "AI" tab. Select at least one.</value>
     <comment>Settings: note</comment>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
@@ -913,6 +909,10 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>Try Japanese Translation</value>
     <comment>Settings: button</comment>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>Try {0} Translation</value>
+    <comment>Settings: button. {0} = language name in the display language (e.g. Korean)</comment>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>Meetings</value>
@@ -1225,6 +1225,10 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>Start Translating to Japanese and &amp;Typing</value>
     <comment>Tray menu item. &amp; = access key</comment>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>Start Translating to {0} and &amp;Typing</value>
+    <comment>Tray menu item. {0} = language name in the display language (e.g. Korean). &amp; = access key</comment>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>Delete this history entry? This can't be undone.</value>

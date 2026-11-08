@@ -312,17 +312,17 @@
   <data name="Wav_NoData" xml:space="preserve">
     <value>WAV फ़ाइल में data चंक नहीं है.</value>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>अंग्रेज़ी</value>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>जापानी</value>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>अंग्रेज़ी में</value>
   </data>
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>जापानी में</value>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>{0} में</value>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>अनुवाद करें और टाइप करें</value>
@@ -333,11 +333,17 @@
   <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
     <value>जापानी में अनुवाद करें और टाइप करें</value>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>{0} में अनुवाद करें और टाइप करें</value>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>अंग्रेज़ी में अनुवाद करके टाइप किया गया</value>
   </data>
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>जापानी में अनुवाद करके टाइप किया गया</value>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>{0} में अनुवाद करके टाइप किया गया</value>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>टाइप किया गया</value>
@@ -389,6 +395,9 @@
   </data>
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>{0} से जापानी में अनुवाद किया जा रहा है…</value>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>{0} से {1} में अनुवाद किया जा रहा है…</value>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>{0} से सुधारा जा रहा है…</value>

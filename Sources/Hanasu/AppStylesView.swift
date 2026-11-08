@@ -139,7 +139,7 @@ private struct AppStyleRow: View {
                     ForEach(AppOutputLanguage.allCases) { Text($0.label).tag($0) }
                 }
                 .labelsHidden()
-                .frame(width: 96)
+                .frame(width: 140)
                 Button(action: onToggleExpanded) {
                     Image(systemName: style.rules.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                           ? "text.badge.plus" : "text.badge.checkmark")

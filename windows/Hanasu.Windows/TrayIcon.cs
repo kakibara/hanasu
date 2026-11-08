@@ -92,9 +92,11 @@ internal sealed class TrayIcon : IDisposable
         dictateItem.Text = busy ? Strings.Tray_StopAndType : Strings.Tray_StartDictation;
         dictateItem.ShortcutKeyDisplayString = s.HotKey.DisplayString;
         // 文言は Mac 版のメニューバーと同じ（DEC-COM-152）
+        // 要件: REQ-DIC-013（英語・日本語は今までの文言、ほかの言語は表示の言語での言語名を埋める）
         translateItem.Text = s.TranslationLanguages.Length != 1 ? Strings.Tray_StartTranslate
+            : s.TranslationLanguages[0] == TranslationLanguage.English ? Strings.Tray_StartTranslate_English
             : s.TranslationLanguages[0] == TranslationLanguage.Japanese ? Strings.Tray_StartTranslate_Japanese
-            : Strings.Tray_StartTranslate_English;
+            : string.Format(Strings.Tray_StartTranslate_Other, s.TranslationLanguages[0].NameInUiLanguage());
         translateItem.ShortcutKeyDisplayString = s.TranslateHotKey.DisplayString;
         // 処理中はどちらも押せない。録音中は「止める」だけ押せる。会議の記録中は音声入力を使えない
         var meetingIdle = meetingState == MeetingState.Idle;

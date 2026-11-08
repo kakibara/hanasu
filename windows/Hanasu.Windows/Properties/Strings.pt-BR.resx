@@ -164,6 +164,9 @@ Original: {2}</value>
   <data name="Hud_SpokenLanguage" xml:space="preserve">
     <value>Como falado</value>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>Outros idiomas</value>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>Para a gravação e digita o texto (o mesmo que pressionar o atalho de novo)</value>
   </data>
@@ -510,14 +513,8 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   <data name="Settings_TranslationLanguages" xml:space="preserve">
     <value>Idiomas de tradução</value>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>Inglês</value>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>Japonês</value>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>O atalho "Traduzir e digitar" traduz para o idioma selecionado mais à esquerda. Durante a gravação, você pode alternar no HUD entre "Como falado" e os idiomas selecionados (o texto é digitado no idioma selecionado quando você para). A tradução usa a IA selecionada para ditado na guia "AI". Selecione pelo menos um.</value>
+    <value>O atalho "Traduzir e digitar" traduz para o primeiro idioma selecionado da lista. Durante a gravação, você pode alternar no HUD entre "Como falado" e os idiomas selecionados (o texto é digitado no idioma selecionado quando você para). A tradução usa a IA selecionada para ditado na guia "AI". Selecione pelo menos um.</value>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
     <value>Modo de gravação</value>
@@ -689,6 +686,9 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   </data>
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>Testar tradução para japonês</value>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>Testar tradução para {0}</value>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>Reuniões</value>
@@ -923,6 +923,9 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   </data>
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>Iniciar &amp;tradução para japonês e digitação</value>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>Iniciar &amp;tradução para {0} e digitação</value>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>Excluir esta entrada do histórico? Esta ação não pode ser desfeita.</value>

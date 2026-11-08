@@ -2042,7 +2042,7 @@
       }
     },
     "%@ は%@" : {
-      "comment" : "HUDPanel.swift:375",
+      "comment" : "HUDPanel.swift:401",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5713,6 +5713,108 @@
         }
       }
     },
+    "%@訳" : {
+      "comment" : "TranslationLanguage.swift:85",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الترجمة إلى %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übersetzung: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ translation"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "traducción al %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "traduction en %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ अनुवाद"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "menerjemahkan ke %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "traduzione in %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 번역"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tłumaczenie na %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tradução para o %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перевод на %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ çeviri"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dịch sang %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "译成%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "譯成%@"
+          }
+        }
+      }
+    },
     "%@（%@ 件）" : {
       "comment" : "DictationHistoryWindow.swift:646",
       "extractionState" : "manual",
@@ -6733,6 +6835,108 @@
         }
       }
     },
+    "AI で%@に翻訳しています…" : {
+      "comment" : "TranslationLanguage.swift:94",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ الترجمة إلى %@ باستخدام AI…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI übersetzt (Zielsprache: %@) …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Translating into %@ with AI…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traduciendo al %@ con IA…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traduction en %@ par l’IA…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI से %@ में अनुवाद हो रहा है…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI sedang menerjemahkan ke %@…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traduzione in %@ con IA…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI로 %@로 번역하는 중…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI tłumaczy na %@…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Traduzindo para o %@ com IA…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI переводит на %@…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI ile çevriliyor (hedef dil: %@)…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI đang dịch sang %@…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 正在翻译成%@…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 正在翻譯成%@…"
+          }
+        }
+      }
+    },
     "AI での%@に失敗したため、原文のまま入力しました。" : {
       "comment" : "DictationHistoryWindow.swift:462",
       "extractionState" : "manual",
@@ -6938,7 +7142,7 @@
       }
     },
     "AI で日本語に翻訳しています…" : {
-      "comment" : "TranslationLanguage.swift:40",
+      "comment" : "TranslationLanguage.swift:93",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7142,7 +7346,7 @@
       }
     },
     "AI で英語に翻訳しています…" : {
-      "comment" : "TranslationLanguage.swift:39",
+      "comment" : "TranslationLanguage.swift:92",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7346,7 +7550,7 @@
       }
     },
     "AI に Gemini を選んだときと、文字起こしのエンジンに Gemini を選んだときに使います。「接続を試す」はモデルの情報を取るだけで、料金はかかりません。" : {
-      "comment" : "AISettingsView.swift:330",
+      "comment" : "AISettingsView.swift:331",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7856,7 +8060,7 @@
       }
     },
     "API キー" : {
-      "comment" : "AISettingsView.swift:294",
+      "comment" : "AISettingsView.swift:295",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8060,7 +8264,7 @@
       }
     },
     "API キー（sk-ant-…）" : {
-      "comment" : "AISettingsView.swift:200",
+      "comment" : "AISettingsView.swift:201",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9080,7 +9284,7 @@
       }
     },
     "Apple の Foundation Models（fm）を使えません" : {
-      "comment" : "TextAI.swift:59",
+      "comment" : "TextAI.swift:60",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9794,7 +9998,7 @@
       }
     },
     "Claude Console で API キーを発行" : {
-      "comment" : "AISettingsView.swift:207",
+      "comment" : "AISettingsView.swift:208",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10610,7 +10814,7 @@
       }
     },
     "Claude の API キーが設定されていません（設定 →「AI」）" : {
-      "comment" : "ClaudeClient.swift:18, TextAI.swift:57",
+      "comment" : "ClaudeClient.swift:18, TextAI.swift:58",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10712,7 +10916,7 @@
       }
     },
     "Claude のモデル" : {
-      "comment" : "AISettingsView.swift:145",
+      "comment" : "AISettingsView.swift:146",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11120,7 +11324,7 @@
       }
     },
     "Claude（Anthropic）の API キー" : {
-      "comment" : "AISettingsView.swift:210",
+      "comment" : "AISettingsView.swift:211",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11523,108 +11727,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Electron App（%@）"
-          }
-        }
-      }
-    },
-    "English（英語）" : {
-      "comment" : "TranslationLanguage.swift:23",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "الإنجليزية"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Englisch"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inglés"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anglais"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "अंग्रेज़ी"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bahasa Inggris"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inglese"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "영어"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inglês"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tiếng Anh"
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "英语"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "英文"
           }
         }
       }
@@ -12548,7 +12650,7 @@
       }
     },
     "Gemini のモデル" : {
-      "comment" : "AISettingsView.swift:132",
+      "comment" : "AISettingsView.swift:133",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -12752,7 +12854,7 @@
       }
     },
     "Gemini の認証" : {
-      "comment" : "AISettingsView.swift:328",
+      "comment" : "AISettingsView.swift:329",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -12956,7 +13058,7 @@
       }
     },
     "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません（設定 →「AI」）" : {
-      "comment" : "TextAI.swift:56",
+      "comment" : "TextAI.swift:57",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -13058,7 +13160,7 @@
       }
     },
     "Gemini 失敗" : {
-      "comment" : "DictationHistory.swift:53",
+      "comment" : "DictationHistory.swift:83",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -13568,7 +13670,7 @@
       }
     },
     "Google AI Studio で API キーを発行" : {
-      "comment" : "AISettingsView.swift:306",
+      "comment" : "AISettingsView.swift:307",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17954,7 +18056,7 @@
       }
     },
     "Vertex AI のユーザー権限（roles/aiplatform.user）を持つサービスアカウントの鍵を指定してください。" : {
-      "comment" : "AISettingsView.swift:372",
+      "comment" : "AISettingsView.swift:373",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -19484,7 +19586,7 @@
       }
     },
     "、" : {
-      "comment" : "HUDPanel.swift:375",
+      "comment" : "HUDPanel.swift:401",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20198,7 +20300,7 @@
       }
     },
     "「、」で区切ると、別の言い方も登録できます（例: 会議URL、会議のリンク）。" : {
-      "comment" : "SnippetsSettingsView.swift:78",
+      "comment" : "SnippetsSettingsView.swift:79",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -21320,7 +21422,7 @@
       }
     },
     "『%@』と同じ起動フレーズがあります。一覧で上にある方が使われます。" : {
-      "comment" : "SnippetsSettingsView.swift:130",
+      "comment" : "SnippetsSettingsView.swift:131",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26827,6 +26929,108 @@
         }
       }
     },
+    "ほかの言語を選ぶ" : {
+      "comment" : "HUDPanel.swift:393",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختيار لغة أخرى"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andere Sprache auswählen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Another Language"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir otro idioma"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir une autre langue"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "दूसरी भाषा चुनें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih bahasa lain"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli un’altra lingua"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다른 언어 선택"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz inny język"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolher outro idioma"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбрать другой язык"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başka bir dil seç"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chọn ngôn ngữ khác"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择其他语言"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇其他語言"
+          }
+        }
+      }
+    },
     "ほかを隠す" : {
       "comment" : "AppDelegate.swift:298",
       "extractionState" : "manual",
@@ -27950,7 +28154,7 @@
       }
     },
     "やり直し" : {
-      "comment" : "DictationHistory.swift:524",
+      "comment" : "DictationHistory.swift:554",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28052,7 +28256,7 @@
       }
     },
     "やり直しません" : {
-      "comment" : "DictationHistory.swift:524",
+      "comment" : "DictationHistory.swift:554",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29174,7 +29378,7 @@
       }
     },
     "アクセシビリティの許可がないため、ウインドウと入力欄を読めません" : {
-      "comment" : "ScreenContext.swift:161",
+      "comment" : "ScreenContext.swift:169",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31724,7 +31928,7 @@
       }
     },
     "キャンセル" : {
-      "comment" : "AISettingsView.swift:192, AISettingsView.swift:286, MeetingNotesViews.swift:247",
+      "comment" : "AISettingsView.swift:193, AISettingsView.swift:287, MeetingNotesViews.swift:247",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31826,7 +32030,7 @@
       }
     },
     "キーはキーチェーンに保存し、Hanasu 以外のアプリが読もうとすると macOS がパスワードを求めるようにします。ただし、同じユーザーで動く悪意のあるプログラムからは守りきれません。料金の目安（100 万トークンあたり 入力 / 出力、2026-11 時点）: Haiku 5.5 は $0.10 / $0.50（10 万トークンを超える部分は $0.50 / $2.50）、Sonnet 5.5 は $2 / $10、Opus 5.5 は $4 / $20。" : {
-      "comment" : "AISettingsView.swift:212",
+      "comment" : "AISettingsView.swift:213",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31928,7 +32132,7 @@
       }
     },
     "キーを削除しました" : {
-      "comment" : "AISettingsView.swift:232, AISettingsView.swift:284",
+      "comment" : "AISettingsView.swift:233, AISettingsView.swift:285",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -32132,7 +32336,7 @@
       }
     },
     "キーチェーンから消えます。使い続けるには、もう一度キーを保存してください。" : {
-      "comment" : "AISettingsView.swift:194, AISettingsView.swift:288",
+      "comment" : "AISettingsView.swift:195, AISettingsView.swift:289",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -32234,7 +32438,7 @@
       }
     },
     "キーチェーンに保存しました。「接続を試す」で確かめられます" : {
-      "comment" : "AISettingsView.swift:226, AISettingsView.swift:299",
+      "comment" : "AISettingsView.swift:227, AISettingsView.swift:300",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33152,7 +33356,7 @@
       }
     },
     "サービスアカウントの JSON" : {
-      "comment" : "AISettingsView.swift:310",
+      "comment" : "AISettingsView.swift:311",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35396,7 +35600,7 @@
       }
     },
     "スニペットがありません" : {
-      "comment" : "SnippetsSettingsView.swift:101",
+      "comment" : "SnippetsSettingsView.swift:102",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35498,7 +35702,7 @@
       }
     },
     "スニペットを追加" : {
-      "comment" : "SnippetsSettingsView.swift:56, SnippetsSettingsView.swift:57",
+      "comment" : "SnippetsSettingsView.swift:57, SnippetsSettingsView.swift:58",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37946,7 +38150,7 @@
       }
     },
     "パスワード欄なので入力欄の文章は読みません" : {
-      "comment" : "ScreenContext.swift:191",
+      "comment" : "ScreenContext.swift:199",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -38048,7 +38252,7 @@
       }
     },
     "フォーカスしている要素を取れませんでした" : {
-      "comment" : "ScreenContext.swift:181",
+      "comment" : "ScreenContext.swift:189",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -38864,7 +39068,7 @@
       }
     },
     "プロジェクト: %@　アカウント: %@" : {
-      "comment" : "AISettingsView.swift:375",
+      "comment" : "AISettingsView.swift:376",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40292,7 +40496,7 @@
       }
     },
     "メッセージ" : {
-      "comment" : "AppStyles.swift:142",
+      "comment" : "AppStyles.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41720,7 +41924,7 @@
       }
     },
     "メール" : {
-      "comment" : "AppStyles.swift:19, AppStyles.swift:144",
+      "comment" : "AppStyles.swift:19, AppStyles.swift:185",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43250,7 +43454,7 @@
       }
     },
     "リージョン" : {
-      "comment" : "AISettingsView.swift:313",
+      "comment" : "AISettingsView.swift:314",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43352,7 +43556,7 @@
       }
     },
     "ローカル" : {
-      "comment" : "TextAI.swift:27",
+      "comment" : "TextAI.swift:28",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43760,7 +43964,7 @@
       }
     },
     "ローカルの LLM のモデルがまだダウンロードされていません（設定 →「AI」でダウンロードしてください）" : {
-      "comment" : "TextAI.swift:58",
+      "comment" : "TextAI.swift:59",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -44882,7 +45086,7 @@
       }
     },
     "ローカル（この Mac の中）" : {
-      "comment" : "TextAI.swift:19",
+      "comment" : "TextAI.swift:20",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52022,7 +52226,7 @@
       }
     },
     "例: メールの署名" : {
-      "comment" : "SnippetsSettingsView.swift:76",
+      "comment" : "SnippetsSettingsView.swift:77",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52430,7 +52634,7 @@
       }
     },
     "保存" : {
-      "comment" : "AISettingsView.swift:201, AISettingsView.swift:295, DictationHistoryWindow.swift:636",
+      "comment" : "AISettingsView.swift:202, AISettingsView.swift:296, DictationHistoryWindow.swift:636",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52532,7 +52736,7 @@
       }
     },
     "保存した Claude の API キーを削除しますか？" : {
-      "comment" : "AISettingsView.swift:190",
+      "comment" : "AISettingsView.swift:191",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52634,7 +52838,7 @@
       }
     },
     "保存した Gemini の API キーを削除しますか？" : {
-      "comment" : "AISettingsView.swift:280",
+      "comment" : "AISettingsView.swift:281",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52736,7 +52940,7 @@
       }
     },
     "保存したキー" : {
-      "comment" : "AISettingsView.swift:181, AISettingsView.swift:271",
+      "comment" : "AISettingsView.swift:182, AISettingsView.swift:272",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53348,7 +53552,7 @@
       }
     },
     "保存に失敗しました" : {
-      "comment" : "AISettingsView.swift:226, AISettingsView.swift:299",
+      "comment" : "AISettingsView.swift:227, AISettingsView.swift:300",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53654,7 +53858,7 @@
       }
     },
     "保存済み" : {
-      "comment" : "AISettingsView.swift:183, AISettingsView.swift:273, Keychain.swift:101",
+      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274, Keychain.swift:101",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53756,7 +53960,7 @@
       }
     },
     "候補" : {
-      "comment" : "AISettingsView.swift:133, TranscriptionEngineSettingsView.swift:156",
+      "comment" : "AISettingsView.swift:134, TranscriptionEngineSettingsView.swift:156",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55184,7 +55388,7 @@
       }
     },
     "入力欄の文章を取れませんでした（%@）" : {
-      "comment" : "ScreenContext.swift:197",
+      "comment" : "ScreenContext.swift:205",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56714,7 +56918,7 @@
       }
     },
     "削除" : {
-      "comment" : "AISettingsView.swift:191, AISettingsView.swift:281, DictationHistoryWindow.swift:195",
+      "comment" : "AISettingsView.swift:192, AISettingsView.swift:282, DictationHistoryWindow.swift:195",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56816,7 +57020,7 @@
       }
     },
     "削除…" : {
-      "comment" : "AISettingsView.swift:189, AISettingsView.swift:279, LocalLLMSettingsView.swift:54",
+      "comment" : "AISettingsView.swift:190, AISettingsView.swift:280, LocalLLMSettingsView.swift:54",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58346,7 +58550,7 @@
       }
     },
     "和訳" : {
-      "comment" : "TranslationLanguage.swift:32",
+      "comment" : "TranslationLanguage.swift:84",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59672,7 +59876,7 @@
       }
     },
     "履歴が見つかりません（削除された可能性があります）" : {
-      "comment" : "DictationHistory.swift:156",
+      "comment" : "DictationHistory.swift:186",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60080,7 +60284,7 @@
       }
     },
     "履歴を保存できませんでした: %@" : {
-      "comment" : "DictationHistory.swift:375",
+      "comment" : "DictationHistory.swift:405",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60182,7 +60386,7 @@
       }
     },
     "履歴を読み込めませんでした: %@" : {
-      "comment" : "DictationHistory.swift:296",
+      "comment" : "DictationHistory.swift:326",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60998,7 +61202,7 @@
       }
     },
     "思考レベル: %@（lite は minimal、それ以外は low）" : {
-      "comment" : "AISettingsView.swift:141",
+      "comment" : "AISettingsView.swift:142",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61100,7 +61304,7 @@
       }
     },
     "成功" : {
-      "comment" : "DictationHistory.swift:52",
+      "comment" : "DictationHistory.swift:82",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62324,7 +62528,7 @@
       }
     },
     "接続できました（%@ を使えます）" : {
-      "comment" : "AISettingsView.swift:243, AISettingsView.swift:357",
+      "comment" : "AISettingsView.swift:244, AISettingsView.swift:358",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62426,7 +62630,7 @@
       }
     },
     "接続を試す" : {
-      "comment" : "AISettingsView.swift:187, AISettingsView.swift:277, AISettingsView.swift:319",
+      "comment" : "AISettingsView.swift:188, AISettingsView.swift:278, AISettingsView.swift:320",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62732,7 +62936,7 @@
       }
     },
     "整形" : {
-      "comment" : "DictationController.swift:320, DictationHistory.swift:37",
+      "comment" : "DictationController.swift:320, DictationHistory.swift:67",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63140,7 +63344,7 @@
       }
     },
     "整形オフ（原文のまま）" : {
-      "comment" : "DictationHistory.swift:55",
+      "comment" : "DictationHistory.swift:85",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63548,7 +63752,7 @@
       }
     },
     "文の途中でも、「よろしくお願いします、メールの署名」のように読点や間で区切って言えば、その部分だけを本文に置き換え、残りを整えます。区切らずに言った「住所を教えて」の「住所」などは置き換えません。" : {
-      "comment" : "SnippetsSettingsView.swift:26",
+      "comment" : "SnippetsSettingsView.swift:28",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -66302,7 +66506,7 @@
       }
     },
     "新しいキーで置き換える" : {
-      "comment" : "AISettingsView.swift:200, AISettingsView.swift:294",
+      "comment" : "AISettingsView.swift:201, AISettingsView.swift:295",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67011,108 +67215,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "預設列表"
-          }
-        }
-      }
-    },
-    "日本語" : {
-      "comment" : "TranslationLanguage.swift:16, TranslationLanguage.swift:24",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اليابانية"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japanisch"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japanese"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japonés"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japonais"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "जापानी"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bahasa Jepang"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Giapponese"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "일본어"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japoński"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japonês"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Японский"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Japonca"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tiếng Nhật"
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "日语"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "日文"
           }
         }
       }
@@ -68954,7 +69056,7 @@
       }
     },
     "未設定" : {
-      "comment" : "AISettingsView.swift:183, AISettingsView.swift:273",
+      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69056,7 +69158,7 @@
       }
     },
     "未設定のため原文のまま" : {
-      "comment" : "DictationHistory.swift:54",
+      "comment" : "DictationHistory.swift:84",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69260,7 +69362,7 @@
       }
     },
     "本文" : {
-      "comment" : "SnippetsSettingsView.swift:86",
+      "comment" : "SnippetsSettingsView.swift:87",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69362,7 +69464,7 @@
       }
     },
     "本文が空のあいだは使われません。" : {
-      "comment" : "SnippetsSettingsView.swift:124",
+      "comment" : "SnippetsSettingsView.swift:125",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -71402,7 +71504,7 @@
       }
     },
     "決まった言葉（起動フレーズ）だけを話すと、登録した文章をそのまま入力します。本文は AI に渡さず、翻訳して入力するときも訳しません。" : {
-      "comment" : "SnippetsSettingsView.swift:17",
+      "comment" : "SnippetsSettingsView.swift:20",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72320,7 +72422,7 @@
       }
     },
     "照合する形: " : {
-      "comment" : "SnippetsSettingsView.swift:81",
+      "comment" : "SnippetsSettingsView.swift:82",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73952,7 +74054,7 @@
       }
     },
     "確かめています…" : {
-      "comment" : "AISettingsView.swift:187, AISettingsView.swift:277, AISettingsView.swift:319",
+      "comment" : "AISettingsView.swift:188, AISettingsView.swift:278, AISettingsView.swift:320",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74054,7 +74156,7 @@
       }
     },
     "空白・句読点を除き、カタカナはひらがなに、英字は小文字にそろえて照合します。話したときの末尾の「です」なども除きます。" : {
-      "comment" : "SnippetsSettingsView.swift:84",
+      "comment" : "SnippetsSettingsView.swift:85",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76196,7 +76298,7 @@
       }
     },
     "翻訳" : {
-      "comment" : "DictationController.swift:320, TranslationLanguage.swift:52",
+      "comment" : "DictationController.swift:320, TranslationLanguage.swift:110",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76604,7 +76706,7 @@
       }
     },
     "考える量（effort）は low。待ち時間を短くするため" : {
-      "comment" : "AISettingsView.swift:153",
+      "comment" : "AISettingsView.swift:154",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76706,7 +76808,7 @@
       }
     },
     "考える量（effort）は medium。長い会議の記録をまとめるため" : {
-      "comment" : "AISettingsView.swift:154",
+      "comment" : "AISettingsView.swift:155",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77828,7 +77930,7 @@
       }
     },
     "英訳" : {
-      "comment" : "TranslationLanguage.swift:31",
+      "comment" : "TranslationLanguage.swift:83",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82316,7 +82418,7 @@
       }
     },
     "話した言語" : {
-      "comment" : "AppStyles.swift:62, GeminiClient.swift:56, HUDPanel.swift:365",
+      "comment" : "AppStyles.swift:101, GeminiClient.swift:56, HUDPanel.swift:377",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83438,7 +83540,7 @@
       }
     },
     "認証方法" : {
-      "comment" : "AISettingsView.swift:266",
+      "comment" : "AISettingsView.swift:267",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86906,7 +87008,7 @@
       }
     },
     "起動フレーズ" : {
-      "comment" : "SnippetsSettingsView.swift:75",
+      "comment" : "SnippetsSettingsView.swift:76",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87008,7 +87110,7 @@
       }
     },
     "起動フレーズと本文が消えます。元に戻せません。" : {
-      "comment" : "SnippetsSettingsView.swift:34",
+      "comment" : "SnippetsSettingsView.swift:35",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87110,7 +87212,7 @@
       }
     },
     "起動フレーズを入力してください。" : {
-      "comment" : "SnippetsSettingsView.swift:121",
+      "comment" : "SnippetsSettingsView.swift:122",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88946,7 +89048,7 @@
       }
     },
     "選んだスニペットを削除" : {
-      "comment" : "SnippetsSettingsView.swift:61, SnippetsSettingsView.swift:62",
+      "comment" : "SnippetsSettingsView.swift:62, SnippetsSettingsView.swift:63",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89048,7 +89150,7 @@
       }
     },
     "選んだスニペットを削除しますか？" : {
-      "comment" : "SnippetsSettingsView.swift:31",
+      "comment" : "SnippetsSettingsView.swift:32",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89456,7 +89558,7 @@
       }
     },
     "選択…" : {
-      "comment" : "AISettingsView.swift:311",
+      "comment" : "AISettingsView.swift:312",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91598,7 +91700,7 @@
       }
     },
     "録音を止めたときに選んでいる言語で入力します（話した言語は整形の言語の設定に従い、%@）" : {
-      "comment" : "HUDPanel.swift:374",
+      "comment" : "HUDPanel.swift:400",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93128,7 +93230,7 @@
       }
     },
     "音声入力" : {
-      "comment" : "Onboarding.swift:539, TextAI.swift:45, TranscriptionEngineSettingsView.swift:19",
+      "comment" : "Onboarding.swift:539, TextAI.swift:46, TranscriptionEngineSettingsView.swift:19",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95780,7 +95882,7 @@
       }
     },
     "（起動フレーズなし）" : {
-      "comment" : "SnippetsSettingsView.swift:43",
+      "comment" : "SnippetsSettingsView.swift:44",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95984,7 +96086,7 @@
       }
     },
     "＋ で追加し、起動フレーズと本文を\n入力してください。\n例: メールの署名、自己紹介、住所、会議URL" : {
-      "comment" : "SnippetsSettingsView.swift:103",
+      "comment" : "SnippetsSettingsView.swift:104",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

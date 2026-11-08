@@ -164,6 +164,9 @@ Asli: {2}</value>
   <data name="Hud_SpokenLanguage" xml:space="preserve">
     <value>Sesuai ucapan</value>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>Bahasa lain</value>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>Menghentikan perekaman dan mengetik teks (sama dengan menekan pintasan lagi)</value>
   </data>
@@ -510,14 +513,8 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   <data name="Settings_TranslationLanguages" xml:space="preserve">
     <value>Bahasa terjemahan</value>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>Inggris</value>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>Jepang</value>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>Pintasan "Terjemahkan dan Ketik" menerjemahkan ke bahasa terpilih yang paling kiri. Saat merekam, Anda dapat beralih antara "Sesuai ucapan" dan bahasa yang dipilih di HUD (teks diketik dalam bahasa yang dipilih saat Anda berhenti). Terjemahan menggunakan AI yang dipilih untuk dikte di tab "AI". Pilih setidaknya satu.</value>
+    <value>Pintasan "Terjemahkan dan Ketik" menerjemahkan ke bahasa terpilih yang pertama dalam daftar. Saat merekam, Anda dapat beralih antara "Sesuai ucapan" dan bahasa yang dipilih di HUD (teks diketik dalam bahasa yang dipilih saat Anda berhenti). Terjemahan menggunakan AI yang dipilih untuk dikte di tab "AI". Pilih setidaknya satu.</value>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
     <value>Mode perekaman</value>
@@ -689,6 +686,9 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   </data>
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>Coba Terjemahan Jepang</value>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>Coba Terjemahan ke {0}</value>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>Rapat</value>
@@ -923,6 +923,9 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   </data>
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>Mulai &amp;Terjemahkan ke Jepang dan Ketik</value>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>Mulai &amp;Terjemahkan ke {0} dan Ketik</value>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>Hapus entri riwayat ini? Tindakan ini tidak dapat dibatalkan.</value>

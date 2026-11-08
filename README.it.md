@@ -26,7 +26,7 @@ Un'app per la dettatura vocale e le note delle riunioni per macOS e Windows. Usa
 > [!NOTE]
 > Hanasu è stato pensato prima di tutto per il **giapponese**, e il giapponese è la lingua più testata.
 > Le schermate dell'app e le istruzioni che dà all'IA sono disponibili nelle stesse 17 lingue di questo README. Le schermate seguono la lingua di sistema, e le istruzioni per l'IA seguono la lingua di trascrizione nelle Impostazioni. Per qualsiasi altra lingua, Hanasu usa l'inglese.
-> Può anche tradurre ciò che dici in un **inglese** naturale (o in **giapponese**) prima di digitarlo.
+> Può anche tradurre ciò che dici in un **inglese** naturale, in **giapponese** o in una qualsiasi delle 17 lingue supportate prima di digitarlo.
 
 ## Perché Hanasu
 
@@ -41,7 +41,7 @@ Si ispira a Typeless, Wispr Flow, Aqua Voice e Granola. Il suo codice sorgente �
 | | |
 | --- | --- |
 | **Parla → testo rifinito** | Premi <kbd>⌥ Space</kbd>, parla e premilo di nuovo (oppure fai clic su **■ Interrompi**). Hanasu rimuove i riempitivi, corregge gli omofoni, applica le tue autocorrezioni e incolla il testo nel punto del cursore. |
-| **Parla e digita la traduzione** | Premi <kbd>⌥⇧ Space</kbd>, oppure passa l'HUD a **English** o **日本語** mentre parli. Le formule di cortesia vengono tradotte in modo naturale, così お疲れ様です diventa "Hi,". Scegli le lingue da proporre (inglese, giapponese o entrambe) in **Impostazioni → Generali**. L'inglese è il predefinito. |
+| **Parla e digita la traduzione** | Premi <kbd>⌥⇧ Space</kbd>, oppure passa l'HUD a **English**, **日本語** o a un'altra lingua mentre parli. Le formule di cortesia vengono tradotte in modo naturale, così お疲れ様です diventa "Hi,". Scegli le lingue da proporre (una qualsiasi delle 17 lingue supportate) in **Impostazioni → Generali**. L'inglese è il predefinito. Su Mac, in **Impostazioni → Per app** puoi far partire un'app in una di queste lingue. |
 | **Le lingue miste restano come le pronunci** | Per impostazione predefinita, le parti che dici in inglese restano in inglese. In alternativa puoi scegliere di uniformare l'output in giapponese. |
 | **Modifica con la voce** | Seleziona del testo, premi <kbd>⌃⌥⌘ E</kbd> e di' "rendilo più cortese", "trasformalo in un elenco puntato" o "traduci in inglese". |
 | **Stili per app** | Il testo è informale e breve in Slack, cortese e diviso in paragrafi in Mail, e in stile scritto in Pages, Word e Notion. Puoi cambiare il preset per ogni app. |
@@ -167,7 +167,7 @@ Su Mac puoi mostrare l'icona di Hanasu nella barra dei menu, nel Dock o in entra
 | Azione | macOS | Windows |
 | --- | --- | --- |
 | Dettatura vocale (avvia / interrompi) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Dettatura vocale tradotta (inglese / giapponese) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Dettatura vocale tradotta (nelle lingue scelte) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Modifica la selezione con la voce | <kbd>⌃⌥⌘ E</kbd> | — |
 | Incolla di nuovo l'ultimo risultato | <kbd>⌥⇧ V</kbd> | — |
 | Annulla la registrazione | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
