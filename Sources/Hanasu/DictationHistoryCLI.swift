@@ -136,6 +136,7 @@ enum DictationHistoryCLI {
         expect(reloaded.entries == store.entries, "保存した内容をそのまま読み込める")
         // 設計判断: DEC-DIC-029
         let savedJSON = (try? String(contentsOf: store.fileURL, encoding: .utf8)) ?? ""
+        let savedCount = reloaded.entries.count
         expect(savedJSON.contains("\"translate\"") && savedJSON.contains("\"translateJapanese\"") && savedJSON.contains("\"translate:ko\""),
                "英訳は translate、和訳は translateJapanese、ほかの言語への翻訳は translate:<言語のコード> として保存される")
         expect(reloaded.entries.contains { $0.mode == .translation(.japanese) && $0.mode.label == "和訳" }, "和訳のモードを読み込める")
@@ -180,6 +181,23 @@ enum DictationHistoryCLI {
         brokenStore.load()
         let brokenText = try? String(contentsOf: brokenStore.fileURL, encoding: .utf8)
         expect(brokenStore.lastError != nil && brokenText == "{ not json", "読めないファイルはエラーにして上書きしない")
+
+        // 7. 知らないモード（新しい版が足した言語など）でも読み込みを止めず、値のまま書き戻す（DEC-DIC-029）
+        let future = directory.appendingPathComponent("future", isDirectory: true)
+        try? FileManager.default.createDirectory(at: future, withIntermediateDirectories: true)
+        let futureValue = "translate:xx-future"
+        try? Data(savedJSON.replacingOccurrences(of: "\"translate:ko\"", with: "\"\(futureValue)\"").utf8)
+            .write(to: future.appendingPathComponent("history.json"))
+        let futureStore = DictationHistoryStore(directory: future)
+        futureStore.policy = store.policy
+        futureStore.load()
+        let futureEntry = futureStore.entries.first { $0.mode == .unknown(futureValue) }
+        expect(futureStore.lastError == nil && futureStore.entries.count == savedCount && futureEntry?.mode.label == futureValue,
+               "知らないモードの項目も読み込め、一覧には値のまま出る（\(futureStore.entries.count) 件 / \(savedCount) 件）")
+        futureStore.save()
+        futureStore.flush()
+        let futureText = (try? String(contentsOf: futureStore.fileURL, encoding: .utf8)) ?? ""
+        expect(futureText.contains("\"\(futureValue)\""), "知らないモードは値のまま書き戻す")
 
         // 7. すべて削除
         fileOnly.deleteAll()
