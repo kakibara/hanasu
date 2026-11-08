@@ -18,7 +18,9 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -30,8 +32,9 @@ MAC_SOURCES = ROOT / "Sources" / "Hanasu"
 MD_PATH = ROOT / "docs" / "verification" / "ui-ux-test-cases.md"
 DEFAULT_BINARY = ROOT / ".build" / "debug" / "Hanasu"
 
-ID_RE = re.compile(r"^UX-\d{3}$")
-REF_RE = re.compile(r"^(?:REQ|DEC)-[A-Z]+-\d{3}$")
+# fullmatch で使う（$ は末尾の改行を許し、\d は全角の数字にも当たるので使わない）
+ID_RE = re.compile(r"UX-[0-9]{3}")
+REF_RE = re.compile(r"(?:REQ|DEC)-[A-Z]+-[0-9]{3}")
 OSES = ("mac", "windows")
 OS_LABEL = {"mac": "M", "windows": "W"}
 PRIORITIES = ("P1", "P2", "P3")
@@ -52,8 +55,15 @@ def load_sections() -> list[dict]:
     """節のファイルを order の順に読む。各節は {file, order, title, cases}"""
     sections = []
     for path in sorted(CASES_DIR.glob("*.json")):
-        data = json.loads(path.read_text(encoding="utf-8"))
-        data["file"] = path.relative_to(ROOT).as_posix()
+        rel = path.relative_to(ROOT).as_posix()
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as e:
+            sys.exit(f"error: {rel}: JSON として読めない（{e}）")
+        if not isinstance(data, dict) or not isinstance(data.get("cases", []), list) \
+                or not all(isinstance(c, dict) for c in data.get("cases", [])):
+            sys.exit(f"error: {rel}: 節は {{order, title, cases: [項目…]}} の形にする")
+        data["file"] = rel
         sections.append(data)
     sections.sort(key=lambda s: s.get("order", 999))
     return sections
@@ -67,10 +77,11 @@ def load_spec() -> tuple[dict[str, bool], list[str]]:
     """spec の ID → 廃止か、と「確かめ方」に「実機」とある要件（廃止は除く）"""
     ids: dict[str, bool] = {}
     manual_reqs: list[str] = []
-    heading = re.compile(r"^###\s+((?:REQ|DEC)-[A-Z]+-\d{3})\b")
+    heading = re.compile(r"^###\s+((?:REQ|DEC)-[A-Z]+-[0-9]{3})(?![0-9])")
     for path in sorted(SPEC_DIR.glob("*.md")):
         retired = False
         current = None
+        in_howto = False  # 「- 確かめ方」の行と、その下の入れ子の箇条書きの中
         for line in path.read_text(encoding="utf-8").splitlines():
             if line.startswith("## "):
                 retired = line[3:].strip() == "廃止"
@@ -78,10 +89,25 @@ def load_spec() -> tuple[dict[str, bool], list[str]]:
             if m:
                 current = m.group(1)
                 ids[current] = retired
+                in_howto = False
                 continue
-            if current and current.startswith("REQ-") and not retired and line.startswith("- 確かめ方") and "実機" in line:
+            if line.startswith("- "):
+                in_howto = line.startswith("- 確かめ方")
+            elif not line.strip() or line.startswith("#"):
+                in_howto = False
+            if in_howto and current and current.startswith("REQ-") and not retired and "実機" in line \
+                    and current not in manual_reqs:
                 manual_reqs.append(current)
     return ids, manual_reqs
+
+
+def nonempty(value) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+# Markdown の表のセルに入る文字列（| と改行を入れると表が崩れる）
+def table_breaking(value) -> bool:
+    return isinstance(value, str) and ("|" in value or "\n" in value or "\r" in value)
 
 
 def render_flags() -> set[str]:
@@ -116,36 +142,44 @@ def check(args: argparse.Namespace) -> int:
                 errors.append(f"{where}: 節に {key} がない")
         for case in section.get("cases", []):
             cid = case.get("id", "?")
-            at = f"{where}: {cid}"
+            at = f"{where}: {cid!r}" if not isinstance(cid, str) else f"{where}: {cid}"
             unknown = set(case) - CASE_KEYS
             if unknown:
                 errors.append(f"{at}: 知らないキー {sorted(unknown)}")
-            if not ID_RE.match(cid):
-                errors.append(f"{at}: ID は UX-<3 桁>")
+            if not isinstance(cid, str) or not ID_RE.fullmatch(cid):
+                errors.append(f"{at}: ID は UX-<半角の 3 桁>")
+                cid = repr(cid)
             if cid in seen:
                 errors.append(f"{at}: ID が {seen[cid]} と重なっている")
             seen[cid] = where
             for key in ("steps", "expected"):
-                if not str(case.get(key, "")).strip():
-                    errors.append(f"{at}: {key} が空")
-            if "|" in case.get("steps", "") + case.get("expected", ""):
-                errors.append(f"{at}: 手順・期待に | を使わない（Markdown の表が崩れる）")
-            oses = case.get("os", [])
-            if not oses or any(o not in OSES for o in oses) or len(set(oses)) != len(oses):
+                if not nonempty(case.get(key)):
+                    errors.append(f"{at}: {key} が空か文字列でない")
+                elif table_breaking(case[key]):
+                    errors.append(f"{at}: {key} に | と改行を使わない（Markdown の表が崩れる）")
+            oses = case.get("os")
+            if not isinstance(oses, list) or not oses or any(o not in OSES for o in oses) or len(set(oses)) != len(oses):
                 errors.append(f"{at}: os は mac / windows の並び")
+                oses = [o for o in oses if o in OSES] if isinstance(oses, list) else []
             if case.get("priority") not in PRIORITIES:
                 errors.append(f"{at}: priority は {'/'.join(PRIORITIES)}")
-            for ref in case.get("refs", []):
-                if not REF_RE.match(ref):
-                    errors.append(f"{at}: refs の {ref} は REQ-/DEC- の ID 1 つ（範囲は使わない）")
+            refs = case.get("refs", [])
+            if not isinstance(refs, list):
+                errors.append(f"{at}: refs は ID の並び")
+                refs = []
+            for ref in refs:
+                if not isinstance(ref, str) or not REF_RE.fullmatch(ref):
+                    errors.append(f"{at}: refs の {ref!r} は REQ-/DEC- の ID 1 つ（範囲は使わない）")
                 elif ref not in spec_ids:
                     errors.append(f"{at}: refs の {ref} が spec にない")
                 elif spec_ids[ref]:
                     errors.append(f"{at}: refs の {ref} は廃止されている")
-                referenced.add(ref)
-            automation = case.get("automation", {})
-            if set(automation) != set(oses):
-                errors.append(f"{at}: automation のキーは os と同じ（{oses}）にする")
+                else:
+                    referenced.add(ref)
+            automation = case.get("automation")
+            if not isinstance(automation, dict) or set(automation) != set(oses):
+                errors.append(f"{at}: automation は os と同じキー（{oses}）の辞書にする")
+                automation = automation if isinstance(automation, dict) else {}
             for os_name, auto in automation.items():
                 errors += [f"{at} ({os_name}): {e}" for e in check_automation(os_name, auto, flags)]
 
@@ -171,7 +205,9 @@ def check(args: argparse.Namespace) -> int:
     return 1 if errors else 0
 
 
-def check_automation(os_name: str, auto: dict, flags: set[str]) -> list[str]:
+def check_automation(os_name: str, auto, flags: set[str]) -> list[str]:
+    if not isinstance(auto, dict):
+        return ["確かめ方は {kind, …} の辞書にする"]
     kind = auto.get("kind")
     if kind not in KINDS:
         return [f"kind は {'/'.join(KINDS)}"]
@@ -179,32 +215,40 @@ def check_automation(os_name: str, auto: dict, flags: set[str]) -> list[str]:
     unknown = set(auto) - AUTOMATION_KEYS[kind]
     if unknown:
         errors.append(f"知らないキー {sorted(unknown)}")
+    if os_name == "windows" and kind != "manual":
+        errors.append("Windows の項目は今はすべて manual（描画・操作の仕組みは FUT-019）")
     if kind == "render":
-        if os_name != "mac":
-            errors.append("render は Mac だけ（Windows の描画は FUT-019）")
         renders = auto.get("renders")
-        if not renders or not all(isinstance(r, list) and r for r in renders):
-            errors.append("renders は引数の並びの並び")
+        if not isinstance(renders, list) or not renders \
+                or not all(isinstance(r, list) and r and all(isinstance(a, str) for a in r) for r in renders):
+            errors.append("renders は引数（文字列）の並びの並び")
         else:
             for r in renders:
                 if r[0] not in flags:
                     errors.append(f"{r[0]} が Sources/Hanasu にない")
                 if not any("{out}" in a for a in r):
                     errors.append(f"{r[0]} の引数に出力の {{out}} がない")
+                if "--ui-language" in r:
+                    errors.append(f"{r[0]}: --ui-language は書かない（言語は languages か render の --lang で選ぶ）")
                 # 描画に渡すテスト用のデータ（common/testdata/ui/fixtures/…）。リポジトリの根からの相対パス
                 for a in r:
                     if a.startswith("common/") and not (ROOT / a).exists():
                         errors.append(f"{r[0]} に渡す {a} がない")
-        if not str(auto.get("look", "")).strip():
-            errors.append("look（PNG で見る観点）が空")
+        if not nonempty(auto.get("look")):
+            errors.append("look（PNG で見る観点）が空か文字列でない")
+        if "remaining" in auto and (not nonempty(auto["remaining"]) or table_breaking(auto["remaining"])):
+            errors.append("remaining は空でない文字列で、| と改行を使わない")
         langs = auto.get("languages")
-        if langs is not None and langs != "all" and (not isinstance(langs, list) or any(l not in LANGUAGES for l in langs)):
-            errors.append("languages は \"all\" か 17 言語のコードの並び")
+        if langs is not None and langs != "all" and (
+                not isinstance(langs, list) or not langs or any(l not in LANGUAGES for l in langs) or len(set(langs)) != len(langs)):
+            errors.append("languages は \"all\" か、17 言語のコードの重ならない並び")
     elif kind == "drive":
-        if not str(auto.get("plan", "")).strip():
-            errors.append("plan（どう操作するか）が空")
-    elif not str(auto.get("reason", "")).strip():
-        errors.append("reason（人が確かめる理由）が空")
+        if not nonempty(auto.get("plan")):
+            errors.append("plan（どう操作するか）が空か文字列でない")
+    elif not nonempty(auto.get("reason")):
+        errors.append("reason（人が確かめる理由）が空か文字列でない")
+    elif table_breaking(auto["reason"]):
+        errors.append("reason に | と改行を使わない（Markdown の表が崩れる）")
     return errors
 
 
@@ -232,7 +276,7 @@ MD_FOOTER = """
 
 
 def md_cell(text: str) -> str:
-    return text.replace("\n", " ").strip()
+    return text.replace("\r", " ").replace("\n", " ").strip()
 
 
 def mac_method(case: dict) -> str:
@@ -287,17 +331,20 @@ def selected_cases(args: argparse.Namespace) -> list[dict]:
             sys.exit(f"error: ない ID: {', '.join(sorted(missing))}")
         cases = [c for c in cases if c["id"] in wanted]
     if getattr(args, "priority", None):
-        allowed = set(args.priority.split(","))
+        allowed = {p.strip().upper() for p in args.priority.split(",") if p.strip()}
+        bad = allowed - set(PRIORITIES)
+        if not allowed or bad:
+            sys.exit(f"error: --priority は {','.join(PRIORITIES)} のどれか（{', '.join(sorted(bad)) or '空'} は使えない）")
         cases = [c for c in cases if c["priority"] in allowed]
     return cases
 
 
 def languages_for(case_auto: dict, cli: str | None) -> list[str]:
-    if cli:
-        langs = list(LANGUAGES) if cli == "all" else [l.strip() for l in cli.split(",") if l.strip()]
+    if cli is not None:
+        langs = list(LANGUAGES) if cli.strip() == "all" else list(dict.fromkeys(l.strip() for l in cli.split(",") if l.strip()))
         bad = [l for l in langs if l not in LANGUAGES]
-        if bad:
-            sys.exit(f"error: --lang は 17 言語のコードか all（{', '.join(bad)} は対応していない）")
+        if not langs or bad:
+            sys.exit(f"error: --lang は 17 言語のコードか all（{', '.join(bad) or '空'} は使えない）")
         return langs
     langs = case_auto.get("languages")
     if langs == "all":
@@ -305,47 +352,79 @@ def languages_for(case_auto: dict, cli: str | None) -> list[str]:
     return langs or ["ja"]
 
 
+def png_state(directory: Path) -> dict[Path, float]:
+    return {p: p.stat().st_mtime_ns for p in directory.rglob("*.png")}
+
+
 def render(args: argparse.Namespace) -> int:
     binary = Path(args.binary).resolve()
-    if not binary.exists():
-        sys.exit(f"error: {binary} がない。先に swift build を動かす")
+    if not binary.is_file() or not os.access(binary, os.X_OK):
+        sys.exit(f"error: {binary} が実行できるファイルでない。先に swift build を動かす（.app ではなく中の実行ファイルを渡す）")
     out = Path(args.out).resolve() if args.out else ROOT / ".build" / "ui-cases" / dt.datetime.now().strftime("%Y%m%d-%H%M%S")
-    targets = [c for c in selected_cases(args) if c.get("automation", {}).get("mac", {}).get("kind") == "render"]
+    chosen = selected_cases(args)
+    targets = [c for c in chosen if c.get("automation", {}).get("mac", {}).get("kind") == "render"]
+    if getattr(args, "ids", None):
+        skipped = [c["id"] for c in chosen if c not in targets]
+        if skipped:
+            print(f"描かない（Mac の確かめ方が render でない）: {', '.join(skipped)}")
     if not targets:
         print("描く項目がない（Mac の確かめ方が render の項目を選ぶ）")
-        return 0
+        return 1 if getattr(args, "ids", None) else 0
+    # 言語の指定の誤りは、描き始める前に止める
+    plans = [(case, languages_for(case["automation"]["mac"], args.lang)) for case in targets]
+    out.mkdir(parents=True, exist_ok=True)
     entries = []
     failed = 0
-    for case in targets:
+    for case, langs in plans:
         auto = case["automation"]["mac"]
-        for lang in languages_for(auto, args.lang):
+        for lang in langs:
             case_dir = out / lang / case["id"]
-            case_dir.mkdir(parents=True, exist_ok=True)
+            # 前の回の PNG で OK にならないよう、その項目のフォルダだけを空にしてから描く
+            if case_dir.exists():
+                shutil.rmtree(case_dir)
+            case_dir.mkdir(parents=True)
             errors = []
+            argvs = []
             for r in auto["renders"]:
                 argv = [str(binary)] + [a.replace("{out}", str(case_dir)) for a in r] + ["--ui-language", lang]
+                argvs.append(argv[1:])
+                before = png_state(case_dir)
                 try:
                     proc = subprocess.run(argv, capture_output=True, text=True, timeout=args.timeout, cwd=ROOT)
                     if proc.returncode != 0:
                         errors.append(f"{r[0]}: 終了コード {proc.returncode}: {proc.stderr.strip()[-300:]}")
+                        continue
                 except subprocess.TimeoutExpired:
                     errors.append(f"{r[0]}: {args.timeout} 秒で終わらなかった")
+                    continue
+                except OSError as e:
+                    errors.append(f"{r[0]}: 起動できなかった（{e}）")
+                    continue
+                # 描画の CLI は PNG を書けなくても 0 で終わることがあるので、新しく書いた PNG があるかで見る
+                after = png_state(case_dir)
+                if not any(before.get(p) != t for p, t in after.items()):
+                    errors.append(f"{r[0]}: PNG を書かなかった")
             pngs = sorted(p.relative_to(out).as_posix() for p in case_dir.rglob("*.png"))
-            if not pngs:
-                errors.append("PNG が 1 つもできなかった")
             ok = not errors
             failed += 0 if ok else 1
             entries.append({
                 "id": case["id"], "language": lang, "priority": case["priority"],
                 "steps": case["steps"], "expected": case["expected"], "look": auto["look"],
                 "remaining": auto.get("remaining"), "refs": case.get("refs", []),
-                "pngs": pngs, "rendered": ok, "errors": errors,
+                "argv": argvs, "pngs": pngs, "rendered": ok, "errors": errors,
             })
             print(f"{'OK' if ok else 'NG'} {case['id']} [{lang}] {len(pngs)} 枚" + ("" if ok else f" — {'; '.join(errors)}"))
+
+    def git(*a: str) -> str:
+        return subprocess.run(["git", *a], capture_output=True, text=True, cwd=ROOT).stdout.strip()
+
     manifest = {
         "created": dt.datetime.now().isoformat(timespec="seconds"),
         "binary": str(binary),
-        "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, cwd=ROOT).stdout.strip(),
+        "binary_modified": dt.datetime.fromtimestamp(binary.stat().st_mtime).isoformat(timespec="seconds"),
+        "commit": git("rev-parse", "--short", "HEAD"),
+        # 作業中の変更があると、commit だけではどのコードで描いたか分からない
+        "dirty": bool(git("status", "--porcelain", "--untracked-files=no")),
         "out": str(out),
         "entries": entries,
     }
