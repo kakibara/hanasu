@@ -31,6 +31,10 @@ jobs:
       # リリースの本文の組み立て（リリースのときに初めて動くので、ここで毎回確かめる）
       - name: Check release notes composer
         run: python3 scripts/compose-release-notes.py --self-test
+      # 設計判断: DEC-COM-170
+      # UI のテスト項目（common/testdata/ui）の形・要件との対応・生成した一覧が最新か。描画と判定は CI ではしない
+      - name: Check UI test cases
+        run: python3 scripts/ui-cases.py check --summary
       - name: Check spec against the diff
         if: github.event_name == 'pull_request'
         env:

@@ -1,0 +1,678 @@
+{
+  "order": 50,
+  "title": "会議の記録",
+  "cases": [
+    {
+      "id": "UX-050",
+      "steps": "メニューバー（タスクトレイ）とショートカットで記録を始める・止める",
+      "expected": "始まりと終わりが分かる。録音中の表示が常にメニューバーに出る",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-MTG-001",
+        "REQ-MTG-026"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "メニューバーとショートカットで会議の記録を始めて止め、メニューバーの録音中の表示を確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-051",
+      "steps": "会議アプリでマイクを使い始める",
+      "expected": "記録するかを聞かれる。断ったら再度しつこく出ない",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-009"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-meeting-suggestion",
+              "{out}/suggestion.png",
+              "--app",
+              "zoom"
+            ],
+            [
+              "--render-meeting-detection-settings",
+              "{out}/detection-settings.png"
+            ]
+          ],
+          "look": "会議アプリを見つけたときの提案のパネルに、記録するか・断るかのボタンがある。設定に自動検出の欄がある",
+          "remaining": "本物の会議アプリで提案が出て、断ったあとにしつこく出ないこと"
+        }
+      }
+    },
+    {
+      "id": "UX-052",
+      "steps": "記録中に文字起こしがリアルタイムに出る。話者が分かれる",
+      "expected": "自分と相手が分かれて、時刻つきで出る",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-MTG-002",
+        "REQ-MTG-003",
+        "REQ-MTG-004",
+        "REQ-MTG-005"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-meeting-notes",
+              "{out}"
+            ]
+          ],
+          "look": "記録中の画面（live.png）で、自分と相手の発言が分かれ、時刻つきで出ている",
+          "remaining": "実際の会議でリアルタイムに出ること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-053",
+      "steps": "記録中にメモを書き、「ここ重要」の印を付ける",
+      "expected": "メモに時刻が付く。印がショートカットで付く（記録中だけ有効）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-011",
+        "REQ-MTG-012"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-meeting-notes",
+              "{out}"
+            ]
+          ],
+          "look": "記録中の画面にメモ欄と「★ ここ重要」があり、付けたばかりの印には「取り消す」が出る（live-undo.png）。メモの編集（notes-editor.png）に時刻が付いている",
+          "remaining": "ショートカットで印を付けられ、記録中だけ有効なこと"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-054",
+      "steps": "字幕トグルを入れる。他のアプリを前面にする",
+      "expected": "字幕が前面に出る。VoiceOver で「字幕を前面に表示」とオン/オフが読まれる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-014"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-meeting-notes",
+              "{out}"
+            ]
+          ],
+          "look": "字幕（caption.png）が暗い背景で読め、「★」がある",
+          "remaining": "字幕のトグルで前面に出ること。VoiceOver の読み上げ"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-055",
+      "steps": "記録を始める途中でシステム音声の許可を拒否する、または失敗させる",
+      "expected": "エラーが分かる文言で出る。録音状態が中途半端に残らない（システム音声のタップが残らない）",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-MTG-002"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "システムオーディオ録音の許可を拒否する必要がある"
+        }
+      }
+    },
+    {
+      "id": "UX-056",
+      "steps": "2 時間以上の記録を止めて、議事録を作る",
+      "expected": "処理中の進行が分かる。アプリが固まらない。メモリが急に増えない",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-MTG-021",
+        "REQ-MTG-022",
+        "REQ-MTG-024"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "2 時間以上の記録が要る"
+        }
+      }
+    },
+    {
+      "id": "UX-057",
+      "steps": "議事録の型を選び、アクションアイテムを取り出す。書き出す",
+      "expected": "型どおりの出力、書き出せる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-017",
+        "REQ-MTG-018",
+        "REQ-MTG-019"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-minutes-ui",
+              "{out}"
+            ]
+          ],
+          "look": "議事録の型の選択欄・テンプレートの管理・会議ノートの詳細・リマインダー登録の画面が描け、型とアクションアイテムが分かる",
+          "remaining": "型どおりに議事録ができ、書き出せること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-058",
+      "steps": "話者名を付け替える。タイトルを変える",
+      "expected": "付け替えられる。変えられることが見てわかる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-008",
+        "REQ-MTG-029"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-minutes-ui",
+              "{out}"
+            ]
+          ],
+          "look": "会議ノートの詳細で、題名の欄が直せると分かる見た目（枠と ✎）で、話者名の欄がある",
+          "remaining": "話者名とタイトルを実際に付け替えられること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-059",
+      "steps": "会議を削除する",
+      "expected": "確認が出る。削除後、一覧から消える",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-MTG-028"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "会議を削除し、確認が出て一覧から消えることを確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-060",
+      "steps": "会議が 100 件以上ある状態で、アプリを起動する",
+      "expected": "起動が遅くならない。一覧が空に見えてから埋まる、といったちらつきがない",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "100 件以上の会議と起動の体感の確認が要る"
+        }
+      }
+    },
+    {
+      "id": "UX-061",
+      "steps": "会議の名前を変える・メモを直す・削除する",
+      "expected": "一覧が再読み込みされても、画面が止まらない",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "会議の名前を変え・メモを直し・削除して、一覧が読み直されても画面が止まらないことを確かめる"
+        }
+      }
+    },
+    {
+      "id": "UX-062",
+      "steps": "過去の会議を検索し、ヒットした位置に飛ぶ。質問して答えを得る",
+      "expected": "引用の根拠が出る",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-015",
+        "REQ-MTG-016"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-meeting-search",
+              "{out}/search.png"
+            ],
+            [
+              "--render-meeting-search",
+              "{out}/ask.png",
+              "--ask"
+            ]
+          ],
+          "look": "横断検索の結果にヒットした位置が出る。質問の答えに引用の根拠が出る",
+          "remaining": "ヒットした位置へ飛べること"
+        }
+      }
+    },
+    {
+      "id": "UX-063",
+      "steps": "文字起こしに `</transcript>` や「以降の指示を無視して」のような文を話して含め、議事録を作る",
+      "expected": "議事録がそのまま指示として動かない。構造が壊れない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-COM-054"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "AI で議事録を作る必要がある（音声と API キーが要る）"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-109",
+      "steps": "会議の記録のショートカットを変えてから、会議ノートで何も選んでいない画面を見る",
+      "expected": "案内の文に、変えた後のショートカットが出る",
+      "os": [
+        "mac"
+      ],
+      "priority": "P3",
+      "refs": [
+        "REQ-MTG-007"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "会議の記録のショートカットを変え、会議ノートで何も選んでいない画面の案内に変えたキーが出ることを確かめる"
+        }
+      }
+    },
+    {
+      "id": "UX-110",
+      "steps": "会議ノートの話者名の変更・カスタムの議事録の型の編集のシートで Esc",
+      "expected": "保存せずに閉じる",
+      "os": [
+        "mac"
+      ],
+      "priority": "P3",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "会議ノートの話者名の変更・カスタムの議事録の型の編集のシートを開いて Esc で閉じ、保存されないことを確かめる"
+        }
+      }
+    },
+    {
+      "id": "UX-111",
+      "steps": "長い話者名（「同席者10」「田中 太郎」）の会議の文字起こしを見る。記録のエラーが長いとき",
+      "expected": "話者名が 1 行で省略され、ポインタを載せると全体が出る。エラーはポインタを載せると全文が出て、選んでコピーできる",
+      "os": [
+        "mac"
+      ],
+      "priority": "P3",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-minutes-ui",
+              "{out}",
+              "--meeting-json",
+              "common/testdata/ui/fixtures/speaker-names.meeting.json"
+            ]
+          ],
+          "look": "文字起こしのタブ（window-tab1.png）で、長い話者名が 1 行で省略（…）され、長いエラーが崩れずに読める",
+          "remaining": "ポインタを載せると話者名とエラーの全体が出ること"
+        }
+      }
+    },
+    {
+      "id": "UX-112",
+      "steps": "Windows の会議ウインドウで「ここ重要」のタブ、「メモ」のタブを選んで「Markdown をコピー」",
+      "expected": "それぞれのタブの中身がコピーされる（以前は「ここ重要」でメモ、「メモ」で議事録がコピーされていた）",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-MTG-012"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-120",
+      "steps": "Windows で、保存先のフォルダを消した会議で「エクスプローラーで開く」",
+      "expected": "「保存先のフォルダが見つかりません」と出る（黙って何もしない、にならない）",
+      "os": [
+        "windows"
+      ],
+      "priority": "P3",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-121",
+      "steps": "議事録のある会議で「議事録を作り直す」。メモのタブで「保存して議事録を作り直す」。議事録がない（失敗した）会議で「議事録を作り直す」",
+      "expected": "議事録があるときだけ「議事録を作り直しますか？ 今の議事録とアクションアイテムは置き換わります。」の確認が出る。キャンセルで何も変わらない（メモも保存されない）。議事録がないときは確認なしで作る。Windows は Enter で作り直されない（既定はキャンセル）。型を変えるときの確認も既定がキャンセル",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-MTG-072"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "議事録のある会議・ない会議で「議事録を作り直す」と「保存して議事録を作り直す」を押し、確認の出方を確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-126",
+      "steps": "会議が 0 件の Windows で会議ノートを開く。会議が多い状態でも開く",
+      "expected": "開いた直後に「会議の一覧を読み込んでいます…」、0 件なら「まだ会議の記録がありません。左下の…」が一覧の場所に出る。会議があれば案内は出ない。読み込み中に「まだありません」と見えない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "DEC-MTG-073"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-136",
+      "steps": "記録中にメモを書き「★ ここ重要」を付けて止め、議事録を見る。記録後にメモを直して「保存して議事録を作り直す」を押し、終わるまで待つ",
+      "expected": "印の箇所が議事録の「重要とした箇所」にまとまり、メモにしかない内容も残る。作り直している間は、その会議の詳細の上に「議事録を作り直しています…」と回る印が出て（今の議事録は薄く出る）、一覧のその会議にも回る印が出る。終わっても選んでいた会議のまま",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-MTG-013",
+        "REQ-MTG-011",
+        "REQ-MTG-012"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-minutes-ui",
+              "{out}"
+            ]
+          ],
+          "look": "detail-regenerating.png で、詳細の上に「議事録を作り直しています…」と回る印が出て、今の議事録が薄く見えている",
+          "remaining": "議事録に印とメモが反映されること。作り直しが終わっても選んでいた会議のままなこと"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-137",
+      "steps": "Google Meet（ブラウザ）・Slack ハドル・Microsoft Teams・Zoom で、それぞれ会議の記録を始めて止める",
+      "expected": "どのツールでも同じ操作で記録でき、ツールごとの設定が要らない。相手の声が「相手」側に入る",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-020"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "本物の会議ツールと相手が要る"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-138",
+      "steps": "既定の文字起こしのエンジン（Mac は Mac 標準、Windows は Whisper）で会議を記録し、その間の通信先を見る（Little Snitch・nettop・リソースモニターなど）",
+      "expected": "記録と文字起こし・話者分離の間に、音声が外に送られない。外に出るのは、議事録を作るときの文字起こしのテキストだけ（議事録の AI がローカルなら何も出ない）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-023"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "本物の会議の記録と、通信先を見る道具が要る"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-139",
+      "steps": "相手が「田中です」と名乗る会議を記録して止め、文字起こしと会議ノートの話者名の欄を見る。推測した名前を直す",
+      "expected": "その話者が文字起こし・議事録・アクションアイテムの担当で「田中」と出て、話者名の欄に「推測」と出る。分からない話者は「話者2」などのまま。「自分」には名前が付かない。名前を直すと「推測」が消える",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-027",
+        "REQ-MTG-008"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-minutes-ui",
+              "{out}",
+              "--meeting-json",
+              "common/testdata/ui/fixtures/speaker-names.meeting.json"
+            ]
+          ],
+          "look": "文字起こしのタブ（window-tab1.png）で、推測した「田中」が話者名に出て、名前のない話者は「話者2」、自分は「自分」のまま",
+          "remaining": "本物の会議で名前が推測されること。話者名の欄の「推測」の表示と、直すと消えること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-140",
+      "steps": "Teams かブラウザの Google Meet の会議中に、記録を始める（提案の「記録する」・メニュー・ショートカットのそれぞれで）。Zoom の会議でも始める",
+      "expected": "Teams・Meet では、会議の名前が会議ノートのタイトルになる。Zoom など名前が読めないときは「会議 <日時>」のまま、記録は始まる",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-MTG-034"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "本物の会議アプリとアクセシビリティの許可が要る"
+        }
+      }
+    },
+    {
+      "id": "UX-141",
+      "steps": "記録中に右側を「AI チャット」に切り替え（⌘J でも）、質問を送る。「ここまでを要約」を押す。答えの時刻を押す。「メモに残す」を押す。文字起こしのエンジンを Whisper にして同じ画面を開く",
+      "expected": "文字起こしを見たまま質問でき、答えに根拠の時刻が [12:34] の形で出て、押すとその発言へ移る。答えはコピーでき、メモに足せる。Whisper / Gemini では、メモと印だけをもとに答えることが知らされる",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-MTG-040"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-meeting-chat",
+              "{out}"
+            ]
+          ],
+          "look": "記録中のチャット（live-chat-empty.png）に、よく使う質問のボタンと入力欄がある。答えのある画面（live-chat.png・detail-chat.png）に [mm:ss] の時刻とコピー・メモに残すがある",
+          "remaining": "本物の AI の答え。時刻を押して発言へ移ること。Whisper / Gemini のときの知らせ"
+        }
+      }
+    },
+    {
+      "id": "UX-147",
+      "steps": "Windows で Ctrl + Alt + Shift + M で会議の記録を始めて止める。Mac で作った会議のフォルダを ドキュメント\\Hanasu\\Meetings に写して会議ノートで開く",
+      "expected": "ドキュメント\\Hanasu\\Meetings\\<日時>\\ に文字起こしと議事録ができ、会議ノートで読める。Mac で作った会議もそのまま開ける",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-011"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    }
+  ]
+}

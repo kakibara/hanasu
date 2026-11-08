@@ -41,4 +41,5 @@ Hanasu（音声入力と会議の記録。Mac 版は `Sources/Hanasu`、Windows 
 - PR の本文は `.github/pull_request_template.md` の項目（触った ID・Spec-Impact・新しい要件の合意・roadmap から移したもの）を埋める。
 - 要件の「確かめ方」に挙げた CLI・テストには `// 確かめ方: REQ-…` を書く。
 - Mac のアプリは `swift build`、Windows 版は `cd windows && dotnet test Hanasu.Core.Tests` で確かめる。
+- 画面を見て確かめる UI のテスト項目は `common/testdata/ui/*.json`（一覧の Markdown は生成物で手で直さない）。画面に関わる変更のあとは [.claude/skills/ui-test/SKILL.md](.claude/skills/ui-test/SKILL.md) で描いて確かめ、項目を足したら `python3 scripts/ui-cases.py md` と `check` を通す。
 - PR を `main` にマージするときは [.claude/skills/pr-merge/SKILL.md](.claude/skills/pr-merge/SKILL.md) の手順で、今の `main` に入れた結果をビルド・テストしてから、確かめたコミットだけをマージする（PR の CI は Mac 版をビルドしない）。

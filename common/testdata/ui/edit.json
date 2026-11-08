@@ -1,0 +1,213 @@
+{
+  "order": 30,
+  "title": "英訳・選択範囲の編集・文体・スニペット・辞書",
+  "cases": [
+    {
+      "id": "UX-030",
+      "steps": "英訳モードで話す。HUD で言語を選ぶ",
+      "expected": "選んだ言語で入力される",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-010",
+        "REQ-DIC-011",
+        "REQ-DIC-013"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-hud",
+              "{out}/translate.png",
+              "--translate-to",
+              "en",
+              "--languages",
+              "en,ja"
+            ]
+          ],
+          "look": "英訳の録音中の HUD に、話した言語 / English / 日本語 の切り替えがあり、English が選ばれていると分かる",
+          "remaining": "選んだ言語で入力されること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-031",
+      "steps": "文章を選択して、声で書き換えを指示する",
+      "expected": "選択範囲だけが置き換わる。取り消しできる（Undo）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-050"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-edit-hud",
+              "{out}/edit.png"
+            ],
+            [
+              "--render-edit-hud",
+              "{out}/edit-processing.png",
+              "--processing"
+            ]
+          ],
+          "look": "選択を声で編集するときの HUD（録音中・処理中）が、通常の音声入力と区別できる",
+          "remaining": "選択範囲だけが置き換わり、Undo で戻せること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-032",
+      "steps": "アプリごとの文体（メール・チャットなど）で入力する",
+      "expected": "文体が変わる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P3",
+      "refs": [
+        "REQ-DIC-020",
+        "REQ-DIC-021"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-app-styles",
+              "{out}/app-styles.png",
+              "--expanded"
+            ]
+          ],
+          "look": "設定のアプリ別の欄に、アプリごとの文体の割り当てと追加ルールが出ている",
+          "remaining": "そのアプリで入力したときに文体が変わること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-033",
+      "steps": "スニペットの言葉を話す",
+      "expected": "定型文が入力される",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P3",
+      "refs": [
+        "REQ-DIC-030"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-snippets-settings",
+              "{out}/snippets.png"
+            ],
+            [
+              "--render-snippets-settings",
+              "{out}/snippets-empty.png",
+              "--empty"
+            ]
+          ],
+          "look": "スニペットの設定に、言葉と定型文の一覧と追加・削除のボタンがある。空のときは案内が出る",
+          "remaining": "スニペットの言葉を話して定型文が入力されること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-034",
+      "steps": "辞書にルールを足し、話す",
+      "expected": "ルールが必ず適用される。候補から選んだものだけが足される",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-070",
+        "REQ-DIC-071"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-dictionary-settings",
+              "{out}/dictionary.png"
+            ]
+          ],
+          "look": "辞書の設定に、語と置き換えルールの欄と、候補の一覧が出ている",
+          "remaining": "ルールが必ず適用され、候補から選んだものだけが足されること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-102",
+      "steps": "設定 → アプリ別 →「初期設定に戻す…」を押す",
+      "expected": "確認が出る。キャンセルで何も変わらず、承諾で初期の割り当てに戻る",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-DIC-047"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "設定 → アプリ別 →「初期設定に戻す…」を押し、確認のキャンセルと承諾を試す"
+        }
+      }
+    },
+    {
+      "id": "UX-103",
+      "steps": "設定 → スニペットで、中身のあるスニペットを選んで「−」を押す。空のスニペットを足して「−」を押す",
+      "expected": "中身があるときだけ確認が出る。空のものは確認なしで消える",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-030"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "設定 → スニペットで、中身のあるものと空のものを「−」で消し、確認の出方を確かめる"
+        }
+      }
+    }
+  ]
+}

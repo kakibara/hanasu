@@ -1,0 +1,253 @@
+{
+  "order": 40,
+  "title": "履歴",
+  "cases": [
+    {
+      "id": "UX-040",
+      "steps": "履歴を開く。履歴が 0 件のとき",
+      "expected": "空の状態の説明が出る（空白のままにならない）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-060"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "履歴が 0 件の状態を描く CLI がない"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-041",
+      "steps": "検索する。検索語を入れ、クリアボタンで消す",
+      "expected": "絞り込まれ、クリアで全件に戻る。VoiceOver で「検索語を消す」と読まれる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-060"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-history",
+              "{out}/history.png"
+            ]
+          ],
+          "look": "履歴のウインドウに検索欄があり、日ごとの一覧と詳細が出ている",
+          "remaining": "検索で絞り込み、クリアで全件に戻ること。VoiceOver の読み上げ"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-042",
+      "steps": "**1 件を削除する**（右クリック / ⌫ / 詳細のボタン）",
+      "expected": "「この履歴を削除しますか？」と確認が出る。キャンセルで残り、承諾で消える。どの入口でも同じ",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-060",
+        "DEC-DIC-079"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "履歴の 1 件を右クリック・⌫・詳細のボタンで削除し、確認の文言・キャンセル・承諾を確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-043",
+      "steps": "複数件を選んで削除する（Windows）",
+      "expected": "「選んだ N 件の履歴を削除しますか？」の確認が出る",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-060"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-044",
+      "steps": "全件を削除する",
+      "expected": "確認が出る。文言が 1 件削除と食い違っていない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-060"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "履歴を全件削除し、確認の文言が 1 件削除と食い違っていないことを確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-045",
+      "steps": "履歴の最新の結果をもう一度入力する。整形に失敗した文を整え直す",
+      "expected": "動く",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-061",
+        "REQ-DIC-062"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "履歴から最新の結果をもう一度入力し、整形に失敗した文を整え直す"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-046",
+      "steps": "履歴を **5000 件近く**溜めて、録音を終える",
+      "expected": "入力後に画面が引っかからない。履歴に反映される",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-DIC-070"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "5000 件近い履歴と体感の確認が要る"
+        }
+      }
+    },
+    {
+      "id": "UX-047",
+      "steps": "録音直後にアプリを終了する（強制終了ではない）→ 再起動",
+      "expected": "直前の履歴が残っている（保存の遅延で失われない）",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-DIC-070"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "アプリを終了して起動し直す必要がある"
+        }
+      }
+    },
+    {
+      "id": "UX-048",
+      "steps": "履歴の保存日数を変える",
+      "expected": "古い履歴が設定どおりに消える",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P3",
+      "refs": [
+        "REQ-DIC-063"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-history",
+              "{out}/settings.png",
+              "--settings"
+            ]
+          ],
+          "look": "設定の履歴の欄に、保存する日数と件数の上限の選択肢が出ている",
+          "remaining": "古い履歴が設定どおりに消えること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-104",
+      "steps": "設定 → 履歴 →「録音だけをすべて削除…」",
+      "expected": "確認が出る。承諾すると録音だけが消え、履歴の文章は残る",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-060"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "設定 → 履歴 →「録音だけをすべて削除…」を押し、確認と、録音だけが消えることを確かめる"
+        }
+      }
+    },
+    {
+      "id": "UX-116",
+      "steps": "履歴が 0 件のとき、検索で何も一致しないときに、Windows の履歴を開く",
+      "expected": "一覧に「まだ履歴がありません…」「条件に一致する履歴がありません。」が出る",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-060"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    }
+  ]
+}
