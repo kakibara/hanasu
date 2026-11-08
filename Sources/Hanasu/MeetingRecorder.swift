@@ -327,7 +327,8 @@ final class MeetingRecorder: ObservableObject {
         try? MeetingStore.save(meeting)
         appLog.notice("meeting transcribed: me=\(mine.count) others=\(theirs.count) utterances=\(meeting.utterances.count) speakers=\(meeting.speakers.count)")
 
-        if settings.makeMeetingMinutes, !meeting.utterances.isEmpty {
+        // 設計判断: DEC-MTG-091
+        if settings.makeMeetingMinutes, !meeting.usedUtterances.isEmpty {
             setState(.processing(tr("議事録を作成しています…")))
             do {
                 // 要件: REQ-COM-032
@@ -386,6 +387,9 @@ final class MeetingRecorder: ObservableObject {
     func regenerateMinutes(_ meeting: Meeting, template: MinutesTemplate? = nil, customPrompt: String? = nil,
                            templateName: String? = nil) async {
         guard state == .idle else { return }
+        // 設計判断: DEC-MTG-092
+        // ビューの会議は古いことがある（選び方を変えた直後など）。一覧の最新から作る
+        let meeting = meetings.first { $0.id == meeting.id } ?? meeting
         setState(.processing(tr("議事録を作り直しています…")))
         regeneratingID = meeting.id
         defer { regeneratingID = nil }
@@ -433,7 +437,21 @@ final class MeetingRecorder: ObservableObject {
     /// 議事録に使う発言の選び方を変えて保存する（議事録は作り直さない）
     func changeMinutesSelection(_ meeting: Meeting, _ change: (inout Meeting) -> Void) {
         guard canEditMinutesSelection(meeting) else { return }
-        update(meeting, change)
+        // ビューの会議は一覧の読み直しが終わるまで古い。続けて押したときに前の変更を消さないよう、
+        // 一覧の最新に当て、一覧もすぐ書き換える
+        guard let index = meetings.firstIndex(where: { $0.id == meeting.id }) else {
+            update(meeting, change)
+            return
+        }
+        guard MeetingStore.exists(meetings[index]) else {
+            reloadMeetings()
+            return
+        }
+        var updated = meetings[index]
+        change(&updated)
+        try? MeetingStore.save(updated)
+        meetings[index] = updated
+        reloadMeetings()
     }
 
     // 要件: REQ-MTG-046
@@ -709,7 +727,9 @@ final class MeetingRecorder: ObservableObject {
         }
         guard state == .recording, let point = sleepPoint, !askingAboutSleep else { return }
         appLog.notice("meeting: woke while recording; asking whether to stop at the sleep point")
-        // 通知を返してから出す（runModal の間、ほかの通知も受け取れるように）
+        // 通知を返してから出す（runModal の間、ほかの通知も受け取れるように）。
+        // 印は今立てる（Task が走る前に復帰の通知がもう一度来ても、確認を 2 つ出さない）
+        askingAboutSleep = true
         Task { @MainActor [weak self] in await self?.askAboutSleep(point) }
     }
 
@@ -717,7 +737,6 @@ final class MeetingRecorder: ObservableObject {
     // 設計判断: DEC-MTG-087
     /// 「スリープ前までで止める」か「記録を続ける」かを聞く。確認を出している間も記録は続ける
     private func askAboutSleep(_ point: MeetingSleepPoint) async {
-        askingAboutSleep = true
         let time = DateFormatter.localizedString(from: point.at, dateStyle: .none, timeStyle: .short)
         let alert = NSAlert()
         alert.messageText = tr("会議の記録中に Mac がスリープしました")

@@ -1030,6 +1030,28 @@ public class MeetingControllerTests
     }
 
     // 確かめ方: REQ-MTG-046
+    // 設計判断: DEC-MTG-091
+    [Fact]
+    public async Task NoMinutesWhenEveryUtteranceIsOffRecord()
+    {
+        var now = 0.0;
+        var handler = new FakeHandler((_, _) => FakeHandler.Json(FakeHandler.TextResponse("## 概要\nテスト")));
+        var (controller, settings, _) = Make(clock: () => now, minutes: _ => new GeminiClient(new GeminiAuth.ApiKey("k"), new HttpClient(handler)));
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        // 始めてすぐオフレコにして、そのまま止める
+        controller.ToggleOffRecord();
+        now = 5;
+        await controller.StopAsync();
+        var saved = controller.Store(settings).Load(meeting.Id)!;
+        Assert.NotEmpty(saved.Utterances);
+        Assert.Empty(saved.UsedUtterances);
+        // 使う発言がないので、AI に議事録を作らせない
+        Assert.Empty(handler.Requests);
+        Assert.Null(saved.Minutes);
+    }
+
+    // 確かめ方: REQ-MTG-046
     // 設計判断: DEC-MTG-094
     [Fact]
     public async Task OffRecordIsCutAtTheSleepPoint()

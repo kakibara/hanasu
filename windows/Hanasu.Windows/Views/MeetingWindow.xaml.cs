@@ -164,7 +164,7 @@ public partial class MeetingWindow : Window
         var live = IsLive(m);
         var busy = live || m.Status is MeetingStatus.Recording or MeetingStatus.Processing;
         RecordingPanel.Visibility = live && meetings.State == MeetingState.Recording ? Visibility.Visible : Visibility.Collapsed;
-        RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = !busy && m.Utterances.Count > 0;
+        RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = !busy && m.UsedUtterances.Count > 0;
         // 設計判断: DEC-MTG-092
         MinutesOutdatedPanel.Visibility = m.MinutesOutdated == true ? Visibility.Visible : Visibility.Collapsed;
         MinutesOutdatedRegenerateButton.IsEnabled = TranscriptOutdatedRegenerateButton.IsEnabled = RegenerateButton.IsEnabled;

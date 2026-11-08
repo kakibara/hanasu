@@ -73,7 +73,8 @@ public sealed class MeetingPostProcessor
         }
         Store.Save(meeting);
 
-        if (MinutesClient is not null && meeting.Utterances.Count > 0)
+        // 設計判断: DEC-MTG-091（使う発言がなければ議事録を作らない）
+        if (MinutesClient is not null && meeting.UsedUtterances.Count > 0)
         {
             ITextGenerator? client = null;
             string? authError = null;

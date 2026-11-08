@@ -431,7 +431,7 @@ struct MeetingDetailView: View {
                     // 設計判断: DEC-MTG-072
                     // 今の議事録があるときだけ確かめる（置き換わるため）。まだないときは、そのまま作る
                     Button(tr("議事録を作り直す"), action: requestRegenerate)
-                    .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
+                    .disabled(recorder.state != .idle || meeting.usedUtterances.isEmpty)
                     .confirmationDialog(tr("議事録を作り直しますか？"), isPresented: $confirmRegenerate) {
                         Button(tr("作り直す")) { Task { await recorder.regenerateMinutes(meeting) } }
                         Button(tr("キャンセル"), role: .cancel) {}
@@ -496,7 +496,7 @@ struct MeetingDetailView: View {
                 Divider()
             } else if tab == 0, meeting.minutes != nil, meeting.minutesOutdated == true, !regenerating {
                 // 設計判断: DEC-MTG-092
-                MinutesOutdatedNotice(recorder: recorder, onRegenerate: requestRegenerate)
+                MinutesOutdatedNotice(meeting: meeting, recorder: recorder, onRegenerate: requestRegenerate)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
                     .padding(.vertical, 8)

@@ -79,8 +79,11 @@ enum MeetingChat {
         }
         let elapsed = meeting.duration > 0 ? meeting.duration : recorder.elapsed
         var pending: [Line] = []
-        if !recorder.volatileOthers.isEmpty { pending.append(Line(time: elapsed, speaker: Meeting.promptLabel(for: "others"), text: recorder.volatileOthers)) }
-        if !recorder.volatileMe.isEmpty { pending.append(Line(time: elapsed, speaker: Meeting.promptLabel(for: "me"), text: recorder.volatileMe)) }
+        // 確定前の発言は今話しているもの。オフレコ中なら渡さない
+        if !meeting.isOffRecord(at: elapsed) {
+            if !recorder.volatileOthers.isEmpty { pending.append(Line(time: elapsed, speaker: Meeting.promptLabel(for: "others"), text: recorder.volatileOthers)) }
+            if !recorder.volatileMe.isEmpty { pending.append(Line(time: elapsed, speaker: Meeting.promptLabel(for: "me"), text: recorder.volatileMe)) }
+        }
         return Material(title: meeting.title, startedAt: meeting.startedAt, live: true, elapsed: elapsed,
                         lines: lines, pending: pending, notes: meeting.notesForPrompt(),
                         batchEngineName: recorder.batchEngine?.shortName)

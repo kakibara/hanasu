@@ -98,7 +98,7 @@ struct TranscriptSelectionBar: View {
                 }
             }
             if meeting.minutesOutdated == true {
-                MinutesOutdatedNotice(recorder: recorder, onRegenerate: onRegenerate)
+                MinutesOutdatedNotice(meeting: meeting, recorder: recorder, onRegenerate: onRegenerate)
             } else if !meeting.hasMinutesSelection, !selecting {
                 Text(tr("発言を右クリックすると、議事録から除いたり、議事録に使う範囲（最初と最後）を決めたりできます。"))
                     .font(.caption)
@@ -131,6 +131,7 @@ struct TranscriptSelectionBar: View {
 // 設計判断: DEC-MTG-092
 /// 議事録に使う発言を変えたあと、まだ作り直していないことの知らせ
 struct MinutesOutdatedNotice: View {
+    let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder
     var onRegenerate: () -> Void
 
@@ -141,7 +142,8 @@ struct MinutesOutdatedNotice: View {
                 .foregroundStyle(.orange)
             Button(tr("議事録を作り直す"), action: onRegenerate)
                 .controlSize(.small)
-                .disabled(recorder.state != .idle)
+                // 設計判断: DEC-MTG-091（使う発言がなければ作らない）
+                .disabled(recorder.state != .idle || meeting.usedUtterances.isEmpty)
         }
     }
 }
