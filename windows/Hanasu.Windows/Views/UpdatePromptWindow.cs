@@ -1,5 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 using Hanasu.Core.Update;
 using Hanasu.Windows.Services;
 
@@ -18,7 +20,7 @@ internal enum UpdateChoice
 
 /// <summary>
 /// 「Hanasu 1.6.0 があります（今は 1.5.0）」の確認。アップデート / あとで / この版をスキップ から選ぶ。
-/// ウインドウを閉じたときは「あとで」と同じ。リリースのページへのリンクと、リリースの本文を付ける。
+/// ウインドウを閉じたときは「あとで」と同じ。リリースのページへのリンクと、リリースの本文（整えて全文。DEC-REL-027）を付ける。
 /// </summary>
 // 設計判断: DEC-REL-022
 internal sealed class UpdatePromptWindow : Window
@@ -30,7 +32,7 @@ internal sealed class UpdatePromptWindow : Window
         Title = Strings.UpdatePrompt_Title;
         SizeToContent = SizeToContent.Height;
         Width = 460;
-        MaxHeight = 560;
+        MaxHeight = 680;
         ResizeMode = ResizeMode.NoResize;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         ShowInTaskbar = true;
@@ -53,17 +55,22 @@ internal sealed class UpdatePromptWindow : Window
             TextWrapping = TextWrapping.Wrap,
         });
 
-        var notes = release.Notes.Trim();
-        if (notes.Length > 0)
+        // アプリの機能の節と Windows の項目だけ出す（全文は「リリースのページを開く」で読む）
+        var notes = ReleaseNotesFormatter.Parse(ReleaseNotesFormatter.ForApp(release.Notes, ReleasePlatform.Windows));
+        if (notes.Count > 0)
         {
-            if (notes.Length > 800) notes = notes[..800] + "…";
-            panel.Children.Add(new TextBox
+            // 切り詰めずに全文を出し、長ければ欄の中でスクロールする（開いたときは先頭が見える）。
+            // 読み取り専用の RichTextBox なので、選んでコピーできる。IsDocumentEnabled でリンクを押せる
+            panel.Children.Add(new RichTextBox
             {
-                Text = notes,
+                Document = ReleaseNotesDocument(notes),
                 IsReadOnly = true,
-                TextWrapping = TextWrapping.Wrap,
+                IsDocumentEnabled = true,
+                AcceptsReturn = false,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                MaxHeight = 220,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+                MaxHeight = 320,
+                Padding = new Thickness(6, 6, 6, 6),
                 Margin = new Thickness(0, 10, 0, 0),
             });
         }
@@ -84,6 +91,76 @@ internal sealed class UpdatePromptWindow : Window
         buttons.Children.Add(MakeButton(Strings.UpdatePrompt_Skip, UpdateChoice.Skip));
         panel.Children.Add(buttons);
         Content = panel;
+    }
+
+    private const double BodySize = 13;
+    private const double IndentPerLevel = 14;
+    private const double MarkerWidth = 16;
+
+    // 設計判断: DEC-REL-027
+    /// <summary>
+    /// リリース文を、見出しは太い大きめの字、箇条書きは印のあとを字下げして折り返し、太字・斜体・コード・リンクは字の形にして並べる。
+    /// 箇条書きは段落の左を「字下げ＋印の幅」だけ空け、1 行目だけ印の幅を戻す（TextIndent を負に）ので、折り返した行も本文の頭にそろう
+    /// </summary>
+    private static FlowDocument ReleaseNotesDocument(IReadOnlyList<ReleaseNotesBlock> blocks)
+    {
+        var document = new FlowDocument
+        {
+            PagePadding = new Thickness(0),
+            FontFamily = SystemFonts.MessageFontFamily,
+            FontSize = BodySize,
+        };
+        foreach (var block in blocks)
+        {
+            var paragraph = new Paragraph();
+            if (block.Kind == ReleaseNotesBlockKind.Heading)
+            {
+                paragraph.FontWeight = FontWeights.Bold;
+                paragraph.FontSize = block.HeadingLevel switch { 1 => BodySize + 4, 2 => BodySize + 2, _ => BodySize };
+            }
+            var spacing = document.Blocks.Count == 0 ? 0 : block.Kind switch
+            {
+                ReleaseNotesBlockKind.Heading => 12,
+                ReleaseNotesBlockKind.Bullet or ReleaseNotesBlockKind.Numbered => block.AfterBlank ? 6 : 3,
+                _ => block.AfterBlank ? 6 : 0,
+            };
+            var left = 0.0;
+            if (block.Marker is not null)
+            {
+                left = block.Level * IndentPerLevel + MarkerWidth;
+                paragraph.TextIndent = -MarkerWidth;
+                // 印は幅を決めた箱に入れ、本文の頭を印の幅の位置にそろえる。下端を字の下端に合わせて、本文と同じ行の高さに置く
+                paragraph.Inlines.Add(new InlineUIContainer(new TextBlock
+                {
+                    Text = block.Marker,
+                    Width = MarkerWidth,
+                    FontSize = BodySize,
+                    Foreground = SystemColors.GrayTextBrush,
+                })
+                { BaselineAlignment = BaselineAlignment.TextBottom });
+            }
+            paragraph.Margin = new Thickness(left, spacing, 0, 0);
+            foreach (var piece in block.Inlines) paragraph.Inlines.Add(MakeInline(piece));
+            document.Blocks.Add(paragraph);
+        }
+        return document;
+    }
+
+    private static Inline MakeInline(ReleaseNotesInline piece)
+    {
+        var run = new Run(piece.Text);
+        if (piece.Style.HasFlag(ReleaseNotesStyle.Bold)) run.FontWeight = FontWeights.Bold;
+        if (piece.Style.HasFlag(ReleaseNotesStyle.Italic)) run.FontStyle = FontStyles.Italic;
+        if (piece.Style.HasFlag(ReleaseNotesStyle.Code))
+        {
+            run.FontFamily = new FontFamily("Consolas, Courier New");
+            run.FontSize = BodySize - 1;
+        }
+        if (piece.Link is not { } uri) return run;
+        // Core が http / https だけを渡す
+        var link = new Hyperlink(run) { NavigateUri = uri, ToolTip = uri.AbsoluteUri };
+        link.Click += (_, _) => Shell.Open(uri.AbsoluteUri);
+        return link;
     }
 
     private Button MakeButton(string text, UpdateChoice choice, bool isDefault = false, bool isCancel = false)

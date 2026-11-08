@@ -60,6 +60,21 @@ public sealed class WavStreamWriter : IDisposable
         Write(new float[count]);
     }
 
+    // 要件: REQ-MTG-043
+    // 設計判断: DEC-MTG-111
+    /// <summary>このクラスで書いた WAV を、先頭から seconds 秒までに切り詰める（ヘッダーの長さも直す）。もともと短ければ何もしない</summary>
+    public static void Truncate(string path, double seconds, int sampleRate = AudioFormat.SampleRate)
+    {
+        if (!File.Exists(path)) return;
+        using var stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+        var dataLength = Math.Max(0, stream.Length - HeaderLength);
+        var keep = Math.Max(0, (long)Math.Round(seconds * sampleRate)) * 2;
+        if (keep >= dataLength) return;
+        stream.SetLength(HeaderLength + keep);
+        stream.Position = 0;
+        stream.Write(Header(keep, sampleRate));
+    }
+
     private void UpdateHeader()
     {
         var position = stream.Position;

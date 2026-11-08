@@ -1,5 +1,21 @@
 # Changelog
 
+## [v2.1.0](https://github.com/kakibara/hanasu/compare/v2.0.1...v2.1.0) - 2026-11-08
+
+- 依頼から要件定義を詰めて計画を固めるスキル requirements を足す by @kakibara in https://github.com/kakibara/hanasu/pull/82
+- 翻訳の言語とアプリ別の出力言語を、対応する 17 言語すべてにする by @kakibara in https://github.com/kakibara/hanasu/pull/81
+- 更新ダイアログのリリース文を整えて出し、スクロールを軽くする（Mac） by @kakibara in https://github.com/kakibara/hanasu/pull/79
+- 更新の知らせのリリース文を整えて全文を出す（Windows） by @kakibara in https://github.com/kakibara/hanasu/pull/80
+- 会議の記録中のスリープへの対応と、議事録に使う発言を選ぶ機能（Mac・Windows） by @kakibara in https://github.com/kakibara/hanasu/pull/77
+- 要件定義の計画を了承の前に敵対的にレビューするスキルとエージェントを足す by @kakibara in https://github.com/kakibara/hanasu/pull/84
+- Mac の履歴も、知らないモードの値を残して読み、値のまま書き戻す by @kakibara in https://github.com/kakibara/hanasu/pull/85
+
+## [v2.0.1](https://github.com/kakibara/hanasu/compare/v2.0.0...v2.0.1) - 2026-11-06
+
+- AI の選択肢を、ローカルを左に、外部 API を右に並べる by @kakibara in https://github.com/kakibara/hanasu/pull/74
+- 設定の「スニペット」画面が崩れるのを直す by @kakibara in https://github.com/kakibara/hanasu/pull/75
+- 設定の文言の古い言い方（「「AI」タブ」「Gemini か Claude」）を直し、韓国語・中国語の「ここ重要」をそろえる by @kakibara in https://github.com/kakibara/hanasu/pull/73
+
 ## [v2.0.0](https://github.com/kakibara/hanasu/compare/v1.5.0...v2.0.0) - 2026-11-06
 
 - 初回起動のオンボーディングと既定の AI の選択を足す by @kakibara in https://github.com/kakibara/hanasu/pull/53

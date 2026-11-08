@@ -26,7 +26,7 @@ Una app de dictado por voz y notas de reuniones para macOS y Windows. Usa recono
 > [!NOTE]
 > Hanasu se hizo ante todo para el **japonés**, y el japonés es el idioma más probado.
 > Las pantallas de la app y las instrucciones que da a la IA están en los mismos 17 idiomas que este README. Las pantallas siguen el idioma del sistema, y las instrucciones para la IA siguen el idioma de transcripción de los Ajustes. Para cualquier otro idioma, Hanasu usa el inglés.
-> También puede traducir lo que dices a un **inglés** natural (o al **japonés**) antes de escribirlo.
+> También puede traducir lo que dices a un **inglés** natural, al **japonés** o a cualquiera de los 17 idiomas compatibles antes de escribirlo.
 
 ## Por qué Hanasu
 
@@ -41,7 +41,7 @@ Está inspirado en Typeless, Wispr Flow, Aqua Voice y Granola. Su código fuente
 | | |
 | --- | --- |
 | **Habla → texto pulido** | Pulsa <kbd>⌥ Space</kbd>, habla y vuelve a pulsarlo (o haz clic en **■ Detener**). Hanasu quita las muletillas, corrige los homófonos, aplica tus autocorrecciones y pega el texto en el cursor. |
-| **Habla y escríbelo traducido** | Pulsa <kbd>⌥⇧ Space</kbd>, o cambia el HUD a **English** o **日本語** mientras hablas. Las frases hechas se traducen con naturalidad, así que お疲れ様です se convierte en "Hi,". Elige los idiomas que se ofrecen (inglés, japonés o ambos) en **Ajustes → General**. El inglés es el predeterminado. |
+| **Habla y escríbelo traducido** | Pulsa <kbd>⌥⇧ Space</kbd>, o cambia el HUD a **English**, **日本語** u otro idioma mientras hablas. Las frases hechas se traducen con naturalidad, así que お疲れ様です se convierte en "Hi,". Elige los idiomas que se ofrecen (cualquiera de los 17 idiomas compatibles) en **Ajustes → General**. El inglés es el predeterminado. En Mac, **Ajustes → Por app** permite que una app empiece en uno de esos idiomas. |
 | **Los idiomas mezclados se quedan como los dijiste** | De forma predeterminada, las partes que dices en inglés se quedan en inglés. Puedes optar por unificar la salida en japonés. |
 | **Edita con la voz** | Selecciona un texto, pulsa <kbd>⌃⌥⌘ E</kbd> y di «hazlo más cortés», «conviértelo en viñetas» o «tradúcelo al inglés». |
 | **Estilos por app** | El texto es informal y breve en Slack, cortés y con párrafos en Mail, y en estilo escrito en Pages, Word y Notion. Puedes cambiar el preajuste de cada app. |
@@ -167,7 +167,7 @@ En Mac, puedes mostrar el icono de Hanasu en la barra de menús, en el Dock o en
 | Acción | macOS | Windows |
 | --- | --- | --- |
 | Dictado por voz (iniciar / detener) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Dictado por voz traducido (inglés / japonés) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Dictado por voz traducido (a los idiomas que elegiste) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Editar la selección con la voz | <kbd>⌃⌥⌘ E</kbd> | — |
 | Volver a pegar el último resultado | <kbd>⌥⇧ V</kbd> | — |
 | Cancelar la grabación | <kbd>Esc</kbd> | <kbd>Esc</kbd> |

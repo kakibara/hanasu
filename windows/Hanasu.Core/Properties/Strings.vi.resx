@@ -312,17 +312,17 @@
   <data name="Wav_NoData" xml:space="preserve">
     <value>Tệp WAV không có khối data.</value>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>Tiếng Anh</value>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>Tiếng Nhật</value>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>Sang tiếng Anh</value>
   </data>
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>Sang tiếng Nhật</value>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>Sang {0}</value>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>Dịch rồi nhập</value>
@@ -333,11 +333,17 @@
   <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
     <value>Dịch sang tiếng Nhật rồi nhập</value>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>Dịch sang {0} rồi nhập</value>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>Đã dịch sang tiếng Anh và nhập</value>
   </data>
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>Đã dịch sang tiếng Nhật và nhập</value>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>Đã dịch sang {0} và nhập</value>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>Đã nhập</value>
@@ -389,6 +395,9 @@
   </data>
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>Đang dịch sang tiếng Nhật bằng {0}…</value>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>Đang dịch sang {1} bằng {0}…</value>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>Đang chỉnh sửa bằng {0}…</value>
@@ -686,5 +695,8 @@
   </data>
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>Tệp zip không có {0} nên sẽ không được dùng</value>
+  </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- Không bao gồm {0} lời nói không dùng cho biên bản</value>
   </data>
 </root>

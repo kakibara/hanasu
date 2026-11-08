@@ -315,7 +315,7 @@ final class DictationController {
         var historyStatus: DictationHistoryEntry.Status = .refineOff
         var historyError: String?
         let translation = mode.translation
-        // 翻訳は AI でしかできないので、整形をオフにしていても AI（Gemini か Claude）に送る。全体がスニペットなら呼ばない
+        // 翻訳は AI でしかできないので、整形をオフにしていても AI（音声入力に選んだもの）に渡す。全体がスニペットなら呼ばない
         if settings.refineWithGemini || translation != nil, snippetMatch?.isWholeUtterance != true {
             let verb = translation != nil ? tr("翻訳") : tr("整形")
             do {

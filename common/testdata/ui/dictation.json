@@ -1,0 +1,412 @@
+{
+  "order": 20,
+  "title": "音声入力（録音・HUD）",
+  "cases": [
+    {
+      "id": "UX-010",
+      "steps": "ショートカットで録音を始め、もう一度で止める",
+      "expected": "HUD が出て、認識中のテキストと音量が動く。止めると整形され、カーソル位置に入力される",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-001",
+        "REQ-DIC-002",
+        "REQ-DIC-003",
+        "REQ-DIC-004",
+        "REQ-DIC-014"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-hud",
+              "{out}/recording.png"
+            ]
+          ],
+          "look": "録音中の HUD に、認識中のテキスト・音量の表示・取消と停止のボタンが出ている",
+          "remaining": "ショートカットで始めて止め、整形した文がカーソル位置に入ること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-011",
+      "steps": "録音中に Esc",
+      "expected": "取り消され、何も入力されない。HUD が消える",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-005"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "録音を始めて Esc を押し、HUD が消えて何も入力されないことを確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-012",
+      "steps": "「押している間だけ録音」に切り替えて試す",
+      "expected": "押している間だけ録音。離すと処理が始まる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-006"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "設定を「押している間だけ録音」にし、キーを押している間だけ録音されることを確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-013",
+      "steps": "HUD のボタンで止める・取り消す",
+      "expected": "キー操作と同じ結果",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-012"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "HUD の停止・取消のボタンを押し、キー操作と同じ結果になることを確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-014",
+      "steps": "HUD のマイクのボタンで入力デバイスを切り替える",
+      "expected": "録音中でも切り替わる。選んだデバイスが分かる表示",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-140"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "録音中に HUD のマイクのボタンから別のデバイスを選び、切り替わることを確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-015",
+      "steps": "**VoiceOver / ナレーターを入れて** HUD を操作する",
+      "expected": "マイクの選択、処理中の表示が読み上げられる（「マイクを選ぶ」「処理中」）",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-140"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "VoiceOver で読み上げを聞く必要がある"
+        }
+      }
+    },
+    {
+      "id": "UX-016",
+      "steps": "処理中（整形中）の HUD を見る",
+      "expected": "スピナーなど進行が分かる。固まって見えない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-hud",
+              "{out}/processing.png",
+              "--engine",
+              "whisper",
+              "--processing"
+            ]
+          ],
+          "look": "文字起こし中・整形中の HUD に、進んでいることが分かる表示（スピナーなど）と文言が出ている"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-017",
+      "steps": "ネットワークを切って録音する",
+      "expected": "整形に失敗しても、話した内容が失われず原文が入力される（または残る）。エラーの文言が分かりやすい",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-007"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "ネットワークを切る必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-018",
+      "steps": "録音を **10 分以上**続ける（上限を設けた場合）",
+      "expected": "上限で自動的に止まり、その旨が HUD に出る。それまでの音声は処理される",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-DIC-144"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "10 分以上の録音が要る"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-019",
+      "steps": "入力先に貼れない場所（フォーカスなし）で録音を終える",
+      "expected": "結果が画面に残り、コピーまたは貼り付けできる。クリップボードの扱いは設定どおり",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-DIC-080",
+        "REQ-DIC-081",
+        "REQ-DIC-083"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-paste-fallback",
+              "{out}/panel.png"
+            ],
+            [
+              "--render-paste-fallback",
+              "{out}/panel-long.png",
+              "--long"
+            ],
+            [
+              "--render-paste-fallback-settings",
+              "{out}/settings.png"
+            ]
+          ],
+          "look": "貼り付けられなかった結果のパネルに、結果の全文とコピー・閉じるのボタンが出る。長い結果でも読める。設定に、入力できる場所がないときの扱いの欄がある",
+          "remaining": "フォーカスのない場所で本当に録音を終え、パネルが出てクリップボードが設定どおりになること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-020",
+      "steps": "HUD が外部ディスプレイ・複数ディスプレイ・フルスクリーンアプリの上でどう出るか",
+      "expected": "見える位置に出る。操作を邪魔しない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "外部ディスプレイ・複数のディスプレイ・フルスクリーンのアプリが要る"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-115",
+      "steps": "ナレーターで、HUD の言語の切り替え（話した言語 / English / 日本語）を読む",
+      "expected": "選んでいるボタンに「選択中」が読まれる",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-011",
+        "REQ-DIC-013"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-125",
+      "steps": "Windows の設定で翻訳の言語に English と日本語の両方を選び、録音して HUD を見る。長い題名（処理中の文言）のときも見る",
+      "expected": "HUD が少し広くなり（580）、右の「経過時間・取消・■ 停止」が切れない。幅が足りないときは題名が「…」で省略される。言語が 1 つのときは 500 のまま",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-DIC-146"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-133",
+      "steps": "音声入力を 2 回したあと、メニューバー（タスクトレイ）の「最近の結果」を開き、1 件選んで別の場所に貼る",
+      "expected": "直近の結果が新しい順に並び、選んだ結果がクリップボードに入って貼れる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-008"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "音声入力を 2 回してから「最近の結果」を開き、1 件選んで ⌘V で貼る"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-134",
+      "steps": "設定 → AI →「画面の文脈を AI に渡す」をオンにし、「東海林さん」と書いた文書を前面にして「しょうじさんに送ります」と話す",
+      "expected": "「東海林さんに送ります」と、画面にある表記で入力される",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-040"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "アクセシビリティの許可と、本物の録音・AI が要る"
+        }
+      }
+    },
+    {
+      "id": "UX-135",
+      "steps": "設定 → 一般 →「貼り付けが届かなかったとき」で「音声入力の履歴を開く」をオンにし、フォーカスのない場所で録音を終える。オフにして同じことをする。貼れる場所でも試す",
+      "expected": "オンのときは履歴のウインドウが開き、最新の結果が選ばれている（検索・絞り込みは外れる）。オフのとき・貼れたときは開かない",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-DIC-083",
+        "REQ-DIC-084"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-paste-fallback-settings",
+              "{out}/settings.png"
+            ]
+          ],
+          "look": "設定の「貼り付けが届かなかったとき」に「音声入力の履歴を開く」の選択がある",
+          "remaining": "実際に貼れなかったときに履歴が開き、最新の結果が選ばれること"
+        }
+      }
+    },
+    {
+      "id": "UX-146",
+      "steps": "Windows の PC で Hanasu.exe を起動し、メモ帳にカーソルを置いて Ctrl + Alt + Space で話し、もう一度押して止める",
+      "expected": "タスクトレイに常駐し、話した内容が整えられてカーソル位置に入る",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-010"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    }
+  ]
+}

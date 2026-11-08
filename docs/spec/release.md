@@ -77,7 +77,7 @@
 - 出典: ユーザーの依頼（2026-11-05「また、アップデートを確認するという機能も追加して」）
 - 対象: Mac / Windows
 - 実装の場所: Mac は `AppDelegate.checkForUpdates`（メニューバーとアプリのメニュー）、`UpdateSettingsSection`（設定の「一般」）。Windows は `TrayIcon`（タスクトレイのメニュー）、`SettingsWindow`（「一般」）、`UpdateService.CheckManuallyAsync`
-- 確かめ方: `Hanasu --check-update`、`Hanasu --update-selftest`、`cd windows && dotnet test Hanasu.Core.Tests`。ダイアログは実機で確かめる
+- 確かめ方: `Hanasu --check-update`、`Hanasu --update-selftest`、`cd windows && dotnet test Hanasu.Core.Tests`。Mac のダイアログの見た目は `Hanasu --preview-update-dialog [<リリース文の .md>]` で出せる。ダイアログは実機で確かめる
 
 ---
 
@@ -227,6 +227,14 @@
 - 関係する要件: REQ-REL-010
 - 対象: Mac
 - 実装の場所: `UpdateInstaller`（`Sources/Hanasu/AppUpdate.swift`）
+
+### DEC-REL-027 リリース文はアプリの機能と自分の OS の話に絞り、見出し・箇条書きを整えて先頭から出す。Mac ではダイアログを Task の外から出す
+- 決めたこと: 新しい版を尋ねるダイアログに出すリリース文は、アプリの機能の話だけに絞る。出す節は「## ハイライト」「## 新しい機能」「## 改善」「## 不具合の修正」だけで、ほかの節（「気をつけること」「アップデートのしかた」など）は出さない（最初の「## 」の見出しより前の文は出す。この 4 つの見出しがどれもなければ、絞らずに全部出す）。行の終わりの OS の印（「（Mac）」「（Windows）」「（Mac / Windows）」。半角の括弧も。あとの「。」は除いて見る）がその OS を含まない行は出さず、その行の下の一段深い行も出さない。出す行の OS の印は外す（「。」は残す）。絞って中身がなくなった節は、見出しも出さない。全文は、リリースのページを開いて読めるようにする（Mac は欄の終わりの「リリースのページで全文を見る」のリンク、Windows は「リリースのページを開く」のボタン）。そのうえで、Markdown の記号をそのまま出さず、見出しは太い大きめの字、箇条書き（番号付きも）は印のあとを字下げして折り返し、太字・斜体・コード・リンクは字の形にして出す（Mac・Windows とも `ReleaseNotesFormatter`。HTML のコメントは出さない。入れ子の箇条書きは一段ずつ深く字下げする）。リンクは http / https のものだけ押して開ける（ほかは字だけ出す）。字数では切らず、長ければ欄の中でスクロールする。欄の字は選んでコピーできる。欄は開いたときに先頭が見える位置にする。Mac では、アップデートのダイアログ（尋ねる・最新です・失敗した、など）は、Swift の Task の中で `runModal` を呼ばず、`RunLoop.main.perform` で Task の外から出して、結果を待つ。出している間も画面は動くので、起動時の確認のダイアログと重ならないよう、知らせのダイアログを出す間も「尋ねている」扱いにし、起動時の確認は、その知らせが閉じるまで待ってから尋ねる（メニューから同じ版を尋ねていれば、もう尋ねない）。
+- 理由: GitHub のリリース文には、作る側の確認の状況（「実機でまだ確かめていない」）や、手で入れ替える人向けの手順（ダイアログには出ない「下のインストールの手順」を指す）、もう一方の OS だけの話も入り、アプリの中で読むと関係のないものが混じる（ユーザーの指摘、2026-11-08「アプリの機能のみに絞った方がいい」）。リリース文の書き方（docs/releases/TEMPLATE.md）は、節の名前と、項目の終わりの（Mac）（Windows）が決まっているので、それで絞れる。記号のままでは読みにくい（ユーザーの指摘）。リリース文は docs/releases/TEMPLATE.md の形（見出しと箇条書き）で書くので、それだけ整えれば足りる。Task の中で `runModal` を呼ぶと、出している間メインのディスパッチキューが回らず（手元の実験で、1.5 秒の間に 0 回。Task の外からなら 31 回）、スクロールが重くなり、ほかの画面の更新も止まる。並べ終えた欄は終わりが見えた状態になり、リリース文の頭（ハイライト）が見えなかった。Windows では 800 字で切っていたので、長いリリース文の後ろが読めなかった。前の Windows の欄（TextBox）は字を選べたので、整えたあとも選べるようにする（PR #80 のレビュー）。リリース文は GitHub から来るので、押して開くリンクは Web のページに限る。ダイアログを出している間も起動時の確認が進むので、待たずにやめると、メニューで「確かめています」を見ている間に届いた新しい版を、この起動では知らせなくなる（PR #79 のレビュー）。
+- 決めた場面: ユーザーの依頼（2026-11-07「スクロールが重いのと markdown をそのまま表示しているので読みにくいです」）。機能の 4 節と自分の OS の項目に絞るのは、ユーザーの依頼（2026-11-08、PR #79 で「機能の 4 節＋自分の OS だけ」を選んだ）。Windows は同じ指摘を受けて合わせた
+- 関係する要件: REQ-REL-010, REQ-REL-011
+- 対象: Mac / Windows
+- 実装の場所: Mac は `AppUpdater.presentAsk`・`AppUpdater.runModal`、`UpdateRelease.appNotes`・`ReleaseNotesFormatter`（`Sources/Hanasu/AppUpdate.swift`）。確かめるのは `Hanasu --preview-update-dialog [<リリース文の .md>]` と `Hanasu --update-selftest`。Windows は `ReleaseNotesFormatter.ForApp`・`ReleaseNotesFormatter.Parse`（`windows/Hanasu.Core/Update/ReleaseNotesFormatter.cs`。テストは `ReleaseNotesFormatterTests`。絞り込みは Mac の selfTest と同じ見本で確かめる）と `UpdatePromptWindow.ReleaseNotesDocument`
 
 ### DEC-REL-030 Windows の入れ替えは、隣のフォルダに展開し、PowerShell のスクリプトでフォルダごと取り替える
 - 決めたこと: zip は `Hanasu.exe` のあるフォルダの隣の `Hanasu.update` に落として展開する（どのエントリーもそのフォルダの外に書かない。`Hanasu\Hanasu.exe` がなければ使わない。ダウンロードは 10 分で打ち切る）。今のフォルダの直下に、新しい `Hanasu` フォルダにないもの（`.dll`・`.pdb` のファイルと、エクスプローラーが作る `desktop.ini`・`Thumbs.db` を除く）があれば、Hanasu 専用のフォルダではないので入れ替えず、名前を挙げてリリースのページを案内する（ドライブの直下も断る）。固定の中身の PowerShell のスクリプト（パスは引数で渡す）を動かしてから Hanasu を終える。スクリプトは Hanasu の終了を待ち（60 秒まで）、今のフォルダを `<フォルダ>.old` に改名し（ファイルがまだ放されていなければ数秒やり直す）、新しいフォルダを今の名前に移す（これも数秒やり直し、失敗したら元に戻す）。`Hanasu.exe` を起動し直し、`.old` と作業フォルダを消す。経過は `%LOCALAPPDATA%\Hanasu\Logs\update.log` に書く。スクリプトを動かす前に入れ替える版を `%LOCALAPPDATA%\Hanasu\update-pending.txt` に書き、次の起動で版が上がっていなければ、ログの場所とリリースのページを案内する。フォルダに書き込めない（Program Files など）ときは、リリースのページを案内する。手元のビルド（版の先頭が 0）は入れ替えず、リリースのページを開く。

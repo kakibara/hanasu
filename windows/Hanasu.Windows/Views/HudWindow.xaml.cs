@@ -1,6 +1,8 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Automation;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
@@ -12,7 +14,7 @@ namespace Hanasu.Windows.Views;
 /// <summary>
 /// 画面の下に出る小さな状態表示（Mac 版の HUDPanel）。
 /// WS_EX_NOACTIVATE で、前面に出てもクリックされても入力先アプリのフォーカスを奪わない。
-/// 「話した言語 / English / 日本語」「取消」「■ 停止」を押せる準備中・録音中だけクリックを受け取り、それ以外は WS_EX_TRANSPARENT でマウスを素通しする。
+/// 「話した言語 / 翻訳の言語（English・日本語 …）」「取消」「■ 停止」を押せる準備中・録音中だけクリックを受け取り、それ以外は WS_EX_TRANSPARENT でマウスを素通しする。
 /// 貼り付けなかったとき（HudPhase.Unpasted）は、広げて結果の全文・「コピー」「閉じる」を出し、自動では閉じない。
 /// 文章をクリックしたときだけ前面に出して（文字の選択・Ctrl+C・Esc のため）、閉じるときに元のウインドウへフォーカスを返す。
 /// IHud のメソッドはどのスレッドから呼んでもよい（UI スレッドに回す）。
@@ -22,8 +24,10 @@ namespace Hanasu.Windows.Views;
 public partial class HudWindow : Window, IHud
 {
     private const double NormalWidth = 500;
-    /// <summary>翻訳の言語を 2 つ（English・日本語）出すときの幅。500 では右のボタンと題名が入らない（DEC-DIC-146）</summary>
-    private const double WideWidth = 580;
+    /// <summary>言語の切り替えを出すとき、切り替えと題名のほかに要る幅（左右の余白・状態のアイコン・経過時間・取消・停止）。DEC-DIC-146</summary>
+    private const double ReservedWidth = 260;
+    /// <summary>言語の切り替えを出すときの幅の上限</summary>
+    private const double MaxWidthWithLanguages = 760;
     private const double NormalHeight = 136;
     private const double UnpastedWidth = 600;
     private const double UnpastedHeight = 330;
@@ -98,8 +102,8 @@ public partial class HudWindow : Window, IHud
         if (newState.Phase != HudPhase.Unpasted) ReturnFocus();
         if (newState.Phase == HudPhase.Recording && state.Phase != HudPhase.Recording) startedAt = DateTime.Now;
         state = newState;
-        UpdateSize();
         Render();
+        UpdateSize();
         if (!IsVisible)
         {
             base.Show();  // ShowActivated=False なので前面アプリのフォーカスは動かない
@@ -125,19 +129,33 @@ public partial class HudWindow : Window, IHud
         translation = selected;
         translationChoices = choices;
         RenderLanguage();
-        // 言語の数で幅が変わる（DEC-DIC-146）。出ている間に変わったら置き直す
+        // 言語の数と名前の長さで幅が変わる（DEC-DIC-146）。出ている間に変わったら置き直す
         var width = Width;
         UpdateSize();
         if (IsVisible && Width != width) PlaceAtBottom();
     });
 
     // 設計判断: DEC-DIC-146
-    /// <summary>結果の表示は広く（DEC-DIC-121）、言語の切り替えに English と日本語の両方を出すときは少し広く、それ以外は 500</summary>
+    /// <summary>
+    /// 結果の表示は広く（DEC-DIC-121）。言語の切り替えを出すときは、切り替えの幅（言語の数と名前の長さで変わる）を測って、
+    /// 題名・切り替え・右のボタンが入る幅にする（500 より狭くはしない）。それ以外は 500。
+    /// 言語の切り替えを出している間は、題名を短く（録音中の題名は短い）して切り替えと右のボタンの場所を空ける。RenderLanguage のあとに呼ぶ
+    /// </summary>
     private void UpdateSize()
     {
         var unpasted = state.Phase == HudPhase.Unpasted;
-        var wide = !unpasted && HudText.CanChooseLanguage(state.Phase) && translationChoices.Count >= 2;
-        Width = unpasted ? UnpastedWidth : wide ? WideWidth : NormalWidth;
+        var choosing = !unpasted && HudText.CanChooseLanguage(state.Phase);
+        TitleText.MaxWidth = unpasted ? 400
+            : !choosing ? 190
+            : translationChoices.Count >= 2 ? 130 : 100;
+        var width = NormalWidth;
+        if (choosing)
+        {
+            LanguageSwitch.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            width = Math.Min(MaxWidthWithLanguages,
+                Math.Max(NormalWidth, Math.Ceiling(ReservedWidth + TitleText.MaxWidth + LanguageSwitch.DesiredSize.Width)));
+        }
+        Width = unpasted ? UnpastedWidth : width;
         Height = unpasted ? UnpastedHeight : NormalHeight;
     }
 
@@ -154,10 +172,6 @@ public partial class HudWindow : Window, IHud
         ErrorMark.Visibility = state.Phase is HudPhase.Error or HudPhase.Unpasted ? Visibility.Visible : Visibility.Collapsed;
 
         var unpasted = state.Phase == HudPhase.Unpasted;
-        // 言語の切り替えを出している間は、題名を短く（録音中の題名は短い）して切り替えと右のボタンの場所を空ける（DEC-DIC-146）
-        TitleText.MaxWidth = unpasted ? 400
-            : !HudText.CanChooseLanguage(state.Phase) ? 190
-            : translationChoices.Count >= 2 ? 130 : 100;
         DetailText.MaxHeight = unpasted ? 70 : 52;
         ResultBox.Visibility = CopyButton.Visibility = CloseButton.Visibility = unpasted ? Visibility.Visible : Visibility.Collapsed;
         if (unpasted)
@@ -195,19 +209,47 @@ public partial class HudWindow : Window, IHud
         LanguageSwitch.Visibility = HudText.CanChooseLanguage(state.Phase) ? Visibility.Visible : Visibility.Collapsed;
         SpokenLanguageButton.Tag = translation is null ? "selected" : null;
         AutomationProperties.SetItemStatus(SpokenLanguageButton, translation is null ? Strings.Hud_Selected_A11y : "");
-        foreach (var (button, language) in new[] { (EnglishButton, TranslationLanguage.English), (JapaneseButton, TranslationLanguage.Japanese) })
+        // 要件: REQ-DIC-013
+        // 設計判断: DEC-DIC-152
+        // 翻訳の言語のボタンは、選択肢（設定で選んだ言語）から作る。3 つ以上なら 2 つと「…」にする（HudText.LanguageButtons）
+        var (buttons, overflow) = HudText.LanguageButtons(translation, translationChoices);
+        LanguageButtons.Children.Clear();
+        foreach (var language in buttons)
         {
-            button.Visibility = translationChoices.Contains(language) ? Visibility.Visible : Visibility.Collapsed;
-            button.Tag = translation == language ? "selected" : null;
-            AutomationProperties.SetItemStatus(button, translation == language ? Strings.Hud_Selected_A11y : "");
+            var selected = translation == language;
+            var button = new Button
+            {
+                Style = (Style)FindResource("LanguageOption"),
+                Content = language.Label(),
+                Tag = selected ? "selected" : null,
+            };
+            AutomationProperties.SetItemStatus(button, selected ? Strings.Hud_Selected_A11y : "");
+            button.Click += (_, _) => LanguageSelected?.Invoke(this, language);
+            LanguageButtons.Children.Add(button);
         }
+        MoreLanguagesButton.Visibility = overflow ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void OnSpokenLanguageClick(object sender, RoutedEventArgs e) => LanguageSelected?.Invoke(this, null);
 
-    private void OnEnglishClick(object sender, RoutedEventArgs e) => LanguageSelected?.Invoke(this, TranslationLanguage.English);
-
-    private void OnJapaneseClick(object sender, RoutedEventArgs e) => LanguageSelected?.Invoke(this, TranslationLanguage.Japanese);
+    // 要件: REQ-DIC-013
+    // 設計判断: DEC-DIC-152
+    /// <summary>「…」。すべての翻訳の言語のメニューを出す（選んでいる言語に印）。メニューもフォーカスを取らない（HUD は前面に出ない）</summary>
+    private void OnMoreLanguagesClick(object sender, RoutedEventArgs e)
+    {
+        var menu = new ContextMenu
+        {
+            PlacementTarget = MoreLanguagesButton,
+            Placement = PlacementMode.Top,
+        };
+        foreach (var language in translationChoices)
+        {
+            var item = new MenuItem { Header = language.Label(), IsChecked = translation == language };
+            item.Click += (_, _) => LanguageSelected?.Invoke(this, language);
+            menu.Items.Add(item);
+        }
+        menu.IsOpen = true;
+    }
 
     private void OnStopClick(object sender, RoutedEventArgs e) => StopRequested?.Invoke(this, EventArgs.Empty);
 

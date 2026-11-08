@@ -240,12 +240,16 @@ struct LiveTranscriptView: View {
                 Image(systemName: "record.circle.fill").foregroundStyle(.red)
                 Text(tr("記録中")).font(.headline)
                 if let start = recorder.current?.startedAt {
-                    TimelineView(.periodic(from: start, by: 1)) { context in
-                        Text(Meeting.clock(context.date.timeIntervalSince(start)))
+                    // 設計判断: DEC-MTG-089（スリープしていた時間は数えない）
+                    TimelineView(.periodic(from: start, by: 1)) { _ in
+                        Text(Meeting.clock(recorder.elapsed))
                             .font(.system(.body, design: .monospaced))
                             .foregroundStyle(.secondary)
                     }
                 }
+                // 要件: REQ-MTG-046
+                LiveOffRecordButton(recorder: recorder)
+                    .padding(.leading, 8)
                 Spacer()
                 LevelMeter(label: tr("自分"), level: recorder.meLevel, color: .accentColor)
                 LevelMeter(label: tr("相手"), level: recorder.othersLevel, color: .orange)
@@ -262,6 +266,7 @@ struct LiveTranscriptView: View {
             }
             .padding([.horizontal, .bottom])
             .padding(.top, 6)
+            LiveOffRecordBanner(recorder: recorder)
             Divider()
             ScrollViewReader { proxy in
                 ScrollView {
@@ -276,7 +281,8 @@ struct LiveTranscriptView: View {
                         ForEach(recorder.liveLines) { line in
                             TranscriptLine(time: line.start, speaker: line.channel == .me ? tr("自分") : tr("相手"),
                                            color: line.channel == .me ? .accentColor : .orange, text: line.text,
-                                           focused: line.id == focusedLine)
+                                           focused: line.id == focusedLine,
+                                           use: recorder.current?.isOffRecord(at: line.start) == true ? .offRecord : .used)
                                 .id(line.id)
                         }
                         if !recorder.volatileOthers.isEmpty {
@@ -392,15 +398,22 @@ struct MeetingDetailView: View {
     @State private var focusedFromHighlight: UUID?
     /// AI チャットの答えの時刻を押したとき、文字起こしのタブを開いてから移る時刻
     @State private var pendingTimeJump: Double?
+    // 設計判断: DEC-MTG-093
+    /// 文字起こしで「議事録に使う発言を選ぶ」（発言ごとのチェックボックス）
+    @State private var selectingForMinutes = false
+    /// チェックボックスを前に押した発言の位置（Shift でまとめて切り替える起点）
+    @State private var selectionAnchor: Int?
 
     /// initialTab は確認用の描き出し（CLI）で、最初に開くタブを決めるため（0 議事録・1 文字起こし・2 メモ・3 ここ重要・4 AI チャット）
+    /// initialSelecting も確認用の描き出しのため（文字起こしのチェックボックスを出した状態で開く）
     init(meeting: Meeting, recorder: MeetingRecorder, jump: MeetingJump? = nil, initialTab: Int = 0,
-         onDelete: (() -> Void)? = nil) {
+         initialSelecting: Bool = false, onDelete: (() -> Void)? = nil) {
         self.meeting = meeting
         self.recorder = recorder
         self.jump = jump
         self.onDelete = onDelete
         _tab = State(initialValue: initialTab)
+        _selectingForMinutes = State(initialValue: initialSelecting)
     }
 
     var body: some View {
@@ -417,14 +430,8 @@ struct MeetingDetailView: View {
                         .disabled(meeting.speakers.isEmpty)
                     // 設計判断: DEC-MTG-072
                     // 今の議事録があるときだけ確かめる（置き換わるため）。まだないときは、そのまま作る
-                    Button(tr("議事録を作り直す")) {
-                        if meeting.minutes == nil {
-                            Task { await recorder.regenerateMinutes(meeting) }
-                        } else {
-                            confirmRegenerate = true
-                        }
-                    }
-                    .disabled(recorder.state != .idle || meeting.utterances.isEmpty)
+                    Button(tr("議事録を作り直す"), action: requestRegenerate)
+                    .disabled(recorder.state != .idle || meeting.usedUtterances.isEmpty)
                     .confirmationDialog(tr("議事録を作り直しますか？"), isPresented: $confirmRegenerate) {
                         Button(tr("作り直す")) { Task { await recorder.regenerateMinutes(meeting) } }
                         Button(tr("キャンセル"), role: .cancel) {}
@@ -482,6 +489,19 @@ struct MeetingDetailView: View {
             }
             .padding()
             Divider()
+            // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+            if tab == 1, !meeting.utterances.isEmpty {
+                TranscriptSelectionBar(meeting: meeting, recorder: recorder, selecting: $selectingForMinutes,
+                                       onRegenerate: requestRegenerate)
+                Divider()
+            } else if tab == 0, meeting.minutes != nil, meeting.minutesOutdated == true, !regenerating {
+                // 設計判断: DEC-MTG-092
+                MinutesOutdatedNotice(meeting: meeting, recorder: recorder, onRegenerate: requestRegenerate)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                Divider()
+            }
             if tab == 2 {
                 MeetingNotesEditor(meeting: meeting, recorder: recorder)
             } else if tab == 4 {
@@ -519,13 +539,16 @@ struct MeetingDetailView: View {
                                     }
                                 }
                             } else {
+                                // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+                                // 設計判断: DEC-MTG-090, DEC-MTG-093
+                                let blocks = meeting.displayBlocks()
                                 LazyVStack(alignment: .leading, spacing: 10) {
-                                    ForEach(meeting.mergedBlocks()) { block in
-                                        TranscriptLine(time: block.start, speaker: meeting.displayName(for: block.speaker),
-                                                       color: Self.color(for: block.speaker, in: meeting), text: block.text,
-                                                       highlight: jump?.terms ?? [],
-                                                       focused: block.id == focusedBlockID || block.id == focusedFromHighlight)
-                                            .id(block.id)
+                                    ForEach(Array(blocks.enumerated()), id: \.element.id) { index, item in
+                                        TranscriptDisplayRow(meeting: meeting, blocks: blocks, index: index, recorder: recorder,
+                                                             selecting: selectingForMinutes, anchor: $selectionAnchor,
+                                                             highlight: jump?.terms ?? [],
+                                                             focused: item.id == focusedBlockID || item.id == focusedFromHighlight)
+                                            .id(item.id)
                                     }
                                 }
                             }
@@ -548,6 +571,7 @@ struct MeetingDetailView: View {
             if titleFocused { commitTitle(for: oldID) }
             title = meeting.title
             focusedFromHighlight = nil
+            selectionAnchor = nil
         }
         .onChange(of: meeting.title) { _, newTitle in
             if !titleFocused { title = newTitle }
@@ -563,6 +587,16 @@ struct MeetingDetailView: View {
         }
         .sheet(isPresented: $editingSpeakers) {
             SpeakerNamesSheet(meeting: meeting, recorder: recorder)
+        }
+    }
+
+    // 設計判断: DEC-MTG-072
+    /// 議事録を作り直す。今の議事録があるときだけ確かめる（置き換わるため）。まだないときは、そのまま作る
+    private func requestRegenerate() {
+        if meeting.minutes == nil {
+            Task { await recorder.regenerateMinutes(meeting) }
+        } else {
+            confirmRegenerate = true
         }
     }
 
@@ -795,13 +829,17 @@ private struct SpeakerNamesSheet: View {
     }
 }
 
-private struct TranscriptLine: View {
+struct TranscriptLine: View {
     let time: Double?
     let speaker: String
     let color: Color
     let text: String
     var highlight: [String] = []
     var focused = false
+    // 要件: REQ-MTG-045
+    // 設計判断: DEC-MTG-091
+    /// 議事録に使うか。使わない発言は薄く出し（除外とオフレコは取り消し線も）、理由を添える
+    var use: MinutesUse = .used
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 10) {
@@ -817,8 +855,20 @@ private struct TranscriptLine: View {
                 .help(speaker)
                 .frame(width: 72, alignment: .leading)
             Text(MeetingSearchHighlight.apply(AttributedString(text), terms: highlight))
+                .strikethrough(use == .excluded || use == .offRecord)
                 .frame(maxWidth: .infinity, alignment: .leading)
+            if !use.isUsed {
+                Text(use.label)
+                    .font(.caption2)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 1)
+                    .background(Capsule().fill(Color.secondary.opacity(0.15)))
+                    .foregroundStyle(.secondary)
+            }
         }
+        .opacity(use.isUsed ? 1 : 0.45)
+        .accessibilityElement(children: .combine)
+        .accessibilityValue(use.isUsed ? "" : tr("議事録に使わない（%@）", use.label))
         .background(focused ? RoundedRectangle(cornerRadius: 6).fill(Color.accentColor.opacity(0.12)).padding(-4) : nil)
     }
 }

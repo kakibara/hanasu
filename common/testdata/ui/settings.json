@@ -1,0 +1,555 @@
+{
+  "order": 60,
+  "title": "設定・認証・権限",
+  "cases": [
+    {
+      "id": "UX-070",
+      "steps": "Gemini / Claude の API キーを保存する",
+      "expected": "保存され、画面にはキー全体が出ない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-021"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-ai-settings",
+              "{out}/ai.png"
+            ],
+            [
+              "--render-ai-settings",
+              "{out}/ai-claude.png",
+              "--claude"
+            ]
+          ],
+          "look": "AI の設定の API キーの欄に、キー全体が見えていない（保存していれば伏せ字か保存済みの表示、なければ未設定の表示）",
+          "remaining": "キーを実際に保存できること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-071",
+      "steps": "API キーの「削除…」を押す",
+      "expected": "確認が出る。キャンセルで残り、承諾で消える",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-021"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "API キーの「削除…」を押し、確認のキャンセルと承諾を確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-072",
+      "steps": "キー削除ボタンを VoiceOver / ナレーターで読む",
+      "expected": "ボタンの目的が読み上げられる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "VoiceOver で読み上げを聞く必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-073",
+      "steps": "間違ったキーで整形を試す",
+      "expected": "原因（キーが無効）が分かるエラー。リトライを繰り返さない",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-020"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "間違った API キーで AI を呼ぶ必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-074",
+      "steps": "Gemini が 429 / 503 を返す状況（またはネットワークの瞬断）で録音を終える",
+      "expected": "短い再試行ののち結果が入力される、または失敗しても原文が残る。待たされすぎない（15 秒の範囲）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-COM-055"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "Gemini の 429 / 503 か通信の瞬断を起こす必要がある"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-075",
+      "steps": "文字起こしエンジン（OS 標準 / Whisper / Gemini）を切り替える",
+      "expected": "切り替わる。Whisper を選ぶとモデルのダウンロードが始まり、進捗とキャンセルが分かる",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-001",
+        "REQ-COM-002",
+        "REQ-COM-003"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-engine-settings",
+              "{out}/whisper.png",
+              "-dictationTranscriptionEngine",
+              "whisper"
+            ],
+            [
+              "--render-engine-settings",
+              "{out}/gemini.png",
+              "-meetingTranscriptionEngine",
+              "gemini"
+            ]
+          ],
+          "look": "文字起こしのエンジンの欄で OS 標準 / Whisper / Gemini を選べ、Whisper ではモデルの一覧と、そのモデルのダウンロード（ダウンロード済みなら削除）のボタンが出る",
+          "remaining": "ダウンロードの進み具合とキャンセル"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-076",
+      "steps": "ローカル LLM を選び、モデルがまだないまま整形する",
+      "expected": "ダウンロードの案内が出る。ダウンロード中の進捗",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-030",
+        "REQ-COM-032"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-local-model-download",
+              "{out}/download.png",
+              "--fraction",
+              "0.42"
+            ],
+            [
+              "--render-local-model-download",
+              "{out}/verifying.png",
+              "--verifying"
+            ],
+            [
+              "--render-ai-settings",
+              "{out}/ai-local.png",
+              "--local"
+            ]
+          ],
+          "look": "ローカルのモデルのダウンロードの案内に、モデルの名前・大きさ・進み具合（42%）が出る。確かめ中の表示がある",
+          "remaining": "モデルがないまま整形を始めて案内が出ること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-077",
+      "steps": "文字起こしの言語を変える",
+      "expected": "一覧から選べ、初期値はシステムの言語",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P3",
+      "refs": [
+        "REQ-COM-004"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-engine-settings",
+              "{out}/engine.png"
+            ]
+          ],
+          "look": "設定の文字起こしの節に、文字起こしの言語を一覧から選ぶ欄がある",
+          "remaining": "初期値がシステムの言語であること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-078",
+      "steps": "アイコンを出す場所（メニューバー / Dock / 両方）を変える",
+      "expected": "即時または再起動の案内が出る",
+      "os": [
+        "mac"
+      ],
+      "priority": "P3",
+      "refs": [
+        "REQ-COM-040"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-presence-settings",
+              "{out}/presence.png"
+            ]
+          ],
+          "look": "アイコンを出す場所（メニューバー / Dock / 両方）を選ぶ欄と、いつ反映されるかの説明がある",
+          "remaining": "変えたときに反映されること"
+        }
+      }
+    },
+    {
+      "id": "UX-079",
+      "steps": "設定の「権限」の項目を見る。権限が拒否されているとき",
+      "expected": "現在の状態と、許可し直す場所への案内が出る",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-settings",
+              "{out}",
+              "--pane",
+              "permissions"
+            ]
+          ],
+          "look": "設定の権限に、項目ごとの今の状態と、許可し直す場所への案内やボタンが出ている",
+          "remaining": "拒否した状態での表示（状態を作る必要がある）"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-100",
+      "steps": "新しいユーザーで、マイク・音声認識をまだ一度も許可していない状態で、設定 → 権限を開く",
+      "expected": "「まだ求めていません」と「許可する」が出る。押すと OS の許可のダイアログが出て、許可すると「許可済み」に変わる",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "マイクと音声認識の許可をまだ求めていない新しいユーザーの状態が要る"
+        }
+      }
+    },
+    {
+      "id": "UX-101",
+      "steps": "権限を拒否した状態で設定 → 権限を開く。「開く…」で許可してアプリに戻る",
+      "expected": "行の下に「システム設定 → プライバシーとセキュリティ → …で Hanasu をオンに」の案内が出る。戻ると「再確認」を押さなくても表示が新しくなる。VoiceOver で「マイクのシステム設定を開く」と読まれる",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "権限を拒否した状態と、システム設定で許可して戻る操作が要る"
+        }
+      }
+    },
+    {
+      "id": "UX-105",
+      "steps": "Whisper のモデル、ローカル LLM のモデルの「削除…」を押す",
+      "expected": "確認が出る（ローカル LLM は大きさも出る）。キャンセルで残る",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-001",
+        "REQ-COM-030"
+      ],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "Whisper のモデル・ローカル LLM のモデルの「削除…」を押し、確認（大きさの表示）とキャンセルを確かめる"
+        }
+      }
+    },
+    {
+      "id": "UX-113",
+      "steps": "Windows の設定でショートカットの欄に Tab で入り、もう一度 Tab / Shift+Tab",
+      "expected": "次（前）の欄へ移れる。Tab がショートカットとして記録されない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-118",
+      "steps": "Windows の設定 → 音声入力の「マイクのプライバシー設定を開く」",
+      "expected": "Windows の設定のマイクのページが開く",
+      "os": [
+        "windows"
+      ],
+      "priority": "P3",
+      "refs": [],
+      "origin": "PR #65 の 2 回目のレビューで直した箇所",
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-122",
+      "steps": "設定で文字起こしのエンジンを Whisper にする前に、欄の説明を読む。モデルの一覧・「ダウンロード」のボタン・進み具合・削除の確認を見る",
+      "expected": "説明に「Whisper を選ぶと、モデル（small・約 485 MB）のダウンロードがすぐ始まります」と出る。ボタンは「ダウンロード（約 485 MB）」、進み具合は「40%（約 485 MB）」、削除の確認にも大きさが出る。Windows も「ダウンロード（487 MB）」「ダウンロード中… 40%（487 MB）」。選ぶとダウンロードは確認なしで始まる（REQ-COM-003 のまま）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "DEC-COM-028"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-engine-settings",
+              "{out}/whisper.png",
+              "-dictationTranscriptionEngine",
+              "whisper"
+            ]
+          ],
+          "look": "Whisper を選ぶ欄の説明に、モデルのダウンロードが要ることと大きさが書いてあり、モデルの一覧と、ダウンロード（ダウンロード済みなら削除）のボタンがある",
+          "remaining": "まだダウンロードしていないときのボタン・進み具合・削除の確認"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-127",
+      "steps": "設定のショートカットの欄で、別の欄に設定しているキー（例: 会議の記録の ⌃⌥⌘M を録音の欄に）を記録する。「初期値に戻す」が別の欄と重なる状態でも押す",
+      "expected": "保存されず、欄の下に「⌃⌥⌘M は「会議の記録の開始／停止」のショートカットと同じです。別のキーを選んでください。」と出る（Windows は「… は「会議の記録」のショートカットと同じです…」）。別のキーを記録すると消える。Mac は 6 つ（録音・翻訳・編集・会議・ここ重要・もう一度入力）、Windows は 4 つの欄すべてで同じ",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-COM-018"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "mac": {
+          "kind": "drive",
+          "plan": "設定のショートカットの欄に、別の欄と重なるキーを記録し、保存されず理由が出ることを確かめる"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-128",
+      "steps": "アクセシビリティを許可していない状態で、設定 → AI →「画面の文脈を AI に渡す」をオンにする。「許可する…」を押して許可し、設定に戻る",
+      "expected": "トグルの下に「アクセシビリティがまだ許可されていないので、画面の文脈は読み取れません…」と「許可する…」が出る。許可して戻ると消える。オフにすると出ない",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "DEC-DIC-068"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-screen-context-settings",
+              "{out}/screen-context.png"
+            ]
+          ],
+          "look": "「画面の文脈を AI に渡す」の欄がある。アクセシビリティが未許可の Mac なら、案内と「許可する…」も出ている",
+          "remaining": "アクセシビリティが未許可のときの案内と、許可して設定に戻ったときに案内が消えること"
+        }
+      }
+    },
+    {
+      "id": "UX-129",
+      "steps": "設定 → 権限と、オンボーディングの許可のページを見る。システムオーディオ録音を拒否した状態で会議の記録を始める",
+      "expected": "権限タブに「システムオーディオ録音」の行（状態は出ない。「初めて会議の記録を始めるときに macOS が求めます」と「開く…」）がある。オンボーディングに 1 行の説明がある。拒否した状態で始めると、エラー文に「システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で…」と出る（タップの作成が失敗するか、無音になるかは実機で確かめる）",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "DEC-MTG-074"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-settings",
+              "{out}",
+              "--pane",
+              "permissions"
+            ],
+            [
+              "--render-onboarding",
+              "{out}",
+              "--page",
+              "permissions"
+            ]
+          ],
+          "look": "設定の権限とオンボーディングの許可のページに、システムオーディオ録音の行がある",
+          "remaining": "拒否した状態で会議の記録を始めたときの案内"
+        }
+      }
+    },
+    {
+      "id": "UX-130",
+      "steps": "Gemini の API キーを保存して「接続を試す」。間違ったキーで試す。サービスアカウントの鍵を指定して「接続を試す」。Windows は入力欄にキーを入れたまま（保存せず）試す",
+      "expected": "「接続できました（gemini-… を使えます）」。間違ったキーは「API キー（またはサービスアカウント）が正しくないか、Gemini API を使う権限がありません（400）」。存在しないモデル名なら「モデル「…」が見つからないか、この認証では使えません」。料金はかからない（モデルの情報を取るだけ）",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "DEC-COM-050",
+        "DEC-COM-143"
+      ],
+      "origin": "PR #65 の判断事項の対応（2026-11-05）",
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "Gemini に実際に接続する必要がある（API キーとネットワーク）"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-143",
+      "steps": "設定 → AI で、音声入力と会議の AI を「Apple」にする。macOS 26 と macOS 27 で見る。macOS 27 で整形と議事録を試す",
+      "expected": "AI の選択肢に Apple がある。使えない Mac では、選んだ欄に理由（「macOS 27 以降で使えます…」など）が出る。macOS 27 では整形・議事録が Apple のモデルで行われる",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-031"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-ai-settings",
+              "{out}/ai-apple.png",
+              "--apple"
+            ]
+          ],
+          "look": "AI の選択肢に Apple があり、Apple を選んだ欄に、使えるか（使えないならその理由）が出ている",
+          "remaining": "macOS 27 の実機で、fm で整形と議事録ができること"
+        }
+      }
+    }
+  ]
+}

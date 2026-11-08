@@ -2,6 +2,9 @@
 
 Hanasu（音声入力と会議の記録。Mac 版は `Sources/Hanasu`、Windows 版は `windows/`）。文書の地図と決まりは [docs/README.md](docs/README.md)。
 
+## 依頼を受けたら
+- 機能を足す・変える・なくす依頼は、コードを書く前に [.claude/skills/requirements/SKILL.md](.claude/skills/requirements/SKILL.md) の手順で要件定義を詰め、計画（要件の案・設計判断の案・やらないこと・手順・確かめ方）を書いたら [.claude/skills/requirements-review/SKILL.md](.claude/skills/requirements-review/SKILL.md) の手順で Opus のエージェントに敵対的にレビューさせて直し、ユーザーと合意してから実装に入る。誤字や振る舞いを変えない直しは除く。
+
 ## 機能を変える前に
 - 変える場所のコードのタグ（`// 要件: REQ-…`、`// 設計判断: DEC-…`）と、[docs/spec/](docs/spec/) のその項目を読む。
 - **要件（REQ）を変えるときは、ユーザーの合意を取る。** 合意なしに要件を書き換えない。合わないところは、その要件に「食い違い（ユーザーの確認待ち）」と書いて残す。
@@ -38,4 +41,5 @@ Hanasu（音声入力と会議の記録。Mac 版は `Sources/Hanasu`、Windows 
 - PR の本文は `.github/pull_request_template.md` の項目（触った ID・Spec-Impact・新しい要件の合意・roadmap から移したもの）を埋める。
 - 要件の「確かめ方」に挙げた CLI・テストには `// 確かめ方: REQ-…` を書く。
 - Mac のアプリは `swift build`、Windows 版は `cd windows && dotnet test Hanasu.Core.Tests` で確かめる。
+- 画面を見て確かめる UI のテスト項目は `common/testdata/ui/*.json`（一覧の Markdown は生成物で手で直さない）。画面に関わる変更のあとは [.claude/skills/ui-test/SKILL.md](.claude/skills/ui-test/SKILL.md) で描いて確かめ、項目を足したら `python3 scripts/ui-cases.py md` と `check` を通す。
 - PR を `main` にマージするときは [.claude/skills/pr-merge/SKILL.md](.claude/skills/pr-merge/SKILL.md) の手順で、今の `main` に入れた結果をビルド・テストしてから、確かめたコミットだけをマージする（PR の CI は Mac 版をビルドしない）。

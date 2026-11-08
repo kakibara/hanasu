@@ -20,7 +20,7 @@ README と同じ 17 言語。並びも同じにする（`scripts/check-i18n.py` 
 | ko | 韓国語 | pt-BR | ポルトガル語（ブラジル） | ar | アラビア語 |
 | | | ru | ロシア語 | hi | ヒンディー語 |
 
-言語を足すときは、この 3 か所と `Sources/Hanasu/Resources/Prompts/<コード>.json` を足し、`PromptLanguage.from(localeIdentifier:)`（Mac・Windows）の寄せ方を見直す。
+言語を足すときは、この 3 か所と `Sources/Hanasu/Resources/Prompts/<コード>.json` を足し、`PromptLanguage.from(localeIdentifier:)`（Mac・Windows）の寄せ方を見直す。各言語の JSON に新しい言語の `languageName.<コード>` も足す（翻訳の言語・アプリ別の出力言語は `PromptLanguage` から作り、言語名はここから読むので、ほかに足す所はない。DEC-DIC-150）。
 
 ## AI へのプロンプト
 

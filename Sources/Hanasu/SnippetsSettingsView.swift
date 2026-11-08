@@ -12,11 +12,13 @@ struct SnippetsSettingsView: View {
         _selection = State(initialValue: initialSelection ?? store.snippets.first?.id)
     }
 
+    // 説明文に .fixedSize(horizontal: false, vertical: true) を付けない。設定のサイドバー（NavigationSplitView）が
+    // 狭い幅で大きさを測ったとき、文が 1 字ずつ折り返して縦に極端に長くなり、ウインドウ全体の配置が崩れる
+    // （サイドバーの項目も見えなくなる）。付けなくても VStack の中で折り返して出る。
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(tr("決まった言葉（起動フレーズ）だけを話すと、登録した文章をそのまま入力します。本文は Gemini に送らず、翻訳して入力するときも訳しません。"))
+            Text(tr("決まった言葉（起動フレーズ）だけを話すと、登録した文章をそのまま入力します。本文は AI に渡さず、翻訳して入力するときも訳しません。"))
                 .font(.caption).foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
             HStack(alignment: .top, spacing: 12) {
                 list
                     .frame(width: 170)
@@ -25,7 +27,6 @@ struct SnippetsSettingsView: View {
             }
             Text(tr("文の途中でも、「よろしくお願いします、メールの署名」のように読点や間で区切って言えば、その部分だけを本文に置き換え、残りを整えます。区切らずに言った「住所を教えて」の「住所」などは置き換えません。"))
                 .font(.caption).foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
         .confirmationDialog(tr("選んだスニペットを削除しますか？"), isPresented: $confirmRemove) {

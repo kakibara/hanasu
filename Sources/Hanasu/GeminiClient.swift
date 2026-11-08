@@ -106,6 +106,13 @@ struct GeminiClient {
     // 設計判断: DEC-DIC-028（Windows 版の GeminiPrompts.JapaneseTranslationInstruction と同じ文面。どちらも Prompts の JSON を読む）
     static var japaneseTranslationInstruction: String { Prompts.text("translate.japanese.system") }
 
+    // 要件: REQ-DIC-013, REQ-COM-061
+    // 設計判断: DEC-DIC-151
+    /// English・日本語のほかの言語に翻訳するときの指示（translate.other.system に、訳す先の言語名をプロンプトの言語で埋める）
+    static func otherTranslationInstruction(to language: TranslationLanguage) -> String {
+        Prompts.text("translate.other.system", ["language": language.nameInPromptLanguage])
+    }
+
     // 設計判断: DEC-COM-006
     static func thinkingLevel(for model: String) -> String {
         model.contains("lite") ? "minimal" : "low"
@@ -163,21 +170,22 @@ struct GeminiClient {
     }
 
     // 要件: REQ-DIC-010, REQ-DIC-013
-    // 設計判断: DEC-DIC-022, DEC-DIC-023, DEC-DIC-028, DEC-COM-047
+    // 設計判断: DEC-DIC-022, DEC-DIC-023, DEC-DIC-028, DEC-DIC-151, DEC-COM-047
     /// 話した内容を翻訳するときのプロンプト。
-    /// 英訳: 追加の整形ルールは日本語の文体向けなので使わない。アプリ別の文体ルールは、英訳向けのルールに切り替えて使う。
+    /// 英訳・ほかの言語への翻訳: 追加の整形ルールは日本語の文体向けなので使わない。アプリ別の文体ルールは、翻訳向けのルールに切り替えて使う。
     /// 和訳: 出力が日本語なので、追加の整形ルールとアプリ別の日本語の文体ルールをそのまま使う。
     static func translationPrompt(_ request: Request, to language: TranslationLanguage) -> (system: String, user: String) {
         var request = request
-        switch language {
-        case .english:
+        if !language.outputsJapanese {
             request.extraInstructions = ""
-            return (translationInstruction + ScreenContext.instruction(for: request.screenContext, translation: .english),
-                    userPrompt(for: request, translation: .english))
-        case .japanese:
-            return (japaneseTranslationInstruction + ScreenContext.instruction(for: request.screenContext, translation: .japanese),
-                    userPrompt(for: request, translation: .japanese))
         }
+        let system: String = switch language {
+        case .english: translationInstruction
+        case .japanese: japaneseTranslationInstruction
+        default: otherTranslationInstruction(to: language)
+        }
+        return (system + ScreenContext.instruction(for: request.screenContext, translation: language),
+                userPrompt(for: request, translation: language))
     }
 
     /// テキストを 1 回送り、応答の本文を返す。thinkingLevel を省くとモデル名から決める。

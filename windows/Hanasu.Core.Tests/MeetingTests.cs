@@ -606,6 +606,26 @@ public class HighlightUndoTests
     }
 }
 
+public class WavTruncateTests
+{
+    // 確かめ方: REQ-MTG-043
+    [Fact]
+    public void TruncatesWavAndFixesHeader()
+    {
+        var path = Path.Combine(TestKeys.TempDirectory(), "me.wav");
+        using (var writer = new WavStreamWriter(path)) writer.Write(new float[16000 * 3]);
+        WavStreamWriter.Truncate(path, 1.25);
+        var (samples, rate) = WavFile.Decode(File.ReadAllBytes(path));
+        Assert.Equal((20000, 16000), (samples.Length, rate));
+        // もともと短ければ何もしない。負の長さは空にする
+        WavStreamWriter.Truncate(path, 5);
+        Assert.Equal(44 + 40000, new FileInfo(path).Length);
+        WavStreamWriter.Truncate(path, -1);
+        Assert.Equal(44, new FileInfo(path).Length);
+        WavStreamWriter.Truncate(Path.Combine(TestKeys.TempDirectory(), "none.wav"), 1);
+    }
+}
+
 public class MeetingControllerTests
 {
     private sealed class FakeRecorder(MeetingChannel channel, float[] audio, double offset, bool failStart = false) : IMeetingChannelRecorder
@@ -661,7 +681,8 @@ public class MeetingControllerTests
     private static float[] Tone(double amplitude) => Enumerable.Range(0, 16000).Select(i => (float)(Math.Sin(i * 0.1) * amplitude)).ToArray();
 
     private static (MeetingController Controller, AppSettings Settings, List<MeetingNotice> Notices) Make(
-        bool failMic = false, bool failLoopback = false, bool failPrepare = false, Func<AppSettings, GeminiClient?>? minutes = null)
+        bool failMic = false, bool failLoopback = false, bool failPrepare = false, Func<AppSettings, GeminiClient?>? minutes = null,
+        Func<double>? clock = null)
     {
         var settings = new AppSettings { MeetingsDirectory = TestKeys.TempDirectory(), MeetingMinutesTemplate = "regular" };
         var controller = new MeetingController(new MeetingServices
@@ -672,6 +693,7 @@ public class MeetingControllerTests
             CreateTranscriber = _ => new FakeTranscriber(failPrepare),
             CreateDiarizer = _ => new FakeDiarizer(),
             CreateMinutesClient = minutes ?? (_ => null),
+            MonotonicSeconds = clock,
         });
         var notices = new List<MeetingNotice>();
         controller.Notice += (_, n) => notices.Add(n);
@@ -705,6 +727,99 @@ public class MeetingControllerTests
         Assert.Contains("認証情報", saved.ErrorMessage);
         Assert.True(File.Exists(controller.Store(settings).AudioPath(saved, MeetingChannel.Me)));
         Assert.Contains(notices, n => n.Title.StartsWith("会議の記録"));
+    }
+
+    // 確かめ方: REQ-MTG-043
+    [Fact]
+    public async Task SleepThenStopAtSleepPointCutsTheMeeting()
+    {
+        var now = 100.0;
+        var (controller, settings, _) = Make(clock: () => now);
+        var prompts = new List<MeetingSleepPoint>();
+        controller.ResumedFromSleep += (_, p) => prompts.Add(p);
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        now += 0.5;
+        controller.AddNote("前のメモ", null);
+        now += 1.0;
+        controller.OnSystemSuspend();
+        // スリープ中は時計が止まる
+        now += 3600;
+        Assert.Equal(1.5, controller.ElapsedSeconds, 3);
+        controller.OnSystemResume();
+        Assert.Equal(1.5, controller.ElapsedSeconds, 3);
+        Assert.Single(prompts);
+        Assert.Equal(1.5, prompts[0].Elapsed, 3);
+        // 答える前にもう一度スリープしても、確認は 1 つで、止める位置は最初のスリープのまま
+        now += 1.0;
+        controller.AddHighlight("後の印");
+        controller.AddNote("後のメモ", null);
+        controller.OnSystemSuspend();
+        now += 60;
+        controller.OnSystemResume();
+        Assert.Single(prompts);
+        Assert.Equal(2.5, controller.ElapsedSeconds, 3);
+
+        await controller.ResolveSleepAsync(stopAtSleep: true);
+        Assert.Equal(MeetingState.Idle, controller.State);
+        var store = controller.Store(settings);
+        var saved = store.Load(meeting.Id)!;
+        Assert.Equal(1.5, saved.Duration, 3);
+        // 後の印は消え、後のメモは時刻をスリープした時点にそろえる
+        Assert.Equal([("前のメモ", 0.5), ("後のメモ", 1.5)], saved.Notes!.Select(n => (n.Text, Math.Round(n.Time!.Value, 3))));
+        // 相手の音声は 2 秒後に始まったので、スリープ（1.5 秒）より前の分はなく、WAV は空にする
+        Assert.Equal(44, new FileInfo(store.AudioPath(saved, MeetingChannel.Others)).Length);
+        // 自分の音声は 0.1 秒後から 1 秒分なので、1.4 秒で切っても変わらない
+        Assert.Equal(44 + 16000 * 2, new FileInfo(store.AudioPath(saved, MeetingChannel.Me)).Length);
+        Assert.Equal(["me"], saved.Utterances.Select(u => u.Speaker));
+    }
+
+    // 確かめ方: REQ-MTG-043
+    [Fact]
+    public async Task SleepThenContinueKeepsRecordingWithoutTheSleepTime()
+    {
+        var now = 0.0;
+        var (controller, settings, _) = Make(clock: () => now);
+        var prompts = 0;
+        controller.ResumedFromSleep += (_, _) => prompts++;
+        await controller.StartAsync();
+        now = 10;
+        controller.OnSystemSuspend();
+        now = 7210;
+        controller.OnSystemResume();
+        await controller.ResolveSleepAsync(stopAtSleep: false);
+        Assert.Equal(MeetingState.Recording, controller.State);
+        now = 7220;
+        Assert.Equal(20, controller.ElapsedSeconds, 3);
+        // 答えたあとにまたスリープしたら、また聞く
+        controller.OnSystemSuspend();
+        controller.OnSystemResume();
+        Assert.Equal(2, prompts);
+        await controller.ResolveSleepAsync(stopAtSleep: false);
+        await controller.StopAsync();
+        var saved = controller.Store(settings).Load(controller.Store(settings).LoadAll()[0].Id)!;
+        Assert.Equal(20, saved.Duration, 3);
+    }
+
+    // 確かめ方: REQ-MTG-043
+    [Fact]
+    public async Task SleepWhileIdleOrAfterStopDoesNotAsk()
+    {
+        var now = 0.0;
+        var (controller, _, _) = Make(clock: () => now);
+        var prompts = 0;
+        controller.ResumedFromSleep += (_, _) => prompts++;
+        controller.OnSystemSuspend();
+        controller.OnSystemResume();
+        Assert.Equal(0, prompts);
+        await controller.StartAsync();
+        controller.OnSystemSuspend();
+        controller.OnSystemResume();
+        Assert.Equal(1, prompts);
+        // 確認の間にほかの手段で止めていたら、答えは使わない
+        await controller.StopAsync();
+        await controller.ResolveSleepAsync(stopAtSleep: true);
+        Assert.Equal(MeetingState.Idle, controller.State);
     }
 
     // 確かめ方: REQ-MTG-012
@@ -863,5 +978,136 @@ public class MeetingControllerTests
         await controller.StartAsync();
         Assert.Equal(MeetingState.Idle, controller.State);
         Assert.Single(notices);
+    }
+
+    // 確かめ方: REQ-MTG-046
+    // 設計判断: DEC-MTG-094
+    [Fact]
+    public async Task ToggleOffRecordWhileRecordingSavesSpansAndLeavesThemOutOfMinutes()
+    {
+        var now = 0.0;
+        var handler = new FakeHandler((_, _) => FakeHandler.Json(FakeHandler.TextResponse("## 概要\nテスト")));
+        var (controller, settings, _) = Make(clock: () => now, minutes: _ => new GeminiClient(new GeminiAuth.ApiKey("k"), new HttpClient(handler)));
+        // 記録中でなければ何もしない
+        controller.ToggleOffRecord();
+        Assert.Null(controller.OpenOffRecord);
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        var changes = 0;
+        controller.MeetingChanged += (_, _) => changes++;
+        Assert.False(controller.CanEditMinutesSelection(meeting));
+
+        // 相手の発言（2.2 秒）をオフレコの区間に入れる
+        now = 2;
+        controller.ToggleOffRecord();
+        Assert.Equal(2, controller.OpenOffRecord!.Start);
+        Assert.Equal(1, changes);
+        // 押すたびに保存する
+        var saved = controller.Store(settings).Load(meeting.Id)!;
+        Assert.Equal(2, Assert.Single(saved.OffRecord!).Start);
+        Assert.Null(saved.OffRecord![0].End);
+        now = 3;
+        controller.ToggleOffRecord();
+        Assert.Null(controller.OpenOffRecord);
+        Assert.Equal(3, controller.Store(settings).Load(meeting.Id)!.OffRecord![0].End);
+        // 記録中に区切っても、議事録の作り直しは促さない
+        Assert.Null(meeting.MinutesOutdated);
+
+        // オフレコのまま止めたら、記録の終わりまでをオフレコにする
+        now = 4;
+        controller.ToggleOffRecord();
+        now = 5;
+        await controller.StopAsync();
+        Assert.Null(controller.OpenOffRecord);
+        saved = controller.Store(settings).Load(meeting.Id)!;
+        Assert.Equal([(2.0, 3.0), (4.0, 5.0)], saved.OffRecord!.Select(s => (s.Start, s.End!.Value)));
+        Assert.Null(saved.MinutesOutdated);
+        // 発言は残り、オフレコの中の発言は議事録に渡さない
+        Assert.Equal(MinutesUse.OffRecord, saved.MinutesUseOf(saved.Utterances.Single(u => u.Speaker == "spk1")));
+        var body = JsonNode.Parse(Assert.Single(handler.Requests).Body!)!["contents"]![0]!["parts"]![0]!["text"]!.GetValue<string>();
+        Assert.Contains("自分の発言", body);
+        Assert.DoesNotContain("相手の発言", body);
+    }
+
+    // 確かめ方: REQ-MTG-046
+    // 設計判断: DEC-MTG-091
+    [Fact]
+    public async Task NoMinutesWhenEveryUtteranceIsOffRecord()
+    {
+        var now = 0.0;
+        var handler = new FakeHandler((_, _) => FakeHandler.Json(FakeHandler.TextResponse("## 概要\nテスト")));
+        var (controller, settings, _) = Make(clock: () => now, minutes: _ => new GeminiClient(new GeminiAuth.ApiKey("k"), new HttpClient(handler)));
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        // 始めてすぐオフレコにして、そのまま止める
+        controller.ToggleOffRecord();
+        now = 5;
+        await controller.StopAsync();
+        var saved = controller.Store(settings).Load(meeting.Id)!;
+        Assert.NotEmpty(saved.Utterances);
+        Assert.Empty(saved.UsedUtterances);
+        // 使う発言がないので、AI に議事録を作らせない
+        Assert.Empty(handler.Requests);
+        Assert.Null(saved.Minutes);
+    }
+
+    // 確かめ方: REQ-MTG-046
+    // 設計判断: DEC-MTG-094
+    [Fact]
+    public async Task OffRecordIsCutAtTheSleepPoint()
+    {
+        var now = 0.0;
+        var (controller, settings, _) = Make(clock: () => now);
+        settings.MakeMeetingMinutes = false;
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        now = 1;
+        controller.ToggleOffRecord();
+        now = 1.5;
+        controller.OnSystemSuspend();
+        now = 100;
+        controller.OnSystemResume();
+        // 答える前に、区間を終えて新しく始めた
+        now = 101;
+        controller.ToggleOffRecord();
+        now = 102;
+        controller.ToggleOffRecord();
+        await controller.ResolveSleepAsync(stopAtSleep: true);
+        var saved = controller.Store(settings).Load(meeting.Id)!;
+        Assert.Equal(1.5, saved.Duration, 3);
+        Assert.Equal([(1.0, 1.5)], saved.OffRecord!.Select(s => (s.Start, Math.Round(s.End!.Value, 3))));
+    }
+
+    // 確かめ方: REQ-MTG-044, REQ-MTG-045
+    // 設計判断: DEC-MTG-091, DEC-MTG-092
+    [Fact]
+    public async Task MinutesSelectionChangeIsSavedAndRegenerateClearsOutdated()
+    {
+        var handler = new FakeHandler((_, _) => FakeHandler.Json(FakeHandler.TextResponse("## 概要\nテスト")));
+        var (controller, settings, _) = Make(minutes: _ => new GeminiClient(new GeminiAuth.ApiKey("k"), new HttpClient(handler)));
+        settings.MakeMeetingMinutes = false;
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        await controller.StopAsync();
+        var store = controller.Store(settings);
+        var saved = store.Load(meeting.Id)!;
+        Assert.True(controller.CanEditMinutesSelection(saved));
+
+        var mine = saved.Utterances.Single(u => u.Speaker == "me").Id;
+        Assert.True(controller.ChangeMinutesSelection(saved, m => m.SetExcluded([mine], excluded: true)));
+        var reloaded = store.Load(meeting.Id)!;
+        Assert.Equal([mine], reloaded.ExcludedUtterances);
+        Assert.True(reloaded.MinutesOutdated);
+        // 書き出しの transcript.md も、使う発言だけ
+        var transcript = File.ReadAllText(Path.Combine(store.DirectoryOf(saved), "transcript.md"));
+        Assert.DoesNotContain("自分の発言", transcript);
+        Assert.Contains("相手の発言", transcript);
+
+        await controller.RegenerateMinutesAsync(saved);
+        Assert.Null(saved.MinutesOutdated);
+        Assert.Null(store.Load(meeting.Id)!.MinutesOutdated);
+        var body = JsonNode.Parse(Assert.Single(handler.Requests).Body!)!["contents"]![0]!["parts"]![0]!["text"]!.GetValue<string>();
+        Assert.DoesNotContain("自分の発言", body);
+        Assert.Contains("相手の発言", body);
     }
 }

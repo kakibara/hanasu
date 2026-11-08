@@ -24,7 +24,7 @@ A voice-input and meeting-notes app for macOS and Windows. It uses on-device spe
 > [!NOTE]
 > Hanasu was built for **Japanese** first, and Japanese is the most tested language.
 > The app's screens and the instructions it gives the AI come in the same 17 languages as this README. The screens follow your system language, and the AI instructions follow the transcription language in Settings. For any other language, Hanasu uses English.
-> It can also translate what you say into natural **English** (or into **Japanese**) before typing it.
+> It can also translate what you say into natural **English**, **Japanese**, or any of the 17 supported languages before typing it.
 
 ## Why Hanasu
 
@@ -39,7 +39,7 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 | | |
 | --- | --- |
 | **Speak → polished text** | Press <kbd>⌥ Space</kbd>, talk, and press it again (or click **■ Stop**). Hanasu removes fillers, fixes homophones, applies your self-corrections, and pastes the text at your cursor. |
-| **Speak, type it translated** | Press <kbd>⌥⇧ Space</kbd>, or switch the HUD to **English** or **日本語** while you talk. Set phrases are translated naturally, so お疲れ様です becomes "Hi,". Pick the languages to offer (English, Japanese, or both) in **Settings → General**. English is the default. |
+| **Speak, type it translated** | Press <kbd>⌥⇧ Space</kbd>, or switch the HUD to **English**, **日本語**, or another language while you talk. Set phrases are translated naturally, so お疲れ様です becomes "Hi,". Pick the languages to offer (any of the 17 supported languages) in **Settings → General**. English is the default. On Mac, **Settings → Per App** can make an app start in one of these languages. |
 | **Mixed languages stay as spoken** | By default, the parts you say in English stay in English. You can choose to unify the output into Japanese instead. |
 | **Edit by voice** | Select some text, press <kbd>⌃⌥⌘ E</kbd>, and say "make it more polite", "turn it into bullets" or "translate to English". |
 | **Per-app styles** | Text is casual and short in Slack, polite with paragraphs in Mail, and in written style in Pages, Word and Notion. You can change the preset for each app. |
@@ -165,7 +165,7 @@ On Mac, you can show the Hanasu icon in the menu bar, in the Dock, or in both (S
 | Action | macOS | Windows |
 | --- | --- | --- |
 | Voice input (start / stop) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Voice input, translated (English / Japanese) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Voice input, translated (into the languages you picked) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Edit selection by voice | <kbd>⌃⌥⌘ E</kbd> | — |
 | Paste last result again | <kbd>⌥⇧ V</kbd> | — |
 | Cancel recording | <kbd>Esc</kbd> | <kbd>Esc</kbd> |

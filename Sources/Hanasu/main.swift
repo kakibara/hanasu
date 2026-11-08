@@ -19,7 +19,7 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     let model = TextAIClient.cliModel(args: args, settings: settings, for: .dictation)
     let app = cliAppStyle(args: args)
     // 確かめ方: REQ-DIC-013
-    // --translate（英訳）/ --translate-to en|ja。アプリ別の既定の出力言語が翻訳なら、その言語に翻訳する
+    // --translate（英訳）/ --translate-to <言語のコード（en、ja、ko …）>。アプリ別の既定の出力言語が翻訳なら、その言語に翻訳する
     let translation = TranslationLanguage.cli(args) ?? app.style?.outputLanguage.translation
     // 音声入力と同じく、置き換えルールを当ててから送る（--dictionary <ファイル> で辞書を差し替えられる）
     let dictionary = try DictionaryCLI.dictionary(from: args)
@@ -31,7 +31,7 @@ func cliRefine(_ raw: String, args: [String]) async throws {
         outputLanguage: settings.refineOutputLanguage)
     if args.contains("--show-prompt") {
         var shown = request
-        if translation == .english { shown.extraInstructions = "" }  // translationPrompt と同じく、英訳では共通の追加ルールを外す
+        if let translation, !translation.outputsJapanese { shown.extraInstructions = "" }  // translationPrompt と同じく、和訳のほかの翻訳では共通の追加ルールを外す
         print(GeminiClient.userPrompt(for: shown, translation: translation))
     }
     // 確かめ方: REQ-COM-020
@@ -421,6 +421,10 @@ MainActor.assumeIsolated { MeetingSearchCLI.runIfRequested(CommandLine.arguments
 // 会議の AI チャットの確認（--test-meeting-chat / --chat-meeting / --render-meeting-chat。MeetingChatCLI.swift）
 MainActor.assumeIsolated { MeetingChatCLI.runIfRequested() }
 
+// 記録中のスリープでの切り詰めの確認（--test-meeting-sleep-cut。MeetingSleepCLI.swift）
+MeetingSleepCLI.runSelfTestIfRequested()
+// 議事録に使う発言の選び方の確認（--test-minutes-selection / --render-minutes-selection。MinutesSelectionCLI.swift）
+MainActor.assumeIsolated { MinutesSelectionCLI.runIfRequested() }
 // 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 // 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）

@@ -126,7 +126,7 @@ final class AppSettings: ObservableObject {
     @Published var model: String { didSet { defaults.set(model, forKey: Keys.model) } }
     // 要件: REQ-COM-020, REQ-COM-024
     // 設計判断: DEC-COM-040
-    /// 音声入力（整形・英訳・選択の編集）に使う AI（Gemini か Claude）。文字起こしのエンジンとは別
+    /// 音声入力（整形・英訳・選択の編集）に使う AI（Gemini・Claude・ローカル・Apple）。文字起こしのエンジンとは別
     @Published var dictationAIProvider: TextAIProvider { didSet { defaults.set(dictationAIProvider.rawValue, forKey: Keys.dictationAIProvider) } }
     /// 会議（議事録・会議への質問・辞書の候補）に使う AI
     @Published var meetingAIProvider: TextAIProvider { didSet { defaults.set(meetingAIProvider.rawValue, forKey: Keys.meetingAIProvider) } }

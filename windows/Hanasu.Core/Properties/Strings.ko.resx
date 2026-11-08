@@ -312,17 +312,17 @@
   <data name="Wav_NoData" xml:space="preserve">
     <value>WAV 파일에 data 청크가 없습니다.</value>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>영어</value>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>일본어</value>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>영어로 번역</value>
   </data>
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>일본어로 번역</value>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>{0}로 번역</value>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>번역해서 입력</value>
@@ -333,11 +333,17 @@
   <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
     <value>일본어로 번역해서 입력</value>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>{0}로 번역해서 입력</value>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>영어로 번역해서 입력했습니다</value>
   </data>
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>일본어로 번역해서 입력했습니다</value>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>{0}로 번역해서 입력했습니다</value>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>입력했습니다</value>
@@ -389,6 +395,9 @@
   </data>
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>{0}(으)로 일본어 번역 중…</value>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>{0}(으)로 {1} 번역 중…</value>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>{0}(으)로 다듬는 중…</value>
@@ -686,5 +695,8 @@
   </data>
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>zip에 {0}이(가) 없어 사용하지 않습니다</value>
+  </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- 회의록에 쓰지 않는 발언({0}개)은 넣지 않았습니다</value>
   </data>
 </root>

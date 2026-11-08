@@ -11,17 +11,23 @@ struct TranslationSettingsSection: View {
         Section {
             ForEach(TranslationLanguage.allCases) { language in
                 let isOn = languages.contains(language)
-                Toggle(language.settingsLabel, isOn: Binding(
+                Toggle(isOn: Binding(
                     get: { isOn },
                     set: { on in
                         languages = TranslationLanguage.normalized(on ? languages + [language] : languages.filter { $0 != language })
-                    }))
-                    .disabled(isOn && languages.count == 1)
+                    })) {
+                    // その言語での言語名と、表示の言語での名前（DEC-DIC-150）
+                    Text(language.label)
+                    if let subtitle = language.subtitleInUILanguage {
+                        Text(subtitle)
+                    }
+                }
+                .disabled(isOn && languages.count == 1)
             }
         } header: {
             Text(tr("翻訳する言語"))
         } footer: {
-            Text(tr("「翻訳して入力」のショートカットでは、選んだ言語のうち上のものに翻訳します。録音中の HUD で「話した言語」と選んだ言語を切り替えられます（止めたときに選んでいる言語で入力）。翻訳は AI（「AI」タブで音声入力に選んだもの）で行います。少なくとも 1 つは選んでください。"))
+            Text(tr("「翻訳して入力」のショートカットでは、選んだ言語のうち上のものに翻訳します。録音中の HUD で「話した言語」と選んだ言語を切り替えられます（止めたときに選んでいる言語で入力）。翻訳は AI（設定の「AI」で音声入力に選んだもの）で行います。少なくとも 1 つは選んでください。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }
@@ -40,7 +46,8 @@ enum TranslationSettingsCLI {
         if let i = args.firstIndex(of: "--languages"), args.indices.contains(i + 1) {
             languages = TranslationLanguage.normalized(args[i + 1].split(separator: ",").compactMap { TranslationLanguage.cliCode(String($0)) })
         }
-        let size = NSSize(width: 560, height: 200)
+        // 17 言語のトグル（2 行のものもある）が全部入る高さ
+        let size = NSSize(width: 560, height: CGFloat(140 + 60 * TranslationLanguage.allCases.count))
         let view = Form { TranslationSettingsSection(languages: .constant(languages)) }
             .formStyle(.grouped)
             .frame(width: size.width, height: size.height)

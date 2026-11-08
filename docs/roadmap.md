@@ -19,6 +19,10 @@
 | FUT-013 | 文字起こしの言語の一覧に、ロシア語・トルコ語・ベトナム語・インドネシア語・ポーランド語・アラビア語・ヒンディー語を足す | 未着手 | 多言語化の PR |
 | FUT-014 | 言語に依存する決まりを、日本語以外にも広げる（会議への質問の期間の語と検索の除外語、スニペットのフィラー、話者名の敬称） | 未着手 | 多言語化の PR |
 | FUT-015 | `hanasu` コマンド（会議の記録を読む・探す・聞く・MCP、文章の整形・翻訳・書き換え） | 未着手（要件定義・判断済み） | ユーザーの依頼（2026-11-06〜08）、[plans/cli.md](plans/cli.md) |
+| FUT-016 | Mac と Windows で共有するデータを common/resources に置く（プロンプト・モデルの一覧・選択肢） | 未着手（計画あり） | [plans/common-shared-data.md](plans/common-shared-data.md) |
+| FUT-017 | Mac と Windows で同じ決まりのロジックを、共有のテストデータ（common/testdata/logic）で確かめる | 未着手（計画あり） | [plans/common-shared-data.md](plans/common-shared-data.md) |
+| FUT-018 | UI のテスト項目のうち、本物のアプリを起動して操作するもの（drive）を Mac で自動で動かす | 未着手 | DEC-COM-170 の PR |
+| FUT-019 | Windows 版の UI のテスト項目を自動で確かめる（画面を PNG にする CLI を足す） | 未着手 | DEC-COM-170 の PR |
 | FUT-101 | ブラウザのサイト別スタイル | 見送り | PR #5 |
 | FUT-102 | 画面の文脈で、Slack のスレッドの直前のメッセージも読む | 見送り | PR #7 |
 | FUT-103 | 音声認識にカスタム言語モデル（customLanguageModel）を使う | 見送り | PR #12 |
@@ -68,6 +72,26 @@
 - 状態: 未着手（調査・要件定義と、[plans/cli.md](plans/cli.md) の 4.7 の判断は済み。2026-11-08）
 - 中身: アプリと同じ実行ファイルのサブコマンドとして、`hanasu` コマンドを足す。会議の記録を AI エージェントやスクリプトから読めるようにし（`meetings`・`actions`・`ask`・`mcp`）、音声入力の整え方をパイプで使えるようにする（`refine`・`edit`）。録音の操作と音声ファイルの文字起こしは入れない。アプリを使ってよい環境なら、CLI のために追加のインストールや管理者の権限を求めない（配布物に含め、絶対パスで動き、PATH は任意）。会社向けに、管理者のポリシーで CLI・MCP・使える AI を決められるようにする。Windows 版は、配布物に `cli\hanasu.exe` を足す。
 - 出どころ: ユーザーの依頼（2026-11-06〜08）。計画の中の C1〜C9・M1〜M13・R1〜R9・E1〜E12 は、実装するときに spec の要件（REQ）として書き直す
+
+### FUT-016 Mac と Windows で共有するデータを common/resources に置く
+- 状態: 未着手（計画あり。[plans/common-shared-data.md](plans/common-shared-data.md) の段階 A）
+- 中身: プロンプトの JSON を `common/resources/prompts/` に移し、モデルの一覧（ローカル LLM・Whisper・Gemini・Claude）と選択肢・既定値を `common/resources/*.json` に置いて、Mac と Windows の両方がビルドで埋め込んで読む。今の「両方を直す」値の二重持ちをなくす。
+- 出どころ: ユーザーの依頼（2026-11-08「共通の設定ファイル化できるものは common/resource 以下に置く」）
+
+### FUT-017 Mac と Windows で同じ決まりのロジックを、共有のテストデータで確かめる
+- 状態: 未着手（計画あり。[plans/common-shared-data.md](plans/common-shared-data.md) の段階 B）
+- 中身: 辞書・話者名の推測・ActionItem の読み取り・議事録のプロンプトの組み立て・長い入力の縮め方・言語の決め方について、入力と期待する出力の組を `common/testdata/logic/*.json` に置き、`Hanasu.Core.Tests` と Mac の自己テストの CLI の両方で回す。共通の処理を Rust で書く案は、これで足りなくなったら考え直す。
+- 出どころ: ユーザーの依頼（2026-11-08「共通の処理を Rust で実装したら」）への提案
+
+### FUT-018 本物のアプリを起動して操作する UI のテストを、Mac で自動で動かす
+- 状態: 未着手
+- 中身: `common/testdata/ui` の項目で `automation.mac.kind` が `drive` のもの（ショートカットで録音して HUD が出る、Esc で取り消す など）を、アプリを起動してアクセシビリティの API で操作し、画面を撮って確かめる。ターミナルにアクセシビリティと画面収録の許可が要り、マイクや OS のダイアログが絡むので、`render`（DEC-COM-170）とは別に作る。
+- 出どころ: DEC-COM-170 の PR（2026-11-08）
+
+### FUT-019 Windows 版の UI のテスト項目を自動で確かめる
+- 状態: 未着手
+- 中身: Windows 版には画面を PNG にする CLI がないので、`common/testdata/ui` の Windows の項目はすべて `manual`。WPF の画面を決まった状態で PNG にする CLI を `Hanasu.Windows` に足し、Windows の上で `scripts/ui-cases.py render` と同じ流れで確かめられるようにする。
+- 出どころ: DEC-COM-170 の PR（2026-11-08）
 
 ---
 

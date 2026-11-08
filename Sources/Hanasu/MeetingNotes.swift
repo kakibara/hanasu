@@ -126,7 +126,8 @@ extension Meeting {
     /// Gemini に渡す文字起こし。印の前後の発言の行頭に ★ を付ける。
     func transcriptForPromptMarkingHighlights() -> String {
         let language = PromptLanguage.current
-        return mergedBlocks()
+        // 設計判断: DEC-MTG-091
+        return blocksForMinutes()
             .map { "\(isNearHighlight($0) ? "★ " : "")[\(Self.clock($0.start))] \(promptName(for: $0.speaker, language: language)): \($0.text)" }
             .joined(separator: "\n")
     }

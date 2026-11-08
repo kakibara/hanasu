@@ -412,13 +412,9 @@
     <value>The WAV file has no data chunk.</value>
     <comment>Audio file error</comment>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>English</value>
-    <comment>Settings → Dictation: checkbox for translating into English</comment>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>Japanese</value>
-    <comment>Settings → Dictation: checkbox for translating into Japanese</comment>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0} ({1})</value>
+    <comment>Settings → Dictation: checkbox for a translation language. {0} = the language name written in that language (e.g. Español), {1} = the same language name in the display language</comment>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>To English</value>
@@ -427,6 +423,10 @@
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>To Japanese</value>
     <comment>History: mode name of 'translate into Japanese and type'</comment>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>To {0}</value>
+    <comment>History: mode name of 'translate into a language and type'. {0} = language name in the display language (e.g. Korean)</comment>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>Translate and Type</value>
@@ -440,6 +440,10 @@
     <value>Translate to Japanese and Type</value>
     <comment>Tray menu item</comment>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>Translate to {0} and Type</value>
+    <comment>Tray menu item (one translation language selected). {0} = language name in the display language (e.g. Korean)</comment>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>Translated to English and typed</value>
     <comment>HUD: done</comment>
@@ -447,6 +451,10 @@
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>Translated to Japanese and typed</value>
     <comment>HUD: done</comment>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>Translated to {0} and typed</value>
+    <comment>HUD: done. {0} = language name in the display language (e.g. Korean)</comment>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>Typed</value>
@@ -515,6 +523,10 @@
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>Translating into Japanese with {0}…</value>
     <comment>HUD. {0} = AI name</comment>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>Translating into {1} with {0}…</value>
+    <comment>HUD. {0} = AI name (Gemini, Claude, Local), {1} = language name in the display language (e.g. Korean)</comment>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>Refining with {0}…</value>
@@ -911,5 +923,9 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>The zip doesn't contain {0}, so it won't be used</value>
     <comment>Update package error. {0} = path such as Hanasu\Hanasu.exe</comment>
+  </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- {0} utterances not used for the minutes are not included</value>
+    <comment>Markdown list item of transcript.md (keep '- '). {0} = number of utterances left out</comment>
   </data>
 </root>

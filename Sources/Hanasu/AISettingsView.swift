@@ -4,7 +4,7 @@ import UniformTypeIdentifiers
 
 // 要件: REQ-COM-020, REQ-COM-024
 // 設計判断: DEC-COM-040
-/// 設定の「AI」タブ。音声入力と会議のそれぞれで、使う AI（Gemini / Claude）とモデルを選ぶ。
+/// 設定の「AI」。音声入力と会議のそれぞれで、使う AI（Gemini・Claude・ローカル・Apple）とモデルを選ぶ。
 /// 認証は、Claude は API キー、Gemini は API キーかサービスアカウント。
 struct AISettingsTab: View {
     @ObservedObject var settings: AppSettings
@@ -20,7 +20,7 @@ struct AISettingsTab: View {
             } header: {
                 Text(tr("使う AI とモデル"))
             } footer: {
-                Text(tr("文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、Claude には音声を送りません。辞書の候補探しは「会議」の AI を使います。「ローカル」は、この Mac の中で小型の LLM を動かします。「Apple」は macOS 27 の Foundation Models（fm）の、この Mac の中のモデルを使います（どちらも文章をネットに送りません）。"))
+                Text(tr("文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、ここで選ぶ AI には音声を送りません。辞書の候補探しは「会議」の AI を使います。「ローカル」は、この Mac の中で小型の LLM を動かします。「Apple」は macOS 27 の Foundation Models（fm）の、この Mac の中のモデルを使います（どちらも文章をネットに送りません）。"))
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {
@@ -118,6 +118,7 @@ struct AIChoiceRow: View {
                 }
                 Spacer()
                 if showsProviderPicker {
+                    // 設計判断: DEC-COM-168（並びは TextAIProvider の case の順）
                     Picker("AI", selection: provider) {
                         ForEach(TextAIProvider.allCases) { Text($0.name).tag($0) }
                     }

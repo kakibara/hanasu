@@ -312,17 +312,17 @@
   <data name="Wav_NoData" xml:space="preserve">
     <value>Le fichier WAV n'a pas de bloc data.</value>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>Anglais</value>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>Japonais</value>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>Vers l'anglais</value>
   </data>
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>Vers le japonais</value>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>Vers le {0}</value>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>Traduire et saisir</value>
@@ -333,11 +333,17 @@
   <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
     <value>Traduire en japonais et saisir</value>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>Traduire en {0} et saisir</value>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>Traduit en anglais et saisi</value>
   </data>
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>Traduit en japonais et saisi</value>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>Traduit en {0} et saisi</value>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>Saisi</value>
@@ -389,6 +395,9 @@
   </data>
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>Traduction en japonais avec {0}…</value>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>Traduction en {1} avec {0}…</value>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>Affinage avec {0}…</value>
@@ -686,5 +695,8 @@
   </data>
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>Le zip ne contient pas {0} : il ne sera pas utilisé</value>
+  </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- Les {0} interventions non utilisées pour le compte rendu ne sont pas incluses</value>
   </data>
 </root>

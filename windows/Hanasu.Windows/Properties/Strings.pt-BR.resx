@@ -164,6 +164,9 @@ Original: {2}</value>
   <data name="Hud_SpokenLanguage" xml:space="preserve">
     <value>Como falado</value>
   </data>
+  <data name="Hud_MoreLanguages" xml:space="preserve">
+    <value>Outros idiomas</value>
+  </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
     <value>Para a gravação e digita o texto (o mesmo que pressionar o atalho de novo)</value>
   </data>
@@ -510,14 +513,8 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   <data name="Settings_TranslationLanguages" xml:space="preserve">
     <value>Idiomas de tradução</value>
   </data>
-  <data name="Settings_TranslateEnglish" xml:space="preserve">
-    <value>Inglês</value>
-  </data>
-  <data name="Settings_TranslateJapanese" xml:space="preserve">
-    <value>Japonês</value>
-  </data>
   <data name="Settings_TranslationNote" xml:space="preserve">
-    <value>O atalho "Traduzir e digitar" traduz para o idioma selecionado mais à esquerda. Durante a gravação, você pode alternar no HUD entre "Como falado" e os idiomas selecionados (o texto é digitado no idioma selecionado quando você para). A tradução usa a IA selecionada para ditado na guia "AI". Selecione pelo menos um.</value>
+    <value>O atalho "Traduzir e digitar" traduz para o primeiro idioma selecionado da lista. Durante a gravação, você pode alternar no HUD entre "Como falado" e os idiomas selecionados (o texto é digitado no idioma selecionado quando você para). A tradução usa a IA selecionada para ditado na guia "AI". Selecione pelo menos um.</value>
   </data>
   <data name="Settings_RecordingMode" xml:space="preserve">
     <value>Modo de gravação</value>
@@ -689,6 +686,9 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   </data>
   <data name="Settings_TryJapanese" xml:space="preserve">
     <value>Testar tradução para japonês</value>
+  </data>
+  <data name="Settings_TryOther" xml:space="preserve">
+    <value>Testar tradução para {0}</value>
   </data>
   <data name="Settings_Tab_Meetings" xml:space="preserve">
     <value>Reuniões</value>
@@ -923,6 +923,9 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   </data>
   <data name="Tray_StartTranslate_Japanese" xml:space="preserve">
     <value>Iniciar &amp;tradução para japonês e digitação</value>
+  </data>
+  <data name="Tray_StartTranslate_Other" xml:space="preserve">
+    <value>Iniciar &amp;tradução para {0} e digitação</value>
   </data>
   <data name="History_ConfirmDeleteOne" xml:space="preserve">
     <value>Excluir esta entrada do histórico? Esta ação não pode ser desfeita.</value>
@@ -1186,5 +1189,107 @@ Abrir a página da versão no navegador?</value>
   </data>
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>Ignorar esta versão</value>
+  </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>Gravação após a suspensão</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>O PC entrou em suspensão durante a gravação de uma reunião</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>Ele entrou em suspensão às {0} e a gravação continuou desde então. Escolha se deseja parar a gravação no ponto anterior à suspensão ou continuar gravando.</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>Parar antes da suspensão</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>Continuar gravando</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>Em off</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>Encerrar o off</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>Em off (desde {0})</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>O que for dito até você encerrar não será usado na ata. A gravação continua.</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>Você mudou quais falas são usadas na ata. Gere a ata novamente para aplicar a mudança.</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>Restaurar tudo</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>Falas usadas na ata: {0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>Intervalo: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>início</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>fim</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>Participante excluído: {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>Restaurar</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>Em off: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>Desmarque uma fala para deixá-la fora da ata (Shift+clique altera todas a partir da que você clicou antes). Clique com o botão direito para definir o intervalo ou excluir um participante. Ctrl+C copia as falas selecionadas.</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>Excluída</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>Em off</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>Participante excluído</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>Fora do intervalo</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>Usar na ata</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>Não usada na ata ({0}). Restaure pela barra acima.</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>Excluir da ata</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>Usar na ata de novo</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>Usar na ata a partir daqui</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>Usar na ata até aqui</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>Excluir tudo o que {0} disse</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>Restaurar tudo o que {0} disse</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>{0} falas copiadas</value>
   </data>
 </root>

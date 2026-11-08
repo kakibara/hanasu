@@ -26,7 +26,7 @@ Um app de entrada por voz e anotações de reunião para macOS e Windows. Ele us
 > [!NOTE]
 > O Hanasu foi feito primeiro para o **japonês**, e o japonês é o idioma mais testado.
 > As telas do app e as instruções que ele dá à IA estão disponíveis nos mesmos 17 idiomas deste README. As telas seguem o idioma do sistema, e as instruções para a IA seguem o idioma de transcrição nos Ajustes. Para qualquer outro idioma, o Hanasu usa o inglês.
-> Ele também pode traduzir o que você diz para um **inglês** natural (ou para **japonês**) antes de digitar.
+> Ele também pode traduzir o que você diz para um **inglês** natural, para **japonês** ou para qualquer um dos 17 idiomas suportados antes de digitar.
 
 ## Por que o Hanasu
 
@@ -41,7 +41,7 @@ Ele é inspirado no Typeless, Wispr Flow, Aqua Voice e Granola. O código-fonte 
 | | |
 | --- | --- |
 | **Fale → texto refinado** | Pressione <kbd>⌥ Space</kbd>, fale e pressione de novo (ou clique em **■ Parar**). O Hanasu remove as hesitações, corrige homófonos, aplica as suas autocorreções e cola o texto no cursor. |
-| **Fale e digite já traduzido** | Pressione <kbd>⌥⇧ Space</kbd> ou mude o HUD para **English** ou **日本語** enquanto fala. Expressões prontas são traduzidas com naturalidade, então お疲れ様です vira "Hi,". Escolha os idiomas oferecidos (inglês, japonês ou ambos) em **Ajustes → Geral**. O padrão é inglês. |
+| **Fale e digite já traduzido** | Pressione <kbd>⌥⇧ Space</kbd> ou mude o HUD para **English**, **日本語** ou outro idioma enquanto fala. Expressões prontas são traduzidas com naturalidade, então お疲れ様です vira "Hi,". Escolha os idiomas oferecidos (qualquer um dos 17 idiomas suportados) em **Ajustes → Geral**. O padrão é inglês. No Mac, em **Ajustes → Por app** você pode fazer um app começar em um desses idiomas. |
 | **Idiomas misturados ficam como foram falados** | Por padrão, as partes que você fala em inglês continuam em inglês. Se preferir, você pode unificar a saída em japonês. |
 | **Edite por voz** | Selecione um texto, pressione <kbd>⌃⌥⌘ E</kbd> e diga "deixe mais educado", "transforme em tópicos" ou "traduza para o inglês". |
 | **Estilos por app** | O texto fica informal e curto no Slack, educado e com parágrafos no Mail, e em estilo escrito no Pages, Word e Notion. Você pode mudar a predefinição de cada app. |
@@ -167,7 +167,7 @@ No Mac, você pode mostrar o ícone do Hanasu na barra de menus, no Dock ou em a
 | Ação | macOS | Windows |
 | --- | --- | --- |
 | Entrada por voz (iniciar / parar) | <kbd>⌥ Space</kbd> | <kbd>Ctrl Alt Space</kbd> |
-| Entrada por voz traduzida (inglês / japonês) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
+| Entrada por voz traduzida (para os idiomas escolhidos) | <kbd>⌥⇧ Space</kbd> | <kbd>Ctrl Alt Shift Space</kbd> |
 | Editar a seleção por voz | <kbd>⌃⌥⌘ E</kbd> | — |
 | Colar o último resultado de novo | <kbd>⌥⇧ V</kbd> | — |
 | Cancelar a gravação | <kbd>Esc</kbd> | <kbd>Esc</kbd> |

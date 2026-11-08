@@ -312,17 +312,17 @@
   <data name="Wav_NoData" xml:space="preserve">
     <value>WAV の data チャンクがありません</value>
   </data>
-  <data name="TranslationLanguage_English" xml:space="preserve">
-    <value>English（英語）</value>
-  </data>
-  <data name="TranslationLanguage_Japanese" xml:space="preserve">
-    <value>日本語</value>
+  <data name="TranslationLanguage_WithName" xml:space="preserve">
+    <value>{0}（{1}）</value>
   </data>
   <data name="Translation_ToEnglish" xml:space="preserve">
     <value>英訳</value>
   </data>
   <data name="Translation_ToJapanese" xml:space="preserve">
     <value>和訳</value>
+  </data>
+  <data name="Translation_ToOther" xml:space="preserve">
+    <value>{0}訳</value>
   </data>
   <data name="Translation_MenuTitle" xml:space="preserve">
     <value>翻訳して入力</value>
@@ -333,11 +333,17 @@
   <data name="Translation_MenuTitle_Japanese" xml:space="preserve">
     <value>和訳して入力</value>
   </data>
+  <data name="Translation_MenuTitle_Other" xml:space="preserve">
+    <value>{0}訳して入力</value>
+  </data>
   <data name="Hud_TranslatedToEnglish" xml:space="preserve">
     <value>英訳して入力しました</value>
   </data>
   <data name="Hud_TranslatedToJapanese" xml:space="preserve">
     <value>和訳して入力しました</value>
+  </data>
+  <data name="Hud_TranslatedToOther" xml:space="preserve">
+    <value>{0}訳して入力しました</value>
   </data>
   <data name="Hud_Typed" xml:space="preserve">
     <value>入力しました</value>
@@ -389,6 +395,9 @@
   </data>
   <data name="Hud_TranslatingToJapanese" xml:space="preserve">
     <value>{0} で日本語に翻訳しています…</value>
+  </data>
+  <data name="Hud_TranslatingToOther" xml:space="preserve">
+    <value>{0} で{1}に翻訳しています…</value>
   </data>
   <data name="Hud_Refining" xml:space="preserve">
     <value>{0} で整えています…</value>
@@ -686,5 +695,8 @@
   </data>
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>zip の中に {0} がないので、使いません</value>
+  </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- 議事録に使わない発言（{0} 件）は含めていません</value>
   </data>
 </root>

@@ -63,9 +63,12 @@ extension ScreenContext {
     /// 文脈を渡すときに system instruction の末尾へ足す文。渡さないときは空文字。
     // 設計判断: DEC-DIC-028
     /// 和訳は出力が日本語なので、整形と同じ指示を使う
+    // 設計判断: DEC-DIC-151
+    /// 英訳は英語向けの screen.translation、ほかの言語への翻訳は訳す先の言語名を埋めた screen.translationOther
     static func instruction(for context: ScreenContext?, translation: TranslationLanguage?) -> String {
         guard context?.promptBlock() != nil else { return "" }
-        return translation == .english ? translationInstruction : refineInstruction
+        guard let translation, !translation.outputsJapanese else { return refineInstruction }
+        return translation == .english ? translationInstruction : otherTranslationInstruction(to: translation)
     }
 
     // 要件: REQ-COM-061
@@ -76,6 +79,11 @@ extension ScreenContext {
 
     static var translationInstruction: String {
         "\n\n" + Prompts.text("screen.title") + "\n" + Prompts.text("screen.common") + "\n" + Prompts.text("screen.translation")
+    }
+
+    static func otherTranslationInstruction(to language: TranslationLanguage) -> String {
+        "\n\n" + Prompts.text("screen.title") + "\n" + Prompts.text("screen.common") + "\n"
+            + Prompts.text("screen.translationOther", ["language": language.nameInPromptLanguage])
     }
 }
 
