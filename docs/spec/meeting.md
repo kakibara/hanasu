@@ -430,6 +430,71 @@
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`ToggleOffRecord`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `.build/debug/Hanasu --test-minutes-selection`、`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~OffRecord"`。画面は `.build/debug/Hanasu --render-minutes-selection <出力フォルダ>`。実際の記録は実機
 
+### REQ-MTG-120 `hanasu meetings list` で、会議を新しい順に並べる
+- 内容: 会議を新しい順に並べる。項目は ID・日時・長さ・タイトル・状態・議事録の有無・アクションアイテムの数。記録中・処理中・失敗の会議も、状態を付けて出す。`--since` / `--until`（`7d`・`24h`・`2w`、`2026-11-01` などの日付）と `--limit` で絞れる。
+- 受け入れ条件:
+  - `hanasu meetings list --json` で、会議ごとに `id`・`slug`・`startedAt`・`durationSeconds`・`title`・`status`・`hasMinutes`・`actionItemCount` が出る。
+  - `--since 2026-10-02 --until 2026-10-02` で、10 月 2 日の会議だけが出る（日付の `--until` はその日を含む）。
+  - 読めない `meeting.json` は飛ばす。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の M1・M8）
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMeetingsCommand.list`、`HanasuPeriod`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
+### REQ-MTG-121 `hanasu meetings show` で、1 つの会議の中身を出す
+- 内容: 既定は議事録。`--transcript`・`--notes`・`--actions`・`--all` で中身を選ぶ。話者は付け替えたあとの名前で出し、AI が推測した名前は推測と分かる印を付ける（REQ-MTG-027）。文字起こしは、議事録に使う発言だけを出す（除いた発言・オフレコの発言は出さない。DEC-MTG-091）。
+- 受け入れ条件:
+  - `--json` では、話者ごとに `key`・`name`・`inferred` が出る。文字起こしの発言には話者のキーと名前が付き、出さなかった発言の数（`omittedUtteranceCount`）も出る。
+  - 文字の出力では、推測した名前に「（推測）」が付く。
+  - 除いた発言・オフレコの発言の中身は、どの出力にも出ない。
+  - 議事録のない会議・処理中の会議は、そのことを stderr に出し、保存されている分だけを出す。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の M2・M8）
+- 関係する要件: REQ-MTG-027, REQ-MTG-045, REQ-MTG-046
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMeetingsCommand.show`、`HanasuMeetingsCommand.transcriptText`、`HanasuMeetingsCommand.speakerLabel`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
+### REQ-MTG-122 会議を、ID・`latest`・日付で指定できる
+- 内容: 会議は、ID（フォルダ名。例: `2026-11-02 1312`）、空白を `_` にした形（`2026-11-02_1312`。JSON の `slug`）、`latest`、日付（`2026-11-02`）で指定できる。`latest` は、状態が「完了」の会議のうち最も新しいもの。
+- 受け入れ条件:
+  - フォルダ名でも、空白を `_` にした形でも、同じ会議になる。
+  - `latest` より新しい記録中・処理中・失敗の会議があれば、そのことを stderr に出す。
+  - 日付で複数の会議が当たれば、終了コード 4 で候補を stderr に出す。当たらなければ 4。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の M3）
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMeetingsCommand.resolve`、`Meeting.slug`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
+### REQ-MTG-123 `hanasu meetings search` で、会議を横断して検索する
+- 内容: アプリの会議の検索（REQ-MTG-015）と同じ索引・同じ一致の決まりで、会議を横断して検索する。結果は会議と、場所（タイトル・議事録の行・発言の時刻と話者）と抜粋。議事録に使わない発言は検索しない（DEC-MTG-121）。
+- 受け入れ条件:
+  - `hanasu meetings search 予算 --json` で、当たった会議ごとに `meeting`・`totalHits`・`hits`（`kind` が `title`・`minutes`（`line`）・`transcript`（`start`・`speakerName`）と `text`）が出る。
+  - 除いた発言・オフレコの発言にだけある語では、何も当たらない。
+  - 検索する語がなければ終了コード 2。当たらなければ 0 で、結果は空。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の M4）
+- 関係する要件: REQ-MTG-015
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMeetingsCommand.search`、`MeetingSearchIndex`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
+### REQ-MTG-124 `hanasu actions` で、会議をまたいでアクションアイテムを並べる
+- 内容: 会議をまたいでアクションアイテム（REQ-MTG-018）を、新しい会議から並べる。項目は担当・内容・期限・期限の言い方・会議。`--since` / `--until` と `--owner`（担当の名前の一部。大文字・小文字と全角・半角を区別しない）と `--limit` で絞れる。
+- 受け入れ条件: `hanasu actions --owner 田中 --json` で、担当に「田中」を含むアイテムだけが、`task`・`owner`・`due`・`dueNote`・`meeting`（`id`・`slug`・`title`・`startedAt`）付きで出る。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の M6）
+- 関係する要件: REQ-MTG-018
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMeetingsCommand.runActions`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
+### REQ-MTG-125 `hanasu` コマンドが読む会議のフォルダを変えられる
+- 内容: `--meetings-dir <フォルダ>` か環境変数 `HANASU_MEETINGS_DIR` で、読む会議のフォルダを変えられる（確かめるときに架空の会議を使うため）。どちらもなければアプリの保存先（REQ-MTG-025）。管理者のポリシーで会議のフォルダを決める仕組みは、Mac 版の保存先を変えられるようにするときに足し、そのときはポリシーを優先する（計画の E6・4.7 の 8）。
+- 受け入れ条件: `--meetings-dir` が環境変数より優先される。どちらもなければ `~/Documents/Hanasu/Meetings/` を読む。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の M9）
+- 関係する要件: REQ-MTG-025
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMeetingsCommand.meetingsDirectory`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
 ---
 
 ## 設計判断
@@ -1165,6 +1230,38 @@
 - 関係する要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+
+### DEC-MTG-120 コマンドで指定する会議の ID は、フォルダ名の空白を `_` にした形も受け付け、JSON に `slug` として出す
+- 決めたこと: 会議の ID はフォルダ名（`2026-11-02 1312`）のまま `id` として出し、空白を `_` にした形を `slug` として一緒に出す。指定は、どちらの形でも、空白を `_` にしてから比べる。文字の出力では `slug` を出す。
+- 理由: フォルダ名には空白があり、エージェントやシェルでの引用で崩れやすい。フォルダ名を変えると、今の会議と Windows 版（DEC-MTG-108）の形が変わるので、変えずに別の名前を足す。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の M3）
+- 関係する要件: REQ-MTG-122
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `Meeting.slug`、`HanasuMeetingsCommand.resolve`
+
+### DEC-MTG-121 `hanasu` コマンドの出力（検索を含む）には、議事録に使わない発言を入れない
+- 決めたこと: `meetings show` の文字起こしと `meetings search` は、議事録に使う発言だけから作る（除いた発言・オフレコ・範囲外を入れない）。検索は、使う発言だけを残した会議の写しで索引を作る。アプリの検索（DEC-MTG-091 で、除いた発言も検索に残す）とは、この点だけ結果が違う。
+- 理由: コマンドの出力は、AI エージェント（とその AI の提供元）に渡ることが多い。除く目的は「AI と共有物に入れない」こと（DEC-MTG-091）で、アプリの検索は自分の Mac の中だけで見て文字起こしで除いたものと分かるが、コマンドの出力では分からない。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)
+- 関係する要件: REQ-MTG-121, REQ-MTG-123, REQ-MTG-046
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `Meeting.withUsedUtterancesOnly`、`HanasuMeetingsCommand.search`、`HanasuMeetingsCommand.transcriptBlocks`
+
+### DEC-MTG-122 期間の指定は、今からさかのぼる長さか、日付か、日時。日付の `--until` はその日を含む
+- 決めたこと: `--since` / `--until` は、`7d`・`24h`・`2w`（今からさかのぼる）、`2026-11-01`（この Mac の時間帯の日付）、ISO 8601 の日時（`2026-11-01T09:00` も可）を受け付ける。日付の `--until` は、その日の終わり（翌日の 0 時より前）までを含む。読めなければ終了コード 2。
+- 理由: エージェントは「最近 1 週間」を `7d` で、人は日付で指定することが多い。`--until 2026-11-05` で 5 日の会議が入らないと、取り違えやすい。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)
+- 関係する要件: REQ-MTG-120, REQ-MTG-124
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuPeriod`
+
+### DEC-MTG-123 `hanasu` コマンドの検索は索引を作らずに会議を順に調べ、会議は並べて読む
+- 決めたこと: `hanasu meetings search` は、アプリの索引（2 文字ごとの索引。DEC-MTG-050）を作らず、`MeetingSearchIndex.scan` で会議ごとに（並べて）調べる。検索の単位・一致の決まり・並び・抜粋・上限は、アプリの検索と同じ関数（`searchUnits`・`fold`・`terms`・`order`・`snippet`）を使う。`MeetingStore.loadAll(in:)` は、会議の `meeting.json` を並べて読む（アプリも同じ関数を使う）。
+- 理由: 2026-11-09 に、架空の会議 1,000 件（1 件に発言 600、合わせて 139 MB）で測ったところ、1 つずつ読むと `meetings list` などが 1.6 秒、索引を作る検索が 5.8 秒で、目安（2 秒以内。計画の 4.4）を検索が超えた。コマンドは呼ぶたびに全部を読むので、1 回のために索引を作るより、順に調べる方が速い。並べて読み、索引を作らずに調べるようにしたあとは、`meetings list` 0.89 秒・`show` 0.78 秒・`actions` 0.92 秒・`search` 1.77 秒で、すべて目安に収まった（索引の検索と結果が同じことも、同じ 1,000 件で確かめた。`--bench-hanasu-command`）。索引をファイルに残す方法は、ファイルと会議のずれを考える必要があるので、要らない形にした。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（段階 1 の速さの測定）
+- 関係する要件: REQ-MTG-123, REQ-MTG-120
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `MeetingSearchIndex.scan`、`MeetingSearchIndex.searchUnits`、`MeetingStore.loadAll(in:)`
 
 ---
 

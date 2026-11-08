@@ -242,6 +242,62 @@
 - 実装の場所: `scripts/check-i18n.py`、`scripts/i18n-strings.py`（Mac の UI）、`scripts/i18n-resx.py`（Windows の UI）、`.github/workflows/spec.yml`、`.claude/skills/i18n/SKILL.md`、`.claude/agents/i18n.md`
 - 確かめ方: `python3 scripts/check-i18n.py`（UI の文字列では、tr() で包んでいない日本語の文字列と、訳のないキーも見つける）
 
+### REQ-COM-180 アプリの実行ファイルを `hanasu` コマンドとしても使える
+- 内容: アプリの実行ファイル（`Hanasu.app/Contents/MacOS/Hanasu`）が、サブコマンドの形（`hanasu <コマンド> [引数]`）のコマンドにもなる。別にインストールしなくても、絶対パスで呼べば動く（`hanasu` という名前のシンボリックリンクから呼んでもよい）。`hanasu help`・`hanasu <コマンド> --help`・`hanasu --version` が使える。開発用の CLI（`--` で始まるフラグ）とは混ざらない。
+- 受け入れ条件:
+  - `Hanasu meetings list` のように最初の引数がサブコマンド（`meetings`・`actions`・`help`）か `--version`・`--help` なら、アプリを起動せずにコマンドとして動いて終わる。引数なしの `Hanasu` と、開発用の `--` のフラグは今までどおり。
+  - `hanasu` という名前（シンボリックリンク）で呼ぶと、引数が何でもコマンドとして扱う。`hanasu` だけなら使い方を出して 0 で終わり、アプリを起動しない。知らないコマンドは終了コード 2。
+  - ヘルプとエラーは表示の言語（REQ-COM-060）で出す。`--` で始まるオプションがあっても、日本語に固定しない（DEC-COM-166 の判定より前に振り分ける）。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C1・C2）
+- 関係する要件: REQ-COM-060
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuCommand.handles`、`HanasuCommand.run`、`HanasuHelp`、`main.swift`（冒頭の振り分け）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
+### REQ-COM-181 `hanasu` コマンドの stdout には結果だけを出し、`--json` で決まった形の JSON を出す
+- 内容: stdout には結果だけを出し、途中経過・警告・エラーは stderr に出す。`--json` で、版（`schemaVersion`）の付いた決まった形の JSON を出す。版を上げずに項目を消したり意味を変えたりしない。日時は ISO 8601 で時差を付け、長さは秒の数にする。
+- 受け入れ条件:
+  - `hanasu meetings list --json` の stdout はそのまま JSON として読め、`schemaVersion` が 1。成功したときの stderr は空。
+  - 日時は `2026-11-02T13:12:00+09:00` の形、長さは `durationSeconds` の整数。
+  - 失敗したときは stdout に何も出さない。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C3・C4）
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuOutput`、`HanasuJSON`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
+### REQ-COM-182 `hanasu` コマンドの終了コードを、失敗の理由で分ける
+- 内容: 0 成功、1 失敗（AI の失敗など）、2 使い方の誤り、3 認証情報・モデルがない、4 会議が見つからない・1 つに決まらない、5 管理者のポリシーで止められている・会議のフォルダを読む権限がない。
+- 受け入れ条件: 知らないオプション・読めない期間・検索する語がない、は 2。ない会議・日付で複数当たる会議は 4。ポリシーで止めたとき・会議のフォルダを読めないときは 5。どれも理由を stderr に出す。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C5）
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuExit`、`HanasuCommandError`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
+### REQ-COM-183 `hanasu` コマンドは、アプリが起動していてもいなくても動き、会議のファイルを書き換えない
+- 内容: 会議を読むコマンドは、Hanasu のアプリが起動していなくても、起動していても動く。アプリの起動時の処理（`AppDelegate`）を通らず、記録中・処理中の会議を「失敗」にする処理（`MeetingStore.markInterruptedMeetings`）と保存（`MeetingStore.save`）を呼ばない。
+- 受け入れ条件: すべてのコマンドを動かしたあとも、会議のフォルダの `meeting.json` は 1 バイトも変わらない。「処理中」の会議は「処理中」のまま。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C6）
+- 関係する要件: REQ-MTG-025
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuCommand.main`、`main.swift`（アプリを起動する前に振り分ける）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
+### REQ-COM-184 管理者のポリシーで、`hanasu` コマンドを使えないようにできる
+- 内容: 会社の管理者が、構成プロファイル（MDM）でアプリのドメイン（`dev.mactypeless.Hanasu`）に `DisableCLI` を true で配ると、`hanasu` コマンドが動かなくなる。ほかのポリシー（MCP を止める・使える AI を絞る）は、それぞれのコマンドと一緒に足す（計画の 4.7 の 7）。
+- 受け入れ条件: `DisableCLI` が管理された値として true のとき、どのコマンドも終了コード 5 と、ポリシーで止められている旨（キーの名前）を stderr に出す。ユーザーが自分で書いた（管理されていない）値は効かない。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の E6）
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuPolicy`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（ポリシーの値を差し替えて確かめる。構成プロファイルで配ったときの動きは実機）
+
+### REQ-COM-185 会議のフォルダを読む権限がないときは、何を許可すればよいかを知らせる
+- 内容: 会議のフォルダを読めないとき（Mac の「書類」フォルダへのアクセスを許可していない、など）は、「会議がない」と取り違えずに止め、どのフォルダを読めないかと、何を許可すればよいかを出す。
+- 受け入れ条件: 会議のフォルダが読めないとき、終了コード 5 で、フォルダのパスと、「システム設定」の「ファイルとフォルダ」で呼び出したアプリに「書類」フォルダへのアクセスを許可する旨（書類の外のフォルダなら、読めるかを確かめる旨）を stderr に出す。フォルダがないだけなら、会議がないとして 0。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の E9）
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMeetingsCommand.load`、`MeetingStore.loadAll(in:)`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（読めないフォルダで確かめる。「書類」フォルダの許可を誰に求められるかは実機）
+
 ---
 
 ## 設計判断
@@ -1075,6 +1131,38 @@
 - 対象: Mac / Windows（自動で描くのは Mac だけ）
 - 実装の場所: `common/testdata/ui/`、`scripts/ui-cases.py`、`.claude/skills/ui-test/SKILL.md`、`.github/workflows/spec.yml`
 - 確かめ方: `python3 scripts/ui-cases.py check`、`python3 scripts/ui-cases.py render --priority P1`
+
+### DEC-COM-180 `hanasu` コマンドは、アプリと同じ実行ファイルのサブコマンドにし、`main.swift` の冒頭で振り分ける
+- 決めたこと: 別のプログラムを作らず、アプリの実行ファイルにサブコマンドを足す。`main.swift` の最初（`--` の引数で表示の言語を日本語にする判定と、`--prompt-language` の読み取りより前）で、最初の引数がサブコマンドか、実行ファイルの名前が `hanasu` なら、`NSApplication` を作らずにコマンドに入って終わる。コマンドのコードは名前が `CLI.swift` で終わらないファイル（`HanasuCommand.swift`・`HanasuMeetingsCommand.swift`）に置き、訳の検査の対象にする（開発用の CLI は `*CLI.swift`）。Foundation の決まりの `-AppleLanguages (en)` のような引数は、オプションとして扱わずに飛ばす（その回だけ表示の言語を変えられる）。
+- 理由: 会社で許可を取るときに、アプリを許可すれば CLI も許可される（実行ファイルが 1 つ）。アプリと版がずれず、配り方（`.app` の zip）も変えなくてよい（[plans/cli.md](../plans/cli.md) の 5.2）。`--` の判定より後だと、`hanasu meetings list --json` の表示が日本語に固定される。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)
+- 関係する要件: REQ-COM-180, REQ-COM-183
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuCommand`、`main.swift`
+
+### DEC-COM-181 `--json` の形は、中の `meeting.json` と分け、キーは英語で固定する
+- 決めたこと: `--json` は `meeting.json` をそのまま出さず、外に約束する別の形を作る。どの形にもいちばん外に `schemaVersion`（今は 1）を付ける。キーと列挙の値（`status` の `done` など）は英語で固定し、訳さない。表示の名前（話者の名前など）は表示の言語の値のまま入れる。項目を足すだけなら版を上げず、消す・意味を変えるときに上げる。キーは並びを固定する（辞書順）。
+- 理由: 中の形（`meeting.json`）を変えても、エージェントやスクリプトとの約束が壊れないように。キーを訳すと、表示の言語で読み取りが壊れる。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)
+- 関係する要件: REQ-COM-181
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuOutput.json`、`HanasuJSON`、`HanasuMeetingsCommand.summaryJSON`
+
+### DEC-COM-182 管理者のポリシーは、アプリのドメインの管理された設定（構成プロファイル）だけを読む
+- 決めたこと: ポリシーは `CFPreferencesAppValueIsForced` で「管理された値か」を確かめ、管理された値だけを読む。ドメインは `Bundle.main.bundleIdentifier`（`.app` の外で動かしたときは `dev.mactypeless.Hanasu`）。キーの名前は英語（`DisableCLI`）で、管理者が構成プロファイルに書く。
+- 理由: 管理者が配る構成プロファイル（MDM）が、会社の Mac の設定を決める普通の方法。管理された値だけを見れば、ユーザーが `defaults write` で書き換えてポリシーを外せない。シンボリックリンク経由でも同じドメインを見るように、名前で開く。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の 4.7 の 7）
+- 関係する要件: REQ-COM-184
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuPolicy`
+
+### DEC-COM-183 シンボリックリンクから起動したら、リンクをたどった先の実際のパスで起動し直す
+- 決めたこと: `hanasu` として動くとき、起動したパス（`_NSGetExecutablePath`）がシンボリックリンクなら、たどった先の実際のパスで `execv` し直す。argv[0]（`hanasu`）と引数は変えない。起動し直せなければ、そのまま続ける。
+- 理由: 2026-11-09 に確かめたところ、`/usr/local/bin/hanasu` のようなリンクから起動すると、`Bundle.main` が `.app` として解決されず（Info.plist の版も読めなかった）、訳（`Localizable.xcstrings`）・アプリの設定（UserDefaults）・管理者のポリシーのドメインを読めなかった。計画（[plans/cli.md](../plans/cli.md) の 5.2）で心配していたこと。読む場所ごとに `Bundle(url:)` で開き直すと、`Bundle.main` を使う場所（今あるものも、これから足すものも）を漏れなく直す必要があり、漏れやすい。起動し直せば 1 か所で済み、アプリと同じ `Bundle.main` になる。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（段階 1 の確かめ）
+- 関係する要件: REQ-COM-180
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuCommand.reexecIfSymlinked`
 
 ---
 

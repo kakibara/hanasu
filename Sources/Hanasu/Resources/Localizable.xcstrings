@@ -103,6 +103,108 @@
         }
       }
     },
+    "# %@ — アクションアイテム" : {
+      "comment" : "HanasuMeetingsCommand.swift:122",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — عناصر الإجراءات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ – Aufgaben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — Action Items"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — Tareas pendientes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — Actions à mener"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — ऐक्शन आइटम"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — Item tindakan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — Attività"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — 액션 아이템"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — zadania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — Itens de ação"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — задачи"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — eylem maddeleri"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — Việc cần làm"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — 待办事项"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %@ — 待辦事項"
+          }
+        }
+      }
+    },
     "# %@ — メモ\n\n%@\n" : {
       "comment" : "MeetingNotes.swift:84",
       "extractionState" : "manual",
@@ -206,7 +308,7 @@
       }
     },
     "# %@ — 文字起こし" : {
-      "comment" : "MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:343, MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1531,6 +1633,210 @@
         }
       }
     },
+    "%@ には 1 以上の整数を指定してください: %@" : {
+      "comment" : "HanasuCommand.swift:227",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يجب أن تكون قيمة %@ عددًا صحيحًا يساوي 1 أو أكثر: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ muss eine ganze Zahl ab 1 sein: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ must be an integer of 1 or greater: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ debe ser un número entero mayor o igual que 1: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ doit être un entier supérieur ou égal à 1 : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ के लिए 1 या उससे बड़ी पूर्ण संख्या दें: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ harus berupa bilangan bulat 1 atau lebih: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ deve essere un numero intero maggiore o uguale a 1: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 옵션에는 1 이상의 정수를 지정하세요: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opcja %@ wymaga liczby całkowitej równej co najmniej 1: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ precisa ser um número inteiro maior ou igual a 1: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для %@ укажите целое число не меньше 1: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ için 1 veya daha büyük bir tam sayı belirtin: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ phải là số nguyên từ 1 trở lên: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 必须是大于或等于 1 的整数：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 必須是大於或等於 1 的整數：%@"
+          }
+        }
+      }
+    },
+    "%@ には値が要ります。" : {
+      "comment" : "HanasuCommand.swift:197",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يتطلب %@ قيمة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ benötigt einen Wert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ requires a value."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ necesita un valor."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ nécessite une valeur."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ के लिए मान देना ज़रूरी है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ memerlukan nilai."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ richiede un valore."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 옵션에는 값이 필요합니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opcja %@ wymaga wartości."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ precisa de um valor."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для %@ нужно указать значение."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ için bir değer gerekir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ cần có giá trị."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 需要指定值。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 需要指定值。"
+          }
+        }
+      }
+    },
     "%@ にやり直し" : {
       "comment" : "DictationHistoryWindow.swift:450",
       "extractionState" : "manual",
@@ -1634,7 +1940,7 @@
       }
     },
     "%@ にスリープしてから、記録を続けています。スリープする前までで記録を止めるか、このまま記録を続けるかを選んでください。" : {
-      "comment" : "MeetingRecorder.swift:724",
+      "comment" : "MeetingRecorder.swift:743",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1935,6 +2241,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "下載 %@"
+          }
+        }
+      }
+    },
+    "%@ の会議が %@ 件あります。ID で指定してください。" : {
+      "comment" : "HanasuMeetingsCommand.swift:263",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عدد الاجتماعات في %1$@: %2$@. حدّد الاجتماع باستخدام ID."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Am %1$@ gibt es %2$@ Meetings. Gib eine ID an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ matches %2$@ meetings. Specify one by ID."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hay %2$@ reuniones del %1$@. Indica el ID."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%2$@ réunions correspondent à %1$@. Indiquez un ID."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ की %2$@ मीटिंग मिलीं। ID से चुनें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ada %2$@ rapat untuk %1$@. Tentukan dengan ID."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ci sono %2$@ riunioni del %1$@. Specifica l'ID."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@에 해당하는 회의가 %@개 있습니다. ID로 지정하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liczba spotkań z %1$@: %2$@. Wskaż spotkanie za pomocą ID."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Há %2$@ reuniões em %1$@. Indique a reunião pelo ID."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Встреч за %1$@: %2$@. Укажите встречу по ID."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ tarihinde %2$@ toplantı var. Toplantıyı ID ile belirtin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có %2$@ cuộc họp vào %1$@. Hãy chỉ định bằng ID."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与 %@ 匹配的会议有 %@ 个。请使用 ID 指定。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "與 %@ 相符的會議有 %@ 場。請使用 ID 指定。"
+          }
+        }
+      }
+    },
+    "%@ の値を読めません: %@" : {
+      "comment" : "HanasuMeetingsCommand.swift:437",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّرت قراءة قيمة %@: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wert für %@ ungültig: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid value for %@: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede interpretar el valor de %@: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valeur de %@ illisible : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ का मान पढ़ा नहीं जा सका: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak dapat membaca nilai %@: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile interpretare il valore di %@: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 옵션의 값을 읽을 수 없습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można odczytać wartości opcji %@: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível interpretar o valor de %@: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось распознать значение %@: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ değeri okunamadı: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không đọc được giá trị của %@: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的值无效：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的值無效：%@"
           }
         }
       }
@@ -2858,7 +3368,7 @@
       }
     },
     "%@ 件" : {
-      "comment" : "DictationHistoryWindow.swift:271, DictationHistoryWindow.swift:621",
+      "comment" : "DictationHistoryWindow.swift:271, DictationHistoryWindow.swift:622",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3062,7 +3572,7 @@
       }
     },
     "%@ 件の履歴と、残している録音を削除します。元に戻せません。" : {
-      "comment" : "DictationHistoryWindow.swift:661",
+      "comment" : "DictationHistoryWindow.swift:662",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3572,7 +4082,7 @@
       }
     },
     "%@ 日" : {
-      "comment" : "DictationHistoryWindow.swift:626",
+      "comment" : "DictationHistoryWindow.swift:627",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -4490,7 +5000,7 @@
       }
     },
     "%@し直して、クリップボードにコピーしました" : {
-      "comment" : "DictationHistoryWindow.swift:536",
+      "comment" : "DictationHistoryWindow.swift:537",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -4592,7 +5102,7 @@
       }
     },
     "%@し直す" : {
-      "comment" : "DictationHistoryWindow.swift:491",
+      "comment" : "DictationHistoryWindow.swift:492",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5918,7 +6428,7 @@
       }
     },
     "%@（%@ 件）" : {
-      "comment" : "DictationHistoryWindow.swift:646",
+      "comment" : "DictationHistoryWindow.swift:647",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6325,8 +6835,110 @@
         }
       }
     },
+    "%@（推測）" : {
+      "comment" : "HanasuMeetingsCommand.swift:359",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (مُستنتَج)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (abgeleitet)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (guessed)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (deducido)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (déduit)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (अनुमानित)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (tebakan)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (dedotto)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@(추측)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (domysł)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (deduzido)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (предположительно)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (tahmini)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (đoán)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（推测）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（推測）"
+          }
+        }
+      }
+    },
     "- 日時: %@" : {
-      "comment" : "MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:344, MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6428,7 +7040,7 @@
       }
     },
     "- 議事録に使わない発言（%@ 件）は含めていません" : {
-      "comment" : "MeetingModels.swift:129",
+      "comment" : "HanasuMeetingsCommand.swift:347, MeetingModels.swift:129",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6530,7 +7142,7 @@
       }
     },
     "- 長さ: %@" : {
-      "comment" : "MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:345, MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6729,6 +7341,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "--\n王小明\n範例科技股份有限公司 開發部\nxiaoming.wang@example.com"
+          }
+        }
+      }
+    },
+    "--json で、決まった形の JSON を出します。--meetings-dir <フォルダ>（か環境変数 HANASU_MEETINGS_DIR）で、会議のフォルダを変えられます。" : {
+      "comment" : "HanasuCommand.swift:314",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يُخرج --json بيانات JSON بتنسيق ثابت. يمكنك تغيير مجلد الاجتماعات باستخدام --meetings-dir <المجلد> (أو متغير البيئة HANASU_MEETINGS_DIR)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit --json erfolgt die Ausgabe als JSON in festem Format. Mit --meetings-dir <Ordner> (oder der Umgebungsvariable HANASU_MEETINGS_DIR) kannst du den Meeting-Ordner ändern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--json outputs JSON in a fixed format. Use --meetings-dir <folder> (or the HANASU_MEETINGS_DIR environment variable) to change the meetings folder."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con --json, la salida es JSON con un formato fijo. Con --meetings-dir <carpeta> (o la variable de entorno HANASU_MEETINGS_DIR) puedes cambiar la carpeta de reuniones."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avec --json, la sortie est au format JSON fixe. Avec --meetings-dir <dossier> (ou la variable d’environnement HANASU_MEETINGS_DIR), vous pouvez changer le dossier des réunions."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--json से तय फ़ॉर्मैट में JSON मिलता है। --meetings-dir <फ़ोल्डर> (या एनवायरनमेंट वेरिएबल HANASU_MEETINGS_DIR) से मीटिंग का फ़ोल्डर बदला जा सकता है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--json mengeluarkan JSON dengan format tetap. --meetings-dir <folder> (atau variabel lingkungan HANASU_MEETINGS_DIR) mengubah folder rapat."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con --json l'output è in JSON con un formato fisso. Con --meetings-dir <cartella> (o la variabile d'ambiente HANASU_MEETINGS_DIR) puoi cambiare la cartella delle riunioni."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--json을 붙이면 정해진 형식의 JSON을 출력합니다. --meetings-dir <폴더>(또는 환경 변수 HANASU_MEETINGS_DIR)로 회의 폴더를 바꿀 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--json wypisuje JSON w stałym formacie. --meetings-dir <folder> (lub zmienna środowiskowa HANASU_MEETINGS_DIR) zmienia folder spotkań."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Com --json, a saída é um JSON de formato fixo. Com --meetings-dir <pasta> (ou a variável de ambiente HANASU_MEETINGS_DIR), você pode mudar a pasta das reuniões."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "С --json выводится JSON фиксированной структуры. С помощью --meetings-dir <папка> (или переменной окружения HANASU_MEETINGS_DIR) можно указать другую папку встреч."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--json ile sabit yapıda JSON çıktısı verilir. --meetings-dir <klasör> (veya HANASU_MEETINGS_DIR ortam değişkeni) ile toplantı klasörünü değiştirebilirsiniz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Với --json, kết quả được xuất ra dạng JSON có cấu trúc cố định. Dùng --meetings-dir <thư mục> (hoặc biến môi trường HANASU_MEETINGS_DIR) để đổi thư mục chứa cuộc họp."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 --json 可输出固定格式的 JSON。使用 --meetings-dir <文件夹>（或环境变量 HANASU_MEETINGS_DIR）可更改会议文件夹。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 --json 可輸出固定格式的 JSON。使用 --meetings-dir <檔案夾>（或環境變數 HANASU_MEETINGS_DIR）可變更會議檔案夾。"
           }
         }
       }
@@ -6937,8 +7651,518 @@
         }
       }
     },
+    "<件数>" : {
+      "comment" : "HanasuCommand.swift:290",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<العدد>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Anzahl>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<count>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<número>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<nombre>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<संख्या>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<jumlah>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<numero>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<개수>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<liczba>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<número>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<число>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<sayı>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<số lượng>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<数量>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<數量>"
+          }
+        }
+      }
+    },
+    "<会議>" : {
+      "comment" : "HanasuCommand.swift:296",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<الاجتماع>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Meeting>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<meeting>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<reunión>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<réunion>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<मीटिंग>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<rapat>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<riunione>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<회의>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<spotkanie>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<reunião>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<встреча>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<toplantı>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<cuộc họp>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<会议>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<會議>"
+          }
+        }
+      }
+    },
+    "<名前>" : {
+      "comment" : "HanasuCommand.swift:305",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<الاسم>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Name>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<name>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<nombre>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<nom>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<नाम>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<nama>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<nome>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<이름>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<imię>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<nome>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<имя>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<ad>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<tên>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<姓名>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<名稱>"
+          }
+        }
+      }
+    },
+    "<期間>" : {
+      "comment" : "HanasuCommand.swift:289",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<المدة>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Zeitraum>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<period>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<periodo>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<période>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<अवधि>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<periode>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<periodo>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<기간>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<okres>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<período>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<период>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<zaman>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<thời gian>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<时间>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<時間>"
+          }
+        }
+      }
+    },
+    "<語>" : {
+      "comment" : "HanasuCommand.swift:298",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<الكلمة>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Begriff>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<words>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<palabra>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<mot>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<शब्द>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<kata>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<parola>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<검색어>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<słowo>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<termo>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<слово>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<sözcük>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<từ khóa>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<关键词>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<關鍵字>"
+          }
+        }
+      }
+    },
     "AI で%@しています…" : {
-      "comment" : "DictationHistoryWindow.swift:495",
+      "comment" : "DictationHistoryWindow.swift:496",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11936,7 +13160,7 @@
       }
     },
     "Finder で表示" : {
-      "comment" : "DictationHistoryWindow.swift:525, MeetingWindow.swift:442",
+      "comment" : "DictationHistoryWindow.swift:526, MeetingWindow.swift:442",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -13364,7 +14588,7 @@
       }
     },
     "Gemini 失敗" : {
-      "comment" : "DictationHistory.swift:83",
+      "comment" : "DictationHistory.swift:89",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -18973,6 +20197,108 @@
         }
       }
     },
+    "hanasu — Hanasu の会議の記録を、ターミナルや AI エージェントから読む" : {
+      "comment" : "HanasuCommand.swift:270",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — قراءة سجلات اجتماعات Hanasu من الطرفية أو من وكيل AI"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu – Hanasu-Meeting-Aufnahmen im Terminal oder von einem KI-Agenten lesen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — Read Hanasu meeting records from a terminal or an AI agent"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — Lee las reuniones grabadas con Hanasu desde el Terminal o un agente de IA"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — Lire les réunions enregistrées par Hanasu depuis le Terminal ou un agent IA"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — Hanasu की मीटिंग के रिकॉर्ड टर्मिनल या AI एजेंट से पढ़ें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — Baca catatan rapat Hanasu dari terminal atau agen AI"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — Leggi le riunioni registrate con Hanasu dal Terminale o da un agente IA"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — Hanasu의 회의 기록을 터미널이나 AI 에이전트에서 읽기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — odczyt zapisów spotkań Hanasu z terminala lub agenta AI"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — leia os registros de reuniões do Hanasu pelo Terminal ou por um agente de IA"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — чтение записей встреч Hanasu из терминала или AI-агентом"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — Hanasu toplantı kayıtlarını terminalden veya bir AI ajanıyla okuyun"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — Đọc bản ghi cuộc họp của Hanasu từ Terminal hoặc tác tử AI"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — 从终端或 AI 智能体读取 Hanasu 的会议记录"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu — 從終端機或 AI 代理程式讀取 Hanasu 的會議記錄"
+          }
+        }
+      }
+    },
     "large-v3-turbo（%@・高精度）" : {
       "comment" : "TranscriptionEngine.swift:78",
       "extractionState" : "manual",
@@ -19076,7 +20402,7 @@
       }
     },
     "m4a（32 kbps）で 1 分あたり約 0.25 MB。履歴と一緒に、件数・期間の上限で消えます。" : {
-      "comment" : "DictationHistoryWindow.swift:632",
+      "comment" : "DictationHistoryWindow.swift:633",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -19994,7 +21320,7 @@
       }
     },
     "「%@」の発言をすべて除く" : {
-      "comment" : "MinutesSelectionViews.swift:223",
+      "comment" : "MinutesSelectionViews.swift:225",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20096,7 +21422,7 @@
       }
     },
     "「%@」の発言を議事録に戻す" : {
-      "comment" : "MinutesSelectionViews.swift:221",
+      "comment" : "MinutesSelectionViews.swift:223",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -21217,6 +22543,108 @@
         }
       }
     },
+    "「システム設定」→「プライバシーとセキュリティ」→「ファイルとフォルダ」で、このコマンドを実行しているアプリ（ターミナルや AI エージェントのアプリ）に「書類」フォルダへのアクセスを許可してください。" : {
+      "comment" : "HanasuMeetingsCommand.swift:232",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "في «إعدادات النظام» ← «الخصوصية والأمن» ← «الملفات والمجلدات»، اسمح للتطبيق الذي يشغّل هذا الأمر (الطرفية أو تطبيق وكيل AI) بالوصول إلى مجلد «المستندات»."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaube unter „Systemeinstellungen“ > „Datenschutz & Sicherheit“ > „Dateien und Ordner“ der App, die diesen Befehl ausführt (Terminal oder die App des KI-Agenten), den Zugriff auf den Ordner „Dokumente“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In System Settings → Privacy & Security → Files & Folders, allow the app running this command (your terminal or AI agent app) to access the Documents folder."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En Ajustes del Sistema > Privacidad y seguridad > Archivos y carpetas, permite que la app que ejecuta este comando (el Terminal o la app del agente de IA) acceda a la carpeta Documentos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans Réglages Système > Confidentialité et sécurité > Fichiers et dossiers, autorisez l’app qui exécute cette commande (Terminal ou l’app de l’agent IA) à accéder au dossier Documents."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“सिस्टम सेटिंग्ज़” → “गोपनीयता और सुरक्षा” → “फ़ाइल और फ़ोल्डर” में, इस कमांड को चलाने वाले ऐप (टर्मिनल या AI एजेंट ऐप) को “दस्तावेज़” फ़ोल्डर का ऐक्सेस दें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di “Pengaturan Sistem” → “Privasi & Keamanan” → “File dan Folder”, izinkan app yang menjalankan perintah ini (terminal atau app agen AI) mengakses folder “Dokumen”."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Impostazioni di Sistema > Privacy e sicurezza > File e cartelle, consenti all'app che esegue questo comando (il Terminale o l'app dell'agente IA) di accedere alla cartella Documenti."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시스템 설정 → 개인정보 보호 및 보안 → 파일 및 폴더에서 이 명령을 실행하는 앱(터미널이나 AI 에이전트 앱)이 \"도큐멘트\" 폴더에 접근할 수 있도록 허용하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W „Ustawienia systemowe” → „Prywatność i ochrona” → „Pliki i foldery” zezwól aplikacji, która uruchamia to polecenie (terminalowi lub aplikacji agenta AI), na dostęp do folderu „Dokumenty”."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Em Ajustes do Sistema → Privacidade e Segurança → Arquivos e Pastas, permita que o app que executa este comando (o Terminal ou o app do agente de IA) acesse a pasta Documentos."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В разделе Системные настройки → Конфиденциальность и безопасность → Файлы и папки разрешите приложению, в котором запускается эта команда (терминалу или приложению AI-агента), доступ к папке «Документы»."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem Ayarları → Gizlilik ve Güvenlik → Dosyalar ve Klasörler bölümünde, bu komutu çalıştıran uygulamaya (terminal veya AI ajanı uygulaması) “Belgeler” klasörüne erişim izni verin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trong Cài đặt hệ thống → Quyền riêng tư & Bảo mật → Tệp và thư mục, hãy cho phép ứng dụng đang chạy lệnh này (Terminal hoặc ứng dụng tác tử AI) truy cập thư mục “Tài liệu”."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在“系统设置”→“隐私与安全性”→“文件与文件夹”中，允许运行此命令的 App（终端或 AI 智能体的 App）访问“文稿”文件夹。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請在「系統設定」→「隱私權與安全性」→「檔案和檔案夾」中，允許執行此指令的 App（終端機或 AI 代理程式的 App）取用「文件」檔案夾。"
+          }
+        }
+      }
+    },
     "「メニューバーだけ」では Dock と ⌘Tab に出ません。「Dock だけ」では、Dock のアイコンを右クリックするとメニューバーと同じメニューが出て、録音中はアイコンに ● が付きます。どの場合も、Finder から Hanasu をもう一度開くと設定画面が出ます。" : {
       "comment" : "AppPresence.swift:57",
       "extractionState" : "manual",
@@ -21524,7 +22952,7 @@
       }
     },
     "「翻訳して入力」のショートカットでは、選んだ言語のうち上のものに翻訳します。録音中の HUD で「話した言語」と選んだ言語を切り替えられます（止めたときに選んでいる言語で入力）。翻訳は AI（設定の「AI」で音声入力に選んだもの）で行います。少なくとも 1 つは選んでください。" : {
-      "comment" : "TranslationSettingsView.swift:24",
+      "comment" : "TranslationSettingsView.swift:30",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22850,7 +24278,7 @@
       }
     },
     "ここから議事録に使う" : {
-      "comment" : "MinutesSelectionViews.swift:216",
+      "comment" : "MinutesSelectionViews.swift:218",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23258,7 +24686,7 @@
       }
     },
     "ここまでを要約" : {
-      "comment" : "MeetingChat.swift:212",
+      "comment" : "MeetingChat.swift:215",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23360,7 +24788,7 @@
       }
     },
     "ここまで議事録に使う" : {
-      "comment" : "MinutesSelectionViews.swift:217",
+      "comment" : "MinutesSelectionViews.swift:219",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24176,7 +25604,7 @@
       }
     },
     "このオフレコを解除する（%@ 〜 %@）" : {
-      "comment" : "MinutesSelectionViews.swift:208",
+      "comment" : "MinutesSelectionViews.swift:210",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24579,6 +26007,414 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "就這場會議提問（按 ↩ 傳送）"
+          }
+        }
+      }
+    },
+    "この会議にはアクションアイテムがありません。" : {
+      "comment" : "HanasuMeetingsCommand.swift:120",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد عناصر إجراءات في هذا الاجتماع."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Meeting enthält keine Aufgaben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This meeting has no action items."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta reunión no tiene tareas pendientes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette réunion ne contient aucune action à mener."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस मीटिंग में कोई ऐक्शन आइटम नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapat ini tidak memiliki item tindakan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa riunione non contiene attività."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 회의에는 액션 아이템이 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To spotkanie nie ma zadań."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta reunião não tem itens de ação."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У этой встречи нет задач."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu toplantının eylem maddesi yok."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuộc họp này không có việc cần làm."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此会议没有待办事项。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此會議沒有待辦事項。"
+          }
+        }
+      }
+    },
+    "この会議にはメモがありません。" : {
+      "comment" : "HanasuMeetingsCommand.swift:112",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد ملاحظات في هذا الاجتماع."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Meeting enthält keine Notizen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This meeting has no notes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta reunión no tiene notas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette réunion ne contient aucune note."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस मीटिंग के कोई नोट्स नहीं हैं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapat ini tidak memiliki catatan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa riunione non contiene note."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 회의에는 메모가 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To spotkanie nie ma notatek."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta reunião não tem notas."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У этой встречи нет заметок."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu toplantının notu yok."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuộc họp này không có ghi chú."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此会议没有备注。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此會議沒有備註。"
+          }
+        }
+      }
+    },
+    "この会議には議事録がありません。" : {
+      "comment" : "HanasuMeetingsCommand.swift:106",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد محضر لهذا الاجتماع."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für dieses Meeting gibt es kein Protokoll."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This meeting has no minutes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta reunión no tiene acta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette réunion n’a pas de compte rendu."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस मीटिंग के मिनट्स नहीं हैं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapat ini tidak memiliki notulen."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa riunione non ha un verbale."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 회의에는 회의록이 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To spotkanie nie ma protokołu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta reunião não tem ata."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У этой встречи нет протокола."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu toplantının tutanağı yok."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuộc họp này không có biên bản họp."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此会议没有会议纪要。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此會議沒有會議紀錄。"
+          }
+        }
+      }
+    },
+    "この会議は「%@」です。保存されている分だけを出します。" : {
+      "comment" : "HanasuMeetingsCommand.swift:97",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حالة هذا الاجتماع «%@». سيُعرض الجزء المحفوظ فقط."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Meeting hat den Status „%@“. Es wird nur ausgegeben, was bisher gesichert wurde."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This meeting's status is “%@”. Showing only what has been saved."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta reunión está en estado «%@». Solo se muestra lo que se ha guardado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette réunion est à l’état « %@ ». Seul le contenu déjà enregistré est affiché."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस मीटिंग की स्थिति “%@” है। सिर्फ़ सहेजा गया हिस्सा दिखाया जाएगा।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status rapat ini “%@”. Hanya bagian yang sudah tersimpan yang ditampilkan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo stato di questa riunione è «%@». Viene mostrato solo ciò che è stato salvato."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 회의는 \"%@\" 상태입니다. 저장된 부분만 출력합니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To spotkanie ma status „%@”. Zostanie wyświetlona tylko zapisana część."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta reunião está com status “%@”. Mostrando apenas o que já foi salvo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Статус встречи: «%@». Выводится только то, что уже сохранено."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu toplantının durumu: “%@”. Yalnızca kaydedilmiş kısım gösteriliyor."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuộc họp này đang ở trạng thái “%@”. Chỉ xuất phần đã được lưu."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此会议的状态为“%@”。仅输出已保存的部分。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此會議的狀態為「%@」。僅輸出已儲存的部分。"
           }
         }
       }
@@ -26011,6 +27847,108 @@
         }
       }
     },
+    "これより新しい会議が %@ 件あります（記録中・処理中・失敗）: %@" : {
+      "comment" : "HanasuMeetingsCommand.swift:251",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توجد اجتماعات أحدث (قيد التسجيل أو قيد المعالجة أو فاشلة)، عددها %@: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es gibt %@ neuere Meetings (Aufnahme läuft, in Verarbeitung oder fehlgeschlagen): %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There are %@ newer meetings (recording, processing, or failed): %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hay %@ reuniones más recientes (grabando, procesando o fallidas): %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ réunions plus récentes (en cours d’enregistrement, en traitement ou en échec) : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इससे नई %@ मीटिंग हैं (रिकॉर्डिंग हो रही है, प्रोसेस हो रही है या विफल): %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ada %@ rapat yang lebih baru (sedang merekam, sedang diproses, atau gagal): %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ci sono %@ riunioni più recenti (in registrazione, in elaborazione o non riuscite): %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이보다 최근 회의가 %@개 있습니다(기록 중·처리 중·실패): %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Są nowsze spotkania (nagrywane, przetwarzane lub z błędem), łącznie %@: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Há %@ reuniões mais recentes que esta (gravando, processando ou com falha): %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Есть более новые встречи — %@ (идёт запись, обработка или ошибка): %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bundan daha yeni %@ toplantı var (kaydediliyor, işleniyor veya başarısız): %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có %@ cuộc họp mới hơn (đang ghi, đang xử lý hoặc thất bại): %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有 %@ 个更新的会议（录制中、正在处理或失败）：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有 %@ 場較新的會議（錄製中、處理中或失敗）：%@"
+          }
+        }
+      }
+    },
     "しまう" : {
       "comment" : "AppDelegate.swift:323",
       "extractionState" : "manual",
@@ -26828,7 +28766,7 @@
       }
     },
     "すべて削除" : {
-      "comment" : "DictationHistoryWindow.swift:659",
+      "comment" : "DictationHistoryWindow.swift:660",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26925,6 +28863,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全部刪除"
+          }
+        }
+      }
+    },
+    "そのフォルダがあり、このユーザーで読めるかを確かめてください。" : {
+      "comment" : "HanasuMeetingsCommand.swift:234",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأكد من وجود المجلد ومن أن هذا المستخدم يستطيع قراءته."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüfe, ob der Ordner existiert und dieser Benutzer ihn lesen kann."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Make sure the folder exists and is readable by this user."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprueba que la carpeta existe y que este usuario puede leerla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez que le dossier existe et que cet utilisateur peut le lire."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "जाँचें कि वह फ़ोल्डर मौजूद है और यह यूज़र उसे पढ़ सकता है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pastikan folder tersebut ada dan dapat dibaca oleh pengguna ini."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifica che la cartella esista e che questo utente possa leggerla."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "폴더가 있는지, 이 사용자가 읽을 수 있는지 확인하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdź, czy folder istnieje i czy ten użytkownik może go odczytać."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifique se a pasta existe e se este usuário pode lê-la."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверьте, что папка существует и этот пользователь может её читать."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klasörün var olduğunu ve bu kullanıcının okuyabildiğini kontrol edin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy kiểm tra thư mục đó có tồn tại và người dùng này có quyền đọc hay không."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请确认该文件夹存在，且当前用户可以读取。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請確認該檔案夾存在，且目前的使用者可以讀取。"
           }
         }
       }
@@ -29174,7 +31214,7 @@
       }
     },
     "やり直し" : {
-      "comment" : "DictationHistory.swift:554",
+      "comment" : "DictationHistory.swift:560",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29276,7 +31316,7 @@
       }
     },
     "やり直しません" : {
-      "comment" : "DictationHistory.swift:554",
+      "comment" : "DictationHistory.swift:560",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29781,6 +31821,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "圖像顯示位置"
+          }
+        }
+      }
+    },
+    "アクション %@ 件" : {
+      "comment" : "HanasuMeetingsCommand.swift:321",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عناصر الإجراءات: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgaben: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Action items: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tareas: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actions : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ऐक्शन आइटम: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ item tindakan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attività: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "액션 %@개"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zadania: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Itens de ação: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задач: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ eylem maddesi"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ việc cần làm"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "待办事项 %@ 条"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "待辦事項 %@ 項"
+          }
+        }
+      }
+    },
+    "アクションアイテムはありません。" : {
+      "comment" : "HanasuMeetingsCommand.swift:193",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد عناصر إجراءات."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Aufgaben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No action items."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay tareas pendientes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune action à mener."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई ऐक्शन आइटम नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada item tindakan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna attività."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "액션 아이템이 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak zadań."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum item de ação."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задач нет."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eylem maddesi yok."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có việc cần làm."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有待办事项。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有待辦事項。"
           }
         }
       }
@@ -34682,7 +36926,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:317, DictationHistoryWindow.swift:555, MeetingChatView.swift:384",
+      "comment" : "AppDelegate.swift:317, DictationHistoryWindow.swift:556, MeetingChatView.swift:384",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37538,7 +39782,7 @@
       }
     },
     "スリープ前までで止める" : {
-      "comment" : "MeetingRecorder.swift:725",
+      "comment" : "MeetingRecorder.swift:744",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37737,6 +39981,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "標題"
+          }
+        }
+      }
+    },
+    "タイトル: %@" : {
+      "comment" : "HanasuMeetingsCommand.swift:310",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العنوان: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titel: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Título: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titre : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शीर्षक: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Judul: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titolo: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제목: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tytuł: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Título: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Название: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlık: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiêu đề: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标题：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標題：%@"
           }
         }
       }
@@ -39985,6 +42331,108 @@
         }
       }
     },
+    "ヒット %@ 件" : {
+      "comment" : "HanasuMeetingsCommand.swift:161",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النتائج المطابقة: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treffer: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hits: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coincidencias: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Occurrences : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिलान: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kecocokan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Occorrenze: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일치 %@건"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trafienia: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocorrências: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Совпадений: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ eşleşme"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ chỗ khớp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "命中 %@ 处"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "命中 %@ 處"
+          }
+        }
+      }
+    },
     "フォーカスしている要素を取れませんでした" : {
       "comment" : "ScreenContext.swift:189",
       "extractionState" : "manual",
@@ -41618,7 +44066,7 @@
       }
     },
     "マイクを再開できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:659",
+      "comment" : "MeetingRecorder.swift:677",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42128,7 +44576,7 @@
       }
     },
     "マイク（自分）の音が入っていません。設定の「会議」→「録音するマイク」を確認してください。" : {
-      "comment" : "MeetingRecorder.swift:759",
+      "comment" : "MeetingRecorder.swift:778",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48962,7 +51410,7 @@
       }
     },
     "今の話を分かりやすく" : {
-      "comment" : "MeetingChat.swift:215",
+      "comment" : "MeetingChat.swift:218",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -50491,6 +52939,108 @@
         }
       }
     },
+    "会議が見つかりません: %@" : {
+      "comment" : "HanasuMeetingsCommand.swift:267",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم يُعثر على الاجتماع: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting nicht gefunden: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting not found: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encuentra la reunión: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réunion introuvable : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग नहीं मिली: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapat tidak ditemukan: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riunione non trovata: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의를 찾을 수 없습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie znaleziono spotkania: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reunião não encontrada: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Встреча не найдена: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı bulunamadı: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không tìm thấy cuộc họp: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到会议：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到會議：%@"
+          }
+        }
+      }
+    },
     "会議に質問" : {
       "comment" : "MeetingSearchView.swift:260",
       "extractionState" : "manual",
@@ -50691,6 +53241,414 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "會議 App 開始使用麥克風時，會提示「要錄製嗎？」。不會擅自錄製。"
+          }
+        }
+      }
+    },
+    "会議のフォルダを読めません: %@" : {
+      "comment" : "HanasuMeetingsCommand.swift:237",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّرت قراءة مجلد الاجتماعات: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting-Ordner kann nicht gelesen werden: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Can't read the meetings folder: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede leer la carpeta de reuniones: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de lire le dossier des réunions : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग का फ़ोल्डर पढ़ा नहीं जा सका: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak dapat membaca folder rapat: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile leggere la cartella delle riunioni: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 폴더를 읽을 수 없습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można odczytać folderu spotkań: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível ler a pasta de reuniões: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось прочитать папку встреч: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı klasörü okunamadı: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không đọc được thư mục cuộc họp: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取会议文件夹：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法讀取會議檔案夾：%@"
+          }
+        }
+      }
+    },
+    "会議の一覧は hanasu meetings list で表示できます。" : {
+      "comment" : "HanasuMeetingsCommand.swift:268",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يمكنك عرض قائمة الاجتماعات باستخدام hanasu meetings list."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit hanasu meetings list kannst du die Liste der Meetings anzeigen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run hanasu meetings list to see the list of meetings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa hanasu meetings list para ver la lista de reuniones."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour afficher la liste des réunions, utilisez hanasu meetings list."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग की सूची hanasu meetings list से देखें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daftar rapat dapat ditampilkan dengan hanasu meetings list."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa hanasu meetings list per vedere l'elenco delle riunioni."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 목록은 hanasu meetings list로 볼 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listę spotkań wyświetlisz poleceniem hanasu meetings list."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use hanasu meetings list para ver a lista de reuniões."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Список встреч можно вывести командой hanasu meetings list."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı listesini hanasu meetings list ile görebilirsiniz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xem danh sách cuộc họp bằng hanasu meetings list."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "运行 hanasu meetings list 可查看会议列表。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "執行 hanasu meetings list 可查看會議列表。"
+          }
+        }
+      }
+    },
+    "会議の中身を出す（既定は議事録）" : {
+      "comment" : "HanasuCommand.swift:297",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض محتوى اجتماع (المحضر افتراضيًا)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inhalt eines Meetings ausgeben (standardmäßig das Protokoll)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show a meeting's contents (minutes by default)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra el contenido de una reunión (por defecto, el acta)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher le contenu d’une réunion (par défaut, le compte rendu)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग की सामग्री दिखाएँ (डिफ़ॉल्ट: मिनट्स)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tampilkan isi rapat (bawaan: notulen)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra il contenuto di una riunione (per impostazione predefinita, il verbale)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 내용 출력(기본값은 회의록)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż zawartość spotkania (domyślnie protokół)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra o conteúdo de uma reunião (por padrão, a ata)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вывести содержимое встречи (по умолчанию — протокол)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantının içeriğini gösterir (varsayılan: tutanak)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xuất nội dung cuộc họp (mặc định là biên bản họp)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输出会议内容（默认为会议纪要）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "輸出會議內容（預設為會議紀錄）"
+          }
+        }
+      }
+    },
+    "会議の指定: ID（例: 2026-11-02_1312）、latest（最新の完了した会議）、日付（例: 2026-11-02）" : {
+      "comment" : "HanasuCommand.swift:312",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحديد الاجتماع: ID (مثال: 2026-11-02_1312)، أو latest (أحدث اجتماع مكتمل)، أو تاريخ (مثال: 2026-11-02)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting angeben: ID (z. B. 2026-11-02_1312), latest (das neueste abgeschlossene Meeting) oder ein Datum (z. B. 2026-11-02)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting: an ID (e.g. 2026-11-02_1312), latest (the most recent completed meeting), or a date (e.g. 2026-11-02)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cómo indicar una reunión: ID (p. ej., 2026-11-02_1312), latest (la última reunión completada) o una fecha (p. ej., 2026-11-02)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désigner une réunion : ID (ex. 2026-11-02_1312), latest (la dernière réunion terminée) ou une date (ex. 2026-11-02)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग कैसे बताएँ: ID (उदाहरण: 2026-11-02_1312), latest (सबसे नई पूरी हुई मीटिंग), तारीख (उदाहरण: 2026-11-02)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menentukan rapat: ID (contoh: 2026-11-02_1312), latest (rapat selesai terbaru), tanggal (contoh: 2026-11-02)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Come indicare una riunione: ID (ad es. 2026-11-02_1312), latest (l'ultima riunione completata) o una data (ad es. 2026-11-02)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 지정: ID(예: 2026-11-02_1312), latest(가장 최근에 완료된 회의), 날짜(예: 2026-11-02)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wskazanie spotkania: ID (np. 2026-11-02_1312), latest (najnowsze zakończone spotkanie), data (np. 2026-11-02)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como indicar a reunião: ID (ex.: 2026-11-02_1312), latest (a reunião concluída mais recente) ou data (ex.: 2026-11-02)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как указать встречу: ID (например, 2026-11-02_1312), latest (последняя завершённая встреча) или дата (например, 2026-11-02)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı belirtme: ID (ör. 2026-11-02_1312), latest (en son tamamlanan toplantı) veya tarih (ör. 2026-11-02)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chỉ định cuộc họp: ID (ví dụ: 2026-11-02_1312), latest (cuộc họp đã hoàn tất gần nhất) hoặc ngày (ví dụ: 2026-11-02)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "指定会议：ID（例如 2026-11-02_1312）、latest（最近一个已完成的会议）、日期（例如 2026-11-02）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "指定會議：ID（例如 2026-11-02_1312）、latest（最近一場已完成的會議）、日期（例如 2026-11-02）"
           }
         }
       }
@@ -52022,7 +54980,7 @@
       }
     },
     "会議の記録中に Mac がスリープしました" : {
-      "comment" : "MeetingRecorder.swift:723",
+      "comment" : "MeetingRecorder.swift:742",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52119,6 +55077,414 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "錄製會議時 Mac 進入了睡眠"
+          }
+        }
+      }
+    },
+    "会議はありません。" : {
+      "comment" : "HanasuMeetingsCommand.swift:44",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد اجتماعات."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Meetings."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No meetings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay reuniones."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune réunion."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई मीटिंग नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada rapat."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna riunione."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의가 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak spotkań."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhuma reunião."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Встреч нет."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı yok."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có cuộc họp nào."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有会议。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有會議。"
+          }
+        }
+      }
+    },
+    "会議を 1 つ指定してください（例: hanasu meetings show latest）。" : {
+      "comment" : "HanasuMeetingsCommand.swift:58",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حدّد اجتماعًا واحدًا (مثال: hanasu meetings show latest)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gib ein Meeting an (z. B. hanasu meetings show latest)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specify one meeting (e.g. hanasu meetings show latest)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indica una reunión (p. ej., hanasu meetings show latest)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indiquez une réunion (ex. hanasu meetings show latest)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एक मीटिंग बताएँ (उदाहरण: hanasu meetings show latest)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tentukan satu rapat (contoh: hanasu meetings show latest)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specifica una riunione (ad es. hanasu meetings show latest)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의를 하나 지정하세요(예: hanasu meetings show latest)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wskaż jedno spotkanie (np. hanasu meetings show latest)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indique uma reunião (ex.: hanasu meetings show latest)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Укажите одну встречу (например, hanasu meetings show latest)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir toplantı belirtin (ör. hanasu meetings show latest)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy chỉ định một cuộc họp (ví dụ: hanasu meetings show latest)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请指定一个会议（例如 hanasu meetings show latest）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請指定一場會議（例如 hanasu meetings show latest）。"
+          }
+        }
+      }
+    },
+    "会議をまたいでアクションアイテムを並べる" : {
+      "comment" : "HanasuCommand.swift:306",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض عناصر الإجراءات من كل الاجتماعات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgaben aus allen Meetings auflisten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "List action items across meetings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista las tareas pendientes de todas las reuniones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lister les actions à mener de toutes les réunions"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सभी मीटिंग के ऐक्शन आइटम एक साथ दिखाएँ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tampilkan item tindakan dari semua rapat"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elenca le attività di tutte le riunioni"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여러 회의의 액션 아이템 나열"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyświetl zadania ze wszystkich spotkań"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista os itens de ação de todas as reuniões"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вывести задачи из всех встреч"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tüm toplantılardaki eylem maddelerini listeler"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liệt kê việc cần làm của nhiều cuộc họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跨会议列出待办事项"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跨會議列出待辦事項"
+          }
+        }
+      }
+    },
+    "会議を新しい順に並べる" : {
+      "comment" : "HanasuCommand.swift:295",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض الاجتماعات من الأحدث إلى الأقدم"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meetings auflisten, neueste zuerst"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "List meetings, newest first"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista las reuniones de la más reciente a la más antigua"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lister les réunions, des plus récentes aux plus anciennes"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग को सबसे नई से शुरू करके दिखाएँ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tampilkan rapat, mulai dari yang terbaru"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elenca le riunioni dalla più recente"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의를 최신순으로 나열"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyświetl spotkania od najnowszych"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista as reuniões, das mais recentes às mais antigas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вывести встречи, начиная с последних"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantıları en yeniden eskiye listeler"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liệt kê cuộc họp, mới nhất trước"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按从新到旧的顺序列出会议"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "依從新到舊的順序列出會議"
           }
         }
       }
@@ -52221,6 +55587,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "搜尋會議"
+          }
+        }
+      }
+    },
+    "会議を横断して検索する（空白で区切ると、すべてを含むものだけ）" : {
+      "comment" : "HanasuCommand.swift:299",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث في كل الاجتماعات (عند الفصل بمسافات، تظهر فقط النتائج التي تحتوي على كل الكلمات)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Meetings durchsuchen (bei mehreren durch Leerzeichen getrennten Begriffen nur Treffer, die alle enthalten)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search across meetings (separate words with spaces to match only meetings that contain all of them)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Busca en todas las reuniones (con varias palabras separadas por espacios, solo las que contienen todas)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher dans toutes les réunions (avec plusieurs mots séparés par des espaces, seules celles qui les contiennent tous)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सभी मीटिंग में खोजें (स्पेस से अलग करने पर, सिर्फ़ वे नतीजे जिनमें सभी शब्द हों)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cari di semua rapat (jika dipisahkan spasi, hanya yang memuat semua kata)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca in tutte le riunioni (con più parole separate da spazi, solo quelle che le contengono tutte)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여러 회의를 통틀어 검색(공백으로 구분하면 모두 포함하는 회의만)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Szukaj we wszystkich spotkaniach (słowa oddzielone spacjami: tylko wyniki zawierające wszystkie)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Busca em todas as reuniões (com termos separados por espaço, só o que contiver todos)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Искать по всем встречам (если слова разделены пробелами — только то, где есть все)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tüm toplantılarda arar (boşlukla ayrılmış sözcüklerde yalnızca hepsini içerenler)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tìm kiếm trên mọi cuộc họp (nhiều từ cách nhau bằng dấu cách: chỉ lấy kết quả chứa tất cả)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跨会议搜索（用空格分隔多个词时，只显示包含所有词的结果）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跨會議搜尋（以空格分隔多個詞時，只顯示包含所有詞的結果）"
           }
         }
       }
@@ -53449,6 +56917,108 @@
         }
       }
     },
+    "余分な引数です: %@" : {
+      "comment" : "HanasuMeetingsCommand.swift:372",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وسيطة زائدة: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überzähliges Argument: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unexpected argument: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argumento de más: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argument en trop : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अतिरिक्त आर्ग्युमेंट: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argumen berlebih: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argomento di troppo: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "불필요한 인수입니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nadmiarowy argument: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argumento extra: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Лишний аргумент: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fazla argüman: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đối số thừa: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "多余的参数：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "多餘的引數：%@"
+          }
+        }
+      }
+    },
     "作り直す" : {
       "comment" : "MeetingNotesViews.swift:246, MeetingWindow.swift:436, MinutesTemplateViews.swift:128",
       "extractionState" : "manual",
@@ -53547,6 +57117,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重新製作"
+          }
+        }
+      }
+    },
+    "使い方:" : {
+      "comment" : "HanasuCommand.swift:270, HanasuCommand.swift:283, HanasuCommand.swift:284",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاستخدام:"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwendung:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisation :"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "उपयोग:"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Penggunaan:"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso:"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용법:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użycie:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso:"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использование:"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanım:"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cách dùng:"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用法："
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用法："
+          }
+        }
+      }
+    },
+    "使い方は hanasu help で表示できます。" : {
+      "comment" : "HanasuCommand.swift:93, HanasuCommand.swift:201, HanasuMeetingsCommand.swift:27",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يمكنك عرض طريقة الاستخدام باستخدام hanasu help."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit hanasu help kannst du die Verwendung anzeigen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run hanasu help to see usage."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa hanasu help para ver cómo se usa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour afficher l’aide, utilisez hanasu help."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "उपयोग का तरीका hanasu help से देखें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cara penggunaan dapat ditampilkan dengan hanasu help."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa hanasu help per vedere come si usa."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용법은 hanasu help로 볼 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sposób użycia wyświetlisz poleceniem hanasu help."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use hanasu help para ver como usar."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Справку можно вывести командой hanasu help."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanım bilgisini hanasu help ile görebilirsiniz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xem cách dùng bằng hanasu help."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "运行 hanasu help 可查看用法。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "執行 hanasu help 可查看用法。"
           }
         }
       }
@@ -54572,7 +58346,7 @@
       }
     },
     "保存" : {
-      "comment" : "AISettingsView.swift:202, AISettingsView.swift:296, DictationHistoryWindow.swift:636",
+      "comment" : "AISettingsView.swift:202, AISettingsView.swift:296, DictationHistoryWindow.swift:637",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55286,7 +59060,7 @@
       }
     },
     "保存しない間も、直近 %@ 件はアプリを終了するまでメニューと再入力に使えます。保存済みの履歴は残るので、消すには下の「すべて削除」を使ってください。" : {
-      "comment" : "DictationHistoryWindow.swift:640",
+      "comment" : "DictationHistoryWindow.swift:641",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55388,7 +59162,7 @@
       }
     },
     "保存できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:358, MinutesTemplateViews.swift:213",
+      "comment" : "MeetingRecorder.swift:359, MinutesTemplateViews.swift:213",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55694,7 +59468,7 @@
       }
     },
     "保存先: ~/Library/Application Support/Hanasu/History（本人だけが読めるファイル）。上限を超えたものは古い順に消えます。" : {
-      "comment" : "DictationHistoryWindow.swift:639",
+      "comment" : "DictationHistoryWindow.swift:640",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56102,7 +59876,7 @@
       }
     },
     "停止" : {
-      "comment" : "DictationHistoryWindow.swift:524, HUDPanel.swift:315",
+      "comment" : "DictationHistoryWindow.swift:525, HUDPanel.swift:315",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56816,7 +60590,7 @@
       }
     },
     "入力先がずれて結果が消えたときに、いま前面にあるアプリへ最後の結果を入力し直します。" : {
-      "comment" : "DictationHistoryWindow.swift:615",
+      "comment" : "DictationHistoryWindow.swift:616",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57530,7 +61304,7 @@
       }
     },
     "再生" : {
-      "comment" : "DictationHistoryWindow.swift:519",
+      "comment" : "DictationHistoryWindow.swift:520",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57836,7 +61610,7 @@
       }
     },
     "処理中" : {
-      "comment" : "HUDPanel.swift:249",
+      "comment" : "HUDPanel.swift:249, HanasuMeetingsCommand.swift:328",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59366,7 +63140,7 @@
       }
     },
     "原文を AI（設定の「AI」で音声入力に選んだもの）に渡して整形し直します。結果はこの履歴に上書きし、クリップボードにもコピーします。" : {
-      "comment" : "DictationHistoryWindow.swift:499",
+      "comment" : "DictationHistoryWindow.swift:500",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60998,7 +64772,7 @@
       }
     },
     "失敗" : {
-      "comment" : "DictationHistoryWindow.swift:375, MeetingWindow.swift:172",
+      "comment" : "DictationHistoryWindow.swift:375, HanasuMeetingsCommand.swift:330, MeetingWindow.swift:172",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61401,6 +65175,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "將字幕顯示在最前面"
+          }
+        }
+      }
+    },
+    "完了" : {
+      "comment" : "HanasuMeetingsCommand.swift:329",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مكتمل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgeschlossen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminée"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पूरा हुआ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selesai"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completata"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zakończone"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concluída"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершена"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamamlandı"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoàn tất"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完成"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已完成"
+          }
+        }
+      }
+    },
+    "完了した会議がありません。" : {
+      "comment" : "HanasuMeetingsCommand.swift:247",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد اجتماعات مكتملة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine abgeschlossenen Meetings."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No completed meetings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay reuniones completadas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune réunion terminée."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई पूरी हुई मीटिंग नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada rapat yang sudah selesai."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna riunione completata."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료된 회의가 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak zakończonych spotkań."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não há reuniões concluídas."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет завершённых встреч."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamamlanmış toplantı yok."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có cuộc họp nào đã hoàn tất."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有已完成的会议。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有已完成的會議。"
           }
         }
       }
@@ -61814,7 +65792,7 @@
       }
     },
     "履歴が見つかりません（削除された可能性があります）" : {
-      "comment" : "DictationHistory.swift:186",
+      "comment" : "DictationHistory.swift:192",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61916,7 +65894,7 @@
       }
     },
     "履歴の文章は残り、録音（音声ファイル）だけを削除します。元に戻せません。" : {
-      "comment" : "DictationHistoryWindow.swift:666",
+      "comment" : "DictationHistoryWindow.swift:667",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62018,7 +65996,7 @@
       }
     },
     "履歴をすべて削除…" : {
-      "comment" : "DictationHistoryWindow.swift:652",
+      "comment" : "DictationHistoryWindow.swift:653",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62120,7 +66098,7 @@
       }
     },
     "履歴をファイルに保存する" : {
-      "comment" : "DictationHistoryWindow.swift:619",
+      "comment" : "DictationHistoryWindow.swift:620",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62222,7 +66200,7 @@
       }
     },
     "履歴を保存できませんでした: %@" : {
-      "comment" : "DictationHistory.swift:405",
+      "comment" : "DictationHistory.swift:411",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62324,7 +66302,7 @@
       }
     },
     "履歴を読み込めませんでした: %@" : {
-      "comment" : "DictationHistory.swift:326",
+      "comment" : "DictationHistory.swift:332",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62528,7 +66506,7 @@
       }
     },
     "履歴を開く" : {
-      "comment" : "DictationHistoryWindow.swift:602",
+      "comment" : "DictationHistoryWindow.swift:603",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63242,7 +67220,7 @@
       }
     },
     "成功" : {
-      "comment" : "DictationHistory.swift:82",
+      "comment" : "DictationHistory.swift:88",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64874,7 +68852,7 @@
       }
     },
     "整形" : {
-      "comment" : "DictationController.swift:320, DictationHistory.swift:67",
+      "comment" : "DictationController.swift:320, DictationHistory.swift:73",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64976,7 +68954,7 @@
       }
     },
     "整形し直す" : {
-      "comment" : "DictationHistoryWindow.swift:489",
+      "comment" : "DictationHistoryWindow.swift:490",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65282,7 +69260,7 @@
       }
     },
     "整形オフ（原文のまま）" : {
-      "comment" : "DictationHistory.swift:85",
+      "comment" : "DictationHistory.swift:91",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -70178,7 +74156,7 @@
       }
     },
     "最後" : {
-      "comment" : "MinutesSelectionViews.swift:65, MinutesSelectionViews.swift:93, MinutesSelectionViews.swift:208",
+      "comment" : "MinutesSelectionViews.swift:65, MinutesSelectionViews.swift:93, MinutesSelectionViews.swift:210",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -70382,7 +74360,7 @@
       }
     },
     "最後の結果をもう一度入力" : {
-      "comment" : "DictationHistoryWindow.swift:606, Onboarding.swift:554, ShortcutRecorder.swift:19",
+      "comment" : "DictationHistoryWindow.swift:607, Onboarding.swift:554, ShortcutRecorder.swift:19",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -70891,6 +74869,108 @@
         }
       }
     },
+    "期間の指定: 7d・24h・2w（今からさかのぼる）、日付（例: 2026-11-01）" : {
+      "comment" : "HanasuCommand.swift:313, HanasuMeetingsCommand.swift:438",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحديد المدة: 7d، 24h، 2w (رجوعًا من الآن)، أو تاريخ (مثال: 2026-11-01)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitraum angeben: 7d, 24h, 2w (ab jetzt rückwärts) oder ein Datum (z. B. 2026-11-01)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Period: 7d, 24h, 2w (counting back from now), or a date (e.g. 2026-11-01)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cómo indicar un periodo: 7d, 24h, 2w (hacia atrás desde ahora) o una fecha (p. ej., 2026-11-01)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désigner une période : 7d, 24h, 2w (en remontant depuis maintenant) ou une date (ex. 2026-11-01)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अवधि कैसे बताएँ: 7d, 24h, 2w (अभी से पीछे की ओर), तारीख (उदाहरण: 2026-11-01)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menentukan periode: 7d, 24h, 2w (mundur dari sekarang), tanggal (contoh: 2026-11-01)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Come indicare un periodo: 7d, 24h, 2w (a ritroso da adesso) o una data (ad es. 2026-11-01)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기간 지정: 7d, 24h, 2w(지금부터 거슬러 올라감), 날짜(예: 2026-11-01)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okres: 7d, 24h, 2w (wstecz od teraz), data (np. 2026-11-01)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como indicar o período: 7d, 24h, 2w (contando para trás a partir de agora) ou data (ex.: 2026-11-01)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как указать период: 7d, 24h, 2w (назад от текущего момента) или дата (например, 2026-11-01)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaman belirtme: 7d, 24h, 2w (şu andan geriye doğru) veya tarih (ör. 2026-11-01)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chỉ định thời gian: 7d, 24h, 2w (tính lùi từ bây giờ) hoặc ngày (ví dụ: 2026-11-01)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "指定时间：7d、24h、2w（从现在往前推算）、日期（例如 2026-11-01）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "指定時間：7d、24h、2w（從現在往前推算）、日期（例如 2026-11-01）"
+          }
+        }
+      }
+    },
     "期限: %@" : {
       "comment" : "ReminderExport.swift:66",
       "extractionState" : "manual",
@@ -71300,7 +75380,7 @@
       }
     },
     "未設定のため原文のまま" : {
-      "comment" : "DictationHistory.swift:84",
+      "comment" : "DictationHistory.swift:90",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72009,6 +76089,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在搜尋…"
+          }
+        }
+      }
+    },
+    "検索する語を指定してください（例: hanasu meetings search 予算）。" : {
+      "comment" : "HanasuMeetingsCommand.swift:139",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حدّد الكلمة التي تريد البحث عنها (مثال: hanasu meetings search الميزانية)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gib die Suchbegriffe an (z. B. hanasu meetings search Budget)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specify words to search for (e.g. hanasu meetings search budget)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indica las palabras que quieres buscar (p. ej., hanasu meetings search presupuesto)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indiquez les mots à rechercher (ex. hanasu meetings search budget)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "खोजने के लिए शब्द दें (उदाहरण: hanasu meetings search बजट)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tentukan kata yang dicari (contoh: hanasu meetings search anggaran)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specifica le parole da cercare (ad es. hanasu meetings search budget)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "검색할 단어를 지정하세요(예: hanasu meetings search 예산)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podaj szukane słowo (np. hanasu meetings search budżet)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indique o termo de busca (ex.: hanasu meetings search orçamento)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Укажите слово для поиска (например, hanasu meetings search бюджет)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aranacak sözcüğü belirtin (ör. hanasu meetings search bütçe)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy chỉ định từ khóa tìm kiếm (ví dụ: hanasu meetings search ngân sách)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请指定要搜索的词（例如 hanasu meetings search 预算）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請指定要搜尋的詞（例如 hanasu meetings search 預算）。"
           }
         }
       }
@@ -73136,7 +77318,7 @@
       }
     },
     "残している録音をすべて削除しますか？" : {
-      "comment" : "DictationHistoryWindow.swift:663",
+      "comment" : "DictationHistoryWindow.swift:664",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73238,7 +77420,7 @@
       }
     },
     "残す件数" : {
-      "comment" : "DictationHistoryWindow.swift:620",
+      "comment" : "DictationHistoryWindow.swift:621",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73340,7 +77522,7 @@
       }
     },
     "残す期間" : {
-      "comment" : "DictationHistoryWindow.swift:624",
+      "comment" : "DictationHistoryWindow.swift:625",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73544,7 +77726,7 @@
       }
     },
     "決まったこと・宿題" : {
-      "comment" : "MeetingChat.swift:214",
+      "comment" : "MeetingChat.swift:217",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74462,7 +78644,7 @@
       }
     },
     "無期限" : {
-      "comment" : "DictationHistoryWindow.swift:626",
+      "comment" : "DictationHistoryWindow.swift:627",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76094,7 +80276,7 @@
       }
     },
     "直近 5 分の話" : {
-      "comment" : "MeetingChat.swift:213",
+      "comment" : "MeetingChat.swift:216",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76298,7 +80480,7 @@
       }
     },
     "相手側（スピーカー）の音が入っていません。会議の音が出ている機器を、設定の「会議」→「録音するスピーカー」で選んでください。" : {
-      "comment" : "MeetingRecorder.swift:762",
+      "comment" : "MeetingRecorder.swift:781",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76395,6 +80577,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有錄到對方（揚聲器）的聲音。請在設定中的「會議」→「錄音揚聲器」中選擇播放會議聲音的裝置。"
+          }
+        }
+      }
+    },
+    "知らないオプションです: %@" : {
+      "comment" : "HanasuCommand.swift:200",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خيار غير معروف: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannte Option: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown option: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opción desconocida: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option inconnue : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अज्ञात विकल्प: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opsi tidak dikenal: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opzione sconosciuta: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알 수 없는 옵션입니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznana opcja: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opção desconhecida: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неизвестный параметр: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilinmeyen seçenek: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tùy chọn không xác định: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知选项：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知的選項：%@"
+          }
+        }
+      }
+    },
+    "知らないコマンドです: %@" : {
+      "comment" : "HanasuCommand.swift:92, HanasuMeetingsCommand.swift:26",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أمر غير معروف: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannter Befehl: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown command: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando desconocido: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commande inconnue : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अज्ञात कमांड: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perintah tidak dikenal: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando sconosciuto: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알 수 없는 명령입니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznane polecenie: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando desconhecido: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неизвестная команда: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilinmeyen komut: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lệnh không xác định: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知命令：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知的指令：%@"
           }
         }
       }
@@ -77007,6 +81393,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "停止等待回答"
+          }
+        }
+      }
+    },
+    "管理者のポリシーで、hanasu コマンドは使えないようにされています（%@）。" : {
+      "comment" : "HanasuCommand.swift:70",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عطّلت سياسة المسؤول الأمر hanasu (%@)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Befehl hanasu wurde von deinem Administrator per Richtlinie deaktiviert (%@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The hanasu command has been disabled by your administrator's policy (%@)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El administrador ha desactivado el comando hanasu mediante una política (%@)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La commande hanasu a été désactivée par une règle de votre administrateur (%@)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एडमिनिस्ट्रेटर की नीति के कारण hanasu कमांड बंद कर दी गई है (%@)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perintah hanasu dinonaktifkan oleh kebijakan administrator (%@)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il comando hanasu è stato disattivato da un criterio dell'amministratore (%@)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관리자 정책에 따라 hanasu 명령을 사용할 수 없습니다(%@)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polecenie hanasu zostało wyłączone przez zasady administratora (%@)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O comando hanasu foi desativado por uma política do administrador (%@)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Команда hanasu отключена политикой администратора (%@)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu komutu yönetici ilkesiyle devre dışı bırakılmış (%@)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lệnh hanasu đã bị tắt theo chính sách của quản trị viên (%@)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理员的策略已禁用 hanasu 命令（%@）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理員的政策已停用 hanasu 指令（%@）。"
           }
         }
       }
@@ -77725,6 +82213,108 @@
         }
       }
     },
+    "終了コード: 0 成功、1 失敗、2 使い方の誤り、3 認証情報がない、4 会議が見つからない、5 ポリシーか権限で止められた" : {
+      "comment" : "HanasuCommand.swift:315",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رموز الخروج: 0 نجاح، 1 فشل، 2 خطأ في الاستخدام، 3 بيانات الاعتماد غير موجودة، 4 لم يُعثر على الاجتماع، 5 منعته السياسة أو الأذونات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exit-Codes: 0 Erfolg, 1 Fehler, 2 falsche Verwendung, 3 Anmeldedaten fehlen, 4 Meeting nicht gefunden, 5 durch Richtlinie oder Berechtigungen blockiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exit codes: 0 success, 1 failure, 2 usage error, 3 missing credentials, 4 meeting not found, 5 blocked by policy or permissions"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Códigos de salida: 0 éxito, 1 error, 2 uso incorrecto, 3 faltan credenciales, 4 reunión no encontrada, 5 bloqueado por una política o por falta de permisos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codes de sortie : 0 succès, 1 échec, 2 utilisation incorrecte, 3 identifiants manquants, 4 réunion introuvable, 5 bloqué par une règle ou des autorisations"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एग्ज़िट कोड: 0 सफल, 1 विफल, 2 उपयोग में गलती, 3 क्रेडेंशियल नहीं हैं, 4 मीटिंग नहीं मिली, 5 नीति या अनुमति के कारण रोका गया"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kode keluar: 0 berhasil, 1 gagal, 2 penggunaan salah, 3 kredensial tidak ada, 4 rapat tidak ditemukan, 5 diblokir oleh kebijakan atau izin"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codici di uscita: 0 riuscito, 1 errore, 2 uso errato, 3 credenziali mancanti, 4 riunione non trovata, 5 bloccato da un criterio o dai permessi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "종료 코드: 0 성공, 1 실패, 2 사용법 오류, 3 인증 정보 없음, 4 회의를 찾을 수 없음, 5 정책 또는 권한으로 차단됨"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kody wyjścia: 0 sukces, 1 błąd, 2 błędne użycie, 3 brak danych uwierzytelniających, 4 nie znaleziono spotkania, 5 zablokowano przez zasady lub uprawnienia"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Códigos de saída: 0 sucesso, 1 falha, 2 uso incorreto, 3 credenciais ausentes, 4 reunião não encontrada, 5 bloqueado por política ou permissão"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Коды выхода: 0 — успех, 1 — ошибка, 2 — неверное использование, 3 — нет учётных данных, 4 — встреча не найдена, 5 — запрещено политикой или правами доступа"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çıkış kodları: 0 başarılı, 1 başarısız, 2 hatalı kullanım, 3 kimlik bilgisi yok, 4 toplantı bulunamadı, 5 ilke veya izin nedeniyle engellendi"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mã thoát: 0 thành công, 1 thất bại, 2 dùng sai cách, 3 thiếu thông tin xác thực, 4 không tìm thấy cuộc họp, 5 bị chặn bởi chính sách hoặc quyền truy cập"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出代码：0 成功，1 失败，2 用法错误，3 缺少认证信息，4 找不到会议，5 被策略或权限阻止"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結束代碼：0 成功，1 失敗，2 用法錯誤，3 缺少驗證資訊，4 找不到會議，5 被政策或權限阻擋"
+          }
+        }
+      }
+    },
     "結果" : {
       "comment" : "PasteFallbackPanel.swift:22, TextInserter.swift:107",
       "extractionState" : "manual",
@@ -78236,7 +82826,7 @@
       }
     },
     "結果（%@）" : {
-      "comment" : "DictationHistoryWindow.swift:110, DictationHistoryWindow.swift:483",
+      "comment" : "DictationHistoryWindow.swift:110, DictationHistoryWindow.swift:483, DictationHistoryWindow.swift:484",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78440,7 +83030,7 @@
       }
     },
     "結果（整形後）" : {
-      "comment" : "DictationHistoryWindow.swift:483",
+      "comment" : "DictationHistoryWindow.swift:484",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79256,7 +83846,7 @@
       }
     },
     "翻訳する言語" : {
-      "comment" : "TranslationSettingsView.swift:22",
+      "comment" : "TranslationSettingsView.swift:28",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79664,7 +84254,7 @@
       }
     },
     "聞いておくとよいこと" : {
-      "comment" : "MeetingChat.swift:216",
+      "comment" : "MeetingChat.swift:219",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81703,6 +86293,108 @@
         }
       }
     },
+    "見つかりませんでした。" : {
+      "comment" : "HanasuMeetingsCommand.swift:157",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم يُعثر على شيء."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts gefunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No results found."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontraron resultados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun résultat."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कुछ नहीं मिला।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ditemukan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun risultato."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "결과를 찾을 수 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nic nie znaleziono."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada encontrado."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ничего не найдено."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonuç bulunamadı."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không tìm thấy kết quả nào."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到结果。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到結果。"
+          }
+        }
+      }
+    },
     "見出しの構成や書き方の指示に名前を付けて保存します。記録の前や、議事録の作り直しで選べます。アクションアイテムと話者のメモは、自動で最後に付きます。" : {
       "comment" : "MinutesTemplateViews.swift:242",
       "extractionState" : "manual",
@@ -82826,7 +87518,7 @@
       }
     },
     "記録を続ける" : {
-      "comment" : "MeetingRecorder.swift:726",
+      "comment" : "MeetingRecorder.swift:745",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83030,7 +87722,7 @@
       }
     },
     "記録中" : {
-      "comment" : "MeetingWindow.swift:121, MeetingWindow.swift:241",
+      "comment" : "HanasuMeetingsCommand.swift:327, MeetingWindow.swift:121, MeetingWindow.swift:241",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87211,8 +91903,110 @@
         }
       }
     },
+    "議事録 %@ 行目: %@" : {
+      "comment" : "HanasuMeetingsCommand.swift:311",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المحضر، السطر %@: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protokoll, Zeile %@: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutes, line %@: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acta, línea %@: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compte rendu, ligne %@ : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स, पंक्ति %@: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notulen baris %@: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbale, riga %@: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록 %@번째 줄: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protokół, wiersz %@: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ata, linha %@: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Протокол, строка %@: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanak, %@. satır: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biên bản họp, dòng %@: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会议纪要第 %@ 行：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會議紀錄第 %@ 行：%@"
+          }
+        }
+      }
+    },
     "議事録から除く" : {
-      "comment" : "MinutesSelectionViews.swift:201",
+      "comment" : "MinutesSelectionViews.swift:203",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87313,8 +92107,110 @@
         }
       }
     },
+    "議事録なし" : {
+      "comment" : "HanasuMeetingsCommand.swift:320",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد محضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Protokoll"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin acta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स नहीं"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanpa notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun verbale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록 없음"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak protokołu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem ata"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Без протокола"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanak yok"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無會議紀錄"
+          }
+        }
+      }
+    },
     "議事録に使う" : {
-      "comment" : "MinutesSelectionViews.swift:253, MinutesSelectionViews.swift:254",
+      "comment" : "MinutesSelectionViews.swift:255, MinutesSelectionViews.swift:256",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87416,7 +92312,7 @@
       }
     },
     "議事録に使うかを変える" : {
-      "comment" : "MinutesSelectionViews.swift:181, MinutesSelectionViews.swift:182",
+      "comment" : "MinutesSelectionViews.swift:183, MinutesSelectionViews.swift:184",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87620,7 +92516,7 @@
       }
     },
     "議事録に使う発言を変えました。作り直すと反映されます。" : {
-      "comment" : "MinutesSelectionViews.swift:139",
+      "comment" : "MinutesSelectionViews.swift:140",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87824,7 +92720,7 @@
       }
     },
     "議事録に使う（範囲を広げる）" : {
-      "comment" : "MinutesSelectionViews.swift:205",
+      "comment" : "MinutesSelectionViews.swift:207",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88028,7 +92924,7 @@
       }
     },
     "議事録に戻す" : {
-      "comment" : "MinutesSelectionViews.swift:203",
+      "comment" : "MinutesSelectionViews.swift:205",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88436,7 +93332,7 @@
       }
     },
     "議事録の作成" : {
-      "comment" : "MeetingRecorder.swift:335, MeetingRecorder.swift:396",
+      "comment" : "MeetingRecorder.swift:336, MeetingRecorder.swift:400",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88945,6 +93841,108 @@
         }
       }
     },
+    "議事録は、使う発言を変えたあとに作り直されていません。" : {
+      "comment" : "HanasuMeetingsCommand.swift:102",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم يُعَد إنشاء المحضر بعد تغيير الأقوال المستخدمة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Protokoll wurde nach der Änderung der verwendeten Äußerungen nicht neu erstellt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The minutes haven't been recreated since the remarks used for them were changed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El acta no se ha vuelto a crear después de cambiar las intervenciones que se usan."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le compte rendu n’a pas été recréé depuis la modification des propos utilisés."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस्तेमाल होने वाले कथन बदलने के बाद मिनट्स दोबारा नहीं बनाए गए हैं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notulen belum dibuat ulang setelah ucapan yang digunakan diubah."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il verbale non è stato ricreato dopo aver cambiato gli interventi da usare."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록에 사용할 발언을 변경한 뒤 회의록을 다시 만들지 않았습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protokół nie został utworzony ponownie po zmianie używanych wypowiedzi."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A ata não foi recriada depois que as falas usadas foram alteradas."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Протокол не пересоздан после изменения используемых реплик."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanılacak konuşmalar değiştirildikten sonra tutanak yeniden oluşturulmadı."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biên bản họp chưa được tạo lại sau khi thay đổi lời nói được dùng."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改用于会议纪要的发言后，尚未重新生成会议纪要。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "變更用於會議紀錄的發言後，尚未重新製作會議紀錄。"
+          }
+        }
+      }
+    },
     "議事録はありません。" : {
       "comment" : "MeetingWindow.swift:528",
       "extractionState" : "manual",
@@ -89048,7 +94046,7 @@
       }
     },
     "議事録は作り直しません" : {
-      "comment" : "MeetingRecorder.swift:396",
+      "comment" : "MeetingRecorder.swift:400",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89354,7 +94352,7 @@
       }
     },
     "議事録を作らずに、文字起こしだけを残します" : {
-      "comment" : "MeetingRecorder.swift:335",
+      "comment" : "MeetingRecorder.swift:336",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89456,7 +94454,7 @@
       }
     },
     "議事録を作り直しています…" : {
-      "comment" : "MeetingRecorder.swift:389, MeetingWindow.swift:608",
+      "comment" : "MeetingRecorder.swift:393, MeetingWindow.swift:608",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89762,7 +94760,7 @@
       }
     },
     "議事録を作り直す" : {
-      "comment" : "MeetingWindow.swift:433, MeetingWindow.swift:470, MinutesSelectionViews.swift:142",
+      "comment" : "MeetingWindow.swift:433, MeetingWindow.swift:470, MinutesSelectionViews.swift:143",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89864,7 +94862,7 @@
       }
     },
     "議事録を作れませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:343, MeetingRecorder.swift:416",
+      "comment" : "MeetingRecorder.swift:344, MeetingRecorder.swift:420",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89966,7 +94964,7 @@
       }
     },
     "議事録を作成しています…" : {
-      "comment" : "MeetingRecorder.swift:331",
+      "comment" : "MeetingRecorder.swift:332",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94046,7 +99044,7 @@
       }
     },
     "録音" : {
-      "comment" : "DictationHistoryWindow.swift:518",
+      "comment" : "DictationHistoryWindow.swift:519",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94250,7 +99248,7 @@
       }
     },
     "録音した音声も残す" : {
-      "comment" : "DictationHistoryWindow.swift:631",
+      "comment" : "DictationHistoryWindow.swift:632",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94760,7 +99758,7 @@
       }
     },
     "録音だけをすべて削除…" : {
-      "comment" : "DictationHistoryWindow.swift:649",
+      "comment" : "DictationHistoryWindow.swift:650",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94862,7 +99860,7 @@
       }
     },
     "録音の使用量" : {
-      "comment" : "DictationHistoryWindow.swift:645",
+      "comment" : "DictationHistoryWindow.swift:646",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95066,7 +100064,7 @@
       }
     },
     "録音をすべて削除" : {
-      "comment" : "DictationHistoryWindow.swift:664",
+      "comment" : "DictationHistoryWindow.swift:665",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97922,7 +102920,7 @@
       }
     },
     "音声入力の履歴をすべて削除しますか？" : {
-      "comment" : "DictationHistoryWindow.swift:658",
+      "comment" : "DictationHistoryWindow.swift:659",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98228,7 +103226,7 @@
       }
     },
     "音声入力の結果と文字起こしの原文（%@ 件）" : {
-      "comment" : "DictationHistoryWindow.swift:600",
+      "comment" : "DictationHistoryWindow.swift:601",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

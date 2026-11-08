@@ -244,14 +244,33 @@ enum MeetingStore {
     }
 
     static func loadAll() -> [Meeting] {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        let dirs = (try? FileManager.default.contentsOfDirectory(at: baseDirectory, includingPropertiesForKeys: nil)) ?? []
-        return dirs.compactMap { dir in
-            guard let data = try? Data(contentsOf: dir.appendingPathComponent("meeting.json")) else { return nil }
-            return try? decoder.decode(Meeting.self, from: data)
+        (try? loadAll(in: baseDirectory)) ?? []
+    }
+
+    // 要件: REQ-COM-185
+    /// フォルダの中の会議をすべて読む（新しい順）。フォルダがなければ空。フォルダを読めなければ投げる
+    /// （hanasu コマンドが、権限がないことを「会議がない」と取り違えないため）。読めない会議は飛ばす
+    static func loadAll(in directory: URL) throws -> [Meeting] {
+        let dirs: [URL]
+        do {
+            dirs = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+        } catch let error as CocoaError where error.code == .fileReadNoSuchFile {
+            return []
         }
-        .sorted { $0.startedAt > $1.startedAt }
+        // 設計判断: DEC-MTG-123
+        // 会議ごとに並べて読む（会議が多いと、1 つずつ読むより速い。hanasu コマンドは呼ぶたびに全部を読む）
+        var meetings = [Meeting?](repeating: nil, count: dirs.count)
+        let lock = NSLock()
+        DispatchQueue.concurrentPerform(iterations: dirs.count) { index in
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            guard let data = try? Data(contentsOf: dirs[index].appendingPathComponent("meeting.json")),
+                  let meeting = try? decoder.decode(Meeting.self, from: data) else { return }
+            lock.lock()
+            meetings[index] = meeting
+            lock.unlock()
+        }
+        return meetings.compactMap { $0 }.sorted { $0.startedAt > $1.startedAt }
     }
 
     // 要件: REQ-MTG-028
