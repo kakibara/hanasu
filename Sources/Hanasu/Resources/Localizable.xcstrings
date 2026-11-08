@@ -206,7 +206,7 @@
       }
     },
     "# %@ — 文字起こし" : {
-      "comment" : "MeetingModels.swift:110",
+      "comment" : "MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1328,7 +1328,7 @@
       }
     },
     "%@ で文字起こしできなかった部分があります（音声ファイルは残しています）。" : {
-      "comment" : "MeetingRecorder.swift:248",
+      "comment" : "MeetingRecorder.swift:290",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1629,6 +1629,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "於 %@ 重新處理"
+          }
+        }
+      }
+    },
+    "%@ にスリープしてから、記録を続けています。スリープする前までで記録を止めるか、このまま記録を続けるかを選んでください。" : {
+      "comment" : "MeetingRecorder.swift:724",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دخل الجهاز في وضع السكون عند %@، واستمر التسجيل منذ ذلك الحين. اختر إيقاف التسجيل عند النقطة السابقة للسكون أو متابعة التسجيل."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Ruhezustand begann um %@, und die Aufnahme läuft seitdem weiter. Wähle, ob die Aufnahme beim Zeitpunkt vor dem Ruhezustand enden oder weiterlaufen soll."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recording has continued since the computer went to sleep at %@. Choose whether to stop the recording at the point before sleep, or keep recording."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entró en reposo a las %@ y la grabación ha continuado desde entonces. Elige si quieres detener la grabación en el punto anterior al reposo o seguir grabando."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La mise en veille a eu lieu à %@ et l’enregistrement s’est poursuivi depuis. Choisissez d’arrêter l’enregistrement avant la mise en veille ou de continuer à enregistrer."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिवाइस %@ पर स्लीप मोड में गया था, और तब से रिकॉर्डिंग जारी है। चुनें कि रिकॉर्डिंग को स्लीप से पहले के बिंदु पर रोकना है या रिकॉर्डिंग जारी रखनी है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perangkat masuk mode tidur pada %@ dan perekaman terus berlanjut sejak itu. Pilih apakah akan menghentikan rekaman pada titik sebelum tidur atau terus merekam."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "È andato in stop alle %@ e da allora la registrazione è continuata. Scegli se interrompere la registrazione al punto prima dello stop o continuare a registrare."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@에 잠자기 상태가 된 이후에도 기록이 계속되고 있습니다. 잠자기 전까지로 기록을 중지할지, 계속 기록할지 선택하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uśpienie nastąpiło o %@, a nagrywanie trwa od tego czasu. Wybierz, czy zatrzymać nagranie w momencie przed uśpieniem, czy kontynuować nagrywanie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ele entrou em repouso às %@ e a gravação continuou desde então. Escolha se deseja parar a gravação no ponto anterior ao repouso ou continuar gravando."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Режим сна начался в %@, и с тех пор запись продолжается. Выберите: остановить запись на моменте до перехода в сон или продолжить запись."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ saatinde uyku moduna geçildi ve kayıt o zamandan beri devam ediyor. Kaydı uykudan önceki noktada durdurmayı veya kayda devam etmeyi seçin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Máy đã ngủ lúc %@ và việc ghi vẫn tiếp tục từ đó. Hãy chọn dừng ghi tại thời điểm trước khi ngủ hoặc tiếp tục ghi."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自 %@ 进入睡眠以来，录制一直在继续。请选择在睡眠前的位置停止录制，还是继续录制。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自 %@ 進入睡眠以來，錄製一直在繼續。請選擇在睡眠前的位置停止錄製，還是繼續錄製。"
           }
         }
       }
@@ -4796,7 +4898,7 @@
       }
     },
     "%@の音声: %@" : {
-      "comment" : "MeetingRecorder.swift:245",
+      "comment" : "MeetingRecorder.swift:287",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -4898,7 +5000,7 @@
       }
     },
     "%@の音量" : {
-      "comment" : "MeetingWindow.swift:366",
+      "comment" : "MeetingWindow.swift:372",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5408,7 +5510,7 @@
       }
     },
     "%@・%@" : {
-      "comment" : "MeetingExport.swift:22, MeetingWindow.swift:413",
+      "comment" : "MeetingExport.swift:22, MeetingWindow.swift:426",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6224,7 +6326,7 @@
       }
     },
     "- 日時: %@" : {
-      "comment" : "MeetingModels.swift:110",
+      "comment" : "MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6325,8 +6427,110 @@
         }
       }
     },
+    "- 議事録に使わない発言（%@ 件）は含めていません" : {
+      "comment" : "MeetingModels.swift:129",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- لم تُضمَّن الأقوال غير المستخدمة في المحضر (%@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- Äußerungen, die nicht für das Protokoll verwendet werden (%@), sind nicht enthalten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- Remarks not used for the minutes are not included (%@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- No se incluyen las intervenciones que no se usan en el acta (%@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- Les propos non utilisés pour le compte rendu ne sont pas inclus (%@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- मिनट्स में इस्तेमाल न होने वाले कथन (%@) शामिल नहीं हैं"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- Ucapan yang tidak digunakan untuk notulen (%@) tidak disertakan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- Gli interventi non usati per il verbale (%@) non sono inclusi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- 회의록에 사용하지 않는 발언(%@건)은 포함하지 않았습니다"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- Nie uwzględniono wypowiedzi wyłączonych z protokołu (%@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- As falas não usadas na ata (%@) não foram incluídas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- Реплики, не используемые в протоколе (%@), не включены"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- Tutanakta kullanılmayan konuşmalar (%@) dahil edilmedi"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- Không bao gồm %@ lời nói không dùng cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- 未包含不用于会议纪要的发言（%@ 条）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "- 未包含不用於會議紀錄的發言（%@ 則）"
+          }
+        }
+      }
+    },
     "- 長さ: %@" : {
-      "comment" : "MeetingModels.swift:110",
+      "comment" : "MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7856,7 +8060,7 @@
       }
     },
     "AI チャット" : {
-      "comment" : "MeetingChatView.swift:527, MeetingWindow.swift:474",
+      "comment" : "MeetingChatView.swift:527, MeetingWindow.swift:481",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11732,7 +11936,7 @@
       }
     },
     "Finder で表示" : {
-      "comment" : "DictationHistoryWindow.swift:525, MeetingWindow.swift:435",
+      "comment" : "DictationHistoryWindow.swift:525, MeetingWindow.swift:442",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -19789,6 +19993,210 @@
         }
       }
     },
+    "「%@」の発言をすべて除く" : {
+      "comment" : "MinutesSelectionViews.swift:223",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استبعاد كل أقوال «%@»"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Äußerungen von „%@“ ausschließen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclude All Remarks by “%@”"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir todas las intervenciones de «%@»"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclure tous les propos de « %@ »"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@” के सभी कथन बाहर करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kecualikan semua ucapan “%@”"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escludi tutti gli interventi di «%@»"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"%@\"의 발언 모두 제외"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyklucz wszystkie wypowiedzi mówcy „%@”"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir todas as falas de “%@”"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Исключить все реплики «%@»"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@” kişisinin tüm konuşmalarını hariç tut"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loại bỏ mọi lời nói của “%@”"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "排除“%@”的所有发言"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "排除「%@」的所有發言"
+          }
+        }
+      }
+    },
+    "「%@」の発言を議事録に戻す" : {
+      "comment" : "MinutesSelectionViews.swift:221",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة أقوال «%@» إلى المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Äußerungen von „%@“ wieder ins Protokoll aufnehmen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include Remarks by “%@” in Minutes Again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver a usar en el acta las intervenciones de «%@»"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réutiliser les propos de « %@ » pour le compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@” के कथन फिर से मिनट्स में शामिल करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan lagi ucapan “%@” untuk notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riporta nel verbale gli interventi di «%@»"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"%@\"의 발언을 회의록에 다시 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przywróć do protokołu wypowiedzi mówcy „%@”"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltar a usar na ata as falas de “%@”"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуть реплики «%@» в протокол"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%@” kişisinin konuşmalarını tutanağa geri ekle"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng lại lời nói của “%@” cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将“%@”的发言重新用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將「%@」的發言重新用於會議紀錄"
+          }
+        }
+      }
+    },
     "「%@」は 1 文字なので使いません（ほかの語の一部に当たりやすいため）" : {
       "comment" : "UserDictionary.swift:149",
       "extractionState" : "manual",
@@ -20504,7 +20912,7 @@
       }
     },
     "「ここ重要」の印はありません。記録中に「★ ここ重要」かショートカットで付けると、ここに前後の会話をまとめて出します。" : {
-      "comment" : "MeetingWindow.swift:722",
+      "comment" : "MeetingWindow.swift:756",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22339,6 +22747,210 @@
         }
       }
     },
+    "ここからの発言を、議事録と AI チャットに使わない（録音は続けます）" : {
+      "comment" : "MinutesSelectionViews.swift:23",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عدم استخدام الكلام من الآن في المحضر ودردشة AI (يستمر التسجيل)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Äußerungen ab jetzt nicht für Protokoll und KI-Chat verwenden (die Aufnahme läuft weiter)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Don’t use remarks from now on for the minutes or AI Chat (recording continues)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No usar en el acta ni en el chat con IA las intervenciones a partir de ahora (la grabación continúa)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne pas utiliser les propos à partir de maintenant pour le compte rendu ni le chat IA (l’enregistrement continue)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अब से कथनों को मिनट्स और AI चैट में इस्तेमाल न करें (रिकॉर्डिंग जारी रहेगी)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jangan gunakan ucapan mulai sekarang untuk notulen dan obrolan AI (perekaman tetap berjalan)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non usare gli interventi da ora in poi per il verbale e la chat IA (la registrazione continua)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금부터의 발언을 회의록과 AI 채팅에 사용하지 않음(녹음은 계속됩니다)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie używaj wypowiedzi od tej chwili w protokole ani w czacie AI (nagrywanie trwa dalej)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não usar as falas a partir de agora na ata nem no chat de IA (a gravação continua)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не использовать дальнейшие реплики в протоколе и AI-чате (запись продолжается)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bundan sonraki konuşmaları tutanakta ve AI sohbette kullanma (kayıt devam eder)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không dùng lời nói từ lúc này cho biên bản họp và Trò chuyện AI (vẫn tiếp tục ghi âm)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此后的发言不用于会议纪要和 AI 聊天（录音会继续）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "之後的發言不用於會議紀錄和 AI 聊天（錄音會繼續）"
+          }
+        }
+      }
+    },
+    "ここから議事録に使う" : {
+      "comment" : "MinutesSelectionViews.swift:216",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاستخدام في المحضر من هنا"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ab hier für das Protokoll verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use for Minutes from Here"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar en el acta desde aquí"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser pour le compte rendu à partir d’ici"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यहाँ से मिनट्स में इस्तेमाल करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan untuk notulen mulai dari sini"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa per il verbale da qui"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여기부터 회의록에 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Używaj w protokole od tego miejsca"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar na ata a partir daqui"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать в протоколе с этого места"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buradan itibaren tutanakta kullan"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng cho biên bản họp từ đây"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从这里开始用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從這裡開始用於會議紀錄"
+          }
+        }
+      }
+    },
     "ここまでの会話について AI に聞けます" : {
       "comment" : "MeetingChatView.swift:211",
       "extractionState" : "manual",
@@ -22646,7 +23258,7 @@
       }
     },
     "ここまでを要約" : {
-      "comment" : "MeetingChat.swift:209",
+      "comment" : "MeetingChat.swift:212",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22743,6 +23355,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "摘要目前為止的內容"
+          }
+        }
+      }
+    },
+    "ここまで議事録に使う" : {
+      "comment" : "MinutesSelectionViews.swift:217",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاستخدام في المحضر حتى هنا"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bis hier für das Protokoll verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use for Minutes up to Here"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar en el acta hasta aquí"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser pour le compte rendu jusqu’ici"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यहाँ तक मिनट्स में इस्तेमाल करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan untuk notulen sampai sini"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa per il verbale fino a qui"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여기까지 회의록에 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Używaj w protokole do tego miejsca"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar na ata até aqui"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать в протоколе до этого места"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buraya kadar tutanakta kullan"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng cho biên bản họp đến đây"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "到这里为止用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "到這裡為止用於會議紀錄"
           }
         }
       }
@@ -23461,6 +24175,108 @@
         }
       }
     },
+    "このオフレコを解除する（%@ 〜 %@）" : {
+      "comment" : "MinutesSelectionViews.swift:208",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء فترة «خارج المحضر» هذه (%@ – %@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diesen Off-the-Record-Abschnitt aufheben (%@ – %@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel This Off-the-Record Period (%@–%@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar este tramo extraoficial (%@–%@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler cette période confidentielle (%@–%@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यह ऑफ़ द रिकॉर्ड अवधि रद्द करें (%@ – %@)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batalkan off the record ini (%@ – %@)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuovi questo off the record (%@ – %@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 오프더레코드 해제(%@~%@)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anuluj ten fragment poza protokołem (%@ – %@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover este off the record (%@ – %@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить этот режим «не для протокола» (%@ – %@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu kayıt dışı bölümü kaldır (%@ – %@)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bỏ khoảng ngoài biên bản này (%@ – %@)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消这段保密（%@～%@）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消這段保密（%@～%@）"
+          }
+        }
+      }
+    },
     "このテンプレートで作った会議の議事録は、そのまま残ります。" : {
       "comment" : "MinutesTemplateViews.swift:310",
       "extractionState" : "manual",
@@ -23768,7 +24584,7 @@
       }
     },
     "この会議をゴミ箱に入れる" : {
-      "comment" : "MeetingWindow.swift:444",
+      "comment" : "MeetingWindow.swift:451",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23870,7 +24686,7 @@
       }
     },
     "この前後（30 秒前〜15 秒後）の発言はありません" : {
-      "comment" : "MeetingWindow.swift:739",
+      "comment" : "MeetingWindow.swift:773",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24889,6 +25705,108 @@
         }
       }
     },
+    "この話者の発言を議事録に戻す" : {
+      "comment" : "MinutesSelectionViews.swift:88",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة أقوال هذا المتحدث إلى المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Äußerungen dieses Sprechers wieder ins Protokoll aufnehmen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include this speaker’s remarks in the minutes again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver a usar en el acta las intervenciones de este hablante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réutiliser les propos de cet intervenant pour le compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस वक्ता के कथन फिर से मिनट्स में शामिल करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan lagi ucapan pembicara ini untuk notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riporta nel verbale gli interventi di questo parlante"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 화자의 발언을 회의록에 다시 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przywróć do protokołu wypowiedzi tego mówcy"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltar a usar na ata as falas deste falante"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуть реплики этого говорящего в протокол"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu konuşmacının konuşmalarını tutanağa geri ekle"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng lại lời nói của người nói này cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将此说话人的发言重新用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將此說話者的發言重新用於會議紀錄"
+          }
+        }
+      }
+    },
     "この説明は、メニューの「Hanasu の使い方…」でいつでも開けます。" : {
       "comment" : "Onboarding.swift:750",
       "extractionState" : "manual",
@@ -25803,6 +26721,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全選"
+          }
+        }
+      }
+    },
+    "すべて元に戻す" : {
+      "comment" : "MinutesSelectionViews.swift:76",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة تعيين الكل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles zurücksetzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revert All"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revertir todo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout réinitialiser"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सब रीसेट करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atur ulang semua"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristina tutto"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모두 되돌리기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resetuj wszystko"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reverter tudo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сбросить всё"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tümünü sıfırla"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đặt lại tất cả"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部还原"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部還原"
           }
         }
       }
@@ -31519,6 +32539,618 @@
         }
       }
     },
+    "オフレコ" : {
+      "comment" : "MinutesSelection.swift:36, MinutesSelectionViews.swift:17",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خارج المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the Record"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the Record"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extraoficial"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confidentiel"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ऑफ़ द रिकॉर्ड"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오프더레코드"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poza protokołem"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не для протокола"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıt dışı"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngoài biên bản"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保密"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保密"
+          }
+        }
+      }
+    },
+    "オフレコ %@ 〜 %@" : {
+      "comment" : "MinutesSelectionViews.swift:93",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خارج المحضر %@ – %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the Record %@ – %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record %@–%@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extraoficial %@–%@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confidentiel %@–%@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ऑफ़ द रिकॉर्ड %@ – %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record %@ – %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record %@ – %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오프더레코드 %@~%@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poza protokołem %@ – %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record %@ – %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не для протокола %@ – %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıt dışı %@ – %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngoài biên bản %@ – %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保密 %@～%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保密 %@～%@"
+          }
+        }
+      }
+    },
+    "オフレコを終えて、ここからの発言をまた議事録に使う" : {
+      "comment" : "MinutesSelectionViews.swift:23",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إنهاء «خارج المحضر» واستخدام الكلام من الآن في المحضر مجددًا"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the Record beenden und Äußerungen ab jetzt wieder für das Protokoll verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End off the record and use remarks from now on for the minutes again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminar el modo extraoficial y volver a usar en el acta las intervenciones a partir de ahora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer le mode confidentiel et utiliser de nouveau les propos à partir de maintenant pour le compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ऑफ़ द रिकॉर्ड खत्म करें और अब से कथनों को फिर से मिनट्स में इस्तेमाल करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akhiri off the record dan gunakan lagi ucapan mulai sekarang untuk notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termina l'off the record e usa di nuovo per il verbale gli interventi da ora in poi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오프더레코드를 끝내고 지금부터의 발언을 다시 회의록에 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zakończ tryb poza protokołem i znów używaj wypowiedzi od tej chwili w protokole"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encerrar o off the record e voltar a usar na ata as falas a partir de agora"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выйти из режима «не для протокола» и снова использовать дальнейшие реплики в протоколе"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıt dışını bitir ve bundan sonraki konuşmaları yeniden tutanakta kullan"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kết thúc ngoài biên bản, dùng lại lời nói từ lúc này cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束保密，此后的发言重新用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結束保密，之後的發言重新用於會議紀錄"
+          }
+        }
+      }
+    },
+    "オフレコを終える" : {
+      "comment" : "MinutesSelectionViews.swift:17",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العودة إلى المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the Record beenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End Off the Record"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminar modo extraoficial"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer le mode confidentiel"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ऑफ़ द रिकॉर्ड खत्म करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akhiri off the record"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termina off the record"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오프더레코드 끝내기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wróć do protokołu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encerrar off the record"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выйти из режима «не для протокола»"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıt dışını bitir"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kết thúc ngoài biên bản"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束保密"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結束保密"
+          }
+        }
+      }
+    },
+    "オフレコを解除して、この間の発言を議事録に使う" : {
+      "comment" : "MinutesSelectionViews.swift:94",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء «خارج المحضر» واستخدام الأقوال في هذه الفترة في المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the Record aufheben und die Äußerungen in diesem Zeitraum für das Protokoll verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel off the record and use the remarks from this period for the minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar el modo extraoficial y usar en el acta las intervenciones de este tramo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler le mode confidentiel et utiliser les propos de cette période pour le compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ऑफ़ द रिकॉर्ड रद्द करें और इस दौरान के कथन मिनट्स में इस्तेमाल करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batalkan off the record dan gunakan ucapan selama periode ini untuk notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuovi l'off the record e usa per il verbale gli interventi di questo intervallo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오프더레코드를 해제하고 이 구간의 발언을 회의록에 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anuluj tryb poza protokołem i użyj wypowiedzi z tego okresu w protokole"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover o off the record e usar na ata as falas desse intervalo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить режим «не для протокола» и использовать реплики за этот период в протоколе"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıt dışını kaldır ve bu aradaki konuşmaları tutanakta kullan"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bỏ ngoài biên bản và dùng lời nói trong khoảng này cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消保密，将这段时间的发言用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消保密，將這段時間的發言用於會議紀錄"
+          }
+        }
+      }
+    },
+    "オフレコ中（%@ から）。この間の発言は、議事録と AI チャットに使いません。" : {
+      "comment" : "MinutesSelectionViews.swift:34",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خارج المحضر (منذ %@). لن تُستخدم الأقوال في هذه الفترة في المحضر ولا في دردشة AI."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the Record (seit %@). Äußerungen in dieser Zeit werden nicht für Protokoll und KI-Chat verwendet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record (since %@). Remarks during this period won’t be used for the minutes or AI Chat."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modo extraoficial (desde las %@). Las intervenciones de este tramo no se usarán en el acta ni en el chat con IA."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode confidentiel (depuis %@). Les propos de cette période ne seront pas utilisés pour le compte rendu ni le chat IA."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ऑफ़ द रिकॉर्ड (%@ से)। इस दौरान के कथन मिनट्स और AI चैट में इस्तेमाल नहीं होंगे।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sedang off the record (sejak %@). Ucapan selama periode ini tidak digunakan untuk notulen dan obrolan AI."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record (da %@). Gli interventi di questo intervallo non vengono usati per il verbale né per la chat IA."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오프더레코드 중(%@부터). 이 구간의 발언은 회의록과 AI 채팅에 사용하지 않습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poza protokołem (od %@). Wypowiedzi z tego czasu nie będą używane w protokole ani w czacie AI."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record (desde %@). As falas desse período não são usadas na ata nem no chat de IA."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не для протокола (с %@). Реплики за это время не используются в протоколе и AI-чате."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıt dışı (başlangıç: %@). Bu sıradaki konuşmalar tutanakta ve AI sohbette kullanılmaz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang ngoài biên bản (từ %@). Lời nói trong khoảng này sẽ không được dùng cho biên bản họp và Trò chuyện AI."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保密中（从 %@ 开始）。这段时间的发言不会用于会议纪要和 AI 聊天。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保密中（從 %@ 開始）。這段時間的發言不會用於會議紀錄和 AI 聊天。"
+          }
+        }
+      }
+    },
     "オン" : {
       "comment" : "MeetingNotesViews.swift:122",
       "extractionState" : "manual",
@@ -32744,7 +34376,7 @@
       }
     },
     "クリックしてタイトルを変更" : {
-      "comment" : "MeetingWindow.swift:709",
+      "comment" : "MeetingWindow.swift:743",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35192,7 +36824,7 @@
       }
     },
     "ショートカット %@ を登録できませんでした（ほかのショートカットと重なっている可能性があります）" : {
-      "comment" : "MeetingNotes.swift:259",
+      "comment" : "MeetingNotes.swift:260",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35905,8 +37537,110 @@
         }
       }
     },
+    "スリープ前までで止める" : {
+      "comment" : "MeetingRecorder.swift:725",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إيقاف عند ما قبل السكون"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor dem Ruhezustand beenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop at the point before sleep"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detener antes del reposo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrêter avant la mise en veille"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्लीप से पहले तक रोकें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hentikan sebelum tidur"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interrompi prima dello stop"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "잠자기 전까지로 중지"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zatrzymaj przed uśpieniem"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parar antes do repouso"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Остановить на моменте до сна"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uykudan önceki noktada durdur"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dừng tại thời điểm trước khi ngủ"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止于睡眠之前"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止於睡眠之前"
+          }
+        }
+      }
+    },
     "タイトル" : {
-      "comment" : "MeetingSearchView.swift:212, MeetingWindow.swift:676",
+      "comment" : "MeetingSearchView.swift:212, MeetingWindow.swift:710",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36008,7 +37742,7 @@
       }
     },
     "タイトルを変更できます" : {
-      "comment" : "MeetingWindow.swift:710",
+      "comment" : "MeetingWindow.swift:744",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39884,7 +41618,7 @@
       }
     },
     "マイクを再開できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:575",
+      "comment" : "MeetingRecorder.swift:659",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40394,7 +42128,7 @@
       }
     },
     "マイク（自分）の音が入っていません。設定の「会議」→「録音するマイク」を確認してください。" : {
-      "comment" : "MeetingRecorder.swift:607",
+      "comment" : "MeetingRecorder.swift:759",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41108,7 +42842,7 @@
       }
     },
     "メモ" : {
-      "comment" : "MeetingChatView.swift:526, MeetingNotesViews.swift:28, MeetingWindow.swift:472",
+      "comment" : "MeetingChatView.swift:526, MeetingNotesViews.swift:28, MeetingWindow.swift:479",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47228,7 +48962,7 @@
       }
     },
     "今の話を分かりやすく" : {
-      "comment" : "MeetingChat.swift:212",
+      "comment" : "MeetingChat.swift:215",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47432,7 +49166,7 @@
       }
     },
     "今の議事録とアクションアイテムは置き換わります。" : {
-      "comment" : "MeetingWindow.swift:432, MinutesTemplateViews.swift:139",
+      "comment" : "MeetingWindow.swift:439, MinutesTemplateViews.swift:139",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48146,7 +49880,7 @@
       }
     },
     "会話から推測した名前です。違っていたら直してください" : {
-      "comment" : "MeetingWindow.swift:775",
+      "comment" : "MeetingWindow.swift:809",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48350,7 +50084,7 @@
       }
     },
     "会議 %@" : {
-      "comment" : "MeetingModels.swift:177",
+      "comment" : "MeetingModels.swift:198",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -50287,6 +52021,108 @@
         }
       }
     },
+    "会議の記録中に Mac がスリープしました" : {
+      "comment" : "MeetingRecorder.swift:723",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دخل جهاز Mac في وضع السكون أثناء تسجيل اجتماع"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein Mac ist während der Aufnahme eines Meetings in den Ruhezustand gewechselt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your Mac went to sleep while recording a meeting"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu Mac entró en reposo mientras grababa una reunión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre Mac s’est mis en veille pendant l’enregistrement d’une réunion"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग रिकॉर्ड करते समय Mac स्लीप मोड में चला गया"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac masuk mode tidur saat merekam rapat"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il Mac è andato in stop durante la registrazione di una riunione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의를 기록하는 중에 Mac이 잠자기 상태가 되었습니다"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac przeszedł w stan uśpienia podczas nagrywania spotkania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Mac entrou em repouso durante a gravação de uma reunião"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac перешел в режим сна во время записи встречи"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı kaydedilirken Mac uyku moduna geçti"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Máy Mac đã chuyển sang chế độ ngủ khi đang ghi cuộc họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录制会议时 Mac 进入了睡眠"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "錄製會議時 Mac 進入了睡眠"
+          }
+        }
+      }
+    },
     "会議を検索" : {
       "comment" : "MeetingSearchView.swift:119",
       "extractionState" : "manual",
@@ -51614,7 +53450,7 @@
       }
     },
     "作り直す" : {
-      "comment" : "MeetingNotesViews.swift:246, MeetingWindow.swift:429, MinutesTemplateViews.swift:128",
+      "comment" : "MeetingNotesViews.swift:246, MeetingWindow.swift:436, MinutesTemplateViews.swift:128",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53552,7 +55388,7 @@
       }
     },
     "保存できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:316, MinutesTemplateViews.swift:213",
+      "comment" : "MeetingRecorder.swift:358, MinutesTemplateViews.swift:213",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58244,7 +60080,7 @@
       }
     },
     "同じ部屋の話者を分けています…" : {
-      "comment" : "MeetingRecorder.swift:273",
+      "comment" : "MeetingRecorder.swift:315",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58346,7 +60182,7 @@
       }
     },
     "同席者%@" : {
-      "comment" : "MeetingModels.swift:76",
+      "comment" : "MeetingModels.swift:90",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62834,7 +64670,7 @@
       }
     },
     "推測" : {
-      "comment" : "MeetingWindow.swift:772",
+      "comment" : "MeetingWindow.swift:806",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64160,7 +65996,7 @@
       }
     },
     "文字起こし" : {
-      "comment" : "MeetingExport.swift:139, MeetingWindow.swift:471, MinutesTemplateViews.swift:374",
+      "comment" : "MeetingExport.swift:139, MeetingWindow.swift:478, MinutesTemplateViews.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64262,7 +66098,7 @@
       }
     },
     "文字起こしで見る" : {
-      "comment" : "MeetingWindow.swift:734",
+      "comment" : "MeetingWindow.swift:768",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64976,7 +66812,7 @@
       }
     },
     "文字起こしは、記録を止めたあとに %@ で行います。記録中はここに文字が出ません。" : {
-      "comment" : "MeetingWindow.swift:271",
+      "comment" : "MeetingWindow.swift:276",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65078,7 +66914,7 @@
       }
     },
     "文字起こしを確定しています…" : {
-      "comment" : "MeetingRecorder.swift:180",
+      "comment" : "MeetingRecorder.swift:198",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68239,6 +70075,210 @@
         }
       }
     },
+    "最初" : {
+      "comment" : "MinutesSelectionViews.swift:65",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البداية"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anfang"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Début"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शुरुआत"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awal"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inizio"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "처음"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Początek"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Início"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "начало"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlangıç"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đầu"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开头"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開頭"
+          }
+        }
+      }
+    },
+    "最後" : {
+      "comment" : "MinutesSelectionViews.swift:65, MinutesSelectionViews.swift:93, MinutesSelectionViews.swift:208",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النهاية"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ende"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Final"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fin"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अंत"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akhir"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fine"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "끝"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koniec"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fim"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "конец"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Son"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuối"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结尾"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結尾"
+          }
+        }
+      }
+    },
     "最後に、許可をお願いします" : {
       "comment" : "Onboarding.swift:695",
       "extractionState" : "manual",
@@ -68648,7 +70688,7 @@
       }
     },
     "最新の発言へ" : {
-      "comment" : "MeetingWindow.swift:319",
+      "comment" : "MeetingWindow.swift:325",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -71504,7 +73544,7 @@
       }
     },
     "決まったこと・宿題" : {
-      "comment" : "MeetingChat.swift:211",
+      "comment" : "MeetingChat.swift:214",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73237,6 +75277,210 @@
         }
       }
     },
+    "発言ごとにチェックボックスを出します。Shift を押しながら押すと、前に押した発言からまとめて切り替えます" : {
+      "comment" : "MinutesSelectionViews.swift:74",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يعرض مربع اختيار لكل قول. انقر مع الضغط على Shift لتبديل الأقوال دفعة واحدة بدءًا من القول الذي نقرت عليه سابقًا"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt bei jeder Äußerung ein Markierungsfeld. Klicke mit gedrückter Shift-Taste, um alle Äußerungen ab der zuvor angeklickten gemeinsam umzuschalten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows a checkbox for each remark. Shift-click to toggle all remarks from the one you clicked last"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra una casilla para cada intervención. Haz clic con la tecla Shift pulsada para cambiar todas las intervenciones desde la última en la que hiciste clic"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affiche une case à cocher pour chaque propos. Cliquez en maintenant la touche Shift pour basculer tous les propos depuis le dernier sur lequel vous avez cliqué"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हर कथन के लिए चेकबॉक्स दिखाता है। Shift दबाकर क्लिक करने पर पिछली बार क्लिक किए गए कथन से यहाँ तक सब एक साथ बदल जाते हैं"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menampilkan kotak centang untuk setiap ucapan. Klik sambil menahan Shift untuk mengubah sekaligus mulai dari ucapan yang diklik sebelumnya"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra una casella di controllo per ogni intervento. Fai clic tenendo premuto Shift per cambiare insieme tutti gli interventi a partire da quello su cui hai fatto clic prima"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발언마다 체크박스를 표시합니다. Shift 키를 누른 채 클릭하면 이전에 클릭한 발언부터 한꺼번에 전환합니다"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokazuje pole wyboru przy każdej wypowiedzi. Kliknij z wciśniętym klawiszem Shift, aby przełączyć naraz wszystkie od poprzednio klikniętej wypowiedzi"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra uma caixa de seleção em cada fala. Clique com Shift pressionado para alternar de uma vez todas as falas a partir da que você clicou antes"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показывает флажок у каждой реплики. Щелчок с нажатой клавишей Shift переключает сразу все реплики начиная с той, которую вы нажали перед этим"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Her konuşmanın yanında bir onay kutusu gösterir. Shift tuşunu basılı tutarak tıklarsanız, önceden tıkladığınız konuşmadan itibaren hepsi birlikte değişir"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiện ô đánh dấu cho từng lời nói. Giữ Shift khi bấm để chuyển đổi cùng lúc từ lời nói đã bấm trước đó"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为每条发言显示复选框。按住 Shift 点按，可从上次点按的发言起批量切换"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "為每則發言顯示核取方塊。按住 Shift 並按一下，可從上次按下的發言起一併切換"
+          }
+        }
+      }
+    },
+    "発言を右クリックすると、議事録から除いたり、議事録に使う範囲（最初と最後）を決めたりできます。" : {
+      "comment" : "MinutesSelectionViews.swift:103",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انقر بزر الماوس الأيمن على قول لاستبعاده من المحضر أو لتحديد النطاق المستخدم في المحضر (البداية والنهاية)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per Rechtsklick auf eine Äußerung kannst du sie aus dem Protokoll ausschließen oder den Bereich für das Protokoll (Anfang und Ende) festlegen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right-click a remark to exclude it from the minutes or to set the range (start and end) used for the minutes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haz clic derecho en una intervención para excluirla del acta o para fijar el rango (inicio y final) que se usa en el acta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquez avec le bouton droit sur un propos pour l’exclure du compte rendu ou définir la plage (début et fin) utilisée pour le compte rendu."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "किसी कथन पर राइट-क्लिक करके उसे मिनट्स से बाहर कर सकते हैं या मिनट्स के लिए सीमा (शुरुआत और अंत) तय कर सकते हैं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klik kanan ucapan untuk mengecualikannya dari notulen atau menentukan cakupan yang digunakan untuk notulen (awal dan akhir)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fai clic destro su un intervento per escluderlo dal verbale o per impostare l'intervallo da usare per il verbale (inizio e fine)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발언을 오른쪽 클릭하면 회의록에서 제외하거나 회의록에 사용할 범위(처음과 끝)를 정할 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kliknij wypowiedź prawym przyciskiem, aby wykluczyć ją z protokołu lub ustawić zakres używany w protokole (początek i koniec)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clique com o botão direito em uma fala para excluí-la da ata ou definir o intervalo usado na ata (início e fim)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щёлкните реплику правой кнопкой мыши, чтобы исключить её из протокола или задать диапазон для протокола (начало и конец)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir konuşmaya sağ tıklayarak onu tutanaktan hariç tutabilir veya tutanakta kullanılacak aralığı (başlangıç ve son) belirleyebilirsiniz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhấp chuột phải vào lời nói để loại khỏi biên bản họp hoặc đặt phạm vi dùng cho biên bản họp (đầu và cuối)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右键点按发言，可将其从会议纪要中排除，或设定用于会议纪要的范围（开头和结尾）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在發言上按右鍵，即可將其從會議紀錄中排除，或設定用於會議紀錄的範圍（開頭和結尾）。"
+          }
+        }
+      }
+    },
     "登録するアクションアイテムを選んでください。期限の日付が分かるものは期限付きで登録します。" : {
       "comment" : "ReminderExport.swift:96",
       "extractionState" : "manual",
@@ -73850,7 +76094,7 @@
       }
     },
     "直近 5 分の話" : {
-      "comment" : "MeetingChat.swift:210",
+      "comment" : "MeetingChat.swift:213",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73952,7 +76196,7 @@
       }
     },
     "相手" : {
-      "comment" : "MeetingBatchTranscription.swift:14, MeetingModels.swift:73, MeetingNotesViews.swift:365",
+      "comment" : "MeetingBatchTranscription.swift:14, MeetingModels.swift:87, MeetingNotesViews.swift:365",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74054,7 +76298,7 @@
       }
     },
     "相手側（スピーカー）の音が入っていません。会議の音が出ている機器を、設定の「会議」→「録音するスピーカー」で選んでください。" : {
-      "comment" : "MeetingRecorder.swift:610",
+      "comment" : "MeetingRecorder.swift:762",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74767,6 +77011,414 @@
         }
       }
     },
+    "範囲: %@ 〜 %@" : {
+      "comment" : "MinutesSelectionViews.swift:65",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النطاق: %@ – %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereich: %@ – %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Range: %@–%@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rango: %@–%@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plage : %@–%@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सीमा: %@ – %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cakupan: %@ – %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervallo: %@ – %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "범위: %@~%@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zakres: %@ – %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervalo: %@ – %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Диапазон: %@ – %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aralık: %@ – %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phạm vi: %@ – %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "范围：%@～%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "範圍：%@～%@"
+          }
+        }
+      }
+    },
+    "範囲を解除する" : {
+      "comment" : "MinutesSelectionViews.swift:66",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء النطاق"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereich aufheben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear the range"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar el rango"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer la plage"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सीमा हटाएँ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batalkan cakupan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuovi intervallo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "범위 해제"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyczyść zakres"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover intervalo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сбросить диапазон"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aralığı kaldır"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bỏ phạm vi"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消范围"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消範圍"
+          }
+        }
+      }
+    },
+    "範囲・除いた発言・除いた話者・オフレコをすべて解除して、全部の発言を議事録に使う" : {
+      "comment" : "MinutesSelectionViews.swift:80",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء النطاق والأقوال المستبعدة والمتحدثين المستبعدين وفترات «خارج المحضر»، واستخدام كل الأقوال في المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereich, ausgeschlossene Äußerungen, ausgeschlossene Sprecher und Off-the-Record-Abschnitte aufheben und alle Äußerungen für das Protokoll verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear the range, excluded remarks, excluded speakers, and off-the-record periods, and use all remarks for the minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar el rango, las intervenciones y hablantes excluidos y los tramos extraoficiales, y usar todas las intervenciones en el acta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer la plage, les propos et intervenants exclus et les périodes confidentielles, et utiliser tous les propos pour le compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सीमा, बाहर किए गए कथन, बाहर किए गए वक्ता और ऑफ़ द रिकॉर्ड सब हटाकर सभी कथन मिनट्स में इस्तेमाल करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batalkan cakupan, ucapan yang dikecualikan, pembicara yang dikecualikan, dan off the record, lalu gunakan semua ucapan untuk notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuovi intervallo, interventi esclusi, parlanti esclusi e off the record, e usa tutti gli interventi per il verbale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "범위·제외한 발언·제외한 화자·오프더레코드를 모두 해제하고 모든 발언을 회의록에 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyczyść zakres, wykluczone wypowiedzi, wykluczonych mówców i fragmenty poza protokołem, aby użyć wszystkich wypowiedzi w protokole"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover intervalo, falas excluídas, falantes excluídos e off the record, e usar todas as falas na ata"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сбросить диапазон, исключённые реплики, исключённых говорящих и режим «не для протокола» и использовать в протоколе все реплики"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aralığı, hariç tutulan konuşmaları, hariç tutulan konuşmacıları ve kayıt dışı bölümleri kaldırıp tüm konuşmaları tutanakta kullan"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bỏ phạm vi, lời nói đã loại, người nói đã loại và ngoài biên bản, rồi dùng toàn bộ lời nói cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消范围、排除的发言、排除的说话人和保密，将所有发言都用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消範圍、排除的發言、排除的說話者和保密，將所有發言都用於會議紀錄"
+          }
+        }
+      }
+    },
+    "範囲外" : {
+      "comment" : "MinutesSelection.swift:38",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خارج النطاق"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht im Bereich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Out of Range"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuera del rango"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hors plage"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सीमा से बाहर"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di luar cakupan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuori intervallo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "범위 밖"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poza zakresem"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fora do intervalo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вне диапазона"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aralık dışı"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngoài phạm vi"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "范围外"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "範圍外"
+          }
+        }
+      }
+    },
     "約 " : {
       "comment" : "TranscriptionEngine.swift:71",
       "extractionState" : "manual",
@@ -74972,7 +77624,7 @@
       }
     },
     "終わるまで、今の議事録を出しています。" : {
-      "comment" : "MeetingWindow.swift:455",
+      "comment" : "MeetingWindow.swift:462",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77012,7 +79664,7 @@
       }
     },
     "聞いておくとよいこと" : {
-      "comment" : "MeetingChat.swift:213",
+      "comment" : "MeetingChat.swift:216",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77216,7 +79868,7 @@
       }
     },
     "自分" : {
-      "comment" : "MeetingBatchTranscription.swift:14, MeetingModels.swift:72, MeetingNotesViews.swift:365",
+      "comment" : "MeetingBatchTranscription.swift:14, MeetingModels.swift:86, MeetingNotesViews.swift:365",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79562,7 +82214,7 @@
       }
     },
     "記録の途中でアプリが終了しました。音声ファイル（me.m4a / others.m4a）は途中まで残っている場合があります。" : {
-      "comment" : "MeetingModels.swift:220",
+      "comment" : "MeetingModels.swift:241",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80169,6 +82821,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "停止錄製"
+          }
+        }
+      }
+    },
+    "記録を続ける" : {
+      "comment" : "MeetingRecorder.swift:726",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متابعة التسجيل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter aufnehmen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep recording"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguir grabando"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer l’enregistrement"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रिकॉर्डिंग जारी रखें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terus merekam"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continua a registrare"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계속 기록"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontynuuj nagrywanie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar gravando"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжить запись"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayda devam et"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếp tục ghi"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续录制"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "繼續錄製"
           }
         }
       }
@@ -83030,7 +85784,7 @@
       }
     },
     "話者%@" : {
-      "comment" : "MeetingModels.swift:75",
+      "comment" : "MeetingModels.swift:89",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83132,7 +85886,7 @@
       }
     },
     "話者の区別（話者1・話者2…）は記録の停止後に行います" : {
-      "comment" : "MeetingWindow.swift:260",
+      "comment" : "MeetingWindow.swift:264",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83234,7 +85988,7 @@
       }
     },
     "話者を分けています…（初回はモデルをダウンロードします）" : {
-      "comment" : "MeetingRecorder.swift:262",
+      "comment" : "MeetingRecorder.swift:304",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83335,8 +86089,110 @@
         }
       }
     },
+    "話者を除外" : {
+      "comment" : "MinutesSelection.swift:37",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متحدث مستبعد"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprecher ausgeschlossen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speaker Excluded"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hablante excluido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervenant exclu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "वक्ता बाहर"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pembicara dikecualikan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parlante escluso"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화자 제외"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mówca wykluczony"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falante excluído"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Говорящий исключён"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konuşmacı hariç"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã loại người nói"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已排除说话人"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已排除說話者"
+          }
+        }
+      }
+    },
     "話者名" : {
-      "comment" : "MeetingWindow.swift:761",
+      "comment" : "MeetingWindow.swift:795",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83438,7 +86294,7 @@
       }
     },
     "話者名…" : {
-      "comment" : "MeetingWindow.swift:416",
+      "comment" : "MeetingWindow.swift:429",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84254,7 +87110,7 @@
       }
     },
     "議事録" : {
-      "comment" : "MeetingExport.swift:139, MeetingSearchView.swift:214, MeetingWindow.swift:470",
+      "comment" : "MeetingExport.swift:139, MeetingSearchView.swift:214, MeetingWindow.swift:477",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84355,8 +87211,926 @@
         }
       }
     },
+    "議事録から除く" : {
+      "comment" : "MinutesSelectionViews.swift:201",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استبعاد من المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Protokoll ausschließen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclude from Minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir del acta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclure du compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स से बाहर करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kecualikan dari notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escludi dal verbale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록에서 제외"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyklucz z protokołu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir da ata"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Исключить из протокола"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanaktan hariç tut"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loại khỏi biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从会议纪要中排除"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從會議紀錄中排除"
+          }
+        }
+      }
+    },
+    "議事録に使う" : {
+      "comment" : "MinutesSelectionViews.swift:253, MinutesSelectionViews.swift:254",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدام في المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für Protokoll verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use for Minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar en el acta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser pour le compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स में इस्तेमाल करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan untuk notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa per il verbale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록에 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj w protokole"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar na ata"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать в протоколе"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanakta kullan"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用於會議紀錄"
+          }
+        }
+      }
+    },
+    "議事録に使うかを変える" : {
+      "comment" : "MinutesSelectionViews.swift:181, MinutesSelectionViews.swift:182",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تغيير الاستخدام في المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwendung im Protokoll ändern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change whether this is used for the minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar si se usa en el acta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier l’utilisation pour le compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स में इस्तेमाल बदलें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ubah penggunaan untuk notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia l'uso nel verbale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록 사용 여부 변경"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmień użycie w protokole"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alterar uso na ata"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить использование в протоколе"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanakta kullanımı değiştir"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thay đổi việc dùng cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改是否用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "變更是否用於會議紀錄"
+          }
+        }
+      }
+    },
+    "議事録に使う発言: %@ / %@" : {
+      "comment" : "MinutesSelectionViews.swift:62",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأقوال المستخدمة في المحضر: %@ / %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Äußerungen fürs Protokoll: %@ / %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remarks used for the minutes: %@ of %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervenciones usadas en el acta: %@ de %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Propos utilisés pour le compte rendu : %@ sur %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स में इस्तेमाल होने वाले कथन: %@ / %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ucapan untuk notulen: %@ / %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interventi usati per il verbale: %@ / %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록에 사용하는 발언: %@ / %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypowiedzi w protokole: %@ / %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falas usadas na ata: %@ / %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Реплики для протокола: %@ / %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanakta kullanılan konuşmalar: %@ / %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lời nói dùng cho biên bản họp: %@ / %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用于会议纪要的发言：%@ / %@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用於會議紀錄的發言：%@ / %@"
+          }
+        }
+      }
+    },
+    "議事録に使う発言を変えました。作り直すと反映されます。" : {
+      "comment" : "MinutesSelectionViews.swift:139",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم تغيير الأقوال المستخدمة في المحضر. أعد إنشاء المحضر لتطبيق التغيير."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Äußerungen fürs Protokoll wurden geändert. Erstelle das Protokoll neu, um die Änderung zu übernehmen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You changed the remarks used for the minutes. Recreate the minutes to apply the changes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiaste las intervenciones que se usan en el acta. Vuelve a crearla para aplicar los cambios."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez modifié les propos utilisés pour le compte rendu. Recréez-le pour appliquer les changements."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स के लिए कथन बदल दिए गए। मिनट्स दोबारा बनाने पर बदलाव लागू होंगे।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ucapan untuk notulen telah diubah. Buat ulang notulen untuk menerapkannya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gli interventi usati per il verbale sono cambiati. Ricrea il verbale per applicare le modifiche."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록에 사용할 발언을 변경했습니다. 다시 만들면 반영됩니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmieniono wypowiedzi używane w protokole. Utwórz protokół ponownie, aby zastosować zmiany."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As falas usadas na ata foram alteradas. Recrie a ata para aplicar a mudança."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Реплики для протокола изменены. Пересоздайте протокол, чтобы применить изменения."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanakta kullanılan konuşmalar değişti. Yansıtmak için tutanağı yeniden oluşturun."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã thay đổi lời nói dùng cho biên bản họp. Tạo lại biên bản họp để áp dụng."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已更改用于会议纪要的发言。重新生成后即可生效。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已變更用於會議紀錄的發言。重新製作後即會套用。"
+          }
+        }
+      }
+    },
+    "議事録に使う発言を選ぶ" : {
+      "comment" : "MinutesSelectionViews.swift:71",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختيار الأقوال المستخدمة في المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Äußerungen fürs Protokoll auswählen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Remarks for Minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir intervenciones para el acta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir les propos du compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स के लिए कथन चुनें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih ucapan untuk notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli gli interventi per il verbale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록에 사용할 발언 선택"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz wypowiedzi do protokołu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolher falas para a ata"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбрать реплики для протокола"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanak için konuşmaları seç"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chọn lời nói dùng cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择用于会议纪要的发言"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇用於會議紀錄的發言"
+          }
+        }
+      }
+    },
+    "議事録に使う（範囲を広げる）" : {
+      "comment" : "MinutesSelectionViews.swift:205",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدام في المحضر (توسيع النطاق)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für Protokoll verwenden (Bereich erweitern)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use for Minutes (Extend Range)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar en el acta (ampliar el rango)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser pour le compte rendu (élargir la plage)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स में इस्तेमाल करें (सीमा बढ़ाएँ)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan untuk notulen (perluas cakupan)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa per il verbale (estendi l'intervallo)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록에 사용(범위 넓히기)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Użyj w protokole (rozszerz zakres)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar na ata (ampliar intervalo)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать в протоколе (расширить диапазон)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanakta kullan (aralığı genişlet)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng cho biên bản họp (mở rộng phạm vi)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用于会议纪要（扩大范围）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用於會議紀錄（擴大範圍）"
+          }
+        }
+      }
+    },
+    "議事録に使わない（%@）" : {
+      "comment" : "MeetingWindow.swift:871",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "غير مستخدم في المحضر (%@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht im Protokoll verwendet (%@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not used for the minutes (%@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se usa en el acta (%@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non utilisé pour le compte rendu (%@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मिनट्स में इस्तेमाल नहीं (%@)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak digunakan untuk notulen (%@)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non usato per il verbale (%@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록에 사용하지 않음(%@)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieużywane w protokole (%@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não usada na ata (%@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не используется в протоколе (%@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanakta kullanılmıyor (%@)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không dùng cho biên bản họp (%@)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不用于会议纪要（%@）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不用於會議紀錄（%@）"
+          }
+        }
+      }
+    },
+    "議事録に戻す" : {
+      "comment" : "MinutesSelectionViews.swift:203",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة إلى المحضر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wieder ins Protokoll aufnehmen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include in Minutes Again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver a usar en el acta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réintégrer au compte rendu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "फिर से मिनट्स में शामिल करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kembalikan ke notulen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riporta nel verbale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의록에 다시 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przywróć do protokołu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltar a usar na ata"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуть в протокол"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutanağa geri ekle"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng lại cho biên bản họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新用于会议纪要"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新用於會議紀錄"
+          }
+        }
+      }
+    },
     "議事録の「話者についてのメモ」も参考にしてください。「推測」は、議事録を作るときに会話から推測して付けた名前です。変更は文字起こしに反映されます（議事録は作り直すと反映されます）。" : {
-      "comment" : "MeetingWindow.swift:762",
+      "comment" : "MeetingWindow.swift:796",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84662,7 +88436,7 @@
       }
     },
     "議事録の作成" : {
-      "comment" : "MeetingRecorder.swift:293, MeetingRecorder.swift:354",
+      "comment" : "MeetingRecorder.swift:335, MeetingRecorder.swift:396",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85172,7 +88946,7 @@
       }
     },
     "議事録はありません。" : {
-      "comment" : "MeetingWindow.swift:508",
+      "comment" : "MeetingWindow.swift:528",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85274,7 +89048,7 @@
       }
     },
     "議事録は作り直しません" : {
-      "comment" : "MeetingRecorder.swift:354",
+      "comment" : "MeetingRecorder.swift:396",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85580,7 +89354,7 @@
       }
     },
     "議事録を作らずに、文字起こしだけを残します" : {
-      "comment" : "MeetingRecorder.swift:293",
+      "comment" : "MeetingRecorder.swift:335",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85682,7 +89456,7 @@
       }
     },
     "議事録を作り直しています…" : {
-      "comment" : "MeetingRecorder.swift:347, MeetingWindow.swift:574",
+      "comment" : "MeetingRecorder.swift:389, MeetingWindow.swift:608",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85784,7 +89558,7 @@
       }
     },
     "議事録を作り直している間は削除できません" : {
-      "comment" : "MeetingWindow.swift:444",
+      "comment" : "MeetingWindow.swift:451",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85886,7 +89660,7 @@
       }
     },
     "議事録を作り直しますか？" : {
-      "comment" : "MeetingWindow.swift:428",
+      "comment" : "MeetingWindow.swift:435",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85988,7 +89762,7 @@
       }
     },
     "議事録を作り直す" : {
-      "comment" : "MeetingWindow.swift:420, MeetingWindow.swift:463",
+      "comment" : "MeetingWindow.swift:433, MeetingWindow.swift:470, MinutesSelectionViews.swift:142",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86090,7 +89864,7 @@
       }
     },
     "議事録を作れませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:301, MeetingRecorder.swift:372",
+      "comment" : "MeetingRecorder.swift:343, MeetingRecorder.swift:416",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86192,7 +89966,7 @@
       }
     },
     "議事録を作成しています…" : {
-      "comment" : "MeetingRecorder.swift:289",
+      "comment" : "MeetingRecorder.swift:331",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86294,7 +90068,7 @@
       }
     },
     "議事録を作成中です…" : {
-      "comment" : "MeetingWindow.swift:508",
+      "comment" : "MeetingWindow.swift:528",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87008,7 +90782,7 @@
       }
     },
     "質問に使える会議の記録がありません。" : {
-      "comment" : "MeetingAsk.swift:169",
+      "comment" : "MeetingAsk.swift:170",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93021,6 +96795,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "播放開始·結束提示音"
+          }
+        }
+      }
+    },
+    "除いた話者: %@" : {
+      "comment" : "MinutesSelectionViews.swift:88",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متحدث مستبعد: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgeschlossener Sprecher: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluded speaker: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hablante excluido: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervenant exclu : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "बाहर किया गया वक्ता: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pembicara dikecualikan: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parlante escluso: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제외한 화자: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wykluczony mówca: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falante excluído: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Исключённый говорящий: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hariç tutulan konuşmacı: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Người nói đã loại: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已排除的说话人：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已排除的說話者：%@"
+          }
+        }
+      }
+    },
+    "除外" : {
+      "comment" : "MinutesSelection.swift:35",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مستبعد"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgeschlossen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluded"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "बाहर किया गया"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dikecualikan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escluso"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제외"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wykluczone"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluída"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Исключена"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hariç"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã loại"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已排除"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已排除"
           }
         }
       }

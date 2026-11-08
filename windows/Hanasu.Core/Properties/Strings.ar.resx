@@ -696,4 +696,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>لا يحتوي ملف zip على {0}، لذا لن يُستخدم</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- لم تُضمَّن المداخلات غير المستخدمة في المحضر ({0})</value>
+  </data>
 </root>

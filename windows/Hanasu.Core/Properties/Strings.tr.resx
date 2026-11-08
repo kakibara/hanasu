@@ -696,4 +696,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>Zip dosyasında {0} olmadığı için kullanılmayacak</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- Tutanakta kullanılmayan {0} konuşma dahil edilmedi</value>
+  </data>
 </root>

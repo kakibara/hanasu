@@ -319,6 +319,27 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 - **メモに残す**: `MeetingChat.noteText` で答えを「AI: …」の 1 行にし、記録中は `MeetingRecorder.addNote`（質問した時刻）、記録のあとは `MeetingRecorder.updateNotes`（時刻なし）で足す（DEC-MTG-085）。
 - **確認**: `--test-meeting-chat` は本文の組み立て・時刻のリンク・メモへの変換を AI なしで確かめる。`--chat-meeting <会議のフォルダ> --ask … --ask …` は保存した会議で実際の AI と会話し（`--at <時刻>` でその時刻までを記録中として渡す）、`--render-meeting-chat` は画面を PNG にする。
 
+### 4.14 記録中のスリープ
+
+記録したままスリープした（MacBook を閉じた）ときに、復帰の直後に「スリープ前までで止める」か「記録を続ける」かを聞く（REQ-MTG-043）。
+
+- **Mac**: `MeetingRecorder.observeSleep` が `NSWorkspace` の `willSleepNotification`・`didWakeNotification` を受ける。スリープの直前（`systemWillSleep`）に、経過時間と、チャンネルごとに書き終えた音声の終わり（`ChannelTranscriber.audioEnd`）を `MeetingSleepPoint` に覚える。復帰（`systemDidWake`）で、スリープしていた時間を `sleepGap` に足して経過時間（`MeetingRecorder.elapsed`）から除き、`askAboutSleep` で `NSAlert` を出す（DEC-MTG-087、DEC-MTG-089）。確認の間も記録は続く。
+- **止めるとき**: `MeetingRecorder.stop(cutAt:)` が、`MeetingSleepCut` で音声ファイルを `AVAssetExportSession`（パススルー）で切り詰め、それより後に始まる発言を捨て、会議の長さ・印・メモを直してから、いつもの後処理に進む（DEC-MTG-088）。
+- **Windows**: `AppHost.OnPowerModeChanged` が `MeetingController.OnSystemSuspend`・`OnSystemResume` を呼ぶ。スリープ中は `MeetingController.ElapsedSeconds` を止める（ループバックの無音の埋め合わせにスリープの時間が入らない）。復帰で `ResumedFromSleep` を出し、`AppHost.AskAboutSleep` が `SleepPromptWindow` で聞いて `ResolveSleepAsync` に渡す。止めるときは `WavStreamWriter.Truncate` で WAV を切り詰め、`MeetingSleepCut.Apply` で長さ・印・メモを直す（DEC-MTG-111）。
+- **確認**: Mac は `--test-meeting-sleep-cut`（`MeetingSleepCLI.swift`）、Windows は `MeetingControllerTests` の `Sleep…` と `WavTruncateTests`。実際のスリープは実機で確かめる。
+
+### 4.15 議事録に使う発言の選び方（範囲・除外・オフレコ）
+
+文字起こしの最初と最後を選ぶ（REQ-MTG-044）、発言や話者を除く（REQ-MTG-045）、記録中にオフレコにする（REQ-MTG-046）。ロジックは `MinutesSelection.swift`、画面は `MinutesSelectionViews.swift`、確認用の CLI は `MinutesSelectionCLI.swift`。
+
+- **持ち方**: `Meeting` の `minutesFrom`・`minutesTo`・`excludedUtterances`・`excludedSpeakers`・`offRecord`（`OffRecordSpan`）・`minutesOutdated`。`utterances` は書き換えない（DEC-MTG-090）。
+- **決まり**: `Meeting.minutesUse(of:)` が発言ごとに `MinutesUse`（使う・除外・オフレコ・話者を除外・範囲外）を返す。`displayBlocks()` は `mergedBlocks()` と同じまとめ方で、使い方が変わるところでも分ける。`blocksForMinutes()` はその中の使うものだけ。
+- **使うところ**: `transcriptForPrompt`・`transcriptForPromptMarkingHighlights`（議事録・話者名の推測・会議への質問・辞書の候補）、`transcriptMarkdown`（書き出し・transcript.md。除いた件数を 1 行書く）、`MeetingChat.material`・`liveMaterial`（記録中はオフレコの区間の発言を除く）、`MeetingAsk.material` は `blocksForMinutes()` を使う。検索の索引（`MeetingSearch`）は `mergedBlocks()` のまま（DEC-MTG-091）。
+- **会議ノート**: 文字起こしのタブの上に `TranscriptSelectionBar`（数・範囲・除いた話者・オフレコの区間・「議事録に使う発言を選ぶ」・すべて元に戻す・作り直しの促し）。行は `TranscriptDisplayRow`（`TranscriptLine` に `use` を渡して薄く・取り消し線・理由のバッジ。右クリックとマウスを載せたときの「…」で `TranscriptLineMenu`。選ぶモードでは `TranscriptUseCheckbox`、Shift で前に押した行からまとめて）。変更は `MeetingRecorder.changeMinutesSelection` で保存し、記録中・処理中・作り直し中の会議は変えない。議事録のタブには `MinutesOutdatedNotice`（DEC-MTG-092、DEC-MTG-093）。
+- **記録中**: `LiveTranscriptView` の上に `LiveOffRecordButton` と `LiveOffRecordBanner`。`MeetingRecorder.toggleOffRecord` が経過時間で区間を足して閉じ、すぐ保存する。止めたときに開いた区間を閉じ、スリープ前までで止めたときは `MeetingSleepCut.apply` が区間をそろえる（DEC-MTG-094）。
+- **Windows**: `windows/Hanasu.Core/Meetings/MinutesSelection.cs` に同じ決まりを置き、会議ノートの文字起こしのタブを発言ごとの一覧にした（DEC-MTG-112）。
+- **確認**: `--test-minutes-selection`（決まり・AI に渡す文字起こし・書き出し・meeting.json・スリープ）、`--render-minutes-selection <フォルダ>`（文字起こしの帯・チェックボックス・作り直しの促し・記録中のオフレコ）。
+
 ## 5. アーキテクチャ
 
 ```

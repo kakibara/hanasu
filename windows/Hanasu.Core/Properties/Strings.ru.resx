@@ -696,4 +696,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>В zip нет {0}, поэтому он не будет использован</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- Реплики, не используемые в протоколе ({0}), не включены</value>
+  </data>
 </root>

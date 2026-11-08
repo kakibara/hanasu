@@ -1190,4 +1190,106 @@
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>이 버전 건너뛰기</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>절전 후 기록</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>회의를 기록하는 중에 PC가 절전 모드로 전환되었습니다</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>{0}에 절전 모드로 전환된 이후에도 기록이 계속되고 있습니다. 절전 전까지로 기록을 중지할지, 계속 기록할지 선택하세요.</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>절전 전까지로 중지</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>계속 기록</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>오프 더 레코드</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>오프 더 레코드 끝내기</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>오프 더 레코드 중 ({0}부터)</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>끝낼 때까지의 발언은 회의록에 쓰지 않습니다. 녹음은 계속됩니다.</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>회의록에 쓸 발언을 바꿨습니다. 다시 만들면 반영됩니다</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>모두 되돌리기</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>회의록에 쓸 발언: {0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>범위: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>처음</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>끝</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>해제</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>제외한 화자: {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>되돌리기</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>오프 더 레코드: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>체크를 해제한 발언은 회의록에 쓰지 않습니다(Shift를 누른 채 클릭하면 앞서 클릭한 발언부터 한꺼번에 바뀝니다). 범위와 화자는 마우스 오른쪽 버튼으로 고를 수 있습니다. Ctrl+C로 선택한 발언을 복사합니다.</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>제외</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>오프 더 레코드</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>화자 제외</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>범위 밖</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>회의록에 쓰기</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>회의록에 쓰지 않습니다({0}). 위쪽 막대에서 되돌릴 수 있습니다</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>회의록에서 제외</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>회의록에 다시 쓰기</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>여기부터 회의록에 쓰기</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>여기까지 회의록에 쓰기</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>'{0}'의 발언을 모두 제외</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>'{0}'의 발언을 모두 되돌리기</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>복사</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>발언 {0}개를 복사했습니다</value>
+  </data>
 </root>

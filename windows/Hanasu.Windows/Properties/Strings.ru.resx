@@ -1190,4 +1190,106 @@
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>Пропустить эту версию</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>Запись после спящего режима</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>Компьютер перешел в спящий режим во время записи встречи</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>Спящий режим начался в {0}, и с тех пор запись продолжается. Выберите: остановить запись на моменте до перехода в спящий режим или продолжить запись.</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>Остановить до спящего режима</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>Продолжить запись</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>Не для протокола</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>Закончить «не для протокола»</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>Не для протокола (с {0})</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>Сказанное до завершения не попадёт в протокол. Запись продолжается.</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>Вы изменили, какие реплики идут в протокол. Создайте протокол заново, чтобы применить изменения.</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>Сбросить всё</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>Реплик для протокола: {0} из {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>Диапазон: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>начало</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>конец</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>Исключён участник: {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>Вернуть</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>Не для протокола: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>Снимите флажок, чтобы не включать реплику в протокол (Shift+щелчок переключает всё от реплики, по которой вы щёлкнули перед этим). Щёлкните правой кнопкой, чтобы задать диапазон или исключить участника. Ctrl+C копирует выбранные реплики.</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>Исключено</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>Не для протокола</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>Участник исключён</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>Вне диапазона</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>Использовать в протоколе</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>Не используется в протоколе ({0}). Вернуть можно на панели выше.</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>Исключить из протокола</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>Снова использовать в протоколе</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>Использовать в протоколе отсюда</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>Использовать в протоколе досюда</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>Исключить все реплики: {0}</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>Вернуть все реплики: {0}</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>Скопировано реплик: {0}</value>
+  </data>
 </root>

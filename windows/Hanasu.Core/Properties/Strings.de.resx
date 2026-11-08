@@ -696,4 +696,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>Das ZIP enthält kein {0} und wird daher nicht verwendet</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- {0} Beiträge, die nicht fürs Protokoll verwendet werden, sind nicht enthalten</value>
+  </data>
 </root>
