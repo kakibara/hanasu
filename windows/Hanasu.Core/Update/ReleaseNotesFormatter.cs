@@ -91,7 +91,7 @@ public static partial class ReleaseNotesFormatter
         if (hashes is >= 1 and <= 6 && hashes < line.Length && char.IsWhiteSpace(line[hashes]))
         {
             return new ReleaseNotesBlock(ReleaseNotesBlockKind.Heading, hashes, 0, null,
-                ParseInline(line[(hashes + 1)..].Trim().TrimEnd('#').TrimEnd()), afterBlank);
+                ParseInline(HeadingText(line[(hashes + 1)..])), afterBlank);
         }
         if (line.Length >= 2 && line[0] is '-' or '*' or '+' && char.IsWhiteSpace(line[1]))
         {
@@ -105,6 +105,19 @@ public static partial class ReleaseNotesFormatter
                 ParseInline(line[(digits + 2)..].Trim()), afterBlank);
         }
         return new ReleaseNotesBlock(ReleaseNotesBlockKind.Paragraph, 0, 0, null, ParseInline(line), afterBlank);
+    }
+
+    /// <summary>
+    /// 見出しの中身。閉じの # の並びは、前に空白があるとき（か、中身が # だけのとき）だけ削る（CommonMark と同じ。「C#」の # は残す）
+    /// </summary>
+    private static string HeadingText(string rest)
+    {
+        var text = rest.Trim();
+        var end = text.Length;
+        while (end > 0 && text[end - 1] == '#') end--;
+        if (end == text.Length) return text;
+        if (end == 0) return "";
+        return char.IsWhiteSpace(text[end - 1]) ? text[..end].TrimEnd() : text;
     }
 
     /// <summary>行の中の Markdown（太字・斜体・コード・リンク・\ のエスケープ）を、字の形のまとまりにする。閉じていない記号はそのまま出す</summary>

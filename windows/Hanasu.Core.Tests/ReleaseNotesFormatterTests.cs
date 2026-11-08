@@ -121,6 +121,18 @@ public class ReleaseNotesFormatterTests
         Assert.Equal(1, blocks[0].HeadingLevel);
     }
 
+    [Theory]
+    [InlineData("## Swift と C#", "Swift と C#")]
+    [InlineData("## 見出し ##", "見出し")]
+    [InlineData("### F# と C# ###", "F# と C#")]
+    [InlineData("## 番号 #5", "番号 #5")]
+    public void OnlyClosingHashesAfterASpaceAreRemoved(string line, string expected)
+    {
+        var block = Assert.Single(ReleaseNotesFormatter.Parse(line));
+        Assert.Equal(ReleaseNotesBlockKind.Heading, block.Kind);
+        Assert.Equal(expected, block.PlainText);
+    }
+
     [Fact]
     public void ReleaseTemplateShowsOnlyHeadings()
     {

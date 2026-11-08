@@ -58,20 +58,19 @@ internal sealed class UpdatePromptWindow : Window
         var notes = ReleaseNotesFormatter.Parse(release.Notes);
         if (notes.Count > 0)
         {
-            // 切り詰めずに全文を出し、長ければスクロールする（開いたときは先頭が見える）
-            panel.Children.Add(new Border
+            // 切り詰めずに全文を出し、長ければ欄の中でスクロールする（開いたときは先頭が見える）。
+            // 読み取り専用の RichTextBox なので、選んでコピーできる。IsDocumentEnabled でリンクを押せる
+            panel.Children.Add(new RichTextBox
             {
-                BorderBrush = SystemColors.ActiveBorderBrush,
-                BorderThickness = new Thickness(1),
+                Document = ReleaseNotesDocument(notes),
+                IsReadOnly = true,
+                IsDocumentEnabled = true,
+                AcceptsReturn = false,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+                MaxHeight = 320,
+                Padding = new Thickness(6, 6, 6, 6),
                 Margin = new Thickness(0, 10, 0, 0),
-                Child = new ScrollViewer
-                {
-                    Content = ReleaseNotesView(notes),
-                    VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                    HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
-                    MaxHeight = 320,
-                    Padding = new Thickness(10, 8, 10, 8),
-                },
             });
         }
 
@@ -100,44 +99,50 @@ internal sealed class UpdatePromptWindow : Window
     // 設計判断: DEC-REL-027
     /// <summary>
     /// リリース文を、見出しは太い大きめの字、箇条書きは印のあとを字下げして折り返し、太字・斜体・コード・リンクは字の形にして並べる。
-    /// 印と本文を別の列に置くので、折り返した行も本文の頭にそろう
+    /// 箇条書きは段落の左を「字下げ＋印の幅」だけ空け、1 行目だけ印の幅を戻す（TextIndent を負に）ので、折り返した行も本文の頭にそろう
     /// </summary>
-    private static StackPanel ReleaseNotesView(IReadOnlyList<ReleaseNotesBlock> blocks)
+    private static FlowDocument ReleaseNotesDocument(IReadOnlyList<ReleaseNotesBlock> blocks)
     {
-        var stack = new StackPanel();
+        var document = new FlowDocument
+        {
+            PagePadding = new Thickness(0),
+            FontFamily = SystemFonts.MessageFontFamily,
+            FontSize = BodySize,
+        };
         foreach (var block in blocks)
         {
-            var text = new TextBlock { TextWrapping = TextWrapping.Wrap, FontSize = BodySize };
+            var paragraph = new Paragraph();
             if (block.Kind == ReleaseNotesBlockKind.Heading)
             {
-                text.FontWeight = FontWeights.Bold;
-                text.FontSize = block.HeadingLevel switch { 1 => BodySize + 4, 2 => BodySize + 2, _ => BodySize };
+                paragraph.FontWeight = FontWeights.Bold;
+                paragraph.FontSize = block.HeadingLevel switch { 1 => BodySize + 4, 2 => BodySize + 2, _ => BodySize };
             }
-            foreach (var piece in block.Inlines) text.Inlines.Add(MakeInline(piece));
-
-            var spacing = stack.Children.Count == 0 ? 0 : block.Kind switch
+            var spacing = document.Blocks.Count == 0 ? 0 : block.Kind switch
             {
                 ReleaseNotesBlockKind.Heading => 12,
                 ReleaseNotesBlockKind.Bullet or ReleaseNotesBlockKind.Numbered => block.AfterBlank ? 6 : 3,
                 _ => block.AfterBlank ? 6 : 0,
             };
-            if (block.Marker is null)
+            var left = 0.0;
+            if (block.Marker is not null)
             {
-                text.Margin = new Thickness(0, spacing, 0, 0);
-                stack.Children.Add(text);
-                continue;
+                left = block.Level * IndentPerLevel + MarkerWidth;
+                paragraph.TextIndent = -MarkerWidth;
+                // 印は幅を決めた箱に入れ、本文の頭を印の幅の位置にそろえる。下端を字の下端に合わせて、本文と同じ行の高さに置く
+                paragraph.Inlines.Add(new InlineUIContainer(new TextBlock
+                {
+                    Text = block.Marker,
+                    Width = MarkerWidth,
+                    FontSize = BodySize,
+                    Foreground = SystemColors.GrayTextBrush,
+                })
+                { BaselineAlignment = BaselineAlignment.TextBottom });
             }
-            var row = new Grid { Margin = new Thickness(block.Level * IndentPerLevel, spacing, 0, 0) };
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(MarkerWidth) });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            var marker = new TextBlock { Text = block.Marker, FontSize = BodySize, Foreground = SystemColors.GrayTextBrush };
-            Grid.SetColumn(marker, 0);
-            Grid.SetColumn(text, 1);
-            row.Children.Add(marker);
-            row.Children.Add(text);
-            stack.Children.Add(row);
+            paragraph.Margin = new Thickness(left, spacing, 0, 0);
+            foreach (var piece in block.Inlines) paragraph.Inlines.Add(MakeInline(piece));
+            document.Blocks.Add(paragraph);
         }
-        return stack;
+        return document;
     }
 
     private static Inline MakeInline(ReleaseNotesInline piece)
