@@ -8,10 +8,13 @@ import Foundation
 /// 音声入力の履歴 1 件。
 struct DictationHistoryEntry: Codable, Identifiable, Equatable {
     // 設計判断: DEC-DIC-029
-    /// 保存する値は、整形が refine、英訳が今までの値（translate）、和訳が translateJapanese、ほかの言語への翻訳が translate:<言語のコード>
+    /// 保存する値は、整形が refine、英訳が今までの値（translate）、和訳が translateJapanese、ほかの言語への翻訳が translate:<言語のコード>。
+    /// 知らない値は読み込みを止めず、値のまま残して書き戻す（Windows 版の HistoryMode と同じ）
     enum Mode: Hashable, Codable {
         case refine
         case translation(TranslationLanguage)
+        /// この版の知らない値（新しい版が足した言語など）。値のまま残して書き戻す
+        case unknown(String)
 
         init(_ mode: DictationController.Mode) {
             self = mode.translation.map(Self.init(translation:)) ?? .refine
@@ -21,7 +24,7 @@ struct DictationHistoryEntry: Codable, Identifiable, Equatable {
             self = .translation(translation)
         }
 
-        /// 保存した値から戻す。知らない値なら nil
+        /// 保存した値から戻す。知らない値なら nil（ファイルから読むときは unknown にする）
         init?(rawValue: String) {
             switch rawValue {
             case "refine": self = .refine
@@ -40,15 +43,13 @@ struct DictationHistoryEntry: Codable, Identifiable, Equatable {
             case .translation(.english): "translate"
             case .translation(.japanese): "translateJapanese"
             case .translation(let language): "translate:\(language.language.rawValue)"
+            case .unknown(let value): value
             }
         }
 
         init(from decoder: Decoder) throws {
             let value = try decoder.singleValueContainer().decode(String.self)
-            guard let mode = Mode(rawValue: value) else {
-                throw DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath, debugDescription: "unknown mode: \(value)"))
-            }
-            self = mode
+            self = Mode(rawValue: value) ?? .unknown(value)
         }
 
         func encode(to encoder: Encoder) throws {
@@ -59,12 +60,17 @@ struct DictationHistoryEntry: Codable, Identifiable, Equatable {
         /// 翻訳の言語（整形なら nil）
         var translation: TranslationLanguage? {
             switch self {
-            case .refine: nil
+            case .refine, .unknown: nil
             case .translation(let language): language
             }
         }
 
-        var label: String { translation?.verb ?? tr("整形") }
+        /// 知らない値なら、その値（一覧にはそのまま出す）
+        var unknownValue: String? {
+            if case .unknown(let value) = self { value } else { nil }
+        }
+
+        var label: String { translation?.verb ?? unknownValue ?? tr("整形") }
     }
 
     enum Status: String, Codable {
