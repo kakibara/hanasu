@@ -179,7 +179,7 @@ MeetingController（Core。idle → starting → recording → processing → id
 - タスクトレイのメニュー →「アップデートを確認…」（設定 → 一般 →「今すぐ確認」も同じ）で、いつでも確かめられる。最新なら「Hanasu は最新です」と出し、失敗したときは理由を出す。
 - 新しい版があると、「アップデート」「あとで」「この版をスキップ」を選ぶ確認が出る。スキップした版は起動時には知らせない（手動の確認では知らせる。もっと新しい版が出れば、また知らせる）。
 - 「アップデート」を選ぶと、zip（`Hanasu-<版>-Windows-x64.zip`）をダウンロードし、API の SHA-256 と大きさで確かめ、Hanasu のフォルダの隣の `Hanasu.update` に展開して、PowerShell のスクリプトで入れ替えて起動し直す（失敗すれば元に戻す）。録音中・会議の記録中は入れ替えない。フォルダに書き込めないとき（Program Files など）や zip が見つからないときは、リリースのページを開く案内になる。フォルダごと取り替えるので、Hanasu のフォルダに Hanasu のものでないファイルやフォルダがあるとき（デスクトップに `Hanasu.exe` を置いたときなど）も入れ替えず、名前を挙げて案内する。入れ替えが終わらなかったときは、次の起動で知らせる（`update-pending.txt`）。
-- 通信は https の GitHub のホストだけ。コードは `Hanasu.Core/Update/`（`AppVersion`・`ReleaseParser`・`UpdateChecker`・`UpdateHosts`・`UpdatePackage`。テストは `UpdateTests`）と、`Hanasu.Windows` の `Services/UpdateService.cs`・`Views/UpdatePromptWindow.cs`。ダウンロードは `ModelDownload` を使う。設定は `AppSettings.CheckForUpdatesOnLaunch`・`SkippedUpdateVersion`。
+- 通信は https の GitHub のホストだけ。コードは `Hanasu.Core/Update/`（`AppVersion`・`ReleaseParser`・`ReleaseNotesFormatter`・`UpdateChecker`・`UpdateHosts`・`UpdatePackage`。テストは `UpdateTests`・`ReleaseNotesFormatterTests`）と、`Hanasu.Windows` の `Services/UpdateService.cs`・`Views/UpdatePromptWindow.cs`。ダウンロードは `ModelDownload` を使う。設定は `AppSettings.CheckForUpdatesOnLaunch`・`SkippedUpdateVersion`。
 
 ## ビルド・テスト・配布
 
