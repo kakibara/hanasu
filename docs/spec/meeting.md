@@ -374,6 +374,62 @@
 - 実装の場所: `MeetingChat.prompt`、`MeetingChatModel`、`MeetingChatStore`
 - 確かめ方: `.build/debug/Hanasu --chat-meeting <会議のフォルダ> --ask "決まったことは？" --ask "その中で期限があるものは？"`、`.build/debug/Hanasu --test-meeting-chat`
 
+### REQ-MTG-043 記録中にスリープしたら、復帰の直後に「スリープ前までで止める」か「続ける」かを選べる
+- 内容: 会議を記録したまま Mac をスリープした（MacBook を閉じた）・Windows がスリープした場合、復帰した直後に、スリープする前までで記録を止めるか、記録を続けるかを聞く。
+- 受け入れ条件:
+  - 記録中にスリープして復帰すると、スリープした時刻を添えて「スリープ前までで止める」「記録を続ける」を選ぶ確認が出る。
+  - 「スリープ前までで止める」を選ぶと、記録はスリープした時点で終わったものとして後処理に進む。スリープより後（復帰してから選ぶまで）の音声・文字起こし・「ここ重要」の印は会議に残らず、会議の長さもスリープした時点まで。
+  - 「記録を続ける」を選ぶと、そのまま記録を続ける。スリープしていた時間は会議の時間軸に入れない（メモの時刻と文字起こしの時刻がずれない）。
+  - 答える前にもう一度スリープしても、確認は 1 つだけ出し、「止める」は最初にスリープした時点で止める。
+  - 記録していないとき・後処理の途中にスリープしたときは、何も聞かない（後処理はそのまま続く）。
+- 出典: ユーザーの依頼（2026-11-06「会議の録音を起動したまま mac をスリープさせてしまったり macbook を閉じた場合に、再開しても録音を継続したままになっていました。そのような場合は、作業再開直後にスリープ前までで録音を停止させるか録音を継続するかを選べるようにしてください。windows でも同様の対応を行なってください」）
+- 関係する要件: REQ-MTG-001, REQ-MTG-011, REQ-MTG-012
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecorder.systemWillSleep`、`MeetingRecorder.systemDidWake`、`MeetingRecorder.stop(cutAt:)`、`MeetingSleepCut`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`OnSystemSuspend`・`OnSystemResume`・`ResolveSleepAsync`）、`windows/Hanasu.Windows/AppHost.cs`、`windows/Hanasu.Windows/Views/SleepPromptWindow.cs`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-sleep-cut`（スリープ時点での切り詰め。音声ファイルの切り詰めを含む）、`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~Sleep"`。実際のスリープと確認の画面は実機
+
+### REQ-MTG-044 文字起こしの最初と最後を選んで、その範囲で議事録を作れる
+- 内容: 記録した会議の文字起こしで、議事録に使う最初の発言と最後の発言を選ぶ。範囲の外の発言（始まる前・終わった後の雑談、止め忘れて録れた次の会議など）は議事録に使わない。
+- 受け入れ条件:
+  - 会議ノートの文字起こしで、発言を右クリックして「ここから議事録に使う」「ここまで議事録に使う」を選べる。片方だけでもよい。
+  - 範囲の外の発言は、文字起こしに薄く残る（消えない）。範囲はいつでも変えられ、解除できる。
+  - 範囲を変えたあと「議事録を作り直す」と、範囲の中の発言だけで議事録ができる。
+- 出典: ユーザーの依頼（2026-11-06「会議を録音したら文字起こしの最初と最後を選んで、その範囲内で議事録を作成する。特定の発言を無視して議事録を作成する」、想定ケースの提案に「推奨どおり進める」）
+- 関係する要件: REQ-MTG-013, REQ-MTG-045
+- 対象: Mac / Windows
+- 実装の場所: `Meeting.minutesFrom`・`Meeting.minutesTo`、`Meeting.minutesUse(of:)`、`TranscriptSelectionBar`、`TranscriptLineMenu`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesSelection.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-minutes-selection`、`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MinutesSelection"`。画面は `.build/debug/Hanasu --render-minutes-selection <出力フォルダ>`
+
+### REQ-MTG-045 特定の発言・特定の話者の発言を除いて議事録を作れる
+- 内容: 記録した会議の文字起こしで、議事録に使わない発言を選んで除く。話者ごとにまとめても除ける。想定する場面は、オフレコの話・機微な話（人事・個人の事情・公開前の数字）、会議と関係ない割り込み（電話・家族や隣の人の声・別のタブの動画）、接続や機材のやりとり（「聞こえますか」「画面見えてますか」）、途中の脱線・雑談、撤回した発言（言い直す前の誤った数字）、会議に関係ない話者（通訳の重なった音声など）。
+- 受け入れ条件:
+  - 発言を右クリックして「議事録から除く」「議事録に戻す」を選べる。「議事録に使う発言を選ぶ」にすると発言ごとにチェックボックスが出て、Shift を押しながらクリックすると前にクリックした発言からまとめて切り替えられる。
+  - 話者の発言を右クリックして、その話者の発言をすべて除く・戻すことができる。
+  - 除いた発言は文字起こしに薄く取り消し線つきで残り、元に戻せる。
+  - 除いた発言（範囲の外・オフレコを含む）は、議事録・話者の名前の推測・AI チャット・会議への質問・文字起こしの書き出し（コピー・保存・transcript.md）に使わない。会議の検索ではヒットする（文字起こしでは薄く出る）。
+  - 議事録に使う発言を変えても、議事録はすぐには作り直さず、議事録のタブに「作り直すと反映されます」と出す。
+- 出典: ユーザーの依頼（2026-11-06「会議を録音したら文字起こしの最初と最後を選んで、その範囲内で議事録を作成する。特定の発言を無視して議事録を作成する」、想定ケースの提案に「推奨どおり進める」）
+- 関係する要件: REQ-MTG-013, REQ-MTG-016, REQ-MTG-040, REQ-MTG-044
+- 対象: Mac / Windows
+- 実装の場所: `Meeting.excludedUtterances`・`Meeting.excludedSpeakers`、`Meeting.minutesUse(of:)`、`Meeting.blocksForMinutes`、`MeetingRecorder.setExcluded`、`TranscriptSelectionBar`、`TranscriptLineMenu`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesSelection.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-minutes-selection`、`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MinutesSelection"`。画面は `.build/debug/Hanasu --render-minutes-selection <出力フォルダ>`
+
+### REQ-MTG-046 記録中に「オフレコ」を始めて終えると、その間の発言を議事録に使わない
+- 内容: 記録中に「オフレコ」のボタンを押してから、もう一度押す（オフレコを終える）までの間の発言を、議事録などに使わない（REQ-MTG-045 で除いた発言と同じ扱い）。録音そのものは続ける。
+- 受け入れ条件:
+  - 記録中の画面に「オフレコ」のボタンがあり、押すと「オフレコ中」と始めた時刻が出て、ボタンが「オフレコを終える」に変わる。オフレコ中の発言は薄く出し、AI チャットにも渡さない。
+  - オフレコのまま記録を止めたら、記録の終わりまでをオフレコにする。
+  - 記録のあと、会議ノートの文字起こしでオフレコの区間を見られ、区間ごとに解除できる。
+- 出典: ユーザーの依頼（2026-11-06「会議を録音したら文字起こしの最初と最後を選んで、その範囲内で議事録を作成する。特定の発言を無視して議事録を作成する」、想定ケースの提案に「推奨どおり進める」）
+- 関係する要件: REQ-MTG-045, REQ-MTG-040
+- 対象: Mac / Windows
+- 実装の場所: `Meeting.offRecord`、`MeetingRecorder.toggleOffRecord`、`LiveOffRecordControls`、`TranscriptSelectionBar`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`ToggleOffRecord`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-minutes-selection`、`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~OffRecord"`。画面は `.build/debug/Hanasu --render-minutes-selection <出力フォルダ>`。実際の記録は実機
+
 ---
 
 ## 設計判断
@@ -942,6 +998,70 @@
 - 対象: Mac
 - 実装の場所: `MeetingChatStore`、`MeetingDetailView`、`MeetingWindowView.delete`
 
+### DEC-MTG-087 スリープは OS の通知で知り、確認は復帰したときにアラートで出す（Mac）
+- 決めたこと: `NSWorkspace` の `willSleepNotification` でスリープする時点を覚え、`didWakeNotification` で確認のアラート（「スリープ前までで止める」が既定のボタン、もう 1 つが「記録を続ける」）を出す。確認が出ている間も記録は続ける。答える前にスリープ・復帰を繰り返しても、確認は 1 つで、止める位置は最初のスリープ。確認の間にほかの手段（メニュー・ショートカット）で記録を止めていたら、答えは使わない。
+- 理由: 蓋を閉じたスリープも `willSleep` で知らせが来る（外部ディスプレイにつないで閉じたときはスリープしないので、記録を続けてよい）。スリープの前に聞くことはできないので、復帰した直後に聞く。止め忘れが主な場面なので「止める」を既定にした。確認の間に録った分は、「止める」なら捨て、「続ける」なら残るので、確認中も録り続けたほうが失うものがない。
+- 決めた場面: ユーザーの依頼（2026-11-06、スリープ後の記録の扱い）
+- 関係する要件: REQ-MTG-043
+- 対象: Mac
+- 実装の場所: `MeetingRecorder.systemWillSleep`、`MeetingRecorder.systemDidWake`、`MeetingRecorder.askAboutSleep`
+
+### DEC-MTG-088 「スリープ前までで止める」は、チャンネルごとの音声の位置で切り、音声ファイルも切り詰める
+- 決めたこと: スリープする時点で、チャンネルごとに「録音開始からの時刻で、どこまで音声を書いたか」（`ChannelTranscriber.audioEnd`）を覚える。止めるときは、その位置より後に始まる発言を捨て、音声ファイル（`me.m4a` / `others.m4a`）もその位置で切り詰める（Whisper / Gemini はその音声から文字起こしする）。切り詰めに失敗しても、発言を捨てるのは行う。会議の長さはスリープした時点までにし、それより後の「ここ重要」の印は消し、メモは消さずに時刻をスリープした時点にそろえる。
+- 理由: スリープ中は音声が届かないので、音声の時間軸（DEC-MTG-006）にはスリープの時間が入らない。時計の時刻で切ると、復帰したあとの音声の一部が残る。メモは本人が書いた文なので消さない。
+- 決めた場面: ユーザーの依頼（2026-11-06、スリープ後の記録の扱い）
+- 関係する要件: REQ-MTG-043, REQ-MTG-011, REQ-MTG-012
+- 対象: Mac
+- 実装の場所: `MeetingSleepCut`、`MeetingRecorder.stop(cutAt:)`、`ChannelTranscriber.audioEnd`、`MeetingSleepCLI`（確認）
+
+### DEC-MTG-089 記録を続けたときは、スリープしていた時間を経過時間から除く（Mac）
+- 決めたこと: 記録中の経過時間（メモ・「ここ重要」の時刻、会議の長さ）は、開始からの時計の時間からスリープしていた時間を引いたものにする。
+- 理由: 音声と文字起こしの時刻はスリープの時間を含まない（DEC-MTG-088）。時計の時間のままだと、スリープより後のメモや印が、スリープしていた分だけ後ろにずれて、議事録でメモと発言を結びつけられなくなる。
+- 決めた場面: ユーザーの依頼（2026-11-06、スリープ後の記録の扱い）
+- 関係する要件: REQ-MTG-043, REQ-MTG-011, REQ-MTG-012
+- 対象: Mac
+- 実装の場所: `MeetingRecorder.elapsed`、`MeetingRecorder.systemDidWake`、`LiveTranscriptView`（記録中の時計）
+
+### DEC-MTG-090 議事録に使う発言の選び方は、meeting.json に「発言の ID・話者・時刻」で持つ
+- 決めたこと: `meeting.json` に、範囲（`minutesFrom` / `minutesTo`。発言の開始時刻の秒）、除いた発言（`excludedUtterances`。発言の ID）、除いた話者（`excludedSpeakers`。話者キー）、オフレコの区間（`offRecord`。`id`・`start`・`end`。`end` がなければ記録の終わりまで）を足す。どれも省略可。発言が議事録に使われるかは、範囲（`minutesFrom ≤ 開始 ≤ minutesTo`）・除いた発言・除いた話者・オフレコ（`start ≤ 開始 < end`）の 4 つで決め、どれか 1 つに当たれば使わない（`Meeting.minutesUse(of:)`）。発言のまとめ（同じ話者が続く発言を 1 つにする）は、使う発言と使わない発言をまたいでまとめない。使い方を変えたら `minutesOutdated` を true にし、議事録を作り直したら外す。
+- 理由: 発言そのもの（`utterances`）は書き換えずに残すので、いつでも戻せる。発言の ID は保存し直しても変わらない。範囲を時刻で持てば、話者名を変えても変わらない。範囲・個別・話者・オフレコを別々に持つと、どれか 1 つだけを解除できる。Mac と Windows で同じキーにして、どちらで選んでも同じ結果にする（DEC-MTG-108）。
+- 決めた場面: ユーザーの依頼（2026-11-06、議事録の範囲と除外）
+- 関係する要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+- 対象: Mac / Windows
+- 実装の場所: `Meeting.minutesUse(of:)`、`Meeting.blocksForMinutes`、`windows/Hanasu.Core/Meetings/MinutesSelection.cs`
+
+### DEC-MTG-091 除いた発言は文字起こしに残し、AI に渡すもの・書き出しには入れない。検索には残す
+- 決めたこと: 議事録・話者名の推測・AI チャット（記録中と記録のあと）・会議への質問・辞書の候補探し・文字起こしの書き出し（Markdown のコピー・保存・`transcript.md`）は、使う発言だけから作る。会議ノートの文字起こしは全部を出し、使わない発言は薄く（除いた発言とオフレコは取り消し線も）して、理由（範囲外・除外・話者を除外・オフレコ）を添える。会議の横断検索の索引は変えない。使う発言が 1 つもなければ、議事録は作らない（記録のあとも、作り直しのボタンも）。Windows 版には AI チャット・会議への質問・辞書の候補探し・会議の検索がないので、議事録（話者名の推測を含む）と文字起こしの書き出しだけが対象。
+- 理由: 除く目的は「AI と共有物に入れない」こと。文字起こしから消すと、間違えて除いたときに気づけず戻せない。検索は自分の Mac の中だけで、見つけた発言が除いたものだと文字起こしで分かる。
+- 決めた場面: ユーザーの依頼（2026-11-06、議事録の範囲と除外）
+- 関係する要件: REQ-MTG-045
+- 対象: Mac / Windows
+- 実装の場所: `Meeting.transcriptForPrompt`、`Meeting.transcriptForPromptMarkingHighlights`、`Meeting.transcriptMarkdown`、`MeetingChat.material`、`MeetingChat.liveMaterial`
+
+### DEC-MTG-092 選び方を変えても議事録は自動では作り直さず、作り直しを促す
+- 決めたこと: 発言を除く・範囲を変えるたびに議事録を作り直さない。`minutesOutdated` が true の会議は、議事録のタブと文字起こしの上の帯に「議事録に使う発言を変えました。作り直すと反映されます」と「議事録を作り直す」を出す。
+- 理由: 発言を 1 つずつ除くたびに AI を呼ぶと、時間とお金がかかり、作り直しの途中にまた変えることになる。いくつか選んでから 1 回作り直すのが自然。
+- 決めた場面: ユーザーの依頼（2026-11-06、議事録の範囲と除外）
+- 関係する要件: REQ-MTG-044, REQ-MTG-045
+- 対象: Mac / Windows
+- 実装の場所: `Meeting.minutesOutdated`、`TranscriptSelectionBar`、`MeetingDetailView`
+
+### DEC-MTG-093 発言の選び方は、右クリックのメニューと「議事録に使う発言を選ぶ」のチェックボックスの 2 つ（Mac）
+- 決めたこと: 文字起こしの発言を右クリックするか、行にマウスを載せると右端に出る「…」を押すと「議事録から除く／戻す」「ここから議事録に使う」「ここまで議事録に使う」「〇〇の発言をすべて除く／戻す」を出す。文字起こしの上の帯の「議事録に使う発言を選ぶ」で、発言ごとのチェックボックス（オンが使う）を出す。Shift を押しながらチェックボックスを押すと、前に押した発言からその発言までを同じ状態にする。帯には、使う発言の数・範囲・除いた話者・オフレコの区間（それぞれ解除のボタン）と「すべて元に戻す」を出す。
+- 理由: 1 つ 2 つを除くだけなら右クリックで足りる。「…」は、右クリックで出せることに気づかない人と、文字を選べる行（`textSelection`）で右クリックが文字のメニューになる場合のため。雑談の続く区間のように多くを除くときは、チェックボックスと Shift でまとめて選べるほうが速い。文字起こしの文字を選んでコピーする操作（`textSelection`）とぶつからないように、行のクリックでは選ばない。
+- 決めた場面: ユーザーの依頼（2026-11-06、議事録の範囲と除外）
+- 関係する要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+- 対象: Mac
+- 実装の場所: `TranscriptSelectionBar`、`TranscriptLineMenu`、`MeetingDetailView`
+
+### DEC-MTG-094 オフレコの区間は、記録の経過時間で持ち、押すたびに保存する
+- 決めたこと: 「オフレコ」を押した時刻と終えた時刻を、記録の経過時間（メモ・印と同じ時間軸。DEC-MTG-089）で `offRecord` に入れ、押すたびに meeting.json に保存する（DEC-MTG-043 のメモと同じく、落ちても残る）。オフレコのまま記録を止めたら終わりを記録の長さにする。スリープ前までで止めたときは、スリープの後に始めた区間を消し、終わりをスリープした時点までにする。メモと「ここ重要」の印は、オフレコ中に付けても残す。
+- 理由: 発言の時刻と同じ時間軸なので、記録のあとに文字起こし（Whisper / Gemini を含む）ができてから発言に当てはめられる。メモと印は本人が書いたもので、オフレコの区間の目印にもなる。
+- 決めた場面: ユーザーの依頼（2026-11-06、議事録の範囲と除外）
+- 関係する要件: REQ-MTG-046, REQ-MTG-043
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecorder.toggleOffRecord`、`MeetingSleepCut.apply`、`windows/Hanasu.Core/Meetings/MeetingController.cs`
+
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。
 - 理由: Mac 版の Process Tap（DEC-MTG-002）にあたる、ドライバーの要らない方法。効果音を鳴らすとループバックに入る。
@@ -1029,6 +1149,22 @@
 - 関係する要件: REQ-MTG-001, REQ-MTG-012
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/Settings/AppSettings.cs`
+
+### DEC-MTG-111 Windows 版のスリープは PowerModeChanged で知り、スリープ中は記録の時計を止める
+- 決めたこと: `SystemEvents.PowerModeChanged` の `Suspend` で、記録の時計（2 つのチャンネルの時刻合わせに使う経過時間）を止めて、その時刻を覚える。`Resume` で時計を動かし直し、確認のウインドウ（「スリープ前までで止める」が既定、閉じたら「記録を続ける」）を前面に出す。「止める」なら、会議の長さをスリープした時刻にし、WAV（`me.wav` / `others.wav`）をその時刻で切り詰めてから後処理する。印とメモの扱いは Mac と同じ（DEC-MTG-088）。
+- 理由: ループバックは届かなかった時間を無音で埋める（DEC-MTG-103）ので、時計がスリープの時間を数えると、その分の無音（16 kHz で 1 時間に約 115 MB）が WAV に入る。時計を止めればスリープの時間は時間軸に入らず、WAV の位置と経過時間が対応するので、経過時間で切ればよい。Windows 版は記録のあとに WAV から文字起こしするので、WAV を切り詰めれば文字起こしもスリープの前までになる。閉じたときに続けるのは、録った音声を失わない側に倒すため。
+- 決めた場面: ユーザーの依頼（2026-11-06、スリープ後の記録の扱い）
+- 関係する要件: REQ-MTG-043, REQ-MTG-002
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Meetings/MeetingController.cs`、`windows/Hanasu.Core/Audio/WavStreamWriter.cs`（`Truncate`）、`windows/Hanasu.Windows/AppHost.cs`、`windows/Hanasu.Windows/Views/SleepPromptWindow.cs`
+
+### DEC-MTG-112 Windows 版の文字起こしのタブは、発言ごとの一覧にして、チェックボックスと右クリックで選ぶ
+- 決めたこと: 会議ノートの「文字起こし」タブを、読み取り専用のテキストから発言ごとの一覧（時刻・話者・本文・使うかのチェックボックス）に変える。右クリックのメニューと Shift でのまとめての切り替え、上の帯（使う発言の数・範囲・除いた話者・オフレコの区間・すべて元に戻す・議事録を作り直す）は Mac と同じ（DEC-MTG-093）。記録中の画面に「オフレコ」のボタンを「ここ重要」の隣に置く。発言のコピーは、一覧で選んで Ctrl + C（使う発言・使わない発言とも、表示どおりの 1 行 1 発言）。
+- 理由: テキストの欄では発言ごとに状態を持てない。Windows 版は記録中にライブの文字起こしを出さない（DEC-MTG-101）ので、オフレコ中の発言を薄く出すのは記録のあとだけ。
+- 決めた場面: ユーザーの依頼（2026-11-06、議事録の範囲と除外）
+- 関係する要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 
 ---
 

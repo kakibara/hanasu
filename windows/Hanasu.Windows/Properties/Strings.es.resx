@@ -1190,4 +1190,106 @@ Las actualizaciones desde la app reemplazan la carpeta entera, así que solo fun
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>Omitir esta versión</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>Grabación tras la suspensión</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>El PC entró en suspensión mientras grababa una reunión</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>Entró en suspensión a las {0} y la grabación ha continuado desde entonces. Elige si quieres detener la grabación en el punto anterior a la suspensión o seguir grabando.</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>Detener antes de la suspensión</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>Seguir grabando</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>Extraoficial</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>Terminar lo extraoficial</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>Extraoficial (desde {0})</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>Lo que se diga hasta que lo termines no se usará para el acta. La grabación continúa.</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>Cambiaste qué intervenciones se usan para el acta. Regenérala para aplicar el cambio.</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>Restablecer todo</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>Intervenciones usadas para el acta: {0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>Rango: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>inicio</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>final</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>Quitar</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>Hablante excluido: {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>Restaurar</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>Extraoficial: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>Desmarca una intervención para dejarla fuera del acta (Mayús+clic cambia todas desde la que pulsaste antes). Haz clic derecho para fijar el rango o excluir a un hablante. Ctrl+C copia las intervenciones seleccionadas.</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>Excluida</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>Extraoficial</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>Hablante excluido</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>Fuera de rango</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>Usar para el acta</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>No se usa para el acta ({0}). Puedes restaurarla desde la barra de arriba.</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>Excluir del acta</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>Volver a usar para el acta</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>Usar para el acta desde aquí</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>Usar para el acta hasta aquí</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>Excluir todo lo que dijo {0}</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>Restaurar todo lo que dijo {0}</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>Se copiaron {0} intervenciones</value>
+  </data>
 </root>

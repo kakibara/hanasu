@@ -1190,4 +1190,106 @@
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>この版をスキップ</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>スリープ後の記録</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>会議の記録中に PC がスリープしました</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>{0} にスリープしてから、記録を続けています。スリープする前までで記録を止めるか、このまま記録を続けるかを選んでください。</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>スリープ前までで止める</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>記録を続ける</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>オフレコ</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>オフレコを終える</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>オフレコ中（{0} から）</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>終えるまでの発言を、議事録などに使いません。録音は続けます。</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>議事録に使う発言を変えました。作り直すと反映されます</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>すべて元に戻す</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>議事録に使う発言: {0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>範囲: {0} 〜 {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>最初</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>最後</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>解除</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>除いた話者: {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>戻す</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>オフレコ: {0} 〜 {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>チェックを外した発言は議事録に使いません（Shift を押しながらクリックすると、前にクリックした発言からまとめて切り替えます）。範囲と話者は右クリックで選べます。Ctrl + C で、選んだ発言をコピーします。</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>除外</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>オフレコ</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>話者を除外</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>範囲外</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>議事録に使う</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>議事録に使いません（{0}）。上の帯から戻せます</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>議事録から除く</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>議事録に戻す</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>ここから議事録に使う</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>ここまで議事録に使う</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>「{0}」の発言をすべて除く</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>「{0}」の発言をすべて戻す</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>{0} 件の発言をコピーしました</value>
+  </data>
 </root>

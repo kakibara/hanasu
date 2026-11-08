@@ -1190,4 +1190,106 @@ Otworzyć stronę wydania w przeglądarce?</value>
   <data name="UpdatePrompt_Skip" xml:space="preserve">
     <value>Pomiń tę wersję</value>
   </data>
+  <data name="SleepPrompt_Title" xml:space="preserve">
+    <value>Nagrywanie po uśpieniu</value>
+  </data>
+  <data name="SleepPrompt_Heading" xml:space="preserve">
+    <value>Komputer przeszedł w stan uśpienia podczas nagrywania spotkania</value>
+  </data>
+  <data name="SleepPrompt_Body" xml:space="preserve">
+    <value>Uśpienie nastąpiło o {0}, a nagrywanie trwa od tego czasu. Wybierz, czy zatrzymać nagranie w momencie przed uśpieniem, czy kontynuować nagrywanie.</value>
+  </data>
+  <data name="SleepPrompt_Stop" xml:space="preserve">
+    <value>Zatrzymaj przed uśpieniem</value>
+  </data>
+  <data name="SleepPrompt_Continue" xml:space="preserve">
+    <value>Kontynuuj nagrywanie</value>
+  </data>
+  <data name="Meeting_OffRecord" xml:space="preserve">
+    <value>Poza protokołem</value>
+  </data>
+  <data name="Meeting_OffRecordEnd" xml:space="preserve">
+    <value>Zakończ „poza protokołem”</value>
+  </data>
+  <data name="Meeting_OffRecordActive" xml:space="preserve">
+    <value>Poza protokołem (od {0})</value>
+  </data>
+  <data name="Meeting_OffRecord_Tip" xml:space="preserve">
+    <value>To, co zostanie powiedziane do zakończenia, nie trafi do protokołu. Nagrywanie trwa dalej.</value>
+  </data>
+  <data name="Meeting_MinutesOutdated" xml:space="preserve">
+    <value>Zmieniono wypowiedzi używane w protokole. Wygeneruj protokół ponownie, aby zastosować zmianę.</value>
+  </data>
+  <data name="Meeting_Selection_ResetAll" xml:space="preserve">
+    <value>Przywróć wszystko</value>
+  </data>
+  <data name="Meeting_Selection_Count" xml:space="preserve">
+    <value>Wypowiedzi w protokole: {0} / {1}</value>
+  </data>
+  <data name="Meeting_Selection_Range" xml:space="preserve">
+    <value>Zakres: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_RangeStart" xml:space="preserve">
+    <value>początek</value>
+  </data>
+  <data name="Meeting_Selection_RangeEnd" xml:space="preserve">
+    <value>koniec</value>
+  </data>
+  <data name="Meeting_Selection_Clear" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="Meeting_Selection_ExcludedSpeaker" xml:space="preserve">
+    <value>Wykluczona osoba: {0}</value>
+  </data>
+  <data name="Meeting_Selection_Restore" xml:space="preserve">
+    <value>Przywróć</value>
+  </data>
+  <data name="Meeting_Selection_OffRecord" xml:space="preserve">
+    <value>Poza protokołem: {0} – {1}</value>
+  </data>
+  <data name="Meeting_Selection_Hint" xml:space="preserve">
+    <value>Odznacz wypowiedź, aby pominąć ją w protokole (Shift+kliknięcie przełącza wszystkie od wypowiedzi klikniętej wcześniej). Kliknij prawym przyciskiem, aby ustawić zakres lub wykluczyć osobę. Ctrl+C kopiuje zaznaczone wypowiedzi.</value>
+  </data>
+  <data name="Meeting_Use_Excluded" xml:space="preserve">
+    <value>Wykluczona</value>
+  </data>
+  <data name="Meeting_Use_OffRecord" xml:space="preserve">
+    <value>Poza protokołem</value>
+  </data>
+  <data name="Meeting_Use_SpeakerExcluded" xml:space="preserve">
+    <value>Osoba wykluczona</value>
+  </data>
+  <data name="Meeting_Use_OutsideRange" xml:space="preserve">
+    <value>Poza zakresem</value>
+  </data>
+  <data name="Meeting_UseForMinutes" xml:space="preserve">
+    <value>Użyj w protokole</value>
+  </data>
+  <data name="Meeting_UseForMinutes_Locked" xml:space="preserve">
+    <value>Nieużywana w protokole ({0}). Możesz ją przywrócić na pasku powyżej.</value>
+  </data>
+  <data name="Meeting_Menu_Exclude" xml:space="preserve">
+    <value>Wyklucz z protokołu</value>
+  </data>
+  <data name="Meeting_Menu_Include" xml:space="preserve">
+    <value>Użyj ponownie w protokole</value>
+  </data>
+  <data name="Meeting_Menu_FromHere" xml:space="preserve">
+    <value>Użyj w protokole od tego miejsca</value>
+  </data>
+  <data name="Meeting_Menu_ToHere" xml:space="preserve">
+    <value>Użyj w protokole do tego miejsca</value>
+  </data>
+  <data name="Meeting_Menu_ExcludeSpeaker" xml:space="preserve">
+    <value>Wyklucz wszystkie wypowiedzi: {0}</value>
+  </data>
+  <data name="Meeting_Menu_IncludeSpeaker" xml:space="preserve">
+    <value>Przywróć wszystkie wypowiedzi: {0}</value>
+  </data>
+  <data name="Meeting_Menu_Copy" xml:space="preserve">
+    <value>Kopiuj</value>
+  </data>
+  <data name="Meeting_CopiedUtterances" xml:space="preserve">
+    <value>Skopiowane wypowiedzi: {0}</value>
+  </data>
 </root>

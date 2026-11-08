@@ -696,4 +696,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>zip 中没有 {0}，因此不会使用</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- 未包含不用于会议纪要的发言（{0} 条）</value>
+  </data>
 </root>

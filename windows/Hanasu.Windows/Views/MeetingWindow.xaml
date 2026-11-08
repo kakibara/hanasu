@@ -30,6 +30,13 @@
             <Setter Property="Padding" Value="10,8" />
             <Setter Property="FontSize" Value="13.5" />
         </Style>
+        <!-- 文字起こしの上の帯の小さいボタン（範囲の解除・話者を戻す・オフレコの解除） -->
+        <Style x:Key="ChipButton" TargetType="Button">
+            <Setter Property="Padding" Value="6,0" />
+            <Setter Property="Margin" Value="4,0,0,0" />
+            <Setter Property="MinHeight" Value="22" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -143,12 +150,18 @@
                     <DockPanel Margin="0,8,0,0">
                         <!-- 要件: REQ-MTG-012 -->
                         <!-- 設計判断: DEC-MTG-047 -->
+                        <!-- 要件: REQ-MTG-046 -->
+                        <!-- 設計判断: DEC-MTG-094, DEC-MTG-112 -->
+                        <Button DockPanel.Dock="Right" x:Name="OffRecordButton" Content="{x:Static p:Strings.Meeting_OffRecord}" Margin="6,0,0,0" Click="OnOffRecordClick"
+                                ToolTip="{x:Static p:Strings.Meeting_OffRecord_Tip}" />
                         <Button DockPanel.Dock="Right" x:Name="UndoHighlightButton" Margin="6,0,0,0" Click="OnUndoHighlightClick" Visibility="Collapsed"
                                 ToolTip="{x:Static p:Strings.Meeting_UndoHighlight_Tip}" />
                         <Button DockPanel.Dock="Right" x:Name="HighlightButton" Content="{x:Static p:Strings.Meeting_Highlight}" Margin="6,0,0,0" Click="OnHighlightClick" />
                         <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Meeting_AddNote}" Margin="6,0,0,0" Click="OnAddNoteClick" />
                         <TextBox x:Name="NoteInput" AutomationProperties.Name="{x:Static p:Strings.Meeting_NoteInput_A11y}" Padding="4,3" KeyDown="OnNoteInputKeyDown" TextChanged="OnNoteInputChanged" />
                     </DockPanel>
+                    <!-- 要件: REQ-MTG-046 -->
+                    <TextBlock x:Name="OffRecordStatus" Style="{StaticResource LiveTitle}" FontWeight="SemiBold" Margin="0,6,0,0" Visibility="Collapsed" />
                     <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Meeting_NoteHint}" />
                     <TextBlock x:Name="LiveNotes" Margin="0,6,0,0" TextWrapping="Wrap" FontFamily="Consolas, Yu Gothic UI" />
                 </StackPanel>
@@ -156,10 +169,82 @@
 
             <TabControl x:Name="Tabs" Margin="0,10,0,0">
                 <TabItem Header="{x:Static p:Strings.Meeting_Tab_Minutes}">
-                    <TextBox x:Name="MinutesBox" AutomationProperties.Name="{x:Static p:Strings.Meeting_Minutes_A11y}" Style="{StaticResource Reader}" />
+                    <DockPanel>
+                        <!-- 設計判断: DEC-MTG-092 -->
+                        <Border x:Name="MinutesOutdatedPanel" DockPanel.Dock="Top" Style="{StaticResource InnerPane}" CornerRadius="4" Padding="8,6" Margin="0,6,0,0" Visibility="Collapsed">
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" x:Name="MinutesOutdatedRegenerateButton" Content="{x:Static p:Strings.Meeting_Regenerate}" Margin="6,0,0,0" Click="OnRegenerateClick" />
+                                <TextBlock Text="{x:Static p:Strings.Meeting_MinutesOutdated}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                            </DockPanel>
+                        </Border>
+                        <TextBox x:Name="MinutesBox" AutomationProperties.Name="{x:Static p:Strings.Meeting_Minutes_A11y}" Style="{StaticResource Reader}" />
+                    </DockPanel>
                 </TabItem>
+                <!-- 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046 -->
+                <!-- 設計判断: DEC-MTG-091, DEC-MTG-112 -->
+                <!-- 発言ごとの一覧（時刻・話者・本文・議事録に使うかのチェックボックス）。上の帯に、使う発言の数・範囲・除いた話者・オフレコの区間 -->
                 <TabItem Header="{x:Static p:Strings.Meeting_Tab_Transcript}">
-                    <TextBox x:Name="TranscriptBox" AutomationProperties.Name="{x:Static p:Strings.Meeting_Transcript_A11y}" Style="{StaticResource Reader}" />
+                    <DockPanel>
+                        <Border x:Name="SelectionBar" DockPanel.Dock="Top" Style="{StaticResource InnerPane}" CornerRadius="4" Padding="8,6" Margin="0,6,0,4" Visibility="Collapsed">
+                            <StackPanel>
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Right" x:Name="ResetSelectionButton" Style="{StaticResource ChipButton}" Content="{x:Static p:Strings.Meeting_Selection_ResetAll}" Click="OnResetSelectionClick" />
+                                    <TextBlock x:Name="UsedCountText" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                </DockPanel>
+                                <WrapPanel x:Name="SelectionChips" Margin="0,2,0,0" />
+                                <DockPanel x:Name="TranscriptOutdatedPanel" Margin="0,6,0,0" Visibility="Collapsed">
+                                    <Button DockPanel.Dock="Right" x:Name="TranscriptOutdatedRegenerateButton" Content="{x:Static p:Strings.Meeting_Regenerate}" Margin="6,0,0,0" Click="OnRegenerateClick" />
+                                    <TextBlock Text="{x:Static p:Strings.Meeting_MinutesOutdated}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                </DockPanel>
+                                <TextBlock x:Name="SelectionHint" Style="{StaticResource Note}" Text="{x:Static p:Strings.Meeting_Selection_Hint}" />
+                            </StackPanel>
+                        </Border>
+                        <TextBlock x:Name="TranscriptEmptyText" DockPanel.Dock="Top" Style="{StaticResource Note}" Margin="10,8" FontSize="13.5" Visibility="Collapsed" />
+                        <ListBox x:Name="TranscriptList" AutomationProperties.Name="{x:Static p:Strings.Meeting_Transcript_A11y}" SelectionMode="Extended" BorderThickness="0"
+                                 HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
+                            <ListBox.CommandBindings>
+                                <CommandBinding Command="ApplicationCommands.Copy" Executed="OnCopyRowsExecuted" CanExecute="OnCopyRowsCanExecute" />
+                            </ListBox.CommandBindings>
+                            <ListBox.ContextMenu>
+                                <ContextMenu Opened="OnTranscriptMenuOpened">
+                                    <MenuItem x:Name="ExcludeMenuItem" Header="{x:Static p:Strings.Meeting_Menu_Exclude}" Click="OnExcludeMenuClick" />
+                                    <MenuItem x:Name="IncludeMenuItem" Header="{x:Static p:Strings.Meeting_Menu_Include}" Click="OnIncludeMenuClick" />
+                                    <Separator />
+                                    <MenuItem x:Name="FromHereMenuItem" Header="{x:Static p:Strings.Meeting_Menu_FromHere}" Click="OnFromHereMenuClick" />
+                                    <MenuItem x:Name="ToHereMenuItem" Header="{x:Static p:Strings.Meeting_Menu_ToHere}" Click="OnToHereMenuClick" />
+                                    <Separator />
+                                    <MenuItem x:Name="SpeakerMenuItem" Click="OnSpeakerMenuClick" />
+                                    <Separator />
+                                    <MenuItem x:Name="CopyRowsMenuItem" Header="{x:Static p:Strings.Meeting_Menu_Copy}" InputGestureText="Ctrl+C" Click="OnCopyRowsMenuClick" />
+                                </ContextMenu>
+                            </ListBox.ContextMenu>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,3" Opacity="{Binding Opacity, Mode=OneTime}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox Grid.Column="0" VerticalAlignment="Top" Margin="0,2,8,0" Focusable="False"
+                                                  IsChecked="{Binding IsUsed, Mode=OneTime}" IsEnabled="{Binding CanToggle, Mode=OneTime}" Click="OnUseCheckClick"
+                                                  AutomationProperties.Name="{x:Static p:Strings.Meeting_UseForMinutes}" ToolTip="{Binding CheckTip, Mode=OneTime}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Time, Mode=OneTime}" FontFamily="Consolas, Segoe UI" FontSize="12" Margin="0,2,8,0"
+                                                   Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                                        <StackPanel Grid.Column="2">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Speaker, Mode=OneTime}" FontWeight="SemiBold" />
+                                                <TextBlock Text="{Binding Reason, Mode=OneTime}" Visibility="{Binding ReasonVisibility, Mode=OneTime}" Margin="8,1,0,0" FontSize="11.5"
+                                                           Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Text, Mode=OneTime}" TextWrapping="Wrap" FontSize="13.5" TextDecorations="{Binding Decorations, Mode=OneTime}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
                 </TabItem>
                 <!-- 要件: REQ-MTG-012 -->
                 <!-- 設計判断: DEC-MTG-049 -->

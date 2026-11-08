@@ -696,4 +696,7 @@
   <data name="Update_ZipMissingExe" xml:space="preserve">
     <value>Lo zip non contiene {0}, quindi non verrà usato</value>
   </data>
+  <data name="Transcript_UnusedOmitted" xml:space="preserve">
+    <value>- Non sono inclusi {0} interventi non usati per il verbale</value>
+  </data>
 </root>

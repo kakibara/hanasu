@@ -95,7 +95,7 @@ enum TextInserter {
 
 ## 6. 変更の手順
 
-依頼を受けたら、作り始める前に要件定義を詰め、計画をユーザーと合意する。Claude Code では、スキル `requirements`（[.claude/skills/requirements/SKILL.md](../.claude/skills/requirements/SKILL.md)）がその手順（調べる・決まっていないことを聞く・計画を書く・了承を取る）を行う。
+依頼を受けたら、作り始める前に要件定義を詰め、計画をユーザーと合意する。Claude Code では、スキル `requirements`（[.claude/skills/requirements/SKILL.md](../.claude/skills/requirements/SKILL.md)）がその手順（調べる・決まっていないことを聞く・計画を書く・了承を取る）を行う。計画を書いたら、了承の前にスキル `requirements-review`（[.claude/skills/requirements-review/SKILL.md](../.claude/skills/requirements-review/SKILL.md)）で、エージェント `requirements-reviewer`（[.claude/agents/requirements-reviewer.md](../.claude/agents/requirements-reviewer.md)、Opus）に計画を敵対的にレビューさせ、指摘を確かめて計画を直す。
 
 ### 新しい機能を作るとき
 1. 依頼から要件を [spec/](spec/) に書く（出典に依頼の日付と要旨）。[roadmap.md](roadmap.md) の項目を実装するなら、その中身を spec に移し、roadmap には「→ REQ-…」だけを残す。

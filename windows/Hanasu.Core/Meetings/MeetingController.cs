@@ -43,6 +43,8 @@ public sealed class MeetingServices
     /// <summary>議事録用の AI（設定の「会議の AI」。認証情報がなければ null）</summary>
     public required Func<AppSettings, Ai.ITextGenerator?> CreateMinutesClient { get; init; }
     public Func<DateTimeOffset> Now { get; init; } = () => DateTimeOffset.Now;
+    /// <summary>単調に増える時計（秒）。記録の経過時間のもとにする。null なら Stopwatch（テストでは偽の時計を渡す）</summary>
+    public Func<double>? MonotonicSeconds { get; init; }
     public Action<string> Log { get; init; } = _ => { };
 }
 
@@ -57,7 +59,20 @@ public sealed class MeetingController
 {
     private readonly MeetingServices services;
     private readonly object gate = new();
-    private readonly Stopwatch clock = new();
+    private readonly Stopwatch clock = Stopwatch.StartNew();
+    /// <summary>記録を始めた時点の、単調な時計の値</summary>
+    private double startedAt;
+    // 設計判断: DEC-MTG-111
+    /// <summary>スリープしていた時間の合計（経過時間から除く）</summary>
+    private double pausedSeconds;
+    /// <summary>止めた経過時間（スリープ中・記録していないとき）。null なら時計が動いている</summary>
+    private double? frozenAt = 0;
+    /// <summary>記録中にスリープして、まだ戻っていない</summary>
+    private bool suspended;
+    // 要件: REQ-MTG-043
+    /// <summary>記録中に最初にスリープした時点（確認に答えるまで持つ）</summary>
+    private MeetingSleepPoint? pendingSleep;
+    private bool askingAboutSleep;
     private MeetingState state = MeetingState.Idle;
     private IMeetingChannelRecorder? mic;
     private IMeetingChannelRecorder? loopback;
@@ -92,8 +107,14 @@ public sealed class MeetingController
     /// <summary>後処理の今の段階（「Whisper で文字起こししています…（自分）」など）</summary>
     public string? ProgressMessage { get; private set; }
 
-    /// <summary>記録を始めてからの秒数</summary>
-    public double ElapsedSeconds => clock.Elapsed.TotalSeconds;
+    // 設計判断: DEC-MTG-111
+    /// <summary>記録を始めてからの秒数。スリープしていた時間は数えない（スリープ中は止まる）</summary>
+    public double ElapsedSeconds
+    {
+        get { lock (gate) return frozenAt ?? Math.Max(0, Monotonic - startedAt - pausedSeconds); }
+    }
+
+    private double Monotonic => services.MonotonicSeconds?.Invoke() ?? clock.Elapsed.TotalSeconds;
 
     public double MicLevel => mic?.Level ?? 0;
     public double LoopbackLevel => loopback?.Level ?? 0;
@@ -106,6 +127,9 @@ public sealed class MeetingController
     public event EventHandler<Meeting>? MeetingChanged;
     public event EventHandler<string>? ProgressChanged;
     public event EventHandler<MeetingNotice>? Notice;
+    // 要件: REQ-MTG-043
+    /// <summary>記録中にスリープして戻った。止めるか続けるかを聞き、答えを <see cref="ResolveSleepAsync"/> に渡す</summary>
+    public event EventHandler<MeetingSleepPoint>? ResumedFromSleep;
 
     public MeetingStore Store(AppSettings settings) => new(settings.MeetingsDirectory);
 
@@ -146,8 +170,16 @@ public sealed class MeetingController
             store.Save(meeting);
             Current = meeting;
 
-            clock.Restart();
-            Func<double> elapsed = () => clock.Elapsed.TotalSeconds;
+            lock (gate)
+            {
+                startedAt = Monotonic;
+                pausedSeconds = 0;
+                frozenAt = null;
+                suspended = false;
+                pendingSleep = null;
+                askingAboutSleep = false;
+            }
+            Func<double> elapsed = () => ElapsedSeconds;
             mic = services.CreateMicRecorder(settings);
             mic.Faulted += OnMicFaulted;
             await mic.StartAsync(store.AudioPath(meeting, MeetingChannel.Me), elapsed).ConfigureAwait(false);
@@ -173,7 +205,7 @@ public sealed class MeetingController
         {
             services.Log($"meeting start failed: {e.GetType().Name}: {e.Message}");
             await DisposeRecordersAsync().ConfigureAwait(false);
-            clock.Reset();
+            lock (gate) frozenAt = 0;
             if (meeting is not null)
             {
                 meeting.Status = MeetingStatus.Failed;
@@ -187,12 +219,16 @@ public sealed class MeetingController
         }
     }
 
-    /// <summary>記録を止め、後処理を始める。後処理が終わるのを待つ Task を返す</summary>
-    public async Task StopAsync()
+    /// <summary>
+    /// 記録を止め、後処理を始める。後処理が終わるのを待つ Task を返す。
+    /// cutAt を渡すと、そのスリープした時点で記録が終わったものとして、それより後の分を除く（REQ-MTG-043）
+    /// </summary>
+    public async Task StopAsync(MeetingSleepPoint? cutAt = null)
     {
         lock (gate)
         {
             if (state != MeetingState.Recording) return;
+            pendingSleep = null;
         }
         var meeting = Current!;
         var settings = recordingSettings!;
@@ -203,10 +239,15 @@ public sealed class MeetingController
         await StopRecordersAsync().ConfigureAwait(false);
         micOffset ??= mic?.StartOffset;
         loopbackOffset ??= loopback?.StartOffset;
-        meeting.Duration = clock.Elapsed.TotalSeconds;
-        clock.Stop();
+        meeting.Duration = ElapsedSeconds;
+        lock (gate) frozenAt = meeting.Duration;
         meeting.AudioStartOffsets = new Dictionary<string, double> { ["me"] = micOffset ?? 0, ["others"] = loopbackOffset ?? 0 };
         await DisposeRecordersAsync().ConfigureAwait(false);
+        // 要件: REQ-MTG-046
+        // 設計判断: DEC-MTG-094
+        // オフレコのまま止めたら、記録の終わりまでをオフレコにする
+        if (meeting.OffRecord?.FindLast(s => s.End is null) is { } open) open.End = Math.Max(open.Start, meeting.Duration);
+        if (cutAt is not null) CutAtSleep(meeting, settings, cutAt);
         services.Log($"meeting stopped: {meeting.Duration:0}s");
 
         processing = ProcessAsync(meeting, settings);
@@ -254,6 +295,87 @@ public sealed class MeetingController
         }
     }
 
+    // MARK: - スリープ
+
+    // 要件: REQ-MTG-043
+    // 設計判断: DEC-MTG-111
+    /// <summary>PC がスリープする（SystemEvents.PowerModeChanged の Suspend）。記録中なら時計を止め、その時点を覚える</summary>
+    public void OnSystemSuspend()
+    {
+        lock (gate)
+        {
+            if (state != MeetingState.Recording || suspended) return;
+            suspended = true;
+            frozenAt = Math.Max(0, Monotonic - startedAt - pausedSeconds);
+            // 答える前にもう一度スリープしても、止める位置は最初のスリープのまま
+            pendingSleep ??= new MeetingSleepPoint(frozenAt.Value, services.Now());
+        }
+        services.Log($"meeting: system suspend while recording ({ElapsedSeconds:0}s)");
+    }
+
+    // 要件: REQ-MTG-043
+    // 設計判断: DEC-MTG-111
+    /// <summary>PC がスリープから戻った（Resume）。時計を動かし直し、記録中なら確認を求める（確認は 1 つだけ）</summary>
+    public void OnSystemResume()
+    {
+        MeetingSleepPoint? ask = null;
+        lock (gate)
+        {
+            if (suspended && frozenAt is { } frozen)
+            {
+                suspended = false;
+                pausedSeconds = Monotonic - startedAt - frozen;
+                frozenAt = null;
+            }
+            if (state == MeetingState.Recording && pendingSleep is not null && !askingAboutSleep)
+            {
+                askingAboutSleep = true;
+                ask = pendingSleep;
+            }
+        }
+        if (ask is null) return;
+        services.Log("meeting: resumed while recording; asking whether to stop at the sleep point");
+        ResumedFromSleep?.Invoke(this, ask);
+    }
+
+    // 要件: REQ-MTG-043
+    /// <summary>スリープのあとの確認の答え。stopAtSleep なら、最初にスリープした時点で記録を止めて後処理に進む</summary>
+    public Task ResolveSleepAsync(bool stopAtSleep)
+    {
+        MeetingSleepPoint? point;
+        lock (gate)
+        {
+            askingAboutSleep = false;
+            point = pendingSleep;
+            pendingSleep = null;
+            // 確認の間に、ほかの手段で記録を止めていたら何もしない
+            if (state != MeetingState.Recording || point is null) return Task.CompletedTask;
+        }
+        services.Log(stopAtSleep ? "meeting: stopping at the sleep point" : "meeting: continuing after sleep");
+        return stopAtSleep ? StopAsync(point) : Task.CompletedTask;
+    }
+
+    // 設計判断: DEC-MTG-111
+    /// <summary>WAV をスリープした時点で切り詰め、印とメモと会議の長さを直す</summary>
+    private void CutAtSleep(Meeting meeting, AppSettings settings, MeetingSleepPoint point)
+    {
+        var store = Store(settings);
+        foreach (var channel in new[] { MeetingChannel.Me, MeetingChannel.Others })
+        {
+            var offset = meeting.AudioStartOffsets?.GetValueOrDefault(channel == MeetingChannel.Me ? "me" : "others") ?? 0;
+            try
+            {
+                Audio.WavStreamWriter.Truncate(store.AudioPath(meeting, channel), point.Elapsed - offset);
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                services.Log($"meeting audio trim failed ({channel}): {e.Message}");
+            }
+        }
+        MeetingSleepCut.Apply(meeting, point);
+        services.Log($"meeting cut at sleep: {point.Elapsed:0}s");
+    }
+
     // MARK: - メモと印
 
     /// <summary>記録中のメモを足す。time は書き始めた時刻（録音開始からの秒数）。記録中でなければ何もしない</summary>
@@ -291,6 +413,50 @@ public sealed class MeetingController
         meeting.Notes.Add(note);
         try { Store(recordingSettings).Save(meeting); } catch (IOException e) { services.Log($"note save failed: {e.Message}"); }
         MeetingChanged?.Invoke(this, meeting);
+    }
+
+    // MARK: - オフレコ
+
+    // 要件: REQ-MTG-046
+    /// <summary>記録中のオフレコの区間（終わっていないもの）。オフレコでなければ null</summary>
+    public OffRecordSpan? OpenOffRecord =>
+        State == MeetingState.Recording && Current is { } meeting ? meeting.OffRecord?.FindLast(s => s.End is null) : null;
+
+    // 要件: REQ-MTG-046
+    // 設計判断: DEC-MTG-094
+    /// <summary>
+    /// 記録中に「オフレコ」を始める・終える（記録の経過時間で持つ）。押すたびに保存する（メモと同じく、落ちても残る）。
+    /// 記録中に区切るのは議事録を作る前なので、MinutesOutdated は付けない。記録中でなければ何もしない
+    /// </summary>
+    public void ToggleOffRecord()
+    {
+        if (State != MeetingState.Recording || Current is not { } meeting || recordingSettings is null) return;
+        var elapsed = ElapsedSeconds;
+        meeting.OffRecord ??= new();
+        if (meeting.OffRecord.FindLast(s => s.End is null) is { } open) open.End = Math.Max(open.Start, elapsed);
+        else meeting.OffRecord.Add(new OffRecordSpan(elapsed));
+        try { Store(recordingSettings).Save(meeting); } catch (IOException e) { services.Log($"off-record save failed: {e.Message}"); }
+        MeetingChanged?.Invoke(this, meeting);
+    }
+
+    // MARK: - 議事録に使う発言（MinutesSelection.cs）
+
+    // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+    /// <summary>議事録に使う発言の選び方を変えられるか。記録中・処理中・議事録の作り直し中の会議は変えない（処理の保存で消えるため）</summary>
+    public bool CanEditMinutesSelection(Meeting meeting)
+    {
+        lock (gate) return Current?.Id != meeting.Id && !regenerating.Contains(meeting.Id) && meeting.Status != MeetingStatus.Processing;
+    }
+
+    // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
+    // 設計判断: DEC-MTG-090, DEC-MTG-092
+    /// <summary>議事録に使う発言の選び方を変えて保存する（議事録は作り直さない）。変えられない会議なら何もせず false</summary>
+    public bool ChangeMinutesSelection(Meeting meeting, Action<Meeting> change)
+    {
+        if (!CanEditMinutesSelection(meeting)) return false;
+        change(meeting);
+        Save(meeting);
+        return true;
     }
 
     // MARK: - 記録のあとの操作
@@ -336,6 +502,8 @@ public sealed class MeetingController
         meeting.CustomMinutesPrompt = draft.CustomMinutesPrompt;
         // 要件: REQ-MTG-027
         meeting.ApplyMinutes(result);
+        // 設計判断: DEC-MTG-092（作り直したので、議事録に使う発言の変更は反映された）
+        meeting.MinutesOutdated = null;
         // 議事録のエラーの行だけを消す（文字起こしの失敗などほかの行は残す）
         meeting.ErrorMessage = WithoutMinutesErrors(meeting.ErrorMessage);
         Store(settings).Save(meeting);

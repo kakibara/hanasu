@@ -107,7 +107,7 @@ final class DictationHistoryUI: NSObject {
             let item = NSMenuItem(title: mark + String(text.prefix(40)) + (text.count > 40 ? "…" : ""),
                                   action: #selector(copyEntry(_:)), keyEquivalent: "")
             item.tag = index
-            let label = entry.status.isUnrefined ? tr("結果（%@）", "\(entry.status.label)") : (entry.mode.translation?.verb ?? tr("整形後"))
+            let label = entry.status.isUnrefined ? tr("結果（%@）", "\(entry.status.label)") : (entry.mode.translation?.verb ?? entry.mode.unknownValue ?? tr("整形後"))
             item.toolTip = tr("%@:\n%@\n\n認識結果:\n%@", "\(label)", "\(entry.output)", "\(entry.raw)")
             menu.addItem(item)
         }
@@ -480,6 +480,7 @@ private struct DictationHistoryDetail: View {
 
     private var outputTitle: String {
         if entry.status.isUnrefined { return tr("結果（原文のまま）") }
+        if let value = entry.mode.unknownValue { return tr("結果（%@）", value) }
         return entry.mode.translation.map { tr("結果（%@）", "\($0.verb)") } ?? tr("結果（整形後）")
     }
 
