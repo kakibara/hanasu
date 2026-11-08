@@ -148,6 +148,69 @@ struct UpdateRelease: Equatable {
         }
         return text.trimmingCharacters(in: .whitespacesAndNewlines)
     }
+
+    enum Platform { case mac, windows }
+
+    /// ダイアログに出す節（リリース文の書き方 docs/releases/TEMPLATE.md の見出し）
+    static let appSections: Set<String> = ["ハイライト", "新しい機能", "改善", "不具合の修正"] // skip-tr（リリース文の見出しを探す語）
+
+    // 設計判断: DEC-REL-027
+    /// リリース文を、ダイアログに出す分（アプリの機能の節と、その OS の項目）に絞る。
+    /// 4 つの見出しがどれもなければ、絞らずに返す
+    static func appNotes(from notes: String, platform: Platform = .mac) -> String {
+        let lines = notes.components(separatedBy: "\n")
+        func sectionTitle(_ line: String) -> String? {
+            guard let match = line.firstMatch(of: #/^##(?!#)\s+(.*?)\s*$/#) else { return nil }
+            return String(match.1)
+        }
+        guard lines.contains(where: { sectionTitle($0).map(appSections.contains) == true }) else { return notes }
+
+        // 節ごとに分ける（最初の見出しより前は、見出しのない節として出す）
+        var sections: [(title: String?, body: [String])] = [(nil, [])]
+        for line in lines {
+            if let title = sectionTitle(line) {
+                sections.append((title, []))
+            } else {
+                sections[sections.count - 1].body.append(line)
+            }
+        }
+
+        var output: [String] = []
+        for section in sections {
+            if let title = section.title, !appSections.contains(title) { continue }
+            var kept: [String] = []
+            // 出さない行の字下げ（その下の一段深い行も出さない）
+            var droppedIndent: Int?
+            for line in section.body {
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                let indent = line.prefix { $0 == " " || $0 == "\t" }.reduce(0) { $0 + ($1 == "\t" ? 4 : 1) }
+                if trimmed.isEmpty {
+                    kept.append("")
+                    continue
+                }
+                if let dropped = droppedIndent {
+                    if indent > dropped { continue }
+                    droppedIndent = nil
+                }
+                guard let tag = line.firstMatch(of: #/\s*[（(]\s*(Mac|Windows)(?:\s*/\s*(Mac|Windows))?\s*[）)]\s*([。.]?)\s*$/#) else {
+                    kept.append(line)
+                    continue
+                }
+                let platforms = [tag.1, tag.2].compactMap { $0 }.map(String.init)
+                let mine = platform == .mac ? "Mac" : "Windows"
+                if platforms.contains(mine) {
+                    // 印は外し、文の終わりの「。」は残す
+                    kept.append(String(line[..<tag.range.lowerBound]) + tag.3)
+                } else {
+                    droppedIndent = indent
+                }
+            }
+            guard kept.contains(where: { !$0.isEmpty }) else { continue }
+            if let title = section.title { output.append("## \(title)") }
+            output.append(contentsOf: kept)
+        }
+        return output.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }
 
 // 設計判断: DEC-REL-027
@@ -714,7 +777,7 @@ final class AppUpdater {
         alert.addButton(withTitle: tr("あとで"))
         alert.addButton(withTitle: tr("この版をスキップ"))
         if !release.notes.isEmpty {
-            let notes = notesView(release.notes)
+            let notes = notesView(UpdateRelease.appNotes(from: release.notes), page: release.pageURL)
             alert.accessoryView = notes
             // 並べ終えると欄の終わりが見えた状態になるので、先頭から読めるように戻す
             alert.layout()
@@ -744,18 +807,36 @@ final class AppUpdater {
     }
 
     // 設計判断: DEC-REL-027
-    /// リリース文を、スクロールできる欄に整えて出す（見出し・箇条書き・太字・リンク）
-    private static func notesView(_ notes: String) -> NSView {
+    /// リリース文を、スクロールできる欄に整えて出す（見出し・箇条書き・太字・リンク）。
+    /// 終わりに、全文を読むためのリリースのページへのリンクを付ける。短ければ欄も低くする
+    private static func notesView(_ notes: String, page: URL) -> NSView {
+        let content = NSMutableAttributedString(attributedString: ReleaseNotesFormatter.attributed(notes))
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.paragraphSpacingBefore = content.length == 0 ? 0 : 12
+        if content.length > 0 { content.append(NSAttributedString(string: "\n")) }
+        content.append(NSAttributedString(string: tr("リリースのページで全文を見る"), attributes: [
+            .font: NSFont.systemFont(ofSize: ReleaseNotesFormatter.bodySize),
+            .link: page,
+            .paragraphStyle: paragraph,
+        ]))
+
+        let width: CGFloat = 440, inset = NSSize(width: 8, height: 8), maxHeight: CGFloat = 260
+        // 中身の高さ（枠・余白・スクロールバーの分を引いた幅で測る）
+        let textWidth = width - inset.width * 2 - 10 - NSScroller.scrollerWidth(for: .regular, scrollerStyle: .overlay)
+        let needed = content.boundingRect(with: NSSize(width: textWidth, height: .greatestFiniteMagnitude),
+                                          options: [.usesLineFragmentOrigin, .usesFontLeading]).height
+        let height = min(maxHeight, ceil(needed) + inset.height * 2 + 6)
+
         // scrollableTextView は、中の文が長ければ縦に伸びてスクロールできる組み合わせを作る
         let scroll = NSTextView.scrollableTextView()
-        scroll.frame = NSRect(x: 0, y: 0, width: 440, height: 260)
+        scroll.frame = NSRect(x: 0, y: 0, width: width, height: height)
         scroll.borderType = .bezelBorder
         if let text = scroll.documentView as? NSTextView {
             text.isEditable = false
             text.isSelectable = true
             text.isRichText = true
-            text.textContainerInset = NSSize(width: 8, height: 8)
-            text.textStorage?.setAttributedString(ReleaseNotesFormatter.attributed(notes))
+            text.textContainerInset = inset
+            text.textStorage?.setAttributedString(content)
         }
         return scroll
     }
