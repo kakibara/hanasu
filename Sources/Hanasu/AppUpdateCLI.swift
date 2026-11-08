@@ -163,6 +163,12 @@ enum AppUpdateCLI {
         expect(headingFont.map { $0.pointSize > ReleaseNotesFormatter.bodySize } == true, "見出しは大きい字で出す")
         let linked = ReleaseNotesFormatter.attributed("[ページ](https://github.com/kakibara/hanasu)")
         expect(linked.string == "ページ" && linked.attribute(.link, at: 0, effectiveRange: nil) != nil, "リンクは押せる文字で出す")
+        let fileLink = ReleaseNotesFormatter.attributed("[開く](file:///Applications/Calculator.app)")
+        expect(fileLink.string == "開く" && fileLink.attribute(.link, at: 0, effectiveRange: nil) == nil, "http / https でないリンクは押せない字で出す")
+        let nested = ReleaseNotesFormatter.attributed("- 外\n  - 中")
+        let outerIndent = (nested.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle)?.headIndent ?? 0
+        let innerIndent = (nested.attribute(.paragraphStyle, at: nested.length - 1, effectiveRange: nil) as? NSParagraphStyle)?.headIndent ?? 0
+        expect(innerIndent > outerIndent, "入れ子の箇条書きは一段深く字下げする")
 
         // 知らせるか
         if let release {

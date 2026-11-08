@@ -168,7 +168,7 @@ enum ReleaseNotesFormatter {
                 previousWasBlank = true
                 continue
             }
-            let block = Block(line)
+            let block = Block(rawLine)
             let paragraph = NSMutableParagraphStyle()
             paragraph.lineSpacing = 2
             paragraph.paragraphSpacingBefore = result.length == 0 ? 0 : block.spacingBefore(afterBlank: previousWasBlank)
@@ -200,8 +200,9 @@ enum ReleaseNotesFormatter {
         let text: String
         let level: Int
 
+        /// line は行頭の空白を残したもの（字下げの深さを数える。空白 2 つかタブ 1 つで 1 段）
         init(_ line: String) {
-            let indent = line.prefix { $0 == " " }.count
+            let indent = line.prefix { $0 == " " || $0 == "\t" }.reduce(0) { $0 + ($1 == "\t" ? 4 : 1) }
             level = indent / 2
             let trimmed = line.trimmingCharacters(in: .whitespaces)
             if let match = trimmed.firstMatch(of: #/^(#{1,6})\s+(.*)$/#) {
@@ -264,7 +265,8 @@ enum ReleaseNotesFormatter {
             if intent.contains(.code) {
                 runFont = .monospacedSystemFont(ofSize: font.pointSize - 1, weight: .regular)
             }
-            if let link = run.link {
+            // 押して開くのは http / https だけ（ほかは字だけ出す）
+            if let link = run.link, let scheme = link.scheme?.lowercased(), scheme == "https" || scheme == "http" {
                 attributes[.link] = link
             }
             attributes[.font] = runFont
@@ -675,6 +677,9 @@ final class AppUpdater {
         // 起動時の確認は、録音・記録が終わるまで尋ねるのを待つ
         if !manual {
             while isBusy() { try? await Task.sleep(for: .seconds(10)) }
+            // メニューからの確認の知らせ（「確かめています」など）を出している間は、閉じるまで待つ
+            // （ダイアログを出している間も画面は動くので、ここで止めると、この起動ではもう知らせなくなる）
+            while isPrompting, !offeredTags.contains(release.tag) { try? await Task.sleep(for: .seconds(1)) }
             // 待つ間にメニューから確かめて尋ねた版は、もう尋ねない
             guard !isFetching, !isPrompting, !offeredTags.contains(release.tag) else { return }
         } else if isPrompting {
