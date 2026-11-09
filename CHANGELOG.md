@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.1.1](https://github.com/kakibara/hanasu/compare/v2.1.0...v2.1.1) - 2026-11-09
+## [v2.2.0](https://github.com/kakibara/hanasu/compare/v2.1.0...v2.2.0) - 2026-11-09
 
 - UI のテスト項目をデータにし、Mac は画面を PNG に描いて確かめる（DEC-COM-170） by @kakibara in https://github.com/kakibara/hanasu/pull/86
 - 会議ノートから辞書を作り、会議の文字起こしにも辞書を当てる（Mac・Windows） by @kakibara in https://github.com/kakibara/hanasu/pull/89
