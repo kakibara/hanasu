@@ -334,6 +334,7 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 
 - **持ち方**: `Meeting` の `minutesFrom`・`minutesTo`・`excludedUtterances`・`excludedSpeakers`・`offRecord`（`OffRecordSpan`）・`minutesOutdated`。`utterances` は書き換えない（DEC-MTG-090）。
 - **決まり**: `Meeting.minutesUse(of:)` が発言ごとに `MinutesUse`（使う・除外・オフレコ・話者を除外・範囲外）を返す。`displayBlocks()` は `mergedBlocks()` と同じまとめ方で、使い方が変わるところでも分ける。`blocksForMinutes()` はその中の使うものだけ。
+- **辞書の置き換え**: 確定した発言に、辞書の置き換えルールを当ててから議事録を作る。認識したままの文は `Utterance.rawText` に残し、会議ノートの辞書のメニューから当て直す・戻すことができる。作りは [dictation.md](dictation.md) の 5.6（REQ-DIC-073・074）。
 - **使うところ**: `transcriptForPrompt`・`transcriptForPromptMarkingHighlights`（議事録・話者名の推測・会議への質問・辞書の候補）、`transcriptMarkdown`（書き出し・transcript.md。除いた件数を 1 行書く）、`MeetingChat.material`・`liveMaterial`（記録中はオフレコの区間の発言を除く）、`MeetingAsk.material` は `blocksForMinutes()` を使う。検索の索引（`MeetingSearch`）は `mergedBlocks()` のまま（DEC-MTG-091）。
 - **会議ノート**: 文字起こしのタブの上に `TranscriptSelectionBar`（数・範囲・除いた話者・オフレコの区間・「議事録に使う発言を選ぶ」・すべて元に戻す・作り直しの促し）。行は `TranscriptDisplayRow`（`TranscriptLine` に `use` を渡して薄く・取り消し線・理由のバッジ。右クリックとマウスを載せたときの「…」で `TranscriptLineMenu`。選ぶモードでは `TranscriptUseCheckbox`、Shift で前に押した行からまとめて）。変更は `MeetingRecorder.changeMinutesSelection` で保存し、記録中・処理中・作り直し中の会議は変えない。議事録のタブには `MinutesOutdatedNotice`（DEC-MTG-092、DEC-MTG-093）。
 - **記録中**: `LiveTranscriptView` の上に `LiveOffRecordButton` と `LiveOffRecordBanner`。`MeetingRecorder.toggleOffRecord` が経過時間で区間を足して閉じ、すぐ保存する。止めたときに開いた区間を閉じ、スリープ前までで止めたときは `MeetingSleepCut.apply` が区間をそろえる（DEC-MTG-094）。
@@ -353,7 +354,7 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
                          └──────────────────────────────┬──────────────────────────────────────────────┘
                                                         │ 停止
                                                         ▼
-                    後処理: 確定 → 話者分離（others.m4a）→ 話者割り当て → 回り込み除去 → 並べ替え
+                    後処理: 確定 → 話者分離（others.m4a）→ 話者割り当て → 回り込み除去 → 並べ替え → 辞書の置き換え（設定でオフにできる）
                                                         │
                                                         ▼
                                 Gemini で議事録 → 保存（transcript.md / minutes.md / meeting.json）

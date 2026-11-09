@@ -928,4 +928,20 @@
     <value>- {0} utterances not used for the minutes are not included</value>
     <comment>Markdown list item of transcript.md (keep '- '). {0} = number of utterances left out</comment>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Couldn't read the AI's response with the dictionary suggestions.</value>
+    <comment>Dictionary suggestions from a meeting: the AI's reply wasn't valid JSON</comment>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>The meeting is being recorded or processed, its minutes are being regenerated, or it has no utterances used for the minutes.</value>
+    <comment>Reason the dictionary can't be applied to a meeting now</comment>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>The meeting's folder wasn't found.</value>
+    <comment>Reason the dictionary can't be applied to a meeting (it was deleted)</comment>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Couldn't change this meeting: {0}</value>
+    <comment>Message when applying/restoring the dictionary for a meeting failed. {0} = reason</comment>
+  </data>
 </root>

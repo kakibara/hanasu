@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- 회의록에 쓰지 않는 발언({0}개)은 넣지 않았습니다</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>사전 후보에 대한 AI의 응답을 읽을 수 없습니다.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>녹음 중이거나 처리 중이거나 회의록을 다시 만드는 중이거나, 회의록에 쓸 발언이 없습니다.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>회의 폴더를 찾을 수 없습니다.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>이 회의를 변경할 수 없습니다: {0}</value>
+  </data>
 </root>

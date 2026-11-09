@@ -143,6 +143,23 @@ struct DictionaryEditorSection: View {
     }
 }
 
+// 要件: REQ-DIC-071, REQ-DIC-072
+/// 辞書の候補の 1 行（チェックボックス・`読み → 表記`・理由）。設定の欄と会議ノートの候補の画面で同じ見た目にする（DEC-DIC-171）
+struct DictionaryCandidateRow: View {
+    let candidate: DictionaryCandidate
+    @Binding var isOn: Bool
+
+    var body: some View {
+        Toggle(isOn: $isOn) {
+            Text(candidate.readings.isEmpty
+                 ? candidate.spelling
+                 : "\(candidate.readings.joined(separator: "、")) → \(candidate.spelling)")
+            if !candidate.reason.isEmpty { Text(candidate.reason) }
+        }
+        .toggleStyle(.checkbox)
+    }
+}
+
 // 要件: REQ-DIC-071
 // 設計判断: DEC-DIC-087
 /// 設定画面の「辞書の候補」の欄。ボタンを押したときだけ、過去の音声入力の結果と会議の記録を Gemini に送って候補を挙げてもらう。
@@ -181,13 +198,7 @@ struct DictionarySuggestionSection: View {
                 Text(message).font(.caption).foregroundStyle(.secondary)
             }
             ForEach(candidates) { candidate in
-                Toggle(isOn: binding(for: candidate)) {
-                    Text(candidate.readings.isEmpty
-                         ? candidate.spelling
-                         : "\(candidate.readings.joined(separator: "、")) → \(candidate.spelling)")
-                    if !candidate.reason.isEmpty { Text(candidate.reason) }
-                }
-                .toggleStyle(.checkbox)
+                DictionaryCandidateRow(candidate: candidate, isOn: binding(for: candidate))
             }
         } header: {
             Text(tr("辞書の候補を探す"))

@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- 未包含不用於會議記錄的發言（{0} 則）</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>無法讀取 AI 傳回的字典候選。</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>會議正在錄製或處理中、正在重新建立會議記錄，或沒有用於會議記錄的發言。</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>找不到會議的資料夾。</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>無法變更此會議：{0}</value>
+  </data>
 </root>

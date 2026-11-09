@@ -1217,9 +1217,6 @@ App 內更新會替換整個資料夾，因此只有在 Hanasu 位於專用資�
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>結束前說的話不會用於會議記錄。錄音會繼續。</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>已變更用於會議記錄的發言。重新建立後才會反映</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>全部還原</value>
   </data>
@@ -1291,5 +1288,68 @@ App 內更新會替換整個資料夾，因此只有在 Hanasu 位於專用資�
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>已複製 {0} 則發言</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>字典…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>從此會議尋找字典候選…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>將目前的字典重新套用到此會議</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>將此會議還原為原始辨識文字</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>從此會議尋找字典候選</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>正在尋找…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>也將字典套用到此會議的逐字稿</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>AI 會從此會議的逐字稿和會議記錄中列出專有名詞和容易辨識錯誤的詞。只有您選取的才會加入字典。會議內容只會傳送給在設定的「AI」中為會議選擇的 AI（選擇「本機」時，不會離開此電腦）。</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>將所選的 {0} 項加入字典</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>沒有找到新的候選。</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>請選取要加入的候選（{0}）。</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>已將 {0} 項加入字典。</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>已重新套用字典，{0} 則發言有所變更。</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>已重新套用字典。沒有發言變更（已由字典取代的發言：{0} 則）。</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>已還原為原始辨識文字，{0} 則發言有所變更。</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>會議較長，因此只讀取了逐字稿開頭約 {0} 分鐘的內容。</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>字典候選</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>逐字稿或用於會議記錄的發言已變更。重新建立會議記錄後即會反映。</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>對逐字稿套用字典的取代規則</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>停止錄製後，會對逐字稿套用「字典與規則」中的取代規則，會議記錄會根據取代後的文字建立。原始辨識文字也會保留，因此可以從會議筆記的「字典…」還原。</value>
   </data>
 </root>

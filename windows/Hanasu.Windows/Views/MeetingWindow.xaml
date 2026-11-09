@@ -118,6 +118,8 @@
                 <TextBlock x:Name="MeetingInfo" Style="{StaticResource Note}" />
                 <WrapPanel x:Name="ActionsPanel" Margin="0,8,0,0">
                     <Button x:Name="RegenerateButton" Content="{x:Static p:Strings.Meeting_Regenerate}" Click="OnRegenerateClick" />
+                    <!-- 要件: REQ-DIC-072, REQ-DIC-074 -->
+                    <Button x:Name="DictionaryButton" Content="{x:Static p:Strings.Meeting_Dictionary}" Click="OnDictionaryClick" />
                     <TextBlock Text="{x:Static p:Strings.Meeting_TemplateShort}" VerticalAlignment="Center" Margin="4,0,4,0" />
                     <ComboBox x:Name="TemplateCombo" MinWidth="110" Margin="0,0,6,0" SelectionChanged="OnTemplateChanged" />
                     <Button x:Name="CopyButton" Content="{x:Static p:Strings.Meeting_CopyMarkdown}" Click="OnCopyClick" />
@@ -174,7 +176,7 @@
                         <Border x:Name="MinutesOutdatedPanel" DockPanel.Dock="Top" Style="{StaticResource InnerPane}" CornerRadius="4" Padding="8,6" Margin="0,6,0,0" Visibility="Collapsed">
                             <DockPanel>
                                 <Button DockPanel.Dock="Right" x:Name="MinutesOutdatedRegenerateButton" Content="{x:Static p:Strings.Meeting_Regenerate}" Margin="6,0,0,0" Click="OnRegenerateClick" />
-                                <TextBlock Text="{x:Static p:Strings.Meeting_MinutesOutdated}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Static p:Strings.Meeting_TranscriptOrSelectionChanged}" TextWrapping="Wrap" VerticalAlignment="Center" />
                             </DockPanel>
                         </Border>
                         <TextBox x:Name="MinutesBox" AutomationProperties.Name="{x:Static p:Strings.Meeting_Minutes_A11y}" Style="{StaticResource Reader}" />
@@ -194,7 +196,7 @@
                                 <WrapPanel x:Name="SelectionChips" Margin="0,2,0,0" />
                                 <DockPanel x:Name="TranscriptOutdatedPanel" Margin="0,6,0,0" Visibility="Collapsed">
                                     <Button DockPanel.Dock="Right" x:Name="TranscriptOutdatedRegenerateButton" Content="{x:Static p:Strings.Meeting_Regenerate}" Margin="6,0,0,0" Click="OnRegenerateClick" />
-                                    <TextBlock Text="{x:Static p:Strings.Meeting_MinutesOutdated}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                    <TextBlock Text="{x:Static p:Strings.Meeting_TranscriptOrSelectionChanged}" TextWrapping="Wrap" VerticalAlignment="Center" />
                                 </DockPanel>
                                 <TextBlock x:Name="SelectionHint" Style="{StaticResource Note}" Text="{x:Static p:Strings.Meeting_Selection_Hint}" />
                             </StackPanel>

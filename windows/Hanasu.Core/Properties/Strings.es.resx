@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- No se incluyen {0} intervenciones que no se usan para el acta</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>No se pudo leer la respuesta de la IA con los candidatos para el diccionario.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>La reunión se está grabando o procesando, se está regenerando el acta o no hay intervenciones usadas para el acta.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>No se encontró la carpeta de la reunión.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>No se pudo modificar esta reunión: {0}</value>
+  </data>
 </root>

@@ -55,8 +55,9 @@ enum DictionarySuggester {
                 parts.append(Prompts.text("dictionarySuggest.dictationsHeader") + "\n" + lines.joined(separator: "\n"))
             }
             for meeting in meetings {
+                // 設計判断: DEC-DIC-088（会議の文字起こしは、辞書で置き換える前の認識したままの文で送る）
                 var text = Prompts.text("dictionarySuggest.meetingHeader", ["title": meeting.title]) + "\n"
-                    + Prompts.text("dictionarySuggest.transcriptHeader") + "\n" + meeting.transcriptForPrompt()
+                    + Prompts.text("dictionarySuggest.transcriptHeader") + "\n" + meeting.transcriptForPrompt(raw: true)
                 if let minutes = meeting.minutes, !minutes.isEmpty {
                     text += "\n" + Prompts.text("dictionarySuggest.minutesHeader") + "\n" + minutes
                 }
@@ -98,10 +99,16 @@ enum DictionarySuggester {
 
     // 設計判断: DEC-DIC-088
     static func suggest(corpus: Corpus, existing: UserDictionary, client: TextAIClient, model: String) async throws -> [DictionaryCandidate] {
+        try await suggest(material: corpus.promptText(), existing: existing, client: client, model: model)
+    }
+
+    // 設計判断: DEC-DIC-088, DEC-DIC-170
+    /// 材料を送って候補を受け取り、絞り込む。材料の区切りのタグは先に無害にし、絞り込みも無害にした材料で照らし合わせる
+    static func suggest(material: String, existing: UserDictionary, client: TextAIClient, model: String) async throws -> [DictionaryCandidate] {
         var client = client
         // 会議の記録は長いので、整形（15 秒）より長く待つ
         client.timeout = 120
-        let material = corpus.promptText()
+        let material = PromptText.neutralizeDelimiters(material)
         let text = try await client.generate(
             systemInstruction: instruction,
             userText: userPrompt(material: material, existing: existing),
@@ -162,6 +169,97 @@ enum DictionarySuggester {
             result.append(candidate)
         }
         return result
+    }
+
+    // MARK: - 会議 1 件（会議ノートから。REQ-DIC-072）
+
+    // 要件: REQ-DIC-072
+    // 設計判断: DEC-DIC-170
+    /// 材料の長さの上限。Gemini・Claude は字数、ローカル・Apple は見積もったトークン数
+    enum Budget: Equatable {
+        case characters(Int)
+        case tokens(Int)
+
+        func cost(_ text: String) -> Int {
+            switch self {
+            case .characters: text.count
+            case .tokens: AppleFMClient.estimateTokens(text)
+            }
+        }
+
+        var limit: Int {
+            switch self {
+            case .characters(let n), .tokens(let n): n
+            }
+        }
+    }
+
+    /// Gemini・Claude に送る材料の上限（設定の欄の全体の上限と同じ）
+    static let characterLimit = 60_000
+
+    // 設計判断: DEC-DIC-170
+    /// 会議の AI に合わせた上限。ローカル・Apple は、文脈の長さから出力・system instruction・既存の辞書・余白の分を引く。
+    /// 見積もりは多めなので（DEC-COM-073）、AI の側で黙って後ろを省かれない
+    static func budget(for client: TextAIClient, existing: UserDictionary) -> Budget {
+        let frame = AppleFMClient.estimateTokens(instruction + userPrompt(material: "", existing: existing)) + LongInputFitter.margin
+        switch client.backend {
+        case .gemini, .claude:
+            return .characters(characterLimit)
+        case .local(let local):
+            return .tokens(max(0, local.model.contextLength - local.maxOutputTokens(.short) - frame))
+        case .appleFM:
+            return .tokens(max(0, AppleFMClient.contextLength - AppleFMClient.maxOutputTokens(.short) - frame))
+        }
+    }
+
+    /// 会議 1 件の材料
+    struct MeetingMaterial: Equatable {
+        var text: String
+        /// 文字起こしを途中で切ったとき、読まなかった最初の発言の開始時刻（秒）。全部読んだなら nil
+        var cutAt: Double?
+
+        /// 「最初の約 N 分」の N（切ったときだけ）
+        var readMinutes: Int? {
+            cutAt.map { max(1, Int(($0 / 60).rounded())) }
+        }
+    }
+
+    // 要件: REQ-DIC-072, REQ-MTG-045, REQ-MTG-046
+    // 設計判断: DEC-DIC-170
+    /// 会議 1 件の材料。議事録に使う発言（オフレコと除いた発言は入らない）を認識したままの文で先に並べ、議事録の本文は残りに入る分だけ入れる
+    static func meetingMaterial(_ meeting: Meeting, budget: Budget) -> MeetingMaterial {
+        let language = PromptLanguage.current
+        var parts = [Prompts.text("dictionarySuggest.meetingHeader", ["title": meeting.title]),
+                     Prompts.text("dictionarySuggest.transcriptHeader")]
+        var used = budget.cost(parts.joined(separator: "\n") + "\n")
+        var cutAt: Double?
+        for block in meeting.blocksForMinutes() {
+            let line = "[\(Meeting.clock(block.start))] \(meeting.promptName(for: block.speaker, language: language)): \(block.recognizedText)"
+            let cost = budget.cost(line + "\n")
+            if used + cost > budget.limit {
+                cutAt = block.start
+                break
+            }
+            parts.append(line)
+            used += cost
+        }
+        if let minutes = meeting.minutes, !minutes.isEmpty {
+            let header = Prompts.text("dictionarySuggest.minutesHeader")
+            var minuteLines: [String] = []
+            var minutesUsed = budget.cost("\n" + header + "\n")
+            for line in minutes.components(separatedBy: "\n") {
+                let cost = budget.cost(line + "\n")
+                if used + minutesUsed + cost > budget.limit { break }
+                minuteLines.append(line)
+                minutesUsed += cost
+            }
+            if minuteLines.contains(where: { !$0.trimmingCharacters(in: .whitespaces).isEmpty }) {
+                parts.append("")
+                parts.append(header)
+                parts.append(contentsOf: minuteLines)
+            }
+        }
+        return MeetingMaterial(text: parts.joined(separator: "\n"), cutAt: cutAt)
     }
 
     // 設計判断: DEC-DIC-087

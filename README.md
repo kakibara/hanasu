@@ -44,7 +44,7 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 | **Edit by voice** | Select some text, press <kbd>⌃⌥⌘ E</kbd>, and say "make it more polite", "turn it into bullets" or "translate to English". |
 | **Per-app styles** | Text is casual and short in Slack, polite with paragraphs in Mail, and in written style in Pages, Word and Notion. You can change the preset for each app. |
 | **Snippets** | Say "email signature" to insert saved text exactly as you wrote it. Snippets are never sent to the AI. |
-| **Dictionary** | Add proper nouns and replacement rules such as `ストックマーク => Stockmark`. On Mac, the AI can also suggest new entries from your history and meetings, and you add only the ones you pick. |
+| **Dictionary** | Add proper nouns and replacement rules such as `ストックマーク => Stockmark`. The rules are also applied to meeting transcripts. From a meeting in Meeting Notes, the AI can suggest new entries from that meeting (on Mac, also from your history and recent meetings), and you add only the ones you pick. |
 | **Screen context** *(opt-in)* | Hanasu reads the window title and the text around your cursor, so names match what is already on screen. Password fields are never read. |
 | **Choose your mic** *(Mac)* | Pick the microphone in Settings, or switch it from the mic button on the HUD without stopping the recording. |
 | **History** | Search past results and retry failed ones. History is kept for 30 days by default, and you can change that in Settings. On Mac, press <kbd>⌥⇧ V</kbd> to paste the last result again. |

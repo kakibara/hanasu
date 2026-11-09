@@ -8,11 +8,12 @@ import Foundation
 /// Gemini・Claude・ローカルの LLM・Apple のどれにも効く。
 /// Windows 版の `PromptText.NeutralizeDelimiters` と同じ考え。Mac には会議への質問（MeetingAsk）があるので、
 /// そこで区切りに使う `<meeting>` `<minutes>` `<transcript_excerpts>` `<question>`、会議中の AI チャット（MeetingChat）の `<pending_transcript>` `<conversation>` `<user>` `<assistant>` も対象にする（そのぶん Windows より広い）。
+/// 辞書の候補（DictionarySuggester）の材料を囲む `<material>` は、Windows と同じく対象にする（DEC-DIC-170）。
 /// 選択を声で編集するモードは、毎回変わる名前のタグ（DEC-DIC-033）で守るので、ここは使わない。
 enum PromptText {
     /// 区切りに使うタグ。閉じタグ（`</…>`）、空白入り（`< / transcript >`）、大文字、属性つき（`<meeting id="M1">`）も拾う
     private static let delimiterTag = try! NSRegularExpression(
-        pattern: #"<\s*(/?)\s*(transcript|transcript_excerpts|pending_transcript|user_notes|action_items|speaker_names|meeting|minutes|question|conversation|user|assistant)(\s[^<>]*?)??\s*>"#,
+        pattern: #"<\s*(/?)\s*(transcript|transcript_excerpts|pending_transcript|user_notes|action_items|speaker_names|meeting|minutes|question|conversation|user|assistant|material)(\s[^<>]*?)??\s*>"#,
         options: [.caseInsensitive])
 
     static func neutralizeDelimiters(_ text: String) -> String {

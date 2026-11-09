@@ -1110,4 +1110,94 @@ public class MeetingControllerTests
         Assert.DoesNotContain("自分の発言", body);
         Assert.Contains("相手の発言", body);
     }
+
+    // 確かめ方: REQ-DIC-073
+    [Fact]
+    public async Task AppliesDictionaryToTranscriptAfterStop()
+    {
+        var (controller, settings, _) = Make();
+        settings.DictionaryText = "自分 => 私";
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        await controller.StopAsync();
+        var saved = controller.Store(settings).Load(meeting.Id)!;
+        var mine = saved.Utterances.Single(u => u.Speaker == "me");
+        Assert.Equal("私の発言", mine.Text);
+        Assert.Equal("自分の発言", mine.RawText);
+        Assert.Null(saved.Utterances.Single(u => u.Speaker != "me").RawText);
+    }
+
+    // 確かめ方: REQ-DIC-073
+    [Fact]
+    public async Task DoesNotApplyDictionaryWhenSettingIsOff()
+    {
+        var (controller, settings, _) = Make();
+        settings.DictionaryText = "自分 => 私";
+        settings.ApplyDictionaryToMeetings = false;
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        await controller.StopAsync();
+        var saved = controller.Store(settings).Load(meeting.Id)!;
+        Assert.Equal("自分の発言", saved.Utterances.Single(u => u.Speaker == "me").Text);
+        Assert.All(saved.Utterances, u => Assert.Null(u.RawText));
+    }
+
+    // 確かめ方: REQ-DIC-074
+    [Fact]
+    public async Task AppliesAndRevertsDictionaryFromMeetingNotes()
+    {
+        var (controller, settings, _) = Make();
+        settings.ApplyDictionaryToMeetings = false;
+        await controller.StartAsync();
+        var meeting = controller.Current!;
+        await controller.StopAsync();
+        var saved = controller.Store(settings).Load(meeting.Id)!;
+        Assert.True(controller.CanApplyDictionary(saved));
+
+        // 議事録がなければ、当てても作り直しを促さない
+        settings.DictionaryText = "自分 => 私";
+        var applied = controller.ApplyDictionary(saved);
+        Assert.Equal(new MeetingDictionaryOutcome(1, 1), applied);
+        Assert.Null(saved.MinutesOutdated);
+        Assert.Equal("私の発言", controller.Store(settings).Load(meeting.Id)!.Utterances.Single(u => u.Speaker == "me").Text);
+
+        // 同じ辞書では変わらない（置き換えてある発言の数は出す）
+        Assert.Equal(new MeetingDictionaryOutcome(0, 1), controller.ApplyDictionary(saved));
+
+        // 議事録があれば、表記を直して当て直すと変わり、作り直しを促す
+        saved.Minutes = "## 決まったこと";
+        settings.DictionaryText = "自分 => わたし";
+        Assert.Equal(new MeetingDictionaryOutcome(1, 1), controller.ApplyDictionary(saved));
+        Assert.True(saved.MinutesOutdated);
+        Assert.Equal("わたしの発言", saved.Utterances.Single(u => u.Speaker == "me").Text);
+
+        // ルールを消して当て直すと戻る
+        settings.DictionaryText = "";
+        Assert.Equal(new MeetingDictionaryOutcome(1, 0), controller.ApplyDictionary(saved));
+        Assert.Equal("自分の発言", saved.Utterances.Single(u => u.Speaker == "me").Text);
+
+        // 認識したままの文に戻す
+        settings.DictionaryText = "自分 => 私";
+        controller.ApplyDictionary(saved);
+        Assert.Equal(new MeetingDictionaryOutcome(1, 0), controller.RevertDictionary(saved));
+        var reloaded = controller.Store(settings).Load(meeting.Id)!;
+        Assert.Equal("自分の発言", reloaded.Utterances.Single(u => u.Speaker == "me").Text);
+        Assert.All(reloaded.Utterances, u => Assert.Null(u.RawText));
+    }
+
+    // 確かめ方: REQ-DIC-074
+    [Fact]
+    public async Task CannotApplyDictionaryToDeletedOrRecordingMeeting()
+    {
+        var (controller, settings, _) = Make();
+        await controller.StartAsync();
+        var recording = controller.Current!;
+        Assert.False(controller.CanApplyDictionary(recording));
+        Assert.Throws<MeetingDictionaryException>(() => controller.ApplyDictionary(recording));
+        await controller.StopAsync();
+        var saved = controller.Store(settings).Load(recording.Id)!;
+        controller.Delete(saved);
+        var error = Assert.Throws<MeetingDictionaryException>(() => controller.ApplyDictionary(saved));
+        Assert.Contains(Hanasu.Core.Properties.Strings.Meeting_Dictionary_Missing, error.Message);
+    }
 }

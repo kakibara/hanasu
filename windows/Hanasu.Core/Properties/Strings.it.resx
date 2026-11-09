@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- Non sono inclusi {0} interventi non usati per il verbale</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Impossibile leggere la risposta dell'IA con i candidati per il dizionario.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>La riunione è in registrazione o in elaborazione, il verbale è in fase di rigenerazione oppure non ci sono interventi usati per il verbale.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>Impossibile trovare la cartella della riunione.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Impossibile modificare questa riunione: {0}</value>
+  </data>
 </root>

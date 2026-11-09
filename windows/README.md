@@ -36,10 +36,11 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 5. 会議ノートで、議事録・文字起こし・ここ重要・メモのタブを見る。「ここ重要」タブには、印ごとにその前後（30 秒前〜15 秒後）の発言が出る。
    - 話者名: 議事録を作るときに、会話（名乗り・名前での呼びかけ）から名前がはっきり分かる話者には自動で名前が付き、欄の横に「推測」と出る（「自分」とユーザーが付けた名前は変えない）。「話者1」などの欄に名前を書くと、文字起こしと議事録の表示（と、作り直したときの議事録）に使う。直すと「推測」が消える。
    - 「議事録を作り直す」「型: 〇〇」（型を選び直して作り直す）、「Markdown をコピー」（表示中のタブ）、「エクスプローラーで開く」。
+   - 「辞書…」: 「この会議から辞書の候補を探す…」（その会議の文字起こしと議事録から AI が挙げた候補を選んで辞書に足す）、「今の辞書をこの会議に当て直す」、「この会議を認識したままの文に戻す」。文字起こしが変わっても議事録は作り直さず、作り直しを促す。
    - 「メモ」タブで記録後にメモを直し、「保存して議事録を作り直す」。
    - 題名は上の欄（枠と ✎ の印が出ている）で直せる。Enter かほかの所をクリックすると保存し、Esc でやめる。
    - 会議を消すには、一覧で選んで Delete キー・右クリックの「ごみ箱に移す…」か、上の「ごみ箱に移す…」。会議のフォルダをまとめてごみ箱に移す（ごみ箱から戻せる）。記録中・処理中・議事録を作り直している会議は消せない。
-6. 設定 → 会議 で、文字起こしのエンジン（Whisper / Gemini）・ショートカット・話者分離・音声を残すか・保存先を変えられる。議事録の AI とモデルは 設定 → AI。
+6. 設定 → 会議 で、文字起こしのエンジン（Whisper / Gemini）・ショートカット・話者分離・音声を残すか・保存先・文字起こしに辞書の置き換えルールを当てるか（既定でオン）を変えられる。議事録の AI とモデルは 設定 → AI。
 
 既定のショートカットは、Windows が使う組み合わせを避けて選んだ。
 
@@ -76,6 +77,7 @@ windows/
 │   ├── Gemini/                  プロンプト（文面は Mac 版と共有の Sources/Hanasu/Resources/Prompts/<言語>.json を埋め込んで読む。Claude にも同じものを送る）・REST クライアント・サービスアカウントの JWT（RS256）・認証の決め方
 │   ├── Net/                     リダイレクトに従わない HttpClient・モデルのダウンロード（ハッシュの確認）
 │   ├── Text/UserDictionary.cs   ユーザー辞書と置き換えルール（Mac 版の UserDictionary.swift の移植）
+│   ├── Text/DictionarySuggester.cs  会議 1 件から辞書の候補を AI に挙げてもらう（Mac 版の DictionarySuggester.swift の会議 1 件の部分の移植）
 │   ├── Settings/                設定（settings.json）・ショートカットの組み合わせ・API キーの保存（SecretStore。DPAPI と Windows Hello はインターフェイスで渡す）
 │   ├── Audio/                   16 kHz・モノラルへの変換（窓付き sinc の再サンプリング）・WAV・無音の判定・効果音
 │   ├── Transcription/           文字起こしのインターフェイス・録ってからまとめて文字起こし・Gemini の文字起こし・Whisper のモデル管理
@@ -139,7 +141,7 @@ MeetingController（Core。idle → starting → recording → processing → id
           └ GeminiSegmentTranscriber（5 分ごとに区切り、JSON で区間を返させる。最大 3 つを並行）
           → 無音のところにかかった時刻を声のあるところへ寄せる（MeetingAudio.SnapToSpeech）→ チャンネルの開始のずれを足す
        2. 相手側の話者分離（SherpaSpeakerDiarizer。失敗したら「相手」1 人として続ける）
-       3. 話者の割り当て・回り込みの除去（MeetingProcessor。Mac 版の移植）
+       3. 話者の割り当て・回り込みの除去（MeetingProcessor。Mac 版の移植）→ 辞書の置き換え（MeetingDictionary。設定でオフにできる。認識したままの文は RawText に残す）
        4. 会議の AI（Gemini / Claude）で議事録（MinutesPrompt。型・メモ・「ここ重要」・アクションアイテムの取り出し・会話から分かる話者の名前（SpeakerNameInference。REQ-MTG-027））
        5. 保存（MeetingStore: meeting.json・transcript.md・minutes.md・notes.md）。設定で音声を消す
 ```
@@ -230,6 +232,7 @@ dotnet run --project Hanasu.Cli -- transcribe-gemini <wav> [--dict <辞書ファ
 dotnet run --project Hanasu.Cli -- transcribe-whisper <wav> --model tiny [--models-dir <dir>] [--download]
 dotnet run --project Hanasu.Cli -- dictation <wav> --engine whisper|gemini [--translate] [--whisper-model tiny]
 dotnet run --project Hanasu.Cli -- dict <辞書ファイル> "<文章>"
+dotnet run --project Hanasu.Cli -- meeting-dict-suggest <会議のフォルダ> [--dict <辞書ファイル>] [--minutes-ai gemini|claude|local]  # 会議 1 件から辞書の候補を挙げてもらう
 dotnet run --project Hanasu.Cli -- models
 
 # Claude
@@ -273,7 +276,7 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | 履歴ウインドウ | 検索・絞り込み・コピー・削除はできる。**整え直し（整形し直す・英訳し直す）と録音の保存は未実装** |
 | 最後の結果をもう一度入力（`⌥⇧ V`） | **未実装**（「最近の結果」からコピーして貼る） |
 | 選択を声で編集 | **未実装** |
-| 辞書の候補を探す（AI で提案） | **未実装**（辞書の編集と置き換えの試しはできる） |
+| 辞書の候補を探す（AI で提案） | 会議ノートの会議からは作った（「辞書…」）。設定の「辞書・ルール」から音声入力の結果と最近の会議をまとめて読むのは**未実装** |
 | 会議の記録 | 作った（下の表は会議の記録での差） |
 
 会議の記録での差:

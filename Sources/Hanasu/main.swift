@@ -297,10 +297,12 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
 
 // 会議記録の後処理の確認:
 //   Hanasu --meeting-files <自分の音声> <相手の音声> [--engine apple|whisper|gemini] [--template <型>] [--custom-prompt <指示>] [--notes <メモのテキスト>]
+//          [--dictionary <辞書ファイル>] [--no-meeting-dictionary]
 // --engine whisper|gemini では、記録中と同じく音声を書き出すだけにして、記録のあとの文字起こしを行う。
 // 2 つのファイルを「自分」「相手」のチャンネルとして文字起こしし、話者の割り当て → 議事録 → 保存まで行う。
 // --notes には、会議中のメモと「ここ重要」の印を、会議ノートの「メモ」タブと同じ形式（[12:34] 内容 / [12:40] ★）で渡す。
-// 確かめ方: REQ-MTG-004, REQ-MTG-005, REQ-MTG-010, REQ-MTG-011, REQ-MTG-012, REQ-MTG-013, REQ-MTG-025
+// --dictionary で辞書を、--no-meeting-dictionary で「文字起こしに辞書の置き換えルールを当てる」のオフを、設定を書き換えずに試せる（DEC-DIC-173）。
+// 確かめ方: REQ-MTG-004, REQ-MTG-005, REQ-MTG-010, REQ-MTG-011, REQ-MTG-012, REQ-MTG-013, REQ-MTG-025, REQ-DIC-073
 if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
    CommandLine.arguments.indices.contains(index + 2)
 {
@@ -309,6 +311,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
     Task { @MainActor in
         do {
             let settings = AppSettings.shared
+            let dictionary = try DictionaryCLI.dictionary(from: args)
             var meeting = try MeetingStore.newMeeting()
             meeting.title = "テスト会議（\(files[1].deletingPathExtension().lastPathComponent)）"
             MinutesCLI.applyTemplateArguments(args, to: &meeting)
@@ -327,7 +330,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
                     channel: channel, inputFormat: file.processingFormat,
                     fileURL: MeetingStore.audioURL(for: meeting, channel: channel),
                     meetingStart: meeting.startedAt, fixedTimeOffset: 0, live: transcription.isLive)
-                try await transcriber.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: settings.userDictionary.contextualStrings)
+                try await transcriber.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: dictionary.contextualStrings)
                 while file.framePosition < file.length {
                     guard let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 8192) else { break }
                     try file.read(into: buffer)
@@ -353,7 +356,9 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             print(String(format: "[文字起こし %.1fs] 自分 %d 件 / 相手 %d 件", Date().timeIntervalSince(started),
                          phrases[.me]?.count ?? 0, phrases[.others]?.count ?? 0))
             let minutesStarted = Date()
-            let result = await recorder.process(meeting, me: phrases[.me] ?? [], others: phrases[.others] ?? [], keepAudio: keepAudio)
+            let result = await recorder.process(meeting, me: phrases[.me] ?? [], others: phrases[.others] ?? [], keepAudio: keepAudio,
+                                                dictionary: dictionary, applyDictionary: !args.contains("--no-meeting-dictionary"))
+            print("辞書の置き換え: \(args.contains("--no-meeting-dictionary") ? "オフ" : "オン") / 置き換えた発言 \(MeetingDictionary.replacedCount(result)) 件")
             print(result.transcriptMarkdown())
             print(String(format: "[議事録 %@ %@ %.1fs]", settings.aiProvider(for: .meeting).name, settings.textModel(for: .meeting),
                          Date().timeIntervalSince(minutesStarted)))
@@ -425,6 +430,8 @@ MainActor.assumeIsolated { MeetingChatCLI.runIfRequested() }
 MeetingSleepCLI.runSelfTestIfRequested()
 // 議事録に使う発言の選び方の確認（--test-minutes-selection / --render-minutes-selection。MinutesSelectionCLI.swift）
 MainActor.assumeIsolated { MinutesSelectionCLI.runIfRequested() }
+// 会議ノートから辞書を作る・会議に辞書を当てるの確認（--test-meeting-dictionary / --render-meeting-dictionary。MeetingDictionaryCLI.swift）
+MainActor.assumeIsolated { MeetingDictionaryCLI.runIfRequested() }
 // 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 // 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）

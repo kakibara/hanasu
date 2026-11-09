@@ -2,6 +2,7 @@ using Hanasu.Core.Audio;
 using Hanasu.Core.Ai;
 using Hanasu.Core.Gemini;
 using Hanasu.Core.Settings;
+using Hanasu.Core.Text;
 using Hanasu.Core.Transcription;
 
 namespace Hanasu.Core.Meetings;
@@ -28,6 +29,12 @@ public sealed class MeetingPostProcessor
     /// <summary>false なら、処理のあとで音声ファイルを消す（文字起こしに失敗したチャンネルがあれば残す）</summary>
     public bool KeepAudio { get; init; } = true;
     public Action<string>? Log { get; init; }
+    // 要件: REQ-DIC-073
+    // 設計判断: DEC-DIC-173
+    /// <summary>確定した発言に当てる辞書。null なら当てない</summary>
+    public UserDictionary? Dictionary { get; init; }
+    /// <summary>設定の「文字起こしに辞書の置き換えルールを当てる」</summary>
+    public bool ApplyDictionary { get; init; }
 
     public async Task<MeetingProcessResult> ProcessAsync(Meeting meeting, IProgress<string>? progress = null,
         CancellationToken cancellationToken = default)
@@ -66,6 +73,10 @@ public sealed class MeetingPostProcessor
         othersSamples = null;
 
         meeting.Utterances = MeetingProcessor.BuildUtterances(me, others, turns);
+        // 要件: REQ-DIC-073
+        // 設計判断: DEC-DIC-173
+        // 確定した発言に、議事録を作る前に辞書の置き換えルールを当てる（記録中の発言には当てない）
+        MeetingDictionary.ApplyOnFinish(meeting, Dictionary, ApplyDictionary);
         var errors = new List<string>();
         if (failures.Count > 0)
         {
