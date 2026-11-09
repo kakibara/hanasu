@@ -32,7 +32,7 @@ struct HanasuCommandError: Error {
 // 設計判断: DEC-COM-180
 enum HanasuCommand {
     /// 最初の引数がこれなら、実行ファイルの名前が何でもサブコマンドとして扱う
-    static let commandNames: Set<String> = ["help", "meetings", "actions"]
+    static let commandNames: Set<String> = ["help", "meetings", "actions", "ask", "refine", "edit", "dict", "doctor"]
     static let topLevelFlags: Set<String> = ["--version", "--help", "-h"]
 
     /// コマンドとして呼ばれたか。`hanasu`（シンボリックリンクの名前）で呼ばれたら、引数が何でもコマンドとして扱う。
@@ -53,11 +53,28 @@ enum HanasuCommand {
     /// 起動時の処理（`MeetingStore.markInterruptedMeetings`）を通らず、会議のファイルを書き換えない
     static func main(_ arguments: [String]) -> Never {
         reexecIfSymlinked(arguments)
+        stopLocalServerOnExit()
         Task.detached {
             let code = await run(Array(arguments.dropFirst()))
             exit(code.rawValue)
         }
         dispatchMain()
+    }
+
+    // 要件: REQ-COM-187
+    // 設計判断: DEC-COM-184
+    /// ローカルの AI のサーバーを起動したら、終わるとき（exit・Ctrl-C・SIGTERM・SIGHUP）に止める。
+    /// 子プロセスの llama-server は、親が終わっても残るため。
+    /// シグナルは SIG_IGN にせず、ハンドラーで受ける（SIG_IGN は子プロセスに引き継がれ、llama-server・fm が止められなくなる）
+    static func stopLocalServerOnExit() {
+        atexit { LocalLLMServer.terminateRunningServer() }
+        for sig in [SIGINT, SIGTERM, SIGHUP] {
+            signal(sig) { received in
+                // シグナルの中なので、ロックやファイルの操作をせずに止めて終える（記録は、持ち主が終わったものとしてアプリが片付ける）
+                LocalLLMServer.killRunningServerFromSignal()
+                _exit(128 + received)
+            }
+        }
     }
 
     // 設計判断: DEC-COM-183
@@ -108,6 +125,16 @@ enum HanasuCommand {
                 return try await HanasuMeetingsCommand.runMeetings(rest)
             case "actions":
                 return try await HanasuMeetingsCommand.runActions(rest)
+            case "ask":
+                return try await HanasuAICommands.runAsk(rest)
+            case "refine":
+                return try await HanasuAICommands.runRefine(rest)
+            case "edit":
+                return try await HanasuAICommands.runEdit(rest)
+            case "dict":
+                return try HanasuAICommands.runDict(rest)
+            case "doctor":
+                return try HanasuDoctorCommand.run(rest)
             default:
                 throw HanasuCommandError(exit: .usage, message: tr("知らないコマンドです: %@", command),
                                          details: [tr("使い方は hanasu help で表示できます。")])
@@ -255,9 +282,12 @@ struct HanasuArguments {
 /// 管理者のポリシー。構成プロファイル（MDM）で配った、アプリのドメインの管理された設定だけを見る。
 /// ユーザーが `defaults write` で書いた値は効かない（管理されていない値は無視する）
 enum HanasuPolicy {
-    enum Key: String {
+    enum Key: String, CaseIterable {
         /// true なら hanasu コマンドを使わせない
         case disableCLI = "DisableCLI"
+        // 要件: REQ-COM-188
+        /// hanasu の AI を使うコマンドが使ってよい AI の名前の配列（local・apple・gemini・claude）
+        case allowedAIProviders = "AllowedAIProviders"
     }
 
     /// アプリの設定のドメイン（シンボリックリンク経由でも、.app の外でも同じものを見る）
@@ -274,10 +304,22 @@ enum HanasuPolicy {
 
     static var cliDisabled: Bool { (forcedValue(.disableCLI) as? Bool) == true }
 
+    // 要件: REQ-COM-188
+    /// 使ってよい AI の名前（小文字）。ポリシーがなければ nil（どれでもよい）。空の配列ならどれも使わない。
+    /// 名前 1 つの文字列で配られても受け付ける
+    static var allowedAIProviders: [String]? {
+        switch forcedValue(.allowedAIProviders) {
+        case let names as [String]: names.map { $0.lowercased() }
+        case let name as String: [name.lowercased()]
+        case .some: []
+        case nil: nil
+        }
+    }
+
     /// 効いているポリシー（キー → 値）。doctor で出す
     static var active: [String: Any] {
         var result: [String: Any] = [:]
-        for key in [Key.disableCLI] {
+        for key in Key.allCases {
             if let value = forcedValue(key) { result[key.rawValue] = value }
         }
         return result
@@ -287,27 +329,37 @@ enum HanasuPolicy {
 /// ヘルプ。オプションの名前とコマンドは訳さず、説明だけを表示の言語にする
 enum HanasuHelp {
     static func full() -> String {
-        var lines = [tr("hanasu — Hanasu の会議の記録を、ターミナルや AI エージェントから読む"), "", tr("使い方:")]
-        lines += meetingsUsage + actionsUsage
+        var lines = [tr("hanasu — Hanasu の会議の記録と文章の整え方を、ターミナルや AI エージェントから使う"), "", tr("使い方:")]
+        lines += meetingsUsage + actionsUsage + askUsage + refineUsage + editUsage + dictUsage + doctorUsage
         lines += [
-            "  hanasu help [meetings|actions]",
+            "  hanasu help [meetings|actions|ask|refine|edit|dict|doctor]",
             "  hanasu --version",
             "",
         ]
-        lines += commonNotes
+        lines += commonNotes + aiNotes
         return lines.joined(separator: "\n")
     }
 
     static func section(for command: String) -> String? {
+        let usage: [String]
+        var notes = commonNotes
         switch command {
-        case "meetings": return ([tr("使い方:")] + meetingsUsage + commonNotes).joined(separator: "\n")
-        case "actions": return ([tr("使い方:")] + actionsUsage + commonNotes).joined(separator: "\n")
+        case "meetings": usage = meetingsUsage
+        case "actions": usage = actionsUsage
+        case "ask": usage = askUsage; notes += aiNotes
+        case "refine": usage = refineUsage; notes = aiNotes
+        case "edit": usage = editUsage; notes = aiNotes
+        case "dict": usage = dictUsage; notes = []
+        case "doctor": usage = doctorUsage; notes = []
         default: return nil
         }
+        return ([tr("使い方:")] + usage + notes).joined(separator: "\n")
     }
 
     private static var period: String { tr("<期間>") }
     private static var count: String { tr("<件数>") }
+    private static var text: String { tr("<文章>") }
+    private static var ai: String { "[--ai <AI>] [--model \(tr("<モデル>"))]" }
 
     private static var meetingsUsage: [String] {
         [
@@ -327,12 +379,55 @@ enum HanasuHelp {
         ]
     }
 
+    private static var askUsage: [String] {
+        [
+            "  hanasu ask \(tr("<質問>")) [--since \(period)] [--until \(period)] \(ai) [--show-prompt] [--json]",
+            "      " + tr("過去の会議について AI に質問する（関係する会議の中身を、会議の AI に送る）"),
+        ]
+    }
+
+    private static var refineUsage: [String] {
+        [
+            "  hanasu refine [\(text)] [--app <bundle ID>] [--style \(tr("<文体>"))] [--translate \(tr("<言語>"))] \(ai) [--fallback-raw] [--show-prompt] [--json]",
+            "      " + tr("音声入力と同じように文章を整える（--translate なら翻訳する）。文章は引数か標準入力で渡す"),
+        ]
+    }
+
+    private static var editUsage: [String] {
+        [
+            "  hanasu edit \(tr("<指示>")) [\(text)] \(ai) [--fallback-raw] [--show-prompt] [--json]",
+            "      " + tr("文章を指示どおりに書き換える（選択を声で編集と同じ）。文章は引数か標準入力で渡す"),
+        ]
+    }
+
+    private static var dictUsage: [String] {
+        [
+            "  hanasu dict apply [\(text)] [--json]",
+            "      " + tr("辞書の置き換えルールだけを当てる（AI には送らない）"),
+        ]
+    }
+
+    private static var doctorUsage: [String] {
+        [
+            "  hanasu doctor [--json]",
+            "      " + tr("使う AI と認証情報・会議のフォルダ・管理者のポリシーを確かめる（キーの値は出さない）"),
+        ]
+    }
+
     private static var commonNotes: [String] {
         [
             tr("会議の指定: ID（例: 2026-11-02_1312）、latest（最新の完了した会議）、日付（例: 2026-11-02）"),
             tr("期間の指定: 7d・24h・2w（今からさかのぼる）、日付（例: 2026-11-01）"),
             tr("--json で、決まった形の JSON を出します。--meetings-dir <フォルダ>（か環境変数 HANASU_MEETINGS_DIR）で、会議のフォルダを変えられます。"),
             tr("終了コード: 0 成功、1 失敗、2 使い方の誤り、3 認証情報がない、4 会議が見つからない、5 ポリシーか権限で止められた"),
+        ]
+    }
+
+    private static var aiNotes: [String] {
+        [
+            tr("<AI>: local・apple・gemini・claude（省くと設定の AI）。<文体>: none・chat・email・document-polite・document-plain。<言語>: en・ja・ko など"),
+            tr("AI が失敗したときは何も出さずに終わります。--fallback-raw なら、整える前の文章を出します。--show-prompt で、AI に送る内容を標準エラー出力に出します。"),
+            tr("ローカルの AI は、呼ぶたびにモデルを読み込むので時間がかかります。アプリがローカルの AI を使っている間は使えません。"),
         ]
     }
 }

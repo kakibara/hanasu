@@ -2,12 +2,13 @@ import Darwin
 import Foundation
 import Security
 
-// 要件: REQ-COM-030
-// 設計判断: DEC-COM-060, DEC-COM-063
+// 要件: REQ-COM-030, REQ-COM-187
+// 設計判断: DEC-COM-060, DEC-COM-063, DEC-COM-184
 /// 同梱した llama.cpp の llama-server を、ローカルの LLM を使うときだけ子プロセスで動かす。
 /// - 127.0.0.1 の空いたポートで、起動のたびに作る API キー（環境変数 LLAMA_API_KEY）を付けて起動する
 /// - 最後の処理から 5 分たつと止める。モデルを変えたら起動し直す。アプリ（CLI も）を終えるときに止める
-/// - 前回落ちたときに残ったサーバーは、記録（server.pid）を見て次の起動時に止める
+/// - 記録は起動したプロセスごとのファイル（server-<持ち主の pid>.pid）。前回落ちたときに残ったサーバーは、
+///   持ち主が終わっている記録を見て、アプリの次の起動時に止める（動いているほかのプロセスのサーバーは止めない）
 actor LocalLLMServer {
     static let shared = LocalLLMServer()
 
@@ -245,8 +246,18 @@ actor LocalLLMServer {
     private static let pidLock = NSLock()
     nonisolated(unsafe) private static var runningPID: pid_t?
 
+    /// シグナルのハンドラーから読む pid（ロックを使わない）
+    nonisolated(unsafe) private static var signalPID: pid_t = 0
+
     private static func setRunningPID(_ pid: pid_t?) {
         pidLock.withLock { runningPID = pid }
+        signalPID = pid ?? 0
+    }
+
+    /// シグナルのハンドラーから呼ぶ。ロックとファイルの操作をせずに、動いているサーバーを止める
+    nonisolated static func killRunningServerFromSignal() {
+        let pid = signalPID
+        if pid > 0 { kill(pid, SIGTERM) }
     }
 
     /// アプリ・CLI を終えるときに呼ぶ（atexit・applicationWillTerminate）。actor を待たずに止める
@@ -256,28 +267,73 @@ actor LocalLLMServer {
         try? FileManager.default.removeItem(at: pidFile)
     }
 
+    /// このプロセスの記録（server-<自分の pid>.pid）
     nonisolated static var pidFile: URL {
+        LocalLLMStore.directory.appendingPathComponent("server-\(getpid()).pid")
+    }
+
+    /// 今までの版が書いた 1 つだけの記録（持ち主が分からない）
+    nonisolated static var legacyPIDFile: URL {
         LocalLLMStore.directory.appendingPathComponent("server.pid")
     }
 
     private static func writePIDFile(pid: pid_t, executable: URL) {
         try? FileManager.default.createDirectory(at: LocalLLMStore.directory, withIntermediateDirectories: true)
-        try? "\(pid)\n\(executable.resolvingSymlinksInPath().path)\n".write(to: pidFile, atomically: true, encoding: .utf8)
+        try? "\(pid)\n\(executable.resolvingSymlinksInPath().path)\n\(getpid())\n".write(to: pidFile, atomically: true, encoding: .utf8)
     }
 
-    /// 前回落ちたときに残った llama-server を止める。記録した pid のプロセスが、記録した実行ファイルのときだけ止める
-    /// （pid は使い回されるので、別のプロセスを止めないため）
+    // 設計判断: DEC-COM-184
+    /// 記録 1 つ。owner は記録を書いたプロセス（今までの server.pid では nil）
+    struct Record {
+        var file: URL
+        var serverPID: pid_t
+        var executablePath: String
+        var owner: pid_t?
+
+        /// 記録した pid のプロセスが、記録した実行ファイルとして動いているか（pid は使い回されるので、パスも見る）
+        var serverIsRunning: Bool {
+            var buffer = [CChar](repeating: 0, count: Int(MAXPATHLEN) * 4)
+            guard serverPID > 0, proc_pidpath(serverPID, &buffer, UInt32(buffer.count)) > 0 else { return false }
+            return URL(fileURLWithPath: String(cString: buffer)).resolvingSymlinksInPath().path == executablePath
+        }
+
+        /// 持ち主のプロセスが動いているか。持ち主が分からなければ false
+        var ownerIsRunning: Bool {
+            guard let owner, owner > 0 else { return false }
+            return kill(owner, 0) == 0 || errno == EPERM
+        }
+    }
+
+    nonisolated static func records() -> [Record] {
+        let files = ((try? FileManager.default.contentsOfDirectory(at: LocalLLMStore.directory, includingPropertiesForKeys: nil)) ?? [])
+            .filter { $0.lastPathComponent == "server.pid" || ($0.lastPathComponent.hasPrefix("server-") && $0.pathExtension == "pid") }
+        return files.compactMap { file in
+            guard let text = try? String(contentsOf: file, encoding: .utf8) else { return nil }
+            let lines = text.split(separator: "\n").map(String.init)
+            guard lines.count >= 2, let pid = pid_t(lines[0]) else { return nil }
+            return Record(file: file, serverPID: pid, executablePath: lines[1], owner: lines.count >= 3 ? pid_t(lines[2]) : nil)
+        }
+    }
+
+    // 要件: REQ-COM-187
+    /// ほかのプロセス（アプリや別の hanasu）が起動したサーバーが動いているか。hanasu は、動いていれば自分のサーバーを起動しない
+    nonisolated static func otherProcessServerRunning() -> Bool {
+        records().contains { record in
+            record.owner != getpid() && (record.owner == nil || record.ownerIsRunning) && record.serverIsRunning
+        }
+    }
+
+    /// 前回落ちたときに残った llama-server を止める（アプリの起動時）。持ち主が終わっている記録のサーバーだけを、
+    /// 記録した実行ファイルのときだけ止める（pid は使い回されるので、別のプロセスを止めないため）。
+    /// 動いているほかのプロセス（hanasu コマンドなど）の記録には触らない
     nonisolated static func cleanUpStaleServer() {
-        guard let text = try? String(contentsOf: pidFile, encoding: .utf8) else { return }
-        let lines = text.split(separator: "\n").map(String.init)
-        defer { try? FileManager.default.removeItem(at: pidFile) }
-        guard lines.count >= 2, let pid = pid_t(lines[0]), pid > 0 else { return }
-        var buffer = [CChar](repeating: 0, count: Int(MAXPATHLEN) * 4)
-        guard proc_pidpath(pid, &buffer, UInt32(buffer.count)) > 0 else { return }
-        let path = String(cString: buffer)
-        if URL(fileURLWithPath: path).resolvingSymlinksInPath().path == lines[1] {
-            kill(pid, SIGTERM)
-            appLog.notice("stopped stale local llm server pid=\(pid)")
+        for record in records() where record.owner != getpid() {
+            if record.ownerIsRunning { continue }
+            if record.serverIsRunning {
+                kill(record.serverPID, SIGTERM)
+                appLog.notice("stopped stale local llm server pid=\(record.serverPID)")
+            }
+            try? FileManager.default.removeItem(at: record.file)
         }
     }
 }

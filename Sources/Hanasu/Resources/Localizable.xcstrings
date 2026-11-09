@@ -308,7 +308,7 @@
       }
     },
     "# %@ — 文字起こし" : {
-      "comment" : "HanasuMeetingsCommand.swift:343, MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:341, MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1634,7 +1634,7 @@
       }
     },
     "%@ には 1 以上の整数を指定してください: %@" : {
-      "comment" : "HanasuCommand.swift:227",
+      "comment" : "HanasuCommand.swift:278",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1736,7 +1736,7 @@
       }
     },
     "%@ には値が要ります。" : {
-      "comment" : "HanasuCommand.swift:197",
+      "comment" : "HanasuCommand.swift:248",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2246,7 +2246,7 @@
       }
     },
     "%@ の会議が %@ 件あります。ID で指定してください。" : {
-      "comment" : "HanasuMeetingsCommand.swift:263",
+      "comment" : "HanasuMeetingsCommand.swift:261",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2348,7 +2348,7 @@
       }
     },
     "%@ の値を読めません: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:437",
+      "comment" : "HanasuMeetingsCommand.swift:435",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6530,7 +6530,7 @@
       }
     },
     "%@（%@）" : {
-      "comment" : "LocalLLMModel.swift:31, LocalLLMSettingsView.swift:15, Onboarding.swift:767",
+      "comment" : "HanasuDoctorCommand.swift:72, HanasuDoctorCommand.swift:72, LocalLLMModel.swift:31",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6733,6 +6733,108 @@
         }
       }
     },
+    "%@（まだありません）" : {
+      "comment" : "HanasuDoctorCommand.swift:61",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (غير موجود بعد)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (existiert noch nicht)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (does not exist yet)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (aún no existe)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (n’existe pas encore)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (अभी मौजूद नहीं)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (belum ada)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (non esiste ancora)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@(아직 없음)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (jeszcze nie istnieje)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (ainda não existe)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (пока не существует)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (henüz yok)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (chưa có)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（尚不存在）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（尚不存在）"
+          }
+        }
+      }
+    },
     "%@（今の型）" : {
       "comment" : "MinutesTemplateViews.swift:100, MinutesTemplateViews.swift:111",
       "extractionState" : "manual",
@@ -6836,7 +6938,7 @@
       }
     },
     "%@（推測）" : {
-      "comment" : "HanasuMeetingsCommand.swift:359",
+      "comment" : "HanasuMeetingsCommand.swift:357",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6937,8 +7039,212 @@
         }
       }
     },
+    "%@（読めます）" : {
+      "comment" : "HanasuDoctorCommand.swift:57, HanasuDoctorCommand.swift:60",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (قابل للقراءة)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (lesbar)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (readable)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (se puede leer)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (lisible)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (पढ़ा जा सकता है)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (dapat dibaca)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (leggibile)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@(읽을 수 있음)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (odczyt możliwy)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (legível)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (чтение возможно)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (okunabiliyor)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (đọc được)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（可读取）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（可讀取）"
+          }
+        }
+      }
+    },
+    "%@（読めません: %@）" : {
+      "comment" : "HanasuDoctorCommand.swift:56, HanasuDoctorCommand.swift:62",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (غير قابل للقراءة: %@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (nicht lesbar: %@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (not readable: %@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (no se puede leer: %@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (illisible : %@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (पढ़ा नहीं जा सकता: %@)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (tidak dapat dibaca: %@)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (non leggibile: %@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@(읽을 수 없음: %@)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (odczyt niemożliwy: %@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (ilegível: %@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (чтение невозможно: %@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (okunamıyor: %@)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (không đọc được: %@)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（无法读取：%@）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（無法讀取：%@）"
+          }
+        }
+      }
+    },
     "- 日時: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:344, MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:342, MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7040,7 +7346,7 @@
       }
     },
     "- 議事録に使わない発言（%@ 件）は含めていません" : {
-      "comment" : "HanasuMeetingsCommand.swift:347, MeetingModels.swift:129",
+      "comment" : "HanasuMeetingsCommand.swift:345, MeetingModels.swift:129",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7142,7 +7448,7 @@
       }
     },
     "- 長さ: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:345, MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:343, MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7345,8 +7651,110 @@
         }
       }
     },
+    "--ai に知らない AI を指定しました: %@" : {
+      "comment" : "HanasuAICommands.swift:26",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI غير معروف في --ai: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannte KI bei --ai: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown AI for --ai: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA desconocida en --ai: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA inconnue pour --ai : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--ai में अज्ञात AI दिया गया: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI tidak dikenal untuk --ai: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA sconosciuta in --ai: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--ai에 알 수 없는 AI를 지정했습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznane AI w --ai: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA desconhecida em --ai: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неизвестный AI в --ai: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--ai için bilinmeyen AI: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI không xác định cho --ai: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--ai 指定了未知的 AI：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--ai 指定了未知的 AI：%@"
+          }
+        }
+      }
+    },
     "--json で、決まった形の JSON を出します。--meetings-dir <フォルダ>（か環境変数 HANASU_MEETINGS_DIR）で、会議のフォルダを変えられます。" : {
-      "comment" : "HanasuCommand.swift:314",
+      "comment" : "HanasuCommand.swift:425",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7443,6 +7851,312 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 --json 可輸出固定格式的 JSON。使用 --meetings-dir <檔案夾>（或環境變數 HANASU_MEETINGS_DIR）可變更會議檔案夾。"
+          }
+        }
+      }
+    },
+    "--since は --until より前にしてください。" : {
+      "comment" : "HanasuAICommands.swift:254",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يجب أن يكون --since قبل --until."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since muss vor --until liegen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since must be earlier than --until."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since debe ser anterior a --until."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since doit être antérieur à --until."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since को --until से पहले रखें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since harus lebih awal daripada --until."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since deve precedere --until."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since는 --until보다 앞이어야 합니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since musi być wcześniejsze niż --until."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since deve ser anterior a --until."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since должно быть раньше --until."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since değeri --until değerinden önce olmalı."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since phải sớm hơn --until."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since 必须早于 --until。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--since 必須早於 --until。"
+          }
+        }
+      }
+    },
+    "--style に知らない文体を指定しました: %@" : {
+      "comment" : "HanasuAICommands.swift:334",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أسلوب غير معروف في --style: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannter Stil bei --style: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown style for --style: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilo desconocido en --style: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style inconnu pour --style : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--style में अज्ञात शैली दी गई: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gaya bahasa tidak dikenal untuk --style: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stile sconosciuto in --style: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--style에 알 수 없는 문체를 지정했습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznany styl w --style: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilo desconhecido em --style: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неизвестный стиль в --style: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--style için bilinmeyen üslup: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Văn phong không xác định cho --style: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--style 指定了未知的文体：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--style 指定了未知的文體：%@"
+          }
+        }
+      }
+    },
+    "--translate に知らない言語を指定しました: %@" : {
+      "comment" : "HanasuAICommands.swift:341",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغة غير معروفة في --translate: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannte Sprache bei --translate: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown language for --translate: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma desconocido en --translate: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langue inconnue pour --translate : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--translate में अज्ञात भाषा दी गई: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bahasa tidak dikenal untuk --translate: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lingua sconosciuta in --translate: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--translate에 알 수 없는 언어를 지정했습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznany język w --translate: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma desconhecido em --translate: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неизвестный язык в --translate: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--translate için bilinmeyen dil: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngôn ngữ không xác định cho --translate: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--translate 指定了未知的语言：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "--translate 指定了未知的語言：%@"
           }
         }
       }
@@ -7651,8 +8365,212 @@
         }
       }
     },
+    "<AI>: local・apple・gemini・claude（省くと設定の AI）。<文体>: none・chat・email・document-polite・document-plain。<言語>: en・ja・ko など" : {
+      "comment" : "HanasuCommand.swift:432",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local، apple، gemini، claude (عند حذفه يُستخدم AI المحدد في الإعدادات). <الأسلوب>: none، chat، email، document-polite، document-plain. <اللغة>: en، ja، ko وغيرها"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (ohne Angabe die KI aus den Einstellungen). <Stil>: none, chat, email, document-polite, document-plain. <Sprache>: en, ja, ko usw."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (defaults to the AI in Settings). <style>: none, chat, email, document-polite, document-plain. <language>: en, ja, ko, etc."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (si se omite, la IA de los ajustes). <estilo>: none, chat, email, document-polite, document-plain. <idioma>: en, ja, ko, etc."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI> : local, apple, gemini, claude (par défaut, l’IA des réglages). <style> : none, chat, email, document-polite, document-plain. <langue> : en, ja, ko, etc."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (छोड़ने पर सेटिंग्ज़ वाला AI)। <शैली>: none, chat, email, document-polite, document-plain। <भाषा>: en, ja, ko आदि"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (jika dihilangkan, AI dari pengaturan). <gaya>: none, chat, email, document-polite, document-plain. <bahasa>: en, ja, ko, dll."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (se omesso, l'IA delle impostazioni). <stile>: none, chat, email, document-polite, document-plain. <lingua>: en, ja, ko, ecc."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude(생략하면 설정의 AI). <문체>: none, chat, email, document-polite, document-plain. <언어>: en, ja, ko 등"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (domyślnie AI z ustawień). <styl>: none, chat, email, document-polite, document-plain. <język>: en, ja, ko itd."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (se omitido, a IA dos Ajustes). <estilo>: none, chat, email, document-polite, document-plain. <idioma>: en, ja, ko etc."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (если не указан — AI из настроек). <стиль>: none, chat, email, document-polite, document-plain. <язык>: en, ja, ko и др."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (belirtilmezse ayarlardaki AI). <üslup>: none, chat, email, document-polite, document-plain. <dil>: en, ja, ko vb."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>: local, apple, gemini, claude (bỏ qua thì dùng AI trong cài đặt). <văn phong>: none, chat, email, document-polite, document-plain. <ngôn ngữ>: en, ja, ko, v.v."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>：local、apple、gemini、claude（省略时使用设置中的 AI）。<文体>：none、chat、email、document-polite、document-plain。<语言>：en、ja、ko 等"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<AI>：local、apple、gemini、claude（省略時使用設定中的 AI）。<文體>：none、chat、email、document-polite、document-plain。<語言>：en、ja、ko 等"
+          }
+        }
+      }
+    },
+    "<モデル>" : {
+      "comment" : "HanasuCommand.swift:366",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<النموذج>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Modell>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<model>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<modelo>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<modèle>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<मॉडल>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<model>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<modello>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<모델>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<model>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<modelo>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<модель>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<model>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<mô hình>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<模型>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<模型>"
+          }
+        }
+      }
+    },
     "<件数>" : {
-      "comment" : "HanasuCommand.swift:290",
+      "comment" : "HanasuCommand.swift:364",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7754,7 +8672,7 @@
       }
     },
     "<会議>" : {
-      "comment" : "HanasuCommand.swift:296",
+      "comment" : "HanasuCommand.swift:372",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7856,7 +8774,7 @@
       }
     },
     "<名前>" : {
-      "comment" : "HanasuCommand.swift:305",
+      "comment" : "HanasuCommand.swift:381",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7957,8 +8875,314 @@
         }
       }
     },
+    "<指示>" : {
+      "comment" : "HanasuCommand.swift:402",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<التعليمات>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Anweisung>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<instruction>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<instrucción>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<instruction>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<निर्देश>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<instruksi>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<istruzione>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<지시>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<polecenie>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<instrução>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<инструкция>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<talimat>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<chỉ dẫn>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<指示>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<指示>"
+          }
+        }
+      }
+    },
+    "<文体>" : {
+      "comment" : "HanasuCommand.swift:395",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<الأسلوب>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Stil>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<style>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<estilo>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<style>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<शैली>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<gaya>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<stile>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<문체>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<styl>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<estilo>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<стиль>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<üslup>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<văn phong>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<文体>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<文體>"
+          }
+        }
+      }
+    },
+    "<文章>" : {
+      "comment" : "HanasuCommand.swift:365",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<النص>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Text>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<text>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<texto>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<texte>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<टेक्स्ट>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<teks>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<testo>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<텍스트>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<tekst>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<texto>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<текст>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<metin>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<văn bản>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<文本>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<文字>"
+          }
+        }
+      }
+    },
     "<期間>" : {
-      "comment" : "HanasuCommand.swift:289",
+      "comment" : "HanasuCommand.swift:363",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8059,8 +9283,110 @@
         }
       }
     },
+    "<言語>" : {
+      "comment" : "HanasuCommand.swift:395",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<اللغة>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Sprache>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<language>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<idioma>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<langue>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<भाषा>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<bahasa>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<lingua>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<언어>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<język>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<idioma>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<язык>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<dil>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<ngôn ngữ>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<语言>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<語言>"
+          }
+        }
+      }
+    },
     "<語>" : {
-      "comment" : "HanasuCommand.swift:298",
+      "comment" : "HanasuCommand.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8157,6 +9483,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "<關鍵字>"
+          }
+        }
+      }
+    },
+    "<質問>" : {
+      "comment" : "HanasuCommand.swift:388",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<السؤال>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Frage>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<question>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<pregunta>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<question>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<सवाल>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<pertanyaan>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<domanda>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<질문>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<pytanie>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<pergunta>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<вопрос>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<soru>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<câu hỏi>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<问题>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<問題>"
+          }
+        }
+      }
+    },
+    "AI が失敗したときは何も出さずに終わります。--fallback-raw なら、整える前の文章を出します。--show-prompt で、AI に送る内容を標準エラー出力に出します。" : {
+      "comment" : "HanasuCommand.swift:433",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إذا فشل AI ينتهي الأمر دون أي مخرجات. مع --fallback-raw يُخرج النص قبل التنقيح. ويعرض --show-prompt ما يُرسَل إلى AI على الخطأ القياسي (stderr)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlägt die KI fehl, endet der Befehl ohne Ausgabe. Mit --fallback-raw wird der unbearbeitete Text ausgegeben. Mit --show-prompt wird der an die KI gesendete Inhalt auf der Standardfehlerausgabe (stderr) ausgegeben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If the AI fails, nothing is output. With --fallback-raw, the unrefined text is output instead. --show-prompt prints what is sent to the AI to stderr."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si la IA falla, termina sin mostrar nada. Con --fallback-raw, muestra el texto sin pulir. Con --show-prompt, muestra en la salida de error estándar (stderr) lo que se envía a la IA."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si l’IA échoue, la commande se termine sans rien afficher. Avec --fallback-raw, le texte est affiché sans mise en forme. Avec --show-prompt, ce qui est envoyé à l’IA est affiché sur la sortie d’erreur standard (stderr)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI विफल होने पर कुछ भी आउटपुट किए बिना समाप्त होता है। --fallback-raw देने पर सुधार से पहले का टेक्स्ट आउटपुट होता है। --show-prompt से AI को भेजी जाने वाली सामग्री stderr पर दिखती है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jika AI gagal, perintah selesai tanpa keluaran. Dengan --fallback-raw, teks sebelum dirapikan yang dikeluarkan. --show-prompt menampilkan isi yang dikirim ke AI di stderr."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se l'IA non riesce, il comando termina senza output. Con --fallback-raw, stampa il testo non rifinito. Con --show-prompt, stampa sullo standard error (stderr) il contenuto inviato all'IA."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI가 실패하면 아무것도 출력하지 않고 종료합니다. --fallback-raw를 붙이면 다듬기 전의 텍스트를 출력합니다. --show-prompt를 붙이면 AI에 보내는 내용을 표준 오류 출력(stderr)에 출력합니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gdy AI zawiedzie, polecenie kończy się bez wyniku. Z --fallback-raw wypisuje tekst sprzed redakcji. Z --show-prompt wypisuje na standardowe wyjście błędów (stderr) treść wysyłaną do AI."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se a IA falhar, o comando termina sem saída. Com --fallback-raw, mostra o texto antes do refinamento. Com --show-prompt, mostra na saída de erro padrão (stderr) o que é enviado à IA."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Если AI не справится, команда завершится без вывода. С --fallback-raw выводится текст до обработки. С --show-prompt то, что отправляется в AI, выводится в стандартный поток ошибок (stderr)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI başarısız olursa hiçbir şey yazdırmadan sonlanır. --fallback-raw ile iyileştirilmemiş metni yazdırır. --show-prompt ile AI’ye gönderilen içeriği standart hataya (stderr) yazdırır."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nếu AI thất bại, lệnh kết thúc mà không xuất gì. Với --fallback-raw, lệnh xuất văn bản trước khi chỉnh sửa. --show-prompt in nội dung gửi cho AI ra stderr."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 失败时不输出任何内容并结束。使用 --fallback-raw 时，输出润色前的文本。使用 --show-prompt 时，将发送给 AI 的内容输出到标准错误输出（stderr）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 失敗時不輸出任何內容並結束。使用 --fallback-raw 時，輸出潤飾前的文字。使用 --show-prompt 時，將傳送給 AI 的內容輸出到標準錯誤輸出（stderr）。"
           }
         }
       }
@@ -8463,6 +9993,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AI %@失敗，已直接輸入原文。"
+          }
+        }
+      }
+    },
+    "AI で処理できませんでした: %@" : {
+      "comment" : "HanasuAICommands.swift:103",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّرت المعالجة باستخدام AI: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die KI konnte die Anfrage nicht verarbeiten: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The AI couldn't process this: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA no pudo procesarlo: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA n’a pas pu traiter la demande : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI से प्रोसेस नहीं हो सका: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI gagal memproses: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'IA non è riuscita a elaborare la richiesta: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI로 처리할 수 없습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się przetworzyć za pomocą AI: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A IA não conseguiu processar: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось обработать с помощью AI: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI ile işlenemedi: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI không xử lý được: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 无法处理：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 無法處理：%@"
           }
         }
       }
@@ -9075,6 +10707,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在 AI 中選擇 Gemini，或將轉錄引擎設為 Gemini 時使用。「測試連線」只會取得模型資訊，不會產生費用。"
+          }
+        }
+      }
+    },
+    "AI に渡した会議（* は答えで引用したもの）:" : {
+      "comment" : "HanasuAICommands.swift:309",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاجتماعات المرسلة إلى AI (* = مُقتبس في الإجابة):"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An die KI übergebene Meetings (* = in der Antwort zitiert):"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meetings sent to the AI (* = cited in the answer):"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reuniones enviadas a la IA (* = citada en la respuesta):"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réunions transmises à l’IA (* = citée dans la réponse) :"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI को भेजी गई मीटिंग (* = जवाब में उद्धृत):"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapat yang dikirim ke AI (* = dikutip dalam jawaban):"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riunioni inviate all'IA (* = citata nella risposta):"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI에 보낸 회의(*는 답변에서 인용한 회의):"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spotkania przekazane AI (* — cytowane w odpowiedzi):"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reuniões enviadas à IA (* = citada na resposta):"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Встречи, переданные AI (* — процитированы в ответе):"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI’ye gönderilen toplantılar (* = yanıtta alıntılananlar):"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các cuộc họp đã gửi cho AI (* = được trích dẫn trong câu trả lời):"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发送给 AI 的会议（* 表示回答中引用的会议）："
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "傳送給 AI 的會議（* 表示回答中引用的會議）："
           }
         }
       }
@@ -16015,6 +17749,108 @@
         }
       }
     },
+    "Hanasu のアプリがローカルの AI を使っています。" : {
+      "comment" : "HanasuAICommands.swift:53, HanasuDoctorCommand.swift:82",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تطبيق Hanasu يستخدم AI المحلي حاليًا."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Hanasu-App verwendet gerade die lokale KI."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Hanasu app is using the local AI."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La app Hanasu está usando la IA local."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’app Hanasu utilise actuellement l’IA locale."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu ऐप लोकल AI इस्तेमाल कर रहा है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Hanasu sedang memakai AI lokal."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'app Hanasu sta usando l'IA locale."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu 앱이 로컬 AI를 사용하고 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacja Hanasu używa teraz lokalnego AI."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O app Hanasu está usando a IA local."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приложение Hanasu сейчас использует локальный AI."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu uygulaması yerel AI’yi kullanıyor."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ứng dụng Hanasu đang dùng AI cục bộ."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu 应用正在使用本地 AI。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu App 正在使用本機 AI。"
+          }
+        }
+      }
+    },
     "Hanasu の使い方" : {
       "comment" : "Onboarding.swift:856",
       "extractionState" : "manual",
@@ -17342,7 +19178,7 @@
       }
     },
     "Hanasu: Claude API キー" : {
-      "comment" : "Keychain.swift:38",
+      "comment" : "Keychain.swift:49",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17444,7 +19280,7 @@
       }
     },
     "Hanasu: Gemini API キー" : {
-      "comment" : "Keychain.swift:37",
+      "comment" : "Keychain.swift:48",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20197,104 +22033,104 @@
         }
       }
     },
-    "hanasu — Hanasu の会議の記録を、ターミナルや AI エージェントから読む" : {
-      "comment" : "HanasuCommand.swift:270",
+    "hanasu — Hanasu の会議の記録と文章の整え方を、ターミナルや AI エージェントから使う" : {
+      "comment" : "HanasuCommand.swift:336",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — قراءة سجلات اجتماعات Hanasu من الطرفية أو من وكيل AI"
+            "value" : "hanasu — استخدام تسجيلات الاجتماعات وتنقيح النصوص في Hanasu من الطرفية أو وكلاء AI"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu – Hanasu-Meeting-Aufnahmen im Terminal oder von einem KI-Agenten lesen"
+            "value" : "hanasu – Meeting-Aufnahmen und Textüberarbeitung von Hanasu im Terminal oder in KI-Agenten nutzen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — Read Hanasu meeting records from a terminal or an AI agent"
+            "value" : "hanasu — use Hanasu's meeting records and text refinement from the terminal or AI agents"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — Lee las reuniones grabadas con Hanasu desde el Terminal o un agente de IA"
+            "value" : "hanasu: usa las grabaciones de reuniones y el pulido de texto de Hanasu desde la terminal o agentes de IA"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — Lire les réunions enregistrées par Hanasu depuis le Terminal ou un agent IA"
+            "value" : "hanasu — utiliser les enregistrements de réunions et la mise en forme de texte de Hanasu depuis le terminal ou un agent IA"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — Hanasu की मीटिंग के रिकॉर्ड टर्मिनल या AI एजेंट से पढ़ें"
+            "value" : "hanasu — Hanasu की मीटिंग रिकॉर्डिंग और टेक्स्ट सुधार को टर्मिनल या AI एजेंट से इस्तेमाल करें"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — Baca catatan rapat Hanasu dari terminal atau agen AI"
+            "value" : "hanasu — Gunakan rekaman rapat dan perapian teks Hanasu dari terminal atau agen AI"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — Leggi le riunioni registrate con Hanasu dal Terminale o da un agente IA"
+            "value" : "hanasu — usa le registrazioni delle riunioni e la rifinitura del testo di Hanasu dal terminale o da agenti IA"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — Hanasu의 회의 기록을 터미널이나 AI 에이전트에서 읽기"
+            "value" : "hanasu — Hanasu의 회의 기록과 텍스트 다듬기를 터미널이나 AI 에이전트에서 사용"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — odczyt zapisów spotkań Hanasu z terminala lub agenta AI"
+            "value" : "hanasu — zapisy spotkań i redagowanie tekstu w Hanasu z poziomu terminala i agentów AI"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — leia os registros de reuniões do Hanasu pelo Terminal ou por um agente de IA"
+            "value" : "hanasu — use os registros de reuniões e o refinamento de texto do Hanasu no terminal ou em agentes de IA"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — чтение записей встреч Hanasu из терминала или AI-агентом"
+            "value" : "hanasu — записи встреч и обработка текста Hanasu из терминала и AI-агентов"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — Hanasu toplantı kayıtlarını terminalden veya bir AI ajanıyla okuyun"
+            "value" : "hanasu — Hanasu’nun toplantı kayıtlarını ve metin iyileştirmesini terminalden veya AI ajanlarından kullanın"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — Đọc bản ghi cuộc họp của Hanasu từ Terminal hoặc tác tử AI"
+            "value" : "hanasu — Dùng bản ghi cuộc họp và tính năng chỉnh sửa văn bản của Hanasu từ terminal hoặc AI agent"
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — 从终端或 AI 智能体读取 Hanasu 的会议记录"
+            "value" : "hanasu — 在终端或 AI 智能体中使用 Hanasu 的会议记录和文本润色"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "hanasu — 從終端機或 AI 代理程式讀取 Hanasu 的會議記錄"
+            "value" : "hanasu — 在終端機或 AI 代理程式中使用 Hanasu 的會議記錄與文字潤飾"
           }
         }
       }
@@ -22544,7 +24380,7 @@
       }
     },
     "「システム設定」→「プライバシーとセキュリティ」→「ファイルとフォルダ」で、このコマンドを実行しているアプリ（ターミナルや AI エージェントのアプリ）に「書類」フォルダへのアクセスを許可してください。" : {
-      "comment" : "HanasuMeetingsCommand.swift:232",
+      "comment" : "HanasuMeetingsCommand.swift:230",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27848,7 +29684,7 @@
       }
     },
     "これより新しい会議が %@ 件あります（記録中・処理中・失敗）: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:251",
+      "comment" : "HanasuMeetingsCommand.swift:249",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28256,7 +30092,7 @@
       }
     },
     "すべてのアプリ" : {
-      "comment" : "Keychain.swift:205",
+      "comment" : "Keychain.swift:216",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28868,7 +30704,7 @@
       }
     },
     "そのフォルダがあり、このユーザーで読めるかを確かめてください。" : {
-      "comment" : "HanasuMeetingsCommand.swift:234",
+      "comment" : "HanasuMeetingsCommand.swift:232",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29378,7 +31214,7 @@
       }
     },
     "なし（どのアプリにも確認を出す）" : {
-      "comment" : "Keychain.swift:197",
+      "comment" : "Keychain.swift:208",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31826,7 +33662,7 @@
       }
     },
     "アクション %@ 件" : {
-      "comment" : "HanasuMeetingsCommand.swift:321",
+      "comment" : "HanasuMeetingsCommand.swift:319",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31928,7 +33764,7 @@
       }
     },
     "アクションアイテムはありません。" : {
-      "comment" : "HanasuMeetingsCommand.swift:193",
+      "comment" : "HanasuMeetingsCommand.swift:191",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33861,6 +35697,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App ID 不同"
+          }
+        }
+      }
+    },
+    "アプリを終了するか、--ai でほかの AI を選んでください（同じモデルを二重に読み込まないため）。" : {
+      "comment" : "HanasuAICommands.swift:54",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أغلق التطبيق أو اختر AI آخر عبر --ai (لتجنّب تحميل النموذج نفسه مرتين)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beende die App oder wähle mit --ai eine andere KI (damit dasselbe Modell nicht doppelt geladen wird)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quit the app, or choose another AI with --ai (so the same model isn't loaded twice)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cierra la app o elige otra IA con --ai (para no cargar el mismo modelo dos veces)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quittez l’app ou choisissez une autre IA avec --ai (pour ne pas charger deux fois le même modèle)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ऐप बंद करें या --ai से कोई दूसरा AI चुनें (ताकि एक ही मॉडल दो बार लोड न हो)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutup app atau pilih AI lain dengan --ai (agar model yang sama tidak dimuat dua kali)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiudi l'app o scegli un'altra IA con --ai (per non caricare due volte lo stesso modello)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱을 종료하거나 --ai로 다른 AI를 선택하세요(같은 모델을 이중으로 불러오지 않기 위해)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zamknij aplikację lub wybierz inne AI przez --ai (aby nie wczytywać tego samego modelu dwa razy)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feche o app ou escolha outra IA com --ai (para não carregar o mesmo modelo duas vezes)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закройте приложение или выберите другой AI с помощью --ai (чтобы не загружать одну и ту же модель дважды)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulamadan çıkın veya --ai ile başka bir AI seçin (aynı model iki kez yüklenmesin diye)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy thoát ứng dụng hoặc chọn AI khác bằng --ai (để không tải cùng một mô hình hai lần)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请退出应用，或用 --ai 选择其他 AI（以免重复加载同一模型）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請結束 App，或用 --ai 選擇其他 AI（以免重複載入同一模型）。"
           }
         }
       }
@@ -36211,6 +38149,108 @@
         }
       }
     },
+    "キーチェーン" : {
+      "comment" : "HanasuAICommands.swift:126",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سلسلة المفاتيح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüsselbund"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Llavero"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trousseau"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कीचेन"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rantai Kunci"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portachiavi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키체인"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pęk kluczy"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaves"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Связка ключей"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anahtar Zinciri"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chuỗi khóa"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "钥匙串"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "鑰匙圈"
+          }
+        }
+      }
+    },
     "キーチェーンから消えます。使い続けるには、もう一度キーを保存してください。" : {
       "comment" : "AISettingsView.swift:195, AISettingsView.swift:289",
       "extractionState" : "manual",
@@ -37737,6 +39777,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法讀取服務帳號的私密金鑰"
+          }
+        }
+      }
+    },
+    "サービスアカウント（%@）" : {
+      "comment" : "HanasuAICommands.swift:148",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حساب خدمة (%@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dienstkonto (%@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Service account (%@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuenta de servicio (%@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compte de service (%@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सर्विस अकाउंट (%@)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akun layanan (%@)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account di servizio (%@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "서비스 계정(%@)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konto usługi (%@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conta de serviço (%@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сервисный аккаунт (%@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hizmet hesabı (%@)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tài khoản dịch vụ (%@)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "服务账号（%@）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "服務帳號（%@）"
           }
         }
       }
@@ -39986,7 +42128,7 @@
       }
     },
     "タイトル: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:310",
+      "comment" : "HanasuMeetingsCommand.swift:308",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41413,6 +43555,108 @@
         }
       }
     },
+    "ダウンロード済みのモデルはありません" : {
+      "comment" : "HanasuDoctorCommand.swift:78",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد نماذج مُنزّلة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Modelle geladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No downloaded models"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay modelos descargados"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun modèle téléchargé"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई डाउनलोड किया गया मॉडल नहीं है"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belum ada model yang diunduh"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun modello scaricato"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다운로드한 모델이 없습니다"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak pobranych modeli"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum modelo baixado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет загруженных моделей"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İndirilmiş model yok"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chưa có mô hình nào được tải về"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有已下载的模型"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有已下載的模型"
+          }
+        }
+      }
+    },
     "ダウンロード（%@）" : {
       "comment" : "LocalLLMSettingsView.swift:37, Onboarding.swift:490, Onboarding.swift:813",
       "extractionState" : "manual",
@@ -42332,7 +44576,7 @@
       }
     },
     "ヒット %@ 件" : {
-      "comment" : "HanasuMeetingsCommand.swift:161",
+      "comment" : "HanasuMeetingsCommand.swift:159",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42429,6 +44673,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "命中 %@ 處"
+          }
+        }
+      }
+    },
+    "ファイルを読めません: %@" : {
+      "comment" : "HanasuAICommands.swift:150",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّرت قراءة الملف: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei kann nicht gelesen werden: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Can't read the file: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede leer el archivo: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de lire le fichier : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "फ़ाइल पढ़ी नहीं जा सकी: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak dapat membaca file: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile leggere il file: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "파일을 읽을 수 없습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie można odczytać pliku: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível ler o arquivo: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось прочитать файл: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dosya okunamıyor: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không đọc được tệp: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取文件：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法讀取檔案：%@"
           }
         }
       }
@@ -47941,6 +50287,210 @@
         }
       }
     },
+    "ローカル: %@" : {
+      "comment" : "HanasuDoctorCommand.swift:78",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محلي: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokal: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लोकल: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokal: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locale: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로컬: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokalnie: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локально: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yerel: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cục bộ: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本機：%@"
+          }
+        }
+      }
+    },
+    "ローカルの AI は、呼ぶたびにモデルを読み込むので時間がかかります。アプリがローカルの AI を使っている間は使えません。" : {
+      "comment" : "HanasuCommand.swift:434",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يحمّل AI المحلي النموذج في كل استدعاء، لذا يستغرق وقتًا. ولا يمكن استخدامه بينما يستخدم التطبيق AI المحلي."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die lokale KI ist langsam, da sie das Modell bei jedem Aufruf lädt. Solange die App die lokale KI verwendet, ist sie nicht verfügbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The local AI loads the model on every call, so it's slow. It can't be used while the app is using the local AI."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA local tarda porque carga el modelo en cada llamada. No se puede usar mientras la app está usando la IA local."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA locale est lente, car elle charge le modèle à chaque appel. Elle n’est pas disponible tant que l’app utilise l’IA locale."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लोकल AI हर बार बुलाने पर मॉडल लोड करता है, इसलिए समय लगता है। जब ऐप लोकल AI इस्तेमाल कर रहा हो, तब इसका उपयोग नहीं किया जा सकता।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI lokal memuat model setiap kali dipanggil, jadi butuh waktu. Tidak bisa dipakai saat app sedang memakai AI lokal."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'IA locale è lenta perché carica il modello a ogni chiamata. Non è disponibile mentre l'app sta usando l'IA locale."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로컬 AI는 호출할 때마다 모델을 불러오므로 시간이 걸립니다. 앱이 로컬 AI를 사용하는 동안에는 사용할 수 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokalne AI wczytuje model przy każdym wywołaniu, więc trwa to dłużej. Nie można go używać, gdy aplikacja korzysta z lokalnego AI."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A IA local carrega o modelo a cada chamada, por isso demora. Não pode ser usada enquanto o app estiver usando a IA local."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локальный AI загружает модель при каждом вызове, поэтому работает медленно. Его нельзя использовать, пока приложение использует локальный AI."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yerel AI her çağrıda modeli yüklediği için zaman alır. Uygulama yerel AI’yi kullanırken kullanılamaz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI cục bộ tải mô hình mỗi lần được gọi nên sẽ mất thời gian. Không dùng được khi ứng dụng đang dùng AI cục bộ."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地 AI 每次调用都会加载模型，因此比较耗时。应用正在使用本地 AI 时无法使用。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本機 AI 每次呼叫都會載入模型，因此較耗時。App 正在使用本機 AI 時無法使用。"
+          }
+        }
+      }
+    },
     "ローカルの LLM から結果が返りませんでした" : {
       "comment" : "LocalLLMClient.swift:15",
       "extractionState" : "manual",
@@ -48146,7 +50696,7 @@
       }
     },
     "ローカルの LLM が起動できませんでした（終了コード %@）" : {
-      "comment" : "LocalLLMServer.swift:40",
+      "comment" : "LocalLLMServer.swift:41",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48554,7 +51104,7 @@
       }
     },
     "ローカルの LLM の起動が %@ 秒たっても終わりませんでした" : {
-      "comment" : "LocalLLMServer.swift:42",
+      "comment" : "LocalLLMServer.swift:43",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48656,7 +51206,7 @@
       }
     },
     "ローカルの LLM を動かす llama-server が見つかりません（アプリを入れ直すか、環境変数 HANASU_LLAMA_SERVER でパスを指定してください）" : {
-      "comment" : "LocalLLMServer.swift:34",
+      "comment" : "LocalLLMServer.swift:35",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48860,7 +51410,7 @@
       }
     },
     "ローカルのモデル「%@」がまだダウンロードされていません（設定 →「AI」でダウンロードしてください）" : {
-      "comment" : "LocalLLMServer.swift:38",
+      "comment" : "LocalLLMServer.swift:39",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48962,7 +51512,7 @@
       }
     },
     "ローカルのモデル「%@」はありません（%@）" : {
-      "comment" : "LocalLLMServer.swift:36",
+      "comment" : "LocalLLMServer.swift:37",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52940,7 +55490,7 @@
       }
     },
     "会議が見つかりません: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:267",
+      "comment" : "HanasuMeetingsCommand.swift:265",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53245,8 +55795,110 @@
         }
       }
     },
+    "会議のフォルダ: %@" : {
+      "comment" : "HanasuDoctorCommand.swift:67",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجلد الاجتماعات: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting-Ordner: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meetings folder: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carpeta de reuniones: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dossier des réunions : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग का फ़ोल्डर: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder rapat: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cartella delle riunioni: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 폴더: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder spotkań: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasta de reuniões: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Папка встреч: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı klasörü: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thư mục cuộc họp: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会议文件夹：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會議檔案夾：%@"
+          }
+        }
+      }
+    },
     "会議のフォルダを読めません: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:237",
+      "comment" : "HanasuMeetingsCommand.swift:235",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53348,7 +56000,7 @@
       }
     },
     "会議の一覧は hanasu meetings list で表示できます。" : {
-      "comment" : "HanasuMeetingsCommand.swift:268",
+      "comment" : "HanasuMeetingsCommand.swift:266",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53450,7 +56102,7 @@
       }
     },
     "会議の中身を出す（既定は議事録）" : {
-      "comment" : "HanasuCommand.swift:297",
+      "comment" : "HanasuCommand.swift:373",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53552,7 +56204,7 @@
       }
     },
     "会議の指定: ID（例: 2026-11-02_1312）、latest（最新の完了した会議）、日付（例: 2026-11-02）" : {
-      "comment" : "HanasuCommand.swift:312",
+      "comment" : "HanasuCommand.swift:423",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55286,7 +57938,7 @@
       }
     },
     "会議をまたいでアクションアイテムを並べる" : {
-      "comment" : "HanasuCommand.swift:306",
+      "comment" : "HanasuCommand.swift:382",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55388,7 +58040,7 @@
       }
     },
     "会議を新しい順に並べる" : {
-      "comment" : "HanasuCommand.swift:295",
+      "comment" : "HanasuCommand.swift:371",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55592,7 +58244,7 @@
       }
     },
     "会議を横断して検索する（空白で区切ると、すべてを含むものだけ）" : {
-      "comment" : "HanasuCommand.swift:299",
+      "comment" : "HanasuCommand.swift:375",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56918,7 +59570,7 @@
       }
     },
     "余分な引数です: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:372",
+      "comment" : "HanasuMeetingsCommand.swift:370",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57122,7 +59774,7 @@
       }
     },
     "使い方:" : {
-      "comment" : "HanasuCommand.swift:270, HanasuCommand.swift:283, HanasuCommand.swift:284",
+      "comment" : "HanasuCommand.swift:336, HanasuCommand.swift:360",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57224,7 +59876,7 @@
       }
     },
     "使い方は hanasu help で表示できます。" : {
-      "comment" : "HanasuCommand.swift:93, HanasuCommand.swift:201, HanasuMeetingsCommand.swift:27",
+      "comment" : "HanasuAICommands.swift:210, HanasuCommand.swift:144, HanasuCommand.swift:252",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57529,6 +60181,108 @@
         }
       }
     },
+    "使う AI と認証情報・会議のフォルダ・管理者のポリシーを確かめる（キーの値は出さない）" : {
+      "comment" : "HanasuCommand.swift:417",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التحقق من AI المستخدم وبيانات الاعتماد ومجلد الاجتماعات وسياسة المسؤول (دون عرض قيم المفاتيح)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwendete KI, Zugangsdaten, Meeting-Ordner und Administrator-Richtlinien prüfen (Schlüsselwerte werden nicht angezeigt)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check the AI in use, credentials, meetings folder, and administrator policy (key values are not shown)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprueba la IA que se usará, las credenciales, la carpeta de reuniones y las políticas del administrador (sin mostrar el valor de las claves)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier l’IA utilisée, les identifiants, le dossier des réunions et les règles de l’administrateur (sans afficher la valeur des clés)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस्तेमाल होने वाला AI, क्रेडेंशियल, मीटिंग का फ़ोल्डर और एडमिनिस्ट्रेटर की नीति जाँचें (की के मान नहीं दिखाए जाते)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Periksa AI yang dipakai, kredensial, folder rapat, dan kebijakan administrator (nilai kunci tidak ditampilkan)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controlla l'IA in uso, le credenziali, la cartella delle riunioni e i criteri dell'amministratore (senza mostrare il valore delle chiavi)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용할 AI와 인증 정보, 회의 폴더, 관리자 정책 확인(키 값은 출력하지 않음)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdź używane AI i dane uwierzytelniające, folder spotkań oraz zasady administratora (bez wypisywania wartości kluczy)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifica a IA usada e as credenciais, a pasta de reuniões e as políticas do administrador (sem mostrar o valor das chaves)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверить используемый AI и учётные данные, папку встреч и политики администратора (значения ключей не выводятся)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanılan AI’yi ve kimlik bilgilerini, toplantı klasörünü ve yönetici ilkelerini denetler (anahtar değerlerini göstermez)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kiểm tra AI được dùng, thông tin xác thực, thư mục cuộc họp và chính sách của quản trị viên (không hiển thị giá trị khóa)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查使用的 AI、凭据、会议文件夹和管理员的策略（不显示密钥的值）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檢查使用的 AI、憑證、會議檔案夾與管理員的政策（不顯示金鑰的值）"
+          }
+        }
+      }
+    },
     "使う AI を選ぶ" : {
       "comment" : "Onboarding.swift:382",
       "extractionState" : "manual",
@@ -57627,6 +60381,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選擇要使用的 AI"
+          }
+        }
+      }
+    },
+    "使う AI:" : {
+      "comment" : "HanasuDoctorCommand.swift:68",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI المستخدم:"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwendete KI:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI in use:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA que se usará:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA utilisée :"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस्तेमाल होने वाला AI:"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI yang dipakai:"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA in uso:"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용할 AI:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Używane AI:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA usada:"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Используемый AI:"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanılan AI:"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI được dùng:"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用的 AI："
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用的 AI："
           }
         }
       }
@@ -57733,6 +60589,108 @@
         }
       }
     },
+    "使えます" : {
+      "comment" : "HanasuDoctorCommand.swift:79",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متاح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponible"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "उपलब्ध"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bisa dipakai"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponibile"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용 가능"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostępne"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponível"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступно"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanılabilir"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng được"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可用"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可使用"
+          }
+        }
+      }
+    },
     "使えます（%@）" : {
       "comment" : "LocalLLMSettingsView.swift:82",
       "extractionState" : "manual",
@@ -57831,6 +60789,312 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "可使用（%@）"
+          }
+        }
+      }
+    },
+    "使える AI はありません。" : {
+      "comment" : "HanasuAICommands.swift:45",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد AI متاح."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine KI verfügbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No AI is available."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay ninguna IA disponible."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune IA disponible."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई उपलब्ध AI नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada AI yang bisa dipakai."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna IA disponibile."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용할 수 있는 AI가 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak dostępnych AI."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhuma IA disponível."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет доступных AI."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanılabilir AI yok."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có AI nào dùng được."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有可用的 AI。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有可使用的 AI。"
+          }
+        }
+      }
+    },
+    "使える AI: %@" : {
+      "comment" : "HanasuAICommands.swift:45",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI المتاح: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfügbare KI: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available AI: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA disponibles: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA disponibles : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "उपलब्ध AI: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI yang bisa dipakai: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA disponibili: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용할 수 있는 AI: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostępne AI: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IAs disponíveis: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступные AI: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanılabilir AI’ler: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI dùng được: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可用的 AI：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可使用的 AI：%@"
+          }
+        }
+      }
+    },
+    "使える値: %@" : {
+      "comment" : "HanasuAICommands.swift:27",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "القيم المتاحة: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gültige Werte: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allowed values: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valores válidos: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valeurs possibles : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मान्य मान: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nilai yang valid: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valori validi: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용할 수 있는 값: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dozwolone wartości: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valores aceitos: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Допустимые значения: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geçerli değerler: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giá trị hợp lệ: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可用的值：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可使用的值：%@"
           }
         }
       }
@@ -59570,7 +62834,7 @@
       }
     },
     "保存済み" : {
-      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274, Keychain.swift:101",
+      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274, Keychain.swift:112",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61610,7 +64874,7 @@
       }
     },
     "処理中" : {
-      "comment" : "HUDPanel.swift:249, HanasuMeetingsCommand.swift:328",
+      "comment" : "HUDPanel.swift:249, HanasuMeetingsCommand.swift:326",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64772,7 +68036,7 @@
       }
     },
     "失敗" : {
-      "comment" : "DictationHistoryWindow.swift:375, HanasuMeetingsCommand.swift:330, MeetingWindow.swift:172",
+      "comment" : "DictationHistoryWindow.swift:375, HanasuMeetingsCommand.swift:328, MeetingWindow.swift:172",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65180,7 +68444,7 @@
       }
     },
     "完了" : {
-      "comment" : "HanasuMeetingsCommand.swift:329",
+      "comment" : "HanasuMeetingsCommand.swift:327",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65282,7 +68546,7 @@
       }
     },
     "完了した会議がありません。" : {
-      "comment" : "HanasuMeetingsCommand.swift:247",
+      "comment" : "HanasuMeetingsCommand.swift:245",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65583,6 +68847,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "可以選擇例會、1on1、商務洽談等範本。待辦事項可以匯出為 Markdown、Slack 格式的拷貝或提醒事項。"
+          }
+        }
+      }
+    },
+    "実行ファイル: %@" : {
+      "comment" : "HanasuDoctorCommand.swift:66",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الملف التنفيذي: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Programmdatei: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Executable: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejecutable: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exécutable : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एक्ज़ीक्यूटेबल फ़ाइल: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File eksekusi: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eseguibile: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "실행 파일: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plik wykonywalny: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Executável: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Исполняемый файл: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yürütülebilir dosya: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tệp thực thi: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可执行文件：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "執行檔：%@"
           }
         }
       }
@@ -68851,6 +72217,108 @@
         }
       }
     },
+    "整えられなかったので、整える前の文章を出します（--fallback-raw）。" : {
+      "comment" : "HanasuAICommands.swift:458",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر التنقيح، لذا يُخرج النص قبل التنقيح (--fallback-raw)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überarbeitung fehlgeschlagen. Der unbearbeitete Text wird ausgegeben (--fallback-raw)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't refine the text, so the unrefined text is output instead (--fallback-raw)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo pulir el texto; se muestra sin pulir (--fallback-raw)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise en forme impossible : le texte est affiché tel quel (--fallback-raw)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सुधार नहीं हो सका, इसलिए सुधार से पहले का टेक्स्ट आउटपुट किया जा रहा है (--fallback-raw)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gagal merapikan, jadi teks sebelum dirapikan dikeluarkan (--fallback-raw)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rifinitura non riuscita: viene stampato il testo originale (--fallback-raw)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다듬지 못해서 다듬기 전의 텍스트를 출력합니다(--fallback-raw)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się zredagować, więc wypisano tekst sprzed redakcji (--fallback-raw)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível refinar; mostrando o texto antes do refinamento (--fallback-raw)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обработать не удалось, поэтому выводится текст до обработки (--fallback-raw)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İyileştirilemediği için iyileştirilmemiş metin yazdırılıyor (--fallback-raw)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không chỉnh sửa được nên xuất văn bản trước khi chỉnh sửa (--fallback-raw)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法润色，因此输出润色前的文本（--fallback-raw）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法潤飾，因此輸出潤飾前的文字（--fallback-raw）。"
+          }
+        }
+      }
+    },
     "整形" : {
       "comment" : "DictationController.swift:320, DictationHistory.swift:73",
       "extractionState" : "manual",
@@ -71197,6 +74665,108 @@
         }
       }
     },
+    "文章が空です。" : {
+      "comment" : "HanasuAICommands.swift:187",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النص فارغ."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Text ist leer."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The text is empty."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El texto está vacío."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le texte est vide."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टेक्स्ट खाली है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teks kosong."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il testo è vuoto."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "텍스트가 비어 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tekst jest pusty."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O texto está vazio."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текст пуст."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metin boş."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Văn bản trống."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文本为空。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字為空。"
+          }
+        }
+      }
+    },
     "文章が選択されていません。書き換えたい文章を選択してから、もう一度押してください。" : {
       "comment" : "EditModeController.swift:256",
       "extractionState" : "manual",
@@ -71299,6 +74869,108 @@
         }
       }
     },
+    "文章が長すぎます（%@ 文字）。%@ 文字以内にしてください。" : {
+      "comment" : "HanasuAICommands.swift:189",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النص طويل جدًا (عدد الأحرف: %@). الحد الأقصى: %@ حرف."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Text ist zu lang (%@ Zeichen). Erlaubt sind höchstens %@ Zeichen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The text is too long (%@ characters). Keep it to %@ characters or fewer."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El texto es demasiado largo (%@ caracteres). El máximo es %@ caracteres."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texte trop long (%@ caractères). Maximum : %@ caractères."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टेक्स्ट बहुत लंबा है (%@ अक्षर)। इसे %@ अक्षरों के भीतर रखें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teks terlalu panjang (%@ karakter). Batasi hingga %@ karakter."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il testo è troppo lungo (%@ caratteri). Il massimo è %@ caratteri."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "텍스트가 너무 깁니다(%@자). %@자 이내로 해 주세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tekst jest za długi (znaki: %@). Maksymalnie %@."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O texto é longo demais (%@ caracteres). Ele deve ter no máximo %@ caracteres."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текст слишком длинный (символов: %@). Допустимо не более %@."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metin çok uzun (%@ karakter). En fazla %@ karakter olmalı."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Văn bản quá dài (%@ ký tự). Hãy giữ trong %@ ký tự."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文本过长（%@ 个字符）。请控制在 %@ 个字符以内。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字過長（%@ 個字元）。請控制在 %@ 個字元以內。"
+          }
+        }
+      }
+    },
     "文章の仕上がりがていねい。Haiku・Sonnet・Opus から選べます" : {
       "comment" : "Onboarding.swift:347",
       "extractionState" : "manual",
@@ -71397,6 +75069,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "文字品質細緻。可從 Haiku、Sonnet、Opus 中選擇"
+          }
+        }
+      }
+    },
+    "文章は、引数か標準入力のどちらかで渡してください（両方は使えません）。" : {
+      "comment" : "HanasuAICommands.swift:173",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مرّر النص عبر وسيط أو عبر الإدخال القياسي (stdin)، وليس كليهما."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übergib den Text entweder als Argument oder über die Standardeingabe (stdin), nicht beides."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pass the text either as an argument or via stdin, not both."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasa el texto como argumento o por la entrada estándar (stdin), no de las dos formas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passez le texte soit en argument, soit sur l’entrée standard (stdin), mais pas les deux."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टेक्स्ट आर्ग्युमेंट या stdin में से किसी एक से दें (दोनों एक साथ नहीं)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berikan teks lewat argumen atau stdin, salah satu saja (tidak bisa keduanya)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passa il testo come argomento oppure dallo standard input (stdin), non in entrambi i modi."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "텍스트는 인수와 표준 입력 중 하나로만 전달하세요(둘 다 사용할 수 없음)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przekaż tekst jako argument albo przez standardowe wejście (stdin), nie na oba sposoby."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passe o texto como argumento ou pela entrada padrão (stdin), não pelos dois."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Передайте текст либо аргументом, либо через стандартный ввод (stdin), но не обоими способами."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metni ya argüman olarak ya da standart girdiden (stdin) verin (ikisi birden kullanılamaz)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy truyền văn bản qua đối số hoặc stdin, chỉ một trong hai (không dùng cả hai)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请通过参数或标准输入二选一传入文本（不能同时使用）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請透過引數或標準輸入擇一傳入文字（不能同時使用）。"
           }
         }
       }
@@ -71707,6 +75481,108 @@
         }
       }
     },
+    "文章を、引数か標準入力（パイプ）で渡してください。" : {
+      "comment" : "HanasuAICommands.swift:179",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مرّر النص عبر وسيط أو عبر الإدخال القياسي (stdin، عبر أنبوب)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übergib den Text als Argument oder über die Standardeingabe (Pipe)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pass the text as an argument or via stdin (a pipe)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasa el texto como argumento o por la entrada estándar (tubería)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passez le texte en argument ou sur l’entrée standard (pipe)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टेक्स्ट आर्ग्युमेंट या stdin (पाइप) से दें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berikan teks lewat argumen atau stdin (pipe)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passa il testo come argomento o dallo standard input (pipe)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "텍스트를 인수나 표준 입력(파이프)으로 전달하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przekaż tekst jako argument lub przez standardowe wejście (potok)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passe o texto como argumento ou pela entrada padrão (pipe)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Передайте текст аргументом или через стандартный ввод (конвейер)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metni argüman olarak veya standart girdiden (pipe) verin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy truyền văn bản qua đối số hoặc stdin (pipe)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请通过参数或标准输入（管道）传入文本。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請透過引數或標準輸入（管線）傳入文字。"
+          }
+        }
+      }
+    },
     "文章をすべてクリップボードにコピーします（⌘C。一部を選んでいるときは、その部分）" : {
       "comment" : "PasteFallbackPanel.swift:246",
       "extractionState" : "manual",
@@ -71907,6 +75783,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "文字不會傳送到網路"
+          }
+        }
+      }
+    },
+    "文章を指示どおりに書き換える（選択を声で編集と同じ）。文章は引数か標準入力で渡す" : {
+      "comment" : "HanasuCommand.swift:403",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة كتابة النص وفق التعليمات (مثل «تحرير التحديد بالصوت»). يُمرَّر النص عبر وسيط أو الإدخال القياسي (stdin)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text nach Anweisung umschreiben (wie „Auswahl per Sprache bearbeiten“). Der Text wird als Argument oder über die Standardeingabe übergeben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rewrite text as instructed (same as Edit Selection by Voice). Pass the text as an argument or via stdin"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reescribe el texto según la instrucción (igual que «Editar selección con la voz»). El texto se pasa como argumento o por la entrada estándar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réécrire le texte selon l’instruction (comme « Modifier la sélection à la voix »). Le texte est passé en argument ou sur l’entrée standard"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "निर्देश के अनुसार टेक्स्ट दोबारा लिखें (“चुने गए टेक्स्ट को आवाज़ से संपादित करें” की तरह)। टेक्स्ट आर्ग्युमेंट या stdin से दें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tulis ulang teks sesuai instruksi (sama seperti “Edit pilihan dengan suara”). Teks diberikan lewat argumen atau stdin"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riscrive il testo secondo l'istruzione (come «Modifica selezione con la voce»). Il testo si passa come argomento o dallo standard input"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "텍스트를 지시대로 고쳐 쓰기(선택 항목을 음성으로 편집과 같음). 텍스트는 인수나 표준 입력으로 전달"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przepisz tekst zgodnie z poleceniem (jak „Edycja zaznaczenia głosem”). Tekst przekaż jako argument lub przez standardowe wejście"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reescreve o texto conforme a instrução (como “Editar seleção por voz”). Passe o texto como argumento ou pela entrada padrão"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переписать текст по инструкции (как «Редактирование выделенного голосом»). Текст передаётся аргументом или через стандартный ввод"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metni talimata göre yeniden yazar (“Seçimi sesle düzenle” ile aynı). Metin argüman olarak veya standart girdiden verilir"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Viết lại văn bản theo chỉ dẫn (giống “Sửa vùng chọn bằng giọng nói”). Truyền văn bản qua đối số hoặc stdin"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按指示改写文本（与“用语音编辑所选内容”相同）。文本通过参数或标准输入传入"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "依指示改寫文字（與「用語音編輯選取內容」相同）。文字透過引數或標準輸入傳入"
           }
         }
       }
@@ -73645,6 +77623,108 @@
         }
       }
     },
+    "書き換えの指示を指定してください。" : {
+      "comment" : "HanasuAICommands.swift:399",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حدّد تعليمات إعادة الكتابة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gib eine Anweisung zum Umschreiben an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specify the rewrite instruction."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indica la instrucción de reescritura."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indiquez l’instruction de réécriture."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "दोबारा लिखने का निर्देश दें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tentukan instruksi penulisan ulang."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specifica l'istruzione di riscrittura."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "고쳐 쓸 지시를 지정하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podaj polecenie przepisania."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indique a instrução de reescrita."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Укажите инструкцию для переписывания."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeniden yazma talimatını belirtin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy chỉ định chỉ dẫn viết lại."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请指定改写的指示。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請指定改寫的指示。"
+          }
+        }
+      }
+    },
     "書き換えました（⌘Z で元に戻せます）" : {
       "comment" : "EditModeController.swift:379",
       "extractionState" : "manual",
@@ -74870,7 +78950,7 @@
       }
     },
     "期間の指定: 7d・24h・2w（今からさかのぼる）、日付（例: 2026-11-01）" : {
-      "comment" : "HanasuCommand.swift:313, HanasuMeetingsCommand.swift:438",
+      "comment" : "HanasuCommand.swift:424, HanasuMeetingsCommand.swift:436",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75278,7 +79358,7 @@
       }
     },
     "未設定" : {
-      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274",
+      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274, HanasuDoctorCommand.swift:55",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79153,6 +83233,108 @@
         }
       }
     },
+    "環境変数 %@" : {
+      "comment" : "HanasuAICommands.swift:122",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متغير البيئة %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umgebungsvariable %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Environment variable %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variable de entorno %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variable d’environnement %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एनवायरनमेंट वेरिएबल %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variabel lingkungan %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variabile d'ambiente %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "환경 변수 %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmienna środowiskowa %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variável de ambiente %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переменная окружения %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ortam değişkeni"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biến môi trường %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "环境变量 %@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "環境變數 %@"
+          }
+        }
+      }
+    },
     "画面の文脈" : {
       "comment" : "ScreenContextSettingsView.swift:52",
       "extractionState" : "manual",
@@ -80582,7 +84764,7 @@
       }
     },
     "知らないオプションです: %@" : {
-      "comment" : "HanasuCommand.swift:200",
+      "comment" : "HanasuCommand.swift:251",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80684,7 +84866,7 @@
       }
     },
     "知らないコマンドです: %@" : {
-      "comment" : "HanasuCommand.swift:92, HanasuMeetingsCommand.swift:26",
+      "comment" : "HanasuAICommands.swift:439, HanasuCommand.swift:143, HanasuMeetingsCommand.swift:26",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81397,8 +85579,314 @@
         }
       }
     },
+    "管理者のポリシー:" : {
+      "comment" : "HanasuDoctorCommand.swift:87",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سياسة المسؤول:"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrator-Richtlinien:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrator policy:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Políticas del administrador:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Règles de l’administrateur :"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एडमिनिस्ट्रेटर की नीति:"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kebijakan administrator:"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Criteri dell'amministratore:"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관리자 정책:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasady administratora:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Políticas do administrador:"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Политики администратора:"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yönetici ilkeleri:"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chính sách của quản trị viên:"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理员的策略："
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理員的政策："
+          }
+        }
+      }
+    },
+    "管理者のポリシー: なし" : {
+      "comment" : "HanasuDoctorCommand.swift:85",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سياسة المسؤول: لا توجد"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrator-Richtlinien: keine"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrator policy: none"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Políticas del administrador: ninguna"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Règles de l’administrateur : aucune"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एडमिनिस्ट्रेटर की नीति: कोई नहीं"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kebijakan administrator: tidak ada"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Criteri dell'amministratore: nessuno"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관리자 정책: 없음"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasady administratora: brak"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Políticas do administrador: nenhuma"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Политики администратора: нет"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yönetici ilkeleri: yok"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chính sách của quản trị viên: không có"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理员的策略：无"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理員的政策：無"
+          }
+        }
+      }
+    },
+    "管理者のポリシーで、%@ は使えないようにされています（%@）。" : {
+      "comment" : "HanasuAICommands.swift:43",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عطّلت سياسة المسؤول %@ (%@)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ wurde von deinem Administrator per Richtlinie deaktiviert (%@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ has been disabled by your administrator's policy (%@)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El administrador ha desactivado %@ mediante una política (%@)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ a été désactivé par une règle de votre administrateur (%@)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एडमिनिस्ट्रेटर की नीति के कारण %@ बंद कर दिया गया है (%@)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ dinonaktifkan oleh kebijakan administrator (%@)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ è stato disattivato da un criterio dell'amministratore (%@)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관리자 정책에 따라 %@을(를) 사용할 수 없습니다(%@)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zasady administratora blokują użycie %@ (%@)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O uso de %@ foi bloqueado por uma política do administrador (%@)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использование %@ запрещено политикой администратора (%@)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ yönetici ilkesiyle devre dışı bırakılmış (%@)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ đã bị tắt theo chính sách của quản trị viên (%@)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理员的策略已禁用 %@（%@）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理員的政策已停用 %@（%@）。"
+          }
+        }
+      }
+    },
     "管理者のポリシーで、hanasu コマンドは使えないようにされています（%@）。" : {
-      "comment" : "HanasuCommand.swift:70",
+      "comment" : "HanasuCommand.swift:111",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82214,7 +86702,7 @@
       }
     },
     "終了コード: 0 成功、1 失敗、2 使い方の誤り、3 認証情報がない、4 会議が見つからない、5 ポリシーか権限で止められた" : {
-      "comment" : "HanasuCommand.swift:315",
+      "comment" : "HanasuCommand.swift:426",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82304,13 +86792,13 @@
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "退出代码：0 成功，1 失败，2 用法错误，3 缺少认证信息，4 找不到会议，5 被策略或权限阻止"
+            "value" : "退出代码：0 成功，1 失败，2 用法错误，3 缺少凭据，4 找不到会议，5 被策略或权限阻止"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "結束代碼：0 成功，1 失敗，2 用法錯誤，3 缺少驗證資訊，4 找不到會議，5 被政策或權限阻擋"
+            "value" : "結束代碼：0 成功，1 失敗，2 用法錯誤，3 缺少憑證，4 找不到會議，5 被政策或權限阻擋"
           }
         }
       }
@@ -86294,7 +90782,7 @@
       }
     },
     "見つかりませんでした。" : {
-      "comment" : "HanasuMeetingsCommand.swift:157",
+      "comment" : "HanasuMeetingsCommand.swift:155",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87722,7 +92210,7 @@
       }
     },
     "記録中" : {
-      "comment" : "HanasuMeetingsCommand.swift:327, MeetingWindow.swift:121, MeetingWindow.swift:241",
+      "comment" : "HanasuMeetingsCommand.swift:325, MeetingWindow.swift:121, MeetingWindow.swift:241",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91189,6 +95677,108 @@
         }
       }
     },
+    "認証情報:" : {
+      "comment" : "HanasuDoctorCommand.swift:75",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بيانات الاعتماد:"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugangsdaten:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credentials:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credenciales:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identifiants :"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "क्रेडेंशियल:"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kredensial:"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credenziali:"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인증 정보:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dane uwierzytelniające:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credenciais:"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Учётные данные:"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kimlik bilgileri:"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thông tin xác thực:"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "凭据："
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "憑證："
+          }
+        }
+      }
+    },
     "認証方法" : {
       "comment" : "AISettingsView.swift:267",
       "extractionState" : "manual",
@@ -91904,7 +96494,7 @@
       }
     },
     "議事録 %@ 行目: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:311",
+      "comment" : "HanasuMeetingsCommand.swift:309",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92108,7 +96698,7 @@
       }
     },
     "議事録なし" : {
-      "comment" : "HanasuMeetingsCommand.swift:320",
+      "comment" : "HanasuMeetingsCommand.swift:318",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95780,7 +100370,7 @@
       }
     },
     "質問に使える会議の記録がありません。" : {
-      "comment" : "MeetingAsk.swift:170",
+      "comment" : "HanasuAICommands.swift:274, MeetingAsk.swift:189",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95877,6 +100467,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有可用於提問的會議記錄。"
+          }
+        }
+      }
+    },
+    "質問を指定してください。" : {
+      "comment" : "HanasuAICommands.swift:251",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حدّد السؤال."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gib eine Frage an."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specify a question."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indica la pregunta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indiquez la question."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कृपया सवाल दें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masukkan pertanyaan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specifica la domanda."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "질문을 지정하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podaj pytanie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indique a pergunta."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Укажите вопрос."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soruyu belirtin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy nhập câu hỏi."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请指定问题。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請指定問題。"
           }
         }
       }
@@ -96591,6 +101283,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "尋找辭典候選"
+          }
+        }
+      }
+    },
+    "辞書の置き換えルールだけを当てる（AI には送らない）" : {
+      "comment" : "HanasuCommand.swift:410",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تطبيق قواعد الاستبدال في القاموس فقط (دون الإرسال إلى AI)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur die Ersetzungsregeln des Wörterbuchs anwenden (nichts wird an die KI gesendet)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply only the dictionary replacement rules (nothing is sent to the AI)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplica solo las reglas de sustitución del diccionario (no se envía a la IA)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appliquer uniquement les règles de remplacement du dictionnaire (rien n’est envoyé à l’IA)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सिर्फ़ शब्दकोश के बदलने के नियम लागू करें (AI को नहीं भेजा जाता)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanya terapkan aturan penggantian kamus (tidak dikirim ke AI)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applica solo le regole di sostituzione del dizionario (non invia nulla all'IA)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사전의 치환 규칙만 적용(AI에는 보내지 않음)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zastosuj tylko reguły zamiany ze słownika (bez wysyłania do AI)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplica só as regras de substituição do dicionário (sem enviar à IA)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Применить только правила замены из словаря (без отправки в AI)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yalnızca sözlüğün değiştirme kurallarını uygular (AI’ye göndermez)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chỉ áp dụng quy tắc thay thế của từ điển (không gửi cho AI)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅应用词典的替换规则（不发送给 AI）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "僅套用辭典的取代規則（不傳送給 AI）"
           }
         }
       }
@@ -97713,6 +102507,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "向 AI 詢問過去的會議"
+          }
+        }
+      }
+    },
+    "過去の会議について AI に質問する（関係する会議の中身を、会議の AI に送る）" : {
+      "comment" : "HanasuCommand.swift:389",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "طرح سؤال على AI حول الاجتماعات السابقة (يُرسَل محتوى الاجتماعات ذات الصلة إلى AI المخصص للاجتماعات)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der KI Fragen zu früheren Meetings stellen (der Inhalt relevanter Meetings wird an die KI für Meetings gesendet)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ask the AI about past meetings (the relevant meetings' contents are sent to the AI configured for meetings)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pregunta a la IA sobre reuniones pasadas (el contenido de las reuniones relevantes se envía a la IA de reuniones)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interroger l’IA sur des réunions passées (le contenu des réunions concernées est envoyé à l’IA des réunions)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पिछली मीटिंग के बारे में AI से सवाल पूछें (संबंधित मीटिंग की सामग्री मीटिंग वाले AI को भेजी जाती है)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanya AI tentang rapat sebelumnya (isi rapat terkait dikirim ke AI untuk rapat)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fai domande all'IA sulle riunioni passate (il contenuto delle riunioni pertinenti viene inviato all'IA delle riunioni)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난 회의에 대해 AI에 질문(관련 회의 내용을 회의용 AI에 보냄)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zadaj AI pytanie o wcześniejsze spotkania (treść powiązanych spotkań trafia do AI ustawionego dla spotkań)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faz uma pergunta à IA sobre reuniões anteriores (envia o conteúdo das reuniões relevantes à IA das reuniões)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задать AI вопрос о прошлых встречах (содержимое подходящих встреч отправляется в AI для встреч)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geçmiş toplantılar hakkında AI’ye soru sorar (ilgili toplantıların içeriği toplantılar için ayarlanan AI’ye gönderilir)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hỏi AI về các cuộc họp trước (gửi nội dung các cuộc họp liên quan cho AI dùng cho cuộc họp)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "就过去的会议向 AI 提问（将相关会议的内容发送给会议使用的 AI）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "就過去的會議向 AI 提問（將相關會議的內容傳送給會議使用的 AI）"
           }
         }
       }
@@ -102919,6 +107815,108 @@
         }
       }
     },
+    "音声入力と同じように文章を整える（--translate なら翻訳する）。文章は引数か標準入力で渡す" : {
+      "comment" : "HanasuCommand.swift:396",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنقيح النص كما في الإدخال الصوتي (أو ترجمته مع --translate). يُمرَّر النص عبر وسيط أو الإدخال القياسي (stdin)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text wie beim Diktat überarbeiten (mit --translate übersetzen). Der Text wird als Argument oder über die Standardeingabe übergeben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refine text the same way as dictation (or translate it with --translate). Pass the text as an argument or via stdin"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pule el texto igual que el dictado (con --translate, lo traduce). El texto se pasa como argumento o por la entrada estándar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre en forme le texte comme la dictée (ou le traduire avec --translate). Le texte est passé en argument ou sur l’entrée standard"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "वॉइस इनपुट की तरह टेक्स्ट सुधारें (--translate देने पर अनुवाद करें)। टेक्स्ट आर्ग्युमेंट या stdin से दें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapikan teks seperti dikte (terjemahkan jika ada --translate). Teks diberikan lewat argumen atau stdin"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rifinisce il testo come la dettatura (con --translate lo traduce). Il testo si passa come argomento o dallo standard input"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "음성 입력과 같은 방식으로 텍스트 다듬기(--translate를 붙이면 번역). 텍스트는 인수나 표준 입력으로 전달"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zredaguj tekst tak jak przy dyktowaniu (z --translate — przetłumacz). Tekst przekaż jako argument lub przez standardowe wejście"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refina o texto como no ditado (com --translate, traduz). Passe o texto como argumento ou pela entrada padrão"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обработать текст так же, как при диктовке (с --translate — перевести). Текст передаётся аргументом или через стандартный ввод"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metni dikteyle aynı şekilde iyileştirir (--translate ile çevirir). Metin argüman olarak veya standart girdiden verilir"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chỉnh sửa văn bản như khi nhập bằng giọng nói (dịch nếu có --translate). Truyền văn bản qua đối số hoặc stdin"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "像语音输入一样润色文本（使用 --translate 时进行翻译）。文本通过参数或标准输入传入"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "像語音輸入一樣潤飾文字（使用 --translate 時進行翻譯）。文字透過引數或標準輸入傳入"
+          }
+        }
+      }
+    },
     "音声入力の履歴をすべて削除しますか？" : {
       "comment" : "DictationHistoryWindow.swift:659",
       "extractionState" : "manual",
@@ -104246,7 +109244,7 @@
       }
     },
     "（ほかのアプリにはパスワードを求める）" : {
-      "comment" : "Keychain.swift:208",
+      "comment" : "Keychain.swift:219",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105062,7 +110060,7 @@
       }
     },
     "（項目がないか、ACL を読めません）" : {
-      "comment" : "Keychain.swift:181",
+      "comment" : "Keychain.swift:192",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

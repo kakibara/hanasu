@@ -495,6 +495,20 @@
 - 実装の場所: `HanasuMeetingsCommand.meetingsDirectory`
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
 
+### REQ-MTG-126 `hanasu ask` で、過去の会議について質問する
+- 内容: `hanasu ask "<質問>"` で、アプリの「会議に質問」（REQ-MTG-016）と同じ集め方・同じプロンプトで、会議の AI（REQ-COM-024）に聞き、答えと、引用した会議を出す。`--since` / `--until` で対象の期間をはっきり指定でき、指定したときは質問文の中の期間の語（「先週」など）より優先する。議事録に使わない発言は送らない（DEC-MTG-121）。
+- 受け入れ条件:
+  - stdout に答えと、AI に渡した会議（`M1` などの番号・slug・タイトル。引用されたものに印）を出す。`--json` で `question`・`answer`・`ai`（`provider`・`model`）・`period`（`since`・`until`）・`sources`（`ref`・`cited`・`matched`・`meeting`）を出す。
+  - `--since 2026-11-01` のとき、それより前の会議は AI に送らない。期間に使える会議がなければ、AI に送らずに終了コード 4。
+  - 除いた発言・オフレコの発言は、AI に送る内容に入らない。
+  - `--show-prompt` で、AI に送る内容を stderr に出す。
+  - AI が失敗したときは、stdout に何も出さずに終了コード 1（認証情報がなければ 3）。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の M5）
+- 関係する要件: REQ-MTG-016, REQ-COM-186
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuAICommands.runAsk`、`MeetingAsk.gatherContext`（`Options.period`・検索の仕方）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（偽の `fm` に送られた内容で確かめる）
+
 ---
 
 ## 設計判断
@@ -1262,6 +1276,14 @@
 - 関係する要件: REQ-MTG-123, REQ-MTG-120
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
 - 実装の場所: `MeetingSearchIndex.scan`、`MeetingSearchIndex.searchUnits`、`MeetingStore.loadAll(in:)`
+
+### DEC-MTG-124 `hanasu ask` で期間を指定したら、その期間の会議だけを使い、会議は索引を作らずに集める
+- 決めたこと: `--since` / `--until` を指定したときは、その期間の会議だけを使い、使える会議がなければ AI に送らずに終了コード 4 にする（`MeetingAsk.Options.period`）。質問文の語から決めた期間（`MeetingAsk.period`）は、今までどおり、期間に会議がなければ絞らない。会議を集める検索は、アプリの索引の代わりに、索引を作らずに順に調べる検索（DEC-MTG-123 の `MeetingSearchIndex.scan`）を `gatherContext` に渡す。会議は、議事録に使わない発言を除いてから渡す。
+- 理由: はっきり指定した期間はユーザーの意図なので、期間の外の会議を外の AI に送らない。質問文の期間の語は日本語でしか読めない（FUT-014）ので、ほかの言語でも期間を絞れるようにする。`hanasu` は呼ぶたびに索引を作り直すことになり、1,000 件では索引を作るだけで 2 秒を超える（DEC-MTG-123）。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の M5）
+- 関係する要件: REQ-MTG-126, REQ-MTG-016
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `MeetingAsk.gatherContext`、`HanasuAICommands.runAsk`
 
 ---
 

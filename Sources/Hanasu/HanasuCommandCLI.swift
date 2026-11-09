@@ -6,6 +6,8 @@ import Foundation
 //   Hanasu --bench-hanasu-command [件数]   架空の会議（既定 1,000 件）で、list / show / search / actions の時間を測る
 // 確かめ方: REQ-COM-180, REQ-COM-181, REQ-COM-182, REQ-COM-183, REQ-COM-184, REQ-COM-185
 // 確かめ方: REQ-MTG-120, REQ-MTG-121, REQ-MTG-122, REQ-MTG-123, REQ-MTG-124, REQ-MTG-125
+// 確かめ方: REQ-COM-186, REQ-COM-187, REQ-COM-188, REQ-MTG-126, REQ-DIC-160, REQ-DIC-161, REQ-DIC-162
+// AI を使うコマンドは、偽の fm（HANASU_FM_PATH。--ai apple）に送られた内容で確かめ、ネットワークには何も送らない
 enum HanasuCommandCLI {
     static func runIfRequested() {
         let args = CommandLine.arguments
@@ -37,7 +39,8 @@ enum HanasuCommandCLI {
     }
 
     /// 実行ファイルを子プロセスとして呼ぶ（表示の言語は日本語に固定する）
-    static func call(_ executable: URL, _ arguments: [String], environment: [String: String] = [:], language: String = "ja") -> Result {
+    static func call(_ executable: URL, _ arguments: [String], environment: [String: String] = [:], language: String = "ja",
+                     stdin: String? = nil, timeout: TimeInterval = 120) -> Result {
         let process = Process()
         process.executableURL = executable
         process.arguments = arguments + ["-AppleLanguages", "(\(language))"]
@@ -48,8 +51,17 @@ enum HanasuCommandCLI {
         let out = Pipe(), err = Pipe()
         process.standardOutput = out
         process.standardError = err
-        process.standardInput = FileHandle.nullDevice
+        let input = Pipe()
+        process.standardInput = stdin == nil ? FileHandle.nullDevice : input
         do { try process.run() } catch { return Result(status: -1, stdout: "", stderr: "\(error)") }
+        if let stdin {
+            input.fileHandleForWriting.write(Data(stdin.utf8))
+            try? input.fileHandleForWriting.close()
+        }
+        // 止まったまま（キーチェーンのパスワードの確認など）にならないよう、時間を切る
+        DispatchQueue.global().asyncAfter(deadline: .now() + timeout) { [process] in
+            if process.isRunning { process.terminate() }
+        }
         let outData = out.fileHandleForReading.readDataToEndOfFile()
         let errData = err.fileHandleForReading.readDataToEndOfFile()
         process.waitUntilExit()
@@ -273,6 +285,8 @@ enum HanasuCommandCLI {
             check(false, "テスト用の .app を作れない: \(error)")
         }
 
+        runAITests(exe: exe, root: root, base: base, link: link)
+
         // 書き換えない（REQ-COM-183）
         check(fingerprints(base) == before, "どのコマンドも meeting.json を書き換えない（処理中の会議も「失敗」にしない）")
 
@@ -307,6 +321,194 @@ enum HanasuCommandCLI {
 
         print(failures == 0 ? "すべて OK" : "NG が \(failures) 件")
         exit(failures == 0 ? 0 : 1)
+    }
+
+    // MARK: - AI を使うコマンド（段階 2）
+
+    private static func runAITests(exe: URL, root: URL, base: URL, link: URL) {
+        let fm = FileManager.default
+        let dir = ["--meetings-dir", base.path]
+        // 偽の fm: 送られた指示と本文をファイルに書き、FAKE_FM_OUTPUT を返す（FAKE_FM_FAIL なら失敗する）
+        let fake = root.appendingPathComponent("fm")
+        let log = root.appendingPathComponent("fm-prompt.txt")
+        let systemLog = root.appendingPathComponent("fm-system.txt")
+        let script = """
+        #!/bin/sh
+        printf '%s' "$3" > "$FAKE_FM_SYSTEM"
+        printf '%s' "$4" > "$FAKE_FM_LOG"
+        if [ -n "$FAKE_FM_FAIL" ]; then echo "fake failure" >&2; exit 3; fi
+        printf '%s\\n' "${FAKE_FM_OUTPUT:-整えた文章です。}"
+        """
+        try? Data(script.utf8).write(to: fake)
+        try? fm.setAttributes([.posixPermissions: 0o755], ofItemAtPath: fake.path)
+        let models = root.appendingPathComponent("Models", isDirectory: true)
+        let ai: [String: String] = [
+            "HANASU_FM_PATH": fake.path, "FAKE_FM_LOG": log.path, "FAKE_FM_SYSTEM": systemLog.path,
+            "ANTHROPIC_API_KEY": "", "GEMINI_API_KEY": "", "GEMINI_SERVICE_ACCOUNT_JSON": "",
+            "HANASU_MODELS_DIR": models.path,
+        ]
+        func sent() -> String { (try? String(contentsOf: log, encoding: .utf8)) ?? "" }
+        func clearLog() { try? fm.removeItem(at: log) }
+        let historyFile = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("Hanasu/History/history.json")
+        func historyStamp() -> String {
+            let attributes = try? fm.attributesOfItem(atPath: historyFile.path)
+            return "\((attributes?[.size] as? Int) ?? -1) \((attributes?[.modificationDate] as? Date)?.timeIntervalSince1970 ?? 0)"
+        }
+        let historyBefore = historyStamp()
+
+        // ask（REQ-MTG-126）
+        var env = ai
+        env["FAKE_FM_OUTPUT"] = "来期の予算案をまとめます（M1: 予算の定例）"
+        clearLog()
+        let ask = call(exe, ["ask", "予算はどうなった", "--ai", "apple", "--json"] + dir, environment: env)
+        let sources = ask.json?["sources"] as? [[String: Any]] ?? []
+        let firstSource = sources.first
+        check(ask.status == 0 && (ask.json?["answer"] as? String)?.contains("予算案") == true, "ask は答えを出す（\(ask.stderr)）")
+        check(firstSource?["ref"] as? String == "M1" && firstSource?["cited"] as? Bool == true
+              && (firstSource?["meeting"] as? [String: Any])?["slug"] as? String == "2026-10-01_0900",
+              "ask は AI に渡した会議と、引用されたかを出す")
+        check((ask.json?["ai"] as? [String: Any])?["provider"] as? String == "apple", "ask の JSON に使った AI")
+        check(sent().contains("予算の定例") && sent().contains("予算はどうなった"), "ask は会議と質問を AI に送る")
+        check(!sent().contains("ひみつのことば") && !sent().contains("オフレコの雑談"), "ask は除いた発言・オフレコの発言を送らない")
+        let askText = call(exe, ["ask", "予算", "--ai", "apple"] + dir, environment: env)
+        check(askText.status == 0 && askText.stdout.contains("* M1  2026-10-01_0900"), "ask の文字の出力に、引用した会議の印と ID")
+        clearLog()
+        let ranged = call(exe, ["ask", "予算", "--since", "2026-10-02", "--ai", "apple", "--json"] + dir, environment: env)
+        let rangedSlugs = (ranged.json?["sources"] as? [[String: Any]] ?? []).compactMap { ($0["meeting"] as? [String: Any])?["slug"] as? String }
+        check(ranged.status == 0 && !rangedSlugs.isEmpty && !rangedSlugs.contains("2026-10-01_0900") && !sent().contains("予算の定例"),
+              "ask --since の前の会議は AI に送らない（\(rangedSlugs)）")
+        check((ranged.json?["period"] as? [String: Any])?["source"] as? String == "option", "ask の JSON に、指定した期間")
+        clearLog()
+        let empty = call(exe, ["ask", "予算", "--since", "2026-12-01", "--ai", "apple"] + dir, environment: env)
+        check(empty.status == 4 && empty.stdout.isEmpty && !fm.fileExists(atPath: log.path), "期間に会議がなければ AI に送らずに 4")
+        var failing = env
+        failing["FAKE_FM_FAIL"] = "1"
+        let askFailed = call(exe, ["ask", "予算", "--ai", "apple"] + dir, environment: failing)
+        check(askFailed.status == 1 && askFailed.stdout.isEmpty, "ask で AI が失敗したら 1 で、stdout に何も出さない")
+        check(call(exe, ["ask"] + dir, environment: env).status == 2, "質問がなければ 2")
+        let askPrompt = call(exe, ["ask", "予算", "--ai", "apple", "--show-prompt"] + dir, environment: env)
+        check(askPrompt.stderr.contains("<question>") && !askPrompt.stdout.contains("<question>"), "--show-prompt は送る内容を stderr に出す")
+
+        // refine（REQ-DIC-160）
+        clearLog()
+        let piped = call(exe, ["refine", "--ai", "apple"], environment: ai, stdin: "えーと、明日は10時からです\n")
+        check(piped.status == 0 && piped.stdout == "整えた文章です。\n" && piped.stderr.isEmpty, "refine は stdin の文章を整え、stdout に結果だけを出す（\(piped.stderr)）")
+        check(sent().contains("えーと、明日は10時からです"), "refine は文章を AI に送る")
+        let refineJSON = call(exe, ["refine", "明日は10時", "--ai", "apple", "--json"], environment: ai)
+        check(refineJSON.json?["text"] as? String == "整えた文章です。" && refineJSON.json?["fallback"] as? Bool == false
+              && refineJSON.json?["translation"] is NSNull, "refine --json の形")
+        let translated = call(exe, ["refine", "明日は10時", "--ai", "apple", "--translate", "en", "--json"], environment: ai)
+        check(translated.json?["translation"] as? String == "en", "refine --translate en で翻訳する")
+        let plain = call(exe, ["refine", "明日は10時です", "--ai", "apple", "--style", "none"], environment: ai)
+        let plainPrompt = sent()
+        check(plain.status == 0, "--style none を受け付ける（\(plain.stderr)）")
+        _ = call(exe, ["refine", "明日は10時です", "--ai", "apple", "--style", "email"], environment: ai)
+        check(plain.status == 0 && sent() != plainPrompt, "--style email で、メールの文体のルールを足して送る")
+        check(call(exe, ["refine", "x", "--style", "poem"], environment: ai).status == 2, "知らない文体は 2")
+        check(call(exe, ["refine", "x", "--translate", "zz"], environment: ai).status == 2, "知らない言語は 2")
+        check(call(exe, ["refine", "x", "--ai", "foo"], environment: ai).status == 2, "知らない AI は 2")
+        let both = call(exe, ["refine", "引数", "--ai", "apple"], environment: ai, stdin: "標準入力")
+        check(both.status == 2 && both.stdout.isEmpty, "引数と stdin の両方があれば 2")
+        check(call(exe, ["refine", "--ai", "apple"], environment: ai).status == 2, "文章がなければ 2")
+        let long = call(exe, ["refine", "--ai", "apple"], environment: ai, stdin: String(repeating: "あ", count: HanasuTextInput.maxLength + 1))
+        check(long.status == 2, "\(HanasuTextInput.maxLength) 文字を超える文章は 2")
+        let failed = call(exe, ["refine", "明日は10時", "--ai", "apple"], environment: failing)
+        check(failed.status == 1 && failed.stdout.isEmpty && failed.stderr.contains("fake failure"), "AI が失敗したら 1 で、stdout に何も出さない")
+        let fallback = call(exe, ["refine", "明日は10時", "--ai", "apple", "--fallback-raw"], environment: failing)
+        check(fallback.status == 0 && fallback.stdout == "明日は10時\n" && !fallback.stderr.isEmpty, "--fallback-raw なら原文を出して 0")
+        var noFM = ai
+        noFM["HANASU_FM_PATH"] = root.appendingPathComponent("no-fm").path
+        let noCredentials = call(exe, ["refine", "明日は10時", "--ai", "apple"], environment: noFM)
+        check(noCredentials.status == 3 && noCredentials.stdout.isEmpty, "AI を使えなければ（fm がない）3")
+        let noClaude = call(exe, ["refine", "明日は10時", "--ai", "claude"], environment: ai.merging(["HANASU_KEYCHAIN_SERVICE": "dev.mactypeless.Hanasu.selftest-none"]) { _, new in new })
+        check(noClaude.status == 3 && noClaude.stderr.contains("Claude"), "Claude のキーがなければ、送らずに 3")
+
+        // edit（REQ-DIC-161）
+        clearLog()
+        let edit = call(exe, ["edit", "丁寧にして", "明日来て", "--ai", "apple"], environment: ai)
+        check(edit.status == 0 && sent().contains("丁寧にして") && sent().contains("明日来て"), "edit は指示と文章を送って書き換える")
+        let editPiped = call(exe, ["edit", "丁寧にして", "--ai", "apple"], environment: ai, stdin: "明日来て")
+        check(editPiped.status == 0, "edit の文章は stdin でもよい")
+        check(call(exe, ["edit", "--ai", "apple"], environment: ai).status == 2, "edit の指示がなければ 2")
+        let editFallback = call(exe, ["edit", "丁寧にして", "明日来て", "--ai", "apple", "--fallback-raw"], environment: failing)
+        check(editFallback.status == 0 && editFallback.stdout == "明日来て\n", "edit --fallback-raw は元の文章を出す")
+
+        // dict apply（REQ-DIC-162）
+        let dict = call(exe, ["dict", "apply", "--json"], environment: ai, stdin: "辞書に当たらない文章")
+        check(dict.status == 0 && dict.json?["text"] as? String == "辞書に当たらない文章", "dict apply は辞書だけを当てて出す")
+        check(call(exe, ["dict"], environment: ai).status == 2, "dict だけなら 2")
+        let dictRules = UserDictionary(text: "はなす => Hanasu")
+        check(dictRules.apply(to: "はなすを使う") == "Hanasuを使う", "置き換えルールの当て方（dict apply と refine が使う UserDictionary.apply）")
+
+        // 履歴に残さない（REQ-DIC-160）
+        check(historyStamp() == historyBefore, "refine・edit のあとも、音声入力の履歴が変わらない")
+
+        // ローカルの AI をアプリと同時に使う（REQ-COM-187）
+        let llm = models.appendingPathComponent("llm", isDirectory: true)
+        try? fm.createDirectory(at: llm, withIntermediateDirectories: true)
+        func sleeper() -> Process? {
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/bin/sleep")
+            process.arguments = ["60"]
+            return (try? process.run()) == nil ? nil : process
+        }
+        if let owner = sleeper(), let server = sleeper(), let stale = sleeper() {
+            let dead = Process()
+            dead.executableURL = URL(fileURLWithPath: "/usr/bin/true")
+            try? dead.run()
+            dead.waitUntilExit()
+            let live = llm.appendingPathComponent("server-\(owner.processIdentifier).pid")
+            let leftover = llm.appendingPathComponent("server-\(dead.processIdentifier).pid")
+            try? "\(server.processIdentifier)\n/bin/sleep\n\(owner.processIdentifier)\n".write(to: live, atomically: true, encoding: .utf8)
+            try? "\(stale.processIdentifier)\n/bin/sleep\n\(dead.processIdentifier)\n".write(to: leftover, atomically: true, encoding: .utf8)
+            let busy = call(exe, ["refine", "明日は10時", "--ai", "local"], environment: ai)
+            check(busy.status == 1 && busy.stderr.contains("ローカルの AI を使っています") && server.isRunning && fm.fileExists(atPath: live.path),
+                  "ほかのプロセスのサーバーが動いていれば、起動せずに 1（そのサーバーと記録には触らない）")
+            setenv("HANASU_MODELS_DIR", models.path, 1)
+            LocalLLMServer.cleanUpStaleServer()
+            unsetenv("HANASU_MODELS_DIR")
+            stale.waitUntilExit()
+            check(!fm.fileExists(atPath: leftover.path) && fm.fileExists(atPath: live.path) && server.isRunning,
+                  "アプリの起動時の片付けは、持ち主が終わった記録のサーバーだけを止める")
+            for process in [owner, server, stale] where process.isRunning { process.terminate() }
+        } else {
+            check(false, "テスト用のプロセスを起動できない")
+        }
+
+        // 管理者のポリシーで使える AI を絞る（REQ-COM-188）
+        HanasuPolicy.testValues = [HanasuPolicy.Key.allowedAIProviders.rawValue: ["Local"]]
+        check(HanasuPolicy.allowedAIProviders == ["local"], "AllowedAIProviders は小文字にして読む")
+        let deniedCode = runSync { await HanasuCommand.run(["ask", "予算", "--ai", "gemini", "--meetings-dir", base.path]) }
+        check(deniedCode == .denied, "AllowedAIProviders にない AI は、送らずに 5")
+        HanasuPolicy.testValues = [HanasuPolicy.Key.allowedAIProviders.rawValue: [String]()]
+        let noneCode = runSync { await HanasuCommand.run(["ask", "予算", "--ai", "local", "--meetings-dir", base.path]) }
+        check(noneCode == .denied, "AllowedAIProviders が空なら、どの AI も 5")
+        HanasuPolicy.testValues = [HanasuPolicy.Key.allowedAIProviders.rawValue: "apple"]
+        check(HanasuPolicy.allowedAIProviders == ["apple"], "名前 1 つの文字列でも読む")
+        HanasuPolicy.testValues = nil
+
+        // doctor と、シンボリックリンク経由のキーチェーン（REQ-COM-186）
+        let doctor = call(link, ["doctor", "--json"] + dir, environment: ai)
+        check(doctor.status == 0 && (doctor.json?["meetingsDirectory"] as? [String: Any])?["status"] as? String == "readable"
+              && (doctor.json?["executable"] as? String) == exe.resolvingSymlinksInPath().path,
+              "doctor は会議のフォルダと、実行ファイルの実際のパスを出す")
+        let doctorText = call(exe, ["doctor"] + dir, environment: ai)
+        check(doctorText.status == 0 && doctorText.stdout.contains("Claude:") && doctorText.stdout.contains("Apple: "), "doctor の文字の出力に認証情報の欄")
+        let keep = call(exe, ["--keychain-selftest", "--keep"], timeout: 60)
+        if let line = keep.stdout.split(separator: "\n").first(where: { $0.hasPrefix("サービス名: ") }) {
+            let service = String(line.dropFirst("サービス名: ".count))
+            var keyEnv = ai
+            keyEnv["HANASU_KEYCHAIN_SERVICE"] = service
+            let viaLink = call(link, ["doctor", "--json"] + dir, environment: keyEnv, timeout: 30)
+            let claude = (viaLink.json?["credentials"] as? [String: Any])?["claude"] as? [String: Any]
+            check(claude?["source"] as? String == "keychain" && claude?["readable"] as? Bool == true,
+                  "シンボリックリンク経由でも、キーチェーンをパスワードなしで読める（\(claude?["problem"] ?? viaLink.stderr)）")
+            check(!viaLink.stdout.contains("sk-ant-selftest"), "doctor はキーの値を出さない")
+            _ = call(exe, ["--keychain-selftest-delete", service], timeout: 30)
+        } else {
+            check(false, "キーチェーンの一時的な項目を作れない（\(keep.stdout)\(keep.stderr)）")
+        }
     }
 
     private static func runSync<T: Sendable>(_ body: @escaping @Sendable () async -> T) -> T {
