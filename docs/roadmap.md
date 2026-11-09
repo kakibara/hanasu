@@ -31,6 +31,7 @@
 | FUT-106 | Whisper で録音中に途中経過を出す | 見送り | PR #17 |
 | FUT-107 | Gemini のストリーミング応答で、体感の待ち時間を短くする | 未着手 | 初版の「今後の拡張候補」 |
 | FUT-108 | Fn キー（Globe キー）でのトリガー | 未着手 | 初版の「今後の拡張候補」 |
+| FUT-109 | 声で Microsoft 365 Copilot に聞き、回答を読み上げる | 未着手（調査だけ。作るかは未定） | [plans/copilot-voice.md](plans/copilot-voice.md) |
 | FUT-201 | 会議アプリだけを録るモード | 未着手（フェーズ 2） | 初版のフェーズ分け |
 | FUT-202 | マイク側のエコーキャンセル | 未着手（フェーズ 2） | 初版のフェーズ分け |
 | FUT-203 | ボットモード（会議にボットを参加させて記録する） | 未着手（計画あり） | [plans/bot-mode.md](plans/bot-mode.md) |
@@ -159,6 +160,11 @@
 - 状態: 未着手
 - 中身: Fn キー（Globe キー）で録音を始める。`CGEventTap` が必要で、入力監視の権限が要る（Carbon の `RegisterEventHotKey` では Fn 単体を登録できない。DEC-DIC-011）。
 - 出どころ: 初版（a787da8）の「今後の拡張候補」
+
+### FUT-109 声で Microsoft 365 Copilot に聞き、回答を読み上げる
+- 状態: 未着手（調査だけ。作るかは未定）
+- 中身: ショートカットで話した質問を文字起こしし、Microsoft 365 Copilot の Chat API（Graph の `/beta`）か Work IQ API に送り、回答を読み上げる。個人向けの Copilot は公式の API がなく、規約が自動アクセスを禁じるので対象にしない。使う人ごとの Copilot のライセンスか Copilot Credits と、テナントの管理者の同意が要る。Hanasu には読み上げの機能がまだない。
+- 出どころ: ユーザーの依頼（2026-11-09）。詳しくは [plans/copilot-voice.md](plans/copilot-voice.md)
 
 ---
 
