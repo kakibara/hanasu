@@ -67,27 +67,8 @@ enum HanasuMeetingsCommand {
         let wantsActions = all || args.flags.contains("--actions")
 
         if args.flags.contains("--json") {
-            var object = summaryJSON(meeting)
-            object["speakers"] = meeting.speakers.map { speakerJSON(meeting, $0) }
-            if wantsMinutes {
-                object["minutes"] = HanasuJSON.optional(meeting.minutes)
-                object["minutesOutdated"] = meeting.minutesOutdated == true
-            }
-            if wantsTranscript {
-                object["transcript"] = transcriptBlocks(meeting).map { block -> [String: Any] in
-                    ["start": HanasuJSON.seconds(block.start), "end": HanasuJSON.seconds(block.end),
-                     "speaker": block.speaker, "speakerName": meeting.displayName(for: block.speaker), "text": block.text]
-                }
-                object["omittedUtteranceCount"] = meeting.utterances.count - meeting.usedUtterances.count
-            }
-            if wantsNotes {
-                object["notes"] = meeting.allNotes.map { note -> [String: Any] in
-                    ["kind": note.kind.rawValue, "time": HanasuJSON.optional(note.time.map(HanasuJSON.seconds)), "text": note.text]
-                }
-            }
-            if wantsActions {
-                object["actionItems"] = (meeting.actionItems ?? []).map(actionJSON)
-            }
+            let object = meetingJSON(meeting, minutes: wantsMinutes, transcript: wantsTranscript ? transcriptBlocks(meeting) : nil,
+                                     notes: wantsNotes, actions: wantsActions)
             try HanasuOutput.json(["meeting": object])
             return .ok
         }
@@ -146,10 +127,7 @@ enum HanasuMeetingsCommand {
         if let limit = try args.int("--limit") { results = Array(results.prefix(limit)) }
 
         if args.flags.contains("--json") {
-            try HanasuOutput.json(["query": query, "results": results.compactMap { result -> [String: Any]? in
-                guard let meeting = byID[result.meetingID] else { return nil }
-                return ["meeting": summaryJSON(meeting), "totalHits": result.totalHits, "hits": result.hits.map(hitJSON)]
-            }])
+            try HanasuOutput.json(["query": query, "results": results.compactMap { searchResultJSON($0, byID: byID) }])
             return .ok
         }
         if results.isEmpty { HanasuOutput.err(tr("見つかりませんでした。")) }
@@ -171,21 +149,10 @@ enum HanasuMeetingsCommand {
         if wantsHelp(args, "actions") { return .ok }
         try noPositionals(args)
         let period = try HanasuPeriod(args)
-        let owner = args.values["--owner"].map(MeetingSearchIndex.fold)
-        var items: [(Meeting, ActionItem)] = []
-        for meeting in try load(args) where period.contains(meeting.startedAt) {
-            for item in meeting.actionItems ?? [] {
-                if let owner, !MeetingSearchIndex.fold(item.owner ?? "").contains(owner) { continue }
-                items.append((meeting, item))
-            }
-        }
+        var items = actionItems(in: try load(args), period: period, owner: args.values["--owner"])
         if let limit = try args.int("--limit") { items = Array(items.prefix(limit)) }
         if args.flags.contains("--json") {
-            try HanasuOutput.json(["actionItems": items.map { meeting, item in
-                var object = actionJSON(item)
-                object["meeting"] = summaryJSON(meeting, brief: true)
-                return object
-            }])
+            try HanasuOutput.json(["actionItems": items.map(actionItemJSON)])
             return .ok
         }
         if items.isEmpty { HanasuOutput.err(tr("アクションアイテムはありません。")) }
@@ -201,6 +168,63 @@ enum HanasuMeetingsCommand {
         }
         if !lines.isEmpty { HanasuOutput.out(lines.joined(separator: "\n")) }
         return .ok
+    }
+
+    // MARK: - JSON（--json と MCP のツールで同じ形にする）
+
+    // 要件: REQ-MTG-121, REQ-MTG-127
+    /// 1 つの会議。transcript は出す発言（nil なら文字起こしを出さない）
+    static func meetingJSON(_ meeting: Meeting, minutes: Bool, transcript: [Utterance]?, notes: Bool, actions: Bool) -> [String: Any] {
+        var object = summaryJSON(meeting)
+        object["speakers"] = meeting.speakers.map { speakerJSON(meeting, $0) }
+        if minutes {
+            object["minutes"] = HanasuJSON.optional(meeting.minutes)
+            object["minutesOutdated"] = meeting.minutesOutdated == true
+        }
+        if let transcript {
+            object["transcript"] = transcript.map { transcriptEntryJSON(meeting, $0) }
+            object["omittedUtteranceCount"] = meeting.utterances.count - meeting.usedUtterances.count
+        }
+        if notes {
+            object["notes"] = meeting.allNotes.map { note -> [String: Any] in
+                ["kind": note.kind.rawValue, "time": HanasuJSON.optional(note.time.map(HanasuJSON.seconds)), "text": note.text]
+            }
+        }
+        if actions {
+            object["actionItems"] = (meeting.actionItems ?? []).map(actionJSON)
+        }
+        return object
+    }
+
+    static func transcriptEntryJSON(_ meeting: Meeting, _ block: Utterance) -> [String: Any] {
+        ["start": HanasuJSON.seconds(block.start), "end": HanasuJSON.seconds(block.end),
+         "speaker": block.speaker, "speakerName": meeting.displayName(for: block.speaker), "text": block.text]
+    }
+
+    // 要件: REQ-MTG-123, REQ-MTG-127
+    static func searchResultJSON(_ result: MeetingSearchResult, byID: [String: Meeting]) -> [String: Any]? {
+        guard let meeting = byID[result.meetingID] else { return nil }
+        return ["meeting": summaryJSON(meeting), "totalHits": result.totalHits, "hits": result.hits.map(hitJSON)]
+    }
+
+    // 要件: REQ-MTG-124, REQ-MTG-127
+    /// 会議をまたいだアクションアイテム（新しい会議から）。owner は担当の名前の一部（大文字・小文字と全角・半角を区別しない）
+    static func actionItems(in meetings: [Meeting], period: HanasuPeriod, owner: String?) -> [(Meeting, ActionItem)] {
+        let owner = owner.map(MeetingSearchIndex.fold)
+        var items: [(Meeting, ActionItem)] = []
+        for meeting in meetings where period.contains(meeting.startedAt) {
+            for item in meeting.actionItems ?? [] {
+                if let owner, !MeetingSearchIndex.fold(item.owner ?? "").contains(owner) { continue }
+                items.append((meeting, item))
+            }
+        }
+        return items
+    }
+
+    static func actionItemJSON(_ entry: (Meeting, ActionItem)) -> [String: Any] {
+        var object = actionJSON(entry.1)
+        object["meeting"] = summaryJSON(entry.0, brief: true)
+        return object
     }
 
     // MARK: - 会議を読む
@@ -220,7 +244,10 @@ enum HanasuMeetingsCommand {
     // 要件: REQ-COM-185
     /// 会議をすべて読む（新しい順）。フォルダを読む権限がなければ、終了コード 5 と、何を許可すればよいかを出す
     static func load(_ args: HanasuArguments) throws -> [Meeting] {
-        let directory = meetingsDirectory(args)
+        try load(directory: meetingsDirectory(args))
+    }
+
+    static func load(directory: URL) throws -> [Meeting] {
         do {
             return try MeetingStore.loadAll(in: directory)
         } catch {
@@ -399,9 +426,16 @@ struct HanasuPeriod {
     var until: Date?
 
     init(_ args: HanasuArguments, now: Date = Date()) throws {
-        since = try args.values["--since"].map { try Self.parse($0, option: "--since", endOfDay: false, now: now) }
-        until = try args.values["--until"].map { try Self.parse($0, option: "--until", endOfDay: true, now: now) }
+        try self.init(since: args.values["--since"], until: args.values["--until"], now: now)
     }
+
+    /// MCP のツールの引数（since・until）から。読めなければ使い方の誤り
+    init(since: String?, until: String?, now: Date = Date()) throws {
+        self.since = try since.map { try Self.parse($0, option: "--since", endOfDay: false, now: now) }
+        self.until = try until.map { try Self.parse($0, option: "--until", endOfDay: true, now: now) }
+    }
+
+    var isSpecified: Bool { since != nil || until != nil }
 
     func contains(_ date: Date) -> Bool {
         if let since, date < since { return false }

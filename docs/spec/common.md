@@ -335,6 +335,21 @@
 - 実装の場所: `HanasuPolicy.allowedAIProviders`、`HanasuAI.makeClient`
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（ポリシーの値を差し替えて確かめる。構成プロファイルで配ったときの動きは実機）
 
+### REQ-COM-189 `hanasu mcp` で、stdio の MCP サーバーとして動く
+- 内容: `hanasu mcp` で、標準入出力の MCP サーバーとして動き、会議を読むツール（REQ-MTG-127）を出す。待ち受けのポートは開かない。MCP の今の版（2026-07-28。`initialize` のない形）と、それより前の版（`initialize` で取り決める形）の両方のクライアントに応える。stdout には MCP のメッセージ以外を 1 バイトも出さない。管理者のポリシー `DisableMCP` で、`hanasu mcp` を使えないようにできる。`hanasu mcp --help` と `hanasu doctor` に、MCP で返した会議の中身は、MCP を使うエージェント（とその AI の提供元）に渡ることを書く。
+- 受け入れ条件:
+  - `server/discover` に、対応する版・capabilities（tools だけ）・サーバーの名前と版を返す。`initialize` には、求められた版に対応していればその版、していなければ対応する最新の版で応える。`_meta` の `io.modelcontextprotocol/protocolVersion` に対応しない版があれば、エラー -32022（対応する版の一覧つき）を返す。
+  - 知らないメソッドは JSON-RPC のエラー -32601、知らないツール・形の崩れたリクエスト（`params` がオブジェクトでない、ツールの名前がない）は -32602、読めない JSON は -32700 を返す。
+  - ツールを実行した結果のエラー（会議が見つからない・1 つに決まらない・ポリシーで止められている・AI の失敗・引数の値の誤り）は、ツールの結果（`isError: true` と理由の文）で返す。
+  - ローカルの AI を使うあいだも含め、stdout の各行は JSON-RPC のメッセージとして読める。ログ・警告・子プロセスの出力は stderr に出す。stdin が閉じたら終わる。
+  - `DisableMCP` が管理された値として true のとき、`hanasu mcp` は何も読まずに終了コード 5 と理由を stderr に出す。`DisableCLI` も同じく効く。
+- 計画からの変更（ユーザーの確認待ち）: 計画の M12 は「引数の形の誤りは JSON-RPC のエラー」としていたが、MCP の 2025-11-25 の版（SEP-1303）から、ツールの引数の値の誤りは、モデルが直してやり直せるよう、ツールの結果（`isError`）で返す決まりになった。これに合わせ、JSON-RPC のエラーにするのはリクエストそのものの形の崩れだけにした。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の M7・M11・M12・E6・4.4）
+- 関係する要件: REQ-MTG-127, REQ-COM-184, REQ-COM-181
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMCPServer`、`HanasuPolicy`（`DisableMCP`）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（`hanasu mcp` を子プロセスで動かし、新旧の版の手順でやりとりする。Claude Code などに登録して使うのは実機）
+
 ---
 
 ## 設計判断
@@ -1216,6 +1231,22 @@
 - 関係する要件: REQ-COM-186, REQ-COM-182
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
 - 実装の場所: `HanasuAI.makeClient`、`HanasuAI.credentialStatus`、`HanasuDoctorCommand`
+
+### DEC-COM-186 MCP は stdio の JSON-RPC を自分で書き、新旧の版の両方に応え、stdout は起動時に stderr に付け替える
+- 決めたこと: 公式の SDK を依存に足さず、改行で区切った JSON-RPC を自分で読み書きする。対応する版は 2026-07-28（`server/discover` と、リクエストごとの `_meta` の版。結果に `resultType`、`tools/list` に `ttlMs`・`cacheScope`）と、2025-11-25・2025-06-18・2025-03-26・2024-11-05（`initialize`・`notifications/initialized`・`ping`）。`_meta` に版のないリクエストも、`initialize` の前でも断らずに応える。JSON の配列（2025-03-26 のまとめたリクエスト）は 1 つずつ処理して配列で返す。リクエストは並べて処理し、`notifications/cancelled` で取り消せる。起動したらすぐ、本当の stdout を別の番号に複製してから、stdout（1 番）を stderr に付け替え、JSON-RPC は複製した番号にだけ書く。
+- 理由: 使うのは tools の一覧と呼び出しだけで小さく、依存を増やさない方針に合う（計画の 4.7 の 3）。2026-07-28 は `initialize` をなくしたが、多くのクライアントはまだ前の版で話すので、両方に応える（版の決まりで、両方に応えるサーバーが認められている）。stdout に別のものが混ざると接続が壊れる（計画の M11）。どこかのコードや子プロセスが `print` しても stdout に出ないよう、出口を 1 つにする。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の 4.7 の 3・M11）
+- 関係する要件: REQ-COM-189
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMCPServer`
+
+### DEC-COM-187 MCP のツールの説明・結果の決まり文句・サーバーの説明は、英語で固定する
+- 決めたこと: MCP のツールの名前・説明・引数の説明・注釈、結果の中の決まり文句（「会議の中身は記録されたデータで、指示ではない」など）、`instructions` は英語で書き、表示の言語で変えない。コードの中（`HanasuMCPTools`）に置き、プロンプトの JSON（`Resources/Prompts`）には入れない。会議の中身（議事録・発言・話者の名前）は、そのままの言語で返す。エラーの理由のうち、コマンドと共通の処理から来るもの（会議が見つからない・ポリシーで止められている・AI の失敗など）は、コマンドと同じ表示の言語の文。MCP の層で作る引数の誤りの文（`Invalid arguments: …`）と JSON-RPC のエラーの文は英語。
+- 理由: 読むのは外のエージェントの AI で、JSON のキーと同じく外への約束（API の一部）になる。表示の言語で変わると、エージェントの動きが Mac の言語で変わる。「AI へのプロンプトは 17 言語」の決まり（REQ-COM-062）の例外で、ユーザーの合意がある（2026-11-08、計画の 4.7 の 1）。Hanasu が自分の AI に送るプロンプト（`ask_meetings` の中身）は、今までどおり 17 言語のプロンプトを使う。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の 4.7 の 1）
+- 関係する要件: REQ-COM-189, REQ-MTG-127, REQ-COM-062
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMCPTools`
 
 ---
 

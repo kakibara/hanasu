@@ -104,7 +104,7 @@
       }
     },
     "# %@ — アクションアイテム" : {
-      "comment" : "HanasuMeetingsCommand.swift:122",
+      "comment" : "HanasuMeetingsCommand.swift:103",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -308,7 +308,7 @@
       }
     },
     "# %@ — 文字起こし" : {
-      "comment" : "HanasuMeetingsCommand.swift:341, MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:368, MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1634,7 +1634,7 @@
       }
     },
     "%@ には 1 以上の整数を指定してください: %@" : {
-      "comment" : "HanasuCommand.swift:278",
+      "comment" : "HanasuCommand.swift:276",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1736,7 +1736,7 @@
       }
     },
     "%@ には値が要ります。" : {
-      "comment" : "HanasuCommand.swift:248",
+      "comment" : "HanasuCommand.swift:246",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2246,7 +2246,7 @@
       }
     },
     "%@ の会議が %@ 件あります。ID で指定してください。" : {
-      "comment" : "HanasuMeetingsCommand.swift:261",
+      "comment" : "HanasuMeetingsCommand.swift:288",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2348,7 +2348,7 @@
       }
     },
     "%@ の値を読めません: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:435",
+      "comment" : "HanasuMeetingsCommand.swift:469",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6530,7 +6530,7 @@
       }
     },
     "%@（%@）" : {
-      "comment" : "HanasuDoctorCommand.swift:72, HanasuDoctorCommand.swift:72, LocalLLMModel.swift:31",
+      "comment" : "HanasuDoctorCommand.swift:75, HanasuDoctorCommand.swift:75, LocalLLMModel.swift:31",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6734,7 +6734,7 @@
       }
     },
     "%@（まだありません）" : {
-      "comment" : "HanasuDoctorCommand.swift:61",
+      "comment" : "HanasuDoctorCommand.swift:64",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6938,7 +6938,7 @@
       }
     },
     "%@（推測）" : {
-      "comment" : "HanasuMeetingsCommand.swift:357",
+      "comment" : "HanasuMeetingsCommand.swift:384",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7040,7 +7040,7 @@
       }
     },
     "%@（読めます）" : {
-      "comment" : "HanasuDoctorCommand.swift:57, HanasuDoctorCommand.swift:60",
+      "comment" : "HanasuDoctorCommand.swift:60, HanasuDoctorCommand.swift:63",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7142,7 +7142,7 @@
       }
     },
     "%@（読めません: %@）" : {
-      "comment" : "HanasuDoctorCommand.swift:56, HanasuDoctorCommand.swift:62",
+      "comment" : "HanasuDoctorCommand.swift:59, HanasuDoctorCommand.swift:65",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7244,7 +7244,7 @@
       }
     },
     "- 日時: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:342, MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:369, MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7346,7 +7346,7 @@
       }
     },
     "- 議事録に使わない発言（%@ 件）は含めていません" : {
-      "comment" : "HanasuMeetingsCommand.swift:345, MeetingModels.swift:129",
+      "comment" : "HanasuMeetingsCommand.swift:372, MeetingModels.swift:129",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7448,7 +7448,7 @@
       }
     },
     "- 長さ: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:343, MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:370, MeetingModels.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7754,7 +7754,7 @@
       }
     },
     "--json で、決まった形の JSON を出します。--meetings-dir <フォルダ>（か環境変数 HANASU_MEETINGS_DIR）で、会議のフォルダを変えられます。" : {
-      "comment" : "HanasuCommand.swift:425",
+      "comment" : "HanasuCommand.swift:455",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7856,7 +7856,7 @@
       }
     },
     "--since は --until より前にしてください。" : {
-      "comment" : "HanasuAICommands.swift:254",
+      "comment" : "HanasuAICommands.swift:254, HanasuAICommands.swift:292",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7958,7 +7958,7 @@
       }
     },
     "--style に知らない文体を指定しました: %@" : {
-      "comment" : "HanasuAICommands.swift:334",
+      "comment" : "HanasuAICommands.swift:355",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8060,7 +8060,7 @@
       }
     },
     "--translate に知らない言語を指定しました: %@" : {
-      "comment" : "HanasuAICommands.swift:341",
+      "comment" : "HanasuAICommands.swift:362",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8366,7 +8366,7 @@
       }
     },
     "<AI>: local・apple・gemini・claude（省くと設定の AI）。<文体>: none・chat・email・document-polite・document-plain。<言語>: en・ja・ko など" : {
-      "comment" : "HanasuCommand.swift:432",
+      "comment" : "HanasuCommand.swift:462",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8467,8 +8467,110 @@
         }
       }
     },
+    "<フォルダ>" : {
+      "comment" : "HanasuCommand.swift:423",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<المجلد>"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<Ordner>"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<folder>"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<carpeta>"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<dossier>"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<फ़ोल्डर>"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<folder>"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<cartella>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<폴더>"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<folder>"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<pasta>"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<папка>"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<klasör>"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<thư mục>"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<文件夹>"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "<檔案夾>"
+          }
+        }
+      }
+    },
     "<モデル>" : {
-      "comment" : "HanasuCommand.swift:366",
+      "comment" : "HanasuCommand.swift:373, HanasuCommand.swift:423",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8570,7 +8672,7 @@
       }
     },
     "<件数>" : {
-      "comment" : "HanasuCommand.swift:364",
+      "comment" : "HanasuCommand.swift:371",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8672,7 +8774,7 @@
       }
     },
     "<会議>" : {
-      "comment" : "HanasuCommand.swift:372",
+      "comment" : "HanasuCommand.swift:379",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8774,7 +8876,7 @@
       }
     },
     "<名前>" : {
-      "comment" : "HanasuCommand.swift:381",
+      "comment" : "HanasuCommand.swift:388",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8876,7 +8978,7 @@
       }
     },
     "<指示>" : {
-      "comment" : "HanasuCommand.swift:402",
+      "comment" : "HanasuCommand.swift:409",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8978,7 +9080,7 @@
       }
     },
     "<文体>" : {
-      "comment" : "HanasuCommand.swift:395",
+      "comment" : "HanasuCommand.swift:402",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9080,7 +9182,7 @@
       }
     },
     "<文章>" : {
-      "comment" : "HanasuCommand.swift:365",
+      "comment" : "HanasuCommand.swift:372",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9182,7 +9284,7 @@
       }
     },
     "<期間>" : {
-      "comment" : "HanasuCommand.swift:363",
+      "comment" : "HanasuCommand.swift:370",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9284,7 +9386,7 @@
       }
     },
     "<言語>" : {
-      "comment" : "HanasuCommand.swift:395",
+      "comment" : "HanasuCommand.swift:402",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9386,7 +9488,7 @@
       }
     },
     "<語>" : {
-      "comment" : "HanasuCommand.swift:374",
+      "comment" : "HanasuCommand.swift:381",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9488,7 +9590,7 @@
       }
     },
     "<質問>" : {
-      "comment" : "HanasuCommand.swift:388",
+      "comment" : "HanasuCommand.swift:395",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9590,7 +9692,7 @@
       }
     },
     "AI が失敗したときは何も出さずに終わります。--fallback-raw なら、整える前の文章を出します。--show-prompt で、AI に送る内容を標準エラー出力に出します。" : {
-      "comment" : "HanasuCommand.swift:433",
+      "comment" : "HanasuCommand.swift:463",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10712,7 +10814,7 @@
       }
     },
     "AI に渡した会議（* は答えで引用したもの）:" : {
-      "comment" : "HanasuAICommands.swift:309",
+      "comment" : "HanasuAICommands.swift:269",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11013,6 +11115,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法讀取 AI 的憑證。"
+          }
+        }
+      }
+    },
+    "AI エージェントから使う MCP サーバーとして動く（標準入出力）。会議を読むツールを出す" : {
+      "comment" : "HanasuCommand.swift:424",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التشغيل كخادم MCP لوكلاء AI (stdio). يوفّر أدوات لقراءة الاجتماعات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als MCP-Server für KI-Agenten laufen (stdio). Stellt Werkzeuge zum Lesen von Meetings bereit"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run as an MCP server for AI agents (stdio). Provides tools for reading meetings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Funciona como servidor MCP para agentes de IA (stdio). Ofrece herramientas para leer las reuniones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exécuter comme serveur MCP pour les agents IA (stdio), avec des outils pour lire les réunions"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI एजेंट के लिए MCP सर्वर के रूप में चलाएँ (stdio)। मीटिंग पढ़ने के टूल देता है"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jalankan sebagai server MCP untuk agen AI (stdio). Menyediakan alat untuk membaca rapat"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Funziona come server MCP per agenti IA (stdio). Offre strumenti per leggere le riunioni"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 에이전트에서 사용하는 MCP 서버로 실행(표준 입출력). 회의를 읽는 도구를 제공"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uruchom jako serwer MCP dla agentów AI (stdio). Udostępnia narzędzia do odczytu spotkań"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Executa como servidor MCP para agentes de IA (stdio). Oferece ferramentas para ler reuniões"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запустить как MCP-сервер для AI-агентов (stdio). Предоставляет инструменты для чтения встреч"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI ajanlarının kullanacağı bir MCP sunucusu olarak çalışır (stdio). Toplantıları okumaya yarayan araçlar sunar"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chạy như máy chủ MCP cho AI agent (stdio). Cung cấp công cụ để đọc cuộc họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "作为供 AI 智能体使用的 MCP 服务器运行（标准输入输出）。提供读取会议的工具"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "作為供 AI 代理程式使用的 MCP 伺服器執行（標準輸入輸出）。提供讀取會議的工具"
           }
         }
       }
@@ -13155,6 +13359,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Claude API 錯誤（%@%@）%@"
+          }
+        }
+      }
+    },
+    "Claude Code への登録の例: %@" : {
+      "comment" : "HanasuCommand.swift:435",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مثال على التسجيل في Claude Code: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beispiel für die Registrierung in Claude Code: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Example registration for Claude Code: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejemplo de registro en Claude Code: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exemple d’enregistrement dans Claude Code : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Code में रजिस्टर करने का उदाहरण: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contoh pendaftaran ke Claude Code: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esempio di registrazione in Claude Code: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Code에 등록하는 예: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przykład rejestracji w Claude Code: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exemplo de registro no Claude Code: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пример регистрации в Claude Code: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Code’a kayıt örneği: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ví dụ đăng ký với Claude Code: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Claude Code 中注册的示例：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Claude Code 中註冊的範例：%@"
           }
         }
       }
@@ -17750,7 +18056,7 @@
       }
     },
     "Hanasu のアプリがローカルの AI を使っています。" : {
-      "comment" : "HanasuAICommands.swift:53, HanasuDoctorCommand.swift:82",
+      "comment" : "HanasuAICommands.swift:53, HanasuDoctorCommand.swift:85",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -19581,6 +19887,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Liquid AI 出品。小巧快速，擅長理解日文指令"
+          }
+        }
+      }
+    },
+    "MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を Hanasu の会議の AI にも送ります。" : {
+      "comment" : "HanasuCommand.swift:433",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يُمرَّر محتوى الاجتماعات الذي يُعاد عبر MCP إلى الوكيل الذي يستخدم MCP وإلى مزوّد AI الخاص به. كما يرسل ask_meetings محتوى الاجتماعات إلى AI المخصص للاجتماعات في Hanasu."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über MCP zurückgegebene Meeting-Inhalte gehen an den Agenten, der MCP nutzt, und an dessen KI-Anbieter. ask_meetings sendet Meeting-Inhalte zusätzlich an die KI für Meetings in Hanasu."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting contents returned over MCP go to the agent using MCP and to its AI provider. ask_meetings also sends meeting contents to the AI configured for meetings in Hanasu."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El contenido de las reuniones devuelto por MCP llega al agente que usa MCP y al proveedor de su IA. ask_meetings también envía el contenido de las reuniones a la IA de reuniones de Hanasu."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le contenu des réunions renvoyé par MCP est transmis à l’agent qui utilise MCP et au fournisseur de son IA. ask_meetings envoie aussi le contenu des réunions à l’IA des réunions de Hanasu."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MCP से लौटाई गई मीटिंग की सामग्री MCP इस्तेमाल करने वाले एजेंट और उसके AI प्रदाता तक जाती है। ask_meetings मीटिंग की सामग्री Hanasu के मीटिंग वाले AI को भी भेजता है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isi rapat yang dikembalikan lewat MCP diteruskan ke agen yang memakai MCP dan ke penyedia AI-nya. ask_meetings juga mengirim isi rapat ke AI untuk rapat di Hanasu."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il contenuto delle riunioni restituito tramite MCP arriva all'agente che usa MCP e al fornitore della sua IA. ask_meetings invia il contenuto delle riunioni anche all'IA delle riunioni di Hanasu."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MCP로 반환한 회의 내용은 MCP를 사용하는 에이전트와 그 AI 제공업체에 전달됩니다. ask_meetings는 회의 내용을 Hanasu의 회의용 AI에도 보냅니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treść spotkań zwrócona przez MCP trafia do agenta korzystającego z MCP i do dostawcy jego AI. ask_meetings wysyła też treść spotkań do AI ustawionego dla spotkań w Hanasu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O conteúdo das reuniões retornado pelo MCP vai para o agente que usa o MCP e para o provedor da IA dele. ask_meetings também envia o conteúdo das reuniões à IA das reuniões do Hanasu."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Содержимое встреч, возвращённое через MCP, передаётся агенту, который использует MCP, и поставщику его AI. ask_meetings также отправляет содержимое встреч в AI для встреч в Hanasu."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MCP ile döndürülen toplantı içeriği, MCP’yi kullanan ajana ve o ajanın AI sağlayıcısına gider. ask_meetings, toplantı içeriğini Hanasu’da toplantılar için ayarlanan AI’ye de gönderir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nội dung cuộc họp trả về qua MCP sẽ được chuyển cho agent dùng MCP và nhà cung cấp AI của agent đó. ask_meetings còn gửi nội dung cuộc họp cho AI dùng cho cuộc họp của Hanasu."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通过 MCP 返回的会议内容会传给使用 MCP 的智能体及其 AI 提供商。ask_meetings 还会把会议内容发送给 Hanasu 中会议使用的 AI。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "透過 MCP 傳回的會議內容會交給使用 MCP 的代理程式及其 AI 供應商。ask_meetings 還會把會議內容傳送給 Hanasu 中會議使用的 AI。"
           }
         }
       }
@@ -22033,8 +22441,110 @@
         }
       }
     },
+    "hanasu mcp: MCP サーバーとして動いています。標準入力が閉じると終わります。" : {
+      "comment" : "HanasuMCPServer.swift:59",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: يعمل كخادم MCP. ينتهي عند إغلاق الإدخال القياسي."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: Läuft als MCP-Server. Wird beendet, wenn die Standardeingabe geschlossen wird."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: running as an MCP server. It exits when standard input is closed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: funcionando como servidor MCP. Termina cuando se cierra la entrada estándar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp : fonctionne comme serveur MCP. S’arrête à la fermeture de l’entrée standard."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: MCP सर्वर के रूप में चल रहा है। stdin बंद होने पर बंद हो जाएगा।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: berjalan sebagai server MCP. Akan berhenti saat stdin ditutup."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: in esecuzione come server MCP. Termina quando lo standard input viene chiuso."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: MCP 서버로 실행 중입니다. 표준 입력이 닫히면 종료됩니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: działa jako serwer MCP. Zakończy się po zamknięciu standardowego wejścia."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: em execução como servidor MCP. Encerra quando a entrada padrão é fechada."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: работает как MCP-сервер. Завершится, когда закроется стандартный ввод."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: MCP sunucusu olarak çalışıyor. Standart girdi kapanınca sonlanır."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp: đang chạy dưới dạng máy chủ MCP. Sẽ thoát khi stdin bị đóng."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp：正在作为 MCP 服务器运行。标准输入关闭时退出。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp：正在作為 MCP 伺服器執行。標準輸入關閉時結束。"
+          }
+        }
+      }
+    },
     "hanasu — Hanasu の会議の記録と文章の整え方を、ターミナルや AI エージェントから使う" : {
-      "comment" : "HanasuCommand.swift:336",
+      "comment" : "HanasuCommand.swift:342",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24380,7 +24890,7 @@
       }
     },
     "「システム設定」→「プライバシーとセキュリティ」→「ファイルとフォルダ」で、このコマンドを実行しているアプリ（ターミナルや AI エージェントのアプリ）に「書類」フォルダへのアクセスを許可してください。" : {
-      "comment" : "HanasuMeetingsCommand.swift:230",
+      "comment" : "HanasuMeetingsCommand.swift:257",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27848,7 +28358,7 @@
       }
     },
     "この会議にはアクションアイテムがありません。" : {
-      "comment" : "HanasuMeetingsCommand.swift:120",
+      "comment" : "HanasuMeetingsCommand.swift:101",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27950,7 +28460,7 @@
       }
     },
     "この会議にはメモがありません。" : {
-      "comment" : "HanasuMeetingsCommand.swift:112",
+      "comment" : "HanasuMeetingsCommand.swift:93",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28052,7 +28562,7 @@
       }
     },
     "この会議には議事録がありません。" : {
-      "comment" : "HanasuMeetingsCommand.swift:106",
+      "comment" : "HanasuMeetingsCommand.swift:87",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28154,7 +28664,7 @@
       }
     },
     "この会議は「%@」です。保存されている分だけを出します。" : {
-      "comment" : "HanasuMeetingsCommand.swift:97",
+      "comment" : "HanasuMeetingsCommand.swift:78",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29684,7 +30194,7 @@
       }
     },
     "これより新しい会議が %@ 件あります（記録中・処理中・失敗）: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:249",
+      "comment" : "HanasuMeetingsCommand.swift:276",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30704,7 +31214,7 @@
       }
     },
     "そのフォルダがあり、このユーザーで読めるかを確かめてください。" : {
-      "comment" : "HanasuMeetingsCommand.swift:232",
+      "comment" : "HanasuMeetingsCommand.swift:259",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33662,7 +34172,7 @@
       }
     },
     "アクション %@ 件" : {
-      "comment" : "HanasuMeetingsCommand.swift:319",
+      "comment" : "HanasuMeetingsCommand.swift:346",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33764,7 +34274,7 @@
       }
     },
     "アクションアイテムはありません。" : {
-      "comment" : "HanasuMeetingsCommand.swift:191",
+      "comment" : "HanasuMeetingsCommand.swift:158",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42128,7 +42638,7 @@
       }
     },
     "タイトル: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:308",
+      "comment" : "HanasuMeetingsCommand.swift:335",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43556,7 +44066,7 @@
       }
     },
     "ダウンロード済みのモデルはありません" : {
-      "comment" : "HanasuDoctorCommand.swift:78",
+      "comment" : "HanasuDoctorCommand.swift:81",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43857,6 +44367,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "聊天"
+          }
+        }
+      }
+    },
+    "ツール: list_meetings・get_meeting・search_meetings・ask_meetings・list_action_items（どれも読むだけ）" : {
+      "comment" : "HanasuCommand.swift:434",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأدوات: list_meetings، get_meeting، search_meetings، ask_meetings، list_action_items (كلها للقراءة فقط)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Werkzeuge: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (alle nur lesend)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tools: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (all read-only)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herramientas: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (todas de solo lectura)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outils : list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (tous en lecture seule)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टूल: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (सभी सिर्फ़ पढ़ने के लिए)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alat: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (semuanya hanya baca)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strumenti: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (tutti in sola lettura)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "도구: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items(모두 읽기 전용)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Narzędzia: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (wszystkie tylko do odczytu)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferramentas: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (todas somente leitura)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Инструменты: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (все только для чтения)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Araçlar: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (hepsi salt okunur)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Công cụ: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (tất cả chỉ đọc)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工具：list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items（均为只读）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工具：list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items（皆為唯讀）"
           }
         }
       }
@@ -44576,7 +45188,7 @@
       }
     },
     "ヒット %@ 件" : {
-      "comment" : "HanasuMeetingsCommand.swift:159",
+      "comment" : "HanasuMeetingsCommand.swift:137",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -50288,7 +50900,7 @@
       }
     },
     "ローカル: %@" : {
-      "comment" : "HanasuDoctorCommand.swift:78",
+      "comment" : "HanasuDoctorCommand.swift:81",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -50390,7 +51002,7 @@
       }
     },
     "ローカルの AI は、呼ぶたびにモデルを読み込むので時間がかかります。アプリがローカルの AI を使っている間は使えません。" : {
-      "comment" : "HanasuCommand.swift:434",
+      "comment" : "HanasuCommand.swift:464",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55490,7 +56102,7 @@
       }
     },
     "会議が見つかりません: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:265",
+      "comment" : "HanasuMeetingsCommand.swift:292",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55796,7 +56408,7 @@
       }
     },
     "会議のフォルダ: %@" : {
-      "comment" : "HanasuDoctorCommand.swift:67",
+      "comment" : "HanasuDoctorCommand.swift:70",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55898,7 +56510,7 @@
       }
     },
     "会議のフォルダを読めません: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:235",
+      "comment" : "HanasuMeetingsCommand.swift:262",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56000,7 +56612,7 @@
       }
     },
     "会議の一覧は hanasu meetings list で表示できます。" : {
-      "comment" : "HanasuMeetingsCommand.swift:266",
+      "comment" : "HanasuMeetingsCommand.swift:293",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56102,7 +56714,7 @@
       }
     },
     "会議の中身を出す（既定は議事録）" : {
-      "comment" : "HanasuCommand.swift:373",
+      "comment" : "HanasuCommand.swift:380",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56204,7 +56816,7 @@
       }
     },
     "会議の指定: ID（例: 2026-11-02_1312）、latest（最新の完了した会議）、日付（例: 2026-11-02）" : {
-      "comment" : "HanasuCommand.swift:423",
+      "comment" : "HanasuCommand.swift:453",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57938,7 +58550,7 @@
       }
     },
     "会議をまたいでアクションアイテムを並べる" : {
-      "comment" : "HanasuCommand.swift:382",
+      "comment" : "HanasuCommand.swift:389",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58040,7 +58652,7 @@
       }
     },
     "会議を新しい順に並べる" : {
-      "comment" : "HanasuCommand.swift:371",
+      "comment" : "HanasuCommand.swift:378",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58244,7 +58856,7 @@
       }
     },
     "会議を横断して検索する（空白で区切ると、すべてを含むものだけ）" : {
-      "comment" : "HanasuCommand.swift:375",
+      "comment" : "HanasuCommand.swift:382",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59570,7 +60182,7 @@
       }
     },
     "余分な引数です: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:370",
+      "comment" : "HanasuMeetingsCommand.swift:397",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59774,7 +60386,7 @@
       }
     },
     "使い方:" : {
-      "comment" : "HanasuCommand.swift:336, HanasuCommand.swift:360",
+      "comment" : "HanasuCommand.swift:342, HanasuCommand.swift:367",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59876,7 +60488,7 @@
       }
     },
     "使い方は hanasu help で表示できます。" : {
-      "comment" : "HanasuAICommands.swift:210, HanasuCommand.swift:144, HanasuCommand.swift:252",
+      "comment" : "HanasuAICommands.swift:210, HanasuCommand.swift:142, HanasuCommand.swift:250",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60182,7 +60794,7 @@
       }
     },
     "使う AI と認証情報・会議のフォルダ・管理者のポリシーを確かめる（キーの値は出さない）" : {
-      "comment" : "HanasuCommand.swift:417",
+      "comment" : "HanasuCommand.swift:447",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60386,7 +60998,7 @@
       }
     },
     "使う AI:" : {
-      "comment" : "HanasuDoctorCommand.swift:68",
+      "comment" : "HanasuDoctorCommand.swift:71",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60590,7 +61202,7 @@
       }
     },
     "使えます" : {
-      "comment" : "HanasuDoctorCommand.swift:79",
+      "comment" : "HanasuDoctorCommand.swift:82",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64874,7 +65486,7 @@
       }
     },
     "処理中" : {
-      "comment" : "HUDPanel.swift:249, HanasuMeetingsCommand.swift:326",
+      "comment" : "HUDPanel.swift:249, HanasuMeetingsCommand.swift:353",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68036,7 +68648,7 @@
       }
     },
     "失敗" : {
-      "comment" : "DictationHistoryWindow.swift:375, HanasuMeetingsCommand.swift:328, MeetingWindow.swift:172",
+      "comment" : "DictationHistoryWindow.swift:375, HanasuMeetingsCommand.swift:355, MeetingWindow.swift:172",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68444,7 +69056,7 @@
       }
     },
     "完了" : {
-      "comment" : "HanasuMeetingsCommand.swift:327",
+      "comment" : "HanasuMeetingsCommand.swift:354",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68546,7 +69158,7 @@
       }
     },
     "完了した会議がありません。" : {
-      "comment" : "HanasuMeetingsCommand.swift:245",
+      "comment" : "HanasuMeetingsCommand.swift:272",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68852,7 +69464,7 @@
       }
     },
     "実行ファイル: %@" : {
-      "comment" : "HanasuDoctorCommand.swift:66",
+      "comment" : "HanasuDoctorCommand.swift:69",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72218,7 +72830,7 @@
       }
     },
     "整えられなかったので、整える前の文章を出します（--fallback-raw）。" : {
-      "comment" : "HanasuAICommands.swift:458",
+      "comment" : "HanasuAICommands.swift:479",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75788,7 +76400,7 @@
       }
     },
     "文章を指示どおりに書き換える（選択を声で編集と同じ）。文章は引数か標準入力で渡す" : {
-      "comment" : "HanasuCommand.swift:403",
+      "comment" : "HanasuCommand.swift:410",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77624,7 +78236,7 @@
       }
     },
     "書き換えの指示を指定してください。" : {
-      "comment" : "HanasuAICommands.swift:399",
+      "comment" : "HanasuAICommands.swift:420",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78950,7 +79562,7 @@
       }
     },
     "期間の指定: 7d・24h・2w（今からさかのぼる）、日付（例: 2026-11-01）" : {
-      "comment" : "HanasuCommand.swift:424, HanasuMeetingsCommand.swift:436",
+      "comment" : "HanasuCommand.swift:454, HanasuMeetingsCommand.swift:470",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79358,7 +79970,7 @@
       }
     },
     "未設定" : {
-      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274, HanasuDoctorCommand.swift:55",
+      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274, HanasuDoctorCommand.swift:58",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80174,7 +80786,7 @@
       }
     },
     "検索する語を指定してください（例: hanasu meetings search 予算）。" : {
-      "comment" : "HanasuMeetingsCommand.swift:139",
+      "comment" : "HanasuMeetingsCommand.swift:120",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84764,7 +85376,7 @@
       }
     },
     "知らないオプションです: %@" : {
-      "comment" : "HanasuCommand.swift:251",
+      "comment" : "HanasuCommand.swift:249",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84866,7 +85478,7 @@
       }
     },
     "知らないコマンドです: %@" : {
-      "comment" : "HanasuAICommands.swift:439, HanasuCommand.swift:143, HanasuMeetingsCommand.swift:26",
+      "comment" : "HanasuAICommands.swift:460, HanasuCommand.swift:141, HanasuMeetingsCommand.swift:26",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84963,6 +85575,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "未知的指令：%@"
+          }
+        }
+      }
+    },
+    "知らない引数です: %@" : {
+      "comment" : "HanasuMCPServer.swift:40",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وسيطة غير معروفة: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekanntes Argument: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown argument: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argumento desconocido: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argument inconnu : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अज्ञात आर्ग्युमेंट: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argumen tidak dikenal: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argomento sconosciuto: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알 수 없는 인수입니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieznany argument: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Argumento desconhecido: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неизвестный аргумент: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilinmeyen argüman: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đối số không xác định: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知参数：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知的引數：%@"
           }
         }
       }
@@ -85580,7 +86294,7 @@
       }
     },
     "管理者のポリシー:" : {
-      "comment" : "HanasuDoctorCommand.swift:87",
+      "comment" : "HanasuDoctorCommand.swift:97",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85682,7 +86396,7 @@
       }
     },
     "管理者のポリシー: なし" : {
-      "comment" : "HanasuDoctorCommand.swift:85",
+      "comment" : "HanasuDoctorCommand.swift:95",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85885,8 +86599,212 @@
         }
       }
     },
+    "管理者のポリシーで、MCP の ask_meetings は使えないようにされています（%@）。" : {
+      "comment" : "HanasuMCPTools.swift:269",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عطّلت سياسة المسؤول الأداة ask_meetings في MCP (%@)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das MCP-Werkzeug ask_meetings wurde von deinem Administrator per Richtlinie deaktiviert (%@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The MCP tool ask_meetings has been disabled by your administrator's policy (%@)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El administrador ha desactivado la herramienta MCP ask_meetings mediante una política (%@)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’outil MCP ask_meetings a été désactivé par une règle de votre administrateur (%@)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एडमिनिस्ट्रेटर की नीति के कारण MCP का ask_meetings टूल बंद कर दिया गया है (%@)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alat ask_meetings di MCP dinonaktifkan oleh kebijakan administrator (%@)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo strumento MCP ask_meetings è stato disattivato da un criterio dell'amministratore (%@)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관리자 정책에 따라 MCP의 ask_meetings를 사용할 수 없습니다(%@)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Narzędzie ask_meetings w MCP zostało wyłączone przez zasady administratora (%@)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A ferramenta ask_meetings do MCP foi desativada por uma política do administrador (%@)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Инструмент ask_meetings в MCP отключён политикой администратора (%@)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MCP’deki ask_meetings aracı yönetici ilkesiyle devre dışı bırakılmış (%@)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Công cụ ask_meetings của MCP đã bị tắt theo chính sách của quản trị viên (%@)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理员的策略已禁用 MCP 的 ask_meetings（%@）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理員的政策已停用 MCP 的 ask_meetings（%@）。"
+          }
+        }
+      }
+    },
+    "管理者のポリシーで、hanasu mcp は使えないようにされています（%@）。" : {
+      "comment" : "HanasuDoctorCommand.swift:90, HanasuMCPServer.swift:46",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عطّلت سياسة المسؤول الأمر hanasu mcp (%@)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp wurde von deinem Administrator per Richtlinie deaktiviert (%@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp has been disabled by your administrator's policy (%@)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El administrador ha desactivado hanasu mcp mediante una política (%@)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp a été désactivé par une règle de votre administrateur (%@)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एडमिनिस्ट्रेटर की नीति के कारण hanasu mcp कमांड बंद कर दी गई है (%@)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perintah hanasu mcp dinonaktifkan oleh kebijakan administrator (%@)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp è stato disattivato da un criterio dell'amministratore (%@)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관리자 정책에 따라 hanasu mcp를 사용할 수 없습니다(%@)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polecenie hanasu mcp zostało wyłączone przez zasady administratora (%@)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O comando hanasu mcp foi desativado por uma política do administrador (%@)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Команда hanasu mcp отключена политикой администратора (%@)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu mcp komutu yönetici ilkesiyle devre dışı bırakılmış (%@)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lệnh hanasu mcp đã bị tắt theo chính sách của quản trị viên (%@)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理员的策略已禁用 hanasu mcp（%@）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理員的政策已停用 hanasu mcp（%@）。"
+          }
+        }
+      }
+    },
     "管理者のポリシーで、hanasu コマンドは使えないようにされています（%@）。" : {
-      "comment" : "HanasuCommand.swift:111",
+      "comment" : "HanasuCommand.swift:107",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86702,7 +87620,7 @@
       }
     },
     "終了コード: 0 成功、1 失敗、2 使い方の誤り、3 認証情報がない、4 会議が見つからない、5 ポリシーか権限で止められた" : {
-      "comment" : "HanasuCommand.swift:426",
+      "comment" : "HanasuCommand.swift:456",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90782,7 +91700,7 @@
       }
     },
     "見つかりませんでした。" : {
-      "comment" : "HanasuMeetingsCommand.swift:155",
+      "comment" : "HanasuMeetingsCommand.swift:133",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92210,7 +93128,7 @@
       }
     },
     "記録中" : {
-      "comment" : "HanasuMeetingsCommand.swift:325, MeetingWindow.swift:121, MeetingWindow.swift:241",
+      "comment" : "HanasuMeetingsCommand.swift:352, MeetingWindow.swift:121, MeetingWindow.swift:241",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95678,7 +96596,7 @@
       }
     },
     "認証情報:" : {
-      "comment" : "HanasuDoctorCommand.swift:75",
+      "comment" : "HanasuDoctorCommand.swift:78",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96494,7 +97412,7 @@
       }
     },
     "議事録 %@ 行目: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:309",
+      "comment" : "HanasuMeetingsCommand.swift:336",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96698,7 +97616,7 @@
       }
     },
     "議事録なし" : {
-      "comment" : "HanasuMeetingsCommand.swift:318",
+      "comment" : "HanasuMeetingsCommand.swift:345",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98432,7 +99350,7 @@
       }
     },
     "議事録は、使う発言を変えたあとに作り直されていません。" : {
-      "comment" : "HanasuMeetingsCommand.swift:102",
+      "comment" : "HanasuMeetingsCommand.swift:83",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100370,7 +101288,7 @@
       }
     },
     "質問に使える会議の記録がありません。" : {
-      "comment" : "HanasuAICommands.swift:274, MeetingAsk.swift:189",
+      "comment" : "HanasuAICommands.swift:306, MeetingAsk.swift:189",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101288,7 +102206,7 @@
       }
     },
     "辞書の置き換えルールだけを当てる（AI には送らない）" : {
-      "comment" : "HanasuCommand.swift:410",
+      "comment" : "HanasuCommand.swift:417",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -102512,7 +103430,7 @@
       }
     },
     "過去の会議について AI に質問する（関係する会議の中身を、会議の AI に送る）" : {
-      "comment" : "HanasuCommand.swift:389",
+      "comment" : "HanasuCommand.swift:396",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -107816,7 +108734,7 @@
       }
     },
     "音声入力と同じように文章を整える（--translate なら翻訳する）。文章は引数か標準入力で渡す" : {
-      "comment" : "HanasuCommand.swift:396",
+      "comment" : "HanasuCommand.swift:403",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

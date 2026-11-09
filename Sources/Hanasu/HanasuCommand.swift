@@ -32,7 +32,7 @@ struct HanasuCommandError: Error {
 // 設計判断: DEC-COM-180
 enum HanasuCommand {
     /// 最初の引数がこれなら、実行ファイルの名前が何でもサブコマンドとして扱う
-    static let commandNames: Set<String> = ["help", "meetings", "actions", "ask", "refine", "edit", "dict", "doctor"]
+    static let commandNames: Set<String> = ["help", "meetings", "actions", "ask", "refine", "edit", "dict", "doctor", "mcp"]
     static let topLevelFlags: Set<String> = ["--version", "--help", "-h"]
 
     /// コマンドとして呼ばれたか。`hanasu`（シンボリックリンクの名前）で呼ばれたら、引数が何でもコマンドとして扱う。
@@ -135,6 +135,8 @@ enum HanasuCommand {
                 return try HanasuAICommands.runDict(rest)
             case "doctor":
                 return try HanasuDoctorCommand.run(rest)
+            case "mcp":
+                return try await HanasuMCPServer.run(rest)
             default:
                 throw HanasuCommandError(exit: .usage, message: tr("知らないコマンドです: %@", command),
                                          details: [tr("使い方は hanasu help で表示できます。")])
@@ -288,6 +290,12 @@ enum HanasuPolicy {
         // 要件: REQ-COM-188
         /// hanasu の AI を使うコマンドが使ってよい AI の名前の配列（local・apple・gemini・claude）
         case allowedAIProviders = "AllowedAIProviders"
+        // 要件: REQ-COM-189
+        /// true なら hanasu mcp を使わせない
+        case disableMCP = "DisableMCP"
+        // 要件: REQ-MTG-127
+        /// true なら MCP の ask_meetings を出さない（会議の中身を Hanasu の AI に送らせない）
+        case disableMCPAskMeetings = "DisableMCPAskMeetings"
     }
 
     /// アプリの設定のドメイン（シンボリックリンク経由でも、.app の外でも同じものを見る）
@@ -303,6 +311,8 @@ enum HanasuPolicy {
     }
 
     static var cliDisabled: Bool { (forcedValue(.disableCLI) as? Bool) == true }
+    static var mcpDisabled: Bool { (forcedValue(.disableMCP) as? Bool) == true }
+    static var mcpAskMeetingsDisabled: Bool { (forcedValue(.disableMCPAskMeetings) as? Bool) == true }
 
     // 要件: REQ-COM-188
     /// 使ってよい AI の名前（小文字）。ポリシーがなければ nil（どれでもよい）。空の配列ならどれも使わない。
@@ -330,9 +340,9 @@ enum HanasuPolicy {
 enum HanasuHelp {
     static func full() -> String {
         var lines = [tr("hanasu — Hanasu の会議の記録と文章の整え方を、ターミナルや AI エージェントから使う"), "", tr("使い方:")]
-        lines += meetingsUsage + actionsUsage + askUsage + refineUsage + editUsage + dictUsage + doctorUsage
+        lines += meetingsUsage + actionsUsage + askUsage + refineUsage + editUsage + dictUsage + mcpUsage + doctorUsage
         lines += [
-            "  hanasu help [meetings|actions|ask|refine|edit|dict|doctor]",
+            "  hanasu help [meetings|actions|ask|refine|edit|dict|mcp|doctor]",
             "  hanasu --version",
             "",
         ]
@@ -351,6 +361,7 @@ enum HanasuHelp {
         case "edit": usage = editUsage; notes = aiNotes
         case "dict": usage = dictUsage; notes = []
         case "doctor": usage = doctorUsage; notes = []
+        case "mcp": usage = mcpUsage; notes = mcpNotes
         default: return nil
         }
         return ([tr("使い方:")] + usage + notes).joined(separator: "\n")
@@ -405,6 +416,29 @@ enum HanasuHelp {
             "  hanasu dict apply [\(text)] [--json]",
             "      " + tr("辞書の置き換えルールだけを当てる（AI には送らない）"),
         ]
+    }
+
+    private static var mcpUsage: [String] {
+        [
+            "  hanasu mcp [--meetings-dir \(tr("<フォルダ>"))] [--ai <AI>] [--model \(tr("<モデル>"))]",
+            "      " + tr("AI エージェントから使う MCP サーバーとして動く（標準入出力）。会議を読むツールを出す"),
+        ]
+    }
+
+    // 要件: REQ-COM-189
+    /// MCP で会議の中身がどこへ渡るか（計画の 4.4）と、登録のしかた
+    static var mcpNotes: [String] {
+        let executable = (Bundle.main.executableURL ?? URL(fileURLWithPath: CommandLine.arguments[0])).resolvingSymlinksInPath().path
+        return [
+            tr("MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を Hanasu の会議の AI にも送ります。"),
+            tr("ツール: list_meetings・get_meeting・search_meetings・ask_meetings・list_action_items（どれも読むだけ）"),
+            tr("Claude Code への登録の例: %@", "claude mcp add hanasu -- \(mcpCommandLine(executable))"),
+        ]
+    }
+
+    /// MCP の登録に書くコマンド（空白を含むパスは引用する）
+    static func mcpCommandLine(_ executable: String) -> String {
+        (executable.contains(" ") ? "'\(executable)'" : executable) + " mcp"
     }
 
     private static var doctorUsage: [String] {

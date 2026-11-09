@@ -1,6 +1,6 @@
 # `hanasu` コマンドの作り（Mac）
 
-利用者向けの `hanasu` コマンドが、今どう作られているか。要件は spec の REQ-COM-180〜188・REQ-MTG-120〜126・REQ-DIC-160〜162、計画（まだ作っていない段階）は [plans/cli.md](../plans/cli.md)。オプションの一覧は `hanasu help` が正で、ここには写さない。
+利用者向けの `hanasu` コマンドが、今どう作られているか。要件は spec の REQ-COM-180〜189・REQ-MTG-120〜127・REQ-DIC-160〜162、計画（まだ作っていない段階）は [plans/cli.md](../plans/cli.md)。オプションの一覧は `hanasu help` が正で、ここには写さない。
 
 ## 1. 入り口
 
@@ -16,6 +16,8 @@
 | `HanasuMeetingsCommand.swift` | `meetings list / show / search`・`actions`。会議のフォルダ・会議の指定（`resolve`）・期間（`HanasuPeriod`）・外向きの JSON |
 | `HanasuAICommands.swift` | `ask`・`refine`・`edit`・`dict apply`。AI の選び方と送る前の確かめ（`HanasuAI`）、文章の受け取り方（`HanasuTextInput`） |
 | `HanasuDoctorCommand.swift` | `doctor` |
+| `HanasuMCPServer.swift` | `mcp`。stdio の JSON-RPC の読み書きと、MCP の手順（新旧の版） |
+| `HanasuMCPTools.swift` | MCP のツールの定義（英語の説明・`inputSchema`・注釈）と呼び出し |
 | `HanasuCommandCLI.swift` | 開発用の自己テスト（`--test-hanasu-command`）と速さの測定（`--bench-hanasu-command`） |
 
 名前が `CLI.swift` で終わるファイルは訳の検査の外なので、利用者に見える文はそれ以外のファイルに置き、`tr()` で書く。
@@ -32,11 +34,19 @@
 - `refine` は音声入力と同じ `GeminiClient.Request` を作り（辞書・追加のルール・出力の言語・`--app` / `--style` の文体）、`TextAIClient.refine` か `translate` に渡す。`edit` は `TextAIClient.editSelection`。どちらも `DictationHistoryStore` には書かない。失敗したら stdout に出さず、`--fallback-raw` のときだけ原文を出す（DEC-DIC-161）。
 - 文章は `HanasuTextInput.read` が、位置の引数か stdin のどちらかから受け取る（DEC-DIC-160）。
 
-## 5. ローカルの AI のサーバー
+## 5. MCP（`hanasu mcp`）
+
+- `HanasuMCPServer.run` は、ポリシー `DisableMCP` を見てから、本当の stdout を `dup` で複製し、1 番を stderr に付け替える。JSON-RPC は複製した番号にだけ書くので、ほかのコードや子プロセスが stdout に書いても接続は壊れない（DEC-COM-186）。
+- stdin を別のスレッドで読み、`\n` で区切る（`AsyncLineSequence` は U+2028 でも切るので使わない）。1 行ごとに `Task` で処理し（`notifications/cancelled` で取り消せる）、stdin が閉じたら処理中のものを待って終わる。
+- `handle` が手順を分ける。`_meta` に `io.modelcontextprotocol/protocolVersion` があれば 2026-07-28 の形（結果に `resultType` とサーバーの名前）、なければ前の版の形で応える。`initialize`・`server/discover`・`ping`・`tools/list`・`tools/call`。
+- ツールは `HanasuMCPTools`。中身はコマンドと同じ関数（`HanasuMeetingsCommand.meetingJSON`・`searchResultJSON`・`actionItems`、`HanasuAICommands.ask`）で作るので、`--json` と同じ形になる。件数・長さの上限と続きの取り方（`nextOffset`・`transcriptNextFrom`）は DEC-MTG-125。引数の値の誤りは `isError` の結果で返す。
+
+## 6. ローカルの AI のサーバー
 
 - `LocalLLMServer` は、起動したプロセスごとに記録（`server-<持ち主の pid>.pid`）を書く。`hanasu` は、ほかの持ち主のサーバーが動いていれば起動しない。アプリの起動時の `cleanUpStaleServer` は、持ち主が終わっている記録のサーバーだけを止める（DEC-COM-184）。
 
-## 6. 確かめ方
+## 7. 確かめ方
 
 - `.build/debug/Hanasu --test-hanasu-command`: 架空の会議と偽の `fm`（`HANASU_FM_PATH`）を使い、本物の実行ファイルをコマンドとして呼んで確かめる。ネットワークには送らない。キーチェーンは自己テストの一時的な項目（`HANASU_KEYCHAIN_SERVICE` で、`…selftest-` の名前だけを読ませられる）を、シンボリックリンク経由の `doctor` で読む。
+- MCP は、`hanasu mcp` を子プロセスで動かし、新旧の版の手順・ツール・エラー・長い会議の切り方・ポリシーを確かめる（同じ自己テスト）。
 - `.build/debug/Hanasu --bench-hanasu-command [件数]`: 架空の会議での速さ。

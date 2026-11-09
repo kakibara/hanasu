@@ -257,12 +257,44 @@ enum HanasuAICommands {
         let settings = AppSettings.shared
         let choice = try HanasuAI.choice(args, for: .meeting, settings: settings)
         let client = try HanasuAI.makeClient(choice, for: .meeting, settings: settings, timeout: 180)
+        let outcome = try await ask(question: question, period: period, choice: choice, client: client,
+                                    meetings: try HanasuMeetingsCommand.load(args), printPrompt: args.flags.contains("--show-prompt"))
+        if args.flags.contains("--json") {
+            try HanasuOutput.json(outcome.json)
+            return .ok
+        }
+        let answer = outcome.answer
+        let byID = outcome.byID
+        let cited = outcome.cited
+        var lines = [answer.text, "", tr("AI に渡した会議（* は答えで引用したもの）:")]
+        for source in answer.sources {
+            let mark = cited.contains(source.meetingID) ? "*" : " "
+            let slug = byID[source.meetingID]?.slug ?? Meeting.slug(of: source.meetingID)
+            lines.append("  \(mark) M\(source.number)  \(slug)  \(source.title)")
+        }
+        HanasuOutput.out(lines.joined(separator: "\n"))
+        return .ok
+    }
 
+    /// ask の結果（hanasu ask と MCP の ask_meetings で同じ）
+    struct AskOutcome {
+        var answer: MeetingAsk.Answer
+        var json: [String: Any]
+        var byID: [String: Meeting]
+        var cited: Set<String>
+    }
+
+    // 要件: REQ-MTG-126, REQ-MTG-127
+    // 設計判断: DEC-MTG-124, DEC-MTG-121
+    static func ask(question: String, period: HanasuPeriod, choice: HanasuAI.Choice, client: TextAIClient,
+                    meetings allMeetings: [Meeting], printPrompt: Bool) async throws -> AskOutcome {
+        if let since = period.since, let until = period.until, since >= until {
+            throw HanasuTextInput.usage(tr("--since は --until より前にしてください。"))
+        }
         // 議事録に使わない発言（除いた発言・オフレコ）は送らない
-        let meetings = try HanasuMeetingsCommand.load(args).map(\.withUsedUtterancesOnly)
+        let meetings = allMeetings.map(\.withUsedUtterancesOnly)
         var options = MeetingAsk.Options()
-        let explicit = period.since != nil || period.until != nil
-        if explicit {
+        if period.isSpecified {
             // DateInterval は終わりを含むので、--until の時刻（含まない）の直前までにする
             let end = (period.until ?? .distantFuture).addingTimeInterval(-0.001)
             options.period = DateInterval(start: period.since ?? .distantPast, end: end)
@@ -273,7 +305,7 @@ enum HanasuAICommands {
         guard !context.sources.isEmpty else {
             throw HanasuCommandError(exit: .notFound, message: tr("質問に使える会議の記録がありません。"))
         }
-        if args.flags.contains("--show-prompt") { showPrompt(system: MeetingAsk.instruction, user: context.prompt) }
+        if printPrompt { showPrompt(system: MeetingAsk.instruction, user: context.prompt) }
 
         let answer: MeetingAsk.Answer
         do {
@@ -283,37 +315,26 @@ enum HanasuAICommands {
         }
         let byID = Dictionary(meetings.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         let cited = Set(answer.cited.map(\.meetingID))
-
-        if args.flags.contains("--json") {
-            var periodJSON: Any = NSNull()
-            if explicit {
-                periodJSON = ["source": "option", "since": HanasuJSON.optional(period.since.map(HanasuJSON.date)),
-                              "until": HanasuJSON.optional(period.until.map(HanasuJSON.date))]
-            } else if let derived = context.period {
-                periodJSON = ["source": "question", "since": HanasuJSON.date(derived.start), "until": HanasuJSON.date(derived.end)]
-            }
-            try HanasuOutput.json([
-                "question": question,
-                "answer": answer.text,
-                "ai": choice.json,
-                "keywords": answer.keywords,
-                "period": periodJSON,
-                "sources": answer.sources.compactMap { source -> [String: Any]? in
-                    guard let meeting = byID[source.meetingID] else { return nil }
-                    return ["ref": "M\(source.number)", "cited": cited.contains(source.meetingID), "matched": source.matched,
-                            "meeting": HanasuMeetingsCommand.summaryJSON(meeting, brief: true)]
-                },
-            ])
-            return .ok
+        var periodJSON: Any = NSNull()
+        if period.isSpecified {
+            periodJSON = ["source": "option", "since": HanasuJSON.optional(period.since.map(HanasuJSON.date)),
+                          "until": HanasuJSON.optional(period.until.map(HanasuJSON.date))]
+        } else if let derived = context.period {
+            periodJSON = ["source": "question", "since": HanasuJSON.date(derived.start), "until": HanasuJSON.date(derived.end)]
         }
-        var lines = [answer.text, "", tr("AI に渡した会議（* は答えで引用したもの）:")]
-        for source in answer.sources {
-            let mark = cited.contains(source.meetingID) ? "*" : " "
-            let slug = byID[source.meetingID]?.slug ?? Meeting.slug(of: source.meetingID)
-            lines.append("  \(mark) M\(source.number)  \(slug)  \(source.title)")
-        }
-        HanasuOutput.out(lines.joined(separator: "\n"))
-        return .ok
+        let json: [String: Any] = [
+            "question": question,
+            "answer": answer.text,
+            "ai": choice.json,
+            "keywords": answer.keywords,
+            "period": periodJSON,
+            "sources": answer.sources.compactMap { source -> [String: Any]? in
+                guard let meeting = byID[source.meetingID] else { return nil }
+                return ["ref": "M\(source.number)", "cited": cited.contains(source.meetingID), "matched": source.matched,
+                        "meeting": HanasuMeetingsCommand.summaryJSON(meeting, brief: true)]
+            },
+        ]
+        return AskOutcome(answer: answer, json: json, byID: byID, cited: cited)
     }
 
     // MARK: - refine

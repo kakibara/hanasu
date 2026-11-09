@@ -7,6 +7,7 @@ import Foundation
 // 確かめ方: REQ-COM-180, REQ-COM-181, REQ-COM-182, REQ-COM-183, REQ-COM-184, REQ-COM-185
 // 確かめ方: REQ-MTG-120, REQ-MTG-121, REQ-MTG-122, REQ-MTG-123, REQ-MTG-124, REQ-MTG-125
 // 確かめ方: REQ-COM-186, REQ-COM-187, REQ-COM-188, REQ-MTG-126, REQ-DIC-160, REQ-DIC-161, REQ-DIC-162
+// 確かめ方: REQ-COM-189, REQ-MTG-127
 // AI を使うコマンドは、偽の fm（HANASU_FM_PATH。--ai apple）に送られた内容で確かめ、ネットワークには何も送らない
 enum HanasuCommandCLI {
     static func runIfRequested() {
@@ -509,6 +510,227 @@ enum HanasuCommandCLI {
         } else {
             check(false, "キーチェーンの一時的な項目を作れない（\(keep.stdout)\(keep.stderr)）")
         }
+
+        runMCPTests(exe: exe, root: root, base: base, ai: ai)
+    }
+
+    // MARK: - MCP（段階 3）
+
+    /// hanasu mcp に、1 行 1 つのメッセージを流し、応答を id ごとに返す（stdout の行がすべて JSON か も確かめる）
+    private static func mcp(_ exe: URL, _ messages: [Any], arguments: [String], environment: [String: String] = [:])
+        -> (responses: [String: [String: Any]], lines: [Any], result: Result) {
+        let input = messages.map { message -> String in
+            if let text = message as? String { return text }
+            return String(decoding: (try? JSONSerialization.data(withJSONObject: message)) ?? Data(), as: UTF8.self)
+        }.joined(separator: "\n") + "\n"
+        let result = call(exe, ["mcp"] + arguments, environment: environment, stdin: input)
+        var responses: [String: [String: Any]] = [:]
+        var lines: [Any] = []
+        for line in result.stdout.split(separator: "\n") {
+            guard let object = try? JSONSerialization.jsonObject(with: Data(line.utf8)) else {
+                lines.append(NSNull())
+                continue
+            }
+            lines.append(object)
+            if let dict = object as? [String: Any] {
+                let id = dict["id"].flatMap { $0 is NSNull ? nil : "\($0)" } ?? "null"
+                responses[id] = dict
+            }
+        }
+        return (responses, lines, result)
+    }
+
+    private static func request(_ id: Int, _ method: String, _ params: [String: Any]? = nil, modern: Bool = false) -> [String: Any] {
+        var object: [String: Any] = ["jsonrpc": "2.0", "id": id, "method": method]
+        var params = params ?? [:]
+        if modern {
+            params["_meta"] = [HanasuMCPServer.versionKey: HanasuMCPServer.modernVersion,
+                               "io.modelcontextprotocol/clientCapabilities": [String: Any]()]
+        }
+        if !params.isEmpty { object["params"] = params }
+        return object
+    }
+
+    private static func toolCall(_ id: Int, _ name: String, _ arguments: [String: Any] = [:]) -> [String: Any] {
+        request(id, "tools/call", ["name": name, "arguments": arguments])
+    }
+
+    /// ツールの結果（content の text を JSON として読む）と isError
+    private static func toolResult(_ response: [String: Any]?) -> (json: [String: Any]?, text: String, isError: Bool?) {
+        let result = response?["result"] as? [String: Any]
+        let text = ((result?["content"] as? [[String: Any]])?.first?["text"] as? String) ?? ""
+        let json = (try? JSONSerialization.jsonObject(with: Data(text.utf8))) as? [String: Any]
+        return (json, text, result?["isError"] as? Bool)
+    }
+
+    private static func runMCPTests(exe: URL, root: URL, base: URL, ai: [String: String]) {
+        let fm = FileManager.default
+        let dir = ["--meetings-dir", base.path]
+
+        // 手順（REQ-COM-189）
+        let session = mcp(exe, [
+            request(1, "initialize", ["protocolVersion": "2025-06-18", "capabilities": [String: Any](),
+                                      "clientInfo": ["name": "selftest", "version": "1"]]),
+            ["jsonrpc": "2.0", "method": "notifications/initialized"],
+            request(2, "tools/list"),
+            request(3, "server/discover", modern: true),
+            request(4, "tools/list", modern: true),
+            ["jsonrpc": "2.0", "id": 5, "method": "tools/list",
+             "params": ["_meta": [HanasuMCPServer.versionKey: "2099-01-01"]]],
+            request(6, "initialize", ["protocolVersion": "1999-01-01"]),
+            request(7, "ping"),
+            request(8, "no/such/method"),
+            "this is not json",
+            ["jsonrpc": "2.0", "id": 9, "method": "tools/call", "params": "x"],
+            request(10, "tools/call", ["arguments": [String: Any]()]),
+            toolCall(11, "no_such_tool"),
+            toolCall(12, "list_meetings", ["limit": 2]),
+            toolCall(13, "list_meetings", ["limit": 2, "offset": 2]),
+            toolCall(14, "get_meeting", ["meeting": "2026-10-01_0900"]),
+            toolCall(15, "get_meeting", ["meeting": "2026-10-01_0900", "include": ["transcript", "notes"]]),
+            toolCall(16, "search_meetings", ["query": "予算"]),
+            toolCall(17, "search_meetings", ["query": "ひみつのことば"]),
+            toolCall(18, "list_action_items", ["owner": "田中"]),
+            toolCall(19, "get_meeting", [String: Any]()),
+            toolCall(20, "get_meeting", ["meeting": "2020-01-01_0000"]),
+            toolCall(21, "list_meetings", ["limit": "many"]),
+            toolCall(22, "list_meetings", ["bogus": 1]),
+            toolCall(23, "list_meetings", ["since": "someday"]),
+            toolCall(24, "get_meeting", ["meeting": "2026-10-02"]),
+            [request(25, "ping"), toolCall(26, "list_meetings", ["limit": 1])],
+        ], arguments: dir + ["--ai", "apple"], environment: ai)
+        let r = session.responses
+        check(session.result.status == 0 && !session.lines.isEmpty && !session.lines.contains { $0 is NSNull },
+              "hanasu mcp の stdout の行は、すべて JSON-RPC のメッセージ（stdin が閉じたら 0 で終わる）")
+        check(session.result.stderr.contains("hanasu mcp"), "hanasu mcp のログは stderr に出す")
+        let initialized = r["1"]?["result"] as? [String: Any]
+        check(initialized?["protocolVersion"] as? String == "2025-06-18"
+              && (initialized?["capabilities"] as? [String: Any])?["tools"] != nil
+              && (initialized?["serverInfo"] as? [String: Any])?["name"] as? String == "hanasu",
+              "initialize は求められた版で応え、capabilities は tools")
+        check((r["6"]?["result"] as? [String: Any])?["protocolVersion"] as? String == HanasuMCPServer.legacyVersions[0],
+              "知らない版の initialize には、対応する最新の版で応える")
+        let discover = r["3"]?["result"] as? [String: Any]
+        check((discover?["supportedVersions"] as? [String]) == [HanasuMCPServer.modernVersion]
+              && discover?["resultType"] as? String == "complete"
+              && ((discover?["_meta"] as? [String: Any])?[HanasuMCPServer.serverInfoKey] as? [String: Any])?["name"] as? String == "hanasu",
+              "server/discover（2026-07-28）に、版・capabilities・サーバーの名前を返す")
+        let modernList = r["4"]?["result"] as? [String: Any]
+        check(modernList?["ttlMs"] is Int && modernList?["cacheScope"] as? String == "private" && modernList?["resultType"] as? String == "complete",
+              "2026-07-28 の tools/list に ttlMs・cacheScope・resultType")
+        let unsupported = r["5"]?["error"] as? [String: Any]
+        check(unsupported?["code"] as? Int == -32022 && ((unsupported?["data"] as? [String: Any])?["supported"] as? [String])?.isEmpty == false,
+              "対応しない版を名乗るリクエストは -32022 と、対応する版")
+        check(r["7"]?["result"] != nil, "ping に応える")
+        check((r["8"]?["error"] as? [String: Any])?["code"] as? Int == -32601, "知らないメソッドは -32601")
+        check((r["null"]?["error"] as? [String: Any])?["code"] as? Int == -32700, "読めない JSON は -32700")
+        check((r["9"]?["error"] as? [String: Any])?["code"] as? Int == -32602, "params がオブジェクトでなければ -32602")
+        check((r["10"]?["error"] as? [String: Any])?["code"] as? Int == -32602, "ツールの名前がなければ -32602")
+        check((r["11"]?["error"] as? [String: Any])?["code"] as? Int == -32602, "知らないツールは -32602")
+        check(session.lines.contains { ($0 as? [Any])?.count == 2 }, "まとめたリクエスト（配列）には、配列で応える")
+
+        // ツールの一覧（REQ-MTG-127）
+        let tools = (r["2"]?["result"] as? [String: Any])?["tools"] as? [[String: Any]] ?? []
+        check(tools.compactMap { $0["name"] as? String } == ["list_meetings", "get_meeting", "search_meetings", "ask_meetings", "list_action_items"],
+              "tools/list に 5 つのツール")
+        check(tools.allSatisfy { (($0["inputSchema"] as? [String: Any])?["type"] as? String) == "object"
+                && (($0["annotations"] as? [String: Any])?["readOnlyHint"] as? Bool) == true },
+              "どのツールにも inputSchema と readOnlyHint")
+        let ask = tools.first { $0["name"] as? String == "ask_meetings" }
+        check((ask?["description"] as? String)?.contains("Apple") == true
+              && (ask?["annotations"] as? [String: Any])?["openWorldHint"] as? Bool == false,
+              "ask_meetings の説明に送る先の AI の名前（--ai apple なら端末の中なので openWorldHint は false）")
+        check(tools.allSatisfy { ($0["description"] as? String)?.range(of: "[ぁ-んァ-ヶ一-龠]", options: .regularExpression) == nil },
+              "ツールの説明は英語で固定（DEC-COM-187）")
+        let gemini = mcp(exe, [request(1, "tools/list")], arguments: dir + ["--ai", "gemini"], environment: ai)
+        let geminiAsk = ((gemini.responses["1"]?["result"] as? [String: Any])?["tools"] as? [[String: Any]])?.first { $0["name"] as? String == "ask_meetings" }
+        check((geminiAsk?["description"] as? String)?.contains("Google Gemini") == true
+              && (geminiAsk?["annotations"] as? [String: Any])?["openWorldHint"] as? Bool == true,
+              "外の AI なら、ask_meetings の openWorldHint は true で、説明に AI の名前")
+
+        // ツールの結果
+        let firstPage = toolResult(r["12"])
+        check(firstPage.isError == false && (firstPage.json?["meetings"] as? [Any])?.count == 2
+              && firstPage.json?["nextOffset"] as? Int == 2 && firstPage.json?["total"] as? Int == 4
+              && firstPage.json?["notice"] is String, "list_meetings は limit で切り、nextOffset と total と notice を返す")
+        let secondPage = toolResult(r["13"])
+        check((secondPage.json?["meetings"] as? [Any])?.count == 2 && secondPage.json?["nextOffset"] is NSNull, "offset で続きを読み、最後は nextOffset が null")
+        let meeting = toolResult(r["14"]).json?["meeting"] as? [String: Any]
+        check(meeting?["minutes"] is String && meeting?["actionItems"] != nil && meeting?["transcript"] == nil,
+              "get_meeting の既定は、議事録とアクションアイテムだけ")
+        let withTranscript = toolResult(r["15"]).json?["meeting"] as? [String: Any]
+        let transcriptText = ((withTranscript?["transcript"] as? [[String: Any]]) ?? []).compactMap { $0["text"] as? String }.joined()
+        check(!transcriptText.isEmpty && !transcriptText.contains("ひみつ") && !transcriptText.contains("オフレコ")
+              && withTranscript?["transcriptTruncated"] as? Bool == false && withTranscript?["notes"] != nil,
+              "include に transcript を入れると文字起こし（除いた発言・オフレコは返さない）")
+        let found = toolResult(r["16"]).json
+        let hits = ((found?["results"] as? [[String: Any]])?.first?["hits"] as? [Any])?.count ?? 0
+        check((found?["results"] as? [Any])?.count == 1 && hits >= 1 && hits <= HanasuMCPTools.hitsPerMeeting, "search_meetings は会議ごとに当たりを 5 か所まで")
+        check((toolResult(r["17"]).json?["results"] as? [Any])?.isEmpty == true, "search_meetings は除いた発言を検索しない")
+        check((toolResult(r["18"]).json?["actionItems"] as? [Any])?.count == 1, "list_action_items は担当で絞る")
+        let missingArgument = toolResult(r["19"])
+        check(missingArgument.isError == true && missingArgument.text.contains("meeting"), "必要な引数がなければ isError（モデルが直せるように）")
+        let notFound = toolResult(r["20"])
+        check(notFound.isError == true && notFound.text.contains("会議が見つかりません"), "ない会議は isError と理由")
+        check(toolResult(r["21"]).isError == true && toolResult(r["22"]).isError == true && toolResult(r["23"]).isError == true,
+              "型の違う引数・知らない引数・読めない期間は isError")
+        let ambiguous = toolResult(r["24"])
+        check(ambiguous.isError == true && ambiguous.text.contains("2026-10-02_1000"), "日付で複数当たれば isError と候補")
+
+        // 長い会議は切って、続きの取り方を返す（DEC-MTG-125）
+        let longBase = root.appendingPathComponent("LongMeetings", isDirectory: true)
+        var long = Meeting(id: "2026-10-05 0900", title: "長い会議", startedAt: date("2026-10-05 09:00"))
+        long.status = .done
+        long.duration = 7200
+        long.utterances = (0..<1500).map { i in
+            Utterance(speaker: i % 2 == 0 ? "me" : "spk1", start: Double(i * 4), end: Double(i * 4 + 3),
+                      text: "これは長い会議の \(i) 番目の発言で、内容を確かめるための文です。")
+        }
+        try? write(long, to: longBase)
+        let first = mcp(exe, [toolCall(1, "get_meeting", ["meeting": "latest", "include": ["transcript"]])],
+                        arguments: ["--meetings-dir", longBase.path])
+        let firstMeeting = toolResult(first.responses["1"]).json?["meeting"] as? [String: Any]
+        let firstEntries = firstMeeting?["transcript"] as? [[String: Any]] ?? []
+        let next = firstMeeting?["transcriptNextFrom"] as? Double
+        let firstText = toolResult(first.responses["1"]).text
+        check(firstMeeting?["transcriptTruncated"] as? Bool == true && next != nil && !firstEntries.isEmpty
+              && firstText.count < HanasuMCPTools.maxCharacters + 5_000,
+              "長い文字起こしは約 \(HanasuMCPTools.maxCharacters) 文字で切り、続きの開始の秒を返す（\(firstText.count) 文字、\(firstEntries.count) 発言）")
+        if let next {
+            let second = mcp(exe, [toolCall(1, "get_meeting", ["meeting": "latest", "include": ["transcript"], "transcriptFrom": next])],
+                             arguments: ["--meetings-dir", longBase.path])
+            let secondEntries = (toolResult(second.responses["1"]).json?["meeting"] as? [String: Any])?["transcript"] as? [[String: Any]] ?? []
+            check(secondEntries.first?["start"] as? Double == next, "transcriptFrom に transcriptNextFrom を渡すと、続きから読める")
+        }
+        let ranged = mcp(exe, [toolCall(1, "get_meeting", ["meeting": "latest", "include": ["transcript"], "transcriptFrom": 40, "transcriptTo": 60])],
+                         arguments: ["--meetings-dir", longBase.path])
+        let rangedStarts = ((toolResult(ranged.responses["1"]).json?["meeting"] as? [String: Any])?["transcript"] as? [[String: Any]] ?? [])
+            .compactMap { $0["start"] as? Double }
+        check(rangedStarts == [40, 44, 48, 52, 56], "transcriptFrom / transcriptTo で時刻の範囲を絞る（\(rangedStarts)）")
+
+        // ask_meetings（偽の fm）
+        var env = ai
+        env["FAKE_FM_OUTPUT"] = "予算案をまとめます（M1: 予算の定例）"
+        let asked = mcp(exe, [toolCall(1, "ask_meetings", ["question": "予算はどうなった"])], arguments: dir + ["--ai", "apple"], environment: env)
+        let answer = toolResult(asked.responses["1"])
+        check(answer.isError == false && (answer.json?["answer"] as? String)?.contains("予算案") == true
+              && !asked.lines.contains { $0 is NSNull }, "ask_meetings は答えと使った会議を返す（AI を使うあいだも stdout は JSON-RPC だけ）")
+        env["FAKE_FM_FAIL"] = "1"
+        let askFailed = toolResult(mcp(exe, [toolCall(1, "ask_meetings", ["question": "予算"])], arguments: dir + ["--ai", "apple"], environment: env).responses["1"])
+        check(askFailed.isError == true && !askFailed.text.isEmpty, "AI が失敗したら isError")
+        check(call(exe, ["mcp", "--ai", "foo"] + dir).status == 2, "hanasu mcp --ai に知らない AI は 2")
+
+        // 管理者のポリシー（REQ-COM-189・REQ-MTG-127）
+        HanasuPolicy.testValues = [HanasuPolicy.Key.disableMCP.rawValue: true]
+        let disabled = runSync { await HanasuCommand.run(["mcp", "--meetings-dir", base.path]) }
+        check(disabled == .denied, "DisableMCP のポリシーがあれば、hanasu mcp は 5")
+        HanasuPolicy.testValues = [HanasuPolicy.Key.disableMCPAskMeetings.rawValue: true]
+        let restricted = HanasuMCPTools(directory: base, aiArguments: HanasuArguments())
+        check(!restricted.definitions().contains { $0["name"] as? String == "ask_meetings" }, "DisableMCPAskMeetings なら ask_meetings を一覧に出さない")
+        let blocked = runSync { await restricted.call("ask_meetings", arguments: ["question": "予算"]) }
+        check(blocked["isError"] as? Bool == true, "DisableMCPAskMeetings なら、ask_meetings を呼ばれても isError")
+        HanasuPolicy.testValues = nil
+        _ = fm
     }
 
     private static func runSync<T: Sendable>(_ body: @escaping @Sendable () async -> T) -> T {

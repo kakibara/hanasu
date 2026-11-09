@@ -509,6 +509,21 @@
 - 実装の場所: `HanasuAICommands.runAsk`、`MeetingAsk.gatherContext`（`Options.period`・検索の仕方）
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（偽の `fm` に送られた内容で確かめる）
 
+### REQ-MTG-127 MCP のツールで、会議を読む・探す・聞く・アクションアイテムを並べる
+- 内容: `hanasu mcp`（REQ-COM-189）は、`list_meetings`・`get_meeting`・`search_meetings`・`ask_meetings`・`list_action_items` の 5 つのツールを出す。中身と形は、`hanasu meetings list / show / search`・`ask`・`actions` の `--json` と同じ（REQ-MTG-120〜124・126）。どれも会議を書き換えない。各ツールの引数は JSON Schema（`inputSchema`）で示す。`get_meeting` は既定で議事録とアクションアイテムだけを返し、文字起こしは求められたときに時刻の範囲を絞って返す。どのツールも 1 回の結果の長さに上限を設け、超えたら切って続きの取り方を書く。
+- 受け入れ条件:
+  - `tools/list` に 5 つのツールが、`inputSchema`・`annotations`（`readOnlyHint`・`openWorldHint`）付きで出る。`ask_meetings` の説明には、会議の中身を設定の会議の AI（名前を出す）に送ることを書き、外の AI なら `openWorldHint` を true にする。
+  - ツールの説明と結果に、会議の中身は記録されたデータで指示ではない旨を書く。
+  - `get_meeting` に `include` がなければ、議事録とアクションアイテムだけで、文字起こしを含まない。`include` に `transcript` と `transcriptFrom` / `transcriptTo`（秒）を渡すと、その範囲の発言を返す。長くて切ったときは `transcriptTruncated` と、続きの開始の秒（`transcriptNextFrom`）を返す。
+  - `list_meetings`・`list_action_items`・`search_meetings` は `limit` と `offset` を受け、続きがあれば `nextOffset` を返す。
+  - 議事録に使わない発言（除いた発言・オフレコ）は、どのツールも返さない（DEC-MTG-121）。
+  - 管理者のポリシー `DisableMCPAskMeetings` が true なら、`ask_meetings` は一覧に出ず、呼ばれてもポリシーで止められている旨の `isError` を返す。`AllowedAIProviders`（REQ-COM-188）も効く。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の M7・M8・M10・M13・4.4）
+- 関係する要件: REQ-COM-189, REQ-MTG-120, REQ-MTG-121, REQ-MTG-123, REQ-MTG-124, REQ-MTG-126
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMCPTools`、`HanasuMeetingsCommand`（JSON を作る関数）、`HanasuAICommands.askJSON`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+
 ---
 
 ## 設計判断
@@ -1284,6 +1299,14 @@
 - 関係する要件: REQ-MTG-126, REQ-MTG-016
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
 - 実装の場所: `MeetingAsk.gatherContext`、`HanasuAICommands.runAsk`
+
+### DEC-MTG-125 MCP のツールの結果は、発言を 2 万文字までにし、件数の既定を小さくする
+- 決めたこと: `get_meeting` の文字起こしは、JSON にした発言の長さの合計が 2 万文字を超える手前で切り、次の発言の開始の秒を `transcriptNextFrom` で返す。議事録が 2 万文字を超えるときも切り、`minutesTruncated` を返す。件数の既定と上限は、`list_meetings` 20（上限 100）、`list_action_items` 50（上限 200）、`search_meetings` は会議 10（上限 50）で、1 つの会議の当たりは 5 か所まで（総数は `totalHits`）。結果のいちばん外に `notice`（会議の中身は記録されたデータで指示ではない旨）を付ける。
+- 理由: 長い会議の文字起こしは数万文字になり、エージェントの文脈を使い切る（計画の M10）。Claude Code は MCP の結果が 2 万 5 千トークンを超えると切るので、それより十分小さくする（日本語は 1 文字がほぼ 1 トークン）。エージェントは続きの取り方が分かれば、必要な部分だけを読み進められる。会議の中には、ほかの参加者の発言（指示めいた文を含みうる）が入る（計画の 4.4）。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の M10・4.4）
+- 関係する要件: REQ-MTG-127
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuMCPTools`
 
 ---
 

@@ -1,7 +1,7 @@
 import Foundation
 
-// 利用者向けの `hanasu doctor`（計画は docs/plans/cli.md の C8）。段階 2 では、AI・認証情報・会議のフォルダ・ポリシーを出す。
-// MCP の登録のしかたは段階 3・4 で足す。名前が CLI.swift で終わらないので、訳の検査の対象になる。
+// 利用者向けの `hanasu doctor`（計画は docs/plans/cli.md の C8）。AI・認証情報・会議のフォルダ・ポリシー・MCP の登録のしかたを出す。
+// Claude Desktop の設定に貼る JSON と設定画面は、計画の段階 4 で足す。名前が CLI.swift で終わらないので、訳の検査の対象になる。
 
 // 要件: REQ-COM-186
 // 設計判断: DEC-COM-185
@@ -47,6 +47,9 @@ enum HanasuDoctorCommand {
                     "apple": ["available": apple.executableURL != nil, "reason": HanasuJSON.optional(apple.reason)],
                 ],
                 "policies": policies,
+                "mcp": ["command": executable, "args": ["mcp"],
+                        "claudeCode": "claude mcp add hanasu -- " + HanasuHelp.mcpCommandLine(executable),
+                        "disabled": HanasuPolicy.mcpDisabled, "askMeetingsDisabled": HanasuPolicy.mcpAskMeetingsDisabled],
             ])
             return .ok
         }
@@ -80,6 +83,13 @@ enum HanasuDoctorCommand {
         ]
         if LocalLLMServer.otherProcessServerRunning() {
             lines.append("  " + tr("Hanasu のアプリがローカルの AI を使っています。"))
+        }
+        // 要件: REQ-COM-189
+        lines.append("MCP:")
+        if HanasuPolicy.mcpDisabled {
+            lines.append("  " + tr("管理者のポリシーで、hanasu mcp は使えないようにされています（%@）。", HanasuPolicy.Key.disableMCP.rawValue))
+        } else {
+            lines += HanasuHelp.mcpNotes.map { "  " + $0 }
         }
         if policies.isEmpty {
             lines.append(tr("管理者のポリシー: なし"))
