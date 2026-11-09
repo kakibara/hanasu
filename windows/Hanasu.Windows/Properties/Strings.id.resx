@@ -1217,9 +1217,6 @@ Buka halaman rilis di browser?</value>
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>Apa yang diucapkan sampai kamu mengakhirinya tidak akan dipakai untuk notulen. Perekaman tetap berjalan.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Kamu mengubah ucapan yang dipakai untuk notulen. Buat ulang notulen untuk menerapkan perubahan.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Kembalikan semua</value>
   </data>
@@ -1291,5 +1288,68 @@ Buka halaman rilis di browser?</value>
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>{0} ucapan disalin</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Kamus…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Cari saran kamus dari rapat ini…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Terapkan ulang kamus saat ini ke rapat ini</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Kembalikan rapat ini ke teks hasil pengenalan asli</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Cari saran kamus dari rapat ini</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Mencari…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Terapkan kamus juga ke transkrip rapat ini</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>AI mengambil nama diri dan kata yang mudah salah dikenali dari transkrip dan notulen rapat ini. Hanya yang Anda pilih yang ditambahkan ke kamus. Isi rapat hanya dikirim ke AI yang dipilih untuk rapat di tab "AI" (dengan "Lokal", tidak ada yang keluar dari PC ini).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Batal</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Tambahkan {0} item terpilih ke kamus</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>Tidak ada saran baru.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Pilih yang ingin ditambahkan ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>{0} item ditambahkan ke kamus.</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Kamus diterapkan ulang. {0} ucapan berubah.</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Kamus diterapkan ulang. Tidak ada ucapan yang berubah ({0} ucapan sudah diganti oleh kamus).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Teks hasil pengenalan asli dikembalikan. {0} ucapan berubah.</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>Rapat ini panjang, jadi hanya sekitar {0} menit pertama transkrip yang dibaca.</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Saran kamus</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Transkrip atau ucapan yang dipakai untuk notulen telah diubah. Buat ulang notulen untuk menerapkan perubahan.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Terapkan aturan penggantian kamus ke transkrip</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>Setelah perekaman dihentikan, aturan penggantian di "Kamus &amp; Aturan" diterapkan ke transkrip, dan notulen dibuat dari teks hasil penggantian. Teks hasil pengenalan asli juga disimpan, jadi Anda bisa mengembalikannya dari "Kamus…" di Catatan Rapat.</value>
   </data>
 </root>

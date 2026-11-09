@@ -46,7 +46,7 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 | **Edit dengan suara** | Pilih teks, tekan <kbd>⌃⌥⌘ E</kbd>, lalu ucapkan "buat lebih sopan", "ubah jadi poin-poin", atau "terjemahkan ke bahasa Inggris". |
 | **Gaya per aplikasi** | Di Slack teks dibuat santai dan singkat, di Mail sopan dan berparagraf, dan di Pages, Word, serta Notion memakai gaya bahasa tulis. Anda dapat mengubah preset untuk setiap aplikasi. |
 | **Snippet** | Ucapkan "tanda tangan email" untuk menyisipkan teks tersimpan persis seperti yang Anda tulis. Snippet tidak pernah dikirim ke AI. |
-| **Kamus** | Tambahkan nama diri dan aturan penggantian seperti `ストックマーク => Stockmark`. Di Mac, AI juga dapat menyarankan entri baru dari riwayat dan rapat Anda, dan Anda hanya menambahkan yang Anda pilih. |
+| **Kamus** | Tambahkan nama diri dan aturan penggantian seperti `ストックマーク => Stockmark`. Aturan penggantian juga diterapkan pada transkrip rapat. Dari rapat yang dibuka di Catatan rapat, AI dapat menyarankan entri baru dari rapat tersebut (di Mac, juga dari riwayat dan rapat terbaru Anda), dan Anda hanya menambahkan yang Anda pilih. |
 | **Konteks layar** *(opsional)* | Hanasu membaca judul jendela dan teks di sekitar kursor, sehingga nama-nama cocok dengan apa yang sudah ada di layar. Kolom kata sandi tidak pernah dibaca. |
 | **Pilih mikrofon** *(Mac)* | Pilih mikrofon di Pengaturan, atau ganti lewat tombol mikrofon di HUD tanpa menghentikan perekaman. |
 | **Riwayat** | Cari hasil sebelumnya dan ulangi yang gagal. Secara bawaan riwayat disimpan selama 30 hari, dan Anda dapat mengubahnya di Pengaturan. Di Mac, tekan <kbd>⌥⇧ V</kbd> untuk menempelkan hasil terakhir lagi. |

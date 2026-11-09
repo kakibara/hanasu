@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- Реплики, не используемые в протоколе ({0}), не включены</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Не удалось прочитать ответ AI с кандидатами для словаря.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>Встреча записывается или обрабатывается, протокол создаётся заново, либо нет реплик для протокола.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>Папка встречи не найдена.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Не удалось изменить встречу: {0}</value>
+  </data>
 </root>

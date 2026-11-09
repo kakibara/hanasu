@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- {0} ucapan yang tidak dipakai untuk notulen tidak disertakan</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Tidak dapat membaca respons AI berisi saran kamus.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>Rapat sedang direkam atau diproses, notulennya sedang dibuat ulang, atau tidak ada ucapan yang dipakai untuk notulen.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>Folder rapat tidak ditemukan.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Tidak dapat mengubah rapat ini: {0}</value>
+  </data>
 </root>

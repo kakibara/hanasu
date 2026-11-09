@@ -1217,9 +1217,6 @@ Mở trang phát hành trong trình duyệt?</value>
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>Những gì nói cho đến khi kết thúc sẽ không được dùng cho biên bản. Việc ghi âm vẫn tiếp tục.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Bạn đã thay đổi các lời nói dùng cho biên bản. Hãy tạo lại biên bản để áp dụng thay đổi.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Khôi phục tất cả</value>
   </data>
@@ -1291,5 +1288,68 @@ Mở trang phát hành trong trình duyệt?</value>
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>Đã sao chép {0} lời nói</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Từ điển…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Tìm gợi ý cho từ điển từ cuộc họp này…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Áp dụng lại từ điển hiện tại cho cuộc họp này</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Khôi phục văn bản nhận dạng gốc của cuộc họp này</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Tìm gợi ý cho từ điển từ cuộc họp này</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Đang tìm…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Áp dụng từ điển cho cả bản ghi lời của cuộc họp này</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>AI sẽ liệt kê các danh từ riêng và từ dễ bị nhận nhầm từ bản ghi lời và biên bản của cuộc họp này. Chỉ những từ bạn chọn mới được thêm vào từ điển. Nội dung cuộc họp chỉ được gửi đến AI đã chọn cho cuộc họp trên tab "AI" (với "Cục bộ", không có gì rời khỏi PC này).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Thêm {0} mục đã chọn vào từ điển</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>Không tìm thấy gợi ý mới.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Hãy chọn những mục bạn muốn thêm ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Đã thêm {0} mục vào từ điển.</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Đã áp dụng lại từ điển, {0} lời nói đã thay đổi.</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Đã áp dụng lại từ điển. Không có lời nói nào thay đổi (lời nói đã được thay thế bằng từ điển: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Đã khôi phục văn bản nhận dạng gốc, {0} lời nói đã thay đổi.</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>Cuộc họp dài nên chỉ đọc khoảng {0} phút đầu của bản ghi lời.</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Gợi ý cho từ điển</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Bạn đã thay đổi bản ghi lời hoặc lời nói dùng cho biên bản. Hãy tạo lại biên bản để áp dụng thay đổi.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Áp dụng quy tắc thay thế của từ điển cho bản ghi lời</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>Sau khi dừng ghi âm, quy tắc thay thế trên tab "Từ điển &amp; quy tắc" sẽ được áp dụng cho bản ghi lời, và biên bản được tạo từ văn bản đã thay thế. Văn bản nhận dạng gốc cũng được giữ lại, nên bạn có thể khôi phục bằng nút "Từ điển…" trong Ghi chú cuộc họp.</value>
   </data>
 </root>

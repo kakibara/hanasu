@@ -506,6 +506,9 @@ struct MeetingDetailView: View {
         }
         ToolbarSpacer(.fixed, placement: .primaryAction)
         ToolbarItemGroup(placement: .primaryAction) {
+            // 要件: REQ-DIC-072, REQ-DIC-074
+            MeetingDictionaryMenu(meeting: meeting, recorder: recorder)
+                .disabled(processing)
             MeetingExportMenu(meeting: meeting, recorder: recorder)
                 .disabled(processing)
             MeetingMoreMenu(meeting: meeting, recorder: recorder, processing: processing,

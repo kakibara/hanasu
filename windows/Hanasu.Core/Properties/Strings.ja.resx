@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- 議事録に使わない発言（{0} 件）は含めていません</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>辞書の候補の AI の応答を読み取れませんでした。</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>記録中・処理中か、議事録を作り直しているところか、議事録に使う発言がありません。</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>会議のフォルダが見つかりません。</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>この会議を変えられませんでした: {0}</value>
+  </data>
 </root>

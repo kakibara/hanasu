@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- कार्यवृत्त में इस्तेमाल न होने वाले {0} कथन शामिल नहीं हैं</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>शब्दकोश के सुझावों वाला AI का जवाब पढ़ा नहीं जा सका।</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>मीटिंग रिकॉर्ड या प्रोसेस हो रही है, उसका कार्यवृत्त फिर से बन रहा है, या कार्यवृत्त में इस्तेमाल होने वाला कोई कथन नहीं है।</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>मीटिंग का फ़ोल्डर नहीं मिला।</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>इस मीटिंग को बदला नहीं जा सका: {0}</value>
+  </data>
 </root>

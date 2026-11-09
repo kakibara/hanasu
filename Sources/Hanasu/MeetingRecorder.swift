@@ -99,7 +99,7 @@ final class MeetingRecorder: ObservableObject {
     }
 
     // 要件: REQ-MTG-002
-    // 設計判断: DEC-MTG-001, DEC-DIC-085
+    // 設計判断: DEC-MTG-001, DEC-DIC-175
     func start() async {
         guard state == .idle else { return }
         setState(.starting)
@@ -322,8 +322,9 @@ final class MeetingRecorder: ObservableObject {
     // 設計判断: DEC-MTG-009, DEC-MTG-015
     /// 後処理（話者分離 → 並べ替え → 議事録 → 保存）。CLI の動作確認からも使う。
     /// 音声を残さない設定のときは、最後（話者分離と文字起こしのあと）に音声ファイルを消す。keepAudio なら消さない
+    /// dictionary と applyDictionary を渡すと、設定の代わりにそれを使う（CLI の確かめで、本物の設定を書き換えないため。DEC-DIC-173）
     func process(_ meeting: Meeting, me mine: [TranscribedPhrase], others theirs: [TranscribedPhrase],
-                 keepAudio: Bool = false) async -> Meeting {
+                 keepAudio: Bool = false, dictionary: UserDictionary? = nil, applyDictionary: Bool? = nil) async -> Meeting {
         var meeting = meeting
         var turns: [SpeakerTurn] = []
         let othersAudio = MeetingStore.audioURL(for: meeting, channel: .others)
@@ -352,6 +353,12 @@ final class MeetingRecorder: ObservableObject {
             for t in micTurns { print("mic turn \(t.speakerId) \(String(format: "%.2f-%.2f", t.start, t.end))") }
         }
         meeting.utterances = MeetingProcessor.buildUtterances(me: mine, others: theirs, turns: turns, micTurns: micTurns)
+        // 要件: REQ-DIC-073
+        // 設計判断: DEC-DIC-173
+        // 確定した発言に、議事録を作る前に辞書の置き換えルールを当てる（記録中のライブの文字起こしには当てない）
+        meeting = MeetingDictionary.applyOnFinish(
+            meeting, dictionary: dictionary ?? settings.userDictionary,
+            enabled: applyDictionary ?? settings.applyDictionaryToMeetings)
         try? MeetingStore.save(meeting)
         appLog.notice("meeting transcribed: me=\(mine.count) others=\(theirs.count) utterances=\(meeting.utterances.count) speakers=\(meeting.speakers.count)")
 
@@ -484,6 +491,54 @@ final class MeetingRecorder: ObservableObject {
         try? MeetingStore.save(updated)
         meetings[index] = updated
         reloadMeetings()
+    }
+
+    // MARK: - 辞書を会議に当てる（MeetingDictionary.swift）
+
+    // 要件: REQ-DIC-074
+    // 設計判断: DEC-DIC-174
+    /// 会議の文字起こしに、辞書を当て直せるか（戻せるか）。議事録に使う発言を変えられて、使う発言がある会議
+    func canApplyDictionary(_ meeting: Meeting) -> Bool {
+        canEditMinutesSelection(meeting) && !meeting.usedUtterances.isEmpty
+    }
+
+    // 要件: REQ-DIC-074
+    // 設計判断: DEC-DIC-174
+    /// 今の辞書を会議の文字起こしに当て直して保存する。議事録は作り直さず、変わったら作り直しを促す
+    func applyDictionary(to meeting: Meeting) -> Result<MeetingDictionary.Outcome, MeetingDictionaryError> {
+        let dictionary = settings.userDictionary
+        return rewriteForDictionary(meeting) { MeetingDictionary.apply(dictionary, to: $0) }
+    }
+
+    // 要件: REQ-DIC-074
+    // 設計判断: DEC-DIC-174
+    /// 会議の文字起こしを、認識したままの文に戻して保存する
+    func revertDictionary(of meeting: Meeting) -> Result<MeetingDictionary.Outcome, MeetingDictionaryError> {
+        rewriteForDictionary(meeting) { MeetingDictionary.revert($0) }
+    }
+
+    // 設計判断: DEC-DIC-174
+    /// 一覧の最新の会議を書き換え、一覧もすぐ書き換える（あとの「議事録を作り直す」が古い会議から作らないように）。
+    /// 保存に失敗したら、一覧も会議も変えない
+    private func rewriteForDictionary(_ meeting: Meeting, _ change: (Meeting) -> MeetingDictionary.Outcome)
+        -> Result<MeetingDictionary.Outcome, MeetingDictionaryError> {
+        guard canApplyDictionary(meeting) else { return .failure(.busy) }
+        let index = meetings.firstIndex { $0.id == meeting.id }
+        let latest = index.map { meetings[$0] } ?? meeting
+        guard MeetingStore.exists(latest) else {
+            reloadMeetings()
+            return .failure(.missing)
+        }
+        let outcome = change(latest)
+        guard outcome.changed > 0 else { return .success(outcome) }
+        do {
+            try MeetingStore.save(outcome.meeting)
+        } catch {
+            return .failure(.saveFailed(error.localizedDescription))
+        }
+        if let index { meetings[index] = outcome.meeting }
+        reloadMeetings()
+        return .success(outcome)
     }
 
     // 要件: REQ-MTG-046

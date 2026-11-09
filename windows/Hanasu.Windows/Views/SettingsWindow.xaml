@@ -345,6 +345,9 @@
                                    Text="{x:Static p:Strings.Settings_DiarizeNote}" />
 
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Minutes}" />
+                        <!-- 要件: REQ-DIC-073 -->
+                        <CheckBox x:Name="ApplyDictionaryCheck" Content="{x:Static p:Strings.Settings_ApplyDictionaryToMeetings}" Checked="OnApplyDictionaryChanged" Unchecked="OnApplyDictionaryChanged" />
+                        <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_ApplyDictionaryToMeetingsNote}" />
                         <CheckBox x:Name="MakeMinutesCheck" Content="{x:Static p:Strings.Settings_MakeMinutes}" Checked="OnMakeMinutesChanged" Unchecked="OnMakeMinutesChanged" />
                         <TextBlock x:Name="MinutesAiNote" Style="{StaticResource Note}" />
                         <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_MinutesNote}" />

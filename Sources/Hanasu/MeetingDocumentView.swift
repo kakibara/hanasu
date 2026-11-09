@@ -320,7 +320,7 @@ struct MeetingStatusBanners: View {
         case .outdated:
             // 設計判断: DEC-MTG-092
             StatusBanner(style: .warning, systemImage: "arrow.triangle.2.circlepath",
-                         title: tr("議事録に使う発言を変えました。作り直すと反映されます。")) {
+                         title: tr("文字起こしか、議事録に使う発言を変えました。作り直すと反映されます。")) {
                 Button(tr("議事録を作り直す"), action: onRegenerate)
                     .controlSize(.small)
                     // 設計判断: DEC-MTG-091（使う発言がなければ作らない）

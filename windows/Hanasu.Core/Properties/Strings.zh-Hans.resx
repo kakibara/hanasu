@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- 未包含不用于会议纪要的发言（{0} 条）</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>无法读取 AI 返回的词典候选。</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>会议正在录制或处理中、正在重新生成会议纪要，或没有用于会议纪要的发言。</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>找不到会议的文件夹。</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>无法更改此会议：{0}</value>
+  </data>
 </root>

@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- Tutanakta kullanılmayan {0} konuşma dahil edilmedi</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Sözlük önerilerini içeren AI yanıtı okunamadı.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>Toplantı kaydediliyor veya işleniyor, tutanak yeniden oluşturuluyor ya da tutanakta kullanılacak konuşma yok.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>Toplantı klasörü bulunamadı.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Bu toplantı değiştirilemedi: {0}</value>
+  </data>
 </root>

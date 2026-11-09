@@ -170,6 +170,8 @@ public partial class MeetingWindow : Window
         MinutesOutdatedPanel.Visibility = m.MinutesOutdated == true ? Visibility.Visible : Visibility.Collapsed;
         MinutesOutdatedRegenerateButton.IsEnabled = TranscriptOutdatedRegenerateButton.IsEnabled = RegenerateButton.IsEnabled;
         DeleteButton.IsEnabled = !busy && meetings.CanDelete(m);
+        // 要件: REQ-DIC-072, REQ-DIC-074
+        DictionaryButton.IsEnabled = !busy && meetings.CanApplyDictionary(m);
         RecordingNote.Text = string.Format(Strings.Meeting_RecordingNote, host.Settings.Current.MeetingEngine == TranscriptionEngine.Gemini ? "Gemini" : "Whisper");
         UpdateLiveNotes();
         UpdateOffRecord();
@@ -577,9 +579,40 @@ public partial class MeetingWindow : Window
         _ = RegenerateAsync(m, t);
     }
 
+    // 要件: REQ-DIC-072, REQ-DIC-074
+    // 設計判断: DEC-DIC-171
+    /// <summary>「辞書…」: この会議から候補を探す・今の辞書を当て直す・認識したままの文に戻す、のメニューを出す</summary>
+    private void OnDictionaryClick(object sender, RoutedEventArgs e)
+    {
+        if (selected is not { } m) return;
+        var menu = new ContextMenu { PlacementTarget = DictionaryButton, Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom };
+        var suggest = new MenuItem { Header = Strings.Meeting_Dictionary_Suggest };
+        suggest.Click += (_, _) => SuggestDictionary(m);
+        var apply = new MenuItem { Header = Strings.Meeting_Dictionary_Apply };
+        apply.Click += (_, _) => ShowDictionaryResult(m, MeetingDictionaryWindow.ApplyMessage(meetings, m, revert: false));
+        var revert = new MenuItem { Header = Strings.Meeting_Dictionary_Revert, IsEnabled = MeetingDictionary.ReplacedCount(m) > 0 };
+        revert.Click += (_, _) => ShowDictionaryResult(m, MeetingDictionaryWindow.ApplyMessage(meetings, m, revert: true));
+        menu.Items.Add(suggest);
+        menu.Items.Add(apply);
+        menu.Items.Add(revert);
+        menu.IsOpen = true;
+    }
+
+    private void SuggestDictionary(Meeting m)
+    {
+        var dialog = new MeetingDictionaryWindow(host, meetings, m) { Owner = this };
+        if (dialog.ShowDialog() == true && dialog.ResultMessage is { } message) ShowDictionaryResult(m, message);
+    }
+
+    private void ShowDictionaryResult(Meeting m, string message)
+    {
+        if (selected?.Id == m.Id) Show(m);
+        MessageBox.Show(this, message, "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
     private async Task RegenerateAsync(Meeting m, MinutesTemplate? template)
     {
-        RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = DeleteButton.IsEnabled = false;
+        RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = DeleteButton.IsEnabled = DictionaryButton.IsEnabled = false;
         // 作り直している間は、議事録に使う発言を変えさせない（CanEditMinutesSelection）
         MinutesOutdatedRegenerateButton.IsEnabled = TranscriptOutdatedRegenerateButton.IsEnabled = false;
         ActionStatus.Text = string.Format(Core.Properties.Strings.Meeting_MakingMinutes, Core.Ai.TextAiFactory.NameOf(host.Settings.Current.MeetingAi));

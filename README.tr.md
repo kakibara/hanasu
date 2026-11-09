@@ -46,7 +46,7 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herk
 | **Sesle düzenleme** | Bir metin seçin, <kbd>⌃⌥⌘ E</kbd> tuşlarına basın ve "daha kibar yap", "madde işaretlerine dönüştür" ya da "İngilizceye çevir" deyin. |
 | **Uygulamaya göre stiller** | Metin Slack'te samimi ve kısa, Mail'de paragraflı ve kibar; Pages, Word ve Notion'da ise yazı dilindedir. Her uygulamanın ön ayarını değiştirebilirsiniz. |
 | **Hazır metinler** | "e-posta imzası" dediğinizde kaydettiğiniz metin tam yazdığınız gibi eklenir. Hazır metinler asla yapay zekâya gönderilmez. |
-| **Sözlük** | Özel adlar ve `ストックマーク => Stockmark` gibi değiştirme kuralları ekleyin. Mac'te yapay zekâ geçmişinizden ve toplantılarınızdan yeni girdiler de önerebilir; yalnızca seçtiklerinizi eklersiniz. |
+| **Sözlük** | Özel adlar ve `ストックマーク => Stockmark` gibi değiştirme kuralları ekleyin. Değiştirme kuralları toplantı dökümlerine de uygulanır. Toplantı Notları'nda açtığınız bir toplantı için yapay zekâ o toplantıdan yeni girdiler önerebilir (Mac'te ayrıca geçmişinizden ve son toplantılarınızdan); yalnızca seçtiklerinizi eklersiniz. |
 | **Ekran bağlamı** *(isteğe bağlı)* | Hanasu pencere başlığını ve imlecin çevresindeki metni okur; böylece adlar ekranda zaten yazılı olanlarla eşleşir. Parola alanları asla okunmaz. |
 | **Mikrofonunuzu seçin** *(Mac)* | Mikrofonu Ayarlar'dan seçin ya da kaydı durdurmadan HUD'daki mikrofon düğmesinden değiştirin. |
 | **Geçmiş** | Önceki sonuçlarda arama yapın ve başarısız olanları yeniden deneyin. Geçmiş varsayılan olarak 30 gün saklanır; bunu Ayarlar'dan değiştirebilirsiniz. Mac'te son sonucu yeniden yapıştırmak için <kbd>⌥⇧ V</kbd> tuşlarına basın. |

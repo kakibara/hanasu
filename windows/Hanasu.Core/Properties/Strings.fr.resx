@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- Les {0} interventions non utilisées pour le compte rendu ne sont pas incluses</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Impossible de lire la réponse de l'IA contenant les suggestions pour le dictionnaire.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>La réunion est en cours d'enregistrement ou de traitement, son compte rendu est en cours de régénération, ou aucune intervention n'est utilisée pour le compte rendu.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>Le dossier de la réunion est introuvable.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Impossible de modifier cette réunion : {0}</value>
+  </data>
 </root>

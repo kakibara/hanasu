@@ -1217,9 +1217,6 @@
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>끝낼 때까지의 발언은 회의록에 쓰지 않습니다. 녹음은 계속됩니다.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>회의록에 쓸 발언을 바꿨습니다. 다시 만들면 반영됩니다</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>모두 되돌리기</value>
   </data>
@@ -1291,5 +1288,68 @@
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>발언 {0}개를 복사했습니다</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>사전…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>이 회의에서 사전 후보 찾기…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>현재 사전을 이 회의에 다시 적용</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>이 회의를 인식된 원래 텍스트로 되돌리기</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>이 회의에서 사전 후보 찾기</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>찾는 중…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>이 회의의 녹취록에도 사전 적용</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>AI가 이 회의의 녹취록과 회의록에서 고유 명사와 잘못 인식하기 쉬운 단어를 찾아 줍니다. 선택한 것만 사전에 추가합니다. 회의 내용은 'AI' 탭에서 회의용으로 선택한 AI에만 넘깁니다('로컬'이면 이 PC 밖으로 보내지 않습니다).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>선택한 {0}개를 사전에 추가</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>새 후보를 찾지 못했습니다.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>추가할 항목을 선택하세요({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>{0}개를 사전에 추가했습니다.</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>다시 적용하여 발언 {0}개가 바뀌었습니다.</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>다시 적용했습니다. 바뀐 발언은 없습니다(사전으로 바꾼 발언: {0}개).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>인식된 원래 텍스트로 되돌려 발언 {0}개가 바뀌었습니다.</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>회의가 길어서 녹취록의 처음 약 {0}분만 읽었습니다.</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>사전 후보</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>녹취록 또는 회의록에 쓸 발언이 바뀌었습니다. 회의록을 다시 만들면 반영됩니다.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>녹취록에 사전의 바꾸기 규칙 적용</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>녹음을 중지한 후의 녹취록에 '사전 및 규칙'의 바꾸기 규칙을 적용합니다. 회의록은 적용한 후의 텍스트로 만듭니다. 인식된 원래 텍스트도 남겨 두므로 회의 노트의 '사전…'에서 되돌릴 수 있습니다.</value>
   </data>
 </root>

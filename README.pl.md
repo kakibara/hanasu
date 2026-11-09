@@ -46,7 +46,7 @@ Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Kod źródłowy Ha
 | **Edycja głosem** | Zaznacz tekst, naciśnij <kbd>⌃⌥⌘ E</kbd> i powiedz „napisz to uprzejmiej”, „zamień na punkty” albo „przetłumacz na angielski”. |
 | **Style dla aplikacji** | W Slacku tekst jest swobodny i krótki, w Mailu uprzejmy i podzielony na akapity, a w Pages, Wordzie i Notion — w stylu pisanym. Ustawienie wstępne możesz zmienić dla każdej aplikacji. |
 | **Fragmenty tekstu** | Powiedz „podpis e-mail”, aby wstawić zapisany tekst dokładnie tak, jak go napisałeś. Fragmenty nigdy nie są wysyłane do AI. |
-| **Słownik** | Dodawaj nazwy własne i reguły zamiany, np. `ストックマーク => Stockmark`. Na Macu AI może też proponować nowe wpisy na podstawie historii i spotkań, a Ty dodajesz tylko wybrane. |
+| **Słownik** | Dodawaj nazwy własne i reguły zamiany, np. `ストックマーク => Stockmark`. Reguły zamiany działają też w transkrypcjach spotkań. Dla spotkania otwartego w Notatkach ze spotkań AI może zaproponować nowe wpisy na podstawie tego spotkania (na Macu także na podstawie historii i ostatnich spotkań), a Ty dodajesz tylko wybrane. |
 | **Kontekst ekranu** *(opcjonalnie)* | Hanasu odczytuje tytuł okna i tekst wokół kursora, aby nazwy zgadzały się z tym, co już jest na ekranie. Pola haseł nigdy nie są odczytywane. |
 | **Wybór mikrofonu** *(Mac)* | Wybierz mikrofon w Ustawieniach albo przełącz go przyciskiem mikrofonu w HUD bez przerywania nagrania. |
 | **Historia** | Przeszukuj wcześniejsze wyniki i ponawiaj nieudane. Domyślnie historia jest przechowywana przez 30 dni; możesz to zmienić w Ustawieniach. Na Macu naciśnij <kbd>⌥⇧ V</kbd>, aby ponownie wkleić ostatni wynik. |

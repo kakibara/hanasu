@@ -1217,9 +1217,6 @@
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>结束前说的话不会用于会议纪要。录音会继续。</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>已更改用于会议纪要的发言。重新生成后才会生效</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>全部恢复</value>
   </data>
@@ -1291,5 +1288,68 @@
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>已复制 {0} 条发言</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>词典…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>从此会议中查找词典候选…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>将当前词典重新应用于此会议</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>将此会议恢复为原始识别文本</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>从此会议中查找词典候选</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>正在查找…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>也将词典应用于此会议的转录稿</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>AI 会从此会议的转录稿和会议纪要中列出专有名词和容易识别错误的词。只有你选中的才会添加到词典。会议内容只会发送给在设置的“AI”中为会议选择的 AI（选择“本地”时，不会离开此电脑）。</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>将所选的 {0} 项添加到词典</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>没有找到新的候选。</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>请选择要添加的候选（{0}）。</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>已将 {0} 项添加到词典。</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>已重新应用词典，{0} 条发言发生了变化。</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>已重新应用词典。没有发言发生变化（已由词典替换的发言：{0} 条）。</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>已恢复为原始识别文本，{0} 条发言发生了变化。</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>会议较长，因此只读取了转录稿开头约 {0} 分钟的内容。</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>词典候选</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>转录稿或用于会议纪要的发言已更改。重新生成会议纪要后即会反映。</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>对转录稿应用词典的替换规则</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>停止录制后，会对转录稿应用“词典和规则”中的替换规则，会议纪要将根据替换后的文本生成。原始识别文本也会保留，因此可以在会议笔记的“词典…”中恢复。</value>
   </data>
 </root>

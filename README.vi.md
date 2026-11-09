@@ -46,7 +46,7 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 | **Chỉnh sửa bằng giọng nói** | Chọn một đoạn văn bản, nhấn <kbd>⌃⌥⌘ E</kbd> và nói "viết lịch sự hơn", "chuyển thành gạch đầu dòng" hoặc "dịch sang tiếng Anh". |
 | **Văn phong theo từng ứng dụng** | Trong Slack, văn bản thân mật và ngắn gọn; trong Mail, lịch sự và chia đoạn; trong Pages, Word và Notion, theo văn viết. Bạn có thể đổi thiết lập sẵn cho từng ứng dụng. |
 | **Đoạn mẫu** | Nói "chữ ký email" để chèn đúng nguyên văn đoạn văn bản bạn đã lưu. Đoạn mẫu không bao giờ được gửi đến AI. |
-| **Từ điển** | Thêm danh từ riêng và quy tắc thay thế như `ストックマーク => Stockmark`. Trên Mac, AI còn có thể gợi ý mục mới từ lịch sử và các cuộc họp của bạn, và bạn chỉ thêm những mục mình chọn. |
+| **Từ điển** | Thêm danh từ riêng và quy tắc thay thế như `ストックマーク => Stockmark`. Quy tắc thay thế cũng được áp dụng cho bản chép lời cuộc họp. Khi mở một cuộc họp trong Ghi chép cuộc họp, AI có thể gợi ý mục mới từ chính cuộc họp đó (trên Mac, còn từ lịch sử và các cuộc họp gần đây của bạn), và bạn chỉ thêm những mục mình chọn. |
 | **Ngữ cảnh màn hình** *(tùy chọn bật)* | Hanasu đọc tiêu đề cửa sổ và văn bản quanh con trỏ để tên riêng khớp với những gì đã có trên màn hình. Ô mật khẩu không bao giờ bị đọc. |
 | **Chọn micrô** *(Mac)* | Chọn micrô trong Cài đặt, hoặc đổi micrô bằng nút micrô trên HUD mà không cần dừng ghi âm. |
 | **Lịch sử** | Tìm kiếm các kết quả trước đây và thử lại những lần thất bại. Theo mặc định, lịch sử được lưu 30 ngày, bạn có thể thay đổi trong Cài đặt. Trên Mac, nhấn <kbd>⌥⇧ V</kbd> để dán lại kết quả gần nhất. |

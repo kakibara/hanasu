@@ -31,6 +31,14 @@ public sealed class Utterance
     public double Start { get; set; }
     public double End { get; set; }
     public string Text { get; set; } = "";
+    // 要件: REQ-DIC-073, REQ-DIC-074
+    // 設計判断: DEC-DIC-172
+    /// <summary>辞書の置き換えで Text が変わったときの、認識したままの文。変わっていなければ null（meeting.json に書かない）</summary>
+    public string? RawText { get; set; }
+
+    /// <summary>認識したままの文（置き換えていなければ Text）</summary>
+    [JsonIgnore]
+    public string RecognizedText => RawText ?? Text;
 
     public Utterance() { }
 
@@ -417,8 +425,7 @@ public sealed partial class Meeting
         {
             if (blocks.Count > 0 && blocks[^1] is var last && last.Speaker == u.Speaker && u.Start - last.End <= maxGap)
             {
-                last.Text += u.Text;
-                last.End = Math.Max(last.End, u.End);
+                JoinInto(last, u);
             }
             else
             {
@@ -449,13 +456,25 @@ public sealed partial class Meeting
         return string.Join("\n", lines);
     }
 
+    // 設計判断: DEC-DIC-172
+    /// <summary>続く発言をつなぐ（into を書き換える）。どちらかを辞書で置き換えていれば、認識したままの文もつなぐ（Text だけをつなぐと読みが消える）</summary>
+    public static void JoinInto(Utterance into, Utterance next)
+    {
+        if (into.RawText != null || next.RawText != null) into.RawText = into.RecognizedText + next.RecognizedText;
+        into.Text += next.Text;
+        into.End = Math.Max(into.End, next.End);
+    }
+
     // 要件: REQ-COM-061
-    /// <summary>Gemini に渡す文字起こし（1 発言 1 行。話者名はプロンプトの言語）。議事録に使う発言だけ</summary>
-    public string TranscriptForPrompt()
+    /// <summary>
+    /// Gemini に渡す文字起こし（1 発言 1 行。話者名はプロンプトの言語）。議事録に使う発言だけ。
+    /// raw が true なら、辞書で置き換える前の認識したままの文で並べる（辞書の候補の材料。DEC-DIC-088・172）
+    /// </summary>
+    public string TranscriptForPrompt(bool raw = false)
     {
         var language = PromptLanguage.Current;
         // 設計判断: DEC-MTG-091
-        return string.Join("\n", BlocksForMinutes().Select(b => $"[{Clock(b.Start)}] {PromptName(b.Speaker, language)}: {b.Text}"));
+        return string.Join("\n", BlocksForMinutes().Select(b => $"[{Clock(b.Start)}] {PromptName(b.Speaker, language)}: {(raw ? b.RecognizedText : b.Text)}"));
     }
 
     // MARK: - メモと印（Mac 版 MeetingNotes.swift の Meeting の拡張）

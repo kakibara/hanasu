@@ -167,6 +167,10 @@ public sealed class AppSettings
     /// <summary>議事録のモデル（Mac 版と同じく、要約の質を優先して gemini-3.8-flash）</summary>
     public string MeetingMinutesModel { get; set; } = "gemini-3.8-flash";
     public bool MakeMeetingMinutes { get; set; } = true;
+    // 要件: REQ-DIC-073
+    // 設計判断: DEC-DIC-173
+    /// <summary>記録を止めたあとの文字起こしに、辞書の置き換えルールを当てる（既定はオン。今までの設定になければオン）</summary>
+    public bool ApplyDictionaryToMeetings { get; set; } = true;
     /// <summary>処理のあとも音声ファイル（me.wav / others.wav）を残す</summary>
     public bool KeepMeetingAudio { get; set; } = true;
     /// <summary>相手側の話者を分ける（sherpa-onnx。初めて使うときにモデルをダウンロードする）</summary>

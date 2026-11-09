@@ -334,6 +334,7 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 
 - **持ち方**: `Meeting` の `minutesFrom`・`minutesTo`・`excludedUtterances`・`excludedSpeakers`・`offRecord`（`OffRecordSpan`）・`minutesOutdated`。`utterances` は書き換えない（DEC-MTG-090）。
 - **決まり**: `Meeting.minutesUse(of:)` が発言ごとに `MinutesUse`（使う・除外・オフレコ・話者を除外・範囲外）を返す。`displayBlocks()` は `mergedBlocks()` と同じまとめ方で、使い方が変わるところでも分ける。`blocksForMinutes()` はその中の使うものだけ。
+- **辞書の置き換え**: 確定した発言に、辞書の置き換えルールを当ててから議事録を作る。認識したままの文は `Utterance.rawText` に残し、会議ノートの辞書のメニューから当て直す・戻すことができる。作りは [dictation.md](dictation.md) の 5.6（REQ-DIC-073・074）。
 - **使うところ**: `transcriptForPrompt`・`transcriptForPromptMarkingHighlights`（議事録・話者名の推測・会議への質問・辞書の候補）、`transcriptMarkdown`（書き出し・transcript.md。除いた件数を 1 行書く）、`MeetingChat.material`・`liveMaterial`（記録中はオフレコの区間の発言を除く）、`MeetingAsk.material` は `blocksForMinutes()` を使う。検索の索引（`MeetingSearch`）は `mergedBlocks()` のまま（DEC-MTG-091）。
 - **会議ノート**: 後ろ側のパネルの文字起こしの上に `TranscriptSelectionBar`（数・「選ぶ…」／「選び終える」・すべて元に戻す、範囲・除いた話者・オフレコの区間のカプセルは `FlowLayout` で折り返す・作り直しの促し。DEC-MTG-137）。行は `TranscriptDisplayRow`（`TranscriptLine` に `use` を渡して薄く・取り消し線・理由のバッジ。右クリックとマウスを載せたときの「…」で `TranscriptLineMenu`。選ぶモードでは `TranscriptUseCheckbox`、Shift で前に押した行からまとめて）。変更は `MeetingRecorder.changeMinutesSelection` で保存し、記録中・処理中・作り直し中の会議は変えない。文書の上には作り直しを促す帯（`MeetingStatusBanners`。DEC-MTG-092、DEC-MTG-093、DEC-MTG-132）。
 - **記録中**: `LiveTranscriptView` の上に `LiveOffRecordButton` と `LiveOffRecordBanner`。`MeetingRecorder.toggleOffRecord` が経過時間で区間を足して閉じ、すぐ保存する。止めたときに開いた区間を閉じ、スリープ前までで止めたときは `MeetingSleepCut.apply` が区間をそろえる（DEC-MTG-094）。
@@ -364,7 +365,7 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
                          └──────────────────────────────┬──────────────────────────────────────────────┘
                                                         │ 停止
                                                         ▼
-                    後処理: 確定 → 話者分離（others.m4a）→ 話者割り当て → 回り込み除去 → 並べ替え
+                    後処理: 確定 → 話者分離（others.m4a）→ 話者割り当て → 回り込み除去 → 並べ替え → 辞書の置き換え（設定でオフにできる）
                                                         │
                                                         ▼
                                 Gemini で議事録 → 保存（transcript.md / minutes.md / meeting.json）
@@ -394,7 +395,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 ## 6. 画面
 
 - **メニューバー**: 「会議の記録を開始／停止」（録音中は経過時間を表示し、アイコンを赤い丸にする）、「会議ノートを開く」。
-- **会議ノート ウィンドウ**: 左に日付でまとめた会議の一覧、真ん中に選んだ会議の文書、後ろ側のパネルに文字起こし・AI チャット（4.16）。記録中は真ん中にライブの文字起こし、後ろ側のパネルに「メモ｜AI チャット」と「ここ重要」ボタン、ツールバーに記録中の印・音量・オフレコ・字幕。ツールバーで議事録の型の選び直し（4.10）・作り直し・書き出し（4.11）・「…」（話者名・Finder で表示・削除）。左下の「会議の記録を開始」と、その下の設定の 1 行で録音する機器と議事録の型を選ぶ。
+- **会議ノート ウィンドウ**: 左に日付でまとめた会議の一覧、真ん中に選んだ会議の文書、後ろ側のパネルに文字起こし・AI チャット（4.16）。記録中は真ん中にライブの文字起こし、後ろ側のパネルに「メモ｜AI チャット」と「ここ重要」ボタン、ツールバーに記録中の印・音量・オフレコ・字幕。ツールバーで議事録の型の選び直し（4.10）・作り直し・辞書（[dictation.md](dictation.md) の 5.6）・書き出し（4.11）・「…」（話者名・Finder で表示・削除）。左下の「会議の記録を開始」と、その下の設定の 1 行で録音する機器と議事録の型を選ぶ。
   - タイトルは文書の先頭の欄（`EditableTitleField`）で書き換える。いつも薄い枠と鉛筆の印を出し、マウスを載せると枠を濃く、編集中はアクセントの色にする。Enter・フォーカスが外れたときに `MeetingRecorder.rename` で保存し、空なら元に戻す。Esc でやめる。別の会議を選んだときは、書きかけのタイトルを元の会議に保存してから切り替える（`MeetingDocumentView.commitTitle`）。ウインドウを開いたときに最初の入力欄としてフォーカスが入らないよう、すぐ外す。
   - 削除: 一覧の右クリックの「削除…」、一覧で ⌫、ツールバーの「…」の「削除…」から。確かめのダイアログのあと、`MeetingRecorder.delete` → `MeetingStore.moveToTrash` で会議のフォルダを丸ごとゴミ箱に移し（`FileManager.trashItem`）、一覧を読み直す（検索の索引も `recorder.$meetings` から更新される）。消したあとは一覧の次の会議を選ぶ。記録中・処理中の会議（`current`）と、議事録を作り直している会議（`regeneratingID`）は消せない。会議を書き換える `MeetingRecorder.update` は、フォルダがもうない会議を保存し直さない。
 - **字幕パネル**: 記録中、ほかのアプリの前面に直近の発言を出す小さなパネル（記録中のツールバーの「字幕」で出す）。

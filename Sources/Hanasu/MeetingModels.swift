@@ -31,6 +31,13 @@ struct Utterance: Codable, Hashable, Identifiable {
     var start: Double
     var end: Double
     var text: String
+    // 要件: REQ-DIC-073, REQ-DIC-074
+    // 設計判断: DEC-DIC-172
+    /// 辞書の置き換えで text が変わったときの、認識したままの文。変わっていなければ nil（meeting.json に書かない）
+    var rawText: String? = nil
+
+    /// 認識したままの文（置き換えていなければ text）
+    var recognizedText: String { rawText ?? text }
 }
 
 // 設計判断: DEC-MTG-017
@@ -140,12 +147,13 @@ struct Meeting: Codable, Identifiable, Hashable {
     }
 
     // 要件: REQ-COM-061
-    /// Gemini に渡す文字起こし（1 発言 1 行。話者名はプロンプトの言語）
-    func transcriptForPrompt() -> String {
+    /// Gemini に渡す文字起こし（1 発言 1 行。話者名はプロンプトの言語）。
+    /// raw が true なら、辞書で置き換える前の認識したままの文で並べる（辞書の候補の材料。DEC-DIC-088・172）
+    func transcriptForPrompt(raw: Bool = false) -> String {
         let language = PromptLanguage.current
         // 設計判断: DEC-MTG-091
         return blocksForMinutes()
-            .map { "[\(Self.clock($0.start))] \(promptName(for: $0.speaker, language: language)): \($0.text)" }
+            .map { "[\(Self.clock($0.start))] \(promptName(for: $0.speaker, language: language)): \(raw ? $0.recognizedText : $0.text)" }
             .joined(separator: "\n")
     }
 
@@ -153,14 +161,23 @@ struct Meeting: Codable, Identifiable, Hashable {
         var blocks: [Utterance] = []
         for u in utterances.sorted(by: { $0.start < $1.start }) {
             if var last = blocks.last, last.speaker == u.speaker, u.start - last.end <= maxGap {
-                last.text += u.text
-                last.end = max(last.end, u.end)
+                last = Self.joinUtterances(last, u)
                 blocks[blocks.count - 1] = last
             } else {
                 blocks.append(u)
             }
         }
         return blocks
+    }
+
+    // 設計判断: DEC-DIC-172
+    /// 続く発言をつなぐ。どちらかを辞書で置き換えていれば、認識したままの文もつなぐ（text だけをつなぐと読みが消える）
+    static func joinUtterances(_ a: Utterance, _ b: Utterance) -> Utterance {
+        var joined = a
+        if a.rawText != nil || b.rawText != nil { joined.rawText = a.recognizedText + b.recognizedText }
+        joined.text = a.text + b.text
+        joined.end = max(a.end, b.end)
+        return joined
     }
 
     static func clock(_ seconds: Double) -> String {
