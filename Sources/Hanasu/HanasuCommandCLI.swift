@@ -682,10 +682,15 @@ enum HanasuCommandCLI {
         var long = Meeting(id: "2026-10-05 0900", title: "長い会議", startedAt: date("2026-10-05 09:00"))
         long.status = .done
         long.duration = 7200
-        long.utterances = (0..<1500).map { i in
-            Utterance(speaker: i % 2 == 0 ? "me" : "spk1", start: Double(i * 4), end: Double(i * 4 + 3),
-                      text: "これは長い会議の \(i) 番目の発言で、内容を確かめるための文です。")
+        // 型の推論が重くならないよう、式を分けて作る（Swift 6.3 で、1 つの式だと時間切れになった）
+        var longUtterances: [Utterance] = []
+        for i in 0..<1500 {
+            let speaker: String = i % 2 == 0 ? "me" : "spk1"
+            let start = Double(i) * 4
+            let text = "これは長い会議の \(i) 番目の発言で、内容を確かめるための文です。"
+            longUtterances.append(Utterance(speaker: speaker, start: start, end: start + 3, text: text))
         }
+        long.utterances = longUtterances
         try? write(long, to: longBase)
         let first = mcp(exe, [toolCall(1, "get_meeting", ["meeting": "latest", "include": ["transcript"]])],
                         arguments: ["--meetings-dir", longBase.path])
