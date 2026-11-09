@@ -425,6 +425,8 @@ MainActor.assumeIsolated { MeetingChatCLI.runIfRequested() }
 MeetingSleepCLI.runSelfTestIfRequested()
 // 議事録に使う発言の選び方の確認（--test-minutes-selection / --render-minutes-selection。MinutesSelectionCLI.swift）
 MainActor.assumeIsolated { MinutesSelectionCLI.runIfRequested() }
+// 会議ノートの文書・引用・再生の確認（--test-minutes-citations / --test-minutes-document / --test-meeting-player / --render-meeting-window。MeetingNotesUICLI.swift）
+MainActor.assumeIsolated { MeetingNotesUICLI.runIfRequested() }
 // 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 // 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）

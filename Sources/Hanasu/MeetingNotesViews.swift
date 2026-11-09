@@ -11,9 +11,6 @@ struct LiveNotesPanel: View {
     var mode: Binding<LiveSidePanelMode>?
     @ObservedObject private var settings = MeetingNotesSettings.shared
     @ObservedObject private var hotKey = MeetingHighlightHotKey.shared
-    @State private var draft = ""
-    /// 今の行を書き始めた時刻（録音開始からの秒数）
-    @State private var draftStartedAt: Double?
     @FocusState private var focused: Bool
 
     private var notes: [MeetingNote] { recorder.current?.allNotes ?? [] }
@@ -68,15 +65,17 @@ struct LiveNotesPanel: View {
             }
             Divider()
             VStack(alignment: .leading, spacing: 4) {
-                TextField(tr("メモを入力して ↩"), text: $draft, axis: .vertical)
+                // 要件: REQ-MTG-054
+                // 設計判断: DEC-MTG-136（書きかけの文は recorder に持ち、記録を止めるときに確定する）
+                TextField(tr("メモを入力して ↩"), text: $recorder.noteDraft, axis: .vertical)
                     .lineLimit(1...4)
                     .textFieldStyle(.roundedBorder)
                     .focused($focused)
                     .onSubmit(submit)
-                    .onChange(of: draft) { old, new in
+                    .onChange(of: recorder.noteDraft) { old, new in
                         // 書き始めた時刻を、その行の時刻にする（聞いてから書き終えるまでの遅れを除く）
-                        if old.isEmpty, !new.isEmpty { draftStartedAt = recorder.elapsed }
-                        if new.isEmpty { draftStartedAt = nil }
+                        if old.isEmpty, !new.isEmpty { recorder.noteDraftStartedAt = recorder.elapsed }
+                        if new.isEmpty { recorder.noteDraftStartedAt = nil }
                     }
                 Text(tr("書き始めた時刻つきで保存します。入力中に「ここ重要」を押すと、その文を印の説明にします。"))
                     .font(.caption2)
@@ -88,38 +87,47 @@ struct LiveNotesPanel: View {
     }
 
     private func submit() {
-        recorder.addNote(draft, at: draftStartedAt)
-        draft = ""
-        draftStartedAt = nil
+        recorder.commitNoteDraft()
         focused = true
     }
 
     private func highlight() {
-        recorder.addHighlight(draft)
-        draft = ""
-        draftStartedAt = nil
+        recorder.addHighlight(recorder.noteDraft)
+        recorder.noteDraft = ""
+        recorder.noteDraftStartedAt = nil
     }
 }
 
-// 要件: REQ-MTG-012, REQ-MTG-014
-/// 記録中の画面の右側の上に出す、字幕の切り替えと「ここ重要」のボタン（「メモ」と「AI チャット」のどちらでも出す）
+// 要件: REQ-MTG-014
+/// 記録中のツールバーの、字幕の切り替え
+struct MeetingCaptionToggle: View {
+    @ObservedObject var recorder: MeetingRecorder
+    @ObservedObject private var caption = MeetingCaptionPanel.shared
+
+    var body: some View {
+        Button {
+            caption.toggle(recorder: recorder)
+        } label: {
+            Label(tr("字幕"), systemImage: caption.isShown ? "captions.bubble.fill" : "captions.bubble")
+        }
+        .disabled(recorder.state != .recording)
+        .help(tr("字幕をほかのアプリの前面に表示する"))
+        .accessibilityLabel(tr("字幕を前面に表示"))
+        .accessibilityValue(caption.isShown ? tr("オン") : tr("オフ"))
+    }
+}
+
+// 要件: REQ-MTG-012
+// 設計判断: DEC-MTG-080（「メモ」と「AI チャット」のどちらを選んでいても、パネルの上に出す）
+/// 記録中の後ろ側のパネルの上に出す「ここ重要」のボタン
 struct LiveHighlightControls: View {
     @ObservedObject var recorder: MeetingRecorder
     /// 「ここ重要」を押したとき。nil なら説明なしで今の時刻に印を付ける（メモ欄では、書きかけの文を印の説明にする）
     var onHighlight: (() -> Void)?
     @ObservedObject private var settings = MeetingNotesSettings.shared
-    @ObservedObject private var caption = MeetingCaptionPanel.shared
 
     var body: some View {
         HStack(spacing: 8) {
-            Button {
-                caption.toggle(recorder: recorder)
-            } label: {
-                Image(systemName: caption.isShown ? "captions.bubble.fill" : "captions.bubble")
-            }
-            .help(tr("字幕をほかのアプリの前面に表示する"))
-            .accessibilityLabel(tr("字幕を前面に表示"))
-            .accessibilityValue(caption.isShown ? tr("オン") : tr("オフ"))
             // 設計判断: DEC-MTG-075（黄色の上は白ではなく黒の文字にする）
             Button {
                 if let onHighlight { onHighlight() } else { recorder.addHighlight() }
@@ -174,7 +182,7 @@ struct HighlightUndoButton: View {
     }
 }
 
-private struct NoteRow: View {
+struct NoteRow: View {
     let note: MeetingNote
 
     var body: some View {
@@ -216,22 +224,23 @@ struct MeetingNotesEditor: View {
                 // 1 文字ずつ折り返した高さを求め、会議ノートの中身がウインドウより縦に大きくなって、上下が画面の外に出る）
                 .lineLimit(3)
             // 設計判断: DEC-MTG-048
-            // テキスト欄は、メモの行数にかかわらず残りの高さに収めて中でスクロールする（最小の高さを決めないと、
-            // 全行ぶんの高さを求めて会議ノートの上のタブの切り替えを押し出す）
+            // テキスト欄は、メモの行数にかかわらず最小 120・最大 360 の高さに収めて中でスクロールする
+            // （高さを決めないと、全行ぶんの高さを求めて会議ノートの中身を押し出す）
             TextEditor(text: $text)
                 .font(.system(.body, design: .monospaced))
                 .scrollContentBackground(.hidden)
-                .frame(minHeight: 120, maxHeight: .infinity)
+                .frame(minHeight: 120, maxHeight: 360)
                 .padding(6)
                 .background(Color(nsColor: .textBackgroundColor))
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .overlay(RoundedRectangle(cornerRadius: 6).stroke(.quaternary))
-            HStack {
+            // 文書の幅が狭いときは折り返す（ボタンは縮まないので、1 行に並べると文書の最小の幅を押し広げる）
+            FlowLayout(spacing: 8) {
                 let count = MeetingNote.parse(text)
                 Text(tr("メモ %@ 件・印 %@ 件", "\(count.filter { $0.kind == .note }.count)", "\(count.filter { $0.kind == .highlight }.count)"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Spacer()
+                    .padding(.trailing, 8)
                 Button(tr("元に戻す")) { text = meeting.notesText }
                     .disabled(!changed)
                 Button(tr("保存")) { recorder.updateNotes(meeting, notes: MeetingNote.parse(text)) }
@@ -250,7 +259,6 @@ struct MeetingNotesEditor: View {
                 }
             }
         }
-        .padding()
         .onAppear { text = meeting.notesText }
         .onChange(of: meeting.id) { text = meeting.notesText }
     }

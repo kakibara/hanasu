@@ -105,7 +105,7 @@ public static class MinutesPrompt
     public const string Placeholder = "{{ACTION_ITEMS}}";
 
     // 要件: REQ-COM-061
-    /// <summary>議事録の指示。Mac 版 MinutesPrompt.systemInstruction と同じ組み立て（minutes.intro・guidance・format か custom・actionItems・speakerNames）</summary>
+    /// <summary>議事録の指示。Mac 版 MinutesPrompt.systemInstruction と同じ組み立て（minutes.intro・guidance・format か custom・actionItems・citations・speakerNames）</summary>
     public static string SystemInstruction(MinutesTemplate template, string? customPrompt)
     {
         var language = PromptLanguage.Current;
@@ -128,6 +128,9 @@ public static class MinutesPrompt
             parts.Add(Prompts.Text("minutes.format", language, ("sections", template.Sections(language)), ("common", common)));
         }
         parts.Add(Prompts.Text("minutes.actionItems", language, ("actionHeading", actionHeading), ("placeholder", Placeholder)));
+        // 要件: REQ-MTG-052
+        // 設計判断: DEC-MTG-134, DEC-COM-102（Mac 版と同じく、アクションアイテムの指示のあとに入れる）
+        parts.Add(Prompts.Text("minutes.citations", language));
         parts.Add(SpeakerNamesInstruction);
         return string.Join("\n\n", parts);
     }
@@ -252,7 +255,8 @@ public static class MinutesPrompt
             // 日付として読めないものは「言い方」の方に回す
             var due = Clean(r, "due");
             var note = Clean(r, "due_note");
-            var item = new ActionItem { Owner = Clean(r, "owner"), Task = task, Due = due, DueNote = note };
+            // 設計判断: DEC-MTG-134（根拠の時刻は、時刻として読めるものだけ残す）
+            var item = new ActionItem { Owner = Clean(r, "owner"), Task = MinutesCitation.Strip(task), Due = due, DueNote = note, At = MinutesCitation.CleanAt(Clean(r, "at")) };
             if (due is not null && item.DueDate is null)
             {
                 item.DueNote ??= due;

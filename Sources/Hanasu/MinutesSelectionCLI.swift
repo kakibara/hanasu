@@ -168,7 +168,7 @@ enum MinutesSelectionCLI {
         meeting.speakerNames = ["spk1": "田中", "spk2": "通訳"]
 
         // 何も選んでいないとき（使い方の案内）
-        try MeetingNotesPreview.write(MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: 1).frame(width: 720, height: 560),
+        try MeetingNotesPreview.write(MeetingDetailPreview(meeting: meeting, recorder: recorder, initialTab: 1).frame(width: 1100, height: 560),
                                       to: dir.appendingPathComponent("transcript-plain.png"))
         // 範囲・除外・話者・オフレコを選んだあと（作り直すと反映）
         let first = meeting.utterances
@@ -177,12 +177,12 @@ enum MinutesSelectionCLI {
         meeting.setExcluded([first[10].id], excluded: true)
         meeting.setSpeakerExcluded("spk2", excluded: true)
         meeting.offRecord = [OffRecordSpan(start: 300, end: 400)]
-        try MeetingNotesPreview.write(MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: 1).frame(width: 720, height: 600),
+        try MeetingNotesPreview.write(MeetingDetailPreview(meeting: meeting, recorder: recorder, initialTab: 1).frame(width: 1100, height: 600),
                                       to: dir.appendingPathComponent("transcript-selected.png"))
         try MeetingNotesPreview.write(
-            MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: 1, initialSelecting: true).frame(width: 720, height: 600),
+            MeetingDetailPreview(meeting: meeting, recorder: recorder, initialTab: 1, initialSelecting: true).frame(width: 1100, height: 600),
             to: dir.appendingPathComponent("transcript-selecting.png"))
-        try MeetingNotesPreview.write(MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: 0).frame(width: 720, height: 360),
+        try MeetingNotesPreview.write(MeetingDetailPreview(meeting: meeting, recorder: recorder, initialTab: 0).frame(width: 1100, height: 360),
                                       to: dir.appendingPathComponent("minutes-outdated.png"))
 
         // 記録中のオフレコ
@@ -194,7 +194,7 @@ enum MinutesSelectionCLI {
             .init(channel: .me, start: 330, text: "分かりました。"),
         ]
         recorder.showPreviewForRendering(live, lines: lines)
-        try MeetingNotesPreview.write(LiveTranscriptView(recorder: recorder).frame(width: 760, height: 420),
+        try MeetingNotesPreview.write(LivePreview(recorder: recorder).frame(width: 1140, height: 420),
                                       to: dir.appendingPathComponent("live-offrecord.png"))
         print("wrote: \(dir.path)")
     }

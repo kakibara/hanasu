@@ -92,6 +92,10 @@ struct ActionItem: Codable, Hashable, Identifiable {
     var dueNote: String?
     /// 登録したリマインダーの識別子（二重登録を避ける）
     var reminderID: String?
+    // 要件: REQ-MTG-052
+    // 設計判断: DEC-MTG-134
+    /// 根拠の発言の時刻（"12:34"）。AI が付けたときだけ。会議ノートで押すと文字起こしのその発言へ移る
+    var at: String?
 
     var dueDate: Date? {
         due.flatMap { Self.isoFormatter.date(from: $0) }
@@ -171,7 +175,10 @@ struct ActionItem: Codable, Hashable, Identifiable {
                 continue
             }
             guard inSection, line.hasPrefix("- [ ] ") || line.hasPrefix("- [x] ") else { continue }
-            var task = String(line.dropFirst(6)).trimmingCharacters(in: .whitespaces)
+            // 設計判断: DEC-MTG-064, DEC-MTG-134（行末の時刻の印は、担当・期限のかっこの読み取りの前に外し、根拠の時刻にする）
+            let raw = String(line.dropFirst(6))
+            let at = MinutesCitation.marks(in: raw).last?.label
+            var task = MinutesCitation.strip(raw).trimmingCharacters(in: .whitespaces)
             var owner: String?
             var dueNote: String?
             // 末尾の（担当: … / 期限: …）。期限には「11/14 (金)」のようにかっこや / が入るので、
@@ -192,7 +199,7 @@ struct ActionItem: Codable, Hashable, Identifiable {
                 if recognized { task = String(task[..<open]).trimmingCharacters(in: .whitespaces) }
             }
             guard !task.isEmpty, !noneWords.contains(task) else { continue }
-            items.append(ActionItem(owner: owner, task: task, dueNote: dueNote))
+            items.append(ActionItem(owner: owner, task: task, dueNote: dueNote, at: at))
         }
         return items
     }
@@ -323,6 +330,9 @@ enum MinutesPrompt {
             parts.append(Prompts.text("minutes.format", ["sections": template.sections, "common": common]))
         }
         parts.append(Prompts.text("minutes.actionItems", ["actionHeading": template.actionHeading, "placeholder": placeholder]))
+        // 要件: REQ-MTG-052
+        // 設計判断: DEC-MTG-134（Windows 版と同じく、アクションアイテムの指示のあとに入れる）
+        parts.append(citationsInstruction)
         parts.append(speakerNamesInstruction)
         return parts.joined(separator: "\n\n")
     }
@@ -331,6 +341,11 @@ enum MinutesPrompt {
     // 設計判断: DEC-MTG-068
     /// 話者の名前を <speaker_names> で出させる指示（Windows 版 MinutesPrompt.SpeakerNamesInstruction と同じ文面。どちらも Prompts の JSON を読む）
     static var speakerNamesInstruction: String { Prompts.text("minutes.speakerNames") }
+
+    // 要件: REQ-MTG-052, REQ-COM-061
+    // 設計判断: DEC-MTG-134
+    /// 要点の行末に根拠の発言の時刻を付けさせる指示（Windows 版 MinutesPrompt.CitationsInstruction と同じキー）
+    static var citationsInstruction: String { Prompts.text("minutes.citations") }
 
     // 設計判断: DEC-COM-054
     static func userText(for meeting: Meeting) -> String {
@@ -397,6 +412,7 @@ enum MinutesPrompt {
         var task: String?
         var due: String?
         var due_note: String?
+        var at: String?
     }
 
     // 設計判断: DEC-MTG-062
@@ -427,7 +443,9 @@ enum MinutesPrompt {
                 if note == nil { note = d }
                 due = nil
             }
-            return ActionItem(owner: clean(r.owner), task: task, due: due, dueNote: note)
+            // 設計判断: DEC-MTG-134（根拠の時刻は、時刻として読めるものだけ残す）
+            let at = clean(r.at).flatMap { MinutesCitation.seconds(of: $0) != nil ? $0.trimmingCharacters(in: CharacterSet(charactersIn: "[]［］ ")) : nil }
+            return ActionItem(owner: clean(r.owner), task: MinutesCitation.strip(task), due: due, dueNote: note, at: at)
         }
     }
 }

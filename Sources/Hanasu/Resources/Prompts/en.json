@@ -409,6 +409,14 @@
     "- due_note: how the deadline was said (\"sometime next week\", \"by the next status meeting\", etc.). null if not said",
     "If there are no action items, output []. Do not write explanations outside <action_items>."
   ],
+  "minutes.citations": [
+    "# Timestamps of the supporting remarks",
+    "At the end of each bullet point in the minutes (lines starting with \"- \"), add the time of the remark that supports it, in the same form as the transcript times, like [12:34] (use [1:02:34] past one hour).",
+    "- If several remarks support it, list up to two (for example: \"… [03:10] [12:34]\").",
+    "- Do not add a time when the supporting remark is unclear or when the point comes only from the notes. Never make up a time that is not in the transcript.",
+    "- Do not add times to headings, checkbox lines (lines starting with \"- [ ] \"), or \"None\".",
+    "- In the action item JSON, you may add the time of the supporting remark as \"at\": \"12:34\" (leave it out if you are not sure)."
+  ],
   "minutes.speakerNames": [
     "Finally, of the speakers without names in the transcript, such as \"Speaker 1\", \"Room 1\", and \"Others\", output only those whose names are clear from the conversation, as JSON in the following form.",
     "<speaker_names>",

@@ -412,6 +412,14 @@
     "- due_note: come è stata espressa la scadenza («entro la settimana prossima», «prima del prossimo incontro di avanzamento», ecc.). null se non è stata detta",
     "Se non ci sono azioni, restituisci []. Non scrivere spiegazioni fuori da <action_items>."
   ],
+  "minutes.citations": [
+    "# Riferimenti temporali agli interventi",
+    "Alla fine di ogni punto elenco del verbale (righe che iniziano con «- »), indica il momento dell'intervento su cui si basa, nello stesso formato dei tempi della trascrizione, ad esempio [12:34] ([1:02:34] oltre la prima ora).",
+    "- Se il punto si basa su più interventi, indicane al massimo due (ad esempio: «… [03:10] [12:34]»).",
+    "- Non indicarlo quando non è chiaro su quale intervento si basa il punto, o quando il contenuto viene solo dalle note. Non inventare tempi che non compaiono nella trascrizione.",
+    "- Non aggiungere tempi ai titoli, alle righe con casella di spunta (righe che iniziano con «- [ ] ») né a «Nessuno».",
+    "- Nel JSON delle azioni puoi aggiungere il momento dell'intervento su cui si basa come \"at\": \"12:34\" (omettilo se non sei sicuro)."
+  ],
   "minutes.speakerNames": [
     "Infine, tra i parlanti senza nome della trascrizione, come «Parlante 1», «Sala 1» e «Altri», restituisci solo quelli il cui nome risulta chiaro dalla conversazione, come JSON nella forma seguente.",
     "<speaker_names>",

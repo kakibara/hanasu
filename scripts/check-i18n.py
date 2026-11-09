@@ -48,7 +48,7 @@ PLACEHOLDER = re.compile(r"\$\{[A-Za-z]+\}")
 TAG = re.compile(r"</?([a-z_]+)(?:_…)?>")
 JSON_KEY = re.compile(r"\"([a-z_]+)\":")
 # 値に必ず残す記号（日本語に入っていれば、ほかの言語にも要る）
-LITERALS = ["MM:SS.s", "M2:", "## ", "{}", "[]", "★", "→", "null", "[--:--]"]
+LITERALS = ["MM:SS.s", "M2:", "## ", "{}", "[]", "★", "→", "null", "[--:--]", "[12:34]", "[1:02:34]", "\"at\": \"12:34\""]
 # 英語と同じでよいキー（書式など）
 SAME_AS_ENGLISH_OK = {"minutes.item.dueDateFormat", "user.dictionaryRuleSeparator", "minutes.item.details"}
 

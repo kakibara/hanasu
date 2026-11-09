@@ -46,7 +46,8 @@ enum ReminderExporter {
         for item in items {
             let reminder = EKReminder(eventStore: store)
             reminder.calendar = calendar
-            reminder.title = item.task
+            // 要件: REQ-MTG-052（根拠の時刻の印は入れない）
+            reminder.title = MinutesCitation.strip(item.task)
             reminder.notes = notes(for: item, meeting: meeting)
             if let due = item.dueDate {
                 // 時刻は決まっていないので日付だけ（終日）

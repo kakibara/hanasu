@@ -411,6 +411,14 @@
     "- due_note : comment l'échéance a été formulée (« dans le courant de la semaine prochaine », « d'ici le prochain point », etc.). null si rien n'a été dit",
     "S'il n'y a aucune action, produis []. N'écris pas d'explications en dehors de <action_items>."
   ],
+  "minutes.citations": [
+    "# Horodatage des propos sources",
+    "À la fin de chaque puce des points du compte rendu (lignes commençant par « - »), ajoute l'heure du propos sur lequel elle s'appuie, au même format que les heures de la transcription, par exemple [12:34] (au-delà d'une heure, [1:02:34]).",
+    "- Si plusieurs propos l'appuient, mets-en deux au maximum, à la suite (par exemple : « … [03:10] [12:34] »).",
+    "- N'en ajoute pas quand le propos source n'est pas clair, ni pour un contenu qui ne vient que des notes. N'invente jamais une heure absente de la transcription.",
+    "- N'en ajoute pas aux titres, aux lignes de case à cocher (lignes commençant par « - [ ] ») ni à « Aucun ».",
+    "- Dans le JSON des actions, tu peux ajouter l'heure du propos source sous la forme \"at\": \"12:34\" (omets-la si tu n'es pas sûr)."
+  ],
   "minutes.speakerNames": [
     "Enfin, parmi les intervenants sans nom de la transcription, comme « Intervenant 1 », « Salle 1 » et « Autres », produis uniquement ceux dont le nom ressort clairement de la conversation, sous forme de JSON de la forme suivante.",
     "<speaker_names>",

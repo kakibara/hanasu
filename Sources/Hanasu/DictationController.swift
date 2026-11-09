@@ -22,7 +22,11 @@ final class DictationController {
     }
 
     private(set) var state: State = .idle {
-        didSet { onStateChange?(state) }
+        didSet {
+            onStateChange?(state)
+            // 要件: REQ-MTG-053（音声入力の間は、会議の音声を再生しない。再生した音がマイクに入るため）
+            MeetingPlayer.shared.dictationActive = state != .idle
+        }
     }
     private(set) var mode: Mode = .refine
     var onStateChange: ((State) -> Void)?

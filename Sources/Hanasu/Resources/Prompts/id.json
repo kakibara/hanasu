@@ -411,6 +411,14 @@
     "- due_note: cara tenggat diucapkan (\"sekitar minggu depan\", \"sebelum rapat rutin berikutnya\", dll.). null jika tidak disebutkan",
     "Jika tidak ada tindak lanjut, keluarkan []. Jangan tulis penjelasan di luar <action_items>."
   ],
+  "minutes.citations": [
+    "# Waktu ucapan yang menjadi dasar",
+    "Di akhir setiap butir poin notulen (baris yang diawali \"- \"), tambahkan waktu ucapan yang menjadi dasar isinya, dalam bentuk yang sama dengan waktu di transkrip, misalnya [12:34] (jika lebih dari satu jam, [1:02:34]).",
+    "- Jika dasarnya lebih dari satu ucapan, cantumkan paling banyak dua (contoh: \"… [03:10] [12:34]\").",
+    "- Jangan tambahkan waktu jika tidak jelas ucapan mana yang menjadi dasarnya, atau jika isinya hanya ada di catatan. Jangan mengarang waktu yang tidak ada di transkrip.",
+    "- Jangan tambahkan waktu pada judul bagian, baris kotak centang (baris yang diawali \"- [ ] \"), atau \"Tidak ada\".",
+    "- Di JSON tindak lanjut, Anda boleh menambahkan waktu ucapan yang menjadi dasarnya sebagai \"at\": \"12:34\" (lewati jika tidak yakin)."
+  ],
   "minutes.speakerNames": [
     "Terakhir, dari pembicara tanpa nama di transkrip, seperti \"Pembicara 1\", \"Peserta seruangan 1\", dan \"Pihak lain\", keluarkan hanya yang namanya jelas dari percakapan, sebagai JSON dengan bentuk berikut.",
     "<speaker_names>",

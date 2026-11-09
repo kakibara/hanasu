@@ -411,6 +411,14 @@
     "- due_note: wie die Frist genannt wurde („irgendwann nächste Woche“, „bis zum nächsten Jour fixe“ usw.). null, wenn nichts gesagt wurde",
     "Wenn es keine Aufgaben gibt, [] ausgeben. Keine Erklärungen außerhalb von <action_items> schreiben."
   ],
+  "minutes.citations": [
+    "# Zeitangaben der zugrunde liegenden Äußerungen",
+    "Setze ans Ende jedes Aufzählungspunkts im Protokoll (Zeilen, die mit „- “ beginnen) die Zeit der Äußerung, auf der der Punkt beruht, im selben Format wie die Zeiten im Transkript, z. B. [12:34] (ab einer Stunde [1:02:34]).",
+    "- Wenn mehrere Äußerungen den Punkt belegen, nenne höchstens zwei (z. B. „… [03:10] [12:34]“).",
+    "- Setze keine Zeit, wenn unklar ist, auf welcher Äußerung der Punkt beruht, oder wenn er nur aus den Notizen stammt. Erfinde keine Zeiten, die nicht im Transkript stehen.",
+    "- Setze keine Zeiten bei Überschriften, Checkbox-Zeilen (Zeilen, die mit „- [ ] “ beginnen) oder „Keine“.",
+    "- Im JSON der Aufgaben darfst du die Zeit der zugrunde liegenden Äußerung als \"at\": \"12:34\" angeben (lass sie weg, wenn du dir nicht sicher bist)."
+  ],
   "minutes.speakerNames": [
     "Gib zum Schluss von den Sprechern ohne Namen im Transkript, etwa „Sprecher 1“, „Vor Ort 1“ und „Andere“, nur diejenigen, deren Name aus dem Gespräch eindeutig hervorgeht, als JSON in folgender Form aus.",
     "<speaker_names>",

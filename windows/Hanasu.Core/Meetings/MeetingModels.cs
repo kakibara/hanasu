@@ -158,6 +158,10 @@ public sealed class ActionItem
     /// <summary>Mac 版でリマインダーに登録したときの識別子（Windows 版では使わないが、読み書きで落とさない）</summary>
     [JsonPropertyName("reminderID")]
     public string? ReminderId { get; set; }
+    // 要件: REQ-MTG-052
+    // 設計判断: DEC-MTG-134, DEC-MTG-108
+    /// <summary>根拠の発言の時刻（"12:34"）。Mac 版の会議ノートで押すと文字起こしのその発言へ移る。Windows 版では使わないが、読み書きで落とさない</summary>
+    public string? At { get; set; }
 
     [JsonIgnore]
     public DateTime? DueDate =>
@@ -258,7 +262,9 @@ public sealed class ActionItem
                 continue;
             }
             if (!inSection || !(line.StartsWith("- [ ] ", StringComparison.Ordinal) || line.StartsWith("- [x] ", StringComparison.Ordinal))) continue;
-            var task = line[6..].Trim();
+            // 設計判断: DEC-MTG-064, DEC-MTG-134（行末の時刻の印は、担当・期限のかっこの読み取りの前に外し、根拠の時刻にする）
+            var at = MinutesCitation.Marks(line[6..]) is { Count: > 0 } marks ? marks[^1].Label : null;
+            var task = MinutesCitation.Strip(line[6..]).Trim();
             string? owner = null, dueNote = null;
             // 期限には「11/14 (金)」のようにかっこや / が入るので、「担当」「期限」の言葉で始まるかっこを探し、中を「 / 」で分ける
             if (task.Length > 0 && task[^1] is '）' or ')' && DetailsOpening(task, ownerKeys.Concat(dueKeys).ToList()) is var open and >= 0)
@@ -278,7 +284,7 @@ public sealed class ActionItem
                 if (recognized) task = task[..open].Trim();
             }
             if (task.Length == 0 || noneWords.Contains(task)) continue;
-            items.Add(new ActionItem { Owner = owner, Task = task, DueNote = dueNote });
+            items.Add(new ActionItem { Owner = owner, Task = task, DueNote = dueNote, At = at });
         }
         return items;
     }
@@ -310,8 +316,8 @@ public sealed partial class Meeting
     /// <summary>メモと「ここ重要」の印。古い会議にはないので省略可</summary>
     public List<MeetingNote>? Notes { get; set; }
     /// <summary>
-    /// Windows 版だけが書く: チャンネル（"me" / "others"）の音声が録音開始から何秒後に始まったか。
-    /// 音声を文字起こしし直すときに使う。Mac 版は知らないキーを読み飛ばすので、互換性は崩れない
+    /// チャンネル（"me" / "others"）の音声が録音開始から何秒後に始まったか。
+    /// 音声を文字起こしし直すときに使う。Mac 版も書いて読む（再生で 2 つのチャンネルを並べる。DEC-MTG-135）
     /// </summary>
     public Dictionary<string, double>? AudioStartOffsets { get; set; }
     /// <summary>会話から推測して名前を付けた話者キー（SpeakerNameInference）。ユーザーが直すと外す。古い会議にはないので省略可（Mac 版と同じキー）</summary>

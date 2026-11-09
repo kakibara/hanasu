@@ -150,7 +150,8 @@ public partial class MeetingWindow : Window
         loading = false;
         ErrorText.Text = m.ErrorMessage ?? "";
         ErrorText.Visibility = m.ErrorMessage is null ? Visibility.Collapsed : Visibility.Visible;
-        MinutesBox.Text = m.Minutes ?? (m.Status switch
+        // 要件: REQ-MTG-052（Windows 版は根拠の時刻の印を押せないので、表示では取り除く。DEC-MTG-134）
+        MinutesBox.Text = (m.Minutes is { } minutes ? MinutesCitation.Strip(minutes) : null) ?? (m.Status switch
         {
             MeetingStatus.Recording => Strings.Meeting_MinutesAfterRecording,
             MeetingStatus.Processing => Strings.Meeting_Processing,
@@ -611,7 +612,8 @@ public partial class MeetingWindow : Window
             1 => (m.TranscriptMarkdown(), Strings.Meeting_NoTranscript, Strings.Meeting_CopiedTranscript),
             2 => (m.HighlightContextText(), Strings.Meeting_NoHighlights, Strings.Meeting_CopiedHighlights),
             3 => (m.NotesMarkdown(), Strings.Meeting_NoNotes, Strings.Meeting_CopiedNotes),
-            _ => (m.Minutes ?? "", Strings.Meeting_NoMinutes, Strings.Meeting_CopiedMinutes),
+            // 要件: REQ-MTG-052（コピーには根拠の時刻の印を入れない。DEC-MTG-134）
+            _ => (MinutesCitation.Strip(m.Minutes ?? ""), Strings.Meeting_NoMinutes, Strings.Meeting_CopiedMinutes),
         };
         if (text.Length == 0)
         {

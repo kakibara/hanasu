@@ -15,6 +15,8 @@ struct LiveOffRecordButton: View {
             recorder.toggleOffRecord()
         } label: {
             Label(open ? tr("オフレコを終える") : tr("オフレコ"), systemImage: open ? "eye" : "eye.slash")
+                // 要件: REQ-MTG-046（ツールバーでも「オフレコを終える」が文字で見えるように）
+                .labelStyle(.titleAndIcon)
         }
         .tint(open ? .purple : nil)
         .buttonStyle(.borderedProminent)
@@ -31,14 +33,9 @@ struct LiveOffRecordBanner: View {
 
     var body: some View {
         if let span = recorder.openOffRecord {
-            Label(tr("オフレコ中（%@ から）。この間の発言は、議事録と AI チャットに使いません。", Meeting.clock(span.start)),
-                  systemImage: "eye.slash")
-                .font(.callout)
-                .foregroundStyle(.purple)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal)
-                .padding(.vertical, 6)
-                .background(Color.purple.opacity(0.08))
+            // 設計判断: DEC-MTG-132
+            StatusBanner(style: .offRecord, systemImage: "eye.slash",
+                         title: tr("オフレコ中（%@ から）。この間の発言は、議事録と AI チャットに使いません。", Meeting.clock(span.start)))
         }
     }
 }
@@ -46,8 +43,9 @@ struct LiveOffRecordBanner: View {
 // MARK: - 会議ノートの文字起こし
 
 // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
-// 設計判断: DEC-MTG-092, DEC-MTG-093
-/// 文字起こしの上の帯: 議事録に使う発言の数・範囲・除いた話者・オフレコの区間と、選ぶモードの切り替え
+// 設計判断: DEC-MTG-092, DEC-MTG-093, DEC-MTG-137
+/// 文字起こしの上の帯（後ろ側のパネル）: 議事録に使う発言の数と「選ぶ…」。範囲・除いた話者・オフレコの区間は、
+/// あるときはカプセル（それぞれ解除）を折り返して出す。選んでいる間は「すべて元に戻す」「選び終える」を出す
 struct TranscriptSelectionBar: View {
     let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder
@@ -58,32 +56,38 @@ struct TranscriptSelectionBar: View {
         let blocks = meeting.displayBlocks()
         let editable = recorder.canEditMinutesSelection(meeting)
         VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 10) {
+            HStack(spacing: 8) {
                 Text(tr("議事録に使う発言: %@ / %@", "\(blocks.filter(\.use.isUsed).count)", "\(blocks.count)"))
                     .font(.callout.weight(.medium))
-                if meeting.minutesFrom != nil || meeting.minutesTo != nil {
-                    chip(tr("範囲: %@ 〜 %@", meeting.minutesFrom.map(Meeting.clock) ?? tr("最初"), meeting.minutesTo.map(Meeting.clock) ?? tr("最後")),
-                         help: tr("範囲を解除する")) {
-                        recorder.changeMinutesSelection(meeting) { $0.setMinutesRange(from: .some(nil), to: .some(nil)) }
+                    .lineLimit(1)
+                Spacer(minLength: 4)
+                if selecting {
+                    if meeting.hasMinutesSelection {
+                        Button(tr("すべて元に戻す")) {
+                            recorder.changeMinutesSelection(meeting) { $0.clearMinutesSelection() }
+                        }
+                        .buttonStyle(.link)
+                        .help(tr("範囲・除いた発言・除いた話者・オフレコをすべて解除して、全部の発言を議事録に使う"))
                     }
-                }
-                Spacer()
-                Toggle(tr("議事録に使う発言を選ぶ"), isOn: $selecting)
-                    .toggleStyle(.button)
-                    .controlSize(.small)
-                    .help(tr("発言ごとにチェックボックスを出します。Shift を押しながら押すと、前に押した発言からまとめて切り替えます"))
-                if meeting.hasMinutesSelection {
-                    Button(tr("すべて元に戻す")) {
-                        recorder.changeMinutesSelection(meeting) { $0.clearMinutesSelection() }
-                    }
-                    .controlSize(.small)
-                    .help(tr("範囲・除いた発言・除いた話者・オフレコをすべて解除して、全部の発言を議事録に使う"))
+                    Button(tr("選び終える")) { selecting = false }
+                        .buttonStyle(.borderedProminent)
+                } else {
+                    Button(tr("選ぶ…")) { selecting = true }
+                        .help(tr("発言ごとにチェックボックスを出します。Shift を押しながら押すと、前に押した発言からまとめて切り替えます"))
                 }
             }
+            .controlSize(.small)
             let speakers = meeting.excludedSpeakers ?? []
             let spans = meeting.offRecord ?? []
-            if !speakers.isEmpty || !spans.isEmpty {
-                HStack(spacing: 6) {
+            let ranged = meeting.minutesFrom != nil || meeting.minutesTo != nil
+            if ranged || !speakers.isEmpty || !spans.isEmpty {
+                FlowLayout(spacing: 6) {
+                    if ranged {
+                        chip(tr("範囲: %@ 〜 %@", meeting.minutesFrom.map(Meeting.clock) ?? tr("最初"), meeting.minutesTo.map(Meeting.clock) ?? tr("最後")),
+                             help: tr("範囲を解除する")) {
+                            recorder.changeMinutesSelection(meeting) { $0.setMinutesRange(from: .some(nil), to: .some(nil)) }
+                        }
+                    }
                     ForEach(speakers, id: \.self) { speaker in
                         chip(tr("除いた話者: %@", meeting.displayName(for: speaker)), help: tr("この話者の発言を議事録に戻す")) {
                             recorder.changeMinutesSelection(meeting) { $0.setSpeakerExcluded(speaker, excluded: false) }
@@ -103,10 +107,12 @@ struct TranscriptSelectionBar: View {
                 Text(tr("発言を右クリックすると、議事録から除いたり、議事録に使う範囲（最初と最後）を決めたりできます。"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    // 設計判断: DEC-MTG-048（fixedSize にすると、細い幅で測ったときに 1 文字ずつ折り返した高さを求める）
+                    .lineLimit(3)
             }
         }
         .disabled(!editable)
-        .padding(.horizontal)
+        .padding(.horizontal, 12)
         .padding(.vertical, 8)
     }
 
@@ -140,6 +146,7 @@ struct MinutesOutdatedNotice: View {
             Label(tr("議事録に使う発言を変えました。作り直すと反映されます。"), systemImage: "arrow.triangle.2.circlepath")
                 .font(.callout)
                 .foregroundStyle(.orange)
+                .lineLimit(3)
             Button(tr("議事録を作り直す"), action: onRegenerate)
                 .controlSize(.small)
                 // 設計判断: DEC-MTG-091（使う発言がなければ作らない）
@@ -160,6 +167,11 @@ struct TranscriptDisplayRow: View {
     @Binding var anchor: Int?
     var highlight: [String] = []
     var focused = false
+    // 要件: REQ-MTG-053
+    /// 再生位置の発言
+    var playing = false
+    /// 時刻を押したとき（そこから再生する）
+    var onPlay: (() -> Void)?
     @State private var hovering = false
 
     var body: some View {
@@ -169,8 +181,9 @@ struct TranscriptDisplayRow: View {
                 TranscriptUseCheckbox(meeting: meeting, blocks: blocks, index: index, recorder: recorder, anchor: $anchor)
             }
             TranscriptLine(time: item.block.start, speaker: meeting.displayName(for: item.block.speaker),
-                           color: MeetingDetailView.color(for: item.block.speaker, in: meeting), text: item.block.text,
-                           highlight: highlight, focused: focused, use: item.use)
+                           color: MeetingSpeakerColor.color(for: item.block.speaker, in: meeting), text: item.block.text,
+                           highlight: highlight, focused: focused, use: item.use, compact: true,
+                           playing: playing, onPlay: onPlay)
             Menu {
                 TranscriptLineMenu(meeting: meeting, block: item, recorder: recorder)
             } label: {
