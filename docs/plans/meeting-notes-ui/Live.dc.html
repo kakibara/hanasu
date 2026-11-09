@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>会議ノート（記録中）</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#0A66D8}a:hover{color:#084FA8}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; background: #FFFFFF; color: #1D1D1F; border-radius: 12px; overflow: hidden; border: 1px solid #C9C9CE; font-size: 13px;">
+
+<nav aria-label="会議の一覧" style="width: 248px; flex-shrink: 0; background: #F2F2F5; border-right: 1px solid #E2E2E7; display: flex; flex-direction: column;">
+  <div style="height: 52px; display: flex; align-items: center; gap: 8px; padding: 0 18px;" aria-hidden="true">
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #FF5F57;"></span>
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #FEBC2E;"></span>
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #28C840;"></span>
+  </div>
+  <div style="padding: 0 12px 8px;">
+    <label style="display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; background: #E4E4E9; border-radius: 8px; color: #6E6E73;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input type="search" placeholder="会議を検索" aria-label="会議を検索" style="border: 0; background: transparent; outline: none; font-size: 13px; width: 100%;">
+    </label>
+  </div>
+  <div style="flex: 1; padding: 4px 10px; display: flex; flex-direction: column; gap: 2px;">
+    <div style="font-size: 11px; font-weight: 600; color: #B42318; padding: 8px 8px 4px;">記録中</div>
+    <a href="#" style="display: block; text-decoration: none; padding: 7px 10px; border-radius: 8px; background: #0A66D8; color: #FFFFFF;">
+      <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 4px; background: #FF6B6B;" aria-hidden="true"></span><span style="font-weight: 600;">Google Meet: 週次レビュー</span></div>
+      <div style="font-size: 11px; opacity: 0.85; margin-top: 2px;">10:30 から · 07:00</div>
+    </a>
+    <div style="font-size: 11px; font-weight: 600; color: #6E6E73; padding: 12px 8px 4px;">今日</div>
+    <a href="#" style="display: block; text-decoration: none; padding: 7px 10px; border-radius: 8px; color: #1D1D1F;">
+      <div style="font-weight: 500;">架空商事 定例</div>
+      <div style="font-size: 11px; color: #6E6E73; margin-top: 2px;">09:00 · 25 分</div>
+    </a>
+    <div style="font-size: 11px; font-weight: 600; color: #6E6E73; padding: 12px 8px 4px;">昨日</div>
+    <a href="#" style="display: block; text-decoration: none; padding: 7px 10px; border-radius: 8px; color: #1D1D1F;">
+      <div style="font-weight: 500;">架空工業 商談</div>
+      <div style="font-size: 11px; color: #6E6E73; margin-top: 2px;">14:00 · 48 分</div>
+    </a>
+  </div>
+  <div style="padding: 12px; border-top: 1px solid #E2E2E7; display: flex; flex-direction: column; gap: 6px;">
+    <button style="height: 36px; border: 0; border-radius: 18px; background: #C0281E; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3" fill="#FFFFFF"></rect></svg>
+      記録を停止
+    </button>
+    <div style="color: #6E6E73; font-size: 11px; text-align: center;">定例 · Mac 全体の音 · システムのマイク</div>
+  </div>
+</nav>
+
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+  <div style="height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 12px; border-bottom: 1px solid #ECECF0;">
+    <div style="display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border-radius: 17px; background: rgba(192,40,30,0.08); border: 1px solid rgba(192,40,30,0.2);">
+      <span style="width: 10px; height: 10px; border-radius: 5px; background: #E0352B;" aria-hidden="true"></span>
+      <span style="font-weight: 700; color: #A3231A;">記録中</span>
+      <span style="font-variant-numeric: tabular-nums; color: #3A3A3C; font-family: ui-monospace, Menlo, monospace;">07:00</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; color: #6E6E73;" role="group" aria-label="音量">
+      <span style="display: flex; align-items: center; gap: 6px;">自分 <span style="width: 56px; height: 6px; border-radius: 3px; background: #E2E2E7; position: relative; overflow: hidden;"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: 64%; background: #0A66D8;"></span></span></span>
+      <span style="display: flex; align-items: center; gap: 6px;">相手 <span style="width: 56px; height: 6px; border-radius: 3px; background: #E2E2E7; position: relative; overflow: hidden;"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: #C25E00;"></span></span></span>
+    </div>
+    <div style="flex: 1;"></div>
+    <div style="display: flex; align-items: center; gap: 2px; height: 34px; padding: 0 4px; border-radius: 17px; background: rgba(250,250,252,0.9); border: 1px solid #E2E2E7; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+      <button style="height: 28px; border: 0; border-radius: 14px; background: transparent; color: #1D1D1F; font-size: 12px; display: flex; align-items: center; gap: 5px; padding: 0 10px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 6.1A9.8 9.8 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-2.6 3.2M6.3 7.6C4.3 9.1 3 12 3 12s4 6 9 6a8.5 8.5 0 0 0 3.7-.8"></path></svg>
+        オフレコ
+      </button>
+      <button style="height: 28px; border: 0; border-radius: 14px; background: transparent; color: #1D1D1F; font-size: 12px; display: flex; align-items: center; gap: 5px; padding: 0 10px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M7 13h4M13 13h4M7 16h10" stroke-linecap="round"></path></svg>
+        字幕
+      </button>
+    </div>
+    <button aria-label="インスペクタを隠す（⌥⌘I）" style="width: 34px; height: 34px; border: 1px solid #E2E2E7; border-radius: 17px; background: rgba(10,102,216,0.10); color: #0A66D8; display: flex; align-items: center; justify-content: center;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M15 4v16"></path></svg>
+    </button>
+  </div>
+
+  <div style="flex: 1; min-height: 0; display: flex;">
+    <!-- 真ん中: 文字起こし -->
+    <main style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+      <div style="padding: 20px 32px 10px; display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 2px 8px; margin: 0 -8px; border: 1px solid #DADADF; border-radius: 8px;">
+          <h1 style="margin: 0; font-size: 22px; font-weight: 700; flex: 1;">Google Meet: 週次レビュー</h1>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E6E73" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>
+        </div>
+        <div style="color: #6E6E73; font-size: 12px;">2026/11/09 (月) 10:30 から · 話者の区別（話者1・話者2…）は記録を止めたあとに行います</div>
+      </div>
+      <div role="alert" style="margin: 0 32px 8px; border-radius: 12px; background: #FFF4E5; border: 1px solid #F5C98A; padding: 9px 12px; display: flex; align-items: center; gap: 10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B4530A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9.5 17h-19z"></path><path d="M12 10v4M12 17h.01"></path></svg>
+        <span style="flex: 1; font-size: 12px; line-height: 1.5; color: #7A3A05;">相手の音が 10 秒以上入っていません。会議アプリの音がこの Mac から出ているか確かめてください。</span>
+        <button style="border: 0; background: rgba(180,83,10,0.12); color: #7A3A05; border-radius: 8px; font-size: 12px; font-weight: 600; padding: 4px 10px;">設定を開く</button>
+      </div>
+      <div style="flex: 1; overflow: hidden; padding: 0 24px; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px;">
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+          <div style="display: flex; gap: 14px; padding: 8px 8px;">
+            <span style="font-variant-numeric: tabular-nums; color: #6E6E73; font-size: 12px; width: 40px; padding-top: 3px;">{{ r.t }}</span>
+            <div style="flex: 1;">
+              <div style="{{ r.nameStyle }}">{{ r.who }}</div>
+              <div style="font-size: 15px; line-height: 1.55;">{{ r.text }}</div>
+            </div>
+          </div>
+        </sc-for>
+        <div style="display: flex; gap: 14px; padding: 8px 8px 18px; opacity: 0.5;">
+          <span style="width: 40px;"></span>
+          <div style="flex: 1;">
+            <div style="font-size: 12px; font-weight: 700; color: #0A66D8;">自分</div>
+            <div style="font-size: 15px; line-height: 1.55;">では山本さんの案を見てから…</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 後ろ側のパネル: メモ｜AI チャット -->
+    <aside aria-label="メモと AI チャット" style="width: 360px; flex-shrink: 0; border-left: 1px solid #E2E2E7; background: #FBFBFD; display: flex; flex-direction: column;">
+      <div style="padding: 12px 14px 8px; display: flex; gap: 8px; align-items: center;">
+        <div role="tablist" style="flex: 1; display: flex; background: #ECECF0; border-radius: 9px; padding: 2px;">
+          <button role="tab" aria-selected="true" style="flex: 1; height: 26px; border: 0; border-radius: 7px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.12); font-size: 12px; font-weight: 600; color: #1D1D1F;">メモ</button>
+          <button role="tab" aria-selected="false" style="flex: 1; height: 26px; border: 0; border-radius: 7px; background: transparent; font-size: 12px; font-weight: 500; color: #3A3A3C;">AI チャット <span style="color: #6E6E73; font-weight: 400;">⌘J</span></button>
+        </div>
+      </div>
+      <div style="padding: 0 14px 10px;">
+        <button style="width: 100%; height: 36px; border: 0; border-radius: 18px; background: #F5C400; color: #000000; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#000000" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg>
+          ここ重要
+          <span style="font-weight: 500; opacity: 0.7;">⌃⌥⌘H</span>
+        </button>
+      </div>
+      <div style="flex: 1; overflow: hidden; padding: 0 8px; display: flex; flex-direction: column; gap: 2px;">
+        <div style="display: flex; gap: 12px; padding: 8px 8px;">
+          <span style="font-variant-numeric: tabular-nums; color: #6E6E73; font-size: 12px; width: 40px; padding-top: 1px;">01:20</span>
+          <span style="font-size: 13px; line-height: 1.55;">KPI の定義を先に揃える</span>
+        </div>
+        <div style="display: flex; gap: 12px; padding: 8px 8px; border-radius: 8px; background: #FFF8DB;">
+          <span style="font-variant-numeric: tabular-nums; color: #6E6E73; font-size: 12px; width: 40px; padding-top: 1px;">03:45</span>
+          <span style="font-size: 13px; line-height: 1.55; display: flex; align-items: center; gap: 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="#D9A400" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"></path></svg>解約率 3% → 2% の目標</span>
+        </div>
+        <div style="display: flex; gap: 12px; padding: 8px 8px;">
+          <span style="font-variant-numeric: tabular-nums; color: #6E6E73; font-size: 12px; width: 40px; padding-top: 1px;">05:10</span>
+          <span style="font-size: 13px; line-height: 1.55;">山本さん：来週までにダッシュボードの案</span>
+        </div>
+      </div>
+      <div style="padding: 10px 14px 14px;">
+        <label style="display: flex; align-items: center; gap: 8px; border: 1px solid #DADADF; border-radius: 12px; padding: 9px 12px; background: #FFFFFF;">
+          <span style="font-variant-numeric: tabular-nums; color: #6E6E73; font-size: 12px;">07:00</span>
+          <input placeholder="メモを入力して Return" aria-label="メモ" style="flex: 1; border: 0; outline: none; font-size: 13px; background: transparent;">
+        </label>
+        <div style="font-size: 11px; color: #6E6E73; margin-top: 6px; line-height: 1.45;">書き始めた時刻つきで残り、議事録で優先して取り上げます。</div>
+      </div>
+    </aside>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const me = 'font-size: 12px; font-weight: 700; color: #0A66D8;';
+    const them = 'font-size: 12px; font-weight: 700; color: #C25E00;';
+    const rows = [
+      { t: '04:50', who: '相手', nameStyle: them, text: '解約率は今月 3.1% でした。目標は 2% です。' },
+      { t: '05:05', who: '自分', nameStyle: me, text: 'ダッシュボードで毎週見られるようにしたいですね。' },
+      { t: '05:12', who: '相手', nameStyle: them, text: '山本さんに来週までに案を作ってもらいます。' },
+      { t: '06:02', who: '自分', nameStyle: me, text: 'KPI の定義はどこにまとまっていますか？' },
+      { t: '06:20', who: '相手', nameStyle: them, text: 'Notion のページにあります。あとで共有します。' },
+      { t: '06:41', who: '自分', nameStyle: me, text: 'ありがとうございます。では次の議題に進みましょう。' }
+    ];
+    return { rows };
+  }
+}
+</script>
+</body>
+</html>

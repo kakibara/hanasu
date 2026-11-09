@@ -85,6 +85,10 @@ struct Meeting: Codable, Identifiable, Hashable {
     // 設計判断: DEC-MTG-092
     /// 議事録に使う発言を変えたあと、議事録をまだ作り直していない
     var minutesOutdated: Bool?
+    // 要件: REQ-MTG-053
+    // 設計判断: DEC-MTG-135, DEC-MTG-108
+    /// チャンネルごとの、音声ファイルの先頭が録音開始から何秒後か（"me" / "others"）。Windows 版と同じキー。古い会議にはない（0 として扱う）
+    var audioStartOffsets: [String: Double]?
 
     // 要件: REQ-MTG-008
     func displayName(for speaker: String) -> String {

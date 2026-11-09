@@ -33,7 +33,7 @@
 - 受け入れ条件: Mac 標準のエンジンで記録中、会議ノートに自分と相手の発言が順に出る。
 - 出典: 初版の要件定義 F3（必須）
 - 対象: Mac / Windows
-- 実装の場所: `LiveTranscriptView`、`MeetingRecorder.receive`、`ChannelTranscriber`
+- 実装の場所: `LiveTranscriptView`、`MeetingRecorder.receive`、`ChannelTranscriber`（見た目と配置は REQ-MTG-054）
 - Windows の実装: なし（Windows 版の会議ではライブの文字起こしを出さない。食い違いを参照）
 - 確かめ方: `--render-meeting-notes <フォルダ>` で記録中の画面を PNG にする。実際の会議は実機
 - 食い違い（ユーザーの確認待ち）: 文字起こしのエンジンに Whisper / Gemini を選ぶと、記録中はライブの文字起こしを出さず、記録を止めたあとにまとめて文字起こしする（DEC-MTG-005、PR #17）。F3 は必須の要件だが、出さないのは実装したエージェントの判断。要件を「Mac 標準のときだけ」に絞るかを確かめる。Windows 版の会議は Whisper / Gemini しか選べない（DEC-MTG-101）ので、ライブの文字起こしはいつも出ない
@@ -67,12 +67,14 @@
 
 ### REQ-MTG-007 記録した会議を一覧し、読める・コピーできる（F7）
 - 内容: 会議ノートのウインドウで、記録した会議を一覧し、文字起こしと議事録を読める・コピーできる。
-- 受け入れ条件: 会議ノートの左に会議の一覧が出て、選ぶと右に「議事録」「文字起こし」が出る。コピー（書き出し）ができる。どのタブ（「メモ」を含む）を開いても、上のタブの切り替えが見えたままで、ほかのタブに戻れる。
-- 出典: 初版の要件定義 F7（必須）
+- 受け入れ条件:
+  - Mac: 会議ノートの左に会議の一覧が出て、選ぶと真ん中に議事録の文書（REQ-MTG-050）、後ろ側のパネルに文字起こしが出る。コピー（書き出し）ができる。メモを編集している間も、議事録と文字起こしが見えたまま。
+  - Windows: 会議ノートの左に会議の一覧が出て、選ぶと右に「議事録」「文字起こし」が出る。コピー（書き出し）ができる。どのタブ（「メモ」を含む）を開いても、上のタブの切り替えが見えたままで、ほかのタブに戻れる。
+- 出典: 初版の要件定義 F7（必須）。Mac の受け入れ条件は 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承で変えた
 - 対象: Mac / Windows
-- 実装の場所: `MeetingWindowView`、`MeetingDetailView`
+- 実装の場所: `MeetingWindowView`、`MeetingDocumentView`、`MeetingInspector`
 - Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（書き出しは「Markdown をコピー」だけ）
-- 確かめ方: `--render-minutes-ui <フォルダ> --meeting-json <json>` で画面を PNG にする（「会議ノートのウインドウの高さ」が、どのタブでも開いたときと同じで、中身の高さがウインドウの中身を超えない（NG が出ない）こと。`window-tab2.png` でタイトルとタブが見えること）
+- 確かめ方: Mac は `.build/debug/Hanasu --render-meeting-window <フォルダ>` で画面を PNG にする（中身の大きさがウインドウの中身を超えない（NG が出ない）こと。メモを編集している状態でもタイトルと文字起こしが見えること）
 
 ### REQ-MTG-008 話者名を、あとから付け替えられる（F8）
 - 内容: 「話者1」を「田中さん」のように、あとから付け替えられる。
@@ -113,24 +115,24 @@
 - 内容: 記録中に、ボタンと設定で変えられるショートカットで「ここ重要」の印を付けられる。付けてから 10 秒のあいだは、その印を取り消せる（押し間違いのやり直し）。記録のあとに、印を付けた時刻の前後の会話を確かめられる。
 - 受け入れ条件:
   - 会議ツールを前面にしたまま `⌃⌥⌘ H` を押すと、その時刻に印が付く。
-  - 印を付けてから 10 秒のあいだ、会議ノートのメモ欄（Mac は字幕のパネルにも）に残りの秒数つきの「取り消す」が出て、押すとその印が消え、`meeting.json` からも消える。10 秒を過ぎると「取り消す」は消え、記録中には消せない（記録のあとに「メモ」タブで消す。REQ-MTG-013）。
-  - 会議ノートの「ここ重要」タブに、印ごとに時刻・説明と、その前後（30 秒前〜15 秒後）の発言が出る。Mac は「文字起こしで見る」で文字起こしのタブのその位置へ移る。
-- 出典: PR #10。前後の会話の確認はユーザーの依頼（2026-11-04「重要の秒数付近の会話をかくにんできるようにして。あと、mac版では会議メモを開くと足袋などが消失して文字起こしや要約のページに戻れないので修正して」）。取り消しはユーザーの依頼（2026-11-04「会議のここ重要を削除できないので削除できるようにして。10秒前まで削除できるようにして」。付けてから 10 秒のあいだ取り消せる、という意味だとユーザーに確かめた）
+  - 印を付けてから 10 秒のあいだ、会議ノートのメモ欄（Mac は字幕のパネルにも）に残りの秒数つきの「取り消す」が出て、押すとその印が消え、`meeting.json` からも消える。10 秒を過ぎると「取り消す」は消え、記録中には消せない（記録のあとに、Mac は文書のメモの欄、Windows は「メモ」タブで消す。REQ-MTG-013）。
+  - 印ごとに時刻・説明と、その前後（30 秒前〜15 秒後）の発言が出る。Mac は会議ノートの文書の「ここ重要」の欄に出し、「前後の会話を見る」で後ろ側のパネルの文字起こしのその位置へ移る。Windows は会議ノートの「ここ重要」タブに出す。
+- 出典: PR #10。前後の会話の確認はユーザーの依頼（2026-11-04「重要の秒数付近の会話をかくにんできるようにして。あと、mac版では会議メモを開くと足袋などが消失して文字起こしや要約のページに戻れないので修正して」）。取り消しはユーザーの依頼（2026-11-04「会議のここ重要を削除できないので削除できるようにして。10秒前まで削除できるようにして」。付けてから 10 秒のあいだ取り消せる、という意味だとユーザーに確かめた）。Mac の置き場所は 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承で変えた
 - 対象: Mac / Windows
 - 実装の場所: `MeetingRecorder.addHighlight`、`MeetingHighlightHotKey`、`MeetingRecorder.undoHighlight`、`HighlightUndoButton`、`Meeting.highlightContexts`、`HighlightContextsView`
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（ショートカットは DEC-MTG-110。取り消しは `UndoHighlight`）、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`HighlightContexts`・`HighlightContextText`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（`UpdateUndoHighlight`、「ここ重要」タブ）
-- 確かめ方: 実機で確かめる。印の反映は `--meeting-files … --notes notes.txt`。取り消しは `.build/debug/Hanasu --render-meeting-notes <フォルダ>`（「ここ重要の取り消し」の結果と `live-undo.png`・`caption-undo.png`）、Windows は `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~HighlightUndo|FullyQualifiedName~UndoesARecentHighlight|FullyQualifiedName~HighlightContext"`。前後の会話は `.build/debug/Hanasu --render-minutes-ui <フォルダ>`（`detail-highlights.png` と「ここ重要の前後」）
+- 確かめ方: 実機で確かめる。印の反映は `--meeting-files … --notes notes.txt`。取り消しは `.build/debug/Hanasu --render-meeting-notes <フォルダ>`（「ここ重要の取り消し」の結果と `live-undo.png`・`caption-undo.png`）、Windows は `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~HighlightUndo|FullyQualifiedName~UndoesARecentHighlight|FullyQualifiedName~HighlightContext"`。前後の会話は `.build/debug/Hanasu --render-minutes-ui <フォルダ>`（「ここ重要の前後」）と `.build/debug/Hanasu --render-meeting-window <フォルダ>`（文書の「ここ重要」の欄）
 
 ### REQ-MTG-013 議事録は、メモと印を優先して反映する。記録後にメモを直して作り直せる（F13）
 - 内容: 議事録はメモと印を優先して反映する。記録後にメモを直して、議事録を作り直せる。作り直しているあいだは、どの会議を作り直しているかがわかり、作り直しても選んでいた会議のままになる。
 - 受け入れ条件:
   - 印を付けた箇所が議事録の「重要とした箇所」にまとまり、メモにしかない内容も残る。「保存して議事録を作り直す」で議事録が変わる。
-  - Mac の会議ノートで議事録を作り直すと、終わるまで、その会議の詳細の上に「議事録を作り直しています…」と回る印が出て（今の議事録は薄く出したまま）、左の一覧のその会議にも回る印が出る。終わっても、一覧で選んでいた会議のまま（先頭の会議に移らない）。
+  - Mac の会議ノートで議事録を作り直すと、終わるまで、その会議の文書の上の帯に「議事録を作り直しています…」と回る印が出て（今の議事録は薄く出したまま）、左の一覧のその会議にも回る印が出る。終わっても、一覧で選んでいた会議のまま（先頭の会議に移らない）。
 - 出典: PR #10。作り直し中の表示と選択はユーザーの依頼（2026-11-04「議事録を再生成したら選択していた会議から先頭の会議に移動してしまうのですが、議事録を再生成しても、同じ会議に留まるようにしてください。また、議事録生成中の場合は生成中であることがわかるようにしてください。」）
 - 対象: Mac / Windows（2 つ目の受け入れ条件は Mac。Windows 版は作り直し中に「〇〇 で議事録を作っています…」と出し、作り直しても選んだ会議のまま）
 - 実装の場所: `Meeting.notesForPrompt`、`Meeting.transcriptForPromptMarkingHighlights`、`MeetingRecorder.regenerateMinutes`、`MeetingRecorder.regeneratingID`、`MeetingNotesEditor`、`MeetingDetailView`、`MeetingWindowView`
 - Windows の実装: `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
-- 確かめ方: `--meeting-files me.wav others.wav --notes notes.txt`。作り直し中の表示は `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail-regenerating.png`。選んだ会議のままかは実機で確かめる
+- 確かめ方: `--meeting-files me.wav others.wav --notes notes.txt`。作り直し中の表示は `.build/debug/Hanasu --render-meeting-window <フォルダ>` の `regenerating.png`。選んだ会議のままかは実機で確かめる
 
 ### REQ-MTG-014 文字起こしの字幕を、ほかのアプリの前面に出せる（F14）
 - 内容: 記録中の文字起こしを、会議ツールなどほかのアプリの前面に字幕として出せる。
@@ -271,7 +273,7 @@
 - 対象: Mac / Windows
 - 実装の場所: `MeetingStore.moveToTrash`、`MeetingRecorder.delete`・`canDelete`、`MeetingWindowView`、`MeetingDetailView`
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingStore.cs`（`Delete`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`Delete`・`CanDelete`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
-- 確かめ方: Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingControllerTests"`（フォルダが消えること、記録中・作り直し中は消せないこと）。Mac: `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail.png` に削除のボタンが出ること。ゴミ箱に移ることは実機で確かめる
+- 確かめ方: Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingControllerTests"`（フォルダが消えること、記録中・作り直し中は消せないこと）。Mac: `.build/debug/Hanasu --render-meeting-window <フォルダ>` の `more-menu.png` に「削除…」が出ること。ゴミ箱に移ることは実機で確かめる
 
 ### REQ-MTG-029 会議のタイトルを変えられ、変えられることが見てわかる
 - 内容: 会議ノートの上のタイトルを、その場で書き換えられる。書き換えられる欄であることが、触らなくても見た目でわかる。
@@ -280,9 +282,9 @@
   - 書き換えて Enter を押すか、ほかの所をクリックすると保存され、一覧のタイトルも変わる。空にしたときは元のタイトルに戻す。Esc で書き換えをやめられる。
 - 出典: ユーザーの依頼（2026-11-04「タイトルが編集できることをUI上でも見ただけでわかるようにしてください」）
 - 対象: Mac / Windows
-- 実装の場所: `EditableTitleField`、`MeetingDetailView`
+- 実装の場所: `EditableTitleField`、`MeetingDocumentView`
 - Windows の実装: `windows/Hanasu.Windows/Views/MeetingWindow.xaml`（`TitleBox`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
-- 確かめ方: `.build/debug/Hanasu --render-minutes-ui <フォルダ>` の `detail.png` で、タイトルの欄に枠と鉛筆の印が出ること。保存は実機で確かめる
+- 確かめ方: `.build/debug/Hanasu --render-meeting-window <フォルダ>` の `document.png` で、タイトルの欄に枠と鉛筆の印が出ること。保存は実機で確かめる
 
 ### REQ-MTG-034 会議を認識したとき、会議のタイトルを議事録のタイトルにする
 - 内容: Google Meet・Microsoft Teams などの会議を記録するとき、会議アプリのウインドウに出ている会議の名前を読み取り、日時のタイトルの代わりに議事録（会議ノート）のタイトルにする。
@@ -409,8 +411,8 @@
   - 話者の発言を右クリックして、その話者の発言をすべて除く・戻すことができる。
   - 除いた発言は文字起こしに薄く取り消し線つきで残り、元に戻せる。
   - 除いた発言（範囲の外・オフレコを含む）は、議事録・話者の名前の推測・AI チャット・会議への質問・文字起こしの書き出し（コピー・保存・transcript.md）に使わない。会議の検索ではヒットする（文字起こしでは薄く出る）。
-  - 議事録に使う発言を変えても、議事録はすぐには作り直さず、議事録のタブに「作り直すと反映されます」と出す。
-- 出典: ユーザーの依頼（2026-11-06「会議を録音したら文字起こしの最初と最後を選んで、その範囲内で議事録を作成する。特定の発言を無視して議事録を作成する」、想定ケースの提案に「推奨どおり進める」）
+  - 議事録に使う発言を変えても、議事録はすぐには作り直さず、「作り直すと反映されます」と出す（Mac は文書の上の帯、Windows は議事録のタブ）。
+- 出典: ユーザーの依頼（2026-11-06「会議を録音したら文字起こしの最初と最後を選んで、その範囲内で議事録を作成する。特定の発言を無視して議事録を作成する」、想定ケースの提案に「推奨どおり進める」）。Mac の知らせの置き場所は 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承で変えた
 - 関係する要件: REQ-MTG-013, REQ-MTG-016, REQ-MTG-040, REQ-MTG-044
 - 対象: Mac / Windows
 - 実装の場所: `Meeting.excludedUtterances`・`Meeting.excludedSpeakers`、`Meeting.minutesUse(of:)`、`Meeting.blocksForMinutes`、`MeetingRecorder.setExcluded`、`TranscriptSelectionBar`、`TranscriptLineMenu`
@@ -429,6 +431,80 @@
 - 実装の場所: `Meeting.offRecord`、`MeetingRecorder.toggleOffRecord`、`LiveOffRecordControls`、`TranscriptSelectionBar`
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`ToggleOffRecord`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `.build/debug/Hanasu --test-minutes-selection`、`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~OffRecord"`。画面は `.build/debug/Hanasu --render-minutes-selection <出力フォルダ>`。実際の記録は実機
+
+### REQ-MTG-050 記録した会議は、真ん中の文書と後ろ側のパネルで、議事録と元の発言を並べて読める
+- 内容: 記録した会議を選ぶと、真ん中に「要約・アクションアイテム・議事録・ここ重要・メモ」を上から順に 1 枚の文書として出し、後ろ側（左から右に書く言語では右）のパネルに「文字起こし」と「AI チャット」を切り替えて出す。タブを切り替えなくても、議事録を読みながら文字起こしを見られる。
+- 受け入れ条件:
+  - 会議を選ぶと、真ん中の文書の上から、タイトル（変えられる）・日時と長さと参加者・状態の帯（あれば）・要約・アクションアイテム・議事録の残りの本文・「ここ重要」・メモの順に出る。要約は議事録の最初の `## ` の節（型の既定では「概要」）で、なければ出さない。アクションアイテムの欄は、取り出したアクションアイテムが 1 つ以上あるときだけ出し、そのときは本文の「## アクションアイテム」（型によって「次のアクション」「次のステップ」）の節を本文に重ねて出さない。0 件なら、その節を本文のまま出す。「ここ重要」の印がない会議では「ここ重要」の欄を出さない。メモの欄はいつも出す。
+  - 後ろ側のパネルの上に「文字起こし｜AI チャット」の切り替えがあり、どちらを選んでも真ん中の文書は見えたまま。パネルはツールバーのボタンと ⌥⌘I で隠せる・出せる。幅はドラッグで変えられる。
+  - ウインドウの最小の大きさで後ろ側のパネルを出したまま、真ん中の文書の幅が 400pt 以上ある。
+  - 検索で議事録の行を選ぶと、その行（要約・本文のどちらに出ていても）へスクロールして色を付ける。アクションアイテムの節の行なら、アクションアイテムの欄の同じ順番の行へ移る（順番が合わなければ欄の先頭）。
+  - 今までのタブでできたこと（議事録・文字起こし・メモの編集・ここ重要の前後の会話・AI チャット・議事録に使う発言の選択・検索から飛ぶ・話者名・作り直し・書き出し・Finder で表示・削除）は、すべてこの画面でできる。
+  - 「質問」（REQ-MTG-016）を開いている間は、後ろ側のパネルを出さない。
+- 出典: 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承
+- 関係する要件: REQ-MTG-007, REQ-MTG-015, REQ-MTG-018
+- 対象: Mac（Windows は今のタブのまま。FUT-206）
+- 実装の場所: `MeetingWindowView`、`MeetingDocumentView`、`MinutesDocument`、`MeetingInspector`
+- 確かめ方: `.build/debug/Hanasu --render-meeting-window <フォルダ>`（最小の大きさ・パネルあり・発言を選ぶ状態を描き、中身の大きさがウインドウを超えない（NG が出ない）こと。文書の順番）と `--test-minutes-document`（節の分け方・アクションアイテムの節の外し方・検索の行の読み替え）
+
+### REQ-MTG-051 会議の一覧は日付でまとめ、記録の操作は 1 つのボタンと 1 行の設定にする
+- 内容: 左の一覧を「記録中・今日・昨日・今週・先週・それより前（月ごと）」に分けて出す。一覧の下は「会議の記録を開始」のボタン（記録中は「記録を停止」）と、その下の今の設定の 1 行にする。1 行を押すと、スピーカー・マイク・議事録の型を選べる小さなパネルが出る。
+- 受け入れ条件:
+  - 一覧の見出しが日付のまとまりになり、各行にタイトル・開始の時刻・長さ、作成中なら回る印、失敗なら「失敗」が出る。
+  - 一覧の下に、記録していないときは「会議の記録を開始」、記録中は「記録を停止」、準備中・処理中は進み具合が出る。その下に今の設定（議事録の型・スピーカー・マイク）の 1 行が出る。1 行を押すとパネルが出て、スピーカー・マイク・議事録の型と、型の管理（REQ-MTG-042）を選べる。記録中・処理中は変えられない。
+  - 記録を始められなかったとき（権限・モデル・認証がないなど）は、ボタンの下に理由を出す。
+  - 右クリック・⌫ での削除、検索、「質問」は今と同じに使える。
+- 出典: 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承
+- 関係する要件: REQ-MTG-001, REQ-MTG-042
+- 対象: Mac
+- 実装の場所: `MeetingWindowView`、`MeetingListGrouping`、`MeetingRow`、`RecordButton`、`RecordSettingsPopover`
+- 確かめ方: `.build/debug/Hanasu --test-minutes-document`（日付のまとまり）、`.build/debug/Hanasu --render-meeting-window <フォルダ>`（基準の日時を固定して、今日・昨日・今週・先月の会議を置いた一覧）
+
+### REQ-MTG-052 議事録の要点から、根拠の発言へ移れる
+- 内容: 議事録を作るとき、AI に要点ごとに根拠の発言の時刻を付けさせる（Mac と Windows で同じ指示）。Mac の会議ノートでは、議事録の本文とアクションアイテムの時刻を小さな印として出し、押すと文字起こしのその発言へ移って強調する。書き出しでは印を取り除く。
+- 受け入れ条件:
+  - 議事録のプロンプトに、要点の箇条書きの行末に根拠の発言の時刻を `[12:34]`（1 時間を超えたら `[1:02:34]`）の形で付ける指示と、アクションアイテムの JSON に任意の `"at"` を付ける指示が、17 言語で入る（Mac と Windows で同じ文面）。
+  - Mac の会議ノートで、議事録の本文とアクションアイテムの欄に時刻の印が出る。印を押すと、後ろ側のパネルが文字起こしに切り替わり（隠れていれば出し）、その時刻（1 秒の幅を見る）までに始まった最後の発言へスクロールして背景に色を付ける。音声を再生中なら、その位置へ移る（再生していなければ再生は始めない）。
+  - 会議の長さを 1 秒より多く超える時刻の印は、薄く出して押せないようにする。
+  - 移った先の発言が議事録から除いた発言でも移り、その発言は除いた発言の見た目で出る。
+  - ローカルの AI・Apple の AI で文字起こしを部分ごとの要点にまとめてから議事録を作ったとき（DEC-COM-065）は、議事録から時刻の印を取り除いてから保存する。
+  - 書き出し（Markdown のコピー・.md / .txt の保存・Slack 向け・リマインダー）には印を入れない。会議フォルダの `minutes.md` と `meeting.json` には残す。Windows 版は、議事録の表示と書き出しで印を取り除く。
+  - 引用のない今までの議事録は、今までどおりに読める。AI が実際に印を付ける割合は参考値とし、合否の条件にはしない。
+- 出典: 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承。書き出しでは消すこと、Windows にも同じ指示を入れることは、同日に確かめた
+- 関係する要件: REQ-MTG-006, REQ-MTG-018, REQ-MTG-019, REQ-COM-061
+- 対象: Mac / Windows（Windows は指示と、印を取り除くことだけ）
+- 実装の場所: `MinutesCitation`、`MinutesPrompt.systemInstruction`（`minutes.citations`）、`ActionItem.at`、`MeetingExport`、`ReminderExporter`、`MinutesDocumentView`、`MeetingRecorder`（要点にまとめたとき）
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesCitation.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`（`MinutesPrompt`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`（議事録の表示とコピーで取り除く）
+- 確かめ方: `.build/debug/Hanasu --test-minutes-citations`、`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MinutesCitation"`。AI が付ける割合は `--minutes-from-transcript <文字起こし.txt>` で見る
+
+### REQ-MTG-053 残した音声を再生し、再生位置の発言を文字起こしで示す
+- 内容: 音声ファイル（`me.m4a`・`others.m4a`）を残した会議では、文書の下に再生のバーを出し、2 つのチャンネルを重ねて再生する（片方ずつ消音できる）。再生中は、今の位置の発言を文字起こしで強調し、その発言が見えるようにスクロールする。文字起こしの発言の時刻を押すと、そこから再生する。
+- 受け入れ条件:
+  - 再生のバーに、再生・一時停止、15 秒戻る・進む、今の時刻と長さ、位置のスライダー、速さ（1×・1.25×・1.5×・2×）、「自分」「相手」の消音の切り替えがある。スライダーには話者ごとの色で話した区間と、「ここ重要」の印の位置が出る。
+  - 再生すると、消音していないチャンネルの声が聞こえ、文字起こしで今の位置の発言の背景に色が付く。強調は、発言の開始の時刻から 0.5 秒以内に移る。ユーザーが文字起こしを手でスクロールしたら自動のスクロールを止め、「再生位置へ」のボタンで戻る。
+  - 文字起こしの発言の時刻を押すと、その発言の開始から再生する。スペースキーで再生・一時停止する（文字の入力欄にフォーカスがあるときを除く）。
+  - 音声ファイルが両方ない会議・記録中の会議・処理中や議事録の作り直し中の会議では、再生のバーを出さない。片方だけあるときは、ある方だけを再生し、ない方の消音の切り替えを押せなくして、ない方を知らせる。読み込めない音声では「この音声は再生できません」と出し、再生のボタンを押せなくする。
+  - 会議を記録している間と音声入力をしている間は、再生を止め、再生のボタンを押せなくして理由を出す。別の会議を選んだ・ウインドウを閉じた・スリープした・アプリを終了したら、再生を止める。
+- 出典: 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承。消音を付けることは同日に確かめた
+- 関係する要件: REQ-MTG-010, REQ-MTG-002
+- 対象: Mac
+- 実装の場所: `MeetingPlayer`、`MeetingPlayerBar`、`MeetingInspector`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-player`（音声の組み立て・チャンネルのずれ・片方だけ・読めないファイル・時刻から発言を引く・強調が 0.5 秒以内に移る・記録中と音声入力中は押せない）。聞こえ方は実機で確かめる
+
+### REQ-MTG-054 記録中の画面と、記録を止めてから議事録ができるまで
+- 内容: 記録中は、真ん中に文字起こし（リアルタイム）、後ろ側のパネルに「メモ｜AI チャット」を出す。記録を止めると、同じ会議を選んだまま、真ん中が議事録の文書に、後ろ側のパネルが「文字起こし｜AI チャット」に替わり、文書の上の帯に処理の進み具合が出る。
+- 受け入れ条件:
+  - 記録中、ツールバーに記録中の印・経過時間・自分と相手の音量・オフレコ・字幕・パネルの表示の切り替えがある。「★ ここ重要」は後ろ側のパネルの上に、「メモ」「AI チャット」のどちらを選んでいても出る。停止は一覧の下のボタンと、メニュー・ショートカット。
+  - 記録中の警告（音が入らないチャンネル）とオフレコ中の知らせは、真ん中の文字起こしの上の帯に出る。「話者の区別は記録を止めたあとに行います」は見出しの下に出る。Whisper / Gemini で記録しているときは、文字起こしの欄に記録を止めたあとに文字起こしすることを出す。
+  - 記録中に AI チャットを開いても、真ん中の文字起こしは見えたまま（REQ-MTG-040）。
+  - 記録を止めるとき、メモの入力欄に打ちかけの文があれば、止めた時点のメモとして確定してから止める。
+  - 記録を止めると、選んでいる会議は変わらず、真ん中が文書になり、上の帯に段階（「文字起こし」（Whisper / Gemini のときだけ）→「話者の区別」→「議事録」）のどこまで進んだかが出る。議事録を作らない設定・使う発言がない会議では「議事録」の段階を出さない。終わると帯が消え、議事録とアクションアイテムが出る。
+  - 処理の間、メモの欄は読むだけにし、議事録ができたら書き足せることを出す。
+- 出典: 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承。記録中の配置（真ん中に文字起こし）は同日に確かめた
+- 関係する要件: REQ-MTG-003, REQ-MTG-011, REQ-MTG-040, REQ-MTG-046
+- 対象: Mac
+- 実装の場所: `LiveTranscriptView`、`LiveSidePanel`、`LiveNotesPanel`、`MeetingRecorder.stop`、`MeetingProcessingStage`、`MeetingStatusBanners`
+- 確かめ方: `.build/debug/Hanasu --render-meeting-notes <フォルダ>`（記録中の画面。警告・オフレコ・Whisper の案内）、`.build/debug/Hanasu --render-meeting-window <フォルダ>`（処理中の段階の帯）。記録して止める流れは実機
 
 ### REQ-MTG-120 `hanasu meetings list` で、会議を新しい順に並べる
 - 内容: 会議を新しい順に並べる。項目は ID・日時・長さ・タイトル・状態・議事録の有無・アクションアイテムの数。記録中・処理中・失敗の会議も、状態を付けて出す。`--since` / `--until`（`7d`・`24h`・`2w`、`2026-11-01` などの日付）と `--limit` で絞れる。
@@ -697,7 +773,7 @@
 - 実装の場所: `HotKeyCombo.defaultMeeting`
 
 ### DEC-MTG-022 会議の削除は、フォルダごとゴミ箱に移し、先に確かめる
-- 決めたこと: 削除は、会議のフォルダを丸ごと Mac のゴミ箱（Windows のごみ箱）に移す。完全には消さない。押す前に、会議のタイトルと「ゴミ箱から戻せる」ことを書いたダイアログで確かめる。入口は、一覧の右クリックの「削除…」、一覧を選んで ⌫（Windows は Delete キー）、会議の詳細の上のゴミ箱のボタン。消したあとは一覧の次の会議を選ぶ。
+- 決めたこと: 削除は、会議のフォルダを丸ごと Mac のゴミ箱（Windows のごみ箱）に移す。完全には消さない。押す前に、会議のタイトルと「ゴミ箱から戻せる」ことを書いたダイアログで確かめる。入口は、一覧の右クリックの「削除…」、一覧を選んで ⌫（Windows は Delete キー）、Mac はツールバーの「…」のメニューの「削除…」（DEC-MTG-131）、Windows は会議の詳細の上のゴミ箱のボタン。消したあとは一覧の次の会議を選ぶ。
 - 理由: 会議の記録は取り直せないので、押し間違えても戻せるようにする。フォルダの中身（音声・メモ）を 1 つずつ消すと、取り残しや、消しかけのフォルダが残るおそれがある。
 - 決めた場面: ユーザーの依頼（2026-11-04）。この PR
 - 関係する要件: REQ-MTG-028
@@ -804,7 +880,7 @@
 - 実装の場所: `MeetingRecorder.appendNote`、`Meeting.notesMarkdown`
 
 ### DEC-MTG-044 メモはテキストの形式で編集する
-- 決めたこと: 1 行 1 件で、`[12:34] 内容`（メモ）、`[12:40] ★ 説明`（印）、時刻なしの行（記録後に足したメモ）。会議ノートの「メモ」タブ・`notes.md`・CLI の `--notes` で同じ形式を使う。
+- 決めたこと: 1 行 1 件で、`[12:34] 内容`（メモ）、`[12:40] ★ 説明`（印）、時刻なしの行（記録後に足したメモ）。会議ノートのメモの欄（Mac は文書の中、Windows は「メモ」タブ）・`notes.md`・CLI の `--notes` で同じ形式を使う。
 - 理由: 行の追加・削除・時刻の修正がまとめてできる。
 - 決めた場面: PR #10
 - 関係する要件: REQ-MTG-013
@@ -820,7 +896,7 @@
 - 実装の場所: `Meeting.notesForPrompt`
 
 ### DEC-MTG-047 「ここ重要」の取り消しは、付けてから 10 秒以内のいちばん新しい印だけ
-- 決めたこと: 記録中に取り消せるのは、録音開始からの経過時間で付けてから 10 秒以内（ちょうど 10 秒まで）の印のうち、いちばん新しいもの。会議ノートのメモ欄に「★ を取り消す（あと N 秒）」を出し（Mac は字幕のパネルにも「取り消す」）、押すと `meeting.json` から消してすぐ保存する。10 秒を過ぎた印は、記録中には消せない（Mac の右クリックの「削除」もメモだけにし、印は 10 秒以内のときだけ「取り消す」を出す）。記録のあとは「メモ」タブのテキストで消せる（DEC-MTG-044）。ショートカットでの取り消しは作らない。
+- 決めたこと: 記録中に取り消せるのは、録音開始からの経過時間で付けてから 10 秒以内（ちょうど 10 秒まで）の印のうち、いちばん新しいもの。会議ノートのメモ欄に「★ を取り消す（あと N 秒）」を出し（Mac は字幕のパネルにも「取り消す」）、押すと `meeting.json` から消してすぐ保存する。10 秒を過ぎた印は、記録中には消せない（Mac の右クリックの「削除」もメモだけにし、印は 10 秒以内のときだけ「取り消す」を出す）。記録のあとはメモの欄のテキストで消せる（DEC-MTG-044）。ショートカットでの取り消しは作らない。
 - 理由: 依頼は押し間違いのやり直し。古い印まで記録中に消せると、会議ツールを見ながら押したつもりの印を誤って消しやすい。記録のあとならテキストでまとめて直せる。同じショートカットを 2 回押して取り消す形は、続けて 2 つ印を付けたいときと区別できないので採らなかった。
 - 決めた場面: ユーザーの依頼（2026-11-04「会議のここ重要を削除できないので削除できるようにして。10秒前まで削除できるようにして」。付けてから 10 秒のあいだ取り消せる、という意味だとユーザーに確かめた）
 - 関係する要件: REQ-MTG-012
@@ -829,16 +905,16 @@
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingModels.cs`（`Meeting.UndoableHighlight`・`HighlightUndoSeconds`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`UndoableHighlight`・`UndoHighlight`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`MeetingWindow.xaml.cs`（`UndoHighlightButton`）
 
 ### DEC-MTG-048 会議ノートのウインドウ（Mac）は、大きさを中身に合わせない
-- 決めたこと: 会議ノートのウインドウの `NSHostingController` の `sizingOptions` を空にし、ウインドウの最小の大きさ（900×520）は `contentMinSize` で決める。「メモ」タブのテキスト欄には最小の高さ（120）を決め、残りの高さに収めて中でスクロールさせる。「メモ」タブの説明文は高さを中身に合わせて固定せず（`fixedSize` にしない）、3 行までにする。
+- 決めたこと: 会議ノートのウインドウの `NSHostingController` の `sizingOptions` を空にし、ウインドウの最小の大きさ（1040×560。DEC-MTG-130）は `contentMinSize` で決める。文書のメモの欄のテキスト欄には最小の高さ（120）と最大の高さ（360）を決め、中でスクロールさせる。説明文は高さを中身に合わせて固定せず（`fixedSize` にしない）、3 行までにする。
 - 理由: 中身に合わせる設定のままだと、「メモ」タブのテキスト欄がメモの全行ぶんの高さを最小として求め、ウインドウが画面より縦に伸びて（メモ 60 行で高さ 672 → 1441）、タイトルとタブの切り替えが画面の外に出て、議事録・文字起こしに戻れなくなっていた（ユーザーの依頼（2026-11-04「重要の秒数付近の会話をかくにんできるようにして。あと、mac版では会議メモを開くと足袋などが消失して文字起こしや要約のページに戻れないので修正して」））。
 - 理由（説明文）: 説明文を `fixedSize`（縦）にしていると、左右に並べる画面（`NavigationSplitView`）が細い幅で最小の高さを測ったとき、1 文字ずつ折り返した高さ（約 1500）を求めた。ウインドウは伸びなくなったが、中身がウインドウより縦に大きくなって（中身 1529／ウインドウ 640）上下が画面の外に出て、タイトル・タブの切り替え・左の検索欄・記録のボタンが見えなくなっていた。メモの行数にはよらない（メモ 2 行の会議でも起きた）（ユーザーの依頼（2026-11-04「メモタブを押したらこうなってしまい、元に戻せません」））。
-- 決めた場面: 同じ依頼の修正。説明文は 2026-11-04 の 2 つめの依頼の修正
+- 決めた場面: 同じ依頼の修正。説明文は 2026-11-04 の 2 つめの依頼の修正。最小の大きさとメモの欄の置き場所は 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）で変えた
 - 関係する要件: REQ-MTG-007
 - 対象: Mac
 - 実装の場所: `AppDelegate.makeMeetingWindow`、`MeetingNotesEditor`
 
 ### DEC-MTG-049 印の前後の会話は「ここ重要」タブにまとめ、範囲は議事録と同じにする
-- 決めたこと: 会議ノートに「ここ重要」タブを足し、印ごとに時刻・説明と、その 30 秒前〜15 秒後にかかる発言（まとめた発言の単位）を時刻の順に出す。範囲は議事録で重要として扱う範囲（DEC-MTG-041）と同じ。時刻のない印（記録後にメモで書き足したもの）は出さない。Mac は印ごとに「文字起こしで見る」を置き、文字起こしのタブのその発言へ移って強調する。Windows は同じ内容を読むだけの文章で出す。
+- 決めたこと: 印ごとに時刻・説明と、その 30 秒前〜15 秒後にかかる発言（まとめた発言の単位）を時刻の順に出す。範囲は議事録で重要として扱う範囲（DEC-MTG-041）と同じ。時刻のない印（記録後にメモで書き足したもの）は出さない。Mac は会議ノートの文書の「ここ重要」の欄に出し、印ごとに「前後の会話を見る」を置き、後ろ側のパネルの文字起こしのその発言へ移って強調する。Windows は「ここ重要」タブに、同じ内容を読むだけの文章で出す。
 - 理由: 依頼は印を付けた秒数の付近の会話を確かめること。印ごとにまとまっていれば、文字起こしを探さずに見比べられる。議事録で ★ を付ける範囲と同じにすると、議事録の「重要とした箇所」が何から作られたかを確かめられる。
 - 決めた場面: ユーザーの依頼（2026-11-04「重要の秒数付近の会話をかくにんできるようにして。あと、mac版では会議メモを開くと足袋などが消失して文字起こしや要約のページに戻れないので修正して」）
 - 関係する要件: REQ-MTG-012
@@ -929,7 +1005,7 @@
 - 実装の場所: `ActionItem`
 
 ### DEC-MTG-064 JSON が壊れていたら、議事録のチェックボックスの行から読む
-- 決めたこと: JSON が読めないときと、この機能より前の議事録（「## TODO」の行）は、チェックボックスの行から読み取る。
+- 決めたこと: JSON が読めないときと、この機能より前の議事録（「## TODO」の行）は、チェックボックスの行から読み取る。読む前に、行末の時刻の印（DEC-MTG-134）を取り除く。
 - 理由: 古い会議もリマインダーに登録できるようにする。
 - 決めた場面: PR #13
 - 関係する要件: REQ-MTG-018
@@ -944,8 +1020,8 @@
 - 対象: Mac
 - 実装の場所: `MeetingExport.slack`、`MeetingExport.slackInline`
 
-### DEC-MTG-066 保存とコピーは、表示中のタブが対象
-- 決めたこと: Markdown のコピーと .md / .txt の保存は、表示中のタブ（議事録か文字起こし）が対象。.txt は見出しを【】、箇条書きを「・」、チェックボックスを「□」にし、太字などの記号を外す。Slack 向けとリマインダーは議事録だけ。
+### DEC-MTG-066 保存とコピーは、書き出しのメニューで議事録か文字起こしを選ぶ
+- 決めたこと: Markdown のコピーと .md / .txt の保存は、書き出しのメニューで「議事録」「文字起こし」を名前で選ぶ（タブがなくなったため。2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）で変えた）。議事録の時刻の印は取り除く（DEC-MTG-134）。.txt は見出しを【】、箇条書きを「・」、チェックボックスを「□」にし、太字などの記号を外す。Slack 向けとリマインダーは議事録だけ。
 - 理由: 従来の「コピー」ボタンと同じ動きにする。
 - 決めた場面: PR #13
 - 関係する要件: REQ-MTG-019, REQ-MTG-007
@@ -1037,12 +1113,12 @@
 - 実装の場所: `SavedMinutesTemplateStore`、`MinutesTemplateStore.resolve`・`apply`、`Meeting.minutesTemplateName`・`templateTitle`、`MeetingRecorder.regenerateMinutes`
 
 ### DEC-MTG-080 チャットは、記録中の画面の右側を「メモ」「AI チャット」で切り替えて出す
-- 決めたこと: 記録中の画面の右側（メモ欄）の上に「メモ｜AI チャット」の切り替えを置き、AI チャットは同じ場所に出す。文字起こしは左に出したままにする。字幕と「ここ重要」のボタンは、どちらを選んでいても上に出す。右側の幅は 280 から 320 にした。選んだほうは覚えておき（`meetingLiveSidePanel`）、次の記録でも同じほうを出す。⌘J で AI チャットに切り替えて、入力欄にフォーカスを移す。
+- 決めたこと: 記録中の画面の右側（メモ欄）の上に「メモ｜AI チャット」の切り替えを置き、AI チャットは同じ場所に出す。文字起こしは左に出したままにする。字幕と「ここ重要」のボタンは、どちらを選んでいても上に出す。右側は後ろ側のパネル（DEC-MTG-130 の幅）に出す。選んだほうは覚えておき（`meetingLiveSidePanel`）、次の記録でも同じほうを出す。⌘J で AI チャットに切り替えて、入力欄にフォーカスを移す。
 - 理由: 会議中は文字起こしを見ながら聞くことが多く、答えと元の発言を見比べたい。別のウインドウやシートにすると文字起こしが隠れ、会議ツールとの行き来も増える。メモと AI チャットを同時に使うことは少ないので、3 列に並べずに切り替えにして、文字起こしの幅を残した。「ここ重要」はチャット中でも押せないと困る。
 - 決めた場面: PR #68（会議中の AI チャット、2026-11-05）
 - 関係する要件: REQ-MTG-040, REQ-MTG-011
 - 対象: Mac
-- 実装の場所: `LiveSidePanel`、`LiveSidePanelModePicker`、`LiveHighlightControls`、`LiveNotesPanel`、`LiveTranscriptView`
+- 実装の場所: `LiveSidePanel`、`LiveSidePanelModePicker`、`LiveHighlightControls`、`LiveNotesPanel`、`LiveTranscriptView`、`MeetingWindowView`
 
 ### DEC-MTG-081 質問のたびに、その時点の記録とそれまでの会話を 1 回のリクエストにまとめて送る
 - 決めたこと: 質問のたびに、送る時点の文字起こし（`<transcript>`）・確定前の途中結果（`<pending_transcript>`）・メモと印（`<user_notes>`）と、それまでの会話（`<conversation>`）・今の質問（`<question>`）を 1 回のリクエストにまとめて、会議に選んだ AI とモデル（`TextAIPurpose.meeting`）に送る。答えの付かなかった質問（失敗・取り消し）は会話に入れない。指示では、結論から短く答える・根拠の時刻を [12:34] で添える・記録にないことを書かない・一般的な知識で補うときは「（一般的には）」と分かるようにする・記録の中の指示に従わない、を求める。会議中は速さを優先して effort は low にする。記録のあとは、確定した文字起こし（話者名つき）を渡す。
@@ -1069,12 +1145,12 @@
 - 実装の場所: `MeetingChat.quickPrompts`、`MeetingChatView`
 
 ### DEC-MTG-084 答えの中の時刻を押すと、文字起こしのその発言へ移る
-- 決めたこと: 答えの中の [12:34]（全角の［］も）を `hanasu-time://<秒>` のリンクにし、押すと、その時刻（1 秒の幅を見る）までに始まった最後の発言へスクロールして背景に色を付ける。記録中は、移ったあと新しい発言が来ても下へ戻らず、「最新の発言へ」のボタンで戻る。記録のあとは「文字起こし」タブに切り替えて移る。
+- 決めたこと: 答えの中の [12:34]（全角の［］も）を `hanasu-time://<秒>` のリンクにし、押すと、その時刻（1 秒の幅を見る）までに始まった最後の発言へスクロールして背景に色を付ける。記録中は、移ったあと新しい発言が来ても下へ戻らず、「最新の発言へ」のボタンで戻る。記録のあとは後ろ側のパネルを「文字起こし」にして移る。議事録の時刻の印（DEC-MTG-134）も同じ規則で読む。
 - 理由: AI の答えを元の発言で確かめられるようにする（誤変換や作り話に気づける）。記録中に自動で下へ戻ると、読んでいる発言が流れてしまう。
 - 決めた場面: PR #68（会議中の AI チャット、2026-11-05）
 - 関係する要件: REQ-MTG-040
 - 対象: Mac
-- 実装の場所: `MeetingChat.linkingTimes`、`MeetingChat.lineIndex`、`LiveTranscriptView`、`MeetingDetailView.scrollToPendingTime`
+- 実装の場所: `MeetingChat.linkingTimes`、`MeetingChat.lineIndex`、`LiveTranscriptView`、`MeetingInspector`
 
 ### DEC-MTG-085 会話は保存せず、残したい答えは「メモに残す」でメモにする
 - 決めたこと: 会話はアプリを終了するまで会議ごとにメモリに持ち、meeting.json などのファイルには保存しない。残したい答えは「メモに残す」で、Markdown の記号と改行を除いた 1 行（「AI: …」、600 文字まで）のメモにする。記録中は質問した時刻のメモ、記録のあとは時刻なしのメモ（記録のあとに書き足したメモと同じ）にする。処理中・議事録の作り直し中は残せない。答えは「コピー」でもコピーできる。チャットの欄には、送り先の AI とモデルと、会話を保存しないことを出す。
@@ -1084,13 +1160,13 @@
 - 対象: Mac
 - 実装の場所: `MeetingChatModel`、`MeetingChat.noteText`、`LiveSidePanel.saveNote`、`MeetingDetailView.saveChatAnswerToNotes`
 
-### DEC-MTG-086 記録のあとも、会議ノートの「AI チャット」タブで同じ会話を続けられる
-- 決めたこと: 会議ノートの詳細に「AI チャット」タブを足す。記録中に始めた会話はそのまま残り、記録のあとは確定した文字起こし（話者分離と話者名のあと）で続ける。記録中にチャットしなかった会議（過去の会議）でも使える。会議を削除したら、その会話も消す。
+### DEC-MTG-086 記録のあとも、会議ノートの「AI チャット」で同じ会話を続けられる
+- 決めたこと: 会議ノートの後ろ側のパネルに「AI チャット」を出す（前は詳細のタブ。2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）で変えた）。記録中に始めた会話はそのまま残り、記録のあとは確定した文字起こし（話者分離と話者名のあと）で続ける。記録中にチャットしなかった会議（過去の会議）でも使える。会議を削除したら、その会話も消す。
 - 理由: 記録を止めると、画面が記録中の画面から会議の詳細に変わるので、タブがないと会話が見えなくなる。会議が終わった直後に、確認やまとめをそのまま続けたいことが多い。過去の会議を横断して聞く「会議に質問」（REQ-MTG-016）は一問一答のままにし、1 つの会議を掘り下げるのはこちらで行う。
 - 決めた場面: PR #68（会議中の AI チャット、2026-11-05）
 - 関係する要件: REQ-MTG-041
 - 対象: Mac
-- 実装の場所: `MeetingChatStore`、`MeetingDetailView`、`MeetingWindowView.delete`
+- 実装の場所: `MeetingChatStore`、`MeetingInspector`、`MeetingWindowView.delete`
 
 ### DEC-MTG-087 スリープは OS の通知で知り、確認は復帰したときにアラートで出す（Mac）
 - 決めたこと: `NSWorkspace` の `willSleepNotification` でスリープする時点を覚え、`didWakeNotification` で確認のアラート（「スリープ前までで止める」が既定のボタン、もう 1 つが「記録を続ける」）を出す。確認が出ている間も記録は続ける。答える前にスリープ・復帰を繰り返しても、確認は 1 つで、止める位置は最初のスリープ。確認の間にほかの手段（メニュー・ショートカット）で記録を止めていたら、答えは使わない。
@@ -1133,20 +1209,20 @@
 - 実装の場所: `Meeting.transcriptForPrompt`、`Meeting.transcriptForPromptMarkingHighlights`、`Meeting.transcriptMarkdown`、`MeetingChat.material`、`MeetingChat.liveMaterial`
 
 ### DEC-MTG-092 選び方を変えても議事録は自動では作り直さず、作り直しを促す
-- 決めたこと: 発言を除く・範囲を変えるたびに議事録を作り直さない。`minutesOutdated` が true の会議は、議事録のタブと文字起こしの上の帯に「文字起こしか、議事録に使う発言を変えました。作り直すと反映されます」と「議事録を作り直す」を出す。辞書を当て直して文字起こしが変わったときも同じ帯を出す（DEC-DIC-174。2026-11-09 に文言を変えた）。
+- 決めたこと: 発言を除く・範囲を変えるたびに議事録を作り直さない。`minutesOutdated` が true の会議は、Mac は文書の上の帯（DEC-MTG-132）と文字起こしの上の帯、Windows は議事録のタブと文字起こしの上の帯に「文字起こしか、議事録に使う発言を変えました。作り直すと反映されます」と「議事録を作り直す」を出す。辞書を当て直して文字起こしが変わったときも同じ帯を出す（DEC-DIC-174。2026-11-09 に文言を変えた）。
 - 理由: 発言を 1 つずつ除くたびに AI を呼ぶと、時間とお金がかかり、作り直しの途中にまた変えることになる。いくつか選んでから 1 回作り直すのが自然。
 - 決めた場面: ユーザーの依頼（2026-11-06、議事録の範囲と除外）
 - 関係する要件: REQ-MTG-044, REQ-MTG-045
 - 対象: Mac / Windows
-- 実装の場所: `Meeting.minutesOutdated`、`TranscriptSelectionBar`、`MeetingDetailView`
+- 実装の場所: `Meeting.minutesOutdated`、`TranscriptSelectionBar`、`MeetingStatusBanners`
 
 ### DEC-MTG-093 発言の選び方は、右クリックのメニューと「議事録に使う発言を選ぶ」のチェックボックスの 2 つ（Mac）
-- 決めたこと: 文字起こしの発言を右クリックするか、行にマウスを載せると右端に出る「…」を押すと「議事録から除く／戻す」「ここから議事録に使う」「ここまで議事録に使う」「〇〇の発言をすべて除く／戻す」を出す。文字起こしの上の帯の「議事録に使う発言を選ぶ」で、発言ごとのチェックボックス（オンが使う）を出す。Shift を押しながらチェックボックスを押すと、前に押した発言からその発言までを同じ状態にする。帯には、使う発言の数・範囲・除いた話者・オフレコの区間（それぞれ解除のボタン）と「すべて元に戻す」を出す。
+- 決めたこと: 文字起こしの発言を右クリックするか、行にマウスを載せると右端に出る「…」を押すと「議事録から除く／戻す」「ここから議事録に使う」「ここまで議事録に使う」「〇〇の発言をすべて除く／戻す」を出す。文字起こしの上の帯（後ろ側のパネル。DEC-MTG-137）の「選ぶ…」で、発言ごとのチェックボックス（オンが使う）を出す。Shift を押しながらチェックボックスを押すと、前に押した発言からその発言までを同じ状態にする。帯には、使う発言の数・範囲・除いた話者・オフレコの区間（それぞれ解除のボタン）と「すべて元に戻す」を出す。
 - 理由: 1 つ 2 つを除くだけなら右クリックで足りる。「…」は、右クリックで出せることに気づかない人と、文字を選べる行（`textSelection`）で右クリックが文字のメニューになる場合のため。雑談の続く区間のように多くを除くときは、チェックボックスと Shift でまとめて選べるほうが速い。文字起こしの文字を選んでコピーする操作（`textSelection`）とぶつからないように、行のクリックでは選ばない。
 - 決めた場面: ユーザーの依頼（2026-11-06、議事録の範囲と除外）
 - 関係する要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
 - 対象: Mac
-- 実装の場所: `TranscriptSelectionBar`、`TranscriptLineMenu`、`MeetingDetailView`
+- 実装の場所: `TranscriptSelectionBar`、`TranscriptLineMenu`、`MeetingInspector`
 
 ### DEC-MTG-094 オフレコの区間は、記録の経過時間で持ち、押すたびに保存する
 - 決めたこと: 「オフレコ」を押した時刻と終えた時刻を、記録の経過時間（メモ・印と同じ時間軸。DEC-MTG-089）で `offRecord` に入れ、押すたびに meeting.json に保存する（DEC-MTG-043 のメモと同じく、落ちても残る）。オフレコのまま記録を止めたら終わりを記録の長さにする。スリープ前までで止めたときは、スリープの後に始めた区間を消し、終わりをスリープした時点までにする。メモと「ここ重要」の印は、オフレコ中に付けても残す。
@@ -1221,7 +1297,7 @@
 - 実装の場所: `windows/Hanasu.Core/Meetings/MeetingTranscription.cs`
 
 ### DEC-MTG-108 Windows 版の meeting.json は、Mac 版と同じ形にする
-- 決めたこと: キーは camelCase、列挙は小文字、日時は秒までの UTC、UUID は大文字、null は書かない。保存先は `ドキュメント\Hanasu\Meetings\<yyyy-MM-dd HHmm>\` で、設定で変えられる。Windows 版だけが書く `audioStartOffsets` は Mac 版では読み飛ばされる。`reminderID` は読み書きで落とさない。
+- 決めたこと: キーは camelCase、列挙は小文字、日時は秒までの UTC、UUID は大文字、null は書かない。保存先は `ドキュメント\Hanasu\Meetings\<yyyy-MM-dd HHmm>\` で、設定で変えられる。`audioStartOffsets` は Mac 版も書いて読む（DEC-MTG-135）。`reminderID` とアクションアイテムの `at`（DEC-MTG-134）は読み書きで落とさない。
 - 理由: Mac で作った会議のフォルダを、そのまま Windows の会議ノートで開けるようにする（逆も）。Swift の `.iso8601` は小数の秒を読めない。
 - 決めた場面: PR #19
 - 関係する要件: REQ-MTG-025, REQ-COM-011
@@ -1309,6 +1385,79 @@
 - 実装の場所: `HanasuMCPTools`
 
 ---
+
+### DEC-MTG-130 文書と後ろ側のパネルは `NavigationSplitView` と `inspector` で作り、最小の大きさを 1040×560 にする
+- 決めたこと: 左の一覧は `NavigationSplitView` のサイドバー（220〜260）のまま。後ろ側のパネルは SwiftUI の `.inspector(isPresented:)`（幅 300〜560、初期値 360。記録中は 300〜520、初期値 340）を `NavigationSplitView` に付け、真ん中の画面とパネルの状態は `MeetingPanelState` で分け合う。表示の有無を `meetingInspectorShown`、記録後のタブを `meetingInspectorTab` に覚える。真ん中の文書は最小 400pt とし、文書には `minWidth` を付けず（理想の幅も 0 にし）、ウインドウの最小の大きさ 1040×560（一覧 260 ＋ 文書 400 ＋ パネル 360 ＋ 区切り）で確保する。ツールバーのパネルの表示の切り替え（⌥⌘I）で出し入れする。ガラスはツールバーと再生のバーだけにし、重ねない。右から左に書く言語では、パネルの位置はシステムに任せる。
+- 理由: macOS 26 の標準の部品で、Liquid Glass の見た目・サイズ変更・キーボード操作・右から左の言語の配置が手に入る。最小の幅 900 では、サイドバーとパネルを出すと文書が 300pt を切る。macOS 26 では一覧とパネルが真ん中の上に重なるので、パネルを真ん中の画面に付けたり文書に `minWidth`・理想の幅を持たせたりすると、左右に並べる画面が一覧の幅を 2 回数えた最小の幅を求め、最小の大きさで中身がウインドウからはみ出した（`--render-meeting-window` で 1296 > 1000 を確かめて直した）。
+- 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
+- 関係する要件: REQ-MTG-050
+- 対象: Mac
+- 実装の場所: `MeetingWindowView`、`MeetingPanelState`、`MeetingDetailInspector`、`LiveInspector`、`AppDelegate.makeMeetingWindow`
+
+### DEC-MTG-131 会議への操作は、ツールバーと「…」のメニューにまとめる
+- 決めたこと: 記録後のツールバーは、前から「議事録の型」「議事録を作り直す」「辞書」（DEC-DIC-171）「書き出し」「…（話者名…・Finder で表示・削除…）」「インスペクタ」。タイトルの欄・日時の行は文書の先頭に置く。日時は `DateFormatter`、長さは `DateComponentsFormatter` で書き、時刻と見間違えないようにする。参加者は話者の色の丸と名前を並べ、押すと「話者名」のシートを開く。
+- 理由: 前は 5 つのボタンが本文の上で折り返していた。使う頻度の低い操作（Finder・削除）はメニューに入れる。
+- 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
+- 関係する要件: REQ-MTG-050, REQ-MTG-008, REQ-MTG-028
+- 対象: Mac
+- 実装の場所: `MeetingWindowView`、`MeetingDocumentHeader`
+
+### DEC-MTG-132 状態は真ん中の先頭の帯で出し、2 本まで積む
+- 決めたこと: 次の状態を、真ん中（記録後は文書、記録中は文字起こし）の先頭の帯にする。帯は種類ごとに色と印を変え、右端に次にすることのボタンを置く。同時に起きたときは、この順で上の 2 本まで出す。(1) 進行中: 議事録を作成中（段階）・作り直し中。(2) 記録中の警告: 音が入らないチャンネル（DEC-MTG-020）、オフレコ中。(3) 失敗: `errorMessage`。長い文は 1 行に切り、「詳しく」で全文（選んでコピーできる）。「閉じる」で、アプリを終えるまでその会議では出さない。(4) 古い: 議事録に使う発言を変えた（DEC-MTG-092）。
+- 理由: 長いオレンジの文章が見出しを押し下げるのをやめ、何をすればよいかを 1 か所で示す。失敗の帯は作り直しが成功するまで消えないので、閉じられるようにする。
+- 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
+- 関係する要件: REQ-MTG-013, REQ-MTG-045, REQ-MTG-050, REQ-MTG-054
+- 対象: Mac
+- 実装の場所: `MeetingStatusBanners`
+
+### DEC-MTG-133 要約とアクションアイテムを文書の先頭に出す
+- 決めたこと: 議事録の Markdown を見出し `## ` で節に分け、最初の節を「要約」として先頭に、続けて `Meeting.resolvedActionItems` のカードを出し、残りの節を本文として出す。カードが 1 件以上あるときは、アクションアイテムの見出し（`minutes.actionHeading*` の言語ごとの文言）の節を本文から外す。カードの各行は、やること・担当・期限・根拠の時刻の印。リマインダーに登録済みの行には、ベルの印を出す（四角のチェックボックスは使わない）。カードの右上に「リマインダーに登録…」を置く。`minutes` の文字列は変えない。検索の飛び先は、描いた行の行番号をそのまま ID にし、外した節の行はカードの同じ順番の行へ読み替える。
+- 理由: 会議のあと最初に読むのは要約とやること。文字列は変えないので、書き出し・検索・Windows との互換は今のまま。四角は完了のチェックに見えて押したくなる。
+- 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
+- 関係する要件: REQ-MTG-018, REQ-MTG-050, REQ-MTG-015
+- 対象: Mac
+- 実装の場所: `MinutesDocument`、`MinutesDocumentView`、`ActionItemsCard`
+
+### DEC-MTG-134 引用は議事録の Markdown の中の `[12:34]` で受け取り、書き出しでは取り除く
+- 決めたこと: プロンプトの `minutes.citations` を、Mac と Windows の `MinutesPrompt` で `minutes.actionItems` のあとに入れる（`minutes.actionItems` は変えない）。中身は、要点の箇条書きの行末に根拠の発言の時刻を `[12:34]` の形で 1〜2 個付ける（はっきりしなければ付けない。チェックボックスの行には付けない）こと、アクションアイテムの JSON に根拠の時刻を `"at"` として付けてよいこと。`MinutesCitation` に印の取り出し（`[m:ss]`・`[mm:ss]`・`[h:mm:ss]`、全角の［］）と取り除き（前の空白ごと）を置く。表示は `MeetingChat.linkingTimes`（DEC-MTG-084）と同じ規則で読み、小さなカプセルで描く。会議の長さを 1 秒より多く超える時刻は無効の印にする。書き出し（`MeetingExport` の Markdown・テキスト・Slack 向け、`ReminderExporter`）では取り除き、`minutes.md` と `meeting.json` には残す。`ActionItem.parse(fromMarkdown:)` は読む前に行末の印を取り除く。要点にまとめてから議事録を作ったとき（DEC-COM-065）は保存の前に取り除く。`ActionItem` に任意の `at` を足し、Windows でも読み書きで落とさない。Windows は議事録の表示と書き出しで取り除く。
+- 理由: 文字起こしの各行はもう `[時刻] 話者: 発言` の形で AI に渡しているので、同じ形で返させるのがいちばん確か。`minutes` の文字列に入るので、検索・保存の仕組みを変えずに済む。Mac と Windows で同じ文面を送る決まり（REQ-COM-061・DEC-COM-102）を守る。
+- 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）。書き出しで消すこと・Windows にも入れることはユーザーに確かめた
+- 関係する要件: REQ-MTG-052, REQ-COM-061
+- 対象: Mac / Windows
+- 実装の場所: `MinutesCitation`、`MinutesPrompt`、`ActionItem`、`MeetingExport`、`ReminderExporter`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MinutesCitation.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`、`windows/Hanasu.Core/Meetings/MeetingModels.cs`（`ActionItem.At`）
+
+### DEC-MTG-135 再生は 2 つの音声を `AVMutableComposition` で重ね、チャンネルのずれは `audioStartOffsets` に残す
+- 決めたこと: `me.m4a` と `others.m4a` を 1 つの `AVMutableComposition` の 2 つの音声トラックとして、それぞれ録音開始からのずれ（`ChannelTranscriber.audioStartOffset`、DEC-MTG-006）だけずらして入れ、`AVPlayer` で再生する。消音は `AVAudioMix` のトラックごとの音量を 0 にする。ずれは Windows 版と同じ `meeting.json` の `audioStartOffsets`（`{"me": 0.12, "others": 0.31}`）に、Mac も記録を止めたときに書き、読む。項目のない会議は 0 として扱う。再生位置は 0.25 秒ごとに見て、`MeetingChat.lineIndex` で今の発言を引く。速さは `AVPlayer.rate`（声の高さを変えない `.timeDomain`）。記録・音声入力が始まったら再生を止める。
+- 理由: 2 つの `AVAudioPlayer` を同時に動かすより、1 つの時間軸でシーク・速さ変更ができてずれない。同じ意味のキーを 2 つにしない。イヤホンなしの会議では相手の声がマイクにも入る（DEC-MTG-013）ので、片方ずつ消せるようにする。
+- 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）。消音はユーザーに確かめた
+- 関係する要件: REQ-MTG-053, REQ-MTG-010
+- 対象: Mac
+- 実装の場所: `MeetingPlayer`、`MeetingRecorder.stop`、`Meeting.audioStartOffsets`
+
+### DEC-MTG-136 処理の段階を状態として持ち、処理中のメモは読むだけにする
+- 決めたこと: 記録のあとの処理の段階（`MeetingProcessingStage`: 文字起こし（Whisper / Gemini のときだけ）・話者の区別・議事録）と、出す段階の一覧を `MeetingRecorder.processingStages`・`processingStage` に持つ。帯は一覧を並べ、今の段階に印を付ける。議事録を作らない設定・使う発言がないときは議事録の段階を一覧に入れない。処理の間、文書のメモの欄は読むだけにする。記録を止める前に、メモの入力欄の打ちかけの文を止めた時点のメモとして確定する。
+- 理由: 前の処理の状態は自由な文だけで、段階を出せなかった。処理は止めた時点の会議を最後に保存するので、処理中のメモの編集は上書きされて消える。
+- 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
+- 関係する要件: REQ-MTG-054, REQ-MTG-011
+- 対象: Mac
+- 実装の場所: `MeetingProcessingStage`、`MeetingRecorder`、`LiveNotesPanel`、`MeetingNotesEditor`
+
+### DEC-MTG-137 議事録に使う発言の選択は、後ろ側のパネルの文字起こしの上の帯で行う
+- 決めたこと: `TranscriptSelectionBar`（DEC-MTG-093）を後ろ側のパネルの文字起こしの上に置く。1 行目は使う発言の数と「選ぶ…」（選んでいる間は「すべて元に戻す」「選び終える」）。範囲・除いた話者・オフレコのカプセル（それぞれ解除）は、あるときに 2 行目以降に折り返して出す。「選ぶ…」でチェックボックスを出す。パネルの幅は選んでいる間も変えない（広げたいときはドラッグで広げる）。右クリック・「…」のメニューは今のまま。
+- 理由: パネルの幅（360）では前の 1 行の帯が収まらないので、折り返す。計画では選ぶ間だけ 520 まで広げるとしたが、パネルの幅の決まりを途中で変えても今の幅は変わらず、広げた幅で最小の幅を求めるとウインドウからはみ出すので、やめた（2026-11-09、実装のとき）。
+- 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
+- 関係する要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046, REQ-MTG-050
+- 対象: Mac
+- 実装の場所: `TranscriptSelectionBar`、`MeetingInspector`
+
+### DEC-MTG-138 一覧の日付のまとまり
+- 決めたこと: 会議の開始の日で「今日・昨日・今週・先週・それより前は月ごと」に分ける。週の始まりは `Calendar.current.firstWeekday`。月の書き方は `DateFormatter.setLocalizedDateFormatFromTemplate("yMMMM")`。検索中は検索結果の一覧を出す。描画の CLI は `--now` で基準の日時を固定できる。
+- 理由: 会議は「この前の〇〇」と時期で探すことが多い。
+- 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
+- 関係する要件: REQ-MTG-051
+- 対象: Mac
+- 実装の場所: `MeetingListGrouping`
 
 ## 廃止
 

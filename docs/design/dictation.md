@@ -613,7 +613,7 @@ Wispr Flow や Typeless は辞書を自動で学習する。Hanasu では、自�
 
 ### 5.6 会議ノートから辞書を作る・会議に辞書を当てる
 
-会議ノートの詳細の上に、辞書のメニュー（`MeetingDictionaryMenu`。窓の最小幅で並びが詰まらないよう、枠のないアイコンだけ）を置く。項目は 3 つ（`MeetingDictionaryViews.swift`）。Windows 版は「辞書…」のボタンと `ContextMenu`（`MeetingWindow.xaml.cs` の `OnDictionaryClick`）。
+会議ノートのツールバーに、辞書のメニュー（`MeetingDictionaryMenu`。ほかのボタンと同じくアイコンだけ）を置く。項目は 3 つ（`MeetingDictionaryViews.swift`）。Windows 版は「辞書…」のボタンと `ContextMenu`（`MeetingWindow.xaml.cs` の `OnDictionaryClick`）。
 
 - **この会議から辞書の候補を探す…**: シート（`MeetingDictionarySheet`。Windows は `MeetingDictionaryWindow`）を開き、すぐ探す。材料は `DictionarySuggester.meetingMaterial`（Windows `MaterialFor`）で、その会議の議事録に使う発言（オフレコ・除いた発言は入らない）を認識したままの文で先に、議事録の本文をあとに並べる（作り直しを促している議事録は、あとで除いた発言の中身を含みうるので入れない）。上限は `DictionarySuggester.budget(for:existing:)`（Windows `BudgetFor`）が会議の AI から決める（Gemini・Claude は 60,000 字、ローカル・Apple は文脈の長さから出力・指示・既存の辞書の分を引いたトークン数。見積もりは `AppleFMClient.estimateTokens` で多めに数える）。文字起こしを切ったら「最初の約 N 分」を出す。キャンセルで閉じたら呼び出しの Task を止める。追加すると `DictionarySuggester.appending` で末尾に足し、「この会議の文字起こしにも辞書を当てる」（既定は下の設定と同じ）がオンなら当て直しもする。
 - **今の辞書をこの会議に当て直す**・**この会議を認識したままの文に戻す**: `MeetingRecorder.applyDictionary(to:)`・`revertDictionary(of:)`（Windows `MeetingController.ApplyDictionary`・`RevertDictionary`）。中身は `MeetingDictionary.apply`・`revert`。

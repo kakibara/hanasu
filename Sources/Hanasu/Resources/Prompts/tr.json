@@ -411,6 +411,14 @@
     "- due_note: son tarihin nasıl söylendiği (“gelecek hafta içinde”, “bir sonraki durum toplantısına kadar” vb.). Söylenmediyse null",
     "Yapılacak iş yoksa [] çıktısını ver. <action_items> dışına açıklama yazma."
   ],
+  "minutes.citations": [
+    "# Dayanak konuşmaların zamanı",
+    "Tutanaktaki her madde işaretli satırın (“- ” ile başlayan satırlar) sonuna, o maddenin dayandığı konuşmanın zamanını dökümdeki zamanlarla aynı biçimde, [12:34] gibi ekle (bir saati geçiyorsa [1:02:34]).",
+    "- Madde birden fazla konuşmaya dayanıyorsa en fazla ikisini yaz (örneğin: “… [03:10] [12:34]”).",
+    "- Dayandığı konuşma belli değilse ya da madde yalnızca notlardan geliyorsa zaman ekleme. Dökümde olmayan bir zaman uydurma.",
+    "- Başlıklara, onay kutusu satırlarına (“- [ ] ” ile başlayan satırlar) ve “Yok” yazan yerlere zaman ekleme.",
+    "- Yapılacakların JSON'unda, dayanak konuşmanın zamanını \"at\": \"12:34\" olarak ekleyebilirsin (emin değilsen ekleme)."
+  ],
   "minutes.speakerNames": [
     "Son olarak, dökümde adı olmayan konuşanlardan (“Konuşmacı 1”, “Odadaki kişi 1” ve “Karşı taraf” gibi) yalnızca adı konuşmadan açıkça anlaşılanları aşağıdaki biçimde JSON olarak çıktı ver.",
     "<speaker_names>",

@@ -37,6 +37,7 @@
 | FUT-203 | ボットモード（会議にボットを参加させて記録する） | 未着手（計画あり） | [plans/bot-mode.md](plans/bot-mode.md) |
 | FUT-204 | 会議の AI チャットを、ほかのアプリの前面のパネルでも使う | 未着手 | PR #68（会議中の AI チャット、2026-11-05） |
 | FUT-205 | Windows 版にも、議事録の名前付きテンプレートを足す（Mac 版は REQ-MTG-042） | 未着手 | REQ-MTG-042 の PR |
+| FUT-206 | 会議ノートの UI を作り直す（文書＋後ろ側のパネル・議事録の引用・音声の再生） | Mac は実装した（PR #90）→ REQ-MTG-050〜054。Windows は未着手 | [plans/meeting-notes-ui.md](plans/meeting-notes-ui.md) |
 
 ---
 
@@ -194,3 +195,8 @@
 - 状態: 未着手
 - 中身: Mac 版の REQ-MTG-042（名前を付けて保存・管理できる議事録のテンプレート）を Windows 版にも入れる。保存先は `windows/Hanasu.Core/Settings` の設定、会議ノートの型の選択欄と作り直しのメニューに保存済みを並べる。`meeting.json` の `minutesTemplateName` は、読み書きで落とさないところまで先に入れた（DEC-MTG-108）。残りは画面と保存先。
 - 出どころ: REQ-MTG-042 の依頼（2026-11-05）。Mac 版だけを先に作った
+
+### FUT-206 会議ノートの UI を作り直す
+- 状態: Mac は実装した（PR #90、計画は [plans/meeting-notes-ui.md](plans/meeting-notes-ui.md)）→ REQ-MTG-050, REQ-MTG-051, REQ-MTG-052, REQ-MTG-053, REQ-MTG-054。Windows の画面は未着手（引用のプロンプトと印の取り除きは入れた）
+- 中身: 会議ノートを、真ん中の文書（要約・アクションアイテム・議事録・ここ重要・メモ）と後ろ側のパネル（文字起こし・AI チャット）の構成にし、議事録の要点から根拠の発言へ移れる引用と、音声の再生と同期を足す。Mac を先に作り、Mac の分は spec に移す。Windows の会議ノートの画面（WPF の `MeetingWindow.xaml`）は、そのあと同じ構成に寄せる。
+- 出どころ: ユーザーの依頼（2026-11-09「会議ノートの UI をモダンに」）

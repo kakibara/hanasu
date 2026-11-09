@@ -359,29 +359,26 @@ struct MinutesTemplateManagerSheet: View {
     }
 }
 
-// 要件: REQ-MTG-019
-// 設計判断: DEC-MTG-066
-/// 会議ノートの「書き出し」メニュー（コピー・ファイルに保存・リマインダー）
+// 要件: REQ-MTG-019, REQ-MTG-052
+// 設計判断: DEC-MTG-066, DEC-MTG-134
+/// 会議ノートの「書き出し」メニュー（コピー・ファイルに保存・リマインダー）。議事録か文字起こしかをメニューで名前で選ぶ。
+/// 議事録の根拠の時刻の印は、書き出しでは取り除く
 struct MeetingExportMenu: View {
     let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder
-    /// 文字起こしのタブを表示しているか（Markdown のコピーと保存は表示中の方を対象にする）
-    let showingTranscript: Bool
     @State private var copied: String?
     @State private var showingReminders = false
 
-    private var markdown: String { showingTranscript ? meeting.transcriptMarkdown() : (meeting.minutes ?? "") }
-    private var kind: String { showingTranscript ? tr("文字起こし") : tr("議事録") }
+    private var minutes: String { meeting.minutes.map(MinutesCitation.strip) ?? "" }
+    private var transcript: String { meeting.transcriptMarkdown() }
 
     var body: some View {
         Menu {
-            Section(kind) {
-                Button(tr("Markdown でコピー")) { copy(markdown, note: tr("コピーしました")) }
-                    .disabled(markdown.isEmpty)
-                Button(tr("Markdown ファイルとして保存…")) { save(.markdown) }
-                    .disabled(markdown.isEmpty)
-                Button(tr("テキストファイルとして保存…")) { save(.text) }
-                    .disabled(markdown.isEmpty)
+            Section(tr("議事録")) {
+                items(minutes, transcript: false)
+            }
+            Section(tr("文字起こし")) {
+                items(transcript, transcript: true)
             }
             Section(tr("議事録の共有")) {
                 Button(tr("Slack 向けにコピー")) {
@@ -394,10 +391,20 @@ struct MeetingExportMenu: View {
         } label: {
             Label(copied ?? tr("書き出し"), systemImage: copied == nil ? "square.and.arrow.up" : "checkmark")
         }
-        .fixedSize()
+        .help(tr("議事録・文字起こしのコピーと保存、Slack 向けのコピー、リマインダーへの登録"))
         .sheet(isPresented: $showingReminders) {
             ReminderExportSheet(meeting: meeting, recorder: recorder)
         }
+    }
+
+    @ViewBuilder
+    private func items(_ markdown: String, transcript: Bool) -> some View {
+        Button(tr("Markdown でコピー")) { copy(markdown, note: tr("コピーしました")) }
+            .disabled(markdown.isEmpty)
+        Button(tr("Markdown ファイルとして保存…")) { save(markdown, transcript: transcript, format: .markdown) }
+            .disabled(markdown.isEmpty)
+        Button(tr("テキストファイルとして保存…")) { save(markdown, transcript: transcript, format: .text) }
+            .disabled(markdown.isEmpty)
     }
 
     private func copy(_ text: String, note: String) {
@@ -407,8 +414,8 @@ struct MeetingExportMenu: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copied = nil }
     }
 
-    private func save(_ format: MeetingExport.FileFormat) {
+    private func save(_ markdown: String, transcript: Bool, format: MeetingExport.FileFormat) {
         MeetingExport.save(markdown, suggestedName: MeetingExport.suggestedFileName(
-            for: meeting, transcript: showingTranscript, format: format), format: format)
+            for: meeting, transcript: transcript, format: format), format: format)
     }
 }

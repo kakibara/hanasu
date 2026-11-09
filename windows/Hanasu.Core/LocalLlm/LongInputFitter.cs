@@ -40,6 +40,8 @@ public sealed class LongInputFitter(
         var available = contextLength - maxOutputTokens - Margin - await countTokens(system, ct).ConfigureAwait(false);
         if (available <= 0) return "";
         if (await countTokens(userText, ct).ConfigureAwait(false) <= available) return userText;
+        // 要件: REQ-MTG-052（縮めて送ると、議事録の根拠の時刻が確かでなくなる）
+        Meetings.LongInputReport.Current.Value?.MarkShortened();
 
         if (SplitTranscript(userText) is { } parts)
         {

@@ -442,6 +442,8 @@ MainActor.assumeIsolated { MeetingChatCLI.runIfRequested() }
 MeetingSleepCLI.runSelfTestIfRequested()
 // 議事録に使う発言の選び方の確認（--test-minutes-selection / --render-minutes-selection。MinutesSelectionCLI.swift）
 MainActor.assumeIsolated { MinutesSelectionCLI.runIfRequested() }
+// 会議ノートの文書・引用・再生の確認（--test-minutes-citations / --test-minutes-document / --test-meeting-player / --render-meeting-window。MeetingNotesUICLI.swift）
+MainActor.assumeIsolated { MeetingNotesUICLI.runIfRequested() }
 // 会議ノートから辞書を作る・会議に辞書を当てるの確認（--test-meeting-dictionary / --render-meeting-dictionary。MeetingDictionaryCLI.swift）
 MainActor.assumeIsolated { MeetingDictionaryCLI.runIfRequested() }
 // 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）

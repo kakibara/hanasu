@@ -229,8 +229,8 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
   **記録中だけ登録する**。ほかのアプリのキーを普段は奪わず、会議ツールを前面にしたまま印を付けられる。押すと効果音（Morse）が鳴る。
 - **印の取り消し**: 付けてから 10 秒のあいだは、メモ欄と字幕のパネルに出る「取り消す」（`HighlightUndoButton`。記録中だけ、0.5 秒ごとに残りの秒数を出し直す。DEC-COM-016）で消せる。
   対象は `Meeting.undoableHighlight(at:)` が返す、10 秒以内のいちばん新しい印だけ。それより古い印は、記録中は右クリックでも消せず、記録のあとに「メモ」タブで消す（DEC-MTG-047）。
-- **印の前後の会話**: 会議ノートの「ここ重要」タブ（`HighlightContextsView`）が、`Meeting.highlightContexts()` で印ごとに 30 秒前〜15 秒後の発言を出す（議事録の ★ と同じ範囲。DEC-MTG-049）。「文字起こしで見る」で文字起こしのタブのその発言へ移る。
-- **会議ノートのウインドウの大きさ**: `AppDelegate.makeMeetingWindow` は `NSHostingController.sizingOptions` を空にし、最小の大きさを `contentMinSize` で決める。中身に合わせると「メモ」タブのテキスト欄でウインドウが画面より伸びていた。「メモ」タブ（`MeetingNotesEditor`）の説明文は `fixedSize` にしない。左右に並べる画面が細い幅で最小の高さを測ると、1 文字ずつ折り返した高さを求めて、中身がウインドウからはみ出す（DEC-MTG-048）。
+- **印の前後の会話**: 会議ノートの文書の「ここ重要」の欄（`HighlightContextsSection`）が、`Meeting.highlightContexts()` で印ごとに 30 秒前〜15 秒後の発言を出す（議事録の ★ と同じ範囲。DEC-MTG-049）。「前後の会話を見る」で後ろ側のパネルの文字起こしのその発言へ移る。
+- **会議ノートのウインドウの大きさ**: `AppDelegate.makeMeetingWindow` は `NSHostingController.sizingOptions` を空にし、最小の大きさ（1040×560）を `contentMinSize` で決める。中身に合わせると、メモのテキスト欄でウインドウが画面より伸びていた。後ろ側のパネル・帯・チャットの説明文は `fixedSize` にせず行数で抑える。左右に並べる画面が細い幅で最小の高さを測ると、1 文字ずつ折り返した高さを求めて、中身がウインドウからはみ出す（DEC-MTG-048）。
 - **テキスト形式**: 会議ノートでの編集・`notes.md`・CLI の `--notes` で同じ形式を使う。1 行 1 件で、`[12:34] 内容`（メモ）、`[12:40] ★ 説明`（印）、時刻なしの行（記録後に書き足したメモ）。
 - **議事録への反映**（メモか印があるときだけ。ない会議の指示と入力は今までと同じ）:
   - 入力に `<user_notes>`（`[時刻] メモ` と `[時刻] ★ここ重要`）を足す。
@@ -238,7 +238,7 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
     範囲の計算は Gemini に任せず、こちらで決めて印を付ける（時刻の計算をモデルに頼ると外れやすいため）。
   - 指示に「メモの点を優先して取り上げ、文字起こしで補う」「メモにしかない情報も『（メモより）』と添えて残す」「★ の話題は詳しめに、決定事項・TODO を拾う」
     「印があれば『## 重要とした箇所』を概要の次に置く」を足す。
-- **記録後の編集**: 会議ノートの「メモ」タブでテキストとして直し、「保存」か「保存して議事録を作り直す」。ヘッダーの「議事録を作り直す」でも作り直せる。
+- **記録後の編集**: 会議ノートの文書のメモの欄（`MeetingNotesSection` の中の `MeetingNotesEditor`）でテキストとして直し、「保存」か「保存して議事録を作り直す」。ツールバーの「議事録を作り直す」でも作り直せる。記録を止めたあとの処理の間は読むだけにする（4.16）。
   - 作り直している会議の ID は `MeetingRecorder.regeneratingID`。`MeetingDetailView` はその会議のときヘッダーの下に回る印と処理の文言を出し、`MeetingRow` は一覧の印を回る印にする。一覧の選択は、作り直しや記録のあとの処理が終わっても変えない（DEC-MTG-070）。
 - **字幕（F14）**: 記録中の画面の文字起こし（F3）は前からある。そのデータ（確定した発言と途中結果）をそのまま使い、前面に浮かぶ小さなパネル
   （`NSPanel`、`.floating`、アプリをアクティブにしない）に直近 2 発言と途中結果を出す。パネルにも「ここ重要」ボタンを置いた。記録が終わると閉じる。
@@ -252,8 +252,8 @@ Granola のテンプレート（1on1・商談・採用面接など）になら�
 
 - どの型でも、最後に「アクションアイテム」（商談は「次のアクション」、ブレストは「次のステップ」）と「話者についてのメモ」の見出しを付ける。
 - 選べる場面は 2 つ。
-  - **記録を始める前**: 会議ノートの左下（録音する機器の下）の「議事録の型」。記録の開始時に会議へ記録する（`meeting.json` の `minutesTemplate` / `customMinutesPrompt`）。記録中は変えられない。
-  - **あとから**: 会議ノートの「型: 〇〇」メニューで型を選び直すと、確認のあと議事録を作り直す。失敗したときは型も議事録も元のまま。
+  - **記録を始める前**: 会議ノートの左下の「会議の記録を開始」の下の設定の 1 行を押して出るパネル（`RecordSettingsPopover`）の「議事録の型」。記録の開始時に会議へ記録する（`meeting.json` の `minutesTemplate` / `customMinutesPrompt`）。記録中は変えられない。
+  - **あとから**: 会議ノートのツールバーの「型: 〇〇」メニューで型を選び直すと、確認のあと議事録を作り直す。失敗したときは型も議事録も元のまま。
 - 選んだ型とカスタムの指示は UserDefaults（`meetingMinutesTemplate` / `meetingCustomMinutesPrompt`）に置く。設定画面には出さず、会議ノートだけで選ぶ。
 
 #### 名前付きテンプレート
@@ -281,9 +281,9 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 
 | 項目 | 内容 |
 | --- | --- |
-| Markdown でコピー | 表示中のタブ（議事録か文字起こし）の Markdown |
-| Markdown ファイルとして保存… / テキストファイルとして保存… | 表示中のタブを .md か .txt で保存。.txt は見出しを【】、箇条書きを「・」、チェックボックスを「□」にし、太字などの記号を外す |
-| Slack 向けにコピー | 議事録を Slack の mrkdwn に直す。タイトルと日時を先頭に置き、「話者についてのメモ」（推測の内部メモ）は除く。見出し → `*太字*`、箇条書き → `•`、チェックボックス → `☐`、リンク → `<url\|text>`。太字は前後が空白でないと効かないので、日本語の文中では前後に空白を入れる。貼り付けて送る前提なので `&` `<` `>` のエスケープはしない |
+| Markdown でコピー | メニューの「議事録」「文字起こし」の節で選んだ方の Markdown（DEC-MTG-066）。議事録の根拠の時刻の印（`[12:34]`）は取り除く（`MinutesCitation.strip`、DEC-MTG-134） |
+| Markdown ファイルとして保存… / テキストファイルとして保存… | 選んだ方を .md か .txt で保存（印は取り除く）。.txt は見出しを【】、箇条書きを「・」、チェックボックスを「□」にし、太字などの記号を外す |
+| Slack 向けにコピー | 議事録（印を取り除いたもの）を Slack の mrkdwn に直す。タイトルと日時を先頭に置き、「話者についてのメモ」（推測の内部メモ）は除く。見出し → `*太字*`、箇条書き → `•`、チェックボックス → `☐`、リンク → `<url\|text>`。太字は前後が空白でないと効かないので、日本語の文中では前後に空白を入れる。貼り付けて送る前提なので `&` `<` `>` のエスケープはしない |
 | アクションアイテムをリマインダーに登録… | 選んだものだけを EventKit でリマインダーに登録する |
 
 リマインダーへの登録:
@@ -336,10 +336,21 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 - **決まり**: `Meeting.minutesUse(of:)` が発言ごとに `MinutesUse`（使う・除外・オフレコ・話者を除外・範囲外）を返す。`displayBlocks()` は `mergedBlocks()` と同じまとめ方で、使い方が変わるところでも分ける。`blocksForMinutes()` はその中の使うものだけ。
 - **辞書の置き換え**: 確定した発言に、辞書の置き換えルールを当ててから議事録を作る。認識したままの文は `Utterance.rawText` に残し、会議ノートの辞書のメニューから当て直す・戻すことができる。作りは [dictation.md](dictation.md) の 5.6（REQ-DIC-073・074）。
 - **使うところ**: `transcriptForPrompt`・`transcriptForPromptMarkingHighlights`（議事録・話者名の推測・会議への質問・辞書の候補）、`transcriptMarkdown`（書き出し・transcript.md。除いた件数を 1 行書く）、`MeetingChat.material`・`liveMaterial`（記録中はオフレコの区間の発言を除く）、`MeetingAsk.material` は `blocksForMinutes()` を使う。検索の索引（`MeetingSearch`）は `mergedBlocks()` のまま（DEC-MTG-091）。
-- **会議ノート**: 文字起こしのタブの上に `TranscriptSelectionBar`（数・範囲・除いた話者・オフレコの区間・「議事録に使う発言を選ぶ」・すべて元に戻す・作り直しの促し）。行は `TranscriptDisplayRow`（`TranscriptLine` に `use` を渡して薄く・取り消し線・理由のバッジ。右クリックとマウスを載せたときの「…」で `TranscriptLineMenu`。選ぶモードでは `TranscriptUseCheckbox`、Shift で前に押した行からまとめて）。変更は `MeetingRecorder.changeMinutesSelection` で保存し、記録中・処理中・作り直し中の会議は変えない。議事録のタブには `MinutesOutdatedNotice`（DEC-MTG-092、DEC-MTG-093）。
+- **会議ノート**: 後ろ側のパネルの文字起こしの上に `TranscriptSelectionBar`（数・「選ぶ…」／「選び終える」・すべて元に戻す、範囲・除いた話者・オフレコの区間のカプセルは `FlowLayout` で折り返す・作り直しの促し。DEC-MTG-137）。行は `TranscriptDisplayRow`（`TranscriptLine` に `use` を渡して薄く・取り消し線・理由のバッジ。右クリックとマウスを載せたときの「…」で `TranscriptLineMenu`。選ぶモードでは `TranscriptUseCheckbox`、Shift で前に押した行からまとめて）。変更は `MeetingRecorder.changeMinutesSelection` で保存し、記録中・処理中・作り直し中の会議は変えない。文書の上には作り直しを促す帯（`MeetingStatusBanners`。DEC-MTG-092、DEC-MTG-093、DEC-MTG-132）。
 - **記録中**: `LiveTranscriptView` の上に `LiveOffRecordButton` と `LiveOffRecordBanner`。`MeetingRecorder.toggleOffRecord` が経過時間で区間を足して閉じ、すぐ保存する。止めたときに開いた区間を閉じ、スリープ前までで止めたときは `MeetingSleepCut.apply` が区間をそろえる（DEC-MTG-094）。
 - **Windows**: `windows/Hanasu.Core/Meetings/MinutesSelection.cs` に同じ決まりを置き、会議ノートの文字起こしのタブを発言ごとの一覧にした（DEC-MTG-112）。
 - **確認**: `--test-minutes-selection`（決まり・AI に渡す文字起こし・書き出し・meeting.json・スリープ）、`--render-minutes-selection <フォルダ>`（文字起こしの帯・チェックボックス・作り直しの促し・記録中のオフレコ）。
+
+### 4.16 会議ノートの画面（文書・後ろ側のパネル・引用・再生）
+
+2026-11-09 に作り直した（計画は [plans/meeting-notes-ui.md](../plans/meeting-notes-ui.md)、見本は [plans/meeting-notes-ui/](../plans/meeting-notes-ui/)。REQ-MTG-050〜054）。
+
+- **組み立て**: `MeetingWindowView` が `NavigationSplitView`（左の一覧と真ん中）に `.inspector` を付ける（DEC-MTG-130）。真ん中は記録中なら `LiveMeetingView`（`LiveTranscriptView`）、記録した会議と処理中なら `MeetingDetailView`（`MeetingDocumentView` と下の `MeetingPlayerBar`、ツールバー）。後ろ側のパネルは記録中なら `LiveInspector`（`LiveSidePanel`）、それ以外は `MeetingDetailInspector`（`MeetingInspector`）。真ん中とパネルの間の状態（パネルのタブ・移る先・発言を選んでいるか・作り直しの確かめ）は `MeetingPanelState`。確認用の描き出しは `MeetingDetailPreview`・`LivePreview`（パネルを横に並べる）か、`MeetingDetailView` の CLI 向けの init（パネルも自分で付ける）。
+- **macOS 26 の一覧とパネル**: 一覧とパネルは真ん中の上に重なり、真ん中は safe area で避ける。パネルを真ん中に付けたり、文書に `minWidth`・理想の幅を持たせたりすると、左右に並べる画面が一覧の幅を 2 回数えた最小の幅を求め、最小の大きさで中身がはみ出す。文書には `.frame(minWidth: 0, idealWidth: 0)` を付けている。再生のバーは狭いと `ViewThatFits` で時刻を外し、速さと消音をメニューにまとめる。
+- **文書**: `MinutesDocument` が議事録の Markdown を節に分け、先頭のタイトル（`# …`）を出さず、最初の `## ` の節を要約に、アクションアイテムが取り出せていればその見出しの節を本文から外す（`ActionItemsCard` に出す）。行番号は議事録の中の番号のままなので、検索の飛び先（`MarkdownText.lineID`）は変わらない。外した節の行は `actionRow(forLine:)` でカードの行（`ActionItemsCard.rowID`）へ読み替える（DEC-MTG-133）。
+- **状態の帯**: `MeetingStatusBanners` が進行中（`ProcessingStagesView`。`MeetingRecorder.processingStages`・`processingStage`）・作り直し中・失敗（`errorMessage`。「詳しく」「閉じる」、閉じた帯は `MeetingBannerDismissals` にアプリを終えるまで覚える）・古い議事録を、優先の順に 2 本まで出す（DEC-MTG-132、DEC-MTG-136）。記録中の警告とオフレコは `LiveTranscriptView` の上の `StatusBanner`。
+- **引用**: 議事録のプロンプトの `minutes.citations`（Mac と Windows で同じ文面）で、要点の行末に `[12:34]`、アクションアイテムの JSON に `"at"` を付けさせる。`MinutesCitation` が印を読み、`MarkdownText.decorateCitations` が `hanasu-time://<秒>` のリンクの小さな印にする（会議の長さを 1 秒より多く超える時刻は取り消し線の灰色で、押せない）。押すと `MeetingDetailView.focusTranscript` → `MeetingPanelState.focus` → `MeetingTranscriptPanel` がその発言へ移って色を付ける。ローカル・Apple の AI で文字起こしを縮めて送ったとき（`LongInputFitter` が `LongInputReport` に書く）は、保存の前に印を取り除く（DEC-MTG-134）。
+- **再生**: `MeetingPlayer.shared` が `me.m4a`・`others.m4a` を `AVMutableComposition` の 2 つのトラックに、`meeting.json` の `audioStartOffsets`（記録を止めたときに書く。Windows と同じキー）だけずらして重ね、`AVPlayer` で鳴らす。消音は `AVAudioMix`、速さは `rate`（`.timeDomain`）。再生位置を 0.25 秒ごとに見て、`MeetingTranscriptPanel` が今の発言に「再生中」を付けてスクロールする（手でスクロールしたら止め、「再生位置へ」で戻る）。スペースキーは、会議ノートが前面で文字の入力欄にフォーカスがないときだけ、`NSEvent` の監視で受ける。記録・音声入力を始めたら止め、その間は押せない（DEC-MTG-135）。
 
 ## 5. アーキテクチャ
 
@@ -384,10 +395,10 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 ## 6. 画面
 
 - **メニューバー**: 「会議の記録を開始／停止」（録音中は経過時間を表示し、アイコンを赤い丸にする）、「会議ノートを開く」。
-- **会議ノート ウィンドウ**: 左に会議の一覧、右に選んだ会議の「議事録」「文字起こし」「メモ」「ここ重要」「AI チャット」タブ。録音中の会議はライブの文字起こしと、右側にメモ欄（「AI チャット」に切り替えられる。4.13）・「ここ重要」ボタン・字幕の切り替えを表示。話者名の変更、議事録の作り直し、書き出し（4.11）、議事録の型の選び直し（4.10）、Finder で開く。左下で録音する機器と議事録の型を選んでから記録を始める。
-  - タイトルは詳細の上の欄（`EditableTitleField`）で書き換える。いつも薄い枠と鉛筆の印を出し、マウスを載せると枠を濃く、編集中はアクセントの色にする。Enter・フォーカスが外れたときに `MeetingRecorder.rename` で保存し、空なら元に戻す。Esc でやめる。別の会議を選んだときは、書きかけのタイトルを元の会議に保存してから切り替える（`MeetingDetailView.commitTitle`）。ウインドウを開いたときに最初の入力欄としてフォーカスが入らないよう、すぐ外す。
-  - 削除: 一覧の右クリックの「削除…」、一覧で ⌫、詳細の上のゴミ箱のボタンから。確かめのダイアログのあと、`MeetingRecorder.delete` → `MeetingStore.moveToTrash` で会議のフォルダを丸ごとゴミ箱に移し（`FileManager.trashItem`）、一覧を読み直す（検索の索引も `recorder.$meetings` から更新される）。消したあとは一覧の次の会議を選ぶ。記録中・処理中の会議（`current`）と、議事録を作り直している会議（`regeneratingID`）は消せない。会議を書き換える `MeetingRecorder.update` は、フォルダがもうない会議を保存し直さない。
-- **字幕パネル**: 記録中、ほかのアプリの前面に直近の発言を出す小さなパネル（記録中の画面のメモ欄の上のボタンで出す）。
+- **会議ノート ウィンドウ**: 左に日付でまとめた会議の一覧、真ん中に選んだ会議の文書、後ろ側のパネルに文字起こし・AI チャット（4.16）。記録中は真ん中にライブの文字起こし、後ろ側のパネルに「メモ｜AI チャット」と「ここ重要」ボタン、ツールバーに記録中の印・音量・オフレコ・字幕。ツールバーで議事録の型の選び直し（4.10）・作り直し・辞書（[dictation.md](dictation.md) の 5.6）・書き出し（4.11）・「…」（話者名・Finder で表示・削除）。左下の「会議の記録を開始」と、その下の設定の 1 行で録音する機器と議事録の型を選ぶ。
+  - タイトルは文書の先頭の欄（`EditableTitleField`）で書き換える。いつも薄い枠と鉛筆の印を出し、マウスを載せると枠を濃く、編集中はアクセントの色にする。Enter・フォーカスが外れたときに `MeetingRecorder.rename` で保存し、空なら元に戻す。Esc でやめる。別の会議を選んだときは、書きかけのタイトルを元の会議に保存してから切り替える（`MeetingDocumentView.commitTitle`）。ウインドウを開いたときに最初の入力欄としてフォーカスが入らないよう、すぐ外す。
+  - 削除: 一覧の右クリックの「削除…」、一覧で ⌫、ツールバーの「…」の「削除…」から。確かめのダイアログのあと、`MeetingRecorder.delete` → `MeetingStore.moveToTrash` で会議のフォルダを丸ごとゴミ箱に移し（`FileManager.trashItem`）、一覧を読み直す（検索の索引も `recorder.$meetings` から更新される）。消したあとは一覧の次の会議を選ぶ。記録中・処理中の会議（`current`）と、議事録を作り直している会議（`regeneratingID`）は消せない。会議を書き換える `MeetingRecorder.update` は、フォルダがもうない会議を保存し直さない。
+- **字幕パネル**: 記録中、ほかのアプリの前面に直近の発言を出す小さなパネル（記録中のツールバーの「字幕」で出す）。
 - **ショートカット**: 記録の開始／停止 `⌃⌥⌘ M`、「ここ重要」の印 `⌃⌥⌘ H`（記録中だけ有効）。どちらも変更可。
 - **提案のパネル**: 会議アプリがマイクを使い始めたら画面の右上に「会議を記録しますか？」、記録中に止めたら「記録を止めますか？」（4.8）。
   - 一覧の上に検索欄（`⌘F`）と「会議に質問」ボタン（✦）。詳しくは 11 章。

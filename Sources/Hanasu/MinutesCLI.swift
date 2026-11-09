@@ -282,15 +282,15 @@ enum MinutesCLI {
             .padding(10).frame(width: 260).defaultAppStorage(defaults)
         try render(customPanel, to: dir.appendingPathComponent("record-panel-custom.png"))
 
-        let detail = MeetingDetailView(meeting: meeting, recorder: recorder, onDelete: {})
-            .frame(width: 600, height: 640)
+        let detail = MeetingDetailPreview(meeting: meeting, recorder: recorder, onDelete: {})
+            .frame(width: 1040, height: 640)
             .defaultAppStorage(defaults)
         try render(detail, to: dir.appendingPathComponent("detail.png"))
         // 確かめ方: REQ-MTG-013
         // 議事録を作り直している途中（上に「作り直しています」と出て、今の議事録は薄く出る）
         recorder.regeneratingID = meeting.id
-        let regenerating = MeetingDetailView(meeting: meeting, recorder: recorder)
-            .frame(width: 600, height: 640)
+        let regenerating = MeetingDetailPreview(meeting: meeting, recorder: recorder)
+            .frame(width: 1040, height: 640)
             .defaultAppStorage(defaults)
         try render(regenerating, to: dir.appendingPathComponent("detail-regenerating.png"))
         recorder.regeneratingID = nil
@@ -303,11 +303,10 @@ enum MinutesCLI {
             let text = isHighlight ? "" : "メモ \(i + 1)"
             return MeetingNote(kind: kind, time: Double(i * 40), text: text)
         }
-        let notesTab = MeetingDetailView(meeting: noted, recorder: recorder, initialTab: 2)
-            .frame(width: 600, height: 640)
+        let notesTab = MeetingDetailPreview(meeting: noted, recorder: recorder, initialTab: 2)
+            .frame(width: 1040, height: 640)
             .defaultAppStorage(defaults)
         try render(notesTab, to: dir.appendingPathComponent("detail-notes.png"))
-        checkWindowHeight(meeting: noted, recorder: recorder, dir: dir)
         // 「ここ重要」タブ（印の前後の発言）
         var marked = meeting
         let times = marked.mergedBlocks().map(\.start)
@@ -320,8 +319,8 @@ enum MinutesCLI {
         }
         print("ここ重要の前後: " + marked.highlightContexts().map { "\(Meeting.clock($0.note.time ?? 0)) の前後 \($0.blocks.count) 発言" }
             .joined(separator: " / "))
-        let highlightsTab = MeetingDetailView(meeting: marked, recorder: recorder, initialTab: 3)
-            .frame(width: 600, height: 640)
+        let highlightsTab = MeetingDetailPreview(meeting: marked, recorder: recorder, initialTab: 3)
+            .frame(width: 1040, height: 640)
             .defaultAppStorage(defaults)
         try render(highlightsTab, to: dir.appendingPathComponent("detail-highlights.png"))
 
@@ -344,43 +343,6 @@ enum MinutesCLI {
         let manager = MinutesTemplateManagerSheet().defaultAppStorage(defaults)
         try render(manager, to: dir.appendingPathComponent("template-manager-sheet.png"))
         print("wrote: \(dir.path)")
-    }
-
-    // 確かめ方: REQ-MTG-007
-    /// 会議ノートのウインドウで「メモ」タブを開いても、ウインドウが縦に伸びず、中身もウインドウからはみ出さない
-    /// （タイトルとタブが画面の外に出ない）か。window-tab<番号>.png に、そのときのウインドウの中身を描き出す
-    private static func checkWindowHeight(meeting: Meeting, recorder: MeetingRecorder, dir: URL) {
-        for tab in [0, 1, 2] {
-            // 本物の会議ノートと同じく、左に一覧・右に詳細の画面を並べて開く
-            let window = AppDelegate.makeMeetingWindow(rootView: NavigationSplitView {
-                List { Text("会議") }
-                    .navigationSplitViewColumnWidth(min: 220, ideal: 260)
-            } detail: {
-                MeetingDetailView(meeting: meeting, recorder: recorder, initialTab: tab, onDelete: {})
-            })
-            window.appearance = NSAppearance(named: .aqua)
-            window.orderBack(nil)
-            RunLoop.main.run(until: Date().addingTimeInterval(0.6))
-            let height = window.frame.height
-            let contentHeight = window.contentView?.bounds.height ?? 0
-            let splitHeight = window.contentView.flatMap(splitView(in:))?.frame.height ?? 0
-            let fits = splitHeight <= contentHeight + 1
-            print("会議ノートのウインドウの高さ（タブ \(tab)）: \(Int(height))（開いたときは \(Int(AppDelegate.meetingWindowSize.height)) 前後）"
-                  + "・中身の高さ \(Int(splitHeight))／ウインドウの中身 \(Int(contentHeight))"
-                  + (fits ? "" : " → NG: 中身がはみ出し、タイトルとタブが画面の外に出る"))
-            if let content = window.contentView, let rep = content.bitmapImageRepForCachingDisplay(in: content.bounds) {
-                content.cacheDisplay(in: content.bounds, to: rep)
-                try? rep.representation(using: .png, properties: [:])?.write(to: dir.appendingPathComponent("window-tab\(tab).png"))
-            }
-            window.close()
-        }
-    }
-
-    /// 左右に並べる画面（NavigationSplitView）の中身の NSSplitView
-    private static func splitView(in view: NSView) -> NSSplitView? {
-        if let split = view as? NSSplitView { return split }
-        for sub in view.subviews { if let found = splitView(in: sub) { return found } }
-        return nil
     }
 
     private static func render(_ view: some View, to url: URL) throws {
