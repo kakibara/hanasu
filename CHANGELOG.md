@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.2.0](https://github.com/kakibara/hanasu/compare/v2.1.0...v2.2.0) - 2026-11-09
+
+- UI のテスト項目をデータにし、Mac は画面を PNG に描いて確かめる（DEC-COM-170） by @kakibara in https://github.com/kakibara/hanasu/pull/86
+- 会議ノートから辞書を作り、会議の文字起こしにも辞書を当てる（Mac・Windows） by @kakibara in https://github.com/kakibara/hanasu/pull/89
+- Microsoft Copilot と声でやり取りする実現性の調査を docs/plans に置く by @kakibara in https://github.com/kakibara/hanasu/pull/88
+- 会議ノートの UI を作り直す（Mac）: 文書と右のパネル・議事録から発言への引用・音声の再生 by @kakibara in https://github.com/kakibara/hanasu/pull/90
+
 ## [v2.1.0](https://github.com/kakibara/hanasu/compare/v2.0.1...v2.1.0) - 2026-11-08
 
 - 依頼から要件定義を詰めて計画を固めるスキル requirements を足す by @kakibara in https://github.com/kakibara/hanasu/pull/82
