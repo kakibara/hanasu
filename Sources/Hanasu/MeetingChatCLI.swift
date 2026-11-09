@@ -127,10 +127,10 @@ enum MeetingChatPreview {
         }
 
         let chat = MeetingChatStore.shared.model(for: meeting.id)
-        try MeetingNotesPreview.write(LiveTranscriptView(recorder: recorder).frame(width: 860, height: 620),
+        try MeetingNotesPreview.write(LivePreview(recorder: recorder).frame(width: 1240, height: 620),
                                       to: directory.appendingPathComponent("live-chat-empty.png"))
         chat.setMessagesForPreview(sampleConversation, draft: "価格表の更新はいつまで？")
-        try MeetingNotesPreview.write(LiveTranscriptView(recorder: recorder).frame(width: 860, height: 620),
+        try MeetingNotesPreview.write(LivePreview(recorder: recorder).frame(width: 1240, height: 620),
                                       to: directory.appendingPathComponent("live-chat.png"))
 
         // 記録のあとの「AI チャット」タブ
@@ -143,7 +143,7 @@ enum MeetingChatPreview {
         }
         done.speakerNames = ["spk1": "田中"]
         MeetingChatStore.shared.model(for: done.id).setMessagesForPreview(sampleConversation)
-        try MeetingNotesPreview.write(MeetingDetailView(meeting: done, recorder: recorder, initialTab: 4).frame(width: 760, height: 620),
+        try MeetingNotesPreview.write(MeetingDetailPreview(meeting: done, recorder: recorder, initialTab: 4).frame(width: 1140, height: 620),
                                       to: directory.appendingPathComponent("detail-chat.png"))
     }
 

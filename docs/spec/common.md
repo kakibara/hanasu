@@ -843,10 +843,10 @@
 - 実装の場所: `windows/Hanasu.Windows/TrayIcon.cs`、`windows/Hanasu.Windows/App.xaml.cs`
 
 ### DEC-COM-102 Windows 版の整形・英訳・議事録のプロンプトは、Mac 版と同じ文面にする
-- 決めたこと: Mac 版の `GeminiClient.swift`（整形・英訳）、`MinutesTemplate.swift`・`MeetingNotes.swift`（議事録）の組み立てをそのまま移す。文面は、多言語化の PR から Mac と同じ言語ごとの JSON（`Sources/Hanasu/Resources/Prompts/`。DEC-COM-160）を埋め込んで読むので、文面を 2 か所で直すことはない。組み立てを変えるときは両方を直す。テストで文面と組み立てを確かめる。
+- 決めたこと: Mac 版の `GeminiClient.swift`（整形・英訳）、`MinutesTemplate.swift`・`MeetingNotes.swift`（議事録）の組み立てをそのまま移す。文面は、多言語化の PR から Mac と同じ言語ごとの JSON（`Sources/Hanasu/Resources/Prompts/`。DEC-COM-160）を埋め込んで読むので、文面を 2 か所で直すことはない。組み立てを変えるときは両方を直す。テストで文面と組み立てを確かめる。議事録の引用の指示 `minutes.citations`（DEC-MTG-134）も、両方の議事録の指示で `minutes.actionItems` のあとに入れる。
 - 理由: Mac と Windows で結果をそろえる。片方だけ直すことを防ぐ。
-- 決めた場面: PR #19。文面を JSON に移したのは多言語化の PR（2026-11-05）
-- 関係する要件: REQ-DIC-003, REQ-DIC-010, REQ-DIC-082, REQ-MTG-006
+- 決めた場面: PR #19。文面を JSON に移したのは多言語化の PR（2026-11-05）。引用の指示は 2026-11-09 の会議ノートの UI の作り直し
+- 関係する要件: REQ-DIC-003, REQ-DIC-010, REQ-DIC-082, REQ-MTG-006, REQ-MTG-052
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`、`windows/Hanasu.Core/Meetings/MinutesTemplate.cs`
 

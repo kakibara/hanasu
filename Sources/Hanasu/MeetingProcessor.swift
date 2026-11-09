@@ -202,8 +202,14 @@ enum MeetingProcessor {
         let language = PromptLanguage.current
         var instruction = MinutesPrompt.systemInstruction(template: meeting.template, customPrompt: meeting.customMinutesPrompt)
         if meeting.notesForPrompt() != nil { instruction += "\n" + notesInstruction }
-        let body = try await client.generate(
-            systemInstruction: instruction, userText: MinutesPrompt.userText(for: meeting), model: model, effort: .medium)
-        return MinutesPrompt.parse(body, title: meeting.title, language: language)
+        // 要件: REQ-MTG-052
+        // 設計判断: DEC-MTG-134（ローカル・Apple の AI で文字起こしを縮めて送ったときは、根拠の時刻の印を残さない）
+        let report = LongInputReport()
+        let body = try await LongInputReport.$current.withValue(report) {
+            try await client.generate(
+                systemInstruction: instruction, userText: MinutesPrompt.userText(for: meeting), model: model, effort: .medium)
+        }
+        let result = MinutesPrompt.parse(body, title: meeting.title, language: language)
+        return report.shortened ? MinutesCitation.stripped(result) : result
     }
 }

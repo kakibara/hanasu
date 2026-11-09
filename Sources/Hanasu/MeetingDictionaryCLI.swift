@@ -199,14 +199,12 @@ enum MeetingDictionaryCLI {
         try MeetingNotesPreview.write(sheet(.results(samples), selected: [samples[0].id], readMinutes: 95),
                                       to: dir.appendingPathComponent("sheet-cut.png"))
 
-        // 辞書を当てて議事録が古くなった会議（「辞書」のメニューと帯）
+        // 辞書を当てて議事録が古くなった会議（文書の上の帯と、置き換えた文字起こし。「辞書」のメニューはツールバーなので --render-meeting-window で見る）
         var outdated = MeetingDictionary.apply(sampleDictionary, to: meeting).meeting
         outdated.minutes = "## 決まったこと\n- ロゴを変える"
         outdated.minutesOutdated = true
-        try MeetingNotesPreview.write(MeetingDetailView(meeting: outdated, recorder: recorder, initialTab: 0).frame(width: 640, height: 320),
+        try MeetingNotesPreview.write(MeetingDetailPreview(meeting: outdated, recorder: recorder).frame(width: 1040, height: 560),
                                       to: dir.appendingPathComponent("detail-outdated.png"))
-        try MeetingNotesPreview.write(MeetingDetailView(meeting: outdated, recorder: recorder, initialTab: 1).frame(width: 760, height: 480),
-                                      to: dir.appendingPathComponent("detail-transcript.png"))
         print("wrote: \(dir.path)")
     }
 }

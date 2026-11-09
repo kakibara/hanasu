@@ -40,6 +40,16 @@ final class MeetingRecorder: ObservableObject {
     /// 議事録を作り直している会議。その間は削除させず（DEC-MTG-023）、会議ノートで作り直し中だとわかるように出す（DEC-MTG-070）。
     /// 描き出しの CLI からも入れる
     @Published var regeneratingID: String?
+    // 要件: REQ-MTG-054
+    // 設計判断: DEC-MTG-136
+    /// 記録のあとの処理で出す段階（順番どおり）と、今の段階。処理していなければ空と nil。描き出しの CLI からも入れる
+    @Published var processingStages: [MeetingProcessingStage] = []
+    @Published var processingStage: MeetingProcessingStage?
+    // 要件: REQ-MTG-054
+    // 設計判断: DEC-MTG-136
+    /// 記録中のメモの入力欄の、書きかけの文と書き始めた時刻（記録を止めるときに確定する）
+    @Published var noteDraft = ""
+    var noteDraftStartedAt: Double?
 
     var onStateChange: ((State) -> Void)?
     // 要件: REQ-MTG-034
@@ -93,7 +103,11 @@ final class MeetingRecorder: ObservableObject {
     func start() async {
         guard state == .idle else { return }
         setState(.starting)
+        // 要件: REQ-MTG-053（記録の間は会議の音声を再生しない。再生した音がマイクに入るため）
+        MeetingPlayer.shared.stop()
         lastError = nil
+        noteDraft = ""
+        noteDraftStartedAt = nil
         liveLines = []
         volatileMe = ""
         volatileOthers = ""
@@ -192,9 +206,17 @@ final class MeetingRecorder: ObservableObject {
     // 要件: REQ-MTG-043
     /// 記録を止めて後処理に進む。cutAt を渡すと、そのスリープした時点で記録が終わったものとして、それより後に録った分を除く
     func stop(cutAt point: MeetingSleepPoint? = nil) async {
-        guard state == .recording, var meeting = current, let me = meTranscriber, let others = othersTranscriber else { return }
+        guard state == .recording, let me = meTranscriber, let others = othersTranscriber else { return }
+        // 要件: REQ-MTG-054
+        // 設計判断: DEC-MTG-136（メモの入力欄の書きかけの文は、止めた時点のメモとして確定してから止める）
+        commitNoteDraft()
+        guard var meeting = current else { return }
         sleepPoint = nil
         NSSound(named: "Pop")?.play()
+        // 設計判断: DEC-MTG-136
+        processingStages = (batchEngine != nil ? [.transcribing] : []) + [.diarizing]
+            + (settings.makeMeetingMinutes ? [.minutes] : [])
+        processingStage = batchEngine != nil ? .transcribing : .diarizing
         setState(.processing(tr("文字起こしを確定しています…")))
         await teardownAudio()
         async let mePhrases = me.finish()
@@ -206,6 +228,9 @@ final class MeetingRecorder: ObservableObject {
         // 設計判断: DEC-MTG-089
         meeting.duration = elapsed
         meeting.status = .processing
+        // 設計判断: DEC-MTG-135（再生で 2 つのチャンネルを並べるため、音声の先頭のずれを残す）
+        meeting.audioStartOffsets = [MeetingChannel.me.rawValue: me.audioStartOffset,
+                                     MeetingChannel.others.rawValue: others.audioStartOffset]
         // 設計判断: DEC-MTG-094
         // オフレコのまま止めたら、記録の終わりまでをオフレコにする
         if let index = meeting.offRecord?.lastIndex(where: { $0.end == nil }) {
@@ -246,6 +271,8 @@ final class MeetingRecorder: ObservableObject {
         meeting = await process(meeting, me: mine, others: theirs, keepAudio: transcriptionFailed)
         batchEngine = nil
         current = nil
+        processingStages = []
+        processingStage = nil
         reloadMeetings()
         setState(.idle)
     }
@@ -301,6 +328,7 @@ final class MeetingRecorder: ObservableObject {
         var meeting = meeting
         var turns: [SpeakerTurn] = []
         let othersAudio = MeetingStore.audioURL(for: meeting, channel: .others)
+        processingStage = .diarizing
         if !theirs.isEmpty, FileManager.default.fileExists(atPath: othersAudio.path) {
             setState(.processing(tr("話者を分けています…（初回はモデルをダウンロードします）")))
             do {
@@ -334,8 +362,10 @@ final class MeetingRecorder: ObservableObject {
         try? MeetingStore.save(meeting)
         appLog.notice("meeting transcribed: me=\(mine.count) others=\(theirs.count) utterances=\(meeting.utterances.count) speakers=\(meeting.speakers.count)")
 
-        // 設計判断: DEC-MTG-091
+        // 設計判断: DEC-MTG-091, DEC-MTG-136（使う発言がなければ、議事録の段階を出さない）
+        if meeting.usedUtterances.isEmpty { processingStages.removeAll { $0 == .minutes } }
         if settings.makeMeetingMinutes, !meeting.usedUtterances.isEmpty {
+            processingStage = .minutes
             setState(.processing(tr("議事録を作成しています…")))
             do {
                 // 要件: REQ-COM-032
@@ -399,6 +429,8 @@ final class MeetingRecorder: ObservableObject {
         let meeting = meetings.first { $0.id == meeting.id } ?? meeting
         setState(.processing(tr("議事録を作り直しています…")))
         regeneratingID = meeting.id
+        // 要件: REQ-MTG-053（作り直しの間は、その会議の再生を止める）
+        if MeetingPlayer.shared.meetingID == meeting.id { MeetingPlayer.shared.stop() }
         defer { regeneratingID = nil }
         var updated = meeting
         do {
@@ -640,6 +672,16 @@ final class MeetingRecorder: ObservableObject {
         return updated
     }
 
+    // 要件: REQ-MTG-054
+    // 設計判断: DEC-MTG-136
+    /// メモの入力欄の書きかけの文を、メモとして確定する（記録を止めるとき）
+    func commitNoteDraft() {
+        let text = noteDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !text.isEmpty { addNote(text, at: noteDraftStartedAt) }
+        noteDraft = ""
+        noteDraftStartedAt = nil
+    }
+
     // 設計判断: DEC-MTG-043
     /// 記録中の会議にメモを足して、すぐ保存する（アプリが落ちてもメモは残る）
     private func appendNote(_ note: MeetingNote) {
@@ -647,6 +689,22 @@ final class MeetingRecorder: ObservableObject {
         meeting.notes = (meeting.notes ?? []) + [note]
         current = meeting
         try? MeetingStore.save(meeting)
+    }
+
+    /// 会議ノートを PNG に描き出す確認用に、ディスクの会議の代わりに架空の会議を一覧に入れる（CLI の --render-meeting-window）
+    func showMeetingsForRendering(_ meetings: [Meeting]) {
+        reloadGeneration += 1  // 裏で読んでいる一覧で上書きしない
+        self.meetings = meetings
+    }
+
+    /// 確認用に、記録を止めたあとの処理中（段階）の状態にする（CLI の --render-meeting-window）
+    func showProcessingForRendering(_ meeting: Meeting, lines: [LiveLine], stages: [MeetingProcessingStage],
+                                    stage: MeetingProcessingStage, message: String) {
+        current = meeting
+        liveLines = lines
+        processingStages = stages
+        processingStage = stage
+        state = .processing(message)
     }
 
     /// 記録中の画面を PNG に描き出す確認用に、録音せずに「記録中」の状態にする（CLI の --render-meeting-notes）

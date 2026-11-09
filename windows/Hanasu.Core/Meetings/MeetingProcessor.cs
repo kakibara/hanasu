@@ -224,8 +224,21 @@ public static class MeetingProcessor
     {
         // 要件: REQ-COM-061（応答は、送ったときのプロンプトの言語で読む。作っている間に設定が変わってもずれないように）
         var language = Ai.PromptLanguage.Current;
-        var body = await client.GenerateTextAsync(Ai.TextPurpose.Minutes, MinutesPrompt.FullInstruction(meeting), MinutesPrompt.UserText(meeting),
-            model, cancellationToken).ConfigureAwait(false);
-        return MinutesPrompt.Parse(body, meeting.Title, language);
+        // 要件: REQ-MTG-052
+        // 設計判断: DEC-MTG-134（ローカルの AI で文字起こしを縮めて送ったときは、根拠の時刻の印を残さない）
+        var report = new LongInputReport();
+        LongInputReport.Current.Value = report;
+        string body;
+        try
+        {
+            body = await client.GenerateTextAsync(Ai.TextPurpose.Minutes, MinutesPrompt.FullInstruction(meeting), MinutesPrompt.UserText(meeting),
+                model, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            LongInputReport.Current.Value = null;
+        }
+        var result = MinutesPrompt.Parse(body, meeting.Title, language);
+        return report.Shortened ? MinutesCitation.Stripped(result) : result;
     }
 }

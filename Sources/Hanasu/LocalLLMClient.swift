@@ -229,6 +229,8 @@ struct LongInputFitter {
         guard available > 0 else { return "" }
         let total = try await countTokens(userText)
         if total <= available { return userText }
+        // 要件: REQ-MTG-052（縮めて送ると、議事録の根拠の時刻が確かでなくなる）
+        LongInputReport.current?.markShortened()
 
         if let parts = Self.splitTranscript(userText) {
             let frame = try await countTokens(parts.prefix + Self.summarizedNote + parts.suffix)

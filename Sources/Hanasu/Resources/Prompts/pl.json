@@ -411,6 +411,14 @@
     "- due_note: jak określono termin („w ciągu przyszłego tygodnia”, „do następnego spotkania statusowego” itp.). null, jeśli o terminie nie mówiono",
     "Jeśli nie ma zadań, wypisz []. Nie pisz wyjaśnień poza <action_items>."
   ],
+  "minutes.citations": [
+    "# Czas wypowiedzi, na których opiera się protokół",
+    "Na końcu każdego punktu protokołu (wiersza zaczynającego się od „- ”) dopisz czas wypowiedzi, na której opiera się jego treść, w tej samej postaci co czasy w transkrypcji, np. [12:34] (po pierwszej godzinie: [1:02:34]).",
+    "- Jeśli punkt opiera się na kilku wypowiedziach, podaj najwyżej dwie (np. „… [03:10] [12:34]”).",
+    "- Nie dopisuj czasu, jeśli nie jest jasne, na której wypowiedzi opiera się punkt, ani wtedy, gdy treść pochodzi wyłącznie z notatek. Nigdy nie wymyślaj czasu, którego nie ma w transkrypcji.",
+    "- Nie dopisuj czasu do nagłówków, wierszy z polem wyboru (zaczynających się od „- [ ] ”) ani do „Brak”.",
+    "- W JSON z zadaniami możesz podać czas wypowiedzi, na której opiera się zadanie, jako \"at\": \"12:34\" (jeśli nie masz pewności, pomiń go)."
+  ],
   "minutes.speakerNames": [
     "Na koniec spośród mówców bez imion w transkrypcji, takich jak „Mówca 1”, „Sala 1” i „Pozostali”, wypisz tylko tych, których imię lub nazwisko jasno wynika z rozmowy, jako JSON w następującej postaci.",
     "<speaker_names>",

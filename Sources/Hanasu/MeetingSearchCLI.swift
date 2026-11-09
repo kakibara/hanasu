@@ -245,7 +245,7 @@ enum MeetingSearchCLI {
                 return false
             }
             let jump = target.map { MeetingJump(meetingID: $0.meetingID, location: $0.location, terms: [query]) }
-            detail = AnyView(MeetingDetailView(meeting: meetings[1], recorder: recorder, jump: jump))
+            detail = AnyView(MeetingDetailPreview(meeting: meetings[1], recorder: recorder, jump: jump))
         }
         let selectedHit = ask ? nil : results.first { $0.meetingID == meetings[1].id }?.hits.first {
             if case .transcript = $0.location { return true }
@@ -261,7 +261,7 @@ enum MeetingSearchCLI {
             Divider()
             detail.frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(width: 1000, height: 640)
+        .frame(width: 1380, height: 640)
         .background(Color(nsColor: .windowBackgroundColor))
 
         let hosting = NSHostingView(rootView: view)

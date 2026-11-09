@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>会議ノート（議事録を作成中）</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#0A66D8}a:hover{color:#084FA8}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; display: flex; background: #FFFFFF; color: #1D1D1F; border-radius: 12px; overflow: hidden; border: 1px solid #C9C9CE; font-size: 13px;">
+
+<nav aria-label="会議の一覧" style="width: 248px; flex-shrink: 0; background: #F2F2F5; border-right: 1px solid #E2E2E7; display: flex; flex-direction: column;">
+  <div style="height: 52px; display: flex; align-items: center; gap: 8px; padding: 0 18px;" aria-hidden="true">
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #FF5F57;"></span>
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #FEBC2E;"></span>
+    <span style="width: 12px; height: 12px; border-radius: 6px; background: #28C840;"></span>
+  </div>
+  <div style="padding: 0 12px 8px;">
+    <label style="display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; background: #E4E4E9; border-radius: 8px; color: #6E6E73;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input type="search" placeholder="会議を検索" aria-label="会議を検索" style="border: 0; background: transparent; outline: none; font-size: 13px; width: 100%;">
+    </label>
+  </div>
+  <div style="flex: 1; padding: 4px 10px; display: flex; flex-direction: column; gap: 2px;">
+    <div style="font-size: 11px; font-weight: 600; color: #6E6E73; padding: 8px 8px 4px;">今日</div>
+    <a href="#" style="display: block; text-decoration: none; padding: 7px 10px; border-radius: 8px; background: #0A66D8; color: #FFFFFF;">
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" role="img" aria-label="議事録を作っています"><path d="M12 3a9 9 0 1 0 9 9"></path></svg>
+        <span style="font-weight: 600;">Google Meet: 週次レビュー</span>
+      </div>
+      <div style="font-size: 11px; opacity: 0.85; margin-top: 2px;">10:30 · 42 分 · 議事録を作成中</div>
+    </a>
+    <a href="#" style="display: block; text-decoration: none; padding: 7px 10px; border-radius: 8px; color: #1D1D1F;">
+      <div style="font-weight: 500;">架空商事 定例</div>
+      <div style="font-size: 11px; color: #6E6E73; margin-top: 2px;">09:00 · 25 分</div>
+    </a>
+    <div style="font-size: 11px; font-weight: 600; color: #6E6E73; padding: 12px 8px 4px;">昨日</div>
+    <a href="#" style="display: block; text-decoration: none; padding: 7px 10px; border-radius: 8px; color: #1D1D1F;">
+      <div style="font-weight: 500;">架空工業 商談</div>
+      <div style="font-size: 11px; color: #6E6E73; margin-top: 2px;">14:00 · 48 分</div>
+    </a>
+  </div>
+  <div style="padding: 12px; border-top: 1px solid #E2E2E7; display: flex; flex-direction: column; gap: 6px;">
+    <button disabled style="height: 36px; border: 0; border-radius: 18px; background: #C7D9F2; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">会議の記録を開始</button>
+    <div style="color: #6E6E73; font-size: 11px; text-align: center;">議事録ができると、次の記録を始められます</div>
+  </div>
+</nav>
+
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+  <div style="height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid #ECECF0;">
+    <div style="flex: 1;"></div>
+    <div style="display: flex; align-items: center; gap: 2px; height: 34px; padding: 0 4px; border-radius: 17px; background: rgba(250,250,252,0.9); border: 1px solid #E2E2E7; opacity: 0.45;">
+      <button disabled style="height: 28px; border: 0; background: transparent; color: #1D1D1F; font-size: 12px; padding: 0 10px;">型: 定例</button>
+      <button disabled aria-label="議事録を作り直す" style="width: 32px; height: 28px; border: 0; background: transparent; color: #1D1D1F; display: flex; align-items: center; justify-content: center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 4v7h-7"></path></svg></button>
+    </div>
+    <div style="display: flex; align-items: center; gap: 2px; height: 34px; padding: 0 4px; border-radius: 17px; background: rgba(250,250,252,0.9); border: 1px solid #E2E2E7;">
+      <button aria-label="書き出し" style="width: 32px; height: 28px; border: 0; background: transparent; color: #1D1D1F; display: flex; align-items: center; justify-content: center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="M8 7l4-4 4 4"></path><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"></path></svg></button>
+      <button aria-label="その他の操作" style="width: 32px; height: 28px; border: 0; background: transparent; color: #1D1D1F; display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+    </div>
+    <button aria-label="インスペクタを隠す（⌥⌘I）" style="width: 34px; height: 34px; border: 1px solid #E2E2E7; border-radius: 17px; background: rgba(10,102,216,0.10); color: #0A66D8; display: flex; align-items: center; justify-content: center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M15 4v16"></path></svg></button>
+  </div>
+
+  <div style="flex: 1; min-height: 0; display: flex;">
+    <main style="flex: 1; min-width: 0; padding: 24px 40px 0; overflow: hidden;">
+      <div style="max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 2px 8px; margin: 0 -8px; border: 1px solid #DADADF; border-radius: 8px;">
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700; flex: 1;">Google Meet: 週次レビュー</h1>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E6E73" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>
+        </div>
+        <div style="color: #6E6E73; font-size: 12px;">2026/11/09 (月) 10:30 · 42 分</div>
+
+        <!-- 状態の帯 -->
+        <div role="status" style="border-radius: 12px; background: #EEF4FD; border: 1px solid #CFE0F8; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A66D8" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9"></path></svg>
+            <span style="font-weight: 600; color: #0A4FA8;">議事録を作成中</span>
+            <span style="color: #3A3A3C; font-size: 12px;">話者を区別しています…</span>
+          </div>
+          <ol style="margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: 8px; font-size: 12px;">
+            <li style="display: flex; align-items: center; gap: 6px; color: #1E6B2E; font-weight: 600;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>文字起こし</li>
+            <li aria-hidden="true" style="width: 28px; height: 2px; background: #9DBFEC;"></li>
+            <li style="display: flex; align-items: center; gap: 6px; color: #0A4FA8; font-weight: 600;"><span style="width: 10px; height: 10px; border-radius: 5px; border: 2px solid #0A66D8; background: #FFFFFF;" aria-hidden="true"></span>話者の区別</li>
+            <li aria-hidden="true" style="width: 28px; height: 2px; background: #D6D6DB;"></li>
+            <li style="display: flex; align-items: center; gap: 6px; color: #6E6E73;"><span style="width: 10px; height: 10px; border-radius: 5px; border: 2px solid #AEAEB2;" aria-hidden="true"></span>議事録</li>
+          </ol>
+        </div>
+
+        <!-- 骨組み -->
+        <div aria-hidden="true" style="border: 1px solid #ECECF0; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+          <span style="width: 120px; height: 10px; border-radius: 5px; background: #ECECF0;"></span>
+          <span style="width: 92%; height: 10px; border-radius: 5px; background: #F2F2F5;"></span>
+          <span style="width: 78%; height: 10px; border-radius: 5px; background: #F2F2F5;"></span>
+        </div>
+        <div aria-hidden="true" style="display: flex; flex-direction: column; gap: 10px; padding: 0 2px;">
+          <span style="width: 80px; height: 12px; border-radius: 6px; background: #ECECF0;"></span>
+          <span style="width: 100%; height: 10px; border-radius: 5px; background: #F2F2F5;"></span>
+          <span style="width: 96%; height: 10px; border-radius: 5px; background: #F2F2F5;"></span>
+          <span style="width: 64%; height: 10px; border-radius: 5px; background: #F2F2F5;"></span>
+        </div>
+
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 8px;">
+          <h2 style="margin: 0; font-size: 13px; font-weight: 700; color: #3A3A3C;">メモ</h2>
+          <span style="font-size: 11px; color: #6E6E73;">議事録ができたら書き足せます</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <div style="display: flex; gap: 14px; padding: 6px 10px;"><span style="font-variant-numeric: tabular-nums; color: #6E6E73; font-size: 12px; width: 40px;">01:20</span><span style="font-size: 14px;">KPI の定義を先に揃える</span></div>
+          <div style="display: flex; gap: 14px; padding: 6px 10px; background: #FFF8DB; border-radius: 8px;"><span style="font-variant-numeric: tabular-nums; color: #6E6E73; font-size: 12px; width: 40px;">03:45</span><span style="font-size: 14px;">★ 解約率 3% → 2% の目標</span></div>
+          <div style="display: flex; gap: 14px; padding: 6px 10px;"><span style="font-variant-numeric: tabular-nums; color: #6E6E73; font-size: 12px; width: 40px;">05:10</span><span style="font-size: 14px;">山本さん：来週までにダッシュボードの案</span></div>
+        </div>
+      </div>
+    </main>
+
+    <aside aria-label="文字起こしと AI チャット" style="width: 380px; flex-shrink: 0; border-left: 1px solid #E2E2E7; background: #FBFBFD; display: flex; flex-direction: column;">
+      <div style="padding: 12px 14px 8px;">
+        <div role="tablist" style="display: flex; background: #ECECF0; border-radius: 9px; padding: 2px;">
+          <button role="tab" aria-selected="true" style="flex: 1; height: 26px; border: 0; border-radius: 7px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.12); font-size: 12px; font-weight: 600; color: #1D1D1F;">文字起こし</button>
+          <button role="tab" aria-selected="false" style="flex: 1; height: 26px; border: 0; border-radius: 7px; background: transparent; font-size: 12px; font-weight: 500; color: #3A3A3C;">AI チャット</button>
+        </div>
+      </div>
+      <div style="padding: 0 14px 8px; font-size: 12px; color: #6E6E73;">話者の区別が終わると、名前と色が付きます</div>
+      <div style="flex: 1; overflow: hidden; padding: 0 8px; display: flex; flex-direction: column; gap: 2px;">
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="7">
+          <div style="display: flex; gap: 10px; padding: 7px 8px;">
+            <span style="font-variant-numeric: tabular-nums; color: #6E6E73; font-size: 11px; width: 34px; padding-top: 2px;">{{ r.t }}</span>
+            <div style="flex: 1;">
+              <div style="{{ r.nameStyle }}">{{ r.who }}</div>
+              <div style="font-size: 13px; line-height: 1.5;">{{ r.text }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </aside>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const me = 'font-size: 12px; font-weight: 700; color: #0A66D8;';
+    const them = 'font-size: 12px; font-weight: 700; color: #C25E00;';
+    const rows = [
+      { t: '00:12', who: '自分', nameStyle: me, text: 'では週次レビューを始めます。' },
+      { t: '00:20', who: '相手', nameStyle: them, text: 'よろしくお願いします。まず先週の数字から。' },
+      { t: '01:05', who: '相手', nameStyle: them, text: 'KPI の定義が部署ごとに少し違っています。' },
+      { t: '01:18', who: '自分', nameStyle: me, text: 'そこを先に揃えたいですね。' },
+      { t: '03:40', who: '相手', nameStyle: them, text: '解約率は 3% から 2% を目標にします。' },
+      { t: '05:12', who: '相手', nameStyle: them, text: '山本さんに来週までに案を作ってもらいます。' },
+      { t: '06:41', who: '自分', nameStyle: me, text: 'では次の議題に進みましょう。' }
+    ];
+    return { rows };
+  }
+}
+</script>
+</body>
+</html>

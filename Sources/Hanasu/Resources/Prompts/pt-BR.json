@@ -411,6 +411,14 @@
     "- due_note: como o prazo foi dito (“ao longo da semana que vem”, “até a próxima reunião de acompanhamento” etc.). null se não foi dito",
     "Se não houver itens de ação, gere []. Não escreva explicações fora de <action_items>."
   ],
+  "minutes.citations": [
+    "# Tempos das falas de origem",
+    "No fim de cada item de lista da ata (linhas que começam com “- ”), indique o tempo da fala em que o conteúdo se baseia, no mesmo formato dos tempos da transcrição, como [12:34] ([1:02:34] acima de uma hora).",
+    "- Se o conteúdo se basear em mais de uma fala, liste no máximo duas (por exemplo: “… [03:10] [12:34]”).",
+    "- Não indique o tempo quando não estiver claro em qual fala o conteúdo se baseia, nem quando ele vier só das anotações. Nunca invente um tempo que não esteja na transcrição.",
+    "- Não coloque tempos em títulos, em linhas de caixa de seleção (linhas que começam com “- [ ] ”) nem em “Nenhum”.",
+    "- No JSON dos itens de ação, você pode incluir o tempo da fala de origem como \"at\": \"12:34\" (omita se não tiver certeza)."
+  ],
   "minutes.speakerNames": [
     "Por fim, dos falantes sem nome na transcrição, como “Falante 1”, “Presencial 1” e “Outros”, gere apenas aqueles cujo nome fica claro pela conversa, como JSON no formato a seguir.",
     "<speaker_names>",

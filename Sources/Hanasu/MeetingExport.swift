@@ -17,7 +17,9 @@ enum MeetingExport {
     /// Slack に貼る要約。議事録を mrkdwn に直し、見出しの「話者についてのメモ」（推測の内部メモ）は除く。
     /// 貼り付けて送る前提なので、`&` `<` `>` のエスケープ（API 用）はしない。
     static func slack(_ meeting: Meeting) -> String? {
-        guard let minutes = meeting.minutes else { return nil }
+        // 要件: REQ-MTG-052
+        // 設計判断: DEC-MTG-134（書き出しには根拠の時刻の印を入れない）
+        guard let minutes = meeting.minutes.map(MinutesCitation.strip) else { return nil }
         var lines = ["*\(meeting.title)*",
                      tr("%@・%@", Meeting.dateFormatter.string(from: meeting.startedAt), Meeting.clock(meeting.duration))]
         lines.append(contentsOf: slackBody(fromMarkdown: minutes))

@@ -412,6 +412,14 @@
     "- due_note: cómo se expresó el plazo («a lo largo de la semana que viene», «antes de la próxima reunión de seguimiento», etc.). null si no se dijo",
     "Si no hay tareas, devuelve []. No escribas explicaciones fuera de <action_items>."
   ],
+  "minutes.citations": [
+    "# Momento de las intervenciones de origen",
+    "Al final de cada viñeta de los puntos del acta (líneas que empiezan por «- »), añade el momento de la intervención en la que se basa, con el mismo formato que las horas de la transcripción, por ejemplo [12:34] (si pasa de una hora, [1:02:34]).",
+    "- Si se basa en varias intervenciones, pon dos como máximo, una detrás de otra (por ejemplo: «… [03:10] [12:34]»).",
+    "- No lo añadas si no está claro en qué intervención se basa ni cuando el contenido solo aparece en las notas. No inventes momentos que no estén en la transcripción.",
+    "- No lo añadas a los encabezados, a las líneas de casilla (las que empiezan por «- [ ] ») ni a «Ninguno».",
+    "- En el JSON de las tareas puedes añadir el momento de la intervención de origen como \"at\": \"12:34\" (si no lo sabes, omítelo)."
+  ],
   "minutes.speakerNames": [
     "Por último, de los hablantes sin nombre de la transcripción, como «Hablante 1», «Sala 1» y «Otros», devuelve solo aquellos cuyo nombre quede claro por la conversación, como JSON con la siguiente forma.",
     "<speaker_names>",

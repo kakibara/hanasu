@@ -2,7 +2,7 @@ import SwiftUI
 
 // 要件: REQ-DIC-072, REQ-DIC-074
 // 設計判断: DEC-DIC-171
-/// 会議ノートの詳細の上に置く「辞書」のメニュー。この会議から候補を探す・今の辞書を当て直す・認識したままの文に戻す
+/// 会議ノートのツールバーに置く「辞書」のメニュー。この会議から候補を探す・今の辞書を当て直す・認識したままの文に戻す
 struct MeetingDictionaryMenu: View {
     let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder
@@ -12,7 +12,7 @@ struct MeetingDictionaryMenu: View {
     @State private var message: String?
 
     var body: some View {
-        // 上のボタンの並びは窓の最小幅（詳細は約 640）で詰まるので、削除のボタンと同じくアイコンだけにし、名前はヘルプに出す
+        // 設計判断: DEC-DIC-171（ツールバーに置くので、ほかのボタンと同じくアイコンだけにし、名前はヘルプに出す）
         Menu {
             Button(tr("この会議から辞書の候補を探す…")) { showingSheet = true }
             Button(tr("今の辞書をこの会議に当て直す")) {
@@ -25,10 +25,7 @@ struct MeetingDictionaryMenu: View {
         } label: {
             Label(tr("辞書"), systemImage: "character.book.closed")
         }
-        .labelStyle(.iconOnly)
-        .menuStyle(.borderlessButton)
         .menuIndicator(.hidden)
-        .fixedSize()
         .help(tr("辞書"))
         .accessibilityLabel(tr("辞書"))
         .disabled(!recorder.canApplyDictionary(meeting))

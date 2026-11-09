@@ -411,6 +411,14 @@
     "- due_note: cách nói về thời hạn (“trong tuần sau”, “trước buổi giao ban tới” v.v.). Nếu không được nói thì null",
     "Nếu không có việc cần làm, xuất []. Không viết giải thích bên ngoài <action_items>."
   ],
+  "minutes.citations": [
+    "# Thời điểm của lời nói làm căn cứ",
+    "Ở cuối mỗi gạch đầu dòng trong biên bản (dòng bắt đầu bằng “- ”), hãy ghi thời điểm của lời nói làm căn cứ cho ý đó, theo cùng dạng với thời gian trong bản chép lời, như [12:34] (quá một giờ thì dùng [1:02:34]).",
+    "- Nếu có nhiều lời nói làm căn cứ, ghi tối đa hai thời điểm (ví dụ: “… [03:10] [12:34]”).",
+    "- Không ghi thời điểm khi không rõ lời nói nào làm căn cứ, hoặc khi ý đó chỉ có trong ghi chú. Không bịa ra thời điểm không có trong bản chép lời.",
+    "- Không ghi thời điểm cho tiêu đề, dòng có ô đánh dấu (dòng bắt đầu bằng “- [ ] ”) hoặc “Không có”.",
+    "- Trong JSON việc cần làm, có thể ghi thời điểm của lời nói làm căn cứ dưới dạng \"at\": \"12:34\" (nếu không chắc thì bỏ qua)."
+  ],
   "minutes.speakerNames": [
     "Cuối cùng, trong số những người nói chưa có tên trong bản chép lời như “Người nói 1”, “Người cùng phòng 1” và “Phía bên kia”, chỉ xuất những người mà tên được thể hiện rõ trong cuộc trò chuyện, dưới dạng JSON như sau.",
     "<speaker_names>",

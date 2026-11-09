@@ -215,7 +215,8 @@ struct MeetingChatView: View {
                  : tr("文字起こしとメモをもとに答えます。続けて質問すると、前のやりとりを踏まえて答えます。"))
                 .font(.callout)
                 .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+                // 設計判断: DEC-MTG-048（後ろ側のパネルは幅が変わるので、fixedSize にせず行数で抑える）
+                .lineLimit(4)
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(MeetingChat.quickPrompts) { prompt in
                     Button { send(prompt.question) } label: {
@@ -286,7 +287,7 @@ struct MeetingChatView: View {
                 Text(privacyNote)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(3)
                 Spacer(minLength: 4)
                 if !model.messages.isEmpty {
                     Button(tr("新しい会話")) { model.clear() }

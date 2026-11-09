@@ -335,9 +335,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         meetingRecorder.toggle()
     }
 
-    static let meetingWindowSize = NSSize(width: 980, height: 640)
-    /// MeetingWindowView の .frame(minWidth: 900, minHeight: 520) と同じ
-    static let meetingWindowMinSize = NSSize(width: 900, height: 520)
+    static let meetingWindowSize = NSSize(width: 1240, height: 760)
+    // 設計判断: DEC-MTG-130
+    /// 会議ノートの最小の大きさ（一覧 260 ＋ 文書 400 ＋ 後ろ側のパネル 360 ＋ 区切り）
+    static let meetingWindowMinSize = NSSize(width: 1040, height: 560)
 
     // 要件: REQ-MTG-007
     // 設計判断: DEC-MTG-048
@@ -348,9 +349,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         // 合わせると、「メモ」タブのテキスト欄がメモの行数ぶんの高さを最小として求め、ウインドウが画面より縦に伸びて、
         // タイトルとタブの切り替えが画面の外に出て、議事録・文字起こしに戻れなくなっていた
         hosting.sizingOptions = []
+        // 設計判断: DEC-MTG-130（SwiftUI のツールバーをウインドウのツールバーにする）
+        hosting.sceneBridgingOptions = [.toolbars]
         let window = NSWindow(contentViewController: hosting)
         window.title = tr("Hanasu 会議ノート")
-        window.styleMask = [.titled, .closable, .resizable, .miniaturizable]
+        window.styleMask = [.titled, .closable, .resizable, .miniaturizable, .fullSizeContentView]
+        window.toolbarStyle = .unified
+        window.titleVisibility = .hidden
+        // 要件: REQ-MTG-053（スペースキーで再生・一時停止するウインドウの目印）
+        window.identifier = MeetingPlayer.windowIdentifier
         window.contentMinSize = meetingWindowMinSize
         window.setContentSize(meetingWindowSize)
         window.isReleasedWhenClosed = false
@@ -362,6 +369,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             let window = Self.makeMeetingWindow(rootView: MeetingWindowView(recorder: meetingRecorder))
             window.setFrameAutosaveName("HanasuMeetingWindow")
             window.center()
+            // 要件: REQ-MTG-053（ウインドウを閉じたら再生を止める。ウインドウは閉じても残すので、中のビューの onDisappear は呼ばれない）
+            NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: .main) { _ in
+                MainActor.assumeIsolated { MeetingPlayer.shared.pause() }
+            }
             meetingWindow = window
         }
         meetingRecorder.reloadMeetings()

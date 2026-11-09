@@ -26,24 +26,24 @@ enum MeetingNotesPreview {
         let recorder = MeetingRecorder()
         recorder.showPreviewForRendering(meeting, lines: lines, volatileOthers: "そうですね、基準は利用頻度と")
 
-        try write(LiveTranscriptView(recorder: recorder).frame(width: 640, height: 520),
+        try write(LivePreview(recorder: recorder).frame(width: 1020, height: 520),
                   to: directory.appendingPathComponent("live.png"))
         var done = meeting
         done.status = .done
-        try write(MeetingNotesEditor(meeting: done, recorder: recorder).frame(width: 560, height: 320),
+        try write(MeetingNotesEditor(meeting: done, recorder: recorder).frame(width: 940, height: 320),
                   to: directory.appendingPathComponent("notes-editor.png"))
-        try write(MeetingCaptionView(recorder: recorder).frame(width: 560, height: 130)
+        try write(MeetingCaptionView(recorder: recorder).frame(width: 940, height: 130)
                       .environment(\.colorScheme, .dark).background(Color.black.opacity(0.85)),
                   to: directory.appendingPathComponent("caption.png"))
-        try write(Form { MeetingNotesSettingsSection() }.formStyle(.grouped).frame(width: 560, height: 220),
+        try write(Form { MeetingNotesSettingsSection() }.formStyle(.grouped).frame(width: 940, height: 220),
                   to: directory.appendingPathComponent("settings.png"))
         // 付けたばかりの印があるとき（「取り消す」が出る）
         var recent = meeting
         recent.notes?.append(MeetingNote(kind: .highlight, time: 750, text: ""))
         recorder.showPreviewForRendering(recent, lines: lines)
-        try write(LiveTranscriptView(recorder: recorder).frame(width: 640, height: 520),
+        try write(LivePreview(recorder: recorder).frame(width: 1020, height: 520),
                   to: directory.appendingPathComponent("live-undo.png"))
-        try write(MeetingCaptionView(recorder: recorder).frame(width: 560, height: 130)
+        try write(MeetingCaptionView(recorder: recorder).frame(width: 940, height: 130)
                       .environment(\.colorScheme, .dark).background(Color.black.opacity(0.85)),
                   to: directory.appendingPathComponent("caption-undo.png"))
         checkHighlightUndo(recorder: recorder)
