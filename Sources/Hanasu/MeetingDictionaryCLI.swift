@@ -128,6 +128,10 @@ enum MeetingDictionaryCLI {
         check(!small.text.contains("Anews の新機能"), "文字起こしで埋まれば議事録は入らない")
         let onlyTranscript = DictionarySuggester.meetingMaterial(source, budget: .characters(material.text.count - 5))
         check(onlyTranscript.cutAt == nil, "議事録だけが入らなかったときは切ったと知らせない")
+        var excludedLater = source
+        excludedLater.minutesOutdated = true
+        check(!DictionarySuggester.meetingMaterial(excludedLater, budget: .characters(60_000)).text.contains("Anews の新機能"),
+              "作り直しを促している議事録は材料に入れない（あとで除いた発言を含みうる）")
         check(DictionarySuggester.Budget.tokens(100).cost("ストックマーク") == 7 && DictionarySuggester.Budget.tokens(100).cost("abcdef") == 2,
               "トークンの見積もり（全角 1・半角 3 字で 1）")
 

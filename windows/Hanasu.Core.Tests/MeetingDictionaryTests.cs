@@ -195,6 +195,18 @@ public class DictionarySuggesterTests
         Assert.Null(DictionarySuggester.MaterialFor(meeting, new DictionarySuggester.Budget(false, full.Text.Length - 5)).CutAt);
     }
 
+    // 要件: REQ-DIC-072, REQ-MTG-045
+    // 設計判断: DEC-DIC-170
+    [Fact]
+    public void OutdatedMinutesAreNotSent()
+    {
+        var meeting = AppliedSample();
+        Assert.Contains("Anews の新機能", DictionarySuggester.MaterialFor(meeting, new DictionarySuggester.Budget(false, 60_000)).Text);
+        // 議事録のあとで発言を除くと作り直しを促す。古い議事録は除いた発言の中身を含みうるので送らない
+        meeting.MinutesOutdated = true;
+        Assert.DoesNotContain("Anews の新機能", DictionarySuggester.MaterialFor(meeting, new DictionarySuggester.Budget(false, 60_000)).Text);
+    }
+
     [Fact]
     public void EstimatesTokensLikeMac()
     {

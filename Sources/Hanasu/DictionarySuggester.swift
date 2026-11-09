@@ -226,7 +226,7 @@ enum DictionarySuggester {
 
     // 要件: REQ-DIC-072, REQ-MTG-045, REQ-MTG-046
     // 設計判断: DEC-DIC-170
-    /// 会議 1 件の材料。議事録に使う発言（オフレコと除いた発言は入らない）を認識したままの文で先に並べ、議事録の本文は残りに入る分だけ入れる
+    /// 会議 1 件の材料。議事録に使う発言（オフレコと除いた発言は入らない）を認識したままの文で先に並べ、議事録の本文は残りに入る分だけ入れる（作り直しを促している議事録は入れない）
     static func meetingMaterial(_ meeting: Meeting, budget: Budget) -> MeetingMaterial {
         let language = PromptLanguage.current
         var parts = [Prompts.text("dictionarySuggest.meetingHeader", ["title": meeting.title]),
@@ -243,7 +243,8 @@ enum DictionarySuggester {
             parts.append(line)
             used += cost
         }
-        if let minutes = meeting.minutes, !minutes.isEmpty {
+        // 作り直しを促している議事録は、あとで除いた発言の中身を含みうるので入れない
+        if let minutes = meeting.minutes, !minutes.isEmpty, meeting.minutesOutdated != true {
             let header = Prompts.text("dictionarySuggest.minutesHeader")
             var minuteLines: [String] = []
             var minutesUsed = budget.cost("\n" + header + "\n")

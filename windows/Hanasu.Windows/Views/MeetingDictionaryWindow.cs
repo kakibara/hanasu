@@ -104,9 +104,9 @@ internal sealed class MeetingDictionaryWindow : Window
         {
             // 閉じたので何もしない
         }
-        catch (Exception e) when (e is TextAiException or DictionarySuggestionException or Core.Gemini.ServiceAccountException
-                                      or HttpRequestException or OperationCanceledException)
+        catch (Exception e)
         {
+            // どんな失敗でも「探しています…」のまま止めず、理由を出す（REQ-DIC-072）
             status.Text = "⚠️ " + e.Message;
         }
     }

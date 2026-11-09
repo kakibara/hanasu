@@ -250,7 +250,7 @@
 - 出典: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承
 - 関係する要件: REQ-DIC-071, REQ-DIC-074, REQ-MTG-045, REQ-MTG-046
 - 対象: Mac / Windows
-- 実装の場所: `MeetingDictionaryMenu`、`MeetingDictionarySheet`、`DictionarySuggester.corpus(for:)`
+- 実装の場所: `MeetingDictionaryMenu`、`MeetingDictionarySheet`、`DictionarySuggester.meetingMaterial(_:budget:)`
 - Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`、`windows/Hanasu.Windows/Views/MeetingDictionaryWindow.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `.build/debug/Hanasu --test-meeting-dictionary`（AI を呼ばない部分）、`--suggest-dictionary --meeting <会議のフォルダ>`（実際に AI を呼ぶ）、`--render-meeting-dictionary <出力フォルダ>`。`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~DictionarySuggester"`、`dotnet run --project Hanasu.Cli -- meeting-dict-suggest <会議のフォルダ>`。Windows の画面は UI のテスト項目（manual）
 
@@ -1322,12 +1322,12 @@
 - 実装の場所: `AppOutputLanguage`
 
 ### DEC-DIC-170 会議 1 件の材料と呼び出し
-- 決めたこと: 材料は、その会議の議事録に使う発言（`blocksForMinutes`。オフレコと除いた発言は入らない）を認識したままの文で並べたもの（話者名つき）を先に、議事録の本文をあとに置く。議事録は文字起こしを入れて残った分だけ入れる。長さの上限は会議の AI で変える。Gemini・Claude は全体で 60,000 字。ローカルの LLM と Apple は、モデルの文脈の長さから、出力・system instruction・既存の辞書の分を引いたトークン数まで（数え方は、どちらも全角 1 字 1 トークン・半角 3 字 1 トークンの多めの見積もり。Mac `AppleFMClient.estimateTokens`、Windows `DictionarySuggester.EstimateTokens`。ローカルの /tokenize はサーバーを起こしてからでないと使えないので使わない）。文字起こしを切ったときだけ、切った位置の発言の時刻から「最初の約 N 分」を出す。音声入力の結果は入れない。AI は会議の AI（DEC-COM-040）で、タイムアウトは Mac 120 秒、Windows は会議の既定。プロンプトは今の `dictionarySuggest.*` を使う（Windows の `TextPurpose` は `Minutes`）。材料を囲む `<material>` を区切りのタグを無害にする一覧に足し、材料はそれに通してから送り、`filter` も通したあとの材料で照合する。キャンセルで閉じたら呼び出しを止める。
+- 決めたこと: 材料は、その会議の議事録に使う発言（`blocksForMinutes`。オフレコと除いた発言は入らない）を認識したままの文で並べたもの（話者名つき）を先に、議事録の本文をあとに置く。議事録は文字起こしを入れて残った分だけ入れる。作り直しを促している議事録（`minutesOutdated`）は入れない（議事録を作ったあとで除いた発言の中身を含みうるため）。長さの上限は会議の AI で変える。Gemini・Claude は全体で 60,000 字。ローカルの LLM と Apple は、モデルの文脈の長さから、出力・system instruction・既存の辞書の分を引いたトークン数まで（数え方は、どちらも全角 1 字 1 トークン・半角 3 字 1 トークンの多めの見積もり。Mac `AppleFMClient.estimateTokens`、Windows `DictionarySuggester.EstimateTokens`。ローカルの /tokenize はサーバーを起こしてからでないと使えないので使わない）。文字起こしを切ったときだけ、切った位置の発言の時刻から「最初の約 N 分」を出す。音声入力の結果は入れない。AI は会議の AI（DEC-COM-040）で、タイムアウトは Mac 120 秒、Windows は会議の既定。プロンプトは今の `dictionarySuggest.*` を使う（Windows の `TextPurpose` は `Minutes`）。材料を囲む `<material>` を区切りのタグを無害にする一覧に足し、材料はそれに通してから送り、`filter` も通したあとの材料で照合する。キャンセルで閉じたら呼び出しを止める。
 - 理由: オフレコを守り、「この会議のことばだけ」を出す。置き換えルールの読み（誤認識の形）は文字起こしにしか出てこず、材料に出てこない読みは DEC-DIC-089 で除くので、文字起こしを先に入れる。ローカル・Apple は文脈が 8,192〜32,768 トークンしかなく、字数で切ると AI の側で黙って切られ、「読んだ範囲」の知らせが誤りになる。見積もりを多めにすると、AI の側の `LongInputFitter` が黙って後ろを省くことがない。
 - 決めた場面: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承
 - 関係する要件: REQ-DIC-072
 - 対象: Mac / Windows
-- 実装の場所: `DictionarySuggester.corpus(for:)`、`DictionarySuggester.MeetingMaterial`、`DictionarySuggester.userPrompt`
+- 実装の場所: `DictionarySuggester.meetingMaterial(_:budget:)`、`DictionarySuggester.MeetingMaterial`、`DictionarySuggester.userPrompt`
 - Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`
 
 ### DEC-DIC-171 入口は会議ノートの「辞書」のメニュー、候補はシート（Windows はダイアログ）

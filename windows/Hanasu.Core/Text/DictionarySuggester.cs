@@ -79,7 +79,7 @@ public static class DictionarySuggester
     // 設計判断: DEC-DIC-170
     /// <summary>
     /// 会議 1 件の材料。議事録に使う発言（オフレコと除いた発言は入らない）を認識したままの文で先に並べ、
-    /// 議事録の本文は残りに入る分だけ入れる
+    /// 議事録の本文は残りに入る分だけ入れる（作り直しを促している議事録は入れない）
     /// </summary>
     public static MeetingMaterial MaterialFor(Meeting meeting, Budget budget)
     {
@@ -103,7 +103,8 @@ public static class DictionarySuggester
             parts.Add(line);
             used += cost;
         }
-        if (!string.IsNullOrEmpty(meeting.Minutes))
+        // 作り直しを促している議事録は、あとで除いた発言の中身を含みうるので入れない
+        if (!string.IsNullOrEmpty(meeting.Minutes) && meeting.MinutesOutdated != true)
         {
             var header = Prompts.Text("dictionarySuggest.minutesHeader");
             var minuteLines = new List<string>();
