@@ -1,16 +1,17 @@
 import AppKit
 import SwiftUI
 
-// 確かめ方: REQ-DIC-070, REQ-DIC-071
+// 確かめ方: REQ-DIC-070, REQ-DIC-071, REQ-DIC-072
 /// ユーザー辞書まわりの動作確認用の CLI モード:
 ///
 ///     Hanasu --apply-dictionary <文> [--dictionary <辞書ファイル>]
 ///         置き換えルールを当てた結果と、どこを置き換えたかを表示する
 ///     Hanasu --test-dictionary
 ///         置き換えの規則の確認（UserDictionarySelfTest）を実行する。失敗があれば終了コード 1
-///     Hanasu --suggest-dictionary [--from-file <テキスト>] [--dictionary <辞書ファイル>] [--model <id>]
-///         辞書の候補を Gemini に挙げてもらう。--from-file があればそのファイルを音声入力の結果として使い、
-///         なければ会議の記録（新しい順に 5 件）を使う
+///     Hanasu --suggest-dictionary [--from-file <テキスト> | --meeting <会議のフォルダ>] [--dictionary <辞書ファイル>] [--model <id>]
+///         辞書の候補を会議の AI に挙げてもらう。--from-file があればそのファイルを音声入力の結果として使い、
+///         --meeting があればその会議 1 件（会議ノートの「この会議から辞書の候補を探す」と同じ材料。REQ-DIC-072）を使い、
+///         どちらもなければ会議の記録（新しい順に 5 件）を使う
 ///     Hanasu --render-dictionary-settings <出力.png> [--dictionary <辞書ファイル>]
 ///         設定画面の辞書の欄を画像にする（見た目の確認用）
 ///
@@ -79,6 +80,10 @@ enum DictionaryCLI {
     @MainActor
     private static func suggest(_ args: [String], dictionary: UserDictionary) async throws {
         let settings = AppSettings.shared
+        if let folder = value(after: "--meeting", in: args) {
+            try await suggestFromMeeting(URL(fileURLWithPath: folder, isDirectory: true), args: args, dictionary: dictionary)
+            return
+        }
         var corpus = DictionarySuggester.Corpus()
         if let path = value(after: "--from-file", in: args) {
             let lines = try String(contentsOfFile: path, encoding: .utf8)
@@ -96,6 +101,27 @@ enum DictionaryCLI {
             corpus: corpus, existing: dictionary, client: client, model: model)
         print(String(format: "[候補 %@ %.1fs] 音声入力 %d 件 / 会議 %d 件 → %d 件", model, Date().timeIntervalSince(started),
                      corpus.dictations.count, corpus.meetings.count, candidates.count))
+        for c in candidates {
+            print("\(c.entry.line)\t# \(c.reason)")
+        }
+    }
+
+    // 要件: REQ-DIC-072
+    /// 会議 1 件から候補を探す（会議ノートの候補の画面と同じ材料・上限）。材料の中身は出さず、長さと切ったかだけを出す
+    @MainActor
+    private static func suggestFromMeeting(_ folder: URL, args: [String], dictionary: UserDictionary) async throws {
+        let settings = AppSettings.shared
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let meeting = try decoder.decode(Meeting.self, from: Data(contentsOf: folder.appendingPathComponent("meeting.json")))
+        let client = try TextAIClient.cli(args: args, settings: settings, for: .meeting, timeout: 120)
+        let model = TextAIClient.cliModel(args: args, settings: settings, for: .meeting)
+        let budget = DictionarySuggester.budget(for: client, existing: dictionary)
+        let material = DictionarySuggester.meetingMaterial(meeting, budget: budget)
+        print("材料: \(material.text.count) 字（上限 \(budget)）" + (material.readMinutes.map { " / 文字起こしの最初の約 \($0) 分まで" } ?? " / 全部"))
+        let started = Date()
+        let candidates = try await DictionarySuggester.suggest(material: material.text, existing: dictionary, client: client, model: model)
+        print(String(format: "[候補 %@ %.1fs] → %d 件", model, Date().timeIntervalSince(started), candidates.count))
         for c in candidates {
             print("\(c.entry.line)\t# \(c.reason)")
         }

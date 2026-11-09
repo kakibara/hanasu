@@ -1217,9 +1217,6 @@
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>終えるまでの発言を、議事録などに使いません。録音は続けます。</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>議事録に使う発言を変えました。作り直すと反映されます</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>すべて元に戻す</value>
   </data>
@@ -1291,5 +1288,68 @@
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>{0} 件の発言をコピーしました</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>辞書…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>この会議から辞書の候補を探す…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>今の辞書をこの会議に当て直す</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>この会議を認識したままの文に戻す</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>この会議から辞書の候補を探す</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>探しています…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>この会議の文字起こしにも辞書を当てる</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>固有名詞や誤認識しやすい語を、この会議の文字起こしと議事録から AI が挙げます。選んだものだけを辞書に追加します。会議の中身は、設定の「AI」で会議に選んだ AI にだけ渡します（「ローカル」なら、この PC の外には送りません）。</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>選んだ {0} 件を辞書に追加</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>新しい候補は見つかりませんでした。</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>追加したいものを選んでください（{0}）。</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>{0} 件を辞書に追加しました。</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>当て直して、{0} 件の発言が変わりました。</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>当て直しました。変わった発言はありませんでした（辞書で置き換えてある発言: {0} 件）。</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>認識したままの文に戻し、{0} 件の発言が変わりました。</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>会議が長いので、文字起こしの最初の約 {0} 分だけを読みました。</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>辞書の候補</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>文字起こしか、議事録に使う発言を変えました。作り直すと反映されます。</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>文字起こしに辞書の置き換えルールを当てる</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>記録を止めたあとの文字起こしに、「辞書・ルール」の置き換えルールを当てます。議事録は当てたあとの文から作ります。認識したままの文も残すので、会議ノートの「辞書…」から戻せます。</value>
   </data>
 </root>

@@ -428,6 +428,8 @@ struct MeetingDetailView: View {
                     Spacer()
                     Button(tr("話者名…")) { editingSpeakers = true }
                         .disabled(meeting.speakers.isEmpty)
+                    // 要件: REQ-DIC-072, REQ-DIC-074
+                    MeetingDictionaryMenu(meeting: meeting, recorder: recorder)
                     // 設計判断: DEC-MTG-072
                     // 今の議事録があるときだけ確かめる（置き換わるため）。まだないときは、そのまま作る
                     Button(tr("議事録を作り直す"), action: requestRegenerate)

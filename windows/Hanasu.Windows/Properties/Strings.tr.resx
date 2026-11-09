@@ -1217,9 +1217,6 @@ Sürüm sayfası tarayıcıda açılsın mı?</value>
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>Bitirene kadar söylenenler tutanakta kullanılmaz. Kayıt devam eder.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Tutanakta kullanılacak konuşmaları değiştirdin. Değişikliği uygulamak için tutanağı yeniden oluştur.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Tümünü sıfırla</value>
   </data>
@@ -1291,5 +1288,68 @@ Sürüm sayfası tarayıcıda açılsın mı?</value>
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>{0} konuşma kopyalandı</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Sözlük…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Bu toplantıdan sözlük önerileri bul…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Geçerli sözlüğü bu toplantıya yeniden uygula</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Bu toplantının özgün tanınan metnini geri yükle</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Bu toplantıdan sözlük önerileri bul</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Aranıyor…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Sözlüğü bu toplantının dökümüne de uygula</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>AI, bu toplantının dökümünden ve tutanağından özel adları ve yanlış tanınmaya yatkın sözcükleri önerir. Yalnızca seçtikleriniz sözlüğe eklenir. Toplantı içeriği yalnızca "AI" sekmesinde toplantılar için seçilen AI'ye gönderilir ("Yerel" seçiliyse hiçbir şey bu bilgisayardan çıkmaz).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Seçilen {0} öğeyi sözlüğe ekle</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>Yeni öneri bulunamadı.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Eklemek istediklerinizi seçin ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Sözlüğe {0} öğe eklendi.</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Sözlük yeniden uygulandı; {0} konuşma değişti.</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Sözlük yeniden uygulandı. Değişen konuşma olmadı (sözlükle değiştirilmiş konuşmalar: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Özgün tanınan metin geri yüklendi; {0} konuşma değişti.</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>Toplantı uzun olduğu için dökümün yalnızca yaklaşık ilk {0} dakikası okundu.</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Sözlük önerileri</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Dökümü veya tutanakta kullanılan konuşmaları değiştirdiniz. Değişikliği yansıtmak için tutanağı yeniden oluşturun.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Sözlükteki değiştirme kurallarını döküme uygula</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>Kayıt durduktan sonra "Sözlük ve Kurallar" sekmesindeki değiştirme kuralları döküme uygulanır ve tutanak, kurallar uygulanmış metinden oluşturulur. Özgün tanınan metin de saklandığı için Toplantı Notları'ndaki "Sözlük…" düğmesinden geri yükleyebilirsiniz.</value>
   </data>
 </root>

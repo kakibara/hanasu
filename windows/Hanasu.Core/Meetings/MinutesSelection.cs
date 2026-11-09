@@ -94,8 +94,7 @@ public sealed partial class Meeting
             var use = MinutesUseOf(u);
             if (blocks.Count > 0 && blocks[^1] is var last && last.Block.Speaker == u.Speaker && u.Start - last.Block.End <= maxGap && last.Use == use)
             {
-                last.Block.Text += u.Text;
-                last.Block.End = Math.Max(last.Block.End, u.End);
+                Meeting.JoinInto(last.Block, u);
                 blocks[^1] = last with { Members = [.. last.Members, u.Id], LastStart = u.Start };
             }
             else

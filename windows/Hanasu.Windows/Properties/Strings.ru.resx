@@ -1217,9 +1217,6 @@
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>Сказанное до завершения не попадёт в протокол. Запись продолжается.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Вы изменили, какие реплики идут в протокол. Создайте протокол заново, чтобы применить изменения.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Сбросить всё</value>
   </data>
@@ -1291,5 +1288,68 @@
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>Скопировано реплик: {0}</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Словарь…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Найти кандидатов для словаря в этой встрече…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Заново применить текущий словарь к этой встрече</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Вернуть исходный распознанный текст этой встречи</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Найти кандидатов для словаря в этой встрече</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Поиск…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Применить словарь и к расшифровке этой встречи</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>AI находит в расшифровке и протоколе этой встречи имена собственные и слова, которые часто распознаются неверно. В словарь добавляются только выбранные вами. Содержимое встречи передаётся только AI, выбранному для встреч на вкладке «AI» (при «Локальная LLM» ничего не покидает этот ПК).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Добавить выбранное в словарь ({0})</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>Новых кандидатов не найдено.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Выберите, что добавить ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Добавлено в словарь: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Словарь применён заново. Изменено реплик: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Словарь применён заново. Ни одна реплика не изменилась (реплик с заменами по словарю: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Исходный распознанный текст восстановлен. Изменено реплик: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>Встреча длинная, поэтому прочитано только начало расшифровки (около {0} мин).</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Кандидаты для словаря</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Расшифровка или выбор реплик для протокола изменены. Создайте протокол заново, чтобы учесть изменения.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Применять к расшифровке правила замены из словаря</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>После остановки записи к расшифровке применяются правила замены с вкладки «Словарь и правила», и протокол создаётся по тексту с заменами. Исходный распознанный текст тоже сохраняется, и его можно вернуть через кнопку «Словарь…» в заметках встреч.</value>
   </data>
 </root>

@@ -89,8 +89,7 @@ extension Meeting {
         for u in utterances.sorted(by: { $0.start < $1.start }) {
             let use = minutesUse(of: u)
             if var last = blocks.last, last.block.speaker == u.speaker, u.start - last.block.end <= maxGap, last.use == use {
-                last.block.text += u.text
-                last.block.end = max(last.block.end, u.end)
+                last.block = Self.joinUtterances(last.block, u)
                 last.members.append(u.id)
                 last.lastStart = u.start
                 blocks[blocks.count - 1] = last

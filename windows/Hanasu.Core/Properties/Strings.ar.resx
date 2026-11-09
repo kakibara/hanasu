@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- لم تُضمَّن المداخلات غير المستخدمة في المحضر ({0})</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>تعذّرت قراءة استجابة AI التي تحتوي على مقترحات القاموس.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>الاجتماع قيد التسجيل أو المعالجة، أو تجري إعادة إنشاء محضره، أو لا توجد مداخلات مستخدمة في المحضر.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>تعذّر العثور على مجلد الاجتماع.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>تعذّر تغيير هذا الاجتماع: {0}</value>
+  </data>
 </root>

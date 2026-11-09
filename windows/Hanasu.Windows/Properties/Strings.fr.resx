@@ -1217,9 +1217,6 @@ Ouvrir la page de la version dans le navigateur ?</value>
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>Ce qui est dit jusqu'à la fin ne sera pas utilisé pour le compte rendu. L'enregistrement continue.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Vous avez modifié les interventions utilisées pour le compte rendu. Régénérez-le pour appliquer la modification.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Tout réinitialiser</value>
   </data>
@@ -1291,5 +1288,68 @@ Ouvrir la page de la version dans le navigateur ?</value>
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>{0} interventions copiées</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Dictionnaire…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Chercher des suggestions pour le dictionnaire dans cette réunion…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Réappliquer le dictionnaire actuel à cette réunion</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Rétablir le texte reconnu d'origine de cette réunion</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Chercher des suggestions pour le dictionnaire dans cette réunion</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Recherche…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Appliquer aussi le dictionnaire à la transcription de cette réunion</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>L'IA propose des noms propres et des mots souvent mal reconnus à partir de la transcription et du compte rendu de cette réunion. Seuls ceux que vous sélectionnez sont ajoutés au dictionnaire. Le contenu de la réunion n'est envoyé qu'à l'IA choisie pour les réunions dans l'onglet « AI » (avec « Local », il ne quitte pas ce PC).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Ajouter la sélection au dictionnaire ({0})</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>Aucune nouvelle suggestion.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Sélectionnez les éléments à ajouter ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Ajouté au dictionnaire (entrées : {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Dictionnaire réappliqué. Interventions modifiées : {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Dictionnaire réappliqué. Aucune intervention n'a changé (interventions déjà remplacées par le dictionnaire : {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Texte reconnu d'origine rétabli. Interventions modifiées : {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>La réunion étant longue, seules les {0} premières minutes environ de la transcription ont été lues.</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Suggestions pour le dictionnaire</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Vous avez modifié la transcription ou les interventions utilisées pour le compte rendu. Régénérez le compte rendu pour appliquer les changements.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Appliquer les règles de remplacement du dictionnaire à la transcription</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>Après l'arrêt de l'enregistrement, les règles de remplacement de « Dictionnaire et règles » sont appliquées à la transcription, et le compte rendu est créé à partir du texte obtenu. Le texte reconnu d'origine est conservé : vous pouvez le rétablir depuis « Dictionnaire… » dans Notes de réunion.</value>
   </data>
 </root>

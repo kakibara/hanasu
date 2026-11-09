@@ -34,6 +34,9 @@ using Hanasu.Whisper;
 //     会議の後処理（チャンネルごとの文字起こし → 話者分離 → 話者の割り当て → 議事録）を、2 つの音声ファイルで通す
 //   hanasu-cli meeting-minutes <会議のフォルダ> [--template <型>] [--minutes-model <id>]   議事録を作り直す
 //   hanasu-cli meeting-show <会議のフォルダ>   meeting.json を読んで中身を出す（Mac で作った会議が読めるかの確認）
+//   hanasu-cli meeting-dict-suggest <会議のフォルダ> [--dict <辞書ファイル>] [--minutes-ai gemini|claude|local] [--minutes-model <id>]
+//     会議 1 件から辞書の候補を会議の AI に挙げてもらう（会議ノートの「この会議から辞書の候補を探す」と同じ材料。材料の中身は出さない）
+//   meeting-files に --dict <辞書ファイル> を付けると、確定した文字起こしに置き換えルールを当てる（--no-meeting-dictionary で当てない）
 // ローカルの LLM（llama.cpp の llama-server。--server <パス> か環境変数 HANASU_LLAMA_SERVER、なければ exe の隣の llama/。Mac の llama-server でも動く）:
 //   hanasu-cli local-list [--models-dir <dir>]   モデルの一覧（ダウンロード済みか）
 //   hanasu-cli local-download <id> [--models-dir <dir>]   モデルをダウンロードし、大きさと SHA-256 を確かめる
@@ -74,6 +77,7 @@ try
         case "meeting-files": await MeetingFiles(args); break;
         case "meeting-minutes": await MeetingMinutes(args); break;
         case "meeting-show": MeetingShow(args); break;
+        case "meeting-dict-suggest": await MeetingDictSuggest(args); break;
         case "claude-request": await ClaudeRequest(args); break;
         case "claude-refine": await ClaudeRefine(args); break;
         case "claude-check": await ClaudeCheck(args); break;
@@ -81,12 +85,13 @@ try
         case "local-download": await LocalDownload(args); break;
         case "local-refine": await LocalRefine(args); break;
         default:
-            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show|claude-request|claude-refine|claude-check|local-list|local-download|local-refine ...（Program.cs の先頭を参照）");
+            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show|meeting-dict-suggest|claude-request|claude-refine|claude-check|local-list|local-download|local-refine ...（Program.cs の先頭を参照）");
             return 2;
     }
     return 0;
 }
-catch (Exception e) when (e is TextAiException or ServiceAccountException or TranscriptionException or InvalidDataException or IOException)
+catch (Exception e) when (e is TextAiException or ServiceAccountException or TranscriptionException or InvalidDataException or IOException
+                           or DictionarySuggestionException)
 {
     Console.Error.WriteLine($"エラー: {SecretRedactor.Redact(e.Message)}");
     return 1;
@@ -291,6 +296,9 @@ static async Task MeetingFiles(string[] args)
         MinutesProvider = Option(args, "--minutes-ai") switch { "claude" => TextAiProvider.Claude, "local" => TextAiProvider.Local, _ => TextAiProvider.Gemini },
         KeepAudio = !Flag(args, "--delete-audio"),
         Log = m => Console.Error.WriteLine($"[log] {m}"),
+        // 要件: REQ-DIC-073（--dict の辞書を当てる。--no-meeting-dictionary で当てない）
+        Dictionary = LoadDictionary(args),
+        ApplyDictionary = !Flag(args, "--no-meeting-dictionary"),
     };
     var sw = Stopwatch.StartNew();
     string? last = null;
@@ -411,6 +419,24 @@ static async Task LocalRefine(string[] args)
     var output = translation is { } language ? await client.TranslateAsync(request, language) : await client.RefineAsync(request);
     Console.WriteLine($"[{translation?.Verb() ?? "整形"} ローカル {client.Model.Id} {sw.Elapsed.TotalSeconds:0.0}s]");
     Console.WriteLine(output);
+}
+
+// 確かめ方: REQ-DIC-072
+static async Task MeetingDictSuggest(string[] args)
+{
+    var folder = Path.GetFullPath(args.ElementAtOrDefault(1) ?? throw new IOException("会議のフォルダを指定してください"));
+    var meeting = new MeetingStore(Path.GetDirectoryName(folder)).Load(Path.GetFileName(folder)) ?? throw new IOException("meeting.json を読めません");
+    var dictionary = LoadDictionary(args);
+    var client = MinutesClientFromEnvironment(args);
+    var model = Option(args, "--minutes-model") ?? DefaultMinutesModel(args);
+    var budget = DictionarySuggester.BudgetFor(client, dictionary);
+    var material = DictionarySuggester.MaterialFor(meeting, budget);
+    Console.WriteLine($"材料: {material.Text.Length} 字（上限 {(budget.IsTokens ? "トークン" : "字")} {budget.Limit}）"
+        + (material.ReadMinutes is { } minutes ? $" / 文字起こしの最初の約 {minutes} 分まで" : " / 全部"));
+    var sw = Stopwatch.StartNew();
+    var candidates = await DictionarySuggester.SuggestAsync(material.Text, dictionary, client, model);
+    Console.WriteLine($"[候補 {model} {sw.Elapsed.TotalSeconds:0.0}s] → {candidates.Count} 件");
+    foreach (var c in candidates) Console.WriteLine($"{c.Entry.LineText}\t# {c.Reason}");
 }
 
 static void MeetingShow(string[] args)

@@ -235,6 +235,55 @@
 - 実装の場所: `DictionarySuggester`、`DictionarySuggestionSection`
 - 確かめ方: `.build/debug/Hanasu --suggest-dictionary --from-file /tmp/texts.txt`、`--render-dictionary-settings /tmp/dict.png`
 
+### REQ-DIC-072 会議ノートの会議から辞書の候補を挙げてもらい、選んだものだけを足す
+- 内容: 会議ノートで開いている会議 1 件の文字起こしと議事録から、会議の AI に辞書の候補を挙げてもらい、ユーザーが選んだものだけを今の辞書に足す。
+- 受け入れ条件:
+  - 会議の詳細の上に「辞書」のメニューがあり、「この会議から辞書の候補を探す…」を選べる。議事録に使う発言が 0 件の会議、記録中・後処理中・議事録を作り直している会議では選べない。
+  - 選ぶと候補の画面が開き、すぐに探し始める。探している間は進み具合を出す。「キャンセル」で閉じると AI の呼び出しを止め、辞書も会議も変えない。
+  - 材料はその会議だけ。オフレコの区間と、議事録に使わないと除いた発言は送らない（REQ-MTG-045・046 と同じ）。
+  - 候補は `読み → 表記` と理由で並ぶ。既定ではどれもチェックしない。チェックしたものだけが「選んだ N 件を辞書に追加」で辞書の末尾に `読み => 表記`（読みがなければ語だけ）の行として入る。
+  - 候補の画面に「この会議の文字起こしにも辞書を当てる」がある。既定は REQ-DIC-073 の設定と同じ。オンで追加すると、追加のあとで REQ-DIC-074 と同じ当て直しをする。
+  - 追加すると画面を閉じ、「N 件を辞書に追加しました。」と知らせる（当てたら REQ-DIC-074 の知らせも続けて出す）。
+  - 候補が 0 件なら「新しい候補は見つかりませんでした。」と出す。
+  - 会議の AI が使えない（鍵がない・ローカルのモデルがない）、ネットにつながらない、時間切れ、応答が読めないときは、理由を画面に出し、辞書も会議も変えない。
+  - 文字起こしが長くて材料に入りきらなかったときは、「会議が長いので、文字起こしの最初の約 N 分だけを読みました。」と出す（DEC-DIC-170）。
+- 出典: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承
+- 関係する要件: REQ-DIC-071, REQ-DIC-074, REQ-MTG-045, REQ-MTG-046
+- 対象: Mac / Windows
+- 実装の場所: `MeetingDictionaryMenu`、`MeetingDictionarySheet`、`DictionarySuggester.meetingMaterial(_:budget:)`
+- Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`、`windows/Hanasu.Windows/Views/MeetingDictionaryWindow.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-dictionary`（AI を呼ばない部分）、`--suggest-dictionary --meeting <会議のフォルダ>`（実際に AI を呼ぶ）、`--render-meeting-dictionary <出力フォルダ>`。`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~DictionarySuggester"`、`dotnet run --project Hanasu.Cli -- meeting-dict-suggest <会議のフォルダ>`。Windows の画面は UI のテスト項目（manual）
+
+### REQ-DIC-073 これから記録する会議の文字起こしに、辞書の置き換えルールを当てる
+- 内容: 会議の記録を止めて文字起こしが確定したら、議事録を作る前に、辞書の置き換えルールを発言ごとに当てる。設定でオフにできる（既定はオン）。議事録・文字起こしの表示・transcript.md・会議への質問・AI チャット・書き出しは、置き換えた後の文を使う。認識したままの文も残す（DEC-DIC-172）。
+- 受け入れ条件:
+  - 設定の会議の欄に「文字起こしに辞書の置き換えルールを当てる」があり、既定でオン。今までの設定にこの項目がなくてもオンになる。
+  - オンで、辞書に `ストックマーク => Stockmark` があるとき、新しく記録した会議の文字起こしの「ストックマーク」が「Stockmark」になり、議事録の材料にも「Stockmark」が渡る。議事録を作る設定がオフでも、文字起こしには当たる。
+  - オフなら、今までと同じく置き換えない（認識のヒントには渡す。DEC-DIC-175）。
+  - 記録中のライブの文字起こし・字幕・記録中の AI チャットには当てない。
+- 出典: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承。[roadmap.md](../roadmap.md) の FUT-104 を移した
+- 関係する要件: REQ-DIC-070, REQ-DIC-074, REQ-MTG-006
+- 対象: Mac / Windows
+- 実装の場所: `MeetingDictionary.applyOnFinish`、`MeetingRecorder.process`、`AppSettings.applyDictionaryToMeetings`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingDictionary.cs`、`windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`、`AppSettings.ApplyDictionaryToMeetings`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-dictionary`、`--meeting-files <me> <others> --dictionary <辞書>`（`--no-meeting-dictionary` で当てない）。`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingDictionary|FullyQualifiedName~MeetingControllerTests"`
+
+### REQ-DIC-074 会議ノートで、今の辞書をその会議の文字起こしに当て直す・認識したままの文に戻す
+- 内容: 会議ノートで開いている会議の文字起こしに、今の辞書の置き換えルールを当て直す。認識したままの文に戻すこともできる。議事録は作り直さず、作り直しを促す。
+- 受け入れ条件:
+  - 「辞書」のメニューに「今の辞書をこの会議に当て直す」がある。選べない条件は REQ-DIC-072 と同じ。REQ-DIC-073 の設定がオフでも使える。
+  - 当て直しは、認識したままの文に今の辞書を当てる。辞書からルールを消して当て直すと、その語は認識したままの文に戻る。設定で表記を直して当て直すと、新しい表記になる。
+  - 当てたら、当てる前と比べて文が変わった発言の数 M を「当て直して、M 件の発言が変わりました。」と出す。M が 0 なら「当て直しました。変わった発言はありませんでした（辞書で置き換えてある発言: K 件）。」と出す。
+  - 「辞書」のメニューに「この会議を認識したままの文に戻す」がある（辞書で置き換えた発言が 1 つ以上あるときだけ選べる）。選ぶと、すべての発言を認識したままの文に戻し、変わった発言の数を知らせる。辞書は変えない。
+  - 文字起こしが変わり、議事録がある会議では、議事録のタブと文字起こしの上の帯に「文字起こしか、議事録に使う発言を変えました。作り直すと反映されます。」と「議事録を作り直す」を出す（DEC-MTG-092）。議事録は自動では作り直さない。
+  - 当て直せなかったとき・保存に失敗したときは「この会議を変えられませんでした: <理由>」と出し、会議を変えない。
+- 出典: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承
+- 関係する要件: REQ-DIC-072, REQ-DIC-073, REQ-MTG-013
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecorder.applyDictionary`、`MeetingRecorder.revertDictionary`、`MeetingDictionaryMenu`
+- Windows の実装: `MeetingController.ApplyDictionary`・`RevertDictionary`（`windows/Hanasu.Core/Meetings/MeetingController.cs`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-dictionary`、`--render-meeting-dictionary <出力フォルダ>`。`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingDictionary|FullyQualifiedName~MeetingControllerTests"`
+
 ### REQ-DIC-080 入力できる場所がないときは、結果を画面に残して自分で貼れるようにする
 - 内容: 音声入力の結果を入れるときに、フォーカスが文字を入力できる場所にない（ペーストできない）と分かったら、結果の文章を画面に表示し、自動では閉じない。表示から文章をコピーでき、閉じるまで残る。
 - 受け入れ条件:
@@ -964,14 +1013,6 @@
 - 対象: Mac
 - 実装の場所: `GeminiClient.userPrompt`
 
-### DEC-DIC-085 会議の記録では、辞書を語彙のヒントにだけ使う
-- 決めたこと: 会議の記録では辞書の語・読み・表記を認識のヒントに渡すだけで、文字起こしと議事録への置き換えはしない。
-- 理由: 会議の後処理は、並行して作ったほかの PR も触っていた。置き換えは [roadmap.md](../roadmap.md) FUT-104。
-- 決めた場面: PR #12
-- 関係する要件: REQ-DIC-070, REQ-MTG-003
-- 対象: Mac
-- 実装の場所: `MeetingRecorder.start`
-
 ### DEC-DIC-086 辞書の確認は、CLI の自己テストで行う
 - 決めたこと: 確かめる例を `UserDictionarySelfTest.swift` に並べ、`--test-dictionary` で実行して、失敗があれば終了コード 1 を返す。
 - 理由: Command Line Tools だけの環境では XCTest も Swift Testing も使えなかった。
@@ -985,11 +1026,12 @@
 - 理由: 自動で足すと、誤って当たるルールが黙って増える。
 - 決めた場面: PR #12
 - 関係する要件: REQ-DIC-071
-- 対象: Mac
-- 実装の場所: `DictionarySuggestionSection`、`DictionarySuggester.appending`
+- 対象: Mac / Windows（Windows は会議ノートの候補の画面だけ。REQ-DIC-072）
+- 実装の場所: `DictionarySuggestionSection`、`MeetingDictionarySheet`、`DictionarySuggester.appending`
+- Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`（`Appending`）、`windows/Hanasu.Windows/Views/MeetingDictionaryWindow.cs`
 
 ### DEC-DIC-088 候補の材料と呼び出し
-- 決めたこと: 材料は今回の起動後の音声入力の結果（最大 50 件、メモリ上だけ）と、文字起こしのある会議の新しい順に 5 件（1 件 15,000 字、全体 60,000 字まで）と既存の辞書。モデルは議事録と同じ（「AI」タブで会議に選んだ AI とモデル。Gemini なら `meetingMinutesModel`。DEC-COM-040）、タイムアウトは 120 秒。会議データの送り先が、その AI だけであることを設定画面に書く。
+- 決めたこと: 材料は今回の起動後の音声入力の結果（最大 50 件、メモリ上だけ）と、文字起こしのある会議の新しい順に 5 件（1 件 15,000 字、全体 60,000 字まで）と既存の辞書。モデルは議事録と同じ（「AI」タブで会議に選んだ AI とモデル。Gemini なら `meetingMinutesModel`。DEC-COM-040）、タイムアウトは 120 秒。会議データの送り先が、その AI だけであることを設定画面に書く。会議の文字起こしは認識したままの文（`rawText`。なければ `text`。DEC-DIC-172）で送る（2026-11-09 に足した。置き換えた後の文を送ると誤認識の形が材料に出てこず、DEC-DIC-089 で読みが消えるため）。
 - 理由: 長い材料を読むのでモデルとタイムアウトを議事録に合わせた。音声入力の結果はこれまでの方針どおりファイルに残さない。
 - 決めた場面: PR #12
 - 関係する要件: REQ-DIC-071
@@ -1001,8 +1043,9 @@
 - 理由: 検証で、Gemini が社名から似た名前の製品名を作ることがあった。
 - 決めた場面: PR #12
 - 関係する要件: REQ-DIC-071
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `DictionarySuggester.filter`
+- Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`（`Filter`）
 
 ### DEC-DIC-090 辞書は「表」と「テキスト」で編集し、書かれたまま書き戻す
 - 決めたこと: 「辞書・ルール」タブで、表（読み → 表記の 2 列）とテキストを切り替えて編集する。保存先は 1 つで、コメントと空行は表に出さないが並びごと残し、編集していない行は書かれたまま書き戻す。
@@ -1329,8 +1372,71 @@
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
 - 実装の場所: `HanasuAICommands.runRefine`、`HanasuAICommands.runEdit`
 
+### DEC-DIC-170 会議 1 件の材料と呼び出し
+- 決めたこと: 材料は、その会議の議事録に使う発言（`blocksForMinutes`。オフレコと除いた発言は入らない）を認識したままの文で並べたもの（話者名つき）を先に、議事録の本文をあとに置く。議事録は文字起こしを入れて残った分だけ入れる。作り直しを促している議事録（`minutesOutdated`）は入れない（議事録を作ったあとで除いた発言の中身を含みうるため）。長さの上限は会議の AI で変える。Gemini・Claude は全体で 60,000 字。ローカルの LLM と Apple は、モデルの文脈の長さから、出力・system instruction・既存の辞書の分を引いたトークン数まで（数え方は、どちらも全角 1 字 1 トークン・半角 3 字 1 トークンの多めの見積もり。Mac `AppleFMClient.estimateTokens`、Windows `DictionarySuggester.EstimateTokens`。ローカルの /tokenize はサーバーを起こしてからでないと使えないので使わない）。文字起こしを切ったときだけ、切った位置の発言の時刻から「最初の約 N 分」を出す。音声入力の結果は入れない。AI は会議の AI（DEC-COM-040）で、タイムアウトは Mac 120 秒、Windows は会議の既定。プロンプトは今の `dictionarySuggest.*` を使う（Windows の `TextPurpose` は `Minutes`）。材料を囲む `<material>` を区切りのタグを無害にする一覧に足し、材料はそれに通してから送り、`filter` も通したあとの材料で照合する。キャンセルで閉じたら呼び出しを止める。
+- 理由: オフレコを守り、「この会議のことばだけ」を出す。置き換えルールの読み（誤認識の形）は文字起こしにしか出てこず、材料に出てこない読みは DEC-DIC-089 で除くので、文字起こしを先に入れる。ローカル・Apple は文脈が 8,192〜32,768 トークンしかなく、字数で切ると AI の側で黙って切られ、「読んだ範囲」の知らせが誤りになる。見積もりを多めにすると、AI の側の `LongInputFitter` が黙って後ろを省くことがない。
+- 決めた場面: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承
+- 関係する要件: REQ-DIC-072
+- 対象: Mac / Windows
+- 実装の場所: `DictionarySuggester.meetingMaterial(_:budget:)`、`DictionarySuggester.MeetingMaterial`、`DictionarySuggester.userPrompt`
+- Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`
+
+### DEC-DIC-171 入口は会議ノートの「辞書」のメニュー、候補はシート（Windows はダイアログ）
+- 決めたこと: Mac は `MeetingDetailView` の上のボタンの並び（「話者名…」の右）に「辞書」のメニューを置き（窓の最小幅（詳細は約 640）で並びが詰まらないよう、枠と矢印のないアイコン `character.book.closed` だけにし、「辞書」はヘルプとアクセシビリティの名前に出す）、「この会議から辞書の候補を探す…」「今の辞書をこの会議に当て直す」「この会議を認識したままの文に戻す」を並べる。候補は `.sheet` で出し、行の見た目は設定の候補の欄と同じにする。結果の知らせは `.alert`。Windows は `ActionsPanel` の「議事録を作り直す」の右に「辞書…」のボタンを置き、同じ 3 つの項目の `ContextMenu` を出す。候補は C# で作るダイアログ（`SleepPromptWindow` と同じ作り）で、知らせは `MessageBox`。画面を開いたらすぐ探し、閉じたら結果は捨てる。追加したら画面を閉じる。Windows の設定画面は `Settings.Changed` を受けて、辞書の欄がキーボードのフォーカスを持っていない（`IsKeyboardFocused` が false）ときに中身を読み直す。
+- 理由: 会議を見ているときにその場で使える。3 つの操作をメニューにまとめ、上のボタンの並びを広げない。開いたままの設定画面が、会議ノートで足した行を古い中身で書き戻さないようにする（WPF の論理フォーカスは非アクティブでも残るので使わない）。
+- 決めた場面: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承
+- 関係する要件: REQ-DIC-072, REQ-DIC-074
+- 対象: Mac / Windows
+- 実装の場所: `MeetingDictionaryMenu`、`MeetingDictionarySheet`
+- Windows の実装: `windows/Hanasu.Windows/Views/MeetingDictionaryWindow.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
+
+### DEC-DIC-172 会議の発言は、認識したままの文を残し、そこから置き換える
+- 決めたこと: 発言に省略できる `rawText`（Windows `RawText`、JSON のキーは `rawText`）を足す。置き換えで `text` が変わったときだけ認識したままの文を入れ、変わらなければ消す。当て直すときは `rawText ?? text` に今の辞書を当てる。認識したままの文に戻すときは `text` を `rawText ?? text` にして `rawText` を消す。続く発言をまとめるときは、認識したままの文もつなぐ（辞書の候補の材料に使う）。
+- 理由: 誤ったルールを足しても、当て直すか戻せば元に戻せる。読み（誤認識の形）が残るので、辞書の候補の材料に使える。省略できるキーなので、前の版の meeting.json も読め、前の版のアプリも新しい meeting.json を読める（前の版で保存し直すと `rawText` は消える）。
+- 決めた場面: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承
+- 関係する要件: REQ-DIC-073, REQ-DIC-074
+- 対象: Mac / Windows
+- 実装の場所: `Utterance.rawText`、`MeetingDictionary`、`Meeting.transcriptForPrompt(raw:)`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingModels.cs`（`Utterance.RawText`）、`windows/Hanasu.Core/Meetings/MeetingDictionary.cs`
+
+### DEC-DIC-173 新しい会議には、文字起こしが確定した直後、議事録の前に 1 回当てる
+- 決めたこと: 確定した発言を作った直後（Mac `MeetingRecorder.process` の `buildUtterances` の後、Windows `MeetingPostProcessor.ProcessAsync` の `BuildUtterances` の後）に、設定がオンなら当ててから保存する。当てる部分は辞書と設定の値を引数で受け取る関数にし、`process` には辞書と設定を外から渡せる口を置く。設定は既定でオンで、項目がなければオンとして読む。記録中の発言（ライブの文字起こし・字幕・記録中の AI チャット）には当てない。照合は音声入力と同じ `UserDictionary.apply`（DEC-DIC-081〜083）を発言ごとに使うので、2 つの発言にまたがる語には当たらない（受け入れる）。横断検索と `hanasu` コマンドが出す発言は、置き換えた後の文（`text`）だけを使う。
+- 理由: 確定した発言は 1 か所で作られるので、そこに当てれば議事録・表示・書き出しにすべて効く。ライブの表示は確定後の発言で置き換わる。発言をまたいで当てると、時刻と話者の区切りを作り直す必要があり見合わない。CLI の確かめで本物の設定を書き換えないため、設定を外から渡す。
+- 決めた場面: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承
+- 関係する要件: REQ-DIC-073
+- 対象: Mac / Windows
+- 実装の場所: `MeetingDictionary.applyOnFinish`、`MeetingRecorder.process`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`
+
+### DEC-DIC-174 会議に当て直したら、議事録は作り直さず、作り直しを促す
+- 決めたこと: 当て直し・戻しができる条件は、議事録に使う発言を変えられる条件（Mac `canEditMinutesSelection`、Windows `CanEditMinutesSelection`）に、使う発言が 1 つ以上あることを足したもの。Mac は一覧の会議をその場で書き換えてから保存する（あとの作り直しが古い会議から作らないように）。保存に失敗したら一覧を元に戻して知らせる。変わった発言の数は、当てる前と後で `text` が違う発言の数（Mac・Windows とも）。発言が変わり議事録があれば `minutesOutdated` を true にして DEC-MTG-092 の帯を出し、作り直しは今のボタン（DEC-MTG-072 の確かめつき）に任せる。
+- 理由: 作り直すと議事録・アクションアイテムが置き換わり、リマインダーに登録した印（`ActionItem.reminderID`）も消える。辞書に 1 語足しただけで、確かめなしにそうならないようにする（ユーザーの回答）。作り直しを当て直しの流れから外すので、別の会議を記録している間も当て直せる。
+- 決めた場面: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承
+- 関係する要件: REQ-DIC-074, REQ-MTG-013
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecorder.applyDictionary`、`MeetingRecorder.revertDictionary`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`ApplyDictionary`・`RevertDictionary`）
+
+### DEC-DIC-175 会議でも、辞書を語彙のヒントとして認識に渡す
+- 決めたこと: 置き換えの設定（DEC-DIC-173）にかかわらず、会議の認識に辞書の語・読み・表記をヒントとして渡す。
+- 理由: DEC-DIC-085 を廃止しても、ヒントの振る舞いは残す。
+- 決めた場面: 2026-11-09 の依頼「議事録から辞書を作成する機能を欲しいです」、同日に計画（[plans/meeting-dictionary.md](../plans/meeting-dictionary.md)）を了承（DEC-DIC-085 から引き継いだ）
+- 関係する要件: REQ-DIC-073, REQ-MTG-003
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecorder.start`、`MeetingBatchTranscription`
+- Windows の実装: `MeetingController.Context`（`windows/Hanasu.Core/Meetings/MeetingController.cs`）
+
 ---
 
 ## 廃止
 
-やめた要件・設計判断は、消さずにここへ移す（`- 状態: 廃止（日付・理由・PR）`）。今はない。
+やめた要件・設計判断は、消さずにここへ移す（`- 状態: 廃止（日付・理由・PR）`）。
+
+### DEC-DIC-085 会議の記録では、辞書を語彙のヒントにだけ使う
+- 決めたこと: 会議の記録では辞書の語・読み・表記を認識のヒントに渡すだけで、文字起こしと議事録への置き換えはしない。
+- 理由: 会議の後処理は、並行して作ったほかの PR も触っていた。置き換えは [roadmap.md](../roadmap.md) FUT-104。
+- 決めた場面: PR #12
+- 関係する要件: REQ-DIC-070, REQ-MTG-003
+- 対象: Mac
+- 実装の場所: `MeetingRecorder.start`
+- 状態: 廃止（2026-11-09。会議の文字起こしにも置き換えを当てることにした。ヒントの部分は DEC-DIC-175、置き換えは DEC-DIC-172〜174。会議ノートから辞書を作る PR）

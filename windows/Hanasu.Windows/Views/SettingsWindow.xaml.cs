@@ -52,8 +52,10 @@ public partial class SettingsWindow : Window
         host.WhisperModels.StateChanged += OnWhisperStateChanged;
         host.LocalLlmModels.StateChanged += OnLocalModelStateChanged;
         host.Secrets.Changed += OnSecretChanged;
+        settings.Changed += OnSettingsChanged;
         Closed += (_, _) =>
         {
+            settings.Changed -= OnSettingsChanged;
             host.WhisperModels.StateChanged -= OnWhisperStateChanged;
             host.LocalLlmModels.StateChanged -= OnLocalModelStateChanged;
             host.Secrets.Changed -= OnSecretChanged;
@@ -128,6 +130,7 @@ public partial class SettingsWindow : Window
             ?? MeetingEngineCombo.Items[0];
         DiarizeCheck.IsChecked = s.DiarizeOthers;
         MakeMinutesCheck.IsChecked = s.MakeMeetingMinutes;
+        ApplyDictionaryCheck.IsChecked = s.ApplyDictionaryToMeetings;
         MinutesModelCombo.ItemsSource = AppSettings.SuggestedModels;
         MinutesModelCombo.Text = s.MeetingMinutesModel;
         KeepAudioCheck.IsChecked = s.KeepMeetingAudio;
@@ -910,6 +913,8 @@ public partial class SettingsWindow : Window
     private void OnDiarizeChanged(object sender, RoutedEventArgs e) => Save(s => s.DiarizeOthers = DiarizeCheck.IsChecked == true);
 
     private void OnMakeMinutesChanged(object sender, RoutedEventArgs e) => Save(s => s.MakeMeetingMinutes = MakeMinutesCheck.IsChecked == true);
+    // 要件: REQ-DIC-073
+    private void OnApplyDictionaryChanged(object sender, RoutedEventArgs e) => Save(s => s.ApplyDictionaryToMeetings = ApplyDictionaryCheck.IsChecked == true);
 
     private void OnMinutesModelChanged(object sender, RoutedEventArgs e)
     {
@@ -943,6 +948,26 @@ public partial class SettingsWindow : Window
     private void OnOpenMeetingsFolder(object sender, RoutedEventArgs e) => OpenFolder(MeetingsDirBox.Text);
 
     // MARK: - 辞書・ルール
+
+    // 設計判断: DEC-DIC-171
+    /// <summary>
+    /// ほか（会議ノートの辞書の候補）で辞書が変わったら、辞書の欄を読み直す。欄で入力している途中（キーボードのフォーカスがある）なら読み直さない。
+    /// 読み直さないと、次にこの欄で 1 文字打ったときに、古い中身で書き戻して足した行が消える
+    /// </summary>
+    private void OnSettingsChanged(object? sender, SettingsChangedEventArgs e)
+    {
+        if (!Dispatcher.CheckAccess())
+        {
+            Dispatcher.BeginInvoke(() => OnSettingsChanged(sender, e));
+            return;
+        }
+        if (e.After.DictionaryText == e.Before.DictionaryText || DictionaryBox.IsKeyboardFocused || DictionaryBox.Text == e.After.DictionaryText) return;
+        var wasLoading = loading;
+        loading = true;
+        DictionaryBox.Text = e.After.DictionaryText;
+        loading = wasLoading;
+        UpdateDictionaryIssues();
+    }
 
     private void OnDictionaryChanged(object sender, TextChangedEventArgs e)
     {

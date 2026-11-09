@@ -203,6 +203,10 @@ final class AppSettings: ObservableObject {
     @Published var meetingMinutesModel: String { didSet { defaults.set(meetingMinutesModel, forKey: Keys.meetingMinutesModel) } }
     @Published var keepMeetingAudio: Bool { didSet { defaults.set(keepMeetingAudio, forKey: Keys.keepMeetingAudio) } }
     @Published var makeMeetingMinutes: Bool { didSet { defaults.set(makeMeetingMinutes, forKey: Keys.makeMeetingMinutes) } }
+    // 要件: REQ-DIC-073
+    // 設計判断: DEC-DIC-173
+    /// 記録を止めたあとの文字起こしに、辞書の置き換えルールを当てる（既定はオン。今までの設定になければオン）
+    @Published var applyDictionaryToMeetings: Bool { didSet { defaults.set(applyDictionaryToMeetings, forKey: Keys.applyDictionaryToMeetings) } }
     /// 会議で録音するスピーカー（出力機器）の UID。空なら Mac 全体の音
     @Published var meetingOutputDeviceUID: String { didSet { defaults.set(meetingOutputDeviceUID, forKey: Keys.meetingOutputDeviceUID) } }
     /// マイク側も話者分離する（会議室などで 1 つのマイクを複数人で使うとき）
@@ -364,6 +368,7 @@ final class AppSettings: ObservableObject {
             // 設計判断: DEC-MTG-016
             Keys.keepMeetingAudio: true,
             Keys.makeMeetingMinutes: true,
+            Keys.applyDictionaryToMeetings: true,
             Keys.meetingOutputDeviceUID: "",
             Keys.meetingInputDeviceUID: "",
             Keys.dictationInputDeviceUID: "",
@@ -406,6 +411,7 @@ final class AppSettings: ObservableObject {
         meetingMinutesModel = defaults.string(forKey: Keys.meetingMinutesModel)!
         keepMeetingAudio = defaults.bool(forKey: Keys.keepMeetingAudio)
         makeMeetingMinutes = defaults.bool(forKey: Keys.makeMeetingMinutes)
+        applyDictionaryToMeetings = defaults.bool(forKey: Keys.applyDictionaryToMeetings)
         meetingOutputDeviceUID = defaults.string(forKey: Keys.meetingOutputDeviceUID)!
         meetingInputDeviceUID = defaults.string(forKey: Keys.meetingInputDeviceUID)!
         dictationInputDeviceUID = defaults.string(forKey: Keys.dictationInputDeviceUID)!
@@ -447,6 +453,7 @@ final class AppSettings: ObservableObject {
         static let meetingMinutesModel = "meetingMinutesModel"
         static let keepMeetingAudio = "keepMeetingAudio"
         static let makeMeetingMinutes = "makeMeetingMinutes"
+        static let applyDictionaryToMeetings = "applyDictionaryToMeetings"
         static let meetingOutputDeviceUID = "meetingOutputDeviceUID"
         static let meetingInputDeviceUID = "meetingInputDeviceUID"
         static let dictationInputDeviceUID = "dictationInputDeviceUID"

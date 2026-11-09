@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- {0} falas não usadas na ata não foram incluídas</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Não foi possível ler a resposta da IA com as sugestões para o dicionário.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>A reunião está sendo gravada ou processada, a ata está sendo gerada novamente ou não há falas usadas na ata.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>A pasta da reunião não foi encontrada.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Não foi possível alterar esta reunião: {0}</value>
+  </data>
 </root>

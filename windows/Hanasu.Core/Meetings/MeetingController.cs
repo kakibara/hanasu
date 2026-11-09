@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Hanasu.Core.Gemini;
 using Hanasu.Core.Settings;
+using Hanasu.Core.Text;
 using Hanasu.Core.Transcription;
 
 namespace Hanasu.Core.Meetings;
@@ -267,6 +268,8 @@ public sealed class MeetingController
             MinutesProvider = settings.MeetingAi,
             KeepAudio = settings.KeepMeetingAudio,
             Log = services.Log,
+            Dictionary = settings.UserDictionary,
+            ApplyDictionary = settings.ApplyDictionaryToMeetings,
         };
         try
         {
@@ -459,6 +462,55 @@ public sealed class MeetingController
         return true;
     }
 
+    // MARK: - 辞書を会議に当てる（MeetingDictionary.cs）
+
+    // 要件: REQ-DIC-074
+    // 設計判断: DEC-DIC-174
+    /// <summary>会議の文字起こしに、辞書を当て直せるか（戻せるか）。議事録に使う発言を変えられて、使う発言がある会議</summary>
+    public bool CanApplyDictionary(Meeting meeting) => CanEditMinutesSelection(meeting) && meeting.UsedUtterances.Count > 0;
+
+    // 要件: REQ-DIC-074
+    // 設計判断: DEC-DIC-174
+    /// <summary>
+    /// 今の辞書を会議の文字起こしに当て直して保存する。議事録は作り直さず、変わったら作り直しを促す。
+    /// 当て直せない・保存できないときは MeetingDictionaryException（会議は変えない）
+    /// </summary>
+    public MeetingDictionaryOutcome ApplyDictionary(Meeting meeting)
+    {
+        var dictionary = services.Settings().UserDictionary;
+        return RewriteForDictionary(meeting, m => MeetingDictionary.Apply(dictionary, m));
+    }
+
+    // 要件: REQ-DIC-074
+    // 設計判断: DEC-DIC-174
+    /// <summary>会議の文字起こしを、認識したままの文に戻して保存する</summary>
+    public MeetingDictionaryOutcome RevertDictionary(Meeting meeting) => RewriteForDictionary(meeting, MeetingDictionary.Revert);
+
+    // 設計判断: DEC-DIC-174
+    /// <summary>発言を書き換えて保存する。保存に失敗したら、発言と「議事録が古い」の印を元に戻す</summary>
+    private MeetingDictionaryOutcome RewriteForDictionary(Meeting meeting, Func<Meeting, MeetingDictionaryOutcome> change)
+    {
+        if (!CanApplyDictionary(meeting)) throw new MeetingDictionaryException(Strings.Meeting_Dictionary_Busy);
+        var store = Store(services.Settings());
+        if (!store.Exists(meeting)) throw new MeetingDictionaryException(Strings.Meeting_Dictionary_Missing);
+        var utterances = meeting.Utterances;
+        var outdated = meeting.MinutesOutdated;
+        var outcome = change(meeting);
+        if (outcome.Changed == 0) return outcome;
+        try
+        {
+            store.Save(meeting);
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            meeting.Utterances = utterances;
+            meeting.MinutesOutdated = outdated;
+            throw new MeetingDictionaryException(e.Message, e);
+        }
+        MeetingChanged?.Invoke(this, meeting);
+        return outcome;
+    }
+
     // MARK: - 記録のあとの操作
 
     /// <summary>議事録を作り直している会議があるか（State は変わらないので、アップデートの入れ替え前の確認に使う）</summary>
@@ -572,6 +624,7 @@ public sealed class MeetingController
 
     // MARK: - Private
 
+    // 設計判断: DEC-DIC-175
     private static TranscriptionContext Context(AppSettings settings) =>
         new(settings.LocaleIdentifier, settings.UserDictionary.ContextualStrings, settings.MeetingMicrophoneDeviceId);
 

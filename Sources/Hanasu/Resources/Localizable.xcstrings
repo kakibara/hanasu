@@ -308,7 +308,7 @@
       }
     },
     "# %@ — 文字起こし" : {
-      "comment" : "HanasuMeetingsCommand.swift:368, MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:368, MeetingModels.swift:131",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1940,7 +1940,7 @@
       }
     },
     "%@ にスリープしてから、記録を続けています。スリープする前までで記録を止めるか、このまま記録を続けるかを選んでください。" : {
-      "comment" : "MeetingRecorder.swift:743",
+      "comment" : "MeetingRecorder.swift:798",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3878,7 +3878,7 @@
       }
     },
     "%@ 件を辞書に追加しました。" : {
-      "comment" : "DictionarySettingsView.swift:240",
+      "comment" : "DictionarySettingsView.swift:251, MeetingDictionaryViews.swift:217",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5306,7 +5306,7 @@
       }
     },
     "%@のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:386",
+      "comment" : "SettingsView.swift:391",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5714,7 +5714,7 @@
       }
     },
     "%@を許可する" : {
-      "comment" : "SettingsView.swift:382",
+      "comment" : "SettingsView.swift:387",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7244,7 +7244,7 @@
       }
     },
     "- 日時: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:369, MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:369, MeetingModels.swift:131",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7346,7 +7346,7 @@
       }
     },
     "- 議事録に使わない発言（%@ 件）は含めていません" : {
-      "comment" : "HanasuMeetingsCommand.swift:372, MeetingModels.swift:129",
+      "comment" : "HanasuMeetingsCommand.swift:372, MeetingModels.swift:136",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7448,7 +7448,7 @@
       }
     },
     "- 長さ: %@" : {
-      "comment" : "HanasuMeetingsCommand.swift:370, MeetingModels.swift:124",
+      "comment" : "HanasuMeetingsCommand.swift:370, MeetingModels.swift:131",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11222,7 +11222,7 @@
       }
     },
     "AI チャット" : {
-      "comment" : "MeetingChatView.swift:527, MeetingWindow.swift:481",
+      "comment" : "MeetingChatView.swift:527, MeetingWindow.swift:483",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -15200,7 +15200,7 @@
       }
     },
     "Finder で表示" : {
-      "comment" : "DictationHistoryWindow.swift:526, MeetingWindow.swift:442",
+      "comment" : "DictationHistoryWindow.swift:526, MeetingWindow.swift:444",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24584,7 +24584,7 @@
       }
     },
     "「ここ重要」の印はありません。記録中に「★ ここ重要」かショートカットで付けると、ここに前後の会話をまとめて出します。" : {
-      "comment" : "MeetingWindow.swift:756",
+      "comment" : "MeetingWindow.swift:758",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28153,6 +28153,210 @@
         }
       }
     },
+    "この会議から辞書の候補を探す" : {
+      "comment" : "MeetingDictionaryViews.swift:109",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث عن مقترحات للقاموس في هذا الاجتماع"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörterbuchvorschläge aus diesem Meeting suchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find Dictionary Suggestions from This Meeting"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar candidatos para el diccionario en esta reunión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chercher des suggestions pour le dictionnaire dans cette réunion"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस मीटिंग से शब्दकोश के सुझाव खोजें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cari saran kamus dari rapat ini"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca candidati per il dizionario in questa riunione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 회의에서 사전 후보 찾기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znajdź propozycje do słownika w tym spotkaniu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar sugestões para o dicionário nesta reunião"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Найти кандидатов для словаря в этой встрече"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu toplantıdan sözlük önerileri bul"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tìm gợi ý cho từ điển từ cuộc họp này"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从此会议中查找词典候选"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從此會議尋找辭典候選"
+          }
+        }
+      }
+    },
+    "この会議から辞書の候補を探す…" : {
+      "comment" : "MeetingDictionaryViews.swift:17",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث عن مقترحات للقاموس في هذا الاجتماع…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörterbuchvorschläge aus diesem Meeting suchen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find Dictionary Suggestions from This Meeting…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar candidatos para el diccionario en esta reunión…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chercher des suggestions pour le dictionnaire dans cette réunion…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस मीटिंग से शब्दकोश के सुझाव खोजें…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cari saran kamus dari rapat ini…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca candidati per il dizionario in questa riunione…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 회의에서 사전 후보 찾기…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znajdź propozycje do słownika w tym spotkaniu…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar sugestões para o dicionário nesta reunião…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Найти кандидатов для словаря в этой встрече…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu toplantıdan sözlük önerileri bul…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tìm gợi ý cho từ điển từ cuộc họp này…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从此会议中查找词典候选…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從此會議尋找辭典候選…"
+          }
+        }
+      }
+    },
     "この会議について AI に聞けます" : {
       "comment" : "MeetingChatView.swift:211",
       "extractionState" : "manual",
@@ -28663,6 +28867,108 @@
         }
       }
     },
+    "この会議の文字起こしにも辞書を当てる" : {
+      "comment" : "MeetingDictionaryViews.swift:120",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تطبيق القاموس أيضًا على النص المفرّغ لهذا الاجتماع"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörterbuch auch auf die Transkription dieses Meetings anwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Also apply the dictionary to this meeting’s transcription"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplicar también el diccionario a la transcripción de esta reunión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appliquer aussi le dictionnaire à la transcription de cette réunion"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस मीटिंग के ट्रांसक्रिप्ट पर भी शब्दकोश लागू करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terapkan kamus juga ke transkrip rapat ini"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applica il dizionario anche alla trascrizione di questa riunione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 회의의 전사본에도 사전 적용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zastosuj słownik także do transkrypcji tego spotkania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplicar o dicionário também à transcrição desta reunião"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Применить словарь и к расшифровке этой встречи"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sözlüğü bu toplantının transkriptine de uygula"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Áp dụng từ điển cho cả bản chép lời của cuộc họp này"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "也将词典应用于此会议的转写稿"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "也將辭典套用到此會議的逐字稿"
+          }
+        }
+      }
+    },
     "この会議は「%@」です。保存されている分だけを出します。" : {
       "comment" : "HanasuMeetingsCommand.swift:78",
       "extractionState" : "manual",
@@ -28766,7 +29072,7 @@
       }
     },
     "この会議をゴミ箱に入れる" : {
-      "comment" : "MeetingWindow.swift:451",
+      "comment" : "MeetingWindow.swift:453",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28867,8 +29173,212 @@
         }
       }
     },
+    "この会議を変えられませんでした: %@" : {
+      "comment" : "MeetingDictionary.swift:86",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر تغيير هذا الاجتماع: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Meeting konnte nicht geändert werden: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't change this meeting: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo modificar esta reunión: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de modifier cette réunion : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस मीटिंग को बदला नहीं जा सका: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak dapat mengubah rapat ini: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile modificare questa riunione: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 회의를 변경할 수 없습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się zmienić tego spotkania: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível alterar esta reunião: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось изменить встречу: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu toplantı değiştirilemedi: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể thay đổi cuộc họp này: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法更改此会议：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法變更此會議：%@"
+          }
+        }
+      }
+    },
+    "この会議を認識したままの文に戻す" : {
+      "comment" : "MeetingDictionaryViews.swift:21",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إرجاع هذا الاجتماع إلى النص كما تم التعرّف عليه"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ursprünglich erkannten Text wiederherstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revert This Meeting to the Original Recognized Text"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar el texto reconocido original de esta reunión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rétablir le texte reconnu d’origine de cette réunion"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस मीटिंग को पहचाने गए मूल टेक्स्ट पर वापस लाएँ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kembalikan rapat ini ke teks hasil pengenalan asli"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristina il testo riconosciuto originale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 회의를 인식된 원래 텍스트로 되돌리기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przywróć pierwotnie rozpoznany tekst tego spotkania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar o texto reconhecido original"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуть исходный распознанный текст этой встречи"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu toplantının özgün tanınan metnini geri yükle"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Khôi phục văn bản nhận dạng gốc của cuộc họp này"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将此会议恢复为原始识别文本"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將此會議還原為原始辨識文字"
+          }
+        }
+      }
+    },
     "この前後（30 秒前〜15 秒後）の発言はありません" : {
-      "comment" : "MeetingWindow.swift:773",
+      "comment" : "MeetingWindow.swift:775",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33050,7 +33560,7 @@
       }
     },
     "まだ求めていません" : {
-      "comment" : "SettingsView.swift:369",
+      "comment" : "SettingsView.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34478,7 +34988,7 @@
       }
     },
     "アクセシビリティ" : {
-      "comment" : "Onboarding.swift:699, SettingsView.swift:321",
+      "comment" : "Onboarding.swift:699, SettingsView.swift:326",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -38252,7 +38762,7 @@
       }
     },
     "キャンセル" : {
-      "comment" : "AISettingsView.swift:193, AISettingsView.swift:287, MeetingNotesViews.swift:247",
+      "comment" : "AISettingsView.swift:193, AISettingsView.swift:287, MeetingDictionaryViews.swift:127",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39170,7 +39680,7 @@
       }
     },
     "クリックしてタイトルを変更" : {
-      "comment" : "MeetingWindow.swift:743",
+      "comment" : "MeetingWindow.swift:745",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40700,7 +41210,7 @@
       }
     },
     "システムオーディオ録音" : {
-      "comment" : "SettingsView.swift:339",
+      "comment" : "SettingsView.swift:344",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40802,7 +41312,7 @@
       }
     },
     "システムオーディオ録音のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:334",
+      "comment" : "SettingsView.swift:339",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40904,7 +41414,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → アクセシビリティ で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:323",
+      "comment" : "SettingsView.swift:328",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41006,7 +41516,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → マイク で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:310",
+      "comment" : "SettingsView.swift:315",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41108,7 +41618,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → 音声認識 で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:317",
+      "comment" : "SettingsView.swift:322",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41210,7 +41720,7 @@
       }
     },
     "システム設定を開く" : {
-      "comment" : "ReminderExport.swift:144, SettingsView.swift:332, SettingsView.swift:384",
+      "comment" : "ReminderExport.swift:144, SettingsView.swift:337, SettingsView.swift:389",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42434,7 +42944,7 @@
       }
     },
     "スリープ前までで止める" : {
-      "comment" : "MeetingRecorder.swift:744",
+      "comment" : "MeetingRecorder.swift:799",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42536,7 +43046,7 @@
       }
     },
     "タイトル" : {
-      "comment" : "MeetingSearchView.swift:212, MeetingWindow.swift:710",
+      "comment" : "MeetingSearchView.swift:212, MeetingWindow.swift:712",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42740,7 +43250,7 @@
       }
     },
     "タイトルを変更できます" : {
-      "comment" : "MeetingWindow.swift:744",
+      "comment" : "MeetingWindow.swift:746",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46616,7 +47126,7 @@
       }
     },
     "マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。システムオーディオ録音の許可の状態は、macOS から取れないためここには出ません。" : {
-      "comment" : "SettingsView.swift:351",
+      "comment" : "SettingsView.swift:356",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46922,7 +47432,7 @@
       }
     },
     "マイクを「自分」、スピーカーの音（Meet・Slack ハドル・Teams など）を「相手」として録ります。スピーカーだと相手の声がマイクにも入るので、イヤホンを使うと正確になります。" : {
-      "comment" : "SettingsView.swift:288",
+      "comment" : "SettingsView.swift:293",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47024,7 +47534,7 @@
       }
     },
     "マイクを再開できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:677",
+      "comment" : "MeetingRecorder.swift:732",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47534,7 +48044,7 @@
       }
     },
     "マイク（自分）の音が入っていません。設定の「会議」→「録音するマイク」を確認してください。" : {
-      "comment" : "MeetingRecorder.swift:778",
+      "comment" : "MeetingRecorder.swift:833",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48248,7 +48758,7 @@
       }
     },
     "メモ" : {
-      "comment" : "MeetingChatView.swift:526, MeetingNotesViews.swift:28, MeetingWindow.swift:479",
+      "comment" : "MeetingChatView.swift:526, MeetingNotesViews.swift:28, MeetingWindow.swift:481",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54776,7 +55286,7 @@
       }
     },
     "今の議事録とアクションアイテムは置き換わります。" : {
-      "comment" : "MeetingWindow.swift:439, MinutesTemplateViews.swift:139",
+      "comment" : "MeetingWindow.swift:441, MinutesTemplateViews.swift:139",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54873,6 +55383,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "目前的會議紀錄和待辦事項將被取代。"
+          }
+        }
+      }
+    },
+    "今の辞書をこの会議に当て直す" : {
+      "comment" : "MeetingDictionaryViews.swift:18",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة تطبيق القاموس الحالي على هذا الاجتماع"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelles Wörterbuch erneut anwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reapply the Current Dictionary to This Meeting"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver a aplicar el diccionario actual a esta reunión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réappliquer le dictionnaire actuel à cette réunion"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मौजूदा शब्दकोश इस मीटिंग पर दोबारा लागू करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terapkan ulang kamus saat ini ke rapat ini"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riapplica il dizionario attuale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 사전을 이 회의에 다시 적용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zastosuj ponownie bieżący słownik do tego spotkania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reaplicar o dicionário atual"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заново применить текущий словарь к этой встрече"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geçerli sözlüğü bu toplantıya yeniden uygula"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Áp dụng lại từ điển hiện tại cho cuộc họp này"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将当前词典重新应用于此会议"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將目前的辭典重新套用到此會議"
           }
         }
       }
@@ -55490,7 +56102,7 @@
       }
     },
     "会話から推測した名前です。違っていたら直してください" : {
-      "comment" : "MeetingWindow.swift:809",
+      "comment" : "MeetingWindow.swift:811",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55694,7 +56306,7 @@
       }
     },
     "会議 %@" : {
-      "comment" : "MeetingModels.swift:198",
+      "comment" : "MeetingModels.swift:215",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56203,6 +56815,108 @@
         }
       }
     },
+    "会議が長いので、文字起こしの最初の約 %@ 分だけを読みました。" : {
+      "comment" : "MeetingDictionaryViews.swift:115",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاجتماع طويل، لذا قُرئ الجزء الأول فقط من النص المفرّغ (نحو %@ دقيقة)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Meeting ist lang, daher wurden nur etwa die ersten %@ Minuten der Transkription gelesen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The meeting is long, so only about the first %@ minutes of the transcription were read."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como la reunión es larga, solo se leyeron los primeros %@ minutos aprox. de la transcripción."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La réunion étant longue, seules les %@ premières minutes environ de la transcription ont été lues."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग लंबी है, इसलिए ट्रांसक्रिप्ट के सिर्फ़ शुरुआती लगभग %@ मिनट पढ़े गए।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapat ini panjang, jadi hanya sekitar %@ menit pertama transkrip yang dibaca."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La riunione è lunga, quindi sono stati letti solo i primi %@ minuti circa della trascrizione."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의가 길어서 전사본의 처음 약 %@분만 읽었습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spotkanie jest długie, więc odczytano tylko początek transkrypcji (około %@ min)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A reunião é longa, então só foram lidos cerca dos primeiros %@ minutos da transcrição."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Встреча длинная, поэтому прочитано только начало расшифровки (около %@ мин)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı uzun olduğu için transkriptin yalnızca yaklaşık ilk %@ dakikası okundu."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuộc họp dài nên chỉ đọc khoảng %@ phút đầu của bản chép lời."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会议较长，因此只读取了转写稿开头约 %@ 分钟的内容。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會議較長，因此只讀取了逐字稿開頭約 %@ 分鐘的內容。"
+          }
+        }
+      }
+    },
     "会議に質問" : {
       "comment" : "MeetingSearchView.swift:260",
       "extractionState" : "manual",
@@ -56505,6 +57219,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "會議檔案夾：%@"
+          }
+        }
+      }
+    },
+    "会議のフォルダが見つかりません。" : {
+      "comment" : "MeetingDictionary.swift:83",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر العثور على مجلد الاجتماع."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Ordner des Meetings wurde nicht gefunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't find the meeting’s folder."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontró la carpeta de la reunión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le dossier de la réunion est introuvable."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग का फ़ोल्डर नहीं मिला।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder rapat tidak ditemukan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile trovare la cartella della riunione."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 폴더를 찾을 수 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie znaleziono folderu spotkania."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A pasta da reunião não foi encontrada."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Папка встречи не найдена."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı klasörü bulunamadı."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không tìm thấy thư mục của cuộc họp."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到会议的文件夹。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到會議的檔案夾。"
           }
         }
       }
@@ -56918,7 +57734,7 @@
       }
     },
     "会議の文字起こしと議事録（新しい順に %@ 件）" : {
-      "comment" : "DictionarySettingsView.swift:169",
+      "comment" : "DictionarySettingsView.swift:186",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57428,7 +58244,7 @@
       }
     },
     "会議の記録で相手の声に必要" : {
-      "comment" : "SettingsView.swift:340",
+      "comment" : "SettingsView.swift:345",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58244,7 +59060,7 @@
       }
     },
     "会議の記録中に Mac がスリープしました" : {
-      "comment" : "MeetingRecorder.swift:742",
+      "comment" : "MeetingRecorder.swift:797",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60284,7 +61100,7 @@
       }
     },
     "作り直す" : {
-      "comment" : "MeetingNotesViews.swift:246, MeetingWindow.swift:436, MinutesTemplateViews.swift:128",
+      "comment" : "MeetingNotesViews.swift:246, MeetingWindow.swift:438, MinutesTemplateViews.swift:128",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63038,7 +63854,7 @@
       }
     },
     "保存できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:359, MinutesTemplateViews.swift:213",
+      "comment" : "MeetingRecorder.swift:366, MinutesTemplateViews.swift:213",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63242,7 +64058,7 @@
       }
     },
     "保存先: ~/Documents/Hanasu/Meetings" : {
-      "comment" : "SettingsView.swift:290",
+      "comment" : "SettingsView.swift:295",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63649,8 +64465,110 @@
         }
       }
     },
+    "候補は探しません" : {
+      "comment" : "MeetingDictionaryViews.swift:185",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لن يتم البحث عن مقترحات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es wird nicht nach Vorschlägen gesucht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no suggestions will be searched for"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no se buscarán candidatos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aucune suggestion ne sera recherchée"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सुझाव नहीं खोजे जाएँगे"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "saran tidak akan dicari"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "la ricerca dei candidati non verrà eseguita"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "후보를 찾지 않습니다"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "propozycje nie zostaną wyszukane"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "a busca de sugestões não será feita"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "кандидаты не ищутся"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "öneri aranmayacak"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sẽ không tìm gợi ý"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不查找候选"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不尋找候選"
+          }
+        }
+      }
+    },
     "候補を探す" : {
-      "comment" : "DictionarySettingsView.swift:171",
+      "comment" : "DictionarySettingsView.swift:188",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65282,7 +66200,7 @@
       }
     },
     "再確認" : {
-      "comment" : "SettingsView.swift:353",
+      "comment" : "SettingsView.swift:358",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65792,7 +66710,7 @@
       }
     },
     "初めて会議の記録を始めるときに macOS が求めます" : {
-      "comment" : "SettingsView.swift:330",
+      "comment" : "SettingsView.swift:335",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67730,7 +68648,7 @@
       }
     },
     "同じ部屋の話者を分けています…" : {
-      "comment" : "MeetingRecorder.swift:315",
+      "comment" : "MeetingRecorder.swift:316",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67832,7 +68750,7 @@
       }
     },
     "同席者%@" : {
-      "comment" : "MeetingModels.swift:90",
+      "comment" : "MeetingModels.swift:97",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68342,7 +69260,7 @@
       }
     },
     "固有名詞や誤認識しやすい語を AI が挙げます。選んだものだけを辞書に追加し、自動では追加しません。会議の中身は、設定の「AI」で会議に選んだ AI にだけ渡します（「ローカル」か「Apple」なら、この Mac の外には送りません）。音声入力の結果はメモリ上だけにあり、アプリを終了すると消えます。" : {
-      "comment" : "DictionarySettingsView.swift:195",
+      "comment" : "DictionarySettingsView.swift:206",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68439,6 +69357,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AI 會列出專有名詞和容易誤辨識的詞。只有你選取的才會加入辭典，不會自動加入。會議內容只會交給在設定的「AI」中為會議選擇的 AI（選擇「本機」或「Apple」時，不會離開這台 Mac）。語音輸入的結果只保存在記憶體中，結束 App 後就會消失。"
+          }
+        }
+      }
+    },
+    "固有名詞や誤認識しやすい語を、この会議の文字起こしと議事録から AI が挙げます。選んだものだけを辞書に追加します。会議の中身は、設定の「AI」で会議に選んだ AI にだけ渡します（「ローカル」か「Apple」なら、この Mac の外には送りません）。" : {
+      "comment" : "MeetingDictionaryViews.swift:122",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يستخرج AI أسماء العَلَم والكلمات التي يسهل الخطأ في التعرّف عليها من النص المفرّغ والمحضر لهذا الاجتماع. لا يُضاف إلى القاموس إلا ما تختاره. لا يُمرَّر محتوى الاجتماع إلا إلى AI المختار للاجتماعات في قسم «AI» في الإعدادات (مع «محلي» أو «Apple» لا يخرج شيء من هذا الـ Mac)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die KI schlägt aus der Transkription und dem Protokoll dieses Meetings Eigennamen und leicht falsch erkannte Wörter vor. Nur die von dir ausgewählten werden zum Wörterbuch hinzugefügt. Meeting-Inhalte gehen nur an die KI, die unter „AI“ in den Einstellungen für Meetings gewählt ist (bei „Lokal“ oder „Apple“ verlässt nichts diesen Mac)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The AI suggests proper nouns and easily misrecognized words from this meeting’s transcription and minutes. Only the ones you select are added to the dictionary. Meeting content is passed only to the AI chosen for meetings in “AI” in Settings (with “Local” or “Apple”, nothing leaves this Mac)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA propone nombres propios y palabras que suelen reconocerse mal a partir de la transcripción y el acta de esta reunión. Solo se añaden al diccionario los que elijas. El contenido de la reunión solo se pasa a la IA elegida para reuniones en «AI» de Ajustes (con «Local» o «Apple», nada sale de este Mac)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA propose des noms propres et des mots souvent mal reconnus à partir de la transcription et du compte rendu de cette réunion. Seuls ceux que vous sélectionnez sont ajoutés au dictionnaire. Le contenu de la réunion n’est transmis qu’à l’IA choisie pour les réunions dans « AI » des Réglages (avec « Local » ou « Apple », rien ne quitte ce Mac)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI इस मीटिंग के ट्रांसक्रिप्ट और मिनट्स से खास नाम और ऐसे शब्द चुनता है जिनकी पहचान में आसानी से गलती होती है। सिर्फ़ आपके चुने हुए शब्द शब्दकोश में जोड़े जाते हैं। मीटिंग की सामग्री सिर्फ़ उसी AI को दी जाती है जिसे सेटिंग्ज़ के “AI” में मीटिंग के लिए चुना गया है (“लोकल” या “Apple” में कुछ भी इस Mac से बाहर नहीं जाता)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI mengambil nama diri dan kata yang mudah salah dikenali dari transkrip dan notulen rapat ini. Hanya yang Anda pilih yang ditambahkan ke kamus. Isi rapat hanya diberikan ke AI yang dipilih untuk rapat di “AI” pada Pengaturan (dengan “Lokal” atau “Apple”, tidak ada yang keluar dari Mac ini)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dalla trascrizione e dal verbale di questa riunione, l'IA propone nomi propri e parole che vengono spesso riconosciute male. Al dizionario vengono aggiunti solo i candidati che scegli. Il contenuto della riunione viene passato solo all'IA scelta per le riunioni in Impostazioni → «AI» (con «Locale» o «Apple», nulla esce da questo Mac)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI가 이 회의의 전사본과 회의록에서 고유 명사와 잘못 인식하기 쉬운 단어를 찾아 줍니다. 선택한 것만 사전에 추가합니다. 회의 내용은 설정의 \"AI\"에서 회의용으로 선택한 AI에만 넘깁니다(\"로컬\" 또는 \"Apple\"이면 이 Mac 밖으로 보내지 않습니다)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI wybiera z transkrypcji i protokołu tego spotkania nazwy własne i słowa, które łatwo błędnie rozpoznać. Do słownika trafią tylko te, które zaznaczysz. Treść spotkania trafia tylko do AI wybranego dla spotkań w Ustawieniach → „AI” (przy „Lokalnie” lub „Apple” nic nie opuszcza tego Maca)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A partir da transcrição e da ata desta reunião, a IA sugere nomes próprios e palavras que costumam ser mal reconhecidas. Só as sugestões que você escolher são adicionadas ao dicionário. O conteúdo da reunião é passado só à IA escolhida para reuniões em Ajustes → “AI” (com “Local” ou “Apple”, nada sai deste Mac)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI находит в расшифровке и протоколе этой встречи имена собственные и слова, которые часто распознаются неверно. В словарь добавляются только выбранные вами. Содержимое встречи передаётся только AI, выбранному для встреч в разделе «AI» в Настройках (при «Локально» или «Apple» ничего не покидает этот Mac)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI, bu toplantının transkriptinden ve tutanağından özel adları ve yanlış tanınmaya yatkın sözcükleri önerir. Yalnızca seçtikleriniz sözlüğe eklenir. Toplantı içeriği yalnızca Ayarlar’daki “AI” bölümünde toplantılar için seçilen AI’a verilir (“Yerel” veya “Apple” seçiliyse hiçbir şey bu Mac’ten çıkmaz)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI sẽ liệt kê các danh từ riêng và từ dễ bị nhận nhầm từ bản chép lời và biên bản họp của cuộc họp này. Chỉ những từ bạn chọn mới được thêm vào từ điển. Nội dung cuộc họp chỉ được giao cho AI đã chọn cho cuộc họp ở mục “AI” trong Cài đặt (với “Cục bộ” hoặc “Apple”, không có gì rời khỏi máy Mac này)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 会从此会议的转写稿和会议纪要中列出专有名词和容易误识别的词。只有你选中的才会添加到词典。会议内容只会交给在设置的“AI”中为会议选择的 AI（选择“本地”或“Apple”时，不会离开这台 Mac）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 會從此會議的逐字稿和會議紀錄中列出專有名詞和容易誤辨識的詞。只有你選取的才會加入辭典。會議內容只會交給在設定的「AI」中為會議選擇的 AI（選擇「本機」或「Apple」時，不會離開這台 Mac）。"
           }
         }
       }
@@ -70993,6 +72013,210 @@
         }
       }
     },
+    "当て直して、%@ 件の発言が変わりました。" : {
+      "comment" : "MeetingDictionaryViews.swift:54",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تمت إعادة تطبيق القاموس. عدد الأقوال التي تغيّرت: %@."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörterbuch erneut angewendet (geänderte Äußerungen: %@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reapplied the dictionary. Remarks changed: %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diccionario aplicado de nuevo. Intervenciones cambiadas: %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dictionnaire réappliqué. Propos modifiés : %@."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शब्दकोश दोबारा लागू किया गया। %@ कथन बदले।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamus diterapkan ulang. %@ ucapan berubah."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dizionario riapplicato (interventi modificati: %@)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 적용하여 발언 %@개가 바뀌었습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponownie zastosowano słownik. Zmienione wypowiedzi: %@."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dicionário reaplicado (falas alteradas: %@)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Словарь применён заново. Изменено реплик: %@."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sözlük yeniden uygulandı; %@ konuşma değişti."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã áp dụng lại từ điển, %@ lời nói đã thay đổi."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已重新应用词典，%@ 条发言发生了变化。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已重新套用辭典，%@ 則發言有所變更。"
+          }
+        }
+      }
+    },
+    "当て直しました。変わった発言はありませんでした（辞書で置き換えてある発言: %@ 件）。" : {
+      "comment" : "MeetingDictionaryViews.swift:55",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تمت إعادة تطبيق القاموس. لم يتغيّر أي قول (عدد الأقوال المستبدلة بالقاموس مسبقًا: %@)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörterbuch erneut angewendet. Keine Äußerung wurde geändert (bereits durch das Wörterbuch ersetzte Äußerungen: %@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reapplied the dictionary. No remarks changed (remarks already replaced by the dictionary: %@)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diccionario aplicado de nuevo. No cambió ninguna intervención (intervenciones ya reemplazadas con el diccionario: %@)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dictionnaire réappliqué. Aucun propos n’a changé (propos déjà remplacés par le dictionnaire : %@)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शब्दकोश दोबारा लागू किया गया। कोई कथन नहीं बदला (शब्दकोश से पहले ही बदले जा चुके कथन: %@)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamus diterapkan ulang. Tidak ada ucapan yang berubah (ucapan yang sudah diganti oleh kamus: %@)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dizionario riapplicato. Nessun intervento è cambiato (interventi già sostituiti dal dizionario: %@)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 적용했습니다. 바뀐 발언은 없습니다(사전으로 바꾼 발언: %@개)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponownie zastosowano słownik. Żadna wypowiedź się nie zmieniła (wypowiedzi już zastąpione słownikiem: %@)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dicionário reaplicado. Nenhuma fala foi alterada (falas já substituídas pelo dicionário: %@)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Словарь применён заново. Ни одна реплика не изменилась (реплик с заменами по словарю: %@)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sözlük yeniden uygulandı. Değişen konuşma olmadı (sözlükle değiştirilmiş konuşmalar: %@)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã áp dụng lại từ điển. Không có lời nói nào thay đổi (lời nói đã được thay thế bằng từ điển: %@)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已重新应用词典。没有发言发生变化（已由词典替换的发言：%@ 条）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已重新套用辭典。沒有發言變更（已由辭典替換的發言：%@ 則）。"
+          }
+        }
+      }
+    },
     "役割不明" : {
       "comment" : "PasteTarget.swift:112",
       "extractionState" : "manual",
@@ -71708,7 +72932,7 @@
       }
     },
     "拒否した場合は、システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:341",
+      "comment" : "SettingsView.swift:346",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72320,7 +73544,7 @@
       }
     },
     "探しています…" : {
-      "comment" : "DictionarySettingsView.swift:171",
+      "comment" : "DictionarySettingsView.swift:188, MeetingDictionaryViews.swift:146",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72626,7 +73850,7 @@
       }
     },
     "推測" : {
-      "comment" : "MeetingWindow.swift:806",
+      "comment" : "MeetingWindow.swift:808",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74054,7 +75278,7 @@
       }
     },
     "文字起こし" : {
-      "comment" : "MeetingExport.swift:139, MeetingWindow.swift:478, MinutesTemplateViews.swift:374",
+      "comment" : "MeetingExport.swift:139, MeetingWindow.swift:480, MinutesTemplateViews.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74155,8 +75379,110 @@
         }
       }
     },
+    "文字起こしか、議事録に使う発言を変えました。作り直すと反映されます。" : {
+      "comment" : "MinutesSelectionViews.swift:140",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم تغيير النص المفرّغ أو الأقوال المستخدمة في المحضر. أعد إنشاء المحضر لتطبيق التغيير."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Transkription oder die Äußerungen fürs Protokoll wurden geändert. Erstelle das Protokoll neu, um die Änderung zu übernehmen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The transcription or the remarks used for the minutes have changed. Recreate the minutes to reflect the changes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiaste la transcripción o las intervenciones que se usan en el acta. Los cambios se aplicarán al volver a crear el acta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez modifié la transcription ou les propos utilisés pour le compte rendu. Recréez le compte rendu pour appliquer les changements."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ट्रांसक्रिप्ट या मिनट्स के लिए कथन बदल दिए गए। मिनट्स दोबारा बनाने पर बदलाव लागू होंगे।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transkrip atau ucapan untuk notulen telah diubah. Buat ulang notulen untuk menerapkannya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hai modificato la trascrizione o gli interventi usati per il verbale. Ricrea il verbale per applicare le modifiche."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전사본 또는 회의록에 사용하는 발언이 바뀌었습니다. 회의록을 다시 만들면 반영됩니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmieniono transkrypcję lub wypowiedzi używane w protokole. Utwórz protokół ponownie, aby zastosować zmiany."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você alterou a transcrição ou as falas usadas na ata. Recrie a ata para aplicar a mudança."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Расшифровка или выбор реплик для протокола изменены. Пересоздайте протокол, чтобы учесть изменения."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transkripti veya tutanakta kullanılan konuşmaları değiştirdiniz. Değişikliği yansıtmak için tutanağı yeniden oluşturun."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bạn đã thay đổi bản chép lời hoặc lời nói dùng cho biên bản họp. Hãy tạo lại biên bản họp để áp dụng thay đổi."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转写稿或用于会议纪要的发言已更改。重新生成会议纪要后即会反映。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "逐字稿或用於會議紀錄的發言已變更。重新製作會議紀錄後即會反映。"
+          }
+        }
+      }
+    },
     "文字起こしで見る" : {
-      "comment" : "MeetingWindow.swift:768",
+      "comment" : "MeetingWindow.swift:770",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74457,6 +75783,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "會根據逐字稿和備註回答。繼續提問時，會參考之前的問答來回答。"
+          }
+        }
+      }
+    },
+    "文字起こしに辞書の置き換えルールを当てる" : {
+      "comment" : "SettingsView.swift:279",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تطبيق قواعد الاستبدال في القاموس على النص المفرّغ"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ersetzungsregeln auf die Transkription anwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply the dictionary’s replacement rules to the transcription"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplicar a la transcripción las reglas de reemplazo del diccionario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appliquer les règles de remplacement du dictionnaire à la transcription"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ट्रांसक्रिप्ट पर शब्दकोश के बदलने के नियम लागू करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terapkan aturan penggantian kamus ke transkrip"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applica le regole di sostituzione alla trascrizione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전사본에 사전의 바꾸기 규칙 적용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stosuj reguły zamiany ze słownika do transkrypcji"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplicar as regras de substituição à transcrição"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Применять к расшифровке правила замены из словаря"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sözlükteki değiştirme kurallarını transkripte uygula"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Áp dụng quy tắc thay thế của từ điển cho bản chép lời"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对转写稿应用词典的替换规则"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "對逐字稿套用辭典的替換規則"
           }
         }
       }
@@ -77420,7 +78848,7 @@
       }
     },
     "新しい候補は見つかりませんでした。" : {
-      "comment" : "DictionarySettingsView.swift:227",
+      "comment" : "DictionarySettingsView.swift:238, MeetingDictionaryViews.swift:151",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80174,7 +81602,7 @@
       }
     },
     "未許可" : {
-      "comment" : "SettingsView.swift:369",
+      "comment" : "SettingsView.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80480,7 +81908,7 @@
       }
     },
     "材料がありません。音声入力をするか、会議を記録してからもう一度試してください。" : {
-      "comment" : "DictionarySettingsView.swift:211",
+      "comment" : "DictionarySettingsView.swift:222",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85172,7 +86600,7 @@
       }
     },
     "相手" : {
-      "comment" : "MeetingBatchTranscription.swift:14, MeetingModels.swift:87, MeetingNotesViews.swift:365",
+      "comment" : "MeetingBatchTranscription.swift:14, MeetingModels.swift:94, MeetingNotesViews.swift:365",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85274,7 +86702,7 @@
       }
     },
     "相手側（スピーカー）の音が入っていません。会議の音が出ている機器を、設定の「会議」→「録音するスピーカー」で選んでください。" : {
-      "comment" : "MeetingRecorder.swift:781",
+      "comment" : "MeetingRecorder.swift:836",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87518,7 +88946,7 @@
       }
     },
     "終わるまで、今の議事録を出しています。" : {
-      "comment" : "MeetingWindow.swift:462",
+      "comment" : "MeetingWindow.swift:464",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89864,7 +91292,7 @@
       }
     },
     "自分" : {
-      "comment" : "MeetingBatchTranscription.swift:14, MeetingModels.swift:86, MeetingNotesViews.swift:365",
+      "comment" : "MeetingBatchTranscription.swift:14, MeetingModels.swift:93, MeetingNotesViews.swift:365",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90374,7 +91802,7 @@
       }
     },
     "自動入力に必要" : {
-      "comment" : "SettingsView.swift:321",
+      "comment" : "SettingsView.swift:326",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92312,7 +93740,7 @@
       }
     },
     "記録の途中でアプリが終了しました。音声ファイル（me.m4a / others.m4a）は途中まで残っている場合があります。" : {
-      "comment" : "MeetingModels.swift:241",
+      "comment" : "MeetingModels.swift:258",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92719,6 +94147,108 @@
         }
       }
     },
+    "記録を止めたあとの文字起こしに、「辞書・ルール」の置き換えルールを当てます。議事録は当てたあとの文から作ります。認識したままの文も残すので、会議ノートの「辞書」から戻せます。" : {
+      "comment" : "SettingsView.swift:280",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بعد إيقاف التسجيل، تُطبَّق قواعد الاستبدال في «القاموس والقواعد» على النص المفرّغ، ويُنشأ المحضر من النص بعد الاستبدال. يُحتفظ أيضًا بالنص كما تم التعرّف عليه، لذا يمكنك استعادته من «القاموس» في ملاحظات الاجتماعات."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach dem Ende der Aufnahme werden die Ersetzungsregeln aus „Wörterbuch & Regeln“ auf die Transkription angewendet. Das Protokoll wird aus dem ersetzten Text erstellt. Der ursprünglich erkannte Text bleibt erhalten, sodass du ihn in den Meeting-Notizen über „Wörterbuch“ wiederherstellen kannst."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After recording stops, the replacement rules in “Dictionary & Rules” are applied to the transcription, and the minutes are created from the replaced text. The original recognized text is kept too, so you can revert to it from “Dictionary” in Meeting Notes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al detener la grabación, se aplican a la transcripción las reglas de reemplazo de «Diccionario y reglas», y el acta se crea a partir del texto resultante. El texto reconocido original también se conserva, así que puedes restaurarlo desde «Diccionario» en Notas de reuniones."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Après l’arrêt de l’enregistrement, les règles de remplacement de « Dictionnaire et règles » sont appliquées à la transcription, et le compte rendu est créé à partir du texte obtenu. Le texte reconnu d’origine est conservé : vous pouvez le rétablir depuis « Dictionnaire » dans Notes de réunion."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रिकॉर्डिंग रोकने के बाद, ट्रांसक्रिप्ट पर “शब्दकोश और नियम” के बदलने के नियम लागू किए जाते हैं, और मिनट्स बदले गए टेक्स्ट से बनते हैं। पहचाना गया मूल टेक्स्ट भी रखा जाता है, इसलिए आप मीटिंग नोट्स के “शब्दकोश” से उसे वापस ला सकते हैं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setelah perekaman dihentikan, aturan penggantian di “Kamus & Aturan” diterapkan ke transkrip, dan notulen dibuat dari teks hasil penggantian. Teks hasil pengenalan asli juga disimpan, jadi Anda bisa mengembalikannya dari “Kamus” di Catatan Rapat."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dopo che interrompi la registrazione, alla trascrizione vengono applicate le regole di sostituzione di «Dizionario e regole» e il verbale viene creato dal testo sostituito. Il testo riconosciuto originale viene conservato, quindi puoi ripristinarlo da «Dizionario» in Note delle riunioni."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록을 중지한 후의 전사본에 \"사전 및 규칙\"의 바꾸기 규칙을 적용합니다. 회의록은 적용한 후의 텍스트로 만듭니다. 인식된 원래 텍스트도 남겨 두므로 회의 노트의 \"사전\"에서 되돌릴 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Po zatrzymaniu nagrywania do transkrypcji są stosowane reguły zamiany z ustawień „Słownik i reguły”, a protokół powstaje z tekstu po zamianie. Pierwotnie rozpoznany tekst też jest zachowywany, więc można go przywrócić w menu „Słownik” w „Notatkach ze spotkań”."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depois que você para a gravação, as regras de substituição de “Dicionário e regras” são aplicadas à transcrição, e a ata é criada a partir do texto substituído. O texto reconhecido original é mantido, então você pode restaurá-lo pelo botão “Dicionário” em Notas de reuniões."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "После остановки записи к расшифровке применяются правила замены из раздела «Словарь и правила». Протокол создаётся по тексту с заменами. Исходный распознанный текст тоже сохраняется, и его можно вернуть через меню «Словарь» в «Заметках о встречах»."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıt durduktan sonra “Sözlük ve kurallar” bölümündeki değiştirme kuralları transkripte uygulanır. Tutanak, kurallar uygulanmış metinden oluşturulur. Özgün tanınan metin de saklandığı için Toplantı Notları’ndaki “Sözlük” menüsünden geri yükleyebilirsiniz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sau khi dừng ghi, quy tắc thay thế trong “Từ điển & quy tắc” sẽ được áp dụng cho bản chép lời. Biên bản họp được tạo từ văn bản đã thay thế. Văn bản nhận dạng gốc cũng được giữ lại, nên bạn có thể khôi phục từ menu “Từ điển” trong Ghi chú cuộc họp."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止录制后，会对转写稿应用“词典与规则”中的替换规则，会议纪要将根据替换后的文本生成。原始识别文本也会保留，因此可以在会议笔记的“词典”中恢复。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止錄製後，會對逐字稿套用「辭典與規則」中的替換規則，會議紀錄會根據替換後的文字製作。原始辨識文字也會保留，因此可以從會議筆記的「辭典」還原。"
+          }
+        }
+      }
+    },
     "記録を止めますか？" : {
       "comment" : "MeetingSuggestionPanel.swift:179",
       "extractionState" : "manual",
@@ -92924,7 +94454,7 @@
       }
     },
     "記録を続ける" : {
-      "comment" : "MeetingRecorder.swift:745",
+      "comment" : "MeetingRecorder.swift:800",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93637,8 +95167,110 @@
         }
       }
     },
+    "記録中・処理中か、議事録を作り直しているところか、議事録に使う発言がありません。" : {
+      "comment" : "MeetingDictionary.swift:82",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاجتماع قيد التسجيل أو المعالجة، أو تجري إعادة إنشاء محضره، أو لا توجد أقوال مستخدمة في المحضر."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Meeting wird gerade aufgenommen oder verarbeitet, das Protokoll wird neu erstellt oder es gibt keine Äußerungen fürs Protokoll."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The meeting is being recorded or processed, its minutes are being recreated, or it has no remarks used for the minutes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La reunión se está grabando o procesando, se está volviendo a crear el acta o no hay intervenciones que usar en el acta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La réunion est en cours d’enregistrement ou de traitement, son compte rendu est en cours de recréation, ou aucun propos n’est utilisé pour le compte rendu."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग रिकॉर्ड या प्रोसेस हो रही है, उसके मिनट्स दोबारा बन रहे हैं, या मिनट्स में इस्तेमाल होने वाला कोई कथन नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapat sedang direkam atau diproses, notulennya sedang dibuat ulang, atau tidak ada ucapan untuk notulen."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La riunione è in registrazione o in elaborazione, il verbale è in fase di ricreazione oppure non ci sono interventi usati per il verbale."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록 중이거나 처리 중이거나 회의록을 다시 만드는 중이거나, 회의록에 사용하는 발언이 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spotkanie jest nagrywane lub przetwarzane, jego protokół jest tworzony ponownie albo nie ma wypowiedzi używanych w protokole."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A reunião está sendo gravada ou processada, a ata está sendo recriada ou não há falas usadas na ata."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Встреча записывается или обрабатывается, протокол пересоздаётся, либо нет реплик для протокола."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı kaydediliyor veya işleniyor, tutanak yeniden oluşturuluyor ya da tutanakta kullanılacak konuşma yok."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuộc họp đang được ghi hoặc xử lý, biên bản họp đang được tạo lại, hoặc không có lời nói nào dùng cho biên bản họp."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会议正在录制或处理中、正在重新生成会议纪要，或没有用于会议纪要的发言。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會議正在錄製或處理中、正在重新製作會議紀錄，或沒有用於會議紀錄的發言。"
+          }
+        }
+      }
+    },
     "記録後に AI で議事録を作る" : {
-      "comment" : "SettingsView.swift:278",
+      "comment" : "SettingsView.swift:283",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94454,7 +96086,7 @@
       }
     },
     "許可する" : {
-      "comment" : "Onboarding.swift:710, Onboarding.swift:723, SettingsView.swift:375",
+      "comment" : "Onboarding.swift:710, Onboarding.swift:723, SettingsView.swift:380",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94658,7 +96290,7 @@
       }
     },
     "許可済み" : {
-      "comment" : "Onboarding.swift:785, SettingsView.swift:369",
+      "comment" : "Onboarding.swift:785, SettingsView.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95882,7 +97514,7 @@
       }
     },
     "話者%@" : {
-      "comment" : "MeetingModels.swift:89",
+      "comment" : "MeetingModels.swift:96",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96086,7 +97718,7 @@
       }
     },
     "話者を分けています…（初回はモデルをダウンロードします）" : {
-      "comment" : "MeetingRecorder.swift:304",
+      "comment" : "MeetingRecorder.swift:305",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96290,7 +97922,7 @@
       }
     },
     "話者名" : {
-      "comment" : "MeetingWindow.swift:795",
+      "comment" : "MeetingWindow.swift:797",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96795,6 +98427,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "認證方式"
+          }
+        }
+      }
+    },
+    "認識したままの文に戻し、%@ 件の発言が変わりました。" : {
+      "comment" : "MeetingDictionaryViews.swift:53",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تمت استعادة النص كما تم التعرّف عليه. عدد الأقوال التي تغيّرت: %@."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ursprünglich erkannter Text wiederhergestellt (geänderte Äußerungen: %@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reverted to the original recognized text. Remarks changed: %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se restauró el texto reconocido original. Intervenciones cambiadas: %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texte reconnu d’origine rétabli. Propos modifiés : %@."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पहचाना गया मूल टेक्स्ट वापस लाया गया। %@ कथन बदले।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teks hasil pengenalan asli dikembalikan. %@ ucapan berubah."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testo riconosciuto originale ripristinato (interventi modificati: %@)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인식된 원래 텍스트로 되돌려 발언 %@개가 바뀌었습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przywrócono pierwotnie rozpoznany tekst. Zmienione wypowiedzi: %@."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texto reconhecido original restaurado (falas alteradas: %@)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Исходный распознанный текст восстановлен. Изменено реплик: %@."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Özgün tanınan metin geri yüklendi; %@ konuşma değişti."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã khôi phục văn bản nhận dạng gốc, %@ lời nói đã thay đổi."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已恢复为原始识别文本，%@ 条发言发生了变化。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已還原為原始辨識文字，%@ 則發言有所變更。"
           }
         }
       }
@@ -97310,7 +99044,7 @@
       }
     },
     "議事録" : {
-      "comment" : "MeetingExport.swift:139, MeetingSearchView.swift:214, MeetingWindow.swift:477",
+      "comment" : "MeetingExport.swift:139, MeetingSearchView.swift:214, MeetingWindow.swift:479",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98023,108 +99757,6 @@
         }
       }
     },
-    "議事録に使う発言を変えました。作り直すと反映されます。" : {
-      "comment" : "MinutesSelectionViews.swift:140",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "تم تغيير الأقوال المستخدمة في المحضر. أعد إنشاء المحضر لتطبيق التغيير."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die Äußerungen fürs Protokoll wurden geändert. Erstelle das Protokoll neu, um die Änderung zu übernehmen."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You changed the remarks used for the minutes. Recreate the minutes to apply the changes."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cambiaste las intervenciones que se usan en el acta. Vuelve a crearla para aplicar los cambios."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vous avez modifié les propos utilisés pour le compte rendu. Recréez-le pour appliquer les changements."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "मिनट्स के लिए कथन बदल दिए गए। मिनट्स दोबारा बनाने पर बदलाव लागू होंगे।"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ucapan untuk notulen telah diubah. Buat ulang notulen untuk menerapkannya."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gli interventi usati per il verbale sono cambiati. Ricrea il verbale per applicare le modifiche."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "회의록에 사용할 발언을 변경했습니다. 다시 만들면 반영됩니다."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zmieniono wypowiedzi używane w protokole. Utwórz protokół ponownie, aby zastosować zmiany."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "As falas usadas na ata foram alteradas. Recrie a ata para aplicar a mudança."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Реплики для протокола изменены. Пересоздайте протокол, чтобы применить изменения."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tutanakta kullanılan konuşmalar değişti. Yansıtmak için tutanağı yeniden oluşturun."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Đã thay đổi lời nói dùng cho biên bản họp. Tạo lại biên bản họp để áp dụng."
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已更改用于会议纪要的发言。重新生成后即可生效。"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已變更用於會議紀錄的發言。重新製作後即會套用。"
-          }
-        }
-      }
-    },
     "議事録に使う発言を選ぶ" : {
       "comment" : "MinutesSelectionViews.swift:71",
       "extractionState" : "manual",
@@ -98330,7 +99962,7 @@
       }
     },
     "議事録に使わない（%@）" : {
-      "comment" : "MeetingWindow.swift:871",
+      "comment" : "MeetingWindow.swift:873",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98534,7 +100166,7 @@
       }
     },
     "議事録の「話者についてのメモ」も参考にしてください。「推測」は、議事録を作るときに会話から推測して付けた名前です。変更は文字起こしに反映されます（議事録は作り直すと反映されます）。" : {
-      "comment" : "MeetingWindow.swift:796",
+      "comment" : "MeetingWindow.swift:798",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98738,7 +100370,7 @@
       }
     },
     "議事録のモデル: %@ · %@（設定の「AI」で、音声入力とは別に選べます）" : {
-      "comment" : "SettingsView.swift:280",
+      "comment" : "SettingsView.swift:285",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98840,7 +100472,7 @@
       }
     },
     "議事録の作成" : {
-      "comment" : "MeetingRecorder.swift:336, MeetingRecorder.swift:400",
+      "comment" : "MeetingRecorder.swift:343, MeetingRecorder.swift:407",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99452,7 +101084,7 @@
       }
     },
     "議事録はありません。" : {
-      "comment" : "MeetingWindow.swift:528",
+      "comment" : "MeetingWindow.swift:530",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99554,7 +101186,7 @@
       }
     },
     "議事録は作り直しません" : {
-      "comment" : "MeetingRecorder.swift:400",
+      "comment" : "MeetingRecorder.swift:407",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99860,7 +101492,7 @@
       }
     },
     "議事録を作らずに、文字起こしだけを残します" : {
-      "comment" : "MeetingRecorder.swift:336",
+      "comment" : "MeetingRecorder.swift:343",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99962,7 +101594,7 @@
       }
     },
     "議事録を作り直しています…" : {
-      "comment" : "MeetingRecorder.swift:393, MeetingWindow.swift:608",
+      "comment" : "MeetingRecorder.swift:400, MeetingWindow.swift:610",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100064,7 +101696,7 @@
       }
     },
     "議事録を作り直している間は削除できません" : {
-      "comment" : "MeetingWindow.swift:451",
+      "comment" : "MeetingWindow.swift:453",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100166,7 +101798,7 @@
       }
     },
     "議事録を作り直しますか？" : {
-      "comment" : "MeetingWindow.swift:435",
+      "comment" : "MeetingWindow.swift:437",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100268,7 +101900,7 @@
       }
     },
     "議事録を作り直す" : {
-      "comment" : "MeetingWindow.swift:433, MeetingWindow.swift:470, MinutesSelectionViews.swift:143",
+      "comment" : "MeetingWindow.swift:435, MeetingWindow.swift:472, MinutesSelectionViews.swift:143",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100370,7 +102002,7 @@
       }
     },
     "議事録を作れませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:344, MeetingRecorder.swift:420",
+      "comment" : "MeetingRecorder.swift:351, MeetingRecorder.swift:427",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100472,7 +102104,7 @@
       }
     },
     "議事録を作成しています…" : {
-      "comment" : "MeetingRecorder.swift:332",
+      "comment" : "MeetingRecorder.swift:339",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100574,7 +102206,7 @@
       }
     },
     "議事録を作成中です…" : {
-      "comment" : "MeetingWindow.swift:528",
+      "comment" : "MeetingWindow.swift:530",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -102001,6 +103633,108 @@
         }
       }
     },
+    "辞書" : {
+      "comment" : "MeetingDictionaryViews.swift:26, MeetingDictionaryViews.swift:32, MeetingDictionaryViews.swift:33",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "القاموس"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörterbuch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dictionary"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diccionario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dictionnaire"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शब्दकोश"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamus"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dizionario"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사전"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Słownik"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dicionário"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Словарь"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sözlük"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Từ điển"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "词典"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "辭典"
+          }
+        }
+      }
+    },
     "辞書と置き換えルール" : {
       "comment" : "Onboarding.swift:610",
       "extractionState" : "manual",
@@ -102103,8 +103837,110 @@
         }
       }
     },
+    "辞書の候補" : {
+      "comment" : "MeetingDictionaryViews.swift:165",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مقترحات القاموس"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörterbuchvorschläge"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dictionary suggestions"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Candidatos para el diccionario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggestions pour le dictionnaire"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शब्दकोश के सुझाव"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saran kamus"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Candidati per il dizionario"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사전 후보"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Propozycje do słownika"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sugestões para o dicionário"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кандидаты для словаря"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sözlük önerileri"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gợi ý cho từ điển"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "词典候选"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "辭典候選"
+          }
+        }
+      }
+    },
     "辞書の候補を探す" : {
-      "comment" : "DictionarySettingsView.swift:193",
+      "comment" : "DictionarySettingsView.swift:204",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -102189,6 +104025,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tìm gợi ý cho từ điển"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查找词典候选"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尋找辭典候選"
+          }
+        }
+      }
+    },
+    "辞書の候補探し" : {
+      "comment" : "MeetingDictionaryViews.swift:185",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث عن مقترحات للقاموس"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suche nach Wörterbuchvorschlägen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the dictionary suggestion search"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "búsqueda de candidatos para el diccionario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "recherche de suggestions du dictionnaire"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शब्दकोश के सुझावों की खोज"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mencari saran kamus"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ricerca dei candidati per il dizionario"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사전 후보 찾기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyszukiwanie propozycji do słownika"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "busca de sugestões para o dicionário"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поиск кандидатов для словаря"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sözlük önerisi arama"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tìm gợi ý cho từ điển"
           }
         },
         "zh-CN" : {
@@ -102613,8 +104551,110 @@
         }
       }
     },
+    "追加したいものを選んでください。" : {
+      "comment" : "MeetingDictionaryViews.swift:154",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختر ما تريد إضافته."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle aus, was du hinzufügen möchtest."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select the ones you want to add."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige los que quieras añadir."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionnez les éléments à ajouter."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "जोड़ने के लिए आइटम चुनें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih yang ingin ditambahkan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli quelli da aggiungere."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가할 항목을 선택하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaznacz te, które chcesz dodać."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolha as que deseja adicionar."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите, что добавить."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eklemek istediklerinizi seçin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy chọn những mục bạn muốn thêm."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请选择要添加的候选。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請選取要加入的候選。"
+          }
+        }
+      }
+    },
     "追加したいものを選んでください（%@）。" : {
-      "comment" : "DictionarySettingsView.swift:227",
+      "comment" : "DictionarySettingsView.swift:238, MeetingDictionaryViews.swift:154",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -103634,7 +105674,7 @@
       }
     },
     "選んだ %@ 件を辞書に追加" : {
-      "comment" : "DictionarySettingsView.swift:176",
+      "comment" : "DictionarySettingsView.swift:193, MeetingDictionaryViews.swift:129",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105368,7 +107408,7 @@
       }
     },
     "録音する前に、参加者の了承を得てください。" : {
-      "comment" : "MeetingSuggestionPanel.swift:145, SettingsView.swift:289",
+      "comment" : "MeetingSuggestionPanel.swift:145, SettingsView.swift:294",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -108020,7 +110060,7 @@
       }
     },
     "音声ファイル（me.m4a / others.m4a）を残す" : {
-      "comment" : "SettingsView.swift:282",
+      "comment" : "SettingsView.swift:287",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -109244,7 +111284,7 @@
       }
     },
     "音声入力の結果（今回の起動後の %@ 件）" : {
-      "comment" : "DictionarySettingsView.swift:168",
+      "comment" : "DictionarySettingsView.swift:185",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -109550,7 +111590,7 @@
       }
     },
     "音声認識" : {
-      "comment" : "Onboarding.swift:720, SettingsView.swift:314",
+      "comment" : "Onboarding.swift:720, SettingsView.swift:319",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
