@@ -1217,9 +1217,6 @@ Vuoi aprire la pagina della release nel browser?</value>
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>Ciò che viene detto fino alla fine non sarà usato per il verbale. La registrazione continua.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Hai cambiato gli interventi usati per il verbale. Rigenera il verbale per applicare la modifica.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Ripristina tutto</value>
   </data>
@@ -1291,5 +1288,68 @@ Vuoi aprire la pagina della release nel browser?</value>
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>{0} interventi copiati</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Dizionario…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Cerca candidati per il dizionario in questa riunione…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Riapplica il dizionario attuale</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Ripristina il testo riconosciuto originale</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Cerca candidati per il dizionario in questa riunione</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Ricerca in corso…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Applica il dizionario anche alla trascrizione di questa riunione</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>Dalla trascrizione e dal verbale di questa riunione, l'IA propone nomi propri e parole che vengono spesso riconosciute male. Al dizionario vengono aggiunti solo i candidati selezionati. Il contenuto della riunione viene inviato solo all'IA scelta per le riunioni nella scheda "AI" (con "Locale" non esce da questo PC).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Aggiungi la selezione al dizionario ({0})</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>Nessun nuovo candidato trovato.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Seleziona quelli da aggiungere ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Aggiunto al dizionario (voci: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Dizionario riapplicato (interventi modificati: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Dizionario riapplicato. Nessun intervento è cambiato (interventi già sostituiti dal dizionario: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Testo riconosciuto originale ripristinato (interventi modificati: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>La riunione è lunga, quindi sono stati letti solo i primi {0} minuti circa della trascrizione.</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Candidati per il dizionario</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Hai modificato la trascrizione o gli interventi usati per il verbale. Rigenera il verbale per applicare le modifiche.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Applica le regole di sostituzione alla trascrizione</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>Dopo che interrompi la registrazione, alla trascrizione vengono applicate le regole di sostituzione di "Dizionario e regole" e il verbale viene creato dal testo sostituito. Il testo riconosciuto originale viene conservato, quindi puoi ripristinarlo da "Dizionario…" in Note riunioni.</value>
   </data>
 </root>

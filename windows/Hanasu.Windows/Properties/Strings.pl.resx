@@ -1217,9 +1217,6 @@ Otworzyć stronę wydania w przeglądarce?</value>
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>To, co zostanie powiedziane do zakończenia, nie trafi do protokołu. Nagrywanie trwa dalej.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Zmieniono wypowiedzi używane w protokole. Wygeneruj protokół ponownie, aby zastosować zmianę.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Przywróć wszystko</value>
   </data>
@@ -1291,5 +1288,68 @@ Otworzyć stronę wydania w przeglądarce?</value>
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>Skopiowane wypowiedzi: {0}</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Słownik…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Znajdź propozycje do słownika w tym spotkaniu…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Zastosuj ponownie bieżący słownik do tego spotkania</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Przywróć pierwotnie rozpoznany tekst tego spotkania</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Znajdź propozycje do słownika w tym spotkaniu</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Wyszukiwanie…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Zastosuj słownik także do transkrypcji tego spotkania</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>AI wybiera z transkrypcji i protokołu tego spotkania nazwy własne i słowa, które łatwo błędnie rozpoznać. Do słownika trafią tylko te, które zaznaczysz. Treść spotkania jest wysyłana tylko do AI wybranego dla spotkań na karcie „AI” (przy „Lokalny” nic nie opuszcza tego komputera).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Dodaj wybrane do słownika ({0})</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>Nie znaleziono nowych propozycji.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Zaznacz te, które chcesz dodać ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Dodano do słownika: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Ponownie zastosowano słownik. Zmienione wypowiedzi: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Ponownie zastosowano słownik. Żadna wypowiedź się nie zmieniła (wypowiedzi już zastąpione słownikiem: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Przywrócono pierwotnie rozpoznany tekst. Zmienione wypowiedzi: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>Spotkanie jest długie, więc odczytano tylko początek transkrypcji (około {0} min).</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Propozycje do słownika</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Zmieniono transkrypcję lub wypowiedzi używane w protokole. Wygeneruj protokół ponownie, aby zastosować zmianę.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Stosuj reguły zamiany ze słownika do transkrypcji</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>Po zatrzymaniu nagrywania do transkrypcji są stosowane reguły zamiany z karty „Słownik i reguły”, a protokół powstaje z tekstu po zamianie. Pierwotnie rozpoznany tekst też jest zachowywany, więc można go przywrócić w menu „Słownik…” w notatkach ze spotkań.</value>
   </data>
 </root>

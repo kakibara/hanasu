@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- {0} Beiträge, die nicht fürs Protokoll verwendet werden, sind nicht enthalten</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Die Antwort der KI mit den Wörterbuchvorschlägen konnte nicht gelesen werden.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>Die Besprechung wird gerade aufgenommen oder verarbeitet, das Protokoll wird neu erstellt oder es gibt keine Beiträge fürs Protokoll.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>Der Ordner der Besprechung wurde nicht gefunden.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Diese Besprechung konnte nicht geändert werden: {0}</value>
+  </data>
 </root>

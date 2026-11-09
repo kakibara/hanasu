@@ -1612,10 +1612,6 @@ Open the release page in your browser?</value>
     <value>What is said until you end it won't be used for the minutes. Recording continues.</value>
     <comment>Tooltip of the off-the-record button</comment>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>You changed which utterances are used for the minutes. Regenerate the minutes to apply the change.</value>
-    <comment>Shown on the minutes and transcript tabs after the selection of utterances changed</comment>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Reset all</value>
     <comment>Transcript bar button: clear the range, excluded utterances/speakers and off-the-record spans</comment>
@@ -1711,5 +1707,89 @@ Open the release page in your browser?</value>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>Copied {0} utterances</value>
     <comment>Status after copying utterances. {0} = count</comment>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Dictionary…</value>
+    <comment>Meeting Notes: button that opens the dictionary menu for the selected meeting</comment>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Find dictionary suggestions from this meeting…</value>
+    <comment>Meeting Notes: dictionary menu item</comment>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Apply the current dictionary to this meeting</value>
+    <comment>Meeting Notes: dictionary menu item (re-applies the replacement rules to the transcript)</comment>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Restore this meeting's recognized text</value>
+    <comment>Meeting Notes: dictionary menu item (undo the dictionary replacements in the transcript)</comment>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Find dictionary suggestions from this meeting</value>
+    <comment>Dictionary suggestions dialog: window title and heading</comment>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Searching…</value>
+    <comment>Dictionary suggestions dialog: while the AI is working</comment>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Also apply the dictionary to this meeting's transcript</value>
+    <comment>Dictionary suggestions dialog: checkbox</comment>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>The AI picks proper nouns and easily misrecognized words from this meeting's transcript and minutes. Only the ones you select are added to the dictionary. The meeting content is sent only to the AI chosen for meetings on the "AI" tab (with "Local", it doesn't leave this PC).</value>
+    <comment>Dictionary suggestions dialog: note under the checkbox</comment>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Dictionary suggestions dialog: button</comment>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Add {0} selected to the dictionary</value>
+    <comment>Dictionary suggestions dialog: button. {0} = number of selected suggestions</comment>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>No new suggestions were found.</value>
+    <comment>Dictionary suggestions dialog</comment>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Select the ones to add ({0}).</value>
+    <comment>Dictionary suggestions dialog. {0} = AI model name</comment>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Added {0} to the dictionary.</value>
+    <comment>Message after adding suggestions. {0} = number of entries</comment>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Applied the dictionary again. {0} utterances changed.</value>
+    <comment>Message after re-applying the dictionary to a meeting. {0} = number of utterances</comment>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Applied the dictionary again. No utterances changed ({0} utterances already replaced by the dictionary).</value>
+    <comment>Message after re-applying the dictionary when nothing changed. {0} = number of utterances already replaced</comment>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Restored the recognized text. {0} utterances changed.</value>
+    <comment>Message after restoring the recognized text. {0} = number of utterances</comment>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>The meeting is long, so only about the first {0} minutes of the transcript were read.</value>
+    <comment>Dictionary suggestions dialog. {0} = minutes</comment>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Dictionary suggestions</value>
+    <comment>Accessibility name of the list of suggestions</comment>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>You changed the transcript or which utterances are used for the minutes. Regenerate the minutes to apply the change.</value>
+    <comment>Shown on the minutes and transcript tabs after the transcript (dictionary) or the selection of utterances changed</comment>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Apply the dictionary's replacement rules to the transcript</value>
+    <comment>Settings &gt; Meetings: checkbox</comment>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>After recording stops, the replacement rules from "Dictionary &amp; Rules" are applied to the transcript, and the minutes are made from the replaced text. The recognized text is kept, so you can restore it from "Dictionary…" in Meeting Notes.</value>
+    <comment>Settings &gt; Meetings: note under the checkbox</comment>
   </data>
 </root>

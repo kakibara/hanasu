@@ -1217,9 +1217,6 @@ Release-Seite im Browser öffnen?</value>
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>Was bis zum Beenden gesagt wird, fließt nicht ins Protokoll ein. Die Aufnahme läuft weiter.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Du hast geändert, welche Beiträge fürs Protokoll verwendet werden. Erstelle das Protokoll neu, um die Änderung zu übernehmen.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Alles zurücksetzen</value>
   </data>
@@ -1291,5 +1288,68 @@ Release-Seite im Browser öffnen?</value>
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>{0} Beiträge kopiert</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Wörterbuch…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Wörterbuchvorschläge aus dieser Besprechung suchen…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Aktuelles Wörterbuch erneut anwenden</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Ursprünglich erkannten Text wiederherstellen</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Wörterbuchvorschläge aus dieser Besprechung suchen</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Suche läuft…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Wörterbuch auch auf das Transkript dieser Besprechung anwenden</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>Die KI schlägt aus dem Transkript und dem Protokoll dieser Besprechung Eigennamen und leicht falsch erkannte Wörter vor. Nur die ausgewählten werden zum Wörterbuch hinzugefügt. Besprechungsinhalte werden nur an die KI gesendet, die im Tab „AI“ für Besprechungen ausgewählt ist (bei „Lokal“ verlassen sie diesen PC nicht).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Auswahl zum Wörterbuch hinzufügen ({0})</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>Keine neuen Vorschläge gefunden.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Hinzuzufügende Einträge auswählen ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Zum Wörterbuch hinzugefügt (Einträge: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Wörterbuch erneut angewendet (geänderte Beiträge: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Wörterbuch erneut angewendet. Kein Beitrag wurde geändert (bereits durch das Wörterbuch ersetzte Beiträge: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Ursprünglich erkannter Text wiederhergestellt (geänderte Beiträge: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>Die Besprechung ist lang, daher wurden nur etwa die ersten {0} Minuten des Transkripts gelesen.</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Wörterbuchvorschläge</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Das Transkript oder die Beiträge fürs Protokoll wurden geändert. Protokoll neu erstellen, um die Änderung zu übernehmen.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Ersetzungsregeln auf das Transkript anwenden</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>Nach dem Beenden der Aufnahme werden die Ersetzungsregeln aus „Wörterbuch und Regeln“ auf das Transkript angewendet; das Protokoll wird aus dem ersetzten Text erstellt. Der ursprünglich erkannte Text bleibt erhalten und kann in den Besprechungsnotizen über „Wörterbuch…“ wiederhergestellt werden.</value>
   </data>
 </root>

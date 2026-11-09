@@ -46,7 +46,7 @@ Ele é inspirado no Typeless, Wispr Flow, Aqua Voice e Granola. O código-fonte 
 | **Edite por voz** | Selecione um texto, pressione <kbd>⌃⌥⌘ E</kbd> e diga "deixe mais educado", "transforme em tópicos" ou "traduza para o inglês". |
 | **Estilos por app** | O texto fica informal e curto no Slack, educado e com parágrafos no Mail, e em estilo escrito no Pages, Word e Notion. Você pode mudar a predefinição de cada app. |
 | **Snippets** | Diga "assinatura de e-mail" para inserir um texto salvo exatamente como você o escreveu. Snippets nunca são enviados para a IA. |
-| **Dicionário** | Adicione nomes próprios e regras de substituição como `ストックマーク => Stockmark`. No Mac, a IA também pode sugerir novas entradas a partir do seu histórico e das suas reuniões, e você adiciona só as que escolher. |
+| **Dicionário** | Adicione nomes próprios e regras de substituição como `ストックマーク => Stockmark`. As regras também valem para as transcrições das reuniões. A partir de uma reunião aberta em Anotações de reunião, a IA pode sugerir novas entradas tiradas dessa reunião (no Mac, também do seu histórico e das reuniões recentes), e você adiciona só as que escolher. |
 | **Contexto da tela** *(opcional)* | O Hanasu lê o título da janela e o texto ao redor do cursor, para que os nomes batam com o que já está na tela. Campos de senha nunca são lidos. |
 | **Escolha o microfone** *(Mac)* | Escolha o microfone nos Ajustes, ou troque pelo botão de microfone no HUD sem interromper a gravação. |
 | **Histórico** | Pesquise resultados anteriores e tente de novo os que falharam. Por padrão, o histórico é mantido por 30 dias, e você pode mudar isso nos Ajustes. No Mac, pressione <kbd>⌥⇧ V</kbd> para colar o último resultado de novo. |

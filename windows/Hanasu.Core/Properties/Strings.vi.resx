@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- Không bao gồm {0} lời nói không dùng cho biên bản</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Không thể đọc phản hồi của AI chứa gợi ý cho từ điển.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>Cuộc họp đang được ghi hoặc xử lý, biên bản đang được tạo lại, hoặc không có lời nói nào dùng cho biên bản.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>Không tìm thấy thư mục của cuộc họp.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Không thể thay đổi cuộc họp này: {0}</value>
+  </data>
 </root>

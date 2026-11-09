@@ -1217,9 +1217,6 @@
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>खत्म करने तक कही गई बातें कार्यवृत्त में इस्तेमाल नहीं होंगी। रिकॉर्डिंग जारी रहती है।</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>आपने बदला है कि कार्यवृत्त में कौन-से कथन इस्तेमाल हों। बदलाव लागू करने के लिए कार्यवृत्त फिर से बनाएँ।</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>सब रीसेट करें</value>
   </data>
@@ -1291,5 +1288,68 @@
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>{0} कथन कॉपी किए गए</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>शब्दकोश…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>इस मीटिंग से शब्दकोश के सुझाव खोजें…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>मौजूदा शब्दकोश इस मीटिंग पर फिर से लागू करें</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>इस मीटिंग को पहचाने गए मूल टेक्स्ट पर वापस लाएँ</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>इस मीटिंग से शब्दकोश के सुझाव खोजें</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>खोजा जा रहा है…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>इस मीटिंग के ट्रांसक्रिप्ट पर भी शब्दकोश लागू करें</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>AI इस मीटिंग के ट्रांसक्रिप्ट और कार्यवृत्त से खास नाम और ऐसे शब्द चुनता है जिनकी पहचान में आसानी से गलती होती है। सिर्फ़ आपके चुने हुए शब्द शब्दकोश में जोड़े जाते हैं। मीटिंग की सामग्री सिर्फ़ उसी AI को भेजी जाती है जिसे "AI" टैब में मीटिंग के लिए चुना गया है ("स्थानीय" में कुछ भी इस PC से बाहर नहीं जाता)।</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>रद्द करें</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>चुने गए {0} आइटम शब्दकोश में जोड़ें</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>कोई नया सुझाव नहीं मिला।</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>जोड़ने के लिए आइटम चुनें ({0})।</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>शब्दकोश में जोड़ा गया (आइटम: {0})।</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>शब्दकोश फिर से लागू किया गया। {0} कथन बदले।</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>शब्दकोश फिर से लागू किया गया। कोई कथन नहीं बदला (शब्दकोश से पहले ही बदले जा चुके कथन: {0})।</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>पहचाना गया मूल टेक्स्ट वापस लाया गया। {0} कथन बदले।</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>मीटिंग लंबी है, इसलिए ट्रांसक्रिप्ट के सिर्फ़ शुरुआती लगभग {0} मिनट पढ़े गए।</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>शब्दकोश के सुझाव</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>आपने ट्रांसक्रिप्ट या कार्यवृत्त में इस्तेमाल होने वाले कथन बदले हैं। बदलाव लागू करने के लिए कार्यवृत्त फिर से बनाएँ।</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>ट्रांसक्रिप्ट पर शब्दकोश के बदलने के नियम लागू करें</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>रिकॉर्डिंग रोकने के बाद, ट्रांसक्रिप्ट पर "शब्दकोश और नियम" के बदलने के नियम लागू किए जाते हैं, और कार्यवृत्त बदले गए टेक्स्ट से बनता है। पहचाना गया मूल टेक्स्ट भी रखा जाता है, इसलिए आप मीटिंग नोट्स के "शब्दकोश…" से उसे वापस ला सकते हैं।</value>
   </data>
 </root>

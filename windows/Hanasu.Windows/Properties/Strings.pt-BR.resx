@@ -1217,9 +1217,6 @@ Abrir a página da versão no navegador?</value>
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>O que for dito até você encerrar não será usado na ata. A gravação continua.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Você mudou quais falas são usadas na ata. Gere a ata novamente para aplicar a mudança.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Restaurar tudo</value>
   </data>
@@ -1291,5 +1288,68 @@ Abrir a página da versão no navegador?</value>
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>{0} falas copiadas</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Dicionário…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Buscar sugestões para o dicionário nesta reunião…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Reaplicar o dicionário atual</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Restaurar o texto reconhecido original</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Buscar sugestões para o dicionário nesta reunião</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Buscando…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Aplicar o dicionário também à transcrição desta reunião</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>A partir da transcrição e da ata desta reunião, a IA sugere nomes próprios e palavras que costumam ser mal reconhecidas. Só as sugestões selecionadas são adicionadas ao dicionário. O conteúdo da reunião é enviado apenas à IA escolhida para reuniões na guia "AI" (com "Local", ele não sai deste PC).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Adicionar a seleção ao dicionário ({0})</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>Nenhuma sugestão nova encontrada.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Selecione as que deseja adicionar ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Adicionado ao dicionário (entradas: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Dicionário reaplicado (falas alteradas: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Dicionário reaplicado. Nenhuma fala foi alterada (falas já substituídas pelo dicionário: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Texto reconhecido original restaurado (falas alteradas: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>A reunião é longa, então só foram lidos cerca dos primeiros {0} minutos da transcrição.</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Sugestões para o dicionário</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Você alterou a transcrição ou as falas usadas na ata. Gere a ata novamente para aplicar a mudança.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Aplicar as regras de substituição à transcrição</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>Depois que você para a gravação, as regras de substituição de "Dicionário e regras" são aplicadas à transcrição, e a ata é criada a partir do texto substituído. O texto reconhecido original é mantido, então você pode restaurá-lo em "Dicionário…" nas Notas da reunião.</value>
   </data>
 </root>

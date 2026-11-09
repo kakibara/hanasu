@@ -1217,9 +1217,6 @@ Las actualizaciones desde la app reemplazan la carpeta entera, así que solo fun
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>Lo que se diga hasta que lo termines no se usará para el acta. La grabación continúa.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>Cambiaste qué intervenciones se usan para el acta. Regenérala para aplicar el cambio.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>Restablecer todo</value>
   </data>
@@ -1291,5 +1288,68 @@ Las actualizaciones desde la app reemplazan la carpeta entera, así que solo fun
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>Se copiaron {0} intervenciones</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>Diccionario…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>Buscar candidatos para el diccionario en esta reunión…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>Volver a aplicar el diccionario actual a esta reunión</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>Restaurar el texto reconocido original de esta reunión</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>Buscar candidatos para el diccionario en esta reunión</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>Buscando…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>Aplicar también el diccionario a la transcripción de esta reunión</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>La IA propone nombres propios y palabras que suelen reconocerse mal a partir de la transcripción y el acta de esta reunión. Solo se añaden al diccionario los que elijas. El contenido de la reunión solo se envía a la IA elegida para reuniones en la pestaña "AI" (con "Local", no sale de este equipo).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>Añadir selección al diccionario ({0})</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>No se encontraron candidatos nuevos.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>Elige los que quieras añadir ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>Añadido al diccionario (entradas: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>Diccionario aplicado de nuevo. Intervenciones cambiadas: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>Diccionario aplicado de nuevo. No cambió ninguna intervención (intervenciones ya reemplazadas con el diccionario: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>Se restauró el texto reconocido original. Intervenciones cambiadas: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>Como la reunión es larga, solo se leyeron los primeros {0} minutos aprox. de la transcripción.</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>Candidatos para el diccionario</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>Cambiaste la transcripción o las intervenciones usadas para el acta. Regenera el acta para aplicar los cambios.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>Aplicar a la transcripción las reglas de reemplazo del diccionario</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>Al detener la grabación, se aplican a la transcripción las reglas de reemplazo de "Diccionario y reglas", y el acta se crea a partir del texto resultante. El texto reconocido original también se conserva, así que puedes restaurarlo desde "Diccionario…" en Notas de reuniones.</value>
   </data>
 </root>

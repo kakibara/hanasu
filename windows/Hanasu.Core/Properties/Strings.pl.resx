@@ -699,4 +699,16 @@
   <data name="Transcript_UnusedOmitted" xml:space="preserve">
     <value>- Pominięto wypowiedzi nieużywane w protokole ({0})</value>
   </data>
+  <data name="DictionarySuggest_InvalidResponse" xml:space="preserve">
+    <value>Nie udało się odczytać odpowiedzi AI z propozycjami do słownika.</value>
+  </data>
+  <data name="Meeting_Dictionary_Busy" xml:space="preserve">
+    <value>Spotkanie jest nagrywane lub przetwarzane, jego protokół jest generowany ponownie albo nie ma wypowiedzi używanych w protokole.</value>
+  </data>
+  <data name="Meeting_Dictionary_Missing" xml:space="preserve">
+    <value>Nie znaleziono folderu spotkania.</value>
+  </data>
+  <data name="Meeting_Dictionary_Failed" xml:space="preserve">
+    <value>Nie udało się zmienić tego spotkania: {0}</value>
+  </data>
 </root>

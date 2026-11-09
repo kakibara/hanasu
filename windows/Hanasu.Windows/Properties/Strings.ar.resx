@@ -1217,9 +1217,6 @@
   <data name="Meeting_OffRecord_Tip" xml:space="preserve">
     <value>ما يُقال حتى تنهيه لن يُستخدم في المحضر. يستمر التسجيل.</value>
   </data>
-  <data name="Meeting_MinutesOutdated" xml:space="preserve">
-    <value>غيّرت المداخلات المستخدمة في المحضر. أعد إنشاء المحضر لتطبيق التغيير.</value>
-  </data>
   <data name="Meeting_Selection_ResetAll" xml:space="preserve">
     <value>إعادة تعيين الكل</value>
   </data>
@@ -1291,5 +1288,68 @@
   </data>
   <data name="Meeting_CopiedUtterances" xml:space="preserve">
     <value>تم نسخ {0} من المداخلات</value>
+  </data>
+  <data name="Meeting_Dictionary" xml:space="preserve">
+    <value>القاموس…</value>
+  </data>
+  <data name="Meeting_Dictionary_Suggest" xml:space="preserve">
+    <value>البحث عن مقترحات للقاموس في هذا الاجتماع…</value>
+  </data>
+  <data name="Meeting_Dictionary_Apply" xml:space="preserve">
+    <value>إعادة تطبيق القاموس الحالي على هذا الاجتماع</value>
+  </data>
+  <data name="Meeting_Dictionary_Revert" xml:space="preserve">
+    <value>إرجاع هذا الاجتماع إلى النص كما تم التعرّف عليه</value>
+  </data>
+  <data name="Meeting_Dictionary_Title" xml:space="preserve">
+    <value>البحث عن مقترحات للقاموس في هذا الاجتماع</value>
+  </data>
+  <data name="Meeting_Dictionary_Searching" xml:space="preserve">
+    <value>جارٍ البحث…</value>
+  </data>
+  <data name="Meeting_Dictionary_ApplyToMeeting" xml:space="preserve">
+    <value>تطبيق القاموس أيضًا على النص المكتوب لهذا الاجتماع</value>
+  </data>
+  <data name="Meeting_Dictionary_Note" xml:space="preserve">
+    <value>يستخرج AI أسماء العَلَم والكلمات التي يسهل الخطأ في التعرّف عليها من النص المكتوب والمحضر لهذا الاجتماع. لا يُضاف إلى القاموس إلا ما تختاره. لا يُرسل محتوى الاجتماع إلا إلى AI المختار للاجتماعات في علامة التبويب "AI" (مع "محلي" لا يخرج شيء من هذا الكمبيوتر).</value>
+  </data>
+  <data name="Meeting_Dictionary_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="Meeting_Dictionary_Add" xml:space="preserve">
+    <value>إضافة المحدد ({0}) إلى القاموس</value>
+  </data>
+  <data name="Meeting_Dictionary_NoCandidates" xml:space="preserve">
+    <value>لم يُعثر على مقترحات جديدة.</value>
+  </data>
+  <data name="Meeting_Dictionary_Choose" xml:space="preserve">
+    <value>اختر ما تريد إضافته ({0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Added" xml:space="preserve">
+    <value>تمت إضافة العناصر ({0}) إلى القاموس.</value>
+  </data>
+  <data name="Meeting_Dictionary_Applied" xml:space="preserve">
+    <value>تمت إعادة تطبيق القاموس. عدد المداخلات التي تغيّرت: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_AppliedNone" xml:space="preserve">
+    <value>تمت إعادة تطبيق القاموس. لم تتغيّر أي مداخلة (عدد المداخلات المستبدلة بالقاموس مسبقًا: {0}).</value>
+  </data>
+  <data name="Meeting_Dictionary_Reverted" xml:space="preserve">
+    <value>تمت استعادة النص كما تم التعرّف عليه. عدد المداخلات التي تغيّرت: {0}.</value>
+  </data>
+  <data name="Meeting_Dictionary_Cut" xml:space="preserve">
+    <value>الاجتماع طويل، لذا قُرئ الجزء الأول فقط من النص المكتوب (نحو {0} دقيقة).</value>
+  </data>
+  <data name="Meeting_Dictionary_ListName" xml:space="preserve">
+    <value>مقترحات القاموس</value>
+  </data>
+  <data name="Meeting_TranscriptOrSelectionChanged" xml:space="preserve">
+    <value>غيّرت النص المكتوب أو المداخلات المستخدمة في المحضر. أعد إنشاء المحضر لتطبيق التغيير.</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetings" xml:space="preserve">
+    <value>تطبيق قواعد الاستبدال في القاموس على النص المكتوب</value>
+  </data>
+  <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
+    <value>بعد إيقاف التسجيل، تُطبَّق قواعد الاستبدال في "القاموس والقواعد" على النص المكتوب، ويُنشأ المحضر من النص بعد الاستبدال. يُحتفظ أيضًا بالنص كما تم التعرّف عليه، لذا يمكنك استعادته من "القاموس…" في ملاحظات الاجتماعات.</value>
   </data>
 </root>

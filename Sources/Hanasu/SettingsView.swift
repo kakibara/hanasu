@@ -274,6 +274,11 @@ private struct MeetingTab: View {
                     Text(tr("マイク側も話者を分ける"))
                     Text(tr("会議室などで 1 つのマイクを複数人で使うときにオン。いちばん長く話した人を「自分」、ほかを「同席者1」「同席者2」…にします。1 人で参加するときはオフのままにしてください（自分の声が 2 人に分かれることがあります）。"))
                 }
+                // 要件: REQ-DIC-073
+                Toggle(isOn: $settings.applyDictionaryToMeetings) {
+                    Text(tr("文字起こしに辞書の置き換えルールを当てる"))
+                    Text(tr("記録を止めたあとの文字起こしに、「辞書・ルール」の置き換えルールを当てます。議事録は当てたあとの文から作ります。認識したままの文も残すので、会議ノートの「辞書」から戻せます。"))
+                }
                 Toggle(isOn: $settings.makeMeetingMinutes) {
                     Text(tr("記録後に AI で議事録を作る"))
                     // 要件: REQ-COM-024

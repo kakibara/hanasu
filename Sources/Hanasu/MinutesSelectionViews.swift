@@ -137,7 +137,7 @@ struct MinutesOutdatedNotice: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Label(tr("議事録に使う発言を変えました。作り直すと反映されます。"), systemImage: "arrow.triangle.2.circlepath")
+            Label(tr("文字起こしか、議事録に使う発言を変えました。作り直すと反映されます。"), systemImage: "arrow.triangle.2.circlepath")
                 .font(.callout)
                 .foregroundStyle(.orange)
             Button(tr("議事録を作り直す"), action: onRegenerate)
