@@ -168,15 +168,18 @@ final class MeetingPlayer: ObservableObject {
     func installSpaceKey() {
         guard keyMonitor == nil else { return }
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-            MainActor.assumeIsolated {
+            // NSEvent は Sendable でないので、MainActor の中へは要る値だけを渡す
+            guard event.keyCode == 49, event.modifierFlags.intersection([.command, .control, .option, .shift]).isEmpty
+            else { return event }
+            let handled = MainActor.assumeIsolated { () -> Bool in
                 let player = MeetingPlayer.shared
-                guard event.keyCode == 49, event.modifierFlags.intersection([.command, .control, .option, .shift]).isEmpty,
-                      let window = NSApp.keyWindow, window.identifier == Self.windowIdentifier,
+                guard let window = NSApp.keyWindow, window.identifier == Self.windowIdentifier,
                       !(window.firstResponder is NSText), window.attachedSheet == nil,
-                      player.availability == .ready, !player.dictationActive else { return event }
+                      player.availability == .ready, !player.dictationActive else { return false }
                 player.toggle()
-                return nil
+                return true
             }
+            return handled ? nil : event
         }
     }
 
