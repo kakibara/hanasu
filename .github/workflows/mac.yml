@@ -32,7 +32,13 @@ jobs:
         shell: bash
         run: |
           swift --version
-          swift build 2>&1 | tail -40
+          # 失敗したときは、末尾だけでなくエラーの行も出す（並べてコンパイルするので、エラーは末尾 40 行より前に出ることがある）
+          if ! swift build > build.log 2>&1; then
+            grep -n -B2 -A8 'error:' build.log | head -300
+            tail -40 build.log
+            exit 1
+          fi
+          tail -40 build.log
 
       - name: Self tests
         run: |
@@ -47,4 +53,10 @@ jobs:
       # デバッグで通っても、最適化ビルドでだけ落ちることがある（PR #39）
       - name: Release build
         shell: bash
-        run: swift build -c release 2>&1 | tail -40
+        run: |
+          if ! swift build -c release > build-release.log 2>&1; then
+            grep -n -B2 -A8 'error:' build-release.log | head -300
+            tail -40 build-release.log
+            exit 1
+          fi
+          tail -40 build-release.log
