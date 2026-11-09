@@ -369,6 +369,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             let window = Self.makeMeetingWindow(rootView: MeetingWindowView(recorder: meetingRecorder))
             window.setFrameAutosaveName("HanasuMeetingWindow")
             window.center()
+            // 要件: REQ-MTG-053（ウインドウを閉じたら再生を止める。ウインドウは閉じても残すので、中のビューの onDisappear は呼ばれない）
+            NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: .main) { _ in
+                MainActor.assumeIsolated { MeetingPlayer.shared.pause() }
+            }
             meetingWindow = window
         }
         meetingRecorder.reloadMeetings()

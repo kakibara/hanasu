@@ -28,12 +28,15 @@ public static class MinutesCitation
         return result;
     }
 
-    /// <summary>印を取り除いた文。各行の末尾の空白も整える</summary>
+    /// <summary>印を取り除いた文。印のあった行だけ末尾の空白も整える（Markdown の行末の空白 2 つの改行を、ほかの行で消さない）</summary>
     public static string Strip(string text)
     {
-        var stripped = StripRegex.Replace(text, "");
-        if (stripped == text) return text;
-        return string.Join("\n", stripped.Split('\n').Select(line => line.TrimEnd(' ', '\t')));
+        if (!StripRegex.IsMatch(text)) return text;
+        return string.Join("\n", text.Split('\n').Select(line =>
+        {
+            var stripped = StripRegex.Replace(line, "");
+            return stripped == line ? line : stripped.TrimEnd(' ', '\t');
+        }));
     }
 
     /// <summary>アクションアイテムの at（"12:34"）を、時刻として読めるときだけ整えて返す</summary>

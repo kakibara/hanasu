@@ -30,16 +30,16 @@ enum MinutesCitation {
         }
     }
 
-    /// 印を取り除いた文（書き出し・リマインダー・アクションアイテムの読み取り用）。各行の末尾の空白も整える
+    /// 印を取り除いた文（書き出し・リマインダー・アクションアイテムの読み取り用）。印のあった行は末尾の空白も整える
     static func strip(_ text: String) -> String {
-        let stripped = stripRegex.stringByReplacingMatches(
-            in: text, range: NSRange(text.startIndex..., in: text), withTemplate: "")
-        guard stripped != text else { return text }
-        return stripped.components(separatedBy: "\n")
+        // 印のあった行だけ末尾の空白を整える（Markdown の行末の空白 2 つの改行を、ほかの行で消さない）
+        text.components(separatedBy: "\n")
             .map { line in
-                var line = line
-                while line.last == " " || line.last == "\t" { line.removeLast() }
-                return line
+                var stripped = stripRegex.stringByReplacingMatches(
+                    in: line, range: NSRange(line.startIndex..., in: line), withTemplate: "")
+                guard stripped != line else { return line }
+                while stripped.last == " " || stripped.last == "\t" { stripped.removeLast() }
+                return stripped
             }
             .joined(separator: "\n")
     }

@@ -82,12 +82,20 @@ enum MeetingNotesUICLI {
     }
 
     // 確かめ方: REQ-MTG-050, REQ-MTG-051, REQ-MTG-052, REQ-MTG-053, REQ-MTG-054, REQ-MTG-007, REQ-MTG-028, REQ-MTG-029
-    /// 会議ノートを PNG に描く。最小の大きさ（1000×560）で中身がはみ出さないかも確かめる（はみ出したら NG・終了コード 1）
+    /// 会議ノートを PNG に描く。最小の大きさ（1040×560）で中身がはみ出さないかも確かめる（はみ出したら NG・終了コード 1）
     static func renderWindow(to dir: URL, now: Date) throws -> Bool {
         _ = NSApplication.shared
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        UserDefaults.standard.set(true, forKey: "meetingInspectorShown")
-        UserDefaults.standard.set(MeetingInspectorTab.transcript.rawValue, forKey: "meetingInspectorTab")
+        // 描くあいだだけパネルの状態を決め、終わったら元に戻す（本物の設定を書き換えたままにしない）
+        let defaults = UserDefaults.standard
+        let savedShown = defaults.object(forKey: "meetingInspectorShown")
+        let savedTab = defaults.object(forKey: "meetingInspectorTab")
+        defer {
+            defaults.set(savedShown, forKey: "meetingInspectorShown")
+            defaults.set(savedTab, forKey: "meetingInspectorTab")
+        }
+        defaults.set(true, forKey: "meetingInspectorShown")
+        defaults.set(MeetingInspectorTab.transcript.rawValue, forKey: "meetingInspectorTab")
         let meeting = sampleDocumentMeeting()
         var ok = true
         // 一覧の日付のまとまり（基準の日時から、今日・昨日・今週・先月の会議を置く）
@@ -337,6 +345,7 @@ enum MeetingNotesUICLI {
         c.check(MinutesCitation.strip("- 価格は 2 案で比べる [07:00] [1:02:34]\n- 次［00:10］") == "- 価格は 2 案で比べる\n- 次",
                 "取り除くと、前の空白も行末の空白も残らない")
         c.check(MinutesCitation.strip("変えない [リンク](https://example.com)") == "変えない [リンク](https://example.com)", "ほかのかっこは変えない")
+        c.check(MinutesCitation.strip("改行する  \n- 次 [00:10]") == "改行する  \n- 次", "印のない行の末尾の空白（Markdown の改行）は残す")
         // 無効の印
         c.check(MinutesCitation.isValid(1500, duration: 1500) && MinutesCitation.isValid(1501, duration: 1500),
                 "会議の長さ（+1 秒）までの印は押せる")
@@ -373,6 +382,9 @@ enum MeetingNotesUICLI {
         c.check(result.actionItems.first?.task == "見積を送る" && result.actionItems.first?.at == "07:12",
                 "アクションアイテムの at を読み、やることから印を外す")
         c.check(result.actionItems.count == 2 && result.actionItems[1].at == nil, "時刻として読めない at は捨てる")
+        let oddAt = MinutesPrompt.decodeItems(#"[{"task": "A", "at": ["03:10", "12:34"]}, {"task": "B", "at": 754}, {"task": "C", "at": "01:00"}]"#)
+        c.check(oddAt?.map(\.task) == ["A", "B", "C"] && oddAt?.map(\.at) == [nil, nil, "01:00"],
+                "at が文字列でない（配列・数）ときは時刻だけを捨て、アクションアイテムは残す（Windows と同じ）")
         c.check(result.markdown.contains("[01:15]"), "議事録の本文（minutes.md に残るもの）には印を残す")
         let parsed = ActionItem.parse(fromMarkdown: "## アクションアイテム\n- [ ] 見積を送る（担当: 田中 / 期限: 11/14 (金)） [07:12]")
         c.check(parsed.first?.task == "見積を送る" && parsed.first?.owner == "田中" && parsed.first?.at == "07:12",

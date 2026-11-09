@@ -413,6 +413,18 @@ enum MinutesPrompt {
         var due: String?
         var due_note: String?
         var at: String?
+
+        private enum CodingKeys: String, CodingKey { case owner, task, due, due_note, at }
+
+        init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            owner = try c.decodeIfPresent(String.self, forKey: .owner)
+            task = try c.decodeIfPresent(String.self, forKey: .task)
+            due = try c.decodeIfPresent(String.self, forKey: .due)
+            due_note = try c.decodeIfPresent(String.self, forKey: .due_note)
+            // 設計判断: DEC-MTG-134（根拠の時刻が文字列でない（配列・数）ときは、時刻だけを捨てて項目は残す。Windows の Clean と同じ）
+            at = try? c.decodeIfPresent(String.self, forKey: .at)
+        }
     }
 
     // 設計判断: DEC-MTG-062

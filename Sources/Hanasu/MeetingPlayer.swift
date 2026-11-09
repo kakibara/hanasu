@@ -51,6 +51,8 @@ final class MeetingPlayer: ObservableObject {
     private var timeObserver: Any?
     private var endObserver: NSObjectProtocol?
     private var loadToken = UUID()
+    /// 音声の終わり（録音開始からの秒）。会議の長さは後片付けの分だけ音声より長いことがあるので、頭へ戻す判断はこちらで見る
+    private var audioEnd: Double = 0
     private var systemObservers: [NSObjectProtocol] = []
 
     private init() {
@@ -94,6 +96,7 @@ final class MeetingPlayer: ObservableObject {
                 self.player = player
                 self.trackIDs = built.trackIDs
                 self.duration = max(meeting.duration, built.duration)
+                self.audioEnd = built.duration
                 self.applyMix()
                 self.observe(player, item: item)
                 self.availability = .ready
@@ -114,6 +117,7 @@ final class MeetingPlayer: ObservableObject {
         timeObserver = nil
         endObserver = nil
         player = nil
+        audioEnd = 0
         trackIDs = [:]
         meetingID = nil
         availability = .none
@@ -127,7 +131,8 @@ final class MeetingPlayer: ObservableObject {
 
     func play() {
         guard availability == .ready, !dictationActive, let player else { return }
-        if currentTime >= duration - 0.1 { seek(to: 0) }
+        // 最後まで再生したあと（音声の終わり以降にいるとき）は、頭から鳴らす
+        if currentTime >= min(duration, audioEnd) - 0.1 { seek(to: 0) }
         player.playImmediately(atRate: rate)
         isPlaying = true
     }
@@ -173,8 +178,10 @@ final class MeetingPlayer: ObservableObject {
             else { return event }
             let handled = MainActor.assumeIsolated { () -> Bool in
                 let player = MeetingPlayer.shared
+                // 文字の入力欄と、キーボードでフォーカスしたボタン・切り替えでは、スペースをその部品に渡す
                 guard let window = NSApp.keyWindow, window.identifier == Self.windowIdentifier,
-                      !(window.firstResponder is NSText), window.attachedSheet == nil,
+                      !(window.firstResponder is NSText), !(window.firstResponder is NSButton),
+                      !(window.firstResponder is NSSegmentedControl), window.attachedSheet == nil,
                       player.availability == .ready, !player.dictationActive else { return false }
                 player.toggle()
                 return true

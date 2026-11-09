@@ -25,6 +25,8 @@ public class MinutesCitationTests
         Assert.Equal("- 価格は 2 案で比べる\n- 次", MinutesCitation.Strip("- 価格は 2 案で比べる [07:00] [1:02:34]\n- 次［00:10］"));
         Assert.Equal("変えない [リンク](https://example.com)", MinutesCitation.Strip("変えない [リンク](https://example.com)"));
         Assert.Equal("時刻 [12:34](hanasu-time://754)", MinutesCitation.Strip("時刻 [12:34](hanasu-time://754)"));
+        // 印のない行の末尾の空白（Markdown の改行）は残す
+        Assert.Equal("改行する  \n- 次", MinutesCitation.Strip("改行する  \n- 次 [00:10]"));
     }
 
     [Fact]

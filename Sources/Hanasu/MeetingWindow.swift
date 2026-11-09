@@ -140,10 +140,13 @@ struct MeetingWindowView: View {
         let list = MeetingListGrouping.groups(recorder.meetings.filter { $0.id != recorder.current?.id }, now: now ?? Date())
             .flatMap(\.meetings)
         let index = list.firstIndex { $0.id == meeting.id }
-        if MeetingPlayer.shared.meetingID == meeting.id { MeetingPlayer.shared.stop() }
+        let wasLoaded = MeetingPlayer.shared.meetingID == meeting.id
+        if wasLoaded { MeetingPlayer.shared.stop() }
         do {
             try recorder.delete(meeting)
         } catch {
+            // 消せなかったら、再生のバーを戻す
+            if wasLoaded { MeetingPlayer.shared.load(meeting) }
             deleteError = error.localizedDescription
             return
         }
