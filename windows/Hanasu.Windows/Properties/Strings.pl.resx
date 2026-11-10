@@ -168,10 +168,10 @@ Oryginał: {2}</value>
     <value>Inne języki</value>
   </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
-    <value>Zatrzymuje nagrywanie i wpisuje tekst (tak samo jak ponowne naciśnięcie skrótu)</value>
+    <value>Kończy nagrywanie i wpisuje tekst (tak samo jak ponowne naciśnięcie skrótu)</value>
   </data>
   <data name="Hud_Stop" xml:space="preserve">
-    <value>Zatrzymaj</value>
+    <value>Gotowe</value>
   </data>
   <data name="Hud_Cancel" xml:space="preserve">
     <value>Anuluj</value>

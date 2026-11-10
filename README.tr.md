@@ -40,7 +40,7 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herk
 
 | | |
 | --- | --- |
-| **Konuşun → derli toplu metin** | <kbd>⌥ Space</kbd> tuşuna basın, konuşun ve tekrar basın (ya da **■ Durdur**'a tıklayın). Hanasu dolgu sözcüklerini çıkarır, sesteş kelimeleri düzeltir, konuşurken yaptığınız düzeltmeleri uygular ve metni imlecin olduğu yere yapıştırır. |
+| **Konuşun → derli toplu metin** | <kbd>⌥ Space</kbd> tuşuna basın, konuşun ve tekrar basın (ya da **■ Bitti**'ye tıklayın). Hanasu dolgu sözcüklerini çıkarır, sesteş kelimeleri düzeltir, konuşurken yaptığınız düzeltmeleri uygular ve metni imlecin olduğu yere yapıştırır. |
 | **Konuşun, çevrilmiş olarak yazılsın** | <kbd>⌥⇧ Space</kbd> tuşlarına basın ya da konuşurken HUD'u **English**, **日本語** veya başka bir dil olarak değiştirin. Kalıp ifadeler doğal biçimde çevrilir; örneğin お疲れ様です "Hi," olur. Sunulacak dilleri (desteklenen 17 dilden herhangi biri) **Ayarlar → Genel** bölümünden seçin. Varsayılan İngilizcedir. Mac'te **Ayarlar → Uygulamalar** bölümünden bir uygulamanın bu dillerden biriyle başlamasını sağlayabilirsiniz. |
 | **Karışık diller söylendiği gibi kalır** | Varsayılan olarak İngilizce söylediğiniz kısımlar İngilizce kalır. Bunun yerine çıktının tamamını Japonca yapmayı da seçebilirsiniz. |
 | **Sesle düzenleme** | Bir metin seçin, <kbd>⌃⌥⌘ E</kbd> tuşlarına basın ve "daha kibar yap", "madde işaretlerine dönüştür" ya da "İngilizceye çevir" deyin. |

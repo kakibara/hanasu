@@ -40,7 +40,7 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 
 | | |
 | --- | --- |
-| **Nói → văn bản chỉn chu** | Nhấn <kbd>⌥ Space</kbd>, nói, rồi nhấn lại lần nữa (hoặc bấm **■ Dừng**). Hanasu loại bỏ từ đệm, sửa từ đồng âm, áp dụng những chỗ bạn tự sửa lời và dán văn bản vào vị trí con trỏ. |
+| **Nói → văn bản chỉn chu** | Nhấn <kbd>⌥ Space</kbd>, nói, rồi nhấn lại lần nữa (hoặc bấm **■ Xong**). Hanasu loại bỏ từ đệm, sửa từ đồng âm, áp dụng những chỗ bạn tự sửa lời và dán văn bản vào vị trí con trỏ. |
 | **Nói và gõ ra bản dịch** | Nhấn <kbd>⌥⇧ Space</kbd>, hoặc chuyển HUD sang **English**, **日本語** hay một ngôn ngữ khác trong lúc nói. Các câu nói quen thuộc được dịch tự nhiên, nên お疲れ様です sẽ thành "Hi,". Chọn các ngôn ngữ muốn hiển thị (bất kỳ ngôn ngữ nào trong 17 ngôn ngữ được hỗ trợ) trong **Cài đặt → Chung**. Mặc định là tiếng Anh. Trên Mac, **Cài đặt → Theo ứng dụng** có thể cho một ứng dụng bắt đầu bằng một trong các ngôn ngữ này. |
 | **Giữ nguyên ngôn ngữ trộn lẫn như khi nói** | Theo mặc định, những phần bạn nói bằng tiếng Anh sẽ được giữ nguyên tiếng Anh. Bạn cũng có thể chọn thống nhất toàn bộ đầu ra sang tiếng Nhật. |
 | **Chỉnh sửa bằng giọng nói** | Chọn một đoạn văn bản, nhấn <kbd>⌃⌥⌘ E</kbd> và nói "viết lịch sự hơn", "chuyển thành gạch đầu dòng" hoặc "dịch sang tiếng Anh". |

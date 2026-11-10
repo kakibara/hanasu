@@ -40,7 +40,7 @@ Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Kod źródłowy Ha
 
 | | |
 | --- | --- |
-| **Mowa → dopracowany tekst** | Naciśnij <kbd>⌥ Space</kbd>, mów i naciśnij ponownie (lub kliknij **■ Zatrzymaj**). Hanasu usuwa wtrącenia, poprawia homofony, uwzględnia Twoje autopoprawki i wkleja tekst w miejscu kursora. |
+| **Mowa → dopracowany tekst** | Naciśnij <kbd>⌥ Space</kbd>, mów i naciśnij ponownie (lub kliknij **■ Gotowe**). Hanasu usuwa wtrącenia, poprawia homofony, uwzględnia Twoje autopoprawki i wkleja tekst w miejscu kursora. |
 | **Mów, wpisuj w tłumaczeniu** | Naciśnij <kbd>⌥⇧ Space</kbd> albo przełącz HUD na **English**, **日本語** lub inny język w trakcie mówienia. Utarte zwroty są tłumaczone naturalnie, więc お疲れ様です staje się „Hi,”. Języki do wyboru (dowolne z 17 obsługiwanych) ustawisz w **Ustawienia → Ogólne**. Domyślnie jest to angielski. Na Macu w **Ustawienia → Aplikacje** możesz sprawić, że dana aplikacja będzie startować w jednym z tych języków. |
 | **Mieszane języki zostają tak, jak je wypowiedziano** | Domyślnie fragmenty wypowiedziane po angielsku pozostają po angielsku. Możesz zamiast tego ujednolicić wynik do japońskiego. |
 | **Edycja głosem** | Zaznacz tekst, naciśnij <kbd>⌃⌥⌘ E</kbd> i powiedz „napisz to uprzejmiej”, „zamień na punkty” albo „przetłumacz na angielski”. |

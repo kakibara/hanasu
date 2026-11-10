@@ -168,10 +168,10 @@
     <value>Другие языки</value>
   </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
-    <value>Останавливает запись и вводит текст (как повторное нажатие сочетания клавиш)</value>
+    <value>Завершает запись и вводит текст (как повторное нажатие сочетания клавиш)</value>
   </data>
   <data name="Hud_Stop" xml:space="preserve">
-    <value>Стоп</value>
+    <value>Готово</value>
   </data>
   <data name="Hud_Cancel" xml:space="preserve">
     <value>Отмена</value>

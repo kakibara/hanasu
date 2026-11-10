@@ -40,7 +40,7 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 
 | | |
 | --- | --- |
-| **Bicara → teks yang rapi** | Tekan <kbd>⌥ Space</kbd>, bicara, lalu tekan lagi (atau klik **■ Berhenti**). Hanasu menghapus kata pengisi, memperbaiki homofon, menerapkan koreksi yang Anda ucapkan sendiri, dan menempelkan teks di posisi kursor. |
+| **Bicara → teks yang rapi** | Tekan <kbd>⌥ Space</kbd>, bicara, lalu tekan lagi (atau klik **■ Selesai**). Hanasu menghapus kata pengisi, memperbaiki homofon, menerapkan koreksi yang Anda ucapkan sendiri, dan menempelkan teks di posisi kursor. |
 | **Bicara, ketik hasil terjemahan** | Tekan <kbd>⌥⇧ Space</kbd>, atau ubah HUD ke **English**, **日本語**, atau bahasa lain saat Anda berbicara. Ungkapan baku diterjemahkan secara alami, jadi お疲れ様です menjadi "Hi,". Pilih bahasa yang ditawarkan (mana saja dari 17 bahasa yang didukung) di **Pengaturan → Umum**. Bawaannya adalah bahasa Inggris. Di Mac, **Pengaturan → Per App** dapat membuat sebuah aplikasi dimulai dalam salah satu bahasa ini. |
 | **Campuran bahasa tetap seperti yang diucapkan** | Secara bawaan, bagian yang Anda ucapkan dalam bahasa Inggris tetap dalam bahasa Inggris. Anda bisa memilih untuk menyeragamkan seluruh keluaran ke bahasa Jepang. |
 | **Edit dengan suara** | Pilih teks, tekan <kbd>⌃⌥⌘ E</kbd>, lalu ucapkan "buat lebih sopan", "ubah jadi poin-poin", atau "terjemahkan ke bahasa Inggris". |

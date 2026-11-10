@@ -219,11 +219,11 @@ Original: {2}</value>
     <comment>HUD language switch: tooltip and accessible name of the "…" button that opens a menu of all translation languages</comment>
   </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
-    <value>Stops recording and types the text (same as pressing the shortcut again)</value>
+    <value>Finishes recording and types the text (same as pressing the shortcut again)</value>
     <comment>HUD tooltip</comment>
   </data>
   <data name="Hud_Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>Done</value>
     <comment>HUD button</comment>
   </data>
   <data name="Hud_Cancel" xml:space="preserve">

@@ -168,10 +168,10 @@
     <value>다른 언어</value>
   </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
-    <value>녹음을 중지하고 텍스트를 입력합니다(바로 가기 키를 다시 누르는 것과 같음)</value>
+    <value>녹음을 마치고 텍스트를 입력합니다(바로 가기 키를 다시 누르는 것과 같음)</value>
   </data>
   <data name="Hud_Stop" xml:space="preserve">
-    <value>중지</value>
+    <value>완료</value>
   </data>
   <data name="Hud_Cancel" xml:space="preserve">
     <value>취소</value>

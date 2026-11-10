@@ -38,7 +38,7 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 
 | | |
 | --- | --- |
-| **Speak → polished text** | Press <kbd>⌥ Space</kbd>, talk, and press it again (or click **■ Stop**). Hanasu removes fillers, fixes homophones, applies your self-corrections, and pastes the text at your cursor. |
+| **Speak → polished text** | Press <kbd>⌥ Space</kbd>, talk, and press it again (or click **■ Done**). Hanasu removes fillers, fixes homophones, applies your self-corrections, and pastes the text at your cursor. |
 | **Speak, type it translated** | Press <kbd>⌥⇧ Space</kbd>, or switch the HUD to **English**, **日本語**, or another language while you talk. Set phrases are translated naturally, so お疲れ様です becomes "Hi,". Pick the languages to offer (any of the 17 supported languages) in **Settings → General**. English is the default. On Mac, **Settings → Per App** can make an app start in one of these languages. |
 | **Mixed languages stay as spoken** | By default, the parts you say in English stay in English. You can choose to unify the output into Japanese instead. |
 | **Edit by voice** | Select some text, press <kbd>⌃⌥⌘ E</kbd>, and say "make it more polite", "turn it into bullets" or "translate to English". |

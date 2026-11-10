@@ -144,7 +144,7 @@ final class EditModeController {
     }
 
     // 要件: REQ-DIC-012
-    /// HUD の「停止」。ショートカットをもう一度押したときと同じく、録音を止めて書き換える
+    /// HUD の「■ 完了」。ショートカットをもう一度押したときと同じく、録音を止めて書き換える
     func stopFromHUD() {
         switch state {
         case .recording: Task { await finish() }

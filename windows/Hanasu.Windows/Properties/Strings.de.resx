@@ -171,7 +171,7 @@ Original: {2}</value>
     <value>Beendet die Aufnahme und gibt den Text ein (wie erneutes Drücken der Tastenkombination)</value>
   </data>
   <data name="Hud_Stop" xml:space="preserve">
-    <value>Beenden</value>
+    <value>Fertig</value>
   </data>
   <data name="Hud_Cancel" xml:space="preserve">
     <value>Abbrechen</value>
