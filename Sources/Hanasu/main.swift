@@ -265,9 +265,10 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-app-styles"),
     exit(0)
 }
 
-// 音声入力の HUD を画像にする（見た目の確認用）:  Hanasu --render-hud <出力.png> [--translate | --translate-to en|ja] [--languages en,ja] [--engine whisper|gemini [--processing]]
+// 音声入力の HUD を画像にする（見た目の確認用）:  Hanasu --render-hud <出力.png> [--translate | --translate-to en|ja] [--languages en,ja] [--engine whisper|gemini [--processing]] [--screenshot on|off|inactive]
 // --engine whisper|gemini は、録音を止めてからまとめて文字起こしするときの見た目（音量の目安）。--processing で文字起こし中
-// 確かめ方: REQ-DIC-002, REQ-DIC-011, REQ-DIC-012
+// --screenshot は、画面収録を許可しているときのスクリーンショットのボタン（inactive は「この録音では使われない」見た目）
+// 確かめ方: REQ-DIC-002, REQ-DIC-011, REQ-DIC-012, REQ-DIC-042
 if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
    CommandLine.arguments.indices.contains(index + 1)
 {
@@ -288,6 +289,15 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
         if let index = CommandLine.arguments.firstIndex(of: "--languages"), CommandLine.arguments.indices.contains(index + 1) {
             hud.model.translationChoices = TranslationLanguage.normalized(
                 CommandLine.arguments[index + 1].split(separator: ",").compactMap { TranslationLanguage.cliCode(String($0)) })
+        }
+        // 要件: REQ-DIC-042
+        if let index = CommandLine.arguments.firstIndex(of: "--screenshot"), CommandLine.arguments.indices.contains(index + 1) {
+            switch CommandLine.arguments[index + 1] {
+            case "on": hud.model.screenshot = .init(on: true)
+            case "off": hud.model.screenshot = .init(on: false)
+            case "inactive": hud.model.screenshot = .init(on: true, inactiveReason: ScreenSnapshotPolicy.InactiveReason.refineOff.message)
+            default: break
+            }
         }
         try? hud.snapshotPNG()?.write(to: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
         print("wrote")

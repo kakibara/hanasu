@@ -48,6 +48,7 @@ Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Kod źródłowy Ha
 | **Fragmenty tekstu** | Powiedz „podpis e-mail”, aby wstawić zapisany tekst dokładnie tak, jak go napisałeś. Fragmenty nigdy nie są wysyłane do AI. |
 | **Słownik** | Dodawaj nazwy własne i reguły zamiany, np. `ストックマーク => Stockmark`. Reguły zamiany działają też w transkrypcjach spotkań. Dla spotkania otwartego w Notatkach ze spotkań AI może zaproponować nowe wpisy na podstawie tego spotkania (na Macu także na podstawie historii i ostatnich spotkań), a Ty dodajesz tylko wybrane. |
 | **Kontekst ekranu** *(opcjonalnie)* | Hanasu odczytuje tytuł okna i tekst wokół kursora, aby nazwy zgadzały się z tym, co już jest na ekranie. Pola haseł nigdy nie są odczytywane. |
+| **Tekst ze zrzutu ekranu** *(opcjonalnie, Mac)* | Hanasu robi zrzut wszystkich ekranów, odczytuje tekst na Twoim Macu i przekazuje AI wyłącznie ten tekst, dzięki czemu nazwy i oznaczenia modeli z innych okien (np. „QX-7s”) są zapisywane tak, jak widać je na ekranie. Obraz nigdy nie jest wysyłany ani zapisywany. Możesz to włączyć lub wyłączyć dla pojedynczego nagrania przyciskiem w HUD. Wymaga uprawnienia Nagrywanie ekranu. |
 | **Wybór mikrofonu** *(Mac)* | Wybierz mikrofon w Ustawieniach albo przełącz go przyciskiem mikrofonu w HUD bez przerywania nagrania. |
 | **Historia** | Przeszukuj wcześniejsze wyniki i ponawiaj nieudane. Domyślnie historia jest przechowywana przez 30 dni; możesz to zmienić w Ustawieniach. Na Macu naciśnij <kbd>⌥⇧ V</kbd>, aby ponownie wkleić ostatni wynik. |
 | **Nie ma gdzie wkleić?** | Jeśli żadne pole tekstowe nie ma fokusu (np. na wierzchu jest pulpit), Hanasu zostawia wynik na ekranie zamiast go wklejać. Skopiuj go stamtąd albo po prostu naciśnij <kbd>⌘V</kbd> tam, gdzie chcesz (możesz wybrać, czy wynik ma pozostać w schowku). |
@@ -136,7 +137,7 @@ Najnowszą wersję pobierzesz z [**Releases**](https://github.com/kakibara/hanas
 1. Rozpakuj plik i przenieś `Hanasu.app` do **Aplikacji**.
 2. Aplikacja jest podpisana własnym certyfikatem i nie przeszła notaryzacji, więc macOS za pierwszym razem ją blokuje. Kliknij **Gotowe**, a następnie otwórz **Ustawienia systemowe → Prywatność i ochrona** i kliknij **Otwórz mimo to**.
    Zamiast tego możesz też uruchomić `xattr -dr com.apple.quarantine /Applications/Hanasu.app`.
-3. Gdy pojawi się prośba, zezwól na dostęp do **Mikrofonu**, **Rozpoznawania mowy** i **Dostępności**. Dostępność jest potrzebna do wklejania za pomocą ⌘V.
+3. Gdy pojawi się prośba, zezwól na dostęp do **Mikrofonu**, **Rozpoznawania mowy** i **Dostępności**. Dostępność jest potrzebna do wklejania za pomocą ⌘V. O uprawnienie **Nagrywanie ekranu** aplikacja poprosi tylko wtedy, gdy włączysz tekst ze zrzutu ekranu.
 
 </details>
 
@@ -181,7 +182,7 @@ Każdy skrót możesz zmienić w Ustawieniach. Pełny podręcznik użytkownika (
 ## Prywatność
 
 - **Dźwięk domyślnie zostaje na urządzeniu.** Rozpoznawanie mowy, Whisper i rozpoznawanie mówców działają lokalnie.
-- **AI dostaje tekst, nie dźwięk.** Gemini lub Claude otrzymuje transkrypcję. W zależności od ustawień może też otrzymać nazwę aplikacji, w której piszesz, kontekst ekranu oraz transkrypcje spotkań na potrzeby pytań i czatu z AI w trakcie spotkania.
+- **AI dostaje tekst, nie dźwięk.** Gemini lub Claude otrzymuje transkrypcję. W zależności od ustawień może też otrzymać nazwę aplikacji, w której piszesz, kontekst ekranu, tekst odczytany ze zrzutu ekranu (nigdy sam obraz) oraz transkrypcje spotkań na potrzeby pytań i czatu z AI w trakcie spotkania.
 - **Tryby Lokalnie i Apple również zatrzymują tekst na urządzeniu.** Jeśli wybierzesz którykolwiek z nich, nic nie jest wysyłane do usługi AI. Jedyne, co się pobiera, to sam model.
 - **Dźwięk trafia do Google tylko wtedy, gdy tak wybierzesz.** Jeśli wybierzesz silnik mowy Gemini, nagrany dźwięk jest wysyłany do Google.
 - **Spotkania to zwykłe pliki.** Są zapisywane jako JSON i Markdown w `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac i Windows używają tego samego formatu.
