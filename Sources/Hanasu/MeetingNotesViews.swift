@@ -11,6 +11,8 @@ struct LiveNotesPanel: View {
     var mode: Binding<LiveSidePanelMode>?
     @ObservedObject private var settings = MeetingNotesSettings.shared
     @ObservedObject private var hotKey = MeetingHighlightHotKey.shared
+    // 要件: REQ-MTG-047（「何を聞かれた？」のショートカットを登録できなかったときも、記録中に知らせる）
+    @ObservedObject private var askedHotKey = MeetingAskedHotKey.shared
     @FocusState private var focused: Bool
 
     private var notes: [MeetingNote] { recorder.current?.allNotes ?? [] }
@@ -35,6 +37,13 @@ struct LiveNotesPanel: View {
                 Text(hotKey.registrationError ?? tr("「ここ重要」は %@ でも付けられます（ほかのアプリを使っていても可）", "\(settings.highlightHotKey.displayString)"))
                     .font(.caption)
                     .foregroundStyle(hotKey.registrationError == nil ? Color.secondary : Color.orange)
+                    .padding(.horizontal)
+                    .padding(.top, 4)
+            }
+            if settings.askedHotKeyEnabled, let error = askedHotKey.registrationError {
+                Text(error)
+                    .font(.caption)
+                    .foregroundStyle(Color.orange)
                     .padding(.horizontal)
                     .padding(.top, 4)
             }

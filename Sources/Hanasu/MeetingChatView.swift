@@ -194,7 +194,12 @@ struct MeetingChatView: View {
                                     .controlSize(.small)
                             }
                         }
-                        if let failure = asked.failure(for: model.meetingID) {
+                        if live, let notice = asked.notice(for: model.meetingID, generation: model.generation) {
+                            Label(notice, systemImage: "exclamationmark.triangle.fill")
+                                .font(.callout)
+                                .foregroundStyle(.orange)
+                        }
+                        if live, let failure = asked.failure(for: model.meetingID, generation: model.generation) {
                             Label(failure, systemImage: "exclamationmark.triangle.fill")
                                 .font(.callout)
                                 .foregroundStyle(.orange)

@@ -196,7 +196,7 @@ struct MeetingAskedQuestionView: View {
             Spacer()
             if Self.showsRetry(request.phase) {
                 Button(tr("もう一度")) { model.retry() }
-                    .disabled(model.recorder?.state != .recording)
+                    .disabled(!model.recording)
                     .help(tr("今の時点までの会話で、もう一度探す"))
             }
             Button(tr("閉じる")) { MeetingAskedQuestionPanel.shared.close(); model.dismiss() }
@@ -308,6 +308,7 @@ final class MeetingAskedHotKey: MeetingRecordingHotKey {
 /// 設定の「会議」に置く、「何を聞かれた？」のショートカットの設定
 struct MeetingAskedSettingsSection: View {
     @ObservedObject private var settings = MeetingNotesSettings.shared
+    @ObservedObject private var hotKey = MeetingAskedHotKey.shared
     var onBeginShortcutRecording: () -> Void = {}
     var onEndShortcutRecording: () -> Void = {}
 
@@ -323,6 +324,11 @@ struct MeetingAskedSettingsSection: View {
                     onEndRecording: onEndShortcutRecording)
             }
             .disabled(!settings.askedHotKeyEnabled)
+            if settings.askedHotKeyEnabled, let error = hotKey.registrationError {
+                Label(error, systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            }
         } header: {
             Text(tr("会議中の AI チャット"))
         } footer: {

@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import Foundation
 
 // 要件: REQ-MTG-047
@@ -38,6 +39,8 @@ final class MeetingAskedQuestion: ObservableObject {
         /// オフレコ中・相手の音声が入っていないときの知らせ
         var notice: String?
         var phase: Phase
+        /// 押したときの会話の世代（「新しい会話」のあとは、チャットに失敗や知らせを出さない）
+        var generation = 0
     }
 
     /// 会議ノートのウインドウに、その会議の AI チャットを開いてもらう依頼（ウインドウが受け取ったら consume する）
@@ -57,6 +60,9 @@ final class MeetingAskedQuestion: ObservableObject {
     private var task: Task<Void, Never>?
     /// 最後に押したときの記録（「もう一度」に使う）
     private(set) weak var recorder: MeetingRecorder?
+    /// その記録が記録中か（パネルの「もう一度」を、記録を止めたら押せなくする）
+    @Published private(set) var recording = false
+    private var recorderState: AnyCancellable?
 
     // MARK: - 状態
 
@@ -64,13 +70,24 @@ final class MeetingAskedQuestion: ObservableObject {
         request?.meetingID == meetingID && request?.phase == .running
     }
 
-    /// チャットから押して失敗したときの理由（チャットの中に出す）
-    func failure(for meetingID: String) -> String? {
-        guard let request, request.meetingID == meetingID, request.origin == .chat else { return nil }
-        switch request.phase {
-        case .failed(let message), .unavailable(let message): return message
-        default: return nil
+    /// チャットから押した質問（その会議の、今の会話の世代のもの）
+    private func chatRequest(for meetingID: String, generation: Int) -> Request? {
+        guard let request, request.meetingID == meetingID, request.origin == .chat,
+              request.generation == generation else { return nil }
+        return request
+    }
+
+    /// チャットから押して失敗したときの理由（チャットの中に出す）。「新しい会話」のあとは出さない
+    func failure(for meetingID: String, generation: Int) -> String? {
+        switch chatRequest(for: meetingID, generation: generation)?.phase {
+        case .failed(let message), .unavailable(let message): message
+        default: nil
         }
+    }
+
+    /// チャットから押したときの、オフレコ中・相手の音声が入っていないときの知らせ
+    func notice(for meetingID: String, generation: Int) -> String? {
+        chatRequest(for: meetingID, generation: generation)?.notice
     }
 
     /// ボタンのヘルプ
@@ -97,7 +114,7 @@ final class MeetingAskedQuestion: ObservableObject {
 
     /// 字幕のボタン・ショートカット・チャットのボタンから呼ぶ
     func ask(recorder: MeetingRecorder, origin: Origin) {
-        self.recorder = recorder
+        watch(recorder)
         let recording = recorder.state == .recording && recorder.current != nil
         if let reason = Self.unavailableReason(recording: recording, batchEngineName: recorder.batchEngine?.shortName) {
             guard origin == .panel else { return }
@@ -126,7 +143,7 @@ final class MeetingAskedQuestion: ObservableObject {
 
     /// 「もう一度」: 今の時点の記録で聞き直す
     func retry() {
-        guard let recorder else { return }
+        guard let recorder, recording else { return }
         let origin = request?.origin ?? .panel
         cancel()
         ask(recorder: recorder, origin: origin)
@@ -144,10 +161,21 @@ final class MeetingAskedQuestion: ObservableObject {
         }
     }
 
-    /// パネルを閉じたとき
+    /// パネルを閉じたとき。チャットから押した質問は、パネルを閉じても続ける
     func dismiss() {
+        guard request?.origin == .panel else { return }
         if request?.phase == .running { cancel() }
-        if request?.origin == .panel { request = nil }
+        request = nil
+    }
+
+    /// 記録の状態を見る（「もう一度」を押せるか）
+    private func watch(_ recorder: MeetingRecorder) {
+        guard self.recorder !== recorder || recorderState == nil else { return }
+        self.recorder = recorder
+        recorderState = recorder.$state
+            .map { $0 == .recording }
+            .removeDuplicates()
+            .sink { [weak self] in self?.recording = $0 }
     }
 
     /// 記録を始めたとき: 別の会議のパネルは閉じる（DEC-MTG-096）
@@ -182,7 +210,8 @@ final class MeetingAskedQuestion: ObservableObject {
         let prompt = MeetingChat.prompt(question: quick.question, material: material, history: [])
         let generation = model.generation
         let new = Request(meetingID: meetingID, origin: origin, at: material.elapsed,
-                          recentOthers: MeetingChat.recentOthers(in: material), notice: notice, phase: .running)
+                          recentOthers: MeetingChat.recentOthers(in: material), notice: notice, phase: .running,
+                          generation: generation)
         request = new
         if origin == .panel { MeetingAskedQuestionPanel.shared.show() }
         let reply = self.reply
@@ -218,6 +247,8 @@ final class MeetingAskedQuestion: ObservableObject {
     func setRequestForPreview(_ request: Request?, recorder: MeetingRecorder? = nil) {
         task?.cancel()
         self.request = request
+        recorderState = nil
         self.recorder = recorder
+        recording = recorder?.state == .recording
     }
 }

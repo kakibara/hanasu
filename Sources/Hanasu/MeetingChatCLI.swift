@@ -359,7 +359,22 @@ extension MeetingAskedQuestion {
         asked.reply = { _ in throw NSError(domain: "test", code: 1) }
         asked.start(material: material, meetingID: "self-test-4", origin: .chat, notice: nil, model: failed)
         try? await Task.sleep(for: .milliseconds(100))
-        check("失敗したら入れず、チャットに理由を出す", failed.messages.isEmpty && asked.failure(for: "self-test-4") != nil)
+        check("失敗したら入れず、チャットに理由を出す", failed.messages.isEmpty
+              && asked.failure(for: "self-test-4", generation: failed.generation) != nil)
+        failed.clear()
+        check("「新しい会話」のあとは失敗の理由を出さない", asked.failure(for: "self-test-4", generation: failed.generation) == nil)
+
+        // チャットから押した質問は、パネルを閉じても続ける
+        let kept = MeetingChatModel(meetingID: "self-test-5")
+        asked.reply = { _ in
+            try await Task.sleep(for: .milliseconds(30))
+            return "答え"
+        }
+        asked.start(material: material, meetingID: "self-test-5", origin: .chat, notice: "知らせ", model: kept)
+        check("チャットから押したときの知らせを出す", asked.notice(for: "self-test-5", generation: kept.generation) == "知らせ")
+        asked.dismiss()
+        try? await Task.sleep(for: .milliseconds(200))
+        check("パネルを閉じても、チャットから押した質問は続く", kept.messages.count == 2)
         return results
     }
 }

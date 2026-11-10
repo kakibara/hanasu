@@ -2246,7 +2246,7 @@
       }
     },
     "%@ の時点" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:128",
+      "comment" : "MeetingAskedQuestionPanel.swift:122",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2756,7 +2756,7 @@
       }
     },
     "%@ までの記録から" : {
-      "comment" : "MeetingChatView.swift:426",
+      "comment" : "MeetingChatView.swift:431",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7754,7 +7754,7 @@
       }
     },
     "1 行に 1 つ書きます。「[12:34] 内容」で時刻（録音開始から）を、「★」で「ここ重要」の印を表します。時刻のない行も書けます。議事録を作るとき、メモと印の前後の発言を優先して反映します。" : {
-      "comment" : "MeetingNotesViews.swift:219",
+      "comment" : "MeetingNotesViews.swift:228",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9182,7 +9182,7 @@
       }
     },
     "AI チャット" : {
-      "comment" : "MeetingChatView.swift:587, MeetingInspector.swift:33",
+      "comment" : "MeetingChatView.swift:592, MeetingInspector.swift:33",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16628,7 +16628,7 @@
       }
     },
     "Hanasu 字幕" : {
-      "comment" : "MeetingNotesViews.swift:351",
+      "comment" : "MeetingNotesViews.swift:360",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20912,7 +20912,7 @@
       }
     },
     "★ を取り消す（あと %@ 秒）" : {
-      "comment" : "MeetingNotesViews.swift:176",
+      "comment" : "MeetingNotesViews.swift:185",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22034,7 +22034,7 @@
       }
     },
     "「ここ重要」の印" : {
-      "comment" : "MeetingNotesViews.swift:281, ShortcutRecorder.swift:18",
+      "comment" : "MeetingNotesViews.swift:290, ShortcutRecorder.swift:18",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22136,7 +22136,7 @@
       }
     },
     "「ここ重要」は %@ でも付けられます（ほかのアプリを使っていても可）" : {
-      "comment" : "MeetingNotesViews.swift:35",
+      "comment" : "MeetingNotesViews.swift:37",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22544,7 +22544,7 @@
       }
     },
     "「何を聞かれた？」" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:323, ShortcutRecorder.swift:19",
+      "comment" : "MeetingAskedQuestionPanel.swift:318, ShortcutRecorder.swift:19",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24278,7 +24278,7 @@
       }
     },
     "ここまでの会話について AI に聞けます" : {
-      "comment" : "MeetingChatView.swift:249",
+      "comment" : "MeetingChatView.swift:254",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24380,7 +24380,7 @@
       }
     },
     "ここまでの会話について質問（↩ で送信）" : {
-      "comment" : "MeetingChatView.swift:296",
+      "comment" : "MeetingChatView.swift:301",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24482,7 +24482,7 @@
       }
     },
     "ここまでの記録を読んでいます…" : {
-      "comment" : "MeetingChatView.swift:206",
+      "comment" : "MeetingChatView.swift:211",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24788,7 +24788,7 @@
       }
     },
     "ここ重要" : {
-      "comment" : "MeetingDocumentView.swift:589, MeetingDocumentView.swift:597, MeetingNotesViews.swift:135",
+      "comment" : "MeetingDocumentView.swift:589, MeetingDocumentView.swift:597, MeetingNotesViews.swift:144",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25910,7 +25910,7 @@
       }
     },
     "この会議について AI に聞けます" : {
-      "comment" : "MeetingChatView.swift:249",
+      "comment" : "MeetingChatView.swift:254",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26012,7 +26012,7 @@
       }
     },
     "この会議について質問（↩ で送信）" : {
-      "comment" : "MeetingChatView.swift:296",
+      "comment" : "MeetingChatView.swift:301",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27134,7 +27134,7 @@
       }
     },
     "この答えをメモに足す（議事録で優先して取り上げます）" : {
-      "comment" : "MeetingChatView.swift:450",
+      "comment" : "MeetingChatView.swift:455",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30908,7 +30908,7 @@
       }
     },
     "まだ相手の発言がありません" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:141",
+      "comment" : "MeetingAskedQuestionPanel.swift:135",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31112,7 +31112,7 @@
       }
     },
     "もう一度" : {
-      "comment" : "LocalLLMSettingsView.swift:65, MeetingAskedQuestionPanel.swift:204, MeetingChatView.swift:220",
+      "comment" : "LocalLLMSettingsView.swift:65, MeetingAskedQuestionPanel.swift:198, MeetingChatView.swift:225",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31316,7 +31316,7 @@
       }
     },
     "やめました。" : {
-      "comment" : "MeetingAskedQuestion.swift:143",
+      "comment" : "MeetingAskedQuestion.swift:160",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31418,7 +31418,7 @@
       }
     },
     "やめる" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:167",
+      "comment" : "MeetingAskedQuestionPanel.swift:161",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35294,7 +35294,7 @@
       }
     },
     "オフ" : {
-      "comment" : "MeetingNotesViews.swift:116, MeetingPlayerBar.swift:200",
+      "comment" : "MeetingNotesViews.swift:125, MeetingPlayerBar.swift:200",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35906,7 +35906,7 @@
       }
     },
     "オフレコ中です。オフレコの間の発言は AI に渡しません。" : {
-      "comment" : "MeetingAskedQuestion.swift:118",
+      "comment" : "MeetingAskedQuestion.swift:135",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36110,7 +36110,7 @@
       }
     },
     "オン" : {
-      "comment" : "MeetingNotesViews.swift:116, MeetingPlayerBar.swift:200",
+      "comment" : "MeetingNotesViews.swift:125, MeetingPlayerBar.swift:200",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37640,7 +37640,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:320, DictationHistoryWindow.swift:556, MeetingChatView.swift:441",
+      "comment" : "AppDelegate.swift:320, DictationHistoryWindow.swift:556, MeetingChatView.swift:446",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37742,7 +37742,7 @@
       }
     },
     "コピーしました" : {
-      "comment" : "MeetingChatView.swift:441, MinutesTemplateViews.swift:402, PasteFallbackPanel.swift:241",
+      "comment" : "MeetingChatView.swift:446, MinutesTemplateViews.swift:402, PasteFallbackPanel.swift:241",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39884,7 +39884,7 @@
       }
     },
     "ショートカット %@ を登録できませんでした（ほかのショートカットと重なっている可能性があります）" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:286",
+      "comment" : "MeetingAskedQuestionPanel.swift:280",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42332,7 +42332,7 @@
       }
     },
     "チャットで続ける" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:198",
+      "comment" : "MeetingAskedQuestionPanel.swift:192",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46004,7 +46004,7 @@
       }
     },
     "メモ" : {
-      "comment" : "MeetingChatView.swift:586, MeetingDocumentView.swift:632, MeetingNotesViews.swift:25",
+      "comment" : "MeetingChatView.swift:591, MeetingDocumentView.swift:632, MeetingNotesViews.swift:27",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46106,7 +46106,7 @@
       }
     },
     "メモ %@ 件・印 %@ 件" : {
-      "comment" : "MeetingNotesViews.swift:240",
+      "comment" : "MeetingNotesViews.swift:249",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46208,7 +46208,7 @@
       }
     },
     "メモと AI チャットを切り替える（AI チャットは ⌘J）" : {
-      "comment" : "MeetingChatView.swift:592",
+      "comment" : "MeetingChatView.swift:597",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46412,7 +46412,7 @@
       }
     },
     "メモに残しました" : {
-      "comment" : "MeetingChatView.swift:446",
+      "comment" : "MeetingChatView.swift:451",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46514,7 +46514,7 @@
       }
     },
     "メモに残す" : {
-      "comment" : "MeetingChatView.swift:446",
+      "comment" : "MeetingChatView.swift:451",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46718,7 +46718,7 @@
       }
     },
     "メモを保存して、議事録を作り直しますか？" : {
-      "comment" : "MeetingNotesViews.swift:254",
+      "comment" : "MeetingNotesViews.swift:263",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46820,7 +46820,7 @@
       }
     },
     "メモを入力して ↩" : {
-      "comment" : "MeetingNotesViews.swift:70",
+      "comment" : "MeetingNotesViews.swift:79",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51818,7 +51818,7 @@
       }
     },
     "今の会話を消して、新しく始める" : {
-      "comment" : "MeetingChatView.swift:335",
+      "comment" : "MeetingChatView.swift:340",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51920,7 +51920,7 @@
       }
     },
     "今の時刻に印を付ける" : {
-      "comment" : "MeetingNotesViews.swift:146",
+      "comment" : "MeetingNotesViews.swift:155",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52022,7 +52022,7 @@
       }
     },
     "今の時刻に印を付ける（%@）" : {
-      "comment" : "MeetingNotesViews.swift:146",
+      "comment" : "MeetingNotesViews.swift:155",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52124,7 +52124,7 @@
       }
     },
     "今の時点までの会話で、もう一度探す" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:206",
+      "comment" : "MeetingAskedQuestionPanel.swift:200",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52838,7 +52838,7 @@
       }
     },
     "今の議事録とアクションアイテムは、メモを反映したものに置き換わります。" : {
-      "comment" : "MeetingNotesViews.swift:258",
+      "comment" : "MeetingNotesViews.swift:267",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53756,7 +53756,7 @@
       }
     },
     "付けてから 10 秒のあいだは、押し間違えた印を取り消せます" : {
-      "comment" : "MeetingNotesViews.swift:179",
+      "comment" : "MeetingNotesViews.swift:188",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56510,7 +56510,7 @@
       }
     },
     "会議を記録している間だけ使えます。" : {
-      "comment" : "MeetingAskedQuestion.swift:91",
+      "comment" : "MeetingAskedQuestion.swift:108",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57428,7 +57428,7 @@
       }
     },
     "会議ノートの AI チャットを開いて、続けて質問する" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:200",
+      "comment" : "MeetingAskedQuestionPanel.swift:194",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57530,7 +57530,7 @@
       }
     },
     "会議ノートの記録中の画面でメモを書いたり「ここ重要」の印を付けたりすると、議事録で優先して取り上げます。ショートカットは記録中だけ有効になり、ほかのアプリを使っていても印を付けられます。" : {
-      "comment" : "MeetingNotesViews.swift:299",
+      "comment" : "MeetingNotesViews.swift:308",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57938,7 +57938,7 @@
       }
     },
     "会議中のメモ" : {
-      "comment" : "MeetingNotesViews.swift:297",
+      "comment" : "MeetingNotesViews.swift:306",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58244,7 +58244,7 @@
       }
     },
     "何を聞かれた？" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:41, MeetingAskedQuestionPanel.swift:126, MeetingChat.swift:264",
+      "comment" : "MeetingAskedQuestionPanel.swift:35, MeetingAskedQuestionPanel.swift:120, MeetingChat.swift:264",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58346,7 +58346,7 @@
       }
     },
     "作り直す" : {
-      "comment" : "MeetingNotesViews.swift:255, MeetingWindow.swift:503, MinutesTemplateViews.swift:128",
+      "comment" : "MeetingNotesViews.swift:264, MeetingWindow.swift:503, MinutesTemplateViews.swift:128",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60080,7 +60080,7 @@
       }
     },
     "保存して議事録を作り直す" : {
-      "comment" : "MeetingNotesViews.swift:249",
+      "comment" : "MeetingNotesViews.swift:258",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61202,7 +61202,7 @@
       }
     },
     "元に戻す" : {
-      "comment" : "MeetingNotesViews.swift:244",
+      "comment" : "MeetingNotesViews.swift:253",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65588,7 +65588,7 @@
       }
     },
     "取り消す" : {
-      "comment" : "AppDelegate.swift:315, MeetingNotesViews.swift:56, MeetingNotesViews.swift:174",
+      "comment" : "AppDelegate.swift:315, MeetingNotesViews.swift:65, MeetingNotesViews.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67118,7 +67118,7 @@
       }
     },
     "字幕" : {
-      "comment" : "MeetingNotesViews.swift:111",
+      "comment" : "MeetingNotesViews.swift:120",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67220,7 +67220,7 @@
       }
     },
     "字幕をほかのアプリの前面に表示する" : {
-      "comment" : "MeetingNotesViews.swift:114",
+      "comment" : "MeetingNotesViews.swift:123",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67322,7 +67322,7 @@
       }
     },
     "字幕を前面に表示" : {
-      "comment" : "MeetingNotesViews.swift:115",
+      "comment" : "MeetingNotesViews.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72524,7 +72524,7 @@
       }
     },
     "文字起こしとメモを %@（%@）に送ります。会話は保存しません。" : {
-      "comment" : "MeetingChatView.swift:345",
+      "comment" : "MeetingChatView.swift:350",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72626,7 +72626,7 @@
       }
     },
     "文字起こしとメモをもとに答えます。続けて質問すると、前のやりとりを踏まえて答えます。" : {
-      "comment" : "MeetingChatView.swift:253",
+      "comment" : "MeetingChatView.swift:258",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75380,7 +75380,7 @@
       }
     },
     "新しい会話" : {
-      "comment" : "MeetingChatView.swift:332",
+      "comment" : "MeetingChatView.swift:337",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76094,7 +76094,7 @@
       }
     },
     "書き始めた時刻つきで保存します。入力中に「ここ重要」を押すと、その文を印の説明にします。" : {
-      "comment" : "MeetingNotesViews.swift:80",
+      "comment" : "MeetingNotesViews.swift:89",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79664,7 +79664,7 @@
       }
     },
     "止める" : {
-      "comment" : "MeetingChatView.swift:193, MeetingChatView.swift:209",
+      "comment" : "MeetingChatView.swift:193, MeetingChatView.swift:214",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80276,7 +80276,7 @@
       }
     },
     "気になったことを書くと、議事録で優先して取り上げます。" : {
-      "comment" : "MeetingNotesViews.swift:45",
+      "comment" : "MeetingNotesViews.swift:54",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82826,7 +82826,7 @@
       }
     },
     "直前に聞かれたことと、その背景を AI がまとめます" : {
-      "comment" : "MeetingAskedQuestion.swift:81",
+      "comment" : "MeetingAskedQuestion.swift:98",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82928,7 +82928,7 @@
       }
     },
     "直前に聞かれたことと、その背景を AI がまとめます（%@）" : {
-      "comment" : "MeetingAskedQuestion.swift:80",
+      "comment" : "MeetingAskedQuestion.swift:97",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83030,7 +83030,7 @@
       }
     },
     "直前に聞かれたことを探しています…" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:164, MeetingChatView.swift:190",
+      "comment" : "MeetingAskedQuestionPanel.swift:158, MeetingChatView.swift:190",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83336,7 +83336,7 @@
       }
     },
     "直近の相手の発言" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:139",
+      "comment" : "MeetingAskedQuestionPanel.swift:133",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83642,7 +83642,7 @@
       }
     },
     "相手側（スピーカー）の音が入っていません。相手の発言がないので、質問を見つけられないことがあります。" : {
-      "comment" : "MeetingAskedQuestion.swift:120",
+      "comment" : "MeetingAskedQuestion.swift:137",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83948,7 +83948,7 @@
       }
     },
     "答えをコピーする" : {
-      "comment" : "MeetingChatView.swift:443",
+      "comment" : "MeetingChatView.swift:448",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84050,7 +84050,7 @@
       }
     },
     "答えを作ったときに渡した記録の範囲（発言 %@ 件）" : {
-      "comment" : "MeetingChatView.swift:429",
+      "comment" : "MeetingChatView.swift:434",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84152,7 +84152,7 @@
       }
     },
     "答えを作れませんでした: %@" : {
-      "comment" : "MeetingAskedQuestion.swift:202, MeetingChatView.swift:58, MeetingSearchView.swift:92",
+      "comment" : "MeetingAskedQuestion.swift:231, MeetingChatView.swift:58, MeetingSearchView.swift:92",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84254,7 +84254,7 @@
       }
     },
     "答えを待つのをやめる" : {
-      "comment" : "MeetingChatView.swift:308",
+      "comment" : "MeetingChatView.swift:313",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87110,7 +87110,7 @@
       }
     },
     "聞き逃した話の確認や、決まったことの整理に。続けて質問すると、前のやりとりを踏まえて答えます。" : {
-      "comment" : "MeetingChatView.swift:252",
+      "comment" : "MeetingChatView.swift:257",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90272,7 +90272,7 @@
       }
     },
     "記録を止めたあとに %@ で文字起こしします" : {
-      "comment" : "MeetingNotesViews.swift:412",
+      "comment" : "MeetingNotesViews.swift:421",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90374,7 +90374,7 @@
       }
     },
     "記録を止めたあとに文字起こしするエンジン（%@）では使えません。" : {
-      "comment" : "MeetingAskedQuestion.swift:85",
+      "comment" : "MeetingAskedQuestion.swift:102",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90884,7 +90884,7 @@
       }
     },
     "記録を読んでいます…" : {
-      "comment" : "MeetingChatView.swift:206",
+      "comment" : "MeetingChatView.swift:211",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91190,7 +91190,7 @@
       }
     },
     "記録中に「ここ重要」のショートカットを使う" : {
-      "comment" : "MeetingNotesViews.swift:280",
+      "comment" : "MeetingNotesViews.swift:289",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91292,7 +91292,7 @@
       }
     },
     "記録中に「何を聞かれた？」のショートカットを使う" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:322",
+      "comment" : "MeetingAskedQuestionPanel.swift:317",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93842,7 +93842,7 @@
       }
     },
     "話し始めると、ここに文字起こしが出ます" : {
-      "comment" : "MeetingNotesViews.swift:414, MeetingWindow.swift:812",
+      "comment" : "MeetingNotesViews.swift:423, MeetingWindow.swift:812",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101696,7 +101696,7 @@
       }
     },
     "送信（↩）" : {
-      "comment" : "MeetingChatView.swift:316",
+      "comment" : "MeetingChatView.swift:321",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
