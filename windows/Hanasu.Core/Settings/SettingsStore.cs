@@ -99,6 +99,8 @@ public sealed class SettingsStore
         s.MeetingsDirectory ??= "";
         if (Meetings.MinutesTemplates.FromRawValue(s.MeetingMinutesTemplate) is null) s.MeetingMinutesTemplate = "auto";
         s.MeetingCustomMinutesPrompt ??= Meetings.MinutesTemplates.DefaultCustomPrompt;
+        // 設計判断: DEC-MTG-143（負の値は無期限）
+        if (s.MeetingAudioRetentionDays < 0) s.MeetingAudioRetentionDays = 0;
 
         static HotKeyCombo Pick(HotKeyCombo? value, HotKeyCombo fallback, List<HotKeyCombo> taken)
         {

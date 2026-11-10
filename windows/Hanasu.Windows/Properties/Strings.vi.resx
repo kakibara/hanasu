@@ -732,12 +732,6 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   <data name="Settings_Storage" xml:space="preserve">
     <value>Lưu trữ</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>Giữ các tệp âm thanh (me.wav / others.wav) sau khi xử lý</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>Khi tắt, âm thanh sẽ bị xóa sau khi tạo bản ghi lời và biên bản (vẫn được giữ nếu chuyển văn bản không thành công). Định dạng WAV mono 16 kHz, khoảng 115 MB mỗi kênh mỗi giờ.</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>Vị trí lưu</value>
   </data>
@@ -1351,5 +1345,126 @@ Mở trang phát hành trong trình duyệt?</value>
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>Sau khi dừng ghi âm, quy tắc thay thế trên tab "Từ điển &amp; quy tắc" sẽ được áp dụng cho bản ghi lời, và biên bản được tạo từ văn bản đã thay thế. Văn bản nhận dạng gốc cũng được giữ lại, nên bạn có thể khôi phục bằng nút "Từ điển…" trong Ghi chú cuộc họp.</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>Xóa bản ghi âm sau khi chuyển thành văn bản</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>Khi bật, bản ghi âm của cuộc họp (me.wav / others.wav) sẽ bị xóa sau khi tạo xong bản ghi lời và biên bản. Nếu bản ghi lời không đầy đủ, bản ghi âm sẽ được giữ lại. Trong khi ghi âm, bạn có thể thay đổi tùy chọn này cho cuộc họp đó trong Ghi chú cuộc họp. Âm thanh ở định dạng WAV mono 16 kHz, khoảng 115 MB cho mỗi kênh mỗi giờ.</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>Giữ bản ghi âm trong</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>Các bản ghi âm cũ hơn khoảng thời gian này sẽ tự động bị xóa khi ứng dụng khởi động và sau khi xử lý xong một cuộc họp. Quy tắc này cũng áp dụng cho các cuộc họp mà bạn đã chọn giữ bản ghi âm. Bản ghi âm của các cuộc họp bị thiếu bản ghi lời sẽ không bị xóa.</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>Trong đó, {0} cuộc họp bị thiếu bản ghi lời.</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>Các bản ghi âm cũ hơn {0} sẽ bị xóa ngay bây giờ: {1} cuộc họp ({2}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>{0} cuộc họp bị thiếu bản ghi lời sẽ được giữ lại.</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>Thay đổi cài đặt và xóa các bản ghi âm này?</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>Mặc định cho các cuộc họp bạn ghi âm từ nay về sau. Trong khi ghi âm, bạn có thể thay đổi cho cuộc họp đó ở khung ghi âm phía trên bên trái.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>Xóa bản ghi âm của cuộc họp này sau khi chuyển thành văn bản</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>Bật: bản ghi âm của cuộc họp này sẽ bị xóa sau khi tạo xong bản ghi lời và biên bản (được giữ lại nếu bản ghi lời không đầy đủ). Cài đặt mặc định không thay đổi.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>Tắt: bản ghi âm của cuộc họp này được giữ lại. Cài đặt mặc định không thay đổi.</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>Xóa bản ghi âm…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>Quản lý bản ghi âm…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>Cuộc họp này không còn bản ghi âm.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>Không thể xóa trong khi đang ghi âm hoặc đang xử lý.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>Xóa bản ghi âm — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>Xóa bản ghi âm của "{0}" ({1})?</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>Biên bản, bản ghi lời và ghi chú vẫn được giữ lại.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>Không có bản ghi lời cho {0}. Phần hội thoại đó sẽ không được lưu lại.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>Bản ghi lời của cuộc họp này bị thiếu một phần. Phần hội thoại đó sẽ không được lưu lại.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>Cuộc họp này không có bản ghi lời. Nếu bạn xóa bản ghi âm, nội dung cuộc hội thoại sẽ không còn được lưu lại ở đâu cả.</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>Đã xóa bản ghi âm của "{0}".</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>Không thể xóa một số tệp ghi âm. Các tệp còn lại vẫn được giữ nguyên.
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>Các tệp âm thanh sẽ bị xóa vĩnh viễn (không chuyển vào Thùng rác). Không thể hoàn tác thao tác này.</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>Quản lý bản ghi âm</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>Bản ghi âm còn lại: {0} cuộc họp, {1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>Không còn bản ghi âm nào.</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>Không có bản ghi lời</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>Thiếu một phần bản ghi lời</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>Các cuộc họp còn bản ghi âm</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>Xóa các bản ghi âm đã chọn…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>Xóa bản ghi âm cũ hơn {0} ngày…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>Xóa tất cả bản ghi âm…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>Nếu nơi lưu của bạn được đồng bộ với OneDrive, iCloud Drive hoặc dịch vụ tương tự, các bản ghi âm đã xóa có thể vẫn nằm trong mục đã xóa của dịch vụ đồng bộ một thời gian.</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>Xóa bản ghi âm của {0} cuộc họp ({1})?</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>Trong đó, {0} cuộc họp bị thiếu bản ghi lời. Phần hội thoại đó sẽ không được lưu lại.</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>{0} cuộc họp bị thiếu bản ghi lời ({1}) sẽ được giữ lại. Bạn có thể chọn chúng để xóa.</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>Đã xóa bản ghi âm của {0} cuộc họp.</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>Không thể xóa hết bản ghi âm của {0} cuộc họp. Các tệp còn lại vẫn được giữ nguyên.</value>
   </data>
 </root>

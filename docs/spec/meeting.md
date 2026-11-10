@@ -93,14 +93,23 @@
 - 実装の場所: `MeetingDetector`、`MeetingAutoDetect`、`MeetingSuggestionPanel`
 - 確かめ方: `.build/debug/Hanasu --simulate-meeting-detection`、`--list-audio-processes`、`--render-meeting-suggestion out.png`
 
-### REQ-MTG-010 音声ファイルを残すか、処理のあとに消すかを選べる（F10）
-- 内容: 設定で、録音した音声ファイルを残すか、後処理のあとに消すかを選べる。
-- 受け入れ条件: 「音声ファイルを残す」をオフにすると、後処理のあとに `me.m4a` / `others.m4a` が消える。
-- 出典: 初版の要件定義 F10（あると良い）
+### REQ-MTG-010 会議ごとに、文字起こしのあとに録音を消すかを選べる（F10）
+- 内容: 会議ごとに、録音を「文字起こしと議事録のあとに消す」か「残す」かを選べる。既定は設定で決め、記録を始める前（記録の設定のパネル）と記録中（記録中の画面）に、その会議の分を変えられる。
+- 受け入れ条件:
+  - 設定「会議」に「文字起こしのあとに録音を削除する」がある（以前の「音声ファイルを残す」の裏返し。保存しているキーは変えない）。既定はオフ（残す）。
+  - Mac: 会議ノートの記録の設定のパネル（REQ-MTG-051）に同じスイッチがあり、設定と同じ値（次の記録からの既定）を変える。Windows: 会議ノートの左下（マイク・スピーカー・議事録の型の下）に同じチェックボックスがある。
+  - 記録を始めると、どの入口（会議ノートのボタン・メニュー・ショートカット・Mac の自動検出のパネル・Windows のトレイ）から始めても、その時点の既定がその会議の値になる。Mac も Windows も、記録を始めると会議ノートが開く。
+  - 記録中の画面に「この会議の録音を文字起こしのあとに削除」の切り替えがあり、今の値が見える。押すとその会議の値だけが変わり、既定は変わらない。Mac はツールバー、Windows は左上の記録中の欄。記録を止めて処理に入ったあとは変えられない。
+  - 記録中に設定画面で既定を変えても、記録中の会議の値は変わらない。記録中は、一覧の下の 1 行に記録中の会議の値を出す。
+  - 値がオンの会議は、後処理のあとに音声ファイル（`me.m4a` / `others.m4a`、Windows は `me.wav` / `others.wav`）が消え、`transcript.md`・`minutes.md`・`meeting.json`・`notes.md` は残る。オフの会議は残る。
+  - オンでも、文字起こしがそろっていない会議（文字起こしに失敗したチャンネルがある・発言が 0 件。DEC-MTG-142）と、記録中・処理中にアプリが終わった会議（DEC-MTG-018）は録音を残し、会議の帯に「音声ファイルは残しています」を出す。
+  - Mac 標準のエンジンで、記録中に認識の結果のストリームがエラーで止まったチャンネル（取り消しを除く）も、文字起こしに失敗したチャンネルに数える。
+- 出典: 初版の要件定義 F10（あると良い）。会議ごとに選べるようにしたのは 2026-11-09 の依頼「文字起こしを作成したら録音を削除するというオプションを作成してください。また、後から録音を削除する機能も作成してください」、2026-11-10 に計画（docs/plans/meeting-audio-deletion.md）を了承
+- 関係する要件: REQ-MTG-051, REQ-MTG-054, REQ-MTG-057
 - 対象: Mac / Windows
-- 実装の場所: `MeetingRecorder.process`
-- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`
-- 確かめ方: `--meeting-files me.wav others.wav -keepMeetingAudio NO`
+- 実装の場所: `MeetingAudioPolicy`、`MeetingRecorder.start`・`stop`・`process`・`setDeleteAudioAfterTranscription`、`ChannelTranscriber`、`RecordSettingsPopover`、`LiveDeleteAudioToggle`、`SettingsView`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`StartAsync`・`SetDeleteAudioAfterTranscription`）、`windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`、`windows/Hanasu.Windows/AppHost.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-audio`（会議への写し・会議の値で決まる・文字起こしがそろっていなければ残す）、`.build/debug/Hanasu --meeting-files me.wav others.wav --delete-audio`。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingAudioDeletionTests"`、`dotnet run --project Hanasu.Cli -- meeting-files me.wav others.wav --delete-audio`。記録中の切り替えの見た目は `.build/debug/Hanasu --render-meeting-window <フォルダ>` の `live-window-min.png`
 
 ### REQ-MTG-011 記録中にメモを書ける（F11）
 - 内容: 記録中にメモを書ける。1 行ずつ、録音開始からの経過時間つきで保存する。
@@ -475,11 +484,11 @@
 - 内容: 左の一覧を「記録中・今日・昨日・今週・先週・それより前（月ごと）」に分けて出す。一覧の下は「会議の記録を開始」のボタン（記録中は「記録を停止」）と、その下の今の設定の 1 行にする。1 行を押すと、スピーカー・マイク・議事録の型を選べる小さなパネルが出る。
 - 受け入れ条件:
   - 一覧の見出しが日付のまとまりになり、各行にタイトル・開始の時刻・長さ、作成中なら回る印、失敗なら「失敗」が出る。
-  - 一覧の下に、記録していないときは「会議の記録を開始」、記録中は「記録を停止」、準備中・処理中は進み具合が出る。その下に今の設定（議事録の型・スピーカー・マイク）の 1 行が出る。1 行を押すとパネルが出て、スピーカー・マイク・議事録の型と、型の管理（REQ-MTG-042）を選べる。記録中・処理中は変えられない。
+  - 一覧の下に、記録していないときは「会議の記録を開始」、記録中は「記録を停止」、準備中・処理中は進み具合が出る。その下に今の設定（議事録の型・スピーカー・マイク。録音を消すのがオンなら「録音は削除」）の 1 行が出る。1 行を押すとパネルが出て、スピーカー・マイク・議事録の型と、型の管理（REQ-MTG-042）、「文字起こしのあとに録音を削除する」（REQ-MTG-010）を選べる。記録中・処理中は変えられず、記録中は 1 行に記録中の会議の録音の扱いを出し、パネルに「この会議の分は記録中のツールバーで変えられます」と出す。
   - 記録を始められなかったとき（権限・モデル・認証がないなど）は、ボタンの下に理由を出す。
   - 右クリック・⌫ での削除、検索、「質問」は今と同じに使える。
-- 出典: 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承
-- 関係する要件: REQ-MTG-001, REQ-MTG-042
+- 出典: 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承。録音を消す設定を足したのは 2026-11-09 の依頼「文字起こしを作成したら録音を削除するというオプションを作成してください。また、後から録音を削除する機能も作成してください」、2026-11-10 に計画（docs/plans/meeting-audio-deletion.md）を了承
+- 関係する要件: REQ-MTG-001, REQ-MTG-042, REQ-MTG-010
 - 対象: Mac
 - 実装の場所: `MeetingWindowView`、`MeetingListGrouping`、`MeetingRow`、`RecordButton`、`RecordSettingsPopover`
 - 確かめ方: `.build/debug/Hanasu --test-minutes-document`（日付のまとまり）、`.build/debug/Hanasu --render-meeting-window <フォルダ>`（基準の日時を固定して、今日・昨日・今週・先月の会議を置いた一覧）
@@ -518,17 +527,62 @@
 ### REQ-MTG-054 記録中の画面と、記録を止めてから議事録ができるまで
 - 内容: 記録中は、真ん中に文字起こし（リアルタイム）、後ろ側のパネルに「メモ｜AI チャット」を出す。記録を止めると、同じ会議を選んだまま、真ん中が議事録の文書に、後ろ側のパネルが「文字起こし｜AI チャット」に替わり、文書の上の帯に処理の進み具合が出る。
 - 受け入れ条件:
-  - 記録中、ツールバーに記録中の印・経過時間・自分と相手の音量・オフレコ・字幕・パネルの表示の切り替えがある。「★ ここ重要」は後ろ側のパネルの上に、「メモ」「AI チャット」のどちらを選んでいても出る。停止は一覧の下のボタンと、メニュー・ショートカット。
+  - 記録中、ツールバーに記録中の印・経過時間・自分と相手の音量・オフレコ・字幕・この会議の録音を文字起こしのあとに削除（REQ-MTG-010）・パネルの表示の切り替えがある。会議ノートの最小の大きさでも、どれもはみ出しのメニューに隠れない。「★ ここ重要」は後ろ側のパネルの上に、「メモ」「AI チャット」のどちらを選んでいても出る。停止は一覧の下のボタンと、メニュー・ショートカット。
   - 記録中の警告（音が入らないチャンネル）とオフレコ中の知らせは、真ん中の文字起こしの上の帯に出る。「話者の区別は記録を止めたあとに行います」は見出しの下に出る。Whisper / Gemini で記録しているときは、文字起こしの欄に記録を止めたあとに文字起こしすることを出す。
   - 記録中に AI チャットを開いても、真ん中の文字起こしは見えたまま（REQ-MTG-040）。
   - 記録を止めるとき、メモの入力欄に打ちかけの文があれば、止めた時点のメモとして確定してから止める。
   - 記録を止めると、選んでいる会議は変わらず、真ん中が文書になり、上の帯に段階（「文字起こし」（Whisper / Gemini のときだけ）→「話者の区別」→「議事録」）のどこまで進んだかが出る。議事録を作らない設定・使う発言がない会議では「議事録」の段階を出さない。終わると帯が消え、議事録とアクションアイテムが出る。
   - 処理の間、メモの欄は読むだけにし、議事録ができたら書き足せることを出す。
-- 出典: 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承。記録中の配置（真ん中に文字起こし）は同日に確かめた
-- 関係する要件: REQ-MTG-003, REQ-MTG-011, REQ-MTG-040, REQ-MTG-046
+- 出典: 2026-11-09 の依頼「hanasu の会議ノートの UI もモダンに変更したい。どのような UI が良いかを考え、タスクを洗い出して要件を定義し、要件に沿ってモダンな UI を考えて」、同日に計画（docs/plans/meeting-notes-ui.md）を了承。記録中の配置（真ん中に文字起こし）は同日に確かめた。録音を消す切り替えを足したのは 2026-11-09 の依頼「文字起こしを作成したら録音を削除するというオプションを作成してください。また、後から録音を削除する機能も作成してください」、2026-11-10 に計画（docs/plans/meeting-audio-deletion.md）を了承
+- 関係する要件: REQ-MTG-003, REQ-MTG-011, REQ-MTG-040, REQ-MTG-046, REQ-MTG-010
 - 対象: Mac
 - 実装の場所: `LiveTranscriptView`、`LiveSidePanel`、`LiveNotesPanel`、`MeetingRecorder.stop`、`MeetingProcessingStage`、`MeetingStatusBanners`
 - 確かめ方: `.build/debug/Hanasu --render-meeting-notes <フォルダ>`（記録中の画面。警告・オフレコ・Whisper の案内）、`.build/debug/Hanasu --render-meeting-window <フォルダ>`（処理中の段階の帯）。記録して止める流れは実機
+
+### REQ-MTG-055 記録した会議の録音だけを、あとから消せる
+- 内容: 会議ノートで、記録した会議の録音（音声ファイル）だけを消せる。議事録・文字起こし・メモ・アクションアイテムは残る。消した録音は戻せない。
+- 受け入れ条件:
+  - Mac: ツールバーの「…」のメニューと一覧の右クリックに「録音を削除…」がある。Windows: 一覧の右クリックと、会議の詳細の上のボタンの並びに「録音を削除…」がある。録音が残っていない会議・記録中や処理中の会議では押せない（Mac はヘルプに理由を出す）。
+  - 選ぶと、会議のタイトル・録音の大きさ・「元に戻せません」を書いたダイアログが出る。残るものは文字起こしの状態（DEC-MTG-142）で書き分ける（すべてある・一部だけ・ない）。「削除」で音声ファイルが完全に消える（ゴミ箱に入らない）。キャンセルで何も変わらない。
+  - 消したあと、会議は選ばれたままで、文書・文字起こしは読める。会議の帯の「音声ファイルは残しています」は出なくなる。Mac は再生のバーが消える（再生中なら止まる）。設定の件数・合計と録音の管理の一覧も変わる。
+  - 議事録の作り直し中も消せる。
+  - 消せなかったファイルがあれば、理由を出し、残ったファイルはそのまま。もうなかったファイルは消せたものとして扱う。
+- 出典: 2026-11-09 の依頼「文字起こしを作成したら録音を削除するというオプションを作成してください。また、後から録音を削除する機能も作成してください」、2026-11-10 に計画（docs/plans/meeting-audio-deletion.md）を了承
+- 関係する要件: REQ-MTG-010, REQ-MTG-028, REQ-MTG-053
+- 対象: Mac / Windows
+- 実装の場所: `MeetingStore.audioFiles`・`audioSize`・`deleteAudio`、`MeetingRecorder.canDeleteAudio`・`deleteAudio`、`MeetingMoreMenuItems`、`MeetingWindowView`、`MeetingStatusBanners`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingStore.cs`（`AudioFiles`・`AudioSize`・`DeleteAudio`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`CanDeleteAudio`・`DeleteAudio`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-audio`（録音だけが消える・4 つのファイル名・もうないファイル・記録中の会議は消さない・文字起こしの状態）、`.build/debug/Hanasu --render-meeting-window <フォルダ>` の `more-menu.png`（録音あり）と `more-menu-no-audio.png`。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingAudioDeletionTests"`。再生のバーが消えることは実機
+
+### REQ-MTG-056 録音の管理の画面で、選んで・30 日より前・すべての録音を消せる
+- 内容: 録音が残っている会議を一覧する「録音の管理」の画面で、選んだ会議・30 日より前に記録した会議・すべての会議の録音をまとめて消せる。消すのは録音だけ。文字起こしがそろっていない会議は、まとめて消す対象から外す。
+- 受け入れ条件:
+  - 入口: 設定「会議」の「録音を管理…」（横に今残っている録音の件数と合計の大きさ。文字起こしがそろっていない会議があればその件数も）。Mac は会議ノートの「…」のメニュー、Windows は会議ノートの一覧の右クリックの「録音の管理…」からも開ける。
+  - 録音が残っている会議が新しい順に、チェックボックス・タイトル・記録した日時・大きさで並ぶ。記録中・処理中の会議は並ばない。文字起こしがない会議には「文字起こしなし」、一部だけの会議には「一部の文字起こしなし」の印が付く。
+  - 「選んだ録音を削除…」（1 件も選んでいなければ押せない）、「30 日より前の録音を削除…」、「すべての録音を削除…」がある。後の 2 つは印の付いた会議を含めず、当てはまる会議がなければ押せない。
+  - どれも、消す件数・合計の大きさ・「元に戻せません」を書いたダイアログで確かめる（Windows の確かめは OK／キャンセル）。選んだ中に印の付いた会議があれば、その件数と「その分の会話の記録は残りません」を書く。「30 日より前」「すべて」で外した会議があれば、その件数と大きさを書く。
+  - 「30 日より前」は、記録を始めた日時が今から 30×24 時間より前の会議。
+  - 消せなかったファイルがあれば件数を出し、残ったものは一覧に残す。画面を開いている間に会議の一覧が変わったら読み直す。
+  - 画面の下に、同期するフォルダ（iCloud Drive・OneDrive など）に保存していると同期先の削除済みの項目に残ることがある、と出す。
+- 出典: 2026-11-09 の依頼「文字起こしを作成したら録音を削除するというオプションを作成してください。また、後から録音を削除する機能も作成してください」、2026-11-10 に計画（docs/plans/meeting-audio-deletion.md）を了承（「選んで消す」は専用の画面で、失敗した会議はまとめて消す対象から外す、と 2026-11-09 に確かめた）
+- 関係する要件: REQ-MTG-055, REQ-MTG-057
+- 対象: Mac / Windows
+- 実装の場所: `MeetingAudioManagerView`、`MeetingAudioCleanup`、`SettingsView`、`MeetingMoreMenuItems`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingAudioCleanup.cs`、`windows/Hanasu.Windows/Views/MeetingAudioWindow.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-audio`（30 日の境目・選んだものだけ・すべて・記録中と印の付いた会議を除く）、`.build/debug/Hanasu --render-meeting-audio-manager <出力フォルダ>`。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingAudioDeletionTests"`
+
+### REQ-MTG-057 決めた日数より前の録音を、自動で消せる
+- 内容: 設定の「録音を残す期間」で、その日数より前に記録した会議の録音を自動で消す。既定は「無期限」（消さない）。文字起こしがそろっていない会議は消さない。
+- 受け入れ条件:
+  - 設定「会議」に「録音を残す期間」があり、「無期限」（既定）・7 日・30 日・90 日・365 日から選べる。説明に、会議ごとに「残す」にした録音も期間を過ぎると消えること、文字起こしがそろっていない会議の録音は消さないことを出す。
+  - 無期限以外のとき、アプリの起動時と会議の記録の後処理が終わったときに、記録を始めた日時がその日数より前の会議の録音を、知らせずに消す（ログには件数を書く）。記録中・処理中の会議と、文字起こしがそろっていない会議は消さない。
+  - 期間を変えたとき、今すぐ消える録音があれば、件数・合計の大きさ・「元に戻せません」・（あれば）残す会議の件数を書いたダイアログで確かめる。「変更して削除」（Windows は「OK」）で設定を変えて消し、キャンセルで設定を元に戻す。
+- 出典: 2026-11-09 の依頼「文字起こしを作成したら録音を削除するというオプションを作成してください。また、後から録音を削除する機能も作成してください」、2026-11-10 に計画（docs/plans/meeting-audio-deletion.md）を了承（「30 日以前の録音を消す」は押して消すと自動で消すの両方、と 2026-11-09 に確かめた。文字起こしがそろっていない会議を除くこと・会議ごとの「残す」より期間が強いことは、計画の「仮に決めたこと」として了承された）
+- 関係する要件: REQ-MTG-056, REQ-MTG-010
+- 対象: Mac / Windows
+- 実装の場所: `AppSettings.meetingAudioRetentionDays`、`MeetingAudioCleanup.expired`、`MeetingRecorder.pruneExpiredAudio`、`AppDelegate`、`SettingsView`
+- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`（`MeetingAudioRetentionDays`）、`windows/Hanasu.Core/Meetings/MeetingAudioCleanup.cs`、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`PruneExpiredAudio`）、`windows/Hanasu.Windows/AppHost.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-audio`（期間ごとの境目・無期限は消さない・印の付いた会議と記録中を除く）。Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingAudioDeletionTests"`
 
 ---
 
@@ -599,12 +653,13 @@
 - 実装の場所: `GeminiTranscriber.transcribeSegments`、`GeminiTranscriber.parseSegments`、`TranscriptionAudio.chunkStarts`
 
 ### DEC-MTG-009 文字起こしに失敗したチャンネルがあれば、音声を残す
-- 決めたこと: 音声を残さない設定でも、記録のあとの文字起こしに失敗したチャンネルがあれば音声ファイルを消さず、会議のエラーに「音声ファイルは残しています」と書く。消すのは後処理の最後（文字起こし・話者分離・議事録のあと）。
+- 決めたこと: 録音を消す会議（REQ-MTG-010）でも、文字起こしに失敗したチャンネルがあれば音声ファイルを消さない。失敗したチャンネルは、消す設定かどうかに関わらず `meeting.json` の `transcriptionFailedChannels` に書く（DEC-MTG-142）。Mac 標準のエンジンでは、記録中に認識の結果のストリームがエラーで止まったチャンネル（取り消しを除く）も失敗に数える（止めるときの締めのエラーは数えない）。「音声ファイルは残しています」はエラーの文に入れず、録音が残っていれば表示のときに帯に出す（DEC-MTG-140）。消すのは後処理の最後（文字起こし・話者分離・議事録のあと）。
 - 理由: あとで文字起こしし直せるようにする。
-- 決めた場面: PR #17
+- 決めた場面: PR #17。Mac 標準のエンジン・`transcriptionFailedChannels`・表示のときに決めることは 2026-11-10 の録音の削除（docs/plans/meeting-audio-deletion.md）で足した。Mac 標準の締めのエラーを数えないのは、手元のログで頻度を確かめられず、止めるたびに出るなら録音を残し続けることになるため
 - 関係する要件: REQ-MTG-010
-- 対象: Mac
-- 実装の場所: `MeetingRecorder.process`、`MeetingRecorder.transcribeRecordedAudio`
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecorder.process`、`MeetingRecorder.transcribeRecordedAudio`、`ChannelTranscriber`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`
 
 ### DEC-MTG-010 話者分離は FluidAudio で行い、失敗しても処理を続ける
 - 決めたこと: FluidAudio（pyannote speaker-diarization-community-1 の CoreML 版）を `0.17.7` に固定し、`traits: []` で不要なテキスト正規化のバイナリをリンクしない。相手側の音声に、会議のあとでまとめてかける。差し替えられる `SpeakerDiarizer` にし、失敗したら相手を 1 人として続ける。モデルは初回に Hugging Face から取り、以後はキャッシュを使う。
@@ -654,16 +709,17 @@
 - 対象: Mac
 - 実装の場所: `MeetingRecorder.process`
 
-### DEC-MTG-016 音声ファイルは、既定では残す
-- 決めたこと: 「音声ファイル（me.m4a / others.m4a）を残す」の初期値はオン。
+### DEC-MTG-016 録音は、既定では残す
+- 決めたこと: 「文字起こしのあとに録音を削除する」（以前の「音声ファイル（me.m4a / others.m4a）を残す」の裏返し。キー `keepMeetingAudio` / `KeepMeetingAudio` は変えない）の初期値はオフ（残す）。「録音を残す期間」の初期値は「無期限」。
 - 理由: 初版のコードの初期値。文書には「設定で処理後に削除可」とだけあり、既定が書かれていなかった。あとで文字起こしし直したり、聞き直したりできる。今回、暗黙の振る舞いから設計判断に格上げして記録した。
 - 決めた場面: 初版（a787da8）のコード。記録はこの PR
 - 関係する要件: REQ-MTG-010
-- 対象: Mac
-- 実装の場所: `AppSettings`（`keepMeetingAudio` の初期値）
+- 対象: Mac / Windows
+- 実装の場所: `AppSettings`（`keepMeetingAudio`・`meetingAudioRetentionDays` の初期値）
+- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`
 
 ### DEC-MTG-017 会議ごとのフォルダの中身
-- 決めたこと: `~/Documents/Hanasu/Meetings/<日付 時刻 タイトル>/` に `meeting.json`（メタデータ・話者名の対応表・発言・議事録の型・アクションアイテム・メモ）、`transcript.md`、`minutes.md`、`notes.md`（メモがあるときだけ）、`me.m4a`・`others.m4a`（AAC 16kHz モノラル）を置く。
+- 決めたこと: `~/Documents/Hanasu/Meetings/<日付 時刻 タイトル>/` に `meeting.json`（メタデータ・話者名の対応表・発言・議事録の型・アクションアイテム・メモ・録音を消すか `deleteAudioAfterTranscription`・文字起こしに失敗したチャンネル `transcriptionFailedChannels`）、`transcript.md`、`minutes.md`、`notes.md`（メモがあるときだけ）、`me.m4a`・`others.m4a`（AAC 16kHz モノラル）を置く。
 - 理由: Markdown なので他のツールでも読める（REQ-MTG-025）。
 - 決めた場面: 初版（a787da8）。項目は PR #10、#13 で足した
 - 関係する要件: REQ-MTG-005, REQ-MTG-025
@@ -671,12 +727,13 @@
 - 実装の場所: `MeetingStore.save`、`Meeting`
 
 ### DEC-MTG-018 途中で落ちた会議は、起動時に「失敗」にする
-- 決めたこと: 起動時に、アプリの終了などで「記録中」「処理中」のまま残った会議を「失敗」にする。エラーのときも、それまでの録音・文字起こしは保存する。
+- 決めたこと: 起動時に、アプリの終了などで「記録中」「処理中」のまま残った会議を「失敗」にする。エラーのときも、それまでの録音・文字起こしは保存する。録音を消す会議でも録音は残し、「音声ファイルは残しています」は録音があれば表示のときに出す（エラーの文には入れない。DEC-MTG-140）。
 - 理由: 一覧に「記録中」のまま残り続けないようにする。
 - 決めた場面: 実機で録音されなかった問題の修正（2026-11-02）
 - 関係する要件: REQ-MTG-007
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `MeetingStore.markInterruptedMeetings`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingStore.cs`（`MarkInterruptedMeetings`）
 
 ### DEC-MTG-019 録音するスピーカーとマイクを選べる
 - 決めたこと: 設定「会議」→「録音するスピーカー」（初期値は Mac 全体の音。特定の出力機器だけもタップできる）と「録音するマイク」（初期値はシステムの設定）。
@@ -703,7 +760,7 @@
 - 実装の場所: `HotKeyCombo.defaultMeeting`
 
 ### DEC-MTG-022 会議の削除は、フォルダごとゴミ箱に移し、先に確かめる
-- 決めたこと: 削除は、会議のフォルダを丸ごと Mac のゴミ箱（Windows のごみ箱）に移す。完全には消さない。押す前に、会議のタイトルと「ゴミ箱から戻せる」ことを書いたダイアログで確かめる。入口は、一覧の右クリックの「削除…」、一覧を選んで ⌫（Windows は Delete キー）、Mac はツールバーの「…」のメニューの「削除…」（DEC-MTG-131）、Windows は会議の詳細の上のゴミ箱のボタン。消したあとは一覧の次の会議を選ぶ。
+- 決めたこと: 削除は、会議のフォルダを丸ごと Mac のゴミ箱（Windows のごみ箱）に移す。完全には消さない。押す前に、会議のタイトルと「ゴミ箱から戻せる」ことを書いたダイアログで確かめる。入口は、一覧の右クリックの「削除…」、一覧を選んで ⌫（Windows は Delete キー）、Mac はツールバーの「…」のメニューの「削除…」（DEC-MTG-131）、Windows は会議の詳細の上のゴミ箱のボタン。消したあとは一覧の次の会議を選ぶ。録音だけを消す操作（REQ-MTG-055〜057）は DEC-MTG-140 で、ゴミ箱に入れずに消す。
 - 理由: 会議の記録は取り直せないので、押し間違えても戻せるようにする。フォルダの中身（音声・メモ）を 1 つずつ消すと、取り残しや、消しかけのフォルダが残るおそれがある。
 - 決めた場面: ユーザーの依頼（2026-11-04）。この PR
 - 関係する要件: REQ-MTG-028
@@ -1267,7 +1324,7 @@
 - 実装の場所: `windows/Hanasu.Core/Meetings/MeetingTranscription.cs`
 
 ### DEC-MTG-108 Windows 版の meeting.json は、Mac 版と同じ形にする
-- 決めたこと: キーは camelCase、列挙は小文字、日時は秒までの UTC、UUID は大文字、null は書かない。保存先は `ドキュメント\Hanasu\Meetings\<yyyy-MM-dd HHmm>\` で、設定で変えられる。`audioStartOffsets` は Mac 版も書いて読む（DEC-MTG-135）。`reminderID` とアクションアイテムの `at`（DEC-MTG-134）は読み書きで落とさない。
+- 決めたこと: キーは camelCase、列挙は小文字、日時は秒までの UTC、UUID は大文字、null は書かない。保存先は `ドキュメント\Hanasu\Meetings\<yyyy-MM-dd HHmm>\` で、設定で変えられる。`audioStartOffsets` は Mac 版も書いて読む（DEC-MTG-135）。`reminderID` とアクションアイテムの `at`（DEC-MTG-134）、`deleteAudioAfterTranscription`・`transcriptionFailedChannels`（DEC-MTG-139・142）は読み書きで落とさない。
 - 理由: Mac で作った会議のフォルダを、そのまま Windows の会議ノートで開けるようにする（逆も）。Swift の `.iso8601` は小数の秒を読めない。
 - 決めた場面: PR #19
 - 関係する要件: REQ-MTG-025, REQ-COM-011
@@ -1317,10 +1374,10 @@
 - 実装の場所: `MeetingWindowView`、`MeetingPanelState`、`MeetingDetailInspector`、`LiveInspector`、`AppDelegate.makeMeetingWindow`
 
 ### DEC-MTG-131 会議への操作は、ツールバーと「…」のメニューにまとめる
-- 決めたこと: 記録後のツールバーは、前から「議事録の型」「議事録を作り直す」「辞書」（DEC-DIC-171）「書き出し」「…（話者名…・Finder で表示・削除…）」「インスペクタ」。タイトルの欄・日時の行は文書の先頭に置く。日時は `DateFormatter`、長さは `DateComponentsFormatter` で書き、時刻と見間違えないようにする。参加者は話者の色の丸と名前を並べ、押すと「話者名」のシートを開く。
+- 決めたこと: 記録後のツールバーは、前から「議事録の型」「議事録を作り直す」「辞書」（DEC-DIC-171）「書き出し」「…（話者名…・Finder で表示・録音を削除…・録音の管理…・削除…）」「インスペクタ」。タイトルの欄・日時の行は文書の先頭に置く。日時は `DateFormatter`、長さは `DateComponentsFormatter` で書き、時刻と見間違えないようにする。参加者は話者の色の丸と名前を並べ、押すと「話者名」のシートを開く。
 - 理由: 前は 5 つのボタンが本文の上で折り返していた。使う頻度の低い操作（Finder・削除）はメニューに入れる。
 - 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
-- 関係する要件: REQ-MTG-050, REQ-MTG-008, REQ-MTG-028
+- 関係する要件: REQ-MTG-050, REQ-MTG-008, REQ-MTG-028, REQ-MTG-055, REQ-MTG-056
 - 対象: Mac
 - 実装の場所: `MeetingWindowView`、`MeetingDocumentHeader`
 
@@ -1380,6 +1437,56 @@
 - 関係する要件: REQ-MTG-051
 - 対象: Mac
 - 実装の場所: `MeetingListGrouping`
+
+### DEC-MTG-139 録音を消すかは会議ごとに meeting.json に持ち、記録中の画面で変えられる
+- 決めたこと: 記録を始めるとき（`MeetingRecorder.start` / `MeetingController.StartAsync`）に、設定（`keepMeetingAudio` / `KeepMeetingAudio`。表示は裏返し）を `meeting.json` の `deleteAudioAfterTranscription`（true のときだけ書く）に写す（`MeetingAudioPolicy.apply`）。記録中の画面の切り替えは、記録中の会議のこの値だけを変える。後処理はこの値と文字起こしの状態（DEC-MTG-142）で消すかを決め（`MeetingAudioPolicy.shouldDeleteAfterProcessing`）、設定は見ない。記録の設定のパネル・Windows の左下のチェックボックス・設定画面は、次の記録からの既定（設定）を変える。Windows も、ショートカット・トレイから記録を始めたら会議ノートを開く（Mac の `toggleMeeting` と同じ）。
+- 理由: 議事録の型（DEC-MTG-061）と同じく、会議に写しておけば記録中に既定を変えても扱いがぶれない。入口が多いので、どこから始めても見える記録中の画面で変えられるようにした（2026-11-09 にユーザーと確かめた）。Windows はショートカットとトレイから始めると会議ノートが開かず、記録中の画面が見えなかった。キーを変えないので、今の設定を引き継げる。
+- 決めた場面: 2026-11-10 の録音の削除（docs/plans/meeting-audio-deletion.md）
+- 関係する要件: REQ-MTG-010, REQ-MTG-051, REQ-MTG-054
+- 対象: Mac / Windows
+- 実装の場所: `MeetingAudioPolicy`、`MeetingRecorder.start`・`setDeleteAudioAfterTranscription`・`process`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingAudioCleanup.cs`（`MeetingAudioPolicy`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`、`windows/Hanasu.Windows/AppHost.cs`
+
+### DEC-MTG-140 あとから消す録音は完全に消し、記録中・処理中の会議は除く。「残しています」は表示のときに決める
+- 決めたこと:
+  - 録音を削除・録音の管理・保存期間は、音声ファイルを `FileManager.removeItem`（Windows は `File.Delete`）で完全に消す。もうないファイルは消せたものとして扱う。
+  - 対象のファイルは、どちらの OS でも `me.m4a`・`others.m4a`・`me.wav`・`others.wav` の 4 つ。大きさ・件数・録音があるかも同じ 4 つで数える。Mac の再生は m4a だけ。
+  - 記録中・記録のあとの処理中の会議（`MeetingRecorder.current` / `MeetingController.Current`）は除く。議事録の作り直し中は除かない。
+  - Mac は消す前に、その会議を `MeetingPlayer.shared` で読み込んでいれば止め、消したあと読み直す。録音があるかはファイルがあるかで決め、消したら `MeetingRecorder.audioRevision`（Windows は画面を読み直す）を進めて描き直す。
+  - 録音を消しても `meeting.json` は書き換えない。「音声ファイルは残しています」はエラーの文に書かず、文字起こしがそろっていないか状態が失敗で、かつ録音があるときに、表示のときに帯に足す。この機能より前の会議のエラーの文はそのまま。
+- 理由: 容量をすぐ空けたい（2026-11-09 にユーザーと確かめた）。会議の削除（DEC-MTG-022）がゴミ箱なのは会議そのものが取り直せないからで、録音は文字起こしが残る（残らない会議は DEC-MTG-142 で守る）。DEC-MTG-108 で Mac と Windows が同じ会議のフォルダを開ける。処理中は音声を読んでいる。作り直しは文字起こしから作るので録音を使わない。`meeting.json` を書き換えないので作り直しの保存と競合せず、保存した文言で探して消すと言語が変わったときに外れる。
+- 決めた場面: 2026-11-10 の録音の削除（docs/plans/meeting-audio-deletion.md）
+- 関係する要件: REQ-MTG-055, REQ-MTG-056, REQ-MTG-057
+- 対象: Mac / Windows
+- 実装の場所: `MeetingStore.audioFiles`・`deleteAudio`、`MeetingRecorder.canDeleteAudio`・`deleteAudio`、`MeetingStatusBanners`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingStore.cs`、`windows/Hanasu.Core/Meetings/MeetingController.cs`、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+
+### DEC-MTG-141 まとめて消すのは「録音の管理」の画面で行い、対象の選び方は純粋な関数にする
+- 決めたこと: 選んで・30 日より前・すべての 3 つは 1 つの画面にまとめる（Mac はウインドウ、Windows は C# で組み立てるウインドウ）。入口は設定「会議」と会議ノートのメニュー。会議ノートの一覧は 1 つずつ選ぶまま。対象の選び方（日数の境目・記録中と文字起こしがそろっていない会議を除く）は `MeetingAudioCleanup`（会議の配列・会議のフォルダ・今の日時を受け取る。Mac・Windows とも）に置き、自己テストは一時フォルダで確かめる。大きさは Mac は `ByteCountFormatter`、Windows は `MeetingAudioCleanup.FormatSize`。
+- 理由: 一覧を複数選べるようにすると、真ん中の文書・後ろ側のパネル・削除・⌫ の振る舞い（REQ-MTG-050・051）をすべて考え直すことになる（専用の画面にすることは 2026-11-09 にユーザーと確かめた）。Mac の `MeetingStore.baseDirectory` は本物の保存先に固定なので、確かめるときに本物の録音を触らないようにする。
+- 決めた場面: 2026-11-10 の録音の削除（docs/plans/meeting-audio-deletion.md）
+- 関係する要件: REQ-MTG-056
+- 対象: Mac / Windows
+- 実装の場所: `MeetingAudioCleanup`、`MeetingAudioManagerView`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingAudioCleanup.cs`、`windows/Hanasu.Windows/Views/MeetingAudioWindow.cs`
+
+### DEC-MTG-142 文字起こしの状態を 3 つに分け、そろっていない会議は録音を守る
+- 決めたこと: `MeetingAudioCleanup.transcriptState` で「すべて」「一部」「なし」に分ける。なし: 発言が 0 件。一部: 発言があり、`transcriptionFailedChannels` が空でないか、状態が「失敗」か、`transcriptionFailedChannels` のキーがなくエラーの文がある（この機能より前の会議）。すべて: それ以外。`transcriptionFailedChannels` は、消す設定かどうかに関わらず後処理で必ず書き、失敗がなければ空の配列にする（キーがないのは、この機能より前の会議だけになる）。「すべて」以外の会議は、後処理の自動の削除・「30 日より前」・「すべて」・保存期間で消さない。会議ごと・選んで消すときは、ダイアログで状態を書き分けてから消す。
+- 理由: DEC-MTG-009・018 で録音を残した会議は、録音がただ 1 つの記録になる（まとめて消すときに外すことは 2026-11-09 にユーザーと確かめ、後処理と保存期間に当てはめることと発言 0 件を入れることは計画で決めて了承された）。エラーの文言で見分けると、言語が変わったときに外れる。この機能より前は、一部のチャンネルだけ失敗しても状態を「完了」にしてエラーの文に書くだけだったので、キーがない会議はエラーの文があるかで守る（議事録だけのエラーの会議も守る側に倒れるが、会議ごと・選んで消すことはできる。PR #91 のレビューで、まとめて消すときに録音を失うと分かって直した）。
+- 決めた場面: 2026-11-10 の録音の削除（docs/plans/meeting-audio-deletion.md）
+- 関係する要件: REQ-MTG-010, REQ-MTG-055, REQ-MTG-056, REQ-MTG-057
+- 対象: Mac / Windows
+- 実装の場所: `MeetingAudioCleanup.transcriptState`、`MeetingRecorder.stop`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingAudioCleanup.cs`、`windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`
+
+### DEC-MTG-143 保存期間で消すのは、起動時・後処理のあと・期間を短くしたとき
+- 決めたこと: 期間は「無期限」（既定）・7・30・90・365 日（音声入力の履歴 `HistorySettings.dayOptions` にそろえる）。消すのは、起動時（会議を「失敗」にしたあと）、記録の後処理が終わったとき（Mac は `MeetingRecorder.stop` で `process` が返ったあと、Windows は `MeetingController` の後処理のあと。`process` / `MeetingPostProcessor` の中では呼ばない）、設定で期間を変えて、今すぐ消える録音を確かめたとき（期間を延ばしても、起動したまま日がたって過ぎた録音があれば確かめる）。起動したまま会議をしない間は、日付が過ぎても消さない。会議ごとの「残す」は保存期間には効かない。
+- 理由: 記録中には触らず、会議のたびに整理される。期間を変えただけで何十件も黙って消えるのを防ぐ。`process` は確かめ方の CLI（`--meeting-files`）からも本物の保存先で呼ばれるので、そこで消すと開発者の録音が消える。会議ごとの「残す」は「明示的に残す」と「既定のまま」を見分けられないので、期間を全部に効かせ、設定の説明に書く。
+- 決めた場面: 2026-11-10 の録音の削除（docs/plans/meeting-audio-deletion.md）
+- 関係する要件: REQ-MTG-057
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecorder.pruneExpiredAudio`、`AppDelegate`、`SettingsView`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`PruneExpiredAudio`）、`windows/Hanasu.Windows/AppHost.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
 
 ## 廃止
 

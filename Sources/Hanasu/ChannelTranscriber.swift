@@ -95,6 +95,9 @@ final class ChannelTranscriber: @unchecked Sendable {
                 }
             } catch {
                 appLog.error("meeting \(channel.rawValue, privacy: .public) results error: \(String(describing: error), privacy: .public)")
+                // 要件: REQ-MTG-010
+                // 設計判断: DEC-MTG-009（認識が途中で止まったチャンネルは、録音を消さない。取り消しは数えない）
+                if !(error is CancellationError) { self?.markRecognitionFailed() }
             }
         }
         try await analyzer.start(inputSequence: stream)
@@ -126,6 +129,13 @@ final class ChannelTranscriber: @unchecked Sendable {
     /// このチャンネルの音声（音声ファイルの先頭）が、録音開始から何秒後に始まったか。
     /// 記録のあとに音声ファイルから文字起こしするとき、時刻をそろえるのに使う
     var audioStartOffset: Double { queue.sync { timeOffset ?? 0 } }
+
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-009
+    /// 記録中に認識の結果のストリームがエラーで止まった（取り消しを除く）。止めるときの締めのエラーは数えない
+    var recognitionFailed: Bool { queue.sync { failed } }
+    private var failed = false
+    private func markRecognitionFailed() { queue.sync { failed = true } }
 
     // 設計判断: DEC-MTG-088
     /// ここまでに書いた音声の終わりが、録音開始からの時刻で何秒か（音声の時間軸。スリープの時間は入らない）。

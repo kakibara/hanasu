@@ -732,12 +732,6 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   <data name="Settings_Storage" xml:space="preserve">
     <value>Stockage</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>Conserver les fichiers audio (me.wav / others.wav) après le traitement</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>Si cette option est désactivée, l'audio est supprimé après la création de la transcription et du compte rendu (il est conservé si la transcription échoue). Il s'agit de WAV mono 16 kHz, environ 115 Mo par canal et par heure.</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>Emplacement d'enregistrement</value>
   </data>
@@ -1351,5 +1345,126 @@ Ouvrir la page de la version dans le navigateur ?</value>
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>Après l'arrêt de l'enregistrement, les règles de remplacement de « Dictionnaire et règles » sont appliquées à la transcription, et le compte rendu est créé à partir du texte obtenu. Le texte reconnu d'origine est conservé : vous pouvez le rétablir depuis « Dictionnaire… » dans Notes de réunion.</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>Supprimer l'enregistrement après la transcription</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>Si cette option est activée, l'enregistrement d'une réunion (me.wav / others.wav) est supprimé une fois la transcription et le compte rendu créés. Il est conservé si la transcription est incomplète. Pendant l'enregistrement, vous pouvez modifier ce choix pour la réunion en cours dans Notes de réunion. L'audio est au format WAV mono 16 kHz, soit environ 115 MB par canal et par heure.</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>Conserver les enregistrements pendant</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>Les enregistrements plus anciens que cette durée sont supprimés automatiquement au démarrage de l'application et après le traitement d'une réunion. Cela s'applique aussi aux réunions dont vous avez choisi de conserver l'enregistrement. Les enregistrements des réunions dont la transcription est incomplète ne sont pas supprimés.</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>Dont {0} avec une transcription incomplète.</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>Les enregistrements de plus de {0} vont être supprimés maintenant : {1} réunions ({2}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>Les {0} réunions dont la transcription est incomplète sont conservées.</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>Modifier le paramètre et les supprimer ?</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>Réglage par défaut pour les réunions que vous enregistrerez à partir de maintenant. Pendant l'enregistrement, vous pouvez le modifier pour la réunion en cours dans la zone d'enregistrement en haut à gauche.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>Supprimer l'enregistrement de cette réunion après la transcription</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>Activé : l'enregistrement de cette réunion est supprimé une fois la transcription et le compte rendu créés (il est conservé si la transcription est incomplète). Le réglage par défaut ne change pas.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>Désactivé : l'enregistrement de cette réunion est conservé. Le réglage par défaut ne change pas.</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>Supprimer l'enregistrement…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>Gérer les enregistrements…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>Il ne reste aucun enregistrement pour cette réunion.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>Impossible de le supprimer pendant l'enregistrement ou le traitement.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>Supprimer l'enregistrement — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>Supprimer l'enregistrement de « {0} » ({1}) ?</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>Le compte rendu, la transcription et les notes sont conservés.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>Aucune transcription pour : {0}. Cette partie de la conversation ne sera pas conservée.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>Une partie de la transcription de cette réunion manque. Cette partie de la conversation ne sera pas conservée.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>Cette réunion n'a pas de transcription. Si vous supprimez l'enregistrement, il ne restera aucune trace de la conversation.</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>L'enregistrement de « {0} » a été supprimé.</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>Certains fichiers de l'enregistrement n'ont pas pu être supprimés. Les fichiers restants sont conservés.
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>Les fichiers audio sont supprimés définitivement (ils ne sont pas placés dans la Corbeille). Cette action est irréversible.</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>Gérer les enregistrements</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>Enregistrements restants : {0} réunions, {1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>Il ne reste aucun enregistrement.</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>Aucune transcription</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>Transcription incomplète</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>Réunions avec un enregistrement</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>Supprimer les enregistrements sélectionnés…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>Supprimer les enregistrements de plus de {0} jours…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>Supprimer tous les enregistrements…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>Si l'emplacement des réunions est synchronisé avec OneDrive, iCloud Drive ou un service similaire, les enregistrements supprimés peuvent rester quelque temps dans les éléments supprimés de ce service.</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>Supprimer les enregistrements de {0} réunions ({1}) ?</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>Parmi elles, {0} ont une transcription incomplète. Cette partie de la conversation ne sera pas conservée.</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>Les {0} réunions dont la transcription est incomplète ({1}) sont conservées. Vous pouvez les sélectionner pour les supprimer.</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>Les enregistrements de {0} réunions ont été supprimés.</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>Les enregistrements de {0} réunions n'ont pas pu être entièrement supprimés. Les fichiers restants sont conservés.</value>
   </data>
 </root>

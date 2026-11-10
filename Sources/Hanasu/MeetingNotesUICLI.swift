@@ -12,7 +12,7 @@ import SwiftUI
 //     音声の重ね方（チャンネルのずれ・片方だけ・読めないファイル）、再生位置の発言、再生できないとき。一時フォルダの音声だけを使う
 //   Hanasu --render-meeting-window <出力フォルダ> [--now "yyyy-MM-dd HH:mm"]
 //     会議ノートのウインドウ（一覧・文書・後ろ側のパネル・再生のバー）を、最小の大きさと決まった状態で PNG にする（MeetingWindowRenderCLI）
-// 確かめ方: REQ-MTG-050, REQ-MTG-051, REQ-MTG-052, REQ-MTG-053
+// 確かめ方: REQ-MTG-050, REQ-MTG-051, REQ-MTG-052, REQ-MTG-053, REQ-MTG-054, REQ-MTG-055
 @MainActor
 enum MeetingNotesUICLI {
     static func runIfRequested(_ args: [String] = CommandLine.arguments) {
@@ -187,13 +187,21 @@ enum MeetingNotesUICLI {
             MeetingDocumentView(meeting: outdated, recorder: recorder, onFocusTranscript: { _ in }, onRegenerate: {}, onEditSpeakers: {})
                 .frame(width: 640, height: 520),
             to: dir.appendingPathComponent("banners-document.png"))
-        // 5. 「…」のメニューの中身
+        // 5. 「…」のメニューの中身（録音がある会議とない会議。REQ-MTG-055）
         try MeetingNotesPreview.write(
             VStack(alignment: .leading, spacing: 8) {
-                MeetingMoreMenuItems(meeting: selected, recorder: recorder, onEditSpeakers: {}, onDelete: {})
+                MeetingMoreMenuItems(meeting: selected, recorder: recorder, onEditSpeakers: {}, onDelete: {},
+                                     onDeleteAudio: {}, hasAudioOverride: true)
             }
             .padding().frame(width: 260),
             to: dir.appendingPathComponent("more-menu.png"))
+        try MeetingNotesPreview.write(
+            VStack(alignment: .leading, spacing: 8) {
+                MeetingMoreMenuItems(meeting: selected, recorder: recorder, onEditSpeakers: {}, onDelete: {},
+                                     onDeleteAudio: {}, hasAudioOverride: false)
+            }
+            .padding().frame(width: 260),
+            to: dir.appendingPathComponent("more-menu-no-audio.png"))
         // 5b. 後ろ側のパネルと文書を単独で描く（ウインドウの中のガラスは画面の外では描けないため）
         player.showForRendering(meetingID: selected.id, channels: [.me, .others], time: 432, duration: selected.duration)
         try MeetingNotesPreview.write(
@@ -252,6 +260,13 @@ enum MeetingNotesUICLI {
         live.showPreviewForRendering(recording, lines: lines, volatileOthers: "それで来週の定例までに")
         ok = renderInWindow(MeetingWindowView(recorder: live, now: now, initialSelection: recording.id),
                             size: AppDelegate.meetingWindowMinSize, name: "live-min", dir: dir) && ok
+        // 7b. 記録中のツールバーの「録音を削除」をオンにした会議（REQ-MTG-010・054。最小の大きさで、はみ出しのメニューに隠れないか）
+        recording.deleteAudioAfterTranscription = true
+        live.showPreviewForRendering(recording, lines: lines, volatileOthers: "それで来週の定例までに")
+        ok = renderInWindow(MeetingWindowView(recorder: live, now: now, initialSelection: recording.id),
+                            size: AppDelegate.meetingWindowMinSize, name: "live-window-min", dir: dir) && ok
+        ok = renderInWindow(MeetingWindowView(recorder: live, now: now, initialSelection: recording.id),
+                            size: AppDelegate.meetingWindowSize, name: "live-window", dir: dir) && ok
         print("wrote: \(dir.path)")
         return ok
     }

@@ -538,7 +538,7 @@
     <value>Cuộc họp {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>Ứng dụng đã thoát trong khi ghi âm. Các tệp âm thanh ({0} / {1}) có thể đã được giữ lại một phần.</value>
+    <value>Ứng dụng đã thoát trong khi ghi âm.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Không thể bắt đầu ghi âm cuộc họp</value>
