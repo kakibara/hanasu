@@ -90,7 +90,7 @@ Typeless のような「話した内容を、自然な文章に整えて今カ�
 
 ### 3.2.1 整形などの AI を Claude にする（Claude API）
 
-- 設定の「AI」で、**音声入力**（整形・英訳・選択の編集）と**会議**（議事録・会議への質問・辞書の候補）のそれぞれに、Gemini か Claude とモデルを選ぶ（`AppSettings.aiProvider(for:)`・`textModel(for:)`、DEC-COM-040）。呼び出し側は `TextAIClient.fromSettings(_:for:)` でクライアントを受け取り、送り先を意識しない。
+- 設定の「AI」で、**音声入力**（整形・英訳・選択の編集）・**会議**（議事録・辞書の候補）・**AI チャット・質問**（会議の AI チャット・会議への質問）のそれぞれに、AI とモデルを選ぶ（`TextAIPurpose`、`AppSettings.aiProvider(for:)`・`textModel(for:)`・`aiChoice(for:)`、DEC-COM-040・171）。呼び出し側は `TextAIClient.fromSettings(_:for:)` でクライアントを受け取り、送り先を意識しない。画面で送り先を変えられる AI チャットと会議への質問は、`TextAIChoice` を `TextAIClient.make(_:settings:for:)` に渡す（[meeting.md](meeting.md) の 4.13.1）。
 - `TextAIClient` は、Gemini なら `GeminiClient` に任せ、Claude なら同じプロンプト（`GeminiClient.refinePrompt`・`translationPrompt`・`editPrompt` など）を `ClaudeClient` で送る（DEC-COM-047）。
 - `ClaudeClient` は REST の Messages API を直接呼ぶ（DEC-COM-041）。考える量は `output_config.effort` だけで決め、音声入力は low、会議は medium（DEC-COM-043）。応答は `stop_reason` を先に見る（refusal・max_tokens はエラー。DEC-COM-045）。429 / 5xx だけ少しやり直す（DEC-COM-046）。
 - API キーはキーチェーンに入れ、送るたびに読む（`Keychain`、`ClaudeClient.fromKeychain`。DEC-COM-048・DEC-COM-049）。設定画面は `AISettingsTab`・`ClaudeKeySection`。
@@ -99,14 +99,15 @@ Typeless のような「話した内容を、自然な文章に整えて今カ�
 
 ### 3.2.2 整形などの AI をローカルの小型 LLM にする（llama.cpp）
 
-- 設定の「AI」の各用途で「ローカル」を選ぶと、Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-4B のどれかを、この Mac の中で動かす（REQ-COM-030）。おすすめ（選ぶ欄に「おすすめ」と出し、既定にするもの）は `LocalLLMModel.recommended`（DEC-COM-067）。AI の既定も音声入力・会議ともローカル（`AppSettings.init` の `register`）で、以前から使っている人は `AppSettings.preserveAIProviderForExistingUsers` が Gemini のままにする（DEC-COM-068）。モデルの一覧（版・ファイル・SHA-256・文脈の長さ・サンプリング・ライセンス）は `LocalLLMModel`。選んだモデルは `AppSettings.localDictationModel`・`localMeetingModel`。
+- 設定の「AI」の各用途で「ローカル」を選ぶと、Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-4B のどれかを、この Mac の中で動かす（REQ-COM-030）。おすすめ（選ぶ欄に「おすすめ」と出し、既定にするもの）は `LocalLLMModel.recommended`（DEC-COM-067）。AI の既定も 3 用途ともローカル（`AppSettings.init` の `register`）で、以前から使っている人は `AppSettings.preserveAIProviderForExistingUsers` が音声入力と会議を Gemini のままにする（DEC-COM-068。AI チャット・質問は対象にしない。DEC-COM-171）。モデルの一覧（版・ファイル・SHA-256・文脈の長さ・サンプリング・ライセンス）は `LocalLLMModel`。選んだモデルは `AppSettings.localDictationModel`・`localMeetingModel`・`localChatModel`。
 - モデルは設定の欄（`LocalModelChoice`）か `--local-llm-download` で、`LocalLLMStore` が Hugging Face から取る。決めたコミットの URL から取り、大きさと SHA-256 を確かめてから `~/Library/Application Support/Hanasu/Models/llm/` に置く（DEC-COM-062）。
 - モデルがないまま整形・英訳・議事録の作成・履歴のやり直しを始めると、`TextAIClient` を作る前に `LocalModelDownloadPrompt.prepare` が NSAlert でダウンロードするか尋ね、`LocalLLMStore.ensureDownloaded` で取りながら進み具合のウインドウ（`LocalModelDownloadView`）を出し、終わるのを待つ。音声入力では、そのあと入力先のアプリを前に戻してから整形・入力に進む（REQ-COM-032、DEC-COM-069）。
 - 動かすのは同梱の llama.cpp の `llama-server`（`Contents/Resources/llama/`。`scripts/fetch-llama-cpp.sh` が SHA-256 を確かめて取り、`scripts/build-app.sh` が入れて署名する。DEC-COM-061）。`LocalLLMServer`（actor）が、使うときに 127.0.0.1 の空いたポートで起動し、5 分使わなければ止める。API キーは起動のたびに作って環境変数で渡す。アプリ・CLI の終了（`atexit`）で止め、前回落ちて残ったものは起動時に止める（DEC-COM-063）。
+- 用途ごとにローカルのモデルを変えられるので、違うモデルの処理が重なることがある。`LocalLLMGate` が、サーバーを使っている処理と起動を待っている処理を分けて数える。会議と AI チャット・質問の処理（`LocalLLMClient.waitsForOtherModel`）は、使っている処理が終わるまで待ってから起動し直し（期限はその処理のタイムアウト。過ぎたら `LocalLLMServer.Failure.busy`）、音声入力は今までどおり待たずに起動し直す（DEC-COM-172）。確認は `--test-local-llm-wait`（`AIPurposeCLI.swift`。サーバーの起動を偽にして確かめる）。
 - `TextAIClient` は、ローカルなら Gemini と同じプロンプトを `LocalLLMClient` で `/v1/chat/completions` に送る。整形・英訳の結果は `LocalLLMClient.cleanUpRewrite` で、全体を囲む「」と行末の空白を除く。終わりの印 `</s>` で止める。
 - 文脈に入らない入力は `LongInputFitter` で縮める（DEC-COM-065）。議事録（`<transcript>` が 1 つ）は文字起こしを部分に分けて要点にまとめてから元の指示で作り、ほかは後ろを省く。長さは llama-server の `/tokenize` で数える。
 - 小さいモデルはアクションアイテムを本文の中に JSON で書くことがあるので、`MinutesPrompt.inlineItems` でも読む（DEC-MTG-062）。
-- 確認: `--local-llm-list`・`--local-llm-download <id>`・`--local-llm-test-fit`（`LocalLLMCLI.swift`）、`--refine-text <文> --ai local --model <id>`、`--minutes-from-transcript <ファイル> --ai local --model <id>`、`--render-ai-settings <png> --local`、`--render-local-model-download <png>`（進み具合のウインドウ）、`--test-ai-defaults`（AI の既定の引き継ぎ）。開発中は `build/llama-cpp/macos-arm64/llama-server` を使う（`./scripts/fetch-llama-cpp.sh` で用意する。環境変数 `HANASU_LLAMA_SERVER` でも指定できる）。
+- 確認: `--local-llm-list`・`--local-llm-download <id>`・`--local-llm-test-fit`（`LocalLLMCLI.swift`）、`--refine-text <文> --ai local --model <id>`、`--minutes-from-transcript <ファイル> --ai local --model <id>`、`--render-ai-settings <png> --local`、`--render-local-model-download <png>`（進み具合のウインドウ）、`--test-ai-defaults`（AI の既定の引き継ぎ）、`--test-ai-purposes`（用途ごとの AI とモデル）。開発中は `build/llama-cpp/macos-arm64/llama-server` を使う（`./scripts/fetch-llama-cpp.sh` で用意する。環境変数 `HANASU_LLAMA_SERVER` でも指定できる）。
 
 ### 3.2.3 整形などの AI を Apple の Foundation Models の CLI にする（macOS 27 の fm）
 

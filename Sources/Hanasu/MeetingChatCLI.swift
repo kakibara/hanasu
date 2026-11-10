@@ -7,7 +7,7 @@ import SwiftUI
 //     プロンプトの組み立て（記録中の時点・確定前の発言・メモ・それまでの会話・長さの上限）・答えの時刻のリンク・
 //     メモへの変換を、決めた例で確かめる（AI は呼ばない）。失敗があれば終了コード 1。
 //   Hanasu --chat-meeting <会議のフォルダ> --ask <質問> [--ask <続けての質問> ...] [--at <mm:ss>] [--show-prompt]
-//          [--ai gemini|claude|local|apple] [--model <id>]
+//          [--ai gemini|claude|local|apple] [--model <id>] [--show-target]
 //     保存した会議について、質問を順に送って会話する（2 つめからは、前のやりとりを踏まえて答える）。
 //     --at を付けると、その時刻までの文字起こしとメモだけを「記録中」として渡す（記録中のチャットの再現）。
 //   Hanasu --render-meeting-chat <出力フォルダ>
@@ -22,7 +22,7 @@ enum MeetingChatCLI {
         }
 
         if args.contains("--test-meeting-chat") {
-            let results = MeetingChat.selfTest()
+            let results = MeetingChat.selfTest() + MeetingChatRouteTest.run()
             results.forEach { print($0) }
             exit(results.allSatisfy { $0.hasPrefix("OK") } ? 0 : 1)
         }
@@ -63,8 +63,11 @@ enum MeetingChatCLI {
             let material = prepared
             do {
                 let settings = AppSettings.shared
-                let client = try TextAIClient.cli(args: args, settings: settings, for: .meeting, timeout: 180)
-                let model = TextAIClient.cliModel(args: args, settings: settings, for: .meeting)
+                // 要件: REQ-COM-025（AI チャットは「AI チャット・質問」の AI とモデル）
+                // 確かめ方: REQ-COM-025
+                if TextAIClient.printTargetIfRequested(args: args, settings: settings, for: .chat) { exit(0) }
+                let client = try TextAIClient.cli(args: args, settings: settings, for: .chat, timeout: 180)
+                let model = TextAIClient.cliModel(args: args, settings: settings, for: .chat)
                 print("[会議] \(meeting.title)・発言 \(material.lines.count) 件"
                       + (material.live ? "（\(Meeting.clock(material.elapsed)) まで。記録中として渡す）" : ""))
                 var history: [MeetingChat.Message] = []
@@ -126,12 +129,42 @@ enum MeetingChatPreview {
             if let previous { UserDefaults.standard.set(previous, forKey: key) } else { UserDefaults.standard.removeObject(forKey: key) }
         }
 
+        // 要件: REQ-MTG-047（送り先は、この Mac の設定に左右されないよう決めて描く。設定は描いたあとに戻す）
+        let settings = AppSettings.shared
+        let savedChat = (settings.chatAIProvider, settings.claudeChatModel, settings.localChatModel)
+        defer {
+            settings.chatAIProvider = savedChat.0
+            settings.claudeChatModel = savedChat.1
+            settings.localChatModel = savedChat.2
+        }
+        settings.chatAIProvider = .claude
+        settings.claudeChatModel = ClaudeClient.Model.defaultChat.rawValue
+        let ready = AIRoute.Availability(claude: true, gemini: true, downloadedLocalModels: [.gemma4E4B], appleFMReason: nil)
+
         let chat = MeetingChatStore.shared.model(for: meeting.id)
+        chat.setAvailabilityForPreview(ready)
         try MeetingNotesPreview.write(LivePreview(recorder: recorder).frame(width: 1240, height: 620),
                                       to: directory.appendingPathComponent("live-chat-empty.png"))
         chat.setMessagesForPreview(sampleConversation, draft: "価格表の更新はいつまで？")
         try MeetingNotesPreview.write(LivePreview(recorder: recorder).frame(width: 1240, height: 620),
                                       to: directory.appendingPathComponent("live-chat.png"))
+        // 既定（Claude Haiku）から Opus に切り替えた会話
+        chat.override = TextAIChoice(provider: .claude, model: ClaudeClient.Model.opus.rawValue)
+        try MeetingNotesPreview.write(LivePreview(recorder: recorder).frame(width: 1240, height: 620),
+                                      to: directory.appendingPathComponent("live-chat-switched.png"))
+        chat.override = nil
+        // 既定（ローカル Gemma）がまだダウンロードされていない
+        settings.chatAIProvider = .local
+        settings.localChatModel = .gemma4E4B
+        var unavailableMeeting = meeting
+        unavailableMeeting.id = "preview-chat-unavailable"
+        MeetingChatStore.shared.model(for: unavailableMeeting.id).setAvailabilityForPreview(
+            AIRoute.Availability(claude: true, gemini: false, downloadedLocalModels: [], appleFMReason: "macOS 27"))
+        recorder.showPreviewForRendering(unavailableMeeting, lines: lines, volatileOthers: "")
+        try MeetingNotesPreview.write(LivePreview(recorder: recorder).frame(width: 1240, height: 620),
+                                      to: directory.appendingPathComponent("live-chat-unavailable.png"))
+        settings.chatAIProvider = .claude
+        recorder.showPreviewForRendering(meeting, lines: lines, volatileOthers: "そうですね、基準は利用頻度と")
 
         // 記録のあとの「AI チャット」タブ
         var done = meeting
@@ -143,6 +176,7 @@ enum MeetingChatPreview {
         }
         done.speakerNames = ["spk1": "田中"]
         MeetingChatStore.shared.model(for: done.id).setMessagesForPreview(sampleConversation)
+        MeetingChatStore.shared.model(for: done.id).setAvailabilityForPreview(ready)
         try MeetingNotesPreview.write(MeetingDetailPreview(meeting: done, recorder: recorder, initialTab: 4).frame(width: 1140, height: 620),
                                       to: directory.appendingPathComponent("detail-chat.png"))
     }
@@ -157,12 +191,12 @@ enum MeetingChatPreview {
         **宿題**
         - 価格表の更新: 佐藤さん（依頼中・未確定）[10:30]
         - 3 社の選び方の基準をまとめる: 自分（来週まで）[11:41]
-        """, coveredUntil: 745, lineCount: 6),
+        """, coveredUntil: 745, lineCount: 6, modelLabel: "Claude · Haiku 5.5"),
         MeetingChat.Message(role: .user, text: "3 社の候補は具体的に出ていた？"),
         MeetingChat.Message(role: .assistant, text: """
         具体的な社名は出ていません。「既存のお客さまのうち、利用頻度が高いところから」という方針だけです [11:00]。
         候補を聞くなら「利用頻度の目安（例: 週何回以上）はありますか？」が使えます。
-        """, coveredUntil: 752, lineCount: 6),
+        """, coveredUntil: 752, lineCount: 6, modelLabel: "Claude · Haiku 5.5"),
     ]
 }
 
@@ -227,6 +261,50 @@ extension MeetingChat {
         let note = noteText(from: "## 決まったこと\n- **リリースは 11/20** [12:34]\n- 価格表は佐藤さん\n")
         check("答えをメモの 1 行にする", note == "AI: 決まったこと / リリースは 11/20 [12:34] / 価格表は佐藤さん")
         check("メモの長さを抑える", noteText(from: String(repeating: "あ", count: 1000), limit: 50).count == 51)
+        return results
+    }
+}
+
+// 確かめ方: REQ-MTG-047, REQ-MTG-048
+/// 送り先の切り替え（既定・切り替え・使えないものの判定・一覧）を確かめる（AI は呼ばない）
+@MainActor
+enum MeetingChatRouteTest {
+    static func run() -> [String] {
+        var results: [String] = []
+        func check(_ name: String, _ ok: Bool) { results.append("\(ok ? "OK" : "NG") \(name)") }
+        let name = "dev.mactypeless.Hanasu.test-meeting-chat.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: name)!
+        defer { defaults.removePersistentDomain(forName: name) }
+        let settings = AppSettings(defaults: defaults, domainName: name)
+        settings.chatAIProvider = .claude
+        settings.claudeChatModel = "claude-haiku-5-5"
+        settings.geminiChatModel = "gemini-custom-x"
+
+        let chat = MeetingChatModel(meetingID: "route-a")
+        check("切り替えていなければ、設定の AI チャット・質問に送る",
+              chat.effectiveChoice(settings: settings) == TextAIChoice(provider: .claude, model: "claude-haiku-5-5"))
+        chat.override = TextAIChoice(provider: .local, model: "qwen3.5-4b")
+        check("切り替えたら、その AI とモデルに送る", chat.effectiveChoice(settings: settings) == TextAIChoice(provider: .local, model: "qwen3.5-4b"))
+        chat.clear()
+        check("「新しい会話」では切り替えを戻さない", chat.override != nil)
+        check("別の会議は既定で始まる", MeetingChatModel(meetingID: "route-b").effectiveChoice(settings: settings).provider == .claude)
+        let ask = MeetingAskModel()
+        check("会議に質問も、切り替えていなければ設定の AI チャット・質問", ask.effectiveChoice(settings: settings) == settings.aiChoice(for: .chat))
+
+        let none = AIRoute.Availability(claude: false, gemini: false, downloadedLocalModels: [.gemma4E4B], appleFMReason: "macOS 27 以降")
+        check("Claude のキーがなければ選べない", none.unavailableReason(TextAIChoice(provider: .claude, model: "claude-opus-5-5")) != nil)
+        check("Gemini の認証がなければ選べない", none.unavailableReason(TextAIChoice(provider: .gemini, model: "gemini-3.8-flash")) != nil)
+        check("ダウンロードしたローカルのモデルは選べる", none.unavailableReason(TextAIChoice(provider: .local, model: "gemma-4-e4b")) == nil)
+        check("ダウンロードしていないローカルのモデルは選べない", none.unavailableReason(TextAIChoice(provider: .local, model: "qwen3.5-4b")) != nil)
+        check("Apple の fm が使えなければ選べない", none.unavailableReason(TextAIChoice(provider: .appleFM, model: AppleFMClient.modelName)) != nil)
+        check("選べない項目は理由を文字に入れる",
+              AIRoute.itemTitle(TextAIChoice(provider: .claude, model: "claude-opus-5-5"), reason: "API キーが未設定").contains("API キーが未設定"))
+
+        let sections = AIRoute.sections(settings: settings)
+        check("一覧は ローカル・Apple・Gemini・Claude の順", sections.map(\.provider) == [.local, .appleFM, .gemini, .claude])
+        check("ローカルは 4 つ、Claude は 3 つ", sections[0].choices.count == LocalLLMModel.allCases.count && sections[3].choices.count == 3)
+        check("Gemini は候補と、設定にある一覧にないモデル",
+              sections[2].choices.map(\.model) == AppSettings.suggestedModels + ["gemini-custom-x"])
         return results
     }
 }

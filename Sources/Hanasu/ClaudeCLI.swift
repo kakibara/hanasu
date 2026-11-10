@@ -104,26 +104,32 @@ enum ClaudeCLI {
         return failures == 0
     }
 
-    // 確かめ方: REQ-COM-020, REQ-COM-024
+    // 確かめ方: REQ-COM-020, REQ-COM-024, REQ-COM-025
     private static func renderSettings(to url: URL, claude: Bool, local: Bool, apple: Bool) -> Never {
         _ = NSApplication.shared
         let settings = AppSettings.shared
-        let saved = (settings.dictationAIProvider, settings.meetingAIProvider)
-        let savedLocal = (settings.localDictationModel, settings.localMeetingModel)
+        let saved = (settings.dictationAIProvider, settings.meetingAIProvider, settings.chatAIProvider)
+        let savedLocal = (settings.localDictationModel, settings.localMeetingModel, settings.localChatModel)
+        let savedChatModels = (settings.claudeChatModel, settings.geminiChatModel)
         if claude {
             settings.dictationAIProvider = .gemini
             settings.meetingAIProvider = .claude
+            settings.chatAIProvider = .claude
+            settings.claudeChatModel = ClaudeClient.Model.defaultChat.rawValue
         }
         if local {
             settings.dictationAIProvider = .local
             settings.meetingAIProvider = .local
+            settings.chatAIProvider = .local
             settings.localDictationModel = .lfm25JP
             settings.localMeetingModel = .gemma4E4B
+            settings.localChatModel = .gemma4E4B
             if !LocalLLMStore.isDownloaded(.lfm25JP) { LocalLLMStore.shared.showDownloadingForRendering(.lfm25JP, fraction: 0.42) }
         }
         if apple {
             settings.dictationAIProvider = .local
             settings.meetingAIProvider = .appleFM
+            settings.chatAIProvider = .appleFM
         }
         let view = AISettingsTab(settings: settings)
             .frame(width: 560, height: 2600)
@@ -148,8 +154,12 @@ enum ClaudeCLI {
         }
         settings.dictationAIProvider = saved.0
         settings.meetingAIProvider = saved.1
+        settings.chatAIProvider = saved.2
         settings.localDictationModel = savedLocal.0
         settings.localMeetingModel = savedLocal.1
+        settings.localChatModel = savedLocal.2
+        settings.claudeChatModel = savedChatModels.0
+        settings.geminiChatModel = savedChatModels.1
         exit(0)
     }
 

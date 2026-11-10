@@ -2,7 +2,7 @@
   "sourceLanguage" : "ja",
   "strings" : {
     "\n\n（%@ %@ %.1f 秒）" : {
-      "comment" : "AISettingsView.swift:80",
+      "comment" : "AISettingsView.swift:82",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -716,7 +716,7 @@
       }
     },
     "%@ · %@" : {
-      "comment" : "MeetingDocumentView.swift:188",
+      "comment" : "MeetingDocumentView.swift:188, TextAI.swift:72",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -818,7 +818,7 @@
       }
     },
     "%@ から · 話者の区別（話者1・話者2…）は記録を止めたあとに行います" : {
-      "comment" : "MeetingWindow.swift:861",
+      "comment" : "MeetingWindow.swift:870",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2144,7 +2144,7 @@
       }
     },
     "%@ のダウンロード" : {
-      "comment" : "Onboarding.swift:799",
+      "comment" : "Onboarding.swift:804",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2654,7 +2654,7 @@
       }
     },
     "%@ までの記録から" : {
-      "comment" : "MeetingChatView.swift:370",
+      "comment" : "MeetingChatView.swift:444",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2858,7 +2858,7 @@
       }
     },
     "%@ をダウンロードする（音声入力と会議の両方で使います）" : {
-      "comment" : "Onboarding.swift:525",
+      "comment" : "Onboarding.swift:528",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3062,7 +3062,7 @@
       }
     },
     "%@ ページ中 %@ ページ目" : {
-      "comment" : "Onboarding.swift:178",
+      "comment" : "Onboarding.swift:181",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3266,7 +3266,7 @@
       }
     },
     "%@ 件の会議・%@ か所" : {
-      "comment" : "MeetingSearchView.swift:199",
+      "comment" : "MeetingSearchView.swift:239",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -4286,7 +4286,7 @@
       }
     },
     "%@…%@（伏せた %@ 文字）" : {
-      "comment" : "ClaudeClient.swift:162",
+      "comment" : "ClaudeClient.swift:175",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -4388,7 +4388,7 @@
       }
     },
     "%@。%@" : {
-      "comment" : "Onboarding.swift:520",
+      "comment" : "Onboarding.swift:523",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5714,7 +5714,7 @@
       }
     },
     "%@の音声を読めません" : {
-      "comment" : "MeetingPlayer.swift:256",
+      "comment" : "MeetingPlayer.swift:266",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5816,7 +5816,7 @@
       }
     },
     "%@の音量" : {
-      "comment" : "MeetingWindow.swift:884",
+      "comment" : "MeetingWindow.swift:893",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6122,7 +6122,7 @@
       }
     },
     "%@を試す" : {
-      "comment" : "AISettingsView.swift:46",
+      "comment" : "AISettingsView.swift:48",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6428,7 +6428,7 @@
       }
     },
     "%@・%@ 件" : {
-      "comment" : "MeetingSearchView.swift:187",
+      "comment" : "MeetingSearchView.swift:227",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6836,7 +6836,7 @@
       }
     },
     "%@（%@）" : {
-      "comment" : "LocalLLMModel.swift:31, LocalLLMSettingsView.swift:15, Onboarding.swift:767",
+      "comment" : "AIRouteMenu.swift:79, LocalLLMModel.swift:33, LocalLLMSettingsView.swift:15",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7550,7 +7550,7 @@
       }
     },
     "1 分ほどで終わります。あとからメニューの「Hanasu の使い方…」でいつでも開けます。" : {
-      "comment" : "Onboarding.swift:297",
+      "comment" : "Onboarding.swift:300",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8672,7 +8672,7 @@
       }
     },
     "AI とモデルを選べる（設定 →「AI」）" : {
-      "comment" : "Onboarding.swift:640",
+      "comment" : "Onboarding.swift:645",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8774,7 +8774,7 @@
       }
     },
     "AI に Gemini を選んだときと、文字起こしのエンジンに Gemini を選んだときに使います。「接続を試す」はモデルの情報を取るだけで、料金はかかりません。" : {
-      "comment" : "AISettingsView.swift:331",
+      "comment" : "AISettingsView.swift:358",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9080,7 +9080,7 @@
       }
     },
     "AI チャット" : {
-      "comment" : "MeetingChatView.swift:528, MeetingInspector.swift:33",
+      "comment" : "MeetingChatView.swift:602, MeetingInspector.swift:33",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9177,6 +9177,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AI 聊天"
+          }
+        }
+      }
+    },
+    "AI チャット・質問" : {
+      "comment" : "TextAI.swift:50",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دردشة AI والأسئلة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI-Chat & Fragen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI Chat & Ask"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat con IA y preguntas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat IA et questions"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI चैट और सवाल"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obrolan AI & tanya jawab"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat IA e domande"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 채팅 · 질문"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czat AI i pytania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat de IA e perguntas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI-чат и вопросы"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI sohbet ve sorular"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trò chuyện AI & hỏi đáp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 聊天·提问"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 聊天·提問"
           }
         }
       }
@@ -9284,7 +9386,7 @@
       }
     },
     "API キー" : {
-      "comment" : "AISettingsView.swift:295",
+      "comment" : "AISettingsView.swift:322",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9381,6 +9483,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "API 金鑰"
+          }
+        }
+      }
+    },
+    "API キーが未設定" : {
+      "comment" : "AIRouteMenu.swift:18",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد مفتاح API"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kein API-Schlüssel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no API key"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sin clave de API"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "clé API non configurée"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API की सेट नहीं है"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belum ada kunci API"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "chiave API non impostata"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API 키가 설정되지 않음"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "brak klucza API"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sem chave de API"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ключ API не задан"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "API anahtarı ayarlanmadı"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chưa có khóa API"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未设置 API 密钥"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尚未設定 API 金鑰"
           }
         }
       }
@@ -9488,7 +9692,7 @@
       }
     },
     "API キー（sk-ant-…）" : {
-      "comment" : "AISettingsView.swift:201",
+      "comment" : "AISettingsView.swift:226",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9692,7 +9896,7 @@
       }
     },
     "Alibaba。Gemma の半分ほどの大きさで、メモリが 8 GB の Mac でも動かしやすい。言い直しの扱いは Gemma より弱い" : {
-      "comment" : "LocalLLMModel.swift:42",
+      "comment" : "LocalLLMModel.swift:44",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9794,7 +9998,7 @@
       }
     },
     "Apple の Foundation Models" : {
-      "comment" : "Onboarding.swift:462",
+      "comment" : "Onboarding.swift:465",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10508,7 +10712,7 @@
       }
     },
     "Apple の Foundation Models（fm）を使えません" : {
-      "comment" : "TextAI.swift:60",
+      "comment" : "TextAI.swift:101",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11222,7 +11426,7 @@
       }
     },
     "Claude Console で API キーを発行" : {
-      "comment" : "AISettingsView.swift:208",
+      "comment" : "AISettingsView.swift:233",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11323,110 +11527,110 @@
         }
       }
     },
-    "Claude Haiku 5.5（速い・安い。音声入力の既定）" : {
-      "comment" : "ClaudeClient.swift:76",
+    "Claude Haiku 5.5（速い・安い。音声入力と AI チャット・質問の既定）" : {
+      "comment" : "ClaudeClient.swift:89",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (سريع ورخيص. الافتراضي للإدخال الصوتي)"
+            "value" : "Claude Haiku 5.5 (سريع ورخيص. الافتراضي للإدخال الصوتي ولدردشة AI والأسئلة)"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (schnell, günstig; Standard für Diktat)"
+            "value" : "Claude Haiku 5.5 (schnell, günstig; Standard für Diktat und „KI-Chat & Fragen“)"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (fast, low cost; default for dictation)"
+            "value" : "Claude Haiku 5.5 (fast and cheap; default for dictation and AI chat & Ask)"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (rápido y económico; predeterminado para el dictado)"
+            "value" : "Claude Haiku 5.5 (rápido y económico; predeterminado para el dictado y para «Chat con IA y preguntas»)"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (rapide, économique ; par défaut pour la dictée)"
+            "value" : "Claude Haiku 5.5 (rapide, économique ; par défaut pour la dictée et « Chat IA et questions »)"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (तेज़ और सस्ता। वॉइस इनपुट के लिए डिफ़ॉल्ट)"
+            "value" : "Claude Haiku 5.5 (तेज़ और सस्ता। वॉइस इनपुट तथा “AI चैट और सवाल” के लिए डिफ़ॉल्ट)"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (cepat, murah; default untuk dikte)"
+            "value" : "Claude Haiku 5.5 (cepat, murah; default untuk dikte serta obrolan AI & tanya jawab)"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (veloce ed economico; predefinito per la dettatura)"
+            "value" : "Claude Haiku 5.5 (veloce ed economico; predefinito per la dettatura e per «Chat IA e domande»)"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5(빠르고 저렴함. 음성 입력 기본값)"
+            "value" : "Claude Haiku 5.5(빠르고 저렴함. 음성 입력과 AI 채팅 · 질문 기본값)"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (szybki i tani; domyślny dla dyktowania)"
+            "value" : "Claude Haiku 5.5 (szybki i tani; domyślny dla dyktowania oraz czatu AI i pytań)"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (rápido e barato; padrão do ditado)"
+            "value" : "Claude Haiku 5.5 (rápido e barato; padrão do ditado e de “Chat de IA e perguntas”)"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (быстрая и недорогая; по умолчанию для диктовки)"
+            "value" : "Claude Haiku 5.5 (быстрая и недорогая; по умолчанию для диктовки и «AI-чат и вопросы»)"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (hızlı ve ucuz; dikte için varsayılan)"
+            "value" : "Claude Haiku 5.5 (hızlı ve ucuz; dikte ile AI sohbet ve sorular için varsayılan)"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5 (nhanh, rẻ; mặc định cho nhập bằng giọng nói)"
+            "value" : "Claude Haiku 5.5 (nhanh, rẻ; mặc định cho nhập bằng giọng nói và Trò chuyện AI & hỏi đáp)"
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5（快速、便宜。语音输入的默认模型）"
+            "value" : "Claude Haiku 5.5（快速、便宜。语音输入和 AI 聊天·提问的默认模型）"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Claude Haiku 5.5（快速、便宜。語音輸入的預設模型）"
+            "value" : "Claude Haiku 5.5（快速、便宜。語音輸入和 AI 聊天·提問的預設模型）"
           }
         }
       }
     },
     "Claude Opus 5.5（いちばん賢い・遅い）" : {
-      "comment" : "ClaudeClient.swift:78",
+      "comment" : "ClaudeClient.swift:91",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11528,7 +11732,7 @@
       }
     },
     "Claude Sonnet 5.5（会議の既定）" : {
-      "comment" : "ClaudeClient.swift:77",
+      "comment" : "ClaudeClient.swift:90",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -12038,7 +12242,7 @@
       }
     },
     "Claude の API キーが設定されていません（設定 →「AI」）" : {
-      "comment" : "ClaudeClient.swift:18, TextAI.swift:58",
+      "comment" : "ClaudeClient.swift:18, TextAI.swift:99",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -12140,7 +12344,7 @@
       }
     },
     "Claude のモデル" : {
-      "comment" : "AISettingsView.swift:146",
+      "comment" : "AISettingsView.swift:173",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -12548,7 +12752,7 @@
       }
     },
     "Claude（Anthropic）の API キー" : {
-      "comment" : "AISettingsView.swift:211",
+      "comment" : "AISettingsView.swift:236",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -12956,7 +13160,7 @@
       }
     },
     "Finder で表示" : {
-      "comment" : "DictationHistoryWindow.swift:526, MeetingWindow.swift:612",
+      "comment" : "DictationHistoryWindow.swift:526, MeetingWindow.swift:621",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -13874,7 +14078,7 @@
       }
     },
     "Gemini のモデル" : {
-      "comment" : "AISettingsView.swift:133",
+      "comment" : "AISettingsView.swift:160",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -14078,7 +14282,7 @@
       }
     },
     "Gemini の認証" : {
-      "comment" : "AISettingsView.swift:329",
+      "comment" : "AISettingsView.swift:356",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -14282,7 +14486,7 @@
       }
     },
     "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません（設定 →「AI」）" : {
-      "comment" : "TextAI.swift:57",
+      "comment" : "TextAI.swift:98",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -14894,7 +15098,7 @@
       }
     },
     "Google AI Studio で API キーを発行" : {
-      "comment" : "AISettingsView.swift:307",
+      "comment" : "AISettingsView.swift:334",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -15608,7 +15812,7 @@
       }
     },
     "Hanasu が動くのに要る許可です。あとから設定の「権限」でもできます。" : {
-      "comment" : "Onboarding.swift:696",
+      "comment" : "Onboarding.swift:701",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -15812,7 +16016,7 @@
       }
     },
     "Hanasu の使い方" : {
-      "comment" : "Onboarding.swift:856",
+      "comment" : "Onboarding.swift:861",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16118,7 +16322,7 @@
       }
     },
     "Hanasu へようこそ" : {
-      "comment" : "Onboarding.swift:288",
+      "comment" : "Onboarding.swift:291",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16628,7 +16832,7 @@
       }
     },
     "Hanasu 設定" : {
-      "comment" : "AppDelegate.swift:428",
+      "comment" : "AppDelegate.swift:432",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17444,7 +17648,7 @@
       }
     },
     "Liquid AI。小さく速い。日本語の指示に強い" : {
-      "comment" : "LocalLLMModel.swift:40",
+      "comment" : "LocalLLMModel.swift:42",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17546,7 +17750,7 @@
       }
     },
     "Mac 全体の音" : {
-      "comment" : "MeetingWindow.swift:347",
+      "comment" : "MeetingWindow.swift:356",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -18260,7 +18464,7 @@
       }
     },
     "Mac 標準（既定）・Whisper（Mac の中で動かす）・Gemini（音声を送る）から、音声入力と会議で別々に選べます（設定 →「一般」）。" : {
-      "comment" : "Onboarding.swift:649",
+      "comment" : "Onboarding.swift:654",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -18566,7 +18770,7 @@
       }
     },
     "Meet・Zoom・Teams・Slack ハドルなどの会議を録って、文字起こしと議事録を作ります。" : {
-      "comment" : "Onboarding.swift:574",
+      "comment" : "Onboarding.swift:577",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -18668,7 +18872,7 @@
       }
     },
     "SB Intuitions。日本語で学習。文脈は 8K まで（長い会議は分けてまとめる）" : {
-      "comment" : "LocalLLMModel.swift:41",
+      "comment" : "LocalLLMModel.swift:43",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -18872,7 +19076,7 @@
       }
     },
     "Slack ならくだけた短い文、メールなら丁寧な文のように、入力先のアプリに合わせて文体を変えます。アプリごとに出力の言語も決められます（設定 →「アプリ別」）。" : {
-      "comment" : "Onboarding.swift:617",
+      "comment" : "Onboarding.swift:620",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -19382,7 +19586,7 @@
       }
     },
     "Vertex AI のユーザー権限（roles/aiplatform.user）を持つサービスアカウントの鍵を指定してください。" : {
-      "comment" : "AISettingsView.swift:373",
+      "comment" : "AISettingsView.swift:400",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20402,7 +20606,7 @@
       }
     },
     "macOS 27 の Apple Intelligence のモデル。無料" : {
-      "comment" : "Onboarding.swift:348",
+      "comment" : "Onboarding.swift:351",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -21524,7 +21728,7 @@
       }
     },
     "「%@」を削除しますか？" : {
-      "comment" : "MeetingWindow.swift:71, MinutesTemplateViews.swift:304",
+      "comment" : "MeetingWindow.swift:77, MinutesTemplateViews.swift:304",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22136,7 +22340,7 @@
       }
     },
     "「はじめる」を押したら、入力したい場所で %@ を押して話してみてください。" : {
-      "comment" : "Onboarding.swift:748",
+      "comment" : "Onboarding.swift:753",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22340,7 +22544,7 @@
       }
     },
     "「メールの署名」と話すだけで、登録した定型文をそのまま入力します（設定 →「スニペット」）。" : {
-      "comment" : "Onboarding.swift:614",
+      "comment" : "Onboarding.swift:617",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23462,7 +23666,7 @@
       }
     },
     "おすすめ" : {
-      "comment" : "Onboarding.swift:411",
+      "comment" : "Onboarding.swift:414",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23564,7 +23768,7 @@
       }
     },
     "おすすめ。Google。いちばん大きく、整形も議事録もいちばん自然。メモリ 16 GB 以上向け" : {
-      "comment" : "LocalLLMModel.swift:39",
+      "comment" : "LocalLLMModel.swift:41",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24074,7 +24278,7 @@
       }
     },
     "ここまでの会話について AI に聞けます" : {
-      "comment" : "MeetingChatView.swift:211",
+      "comment" : "MeetingChatView.swift:269",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24176,7 +24380,7 @@
       }
     },
     "ここまでの会話について質問（↩ で送信）" : {
-      "comment" : "MeetingChatView.swift:257",
+      "comment" : "MeetingChatView.swift:315",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24278,7 +24482,7 @@
       }
     },
     "ここまでの記録を読んでいます…" : {
-      "comment" : "MeetingChatView.swift:168",
+      "comment" : "MeetingChatView.swift:214",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24380,7 +24584,7 @@
       }
     },
     "ここまでを要約" : {
-      "comment" : "MeetingChat.swift:215",
+      "comment" : "MeetingChat.swift:218",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24788,7 +24992,7 @@
       }
     },
     "この Mac では使えません（macOS 27 から）" : {
-      "comment" : "Onboarding.swift:426",
+      "comment" : "Onboarding.swift:429",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24890,7 +25094,7 @@
       }
     },
     "この Mac のメモリは 16 GB より少ないので、Gemma は遅いかもしれません。そのときは設定 →「AI」で小さいモデルか、ほかの AI に変えてください。" : {
-      "comment" : "Onboarding.swift:515",
+      "comment" : "Onboarding.swift:518",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24992,7 +25196,7 @@
       }
     },
     "この Mac の中で動く Google の Gemma。無料で、議事録もまとめやすい" : {
-      "comment" : "Onboarding.swift:345",
+      "comment" : "Onboarding.swift:348",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25089,6 +25293,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在這台 Mac 本機執行的 Google Gemma。免費，也擅長彙整會議紀錄"
+          }
+        }
+      }
+    },
+    "この Mac の外には送りません。" : {
+      "comment" : "MeetingSearchView.swift:322",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يخرج شيء من هذا الـ Mac."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts verlässt diesen Mac."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing is sent outside this Mac."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada sale de este Mac."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rien ne quitte ce Mac."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कुछ भी इस Mac से बाहर नहीं भेजा जाता।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada yang keluar dari Mac ini."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nulla esce da questo Mac."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 Mac 밖으로 보내지 않습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nic nie opuszcza tego Maca."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada sai deste Mac."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ничего не покидает этот Mac."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiçbir şey bu Mac’ten çıkmaz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có gì rời khỏi máy Mac này."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内容不会离开这台 Mac。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "內容不會離開這台 Mac。"
+          }
+        }
+      }
+    },
+    "この Mac の外には送りません。会話は保存しません。" : {
+      "comment" : "MeetingChatView.swift:371",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يخرج شيء من هذا الـ Mac. لا تُحفظ المحادثة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts verlässt diesen Mac. Das Gespräch wird nicht gespeichert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing is sent outside this Mac. The conversation isn't saved."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada sale de este Mac. La conversación no se guarda."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rien ne quitte ce Mac. La conversation n’est pas enregistrée."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कुछ भी इस Mac से बाहर नहीं भेजा जाता। बातचीत सहेजी नहीं जाती।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada yang keluar dari Mac ini. Percakapan tidak disimpan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nulla esce da questo Mac. La conversazione non viene salvata."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 Mac 밖으로 보내지 않습니다. 대화는 저장하지 않습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nic nie opuszcza tego Maca. Rozmowa nie jest zapisywana."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada sai deste Mac. A conversa não é salva."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ничего не покидает этот Mac. Разговор не сохраняется."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiçbir şey bu Mac’ten çıkmaz. Sohbet kaydedilmez."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có gì rời khỏi máy Mac này. Cuộc trò chuyện không được lưu."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内容不会离开这台 Mac。不会保存对话。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "內容不會離開這台 Mac。不會儲存對話。"
           }
         }
       }
@@ -25501,6 +25909,108 @@
         }
       }
     },
+    "この会話だけ、既定（%@）から変えています" : {
+      "comment" : "AIRouteMenu.swift:128",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم التغيير عن الافتراضي (%@) لهذه المحادثة فقط"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur für dieses Gespräch geändert (Standard: %@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changed from the default (%@) for this conversation only"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiado solo para esta conversación (predeterminado: %@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifié pour cette conversation uniquement (par défaut : %@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सिर्फ़ इस बातचीत के लिए डिफ़ॉल्ट (%@) से बदला गया है"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diubah dari default (%@) hanya untuk percakapan ini"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiato solo per questa conversazione (predefinito: %@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 대화에서만 기본값(%@)에서 바꿨습니다"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmienione względem domyślnego (%@) tylko w tej rozmowie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alterado só nesta conversa (padrão: %@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменено только для этого разговора (по умолчанию — %@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yalnızca bu sohbet için varsayılandan (%@) değiştirildi"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã đổi so với mặc định (%@), chỉ cho cuộc trò chuyện này"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅此对话已从默认（%@）更改"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "僅此對話已從預設（%@）變更"
+          }
+        }
+      }
+    },
     "この会議から辞書の候補を探す" : {
       "comment" : "MeetingDictionaryViews.swift:106",
       "extractionState" : "manual",
@@ -25706,7 +26216,7 @@
       }
     },
     "この会議について AI に聞けます" : {
-      "comment" : "MeetingChatView.swift:211",
+      "comment" : "MeetingChatView.swift:269",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25808,7 +26318,7 @@
       }
     },
     "この会議について質問（↩ で送信）" : {
-      "comment" : "MeetingChatView.swift:257",
+      "comment" : "MeetingChatView.swift:315",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26012,7 +26522,7 @@
       }
     },
     "この会議をゴミ箱に入れる" : {
-      "comment" : "MeetingWindow.swift:620",
+      "comment" : "MeetingWindow.swift:629",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26930,7 +27440,7 @@
       }
     },
     "この答えをメモに足す（議事録で優先して取り上げます）" : {
-      "comment" : "MeetingChatView.swift:394",
+      "comment" : "MeetingChatView.swift:468",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27440,7 +27950,7 @@
       }
     },
     "この説明は、メニューの「Hanasu の使い方…」でいつでも開けます。" : {
-      "comment" : "Onboarding.swift:750",
+      "comment" : "Onboarding.swift:755",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28766,7 +29276,7 @@
       }
     },
     "その他" : {
-      "comment" : "MeetingWindow.swift:595, SettingsView.swift:209",
+      "comment" : "MeetingWindow.swift:604, SettingsView.swift:209",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28868,7 +29378,7 @@
       }
     },
     "どのアプリでも、カーソルのある場所に、話した内容を整えて入力します。" : {
-      "comment" : "Onboarding.swift:540",
+      "comment" : "Onboarding.swift:543",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28970,7 +29480,7 @@
       }
     },
     "どれか 1 つを選ぶと、次へ進めます。" : {
-      "comment" : "Onboarding.swift:393",
+      "comment" : "Onboarding.swift:396",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29378,7 +29888,7 @@
       }
     },
     "はじめる" : {
-      "comment" : "Onboarding.swift:180",
+      "comment" : "Onboarding.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29480,7 +29990,7 @@
       }
     },
     "ほか %@ 件" : {
-      "comment" : "MeetingSearchView.swift:181",
+      "comment" : "MeetingSearchView.swift:221",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29582,7 +30092,7 @@
       }
     },
     "ほかの Tips" : {
-      "comment" : "Onboarding.swift:645",
+      "comment" : "Onboarding.swift:650",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29684,7 +30194,7 @@
       }
     },
     "ほかのアプリと重なるときは、設定の「一般」「会議」「履歴」で別のキーにできます。" : {
-      "comment" : "Onboarding.swift:651",
+      "comment" : "Onboarding.swift:656",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29781,6 +30291,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "如果與其他 App 衝突，可在設定的「一般」「會議」「記錄」中改用其他按鍵。"
+          }
+        }
+      }
+    },
+    "ほかの処理が終わるのを待っています…" : {
+      "comment" : "MeetingChatView.swift:213, MeetingSearchView.swift:339",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "في انتظار انتهاء مهمة أخرى…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warten, bis eine andere Aufgabe fertig ist …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for another task to finish…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando a que termine otra tarea…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente de la fin d’une autre tâche…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "किसी दूसरे काम के पूरा होने का इंतज़ार है…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menunggu proses lain selesai…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In attesa che termini un'altra operazione…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다른 작업이 끝나기를 기다리는 중…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oczekiwanie na zakończenie innego zadania…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aguardando o término de outra tarefa…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ожидание завершения другой задачи…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başka bir işlemin bitmesi bekleniyor…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang chờ tác vụ khác hoàn tất…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在等待其他任务完成…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在等待其他工作完成…"
+          }
+        }
+      }
+    },
+    "ほかの処理（議事録の作成など）が終わらないため、ローカルの AI を使えませんでした" : {
+      "comment" : "LocalLLMServer.swift:46",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر استخدام AI المحلي لأن مهمة أخرى (مثل إنشاء المحضر) لم تنتهِ"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die lokale KI konnte nicht verwendet werden, weil eine andere Aufgabe (z. B. das Erstellen eines Protokolls) nicht fertig wurde"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't use the local AI because another task (such as creating minutes) didn't finish"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo usar la IA local porque otra tarea (como crear el acta) no terminó"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d’utiliser l’IA locale : une autre tâche (comme la création d’un compte rendu) ne s’est pas terminée"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई दूसरा काम (जैसे मिनट्स बनाना) पूरा नहीं हुआ, इसलिए लोकल AI इस्तेमाल नहीं हो सका"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI lokal tidak dapat digunakan karena proses lain (seperti pembuatan notulen) belum selesai"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile usare l'IA locale perché un'altra operazione (ad esempio la creazione del verbale) non è terminata"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다른 작업(회의록 작성 등)이 끝나지 않아 로컬 AI를 사용할 수 없었습니다"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się użyć lokalnego AI, ponieważ inne zadanie (np. tworzenie protokołu) nie zostało zakończone"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível usar a IA local porque outra tarefa (como a criação da ata) não terminou"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось использовать локальный AI: другая задача (например, создание протокола) не завершилась"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başka bir işlem (ör. tutanak oluşturma) bitmediği için yerel AI kullanılamadı"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không dùng được AI cục bộ vì một tác vụ khác (như tạo biên bản họp) chưa hoàn tất"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他任务（如生成会议纪要）尚未完成，因此无法使用本地 AI"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他工作（如製作會議紀錄）尚未完成，因此無法使用本機 AI"
           }
         }
       }
@@ -29990,7 +30704,7 @@
       }
     },
     "まず、使う AI を選びます" : {
-      "comment" : "Onboarding.swift:294",
+      "comment" : "Onboarding.swift:297",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30296,7 +31010,7 @@
       }
     },
     "まだダウンロードしていません。「ダウンロードして次へ」でも始められます。" : {
-      "comment" : "Onboarding.swift:487",
+      "comment" : "Onboarding.swift:490",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30806,7 +31520,7 @@
       }
     },
     "もう一度" : {
-      "comment" : "LocalLLMSettingsView.swift:65, MeetingChatView.swift:182, Onboarding.swift:511",
+      "comment" : "LocalLLMSettingsView.swift:65, MeetingChatView.swift:228, Onboarding.swift:514",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31316,7 +32030,7 @@
       }
     },
     "よく変える設定です。AI とモデルは、ここで選べます。" : {
-      "comment" : "Onboarding.swift:634",
+      "comment" : "Onboarding.swift:637",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31520,7 +32234,7 @@
       }
     },
     "アイコンを出す場所" : {
-      "comment" : "AppPresence.swift:50, Onboarding.swift:656",
+      "comment" : "AppPresence.swift:50, Onboarding.swift:661",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31826,7 +32540,7 @@
       }
     },
     "アクセシビリティ" : {
-      "comment" : "Onboarding.swift:699, SettingsView.swift:326",
+      "comment" : "Onboarding.swift:704, SettingsView.swift:326",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33764,7 +34478,7 @@
       }
     },
     "アプリ別の文体" : {
-      "comment" : "Onboarding.swift:616",
+      "comment" : "Onboarding.swift:619",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33968,7 +34682,7 @@
       }
     },
     "インスペクタを表示" : {
-      "comment" : "MeetingWindow.swift:632",
+      "comment" : "MeetingWindow.swift:641",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34070,7 +34784,7 @@
       }
     },
     "インスペクタを表示（⌥⌘I）" : {
-      "comment" : "MeetingWindow.swift:635",
+      "comment" : "MeetingWindow.swift:644",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34172,7 +34886,7 @@
       }
     },
     "インスペクタを隠す" : {
-      "comment" : "MeetingWindow.swift:632",
+      "comment" : "MeetingWindow.swift:641",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34274,7 +34988,7 @@
       }
     },
     "インスペクタを隠す（⌥⌘I）" : {
-      "comment" : "MeetingWindow.swift:635",
+      "comment" : "MeetingWindow.swift:644",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35906,7 +36620,7 @@
       }
     },
     "キャンセル" : {
-      "comment" : "AISettingsView.swift:193, AISettingsView.swift:287, MeetingDictionaryViews.swift:124",
+      "comment" : "AISettingsView.swift:218, AISettingsView.swift:314, MeetingDictionaryViews.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36008,7 +36722,7 @@
       }
     },
     "キーはキーチェーンに保存し、Hanasu 以外のアプリが読もうとすると macOS がパスワードを求めるようにします。ただし、同じユーザーで動く悪意のあるプログラムからは守りきれません。料金の目安（100 万トークンあたり 入力 / 出力、2026-11 時点）: Haiku 5.5 は $0.10 / $0.50（10 万トークンを超える部分は $0.50 / $2.50）、Sonnet 5.5 は $2 / $10、Opus 5.5 は $4 / $20。" : {
-      "comment" : "AISettingsView.swift:213",
+      "comment" : "AISettingsView.swift:238",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36110,7 +36824,7 @@
       }
     },
     "キーを削除しました" : {
-      "comment" : "AISettingsView.swift:233, AISettingsView.swift:285",
+      "comment" : "AISettingsView.swift:258, AISettingsView.swift:312",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36314,7 +37028,7 @@
       }
     },
     "キーチェーンから消えます。使い続けるには、もう一度キーを保存してください。" : {
-      "comment" : "AISettingsView.swift:195, AISettingsView.swift:289",
+      "comment" : "AISettingsView.swift:220, AISettingsView.swift:316",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36416,7 +37130,7 @@
       }
     },
     "キーチェーンに保存しました。「接続を試す」で確かめられます" : {
-      "comment" : "AISettingsView.swift:227, AISettingsView.swift:300",
+      "comment" : "AISettingsView.swift:252, AISettingsView.swift:327",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37028,7 +37742,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:317, DictationHistoryWindow.swift:556, MeetingChatView.swift:385",
+      "comment" : "AppDelegate.swift:317, DictationHistoryWindow.swift:556, MeetingChatView.swift:459",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37130,7 +37844,7 @@
       }
     },
     "コピーしました" : {
-      "comment" : "MeetingChatView.swift:385, MinutesTemplateViews.swift:402, PasteFallbackPanel.swift:241",
+      "comment" : "MeetingChatView.swift:459, MinutesTemplateViews.swift:402, PasteFallbackPanel.swift:241",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37232,7 +37946,7 @@
       }
     },
     "ゴミ箱に入れる" : {
-      "comment" : "MeetingWindow.swift:74",
+      "comment" : "MeetingWindow.swift:80",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37334,7 +38048,7 @@
       }
     },
     "サービスアカウントの JSON" : {
-      "comment" : "AISettingsView.swift:311",
+      "comment" : "AISettingsView.swift:338",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37946,7 +38660,7 @@
       }
     },
     "システムのマイク" : {
-      "comment" : "MeetingWindow.swift:349",
+      "comment" : "MeetingWindow.swift:358",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39374,7 +40088,7 @@
       }
     },
     "ショートカットを変えられる" : {
-      "comment" : "Onboarding.swift:650",
+      "comment" : "Onboarding.swift:655",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39476,7 +40190,7 @@
       }
     },
     "スニペット" : {
-      "comment" : "Onboarding.swift:613, SettingsView.swift:17",
+      "comment" : "Onboarding.swift:616, SettingsView.swift:17",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40088,7 +40802,7 @@
       }
     },
     "タイトル" : {
-      "comment" : "MeetingDocumentView.swift:665, MeetingSearchView.swift:212",
+      "comment" : "MeetingDocumentView.swift:665, MeetingSearchView.swift:252",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41006,7 +41720,7 @@
       }
     },
     "ダウンロードして次へ" : {
-      "comment" : "Onboarding.swift:180",
+      "comment" : "Onboarding.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41210,7 +41924,7 @@
       }
     },
     "ダウンロードは、次のページへ進んでも、このウインドウを閉じても続きます。" : {
-      "comment" : "Onboarding.swift:503",
+      "comment" : "Onboarding.swift:506",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41414,7 +42128,7 @@
       }
     },
     "ダウンロード済み。すぐに使えます" : {
-      "comment" : "Onboarding.swift:506",
+      "comment" : "Onboarding.swift:509",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41516,7 +42230,7 @@
       }
     },
     "ダウンロード（%@）" : {
-      "comment" : "LocalLLMSettingsView.swift:37, Onboarding.swift:490, Onboarding.swift:813",
+      "comment" : "LocalLLMSettingsView.swift:37, Onboarding.swift:493, Onboarding.swift:818",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43250,7 +43964,7 @@
       }
     },
     "プロジェクト: %@　アカウント: %@" : {
-      "comment" : "AISettingsView.swift:376",
+      "comment" : "AISettingsView.swift:403",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43454,7 +44168,7 @@
       }
     },
     "マイク" : {
-      "comment" : "DictationMicrophone.swift:43, MeetingDevicePickers.swift:38, Onboarding.swift:707",
+      "comment" : "DictationMicrophone.swift:43, MeetingDevicePickers.swift:38, Onboarding.swift:712",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43862,7 +44576,7 @@
       }
     },
     "マイクを「自分」、Mac で鳴っている音を「相手」として録ります。イヤホンがおすすめです。記録は「書類」フォルダの Hanasu/Meetings に保存します。" : {
-      "comment" : "Onboarding.swift:578",
+      "comment" : "Onboarding.swift:581",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -44372,7 +45086,7 @@
       }
     },
     "マイクを選べる" : {
-      "comment" : "Onboarding.swift:646",
+      "comment" : "Onboarding.swift:651",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -44780,7 +45494,7 @@
       }
     },
     "メニューからも" : {
-      "comment" : "Onboarding.swift:558",
+      "comment" : "Onboarding.swift:561",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45086,7 +45800,7 @@
       }
     },
     "メニューバーの Hanasu のアイコンから、どれも始められます。録音中はアイコンが赤くなります。" : {
-      "comment" : "Onboarding.swift:559",
+      "comment" : "Onboarding.swift:562",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45188,7 +45902,7 @@
       }
     },
     "メニューバー・Dock・両方から選べます（設定 →「一般」→「アイコンの表示」）。" : {
-      "comment" : "Onboarding.swift:657",
+      "comment" : "Onboarding.swift:662",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45290,7 +46004,7 @@
       }
     },
     "メモ" : {
-      "comment" : "MeetingChatView.swift:527, MeetingDocumentView.swift:632, MeetingNotesViews.swift:25",
+      "comment" : "MeetingChatView.swift:601, MeetingDocumentView.swift:632, MeetingNotesViews.swift:25",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45494,7 +46208,7 @@
       }
     },
     "メモと AI チャットを切り替える（AI チャットは ⌘J）" : {
-      "comment" : "MeetingChatView.swift:533",
+      "comment" : "MeetingChatView.swift:607",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45596,7 +46310,7 @@
       }
     },
     "メモと「ここ重要」" : {
-      "comment" : "Onboarding.swift:584",
+      "comment" : "Onboarding.swift:587",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45698,7 +46412,7 @@
       }
     },
     "メモに残しました" : {
-      "comment" : "MeetingChatView.swift:390",
+      "comment" : "MeetingChatView.swift:464",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45800,7 +46514,7 @@
       }
     },
     "メモに残す" : {
-      "comment" : "MeetingChatView.swift:390",
+      "comment" : "MeetingChatView.swift:464",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46922,7 +47636,7 @@
       }
     },
     "ライセンス" : {
-      "comment" : "LocalLLMSettingsView.swift:22, Onboarding.swift:521",
+      "comment" : "LocalLLMSettingsView.swift:22, Onboarding.swift:524",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47024,7 +47738,7 @@
       }
     },
     "ライセンス: %@" : {
-      "comment" : "LocalLLMModel.swift:145",
+      "comment" : "LocalLLMModel.swift:147",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47126,7 +47840,7 @@
       }
     },
     "ライセンス: %@。年間売上 1,000 万ドル以上の組織の商用利用は、このライセンスでは許されていません" : {
-      "comment" : "LocalLLMModel.swift:143",
+      "comment" : "LocalLLMModel.swift:145",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48044,7 +48758,7 @@
       }
     },
     "リージョン" : {
-      "comment" : "AISettingsView.swift:314",
+      "comment" : "AISettingsView.swift:341",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48452,7 +49166,7 @@
       }
     },
     "ローカルの LLM が起動できませんでした（終了コード %@）" : {
-      "comment" : "LocalLLMServer.swift:40",
+      "comment" : "LocalLLMServer.swift:42",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48554,7 +49268,7 @@
       }
     },
     "ローカルの LLM のモデルがまだダウンロードされていません（設定 →「AI」でダウンロードしてください）" : {
-      "comment" : "TextAI.swift:59",
+      "comment" : "TextAI.swift:100",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48860,7 +49574,7 @@
       }
     },
     "ローカルの LLM の起動が %@ 秒たっても終わりませんでした" : {
-      "comment" : "LocalLLMServer.swift:42",
+      "comment" : "LocalLLMServer.swift:44",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48962,7 +49676,7 @@
       }
     },
     "ローカルの LLM を動かす llama-server が見つかりません（アプリを入れ直すか、環境変数 HANASU_LLAMA_SERVER でパスを指定してください）" : {
-      "comment" : "LocalLLMServer.swift:34",
+      "comment" : "LocalLLMServer.swift:36",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49166,7 +49880,7 @@
       }
     },
     "ローカルのモデル「%@」がまだダウンロードされていません（設定 →「AI」でダウンロードしてください）" : {
-      "comment" : "LocalLLMServer.swift:38",
+      "comment" : "LocalLLMServer.swift:40",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49268,7 +49982,7 @@
       }
     },
     "ローカルのモデル「%@」はありません（%@）" : {
-      "comment" : "LocalLLMServer.swift:36",
+      "comment" : "LocalLLMServer.swift:38",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -50492,7 +51206,7 @@
       }
     },
     "下のボタンか %@ で記録を始められます。" : {
-      "comment" : "MeetingWindow.swift:108",
+      "comment" : "MeetingWindow.swift:114",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -50696,7 +51410,7 @@
       }
     },
     "中止" : {
-      "comment" : "LocalLLMSettingsView.swift:48, LocalModelDownloadPrompt.swift:135, Onboarding.swift:501",
+      "comment" : "LocalLLMSettingsView.swift:48, LocalModelDownloadPrompt.swift:135, Onboarding.swift:504",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -50798,7 +51512,7 @@
       }
     },
     "人の名前や社内の用語を登録すると、認識と整形に効きます。「じぇみに → Gemini」のような置き換えルールも書け、会議の記録から候補を挙げてもらうこともできます（設定 →「辞書・ルール」）。" : {
-      "comment" : "Onboarding.swift:611",
+      "comment" : "Onboarding.swift:614",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51104,7 +51818,7 @@
       }
     },
     "今の会話を消して、新しく始める" : {
-      "comment" : "MeetingChatView.swift:296",
+      "comment" : "MeetingChatView.swift:355",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51920,7 +52634,7 @@
       }
     },
     "今の話を分かりやすく" : {
-      "comment" : "MeetingChat.swift:218",
+      "comment" : "MeetingChat.swift:221",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52124,7 +52838,7 @@
       }
     },
     "今の議事録とアクションアイテムは置き換わります。" : {
-      "comment" : "MeetingWindow.swift:489, MinutesTemplateViews.swift:139",
+      "comment" : "MeetingWindow.swift:498, MinutesTemplateViews.swift:139",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53756,7 +54470,7 @@
       }
     },
     "会議に質問" : {
-      "comment" : "MeetingSearchView.swift:260",
+      "comment" : "MeetingSearchView.swift:301",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53857,8 +54571,110 @@
         }
       }
     },
+    "会議の AI チャット・会議への質問" : {
+      "comment" : "TextAI.swift:58",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دردشة AI في الاجتماع وأسئلة الاجتماعات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI-Chat in Meetings und Fragen zu Meetings"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting AI chat and Ask About Meetings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat con IA en reuniones y preguntas a las reuniones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat IA des réunions et questions sur les réunions"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग की AI चैट और मीटिंग से सवाल"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obrolan AI di rapat · tanya tentang rapat"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat IA della riunione e Chiedi alle riunioni"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 AI 채팅 · 회의에 질문"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czat AI w spotkaniu i pytania o spotkania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat de IA da reunião e Perguntar às reuniões"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI-чат встречи и вопросы по встречам"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı AI sohbeti, toplantılara sorular"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trò chuyện AI trong cuộc họp · hỏi về cuộc họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会议中的 AI 聊天·向会议提问"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會議中的 AI 聊天·向會議提問"
+          }
+        }
+      }
+    },
     "会議のアプリがマイクを使い始めると「記録しますか？」と提案します。勝手には録りません。" : {
-      "comment" : "Onboarding.swift:582",
+      "comment" : "Onboarding.swift:585",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54164,7 +54980,7 @@
       }
     },
     "会議の自動検出" : {
-      "comment" : "MeetingDetectionSettingsView.swift:28, Onboarding.swift:581",
+      "comment" : "MeetingDetectionSettingsView.swift:28, Onboarding.swift:584",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54266,7 +55082,7 @@
       }
     },
     "会議の記録" : {
-      "comment" : "Onboarding.swift:573, SettingsView.swift:264, TranscriptionEngineSettingsView.swift:22",
+      "comment" : "Onboarding.swift:576, SettingsView.swift:264, TranscriptionEngineSettingsView.swift:22",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54368,7 +55184,7 @@
       }
     },
     "会議の記録から答えます。「先週」「昨日」「11月2日」のように期間を書くと、その期間の会議に絞ります。" : {
-      "comment" : "MeetingSearchView.swift:288",
+      "comment" : "MeetingSearchView.swift:355",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54674,7 +55490,7 @@
       }
     },
     "会議の記録で相手の声（Mac で再生している音）を録るには、「システムオーディオ録音」の許可も要ります。初めて記録を始めるときに macOS が求めるので、ここでは何もしなくてよいです。" : {
-      "comment" : "Onboarding.swift:734",
+      "comment" : "Onboarding.swift:739",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55184,7 +56000,7 @@
       }
     },
     "会議の記録を開始" : {
-      "comment" : "AppDelegate.swift:209, AppDelegate.swift:275, MeetingWindow.swift:300",
+      "comment" : "AppDelegate.swift:209, AppDelegate.swift:275, MeetingWindow.swift:309",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55286,7 +56102,7 @@
       }
     },
     "会議の記録を集めて答えを作っています…" : {
-      "comment" : "MeetingSearchView.swift:277",
+      "comment" : "MeetingSearchView.swift:340",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55592,7 +56408,7 @@
       }
     },
     "会議を検索" : {
-      "comment" : "MeetingSearchView.swift:119",
+      "comment" : "MeetingSearchView.swift:159",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55694,7 +56510,7 @@
       }
     },
     "会議を記録している間は再生できません（再生した音がマイクに入るため）" : {
-      "comment" : "MeetingPlayer.swift:292",
+      "comment" : "MeetingPlayer.swift:302",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55898,7 +56714,7 @@
       }
     },
     "会議を選んでください" : {
-      "comment" : "MeetingWindow.swift:107",
+      "comment" : "MeetingWindow.swift:113",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56204,7 +57020,7 @@
       }
     },
     "会議ノートで過去の会議を横断して検索し（⌘F）、「先週の定例で何が決まった？」と質問すると、根拠の会議を引いて答えます。" : {
-      "comment" : "Onboarding.swift:592",
+      "comment" : "Onboarding.swift:595",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57020,7 +57836,7 @@
       }
     },
     "作り直す" : {
-      "comment" : "MeetingNotesViews.swift:255, MeetingWindow.swift:486, MinutesTemplateViews.swift:128",
+      "comment" : "MeetingNotesViews.swift:255, MeetingWindow.swift:495, MinutesTemplateViews.swift:128",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57122,7 +57938,7 @@
       }
     },
     "使う AI" : {
-      "comment" : "Onboarding.swift:740",
+      "comment" : "Onboarding.swift:745",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57224,7 +58040,7 @@
       }
     },
     "使う AI とモデル" : {
-      "comment" : "AISettingsView.swift:21",
+      "comment" : "AISettingsView.swift:23",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57326,7 +58142,7 @@
       }
     },
     "使う AI を選ぶ" : {
-      "comment" : "Onboarding.swift:382",
+      "comment" : "Onboarding.swift:385",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57428,7 +58244,7 @@
       }
     },
     "使うほど、あなたの言葉に合わせて入力できるようになります。" : {
-      "comment" : "Onboarding.swift:604",
+      "comment" : "Onboarding.swift:607",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57627,6 +58443,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "可使用（%@）"
+          }
+        }
+      }
+    },
+    "使えません" : {
+      "comment" : "AIRouteMenu.swift:22, AIRouteMenu.swift:47",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "غير متاح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nicht verfügbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "unavailable"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no disponible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "non disponible"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "उपलब्ध नहीं"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak dapat digunakan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "non disponibile"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용할 수 없음"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "niedostępne"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "indisponível"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "недоступно"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kullanılamıyor"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không dùng được"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法使用"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法使用"
           }
         }
       }
@@ -57836,7 +58754,7 @@
       }
     },
     "例: 先週の定例で何が決まった？" : {
-      "comment" : "MeetingSearchView.swift:264",
+      "comment" : "MeetingSearchView.swift:305",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58142,7 +59060,7 @@
       }
     },
     "保存" : {
-      "comment" : "AISettingsView.swift:202, AISettingsView.swift:296, DictationHistoryWindow.swift:637",
+      "comment" : "AISettingsView.swift:227, AISettingsView.swift:323, DictationHistoryWindow.swift:637",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58244,7 +59162,7 @@
       }
     },
     "保存した Claude の API キーを削除しますか？" : {
-      "comment" : "AISettingsView.swift:191",
+      "comment" : "AISettingsView.swift:216",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58346,7 +59264,7 @@
       }
     },
     "保存した Gemini の API キーを削除しますか？" : {
-      "comment" : "AISettingsView.swift:281",
+      "comment" : "AISettingsView.swift:308",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58448,7 +59366,7 @@
       }
     },
     "保存したキー" : {
-      "comment" : "AISettingsView.swift:182, AISettingsView.swift:272",
+      "comment" : "AISettingsView.swift:207, AISettingsView.swift:299",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59060,7 +59978,7 @@
       }
     },
     "保存に失敗しました" : {
-      "comment" : "AISettingsView.swift:227, AISettingsView.swift:300",
+      "comment" : "AISettingsView.swift:252, AISettingsView.swift:327",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59366,7 +60284,7 @@
       }
     },
     "保存済み" : {
-      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274, Keychain.swift:101",
+      "comment" : "AISettingsView.swift:209, AISettingsView.swift:301, Keychain.swift:101",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59468,7 +60386,7 @@
       }
     },
     "候補" : {
-      "comment" : "AISettingsView.swift:134, TranscriptionEngineSettingsView.swift:156",
+      "comment" : "AISettingsView.swift:161, TranscriptionEngineSettingsView.swift:156",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60182,7 +61100,7 @@
       }
     },
     "入力したい場所で押して話し、もう一度押す（画面下の表示の「■ 停止」でも）と、AI が整えた文章を入力します。Esc で取り消し。押している間だけ録音する使い方も選べます。" : {
-      "comment" : "Onboarding.swift:543",
+      "comment" : "Onboarding.swift:546",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60692,7 +61610,7 @@
       }
     },
     "入力先がずれて結果が消えたときは、入れたい場所で押します。メニューの「最近の結果」からコピーもできます。" : {
-      "comment" : "Onboarding.swift:555",
+      "comment" : "Onboarding.swift:558",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60794,7 +61712,7 @@
       }
     },
     "入力先のアプリ名を AI に伝える（体裁の参考）" : {
-      "comment" : "AISettingsView.swift:33",
+      "comment" : "AISettingsView.swift:35",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63242,7 +64160,7 @@
       }
     },
     "削除" : {
-      "comment" : "AISettingsView.swift:192, AISettingsView.swift:282, DictationHistoryWindow.swift:195",
+      "comment" : "AISettingsView.swift:217, AISettingsView.swift:309, DictationHistoryWindow.swift:195",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63344,7 +64262,7 @@
       }
     },
     "削除…" : {
-      "comment" : "AISettingsView.swift:190, AISettingsView.swift:280, LocalLLMSettingsView.swift:54",
+      "comment" : "AISettingsView.swift:215, AISettingsView.swift:307, LocalLLMSettingsView.swift:54",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63446,7 +64364,7 @@
       }
     },
     "削除できませんでした" : {
-      "comment" : "MeetingWindow.swift:79",
+      "comment" : "MeetingWindow.swift:85",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65588,7 +66506,7 @@
       }
     },
     "失敗" : {
-      "comment" : "DictationHistoryWindow.swift:375, MeetingWindow.swift:262",
+      "comment" : "DictationHistoryWindow.swift:375, MeetingWindow.swift:271",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -66200,7 +67118,7 @@
       }
     },
     "定例・1on1・商談などの型を選べます。アクションアイテムは Markdown・Slack 向けのコピー・リマインダーに書き出せます。" : {
-      "comment" : "Onboarding.swift:589",
+      "comment" : "Onboarding.swift:592",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -66404,7 +67322,7 @@
       }
     },
     "履歴" : {
-      "comment" : "Onboarding.swift:607, SettingsView.swift:19",
+      "comment" : "Onboarding.swift:610, SettingsView.swift:19",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67424,7 +68342,7 @@
       }
     },
     "履歴・辞書・スニペット" : {
-      "comment" : "Onboarding.swift:603",
+      "comment" : "Onboarding.swift:606",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67628,7 +68546,7 @@
       }
     },
     "引用" : {
-      "comment" : "MeetingSearchView.swift:309",
+      "comment" : "MeetingSearchView.swift:376",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68036,7 +68954,7 @@
       }
     },
     "思考レベル: %@（lite は minimal、それ以外は low）" : {
-      "comment" : "AISettingsView.swift:142",
+      "comment" : "AISettingsView.swift:169",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68240,7 +69158,7 @@
       }
     },
     "戻る" : {
-      "comment" : "Onboarding.swift:167",
+      "comment" : "Onboarding.swift:170",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69464,7 +70382,7 @@
       }
     },
     "接続できました（%@ を使えます）" : {
-      "comment" : "AISettingsView.swift:244, AISettingsView.swift:358",
+      "comment" : "AISettingsView.swift:271, AISettingsView.swift:385",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69566,7 +70484,7 @@
       }
     },
     "接続を試す" : {
-      "comment" : "AISettingsView.swift:188, AISettingsView.swift:278, AISettingsView.swift:320",
+      "comment" : "AISettingsView.swift:213, AISettingsView.swift:305, AISettingsView.swift:347",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69770,7 +70688,7 @@
       }
     },
     "整えた文章を ⌘V で入力するのに要ります。システム設定で Hanasu をオンにしてください。" : {
-      "comment" : "Onboarding.swift:700",
+      "comment" : "Onboarding.swift:705",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -70076,7 +70994,7 @@
       }
     },
     "整形の言語" : {
-      "comment" : "AISettingsView.swift:29",
+      "comment" : "AISettingsView.swift:31",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -70178,7 +71096,7 @@
       }
     },
     "整形を試す" : {
-      "comment" : "AISettingsView.swift:42",
+      "comment" : "AISettingsView.swift:44",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -70382,7 +71300,7 @@
       }
     },
     "整形・翻訳・選択の編集" : {
-      "comment" : "AISettingsView.swift:116",
+      "comment" : "TextAI.swift:56",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -71197,110 +72115,110 @@
         }
       }
     },
-    "文字起こしとメモを %@（%@）に送ります。会話は保存しません。" : {
-      "comment" : "MeetingChatView.swift:306",
+    "文字起こしとメモをこの AI に送ります。会話は保存しません。" : {
+      "comment" : "MeetingChatView.swift:370",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "يُرسَل النص المفرّغ والملاحظات إلى %@ (%@). لا تُحفظ المحادثة."
+            "value" : "يُرسَل النص المفرّغ والملاحظات إلى هذا الـ AI. لا تُحفظ المحادثة."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Transkription und Notizen werden an %@ (%@) gesendet. Das Gespräch wird nicht gespeichert."
+            "value" : "Transkription und Notizen werden an diese KI gesendet. Das Gespräch wird nicht gespeichert."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The transcript and notes are sent to %@ (%@). The conversation isn't saved."
+            "value" : "The transcript and notes are sent to this AI. The conversation isn't saved."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La transcripción y las notas se envían a %@ (%@). La conversación no se guarda."
+            "value" : "La transcripción y las notas se envían a esta IA. La conversación no se guarda."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La transcription et les notes sont envoyées à %@ (%@). La conversation n’est pas enregistrée."
+            "value" : "La transcription et les notes sont envoyées à cette IA. La conversation n’est pas enregistrée."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ट्रांसक्रिप्ट और नोट्स %@ (%@) को भेजे जाते हैं। बातचीत सहेजी नहीं जाती।"
+            "value" : "ट्रांसक्रिप्ट और नोट्स इस AI को भेजे जाते हैं। बातचीत सहेजी नहीं जाती।"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Transkrip dan catatan dikirim ke %@ (%@). Percakapan tidak disimpan."
+            "value" : "Transkrip dan catatan dikirim ke AI ini. Percakapan tidak disimpan."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La trascrizione e le note vengono inviate a %@ (%@). La conversazione non viene salvata."
+            "value" : "La trascrizione e le note vengono inviate a questa IA. La conversazione non viene salvata."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "전사본과 메모를 %@(%@)에 보냅니다. 대화는 저장하지 않습니다."
+            "value" : "전사본과 메모를 이 AI에 보냅니다. 대화는 저장하지 않습니다."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Transkrypcja i notatki są wysyłane do %@ (%@). Rozmowa nie jest zapisywana."
+            "value" : "Transkrypcja i notatki są wysyłane do tego AI. Rozmowa nie jest zapisywana."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A transcrição e as notas são enviadas para %@ (%@). A conversa não é salva."
+            "value" : "A transcrição e as notas são enviadas a esta IA. A conversa não é salva."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Расшифровка и заметки отправляются в %@ (%@). Разговор не сохраняется."
+            "value" : "Расшифровка и заметки отправляются этому AI. Разговор не сохраняется."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Transkript ve notlar %@ (%@) hizmetine gönderilir. Sohbet kaydedilmez."
+            "value" : "Transkript ve notlar bu AI’a gönderilir. Sohbet kaydedilmez."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bản chép lời và ghi chú sẽ được gửi tới %@ (%@). Cuộc trò chuyện không được lưu."
+            "value" : "Bản chép lời và ghi chú sẽ được gửi tới AI này. Cuộc trò chuyện không được lưu."
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "会将转写稿和备注发送给 %@（%@）。不会保存对话。"
+            "value" : "会将转写稿和备注发送给此 AI。不会保存对话。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "會將逐字稿和備註傳送給 %@（%@）。不會儲存對話。"
+            "value" : "會將逐字稿和備註傳送給此 AI。不會儲存對話。"
           }
         }
       }
     },
     "文字起こしとメモをもとに答えます。続けて質問すると、前のやりとりを踏まえて答えます。" : {
-      "comment" : "MeetingChatView.swift:215",
+      "comment" : "MeetingChatView.swift:273",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -71606,7 +72524,7 @@
       }
     },
     "文字起こしのエンジンが Mac 標準のときに要ります。" : {
-      "comment" : "Onboarding.swift:721",
+      "comment" : "Onboarding.swift:726",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -71708,7 +72626,7 @@
       }
     },
     "文字起こしのエンジンを選べる" : {
-      "comment" : "Onboarding.swift:648",
+      "comment" : "Onboarding.swift:653",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72014,7 +72932,7 @@
       }
     },
     "文字起こしは、記録を止めたあとに %@ で行います。記録中はここに文字が出ません。" : {
-      "comment" : "MeetingWindow.swift:790",
+      "comment" : "MeetingWindow.swift:799",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72626,7 +73544,7 @@
       }
     },
     "文章の仕上がりがていねい。Haiku・Sonnet・Opus から選べます" : {
-      "comment" : "Onboarding.swift:347",
+      "comment" : "Onboarding.swift:350",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72830,7 +73748,7 @@
       }
     },
     "文章を Anthropic に送ります（音声は送りません）" : {
-      "comment" : "Onboarding.swift:357",
+      "comment" : "Onboarding.swift:360",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72932,7 +73850,7 @@
       }
     },
     "文章を Google に送ります" : {
-      "comment" : "Onboarding.swift:356",
+      "comment" : "Onboarding.swift:359",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73136,7 +74054,7 @@
       }
     },
     "文章をネットに送りません" : {
-      "comment" : "Onboarding.swift:358",
+      "comment" : "Onboarding.swift:361",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73237,110 +74155,110 @@
         }
       }
     },
-    "文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、ここで選ぶ AI には音声を送りません。辞書の候補探しは「会議」の AI を使います。「ローカル」は、この Mac の中で小型の LLM を動かします。「Apple」は macOS 27 の Foundation Models（fm）の、この Mac の中のモデルを使います（どちらも文章をネットに送りません）。" : {
-      "comment" : "AISettingsView.swift:23",
+    "文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、ここで選ぶ AI には音声を送りません。辞書の候補探しは「会議」の AI、会議の AI チャットと会議への質問は「AI チャット・質問」の AI を使います（チャットと質問の画面で、その場で変えることもできます）。「ローカル」は、この Mac の中で小型の LLM を動かします。「Apple」は macOS 27 の Foundation Models（fm）の、この Mac の中のモデルを使います（どちらも文章をネットに送りません）。" : {
+      "comment" : "AISettingsView.swift:25",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "يُستخدم فقط لتنقيح النص. يتولى التفريغ النصي للصوت المحركُ المختار في «عام» ← «التفريغ النصي»، ولا يُرسل الصوت إلى AI المختار هنا. يستخدم البحث عن مقترحات القاموس AI المختار لـ «الاجتماعات». يشغّل «محلي» نموذج LLM صغيرًا داخل هذا الـ Mac. ويستخدم «Apple» نموذج Foundation Models (fm) الموجود على هذا الـ Mac في macOS 27 (ولا يُرسل أيٌّ منهما النص إلى الإنترنت)."
+            "value" : "يُستخدم فقط لتنقيح النص. يتولى التفريغ النصي للصوت المحركُ المختار في «عام» ← «النص المفرّغ»، ولا يُرسل الصوت إلى AI المختار هنا. يستخدم البحث عن مقترحات القاموس AI المختار لـ «الاجتماعات»، وتستخدم دردشة AI في الاجتماع وأسئلة الاجتماعات AI المختار لـ «دردشة AI والأسئلة» (ويمكنك أيضًا تغييره في الحال من شاشتي الدردشة والأسئلة). يشغّل «محلي» نموذج LLM صغيرًا داخل هذا الـ Mac. ويستخدم «Apple» نموذج Foundation Models (fm) الموجود على هذا الـ Mac في macOS 27 (ولا يُرسل أيٌّ منهما النص إلى الإنترنت)."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wird nur zum Überarbeiten von Text verwendet. Audio wird von der unter „Allgemein“ → „Transkription“ gewählten Engine transkribiert; an die hier gewählte KI wird kein Audio gesendet. Wörterbuchvorschläge verwenden die KI für „Meetings“. „Lokal“ führt ein kleines LLM auf diesem Mac aus. „Apple“ verwendet das Modell von Foundation Models (fm) in macOS 27 direkt auf diesem Mac (beide senden keinen Text über das Internet)."
+            "value" : "Wird nur zum Überarbeiten von Text verwendet. Audio wird von der unter „Allgemein“ → „Transkription“ gewählten Engine transkribiert; an die hier gewählte KI wird kein Audio gesendet. Wörterbuchvorschläge verwenden die KI für „Meetings“, der KI-Chat in Meetings und „Fragen zu Meetings“ die KI für „KI-Chat & Fragen“ (du kannst sie auch direkt im Chat- und im Fragen-Fenster wechseln). „Lokal“ führt ein kleines LLM auf diesem Mac aus. „Apple“ verwendet das Modell von Foundation Models (fm) in macOS 27 direkt auf diesem Mac (beide senden keinen Text über das Internet)."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Used only to refine text. Audio is transcribed by the engine chosen in “General” → “Transcription”; no audio is sent to the AI chosen here. Dictionary suggestions use the AI chosen for “Meetings”. “Local” runs a small LLM on this Mac. “Apple” uses the on-device model of Foundation Models (fm) in macOS 27 (neither sends text over the internet)."
+            "value" : "Used only for processing text. Speech is transcribed by the engine chosen in General → Transcription, and no audio is sent to the AI chosen here. Dictionary suggestions use the Meetings AI; the meeting AI chat and Ask About Meetings use the AI Chat & Ask AI (you can also change it on the spot in the chat and Ask screens). Local runs a small LLM on this Mac. Apple uses the on-device model of Foundation Models (fm) in macOS 27. Neither sends your text over the internet."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo se usa para pulir el texto. La transcripción del audio la hace el motor elegido en «General» → «Transcripción» y no se envía audio a la IA elegida aquí. La búsqueda de candidatos del diccionario usa la IA de «Reuniones». «Local» ejecuta un LLM pequeño en este Mac. «Apple» usa el modelo de Foundation Models (fm) de macOS 27 integrado en este Mac (ninguno de los dos envía texto a internet)."
+            "value" : "Solo se usa para pulir el texto. La transcripción del audio la hace el motor elegido en «General» → «Transcripción» y no se envía audio a la IA elegida aquí. La búsqueda de candidatos para el diccionario usa la IA de «Reuniones», y el chat con IA de las reuniones y «Preguntar a las reuniones» usan la IA de «Chat con IA y preguntas» (también puedes cambiarla al momento en las pantallas del chat y de las preguntas). «Local» ejecuta un LLM pequeño en este Mac. «Apple» usa el modelo de Foundation Models (fm) de macOS 27 integrado en este Mac (ninguno de los dos envía texto a internet)."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sert uniquement à mettre en forme le texte. L’audio est transcrit par le moteur choisi dans « Général » → « Transcription » ; aucun audio n’est envoyé à l’IA choisie ici. Les suggestions du dictionnaire utilisent l’IA choisie pour « Réunions ». « Local » exécute un petit LLM sur ce Mac. « Apple » utilise le modèle de Foundation Models (fm) de macOS 27 directement sur ce Mac (aucun des deux n’envoie de texte sur Internet)."
+            "value" : "Sert uniquement à mettre en forme le texte. L’audio est transcrit par le moteur choisi dans « Général » → « Transcription » ; aucun audio n’est envoyé à l’IA choisie ici. Les suggestions du dictionnaire utilisent l’IA choisie pour « Réunions », et le chat IA des réunions et « Questions sur les réunions » utilisent celle de « Chat IA et questions » (vous pouvez aussi la changer sur le moment dans les écrans de chat et de questions). « Local » exécute un petit LLM sur ce Mac. « Apple » utilise le modèle de Foundation Models (fm) de macOS 27 directement sur ce Mac (aucun des deux n’envoie de texte sur Internet)."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "यह सिर्फ़ टेक्स्ट सुधारने के लिए है। ऑडियो का ट्रांसक्रिप्शन “सामान्य” → “ट्रांसक्रिप्शन” में चुना गया इंजन करता है, और यहाँ चुने गए AI को ऑडियो नहीं भेजा जाता। शब्दकोश के सुझाव खोजने में “मीटिंग” वाला AI इस्तेमाल होता है। “लोकल” इसी Mac के अंदर एक छोटा LLM चलाता है। “Apple” macOS 27 के Foundation Models (fm) का इसी Mac के अंदर वाला मॉडल इस्तेमाल करता है (दोनों में से कोई भी टेक्स्ट इंटरनेट पर नहीं भेजता)।"
+            "value" : "यह सिर्फ़ टेक्स्ट सुधारने के लिए है। ऑडियो का ट्रांसक्रिप्शन “सामान्य” → “ट्रांसक्रिप्ट” में चुना गया इंजन करता है, और यहाँ चुने गए AI को ऑडियो नहीं भेजा जाता। शब्दकोश के सुझाव खोजने में “मीटिंग” वाला AI, और मीटिंग की AI चैट व मीटिंग से सवाल में “AI चैट और सवाल” वाला AI इस्तेमाल होता है (चैट और सवाल की स्क्रीन पर इसे वहीं बदल भी सकते हैं)। “लोकल” इसी Mac के अंदर एक छोटा LLM चलाता है। “Apple” macOS 27 के Foundation Models (fm) का इसी Mac के अंदर वाला मॉडल इस्तेमाल करता है (दोनों में से कोई भी टेक्स्ट इंटरनेट पर नहीं भेजता)।"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hanya digunakan untuk merapikan teks. Transkripsi audio dilakukan oleh mesin yang dipilih di “Umum” → “Transkrip”, dan audio tidak dikirim ke AI yang dipilih di sini. Pencarian saran kamus memakai AI untuk “Rapat”. “Lokal” menjalankan LLM kecil di Mac ini. “Apple” memakai model di Mac ini dari Foundation Models (fm) macOS 27 (keduanya tidak mengirim teks ke internet)."
+            "value" : "Hanya digunakan untuk merapikan teks. Transkripsi audio dilakukan oleh mesin yang dipilih di “Umum” → “Transkrip”, dan audio tidak dikirim ke AI yang dipilih di sini. Pencarian saran kamus memakai AI untuk “Rapat”, sedangkan obrolan AI di rapat dan tanya tentang rapat memakai AI untuk “Obrolan AI & tanya jawab” (bisa juga diubah langsung di layar obrolan dan tanya jawab). “Lokal” menjalankan LLM kecil di Mac ini. “Apple” memakai model di Mac ini dari Foundation Models (fm) macOS 27 (keduanya tidak mengirim teks ke internet)."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Usato solo per rifinire il testo. La trascrizione dell'audio è fatta dal motore scelto in «Generali» → «Trascrizione» e all'IA scelta qui non viene inviato audio. La ricerca dei candidati per il dizionario usa l'IA di «Riunioni». «Locale» esegue un piccolo LLM su questo Mac. «Apple» usa il modello di Foundation Models (fm) di macOS 27 integrato in questo Mac (nessuno dei due invia testo in rete)."
+            "value" : "Usato solo per rifinire il testo. La trascrizione dell'audio è fatta dal motore scelto in «Generali» → «Trascrizione» e all'IA scelta qui non viene inviato audio. La ricerca dei candidati per il dizionario usa l'IA di «Riunioni»; la chat IA della riunione e «Chiedi alle riunioni» usano l'IA di «Chat IA e domande» (puoi cambiarla anche al momento, nelle schermate della chat e delle domande). «Locale» esegue un piccolo LLM su questo Mac. «Apple» usa il modello di Foundation Models (fm) di macOS 27 integrato in questo Mac (nessuno dei due invia testo in rete)."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "텍스트를 다듬는 데만 사용합니다. 오디오 전사는 \"일반\" → \"전사\"에서 선택한 엔진이 하며 여기서 선택한 AI에는 오디오를 보내지 않습니다. 사전 후보 찾기는 \"회의\"의 AI를 사용합니다. \"로컬\"은 이 Mac 안에서 소형 LLM을 실행합니다. \"Apple\"은 macOS 27 Foundation Models(fm)의 이 Mac 내 모델을 사용합니다(둘 다 텍스트를 인터넷으로 보내지 않음)."
+            "value" : "텍스트를 다듬는 데만 사용합니다. 오디오 전사는 \"일반\" → \"전사\"에서 선택한 엔진이 하며 여기서 선택한 AI에는 오디오를 보내지 않습니다. 사전 후보 찾기는 \"회의\"의 AI를, 회의 AI 채팅과 회의에 질문은 \"AI 채팅 · 질문\"의 AI를 사용합니다(채팅과 질문 화면에서 바로 바꿀 수도 있습니다). \"로컬\"은 이 Mac 안에서 소형 LLM을 실행합니다. \"Apple\"은 macOS 27 Foundation Models(fm)의 이 Mac 내 모델을 사용합니다(둘 다 텍스트를 인터넷으로 보내지 않음)."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Używane tylko do redakcji tekstu. Audio transkrybuje silnik wybrany w „Ogólne” → „Transkrypcja”; do wybranego tutaj AI audio nie jest wysyłane. Wyszukiwanie propozycji do słownika używa AI wybranego dla spotkań. „Lokalnie” uruchamia mały LLM na tym Macu. „Apple” używa lokalnego modelu Foundation Models (fm) z macOS 27 na tym Macu (w obu przypadkach tekst nie jest wysyłany do internetu)."
+            "value" : "Używane tylko do redakcji tekstu. Audio transkrybuje silnik wybrany w „Ogólne” → „Transkrypcja”; do wybranego tutaj AI audio nie jest wysyłane. Wyszukiwanie propozycji do słownika używa AI wybranego dla „Spotkania”, a czat AI w spotkaniu i pytania o spotkania — AI wybranego dla „Czat AI i pytania” (można je też zmienić od razu na ekranie czatu i pytań). „Lokalnie” uruchamia mały LLM na tym Macu. „Apple” używa lokalnego modelu Foundation Models (fm) z macOS 27 na tym Macu (w obu przypadkach tekst nie jest wysyłany do internetu)."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Usado apenas para refinar o texto. A transcrição do áudio é feita pelo mecanismo escolhido em “Geral” → “Transcrição”, e nenhum áudio é enviado à IA escolhida aqui. A busca de sugestões para o dicionário usa a IA de “Reuniões”. “Local” executa um LLM pequeno neste Mac. “Apple” usa o modelo do Foundation Models (fm) do macOS 27 integrado a este Mac (nenhum dos dois envia texto para a internet)."
+            "value" : "Usado apenas para refinar o texto. A transcrição do áudio é feita pelo mecanismo escolhido em “Geral” → “Transcrição”, e nenhum áudio é enviado à IA escolhida aqui. A busca de sugestões para o dicionário usa a IA de “Reuniões”; o chat de IA da reunião e “Perguntar às reuniões” usam a IA de “Chat de IA e perguntas” (também é possível trocá-la na hora, nas telas do chat e das perguntas). “Local” executa um LLM pequeno neste Mac. “Apple” usa o modelo do Foundation Models (fm) do macOS 27 integrado a este Mac (nenhum dos dois envia texto para a internet)."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Используется только для обработки текста. Аудио расшифровывает движок, выбранный в «Основные» → «Расшифровка»; выбранному здесь AI аудио не отправляется. Поиск кандидатов для словаря использует AI, выбранный для встреч. «Локально» запускает небольшую LLM на этом Mac. «Apple» использует локальную модель Foundation Models (fm) в macOS 27 на этом Mac (в обоих случаях текст не отправляется в интернет)."
+            "value" : "Используется только для обработки текста. Аудио расшифровывает движок, выбранный в «Основные» → «Расшифровка»; выбранному здесь AI аудио не отправляется. Поиск кандидатов для словаря использует AI, выбранный для встреч, а AI-чат встречи и «Вопрос по встречам» — AI, выбранный в «AI-чат и вопросы» (его можно сменить и прямо на экранах чата и вопросов). «Локально» запускает небольшую LLM на этом Mac. «Apple» использует локальную модель Foundation Models (fm) в macOS 27 на этом Mac (в обоих случаях текст не отправляется в интернет)."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yalnızca metni iyileştirmek için kullanılır. Sesi, “Genel” → “Yazıya dökme” bölümünde seçilen motor yazıya döker; burada seçilen AI’a ses gönderilmez. Sözlük önerisi bulma, “Toplantılar” için seçilen AI’ı kullanır. “Yerel”, bu Mac’te küçük bir LLM çalıştırır. “Apple”, macOS 27’deki Foundation Models’ın (fm) bu Mac’teki modelini kullanır (ikisi de metni internete göndermez)."
+            "value" : "Yalnızca metni iyileştirmek için kullanılır. Sesi, “Genel” → “Transkript” bölümünde seçilen motor yazıya döker; burada seçilen AI’a ses gönderilmez. Sözlük önerisi bulma “Toplantılar” için seçilen AI’ı, toplantı AI sohbeti ve toplantılara sorular ise “AI sohbet ve sorular” için seçilen AI’ı kullanır (sohbet ve soru ekranlarında o anda da değiştirebilirsiniz). “Yerel”, bu Mac’te küçük bir LLM çalıştırır. “Apple”, macOS 27’deki Foundation Models’ın (fm) bu Mac’teki modelini kullanır (ikisi de metni internete göndermez)."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chỉ dùng để chỉnh sửa văn bản. Việc chép lời âm thanh do công cụ đã chọn trong “Chung” → “Bản chép lời” thực hiện, không gửi âm thanh cho AI chọn ở đây. Việc tìm gợi ý cho từ điển dùng AI của “Cuộc họp”. “Cục bộ” chạy một LLM nhỏ ngay trong máy Mac này. “Apple” dùng mô hình trong máy Mac này của Foundation Models (fm) trên macOS 27 (cả hai đều không gửi văn bản lên mạng)."
+            "value" : "Chỉ dùng để chỉnh sửa văn bản. Việc chép lời âm thanh do công cụ đã chọn trong “Chung” → “Bản chép lời” thực hiện, không gửi âm thanh cho AI chọn ở đây. Việc tìm gợi ý cho từ điển dùng AI của “Cuộc họp”, còn Trò chuyện AI trong cuộc họp và hỏi về cuộc họp dùng AI của “Trò chuyện AI & hỏi đáp” (cũng có thể đổi ngay trên màn hình trò chuyện và hỏi đáp). “Cục bộ” chạy một LLM nhỏ ngay trong máy Mac này. “Apple” dùng mô hình trong máy Mac này của Foundation Models (fm) trên macOS 27 (cả hai đều không gửi văn bản lên mạng)."
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仅用于润色文本。音频转写由“通用”→“转写”中选择的引擎完成，不会把音频发送给这里选择的 AI。词典候选查找使用“会议”的 AI。“本地”会在这台 Mac 上运行小型 LLM。“Apple”使用 macOS 27 Foundation Models（fm）在这台 Mac 本机上的模型（两者都不会把文本发送到网络）。"
+            "value" : "仅用于润色文本。音频转写由“通用”→“转写”中选择的引擎完成，不会把音频发送给这里选择的 AI。词典候选查找使用“会议”的 AI，会议中的 AI 聊天和向会议提问使用“AI 聊天·提问”的 AI（也可以在聊天和提问界面中直接切换）。“本地”会在这台 Mac 上运行小型 LLM。“Apple”使用 macOS 27 Foundation Models（fm）在这台 Mac 本机上的模型（两者都不会把文本发送到网络）。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "僅用於潤飾文字。音訊轉錄由「一般」→「轉錄」中選擇的引擎完成，不會把音訊傳送給這裡選擇的 AI。辭典候選尋找使用「會議」的 AI。「本機」會在這台 Mac 上執行小型 LLM。「Apple」使用 macOS 27 Foundation Models（fm）在這台 Mac 本機上的模型（兩者都不會把文字傳送到網路）。"
+            "value" : "僅用於潤飾文字。音訊轉錄由「一般」→「轉錄」中選擇的引擎完成，不會把音訊傳送給這裡選擇的 AI。辭典候選尋找使用「會議」的 AI，會議中的 AI 聊天和向會議提問使用「AI 聊天·提問」的 AI（也可以在聊天和提問畫面中直接切換）。「本機」會在這台 Mac 上執行小型 LLM。「Apple」使用 macOS 27 Foundation Models（fm）在這台 Mac 本機上的模型（兩者都不會把文字傳送到網路）。"
           }
         }
       }
     },
     "文章を選んで押し、「もっと丁寧に」「箇条書きにして」「英語にして」のように話してもう一度押すと、書き換えた文章で置き換えます。" : {
-      "comment" : "Onboarding.swift:551",
+      "comment" : "Onboarding.swift:554",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73748,7 +74666,7 @@
       }
     },
     "新しいキーで置き換える" : {
-      "comment" : "AISettingsView.swift:201, AISettingsView.swift:295",
+      "comment" : "AISettingsView.swift:226, AISettingsView.swift:322",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74054,7 +74972,7 @@
       }
     },
     "新しい会話" : {
-      "comment" : "MeetingChatView.swift:293",
+      "comment" : "MeetingChatView.swift:352",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74457,6 +75375,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "預設列表"
+          }
+        }
+      }
+    },
+    "既定の送り先（%@）は今は使えません（%@）。下の「送り先」で選ぶか、設定の「AI」→「AI チャット・質問」で変えてください。" : {
+      "comment" : "AIRouteMenu.swift:148",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الوجهة الافتراضية (%1$@) غير متاحة الآن (%2$@). اختر وجهة من «الإرسال إلى» أدناه، أو غيّرها في الإعدادات ← «AI» ← «دردشة AI والأسئلة»."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Standardziel (%1$@) ist gerade nicht verfügbar (%2$@). Wähle unten unter „Senden an“ ein anderes oder ändere es unter Einstellungen → „AI“ → „KI-Chat & Fragen“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The default destination (%1$@) can't be used right now (%2$@). Choose one in “Send to” below, or change it in Settings → AI → AI Chat & Ask."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El destino predeterminado (%1$@) no se puede usar ahora (%2$@). Elige otro abajo en «Enviar a», o cámbialo en Ajustes → «AI» → «Chat con IA y preguntas»."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La destination par défaut (%1$@) n’est pas utilisable pour le moment (%2$@). Choisissez-en une autre dans « Envoyer à » ci-dessous, ou modifiez-la dans Réglages → « AI » → « Chat IA et questions »."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिफ़ॉल्ट AI (%1$@) अभी उपलब्ध नहीं है (%2$@)। नीचे “भेजें” में कोई दूसरा चुनें, या सेटिंग्ज़ → “AI” → “AI चैट और सवाल” में बदलें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tujuan default (%1$@) saat ini tidak dapat digunakan (%2$@). Pilih di “Kirim ke” di bawah, atau ubah di Pengaturan → “AI” → “Obrolan AI & tanya jawab”."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La destinazione predefinita (%1$@) al momento non è disponibile (%2$@). Scegline una in «Invia a» qui sotto o cambiala in Impostazioni → «AI» → «Chat IA e domande»."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 보낼 곳(%@)은 지금 사용할 수 없습니다(%@). 아래의 \"보낼 곳\"에서 선택하거나 설정의 \"AI\" → \"AI 채팅 · 질문\"에서 바꾸세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Domyślne AI (%1$@) jest teraz niedostępne (%2$@). Wybierz inne w „Wyślij do” poniżej albo zmień ustawienie w Ustawienia → „AI” → „Czat AI i pytania”."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O destino padrão (%1$@) não pode ser usado agora (%2$@). Escolha outro em “Enviar para” abaixo ou altere em Ajustes → “AI” → “Chat de IA e perguntas”."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI по умолчанию (%1$@) сейчас недоступен (%2$@). Выберите другой в «Отправлять в» ниже или измените его в Настройки → «AI» → «AI-чат и вопросы»."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varsayılan hedef (%1$@) şu anda kullanılamıyor (%2$@). Aşağıdaki “Hedef” menüsünden birini seçin veya Ayarlar → “AI” → “AI sohbet ve sorular” bölümünden değiştirin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nơi gửi mặc định (%1$@) hiện không dùng được (%2$@). Hãy chọn ở “Gửi đến” bên dưới, hoặc đổi trong Cài đặt → “AI” → “Trò chuyện AI & hỏi đáp”."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "默认的发送目标（%@）目前无法使用（%@）。请在下方的“发送到”中选择，或在设置的“AI”→“AI 聊天·提问”中更改。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "預設的傳送目標（%@）目前無法使用（%@）。請在下方的「傳送到」中選擇，或在設定的「AI」→「AI 聊天·提問」中變更。"
+          }
+        }
+      }
+    },
+    "既定（%@）" : {
+      "comment" : "AIRouteMenu.swift:104",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الافتراضي (%@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard (%@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default (%@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predeterminado (%@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par défaut (%@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "डिफ़ॉल्ट (%@)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default (%@)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predefinito (%@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본값(%@)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Domyślne (%@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Padrão (%@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По умолчанию (%@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varsayılan (%@)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mặc định (%@)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "默认（%@）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "預設（%@）"
           }
         }
       }
@@ -75584,7 +76706,7 @@
       }
     },
     "最後に、許可をお願いします" : {
-      "comment" : "Onboarding.swift:695",
+      "comment" : "Onboarding.swift:700",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75686,7 +76808,7 @@
       }
     },
     "最後の結果をもう一度入力" : {
-      "comment" : "DictationHistoryWindow.swift:607, Onboarding.swift:554, ShortcutRecorder.swift:19",
+      "comment" : "DictationHistoryWindow.swift:607, Onboarding.swift:557, ShortcutRecorder.swift:19",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75992,7 +77114,7 @@
       }
     },
     "最新の発言へ" : {
-      "comment" : "MeetingWindow.swift:846",
+      "comment" : "MeetingWindow.swift:855",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76400,7 +77522,7 @@
       }
     },
     "未ダウンロード" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:102",
+      "comment" : "AIRouteMenu.swift:21, TranscriptionEngineSettingsView.swift:102",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76604,7 +77726,7 @@
       }
     },
     "未設定" : {
-      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274",
+      "comment" : "AISettingsView.swift:209, AISettingsView.swift:301",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77318,7 +78440,7 @@
       }
     },
     "検索した語: %@" : {
-      "comment" : "MeetingSearchView.swift:316",
+      "comment" : "MeetingSearchView.swift:383",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77420,7 +78542,7 @@
       }
     },
     "検索しています…" : {
-      "comment" : "MeetingSearchView.swift:165",
+      "comment" : "MeetingSearchView.swift:205",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77521,110 +78643,212 @@
         }
       }
     },
-    "検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を AI（設定の「AI」で会議に選んだもの）に渡して答えさせます。会議の内容はその AI にだけ渡します（「ローカル」か「Apple」なら、この Mac の外には送りません）。" : {
-      "comment" : "MeetingSearchView.swift:261",
+    "検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を、設定の「AI」で「AI チャット・質問」に選んだ AI（下の「送り先」で変えたときはその AI）に渡して答えさせます。" : {
+      "comment" : "MeetingSearchView.swift:302",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "يُمرَّر محضر الاجتماعات المطابقة للبحث والاجتماعات الأخيرة (أو نصها المفرّغ إن لم يوجد محضر) إلى AI (المختار للاجتماعات في قسم «AI» في الإعدادات) ليجيب. لا يُمرَّر محتوى الاجتماعات إلا إلى ذلك الـ AI (مع «محلي» أو «Apple» لا يخرج شيء من هذا الـ Mac)."
+            "value" : "يُمرَّر محضر الاجتماعات المطابقة للبحث والاجتماعات الأخيرة (أو نصها المفرّغ إن لم يوجد محضر) إلى AI المختار لـ «دردشة AI والأسئلة» في قسم «AI» في الإعدادات (أو إلى AI الذي تختاره في «الإرسال إلى» أدناه) ليجيب."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Übergibt die Protokolle (oder, falls keine vorhanden sind, die Transkriptionen) der gefundenen und der letzten Meetings an die KI (die unter „AI“ in den Einstellungen für Meetings gewählte), die dann antwortet. Meeting-Inhalte gehen nur an diese KI (bei „Lokal“ oder „Apple“ verlässt nichts diesen Mac)."
+            "value" : "Übergibt die Protokolle (oder, falls keine vorhanden sind, die Transkriptionen) der gefundenen und der letzten Meetings an die KI, die unter „AI“ in den Einstellungen für „KI-Chat & Fragen“ gewählt ist (oder an die unten unter „Senden an“ gewählte), die dann antwortet."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Passes the minutes (or transcripts, if there are no minutes) of matching meetings and recent meetings to the AI (the one chosen for meetings in “AI” in Settings) to answer. Meeting content is passed only to that AI (with “Local” or “Apple”, nothing leaves this Mac)."
+            "value" : "Sends the minutes (or transcripts, if there are no minutes) of matching and recent meetings to the AI chosen for AI Chat & Ask in Settings → AI (or the one you pick in “Send to” below), and asks it to answer."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pasa a la IA (la elegida para reuniones en «AI» de Ajustes) las actas (o, si no hay, las transcripciones) de las reuniones encontradas y de las más recientes para que responda. El contenido de las reuniones solo se pasa a esa IA (con «Local» o «Apple», nada sale de este Mac)."
+            "value" : "Pasa a la IA elegida para «Chat con IA y preguntas» en «AI» de Ajustes (o a la que elijas abajo en «Enviar a») las actas (o, si no hay, las transcripciones) de las reuniones encontradas y de las más recientes para que responda."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Transmet à l’IA (celle choisie pour les réunions dans « AI » des Réglages) les comptes rendus (ou, à défaut, les transcriptions) des réunions trouvées et des réunions récentes pour qu’elle réponde. Le contenu des réunions n’est transmis qu’à cette IA (avec « Local » ou « Apple », rien ne quitte ce Mac)."
+            "value" : "Transmet à l’IA choisie pour « Chat IA et questions » dans « AI » des Réglages (ou à celle choisie dans « Envoyer à » ci-dessous) les comptes rendus (ou, à défaut, les transcriptions) des réunions trouvées et des réunions récentes pour qu’elle réponde."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "खोज में मिली मीटिंग और हाल की मीटिंग के मिनट्स (न हों तो ट्रांसक्रिप्ट) AI (सेटिंग्ज़ के “AI” में मीटिंग के लिए चुना गया) को देकर जवाब बनवाता है। मीटिंग की सामग्री सिर्फ़ उसी AI को दी जाती है (“लोकल” या “Apple” में कुछ भी इस Mac से बाहर नहीं जाता)।"
+            "value" : "खोज में मिली मीटिंग और हाल की मीटिंग के मिनट्स (न हों तो ट्रांसक्रिप्ट) सेटिंग्ज़ के “AI” में “AI चैट और सवाल” के लिए चुने गए AI को (नीचे “भेजें” में बदला हो तो उस AI को) देकर जवाब बनवाता है।"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notulen (atau transkrip jika tidak ada) dari rapat yang cocok dengan pencarian dan rapat terbaru diberikan kepada AI (yang dipilih untuk rapat di “AI” pada Pengaturan) untuk menjawab. Isi rapat hanya diberikan ke AI tersebut (dengan “Lokal” atau “Apple”, tidak ada yang keluar dari Mac ini)."
+            "value" : "Notulen (atau transkrip jika tidak ada) dari rapat yang cocok dengan pencarian dan rapat terbaru diberikan kepada AI yang dipilih untuk “Obrolan AI & tanya jawab” di “AI” pada Pengaturan (atau AI yang Anda pilih di “Kirim ke” di bawah) untuk menjawab."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Passa all'IA (quella scelta per le riunioni in Impostazioni → «AI») i verbali (o, se mancano, le trascrizioni) delle riunioni trovate dalla ricerca e di quelle più recenti per ottenere una risposta. Il contenuto delle riunioni viene passato solo a quell'IA (con «Locale» o «Apple», nulla esce da questo Mac)."
+            "value" : "Il verbale (o, se manca, la trascrizione) delle riunioni trovate e di quelle più recenti viene passato all'IA scelta per «Chat IA e domande» in Impostazioni → «AI» (o a quella scelta in «Invia a» qui sotto), che risponde alla domanda."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "검색에 걸린 회의와 최근 회의의 회의록(없으면 전사본)을 AI(설정의 \"AI\"에서 회의용으로 선택한 AI)에 넘겨 답하게 합니다. 회의 내용은 그 AI에만 넘깁니다(\"로컬\" 또는 \"Apple\"이면 이 Mac 밖으로 보내지 않습니다)."
+            "value" : "검색에 걸린 회의와 최근 회의의 회의록(없으면 전사본)을 설정의 \"AI\"에서 \"AI 채팅 · 질문\"용으로 선택한 AI(아래의 \"보낼 곳\"에서 바꿨다면 그 AI)에 넘겨 답하게 합니다."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Protokoły (a jeśli ich brak — transkrypcje) znalezionych i ostatnich spotkań są przekazywane do AI (wybranego dla spotkań w Ustawieniach → „AI”), aby uzyskać odpowiedź. Treść spotkań trafia tylko do tego AI (przy „Lokalnie” lub „Apple” nic nie opuszcza tego Maca)."
+            "value" : "Protokoły (a jeśli ich brak — transkrypcje) znalezionych i ostatnich spotkań są przekazywane do AI wybranego dla „Czat AI i pytania” w Ustawieniach → „AI” (lub do AI wybranego poniżej w „Wyślij do”), aby uzyskać odpowiedź."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Passa à IA (a escolhida para reuniões em Ajustes → “AI”) as atas (ou, se não houver, as transcrições) das reuniões encontradas na busca e das mais recentes para obter uma resposta. O conteúdo das reuniões é passado só a essa IA (com “Local” ou “Apple”, nada sai deste Mac)."
+            "value" : "A ata (ou a transcrição, se não houver ata) das reuniões encontradas e das mais recentes é passada à IA escolhida para “Chat de IA e perguntas” em Ajustes → “AI” (ou à escolhida em “Enviar para” abaixo), que responde à pergunta."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Протоколы (а если их нет — расшифровки) найденных и последних встреч передаются AI (выбранному для встреч в разделе «AI» в Настройках), чтобы получить ответ. Содержимое встреч передаётся только этому AI (при «Локально» или «Apple» ничего не покидает этот Mac)."
+            "value" : "Протоколы (или расшифровки, если протокола нет) найденных и последних встреч передаются AI, выбранному для «AI-чат и вопросы» в разделе «AI» в Настройках (или выбранному в «Отправлять в» ниже), и он отвечает на вопрос."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Arama sonucunda bulunan toplantıların ve son toplantıların tutanakları (yoksa transkriptleri) AI’a (Ayarlar’daki “AI” bölümünde toplantılar için seçilen) verilir ve yanıt oluşturulur. Toplantı içeriği yalnızca bu AI’a verilir (“Yerel” veya “Apple” seçiliyse hiçbir şey bu Mac’ten çıkmaz)."
+            "value" : "Arama sonucunda bulunan toplantıların ve son toplantıların tutanakları (yoksa transkriptleri), Ayarlar’daki “AI” bölümünde “AI sohbet ve sorular” için seçilen AI’a (aşağıdaki “Hedef” menüsünden değiştirdiyseniz o AI’a) verilir ve yanıt oluşturulur."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Biên bản (nếu không có thì bản chép lời) của các cuộc họp khớp tìm kiếm và các cuộc họp gần đây sẽ được giao cho AI (AI đã chọn cho cuộc họp ở mục “AI” trong Cài đặt) để trả lời. Nội dung cuộc họp chỉ được giao cho AI đó (với “Cục bộ” hoặc “Apple”, không có gì rời khỏi máy Mac này)."
+            "value" : "Biên bản (nếu không có thì bản chép lời) của các cuộc họp khớp tìm kiếm và các cuộc họp gần đây sẽ được giao cho AI đã chọn cho “Trò chuyện AI & hỏi đáp” ở mục “AI” trong Cài đặt (nếu đã đổi ở “Gửi đến” bên dưới thì là AI đó) để trả lời."
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "会将搜索命中的会议和最近会议的会议纪要（没有则为转写稿）交给 AI（在设置的“AI”中为会议选择的 AI）来回答。会议内容只会交给该 AI（选择“本地”或“Apple”时，不会离开这台 Mac）。"
+            "value" : "会将搜索命中的会议和最近会议的会议纪要（没有则为转写稿）交给在设置的“AI”中为“AI 聊天·提问”选择的 AI（如果在下方的“发送到”中更改过，则交给该 AI）来回答。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "會將搜尋命中的會議和最近會議的會議紀錄（若沒有則為逐字稿）交給 AI（在設定的「AI」中為會議選擇的 AI）來回答。會議內容只會交給該 AI（選擇「本機」或「Apple」時，不會離開這台 Mac）。"
+            "value" : "會將搜尋命中的會議和最近會議的會議紀錄（若沒有則為逐字稿）交給在設定的「AI」中為「AI 聊天·提問」選擇的 AI（若在下方的「傳送到」中變更過，則交給該 AI）來回答。"
+          }
+        }
+      }
+    },
+    "検索で選んだ会議の議事録と文字起こしをこの AI に送ります。" : {
+      "comment" : "MeetingSearchView.swift:321",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يُرسَل محضر الاجتماعات المختارة في البحث ونصها المفرّغ إلى هذا الـ AI."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Protokolle und Transkriptionen der von der Suche ausgewählten Meetings werden an diese KI gesendet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The minutes and transcripts of the selected meetings are sent to this AI."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las actas y las transcripciones de las reuniones elegidas por la búsqueda se envían a esta IA."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les comptes rendus et les transcriptions des réunions retenues par la recherche sont envoyés à cette IA."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "खोज में चुनी गई मीटिंग के मिनट्स और ट्रांसक्रिप्ट इस AI को भेजे जाते हैं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notulen dan transkrip rapat yang dipilih dalam pencarian dikirim ke AI ini."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il verbale e la trascrizione delle riunioni scelte nella ricerca vengono inviati a questa IA."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "검색에서 선택한 회의의 회의록과 전사본을 이 AI에 보냅니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protokoły i transkrypcje spotkań wybranych w wyszukiwaniu są wysyłane do tego AI."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A ata e a transcrição das reuniões escolhidas na busca são enviadas a esta IA."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Протоколы и расшифровки встреч, выбранных в поиске, отправляются этому AI."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aramada seçilen toplantıların tutanakları ve transkriptleri bu AI’a gönderilir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biên bản họp và bản chép lời của các cuộc họp đã chọn khi tìm kiếm sẽ được gửi tới AI này."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会将搜索中选中的会议的会议纪要和转写稿发送给此 AI。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會將搜尋中選取的會議的會議紀錄和逐字稿傳送給此 AI。"
           }
         }
       }
     },
     "検索をやめる" : {
-      "comment" : "MeetingSearchView.swift:128",
+      "comment" : "MeetingSearchView.swift:168",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77726,7 +78950,7 @@
       }
     },
     "検索語を消す" : {
-      "comment" : "DictationHistoryWindow.swift:240, DictationHistoryWindow.swift:241, MeetingSearchView.swift:129",
+      "comment" : "DictationHistoryWindow.swift:240, DictationHistoryWindow.swift:241, MeetingSearchView.swift:169",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78032,7 +79256,7 @@
       }
     },
     "次に、主な機能と設定の Tips を紹介します" : {
-      "comment" : "Onboarding.swift:296",
+      "comment" : "Onboarding.swift:299",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78134,7 +79358,7 @@
       }
     },
     "次へ" : {
-      "comment" : "Onboarding.swift:180",
+      "comment" : "Onboarding.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78338,7 +79562,7 @@
       }
     },
     "止める" : {
-      "comment" : "MeetingChatView.swift:171",
+      "comment" : "MeetingChatView.swift:217",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79052,7 +80276,7 @@
       }
     },
     "決まったこと・宿題" : {
-      "comment" : "MeetingChat.swift:217",
+      "comment" : "MeetingChat.swift:220",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79358,7 +80582,7 @@
       }
     },
     "済み" : {
-      "comment" : "MeetingDocumentView.swift:439, Onboarding.swift:815",
+      "comment" : "MeetingDocumentView.swift:439, Onboarding.swift:820",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79460,7 +80684,7 @@
       }
     },
     "渡した会議（%@ 件）" : {
-      "comment" : "MeetingSearchView.swift:302",
+      "comment" : "MeetingSearchView.swift:369",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79562,7 +80786,7 @@
       }
     },
     "準備ができたら" : {
-      "comment" : "Onboarding.swift:739",
+      "comment" : "Onboarding.swift:744",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79766,7 +80990,7 @@
       }
     },
     "準備はあとからでもできます（設定 →「AI」）。" : {
-      "comment" : "Onboarding.swift:466",
+      "comment" : "Onboarding.swift:469",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79868,7 +81092,7 @@
       }
     },
     "準備中…" : {
-      "comment" : "DictationController.swift:229, EditModeController.swift:199, MeetingWindow.swift:306",
+      "comment" : "DictationController.swift:229, EditModeController.swift:199, MeetingWindow.swift:315",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80684,7 +81908,7 @@
       }
     },
     "画面の文脈を参考にできる" : {
-      "comment" : "Onboarding.swift:654",
+      "comment" : "Onboarding.swift:659",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81500,7 +82724,7 @@
       }
     },
     "直近" : {
-      "comment" : "MeetingSearchView.swift:310",
+      "comment" : "MeetingSearchView.swift:377",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81602,7 +82826,7 @@
       }
     },
     "直近 5 分の話" : {
-      "comment" : "MeetingChat.swift:216",
+      "comment" : "MeetingChat.swift:219",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81908,7 +83132,7 @@
       }
     },
     "確かめています…" : {
-      "comment" : "AISettingsView.swift:188, AISettingsView.swift:278, AISettingsView.swift:320",
+      "comment" : "AISettingsView.swift:213, AISettingsView.swift:305, AISettingsView.swift:347",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82112,7 +83336,7 @@
       }
     },
     "答えをコピーする" : {
-      "comment" : "MeetingChatView.swift:387",
+      "comment" : "MeetingChatView.swift:461",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82214,7 +83438,7 @@
       }
     },
     "答えを作ったときに渡した記録の範囲（発言 %@ 件）" : {
-      "comment" : "MeetingChatView.swift:373",
+      "comment" : "MeetingChatView.swift:447",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82316,7 +83540,7 @@
       }
     },
     "答えを作れませんでした: %@" : {
-      "comment" : "MeetingChatView.swift:55, MeetingSearchView.swift:92",
+      "comment" : "MeetingChatView.swift:89, MeetingSearchView.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82418,7 +83642,7 @@
       }
     },
     "答えを待つのをやめる" : {
-      "comment" : "MeetingChatView.swift:269",
+      "comment" : "MeetingChatView.swift:327",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83336,7 +84560,7 @@
       }
     },
     "結果と元の文字起こしを残し、検索・コピーできます。整形に失敗した文は、原文から整え直せます（メニュー →「履歴を開く…」）。" : {
-      "comment" : "Onboarding.swift:608",
+      "comment" : "Onboarding.swift:611",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84662,7 +85886,7 @@
       }
     },
     "翻訳して入力" : {
-      "comment" : "Onboarding.swift:546, SettingsView.swift:174, ShortcutRecorder.swift:15",
+      "comment" : "Onboarding.swift:549, SettingsView.swift:174, ShortcutRecorder.swift:15",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84866,7 +86090,7 @@
       }
     },
     "翻訳する言語を足せる" : {
-      "comment" : "Onboarding.swift:652",
+      "comment" : "Onboarding.swift:657",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84968,7 +86192,7 @@
       }
     },
     "考える量（effort）は low。待ち時間を短くするため" : {
-      "comment" : "AISettingsView.swift:154",
+      "comment" : "AISettingsView.swift:132",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85070,7 +86294,7 @@
       }
     },
     "考える量（effort）は medium。長い会議の記録をまとめるため" : {
-      "comment" : "AISettingsView.swift:155",
+      "comment" : "AISettingsView.swift:133",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85171,8 +86395,110 @@
         }
       }
     },
+    "考える量（effort）は、AI チャットは low、会議への質問は medium" : {
+      "comment" : "AISettingsView.swift:134",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مستوى التفكير (effort) هو low لدردشة AI وmedium لأسئلة الاجتماعات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufwand (effort) ist low für den KI-Chat und medium für Fragen zu Meetings"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effort is low for AI chat and medium for Ask About Meetings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esfuerzo (effort): low para el chat con IA y medium para las preguntas a las reuniones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effort : low pour le chat IA, medium pour les questions sur les réunions"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सोचने की मात्रा (effort) AI चैट के लिए low और मीटिंग से सवाल के लिए medium है"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tingkat pemikiran (effort) low untuk obrolan AI dan medium untuk tanya tentang rapat"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impegno (effort): low per la chat IA, medium per Chiedi alle riunioni"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "생각하는 양(effort)은 AI 채팅은 low, 회의에 질문은 medium"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poziom rozumowania (effort): low dla czatu AI, medium dla pytań o spotkania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esforço (effort): low no chat de IA e medium em Perguntar às reuniões"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уровень рассуждения (effort): low для AI-чата, medium для вопросов по встречам"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düşünme miktarı (effort): AI sohbette low, toplantılara sorularda medium"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mức suy nghĩ (effort) là low cho Trò chuyện AI và medium cho hỏi về cuộc họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "思考量（effort）：AI 聊天为 low，向会议提问为 medium"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "思考量（effort）：AI 聊天為 low，向會議提問為 medium"
+          }
+        }
+      }
+    },
     "聞いておくとよいこと" : {
-      "comment" : "MeetingChat.swift:219",
+      "comment" : "MeetingChat.swift:222",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85274,7 +86600,7 @@
       }
     },
     "聞き逃した話の確認や、決まったことの整理に。続けて質問すると、前のやりとりを踏まえて答えます。" : {
-      "comment" : "MeetingChatView.swift:214",
+      "comment" : "MeetingChatView.swift:272",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86804,7 +88130,7 @@
       }
     },
     "要るもの: API キーかサービスアカウント" : {
-      "comment" : "Onboarding.swift:365",
+      "comment" : "Onboarding.swift:368",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86906,7 +88232,7 @@
       }
     },
     "要るもの: API キー（Claude Console）" : {
-      "comment" : "Onboarding.swift:366",
+      "comment" : "Onboarding.swift:369",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87008,7 +88334,7 @@
       }
     },
     "要るもの: macOS 27 と Apple Intelligence" : {
-      "comment" : "Onboarding.swift:367",
+      "comment" : "Onboarding.swift:370",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87110,7 +88436,7 @@
       }
     },
     "要るもの: ダウンロード（%@。このあとすぐ）" : {
-      "comment" : "Onboarding.swift:364",
+      "comment" : "Onboarding.swift:367",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87212,7 +88538,7 @@
       }
     },
     "見つかりませんでした" : {
-      "comment" : "MeetingSearchView.swift:165",
+      "comment" : "MeetingSearchView.swift:205",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87824,7 +89150,7 @@
       }
     },
     "記録する機器と議事録の型を変える（次の記録から）" : {
-      "comment" : "MeetingWindow.swift:328",
+      "comment" : "MeetingWindow.swift:337",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88028,7 +89354,7 @@
       }
     },
     "記録の設定" : {
-      "comment" : "MeetingWindow.swift:329, MeetingWindow.swift:362",
+      "comment" : "MeetingWindow.swift:338, MeetingWindow.swift:371",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88232,7 +89558,7 @@
       }
     },
     "記録の開始／停止" : {
-      "comment" : "AppDelegate.swift:306, Onboarding.swift:577, SettingsView.swift:265",
+      "comment" : "AppDelegate.swift:306, Onboarding.swift:580, SettingsView.swift:265",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88334,7 +89660,7 @@
       }
     },
     "記録を停止" : {
-      "comment" : "MeetingWindow.swift:309",
+      "comment" : "MeetingWindow.swift:318",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88946,7 +90272,7 @@
       }
     },
     "記録を読んでいます…" : {
-      "comment" : "MeetingChatView.swift:168",
+      "comment" : "MeetingChatView.swift:214",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89048,7 +90374,7 @@
       }
     },
     "記録中" : {
-      "comment" : "MeetingWindow.swift:181, MeetingWindow.swift:254, MeetingWindow.swift:712",
+      "comment" : "MeetingWindow.swift:190, MeetingWindow.swift:263, MeetingWindow.swift:721",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89354,7 +90680,7 @@
       }
     },
     "記録中に会議ノートへメモを書いたり、重要なところに印を付けたりすると、議事録がそこを優先してまとめます。" : {
-      "comment" : "Onboarding.swift:585",
+      "comment" : "Onboarding.swift:588",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89456,7 +90782,7 @@
       }
     },
     "記録中の文字起こしがないため（%@）、メモと印だけをもとに答えます。" : {
-      "comment" : "MeetingChatView.swift:150",
+      "comment" : "MeetingChatView.swift:191",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89558,7 +90884,7 @@
       }
     },
     "記録中は変えられません。次の記録から使います。" : {
-      "comment" : "MeetingWindow.swift:366",
+      "comment" : "MeetingWindow.swift:375",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89864,7 +91190,7 @@
       }
     },
     "設定 →「AI」でオンにすると、画面にある名前の表記に合わせて整えます（既定はオフ）。" : {
-      "comment" : "Onboarding.swift:655",
+      "comment" : "Onboarding.swift:660",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89966,7 +91292,7 @@
       }
     },
     "設定 →「一般」→「マイク」。録音中の画面下の表示のマイクのボタンでも切り替えられます。" : {
-      "comment" : "Onboarding.swift:647",
+      "comment" : "Onboarding.swift:652",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90068,7 +91394,7 @@
       }
     },
     "設定 →「一般」→「翻訳する言語」で日本語も選ぶと、英語で話して日本語で入力できます。" : {
-      "comment" : "Onboarding.swift:653",
+      "comment" : "Onboarding.swift:658",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90272,7 +91598,7 @@
       }
     },
     "設定の Tips" : {
-      "comment" : "Onboarding.swift:633",
+      "comment" : "Onboarding.swift:636",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90374,7 +91700,7 @@
       }
     },
     "設定の「会議」で別のキーを選んでください。" : {
-      "comment" : "AppDelegate.swift:386",
+      "comment" : "AppDelegate.swift:390",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90578,7 +91904,7 @@
       }
     },
     "許可する" : {
-      "comment" : "Onboarding.swift:710, Onboarding.swift:723, SettingsView.swift:380",
+      "comment" : "Onboarding.swift:715, Onboarding.swift:728, SettingsView.swift:380",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90680,7 +92006,7 @@
       }
     },
     "許可する…" : {
-      "comment" : "Onboarding.swift:702, ScreenContextSettingsView.swift:25",
+      "comment" : "Onboarding.swift:707, ScreenContextSettingsView.swift:25",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90782,7 +92108,7 @@
       }
     },
     "許可済み" : {
-      "comment" : "Onboarding.swift:785, SettingsView.swift:374",
+      "comment" : "Onboarding.swift:790, SettingsView.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90884,7 +92210,7 @@
       }
     },
     "試してみる（音声入力の AI）" : {
-      "comment" : "AISettingsView.swift:38",
+      "comment" : "AISettingsView.swift:40",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90986,7 +92312,7 @@
       }
     },
     "話した内容を%@して入力します。録音中に画面下の表示で言語を選んでも切り替えられます。" : {
-      "comment" : "Onboarding.swift:547",
+      "comment" : "Onboarding.swift:550",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91088,7 +92414,7 @@
       }
     },
     "話した内容を整える・翻訳する・議事録をまとめるのに使います。" : {
-      "comment" : "Onboarding.swift:295",
+      "comment" : "Onboarding.swift:298",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91190,7 +92516,7 @@
       }
     },
     "話した内容を整える・翻訳する・議事録をまとめるのに使う AI です。おすすめは、この Mac の中で動く Gemma です。あとから設定の「AI」で変えられます。" : {
-      "comment" : "Onboarding.swift:383",
+      "comment" : "Onboarding.swift:386",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91394,7 +92720,7 @@
       }
     },
     "話した声を録るのに要ります。" : {
-      "comment" : "Onboarding.swift:708",
+      "comment" : "Onboarding.swift:713",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91700,7 +93026,7 @@
       }
     },
     "話して入力" : {
-      "comment" : "Onboarding.swift:543",
+      "comment" : "Onboarding.swift:546",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91802,7 +93128,7 @@
       }
     },
     "話し始めると、ここに文字起こしが出ます" : {
-      "comment" : "MeetingNotesViews.swift:385, MeetingWindow.swift:795",
+      "comment" : "MeetingNotesViews.swift:385, MeetingWindow.swift:804",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91904,7 +93230,7 @@
       }
     },
     "話すだけで、整った文章をカーソルの場所に入力します。\n会議を記録して、文字起こしと議事録も作ります。" : {
-      "comment" : "Onboarding.swift:289",
+      "comment" : "Onboarding.swift:292",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92618,7 +93944,7 @@
       }
     },
     "話者名…" : {
-      "comment" : "MeetingWindow.swift:610",
+      "comment" : "MeetingWindow.swift:619",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92822,7 +94148,7 @@
       }
     },
     "話者名・Finder で表示・削除" : {
-      "comment" : "MeetingWindow.swift:597",
+      "comment" : "MeetingWindow.swift:606",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93025,6 +94351,108 @@
         }
       }
     },
+    "認証が未設定" : {
+      "comment" : "AIRouteMenu.swift:19",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المصادقة غير مُعدّة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "keine Zugangsdaten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "not signed in"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sin credenciales"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "identifiants non configurés"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ऑथेंटिकेशन सेट नहीं है"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autentikasi belum diatur"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "credenziali non impostate"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인증 정보가 설정되지 않음"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "brak danych uwierzytelniających"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sem credenciais"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "учётные данные не заданы"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kimlik doğrulama ayarlanmadı"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chưa thiết lập xác thực"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未设置凭据"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尚未設定憑證"
+          }
+        }
+      }
+    },
     "認証は設定の「AI」にある Gemini の認証情報を使います。音声入力では、文字起こしのあとに辞書・スニペットを当ててから、いつもどおり整形します（整形の AI も Gemini なら、Gemini を 2 回呼びます）。長い会議は 5 分ごとに分けて送ります。" : {
       "comment" : "TranscriptionEngineSettingsView.swift:166",
       "extractionState" : "manual",
@@ -93128,7 +94556,7 @@
       }
     },
     "認証方法" : {
-      "comment" : "AISettingsView.swift:267",
+      "comment" : "AISettingsView.swift:294",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93332,7 +94760,7 @@
       }
     },
     "認識結果の例" : {
-      "comment" : "AISettingsView.swift:39",
+      "comment" : "AISettingsView.swift:41",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93842,7 +95270,7 @@
       }
     },
     "議事録" : {
-      "comment" : "MeetingExport.swift:141, MeetingSearchView.swift:214, MinutesDocument.swift:94",
+      "comment" : "MeetingExport.swift:141, MeetingSearchView.swift:254, MinutesDocument.swift:94",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95372,7 +96800,7 @@
       }
     },
     "議事録の型と書き出し" : {
-      "comment" : "Onboarding.swift:588",
+      "comment" : "Onboarding.swift:591",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95882,7 +97310,7 @@
       }
     },
     "議事録を作っています" : {
-      "comment" : "MeetingWindow.swift:250, MeetingWindow.swift:251",
+      "comment" : "MeetingWindow.swift:259, MeetingWindow.swift:260",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96188,7 +97616,7 @@
       }
     },
     "議事録を作り直している間は削除できません" : {
-      "comment" : "MeetingWindow.swift:620",
+      "comment" : "MeetingWindow.swift:629",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96290,7 +97718,7 @@
       }
     },
     "議事録を作り直しますか？" : {
-      "comment" : "MeetingWindow.swift:485",
+      "comment" : "MeetingWindow.swift:494",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96392,7 +97820,7 @@
       }
     },
     "議事録を作り直す" : {
-      "comment" : "MeetingDocumentView.swift:314, MeetingDocumentView.swift:324, MeetingWindow.swift:502",
+      "comment" : "MeetingDocumentView.swift:314, MeetingDocumentView.swift:324, MeetingWindow.swift:511",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96800,7 +98228,7 @@
       }
     },
     "議事録を作成中" : {
-      "comment" : "MeetingDocumentView.swift:293, MeetingWindow.swift:261",
+      "comment" : "MeetingDocumentView.swift:293, MeetingWindow.swift:270",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97106,7 +98534,7 @@
       }
     },
     "議事録・文字起こし・メモ・音声をまとめてゴミ箱に移します。ゴミ箱から戻せます。" : {
-      "comment" : "MeetingWindow.swift:77",
+      "comment" : "MeetingWindow.swift:83",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97207,104 +98635,104 @@
         }
       }
     },
-    "議事録（作り直しも）・会議への質問・辞書の候補" : {
-      "comment" : "AISettingsView.swift:116",
+    "議事録（作り直しも）・辞書の候補" : {
+      "comment" : "TextAI.swift:57",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "المحاضر (وإعادة إنشائها) · أسئلة الاجتماعات · مقترحات القاموس"
+            "value" : "المحاضر (وإعادة إنشائها) · مقترحات القاموس"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Protokolle (auch Neuerstellung), Fragen zu Meetings, Wörterbuchvorschläge"
+            "value" : "Protokolle (auch Neuerstellung) und Wörterbuchvorschläge"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Minutes (including recreation), meeting questions, dictionary suggestions"
+            "value" : "Minutes (including regenerating) and dictionary suggestions"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Actas (y su recreación), preguntas a las reuniones y candidatos del diccionario"
+            "value" : "Actas (y su recreación) y candidatos para el diccionario"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comptes rendus (y compris recréation), questions sur les réunions, suggestions du dictionnaire"
+            "value" : "Comptes rendus (y compris recréation) et suggestions du dictionnaire"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "मिनट्स (दोबारा बनाना भी) · मीटिंग से सवाल · शब्दकोश के सुझाव"
+            "value" : "मिनट्स (दोबारा बनाना भी) · शब्दकोश के सुझाव"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notulen (termasuk buat ulang) · tanya rapat · saran kamus"
+            "value" : "Notulen (termasuk buat ulang) · saran kamus"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verbali (anche ricreati), domande alle riunioni e candidati per il dizionario"
+            "value" : "Verbale (anche quando viene ricreato) e candidati per il dizionario"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "회의록(다시 만들기 포함) · 회의에 질문 · 사전 후보"
+            "value" : "회의록(다시 만들기 포함) · 사전 후보"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Protokoły (także ponowne tworzenie), pytania o spotkania, propozycje do słownika"
+            "value" : "Protokoły (także ponowne tworzenie), propozycje do słownika"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Atas (inclusive recriação), perguntas às reuniões e sugestões para o dicionário"
+            "value" : "Ata (inclusive ao recriar) e sugestões para o dicionário"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Протоколы (в т. ч. пересоздание), вопросы по встречам, кандидаты для словаря"
+            "value" : "Протоколы (включая пересоздание) и кандидаты для словаря"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tutanaklar (yeniden oluşturma dahil), toplantılara sorular, sözlük önerileri"
+            "value" : "Tutanaklar (yeniden oluşturma dahil), sözlük önerileri"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Biên bản họp (kể cả tạo lại) · hỏi về cuộc họp · gợi ý từ điển"
+            "value" : "Biên bản họp (kể cả tạo lại) · gợi ý từ điển"
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "会议纪要（包括重新生成）·向会议提问·词典候选"
+            "value" : "会议纪要（含重新生成）·词典候选"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "會議紀錄（包括重新製作）·向會議提問·辭典候選"
+            "value" : "會議紀錄（含重新製作）·辭典候選"
           }
         }
       }
@@ -97616,7 +99044,7 @@
       }
     },
     "質問" : {
-      "comment" : "MeetingSearchView.swift:267",
+      "comment" : "MeetingSearchView.swift:308",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98432,7 +99860,7 @@
       }
     },
     "辞書と置き換えルール" : {
-      "comment" : "Onboarding.swift:610",
+      "comment" : "Onboarding.swift:613",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99553,8 +100981,212 @@
         }
       }
     },
+    "送り先: %@" : {
+      "comment" : "AIRouteMenu.swift:120",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإرسال إلى: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senden an: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send to: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar a: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer à : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "भेजें: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kirim ke: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invia a: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보낼 곳: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij do: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar para: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отправлять в: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hedef: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gửi đến: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发送到：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "傳送到：%@"
+          }
+        }
+      }
+    },
+    "送り先の AI とモデルを、この会話だけ変える" : {
+      "comment" : "AIRouteMenu.swift:129",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تغيير AI والنموذج لهذه المحادثة فقط"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI und Modell nur für dieses Gespräch ändern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change the AI and model for this conversation only"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar la IA y el modelo de destino solo para esta conversación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changer l’IA et le modèle de destination pour cette conversation uniquement"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सिर्फ़ इस बातचीत के लिए AI और मॉडल बदलें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ubah AI dan model tujuan hanya untuk percakapan ini"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia l'IA e il modello solo per questa conversazione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 대화에서만 보낼 곳의 AI와 모델 바꾸기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zmień AI i model tylko dla tej rozmowy"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trocar a IA e o modelo só nesta conversa"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сменить AI и модель только для этого разговора"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yalnızca bu sohbet için hedef AI’ı ve modeli değiştir"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đổi AI và mô hình để gửi đến, chỉ cho cuộc trò chuyện này"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅为此对话更改发送目标的 AI 与模型"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "僅為此對話變更傳送目標的 AI 與模型"
+          }
+        }
+      }
+    },
     "送信中…" : {
-      "comment" : "AISettingsView.swift:42",
+      "comment" : "AISettingsView.swift:44",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99656,7 +101288,7 @@
       }
     },
     "送信（↩）" : {
-      "comment" : "MeetingChatView.swift:277",
+      "comment" : "MeetingChatView.swift:335",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99758,7 +101390,7 @@
       }
     },
     "速くて安い。モデルは自由に指定できます" : {
-      "comment" : "Onboarding.swift:346",
+      "comment" : "Onboarding.swift:349",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99962,7 +101594,7 @@
       }
     },
     "過去の会議について AI に質問する" : {
-      "comment" : "MeetingSearchView.swift:138",
+      "comment" : "MeetingSearchView.swift:178",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100064,7 +101696,7 @@
       }
     },
     "過去の会議を検索・質問" : {
-      "comment" : "Onboarding.swift:591",
+      "comment" : "Onboarding.swift:594",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100982,7 +102614,7 @@
       }
     },
     "選択…" : {
-      "comment" : "AISettingsView.swift:312",
+      "comment" : "AISettingsView.swift:339",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101186,7 +102818,7 @@
       }
     },
     "選択を声で編集" : {
-      "comment" : "EditModeController.swift:77, EditModeSettings.swift:51, Onboarding.swift:550",
+      "comment" : "EditModeController.swift:77, EditModeSettings.swift:51, Onboarding.swift:553",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -104144,7 +105776,7 @@
       }
     },
     "開く…" : {
-      "comment" : "Onboarding.swift:710, Onboarding.swift:723",
+      "comment" : "Onboarding.swift:715, Onboarding.swift:728",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -104960,7 +106592,7 @@
       }
     },
     "音声入力" : {
-      "comment" : "Onboarding.swift:539, TextAI.swift:46, TranscriptionEngineSettingsView.swift:19",
+      "comment" : "Onboarding.swift:542, TextAI.swift:48, TranscriptionEngineSettingsView.swift:19",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105061,110 +106693,110 @@
         }
       }
     },
-    "音声入力 %@・会議 %@" : {
-      "comment" : "Onboarding.swift:769",
+    "音声入力 %@・会議 %@・AI チャット・質問 %@" : {
+      "comment" : "Onboarding.swift:774",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "الإدخال الصوتي: %@ · الاجتماعات: %@"
+            "value" : "الإدخال الصوتي: %1$@ · الاجتماعات: %2$@ · دردشة AI والأسئلة: %3$@"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diktat %@ · Meetings %@"
+            "value" : "Diktat %1$@ · Meetings %2$@ · KI-Chat & Fragen %3$@"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dictation %@ · Meetings %@"
+            "value" : "Dictation %1$@ · Meetings %2$@ · AI chat & Ask %3$@"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dictado: %@ · Reuniones: %@"
+            "value" : "Dictado: %1$@ · Reuniones: %2$@ · Chat con IA y preguntas: %3$@"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dictée %@ · Réunions %@"
+            "value" : "Dictée %1$@ · Réunions %2$@ · Chat IA et questions %3$@"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "वॉइस इनपुट %@ · मीटिंग %@"
+            "value" : "वॉइस इनपुट %1$@ · मीटिंग %2$@ · AI चैट और सवाल %3$@"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dikte %@ · Rapat %@"
+            "value" : "Dikte %1$@ · Rapat %2$@ · Obrolan AI & tanya jawab %3$@"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dettatura: %@ · Riunioni: %@"
+            "value" : "Dettatura %1$@ · Riunioni %2$@ · Chat IA e domande %3$@"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "음성 입력 %@ · 회의 %@"
+            "value" : "음성 입력 %@, 회의 %@, AI 채팅 · 질문 %@"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dyktowanie: %@ · spotkania: %@"
+            "value" : "Dyktowanie: %1$@ · spotkania: %2$@ · czat AI i pytania: %3$@"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ditado: %@ · Reuniões: %@"
+            "value" : "Ditado %1$@ · Reuniões %2$@ · Chat de IA e perguntas %3$@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Диктовка: %@ · встречи: %@"
+            "value" : "Диктовка %1$@ · Встречи %2$@ · AI-чат и вопросы %3$@"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dikte %@ · Toplantılar %@"
+            "value" : "Dikte %1$@ · Toplantılar %2$@ · AI sohbet ve sorular %3$@"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nhập bằng giọng nói %@ · Cuộc họp %@"
+            "value" : "Nhập bằng giọng nói %1$@ · Cuộc họp %2$@ · Trò chuyện AI & hỏi đáp %3$@"
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "语音输入 %@·会议 %@"
+            "value" : "语音输入 %@，会议 %@，AI 聊天·提问 %@"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "語音輸入 %@·會議 %@"
+            "value" : "語音輸入 %@，會議 %@，AI 聊天·提問 %@"
           }
         }
       }
     },
     "音声入力だけ小さく速いモデル（LFM2.5）にするなどは、このあとの「設定の Tips」か、設定 →「AI」で選べます。" : {
-      "comment" : "Onboarding.swift:465",
+      "comment" : "Onboarding.swift:468",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105465,6 +107097,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "切換語音輸入使用的麥克風"
+          }
+        }
+      }
+    },
+    "音声入力と AI チャットは速いモデル、議事録は賢いモデル、のように分けられます。選ぶとすぐに保存します。" : {
+      "comment" : "Onboarding.swift:647",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يمكنك الفصل، مثل نموذج سريع للإدخال الصوتي ودردشة AI ونموذج ذكي للمحاضر. يُحفظ الاختيار فورًا."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst z. B. ein schnelles Modell für Diktat und KI-Chat und ein intelligenteres für Protokolle verwenden. Deine Auswahl wird sofort gesichert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For example, use a fast model for dictation and AI chat, and a smarter one for minutes. Your choice is saved right away."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puedes usar, por ejemplo, un modelo rápido para el dictado y el chat con IA, y uno más inteligente para las actas. Se guarda en cuanto lo eliges."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez par exemple utiliser un modèle rapide pour la dictée et le chat IA, et un modèle plus intelligent pour les comptes rendus. Votre choix est enregistré immédiatement."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "वॉइस इनपुट और AI चैट के लिए तेज़ मॉडल, और मिनट्स के लिए समझदार मॉडल, इस तरह अलग-अलग चुन सकते हैं। चुनते ही सहेज लिया जाता है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anda bisa memisahkannya, misalnya model cepat untuk dikte dan obrolan AI, serta model cerdas untuk notulen. Pilihan langsung disimpan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puoi separarli, ad esempio un modello veloce per la dettatura e la chat IA e uno più intelligente per i verbali. La scelta viene salvata subito."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "예를 들어 음성 입력과 AI 채팅은 빠른 모델, 회의록은 똑똑한 모델처럼 나눌 수 있습니다. 선택하면 바로 저장됩니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Możesz wybrać na przykład szybki model do dyktowania i czatu AI, a inteligentniejszy do protokołów. Wybór jest zachowywany od razu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dá para separar, por exemplo: um modelo rápido para o ditado e o chat de IA e um mais inteligente para as atas. A escolha é salva na hora."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Можно, например, выбрать быструю модель для диктовки и AI-чата, а более умную — для протоколов. Выбор сохраняется сразу."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dikte ve AI sohbet için hızlı, tutanaklar için akıllı bir model gibi ayrı seçimler yapabilirsiniz. Seçim hemen kaydedilir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có thể chia ra, ví dụ mô hình nhanh cho nhập bằng giọng nói và Trò chuyện AI, mô hình thông minh cho biên bản họp. Lựa chọn được lưu ngay."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "例如，语音输入和 AI 聊天使用快速的模型，会议纪要使用更聪明的模型。选择后会立即存储。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "例如，語音輸入和 AI 聊天使用快速的模型，會議紀錄使用更聰明的模型。選擇後會立即儲存。"
           }
         }
       }
@@ -106081,110 +107815,8 @@
         }
       }
     },
-    "音声入力は速いモデル、会議は賢いモデル、のように分けられます。選ぶとすぐに保存します。" : {
-      "comment" : "Onboarding.swift:642",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "يمكنك الفصل، مثل نموذج سريع للإدخال الصوتي ونموذج ذكي للاجتماعات. يُحفظ الاختيار فورًا."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du kannst z. B. ein schnelles Modell für das Diktat und ein intelligenteres für Meetings verwenden. Deine Auswahl wird sofort gesichert."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You can use a fast model for dictation and a smarter one for meetings, for example. Your choice is saved immediately."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Puedes usar, por ejemplo, un modelo rápido para el dictado y uno más inteligente para las reuniones. Se guarda en cuanto lo eliges."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vous pouvez par exemple utiliser un modèle rapide pour la dictée et un modèle plus intelligent pour les réunions. Votre choix est enregistré immédiatement."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "वॉइस इनपुट के लिए तेज़ मॉडल और मीटिंग के लिए समझदार मॉडल, इस तरह अलग-अलग चुन सकते हैं। चुनते ही सहेज लिया जाता है।"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anda bisa memisahkannya, misalnya model cepat untuk dikte dan model cerdas untuk rapat. Pilihan langsung disimpan."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Puoi usare, ad esempio, un modello veloce per la dettatura e uno più intelligente per le riunioni. Viene salvato non appena lo scegli."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "음성 입력은 빠른 모델, 회의는 똑똑한 모델처럼 나눌 수 있습니다. 선택하면 바로 저장됩니다."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Możesz wybrać szybki model do dyktowania i inteligentniejszy do spotkań. Wybór jest zachowywany od razu."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Você pode usar, por exemplo, um modelo rápido para o ditado e um mais inteligente para as reuniões. É salvo assim que você escolhe."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Можно выбрать быструю модель для диктовки и умную для встреч. Выбор сохраняется сразу."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dikte için hızlı, toplantılar için akıllı bir model gibi ayrı seçimler yapabilirsiniz. Seçim hemen kaydedilir."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Có thể chia ra, ví dụ mô hình nhanh cho nhập bằng giọng nói và mô hình thông minh cho cuộc họp. Lựa chọn được lưu ngay."
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "可以分开设置，例如语音输入用快速模型，会议用聪明的模型。选择后会立即存储。"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "可以分開設定，例如語音輸入用快速模型，會議用聰明的模型。選擇後會立即儲存。"
-          }
-        }
-      }
-    },
     "音声入力を AI で整える" : {
-      "comment" : "AISettingsView.swift:27",
+      "comment" : "AISettingsView.swift:29",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -106286,7 +107918,7 @@
       }
     },
     "音声入力をしている間は再生できません" : {
-      "comment" : "MeetingPlayer.swift:293",
+      "comment" : "MeetingPlayer.swift:303",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -106388,7 +108020,7 @@
       }
     },
     "音声認識" : {
-      "comment" : "Onboarding.swift:720, SettingsView.swift:319",
+      "comment" : "Onboarding.swift:725, SettingsView.swift:319",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -107306,7 +108938,7 @@
       }
     },
     "（伏せた %@ 文字）" : {
-      "comment" : "ClaudeClient.swift:160",
+      "comment" : "ClaudeClient.swift:173",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -107510,7 +109142,7 @@
       }
     },
     "（未設定）" : {
-      "comment" : "ClaudeClient.swift:170",
+      "comment" : "ClaudeClient.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

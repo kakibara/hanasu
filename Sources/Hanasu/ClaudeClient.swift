@@ -67,13 +67,26 @@ struct ClaudeClient {
 
         /// 音声入力（整形・英訳・選択の編集）の既定。待ち時間が短いもの
         static let defaultDictation = Model.haiku
-        /// 会議（議事録・会議への質問）の既定。長い記録をまとめる
+        /// 会議（議事録・辞書の候補）の既定。長い記録をまとめる
         static let defaultMeeting = Model.sonnet
+        // 要件: REQ-COM-023, REQ-COM-025
+        // 設計判断: DEC-COM-171
+        /// AI チャット・質問の既定。対話なので待ち時間が短いもの
+        static let defaultChat = Model.haiku
+
+        /// 送り先のメニューに出す短い名前（製品名なので訳さない）
+        var shortName: String {
+            switch self {
+            case .haiku: "Haiku 5.5"
+            case .sonnet: "Sonnet 5.5"
+            case .opus: "Opus 5.5"
+            }
+        }
 
         var id: String { rawValue }
         var label: String {
             switch self {
-            case .haiku: tr("Claude Haiku 5.5（速い・安い。音声入力の既定）")
+            case .haiku: tr("Claude Haiku 5.5（速い・安い。音声入力と AI チャット・質問の既定）")
             case .sonnet: tr("Claude Sonnet 5.5（会議の既定）")
             case .opus: tr("Claude Opus 5.5（いちばん賢い・遅い）")
             }

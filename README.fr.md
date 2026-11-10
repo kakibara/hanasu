@@ -68,7 +68,7 @@ Il s'inspire de Typeless, Wispr Flow, Aqua Voice et Granola. Son code source est
 | **Vérifier la source et réécouter** *(Mac)* | Le compte rendu s'ouvre sur une seule page : d'abord le résumé et les actions, avec la transcription à côté. Cliquez sur l'horodatage à la fin d'un point pour aller au propos dont il provient. Lancez la lecture de l'enregistrement à partir de n'importe quel propos, et coupez votre côté ou le leur si l'appel faisait écho. |
 | **Notes en direct et temps forts** | Saisissez des notes horodatées pendant l'appel, ou appuyez sur <kbd>⌃⌥⌘ H</kbd> pour marquer « c'est important » (annulable pendant 10 secondes). Le compte rendu donne la priorité à ces passages, et vous pouvez ensuite relire la conversation autour de chaque marque. |
 | **Sous-titres flottants** *(Mac)* | Affichez la transcription en direct sous forme de sous-titres par-dessus votre application de réunion. |
-| **Chat IA pendant la réunion** *(Mac)* | Pendant l'enregistrement, interrogez l'IA sur la conversation jusqu'ici (<kbd>⌘J</kbd>). Un clic suffit pour « résumé jusqu'ici » ou « décisions et tâches ». Posez des questions de suivi, et cliquez sur un horodatage dans une réponse pour aller à ce passage de la transcription. |
+| **Chat IA pendant la réunion** *(Mac)* | Pendant l'enregistrement, interrogez l'IA sur la conversation jusqu'ici (<kbd>⌘J</kbd>). Un clic suffit pour « résumé jusqu'ici » ou « décisions et tâches ». Posez des questions de suivi, et cliquez sur un horodatage dans une réponse pour aller à ce passage de la transcription. Changez l'IA et le modèle de cette conversation depuis le menu sous le champ de saisie. |
 | **Détection des réunions** | Quand une application de réunion commence à utiliser le micro, Hanasu vous demande s'il faut enregistrer. Il ne lance jamais l'enregistrement de lui-même. |
 | **Rechercher et demander** | Recherchez dans le texte de toutes les réunions, ou demandez « Qu'avons-nous décidé au point de la semaine dernière ? ». La réponse cite les réunions utilisées. |
 | **Export** | Copiez en Markdown ou sous forme de résumé prêt pour Slack, enregistrez en `.md` / `.txt`, ou envoyez les actions vers Rappels. |
@@ -85,12 +85,12 @@ Il s'inspire de Typeless, Wispr Flow, Aqua Voice et Granola. Son code source est
 
 ### 🤖 Choisissez votre IA
 
-Choisissez l'IA qui met votre texte au propre, séparément pour la **saisie vocale** et les **réunions**.
+Choisissez l'IA qui met votre texte au propre, séparément pour la **saisie vocale** et les **réunions** (comptes rendus). Sur le Mac, vous en choisissez aussi une pour **Chat IA et questions** (le chat IA des réunions et les questions sur les réunions passées).
 
 | IA | Modèle par défaut | Connexion |
 | --- | --- | --- |
-| **Gemini** (par défaut sur Windows) | saisie vocale `gemini-3.5-flash-lite`, réunions `gemini-3.8-flash` | Clé d'API Google AI Studio ou compte de service Vertex AI |
-| **Claude** | saisie vocale `claude-haiku-5-5`, réunions `claude-sonnet-5-5` (Opus 5.5 également disponible) | Clé d'API Anthropic |
+| **Gemini** (par défaut sur Windows) | saisie vocale `gemini-3.5-flash-lite`, réunions et « Chat IA et questions » `gemini-3.8-flash` | Clé d'API Google AI Studio ou compte de service Vertex AI |
+| **Claude** | saisie vocale et « Chat IA et questions » `claude-haiku-5-5`, réunions `claude-sonnet-5-5` (Opus 5.5 également disponible) | Clé d'API Anthropic |
 | **Local** (sur votre appareil, par défaut sur Mac) | Gemma 4 E4B (recommandé). Voir le tableau ci-dessous | Aucune. Téléchargez le modèle dans **Réglages → IA**. Sur Mac, si le modèle est absent quand Hanasu commence à mettre le texte au propre, il vous demande s'il faut le télécharger |
 | **Apple** *(Mac, macOS 27)* | Le modèle Apple Intelligence sur l'appareil, via la commande `fm` | Aucune |
 
@@ -157,7 +157,7 @@ Quand une nouvelle version sort, Hanasu vous prévient au lancement et vous pose
 
 Sur Mac, le premier lancement ouvre une courte visite guidée. Elle vous permet de choisir votre IA (Gemma 4 E4B, le modèle local recommandé, se télécharge directement), présente les principales fonctionnalités et des conseils de réglage, et demande les autorisations dont Hanasu a besoin. Rouvrez-la à tout moment via **Comment utiliser Hanasu…** dans le menu.
 
-1. **Choisissez une IA.** Ouvrez **Réglages → IA** et choisissez une IA pour la saisie vocale et pour les réunions. Pour Gemini, collez une clé d'API depuis [Google AI Studio](https://aistudio.google.com/apikey) ou sélectionnez un fichier JSON de compte de service Vertex AI. Pour Claude, collez une clé d'API depuis la [Claude Console](https://console.anthropic.com/settings/keys). Pour Local, téléchargez un modèle (Gemma 4 E4B est recommandé). Aucune clé n'est nécessaire. Cliquez sur le bouton de test pour vérifier que tout fonctionne.
+1. **Choisissez une IA.** Ouvrez **Réglages → IA** et choisissez une IA pour la saisie vocale et pour les réunions (sur le Mac, aussi pour « Chat IA et questions »). Pour Gemini, collez une clé d'API depuis [Google AI Studio](https://aistudio.google.com/apikey) ou sélectionnez un fichier JSON de compte de service Vertex AI. Pour Claude, collez une clé d'API depuis la [Claude Console](https://console.anthropic.com/settings/keys). Pour Local, téléchargez un modèle (Gemma 4 E4B est recommandé). Aucune clé n'est nécessaire. Cliquez sur le bouton de test pour vérifier que tout fonctionne.
 2. **Dictez.** Placez le curseur là où vous voulez le texte, appuyez sur le raccourci, parlez, puis appuyez à nouveau sur le raccourci.
 3. **Enregistrez une réunion.** Utilisez le menu de la barre des menus (Mac) ou de la zone de notification (Windows), ou le raccourci. Un casque aide à bien séparer les deux côtés.
 

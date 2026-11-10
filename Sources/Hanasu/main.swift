@@ -78,6 +78,8 @@ atexit { LocalLLMServer.terminateRunningServer() }
 MainActor.assumeIsolated { AppUpdateCLI.runIfRequested() }
 // ローカルの LLM の確認（--local-llm-list / --local-llm-download / --local-llm-delete / --local-llm-test-fit）。LocalLLMCLI.swift
 MainActor.assumeIsolated { LocalLLMCLI.runIfRequested() }
+// AI の用途とローカルの LLM の順番の確認（--test-ai-purposes / --test-local-llm-wait）。AIPurposeCLI.swift
+MainActor.assumeIsolated { AIPurposeCLI.runIfRequested() }
 
 // 文字起こしのエンジンの確認（--download-whisper / --render-engine-settings）。TranscriptionEngineCLI.swift
 MainActor.assumeIsolated { TranscriptionEngineCLI.runIfRequested() }

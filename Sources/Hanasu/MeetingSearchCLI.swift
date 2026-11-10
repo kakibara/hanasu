@@ -3,7 +3,7 @@ import SwiftUI
 
 // 会議の横断検索・質問の確認用の CLI モード:
 //   Hanasu --search-meetings <語> [--meetings-dir <フォルダ>]
-//   Hanasu --ask-meetings <質問> [--meetings-dir <フォルダ>] [--limit <会議数>] [--model <id>] [--show-context]
+//   Hanasu --ask-meetings <質問> [--meetings-dir <フォルダ>] [--limit <会議数>] [--model <id>] [--show-context] [--show-target]
 //   Hanasu --write-sample-meetings <フォルダ>       架空の会議データを書き出す（確認・テスト用）
 //   Hanasu --render-meeting-search <出力.png> [--ask]  架空のデータで検索（--ask なら質問）の画面を画像にする
 // 会議のフォルダの既定は ~/Documents/Hanasu/Meetings。認証は --refine-text と同じ順に探す。
@@ -65,7 +65,10 @@ enum MeetingSearchCLI {
                     let settings = AppSettings.shared
                     var options = MeetingAsk.Options()
                     if let limit = value(after: "--limit").flatMap(Int.init) { options.maxMeetings = limit }
-                    let model = TextAIClient.cliModel(args: args, settings: settings, for: .meeting)
+                    // 要件: REQ-COM-025（会議への質問は「AI チャット・質問」の AI とモデル）
+                    // 確かめ方: REQ-COM-025
+                    if TextAIClient.printTargetIfRequested(args: args, settings: settings, for: .chat) { exit(0) }
+                    let model = TextAIClient.cliModel(args: args, settings: settings, for: .chat)
                     let context = await MeetingAsk.gatherContext(question: question, meetings: meetings, index: index, options: options)
                     print("[質問] 検索語: \(context.keywords.joined(separator: ", "))"
                           + (context.period.map { "  期間: \($0.start.formatted()) 〜 \($0.end.formatted())" } ?? ""))
@@ -76,7 +79,7 @@ enum MeetingSearchCLI {
                     if args.contains("--show-context") { print(context.prompt) }
                     let askStarted = Date()
                     let answer = try await MeetingAsk.ask(question: question, meetings: meetings, index: index,
-                                                          client: try TextAIClient.cli(args: args, settings: settings, for: .meeting, timeout: 180),
+                                                          client: try TextAIClient.cli(args: args, settings: settings, for: .chat, timeout: 180),
                                                           model: model, options: options)
                     print(String(format: "\n[答え %@ %.1fs] 引用された会議 %d 件", model, Date().timeIntervalSince(askStarted), answer.cited.count))
                     print(answer.text)
@@ -202,6 +205,15 @@ enum MeetingSearchCLI {
     @MainActor
     private static func render(to url: URL, ask: Bool) {
         _ = NSApplication.shared
+        // 要件: REQ-MTG-048（送り先は、この Mac の設定に左右されないよう決めて描く。描いたあとに戻す）
+        let settings = AppSettings.shared
+        let savedChat = (settings.chatAIProvider, settings.claudeChatModel)
+        settings.chatAIProvider = .claude
+        settings.claudeChatModel = ClaudeClient.Model.defaultChat.rawValue
+        defer {
+            settings.chatAIProvider = savedChat.0
+            settings.claudeChatModel = savedChat.1
+        }
         let meetings = sampleMeetings()
         let search = MeetingSearchModel()
         let query = "料金プラン"
@@ -221,6 +233,7 @@ enum MeetingSearchCLI {
         let detail: AnyView
         if ask {
             let model = MeetingAskModel()
+            model.setAvailabilityForPreview(AIRoute.Availability(claude: true, gemini: true, downloadedLocalModels: [.gemma4E4B], appleFMReason: nil))
             let sources = [
                 MeetingAsk.Source(number: 1, meetingID: meetings[1].id, title: meetings[1].title, startedAt: meetings[1].startedAt, matched: true),
                 MeetingAsk.Source(number: 2, meetingID: meetings[0].id, title: meetings[0].title, startedAt: meetings[0].startedAt, matched: true),
@@ -237,7 +250,8 @@ enum MeetingSearchCLI {
             - M1: \(d.string(from: meetings[1].startedAt)) \(meetings[1].title)
             """
             model.setAnswerForPreview(question: "先週の定例で何が決まった？", answer: MeetingAsk.Answer(
-                text: text, sources: sources, cited: MeetingAsk.cited(in: text, sources: sources), keywords: ["定例"]))
+                text: text, sources: sources, cited: MeetingAsk.cited(in: text, sources: sources), keywords: ["定例"]),
+                answeredBy: "Claude · Haiku 5.5")
             detail = AnyView(MeetingAskView(model: model, meetings: meetings, index: index) { _ in })
         } else {
             let target = results.first { $0.meetingID == meetings[1].id }?.hits.first {

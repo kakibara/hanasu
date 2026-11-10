@@ -52,6 +52,12 @@ struct MeetingWindowView: View {
             inspector
         }
         .onReceive(recorder.$meetings) { search.update($0) }
+        // 要件: REQ-MTG-048
+        // 設計判断: DEC-MTG-095（ウインドウは閉じても残すので、閉じる通知で会議に質問の送り先を既定に戻す）
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { note in
+            guard (note.object as? NSWindow)?.identifier == MeetingPlayer.windowIdentifier else { return }
+            ask.override = nil
+        }
         .onChange(of: search.isActive) { _, active in
             if !active { jump = nil }  // 検索をやめたら、検索語の色も消す
         }

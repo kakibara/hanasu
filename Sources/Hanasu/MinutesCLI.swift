@@ -3,7 +3,7 @@ import SwiftUI
 
 // 議事録のテンプレートと書き出しの確認用の CLI モード:
 //   Hanasu --minutes-from-transcript <文字起こし.txt> [--template auto|regular|oneOnOne|sales|brainstorm|custom]
-//          [--custom-prompt <指示>] [--title <会議名>] [--date "yyyy-MM-dd HH:mm"] [--model <id>] [--save-json <meeting.json>]
+//          [--custom-prompt <指示>] [--title <会議名>] [--date "yyyy-MM-dd HH:mm"] [--model <id>] [--save-json <meeting.json>] [--show-target]
 //     文字起こし（1 行 1 発言、「[00:12] 話者: 発言」か「話者: 発言」）から議事録を作り、
 //     議事録・アクションアイテム・Slack 向け・テキストの書き出しを表示する。会議ノート（~/Documents）には保存しない。
 //   Hanasu --export-minutes <meeting.json | minutes.md>
@@ -179,6 +179,8 @@ enum MinutesCLI {
         applyTemplateArguments(args, to: &meeting)
 
         let settings = AppSettings.shared
+        // 確かめ方: REQ-COM-025（議事録は「会議」の AI とモデルのまま）
+        if TextAIClient.printTargetIfRequested(args: args, settings: settings, for: .meeting) { exit(0) }
         let model = TextAIClient.cliModel(args: args, settings: settings, for: .meeting)
         let started = Date()
         let client = try TextAIClient.cli(args: args, settings: settings, for: .meeting, timeout: 300)

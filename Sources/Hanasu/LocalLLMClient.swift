@@ -40,11 +40,24 @@ struct LocalLLMClient {
 
     var model: LocalLLMModel
     var timeout: TimeInterval
+    // 設計判断: DEC-COM-172
+    /// 違うモデルを使っている処理があるとき、終わるまで待つか（偽なら止めて起動し直す）
+    var waitsForOtherModel = false
     var server: LocalLLMServer = .shared
 
-    /// 用途ごとの最短の待ち時間（モデルの読み込みを含む。DEC-COM-064）
+    /// 用途ごとの最短の待ち時間（モデルの読み込みを含む。DEC-COM-064）。
+    /// 「音声入力か、それ以外か」で決める（AI チャット・質問は会議と同じ長いほう。DEC-COM-171）
     static func minimumTimeout(for purpose: TextAIPurpose) -> TimeInterval {
         purpose == .dictation ? 120 : 1800
+    }
+
+    // 設計判断: DEC-COM-172
+    /// 違うモデルの処理が終わるのを待つ用途か。音声入力だけは今までどおり待たない
+    static func waitsForOtherModel(_ purpose: TextAIPurpose) -> Bool {
+        switch purpose {
+        case .dictation: false
+        case .meeting, .chat: true
+        }
     }
 
     // 設計判断: DEC-COM-064
@@ -68,7 +81,8 @@ struct LocalLLMClient {
     // MARK: - 送る
 
     func generate(system: String, userText: String, purpose: Purpose) async throws -> String {
-        let endpoint = try await server.beginRequest(model)
+        let endpoint = try await server.beginRequest(model, waitsForOtherModel: waitsForOtherModel,
+                                                     deadline: Date().addingTimeInterval(timeout))
         do {
             let output = try await generate(system: system, userText: userText, purpose: purpose, endpoint: endpoint)
             await server.finishRequest()

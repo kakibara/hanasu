@@ -31,20 +31,61 @@ enum TextAIProvider: String, CaseIterable, Identifiable {
     }
 }
 
-// 要件: REQ-COM-024
-// 設計判断: DEC-COM-040
-/// AI とモデルを別々に選ぶ用途
+// 要件: REQ-COM-024, REQ-COM-025
+// 設計判断: DEC-COM-040, DEC-COM-171
+/// AI とモデルを別々に選ぶ用途。case の順が設定画面の並び
 enum TextAIPurpose: String, CaseIterable, Identifiable {
     /// 音声入力: 整形・英訳・選択の編集
     case dictation
-    /// 会議: 議事録（作り直しを含む）・会議への質問。辞書の候補探しもこちら（会議の記録を読む長い処理なので）
+    /// 会議: 議事録（作り直しを含む）。辞書の候補探しもこちら（会議の記録を読む長い処理なので）
     case meeting
+    /// AI チャット・質問: 会議の AI チャット（記録中・会議ノート）・会議への質問。対話なので議事録とは別に選ぶ
+    case chat
 
     var id: String { rawValue }
     var label: String {
         switch self {
         case .dictation: tr("音声入力")
         case .meeting: tr("会議")
+        case .chat: tr("AI チャット・質問")
+        }
+    }
+    /// 設定画面で、用途の名前の下に出す説明
+    var detail: String {
+        switch self {
+        case .dictation: tr("整形・翻訳・選択の編集")
+        case .meeting: tr("議事録（作り直しも）・辞書の候補")
+        case .chat: tr("会議の AI チャット・会議への質問")
+        }
+    }
+}
+
+// 要件: REQ-MTG-047, REQ-MTG-048
+// 設計判断: DEC-MTG-095
+/// 送り先の AI とモデルの組。画面で既定から切り替えたものもこれで持つ
+struct TextAIChoice: Hashable {
+    var provider: TextAIProvider
+    var model: String
+
+    /// 「Claude · Haiku 5.5」のような表示
+    var label: String {
+        tr("%@ · %@", provider.name, modelName)
+    }
+
+    /// モデルの短い表示（Claude は「Haiku 5.5」、ローカルはモデルの名前。ほかは ID のまま）
+    var modelName: String {
+        switch provider {
+        case .claude: ClaudeClient.Model(rawValue: model)?.shortName ?? model
+        case .local: LocalLLMModel(rawValue: model)?.name ?? model
+        case .gemini, .appleFM: model
+        }
+    }
+
+    /// 文章をこの Mac の外に送るか
+    var sendsOutside: Bool {
+        switch provider {
+        case .gemini, .claude: true
+        case .local, .appleFM: false
         }
     }
 }
@@ -109,18 +150,28 @@ struct TextAIClient {
 
     /// 設定でその用途に選んだ AI のクライアント。認証情報がまだなければ nil
     static func fromSettings(_ settings: AppSettings, for purpose: TextAIPurpose, timeout: TimeInterval = 15) throws -> TextAIClient? {
-        switch settings.aiProvider(for: purpose) {
+        try make(settings.aiChoice(for: purpose), settings: settings, for: purpose, timeout: timeout)
+    }
+
+    // 要件: REQ-MTG-047, REQ-MTG-048
+    // 設計判断: DEC-MTG-095
+    /// 選んだ AI とモデルのクライアント（画面で既定から切り替えたときも）。認証情報がまだなければ nil。
+    /// モデルは generate に渡す（ローカルだけはクライアントが持つ）
+    static func make(_ choice: TextAIChoice, settings: AppSettings, for purpose: TextAIPurpose,
+                     timeout: TimeInterval = 15) throws -> TextAIClient? {
+        switch choice.provider {
         case .gemini:
             return try GeminiClient.authFromSettings(settings).map { TextAIClient(.gemini(GeminiClient(auth: $0, timeout: timeout))) }
         case .claude:
             return ClaudeClient.fromKeychain(timeout: timeout).map { TextAIClient(.claude($0)) }
         case .local:
             // 要件: REQ-COM-030
-            let model = settings.localModel(for: purpose)
+            guard let model = LocalLLMModel(rawValue: choice.model) else { throw LocalLLMServer.Failure.unknownModel(choice.model) }
             // 認証情報の「未設定」ではないので、何が足りないかを知らせる
             guard LocalLLMStore.isDownloaded(model) else { throw LocalLLMServer.Failure.modelNotDownloaded(model) }
             return TextAIClient(.local(LocalLLMClient(
-                model: model, timeout: max(timeout, LocalLLMClient.minimumTimeout(for: purpose)))))
+                model: model, timeout: max(timeout, LocalLLMClient.minimumTimeout(for: purpose)),
+                waitsForOtherModel: LocalLLMClient.waitsForOtherModel(purpose))))
         case .appleFM:
             // 要件: REQ-COM-031
             // 設計判断: DEC-COM-071
@@ -133,8 +184,14 @@ struct TextAIClient {
 
     /// fromSettings と同じ。認証情報がなければ、分かる文言のエラーにする
     static func requireFromSettings(_ settings: AppSettings, for purpose: TextAIPurpose, timeout: TimeInterval = 15) throws -> TextAIClient {
-        guard let client = try fromSettings(settings, for: purpose, timeout: timeout) else {
-            throw TextAIError.missingCredentials(settings.aiProvider(for: purpose))
+        try require(settings.aiChoice(for: purpose), settings: settings, for: purpose, timeout: timeout)
+    }
+
+    /// make と同じ。認証情報がなければ、分かる文言のエラーにする
+    static func require(_ choice: TextAIChoice, settings: AppSettings, for purpose: TextAIPurpose,
+                        timeout: TimeInterval = 15) throws -> TextAIClient {
+        guard let client = try make(choice, settings: settings, for: purpose, timeout: timeout) else {
+            throw TextAIError.missingCredentials(choice.provider)
         }
         return client
     }
@@ -249,7 +306,8 @@ extension TextAIClient {
                 throw LocalLLMServer.Failure.unknownModel(id)
             }
             guard LocalLLMStore.isDownloaded(model) else { throw LocalLLMServer.Failure.modelNotDownloaded(model) }
-            return TextAIClient(.local(LocalLLMClient(model: model, timeout: max(timeout, LocalLLMClient.minimumTimeout(for: purpose)))))
+            return TextAIClient(.local(LocalLLMClient(model: model, timeout: max(timeout, LocalLLMClient.minimumTimeout(for: purpose)),
+                                                      waitsForOtherModel: LocalLLMClient.waitsForOtherModel(purpose))))
         case .appleFM:
             // 確認用に HANASU_FM_PATH で偽の fm を指定できる（AppleFMAvailability）
             let availability = AppleFMAvailability.check()
@@ -268,13 +326,15 @@ extension TextAIClient {
         if let model = args.firstIndex(of: "--model").flatMap({ args.indices.contains($0 + 1) ? args[$0 + 1] : nil }) {
             return model
         }
-        switch (purpose, cliProvider(args: args, settings: settings, for: purpose)) {
-        case (.dictation, .claude): return settings.claudeModel
-        case (.dictation, .gemini): return settings.model
-        case (.meeting, .claude): return settings.claudeMinutesModel
-        case (.meeting, .gemini): return settings.meetingMinutesModel
-        case (_, .local): return settings.localModel(for: purpose).rawValue
-        case (_, .appleFM): return AppleFMClient.modelName
-        }
+        return settings.model(for: purpose, provider: cliProvider(args: args, settings: settings, for: purpose))
+    }
+
+    // 要件: REQ-COM-025
+    /// `--show-target` のとき、AI を呼ばずに用途・AI・モデルを出す（呼び出しが正しい用途を使っているかを確かめる）
+    static func printTargetIfRequested(args: [String], settings: AppSettings, for purpose: TextAIPurpose) -> Bool {
+        guard args.contains("--show-target") else { return false }
+        let provider = cliProvider(args: args, settings: settings, for: purpose)
+        print("purpose=\(purpose.rawValue) ai=\(provider.rawValue) model=\(cliModel(args: args, settings: settings, for: purpose))")
+        return true
     }
 }

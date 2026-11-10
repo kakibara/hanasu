@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 /// 会議ノートの検索欄の状態。索引は会議の一覧が変わるたびに、変わった会議の分だけ作り直す。
@@ -70,7 +71,26 @@ final class MeetingAskModel: ObservableObject {
     @Published private(set) var answer: MeetingAsk.Answer?
     @Published private(set) var running = false
     @Published private(set) var error: String?
+    // 要件: REQ-MTG-048
+    // 設計判断: DEC-MTG-095
+    /// この画面だけ、既定から切り替えた送り先。nil なら既定（設定の「AI チャット・質問」）。会議のウインドウを閉じたら戻す
+    @Published var override: TextAIChoice?
+    @Published private(set) var availability: AIRoute.Availability?
+    /// 今の答えを作った AI とモデル
+    @Published private(set) var answeredBy: String?
+    @Published private(set) var waitingForOtherModel = false
+    private var appleFMReason: String??
     private var lastQuestion = ""
+
+    func effectiveChoice(settings: AppSettings) -> TextAIChoice {
+        override ?? settings.aiChoice(for: .chat)
+    }
+
+    func refreshAvailability(settings: AppSettings) {
+        guard !availabilityFixedForPreview else { return }
+        if appleFMReason == nil { appleFMReason = .some(AIRoute.appleFMReason()) }
+        availability = AIRoute.availability(settings: settings, appleFMReason: appleFMReason ?? nil)
+    }
 
     func ask(meetings: [Meeting], index: MeetingSearchIndex) {
         let question = question.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -78,16 +98,28 @@ final class MeetingAskModel: ObservableObject {
         running = true
         error = nil
         answer = nil
+        answeredBy = nil
         lastQuestion = question
+        // 要件: REQ-COM-025, REQ-MTG-048
+        // 設計判断: DEC-MTG-053
+        let settings = AppSettings.shared
+        let choice = effectiveChoice(settings: settings)
         Task {
-            defer { running = false }
+            defer {
+                running = false
+                waitingForOtherModel = false
+            }
             do {
-                let settings = AppSettings.shared
-                let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 180)
+                let client = try TextAIClient.require(choice, settings: settings, for: .chat, timeout: 180)
+                // 設計判断: DEC-COM-172
+                if choice.provider == .local, let local = LocalLLMModel(rawValue: choice.model) {
+                    waitingForOtherModel = await LocalLLMServer.shared.wouldWait(for: local, waitsForOtherModel: true)
+                }
                 await index.update(meetings)
                 answer = try await MeetingAsk.ask(
                     question: question, meetings: meetings, index: index,
-                    client: client, model: settings.textModel(for: .meeting))
+                    client: client, model: choice.model)
+                answeredBy = choice.label
             } catch {
                 self.error = tr("答えを作れませんでした: %@", "\(error.localizedDescription)")
             }
@@ -97,10 +129,18 @@ final class MeetingAskModel: ObservableObject {
     var answeredQuestion: String { lastQuestion }
 
     /// 確認用: Gemini を呼ばずに答えを入れる
-    func setAnswerForPreview(question: String, answer: MeetingAsk.Answer) {
+    /// 確認用: 送り先が使えるかを決めて描く
+    func setAvailabilityForPreview(_ availability: AIRoute.Availability) {
+        self.availability = availability
+        availabilityFixedForPreview = true
+    }
+    private var availabilityFixedForPreview = false
+
+    func setAnswerForPreview(question: String, answer: MeetingAsk.Answer, answeredBy: String? = nil) {
         self.question = question
         lastQuestion = question
         self.answer = answer
+        self.answeredBy = answeredBy
     }
 }
 
@@ -247,18 +287,19 @@ enum MeetingSearchHighlight {
 // MARK: - 質問
 
 // 要件: REQ-MTG-016
-/// 過去の会議について Gemini に質問する画面
+/// 過去の会議について AI に質問する画面
 struct MeetingAskView: View {
     @ObservedObject var model: MeetingAskModel
     var meetings: [Meeting]
     var index: MeetingSearchIndex
     var onOpen: (String) -> Void
+    @ObservedObject private var settings = AppSettings.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 8) {
                 Label(tr("会議に質問"), systemImage: "sparkles").font(.title2.bold())
-                Text(tr("検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を AI（設定の「AI」で会議に選んだもの）に渡して答えさせます。会議の内容はその AI にだけ渡します（「ローカル」か「Apple」なら、この Mac の外には送りません）。"))
+                Text(tr("検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を、設定の「AI」で「AI チャット・質問」に選んだ AI（下の「送り先」で変えたときはその AI）に渡して答えさせます。"))
                     .font(.caption).foregroundStyle(.secondary)
                 HStack {
                     TextField(tr("例: 先週の定例で何が決まった？"), text: $model.question)
@@ -268,13 +309,35 @@ struct MeetingAskView: View {
                         .keyboardShortcut(.defaultAction)
                         .disabled(model.running || model.question.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
+                // 要件: REQ-MTG-048
+                if let availability = model.availability {
+                    if model.override == nil, let reason = availability.unavailableReason(settings.aiChoice(for: .chat)) {
+                        AIRouteUnavailableNotice(defaultChoice: settings.aiChoice(for: .chat), reason: reason)
+                    }
+                    HStack(spacing: 8) {
+                        AIRouteMenu(defaultChoice: settings.aiChoice(for: .chat), override: $model.override,
+                                    availability: availability, settings: settings, disabled: model.running)
+                        Text(model.effectiveChoice(settings: settings).sendsOutside
+                             ? tr("検索で選んだ会議の議事録と文字起こしをこの AI に送ります。")
+                             : tr("この Mac の外には送りません。"))
+                            .font(.caption2).foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+                }
             }
             .padding()
+            // 設計判断: DEC-MTG-095
+            .onAppear { model.refreshAvailability(settings: settings) }
+            .onReceive(settings.objectWillChange.debounce(for: .milliseconds(300), scheduler: RunLoop.main)) { _ in
+                model.refreshAvailability(settings: settings)
+            }
             Divider()
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
                     if model.running {
-                        ProgressView(tr("会議の記録を集めて答えを作っています…")).controlSize(.small)
+                        ProgressView(model.waitingForOtherModel
+                                     ? tr("ほかの処理が終わるのを待っています…")
+                                     : tr("会議の記録を集めて答えを作っています…")).controlSize(.small)
                     }
                     if let error = model.error {
                         Text(error).foregroundStyle(.orange)
@@ -283,6 +346,10 @@ struct MeetingAskView: View {
                         Text(model.answeredQuestion).font(.headline)
                         MarkdownText(markdown: answer.text)
                             .textSelection(.enabled)
+                        // 要件: REQ-MTG-048（その答えを作った AI とモデル）
+                        if let answeredBy = model.answeredBy {
+                            Text(answeredBy).font(.caption2).foregroundStyle(.secondary)
+                        }
                         sources(answer)
                     } else if !model.running, model.error == nil {
                         Text(tr("会議の記録から答えます。「先週」「昨日」「11月2日」のように期間を書くと、その期間の会議に絞ります。"))
