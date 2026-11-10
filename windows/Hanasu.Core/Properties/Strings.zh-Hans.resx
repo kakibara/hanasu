@@ -538,7 +538,7 @@
     <value>会议 {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>录制过程中应用已退出。音频文件（{0} / {1}）可能已部分保留。</value>
+    <value>录制过程中应用已退出。</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>无法开始录制会议</value>

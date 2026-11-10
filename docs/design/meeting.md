@@ -100,9 +100,9 @@ Mac 標準は今までどおり（チャンネルごとの SpeechTranscriber で
     時刻は区切りの長さに収め、終わりが始まりより前なら直す。
   - 音声は FLAC（16 kHz モノラル。5 分で 5 MB 前後。inline data の上限 20 MB に収まる）。無音だけの区切りは送らない。
   - 区切りを短く（30 秒）すると、先頭が無音の区切りで発話を丸ごと落とすことが検証で分かったので、短くしすぎない。
-- **音声を残さない設定のとき**: 音声ファイルを消すのは、今までどおり後処理の最後（文字起こし・話者分離・議事録のあと）。
-  記録のあとの文字起こしは消す前に終わるので、順番は変えなくてよい。**文字起こしに失敗したチャンネルがあるときは、設定にかかわらず音声を残し**、
-  会議のエラーに「音声ファイルは残しています」と書く（あとで文字起こしし直せるように）。
+- **録音を消す会議のとき**: 音声ファイルを消すのは、今までどおり後処理の最後（文字起こし・話者分離・議事録のあと）。
+  記録のあとの文字起こしは消す前に終わるので、順番は変えなくてよい。**文字起こしに失敗したチャンネルがあるときは、会議の値にかかわらず音声を残す**
+  （あとで使えるように。くわしくは 4.17）。
 - 権限: Whisper / Gemini では、音声認識の権限は求めない（マイクとシステムオーディオ録音だけ）。
 
 ### 4.4 話者分離
@@ -350,6 +350,7 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 - **文書**: `MinutesDocument` が議事録の Markdown を節に分け、先頭のタイトル（`# …`）を出さず、最初の `## ` の節を要約に、アクションアイテムが取り出せていればその見出しの節を本文から外す（`ActionItemsCard` に出す）。行番号は議事録の中の番号のままなので、検索の飛び先（`MarkdownText.lineID`）は変わらない。外した節の行は `actionRow(forLine:)` でカードの行（`ActionItemsCard.rowID`）へ読み替える（DEC-MTG-133）。
 - **状態の帯**: `MeetingStatusBanners` が進行中（`ProcessingStagesView`。`MeetingRecorder.processingStages`・`processingStage`）・作り直し中・失敗（`errorMessage`。「詳しく」「閉じる」、閉じた帯は `MeetingBannerDismissals` にアプリを終えるまで覚える）・古い議事録を、優先の順に 2 本まで出す（DEC-MTG-132、DEC-MTG-136）。記録中の警告とオフレコは `LiveTranscriptView` の上の `StatusBanner`。
 - **引用**: 議事録のプロンプトの `minutes.citations`（Mac と Windows で同じ文面）で、要点の行末に `[12:34]`、アクションアイテムの JSON に `"at"` を付けさせる。`MinutesCitation` が印を読み、`MarkdownText.decorateCitations` が `hanasu-time://<秒>` のリンクの小さな印にする（会議の長さを 1 秒より多く超える時刻は取り消し線の灰色で、押せない）。押すと `MeetingDetailView.focusTranscript` → `MeetingPanelState.focus` → `MeetingTranscriptPanel` がその発言へ移って色を付ける。ローカル・Apple の AI で文字起こしを縮めて送ったとき（`LongInputFitter` が `LongInputReport` に書く）は、保存の前に印を取り除く（DEC-MTG-134）。
+- **録音の削除**: 4.17。
 - **再生**: `MeetingPlayer.shared` が `me.m4a`・`others.m4a` を `AVMutableComposition` の 2 つのトラックに、`meeting.json` の `audioStartOffsets`（記録を止めたときに書く。Windows と同じキー）だけずらして重ね、`AVPlayer` で鳴らす。消音は `AVAudioMix`、速さは `rate`（`.timeDomain`）。再生位置を 0.25 秒ごとに見て、`MeetingTranscriptPanel` が今の発言に「再生中」を付けてスクロールする（手でスクロールしたら止め、「再生位置へ」で戻る）。スペースキーは、会議ノートが前面で文字の入力欄にフォーカスがないときだけ、`NSEvent` の監視で受ける。記録・音声入力を始めたら止め、その間は押せない（DEC-MTG-135）。
 
 ## 5. アーキテクチャ
@@ -380,15 +381,27 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 エラー時は idle に戻り、それまでの録音・文字起こしは保存する
 ```
 
+### 4.17 録音を消す（会議ごと・あとから・保存期間）
+
+2026-11-10 に足した（計画は [plans/meeting-audio-deletion.md](../plans/meeting-audio-deletion.md)。REQ-MTG-010・055〜057）。対象の選び方と判定は UI から切り離した `MeetingAudioCleanup.swift` にまとめ、`--test-meeting-audio` が一時フォルダで確かめる（本物の保存先と設定は触らない）。
+
+- **会議ごとの値**: 記録を始めるとき `MeetingAudioPolicy.apply` が、設定 `keepMeetingAudio` の裏返しを `meeting.json` の `deleteAudioAfterTranscription`（true のときだけ）に写す。記録中のツールバーの `LiveDeleteAudioToggle` は `MeetingRecorder.setDeleteAudioAfterTranscription` で記録中の会議の値だけを変える。記録の設定のパネル（`RecordSettingsPopover`）と設定画面（`MeetingAudioSettingsRows`）は既定（設定）を変える（DEC-MTG-139）。
+- **後処理で消すか**: `MeetingRecorder.process` の最後で `MeetingAudioPolicy.shouldDeleteAfterProcessing`（会議の値がオンで、文字起こしの状態が「すべて」）なら消す。文字起こしの状態（`MeetingAudioCleanup.transcriptState`）は、発言が 0 件なら「なし」、`transcriptionFailedChannels` があるか状態が失敗なら「一部」（DEC-MTG-142）。失敗したチャンネルは `MeetingRecorder.stop` が書く: Whisper / Gemini は `transcribeRecordedAudio` の失敗、Mac 標準は `ChannelTranscriber.recognitionFailed`（記録中に結果のストリームがエラーで止まった。取り消しと、止めるときの締めのエラーは数えない）。
+- **あとから消す**: `MeetingRecorder.deleteAudio` が `MeetingAudioCleanup.deleteAudio`（`me.m4a`・`others.m4a`・`me.wav`・`others.wav` を `removeItem`。ないファイルは成功）を呼ぶ。記録中・処理中の会議（`current`）は飛ばす。`MeetingPlayer.shared` で読み込んでいれば止めて読み直し（音声がないのでバーが消える）、`audioRevision` を進めてメニュー・帯・件数を描き直す（DEC-MTG-140）。入口は会議ノートの一覧の右クリックと「…」の `MeetingMoreMenuItems`（`MeetingWindowView.confirmDeleteAudio` → `MeetingAudioDeleteText` の文で確かめる）。
+- **「音声ファイルは残しています」**: エラーの文には書かず、`MeetingStatusBanners` が `MeetingAudioCleanup.showsAudioKept`（文字起こしがそろっていないか失敗で、録音がある）のときに帯を出す。録音を消せば消える。この機能より前の会議のエラーの文は書き換えない。
+- **録音の管理**: `MeetingAudioManagerWindow`（`AppDelegate` が recorder を渡す）の `MeetingAudioManagerView`。`MeetingAudioManagerModel` が `MeetingAudioCleanup.entries`（録音が残る会議を新しい順に。記録中・処理中を除く）を裏で数え、`bulkTargets` で「30 日より前」「すべて」の対象と外す会議（文字起こしがそろっていない）を分ける（DEC-MTG-141）。
+- **保存期間**: 設定 `meetingAudioRetentionDays`（0 は無期限）。`MeetingRecorder.pruneExpiredAudio` を、起動時（`AppDelegate` で `markInterruptedMeetings` のあと）と、`stop` で `process` が返ったあとに呼ぶ（`process` は CLI からも呼ばれるので、そこでは呼ばない）。設定で期間を短くして今すぐ消える録音があれば、`MeetingAudioSettingsRows` が確かめてから消す（DEC-MTG-143）。
+- **消したファイル**: 完全に消すが、同期するフォルダ（iCloud Drive など）やバックアップには残ることがある（[security.md](security.md) 5）。
+
 ### 5.2 保存形式
 
 ```
 ~/Documents/Hanasu/Meetings/2026-11-02 1430 定例/
-├── meeting.json      # メタデータ、話者名の対応表（と、会話から推測した話者 inferredSpeakers）、発言の配列（話者・開始・終了・本文）、議事録の型、アクションアイテム
+├── meeting.json      # メタデータ、話者名の対応表（と、会話から推測した話者 inferredSpeakers）、発言の配列（話者・開始・終了・本文）、議事録の型、アクションアイテム、録音を消すか（deleteAudioAfterTranscription）、文字起こしに失敗したチャンネル（transcriptionFailedChannels）
 ├── transcript.md     # [00:01:23] 話者1: …… の形式
 ├── minutes.md        # Gemini の議事録
 ├── notes.md          # 会議中のメモと「ここ重要」の印（あるときだけ。中身は meeting.json の notes と同じ）
-├── me.m4a            # マイク（AAC 16kHz モノラル。設定で処理後に削除可。Whisper / Gemini で文字起こしに失敗したときは残す）
+├── me.m4a            # マイク（AAC 16kHz モノラル。会議ごとに処理後に削除できる。文字起こしがそろっていないときは残す。あとから・保存期間でも消せる。4.17）
 └── others.m4a        # システム音声
 ```
 

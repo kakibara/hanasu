@@ -538,7 +538,7 @@
     <value>회의 {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>녹음 중에 앱이 종료되었습니다. 오디오 파일({0} / {1})이 일부 남아 있을 수 있습니다.</value>
+    <value>녹음 중에 앱이 종료되었습니다.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>회의 녹음을 시작할 수 없습니다</value>

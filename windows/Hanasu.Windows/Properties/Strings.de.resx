@@ -732,12 +732,6 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   <data name="Settings_Storage" xml:space="preserve">
     <value>Speicherung</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>Audiodateien (me.wav / others.wav) nach der Verarbeitung aufbewahren</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>Wenn deaktiviert, wird das Audio nach der Erstellung von Transkript und Protokoll gelöscht (bei fehlgeschlagener Transkription bleibt es erhalten). Format: 16 kHz Mono-WAV, ca. 115 MB pro Kanal und Stunde.</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>Speicherort</value>
   </data>
@@ -1351,5 +1345,126 @@ Release-Seite im Browser öffnen?</value>
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>Nach dem Beenden der Aufnahme werden die Ersetzungsregeln aus „Wörterbuch und Regeln“ auf das Transkript angewendet; das Protokoll wird aus dem ersetzten Text erstellt. Der ursprünglich erkannte Text bleibt erhalten und kann in den Besprechungsnotizen über „Wörterbuch…“ wiederhergestellt werden.</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>Aufnahme nach der Transkription löschen</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>Wenn aktiviert, wird die Aufnahme einer Besprechung (me.wav / others.wav) gelöscht, nachdem Transkript und Protokoll erstellt wurden. Ist das Transkript unvollständig, bleibt sie erhalten. Während der Aufnahme lässt sich das für diese Besprechung in den Besprechungsnotizen ändern. Das Audio ist WAV (16 kHz, mono), etwa 115 MB pro Kanal und Stunde.</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>Aufnahmen aufbewahren für</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>Ältere Aufnahmen werden beim Start der App und nach der Verarbeitung einer Besprechung automatisch gelöscht. Das gilt auch für Besprechungen, bei denen die Aufnahme ausdrücklich behalten wurde. Aufnahmen von Besprechungen mit unvollständigem Transkript werden nicht gelöscht.</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>Davon {0} mit unvollständigem Transkript.</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>Aufnahmen, die älter als {0} sind, werden jetzt gelöscht: {1} Besprechungen ({2}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>{0} Besprechungen mit unvollständigem Transkript bleiben erhalten.</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>Einstellung ändern und die Aufnahmen löschen?</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>Standard für künftig aufgezeichnete Besprechungen. Während der Aufnahme lässt sich das für diese Besprechung im Aufnahmebereich oben links ändern.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>Aufnahme dieser Besprechung nach der Transkription löschen</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>Ein: Die Aufnahme dieser Besprechung wird gelöscht, nachdem Transkript und Protokoll erstellt wurden (bei unvollständigem Transkript bleibt sie erhalten). Die Standardeinstellung ändert sich nicht.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>Aus: Die Aufnahme dieser Besprechung bleibt erhalten. Die Standardeinstellung ändert sich nicht.</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>Aufnahme löschen…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>Aufnahmen verwalten…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>Für diese Besprechung ist keine Aufnahme mehr vorhanden.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>Während der Aufnahme oder Verarbeitung kann nicht gelöscht werden.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>Aufnahme löschen — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>Aufnahme von „{0}“ ({1}) löschen?</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>Protokoll, Transkript und Notizen bleiben erhalten.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>Kein Transkript vorhanden für: {0}. Dieser Teil des Gesprächs geht verloren.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>Ein Teil des Transkripts dieser Besprechung fehlt. Dieser Teil des Gesprächs geht verloren.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>Für diese Besprechung gibt es kein Transkript. Wird die Aufnahme gelöscht, bleibt nichts vom Gespräch erhalten.</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>Aufnahme von „{0}“ wurde gelöscht.</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>Einige Aufnahmedateien konnten nicht gelöscht werden. Die übrigen Dateien bleiben erhalten.
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>Die Audiodateien werden endgültig gelöscht (nicht in den Papierkorb verschoben). Dies kann nicht rückgängig gemacht werden.</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>Aufnahmen verwalten</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>Vorhandene Aufnahmen: {0} Besprechungen, {1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>Keine Aufnahmen vorhanden.</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>Kein Transkript</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>Transkript unvollständig</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>Besprechungen mit Aufnahme</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>Ausgewählte Aufnahmen löschen…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>Aufnahmen löschen, die älter als {0} Tage sind…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>Alle Aufnahmen löschen…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>Wenn der Speicherort mit OneDrive, iCloud Drive oder einem ähnlichen Dienst synchronisiert wird, können gelöschte Aufnahmen dort noch eine Weile unter den gelöschten Elementen verbleiben.</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>Aufnahmen von {0} Besprechungen ({1}) löschen?</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>Bei {0} davon ist das Transkript unvollständig. Dieser Teil des Gesprächs geht verloren.</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>{0} Besprechungen mit unvollständigem Transkript ({1}) bleiben erhalten. Diese können ausgewählt und dann gelöscht werden.</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>Aufnahmen von {0} Besprechungen wurden gelöscht.</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>Die Aufnahmen von {0} Besprechungen konnten nicht vollständig gelöscht werden. Die übrigen Dateien bleiben erhalten.</value>
   </data>
 </root>

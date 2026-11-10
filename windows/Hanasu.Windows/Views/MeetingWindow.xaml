@@ -57,6 +57,11 @@
                         </DockPanel>
                         <TextBlock x:Name="LiveElapsed" FontSize="22" FontFamily="Consolas, Segoe UI" Margin="0,4,0,0" Text="00:00" />
                         <TextBlock x:Name="LiveProgress" Style="{StaticResource Note}" />
+                        <!-- 要件: REQ-MTG-010 -->
+                        <!-- 設計判断: DEC-MTG-139（記録中の会議の値だけを変える。既定の設定は変えない。処理に入ったあとは押せない） -->
+                        <CheckBox x:Name="LiveDeleteAudioCheck" Margin="0,6,0,0" Visibility="Collapsed" Click="OnLiveDeleteAudioClick">
+                            <TextBlock Text="{x:Static p:Strings.Meeting_LiveDeleteAudio}" TextWrapping="Wrap" />
+                        </CheckBox>
                     </StackPanel>
                 </Border>
 
@@ -69,6 +74,12 @@
                     <ComboBox x:Name="NextTemplateCombo" SelectionChanged="OnNextTemplateChanged" />
                     <TextBox x:Name="CustomPromptBox" Margin="0,4,0,0" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="60" MaxHeight="120"
                              VerticalScrollBarVisibility="Auto" Padding="4,3" Visibility="Collapsed" LostFocus="OnCustomPromptChanged" />
+                    <!-- 要件: REQ-MTG-010 -->
+                    <!-- 設計判断: DEC-MTG-139（次の記録からの既定。設定画面と同じ値。記録中・処理中は変えられない） -->
+                    <CheckBox x:Name="DeleteAudioDefaultCheck" Margin="0,8,0,0" ToolTip="{x:Static p:Strings.Meeting_DeleteAudioDefault_Tip}"
+                              Checked="OnDeleteAudioDefaultChanged" Unchecked="OnDeleteAudioDefaultChanged">
+                        <TextBlock Text="{x:Static p:Strings.Settings_DeleteAudioAfterTranscription}" TextWrapping="Wrap" />
+                    </CheckBox>
                     <Button x:Name="StartButton" Margin="0,10,0,0" Padding="10,6" Content="{x:Static p:Strings.Meeting_Start}" Click="OnStartClick" />
                     <TextBlock x:Name="StartNote" Style="{StaticResource Note}" />
                 </StackPanel>
@@ -79,6 +90,10 @@
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" KeyDown="OnMeetingListKeyDown">
                     <ListBox.ContextMenu>
                         <ContextMenu Opened="OnMeetingListMenuOpened">
+                            <!-- 要件: REQ-MTG-055, REQ-MTG-056 -->
+                            <MenuItem x:Name="DeleteAudioMenuItem" Header="{x:Static p:Strings.Meeting_DeleteAudio}" Click="OnDeleteAudioClick" ToolTipService.ShowOnDisabled="True" />
+                            <MenuItem Header="{x:Static p:Strings.Meeting_ManageAudio}" Click="OnManageAudioClick" />
+                            <Separator />
                             <MenuItem x:Name="DeleteMenuItem" Header="{x:Static p:Strings.Meeting_MoveToRecycleBin}" Click="OnDeleteClick" />
                         </ContextMenu>
                     </ListBox.ContextMenu>
@@ -124,6 +139,8 @@
                     <ComboBox x:Name="TemplateCombo" MinWidth="110" Margin="0,0,6,0" SelectionChanged="OnTemplateChanged" />
                     <Button x:Name="CopyButton" Content="{x:Static p:Strings.Meeting_CopyMarkdown}" Click="OnCopyClick" />
                     <Button Content="{x:Static p:Strings.Meeting_OpenInExplorer}" Click="OnOpenFolderClick" />
+                    <!-- 要件: REQ-MTG-055 -->
+                    <Button x:Name="DeleteAudioButton" Content="{x:Static p:Strings.Meeting_DeleteAudio}" Click="OnDeleteAudioClick" ToolTipService.ShowOnDisabled="True" />
                     <!-- 要件: REQ-MTG-028 -->
                     <Button x:Name="DeleteButton" Content="{x:Static p:Strings.Meeting_MoveToRecycleBin}" Click="OnDeleteClick" />
                 </WrapPanel>

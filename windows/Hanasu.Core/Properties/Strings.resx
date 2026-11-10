@@ -678,7 +678,7 @@
   </data>
   <data name="Meeting_AudioKept" xml:space="preserve">
     <value>The audio files have been kept.</value>
-    <comment>Meeting error, appended after transcription failures</comment>
+    <comment>Shown on the meeting's banner when the transcript is incomplete and the recording still exists (not saved in the error)</comment>
   </data>
   <data name="Meeting_MinutesFailed" xml:space="preserve">
     <value>Couldn't create the minutes: {0}</value>
@@ -713,8 +713,8 @@
     <comment>Default meeting title. {0} = date like 2026/11/03 (Tue) 14:30</comment>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>The app quit during recording. The audio files ({0} / {1}) may have been partly kept.</value>
-    <comment>Meeting error. {0}, {1} = audio file names</comment>
+    <value>The app quit during recording.</value>
+    <comment>Meeting error for a meeting interrupted by quitting the app (whether the audio is kept is shown separately)</comment>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Can't start recording the meeting</value>

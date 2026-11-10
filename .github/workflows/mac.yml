@@ -32,7 +32,9 @@ jobs:
         shell: bash
         run: |
           swift --version
-          swift build 2>&1 | tail -40
+          # 出力の最後だけでは前のほうのエラーが切れるので、落ちたときはエラーの行を出す
+          swift build > build.log 2>&1 || { grep -E "error:" -A3 build.log | head -150; exit 1; }
+          tail -40 build.log
 
       - name: Self tests
         run: |
@@ -47,4 +49,6 @@ jobs:
       # デバッグで通っても、最適化ビルドでだけ落ちることがある（PR #39）
       - name: Release build
         shell: bash
-        run: swift build -c release 2>&1 | tail -40
+        run: |
+          swift build -c release > build-release.log 2>&1 || { grep -E "error:" -A3 build-release.log | head -150; exit 1; }
+          tail -40 build-release.log

@@ -284,7 +284,8 @@ private struct MeetingTab: View {
                     // 要件: REQ-COM-024
                     Text(tr("議事録のモデル: %@ · %@（設定の「AI」で、音声入力とは別に選べます）", "\(settings.aiProvider(for: .meeting).name)", "\(settings.textModel(for: .meeting))"))
                 }
-                Toggle(tr("音声ファイル（me.m4a / others.m4a）を残す"), isOn: $settings.keepMeetingAudio)
+                // 要件: REQ-MTG-010, REQ-MTG-056, REQ-MTG-057
+                MeetingAudioSettingsRows(settings: settings, fixedEntries: SettingsRenderOverrides.meetingAudioEntries)
             }
             MeetingDetectionSettingsSection()
             MeetingNotesSettingsSection(onBeginShortcutRecording: onBeginShortcutRecording,

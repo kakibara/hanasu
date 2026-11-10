@@ -25,8 +25,9 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 ### 会議の記録
 
 1. 録音することを相手に伝える（同意を得る）。イヤホンを使うと、相手の声がマイクに回り込みにくい。
-2. タスクトレイのメニュー →「会議ノートを開く…」。左下で「自分（マイク）」「相手（この出力で鳴る音）」と「議事録の型」を選ぶ（初期値は Windows の既定の機器と「自動」）。
-3. 「● 会議の記録を開始」か **Ctrl + Alt + Shift + M**（タスクトレイのメニュー「会議の記録を開始」でもよい）で始める。
+2. タスクトレイのメニュー →「会議ノートを開く…」。左下で「自分（マイク）」「相手（この出力で鳴る音）」と「議事録の型」、「文字起こしのあとに録音を削除する」を選ぶ（初期値は Windows の既定の機器と「自動」、録音は残す）。
+3. 「● 会議の記録を開始」か **Ctrl + Alt + Shift + M**（タスクトレイのメニュー「会議の記録を開始」でもよい）で始める。ショートカットとメニューから始めたときも会議ノートが開く（止めるときは開かない）。
+   - 記録を始めた時点の「文字起こしのあとに録音を削除する」が、その会議の値になる。記録中は、左上の記録中の欄の「この会議の録音を文字起こしのあとに削除」で、その会議の分だけを変えられる（既定は変わらない）。
    - 記録中は、会議ノートの左上に経過時間と「■ 停止」、右にメモ欄と「★ ここ重要」が出る。メモは Enter で足す（時刻は書き始めた時点）。
      「ここ重要」は **Ctrl + Alt + Shift + H**（記録中だけ有効）でも付けられる。書きかけのメモがあれば、その文を印の説明にする。
      押し間違えたときは、付けてから 10 秒のあいだ出る「★ を取り消す（あと N 秒）」で消せる（それより古い印は、記録のあとに「メモ」タブで消す）。
@@ -40,7 +41,11 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
    - 「メモ」タブで記録後にメモを直し、「保存して議事録を作り直す」。
    - 題名は上の欄（枠と ✎ の印が出ている）で直せる。Enter かほかの所をクリックすると保存し、Esc でやめる。
    - 会議を消すには、一覧で選んで Delete キー・右クリックの「ごみ箱に移す…」か、上の「ごみ箱に移す…」。会議のフォルダをまとめてごみ箱に移す（ごみ箱から戻せる）。記録中・処理中・議事録を作り直している会議は消せない。
-6. 設定 → 会議 で、文字起こしのエンジン（Whisper / Gemini）・ショートカット・話者分離・音声を残すか・保存先・文字起こしに辞書の置き換えルールを当てるか（既定でオン）を変えられる。議事録の AI とモデルは 設定 → AI。
+   - 録音（音声ファイル）だけを消すには、上の「録音を削除…」か一覧の右クリックの「録音を削除…」。議事録・文字起こし・メモは残る。録音はごみ箱に入れずに完全に消す（元に戻せない）。確かめのダイアログには、文字起こしが欠けている会議ならその分の会話の記録が残らないことが出る。録音がない会議・記録中・処理中の会議では押せない。
+   - 一覧の右クリックの「録音の管理…」（設定 → 会議 の「録音の管理…」でも開く）で、録音が残っている会議を選んで・30 日より前・すべてをまとめて消せる。「30 日より前」「すべて」は、文字起こしが欠けている会議（「文字起こしなし」「一部の文字起こしなし」の印）を含めない。
+   - 文字起こしが欠けている・途中で落ちた会議に録音が残っていれば、会議の上の帯に「音声ファイルは残しています」が出る。
+6. 設定 → 会議 で、文字起こしのエンジン（Whisper / Gemini）・ショートカット・話者分離・文字起こしのあとに録音を削除するか・録音を残す期間・保存先・文字起こしに辞書の置き換えルールを当てるか（既定でオン）を変えられる。議事録の AI とモデルは 設定 → AI。
+   - 「録音を残す期間」（無期限（既定）・7・30・90・365 日）を選ぶと、それより前に記録した会議の録音を、アプリの起動時と会議の処理のあとに知らせずに消す。会議ごとに「残す」にした録音も消える。文字起こしが欠けている会議は消さない。期間を短くして今すぐ消える録音があれば、件数と大きさを出して確かめる。
 
 既定のショートカットは、Windows が使う組み合わせを避けて選んだ。
 
@@ -143,7 +148,9 @@ MeetingController（Core。idle → starting → recording → processing → id
        2. 相手側の話者分離（SherpaSpeakerDiarizer。失敗したら「相手」1 人として続ける）
        3. 話者の割り当て・回り込みの除去（MeetingProcessor。Mac 版の移植）→ 辞書の置き換え（MeetingDictionary。設定でオフにできる。認識したままの文は RawText に残す）
        4. 会議の AI（Gemini / Claude）で議事録（MinutesPrompt。型・メモ・「ここ重要」・アクションアイテムの取り出し・会話から分かる話者の名前（SpeakerNameInference。REQ-MTG-027））
-       5. 保存（MeetingStore: meeting.json・transcript.md・minutes.md・notes.md）。設定で音声を消す
+       5. 保存（MeetingStore: meeting.json・transcript.md・minutes.md・notes.md）。文字起こしに失敗したチャンネルを transcriptionFailedChannels に書く。
+          会議の deleteAudioAfterTranscription（記録を始めたときに設定から写す。MeetingAudioPolicy）がオンで、文字起こしがそろっていれば録音を消す
+    → MeetingController が、設定の「録音を残す期間」を過ぎた録音を消す（PruneExpiredAudio。起動時にも。MeetingAudioCleanup）
 ```
 
 - **2 つのチャンネルと時刻**: マイクとループバックを別々に録り、録音開始を 0 秒とした共通の時間軸にそろえる。
@@ -173,7 +180,8 @@ MeetingController（Core。idle → starting → recording → processing → id
   Mac で作った会議のフォルダを保存先に置けば、そのまま会議ノートで開ける（`MeetingJsonTests`。Swift の Codable で Windows の `meeting.json` を読めることも確かめた）。
   Windows 版だけが書く `audioStartOffsets` は、Mac 版では読み飛ばされる。
 - 音声入力と会議の記録は同時に動かさない（`DictationController.CanStart` / `MeetingController.CanStart`）。
-- 起動時に、記録中・処理中のまま残った会議を「失敗」にする（音声は残る）。
+- 起動時に、記録中・処理中のまま残った会議を「失敗」にする（音声は残る）。そのあとで、保存期間を過ぎた録音を消す。
+- 録音を消す対象は、Mac 版と同じく `me.m4a`・`others.m4a`・`me.wav`・`others.wav` の 4 つ（Mac で作った会議のフォルダの録音も消せる）。記録中・処理中の会議の録音は消さない。
 
 ## アップデート
 
@@ -244,6 +252,7 @@ dotnet run --project Hanasu.Cli -- local-list | local-download <id> | local-refi
 # 会議の後処理（2 つの音声を「自分」「相手」として文字起こし → 話者分離 → 話者の割り当て → 議事録）。会議は --meetings-dir の下に作る
 dotnet run --project Hanasu.Cli -- meeting-files me.wav others.wav --meetings-dir <保存先> [--engine whisper|gemini] [--whisper-model base] [--models-dir <dir>] [--download] \
     [--others-offset 1.5] [--template regular] [--notes notes.txt] [--no-minutes] [--no-diarize] [--diarization-models-dir <dir>] [--minutes-ai gemini|claude] [--minutes-model <id>] [--delete-audio]
+# --delete-audio は、その会議の「文字起こしのあとに録音を削除」をオンにする（会議の値。文字起こしがそろわなければ残す）。保存期間の削除はしない
 dotnet run --project Hanasu.Cli -- meeting-minutes <会議のフォルダ> [--template sales] [--minutes-ai claude]   # 議事録を作り直す
 dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>                        # meeting.json を読んで出す（Mac で作った会議が読めるかの確認）
 ```

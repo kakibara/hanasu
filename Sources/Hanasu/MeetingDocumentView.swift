@@ -274,7 +274,7 @@ struct MeetingStatusBanners: View {
     }
 
     private enum Kind: Hashable {
-        case processing, regenerating, error(String), outdated
+        case processing, regenerating, error(String), audioKept, outdated
     }
 
     private var items: [Kind] {
@@ -282,6 +282,10 @@ struct MeetingStatusBanners: View {
         if processing { list.append(.processing) }
         if recorder.regeneratingID == meeting.id { list.append(.regenerating) }
         if let error = meeting.errorMessage, !processing, !dismissals.isDismissed(meeting.id, error) { list.append(.error(error)) }
+        // 要件: REQ-MTG-010, REQ-MTG-055
+        // 設計判断: DEC-MTG-140（録音を残したことはエラーの文に書かず、録音があるかで表示のときに決める）
+        let _ = recorder.audioRevision
+        if !processing, MeetingAudioCleanup.showsAudioKept(meeting, hasAudio: MeetingStore.hasAudio(meeting)) { list.append(.audioKept) }
         if meeting.minutesOutdated == true, meeting.minutes != nil, recorder.regeneratingID != meeting.id { list.append(.outdated) }
         return list
     }
@@ -317,6 +321,10 @@ struct MeetingStatusBanners: View {
                 }
                 .controlSize(.small)
             }
+        case .audioKept:
+            StatusBanner(style: .warning, systemImage: "waveform",
+                         title: tr("音声ファイルは残しています"),
+                         subtitle: tr("文字起こしが欠けているため、録音を消さずに残しています。要らなければ「…」の「録音を削除…」で消せます。"))
         case .outdated:
             // 設計判断: DEC-MTG-092
             StatusBanner(style: .warning, systemImage: "arrow.triangle.2.circlepath",

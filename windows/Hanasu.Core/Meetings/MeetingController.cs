@@ -131,6 +131,10 @@ public sealed class MeetingController
     // 要件: REQ-MTG-043
     /// <summary>記録中にスリープして戻った。止めるか続けるかを聞き、答えを <see cref="ResolveSleepAsync"/> に渡す</summary>
     public event EventHandler<MeetingSleepPoint>? ResumedFromSleep;
+    // 要件: REQ-MTG-055, REQ-MTG-056, REQ-MTG-057
+    // 設計判断: DEC-MTG-140
+    /// <summary>録音を消した（あとから・保存期間で）。会議ノート・録音の管理・設定の件数を読み直す。meeting.json は変わらない</summary>
+    public event EventHandler<IReadOnlyList<Meeting>>? AudioDeleted;
 
     public MeetingStore Store(AppSettings settings) => new(settings.MeetingsDirectory);
 
@@ -167,6 +171,9 @@ public sealed class MeetingController
             meeting = store.NewMeeting(services.Now());
             meeting.MinutesTemplateId = settings.MeetingMinutesTemplate;
             meeting.CustomMinutesPrompt = settings.MeetingMinutesTemplate == MinutesTemplate.Custom.RawValue() ? settings.MeetingCustomMinutesPrompt : null;
+            // 要件: REQ-MTG-010
+            // 設計判断: DEC-MTG-139（どの入口から始めても、その時点の既定をこの会議の値にする）
+            MeetingAudioPolicy.Apply(meeting, settings);
             meeting.Status = MeetingStatus.Recording;
             store.Save(meeting);
             Current = meeting;
@@ -266,7 +273,6 @@ public sealed class MeetingController
             MinutesClient = settings.MakeMeetingMinutes ? () => services.CreateMinutesClient(settings) : null,
             MinutesModel = settings.MinutesModel,
             MinutesProvider = settings.MeetingAi,
-            KeepAudio = settings.KeepMeetingAudio,
             Log = services.Log,
             Dictionary = settings.UserDictionary,
             ApplyDictionary = settings.ApplyDictionaryToMeetings,
@@ -296,6 +302,9 @@ public sealed class MeetingController
             State = MeetingState.Idle;
             MeetingChanged?.Invoke(this, meeting);
         }
+        // 要件: REQ-MTG-057
+        // 設計判断: DEC-MTG-143（後処理が終わったあとに、保存期間を過ぎた録音を消す。MeetingPostProcessor の中では呼ばない）
+        PruneExpiredAudio();
     }
 
     // MARK: - スリープ
@@ -440,6 +449,89 @@ public sealed class MeetingController
         else meeting.OffRecord.Add(new OffRecordSpan(elapsed));
         try { Store(recordingSettings).Save(meeting); } catch (IOException e) { services.Log($"off-record save failed: {e.Message}"); }
         MeetingChanged?.Invoke(this, meeting);
+    }
+
+    // MARK: - 録音を消す（MeetingAudioCleanup.cs）
+
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-139
+    /// <summary>
+    /// 記録中の会議の「文字起こしのあとに録音を削除」を変えて保存する（既定の設定は変えない）。
+    /// 記録中でなければ（処理に入ったあとも）何もせず false
+    /// </summary>
+    public bool SetDeleteAudioAfterTranscription(bool delete)
+    {
+        if (State != MeetingState.Recording || Current is not { } meeting || recordingSettings is null) return false;
+        meeting.DeleteAudioAfterTranscription = delete ? true : null;
+        try { Store(recordingSettings).Save(meeting); } catch (IOException e) { services.Log($"delete-audio save failed: {e.Message}"); }
+        services.Log($"meeting: delete audio after transcription = {delete}");
+        MeetingChanged?.Invoke(this, meeting);
+        return true;
+    }
+
+    // 要件: REQ-MTG-055
+    // 設計判断: DEC-MTG-140
+    /// <summary>録音を消してよい会議か。記録中・処理中の会議は消さない（議事録の作り直し中は消してよい）</summary>
+    public bool CanDeleteAudio(Meeting meeting)
+    {
+        lock (gate) return Current?.Id != meeting.Id && meeting.Status is not (MeetingStatus.Recording or MeetingStatus.Processing);
+    }
+
+    // 要件: REQ-MTG-055, REQ-MTG-056
+    // 設計判断: DEC-MTG-140
+    /// <summary>
+    /// 会議の録音を完全に消す（meeting.json は書き換えない）。消せない会議（記録中・処理中）は飛ばす。
+    /// 消せなかったファイルを結果に入れる
+    /// </summary>
+    public MeetingAudioDeletion DeleteAudio(IEnumerable<Meeting> meetings) => DeleteAudio(meetings, Store(services.Settings()), "delete");
+
+    private MeetingAudioDeletion DeleteAudio(IEnumerable<Meeting> meetings, MeetingStore store, string reason)
+    {
+        var deleted = new List<Meeting>();
+        var failures = new List<MeetingAudioDeleteFailure>();
+        var touched = new List<Meeting>();
+        foreach (var meeting in meetings)
+        {
+            if (!CanDeleteAudio(meeting))
+            {
+                services.Log($"meeting audio not deleted (busy): {meeting.Id}");
+                continue;
+            }
+            var failed = store.DeleteAudio(meeting);
+            touched.Add(meeting);
+            if (failed.Count == 0) deleted.Add(meeting);
+            else failures.AddRange(failed);
+        }
+        services.Log($"meeting audio deleted ({reason}): {deleted.Count} meetings, {failures.Count} files failed");
+        if (touched.Count > 0) AudioDeleted?.Invoke(this, touched);
+        return new MeetingAudioDeletion(deleted.Count, failures);
+    }
+
+    // 要件: REQ-MTG-057
+    // 設計判断: DEC-MTG-143
+    /// <summary>
+    /// 設定の「録音を残す期間」を過ぎた会議の録音を、知らせずに消す（ログには件数を書く）。無期限なら何もしない。
+    /// 記録中・処理中の会議と、文字起こしがそろっていない会議は消さない。会議ごとの「残す」は効かない
+    /// </summary>
+    public MeetingAudioDeletion PruneExpiredAudio()
+    {
+        var settings = services.Settings();
+        if (settings.MeetingAudioRetentionDays <= 0) return new MeetingAudioDeletion(0, []);
+        try
+        {
+            var store = Store(settings);
+            string? currentId;
+            lock (gate) currentId = Current?.Id;
+            var entries = MeetingAudioCleanup.Entries(store.LoadAll(), store.BaseDirectory, currentId);
+            var expired = MeetingAudioCleanup.Expired(entries, settings.MeetingAudioRetentionDays, services.Now());
+            if (expired.Count == 0) return new MeetingAudioDeletion(0, []);
+            return DeleteAudio(expired.Select(e => e.Meeting), store, $"retention {settings.MeetingAudioRetentionDays} days");
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            services.Log($"meeting audio retention failed: {e.Message}");
+            return new MeetingAudioDeletion(0, []);
+        }
     }
 
     // MARK: - 議事録に使う発言（MinutesSelection.cs）
