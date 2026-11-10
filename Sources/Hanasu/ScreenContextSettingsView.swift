@@ -93,7 +93,8 @@ struct ScreenContextSettingsSection: View {
         .onChange(of: settings.useScreenshot) { _, on in
             // 設計判断: DEC-DIC-189
             // オンにしたとき、許可がなければ macOS のダイアログで求める（会議の記録中は求めない。録音中も求めない）
-            if on, !ScreenRecordingPermission.isGranted, !settings.meetingInProgress, !previewScreenRecordingDenied {
+            if on, !ScreenRecordingPermission.isGranted, !settings.meetingInProgress, !settings.dictationInProgress,
+               !previewScreenRecordingDenied {
                 ScreenRecordingPermission.request()
             }
             refreshTrust()

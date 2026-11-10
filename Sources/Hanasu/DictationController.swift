@@ -26,6 +26,8 @@ final class DictationController {
             onStateChange?(state)
             // 要件: REQ-MTG-053（音声入力の間は、会議の音声を再生しない。再生した音がマイクに入るため）
             MeetingPlayer.shared.dictationActive = state != .idle
+            // 設計判断: DEC-DIC-189（音声入力の間は、設定の欄で画面収録の許可を求めない）
+            ScreenContextSettings.shared.dictationInProgress = state != .idle
         }
     }
     private(set) var mode: Mode = .refine
@@ -219,11 +221,17 @@ final class DictationController {
         screenshotCapture = nil
     }
 
-    /// 音声入力の AI の認証情報があるか。ローカル・Apple はここでは見ない（ないときは整形の前に尋ねる。REQ-COM-032）
+    /// 音声入力の AI の認証情報があるか。ローカル・Apple はここでは見ない（ないときは整形の前に尋ねる。REQ-COM-032）。
+    /// 録音を始めるたびに呼ぶので、秘密の中身は読まない（キーチェーンのロック解除のダイアログで前面が変わらないように。DEC-COM-069）
     private func dictationAIHasCredentials() -> Bool {
         switch settings.aiProvider(for: .dictation) {
-        case .gemini: (try? GeminiClient.authFromSettings(settings)) != nil
-        case .claude: ClaudeClient.fromKeychain() != nil
+        case .gemini:
+            switch settings.authMode {
+            case .apiKey: Keychain.exists(.geminiAPIKey)
+            case .serviceAccount:
+                FileManager.default.fileExists(atPath: settings.serviceAccountPath.trimmingCharacters(in: .whitespacesAndNewlines))
+            }
+        case .claude: Keychain.exists(.claudeAPIKey)
         case .local, .appleFM: true
         }
     }

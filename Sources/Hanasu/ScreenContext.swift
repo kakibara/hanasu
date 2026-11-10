@@ -144,6 +144,9 @@ final class ScreenContextSettings: ObservableObject {
     // 設計判断: DEC-DIC-189
     /// 会議の記録中か（保存しない。AppDelegate が記録の状態に合わせて立てる）。設定の欄で画面収録の許可を求めないために使う
     @Published var meetingInProgress = false
+    // 設計判断: DEC-DIC-189
+    /// 音声入力の準備中・録音中・処理中か（保存しない。DictationController が状態に合わせて立てる）。設定の欄で画面収録の許可を求めないために使う
+    @Published var dictationInProgress = false
     /// 除外するアプリ（バンドル ID かアプリ名を 1 行に 1 つ）
     @Published var excludedAppsText: String { didSet { defaults.set(excludedAppsText, forKey: Keys.excludedApps) } }
 
