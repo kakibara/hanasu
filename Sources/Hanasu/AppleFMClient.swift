@@ -123,8 +123,14 @@ struct AppleFMClient {
         return wide + (narrow + 2) / 3
     }
 
-    func generate(system: String, userText: String, purpose: LocalLLMClient.Purpose) async throws -> String {
+    func generate(system rawSystem: String, userText rawUserText: String, purpose: LocalLLMClient.Purpose) async throws -> String {
         let maxOutput = Self.maxOutputTokens(purpose)
+        // 要件: REQ-DIC-041
+        // 設計判断: DEC-DIC-184
+        // 入りきらないときは、文字起こしを要約させる前に、スクリーンショットの文字を外す
+        let (system, userText) = try await ScreenOCRBudget.fit(
+            system: rawSystem, userText: rawUserText, contextLength: Self.contextLength, maxOutputTokens: maxOutput,
+            countTokens: { Self.estimateTokens($0) })
         let fitter = LongInputFitter(
             contextLength: Self.contextLength, maxOutputTokens: maxOutput,
             countTokens: { Self.estimateTokens($0) },

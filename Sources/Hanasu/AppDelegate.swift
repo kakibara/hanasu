@@ -71,6 +71,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         meetingRecorder.onStateChange = { [weak self] _ in
             guard let self else { return }
             self.updateIcon(for: self.controller.state)
+            // 設計判断: DEC-DIC-189
+            // 会議の記録中は、設定の欄で画面収録の許可を求めない（macOS の「終了して再度開く」で記録が切れないように）
+            ScreenContextSettings.shared.meetingInProgress = self.meetingRecorder.state != .idle
         }
         AppSettings.shared.$meetingHotKey
             .removeDuplicates()

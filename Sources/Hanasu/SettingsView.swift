@@ -327,6 +327,40 @@ private struct PermissionsTab: View {
                     granted: Permissions.isAccessibilityTrusted(prompt: false),
                     deniedHint: tr("システム設定 → プライバシーとセキュリティ → アクセシビリティ で Hanasu をオンにしてください。"),
                     anchor: "Privacy_Accessibility")
+                // 要件: REQ-DIC-042
+                // 設計判断: DEC-DIC-189
+                // 画面収録（音声入力のスクリーンショットの文字）。求めるのは設定の「AI」の欄からだけなので、ここは状態とシステム設定を開くボタンだけ。
+                // 使っていない人には未許可が普通なので、警告の色にしない
+                LabeledContent {
+                    HStack(spacing: 8) {
+                        if ScreenRecordingPermission.isGranted {
+                            Label(tr("許可済み"), systemImage: "checkmark.circle.fill")
+                                .font(.callout.weight(.medium))
+                                .foregroundStyle(.green)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(Color.green.opacity(0.12), in: Capsule())
+                        } else {
+                            Text(tr("スクリーンショットの文字をオンにするときに求めます"))
+                                .font(.callout).foregroundStyle(.secondary)
+                            Button(tr("システム設定を開く")) { Permissions.openPrivacySettings("Privacy_ScreenCapture") }
+                                .controlSize(.small)
+                                .accessibilityLabel(tr("画面収録のシステム設定を開く"))
+                        }
+                    }
+                } label: {
+                    Label {
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(tr("画面収録"))
+                            Text(tr("音声入力でスクリーンショットの文字を使うときだけ必要（設定の「AI」→「画面の文脈」）"))
+                                .font(.caption).foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    } icon: {
+                        Image(systemName: "camera.viewfinder").foregroundStyle(.secondary)
+                    }
+                }
+                .id(refresh)
                 // 設計判断: DEC-MTG-074
                 // システムオーディオ録音（会議の記録の相手の声）は、許可の状態を取る API がないので、状態は出さずに
                 // 「いつ求められるか」と「拒否したときに直す場所」だけを案内する

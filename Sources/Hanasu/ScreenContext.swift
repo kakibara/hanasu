@@ -16,11 +16,14 @@ struct ScreenContext: Sendable, Codable, Equatable {
     var textAfter: String?
     /// カーソル位置が取れず、入力欄の文章の末尾を textBefore に入れたとき true
     var cursorUnknown: Bool?
+    // 要件: REQ-DIC-041
+    /// 画面のスクリーンショットから読み取った文字（スクリーンショットを使う録音だけ）。AX の文脈とは別のブロックで渡す
+    var ocr: ScreenOCR?
     /// 読み取れなかった理由など。確認用で、Gemini には送らない
     var notes: [String] = []
 
     private enum CodingKeys: String, CodingKey {
-        case appName, bundleID, windowTitle, focusedRole, textBefore, textAfter, cursorUnknown
+        case appName, bundleID, windowTitle, focusedRole, textBefore, textAfter, cursorUnknown, ocr
     }
 
     /// Gemini に渡す材料（タイトルか入力欄の文章）があるか
@@ -53,6 +56,22 @@ extension ScreenContext {
         return lines.joined(separator: "\n")
     }
 
+    // 要件: REQ-DIC-041
+    // 設計判断: DEC-DIC-186
+    /// スクリーンショットから読み取った文字のブロック。<screen_context> とは別にし、そのあと・<transcript> の前に置く。渡すものがなければ nil
+    func ocrBlock() -> String? {
+        guard let ocr, !ocr.isEmpty else { return nil }
+        var lines = ["<screen_ocr>"]
+        if !ocr.terms.isEmpty {
+            lines.append("<terms>\(Self.escape(ocr.terms.joined(separator: ", ")))</terms>")
+        }
+        if !ocr.lines.isEmpty {
+            lines.append("<lines>\n\(Self.escape(ocr.lines.joined(separator: "\n")))\n</lines>")
+        }
+        lines.append("</screen_ocr>")
+        return lines.joined(separator: "\n")
+    }
+
     // 設計判断: DEC-DIC-065
     /// 画面の文字に含まれる "<" を全角にして、タグを閉じたり <transcript> を偽装したりできないようにする
     static func escape(_ text: String) -> String {
@@ -65,11 +84,19 @@ extension ScreenContext {
     /// 和訳は出力が日本語なので、整形と同じ指示を使う
     // 設計判断: DEC-DIC-151
     /// 英訳は英語向けの screen.translation、ほかの言語への翻訳は訳す先の言語名を埋めた screen.translationOther
+    // 設計判断: DEC-DIC-186
+    /// スクリーンショットの文字（<screen_ocr>）を渡すときは、その注意（screen.ocr）を後ろに足す。AX の文脈の注意は今までどおり
     static func instruction(for context: ScreenContext?, translation: TranslationLanguage?) -> String {
-        guard context?.promptBlock() != nil else { return "" }
-        guard let translation, !translation.outputsJapanese else { return refineInstruction }
-        return translation == .english ? translationInstruction : otherTranslationInstruction(to: translation)
+        let ocr = context?.ocrBlock() != nil ? ocrInstruction : ""
+        guard context?.promptBlock() != nil else { return ocr }
+        guard let translation, !translation.outputsJapanese else { return refineInstruction + ocr }
+        return (translation == .english ? translationInstruction : otherTranslationInstruction(to: translation)) + ocr
     }
+
+    // 要件: REQ-DIC-041, REQ-COM-061
+    // 設計判断: DEC-DIC-186
+    /// スクリーンショットの文字を渡すときの注意。文面は Resources/Prompts/<言語>.json の screen.ocr
+    static var ocrInstruction: String { "\n\n" + Prompts.text("screen.ocr") }
 
     // 要件: REQ-COM-061
     /// 文面は Resources/Prompts/<言語>.json の screen.*
@@ -110,6 +137,13 @@ final class ScreenContextSettings: ObservableObject {
     private let defaults = UserDefaults.standard
 
     @Published var enabled: Bool { didSet { defaults.set(enabled, forKey: Keys.enabled) } }
+    // 要件: REQ-DIC-042
+    // 設計判断: DEC-DIC-180
+    /// スクリーンショットの文字も AI に渡す（録音を始めたときの既定。HUD でその録音だけ切り替えられる）。既定はオフ
+    @Published var useScreenshot: Bool { didSet { defaults.set(useScreenshot, forKey: Keys.useScreenshot) } }
+    // 設計判断: DEC-DIC-189
+    /// 会議の記録中か（保存しない。AppDelegate が記録の状態に合わせて立てる）。設定の欄で画面収録の許可を求めないために使う
+    @Published var meetingInProgress = false
     /// 除外するアプリ（バンドル ID かアプリ名を 1 行に 1 つ）
     @Published var excludedAppsText: String { didSet { defaults.set(excludedAppsText, forKey: Keys.excludedApps) } }
 
@@ -128,14 +162,17 @@ final class ScreenContextSettings: ObservableObject {
     private init() {
         defaults.register(defaults: [
             Keys.enabled: false,
+            Keys.useScreenshot: false,
             Keys.excludedApps: Self.defaultExcludedApps.joined(separator: "\n"),
         ])
         enabled = defaults.bool(forKey: Keys.enabled)
+        useScreenshot = defaults.bool(forKey: Keys.useScreenshot)
         excludedAppsText = defaults.string(forKey: Keys.excludedApps)!
     }
 
     private enum Keys {
         static let enabled = "screenContextEnabled"
+        static let useScreenshot = "screenContextUseScreenshot"
         static let excludedApps = "screenContextExcludedApps"
     }
 }

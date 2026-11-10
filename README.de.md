@@ -48,6 +48,7 @@ Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Der Quellcod
 | **Textbausteine** | Sage „E-Mail-Signatur“, um einen gespeicherten Text genau so einzufügen, wie du ihn geschrieben hast. Textbausteine werden nie an die KI gesendet. |
 | **Wörterbuch** | Füge Eigennamen und Ersetzungsregeln wie `ストックマーク => Stockmark` hinzu. Die Ersetzungsregeln gelten auch für Besprechungstranskripte. Zu einer Besprechung, die du in den Besprechungsnotizen öffnest, kann die KI neue Einträge aus genau dieser Besprechung vorschlagen (auf dem Mac auch aus deinem Verlauf und deinen letzten Besprechungen) – du übernimmst nur die, die du auswählst. |
 | **Bildschirmkontext** *(optional)* | Hanasu liest den Fenstertitel und den Text rund um den Cursor, damit Namen zu dem passen, was schon auf dem Bildschirm steht. Passwortfelder werden nie gelesen. |
+| **Text aus Bildschirmfotos** *(optional, Mac)* | Hanasu nimmt ein Bildschirmfoto aller Displays auf, liest den Text direkt auf deinem Mac aus und übergibt nur diesen Text an die KI – so werden Namen und Modellnummern aus anderen Fenstern (zum Beispiel „QX-7s“) so geschrieben, wie sie dort stehen. Das Bild wird nie gesendet oder gespeichert. Mit der Taste im HUD schaltest du die Funktion für eine einzelne Aufnahme ein oder aus. Benötigt die Berechtigung für Bildschirmaufnahme. |
 | **Mikrofon wählen** *(Mac)* | Wähle das Mikrofon in den Einstellungen oder wechsle es über die Mikrofontaste im HUD, ohne die Aufnahme zu stoppen. |
 | **Verlauf** | Durchsuche frühere Ergebnisse und wiederhole fehlgeschlagene. Der Verlauf wird standardmäßig 30 Tage aufbewahrt; das lässt sich in den Einstellungen ändern. Auf dem Mac fügst du mit <kbd>⌥⇧ V</kbd> das letzte Ergebnis erneut ein. |
 | **Nirgends zum Einfügen?** | Hat kein Textfeld den Fokus (zum Beispiel, weil der Schreibtisch im Vordergrund ist), lässt Hanasu das Ergebnis auf dem Bildschirm stehen, statt es einzufügen. Kopiere es von dort oder drücke einfach <kbd>⌘V</kbd> an der gewünschten Stelle (du kannst wählen, ob das Ergebnis in der Zwischenablage bleibt). |
@@ -136,7 +137,7 @@ Die neueste Version gibt es unter [**Releases**](https://github.com/kakibara/han
 1. Entpacke die Datei und verschiebe `Hanasu.app` in den Ordner **Programme**.
 2. Die App ist selbst signiert und nicht notarisiert, deshalb blockiert macOS sie beim ersten Mal. Klicke auf **Fertig**, öffne dann **Systemeinstellungen → Datenschutz & Sicherheit** und klicke auf **Dennoch öffnen**.
    Alternativ kannst du `xattr -dr com.apple.quarantine /Applications/Hanasu.app` ausführen.
-3. Erlaube auf Nachfrage **Mikrofon**, **Spracherkennung** und **Bedienungshilfen**. Die Bedienungshilfen werden benötigt, um mit ⌘V einzufügen.
+3. Erlaube auf Nachfrage **Mikrofon**, **Spracherkennung** und **Bedienungshilfen**. Die Bedienungshilfen werden benötigt, um mit ⌘V einzufügen. Nach **Bildschirmaufnahme** wird nur gefragt, wenn du Text aus Bildschirmfotos einschaltest.
 
 </details>
 
@@ -180,7 +181,7 @@ Alle Tastenkürzel lassen sich in den Einstellungen ändern. Das vollständige B
 ## Datenschutz
 
 - **Audio bleibt standardmäßig auf deinem Gerät.** Spracherkennung, Whisper und Sprechertrennung laufen alle lokal.
-- **Die KI erhält Text, kein Audio.** Gemini oder Claude bekommt das Transkript. Je nach Einstellungen kann es außerdem den Namen der App erhalten, in die du tippst, den Bildschirmkontext sowie Besprechungstranskripte für Fragen und den KI-Chat in Besprechungen.
+- **Die KI erhält Text, kein Audio.** Gemini oder Claude bekommt das Transkript. Je nach Einstellungen kann es außerdem den Namen der App erhalten, in die du tippst, den Bildschirmkontext, aus einem Bildschirmfoto gelesenen Text (nie das Bild selbst) sowie Besprechungstranskripte für Fragen und den KI-Chat in Besprechungen.
 - **Lokal und Apple halten auch den Text auf deinem Gerät.** Wenn du eine der beiden Optionen wählst, wird nichts an einen KI-Dienst gesendet. Heruntergeladen wird nur das Modell selbst.
 - **Audio geht nur an Google, wenn du das so wählst.** Wenn du die Gemini-Sprach-Engine auswählst, wird das aufgenommene Audio an Google gesendet.
 - **Besprechungen sind einfache Dateien.** Sie werden als JSON und Markdown unter `~/Documents/Hanasu/Meetings/` gespeichert (Windows: `Documents\Hanasu\Meetings\`). Mac und Windows verwenden dasselbe Format.

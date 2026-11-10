@@ -54,6 +54,18 @@ final class DictationController {
     /// 録音を始めたときの前面アプリのスタイル（アプリ別の設定がなければ nil）
     private var targetAppStyle: AppStyle?
     private var screenContextCapture: ScreenContextCapture?
+    // 要件: REQ-DIC-041, REQ-DIC-042
+    /// スクリーンショットの文字の読み取り（撮っている録音だけ）
+    private var screenshotCapture: ScreenSnapshotCapture?
+    /// この録音でスクリーンショットを使うか（設定の既定で始まり、HUD のボタンで切り替わる）
+    private var screenshotOn = false
+    /// 画面収録の許可があるか（録音を始めたときに見る）
+    private var screenshotPermitted = false
+    /// 録音を始めたときの前面のアプリと、それが除外アプリか
+    private var screenshotTargetPID: pid_t?
+    private var screenshotTargetExcluded = false
+    /// 音声入力の AI の認証情報があるか（録音を始めたときに見る）
+    private var screenshotHasCredentials = true
     private var cancellables: Set<AnyCancellable> = []
 
     // 要件: REQ-DIC-002
@@ -82,6 +94,7 @@ final class DictationController {
         hud.model.onStop = { [weak self] in self?.stopFromHUD() }
         hud.model.onCancel = { [weak self] in self?.cancelDictation() }
         hud.model.onSelectMicrophone = { [weak self] uid in self?.selectMicrophone(uid) }
+        hud.model.onToggleScreenshot = { [weak self] in self?.toggleScreenshot() }
         settings.$hotKey
             .removeDuplicates()
             .sink { [weak self] combo in self?.registerHotKey(combo, translating: false) }
@@ -161,6 +174,58 @@ final class DictationController {
         guard state == .preparing || state == .recording else { return }
         mode = translation.map(Mode.translate) ?? .refine
         hud.model.translation = translation
+        // 翻訳に切り替えると、整形がオフでもスクリーンショットが使われるようになる（DEC-DIC-188）
+        updateScreenshot()
+    }
+
+    // 要件: REQ-DIC-042
+    // 設計判断: DEC-DIC-188
+    /// HUD のスクリーンショットのボタン。その録音だけ、使う／使わないを切り替える
+    func toggleScreenshot() {
+        guard state == .preparing || state == .recording, screenshotPermitted else { return }
+        screenshotOn.toggle()
+        updateScreenshot()
+    }
+
+    // 要件: REQ-DIC-041, REQ-DIC-042
+    // 設計判断: DEC-DIC-185, DEC-DIC-188
+    private var screenshotInactiveReason: ScreenSnapshotPolicy.InactiveReason? {
+        ScreenSnapshotPolicy.inactiveReason(
+            refineEnabled: settings.refineWithGemini, translating: mode.translation != nil,
+            targetExcluded: screenshotTargetExcluded, hasCredentials: screenshotHasCredentials)
+    }
+
+    /// 今の状態に合わせて、撮り始める・取り消す・HUD のボタンの見た目を変える
+    private func updateScreenshot() {
+        let inactive = screenshotInactiveReason
+        hud.model.screenshot = screenshotPermitted
+            ? HUDModel.ScreenshotState(on: screenshotOn, inactiveReason: inactive?.message) : nil
+        if ScreenSnapshotPolicy.shouldUse(permitted: screenshotPermitted, buttonOn: screenshotOn, inactive: inactive) {
+            guard screenshotCapture == nil else { return }
+            let screenSettings = ScreenContextSettings.shared
+            screenshotCapture = ScreenSnapshotCapture.begin(
+                .init(targetPID: screenshotTargetPID, excludedApps: screenSettings.excludedApps,
+                      languages: ScreenSnapshotReader.languages(localeIdentifier: settings.localeIdentifier)),
+                limit: ScreenSnapshotLayout.limit(provider: settings.aiProvider(for: .dictation),
+                                                  localModel: settings.localModel(for: .dictation)))
+        } else if !screenshotOn {
+            // オフにしたら、撮ったものはこの録音では渡さない。使われないだけのとき（整形がオフなど）は、翻訳に切り替えたときのために残す
+            discardScreenshot()
+        }
+    }
+
+    private func discardScreenshot() {
+        screenshotCapture?.cancel()
+        screenshotCapture = nil
+    }
+
+    /// 音声入力の AI の認証情報があるか。ローカル・Apple はここでは見ない（ないときは整形の前に尋ねる。REQ-COM-032）
+    private func dictationAIHasCredentials() -> Bool {
+        switch settings.aiProvider(for: .dictation) {
+        case .gemini: (try? GeminiClient.authFromSettings(settings)) != nil
+        case .claude: ClaudeClient.fromKeychain() != nil
+        case .local, .appleFM: true
+        }
     }
 
     /// 翻訳して入力するときの言語。メニューから始めるとき用（ショートカットと同じく、選んだ言語のうち最初）
@@ -220,6 +285,21 @@ final class DictationController {
             self.mode = .translate(translation)
         }
         screenContextCapture = ScreenContextCapture.begin()
+        // 要件: REQ-DIC-041, REQ-DIC-042
+        // 設計判断: DEC-DIC-188, DEC-DIC-189
+        // スクリーンショット: 設定の既定で始め、許可があるときだけ HUD にボタンを出す。使われる録音なら撮り始める
+        let frontmost = NSWorkspace.shared.frontmostApplication
+        let screenSettings = ScreenContextSettings.shared
+        screenshotPermitted = ScreenRecordingPermission.isGranted
+        screenshotOn = screenSettings.useScreenshot
+        screenshotTargetPID = frontmost?.processIdentifier
+        screenshotTargetExcluded = frontmost.map {
+            $0.processIdentifier == ProcessInfo.processInfo.processIdentifier
+                || screenSettings.isExcluded(bundleID: $0.bundleIdentifier, appName: $0.localizedName)
+        } ?? false
+        screenshotHasCredentials = screenshotPermitted ? dictationAIHasCredentials() : true
+        discardScreenshot()
+        updateScreenshot()
         pendingAudioURL = DictationHistoryStore.shared.newAudioURL()
         // HUD には「話した言語」と設定で選んだ翻訳の言語を出す（アプリ別の既定で選んでいない言語から始めたときは、それも出す）
         hud.model.translationChoices = TranslationLanguage.normalized(settings.translationLanguages + [self.mode.translation].compactMap { $0 })
@@ -274,6 +354,7 @@ final class DictationController {
 
     private func finishCancelled() {
         state = .idle
+        discardScreenshot()
         DictationHistoryStore.shared.discardAudio(pendingAudioURL)
         pendingAudioURL = nil
         setEscapeHotKey(enabled: false)
@@ -282,6 +363,7 @@ final class DictationController {
 
     private func fail(_ message: String) {
         state = .idle
+        discardScreenshot()
         DictationHistoryStore.shared.discardAudio(pendingAudioURL)
         pendingAudioURL = nil
         setEscapeHotKey(enabled: false)
@@ -332,6 +414,7 @@ final class DictationController {
                 // 要件: REQ-COM-020, REQ-COM-024
                 if let client = try TextAIClient.fromSettings(settings, for: .dictation) {
                     let model = settings.textModel(for: .dictation)
+                    let screenContext = await screenContextForAI()
                     let request = GeminiClient.Request(
                         transcript: output,
                         model: model,
@@ -340,7 +423,7 @@ final class DictationController {
                         extraInstructions: settings.extraInstructions,
                         dictionaryRules: settings.userDictionary.rules,
                         appStyle: targetAppStyle,
-                        screenContext: await screenContextCapture?.result(),
+                        screenContext: screenContext,
                         outputLanguage: settings.refineOutputLanguage)
                     // スニペットがあれば、その前後の文だけを整形（翻訳）してつなぐ。本文は送らない
                     let convert: @Sendable (String) async throws -> String = { text in
@@ -369,6 +452,12 @@ final class DictationController {
                 historyError = error.localizedDescription
             }
         }
+
+        // AI を呼ばなかった録音（整形オフ・スニペットだけ・認証なし・失敗）でも、読み取りを止めて捨てる
+        if screenshotCapture != nil {
+            appLog.notice("screen ocr: discarded (not used in this recording)")
+        }
+        discardScreenshot()
 
         // 入力先がずれても取り戻せるよう、貼り付けの前に履歴へ残す
         let entry = DictationHistoryStore.shared.record(
@@ -400,6 +489,28 @@ final class DictationController {
         case (.pasted, nil):
             hud.show(.done(snippetMatch?.hudMessage ?? (translation.map { tr("%@して入力しました", "\($0.verb)") } ?? tr("入力しました"))))
         }
+    }
+
+    // 要件: REQ-DIC-040, REQ-DIC-041
+    // 設計判断: DEC-DIC-064, DEC-DIC-185, DEC-DIC-187
+    /// AI に渡す画面の文脈。AX の文脈（オンのとき）と、止めた時点で使うことになっているスクリーンショットの文字を合わせる
+    private func screenContextForAI() async -> ScreenContext? {
+        var context = await screenContextCapture?.result()
+        if ScreenSnapshotPolicy.shouldUse(permitted: screenshotPermitted, buttonOn: screenshotOn, inactive: screenshotInactiveReason),
+           let capture = screenshotCapture
+        {
+            screenshotCapture = nil
+            if let ocr = await capture.result(waitingUpTo: .seconds(2)) {
+                appLog.notice("screen ocr: used (terms=\(ocr.terms.count, privacy: .public) lines=\(ocr.lines.count, privacy: .public) chars=\(ocr.characterCount, privacy: .public))")
+                if context == nil { context = ScreenContext() }
+                context?.ocr = ocr
+            } else {
+                appLog.notice("screen ocr: skipped (nothing read in time)")
+            }
+        } else if screenshotPermitted && screenshotOn {
+            appLog.notice("screen ocr: skipped (\(String(describing: self.screenshotInactiveReason), privacy: .public))")
+        }
+        return context
     }
 
     // 設計判断: DEC-DIC-018

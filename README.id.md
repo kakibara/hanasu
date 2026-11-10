@@ -48,6 +48,7 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 | **Snippet** | Ucapkan "tanda tangan email" untuk menyisipkan teks tersimpan persis seperti yang Anda tulis. Snippet tidak pernah dikirim ke AI. |
 | **Kamus** | Tambahkan nama diri dan aturan penggantian seperti `ストックマーク => Stockmark`. Aturan penggantian juga diterapkan pada transkrip rapat. Dari rapat yang dibuka di Catatan rapat, AI dapat menyarankan entri baru dari rapat tersebut (di Mac, juga dari riwayat dan rapat terbaru Anda), dan Anda hanya menambahkan yang Anda pilih. |
 | **Konteks layar** *(opsional)* | Hanasu membaca judul jendela dan teks di sekitar kursor, sehingga nama-nama cocok dengan apa yang sudah ada di layar. Kolom kata sandi tidak pernah dibaca. |
+| **Teks tangkapan layar** *(opsional, Mac)* | Hanasu mengambil tangkapan semua layar Anda, membaca teksnya di Mac Anda, dan hanya memberikan teks itu ke AI, sehingga nama dan nomor model di jendela lain (misalnya "QX-7s") ditulis sesuai yang tampil. Gambarnya tidak pernah dikirim atau disimpan. Aktifkan atau nonaktifkan untuk satu perekaman lewat tombol di HUD. Memerlukan izin Perekaman Layar. |
 | **Pilih mikrofon** *(Mac)* | Pilih mikrofon di Pengaturan, atau ganti lewat tombol mikrofon di HUD tanpa menghentikan perekaman. |
 | **Riwayat** | Cari hasil sebelumnya dan ulangi yang gagal. Secara bawaan riwayat disimpan selama 30 hari, dan Anda dapat mengubahnya di Pengaturan. Di Mac, tekan <kbd>⌥⇧ V</kbd> untuk menempelkan hasil terakhir lagi. |
 | **Tidak ada tempat untuk menempel?** | Jika tidak ada kolom teks yang sedang aktif (misalnya desktop sedang di depan), Hanasu menampilkan hasilnya di layar alih-alih menempelkannya. Salin dari sana, atau cukup tekan <kbd>⌘V</kbd> di tempat yang Anda inginkan (Anda dapat memilih apakah hasilnya tetap ada di clipboard). |
@@ -136,7 +137,7 @@ Dapatkan build terbaru dari [**Releases**](https://github.com/kakibara/hanasu/re
 1. Ekstrak berkas dan pindahkan `Hanasu.app` ke **Aplikasi**.
 2. Aplikasi ini ditandatangani sendiri (self-signed) dan belum dinotarisasi, jadi macOS memblokirnya saat pertama kali dibuka. Klik **Selesai**, lalu buka **Pengaturan Sistem → Privasi & Keamanan** dan klik **Tetap Buka**.
    Anda juga bisa menjalankan `xattr -dr com.apple.quarantine /Applications/Hanasu.app` sebagai gantinya.
-3. Saat diminta, izinkan **Mikrofon**, **Pengenalan Ucapan**, dan **Aksesibilitas**. Aksesibilitas diperlukan untuk menempel dengan ⌘V.
+3. Saat diminta, izinkan **Mikrofon**, **Pengenalan Ucapan**, dan **Aksesibilitas**. Aksesibilitas diperlukan untuk menempel dengan ⌘V. Izin **Perekaman Layar** hanya diminta jika Anda mengaktifkan teks tangkapan layar.
 
 </details>
 
@@ -180,7 +181,7 @@ Anda dapat mengubah semua pintasan di Pengaturan. Panduan pengguna lengkap (dala
 ## Privasi
 
 - **Secara bawaan, audio tetap di perangkat Anda.** Pengenalan ucapan, Whisper, dan pemisahan pembicara semuanya berjalan secara lokal.
-- **AI menerima teks, bukan audio.** Gemini atau Claude menerima transkrip. Tergantung pengaturan Anda, AI juga dapat menerima nama aplikasi tempat Anda mengetik, konteks layar, dan transkrip rapat untuk fitur Tanya dan obrolan AI selama rapat.
+- **AI menerima teks, bukan audio.** Gemini atau Claude menerima transkrip. Tergantung pengaturan Anda, AI juga dapat menerima nama aplikasi tempat Anda mengetik, konteks layar, teks yang dibaca dari tangkapan layar Anda (tidak pernah gambarnya), dan transkrip rapat untuk fitur Tanya dan obrolan AI selama rapat.
 - **Lokal dan Apple juga menyimpan teks di perangkat Anda.** Jika Anda memilih salah satunya, tidak ada yang dikirim ke layanan AI. Satu-satunya yang diunduh adalah model itu sendiri.
 - **Audio dikirim ke Google hanya jika Anda memilihnya.** Jika Anda memilih mesin ucapan Gemini, audio rekaman dikirim ke Google.
 - **Rapat disimpan sebagai berkas biasa.** Rapat disimpan dalam format JSON dan Markdown di `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac dan Windows memakai format yang sama.

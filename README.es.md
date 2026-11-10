@@ -48,6 +48,7 @@ Está inspirado en Typeless, Wispr Flow, Aqua Voice y Granola. Su código fuente
 | **Fragmentos** | Di «firma de correo» para insertar un texto guardado tal como lo escribiste. Los fragmentos nunca se envían a la IA. |
 | **Diccionario** | Añade nombres propios y reglas de sustitución como `ストックマーク => Stockmark`. Las reglas también se aplican a las transcripciones de las reuniones. Desde una reunión en Notas de reuniones, la IA puede sugerir entradas nuevas a partir de esa reunión (en Mac, también de tu historial y tus reuniones recientes), y solo añades las que elijas. |
 | **Contexto de pantalla** *(opcional)* | Hanasu lee el título de la ventana y el texto alrededor del cursor, para que los nombres coincidan con lo que ya está en pantalla. Los campos de contraseña nunca se leen. |
+| **Texto de capturas de pantalla** *(opcional, Mac)* | Hanasu hace una captura de todas tus pantallas, lee el texto en tu Mac y solo pasa ese texto a la IA, así que los nombres y números de modelo de otras ventanas (por ejemplo, "QX-7s") se escriben tal como aparecen. La imagen nunca se envía ni se guarda. Actívalo o desactívalo para una sola grabación con el botón del HUD. Necesita el permiso de Grabación de pantalla. |
 | **Elige tu micrófono** *(Mac)* | Elige el micrófono en Ajustes, o cámbialo desde el botón de micrófono del HUD sin detener la grabación. |
 | **Historial** | Busca resultados anteriores y reintenta los que fallaron. El historial se guarda 30 días de forma predeterminada, y puedes cambiarlo en Ajustes. En Mac, pulsa <kbd>⌥⇧ V</kbd> para volver a pegar el último resultado. |
 | **¿No hay dónde pegar?** | Si ningún campo de texto tiene el foco (por ejemplo, el escritorio está delante), Hanasu deja el resultado en pantalla en lugar de pegarlo. Cópialo desde ahí o simplemente pulsa <kbd>⌘V</kbd> donde lo quieras (puedes elegir si el resultado se queda en el portapapeles). |
@@ -136,7 +137,7 @@ Consigue la última versión en [**Releases**](https://github.com/kakibara/hanas
 1. Descomprime el archivo y mueve `Hanasu.app` a **Aplicaciones**.
 2. La app está autofirmada y no notarizada, así que macOS la bloquea la primera vez. Haz clic en **Aceptar**, luego abre **Ajustes del Sistema → Privacidad y seguridad** y haz clic en **Abrir igualmente**.
    También puedes ejecutar `xattr -dr com.apple.quarantine /Applications/Hanasu.app` en su lugar.
-3. Cuando se te pida, permite **Micrófono**, **Reconocimiento de voz** y **Accesibilidad**. La accesibilidad es necesaria para pegar con ⌘V.
+3. Cuando se te pida, permite **Micrófono**, **Reconocimiento de voz** y **Accesibilidad**. La accesibilidad es necesaria para pegar con ⌘V. **Grabación de pantalla** solo se pide si activas el texto de capturas de pantalla.
 
 </details>
 
@@ -180,7 +181,7 @@ Puedes cambiar todos los atajos en Ajustes. La guía de usuario completa (en jap
 ## Privacidad
 
 - **El audio se queda en tu dispositivo de forma predeterminada.** El reconocimiento de voz, Whisper y la diarización de hablantes se ejecutan localmente.
-- **La IA recibe texto, no audio.** Gemini o Claude reciben la transcripción. Según tu configuración, también pueden recibir el nombre de la app en la que escribes, el contexto de pantalla y las transcripciones de reuniones para preguntar y para el chat con IA de la reunión.
+- **La IA recibe texto, no audio.** Gemini o Claude reciben la transcripción. Según tu configuración, también pueden recibir el nombre de la app en la que escribes, el contexto de pantalla, el texto leído de una captura de tu pantalla (nunca la imagen) y las transcripciones de reuniones para preguntar y para el chat con IA de la reunión.
 - **Local y Apple también mantienen el texto en tu dispositivo.** Si eliges cualquiera de los dos, no se envía nada a ningún servicio de IA. Lo único que se descarga es el propio modelo.
 - **El audio va a Google solo si así lo eliges.** Si seleccionas el motor de voz Gemini, el audio grabado se envía a Google.
 - **Las reuniones son archivos normales.** Se guardan como JSON y Markdown en `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac y Windows usan el mismo formato.

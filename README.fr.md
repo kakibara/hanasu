@@ -48,6 +48,7 @@ Il s'inspire de Typeless, Wispr Flow, Aqua Voice et Granola. Son code source est
 | **Extraits** | Dites « signature d'e-mail » pour insérer un texte enregistré exactement tel que vous l'avez écrit. Les extraits ne sont jamais envoyés à l'IA. |
 | **Dictionnaire** | Ajoutez des noms propres et des règles de remplacement comme `ストックマーク => Stockmark`. Les règles s'appliquent aussi aux transcriptions des réunions. Depuis une réunion ouverte dans Notes de réunion, l'IA peut suggérer de nouvelles entrées tirées de cette réunion (sur Mac, aussi à partir de votre historique et de vos réunions récentes), et vous n'ajoutez que celles que vous choisissez. |
 | **Contexte de l'écran** *(sur option)* | Hanasu lit le titre de la fenêtre et le texte autour de votre curseur, pour que les noms correspondent à ce qui est déjà à l'écran. Les champs de mot de passe ne sont jamais lus. |
+| **Texte des captures d'écran** *(sur option, Mac)* | Hanasu fait une capture de tous vos écrans, lit le texte sur votre Mac et ne transmet que ce texte à l'IA : les noms et références de modèles affichés dans d'autres fenêtres (par exemple "QX-7s") sont ainsi écrits tels qu'ils apparaissent. L'image n'est jamais envoyée ni enregistrée. Activez-le ou désactivez-le pour un seul enregistrement avec le bouton du HUD. Nécessite l'autorisation Enregistrement de l'écran. |
 | **Choisissez votre micro** *(Mac)* | Choisissez le microphone dans les Réglages, ou changez-le depuis le bouton micro du HUD sans arrêter l'enregistrement. |
 | **Historique** | Recherchez dans les résultats passés et relancez ceux qui ont échoué. L'historique est conservé 30 jours par défaut, et vous pouvez changer cela dans les Réglages. Sur Mac, appuyez sur <kbd>⌥⇧ V</kbd> pour coller à nouveau le dernier résultat. |
 | **Nulle part où coller ?** | Si aucun champ de texte n'a le focus (par exemple, le bureau est au premier plan), Hanasu garde le résultat à l'écran au lieu de le coller. Copiez-le depuis là, ou appuyez simplement sur <kbd>⌘V</kbd> là où vous le voulez (vous pouvez choisir si le résultat reste dans le presse-papiers). |
@@ -136,7 +137,7 @@ Récupérez la dernière version depuis les [**Releases**](https://github.com/ka
 1. Décompressez le fichier et déplacez `Hanasu.app` dans **Applications**.
 2. L'application est auto-signée et non notarisée, donc macOS la bloque la première fois. Cliquez sur **OK**, puis ouvrez **Réglages Système → Confidentialité et sécurité** et cliquez sur **Ouvrir quand même**.
    Vous pouvez aussi exécuter `xattr -dr com.apple.quarantine /Applications/Hanasu.app` à la place.
-3. Quand on vous le demande, autorisez **Microphone**, **Reconnaissance vocale** et **Accessibilité**. L'accessibilité est nécessaire pour coller avec ⌘V.
+3. Quand on vous le demande, autorisez **Microphone**, **Reconnaissance vocale** et **Accessibilité**. L'accessibilité est nécessaire pour coller avec ⌘V. **Enregistrement de l'écran** n'est demandé que si vous activez le texte des captures d'écran.
 
 </details>
 
@@ -180,7 +181,7 @@ Vous pouvez modifier chaque raccourci dans les Réglages. Le guide d'utilisation
 ## Confidentialité
 
 - **L'audio reste sur votre appareil par défaut.** La reconnaissance vocale, Whisper et la diarisation des locuteurs tournent tous en local.
-- **L'IA reçoit du texte, pas de l'audio.** Gemini ou Claude reçoit la transcription. Selon vos réglages, il peut aussi recevoir le nom de l'application dans laquelle vous saisissez, le contexte de l'écran et les transcriptions de réunion pour les questions et pour le chat IA de la réunion.
+- **L'IA reçoit du texte, pas de l'audio.** Gemini ou Claude reçoit la transcription. Selon vos réglages, il peut aussi recevoir le nom de l'application dans laquelle vous saisissez, le contexte de l'écran, le texte lu sur une capture de votre écran (jamais l'image) et les transcriptions de réunion pour les questions et pour le chat IA de la réunion.
 - **Local et Apple gardent aussi le texte sur votre appareil.** Si vous choisissez l'un des deux, rien n'est envoyé à un service d'IA. Le seul téléchargement est le modèle lui-même.
 - **L'audio n'est envoyé à Google que si vous le choisissez.** Si vous sélectionnez le moteur de reconnaissance vocale Gemini, l'audio enregistré est envoyé à Google.
 - **Les réunions sont de simples fichiers.** Elles sont enregistrées en JSON et en Markdown dans `~/Documents/Hanasu/Meetings/` (Windows : `Documents\Hanasu\Meetings\`). Mac et Windows utilisent le même format.
