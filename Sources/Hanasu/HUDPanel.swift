@@ -74,9 +74,9 @@ final class HUDModel: ObservableObject {
     }
 }
 
-// 設計判断: DEC-DIC-025
-/// 前面にないパネルでも、1 回のクリックでボタンが押せるようにする
-private final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
+// 設計判断: DEC-DIC-025, DEC-MTG-096, DEC-MTG-099
+/// 前面にないパネルでも、1 回のクリックでボタンが押せるようにする（HUD・字幕・「何を聞かれた？」のパネル）
+final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }
 

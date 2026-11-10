@@ -582,6 +582,7 @@
     "- Odpowiadaj po polsku. Możesz używać nagłówków, wypunktowań i pogrubień (Markdown), ale nie tabel."
   ],
   "chat.transcript.omitted": "(Ze względu na limit długości pominięto początkowe wypowiedzi: ${count}.)",
+  "chat.transcript.recentOnly": "(Pominięto wypowiedzi sprzed ostatnich ${minutes} min: ${count}.)",
   "chat.transcript.afterRecording": "(To spotkanie jest transkrybowane przez ${engine} po zatrzymaniu nagrywania, więc nie ma zapisu wypowiedzi z czasu nagrywania.)",
   "chat.transcript.empty": "(Nie ma jeszcze zapisanych wypowiedzi.)",
   "chat.status.live": "Nagrywanie (stan na ${elapsed} od początku nagrania)",
@@ -592,5 +593,6 @@
   "chat.quick.recent": "Krótko streść, o czym rozmawiano w ostatnich mniej więcej 5 minutach.",
   "chat.quick.decisions": "Wypisz w punktach, co do tej pory ustalono i kto ma co zrobić (zadania, TODO). Osobno wypisz to, czego jeszcze nie ustalono.",
   "chat.quick.explain": "Wyjaśnij ostatni temat tak, żeby zrozumiała go osoba, która nie zna kontekstu. Jeśli pojawiły się terminy specjalistyczne, krótko je objaśnij.",
-  "chat.quick.questions": "Wskaż 3 kwestie z dotychczasowej rozmowy, które pozostają niejasne lub warto je potwierdzić, w formie pytań, które mogę zadać na spotkaniu."
+  "chat.quick.questions": "Wskaż 3 kwestie z dotychczasowej rozmowy, które pozostają niejasne lub warto je potwierdzić, w formie pytań, które mogę zadać na spotkaniu.",
+  "chat.quick.asked": "Znajdź najnowsze pytanie lub prośbę, z którymi w ostatniej części rozmowy zwrócili się pozostali uczestnicy („Pozostali”). Szukaj także w wypowiedziach z <pending_transcript>, które nie są jeszcze ostateczne. Napisz krótko tylko dwa poniższe punkty.\n1. **O co pytano**: w 1–2 zdaniach powiedz własnymi słowami, o co pytano lub o co poproszono, i dodaj znacznik czasu [12:34] wypowiedzi, na której się opierasz. Kto pytał i czy pytanie było skierowane do mnie („Ja”), napisz tylko wtedy, gdy jasno to wynika, np. z tego, jak ktoś się do kogoś zwrócił.\n2. **Kontekst**: przebieg rozmowy, który doprowadził do tego pytania, w 2–3 punktach.\nNie proponuj, co mam odpowiedzieć ani jak odpowiedzieć. Jeśli nie znajdziesz pytania ani prośby, napisz to, a potem streść ostatnie 1–2 minuty rozmowy w 2–3 linijkach."
 }

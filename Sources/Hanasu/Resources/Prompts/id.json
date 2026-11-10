@@ -582,6 +582,7 @@
     "- Jawab dalam bahasa Indonesia. Anda boleh memakai judul, daftar berpoin, dan huruf tebal (Markdown), tetapi jangan memakai tabel."
   ],
   "chat.transcript.omitted": "(${count} ucapan pertama dihilangkan karena batas panjang.)",
+  "chat.transcript.recentOnly": "(${count} ucapan dari sebelum ${minutes} menit terakhir dihilangkan.)",
   "chat.transcript.afterRecording": "(Rapat ini ditranskripsikan dengan ${engine} setelah perekaman dihentikan, jadi tidak ada catatan ucapan selama perekaman.)",
   "chat.transcript.empty": "(Belum ada ucapan yang tercatat.)",
   "chat.status.live": "Merekam (pada ${elapsed} sejak perekaman dimulai)",
@@ -592,5 +593,6 @@
   "chat.quick.recent": "Rangkum secara singkat apa yang dibahas dalam sekitar 5 menit terakhir.",
   "chat.quick.decisions": "Sebutkan dalam daftar berpoin apa saja yang sudah diputuskan sejauh ini dan siapa akan mengerjakan apa (tugas, TODO). Sebutkan juga secara terpisah hal-hal yang belum diputuskan.",
   "chat.quick.explain": "Jelaskan topik yang baru saja dibahas agar bisa dipahami orang yang tidak tahu latar belakangnya. Jika ada istilah teknis, jelaskan secara singkat.",
-  "chat.quick.questions": "Sebutkan 3 hal dari pembahasan sejauh ini yang masih belum jelas atau sebaiknya dipastikan, dalam bentuk pertanyaan yang bisa saya ajukan di rapat."
+  "chat.quick.questions": "Sebutkan 3 hal dari pembahasan sejauh ini yang masih belum jelas atau sebaiknya dipastikan, dalam bentuk pertanyaan yang bisa saya ajukan di rapat.",
+  "chat.quick.asked": "Temukan pertanyaan atau permintaan paling baru yang diajukan peserta lain (\"Pihak lain\") dalam percakapan terakhir. Saat mencari, sertakan juga ucapan yang belum final di <pending_transcript>. Tulis hanya dua hal berikut secara singkat.\n1. **Yang ditanyakan**: Uraikan kembali apa yang ditanyakan atau diminta dalam 1–2 kalimat, beserta waktu [12:34] ucapan yang menjadi dasarnya. Sebutkan siapa yang bertanya dan apakah pertanyaan itu ditujukan kepada saya (\"Saya\") hanya jika jelas, misalnya dari cara orang itu menyapa.\n2. **Latar belakang**: Alur pembicaraan tepat sebelumnya yang mengarah ke pertanyaan itu, dalam 2–3 poin.\nJangan menuliskan usulan jawaban untuk saya atau saran cara menjawab. Jika tidak ditemukan pertanyaan atau permintaan, sebutkan hal itu, lalu rangkum pembicaraan 1–2 menit terakhir dalam 2–3 baris."
 }

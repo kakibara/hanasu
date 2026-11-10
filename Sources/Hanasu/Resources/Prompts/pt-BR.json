@@ -582,6 +582,7 @@
     "- Responda em português. Pode usar títulos, tópicos e negrito (Markdown), mas não tabelas."
   ],
   "chat.transcript.omitted": "(As primeiras ${count} falas foram omitidas por causa do limite de tamanho.)",
+  "chat.transcript.recentOnly": "(As ${count} falas anteriores aos últimos ${minutes} minutos foram omitidas.)",
   "chat.transcript.afterRecording": "(A transcrição desta reunião é feita com ${engine} depois que a gravação termina, por isso não há registro das falas durante a gravação.)",
   "chat.transcript.empty": "(Ninguém falou nada ainda.)",
   "chat.status.live": "Gravando (${elapsed} desde o início da gravação)",
@@ -592,5 +593,6 @@
   "chat.quick.recent": "Resuma rapidamente o que foi discutido nos últimos 5 minutos, mais ou menos.",
   "chat.quick.decisions": "Liste em tópicos o que já foi decidido e quem vai fazer o quê (tarefas, pendências). Liste separadamente o que ainda não foi decidido.",
   "chat.quick.explain": "Explique o assunto mais recente de um jeito que alguém sem o contexto consiga entender. Explique rapidamente os termos técnicos, se houver.",
-  "chat.quick.questions": "Liste 3 pontos que continuam vagos ou que valeria a pena confirmar, em forma de perguntas que eu possa fazer na reunião."
+  "chat.quick.questions": "Liste 3 pontos que continuam vagos ou que valeria a pena confirmar, em forma de perguntas que eu possa fazer na reunião.",
+  "chat.quick.asked": "Encontre a pergunta ou o pedido mais recente feito pelos outros participantes (“Outros”) na conversa recente. Procure também nas falas ainda não finalizadas em <pending_transcript>. Escreva apenas os dois itens abaixo, de forma breve.\n1. **O que foi perguntado**: reformule em 1 a 2 frases o que foi perguntado ou pedido, com o horário [12:34] da fala em que você se baseou. Diga quem perguntou e se era dirigido a mim (“Eu”) só quando isso estiver claro, por exemplo pela forma como a pessoa foi chamada.\n2. **Contexto**: o rumo da conversa que levou à pergunta, em 2 a 3 tópicos.\nNão sugira o que eu devo responder nem como responder. Se não encontrar nenhuma pergunta ou pedido, diga isso e depois resuma em 2 a 3 linhas a conversa dos últimos 1 a 2 minutos."
 }

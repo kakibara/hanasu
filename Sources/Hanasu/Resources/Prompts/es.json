@@ -583,6 +583,7 @@
     "- Responde en español. Puedes usar encabezados, viñetas y negrita (Markdown), pero no tablas."
   ],
   "chat.transcript.omitted": "(Se omitieron las primeras ${count} intervenciones por el límite de longitud.)",
+  "chat.transcript.recentOnly": "(Se omitieron las ${count} intervenciones anteriores a los últimos ${minutes} minutos.)",
   "chat.transcript.afterRecording": "(Esta reunión se transcribe con ${engine} después de detener la grabación, así que no hay registro de lo dicho durante la grabación.)",
   "chat.transcript.empty": "(Todavía no se ha dicho nada.)",
   "chat.status.live": "Grabando (a ${elapsed} del inicio de la grabación)",
@@ -593,5 +594,6 @@
   "chat.quick.recent": "Resume brevemente de qué se habló en los últimos 5 minutos, más o menos.",
   "chat.quick.decisions": "Enumera en viñetas lo que se ha decidido hasta ahora y quién hará qué (tareas pendientes). Enumera aparte lo que aún no está decidido.",
   "chat.quick.explain": "Explica el tema más reciente para que alguien sin contexto pueda seguirlo. Si hay términos técnicos, explícalos brevemente.",
-  "chat.quick.questions": "Dame 3 puntos que sigan sin estar claros o que convenga confirmar, formulados como preguntas que yo pueda hacer en la reunión."
+  "chat.quick.questions": "Dame 3 puntos que sigan sin estar claros o que convenga confirmar, formulados como preguntas que yo pueda hacer en la reunión.",
+  "chat.quick.asked": "Busca en la conversación reciente la última pregunta o petición que hicieron los demás participantes («Otros»). Incluye en la búsqueda lo dicho en <pending_transcript>, aunque todavía no sea definitivo. Escribe solo estos dos puntos, de forma breve.\n1. **Qué se preguntó**: Reformula en 1–2 frases qué se preguntó o se pidió, con la marca de tiempo [12:34] de la intervención en la que te basas. Indica quién preguntó y si iba dirigido a mí («Yo») solo cuando quede claro, por ejemplo por cómo se dirigieron a alguien.\n2. **Contexto**: Cómo fue la conversación hasta llegar a esa pregunta, en 2–3 viñetas.\nNo me propongas qué responder ni cómo hacerlo. Si no encuentras ninguna pregunta ni petición, dilo y luego resume en 2–3 líneas lo que se habló en los últimos 1–2 minutos."
 }

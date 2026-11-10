@@ -68,8 +68,8 @@ Si ispira a Typeless, Wispr Flow, Aqua Voice e Granola. Il suo codice sorgente �
 | **Verbali con IA** | Generati dall'IA che scegli per le riunioni. Scegli un modello: automatico, riunione settimanale, 1-on-1, chiamata commerciale, brainstorming o personalizzato. Le azioni da svolgere includono un responsabile e una scadenza. |
 | **Verifica la fonte e riascolta** *(Mac)* | Il verbale si apre in un'unica pagina: prima il riepilogo e le azioni da svolgere, con la trascrizione accanto. Fai clic sulla marca temporale dopo un punto per passare all'intervento da cui proviene. Riproduci la registrazione da qualsiasi intervento e silenzia la tua parte o la loro se nella chiamata c'era eco. |
 | **Note dal vivo e momenti salienti** | Scrivi note con marca temporale durante la chiamata, oppure premi <kbd>⌃⌥⌘ H</kbd> per segnare "questo è importante" (puoi annullarlo per 10 secondi). Il verbale dà priorità a quelle parti, e in seguito puoi rileggere la conversazione intorno a ogni segno. |
-| **Sottotitoli fluttuanti** *(Mac)* | Mostra la trascrizione dal vivo come sottotitoli sopra l'app della riunione. |
-| **Chat IA durante la riunione** *(Mac)* | Durante la registrazione, chiedi all'IA della conversazione fin qui (<kbd>⌘J</kbd>). Un clic per "riassunto fin qui" o "decisioni e cose da fare". Fai domande di approfondimento e fai clic su una marca temporale in una risposta per passare a quel punto della trascrizione. |
+| **Sottotitoli fluttuanti** *(Mac)* | Mostra la trascrizione dal vivo come sottotitoli sopra l'app della riunione. Se li lasci attivi, ricompaiono anche alla riunione successiva. |
+| **Chat IA durante la riunione** *(Mac)* | Durante la registrazione, chiedi all'IA della conversazione fin qui (<kbd>⌘J</kbd>). Un clic per "riassunto fin qui" o "decisioni e cose da fare". Fai domande di approfondimento e fai clic su una marca temporale in una risposta per passare a quel punto della trascrizione. Ti fanno una domanda all'improvviso mentre stai facendo altro? Premi **Cosa mi hanno chiesto?** nei sottotitoli (oppure <kbd>⌃⌥⌘ A</kbd>) senza lasciare l'app della riunione: un pannello fluttuante mostra cosa hanno appena detto gli altri, poi il riepilogo dell'IA con la domanda e il contesto da cui è nata. |
 | **Rilevamento delle riunioni** | Quando un'app di riunioni inizia a usare il microfono, Hanasu chiede se registrare. Non inizia mai a registrare da solo. |
 | **Cerca e chiedi** | Cerca nel testo di tutte le riunioni, oppure chiedi "Cosa abbiamo deciso nella riunione della settimana scorsa?". La risposta cita le riunioni che ha usato. |
 | **Esporta** | Copia come Markdown o come riepilogo pronto per Slack, salva come `.md` / `.txt`, oppure invia le azioni da svolgere a Promemoria. |
@@ -175,6 +175,7 @@ Su Mac puoi mostrare l'icona di Hanasu nella barra dei menu, nel Dock o in entra
 | Annulla la registrazione | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Registrazione della riunione (avvia / interrompi) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Segna "questo è importante" in una riunione | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| "Cosa mi hanno chiesto?" in una riunione | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Puoi cambiare ogni scorciatoia nelle Impostazioni. La guida utente completa (in giapponese) è [docs/guide.md](docs/guide.md).
 
