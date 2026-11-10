@@ -186,3 +186,14 @@ v1.4.0 で「メモ」タブを開くと、タイトル・タブの切り替え�
 - `--render-minutes-ui` の `detail.png`・`window-tab0.png` で、タイトルの欄に薄い枠と鉛筆の印が出て、詳細の上の右端にゴミ箱のボタンが出た。ウインドウを開いたときにタイトルへフォーカスが入らない（編集中の枠にならず、全選択もされない）。3 つのタブとも中身の高さ 640／ウインドウの中身 640 のまま。
 - Windows: `dotnet test Hanasu.Core.Tests`（275 件すべて成功）。`MeetingControllerTests` で、記録中の会議は消せない・ごみ箱に移す処理を渡すとそれでフォルダを消す・消した会議を書き換えて保存してもフォルダを作り直さない・議事録を作り直している間は消せない、を確かめた。`dotnet build Hanasu.Windows` も通る（Mac の上でのコンパイルだけ）。
 - 確かめていないこと（実機）: Mac で実際にゴミ箱へ移ること・確かめのダイアログ・右クリックと ⌫、タイトルの欄のマウスを載せたときの見た目と保存。Windows の画面（ごみ箱へ移ること・Delete キー・右クリック・✎ の印）。
+
+## 15. 会議の録音の削除（2026-11-10、macOS 26.6.2 と、その上の .NET 10 SDK）
+
+関係: REQ-MTG-010、REQ-MTG-051、REQ-MTG-054、REQ-MTG-055、REQ-MTG-056、REQ-MTG-057、DEC-MTG-009、DEC-MTG-139〜143（計画は [plans/meeting-audio-deletion.md](../plans/meeting-audio-deletion.md)）
+
+- 計画の手順 0（Mac 標準のエンジンの認識のエラーの頻度）: 手元の `log show --predicate 'subsystem == "dev.mactypeless.Hanasu"' --last 30d` には会議の記録が 1 件しか残っておらず、`results error`・`finalize error` は 0 件だった。頻度を決めるには足りないので、止めるときの締めのエラー（`finalizeAndFinishThroughEndOfInput`）は数えず、記録の途中で結果のストリームが止まったエラー（取り消しを除く）だけを失敗に数えることにした（DEC-MTG-009）。
+- `.build/debug/Hanasu --test-meeting-audio`: すべて OK（会議への写しと JSON の往復、後処理で消すかの決め方、文字起こしの状態、4 つのファイル名・ないファイル・消せないファイル、一覧の並びと除外、30 日の境目、保存期間、「音声ファイルは残しています」）。`--test-meeting-player`・`--test-minutes-document`・`--test-minutes-citations` も すべて OK。`swift build -c release` も通る。
+- `--render-meeting-window`・`--render-meeting-audio-manager` の結果は [ui-runs.md](ui-runs.md)。ウインドウの描き出しに NG はない。
+- Windows: `dotnet test Hanasu.Core.Tests`（557 件すべて成功。`MeetingAudioDeletionTests` 23 件）。`dotnet build Hanasu.Windows -p:EnableWindowsTargeting=true` も通る（Mac の上でのコンパイルだけ）。
+- 確かめていないこと（実機）: Mac で記録して止めたあと録音が消えること・記録中のツールバーで切り替えること・再生中に録音を消したときバーが消えること・保存期間を短くしたときの確かめ・起動時の整理。`--meeting-files … --delete-audio` は本物の保存先と AI を使うので動かしていない。Windows の画面すべて（左下と記録中の欄のチェックボックス、録音の管理、設定、ショートカットから始めたとき会議ノートが開くこと）。
+

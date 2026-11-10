@@ -142,6 +142,9 @@ internal sealed class AppHost : IDisposable
         {
             AppLog.Write($"mark interrupted meetings failed: {e.Message}");
         }
+        // 要件: REQ-MTG-057
+        // 設計判断: DEC-MTG-143（起動時に、会議を「失敗」にしたあとで、保存期間を過ぎた録音を消す。読めないときは中でログに書く）
+        Meetings.PruneExpiredAudio();
         RegisterHotKeys();
         // 設計判断: DEC-REL-030（前回の入れ替えが失敗していたら知らせる。起動時の確認より先）
         Updates.ReportPreviousAttempt();
@@ -206,7 +209,7 @@ internal sealed class AppHost : IDisposable
         translateHotKeyId = hotKeys.Register(s.TranslateHotKey, kind => Dictation.HandleHotKey(kind, Dictation.PrimaryTranslateMode));
         meetingHotKeyId = hotKeys.Register(s.MeetingHotKey, kind =>
         {
-            if (kind == HotKeyEventKind.Pressed) _ = Meetings.ToggleAsync();
+            if (kind == HotKeyEventKind.Pressed) ToggleMeeting();
         });
         var failed = new List<string>();
         if (dictationHotKeyId is null) failed.Add(s.HotKey.DisplayString);
@@ -338,7 +341,28 @@ internal sealed class AppHost : IDisposable
     }
 
     /// <summary>タスクトレイのメニューから会議の記録を始める・止める</summary>
-    public void ToggleMeetingFromMenu() => _ = Meetings.ToggleAsync();
+    public void ToggleMeetingFromMenu() => ToggleMeeting();
+
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-139
+    /// <summary>
+    /// ショートカットとトレイから、会議の記録を始める・止める。始めるときは会議ノートを開く（Mac 版の toggleMeeting と同じ。
+    /// 記録中の欄で、この会議の録音を消すかが見えて変えられるように）。止めるときは開かない
+    /// </summary>
+    private void ToggleMeeting()
+    {
+        if (Meetings.State == MeetingState.Idle) ShowMeetings();
+        _ = Meetings.ToggleAsync();
+    }
+
+    // 要件: REQ-MTG-056
+    // 設計判断: DEC-MTG-141
+    /// <summary>録音の管理を、owner の上に開く（閉じるまで待つ）</summary>
+    public void ShowMeetingAudio(Window owner)
+    {
+        var window = new MeetingAudioWindow(this) { Owner = owner };
+        window.ShowDialog();
+    }
 
     public void CopyToClipboard(string text)
     {

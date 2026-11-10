@@ -732,12 +732,6 @@
   <data name="Settings_Storage" xml:space="preserve">
     <value>保存</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>処理のあとも音声ファイル（me.wav / others.wav）を残す</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>オフにすると、文字起こしと議事録のあとで音声を消します（文字起こしに失敗したときは残します）。16 kHz・モノラルの WAV で、1 時間あたり 1 チャンネル約 115 MB です。</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>保存先</value>
   </data>
@@ -1351,5 +1345,126 @@
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>記録を止めたあとの文字起こしに、「辞書・ルール」の置き換えルールを当てます。議事録は当てたあとの文から作ります。認識したままの文も残すので、会議ノートの「辞書…」から戻せます。</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>文字起こしのあとに録音を削除する</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>オンにすると、会議の録音（me.wav / others.wav）を文字起こしと議事録のあとに削除します。文字起こしがそろわなかったときは残します。記録中は、その会議の分を会議ノートで変えられます。16 kHz・モノラルの WAV で、1 時間あたり 1 チャンネル約 115 MB です。</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>録音を残す期間</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>この期間より前に記録した会議の録音を、アプリの起動時と会議の処理のあとに自動で削除します。会議ごとに「残す」にした録音も、この期間を過ぎると消えます。文字起こしが欠けている会議の録音は消しません。</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>うち {0} 件は文字起こしが欠けています。</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>{0}より前の録音を今すぐ削除します: {1} 件（{2}）。</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>文字起こしが欠けている {0} 件は残します。</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>設定を変更して削除しますか？</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>次の記録からの既定です。記録中は、その会議の分を左上の記録中の欄で変えられます。</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>この会議の録音を文字起こしのあとに削除</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>オン: この会議の録音は、文字起こしと議事録のあとに削除します（文字起こしがそろわなければ残します）。既定の設定は変わりません。</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>オフ: この会議の録音は残します。既定の設定は変わりません。</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>録音を削除…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>録音の管理…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>この会議には録音が残っていません。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>記録中・処理中は削除できません。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>録音の削除 — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>「{0}」の録音（{1}）を削除しますか？</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>議事録・文字起こし・メモは残ります。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>{0}の文字起こしはありません。その分の会話の記録は残りません。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>この会議の文字起こしには欠けている部分があります。その分の会話の記録は残りません。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>この会議には文字起こしがありません。録音を消すと、会話の記録は残りません。</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>「{0}」の録音を削除しました。</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>削除できなかった録音のファイルがあります。残ったファイルはそのままです。
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>音声ファイルは完全に削除します（ごみ箱には入りません）。元に戻せません。</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>録音の管理</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>録音が残っている会議: {0} 件・{1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>残っている録音はありません。</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>文字起こしなし</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>一部の文字起こしなし</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>録音が残っている会議</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>選んだ録音を削除…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>{0} 日より前の録音を削除…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>すべての録音を削除…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>保存先を OneDrive・iCloud Drive などで同期している場合は、同期先の削除済みの項目にしばらく残ることがあります。</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>{0} 件の会議の録音（{1}）を削除しますか？</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>うち {0} 件は文字起こしが欠けています。その分の会話の記録は残りません。</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>文字起こしが欠けている {0} 件（{1}）は残します。選んで削除できます。</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>{0} 件の会議の録音を削除しました。</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>{0} 件の会議の録音を削除しきれませんでした。残ったファイルはそのままです。</value>
   </data>
 </root>

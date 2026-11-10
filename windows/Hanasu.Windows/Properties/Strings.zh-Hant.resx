@@ -732,12 +732,6 @@
   <data name="Settings_Storage" xml:space="preserve">
     <value>儲存</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>處理後保留音訊檔案（me.wav / others.wav）</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>關閉時，建立逐字稿和會議記錄後會刪除音訊（轉錄失敗時會保留）。格式為 16 kHz 單聲道 WAV，每個聲道每小時約 115 MB。</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>儲存位置</value>
   </data>
@@ -1351,5 +1345,126 @@ App 內更新會替換整個資料夾，因此只有在 Hanasu 位於專用資�
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>停止錄製後，會對逐字稿套用「字典與規則」中的取代規則，會議記錄會根據取代後的文字建立。原始辨識文字也會保留，因此可以從會議筆記的「字典…」還原。</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>轉錄後刪除錄音</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>開啟後，會議錄音（me.wav / others.wav）會在建立逐字稿和會議記錄後刪除。如果逐字稿不完整，則會保留錄音。錄製期間，可以在會議筆記中變更這場會議的設定。音訊為 16 kHz 單聲道 WAV，每個聲道每小時約 115 MB。</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>錄音保留期限</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>超過此期限的錄音會在應用程式啟動時和會議處理完成後自動刪除。已選擇保留錄音的會議也同樣適用。逐字稿不完整的會議，其錄音不會被刪除。</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>其中 {0} 場會議的逐字稿不完整。</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>超過 {0} 的錄音將立即刪除：{1} 場會議（{2}）。</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>逐字稿不完整的 {0} 場會議的錄音將會保留。</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>要變更設定並刪除這些錄音嗎？</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>這是之後錄製的會議的預設設定。錄製期間，可以在左上方的錄製欄中變更這場會議的設定。</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>轉錄後刪除這場會議的錄音</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>開啟：這場會議的錄音會在建立逐字稿和會議記錄後刪除（如果逐字稿不完整則保留）。預設設定不會變更。</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>關閉：保留這場會議的錄音。預設設定不會變更。</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>刪除錄音…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>管理錄音…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>這場會議已沒有錄音。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>錄製或處理期間無法刪除。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>刪除錄音 — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>要刪除「{0}」的錄音（{1}）嗎？</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>會議記錄、逐字稿和筆記都會保留。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>{0}的聲道沒有逐字稿。這部分的對話內容將不會保留。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>這場會議的逐字稿有部分缺漏。這部分的對話內容將不會保留。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>這場會議沒有逐字稿。刪除錄音後，對話內容將完全不會保留。</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>已刪除「{0}」的錄音。</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>部分錄音檔案無法刪除。其餘檔案維持不變。
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>音訊檔案將永久刪除（不會移至資源回收筒）。此動作無法復原。</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>管理錄音</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>有錄音的會議：{0} 場，{1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>沒有剩餘的錄音。</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>無逐字稿</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>逐字稿部分缺漏</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>有錄音的會議</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>刪除選取的錄音…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>刪除超過 {0} 天的錄音…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>刪除所有錄音…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>如果儲存位置透過 OneDrive、iCloud Drive 等進行同步，已刪除的錄音可能會在同步服務的已刪除項目中保留一段時間。</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>要刪除 {0} 場會議的錄音（{1}）嗎？</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>其中 {0} 場會議的逐字稿不完整。這部分的對話內容將不會保留。</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>逐字稿不完整的 {0} 場會議的錄音（{1}）將會保留。您可以選取後再刪除。</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>已刪除 {0} 場會議的錄音。</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>{0} 場會議的錄音未能完全刪除。其餘檔案維持不變。</value>
   </data>
 </root>

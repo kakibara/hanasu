@@ -732,12 +732,6 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   <data name="Settings_Storage" xml:space="preserve">
     <value>Depolama</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>İşlemeden sonra ses dosyalarını (me.wav / others.wav) sakla</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>Kapalıyken ses, döküm ve tutanak oluşturulduktan sonra silinir (yazıya dökme başarısız olursa saklanır). 16 kHz mono WAV biçimindedir; kanal başına saatte yaklaşık 115 MB.</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>Kayıt konumu</value>
   </data>
@@ -1351,5 +1345,126 @@ Sürüm sayfası tarayıcıda açılsın mı?</value>
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>Kayıt durduktan sonra "Sözlük ve Kurallar" sekmesindeki değiştirme kuralları döküme uygulanır ve tutanak, kurallar uygulanmış metinden oluşturulur. Özgün tanınan metin de saklandığı için Toplantı Notları'ndaki "Sözlük…" düğmesinden geri yükleyebilirsiniz.</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>Yazıya dökme bittikten sonra ses kaydını sil</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>Açık olduğunda, toplantının ses kaydı (me.wav / others.wav) döküm ve tutanak oluşturulduktan sonra silinir. Döküm eksikse ses kaydı saklanır. Kayıt sırasında bu ayarı o toplantı için Toplantı Notları'nda değiştirebilirsiniz. Ses 16 kHz mono WAV biçimindedir ve kanal başına saatte yaklaşık 115 MB yer kaplar.</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>Ses kayıtlarının saklama süresi</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>Bu süreden eski ses kayıtları, uygulama başlatıldığında ve bir toplantı işlendikten sonra otomatik olarak silinir. Ses kaydını saklamayı seçtiğiniz toplantılar da buna dahildir. Dökümü eksik olan toplantıların ses kayıtları silinmez.</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>Bunların {0} tanesinin dökümü eksik.</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>Üzerinden {0} geçmiş ses kayıtları şimdi silinecek: {1} toplantı ({2}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>Dökümü eksik olan {0} toplantı saklanacak.</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>Ayar değiştirilip bu ses kayıtları silinsin mi?</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>Bundan sonra kaydedeceğiniz toplantılar için varsayılan ayar. Kayıt sırasında bu ayarı o toplantı için sol üstteki kayıt alanında değiştirebilirsiniz.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>Yazıya dökme bittikten sonra bu toplantının ses kaydını sil</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>Açık: Bu toplantının ses kaydı, döküm ve tutanak oluşturulduktan sonra silinir (döküm eksikse saklanır). Varsayılan ayar değişmez.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>Kapalı: Bu toplantının ses kaydı saklanır. Varsayılan ayar değişmez.</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>Ses Kaydını Sil…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>Ses Kayıtlarını Yönet…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>Bu toplantının ses kaydı kalmadı.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>Kayıt veya işleme sırasında silinemez.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>Ses Kaydını Sil — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>"{0}" toplantısının ses kaydı ({1}) silinsin mi?</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>Tutanak, döküm ve notlar saklanır.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>{0} için döküm yok. Konuşmanın bu kısmı saklanmayacak.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>Bu toplantının dökümünün bir kısmı eksik. Konuşmanın bu kısmı saklanmayacak.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>Bu toplantının dökümü yok. Ses kaydını silerseniz konuşmadan geriye hiçbir şey kalmaz.</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>"{0}" toplantısının ses kaydı silindi.</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>Bazı ses kaydı dosyaları silinemedi. Kalan dosyalar olduğu gibi bırakıldı.
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>Ses dosyaları kalıcı olarak silinir (Geri Dönüşüm Kutusu'na taşınmaz). Bu işlem geri alınamaz.</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>Ses Kayıtlarını Yönet</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>Kalan ses kayıtları: {0} toplantı, {1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>Kalan ses kaydı yok.</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>Döküm yok</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>Döküm kısmen eksik</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>Ses kaydı olan toplantılar</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>Seçili Ses Kayıtlarını Sil…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>{0} Günden Eski Ses Kayıtlarını Sil…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>Tüm Ses Kayıtlarını Sil…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>Kayıt yeriniz OneDrive, iCloud Drive veya benzeri bir hizmetle eşitleniyorsa, silinen ses kayıtları bir süre eşitleme hizmetinin silinmiş öğeleri arasında kalabilir.</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>{0} toplantının ses kayıtları ({1}) silinsin mi?</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>Bunların {0} tanesinin dökümü eksik. Konuşmanın bu kısımları saklanmayacak.</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>Dökümü eksik olan {0} toplantı ({1}) saklanacak. Bunları seçerek silebilirsiniz.</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>{0} toplantının ses kayıtları silindi.</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>{0} toplantının ses kayıtları tamamen silinemedi. Kalan dosyalar olduğu gibi bırakıldı.</value>
   </data>
 </root>

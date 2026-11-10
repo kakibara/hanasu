@@ -538,7 +538,7 @@
     <value>Réunion {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>L'application s'est fermée pendant l'enregistrement. Les fichiers audio ({0} / {1}) ont peut-être été en partie conservés.</value>
+    <value>L'application s'est fermée pendant l'enregistrement.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Impossible de commencer l'enregistrement de la réunion</value>

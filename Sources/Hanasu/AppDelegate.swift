@@ -12,7 +12,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var meetingWindow: NSWindow?
     private let meetingRecorder: MeetingRecorder = {
         MeetingStore.markInterruptedMeetings()
-        return MeetingRecorder()
+        let recorder = MeetingRecorder()
+        // 要件: REQ-MTG-057
+        // 設計判断: DEC-MTG-143（起動時に、会議を「失敗」にしたあとで、保存期間を過ぎた録音を消す）
+        recorder.pruneExpiredAudio()
+        // 要件: REQ-MTG-056（設定と会議ノートのメニューから、録音の管理を開けるように）
+        MeetingAudioManagerWindow.recorder = recorder
+        return recorder
     }()
     private let meetingHotKeys = HotKeyManager()
     private var meetingHotKeyID: UInt32?

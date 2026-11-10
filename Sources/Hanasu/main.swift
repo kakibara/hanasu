@@ -297,7 +297,8 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-hud"),
 
 // 会議記録の後処理の確認:
 //   Hanasu --meeting-files <自分の音声> <相手の音声> [--engine apple|whisper|gemini] [--template <型>] [--custom-prompt <指示>] [--notes <メモのテキスト>]
-//          [--dictionary <辞書ファイル>] [--no-meeting-dictionary]
+//          [--dictionary <辞書ファイル>] [--no-meeting-dictionary] [--delete-audio]
+// --delete-audio で、この会議の録音を後処理のあとに消す（付けなければ設定の既定。REQ-MTG-010）。
 // --engine whisper|gemini では、記録中と同じく音声を書き出すだけにして、記録のあとの文字起こしを行う。
 // 2 つのファイルを「自分」「相手」のチャンネルとして文字起こしし、話者の割り当て → 議事録 → 保存まで行う。
 // --notes には、会議中のメモと「ここ重要」の印を、会議ノートの「メモ」タブと同じ形式（[12:34] 内容 / [12:40] ★）で渡す。
@@ -315,6 +316,9 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             var meeting = try MeetingStore.newMeeting()
             meeting.title = "テスト会議（\(files[1].deletingPathExtension().lastPathComponent)）"
             MinutesCLI.applyTemplateArguments(args, to: &meeting)
+            // 要件: REQ-MTG-010
+            MeetingAudioPolicy.apply(to: &meeting, settings: settings)
+            if args.contains("--delete-audio") { MeetingAudioPolicy.apply(to: &meeting, deleteAfterTranscription: true) }
             if let notesIndex = args.firstIndex(of: "--notes"), args.indices.contains(notesIndex + 1) {
                 meeting.notes = MeetingNote.parse(try String(contentsOfFile: args[notesIndex + 1], encoding: .utf8))
                 print("メモ: \(meeting.notes?.count ?? 0) 件\n\(meeting.notesForPrompt() ?? "")")
@@ -324,6 +328,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             if transcription == .whisper { try await TranscriptionEngineCLI.ensureWhisperModel(settings.whisperModel) }
             let recorder = MeetingRecorder()
             let started = Date()
+            var liveFailed: [MeetingChannel] = []
             for (channel, url) in zip([MeetingChannel.me, .others], files) {
                 let file = try AVAudioFile(forReading: url)
                 let transcriber = ChannelTranscriber(
@@ -338,14 +343,18 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
                     transcriber.append(buffer)
                 }
                 phrases[channel] = await transcriber.finish()
+                // 設計判断: DEC-MTG-142（失敗がなくても空の配列を書く）
+                if transcriber.recognitionFailed { liveFailed.append(channel) }
                 meeting.duration = max(meeting.duration, Double(file.length) / file.processingFormat.sampleRate)
             }
-            var keepAudio = false
+            meeting.transcriptionFailedChannels = liveFailed
             if !transcription.isLive {
                 recorder.onStateChange = { state in if case .processing(let message) = state { print(message) } }
                 let result = await recorder.transcribeRecordedAudio(meeting, engine: transcription, offsets: [.me: 0, .others: 0])
                 phrases = [.me: result.me, .others: result.others]
-                if let error = result.error { print("⚠️ \(error)"); meeting.errorMessage = error; keepAudio = true }
+                if let error = result.error { print("⚠️ \(error)"); meeting.errorMessage = error }
+                // 設計判断: DEC-MTG-142
+                meeting.transcriptionFailedChannels = result.failedChannels
             }
             if ProcessInfo.processInfo.environment["HANASU_DEBUG"] != nil {
                 for p in (phrases[.me] ?? []) + (phrases[.others] ?? []) {
@@ -356,7 +365,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             print(String(format: "[文字起こし %.1fs] 自分 %d 件 / 相手 %d 件", Date().timeIntervalSince(started),
                          phrases[.me]?.count ?? 0, phrases[.others]?.count ?? 0))
             let minutesStarted = Date()
-            let result = await recorder.process(meeting, me: phrases[.me] ?? [], others: phrases[.others] ?? [], keepAudio: keepAudio,
+            let result = await recorder.process(meeting, me: phrases[.me] ?? [], others: phrases[.others] ?? [],
                                                 dictionary: dictionary, applyDictionary: !args.contains("--no-meeting-dictionary"))
             print("辞書の置き換え: \(args.contains("--no-meeting-dictionary") ? "オフ" : "オン") / 置き換えた発言 \(MeetingDictionary.replacedCount(result)) 件")
             print(result.transcriptMarkdown())
@@ -364,6 +373,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
                          Date().timeIntervalSince(minutesStarted)))
             print(result.minutes ?? result.errorMessage ?? "(なし)")
             print("保存先: \(MeetingStore.directory(for: result).path)")
+            print("録音: \(MeetingStore.hasAudio(result) ? "残した" : "消した")（この会議の値: \(result.deleteAudioAfterTranscription == true ? "文字起こしのあとに削除" : "残す")）")
             exit(0)
         } catch {
             FileHandle.standardError.write(Data("error: \(error.localizedDescription) (\(error))\n".utf8))
@@ -432,6 +442,8 @@ MeetingSleepCLI.runSelfTestIfRequested()
 MainActor.assumeIsolated { MinutesSelectionCLI.runIfRequested() }
 // 会議ノートの文書・引用・再生の確認（--test-minutes-citations / --test-minutes-document / --test-meeting-player / --render-meeting-window。MeetingNotesUICLI.swift）
 MainActor.assumeIsolated { MeetingNotesUICLI.runIfRequested() }
+// 会議の録音を消す機能の確認（--test-meeting-audio / --render-meeting-audio-manager。MeetingAudioCLI.swift）
+MainActor.assumeIsolated { MeetingAudioCLI.runIfRequested() }
 // 会議ノートから辞書を作る・会議に辞書を当てるの確認（--test-meeting-dictionary / --render-meeting-dictionary。MeetingDictionaryCLI.swift）
 MainActor.assumeIsolated { MeetingDictionaryCLI.runIfRequested() }
 // 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）

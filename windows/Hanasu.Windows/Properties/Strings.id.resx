@@ -732,12 +732,6 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   <data name="Settings_Storage" xml:space="preserve">
     <value>Penyimpanan</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>Simpan file audio (me.wav / others.wav) setelah diproses</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>Jika nonaktif, audio dihapus setelah transkrip dan notulen dibuat (tetap disimpan jika transkripsi gagal). Formatnya WAV mono 16 kHz, sekitar 115 MB per saluran per jam.</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>Lokasi penyimpanan</value>
   </data>
@@ -1351,5 +1345,126 @@ Buka halaman rilis di browser?</value>
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>Setelah perekaman dihentikan, aturan penggantian di "Kamus &amp; Aturan" diterapkan ke transkrip, dan notulen dibuat dari teks hasil penggantian. Teks hasil pengenalan asli juga disimpan, jadi Anda bisa mengembalikannya dari "Kamus…" di Catatan Rapat.</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>Hapus rekaman setelah ditranskripsi</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>Jika aktif, rekaman rapat (me.wav / others.wav) dihapus setelah transkrip dan notulennya dibuat. Rekaman tetap disimpan jika transkripnya tidak lengkap. Saat merekam, Anda dapat mengubahnya untuk rapat tersebut di Catatan Rapat. Audionya berformat WAV mono 16 kHz, sekitar 115 MB per saluran per jam.</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>Simpan rekaman selama</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>Rekaman yang lebih lama dari jangka waktu ini dihapus otomatis saat aplikasi dimulai dan setelah rapat selesai diproses. Ini juga berlaku untuk rapat yang rekamannya Anda pilih untuk disimpan. Rekaman rapat yang transkripnya tidak lengkap tidak dihapus.</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>{0} di antaranya memiliki transkrip yang tidak lengkap.</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>Rekaman yang lebih lama dari {0} akan dihapus sekarang: {1} rapat ({2}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>{0} rapat dengan transkrip yang tidak lengkap tetap disimpan.</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>Ubah pengaturan dan hapus rekaman tersebut?</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>Pengaturan default untuk rapat yang Anda rekam mulai sekarang. Saat merekam, Anda dapat mengubahnya untuk rapat tersebut di kotak perekaman di kiri atas.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>Hapus rekaman rapat ini setelah ditranskripsi</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>Aktif: rekaman rapat ini dihapus setelah transkrip dan notulen dibuat (tetap disimpan jika transkripnya tidak lengkap). Pengaturan default tidak berubah.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>Nonaktif: rekaman rapat ini tetap disimpan. Pengaturan default tidak berubah.</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>Hapus Rekaman…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>Kelola Rekaman…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>Rapat ini sudah tidak memiliki rekaman.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>Tidak dapat dihapus saat sedang merekam atau memproses.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>Hapus Rekaman — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>Hapus rekaman "{0}" ({1})?</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>Notulen, transkrip, dan catatan tetap disimpan.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>Tidak ada transkrip untuk {0}. Bagian percakapan tersebut tidak akan tersimpan.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>Sebagian transkrip rapat ini tidak ada. Bagian percakapan tersebut tidak akan tersimpan.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>Rapat ini tidak memiliki transkrip. Jika Anda menghapus rekamannya, isi percakapan tidak akan tersimpan sama sekali.</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>Rekaman "{0}" telah dihapus.</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>Beberapa file rekaman tidak dapat dihapus. File yang tersisa dibiarkan apa adanya.
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>File audio dihapus secara permanen (tidak dipindahkan ke Keranjang Sampah). Tindakan ini tidak dapat dibatalkan.</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>Kelola Rekaman</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>Rekaman tersisa: {0} rapat, {1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>Tidak ada rekaman yang tersisa.</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>Tidak ada transkrip</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>Sebagian transkrip tidak ada</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>Rapat yang masih memiliki rekaman</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>Hapus Rekaman yang Dipilih…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>Hapus Rekaman yang Lebih Lama dari {0} Hari…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>Hapus Semua Rekaman…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>Jika lokasi penyimpanan Anda disinkronkan dengan OneDrive, iCloud Drive, atau layanan serupa, rekaman yang dihapus mungkin masih ada di item terhapus layanan sinkronisasi tersebut untuk sementara waktu.</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>Hapus rekaman {0} rapat ({1})?</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>{0} di antaranya memiliki transkrip yang tidak lengkap. Bagian percakapan tersebut tidak akan tersimpan.</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>{0} rapat dengan transkrip yang tidak lengkap ({1}) tetap disimpan. Anda dapat memilihnya untuk menghapusnya.</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>Rekaman {0} rapat telah dihapus.</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>Rekaman {0} rapat tidak dapat dihapus seluruhnya. File yang tersisa dibiarkan apa adanya.</value>
   </data>
 </root>
