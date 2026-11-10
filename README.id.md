@@ -67,8 +67,8 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 | **Notulen AI** | Dibuat oleh AI yang Anda pilih untuk rapat. Pilih templat: otomatis, rapat mingguan, 1-on-1, panggilan penjualan, curah gagasan, atau kustom. Butir tindakan dilengkapi penanggung jawab dan tenggat waktu. |
 | **Cek sumber & dengarkan lagi** *(Mac)* | Notulen terbuka dalam satu halaman: ringkasan dan item tindakan di bagian atas, dengan transkrip di sampingnya. Klik tanda waktu di akhir sebuah poin untuk melompat ke ucapan asalnya. Putar rekaman dari ucapan mana pun, dan bisukan suara Anda atau suara mereka jika panggilan bergema. |
 | **Catatan langsung & sorotan** | Ketik catatan bertanda waktu selama panggilan, atau tekan <kbd>⌃⌥⌘ H</kbd> untuk menandai "ini penting" (dapat dibatalkan dalam 10 detik). Notulen memprioritaskan bagian-bagian tersebut, dan setelahnya Anda dapat membaca percakapan di sekitar setiap tanda. |
-| **Teks terjemahan mengambang** *(Mac)* | Tampilkan transkrip langsung sebagai teks di atas aplikasi rapat Anda. |
-| **Obrolan AI selama rapat** *(Mac)* | Saat merekam, tanyakan kepada AI tentang percakapan sejauh ini (<kbd>⌘J</kbd>). Sekali klik untuk "ringkasan sejauh ini" atau "keputusan & tugas". Ajukan pertanyaan lanjutan, dan klik tanda waktu dalam jawaban untuk melompat ke bagian transkrip tersebut. Ganti AI dan model untuk percakapan itu dari menu di bawah kotak input. |
+| **Teks terjemahan mengambang** *(Mac)* | Tampilkan transkrip langsung sebagai teks di atas aplikasi rapat Anda. Jika Anda membiarkannya menyala, teks ini akan muncul lagi di rapat berikutnya. |
+| **Obrolan AI selama rapat** *(Mac)* | Saat merekam, tanyakan kepada AI tentang percakapan sejauh ini (<kbd>⌘J</kbd>). Sekali klik untuk "ringkasan sejauh ini" atau "keputusan & tugas". Ajukan pertanyaan lanjutan, dan klik tanda waktu dalam jawaban untuk melompat ke bagian transkrip tersebut. Tiba-tiba ditanya saat sedang mengerjakan hal lain? Klik **Saya ditanya apa?** pada teks (atau tekan <kbd>⌃⌥⌘ A</kbd>) tanpa meninggalkan aplikasi rapat: panel mengambang menampilkan apa yang baru saja dikatakan peserta lain, lalu ringkasan AI tentang pertanyaannya dan bagaimana pembahasan sampai ke sana. Ganti AI dan model untuk percakapan itu dari menu di bawah kotak input. |
 | **Deteksi rapat** | Saat aplikasi rapat mulai memakai mikrofon, Hanasu bertanya apakah Anda ingin merekam. Hanasu tidak pernah mulai merekam dengan sendirinya. |
 | **Cari & Tanya** | Cari teks di semua rapat, atau tanyakan "Apa yang kita putuskan di rapat mingguan lalu?". Jawabannya mencantumkan rapat yang menjadi sumbernya. |
 | **Ekspor** | Salin sebagai Markdown atau sebagai ringkasan yang siap untuk Slack, simpan sebagai `.md` / `.txt`, atau kirim butir tindakan ke Pengingat. |
@@ -174,6 +174,7 @@ Di Mac, Anda dapat menampilkan ikon Hanasu di bilah menu, di Dock, atau di kedua
 | Batalkan perekaman | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Perekaman rapat (mulai / berhenti) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Tandai "ini penting" dalam rapat | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| "Saya ditanya apa?" dalam rapat | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Anda dapat mengubah semua pintasan di Pengaturan. Panduan pengguna lengkap (dalam bahasa Jepang) ada di [docs/guide.md](docs/guide.md).
 

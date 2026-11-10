@@ -6,14 +6,17 @@ import SwiftUI
 //   Hanasu --test-meeting-chat
 //     プロンプトの組み立て（記録中の時点・確定前の発言・メモ・それまでの会話・長さの上限）・答えの時刻のリンク・
 //     メモへの変換を、決めた例で確かめる（AI は呼ばない）。失敗があれば終了コード 1。
-//   Hanasu --chat-meeting <会議のフォルダ> --ask <質問> [--ask <続けての質問> ...] [--at <mm:ss>] [--show-prompt]
-//          [--ai gemini|claude|local|apple] [--model <id>] [--show-target]
-//     保存した会議について、質問を順に送って会話する（2 つめからは、前のやりとりを踏まえて答える）。
+//   Hanasu --chat-meeting <会議のフォルダ> --ask <質問> [--quick <よく使う質問の id>] [--ask ...] [--at <mm:ss>] [--live]
+//          [--pending <相手の途中の発言>] [--show-prompt] [--ai gemini|claude|local|apple] [--model <id>] [--show-target]
+//     保存した会議について、質問を書いた順に送って会話する（2 つめからは、前のやりとりを踏まえて答える）。
+//     --quick はよく使う質問の文面で聞く（asked は「何を聞かれた？」と同じく、直近 10 分だけを会話なしで渡す）。
 //     --at を付けると、その時刻までの文字起こしとメモだけを「記録中」として渡す（記録中のチャットの再現）。
+//     --live を付けると、記録中と同じ形にする（話者はチャンネルから「自分／相手」、発言ごとに --at で切る）。
+//     --pending は、相手の確定前の途中結果として --at の時点に足す。かかった秒数も出す。
 //   Hanasu --render-meeting-chat <出力フォルダ>
 //     架空の会議で、記録中の右側の AI チャット（会話の前・会話のあと）と、記録のあとの「AI チャット」タブを PNG にする
 // 認証は --ask-meetings と同じ順に探す（TextAIClient.cli）。
-// 確かめ方: REQ-MTG-040, REQ-MTG-041
+// 確かめ方: REQ-MTG-040, REQ-MTG-041, REQ-MTG-047
 enum MeetingChatCLI {
     @MainActor
     static func runIfRequested(_ args: [String] = CommandLine.arguments) {
@@ -22,9 +25,14 @@ enum MeetingChatCLI {
         }
 
         if args.contains("--test-meeting-chat") {
-            let results = MeetingChat.selfTest() + MeetingChatRouteTest.run()
-            results.forEach { print($0) }
-            exit(results.allSatisfy { $0.hasPrefix("OK") } ? 0 : 1)
+            Task { @MainActor in
+                // 確かめ方: REQ-MTG-047, REQ-MTG-048, REQ-MTG-049
+                let results = MeetingChat.selfTest() + MeetingChat.askedSelfTest() + (await MeetingAskedQuestion.selfTest())
+                    + MeetingChatRouteTest.run()
+                results.forEach { print($0) }
+                exit(results.allSatisfy { $0.hasPrefix("OK") } ? 0 : 1)
+            }
+            RunLoop.main.run()
         }
 
         if let dir = value(after: "--render-meeting-chat") {
@@ -37,8 +45,19 @@ enum MeetingChatCLI {
         }
 
         guard let folder = value(after: "--chat-meeting") else { return }
-        let questions = args.indices.filter { args[$0] == "--ask" && args.indices.contains($0 + 1) }.map { args[$0 + 1] }
-        guard !questions.isEmpty else { fail("--ask <質問> を 1 つ以上付けてください") }
+        // --ask と --quick を書いた順に送る
+        var questions: [MeetingChat.QuickPrompt] = []
+        for index in args.indices where args.indices.contains(index + 1) {
+            if args[index] == "--ask" {
+                questions.append(MeetingChat.QuickPrompt(id: "", label: args[index + 1], symbol: "", question: args[index + 1]))
+            } else if args[index] == "--quick" {
+                guard let quick = MeetingChat.quickPrompts.first(where: { $0.id == args[index + 1] }) else {
+                    fail("--quick は \(MeetingChat.quickPrompts.map(\.id).joined(separator: " / ")) のどれかです: \(args[index + 1])")
+                }
+                questions.append(quick)
+            }
+        }
+        guard !questions.isEmpty else { fail("--ask <質問> か --quick <id> を 1 つ以上付けてください") }
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: folder).appendingPathComponent("meeting.json")),
@@ -47,7 +66,24 @@ enum MeetingChatCLI {
         }
 
         var material = MeetingChat.material(for: meeting)
-        if let atText = value(after: "--at") {
+        var notesForAsked = meeting.allNotes
+        if args.contains("--live") {
+            // 記録中と同じ形: 話者はチャンネルから「自分／相手」、発言ごとに切る、オフレコの発言は渡さない
+            let at = value(after: "--at").flatMap(MeetingNote.parseClock) ?? meeting.duration
+            notesForAsked = meeting.allNotes.filter { ($0.time ?? .infinity) <= at }
+            var cut = meeting
+            cut.notes = notesForAsked
+            material = MeetingChat.Material(
+                title: meeting.title, startedAt: meeting.startedAt, live: true, elapsed: at,
+                lines: meeting.utterances.filter { $0.start <= at && !meeting.isOffRecord(at: $0.start) }
+                    .sorted { $0.start < $1.start }
+                    .map { MeetingChat.Line(time: $0.start, speaker: Meeting.promptLabel(for: $0.speaker == "me" ? "me" : "others"),
+                                            text: $0.text) },
+                notes: cut.notesForPrompt())
+            if let pending = value(after: "--pending") {
+                material.pending = [MeetingChat.Line(time: at, speaker: Meeting.promptLabel(for: "others"), text: pending)]
+            }
+        } else if let atText = value(after: "--at") {
             guard let at = MeetingNote.parseClock(atText) else { fail("--at は mm:ss か h:mm:ss で書いてください: \(atText)") }
             // その時刻まで記録した、記録中の会議として渡す
             var cut = meeting
@@ -71,17 +107,23 @@ enum MeetingChatCLI {
                 print("[会議] \(meeting.title)・発言 \(material.lines.count) 件"
                       + (material.live ? "（\(Meeting.clock(material.elapsed)) まで。記録中として渡す）" : ""))
                 var history: [MeetingChat.Message] = []
-                for question in questions {
+                for quick in questions {
                     let started = Date()
-                    let result = try await MeetingChat.reply(question: question, material: material, history: history,
-                                                             client: client, model: model)
+                    let question = quick.question
+                    // 要件: REQ-MTG-047（「何を聞かれた？」は直近 10 分だけを、会話なしで渡す。DEC-MTG-095）
+                    let result = quick.isAsked
+                        ? try await MeetingChat.reply(question: question,
+                                                      material: MeetingChat.askedMaterial(from: material, notes: notesForAsked),
+                                                      history: [], client: client, model: model)
+                        : try await MeetingChat.reply(question: question, material: material, history: history,
+                                                      client: client, model: model)
                     if args.contains("--show-prompt") { print("\n----- プロンプト -----\n\(result.prompt.text)\n---------------------") }
-                    print("\n> \(question)")
+                    print("\n> \(quick.isAsked ? quick.label : question)")
                     print(String(format: "[答え %@ %.1fs・プロンプト %d 文字・それまでの会話 %d 件]", model,
                                  Date().timeIntervalSince(started), result.prompt.text.count,
                                  MeetingChat.answeredTurns(history).count))
                     print(result.text)
-                    history.append(MeetingChat.Message(role: .user, text: question))
+                    history.append(MeetingChat.Message(role: .user, text: question, label: quick.isAsked ? quick.label : nil))
                     history.append(MeetingChat.Message(role: .assistant, text: result.text,
                                                        coveredUntil: result.prompt.coveredUntil, lineCount: result.prompt.lineCount))
                 }
@@ -203,6 +245,36 @@ enum MeetingChatPreview {
 extension MeetingChat {
     // MARK: - 確認用
 
+    // 確かめ方: REQ-MTG-047
+    /// 「何を聞かれた？」で渡す記録の切り方・相手の直近の発言・よく使う質問の出し分けを確かめる（AI は呼ばない）
+    static func askedSelfTest() -> [String] {
+        var results: [String] = []
+        func check(_ name: String, _ ok: Bool) { results.append("\(ok ? "OK" : "NG") \(name)") }
+        let me = Meeting.promptLabel(for: "me"), others = Meeting.promptLabel(for: "others")
+        // 0 秒から 30 秒ごとに 40 発言（〜19:30）。今は 20:00
+        let lines = (0..<40).map { Line(time: Double($0 * 30), speaker: $0 % 2 == 0 ? me : others, text: "発言\($0)") }
+        let material = Material(title: "定例", startedAt: Date(timeIntervalSince1970: 0), live: true, elapsed: 1_200,
+                                lines: lines, pending: [Line(time: 1_200, speaker: others, text: "どう思いますか")])
+        let notes = [MeetingNote(kind: .note, time: 60, text: "古いメモ"), MeetingNote(kind: .highlight, time: 900, text: "新しい印"),
+                     MeetingNote(kind: .note, time: nil, text: "時刻なし")]
+        let asked = askedMaterial(from: material, notes: notes)
+        check("直近 10 分の発言だけを渡す", asked.lines.first?.time == 600 && asked.lines.count == 20 && asked.omittedBeforeWindow == 20)
+        check("確定前の途中結果も渡す", asked.pending.map(\.text) == ["どう思いますか"])
+        check("直近 10 分のメモと印だけを渡す", asked.notes?.contains("新しい印") == true && asked.notes?.contains("古いメモ") == false
+              && asked.notes?.contains("時刻なし") == false)
+        let prompt = MeetingChat.prompt(question: askedPrompt.question, material: asked, history: [])
+        check("省いた前の発言の数を書く", prompt.text.contains(Prompts.text("chat.transcript.recentOnly", ["minutes": "10", "count": "20"])))
+        check("<pending_transcript> に質問が入る", prompt.text.contains("<pending_transcript>\n[20:00] \(others): どう思いますか"))
+        let recent = recentOthers(in: material)
+        check("相手の直近の発言 3 つ（確定前を最後に）", recent.map(\.text) == ["発言37", "発言39", "どう思いますか"])
+        check("相手の発言がなければ空", recentOthers(in: Material(title: "", startedAt: Date(), live: true, elapsed: 0,
+                                                                 lines: [Line(time: 0, speaker: me, text: "a")])).isEmpty)
+        check("「何を聞かれた？」は記録中だけ先頭に出す", quickPrompts(live: true).first?.isAsked == true
+              && !quickPrompts(live: false).contains { $0.isAsked } && quickPrompts(live: false).count == quickPrompts.count - 1)
+        check("「何を聞かれた？」の文面がある", !askedPrompt.question.isEmpty && askedPrompt.question != "chat.quick.asked")
+        return results
+    }
+
     // 確かめ方: REQ-MTG-040, REQ-MTG-041
     /// プロンプトの組み立て・時刻のリンク・メモへの変換を確かめる（AI は呼ばない）。結果の行を返す
     static func selfTest() -> [String] {
@@ -305,6 +377,88 @@ enum MeetingChatRouteTest {
         check("ローカルは 4 つ、Claude は 3 つ", sections[0].choices.count == LocalLLMModel.allCases.count && sections[3].choices.count == 3)
         check("Gemini は候補と、設定にある一覧にないモデル",
               sections[2].choices.map(\.model) == AppSettings.suggestedModels + ["gemini-custom-x"])
+        return results
+    }
+}
+
+// MARK: - 「何を聞かれた？」の確認用
+
+extension MeetingAskedQuestion {
+    // 確かめ方: REQ-MTG-047
+    /// 使えるかの決まり・会話への入れ方・待たずに聞くこと・やめた／会話を消したときを確かめる（AI は呼ばない）。結果の行を返す
+    static func selfTest() async -> [String] {
+        var results: [String] = []
+        func check(_ name: String, _ ok: Bool) { results.append("\(ok ? "OK" : "NG") \(name)") }
+
+        check("記録中でなければ使えない", unavailableReason(recording: false, batchEngineName: nil) != nil)
+        check("Whisper / Gemini では使えない", unavailableReason(recording: true, batchEngineName: "Whisper")?.contains("Whisper") == true)
+        check("Mac 標準で記録中なら使える", unavailableReason(recording: true, batchEngineName: nil) == nil)
+
+        let asked = MeetingAskedQuestion()
+        let material = MeetingChat.Material(
+            title: "定例", startedAt: Date(timeIntervalSince1970: 0), live: true, elapsed: 700,
+            lines: [MeetingChat.Line(time: 650, speaker: Meeting.promptLabel(for: "others"), text: "どう思いますか？")])
+
+        // ウインドウのチャットで答えを待っている質問の前に入る
+        let model = MeetingChatModel(meetingID: "self-test")
+        model.setMessagesForPreview([MeetingChat.Message(role: .user, text: "要約して")])
+        var sentPrompt = ""
+        var sentChoice: TextAIChoice?
+        model.override = TextAIChoice(provider: .claude, model: "claude-opus-5-5")
+        asked.reply = { prompt, choice in
+            sentPrompt = prompt.text
+            sentChoice = choice
+            try await Task.sleep(for: .milliseconds(30))
+            return "聞かれたこと: 意見 [10:50]"
+        }
+        asked.start(material: material, meetingID: "self-test", origin: .chat, notice: nil, model: model)
+        check("押してすぐは作っている途中", asked.isRunning(for: "self-test"))
+        try? await Task.sleep(for: .milliseconds(200))
+        check("答えが出る", asked.request?.phase == .answered("聞かれたこと: 意見 [10:50]"))
+        // 確かめ方: REQ-MTG-048
+        check("その会議の AI チャットと同じ送り先に聞く", sentChoice == model.override)
+        check("会話を渡さない", !sentPrompt.contains("<conversation>")
+              && sentPrompt.contains(PromptText.neutralizeDelimiters(Prompts.text("chat.quick.asked"))))
+        let texts = model.messages.map { $0.label ?? $0.text }
+        check("待っている質問の前に、組で入る", texts == ["何を聞かれた？", "聞かれたこと: 意見 [10:50]", "要約して"])
+        check("会話の中の文面は AI に渡す文", model.messages.first?.text == Prompts.text("chat.quick.asked"))
+
+        // 会話を消したら入れない
+        let cleared = MeetingChatModel(meetingID: "self-test-2")
+        asked.start(material: material, meetingID: "self-test-2", origin: .chat, notice: nil, model: cleared)
+        cleared.clear()
+        try? await Task.sleep(for: .milliseconds(200))
+        check("押したあとに会話を消したら入れない", cleared.messages.isEmpty)
+
+        // やめたら入れない
+        let cancelled = MeetingChatModel(meetingID: "self-test-3")
+        asked.start(material: material, meetingID: "self-test-3", origin: .panel, notice: nil, model: cancelled)
+        asked.cancel()
+        try? await Task.sleep(for: .milliseconds(200))
+        check("やめたら入れない", cancelled.messages.isEmpty && asked.request?.phase != .running)
+        MeetingAskedQuestionPanel.shared.close()
+
+        // 失敗したら入れない
+        let failed = MeetingChatModel(meetingID: "self-test-4")
+        asked.reply = { _, _ in throw NSError(domain: "test", code: 1) }
+        asked.start(material: material, meetingID: "self-test-4", origin: .chat, notice: nil, model: failed)
+        try? await Task.sleep(for: .milliseconds(100))
+        check("失敗したら入れず、チャットに理由を出す", failed.messages.isEmpty
+              && asked.failure(for: "self-test-4", generation: failed.generation) != nil)
+        failed.clear()
+        check("「新しい会話」のあとは失敗の理由を出さない", asked.failure(for: "self-test-4", generation: failed.generation) == nil)
+
+        // チャットから押した質問は、パネルを閉じても続ける
+        let kept = MeetingChatModel(meetingID: "self-test-5")
+        asked.reply = { _, _ in
+            try await Task.sleep(for: .milliseconds(30))
+            return "答え"
+        }
+        asked.start(material: material, meetingID: "self-test-5", origin: .chat, notice: "知らせ", model: kept)
+        check("チャットから押したときの知らせを出す", asked.notice(for: "self-test-5", generation: kept.generation) == "知らせ")
+        asked.dismiss()
+        try? await Task.sleep(for: .milliseconds(200))
+        check("パネルを閉じても、チャットから押した質問は続く", kept.messages.count == 2)
         return results
     }
 }

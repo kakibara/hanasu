@@ -28,6 +28,9 @@ final class MeetingChatModel: ObservableObject {
     // 設計判断: DEC-COM-172
     /// ローカルの AI で、ほかの処理が終わるのを待っている
     @Published private(set) var waitingForOtherModel = false
+    // 設計判断: DEC-MTG-098
+    /// 会話の世代。「新しい会話」で増やす（押したあとに会話を消したら、「何を聞かれた？」の答えを入れないため）
+    private(set) var generation = 0
 
     private var task: Task<Void, Never>?
     /// 送っている質問（取り消し・やり直しのため）
@@ -111,6 +114,7 @@ final class MeetingChatModel: ObservableObject {
     /// 会話を消して、新しく始める
     func clear() {
         task?.cancel()
+        generation += 1
         messages = []
         error = nil
         savedToNotes = []
@@ -118,6 +122,19 @@ final class MeetingChatModel: ObservableObject {
     }
 
     func markSaved(_ id: UUID) { savedToNotes.insert(id) }
+
+    // 要件: REQ-MTG-047
+    // 設計判断: DEC-MTG-098
+    /// 答えの付いた質問と答えの組を足す（「何を聞かれた？」はウインドウのチャットを待たずに聞き、答えが出てから入れる）。
+    /// 答えを待っている（か失敗した）質問があれば、その前に入れる。generation が今と違えば（会話を消したあとなら）入れない
+    @discardableResult
+    func insertAnsweredTurn(question: MeetingChat.Message, answer: MeetingChat.Message, generation: Int) -> Bool {
+        guard generation == self.generation else { return false }
+        let unanswered = messages.last?.role == .user
+        let index = unanswered ? messages.count - 1 : messages.count
+        messages.insert(contentsOf: [question, answer], at: index)
+        return true
+    }
 
     /// 確認用: AI を呼ばずに会話を入れる（--render-meeting-chat）
     func setMessagesForPreview(_ messages: [MeetingChat.Message], draft: String = "") {
@@ -178,6 +195,10 @@ struct MeetingChatView: View {
     var onJump: (Double) -> Void
     /// 答えをメモに残す（引数は答えと、質問した時点）。nil ならボタンを出さない
     var onSaveNote: ((MeetingChat.Message) -> Void)?
+    // 要件: REQ-MTG-047
+    /// 「何を聞かれた？」を押したとき（記録中だけ。MeetingAskedQuestion に渡す）。nil なら押せない
+    var onAsked: (() -> Void)?
+    @ObservedObject private var asked = MeetingAskedQuestion.shared
 
     @ObservedObject private var settings = AppSettings.shared
     @FocusState private var inputFocused: Bool
@@ -205,6 +226,28 @@ struct MeetingChatView: View {
                                 onJump: onJump,
                                 onSaveNote: saveAction(for: message))
                                 .id(message.id)
+                        }
+                        // 要件: REQ-MTG-047
+                        if asked.isRunning(for: model.meetingID) {
+                            HStack(spacing: 8) {
+                                ProgressView().controlSize(.small)
+                                Text(tr("直前に聞かれたことを探しています…"))
+                                    .font(.callout).foregroundStyle(.secondary)
+                                Spacer()
+                                Button(tr("止める")) { asked.cancel() }
+                                    .controlSize(.small)
+                            }
+                        }
+                        if live, let notice = asked.notice(for: model.meetingID, generation: model.generation) {
+                            Label(notice, systemImage: "exclamationmark.triangle.fill")
+                                .font(.callout)
+                                .foregroundStyle(.orange)
+                        }
+                        if live, let failure = asked.failure(for: model.meetingID, generation: model.generation) {
+                            Label(failure, systemImage: "exclamationmark.triangle.fill")
+                                .font(.callout)
+                                .foregroundStyle(.orange)
+                                .textSelection(.enabled)
                         }
                         if model.running {
                             HStack(spacing: 8) {
@@ -276,14 +319,15 @@ struct MeetingChatView: View {
                 // 設計判断: DEC-MTG-048（後ろ側のパネルは幅が変わるので、fixedSize にせず行数で抑える）
                 .lineLimit(4)
             VStack(alignment: .leading, spacing: 6) {
-                ForEach(MeetingChat.quickPrompts) { prompt in
-                    Button { send(prompt.question) } label: {
+                ForEach(MeetingChat.quickPrompts(live: live)) { prompt in
+                    Button { tap(prompt) } label: {
                         Label(prompt.label, systemImage: prompt.symbol)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(MeetingChatSuggestionButtonStyle())
-                    .disabled(model.running)
+                    .disabled(!enabled(prompt))
+                    .help(help(for: prompt))
                 }
             }
             .padding(.top, 2)
@@ -294,14 +338,14 @@ struct MeetingChatView: View {
     private var quickPromptChips: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
-                ForEach(MeetingChat.quickPrompts) { prompt in
-                    Button { send(prompt.question) } label: {
+                ForEach(MeetingChat.quickPrompts(live: live)) { prompt in
+                    Button { tap(prompt) } label: {
                         Label(prompt.label, systemImage: prompt.symbol)
                             .font(.caption)
                     }
                     .buttonStyle(MeetingChatChipButtonStyle())
-                    .disabled(model.running)
-                    .help(prompt.question)
+                    .disabled(!enabled(prompt))
+                    .help(help(for: prompt))
                 }
             }
             .padding(.horizontal, 10)
@@ -375,6 +419,22 @@ struct MeetingChatView: View {
         !model.running && !model.draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
+    // 要件: REQ-MTG-047
+    /// よく使う質問を押したとき。「何を聞かれた？」はウインドウのチャットを待たずに聞く（DEC-MTG-098）
+    private func tap(_ prompt: MeetingChat.QuickPrompt) {
+        if prompt.isAsked { onAsked?() } else { send(prompt.question) }
+    }
+
+    private func enabled(_ prompt: MeetingChat.QuickPrompt) -> Bool {
+        prompt.isAsked ? onAsked != nil && !asked.isRunning(for: model.meetingID) : !model.running
+    }
+
+    private func help(for prompt: MeetingChat.QuickPrompt) -> String {
+        guard prompt.isAsked else { return prompt.question }
+        if let batchEngineName { return MeetingAskedQuestion.unavailableMessage(engine: batchEngineName) }
+        return MeetingAskedQuestion.helpText
+    }
+
     private func send(_ text: String) {
         guard let current = material() else { return }
         model.send(text, material: current)
@@ -412,8 +472,9 @@ private struct MeetingChatMessageRow: View {
         case .user:
             HStack {
                 Spacer(minLength: 32)
-                Text(message.text)
+                Text(message.label ?? message.text)
                     .textSelection(.enabled)
+                    .help(message.label == nil ? "" : message.text)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 7)
                     .background(RoundedRectangle(cornerRadius: 12).fill(Color.accentColor.opacity(0.16)))
@@ -562,7 +623,10 @@ struct LiveSidePanel: View {
                         live: true,
                         batchEngineName: recorder.batchEngine?.shortName,
                         onJump: onJump,
-                        onSaveNote: saveNote)
+                        onSaveNote: saveNote,
+                        // 要件: REQ-MTG-047
+                        onAsked: recorder.state == .recording && recorder.batchEngine == nil
+                            ? { [recorder] in MeetingAskedQuestion.shared.ask(recorder: recorder, origin: .chat) } : nil)
                 }
             }
         }

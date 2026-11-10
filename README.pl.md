@@ -67,8 +67,8 @@ Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Kod źródłowy Ha
 | **Protokoły AI** | Tworzone przez AI wybrane dla spotkań. Wybierz szablon: automatyczny, cotygodniowe spotkanie, 1-on-1, rozmowa sprzedażowa, burza mózgów lub własny. Zadania do wykonania zawierają osobę odpowiedzialną i termin. |
 | **Sprawdzanie źródła i ponowne odsłuchanie** *(Mac)* | Protokół otwiera się jako jedna strona: najpierw podsumowanie i zadania, obok transkrypcja. Kliknij znacznik czasu na końcu punktu, aby przejść do wypowiedzi, z której pochodzi. Odtwórz nagranie od dowolnej wypowiedzi, a jeśli w rozmowie było echo, wycisz swoją stronę albo drugą. |
 | **Notatki na żywo i wyróżnienia** | Pisz notatki ze znacznikiem czasu w trakcie rozmowy albo naciśnij <kbd>⌃⌥⌘ H</kbd>, aby oznaczyć „to ważne” (możesz to cofnąć przez 10 sekund). Protokół traktuje te fragmenty priorytetowo, a później możesz przeczytać rozmowę wokół każdego oznaczenia. |
-| **Pływające napisy** *(Mac)* | Wyświetlaj transkrypcję na żywo jako napisy nad aplikacją do spotkań. |
-| **Czat z AI w trakcie spotkania** *(Mac)* | Podczas nagrywania pytaj AI o dotychczasową rozmowę (<kbd>⌘J</kbd>). Jednym kliknięciem: „podsumuj dotąd” albo „decyzje i zadania”. Zadawaj pytania uzupełniające i kliknij znacznik czasu w odpowiedzi, aby przejść do tego miejsca w transkrypcji. W menu pod polem wpisywania przełączysz AI i model dla tej rozmowy. |
+| **Pływające napisy** *(Mac)* | Wyświetlaj transkrypcję na żywo jako napisy nad aplikacją do spotkań. Jeśli ich nie wyłączysz, pojawią się też na następnym spotkaniu. |
+| **Czat z AI w trakcie spotkania** *(Mac)* | Podczas nagrywania pytaj AI o dotychczasową rozmowę (<kbd>⌘J</kbd>). Jednym kliknięciem: „podsumuj dotąd” albo „decyzje i zadania”. Zadawaj pytania uzupełniające i kliknij znacznik czasu w odpowiedzi, aby przejść do tego miejsca w transkrypcji. Ktoś nagle zadał Ci pytanie, gdy zajmowałeś się czymś innym? Kliknij **O co mnie zapytano?** na napisach (lub naciśnij <kbd>⌃⌥⌘ A</kbd>), nie wychodząc z aplikacji do spotkań: w pływającym panelu zobaczysz, co przed chwilą powiedzieli inni, a potem podsumowanie AI – o co padło pytanie i jak rozmowa do niego doszła. W menu pod polem wpisywania przełączysz AI i model dla tej rozmowy. |
 | **Wykrywanie spotkań** | Gdy aplikacja do spotkań zaczyna używać mikrofonu, Hanasu pyta, czy nagrywać. Nigdy nie zaczyna nagrywać samo. |
 | **Wyszukiwanie i pytania** | Przeszukuj tekst wszystkich spotkań albo zapytaj: „Co ustaliliśmy na zeszłotygodniowym spotkaniu?”. Odpowiedź wskazuje spotkania, z których korzystała. |
 | **Eksport** | Kopiuj jako Markdown lub jako podsumowanie gotowe do Slacka, zapisuj jako `.md` / `.txt` albo wysyłaj zadania do Przypomnień. |
@@ -174,6 +174,7 @@ Na Macu ikonę Hanasu możesz wyświetlać na pasku menu, w Docku lub w obu miej
 | Anulowanie nagrania | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Nagrywanie spotkania (start / stop) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Oznaczenie „to ważne” podczas spotkania | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| „O co mnie zapytano?” podczas spotkania | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Każdy skrót możesz zmienić w Ustawieniach. Pełny podręcznik użytkownika (po japońsku) to [docs/guide.md](docs/guide.md).
 

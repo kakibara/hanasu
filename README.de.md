@@ -67,8 +67,8 @@ Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Der Quellcod
 | **KI-Protokolle** | Erstellt von der KI, die du für Besprechungen wählst. Wähle eine Vorlage: automatisch, wöchentliches Meeting, 1-on-1, Verkaufsgespräch, Brainstorming oder benutzerdefiniert. Aufgaben enthalten eine verantwortliche Person und ein Fälligkeitsdatum. |
 | **Quelle prüfen & nachhören** *(Mac)* | Das Protokoll öffnet sich als eine Seite: oben Zusammenfassung und Aufgaben, daneben das Transkript. Klicke auf den Zeitstempel hinter einem Punkt, um zu der Äußerung zu springen, auf der er beruht. Starte die Wiedergabe bei jeder beliebigen Äußerung und schalte deine Seite oder die der anderen stumm, wenn es im Call ein Echo gab. |
 | **Live-Notizen & Markierungen** | Tippe während des Calls Notizen mit Zeitstempel oder drücke <kbd>⌃⌥⌘ H</kbd>, um „das ist wichtig“ zu markieren (10 Sekunden lang rückgängig zu machen). Das Protokoll berücksichtigt diese Stellen bevorzugt, und hinterher kannst du das Gespräch rund um jede Markierung nachlesen. |
-| **Schwebende Untertitel** *(Mac)* | Zeige das Live-Transkript als Untertitel über deiner Besprechungs-App an. |
-| **KI-Chat während der Besprechung** *(Mac)* | Frag die KI während der Aufnahme zum bisherigen Gespräch (<kbd>⌘J</kbd>). „Bisher zusammenfassen“ oder „Entscheidungen & To-dos“ mit einem Klick. Stell Folgefragen und klicke auf einen Zeitstempel in einer Antwort, um zu dieser Stelle im Transkript zu springen. KI und Modell für dieses Gespräch wechselst du über das Menü unter dem Eingabefeld. |
+| **Schwebende Untertitel** *(Mac)* | Zeige das Live-Transkript als Untertitel über deiner Besprechungs-App an. Wenn du sie eingeschaltet lässt, erscheinen sie auch in der nächsten Besprechung wieder. |
+| **KI-Chat während der Besprechung** *(Mac)* | Frag die KI während der Aufnahme zum bisherigen Gespräch (<kbd>⌘J</kbd>). „Bisher zusammenfassen“ oder „Entscheidungen & To-dos“ mit einem Klick. Stell Folgefragen und klicke auf einen Zeitstempel in einer Antwort, um zu dieser Stelle im Transkript zu springen. Mitten in einer anderen Aufgabe plötzlich etwas gefragt? Drücke in den Untertiteln auf **Was wurde ich gefragt?** (oder <kbd>⌃⌥⌘ A</kbd>), ohne deine Besprechungs-App zu verlassen: Ein schwebendes Fenster zeigt, was die anderen gerade gesagt haben, und danach die Zusammenfassung der KI – worum es in der Frage geht und wie das Gespräch dorthin gekommen ist. KI und Modell für dieses Gespräch wechselst du über das Menü unter dem Eingabefeld. |
 | **Besprechungserkennung** | Sobald eine Besprechungs-App das Mikrofon nutzt, fragt Hanasu, ob aufgenommen werden soll. Es startet nie von selbst eine Aufnahme. |
 | **Suchen & Fragen** | Durchsuche den Text aller Besprechungen oder frage „Was haben wir im Meeting letzte Woche beschlossen?“. Die Antwort nennt die Besprechungen, auf die sie sich stützt. |
 | **Export** | Als Markdown oder als Slack-fertige Zusammenfassung kopieren, als `.md` / `.txt` speichern oder Aufgaben an Erinnerungen senden. |
@@ -174,6 +174,7 @@ Auf dem Mac kannst du das Hanasu-Symbol in der Menüleiste, im Dock oder an beid
 | Aufnahme abbrechen | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Besprechungsaufnahme (Start / Stopp) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | „Das ist wichtig“ in einer Besprechung markieren | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| „Was wurde ich gefragt?“ in einer Besprechung | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Alle Tastenkürzel lassen sich in den Einstellungen ändern. Das vollständige Benutzerhandbuch (auf Japanisch) findest du unter [docs/guide.md](docs/guide.md).
 

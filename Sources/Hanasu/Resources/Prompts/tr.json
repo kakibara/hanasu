@@ -574,6 +574,7 @@
     "- Türkçe yanıt ver. Başlık, madde işaretleri ve kalın yazı (Markdown) kullanabilirsin ama tablo kullanma."
   ],
   "chat.transcript.omitted": "(Uzunluk sınırı nedeniyle ilk ${count} konuşma çıkarıldı.)",
+  "chat.transcript.recentOnly": "(Son ${minutes} dakikadan önceki ${count} konuşma çıkarıldı.)",
   "chat.transcript.afterRecording": "(Bu toplantının dökümü kayıt durduktan sonra ${engine} ile yapılır; bu yüzden kayıt sırasındaki konuşmaların kaydı yoktur.)",
   "chat.transcript.empty": "(Henüz kimse bir şey söylemedi.)",
   "chat.status.live": "Kayıt sürüyor (kayıt başlayalı ${elapsed} oldu)",
@@ -584,5 +585,6 @@
   "chat.quick.recent": "Son 5 dakika kadarında neler konuşulduğunu kısaca özetle.",
   "chat.quick.decisions": "Şu ana kadar neye karar verildiğini ve kimin ne yapacağını (görevler, yapılacaklar) madde madde yaz. Henüz karara bağlanmamış konuları ayrıca listele.",
   "chat.quick.explain": "Son konuyu, arka planı bilmeyen birinin de anlayabileceği şekilde açıkla. Teknik terimler varsa kısaca açıkla.",
-  "chat.quick.questions": "Şu ana kadar konuşulanlarda belirsiz kalan ya da teyit etmekte fayda olan 3 noktayı, toplantıda sorabileceğim sorular şeklinde yaz."
+  "chat.quick.questions": "Şu ana kadar konuşulanlarda belirsiz kalan ya da teyit etmekte fayda olan 3 noktayı, toplantıda sorabileceğim sorular şeklinde yaz.",
+  "chat.quick.asked": "Son konuşmalarda diğer katılımcıların (“Karşı taraf”) sorduğu sorular veya yaptığı istekler arasından en yenisini bul. Ararken henüz kesinleşmemiş <pending_transcript> konuşmasını da hesaba kat. Yalnızca aşağıdaki iki maddeyi kısaca yaz.\n1. **Sorulan şey**: Ne sorulduğunu ya da ne istendiğini 1–2 cümleyle kendi ifadenle aktar ve dayanak olan konuşmanın zamanını [12:34] ekle. Kimin sorduğunu ve sorunun bana (“Ben”) yönelik olup olmadığını yalnızca hitap şeklinden vb. açıkça anlaşılıyorsa yaz.\n2. **Arka plan**: Soruya varan, hemen öncesindeki konuşmanın akışını 2–3 madde hâlinde yaz.\nNe cevap vermem gerektiğine dair bir öneri ya da nasıl cevap vereceğime dair bir tavsiye yazma. Soru ya da istek bulamazsan bunu belirt, ardından son 1–2 dakikada konuşulanları 2–3 satırda özetle."
 }

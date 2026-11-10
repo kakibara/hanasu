@@ -67,8 +67,8 @@ Il s'inspire de Typeless, Wispr Flow, Aqua Voice et Granola. Son code source est
 | **Comptes rendus par IA** | Rédigés par l'IA que vous choisissez pour les réunions. Choisissez un modèle : automatique, point hebdomadaire, 1-on-1, appel commercial, brainstorming ou personnalisé. Les actions incluent un responsable et une échéance. |
 | **Vérifier la source et réécouter** *(Mac)* | Le compte rendu s'ouvre sur une seule page : d'abord le résumé et les actions, avec la transcription à côté. Cliquez sur l'horodatage à la fin d'un point pour aller au propos dont il provient. Lancez la lecture de l'enregistrement à partir de n'importe quel propos, et coupez votre côté ou le leur si l'appel faisait écho. |
 | **Notes en direct et temps forts** | Saisissez des notes horodatées pendant l'appel, ou appuyez sur <kbd>⌃⌥⌘ H</kbd> pour marquer « c'est important » (annulable pendant 10 secondes). Le compte rendu donne la priorité à ces passages, et vous pouvez ensuite relire la conversation autour de chaque marque. |
-| **Sous-titres flottants** *(Mac)* | Affichez la transcription en direct sous forme de sous-titres par-dessus votre application de réunion. |
-| **Chat IA pendant la réunion** *(Mac)* | Pendant l'enregistrement, interrogez l'IA sur la conversation jusqu'ici (<kbd>⌘J</kbd>). Un clic suffit pour « résumé jusqu'ici » ou « décisions et tâches ». Posez des questions de suivi, et cliquez sur un horodatage dans une réponse pour aller à ce passage de la transcription. Changez l'IA et le modèle de cette conversation depuis le menu sous le champ de saisie. |
+| **Sous-titres flottants** *(Mac)* | Affichez la transcription en direct sous forme de sous-titres par-dessus votre application de réunion. Si vous les laissez affichés, ils réapparaissent à la réunion suivante. |
+| **Chat IA pendant la réunion** *(Mac)* | Pendant l'enregistrement, interrogez l'IA sur la conversation jusqu'ici (<kbd>⌘J</kbd>). Un clic suffit pour « résumé jusqu'ici » ou « décisions et tâches ». Posez des questions de suivi, et cliquez sur un horodatage dans une réponse pour aller à ce passage de la transcription. Pris de court par une question alors que vous faisiez autre chose ? Sans quitter votre application de réunion, appuyez sur « Qu’est-ce qu’on m’a demandé ? » dans les sous-titres (ou <kbd>⌃⌥⌘ A</kbd>) : un panneau flottant affiche ce que les autres viennent de dire, puis le résumé de l'IA sur la question posée et le contexte qui y a mené. Changez l'IA et le modèle de cette conversation depuis le menu sous le champ de saisie. |
 | **Détection des réunions** | Quand une application de réunion commence à utiliser le micro, Hanasu vous demande s'il faut enregistrer. Il ne lance jamais l'enregistrement de lui-même. |
 | **Rechercher et demander** | Recherchez dans le texte de toutes les réunions, ou demandez « Qu'avons-nous décidé au point de la semaine dernière ? ». La réponse cite les réunions utilisées. |
 | **Export** | Copiez en Markdown ou sous forme de résumé prêt pour Slack, enregistrez en `.md` / `.txt`, ou envoyez les actions vers Rappels. |
@@ -174,6 +174,7 @@ Sur Mac, vous pouvez afficher l'icône de Hanasu dans la barre des menus, dans l
 | Annuler l'enregistrement | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Enregistrement de réunion (démarrer / arrêter) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Marquer « c'est important » en réunion | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| « Qu’est-ce qu’on m’a demandé ? » en réunion | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Vous pouvez modifier chaque raccourci dans les Réglages. Le guide d'utilisation complet (en japonais) se trouve dans [docs/guide.md](docs/guide.md).
 

@@ -2,6 +2,7 @@
 
 - 状態: 実装済み（2026-11-10 に計画を了承）。要件と設計判断は spec に移した: REQ-COM-025・DEC-COM-171・DEC-COM-172（[spec/common.md](../spec/common.md)）、REQ-MTG-048・REQ-MTG-049・DEC-MTG-150（[spec/meeting.md](../spec/meeting.md)）。この文書は計画と敵対的レビューの記録として残す
 - 番号: 計画を書いたときは、要件の 2 つと送り先のメニューの設計判断に、先に main に入った PR #94（「何を聞かれた？」）と同じ番号を使っていたので、REQ-MTG-048・049・DEC-MTG-150 に付け直した（この文書の中も付け直した番号で書く）
+- PR #94 との合わせ: 「何を聞かれた？」（REQ-MTG-047）は答えをその会議の AI チャットの会話に入れるので、AI チャットと同じ送り先（画面で切り替えていればそれ、なければ「AI チャット・質問」）で聞くようにした（DEC-MTG-150 に書いた）。#94 の計画も「AI と effort はチャットと同じ」としていた
 - 対象: Mac（Windows 版には AI チャットと会議への質問がない。roadmap の FUT-003 の本文、windows/README.md の「会議の横断検索・会議への質問（Ask）」）
 
 ## 目的
@@ -85,7 +86,7 @@
 - 対象: Mac
 - 影響（以前から使っている人で、会議を Gemini・Claude にしている人）:
   - Gemma 4 E4B を入れていない人は、この版に上げると AI チャットと会議に質問が「未ダウンロード」で止まる。画面に出す案内（REQ-COM-025 の受け入れ条件 4 つ目）で知らせる。
-  - Gemma 4 E4B を入れている人（例: 音声入力 = ローカル、会議 = Claude）は、止まらずに送り先がローカルに変わる。会議への質問はローカルの文脈（32,768 トークン）に入らない分を省く（DEC-COM-065）ので、答えが浅くなりうる。送り先はメニューのボタンに常に出る（REQ-MTG-048・048）ので画面で気づけるようにし、リリース文でも知らせる。
+  - Gemma 4 E4B を入れている人（例: 音声入力 = ローカル、会議 = Claude）は、止まらずに送り先がローカルに変わる。会議への質問はローカルの文脈（32,768 トークン）に入らない分を省く（DEC-COM-065）ので、答えが浅くなりうる。送り先はメニューのボタンに常に出る（REQ-MTG-048・049）ので画面で気づけるようにし、リリース文でも知らせる。
 
 ### DEC-COM-172 AI チャット・質問と議事録は、ローカルのモデルを切り替えるとき、使っている処理が終わるのを待つ（音声入力は今のまま）
 - 決めたこと:
@@ -122,7 +123,7 @@
 ## 手順
 作業は今のブランチ（claude/screen-ocr-context。別の作業の未コミットの変更がある）ではなく、`origin/main` から切った worktree（`claude/ai-chat-model`）で行い、この計画のファイルもそちらへ移す。
 
-1. spec: `docs/spec/common.md` に REQ-COM-025・DEC-COM-171・DEC-COM-172 を足し、REQ-COM-020・023・024・030・031・050 と DEC-COM-040・042・043・092 を直す。`docs/spec/meeting.md` に REQ-MTG-048・048・DEC-MTG-150 を足し、DEC-MTG-053・081・085 を直す。番号を書く前に、開いている PR（#78・#91）と突き合わせ直す。
+1. spec: `docs/spec/common.md` に REQ-COM-025・DEC-COM-171・DEC-COM-172 を足し、REQ-COM-020・023・024・030・031・050 と DEC-COM-040・042・043・092 を直す。`docs/spec/meeting.md` に REQ-MTG-048・049・DEC-MTG-150 を足し、DEC-MTG-053・081・085 を直す。番号を書く前に、開いている PR（#78・#91）と突き合わせ直す。
 2. 設定と AI の土台:
    - `TextAI.swift`: `TextAIPurpose.chat`、`TextAIChoice`（provider と model）、`TextAIClient.make(provider:model:settings:purpose:timeout:)`、`fromSettings` を `make` で書き直す、`cliModel` を網羅の switch に。
    - `Settings.swift`: キーと `@Published` の 4 つ、既定値、`aiProvider(for:)`・`textModel(for:)`・`localModel(for:)` を網羅の switch に。引き継ぎの印は足さない。

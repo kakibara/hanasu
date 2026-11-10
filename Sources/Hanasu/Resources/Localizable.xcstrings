@@ -818,7 +818,7 @@
       }
     },
     "%@ から · 話者の区別（話者1・話者2…）は記録を止めたあとに行います" : {
-      "comment" : "MeetingWindow.swift:935",
+      "comment" : "MeetingWindow.swift:959",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1634,7 +1634,7 @@
       }
     },
     "%@ で文字起こしできなかった部分があります。" : {
-      "comment" : "MeetingRecorder.swift:339",
+      "comment" : "MeetingRecorder.swift:350",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1940,7 +1940,7 @@
       }
     },
     "%@ にスリープしてから、記録を続けています。スリープする前までで記録を止めるか、このまま記録を続けるかを選んでください。" : {
-      "comment" : "MeetingRecorder.swift:940",
+      "comment" : "MeetingRecorder.swift:953",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2241,6 +2241,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "下載 %@"
+          }
+        }
+      }
+    },
+    "%@ の時点" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:122",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عند %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stand: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As of %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el minuto %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ तक"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al minuto %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 시점"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stan na %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Até %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На момент %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ itibarıyla"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tính đến %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "截至 %@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "截至 %@"
           }
         }
       }
@@ -2552,7 +2654,7 @@
       }
     },
     "%@ は「%@」のショートカットと同じです。別のキーを選んでください。" : {
-      "comment" : "ShortcutRecorder.swift:91",
+      "comment" : "ShortcutRecorder.swift:94",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2654,7 +2756,7 @@
       }
     },
     "%@ までの記録から" : {
-      "comment" : "MeetingChatView.swift:444",
+      "comment" : "MeetingChatView.swift:505",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5000,7 +5102,7 @@
       }
     },
     "%@して入力を開始　%@" : {
-      "comment" : "AppDelegate.swift:204",
+      "comment" : "AppDelegate.swift:207",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5408,7 +5510,7 @@
       }
     },
     "%@のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:392",
+      "comment" : "SettingsView.swift:395",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5816,7 +5918,7 @@
       }
     },
     "%@の音声: %@" : {
-      "comment" : "MeetingRecorder.swift:334",
+      "comment" : "MeetingRecorder.swift:345",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6122,7 +6224,7 @@
       }
     },
     "%@の音量" : {
-      "comment" : "MeetingWindow.swift:958",
+      "comment" : "MeetingWindow.swift:982",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6326,7 +6428,7 @@
       }
     },
     "%@を許可する" : {
-      "comment" : "SettingsView.swift:388",
+      "comment" : "SettingsView.swift:391",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7958,7 +8060,7 @@
       }
     },
     "1 行に 1 つ書きます。「[12:34] 内容」で時刻（録音開始から）を、「★」で「ここ重要」の印を表します。時刻のない行も書けます。議事録を作るとき、メモと印の前後の発言を優先して反映します。" : {
-      "comment" : "MeetingNotesViews.swift:219",
+      "comment" : "MeetingNotesViews.swift:228",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9590,7 +9692,7 @@
       }
     },
     "AI チャット" : {
-      "comment" : "MeetingChatView.swift:602, MeetingInspector.swift:33",
+      "comment" : "MeetingChatView.swift:666, MeetingInspector.swift:33",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -13670,7 +13772,7 @@
       }
     },
     "Finder で表示" : {
-      "comment" : "DictationHistoryWindow.swift:526, MeetingWindow.swift:671",
+      "comment" : "DictationHistoryWindow.swift:526, MeetingWindow.swift:695",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16424,7 +16526,7 @@
       }
     },
     "Hanasu について" : {
-      "comment" : "AppDelegate.swift:295",
+      "comment" : "AppDelegate.swift:298",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16628,7 +16730,7 @@
       }
     },
     "Hanasu の使い方…" : {
-      "comment" : "AppDelegate.swift:243, AppDelegate.swift:300",
+      "comment" : "AppDelegate.swift:246, AppDelegate.swift:303",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16934,7 +17036,7 @@
       }
     },
     "Hanasu を終了" : {
-      "comment" : "AppDelegate.swift:248, AppDelegate.swift:308",
+      "comment" : "AppDelegate.swift:251, AppDelegate.swift:311",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17036,7 +17138,7 @@
       }
     },
     "Hanasu を隠す" : {
-      "comment" : "AppDelegate.swift:303",
+      "comment" : "AppDelegate.swift:306",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17138,7 +17240,7 @@
       }
     },
     "Hanasu 会議ノート" : {
-      "comment" : "AppDelegate.swift:361",
+      "comment" : "AppDelegate.swift:364",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17240,7 +17342,7 @@
       }
     },
     "Hanasu 字幕" : {
-      "comment" : "MeetingNotesViews.swift:329",
+      "comment" : "MeetingNotesViews.swift:360",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17342,7 +17444,7 @@
       }
     },
     "Hanasu 設定" : {
-      "comment" : "AppDelegate.swift:438",
+      "comment" : "AppDelegate.swift:441",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -18260,7 +18362,7 @@
       }
     },
     "Mac 全体の音" : {
-      "comment" : "MeetingWindow.swift:388",
+      "comment" : "MeetingWindow.swift:412",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -21524,7 +21626,7 @@
       }
     },
     "★ を取り消す（あと %@ 秒）" : {
-      "comment" : "MeetingNotesViews.swift:176",
+      "comment" : "MeetingNotesViews.swift:185",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22340,7 +22442,7 @@
       }
     },
     "「%@」を削除しますか？" : {
-      "comment" : "MeetingWindow.swift:79, MinutesTemplateViews.swift:304",
+      "comment" : "MeetingWindow.swift:62, MinutesTemplateViews.swift:304",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22850,7 +22952,7 @@
       }
     },
     "「ここ重要」の印" : {
-      "comment" : "MeetingNotesViews.swift:281, ShortcutRecorder.swift:18",
+      "comment" : "MeetingNotesViews.swift:290, ShortcutRecorder.swift:18",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22952,7 +23054,7 @@
       }
     },
     "「ここ重要」は %@ でも付けられます（ほかのアプリを使っていても可）" : {
-      "comment" : "MeetingNotesViews.swift:35",
+      "comment" : "MeetingNotesViews.swift:37",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23355,6 +23457,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "只要說「郵件簽名」，就會直接輸入登錄好的固定文字（設定 →「片段」）。"
+          }
+        }
+      }
+    },
+    "「何を聞かれた？」" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:318, ShortcutRecorder.swift:19",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«ماذا سُئلت؟»"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„Was wurde ich gefragt?“"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“What was I asked?”"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«¿Qué me preguntaron?»"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "« Qu’est-ce qu’on m’a demandé ? »"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“मुझसे क्या पूछा गया?”"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Saya ditanya apa?”"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«Cosa mi hanno chiesto?»"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"무슨 질문이었지?\""
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„O co mnie zapytano?”"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“O que me perguntaram?”"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«О чём меня спросили?»"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Bana ne soruldu?”"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Tôi vừa được hỏi gì?”"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“问了我什么？”"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「問了我什麼？」"
           }
         }
       }
@@ -24992,7 +25196,7 @@
       }
     },
     "ここまでの会話について AI に聞けます" : {
-      "comment" : "MeetingChatView.swift:269",
+      "comment" : "MeetingChatView.swift:312",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25094,7 +25298,7 @@
       }
     },
     "ここまでの会話について質問（↩ で送信）" : {
-      "comment" : "MeetingChatView.swift:315",
+      "comment" : "MeetingChatView.swift:359",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25196,7 +25400,7 @@
       }
     },
     "ここまでの記録を読んでいます…" : {
-      "comment" : "MeetingChatView.swift:214",
+      "comment" : "MeetingChatView.swift:257",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25298,7 +25502,7 @@
       }
     },
     "ここまでを要約" : {
-      "comment" : "MeetingChat.swift:218",
+      "comment" : "MeetingChat.swift:284",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25502,7 +25706,7 @@
       }
     },
     "ここ重要" : {
-      "comment" : "MeetingDocumentView.swift:597, MeetingDocumentView.swift:605, MeetingNotesViews.swift:135",
+      "comment" : "MeetingDocumentView.swift:597, MeetingDocumentView.swift:605, MeetingNotesViews.swift:144",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26114,7 +26318,7 @@
       }
     },
     "この Mac の外には送りません。会話は保存しません。" : {
-      "comment" : "MeetingChatView.swift:371",
+      "comment" : "MeetingChatView.swift:415",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27032,7 +27236,7 @@
       }
     },
     "この会議について AI に聞けます" : {
-      "comment" : "MeetingChatView.swift:269",
+      "comment" : "MeetingChatView.swift:312",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27134,7 +27338,7 @@
       }
     },
     "この会議について質問（↩ で送信）" : {
-      "comment" : "MeetingChatView.swift:315",
+      "comment" : "MeetingChatView.swift:359",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27338,7 +27542,7 @@
       }
     },
     "この会議には録音が残っていません" : {
-      "comment" : "MeetingAudioManager.swift:40, MeetingWindow.swift:679",
+      "comment" : "MeetingAudioManager.swift:40, MeetingWindow.swift:703",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27542,7 +27746,7 @@
       }
     },
     "この会議の録音だけを削除する（議事録・文字起こしは残る）" : {
-      "comment" : "MeetingWindow.swift:683",
+      "comment" : "MeetingWindow.swift:707",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27644,7 +27848,7 @@
       }
     },
     "この会議の録音の扱いは、記録中のツールバーで変えられます。" : {
-      "comment" : "MeetingWindow.swift:417",
+      "comment" : "MeetingWindow.swift:441",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28052,7 +28256,7 @@
       }
     },
     "この会議をゴミ箱に入れる" : {
-      "comment" : "MeetingWindow.swift:692",
+      "comment" : "MeetingWindow.swift:716",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28970,7 +29174,7 @@
       }
     },
     "この答えをメモに足す（議事録で優先して取り上げます）" : {
-      "comment" : "MeetingChatView.swift:468",
+      "comment" : "MeetingChatView.swift:529",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29888,7 +30092,7 @@
       }
     },
     "しまう" : {
-      "comment" : "AppDelegate.swift:329",
+      "comment" : "AppDelegate.swift:332",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30602,7 +30806,7 @@
       }
     },
     "すべてを表示" : {
-      "comment" : "AppDelegate.swift:306",
+      "comment" : "AppDelegate.swift:309",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30704,7 +30908,7 @@
       }
     },
     "すべてを選択" : {
-      "comment" : "AppDelegate.swift:325",
+      "comment" : "AppDelegate.swift:328",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31010,7 +31214,7 @@
       }
     },
     "その他" : {
-      "comment" : "MeetingWindow.swift:651, SettingsView.swift:209",
+      "comment" : "MeetingWindow.swift:675, SettingsView.swift:209",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -32030,7 +32234,7 @@
       }
     },
     "ほかの処理が終わるのを待っています…" : {
-      "comment" : "MeetingChatView.swift:213, MeetingSearchView.swift:339",
+      "comment" : "MeetingChatView.swift:256, MeetingSearchView.swift:339",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -32336,7 +32540,7 @@
       }
     },
     "ほかを隠す" : {
-      "comment" : "AppDelegate.swift:304",
+      "comment" : "AppDelegate.swift:307",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -32948,7 +33152,7 @@
       }
     },
     "まだ求めていません" : {
-      "comment" : "SettingsView.swift:375",
+      "comment" : "SettingsView.swift:378",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33151,6 +33355,108 @@
         }
       }
     },
+    "まだ相手の発言がありません" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:135",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد أقوال من الطرف الآخر بعد"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Äußerungen der Gegenseite"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No remarks from others yet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay intervenciones de los demás"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun propos des interlocuteurs pour l’instant"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "दूसरे पक्ष ने अभी तक कुछ नहीं कहा है"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belum ada ucapan dari lawan bicara"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ancora nessun intervento degli altri"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 상대의 발언이 없습니다"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rozmówcy jeszcze nic nie powiedzieli"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os outros ainda não falaram"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Реплик собеседников пока нет"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karşı taraf henüz konuşmadı"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bên kia chưa nói gì"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对方还没有发言"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "對方還沒有發言"
+          }
+        }
+      }
+    },
     "まだ音声入力の結果がありません" : {
       "comment" : "DictationHistoryWindow.swift:63",
       "extractionState" : "manual",
@@ -33254,7 +33560,7 @@
       }
     },
     "もう一度" : {
-      "comment" : "LocalLLMSettingsView.swift:65, MeetingChatView.swift:228, Onboarding.swift:514",
+      "comment" : "LocalLLMSettingsView.swift:65, MeetingAskedQuestionPanel.swift:198, MeetingChatView.swift:271",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33453,6 +33759,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "如需再次使用，需要重新下載（%@）。"
+          }
+        }
+      }
+    },
+    "やめました。" : {
+      "comment" : "MeetingAskedQuestion.swift:161",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم الإيقاف."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgebrochen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stopped."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulé."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रोक दिया गया।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dihentikan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annullato."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중지했습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerwano."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelado."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменено."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İptal edildi."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã hủy."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已停止。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已停止。"
+          }
+        }
+      }
+    },
+    "やめる" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:161",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إيقاف"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रोकें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hentikan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중지"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przerwij"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vazgeç"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hủy"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止"
           }
         }
       }
@@ -33662,7 +34172,7 @@
       }
     },
     "やり直す" : {
-      "comment" : "AppDelegate.swift:319",
+      "comment" : "AppDelegate.swift:322",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34274,7 +34784,7 @@
       }
     },
     "アクセシビリティ" : {
-      "comment" : "Onboarding.swift:704, SettingsView.swift:327",
+      "comment" : "Onboarding.swift:704, SettingsView.swift:330",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35600,7 +36110,7 @@
       }
     },
     "アップデートを確認…" : {
-      "comment" : "AppDelegate.swift:245, AppDelegate.swift:297",
+      "comment" : "AppDelegate.swift:248, AppDelegate.swift:300",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36416,7 +36926,7 @@
       }
     },
     "インスペクタを表示" : {
-      "comment" : "MeetingWindow.swift:704",
+      "comment" : "MeetingWindow.swift:728",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36518,7 +37028,7 @@
       }
     },
     "インスペクタを表示（⌥⌘I）" : {
-      "comment" : "MeetingWindow.swift:707",
+      "comment" : "MeetingWindow.swift:731",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36620,7 +37130,7 @@
       }
     },
     "インスペクタを隠す" : {
-      "comment" : "MeetingWindow.swift:704",
+      "comment" : "MeetingWindow.swift:728",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36722,7 +37232,7 @@
       }
     },
     "インスペクタを隠す（⌥⌘I）" : {
-      "comment" : "MeetingWindow.swift:707",
+      "comment" : "MeetingWindow.swift:731",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36824,7 +37334,7 @@
       }
     },
     "ウインドウ" : {
-      "comment" : "AppDelegate.swift:328, AppDelegate.swift:331",
+      "comment" : "AppDelegate.swift:331, AppDelegate.swift:334",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37232,7 +37742,7 @@
       }
     },
     "オフ" : {
-      "comment" : "MeetingNotesViews.swift:116, MeetingPlayerBar.swift:200",
+      "comment" : "MeetingNotesViews.swift:125, MeetingPlayerBar.swift:200",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37843,6 +38353,108 @@
         }
       }
     },
+    "オフレコ中です。オフレコの間の発言は AI に渡しません。" : {
+      "comment" : "MeetingAskedQuestion.swift:136",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أنت الآن خارج المحضر. لا تُمرَّر الأقوال خلال فترة خارج المحضر إلى AI."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the Record ist aktiv. Äußerungen während Off the Record werden nicht an die KI übergeben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're off the record. Remarks made off the record aren't passed to the AI."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modo extraoficial activo. Las intervenciones en modo extraoficial no se pasan a la IA."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode confidentiel en cours. Les propos tenus en mode confidentiel ne sont pas transmis à l’IA."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अभी ऑफ़ द रिकॉर्ड है। ऑफ़ द रिकॉर्ड के दौरान के कथन AI को नहीं दिए जाते।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sedang off the record. Ucapan selama off the record tidak diberikan ke AI."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off the record attivo. Gli interventi off the record non vengono passati all'IA."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오프더레코드 중입니다. 오프더레코드 동안의 발언은 AI에 넘기지 않습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trwa tryb poza protokołem. Wypowiedzi z tego czasu nie są przekazywane do AI."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você está em off the record. As falas desse período não são passadas à IA."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сейчас режим «не для протокола». Реплики за это время не передаются AI."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şu an kayıt dışı. Kayıt dışı sırasındaki konuşmalar AI’a verilmez."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang ngoài biên bản. Lời nói trong khoảng này sẽ không được giao cho AI."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保密中。保密期间的发言不会交给 AI。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保密中。保密期間的發言不會交給 AI。"
+          }
+        }
+      }
+    },
     "オフレコ中（%@ から）。この間の発言は、議事録と AI チャットに使いません。" : {
       "comment" : "MinutesSelectionViews.swift:38",
       "extractionState" : "manual",
@@ -37946,7 +38558,7 @@
       }
     },
     "オン" : {
-      "comment" : "MeetingNotesViews.swift:116, MeetingPlayerBar.swift:200",
+      "comment" : "MeetingNotesViews.swift:125, MeetingPlayerBar.swift:200",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -38252,7 +38864,7 @@
       }
     },
     "カット" : {
-      "comment" : "AppDelegate.swift:322",
+      "comment" : "AppDelegate.swift:325",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -38660,7 +39272,7 @@
       }
     },
     "キーを押してください（Esc で取消）" : {
-      "comment" : "ShortcutRecorder.swift:72",
+      "comment" : "ShortcutRecorder.swift:75",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39476,7 +40088,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:323, DictationHistoryWindow.swift:556, MeetingChatView.swift:459",
+      "comment" : "AppDelegate.swift:326, DictationHistoryWindow.swift:556, MeetingChatView.swift:520",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39578,7 +40190,7 @@
       }
     },
     "コピーしました" : {
-      "comment" : "MeetingChatView.swift:459, MinutesTemplateViews.swift:402, PasteFallbackPanel.swift:241",
+      "comment" : "MeetingChatView.swift:520, MinutesTemplateViews.swift:402, PasteFallbackPanel.swift:241",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39680,7 +40292,7 @@
       }
     },
     "ゴミ箱に入れる" : {
-      "comment" : "MeetingWindow.swift:82",
+      "comment" : "MeetingWindow.swift:65",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40394,7 +41006,7 @@
       }
     },
     "システムのマイク" : {
-      "comment" : "MeetingWindow.swift:390",
+      "comment" : "MeetingWindow.swift:414",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40700,7 +41312,7 @@
       }
     },
     "システムオーディオ録音" : {
-      "comment" : "SettingsView.swift:345",
+      "comment" : "SettingsView.swift:348",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40802,7 +41414,7 @@
       }
     },
     "システムオーディオ録音のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:340",
+      "comment" : "SettingsView.swift:343",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40904,7 +41516,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → アクセシビリティ で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:329",
+      "comment" : "SettingsView.swift:332",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41006,7 +41618,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → マイク で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:316",
+      "comment" : "SettingsView.swift:319",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41108,7 +41720,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → 音声認識 で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:323",
+      "comment" : "SettingsView.swift:326",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41210,7 +41822,7 @@
       }
     },
     "システム設定を開く" : {
-      "comment" : "ReminderExport.swift:145, SettingsView.swift:338, SettingsView.swift:390",
+      "comment" : "ReminderExport.swift:145, SettingsView.swift:341, SettingsView.swift:393",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41618,7 +42230,7 @@
       }
     },
     "ショートカット %@ を登録できませんでした" : {
-      "comment" : "AppDelegate.swift:47, AppDelegate.swift:74, AppDelegate.swift:91",
+      "comment" : "AppDelegate.swift:47, AppDelegate.swift:74, AppDelegate.swift:94",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41720,7 +42332,7 @@
       }
     },
     "ショートカット %@ を登録できませんでした（ほかのショートカットと重なっている可能性があります）" : {
-      "comment" : "MeetingNotes.swift:260",
+      "comment" : "MeetingAskedQuestionPanel.swift:280",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42434,7 +43046,7 @@
       }
     },
     "スリープ前までで止める" : {
-      "comment" : "MeetingRecorder.swift:941",
+      "comment" : "MeetingRecorder.swift:954",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -44167,6 +44779,108 @@
         }
       }
     },
+    "チャットで続ける" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:192",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المتابعة في الدردشة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Chat fortfahren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue in Chat"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguir en el chat"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer dans le chat"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "चैट में जारी रखें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lanjutkan di obrolan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continua nella chat"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "채팅에서 계속하기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontynuuj w czacie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar no chat"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжить в чате"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sohbette devam et"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiếp tục trò chuyện"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在聊天中继续"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在聊天中繼續"
+          }
+        }
+      }
+    },
     "テキスト" : {
       "comment" : "DictionarySettingsView.swift:53, MeetingExport.swift:11",
       "extractionState" : "manual",
@@ -45800,7 +46514,7 @@
       }
     },
     "ペースト" : {
-      "comment" : "AppDelegate.swift:324",
+      "comment" : "AppDelegate.swift:327",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46106,7 +46820,7 @@
       }
     },
     "マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。システムオーディオ録音の許可の状態は、macOS から取れないためここには出ません。" : {
-      "comment" : "SettingsView.swift:357",
+      "comment" : "SettingsView.swift:360",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46412,7 +47126,7 @@
       }
     },
     "マイクを「自分」、スピーカーの音（Meet・Slack ハドル・Teams など）を「相手」として録ります。スピーカーだと相手の声がマイクにも入るので、イヤホンを使うと正確になります。" : {
-      "comment" : "SettingsView.swift:294",
+      "comment" : "SettingsView.swift:297",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46514,7 +47228,7 @@
       }
     },
     "マイクを再開できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:874",
+      "comment" : "MeetingRecorder.swift:887",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47024,7 +47738,7 @@
       }
     },
     "マイク（自分）の音が入っていません。設定の「会議」→「録音するマイク」を確認してください。" : {
-      "comment" : "MeetingRecorder.swift:975",
+      "comment" : "MeetingRecorder.swift:988",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47738,7 +48452,7 @@
       }
     },
     "メモ" : {
-      "comment" : "MeetingChatView.swift:601, MeetingDocumentView.swift:640, MeetingNotesViews.swift:25",
+      "comment" : "MeetingChatView.swift:665, MeetingDocumentView.swift:640, MeetingNotesViews.swift:27",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47840,7 +48554,7 @@
       }
     },
     "メモ %@ 件・印 %@ 件" : {
-      "comment" : "MeetingNotesViews.swift:240",
+      "comment" : "MeetingNotesViews.swift:249",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47942,7 +48656,7 @@
       }
     },
     "メモと AI チャットを切り替える（AI チャットは ⌘J）" : {
-      "comment" : "MeetingChatView.swift:607",
+      "comment" : "MeetingChatView.swift:671",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48146,7 +48860,7 @@
       }
     },
     "メモに残しました" : {
-      "comment" : "MeetingChatView.swift:464",
+      "comment" : "MeetingChatView.swift:525",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48248,7 +48962,7 @@
       }
     },
     "メモに残す" : {
-      "comment" : "MeetingChatView.swift:464",
+      "comment" : "MeetingChatView.swift:525",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48452,7 +49166,7 @@
       }
     },
     "メモを保存して、議事録を作り直しますか？" : {
-      "comment" : "MeetingNotesViews.swift:254",
+      "comment" : "MeetingNotesViews.swift:263",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48554,7 +49268,7 @@
       }
     },
     "メモを入力して ↩" : {
-      "comment" : "MeetingNotesViews.swift:70",
+      "comment" : "MeetingNotesViews.swift:79",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53042,7 +53756,7 @@
       }
     },
     "下のボタンか %@ で記録を始められます。" : {
-      "comment" : "MeetingWindow.swift:125",
+      "comment" : "MeetingWindow.swift:108",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53654,7 +54368,7 @@
       }
     },
     "今の会話を消して、新しく始める" : {
-      "comment" : "MeetingChatView.swift:355",
+      "comment" : "MeetingChatView.swift:399",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53756,7 +54470,7 @@
       }
     },
     "今の時刻に印を付ける" : {
-      "comment" : "MeetingNotesViews.swift:146",
+      "comment" : "MeetingNotesViews.swift:155",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53858,7 +54572,7 @@
       }
     },
     "今の時刻に印を付ける（%@）" : {
-      "comment" : "MeetingNotesViews.swift:146",
+      "comment" : "MeetingNotesViews.swift:155",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53955,6 +54669,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在目前時間加上標記（%@）"
+          }
+        }
+      }
+    },
+    "今の時点までの会話で、もう一度探す" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:200",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث مجددًا في المحادثة حتى هذه اللحظة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit dem Gespräch bis jetzt erneut suchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search again using the conversation up to now"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver a buscar con la conversación hasta ahora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechercher de nouveau avec la conversation jusqu’à maintenant"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अभी तक की बातचीत में फिर से खोजें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cari lagi dalam percakapan hingga saat ini"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca di nuovo con la conversazione fino a ora"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금까지의 대화로 다시 찾기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyszukaj ponownie w rozmowie do tej chwili"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar novamente na conversa até agora"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Искать снова по разговору до текущего момента"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şu ana kadarki konuşmada yeniden ara"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tìm lại trong hội thoại tính đến lúc này"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "根据到目前为止的对话重新查找"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "根據到目前為止的對話重新尋找"
           }
         }
       }
@@ -54470,7 +55286,7 @@
       }
     },
     "今の話を分かりやすく" : {
-      "comment" : "MeetingChat.swift:221",
+      "comment" : "MeetingChat.swift:287",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54572,7 +55388,7 @@
       }
     },
     "今の議事録とアクションアイテムは、メモを反映したものに置き換わります。" : {
-      "comment" : "MeetingNotesViews.swift:258",
+      "comment" : "MeetingNotesViews.swift:267",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54674,7 +55490,7 @@
       }
     },
     "今の議事録とアクションアイテムは置き換わります。" : {
-      "comment" : "MeetingWindow.swift:544, MinutesTemplateViews.swift:139",
+      "comment" : "MeetingWindow.swift:568, MinutesTemplateViews.swift:139",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55388,7 +56204,7 @@
       }
     },
     "他のアプリやシステムのショートカットと重なっている可能性があります。設定で別のキーを選んでください。" : {
-      "comment" : "AppDelegate.swift:92",
+      "comment" : "AppDelegate.swift:95",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55490,7 +56306,7 @@
       }
     },
     "付けてから 10 秒のあいだは、押し間違えた印を取り消せます" : {
-      "comment" : "MeetingNotesViews.swift:179",
+      "comment" : "MeetingNotesViews.swift:188",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55694,7 +56510,7 @@
       }
     },
     "会議" : {
-      "comment" : "AppDelegate.swift:311, AppDelegate.swift:314, SettingsView.swift:18",
+      "comment" : "AppDelegate.swift:314, AppDelegate.swift:317, SettingsView.swift:18",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57224,7 +58040,7 @@
       }
     },
     "会議の記録で相手の声に必要" : {
-      "comment" : "SettingsView.swift:346",
+      "comment" : "SettingsView.swift:349",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57530,7 +58346,7 @@
       }
     },
     "会議の記録を停止" : {
-      "comment" : "AppDelegate.swift:281",
+      "comment" : "AppDelegate.swift:284",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57632,7 +58448,7 @@
       }
     },
     "会議の記録を停止（%@）" : {
-      "comment" : "AppDelegate.swift:219",
+      "comment" : "AppDelegate.swift:222",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57734,7 +58550,7 @@
       }
     },
     "会議の記録を準備中…" : {
-      "comment" : "AppDelegate.swift:216",
+      "comment" : "AppDelegate.swift:219",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57836,7 +58652,7 @@
       }
     },
     "会議の記録を開始" : {
-      "comment" : "AppDelegate.swift:215, AppDelegate.swift:281, MeetingWindow.swift:341",
+      "comment" : "AppDelegate.swift:218, AppDelegate.swift:284, MeetingWindow.swift:365",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58040,7 +58856,7 @@
       }
     },
     "会議の記録中に Mac がスリープしました" : {
-      "comment" : "MeetingRecorder.swift:939",
+      "comment" : "MeetingRecorder.swift:952",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58345,6 +59161,108 @@
         }
       }
     },
+    "会議を記録している間だけ使えます。" : {
+      "comment" : "MeetingAskedQuestion.swift:109",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متاح فقط أثناء تسجيل اجتماع."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur während einer Meeting-Aufnahme verfügbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available only while recording a meeting."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo se puede usar mientras se graba una reunión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponible uniquement pendant l’enregistrement d’une réunion."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सिर्फ़ मीटिंग रिकॉर्ड करते समय उपलब्ध है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanya bisa digunakan saat merekam rapat."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponibile solo durante la registrazione di una riunione."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의를 기록하는 동안에만 사용할 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dostępne tylko podczas nagrywania spotkania."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Só pode ser usado durante a gravação de uma reunião."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступно только во время записи встречи."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yalnızca toplantı kaydedilirken kullanılabilir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chỉ dùng được trong lúc ghi cuộc họp."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅在录制会议时可用。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "僅在錄製會議時可用。"
+          }
+        }
+      }
+    },
     "会議を記録している間は再生できません（再生した音がマイクに入るため）" : {
       "comment" : "MeetingPlayer.swift:302",
       "extractionState" : "manual",
@@ -58550,7 +59468,7 @@
       }
     },
     "会議を選んでください" : {
-      "comment" : "MeetingWindow.swift:124",
+      "comment" : "MeetingWindow.swift:107",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58855,6 +59773,108 @@
         }
       }
     },
+    "会議ツールを前面にしたまま、字幕の「何を聞かれた？」かこのショートカットで、直前に聞かれたことと背景を AI がまとめて前面のパネルに出します（直近 10 分の会話を、設定の「AI」で会議に選んだ AI に送ります）。ショートカットは記録中だけ有効です。" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:335",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مع إبقاء أداة الاجتماعات في المقدمة، اضغط «ماذا سُئلت؟» في التسميات التوضيحية أو استخدم هذا الاختصار، ليلخّص AI ما سُئلت عنه للتو وخلفيته في لوحة تظهر في المقدمة (تُرسل محادثة آخر 10 دقائق إلى AI المختار للاجتماعات في قسم «AI» في الإعدادات). يعمل الاختصار أثناء التسجيل فقط."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lass die Meeting-App vorne und nutze „Was wurde ich gefragt?“ in den Untertiteln oder diesen Kurzbefehl: Die KI fasst die gerade gestellte Frage und ihren Hintergrund in einem Fenster im Vordergrund zusammen (die letzten 10 Minuten des Gesprächs gehen an die KI, die unter „AI“ in den Einstellungen für Meetings gewählt ist). Der Kurzbefehl funktioniert nur während der Aufnahme."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep your meeting app in front and click “What was I asked?” in the captions or press this shortcut: the AI summarizes what you were just asked and its background, and shows it in a panel in front (the last 10 minutes of the conversation are sent to the AI chosen for meetings in “AI” in Settings). The shortcut works only during recording."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin salir de la herramienta de reuniones, pulsa «¿Qué me preguntaron?» en los subtítulos o usa este atajo: la IA resume lo que te acaban de preguntar y su contexto en un panel que se muestra delante (envía los últimos 10 minutos de conversación a la IA elegida para reuniones en «AI» de Ajustes). El atajo solo funciona durante la grabación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans quitter votre app de réunion, utilisez « Qu’est-ce qu’on m’a demandé ? » dans les sous-titres ou ce raccourci : l’IA résume la question qu’on vient de vous poser et son contexte dans un panneau au premier plan (les 10 dernières minutes de conversation sont envoyées à l’IA choisie pour les réunions dans « AI » des Réglages). Le raccourci ne fonctionne que pendant l’enregistrement."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग टूल को सामने रखे हुए ही, कैप्शन में “मुझसे क्या पूछा गया?” दबाएँ या यह शॉर्टकट इस्तेमाल करें, तो AI अभी-अभी पूछी गई बात और उसकी पृष्ठभूमि का सारांश सामने वाले पैनल में दिखाता है (पिछले 10 मिनट की बातचीत, सेटिंग्ज़ के “AI” में मीटिंग के लिए चुने गए AI को भेजी जाती है)। शॉर्टकट सिर्फ़ रिकॉर्डिंग के दौरान काम करता है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sambil tetap membiarkan aplikasi rapat di depan, tekan “Saya ditanya apa?” di teks langsung atau gunakan pintasan ini, lalu AI merangkum hal yang baru saja ditanyakan beserta latar belakangnya di panel yang tampil di depan (percakapan 10 menit terakhir dikirim ke AI yang dipilih untuk rapat di “AI” pada Pengaturan). Pintasan hanya aktif saat merekam."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senza lasciare lo strumento per le riunioni, usa «Cosa mi hanno chiesto?» nei sottotitoli o questa abbreviazione: l'IA riassume ciò che ti hanno appena chiesto e il contesto in un pannello in primo piano (invia gli ultimi 10 minuti di conversazione all'IA scelta per le riunioni in Impostazioni → «AI»). L'abbreviazione funziona solo durante la registrazione."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 도구를 앞에 둔 채로 자막의 \"무슨 질문이었지?\" 또는 이 단축키를 사용하면, 방금 받은 질문과 그 배경을 AI가 정리해 앞쪽 패널에 표시합니다(최근 10분간의 대화를 설정의 \"AI\"에서 회의용으로 선택한 AI에 보냅니다). 단축키는 기록 중에만 유효합니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie opuszczając aplikacji do spotkań, kliknij „O co mnie zapytano?” w napisach lub użyj tego skrótu, a AI podsumuje w panelu na pierwszym planie, o co właśnie zapytano i w jakim kontekście (do AI wybranego dla spotkań w Ustawieniach → „AI” wysyłana jest rozmowa z ostatnich 10 minut). Skrót działa tylko podczas nagrywania."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem sair do app de reuniões, clique em “O que me perguntaram?” nas legendas ou use este atalho: a IA resume o que acabaram de perguntar a você e o contexto num painel em primeiro plano (os últimos 10 minutos da conversa são enviados à IA escolhida para reuniões em Ajustes → “AI”). O atalho só funciona durante a gravação."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не уходя из приложения для встреч, нажмите «О чём меня спросили?» в субтитрах или это сочетание клавиш — AI кратко изложит только что заданный вам вопрос и его контекст в панели поверх окон (последние 10 минут разговора отправляются AI, выбранному для встреч в разделе «AI» в Настройках). Сочетание клавиш работает только во время записи."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı uygulaması öndeyken altyazıdaki “Bana ne soruldu?” düğmesiyle veya bu kısayolla, AI az önce size sorulanı ve arka planını özetleyip öndeki bir panelde gösterir (son 10 dakikalık konuşma, Ayarlar’daki “AI” bölümünde toplantılar için seçilen AI’a gönderilir). Kısayol yalnızca kayıt sırasında etkindir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không cần rời ứng dụng họp, nhấn “Tôi vừa được hỏi gì?” trên phụ đề hoặc dùng phím tắt này, AI sẽ tóm tắt điều bạn vừa được hỏi cùng bối cảnh và hiện trong một bảng ở trên cùng (10 phút hội thoại gần nhất được gửi cho AI đã chọn cho cuộc họp ở mục “AI” trong Cài đặt). Phím tắt chỉ có hiệu lực trong lúc ghi."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "让会议工具保持在最前面，点按字幕中的“问了我什么？”或使用此快捷键，AI 就会汇总刚才被问到的问题及其背景，并显示在最前面的面板中（会将最近 10 分钟的对话发送给在设置的“AI”中为会议选择的 AI）。快捷键仅在录制时有效。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "讓會議工具保持在最前面，按一下字幕中的「問了我什麼？」或使用此快速鍵，AI 就會彙整剛才被問到的問題及其背景，並顯示在最前面的面板中（會將最近 10 分鐘的對話傳送給在設定的「AI」中為會議選擇的 AI）。快速鍵僅在錄製時有效。"
+          }
+        }
+      }
+    },
     "会議ノートで過去の会議を横断して検索し（⌘F）、「先週の定例で何が決まった？」と質問すると、根拠の会議を引いて答えます。" : {
       "comment" : "Onboarding.swift:595",
       "extractionState" : "manual",
@@ -59059,8 +60079,110 @@
         }
       }
     },
+    "会議ノートの AI チャットを開いて、続けて質問する" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:194",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فتح دردشة AI في ملاحظات الاجتماعات لمتابعة طرح الأسئلة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI-Chat in den Meeting-Notizen öffnen und weitere Fragen stellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open AI Chat in Meeting Notes and ask follow-up questions"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir el chat con IA de Notas de reuniones para seguir preguntando"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir le chat IA de Notes de réunion pour poser d’autres questions"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग नोट्स की AI चैट खोलकर आगे सवाल पूछें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka obrolan AI di Catatan Rapat untuk melanjutkan bertanya"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri la chat IA di Note delle riunioni per fare altre domande"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 노트의 AI 채팅을 열어 이어서 질문하기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz czat AI w „Notatkach ze spotkań” i zadawaj kolejne pytania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir o chat de IA em Notas de reuniões e continuar perguntando"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть AI-чат в «Заметках о встречах» и задать дополнительные вопросы"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı Notları’nda AI sohbeti açıp soru sormaya devam et"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mở Trò chuyện AI trong Ghi chú cuộc họp để hỏi tiếp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开会议笔记中的 AI 聊天，继续提问"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打開會議筆記中的 AI 聊天，繼續提問"
+          }
+        }
+      }
+    },
     "会議ノートの記録中の画面でメモを書いたり「ここ重要」の印を付けたりすると、議事録で優先して取り上げます。ショートカットは記録中だけ有効になり、ほかのアプリを使っていても印を付けられます。" : {
-      "comment" : "MeetingNotesViews.swift:299",
+      "comment" : "MeetingNotesViews.swift:308",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59162,7 +60284,7 @@
       }
     },
     "会議ノートを開く" : {
-      "comment" : "AppDelegate.swift:285, AppDelegate.swift:313, SettingsView.swift:253",
+      "comment" : "AppDelegate.swift:288, AppDelegate.swift:316, SettingsView.swift:253",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59264,7 +60386,7 @@
       }
     },
     "会議ノートを開く…" : {
-      "comment" : "AppDelegate.swift:226",
+      "comment" : "AppDelegate.swift:229",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59365,8 +60487,110 @@
         }
       }
     },
+    "会議中の AI チャット" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:333",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دردشة AI أثناء الاجتماع"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI-Chat während des Meetings"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI Chat During Meetings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat con IA durante la reunión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat IA pendant la réunion"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग के दौरान AI चैट"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obrolan AI selama rapat"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat IA durante la riunione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 중 AI 채팅"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czat AI podczas spotkania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chat de IA durante a reunião"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI-чат во время встречи"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı sırasında AI sohbet"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trò chuyện AI trong cuộc họp"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会议中的 AI 聊天"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會議中的 AI 聊天"
+          }
+        }
+      }
+    },
     "会議中のメモ" : {
-      "comment" : "MeetingNotesViews.swift:297",
+      "comment" : "MeetingNotesViews.swift:306",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59671,8 +60895,110 @@
         }
       }
     },
+    "何を聞かれた？" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:35, MeetingAskedQuestionPanel.swift:120, MeetingChat.swift:267",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ماذا سُئلت؟"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was wurde ich gefragt?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What was I asked?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué me preguntaron?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu’est-ce qu’on m’a demandé ?"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मुझसे क्या पूछा गया?"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saya ditanya apa?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cosa mi hanno chiesto?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무슨 질문이었지?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O co mnie zapytano?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O que me perguntaram?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "О чём меня спросили?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bana ne soruldu?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tôi vừa được hỏi gì?"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "问了我什么？"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "問了我什麼？"
+          }
+        }
+      }
+    },
     "作り直す" : {
-      "comment" : "MeetingNotesViews.swift:255, MeetingWindow.swift:541, MinutesTemplateViews.swift:128",
+      "comment" : "MeetingNotesViews.swift:264, MeetingWindow.swift:565, MinutesTemplateViews.swift:128",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61508,7 +62834,7 @@
       }
     },
     "保存して議事録を作り直す" : {
-      "comment" : "MeetingNotesViews.swift:249",
+      "comment" : "MeetingNotesViews.swift:258",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61712,7 +63038,7 @@
       }
     },
     "保存できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:421, MinutesTemplateViews.swift:213",
+      "comment" : "MeetingRecorder.swift:432, MinutesTemplateViews.swift:213",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61916,7 +63242,7 @@
       }
     },
     "保存先: ~/Documents/Hanasu/Meetings" : {
-      "comment" : "SettingsView.swift:296",
+      "comment" : "SettingsView.swift:299",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62630,7 +63956,7 @@
       }
     },
     "元に戻す" : {
-      "comment" : "MeetingNotesViews.swift:244",
+      "comment" : "MeetingNotesViews.swift:253",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64874,7 +66200,7 @@
       }
     },
     "再確認" : {
-      "comment" : "SettingsView.swift:359",
+      "comment" : "SettingsView.swift:362",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65384,7 +66710,7 @@
       }
     },
     "初めて会議の記録を始めるときに macOS が求めます" : {
-      "comment" : "SettingsView.swift:336",
+      "comment" : "SettingsView.swift:339",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65690,7 +67016,7 @@
       }
     },
     "初期値に戻す" : {
-      "comment" : "ShortcutRecorder.swift:69",
+      "comment" : "ShortcutRecorder.swift:72",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65792,7 +67118,7 @@
       }
     },
     "初期値（%@）に戻す" : {
-      "comment" : "ShortcutRecorder.swift:68",
+      "comment" : "ShortcutRecorder.swift:71",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -66404,7 +67730,7 @@
       }
     },
     "削除できませんでした" : {
-      "comment" : "MeetingWindow.swift:96",
+      "comment" : "MeetingWindow.swift:79",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67220,7 +68546,7 @@
       }
     },
     "取り消す" : {
-      "comment" : "AppDelegate.swift:318, MeetingNotesViews.swift:56, MeetingNotesViews.swift:174",
+      "comment" : "AppDelegate.swift:321, MeetingNotesViews.swift:65, MeetingNotesViews.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67628,7 +68954,7 @@
       }
     },
     "同じ部屋の話者を分けています…" : {
-      "comment" : "MeetingRecorder.swift:367",
+      "comment" : "MeetingRecorder.swift:378",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68750,7 +70076,7 @@
       }
     },
     "失敗" : {
-      "comment" : "DictationHistoryWindow.swift:375, MeetingWindow.swift:303",
+      "comment" : "DictationHistoryWindow.swift:375, MeetingWindow.swift:327",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68954,7 +70280,7 @@
       }
     },
     "字幕" : {
-      "comment" : "MeetingNotesViews.swift:111",
+      "comment" : "MeetingNotesViews.swift:120",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69056,7 +70382,7 @@
       }
     },
     "字幕をほかのアプリの前面に表示する" : {
-      "comment" : "MeetingNotesViews.swift:114",
+      "comment" : "MeetingNotesViews.swift:123",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69158,7 +70484,7 @@
       }
     },
     "字幕を前面に表示" : {
-      "comment" : "MeetingNotesViews.swift:115",
+      "comment" : "MeetingNotesViews.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -70484,7 +71810,7 @@
       }
     },
     "履歴を開く…" : {
-      "comment" : "AppDelegate.swift:232",
+      "comment" : "AppDelegate.swift:235",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -71912,7 +73238,7 @@
       }
     },
     "拒否した場合は、システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:347",
+      "comment" : "SettingsView.swift:350",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73748,7 +75074,7 @@
       }
     },
     "整形中…" : {
-      "comment" : "AppDelegate.swift:195",
+      "comment" : "AppDelegate.swift:198",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74768,7 +76094,7 @@
       }
     },
     "文字起こしとメモをこの AI に送ります。会話は保存しません。" : {
-      "comment" : "MeetingChatView.swift:370",
+      "comment" : "MeetingChatView.swift:414",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74870,7 +76196,7 @@
       }
     },
     "文字起こしとメモをもとに答えます。続けて質問すると、前のやりとりを踏まえて答えます。" : {
-      "comment" : "MeetingChatView.swift:273",
+      "comment" : "MeetingChatView.swift:316",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75278,7 +76604,7 @@
       }
     },
     "文字起こしのあとに録音を削除する" : {
-      "comment" : "MeetingAudioManager.swift:353, MeetingWindow.swift:411",
+      "comment" : "MeetingAudioManager.swift:353, MeetingWindow.swift:435",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75788,7 +77114,7 @@
       }
     },
     "文字起こしは、記録を止めたあとに %@ で行います。記録中はここに文字が出ません。" : {
-      "comment" : "MeetingWindow.swift:864",
+      "comment" : "MeetingWindow.swift:888",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75992,7 +77318,7 @@
       }
     },
     "文字起こしを確定しています…" : {
-      "comment" : "MeetingRecorder.swift:227",
+      "comment" : "MeetingRecorder.swift:238",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77828,7 +79154,7 @@
       }
     },
     "新しい会話" : {
-      "comment" : "MeetingChatView.swift:352",
+      "comment" : "MeetingChatView.swift:396",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78746,7 +80072,7 @@
       }
     },
     "書き始めた時刻つきで保存します。入力中に「ここ重要」を押すと、その文を印の説明にします。" : {
-      "comment" : "MeetingNotesViews.swift:80",
+      "comment" : "MeetingNotesViews.swift:89",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79664,7 +80990,7 @@
       }
     },
     "最後の結果をもう一度入力" : {
-      "comment" : "DictationHistoryWindow.swift:607, Onboarding.swift:557, ShortcutRecorder.swift:19",
+      "comment" : "DictationHistoryWindow.swift:607, Onboarding.swift:557, ShortcutRecorder.swift:20",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79970,7 +81296,7 @@
       }
     },
     "最新の発言へ" : {
-      "comment" : "MeetingWindow.swift:920",
+      "comment" : "MeetingWindow.swift:944",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80072,7 +81398,7 @@
       }
     },
     "最近の結果" : {
-      "comment" : "AppDelegate.swift:229",
+      "comment" : "AppDelegate.swift:232",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80786,7 +82112,7 @@
       }
     },
     "未許可" : {
-      "comment" : "SettingsView.swift:375",
+      "comment" : "SettingsView.swift:378",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82418,7 +83744,7 @@
       }
     },
     "止める" : {
-      "comment" : "MeetingChatView.swift:217",
+      "comment" : "MeetingChatView.swift:237, MeetingChatView.swift:260",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83234,7 +84560,7 @@
       }
     },
     "気になったことを書くと、議事録で優先して取り上げます。" : {
-      "comment" : "MeetingNotesViews.swift:45",
+      "comment" : "MeetingNotesViews.swift:54",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83336,7 +84662,7 @@
       }
     },
     "決まったこと・宿題" : {
-      "comment" : "MeetingChat.swift:220",
+      "comment" : "MeetingChat.swift:286",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84152,7 +85478,7 @@
       }
     },
     "準備中…" : {
-      "comment" : "DictationController.swift:229, EditModeController.swift:199, MeetingWindow.swift:347",
+      "comment" : "DictationController.swift:229, EditModeController.swift:199, MeetingWindow.swift:371",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85783,6 +87109,312 @@
         }
       }
     },
+    "直前に聞かれたことと、その背景を AI がまとめます" : {
+      "comment" : "MeetingAskedQuestion.swift:99",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يلخّص AI ما سُئلت عنه للتو وخلفيته"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die KI fasst die gerade gestellte Frage und ihren Hintergrund zusammen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The AI summarizes what you were just asked and its background"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA resume lo que te acaban de preguntar y su contexto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA résume la question qu’on vient de vous poser et son contexte"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI अभी-अभी पूछी गई बात और उसकी पृष्ठभूमि का सारांश बनाता है"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI merangkum hal yang baru saja ditanyakan beserta latar belakangnya"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'IA riassume ciò che ti hanno appena chiesto e il contesto"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "방금 받은 질문과 그 배경을 AI가 정리합니다"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI podsumuje, o co właśnie zapytano i w jakim kontekście"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A IA resume o que acabaram de perguntar a você e o contexto"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI кратко изложит только что заданный вам вопрос и его контекст"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI az önce size sorulanı ve arka planını özetler"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI tóm tắt điều bạn vừa được hỏi và bối cảnh"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 会汇总刚才被问到的问题及其背景"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 會彙整剛才被問到的問題及其背景"
+          }
+        }
+      }
+    },
+    "直前に聞かれたことと、その背景を AI がまとめます（%@）" : {
+      "comment" : "MeetingAskedQuestion.swift:98",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يلخّص AI ما سُئلت عنه للتو وخلفيته (%@)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die KI fasst die gerade gestellte Frage und ihren Hintergrund zusammen (%@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The AI summarizes what you were just asked and its background (%@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA resume lo que te acaban de preguntar y su contexto (%@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA résume la question qu’on vient de vous poser et son contexte (%@)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI अभी-अभी पूछी गई बात और उसकी पृष्ठभूमि का सारांश बनाता है (%@)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI merangkum hal yang baru saja ditanyakan beserta latar belakangnya (%@)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'IA riassume ciò che ti hanno appena chiesto e il contesto (%@)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "방금 받은 질문과 그 배경을 AI가 정리합니다(%@)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI podsumuje, o co właśnie zapytano i w jakim kontekście (%@)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A IA resume o que acabaram de perguntar a você e o contexto (%@)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI кратко изложит только что заданный вам вопрос и его контекст (%@)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI az önce size sorulanı ve arka planını özetler (%@)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI tóm tắt điều bạn vừa được hỏi và bối cảnh (%@)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 会汇总刚才被问到的问题及其背景（%@）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 會彙整剛才被問到的問題及其背景（%@）"
+          }
+        }
+      }
+    },
+    "直前に聞かれたことを探しています…" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:158, MeetingChatView.swift:234",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ البحث عمّا سُئلت عنه للتو…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerade gestellte Frage wird gesucht …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Looking for what you were just asked…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscando lo que te acaban de preguntar…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recherche de la question qu’on vient de vous poser…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अभी-अभी पूछी गई बात खोजी जा रही है…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mencari hal yang baru saja ditanyakan…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ricerca di ciò che ti hanno appena chiesto…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "방금 받은 질문을 찾는 중…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyszukiwanie ostatniego pytania…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscando o que acabaram de perguntar…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поиск только что заданного вопроса…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Az önce sorulan soru aranıyor…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang tìm điều bạn vừa được hỏi…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在查找刚才被问到的问题…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在尋找剛才被問到的問題…"
+          }
+        }
+      }
+    },
     "直近" : {
       "comment" : "MeetingSearchView.swift:377",
       "extractionState" : "manual",
@@ -85886,7 +87518,7 @@
       }
     },
     "直近 5 分の話" : {
-      "comment" : "MeetingChat.swift:219",
+      "comment" : "MeetingChat.swift:285",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85983,6 +87615,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最近 5 分鐘的內容"
+          }
+        }
+      }
+    },
+    "直近の相手の発言" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:133",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أحدث أقوال الطرف الآخر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte Äußerungen der Gegenseite"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Remarks from Others"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Últimas intervenciones de los demás"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Derniers propos des interlocuteurs"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "दूसरे पक्ष के हाल के कथन"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ucapan terbaru lawan bicara"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ultimi interventi degli altri"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 상대의 발언"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ostatnie wypowiedzi rozmówców"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falas recentes dos outros"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Последние реплики собеседников"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karşı tarafın son konuşmaları"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lời nói gần đây của bên kia"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对方最近的发言"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "對方最近的發言"
           }
         }
       }
@@ -86192,7 +87926,7 @@
       }
     },
     "相手側（スピーカー）の音が入っていません。会議の音が出ている機器を、設定の「会議」→「録音するスピーカー」で選んでください。" : {
-      "comment" : "MeetingRecorder.swift:978",
+      "comment" : "MeetingRecorder.swift:991",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86289,6 +88023,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有錄到對方（揚聲器）的聲音。請在設定中的「會議」→「錄音揚聲器」中選擇播放會議聲音的裝置。"
+          }
+        }
+      }
+    },
+    "相手側（スピーカー）の音が入っていません。相手の発言がないので、質問を見つけられないことがあります。" : {
+      "comment" : "MeetingAskedQuestion.swift:138",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يصل صوت الطرف الآخر (مكبر الصوت). قد يتعذّر العثور على السؤال لعدم وجود أقوال من الطرف الآخر."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Ton von der Gegenseite (Lautsprecher). Ohne Äußerungen der Gegenseite wird die Frage möglicherweise nicht gefunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No sound from the other side (speakers). Without remarks from others, the question may not be found."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No llega sonido del otro lado (altavoz). Sin intervenciones de los demás, es posible que no se encuentre la pregunta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun son des interlocuteurs (haut-parleurs). Sans leurs propos, la question risque de ne pas être trouvée."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "दूसरे पक्ष (स्पीकर) की आवाज़ नहीं आ रही है। दूसरे पक्ष के कथन न होने से सवाल शायद न मिल पाए।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada suara dari sisi lawan bicara (speaker). Karena tidak ada ucapan lawan bicara, pertanyaan mungkin tidak dapat ditemukan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun audio dagli altri (altoparlante). Senza interventi degli altri, la domanda potrebbe non essere trovata."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상대방(스피커)의 소리가 들어오지 않습니다. 상대의 발언이 없어 질문을 찾지 못할 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak dźwięku rozmówców (głośników). Bez wypowiedzi rozmówców pytanie może nie zostać znalezione."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não há som do outro lado (alto-falante). Como não há falas dos outros, talvez não seja possível encontrar a pergunta."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет звука собеседников (динамиков). Без реплик собеседников вопрос может не найтись."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karşı taraftan (hoparlör) ses gelmiyor. Karşı tarafın konuşması olmadığından soru bulunamayabilir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có âm thanh từ phía bên kia (loa). Vì không có lời nói của bên kia nên có thể không tìm được câu hỏi."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有录到对方（扬声器）的声音。由于没有对方的发言，可能找不到问题。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有錄到對方（揚聲器）的聲音。由於沒有對方的發言，可能找不到問題。"
           }
         }
       }
@@ -86498,7 +88334,7 @@
       }
     },
     "答えをコピーする" : {
-      "comment" : "MeetingChatView.swift:461",
+      "comment" : "MeetingChatView.swift:522",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86600,7 +88436,7 @@
       }
     },
     "答えを作ったときに渡した記録の範囲（発言 %@ 件）" : {
-      "comment" : "MeetingChatView.swift:447",
+      "comment" : "MeetingChatView.swift:508",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86702,7 +88538,7 @@
       }
     },
     "答えを作れませんでした: %@" : {
-      "comment" : "MeetingChatView.swift:89, MeetingSearchView.swift:124",
+      "comment" : "MeetingAskedQuestion.swift:235, MeetingChatView.swift:92, MeetingSearchView.swift:124",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86804,7 +88640,7 @@
       }
     },
     "答えを待つのをやめる" : {
-      "comment" : "MeetingChatView.swift:327",
+      "comment" : "MeetingChatView.swift:371",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88538,7 +90374,7 @@
       }
     },
     "編集" : {
-      "comment" : "AppDelegate.swift:317, AppDelegate.swift:326",
+      "comment" : "AppDelegate.swift:320, AppDelegate.swift:329",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89660,7 +91496,7 @@
       }
     },
     "聞いておくとよいこと" : {
-      "comment" : "MeetingChat.swift:222",
+      "comment" : "MeetingChat.swift:288",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89762,7 +91598,7 @@
       }
     },
     "聞き逃した話の確認や、決まったことの整理に。続けて質問すると、前のやりとりを踏まえて答えます。" : {
-      "comment" : "MeetingChatView.swift:272",
+      "comment" : "MeetingChatView.swift:315",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90374,7 +92210,7 @@
       }
     },
     "自動入力: 有効（アクセシビリティ許可済み）" : {
-      "comment" : "AppDelegate.swift:236",
+      "comment" : "AppDelegate.swift:239",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90476,7 +92312,7 @@
       }
     },
     "自動入力: 無効 — アクセシビリティを許可…" : {
-      "comment" : "AppDelegate.swift:236",
+      "comment" : "AppDelegate.swift:239",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90578,7 +92414,7 @@
       }
     },
     "自動入力に必要" : {
-      "comment" : "SettingsView.swift:327",
+      "comment" : "SettingsView.swift:330",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92414,7 +94250,7 @@
       }
     },
     "記録する機器・議事録の型・録音の扱いを変える（次の記録から）" : {
-      "comment" : "MeetingWindow.swift:369",
+      "comment" : "MeetingWindow.swift:393",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92720,7 +94556,7 @@
       }
     },
     "記録の設定" : {
-      "comment" : "MeetingWindow.swift:370, MeetingWindow.swift:406",
+      "comment" : "MeetingWindow.swift:394, MeetingWindow.swift:430",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93026,7 +94862,7 @@
       }
     },
     "記録の途中で音声認識が止まったため、文字起こしできなかった部分があります（%@）。" : {
-      "comment" : "MeetingRecorder.swift:276",
+      "comment" : "MeetingRecorder.swift:287",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93128,7 +94964,7 @@
       }
     },
     "記録の開始／停止" : {
-      "comment" : "AppDelegate.swift:312, Onboarding.swift:580, SettingsView.swift:265",
+      "comment" : "AppDelegate.swift:315, Onboarding.swift:580, SettingsView.swift:265",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93230,7 +95066,7 @@
       }
     },
     "記録を停止" : {
-      "comment" : "MeetingWindow.swift:350",
+      "comment" : "MeetingWindow.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93332,7 +95168,7 @@
       }
     },
     "記録を止めたあとに %@ で文字起こしします" : {
-      "comment" : "MeetingNotesViews.swift:383",
+      "comment" : "MeetingNotesViews.swift:421",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93429,6 +95265,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "停止錄製後將使用 %@ 轉錄"
+          }
+        }
+      }
+    },
+    "記録を止めたあとに文字起こしするエンジン（%@）では使えません。" : {
+      "comment" : "MeetingAskedQuestion.swift:103",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "غير متاح مع محرك يفرّغ النص بعد إيقاف التسجيل (%@)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht verfügbar mit Engines, die erst nach dem Ende der Aufnahme transkribieren (%@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not available with an engine that transcribes after recording stops (%@)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No está disponible con motores que transcriben al detener la grabación (%@)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indisponible avec les moteurs qui transcrivent après l’arrêt de l’enregistrement (%@)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रिकॉर्डिंग रोकने के बाद ट्रांसक्रिप्शन करने वाले इंजन (%@) के साथ उपलब्ध नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak dapat digunakan dengan mesin yang mentranskripsi setelah perekaman dihentikan (%@)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non disponibile con i motori che trascrivono dopo aver interrotto la registrazione (%@)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록을 중지한 후에 전사하는 엔진(%@)에서는 사용할 수 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niedostępne z silnikiem, który transkrybuje po zatrzymaniu nagrywania (%@)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não disponível com mecanismos que transcrevem depois que a gravação para (%@)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Недоступно с движком, который выполняет расшифровку после остановки записи (%@)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıt durdurulduktan sonra yazıya döken motorla (%@) kullanılamaz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không dùng được với công cụ chép lời sau khi dừng ghi (%@)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在停止录制后才转写的引擎（%@）下无法使用。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在停止錄製後才轉錄的引擎（%@）下無法使用。"
           }
         }
       }
@@ -93740,7 +95678,7 @@
       }
     },
     "記録を続ける" : {
-      "comment" : "MeetingRecorder.swift:942",
+      "comment" : "MeetingRecorder.swift:955",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93842,7 +95780,7 @@
       }
     },
     "記録を読んでいます…" : {
-      "comment" : "MeetingChatView.swift:214",
+      "comment" : "MeetingChatView.swift:257",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93944,7 +95882,7 @@
       }
     },
     "記録中" : {
-      "comment" : "MeetingWindow.swift:217, MeetingWindow.swift:295, MeetingWindow.swift:786",
+      "comment" : "MeetingWindow.swift:241, MeetingWindow.swift:319, MeetingWindow.swift:810",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94148,7 +96086,7 @@
       }
     },
     "記録中に「ここ重要」のショートカットを使う" : {
-      "comment" : "MeetingNotesViews.swift:280",
+      "comment" : "MeetingNotesViews.swift:289",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94245,6 +96183,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "錄製時使用「重要」快速鍵"
+          }
+        }
+      }
+    },
+    "記録中に「何を聞かれた？」のショートカットを使う" : {
+      "comment" : "MeetingAskedQuestionPanel.swift:317",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدام اختصار «ماذا سُئلت؟» أثناء التسجيل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurzbefehl für „Was wurde ich gefragt?“ während der Aufnahme verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the “What was I asked?” shortcut during recording"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar el atajo de «¿Qué me preguntaron?» durante la grabación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser le raccourci « Qu’est-ce qu’on m’a demandé ? » pendant l’enregistrement"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रिकॉर्डिंग के दौरान “मुझसे क्या पूछा गया?” शॉर्टकट का उपयोग करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gunakan pintasan “Saya ditanya apa?” saat merekam"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa l'abbreviazione «Cosa mi hanno chiesto?» durante la registrazione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록 중 \"무슨 질문이었지?\" 단축키 사용"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skrót „O co mnie zapytano?” podczas nagrywania"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar o atalho de “O que me perguntaram?” durante a gravação"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетание клавиш «О чём меня спросили?» во время записи"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıt sırasında “Bana ne soruldu?” kısayolunu kullan"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dùng phím tắt “Tôi vừa được hỏi gì?” trong lúc ghi"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录制时使用“问了我什么？”快捷键"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "錄製時使用「問了我什麼？」快速鍵"
           }
         }
       }
@@ -94352,7 +96392,7 @@
       }
     },
     "記録中の文字起こしがないため（%@）、メモと印だけをもとに答えます。" : {
-      "comment" : "MeetingChatView.swift:191",
+      "comment" : "MeetingChatView.swift:212",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94454,7 +96494,7 @@
       }
     },
     "記録中は変えられません。次の記録から使います。" : {
-      "comment" : "MeetingWindow.swift:414",
+      "comment" : "MeetingWindow.swift:438",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94658,7 +96698,7 @@
       }
     },
     "記録中・処理中は録音を削除できません" : {
-      "comment" : "MeetingAudioManager.swift:39, MeetingWindow.swift:680",
+      "comment" : "MeetingAudioManager.swift:39, MeetingWindow.swift:704",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95168,7 +97208,7 @@
       }
     },
     "設定…" : {
-      "comment" : "AppDelegate.swift:246, AppDelegate.swift:286, AppDelegate.swift:301",
+      "comment" : "AppDelegate.swift:249, AppDelegate.swift:289, AppDelegate.swift:304",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95372,7 +97412,7 @@
       }
     },
     "設定の「会議」で別のキーを選んでください。" : {
-      "comment" : "AppDelegate.swift:396",
+      "comment" : "AppDelegate.swift:399",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95576,7 +97616,7 @@
       }
     },
     "許可する" : {
-      "comment" : "Onboarding.swift:715, Onboarding.swift:728, SettingsView.swift:381",
+      "comment" : "Onboarding.swift:715, Onboarding.swift:728, SettingsView.swift:384",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95780,7 +97820,7 @@
       }
     },
     "許可済み" : {
-      "comment" : "Onboarding.swift:790, SettingsView.swift:375",
+      "comment" : "Onboarding.swift:790, SettingsView.swift:378",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96800,7 +98840,7 @@
       }
     },
     "話し始めると、ここに文字起こしが出ます" : {
-      "comment" : "MeetingNotesViews.swift:385, MeetingWindow.swift:869",
+      "comment" : "MeetingNotesViews.swift:423, MeetingWindow.swift:893",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97310,7 +99350,7 @@
       }
     },
     "話者を分けています…（初回はモデルをダウンロードします）" : {
-      "comment" : "MeetingRecorder.swift:356",
+      "comment" : "MeetingRecorder.swift:367",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97616,7 +99656,7 @@
       }
     },
     "話者名…" : {
-      "comment" : "MeetingWindow.swift:669",
+      "comment" : "MeetingWindow.swift:693",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97820,7 +99860,7 @@
       }
     },
     "話者名・Finder で表示・録音・削除" : {
-      "comment" : "MeetingWindow.swift:653",
+      "comment" : "MeetingWindow.swift:677",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100166,7 +102206,7 @@
       }
     },
     "議事録の作成" : {
-      "comment" : "MeetingRecorder.swift:396, MeetingRecorder.swift:464",
+      "comment" : "MeetingRecorder.swift:407, MeetingRecorder.swift:475",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100778,7 +102818,7 @@
       }
     },
     "議事録は作り直しません" : {
-      "comment" : "MeetingRecorder.swift:464",
+      "comment" : "MeetingRecorder.swift:475",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100982,7 +103022,7 @@
       }
     },
     "議事録を作っています" : {
-      "comment" : "MeetingWindow.swift:291, MeetingWindow.swift:292",
+      "comment" : "MeetingWindow.swift:315, MeetingWindow.swift:316",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101084,7 +103124,7 @@
       }
     },
     "議事録を作らずに、文字起こしだけを残します" : {
-      "comment" : "MeetingRecorder.swift:396",
+      "comment" : "MeetingRecorder.swift:407",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101186,7 +103226,7 @@
       }
     },
     "議事録を作り直しています…" : {
-      "comment" : "MeetingDocumentView.swift:347, MeetingRecorder.swift:455",
+      "comment" : "MeetingDocumentView.swift:347, MeetingRecorder.swift:466",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101288,7 +103328,7 @@
       }
     },
     "議事録を作り直している間は削除できません" : {
-      "comment" : "MeetingWindow.swift:692",
+      "comment" : "MeetingWindow.swift:716",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101390,7 +103430,7 @@
       }
     },
     "議事録を作り直しますか？" : {
-      "comment" : "MeetingWindow.swift:540",
+      "comment" : "MeetingWindow.swift:564",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101492,7 +103532,7 @@
       }
     },
     "議事録を作り直す" : {
-      "comment" : "MeetingDocumentView.swift:318, MeetingDocumentView.swift:332, MeetingWindow.swift:557",
+      "comment" : "MeetingDocumentView.swift:318, MeetingDocumentView.swift:332, MeetingWindow.swift:581",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101696,7 +103736,7 @@
       }
     },
     "議事録を作れませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:404, MeetingRecorder.swift:484",
+      "comment" : "MeetingRecorder.swift:415, MeetingRecorder.swift:495",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101798,7 +103838,7 @@
       }
     },
     "議事録を作成しています…" : {
-      "comment" : "MeetingRecorder.swift:392",
+      "comment" : "MeetingRecorder.swift:403",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101900,7 +103940,7 @@
       }
     },
     "議事録を作成中" : {
-      "comment" : "MeetingDocumentView.swift:297, MeetingWindow.swift:302",
+      "comment" : "MeetingDocumentView.swift:297, MeetingWindow.swift:326",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -102308,7 +104348,7 @@
       }
     },
     "議事録・文字起こし・メモ・音声をまとめてゴミ箱に移します。ゴミ箱から戻せます。" : {
-      "comment" : "MeetingWindow.swift:85",
+      "comment" : "MeetingWindow.swift:68",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105062,7 +107102,7 @@
       }
     },
     "送信（↩）" : {
-      "comment" : "MeetingChatView.swift:335",
+      "comment" : "MeetingChatView.swift:379",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -108020,7 +110060,7 @@
       }
     },
     "録音する前に、参加者の了承を得てください。" : {
-      "comment" : "MeetingSuggestionPanel.swift:145, SettingsView.swift:295",
+      "comment" : "MeetingSuggestionPanel.swift:145, SettingsView.swift:298",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -108530,7 +110570,7 @@
       }
     },
     "録音の管理…" : {
-      "comment" : "MeetingWindow.swift:231, MeetingWindow.swift:685",
+      "comment" : "MeetingWindow.swift:255, MeetingWindow.swift:709",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -108836,7 +110876,7 @@
       }
     },
     "録音は削除" : {
-      "comment" : "MeetingWindow.swift:394",
+      "comment" : "MeetingWindow.swift:418",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -109040,7 +111080,7 @@
       }
     },
     "録音を停止して入力" : {
-      "comment" : "AppDelegate.swift:194",
+      "comment" : "AppDelegate.swift:197",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -109244,7 +111284,7 @@
       }
     },
     "録音を削除…" : {
-      "comment" : "MeetingWindow.swift:229, MeetingWindow.swift:681",
+      "comment" : "MeetingWindow.swift:253, MeetingWindow.swift:705",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -110162,7 +112202,7 @@
       }
     },
     "録音を開始" : {
-      "comment" : "AppDelegate.swift:193",
+      "comment" : "AppDelegate.swift:196",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -110876,7 +112916,7 @@
       }
     },
     "閉じる" : {
-      "comment" : "AppDelegate.swift:330, AppUpdate.swift:685, AppUpdate.swift:889",
+      "comment" : "AppDelegate.swift:333, AppUpdate.swift:685, AppUpdate.swift:889",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -113324,7 +115364,7 @@
       }
     },
     "音声認識" : {
-      "comment" : "Onboarding.swift:725, SettingsView.swift:320",
+      "comment" : "Onboarding.swift:725, SettingsView.swift:323",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

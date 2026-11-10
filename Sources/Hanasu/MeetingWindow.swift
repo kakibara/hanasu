@@ -32,48 +32,9 @@ struct MeetingWindowView: View {
     @AppStorage("meetingInspectorShown") private var inspectorShown = true
 
     var body: some View {
-        NavigationSplitView {
-            // 検索欄・一覧・記録の欄を縦に積む。safeAreaInset で重ねると、一覧が欄の裏に回り込んで透けて見える
-            VStack(spacing: 0) {
-                MeetingSearchField(model: search) {
-                    showingAsk = true
-                    selection = nil
-                }
-                sidebarList
-                    .frame(maxHeight: .infinity)
-                Divider()
-                RecordButton(recorder: recorder)
-                    .padding(12)
-            }
-            .navigationSplitViewColumnWidth(min: 220, ideal: 260)
-        } detail: {
-            detail
-        }
-        // 設計判断: DEC-MTG-130（後ろ側のパネルは NavigationSplitView に付ける）
-        .inspector(isPresented: inspectorBinding) {
-            inspector
-        }
-        .onReceive(recorder.$meetings) { search.update($0) }
-        // 要件: REQ-MTG-049
-        // 設計判断: DEC-MTG-150（ウインドウは閉じても残すので、閉じる通知で会議に質問の送り先を既定に戻す）
-        .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { note in
-            guard (note.object as? NSWindow)?.identifier == MeetingPlayer.windowIdentifier else { return }
-            ask.override = nil
-        }
-        .onChange(of: search.isActive) { _, active in
-            if !active { jump = nil }  // 検索をやめたら、検索語の色も消す
-        }
-        .onChange(of: selection) { _, newID in
-            if newID != nil { showingAsk = false }
-            if newID != jump?.meetingID { jump = nil }
-            panel.reset()
-        }
-        // 設計判断: DEC-MTG-070
-        // 記録を始めたら、その会議を選ぶ。処理（記録のあとの処理・議事録の作り直し）が終わっても選び直さない。
-        // 記録中の会議と保存した会議は同じ ID なので、記録のあとも選んだ会議のまま、議事録が出る
-        .onChange(of: recorder.current?.id) { _, newID in
-            if let newID { selection = newID }
-        }
+        // 修飾子が多いと型の推論が時間切れになるので、分割の画面と後ろ側のパネルは splitView、
+        // 一覧・選択・通知を受けるところは observedSplitView に分ける
+        observedSplitView
         // 要件: REQ-MTG-028
         // 設計判断: DEC-MTG-022
         .confirmationDialog(pendingDelete.map { tr("「%@」を削除しますか？", "\($0.title)") } ?? "",
@@ -97,6 +58,30 @@ struct MeetingWindowView: View {
             Button("OK") {}
         } message: {
             Text(deleteError ?? "")
+        }
+    }
+
+    /// 一覧・検索・選択の変化と、通知（チャットで続ける・ウインドウを閉じる）を受ける
+    private var observedSplitView: some View {
+        splitView
+        .onReceive(recorder.$meetings) { search.update($0) }
+        // 要件: REQ-MTG-049（式が長いと型の推論が時間切れになるので、関数に分ける）
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification), perform: resetAskRoute)
+        // 要件: REQ-MTG-047（「チャットで続ける」。式が長いと型の推論が時間切れになるので、関数に分ける）
+        .onReceive(MeetingAskedQuestion.shared.$openChatRequest.compactMap { $0 }, perform: openChat)
+        .onChange(of: search.isActive) { _, active in
+            if !active { jump = nil }  // 検索をやめたら、検索語の色も消す
+        }
+        .onChange(of: selection) { _, newID in
+            if newID != nil { showingAsk = false }
+            if newID != jump?.meetingID { jump = nil }
+            panel.reset()
+        }
+        // 設計判断: DEC-MTG-070
+        // 記録を始めたら、その会議を選ぶ。処理（記録のあとの処理・議事録の作り直し）が終わっても選び直さない。
+        // 記録中の会議と保存した会議は同じ ID なので、記録のあとも選んだ会議のまま、議事録が出る
+        .onChange(of: recorder.current?.id) { _, newID in
+            if let newID { selection = newID }
         }
     }
 
@@ -127,6 +112,54 @@ struct MeetingWindowView: View {
     }
 
     private var isLive: Bool { recorder.state == .recording || recorder.state == .starting }
+
+    /// 左の一覧・真ん中・後ろ側のパネル
+    private var splitView: some View {
+        NavigationSplitView {
+            // 検索欄・一覧・記録の欄を縦に積む。safeAreaInset で重ねると、一覧が欄の裏に回り込んで透けて見える
+            VStack(spacing: 0) {
+                MeetingSearchField(model: search) {
+                    showingAsk = true
+                    selection = nil
+                }
+                sidebarList
+                    .frame(maxHeight: .infinity)
+                Divider()
+                RecordButton(recorder: recorder)
+                    .padding(12)
+            }
+            .navigationSplitViewColumnWidth(min: 220, ideal: 260)
+        } detail: {
+            detail
+        }
+        // 設計判断: DEC-MTG-130（後ろ側のパネルは NavigationSplitView に付ける）
+        .inspector(isPresented: inspectorBinding) {
+            inspector
+        }
+    }
+
+    // 要件: REQ-MTG-047
+    // 設計判断: DEC-MTG-096
+    /// 「チャットで続ける」: その会議を選び、後ろ側のパネルを出して AI チャットにし、入力欄にフォーカスを移す
+    // 要件: REQ-MTG-049
+    // 設計判断: DEC-MTG-150（ウインドウは閉じても残すので、閉じる通知で会議に質問の送り先を既定に戻す）
+    private func resetAskRoute(_ note: Notification) {
+        guard (note.object as? NSWindow)?.identifier == MeetingPlayer.windowIdentifier else { return }
+        ask.override = nil
+    }
+
+    private func openChat(_ request: MeetingAskedQuestion.OpenChatRequest) {
+        MeetingAskedQuestion.shared.consumeOpenChatRequest(request.id)
+        showingAsk = false
+        selection = request.meetingID
+        inspectorShown = true
+        panel.tab = .chat
+        UserDefaults.standard.set(LiveSidePanelMode.chat.rawValue, forKey: "meetingLiveSidePanel")
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(200))  // パネルができてから
+            MeetingChatStore.shared.model(for: request.meetingID).requestFocus()
+        }
+    }
 
     private var selectedMeeting: Meeting? {
         guard let id = selection else { return nil }

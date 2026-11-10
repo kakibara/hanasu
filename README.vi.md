@@ -67,8 +67,8 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 | **Biên bản bằng AI** | Được tạo bởi AI bạn chọn cho cuộc họp. Chọn mẫu: tự động, họp định kỳ hằng tuần, 1-1, cuộc gọi bán hàng, động não hoặc tùy chỉnh. Các đầu việc có người phụ trách và hạn chót. |
 | **Kiểm tra nguồn & nghe lại** *(Mac)* | Biên bản mở ra thành một trang: tóm tắt và các đầu việc ở trên, bản chép lời nằm bên cạnh. Bấm vào mốc thời gian sau mỗi ý để chuyển đến lời nói làm căn cứ cho ý đó. Phát bản ghi từ bất kỳ lời nói nào, và tắt tiếng phía bạn hoặc phía bên kia nếu cuộc gọi bị vọng tiếng. |
 | **Ghi chú trực tiếp & đánh dấu** | Gõ ghi chú có dấu thời gian trong cuộc gọi, hoặc nhấn <kbd>⌃⌥⌘ H</kbd> để đánh dấu "chỗ này quan trọng" (có thể hoàn tác trong 10 giây). Biên bản sẽ ưu tiên những phần đó, và sau này bạn có thể đọc lại đoạn hội thoại quanh mỗi dấu. |
-| **Phụ đề nổi** *(Mac)* | Hiển thị bản chép lời trực tiếp dưới dạng phụ đề phía trên ứng dụng họp của bạn. |
-| **Trò chuyện với AI trong cuộc họp** *(Mac)* | Trong lúc ghi âm, hãy hỏi AI về cuộc hội thoại cho đến lúc này (<kbd>⌘J</kbd>). Chỉ một cú nhấp để có "tóm tắt đến giờ" hoặc "quyết định & việc cần làm". Hãy hỏi tiếp, và bấm vào dấu thời gian trong câu trả lời để chuyển đến đoạn đó trong bản chép lời. Có thể đổi AI và mô hình dùng cho cuộc trò chuyện đó bằng menu bên dưới ô nhập. |
+| **Phụ đề nổi** *(Mac)* | Hiển thị bản chép lời trực tiếp dưới dạng phụ đề phía trên ứng dụng họp của bạn. Nếu bạn để phụ đề bật, lần họp sau phụ đề sẽ lại hiện ra. |
+| **Trò chuyện với AI trong cuộc họp** *(Mac)* | Trong lúc ghi âm, hãy hỏi AI về cuộc hội thoại cho đến lúc này (<kbd>⌘J</kbd>). Chỉ một cú nhấp để có "tóm tắt đến giờ" hoặc "quyết định & việc cần làm". Hãy hỏi tiếp, và bấm vào dấu thời gian trong câu trả lời để chuyển đến đoạn đó trong bản chép lời. Bị hỏi bất ngờ khi đang làm việc khác? Hãy bấm **Tôi vừa được hỏi gì?** trên phụ đề (hoặc nhấn <kbd>⌃⌥⌘ A</kbd>) mà không cần rời ứng dụng họp: một bảng nổi sẽ hiện những gì người khác vừa nói, kèm phần AI tóm tắt câu hỏi và bối cảnh dẫn đến câu hỏi đó. Có thể đổi AI và mô hình dùng cho cuộc trò chuyện đó bằng menu bên dưới ô nhập. |
 | **Phát hiện cuộc họp** | Khi một ứng dụng họp bắt đầu dùng micrô, Hanasu hỏi bạn có muốn ghi âm không. Ứng dụng không bao giờ tự bắt đầu ghi âm. |
 | **Tìm kiếm & Hỏi đáp** | Tìm trong nội dung của mọi cuộc họp, hoặc hỏi "Cuộc họp tuần trước chúng ta đã quyết định gì?". Câu trả lời có trích dẫn các cuộc họp được dùng làm nguồn. |
 | **Xuất** | Sao chép dưới dạng Markdown hoặc bản tóm tắt sẵn để gửi lên Slack, lưu thành `.md` / `.txt`, hoặc gửi các đầu việc sang Lời nhắc. |
@@ -174,6 +174,7 @@ Trên Mac, bạn có thể hiện biểu tượng Hanasu trên thanh menu, trên
 | Hủy ghi âm | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Ghi âm cuộc họp (bắt đầu / dừng) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Đánh dấu "chỗ này quan trọng" trong cuộc họp | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| "Tôi vừa được hỏi gì?" trong cuộc họp | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Bạn có thể thay đổi mọi phím tắt trong Cài đặt. Hướng dẫn sử dụng đầy đủ (bằng tiếng Nhật) nằm ở [docs/guide.md](docs/guide.md).
 

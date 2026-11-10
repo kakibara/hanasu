@@ -13,7 +13,12 @@ enum MeetingChat {
 
         var id = UUID()
         var role: Role
+        /// AI に渡す会話の文面
         var text: String
+        // 要件: REQ-MTG-047
+        // 設計判断: DEC-MTG-098
+        /// 会話の中に出す短い名前（「何を聞かれた？」の長い文面を出さないため）。nil なら text を出す
+        var label: String?
         /// 答えのとき: 渡した記録の終わり（録音開始からの秒数）
         var coveredUntil: Double?
         /// 答えのとき: 渡した発言の数
@@ -47,6 +52,10 @@ enum MeetingChat {
         var notes: String?
         /// 記録中は文字起こししないエンジン（Whisper / Gemini）の名前。Mac 標準なら nil
         var batchEngineName: String?
+        // 設計判断: DEC-MTG-095
+        /// 直近だけを渡すとき: その幅（分）と、それより前で省いた発言の数
+        var recentWindowMinutes: Int?
+        var omittedBeforeWindow = 0
     }
 
     // 設計判断: DEC-MTG-082
@@ -92,6 +101,35 @@ enum MeetingChat {
                         batchEngineName: recorder.batchEngine?.shortName)
     }
 
+    // 要件: REQ-MTG-047
+    // 設計判断: DEC-MTG-095
+    /// 「何を聞かれた？」で渡す記録: 記録中の記録のうち、今から window 秒前より後に始まった発言と確定前の途中結果、
+    /// その間の時刻を持つメモと印だけ。省いた前の発言は数だけ持つ
+    static func askedMaterial(from material: Material, notes: [MeetingNote], window: Double = askedWindow) -> Material {
+        let from = material.elapsed - window
+        var result = material
+        result.lines = material.lines.filter { $0.time >= from }
+        result.omittedBeforeWindow = material.lines.count - result.lines.count
+        result.recentWindowMinutes = Int((window / 60).rounded())
+        var cut = Meeting(id: "", title: material.title, startedAt: material.startedAt)
+        cut.notes = notes.filter { ($0.time ?? -.infinity) >= from }
+        result.notes = cut.notesForPrompt()
+        return result
+    }
+
+    // 設計判断: DEC-MTG-095
+    /// 「何を聞かれた？」で渡す幅（秒）
+    static let askedWindow: Double = 600
+
+    // 要件: REQ-MTG-047
+    // 設計判断: DEC-MTG-096
+    /// 「何を聞かれた？」のパネルに AI を待たずに出す、相手の直近の発言（確定した発言の最後と、確定前の途中結果。合わせて count 個）
+    static func recentOthers(in material: Material, count: Int = 3) -> [Line] {
+        let others = Meeting.promptLabel(for: "others")
+        let all = material.lines.filter { $0.speaker == others } + material.pending.filter { $0.speaker == others }
+        return Array(all.suffix(count))
+    }
+
     /// 記録のあとの会議の記録（確定した文字起こしと、付け替えた話者名）
     static func material(for meeting: Meeting) -> Material {
         // 設計判断: DEC-MTG-091
@@ -127,6 +165,10 @@ enum MeetingChat {
         let omitted = material.lines.count - kept.count
 
         var transcript: [String] = []
+        // 設計判断: DEC-MTG-095
+        if material.omittedBeforeWindow > 0, let minutes = material.recentWindowMinutes {
+            transcript.append(Prompts.text("chat.transcript.recentOnly", ["minutes": "\(minutes)", "count": "\(material.omittedBeforeWindow)"]))
+        }
         if omitted > 0 { transcript.append(Prompts.text("chat.transcript.omitted", ["count": "\(omitted)"])) }
         if kept.isEmpty {
             if let engine = material.batchEngineName, material.live {
@@ -207,6 +249,29 @@ enum MeetingChat {
         var label: String
         var symbol: String
         var question: String
+        // 要件: REQ-MTG-047
+        /// 記録中だけ出す（記録のあとの会議には出さない）
+        var liveOnly = false
+
+        /// 「何を聞かれた？」（押すと MeetingAskedQuestion に渡す）
+        var isAsked: Bool { id == MeetingChat.askedPromptID }
+    }
+
+    // 要件: REQ-MTG-047
+    static let askedPromptID = "asked"
+
+    // 要件: REQ-MTG-047
+    // 設計判断: DEC-MTG-095
+    /// 「何を聞かれた？」の質問（表示の名前と、AI に渡す文面）
+    static var askedPrompt: QuickPrompt {
+        QuickPrompt(id: askedPromptID, label: tr("何を聞かれた？"), symbol: "person.fill.questionmark",
+                    question: Prompts.text("chat.quick.asked"), liveOnly: true)
+    }
+
+    // 要件: REQ-MTG-047
+    /// その画面に出すよく使う質問（記録のあとは「記録中だけ」のものを外す）
+    static func quickPrompts(live: Bool) -> [QuickPrompt] {
+        quickPrompts.filter { live || !$0.liveOnly }
     }
 
     // 設計判断: DEC-MTG-083
@@ -215,6 +280,7 @@ enum MeetingChat {
     /// 送る質問の文面はプロンプトの言語（chat.quick.<id>）
     static var quickPrompts: [QuickPrompt] {
         [
+            askedPrompt,
             QuickPrompt(id: "summary", label: tr("ここまでを要約"), symbol: "text.alignleft", question: Prompts.text("chat.quick.summary")),
             QuickPrompt(id: "recent", label: tr("直近 5 分の話"), symbol: "clock.arrow.circlepath", question: Prompts.text("chat.quick.recent")),
             QuickPrompt(id: "decisions", label: tr("決まったこと・宿題"), symbol: "checklist", question: Prompts.text("chat.quick.decisions")),
