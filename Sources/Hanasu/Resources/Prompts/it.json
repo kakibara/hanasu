@@ -575,6 +575,7 @@
     "- Rispondi in italiano. Puoi usare titoli, elenchi puntati e grassetto (Markdown), ma non tabelle."
   ],
   "chat.transcript.omitted": "(Le prime ${count} frasi sono state omesse per il limite di lunghezza.)",
+  "chat.transcript.recentOnly": "(Le ${count} frasi precedenti agli ultimi ${minutes} minuti sono state omesse.)",
   "chat.transcript.afterRecording": "(Questa riunione viene trascritta con ${engine} dopo la fine della registrazione, quindi non c'è traccia di ciò che viene detto durante la registrazione.)",
   "chat.transcript.empty": "(Non è stato ancora detto nulla.)",
   "chat.status.live": "In registrazione (${elapsed} dall'inizio della registrazione)",
@@ -585,5 +586,6 @@
   "chat.quick.recent": "Riassumi in breve di cosa si è parlato negli ultimi 5 minuti circa.",
   "chat.quick.decisions": "Elenca per punti cosa è stato deciso finora e chi fa cosa (compiti, cose da fare). Elenca a parte ciò che non è ancora stato deciso.",
   "chat.quick.explain": "Spiega l'argomento più recente in modo che lo capisca anche chi non conosce il contesto. Spiega brevemente gli eventuali termini tecnici.",
-  "chat.quick.questions": "Indica 3 punti rimasti poco chiari o che vale la pena verificare, formulati come domande che posso fare durante la riunione."
+  "chat.quick.questions": "Indica 3 punti rimasti poco chiari o che vale la pena verificare, formulati come domande che posso fare durante la riunione.",
+  "chat.quick.asked": "Trova la domanda o la richiesta più recente che gli altri partecipanti («Altri») hanno fatto nella conversazione recente. Cerca anche tra le frasi non ancora definitive in <pending_transcript>. Scrivi solo i due punti seguenti, in modo conciso.\n1. **Cosa è stato chiesto**: riformula in 1–2 frasi cosa è stato chiesto o richiesto, con l'orario [12:34] della frase su cui ti basi. Indica chi l'ha chiesto e se era rivolto a me («Io») solo quando è chiaro, per esempio da come è stata chiamata la persona.\n2. **Contesto**: come si è sviluppata la discussione fino a quella domanda, in 2–3 punti elenco.\nNon suggerire cosa dovrei rispondere né come rispondere. Se non trovi domande o richieste, dillo e poi riassumi in 2–3 righe gli ultimi 1–2 minuti di discussione."
 }

@@ -574,6 +574,7 @@
     "- Trả lời bằng tiếng Việt. Có thể dùng tiêu đề, gạch đầu dòng và chữ đậm (Markdown), nhưng không dùng bảng."
   ],
   "chat.transcript.omitted": "(Đã lược bỏ ${count} lượt nói đầu tiên do giới hạn độ dài.)",
+  "chat.transcript.recentOnly": "(Đã lược bỏ ${count} lượt nói trước ${minutes} phút gần nhất.)",
   "chat.transcript.afterRecording": "(Cuộc họp này được chép lời bằng ${engine} sau khi dừng ghi âm, nên không có bản ghi lời nói trong lúc ghi âm.)",
   "chat.transcript.empty": "(Chưa có lời nói nào được ghi lại.)",
   "chat.status.live": "Đang ghi âm (tại thời điểm ${elapsed} kể từ lúc bắt đầu ghi âm)",
@@ -584,5 +585,6 @@
   "chat.quick.recent": "Hãy tóm tắt ngắn gọn những gì đã được thảo luận trong khoảng 5 phút gần đây.",
   "chat.quick.decisions": "Hãy liệt kê dạng gạch đầu dòng những gì đã được quyết định đến giờ và ai sẽ làm gì (việc cần làm, TODO). Liệt kê riêng những điều vẫn chưa được quyết định.",
   "chat.quick.explain": "Hãy giải thích chủ đề vừa được bàn sao cho người không nắm bối cảnh cũng hiểu được. Nếu có thuật ngữ chuyên môn, hãy giải thích ngắn gọn.",
-  "chat.quick.questions": "Hãy nêu 3 điểm còn mơ hồ hoặc nên xác nhận lại trong những gì đã bàn đến giờ, dưới dạng câu hỏi tôi có thể hỏi trong cuộc họp."
+  "chat.quick.questions": "Hãy nêu 3 điểm còn mơ hồ hoặc nên xác nhận lại trong những gì đã bàn đến giờ, dưới dạng câu hỏi tôi có thể hỏi trong cuộc họp.",
+  "chat.quick.asked": "Hãy tìm câu hỏi hoặc yêu cầu mới nhất mà những người tham dự khác (“Phía bên kia”) đưa ra trong phần trao đổi gần đây. Khi tìm, hãy xét cả lời nói chưa chốt trong <pending_transcript>. Chỉ viết ngắn gọn 2 mục sau.\n1. **Điều được hỏi**: Diễn đạt lại trong 1–2 câu điều đã được hỏi hoặc được nhờ, kèm thời điểm [12:34] của lời nói làm căn cứ. Chỉ ghi ai đã hỏi và câu hỏi có hướng đến tôi (“Tôi”) hay không khi điều đó rõ ràng, chẳng hạn qua cách xưng hô.\n2. **Bối cảnh**: Diễn biến phần trao đổi ngay trước đó dẫn đến câu hỏi, trong 2–3 gạch đầu dòng.\nĐừng gợi ý tôi nên trả lời gì hay trả lời thế nào. Nếu không tìm thấy câu hỏi hay yêu cầu nào, hãy nói rõ như vậy, rồi tóm tắt phần trao đổi trong 1–2 phút gần nhất bằng 2–3 dòng."
 }

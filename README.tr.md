@@ -67,8 +67,8 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herk
 | **Yapay zekâ tutanakları** | Toplantılar için seçtiğiniz yapay zekâ tarafından hazırlanır. Bir şablon seçin: otomatik, haftalık toplantı, birebir görüşme, satış görüşmesi, beyin fırtınası ya da özel. Aksiyon maddeleri bir sorumlu ve bir bitiş tarihi içerir. |
 | **Kaynağı kontrol edin ve yeniden dinleyin** *(Mac)* | Tutanak tek sayfa olarak açılır: önce özet ve aksiyon maddeleri, yanında da döküm. Bir maddenin sonundaki zamana tıklayarak o maddenin dayandığı konuşmaya gidin. Kaydı herhangi bir konuşmadan itibaren oynatın; görüşmede yankı olduysa kendi tarafınızın ya da karşı tarafın sesini kapatın. |
 | **Canlı notlar ve önemli anlar** | Görüşme sırasında zaman damgalı notlar yazın ya da "bu önemli" diye işaretlemek için <kbd>⌃⌥⌘ H</kbd> tuşlarına basın (10 saniye içinde geri alabilirsiniz). Tutanaklar bu bölümlere öncelik verir; sonrasında her işaretin çevresindeki konuşmayı okuyabilirsiniz. |
-| **Yüzen altyazılar** *(Mac)* | Canlı dökümü toplantı uygulamanızın üzerinde altyazı olarak gösterin. |
-| **Toplantı sırasında yapay zekâ sohbeti** *(Mac)* | Kayıt sırasında, o ana kadarki konuşma hakkında yapay zekâya soru sorun (<kbd>⌘J</kbd>). "Şu ana kadarki özet" ya da "kararlar ve yapılacaklar" tek tıkla. Ek sorular sorun ve dökümün o bölümüne gitmek için yanıttaki bir zaman damgasına tıklayın. |
+| **Yüzen altyazılar** *(Mac)* | Canlı dökümü toplantı uygulamanızın üzerinde altyazı olarak gösterin. Açık bırakırsanız bir sonraki toplantıda da görünürler. |
+| **Toplantı sırasında yapay zekâ sohbeti** *(Mac)* | Kayıt sırasında, o ana kadarki konuşma hakkında yapay zekâya soru sorun (<kbd>⌘J</kbd>). "Şu ana kadarki özet" ya da "kararlar ve yapılacaklar" tek tıkla. Ek sorular sorun ve dökümün o bölümüne gitmek için yanıttaki bir zaman damgasına tıklayın. Başka bir işle uğraşırken aniden size soru mu yöneltildi? Toplantı uygulamanızdan ayrılmadan altyazılardaki **Bana ne soruldu?** düğmesine (ya da <kbd>⌃⌥⌘ A</kbd> tuşlarına) basın: yüzen bir panelde diğerlerinin az önce söyledikleri, ardından yapay zekânın özeti, yani sorunun ne olduğu ve konuşmanın oraya nasıl geldiği görünür. |
 | **Toplantı algılama** | Bir toplantı uygulaması mikrofonu kullanmaya başladığında Hanasu kayıt yapılıp yapılmayacağını sorar. Kaydı asla kendiliğinden başlatmaz. |
 | **Arama ve Sorma** | Tüm toplantıların metninde arama yapın ya da "Geçen haftaki toplantıda ne karar verdik?" diye sorun. Yanıt, kullandığı toplantıları kaynak olarak gösterir. |
 | **Dışa aktarma** | Markdown olarak ya da Slack'e hazır bir özet olarak kopyalayın, `.md` / `.txt` olarak kaydedin veya aksiyon maddelerini Anımsatıcılar'a gönderin. |
@@ -174,6 +174,7 @@ Mac'te Hanasu simgesini menü çubuğunda, Dock'ta ya da her ikisinde gösterebi
 | Kaydı iptal etme | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Toplantı kaydı (başlat / durdur) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Toplantıda "bu önemli" diye işaretleme | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| Toplantıda "Bana ne soruldu?" | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Tüm kısayolları Ayarlar'dan değiştirebilirsiniz. Kullanıcı kılavuzunun tamamı (Japonca) [docs/guide.md](docs/guide.md) dosyasındadır.
 

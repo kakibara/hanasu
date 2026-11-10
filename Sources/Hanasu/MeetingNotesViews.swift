@@ -305,8 +305,10 @@ struct MeetingNotesSettingsSection: View {
 // MARK: - 前面に出す字幕
 
 // 要件: REQ-MTG-014
-// 設計判断: DEC-MTG-046
-/// 記録中の文字起こしを、会議ツールなどほかのアプリの前面に小さく出す字幕ウインドウ
+// 設計判断: DEC-MTG-046, DEC-MTG-099
+/// 記録中の文字起こしを、会議ツールなどほかのアプリの前面に小さく出す字幕ウインドウ。
+/// キーウインドウにならない（ボタンを押しても、会議ツールのキー入力を奪わない）。
+/// ユーザーが出したか閉じたかを覚え、出したまま記録を終えたら、次の記録の開始で出す
 @MainActor
 final class MeetingCaptionPanel: ObservableObject {
     static let shared = MeetingCaptionPanel()
@@ -314,15 +316,35 @@ final class MeetingCaptionPanel: ObservableObject {
     @Published private(set) var isShown = false
 
     private var panel: NSPanel?
+    private var closingByApp = false
     private var cancellables: Set<AnyCancellable> = []
 
+    // 要件: REQ-MTG-014
+    // 設計判断: DEC-MTG-099
+    private static let shownKey = "meetingCaptionShown"
+    /// ユーザーが最後に字幕を出したままにしていたか（記録が終わって閉じたときは変えない）
+    static var rememberedShown: Bool {
+        get { UserDefaults.standard.bool(forKey: shownKey) }
+        set { UserDefaults.standard.set(newValue, forKey: shownKey) }
+    }
+
+    /// 字幕の位置と大きさ（出していなければ nil）
+    var frame: NSRect? { isShown ? panel?.frame : nil }
+
+    /// ツールバーの「字幕」: 出す・閉じるを切り替えて、覚える
     func toggle(recorder: MeetingRecorder) {
-        isShown ? close() : show(recorder: recorder)
+        if isShown {
+            close()
+            Self.rememberedShown = false
+        } else {
+            show(recorder: recorder)
+            Self.rememberedShown = true
+        }
     }
 
     func show(recorder: MeetingRecorder) {
         if panel == nil {
-            let panel = NSPanel(
+            let panel = NonKeyPanel(
                 contentRect: NSRect(x: 0, y: 0, width: 560, height: 130),
                 styleMask: [.titled, .closable, .resizable, .utilityWindow, .nonactivatingPanel, .hudWindow],
                 backing: .buffered, defer: false)
@@ -331,7 +353,7 @@ final class MeetingCaptionPanel: ObservableObject {
             panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
             panel.hidesOnDeactivate = false
             panel.isReleasedWhenClosed = false
-            panel.contentView = NSHostingView(rootView: MeetingCaptionView(recorder: recorder))
+            panel.contentView = FirstMouseHostingView(rootView: MeetingCaptionView(recorder: recorder))
             panel.setFrameAutosaveName("HanasuMeetingCaption")
             // 設計判断: DEC-COM-017
             // 初回はマウスのある画面の下の中央（HUD と同じ）。2 回目からは前に置いた位置
@@ -341,9 +363,14 @@ final class MeetingCaptionPanel: ObservableObject {
                 panel.setFrameOrigin(NSPoint(x: frame.midX - 280, y: frame.minY + 40))
             }
             NotificationCenter.default.publisher(for: NSWindow.willCloseNotification, object: panel)
-                .sink { [weak self] _ in self?.isShown = false }
+                .sink { [weak self] _ in
+                    guard let self else { return }
+                    self.isShown = false
+                    // パネルの閉じるボタンで閉じたら、次の記録では出さない
+                    if !self.closingByApp { Self.rememberedShown = false }
+                }
                 .store(in: &cancellables)
-            // 記録が終わったら閉じる
+            // 記録が終わったら閉じる（覚えている「出す」は変えない）
             recorder.$state
                 .sink { [weak self] state in
                     if state == .idle { DispatchQueue.main.async { self?.close() } }
@@ -356,7 +383,9 @@ final class MeetingCaptionPanel: ObservableObject {
     }
 
     func close() {
+        closingByApp = true
         panel?.close()
+        closingByApp = false
         isShown = false
     }
 }
@@ -387,6 +416,18 @@ struct MeetingCaptionView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             VStack(spacing: 4) {
+                // 要件: REQ-MTG-047
+                // 設計判断: DEC-MTG-099
+                Button {
+                    MeetingAskedQuestion.shared.ask(recorder: recorder, origin: .panel)
+                } label: {
+                    Label(tr("何を聞かれた？"), systemImage: "person.fill.questionmark")
+                        .font(.callout)
+                        .lineLimit(1)
+                }
+                .buttonStyle(.bordered)
+                .help(askedHelp)
+                .disabled(recorder.state != .recording || recorder.batchEngine != nil)
                 // 設計判断: DEC-MTG-075
                 Button { recorder.addHighlight() } label: {
                     Image(systemName: "star.fill")
@@ -404,6 +445,11 @@ struct MeetingCaptionView: View {
         .font(.title3)
         .padding(12)
         .frame(minWidth: 320, minHeight: 80)
+    }
+
+    private var askedHelp: String {
+        if let engine = recorder.batchEngine { return MeetingAskedQuestion.unavailableMessage(engine: engine.shortName) }
+        return MeetingAskedQuestion.helpText
     }
 
     private func row(speaker: String, text: String, color: Color) -> some View {

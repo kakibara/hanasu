@@ -80,6 +80,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         meetingAutoDetect = MeetingAutoDetect(recorder: meetingRecorder) { [weak self] in self?.toggleMeeting() }
         // 要件: REQ-MTG-034
         meetingRecorder.titleSourceApps = { [weak self] in self?.meetingAutoDetect?.titleSourceApps ?? [] }
+        // 要件: REQ-MTG-047
+        // 設計判断: DEC-MTG-096（「チャットで続ける」で会議ノートを前に出す）
+        MeetingAskedQuestion.shared.openMeetingWindow = { [weak self] in self?.openMeetingWindow() }
         controller.onHotKeyRegistrationFailed = { [weak self] combo in
             self?.showAlert(
                 tr("ショートカット %@ を登録できませんでした", "\(combo.displayString)"),
@@ -452,6 +455,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     self.editController.suspendHotKey()
                     if let id = self.meetingHotKeyID { self.meetingHotKeys.unregister(id) }
                     self.meetingHotKeyID = nil
+                    // 設計判断: DEC-COM-012, DEC-MTG-097（記録中だけのショートカットも外す）
+                    MeetingHighlightHotKey.shared.suspend()
+                    MeetingAskedHotKey.shared.suspend()
                 },
                 onEndShortcutRecording: { [weak self] in
                     guard let self else { return }
@@ -459,6 +465,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     self.historyUI.resumeHotKey()
                     self.editController.resumeHotKey()
                     self.registerMeetingHotKey(AppSettings.shared.meetingHotKey)
+                    MeetingHighlightHotKey.shared.resume()
+                    MeetingAskedHotKey.shared.resume()
                 },
                 onOpenHistory: { [weak self] in self?.historyUI.openWindow() },
                 onCheckForUpdates: { [weak self] in self?.updater.checkManually() })

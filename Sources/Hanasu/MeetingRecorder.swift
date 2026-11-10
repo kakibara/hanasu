@@ -34,6 +34,9 @@ final class MeetingRecorder: ObservableObject {
     @Published private(set) var othersLevel: Float = 0
     /// 音が入っていないときの注意
     @Published private(set) var warnings: [String] = []
+    // 要件: REQ-MTG-047
+    /// 相手側（スピーカー）の音がまだ一度も入っていない（DEC-MTG-020 の注意を出しているとき）
+    @Published private(set) var othersSilent = false
     /// 記録中の会議を、記録のあとにまとめて文字起こしするエンジン（Whisper / Gemini）。nil なら Mac 標準のライブ文字起こし
     @Published private(set) var batchEngine: TranscriptionEngine?
     // 要件: REQ-MTG-013
@@ -181,6 +184,14 @@ final class MeetingRecorder: ObservableObject {
             startLevelTimer()
             setState(.recording)
             MeetingHighlightHotKey.shared.activate { [weak self] in self?.addHighlight() }
+            // 要件: REQ-MTG-047
+            // 設計判断: DEC-MTG-097, DEC-MTG-099
+            MeetingAskedHotKey.shared.activate { [weak self] in
+                guard let self else { return }
+                MeetingAskedQuestion.shared.ask(recorder: self, origin: .panel)
+            }
+            MeetingAskedQuestion.shared.recordingStarted(meetingID: meeting.id)
+            if MeetingCaptionPanel.rememberedShown { MeetingCaptionPanel.shared.show(recorder: self) }
             NSSound(named: "Tink")?.play()
             appLog.notice("meeting recording started: \(meeting.id, privacy: .public)")
         } catch {
@@ -739,6 +750,7 @@ final class MeetingRecorder: ObservableObject {
 
     private func teardownAudio() async {
         MeetingHighlightHotKey.shared.deactivate()
+        MeetingAskedHotKey.shared.deactivate()
         stopMic()
         systemTap?.stop()
         systemTap = nil
@@ -747,6 +759,7 @@ final class MeetingRecorder: ObservableObject {
         meLevel = 0
         othersLevel = 0
         warnings = []
+        othersSilent = false
     }
 
     // MARK: - マイク
@@ -894,6 +907,8 @@ final class MeetingRecorder: ObservableObject {
                 notes.append(tr("相手側（スピーカー）の音が入っていません。会議の音が出ている機器を、設定の「会議」→「録音するスピーカー」で選んでください。"))
             }
         }
+        let silent = Date().timeIntervalSince(recordingStartedAt) > 10 && others.lastSoundAt == nil
+        if silent != othersSilent { othersSilent = silent }
         if notes != warnings { warnings = notes }
     }
 

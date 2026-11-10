@@ -4,7 +4,8 @@ import SwiftUI
 
 // MARK: - 見た目の確認用の描き出し
 
-/// `Hanasu --render-meeting-notes <出力フォルダ>`: 架空の会議で、記録中の画面・メモの編集・字幕を PNG にする
+/// `Hanasu --render-meeting-notes <出力フォルダ>`: 架空の会議で、記録中の画面・メモの編集・字幕・「何を聞かれた？」のパネルを PNG にする
+// 確かめ方: REQ-MTG-014, REQ-MTG-047
 enum MeetingNotesPreview {
     @MainActor
     static func render(to directory: URL) throws {
@@ -37,6 +38,10 @@ enum MeetingNotesPreview {
                   to: directory.appendingPathComponent("caption.png"))
         try write(Form { MeetingNotesSettingsSection() }.formStyle(.grouped).frame(width: 940, height: 220),
                   to: directory.appendingPathComponent("settings.png"))
+        // 要件: REQ-MTG-047（設定の「会議中の AI チャット」と、「何を聞かれた？」のパネルの各状態）
+        try write(Form { MeetingAskedSettingsSection() }.formStyle(.grouped).frame(width: 940, height: 220),
+                  to: directory.appendingPathComponent("settings-asked.png"))
+        try renderAskedPanel(recorder: recorder, meetingID: meeting.id, to: directory)
         // 付けたばかりの印があるとき（「取り消す」が出る）
         var recent = meeting
         recent.notes?.append(MeetingNote(kind: .highlight, time: 750, text: ""))
@@ -48,6 +53,45 @@ enum MeetingNotesPreview {
                   to: directory.appendingPathComponent("caption-undo.png"))
         checkHighlightUndo(recorder: recorder)
         checkCompatibility()
+    }
+
+    // 確かめ方: REQ-MTG-047
+    /// 「何を聞かれた？」のパネル（DEC-MTG-096）の状態: 作っている途中・答え・失敗・使えない・オフレコ中。AI は呼ばない
+    @MainActor
+    private static func renderAskedPanel(recorder: MeetingRecorder, meetingID: String, to directory: URL) throws {
+        let asked = MeetingAskedQuestion.shared
+        guard let live = MeetingChat.liveMaterial(recorder: recorder) else { return }
+        let recent = MeetingChat.recentOthers(in: live)
+        func request(_ phase: MeetingAskedQuestion.Phase, notice: String? = nil) -> MeetingAskedQuestion.Request {
+            MeetingAskedQuestion.Request(meetingID: meetingID, origin: .panel, at: live.elapsed, recentOthers: recent,
+                                         notice: notice, phase: phase)
+        }
+        // 答えの見本（架空の会議の文。画面の文字列ではない）
+        let sample = """
+        **聞かれたこと**: β版を出す 3 社をどう選ぶか、意見を求められています [12:34]。
+
+        **背景**
+        - β版はまず 3 社に絞って出す方針になった [10:40]
+        - 候補は既存のお客さまのうち、利用頻度が高いところから [11:00]
+        - 選び方の基準（利用頻度など）の話が続いている [12:34]
+        """
+        let states: [(String, MeetingAskedQuestion.Request)] = [
+            ("asked-running.png", request(.running)),
+            ("asked-answer.png", request(.answered(sample))),
+            ("asked-failed.png", request(.failed(tr("答えを作れませんでした: %@", "The request timed out.")))),
+            ("asked-unavailable.png", MeetingAskedQuestion.Request(
+                meetingID: meetingID, origin: .panel, at: live.elapsed, recentOthers: [],
+                phase: .unavailable(MeetingAskedQuestion.unavailableMessage(engine: "Whisper")))),
+            ("asked-offrecord.png", request(.running, notice: tr("オフレコ中です。オフレコの間の発言は AI に渡しません。"))),
+        ]
+        for (name, state) in states {
+            asked.setRequestForPreview(state, recorder: recorder)
+            try write(MeetingAskedQuestionView(model: asked)
+                          .frame(width: MeetingAskedQuestionPanel.size.width, height: MeetingAskedQuestionPanel.size.height)
+                          .environment(\.colorScheme, .dark).background(Color.black.opacity(0.85)),
+                      to: directory.appendingPathComponent(name))
+        }
+        asked.setRequestForPreview(nil)
     }
 
     // 確かめ方: REQ-MTG-012

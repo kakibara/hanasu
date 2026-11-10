@@ -318,6 +318,13 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 - **会話の持ち方**: `MeetingChatStore.shared` が会議の ID ごとに `MeetingChatModel` を持つ（メモリだけ）。同じ ID なので、記録を止めて会議の詳細に変わっても、「AI チャット」タブ（`MeetingDetailView` の 5 つめのタブ）で同じ会話が続く。記録のあとは `MeetingChat.material(for:)` で確定した文字起こしと話者名を渡す（DEC-MTG-086）。取り消し（「止める」）は、送った質問を会話から外して入力欄に戻す。
 - **メモに残す**: `MeetingChat.noteText` で答えを「AI: …」の 1 行にし、記録中は `MeetingRecorder.addNote`（質問した時刻）、記録のあとは `MeetingRecorder.updateNotes`（時刻なし）で足す（DEC-MTG-085）。
 - **確認**: `--test-meeting-chat` は本文の組み立て・時刻のリンク・メモへの変換を AI なしで確かめる。`--chat-meeting <会議のフォルダ> --ask … --ask …` は保存した会議で実際の AI と会話し（`--at <時刻>` でその時刻までを記録中として渡す）、`--render-meeting-chat` は画面を PNG にする。
+- **「何を聞かれた？」**（REQ-MTG-047）: 流れは `MeetingAskedQuestion.swift`（`MeetingAskedQuestion`）、前面のパネルとショートカットと設定の節は `MeetingAskedQuestionPanel.swift`（`MeetingAskedQuestionPanel`・`MeetingAskedQuestionView`・`MeetingAskedHotKey`・`MeetingAskedSettingsSection`）。
+  - 入口は 3 つ: 字幕の「何を聞かれた？」（`MeetingCaptionView`）、記録中だけ登録するショートカット（`MeetingAskedHotKey`。「ここ重要」と共通の `MeetingRecordingHotKey`）、記録中のチャットのよく使う質問の先頭（`MeetingChat.askedPrompt`。`MeetingChat.quickPrompts(live:)` が記録のあとは外す）。どれも `MeetingAskedQuestion.ask(recorder:origin:)` を呼ぶ。
+  - 渡すもの: `MeetingChat.liveMaterial` を `MeetingChat.askedMaterial` で直近 10 分（`askedWindow`）に切り、それまでの会話を付けずに `MeetingChat.prompt` で本文にする。省いた前の発言は `chat.transcript.recentOnly` で数だけ書く（DEC-MTG-095）。
+  - パネル: `NonKeyPanel`（キーウインドウにならない `NSPanel`。`sharingType = .none`）に、見出し・`MeetingChat.recentOthers` の相手の直近の発言（AI を待たずに出す）・答え・ボタンを出す。オフレコ中（`Meeting.isOffRecord`）と相手の音が入っていないとき（`MeetingRecorder.othersSilent`）は知らせを出す（DEC-MTG-096）。
+  - 会話への入れ方: ウインドウのチャット（`MeetingChatModel.send`）とは別の作業で聞き、答えが出たら `MeetingChatModel.insertAnsweredTurn` で組にして入れる。表示は `MeetingChat.Message.label`。押したあとに「新しい会話」を押したら `MeetingChatModel.generation` が変わるので入れない（DEC-MTG-098）。
+  - 「チャットで続ける」: `MeetingAskedQuestion.openChatRequest` を立てて `openMeetingWindow`（AppDelegate が入れる）を呼ぶ。会議ノートのウインドウ（`MeetingWindowView`）が受け取り、その会議を選び、後ろ側のパネルを出して AI チャットにし、入力欄にフォーカスを移す。
+  - 確認: `--test-meeting-chat` に切り方・出し分け・会話への入れ方（`MeetingAskedQuestion.selfTest`。AI を呼ぶ部分 `reply` を差し替える）を足した。`--chat-meeting … --live --at … [--pending …] --quick asked` で記録中と同じ形を作って実際の AI に聞く。`--render-meeting-notes` でパネルの状態と設定の節を描く。
 
 ### 4.14 記録中のスリープ
 
@@ -398,8 +405,8 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 - **会議ノート ウィンドウ**: 左に日付でまとめた会議の一覧、真ん中に選んだ会議の文書、後ろ側のパネルに文字起こし・AI チャット（4.16）。記録中は真ん中にライブの文字起こし、後ろ側のパネルに「メモ｜AI チャット」と「ここ重要」ボタン、ツールバーに記録中の印・音量・オフレコ・字幕。ツールバーで議事録の型の選び直し（4.10）・作り直し・辞書（[dictation.md](dictation.md) の 5.6）・書き出し（4.11）・「…」（話者名・Finder で表示・削除）。左下の「会議の記録を開始」と、その下の設定の 1 行で録音する機器と議事録の型を選ぶ。
   - タイトルは文書の先頭の欄（`EditableTitleField`）で書き換える。いつも薄い枠と鉛筆の印を出し、マウスを載せると枠を濃く、編集中はアクセントの色にする。Enter・フォーカスが外れたときに `MeetingRecorder.rename` で保存し、空なら元に戻す。Esc でやめる。別の会議を選んだときは、書きかけのタイトルを元の会議に保存してから切り替える（`MeetingDocumentView.commitTitle`）。ウインドウを開いたときに最初の入力欄としてフォーカスが入らないよう、すぐ外す。
   - 削除: 一覧の右クリックの「削除…」、一覧で ⌫、ツールバーの「…」の「削除…」から。確かめのダイアログのあと、`MeetingRecorder.delete` → `MeetingStore.moveToTrash` で会議のフォルダを丸ごとゴミ箱に移し（`FileManager.trashItem`）、一覧を読み直す（検索の索引も `recorder.$meetings` から更新される）。消したあとは一覧の次の会議を選ぶ。記録中・処理中の会議（`current`）と、議事録を作り直している会議（`regeneratingID`）は消せない。会議を書き換える `MeetingRecorder.update` は、フォルダがもうない会議を保存し直さない。
-- **字幕パネル**: 記録中、ほかのアプリの前面に直近の発言を出す小さなパネル（記録中のツールバーの「字幕」で出す）。
-- **ショートカット**: 記録の開始／停止 `⌃⌥⌘ M`、「ここ重要」の印 `⌃⌥⌘ H`（記録中だけ有効）。どちらも変更可。
+- **字幕パネル**: 記録中、ほかのアプリの前面に直近の発言を出す小さなパネル（記録中のツールバーの「字幕」で出す）。キーウインドウにならない（`NonKeyPanel`）。右に「何を聞かれた？」と「★」のボタン。出したまま記録を終えると、次の記録の開始で出す（`MeetingCaptionPanel.rememberedShown`。DEC-MTG-099）。
+- **ショートカット**: 記録の開始／停止 `⌃⌥⌘ M`、「ここ重要」の印 `⌃⌥⌘ H`、「何を聞かれた？」`⌃⌥⌘ A`（あとの 2 つは記録中だけ有効）。どれも変更可。
 - **提案のパネル**: 会議アプリがマイクを使い始めたら画面の右上に「会議を記録しますか？」、記録中に止めたら「記録を止めますか？」（4.8）。
   - 一覧の上に検索欄（`⌘F`）と「会議に質問」ボタン（✦）。詳しくは 11 章。
 

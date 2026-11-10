@@ -52,6 +52,20 @@ struct MeetingWindowView: View {
             inspector
         }
         .onReceive(recorder.$meetings) { search.update($0) }
+        // 要件: REQ-MTG-047
+        // 設計判断: DEC-MTG-096（「チャットで続ける」: その会議を選び、後ろ側のパネルを出して AI チャットにし、入力欄にフォーカス）
+        .onReceive(MeetingAskedQuestion.shared.$openChatRequest.compactMap { $0 }) { request in
+            MeetingAskedQuestion.shared.consumeOpenChatRequest(request.id)
+            showingAsk = false
+            selection = request.meetingID
+            inspectorShown = true
+            panel.tab = .chat
+            UserDefaults.standard.set(LiveSidePanelMode.chat.rawValue, forKey: "meetingLiveSidePanel")
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(200))  // パネルができてから
+                MeetingChatStore.shared.model(for: request.meetingID).requestFocus()
+            }
+        }
         .onChange(of: search.isActive) { _, active in
             if !active { jump = nil }  // 検索をやめたら、検索語の色も消す
         }

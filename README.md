@@ -65,8 +65,8 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 | **AI minutes** | Made by the AI you choose for meetings. Choose a template: auto, weekly sync, 1-on-1, sales call, brainstorm, or custom. Action items include an owner and a due date. |
 | **Check the source & listen again** *(Mac)* | The minutes open as one page: summary and action items first, with the transcript beside them. Click the timestamp after a point to jump to the remark it came from. Play the recording from any remark, and mute your side or theirs if the call echoed. |
 | **Live notes & highlights** | Type timestamped notes during the call, or press <kbd>⌃⌥⌘ H</kbd> to mark "this matters" (you can undo it for 10 seconds). The minutes give those parts priority, and afterwards you can read the conversation around each mark. |
-| **Floating captions** *(Mac)* | Show the live transcript as captions on top of your meeting app. |
-| **AI chat during the meeting** *(Mac)* | While recording, ask the AI about the conversation so far (<kbd>⌘J</kbd>). One click for "summarize so far" or "decisions & to-dos". Ask follow-ups, and click a timestamp in an answer to jump to that part of the transcript. |
+| **Floating captions** *(Mac)* | Show the live transcript as captions on top of your meeting app. If you leave them on, they come back for the next meeting. |
+| **AI chat during the meeting** *(Mac)* | While recording, ask the AI about the conversation so far (<kbd>⌘J</kbd>). One click for "summarize so far" or "decisions & to-dos". Ask follow-ups, and click a timestamp in an answer to jump to that part of the transcript. Put on the spot while doing something else? Press **What was I asked?** on the captions (or <kbd>⌃⌥⌘ A</kbd>) without leaving your meeting app: a floating panel shows what the others just said, then the AI's summary of the question and how the discussion got there. |
 | **Meeting detection** | When a meeting app starts using the mic, Hanasu asks whether to record. It never starts recording on its own. |
 | **Search & Ask** | Search the text of every meeting, or ask "What did we decide in last week's sync?". The answer cites the meetings it used. |
 | **Export** | Copy as Markdown or as a summary ready for Slack, save as `.md` / `.txt`, or send action items to Reminders. |
@@ -172,6 +172,7 @@ On Mac, you can show the Hanasu icon in the menu bar, in the Dock, or in both (S
 | Cancel recording | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Meeting recording (start / stop) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Mark "this matters" in a meeting | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| "What was I asked?" in a meeting | <kbd>⌃⌥⌘ A</kbd> | — |
 
 You can change every shortcut in Settings. The full user guide (in Japanese) is [docs/guide.md](docs/guide.md).
 
