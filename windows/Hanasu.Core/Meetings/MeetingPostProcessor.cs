@@ -26,8 +26,6 @@ public sealed class MeetingPostProcessor
     /// <summary>会議の AI の名前（知らせの文言に使う）</summary>
     public TextAiProvider MinutesProvider { get; init; } = TextAiProvider.Gemini;
     public string MinutesModel { get; init; } = "gemini-3.8-flash";
-    /// <summary>false なら、処理のあとで音声ファイルを消す（文字起こしに失敗したチャンネルがあれば残す）</summary>
-    public bool KeepAudio { get; init; } = true;
     public Action<string>? Log { get; init; }
     // 要件: REQ-DIC-073
     // 設計判断: DEC-DIC-173
@@ -41,14 +39,16 @@ public sealed class MeetingPostProcessor
     {
         var warnings = new List<string>();
         var failures = new List<string>();
+        var failedChannels = new List<MeetingChannel>();
         meeting.Status = MeetingStatus.Processing;
         meeting.ErrorMessage = null;
+        meeting.TranscriptionFailedChannels = null;
         Store.Save(meeting);
 
         var offsets = meeting.AudioStartOffsets ?? new Dictionary<string, double>();
-        var (me, _) = await TranscribeChannelAsync(meeting, MeetingChannel.Me, offsets.GetValueOrDefault("me"), failures, progress, cancellationToken)
+        var (me, _) = await TranscribeChannelAsync(meeting, MeetingChannel.Me, offsets.GetValueOrDefault("me"), failures, failedChannels, progress, cancellationToken)
             .ConfigureAwait(false);
-        var (others, othersSamples) = await TranscribeChannelAsync(meeting, MeetingChannel.Others, offsets.GetValueOrDefault("others"), failures, progress, cancellationToken)
+        var (others, othersSamples) = await TranscribeChannelAsync(meeting, MeetingChannel.Others, offsets.GetValueOrDefault("others"), failures, failedChannels, progress, cancellationToken)
             .ConfigureAwait(false);
 
         IReadOnlyList<SpeakerTurn> turns = Array.Empty<SpeakerTurn>();
@@ -78,9 +78,13 @@ public sealed class MeetingPostProcessor
         // 確定した発言に、議事録を作る前に辞書の置き換えルールを当てる（記録中の発言には当てない）
         MeetingDictionary.ApplyOnFinish(meeting, Dictionary, ApplyDictionary);
         var errors = new List<string>();
+        // 要件: REQ-MTG-010
+        // 設計判断: DEC-MTG-009, DEC-MTG-140, DEC-MTG-142
+        // 失敗したチャンネルは、消す設定かどうかに関わらず書く。「音声ファイルは残しています」はエラーの文に入れない（表示のときに決める）
         if (failures.Count > 0)
         {
-            errors.Add(string.Join("\n", failures) + "\n" + Strings.Meeting_AudioKept);
+            errors.Add(string.Join("\n", failures));
+            meeting.TranscriptionFailedChannels = failedChannels;
         }
         Store.Save(meeting);
 
@@ -123,12 +127,19 @@ public sealed class MeetingPostProcessor
         meeting.ErrorMessage = errors.Count == 0 ? null : string.Join("\n", errors);
         Store.Save(meeting);
 
-        if (!KeepAudio && failures.Count == 0) Store.DeleteAudio(meeting);
+        // 要件: REQ-MTG-010
+        // 設計判断: DEC-MTG-139, DEC-MTG-142
+        // 設定ではなく会議の値と文字起こしの状態で決める（文字起こしがそろっていなければ残す）。保存期間の削除はここでは行わない（DEC-MTG-143）
+        if (MeetingAudioPolicy.ShouldDeleteAfterProcessing(meeting))
+        {
+            var failed = Store.DeleteAudio(meeting);
+            Log?.Invoke(failed.Count == 0 ? "meeting audio deleted after processing" : $"meeting audio delete failed: {failed.Count} files");
+        }
         return new MeetingProcessResult(meeting, warnings);
     }
 
     private async Task<(List<TranscribedPhrase> Phrases, float[]? Samples)> TranscribeChannelAsync(Meeting meeting, MeetingChannel channel,
-        double offset, List<string> failures, IProgress<string>? progress, CancellationToken cancellationToken)
+        double offset, List<string> failures, List<MeetingChannel> failedChannels, IProgress<string>? progress, CancellationToken cancellationToken)
     {
         var path = Store.AudioPath(meeting, channel);
         var label = channel == MeetingChannel.Me ? Strings.Speaker_Me : Strings.Speaker_Others;
@@ -149,6 +160,7 @@ public sealed class MeetingPostProcessor
         {
             Log?.Invoke($"transcription failed ({channel}): {e.GetType().Name}");
             failures.Add(string.Format(Strings.Meeting_ChannelTranscriptionFailed, label, e.Message));
+            failedChannels.Add(channel);
             return (new(), null);
         }
     }

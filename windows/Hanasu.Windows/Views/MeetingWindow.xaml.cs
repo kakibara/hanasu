@@ -50,12 +50,15 @@ public partial class MeetingWindow : Window
         NextTemplateCombo.SelectedItem = NextTemplateCombo.Items.OfType<ComboBoxItem>()
             .First(i => (MinutesTemplate)i.Tag == (MinutesTemplates.FromRawValue(s.MeetingMinutesTemplate) ?? MinutesTemplate.Auto));
         CustomPromptBox.Text = s.MeetingCustomMinutesPrompt;
+        DeleteAudioDefaultCheck.IsChecked = !s.KeepMeetingAudio;
         loading = false;
         UpdateNextTemplate();
 
         meetings.StateChanged += OnStateChanged;
         meetings.MeetingChanged += OnMeetingChanged;
         meetings.ProgressChanged += OnProgressChanged;
+        meetings.AudioDeleted += OnAudioDeleted;
+        host.Settings.Changed += OnSettingsChanged;
         timer.Tick += (_, _) => UpdateLive();
         Closed += (_, _) =>
         {
@@ -64,6 +67,8 @@ public partial class MeetingWindow : Window
             meetings.StateChanged -= OnStateChanged;
             meetings.MeetingChanged -= OnMeetingChanged;
             meetings.ProgressChanged -= OnProgressChanged;
+            meetings.AudioDeleted -= OnAudioDeleted;
+            host.Settings.Changed -= OnSettingsChanged;
         };
         ReloadList(meetings.Current?.Id);
         UpdateState();
@@ -148,8 +153,10 @@ public partial class MeetingWindow : Window
             + string.Format(Strings.Meeting_SavedIn, Path.Combine(meetings.Store(host.Settings.Current).BaseDirectory, m.Id));
         TemplateCombo.SelectedItem = TemplateCombo.Items.OfType<ComboBoxItem>().First(i => (MinutesTemplate)i.Tag == m.Template);
         loading = false;
-        ErrorText.Text = m.ErrorMessage ?? "";
-        ErrorText.Visibility = m.ErrorMessage is null ? Visibility.Collapsed : Visibility.Visible;
+        var store = meetings.Store(host.Settings.Current);
+        var hasAudio = store.HasAudio(m);
+        ErrorText.Text = BannerText(m, hasAudio);
+        ErrorText.Visibility = ErrorText.Text.Length == 0 ? Visibility.Collapsed : Visibility.Visible;
         // 要件: REQ-MTG-052（Windows 版は根拠の時刻の印を押せないので、表示では取り除く。DEC-MTG-134）
         MinutesBox.Text = (m.Minutes is { } minutes ? MinutesCitation.Strip(minutes) : null) ?? (m.Status switch
         {
@@ -170,6 +177,10 @@ public partial class MeetingWindow : Window
         MinutesOutdatedPanel.Visibility = m.MinutesOutdated == true ? Visibility.Visible : Visibility.Collapsed;
         MinutesOutdatedRegenerateButton.IsEnabled = TranscriptOutdatedRegenerateButton.IsEnabled = RegenerateButton.IsEnabled;
         DeleteButton.IsEnabled = !busy && meetings.CanDelete(m);
+        // 要件: REQ-MTG-055（議事録の作り直し中も押せる。押せないときは理由をヒントに出す）
+        var audioProblem = DeleteAudioProblem(m, hasAudio);
+        DeleteAudioButton.IsEnabled = audioProblem is null;
+        DeleteAudioButton.ToolTip = audioProblem;
         // 要件: REQ-DIC-072, REQ-DIC-074
         DictionaryButton.IsEnabled = !busy && meetings.CanApplyDictionary(m);
         RecordingNote.Text = string.Format(Strings.Meeting_RecordingNote, host.Settings.Current.MeetingEngine == TranscriptionEngine.Gemini ? "Gemini" : "Whisper");
@@ -689,8 +700,16 @@ public partial class MeetingWindow : Window
         ConfirmDelete();
     }
 
-    private void OnMeetingListMenuOpened(object sender, RoutedEventArgs e) =>
-        DeleteMenuItem.IsEnabled = MeetingList.SelectedItem is MeetingRow row && CanDelete(row.Meeting);
+    private void OnMeetingListMenuOpened(object sender, RoutedEventArgs e)
+    {
+        var row = MeetingList.SelectedItem as MeetingRow;
+        DeleteMenuItem.IsEnabled = row is not null && CanDelete(row.Meeting);
+        // 要件: REQ-MTG-055
+        var audioProblem = row is null ? Strings.Meeting_DeleteAudio_NoAudioTip
+            : DeleteAudioProblem(row.Meeting, meetings.Store(host.Settings.Current).HasAudio(row.Meeting));
+        DeleteAudioMenuItem.IsEnabled = audioProblem is null;
+        DeleteAudioMenuItem.ToolTip = audioProblem;
+    }
 
     private bool CanDelete(Meeting m) =>
         meetings.CanDelete(m) && m.Status is not (MeetingStatus.Recording or MeetingStatus.Processing);
@@ -724,6 +743,139 @@ public partial class MeetingWindow : Window
         ReloadList(next?.Id);
         if (next is null) Show(null);
         ActionStatus.Text = string.Format(Strings.Meeting_MovedToRecycleBin, m.Title);
+    }
+
+    // MARK: - 録音を消す
+
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-140, DEC-MTG-142
+    /// <summary>
+    /// 会議の帯の文。会議のエラーに、文字起こしがそろっていない（か状態が失敗）で録音が残っていれば「音声ファイルは残しています」を足す
+    /// （エラーの文には保存せず、表示のときに決める。この機能より前の会議で、もう文に入っていれば重ねない）
+    /// </summary>
+    private string BannerText(Meeting m, bool hasAudio)
+    {
+        var lines = new List<string>();
+        if (!string.IsNullOrEmpty(m.ErrorMessage)) lines.Add(m.ErrorMessage);
+        var incomplete = m.Status == MeetingStatus.Failed
+            || (m.Status == MeetingStatus.Done && MeetingAudioCleanup.TranscriptState(m) != MeetingTranscriptState.Complete);
+        var kept = Core.Properties.Strings.Meeting_AudioKept;
+        if (incomplete && hasAudio && !IsLive(m) && m.ErrorMessage?.Contains(kept, StringComparison.Ordinal) != true) lines.Add(kept);
+        return string.Join("\n", lines);
+    }
+
+    // 要件: REQ-MTG-055
+    // 設計判断: DEC-MTG-140
+    /// <summary>録音を消せない理由（ヒントに出す）。消せるなら null</summary>
+    private string? DeleteAudioProblem(Meeting m, bool hasAudio)
+    {
+        if (IsLive(m) || !meetings.CanDeleteAudio(m)) return Strings.Meeting_DeleteAudio_BusyTip;
+        return hasAudio ? null : Strings.Meeting_DeleteAudio_NoAudioTip;
+    }
+
+    // 要件: REQ-MTG-055
+    // 設計判断: DEC-MTG-140, DEC-MTG-142
+    /// <summary>「録音を削除…」: 選んだ会議の録音を、文字起こしの状態を書いたダイアログで確かめてから完全に消す。会議は選んだまま</summary>
+    private void OnDeleteAudioClick(object sender, RoutedEventArgs e)
+    {
+        if (selected is not { } m) return;
+        var store = meetings.Store(host.Settings.Current);
+        if (DeleteAudioProblem(m, store.HasAudio(m)) is not null) return;
+        var message = string.Format(Strings.Meeting_DeleteAudio_Confirm, m.Title, MeetingAudioCleanup.FormatSize(store.AudioSize(m)))
+            + "\n\n" + TranscriptStateNote(m) + "\n\n" + Strings.Audio_CannotUndo;
+        if (MessageBox.Show(this, message, Strings.Meeting_DeleteAudio_Title, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel)
+            != MessageBoxResult.OK)
+        {
+            return;
+        }
+        var result = meetings.DeleteAudio([m]);
+        if (result.Failures.Count > 0)
+        {
+            MessageBox.Show(this, string.Format(Strings.Meeting_DeleteAudioFailed,
+                    string.Join("\n", result.Failures.Select(f => $"{Path.GetFileName(f.Path)}: {f.Message}"))),
+                Strings.Meeting_DeleteAudio_Title, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        else
+        {
+            ActionStatus.Text = string.Format(Strings.Meeting_AudioDeleted, m.Title);
+        }
+        if (selected?.Id == m.Id) Show(m);
+    }
+
+    // 設計判断: DEC-MTG-142
+    /// <summary>録音を消すと何が残るか（文字起こしの状態で書き分ける）</summary>
+    private static string TranscriptStateNote(Meeting m)
+    {
+        switch (MeetingAudioCleanup.TranscriptState(m))
+        {
+            case MeetingTranscriptState.None:
+                return Strings.Meeting_DeleteAudio_KeepsNone;
+            case MeetingTranscriptState.Partial:
+                if (m.TranscriptionFailedChannels is { Count: > 0 } failed)
+                {
+                    var labels = failed.Distinct().Select(c => c == MeetingChannel.Me ? Core.Properties.Strings.Speaker_Me : Core.Properties.Strings.Speaker_Others);
+                    return string.Format(Strings.Meeting_DeleteAudio_KeepsPartial, string.Join(Strings.ListSeparator, labels));
+                }
+                return Strings.Meeting_DeleteAudio_KeepsPartialUnknown;
+            default:
+                return Strings.Meeting_DeleteAudio_KeepsAll;
+        }
+    }
+
+    // 要件: REQ-MTG-056
+    private void OnManageAudioClick(object sender, RoutedEventArgs e) => host.ShowMeetingAudio(this);
+
+    // 要件: REQ-MTG-055, REQ-MTG-056, REQ-MTG-057
+    // 設計判断: DEC-MTG-140（録音を消したら、帯・ボタンを読み直す。meeting.json は変わらない）
+    private void OnAudioDeleted(object? sender, IReadOnlyList<Meeting> deleted) => Dispatcher.BeginInvoke(() =>
+    {
+        if (selected is { } m && deleted.Any(d => d.Id == m.Id)) Show(m);
+    });
+
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-139（左下のチェックボックスは次の記録からの既定。設定と同じ値）
+    private void OnDeleteAudioDefaultChanged(object sender, RoutedEventArgs e)
+    {
+        if (loading) return;
+        var delete = DeleteAudioDefaultCheck.IsChecked == true;
+        host.Settings.Update(s => s.KeepMeetingAudio = !delete);
+    }
+
+    /// <summary>設定画面で既定を変えたら、左下のチェックボックスをそろえる</summary>
+    private void OnSettingsChanged(object? sender, SettingsChangedEventArgs e)
+    {
+        if (e.Before.KeepMeetingAudio == e.After.KeepMeetingAudio) return;
+        Dispatcher.BeginInvoke(() =>
+        {
+            var wasLoading = loading;
+            loading = true;
+            DeleteAudioDefaultCheck.IsChecked = !host.Settings.Current.KeepMeetingAudio;
+            loading = wasLoading;
+        });
+    }
+
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-139（記録中の会議の値だけを変える）
+    private void OnLiveDeleteAudioClick(object sender, RoutedEventArgs e)
+    {
+        meetings.SetDeleteAudioAfterTranscription(LiveDeleteAudioCheck.IsChecked == true);
+        UpdateLiveDeleteAudio();
+    }
+
+    /// <summary>記録中の欄の「この会議の録音を文字起こしのあとに削除」を、記録中の会議の値にそろえる（処理中は見せるだけ）</summary>
+    private void UpdateLiveDeleteAudio()
+    {
+        var state = meetings.State;
+        if (meetings.Current is not { } current || state is not (MeetingState.Recording or MeetingState.Processing))
+        {
+            LiveDeleteAudioCheck.Visibility = Visibility.Collapsed;
+            return;
+        }
+        var on = current.DeleteAudioAfterTranscription == true;
+        LiveDeleteAudioCheck.Visibility = Visibility.Visible;
+        LiveDeleteAudioCheck.IsChecked = on;
+        LiveDeleteAudioCheck.IsEnabled = state == MeetingState.Recording;
+        LiveDeleteAudioCheck.ToolTip = on ? Strings.Meeting_LiveDeleteAudio_OnTip : Strings.Meeting_LiveDeleteAudio_OffTip;
     }
 
     // MARK: - メモ（記録のあと）
@@ -860,8 +1012,10 @@ public partial class MeetingWindow : Window
         {
             UpdateLiveNotes();
             UpdateOffRecord();
+            UpdateLiveDeleteAudio();
             return;
         }
+        if (IsLive(m)) UpdateLiveDeleteAudio();
         ReloadList(m.Id == meetings.Current?.Id || selected is null ? m.Id : null);
     });
 
@@ -878,7 +1032,8 @@ public partial class MeetingWindow : Window
         StopButton.Visibility = state == MeetingState.Recording ? Visibility.Visible : Visibility.Collapsed;
         LiveProgress.Text = state == MeetingState.Processing ? meetings.ProgressMessage ?? "" : string.Format(Strings.Meeting_StopHint, host.Settings.Current.MeetingHotKey.DisplayString);
         StartButton.IsEnabled = state == MeetingState.Idle;
-        MicCombo.IsEnabled = OutputCombo.IsEnabled = NextTemplateCombo.IsEnabled = CustomPromptBox.IsEnabled = state == MeetingState.Idle;
+        MicCombo.IsEnabled = OutputCombo.IsEnabled = NextTemplateCombo.IsEnabled = CustomPromptBox.IsEnabled = DeleteAudioDefaultCheck.IsEnabled = state == MeetingState.Idle;
+        UpdateLiveDeleteAudio();
         StartNote.Text = state == MeetingState.Idle
             ? string.Format(Strings.Meeting_StartHint, host.Settings.Current.MeetingHotKey.DisplayString)
             : "";

@@ -970,14 +970,6 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <value>Storage</value>
     <comment>Settings: section heading</comment>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>Keep the audio files (me.wav / others.wav) after processing</value>
-    <comment>Settings: checkbox</comment>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>When off, the audio is deleted after the transcript and minutes are created (it's kept if transcription fails). It's 16 kHz mono WAV, about 115 MB per channel per hour.</value>
-    <comment>Settings: note</comment>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>Save location</value>
     <comment>Settings: label</comment>
@@ -1791,5 +1783,166 @@ Open the release page in your browser?</value>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>After recording stops, the replacement rules from "Dictionary &amp; Rules" are applied to the transcript, and the minutes are made from the replaced text. The recognized text is kept, so you can restore it from "Dictionary…" in Meeting Notes.</value>
     <comment>Settings &gt; Meetings: note under the checkbox</comment>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>Delete the recording after transcription</value>
+    <comment>Settings &gt; Meetings and the bottom left of Meeting Notes: checkbox. The default for meetings recorded from now on</comment>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>When on, a meeting's recording (me.wav / others.wav) is deleted after its transcript and minutes are created. It's kept if the transcript is incomplete. While recording, you can change it for that meeting in Meeting Notes. The audio is 16 kHz mono WAV, about 115 MB per channel per hour.</value>
+    <comment>Settings &gt; Meetings: note under the delete-recording checkbox</comment>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>Keep recordings for</value>
+    <comment>Settings &gt; Meetings: label of the retention period menu (options are '7 days' ... 'Forever'). Also the title of its confirmation</comment>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>Recordings older than this are deleted automatically when the app starts and after a meeting is processed. This also applies to meetings whose recording you chose to keep. Recordings of meetings with missing transcripts aren't deleted.</value>
+    <comment>Settings &gt; Meetings: note under the retention period</comment>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>{0} of them are missing transcripts.</value>
+    <comment>Settings &gt; Meetings and Manage Recordings: appended to the recording count. {0} = number of meetings whose transcript is incomplete</comment>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>Recordings older than {0} will be deleted now: {1} meetings ({2}).</value>
+    <comment>Confirmation when shortening the retention period. {0} = period (e.g. '30 days'), {1} = number of meetings, {2} = total size (e.g. '1.4 GB')</comment>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>{0} meetings with missing transcripts are kept.</value>
+    <comment>Confirmation when shortening the retention period. {0} = number of meetings kept</comment>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>Change the setting and delete them?</value>
+    <comment>Last line of the retention confirmation (OK = change and delete, Cancel = keep the previous period)</comment>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>The default for meetings you record from now on. While recording, you can change it for that meeting in the recording box at the top left.</value>
+    <comment>Meeting Notes: tooltip of the delete-recording checkbox at the bottom left</comment>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>Delete this meeting's recording after transcription</value>
+    <comment>Meeting Notes: checkbox in the recording box (applies only to the meeting being recorded)</comment>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>On: this meeting's recording is deleted after the transcript and minutes are created (it's kept if the transcript is incomplete). The default setting doesn't change.</value>
+    <comment>Meeting Notes: tooltip of the checkbox in the recording box when on</comment>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>Off: this meeting's recording is kept. The default setting doesn't change.</value>
+    <comment>Meeting Notes: tooltip of the checkbox in the recording box when off</comment>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>Delete Recording…</value>
+    <comment>Meeting Notes: button above the meeting and context menu item of the list</comment>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>Manage Recordings…</value>
+    <comment>Meeting Notes context menu and Settings &gt; Meetings: opens the Manage Recordings window</comment>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>This meeting has no recording left.</value>
+    <comment>Tooltip of the disabled Delete Recording… button</comment>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>You can't delete it while recording or processing.</value>
+    <comment>Tooltip of the disabled Delete Recording… button</comment>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>Delete Recording — Hanasu</value>
+    <comment>Message box title</comment>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>Delete the recording of "{0}" ({1})?</value>
+    <comment>Confirmation. {0} = meeting title, {1} = size (e.g. '115 MB')</comment>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>The minutes, transcript, and notes are kept.</value>
+    <comment>Confirmation of Delete Recording: what remains when the transcript is complete</comment>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>There's no transcript for {0}. That part of the conversation won't be kept.</value>
+    <comment>Confirmation of Delete Recording when a channel failed. {0} = 'Me' and/or 'Others' (speaker labels)</comment>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>Part of this meeting's transcript is missing. That part of the conversation won't be kept.</value>
+    <comment>Confirmation of Delete Recording when part of the transcript is missing (channel unknown)</comment>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>This meeting has no transcript. If you delete the recording, no record of the conversation will remain.</value>
+    <comment>Confirmation of Delete Recording when there is no transcript</comment>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>Deleted the recording of "{0}".</value>
+    <comment>Status after deleting a recording. {0} = meeting title</comment>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>Some recording files couldn't be deleted. The remaining files are kept.
+{0}</value>
+    <comment>Error. {0} = list of 'file name: reason' lines</comment>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>The audio files are deleted permanently (not moved to the Recycle Bin). This can't be undone.</value>
+    <comment>Last sentence of every confirmation that deletes recordings</comment>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>Manage Recordings</value>
+    <comment>Window title and heading</comment>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>Recordings left: {0} meetings, {1}</value>
+    <comment>Manage Recordings and Settings &gt; Meetings. {0} = number of meetings with recordings, {1} = total size (e.g. '1.4 GB')</comment>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>No recordings are left.</value>
+    <comment>Manage Recordings: shown when the list is empty</comment>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>No transcript</value>
+    <comment>Manage Recordings: mark on a meeting without any transcript</comment>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>Transcript partly missing</value>
+    <comment>Manage Recordings: mark on a meeting whose transcript is incomplete</comment>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>Meetings with recordings</value>
+    <comment>Accessible name of the list</comment>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>Delete Selected Recordings…</value>
+    <comment>Manage Recordings: button</comment>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>Delete Recordings Older Than {0} Days…</value>
+    <comment>Manage Recordings: button. {0} = number of days (30)</comment>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>Delete All Recordings…</value>
+    <comment>Manage Recordings: button</comment>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>If your save location is synced with OneDrive, iCloud Drive, or similar, deleted recordings may stay in the sync service's deleted items for a while.</value>
+    <comment>Manage Recordings: note at the bottom</comment>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>Delete the recordings of {0} meetings ({1})?</value>
+    <comment>Confirmation. {0} = number of meetings, {1} = total size</comment>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>{0} of them have a missing transcript. That part of the conversation won't be kept.</value>
+    <comment>Confirmation of Delete Selected. {0} = number of selected meetings without a complete transcript</comment>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>{0} meetings with missing transcripts ({1}) are kept. You can select them to delete them.</value>
+    <comment>Confirmation of Delete Older / Delete All. {0} = number of meetings skipped, {1} = their total size</comment>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>Deleted the recordings of {0} meetings.</value>
+    <comment>Manage Recordings: status after deleting. {0} = number of meetings</comment>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>The recordings of {0} meetings couldn't be fully deleted. The remaining files are kept.</value>
+    <comment>Error. {0} = number of meetings</comment>
   </data>
 </root>

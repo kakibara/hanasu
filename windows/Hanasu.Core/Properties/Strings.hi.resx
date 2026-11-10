@@ -538,7 +538,7 @@
     <value>मीटिंग {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>रिकॉर्डिंग के दौरान ऐप बंद हो गया. ऑडियो फ़ाइलें ({0} / {1}) आंशिक रूप से रखी गई हो सकती हैं.</value>
+    <value>रिकॉर्डिंग के दौरान ऐप बंद हो गया.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>मीटिंग की रिकॉर्डिंग शुरू नहीं की जा सकती</value>

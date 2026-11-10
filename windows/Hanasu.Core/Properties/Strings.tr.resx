@@ -538,7 +538,7 @@
     <value>Toplantı {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>Uygulama kayıt sırasında kapandı. Ses dosyaları ({0} / {1}) kısmen saklanmış olabilir.</value>
+    <value>Uygulama kayıt sırasında kapandı.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Toplantı kaydı başlatılamıyor</value>

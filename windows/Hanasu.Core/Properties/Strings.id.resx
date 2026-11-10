@@ -538,7 +538,7 @@
     <value>Rapat {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>Aplikasi keluar saat merekam. File audio ({0} / {1}) mungkin tersimpan sebagian.</value>
+    <value>Aplikasi keluar saat merekam.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Tidak dapat mulai merekam rapat</value>

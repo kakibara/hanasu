@@ -269,6 +269,10 @@ static async Task MeetingFiles(string[] args)
         if (template == MinutesTemplate.Custom) meeting.CustomMinutesPrompt = MinutesTemplates.DefaultCustomPrompt;
     }
     if (Option(args, "--notes") is { } notesFile) meeting.Notes = MeetingNote.Parse(File.ReadAllText(notesFile));
+    // 確かめ方: REQ-MTG-010
+    // --delete-audio は、この会議の「文字起こしのあとに録音を削除」をオンにする（記録を始めたときに設定から写す値と同じ。DEC-MTG-139）。
+    // 文字起こしがそろっていなければ残す。保存期間の削除はしない（DEC-MTG-143）
+    if (Flag(args, "--delete-audio")) meeting.DeleteAudioAfterTranscription = true;
 
     // 録音のかわりに、音声を 16 kHz・モノラルの WAV にして会議のフォルダに置く
     double Seconds(string name) => double.Parse(Option(args, name) ?? "0", System.Globalization.CultureInfo.InvariantCulture);
@@ -294,7 +298,6 @@ static async Task MeetingFiles(string[] args)
         MinutesClient = Flag(args, "--no-minutes") ? null : () => MinutesClientFromEnvironment(args),
         MinutesModel = Option(args, "--minutes-model") ?? DefaultMinutesModel(args),
         MinutesProvider = Option(args, "--minutes-ai") switch { "claude" => TextAiProvider.Claude, "local" => TextAiProvider.Local, _ => TextAiProvider.Gemini },
-        KeepAudio = !Flag(args, "--delete-audio"),
         Log = m => Console.Error.WriteLine($"[log] {m}"),
         // 要件: REQ-DIC-073（--dict の辞書を当てる。--no-meeting-dictionary で当てない）
         Dictionary = LoadDictionary(args),
@@ -451,6 +454,9 @@ static void PrintMeeting(string folder, Meeting meeting)
     Console.WriteLine($"会議: {meeting.Title}（{meeting.Status}、{Meeting.Clock(meeting.Duration)}、型: {meeting.Template.Title()}）");
     Console.WriteLine($"保存先: {folder}");
     if (meeting.ErrorMessage is not null) Console.WriteLine($"エラー: {meeting.ErrorMessage}");
+    if (meeting.TranscriptionFailedChannels is { Count: > 0 } failedChannels) Console.WriteLine($"文字起こしに失敗したチャンネル: {string.Join(", ", failedChannels)}");
+    var audio = MeetingStore.AudioFilesIn(folder);
+    Console.WriteLine($"録音: {(audio.Count == 0 ? "なし" : string.Join(", ", audio.Select(Path.GetFileName)))}（文字起こし: {MeetingAudioCleanup.TranscriptState(meeting)}）");
     Console.WriteLine($"話者: {string.Join("、", meeting.Speakers.Select(s => $"{s}={meeting.DisplayName(s)}"))}");
     Console.WriteLine();
     Console.WriteLine(meeting.TranscriptForPrompt());

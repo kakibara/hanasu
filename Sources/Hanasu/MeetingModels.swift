@@ -89,6 +89,13 @@ struct Meeting: Codable, Identifiable, Hashable {
     // 設計判断: DEC-MTG-135, DEC-MTG-108
     /// チャンネルごとの、音声ファイルの先頭が録音開始から何秒後か（"me" / "others"）。Windows 版と同じキー。古い会議にはない（0 として扱う）
     var audioStartOffsets: [String: Double]?
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-139, DEC-MTG-108
+    /// 後処理のあとに録音を消す（記録を始めたときに設定から写し、記録中に変えられる）。true のときだけ書く
+    var deleteAudioAfterTranscription: Bool?
+    // 設計判断: DEC-MTG-142, DEC-MTG-009
+    /// 文字起こしに失敗したチャンネル。録音を消す設定かどうかに関わらず書く。古い会議にはない
+    var transcriptionFailedChannels: [MeetingChannel]?
 
     // 要件: REQ-MTG-008
     func displayName(for speaker: String) -> String {
@@ -254,12 +261,13 @@ enum MeetingStore {
         }
     }
 
-    // 設計判断: DEC-MTG-018
-    /// アプリが落ちたり終了したりして「記録中」「処理中」のまま残った会議を「失敗」にする（起動時に 1 回呼ぶ）
+    // 設計判断: DEC-MTG-018, DEC-MTG-140
+    /// アプリが落ちたり終了したりして「記録中」「処理中」のまま残った会議を「失敗」にする（起動時に 1 回呼ぶ）。
+    /// 録音が残っていることは、エラーの文ではなく表示のときに出す（MeetingAudioCleanup.showsAudioKept）
     static func markInterruptedMeetings() {
         for var meeting in loadAll() where meeting.status == .recording || meeting.status == .processing {
             meeting.status = .failed
-            meeting.errorMessage = tr("記録の途中でアプリが終了しました。音声ファイル（me.m4a / others.m4a）は途中まで残っている場合があります。")
+            meeting.errorMessage = tr("記録の途中でアプリが終了しました。")
             try? save(meeting)
         }
     }

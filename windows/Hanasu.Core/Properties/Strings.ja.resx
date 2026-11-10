@@ -538,7 +538,7 @@
     <value>会議 {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>記録の途中でアプリが終了しました。音声ファイル（{0} / {1}）は途中まで残っている場合があります。</value>
+    <value>記録の途中でアプリが終了しました。</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>会議の記録を始められません</value>

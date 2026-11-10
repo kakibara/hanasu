@@ -353,8 +353,22 @@
                         <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_MinutesNote}" />
 
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Storage}" />
-                        <CheckBox x:Name="KeepAudioCheck" Content="{x:Static p:Strings.Settings_KeepAudio}" Checked="OnKeepAudioChanged" Unchecked="OnKeepAudioChanged" />
-                        <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_KeepAudioNote}" />
+                        <!-- 要件: REQ-MTG-010 -->
+                        <!-- 設計判断: DEC-MTG-016, DEC-MTG-139（保存しているキー KeepMeetingAudio の裏返し。次の記録からの既定） -->
+                        <CheckBox x:Name="DeleteAudioCheck" Content="{x:Static p:Strings.Settings_DeleteAudioAfterTranscription}" Checked="OnDeleteAudioChanged" Unchecked="OnDeleteAudioChanged" />
+                        <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_DeleteAudioNote}" />
+                        <!-- 要件: REQ-MTG-057 -->
+                        <!-- 設計判断: DEC-MTG-143 -->
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <TextBlock Text="{x:Static p:Strings.Settings_AudioRetention}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <ComboBox x:Name="AudioRetentionCombo" AutomationProperties.Name="{x:Static p:Strings.Settings_AudioRetention}" MinWidth="160" SelectionChanged="OnAudioRetentionChanged" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_AudioRetentionNote}" />
+                        <!-- 要件: REQ-MTG-056 -->
+                        <DockPanel Margin="0,8,0,0">
+                            <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Meeting_ManageAudio}" Click="OnManageAudio" Margin="8,0,0,0" />
+                            <TextBlock x:Name="AudioStatusText" TextWrapping="Wrap" VerticalAlignment="Center" />
+                        </DockPanel>
                         <DockPanel Margin="0,8,0,0">
                             <TextBlock Text="{x:Static p:Strings.Settings_SaveLocation}" Width="110" TextWrapping="Wrap" VerticalAlignment="Center" />
                             <Button DockPanel.Dock="Right" Content="{x:Static p:Strings.Settings_Open}" Click="OnOpenMeetingsFolder" Margin="8,0,0,0" />
