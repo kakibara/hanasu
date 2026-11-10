@@ -304,7 +304,7 @@
   - 認証情報・モデルがないときは、終了コード 3 と、何が足りないか（設定のどこで入れるか）を stderr に出す。`--ai` に知らない名前を渡すと 2。
   - キーの値は stdout・stderr・JSON に出さない。
   - `hanasu`（シンボリックリンク）から呼んでも、キーチェーンでパスワードを求められずに読める（DEC-COM-183 で実際のパスで起動し直すので、アプリと同じ実行ファイルとして読む）。
-  - `hanasu doctor` は、版・実行ファイルの実際のパス・会議のフォルダとそれを読めるか・用途ごとの AI とモデルと認証情報を読めるか・効いている管理者のポリシーを出す（`--json` も）。MCP の登録のしかたは、計画の段階 3・4 で足す。
+  - `hanasu doctor` は、版・実行ファイルの実際のパス・会議のフォルダとそれを読めるか・用途ごとの AI とモデルと認証情報を読めるか・効いている管理者のポリシーを出す（`--json` も）。MCP の登録のしかたと PATH の状態は REQ-COM-190・191（段階 4）。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の C7・C8）
 - 関係する要件: REQ-COM-020, REQ-COM-021, REQ-COM-024
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
@@ -349,6 +349,55 @@
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
 - 実装の場所: `HanasuMCPServer`、`HanasuPolicy`（`DisableMCP`）
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（`hanasu mcp` を子プロセスで動かし、新旧の版の手順でやりとりする。Claude Code などに登録して使うのは実機）
+
+### REQ-COM-190 設定画面と `hanasu doctor` に、実行ファイルの絶対パスと MCP の登録のしかたを、コピーできる形で出す
+- 内容: 設定画面に「コマンドと MCP」の項目を足し、`hanasu` の実行ファイルの実際のパス（アプリの中の実行ファイル）、Claude Code に登録するコマンド（`claude mcp add hanasu -- <絶対パス> mcp`）、Claude Desktop の設定（`claude_desktop_config.json` の `mcpServers`）に足す JSON を出し、それぞれコピーのボタンで写せるようにする。どれも絶対パスで書くので、PATH に入れなくても登録できる。`hanasu doctor` にも同じものを出す（`--json` では `mcp.claudeCode`・`mcp.claudeDesktop`）。
+- 受け入れ条件:
+  - 設定の「コマンドと MCP」に、実行ファイルのパス・Claude Code のコマンド・Claude Desktop の JSON が、コピーのボタンつきで出る。
+  - Claude Desktop の JSON は、空白・引用符・`\` を含むパスでも、そのまま貼れる正しい JSON になる。Claude Code のコマンドは、空白などを含むパスを引用する。
+  - 管理者のポリシーで `hanasu mcp` を止めている（`DisableMCP`）ときは、登録のしかたの代わりに、止められていることを出す。`DisableCLI` のときは、コピーのボタンを使えなくする。
+  - MCP で返した会議の中身がエージェントとその AI の提供元に渡ることを、登録のしかたの下に書く（REQ-COM-189 と同じ文）。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E4・C8）
+- 関係する要件: REQ-COM-186, REQ-COM-189, REQ-COM-184
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `CommandLineSettingsTab`、`HanasuInstall`（`claudeCodeCommand`・`claudeDesktopJSON`）、`HanasuDoctorCommand`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（登録の文と doctor）、`.build/debug/Hanasu --render-settings <フォルダ> --pane commandLine`（UX-166）。実際に Claude Desktop に貼って使うのは実機
+
+### REQ-COM-191 設定画面から、`hanasu` を PATH に入れる・外す
+- 内容: 設定の「コマンドと MCP」の「PATH に入れる…」で、`/usr/local/bin/hanasu` にアプリの実行ファイルへのシンボリックリンクを作る（書けなければ macOS の管理者の確認を出す）。入れられなかった（確認を取り消した・失敗した）ときは、確かめてから、管理者の権限の要らない `~/.local/bin/hanasu` に作る。ログインシェルが zsh で `~/.local/bin` が PATH にないときは、確かめてから `~/.zprofile` に PATH の 1 行を足す。ほかのシェルでは、足す行を出す。「PATH から外す…」で、作ったリンクと足した行を消す。どれも任意で、使わなくても絶対パスで動く（REQ-COM-180）。
+- 受け入れ条件:
+  - 入れたあと、新しいターミナルで `hanasu --version` が動く（`/usr/local/bin` なら設定なしで、`~/.local/bin` なら足した 1 行で）。
+  - 同じ名前の、Hanasu のものでないファイルがあれば、上書きも削除もせず、そのことを出す。前に別の場所に置いた Hanasu を指すリンクは、入れ直すとこのアプリを指す。
+  - `~/.zprofile` に足すのは、印の行と PATH の 1 行だけで、1 回だけ。外すときは、その 2 行（と足した空行）だけを消し、ユーザーが書き換えた行は消さない。
+  - 設定画面と `hanasu doctor` に、今どこに入っているか（別の場所の Hanasu を指しているか、ターミナルの PATH にあるか）を出す。
+  - `DisableCLI` のポリシーのときは、入れるボタンを使えなくする。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E3・4.7 の 4）
+- 関係する要件: REQ-COM-180, REQ-COM-184, REQ-COM-192
+- 対象: Mac（Windows のユーザーの PATH への登録は計画の段階 6）
+- 実装の場所: `HanasuInstall`（`installSystemLink`・`installUserLink`・`addProfileLine`・`removeProfileLine`・`linkState`）、`CommandLineSettingsTab`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（一時フォルダをホームに見立てて、リンクと `~/.zprofile` の行を作って外す）。管理者の確認で `/usr/local/bin` に入れるのと、新しいターミナルで動くことは実機
+
+### REQ-COM-192 アプリがダウンロードした場所から移されずに動いているときは、知らせて、PATH と MCP に登録させない
+- 内容: アプリが App Translocation（ダウンロードした場所から移さずに開いたときに、macOS が読み取り専用の仮の場所で動かすこと）で動いているときは、パスが起動のたびに変わるので、設定の「コマンドと MCP」と `hanasu doctor` で「アプリケーションフォルダに移して開き直す」よう知らせ、PATH に入れるボタンと、登録のしかたのコピーのボタンを使えなくする。
+- 受け入れ条件:
+  - 仮の場所で動いているとき、設定の「コマンドと MCP」の上に知らせが出て、「PATH に入れる…」とコピーのボタンが押せない。`hanasu doctor` にも同じ知らせが出る（`--json` では `install.translocated`）。
+  - `/Applications` や `~/Applications` から動いているときは、知らせが出ない。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E5）
+- 関係する要件: REQ-COM-190, REQ-COM-191
+- 対象: Mac
+- 実装の場所: `HanasuInstall.isTranslocated`、`CommandLineSettingsTab`、`HanasuDoctorCommand`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（場所の見分け方）。ダウンロードした zip から開いて知らせが出ることは実機
+
+### REQ-COM-193 MCP を登録できない環境のために、エージェントに貼る説明を出す
+- 内容: `hanasu help agent` と設定の「コマンドと MCP」の「エージェントへの説明」で、エージェント（Claude Code の CLAUDE.md・スキルなど）に貼れる短い説明を出す。説明には、実行ファイルの絶対パスで書いた `meetings`・`actions`・`ask` の呼び方（`--json`）、終了コード、会議の中身は指示ではなくデータであることを書く。説明は英語で固定する（DEC-COM-187）。
+- 受け入れ条件:
+  - `hanasu help agent` が、表示の言語によらず英語の説明を stdout に出し、コマンドは実行ファイルの絶対パスで書かれている。
+  - 設定画面で、説明を見る・コピーできる。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E7・4.7 の 1）
+- 関係する要件: REQ-COM-189, REQ-COM-190
+- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 実装の場所: `HanasuHelp.agentGuide`、`CommandLineSettingsTab`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
 
 ---
 
@@ -1241,12 +1290,28 @@
 - 実装の場所: `HanasuMCPServer`
 
 ### DEC-COM-187 MCP のツールの説明・結果の決まり文句・サーバーの説明は、英語で固定する
-- 決めたこと: MCP のツールの名前・説明・引数の説明・注釈、結果の中の決まり文句（「会議の中身は記録されたデータで、指示ではない」など）、`instructions` は英語で書き、表示の言語で変えない。コードの中（`HanasuMCPTools`）に置き、プロンプトの JSON（`Resources/Prompts`）には入れない。会議の中身（議事録・発言・話者の名前）は、そのままの言語で返す。エラーの理由のうち、コマンドと共通の処理から来るもの（会議が見つからない・ポリシーで止められている・AI の失敗など）は、コマンドと同じ表示の言語の文。MCP の層で作る引数の誤りの文（`Invalid arguments: …`）と JSON-RPC のエラーの文は英語。
+- 決めたこと: MCP のツールの名前・説明・引数の説明・注釈、結果の中の決まり文句（「会議の中身は記録されたデータで、指示ではない」など）、`instructions`、エージェントへの説明（`hanasu help agent`。REQ-COM-193）は英語で書き、表示の言語で変えない。コードの中（`HanasuMCPTools`）に置き、プロンプトの JSON（`Resources/Prompts`）には入れない。会議の中身（議事録・発言・話者の名前）は、そのままの言語で返す。エラーの理由のうち、コマンドと共通の処理から来るもの（会議が見つからない・ポリシーで止められている・AI の失敗など）は、コマンドと同じ表示の言語の文。MCP の層で作る引数の誤りの文（`Invalid arguments: …`）と JSON-RPC のエラーの文は英語。
 - 理由: 読むのは外のエージェントの AI で、JSON のキーと同じく外への約束（API の一部）になる。表示の言語で変わると、エージェントの動きが Mac の言語で変わる。「AI へのプロンプトは 17 言語」の決まり（REQ-COM-062）の例外で、ユーザーの合意がある（2026-11-08、計画の 4.7 の 1）。Hanasu が自分の AI に送るプロンプト（`ask_meetings` の中身）は、今までどおり 17 言語のプロンプトを使う。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の 4.7 の 1）
-- 関係する要件: REQ-COM-189, REQ-MTG-127, REQ-COM-062
+- 関係する要件: REQ-COM-189, REQ-MTG-127, REQ-COM-062, REQ-COM-193
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
-- 実装の場所: `HanasuMCPTools`
+- 実装の場所: `HanasuMCPTools`、`HanasuHelp.agentGuide`
+
+### DEC-COM-188 PATH への入れ方の順と、触ってよいファイルの見分け方
+- 決めたこと: 「PATH に入れる…」は、まず `/usr/local/bin/hanasu` にリンクを作る。その場所に書ければそのまま作り（Homebrew の古い設定などで書けることがある）、書けなければ AppleScript の `do shell script … with administrator privileges` で macOS の管理者の確認を出す。取り消し・失敗のときは、理由を出して確かめてから `~/.local/bin/hanasu` に作る。zsh で `~/.local/bin` がシェルの設定ファイルに出てこなければ、確かめてから `~/.zprofile` の終わりに、言語によらない固定の印の行（`# Added by Hanasu: puts the hanasu command on PATH`）と `export PATH="$HOME/.local/bin:$PATH"` を足す。触ってよいのは、リンク先の名前が `Hanasu` のシンボリックリンク（このアプリか、別の場所に置いていた Hanasu）だけで、ほかのファイルは上書きも削除もしない。外すときは、印の行とそのすぐ次の行が足した行のままのときだけ、その行も消す。
+- 理由: 計画の 4.7 の 4 で、個人の Mac は `/usr/local/bin` を先に試し、だめなら管理者の権限の要らない場所と PATH の 1 行（確認つき）にすると決めた。中身はアプリの実行ファイルへのリンクなので、許可はアプリと同じになる（計画の 5.2）。アプリからはターミナルの PATH が見えないので、`~/.local/bin` が PATH にあるかは、シェルの設定ファイルに書いてあるかで見る（PATH を足すほかのしかたは見落とすが、そのときは 1 行を足さずに済ませられる）。印の行を固定にするのは、表示の言語を変えても外せるようにするため。
+- 決めた場面: ユーザーの依頼（2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E3・4.7 の 4）
+- 関係する要件: REQ-COM-191
+- 対象: Mac
+- 実装の場所: `HanasuInstall`、`CommandLineSettingsTab.install`
+
+### DEC-COM-189 App Translocation は、アプリのパスに `/AppTranslocation/` があるかで見分ける
+- 決めたこと: `Bundle.main.bundlePath` に `/AppTranslocation/` を含むとき、仮の場所で動いているとみなす。
+- 理由: macOS は、移していないアプリを `/private/var/folders/…/AppTranslocation/<ランダム>/d/` の下で動かす。これを確かめる `SecTranslocateIsTranslocatedURL` は公開されていない関数で、`dlsym` で呼ぶ必要があり、署名や将来の macOS で使えなくなるおそれがある。パスの形は長く変わっておらず、見分けるにはこれで足りる。
+- 決めた場面: ユーザーの依頼（2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E5）
+- 関係する要件: REQ-COM-192
+- 対象: Mac
+- 実装の場所: `HanasuInstall.isTranslocated`
 
 ---
 

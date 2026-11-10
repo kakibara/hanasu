@@ -121,6 +121,20 @@ Với **Cục bộ**, Hanasu chạy một mô hình ngôn ngữ nhỏ ngay trên
 Bạn có thể chọn công cụ khác nhau cho nhập liệu bằng giọng nói và cho cuộc họp. Trên Windows, cuộc họp dùng Whisper hoặc Gemini.
 Trên Mac, chọn ngôn ngữ chép lời từ danh sách (tiếng Nhật, tiếng Anh, tiếng Trung, tiếng Hàn, tiếng Pháp, tiếng Đức, tiếng Tây Ban Nha, tiếng Ý, tiếng Bồ Đào Nha). Ban đầu ngôn ngữ này được đặt theo ngôn ngữ hệ thống của bạn.
 
+### ⌨️ Dùng từ terminal và AI agent *(Mac)*
+
+Lệnh `hanasu` cho phép script và AI agent (Claude Code, Claude Desktop và các agent khác) đọc bản ghi cuộc họp của bạn và dùng cách chỉnh sửa văn bản giống như bạn đã thiết lập. Lệnh này chính là ứng dụng, nên không cần cài thêm gì. Mở **Cài đặt → Lệnh & MCP** để thêm lệnh vào PATH hoặc sao chép cấu hình MCP.
+
+| | |
+| --- | --- |
+| **Đọc cuộc họp** | `hanasu meetings list / show / search` và `hanasu actions` in ra cuộc họp, biên bản, bản chép lời và các đầu việc, dưới dạng văn bản hoặc `--json`. Không gửi gì đi đâu cả. |
+| **Hỏi đáp** | `hanasu ask "Tuần trước chúng ta đã quyết định gì?"` trả lời dựa trên các cuộc họp của bạn, bằng AI bạn chọn cho cuộc họp. |
+| **Chỉnh sửa văn bản** | `hanasu refine` chỉnh sửa hoặc dịch văn bản giống như nhập liệu bằng giọng nói, còn `hanasu edit "<chỉ dẫn>"` viết lại văn bản. Cả hai đều dùng được trong pipe. |
+| **MCP cho AI agent** | `hanasu mcp` là một máy chủ MCP (stdio). Agent có thể liệt kê, đọc, tìm kiếm và đặt câu hỏi về các cuộc họp của bạn. Nội dung cuộc họp bạn chia sẻ theo cách này sẽ được chuyển cho agent và nhà cung cấp AI của agent đó. |
+| **Kiểm tra thiết lập** | `hanasu doctor` cho biết AI và thông tin xác thực nào đang được dùng, thư mục cuộc họp, và cách đăng ký MCP. Chạy `hanasu help` để xem mọi tùy chọn. |
+
+Quản trị viên có thể tắt lệnh, MCP hoặc một số AI bằng hồ sơ cấu hình.
+
 ## Tải về
 
 Tải bản mới nhất từ [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
@@ -183,6 +197,7 @@ Bạn có thể thay đổi mọi phím tắt trong Cài đặt. Hướng dẫn 
 - **AI nhận văn bản, không nhận âm thanh.** Gemini hoặc Claude nhận bản chép lời. Tùy theo cài đặt, AI cũng có thể nhận tên ứng dụng bạn đang gõ, ngữ cảnh màn hình và bản chép lời cuộc họp cho tính năng Hỏi đáp và trò chuyện với AI trong cuộc họp.
 - **Cục bộ và Apple cũng giữ văn bản trên thiết bị của bạn.** Nếu bạn chọn một trong hai, không có gì được gửi đến dịch vụ AI nào. Thứ duy nhất được tải về là chính mô hình.
 - **Âm thanh chỉ được gửi đến Google nếu bạn chọn.** Nếu bạn chọn công cụ nhận dạng giọng nói Gemini, âm thanh đã ghi sẽ được gửi đến Google.
+- **Agent chỉ nhận cuộc họp khi bạn kết nối.** Lệnh `hanasu` và máy chủ MCP của nó chỉ đọc cuộc họp khi bạn hoặc một agent gọi đến, và nội dung trả về sẽ được chuyển cho agent đó và nhà cung cấp AI của agent.
 - **Cuộc họp là các tệp thông thường.** Chúng được lưu dưới dạng JSON và Markdown trong `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac và Windows dùng cùng một định dạng.
 - **Không thu thập dữ liệu từ xa (telemetry).** Hanasu không thu thập dữ liệu phân tích nào.
 - **Khóa API được hệ điều hành bảo vệ.** Trên macOS, khóa được lưu trong Keychain và các ứng dụng khác phải hỏi mật khẩu đăng nhập của bạn mới đọc được. Trên Windows, khóa được mã hóa bằng DPAPI, hoặc bằng khóa Windows Hello nếu bạn chọn. Cả hai cách đều không thể ngăn hoàn toàn phần mềm độc hại chạy dưới tài khoản người dùng của bạn. Xem [docs/design/security.md](docs/design/security.md).

@@ -119,6 +119,20 @@ With **Local**, Hanasu runs a small language model on your own Mac or PC with th
 You can choose a different engine for voice input and for meetings. On Windows, meetings use Whisper or Gemini.
 On Mac, pick the transcription language from a list (Japanese, English, Chinese, Korean, French, German, Spanish, Italian, Portuguese). It starts as your system language.
 
+### ⌨️ Use it from the terminal and AI agents *(Mac)*
+
+The `hanasu` command lets scripts and AI agents (Claude Code, Claude Desktop, and others) read your meeting records and use your clean-up style. It is the app itself, so there is nothing else to install. Open **Settings → Command & MCP** to add it to your PATH or to copy the setup for MCP.
+
+| | |
+| --- | --- |
+| **Read meetings** | `hanasu meetings list / show / search` and `hanasu actions` print meetings, minutes, transcripts and action items, as text or `--json`. Nothing is sent anywhere. |
+| **Ask** | `hanasu ask "What did we decide last week?"` answers from your meetings with the AI you chose for meetings. |
+| **Clean up text** | `hanasu refine` polishes or translates text the same way voice input does, and `hanasu edit "<instruction>"` rewrites it. Both work in pipes. |
+| **MCP for AI agents** | `hanasu mcp` is an MCP server (stdio). Agents can list, read, search and ask your meetings. The meeting content you share this way goes to the agent and its AI provider. |
+| **Check the setup** | `hanasu doctor` shows which AI and credentials are used, the meeting folder, and how to register MCP. Run `hanasu help` for every option. |
+
+Administrators can turn off the command, MCP, or some AIs with a configuration profile.
+
 ## Download
 
 Get the latest build from [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
@@ -181,6 +195,7 @@ You can change every shortcut in Settings. The full user guide (in Japanese) is 
 - **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask and the meeting AI chat.
 - **Local and Apple keep text on your device too.** If you choose either one, nothing is sent to an AI service. The only download is the model itself.
 - **Audio goes to Google only if you choose it.** If you select the Gemini speech engine, the recorded audio is sent to Google.
+- **Agents get meetings only if you connect them.** The `hanasu` command and its MCP server only read meetings when you or an agent call them, and what they return goes to that agent and its AI provider.
 - **Meetings are plain files.** They are saved as JSON and Markdown under `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac and Windows use the same format.
 - **No telemetry.** Hanasu collects no analytics.
 - **API keys are protected by the OS.** On macOS they are kept in the Keychain, and other apps must ask for your login password to read them. On Windows they are encrypted with DPAPI, or with a Windows Hello key if you choose. Neither can fully stop malware running as your user. See [docs/design/security.md](docs/design/security.md).

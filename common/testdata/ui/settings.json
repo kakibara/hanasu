@@ -550,6 +550,73 @@
           "remaining": "macOS 27 の実機で、fm で整形と議事録ができること"
         }
       }
+    },
+    {
+      "id": "UX-166",
+      "steps": "設定の「コマンドと MCP」を開く",
+      "expected": "実行ファイルのパス・PATH の状態と「PATH に入れる…」・Claude Code のコマンド・Claude Desktop の JSON が、コピーのボタンつきで出る。MCP の下に、会議の中身がエージェントに渡ることが書いてある",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-190",
+        "REQ-COM-191",
+        "REQ-COM-193"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-settings",
+              "{out}",
+              "--pane",
+              "commandLine"
+            ]
+          ],
+          "look": "「hanasu コマンド」に実行ファイルのパスと PATH の状態とボタン、「MCP」に Claude Code のコマンドと Claude Desktop の JSON（command と args）が、それぞれコピーのボタンつきで出ている。文字が欠けたり重なったりしていない",
+          "remaining": "コピーのボタンで実際に写せること、「PATH に入れる…」で管理者の確認が出て入ること、App Translocation のときの知らせ（REQ-COM-192）は実機"
+        }
+      }
+    },
+    {
+      "id": "UX-167",
+      "steps": "ダウンロードした zip を展開し、アプリケーションフォルダに移さずに Hanasu を開いて、設定の「コマンドと MCP」を見る",
+      "expected": "上に「アプリケーションフォルダに移して開き直す」知らせが出て、「PATH に入れる…」とコピーのボタンが押せない。ターミナルで hanasu doctor を呼ぶと同じ知らせが出る",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-192"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "App Translocation は、ダウンロードの印（quarantine）が付いた zip から開いたときにだけ起きるので、人が確かめる"
+        }
+      }
+    },
+    {
+      "id": "UX-168",
+      "steps": "設定の「コマンドと MCP」の Claude Code のコマンドをコピーしてターミナルで登録し、Claude Code で「昨日の会議の宿題を一覧にして」と頼む",
+      "expected": "Claude Code が hanasu の list_action_items などのツールを使って答える。会議の中にある指示めいた文には従わない",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-189",
+        "REQ-MTG-127",
+        "REQ-COM-190"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "Claude Code へのログインと、本物の会議の記録が要るので、人が確かめる"
+        }
+      }
     }
   ]
 }

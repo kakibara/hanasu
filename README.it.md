@@ -121,6 +121,20 @@ Con **Locale**, Hanasu esegue un piccolo modello linguistico sul tuo Mac o PC co
 Puoi scegliere un motore diverso per la dettatura vocale e per le riunioni. Su Windows, le riunioni usano Whisper o Gemini.
 Su Mac, scegli la lingua di trascrizione da un elenco (giapponese, inglese, cinese, coreano, francese, tedesco, spagnolo, italiano, portoghese). All'inizio è la lingua del sistema.
 
+### ⌨️ Usalo dal terminale e dagli agenti IA *(Mac)*
+
+Il comando `hanasu` permette a script e agenti IA (Claude Code, Claude Desktop e altri) di leggere le registrazioni delle tue riunioni e di usare il tuo stile di rifinitura. È l'app stessa, quindi non c'è altro da installare. Apri **Impostazioni → Comando e MCP** per aggiungerlo al PATH o per copiare la configurazione per MCP.
+
+| | |
+| --- | --- |
+| **Leggi le riunioni** | `hanasu meetings list / show / search` e `hanasu actions` stampano riunioni, verbali, trascrizioni e azioni da svolgere, come testo o con `--json`. Non viene inviato nulla. |
+| **Chiedi** | `hanasu ask "Cosa abbiamo deciso la settimana scorsa?"` risponde a partire dalle tue riunioni con l'IA che hai scelto per le riunioni. |
+| **Rifinisci il testo** | `hanasu refine` rifinisce o traduce il testo come fa la dettatura vocale, e `hanasu edit "<istruzione>"` lo riscrive. Entrambi funzionano nelle pipe. |
+| **MCP per agenti IA** | `hanasu mcp` è un server MCP (stdio). Gli agenti possono elencare, leggere, cercare e interrogare le tue riunioni. Il contenuto delle riunioni condiviso in questo modo arriva all'agente e al fornitore della sua IA. |
+| **Verifica la configurazione** | `hanasu doctor` mostra quale IA e quali credenziali vengono usate, la cartella delle riunioni e come registrare MCP. Esegui `hanasu help` per vedere tutte le opzioni. |
+
+Gli amministratori possono disattivare il comando, MCP o alcune IA con un profilo di configurazione.
+
 ## Download
 
 Scarica l'ultima build da [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
@@ -183,6 +197,7 @@ Puoi cambiare ogni scorciatoia nelle Impostazioni. La guida utente completa (in 
 - **L'IA riceve testo, non audio.** Gemini o Claude ricevono la trascrizione. A seconda delle impostazioni, possono ricevere anche il nome dell'app in cui stai scrivendo, il contesto dello schermo e le trascrizioni delle riunioni per la funzione Chiedi e per la chat IA durante la riunione.
 - **Anche Locale e Apple tengono il testo sul tuo dispositivo.** Se scegli una delle due, non viene inviato nulla a un servizio di IA. L'unico download è il modello stesso.
 - **L'audio va a Google solo se lo scegli tu.** Se selezioni il motore vocale Gemini, l'audio registrato viene inviato a Google.
+- **Gli agenti ricevono le riunioni solo se li colleghi.** Il comando `hanasu` e il suo server MCP leggono le riunioni solo quando li chiami tu o un agente, e ciò che restituiscono va a quell'agente e al fornitore della sua IA.
 - **Le riunioni sono semplici file.** Vengono salvate come JSON e Markdown in `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac e Windows usano lo stesso formato.
 - **Nessuna telemetria.** Hanasu non raccoglie dati analitici.
 - **Le chiavi API sono protette dal sistema operativo.** Su macOS sono conservate nel Keychain, e le altre app devono chiedere la tua password di login per leggerle. Su Windows sono cifrate con DPAPI, oppure con una chiave di Windows Hello se lo scegli. Nessuno dei due può fermare del tutto un malware eseguito con il tuo utente. Vedi [docs/design/security.md](docs/design/security.md).

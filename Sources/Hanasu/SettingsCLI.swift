@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 // 確認用の CLI モード:
-//   Hanasu --render-settings <出力フォルダ> [--pane general|ai|words|appStyles|snippets|meeting|history|permissions] [--dark]
+//   Hanasu --render-settings <出力フォルダ> [--pane general|ai|words|appStyles|snippets|meeting|history|commandLine|permissions] [--dark]
 //     設定のウインドウ（左のサイドバーと右の項目）を、項目ごとに settings-<項目>.png に描き出す。
 //     --pane で 1 つだけにできる。設定の値は変えない（前に開いていた項目の記録も変えない）
 enum SettingsCLI {

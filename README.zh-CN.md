@@ -121,6 +121,20 @@ Hanasu 会把转写结果交给 AI（Gemini、Claude，或你设备上的本地�
 语音输入和会议可以选择不同的引擎。在 Windows 上，会议使用 Whisper 或 Gemini。
 在 Mac 上，可以从列表中选择转写语言（日语、英语、中文、韩语、法语、德语、西班牙语、意大利语、葡萄牙语）。初始值为你的系统语言。
 
+### ⌨️ 从终端和 AI 智能体使用 *（Mac）*
+
+借助 `hanasu` 命令，脚本和 AI 智能体（Claude Code、Claude Desktop 等）可以读取你的会议记录，并使用你的润色风格。它就是应用本身，无需另外安装任何东西。打开 **设置 → 命令与 MCP**，即可将它添加到 PATH，或复制 MCP 的设置。
+
+| | |
+| --- | --- |
+| **读取会议** | `hanasu meetings list / show / search` 和 `hanasu actions` 以文本或 `--json` 输出会议、会议纪要、转写和待办事项。不会发送到任何地方。 |
+| **提问** | `hanasu ask "上周我们决定了什么？"` 会用你为会议选择的 AI，根据你的会议内容回答。 |
+| **润色文本** | `hanasu refine` 会像语音输入一样润色或翻译文本，`hanasu edit "<指令>"` 则会改写文本。两者都可以在管道中使用。 |
+| **面向 AI 智能体的 MCP** | `hanasu mcp` 是一个 MCP 服务器（stdio）。智能体可以列出、读取、搜索你的会议，并就会议提问。以这种方式共享的会议内容会传给智能体及其 AI 提供商。 |
+| **检查设置** | `hanasu doctor` 会显示使用的 AI 和凭据、会议文件夹，以及注册 MCP 的方法。运行 `hanasu help` 可查看所有选项。 |
+
+管理员可以通过配置描述文件关闭该命令、MCP 或部分 AI。
+
 ## 下载
 
 从 [**Releases**](https://github.com/kakibara/hanasu/releases/latest) 获取最新版本。
@@ -183,6 +197,7 @@ Hanasu 会把转写结果交给 AI（Gemini、Claude，或你设备上的本地�
 - **AI 收到的是文字，而不是音频。** Gemini 或 Claude 接收的是转写结果。根据你的设置，它还可能收到你正在输入的应用名称、屏幕上下文，以及用于提问功能和会议 AI 聊天的会议转写。
 - **本地模型和 Apple 同样会把文字留在设备上。** 选择其中任意一个时，不会向任何 AI 服务发送内容。唯一的下载是模型本身。
 - **只有你选择时，音频才会发送给 Google。** 如果选择 Gemini 语音引擎，录制的音频会发送给 Google。
+- **只有你连接了智能体，它才会拿到会议。** `hanasu` 命令及其 MCP 服务器只在你或智能体调用时才读取会议，返回的内容会传给该智能体及其 AI 提供商。
 - **会议是普通文件。** 会议以 JSON 和 Markdown 格式保存在 `~/Documents/Hanasu/Meetings/`（Windows：`Documents\Hanasu\Meetings\`）下。Mac 和 Windows 使用相同的格式。
 - **没有遥测。** Hanasu 不收集任何分析数据。
 - **API 密钥受操作系统保护。** 在 macOS 上，密钥保存在 Keychain 中，其他应用必须输入你的登录密码才能读取。在 Windows 上，密钥使用 DPAPI 加密，也可以选择使用 Windows Hello 密钥加密。两者都无法完全防范以你的用户身份运行的恶意软件。参见 [docs/design/security.md](docs/design/security.md)。

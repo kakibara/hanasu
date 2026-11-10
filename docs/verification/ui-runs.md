@@ -136,3 +136,14 @@ PR #86 のレビューで、`ui-cases.py` が「確かめ方」の下の箇条�
 |---|---|---|---|
 | UX-154 | ja | OK | window-min.png のツールバーで「作り直す」と「書き出し」の間に辞書のアイコン（本）があり、切れていない。detail-outdated.png の文書の上と文字起こしの上に「文字起こしか、議事録に使う発言を変えました」の帯、文字起こしに Anews・Stockmark が出ている |
 | UX-161 | ja | OK | 辞書のアイコンを足しても、出力に NG がなく、最小の大きさでツールバーが切れていない |
+
+## 6. 2026-11-10 `hanasu` コマンドの段階 4（設定の「コマンドと MCP」。ff7b733 の上の作業中の変更、macOS 26.6.2）
+
+- 描いたもの: `.build/debug/Hanasu --render-settings <フォルダ> --pane commandLine`（ja・en・ar）。
+- 判定: OK 1
+
+| ID | 言語 | 判定 | メモ |
+| --- | --- | --- | --- |
+| UX-166 | ja・en・ar | OK | 実行ファイルのパス・PATH の状態と「PATH に入れる…」・Claude Code のコマンド・Claude Desktop の JSON に、コピーのボタン。ウインドウの高さで、下の「エージェントへの説明」の節は描き出しの外（`hanasu help agent` の出力を自己テストで確かめた）。サイドバーが空なのは、ほかの項目の描き出しと同じ |
+
+- 残り: UX-167（App Translocation）と UX-168（Claude Code に登録して質問）は人が確かめる。「PATH に入れる…」で管理者の確認が出て `/usr/local/bin` に入ることも実機。

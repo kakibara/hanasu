@@ -1939,6 +1939,108 @@
         }
       }
     },
+    "%@ に、Hanasu のものでないファイルがあります。上書きしません。" : {
+      "comment" : "HanasuInstall.swift:92",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يوجد في %@ ملف لا يخص Hanasu. لن يستبدله Hanasu."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unter %@ liegt eine Datei, die nicht zu Hanasu gehört. Hanasu überschreibt sie nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There is a file at %@ that doesn't belong to Hanasu. Hanasu won't overwrite it."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En %@ hay un archivo que no pertenece a Hanasu. Hanasu no lo sobrescribirá."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un fichier qui n’appartient pas à Hanasu se trouve à l’emplacement %@. Hanasu ne l’écrasera pas."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ पर एक ऐसी फ़ाइल है जो Hanasu की नहीं है। Hanasu उसे ओवरराइट नहीं करेगा।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ada file di %@ yang bukan milik Hanasu. Hanasu tidak akan menimpanya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %@ c'è un file che non appartiene a Hanasu. Hanasu non lo sovrascriverà."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@에 Hanasu의 것이 아닌 파일이 있습니다. 덮어쓰지 않습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W lokalizacji %@ jest plik, który nie należy do Hanasu. Hanasu go nie zastąpi."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Há um arquivo em %@ que não pertence ao Hanasu. O Hanasu não vai sobrescrevê-lo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По пути %@ есть файл, который не принадлежит Hanasu. Hanasu не будет его перезаписывать."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ konumunda Hanasu'ya ait olmayan bir dosya var. Hanasu bu dosyanın üzerine yazmaz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tại %@ có một tệp không thuộc về Hanasu. Hanasu sẽ không ghi đè lên tệp đó."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 处有一个不属于 Hanasu 的文件。Hanasu 不会覆盖它。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 有一個不屬於 Hanasu 的檔案。Hanasu 不會覆寫它。"
+          }
+        }
+      }
+    },
     "%@ には 1 以上の整数を指定してください: %@" : {
       "comment" : "HanasuCommand.swift:276",
       "extractionState" : "manual",
@@ -2343,6 +2445,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "自 %@ 進入睡眠以來，錄製一直在繼續。請選擇在睡眠前的位置停止錄製，還是繼續錄製。"
+          }
+        }
+      }
+    },
+    "%@ に入っています" : {
+      "comment" : "CommandLineSettingsView.swift:131",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "موجود في %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ में जोड़ा गया है"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ada di %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presente in %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@에 추가됨"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znajduje się w %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presente em %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавлено: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ içinde"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Có trong %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已添加到 %@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已加入 %@"
+          }
+        }
+      }
+    },
+    "%@ に入れました。新しいターミナルで hanasu と打つと使えます。" : {
+      "comment" : "CommandLineSettingsView.swift:169, CommandLineSettingsView.swift:191",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تمت الإضافة إلى %@. اكتب hanasu في نافذة جديدة في الطرفية لاستخدامه."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu %@ hinzugefügt. Gib in einem neuen Terminalfenster hanasu ein, um den Befehl zu verwenden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added to %@. Type hanasu in a new Terminal window to use it."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se ha añadido a %@. Escribe hanasu en una ventana nueva de Terminal para usarlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouté à %@. Saisissez hanasu dans une nouvelle fenêtre de Terminal pour l’utiliser."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ में जोड़ा गया। इस्तेमाल करने के लिए नई टर्मिनल विंडो में hanasu टाइप करें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ditambahkan ke %@. Ketik hanasu di jendela Terminal baru untuk menggunakannya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunto in %@. Digita hanasu in una nuova finestra del Terminale per usarlo."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@에 추가했습니다. 새 터미널 윈도우에서 hanasu를 입력하면 사용할 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodano do %@. Aby go używać, wpisz hanasu w nowym oknie Terminala."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionado em %@. Digite hanasu em uma nova janela do Terminal para usá-lo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавлено: %@. Введите hanasu в новом окне Терминала, чтобы начать пользоваться."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ konumuna eklendi. Kullanmak için yeni bir Terminal penceresinde hanasu yazın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã thêm vào %@. Gõ hanasu trong một cửa sổ Terminal mới để sử dụng."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已添加到 %@。在新的“终端”窗口中输入 hanasu 即可使用。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已加入 %@。在新的「終端機」視窗中輸入 hanasu 即可使用。"
           }
         }
       }
@@ -3057,6 +3363,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 則%@"
+          }
+        }
+      }
+    },
+    "%@ は、別の場所の Hanasu を指しています。入れ直すと、このアプリを指します。" : {
+      "comment" : "CommandLineSettingsView.swift:131",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يشير %@ إلى نسخة من Hanasu في موقع آخر. أضِفه مرة أخرى ليشير إلى هذا التطبيق."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ verweist auf eine Kopie von Hanasu an einem anderen Ort. Füge den Befehl erneut hinzu, damit er auf diese App verweist."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ points to a copy of Hanasu in another location. Add it again to point it to this app."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ apunta a una copia de Hanasu que está en otra ubicación. Vuelve a añadirlo para que apunte a esta app."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ pointe vers une copie de Hanasu située ailleurs. Ajoutez-le à nouveau pour qu’il pointe vers cette app."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ किसी दूसरी जगह रखी Hanasu की कॉपी की ओर इशारा करता है। इसे इस ऐप की ओर इशारा कराने के लिए फिर से जोड़ें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ mengarah ke salinan Hanasu di lokasi lain. Tambahkan lagi agar mengarah ke app ini."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ punta a una copia di Hanasu in un'altra posizione. Aggiungilo di nuovo per farlo puntare a questa app."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 링크가 다른 위치의 Hanasu를 가리키고 있습니다. 다시 추가하면 이 앱을 가리킵니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ wskazuje na kopię Hanasu w innej lokalizacji. Dodaj ponownie, aby wskazywał na tę aplikację."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ aponta para uma cópia do Hanasu em outro local. Adicione de novo para que aponte para este app."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ указывает на копию Hanasu в другом месте. Добавьте заново, чтобы ссылка указывала на это приложение."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, başka bir konumdaki bir Hanasu kopyasını gösteriyor. Yeniden eklerseniz bu uygulamayı gösterir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ đang trỏ đến một bản Hanasu ở vị trí khác. Hãy thêm lại để trỏ đến ứng dụng này."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 指向另一个位置的 Hanasu。重新添加后，它将指向此应用。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 指向另一個位置的 Hanasu。重新加入後，它會指向此 App。"
           }
         }
       }
@@ -5612,7 +6020,7 @@
       }
     },
     "%@のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:391",
+      "comment" : "SettingsView.swift:398",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6530,7 +6938,7 @@
       }
     },
     "%@を許可する" : {
-      "comment" : "SettingsView.swift:387",
+      "comment" : "SettingsView.swift:394",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7346,7 +7754,7 @@
       }
     },
     "%@（%@）" : {
-      "comment" : "HanasuDoctorCommand.swift:75, HanasuDoctorCommand.swift:75, LocalLLMModel.swift:31",
+      "comment" : "HanasuDoctorCommand.swift:103, HanasuDoctorCommand.swift:103, LocalLLMModel.swift:31",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7550,7 +7958,7 @@
       }
     },
     "%@（まだありません）" : {
-      "comment" : "HanasuDoctorCommand.swift:64",
+      "comment" : "HanasuDoctorCommand.swift:76",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7856,7 +8264,7 @@
       }
     },
     "%@（読めます）" : {
-      "comment" : "HanasuDoctorCommand.swift:60, HanasuDoctorCommand.swift:63",
+      "comment" : "HanasuDoctorCommand.swift:72, HanasuDoctorCommand.swift:75",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7958,7 +8366,7 @@
       }
     },
     "%@（読めません: %@）" : {
-      "comment" : "HanasuDoctorCommand.swift:59, HanasuDoctorCommand.swift:65",
+      "comment" : "HanasuDoctorCommand.swift:71, HanasuDoctorCommand.swift:77",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8570,7 +8978,7 @@
       }
     },
     "--json で、決まった形の JSON を出します。--meetings-dir <フォルダ>（か環境変数 HANASU_MEETINGS_DIR）で、会議のフォルダを変えられます。" : {
-      "comment" : "HanasuCommand.swift:455",
+      "comment" : "HanasuCommand.swift:492",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8973,6 +9381,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "--translate 指定了未知的語言：%@"
+          }
+        }
+      }
+    },
+    "/usr/local/bin に入れられませんでした: %@" : {
+      "comment" : "CommandLineSettingsView.swift:174",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّرت الإضافة إلى /usr/local/bin: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen zu /usr/local/bin fehlgeschlagen: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't add it to /usr/local/bin: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se ha podido añadir a /usr/local/bin: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d’ajouter à /usr/local/bin : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/usr/local/bin में नहीं जोड़ा जा सका: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak dapat menambahkan ke /usr/local/bin: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile aggiungerlo a /usr/local/bin: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/usr/local/bin에 추가할 수 없습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się dodać do /usr/local/bin: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível adicioná-lo a /usr/local/bin: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось добавить в /usr/local/bin: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/usr/local/bin konumuna eklenemedi: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể thêm vào /usr/local/bin: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法添加到 /usr/local/bin：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法加入 /usr/local/bin：%@"
+          }
+        }
+      }
+    },
+    "/usr/local/bin への登録を取り消しました。" : {
+      "comment" : "CommandLineSettingsView.swift:172",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أُلغيت الإضافة إلى /usr/local/bin."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen zu /usr/local/bin abgebrochen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adding it to /usr/local/bin was canceled."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se ha cancelado la adición a /usr/local/bin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajout à /usr/local/bin annulé."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/usr/local/bin में जोड़ना रद्द कर दिया गया।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Penambahan ke /usr/local/bin dibatalkan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'aggiunta a /usr/local/bin è stata annullata."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/usr/local/bin에 추가하는 것을 취소했습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anulowano dodawanie do /usr/local/bin."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A adição a /usr/local/bin foi cancelada."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавление в /usr/local/bin отменено."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/usr/local/bin konumuna ekleme iptal edildi."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã hủy việc thêm vào /usr/local/bin."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已取消添加到 /usr/local/bin。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已取消加入 /usr/local/bin。"
           }
         }
       }
@@ -9386,7 +9998,7 @@
       }
     },
     "<AI>: local・apple・gemini・claude（省くと設定の AI）。<文体>: none・chat・email・document-polite・document-plain。<言語>: en・ja・ko など" : {
-      "comment" : "HanasuCommand.swift:462",
+      "comment" : "HanasuCommand.swift:499",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9488,7 +10100,7 @@
       }
     },
     "<フォルダ>" : {
-      "comment" : "HanasuCommand.swift:423",
+      "comment" : "HanasuCommand.swift:426",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9590,7 +10202,7 @@
       }
     },
     "<モデル>" : {
-      "comment" : "HanasuCommand.swift:373, HanasuCommand.swift:423",
+      "comment" : "HanasuCommand.swift:376, HanasuCommand.swift:426",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9692,7 +10304,7 @@
       }
     },
     "<件数>" : {
-      "comment" : "HanasuCommand.swift:371",
+      "comment" : "HanasuCommand.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9794,7 +10406,7 @@
       }
     },
     "<会議>" : {
-      "comment" : "HanasuCommand.swift:379",
+      "comment" : "HanasuCommand.swift:382",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9896,7 +10508,7 @@
       }
     },
     "<名前>" : {
-      "comment" : "HanasuCommand.swift:388",
+      "comment" : "HanasuCommand.swift:391",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9998,7 +10610,7 @@
       }
     },
     "<指示>" : {
-      "comment" : "HanasuCommand.swift:409",
+      "comment" : "HanasuCommand.swift:412",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10100,7 +10712,7 @@
       }
     },
     "<文体>" : {
-      "comment" : "HanasuCommand.swift:402",
+      "comment" : "HanasuCommand.swift:405",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10202,7 +10814,7 @@
       }
     },
     "<文章>" : {
-      "comment" : "HanasuCommand.swift:372",
+      "comment" : "HanasuCommand.swift:375",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10304,7 +10916,7 @@
       }
     },
     "<期間>" : {
-      "comment" : "HanasuCommand.swift:370",
+      "comment" : "HanasuCommand.swift:373",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10406,7 +11018,7 @@
       }
     },
     "<言語>" : {
-      "comment" : "HanasuCommand.swift:402",
+      "comment" : "HanasuCommand.swift:405",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10508,7 +11120,7 @@
       }
     },
     "<語>" : {
-      "comment" : "HanasuCommand.swift:381",
+      "comment" : "HanasuCommand.swift:384",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10610,7 +11222,7 @@
       }
     },
     "<質問>" : {
-      "comment" : "HanasuCommand.swift:395",
+      "comment" : "HanasuCommand.swift:398",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10712,7 +11324,7 @@
       }
     },
     "AI が失敗したときは何も出さずに終わります。--fallback-raw なら、整える前の文章を出します。--show-prompt で、AI に送る内容を標準エラー出力に出します。" : {
-      "comment" : "HanasuCommand.swift:463",
+      "comment" : "HanasuCommand.swift:500",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -12140,7 +12752,7 @@
       }
     },
     "AI エージェントから使う MCP サーバーとして動く（標準入出力）。会議を読むツールを出す" : {
-      "comment" : "HanasuCommand.swift:424",
+      "comment" : "HanasuCommand.swift:427",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -12237,6 +12849,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "作為供 AI 代理程式使用的 MCP 伺服器執行（標準輸入輸出）。提供讀取會議的工具"
+          }
+        }
+      }
+    },
+    "AI エージェント（CLAUDE.md など）に貼る、hanasu の使い方の説明を出す（英語）" : {
+      "comment" : "HanasuCommand.swift:347",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض تعليمات استخدام hanasu للصقها في تعليمات وكيل AI (مثل CLAUDE.md). بالإنجليزية دائمًا"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anleitung zur Verwendung von hanasu ausgeben, zum Einfügen in die Anweisungen eines KI-Agenten (etwa CLAUDE.md). Immer auf Englisch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Print instructions on using hanasu, to paste into an AI agent's instructions (such as CLAUDE.md). Always in English"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra instrucciones de uso de hanasu para pegarlas en las instrucciones de un agente de IA (como CLAUDE.md). Siempre en inglés"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les instructions d’utilisation de hanasu, à coller dans les instructions d’un agent IA (comme CLAUDE.md). Toujours en anglais"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI एजेंट के निर्देशों (जैसे CLAUDE.md) में पेस्ट करने के लिए hanasu के इस्तेमाल के निर्देश दिखाएँ। हमेशा अंग्रेज़ी में"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tampilkan petunjuk penggunaan hanasu untuk ditempelkan ke instruksi agen AI (seperti CLAUDE.md). Selalu dalam bahasa Inggris"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stampa le istruzioni sull'uso di hanasu da incollare nelle istruzioni di un agente IA (come CLAUDE.md). Sempre in inglese"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 에이전트 지침(CLAUDE.md 등)에 붙여 넣을 hanasu 사용 설명을 출력(영어)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wypisz instrukcje korzystania z hanasu do wklejenia w instrukcjach agenta AI (np. CLAUDE.md). Zawsze po angielsku"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra instruções de uso do hanasu para colar nas instruções de um agente de IA (como o CLAUDE.md). Sempre em inglês"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вывести инструкцию по использованию hanasu для вставки в инструкции AI-агента (например, CLAUDE.md). Всегда на английском"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI ajanının talimatlarına (CLAUDE.md gibi) yapıştırmak için hanasu kullanım talimatlarını yazdırır. Her zaman İngilizce"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In hướng dẫn dùng hanasu để dán vào chỉ dẫn của AI agent (như CLAUDE.md). Luôn bằng tiếng Anh"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输出 hanasu 的使用说明（英文），用于粘贴到 AI 智能体的指令（如 CLAUDE.md）中"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "輸出 hanasu 的使用說明（英文），用來貼到 AI 代理程式的指示（例如 CLAUDE.md）中"
           }
         }
       }
@@ -14384,7 +15098,7 @@
       }
     },
     "Claude Code への登録の例: %@" : {
-      "comment" : "HanasuCommand.swift:435",
+      "comment" : "HanasuCommand.swift:437",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -14583,6 +15297,312 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在 Claude Console 中建立 API 金鑰"
+          }
+        }
+      }
+    },
+    "Claude Desktop などへの登録の JSON は、hanasu doctor と設定画面の「コマンドと MCP」に出ます。" : {
+      "comment" : "HanasuCommand.swift:438",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يظهر JSON الخاص بـ Claude Desktop والتطبيقات الأخرى في hanasu doctor وفي الإعدادات ← «الأمر وMCP»."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das JSON zum Eintragen in Claude Desktop und andere Apps zeigen hanasu doctor und Einstellungen → „Befehl & MCP“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The JSON for Claude Desktop and other apps is shown by hanasu doctor and in Settings → Command & MCP."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El JSON para Claude Desktop y otras apps aparece en hanasu doctor y en Ajustes → «Comando y MCP»."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le JSON pour Claude Desktop et d’autres apps est affiché par hanasu doctor et dans Réglages → « Commande et MCP »."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Desktop और दूसरे ऐप्स के लिए JSON, hanasu doctor में और सेटिंग्ज़ → “कमांड और MCP” में दिखता है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JSON untuk Claude Desktop dan app lainnya ditampilkan oleh hanasu doctor dan di Pengaturan → Perintah & MCP."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il JSON per Claude Desktop e altre app è mostrato da hanasu doctor e in Impostazioni → «Comando e MCP»."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Desktop 등에 등록할 JSON은 hanasu doctor와 설정 → \"명령 및 MCP\"에 표시됩니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JSON dla Claude Desktop i innych aplikacji pokazuje hanasu doctor oraz Ustawienia → „Polecenie i MCP”."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O JSON para o Claude Desktop e outros apps é mostrado pelo hanasu doctor e em Ajustes → “Comando e MCP”."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JSON для Claude Desktop и других приложений показывают hanasu doctor и Настройки → «Команда и MCP»."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Desktop ve diğer uygulamalar için JSON, hanasu doctor çıktısında ve Ayarlar → Komut ve MCP bölümünde gösterilir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JSON dùng cho Claude Desktop và các ứng dụng khác được hiển thị bởi hanasu doctor và trong Cài đặt → Lệnh & MCP."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用于在 Claude Desktop 等应用中注册的 JSON，可在 hanasu doctor 和设置 →“命令与 MCP”中查看。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用來在 Claude Desktop 等 App 中登錄的 JSON，可在 hanasu doctor 和設定 →「指令與 MCP」中查看。"
+          }
+        }
+      }
+    },
+    "Claude Desktop の設定ファイル（claude_desktop_config.json）の mcpServers に足します。ほかのアプリも、command と args に同じものを書きます。" : {
+      "comment" : "CommandLineSettingsView.swift:81",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أضِف هذا إلى mcpServers في ملف إعدادات Claude Desktop ‏(claude_desktop_config.json). وفي التطبيقات الأخرى، اكتب القيم نفسها في command وargs."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge dies unter mcpServers in der Konfigurationsdatei von Claude Desktop (claude_desktop_config.json) hinzu. Für andere Apps trägst du dasselbe unter command und args ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add this to mcpServers in the Claude Desktop config file (claude_desktop_config.json). For other apps, use the same command and args."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade esto a mcpServers en el archivo de configuración de Claude Desktop (claude_desktop_config.json). En otras apps, usa los mismos command y args."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez ceci à mcpServers dans le fichier de configuration de Claude Desktop (claude_desktop_config.json). Pour les autres apps, indiquez la même chose dans command et args."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इसे Claude Desktop की कॉन्फ़िगरेशन फ़ाइल (claude_desktop_config.json) के mcpServers में जोड़ें। दूसरे ऐप्स के लिए भी command और args में यही लिखें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tambahkan ini ke mcpServers di file konfigurasi Claude Desktop (claude_desktop_config.json). Untuk app lain, gunakan command dan args yang sama."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungilo a mcpServers nel file di configurazione di Claude Desktop (claude_desktop_config.json). Per le altre app, usa gli stessi command e args."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Desktop 설정 파일(claude_desktop_config.json)의 mcpServers에 추가합니다. 다른 앱도 command와 args에 같은 내용을 적습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj to do mcpServers w pliku konfiguracyjnym Claude Desktop (claude_desktop_config.json). W innych aplikacjach wpisz to samo w command i args."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicione isto a mcpServers no arquivo de configuração do Claude Desktop (claude_desktop_config.json). Em outros apps, use os mesmos command e args."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавьте это в mcpServers в файле настроек Claude Desktop (claude_desktop_config.json). В других приложениях укажите те же command и args."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bunu Claude Desktop yapılandırma dosyasındaki (claude_desktop_config.json) mcpServers bölümüne ekleyin. Diğer uygulamalarda da command ve args için aynı değerleri kullanın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thêm đoạn này vào mcpServers trong tệp cấu hình của Claude Desktop (claude_desktop_config.json). Với các ứng dụng khác, dùng cùng command và args."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将其添加到 Claude Desktop 配置文件（claude_desktop_config.json）的 mcpServers 中。其他应用也在 command 和 args 中填写相同的内容。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將它加入 Claude Desktop 設定檔（claude_desktop_config.json）的 mcpServers 中。其他 App 也在 command 和 args 中填入相同的內容。"
+          }
+        }
+      }
+    },
+    "Claude Desktop の設定（claude_desktop_config.json）に足す形:" : {
+      "comment" : "HanasuDoctorCommand.swift:121",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "للإضافة إلى إعدادات Claude Desktop ‏(claude_desktop_config.json):"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zum Hinzufügen zur Konfiguration von Claude Desktop (claude_desktop_config.json):"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To add to the Claude Desktop config (claude_desktop_config.json):"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para añadir a la configuración de Claude Desktop (claude_desktop_config.json):"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À ajouter à la configuration de Claude Desktop (claude_desktop_config.json) :"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Desktop के कॉन्फ़िगरेशन (claude_desktop_config.json) में जोड़ने के लिए:"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Untuk ditambahkan ke konfigurasi Claude Desktop (claude_desktop_config.json):"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da aggiungere alla configurazione di Claude Desktop (claude_desktop_config.json):"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Desktop 설정(claude_desktop_config.json)에 추가할 내용:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do dodania w konfiguracji Claude Desktop (claude_desktop_config.json):"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para adicionar à configuração do Claude Desktop (claude_desktop_config.json):"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для добавления в настройки Claude Desktop (claude_desktop_config.json):"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude Desktop yapılandırmasına (claude_desktop_config.json) eklenecek biçim:"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đoạn cần thêm vào cấu hình Claude Desktop (claude_desktop_config.json):"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加到 Claude Desktop 配置（claude_desktop_config.json）中的内容："
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加入 Claude Desktop 設定（claude_desktop_config.json）的內容："
           }
         }
       }
@@ -18871,6 +19891,312 @@
         }
       }
     },
+    "Hanasu がダウンロードした場所から移されずに動いています（App Translocation）。このパスは起動のたびに変わるので、Hanasu をアプリケーションフォルダに移して開き直してから、PATH と MCP に登録してください。" : {
+      "comment" : "HanasuDoctorCommand.swift:85",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يعمل Hanasu من الموقع الذي نُزِّل إليه (App Translocation). يتغيّر هذا المسار في كل مرة يُفتح فيها Hanasu، لذا انقل Hanasu إلى مجلد التطبيقات وافتحه مرة أخرى قبل إضافته إلى PATH أو MCP."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu wird an dem Ort ausgeführt, an den es heruntergeladen wurde (App Translocation). Dieser Pfad ändert sich bei jedem Öffnen von Hanasu. Bewege Hanasu deshalb in den Ordner „Programme“ und öffne es erneut, bevor du es zu PATH oder MCP hinzufügst."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu is running from where it was downloaded (App Translocation). This path changes every time Hanasu opens, so move Hanasu to the Applications folder and open it again before you add it to PATH or MCP."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu se está ejecutando desde donde se descargó (App Translocation). Esta ruta cambia cada vez que se abre Hanasu, así que mueve Hanasu a la carpeta Aplicaciones y vuelve a abrirlo antes de añadirlo a PATH o a MCP."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu s’exécute depuis l’emplacement où il a été téléchargé (App Translocation). Ce chemin change à chaque ouverture de Hanasu : déplacez Hanasu dans le dossier Applications et rouvrez-le avant de l’ajouter au PATH ou à MCP."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu उसी जगह से चल रहा है जहाँ उसे डाउनलोड किया गया था (App Translocation)। Hanasu हर बार खुलने पर यह पाथ बदल जाता है, इसलिए PATH या MCP में जोड़ने से पहले Hanasu को ऐप्लिकेशन फ़ोल्डर में ले जाएँ और फिर से खोलें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu berjalan dari lokasi tempat ia diunduh (App Translocation). Jalur ini berubah setiap kali Hanasu dibuka, jadi pindahkan Hanasu ke folder Aplikasi dan buka lagi sebelum menambahkannya ke PATH atau MCP."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu è in esecuzione dalla posizione in cui è stato scaricato (App Translocation). Questo percorso cambia a ogni apertura di Hanasu, quindi sposta Hanasu nella cartella Applicazioni e riaprilo prima di aggiungerlo al PATH o a MCP."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu가 다운로드한 위치에서 옮겨지지 않은 채 실행되고 있습니다(App Translocation). 이 경로는 Hanasu를 열 때마다 바뀌므로, Hanasu를 '응용 프로그램' 폴더로 옮겨 다시 연 다음 PATH와 MCP에 등록하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu działa z miejsca, do którego zostało pobrane (App Translocation). Ta ścieżka zmienia się przy każdym otwarciu Hanasu, więc przenieś aplikację Hanasu do folderu Aplikacje i otwórz ją ponownie, zanim dodasz ją do PATH lub MCP."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Hanasu está sendo executado do local onde foi baixado (App Translocation). Este caminho muda toda vez que o Hanasu é aberto, então mova o Hanasu para a pasta Aplicativos e abra-o de novo antes de adicioná-lo ao PATH ou ao MCP."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu запущен из места, куда был загружен (App Translocation). Этот путь меняется при каждом открытии Hanasu, поэтому переместите Hanasu в папку «Программы» и откройте снова, прежде чем добавлять его в PATH и MCP."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu, indirildiği konumdan taşınmadan çalışıyor (App Translocation). Bu yol Hanasu her açıldığında değişir; bu yüzden PATH'e veya MCP'ye eklemeden önce Hanasu'yu Uygulamalar klasörüne taşıyıp yeniden açın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu đang chạy từ nơi đã được tải về (App Translocation). Đường dẫn này thay đổi mỗi lần Hanasu mở, nên hãy di chuyển Hanasu vào thư mục Ứng dụng và mở lại trước khi thêm vào PATH hoặc MCP."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu 正在从下载位置直接运行（App Translocation）。此路径在每次打开 Hanasu 时都会改变，因此请先将 Hanasu 移到“应用程序”文件夹并重新打开，再添加到 PATH 和 MCP。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu 正從下載位置直接執行（App Translocation）。此路徑在每次打開 Hanasu 時都會改變，因此請先將 Hanasu 移到「應用程式」檔案夾並重新打開，再加入 PATH 和 MCP。"
+          }
+        }
+      }
+    },
+    "Hanasu がダウンロードした場所から移されずに動いています（App Translocation）。このパスは起動のたびに変わるので、PATH と MCP には登録できません。Hanasu をアプリケーションフォルダに移してから、開き直してください。" : {
+      "comment" : "CommandLineSettingsView.swift:28",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يعمل Hanasu من الموقع الذي نُزِّل إليه (App Translocation). يتغيّر هذا المسار في كل مرة يُفتح فيها Hanasu، لذا لا يمكن إضافته إلى PATH أو MCP. انقل Hanasu إلى مجلد التطبيقات، ثم افتحه مرة أخرى."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu wird an dem Ort ausgeführt, an den es heruntergeladen wurde (App Translocation). Dieser Pfad ändert sich bei jedem Öffnen von Hanasu, daher kann es nicht zu PATH oder MCP hinzugefügt werden. Bewege Hanasu in den Ordner „Programme“ und öffne es dann erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu is running from where it was downloaded (App Translocation). This path changes every time Hanasu opens, so it can't be added to PATH or MCP. Move Hanasu to the Applications folder, then open it again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu se está ejecutando desde donde se descargó (App Translocation). Esta ruta cambia cada vez que se abre Hanasu, así que no se puede añadir a PATH ni a MCP. Mueve Hanasu a la carpeta Aplicaciones y vuelve a abrirlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu s’exécute depuis l’emplacement où il a été téléchargé (App Translocation). Ce chemin change à chaque ouverture de Hanasu, il ne peut donc pas être ajouté au PATH ni à MCP. Déplacez Hanasu dans le dossier Applications, puis rouvrez-le."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu उसी जगह से चल रहा है जहाँ उसे डाउनलोड किया गया था (App Translocation)। Hanasu हर बार खुलने पर यह पाथ बदल जाता है, इसलिए इसे PATH या MCP में नहीं जोड़ा जा सकता। Hanasu को ऐप्लिकेशन फ़ोल्डर में ले जाएँ, फिर उसे दोबारा खोलें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu berjalan dari lokasi tempat ia diunduh (App Translocation). Jalur ini berubah setiap kali Hanasu dibuka, jadi Hanasu tidak dapat ditambahkan ke PATH atau MCP. Pindahkan Hanasu ke folder Aplikasi, lalu buka lagi."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu è in esecuzione dalla posizione in cui è stato scaricato (App Translocation). Questo percorso cambia a ogni apertura di Hanasu, quindi non può essere aggiunto al PATH o a MCP. Sposta Hanasu nella cartella Applicazioni, poi riaprilo."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu가 다운로드한 위치에서 옮겨지지 않은 채 실행되고 있습니다(App Translocation). 이 경로는 Hanasu를 열 때마다 바뀌므로 PATH와 MCP에 등록할 수 없습니다. Hanasu를 '응용 프로그램' 폴더로 옮긴 후 다시 여세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu działa z miejsca, do którego zostało pobrane (App Translocation). Ta ścieżka zmienia się przy każdym otwarciu Hanasu, więc nie można dodać jej do PATH ani MCP. Przenieś aplikację Hanasu do folderu Aplikacje, a następnie otwórz ją ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Hanasu está sendo executado do local onde foi baixado (App Translocation). Este caminho muda toda vez que o Hanasu é aberto, então ele não pode ser adicionado ao PATH nem ao MCP. Mova o Hanasu para a pasta Aplicativos e abra-o de novo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu запущен из места, куда был загружен (App Translocation). Этот путь меняется при каждом открытии Hanasu, поэтому его нельзя добавить в PATH и MCP. Переместите Hanasu в папку «Программы», затем откройте снова."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu, indirildiği konumdan taşınmadan çalışıyor (App Translocation). Bu yol Hanasu her açıldığında değiştiği için PATH'e veya MCP'ye eklenemez. Hanasu'yu Uygulamalar klasörüne taşıyın, ardından yeniden açın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu đang chạy từ nơi đã được tải về (App Translocation). Đường dẫn này thay đổi mỗi lần Hanasu mở, nên không thể thêm vào PATH hoặc MCP. Hãy di chuyển Hanasu vào thư mục Ứng dụng rồi mở lại."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu 正在从下载位置直接运行（App Translocation）。此路径在每次打开 Hanasu 时都会改变，因此无法添加到 PATH 和 MCP。请将 Hanasu 移到“应用程序”文件夹，然后重新打开。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu 正從下載位置直接執行（App Translocation）。此路徑在每次打開 Hanasu 時都會改變，因此無法加入 PATH 和 MCP。請將 Hanasu 移到「應用程式」檔案夾，然後重新打開。"
+          }
+        }
+      }
+    },
+    "Hanasu が作ったリンクと、~/.zprofile に足した行を消します。絶対パスで登録した MCP は、そのまま使えます。" : {
+      "comment" : "CommandLineSettingsView.swift:215",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سيؤدي هذا إلى حذف الروابط التي أنشأها Hanasu والسطر الذي أضافه إلى ~/.zprofile. وتظل إعدادات MCP التي تستخدم المسار الكامل تعمل."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dadurch werden die von Hanasu erstellten Links und die zu ~/.zprofile hinzugefügte Zeile entfernt. MCP-Einrichtungen mit dem vollständigen Pfad funktionieren weiterhin."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This removes the links Hanasu made and the line it added to ~/.zprofile. MCP setups that use the full path keep working."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se eliminarán los enlaces que creó Hanasu y la línea que añadió a ~/.zprofile. Las configuraciones de MCP que usan la ruta completa seguirán funcionando."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cela supprime les liens créés par Hanasu et la ligne ajoutée à ~/.zprofile. Les configurations MCP qui utilisent le chemin complet continuent de fonctionner."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इससे Hanasu के बनाए लिंक और ~/.zprofile में जोड़ी गई लाइन हट जाएँगे। पूरे पाथ से जोड़े गए MCP सेटअप काम करते रहेंगे।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ini menghapus tautan yang dibuat Hanasu dan baris yang ditambahkannya ke ~/.zprofile. Pengaturan MCP yang memakai jalur lengkap tetap berfungsi."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verranno rimossi i link creati da Hanasu e la riga aggiunta a ~/.zprofile. Le configurazioni MCP che usano il percorso completo continueranno a funzionare."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu가 만든 링크와 ~/.zprofile에 추가한 줄을 삭제합니다. 전체 경로로 등록한 MCP는 그대로 사용할 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zostaną usunięte linki utworzone przez Hanasu oraz wiersz dodany do ~/.zprofile. Konfiguracje MCP używające pełnej ścieżki będą nadal działać."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isso remove os links criados pelo Hanasu e a linha adicionada a ~/.zprofile. As configurações de MCP que usam o caminho completo continuam funcionando."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Будут удалены ссылки, созданные Hanasu, и строка, добавленная в ~/.zprofile. Настройки MCP с полным путём продолжат работать."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu'nun oluşturduğu bağlantılar ve ~/.zprofile dosyasına eklediği satır silinir. Tam yolu kullanan MCP kurulumları çalışmaya devam eder."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thao tác này xóa các liên kết do Hanasu tạo và dòng đã thêm vào ~/.zprofile. Các thiết lập MCP dùng đường dẫn đầy đủ vẫn hoạt động bình thường."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这会删除 Hanasu 创建的链接，以及添加到 ~/.zprofile 的那一行。使用完整路径注册的 MCP 仍可继续使用。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "這會刪除 Hanasu 建立的連結，以及加入 ~/.zprofile 的那一行。以完整路徑登錄的 MCP 仍可繼續使用。"
+          }
+        }
+      }
+    },
     "Hanasu が動くのに要る許可です。あとから設定の「権限」でもできます。" : {
       "comment" : "Onboarding.swift:696",
       "extractionState" : "manual",
@@ -19076,7 +20402,7 @@
       }
     },
     "Hanasu のアプリがローカルの AI を使っています。" : {
-      "comment" : "HanasuAICommands.swift:53, HanasuDoctorCommand.swift:85",
+      "comment" : "HanasuAICommands.swift:53, HanasuDoctorCommand.swift:113",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20912,7 +22238,7 @@
       }
     },
     "MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を Hanasu の会議の AI にも送ります。" : {
-      "comment" : "HanasuCommand.swift:433",
+      "comment" : "CommandLineSettingsView.swift:87, HanasuCommand.swift:435",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -21009,6 +22335,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "透過 MCP 傳回的會議內容會交給使用 MCP 的代理程式及其 AI 供應商。ask_meetings 還會把會議內容傳送給 Hanasu 中會議使用的 AI。"
+          }
+        }
+      }
+    },
+    "MCP を登録できないときは、この説明（英語）をエージェントの指示（Claude Code の CLAUDE.md やスキルなど）に貼ると、エージェントがシェルから hanasu を呼んで会議を読めます。ターミナルでは hanasu help agent で出せます。" : {
+      "comment" : "CommandLineSettingsView.swift:108",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إذا تعذّرت إضافة خادم MCP، فالصق هذه التعليمات (بالإنجليزية) في تعليمات الوكيل، مثل CLAUDE.md أو مهارة في Claude Code. عندها يستطيع الوكيل تشغيل hanasu من الصدفة (shell) لقراءة اجتماعاتك. وفي الطرفية، شغّل hanasu help agent لعرضها."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn du keinen MCP-Server hinzufügen kannst, füge diese Anleitung (auf Englisch) in die Anweisungen des Agenten ein, etwa in CLAUDE.md oder einen Skill in Claude Code. Der Agent kann dann hanasu über die Shell ausführen und deine Meetings lesen. Im Terminal gibt hanasu help agent die Anleitung aus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you can't add an MCP server, paste these instructions (in English) into the agent's instructions, such as CLAUDE.md or a skill in Claude Code. The agent can then run hanasu from the shell to read your meetings. In Terminal, run hanasu help agent to print them."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si no puedes añadir un servidor MCP, pega estas instrucciones (en inglés) en las instrucciones del agente, como CLAUDE.md o una skill de Claude Code. Así el agente podrá ejecutar hanasu desde la shell para leer tus reuniones. En Terminal, ejecuta hanasu help agent para mostrarlas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si vous ne pouvez pas ajouter de serveur MCP, collez ces instructions (en anglais) dans les instructions de l’agent, comme CLAUDE.md ou une skill de Claude Code. L’agent pourra alors exécuter hanasu depuis le shell pour lire vos réunions. Dans Terminal, exécutez hanasu help agent pour les afficher."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अगर MCP सर्वर नहीं जोड़ पा रहे हैं, तो ये निर्देश (अंग्रेज़ी में) एजेंट के निर्देशों में पेस्ट करें, जैसे Claude Code की CLAUDE.md फ़ाइल या कोई स्किल। इसके बाद एजेंट आपकी मीटिंग पढ़ने के लिए शेल से hanasu चला सकता है। टर्मिनल में इन्हें दिखाने के लिए hanasu help agent चलाएँ।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jika Anda tidak dapat menambahkan server MCP, tempelkan petunjuk ini (dalam bahasa Inggris) ke instruksi agen, seperti CLAUDE.md atau skill di Claude Code. Agen kemudian dapat menjalankan hanasu dari shell untuk membaca rapat Anda. Di Terminal, jalankan hanasu help agent untuk menampilkannya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se non puoi aggiungere un server MCP, incolla queste istruzioni (in inglese) nelle istruzioni dell'agente, per esempio in CLAUDE.md o in una skill di Claude Code. L'agente potrà così eseguire hanasu dalla shell per leggere le tue riunioni. Nel Terminale, esegui hanasu help agent per stamparle."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MCP를 등록할 수 없을 때는 이 설명(영어)을 에이전트 지침(Claude Code의 CLAUDE.md나 스킬 등)에 붙여 넣으면, 에이전트가 셸에서 hanasu를 호출해 회의를 읽을 수 있습니다. 터미널에서는 hanasu help agent로 출력할 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeśli nie możesz dodać serwera MCP, wklej te instrukcje (po angielsku) do instrukcji agenta, np. do CLAUDE.md lub umiejętności w Claude Code. Agent będzie wtedy mógł uruchamiać hanasu z powłoki i czytać Twoje spotkania. W Terminalu wypiszesz je poleceniem hanasu help agent."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se não for possível adicionar um servidor MCP, cole estas instruções (em inglês) nas instruções do agente, como o CLAUDE.md ou uma skill no Claude Code. Assim, o agente pode executar hanasu pela shell para ler as suas reuniões. No Terminal, execute hanasu help agent para mostrá-las."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Если добавить MCP-сервер нельзя, вставьте эту инструкцию (на английском) в инструкции агента, например в CLAUDE.md или навык Claude Code. Тогда агент сможет запускать hanasu из оболочки и читать ваши встречи. В Терминале её можно вывести командой hanasu help agent."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MCP sunucusu ekleyemiyorsanız bu talimatları (İngilizce) ajanın talimatlarına, örneğin CLAUDE.md'ye veya Claude Code'daki bir beceriye yapıştırın. Böylece ajan, toplantılarınızı okumak için hanasu'yu kabuktan çalıştırabilir. Talimatları Terminal'de yazdırmak için hanasu help agent komutunu çalıştırın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nếu không thể thêm máy chủ MCP, hãy dán hướng dẫn này (bằng tiếng Anh) vào chỉ dẫn của agent, chẳng hạn CLAUDE.md hoặc một skill trong Claude Code. Khi đó agent có thể chạy hanasu từ shell để đọc các cuộc họp của bạn. Trong Terminal, chạy hanasu help agent để in hướng dẫn này."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果无法注册 MCP，可以将这段说明（英文）粘贴到智能体的指令中（如 Claude Code 的 CLAUDE.md 或技能），智能体就能从 shell 调用 hanasu 来读取会议。在“终端”中运行 hanasu help agent 也可以输出这段说明。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果無法登錄 MCP，可以將這段說明（英文）貼到代理程式的指示中（例如 Claude Code 的 CLAUDE.md 或技能），代理程式就能從 shell 呼叫 hanasu 來讀取會議。在「終端機」中執行 hanasu help agent 也可以輸出這段說明。"
           }
         }
       }
@@ -22131,6 +23559,618 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "錄製 Meet、Zoom、Teams、Slack 抱團等會議，並製作逐字稿和會議紀錄。"
+          }
+        }
+      }
+    },
+    "PATH から外しました。" : {
+      "comment" : "CommandLineSettingsView.swift:226",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تمت الإزالة من PATH."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus PATH entfernt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removed from PATH."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se ha quitado de PATH."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retiré du PATH."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH से हटा दिया गया।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dihapus dari PATH."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimosso dal PATH."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH에서 제거했습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usunięto z PATH."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removido do PATH."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрано из PATH."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH'ten kaldırıldı."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã xóa khỏi PATH."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已从 PATH 中移除。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已從 PATH 移除。"
+          }
+        }
+      }
+    },
+    "PATH から外す…" : {
+      "comment" : "CommandLineSettingsView.swift:55",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إزالة من PATH…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus PATH entfernen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove from PATH…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar de PATH…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer du PATH…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH से हटाएँ…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapus dari PATH…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuovi dal PATH…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH에서 제거…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń z PATH…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover do PATH…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрать из PATH…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH'ten kaldır…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xóa khỏi PATH…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从 PATH 中移除…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從 PATH 移除…"
+          }
+        }
+      }
+    },
+    "PATH に入れる…" : {
+      "comment" : "CommandLineSettingsView.swift:50",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة إلى PATH…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu PATH hinzufügen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to PATH…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir a PATH…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter au PATH…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH में जोड़ें…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tambahkan ke PATH…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi al PATH…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH에 추가…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj do PATH…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionar ao PATH…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить в PATH…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH'e ekle…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thêm vào PATH…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加到 PATH…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加入 PATH…"
+          }
+        }
+      }
+    },
+    "PATH: %@" : {
+      "comment" : "HanasuDoctorCommand.swift:93",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH：%@"
+          }
+        }
+      }
+    },
+    "PATH: %@（別の場所の Hanasu を指しています）" : {
+      "comment" : "HanasuDoctorCommand.swift:93",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (يشير إلى Hanasu في موقع آخر)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (verweist auf Hanasu an einem anderen Ort)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (points to Hanasu in another location)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (apunta a Hanasu en otra ubicación)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH : %@ (pointe vers Hanasu à un autre emplacement)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (दूसरी जगह के Hanasu की ओर इशारा करता है)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (mengarah ke Hanasu di lokasi lain)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (punta a Hanasu in un'altra posizione)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (다른 위치의 Hanasu를 가리킴)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (wskazuje na Hanasu w innej lokalizacji)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (aponta para o Hanasu em outro local)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (указывает на Hanasu в другом месте)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (başka bir konumdaki Hanasu'yu gösteriyor)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: %@ (trỏ đến Hanasu ở vị trí khác)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH：%@（指向另一个位置的 Hanasu）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH：%@（指向另一個位置的 Hanasu）"
+          }
+        }
+      }
+    },
+    "PATH: 入っていません（設定画面の「コマンドと MCP」で入れられます。絶対パスならそのまま使えます）" : {
+      "comment" : "HanasuDoctorCommand.swift:90",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: غير مُضاف (يمكنك إضافته من الإعدادات ← «الأمر وMCP»؛ ويعمل المسار الكامل من دونه)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: nicht hinzugefügt (unter Einstellungen → „Befehl & MCP“ hinzufügen; mit dem vollständigen Pfad geht es auch ohne)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: not added (add it in Settings → Command & MCP; the full path works without it)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: no añadido (puedes añadirlo en Ajustes → «Comando y MCP»; con la ruta completa funciona sin añadirlo)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH : non ajouté (ajoutez-le dans Réglages → « Commande et MCP » ; avec le chemin complet, cela fonctionne sans)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: नहीं जोड़ा गया (सेटिंग्ज़ → “कमांड और MCP” में जोड़ सकते हैं; पूरा पाथ इसके बिना भी काम करता है)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: belum ditambahkan (tambahkan di Pengaturan → Perintah & MCP; jalur lengkap tetap berfungsi tanpanya)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: non aggiunto (aggiungilo in Impostazioni → «Comando e MCP»; il percorso completo funziona anche senza)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: 추가되지 않음(설정 → \"명령 및 MCP\"에서 추가할 수 있습니다. 전체 경로를 쓰면 추가하지 않아도 됩니다)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: nie dodano (możesz dodać w Ustawieniach → „Polecenie i MCP”; pełna ścieżka działa i bez tego)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: não adicionado (adicione em Ajustes → “Comando e MCP”; o caminho completo funciona sem isso)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: не добавлено (добавить можно в Настройки → «Команда и MCP»; полный путь работает и без этого)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: eklenmedi (Ayarlar → Komut ve MCP bölümünden ekleyebilirsiniz; tam yol bu olmadan da çalışır)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH: chưa thêm (thêm trong Cài đặt → Lệnh & MCP; đường dẫn đầy đủ vẫn dùng được mà không cần thêm)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH：未添加（可在设置 →“命令与 MCP”中添加；使用完整路径则无需添加）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH：未加入（可在設定 →「指令與 MCP」中加入；使用完整路徑則不需加入）"
           }
         }
       }
@@ -23767,6 +25807,210 @@
         }
       }
     },
+    "hanasu を PATH から外しますか？" : {
+      "comment" : "CommandLineSettingsView.swift:214",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد إزالة hanasu من PATH؟"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu aus PATH entfernen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove hanasu from PATH?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Quitar hanasu de PATH?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer hanasu du PATH ?"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu को PATH से हटाएँ?"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapus hanasu dari PATH?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuovere hanasu dal PATH?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH에서 hanasu를 제거하겠습니까?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usunąć hanasu z PATH?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover hanasu do PATH?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрать hanasu из PATH?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu PATH'ten kaldırılsın mı?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xóa hanasu khỏi PATH?"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要从 PATH 中移除 hanasu 吗？"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要從 PATH 移除 hanasu 嗎？"
+          }
+        }
+      }
+    },
+    "hanasu コマンド" : {
+      "comment" : "CommandLineSettingsView.swift:63",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأمر hanasu"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu-Befehl"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu command"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando hanasu"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commande hanasu"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu कमांड"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perintah hanasu"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando hanasu"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu 명령"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polecenie hanasu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando hanasu"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Команда hanasu"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu komutu"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lệnh hanasu"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu 命令"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu 指令"
+          }
+        }
+      }
+    },
     "large-v3-turbo（%@・高精度）" : {
       "comment" : "TranscriptionEngine.swift:78",
       "extractionState" : "manual",
@@ -24477,6 +26721,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "tiny（%@·快但粗略）"
+          }
+        }
+      }
+    },
+    "~/.local/bin に入れる" : {
+      "comment" : "CommandLineSettingsView.swift:181",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة إلى ~/.local/bin"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu ~/.local/bin hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to ~/.local/bin"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir a ~/.local/bin"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter à ~/.local/bin"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~/.local/bin में जोड़ें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tambahkan ke ~/.local/bin"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi a ~/.local/bin"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~/.local/bin에 추가"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj do ~/.local/bin"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionar a ~/.local/bin"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить в ~/.local/bin"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~/.local/bin konumuna ekle"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thêm vào ~/.local/bin"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加到 ~/.local/bin"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加入 ~/.local/bin"
+          }
+        }
+      }
+    },
+    "~/.zprofile に PATH の 1 行を足しますか？" : {
+      "comment" : "CommandLineSettingsView.swift:196",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد إضافة سطر PATH إلى ~/.zprofile؟"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PATH-Zeile zu ~/.zprofile hinzufügen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a PATH line to ~/.zprofile?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Añadir una línea de PATH a ~/.zprofile?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une ligne PATH à ~/.zprofile ?"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~/.zprofile में PATH की एक लाइन जोड़ें?"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tambahkan baris PATH ke ~/.zprofile?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungere una riga PATH a ~/.zprofile?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~/.zprofile에 PATH 줄을 하나 추가하겠습니까?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodać wiersz PATH do ~/.zprofile?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionar uma linha de PATH a ~/.zprofile?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить строку PATH в ~/.zprofile?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~/.zprofile dosyasına bir PATH satırı eklensin mi?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thêm một dòng PATH vào ~/.zprofile?"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要在 ~/.zprofile 中添加一行 PATH 设置吗？"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要在 ~/.zprofile 中加入一行 PATH 設定嗎？"
           }
         }
       }
@@ -25400,7 +27848,7 @@
       }
     },
     "「Mac 全体の音」は、どのスピーカー・イヤホンから出ている音も録ります。特定の機器の音だけを録りたいときに選んでください。マイクは、会議ツールで使っているマイクと同じものを選ぶのが確実です。" : {
-      "comment" : "SettingsView.swift:261",
+      "comment" : "SettingsView.swift:268",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26216,7 +28664,7 @@
       }
     },
     "「翻訳して入力」では、AI（設定の「AI」で音声入力に選んだもの）が、話した内容を下の「翻訳する言語」に翻訳して入力します。録音中は Esc で取り消せます。" : {
-      "comment" : "SettingsView.swift:186",
+      "comment" : "SettingsView.swift:193",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33152,7 +35600,7 @@
       }
     },
     "その他" : {
-      "comment" : "MeetingWindow.swift:598, SettingsView.swift:209",
+      "comment" : "MeetingWindow.swift:598, SettingsView.swift:216",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34886,7 +37334,7 @@
       }
     },
     "まだ求めていません" : {
-      "comment" : "SettingsView.swift:374",
+      "comment" : "SettingsView.swift:381",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36416,7 +38864,7 @@
       }
     },
     "アクセシビリティ" : {
-      "comment" : "Onboarding.swift:699, SettingsView.swift:326",
+      "comment" : "Onboarding.swift:699, SettingsView.swift:333",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39475,6 +41923,108 @@
         }
       }
     },
+    "エージェントへの説明" : {
+      "comment" : "CommandLineSettingsView.swift:106",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعليمات للوكلاء"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anleitung für Agenten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instructions for agents"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instrucciones para agentes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instructions pour les agents"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एजेंट के लिए निर्देश"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petunjuk untuk agen"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Istruzioni per gli agenti"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "에이전트용 설명"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instrukcje dla agentów"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instruções para agentes"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Инструкция для агентов"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajanlar için talimatlar"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hướng dẫn cho agent"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "给智能体的说明"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "給代理程式的說明"
+          }
+        }
+      }
+    },
     "オフ" : {
       "comment" : "MeetingNotesViews.swift:116, MeetingPlayerBar.swift:200",
       "extractionState" : "manual",
@@ -40598,7 +43148,7 @@
       }
     },
     "キャンセル" : {
-      "comment" : "AISettingsView.swift:193, AISettingsView.swift:287, MeetingDictionaryViews.swift:124",
+      "comment" : "AISettingsView.swift:193, AISettingsView.swift:287, CommandLineSettingsView.swift:182",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41822,7 +44372,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:317, DictationHistoryWindow.swift:556, MeetingChatView.swift:385",
+      "comment" : "AppDelegate.swift:317, CommandLineSettingsView.swift:271, DictationHistoryWindow.swift:556",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41924,7 +44474,7 @@
       }
     },
     "コピーしました" : {
-      "comment" : "MeetingChatView.swift:385, MinutesTemplateViews.swift:402, PasteFallbackPanel.swift:241",
+      "comment" : "CommandLineSettingsView.swift:271, MeetingChatView.swift:385, MinutesTemplateViews.swift:402",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42021,6 +44571,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已拷貝"
+          }
+        }
+      }
+    },
+    "コマンドと MCP" : {
+      "comment" : "SettingsView.swift:20",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأمر وMCP"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Befehl & MCP"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command & MCP"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando y MCP"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commande et MCP"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कमांड और MCP"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perintah & MCP"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando e MCP"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명령 및 MCP"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Polecenie i MCP"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comando e MCP"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Команда и MCP"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komut ve MCP"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lệnh & MCP"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "命令与 MCP"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "指令與 MCP"
           }
         }
       }
@@ -42841,6 +45493,108 @@
         }
       }
     },
+    "シェルの設定に足す行" : {
+      "comment" : "CommandLineSettingsView.swift:143",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السطر المطلوب إضافته إلى إعدادات الصدفة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile für deine Shell-Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Line to add to your shell settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Línea para añadir a la configuración de la shell"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ligne à ajouter à la configuration de votre shell"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शेल की सेटिंग्ज़ में जोड़ने वाली लाइन"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baris untuk ditambahkan ke pengaturan shell Anda"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riga da aggiungere alle impostazioni della shell"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "셸 설정에 추가할 줄"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiersz do dodania w ustawieniach powłoki"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linha a adicionar aos ajustes da shell"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Строка для настроек оболочки"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kabuk ayarlarınıza eklenecek satır"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dòng cần thêm vào cài đặt shell"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要添加到 shell 配置中的行"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要加入 shell 設定的那一行"
+          }
+        }
+      }
+    },
     "システムのマイク" : {
       "comment" : "MeetingWindow.swift:352",
       "extractionState" : "manual",
@@ -43148,7 +45902,7 @@
       }
     },
     "システムオーディオ録音" : {
-      "comment" : "SettingsView.swift:344",
+      "comment" : "SettingsView.swift:351",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43250,7 +46004,7 @@
       }
     },
     "システムオーディオ録音のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:339",
+      "comment" : "SettingsView.swift:346",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43352,7 +46106,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → アクセシビリティ で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:328",
+      "comment" : "SettingsView.swift:335",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43454,7 +46208,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → マイク で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:315",
+      "comment" : "SettingsView.swift:322",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43556,7 +46310,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → 音声認識 で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:322",
+      "comment" : "SettingsView.swift:329",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43658,7 +46412,7 @@
       }
     },
     "システム設定を開く" : {
-      "comment" : "ReminderExport.swift:145, SettingsView.swift:337, SettingsView.swift:389",
+      "comment" : "ReminderExport.swift:145, SettingsView.swift:344, SettingsView.swift:396",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43964,7 +46718,7 @@
       }
     },
     "ショートカット" : {
-      "comment" : "SettingsView.swift:166",
+      "comment" : "SettingsView.swift:173",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45289,6 +48043,108 @@
         }
       }
     },
+    "ターミナルやスクリプト、AI エージェントから、会議の記録を読んだり、文章を整えたりできます。PATH に入れなくても、上の実行ファイルのパスで呼べます。使い方はターミナルで hanasu help を見てください。" : {
+      "comment" : "CommandLineSettingsView.swift:65",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اقرأ تسجيلات اجتماعاتك ونقّح النصوص من الطرفية والبرامج النصية ووكلاء AI. يمكنك تشغيل الأمر بمساره الكامل الظاهر أعلاه دون إضافته إلى PATH. شغّل hanasu help في الطرفية لمعرفة طريقة الاستخدام."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lies deine Meeting-Aufnahmen und überarbeite Text im Terminal, in Skripten und in KI-Agenten. Du kannst den Befehl über den vollständigen Pfad oben ausführen, ohne ihn zu PATH hinzuzufügen. Führe im Terminal hanasu help aus, um zu sehen, wie er funktioniert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read your meeting records and clean up text from Terminal, scripts and AI agents. You can run the command by its full path above without adding it to PATH. Run hanasu help in Terminal to see how to use it."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lee tus grabaciones de reuniones y pule texto desde Terminal, scripts y agentes de IA. Puedes ejecutar el comando con la ruta completa de arriba sin añadirlo a PATH. Ejecuta hanasu help en Terminal para ver cómo usarlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisez vos enregistrements de réunions et mettez du texte au propre depuis Terminal, des scripts et des agents IA. Vous pouvez exécuter la commande avec son chemin complet ci-dessus sans l’ajouter au PATH. Exécutez hanasu help dans Terminal pour savoir comment l’utiliser."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टर्मिनल, स्क्रिप्ट और AI एजेंट से अपनी मीटिंग रिकॉर्डिंग पढ़ें और टेक्स्ट सुधारें। PATH में जोड़े बिना भी, ऊपर दिए पूरे पाथ से कमांड चला सकते हैं। इस्तेमाल का तरीका देखने के लिए टर्मिनल में hanasu help चलाएँ।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baca rekaman rapat dan rapikan teks dari Terminal, skrip, dan agen AI. Anda dapat menjalankan perintah ini dengan jalur lengkap di atas tanpa menambahkannya ke PATH. Jalankan hanasu help di Terminal untuk melihat cara penggunaannya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leggi le registrazioni delle riunioni e rifinisci il testo dal Terminale, da script e da agenti IA. Puoi eseguire il comando con il percorso completo qui sopra anche senza aggiungerlo al PATH. Esegui hanasu help nel Terminale per vedere come usarlo."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "터미널, 스크립트, AI 에이전트에서 회의 기록을 읽거나 텍스트를 다듬을 수 있습니다. PATH에 추가하지 않아도 위의 실행 파일 경로로 호출할 수 있습니다. 사용법은 터미널에서 hanasu help를 실행해 확인하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Czytaj zapisy spotkań i redaguj tekst z poziomu Terminala, skryptów i agentów AI. Bez dodawania do PATH możesz uruchomić polecenie przez pełną ścieżkę powyżej. Aby dowiedzieć się, jak go używać, uruchom hanasu help w Terminalu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leia os registros das suas reuniões e refine textos pelo Terminal, por scripts e por agentes de IA. Você pode executar o comando pelo caminho completo acima sem adicioná-lo ao PATH. Execute hanasu help no Terminal para ver como usar."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Читайте записи встреч и обрабатывайте текст из Терминала, скриптов и AI-агентов. Команду можно запускать по полному пути выше, не добавляя её в PATH. Чтобы узнать, как ей пользоваться, выполните hanasu help в Терминале."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminal'den, betiklerden ve AI ajanlarından toplantı kayıtlarınızı okuyabilir ve metinleri iyileştirebilirsiniz. Komutu PATH'e eklemeden de yukarıdaki tam yolla çalıştırabilirsiniz. Kullanımını görmek için Terminal'de hanasu help komutunu çalıştırın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đọc bản ghi cuộc họp và chỉnh sửa văn bản từ Terminal, script và AI agent. Bạn có thể chạy lệnh bằng đường dẫn đầy đủ ở trên mà không cần thêm vào PATH. Chạy hanasu help trong Terminal để xem cách dùng."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可以从“终端”、脚本和 AI 智能体读取会议记录、润色文本。即使不添加到 PATH，也可以用上方可执行文件的路径调用。用法请在“终端”中运行 hanasu help 查看。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可以從「終端機」、腳本和 AI 代理程式讀取會議記錄、潤飾文字。即使不加入 PATH，也可以用上方執行檔的路徑呼叫。用法請在「終端機」中執行 hanasu help 查看。"
+          }
+        }
+      }
+    },
     "ダウンロードした zip に Hanasu.app がありません" : {
       "comment" : "AppUpdate.swift:536",
       "extractionState" : "manual",
@@ -46514,7 +49370,7 @@
       }
     },
     "ダウンロード済みのモデルはありません" : {
-      "comment" : "HanasuDoctorCommand.swift:81",
+      "comment" : "HanasuDoctorCommand.swift:109",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46820,7 +49676,7 @@
       }
     },
     "ツール: list_meetings・get_meeting・search_meetings・ask_meetings・list_action_items（どれも読むだけ）" : {
-      "comment" : "HanasuCommand.swift:434",
+      "comment" : "HanasuCommand.swift:436",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48859,6 +51715,108 @@
         }
       }
     },
+    "ホームフォルダの ~/.local/bin に hanasu のリンクを作ります。管理者の権限は要りません。" : {
+      "comment" : "CommandLineSettingsView.swift:180",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سينشئ Hanasu رابط hanasu في ~/.local/bin داخل مجلد الحساب الرئيسي. لا يتطلب ذلك صلاحيات المسؤول."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu erstellt in deinem Privatordner unter ~/.local/bin einen Link namens hanasu. Dafür sind keine Administratorrechte nötig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu will make a hanasu link in ~/.local/bin in your home folder. This doesn't need administrator access."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu creará un enlace hanasu en ~/.local/bin, dentro de tu carpeta de inicio. No se necesita acceso de administrador."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu créera un lien hanasu dans ~/.local/bin, dans votre dossier de départ. Aucun accès administrateur n’est nécessaire."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu आपके होम फ़ोल्डर के ~/.local/bin में hanasu का लिंक बनाएगा। इसके लिए एडमिनिस्ट्रेटर एक्सेस की ज़रूरत नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu akan membuat tautan hanasu di ~/.local/bin dalam folder rumah Anda. Ini tidak memerlukan akses administrator."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu creerà un link hanasu in ~/.local/bin nella tua cartella Inizio. Non servono privilegi di amministratore."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "홈 폴더의 ~/.local/bin에 hanasu 링크를 만듭니다. 관리자 권한은 필요하지 않습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu utworzy link hanasu w ~/.local/bin w Twoim folderze domowym. Nie wymaga to uprawnień administratora."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Hanasu vai criar um link hanasu em ~/.local/bin, na sua pasta pessoal. Não é preciso acesso de administrador."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu создаст ссылку hanasu в ~/.local/bin в вашей домашней папке. Права администратора не нужны."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu, ana klasörünüzdeki ~/.local/bin içinde bir hanasu bağlantısı oluşturur. Bunun için yönetici erişimi gerekmez."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu sẽ tạo liên kết hanasu trong ~/.local/bin thuộc thư mục nhà của bạn. Không cần quyền quản trị viên."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将在个人文件夹的 ~/.local/bin 中创建 hanasu 的链接。不需要管理员权限。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將在個人專屬檔案夾的 ~/.local/bin 中建立 hanasu 的連結。不需要管理員權限。"
+          }
+        }
+      }
+    },
     "マイク" : {
       "comment" : "DictationMicrophone.swift:43, MeetingDevicePickers.swift:38, Onboarding.swift:707",
       "extractionState" : "manual",
@@ -49064,7 +52022,7 @@
       }
     },
     "マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。システムオーディオ録音の許可の状態は、macOS から取れないためここには出ません。" : {
-      "comment" : "SettingsView.swift:356",
+      "comment" : "SettingsView.swift:363",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49370,7 +52328,7 @@
       }
     },
     "マイクを「自分」、スピーカーの音（Meet・Slack ハドル・Teams など）を「相手」として録ります。スピーカーだと相手の声がマイクにも入るので、イヤホンを使うと正確になります。" : {
-      "comment" : "SettingsView.swift:293",
+      "comment" : "SettingsView.swift:300",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49880,7 +52838,7 @@
       }
     },
     "マイク側も話者を分ける" : {
-      "comment" : "SettingsView.swift:274",
+      "comment" : "SettingsView.swift:281",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53654,7 +56612,7 @@
       }
     },
     "ローカル: %@" : {
-      "comment" : "HanasuDoctorCommand.swift:81",
+      "comment" : "HanasuDoctorCommand.swift:109",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53756,7 +56714,7 @@
       }
     },
     "ローカルの AI は、呼ぶたびにモデルを読み込むので時間がかかります。アプリがローカルの AI を使っている間は使えません。" : {
-      "comment" : "HanasuCommand.swift:464",
+      "comment" : "HanasuCommand.swift:501",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59672,7 +62630,7 @@
       }
     },
     "会議のフォルダ: %@" : {
-      "comment" : "HanasuDoctorCommand.swift:70",
+      "comment" : "HanasuDoctorCommand.swift:98",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60080,7 +63038,7 @@
       }
     },
     "会議の中身を出す（既定は議事録）" : {
-      "comment" : "HanasuCommand.swift:380",
+      "comment" : "HanasuCommand.swift:383",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60182,7 +63140,7 @@
       }
     },
     "会議の指定: ID（例: 2026-11-02_1312）、latest（最新の完了した会議）、日付（例: 2026-11-02）" : {
-      "comment" : "HanasuCommand.swift:453",
+      "comment" : "HanasuCommand.swift:490",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60488,7 +63446,7 @@
       }
     },
     "会議の記録" : {
-      "comment" : "Onboarding.swift:573, SettingsView.swift:264, TranscriptionEngineSettingsView.swift:22",
+      "comment" : "Onboarding.swift:573, SettingsView.swift:271, TranscriptionEngineSettingsView.swift:22",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60794,7 +63752,7 @@
       }
     },
     "会議の記録で相手の声に必要" : {
-      "comment" : "SettingsView.swift:345",
+      "comment" : "SettingsView.swift:352",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62018,7 +64976,7 @@
       }
     },
     "会議をまたいでアクションアイテムを並べる" : {
-      "comment" : "HanasuCommand.swift:389",
+      "comment" : "HanasuCommand.swift:392",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62120,7 +65078,7 @@
       }
     },
     "会議を新しい順に並べる" : {
-      "comment" : "HanasuCommand.swift:378",
+      "comment" : "HanasuCommand.swift:381",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62324,7 +65282,7 @@
       }
     },
     "会議を横断して検索する（空白で区切ると、すべてを含むものだけ）" : {
-      "comment" : "HanasuCommand.swift:382",
+      "comment" : "HanasuCommand.swift:385",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63242,7 +66200,7 @@
       }
     },
     "会議ノートを開く" : {
-      "comment" : "AppDelegate.swift:279, AppDelegate.swift:307, SettingsView.swift:253",
+      "comment" : "AppDelegate.swift:279, AppDelegate.swift:307, SettingsView.swift:260",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63548,7 +66506,7 @@
       }
     },
     "会議室などで 1 つのマイクを複数人で使うときにオン。いちばん長く話した人を「自分」、ほかを「同席者1」「同席者2」…にします。1 人で参加するときはオフのままにしてください（自分の声が 2 人に分かれることがあります）。" : {
-      "comment" : "SettingsView.swift:275",
+      "comment" : "SettingsView.swift:282",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63956,7 +66914,7 @@
       }
     },
     "使い方:" : {
-      "comment" : "HanasuCommand.swift:342, HanasuCommand.swift:367",
+      "comment" : "HanasuCommand.swift:342, HanasuCommand.swift:370",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64364,7 +67322,7 @@
       }
     },
     "使う AI と認証情報・会議のフォルダ・管理者のポリシーを確かめる（キーの値は出さない）" : {
-      "comment" : "HanasuCommand.swift:447",
+      "comment" : "HanasuCommand.swift:484",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64568,7 +67526,7 @@
       }
     },
     "使う AI:" : {
-      "comment" : "HanasuDoctorCommand.swift:71",
+      "comment" : "HanasuDoctorCommand.swift:99",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64772,7 +67730,7 @@
       }
     },
     "使えます" : {
-      "comment" : "HanasuDoctorCommand.swift:82",
+      "comment" : "HanasuDoctorCommand.swift:110",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65282,7 +68240,7 @@
       }
     },
     "例: 「です・ます調に統一する」「英単語は半角で書く」「文末に句点を付けない」" : {
-      "comment" : "SettingsView.swift:233",
+      "comment" : "SettingsView.swift:240",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -66812,7 +69770,7 @@
       }
     },
     "保存先: ~/Documents/Hanasu/Meetings" : {
-      "comment" : "SettingsView.swift:295",
+      "comment" : "SettingsView.swift:302",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67827,6 +70785,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "上週"
+          }
+        }
+      }
+    },
+    "入っていません" : {
+      "comment" : "CommandLineSettingsView.swift:128",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "غير مُضاف"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht hinzugefügt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not added"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No añadido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non ajouté"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नहीं जोड़ा गया"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belum ditambahkan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non aggiunto"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가되지 않음"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie dodano"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não adicionado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не добавлено"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eklenmedi"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chưa thêm"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未添加"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未加入"
           }
         }
       }
@@ -69668,7 +72728,7 @@
       }
     },
     "再確認" : {
-      "comment" : "SettingsView.swift:358",
+      "comment" : "SettingsView.swift:365",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -70178,7 +73238,7 @@
       }
     },
     "初めて会議の記録を始めるときに macOS が求めます" : {
-      "comment" : "SettingsView.swift:335",
+      "comment" : "SettingsView.swift:342",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73237,6 +76297,108 @@
         }
       }
     },
+    "外す" : {
+      "comment" : "CommandLineSettingsView.swift:216",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إزالة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हटाएँ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapus"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuovi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제거"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрать"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaldır"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xóa"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除"
+          }
+        }
+      }
+    },
     "失敗" : {
       "comment" : "DictationHistoryWindow.swift:375, HanasuMeetingsCommand.swift:355, MeetingWindow.swift:265",
       "extractionState" : "manual",
@@ -74155,8 +77317,110 @@
         }
       }
     },
+    "実行ファイル" : {
+      "comment" : "CommandLineSettingsView.swift:44",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الملف التنفيذي"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausführbare Datei"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Executable"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejecutable"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exécutable"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एक्ज़ीक्यूटेबल"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File yang dapat dieksekusi"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eseguibile"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "실행 파일"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plik wykonywalny"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Executável"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Исполняемый файл"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yürütülebilir dosya"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tệp thực thi"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可执行文件"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "執行檔"
+          }
+        }
+      }
+    },
     "実行ファイル: %@" : {
-      "comment" : "HanasuDoctorCommand.swift:69",
+      "comment" : "HanasuDoctorCommand.swift:81",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76706,7 +79970,7 @@
       }
     },
     "拒否した場合は、システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:346",
+      "comment" : "SettingsView.swift:353",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79460,7 +82724,7 @@
       }
     },
     "文字起こしに辞書の置き換えルールを当てる" : {
-      "comment" : "SettingsView.swift:279",
+      "comment" : "SettingsView.swift:286",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81704,7 +84968,7 @@
       }
     },
     "文章を指示どおりに書き換える（選択を声で編集と同じ）。文章は引数か標準入力で渡す" : {
-      "comment" : "HanasuCommand.swift:410",
+      "comment" : "HanasuCommand.swift:413",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82413,6 +85677,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "用新金鑰取代"
+          }
+        }
+      }
+    },
+    "新しいターミナルで hanasu と打って使うには、この行をシェルの設定ファイルに足してください（%@）。" : {
+      "comment" : "CommandLineSettingsView.swift:144",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لتشغيل hanasu باسمه في نافذة جديدة في الطرفية، أضِف هذا السطر إلى ملف إعدادات الصدفة (%@)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Damit du hanasu in einem neuen Terminalfenster direkt eingeben kannst, füge diese Zeile zur Einstellungsdatei deiner Shell hinzu (%@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To run hanasu by name in a new Terminal window, add this line to your shell's settings file (%@)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para ejecutar hanasu por su nombre en una ventana nueva de Terminal, añade esta línea al archivo de configuración de tu shell (%@)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour lancer hanasu par son nom dans une nouvelle fenêtre de Terminal, ajoutez cette ligne au fichier de configuration de votre shell (%@)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नई टर्मिनल विंडो में hanasu नाम से चलाने के लिए, यह लाइन अपनी शेल की सेटिंग्ज़ फ़ाइल (%@) में जोड़ें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agar hanasu dapat dijalankan dengan namanya di jendela Terminal baru, tambahkan baris ini ke file pengaturan shell Anda (%@)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per eseguire hanasu digitandone il nome in una nuova finestra del Terminale, aggiungi questa riga al file di impostazioni della shell (%@)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 터미널 윈도우에서 hanasu를 입력해 사용하려면 이 줄을 셸 설정 파일(%@)에 추가하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby uruchamiać hanasu po nazwie w nowym oknie Terminala, dodaj ten wiersz do pliku ustawień powłoki (%@)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para executar hanasu pelo nome em uma nova janela do Terminal, adicione esta linha ao arquivo de ajustes da sua shell (%@)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чтобы запускать hanasu по имени в новом окне Терминала, добавьте эту строку в файл настроек оболочки (%@)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hanasu'yu yeni bir Terminal penceresinde adıyla çalıştırmak için bu satırı kabuğunuzun ayar dosyasına ekleyin (%@)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Để chạy hanasu bằng tên trong cửa sổ Terminal mới, hãy thêm dòng này vào tệp cài đặt của shell (%@)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要在新的“终端”窗口中直接输入 hanasu 来使用，请将此行添加到 shell 的配置文件中（%@）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "若要在新的「終端機」視窗中直接輸入 hanasu 來使用，請將此行加入 shell 的設定檔（%@）。"
+          }
+        }
+      }
+    },
+    "新しいターミナルで hanasu と打って使えるように、~/.zprofile の終わりに次の行を足します。「PATH から外す」で消せます。" : {
+      "comment" : "CommandLineSettingsView.swift:197",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لتتمكن من كتابة hanasu في نافذة جديدة في الطرفية، سيضيف Hanasu هذا السطر إلى نهاية ~/.zprofile. ويحذفه خيار «إزالة من PATH»."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Damit du hanasu in einem neuen Terminalfenster eingeben kannst, fügt Hanasu diese Zeile am Ende von ~/.zprofile hinzu. „Aus PATH entfernen“ löscht sie wieder."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "So you can type hanasu in a new Terminal window, Hanasu will add this line to the end of ~/.zprofile. Remove from PATH deletes it."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para que puedas escribir hanasu en una ventana nueva de Terminal, Hanasu añadirá esta línea al final de ~/.zprofile. «Quitar de PATH» la elimina."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour que vous puissiez saisir hanasu dans une nouvelle fenêtre de Terminal, Hanasu ajoutera cette ligne à la fin de ~/.zprofile. « Retirer du PATH » la supprime."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नई टर्मिनल विंडो में hanasu टाइप करके चला सकें, इसके लिए Hanasu यह लाइन ~/.zprofile के अंत में जोड़ेगा। “PATH से हटाएँ” से यह मिट जाती है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agar Anda dapat mengetik hanasu di jendela Terminal baru, Hanasu akan menambahkan baris ini ke akhir ~/.zprofile. Baris ini dapat dihapus dengan “Hapus dari PATH”."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per poter digitare hanasu in una nuova finestra del Terminale, Hanasu aggiungerà questa riga alla fine di ~/.zprofile. «Rimuovi dal PATH» la elimina."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 터미널 윈도우에서 hanasu를 입력해 사용할 수 있도록 ~/.zprofile 끝에 다음 줄을 추가합니다. \"PATH에서 제거\"로 삭제할 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby można było wpisywać hanasu w nowym oknie Terminala, Hanasu doda ten wiersz na końcu ~/.zprofile. Opcja „Usuń z PATH” go usunie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para que você possa digitar hanasu em uma nova janela do Terminal, o Hanasu vai adicionar esta linha ao final de ~/.zprofile. “Remover do PATH” a apaga."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чтобы hanasu можно было вводить в новом окне Терминала, Hanasu добавит эту строку в конец ~/.zprofile. Кнопка «Убрать из PATH» её удалит."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni bir Terminal penceresinde hanasu yazabilmeniz için Hanasu bu satırı ~/.zprofile dosyasının sonuna ekler. “PATH'ten kaldır” ile silinir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Để bạn có thể gõ hanasu trong cửa sổ Terminal mới, Hanasu sẽ thêm dòng này vào cuối ~/.zprofile. Dùng “Xóa khỏi PATH” để xóa dòng này."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为了能在新的“终端”窗口中输入 hanasu 来使用，将在 ~/.zprofile 末尾添加下面这一行。可用“从 PATH 中移除”删除。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "為了能在新的「終端機」視窗中輸入 hanasu 來使用，將在 ~/.zprofile 結尾加入下面這一行。可用「從 PATH 移除」刪除。"
           }
         }
       }
@@ -84866,7 +88334,7 @@
       }
     },
     "期間の指定: 7d・24h・2w（今からさかのぼる）、日付（例: 2026-11-01）" : {
-      "comment" : "HanasuCommand.swift:454, HanasuMeetingsCommand.swift:470",
+      "comment" : "HanasuCommand.swift:491, HanasuMeetingsCommand.swift:470",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85376,7 +88844,7 @@
       }
     },
     "未設定" : {
-      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274, HanasuDoctorCommand.swift:58",
+      "comment" : "AISettingsView.swift:184, AISettingsView.swift:274, HanasuDoctorCommand.swift:70",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85580,7 +89048,7 @@
       }
     },
     "未許可" : {
-      "comment" : "SettingsView.swift:374",
+      "comment" : "SettingsView.swift:381",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86804,7 +90272,7 @@
       }
     },
     "権限" : {
-      "comment" : "SettingsView.swift:20",
+      "comment" : "SettingsView.swift:21",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91802,7 +95270,7 @@
       }
     },
     "管理者のポリシー:" : {
-      "comment" : "HanasuDoctorCommand.swift:97",
+      "comment" : "HanasuDoctorCommand.swift:127",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91904,7 +95372,7 @@
       }
     },
     "管理者のポリシー: なし" : {
-      "comment" : "HanasuDoctorCommand.swift:95",
+      "comment" : "HanasuDoctorCommand.swift:125",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92210,7 +95678,7 @@
       }
     },
     "管理者のポリシーで、hanasu mcp は使えないようにされています（%@）。" : {
-      "comment" : "HanasuDoctorCommand.swift:90, HanasuMCPServer.swift:46",
+      "comment" : "CommandLineSettingsView.swift:72, HanasuDoctorCommand.swift:118, HanasuMCPServer.swift:46",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92312,7 +95780,7 @@
       }
     },
     "管理者のポリシーで、hanasu コマンドは使えないようにされています（%@）。" : {
-      "comment" : "HanasuCommand.swift:107",
+      "comment" : "CommandLineSettingsView.swift:36, HanasuCommand.swift:107",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92409,6 +95877,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "管理員的政策已停用 hanasu 指令（%@）。"
+          }
+        }
+      }
+    },
+    "管理者の権限なしで、~/.local/bin に入れますか？" : {
+      "comment" : "CommandLineSettingsView.swift:179",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد الإضافة إلى ~/.local/bin دون صلاحيات المسؤول؟"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Administratorrechte zu ~/.local/bin hinzufügen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add it to ~/.local/bin without administrator access?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Añadirlo a ~/.local/bin sin acceso de administrador?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter à ~/.local/bin sans accès administrateur ?"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एडमिनिस्ट्रेटर एक्सेस के बिना ~/.local/bin में जोड़ें?"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tambahkan ke ~/.local/bin tanpa akses administrator?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungerlo a ~/.local/bin senza privilegi di amministratore?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관리자 권한 없이 ~/.local/bin에 추가하겠습니까?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodać do ~/.local/bin bez uprawnień administratora?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionar a ~/.local/bin sem acesso de administrador?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить в ~/.local/bin без прав администратора?"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yönetici erişimi olmadan ~/.local/bin konumuna eklensin mi?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thêm vào ~/.local/bin mà không cần quyền quản trị viên?"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要在没有管理员权限的情况下添加到 ~/.local/bin 吗？"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要在沒有管理員權限的情況下加入 ~/.local/bin 嗎？"
+          }
+        }
+      }
+    },
+    "管理者の確認を出せませんでした。" : {
+      "comment" : "HanasuInstall.swift:158, HanasuInstall.swift:164",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر طلب صلاحيات المسؤول."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Administratorabfrage konnte nicht angezeigt werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't ask for administrator access."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se ha podido pedir acceso de administrador."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de demander l’accès administrateur."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "एडमिनिस्ट्रेटर एक्सेस नहीं माँगा जा सका।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak dapat meminta akses administrator."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile richiedere i privilegi di amministratore."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "관리자 권한을 요청할 수 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się poprosić o uprawnienia administratora."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível pedir acesso de administrador."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось запросить права администратора."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yönetici erişimi istenemedi."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thể yêu cầu quyền quản trị viên."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法请求管理员权限。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法要求管理員權限。"
           }
         }
       }
@@ -93128,7 +96800,7 @@
       }
     },
     "終了コード: 0 成功、1 失敗、2 使い方の誤り、3 認証情報がない、4 会議が見つからない、5 ポリシーか権限で止められた" : {
-      "comment" : "HanasuCommand.swift:456",
+      "comment" : "HanasuCommand.swift:493",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94658,7 +98330,7 @@
       }
     },
     "翻訳して入力" : {
-      "comment" : "Onboarding.swift:546, SettingsView.swift:174, ShortcutRecorder.swift:15",
+      "comment" : "Onboarding.swift:546, SettingsView.swift:181, ShortcutRecorder.swift:15",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95984,7 +99656,7 @@
       }
     },
     "自動入力に必要" : {
-      "comment" : "SettingsView.swift:326",
+      "comment" : "SettingsView.swift:333",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97718,7 +101390,7 @@
       }
     },
     "記録した会議の議事録・文字起こし" : {
-      "comment" : "SettingsView.swift:251",
+      "comment" : "SettingsView.swift:258",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98330,7 +102002,7 @@
       }
     },
     "記録の開始／停止" : {
-      "comment" : "AppDelegate.swift:306, Onboarding.swift:577, SettingsView.swift:265",
+      "comment" : "AppDelegate.swift:306, Onboarding.swift:577, SettingsView.swift:272",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98636,7 +102308,7 @@
       }
     },
     "記録を止めたあとの文字起こしに、「辞書・ルール」の置き換えルールを当てます。議事録は当てたあとの文から作ります。認識したままの文も残すので、会議ノートの「辞書」から戻せます。" : {
-      "comment" : "SettingsView.swift:280",
+      "comment" : "SettingsView.swift:287",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99860,7 +103532,7 @@
       }
     },
     "記録後に AI で議事録を作る" : {
-      "comment" : "SettingsView.swift:283",
+      "comment" : "SettingsView.swift:290",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100676,7 +104348,7 @@
       }
     },
     "許可する" : {
-      "comment" : "Onboarding.swift:710, Onboarding.swift:723, SettingsView.swift:380",
+      "comment" : "Onboarding.swift:710, Onboarding.swift:723, SettingsView.swift:387",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100880,7 +104552,7 @@
       }
     },
     "許可済み" : {
-      "comment" : "Onboarding.swift:785, SettingsView.swift:374",
+      "comment" : "Onboarding.swift:785, SettingsView.swift:381",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -103226,7 +106898,7 @@
       }
     },
     "認証情報:" : {
-      "comment" : "HanasuDoctorCommand.swift:78",
+      "comment" : "HanasuDoctorCommand.swift:106",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -103629,6 +107301,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "辨識結果範例"
+          }
+        }
+      }
+    },
+    "説明を見る" : {
+      "comment" : "CommandLineSettingsView.swift:95",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إظهار"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einblenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "दिखाएँ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tampilkan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설명 보기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokaż"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показать"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Göster"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiện"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示说明"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示說明"
+          }
+        }
+      }
+    },
+    "説明を隠す" : {
+      "comment" : "CommandLineSettingsView.swift:95",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إخفاء"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausblenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masquer"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "छिपाएँ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sembunyikan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nascondi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설명 숨기기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ukryj"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скрыть"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gizle"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ẩn"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐藏说明"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隱藏說明"
           }
         }
       }
@@ -105368,7 +109244,7 @@
       }
     },
     "議事録のモデル: %@ · %@（設定の「AI」で、音声入力とは別に選べます）" : {
-      "comment" : "SettingsView.swift:285",
+      "comment" : "SettingsView.swift:292",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -108937,6 +112813,210 @@
         }
       }
     },
+    "足さない" : {
+      "comment" : "CommandLineSettingsView.swift:200",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عدم الإضافة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Don't Add"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No añadir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne pas ajouter"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "न जोड़ें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jangan Tambahkan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non aggiungere"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가 안 함"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie dodawaj"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não adicionar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не добавлять"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekleme"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thêm"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不添加"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不要加入"
+          }
+        }
+      }
+    },
+    "足す" : {
+      "comment" : "CommandLineSettingsView.swift:199",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "जोड़ें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tambahkan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dodaj"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekle"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thêm"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加入"
+          }
+        }
+      }
+    },
     "辞書" : {
       "comment" : "MeetingDictionaryViews.swift:26, MeetingDictionaryViews.swift:29, MeetingDictionaryViews.swift:30",
       "extractionState" : "manual",
@@ -109448,7 +113528,7 @@
       }
     },
     "辞書の置き換えルールだけを当てる（AI には送らない）" : {
-      "comment" : "HanasuCommand.swift:417",
+      "comment" : "HanasuCommand.swift:420",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -110162,7 +114242,7 @@
       }
     },
     "追加の整形ルール" : {
-      "comment" : "SettingsView.swift:231",
+      "comment" : "SettingsView.swift:238",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -110774,7 +114854,7 @@
       }
     },
     "過去の会議について AI に質問する（関係する会議の中身を、会議の AI に送る）" : {
-      "comment" : "HanasuCommand.swift:396",
+      "comment" : "HanasuCommand.swift:399",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -112916,7 +116996,7 @@
       }
     },
     "録音する前に、参加者の了承を得てください。" : {
-      "comment" : "MeetingSuggestionPanel.swift:145, SettingsView.swift:294",
+      "comment" : "MeetingSuggestionPanel.swift:145, SettingsView.swift:301",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -113018,7 +117098,7 @@
       }
     },
     "録音する機器" : {
-      "comment" : "SettingsView.swift:259",
+      "comment" : "SettingsView.swift:266",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -113324,7 +117404,7 @@
       }
     },
     "録音の開始／停止" : {
-      "comment" : "SettingsView.swift:167, ShortcutRecorder.swift:14",
+      "comment" : "SettingsView.swift:174, ShortcutRecorder.swift:14",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -114242,7 +118322,7 @@
       }
     },
     "録音モード" : {
-      "comment" : "SettingsView.swift:183",
+      "comment" : "SettingsView.swift:190",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -115058,7 +119138,7 @@
       }
     },
     "開始・終了の効果音を鳴らす" : {
-      "comment" : "SettingsView.swift:210",
+      "comment" : "SettingsView.swift:217",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -115670,7 +119750,7 @@
       }
     },
     "音声ファイル（me.m4a / others.m4a）を残す" : {
-      "comment" : "SettingsView.swift:287",
+      "comment" : "SettingsView.swift:294",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -116282,7 +120362,7 @@
       }
     },
     "音声入力と「選択を声で編集」で使うマイク。録音中の画面（HUD）のマイクのボタンからも切り替えられます。会議の記録のマイクは「会議」タブで選びます。" : {
-      "comment" : "SettingsView.swift:198",
+      "comment" : "SettingsView.swift:205",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -116384,7 +120464,7 @@
       }
     },
     "音声入力と同じように文章を整える（--translate なら翻訳する）。文章は引数か標準入力で渡す" : {
-      "comment" : "HanasuCommand.swift:403",
+      "comment" : "HanasuCommand.swift:406",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -117302,7 +121382,7 @@
       }
     },
     "音声認識" : {
-      "comment" : "Onboarding.swift:720, SettingsView.swift:319",
+      "comment" : "Onboarding.swift:720, SettingsView.swift:326",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -117909,6 +121989,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "（%@）"
+          }
+        }
+      }
+    },
+    "（このシェルの PATH にはありません）" : {
+      "comment" : "HanasuDoctorCommand.swift:94",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(غير موجود في PATH لهذه الصدفة)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(nicht im PATH dieser Shell)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(not on this shell's PATH)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(no está en el PATH de esta shell)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(absent du PATH de ce shell)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(इस शेल के PATH में नहीं है)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(tidak ada di PATH shell ini)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(non nel PATH di questa shell)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(이 셸의 PATH에 없음)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(brak w PATH tej powłoki)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(não está no PATH desta shell)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(нет в PATH этой оболочки)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(bu kabuğun PATH'inde yok)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(không có trong PATH của shell này)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（不在此 shell 的 PATH 中）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（不在此 shell 的 PATH 中）"
           }
         }
       }

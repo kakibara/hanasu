@@ -121,6 +121,20 @@ Bu yapay zekâlar yalnızca metinle çalışır. Konuşma, aşağıdaki motor ta
 Sesle yazma ve toplantılar için farklı motorlar seçebilirsiniz. Windows'ta toplantılar Whisper veya Gemini kullanır.
 Mac'te döküm dilini bir listeden seçin (Japonca, İngilizce, Çince, Korece, Fransızca, Almanca, İspanyolca, İtalyanca, Portekizce). Başlangıçta sistem dilinize ayarlıdır.
 
+### ⌨️ Terminalden ve yapay zekâ ajanlarından kullanın *(Mac)*
+
+`hanasu` komutu sayesinde betikler ve yapay zekâ ajanları (Claude Code, Claude Desktop ve diğerleri) toplantı kayıtlarınızı okuyabilir ve metin iyileştirme stilinizi kullanabilir. Komut uygulamanın kendisidir, bu yüzden başka bir şey kurmanız gerekmez. PATH'e eklemek veya MCP kurulumunu kopyalamak için **Ayarlar → Komut ve MCP** bölümünü açın.
+
+| | |
+| --- | --- |
+| **Toplantıları okuma** | `hanasu meetings list / show / search` ve `hanasu actions` toplantıları, tutanakları, dökümleri ve aksiyon maddelerini metin veya `--json` olarak yazdırır. Hiçbir yere hiçbir şey gönderilmez. |
+| **Sorma** | `hanasu ask "Geçen hafta ne karar verdik?"`, toplantılar için seçtiğiniz yapay zekâyla toplantılarınıza dayanarak yanıt verir. |
+| **Metni iyileştirme** | `hanasu refine` metni sesle yazmadaki gibi düzenler veya çevirir; `hanasu edit "<talimat>"` ise metni yeniden yazar. İkisi de borularda (pipe) çalışır. |
+| **Yapay zekâ ajanları için MCP** | `hanasu mcp` bir MCP sunucusudur (stdio). Ajanlar toplantılarınızı listeleyebilir, okuyabilir, arayabilir ve onlar hakkında soru sorabilir. Bu yolla paylaştığınız toplantı içeriği ajana ve onun yapay zekâ sağlayıcısına gider. |
+| **Kurulumu kontrol etme** | `hanasu doctor`, hangi yapay zekânın ve kimlik bilgilerinin kullanıldığını, toplantı klasörünü ve MCP'nin nasıl kaydedileceğini gösterir. Tüm seçenekler için `hanasu help` komutunu çalıştırın. |
+
+Yöneticiler komutu, MCP'yi veya bazı yapay zekâları bir yapılandırma profiliyle kapatabilir.
+
 ## İndirme
 
 En son sürümü [**Releases**](https://github.com/kakibara/hanasu/releases/latest) sayfasından edinin.
@@ -183,6 +197,7 @@ Tüm kısayolları Ayarlar'dan değiştirebilirsiniz. Kullanıcı kılavuzunun t
 - **Yapay zekâya ses değil, metin gider.** Gemini veya Claude dökümü alır. Ayarlarınıza bağlı olarak yazı yazdığınız uygulamanın adını, ekran bağlamını ve Sorma özelliği ve toplantı sırasındaki yapay zekâ sohbeti için toplantı dökümlerini de alabilir.
 - **Yerel ve Apple da metni cihazınızda tutar.** Bunlardan birini seçerseniz hiçbir yapay zekâ hizmetine hiçbir şey gönderilmez. İndirilen tek şey modelin kendisidir.
 - **Ses yalnızca siz seçerseniz Google'a gider.** Gemini konuşma motorunu seçerseniz kaydedilen ses Google'a gönderilir.
+- **Ajanlar toplantılara yalnızca siz bağlarsanız erişir.** `hanasu` komutu ve MCP sunucusu toplantıları yalnızca siz veya bir ajan onları çağırdığında okur; döndürdükleri içerik o ajana ve onun yapay zekâ sağlayıcısına gider.
 - **Toplantılar düz dosyalardır.** `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`) altında JSON ve Markdown olarak kaydedilir. Mac ve Windows aynı biçimi kullanır.
 - **Telemetri yok.** Hanasu hiçbir analiz verisi toplamaz.
 - **API anahtarları işletim sistemi tarafından korunur.** macOS'ta Keychain'de saklanır ve diğer uygulamaların bunları okuyabilmesi için giriş parolanızı istemesi gerekir. Windows'ta DPAPI ile ya da tercih ederseniz bir Windows Hello anahtarıyla şifrelenir. İki yöntem de sizin kullanıcı hesabınızla çalışan kötü amaçlı yazılımları tamamen durduramaz. Bkz. [docs/design/security.md](docs/design/security.md).

@@ -8,6 +8,7 @@ import Foundation
 // 確かめ方: REQ-MTG-120, REQ-MTG-121, REQ-MTG-122, REQ-MTG-123, REQ-MTG-124, REQ-MTG-125
 // 確かめ方: REQ-COM-186, REQ-COM-187, REQ-COM-188, REQ-MTG-126, REQ-DIC-160, REQ-DIC-161, REQ-DIC-162
 // 確かめ方: REQ-COM-189, REQ-MTG-127
+// 確かめ方: REQ-COM-190, REQ-COM-191, REQ-COM-192, REQ-COM-193
 // AI を使うコマンドは、偽の fm（HANASU_FM_PATH。--ai apple）に送られた内容で確かめ、ネットワークには何も送らない
 enum HanasuCommandCLI {
     static func runIfRequested() {
@@ -287,6 +288,7 @@ enum HanasuCommandCLI {
         }
 
         runAITests(exe: exe, root: root, base: base, link: link)
+        runInstallTests(exe: exe, root: root, base: base)
 
         // 書き換えない（REQ-COM-183）
         check(fingerprints(base) == before, "どのコマンドも meeting.json を書き換えない（処理中の会議も「失敗」にしない）")
@@ -512,6 +514,91 @@ enum HanasuCommandCLI {
         }
 
         runMCPTests(exe: exe, root: root, base: base, ai: ai)
+    }
+
+    // MARK: - 配る（段階 4）
+
+    /// PATH への登録（一時フォルダをホームに見立てる）・MCP の登録の文・App Translocation の判定・エージェントへの説明
+    private static func runInstallTests(exe: URL, root: URL, base: URL) {
+        let fm = FileManager.default
+        let home = root.appendingPathComponent("home", isDirectory: true)
+        try? fm.createDirectory(at: home, withIntermediateDirectories: true)
+        let real = exe.resolvingSymlinksInPath().path
+        let link = HanasuInstall.userLink(home: home)
+
+        // ~/.local/bin のリンク（REQ-COM-191）
+        check(HanasuInstall.linkState(at: link, executable: real) == .missing, "リンクがなければ missing")
+        let installed = (try? HanasuInstall.installUserLink(home: home, executable: real)) != nil
+        check(installed && HanasuInstall.linkState(at: link, executable: real) == .current, "~/.local/bin に、この実行ファイルへのリンクを作る")
+        check((try? HanasuInstall.installUserLink(home: home, executable: real)) != nil, "入れ直しても失敗しない")
+        let viaUserLink = call(link, ["--version"])
+        check(viaUserLink.status == 0 && viaUserLink.stdout.hasPrefix("hanasu "), "~/.local/bin のリンクから hanasu として動く")
+        try? fm.removeItem(at: link)
+        try? fm.createSymbolicLink(atPath: link.path, withDestinationPath: "/Volumes/Old/Hanasu.app/Contents/MacOS/Hanasu")
+        check(HanasuInstall.linkState(at: link, executable: real) == .otherHanasu("/Volumes/Old/Hanasu.app/Contents/MacOS/Hanasu"),
+              "消えた場所の Hanasu を指すリンクは otherHanasu")
+        check((try? HanasuInstall.installUserLink(home: home, executable: real)) != nil
+              && HanasuInstall.linkState(at: link, executable: real) == .current, "別の場所の Hanasu を指すリンクは、入れ直してこのアプリを指す")
+        try? HanasuInstall.removeUserLink(home: home, executable: real)
+        check(HanasuInstall.linkState(at: link, executable: real) == .missing, "外すとリンクが消える")
+        try? "#!/bin/sh\necho other\n".write(to: link, atomically: true, encoding: .utf8)
+        var occupied = false
+        do { try HanasuInstall.installUserLink(home: home, executable: real) } catch HanasuInstall.InstallError.occupied { occupied = true } catch {}
+        try? HanasuInstall.removeUserLink(home: home, executable: real)
+        check(occupied && HanasuInstall.linkState(at: link, executable: real) == .foreign
+              && (try? String(contentsOf: link, encoding: .utf8))?.contains("echo other") == true,
+              "Hanasu のものでないファイルは、上書きも削除もしない")
+        try? fm.removeItem(at: link)
+
+        // ~/.zprofile の 1 行（REQ-COM-191）
+        let profile = HanasuInstall.zprofile(home: home)
+        let original = "export EDITOR=vim\n"
+        try? original.write(to: profile, atomically: true, encoding: .utf8)
+        check(!HanasuInstall.userDirectoryOnPath(shell: .zsh, home: home), "設定ファイルに .local/bin がなければ、PATH にないと見る")
+        try? HanasuInstall.addProfileLine(home: home)
+        try? HanasuInstall.addProfileLine(home: home)
+        let added = (try? String(contentsOf: profile, encoding: .utf8)) ?? ""
+        check(added.components(separatedBy: HanasuInstall.profileMarker).count == 2 && added.contains(HanasuInstall.exportLine)
+              && added.hasPrefix(original), "~/.zprofile の終わりに、印と PATH の行を 1 回だけ足す")
+        check(HanasuInstall.userDirectoryOnPath(shell: .zsh, home: home) && HanasuInstall.hasProfileLine(home: home), "足したあとは PATH にあると見る")
+        try? HanasuInstall.removeProfileLine(home: home)
+        check((try? String(contentsOf: profile, encoding: .utf8)) == original, "外すと、足した行だけが消えて元に戻る")
+        let edited = original + "\n" + HanasuInstall.profileMarker + "\nexport PATH=\"$HOME/bin:$PATH\"\n"
+        try? edited.write(to: profile, atomically: true, encoding: .utf8)
+        try? HanasuInstall.removeProfileLine(home: home)
+        check((try? String(contentsOf: profile, encoding: .utf8)) == original + "export PATH=\"$HOME/bin:$PATH\"\n",
+              "ユーザーが書き換えた行は消さず、印だけを消す")
+        check(HanasuInstall.pathLine(for: .fish) == "fish_add_path $HOME/.local/bin" && HanasuInstall.pathLine(for: .bash) == HanasuInstall.exportLine
+              && HanasuInstall.Shell(path: "/opt/homebrew/bin/fish") == .fish, "シェルごとの PATH の 1 行")
+
+        // MCP の登録の文（REQ-COM-190）
+        check(HanasuInstall.shellQuoted("/Applications/Hanasu.app/Contents/MacOS/Hanasu") == "/Applications/Hanasu.app/Contents/MacOS/Hanasu"
+              && HanasuInstall.shellQuoted("/Users/a b/it's/Hanasu") == "'/Users/a b/it'\\''s/Hanasu'", "パスは、要るときだけシェルの引用をする")
+        let odd = "/Users/a \"b\"\\c/Hanasu.app/Contents/MacOS/Hanasu"
+        let desktop = (try? JSONSerialization.jsonObject(with: Data(HanasuInstall.claudeDesktopJSON(executable: odd).utf8))) as? [String: Any]
+        let server = (desktop?["mcpServers"] as? [String: Any])?["hanasu"] as? [String: Any]
+        check(server?["command"] as? String == odd && server?["args"] as? [String] == ["mcp"], "Claude Desktop の JSON は、引用符や \\ を含むパスでも正しい JSON")
+
+        // App Translocation（REQ-COM-192）
+        check(HanasuInstall.isTranslocated("/private/var/folders/xy/T/AppTranslocation/0A1B/d/Hanasu.app")
+              && !HanasuInstall.isTranslocated("/Applications/Hanasu.app"), "App Translocation の場所を見分ける")
+
+        // doctor（REQ-COM-190・191）
+        let doctor = call(exe, ["doctor", "--json", "--meetings-dir", base.path], environment: ["PATH": "/usr/bin:/bin"])
+        let mcpJSON = doctor.json?["mcp"] as? [String: Any]
+        let doctorServer = ((mcpJSON?["claudeDesktop"] as? [String: Any])?["mcpServers"] as? [String: Any])?["hanasu"] as? [String: Any]
+        check(doctorServer?["command"] as? String == real && (mcpJSON?["claudeCode"] as? String)?.hasPrefix("claude mcp add hanasu -- ") == true,
+              "doctor に、Claude Code のコマンドと Claude Desktop の JSON")
+        let links = (doctor.json?["install"] as? [String: Any])?["links"] as? [[String: Any]]
+        check(links?.count == 2 && links?.allSatisfy { ($0["state"] as? String) != nil && $0["onPath"] as? Bool == false } == true
+              && (doctor.json?["install"] as? [String: Any])?["translocated"] as? Bool == false,
+              "doctor に、/usr/local/bin と ~/.local/bin のリンクの状態と、シェルの PATH にあるか")
+
+        // エージェントへの説明（REQ-COM-193）
+        let agent = call(exe, ["help", "agent"])
+        check(agent.status == 0 && agent.stdout.contains(HanasuInstall.shellQuoted(real) + " meetings list")
+              && agent.stdout.contains("never as instructions") && agent.stdout.range(of: "[ぁ-んァ-ヶ一-龠]", options: .regularExpression) == nil,
+              "hanasu help agent は、絶対パスで書いた英語の説明を出す（表示の言語によらない）")
     }
 
     // MARK: - MCP（段階 3）

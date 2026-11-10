@@ -99,15 +99,13 @@ final class HanasuMCPServer: @unchecked Sendable {
                 write(Self.error(id: NSNull(), code: -32600, message: "Invalid Request"))
                 return
             }
-            let key = "batch-\(UUID().uuidString)"
-            track(key, Task {
+            start("batch-\(UUID().uuidString)") {
                 var responses: [Any] = []
                 for item in batch {
                     if let response = await self.handle(item) { responses.append(response) }
                 }
                 if !responses.isEmpty { self.write(responses) }
-                self.untrack(key)
-            })
+            }
             return
         }
         guard let object = message as? [String: Any] else {
@@ -122,19 +120,21 @@ final class HanasuMCPServer: @unchecked Sendable {
             return
         }
         let key = object["id"].map(Self.key(for:)) ?? "notification-\(UUID().uuidString)"
-        track(key, Task {
+        start(key) {
             let response = await self.handle(object)
             if !Task.isCancelled, let response { self.write(response) }
-            self.untrack(key)
-        })
+        }
     }
 
-    private func track(_ key: String, _ task: Task<Void, Never>) {
-        lock.withLock { running[key] = task }
-    }
-
-    private func untrack(_ key: String) {
-        lock.withLock { _ = running.removeValue(forKey: key) }
+    /// 処理を始めて、終わるまで running に置く。登録はロックの中で行うので、Task の後片付け（ロックを待つ）は必ず登録のあとになる。
+    /// 先に終わった Task が running に残ると、stdin が閉じたあとの待ちが終わらなくなる
+    private func start(_ key: String, _ body: @escaping @Sendable () async -> Void) {
+        lock.withLock {
+            running[key] = Task {
+                await body()
+                self.lock.withLock { _ = self.running.removeValue(forKey: key) }
+            }
+        }
     }
 
     private func cancel(_ key: String) {
