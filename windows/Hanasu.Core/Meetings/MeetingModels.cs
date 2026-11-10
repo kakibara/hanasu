@@ -345,6 +345,17 @@ public sealed partial class Meeting
     // 設計判断: DEC-MTG-092
     /// <summary>議事録に使う発言を変えたあと、議事録をまだ作り直していない</summary>
     public bool? MinutesOutdated { get; set; }
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-139, DEC-MTG-108
+    /// <summary>
+    /// 文字起こしと議事録のあとに録音を消す会議か。記録を始めたときに設定から写し（MeetingAudioPolicy.Apply）、記録中に変えられる。
+    /// true のときだけ書く（false・null は残す。Mac 版と同じキー）
+    /// </summary>
+    public bool? DeleteAudioAfterTranscription { get; set; }
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-142, DEC-MTG-009, DEC-MTG-108
+    /// <summary>文字起こしに失敗したチャンネル（["me"]・["others"] など）。消す設定かどうかに関わらず書く。失敗がなければ null（Mac 版と同じキー）</summary>
+    public List<MeetingChannel>? TranscriptionFailedChannels { get; set; }
 
     /// <summary>議事録の結果を入れる。応答で分かった話者の名前も、名前のない話者に付ける</summary>
     // 要件: REQ-MTG-027

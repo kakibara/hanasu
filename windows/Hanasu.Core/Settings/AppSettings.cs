@@ -171,8 +171,17 @@ public sealed class AppSettings
     // 設計判断: DEC-DIC-173
     /// <summary>記録を止めたあとの文字起こしに、辞書の置き換えルールを当てる（既定はオン。今までの設定になければオン）</summary>
     public bool ApplyDictionaryToMeetings { get; set; } = true;
-    /// <summary>処理のあとも音声ファイル（me.wav / others.wav）を残す</summary>
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-016, DEC-MTG-139
+    /// <summary>
+    /// 次に記録する会議の録音を、処理のあとも残す（既定）。画面では裏返しの「文字起こしのあとに録音を削除する」として出す（キーは前のまま）。
+    /// 記録を始めたときに会議の deleteAudioAfterTranscription に写し、後処理は会議の値で決める
+    /// </summary>
     public bool KeepMeetingAudio { get; set; } = true;
+    // 要件: REQ-MTG-057
+    // 設計判断: DEC-MTG-016, DEC-MTG-143
+    /// <summary>会議の録音を残す日数。0 は無期限（既定）。選択肢は音声入力の履歴と同じ（HistoryPolicy.DayOptions）</summary>
+    public int MeetingAudioRetentionDays { get; set; }
     /// <summary>相手側の話者を分ける（sherpa-onnx。初めて使うときにモデルをダウンロードする）</summary>
     public bool DiarizeOthers { get; set; } = true;
     /// <summary>会議で「自分」として録るマイク。空なら Windows の既定のマイク</summary>

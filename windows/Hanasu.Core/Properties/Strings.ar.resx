@@ -538,7 +538,7 @@
     <value>اجتماع {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>تم إغلاق التطبيق أثناء التسجيل. ربما تم الاحتفاظ بالملفات الصوتية ({0} / {1}) جزئيًا.</value>
+    <value>تم إغلاق التطبيق أثناء التسجيل.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>يتعذر بدء تسجيل الاجتماع</value>

@@ -215,7 +215,13 @@ final class AppSettings: ObservableObject {
         }
     }
     @Published var meetingMinutesModel: String { didSet { defaults.set(meetingMinutesModel, forKey: Keys.meetingMinutesModel) } }
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-016, DEC-MTG-139（画面では「文字起こしのあとに録音を削除する」として裏返して出す。次の記録からの既定）
     @Published var keepMeetingAudio: Bool { didSet { defaults.set(keepMeetingAudio, forKey: Keys.keepMeetingAudio) } }
+    // 要件: REQ-MTG-057
+    // 設計判断: DEC-MTG-143
+    /// 録音を残す期間（日）。0 は無期限
+    @Published var meetingAudioRetentionDays: Int { didSet { defaults.set(meetingAudioRetentionDays, forKey: Keys.meetingAudioRetentionDays) } }
     @Published var makeMeetingMinutes: Bool { didSet { defaults.set(makeMeetingMinutes, forKey: Keys.makeMeetingMinutes) } }
     // 要件: REQ-DIC-073
     // 設計判断: DEC-DIC-173
@@ -423,6 +429,7 @@ final class AppSettings: ObservableObject {
             Keys.meetingMinutesModel: "gemini-3.8-flash",
             // 設計判断: DEC-MTG-016
             Keys.keepMeetingAudio: true,
+            Keys.meetingAudioRetentionDays: 0,
             Keys.makeMeetingMinutes: true,
             Keys.applyDictionaryToMeetings: true,
             Keys.meetingOutputDeviceUID: "",
@@ -470,6 +477,7 @@ final class AppSettings: ObservableObject {
             modifiers: UInt32(defaults.integer(forKey: Keys.meetingHotKeyModifiers)))
         meetingMinutesModel = defaults.string(forKey: Keys.meetingMinutesModel)!
         keepMeetingAudio = defaults.bool(forKey: Keys.keepMeetingAudio)
+        meetingAudioRetentionDays = defaults.integer(forKey: Keys.meetingAudioRetentionDays)
         makeMeetingMinutes = defaults.bool(forKey: Keys.makeMeetingMinutes)
         applyDictionaryToMeetings = defaults.bool(forKey: Keys.applyDictionaryToMeetings)
         meetingOutputDeviceUID = defaults.string(forKey: Keys.meetingOutputDeviceUID)!
@@ -516,6 +524,7 @@ final class AppSettings: ObservableObject {
         static let meetingHotKeyModifiers = "meetingHotKeyModifiers"
         static let meetingMinutesModel = "meetingMinutesModel"
         static let keepMeetingAudio = "keepMeetingAudio"
+        static let meetingAudioRetentionDays = "meetingAudioRetentionDays"
         static let makeMeetingMinutes = "makeMeetingMinutes"
         static let applyDictionaryToMeetings = "applyDictionaryToMeetings"
         static let meetingOutputDeviceUID = "meetingOutputDeviceUID"

@@ -53,9 +53,13 @@ public partial class SettingsWindow : Window
         host.LocalLlmModels.StateChanged += OnLocalModelStateChanged;
         host.Secrets.Changed += OnSecretChanged;
         settings.Changed += OnSettingsChanged;
+        host.Meetings.AudioDeleted += OnMeetingAudioChanged;
+        host.Meetings.StateChanged += OnMeetingStateChanged;
         Closed += (_, _) =>
         {
             settings.Changed -= OnSettingsChanged;
+            host.Meetings.AudioDeleted -= OnMeetingAudioChanged;
+            host.Meetings.StateChanged -= OnMeetingStateChanged;
             host.WhisperModels.StateChanged -= OnWhisperStateChanged;
             host.LocalLlmModels.StateChanged -= OnLocalModelStateChanged;
             host.Secrets.Changed -= OnSecretChanged;
@@ -133,7 +137,10 @@ public partial class SettingsWindow : Window
         ApplyDictionaryCheck.IsChecked = s.ApplyDictionaryToMeetings;
         MinutesModelCombo.ItemsSource = AppSettings.SuggestedModels;
         MinutesModelCombo.Text = s.MeetingMinutesModel;
-        KeepAudioCheck.IsChecked = s.KeepMeetingAudio;
+        DeleteAudioCheck.IsChecked = !s.KeepMeetingAudio;
+        AudioRetentionCombo.ItemsSource = LimitItems(HistoryPolicy.DayOptions, s.MeetingAudioRetentionDays, HistoryPolicy.DaysLabel);
+        AudioRetentionCombo.SelectedItem = ((List<ComboBoxItem>)AudioRetentionCombo.ItemsSource).First(i => (int)i.Tag == s.MeetingAudioRetentionDays);
+        UpdateAudioStatus();
         MeetingsDirBox.Text = new MeetingStore(s.MeetingsDirectory).BaseDirectory;
         UpdateMeetingEngineNote(s.MeetingEngine);
 
@@ -929,7 +936,97 @@ public partial class SettingsWindow : Window
         UpdateAiPanels();
     }
 
-    private void OnKeepAudioChanged(object sender, RoutedEventArgs e) => Save(s => s.KeepMeetingAudio = KeepAudioCheck.IsChecked == true);
+    // 要件: REQ-MTG-010
+    // 設計判断: DEC-MTG-139（裏返し。次の記録からの既定で、記録中の会議の値は変えない）
+    private void OnDeleteAudioChanged(object sender, RoutedEventArgs e) => Save(s => s.KeepMeetingAudio = DeleteAudioCheck.IsChecked != true);
+
+    // 要件: REQ-MTG-057
+    // 設計判断: DEC-MTG-143
+    /// <summary>
+    /// 録音を残す期間を変える。今すぐ消える録音があれば、件数・大きさ・残す件数・元に戻せないことを書いたダイアログで確かめ、
+    /// OK なら設定を変えて消す。キャンセルなら選択を元に戻す。消える録音がなければ確かめずに変える
+    /// </summary>
+    private void OnAudioRetentionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (loading || AudioRetentionCombo.SelectedItem is not ComboBoxItem { Tag: int days }) return;
+        var before = settings.Current.MeetingAudioRetentionDays;
+        if (days == before) return;
+        if (days > 0)
+        {
+            var store = host.Meetings.Store(settings.Current);
+            List<MeetingAudioEntry> entries;
+            try
+            {
+                entries = MeetingAudioCleanup.Entries(store.LoadAll(), store.BaseDirectory, host.Meetings.Current?.Id);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                entries = new();
+            }
+            var now = DateTimeOffset.Now;
+            var expired = MeetingAudioCleanup.Expired(entries, days, now);
+            if (expired.Count > 0)
+            {
+                var message = string.Format(Strings.Settings_AudioRetention_Confirm, HistoryPolicy.DaysLabel(days), expired.Count,
+                    MeetingAudioCleanup.FormatSize(MeetingAudioCleanup.TotalSize(expired)));
+                var skipped = MeetingAudioCleanup.SkippedOlderThan(entries, days, now);
+                if (skipped.Count > 0) message += "\n\n" + string.Format(Strings.Settings_AudioRetention_ConfirmSkipped, skipped.Count);
+                message += "\n\n" + Strings.Audio_CannotUndo + "\n\n" + Strings.Settings_AudioRetention_ConfirmQuestion;
+                if (MessageBox.Show(this, message, Strings.Settings_AudioRetention, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel)
+                    != MessageBoxResult.OK)
+                {
+                    loading = true;
+                    AudioRetentionCombo.SelectedItem = ((List<ComboBoxItem>)AudioRetentionCombo.ItemsSource).FirstOrDefault(i => (int)i.Tag == before);
+                    loading = false;
+                    return;
+                }
+                Save(s => s.MeetingAudioRetentionDays = days);
+                host.Meetings.PruneExpiredAudio();
+                UpdateAudioStatus();
+                return;
+            }
+        }
+        Save(s => s.MeetingAudioRetentionDays = days);
+        UpdateAudioStatus();
+    }
+
+    // 要件: REQ-MTG-056
+    private void OnManageAudio(object sender, RoutedEventArgs e)
+    {
+        host.ShowMeetingAudio(this);
+        UpdateAudioStatus();
+    }
+
+    private void OnMeetingAudioChanged(object? sender, IReadOnlyList<Meeting> deleted) => Dispatcher.BeginInvoke(UpdateAudioStatus);
+
+    private void OnMeetingStateChanged(object? sender, MeetingState state) => Dispatcher.BeginInvoke(UpdateAudioStatus);
+
+    /// <summary>読み込みの番号（最後に始めた読み込みの結果だけを出す）</summary>
+    private int audioStatusGeneration;
+
+    // 要件: REQ-MTG-056
+    /// <summary>残っている録音の件数と合計の大きさ（文字起こしが欠けている会議があればその件数も）。読み込みは UI スレッドの外で</summary>
+    private async void UpdateAudioStatus()
+    {
+        var mine = ++audioStatusGeneration;
+        var store = host.Meetings.Store(settings.Current);
+        var currentId = host.Meetings.Current?.Id;
+        List<MeetingAudioEntry> entries;
+        try
+        {
+            entries = await Task.Run(() => MeetingAudioCleanup.Entries(store.LoadAll(), store.BaseDirectory, currentId));
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            if (mine == audioStatusGeneration) AudioStatusText.Text = Strings.Meeting_ListLoadFailed;
+            return;
+        }
+        if (mine != audioStatusGeneration) return;
+        var text = string.Format(Strings.MeetingAudio_Summary, entries.Count, MeetingAudioCleanup.FormatSize(MeetingAudioCleanup.TotalSize(entries)));
+        var incomplete = entries.Count(x => !x.IsComplete);
+        if (incomplete > 0) text += " " + string.Format(Strings.Settings_AudioStatusIncomplete, incomplete);
+        AudioStatusText.Text = text;
+    }
 
     private void OnBrowseMeetingsFolder(object sender, RoutedEventArgs e)
     {
@@ -937,12 +1034,14 @@ public partial class SettingsWindow : Window
         if (dialog.ShowDialog(this) != true) return;
         Save(s => s.MeetingsDirectory = dialog.FolderName);
         MeetingsDirBox.Text = dialog.FolderName;
+        UpdateAudioStatus();
     }
 
     private void OnResetMeetingsFolder(object sender, RoutedEventArgs e)
     {
         Save(s => s.MeetingsDirectory = "");
         MeetingsDirBox.Text = MeetingStore.DefaultBaseDirectory;
+        UpdateAudioStatus();
     }
 
     private void OnOpenMeetingsFolder(object sender, RoutedEventArgs e) => OpenFolder(MeetingsDirBox.Text);
@@ -960,6 +1059,14 @@ public partial class SettingsWindow : Window
         {
             Dispatcher.BeginInvoke(() => OnSettingsChanged(sender, e));
             return;
+        }
+        // 要件: REQ-MTG-010（会議ノートの左下で既定を変えたら、こちらのチェックボックスもそろえる）
+        if (e.After.KeepMeetingAudio != e.Before.KeepMeetingAudio && DeleteAudioCheck.IsChecked != !e.After.KeepMeetingAudio)
+        {
+            var was = loading;
+            loading = true;
+            DeleteAudioCheck.IsChecked = !e.After.KeepMeetingAudio;
+            loading = was;
         }
         if (e.After.DictionaryText == e.Before.DictionaryText || DictionaryBox.IsKeyboardFocused || DictionaryBox.Text == e.After.DictionaryText) return;
         var wasLoading = loading;

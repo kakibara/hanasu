@@ -538,7 +538,7 @@
     <value>Riunione {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>L'app è stata chiusa durante la registrazione. I file audio ({0} / {1}) potrebbero essere stati conservati in parte.</value>
+    <value>L'app si è chiusa durante la registrazione.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Impossibile avviare la registrazione della riunione</value>

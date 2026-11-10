@@ -538,7 +538,7 @@
     <value>會議 {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>錄製期間應用程式已結束。音訊檔案（{0} / {1}）可能已保留部分內容。</value>
+    <value>錄製期間應用程式已結束。</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>無法開始錄製會議</value>

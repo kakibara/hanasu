@@ -732,12 +732,6 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
   <data name="Settings_Storage" xml:space="preserve">
     <value>Almacenamiento</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>Conservar los archivos de audio (me.wav / others.wav) después del procesamiento</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>Si está desactivado, el audio se elimina después de crear la transcripción y el acta (se conserva si la transcripción falla). Es WAV mono de 16 kHz, unos 115 MB por canal y hora.</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>Ubicación de guardado</value>
   </data>
@@ -1351,5 +1345,126 @@ Las actualizaciones desde la app reemplazan la carpeta entera, así que solo fun
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>Al detener la grabación, se aplican a la transcripción las reglas de reemplazo de "Diccionario y reglas", y el acta se crea a partir del texto resultante. El texto reconocido original también se conserva, así que puedes restaurarlo desde "Diccionario…" en Notas de reuniones.</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>Eliminar la grabación después de la transcripción</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>Si está activado, la grabación de la reunión (me.wav / others.wav) se elimina después de crear la transcripción y el acta. Si la transcripción está incompleta, se conserva. Durante la grabación, puedes cambiarlo para esa reunión en Notas de reuniones. El audio es WAV mono de 16 kHz, unos 115 MB por canal y hora.</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>Conservar las grabaciones durante</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>Las grabaciones anteriores a este periodo se eliminan automáticamente al iniciar la aplicación y después de procesar una reunión. Esto también se aplica a las reuniones cuya grabación elegiste conservar. No se eliminan las grabaciones de reuniones con la transcripción incompleta.</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>De ellas, {0} tienen la transcripción incompleta.</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>Se eliminarán ahora las grabaciones de hace más de {0}: {1} reuniones ({2}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>Se conservan {0} reuniones con la transcripción incompleta.</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>¿Quieres cambiar la configuración y eliminarlas?</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>Valor predeterminado para las reuniones que grabes a partir de ahora. Durante la grabación, puedes cambiarlo para esa reunión en el cuadro de grabación de la parte superior izquierda.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>Eliminar la grabación de esta reunión después de la transcripción</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>Activado: la grabación de esta reunión se elimina después de crear la transcripción y el acta (se conserva si la transcripción está incompleta). La configuración predeterminada no cambia.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>Desactivado: la grabación de esta reunión se conserva. La configuración predeterminada no cambia.</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>Eliminar grabación…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>Administrar grabaciones…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>Ya no queda ninguna grabación de esta reunión.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>No se puede eliminar durante la grabación o el procesamiento.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>Eliminar grabación — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>¿Eliminar la grabación de "{0}" ({1})?</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>El acta, la transcripción y las notas se conservan.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>Falta la transcripción de: {0}. Esa parte de la conversación no se conservará.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>Falta parte de la transcripción de esta reunión. Esa parte de la conversación no se conservará.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>Esta reunión no tiene transcripción. Si eliminas la grabación, no quedará ningún registro de la conversación.</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>Se eliminó la grabación de "{0}".</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>No se pudieron eliminar algunos archivos de la grabación. Los archivos restantes se conservan.
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>Los archivos de audio se eliminan de forma permanente (no se mueven a la Papelera de reciclaje). Esta acción no se puede deshacer.</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>Administrar grabaciones</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>Grabaciones restantes: {0} reuniones, {1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>No queda ninguna grabación.</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>Sin transcripción</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>Transcripción incompleta</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>Reuniones con grabación</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>Eliminar las grabaciones seleccionadas…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>Eliminar las grabaciones de hace más de {0} días…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>Eliminar todas las grabaciones…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>Si la ubicación donde se guardan las reuniones se sincroniza con OneDrive, iCloud Drive u otro servicio similar, las grabaciones eliminadas pueden permanecer un tiempo en los elementos eliminados de ese servicio.</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>¿Eliminar las grabaciones de {0} reuniones ({1})?</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>De ellas, {0} tienen la transcripción incompleta. Esa parte de la conversación no se conservará.</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>Se conservan {0} reuniones con la transcripción incompleta ({1}). Puedes seleccionarlas para eliminarlas.</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>Se eliminaron las grabaciones de {0} reuniones.</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>No se pudieron eliminar por completo las grabaciones de {0} reuniones. Los archivos restantes se conservan.</value>
   </data>
 </root>

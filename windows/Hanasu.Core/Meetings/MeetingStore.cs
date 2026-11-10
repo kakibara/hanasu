@@ -142,13 +142,17 @@ public sealed class MeetingStore
             .ToList();
     }
 
-    /// <summary>アプリが落ちたり終了したりして「記録中」「処理中」のまま残った会議を「失敗」にする（起動時に 1 回呼ぶ）</summary>
+    // 設計判断: DEC-MTG-018, DEC-MTG-140
+    /// <summary>
+    /// アプリが落ちたり終了したりして「記録中」「処理中」のまま残った会議を「失敗」にする（起動時に 1 回呼ぶ）。
+    /// 録音は消さない。「音声ファイルは残しています」はエラーの文に入れず、録音があれば表示のときに出す
+    /// </summary>
     public void MarkInterruptedMeetings()
     {
         foreach (var meeting in LoadAll().Where(m => m.Status is MeetingStatus.Recording or MeetingStatus.Processing))
         {
             meeting.Status = MeetingStatus.Failed;
-            meeting.ErrorMessage = string.Format(Strings.Meeting_Interrupted, MeAudioFile, OthersAudioFile);
+            meeting.ErrorMessage = Strings.Meeting_Interrupted;
             try { Save(meeting); } catch (IOException) { }
         }
     }
@@ -170,14 +174,66 @@ public sealed class MeetingStore
     /// <summary>会議のフォルダがあるか（削除した会議を保存し直さないため）</summary>
     public bool Exists(Meeting meeting) => Directory.Exists(DirectoryOf(meeting));
 
-    /// <summary>チャンネルの音声ファイルを消す（設定で「音声を残さない」とき）</summary>
-    public void DeleteAudio(Meeting meeting)
+    // 要件: REQ-MTG-055
+    // 設計判断: DEC-MTG-140
+    /// <summary>
+    /// 録音のファイル名。どちらの OS でも 4 つを対象にする（Mac 版は m4a、Windows 版は wav。DEC-MTG-108 で同じ会議のフォルダを開けるため）
+    /// </summary>
+    public static readonly IReadOnlyList<string> AudioFileNames = ["me.m4a", "others.m4a", MeAudioFile, OthersAudioFile];
+
+    // 要件: REQ-MTG-055
+    // 設計判断: DEC-MTG-140
+    /// <summary>会議のフォルダにある録音のファイル（4 つの名前のうち、あるもの）</summary>
+    public static IReadOnlyList<string> AudioFilesIn(string meetingDirectory) =>
+        AudioFileNames.Select(name => Path.Combine(meetingDirectory, name)).Where(File.Exists).ToList();
+
+    /// <summary>会議の録音のファイル（あるものだけ）</summary>
+    public IReadOnlyList<string> AudioFiles(Meeting meeting) => AudioFilesIn(DirectoryOf(meeting));
+
+    /// <summary>会議に録音が残っているか</summary>
+    public bool HasAudio(Meeting meeting) => AudioFiles(meeting).Count > 0;
+
+    /// <summary>会議の録音の大きさの合計（バイト）。読めないファイルは 0 として数える</summary>
+    public long AudioSize(Meeting meeting) => SizeOf(AudioFiles(meeting));
+
+    /// <summary>ファイルの大きさの合計（バイト）。消えた・読めないファイルは 0 として数える</summary>
+    public static long SizeOf(IEnumerable<string> files)
     {
-        foreach (var channel in new[] { MeetingChannel.Me, MeetingChannel.Others })
+        long total = 0;
+        foreach (var file in files)
         {
-            var path = AudioPath(meeting, channel);
-            try { if (File.Exists(path)) File.Delete(path); } catch (Exception e) when (e is IOException or UnauthorizedAccessException) { }
+            try { total += new FileInfo(file).Length; }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException) { }
         }
+        return total;
+    }
+
+    // 要件: REQ-MTG-010, REQ-MTG-055
+    // 設計判断: DEC-MTG-140
+    /// <summary>
+    /// 会議の録音（4 つの名前）を完全に消す（ごみ箱に入れない）。meeting.json は書き換えない。
+    /// もうないファイルは消せたものとして扱う。消せなかったファイルを返す（空なら全部消せた）
+    /// </summary>
+    public IReadOnlyList<MeetingAudioDeleteFailure> DeleteAudio(Meeting meeting)
+    {
+        var failures = new List<MeetingAudioDeleteFailure>();
+        foreach (var name in AudioFileNames)
+        {
+            var path = Path.Combine(DirectoryOf(meeting), name);
+            try
+            {
+                if (File.Exists(path)) File.Delete(path);
+            }
+            catch (Exception e) when (e is FileNotFoundException or DirectoryNotFoundException)
+            {
+                // もうない（ほかで消した）。消せたものとして扱う
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                failures.Add(new MeetingAudioDeleteFailure(meeting.Id, path, e.Message));
+            }
+        }
+        return failures;
     }
 
     private static void WriteAtomically(string path, string text)

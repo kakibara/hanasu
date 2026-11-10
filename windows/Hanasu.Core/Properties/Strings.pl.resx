@@ -538,7 +538,7 @@
     <value>Spotkanie {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>Aplikacja została zamknięta podczas nagrywania. Pliki audio ({0} / {1}) mogły zostać częściowo zachowane.</value>
+    <value>Aplikacja została zamknięta podczas nagrywania.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Nie można rozpocząć nagrywania spotkania</value>
