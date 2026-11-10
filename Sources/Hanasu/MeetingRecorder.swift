@@ -278,7 +278,8 @@ final class MeetingRecorder: ObservableObject {
                 meeting.errorMessage = meeting.errorMessage.map { $0 + "\n" + message } ?? message
             }
         }
-        meeting.transcriptionFailedChannels = failedChannels.isEmpty ? nil : failedChannels
+        // 失敗がなくても空の配列を書く（キーがないのは、この機能より前の会議だけにする。DEC-MTG-142）
+        meeting.transcriptionFailedChannels = failedChannels
         if let point {
             mine = MeetingSleepCut.phrases(mine, before: point)
             theirs = MeetingSleepCut.phrases(theirs, before: point)

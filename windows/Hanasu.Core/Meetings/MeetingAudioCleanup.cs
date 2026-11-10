@@ -71,6 +71,9 @@ public static class MeetingAudioCleanup
     {
         if (meeting.Utterances.Count == 0) return MeetingTranscriptState.None;
         if (meeting.TranscriptionFailedChannels is { Count: > 0 } || meeting.Status == MeetingStatus.Failed) return MeetingTranscriptState.Partial;
+        // この機能より前の会議（キーがない）は、一部のチャンネルだけ失敗してもエラーの文に書くだけだった。
+        // エラーの文があれば「一部」として録音を守る（文言では見分けない）
+        if (meeting.TranscriptionFailedChannels is null && !string.IsNullOrEmpty(meeting.ErrorMessage)) return MeetingTranscriptState.Partial;
         return MeetingTranscriptState.Complete;
     }
 

@@ -42,7 +42,8 @@ public sealed class MeetingPostProcessor
         var failedChannels = new List<MeetingChannel>();
         meeting.Status = MeetingStatus.Processing;
         meeting.ErrorMessage = null;
-        meeting.TranscriptionFailedChannels = null;
+        // 失敗がなくても空の配列を書く（キーがないのは、この機能より前の会議だけにする。DEC-MTG-142）
+        meeting.TranscriptionFailedChannels = new List<MeetingChannel>();
         Store.Save(meeting);
 
         var offsets = meeting.AudioStartOffsets ?? new Dictionary<string, double>();

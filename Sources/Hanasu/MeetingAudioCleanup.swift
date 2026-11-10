@@ -55,6 +55,9 @@ enum MeetingAudioCleanup {
         if meeting.utterances.isEmpty { return .none }
         let failed = meeting.transcriptionFailedChannels ?? []
         if !failed.isEmpty || meeting.status == .failed { return .partial(failedChannels: failed) }
+        // この機能より前の会議（キーがない）は、一部のチャンネルだけ失敗してもエラーの文に書くだけだった。
+        // エラーの文があれば、どのチャンネルが欠けたかは分からないが「一部」として録音を守る（文言では見分けない）
+        if meeting.transcriptionFailedChannels == nil && meeting.errorMessage != nil { return .partial(failedChannels: []) }
         return .complete
     }
 

@@ -112,6 +112,18 @@ enum MeetingAudioCLI {
         c.check(MeetingAudioCleanup.transcriptState(of: partial) == .partial(failedChannels: [.me]), "状態: 一部（自分が欠けた）")
         c.check(MeetingAudioCleanup.transcriptState(of: failedStatus) == .partial(failedChannels: []), "状態: 失敗で発言がある会議は一部")
         c.check(MeetingAudioCleanup.transcriptState(of: empty) == .none, "状態: 発言 0 件はなし")
+        var legacy = meeting("legacy", daysAgo: 60)
+        legacy.errorMessage = "Whisper で文字起こしできなかった部分があります（音声ファイルは残しています）。"
+        c.check(MeetingAudioCleanup.transcriptState(of: legacy) == .partial(failedChannels: []),
+                "状態: この機能より前の会議（キーがない）でエラーの文があれば一部")
+        var minutesError = meeting("minutes-error", daysAgo: 60, failed: [])
+        minutesError.errorMessage = "議事録を作れませんでした"
+        c.check(MeetingAudioCleanup.transcriptState(of: minutesError) == .complete,
+                "状態: 新しい会議（空の配列）は議事録のエラーがあってもすべて")
+        let legacyEntries = [MeetingAudioEntry(meeting: legacy, size: 1, state: MeetingAudioCleanup.transcriptState(of: legacy))]
+        c.check(MeetingAudioCleanup.bulkTargets(legacyEntries, olderThan: 30, now: now).targets.isEmpty
+                && MeetingAudioCleanup.expired(legacyEntries, retentionDays: 30, now: now).targets.isEmpty,
+                "この機能より前に一部が失敗した会議は、30 日より前・保存期間でも消さない")
 
         // 録音のファイルだけを消す（REQ-MTG-055・DEC-MTG-140）
         let files = meeting("files", daysAgo: 3)

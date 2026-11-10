@@ -206,7 +206,8 @@ public class MeetingAudioDeletionTests
         var store = controller.Store(settings);
         var saved = store.Load(meeting.Id)!;
         Assert.Empty(saved.Utterances);
-        Assert.Null(saved.TranscriptionFailedChannels);
+        Assert.NotNull(saved.TranscriptionFailedChannels);
+        Assert.Empty(saved.TranscriptionFailedChannels!);
         Assert.Equal(MeetingTranscriptState.None, MeetingAudioCleanup.TranscriptState(saved));
         Assert.True(store.HasAudio(saved));
     }
@@ -239,6 +240,10 @@ public class MeetingAudioDeletionTests
         Assert.Equal(MeetingTranscriptState.Partial, MeetingAudioCleanup.TranscriptState(new Meeting { Status = MeetingStatus.Failed, Utterances = one }));
         Assert.Equal(MeetingTranscriptState.None, MeetingAudioCleanup.TranscriptState(new Meeting { Status = MeetingStatus.Failed }));
         Assert.Equal(MeetingTranscriptState.None, MeetingAudioCleanup.TranscriptState(new Meeting { Status = MeetingStatus.Done }));
+
+        // この機能より前の会議（キーがない）: エラーの文があれば一部として守る。新しい会議（空の配列）は議事録のエラーがあってもすべて
+        Assert.Equal(MeetingTranscriptState.Partial, MeetingAudioCleanup.TranscriptState(new Meeting { Status = MeetingStatus.Done, Utterances = one, ErrorMessage = "Whisper で文字起こしできなかった部分があります" }));
+        Assert.Equal(MeetingTranscriptState.Complete, MeetingAudioCleanup.TranscriptState(new Meeting { Status = MeetingStatus.Done, Utterances = one, ErrorMessage = "議事録を作れませんでした", TranscriptionFailedChannels = [] }));
     }
 
     [Fact]

@@ -328,6 +328,7 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             if transcription == .whisper { try await TranscriptionEngineCLI.ensureWhisperModel(settings.whisperModel) }
             let recorder = MeetingRecorder()
             let started = Date()
+            var liveFailed: [MeetingChannel] = []
             for (channel, url) in zip([MeetingChannel.me, .others], files) {
                 let file = try AVAudioFile(forReading: url)
                 let transcriber = ChannelTranscriber(
@@ -342,15 +343,18 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
                     transcriber.append(buffer)
                 }
                 phrases[channel] = await transcriber.finish()
+                // 設計判断: DEC-MTG-142（失敗がなくても空の配列を書く）
+                if transcriber.recognitionFailed { liveFailed.append(channel) }
                 meeting.duration = max(meeting.duration, Double(file.length) / file.processingFormat.sampleRate)
             }
+            meeting.transcriptionFailedChannels = liveFailed
             if !transcription.isLive {
                 recorder.onStateChange = { state in if case .processing(let message) = state { print(message) } }
                 let result = await recorder.transcribeRecordedAudio(meeting, engine: transcription, offsets: [.me: 0, .others: 0])
                 phrases = [.me: result.me, .others: result.others]
                 if let error = result.error { print("⚠️ \(error)"); meeting.errorMessage = error }
                 // 設計判断: DEC-MTG-142
-                meeting.transcriptionFailedChannels = result.failedChannels.isEmpty ? nil : result.failedChannels
+                meeting.transcriptionFailedChannels = result.failedChannels
             }
             if ProcessInfo.processInfo.environment["HANASU_DEBUG"] != nil {
                 for p in (phrases[.me] ?? []) + (phrases[.others] ?? []) {
