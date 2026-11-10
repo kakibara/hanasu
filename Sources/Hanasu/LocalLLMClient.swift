@@ -93,8 +93,14 @@ struct LocalLLMClient {
         }
     }
 
-    private func generate(system: String, userText: String, purpose: Purpose, endpoint: LocalLLMServer.Endpoint) async throws -> String {
+    private func generate(system rawSystem: String, userText rawUserText: String, purpose: Purpose, endpoint: LocalLLMServer.Endpoint) async throws -> String {
         let maxOutput = maxOutputTokens(purpose)
+        // 要件: REQ-DIC-041
+        // 設計判断: DEC-DIC-184
+        // 入りきらないときは、文字起こしを要約させる前に、スクリーンショットの文字を外す
+        let (system, userText) = try await ScreenOCRBudget.fit(
+            system: rawSystem, userText: rawUserText, contextLength: model.contextLength, maxOutputTokens: maxOutput,
+            countTokens: { try await countTokens($0, endpoint: endpoint) })
         let fitter = LongInputFitter(
             contextLength: model.contextLength, maxOutputTokens: maxOutput,
             countTokens: { try await countTokens($0, endpoint: endpoint) },

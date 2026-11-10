@@ -46,6 +46,7 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 | **Snippets** | Say "email signature" to insert saved text exactly as you wrote it. Snippets are never sent to the AI. |
 | **Dictionary** | Add proper nouns and replacement rules such as `ストックマーク => Stockmark`. The rules are also applied to meeting transcripts. From a meeting in Meeting Notes, the AI can suggest new entries from that meeting (on Mac, also from your history and recent meetings), and you add only the ones you pick. |
 | **Screen context** *(opt-in)* | Hanasu reads the window title and the text around your cursor, so names match what is already on screen. Password fields are never read. |
+| **Screenshot text** *(opt-in, Mac)* | Hanasu takes a screenshot of all your displays, reads the text on your Mac, and passes only that text to the AI, so names and model numbers in other windows (for example "QX-7s") are spelled the way they appear. The image is never sent or saved. Turn it on or off for one recording with the button on the HUD. Needs the Screen Recording permission. |
 | **Choose your mic** *(Mac)* | Pick the microphone in Settings, or switch it from the mic button on the HUD without stopping the recording. |
 | **History** | Search past results and retry failed ones. History is kept for 30 days by default, and you can change that in Settings. On Mac, press <kbd>⌥⇧ V</kbd> to paste the last result again. |
 | **Nowhere to paste?** | If no text field has focus (for example, the desktop is in front), Hanasu keeps the result on screen instead of pasting it. Copy it from there, or just press <kbd>⌘V</kbd> where you want it (you can choose whether the result stays on the clipboard). |
@@ -134,7 +135,7 @@ Get the latest build from [**Releases**](https://github.com/kakibara/hanasu/rele
 1. Unzip the file and move `Hanasu.app` to **Applications**.
 2. The app is self-signed and not notarized, so macOS blocks it the first time. Click **Done**, then open **System Settings → Privacy & Security** and click **Open Anyway**.
    You can also run `xattr -dr com.apple.quarantine /Applications/Hanasu.app` instead.
-3. When asked, allow **Microphone**, **Speech Recognition** and **Accessibility**. Accessibility is needed to paste with ⌘V.
+3. When asked, allow **Microphone**, **Speech Recognition** and **Accessibility**. Accessibility is needed to paste with ⌘V. **Screen Recording** is asked for only if you turn on screenshot text.
 
 </details>
 
@@ -179,7 +180,7 @@ You can change every shortcut in Settings. The full user guide (in Japanese) is 
 ## Privacy
 
 - **Audio stays on your device by default.** Speech recognition, Whisper and speaker diarization all run locally.
-- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask and the meeting AI chat.
+- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, text read from a screenshot of your screen (never the image), and meeting transcripts for Ask and the meeting AI chat.
 - **Local and Apple keep text on your device too.** If you choose either one, nothing is sent to an AI service. The only download is the model itself.
 - **Audio goes to Google only if you choose it.** If you select the Gemini speech engine, the recorded audio is sent to Google.
 - **Meetings are plain files.** They are saved as JSON and Markdown under `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac and Windows use the same format.

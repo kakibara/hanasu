@@ -13,7 +13,10 @@ enum PromptsCLI {
             extraInstructions: "語尾は「です」にする",
             dictionaryRules: [UserDictionary.Rule(sources: ["ジェミニ", "ジェミナイ"], target: "Gemini")],
             appStyle: AppStyle(bundleID: "com.tinyspeck.slackmacgap", name: "Slack", preset: .chat, rules: "絵文字は使わない"),
-            screenContext: ScreenContext(appName: "Slack", windowTitle: "#general", textBefore: "明日の会議の件です。"))
+            screenContext: ScreenContext(
+                appName: "Slack", windowTitle: "#general", textBefore: "明日の会議の件です。",
+                // 要件: REQ-DIC-041
+                ocr: ScreenOCR(terms: ["J3", "Gemini", "資料"], lines: ["J3 の資料（第 2 版）"])))
         func section(_ title: String, _ body: String) {
             print("===== \(title)")
             print(body)

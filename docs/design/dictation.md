@@ -403,6 +403,18 @@ Wispr Flow の Context Awareness、Aqua Voice の画面コンテキスト、Will
 - user content の `<transcript>` の前に `<screen_context>` のブロックを置き（`ScreenContext.promptBlock`）、画面の文字の `<` は全角にする（`ScreenContext.escape`）。
 - 文脈を渡すときだけ、system instruction の末尾に注意書きを足す（`ScreenContext.instruction`。整形用と英訳用で少し変える）。中身は DEC-DIC-065・DEC-DIC-066。
 
+**スクリーンショットの文字**（既定はオフ。REQ-DIC-041・042、計画は [plans/screen-ocr.md](../plans/screen-ocr.md)）
+
+AX の文脈では拾えない、横に開いた資料・別のウインドウ・別の画面の表記（型番・固有名詞）に合わせるため、すべての画面を撮って Mac の中で OCR し、読み取った文字だけを AI に渡す。画像は送らない。実装は `ScreenSnapshot.swift`、自己テストは `ScreenSnapshotSelfTest.swift`。
+
+- 流れ: 録音を始めたとき（`DictationController.startDictation`）に、設定の既定（`ScreenContextSettings.useScreenshot`）と画面収録の許可（`ScreenRecordingPermission`）を見る。使われる録音（`ScreenSnapshotPolicy`）なら `ScreenSnapshotCapture.begin` が裏で撮って読む。止めたとき（`screenContextForAI`）に、そのときもボタンがオンなら最大 2 秒待って受け取り、`ScreenContext.ocr` に入れる。HUD でオフにしたとき・Esc・エラーでは取り消す（`discardScreenshot`）。
+- 撮る（`ScreenSnapshotReader.capture`）: `SCShareableContent` のすべての画面を、`SCContentFilter` で Hanasu・除外アプリ・いつも除くシステムの部分（`ScreenSnapshotFilter`）を除いて、点の 2 倍で 1 枚ずつ撮る。
+- 読む（`ScreenSnapshotReader.recognize`）: Vision の `RecognizeTextRequest`（accurate）。座標を画面の点の座標に直し、入力先のウインドウ（前面のアプリのいちばん手前の画面に出ているウインドウ）の中かを決める。
+- 並べる（`ScreenSnapshotLayout`）: 行から「語の一覧」（英数字を含む語・カタカナの語・漢字の並び）と「行」を作り、AI ごとの上限（`ScreenSnapshotLayout.limit`）に収める。語の一覧を先に、入力先のウインドウの外を先に詰める（DEC-DIC-183・184）。
+- プロンプト: `<screen_context>` とは別の `<screen_ocr>`（`ScreenContext.ocrBlock`）を `<transcript>` の前に置き、system instruction に `screen.ocr` を足す（DEC-DIC-186）。ローカル・fm で文脈に入らないときは、文字起こしを要約させる前に外す（`ScreenOCRBudget`）。
+- HUD: 許可があるときだけ、録音中の 2 行目にボタン（`ScreenshotButton`）を出す。設定の欄（`ScreenContextSettingsSection`）でトグルをオンにしたときに許可を求め、会議の記録中は求めない（DEC-DIC-189）。
+- 確かめ方: `--test-screen-ocr`、`--dump-screen-ocr`、`--refine-text … --context <JSON に ocrText> --show-prompt`。測った時間は [verification/dictation.md](../verification/dictation.md) 20。
+
 ### 4.9 音声入力の履歴
 
 類似製品の口コミで多い不満「入力先がずれて結果が消えた」「整形に失敗した文を取り戻したい」への対応（Wispr Flow・VoiceInk の History を参考にした）。コードは `DictationHistory.swift`（保存）、`DictationHistoryWindow.swift`（ウインドウ・メニュー・再入力・設定の「履歴」）、`DictationHistoryCLI.swift`（確認用 CLI）にまとめ、既存のファイルからは呼び出すだけにしている。
@@ -630,11 +642,12 @@ Wispr Flow や Typeless は辞書を自動で学習する。Hanasu では、自�
 | マイク | 録音 | `AVCaptureDevice.requestAccess(for: .audio)`（Info.plist: `NSMicrophoneUsageDescription`） |
 | 音声認識 | 標準エンジンの利用 | `SFSpeechRecognizer.requestAuthorization`（Info.plist: `NSSpeechRecognitionUsageDescription`） |
 | アクセシビリティ | ⌘V の送信、画面の文脈の読み取り（オンのときだけ） | `AXIsProcessTrustedWithOptions` でダイアログ → ユーザーがシステム設定で許可。初回の起動ではダイアログを出さず、オンボーディングの最後のページのボタンで求める（DEC-COM-093） |
+| 画面収録 | スクリーンショットの文字（オンのときだけ。REQ-DIC-041） | 設定の「AI」→「画面の文脈」のトグルをオンにしたときに `CGRequestScreenCaptureAccess` で求める。会議の記録中・録音中は求めない（DEC-DIC-189）。オンボーディングでは求めない |
 | ネットワーク | Gemini API・Claude API | サンドボックスなしのため不要 |
 
 ## 7. セキュリティ・プライバシー
 
-- 音声はオンデバイスで処理し、外部には送らない（Mac 標準・Whisper）。文字起こしのエンジンに Gemini を選んだときだけ、録った音声を Gemini に送る。設定画面にそのことを書く（4.10）。整形・英訳で Gemini に送るのは、認識後のテキストと入力先アプリ名（OFF 可）・ユーザー辞書・追加ルール・アプリ別の文体ルール。画面の文脈をオンにしたときは、ウインドウのタイトルと入力欄のカーソル前後の文章（各 500 文字まで）も送る（4.8 参照）。選択を声で編集するときは、選択した文章も送る（4.5）。
+- 音声はオンデバイスで処理し、外部には送らない（Mac 標準・Whisper）。文字起こしのエンジンに Gemini を選んだときだけ、録った音声を Gemini に送る。設定画面にそのことを書く（4.10）。整形・英訳で Gemini に送るのは、認識後のテキストと入力先アプリ名（OFF 可）・ユーザー辞書・追加ルール・アプリ別の文体ルール。画面の文脈をオンにしたときは、ウインドウのタイトルと入力欄のカーソル前後の文章（各 500 文字まで）も送る（4.8 参照）。スクリーンショットの文字をオンにしたときは、すべての画面から読み取った文字（AI ごとに 500〜4,000 文字まで。画像は送らない）も送る（4.8）。選択を声で編集するときは、選択した文章も送る（4.5）。
 - API キー（Gemini・Claude）はキーチェーン（`kSecClassGenericPassword`）に保存。UserDefaults やログには残さない。守れる範囲と、そのほかの調査の結果は [security.md](security.md)。
 - 整形などの AI に Claude を選んだときは、Gemini に送るのと同じもの（文字起こしの結果・辞書・アプリ名など。音声は送らない）を Claude に送る（3.2.1）。
 - サービスアカウントは鍵ファイルのパスだけを保存し、中身はアプリに取り込まない。アクセストークンはメモリ上だけに置く。
@@ -659,7 +672,9 @@ mac-typeless/
 │   ├── Resources/Prompts/         # プロンプトの文面（<言語>.json。Windows 版も読む）
 │   ├── ScreenContext.swift        # 画面の文脈の読み取り（AX）・プロンプト・設定
 │   ├── ScreenContextSettingsView.swift # 設定画面の「画面の文脈」の欄
-│   ├── ScreenContextCLI.swift     # 画面の文脈の確認用 CLI
+│   ├── ScreenContextCLI.swift     # 画面の文脈・スクリーンショットの文字の確認用 CLI
+│   ├── ScreenSnapshot.swift       # スクリーンショットの文字（撮る・OCR・並べる・使うかの判定）
+│   ├── ScreenSnapshotSelfTest.swift # --test-screen-ocr
 │   ├── ServiceAccount.swift       # サービスアカウント → アクセストークン（JWT/RS256）
 │   ├── TextInserter.swift         # クリップボード + ⌘V
 │   ├── PasteTarget.swift          # 入力できる場所があるかの判定（AX）と、そのときの設定

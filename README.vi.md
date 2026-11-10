@@ -48,6 +48,7 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 | **Đoạn mẫu** | Nói "chữ ký email" để chèn đúng nguyên văn đoạn văn bản bạn đã lưu. Đoạn mẫu không bao giờ được gửi đến AI. |
 | **Từ điển** | Thêm danh từ riêng và quy tắc thay thế như `ストックマーク => Stockmark`. Quy tắc thay thế cũng được áp dụng cho bản chép lời cuộc họp. Khi mở một cuộc họp trong Ghi chép cuộc họp, AI có thể gợi ý mục mới từ chính cuộc họp đó (trên Mac, còn từ lịch sử và các cuộc họp gần đây của bạn), và bạn chỉ thêm những mục mình chọn. |
 | **Ngữ cảnh màn hình** *(tùy chọn bật)* | Hanasu đọc tiêu đề cửa sổ và văn bản quanh con trỏ để tên riêng khớp với những gì đã có trên màn hình. Ô mật khẩu không bao giờ bị đọc. |
+| **Chữ trên ảnh chụp màn hình** *(tùy chọn bật, Mac)* | Hanasu chụp tất cả màn hình của bạn, đọc chữ ngay trên Mac và chỉ gửi phần chữ đó cho AI, để tên riêng và số hiệu mẫu ở các cửa sổ khác (ví dụ “QX-7s”) được viết đúng như trên màn hình. Hình ảnh không bao giờ được gửi đi hay lưu lại. Bạn có thể bật hoặc tắt cho từng lần ghi âm bằng nút trên HUD. Cần quyền Ghi màn hình. |
 | **Chọn micrô** *(Mac)* | Chọn micrô trong Cài đặt, hoặc đổi micrô bằng nút micrô trên HUD mà không cần dừng ghi âm. |
 | **Lịch sử** | Tìm kiếm các kết quả trước đây và thử lại những lần thất bại. Theo mặc định, lịch sử được lưu 30 ngày, bạn có thể thay đổi trong Cài đặt. Trên Mac, nhấn <kbd>⌥⇧ V</kbd> để dán lại kết quả gần nhất. |
 | **Không có chỗ để dán?** | Nếu không có ô văn bản nào đang được chọn (ví dụ, màn hình nền đang ở phía trước), Hanasu giữ kết quả trên màn hình thay vì dán. Hãy sao chép từ đó, hoặc chỉ cần nhấn <kbd>⌘V</kbd> ở nơi bạn muốn (bạn có thể chọn có giữ kết quả trong bảng nhớ tạm hay không). |
@@ -136,7 +137,7 @@ Tải bản mới nhất từ [**Releases**](https://github.com/kakibara/hanasu/
 1. Giải nén tệp và di chuyển `Hanasu.app` vào **Ứng dụng**.
 2. Ứng dụng được tự ký và chưa được Apple công chứng (notarize), nên macOS sẽ chặn ở lần mở đầu tiên. Bấm **Xong**, sau đó mở **Cài đặt hệ thống → Quyền riêng tư & Bảo mật** và bấm **Vẫn mở**.
    Bạn cũng có thể chạy `xattr -dr com.apple.quarantine /Applications/Hanasu.app` thay vào đó.
-3. Khi được hỏi, hãy cho phép **Micrô**, **Nhận dạng giọng nói** và **Trợ năng**. Quyền Trợ năng là cần thiết để dán bằng ⌘V.
+3. Khi được hỏi, hãy cho phép **Micrô**, **Nhận dạng giọng nói** và **Trợ năng**. Quyền Trợ năng là cần thiết để dán bằng ⌘V. Quyền **Ghi màn hình** chỉ được hỏi khi bạn bật chữ trên ảnh chụp màn hình.
 
 </details>
 
@@ -181,7 +182,7 @@ Bạn có thể thay đổi mọi phím tắt trong Cài đặt. Hướng dẫn 
 ## Quyền riêng tư
 
 - **Âm thanh mặc định ở lại trên thiết bị của bạn.** Nhận dạng giọng nói, Whisper và phân tách người nói đều chạy cục bộ.
-- **AI nhận văn bản, không nhận âm thanh.** Gemini hoặc Claude nhận bản chép lời. Tùy theo cài đặt, AI cũng có thể nhận tên ứng dụng bạn đang gõ, ngữ cảnh màn hình và bản chép lời cuộc họp cho tính năng Hỏi đáp và trò chuyện với AI trong cuộc họp.
+- **AI nhận văn bản, không nhận âm thanh.** Gemini hoặc Claude nhận bản chép lời. Tùy theo cài đặt, AI cũng có thể nhận tên ứng dụng bạn đang gõ, ngữ cảnh màn hình, chữ đọc được từ ảnh chụp màn hình (không bao giờ gửi hình ảnh) và bản chép lời cuộc họp cho tính năng Hỏi đáp và trò chuyện với AI trong cuộc họp.
 - **Cục bộ và Apple cũng giữ văn bản trên thiết bị của bạn.** Nếu bạn chọn một trong hai, không có gì được gửi đến dịch vụ AI nào. Thứ duy nhất được tải về là chính mô hình.
 - **Âm thanh chỉ được gửi đến Google nếu bạn chọn.** Nếu bạn chọn công cụ nhận dạng giọng nói Gemini, âm thanh đã ghi sẽ được gửi đến Google.
 - **Cuộc họp là các tệp thông thường.** Chúng được lưu dưới dạng JSON và Markdown trong `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac và Windows dùng cùng một định dạng.

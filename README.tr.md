@@ -48,6 +48,7 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herk
 | **Hazır metinler** | "e-posta imzası" dediğinizde kaydettiğiniz metin tam yazdığınız gibi eklenir. Hazır metinler asla yapay zekâya gönderilmez. |
 | **Sözlük** | Özel adlar ve `ストックマーク => Stockmark` gibi değiştirme kuralları ekleyin. Değiştirme kuralları toplantı dökümlerine de uygulanır. Toplantı Notları'nda açtığınız bir toplantı için yapay zekâ o toplantıdan yeni girdiler önerebilir (Mac'te ayrıca geçmişinizden ve son toplantılarınızdan); yalnızca seçtiklerinizi eklersiniz. |
 | **Ekran bağlamı** *(isteğe bağlı)* | Hanasu pencere başlığını ve imlecin çevresindeki metni okur; böylece adlar ekranda zaten yazılı olanlarla eşleşir. Parola alanları asla okunmaz. |
+| **Ekran görüntüsündeki metin** *(isteğe bağlı, Mac)* | Hanasu tüm ekranlarınızın görüntüsünü alır, metni Mac'inizde okur ve yapay zekâya yalnızca bu metni iletir; böylece başka pencerelerdeki adlar ve model numaraları (örneğin "QX-7s") ekranda göründüğü gibi yazılır. Görüntü asla gönderilmez ve saklanmaz. HUD'daki düğmeyle tek bir kayıt için açıp kapatabilirsiniz. Ekran Kaydı izni gerekir. |
 | **Mikrofonunuzu seçin** *(Mac)* | Mikrofonu Ayarlar'dan seçin ya da kaydı durdurmadan HUD'daki mikrofon düğmesinden değiştirin. |
 | **Geçmiş** | Önceki sonuçlarda arama yapın ve başarısız olanları yeniden deneyin. Geçmiş varsayılan olarak 30 gün saklanır; bunu Ayarlar'dan değiştirebilirsiniz. Mac'te son sonucu yeniden yapıştırmak için <kbd>⌥⇧ V</kbd> tuşlarına basın. |
 | **Yapıştıracak yer yok mu?** | Odakta bir metin alanı yoksa (örneğin masaüstü öndeyse) Hanasu sonucu yapıştırmak yerine ekranda tutar. Oradan kopyalayın ya da istediğiniz yerde <kbd>⌘V</kbd> tuşlarına basın (sonucun panoda kalıp kalmayacağını seçebilirsiniz). |
@@ -136,7 +137,7 @@ En son sürümü [**Releases**](https://github.com/kakibara/hanasu/releases/late
 1. Zip dosyasını açın ve `Hanasu.app` uygulamasını **Uygulamalar** klasörüne taşıyın.
 2. Uygulama kendinden imzalıdır ve notarize edilmemiştir, bu yüzden macOS ilk seferde açılmasını engeller. **Bitti**'ye tıklayın, ardından **Sistem Ayarları → Gizlilik ve Güvenlik** bölümünü açıp **Yine de Aç**'a tıklayın.
    Bunun yerine `xattr -dr com.apple.quarantine /Applications/Hanasu.app` komutunu da çalıştırabilirsiniz.
-3. İstendiğinde **Mikrofon**, **Konuşma Tanıma** ve **Erişilebilirlik** izinlerini verin. Erişilebilirlik izni ⌘V ile yapıştırmak için gereklidir.
+3. İstendiğinde **Mikrofon**, **Konuşma Tanıma** ve **Erişilebilirlik** izinlerini verin. Erişilebilirlik izni ⌘V ile yapıştırmak için gereklidir. **Ekran Kaydı** izni yalnızca ekran görüntüsündeki metni açarsanız istenir.
 
 </details>
 
@@ -181,7 +182,7 @@ Tüm kısayolları Ayarlar'dan değiştirebilirsiniz. Kullanıcı kılavuzunun t
 ## Gizlilik
 
 - **Ses varsayılan olarak cihazınızda kalır.** Konuşma tanıma, Whisper ve konuşmacı ayrımı tamamen yerel olarak çalışır.
-- **Yapay zekâya ses değil, metin gider.** Gemini veya Claude dökümü alır. Ayarlarınıza bağlı olarak yazı yazdığınız uygulamanın adını, ekran bağlamını ve Sorma özelliği ve toplantı sırasındaki yapay zekâ sohbeti için toplantı dökümlerini de alabilir.
+- **Yapay zekâya ses değil, metin gider.** Gemini veya Claude dökümü alır. Ayarlarınıza bağlı olarak yazı yazdığınız uygulamanın adını, ekran bağlamını, ekranınızın ekran görüntüsünden okunan metni (görüntünün kendisi asla gönderilmez) ve Sorma özelliği ve toplantı sırasındaki yapay zekâ sohbeti için toplantı dökümlerini de alabilir.
 - **Yerel ve Apple da metni cihazınızda tutar.** Bunlardan birini seçerseniz hiçbir yapay zekâ hizmetine hiçbir şey gönderilmez. İndirilen tek şey modelin kendisidir.
 - **Ses yalnızca siz seçerseniz Google'a gider.** Gemini konuşma motorunu seçerseniz kaydedilen ses Google'a gönderilir.
 - **Toplantılar düz dosyalardır.** `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`) altında JSON ve Markdown olarak kaydedilir. Mac ve Windows aynı biçimi kullanır.
