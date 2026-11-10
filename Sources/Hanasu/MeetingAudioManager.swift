@@ -90,9 +90,11 @@ final class MeetingAudioManagerModel: ObservableObject {
                 MeetingAudioCleanup.entries(meetings, excluding: currentID, directory: MeetingStore.directory(for:))
             }.value
             guard token == generation else { return }
-            self.entries = entries
-            selected = selected.intersection(entries.map(\.id))
-            loaded = true
+            // 同じ結果なら入れない（描き直し → 数え直し、の輪にしない）
+            if self.entries != entries { self.entries = entries }
+            let kept = selected.intersection(entries.map(\.id))
+            if kept != selected { selected = kept }
+            if !loaded { loaded = true }
         }
     }
 
@@ -386,9 +388,11 @@ struct MeetingAudioSettingsRows: View {
         let meetings = recorder.meetings
         let currentID = recorder.current?.id
         Task {
-            entries = await Task.detached(priority: .utility) {
+            let loaded = await Task.detached(priority: .utility) {
                 MeetingAudioCleanup.entries(meetings, excluding: currentID, directory: MeetingStore.directory(for:))
             }.value
+            // 同じ結果なら入れない。recorderMeetings は描くたびに作り直すので、つなぎ直した直後に今の値が届いても、描き直しと数え直しの輪にしない
+            if loaded != entries { entries = loaded }
         }
     }
 
