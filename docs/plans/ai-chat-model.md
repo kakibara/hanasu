@@ -1,6 +1,7 @@
 # AI チャット・会議への質問のモデルを、議事録と分けて選び、画面でも切り替える
 
-- 状態: 実装済み（2026-11-10 に計画を了承）。要件と設計判断は spec に移した: REQ-COM-025・DEC-COM-171・DEC-COM-172（[spec/common.md](../spec/common.md)）、REQ-MTG-047・REQ-MTG-048・DEC-MTG-095（[spec/meeting.md](../spec/meeting.md)）。この文書は計画と敵対的レビューの記録として残す
+- 状態: 実装済み（2026-11-10 に計画を了承）。要件と設計判断は spec に移した: REQ-COM-025・DEC-COM-171・DEC-COM-172（[spec/common.md](../spec/common.md)）、REQ-MTG-048・REQ-MTG-049・DEC-MTG-150（[spec/meeting.md](../spec/meeting.md)）。この文書は計画と敵対的レビューの記録として残す
+- 番号: 計画を書いたときは、要件の 2 つと送り先のメニューの設計判断に、先に main に入った PR #94（「何を聞かれた？」）と同じ番号を使っていたので、REQ-MTG-048・049・DEC-MTG-150 に付け直した（この文書の中も付け直した番号で書く）
 - 対象: Mac（Windows 版には AI チャットと会議への質問がない。roadmap の FUT-003 の本文、windows/README.md の「会議の横断検索・会議への質問（Ask）」）
 
 ## 目的
@@ -30,7 +31,7 @@
 - 実装の場所: `TextAIPurpose.chat`、`AppSettings`（`chatAIProvider`・`claudeChatModel`・`geminiChatModel`・`localChatModel`・`aiProvider(for:)`・`textModel(for:)`・`localModel(for:)`）、`AIChoiceRow`、`AISettingsTab`、`OnboardingModel`、`OnboardingTipsPage`（名前は実装で確かめる）
 - 確かめ方: `.build/debug/Hanasu --test-ai-purposes`（新設。AI を呼ばない）、`--chat-meeting … --show-target`、`--ask-meetings … --show-target`、`--minutes-from-transcript … --show-target`、`--render-ai-settings /tmp/ai.png --claude`
 
-### REQ-MTG-047 AI チャットの画面で、その会議の会話に使う AI とモデルを既定から切り替えられる（新規）
+### REQ-MTG-048 AI チャットの画面で、その会議の会話に使う AI とモデルを既定から切り替えられる（新規）
 - 内容: AI チャットの入力欄の下に、今の送り先（AI とモデル）を出し、押すと AI とモデルの一覧から選べる。選んだものは、その会議の会話にだけ効き、次の質問から使う。ほかの会議・アプリの終了後・設定の既定は変わらない。
 - 受け入れ条件:
   - 入力欄の下に「送り先: Claude · Haiku 5.5」のように出る。押すと、先頭に「既定（<設定の AI とモデル>）」、その下に AI ごとにローカル（4 つ）・Apple・Gemini（候補のモデル）・Claude（3 つ）が並ぶ。今の送り先に印が付く。
@@ -45,10 +46,10 @@
 - 実装の場所: `MeetingChatModel`（`override`）、`MeetingChatView`、`AIRouteMenu`（新設。AI チャットと会議に質問で共有）、`MeetingChat.Message`（`modelLabel`）、`TextAIClient.make`
 - 確かめ方: `.build/debug/Hanasu --test-meeting-chat`（切り替えの有無で送り先が変わる・使えない選択肢の判定）、`--render-meeting-chat <出力フォルダ>`（既定・切り替え中・既定が使えないの 3 枚）、実機で一覧を開いて選ぶ
 
-### REQ-MTG-048 「会議に質問」の画面でも、使う AI とモデルを既定から切り替えられる（新規）
-- 内容: 会議に質問の画面にも REQ-MTG-047 と同じ送り先のメニューを出し、その画面での質問に使う AI とモデルを選べる。設定の既定は変わらない。
+### REQ-MTG-049 「会議に質問」の画面でも、使う AI とモデルを既定から切り替えられる（新規）
+- 内容: 会議に質問の画面にも REQ-MTG-048 と同じ送り先のメニューを出し、その画面での質問に使う AI とモデルを選べる。設定の既定は変わらない。
 - 受け入れ条件:
-  - 質問の入力欄の近くに「送り先: …」のメニューがあり、一覧・使えないものの扱い・既定に戻すは REQ-MTG-047 と同じ。外に送るかの文は、この画面が送るものに合わせて「検索で選んだ会議の議事録と文字起こしをこの AI に送ります」（ローカル・Apple なら「この Mac の外には送りません」）にする。
+  - 質問の入力欄の近くに「送り先: …」のメニューがあり、一覧・使えないものの扱い・既定に戻すは REQ-MTG-048 と同じ。外に送るかの文は、この画面が送るものに合わせて「検索で選んだ会議の議事録と文字起こしをこの AI に送ります」（ローカル・Apple なら「この Mac の外には送りません」）にする。
   - 選んだものは次の質問から使う。会議のウインドウを閉じるか、アプリを終了すると既定に戻る（ウインドウは閉じても残す作りなので、閉じる通知で戻す）。
   - 答えを待っている間は切り替えられない。
 - 出典: 2026-11-10 の回答「（会議に質問の画面にもメニューを）付ける」（了承の日付を足す）
@@ -84,7 +85,7 @@
 - 対象: Mac
 - 影響（以前から使っている人で、会議を Gemini・Claude にしている人）:
   - Gemma 4 E4B を入れていない人は、この版に上げると AI チャットと会議に質問が「未ダウンロード」で止まる。画面に出す案内（REQ-COM-025 の受け入れ条件 4 つ目）で知らせる。
-  - Gemma 4 E4B を入れている人（例: 音声入力 = ローカル、会議 = Claude）は、止まらずに送り先がローカルに変わる。会議への質問はローカルの文脈（32,768 トークン）に入らない分を省く（DEC-COM-065）ので、答えが浅くなりうる。送り先はメニューのボタンに常に出る（REQ-MTG-047・048）ので画面で気づけるようにし、リリース文でも知らせる。
+  - Gemma 4 E4B を入れている人（例: 音声入力 = ローカル、会議 = Claude）は、止まらずに送り先がローカルに変わる。会議への質問はローカルの文脈（32,768 トークン）に入らない分を省く（DEC-COM-065）ので、答えが浅くなりうる。送り先はメニューのボタンに常に出る（REQ-MTG-048・048）ので画面で気づけるようにし、リリース文でも知らせる。
 
 ### DEC-COM-172 AI チャット・質問と議事録は、ローカルのモデルを切り替えるとき、使っている処理が終わるのを待つ（音声入力は今のまま）
 - 決めたこと:
@@ -94,20 +95,20 @@
   - 送る前に `LocalLLMServer.wouldWait(for:)` で待つかどうかを見て、待つなら AI チャット・会議に質問の表示を「ほかの処理が終わるのを待っています…」にする。
   - 待つかどうか・誰が先に進むかの判断は、サーバーを起こさずに試せるよう小さな型（`LocalLLMGate`）に切り出す。
 - 理由: 今は違うモデルを求められると、処理中でもサーバーを止める（`stop()`）。AI チャット・質問のローカルのモデルを会議と別にできるようになると、記録を止めた直後の議事録の作成（ローカルでは最大 30 分）中にチャットで聞くと、議事録が途中で切れる（DEC-MTG-086 の「会議が終わった直後に続けたい」場面）。待てば議事録は守られ、チャットは遅れるだけ。待っている処理を「使っている処理」と同じに数えると、待つ処理どうしが止まり合うので分ける。音声入力は依頼の外で、待たせると整形が最大 120 秒遅れたうえ失敗しうる（REQ-DIC-007）ので、今の振る舞いを変えない（音声入力が議事録を止めうるのは今と同じ）。
-- 関係する要件: REQ-COM-030, REQ-COM-025, REQ-MTG-047, REQ-MTG-048
+- 関係する要件: REQ-COM-030, REQ-COM-025, REQ-MTG-048, REQ-MTG-049
 - 対象: Mac（Windows の `LocalLlmServer` にも違うモデルで止める同じ作りがあるが、Windows には AI チャットと会議への質問がなく、議事録と整形のモデルの組み合わせは今のまま。直すなら FUT に足す）
 - 実装の場所: `LocalLLMServer.beginRequest`・`ensureRunning`・`wouldWait(for:)`、`LocalLLMGate`、`LocalLLMClient.waitsForOtherModel`、`TextAIClient.make`
 
-### DEC-MTG-095 送り先の切り替えは、入力欄の下のメニューで、会議ごと（会議に質問は画面ごと）のメモリに持つ
+### DEC-MTG-150 送り先の切り替えは、入力欄の下のメニューで、会議ごと（会議に質問は画面ごと）のメモリに持つ
 - 決めたこと:
-  - 部品: `AIRouteMenu`（SwiftUI の `Menu`）を、AI チャットの入力欄の下（今の「…に送ります。会話は保存しません。」の場所）と、会議に質問の入力欄の近くに出す。ボタンは「送り先: <AI> · <モデル>」（切り替え中は印つき）。その下に、外に送るかの文（REQ-MTG-047）を出す。
+  - 部品: `AIRouteMenu`（SwiftUI の `Menu`）を、AI チャットの入力欄の下（今の「…に送ります。会話は保存しません。」の場所）と、会議に質問の入力欄の近くに出す。ボタンは「送り先: <AI> · <モデル>」（切り替え中は印つき）。その下に、外に送るかの文（REQ-MTG-048）を出す。
   - 一覧: 先頭に「既定（<AI> · <モデル>）」。続けて AI の並び（DEC-COM-168: ローカル・Apple・Gemini・Claude）でセクションに分ける。Gemini は `AppSettings.suggestedModels` と、設定の Gemini のモデル（3 用途）のうち一覧にないもの。Claude は `ClaudeClient.Model.allCases`。ローカルは `LocalLLMModel.allCases`。
   - 使えるかの判定は中身を読まずに行う（DEC-COM-049）: Claude は `Keychain.exists(.claudeAPIKey)`、Gemini は API キーなら `Keychain.exists(.geminiAPIKey)`、サービスアカウントならパスが空でなくファイルがあること、ローカルは `LocalLLMStore.isDownloaded`、Apple は `AppleFMAvailability.check()`（署名を確かめるので、AI チャット・会議に質問の画面が出たときに 1 回だけ確かめて model に覚える。描くたびには呼ばない）。使えない項目は `.disabled` にし、理由は項目の文字に入れる（メニューの項目では help が出ないため）。
   - 持ち方: AI チャットは `MeetingChatModel.override`（`TextAIChoice?`。nil なら既定）。`MeetingChatStore` の会議ごとのモデルと一緒にアプリを終了するまで残り、「新しい会話」では戻さず、会議を消したら消える。会議に質問は `MeetingAskModel.override`。会議のウインドウは閉じても残す作り（`AppDelegate.openMeetingWindow`、`isReleasedWhenClosed = false`）で `@StateObject` も残るので、`MeetingWindowView` が `NSWindow.willCloseNotification` を受けて `override` を nil に戻す。
   - 送るとき: `TextAIClient.make(provider:model:settings:purpose:timeout:)` でクライアントを作る（`fromSettings` もこれで書き直す）。答え（`MeetingChat.Message`）に `modelLabel` を持たせ、答えの下の「<時刻> までの記録から」の横に出す。会議に質問の答えも同じく出す。
   - 選んだ送り先が送るときに使えなくなっていたら（キーを消した等）、今のエラーの文言（`答えを作れませんでした: …`）で知らせ、切り替えは残す。
 - 理由: 入力欄の近くなら、送る前に送り先が目に入る（外に送るかどうかが分かる。DEC-MTG-085 の表示を兼ねる）。会議中は画面が狭いので、ツールバーやシートを足さない。使えないものを隠すと「なぜ出ないのか」が分からないので、理由を添えて選べなくする。「新しい会話」は話題を変えるためのもので、モデルの選択とは別。
-- 関係する要件: REQ-MTG-047, REQ-MTG-048, REQ-MTG-040, REQ-MTG-041, REQ-MTG-016
+- 関係する要件: REQ-MTG-048, REQ-MTG-049, REQ-MTG-040, REQ-MTG-041, REQ-MTG-016
 - 対象: Mac
 
 ## やらないこと
@@ -121,7 +122,7 @@
 ## 手順
 作業は今のブランチ（claude/screen-ocr-context。別の作業の未コミットの変更がある）ではなく、`origin/main` から切った worktree（`claude/ai-chat-model`）で行い、この計画のファイルもそちらへ移す。
 
-1. spec: `docs/spec/common.md` に REQ-COM-025・DEC-COM-171・DEC-COM-172 を足し、REQ-COM-020・023・024・030・031・050 と DEC-COM-040・042・043・092 を直す。`docs/spec/meeting.md` に REQ-MTG-047・048・DEC-MTG-095 を足し、DEC-MTG-053・081・085 を直す。番号を書く前に、開いている PR（#78・#91）と突き合わせ直す。
+1. spec: `docs/spec/common.md` に REQ-COM-025・DEC-COM-171・DEC-COM-172 を足し、REQ-COM-020・023・024・030・031・050 と DEC-COM-040・042・043・092 を直す。`docs/spec/meeting.md` に REQ-MTG-048・048・DEC-MTG-150 を足し、DEC-MTG-053・081・085 を直す。番号を書く前に、開いている PR（#78・#91）と突き合わせ直す。
 2. 設定と AI の土台:
    - `TextAI.swift`: `TextAIPurpose.chat`、`TextAIChoice`（provider と model）、`TextAIClient.make(provider:model:settings:purpose:timeout:)`、`fromSettings` を `make` で書き直す、`cliModel` を網羅の switch に。
    - `Settings.swift`: キーと `@Published` の 4 つ、既定値、`aiProvider(for:)`・`textModel(for:)`・`localModel(for:)` を網羅の switch に。引き継ぎの印は足さない。
@@ -161,28 +162,28 @@
 | 3 | 重大 | チャットが別のローカルのモデルを求めると、議事録の作成中でも llama-server を止める | 直す | DEC-COM-172（違うモデルは、ほかの処理が終わるまで待つ）を足した |
 | 4 | 重大 | 「会議への質問は会議の AI」と書いた REQ-COM-020・030・031・050、DEC-COM-042・043・092、DEC-MTG-053 が変える一覧にない | 直す | 「変える要件」「直す設計判断」に足した |
 | 5 | 重大 | 会議に質問の説明文が「会議に選んだ AI に渡す」のまま残り、外に送るかを誤って伝える | 直す | 手順 3・7・10 に足した |
-| 6 | 重大 | Gemini の判定に `authFromSettings` を使うと、キーと秘密鍵を読む（DEC-COM-049 に反する） | 直す | `Keychain.exists` とファイルの有無で判定する、と DEC-MTG-095 に書いた |
+| 6 | 重大 | Gemini の判定に `authFromSettings` を使うと、キーと秘密鍵を読む（DEC-COM-049 に反する） | 直す | `Keychain.exists` とファイルの有無で判定する、と DEC-MTG-150 に書いた |
 | 7 | 重大 | 「議事録は Sonnet、チャットは Haiku」を AI を呼ばずに確かめる手段がない | 直す | `--test-ai-purposes` と `--show-target` を手順 6 に足した |
 | 8 | 重大 | README に用途ごとの AI と既定のモデルの表がある（計画は「記述なし」と誤記） | 直す | 手順 8（README と 15 の訳）を足した |
 | 9 | 軽微 | オンボーディングの「設定の Tips」に 3 行目がない | 直す | 手順 4 と受け入れ条件に足した |
 | 10 | 軽微 | 描き出しの CLI が新しい値を保存して戻さない | 直す | 手順 4 に `ClaudeCLI.renderSettings` とオンボーディングを足した |
 | 11 | 軽微 | 三項演算子の箇所は `.chat` を足してもコンパイルで止まらない | 直す | 網羅の switch に書き直すと DEC-COM-171 に書いた（待ち時間の 2 か所は意図して残す） |
-| 12a | 軽微 | 会議に質問の画面での切り替えを聞かずに「やらないこと」にしていた | 聞く | 答え「付ける」。REQ-MTG-048 を足した |
+| 12a | 軽微 | 会議に質問の画面での切り替えを聞かずに「やらないこと」にしていた | 聞く | 答え「付ける」。REQ-MTG-049 を足した |
 | 12b | 軽微 | 「Haiku 5.5 は 200k の文脈」に根拠がない | 直す | 理由から外した |
 | 12c | 軽微 | メニューの項目では help が出ない | 直す | 理由は項目の文字に入れる |
 | 12d | 軽微 | `AppleFMAvailability.check()` は署名を確かめるので重い | 直す | メニューを開いたときに 1 回だけ |
-| 12e | 軽微 | 送り先を「AI · モデル」だけにすると、外に送ることが読めない | 直す | 外に送るかの文を残す（REQ-MTG-047） |
+| 12e | 軽微 | 送り先を「AI · モデル」だけにすると、外に送ることが読めない | 直す | 外に送るかの文を残す（REQ-MTG-048） |
 
-2026-11-10、requirements-reviewer（Opus）1 つ、2 回目（REQ-MTG-048 と DEC-COM-172 を足したため）。
+2026-11-10、requirements-reviewer（Opus）1 つ、2 回目（REQ-MTG-049 と DEC-COM-172 を足したため）。
 
 | # | 重さ | 指摘 | 仕分け | どうしたか |
 | --- | --- | --- | --- | --- |
 | 1 | 重大 | DEC-COM-172 の待ちは、`beginRequest` が先に数えるため待つ処理どうしが止まり合う。待ちに期限もない | 直す | 使っている処理と待っている処理を分けて数え、期限（`deadline`）と待ち中の表示を足した。`LocalLLMGate` に切り出し `--test-local-llm-wait` で確かめる |
 | 2 | 重大 | 待ちを音声入力にも当てると、依頼の外で音声入力が遅くなる | 聞く代わりに推奨で決めた（質問は 2 回使った） | 音声入力は今のまま（待たない）。「仮に決めたこと」に書いた |
-| 3 | 重大 | 会議のウインドウは閉じても残るので、会議に質問の切り替えが戻らない | 直す | `willCloseNotification` で戻す、と DEC-MTG-095 に書いた |
+| 3 | 重大 | 会議のウインドウは閉じても残るので、会議に質問の切り替えが戻らない | 直す | `willCloseNotification` で戻す、と DEC-MTG-150 に書いた |
 | 4 | 重大 | 「設定の Tips」を決めている REQ-COM-051 が変える一覧にない | 直す | 「変える要件」に足した |
 | 5 | 重大 | Gemma を入れている既存の利用者は、知らせなしに送り先がローカルに変わり、会議への質問が浅くなる | 聞く代わりに推奨で決めた | 影響を DEC-COM-171 に書いた。送り先はメニューに常に出るので画面で分かり、リリース文でも知らせる（「仮に決めたこと」） |
-| 6 | 軽微 | 会議に質問が送るのは議事録と文字起こしで、メモではない | 直す | 会議に質問用の文を分けた（REQ-MTG-048） |
+| 6 | 軽微 | 会議に質問が送るのは議事録と文字起こしで、メモではない | 直す | 会議に質問用の文を分けた（REQ-MTG-049） |
 | 7 | 軽微 | Claude の「接続を試す」がチャット・質問のモデルを見ない | 直す | 手順 4 に足した |
 | 8 | 軽微 | `docs/guide.md` と `README.ja.md` が手順にない | 直す | 手順 8・10 に足した |
 | 9 | 軽微 | Apple の判定をメニューを開いたときだけにすると、既定が使えないときの案内と合わない | 直す | 画面が出たときに 1 回確かめて覚える |

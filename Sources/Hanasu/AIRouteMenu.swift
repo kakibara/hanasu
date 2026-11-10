@@ -1,7 +1,7 @@
 import SwiftUI
 
-// 要件: REQ-MTG-047, REQ-MTG-048
-// 設計判断: DEC-MTG-095
+// 要件: REQ-MTG-048, REQ-MTG-049
+// 設計判断: DEC-MTG-150
 /// AI チャットと会議に質問の送り先（AI とモデル）の一覧と、使えるかの判定
 enum AIRoute {
     /// 使えるかどうか。キーやファイルの中身は読まない（DEC-COM-049）
@@ -80,8 +80,8 @@ enum AIRoute {
     }
 }
 
-// 要件: REQ-MTG-047, REQ-MTG-048
-// 設計判断: DEC-MTG-095
+// 要件: REQ-MTG-048, REQ-MTG-049
+// 設計判断: DEC-MTG-150
 /// 送り先のメニュー。ボタンは「送り先: Claude · Haiku 5.5」。先頭に「既定」、続けて AI ごとのモデル
 struct AIRouteMenu: View {
     /// 設定の既定（AI チャット・質問の AI とモデル）

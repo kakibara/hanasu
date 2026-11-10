@@ -71,8 +71,8 @@ final class MeetingAskModel: ObservableObject {
     @Published private(set) var answer: MeetingAsk.Answer?
     @Published private(set) var running = false
     @Published private(set) var error: String?
-    // 要件: REQ-MTG-048
-    // 設計判断: DEC-MTG-095
+    // 要件: REQ-MTG-049
+    // 設計判断: DEC-MTG-150
     /// この画面だけ、既定から切り替えた送り先。nil なら既定（設定の「AI チャット・質問」）。会議のウインドウを閉じたら戻す
     @Published var override: TextAIChoice?
     @Published private(set) var availability: AIRoute.Availability?
@@ -100,7 +100,7 @@ final class MeetingAskModel: ObservableObject {
         answer = nil
         answeredBy = nil
         lastQuestion = question
-        // 要件: REQ-COM-025, REQ-MTG-048
+        // 要件: REQ-COM-025, REQ-MTG-049
         // 設計判断: DEC-MTG-053
         let settings = AppSettings.shared
         let choice = effectiveChoice(settings: settings)
@@ -309,7 +309,7 @@ struct MeetingAskView: View {
                         .keyboardShortcut(.defaultAction)
                         .disabled(model.running || model.question.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
-                // 要件: REQ-MTG-048
+                // 要件: REQ-MTG-049
                 if let availability = model.availability {
                     if model.override == nil, let reason = availability.unavailableReason(settings.aiChoice(for: .chat)) {
                         AIRouteUnavailableNotice(defaultChoice: settings.aiChoice(for: .chat), reason: reason)
@@ -326,7 +326,7 @@ struct MeetingAskView: View {
                 }
             }
             .padding()
-            // 設計判断: DEC-MTG-095
+            // 設計判断: DEC-MTG-150
             .onAppear { model.refreshAvailability(settings: settings) }
             .onReceive(settings.objectWillChange.debounce(for: .milliseconds(300), scheduler: RunLoop.main)) { _ in
                 model.refreshAvailability(settings: settings)
@@ -346,7 +346,7 @@ struct MeetingAskView: View {
                         Text(model.answeredQuestion).font(.headline)
                         MarkdownText(markdown: answer.text)
                             .textSelection(.enabled)
-                        // 要件: REQ-MTG-048（その答えを作った AI とモデル）
+                        // 要件: REQ-MTG-049（その答えを作った AI とモデル）
                         if let answeredBy = model.answeredBy {
                             Text(answeredBy).font(.caption2).foregroundStyle(.secondary)
                         }

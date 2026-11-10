@@ -129,7 +129,7 @@ enum MeetingChatPreview {
             if let previous { UserDefaults.standard.set(previous, forKey: key) } else { UserDefaults.standard.removeObject(forKey: key) }
         }
 
-        // 要件: REQ-MTG-047（送り先は、この Mac の設定に左右されないよう決めて描く。設定は描いたあとに戻す）
+        // 要件: REQ-MTG-048（送り先は、この Mac の設定に左右されないよう決めて描く。設定は描いたあとに戻す）
         let settings = AppSettings.shared
         let savedChat = (settings.chatAIProvider, settings.claudeChatModel, settings.localChatModel)
         defer {
@@ -265,7 +265,7 @@ extension MeetingChat {
     }
 }
 
-// 確かめ方: REQ-MTG-047, REQ-MTG-048
+// 確かめ方: REQ-MTG-048, REQ-MTG-049
 /// 送り先の切り替え（既定・切り替え・使えないものの判定・一覧）を確かめる（AI は呼ばない）
 @MainActor
 enum MeetingChatRouteTest {

@@ -157,7 +157,7 @@ PR #86 のレビューで、`ui-cases.py` が「確かめ方」の下の箇条�
 
 ## 7. 2026-11-10 AI チャット・質問の送り先の切り替え（c9609d8 の上の作業中の変更、macOS 26.6.2）
 
-AI チャット・会議への質問のモデルを議事録と分けて選び、画面でも切り替える変更（REQ-COM-025・REQ-MTG-047・REQ-MTG-048、[plans/ai-chat-model.md](../plans/ai-chat-model.md)）のあとで確かめた結果。
+AI チャット・会議への質問のモデルを議事録と分けて選び、画面でも切り替える変更（REQ-COM-025・REQ-MTG-048・REQ-MTG-049、[plans/ai-chat-model.md](../plans/ai-chat-model.md)）のあとで確かめた結果。
 
 - 描いたもの: `python3 scripts/ui-cases.py render --ids UX-141,UX-180,UX-181,UX-182 --lang ja,en`。ほかに `--render-meeting-chat <dir> --ui-language de` で、ドイツ語の送り先のメニュー・外に送るかの文・使えないときの案内が切れないことを見た。
 - 判定: OK 8・NG 0・判断できない 0・描けなかった 0

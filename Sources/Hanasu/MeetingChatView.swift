@@ -16,8 +16,8 @@ final class MeetingChatModel: ObservableObject {
     @Published private(set) var savedToNotes: Set<UUID> = []
     /// 入力欄にフォーカスを移す（⌘J）
     @Published private(set) var focusRequest = UUID()
-    // 要件: REQ-MTG-047
-    // 設計判断: DEC-MTG-095
+    // 要件: REQ-MTG-048
+    // 設計判断: DEC-MTG-150
     /// この会議の会話だけ、既定から切り替えた送り先。nil なら既定（設定の「AI チャット・質問」）。
     /// 「新しい会話」では戻さず、アプリを終了するか会議を消すまで残す
     @Published var override: TextAIChoice?
@@ -64,8 +64,8 @@ final class MeetingChatModel: ObservableObject {
         running = true
         let token = UUID()
         pending = (token, question)
-        // 要件: REQ-COM-025, REQ-MTG-047
-        // 設計判断: DEC-MTG-081, DEC-MTG-095
+        // 要件: REQ-COM-025, REQ-MTG-048
+        // 設計判断: DEC-MTG-081, DEC-MTG-150
         let settings = AppSettings.shared
         let choice = effectiveChoice(settings: settings)
         task = Task { [weak self] in
@@ -247,7 +247,7 @@ struct MeetingChatView: View {
             inputArea
         }
         .onChange(of: model.focusRequest) { inputFocused = true }
-        // 設計判断: DEC-MTG-095（使えるかは、画面が出たときと設定が変わったときに見直す）
+        // 設計判断: DEC-MTG-150（使えるかは、画面が出たときと設定が変わったときに見直す）
         .onAppear { model.refreshAvailability(settings: settings) }
         .onReceive(settings.objectWillChange.debounce(for: .milliseconds(300), scheduler: RunLoop.main)) { _ in
             model.refreshAvailability(settings: settings)
@@ -342,7 +342,7 @@ struct MeetingChatView: View {
             .overlay(RoundedRectangle(cornerRadius: 10)
                 .strokeBorder(inputFocused ? Color.accentColor.opacity(0.6) : Color.secondary.opacity(0.3)))
             HStack(spacing: 6) {
-                // 要件: REQ-MTG-047
+                // 要件: REQ-MTG-048
                 if let availability = model.availability {
                     AIRouteMenu(defaultChoice: settings.aiChoice(for: .chat), override: $model.override,
                                 availability: availability, settings: settings, disabled: model.running)
@@ -363,7 +363,7 @@ struct MeetingChatView: View {
         .padding(10)
     }
 
-    // 要件: REQ-MTG-047
+    // 要件: REQ-MTG-048
     // 設計判断: DEC-MTG-085
     private var privacyNote: String {
         model.effectiveChoice(settings: settings).sendsOutside
@@ -424,7 +424,7 @@ private struct MeetingChatMessageRow: View {
                     Label("AI", systemImage: "sparkles")
                         .font(.caption.bold())
                         .foregroundStyle(.purple)
-                    // 要件: REQ-MTG-047（その答えを作った AI とモデル）
+                    // 要件: REQ-MTG-048（その答えを作った AI とモデル）
                     if let modelLabel = message.modelLabel {
                         Text(modelLabel)
                             .font(.caption2)

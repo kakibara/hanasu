@@ -1148,7 +1148,7 @@
       ],
       "priority": "P1",
       "refs": [
-        "REQ-MTG-047",
+        "REQ-MTG-048",
         "REQ-COM-025"
       ],
       "automation": {
@@ -1174,7 +1174,7 @@
       ],
       "priority": "P2",
       "refs": [
-        "REQ-MTG-048",
+        "REQ-MTG-049",
         "REQ-COM-025"
       ],
       "automation": {

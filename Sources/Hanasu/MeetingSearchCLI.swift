@@ -205,7 +205,7 @@ enum MeetingSearchCLI {
     @MainActor
     private static func render(to url: URL, ask: Bool) {
         _ = NSApplication.shared
-        // 要件: REQ-MTG-048（送り先は、この Mac の設定に左右されないよう決めて描く。描いたあとに戻す）
+        // 要件: REQ-MTG-049（送り先は、この Mac の設定に左右されないよう決めて描く。描いたあとに戻す）
         let settings = AppSettings.shared
         let savedChat = (settings.chatAIProvider, settings.claudeChatModel)
         settings.chatAIProvider = .claude

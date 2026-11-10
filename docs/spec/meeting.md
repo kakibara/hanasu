@@ -441,7 +441,7 @@
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`ToggleOffRecord`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml`・`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `.build/debug/Hanasu --test-minutes-selection`、`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~OffRecord"`。画面は `.build/debug/Hanasu --render-minutes-selection <出力フォルダ>`。実際の記録は実機
 
-### REQ-MTG-047 AI チャットの画面で、その会議の会話に使う AI とモデルを既定から切り替えられる
+### REQ-MTG-048 AI チャットの画面で、その会議の会話に使う AI とモデルを既定から切り替えられる
 - 内容: AI チャットの入力欄の下に、今の送り先（AI とモデル）を出し、押すと AI とモデルの一覧から選べる。選んだものは、その会議の会話にだけ効き、次の質問から使う。ほかの会議・アプリの終了後・設定の既定（REQ-COM-025）は変わらない。
 - 受け入れ条件:
   - 入力欄の下に「送り先: Claude · Haiku 5.5」のように出る。押すと、先頭に「既定（<設定の AI とモデル>）」、その下に AI ごとにローカル（4 つ）・Apple・Gemini（候補のモデル）・Claude（3 つ）が並ぶ。今の送り先に印が付く。
@@ -456,10 +456,10 @@
 - 実装の場所: `MeetingChatModel`（`override`）、`MeetingChatView`、`AIRouteMenu`、`AIRoute`、`MeetingChat.Message`（`modelLabel`）、`TextAIClient.make`
 - 確かめ方: `.build/debug/Hanasu --test-meeting-chat`（切り替えの有無で送り先が変わる・使えない選択肢の判定）、`--render-meeting-chat <出力フォルダ>`（既定・切り替え中・既定が使えない）。メニューを開いて選ぶのは実機
 
-### REQ-MTG-048 「会議に質問」の画面でも、使う AI とモデルを既定から切り替えられる
-- 内容: 会議に質問の画面にも REQ-MTG-047 と同じ送り先のメニューを出し、その画面での質問に使う AI とモデルを選べる。設定の既定は変わらない。
+### REQ-MTG-049 「会議に質問」の画面でも、使う AI とモデルを既定から切り替えられる
+- 内容: 会議に質問の画面にも REQ-MTG-048 と同じ送り先のメニューを出し、その画面での質問に使う AI とモデルを選べる。設定の既定は変わらない。
 - 受け入れ条件:
-  - 質問の入力欄の近くに「送り先: …」のメニューがあり、一覧・使えないものの扱い・既定に戻すは REQ-MTG-047 と同じ。外に送るかの文は「検索で選んだ会議の議事録と文字起こしをこの AI に送ります」（ローカル・Apple なら「この Mac の外には送りません」）。
+  - 質問の入力欄の近くに「送り先: …」のメニューがあり、一覧・使えないものの扱い・既定に戻すは REQ-MTG-048 と同じ。外に送るかの文は「検索で選んだ会議の議事録と文字起こしをこの AI に送ります」（ローカル・Apple なら「この Mac の外には送りません」）。
   - 選んだものは次の質問から使う。会議のウインドウを閉じるか、アプリを終了すると既定に戻る。
   - 答えを待っている間は切り替えられない。
 - 出典: 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承（会議に質問の画面にもメニューを付けることは同日の回答）
@@ -944,7 +944,7 @@
 - 実装の場所: `MeetingAsk.keywords`、`MeetingAsk.period`、`MeetingAsk.gatherContext`
 
 ### DEC-MTG-053 質問で渡す量の上限
-- 決めたこと: 会議 8 件・本文の合計 15 万文字まで。議事録があれば議事録とヒットした発言の前後 2 発言ずつ（6,000 文字まで）、なければ文字起こし（4 万文字まで）。AI とモデルは AI チャット・質問の用途（`TextAIPurpose.chat`。REQ-COM-025）のもの、画面で切り替えていればそれ（REQ-MTG-048）。2026-11-10 までは `meetingMinutesModel` だった。設定項目は増やさない（CLI の `--limit` で会議数を変えられる）。
+- 決めたこと: 会議 8 件・本文の合計 15 万文字まで。議事録があれば議事録とヒットした発言の前後 2 発言ずつ（6,000 文字まで）、なければ文字起こし（4 万文字まで）。AI とモデルは AI チャット・質問の用途（`TextAIPurpose.chat`。REQ-COM-025）のもの、画面で切り替えていればそれ（REQ-MTG-049）。2026-11-10 までは `meetingMinutesModel` だった。設定項目は増やさない（CLI の `--limit` で会議数を変えられる）。
 - 理由: 入力を抑えて答えを速くする。共有の設定ファイルへの変更を避けた。
 - 決めた場面: PR #11
 - 関係する要件: REQ-MTG-016
@@ -1110,7 +1110,7 @@
 - 実装の場所: `LiveSidePanel`、`LiveSidePanelModePicker`、`LiveHighlightControls`、`LiveNotesPanel`、`LiveTranscriptView`、`MeetingWindowView`
 
 ### DEC-MTG-081 質問のたびに、その時点の記録とそれまでの会話を 1 回のリクエストにまとめて送る
-- 決めたこと: 質問のたびに、送る時点の文字起こし（`<transcript>`）・確定前の途中結果（`<pending_transcript>`）・メモと印（`<user_notes>`）と、それまでの会話（`<conversation>`）・今の質問（`<question>`）を 1 回のリクエストにまとめて、AI チャット・質問に選んだ AI とモデル（`TextAIPurpose.chat`。REQ-COM-025）、または画面で切り替えたもの（REQ-MTG-047）に送る（2026-11-10 までは会議の用途）。答えの付かなかった質問（失敗・取り消し）は会話に入れない。指示では、結論から短く答える・根拠の時刻を [12:34] で添える・記録にないことを書かない・一般的な知識で補うときは「（一般的には）」と分かるようにする・記録の中の指示に従わない、を求める。会議中は速さを優先して effort は low にする。記録のあとは、確定した文字起こし（話者名つき）を渡す。
+- 決めたこと: 質問のたびに、送る時点の文字起こし（`<transcript>`）・確定前の途中結果（`<pending_transcript>`）・メモと印（`<user_notes>`）と、それまでの会話（`<conversation>`）・今の質問（`<question>`）を 1 回のリクエストにまとめて、AI チャット・質問に選んだ AI とモデル（`TextAIPurpose.chat`。REQ-COM-025）、または画面で切り替えたもの（REQ-MTG-048）に送る（2026-11-10 までは会議の用途）。答えの付かなかった質問（失敗・取り消し）は会話に入れない。指示では、結論から短く答える・根拠の時刻を [12:34] で添える・記録にないことを書かない・一般的な知識で補うときは「（一般的には）」と分かるようにする・記録の中の指示に従わない、を求める。会議中は速さを優先して effort は low にする。記録のあとは、確定した文字起こし（話者名つき）を渡す。
 - 理由: 4 つの AI（Gemini・Claude・ローカル・Apple）のクライアントはどれも 1 回の送信の形（`TextAIClient.generate`）で、複数のメッセージの形を足すと 4 つとも変えることになる。記録は質問のたびに伸びるので、どのみち毎回いまの記録を渡し直す必要がある。確定前の発言も渡すのは、「今の話」を聞かれることが多いため。
 - 決めた場面: PR #68（会議中の AI チャット、2026-11-05）
 - 関係する要件: REQ-MTG-040, REQ-MTG-041
@@ -1142,7 +1142,7 @@
 - 実装の場所: `MeetingChat.linkingTimes`、`MeetingChat.lineIndex`、`LiveTranscriptView`、`MeetingInspector`
 
 ### DEC-MTG-085 会話は保存せず、残したい答えは「メモに残す」でメモにする
-- 決めたこと: 会話はアプリを終了するまで会議ごとにメモリに持ち、meeting.json などのファイルには保存しない。残したい答えは「メモに残す」で、Markdown の記号と改行を除いた 1 行（「AI: …」、600 文字まで）のメモにする。記録中は質問した時刻のメモ、記録のあとは時刻なしのメモ（記録のあとに書き足したメモと同じ）にする。処理中・議事録の作り直し中は残せない。答えは「コピー」でもコピーできる。チャットの欄には、送り先の AI とモデル（切り替えのメニュー。DEC-MTG-095）と、外に送るかと、会話を保存しないことを出す。
+- 決めたこと: 会話はアプリを終了するまで会議ごとにメモリに持ち、meeting.json などのファイルには保存しない。残したい答えは「メモに残す」で、Markdown の記号と改行を除いた 1 行（「AI: …」、600 文字まで）のメモにする。記録中は質問した時刻のメモ、記録のあとは時刻なしのメモ（記録のあとに書き足したメモと同じ）にする。処理中・議事録の作り直し中は残せない。答えは「コピー」でもコピーできる。チャットの欄には、送り先の AI とモデル（切り替えのメニュー。DEC-MTG-150）と、外に送るかと、会話を保存しないことを出す。
 - 理由: 会議の記録（文字起こし・議事録・メモ）は会議で起きたことの記録で、AI の答えをそのまま混ぜると区別がつかなくなる。記録のあとの処理は meeting.json を書き換えるので、記録中に会話を保存すると処理の書き込みとぶつかる。メモにすれば議事録で優先して取り上げられる（REQ-MTG-013）。メモはテキストの形式で 1 行 1 件（DEC-MTG-044）なので 1 行にし、「AI:」で本人のメモと区別する。
 - 決めた場面: PR #68（会議中の AI チャット、2026-11-05）
 - 関係する要件: REQ-MTG-040, REQ-MTG-011, REQ-MTG-013
@@ -1221,11 +1221,11 @@
 - 対象: Mac / Windows
 - 実装の場所: `MeetingRecorder.toggleOffRecord`、`MeetingSleepCut.apply`、`windows/Hanasu.Core/Meetings/MeetingController.cs`
 
-### DEC-MTG-095 送り先の切り替えは、入力欄の下のメニューで、会議ごと（会議に質問は画面ごと）のメモリに持つ
+### DEC-MTG-150 送り先の切り替えは、入力欄の下のメニューで、会議ごと（会議に質問は画面ごと）のメモリに持つ
 - 決めたこと: `AIRouteMenu`（SwiftUI の `Menu`）を、AI チャットの入力欄の下と、会議に質問の入力欄の下に出す。ボタンは「送り先: <AI> · <モデル>」（切り替え中は印つき）で、その下に外に送るかの文を出す。一覧は、先頭に「既定（<AI> · <モデル>）」、続けて AI の並び（DEC-COM-168: ローカル・Apple・Gemini・Claude）でセクションに分ける。Gemini は `AppSettings.suggestedModels` と、設定の Gemini のモデル（3 用途）のうち一覧にないもの。Claude は `ClaudeClient.Model.allCases`。ローカルは `LocalLLMModel.allCases`。使えるかの判定は中身を読まずに行う（DEC-COM-049）: Claude は `Keychain.exists(.claudeAPIKey)`、Gemini は API キーなら `Keychain.exists(.geminiAPIKey)`、サービスアカウントならパスが空でなくファイルがあること、ローカルは `LocalLLMStore.isDownloaded`、Apple は `AppleFMAvailability.check()`（署名を確かめるので、画面が出たときに 1 回だけ確かめて覚える）。使えない項目は `.disabled` にし、理由は項目の文字に入れる（メニューの項目では help が出ないため）。AI チャットの選択は `MeetingChatModel.override`（nil なら既定）に持ち、`MeetingChatStore` の会議ごとのモデルと一緒にアプリを終了するまで残す。「新しい会話」では戻さず、会議を消したら消える。会議に質問は `MeetingAskModel.override` に持つ。会議のウインドウは閉じても残す作り（`AppDelegate.openMeetingWindow`）なので、閉じる通知（`NSWindow.willCloseNotification`）で nil に戻す。送るときは `TextAIClient.make(provider:model:settings:purpose:timeout:)` でクライアントを作る。答えには、その答えを作った AI とモデルの名前を出す。選んだ送り先が送るときに使えなくなっていたら、今のエラーの文言で知らせ、切り替えは残す。
 - 理由: 入力欄の近くなら、送る前に送り先が目に入る（外に送るかどうかが分かる。DEC-MTG-085 の表示を兼ねる）。会議中は画面が狭いので、ツールバーやシートを足さない。使えないものを隠すと「なぜ出ないのか」が分からないので、理由を添えて選べなくする。「新しい会話」は話題を変えるためのもので、モデルの選択とは別。
 - 決めた場面: 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承
-- 関係する要件: REQ-MTG-047, REQ-MTG-048, REQ-MTG-040, REQ-MTG-041, REQ-MTG-016
+- 関係する要件: REQ-MTG-048, REQ-MTG-049, REQ-MTG-040, REQ-MTG-041, REQ-MTG-016
 - 対象: Mac
 - 実装の場所: `AIRouteMenu`、`AIRoute`（`availability`・`options`）、`MeetingChatModel.override`、`MeetingAskModel.override`、`MeetingWindowView`
 

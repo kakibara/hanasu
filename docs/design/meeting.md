@@ -322,7 +322,7 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 
 #### 4.13.1 送り先の切り替え
 
-AI チャットと会議への質問（11.2）で、その会話・その画面だけ、送り先の AI とモデルを既定から変える（REQ-MTG-047・048、DEC-MTG-095）。部品は `AIRouteMenu.swift`。
+AI チャットと会議への質問（11.2）で、その会話・その画面だけ、送り先の AI とモデルを既定から変える（REQ-MTG-048・048、DEC-MTG-150）。部品は `AIRouteMenu.swift`。
 
 - **一覧**: `AIRoute.sections(settings:)` が AI の並び（ローカル・Apple・Gemini・Claude。DEC-COM-168）で選択肢を作る。Gemini は `AppSettings.suggestedModels` に、設定の 3 用途の Gemini のモデルのうち一覧にないものを足す。Claude も同じ。先頭は「既定（<AI> · <モデル>）」。
 - **使えるか**: `AIRoute.availability(settings:appleFMReason:)` が中身を読まずに調べる（Claude・Gemini のキーは `Keychain.exists`、サービスアカウントはファイルがあるか、ローカルは `LocalLLMStore.isDownloaded`）。Apple の判定（`AppleFMAvailability.check`）は署名を確かめるので、モデルが最初に 1 回だけして覚える。見直すのは画面が出たときと設定が変わったとき。使えない項目は理由を文字に入れて選べなくする。

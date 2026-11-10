@@ -18,7 +18,7 @@ enum MeetingChat {
         var coveredUntil: Double?
         /// 答えのとき: 渡した発言の数
         var lineCount: Int?
-        // 要件: REQ-MTG-047
+        // 要件: REQ-MTG-048
         /// 答えのとき: その答えを作った AI とモデル（「Claude · Haiku 5.5」）
         var modelLabel: String?
     }

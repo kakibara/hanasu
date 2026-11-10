@@ -60,8 +60,8 @@ enum TextAIPurpose: String, CaseIterable, Identifiable {
     }
 }
 
-// 要件: REQ-MTG-047, REQ-MTG-048
-// 設計判断: DEC-MTG-095
+// 要件: REQ-MTG-048, REQ-MTG-049
+// 設計判断: DEC-MTG-150
 /// 送り先の AI とモデルの組。画面で既定から切り替えたものもこれで持つ
 struct TextAIChoice: Hashable {
     var provider: TextAIProvider
@@ -153,8 +153,8 @@ struct TextAIClient {
         try make(settings.aiChoice(for: purpose), settings: settings, for: purpose, timeout: timeout)
     }
 
-    // 要件: REQ-MTG-047, REQ-MTG-048
-    // 設計判断: DEC-MTG-095
+    // 要件: REQ-MTG-048, REQ-MTG-049
+    // 設計判断: DEC-MTG-150
     /// 選んだ AI とモデルのクライアント（画面で既定から切り替えたときも）。認証情報がまだなければ nil。
     /// モデルは generate に渡す（ローカルだけはクライアントが持つ）
     static func make(_ choice: TextAIChoice, settings: AppSettings, for purpose: TextAIPurpose,
