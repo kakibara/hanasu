@@ -40,9 +40,14 @@ enum MeetingAudioCLI {
                         failed: [MeetingChannel]? = nil) -> Meeting {
         var m = Meeting(id: id, title: "会議 \(id)", startedAt: now.addingTimeInterval(-daysAgo * 24 * 3600))
         m.status = status
-        m.utterances = (0..<utterances).map { i in
-            Utterance(speaker: i % 2 == 0 ? "me" : "spk1", start: Double(i * 5), end: Double(i * 5 + 4), text: "発言 \(i)")
+        // 式を分けて型を書く（Swift 6.3 では 1 つの式のままだと型の推論が時間切れになる）
+        var list: [Utterance] = []
+        for i in 0..<utterances {
+            let speaker: String = i.isMultiple(of: 2) ? "me" : "spk1"
+            let start: Double = Double(i) * 5
+            list.append(Utterance(speaker: speaker, start: start, end: start + 4, text: "発言 \(i)"))
         }
+        m.utterances = list
         m.transcriptionFailedChannels = failed
         return m
     }
