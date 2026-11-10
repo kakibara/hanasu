@@ -572,6 +572,7 @@
     "- Answer in English. You may use headings, bullet points, and bold (Markdown), but not tables."
   ],
   "chat.transcript.omitted": "(The first ${count} utterances were omitted because of the length limit.)",
+  "chat.transcript.recentOnly": "(The ${count} utterances from before the last ${minutes} minutes were omitted.)",
   "chat.transcript.afterRecording": "(This meeting is transcribed with ${engine} after the recording stops, so there is no record of the speech during recording.)",
   "chat.transcript.empty": "(Nothing has been said yet.)",
   "chat.status.live": "Recording (as of ${elapsed} since the recording started)",
@@ -582,5 +583,6 @@
   "chat.quick.recent": "Briefly summarize what was discussed in the last 5 minutes or so.",
   "chat.quick.decisions": "List what has been decided so far and who will do what (action items, TODOs) as bullet points. List what is still undecided separately.",
   "chat.quick.explain": "Explain the most recent topic so that someone without the background can follow it. Briefly explain any technical terms.",
-  "chat.quick.questions": "List 3 points that are still unclear or worth confirming, phrased as questions I can ask in the meeting."
+  "chat.quick.questions": "List 3 points that are still unclear or worth confirming, phrased as questions I can ask in the meeting.",
+  "chat.quick.asked": "Find the most recent question or request that the other participants (\"Others\") made in the recent conversation. Include the not-yet-finalized speech in <pending_transcript> when you look. Write only the following two items, briefly.\n1. **What you were asked**: Restate what was asked or requested in 1–2 sentences, with the timestamp [12:34] of the utterance it is based on. Mention who asked and whether it was directed at me (\"Me\") only when it is clear, for example from how they addressed someone.\n2. **Background**: The flow of the discussion that led up to the question, in 2–3 bullet points.\nDo not suggest what I should answer or how to answer. If you cannot find a question or request, say so, and then summarize the last 1–2 minutes of discussion in 2–3 lines."
 }

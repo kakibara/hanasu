@@ -574,6 +574,7 @@
     "- Antworte auf Deutsch. Überschriften, Aufzählungen und Fettdruck (Markdown) sind erlaubt, Tabellen nicht."
   ],
   "chat.transcript.omitted": "(Wegen der Längenbegrenzung wurden die ersten ${count} Äußerungen ausgelassen.)",
+  "chat.transcript.recentOnly": "(Die ${count} Äußerungen vor den letzten ${minutes} Minuten wurden ausgelassen.)",
   "chat.transcript.afterRecording": "(Diese Besprechung wird erst nach dem Ende der Aufnahme mit ${engine} transkribiert, daher gibt es während der Aufnahme keine Aufzeichnung des Gesprochenen.)",
   "chat.transcript.empty": "(Bisher wurde noch nichts gesagt.)",
   "chat.status.live": "Aufnahme läuft (${elapsed} seit Beginn der Aufnahme)",
@@ -584,5 +585,6 @@
   "chat.quick.recent": "Fass kurz zusammen, worüber in den letzten etwa 5 Minuten gesprochen wurde.",
   "chat.quick.decisions": "Liste in Stichpunkten auf, was bisher entschieden wurde und wer was übernimmt (Aufgaben, To-dos). Führe das, was noch offen ist, getrennt auf.",
   "chat.quick.explain": "Erkläre das aktuelle Thema so, dass es auch jemand ohne Hintergrundwissen versteht. Erkläre Fachbegriffe kurz.",
-  "chat.quick.questions": "Nenne 3 Punkte, die bisher unklar geblieben sind oder geklärt werden sollten, formuliert als Fragen, die ich in der Besprechung stellen kann."
+  "chat.quick.questions": "Nenne 3 Punkte, die bisher unklar geblieben sind oder geklärt werden sollten, formuliert als Fragen, die ich in der Besprechung stellen kann.",
+  "chat.quick.asked": "Finde im jüngsten Gesprächsverlauf die neueste Frage oder Bitte, die von den anderen Teilnehmenden („Andere“) kam. Beziehe dabei auch das noch nicht feststehende Gesprochene in <pending_transcript> ein. Schreib nur die folgenden zwei Punkte, kurz.\n1. **Was gefragt wurde**: Gib in 1–2 Sätzen wieder, was gefragt oder worum gebeten wurde, mit dem Zeitstempel [12:34] der Äußerung, auf die du dich stützt. Wer gefragt hat und ob die Frage an mich („Ich“) ging, nur angeben, wenn es eindeutig ist, etwa an der Anrede.\n2. **Hintergrund**: Der Gesprächsverlauf, der zu der Frage geführt hat, in 2–3 Stichpunkten.\nSchlag mir keine Antwort vor und auch nicht, wie ich antworten soll. Wenn du keine Frage oder Bitte findest, schreib das und fasse dann die letzten 1–2 Minuten des Gesprächs in 2–3 Zeilen zusammen."
 }

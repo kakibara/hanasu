@@ -67,8 +67,8 @@ Ele é inspirado no Typeless, Wispr Flow, Aqua Voice e Granola. O código-fonte 
 | **Atas com IA** | Geradas pela IA que você escolher para reuniões. Escolha um modelo: automático, reunião semanal, 1:1, chamada de vendas, brainstorming ou personalizado. Os itens de ação incluem um responsável e um prazo. |
 | **Confira a origem e ouça de novo** *(Mac)* | A ata abre em uma única página: resumo e itens de ação primeiro, com a transcrição ao lado. Clique no horário depois de um ponto para ir à fala de onde ele veio. Reproduza a gravação a partir de qualquer fala e silencie o seu lado ou o deles se a chamada teve eco. |
 | **Notas ao vivo e destaques** | Digite notas com horário durante a chamada, ou pressione <kbd>⌃⌥⌘ H</kbd> para marcar "isto é importante" (dá para desfazer por 10 segundos). A ata dá prioridade a esses trechos, e depois você pode ler a conversa em torno de cada marcação. |
-| **Legendas flutuantes** *(Mac)* | Mostre a transcrição ao vivo como legendas sobre o app da reunião. |
-| **Chat com IA durante a reunião** *(Mac)* | Enquanto grava, pergunte à IA sobre a conversa até agora (<kbd>⌘J</kbd>). Um clique para "resumo até agora" ou "decisões e tarefas". Faça perguntas de acompanhamento e clique em um horário numa resposta para ir àquele trecho da transcrição. |
+| **Legendas flutuantes** *(Mac)* | Mostre a transcrição ao vivo como legendas sobre o app da reunião. Se você deixá-las ativadas, elas aparecem de novo na próxima reunião. |
+| **Chat com IA durante a reunião** *(Mac)* | Enquanto grava, pergunte à IA sobre a conversa até agora (<kbd>⌘J</kbd>). Um clique para "resumo até agora" ou "decisões e tarefas". Faça perguntas de acompanhamento e clique em um horário numa resposta para ir àquele trecho da transcrição. Foi pego de surpresa por uma pergunta enquanto fazia outra coisa? Pressione **O que me perguntaram?** nas legendas (ou <kbd>⌃⌥⌘ A</kbd>) sem sair do app da reunião: um painel flutuante mostra o que os outros acabaram de dizer e, em seguida, o resumo da IA com a pergunta e o contexto que levou até ela. |
 | **Detecção de reuniões** | Quando um app de reunião começa a usar o microfone, o Hanasu pergunta se deve gravar. Ele nunca começa a gravar sozinho. |
 | **Pesquisar e perguntar** | Pesquise o texto de todas as reuniões, ou pergunte "O que decidimos na reunião semanal passada?". A resposta cita as reuniões que usou. |
 | **Exportar** | Copie como Markdown ou como um resumo pronto para o Slack, salve como `.md` / `.txt`, ou envie os itens de ação para o Lembretes. |
@@ -174,6 +174,7 @@ No Mac, você pode mostrar o ícone do Hanasu na barra de menus, no Dock ou em a
 | Cancelar a gravação | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Gravação de reunião (iniciar / parar) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Marcar "isto é importante" em uma reunião | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| "O que me perguntaram?" em uma reunião | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Você pode mudar todos os atalhos nos Ajustes. O guia completo do usuário (em japonês) está em [docs/guide.md](docs/guide.md).
 

@@ -290,6 +290,9 @@ private struct MeetingTab: View {
             MeetingDetectionSettingsSection()
             MeetingNotesSettingsSection(onBeginShortcutRecording: onBeginShortcutRecording,
                                         onEndShortcutRecording: onEndShortcutRecording)
+            // 要件: REQ-MTG-047
+            MeetingAskedSettingsSection(onBeginShortcutRecording: onBeginShortcutRecording,
+                                        onEndShortcutRecording: onEndShortcutRecording)
             Section {
                 Text(tr("マイクを「自分」、スピーカーの音（Meet・Slack ハドル・Teams など）を「相手」として録ります。スピーカーだと相手の声がマイクにも入るので、イヤホンを使うと正確になります。"))
                 Text(tr("録音する前に、参加者の了承を得てください。"))

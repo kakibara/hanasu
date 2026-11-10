@@ -177,22 +177,49 @@ final class MeetingNotesSettings: ObservableObject {
         }
     }
 
+    // 要件: REQ-MTG-047
+    // 設計判断: DEC-MTG-097
+    /// 「何を聞かれた？」の初期値は ⌃⌥⌘ A（Asked）。Q は ⌃⌘Q（画面のロック）と押し間違えやすいので避けた
+    static let defaultAskedHotKey = HotKeyCombo(
+        keyCode: UInt32(kVK_ANSI_A), modifiers: UInt32(controlKey | optionKey | cmdKey))
+
+    /// 記録中だけ「何を聞かれた？」のショートカットを有効にする
+    @Published var askedHotKeyEnabled: Bool {
+        didSet { defaults.set(askedHotKeyEnabled, forKey: Keys.askedEnabled) }
+    }
+    @Published var askedHotKey: HotKeyCombo {
+        didSet {
+            defaults.set(Int(askedHotKey.keyCode), forKey: Keys.askedCode)
+            defaults.set(Int(askedHotKey.modifiers), forKey: Keys.askedModifiers)
+        }
+    }
+
     private init() {
         defaults.register(defaults: [
             Keys.enabled: true,
             Keys.code: Int(Self.defaultHighlightHotKey.keyCode),
             Keys.modifiers: Int(Self.defaultHighlightHotKey.modifiers),
+            Keys.askedEnabled: true,
+            Keys.askedCode: Int(Self.defaultAskedHotKey.keyCode),
+            Keys.askedModifiers: Int(Self.defaultAskedHotKey.modifiers),
         ])
         highlightHotKeyEnabled = defaults.bool(forKey: Keys.enabled)
         highlightHotKey = HotKeyCombo(
             keyCode: UInt32(defaults.integer(forKey: Keys.code)),
             modifiers: UInt32(defaults.integer(forKey: Keys.modifiers)))
+        askedHotKeyEnabled = defaults.bool(forKey: Keys.askedEnabled)
+        askedHotKey = HotKeyCombo(
+            keyCode: UInt32(defaults.integer(forKey: Keys.askedCode)),
+            modifiers: UInt32(defaults.integer(forKey: Keys.askedModifiers)))
     }
 
     private enum Keys {
         static let enabled = "meetingHighlightHotKeyEnabled"
         static let code = "meetingHighlightHotKeyCode"
         static let modifiers = "meetingHighlightHotKeyModifiers"
+        static let askedEnabled = "meetingAskedHotKeyEnabled"
+        static let askedCode = "meetingAskedHotKeyCode"
+        static let askedModifiers = "meetingAskedHotKeyModifiers"
     }
 }
 
@@ -200,65 +227,18 @@ final class MeetingNotesSettings: ObservableObject {
 // 設計判断: DEC-MTG-042
 /// 「ここ重要」のグローバルショートカット。会議の記録中だけ登録する（ほかのアプリのキーを普段は奪わない）。
 @MainActor
-final class MeetingHighlightHotKey: ObservableObject {
+final class MeetingHighlightHotKey: MeetingRecordingHotKey {
     static let shared = MeetingHighlightHotKey()
-
-    /// 登録できなかったとき（ほかのアプリと重なっているなど）の説明
-    @Published private(set) var registrationError: String?
-
-    private let hotKeys = HotKeyManager()
-    private var hotKeyID: UInt32?
-    private var handler: (() -> Void)?
-    private var suspended = false
-    private var cancellables: Set<AnyCancellable> = []
 
     private init() {
         let settings = MeetingNotesSettings.shared
-        settings.$highlightHotKey.removeDuplicates().dropFirst()
-            .sink { [weak self] _ in DispatchQueue.main.async { self?.refresh() } }
-            .store(in: &cancellables)
-        settings.$highlightHotKeyEnabled.removeDuplicates().dropFirst()
-            .sink { [weak self] _ in DispatchQueue.main.async { self?.refresh() } }
-            .store(in: &cancellables)
-    }
-
-    /// 記録の開始時に呼ぶ
-    func activate(_ handler: @escaping () -> Void) {
-        self.handler = handler
-        refresh()
-    }
-
-    /// 記録の停止時に呼ぶ
-    func deactivate() {
-        handler = nil
-        refresh()
-    }
-
-    /// 設定画面でショートカットを記録している間は外す
-    func suspend() {
-        suspended = true
-        refresh()
-    }
-
-    func resume() {
-        suspended = false
-        refresh()
-    }
-
-    private func refresh() {
-        if let hotKeyID { hotKeys.unregister(hotKeyID) }
-        hotKeyID = nil
-        registrationError = nil
-        let settings = MeetingNotesSettings.shared
-        guard handler != nil, !suspended, settings.highlightHotKeyEnabled else { return }
-        let combo = settings.highlightHotKey
-        hotKeyID = hotKeys.register(combo) { [weak self] event in
-            guard event == .pressed else { return }
-            MainActor.assumeIsolated { self?.handler?() }
-        }
-        if hotKeyID == nil {
-            registrationError = tr("ショートカット %@ を登録できませんでした（ほかのショートカットと重なっている可能性があります）", "\(combo.displayString)")
-            appLog.error("highlight hot key registration failed")
-        }
+        super.init(
+            isEnabled: { settings.highlightHotKeyEnabled },
+            combo: { settings.highlightHotKey },
+            changes: Publishers.Merge(
+                settings.$highlightHotKey.removeDuplicates().dropFirst().map { _ in () },
+                settings.$highlightHotKeyEnabled.removeDuplicates().dropFirst().map { _ in () })
+                .eraseToAnyPublisher(),
+            logName: "highlight")
     }
 }
