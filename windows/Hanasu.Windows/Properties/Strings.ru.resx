@@ -732,12 +732,6 @@
   <data name="Settings_Storage" xml:space="preserve">
     <value>Хранение</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>Сохранять аудиофайлы (me.wav / others.wav) после обработки</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>Если выключено, аудио удаляется после создания расшифровки и протокола (при ошибке распознавания оно сохраняется). Формат — WAV 16 кГц моно, около 115 МБ на канал в час.</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>Место сохранения</value>
   </data>
@@ -1351,5 +1345,126 @@
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>После остановки записи к расшифровке применяются правила замены с вкладки «Словарь и правила», и протокол создаётся по тексту с заменами. Исходный распознанный текст тоже сохраняется, и его можно вернуть через кнопку «Словарь…» в заметках встреч.</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>Удалять запись после распознавания</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>Если включено, запись встречи (me.wav / others.wav) удаляется после создания расшифровки и протокола. Если расшифровка неполная, запись сохраняется. Во время записи это можно изменить для текущей встречи в окне «Заметки встреч». Аудио хранится в формате WAV (моно, 16 kHz), около 115 MB на канал за час.</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>Хранить записи</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>Записи старше этого срока автоматически удаляются при запуске приложения и после обработки встречи — в том числе записи, которые вы решили сохранить для отдельной встречи. Записи встреч с неполной расшифровкой не удаляются.</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>Из них с неполной расшифровкой: {0}.</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>Записи старше выбранного срока ({0}) будут удалены сейчас. Встреч: {1} ({2}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>Встречи с неполной расшифровкой будут сохранены (количество: {0}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>Изменить параметр и удалить их?</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>Значение по умолчанию для встреч, которые вы будете записывать дальше. Во время записи его можно изменить для текущей встречи в панели записи в левом верхнем углу.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>Удалить запись этой встречи после распознавания</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>Включено: запись этой встречи будет удалена после создания расшифровки и протокола (если расшифровка неполная, запись сохранится). Значение по умолчанию не меняется.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>Выключено: запись этой встречи будет сохранена. Значение по умолчанию не меняется.</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>Удалить запись…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>Управление записями…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>У этой встречи не осталось записи.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>Во время записи или обработки удалить нельзя.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>Удаление записи — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>Удалить запись встречи «{0}» ({1})?</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>Протокол, расшифровка и заметки сохранятся.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>Нет расшифровки: {0}. Эта часть разговора не сохранится.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>В расшифровке этой встречи не хватает части. Эта часть разговора не сохранится.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>У этой встречи нет расшифровки. Если удалить запись, от разговора ничего не останется.</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>Запись встречи «{0}» удалена.</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>Не удалось удалить некоторые файлы записи. Оставшиеся файлы сохранены.
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>Аудиофайлы удаляются безвозвратно (не перемещаются в корзину). Это действие нельзя отменить.</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>Управление записями</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>Встреч с записями: {0}, {1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>Записей не осталось.</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>Нет расшифровки</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>Расшифровка неполная</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>Встречи с записями</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>Удалить выбранные записи…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>Удалить записи старше {0} дней…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>Удалить все записи…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>Если место сохранения синхронизируется с OneDrive, iCloud Drive или похожим сервисом, удаленные записи могут какое-то время оставаться в удаленных объектах этого сервиса.</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>Удалить записи встреч (количество: {0}, {1})?</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>Из них с неполной расшифровкой: {0}. Эти части разговора не сохранятся.</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>Встречи с неполной расшифровкой будут сохранены (количество: {0}, {1}). Их можно выбрать и удалить вручную.</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>Удалены записи встреч (количество: {0}).</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>Не удалось полностью удалить записи встреч (количество: {0}). Оставшиеся файлы сохранены.</value>
   </data>
 </root>

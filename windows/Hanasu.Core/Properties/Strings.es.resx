@@ -538,7 +538,7 @@
     <value>Reunión {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>La aplicación se cerró durante la grabación. Es posible que los archivos de audio ({0} / {1}) se hayan conservado en parte.</value>
+    <value>La aplicación se cerró durante la grabación.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>No se puede empezar a grabar la reunión</value>

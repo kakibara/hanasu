@@ -26,32 +26,17 @@ struct MeetingWindowView: View {
     /// 削除を確かめている会議
     @State private var pendingDelete: Meeting?
     @State private var deleteError: String?
+    /// 録音の削除を確かめている会議と、録音の大きさ（REQ-MTG-055）
+    @State private var pendingAudioDelete: (meeting: Meeting, size: Int64)?
     @StateObject private var panel: MeetingPanelState
     @AppStorage("meetingInspectorShown") private var inspectorShown = true
 
     var body: some View {
-        NavigationSplitView {
-            // 検索欄・一覧・記録の欄を縦に積む。safeAreaInset で重ねると、一覧が欄の裏に回り込んで透けて見える
-            VStack(spacing: 0) {
-                MeetingSearchField(model: search) {
-                    showingAsk = true
-                    selection = nil
-                }
-                sidebarList
-                    .frame(maxHeight: .infinity)
-                Divider()
-                RecordButton(recorder: recorder)
-                    .padding(12)
-            }
-            .navigationSplitViewColumnWidth(min: 220, ideal: 260)
-        } detail: {
-            detail
-        }
-        // 設計判断: DEC-MTG-130（後ろ側のパネルは NavigationSplitView に付ける）
-        .inspector(isPresented: inspectorBinding) {
-            inspector
-        }
+        // 修飾子が多いと型の推論が時間切れになるので、分割の画面と後ろ側のパネルは splitView に分ける
+        splitView
         .onReceive(recorder.$meetings) { search.update($0) }
+        // 要件: REQ-MTG-047（「チャットで続ける」。式が長いと型の推論が時間切れになるので、関数に分ける）
+        .onReceive(MeetingAskedQuestion.shared.$openChatRequest.compactMap { $0 }, perform: openChat)
         .onChange(of: search.isActive) { _, active in
             if !active { jump = nil }  // 検索をやめたら、検索語の色も消す
         }
@@ -75,6 +60,15 @@ struct MeetingWindowView: View {
             Button(tr("キャンセル"), role: .cancel) {}
         } message: { _ in
             Text(tr("議事録・文字起こし・メモ・音声をまとめてゴミ箱に移します。ゴミ箱から戻せます。"))
+        }
+        // 要件: REQ-MTG-055
+        // 設計判断: DEC-MTG-140, DEC-MTG-142
+        .confirmationDialog(pendingAudioDelete.map { MeetingAudioDeleteText.title(for: $0.meeting) } ?? "",
+                            isPresented: Binding(get: { pendingAudioDelete != nil }, set: { if !$0 { pendingAudioDelete = nil } })) {
+            Button(tr("削除"), role: .destructive) { deleteAudio() }
+            Button(tr("キャンセル"), role: .cancel) {}
+        } message: {
+            Text(pendingAudioDelete.map { MeetingAudioDeleteText.message(for: $0.meeting, size: $0.size) } ?? "")
         }
         .alert(tr("削除できませんでした"), isPresented: Binding(get: { deleteError != nil }, set: { if !$0 { deleteError = nil } })) {
             Button("OK") {}
@@ -102,7 +96,7 @@ struct MeetingWindowView: View {
             }
         } else if let meeting = selectedMeeting {
             MeetingDetailView(meeting: meeting, recorder: recorder, panel: panel, jump: jump?.meetingID == meeting.id ? jump : nil,
-                              onDelete: { confirmDelete(meeting.id) })
+                              onDelete: { confirmDelete(meeting.id) }, onDeleteAudio: { confirmDeleteAudio(meeting.id) })
         } else {
             ContentUnavailableView(tr("会議を選んでください"), systemImage: "waveform",
                                    description: Text(tr("下のボタンか %@ で記録を始められます。", "\(AppSettings.shared.meetingHotKey.displayString)")))
@@ -110,6 +104,47 @@ struct MeetingWindowView: View {
     }
 
     private var isLive: Bool { recorder.state == .recording || recorder.state == .starting }
+
+    /// 左の一覧・真ん中・後ろ側のパネル
+    private var splitView: some View {
+        NavigationSplitView {
+            // 検索欄・一覧・記録の欄を縦に積む。safeAreaInset で重ねると、一覧が欄の裏に回り込んで透けて見える
+            VStack(spacing: 0) {
+                MeetingSearchField(model: search) {
+                    showingAsk = true
+                    selection = nil
+                }
+                sidebarList
+                    .frame(maxHeight: .infinity)
+                Divider()
+                RecordButton(recorder: recorder)
+                    .padding(12)
+            }
+            .navigationSplitViewColumnWidth(min: 220, ideal: 260)
+        } detail: {
+            detail
+        }
+        // 設計判断: DEC-MTG-130（後ろ側のパネルは NavigationSplitView に付ける）
+        .inspector(isPresented: inspectorBinding) {
+            inspector
+        }
+    }
+
+    // 要件: REQ-MTG-047
+    // 設計判断: DEC-MTG-096
+    /// 「チャットで続ける」: その会議を選び、後ろ側のパネルを出して AI チャットにし、入力欄にフォーカスを移す
+    private func openChat(_ request: MeetingAskedQuestion.OpenChatRequest) {
+        MeetingAskedQuestion.shared.consumeOpenChatRequest(request.id)
+        showingAsk = false
+        selection = request.meetingID
+        inspectorShown = true
+        panel.tab = .chat
+        UserDefaults.standard.set(LiveSidePanelMode.chat.rawValue, forKey: "meetingLiveSidePanel")
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(200))  // パネルができてから
+            MeetingChatStore.shared.model(for: request.meetingID).requestFocus()
+        }
+    }
 
     private var selectedMeeting: Meeting? {
         guard let id = selection else { return nil }
@@ -167,6 +202,22 @@ struct MeetingWindowView: View {
         pendingDelete = meeting
     }
 
+    // 要件: REQ-MTG-055
+    /// 一覧の右クリック・ツールバーの「…」から、録音の削除を確かめる
+    private func confirmDeleteAudio(_ id: String?) {
+        guard let id, let meeting = recorder.meetings.first(where: { $0.id == id }), recorder.canDeleteAudio(meeting) else { return }
+        pendingAudioDelete = (meeting, MeetingStore.audioSize(for: meeting))
+    }
+
+    // 要件: REQ-MTG-055
+    // 設計判断: DEC-MTG-140（会議は選んだまま。再生のバーは recorder.deleteAudio が止めて読み直す）
+    private func deleteAudio() {
+        guard let meeting = pendingAudioDelete?.meeting else { return }
+        pendingAudioDelete = nil
+        let failures = recorder.deleteAudio([meeting])
+        if !failures.isEmpty { deleteError = MeetingAudioDeleteText.failureMessage(failures) }
+    }
+
     // 要件: REQ-MTG-051
     // 設計判断: DEC-MTG-138
     /// 左の一覧（検索中は検索結果）。記録中・今日・昨日・今週・先週・月ごとにまとめる
@@ -192,6 +243,11 @@ struct MeetingWindowView: View {
                                        style: MeetingRow.Style(group: group.id))
                                 .tag(meeting.id)
                                 .contextMenu {
+                                    // 要件: REQ-MTG-055, REQ-MTG-056
+                                    Button(tr("録音を削除…")) { confirmDeleteAudio(meeting.id) }
+                                        .disabled(!recorder.canDeleteAudio(meeting))
+                                    Button(tr("録音の管理…")) { MeetingAudioManagerWindow.show() }
+                                    Divider()
                                     Button(tr("削除…"), role: .destructive) { confirmDelete(meeting.id) }
                                         .disabled(!recorder.canDelete(meeting))
                                 }
@@ -328,7 +384,7 @@ private struct RecordButton: View {
                 .foregroundStyle(.secondary)
             }
             .buttonStyle(.plain)
-            .help(tr("記録する機器と議事録の型を変える（次の記録から）"))
+            .help(tr("記録する機器・議事録の型・録音の扱いを変える（次の記録から）"))
             .accessibilityLabel(tr("記録の設定"))
             .accessibilityValue(summary)
             .popover(isPresented: $showingSettings, arrowEdge: .top) {
@@ -351,7 +407,9 @@ private struct RecordButton: View {
             : devices.outputs.first { $0.uid == settings.meetingOutputDeviceUID }?.name ?? tr("（接続されていない機器）")
         let input = settings.meetingInputDeviceUID.isEmpty ? tr("システムのマイク")
             : devices.inputs.first { $0.uid == settings.meetingInputDeviceUID }?.name ?? tr("（接続されていない機器）")
-        return [template, output, input].joined(separator: " · ")
+        // 要件: REQ-MTG-051, REQ-MTG-010（録音を消すのがオンなら足す。記録中・処理中は記録中の会議の値）
+        let deletesAudio = recorder.current.map { $0.deleteAudioAfterTranscription == true } ?? !settings.keepMeetingAudio
+        return ([template, output, input] + (deletesAudio ? [tr("録音は削除")] : [])).joined(separator: " · ")
     }
 }
 
@@ -359,15 +417,24 @@ private struct RecordButton: View {
 /// 記録の設定のパネル: スピーカー・マイク・議事録の型（記録中・処理中は変えられない。次の記録から）
 private struct RecordSettingsPopover: View {
     @ObservedObject var recorder: MeetingRecorder
+    @ObservedObject private var settings = AppSettings.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(tr("記録の設定")).font(.headline)
             MeetingDevicePickers(compact: true)
             MinutesTemplatePicker()
+            // 要件: REQ-MTG-010, REQ-MTG-051
+            // 設計判断: DEC-MTG-139（次の記録からの既定。記録中の会議の分は、記録中のツールバーで変える）
+            Toggle(tr("文字起こしのあとに録音を削除する"),
+                   isOn: Binding(get: { !settings.keepMeetingAudio }, set: { settings.keepMeetingAudio = !$0 }))
             if recorder.state != .idle {
                 Text(tr("記録中は変えられません。次の記録から使います。"))
                     .font(.caption).foregroundStyle(.secondary)
+                if recorder.state == .recording {
+                    Text(tr("この会議の録音の扱いは、記録中のツールバーで変えられます。"))
+                        .font(.caption).foregroundStyle(.secondary)
+                }
             }
         }
         .disabled(recorder.state != .idle)
@@ -424,6 +491,8 @@ struct MeetingDetailView: View {
     var embedsInspector = true
     /// 削除の確かめを出す（会議ノートのウインドウが持つ）。nil なら削除を出さない
     var onDelete: (() -> Void)?
+    /// 録音の削除の確かめを出す（REQ-MTG-055）。nil なら出さない
+    var onDeleteAudio: (() -> Void)?
     @AppStorage("meetingInspectorShown") private var inspectorShown = true
     @State private var editingSpeakers = false
 
@@ -431,7 +500,7 @@ struct MeetingDetailView: View {
     static let documentMinWidth: CGFloat = 400
 
     init(meeting: Meeting, recorder: MeetingRecorder, panel: MeetingPanelState, processing: Bool = false,
-         jump: MeetingJump? = nil, embedsInspector: Bool = false, onDelete: (() -> Void)? = nil) {
+         jump: MeetingJump? = nil, embedsInspector: Bool = false, onDelete: (() -> Void)? = nil, onDeleteAudio: (() -> Void)? = nil) {
         self.meeting = meeting
         self.recorder = recorder
         self.panel = panel
@@ -439,6 +508,7 @@ struct MeetingDetailView: View {
         self.jump = jump
         self.embedsInspector = embedsInspector
         self.onDelete = onDelete
+        self.onDeleteAudio = onDeleteAudio
     }
 
     /// 確認用の描き出し（CLI）: 後ろ側のパネルも自分で付ける。initialTab が 4 なら AI チャット、ほかは文字起こし。
@@ -515,7 +585,7 @@ struct MeetingDetailView: View {
             MeetingExportMenu(meeting: meeting, recorder: recorder)
                 .disabled(processing)
             MeetingMoreMenu(meeting: meeting, recorder: recorder, processing: processing,
-                            onEditSpeakers: { editingSpeakers = true }, onDelete: onDelete)
+                            onEditSpeakers: { editingSpeakers = true }, onDelete: onDelete, onDeleteAudio: onDeleteAudio)
         }
         ToolbarSpacer(.fixed, placement: .primaryAction)
         ToolbarItem(placement: .primaryAction) {
@@ -580,24 +650,25 @@ struct MeetingDetailInspector: View {
     }
 }
 
-// 要件: REQ-MTG-008, REQ-MTG-028
+// 要件: REQ-MTG-008, REQ-MTG-028, REQ-MTG-055, REQ-MTG-056
 // 設計判断: DEC-MTG-131, DEC-MTG-022
-/// ツールバーの「…」: 話者名・Finder で表示・削除
+/// ツールバーの「…」: 話者名・Finder で表示・録音を削除・録音の管理・削除
 struct MeetingMoreMenu: View {
     let meeting: Meeting
     @ObservedObject var recorder: MeetingRecorder
     var processing = false
     var onEditSpeakers: () -> Void
     var onDelete: (() -> Void)?
+    var onDeleteAudio: (() -> Void)?
 
     var body: some View {
         Menu {
             MeetingMoreMenuItems(meeting: meeting, recorder: recorder, processing: processing,
-                                 onEditSpeakers: onEditSpeakers, onDelete: onDelete)
+                                 onEditSpeakers: onEditSpeakers, onDelete: onDelete, onDeleteAudio: onDeleteAudio)
         } label: {
             Label(tr("その他"), systemImage: "ellipsis")
         }
-        .help(tr("話者名・Finder で表示・削除"))
+        .help(tr("話者名・Finder で表示・録音・削除"))
     }
 }
 
@@ -608,12 +679,28 @@ struct MeetingMoreMenuItems: View {
     var processing = false
     var onEditSpeakers: () -> Void
     var onDelete: (() -> Void)?
+    var onDeleteAudio: (() -> Void)?
+    /// 確認用の描き出しで、録音があるかを差し替える（nil ならファイルで決める）
+    var hasAudioOverride: Bool?
 
     var body: some View {
         Button(tr("話者名…"), action: onEditSpeakers)
             .disabled(processing || meeting.speakers.isEmpty)
         Button(tr("Finder で表示")) {
             NSWorkspace.shared.activateFileViewerSelecting([MeetingStore.directory(for: meeting)])
+        }
+        if let onDeleteAudio {
+            Divider()
+            // 要件: REQ-MTG-055
+            // 設計判断: DEC-MTG-140（録音があるかはファイルで決め、消したら recorder.audioRevision で描き直す）
+            let _ = recorder.audioRevision
+            let reason = hasAudioOverride.map { $0 ? nil : tr("この会議には録音が残っていません") }
+                ?? (processing ? tr("記録中・処理中は録音を削除できません") : MeetingAudioDeleteText.disabledReason(meeting, recorder: recorder))
+            Button(tr("録音を削除…"), action: onDeleteAudio)
+                .disabled(reason != nil)
+                .help(reason ?? tr("この会議の録音だけを削除する（議事録・文字起こしは残る）"))
+            // 要件: REQ-MTG-056
+            Button(tr("録音の管理…")) { MeetingAudioManagerWindow.show() }
         }
         if let onDelete {
             Divider()
@@ -663,6 +750,8 @@ struct LiveMeetingView: View {
                     LiveOffRecordButton(recorder: recorder)
                     // 要件: REQ-MTG-014
                     MeetingCaptionToggle(recorder: recorder)
+                    // 要件: REQ-MTG-010, REQ-MTG-054
+                    LiveDeleteAudioToggle(recorder: recorder)
                 }
                 ToolbarSpacer(.fixed, placement: .primaryAction)
                 ToolbarItem(placement: .primaryAction) {

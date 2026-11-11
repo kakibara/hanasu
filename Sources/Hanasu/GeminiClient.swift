@@ -142,6 +142,11 @@ struct GeminiClient {
         if let block = request.screenContext?.promptBlock() {
             lines.append(block)
         }
+        // 要件: REQ-DIC-041
+        // 設計判断: DEC-DIC-186
+        if let block = request.screenContext?.ocrBlock() {
+            lines.append(block)
+        }
         // 認識結果の中の区切りのタグは無害にしてから埋め込む（プロンプトインジェクションの対策。DEC-COM-054）
         lines.append("<transcript>\n\(PromptText.neutralizeDelimiters(request.transcript))\n</transcript>")
         return lines.joined(separator: "\n")

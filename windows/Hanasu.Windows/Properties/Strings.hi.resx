@@ -732,12 +732,6 @@
   <data name="Settings_Storage" xml:space="preserve">
     <value>संग्रहण</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>प्रोसेसिंग के बाद ऑडियो फ़ाइलें (me.wav / others.wav) रखें</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>बंद होने पर, ट्रांसक्रिप्ट और कार्यवृत्त बनने के बाद ऑडियो हटा दिया जाता है (ट्रांसक्रिप्शन विफल होने पर रखा जाता है). यह 16 kHz मोनो WAV है, प्रति चैनल प्रति घंटा लगभग 115 MB.</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>सहेजने का स्थान</value>
   </data>
@@ -1351,5 +1345,126 @@
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>रिकॉर्डिंग रोकने के बाद, ट्रांसक्रिप्ट पर "शब्दकोश और नियम" के बदलने के नियम लागू किए जाते हैं, और कार्यवृत्त बदले गए टेक्स्ट से बनता है। पहचाना गया मूल टेक्स्ट भी रखा जाता है, इसलिए आप मीटिंग नोट्स के "शब्दकोश…" से उसे वापस ला सकते हैं।</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>ट्रांसक्रिप्शन के बाद रिकॉर्डिंग हटाएँ</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>चालू होने पर, ट्रांसक्रिप्ट और कार्यवृत्त बनने के बाद मीटिंग की रिकॉर्डिंग (me.wav / others.wav) हटा दी जाती है. ट्रांसक्रिप्ट अधूरी होने पर रिकॉर्डिंग रखी जाती है. रिकॉर्डिंग के दौरान, आप मीटिंग नोट्स में उस मीटिंग के लिए इसे बदल सकते हैं. ऑडियो 16 kHz मोनो WAV है, प्रति चैनल प्रति घंटे लगभग 115 MB.</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>रिकॉर्डिंग रखने की अवधि</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>इस अवधि से पुरानी रिकॉर्डिंग, ऐप शुरू होने पर और मीटिंग प्रोसेस होने के बाद अपने-आप हटा दी जाती हैं. यह उन मीटिंग पर भी लागू होता है जिनकी रिकॉर्डिंग आपने रखने के लिए चुनी थी. जिन मीटिंग की ट्रांसक्रिप्ट अधूरी है, उनकी रिकॉर्डिंग नहीं हटाई जाती.</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>इनमें से {0} की ट्रांसक्रिप्ट अधूरी है.</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>{0} से पुरानी रिकॉर्डिंग अभी हटाई जाएँगी: {1} मीटिंग ({2}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>अधूरी ट्रांसक्रिप्ट वाली {0} मीटिंग रखी जाएँगी.</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>सेटिंग बदलें और इन्हें हटाएँ?</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>अब से रिकॉर्ड की जाने वाली मीटिंग के लिए डिफ़ॉल्ट. रिकॉर्डिंग के दौरान, आप ऊपर बाईं ओर के रिकॉर्डिंग बॉक्स में उस मीटिंग के लिए इसे बदल सकते हैं.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>ट्रांसक्रिप्शन के बाद इस मीटिंग की रिकॉर्डिंग हटाएँ</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>चालू: ट्रांसक्रिप्ट और कार्यवृत्त बनने के बाद इस मीटिंग की रिकॉर्डिंग हटा दी जाएगी (ट्रांसक्रिप्ट अधूरी होने पर रखी जाएगी). डिफ़ॉल्ट सेटिंग नहीं बदलती.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>बंद: इस मीटिंग की रिकॉर्डिंग रखी जाएगी. डिफ़ॉल्ट सेटिंग नहीं बदलती.</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>रिकॉर्डिंग हटाएँ…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>रिकॉर्डिंग प्रबंधित करें…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>इस मीटिंग की कोई रिकॉर्डिंग बाकी नहीं है.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>रिकॉर्डिंग या प्रोसेसिंग के दौरान इसे हटाया नहीं जा सकता.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>रिकॉर्डिंग हटाएँ — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>"{0}" की रिकॉर्डिंग ({1}) हटाएँ?</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>कार्यवृत्त, ट्रांसक्रिप्ट और नोट्स बने रहेंगे.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>इनकी ट्रांसक्रिप्ट नहीं है: {0}. बातचीत के उस हिस्से का कोई रिकॉर्ड नहीं बचेगा.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>इस मीटिंग की ट्रांसक्रिप्ट का कुछ हिस्सा गायब है. बातचीत के उस हिस्से का कोई रिकॉर्ड नहीं बचेगा.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>इस मीटिंग की कोई ट्रांसक्रिप्ट नहीं है. रिकॉर्डिंग हटाने पर बातचीत का कोई रिकॉर्ड नहीं बचेगा.</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>"{0}" की रिकॉर्डिंग हटा दी गई.</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>रिकॉर्डिंग की कुछ फ़ाइलें हटाई नहीं जा सकीं. बाकी फ़ाइलें रखी गई हैं.
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>ऑडियो फ़ाइलें स्थायी रूप से हटा दी जाएँगी (रीसायकल बिन में नहीं जाएँगी). इसे पूर्ववत नहीं किया जा सकता.</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>रिकॉर्डिंग प्रबंधन</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>बची हुई रिकॉर्डिंग: {0} मीटिंग, {1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>कोई रिकॉर्डिंग बाकी नहीं है.</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>कोई ट्रांसक्रिप्ट नहीं</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>ट्रांसक्रिप्ट अधूरी</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>रिकॉर्डिंग वाली मीटिंग</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>चुनी गई रिकॉर्डिंग हटाएँ…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>{0} दिन से पुरानी रिकॉर्डिंग हटाएँ…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>सभी रिकॉर्डिंग हटाएँ…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>अगर सहेजने का स्थान OneDrive, iCloud Drive या ऐसी ही किसी सेवा से सिंक होता है, तो हटाई गई रिकॉर्डिंग कुछ समय तक सिंक सेवा के हटाए गए आइटम में रह सकती हैं.</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>{0} मीटिंग की रिकॉर्डिंग ({1}) हटाएँ?</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>इनमें से {0} की ट्रांसक्रिप्ट अधूरी है. बातचीत के उन हिस्सों का कोई रिकॉर्ड नहीं बचेगा.</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>अधूरी ट्रांसक्रिप्ट वाली {0} मीटिंग ({1}) रखी जाएँगी. आप उन्हें चुनकर हटा सकते हैं.</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>{0} मीटिंग की रिकॉर्डिंग हटा दी गईं.</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>{0} मीटिंग की रिकॉर्डिंग पूरी तरह हटाई नहीं जा सकीं. बाकी फ़ाइलें रखी गई हैं.</value>
   </data>
 </root>

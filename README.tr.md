@@ -48,6 +48,7 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herk
 | **Hazır metinler** | "e-posta imzası" dediğinizde kaydettiğiniz metin tam yazdığınız gibi eklenir. Hazır metinler asla yapay zekâya gönderilmez. |
 | **Sözlük** | Özel adlar ve `ストックマーク => Stockmark` gibi değiştirme kuralları ekleyin. Değiştirme kuralları toplantı dökümlerine de uygulanır. Toplantı Notları'nda açtığınız bir toplantı için yapay zekâ o toplantıdan yeni girdiler önerebilir (Mac'te ayrıca geçmişinizden ve son toplantılarınızdan); yalnızca seçtiklerinizi eklersiniz. |
 | **Ekran bağlamı** *(isteğe bağlı)* | Hanasu pencere başlığını ve imlecin çevresindeki metni okur; böylece adlar ekranda zaten yazılı olanlarla eşleşir. Parola alanları asla okunmaz. |
+| **Ekran görüntüsündeki metin** *(isteğe bağlı, Mac)* | Hanasu tüm ekranlarınızın görüntüsünü alır, metni Mac'inizde okur ve yapay zekâya yalnızca bu metni iletir; böylece başka pencerelerdeki adlar ve model numaraları (örneğin "QX-7s") ekranda göründüğü gibi yazılır. Görüntü asla gönderilmez ve saklanmaz. HUD'daki düğmeyle tek bir kayıt için açıp kapatabilirsiniz. Ekran Kaydı izni gerekir. |
 | **Mikrofonunuzu seçin** *(Mac)* | Mikrofonu Ayarlar'dan seçin ya da kaydı durdurmadan HUD'daki mikrofon düğmesinden değiştirin. |
 | **Geçmiş** | Önceki sonuçlarda arama yapın ve başarısız olanları yeniden deneyin. Geçmiş varsayılan olarak 30 gün saklanır; bunu Ayarlar'dan değiştirebilirsiniz. Mac'te son sonucu yeniden yapıştırmak için <kbd>⌥⇧ V</kbd> tuşlarına basın. |
 | **Yapıştıracak yer yok mu?** | Odakta bir metin alanı yoksa (örneğin masaüstü öndeyse) Hanasu sonucu yapıştırmak yerine ekranda tutar. Oradan kopyalayın ya da istediğiniz yerde <kbd>⌘V</kbd> tuşlarına basın (sonucun panoda kalıp kalmayacağını seçebilirsiniz). |
@@ -67,8 +68,8 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herk
 | **Yapay zekâ tutanakları** | Toplantılar için seçtiğiniz yapay zekâ tarafından hazırlanır. Bir şablon seçin: otomatik, haftalık toplantı, birebir görüşme, satış görüşmesi, beyin fırtınası ya da özel. Aksiyon maddeleri bir sorumlu ve bir bitiş tarihi içerir. |
 | **Kaynağı kontrol edin ve yeniden dinleyin** *(Mac)* | Tutanak tek sayfa olarak açılır: önce özet ve aksiyon maddeleri, yanında da döküm. Bir maddenin sonundaki zamana tıklayarak o maddenin dayandığı konuşmaya gidin. Kaydı herhangi bir konuşmadan itibaren oynatın; görüşmede yankı olduysa kendi tarafınızın ya da karşı tarafın sesini kapatın. |
 | **Canlı notlar ve önemli anlar** | Görüşme sırasında zaman damgalı notlar yazın ya da "bu önemli" diye işaretlemek için <kbd>⌃⌥⌘ H</kbd> tuşlarına basın (10 saniye içinde geri alabilirsiniz). Tutanaklar bu bölümlere öncelik verir; sonrasında her işaretin çevresindeki konuşmayı okuyabilirsiniz. |
-| **Yüzen altyazılar** *(Mac)* | Canlı dökümü toplantı uygulamanızın üzerinde altyazı olarak gösterin. |
-| **Toplantı sırasında yapay zekâ sohbeti** *(Mac)* | Kayıt sırasında, o ana kadarki konuşma hakkında yapay zekâya soru sorun (<kbd>⌘J</kbd>). "Şu ana kadarki özet" ya da "kararlar ve yapılacaklar" tek tıkla. Ek sorular sorun ve dökümün o bölümüne gitmek için yanıttaki bir zaman damgasına tıklayın. |
+| **Yüzen altyazılar** *(Mac)* | Canlı dökümü toplantı uygulamanızın üzerinde altyazı olarak gösterin. Açık bırakırsanız bir sonraki toplantıda da görünürler. |
+| **Toplantı sırasında yapay zekâ sohbeti** *(Mac)* | Kayıt sırasında, o ana kadarki konuşma hakkında yapay zekâya soru sorun (<kbd>⌘J</kbd>). "Şu ana kadarki özet" ya da "kararlar ve yapılacaklar" tek tıkla. Ek sorular sorun ve dökümün o bölümüne gitmek için yanıttaki bir zaman damgasına tıklayın. Başka bir işle uğraşırken aniden size soru mu yöneltildi? Toplantı uygulamanızdan ayrılmadan altyazılardaki **Bana ne soruldu?** düğmesine (ya da <kbd>⌃⌥⌘ A</kbd> tuşlarına) basın: yüzen bir panelde diğerlerinin az önce söyledikleri, ardından yapay zekânın özeti, yani sorunun ne olduğu ve konuşmanın oraya nasıl geldiği görünür. |
 | **Toplantı algılama** | Bir toplantı uygulaması mikrofonu kullanmaya başladığında Hanasu kayıt yapılıp yapılmayacağını sorar. Kaydı asla kendiliğinden başlatmaz. |
 | **Arama ve Sorma** | Tüm toplantıların metninde arama yapın ya da "Geçen haftaki toplantıda ne karar verdik?" diye sorun. Yanıt, kullandığı toplantıları kaynak olarak gösterir. |
 | **Dışa aktarma** | Markdown olarak ya da Slack'e hazır bir özet olarak kopyalayın, `.md` / `.txt` olarak kaydedin veya aksiyon maddelerini Anımsatıcılar'a gönderin. |
@@ -136,7 +137,7 @@ En son sürümü [**Releases**](https://github.com/kakibara/hanasu/releases/late
 1. Zip dosyasını açın ve `Hanasu.app` uygulamasını **Uygulamalar** klasörüne taşıyın.
 2. Uygulama kendinden imzalıdır ve notarize edilmemiştir, bu yüzden macOS ilk seferde açılmasını engeller. **Bitti**'ye tıklayın, ardından **Sistem Ayarları → Gizlilik ve Güvenlik** bölümünü açıp **Yine de Aç**'a tıklayın.
    Bunun yerine `xattr -dr com.apple.quarantine /Applications/Hanasu.app` komutunu da çalıştırabilirsiniz.
-3. İstendiğinde **Mikrofon**, **Konuşma Tanıma** ve **Erişilebilirlik** izinlerini verin. Erişilebilirlik izni ⌘V ile yapıştırmak için gereklidir.
+3. İstendiğinde **Mikrofon**, **Konuşma Tanıma** ve **Erişilebilirlik** izinlerini verin. Erişilebilirlik izni ⌘V ile yapıştırmak için gereklidir. **Ekran Kaydı** izni yalnızca ekran görüntüsündeki metni açarsanız istenir.
 
 </details>
 
@@ -174,13 +175,14 @@ Mac'te Hanasu simgesini menü çubuğunda, Dock'ta ya da her ikisinde gösterebi
 | Kaydı iptal etme | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Toplantı kaydı (başlat / durdur) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Toplantıda "bu önemli" diye işaretleme | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| Toplantıda "Bana ne soruldu?" | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Tüm kısayolları Ayarlar'dan değiştirebilirsiniz. Kullanıcı kılavuzunun tamamı (Japonca) [docs/guide.md](docs/guide.md) dosyasındadır.
 
 ## Gizlilik
 
 - **Ses varsayılan olarak cihazınızda kalır.** Konuşma tanıma, Whisper ve konuşmacı ayrımı tamamen yerel olarak çalışır.
-- **Yapay zekâya ses değil, metin gider.** Gemini veya Claude dökümü alır. Ayarlarınıza bağlı olarak yazı yazdığınız uygulamanın adını, ekran bağlamını ve Sorma özelliği ve toplantı sırasındaki yapay zekâ sohbeti için toplantı dökümlerini de alabilir.
+- **Yapay zekâya ses değil, metin gider.** Gemini veya Claude dökümü alır. Ayarlarınıza bağlı olarak yazı yazdığınız uygulamanın adını, ekran bağlamını, ekranınızın ekran görüntüsünden okunan metni (görüntünün kendisi asla gönderilmez) ve Sorma özelliği ve toplantı sırasındaki yapay zekâ sohbeti için toplantı dökümlerini de alabilir.
 - **Yerel ve Apple da metni cihazınızda tutar.** Bunlardan birini seçerseniz hiçbir yapay zekâ hizmetine hiçbir şey gönderilmez. İndirilen tek şey modelin kendisidir.
 - **Ses yalnızca siz seçerseniz Google'a gider.** Gemini konuşma motorunu seçerseniz kaydedilen ses Google'a gönderilir.
 - **Toplantılar düz dosyalardır.** `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`) altında JSON ve Markdown olarak kaydedilir. Mac ve Windows aynı biçimi kullanır.

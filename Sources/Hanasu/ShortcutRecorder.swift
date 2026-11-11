@@ -3,10 +3,10 @@ import Carbon.HIToolbox
 import SwiftUI
 
 // 設計判断: DEC-COM-018
-/// 設定で変えられるショートカットの一覧（音声入力・翻訳・選択を声で編集・会議の記録・「ここ重要」・最後の結果をもう一度入力）。
+/// 設定で変えられるショートカットの一覧（音声入力・翻訳・選択を声で編集・会議の記録・「ここ重要」・「何を聞かれた？」・最後の結果をもう一度入力）。
 /// 記録するときに、ほかのショートカットと同じキーになっていないかを確かめるために使う（Windows 版の SetHotKey と同じ）
 enum ShortcutKind: CaseIterable {
-    case dictation, translate, edit, meeting, highlight, repaste
+    case dictation, translate, edit, meeting, highlight, asked, repaste
 
     /// 設定画面での呼び名
     var title: String {
@@ -16,6 +16,7 @@ enum ShortcutKind: CaseIterable {
         case .edit: tr("選択を声で編集")
         case .meeting: tr("会議の記録の開始／停止")
         case .highlight: tr("「ここ重要」の印")
+        case .asked: tr("「何を聞かれた？」")
         case .repaste: tr("最後の結果をもう一度入力")
         }
     }
@@ -28,6 +29,8 @@ enum ShortcutKind: CaseIterable {
         case .edit: EditModeSettings.shared.hotKey
         case .meeting: AppSettings.shared.meetingHotKey
         case .highlight: MeetingNotesSettings.shared.highlightHotKey
+        // 要件: REQ-MTG-047
+        case .asked: MeetingNotesSettings.shared.askedHotKey
         case .repaste: HistorySettings.shared.repasteHotKey
         }
     }

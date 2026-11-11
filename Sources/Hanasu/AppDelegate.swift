@@ -12,7 +12,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var meetingWindow: NSWindow?
     private let meetingRecorder: MeetingRecorder = {
         MeetingStore.markInterruptedMeetings()
-        return MeetingRecorder()
+        let recorder = MeetingRecorder()
+        // 要件: REQ-MTG-057
+        // 設計判断: DEC-MTG-143（起動時に、会議を「失敗」にしたあとで、保存期間を過ぎた録音を消す）
+        recorder.pruneExpiredAudio()
+        // 要件: REQ-MTG-056（設定と会議ノートのメニューから、録音の管理を開けるように）
+        MeetingAudioManagerWindow.recorder = recorder
+        return recorder
     }()
     private let meetingHotKeys = HotKeyManager()
     private var meetingHotKeyID: UInt32?
@@ -71,6 +77,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         meetingRecorder.onStateChange = { [weak self] _ in
             guard let self else { return }
             self.updateIcon(for: self.controller.state)
+            // 設計判断: DEC-DIC-189
+            // 会議の記録中は、設定の欄で画面収録の許可を求めない（macOS の「終了して再度開く」で記録が切れないように）
+            ScreenContextSettings.shared.meetingInProgress = self.meetingRecorder.state != .idle
         }
         AppSettings.shared.$meetingHotKey
             .removeDuplicates()
@@ -80,6 +89,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         meetingAutoDetect = MeetingAutoDetect(recorder: meetingRecorder) { [weak self] in self?.toggleMeeting() }
         // 要件: REQ-MTG-034
         meetingRecorder.titleSourceApps = { [weak self] in self?.meetingAutoDetect?.titleSourceApps ?? [] }
+        // 要件: REQ-MTG-047
+        // 設計判断: DEC-MTG-096（「チャットで続ける」で会議ノートを前に出す）
+        MeetingAskedQuestion.shared.openMeetingWindow = { [weak self] in self?.openMeetingWindow() }
         controller.onHotKeyRegistrationFailed = { [weak self] combo in
             self?.showAlert(
                 tr("ショートカット %@ を登録できませんでした", "\(combo.displayString)"),
@@ -452,6 +464,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     self.editController.suspendHotKey()
                     if let id = self.meetingHotKeyID { self.meetingHotKeys.unregister(id) }
                     self.meetingHotKeyID = nil
+                    // 設計判断: DEC-COM-012, DEC-MTG-097（記録中だけのショートカットも外す）
+                    MeetingHighlightHotKey.shared.suspend()
+                    MeetingAskedHotKey.shared.suspend()
                 },
                 onEndShortcutRecording: { [weak self] in
                     guard let self else { return }
@@ -459,6 +474,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     self.historyUI.resumeHotKey()
                     self.editController.resumeHotKey()
                     self.registerMeetingHotKey(AppSettings.shared.meetingHotKey)
+                    MeetingHighlightHotKey.shared.resume()
+                    MeetingAskedHotKey.shared.resume()
                 },
                 onOpenHistory: { [weak self] in self?.historyUI.openWindow() },
                 onCheckForUpdates: { [weak self] in self?.updater.checkManually() })

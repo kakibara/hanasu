@@ -176,7 +176,9 @@ public class MeetingJsonTests
         store.MarkInterruptedMeetings();
         var loaded = store.Load(m.Id)!;
         Assert.Equal(MeetingStatus.Failed, loaded.Status);
-        Assert.Contains("me.wav", loaded.ErrorMessage);
+        // 設計判断: DEC-MTG-140（音声を残したことはエラーの文に書かず、録音があれば表示のときに出す）
+        Assert.Equal(Core.Properties.Strings.Meeting_Interrupted, loaded.ErrorMessage);
+        Assert.DoesNotContain("me.wav", loaded.ErrorMessage);
     }
 }
 
@@ -523,10 +525,10 @@ public class MeetingSettingsTests
     public void MeetingSettingsSurviveSaveAndLoad()
     {
         var store = new SettingsStore(Path.Combine(TestKeys.TempDirectory(), "settings.json"));
-        var s = new AppSettings { MeetingEngine = TranscriptionEngine.Gemini, KeepMeetingAudio = false, MeetingsDirectory = @"D:\会議", MeetingMinutesTemplate = "sales" };
+        var s = new AppSettings { MeetingEngine = TranscriptionEngine.Gemini, KeepMeetingAudio = false, MeetingAudioRetentionDays = 30, MeetingsDirectory = @"D:\会議", MeetingMinutesTemplate = "sales" };
         store.Save(s);
         var loaded = store.Load();
-        Assert.Equal((TranscriptionEngine.Gemini, false, @"D:\会議", "sales"), (loaded.MeetingEngine, loaded.KeepMeetingAudio, loaded.MeetingsDirectory, loaded.MeetingMinutesTemplate));
+        Assert.Equal((TranscriptionEngine.Gemini, false, 30, @"D:\会議", "sales"), (loaded.MeetingEngine, loaded.KeepMeetingAudio, loaded.MeetingAudioRetentionDays, loaded.MeetingsDirectory, loaded.MeetingMinutesTemplate));
     }
 }
 
@@ -904,6 +906,8 @@ public class MeetingControllerTests
         Assert.True(controller.CanDelete(saved));
     }
 
+    // 確かめ方: REQ-MTG-010
+    // 設計判断: DEC-MTG-139（設定の「文字起こしのあとに録音を削除する」は、記録を始めたときに会議に写し、後処理は会議の値で決める）
     [Fact]
     public async Task DeletesAudioWhenNotKept()
     {
@@ -912,10 +916,15 @@ public class MeetingControllerTests
         settings.MakeMeetingMinutes = false;
         await controller.StartAsync();
         var meeting = controller.Current!;
+        Assert.True(meeting.DeleteAudioAfterTranscription);
         await controller.StopAsync();
-        var saved = controller.Store(settings).Load(meeting.Id)!;
+        var store = controller.Store(settings);
+        var saved = store.Load(meeting.Id)!;
         Assert.Null(saved.ErrorMessage);
-        Assert.False(File.Exists(controller.Store(settings).AudioPath(saved, MeetingChannel.Me)));
+        Assert.True(saved.DeleteAudioAfterTranscription);
+        Assert.False(File.Exists(store.AudioPath(saved, MeetingChannel.Me)));
+        Assert.False(File.Exists(store.AudioPath(saved, MeetingChannel.Others)));
+        Assert.True(File.Exists(Path.Combine(store.DirectoryOf(saved), "transcript.md")));
     }
 
     [Fact]
