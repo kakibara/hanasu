@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0} (belum ada)</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>Di sesi tanpa layar (seperti SSH), Windows Hello tidak dapat meminta konfirmasi, jadi kunci API yang dilindungi Windows Hello tidak bisa dipakai. Lindungi dengan DPAPI, atau berikan kunci melalui variabel lingkungan.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Konfirmasi Windows Hello tidak selesai dalam {0} detik. Periksa apakah jendela konfirmasi tersembunyi di balik jendela lain.</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>Tampilkan item tindakan dari semua rapat</value>
   </data>

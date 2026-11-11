@@ -1302,8 +1302,9 @@
 - 理由: 1 つのファイルだと、`hanasu` が起動したサーバーの記録がアプリの記録を上書きし、次にアプリが起動するときに動いているサーバーを止めてしまう。起動中のアプリのサーバーに接続して使い回すには、アプリとの通信の仕組み（計画の 4.6）が要るので、まずは二重に読み込まないことだけを守る（計画の 4.7 の 9）。`hanasu` は Ctrl-C で止められることが多く、子プロセスの llama-server は親が終わっても残るので、シグナルでも止める。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の 4.7 の 9）
 - 関係する要件: REQ-COM-187, REQ-COM-030
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `LocalLLMServer`、`HanasuCommand.main`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServerRecords.cs`（`%LOCALAPPDATA%\Hanasu\llm-server-<持ち主の pid>.json`）、`LocalLlmServer.WriteRecords`・`ResolveExecutable`（`cli\` から見た `..\llama\` も探す）、`windows/Hanasu.Command/Program.cs`（ジョブオブジェクトと、終わるときに止める）
 
 ### DEC-COM-185 `hanasu` は、AI に送る前に認証情報があるかを確かめ、足りなければ終了コード 3 にする
 - 決めたこと: AI を使うコマンドは、送る前に、選んだ AI の認証情報があるか（Claude・Gemini はキーチェーンの項目の有無と環境変数、ローカルはモデルのファイル、Apple は `fm` が使えるか）を確かめ、なければ終了コード 3 にする。キーチェーンの読み取りに失敗したとき（拒否・パスワードの取り消し）も 3。`--model` は確かめずにそのまま渡す（知らないモデルは AI の失敗として 1）。ただしローカルの知らないモデルは 2。`doctor` はキーを実際に読んで（値は出さない）、読めるかを出す。
@@ -1400,6 +1401,30 @@
 - 関係する要件: REQ-COM-186, REQ-COM-191
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/Command/DoctorCommand.cs`
+
+### DEC-COM-195 Windows の `hanasu` は、相手がコンソールなら UTF-16 で、パイプ・ファイルなら UTF-8 で読み書きする
+- 決めたこと: `cli\hanasu.exe` は、stdout・stderr がコンソール（`GetConsoleMode` が通る）なら `WriteConsoleW` で書き、パイプ・ファイルなら UTF-8（BOM なし）・改行 `\n` のバイトで書く。stdin はパイプ・ファイルなら UTF-8 として読み、先頭の BOM を外し、UTF-8 として正しくなければ `GetConsoleCP` のコードページで読み直す。コンソールの stdin は「文章を渡していない」とみなす（Mac と同じ）。`Console.OutputEncoding` は変えない。PowerShell で出力を読むときの設定（`[Console]::OutputEncoding`、5.1 の `$OutputEncoding`）と、5.1 の `>` が UTF-16 で書くことは、ヘルプ・README・エージェントへの説明に書く。
+- 理由: .NET のコンソールは既定でコンソールのコードページ（英語の Windows は 437、日本語は 932）で読み書きし、改行は CRLF になる。UTF-8 のバイトをコンソールに書くと conhost はコードページとして表示して化ける。cmd の `echo` はパイプにコンソールのコードページのバイトを書く。パイプには Mac と同じバイトを出し、JSON を UTF-8 で読めるようにする（2 回目のレビューの指摘）。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（WD9）
+- 関係する要件: REQ-COM-180, REQ-COM-181
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Command/WindowsConsole.cs`、`windows/Hanasu.Core/Command/CommandPlatformParts.cs`（`CommandEncoding`）
+
+### DEC-COM-198 `hanasu` が Windows Hello で守ったキーを読むときは、画面のないセッションでは確認を出さず、60 秒で諦める
+- 決めたこと: `cli\hanasu.exe` は、Windows Hello の鍵（`WindowsHelloKey`）を `GuardedPresenceKey` で包む。画面のないセッション（`SSH_CONNECTION`・`SSH_CLIENT` がある、または対話のできないプロセス）では確認を出さずに断り、確認が 60 秒で終わらなければ、確認の画面がほかのウインドウの裏に隠れていないかを添えて断る（どちらも終了コード 3、MCP は `isError`）。鍵はそのプロセスの中でだけ持つので、`refine` などは呼ぶたびに確認が出る。`hanasu mcp` は確認が通ったあとも鍵を持ち、画面のロック・ログオフ・切断・スリープ（`SystemEvents`）で捨てて、次に要るときにまた確認を出す（DEC-COM-144 と同じ）。`doctor` は Windows Hello で守ったキーを読まない（DEC-COM-197）。
+- 理由: 確認の画面が出ないまま、AI エージェントやスクリプトが止まり続けるのを防ぐ。ロックのあとも鍵を持ち続けると、アプリより弱い守り方になる（1 回目のレビューの指摘）。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（W3、決定 2）
+- 関係する要件: REQ-COM-186, REQ-COM-021
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Command/CommandPlatformParts.cs`（`GuardedPresenceKey`）、`windows/Hanasu.Command/Program.cs`
+
+### DEC-COM-199 Windows の PATH は、ユーザーの PATH に `cli` のフォルダを足し、足した値を設定に覚える
+- 決めたこと: ユーザーの PATH（`HKCU\Environment` の `Path`。`%…%` を広げずに読み、型は今のまま書く）に `<アプリのフォルダ>\cli` を最後に足し、`WM_SETTINGCHANGE`（"Environment"）を送る。足した値を設定（`CommandPathEntry`）に覚える。外すときは、同じフォルダを指す項目（`%…%` を広げ、末尾の `\` を除き、大文字小文字を区別しない）だけを消し、ほかの項目の書き方と並びは変えない。別の場所の Hanasu の項目は、末尾が `\cli` でその親に `Hanasu.exe` があるか、覚えた値と同じもの（消えたフォルダも見分ける）。
+- 理由: 管理者の権限なしで、新しく起動したターミナルから使える。`cli` には `hanasu.exe` だけを置くので、DLL の多い `Hanasu` のフォルダを PATH に入れずに済む（DEC-COM-193）。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（W4・WD7、決定 3）
+- 関係する要件: REQ-COM-191
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Command/CommandPlatformParts.cs`（`CommandPath`）、`windows/Hanasu.Command/WindowsCommandPlatform.cs`、`AppSettings.CommandPathEntry`
 
 ---
 

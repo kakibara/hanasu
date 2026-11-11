@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0} (chưa có)</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>Trong phiên không có màn hình (như SSH), Windows Hello không thể hỏi xác nhận nên không dùng được khóa API được Windows Hello bảo vệ. Hãy bảo vệ bằng DPAPI hoặc truyền khóa qua biến môi trường.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Xác nhận Windows Hello không hoàn tất trong {0} giây. Hãy kiểm tra xem cửa sổ xác nhận có bị che sau các cửa sổ khác không.</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>Liệt kê việc cần làm của nhiều cuộc họp</value>
   </data>

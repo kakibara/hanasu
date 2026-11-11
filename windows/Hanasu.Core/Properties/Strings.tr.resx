@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0} (henüz yok)</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>Ekranı olmayan bir oturumda (SSH gibi) Windows Hello onay isteyemez; bu yüzden Windows Hello ile korunan API anahtarları kullanılamaz. Anahtarları DPAPI ile koruyun veya anahtarı bir ortam değişkeniyle verin.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Windows Hello onayı {0} saniye içinde tamamlanmadı. Onay penceresinin başka pencerelerin arkasında kalıp kalmadığını kontrol edin.</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>Tüm toplantılardaki eylem maddelerini listeler</value>
   </data>

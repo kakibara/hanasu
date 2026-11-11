@@ -57,15 +57,25 @@ public sealed class LocalLlmServer : IDisposable
     public bool IsDownloaded(LocalLlmModel m) => File.Exists(ModelPath(m)) && new FileInfo(ModelPath(m)).Length == m.Bytes;
 
     // 設計判断: DEC-COM-061
-    /// <summary>llama-server の場所: 環境変数 HANASU_LLAMA_SERVER → exe の隣の llama/</summary>
+    /// <summary>
+    /// llama-server の場所: 環境変数 HANASU_LLAMA_SERVER → exe の隣の llama/ → 1 つ上の llama/（cli\hanasu.exe から見た ..\llama\。WD4）
+    /// </summary>
     public static string? ResolveExecutable()
     {
         var fromEnv = Environment.GetEnvironmentVariable("HANASU_LLAMA_SERVER");
         if (!string.IsNullOrEmpty(fromEnv) && File.Exists(fromEnv)) return fromEnv;
         var name = OperatingSystem.IsWindows() ? "llama-server.exe" : "llama-server";
         var bundled = Path.Combine(AppContext.BaseDirectory, "llama", name);
-        return File.Exists(bundled) ? bundled : null;
+        if (File.Exists(bundled)) return bundled;
+        var parent = Path.GetDirectoryName(Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory));
+        var shared = parent is null ? null : Path.Combine(parent, "llama", name);
+        return shared is not null && File.Exists(shared) ? shared : null;
     }
+
+    // 要件: REQ-COM-187
+    // 設計判断: DEC-COM-184
+    /// <summary>起動したサーバーを記録する（ほかのプロセスの hanasu が、二重に読み込まないよう見分けるため）。テストでは切る</summary>
+    public bool WriteRecords { get; set; } = true;
 
     /// <summary>処理を 1 つ始める。そのモデルでサーバーが動いていなければ起動する。終わったら FinishRequest を呼ぶ</summary>
     public async Task<LocalLlmEndpoint> BeginRequestAsync(LocalLlmModel m, CancellationToken ct)
@@ -151,6 +161,7 @@ public sealed class LocalLlmServer : IDisposable
             }
             p.Dispose();
         }
+        if (process is not null && WriteRecords) LocalLlmServerRecords.Remove();
         process = null;
         model = null;
         endpoint = null;
@@ -203,6 +214,7 @@ public sealed class LocalLlmServer : IDisposable
         p.BeginErrorReadLine();
         p.BeginOutputReadLine();
         ProcessStarted?.Invoke(p);
+        if (WriteRecords) LocalLlmServerRecords.Write(p.Id, executable);
         lock (stateLock)
         {
             process = p;

@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanasu.Diarization", "Hanas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanasu.Platform", "Hanasu.Platform\Hanasu.Platform.csproj", "{B32D3A7B-8DDC-44ED-BC06-1FF276433162}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hanasu.Command", "Hanasu.Command\Hanasu.Command.csproj", "{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,18 @@ Global
 		{B32D3A7B-8DDC-44ED-BC06-1FF276433162}.Release|x64.Build.0 = Release|Any CPU
 		{B32D3A7B-8DDC-44ED-BC06-1FF276433162}.Release|x86.ActiveCfg = Release|Any CPU
 		{B32D3A7B-8DDC-44ED-BC06-1FF276433162}.Release|x86.Build.0 = Release|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Debug|x64.Build.0 = Debug|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Debug|x86.Build.0 = Debug|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Release|x64.ActiveCfg = Release|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Release|x64.Build.0 = Release|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Release|x86.ActiveCfg = Release|Any CPU
+		{B8AD93EC-7D74-47D1-BCEF-DC607C86F839}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

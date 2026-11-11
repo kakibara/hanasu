@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0}（まだありません）</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>画面のないセッション（SSH など）では、Windows Hello の確認を出せないので、Windows Hello で守った API キーを使えません。DPAPI で守るか、環境変数でキーを渡してください。</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Windows Hello の確認が {0} 秒以内に終わりませんでした。確認の画面がほかのウインドウの裏に隠れていないか確かめてください。</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>会議をまたいでアクションアイテムを並べる</value>
   </data>

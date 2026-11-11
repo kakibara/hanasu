@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0} (aún no existe)</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>En una sesión sin pantalla (como SSH), Windows Hello no puede pedir confirmación, así que no se pueden usar las claves de API protegidas con Windows Hello. Protégelas con DPAPI o pasa la clave en una variable de entorno.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>La confirmación de Windows Hello no terminó en {0} segundos. Comprueba si la ventana de confirmación está oculta detrás de otras ventanas.</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>Lista las tareas pendientes de todas las reuniones</value>
   </data>

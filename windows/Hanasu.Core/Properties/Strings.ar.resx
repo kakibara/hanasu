@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0} (غير موجود بعد)</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>في جلسة بلا شاشة (مثل SSH) لا يستطيع Windows Hello طلب التأكيد، لذا لا يمكن استخدام مفاتيح API المحمية بـ Windows Hello. احمها بـ DPAPI أو مرّر المفتاح في متغير بيئة.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>لم يكتمل تأكيد Windows Hello خلال {0} ثانية. تحقّق مما إذا كانت نافذة التأكيد مخفية خلف نوافذ أخرى.</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>عرض عناصر الإجراءات من كل الاجتماعات</value>
   </data>

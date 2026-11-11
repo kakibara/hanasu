@@ -1010,6 +1010,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0} (does not exist yet)</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>Windows Hello can't ask for confirmation in a session without a screen (such as SSH), so API keys protected with Windows Hello can't be used. Protect them with DPAPI, or pass the key in an environment variable.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>The Windows Hello confirmation didn't finish within {0} seconds. Check whether the confirmation window is hidden behind other windows.</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>List action items across meetings</value>
   </data>

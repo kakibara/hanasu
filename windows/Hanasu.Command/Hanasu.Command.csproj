@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 利用者向けの hanasu コマンド（配布の zip の cli\hanasu.exe）。中身は Hanasu.Core の Hanasu.Core.Command で、ここは入出力と Windows の部品をつなぐだけ。
+       計画は docs/plans/cli-windows.md、作りは docs/design/cli.md の「Windows」。設計判断: DEC-COM-193 -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <RootNamespace>Hanasu.Command</RootNamespace>
+    <AssemblyName>hanasu</AssemblyName>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <!-- LibraryImport（P/Invoke のソース生成）に要る -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NeutralLanguage>en</NeutralLanguage>
+    <!-- PATH に入れる cli\ に hanasu.exe だけを置く（ほかの DLL を混ぜない。DEC-COM-193）。サテライトの訳も exe に入れる -->
+    <SatelliteResourceLanguages>en;ja;zh-Hans;zh-Hant;ko;es;fr;de;it;pt-BR;ru;tr;vi;id;pl;ar;hi</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hanasu.Core\Hanasu.Core.csproj" />
+    <ProjectReference Include="..\Hanasu.Platform\Hanasu.Platform.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 画面のロック・スリープを知る（Windows Hello の鍵を捨てる。DEC-COM-144・W3）。コンソールの exe なので、隠れた窓は SystemEvents が作る -->
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>

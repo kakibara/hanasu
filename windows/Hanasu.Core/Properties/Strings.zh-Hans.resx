@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0}（尚不存在）</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>在没有屏幕的会话（如 SSH）中无法显示 Windows Hello 确认，因此不能使用受 Windows Hello 保护的 API 密钥。请改用 DPAPI 保护，或通过环境变量传入密钥。</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Windows Hello 确认未在 {0} 秒内完成。请检查确认窗口是否被其他窗口挡住。</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>跨会议列出待办事项</value>
   </data>

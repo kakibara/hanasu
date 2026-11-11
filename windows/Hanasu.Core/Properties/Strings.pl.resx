@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0} (jeszcze nie istnieje)</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>W sesji bez ekranu (np. SSH) Windows Hello nie może poprosić o potwierdzenie, więc kluczy API chronionych przez Windows Hello nie da się użyć. Zabezpiecz je przez DPAPI albo przekaż klucz w zmiennej środowiskowej.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Potwierdzenie Windows Hello nie zakończyło się w ciągu {0} s. Sprawdź, czy okno potwierdzenia nie jest ukryte za innymi oknami.</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>Wyświetl zadania ze wszystkich spotkań</value>
   </data>

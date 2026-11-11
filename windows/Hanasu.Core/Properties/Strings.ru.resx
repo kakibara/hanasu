@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0} (пока не существует)</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>В сеансе без экрана (например, SSH) Windows Hello не может запросить подтверждение, поэтому API-ключи, защищённые Windows Hello, использовать нельзя. Защитите их с помощью DPAPI или передайте ключ в переменной окружения.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Подтверждение Windows Hello не завершилось за {0} с. Проверьте, не скрыто ли окно подтверждения за другими окнами.</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>Вывести задачи из всех встреч</value>
   </data>

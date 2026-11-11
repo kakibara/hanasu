@@ -777,6 +777,12 @@
   <data name="Cmd_FolderMissing" xml:space="preserve">
     <value>{0} (अभी मौजूद नहीं)</value>
   </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>बिना स्क्रीन वाले सत्र (जैसे SSH) में Windows Hello पुष्टि नहीं माँग सकता, इसलिए Windows Hello से सुरक्षित API कुंजियाँ इस्तेमाल नहीं हो सकतीं। उन्हें DPAPI से सुरक्षित करें, या कुंजी किसी एनवायरनमेंट वेरिएबल में दें।</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Windows Hello की पुष्टि {0} सेकंड में पूरी नहीं हुई। देखें कि पुष्टि वाली विंडो दूसरी विंडो के पीछे तो नहीं छिपी है।</value>
+  </data>
   <data name="Cmd_HelpActions" xml:space="preserve">
     <value>सभी मीटिंग के ऐक्शन आइटम एक साथ दिखाएँ</value>
   </data>
