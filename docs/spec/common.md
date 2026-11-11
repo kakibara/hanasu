@@ -1099,12 +1099,12 @@
 - 実装の場所: `TextAIPurpose`、`AppSettings`（`Keys.chatAIProvider`・`claudeChatModel`・`geminiChatModel`・`localChatModel`）、`ClaudeClient.Model.defaultChat`、`AppSettings.defaultGeminiChatModel`
 
 ### DEC-COM-172 AI チャット・質問と議事録は、ローカルのモデルを切り替えるとき、使っている処理が終わるのを待つ（音声入力は今のまま）
-- 決めたこと: `LocalLLMServer` で、サーバーを使っている処理と、起動を待っている処理を分けて数える（`LocalLLMGate`）。`LocalLLMClient.waitsForOtherModel` が真の処理（AI チャット・会議への質問（`.chat`）と、議事録・辞書の候補（`.meeting`））は、動いているモデルと違うモデルを求めたとき、使っている処理が 0 になるまで待ってから起動し直す。待っている処理は来た順に進み、先に進んだ処理と同じモデルを待っていた処理は、起動し直さずにそのまま通る。待ちには期限（その処理のタイムアウト）を付け、過ぎたら「ほかの処理（議事録の作成など）が終わらないため、ローカルの AI を使えませんでした」で失敗させる。取り消し（「止める」）にも従う。待っている処理があるときは、5 分で止める判定（DEC-COM-063）でも止めない。音声入力（`.dictation`）は今のまま、違うモデルを求めたら処理中でもサーバーを止めて起動し直す。AI チャットと会議に質問は、送る前に `LocalLLMServer.wouldWait(for:)` で待つかを見て、待つなら「ほかの処理が終わるのを待っています…」と出す。
+- 決めたこと: `LocalLLMServer` で、サーバーを使っている処理と、起動を待っている処理を分けて数える（`LocalLLMGate`）。`LocalLLMClient.waitsForOtherModel` が真の処理（AI チャット・会議への質問（`.chat`）と、議事録・辞書の候補（`.meeting`））は、動いているモデルと違うモデルを求めたとき、使っている処理が 0 になるまで待ってから起動し直す。待っている処理は来た順に進み、先に進んだ処理と同じモデルを待っていた処理は、起動し直さずにそのまま通る。待ちには期限（その処理のタイムアウト）を付け、過ぎたら「ほかの処理（議事録の作成など）が終わらないため、ローカルの AI を使えませんでした」で失敗させる。取り消し（「止める」）にも従う。待っている処理があるときは、5 分で止める判定（DEC-COM-063）でも止めない。音声入力（`.dictation`）は今のまま、違うモデルを求めたら処理中でもサーバーを止めて起動し直す。AI チャットと会議に質問は、実際に待っている間だけ「ほかの処理が終わるのを待っています…」と出す（`beginRequest` が待ち始めたときと抜けたときに、呼び出した画面へ知らせる。`LocalLLMServer.observingWait`。送る前の判定だけで決めると、待ちが終わってモデルの起動と生成に入っても出続けるため。PR #95 のレビュー）。
 - 理由: 今は違うモデルを求められると、処理中でもサーバーを止める。AI チャット・質問のローカルのモデルを会議と別にできるので、記録を止めた直後の議事録の作成（ローカルでは最大 30 分）中にチャットで聞くと、議事録が途中で切れてしまう（DEC-MTG-086 の「会議が終わった直後に続けたい」場面）。待てば議事録は守られ、チャットは遅れるだけ。待っている処理を使っている処理と同じに数えると、待つ処理どうしが止まり合うので分ける。音声入力は依頼の外で、待たせると整形が最大 120 秒遅れたうえ失敗しうる（REQ-DIC-007）ので、今の振る舞いを変えない（音声入力が議事録を止めうるのは今と同じ）。
 - 決めた場面: 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承
 - 関係する要件: REQ-COM-030, REQ-COM-025, REQ-MTG-048, REQ-MTG-049
 - 対象: Mac（Windows の `LocalLlmServer` にも違うモデルで止める同じ作りがあるが、Windows には AI チャットと会議への質問がなく、今のまま）
-- 実装の場所: `LocalLLMGate`、`LocalLLMServer.beginRequest`・`ensureRunning`・`wouldWait(for:)`、`LocalLLMClient.waitsForOtherModel`、`TextAIClient.make`
+- 実装の場所: `LocalLLMGate`、`LocalLLMServer.beginRequest`・`ensureRunning`・`wouldWait(for:)`・`observingWait`、`LocalLLMClient.waitsForOtherModel`、`TextAIClient.make`
 - 確かめ方: `.build/debug/Hanasu --test-local-llm-wait`（サーバーを起こさずに、待つ・通す・期限・取り消しを確かめる）
 
 ---

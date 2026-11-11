@@ -332,7 +332,7 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 AI チャットと会議への質問（11.2）で、その会話・その画面だけ、送り先の AI とモデルを既定から変える（REQ-MTG-048・049、DEC-MTG-150）。部品は `AIRouteMenu.swift`。
 
 - **一覧**: `AIRoute.sections(settings:)` が AI の並び（ローカル・Apple・Gemini・Claude。DEC-COM-168）で選択肢を作る。Gemini は `AppSettings.suggestedModels` に、設定の 3 用途の Gemini のモデルのうち一覧にないものを足す。Claude も同じ。先頭は「既定（<AI> · <モデル>）」。
-- **使えるか**: `AIRoute.availability(settings:appleFMReason:)` が中身を読まずに調べる（Claude・Gemini のキーは `Keychain.exists`、サービスアカウントはファイルがあるか、ローカルは `LocalLLMStore.isDownloaded`）。Apple の判定（`AppleFMAvailability.check`）は署名を確かめるので、モデルが最初に 1 回だけして覚える。見直すのは画面が出たときと設定が変わったとき。使えない項目は理由を文字に入れて選べなくする。
+- **使えるか**: `AIRoute.availability(settings:appleFMReason:)` が中身を読まずに調べる（Claude・Gemini のキーは `Keychain.exists`、サービスアカウントはファイルがあるか、ローカルは `LocalLLMStore.isDownloaded`）。Apple の判定（`AppleFMAvailability.check`）は署名を確かめるので、モデルが最初に 1 回だけして覚える。見直すのは、画面が出たとき・設定が変わったとき・どれかのウインドウが前に出たとき（`AIRoute.availabilityRefreshes`。キーの保存とモデルのダウンロードは設定の値を変えないので、設定の画面から戻ったことで拾う）・送る直前。使えない項目は理由を文字に入れて選べなくする。
 - **持ち方**: AI チャットは `MeetingChatModel.override`（会議ごと。`MeetingChatStore` と同じくアプリを終了するまで。「新しい会話」では戻さない）。会議への質問は `MeetingAskModel.override`。会議のウインドウは閉じても残す作りなので、`MeetingWindowView` が `NSWindow.willCloseNotification` を受けて戻す。
 - **送るとき**: `TextAIClient.make(_:settings:for:timeout:)` が選んだ AI とモデルのクライアントを作る（`fromSettings` もこれを使う）。ローカルなら `LocalLLMClient` にモデルを渡し、ほかは `generate` にモデル名を渡す。
 

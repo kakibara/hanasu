@@ -103,6 +103,7 @@ final class MeetingAskModel: ObservableObject {
         // 要件: REQ-COM-025, REQ-MTG-049
         // 設計判断: DEC-MTG-053
         let settings = AppSettings.shared
+        refreshAvailability(settings: settings)
         let choice = effectiveChoice(settings: settings)
         Task {
             defer {
@@ -111,14 +112,16 @@ final class MeetingAskModel: ObservableObject {
             }
             do {
                 let client = try TextAIClient.require(choice, settings: settings, for: .chat, timeout: 180)
-                // 設計判断: DEC-COM-172
-                if choice.provider == .local, let local = LocalLLMModel(rawValue: choice.model) {
-                    waitingForOtherModel = await LocalLLMServer.shared.wouldWait(for: local, waitsForOtherModel: true)
-                }
                 await index.update(meetings)
-                answer = try await MeetingAsk.ask(
-                    question: question, meetings: meetings, index: index,
-                    client: client, model: choice.model)
+                // 設計判断: DEC-COM-172（実際に待っている間だけ「待っています」と出す）
+                answer = try await LocalLLMServer.observingWait({ [weak self] waiting in
+                    guard let self, self.running else { return }
+                    self.waitingForOtherModel = waiting
+                }) {
+                    try await MeetingAsk.ask(
+                        question: question, meetings: meetings, index: index,
+                        client: client, model: choice.model)
+                }
                 answeredBy = choice.label
             } catch {
                 self.error = tr("答えを作れませんでした: %@", "\(error.localizedDescription)")
@@ -328,7 +331,7 @@ struct MeetingAskView: View {
             .padding()
             // 設計判断: DEC-MTG-150
             .onAppear { model.refreshAvailability(settings: settings) }
-            .onReceive(settings.objectWillChange.debounce(for: .milliseconds(300), scheduler: RunLoop.main)) { _ in
+            .onReceive(AIRoute.availabilityRefreshes(settings: settings)) { _ in
                 model.refreshAvailability(settings: settings)
             }
             Divider()

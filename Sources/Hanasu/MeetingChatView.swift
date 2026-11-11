@@ -21,7 +21,7 @@ final class MeetingChatModel: ObservableObject {
     /// この会議の会話だけ、既定から切り替えた送り先。nil なら既定（設定の「AI チャット・質問」）。
     /// 「新しい会話」では戻さず、アプリを終了するか会議を消すまで残す
     @Published var override: TextAIChoice?
-    /// 送り先が使えるか（画面が出たときと、設定が変わったときに見直す）
+    /// 送り先が使えるか（画面が出たとき・設定が変わったとき・ウインドウが前に出たとき・送る前に見直す）
     @Published private(set) var availability: AIRoute.Availability?
     /// Apple の fm の判定（署名を確かめるので、1 回だけ）
     private var appleFMReason: String??
@@ -70,17 +70,19 @@ final class MeetingChatModel: ObservableObject {
         // 要件: REQ-COM-025, REQ-MTG-048
         // 設計判断: DEC-MTG-081, DEC-MTG-150
         let settings = AppSettings.shared
+        refreshAvailability(settings: settings)
         let choice = effectiveChoice(settings: settings)
         task = Task { [weak self] in
             do {
                 let client = try TextAIClient.require(choice, settings: settings, for: .chat, timeout: 120)
-                // 設計判断: DEC-COM-172
-                if let local = LocalLLMModel(rawValue: choice.model), choice.provider == .local {
-                    let waits = await LocalLLMServer.shared.wouldWait(for: local, waitsForOtherModel: true)
-                    if self?.pending?.token == token { self?.waitingForOtherModel = waits }
+                // 設計判断: DEC-COM-172（実際に待っている間だけ「待っています」と出す）
+                let result = try await LocalLLMServer.observingWait({ [weak self] waiting in
+                    guard let self, self.pending?.token == token else { return }
+                    self.waitingForOtherModel = waiting
+                }) {
+                    try await MeetingChat.reply(question: question, material: material, history: history,
+                                                client: client, model: choice.model)
                 }
-                let result = try await MeetingChat.reply(question: question, material: material, history: history,
-                                                         client: client, model: choice.model)
                 guard let self, self.pending?.token == token else { return }
                 self.messages.append(MeetingChat.Message(role: .assistant, text: result.text,
                                                          coveredUntil: result.prompt.coveredUntil,
@@ -290,9 +292,9 @@ struct MeetingChatView: View {
             inputArea
         }
         .onChange(of: model.focusRequest) { inputFocused = true }
-        // 設計判断: DEC-MTG-150（使えるかは、画面が出たときと設定が変わったときに見直す）
+        // 設計判断: DEC-MTG-150（使えるかは、画面が出たとき・設定が変わったとき・ウインドウが前に出たとき・送る前に見直す）
         .onAppear { model.refreshAvailability(settings: settings) }
-        .onReceive(settings.objectWillChange.debounce(for: .milliseconds(300), scheduler: RunLoop.main)) { _ in
+        .onReceive(AIRoute.availabilityRefreshes(settings: settings)) { _ in
             model.refreshAvailability(settings: settings)
         }
     }

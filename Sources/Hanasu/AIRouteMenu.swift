@@ -1,3 +1,5 @@
+import AppKit
+import Combine
 import SwiftUI
 
 // 要件: REQ-MTG-048, REQ-MTG-049
@@ -39,6 +41,15 @@ enum AIRoute {
             gemini: gemini,
             downloadedLocalModels: Set(LocalLLMModel.allCases.filter(LocalLLMStore.isDownloaded)),
             appleFMReason: appleFMReason)
+    }
+
+    /// 使えるかを見直すきっかけ。設定が変わったときと、どれかのウインドウが前に出たとき。
+    /// キーの保存とモデルのダウンロードは設定の値を変えないので、設定の画面から戻ってきたこと（前に出たこと）で拾う
+    @MainActor static func availabilityRefreshes(settings: AppSettings) -> AnyPublisher<Void, Never> {
+        settings.objectWillChange.map { _ in () }
+            .merge(with: NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification).map { _ in () })
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .eraseToAnyPublisher()
     }
 
     /// Apple の fm が使えないときの理由（使えるなら nil）。署名を確かめるので、画面が出たときに 1 回だけ呼ぶ

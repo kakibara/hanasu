@@ -92,10 +92,18 @@ actor LocalLLMServer {
     func beginRequest(_ model: LocalLLMModel, waitsForOtherModel: Bool = false, deadline: Date? = nil) async throws -> Endpoint {
         let ticket = UUID()
         gate.enqueue(ticket)
+        // 待ち始めたら真、待ちを抜けたら（進んだ・期限・取り消しのどれでも）偽を、見ている画面に知らせる
+        let observer = Self.waitObserver
+        var notifiedWaiting = false
+        defer { if notifiedWaiting { observer?(false) } }
         while true {
             switch gate.decision(for: ticket, model: model, serving: servingModel, waitsForOtherModel: waitsForOtherModel) {
             case .proceed, .start:
                 gate.admit(ticket)
+                if notifiedWaiting {
+                    notifiedWaiting = false
+                    observer?(false)
+                }
                 do {
                     let endpoint = try await ensureRunning(model)
                     lastUsed = Date()
@@ -105,6 +113,10 @@ actor LocalLLMServer {
                     throw error
                 }
             case .wait:
+                if !notifiedWaiting {
+                    notifiedWaiting = true
+                    observer?(true)
+                }
                 if let deadline, Date() >= deadline {
                     gate.leave(ticket)
                     throw Failure.busy
@@ -128,6 +140,20 @@ actor LocalLLMServer {
     /// そのモデルの処理を今送ると、ほかの処理が終わるのを待つことになるか
     func wouldWait(for model: LocalLLMModel, waitsForOtherModel: Bool) -> Bool {
         gate.wouldWait(for: model, serving: servingModel, waitsForOtherModel: waitsForOtherModel)
+    }
+
+    /// beginRequest が、ほかの処理の終わりを待ち始めた（真）・待ちを抜けた（偽）ことを知らせる先。
+    /// 呼び出す側のタスクに付ける（observingWait）ので、間に挟まる AI の呼び出しの層を変えずに届く
+    @TaskLocal static var waitObserver: (@Sendable (Bool) -> Void)?
+
+    // 設計判断: DEC-COM-172
+    /// body の中で始めたローカルの AI の処理が、ほかの処理の終わりを待っている間だけ、
+    /// onChange に真を渡す（抜けたら偽）。onChange はメインスレッドで、起きた順に呼ぶ
+    nonisolated static func observingWait<T>(_ onChange: @escaping @MainActor @Sendable (Bool) -> Void,
+                                             _ body: () async throws -> T) async rethrows -> T {
+        try await $waitObserver.withValue({ waiting in
+            DispatchQueue.main.async { MainActor.assumeIsolated { onChange(waiting) } }
+        }, operation: body)
     }
 
     /// 使える状態で動いているモデル（起動中は nil）

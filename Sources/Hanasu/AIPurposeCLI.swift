@@ -227,6 +227,44 @@ enum AIPurposeCLI {
             await server.finishRequest()
             c.check("取り消した処理は並びに残らない", !(await server.wouldWait(for: .qwen35, waitsForOtherModel: true)))
         }
+        // 5. 「待っています」の表示: 実際に待ち始めたら真、待ちを抜けたら偽が届く（送る前の判定だけに頼らない）
+        do {
+            final class Events: @unchecked Sendable {
+                private let lock = NSLock()
+                private var list: [Bool] = []
+                func add(_ value: Bool) { lock.withLock { list.append(value) } }
+                var all: [Bool] { lock.withLock { list } }
+            }
+            let server = makeServer()
+            _ = try? await server.beginRequest(.gemma4E4B, waitsForOtherModel: true)
+            let events = Events()
+            let chat = Task {
+                await LocalLLMServer.$waitObserver.withValue({ events.add($0) }) {
+                    _ = try? await server.beginRequest(.qwen35, waitsForOtherModel: true)
+                }
+            }
+            try? await Task.sleep(for: .milliseconds(150))
+            c.check("待ち始めると「待っています」が届く", events.all == [true])
+            await server.finishRequest()
+            _ = await chat.value
+            c.check("待ちを抜けると「待っています」が消える", events.all == [true, false])
+            await server.finishRequest()
+
+            let quiet = Events()
+            await LocalLLMServer.$waitObserver.withValue({ quiet.add($0) }) {
+                _ = try? await server.beginRequest(.qwen35, waitsForOtherModel: true)
+            }
+            c.check("待たずに進む処理には「待っています」を出さない", quiet.all.isEmpty)
+            await server.finishRequest()
+
+            _ = try? await server.beginRequest(.gemma4E4B, waitsForOtherModel: true)
+            let late = Events()
+            await LocalLLMServer.$waitObserver.withValue({ late.add($0) }) {
+                _ = try? await server.beginRequest(.qwen35, waitsForOtherModel: true, deadline: Date().addingTimeInterval(0.1))
+            }
+            c.check("期限で抜けたときも「待っています」が消える", late.all == [true, false])
+            await server.finishRequest()
+        }
 
         print(c.failures == 0 ? "すべて OK" : "\(c.failures) 件が NG")
         return c.failures == 0
