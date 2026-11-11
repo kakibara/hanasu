@@ -403,6 +403,13 @@ final class MeetingCaptionPanel: ObservableObject {
 /// 字幕の中身: 直近の発言と、確定前の途中結果
 struct MeetingCaptionView: View {
     @ObservedObject var recorder: MeetingRecorder
+    // 設計判断: DEC-MTG-151（字幕は途中結果を出すので、変わるたびに描き直す）
+    @ObservedObject private var signals: MeetingLiveSignals
+
+    init(recorder: MeetingRecorder) {
+        self.recorder = recorder
+        signals = recorder.signals
+    }
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 10) {
@@ -411,15 +418,15 @@ struct MeetingCaptionView: View {
                     row(speaker: line.channel == .me ? tr("自分") : tr("相手"), text: line.text,
                         color: line.channel == .me ? .accentColor : .orange)
                 }
-                if !recorder.volatileOthers.isEmpty {
-                    row(speaker: tr("相手"), text: recorder.volatileOthers, color: .orange).opacity(0.6)
+                if !signals.volatileOthers.isEmpty {
+                    row(speaker: tr("相手"), text: signals.volatileOthers, color: .orange).opacity(0.6)
                 }
-                if !recorder.volatileMe.isEmpty {
-                    row(speaker: tr("自分"), text: recorder.volatileMe, color: .accentColor).opacity(0.6)
+                if !signals.volatileMe.isEmpty {
+                    row(speaker: tr("自分"), text: signals.volatileMe, color: .accentColor).opacity(0.6)
                 }
                 if let engine = recorder.batchEngine {
                     Text(tr("記録を止めたあとに %@ で文字起こしします", "\(engine.shortName)")).foregroundStyle(.secondary)
-                } else if recorder.liveLines.isEmpty, recorder.volatileMe.isEmpty, recorder.volatileOthers.isEmpty {
+                } else if recorder.liveLines.isEmpty, signals.volatileIsEmpty {
                     Text(tr("話し始めると、ここに文字起こしが出ます")).foregroundStyle(.secondary)
                 }
             }
