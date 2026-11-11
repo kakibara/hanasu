@@ -1449,4 +1449,82 @@ Otworzyć stronę wydania w przeglądarce?</value>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>Nie udało się całkowicie usunąć nagrań spotkań (liczba: {0}). Pozostałe pliki zostały zachowane.</value>
   </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>Nie udało się dodać do PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>Dodano do PATH. Wpisz hanasu w nowo otwartym PowerShellu lub wierszu polecenia (otwarte już terminale i uruchomione z nich aplikacje nie widzą zmiany — otwórz je ponownie).</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>Jeśli nie możesz dodać serwera MCP, wklej te instrukcje (po angielsku) do instrukcji agenta, np. do CLAUDE.md lub umiejętności w Claude Code. Agent będzie wtedy mógł uruchamiać hanasu z powłoki i czytać Twoje spotkania. W Terminalu wypiszesz je poleceniem hanasu help agent.</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>Instrukcje dla agentów</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>Skopiowano</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>Kopiuj</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>Dodaj to do mcpServers w pliku konfiguracyjnym Claude Desktop (claude_desktop_config.json). W innych aplikacjach wpisz to samo w command i args.</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>Aby PowerShell poprawnie czytał wynik, najpierw uruchom [Console]::OutputEncoding = [Text.UTF8Encoding]::new() (w Windows PowerShell 5.1 także $OutputEncoding = [Text.UTF8Encoding]::new()). W 5.1 &gt; zapisuje w UTF-16, więc do zapisu pliku użyj | Out-File -Encoding utf8.</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>Plik wykonywalny</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>Ukryj</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>Czytaj zapisy spotkań i redaguj tekst z poziomu Terminala, skryptów i agentów AI. Bez dodawania do PATH możesz uruchomić polecenie przez pełną ścieżkę powyżej. Aby dowiedzieć się, jak go używać, uruchom hanasu help w Terminalu.</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>Treść spotkań zwracana przez MCP trafia do agenta korzystającego z MCP i do jego dostawcy AI. ask_meetings wysyła też treść spotkań do tego samego AI co hanasu ask (zobacz wiersz ask w hanasu doctor).</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>Brak cli\hanasu.exe. Otwórz Hanasu z folderu, do którego wypakowano całe pobrane archiwum zip.</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>Nie dodano</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>Znajduje się w {0}</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>{0} wskazuje na kopię Hanasu w innej lokalizacji. Dodaj ponownie, aby wskazywał na tę aplikację.</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>Dodaj do PATH</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>Usuń z PATH</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>Nie udało się usunąć z PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>Usunięto z PATH.</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>Polecenie hanasu</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>Pokaż</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>Hanasu działa z folderu tymczasowego (np. z wnętrza archiwum zip). Wypakuj całe archiwum, otwórz Hanasu z tego folderu, a potem dodaj go do PATH i MCP.</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>Polecenie i MCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>Nie udało się zainstalować aktualizacji, bo nie można zmienić nazwy folderu Hanasu. Zakończ hanasu uruchomione jako administrator, w terminalach wyjdź z folderu cli Hanasu i zaktualizuj ponownie.</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>Przed instalacją aktualizacji uruchomione polecenia hanasu ({0}) zostaną zatrzymane. Jeśli aplikacja korzystająca z MCP (np. Claude Desktop) straci narzędzia Hanasu, uruchom ją ponownie.</value>
+  </data>
 </root>

@@ -134,6 +134,12 @@ jobs:
           $version = $env:TAG.TrimStart('v')
           dotnet publish windows/Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self-contained `
             -p:PublishSingleFile=true -p:RestoreLockedMode=false -p:Version=$version -o build/windows/Hanasu
+          # 要件: REQ-COM-180
+          # 設計判断: DEC-COM-193（利用者向けの hanasu コマンド。cli\ には hanasu.exe だけを置く）
+          dotnet publish windows/Hanasu.Command/Hanasu.Command.csproj -c Release -r win-x64 --self-contained `
+            -p:PublishSingleFile=true -p:RestoreLockedMode=false -p:Version=$version -o build/windows/Hanasu/cli
+          $cli = @(Get-ChildItem build/windows/Hanasu/cli | ForEach-Object Name)
+          if ($cli.Count -ne 1 -or $cli[0] -ne "hanasu.exe") { throw "cli\ に hanasu.exe 以外があります: $($cli -join ', ')" }
 
       # 要件: REQ-COM-030
       # 設計判断: DEC-COM-061

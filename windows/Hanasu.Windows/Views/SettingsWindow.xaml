@@ -454,6 +454,55 @@
                     </DockPanel>
                 </Grid>
             </TabItem>
+
+            <!-- コマンドと MCP -->
+            <!-- 要件: REQ-COM-190, REQ-COM-191, REQ-COM-193 -->
+            <!-- 設計判断: DEC-COM-199, DEC-COM-188 -->
+            <TabItem Header="{x:Static p:Strings.Settings_Tab_Command}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14,4,14,14">
+                        <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Cmd_Section}" />
+                        <TextBlock x:Name="CommandWarning" Style="{StaticResource Error}" Visibility="Collapsed" />
+                        <TextBlock Text="{x:Static p:Strings.Settings_Cmd_Executable}" Margin="0,4,0,2" />
+                        <DockPanel>
+                            <Button x:Name="CommandCopyExecutable" DockPanel.Dock="Right" Content="{x:Static p:Strings.Settings_Cmd_Copy}" Click="OnCopyCommandText" Tag="executable" />
+                            <TextBox x:Name="CommandExecutableBox" IsReadOnly="True" FontFamily="Consolas" Padding="4,3" />
+                        </DockPanel>
+                        <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_Cmd_Intro}" />
+                        <TextBlock Text="PATH" Margin="0,10,0,2" />
+                        <TextBlock x:Name="CommandPathStatus" TextWrapping="Wrap" />
+                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                            <Button x:Name="CommandPathAddButton" Content="{x:Static p:Strings.Settings_Cmd_PathAdd}" Click="OnCommandPathAdd" />
+                            <Button x:Name="CommandPathRemoveButton" Content="{x:Static p:Strings.Settings_Cmd_PathRemove}" Click="OnCommandPathRemove" />
+                        </StackPanel>
+                        <TextBlock x:Name="CommandPathResult" Style="{StaticResource Note}" />
+                        <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_Cmd_Encoding}" />
+
+                        <TextBlock Style="{StaticResource Section}" Text="MCP" />
+                        <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_Cmd_McpNote}" Margin="0,0,0,6" />
+                        <TextBlock Text="Claude Code" Margin="0,4,0,2" />
+                        <DockPanel>
+                            <Button x:Name="CommandCopyClaudeCode" DockPanel.Dock="Right" Content="{x:Static p:Strings.Settings_Cmd_Copy}" Click="OnCopyCommandText" Tag="claudeCode" />
+                            <TextBox x:Name="CommandClaudeCodeBox" IsReadOnly="True" FontFamily="Consolas" Padding="4,3" TextWrapping="Wrap" />
+                        </DockPanel>
+                        <TextBlock Text="Claude Desktop" Margin="0,10,0,2" />
+                        <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_Cmd_DesktopNote}" Margin="0,0,0,4" />
+                        <DockPanel>
+                            <Button x:Name="CommandCopyDesktop" DockPanel.Dock="Right" VerticalAlignment="Top" Content="{x:Static p:Strings.Settings_Cmd_Copy}" Click="OnCopyCommandText" Tag="claudeDesktop" />
+                            <TextBox x:Name="CommandDesktopBox" IsReadOnly="True" FontFamily="Consolas" Padding="4,3" AcceptsReturn="True" />
+                        </DockPanel>
+
+                        <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Cmd_AgentSection}" />
+                        <TextBlock Style="{StaticResource Note}" Text="{x:Static p:Strings.Settings_Cmd_AgentNote}" Margin="0,0,0,6" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="CommandGuideToggle" Content="{x:Static p:Strings.Settings_Cmd_ShowGuide}" Click="OnToggleAgentGuide" />
+                            <Button x:Name="CommandCopyGuide" Content="{x:Static p:Strings.Settings_Cmd_Copy}" Click="OnCopyCommandText" Tag="agentGuide" />
+                        </StackPanel>
+                        <TextBox x:Name="CommandGuideBox" IsReadOnly="True" FontFamily="Consolas" Padding="4,3" Margin="0,6,0,0" AcceptsReturn="True"
+                                 TextWrapping="Wrap" MaxHeight="260" VerticalScrollBarVisibility="Auto" Visibility="Collapsed" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>

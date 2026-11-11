@@ -2,12 +2,6 @@
   "version": 1,
   "dependencies": {
     "net8.0-windows10.0.19041": {
-      "Microsoft.NET.ILLink.Tasks": {
-        "type": "Direct",
-        "requested": "[8.0.33, )",
-        "resolved": "8.0.33",
-        "contentHash": "dG9SM/0/zOTIE1UvSrveD1iDyEJjThqPqSnreExgqQWSoGWvze0esDi0faRk3C44IO1kqCeEX6AeCxWmBOppfw=="
-      },
       "Microsoft.Win32.SystemEvents": {
         "type": "Direct",
         "requested": "[8.0.0, )",
@@ -70,7 +64,7 @@
       "hanasu.platform": {
         "type": "Project",
         "dependencies": {
-          "Hanasu.Core": "[9.9.9, )",
+          "Hanasu.Core": "[0.1.0, )",
           "System.Security.Cryptography.ProtectedData": "[8.0.0, )"
         }
       }

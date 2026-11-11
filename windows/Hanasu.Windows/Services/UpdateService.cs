@@ -115,7 +115,15 @@ internal sealed class UpdateService
         var release = result.Release!;
         // 手元のビルドは、フォルダを入れ替えない（リリースのページを案内するだけ）
         var canInstall = result.Kind == UpdateCheckKind.Available && !IsDevBuild;
-        var window = new UpdatePromptWindow(CurrentVersion, release, canInstall);
+        // 要件: REQ-REL-013
+        // 設計判断: DEC-REL-031（動いている hanasu は、入れ替えの直前に終わらせる。前もって知らせる）
+        string? note = null;
+        if (canInstall)
+        {
+            var running = RunningCommands.Scan(Path.Combine(AppContext.BaseDirectory, "cli", "hanasu.exe"));
+            if (running.Total > 0) note = string.Format(Strings.Update_CliRunning, running.Total);
+        }
+        var window = new UpdatePromptWindow(CurrentVersion, release, canInstall, note);
         window.ShowDialog();
         switch (window.Choice)
         {
@@ -161,8 +169,11 @@ internal sealed class UpdateService
             if (expected is null || CurrentVersion >= expected) return;
             AppLog.Write($"update: previous attempt to {expected} did not complete (running {CurrentVersion})");
             var logPath = Path.Combine(HanasuPaths.LocalDataDirectory, "Logs", "update.log");
+            var message = string.Format(Strings.Update_PreviousAttemptFailed, expected, CurrentVersion, logPath);
+            // 要件: REQ-REL-013（フォルダの名前を変えられなかった。動いている hanasu か、cli の中を作業フォルダにしたターミナル）
+            if (lines.Contains("rename-failed")) message = Strings.Update_CliRenameFailed + "\n\n" + message;
             var answer = MessageBox.Show(
-                string.Format(Strings.Update_PreviousAttemptFailed, expected, CurrentVersion, logPath),
+                message,
                 "Hanasu", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (answer == MessageBoxResult.Yes)
             {
@@ -272,7 +283,7 @@ internal sealed class UpdateService
                 return;
             }
             var scriptPath = Path.Combine(staging, "apply-update.ps1");
-            await File.WriteAllTextAsync(scriptPath, SwapScript, new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
+            await File.WriteAllTextAsync(scriptPath, UpdateSwapScript.Text, new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
 
             // ダウンロードの間に録音が始まったかもしれない
             if (IsRecordingOrProcessing())
@@ -365,6 +376,9 @@ internal sealed class UpdateService
                      "-WaitPid", Environment.ProcessId.ToString(System.Globalization.CultureInfo.InvariantCulture),
                      "-Install", installDir,
                      "-Staged", stagedDir,
+                     // 要件: REQ-REL-013（動いている hanasu を終わらせる。入れ替えに失敗したら印に理由を足す）
+                     "-Cli", Path.Combine(installDir, "cli", "hanasu.exe"),
+                     "-Pending", PendingFile,
                  })
         {
             info.ArgumentList.Add(argument);
@@ -373,94 +387,4 @@ internal sealed class UpdateService
         AppLog.Write($"update: swap script started (pid {process.Id}), quitting");
         host.QuitForUpdate();
     }
-
-    /// <summary>
-    /// 入れ替えのスクリプト（中身は固定。パスは引数で受け取る）。
-    /// Hanasu が終わるのを待つ → 今のフォルダを「.old」に改名（ファイルがまだ放されていないことがあるので数秒リトライ）
-    /// → 新しいフォルダを今の名前に移す。失敗したら「.old」を戻す → Hanasu.exe を起動 → 「.old」と作業用フォルダを消す（消せなくてもよい）。
-    /// 作業用フォルダは、同じドライブで移せるよう、インストール先の隣にある。
-    /// </summary>
-    private const string SwapScript = """
-        param(
-            [Parameter(Mandatory = $true)][int]$WaitPid,
-            [Parameter(Mandatory = $true)][string]$Install,
-            [Parameter(Mandatory = $true)][string]$Staged
-        )
-        $ErrorActionPreference = 'Stop'
-        $Old = $Install + '.old'
-        $LogDir = Join-Path $env:LOCALAPPDATA 'Hanasu\Logs'
-        function Write-Log([string]$Message) {
-            try {
-                New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
-                Add-Content -LiteralPath (Join-Path $LogDir 'update.log') -Value ((Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + ' ' + $Message)
-            } catch { }
-        }
-
-        Write-Log 'update: waiting for Hanasu to exit'
-        $stillRunning = $false
-        try {
-            $process = Get-Process -Id $WaitPid -ErrorAction SilentlyContinue
-            if ($process) {
-                if (-not $process.WaitForExit(60000)) { $stillRunning = $true }
-            }
-        } catch { }
-
-        $swapped = $false
-        if (-not $stillRunning) {
-            try {
-                if (Test-Path -LiteralPath $Old) { Remove-Item -LiteralPath $Old -Recurse -Force -ErrorAction SilentlyContinue }
-                $renamed = $false
-                for ($i = 0; $i -lt 15 -and -not $renamed; $i++) {
-                    try {
-                        [System.IO.Directory]::Move($Install, $Old)
-                        $renamed = $true
-                    } catch {
-                        Start-Sleep -Seconds 1
-                    }
-                }
-                if ($renamed) {
-                    # 展開したばかりのファイルはウイルス対策ソフトが開いていることがあるので、こちらも数秒リトライ
-                    $moved = $false
-                    $moveError = ''
-                    for ($i = 0; $i -lt 15 -and -not $moved; $i++) {
-                        try {
-                            [System.IO.Directory]::Move($Staged, $Install)
-                            $moved = $true
-                        } catch {
-                            $moveError = $_.Exception.Message
-                            Start-Sleep -Seconds 1
-                        }
-                    }
-                    if ($moved) {
-                        $swapped = $true
-                    } else {
-                        Write-Log ('update: move failed, rolling back: ' + $moveError)
-                        if (-not (Test-Path -LiteralPath $Install)) {
-                            [System.IO.Directory]::Move($Old, $Install)
-                        }
-                    }
-                } else {
-                    Write-Log 'update: could not rename the install folder'
-                }
-            } catch {
-                Write-Log ('update: failed: ' + $_.Exception.Message)
-            }
-        } else {
-            Write-Log 'update: Hanasu did not exit in time'
-        }
-
-        if (-not $stillRunning) {
-            $exe = Join-Path $Install 'Hanasu.exe'
-            if (Test-Path -LiteralPath $exe) {
-                Start-Process -FilePath $exe -WorkingDirectory $Install
-            }
-        }
-
-        if ($swapped) {
-            Remove-Item -LiteralPath $Old -Recurse -Force -ErrorAction SilentlyContinue
-        }
-        Set-Location -LiteralPath (Split-Path -Parent $Install)
-        Remove-Item -LiteralPath $PSScriptRoot -Recurse -Force -ErrorAction SilentlyContinue
-        Write-Log ('update: done (swapped=' + $swapped + ')')
-        """;
 }

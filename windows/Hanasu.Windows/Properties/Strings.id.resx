@@ -1449,4 +1449,82 @@ Buka halaman rilis di browser?</value>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>Rekaman {0} rapat tidak dapat dihapus seluruhnya. File yang tersisa dibiarkan apa adanya.</value>
   </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>Tidak bisa menambahkan ke PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>Sudah ditambahkan ke PATH. Ketik hanasu di PowerShell atau Command Prompt yang baru dibuka (terminal yang sudah terbuka, dan aplikasi yang dijalankan darinya, tidak melihat perubahan; buka ulang).</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>Jika Anda tidak dapat menambahkan server MCP, tempelkan petunjuk ini (dalam bahasa Inggris) ke instruksi agen, seperti CLAUDE.md atau skill di Claude Code. Agen kemudian dapat menjalankan hanasu dari shell untuk membaca rapat Anda. Di Terminal, jalankan hanasu help agent untuk menampilkannya.</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>Petunjuk untuk agen</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>Disalin</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>Salin</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>Tambahkan ini ke mcpServers di file konfigurasi Claude Desktop (claude_desktop_config.json). Untuk app lain, gunakan command dan args yang sama.</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>Saat PowerShell membaca keluaran, jalankan dulu [Console]::OutputEncoding = [Text.UTF8Encoding]::new() (di Windows PowerShell 5.1, juga $OutputEncoding = [Text.UTF8Encoding]::new()). Di 5.1, &gt; menulis dalam UTF-16, jadi untuk menulis file gunakan | Out-File -Encoding utf8.</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>File yang dapat dieksekusi</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>Sembunyikan</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>Baca rekaman rapat dan rapikan teks dari Terminal, skrip, dan agen AI. Anda dapat menjalankan perintah ini dengan jalur lengkap di atas tanpa menambahkannya ke PATH. Jalankan hanasu help di Terminal untuk melihat cara penggunaannya.</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>Isi rapat yang dikembalikan lewat MCP akan sampai ke agen yang memakai MCP dan ke penyedia AI-nya. ask_meetings juga mengirim isi rapat ke AI yang sama dengan hanasu ask (lihat baris ask di hanasu doctor).</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>cli\hanasu.exe tidak ada. Buka Hanasu dari folder tempat seluruh zip unduhan diekstrak.</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>Belum ditambahkan</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>Ada di {0}</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>{0} mengarah ke salinan Hanasu di lokasi lain. Tambahkan lagi agar mengarah ke app ini.</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>Tambahkan ke PATH</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>Hapus dari PATH</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>Tidak bisa menghapus dari PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>Dihapus dari PATH.</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>Perintah hanasu</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>Tampilkan</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>Hanasu sedang berjalan dari folder sementara (misalnya di dalam zip). Ekstrak seluruh zip, buka Hanasu dari folder itu, lalu tambahkan ke PATH dan MCP.</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>Perintah &amp; MCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>Pembaruan tidak bisa dipasang karena folder Hanasu tidak bisa diganti namanya. Hentikan hanasu yang berjalan sebagai administrator, keluar dari folder cli Hanasu di terminal yang sedang berada di sana, lalu perbarui lagi.</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>hanasu yang sedang berjalan ({0}) akan dihentikan sebelum pembaruan dipasang. Jika aplikasi yang memakai MCP (seperti Claude Desktop) kehilangan alat Hanasu, mulai ulang aplikasinya.</value>
+  </data>
 </root>

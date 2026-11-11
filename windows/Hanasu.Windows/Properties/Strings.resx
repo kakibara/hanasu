@@ -1921,4 +1921,82 @@ Open the release page in your browser?</value>
     <value>The recordings of {0} meetings couldn't be fully deleted. The remaining files are kept.</value>
     <comment>Error. {0} = number of meetings</comment>
   </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>Couldn't add to PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>Added to PATH. Type hanasu in a newly opened PowerShell or Command Prompt (terminals that are already open, and apps started from them, don't see the change, so reopen them).</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>If you can't add an MCP server, paste these instructions (in English) into the agent's instructions, such as CLAUDE.md or a skill in Claude Code. The agent can then run hanasu from the shell to read your meetings. In Terminal, run hanasu help agent to print them.</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>Instructions for agents</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>Add this to mcpServers in the Claude Desktop config file (claude_desktop_config.json). For other apps, use the same command and args.</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>When PowerShell reads the output, run [Console]::OutputEncoding = [Text.UTF8Encoding]::new() first (in Windows PowerShell 5.1, also $OutputEncoding = [Text.UTF8Encoding]::new()). In 5.1, &gt; writes UTF-16, so use | Out-File -Encoding utf8 to write a file.</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>Executable</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>Read your meeting records and clean up text from Terminal, scripts and AI agents. You can run the command by its full path above without adding it to PATH. Run hanasu help in Terminal to see how to use it.</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>Meeting contents returned over MCP go to the agent using MCP and to its AI provider. ask_meetings also sends meeting contents to the same AI as hanasu ask (see the ask line of hanasu doctor).</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>cli\hanasu.exe is missing. Open Hanasu from a folder where the whole download zip has been extracted.</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>Not added</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>In {0}</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>{0} points to a copy of Hanasu in another location. Add it again to point it to this app.</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>Add to PATH</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>Remove from PATH</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>Couldn't remove from PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>Removed from PATH.</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>hanasu command</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>Hanasu is running from a temporary folder (such as inside the zip). Extract the whole zip, open Hanasu from that folder, and then add it to PATH and MCP.</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>Command &amp; MCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>The update couldn't be installed because the Hanasu folder couldn't be renamed. Stop any hanasu running as administrator, move any terminal whose current folder is inside Hanasu's cli folder, and then update again.</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>The running hanasu commands ({0}) will be stopped before the update is installed. If an app that uses MCP (such as Claude Desktop) loses the Hanasu tools, restart it.</value>
+  </data>
 </root>

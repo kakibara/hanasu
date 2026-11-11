@@ -1449,4 +1449,82 @@
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>تعذر حذف تسجيلات بعض الاجتماعات بالكامل (العدد: {0}). تم الاحتفاظ بالملفات المتبقية.</value>
   </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>تعذّرت الإضافة إلى PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>تمت الإضافة إلى PATH. اكتب hanasu في PowerShell أو موجه الأوامر بعد فتحه من جديد (الطرفيات المفتوحة والتطبيقات التي بدأت منها لا ترى التغيير، فأعد فتحها).</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>إذا تعذّرت إضافة خادم MCP، فالصق هذه التعليمات (بالإنجليزية) في تعليمات الوكيل، مثل CLAUDE.md أو مهارة في Claude Code. عندها يستطيع الوكيل تشغيل hanasu من الصدفة (shell) لقراءة اجتماعاتك. وفي الطرفية، شغّل hanasu help agent لعرضها.</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>تعليمات للوكلاء</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>تم النسخ</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>نسخ</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>أضِف هذا إلى mcpServers في ملف إعدادات Claude Desktop ‏(claude_desktop_config.json). وفي التطبيقات الأخرى، اكتب القيم نفسها في command وargs.</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>عند قراءة المخرجات في PowerShell، شغّل أولًا [Console]::OutputEncoding = [Text.UTF8Encoding]::new() (وفي Windows PowerShell 5.1 شغّل أيضًا $OutputEncoding = [Text.UTF8Encoding]::new()). في 5.1 يكتب &gt; بترميز UTF-16، لذا استخدم | Out-File -Encoding utf8 للكتابة إلى ملف.</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>الملف التنفيذي</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>إخفاء</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>اقرأ تسجيلات اجتماعاتك ونقّح النصوص من الطرفية والبرامج النصية ووكلاء AI. يمكنك تشغيل الأمر بمساره الكامل الظاهر أعلاه دون إضافته إلى PATH. شغّل hanasu help في الطرفية لمعرفة طريقة الاستخدام.</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>يذهب محتوى الاجتماعات الذي يُعاد عبر MCP إلى الوكيل الذي يستخدم MCP وإلى مزوّد الذكاء الاصطناعي الخاص به. ويرسل ask_meetings محتوى الاجتماعات أيضًا إلى الذكاء الاصطناعي نفسه الذي يستخدمه hanasu ask (انظر سطر ask في hanasu doctor).</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>الملف cli\hanasu.exe غير موجود. افتح Hanasu من مجلد استُخرج فيه ملف zip المنزّل كاملًا.</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>غير مُضاف</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>موجود في {0}</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>يشير {0} إلى نسخة من Hanasu في موقع آخر. أضِفه مرة أخرى ليشير إلى هذا التطبيق.</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>إضافة إلى PATH</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>إزالة من PATH</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>تعذّرت الإزالة من PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>تمت الإزالة من PATH.</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>الأمر hanasu</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>إظهار</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>يعمل Hanasu من مجلد مؤقت (مثل داخل ملف zip). استخرج ملف zip كاملًا، وافتح Hanasu من ذلك المجلد، ثم أضفه إلى PATH وMCP.</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>الأمر وMCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>تعذّر تثبيت التحديث لأنه تعذّرت إعادة تسمية مجلد Hanasu. أوقف أي hanasu يعمل كمسؤول، واخرج من مجلد cli الخاص بـ Hanasu في أي طرفية موجودة فيه، ثم حدّث مرة أخرى.</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>سيتم إيقاف أوامر hanasu العاملة ({0}) قبل تثبيت التحديث. إذا فقد تطبيق يستخدم MCP (مثل Claude Desktop) أدوات Hanasu، فأعد تشغيله.</value>
+  </data>
 </root>

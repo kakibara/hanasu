@@ -1449,4 +1449,82 @@ Sürüm sayfası tarayıcıda açılsın mı?</value>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>{0} toplantının ses kayıtları tamamen silinemedi. Kalan dosyalar olduğu gibi bırakıldı.</value>
   </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>PATH'e eklenemedi: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>PATH'e eklendi. Yeni açılan bir PowerShell'de veya Komut İstemi'nde hanasu yazarak kullanabilirsiniz (açık olan terminaller ve onlardan başlatılan uygulamalar değişikliği görmez; yeniden açın).</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>MCP sunucusu ekleyemiyorsanız bu talimatları (İngilizce) ajanın talimatlarına, örneğin CLAUDE.md'ye veya Claude Code'daki bir beceriye yapıştırın. Böylece ajan, toplantılarınızı okumak için hanasu'yu kabuktan çalıştırabilir. Talimatları Terminal'de yazdırmak için hanasu help agent komutunu çalıştırın.</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>Ajanlar için talimatlar</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>Kopyalandı</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>Kopyala</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>Bunu Claude Desktop yapılandırma dosyasındaki (claude_desktop_config.json) mcpServers bölümüne ekleyin. Diğer uygulamalarda da command ve args için aynı değerleri kullanın.</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>PowerShell'de çıktıyı okumadan önce [Console]::OutputEncoding = [Text.UTF8Encoding]::new() komutunu çalıştırın (Windows PowerShell 5.1'de ayrıca $OutputEncoding = [Text.UTF8Encoding]::new()). 5.1'de &gt; UTF-16 yazar; dosyaya yazarken | Out-File -Encoding utf8 kullanın.</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>Yürütülebilir dosya</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>Gizle</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>Terminal'den, betiklerden ve AI ajanlarından toplantı kayıtlarınızı okuyabilir ve metinleri iyileştirebilirsiniz. Komutu PATH'e eklemeden de yukarıdaki tam yolla çalıştırabilirsiniz. Kullanımını görmek için Terminal'de hanasu help komutunu çalıştırın.</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>MCP üzerinden döndürülen toplantı içeriği, MCP'yi kullanan ajana ve onun yapay zekâ sağlayıcısına gider. ask_meetings, toplantı içeriğini hanasu ask ile aynı yapay zekâya da gönderir (hanasu doctor'daki ask satırına bakın).</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>cli\hanasu.exe bulunamadı. Hanasu'yu, indirilen zip'in tamamının çıkarıldığı klasörden açın.</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>Eklenmedi</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>{0} içinde</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>{0}, başka bir konumdaki bir Hanasu kopyasını gösteriyor. Yeniden eklerseniz bu uygulamayı gösterir.</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>PATH'e ekle</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>PATH'ten kaldır</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>PATH'ten kaldırılamadı: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>PATH'ten kaldırıldı.</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>hanasu komutu</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>Göster</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>Hanasu geçici bir klasörden (örneğin zip'in içinden) çalışıyor. Zip'in tamamını çıkarın, Hanasu'yu o klasörden yeniden açın, sonra PATH'e ve MCP'ye ekleyin.</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>Komut ve MCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>Hanasu klasörü yeniden adlandırılamadığı için güncelleme yüklenemedi. Yönetici olarak çalışan hanasu'ları kapatın, Hanasu'nun cli klasöründe çalışan terminallerden çıkın ve yeniden güncelleyin.</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>Güncelleme yüklenmeden önce çalışan hanasu komutları ({0}) kapatılacak. MCP kullanan bir uygulama (Claude Desktop gibi) Hanasu araçlarını kaybederse onu yeniden başlatın.</value>
+  </data>
 </root>

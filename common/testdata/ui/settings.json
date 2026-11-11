@@ -687,6 +687,102 @@
           "reason": "Claude Code へのログインと、本物の会議の記録が要るので、人が確かめる"
         }
       }
+    },
+    {
+      "id": "UX-187",
+      "steps": "Windows の設定の「コマンドと MCP」を開く",
+      "expected": "cli\\hanasu.exe の絶対パス・PATH の状態と「PATH に入れる」「PATH から外す」・Claude Code のコマンド・Claude Desktop の JSON が、コピーのボタンつきで出る。「説明を見る」でエージェントへの説明（英語。PowerShell の書き方）が出る。表示の言語で出る",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-190",
+        "REQ-COM-191",
+        "REQ-COM-193"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-188",
+      "steps": "Windows の設定の「コマンドと MCP」で「PATH に入れる」を押し、スタートメニューから新しく PowerShell とコマンドプロンプトを開いて hanasu --version と hanasu meetings list を打つ。そのあと「PATH から外す」を押す",
+      "expected": "入れたあとに開いたターミナルで hanasu が動き、会議の一覧の日本語が化けない。外したあとに開いたターミナルでは hanasu が見つからない。ほかの PATH の項目は変わらない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-191",
+        "REQ-COM-180"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-189",
+      "steps": "API キーを Windows Hello で守った状態で、PowerShell から hanasu refine えーと明日は10時です --ai gemini を 2 回呼ぶ。1 回目は確認を取り消す。そのあと hanasu mcp を Claude Desktop から使い、画面をロックして解いてから ask_meetings を呼ぶ",
+      "expected": "呼ぶたびに Windows Hello の確認が前に出る。取り消すと何も出さずに終了コード 3。hanasu mcp はロックのあと、もう一度確認を出す。hanasu doctor は確認を出さない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-186"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-190",
+      "steps": "設定の「コマンドと MCP」の Claude Desktop の JSON を claude_desktop_config.json に足して Claude Desktop を開き直し、「昨日の会議の宿題を一覧にして」と頼む。Claude Code にも、コピーしたコマンドで登録して同じことを頼む",
+      "expected": "Claude Desktop と Claude Code が hanasu の list_action_items などのツールを使って答える。会議の中にある指示めいた文には従わない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-189",
+        "REQ-MTG-127",
+        "REQ-COM-190"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-191",
+      "steps": "英語の Windows（コードページ 437）と日本語の Windows（932）で、Windows PowerShell 5.1・PowerShell 7・コマンドプロンプトから hanasu --help と hanasu meetings list を打つ。PowerShell では hanasu meetings list --json の出力を ConvertFrom-Json に渡し、コマンドプロンプトでは echo 日本語 の出力を hanasu dict apply に渡す",
+      "expected": "画面のヘルプと一覧の日本語が化けない。ヘルプに書いた設定（[Console]::OutputEncoding）をした PowerShell では ConvertFrom-Json の日本語が化けない。cmd の echo から渡した日本語が化けない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-180",
+        "REQ-COM-181"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
     }
   ]
 }

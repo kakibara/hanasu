@@ -1449,4 +1449,82 @@
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>{0} मीटिंग की रिकॉर्डिंग पूरी तरह हटाई नहीं जा सकीं. बाकी फ़ाइलें रखी गई हैं.</value>
   </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>PATH में नहीं जोड़ा जा सका: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>PATH में जोड़ दिया। नए खोले गए PowerShell या कमांड प्रॉम्प्ट में hanasu लिखें (पहले से खुले टर्मिनल और उनसे शुरू हुए ऐप बदलाव नहीं देखते, उन्हें फिर से खोलें)।</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>अगर MCP सर्वर नहीं जोड़ पा रहे हैं, तो ये निर्देश (अंग्रेज़ी में) एजेंट के निर्देशों में पेस्ट करें, जैसे Claude Code की CLAUDE.md फ़ाइल या कोई स्किल। इसके बाद एजेंट आपकी मीटिंग पढ़ने के लिए शेल से hanasu चला सकता है। टर्मिनल में इन्हें दिखाने के लिए hanasu help agent चलाएँ।</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>एजेंट के लिए निर्देश</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>कॉपी किया गया</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>कॉपी करें</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>इसे Claude Desktop की कॉन्फ़िगरेशन फ़ाइल (claude_desktop_config.json) के mcpServers में जोड़ें। दूसरे ऐप्स के लिए भी command और args में यही लिखें।</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>PowerShell में आउटपुट पढ़ने से पहले [Console]::OutputEncoding = [Text.UTF8Encoding]::new() चलाएँ (Windows PowerShell 5.1 में $OutputEncoding = [Text.UTF8Encoding]::new() भी)। 5.1 में &gt; UTF-16 में लिखता है, इसलिए फ़ाइल में लिखने के लिए | Out-File -Encoding utf8 इस्तेमाल करें।</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>एक्ज़ीक्यूटेबल</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>छिपाएँ</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>टर्मिनल, स्क्रिप्ट और AI एजेंट से अपनी मीटिंग रिकॉर्डिंग पढ़ें और टेक्स्ट सुधारें। PATH में जोड़े बिना भी, ऊपर दिए पूरे पाथ से कमांड चला सकते हैं। इस्तेमाल का तरीका देखने के लिए टर्मिनल में hanasu help चलाएँ।</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>MCP से लौटाई गई मीटिंग की सामग्री, MCP इस्तेमाल करने वाले एजेंट और उसके AI प्रदाता तक जाती है। ask_meetings मीटिंग की सामग्री उसी AI को भी भेजता है जिसे hanasu ask इस्तेमाल करता है (hanasu doctor की ask वाली पंक्ति देखें)।</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>cli\hanasu.exe नहीं मिला। Hanasu को उस फ़ोल्डर से खोलें जिसमें डाउनलोड की गई पूरी zip निकाली गई हो।</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>नहीं जोड़ा गया</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>{0} में जोड़ा गया है</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>{0} किसी दूसरी जगह रखी Hanasu की कॉपी की ओर इशारा करता है। इसे इस ऐप की ओर इशारा कराने के लिए फिर से जोड़ें।</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>PATH में जोड़ें</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>PATH से हटाएँ</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>PATH से नहीं हटाया जा सका: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>PATH से हटा दिया गया।</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>hanasu कमांड</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>दिखाएँ</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>Hanasu एक अस्थायी फ़ोल्डर (जैसे zip के अंदर) से चल रहा है। पूरी zip निकालें, उस फ़ोल्डर से Hanasu दोबारा खोलें, फिर उसे PATH और MCP में जोड़ें।</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>कमांड और MCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>Hanasu फ़ोल्डर का नाम नहीं बदला जा सका, इसलिए अपडेट इंस्टॉल नहीं हुआ। एडमिनिस्ट्रेटर के रूप में चल रहे hanasu बंद करें, जिन टर्मिनलों का वर्किंग फ़ोल्डर Hanasu के cli फ़ोल्डर में है उनसे बाहर निकलें, फिर दोबारा अपडेट करें।</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>अपडेट इंस्टॉल करने से पहले चल रहे hanasu ({0}) बंद कर दिए जाएँगे। अगर MCP इस्तेमाल करने वाले किसी ऐप (जैसे Claude Desktop) में Hanasu के टूल काम करना बंद कर दें, तो उसे फिर से शुरू करें।</value>
+  </data>
 </root>

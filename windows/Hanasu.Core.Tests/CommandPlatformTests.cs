@@ -3,6 +3,7 @@ using System.Text.Json.Nodes;
 using Hanasu.Core.Command;
 using Hanasu.Core.LocalLlm;
 using Hanasu.Core.Settings;
+using Hanasu.Core.Update;
 
 namespace Hanasu.Core.Tests;
 
@@ -187,5 +188,29 @@ public class CommandPlatformTests
         });
         Assert.Equal(HanasuExit.Failure, exit);
         Assert.Contains("--ai", console.Stderr.ToString());
+    }
+
+    // 確かめ方: REQ-REL-013（DEC-REL-031。このインストールの hanasu と、パスを読めない hanasu を数える）
+    [Fact]
+    public void RunningCommandsAreClassified()
+    {
+        var cli = Path.Combine(TestKeys.TempDirectory(), "cli", "hanasu.exe");
+        var count = RunningCommands.Classify([cli, cli.ToUpperInvariant() == cli ? cli : cli, null, Path.Combine(TestKeys.TempDirectory(), "hanasu.exe")], cli);
+        Assert.Equal(2, count.Ours);
+        Assert.Equal(1, count.Unknown);
+        Assert.Equal(3, count.Total);
+    }
+
+    // 確かめ方: REQ-REL-013（DEC-REL-031。入れ替えのスクリプトは、名前を変える前に cli の hanasu を探し直して終わらせ、改名できなければ印に理由を足す）
+    [Fact]
+    public void SwapScriptStopsCommandsBeforeRename()
+    {
+        var script = UpdateSwapScript.Text;
+        var stop = script.IndexOf("Get-Process -Name 'hanasu'", StringComparison.Ordinal);
+        var rename = script.IndexOf("[System.IO.Directory]::Move($Install, $Old)", StringComparison.Ordinal);
+        Assert.True(stop > 0 && rename > stop);
+        Assert.Contains("$Cli", script);
+        Assert.Contains("'rename-failed'", script);
+        Assert.Contains("[string]$Pending", script);
     }
 }

@@ -1449,4 +1449,82 @@ App 內更新會替換整個資料夾，因此只有在 Hanasu 位於專用資�
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>{0} 場會議的錄音未能完全刪除。其餘檔案維持不變。</value>
   </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>無法加入 PATH：{0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>已加入 PATH。在新開啟的 PowerShell 或命令提示字元中輸入 hanasu 即可使用（已開啟的終端機以及從中啟動的應用程式不會取得變更，請重新開啟）。</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>如果無法登錄 MCP，可以將這段說明（英文）貼到代理程式的指示中（例如 Claude Code 的 CLAUDE.md 或技能），代理程式就能從 shell 呼叫 hanasu 來讀取會議。在「終端機」中執行 hanasu help agent 也可以輸出這段說明。</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>給代理程式的說明</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>已拷貝</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>拷貝</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>將它加入 Claude Desktop 設定檔（claude_desktop_config.json）的 mcpServers 中。其他 App 也在 command 和 args 中填入相同的內容。</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>在 PowerShell 中讀取輸出前，請先執行 [Console]::OutputEncoding = [Text.UTF8Encoding]::new()（Windows PowerShell 5.1 中還要執行 $OutputEncoding = [Text.UTF8Encoding]::new()）。5.1 的 &gt; 會以 UTF-16 寫入，寫入檔案時請使用 | Out-File -Encoding utf8。</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>執行檔</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>隱藏說明</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>可以從「終端機」、腳本和 AI 代理程式讀取會議記錄、潤飾文字。即使不加入 PATH，也可以用上方執行檔的路徑呼叫。用法請在「終端機」中執行 hanasu help 查看。</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>透過 MCP 傳回的會議內容會交給使用 MCP 的代理程式及其 AI 提供者。ask_meetings 也會把會議內容傳送給與 hanasu ask 相同的 AI（見 hanasu doctor 中 ask 那一行）。</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>缺少 cli\hanasu.exe。請從完整解壓縮下載的 zip 後的資料夾開啟 Hanasu。</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>未加入</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>已加入 {0}</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>{0} 指向另一個位置的 Hanasu。重新加入後，它會指向此 App。</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>加入 PATH</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>從 PATH 移除</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>無法從 PATH 移除：{0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>已從 PATH 移除。</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>hanasu 指令</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>顯示說明</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>Hanasu 正從暫存資料夾（例如 zip 內部）執行。請解壓縮整個 zip，從解壓縮後的資料夾重新開啟，再加入 PATH 和 MCP。</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>指令與 MCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>無法重新命名 Hanasu 資料夾，因此未能安裝更新。請結束以系統管理員身分執行的 hanasu；如果終端機的工作目錄在 Hanasu 的 cli 資料夾內，請先離開該資料夾，然後再更新一次。</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>安裝更新前會結束正在執行的 hanasu（{0} 個）。如果使用 MCP 的應用程式（如 Claude Desktop）無法再使用 Hanasu 的工具，請重新啟動它。</value>
+  </data>
 </root>
