@@ -59,7 +59,7 @@ jobs:
       # 設計判断: DEC-COM-193
       # 利用者向けの hanasu コマンド（cli\hanasu.exe）。PATH に入れるフォルダなので、hanasu.exe だけを置く
       - name: Publish hanasu (cli)
-        run: dotnet publish Hanasu.Command/Hanasu.Command.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:RestoreLockedMode=false -o publish/win-x64/cli
+        run: dotnet publish Hanasu.Command/Hanasu.Command.csproj -c Release -r win-x64 --self-contained -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:RestoreLockedMode=false -o publish/win-x64/cli
 
       # 設計判断: DEC-COM-061
       # ローカルの LLM の llama-server（llama.cpp）を、SHA-256 を確かめてから llama/ に入れる
