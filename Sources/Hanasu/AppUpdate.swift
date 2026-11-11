@@ -807,7 +807,7 @@ final class AppUpdater {
     func checkOnLaunch() {
         guard UpdateSettings.shared.checkOnLaunch, AppVersion.current != nil else { return }
         Task {
-            // 起動の直後に設定画面などと重ならないよう、少し待つ
+            // 起動の直後の許可のダイアログなどと重ならないよう、少し待つ
             try? await Task.sleep(for: .seconds(5))
             await check(manual: false)
         }
