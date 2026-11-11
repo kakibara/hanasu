@@ -834,15 +834,52 @@ struct LiveRecordingPill: View {
 
 /// ツールバーの自分と相手の音量
 struct LiveLevelMeters: View {
-    @ObservedObject var recorder: MeetingRecorder
+    // 設計判断: DEC-MTG-151（0.25 秒ごとに変わる音量は、これだけが見る）
+    @ObservedObject private var signals: MeetingLiveSignals
+
+    init(recorder: MeetingRecorder) {
+        signals = recorder.signals
+    }
 
     var body: some View {
         HStack(spacing: 12) {
-            LevelMeter(label: tr("自分"), level: recorder.meLevel, color: .accentColor)
-            LevelMeter(label: tr("相手"), level: recorder.othersLevel, color: .orange)
+            LevelMeter(label: tr("自分"), level: signals.meLevel, color: .accentColor)
+            LevelMeter(label: tr("相手"), level: signals.othersLevel, color: .orange)
         }
         .padding(.horizontal, 6)
         .fixedSize()
+    }
+}
+
+// 要件: REQ-MTG-003
+// 設計判断: DEC-MTG-151（話すたびに変わる途中結果は、これだけが見る）
+/// 記録中の文字起こしの末尾の、確定前の途中結果（薄く出す）
+struct LiveVolatileLines: View {
+    @ObservedObject var signals: MeetingLiveSignals
+
+    var body: some View {
+        if !signals.volatileOthers.isEmpty {
+            TranscriptLine(time: nil, speaker: tr("相手"), color: .orange, text: signals.volatileOthers)
+                .opacity(0.5)
+        }
+        if !signals.volatileMe.isEmpty {
+            TranscriptLine(time: nil, speaker: tr("自分"), color: .accentColor, text: signals.volatileMe)
+                .opacity(0.5)
+        }
+    }
+}
+
+// 設計判断: DEC-MTG-151
+/// まだ確定した発言がないときの案内。途中結果が出たら消す
+struct LiveTranscriptPlaceholder: View {
+    @ObservedObject var signals: MeetingLiveSignals
+
+    var body: some View {
+        if signals.volatileIsEmpty {
+            Text(tr("話し始めると、ここに文字起こしが出ます"))
+                .font(.callout)
+                .foregroundStyle(.secondary)
+        }
     }
 }
 
@@ -898,10 +935,8 @@ struct LiveTranscriptView: View {
                                   systemImage: "waveform")
                                 .font(.callout)
                                 .foregroundStyle(.secondary)
-                        } else if recorder.liveLines.isEmpty, recorder.volatileMe.isEmpty, recorder.volatileOthers.isEmpty {
-                            Text(tr("話し始めると、ここに文字起こしが出ます"))
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
+                        } else if recorder.liveLines.isEmpty {
+                            LiveTranscriptPlaceholder(signals: recorder.signals)
                         }
                         ForEach(recorder.liveLines) { line in
                             TranscriptLine(time: line.start, speaker: line.channel == .me ? tr("自分") : tr("相手"),
@@ -910,14 +945,7 @@ struct LiveTranscriptView: View {
                                            use: recorder.current?.isOffRecord(at: line.start) == true ? .offRecord : .used)
                                 .id(line.id)
                         }
-                        if !recorder.volatileOthers.isEmpty {
-                            TranscriptLine(time: nil, speaker: tr("相手"), color: .orange, text: recorder.volatileOthers)
-                                .opacity(0.5)
-                        }
-                        if !recorder.volatileMe.isEmpty {
-                            TranscriptLine(time: nil, speaker: tr("自分"), color: .accentColor, text: recorder.volatileMe)
-                                .opacity(0.5)
-                        }
+                        LiveVolatileLines(signals: recorder.signals)
                         Color.clear.frame(height: 1).id("bottom")
                     }
                     .padding(.horizontal, 24)

@@ -3,7 +3,7 @@ import Foundation
 import Speech
 
 // 要件: REQ-MTG-002, REQ-MTG-003, REQ-MTG-023
-// 設計判断: DEC-MTG-005
+// 設計判断: DEC-MTG-005, DEC-MTG-152
 /// 会議の 1 チャンネル（自分／相手）分の音声を、文字起こししながら音声ファイルにも書き出す。
 /// append はオーディオスレッドなど任意のスレッドから呼んでよい（内部のキューで順番に処理する）。
 final class ChannelTranscriber: @unchecked Sendable {
@@ -35,6 +35,12 @@ final class ChannelTranscriber: @unchecked Sendable {
     private var phrases: [TranscribedPhrase] = []
     /// 書いた（文字起こしに渡した）音声の長さ（秒）
     private var writtenSeconds: Double = 0
+    // 設計判断: DEC-MTG-152
+    /// 文字起こしに渡す前にためている音声（analyzerChunkSeconds たまったら渡す）
+    private var pendingInput: AVAudioPCMBuffer?
+    /// 文字起こしに 1 回で渡す音声の長さ（秒）。SpeechAnalyzer は渡した回数ぶんの記録を最後まで持つので、
+    /// 約 10 ms ごとに届くバッファをそのまま渡さず、まとめて回数を減らす
+    static let analyzerChunkSeconds = 0.2
 
     /// - Parameter fixedTimeOffset: 録音開始からのずれが分かっている場合（ファイル入力など）に指定する
     init(channel: MeetingChannel, inputFormat: AVAudioFormat, fileURL: URL?, meetingStart: Date, fixedTimeOffset: Double? = nil,
@@ -158,8 +164,64 @@ final class ChannelTranscriber: @unchecked Sendable {
             }
             writtenSeconds += Double(converted.frameLength) / converted.format.sampleRate
             measureLevel(converted)
-            continuation?.yield(AnalyzerInput(buffer: converted))
+            enqueueForAnalyzer(converted)
         }
+    }
+
+    // 設計判断: DEC-MTG-152
+    /// 文字起こしに渡す音声を analyzerChunkSeconds ずつにまとめて渡す（queue の上で呼ぶ）。
+    /// 音声の順番と長さは変えないので、時刻はまとめないときと同じ
+    private func enqueueForAnalyzer(_ buffer: AVAudioPCMBuffer) {
+        guard let continuation else { return }
+        if let pendingInput, !Self.appendFrames(of: buffer, to: pendingInput) {
+            // 入らない（形式が変わった・容量が足りない）ときは、たまった分を先に渡す
+            flushPendingInput()
+        }
+        if pendingInput == nil {
+            guard let fresh = AVAudioPCMBuffer(pcmFormat: buffer.format,
+                                               frameCapacity: Self.chunkFrames(buffer.format) + buffer.frameLength),
+                  Self.appendFrames(of: buffer, to: fresh)
+            else {
+                continuation.yield(AnalyzerInput(buffer: buffer))
+                return
+            }
+            pendingInput = fresh
+        }
+        if let pendingInput, pendingInput.frameLength >= Self.chunkFrames(pendingInput.format) {
+            flushPendingInput()
+        }
+    }
+
+    /// ためている音声を文字起こしに渡す（queue の上で呼ぶ）
+    private func flushPendingInput() {
+        if let pendingInput, pendingInput.frameLength > 0 {
+            continuation?.yield(AnalyzerInput(buffer: pendingInput))
+        }
+        pendingInput = nil
+    }
+
+    private static func chunkFrames(_ format: AVAudioFormat) -> AVAudioFrameCount {
+        AVAudioFrameCount((format.sampleRate * analyzerChunkSeconds).rounded(.up))
+    }
+
+    /// buffer の音声を target の末尾に写す。形式が違うか、入りきらなければ false（target は変えない）
+    static func appendFrames(of buffer: AVAudioPCMBuffer, to target: AVAudioPCMBuffer) -> Bool {
+        guard buffer.format == target.format,
+              target.frameLength + buffer.frameLength <= target.frameCapacity else { return false }
+        let bytesPerFrame = Int(target.format.streamDescription.pointee.mBytesPerFrame)
+        guard bytesPerFrame > 0 else { return false }
+        let from = UnsafeMutableAudioBufferListPointer(UnsafeMutablePointer(mutating: buffer.audioBufferList))
+        let to = UnsafeMutableAudioBufferListPointer(target.mutableAudioBufferList)
+        guard from.count == to.count else { return false }
+        let offset = Int(target.frameLength) * bytesPerFrame
+        let length = Int(buffer.frameLength) * bytesPerFrame
+        for (src, dst) in zip(from, to) {
+            guard let srcData = src.mData, let dstData = dst.mData else { return false }
+            memcpy(dstData.advanced(by: offset), srcData, length)
+        }
+        target.frameLength += buffer.frameLength
+        for index in 0..<to.count { to[index].mDataByteSize = UInt32(Int(target.frameLength) * bytesPerFrame) }
+        return true
     }
 
     /// 直近のバッファの音量（0〜1。RMS）
@@ -188,6 +250,7 @@ final class ChannelTranscriber: @unchecked Sendable {
     /// 入力を締め切り、残りの音声を確定させて、全発話を返す。
     func finish() async -> [TranscribedPhrase] {
         let analyzer: SpeechAnalyzer? = queue.sync {
+            flushPendingInput()
             if let continuation, let analyzerFormat {
                 continuation.yield(AnalyzerInput(buffer: Self.silence(format: analyzerFormat, seconds: 0.6)))
                 continuation.finish()
@@ -209,6 +272,7 @@ final class ChannelTranscriber: @unchecked Sendable {
 
     func cancel() async {
         let analyzer: SpeechAnalyzer? = queue.sync {
+            pendingInput = nil
             continuation?.finish()
             continuation = nil
             file = nil

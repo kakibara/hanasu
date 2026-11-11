@@ -1293,6 +1293,22 @@
 - 対象: Mac
 - 実装の場所: `AIRouteMenu`、`AIRoute`（`availability`・`options`）、`MeetingChatModel.override`、`MeetingAskModel.override`、`MeetingWindowView`
 
+### DEC-MTG-151 記録中に何度も変わる値（音量・途中結果）は、MeetingRecorder とは別の観察対象に持つ
+- 決めたこと: 0.25 秒ごとの音量（`meLevel`・`othersLevel`）と、話すたびに変わる確定前の途中結果（`volatileMe`・`volatileOthers`）は、`MeetingRecorder` の `@Published` に置かず、`MeetingLiveSignals`（`MeetingRecorder.signals`）に持つ。画面では、それを出すビュー（ツールバーの音量計 `LiveLevelMeters`、記録中の文字起こしの末尾の途中結果 `LiveVolatileLines` と案内 `LiveTranscriptPlaceholder`、字幕 `MeetingCaptionView`）だけが見る。`MeetingRecorder` の同じ名前のプロパティは読み出しだけを残す（AI チャットに渡す材料など、描き直しの要らない読み手のため）。
+- 理由: `MeetingRecorder` の `@Published` が変わると、それを見る会議ノートの全体（左の一覧の全行と右クリックのメニュー、録音ファイルの有無の確かめ、ツールバー、チャットの欄）が描き直される。2026-11-11 に実機で測ると、記録中は CPU を約 40% 使い続け、描き直しのたびに SwiftUI の内部のオブジェクト（Observation の登録・ツールチップ）が残って、メモリが 1 時間に約 40 MB 増えていた。分けたあと、同じ画面を早回しで動かす実験では CPU の時間が約 9 分の 1 になった。
+- 決めた場面: 2026-11-11 の依頼「録音時間が長くなると、メモリを大量に消費する」
+- 関係する要件: REQ-MTG-003, REQ-MTG-014
+- 対象: Mac
+- 実装の場所: `MeetingLiveSignals`、`MeetingRecorder.signals`、`LiveLevelMeters`、`LiveVolatileLines`、`LiveTranscriptPlaceholder`、`MeetingCaptionView`
+
+### DEC-MTG-152 文字起こし（SpeechAnalyzer）には、音声を約 0.2 秒ずつまとめて渡す
+- 決めたこと: `ChannelTranscriber.append` は、音声ファイルへの書き出しと音量の測定は届いたバッファごとに行い、SpeechAnalyzer へは `analyzerChunkSeconds`（0.2 秒）たまってから 1 つの `AnalyzerInput` にして渡す。形式が変わったときと、止めるとき（`finish`）は、たまった分を先に渡す。音声の順番と長さは変えない。
+- 理由: SpeechAnalyzer は、渡された入力 1 回ごとの記録を、文字起こしを終えるまで持ち続ける。システム音声は約 10 ms ごとに届くので、そのまま渡すと 1 時間に 1 チャンネルあたり約 8 MB 増えていた（2026-11-11 に実機で測った）。0.2 秒にまとめると回数は約 20 分の 1 になる。途中結果が出るのは最大 0.2 秒遅れるが、認識そのものの遅れ（1 秒前後）に比べて小さい。
+- 決めた場面: 2026-11-11 の依頼「録音時間が長くなると、メモリを大量に消費する」
+- 関係する要件: REQ-MTG-003
+- 対象: Mac
+- 実装の場所: `ChannelTranscriber.enqueueForAnalyzer`、`ChannelTranscriber.appendFrames`
+
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。
 - 理由: Mac 版の Process Tap（DEC-MTG-002）にあたる、ドライバーの要らない方法。効果音を鳴らすとループバックに入る。
