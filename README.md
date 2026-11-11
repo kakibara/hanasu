@@ -46,6 +46,7 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 | **Snippets** | Say "email signature" to insert saved text exactly as you wrote it. Snippets are never sent to the AI. |
 | **Dictionary** | Add proper nouns and replacement rules such as `ストックマーク => Stockmark`. The rules are also applied to meeting transcripts. From a meeting in Meeting Notes, the AI can suggest new entries from that meeting (on Mac, also from your history and recent meetings), and you add only the ones you pick. |
 | **Screen context** *(opt-in)* | Hanasu reads the window title and the text around your cursor, so names match what is already on screen. Password fields are never read. |
+| **Screenshot text** *(opt-in, Mac)* | Hanasu takes a screenshot of all your displays, reads the text on your Mac, and passes only that text to the AI, so names and model numbers in other windows (for example "QX-7s") are spelled the way they appear. The image is never sent or saved. Turn it on or off for one recording with the button on the HUD. Needs the Screen Recording permission. |
 | **Choose your mic** *(Mac)* | Pick the microphone in Settings, or switch it from the mic button on the HUD without stopping the recording. |
 | **History** | Search past results and retry failed ones. History is kept for 30 days by default, and you can change that in Settings. On Mac, press <kbd>⌥⇧ V</kbd> to paste the last result again. |
 | **Nowhere to paste?** | If no text field has focus (for example, the desktop is in front), Hanasu keeps the result on screen instead of pasting it. Copy it from there, or just press <kbd>⌘V</kbd> where you want it (you can choose whether the result stays on the clipboard). |
@@ -65,8 +66,8 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 | **AI minutes** | Made by the AI you choose for meetings. Choose a template: auto, weekly sync, 1-on-1, sales call, brainstorm, or custom. Action items include an owner and a due date. |
 | **Check the source & listen again** *(Mac)* | The minutes open as one page: summary and action items first, with the transcript beside them. Click the timestamp after a point to jump to the remark it came from. Play the recording from any remark, and mute your side or theirs if the call echoed. |
 | **Live notes & highlights** | Type timestamped notes during the call, or press <kbd>⌃⌥⌘ H</kbd> to mark "this matters" (you can undo it for 10 seconds). The minutes give those parts priority, and afterwards you can read the conversation around each mark. |
-| **Floating captions** *(Mac)* | Show the live transcript as captions on top of your meeting app. |
-| **AI chat during the meeting** *(Mac)* | While recording, ask the AI about the conversation so far (<kbd>⌘J</kbd>). One click for "summarize so far" or "decisions & to-dos". Ask follow-ups, and click a timestamp in an answer to jump to that part of the transcript. |
+| **Floating captions** *(Mac)* | Show the live transcript as captions on top of your meeting app. If you leave them on, they come back for the next meeting. |
+| **AI chat during the meeting** *(Mac)* | While recording, ask the AI about the conversation so far (<kbd>⌘J</kbd>). One click for "summarize so far" or "decisions & to-dos". Ask follow-ups, and click a timestamp in an answer to jump to that part of the transcript. Put on the spot while doing something else? Press **What was I asked?** on the captions (or <kbd>⌃⌥⌘ A</kbd>) without leaving your meeting app: a floating panel shows what the others just said, then the AI's summary of the question and how the discussion got there. |
 | **Meeting detection** | When a meeting app starts using the mic, Hanasu asks whether to record. It never starts recording on its own. |
 | **Search & Ask** | Search the text of every meeting, or ask "What did we decide in last week's sync?". The answer cites the meetings it used. |
 | **Export** | Copy as Markdown or as a summary ready for Slack, save as `.md` / `.txt`, or send action items to Reminders. |
@@ -148,7 +149,7 @@ Get the latest build from [**Releases**](https://github.com/kakibara/hanasu/rele
 1. Unzip the file and move `Hanasu.app` to **Applications**.
 2. The app is self-signed and not notarized, so macOS blocks it the first time. Click **Done**, then open **System Settings → Privacy & Security** and click **Open Anyway**.
    You can also run `xattr -dr com.apple.quarantine /Applications/Hanasu.app` instead.
-3. When asked, allow **Microphone**, **Speech Recognition** and **Accessibility**. Accessibility is needed to paste with ⌘V.
+3. When asked, allow **Microphone**, **Speech Recognition** and **Accessibility**. Accessibility is needed to paste with ⌘V. **Screen Recording** is asked for only if you turn on screenshot text.
 
 </details>
 
@@ -186,13 +187,14 @@ On Mac, you can show the Hanasu icon in the menu bar, in the Dock, or in both (S
 | Cancel recording | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Meeting recording (start / stop) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Mark "this matters" in a meeting | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| "What was I asked?" in a meeting | <kbd>⌃⌥⌘ A</kbd> | — |
 
 You can change every shortcut in Settings. The full user guide (in Japanese) is [docs/guide.md](docs/guide.md).
 
 ## Privacy
 
 - **Audio stays on your device by default.** Speech recognition, Whisper and speaker diarization all run locally.
-- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, and meeting transcripts for Ask and the meeting AI chat.
+- **The AI gets text, not audio.** Gemini or Claude receives the transcript. Depending on your settings, it can also receive the name of the app you are typing into, the screen context, text read from a screenshot of your screen (never the image), and meeting transcripts for Ask and the meeting AI chat.
 - **Local and Apple keep text on your device too.** If you choose either one, nothing is sent to an AI service. The only download is the model itself.
 - **Audio goes to Google only if you choose it.** If you select the Gemini speech engine, the recorded audio is sent to Google.
 - **Agents get meetings only if you connect them.** The `hanasu` command and its MCP server only read meetings when you or an agent call them, and what they return goes to that agent and its AI provider.

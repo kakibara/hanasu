@@ -538,7 +538,7 @@
     <value>Besprechung {0}</value>
   </data>
   <data name="Meeting_Interrupted" xml:space="preserve">
-    <value>Die App wurde während der Aufnahme beendet. Die Audiodateien ({0} / {1}) wurden möglicherweise teilweise aufbewahrt.</value>
+    <value>Die App wurde während der Aufnahme beendet.</value>
   </data>
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Besprechungsaufzeichnung kann nicht gestartet werden</value>

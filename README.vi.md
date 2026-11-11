@@ -48,6 +48,7 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 | **Đoạn mẫu** | Nói "chữ ký email" để chèn đúng nguyên văn đoạn văn bản bạn đã lưu. Đoạn mẫu không bao giờ được gửi đến AI. |
 | **Từ điển** | Thêm danh từ riêng và quy tắc thay thế như `ストックマーク => Stockmark`. Quy tắc thay thế cũng được áp dụng cho bản chép lời cuộc họp. Khi mở một cuộc họp trong Ghi chép cuộc họp, AI có thể gợi ý mục mới từ chính cuộc họp đó (trên Mac, còn từ lịch sử và các cuộc họp gần đây của bạn), và bạn chỉ thêm những mục mình chọn. |
 | **Ngữ cảnh màn hình** *(tùy chọn bật)* | Hanasu đọc tiêu đề cửa sổ và văn bản quanh con trỏ để tên riêng khớp với những gì đã có trên màn hình. Ô mật khẩu không bao giờ bị đọc. |
+| **Chữ trên ảnh chụp màn hình** *(tùy chọn bật, Mac)* | Hanasu chụp tất cả màn hình của bạn, đọc chữ ngay trên Mac và chỉ gửi phần chữ đó cho AI, để tên riêng và số hiệu mẫu ở các cửa sổ khác (ví dụ “QX-7s”) được viết đúng như trên màn hình. Hình ảnh không bao giờ được gửi đi hay lưu lại. Bạn có thể bật hoặc tắt cho từng lần ghi âm bằng nút trên HUD. Cần quyền Ghi màn hình. |
 | **Chọn micrô** *(Mac)* | Chọn micrô trong Cài đặt, hoặc đổi micrô bằng nút micrô trên HUD mà không cần dừng ghi âm. |
 | **Lịch sử** | Tìm kiếm các kết quả trước đây và thử lại những lần thất bại. Theo mặc định, lịch sử được lưu 30 ngày, bạn có thể thay đổi trong Cài đặt. Trên Mac, nhấn <kbd>⌥⇧ V</kbd> để dán lại kết quả gần nhất. |
 | **Không có chỗ để dán?** | Nếu không có ô văn bản nào đang được chọn (ví dụ, màn hình nền đang ở phía trước), Hanasu giữ kết quả trên màn hình thay vì dán. Hãy sao chép từ đó, hoặc chỉ cần nhấn <kbd>⌘V</kbd> ở nơi bạn muốn (bạn có thể chọn có giữ kết quả trong bảng nhớ tạm hay không). |
@@ -67,8 +68,8 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 | **Biên bản bằng AI** | Được tạo bởi AI bạn chọn cho cuộc họp. Chọn mẫu: tự động, họp định kỳ hằng tuần, 1-1, cuộc gọi bán hàng, động não hoặc tùy chỉnh. Các đầu việc có người phụ trách và hạn chót. |
 | **Kiểm tra nguồn & nghe lại** *(Mac)* | Biên bản mở ra thành một trang: tóm tắt và các đầu việc ở trên, bản chép lời nằm bên cạnh. Bấm vào mốc thời gian sau mỗi ý để chuyển đến lời nói làm căn cứ cho ý đó. Phát bản ghi từ bất kỳ lời nói nào, và tắt tiếng phía bạn hoặc phía bên kia nếu cuộc gọi bị vọng tiếng. |
 | **Ghi chú trực tiếp & đánh dấu** | Gõ ghi chú có dấu thời gian trong cuộc gọi, hoặc nhấn <kbd>⌃⌥⌘ H</kbd> để đánh dấu "chỗ này quan trọng" (có thể hoàn tác trong 10 giây). Biên bản sẽ ưu tiên những phần đó, và sau này bạn có thể đọc lại đoạn hội thoại quanh mỗi dấu. |
-| **Phụ đề nổi** *(Mac)* | Hiển thị bản chép lời trực tiếp dưới dạng phụ đề phía trên ứng dụng họp của bạn. |
-| **Trò chuyện với AI trong cuộc họp** *(Mac)* | Trong lúc ghi âm, hãy hỏi AI về cuộc hội thoại cho đến lúc này (<kbd>⌘J</kbd>). Chỉ một cú nhấp để có "tóm tắt đến giờ" hoặc "quyết định & việc cần làm". Hãy hỏi tiếp, và bấm vào dấu thời gian trong câu trả lời để chuyển đến đoạn đó trong bản chép lời. |
+| **Phụ đề nổi** *(Mac)* | Hiển thị bản chép lời trực tiếp dưới dạng phụ đề phía trên ứng dụng họp của bạn. Nếu bạn để phụ đề bật, lần họp sau phụ đề sẽ lại hiện ra. |
+| **Trò chuyện với AI trong cuộc họp** *(Mac)* | Trong lúc ghi âm, hãy hỏi AI về cuộc hội thoại cho đến lúc này (<kbd>⌘J</kbd>). Chỉ một cú nhấp để có "tóm tắt đến giờ" hoặc "quyết định & việc cần làm". Hãy hỏi tiếp, và bấm vào dấu thời gian trong câu trả lời để chuyển đến đoạn đó trong bản chép lời. Bị hỏi bất ngờ khi đang làm việc khác? Hãy bấm **Tôi vừa được hỏi gì?** trên phụ đề (hoặc nhấn <kbd>⌃⌥⌘ A</kbd>) mà không cần rời ứng dụng họp: một bảng nổi sẽ hiện những gì người khác vừa nói, kèm phần AI tóm tắt câu hỏi và bối cảnh dẫn đến câu hỏi đó. |
 | **Phát hiện cuộc họp** | Khi một ứng dụng họp bắt đầu dùng micrô, Hanasu hỏi bạn có muốn ghi âm không. Ứng dụng không bao giờ tự bắt đầu ghi âm. |
 | **Tìm kiếm & Hỏi đáp** | Tìm trong nội dung của mọi cuộc họp, hoặc hỏi "Cuộc họp tuần trước chúng ta đã quyết định gì?". Câu trả lời có trích dẫn các cuộc họp được dùng làm nguồn. |
 | **Xuất** | Sao chép dưới dạng Markdown hoặc bản tóm tắt sẵn để gửi lên Slack, lưu thành `.md` / `.txt`, hoặc gửi các đầu việc sang Lời nhắc. |
@@ -150,7 +151,7 @@ Tải bản mới nhất từ [**Releases**](https://github.com/kakibara/hanasu/
 1. Giải nén tệp và di chuyển `Hanasu.app` vào **Ứng dụng**.
 2. Ứng dụng được tự ký và chưa được Apple công chứng (notarize), nên macOS sẽ chặn ở lần mở đầu tiên. Bấm **Xong**, sau đó mở **Cài đặt hệ thống → Quyền riêng tư & Bảo mật** và bấm **Vẫn mở**.
    Bạn cũng có thể chạy `xattr -dr com.apple.quarantine /Applications/Hanasu.app` thay vào đó.
-3. Khi được hỏi, hãy cho phép **Micrô**, **Nhận dạng giọng nói** và **Trợ năng**. Quyền Trợ năng là cần thiết để dán bằng ⌘V.
+3. Khi được hỏi, hãy cho phép **Micrô**, **Nhận dạng giọng nói** và **Trợ năng**. Quyền Trợ năng là cần thiết để dán bằng ⌘V. Quyền **Ghi màn hình** chỉ được hỏi khi bạn bật chữ trên ảnh chụp màn hình.
 
 </details>
 
@@ -188,13 +189,14 @@ Trên Mac, bạn có thể hiện biểu tượng Hanasu trên thanh menu, trên
 | Hủy ghi âm | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Ghi âm cuộc họp (bắt đầu / dừng) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Đánh dấu "chỗ này quan trọng" trong cuộc họp | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| "Tôi vừa được hỏi gì?" trong cuộc họp | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Bạn có thể thay đổi mọi phím tắt trong Cài đặt. Hướng dẫn sử dụng đầy đủ (bằng tiếng Nhật) nằm ở [docs/guide.md](docs/guide.md).
 
 ## Quyền riêng tư
 
 - **Âm thanh mặc định ở lại trên thiết bị của bạn.** Nhận dạng giọng nói, Whisper và phân tách người nói đều chạy cục bộ.
-- **AI nhận văn bản, không nhận âm thanh.** Gemini hoặc Claude nhận bản chép lời. Tùy theo cài đặt, AI cũng có thể nhận tên ứng dụng bạn đang gõ, ngữ cảnh màn hình và bản chép lời cuộc họp cho tính năng Hỏi đáp và trò chuyện với AI trong cuộc họp.
+- **AI nhận văn bản, không nhận âm thanh.** Gemini hoặc Claude nhận bản chép lời. Tùy theo cài đặt, AI cũng có thể nhận tên ứng dụng bạn đang gõ, ngữ cảnh màn hình, chữ đọc được từ ảnh chụp màn hình (không bao giờ gửi hình ảnh) và bản chép lời cuộc họp cho tính năng Hỏi đáp và trò chuyện với AI trong cuộc họp.
 - **Cục bộ và Apple cũng giữ văn bản trên thiết bị của bạn.** Nếu bạn chọn một trong hai, không có gì được gửi đến dịch vụ AI nào. Thứ duy nhất được tải về là chính mô hình.
 - **Âm thanh chỉ được gửi đến Google nếu bạn chọn.** Nếu bạn chọn công cụ nhận dạng giọng nói Gemini, âm thanh đã ghi sẽ được gửi đến Google.
 - **Agent chỉ nhận cuộc họp khi bạn kết nối.** Lệnh `hanasu` và máy chủ MCP của nó chỉ đọc cuộc họp khi bạn hoặc một agent gọi đến, và nội dung trả về sẽ được chuyển cho agent đó và nhà cung cấp AI của agent.

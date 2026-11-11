@@ -42,6 +42,18 @@ final class HUDModel: ObservableObject {
     // 要件: REQ-DIC-140
     /// HUD のマイクのメニューでマイクを選んだとき（UID。空ならシステムの設定）
     var onSelectMicrophone: ((String) -> Void)?
+    // 要件: REQ-DIC-042
+    // 設計判断: DEC-DIC-188, DEC-DIC-189
+    /// スクリーンショットのボタンの状態。nil なら出さない（画面収録の許可がない・選択を声で編集しているとき）
+    struct ScreenshotState: Equatable {
+        /// この録音で使う（ボタンがオン）
+        var on: Bool
+        /// この録音では使われない理由（整形がオフなど）。nil なら使われる
+        var inactiveReason: String?
+    }
+    @Published var screenshot: ScreenshotState?
+    /// HUD のスクリーンショットのボタンを押したとき
+    var onToggleScreenshot: (() -> Void)?
 
     /// 準備中と録音中は、出力の言語を選べる
     var canChooseLanguage: Bool {
@@ -62,9 +74,9 @@ final class HUDModel: ObservableObject {
     }
 }
 
-// 設計判断: DEC-DIC-025
-/// 前面にないパネルでも、1 回のクリックでボタンが押せるようにする
-private final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
+// 設計判断: DEC-DIC-025, DEC-MTG-096, DEC-MTG-099
+/// 前面にないパネルでも、1 回のクリックでボタンが押せるようにする（HUD・字幕・「何を聞かれた？」のパネル）
+final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }
 
@@ -218,6 +230,12 @@ private struct HUDView: View {
                         // 要件: REQ-DIC-014
                         // 設計判断: DEC-DIC-143
                         // 声がマイクに届いているかを、どのエンジンでも音量で示す（マイクのボタンの隣）
+                        if let screenshot = model.screenshot {
+                            // 要件: REQ-DIC-042
+                            // 設計判断: DEC-DIC-189
+                            // 音量の目安の左に置く（音量の目安はマイクのボタンのすぐ左のまま。DEC-DIC-143）
+                            ScreenshotButton(state: screenshot) { model.onToggleScreenshot?() }
+                        }
                         LevelMeter(level: model.level)
                             .padding(.top, 1)
                         microphoneButton
@@ -323,6 +341,44 @@ private struct StopButton: View {
         .buttonStyle(.plain)
         .fixedSize()
         .help(tr("録音を止めて入力します（ショートカットをもう一度押すのと同じ）"))
+    }
+}
+
+// 要件: REQ-DIC-042
+// 設計判断: DEC-DIC-188, DEC-DIC-189
+/// その録音だけ、スクリーンショットの文字を AI に渡すかを切り替えるボタン。アイコンだけ（言語ごとの幅の違いを避ける）
+private struct ScreenshotButton: View {
+    var state: HUDModel.ScreenshotState
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "camera.viewfinder")
+                .font(.system(size: 11, weight: state.on ? .semibold : .regular))
+                .foregroundStyle(foreground)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 3)
+                .background(state.on && state.inactiveReason == nil ? AnyShapeStyle(Color.accentColor.opacity(0.18)) : AnyShapeStyle(.quaternary),
+                            in: Capsule())
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(tr("スクリーンショットの文字を使う"))
+        .accessibilityValue(state.on ? tr("オン") : tr("オフ"))
+        .help(help)
+    }
+
+    private var foreground: AnyShapeStyle {
+        if state.inactiveReason != nil { return AnyShapeStyle(.tertiary) }
+        return state.on ? AnyShapeStyle(Color.accentColor) : AnyShapeStyle(.secondary)
+    }
+
+    private var help: String {
+        let base = state.on
+            ? tr("この録音では、画面のスクリーンショットの文字を AI に渡します（押すと渡しません）")
+            : tr("この録音では、画面のスクリーンショットの文字を AI に渡しません（押すと渡します）")
+        guard let reason = state.inactiveReason else { return base }
+        return base + "\n" + reason
     }
 }
 

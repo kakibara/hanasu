@@ -732,12 +732,6 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
   <data name="Settings_Storage" xml:space="preserve">
     <value>Przechowywanie</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>Zachowaj pliki audio (me.wav / others.wav) po przetworzeniu</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>Gdy wyłączone, audio jest usuwane po utworzeniu transkrypcji i protokołu (zostaje zachowane, jeśli transkrypcja się nie powiedzie). Format: WAV mono 16 kHz, ok. 115 MB na kanał na godzinę.</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>Lokalizacja zapisu</value>
   </data>
@@ -1351,5 +1345,126 @@ Otworzyć stronę wydania w przeglądarce?</value>
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>Po zatrzymaniu nagrywania do transkrypcji są stosowane reguły zamiany z karty „Słownik i reguły”, a protokół powstaje z tekstu po zamianie. Pierwotnie rozpoznany tekst też jest zachowywany, więc można go przywrócić w menu „Słownik…” w notatkach ze spotkań.</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>Usuń nagranie po transkrypcji</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>Po włączeniu nagranie spotkania (me.wav / others.wav) jest usuwane po utworzeniu transkrypcji i protokołu. Jeśli transkrypcja jest niepełna, nagranie zostaje zachowane. Podczas nagrywania możesz zmienić to ustawienie dla bieżącego spotkania w oknie Notatki ze spotkań. Dźwięk jest zapisywany jako WAV mono 16 kHz, ok. 115 MB na kanał na godzinę.</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>Okres przechowywania nagrań</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>Nagrania starsze niż ten okres są usuwane automatycznie przy uruchomieniu aplikacji i po przetworzeniu spotkania. Dotyczy to także spotkań, dla których wybrano zachowanie nagrania. Nagrania spotkań z niepełną transkrypcją nie są usuwane.</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>W tym z niepełną transkrypcją: {0}.</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>Nagrania starsze niż {0} zostaną teraz usunięte. Liczba spotkań: {1} ({2}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>Spotkania z niepełną transkrypcją zostaną zachowane (liczba: {0}).</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>Zmienić ustawienie i usunąć te nagrania?</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>Ustawienie domyślne dla spotkań nagrywanych od teraz. Podczas nagrywania możesz je zmienić dla bieżącego spotkania w polu nagrywania w lewym górnym rogu.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>Usuń nagranie tego spotkania po transkrypcji</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>Włączone: nagranie tego spotkania zostanie usunięte po utworzeniu transkrypcji i protokołu (jeśli transkrypcja będzie niepełna, nagranie zostanie zachowane). Ustawienie domyślne się nie zmienia.</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>Wyłączone: nagranie tego spotkania zostanie zachowane. Ustawienie domyślne się nie zmienia.</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>Usuń nagranie…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>Zarządzaj nagraniami…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>To spotkanie nie ma już nagrania.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>Nie można usunąć nagrania podczas nagrywania ani przetwarzania.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>Usuń nagranie — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>Usunąć nagranie spotkania „{0}” ({1})?</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>Protokół, transkrypcja i notatki zostaną zachowane.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>Brak transkrypcji kanału: {0}. Ta część rozmowy nie zostanie zachowana.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>Brakuje części transkrypcji tego spotkania. Ta część rozmowy nie zostanie zachowana.</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>To spotkanie nie ma transkrypcji. Jeśli usuniesz nagranie, nie pozostanie żaden zapis rozmowy.</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>Usunięto nagranie spotkania „{0}”.</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>Nie udało się usunąć niektórych plików nagrania. Pozostałe pliki zostały zachowane.
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>Pliki audio zostaną usunięte trwale (nie trafią do Kosza). Tej operacji nie można cofnąć.</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>Zarządzanie nagraniami</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>Spotkania z zachowanymi nagraniami: {0}, {1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>Brak zachowanych nagrań.</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>Brak transkrypcji</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>Niepełna transkrypcja</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>Spotkania z nagraniami</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>Usuń zaznaczone nagrania…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>Usuń nagrania starsze niż {0} dni…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>Usuń wszystkie nagrania…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>Jeśli miejsce zapisu jest synchronizowane z OneDrive, iCloud Drive lub podobną usługą, usunięte nagrania mogą przez pewien czas pozostawać w elementach usuniętych tej usługi.</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>Usunąć nagrania spotkań (liczba: {0}, {1})?</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>W tym z niepełną transkrypcją: {0}. Części rozmów bez transkrypcji nie zostaną zachowane.</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>Spotkania z niepełną transkrypcją zostaną zachowane (liczba: {0}, {1}). Możesz je zaznaczyć i usunąć.</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>Usunięto nagrania spotkań (liczba: {0}).</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>Nie udało się całkowicie usunąć nagrań spotkań (liczba: {0}). Pozostałe pliki zostały zachowane.</value>
   </data>
 </root>

@@ -48,6 +48,7 @@ Ele é inspirado no Typeless, Wispr Flow, Aqua Voice e Granola. O código-fonte 
 | **Snippets** | Diga "assinatura de e-mail" para inserir um texto salvo exatamente como você o escreveu. Snippets nunca são enviados para a IA. |
 | **Dicionário** | Adicione nomes próprios e regras de substituição como `ストックマーク => Stockmark`. As regras também valem para as transcrições das reuniões. A partir de uma reunião aberta em Anotações de reunião, a IA pode sugerir novas entradas tiradas dessa reunião (no Mac, também do seu histórico e das reuniões recentes), e você adiciona só as que escolher. |
 | **Contexto da tela** *(opcional)* | O Hanasu lê o título da janela e o texto ao redor do cursor, para que os nomes batam com o que já está na tela. Campos de senha nunca são lidos. |
+| **Texto da captura de tela** *(opcional, Mac)* | O Hanasu faz uma captura de todas as suas telas, lê o texto no seu próprio Mac e passa só esse texto para a IA, para que nomes e números de modelo de outras janelas (por exemplo, “QX-7s”) sejam escritos do jeito que aparecem. A imagem nunca é enviada nem salva. Ative ou desative para uma gravação com o botão no HUD. Precisa da permissão de Gravação de Tela. |
 | **Escolha o microfone** *(Mac)* | Escolha o microfone nos Ajustes, ou troque pelo botão de microfone no HUD sem interromper a gravação. |
 | **Histórico** | Pesquise resultados anteriores e tente de novo os que falharam. Por padrão, o histórico é mantido por 30 dias, e você pode mudar isso nos Ajustes. No Mac, pressione <kbd>⌥⇧ V</kbd> para colar o último resultado de novo. |
 | **Nenhum lugar para colar?** | Se nenhum campo de texto estiver em foco (por exemplo, com a área de trabalho em primeiro plano), o Hanasu mantém o resultado na tela em vez de colá-lo. Copie dali, ou simplesmente pressione <kbd>⌘V</kbd> onde quiser (você pode escolher se o resultado fica na área de transferência). |
@@ -67,8 +68,8 @@ Ele é inspirado no Typeless, Wispr Flow, Aqua Voice e Granola. O código-fonte 
 | **Atas com IA** | Geradas pela IA que você escolher para reuniões. Escolha um modelo: automático, reunião semanal, 1:1, chamada de vendas, brainstorming ou personalizado. Os itens de ação incluem um responsável e um prazo. |
 | **Confira a origem e ouça de novo** *(Mac)* | A ata abre em uma única página: resumo e itens de ação primeiro, com a transcrição ao lado. Clique no horário depois de um ponto para ir à fala de onde ele veio. Reproduza a gravação a partir de qualquer fala e silencie o seu lado ou o deles se a chamada teve eco. |
 | **Notas ao vivo e destaques** | Digite notas com horário durante a chamada, ou pressione <kbd>⌃⌥⌘ H</kbd> para marcar "isto é importante" (dá para desfazer por 10 segundos). A ata dá prioridade a esses trechos, e depois você pode ler a conversa em torno de cada marcação. |
-| **Legendas flutuantes** *(Mac)* | Mostre a transcrição ao vivo como legendas sobre o app da reunião. |
-| **Chat com IA durante a reunião** *(Mac)* | Enquanto grava, pergunte à IA sobre a conversa até agora (<kbd>⌘J</kbd>). Um clique para "resumo até agora" ou "decisões e tarefas". Faça perguntas de acompanhamento e clique em um horário numa resposta para ir àquele trecho da transcrição. |
+| **Legendas flutuantes** *(Mac)* | Mostre a transcrição ao vivo como legendas sobre o app da reunião. Se você deixá-las ativadas, elas aparecem de novo na próxima reunião. |
+| **Chat com IA durante a reunião** *(Mac)* | Enquanto grava, pergunte à IA sobre a conversa até agora (<kbd>⌘J</kbd>). Um clique para "resumo até agora" ou "decisões e tarefas". Faça perguntas de acompanhamento e clique em um horário numa resposta para ir àquele trecho da transcrição. Foi pego de surpresa por uma pergunta enquanto fazia outra coisa? Pressione **O que me perguntaram?** nas legendas (ou <kbd>⌃⌥⌘ A</kbd>) sem sair do app da reunião: um painel flutuante mostra o que os outros acabaram de dizer e, em seguida, o resumo da IA com a pergunta e o contexto que levou até ela. |
 | **Detecção de reuniões** | Quando um app de reunião começa a usar o microfone, o Hanasu pergunta se deve gravar. Ele nunca começa a gravar sozinho. |
 | **Pesquisar e perguntar** | Pesquise o texto de todas as reuniões, ou pergunte "O que decidimos na reunião semanal passada?". A resposta cita as reuniões que usou. |
 | **Exportar** | Copie como Markdown ou como um resumo pronto para o Slack, salve como `.md` / `.txt`, ou envie os itens de ação para o Lembretes. |
@@ -150,7 +151,7 @@ Baixe a versão mais recente em [**Releases**](https://github.com/kakibara/hanas
 1. Descompacte o arquivo e mova `Hanasu.app` para **Aplicativos**.
 2. O app é autoassinado e não notarizado, então o macOS o bloqueia na primeira vez. Clique em **OK**, depois abra **Ajustes do Sistema → Privacidade e Segurança** e clique em **Abrir Mesmo Assim**.
    Você também pode executar `xattr -dr com.apple.quarantine /Applications/Hanasu.app`.
-3. Quando solicitado, permita **Microfone**, **Reconhecimento de Fala** e **Acessibilidade**. A Acessibilidade é necessária para colar com ⌘V.
+3. Quando solicitado, permita **Microfone**, **Reconhecimento de Fala** e **Acessibilidade**. A Acessibilidade é necessária para colar com ⌘V. A **Gravação de Tela** só é solicitada se você ativar o texto da captura de tela.
 
 </details>
 
@@ -188,13 +189,14 @@ No Mac, você pode mostrar o ícone do Hanasu na barra de menus, no Dock ou em a
 | Cancelar a gravação | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Gravação de reunião (iniciar / parar) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Marcar "isto é importante" em uma reunião | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| "O que me perguntaram?" em uma reunião | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Você pode mudar todos os atalhos nos Ajustes. O guia completo do usuário (em japonês) está em [docs/guide.md](docs/guide.md).
 
 ## Privacidade
 
 - **Por padrão, o áudio fica no seu dispositivo.** O reconhecimento de fala, o Whisper e a diarização de falantes rodam todos localmente.
-- **A IA recebe texto, não áudio.** O Gemini ou o Claude recebe a transcrição. Dependendo dos seus ajustes, também pode receber o nome do app em que você está digitando, o contexto da tela e as transcrições de reuniões para a função Perguntar e para o chat com IA da reunião.
+- **A IA recebe texto, não áudio.** O Gemini ou o Claude recebe a transcrição. Dependendo dos seus ajustes, também pode receber o nome do app em que você está digitando, o contexto da tela, o texto lido de uma captura da sua tela (nunca a imagem) e as transcrições de reuniões para a função Perguntar e para o chat com IA da reunião.
 - **Local e Apple também mantêm o texto no seu dispositivo.** Se você escolher qualquer um dos dois, nada é enviado a um serviço de IA. O único download é o próprio modelo.
 - **O áudio só vai para o Google se você escolher.** Se você selecionar o mecanismo de fala Gemini, o áudio gravado é enviado ao Google.
 - **Os agentes só recebem reuniões se você os conectar.** O comando `hanasu` e o servidor MCP dele só leem reuniões quando você ou um agente os chamam, e o que eles retornam vai para esse agente e para o provedor da IA dele.

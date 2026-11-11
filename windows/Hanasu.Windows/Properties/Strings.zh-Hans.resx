@@ -732,12 +732,6 @@
   <data name="Settings_Storage" xml:space="preserve">
     <value>存储</value>
   </data>
-  <data name="Settings_KeepAudio" xml:space="preserve">
-    <value>处理后保留音频文件（me.wav / others.wav）</value>
-  </data>
-  <data name="Settings_KeepAudioNote" xml:space="preserve">
-    <value>关闭时，生成转录稿和会议纪要后会删除音频（转录失败时会保留）。格式为 16 kHz 单声道 WAV，每声道每小时约 115 MB。</value>
-  </data>
   <data name="Settings_SaveLocation" xml:space="preserve">
     <value>保存位置</value>
   </data>
@@ -1351,5 +1345,126 @@
   </data>
   <data name="Settings_ApplyDictionaryToMeetingsNote" xml:space="preserve">
     <value>停止录制后，会对转录稿应用“词典和规则”中的替换规则，会议纪要将根据替换后的文本生成。原始识别文本也会保留，因此可以在会议笔记的“词典…”中恢复。</value>
+  </data>
+  <data name="Settings_DeleteAudioAfterTranscription" xml:space="preserve">
+    <value>转录后删除录音</value>
+  </data>
+  <data name="Settings_DeleteAudioNote" xml:space="preserve">
+    <value>开启后，会议录音（me.wav / others.wav）会在生成转录稿和会议纪要后删除。如果转录稿不完整，则保留录音。录制期间，可以在会议笔记中更改当前会议的设置。音频为 16 kHz 单声道 WAV，每个声道每小时约 115 MB。</value>
+  </data>
+  <data name="Settings_AudioRetention" xml:space="preserve">
+    <value>录音保留期限</value>
+  </data>
+  <data name="Settings_AudioRetentionNote" xml:space="preserve">
+    <value>超过此期限的录音会在应用启动时和会议处理完成后自动删除。已选择保留录音的会议也同样适用。转录稿不完整的会议，其录音不会被删除。</value>
+  </data>
+  <data name="Settings_AudioStatusIncomplete" xml:space="preserve">
+    <value>其中 {0} 个会议的转录稿不完整。</value>
+  </data>
+  <data name="Settings_AudioRetention_Confirm" xml:space="preserve">
+    <value>超过 {0} 的录音将立即删除：{1} 个会议（{2}）。</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmSkipped" xml:space="preserve">
+    <value>转录稿不完整的 {0} 个会议的录音将保留。</value>
+  </data>
+  <data name="Settings_AudioRetention_ConfirmQuestion" xml:space="preserve">
+    <value>要更改设置并删除这些录音吗？</value>
+  </data>
+  <data name="Meeting_DeleteAudioDefault_Tip" xml:space="preserve">
+    <value>这是今后录制的会议的默认设置。录制期间，可以在左上方的录制框中更改当前会议的设置。</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio" xml:space="preserve">
+    <value>转录后删除此会议的录音</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OnTip" xml:space="preserve">
+    <value>开启：此会议的录音会在生成转录稿和会议纪要后删除（如果转录稿不完整则保留）。默认设置不变。</value>
+  </data>
+  <data name="Meeting_LiveDeleteAudio_OffTip" xml:space="preserve">
+    <value>关闭：保留此会议的录音。默认设置不变。</value>
+  </data>
+  <data name="Meeting_DeleteAudio" xml:space="preserve">
+    <value>删除录音…</value>
+  </data>
+  <data name="Meeting_ManageAudio" xml:space="preserve">
+    <value>管理录音…</value>
+  </data>
+  <data name="Meeting_DeleteAudio_NoAudioTip" xml:space="preserve">
+    <value>此会议已没有录音。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_BusyTip" xml:space="preserve">
+    <value>录制或处理期间无法删除。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Title" xml:space="preserve">
+    <value>删除录音 — Hanasu</value>
+  </data>
+  <data name="Meeting_DeleteAudio_Confirm" xml:space="preserve">
+    <value>要删除“{0}”的录音（{1}）吗？</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsAll" xml:space="preserve">
+    <value>会议纪要、转录稿和笔记会保留。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartial" xml:space="preserve">
+    <value>{0}的声道没有转录稿。这部分对话内容将不会保留。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsPartialUnknown" xml:space="preserve">
+    <value>此会议的转录稿有部分缺失。这部分对话内容将不会保留。</value>
+  </data>
+  <data name="Meeting_DeleteAudio_KeepsNone" xml:space="preserve">
+    <value>此会议没有转录稿。删除录音后，对话内容将完全不会保留。</value>
+  </data>
+  <data name="Meeting_AudioDeleted" xml:space="preserve">
+    <value>已删除“{0}”的录音。</value>
+  </data>
+  <data name="Meeting_DeleteAudioFailed" xml:space="preserve">
+    <value>部分录音文件无法删除。其余文件保持不变。
+{0}</value>
+  </data>
+  <data name="Audio_CannotUndo" xml:space="preserve">
+    <value>音频文件将被永久删除（不会移到回收站）。此操作无法撤消。</value>
+  </data>
+  <data name="MeetingAudio_Title" xml:space="preserve">
+    <value>管理录音</value>
+  </data>
+  <data name="MeetingAudio_Summary" xml:space="preserve">
+    <value>有录音的会议：{0} 个，{1}</value>
+  </data>
+  <data name="MeetingAudio_Empty" xml:space="preserve">
+    <value>没有剩余的录音。</value>
+  </data>
+  <data name="MeetingAudio_NoTranscript" xml:space="preserve">
+    <value>无转录稿</value>
+  </data>
+  <data name="MeetingAudio_PartialTranscript" xml:space="preserve">
+    <value>转录稿部分缺失</value>
+  </data>
+  <data name="MeetingAudio_List_A11y" xml:space="preserve">
+    <value>有录音的会议</value>
+  </data>
+  <data name="MeetingAudio_DeleteSelected" xml:space="preserve">
+    <value>删除所选录音…</value>
+  </data>
+  <data name="MeetingAudio_DeleteOlder" xml:space="preserve">
+    <value>删除超过 {0} 天的录音…</value>
+  </data>
+  <data name="MeetingAudio_DeleteAll" xml:space="preserve">
+    <value>删除所有录音…</value>
+  </data>
+  <data name="MeetingAudio_SyncNote" xml:space="preserve">
+    <value>如果保存位置通过 OneDrive、iCloud Drive 等同步，已删除的录音可能会在同步服务的已删除项目中保留一段时间。</value>
+  </data>
+  <data name="MeetingAudio_Confirm" xml:space="preserve">
+    <value>要删除 {0} 个会议的录音（{1}）吗？</value>
+  </data>
+  <data name="MeetingAudio_ConfirmMarked" xml:space="preserve">
+    <value>其中 {0} 个会议的转录稿不完整。这部分对话内容将不会保留。</value>
+  </data>
+  <data name="MeetingAudio_ConfirmSkipped" xml:space="preserve">
+    <value>转录稿不完整的 {0} 个会议的录音（{1}）将保留。可以选中它们后删除。</value>
+  </data>
+  <data name="MeetingAudio_Deleted" xml:space="preserve">
+    <value>已删除 {0} 个会议的录音。</value>
+  </data>
+  <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
+    <value>{0} 个会议的录音未能完全删除。其余文件保持不变。</value>
   </data>
 </root>

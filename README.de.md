@@ -48,6 +48,7 @@ Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Der Quellcod
 | **Textbausteine** | Sage „E-Mail-Signatur“, um einen gespeicherten Text genau so einzufügen, wie du ihn geschrieben hast. Textbausteine werden nie an die KI gesendet. |
 | **Wörterbuch** | Füge Eigennamen und Ersetzungsregeln wie `ストックマーク => Stockmark` hinzu. Die Ersetzungsregeln gelten auch für Besprechungstranskripte. Zu einer Besprechung, die du in den Besprechungsnotizen öffnest, kann die KI neue Einträge aus genau dieser Besprechung vorschlagen (auf dem Mac auch aus deinem Verlauf und deinen letzten Besprechungen) – du übernimmst nur die, die du auswählst. |
 | **Bildschirmkontext** *(optional)* | Hanasu liest den Fenstertitel und den Text rund um den Cursor, damit Namen zu dem passen, was schon auf dem Bildschirm steht. Passwortfelder werden nie gelesen. |
+| **Text aus Bildschirmfotos** *(optional, Mac)* | Hanasu nimmt ein Bildschirmfoto aller Displays auf, liest den Text direkt auf deinem Mac aus und übergibt nur diesen Text an die KI – so werden Namen und Modellnummern aus anderen Fenstern (zum Beispiel „QX-7s“) so geschrieben, wie sie dort stehen. Das Bild wird nie gesendet oder gespeichert. Mit der Taste im HUD schaltest du die Funktion für eine einzelne Aufnahme ein oder aus. Benötigt die Berechtigung für Bildschirmaufnahme. |
 | **Mikrofon wählen** *(Mac)* | Wähle das Mikrofon in den Einstellungen oder wechsle es über die Mikrofontaste im HUD, ohne die Aufnahme zu stoppen. |
 | **Verlauf** | Durchsuche frühere Ergebnisse und wiederhole fehlgeschlagene. Der Verlauf wird standardmäßig 30 Tage aufbewahrt; das lässt sich in den Einstellungen ändern. Auf dem Mac fügst du mit <kbd>⌥⇧ V</kbd> das letzte Ergebnis erneut ein. |
 | **Nirgends zum Einfügen?** | Hat kein Textfeld den Fokus (zum Beispiel, weil der Schreibtisch im Vordergrund ist), lässt Hanasu das Ergebnis auf dem Bildschirm stehen, statt es einzufügen. Kopiere es von dort oder drücke einfach <kbd>⌘V</kbd> an der gewünschten Stelle (du kannst wählen, ob das Ergebnis in der Zwischenablage bleibt). |
@@ -67,8 +68,8 @@ Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Der Quellcod
 | **KI-Protokolle** | Erstellt von der KI, die du für Besprechungen wählst. Wähle eine Vorlage: automatisch, wöchentliches Meeting, 1-on-1, Verkaufsgespräch, Brainstorming oder benutzerdefiniert. Aufgaben enthalten eine verantwortliche Person und ein Fälligkeitsdatum. |
 | **Quelle prüfen & nachhören** *(Mac)* | Das Protokoll öffnet sich als eine Seite: oben Zusammenfassung und Aufgaben, daneben das Transkript. Klicke auf den Zeitstempel hinter einem Punkt, um zu der Äußerung zu springen, auf der er beruht. Starte die Wiedergabe bei jeder beliebigen Äußerung und schalte deine Seite oder die der anderen stumm, wenn es im Call ein Echo gab. |
 | **Live-Notizen & Markierungen** | Tippe während des Calls Notizen mit Zeitstempel oder drücke <kbd>⌃⌥⌘ H</kbd>, um „das ist wichtig“ zu markieren (10 Sekunden lang rückgängig zu machen). Das Protokoll berücksichtigt diese Stellen bevorzugt, und hinterher kannst du das Gespräch rund um jede Markierung nachlesen. |
-| **Schwebende Untertitel** *(Mac)* | Zeige das Live-Transkript als Untertitel über deiner Besprechungs-App an. |
-| **KI-Chat während der Besprechung** *(Mac)* | Frag die KI während der Aufnahme zum bisherigen Gespräch (<kbd>⌘J</kbd>). „Bisher zusammenfassen“ oder „Entscheidungen & To-dos“ mit einem Klick. Stell Folgefragen und klicke auf einen Zeitstempel in einer Antwort, um zu dieser Stelle im Transkript zu springen. |
+| **Schwebende Untertitel** *(Mac)* | Zeige das Live-Transkript als Untertitel über deiner Besprechungs-App an. Wenn du sie eingeschaltet lässt, erscheinen sie auch in der nächsten Besprechung wieder. |
+| **KI-Chat während der Besprechung** *(Mac)* | Frag die KI während der Aufnahme zum bisherigen Gespräch (<kbd>⌘J</kbd>). „Bisher zusammenfassen“ oder „Entscheidungen & To-dos“ mit einem Klick. Stell Folgefragen und klicke auf einen Zeitstempel in einer Antwort, um zu dieser Stelle im Transkript zu springen. Mitten in einer anderen Aufgabe plötzlich etwas gefragt? Drücke in den Untertiteln auf **Was wurde ich gefragt?** (oder <kbd>⌃⌥⌘ A</kbd>), ohne deine Besprechungs-App zu verlassen: Ein schwebendes Fenster zeigt, was die anderen gerade gesagt haben, und danach die Zusammenfassung der KI – worum es in der Frage geht und wie das Gespräch dorthin gekommen ist. |
 | **Besprechungserkennung** | Sobald eine Besprechungs-App das Mikrofon nutzt, fragt Hanasu, ob aufgenommen werden soll. Es startet nie von selbst eine Aufnahme. |
 | **Suchen & Fragen** | Durchsuche den Text aller Besprechungen oder frage „Was haben wir im Meeting letzte Woche beschlossen?“. Die Antwort nennt die Besprechungen, auf die sie sich stützt. |
 | **Export** | Als Markdown oder als Slack-fertige Zusammenfassung kopieren, als `.md` / `.txt` speichern oder Aufgaben an Erinnerungen senden. |
@@ -150,7 +151,7 @@ Die neueste Version gibt es unter [**Releases**](https://github.com/kakibara/han
 1. Entpacke die Datei und verschiebe `Hanasu.app` in den Ordner **Programme**.
 2. Die App ist selbst signiert und nicht notarisiert, deshalb blockiert macOS sie beim ersten Mal. Klicke auf **Fertig**, öffne dann **Systemeinstellungen → Datenschutz & Sicherheit** und klicke auf **Dennoch öffnen**.
    Alternativ kannst du `xattr -dr com.apple.quarantine /Applications/Hanasu.app` ausführen.
-3. Erlaube auf Nachfrage **Mikrofon**, **Spracherkennung** und **Bedienungshilfen**. Die Bedienungshilfen werden benötigt, um mit ⌘V einzufügen.
+3. Erlaube auf Nachfrage **Mikrofon**, **Spracherkennung** und **Bedienungshilfen**. Die Bedienungshilfen werden benötigt, um mit ⌘V einzufügen. Nach **Bildschirmaufnahme** wird nur gefragt, wenn du Text aus Bildschirmfotos einschaltest.
 
 </details>
 
@@ -188,13 +189,14 @@ Auf dem Mac kannst du das Hanasu-Symbol in der Menüleiste, im Dock oder an beid
 | Aufnahme abbrechen | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Besprechungsaufnahme (Start / Stopp) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | „Das ist wichtig“ in einer Besprechung markieren | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| „Was wurde ich gefragt?“ in einer Besprechung | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Alle Tastenkürzel lassen sich in den Einstellungen ändern. Das vollständige Benutzerhandbuch (auf Japanisch) findest du unter [docs/guide.md](docs/guide.md).
 
 ## Datenschutz
 
 - **Audio bleibt standardmäßig auf deinem Gerät.** Spracherkennung, Whisper und Sprechertrennung laufen alle lokal.
-- **Die KI erhält Text, kein Audio.** Gemini oder Claude bekommt das Transkript. Je nach Einstellungen kann es außerdem den Namen der App erhalten, in die du tippst, den Bildschirmkontext sowie Besprechungstranskripte für Fragen und den KI-Chat in Besprechungen.
+- **Die KI erhält Text, kein Audio.** Gemini oder Claude bekommt das Transkript. Je nach Einstellungen kann es außerdem den Namen der App erhalten, in die du tippst, den Bildschirmkontext, aus einem Bildschirmfoto gelesenen Text (nie das Bild selbst) sowie Besprechungstranskripte für Fragen und den KI-Chat in Besprechungen.
 - **Lokal und Apple halten auch den Text auf deinem Gerät.** Wenn du eine der beiden Optionen wählst, wird nichts an einen KI-Dienst gesendet. Heruntergeladen wird nur das Modell selbst.
 - **Audio geht nur an Google, wenn du das so wählst.** Wenn du die Gemini-Sprach-Engine auswählst, wird das aufgenommene Audio an Google gesendet.
 - **Agenten erhalten Besprechungen nur, wenn du sie verbindest.** Der Befehl `hanasu` und sein MCP-Server lesen Besprechungen nur, wenn sie von dir oder einem Agenten aufgerufen werden, und was sie zurückgeben, geht an diesen Agenten und dessen KI-Anbieter.

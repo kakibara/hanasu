@@ -60,5 +60,5 @@
 
 - `.build/debug/Hanasu --test-hanasu-command`: 架空の会議と偽の `fm`（`HANASU_FM_PATH`）を使い、本物の実行ファイルをコマンドとして呼んで確かめる。ネットワークには送らない。キーチェーンは自己テストの一時的な項目（`HANASU_KEYCHAIN_SERVICE` で、`…selftest-` の名前だけを読ませられる）を、シンボリックリンク経由の `doctor` で読む。
 - MCP は、`hanasu mcp` を子プロセスで動かし、新旧の版の手順・ツール・エラー・長い会議の切り方・ポリシーを確かめる（同じ自己テスト）。
-- 配る部分は、一時フォルダをホームに見立てて、リンクと `~/.zprofile` の行を作って外し、登録の文・doctor・`help agent` を確かめる（同じ自己テスト）。画面は `--render-settings <フォルダ> --pane commandLine`（UX-166）。`/usr/local/bin` への管理者の確認と App Translocation は実機（UX-167）。
+- 配る部分は、一時フォルダをホームに見立てて、リンクと `~/.zprofile` の行を作って外し、登録の文・doctor・`help agent` を確かめる（同じ自己テスト）。画面は `--render-settings <フォルダ> --pane commandLine`（UX-183）。`/usr/local/bin` への管理者の確認と App Translocation は実機（UX-184）。
 - `.build/debug/Hanasu --bench-hanasu-command [件数]`: 架空の会議での速さ。

@@ -48,6 +48,7 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 | **Snippet** | Ucapkan "tanda tangan email" untuk menyisipkan teks tersimpan persis seperti yang Anda tulis. Snippet tidak pernah dikirim ke AI. |
 | **Kamus** | Tambahkan nama diri dan aturan penggantian seperti `ストックマーク => Stockmark`. Aturan penggantian juga diterapkan pada transkrip rapat. Dari rapat yang dibuka di Catatan rapat, AI dapat menyarankan entri baru dari rapat tersebut (di Mac, juga dari riwayat dan rapat terbaru Anda), dan Anda hanya menambahkan yang Anda pilih. |
 | **Konteks layar** *(opsional)* | Hanasu membaca judul jendela dan teks di sekitar kursor, sehingga nama-nama cocok dengan apa yang sudah ada di layar. Kolom kata sandi tidak pernah dibaca. |
+| **Teks tangkapan layar** *(opsional, Mac)* | Hanasu mengambil tangkapan semua layar Anda, membaca teksnya di Mac Anda, dan hanya memberikan teks itu ke AI, sehingga nama dan nomor model di jendela lain (misalnya "QX-7s") ditulis sesuai yang tampil. Gambarnya tidak pernah dikirim atau disimpan. Aktifkan atau nonaktifkan untuk satu perekaman lewat tombol di HUD. Memerlukan izin Perekaman Layar. |
 | **Pilih mikrofon** *(Mac)* | Pilih mikrofon di Pengaturan, atau ganti lewat tombol mikrofon di HUD tanpa menghentikan perekaman. |
 | **Riwayat** | Cari hasil sebelumnya dan ulangi yang gagal. Secara bawaan riwayat disimpan selama 30 hari, dan Anda dapat mengubahnya di Pengaturan. Di Mac, tekan <kbd>⌥⇧ V</kbd> untuk menempelkan hasil terakhir lagi. |
 | **Tidak ada tempat untuk menempel?** | Jika tidak ada kolom teks yang sedang aktif (misalnya desktop sedang di depan), Hanasu menampilkan hasilnya di layar alih-alih menempelkannya. Salin dari sana, atau cukup tekan <kbd>⌘V</kbd> di tempat yang Anda inginkan (Anda dapat memilih apakah hasilnya tetap ada di clipboard). |
@@ -67,8 +68,8 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 | **Notulen AI** | Dibuat oleh AI yang Anda pilih untuk rapat. Pilih templat: otomatis, rapat mingguan, 1-on-1, panggilan penjualan, curah gagasan, atau kustom. Butir tindakan dilengkapi penanggung jawab dan tenggat waktu. |
 | **Cek sumber & dengarkan lagi** *(Mac)* | Notulen terbuka dalam satu halaman: ringkasan dan item tindakan di bagian atas, dengan transkrip di sampingnya. Klik tanda waktu di akhir sebuah poin untuk melompat ke ucapan asalnya. Putar rekaman dari ucapan mana pun, dan bisukan suara Anda atau suara mereka jika panggilan bergema. |
 | **Catatan langsung & sorotan** | Ketik catatan bertanda waktu selama panggilan, atau tekan <kbd>⌃⌥⌘ H</kbd> untuk menandai "ini penting" (dapat dibatalkan dalam 10 detik). Notulen memprioritaskan bagian-bagian tersebut, dan setelahnya Anda dapat membaca percakapan di sekitar setiap tanda. |
-| **Teks terjemahan mengambang** *(Mac)* | Tampilkan transkrip langsung sebagai teks di atas aplikasi rapat Anda. |
-| **Obrolan AI selama rapat** *(Mac)* | Saat merekam, tanyakan kepada AI tentang percakapan sejauh ini (<kbd>⌘J</kbd>). Sekali klik untuk "ringkasan sejauh ini" atau "keputusan & tugas". Ajukan pertanyaan lanjutan, dan klik tanda waktu dalam jawaban untuk melompat ke bagian transkrip tersebut. |
+| **Teks terjemahan mengambang** *(Mac)* | Tampilkan transkrip langsung sebagai teks di atas aplikasi rapat Anda. Jika Anda membiarkannya menyala, teks ini akan muncul lagi di rapat berikutnya. |
+| **Obrolan AI selama rapat** *(Mac)* | Saat merekam, tanyakan kepada AI tentang percakapan sejauh ini (<kbd>⌘J</kbd>). Sekali klik untuk "ringkasan sejauh ini" atau "keputusan & tugas". Ajukan pertanyaan lanjutan, dan klik tanda waktu dalam jawaban untuk melompat ke bagian transkrip tersebut. Tiba-tiba ditanya saat sedang mengerjakan hal lain? Klik **Saya ditanya apa?** pada teks (atau tekan <kbd>⌃⌥⌘ A</kbd>) tanpa meninggalkan aplikasi rapat: panel mengambang menampilkan apa yang baru saja dikatakan peserta lain, lalu ringkasan AI tentang pertanyaannya dan bagaimana pembahasan sampai ke sana. |
 | **Deteksi rapat** | Saat aplikasi rapat mulai memakai mikrofon, Hanasu bertanya apakah Anda ingin merekam. Hanasu tidak pernah mulai merekam dengan sendirinya. |
 | **Cari & Tanya** | Cari teks di semua rapat, atau tanyakan "Apa yang kita putuskan di rapat mingguan lalu?". Jawabannya mencantumkan rapat yang menjadi sumbernya. |
 | **Ekspor** | Salin sebagai Markdown atau sebagai ringkasan yang siap untuk Slack, simpan sebagai `.md` / `.txt`, atau kirim butir tindakan ke Pengingat. |
@@ -150,7 +151,7 @@ Dapatkan build terbaru dari [**Releases**](https://github.com/kakibara/hanasu/re
 1. Ekstrak berkas dan pindahkan `Hanasu.app` ke **Aplikasi**.
 2. Aplikasi ini ditandatangani sendiri (self-signed) dan belum dinotarisasi, jadi macOS memblokirnya saat pertama kali dibuka. Klik **Selesai**, lalu buka **Pengaturan Sistem → Privasi & Keamanan** dan klik **Tetap Buka**.
    Anda juga bisa menjalankan `xattr -dr com.apple.quarantine /Applications/Hanasu.app` sebagai gantinya.
-3. Saat diminta, izinkan **Mikrofon**, **Pengenalan Ucapan**, dan **Aksesibilitas**. Aksesibilitas diperlukan untuk menempel dengan ⌘V.
+3. Saat diminta, izinkan **Mikrofon**, **Pengenalan Ucapan**, dan **Aksesibilitas**. Aksesibilitas diperlukan untuk menempel dengan ⌘V. Izin **Perekaman Layar** hanya diminta jika Anda mengaktifkan teks tangkapan layar.
 
 </details>
 
@@ -188,13 +189,14 @@ Di Mac, Anda dapat menampilkan ikon Hanasu di bilah menu, di Dock, atau di kedua
 | Batalkan perekaman | <kbd>Esc</kbd> | <kbd>Esc</kbd> |
 | Perekaman rapat (mulai / berhenti) | <kbd>⌃⌥⌘ M</kbd> | <kbd>Ctrl Alt Shift M</kbd> |
 | Tandai "ini penting" dalam rapat | <kbd>⌃⌥⌘ H</kbd> | <kbd>Ctrl Alt Shift H</kbd> |
+| "Saya ditanya apa?" dalam rapat | <kbd>⌃⌥⌘ A</kbd> | — |
 
 Anda dapat mengubah semua pintasan di Pengaturan. Panduan pengguna lengkap (dalam bahasa Jepang) ada di [docs/guide.md](docs/guide.md).
 
 ## Privasi
 
 - **Secara bawaan, audio tetap di perangkat Anda.** Pengenalan ucapan, Whisper, dan pemisahan pembicara semuanya berjalan secara lokal.
-- **AI menerima teks, bukan audio.** Gemini atau Claude menerima transkrip. Tergantung pengaturan Anda, AI juga dapat menerima nama aplikasi tempat Anda mengetik, konteks layar, dan transkrip rapat untuk fitur Tanya dan obrolan AI selama rapat.
+- **AI menerima teks, bukan audio.** Gemini atau Claude menerima transkrip. Tergantung pengaturan Anda, AI juga dapat menerima nama aplikasi tempat Anda mengetik, konteks layar, teks yang dibaca dari tangkapan layar Anda (tidak pernah gambarnya), dan transkrip rapat untuk fitur Tanya dan obrolan AI selama rapat.
 - **Lokal dan Apple juga menyimpan teks di perangkat Anda.** Jika Anda memilih salah satunya, tidak ada yang dikirim ke layanan AI. Satu-satunya yang diunduh adalah model itu sendiri.
 - **Audio dikirim ke Google hanya jika Anda memilihnya.** Jika Anda memilih mesin ucapan Gemini, audio rekaman dikirim ke Google.
 - **Agen mendapat rapat hanya jika Anda menghubungkannya.** Perintah `hanasu` dan server MCP-nya hanya membaca rapat saat Anda atau agen memanggilnya, dan isi yang dikembalikan diteruskan ke agen tersebut dan penyedia AI-nya.

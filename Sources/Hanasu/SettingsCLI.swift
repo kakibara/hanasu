@@ -10,6 +10,8 @@ enum SettingsCLI {
     static func render(to dir: URL, panes: [SettingsPane], dark: Bool) {
         _ = NSApplication.shared
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        // 要件: REQ-MTG-056（残っている録音の件数と合計は、本物の保存先を数えずに固定する）
+        SettingsRenderOverrides.meetingAudioEntries = MeetingAudioManagerRender.sampleEntries()
         for pane in panes {
             let view = SettingsView(onOpenMeetingNotes: {}, onBeginShortcutRecording: {}, onEndShortcutRecording: {},
                                     initialPane: pane)
