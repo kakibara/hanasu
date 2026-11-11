@@ -1,5 +1,10 @@
 # Changelog
 
+## [v2.4.1](https://github.com/kakibara/hanasu/compare/v2.4.0...v2.4.1) - 2026-11-11
+
+- 長い記録でメモリと CPU が増え続けるのを抑える by @kakibara in https://github.com/kakibara/hanasu/pull/99
+- 起動のたびに設定画面を開くのをやめる by @kakibara in https://github.com/kakibara/hanasu/pull/101
+
 ## [v2.4.0](https://github.com/kakibara/hanasu/compare/v2.3.0...v2.4.0) - 2026-11-11
 
 - AI チャットと会議に質問の送り先を、議事録とは別に選べるようにし、画面でも切り替えられるようにする（Mac） by @kakibara in https://github.com/kakibara/hanasu/pull/95
