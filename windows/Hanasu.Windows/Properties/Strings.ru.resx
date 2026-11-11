@@ -357,7 +357,7 @@
     <value>Обработка…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Протокола пока нет. Его можно создать кнопкой «Создать протокол заново» (нужны параметры ИИ для «Встреч» в разделе Параметры → AI).</value>
+    <value>Протокола пока нет. Его можно создать кнопкой «Создать протокол заново» (нужны настройки AI в пункте «Протокол» в разделе Параметры → AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>Распознавание выполняется после остановки записи.</value>
@@ -504,8 +504,17 @@
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Запись только при удержании</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Модуль распознавания</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>AI для расшифровки</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Диктовка</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Запись встреч</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Модель расшифровки (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Распознавание речи Windows (по умолчанию)</value>
@@ -517,7 +526,7 @@
     <value>Gemini (отправляет аудио в Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Распознает речь средствами Windows (диктовка) и показывает промежуточные результаты во время речи. Используется сетевое распознавание речи Microsoft, поэтому включите «Распознавание речи в Интернете» в разделе Параметры Windows → Конфиденциальность и защита → Голосовые функции. Используется микрофон Windows по умолчанию (выбор ниже не применяется).</value>
+    <value>Распознает речь средствами Windows (диктовка) и показывает промежуточные результаты во время речи. Используется сетевое распознавание речи Microsoft, поэтому включите «Распознавание речи в Интернете» в разделе Параметры Windows → Конфиденциальность и защита → Голосовые функции. Используется микрофон Windows по умолчанию (выбор микрофона на вкладке «Общие» не применяется).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Открыть параметры речи</value>
@@ -538,7 +547,7 @@
     <value>Отмена</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Отправляет записанное аудио в Gemini API от Google для распознавания (с учетными данными Gemini, заданными на вкладке «AI», и моделью Gemini для диктовки). Учтите, что ваше аудио отправляется в Google. Оно отправляется после остановки записи (до 7 минут за раз).</value>
+    <value>Отправляет записанное аудио в Gemini API от Google для расшифровки (с учетными данными Gemini на этой вкладке и моделью расшифровки, выбранной ниже). Учтите, что ваше аудио отправляется в Google. Оно отправляется после остановки записи (до 7 минут за раз).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Микрофон</value>
@@ -568,19 +577,19 @@
     <value>Открыть папку параметров</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>ИИ и модели</value>
+    <value>AI после расшифровки</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Диктовка (обработка, перевод)</value>
+    <value>Обработка диктовки</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Локальная LLM</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Встречи (протокол)</value>
+    <value>Протокол</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>ИИ и модель можно выбрать отдельно для диктовки и встреч. По умолчанию для Gemini — gemini-3.5-flash-lite (диктовка) и gemini-3.8-flash (протоколы), для Claude — Haiku 5.5 (диктовка) и Sonnet 5.5 (протоколы). Claude используется только для обработки текста, а не для распознавания аудио (модуль распознавания выбирается на вкладках «Общие» и «Встречи»).</value>
+    <value>AI и модель можно выбрать отдельно для обработки диктовки и протоколов. По умолчанию для Gemini — gemini-3.5-flash-lite (обработка диктовки) и gemini-3.8-flash (протоколы), для Claude — Haiku 5.5 (обработка диктовки) и Sonnet 5.5 (протоколы). Claude используется только для обработки текста, а не для расшифровки аудио (движок расшифровки выбирается выше в «AI для расшифровки»).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Локальные модели (небольшие LLM, работающие на этом ПК)</value>
@@ -652,7 +661,7 @@
     <value>Ключи хранятся в зашифрованном виде в %LOCALAPPDATA%\Hanasu\secrets.json, а не в settings.json. При DPAPI (по умолчанию) их может прочитать только этот пользователь Windows, но другие приложения, запущенные от его имени, могут прочитать их без подтверждения. С Windows Hello попытка другого приложения прочитать их вызывает запрос Windows Hello (подтверждение требуется один раз при первом использовании после запуска и снова после блокировки экрана). Это не защищает от чтения памяти приложениями того же пользователя, пока Hanasu работает.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Попробовать (ИИ для диктовки)</value>
+    <value>Попробовать (обработка диктовки)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>э ну вот на завтрашней встрече я как бы буду использовать слайды которые сделал в gemini</value>
@@ -681,9 +690,6 @@
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>Использовать сочетание клавиш «Важно» (действует только во время записи)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Распознавание</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (работает на этом ПК; по умолчанию)</value>
   </data>
@@ -706,7 +712,7 @@
     <value>Создавать протокол с помощью ИИ после записи</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>ИИ и модель для протоколов выбираются в пункте «Встречи (протокол)» на вкладке «AI». Отправляется только текст расшифровки (если для распознавания выбран Gemini, аудио также отправляется в Google). Шаблон протокола выбирается в заметках встреч.</value>
+    <value>AI и модель для протоколов выбираются в пункте «Протокол» на вкладке «AI». Отправляется только текст расшифровки (если для расшифровки выбран Gemini, аудио также отправляется в Google). Шаблон протокола выбирается в заметках встреч.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Хранение</value>
@@ -862,13 +868,13 @@
     <value>{0} ({1}), с: {2}</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>Записанное аудио встречи делится на части по 5 минут и отправляется в Gemini (с учетными данными Gemini на вкладке «AI» и моделью Gemini для диктовки). Учтите, что ваше аудио отправляется в Google.</value>
+    <value>Записанное аудио встречи делится на части по 5 минут и отправляется в Gemini (с учетными данными Gemini на этой вкладке и моделью расшифровки, выбранной ниже). Учтите, что ваше аудио отправляется в Google.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Используется модель Whisper, выбранная на вкладке «Общие» ({0}).</value>
+    <value>Используется модель Whisper, выбранная ниже ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Она еще не скачана (скачайте ее на вкладке «Общие»).</value>
+    <value> Она еще не скачана (скачайте ее ниже).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Выбор места сохранения встреч</value>

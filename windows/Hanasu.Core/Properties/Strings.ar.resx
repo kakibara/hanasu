@@ -634,7 +634,7 @@
     <value>"{0}" موجود أيضًا في سطر سابق، لذا سيتم استخدام ذلك السطر.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>لم يتم تنزيل نموذج Whisper ({0}) بعد. قم بتنزيله من القائمة ← الإعدادات ← عام.</value>
+    <value>لم يتم تنزيل نموذج Whisper ({0}) بعد. قم بتنزيله من "AI للتفريغ النصي" في القائمة ← الإعدادات ← AI.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>تعذر تشغيل Whisper. ثبّت Microsoft Visual C++ Redistributable (2015–2022، x64) ثم حاول مرة أخرى. ({0})</value>

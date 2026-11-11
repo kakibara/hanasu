@@ -357,7 +357,7 @@ Originale: {2}</value>
     <value>Elaborazione…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Nessun verbale. Puoi crearlo con "Rigenera verbale" (richiede le impostazioni dell'IA per "Riunioni" in Impostazioni → AI).</value>
+    <value>Nessun verbale. Puoi crearlo con "Rigenera verbale" (richiede le impostazioni dell'IA per "Verbale" in Impostazioni → AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>La trascrizione avviene dopo che interrompi la registrazione.</value>
@@ -504,8 +504,17 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Registra solo tenendo premuto</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Motore di trascrizione</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>IA di trascrizione</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Dettatura</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Registrazione della riunione</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Modello di trascrizione (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Riconoscimento vocale di Windows (predefinito)</value>
@@ -517,7 +526,7 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
     <value>Gemini (invia l'audio a Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Riconosce il parlato con il riconoscimento vocale di Windows (dettatura) e mostra risultati parziali mentre parli. Usa il riconoscimento vocale online di Microsoft, quindi attiva "Riconoscimento vocale online" in Impostazioni di Windows → Privacy e sicurezza → Voce. Usa il microfono predefinito di Windows (la selezione qui sotto non viene usata).</value>
+    <value>Riconosce il parlato con il riconoscimento vocale di Windows (dettatura) e mostra risultati parziali mentre parli. Usa il riconoscimento vocale online di Microsoft, quindi attiva "Riconoscimento vocale online" in Impostazioni di Windows → Privacy e sicurezza → Voce. Usa il microfono predefinito di Windows (la selezione del microfono nella scheda "Generale" non viene usata).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Apri impostazioni vocali</value>
@@ -538,7 +547,7 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
     <value>Annulla</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Invia l'audio registrato all'API Gemini di Google per la trascrizione (usando le credenziali di Gemini impostate nella scheda AI e il modello Gemini per la dettatura). Tieni presente che il tuo audio viene inviato a Google. Viene inviato dopo che interrompi la registrazione (fino a 7 minuti alla volta).</value>
+    <value>Invia l'audio registrato all'API Gemini di Google per la trascrizione (usando le credenziali di Gemini di questa scheda e il modello di trascrizione scelto qui sotto). Tieni presente che il tuo audio viene inviato a Google. Viene inviato dopo che interrompi la registrazione (fino a 7 minuti alla volta).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Microfono</value>
@@ -568,19 +577,19 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
     <value>Apri cartella impostazioni</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>IA e modelli</value>
+    <value>IA dopo la trascrizione</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Dettatura (rifinitura, traduzione)</value>
+    <value>Rifinitura della dettatura</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Locale</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Riunioni (verbali)</value>
+    <value>Verbale</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>Puoi scegliere l'IA e il modello separatamente per la dettatura e le riunioni. I valori predefiniti sono gemini-3.5-flash-lite (dettatura) e gemini-3.8-flash (verbali) per Gemini, e Haiku 5.5 (dettatura) e Sonnet 5.5 (verbali) per Claude. Claude viene usato solo per elaborare testo, non per trascrivere l'audio (il motore di trascrizione si trova nelle schede "Generale" e "Riunioni").</value>
+    <value>Puoi scegliere l'IA e il modello separatamente per la rifinitura della dettatura e per il verbale. I valori predefiniti sono gemini-3.5-flash-lite (rifinitura della dettatura) e gemini-3.8-flash (verbale) per Gemini, e Haiku 5.5 (rifinitura della dettatura) e Sonnet 5.5 (verbale) per Claude. Claude viene usato solo per elaborare testo, non per trascrivere l'audio (il motore di trascrizione si trova sopra, in "IA di trascrizione").</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Modelli locali (piccoli LLM in esecuzione su questo PC)</value>
@@ -652,7 +661,7 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
     <value>Le chiavi vengono archiviate crittografate in %LOCALAPPDATA%\Hanasu\secrets.json, non in settings.json. Con DPAPI (predefinito), solo questo utente di Windows può leggerle, ma altre app eseguite con lo stesso utente possono leggerle senza conferma. Con Windows Hello, se altre app tentano di leggerle compare una richiesta di Windows Hello (la verifica avviene una volta al primo utilizzo dopo l'avvio e di nuovo dopo il blocco dello schermo). Questo non impedisce alle app eseguite con lo stesso utente di leggere la memoria mentre Hanasu è in esecuzione.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Prova (IA della dettatura)</value>
+    <value>Prova (rifinitura della dettatura)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>ehm allora per la riunione di domani cioè uso le slide che ho fatto con gemini</value>
@@ -681,9 +690,6 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>Usa la scelta rapida "Importante" (attiva solo durante la registrazione)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Trascrizione</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (in esecuzione su questo PC; predefinito)</value>
   </data>
@@ -706,7 +712,7 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
     <value>Crea il verbale con l'IA dopo la registrazione</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>Scegli l'IA e il modello per i verbali in "Riunioni (verbali)" nella scheda "AI". Viene inviato solo il testo della trascrizione (se il motore di trascrizione è Gemini, anche l'audio viene inviato a Google). Scegli il modello di verbale in Note riunioni.</value>
+    <value>Scegli l'IA e il modello per il verbale in "Verbale" nella scheda "AI". Viene inviato solo il testo della trascrizione (se il motore di trascrizione è Gemini, anche l'audio viene inviato a Google). Scegli il modello di verbale in Note riunioni.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Archiviazione</value>
@@ -862,13 +868,13 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
     <value>{0} ({1}) ha impiegato {2} s</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>L'audio registrato della riunione viene diviso in parti da 5 minuti e inviato a Gemini (usando le credenziali di Gemini della scheda AI e il modello Gemini per la dettatura). Tieni presente che il tuo audio viene inviato a Google.</value>
+    <value>L'audio registrato della riunione viene diviso in parti da 5 minuti e inviato a Gemini (usando le credenziali di Gemini di questa scheda e il modello di trascrizione scelto qui sotto). Tieni presente che il tuo audio viene inviato a Google.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Usa il modello Whisper selezionato nella scheda "Generale" ({0}).</value>
+    <value>Usa il modello Whisper selezionato qui sotto ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Non è ancora stato scaricato (scaricalo nella scheda "Generale").</value>
+    <value> Non è ancora stato scaricato (scaricalo qui sotto).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Scegli dove salvare le riunioni</value>

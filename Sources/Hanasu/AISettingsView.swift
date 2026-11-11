@@ -2,9 +2,10 @@ import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 
-// 要件: REQ-COM-020, REQ-COM-024
-// 設計判断: DEC-COM-040
-/// 設定の「AI」。音声入力と会議のそれぞれで、使う AI（Gemini・Claude・ローカル・Apple）とモデルを選ぶ。
+// 要件: REQ-COM-001, REQ-COM-020, REQ-COM-024
+// 設計判断: DEC-COM-040, DEC-COM-173
+/// 設定の「AI」。先頭で文字起こし AI（音声入力と会議の記録のエンジン）を選び、その下で、文字起こしのあとの処理
+/// （音声入力整形・議事録・AI チャット・質問）のそれぞれに使う AI（Gemini・Claude・ローカル・Apple）とモデルを選ぶ。
 /// 認証は、Claude は API キー、Gemini は API キーかサービスアカウント。
 struct AISettingsTab: View {
     @ObservedObject var settings: AppSettings
@@ -14,15 +15,17 @@ struct AISettingsTab: View {
 
     var body: some View {
         Form {
+            // 設計判断: DEC-COM-173（文字起こし AI を先頭に置き、その下に文章の AI を並べる）
+            TranscriptionEngineSettingsSection(settings: settings)
             Section {
                 // 要件: REQ-COM-025
                 ForEach(TextAIPurpose.allCases) { purpose in
                     AIChoiceRow(settings: settings, purpose: purpose)
                 }
             } header: {
-                Text(tr("使う AI とモデル"))
+                Text(tr("文字起こしのあとの AI"))
             } footer: {
-                Text(tr("文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、ここで選ぶ AI には音声を送りません。辞書の候補探しは「会議」の AI、会議の AI チャットと会議への質問は「AI チャット・質問」の AI を使います（チャットと質問の画面で、その場で変えることもできます）。「ローカル」は、この Mac の中で小型の LLM を動かします。「Apple」は macOS 27 の Foundation Models（fm）の、この Mac の中のモデルを使います（どちらも文章をネットに送りません）。"))
+                Text(tr("文字起こしのあとの文章の処理だけに使います。音声の文字起こしは上の「文字起こし AI」で選んだエンジンが行い、ここで選ぶ AI には音声を送りません。辞書の候補探しは「議事録」の AI、会議の AI チャットと会議への質問は「AI チャット・質問」の AI を使います（チャットと質問の画面で、その場で変えることもできます）。「ローカル」は、この Mac の中で小型の LLM を動かします。「Apple」は macOS 27 の Foundation Models（fm）の、この Mac の中のモデルを使います（どちらも文章をネットに送りません）。"))
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {
@@ -37,7 +40,7 @@ struct AISettingsTab: View {
             ScreenContextSettingsSection()
             ClaudeKeySection(settings: settings)
             GeminiAuthSection(settings: settings)
-            Section(tr("試してみる（音声入力の AI）")) {
+            Section(tr("試してみる（音声入力整形）")) {
                 TextField(tr("認識結果の例"), text: $testInput, axis: .vertical)
                     .lineLimit(2...4)
                 HStack {
@@ -90,7 +93,7 @@ struct AISettingsTab: View {
 
 // 要件: REQ-COM-024, REQ-COM-025, REQ-COM-030
 // 設計判断: DEC-COM-092, DEC-COM-171
-/// 1 つの用途（音声入力 / 会議 / AI チャット・質問）の、AI とモデルの選択。オンボーディングの「設定の Tips」でも使う
+/// 1 つの用途（音声入力整形 / 議事録 / AI チャット・質問）の、AI とモデルの選択。オンボーディングの「設定の Tips」でも使う
 struct AIChoiceRow: View {
     @ObservedObject var settings: AppSettings
     var purpose: TextAIPurpose

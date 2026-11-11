@@ -83,48 +83,6 @@
                             <RadioButton x:Name="PushToTalkRadio" GroupName="RecordingMode" Content="{x:Static p:Strings.Settings_PushToTalk}" Checked="OnRecordingModeChanged" />
                         </StackPanel>
 
-                        <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Engine}" />
-                        <ComboBox x:Name="EngineCombo" SelectionChanged="OnEngineChanged" HorizontalAlignment="Left" MinWidth="320">
-                            <ComboBoxItem Content="{x:Static p:Strings.Settings_Engine_Windows}" Tag="Windows" />
-                            <ComboBoxItem Content="{x:Static p:Strings.Settings_Engine_Whisper}" Tag="Whisper" />
-                            <ComboBoxItem Content="{x:Static p:Strings.Settings_Engine_Gemini}" Tag="Gemini" />
-                        </ComboBox>
-
-                        <!-- Windows 標準 -->
-                        <StackPanel x:Name="WindowsEnginePanel" Margin="0,6,0,0">
-                            <TextBlock Style="{StaticResource Note}"
-                                       Text="{x:Static p:Strings.Settings_Engine_WindowsNote}" />
-                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                                <Button Content="{x:Static p:Strings.Settings_OpenSpeechSettings}" Click="OnOpenSpeechPrivacy" />
-                                <Button Content="{x:Static p:Strings.Settings_OpenLanguageSettings}" Click="OnOpenLanguageSettings" />
-                            </StackPanel>
-                        </StackPanel>
-
-                        <!-- Whisper -->
-                        <StackPanel x:Name="WhisperEnginePanel" Margin="0,6,0,0">
-                            <TextBlock Style="{StaticResource Note}"
-                                       Text="{x:Static p:Strings.Settings_Engine_WhisperNote}" />
-                            <DockPanel Margin="0,6,0,0">
-                                <TextBlock Text="{x:Static p:Strings.Settings_Model}" Width="60" VerticalAlignment="Center" />
-                                <ComboBox x:Name="WhisperModelCombo" SelectionChanged="OnWhisperModelChanged" />
-                            </DockPanel>
-                            <DockPanel Margin="60,6,0,0">
-                                <Button x:Name="WhisperDownloadButton" Content="{x:Static p:Strings.Settings_Download}" Click="OnWhisperDownload" />
-                                <Button x:Name="WhisperCancelButton" Content="{x:Static p:Strings.Settings_CancelDownload}" Click="OnWhisperCancel" />
-                                <Button x:Name="WhisperDeleteButton" Content="{x:Static p:Strings.Delete}" AutomationProperties.Name="{x:Static p:Strings.Settings_WhisperDelete_A11y}" Click="OnWhisperDelete" />
-                                <Button Content="{x:Static p:Strings.OpenSaveFolder}" Click="OnOpenModelsFolder" />
-                                <TextBlock x:Name="WhisperStatus" VerticalAlignment="Center" TextWrapping="Wrap" />
-                            </DockPanel>
-                            <ProgressBar x:Name="WhisperProgress" Margin="60,6,0,0" Height="6" Minimum="0" Maximum="1" Visibility="Collapsed" />
-                            <TextBlock x:Name="WhisperFolderNote" Style="{StaticResource Note}" Margin="60,4,0,0" />
-                        </StackPanel>
-
-                        <!-- Gemini -->
-                        <StackPanel x:Name="GeminiEnginePanel" Margin="0,6,0,0">
-                            <TextBlock Style="{StaticResource Note}" Foreground="#FFB06000"
-                                       Text="{x:Static p:Strings.Settings_Engine_GeminiNote}" />
-                        </StackPanel>
-
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Microphone}" />
                         <ComboBox x:Name="MicrophoneCombo" AutomationProperties.Name="{x:Static p:Strings.Settings_Microphone_A11y}" SelectionChanged="OnMicrophoneChanged" HorizontalAlignment="Left" MinWidth="320" />
                         <TextBlock x:Name="MicrophoneNote" Style="{StaticResource Note}" />
@@ -158,6 +116,68 @@
             <TabItem Header="AI">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="14,4,14,14">
+                        <!-- 要件: REQ-COM-001 / 設計判断: DEC-COM-020, DEC-COM-173（文字起こし AI を AI タブの先頭に置く） -->
+                        <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_TranscriptionAi}" />
+                        <TextBlock FontWeight="SemiBold" Text="{x:Static p:Strings.Settings_TranscriptionAi_Dictation}" />
+                        <ComboBox x:Name="EngineCombo" SelectionChanged="OnEngineChanged" HorizontalAlignment="Left" MinWidth="320">
+                            <ComboBoxItem Content="{x:Static p:Strings.Settings_Engine_Windows}" Tag="Windows" />
+                            <ComboBoxItem Content="{x:Static p:Strings.Settings_Engine_Whisper}" Tag="Whisper" />
+                            <ComboBoxItem Content="{x:Static p:Strings.Settings_Engine_Gemini}" Tag="Gemini" />
+                        </ComboBox>
+
+                        <!-- Windows 標準 -->
+                        <StackPanel x:Name="WindowsEnginePanel" Margin="0,6,0,0">
+                            <TextBlock Style="{StaticResource Note}"
+                                       Text="{x:Static p:Strings.Settings_Engine_WindowsNote}" />
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <Button Content="{x:Static p:Strings.Settings_OpenSpeechSettings}" Click="OnOpenSpeechPrivacy" />
+                                <Button Content="{x:Static p:Strings.Settings_OpenLanguageSettings}" Click="OnOpenLanguageSettings" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Gemini -->
+                        <StackPanel x:Name="GeminiEnginePanel" Margin="0,6,0,0">
+                            <TextBlock Style="{StaticResource Note}" Foreground="#FFB06000"
+                                       Text="{x:Static p:Strings.Settings_Engine_GeminiNote}" />
+                        </StackPanel>
+
+                        <TextBlock FontWeight="SemiBold" Margin="0,12,0,0" Text="{x:Static p:Strings.Settings_TranscriptionAi_Meeting}" />
+                        <ComboBox x:Name="MeetingEngineCombo" SelectionChanged="OnMeetingEngineChanged" HorizontalAlignment="Left" MinWidth="320">
+                            <ComboBoxItem Content="{x:Static p:Strings.Settings_MeetingEngine_Whisper}" Tag="Whisper" />
+                            <ComboBoxItem Content="{x:Static p:Strings.Settings_Engine_Gemini}" Tag="Gemini" />
+                        </ComboBox>
+                        <TextBlock x:Name="MeetingEngineNote" Style="{StaticResource Note}" />
+                        <TextBlock Style="{StaticResource Note}"
+                                   Text="{x:Static p:Strings.Settings_MeetingEngineNote}" />
+
+                        <!-- Whisper（音声入力か会議の記録のどちらかが Whisper のとき） -->
+                        <StackPanel x:Name="WhisperEnginePanel" Margin="0,10,0,0">
+                            <TextBlock Style="{StaticResource Note}"
+                                       Text="{x:Static p:Strings.Settings_Engine_WhisperNote}" />
+                            <DockPanel Margin="0,6,0,0">
+                                <TextBlock Text="{x:Static p:Strings.Settings_Model}" Width="60" VerticalAlignment="Center" />
+                                <ComboBox x:Name="WhisperModelCombo" SelectionChanged="OnWhisperModelChanged" />
+                            </DockPanel>
+                            <DockPanel Margin="60,6,0,0">
+                                <Button x:Name="WhisperDownloadButton" Content="{x:Static p:Strings.Settings_Download}" Click="OnWhisperDownload" />
+                                <Button x:Name="WhisperCancelButton" Content="{x:Static p:Strings.Settings_CancelDownload}" Click="OnWhisperCancel" />
+                                <Button x:Name="WhisperDeleteButton" Content="{x:Static p:Strings.Delete}" AutomationProperties.Name="{x:Static p:Strings.Settings_WhisperDelete_A11y}" Click="OnWhisperDelete" />
+                                <Button Content="{x:Static p:Strings.OpenSaveFolder}" Click="OnOpenModelsFolder" />
+                                <TextBlock x:Name="WhisperStatus" VerticalAlignment="Center" TextWrapping="Wrap" />
+                            </DockPanel>
+                            <ProgressBar x:Name="WhisperProgress" Margin="60,6,0,0" Height="6" Minimum="0" Maximum="1" Visibility="Collapsed" />
+                            <TextBlock x:Name="WhisperFolderNote" Style="{StaticResource Note}" Margin="60,4,0,0" />
+                        </StackPanel>
+
+                        <!-- Gemini の文字起こしのモデル（音声入力か会議の記録のどちらかが Gemini のとき。整形のモデルとは別。DEC-COM-173） -->
+                        <DockPanel x:Name="GeminiTranscriptionModelPanel" Margin="0,10,0,0">
+                            <TextBlock Text="{x:Static p:Strings.Settings_GeminiTranscriptionModel}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                            <ComboBox x:Name="GeminiTranscriptionModelCombo" IsEditable="True" HorizontalAlignment="Left" MinWidth="240"
+                                      AutomationProperties.Name="{x:Static p:Strings.Settings_GeminiTranscriptionModel}"
+                                      LostFocus="OnGeminiTranscriptionModelChanged" SelectionChanged="OnGeminiTranscriptionModelSelectionChanged" />
+                        </DockPanel>
+
+                        <!-- 設計判断: DEC-COM-173（文章の AI の用途は処理の名前で呼ぶ: 音声入力整形・議事録） -->
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_AiAndModels}" />
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -329,15 +349,6 @@
                         </Grid>
                         <TextBlock x:Name="MeetingHotKeyError" Style="{StaticResource Error}" Visibility="Collapsed" />
                         <CheckBox x:Name="HighlightHotKeyCheck" Content="{x:Static p:Strings.Settings_UseHighlightHotKey}" Checked="OnHighlightHotKeyEnabledChanged" Unchecked="OnHighlightHotKeyEnabledChanged" />
-
-                        <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Transcription}" />
-                        <ComboBox x:Name="MeetingEngineCombo" SelectionChanged="OnMeetingEngineChanged" HorizontalAlignment="Left" MinWidth="320">
-                            <ComboBoxItem Content="{x:Static p:Strings.Settings_MeetingEngine_Whisper}" Tag="Whisper" />
-                            <ComboBoxItem Content="{x:Static p:Strings.Settings_Engine_Gemini}" Tag="Gemini" />
-                        </ComboBox>
-                        <TextBlock x:Name="MeetingEngineNote" Style="{StaticResource Note}" />
-                        <TextBlock Style="{StaticResource Note}"
-                                   Text="{x:Static p:Strings.Settings_MeetingEngineNote}" />
 
                         <TextBlock Style="{StaticResource Section}" Text="{x:Static p:Strings.Settings_Speakers}" />
                         <CheckBox x:Name="DiarizeCheck" Content="{x:Static p:Strings.Settings_Diarize}" Checked="OnDiarizeChanged" Unchecked="OnDiarizeChanged" />

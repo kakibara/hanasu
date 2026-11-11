@@ -634,7 +634,7 @@
     <value>«{0}» также есть в строке выше, поэтому используется та строка.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Модель Whisper ({0}) еще не скачана. Скачайте ее в меню → Параметры → Общие.</value>
+    <value>Модель Whisper ({0}) еще не скачана. Скачайте ее в разделе «AI для расшифровки»: меню → Параметры → AI.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Не удалось запустить Whisper. Установите Microsoft Visual C++ Redistributable (2015–2022, x64) и повторите попытку. ({0})</value>

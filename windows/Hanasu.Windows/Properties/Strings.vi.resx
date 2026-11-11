@@ -357,7 +357,7 @@ Bản gốc: {2}</value>
     <value>Đang xử lý…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Chưa có biên bản. Bạn có thể tạo bằng "Tạo lại biên bản" (cần cài đặt AI cho "Cuộc họp" trong Cài đặt → AI).</value>
+    <value>Chưa có biên bản. Bạn có thể tạo bằng "Tạo lại biên bản" (cần cài đặt AI cho "Biên bản họp" trong Cài đặt → AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>Việc chuyển thành văn bản diễn ra sau khi bạn dừng ghi âm.</value>
@@ -504,8 +504,17 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Chỉ ghi âm khi giữ phím</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Công cụ chuyển văn bản</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>AI chép lời</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Đọc chính tả</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Ghi lại cuộc họp</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Mô hình chép lời (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Nhận dạng giọng nói của Windows (mặc định)</value>
@@ -517,7 +526,7 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
     <value>Gemini (gửi âm thanh đến Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Nhận dạng lời nói bằng nhận dạng giọng nói của Windows (đọc chính tả) và hiển thị kết quả tạm thời trong khi bạn nói. Tính năng này dùng nhận dạng giọng nói trực tuyến của Microsoft, nên hãy bật "Nhận dạng giọng nói trực tuyến" trong Cài đặt Windows → Quyền riêng tư &amp; bảo mật → Giọng nói. Tính năng này dùng micrô mặc định của Windows (lựa chọn bên dưới không được dùng).</value>
+    <value>Nhận dạng lời nói bằng nhận dạng giọng nói của Windows (đọc chính tả) và hiển thị kết quả tạm thời trong khi bạn nói. Tính năng này dùng nhận dạng giọng nói trực tuyến của Microsoft, nên hãy bật "Nhận dạng giọng nói trực tuyến" trong Cài đặt Windows → Quyền riêng tư &amp; bảo mật → Giọng nói. Tính năng này dùng micrô mặc định của Windows (lựa chọn micrô trên tab "Chung" không được dùng).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Mở cài đặt giọng nói</value>
@@ -538,7 +547,7 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
     <value>Hủy</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Gửi âm thanh đã ghi đến Gemini API của Google để chuyển thành văn bản (dùng thông tin xác thực Gemini đặt trên tab AI và mô hình Gemini cho đọc chính tả). Lưu ý rằng âm thanh của bạn được gửi đến Google. Âm thanh được gửi sau khi bạn dừng ghi âm (tối đa 7 phút mỗi lần).</value>
+    <value>Gửi âm thanh đã ghi đến Gemini API của Google để chép lời (dùng thông tin xác thực Gemini trên tab này và mô hình chép lời chọn bên dưới). Lưu ý rằng âm thanh của bạn được gửi đến Google. Âm thanh được gửi sau khi bạn dừng ghi âm (tối đa 7 phút mỗi lần).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Micrô</value>
@@ -568,19 +577,19 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
     <value>Mở thư mục cài đặt</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>AI và mô hình</value>
+    <value>AI sau khi chép lời</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Đọc chính tả (chỉnh sửa, dịch)</value>
+    <value>Chỉnh sửa đọc chính tả</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Cục bộ</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Cuộc họp (biên bản)</value>
+    <value>Biên bản họp</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>Bạn có thể chọn AI và mô hình riêng cho đọc chính tả và cuộc họp. Mặc định là gemini-3.5-flash-lite (đọc chính tả) và gemini-3.8-flash (biên bản) với Gemini, và Haiku 5.5 (đọc chính tả) và Sonnet 5.5 (biên bản) với Claude. Claude chỉ được dùng để xử lý văn bản, không dùng để chuyển âm thanh thành văn bản (công cụ chuyển văn bản nằm trên tab "Chung" và "Cuộc họp").</value>
+    <value>Bạn có thể chọn AI và mô hình riêng cho chỉnh sửa đọc chính tả và biên bản họp. Mặc định là gemini-3.5-flash-lite (chỉnh sửa đọc chính tả) và gemini-3.8-flash (biên bản họp) với Gemini, và Haiku 5.5 (chỉnh sửa đọc chính tả) và Sonnet 5.5 (biên bản họp) với Claude. Claude chỉ được dùng để xử lý văn bản, không dùng để chép lời âm thanh (công cụ chép lời nằm ở "AI chép lời" phía trên).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Mô hình cục bộ (LLM nhỏ chạy trên PC này)</value>
@@ -652,7 +661,7 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
     <value>Khóa được lưu ở dạng mã hóa trong %LOCALAPPDATA%\Hanasu\secrets.json, không phải trong settings.json. Với DPAPI mặc định, chỉ người dùng Windows này đọc được, nhưng các ứng dụng khác chạy dưới cùng người dùng có thể đọc mà không cần xác nhận. Với Windows Hello, ứng dụng khác cố đọc khóa sẽ kích hoạt lời nhắc Windows Hello (bạn xác minh một lần khi dùng lần đầu sau khi khởi động, và lại sau khi khóa màn hình). Điều này không ngăn được các ứng dụng chạy dưới cùng người dùng đọc bộ nhớ trong khi Hanasu đang chạy.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Dùng thử (AI đọc chính tả)</value>
+    <value>Dùng thử (chỉnh sửa đọc chính tả)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>à ừm cuộc họp ngày mai ấy thì tôi sẽ dùng mấy cái slide làm bằng gemini</value>
@@ -681,9 +690,6 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>Dùng phím tắt "Quan trọng" (chỉ hoạt động khi đang ghi âm)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Chuyển thành văn bản</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (chạy trên PC này; mặc định)</value>
   </data>
@@ -706,7 +712,7 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
     <value>Tạo biên bản bằng AI sau khi ghi âm</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>Chọn AI và mô hình cho biên bản ở mục "Cuộc họp (biên bản)" trên tab "AI". Chỉ văn bản của bản ghi lời được gửi đi (khi công cụ chuyển văn bản là Gemini, âm thanh cũng được gửi đến Google). Chọn mẫu biên bản trong Ghi chú cuộc họp.</value>
+    <value>Chọn AI và mô hình cho biên bản ở mục "Biên bản họp" trên tab "AI". Chỉ văn bản của bản chép lời được gửi đi (khi công cụ chép lời là Gemini, âm thanh cũng được gửi đến Google). Chọn mẫu biên bản trong Ghi chú cuộc họp.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Lưu trữ</value>
@@ -862,13 +868,13 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
     <value>{0} ({1}) mất {2} giây</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>Âm thanh cuộc họp đã ghi được chia thành các đoạn 5 phút và gửi đến Gemini (dùng thông tin xác thực Gemini trên tab AI và mô hình Gemini cho đọc chính tả). Lưu ý rằng âm thanh của bạn được gửi đến Google.</value>
+    <value>Âm thanh cuộc họp đã ghi được chia thành các đoạn 5 phút và gửi đến Gemini (dùng thông tin xác thực Gemini trên tab này và mô hình chép lời chọn bên dưới). Lưu ý rằng âm thanh của bạn được gửi đến Google.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Dùng mô hình Whisper được chọn trên tab "Chung" ({0}).</value>
+    <value>Dùng mô hình Whisper được chọn bên dưới ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Mô hình này chưa được tải xuống (hãy tải xuống trên tab "Chung").</value>
+    <value> Mô hình này chưa được tải xuống (hãy tải xuống ở bên dưới).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Chọn nơi lưu cuộc họp</value>

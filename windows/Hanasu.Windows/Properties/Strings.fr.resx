@@ -357,7 +357,7 @@ Original : {2}</value>
     <value>Traitement…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Pas encore de compte rendu. Vous pouvez le créer avec « Régénérer le compte rendu » (nécessite les paramètres d'IA pour « Réunions » dans Paramètres → AI).</value>
+    <value>Pas encore de compte rendu. Vous pouvez le créer avec « Régénérer le compte rendu » (nécessite les paramètres d'IA pour « Compte rendu » dans Paramètres → AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>La transcription a lieu après l'arrêt de l'enregistrement.</value>
@@ -504,8 +504,17 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Enregistrer seulement en maintenant la touche enfoncée</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Moteur de transcription</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>IA de transcription</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Dictée</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Enregistrement des réunions</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Modèle de transcription (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Reconnaissance vocale Windows (par défaut)</value>
@@ -517,7 +526,7 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
     <value>Gemini (envoie l'audio à Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Reconnaît la parole avec la reconnaissance vocale Windows (dictée) et affiche des résultats partiels pendant que vous parlez. Elle utilise la reconnaissance vocale en ligne de Microsoft ; activez donc « Reconnaissance vocale en ligne » dans Paramètres Windows → Confidentialité et sécurité → Voix. Elle utilise le microphone par défaut de Windows (la sélection ci-dessous n'est pas utilisée).</value>
+    <value>Reconnaît la parole avec la reconnaissance vocale Windows (dictée) et affiche des résultats partiels pendant que vous parlez. Elle utilise la reconnaissance vocale en ligne de Microsoft ; activez donc « Reconnaissance vocale en ligne » dans Paramètres Windows → Confidentialité et sécurité → Voix. Elle utilise le microphone par défaut de Windows (le microphone choisi dans l'onglet « Général » n'est pas utilisé).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Ouvrir les paramètres vocaux</value>
@@ -538,7 +547,7 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
     <value>Annuler</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Envoie l'audio enregistré à l'API Gemini de Google pour la transcription (avec les identifiants Gemini définis dans l'onglet AI et le modèle Gemini pour la dictée). Notez que votre audio est envoyé à Google. Il est envoyé après l'arrêt de l'enregistrement (7 minutes maximum à la fois).</value>
+    <value>Envoie l'audio enregistré à l'API Gemini de Google pour la transcription (avec les identifiants Gemini de cet onglet et le modèle de transcription choisi ci-dessous). Notez que votre audio est envoyé à Google. Il est envoyé après l'arrêt de l'enregistrement (7 minutes maximum à la fois).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Microphone</value>
@@ -568,19 +577,19 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
     <value>Ouvrir le dossier des paramètres</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>IA et modèles</value>
+    <value>IA après la transcription</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Dictée (affinage, traduction)</value>
+    <value>Affinage de la dictée</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Local</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Réunions (comptes rendus)</value>
+    <value>Compte rendu</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>Vous pouvez choisir l'IA et le modèle séparément pour la dictée et les réunions. Par défaut : gemini-3.5-flash-lite (dictée) et gemini-3.8-flash (comptes rendus) pour Gemini, Haiku 5.5 (dictée) et Sonnet 5.5 (comptes rendus) pour Claude. Claude sert uniquement à traiter du texte, pas à transcrire l'audio (le moteur de transcription se trouve dans les onglets « Général » et « Réunions »).</value>
+    <value>Vous pouvez choisir l'IA et le modèle séparément pour l'affinage de la dictée et le compte rendu. Par défaut : gemini-3.5-flash-lite (affinage de la dictée) et gemini-3.8-flash (compte rendu) pour Gemini, Haiku 5.5 (affinage de la dictée) et Sonnet 5.5 (compte rendu) pour Claude. Claude sert uniquement à traiter du texte, pas à transcrire l'audio (le moteur de transcription se trouve plus haut, sous « IA de transcription »).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Modèles locaux (petits LLM qui s'exécutent sur ce PC)</value>
@@ -652,7 +661,7 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
     <value>Les clés sont stockées chiffrées dans %LOCALAPPDATA%\Hanasu\secrets.json, et non dans settings.json. Avec DPAPI (par défaut), seul cet utilisateur Windows peut les lire, mais d'autres applications exécutées sous le même utilisateur peuvent les lire sans confirmation. Avec Windows Hello, toute autre application qui tente de les lire déclenche une invite Windows Hello (vous vous vérifiez une fois à la première utilisation après le démarrage, puis à nouveau après le verrouillage de l'écran). Cela ne peut pas empêcher des applications exécutées sous le même utilisateur de lire la mémoire pendant que Hanasu s'exécute.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Essayer (IA de dictée)</value>
+    <value>Essayer (affinage de la dictée)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>euh alors pour la réunion de demain ben je vais utiliser les diapos que j'ai faites avec gemini</value>
@@ -681,9 +690,6 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>Utiliser le raccourci « Important » (actif uniquement pendant l'enregistrement)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Transcription</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (s'exécute sur ce PC ; par défaut)</value>
   </data>
@@ -706,7 +712,7 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
     <value>Créer un compte rendu avec l'IA après l'enregistrement</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>Choisissez l'IA et le modèle des comptes rendus sous « Réunions (comptes rendus) » dans l'onglet « AI ». Seul le texte de la transcription est envoyé (si le moteur de transcription est Gemini, l'audio est aussi envoyé à Google). Choisissez le modèle de compte rendu dans Notes de réunion.</value>
+    <value>Choisissez l'IA et le modèle des comptes rendus sous « Compte rendu » dans l'onglet « AI ». Seul le texte de la transcription est envoyé (si le moteur de transcription est Gemini, l'audio est aussi envoyé à Google). Choisissez le modèle de compte rendu dans Notes de réunion.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Stockage</value>
@@ -862,13 +868,13 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
     <value>{0} ({1}) a pris {2} s</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>L'audio enregistré de la réunion est découpé en segments de 5 minutes et envoyé à Gemini (avec les identifiants Gemini de l'onglet AI et le modèle Gemini pour la dictée). Notez que votre audio est envoyé à Google.</value>
+    <value>L'audio enregistré de la réunion est découpé en segments de 5 minutes et envoyé à Gemini (avec les identifiants Gemini de cet onglet et le modèle de transcription choisi ci-dessous). Notez que votre audio est envoyé à Google.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Utilise le modèle Whisper sélectionné dans l'onglet « Général » ({0}).</value>
+    <value>Utilise le modèle Whisper sélectionné ci-dessous ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Il n'a pas encore été téléchargé (téléchargez-le dans l'onglet « Général »).</value>
+    <value> Il n'a pas encore été téléchargé (téléchargez-le ci-dessous).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Choisir où enregistrer les réunions</value>

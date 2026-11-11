@@ -190,7 +190,7 @@ private struct GeneralTab: View {
                 Picker(tr("録音モード"), selection: $settings.recordingMode) {
                     ForEach(RecordingMode.allCases) { Text($0.label).tag($0) }
                 }
-                Text(tr("「翻訳して入力」では、AI（設定の「AI」で音声入力に選んだもの）が、話した内容を下の「翻訳する言語」に翻訳して入力します。録音中は Esc で取り消せます。"))
+                Text(tr("「翻訳して入力」では、AI（設定の「AI」の「音声入力整形」で選んだもの）が、話した内容を下の「翻訳する言語」に翻訳して入力します。録音中は Esc で取り消せます。"))
                     .font(.caption).foregroundStyle(.secondary)
             }
             // 要件: REQ-DIC-013
@@ -205,8 +205,6 @@ private struct GeneralTab: View {
                 Text(tr("音声入力と「選択を声で編集」で使うマイク。録音中の画面（HUD）のマイクのボタンからも切り替えられます。会議の記録のマイクは「会議」タブで選びます。"))
                     .font(.caption).foregroundStyle(.secondary)
             }
-            // 音声入力と会議の記録の文字起こしのエンジン（TranscriptionEngineSettingsView.swift）
-            TranscriptionEngineSettingsSection(settings: settings)
             // 入力できる場所がないときのクリップボードの扱い（PasteFallbackPanel.swift）
             PasteFallbackSettingsSection()
             PasteUnconfirmedSettingsSection()
@@ -289,7 +287,7 @@ private struct MeetingTab: View {
                 Toggle(isOn: $settings.makeMeetingMinutes) {
                     Text(tr("記録後に AI で議事録を作る"))
                     // 要件: REQ-COM-024
-                    Text(tr("議事録のモデル: %@ · %@（設定の「AI」で、音声入力とは別に選べます）", "\(settings.aiProvider(for: .meeting).name)", "\(settings.textModel(for: .meeting))"))
+                    Text(tr("議事録のモデル: %@ · %@（設定の「AI」の「議事録」で選べます）", "\(settings.aiProvider(for: .meeting).name)", "\(settings.textModel(for: .meeting))"))
                 }
                 // 要件: REQ-MTG-010, REQ-MTG-056, REQ-MTG-057
                 MeetingAudioSettingsRows(settings: settings, fixedEntries: SettingsRenderOverrides.meetingAudioEntries)

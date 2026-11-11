@@ -357,7 +357,7 @@ Asli: {2}</value>
     <value>Memproses…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Belum ada notulen. Anda dapat membuatnya dengan "Buat Ulang Notulen" (memerlukan pengaturan AI untuk "Rapat" di Pengaturan → AI).</value>
+    <value>Belum ada notulen. Anda dapat membuatnya dengan "Buat Ulang Notulen" (memerlukan pengaturan AI untuk "Notulen" di Pengaturan → AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>Transkripsi dilakukan setelah Anda menghentikan perekaman.</value>
@@ -504,8 +504,17 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Rekam hanya selama ditahan</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Mesin transkripsi</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>AI transkripsi</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Dikte</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Perekaman rapat</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Model transkripsi (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Pengenalan ucapan Windows (default)</value>
@@ -517,7 +526,7 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
     <value>Gemini (mengirim audio ke Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Mengenali ucapan dengan pengenalan ucapan Windows (dikte) dan menampilkan hasil sementara saat Anda berbicara. Fitur ini menggunakan pengenalan ucapan online Microsoft, jadi aktifkan "Pengenalan ucapan online" di Pengaturan Windows → Privasi &amp; keamanan → Ucapan. Mikrofon default Windows yang digunakan (pilihan di bawah tidak digunakan).</value>
+    <value>Mengenali ucapan dengan pengenalan ucapan Windows (dikte) dan menampilkan hasil sementara saat Anda berbicara. Fitur ini menggunakan pengenalan ucapan online Microsoft, jadi aktifkan "Pengenalan ucapan online" di Pengaturan Windows → Privasi &amp; keamanan → Ucapan. Mikrofon default Windows yang digunakan (pilihan mikrofon di tab "Umum" tidak digunakan).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Buka Pengaturan Ucapan</value>
@@ -538,7 +547,7 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
     <value>Batal</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Mengirim audio rekaman ke API Gemini Google (menggunakan kredensial Gemini yang diatur di tab AI dan model Gemini untuk dikte) untuk ditranskripsi. Perhatikan bahwa audio Anda dikirim ke Google. Audio dikirim setelah Anda menghentikan perekaman (maksimal 7 menit sekaligus).</value>
+    <value>Mengirim audio rekaman ke API Gemini Google (menggunakan kredensial Gemini di tab ini dan model transkripsi yang dipilih di bawah) untuk ditranskripsi. Perhatikan bahwa audio Anda dikirim ke Google. Audio dikirim setelah Anda menghentikan perekaman (maksimal 7 menit sekaligus).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Mikrofon</value>
@@ -568,19 +577,19 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
     <value>Buka Folder Pengaturan</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>AI dan model</value>
+    <value>AI setelah transkripsi</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Dikte (perapian, terjemahan)</value>
+    <value>Perapian dikte</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Lokal</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Rapat (notulen)</value>
+    <value>Notulen</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>Anda dapat memilih AI dan model secara terpisah untuk dikte dan rapat. Default-nya adalah gemini-3.5-flash-lite (dikte) dan gemini-3.8-flash (notulen) untuk Gemini, serta Haiku 5.5 (dikte) dan Sonnet 5.5 (notulen) untuk Claude. Claude hanya digunakan untuk memproses teks, bukan untuk mentranskripsi audio (mesin transkripsi ada di tab "Umum" dan "Rapat").</value>
+    <value>Anda dapat memilih AI dan model secara terpisah untuk perapian dikte dan notulen. Default-nya adalah gemini-3.5-flash-lite (perapian dikte) dan gemini-3.8-flash (notulen) untuk Gemini, serta Haiku 5.5 (perapian dikte) dan Sonnet 5.5 (notulen) untuk Claude. Claude hanya digunakan untuk memproses teks, bukan untuk mentranskripsi audio (mesin transkripsi ada di "AI transkripsi" di atas).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Model lokal (LLM kecil yang berjalan di PC ini)</value>
@@ -652,7 +661,7 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
     <value>Kunci disimpan terenkripsi di %LOCALAPPDATA%\Hanasu\secrets.json, bukan di settings.json. Dengan DPAPI default, hanya pengguna Windows ini yang dapat membacanya, tetapi aplikasi lain yang berjalan sebagai pengguna yang sama dapat membacanya tanpa konfirmasi. Dengan Windows Hello, aplikasi lain yang mencoba membacanya akan memicu permintaan Windows Hello (Anda memverifikasi sekali saat pertama digunakan setelah memulai, dan lagi setelah mengunci layar). Ini tidak dapat mencegah aplikasi yang berjalan sebagai pengguna yang sama membaca memori saat Hanasu berjalan.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Coba (AI dikte)</value>
+    <value>Coba (Perapian dikte)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>eh jadi untuk rapat besok itu eh saya mau pakai slide yang saya bikin pakai gemini</value>
@@ -681,9 +690,6 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>Gunakan pintasan "Penting" (aktif hanya saat merekam)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Transkripsi</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (berjalan di PC ini; default)</value>
   </data>
@@ -706,7 +712,7 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
     <value>Buat notulen dengan AI setelah perekaman</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>Pilih AI dan model untuk notulen di "Rapat (notulen)" pada tab "AI". Hanya teks transkrip yang dikirim (jika mesin transkripsi adalah Gemini, audio juga dikirim ke Google). Pilih templat notulen di Catatan Rapat.</value>
+    <value>Pilih AI dan model untuk notulen di "Notulen" pada tab "AI". Hanya teks transkrip yang dikirim (jika mesin transkripsi adalah Gemini, audio juga dikirim ke Google). Pilih templat notulen di Catatan Rapat.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Penyimpanan</value>
@@ -862,13 +868,13 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
     <value>{0} ({1}) memerlukan {2} dtk</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>Audio rapat yang direkam dibagi menjadi potongan 5 menit dan dikirim ke Gemini (menggunakan kredensial Gemini di tab AI dan model Gemini untuk dikte). Perhatikan bahwa audio Anda dikirim ke Google.</value>
+    <value>Audio rapat yang direkam dibagi menjadi potongan 5 menit dan dikirim ke Gemini (menggunakan kredensial Gemini di tab ini dan model transkripsi yang dipilih di bawah). Perhatikan bahwa audio Anda dikirim ke Google.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Menggunakan model Whisper yang dipilih di tab "Umum" ({0}).</value>
+    <value>Menggunakan model Whisper yang dipilih di bawah ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Model belum diunduh (unduh di tab "Umum").</value>
+    <value> Model belum diunduh (unduh di bawah).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Pilih Lokasi Penyimpanan Rapat</value>

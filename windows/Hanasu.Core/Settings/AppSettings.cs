@@ -150,6 +150,13 @@ public sealed class AppSettings
     public string ServiceAccountPath { get; set; } = "";
     public string VertexLocation { get; set; } = "global";
     public string Model { get; set; } = SuggestedModels[0];
+    // 要件: REQ-COM-001
+    // 設計判断: DEC-COM-173
+    /// <summary>
+    /// Gemini で文字起こしするときのモデル（音声入力と会議の記録で共通）。整形のモデル（<see cref="Model"/>）とは別に選ぶ。
+    /// 2026-11-10 までは <see cref="Model"/> を共用していたので、設定のファイルになければ読み込みで <see cref="Model"/> の値を写す
+    /// </summary>
+    public string GeminiTranscriptionModel { get; set; } = "";
     /// <summary>入力先アプリ名を Gemini に伝える</summary>
     public bool SendAppName { get; set; } = true;
 

@@ -634,7 +634,7 @@
     <value>"{0}" ऊपर की एक पंक्ति में भी है, इसलिए उस पंक्ति का उपयोग होगा.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Whisper मॉडल ({0}) अभी तक डाउनलोड नहीं हुआ है. इसे मेनू → सेटिंग्स → सामान्य में डाउनलोड करें.</value>
+    <value>Whisper मॉडल ({0}) अभी तक डाउनलोड नहीं हुआ है. इसे मेनू → सेटिंग्स → AI में "ट्रांसक्रिप्शन AI" से डाउनलोड करें.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Whisper नहीं चल सका. Microsoft Visual C++ Redistributable (2015–2022, x64) इंस्टॉल करें और फिर से प्रयास करें. ({0})</value>

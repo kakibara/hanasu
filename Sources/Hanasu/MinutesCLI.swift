@@ -179,7 +179,7 @@ enum MinutesCLI {
         applyTemplateArguments(args, to: &meeting)
 
         let settings = AppSettings.shared
-        // 確かめ方: REQ-COM-025（議事録は「会議」の AI とモデルのまま）
+        // 確かめ方: REQ-COM-025（議事録は「議事録」の AI とモデルのまま）
         if TextAIClient.printTargetIfRequested(args: args, settings: settings, for: .meeting) { exit(0) }
         let model = TextAIClient.cliModel(args: args, settings: settings, for: .meeting)
         let started = Date()

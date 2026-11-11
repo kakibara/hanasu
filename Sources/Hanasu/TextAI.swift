@@ -32,12 +32,13 @@ enum TextAIProvider: String, CaseIterable, Identifiable {
 }
 
 // 要件: REQ-COM-024, REQ-COM-025
-// 設計判断: DEC-COM-040, DEC-COM-171
-/// AI とモデルを別々に選ぶ用途。case の順が設定画面の並び
+// 設計判断: DEC-COM-040, DEC-COM-171, DEC-COM-173
+/// AI とモデルを別々に選ぶ用途。case の順が設定画面の並び。
+/// 画面では入口（音声入力・会議）ではなく処理の名前（音声入力整形・議事録）で呼ぶ（文字起こしの AI と取り違えないため）
 enum TextAIPurpose: String, CaseIterable, Identifiable {
-    /// 音声入力: 整形・英訳・選択の編集
+    /// 音声入力整形: 整形・英訳・選択の編集
     case dictation
-    /// 会議: 議事録（作り直しを含む）。辞書の候補探しもこちら（会議の記録を読む長い処理なので）
+    /// 議事録: 議事録（作り直しを含む）。辞書の候補探しもこちら（会議の記録を読む長い処理なので）
     case meeting
     /// AI チャット・質問: 会議の AI チャット（記録中・会議ノート）・会議への質問。対話なので議事録とは別に選ぶ
     case chat
@@ -45,8 +46,8 @@ enum TextAIPurpose: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .dictation: tr("音声入力")
-        case .meeting: tr("会議")
+        case .dictation: tr("音声入力整形")
+        case .meeting: tr("議事録")
         case .chat: tr("AI チャット・質問")
         }
     }
@@ -54,7 +55,7 @@ enum TextAIPurpose: String, CaseIterable, Identifiable {
     var detail: String {
         switch self {
         case .dictation: tr("整形・翻訳・選択の編集")
-        case .meeting: tr("議事録（作り直しも）・辞書の候補")
+        case .meeting: tr("作り直しも含む・辞書の候補")
         case .chat: tr("会議の AI チャット・会議への質問")
         }
     }

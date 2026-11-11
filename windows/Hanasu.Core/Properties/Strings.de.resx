@@ -634,7 +634,7 @@
     <value>„{0}“ steht auch in einer Zeile weiter oben; diese Zeile wird verwendet.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Das Whisper-Modell ({0}) wurde noch nicht heruntergeladen. Unter Menü → Einstellungen → Allgemein herunterladen.</value>
+    <value>Das Whisper-Modell ({0}) wurde noch nicht heruntergeladen. Unter Menü → Einstellungen → AI bei „Transkriptions-KI“ herunterladen.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Whisper konnte nicht ausgeführt werden. Microsoft Visual C++ Redistributable (2015–2022, x64) installieren und erneut versuchen. ({0})</value>

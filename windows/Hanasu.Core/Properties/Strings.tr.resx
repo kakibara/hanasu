@@ -634,7 +634,7 @@
     <value>"{0}" yukarıdaki bir satırda da var; o satır kullanılacak.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Whisper modeli ({0}) henüz indirilmedi. Menü → Ayarlar → Genel bölümünden indirin.</value>
+    <value>Whisper modeli ({0}) henüz indirilmedi. Menü → Ayarlar → AI bölümündeki "Yazıya dökme AI'ı" altından indirin.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Whisper çalıştırılamadı. Microsoft Visual C++ Redistributable (2015–2022, x64) yükleyip yeniden deneyin. ({0})</value>

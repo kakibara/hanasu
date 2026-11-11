@@ -634,7 +634,7 @@
     <value>「{0}」は上の行にもあるので、上の行を使います</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Whisper のモデル（{0}）がまだダウンロードされていません。メニュー → 設定 → 一般 でダウンロードしてください。</value>
+    <value>Whisper のモデル（{0}）がまだダウンロードされていません。メニュー → 設定 → AI の「文字起こし AI」でダウンロードしてください。</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Whisper を動かせませんでした。Microsoft Visual C++ 再頒布可能パッケージ（2015〜2022, x64）を入れてから、もう一度試してください。（{0}）</value>

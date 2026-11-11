@@ -357,7 +357,7 @@
     <value>처리 중…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>아직 회의록이 없습니다. '회의록 다시 만들기'로 만들 수 있습니다(설정 → AI에서 '회의'의 AI 설정이 필요합니다).</value>
+    <value>아직 회의록이 없습니다. '회의록 다시 만들기'로 만들 수 있습니다(설정 → AI에서 '회의록'의 AI 설정이 필요합니다).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>텍스트 변환은 녹음을 중지한 후에 진행됩니다.</value>
@@ -504,8 +504,17 @@
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>누르고 있는 동안만 녹음</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>텍스트 변환 엔진</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>텍스트 변환 AI</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>음성 입력</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>회의 기록</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>텍스트 변환 모델(Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Windows 음성 인식(기본값)</value>
@@ -517,7 +526,7 @@
     <value>Gemini(오디오를 Google로 전송)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Windows 음성 인식(받아쓰기)으로 음성을 인식하고 말하는 동안 중간 결과를 표시합니다. Microsoft의 온라인 음성 인식을 사용하므로 Windows 설정 → 개인 정보 및 보안 → 음성에서 '온라인 음성 인식'을 켜세요. Windows 기본 마이크를 사용합니다(아래 선택은 사용하지 않음).</value>
+    <value>Windows 음성 인식(받아쓰기)으로 음성을 인식하고 말하는 동안 중간 결과를 표시합니다. Microsoft의 온라인 음성 인식을 사용하므로 Windows 설정 → 개인 정보 및 보안 → 음성에서 '온라인 음성 인식'을 켜세요. Windows 기본 마이크를 사용합니다('일반' 탭의 마이크 선택은 사용하지 않음).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>음성 설정 열기</value>
@@ -538,7 +547,7 @@
     <value>취소</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>녹음한 오디오를 Google의 Gemini API로 보내 텍스트로 변환합니다('AI' 탭에서 설정한 Gemini 자격 증명과 음성 입력용 Gemini 모델 사용). 오디오가 Google로 전송된다는 점에 유의하세요. 녹음을 중지한 후에 전송합니다(한 번에 최대 7분).</value>
+    <value>녹음한 오디오를 Google의 Gemini API로 보내 텍스트로 변환합니다(이 탭의 Gemini 자격 증명과 아래에서 선택한 텍스트 변환 모델 사용). 오디오가 Google로 전송된다는 점에 유의하세요. 녹음을 중지한 후에 전송합니다(한 번에 최대 7분).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>마이크</value>
@@ -568,19 +577,19 @@
     <value>설정 폴더 열기</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>AI 및 모델</value>
+    <value>텍스트 변환 후 AI</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>음성 입력(다듬기, 번역)</value>
+    <value>음성 입력 다듬기</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>로컬</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>회의(회의록)</value>
+    <value>회의록</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>음성 입력과 회의에 대해 AI와 모델을 따로 선택할 수 있습니다. 기본값은 Gemini의 경우 gemini-3.5-flash-lite(음성 입력)와 gemini-3.8-flash(회의록), Claude의 경우 Haiku 5.5(음성 입력)와 Sonnet 5.5(회의록)입니다. Claude는 텍스트 처리에만 사용되며 오디오의 텍스트 변환에는 사용되지 않습니다(텍스트 변환 엔진은 '일반' 및 '회의' 탭에 있음).</value>
+    <value>음성 입력 다듬기와 회의록에 대해 AI와 모델을 따로 선택할 수 있습니다. 기본값은 Gemini의 경우 gemini-3.5-flash-lite(음성 입력 다듬기)와 gemini-3.8-flash(회의록), Claude의 경우 Haiku 5.5(음성 입력 다듬기)와 Sonnet 5.5(회의록)입니다. Claude는 텍스트 처리에만 사용되며 오디오의 텍스트 변환에는 사용되지 않습니다(텍스트 변환 엔진은 위의 '텍스트 변환 AI'에 있음).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>로컬 모델(이 PC에서 실행되는 소형 LLM)</value>
@@ -652,7 +661,7 @@
     <value>키는 settings.json이 아니라 %LOCALAPPDATA%\Hanasu\secrets.json에 암호화되어 저장됩니다. 기본값인 DPAPI를 사용하면 이 Windows 사용자만 읽을 수 있지만, 같은 사용자로 실행되는 다른 앱은 확인 없이 읽을 수 있습니다. Windows Hello를 사용하면 다른 앱이 읽으려고 할 때 Windows Hello 확인이 표시됩니다(시작 후 처음 사용할 때 한 번 확인하고, 화면을 잠근 후에는 다시 확인). Hanasu가 실행 중일 때 같은 사용자로 실행되는 앱이 메모리를 읽는 것까지는 막을 수 없습니다.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>사용해 보기(음성 입력 AI)</value>
+    <value>사용해 보기(음성 입력 다듬기)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>음 그러니까 내일 회의 말인데요 어 자료는 제미나이로 만든 거 쓸게요</value>
@@ -681,9 +690,6 @@
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>'중요' 바로 가기 키 사용(녹음 중에만 활성화)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>텍스트 변환</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper(이 PC에서 실행, 기본값)</value>
   </data>
@@ -706,7 +712,7 @@
     <value>녹음 후 AI로 회의록 만들기</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>회의록용 AI와 모델은 'AI' 탭의 '회의(회의록)'에서 선택합니다. 녹취록 텍스트만 전송됩니다(텍스트 변환 엔진이 Gemini이면 오디오도 Google로 전송됨). 회의록 템플릿은 회의 노트에서 선택합니다.</value>
+    <value>회의록용 AI와 모델은 'AI' 탭의 '회의록'에서 선택합니다. 녹취록 텍스트만 전송됩니다(텍스트 변환 엔진이 Gemini이면 오디오도 Google로 전송됨). 회의록 템플릿은 회의 노트에서 선택합니다.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>저장</value>
@@ -862,13 +868,13 @@
     <value>{0}({1}): {2}초 소요</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>녹음한 회의 오디오를 5분 단위로 나누어 Gemini로 보냅니다('AI' 탭의 Gemini 자격 증명과 음성 입력용 Gemini 모델 사용). 오디오가 Google로 전송된다는 점에 유의하세요.</value>
+    <value>녹음한 회의 오디오를 5분 단위로 나누어 Gemini로 보냅니다(이 탭의 Gemini 자격 증명과 아래에서 선택한 텍스트 변환 모델 사용). 오디오가 Google로 전송된다는 점에 유의하세요.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>'일반' 탭에서 선택한 Whisper 모델({0})을 사용합니다.</value>
+    <value>아래에서 선택한 Whisper 모델({0})을 사용합니다.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> 아직 다운로드하지 않았습니다('일반' 탭에서 다운로드하세요).</value>
+    <value> 아직 다운로드하지 않았습니다(아래에서 다운로드하세요).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>회의 저장 위치 선택</value>

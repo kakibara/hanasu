@@ -651,7 +651,7 @@ struct OnboardingTipsPage: View {
                     tip("mic", tr("マイクを選べる"),
                         tr("設定 →「一般」→「マイク」。録音中の画面下の表示のマイクのボタンでも切り替えられます。"))
                     tip("waveform", tr("文字起こしのエンジンを選べる"),
-                        tr("Mac 標準（既定）・Whisper（Mac の中で動かす）・Gemini（音声を送る）から、音声入力と会議で別々に選べます（設定 →「一般」）。"))
+                        tr("Mac 標準（既定）・Whisper（Mac の中で動かす）・Gemini（音声を送る）から、音声入力と会議で別々に選べます（設定 →「AI」→「文字起こし AI」）。"))
                     tip("keyboard", tr("ショートカットを変えられる"),
                         tr("ほかのアプリと重なるときは、設定の「一般」「会議」「履歴」で別のキーにできます。"))
                     tip("globe", tr("翻訳する言語を足せる"),
@@ -771,7 +771,7 @@ struct OnboardingPermissionsPage: View {
             let model = provider == .local ? settings.localModel(for: purpose).name : settings.textModel(for: purpose)
             return tr("%@（%@）", provider.name, model)
         }
-        return tr("音声入力 %@・会議 %@・AI チャット・質問 %@", "\(label(.dictation))", "\(label(.meeting))", "\(label(.chat))")
+        return tr("音声入力整形 %@・議事録 %@・AI チャット・質問 %@", "\(label(.dictation))", "\(label(.meeting))", "\(label(.chat))")
     }
 
     private func row(title: String, detail: String, granted: Bool, actionTitle: String,

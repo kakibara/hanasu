@@ -82,7 +82,7 @@ Granola のドキュメントでは「マイクを 1 チャンネル、PC で鳴
 
 ### 4.3.1 Whisper / Gemini を選んだとき（記録のあとに文字起こし）
 
-設定の「一般」→「文字起こし」の「会議の記録」で、エンジンを Mac 標準 / Whisper / Gemini から選べる（音声入力とは別に選ぶ。理由と各エンジンの中身は [design/dictation.md](dictation.md) 4.10）。
+設定の「AI」→「文字起こし AI」の「会議の記録」で、エンジンを Mac 標準 / Whisper / Gemini から選べる（音声入力とは別に選ぶ。理由と各エンジンの中身は [design/dictation.md](dictation.md) 4.10）。
 Mac 標準は今までどおり（チャンネルごとの SpeechTranscriber でライブ文字起こし）。Whisper と Gemini は次のようにする。
 
 - **記録中**: `ChannelTranscriber(live: false)` で、文字起こしはせず、チャンネルごとに 16 kHz モノラルの AAC（me.m4a / others.m4a）に書き出すだけにする

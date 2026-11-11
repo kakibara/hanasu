@@ -141,6 +141,8 @@ public sealed class SettingsStore
         }
         if (string.IsNullOrWhiteSpace(s.VertexLocation)) s.VertexLocation = "global";
         if (string.IsNullOrWhiteSpace(s.Model)) s.Model = AppSettings.SuggestedModels[0];
+        // 設計判断: DEC-COM-173（以前は整形のモデルを文字起こしにも使っていたので、その値を引き継ぐ）
+        if (string.IsNullOrWhiteSpace(s.GeminiTranscriptionModel)) s.GeminiTranscriptionModel = s.Model;
         s.DictionaryText ??= "";
         s.ExtraInstructions ??= "";
     }

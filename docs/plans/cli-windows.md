@@ -1,6 +1,6 @@
 # `hanasu` コマンドの段階 6（Windows の `cli\hanasu.exe`）— 計画
 
-- 状態: 実装した（2026-11-11）。spec は既存の要件・設計判断の対象を Mac / Windows にし、REQ-REL-013、DEC-COM-190〜199、DEC-MTG-153・154、DEC-DIC-190、DEC-REL-031 を足した。実機で確かめることは UX-188〜193。以下は計画のときの記録。[plans/cli.md](cli.md) の 6 章の段階 6 を、実装できる粒度に詰めたもの。要件・設計判断の案の番号（W1〜・WD1〜）は、この計画の中だけのもの。実装するときに spec の番号（COM・MTG・DIC・REL の、今の続きの空き番号。REL は #98 の REQ-REL-012・DEC-REL-028 の続き）にする
+- 状態: 実装した（2026-11-11）。spec は既存の要件・設計判断の対象を Mac / Windows にし、REQ-REL-013、DEC-COM-190〜199、DEC-MTG-153・154、DEC-DIC-190、DEC-REL-031 を足した。実機で確かめることは UX-189〜194。以下は計画のときの記録。[plans/cli.md](cli.md) の 6 章の段階 6 を、実装できる粒度に詰めたもの。要件・設計判断の案の番号（W1〜・WD1〜）は、この計画の中だけのもの。実装するときに spec の番号（COM・MTG・DIC・REL の、今の続きの空き番号。REL は #98 の REQ-REL-012・DEC-REL-028 の続き）にする
 - 前提: main の #95（AI チャット・質問の送り先。REQ-COM-025）・#96・#98（アップデートのダウンロードの進み具合）を取り込んだあとの作り（4c3563a）
 - 出どころ: 2026-11-11 の依頼「段階 6 に進む」。ユーザーの決定（2026-11-11）:
   1. Windows の `hanasu` には、Mac と同じコマンドを**すべて**入れる（`meetings search`・`ask`・`edit`・`refine --app / --style`、MCP の `search_meetings`・`ask_meetings` を含む）。Windows のアプリにまだない会議の検索・会議への質問・選択の書き換え・文体は、`Hanasu.Core` に移して `hanasu` から使う（アプリの画面に出すのは、この計画の外）

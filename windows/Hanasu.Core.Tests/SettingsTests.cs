@@ -127,6 +127,29 @@ public class SettingsTests
         Assert.True(File.Exists(path + ".broken"));
     }
 
+    // 確かめ方: REQ-COM-001
+    [Fact]
+    public void GeminiTranscriptionModelIsSeparateAndInheritsDictationModel()
+    {
+        // 新しく使い始めた人は、整形の既定のモデルと同じ
+        var fresh = new SettingsStore(Path.Combine(TestKeys.TempDirectory(), "settings.json")).Load();
+        Assert.Equal("gemini-3.5-flash-lite", fresh.GeminiTranscriptionModel);
+
+        // 以前の版の設定（文字起こしのモデルがない）は、整形のモデルを引き継ぐ（DEC-COM-173）
+        var path = Path.Combine(TestKeys.TempDirectory(), "settings.json");
+        File.WriteAllText(path, """{ "model": "gemini-3.8-flash" }""");
+        var old = new SettingsStore(path).Load();
+        Assert.Equal("gemini-3.8-flash", old.GeminiTranscriptionModel);
+
+        // 保存したあとは、整形のモデルを変えても文字起こしのモデルは変わらない
+        var service = new SettingsService(new SettingsStore(path), TestKeys.Secrets());
+        service.Update(s => s.GeminiTranscriptionModel = "gemini-3.8-flash-lite");
+        service.Update(s => s.Model = "gemini-3.5-flash-lite");
+        var reloaded = new SettingsStore(path).Load();
+        Assert.Equal("gemini-3.8-flash-lite", reloaded.GeminiTranscriptionModel);
+        Assert.Equal("gemini-3.5-flash-lite", reloaded.Model);
+    }
+
     [Fact]
     public void InvalidValuesAreNormalized()
     {

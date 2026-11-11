@@ -357,7 +357,7 @@ Oryginał: {2}</value>
     <value>Przetwarzanie…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Jeszcze brak protokołu. Możesz go utworzyć przyciskiem „Wygeneruj protokół ponownie” (wymaga ustawień AI dla „Spotkań” w Ustawienia → AI).</value>
+    <value>Jeszcze brak protokołu. Możesz go utworzyć przyciskiem „Wygeneruj protokół ponownie” (wymaga ustawień AI w pozycji „Protokół” w Ustawienia → AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>Transkrypcja zostanie wykonana po zatrzymaniu nagrywania.</value>
@@ -504,8 +504,17 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Nagrywaj tylko podczas przytrzymania</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Silnik transkrypcji</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>AI do transkrypcji</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Dyktowanie</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Nagrywanie spotkań</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Model transkrypcji (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Rozpoznawanie mowy systemu Windows (domyślne)</value>
@@ -517,7 +526,7 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
     <value>Gemini (wysyła audio do Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Rozpoznaje mowę za pomocą rozpoznawania mowy systemu Windows (dyktowanie) i pokazuje częściowe wyniki podczas mówienia. Korzysta z rozpoznawania mowy online firmy Microsoft, więc włącz „Rozpoznawanie mowy online” w Ustawienia systemu Windows → Prywatność i zabezpieczenia → Mowa. Używa mikrofonu domyślnego systemu Windows (wybór poniżej nie jest używany).</value>
+    <value>Rozpoznaje mowę za pomocą rozpoznawania mowy systemu Windows (dyktowanie) i pokazuje częściowe wyniki podczas mówienia. Korzysta z rozpoznawania mowy online firmy Microsoft, więc włącz „Rozpoznawanie mowy online” w Ustawienia systemu Windows → Prywatność i zabezpieczenia → Mowa. Używa mikrofonu domyślnego systemu Windows (wybór mikrofonu na karcie „Ogólne” nie jest używany).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Otwórz ustawienia mowy</value>
@@ -538,7 +547,7 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
     <value>Anuluj</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Wysyła nagrane audio do transkrypcji do Gemini API firmy Google (z użyciem poświadczeń Gemini ustawionych na karcie AI i modelu Gemini dla dyktowania). Pamiętaj, że Twoje audio jest wysyłane do Google. Jest wysyłane po zatrzymaniu nagrywania (maks. 7 minut naraz).</value>
+    <value>Wysyła nagrane audio do transkrypcji do Gemini API firmy Google (z użyciem poświadczeń Gemini z tej karty i modelu transkrypcji wybranego poniżej). Pamiętaj, że Twoje audio jest wysyłane do Google. Jest wysyłane po zatrzymaniu nagrywania (maks. 7 minut naraz).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Mikrofon</value>
@@ -568,19 +577,19 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
     <value>Otwórz folder ustawień</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>AI i modele</value>
+    <value>AI po transkrypcji</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Dyktowanie (dopracowanie, tłumaczenie)</value>
+    <value>Redakcja dyktowania</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Lokalny</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Spotkania (protokół)</value>
+    <value>Protokół</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>AI i model można wybrać osobno dla dyktowania i spotkań. Domyślne to gemini-3.5-flash-lite (dyktowanie) i gemini-3.8-flash (protokół) dla Gemini oraz Haiku 5.5 (dyktowanie) i Sonnet 5.5 (protokół) dla Claude. Claude służy tylko do przetwarzania tekstu, nie do transkrypcji audio (silnik transkrypcji jest na kartach „Ogólne” i „Spotkania”).</value>
+    <value>AI i model można wybrać osobno dla redakcji dyktowania i protokołu. Domyślne to gemini-3.5-flash-lite (redakcja dyktowania) i gemini-3.8-flash (protokół) dla Gemini oraz Haiku 5.5 (redakcja dyktowania) i Sonnet 5.5 (protokół) dla Claude. Claude służy tylko do przetwarzania tekstu, nie do transkrypcji audio (silnik transkrypcji wybiera się powyżej w sekcji „AI do transkrypcji”).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Modele lokalne (małe LLM działające na tym komputerze)</value>
@@ -652,7 +661,7 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
     <value>Klucze są przechowywane w postaci zaszyfrowanej w %LOCALAPPDATA%\Hanasu\secrets.json, a nie w settings.json. Przy domyślnym DPAPI odczytać je może tylko ten użytkownik systemu Windows, ale inne aplikacje działające jako ten sam użytkownik mogą je odczytać bez potwierdzenia. Przy Windows Hello próba odczytu przez inne aplikacje wywołuje monit Windows Hello (weryfikacja raz przy pierwszym użyciu po uruchomieniu i ponownie po zablokowaniu ekranu). Nie zapobiega to odczytowi pamięci przez aplikacje działające jako ten sam użytkownik, gdy Hanasu jest uruchomiony.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Wypróbuj (AI dyktowania)</value>
+    <value>Wypróbuj (Redakcja dyktowania)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>yyy no więc na jutrzejsze spotkanie eee użyję slajdów które zrobiłem w gemini</value>
@@ -681,9 +690,6 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>Używaj skrótu „Ważne” (aktywny tylko podczas nagrywania)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Transkrypcja</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (działa na tym komputerze; domyślny)</value>
   </data>
@@ -706,7 +712,7 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
     <value>Twórz protokół za pomocą AI po nagraniu</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>Wybierz AI i model dla protokołu w sekcji „Spotkania (protokół)” na karcie „AI”. Wysyłany jest tylko tekst transkrypcji (gdy silnikiem transkrypcji jest Gemini, audio też jest wysyłane do Google). Szablon protokołu wybierz w notatkach ze spotkań.</value>
+    <value>Wybierz AI i model dla protokołu w pozycji „Protokół” na karcie „AI”. Wysyłany jest tylko tekst transkrypcji (gdy silnikiem transkrypcji jest Gemini, audio też jest wysyłane do Google). Szablon protokołu wybierz w notatkach ze spotkań.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Przechowywanie</value>
@@ -862,13 +868,13 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
     <value>{0} ({1}): {2} s</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>Nagrane audio spotkania jest dzielone na 5-minutowe fragmenty i wysyłane do Gemini (z użyciem poświadczeń Gemini z karty AI i modelu Gemini dla dyktowania). Pamiętaj, że Twoje audio jest wysyłane do Google.</value>
+    <value>Nagrane audio spotkania jest dzielone na 5-minutowe fragmenty i wysyłane do Gemini (z użyciem poświadczeń Gemini z tej karty i modelu transkrypcji wybranego poniżej). Pamiętaj, że Twoje audio jest wysyłane do Google.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Używa modelu Whisper wybranego na karcie „Ogólne” ({0}).</value>
+    <value>Używa modelu Whisper wybranego poniżej ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Nie został jeszcze pobrany (pobierz go na karcie „Ogólne”).</value>
+    <value> Nie został jeszcze pobrany (pobierz go poniżej).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Wybierz miejsce zapisu spotkań</value>

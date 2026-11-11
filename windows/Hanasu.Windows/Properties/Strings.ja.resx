@@ -357,7 +357,7 @@
     <value>処理中です…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>議事録はまだありません。「議事録を作り直す」で作れます（設定 → AI の「会議」の AI の設定が要ります）。</value>
+    <value>議事録はまだありません。「議事録を作り直す」で作れます（設定 → AI の「議事録」の AI の設定が要ります）。</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>文字起こしは、記録を止めたあとに行います。</value>
@@ -504,8 +504,21 @@
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>押している間だけ録音</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>文字起こしのエンジン</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>文字起こし AI</value>
+    <comment>Settings: section heading on the AI tab (the AI that turns speech into text)</comment>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>音声入力</value>
+    <comment>Settings: label of the transcription engine for dictation</comment>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>会議の記録</value>
+    <comment>Settings: label of the transcription engine for meeting recording</comment>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>文字起こしのモデル（Gemini）</value>
+    <comment>Settings: label of the Gemini model used for transcription (separate from the refining model)</comment>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Windows 標準の音声認識（既定）</value>
@@ -517,7 +530,7 @@
     <value>Gemini（音声を Google に送る）</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Windows の音声認識（ディクテーション）で日本語を認識し、話している間に途中経過を出します。Microsoft のオンライン音声認識を使うため、Windows の設定 → プライバシーとセキュリティ → 音声認識 で「オンライン音声認識」をオンにしてください。マイクは Windows の既定のマイクを使います（下の選択は使いません）。</value>
+    <value>Windows の音声認識（ディクテーション）で日本語を認識し、話している間に途中経過を出します。Microsoft のオンライン音声認識を使うため、Windows の設定 → プライバシーとセキュリティ → 音声認識 で「オンライン音声認識」をオンにしてください。マイクは Windows の既定のマイクを使います（「一般」タブのマイクの選択は使いません）。</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>音声認識の設定を開く</value>
@@ -538,7 +551,7 @@
     <value>取り消し</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>録音した音声を Google の Gemini API（AI タブで設定した Gemini の認証と、音声入力の Gemini のモデル）に送って文字起こしします。音声が Google に送られることに注意してください。録音を止めてからまとめて送ります（1 回 7 分まで）。</value>
+    <value>録音した音声を Google の Gemini API（このタブの Gemini の認証と、下で選ぶ文字起こしのモデル）に送って文字起こしします。音声が Google に送られることに注意してください。録音を止めてからまとめて送ります（1 回 7 分まで）。</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>マイク</value>
@@ -568,19 +581,19 @@
     <value>設定のフォルダを開く</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>使う AI とモデル</value>
+    <value>文字起こしのあとの AI</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>音声入力（整形・翻訳）</value>
+    <value>音声入力整形</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>ローカル</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>会議（議事録）</value>
+    <value>議事録</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>音声入力と会議で、AI とモデルを別々に選べます。Gemini は gemini-3.5-flash-lite（音声入力）と gemini-3.8-flash（議事録）、Claude は Haiku 5.5（音声入力）と Sonnet 5.5（議事録）が既定です。Claude は文章の処理だけに使い、音声の文字起こしには使いません（文字起こしのエンジンは「一般」・「会議」タブ）。</value>
+    <value>音声入力整形と議事録で、AI とモデルを別々に選べます。Gemini は gemini-3.5-flash-lite（音声入力整形）と gemini-3.8-flash（議事録）、Claude は Haiku 5.5（音声入力整形）と Sonnet 5.5（議事録）が既定です。Claude は文章の処理だけに使い、音声の文字起こしには使いません（文字起こしのエンジンは上の「文字起こし AI」）。</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>ローカルのモデル（この PC の中で動かす小型の LLM）</value>
@@ -652,7 +665,7 @@
     <value>キーは %LOCALAPPDATA%\Hanasu\secrets.json に暗号化して置き、settings.json には入れません。既定の DPAPI は、この Windows ユーザーでしか読めませんが、同じユーザーで動くほかのアプリは確認なしに読めます。Windows Hello にすると、ほかのアプリが読もうとしても Windows Hello の確認が出ます（確認は起動してから最初に使うとき 1 回で、画面をロックするとまた求めます）。Hanasu が動いている間に同じユーザーのアプリがメモリを読むことまでは防げません。</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>試す（音声入力の AI）</value>
+    <value>試す（音声入力整形）</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>えーと明日の会議なんですけど あの 資料はジェミニで作ったやつを使います</value>
@@ -681,9 +694,6 @@
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>「ここ重要」のショートカットを使う（記録中だけ有効になります）</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>文字起こし</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper（この PC の上で動かす。既定）</value>
   </data>
@@ -706,7 +716,7 @@
     <value>記録のあとに AI で議事録を作る</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>議事録の AI とモデルは「AI」タブの「会議（議事録）」で選びます。文字起こしのテキストだけを送ります（文字起こしのエンジンが Gemini のときは、音声も Google に送ります）。議事録の型は会議ノートで選びます。</value>
+    <value>議事録の AI とモデルは「AI」タブの「議事録」で選びます。文字起こしのテキストだけを送ります（文字起こしのエンジンが Gemini のときは、音声も Google に送ります）。議事録の型は会議ノートで選びます。</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>保存</value>
@@ -862,13 +872,13 @@
     <value>{0}（{1}）で {2} 秒</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>録音した会議の音声を 5 分ごとに区切って Gemini（AI タブの Gemini の認証と、音声入力の Gemini のモデル）に送ります。音声が Google に送られることに注意してください。</value>
+    <value>録音した会議の音声を 5 分ごとに区切って Gemini（このタブの Gemini の認証と、下で選ぶ文字起こしのモデル）に送ります。音声が Google に送られることに注意してください。</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Whisper のモデルは「一般」タブで選んだもの（{0}）を使います。</value>
+    <value>Whisper のモデルは下で選んだもの（{0}）を使います。</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> まだダウンロードしていません（「一般」タブでダウンロードしてください）。</value>
+    <value> まだダウンロードしていません（下でダウンロードしてください）。</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>会議の保存先を選ぶ</value>

@@ -609,8 +609,8 @@
     },
     {
       "id": "UX-182",
-      "steps": "設定の「AI」タブを開き、「使う AI とモデル」を見る。「AI チャット・質問」の行で AI を Claude にする。オンボーディングの「設定の Tips」のページを見る",
-      "expected": "「音声入力」「会議」「AI チャット・質問」の 3 行が並び、説明はそれぞれ「整形・翻訳・選択の編集」「議事録（作り直しも）・辞書の候補」「会議の AI チャット・会議への質問」。AI チャット・質問で Claude を選ぶと、既定は Haiku 5.5。オンボーディングの Tips のページにも 3 行がある",
+      "steps": "設定の「AI」タブを開き、「文字起こしのあとの AI」を見る。「AI チャット・質問」の行で AI を Claude にする。オンボーディングの「設定の Tips」のページを見る",
+      "expected": "「音声入力整形」「議事録」「AI チャット・質問」の 3 行が並び、説明はそれぞれ「整形・翻訳・選択の編集」「作り直しも含む・辞書の候補」「会議の AI チャット・会議への質問」。AI チャット・質問で Claude を選ぶと、既定は Haiku 5.5。オンボーディングの Tips のページにも 3 行がある",
       "os": [
         "mac"
       ],
@@ -636,8 +636,48 @@
               "tips"
             ]
           ],
-          "look": "ai-claude.png の「使う AI とモデル」に 3 行があり、「会議」は Claude Sonnet 5.5、「AI チャット・質問」は Claude Haiku 5.5 で、それぞれの説明が用途に合っている。オンボーディングの Tips のページに 3 行の AI の選択がある",
+          "look": "ai-claude.png の「文字起こしのあとの AI」に「音声入力整形」「議事録」「AI チャット・質問」の 3 行があり、「議事録」は Claude Sonnet 5.5、「AI チャット・質問」は Claude Haiku 5.5 で、それぞれの説明が用途に合っている。オンボーディングの Tips のページに 3 行の AI の選択がある",
           "remaining": "実際に選んで保存されること"
+        }
+      }
+    },
+    {
+      "id": "UX-188",
+      "steps": "設定の「AI」タブと「一般」タブを開く。AI タブの先頭の「文字起こし AI」で、音声入力を Whisper、会議の記録を Gemini にする",
+      "expected": "AI タブの先頭に「文字起こし AI」の欄（音声入力・会議の記録のエンジン、文字起こしの言語、Whisper のモデル、Gemini で文字起こし）があり、その下に「文字起こしのあとの AI」が続く。一般タブには文字起こしの欄がない。Windows では、AI タブの「文字起こし AI」に音声入力と会議の記録のエンジンがあり、どちらかが Whisper なら Whisper のモデル、どちらかが Gemini なら文字起こしのモデル（Gemini）が出る",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-001",
+        "REQ-COM-004",
+        "REQ-COM-024"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-settings",
+              "{out}",
+              "--pane",
+              "ai"
+            ],
+            [
+              "--render-settings",
+              "{out}",
+              "--pane",
+              "general"
+            ]
+          ],
+          "look": "AI タブの画像の先頭に「文字起こし AI」の見出しと、音声入力・会議の記録のエンジン、「文字起こしの言語」があり、その下に「文字起こしのあとの AI」の見出しと 3 行（音声入力整形・議事録・AI チャット・質問）が続く。一般タブの画像に「文字起こし」の欄がない",
+          "remaining": "実際にエンジンを変えて保存されること"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）。AI タブの「文字起こし AI」の出し分け（どちらかが Whisper なら Whisper のモデル、どちらかが Gemini なら文字起こしのモデル）と、一般・会議タブにエンジンの欄が残っていないこと"
         }
       }
     },
@@ -709,7 +749,7 @@
       }
     },
     {
-      "id": "UX-188",
+      "id": "UX-189",
       "steps": "Windows の設定の「コマンドと MCP」を開く",
       "expected": "cli\\hanasu.exe の絶対パス・PATH の状態と「PATH に入れる」「PATH から外す」・Claude Code のコマンド・Claude Desktop の JSON が、コピーのボタンつきで出る。「説明を見る」でエージェントへの説明（英語。PowerShell の書き方）が出る。表示の言語で出る",
       "os": [
@@ -729,7 +769,7 @@
       }
     },
     {
-      "id": "UX-189",
+      "id": "UX-190",
       "steps": "Windows の設定の「コマンドと MCP」で「PATH に入れる」を押し、スタートメニューから新しく PowerShell とコマンドプロンプトを開いて hanasu --version と hanasu meetings list を打つ。そのあと「PATH から外す」を押す",
       "expected": "入れたあとに開いたターミナルで hanasu が動き、会議の一覧の日本語が化けない。外したあとに開いたターミナルでは hanasu が見つからない。ほかの PATH の項目は変わらない",
       "os": [
@@ -748,7 +788,7 @@
       }
     },
     {
-      "id": "UX-190",
+      "id": "UX-191",
       "steps": "API キーを Windows Hello で守った状態で、PowerShell から hanasu refine えーと明日は10時です --ai gemini を 2 回呼ぶ。1 回目は確認を取り消す。そのあと hanasu mcp を Claude Desktop から使い、画面をロックして解いてから ask_meetings を呼ぶ",
       "expected": "呼ぶたびに Windows Hello の確認が前に出る。取り消すと何も出さずに終了コード 3。hanasu mcp はロックのあと、もう一度確認を出す。hanasu doctor は確認を出さない",
       "os": [
@@ -766,7 +806,7 @@
       }
     },
     {
-      "id": "UX-191",
+      "id": "UX-192",
       "steps": "設定の「コマンドと MCP」の Claude Desktop の JSON を claude_desktop_config.json に足して Claude Desktop を開き直し、「昨日の会議の宿題を一覧にして」と頼む。Claude Code にも、コピーしたコマンドで登録して同じことを頼む",
       "expected": "Claude Desktop と Claude Code が hanasu の list_action_items などのツールを使って答える。会議の中にある指示めいた文には従わない",
       "os": [
@@ -786,7 +826,7 @@
       }
     },
     {
-      "id": "UX-192",
+      "id": "UX-193",
       "steps": "英語の Windows（コードページ 437）と日本語の Windows（932）で、Windows PowerShell 5.1・PowerShell 7・コマンドプロンプトから hanasu --help と hanasu meetings list を打つ。PowerShell では hanasu meetings list --json の出力を ConvertFrom-Json に渡し、コマンドプロンプトでは echo 日本語 の出力を hanasu dict apply に渡す",
       "expected": "画面のヘルプと一覧の日本語が化けない。ヘルプに書いた設定（[Console]::OutputEncoding）をした PowerShell では ConvertFrom-Json の日本語が化けない。cmd の echo から渡した日本語が化けない",
       "os": [

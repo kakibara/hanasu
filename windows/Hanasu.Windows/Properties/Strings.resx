@@ -471,7 +471,7 @@ Original: {2}</value>
     <comment>Meeting window placeholder</comment>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>No minutes yet. You can create them with "Regenerate Minutes" (requires the AI settings for "Meetings" in Settings → AI).</value>
+    <value>No minutes yet. You can create them with "Regenerate Minutes" (requires the AI settings for "Minutes" in Settings → AI).</value>
     <comment>Meeting window placeholder</comment>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
@@ -666,9 +666,21 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <value>Record only while held down</value>
     <comment>Settings: radio button</comment>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Transcription engine</value>
-    <comment>Settings: section heading</comment>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>Transcription AI</value>
+    <comment>Settings: section heading on the AI tab (the AI that turns speech into text)</comment>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Dictation</value>
+    <comment>Settings: label of the transcription engine for dictation</comment>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Meeting recording</value>
+    <comment>Settings: label of the transcription engine for meeting recording</comment>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Transcription model (Gemini)</value>
+    <comment>Settings: label of the Gemini model used for transcription (separate from the refining model)</comment>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Windows speech recognition (default)</value>
@@ -683,7 +695,7 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <comment>Settings: engine list item</comment>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Recognizes speech with Windows speech recognition (dictation) and shows partial results while you speak. It uses Microsoft's online speech recognition, so turn on "Online speech recognition" in Windows Settings → Privacy &amp; security → Speech. It uses the Windows default microphone (the selection below isn't used).</value>
+    <value>Recognizes speech with Windows speech recognition (dictation) and shows partial results while you speak. It uses Microsoft's online speech recognition, so turn on "Online speech recognition" in Windows Settings → Privacy &amp; security → Speech. It uses the Windows default microphone (the microphone selection on the "General" tab isn't used).</value>
     <comment>Settings: note; use the names shown in Windows Settings</comment>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
@@ -711,7 +723,7 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <comment>Settings: button: cancel the download</comment>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Sends the recorded audio to Google's Gemini API (using the Gemini credentials set on the AI tab and the Gemini model for dictation) for transcription. Note that your audio is sent to Google. It's sent after you stop recording (up to 7 minutes at a time).</value>
+    <value>Sends the recorded audio to Google's Gemini API (using the Gemini credentials on this tab and the transcription model chosen below) for transcription. Note that your audio is sent to Google. It's sent after you stop recording (up to 7 minutes at a time).</value>
     <comment>Settings: note</comment>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
@@ -751,11 +763,11 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <comment>Settings: button</comment>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>AI and models</value>
+    <value>AI after transcription</value>
     <comment>Settings: section heading</comment>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Dictation (refining, translation)</value>
+    <value>Dictation Refinement</value>
     <comment>Settings: row label</comment>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
@@ -763,11 +775,11 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <comment>Settings: AI list item: local LLM on this PC</comment>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Meetings (minutes)</value>
+    <value>Minutes</value>
     <comment>Settings: row label</comment>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>You can choose the AI and model separately for dictation and meetings. The defaults are gemini-3.5-flash-lite (dictation) and gemini-3.8-flash (minutes) for Gemini, and Haiku 5.5 (dictation) and Sonnet 5.5 (minutes) for Claude. Claude is used only for processing text, not for transcribing audio (the transcription engine is on the "General" and "Meetings" tabs).</value>
+    <value>You can choose the AI and model separately for dictation refinement and minutes. The defaults are gemini-3.5-flash-lite (dictation refinement) and gemini-3.8-flash (minutes) for Gemini, and Haiku 5.5 (dictation refinement) and Sonnet 5.5 (minutes) for Claude. Claude is used only for processing text, not for transcribing audio (the transcription engine is under "Transcription AI" above).</value>
     <comment>Settings: note</comment>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
@@ -863,7 +875,7 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <comment>Settings: note; keep the file paths</comment>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Try it (dictation AI)</value>
+    <value>Try it (Dictation Refinement)</value>
     <comment>Settings: section heading</comment>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
@@ -902,10 +914,6 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <value>Use the "Important" shortcut (active only while recording)</value>
     <comment>Settings: checkbox</comment>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Transcription</value>
-    <comment>Settings: section heading</comment>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (runs on this PC; default)</value>
     <comment>Settings: engine list item</comment>
@@ -935,7 +943,7 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <comment>Settings: checkbox</comment>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>Choose the AI and model for minutes under "Meetings (minutes)" on the "AI" tab. Only the transcript text is sent (when the transcription engine is Gemini, the audio is also sent to Google). Choose the minutes template in Meeting Notes.</value>
+    <value>Choose the AI and model for minutes under "Minutes" on the "AI" tab. Only the transcript text is sent (when the transcription engine is Gemini, the audio is also sent to Google). Choose the minutes template in Meeting Notes.</value>
     <comment>Settings: note</comment>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
@@ -1143,15 +1151,15 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <comment>Settings: status. {0} = AI name, {1} = model, {2} = seconds</comment>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>The recorded meeting audio is split into 5-minute pieces and sent to Gemini (using the Gemini credentials on the AI tab and the Gemini model for dictation). Note that your audio is sent to Google.</value>
+    <value>The recorded meeting audio is split into 5-minute pieces and sent to Gemini (using the Gemini credentials on this tab and the transcription model chosen below). Note that your audio is sent to Google.</value>
     <comment>Settings: note</comment>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Uses the Whisper model selected on the "General" tab ({0}).</value>
+    <value>Uses the Whisper model selected below ({0}).</value>
     <comment>Settings: note. {0} = model ID</comment>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> It hasn't been downloaded yet (download it on the "General" tab).</value>
+    <value> It hasn't been downloaded yet (download it below).</value>
     <comment>Settings: note appended to Settings_MeetingEngine_WhisperNote (starts with a space)</comment>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">

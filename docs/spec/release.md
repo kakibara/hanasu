@@ -99,12 +99,12 @@
   - `hanasu mcp` を動かしたまま「アップデート」を選ぶと、入れ替わって新しい版が起動する（前は失敗して古い版のまま）。「あとで」なら、今の版のまま動く。
   - 動いている `hanasu` がなければ、確認の文は増えない。
   - 終わらせられない `hanasu`（管理者として動かしたもの）があるときや、ターミナルの作業フォルダが `cli` の中にあってフォルダの名前を変えられないときは、今までどおり古い版のまま起動し直し、起動したアプリが「`hanasu` を終わらせ、`cli` のフォルダから出てから、もう一度アップデートしてください」の旨を知らせる（黙って失敗しない）。
-  - Claude Desktop と Claude Code が実際にどうなるか（自動で戻るか、再起動が要るか）は、実機で確かめて `docs/verification/` に記録する（UX-193）。
+  - Claude Desktop と Claude Code が実際にどうなるか（自動で戻るか、再起動が要るか）は、実機で確かめて `docs/verification/` に記録する（UX-194）。
 - 出典: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（W5、決定 6）
 - 関係する要件: REQ-REL-010, REQ-REL-011, REQ-COM-189
 - 対象: Windows
 - 実装の場所: `UpdateService.PromptAndInstallAsync`・`ReportPreviousAttempt`・`StartSwapScript`（`windows/Hanasu.Windows/Services/UpdateService.cs`）、`UpdatePromptWindow`、`RunningCommands`・`UpdateSwapScript`（`windows/Hanasu.Core/Update/`）
-- 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`CommandPlatformTests` の数え方とスクリプト）。実際の入れ替えと MCP のクライアントの振る舞いは実機（UX-193）
+- 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`CommandPlatformTests` の数え方とスクリプト）。実際の入れ替えと MCP のクライアントの振る舞いは実機（UX-194）
 
 ---
 

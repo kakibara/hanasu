@@ -21,7 +21,7 @@ namespace Hanasu.Windows.Views;
 
 /// <summary>
 /// 設定画面（一般 / AI / 会議 / 履歴 / 辞書・ルール）。変更はその場で SettingsService に書き、すぐ保存する（Mac 版と同じ）。
-/// AI タブでは、音声入力と会議の AI とモデルを別々に選び（REQ-COM-024）、Gemini の認証と Claude の API キーを設定する。
+/// AI タブでは、先頭の「文字起こし AI」で音声入力と会議の記録のエンジンを選び（REQ-COM-001・DEC-COM-173）、音声入力整形と議事録の AI とモデルを別々に選び（REQ-COM-024）、Gemini の認証と Claude の API キーを設定する。
 /// API キーは入力欄をマスクし、保存したあとは末尾 4 文字だけを見せる（REQ-COM-021）。
 /// </summary>
 // 要件: REQ-COM-020, REQ-COM-021, REQ-COM-024
@@ -112,6 +112,8 @@ public partial class SettingsWindow : Window
         VertexLocationBox.Text = s.VertexLocation;
         ModelCombo.ItemsSource = AppSettings.SuggestedModels;
         ModelCombo.Text = s.Model;
+        GeminiTranscriptionModelCombo.ItemsSource = AppSettings.SuggestedModels;
+        GeminiTranscriptionModelCombo.Text = s.GeminiTranscriptionModel;
         ClaudeModelCombo.ItemsSource = ClaudeModels.All;
         ClaudeModelCombo.DisplayMemberPath = nameof(ClaudeModelInfo.Label);
         ClaudeModelCombo.SelectedItem = ClaudeModels.Find(s.ClaudeModel);
@@ -155,7 +157,7 @@ public partial class SettingsWindow : Window
         DictionaryBox.Text = s.DictionaryText;
         ExtraInstructionsBox.Text = s.ExtraInstructions;
 
-        UpdateEnginePanels(s.Engine);
+        UpdateEnginePanels();
         UpdateAuthPanels(s.AuthMode);
         UpdateAiPanels();
         UpdateApiKeyStatus();
@@ -221,17 +223,25 @@ public partial class SettingsWindow : Window
     {
         if (EngineCombo.SelectedItem is not ComboBoxItem { Tag: string tag } || !Enum.TryParse<TranscriptionEngine>(tag, out var engine)) return;
         Save(s => s.Engine = engine);
-        UpdateEnginePanels(engine);
+        UpdateEnginePanels();
         UpdateAiPanels();
         // Whisper を選んだ時点で、モデルがなければダウンロードを始める
         if (!loading && engine == TranscriptionEngine.Whisper) StartWhisperDownloadIfNeeded();
     }
 
-    private void UpdateEnginePanels(TranscriptionEngine engine)
+    // 設計判断: DEC-COM-173
+    /// <summary>
+    /// 「文字起こし AI」の欄の出し分け。Windows 標準と Gemini の注記は音声入力のエンジンで、
+    /// Whisper のモデルと Gemini の文字起こしのモデルは、音声入力か会議の記録のどちらかが使っていれば出す（Mac と同じ）
+    /// </summary>
+    private void UpdateEnginePanels()
     {
+        var engine = settings.Current.Engine;
+        var engines = new[] { engine, settings.Current.MeetingEngine };
         WindowsEnginePanel.Visibility = engine == TranscriptionEngine.Windows ? Visibility.Visible : Visibility.Collapsed;
-        WhisperEnginePanel.Visibility = engine == TranscriptionEngine.Whisper ? Visibility.Visible : Visibility.Collapsed;
+        WhisperEnginePanel.Visibility = engines.Contains(TranscriptionEngine.Whisper) ? Visibility.Visible : Visibility.Collapsed;
         GeminiEnginePanel.Visibility = engine == TranscriptionEngine.Gemini ? Visibility.Visible : Visibility.Collapsed;
+        GeminiTranscriptionModelPanel.Visibility = engines.Contains(TranscriptionEngine.Gemini) ? Visibility.Visible : Visibility.Collapsed;
         MicrophoneCombo.IsEnabled = engine != TranscriptionEngine.Windows;
         MicrophoneNote.Text = engine == TranscriptionEngine.Windows
             ? Strings.Settings_MicNote_Windows
@@ -387,6 +397,8 @@ public partial class SettingsWindow : Window
             WhisperModelStatus.Failed => string.Format(Strings.Settings_DownloadFailed, state.Error),
             _ => Strings.Settings_NotDownloaded,
         };
+        // 会議の記録の注記も同じ画面にあり、Whisper のモデルの名前とダウンロードの状態を出すので合わせる（DEC-COM-173）
+        UpdateMeetingEngineNote(settings.Current.MeetingEngine);
     }
 
     // MARK: - AI（音声入力と会議で別々に選ぶ）
@@ -762,6 +774,19 @@ public partial class SettingsWindow : Window
         if (ModelCombo.SelectedItem is string model) Save(s => s.Model = model);
     }
 
+    // 要件: REQ-COM-001
+    // 設計判断: DEC-COM-173（Gemini の文字起こしのモデルは、整形のモデルとは別に持つ）
+    private void OnGeminiTranscriptionModelChanged(object sender, RoutedEventArgs e)
+    {
+        var model = GeminiTranscriptionModelCombo.Text.Trim();
+        if (model.Length > 0) Save(s => s.GeminiTranscriptionModel = model);
+    }
+
+    private void OnGeminiTranscriptionModelSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (GeminiTranscriptionModelCombo.SelectedItem is string model) Save(s => s.GeminiTranscriptionModel = model);
+    }
+
     private void OnSendAppNameChanged(object sender, RoutedEventArgs e) => Save(s => s.SendAppName = SendAppNameCheck.IsChecked == true);
 
     private void OnTrialRefine(object sender, RoutedEventArgs e) => _ = RunTrialAsync(DictationMode.Refine);
@@ -902,6 +927,7 @@ public partial class SettingsWindow : Window
         if (MeetingEngineCombo.SelectedItem is not ComboBoxItem { Tag: string tag } || !Enum.TryParse<TranscriptionEngine>(tag, out var engine)) return;
         Save(s => s.MeetingEngine = engine);
         UpdateMeetingEngineNote(engine);
+        UpdateEnginePanels();
         UpdateAiPanels();
         if (!loading && engine == TranscriptionEngine.Whisper) StartWhisperDownloadIfNeeded();
     }

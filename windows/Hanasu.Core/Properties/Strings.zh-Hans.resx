@@ -634,7 +634,7 @@
     <value>“{0}”在上面的行中也出现了，将使用上面的行。</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Whisper 模型（{0}）尚未下载。请在菜单 → 设置 → 常规中下载。</value>
+    <value>Whisper 模型（{0}）尚未下载。请在菜单 → 设置 → AI 的“转录 AI”中下载。</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>无法运行 Whisper。请安装 Microsoft Visual C++ 可再发行程序包（2015–2022，x64）后重试。（{0}）</value>
