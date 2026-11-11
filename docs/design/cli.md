@@ -90,4 +90,4 @@ Mac と同じコマンド・同じ JSON・同じ終了コード。中身は `win
 - アプリの保存: `SharedFile`（DEC-COM-194）で、`hanasu` が読んでいる間も置き換えが失敗しない。
 - 設定の「コマンドと MCP」: `windows/Hanasu.Windows/Views/SettingsWindow.CommandLine.cs`。PATH は `UserPath`（`HKCU\Environment`）と `CommandPath`（DEC-COM-199）。
 - 自動アップデート: 動いている `hanasu` を `RunningCommands` で数えて確認に出し、`UpdateSwapScript` が名前を変える直前に終わらせる（REQ-REL-013・DEC-REL-031）。
-- 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests` は `common/testdata/cli` の 29 件で Mac の期待する出力と比べる。`CommandTests`・`CommandPlatformTests`）。CI（`windows.yml`）は publish した `cli\hanasu.exe` を動かし（共有の会議・MCP・コードページ 932 と 437 のパイプとファイル）、架空の会議 1,000 件で速さを測る。画面と Windows Hello・PATH・アップデート・MCP のクライアントは実機（UX-187〜192）。
+- 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests` は `common/testdata/cli` の 29 件で Mac の期待する出力と比べる。`CommandTests`・`CommandPlatformTests`）。CI（`windows.yml`）は publish した `cli\hanasu.exe` を動かし（共有の会議・MCP・コードページ 932 と 437 のパイプとファイル）、架空の会議 1,000 件で速さを測る。画面と Windows Hello・PATH・アップデート・MCP のクライアントは実機（UX-188〜193）。

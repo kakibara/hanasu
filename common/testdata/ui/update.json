@@ -86,7 +86,7 @@
       }
     },
     {
-      "id": "UX-192",
+      "id": "UX-193",
       "steps": "Claude Desktop から hanasu mcp を動かしたまま、Windows のアプリでアップデートの確認を出し、「アップデート」を押す。別の回では、管理者として開いた PowerShell で hanasu mcp を動かしたまま同じことをする",
       "expected": "確認に「動いている hanasu（1 個）を終わらせてから入れ替えます」と出て、入れ替わって新しい版が起動する。管理者の hanasu があると入れ替えられず、古い版のまま起動し直して、hanasu を終わらせてからもう一度アップデートする旨を知らせる。Claude Desktop の Hanasu のツールが使えなくなったら、再起動で戻る（結果は docs/verification/ に残す）",
       "os": [
