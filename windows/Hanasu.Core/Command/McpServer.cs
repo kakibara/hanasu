@@ -421,7 +421,7 @@ public sealed class McpTools(string directory, string? ai, string? model, Comman
     private JsonObject ListMeetings(JsonObject arguments)
     {
         var period = Period(arguments);
-        var loaded = MeetingsCommand.Load(directory);
+        var loaded = MeetingsCommand.Load(directory, includeUtterances: false);
         var meetings = loaded.Meetings.Where(m => period.Contains(m.StartedAt)).ToList();
         var json = Page(meetings, arguments, 20, 100, "meetings", m => MeetingsCommand.Summary(m, context));
         json["unreadableMeetingCount"] = loaded.Unreadable.Count;
@@ -450,7 +450,7 @@ public sealed class McpTools(string directory, string? ai, string? model, Comman
         var to = Number(arguments, "transcriptTo") ?? double.PositiveInfinity;
         if (from >= to) throw new ArgumentProblem("transcriptFrom must be less than transcriptTo.");
 
-        var meeting = MeetingsCommand.Resolve(reference, MeetingsCommand.Load(directory), context);
+        var meeting = MeetingsCommand.ResolveFull(reference, MeetingsCommand.Load(directory, includeUtterances: false), context);
         var json = MeetingsCommand.MeetingJson(meeting, include.Contains("minutes"), null, include.Contains("notes"), include.Contains("actionItems"), context);
         if (meeting.Minutes is { } minutes && include.Contains("minutes") && TextElements.Count(minutes) > MaxCharacters)
         {
@@ -519,7 +519,7 @@ public sealed class McpTools(string directory, string? ai, string? model, Comman
     private JsonObject ListActionItems(JsonObject arguments)
     {
         var period = Period(arguments);
-        var loaded = MeetingsCommand.Load(directory);
+        var loaded = MeetingsCommand.Load(directory, includeUtterances: false);
         var items = MeetingsCommand.ActionItems(loaded.Meetings, period, String(arguments, "owner"));
         var json = Page(items, arguments, 50, 200, "actionItems", e => MeetingsCommand.ActionItemJson(e, context));
         json["unreadableMeetingCount"] = loaded.Unreadable.Count;

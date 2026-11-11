@@ -12,6 +12,8 @@ namespace Hanasu.Core.Meetings
         /// <summary>議事録に使う発言だけを残した写し（hanasu コマンドで、除いた発言を外に出さないため）</summary>
         public Meeting WithUsedUtterancesOnly()
         {
+            // 範囲・除外・オフレコを何も設定していなければ、すべての発言を使うので写さない
+            if (!HasMinutesSelection) return this;
             var copy = (Meeting)MemberwiseClone();
             copy.Utterances = UsedUtterances.ToList();
             return copy;

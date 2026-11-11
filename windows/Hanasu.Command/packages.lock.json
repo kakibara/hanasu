@@ -69,6 +69,19 @@
         }
       }
     },
+    "net8.0-windows10.0.19041/osx-arm64": {
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Direct",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
+      },
+      "System.Text.Encodings.Web": {
+        "type": "Transitive",
+        "resolved": "10.0.6",
+        "contentHash": "o7zWD39jHesxpHyMSWAf+CjM+NaEIV49IJ8tasAsnaVkRcLP33+5aobgxeKLJRLQQfeciO7BbW5vXCUMzPoU6w=="
+      }
+    },
     "net8.0-windows10.0.19041/win-arm64": {
       "Microsoft.Win32.SystemEvents": {
         "type": "Direct",

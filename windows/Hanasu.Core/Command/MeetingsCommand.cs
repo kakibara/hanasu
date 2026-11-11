@@ -54,7 +54,7 @@ public static class MeetingsCommand
         if (CommandHelp.WantsHelp(args, "meetings", context)) return HanasuExit.Ok;
         args.NoPositionals();
         var period = CommandPeriod.From(args, context);
-        var loaded = Load(args, context);
+        var loaded = Load(args, context, includeUtterances: false);
         IEnumerable<Meeting> meetings = loaded.Meetings.Where(m => period.Contains(m.StartedAt));
         if (args.PositiveInt("--limit") is { } limit) meetings = meetings.Take(limit);
         var list = meetings.ToList();
@@ -79,7 +79,7 @@ public static class MeetingsCommand
         var args = CommandArguments.Parse(arguments, [.. CommonFlags, .. parts], CommonOptions);
         if (CommandHelp.WantsHelp(args, "meetings", context)) return HanasuExit.Ok;
         if (args.Positionals.Count != 1) throw new CommandException(HanasuExit.Usage, Strings.Cmd_SpecifyOneMeeting);
-        var meeting = Resolve(args.Positionals[0], Load(args, context), context);
+        var meeting = ResolveFull(args.Positionals[0], Load(args, context, includeUtterances: false), context);
         var all = args.Has("--all");
         var chosen = parts.Where(args.Has).ToList();
         // 何も選ばなければ議事録。--all ならすべて
@@ -170,7 +170,7 @@ public static class MeetingsCommand
         if (CommandHelp.WantsHelp(args, "actions", context)) return HanasuExit.Ok;
         args.NoPositionals();
         var period = CommandPeriod.From(args, context);
-        var loaded = Load(args, context);
+        var loaded = Load(args, context, includeUtterances: false);
         IEnumerable<(Meeting Meeting, ActionItem Item)> items = ActionItems(loaded.Meetings, period, args.Value("--owner"));
         if (args.PositiveInt("--limit") is { } limit) items = items.Take(limit);
         var list = items.ToList();
@@ -340,19 +340,20 @@ public static class MeetingsCommand
 
     // 要件: REQ-COM-185
     /// <summary>会議をすべて読む（新しい順）。文の出力では、読めない会議があればその数を stderr に出す</summary>
-    public static LoadedMeetings Load(CommandArguments args, CommandContext context)
+    public static LoadedMeetings Load(CommandArguments args, CommandContext context, bool includeUtterances = true)
     {
-        var loaded = Load(MeetingsDirectory(args, context));
+        var loaded = Load(MeetingsDirectory(args, context), includeUtterances);
         if (!args.Json) loaded.WarnIfUnreadable(context.Console);
         return loaded;
     }
 
     /// <summary>フォルダを読む権限がなければ、終了コード 5 と、確かめることを出す</summary>
-    public static LoadedMeetings Load(string directory)
+    /// <param name="includeUtterances">false なら発言を読み飛ばす（一覧・アクションアイテム・会議の指定。DEC-MTG-123）</param>
+    public static LoadedMeetings Load(string directory, bool includeUtterances = true)
     {
         try
         {
-            var report = new MeetingStore(directory).LoadAllReporting();
+            var report = new MeetingStore(directory).LoadAllReporting(includeUtterances);
             return new LoadedMeetings(report.Meetings, report.Unreadable, directory);
         }
         catch (Exception e) when (e is IOException or UnauthorizedAccessException)
@@ -375,6 +376,21 @@ public static class MeetingsCommand
             && loaded.Unreadable.Any(name => name == reference || Meeting.SlugOf(name) == reference))
         {
             throw new CommandException(HanasuExit.Denied, string.Format(Strings.Cmd_CannotReadMeeting, reference), [Strings.Cmd_UnreadableAdvice]);
+        }
+    }
+
+    /// <summary>発言を読み飛ばして読んだ会議の一覧から 1 つに決め、その会議だけを発言ごと読み直す</summary>
+    public static Meeting ResolveFull(string reference, LoadedMeetings summaries, CommandContext context)
+    {
+        var summary = Resolve(reference, summaries, context);
+        try
+        {
+            return new MeetingStore(summaries.Directory).Load(summary.Id)
+                ?? throw new CommandException(HanasuExit.Denied, string.Format(Strings.Cmd_CannotReadMeeting, reference), [Strings.Cmd_UnreadableAdvice]);
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            throw new CommandException(HanasuExit.Denied, string.Format(Strings.Cmd_CannotReadMeeting, reference), [Strings.Cmd_UnreadableAdvice, e.Message]);
         }
     }
 

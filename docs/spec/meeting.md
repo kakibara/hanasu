@@ -1566,7 +1566,7 @@
 - 関係する要件: REQ-MTG-123, REQ-MTG-120
 - 対象: Mac / Windows
 - 実装の場所: `MeetingSearchIndex.scan`、`MeetingSearchIndex.searchUnits`、`MeetingStore.loadAll(in:)`
-- Windows の実装: `MeetingStore.LoadAllReporting`（並べて読む）、`MeetingSearch.Scan`。1,000 件で 2 秒以内かを CI（windows.yml）で測る
+- Windows の実装: `MeetingStore.LoadAllReporting`（並べて読む）、`MeetingSearch.Scan`。一覧・アクションアイテム・会議の指定では発言を読み飛ばし（`MeetingJson.SummaryOptions`）、`show` は決まった 1 件だけを全部読む（`MeetingsCommand.ResolveFull`）。`cli\hanasu.exe` は ReadyToRun で、単一ファイルを圧縮しない（呼ぶたびの起動を速くする）。1,000 件で 2 秒以内かを CI（windows.yml）で測る（2026-11-11 の最初の CI では、全部を読む `meetings list` が 2.46 秒だった）
 
 ### DEC-MTG-124 `hanasu ask` で期間を指定したら、その期間の会議だけを使い、会議は索引を作らずに集める
 - 決めたこと: `--since` / `--until` を指定したときは、その期間の会議だけを使い、使える会議がなければ AI に送らずに終了コード 4 にする（`MeetingAsk.Options.period`）。質問文の語から決めた期間（`MeetingAsk.period`）は、今までどおり、期間に会議がなければ絞らない。会議を集める検索は、アプリの索引の代わりに、索引を作らずに順に調べる検索（DEC-MTG-123 の `MeetingSearchIndex.scan`）を `gatherContext` に渡す。会議は、議事録に使わない発言を除いてから渡す。

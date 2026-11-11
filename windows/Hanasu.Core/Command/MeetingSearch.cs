@@ -50,6 +50,17 @@ public static class MeetingSearch
     /// </summary>
     public static string Fold(string text)
     {
+        // 畳むものがない文（ほとんどの発言）は、小文字にするだけにする（速さのため。結果は同じ）
+        var plain = true;
+        foreach (var c in text)
+        {
+            if (c is >= '\uFF01' and <= '\uFFEE' || c == '\u3000' || c is >= '\u0300' and <= '\u036F' || c is '\u3099' or '\u309A')
+            {
+                plain = false;
+                break;
+            }
+        }
+        if (plain && text.IsNormalized(NormalizationForm.FormC)) return text.ToLowerInvariant();
         var sb = new StringBuilder(text.Length);
         foreach (var c in text)
         {
