@@ -469,15 +469,15 @@ final class UpdateDownloadDelegate: NSObject, URLSessionDownloadDelegate, @unche
         configuration.timeoutIntervalForRequest = 60
         let session = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            // タスクを作って始めるまでを鍵の中で行う（間に cancel() が session を無効にすると、無効な session にタスクを作ってしまう）
             let start = lock.withLock { () -> Bool in
                 guard !cancelled else { return false }
                 self.continuation = continuation
                 self.session = session
+                session.downloadTask(with: request).resume()
                 return true
             }
-            if start {
-                session.downloadTask(with: request).resume()
-            } else {
+            if !start {
                 session.invalidateAndCancel()
                 continuation.resume(throwing: CancellationError())
             }
@@ -979,9 +979,14 @@ final class AppUpdater {
                     Task { @MainActor in progress.received = max(progress.received, received) }
                 }
             }
-            progress.onCancel = { download.cancel() }
+            progress.onCancel = {
+                progress.cancelRequested = true
+                download.cancel()
+            }
             showProgress(progress)
             let zip = try await download.value
+            // 落とし終えた直後（続きがまだ動く前）に「中止」を押していたら、入れ替えない
+            if progress.cancelRequested { throw CancellationError() }
             progress.received = asset.size
             progress.verifying = true
             // 大きさと SHA-256 の確認・展開・署名の確認は数秒かかるので、UI のスレッドの外で行う
@@ -1066,6 +1071,8 @@ final class UpdateProgressModel: ObservableObject {
     @Published var received: Int64 = 0
     /// ダウンロードが終わり、確かめ・展開をしている（「中止」は押せない）
     @Published var verifying = false
+    /// 「中止」を押した（ダウンロードが終わった直後に押したときも、入れ替えない）
+    var cancelRequested = false
     var onCancel: () -> Void = {}
 
     init(version: String, total: Int64) {

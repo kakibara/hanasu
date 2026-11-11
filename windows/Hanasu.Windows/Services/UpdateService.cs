@@ -248,6 +248,13 @@ internal sealed class UpdateService
                     throw new UpdateException(Strings.Update_DownloadTimeout);
                 }
             }
+            // 落とし終えた直後（ハッシュの確認の間か、続きがまだ動く前）に「中止」を押していたら、入れ替えない
+            if (userCancel.IsCancellationRequested)
+            {
+                AppLog.Write($"update: download of {release.Tag} canceled by the user (after it finished)");
+                TryDeleteDirectory(staging);
+                return;
+            }
             progressWindow.SetProgress(asset.Size, asset.Size);
             progressWindow.SetPreparing();
             var staged = await Task.Run(() => UpdatePackage.Extract(zipPath, Path.Combine(staging, "pkg")));
