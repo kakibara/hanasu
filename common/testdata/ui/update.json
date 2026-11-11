@@ -47,6 +47,43 @@
           "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
         }
       }
+    },
+    {
+      "id": "UX-186",
+      "steps": "新しい版の確認で「アップデート」を選び、ダウンロードの間の窓を見る。もう一度選び、途中で「中止」を押す（Windows は閉じるボタンも）",
+      "expected": "バーが進み、「<割合>%（<落とした大きさ> / <全体の大きさ>）」が進むにつれて変わる。落とし終えると、バーが動き続ける形になり、確かめている・展開していると出て、「中止」は押せない。「中止」を押すと、何も出さずに窓が閉じ、今の版のまま",
+      "os": [
+        "mac",
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-REL-012"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-update-progress",
+              "{out}/update-progress.png",
+              "--fraction",
+              "0.42"
+            ],
+            [
+              "--render-update-progress",
+              "{out}/update-verifying.png",
+              "--verifying"
+            ]
+          ],
+          "look": "update-progress.png: バーが約 4 割まで塗られ、その下に「42%（11.4 MB / 27.1 MB）」の形の文が 1 行で切れずに出て、右下に「中止」がある。update-verifying.png: バーが不定（端に小さな印だけ）で、「ダウンロードしたファイルを確かめています…」が出て、「中止」は薄く押せない形。どちらも見出しの「Hanasu 2.3.1 をダウンロードしています…」が切れない",
+          "remaining": "実際のダウンロードでバーと文が進むこと、「中止」で止まって窓が閉じること（通信は `Hanasu --download-update [--cancel-after <秒>]` で確かめられる）"
+        },
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
     }
   ]
 }

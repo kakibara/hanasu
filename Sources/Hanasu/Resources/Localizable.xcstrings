@@ -308,7 +308,7 @@
       }
     },
     "%@\n\nリリースのページから zip をダウンロードして、手で入れ替えることもできます。" : {
-      "comment" : "AppUpdate.swift:887",
+      "comment" : "AppUpdate.swift:1019",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2042,7 +2042,7 @@
       }
     },
     "%@ に書き込めないので、入れ替えられません" : {
-      "comment" : "AppUpdate.swift:535",
+      "comment" : "AppUpdate.swift:647",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2756,7 +2756,7 @@
       }
     },
     "%@ までの記録から" : {
-      "comment" : "MeetingChatView.swift:505",
+      "comment" : "MeetingChatView.swift:507",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3470,7 +3470,7 @@
       }
     },
     "%@ 件の会議・%@ か所" : {
-      "comment" : "MeetingSearchView.swift:239",
+      "comment" : "MeetingSearchView.swift:242",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -4388,7 +4388,7 @@
       }
     },
     "%@%%（%@ / %@）" : {
-      "comment" : "LocalModelDownloadPrompt.swift:147",
+      "comment" : "AppUpdate.swift:1090, LocalModelDownloadPrompt.swift:147",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6836,7 +6836,7 @@
       }
     },
     "%@・%@ 件" : {
-      "comment" : "MeetingSearchView.swift:227",
+      "comment" : "MeetingSearchView.swift:230",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7244,7 +7244,7 @@
       }
     },
     "%@（%@）" : {
-      "comment" : "AIRouteMenu.swift:79, LocalLLMModel.swift:33, LocalLLMSettingsView.swift:15",
+      "comment" : "AIRouteMenu.swift:90, LocalLLMModel.swift:33, LocalLLMSettingsView.swift:15",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9692,7 +9692,7 @@
       }
     },
     "AI チャット" : {
-      "comment" : "MeetingChatView.swift:666, MeetingInspector.swift:33",
+      "comment" : "MeetingChatView.swift:668, MeetingInspector.swift:33",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -10100,7 +10100,7 @@
       }
     },
     "API キーが未設定" : {
-      "comment" : "AIRouteMenu.swift:18",
+      "comment" : "AIRouteMenu.swift:20",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -15914,7 +15914,7 @@
       }
     },
     "Hanasu %@ があります" : {
-      "comment" : "AppUpdate.swift:772",
+      "comment" : "AppUpdate.swift:884",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16016,7 +16016,7 @@
       }
     },
     "Hanasu %@ へのアップデートができませんでした" : {
-      "comment" : "AppUpdate.swift:681",
+      "comment" : "AppUpdate.swift:793",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16118,7 +16118,7 @@
       }
     },
     "Hanasu %@ をダウンロードしています…" : {
-      "comment" : "AppUpdate.swift:859",
+      "comment" : "AppUpdate.swift:1133",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16220,7 +16220,7 @@
       }
     },
     "Hanasu が 60 秒たっても終わらなかったので、入れ替えませんでした" : {
-      "comment" : "AppUpdate.swift:645",
+      "comment" : "AppUpdate.swift:757",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16322,7 +16322,7 @@
       }
     },
     "Hanasu が「ダウンロード」などから直接開かれているので、入れ替えられません。Hanasu.app を「アプリケーション」フォルダに移してから開き直してください" : {
-      "comment" : "AppUpdate.swift:534",
+      "comment" : "AppUpdate.swift:646",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16832,7 +16832,7 @@
       }
     },
     "Hanasu は最新です" : {
-      "comment" : "AppUpdate.swift:735",
+      "comment" : "AppUpdate.swift:847",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17648,7 +17648,7 @@
       }
     },
     "Hanasu.app として動いていないため、アップデートを確かめられません。" : {
-      "comment" : "AppUpdate.swift:717",
+      "comment" : "AppUpdate.swift:829",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17750,7 +17750,7 @@
       }
     },
     "Hanasu.app として動いていないので、入れ替えられません" : {
-      "comment" : "AppUpdate.swift:533",
+      "comment" : "AppUpdate.swift:645",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17852,7 +17852,7 @@
       }
     },
     "Hanasu.app を入れ替えられませんでした（macOS がアプリの書き換えを止めたときなど）。リリースのページから zip をダウンロードして、手で入れ替えてください。" : {
-      "comment" : "AppUpdate.swift:683",
+      "comment" : "AppUpdate.swift:795",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24278,7 +24278,7 @@
       }
     },
     "あとで" : {
-      "comment" : "AppUpdate.swift:777",
+      "comment" : "AppUpdate.swift:889",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24380,7 +24380,7 @@
       }
     },
     "いま確かめているか、アップデートの確認を出しているところです。" : {
-      "comment" : "AppUpdate.swift:713",
+      "comment" : "AppUpdate.swift:825",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25196,7 +25196,7 @@
       }
     },
     "ここまでの会話について AI に聞けます" : {
-      "comment" : "MeetingChatView.swift:312",
+      "comment" : "MeetingChatView.swift:314",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25298,7 +25298,7 @@
       }
     },
     "ここまでの会話について質問（↩ で送信）" : {
-      "comment" : "MeetingChatView.swift:359",
+      "comment" : "MeetingChatView.swift:361",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25400,7 +25400,7 @@
       }
     },
     "ここまでの記録を読んでいます…" : {
-      "comment" : "MeetingChatView.swift:257",
+      "comment" : "MeetingChatView.swift:259",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26216,7 +26216,7 @@
       }
     },
     "この Mac の外には送りません。" : {
-      "comment" : "MeetingSearchView.swift:322",
+      "comment" : "MeetingSearchView.swift:325",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26318,7 +26318,7 @@
       }
     },
     "この Mac の外には送りません。会話は保存しません。" : {
-      "comment" : "MeetingChatView.swift:415",
+      "comment" : "MeetingChatView.swift:417",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -26930,7 +26930,7 @@
       }
     },
     "この会話だけ、既定（%@）から変えています" : {
-      "comment" : "AIRouteMenu.swift:128",
+      "comment" : "AIRouteMenu.swift:139",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27236,7 +27236,7 @@
       }
     },
     "この会議について AI に聞けます" : {
-      "comment" : "MeetingChatView.swift:312",
+      "comment" : "MeetingChatView.swift:314",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -27338,7 +27338,7 @@
       }
     },
     "この会議について質問（↩ で送信）" : {
-      "comment" : "MeetingChatView.swift:359",
+      "comment" : "MeetingChatView.swift:361",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29072,7 +29072,7 @@
       }
     },
     "この版をスキップ" : {
-      "comment" : "AppUpdate.swift:778",
+      "comment" : "AppUpdate.swift:890",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -29174,7 +29174,7 @@
       }
     },
     "この答えをメモに足す（議事録で優先して取り上げます）" : {
-      "comment" : "MeetingChatView.swift:529",
+      "comment" : "MeetingChatView.swift:531",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -32132,7 +32132,7 @@
       }
     },
     "ほか %@ 件" : {
-      "comment" : "MeetingSearchView.swift:221",
+      "comment" : "MeetingSearchView.swift:224",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -32438,7 +32438,7 @@
       }
     },
     "ほかの処理が終わるのを待っています…" : {
-      "comment" : "MeetingChatView.swift:256, MeetingSearchView.swift:339",
+      "comment" : "MeetingChatView.swift:258, MeetingSearchView.swift:342",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33764,7 +33764,7 @@
       }
     },
     "もう一度" : {
-      "comment" : "LocalLLMSettingsView.swift:65, MeetingAskedQuestionPanel.swift:198, MeetingChatView.swift:271",
+      "comment" : "LocalLLMSettingsView.swift:65, MeetingAskedQuestionPanel.swift:198, MeetingChatView.swift:273",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35906,7 +35906,7 @@
       }
     },
     "アップデート" : {
-      "comment" : "AppUpdate.swift:776, AppUpdate.swift:902, AppUpdate.swift:954",
+      "comment" : "AppUpdate.swift:888, AppUpdate.swift:1028, AppUpdate.swift:1180",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36008,7 +36008,7 @@
       }
     },
     "アップデートできませんでした" : {
-      "comment" : "AppUpdate.swift:886",
+      "comment" : "AppUpdate.swift:1018",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36110,7 +36110,7 @@
       }
     },
     "アップデートを確かめています" : {
-      "comment" : "AppUpdate.swift:713",
+      "comment" : "AppUpdate.swift:825",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36212,7 +36212,7 @@
       }
     },
     "アップデートを確かめられませんでした" : {
-      "comment" : "AppUpdate.swift:728",
+      "comment" : "AppUpdate.swift:840",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36620,7 +36620,7 @@
       }
     },
     "アプリの ID が違います" : {
-      "comment" : "AppUpdate.swift:513",
+      "comment" : "AppUpdate.swift:625",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40292,7 +40292,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:329, DictationHistoryWindow.swift:556, MeetingChatView.swift:520",
+      "comment" : "AppDelegate.swift:329, DictationHistoryWindow.swift:556, MeetingChatView.swift:522",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40394,7 +40394,7 @@
       }
     },
     "コピーしました" : {
-      "comment" : "MeetingChatView.swift:520, MinutesTemplateViews.swift:402, PasteFallbackPanel.swift:241",
+      "comment" : "MeetingChatView.swift:522, MinutesTemplateViews.swift:402, PasteFallbackPanel.swift:241",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43658,7 +43658,7 @@
       }
     },
     "タイトル" : {
-      "comment" : "MeetingDocumentView.swift:673, MeetingSearchView.swift:252",
+      "comment" : "MeetingDocumentView.swift:673, MeetingSearchView.swift:255",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43862,7 +43862,7 @@
       }
     },
     "ダウンロードした zip に Hanasu.app がありません" : {
-      "comment" : "AppUpdate.swift:536",
+      "comment" : "AppUpdate.swift:648",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43964,7 +43964,7 @@
       }
     },
     "ダウンロードした zip を展開できませんでした（ditto %@）" : {
-      "comment" : "AppUpdate.swift:537",
+      "comment" : "AppUpdate.swift:649",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -44168,7 +44168,7 @@
       }
     },
     "ダウンロードしたファイルを確かめています…" : {
-      "comment" : "LocalModelDownloadPrompt.swift:151",
+      "comment" : "AppUpdate.swift:1137, LocalModelDownloadPrompt.swift:151",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48962,7 +48962,7 @@
       }
     },
     "メモ" : {
-      "comment" : "MeetingChatView.swift:665, MeetingDocumentView.swift:640, MeetingNotesViews.swift:27",
+      "comment" : "MeetingChatView.swift:667, MeetingDocumentView.swift:640, MeetingNotesViews.swift:27",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49166,7 +49166,7 @@
       }
     },
     "メモと AI チャットを切り替える（AI チャットは ⌘J）" : {
-      "comment" : "MeetingChatView.swift:671",
+      "comment" : "MeetingChatView.swift:673",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49370,7 +49370,7 @@
       }
     },
     "メモに残しました" : {
-      "comment" : "MeetingChatView.swift:525",
+      "comment" : "MeetingChatView.swift:527",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49472,7 +49472,7 @@
       }
     },
     "メモに残す" : {
-      "comment" : "MeetingChatView.swift:525",
+      "comment" : "MeetingChatView.swift:527",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51410,7 +51410,7 @@
       }
     },
     "リリースのページで全文を見る" : {
-      "comment" : "AppUpdate.swift:817",
+      "comment" : "AppUpdate.swift:929",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51512,7 +51512,7 @@
       }
     },
     "リリースのページを開く" : {
-      "comment" : "AppUpdate.swift:684, AppUpdate.swift:888",
+      "comment" : "AppUpdate.swift:796, AppUpdate.swift:1020",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54368,7 +54368,7 @@
       }
     },
     "不明" : {
-      "comment" : "AppUpdate.swift:949",
+      "comment" : "AppUpdate.swift:1175",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54470,7 +54470,7 @@
       }
     },
     "中止" : {
-      "comment" : "LocalLLMSettingsView.swift:48, LocalModelDownloadPrompt.swift:135, Onboarding.swift:504",
+      "comment" : "AppUpdate.swift:1145, LocalLLMSettingsView.swift:48, LocalModelDownloadPrompt.swift:135",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54674,7 +54674,7 @@
       }
     },
     "今すぐ確認" : {
-      "comment" : "AppUpdate.swift:950",
+      "comment" : "AppUpdate.swift:1176",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54776,7 +54776,7 @@
       }
     },
     "今の Hanasu が配布用の証明書で署名されていない（手元でビルドしたものなど）ので、自動では入れ替えません" : {
-      "comment" : "AppUpdate.swift:475",
+      "comment" : "AppUpdate.swift:587",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -54878,7 +54878,7 @@
       }
     },
     "今の会話を消して、新しく始める" : {
-      "comment" : "MeetingChatView.swift:399",
+      "comment" : "MeetingChatView.swift:401",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55286,7 +55286,7 @@
       }
     },
     "今の版" : {
-      "comment" : "AppUpdate.swift:947",
+      "comment" : "AppUpdate.swift:1173",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55388,7 +55388,7 @@
       }
     },
     "今の版が分かりません" : {
-      "comment" : "AppUpdate.swift:717",
+      "comment" : "AppUpdate.swift:829",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55490,7 +55490,7 @@
       }
     },
     "今の版は %@ です。「アップデート」を押すと、新しい版をダウンロードして確かめてから、Hanasu を終えて入れ替え、開き直します。" : {
-      "comment" : "AppUpdate.swift:775",
+      "comment" : "AppUpdate.swift:887",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55592,7 +55592,7 @@
       }
     },
     "今の版は %@ です。この版は自動では入れ替えられないので、「アップデート」でリリースのページを開きます。" : {
-      "comment" : "AppUpdate.swift:774",
+      "comment" : "AppUpdate.swift:886",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -55694,7 +55694,7 @@
       }
     },
     "今の版（%@）が最新です。" : {
-      "comment" : "AppUpdate.swift:735",
+      "comment" : "AppUpdate.swift:847",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56204,7 +56204,7 @@
       }
     },
     "今はアップデートできません" : {
-      "comment" : "AppUpdate.swift:851, AppUpdate.swift:872",
+      "comment" : "AppUpdate.swift:964, AppUpdate.swift:999",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57632,7 +57632,7 @@
       }
     },
     "会議に質問" : {
-      "comment" : "MeetingSearchView.swift:301",
+      "comment" : "MeetingSearchView.swift:304",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58346,7 +58346,7 @@
       }
     },
     "会議の記録から答えます。「先週」「昨日」「11月2日」のように期間を書くと、その期間の会議に絞ります。" : {
-      "comment" : "MeetingSearchView.swift:355",
+      "comment" : "MeetingSearchView.swift:358",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59366,7 +59366,7 @@
       }
     },
     "会議の記録を集めて答えを作っています…" : {
-      "comment" : "MeetingSearchView.swift:340",
+      "comment" : "MeetingSearchView.swift:343",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59672,7 +59672,7 @@
       }
     },
     "会議を検索" : {
-      "comment" : "MeetingSearchView.swift:159",
+      "comment" : "MeetingSearchView.swift:162",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62222,7 +62222,7 @@
       }
     },
     "使えません" : {
-      "comment" : "AIRouteMenu.swift:22, AIRouteMenu.swift:47",
+      "comment" : "AIRouteMenu.swift:24, AIRouteMenu.swift:58",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62528,7 +62528,7 @@
       }
     },
     "例: 先週の定例で何が決まった？" : {
-      "comment" : "MeetingSearchView.swift:305",
+      "comment" : "MeetingSearchView.swift:308",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68546,7 +68546,7 @@
       }
     },
     "前の Hanasu.app は次の場所に残っています:" : {
-      "comment" : "AppUpdate.swift:646",
+      "comment" : "AppUpdate.swift:758",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72932,7 +72932,7 @@
       }
     },
     "引用" : {
-      "comment" : "MeetingSearchView.swift:376",
+      "comment" : "MeetingSearchView.swift:379",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77012,7 +77012,7 @@
       }
     },
     "文字起こしとメモをこの AI に送ります。会話は保存しません。" : {
-      "comment" : "MeetingChatView.swift:414",
+      "comment" : "MeetingChatView.swift:416",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77114,7 +77114,7 @@
       }
     },
     "文字起こしとメモをもとに答えます。続けて質問すると、前のやりとりを踏まえて答えます。" : {
-      "comment" : "MeetingChatView.swift:316",
+      "comment" : "MeetingChatView.swift:318",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79562,7 +79562,7 @@
       }
     },
     "新しい Hanasu が、今の Hanasu と違う証明書で署名されているので、入れ替えません" : {
-      "comment" : "AppUpdate.swift:477",
+      "comment" : "AppUpdate.swift:589",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79664,7 +79664,7 @@
       }
     },
     "新しい Hanasu の署名を確かめられませんでした（%@）" : {
-      "comment" : "AppUpdate.swift:476",
+      "comment" : "AppUpdate.swift:588",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80072,7 +80072,7 @@
       }
     },
     "新しい会話" : {
-      "comment" : "MeetingChatView.swift:396",
+      "comment" : "MeetingChatView.swift:398",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80276,7 +80276,7 @@
       }
     },
     "新しい版があれば、入れ替えてよいかを尋ねます。「アップデート」を選んだときだけ、GitHub のリリースから新しい版をダウンロードし、SHA-256 と署名を確かめてから入れ替えます。" : {
-      "comment" : "AppUpdate.swift:956",
+      "comment" : "AppUpdate.swift:1182",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80480,7 +80480,7 @@
       }
     },
     "既定の送り先（%@）は今は使えません（%@）。下の「送り先」で選ぶか、設定の「AI」→「AI チャット・質問」で変えてください。" : {
-      "comment" : "AIRouteMenu.swift:148",
+      "comment" : "AIRouteMenu.swift:159",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80582,7 +80582,7 @@
       }
     },
     "既定（%@）" : {
-      "comment" : "AIRouteMenu.swift:104",
+      "comment" : "AIRouteMenu.swift:115",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82622,7 +82622,7 @@
       }
     },
     "未ダウンロード" : {
-      "comment" : "AIRouteMenu.swift:21, TranscriptionEngineSettingsView.swift:102",
+      "comment" : "AIRouteMenu.swift:23, TranscriptionEngineSettingsView.swift:102",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83540,7 +83540,7 @@
       }
     },
     "検索した語: %@" : {
-      "comment" : "MeetingSearchView.swift:383",
+      "comment" : "MeetingSearchView.swift:386",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83642,7 +83642,7 @@
       }
     },
     "検索しています…" : {
-      "comment" : "MeetingSearchView.swift:205",
+      "comment" : "MeetingSearchView.swift:208",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83744,7 +83744,7 @@
       }
     },
     "検索でヒットした会議と直近の会議の議事録（なければ文字起こし）を、設定の「AI」で「AI チャット・質問」に選んだ AI（下の「送り先」で変えたときはその AI）に渡して答えさせます。" : {
-      "comment" : "MeetingSearchView.swift:302",
+      "comment" : "MeetingSearchView.swift:305",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83846,7 +83846,7 @@
       }
     },
     "検索で選んだ会議の議事録と文字起こしをこの AI に送ります。" : {
-      "comment" : "MeetingSearchView.swift:321",
+      "comment" : "MeetingSearchView.swift:324",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83948,7 +83948,7 @@
       }
     },
     "検索をやめる" : {
-      "comment" : "MeetingSearchView.swift:168",
+      "comment" : "MeetingSearchView.swift:171",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84050,7 +84050,7 @@
       }
     },
     "検索語を消す" : {
-      "comment" : "DictationHistoryWindow.swift:240, DictationHistoryWindow.swift:241, MeetingSearchView.swift:169",
+      "comment" : "DictationHistoryWindow.swift:240, DictationHistoryWindow.swift:241, MeetingSearchView.swift:172",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84662,7 +84662,7 @@
       }
     },
     "止める" : {
-      "comment" : "MeetingChatView.swift:237, MeetingChatView.swift:260",
+      "comment" : "MeetingChatView.swift:239, MeetingChatView.swift:262",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85988,7 +85988,7 @@
       }
     },
     "渡した会議（%@ 件）" : {
-      "comment" : "MeetingSearchView.swift:369",
+      "comment" : "MeetingSearchView.swift:372",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86702,7 +86702,7 @@
       }
     },
     "版がリリースと違います" : {
-      "comment" : "AppUpdate.swift:516",
+      "comment" : "AppUpdate.swift:628",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88844,7 +88844,7 @@
       }
     },
     "直前に聞かれたことを探しています…" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:158, MeetingChatView.swift:234",
+      "comment" : "MeetingAskedQuestionPanel.swift:158, MeetingChatView.swift:236",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88946,7 +88946,7 @@
       }
     },
     "直近" : {
-      "comment" : "MeetingSearchView.swift:377",
+      "comment" : "MeetingSearchView.swift:380",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89864,7 +89864,7 @@
       }
     },
     "答えをコピーする" : {
-      "comment" : "MeetingChatView.swift:522",
+      "comment" : "MeetingChatView.swift:524",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89966,7 +89966,7 @@
       }
     },
     "答えを作ったときに渡した記録の範囲（発言 %@ 件）" : {
-      "comment" : "MeetingChatView.swift:508",
+      "comment" : "MeetingChatView.swift:510",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90068,7 +90068,7 @@
       }
     },
     "答えを作れませんでした: %@" : {
-      "comment" : "MeetingAskedQuestion.swift:235, MeetingChatView.swift:92, MeetingSearchView.swift:124",
+      "comment" : "MeetingAskedQuestion.swift:235, MeetingChatView.swift:94, MeetingSearchView.swift:127",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90170,7 +90170,7 @@
       }
     },
     "答えを待つのをやめる" : {
-      "comment" : "MeetingChatView.swift:371",
+      "comment" : "MeetingChatView.swift:373",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93128,7 +93128,7 @@
       }
     },
     "聞き逃した話の確認や、決まったことの整理に。続けて質問すると、前のやりとりを踏まえて答えます。" : {
-      "comment" : "MeetingChatView.swift:315",
+      "comment" : "MeetingChatView.swift:317",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95168,7 +95168,7 @@
       }
     },
     "見つかりませんでした" : {
-      "comment" : "MeetingSearchView.swift:205",
+      "comment" : "MeetingSearchView.swift:208",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97310,7 +97310,7 @@
       }
     },
     "記録を読んでいます…" : {
-      "comment" : "MeetingChatView.swift:257",
+      "comment" : "MeetingChatView.swift:259",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97922,7 +97922,7 @@
       }
     },
     "記録中の文字起こしがないため（%@）、メモと印だけをもとに答えます。" : {
-      "comment" : "MeetingChatView.swift:212",
+      "comment" : "MeetingChatView.swift:214",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101696,7 +101696,7 @@
       }
     },
     "認証が未設定" : {
-      "comment" : "AIRouteMenu.swift:19",
+      "comment" : "AIRouteMenu.swift:21",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -102410,7 +102410,7 @@
       }
     },
     "読み込めません" : {
-      "comment" : "AppUpdate.swift:499",
+      "comment" : "AppUpdate.swift:611",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -102512,7 +102512,7 @@
       }
     },
     "議事録" : {
-      "comment" : "MeetingExport.swift:141, MeetingSearchView.swift:254, MinutesDocument.swift:94",
+      "comment" : "MeetingExport.swift:141, MeetingSearchView.swift:257, MinutesDocument.swift:94",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -106388,7 +106388,7 @@
       }
     },
     "質問" : {
-      "comment" : "MeetingSearchView.swift:308",
+      "comment" : "MeetingSearchView.swift:311",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -107000,7 +107000,7 @@
       }
     },
     "起動時にアップデートを確認する" : {
-      "comment" : "AppUpdate.swift:946",
+      "comment" : "AppUpdate.swift:1172",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -108326,7 +108326,7 @@
       }
     },
     "送り先: %@" : {
-      "comment" : "AIRouteMenu.swift:120",
+      "comment" : "AIRouteMenu.swift:131",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -108428,7 +108428,7 @@
       }
     },
     "送り先の AI とモデルを、この会話だけ変える" : {
-      "comment" : "AIRouteMenu.swift:129",
+      "comment" : "AIRouteMenu.swift:140",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -108632,7 +108632,7 @@
       }
     },
     "送信（↩）" : {
-      "comment" : "MeetingChatView.swift:379",
+      "comment" : "MeetingChatView.swift:381",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -109142,7 +109142,7 @@
       }
     },
     "過去の会議について AI に質問する" : {
-      "comment" : "MeetingSearchView.swift:178",
+      "comment" : "MeetingSearchView.swift:181",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -114242,7 +114242,7 @@
       }
     },
     "録音中・会議の記録中・処理中は入れ替えません。終わってから、メニューの「アップデートを確認…」でもう一度選んでください。" : {
-      "comment" : "AppUpdate.swift:851, AppUpdate.swift:872",
+      "comment" : "AppUpdate.swift:964, AppUpdate.swift:999",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -114548,7 +114548,7 @@
       }
     },
     "閉じる" : {
-      "comment" : "AppDelegate.swift:336, AppUpdate.swift:685, AppUpdate.swift:889",
+      "comment" : "AppDelegate.swift:336, AppUpdate.swift:797, AppUpdate.swift:1021",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

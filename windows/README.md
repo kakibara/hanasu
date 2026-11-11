@@ -188,8 +188,8 @@ MeetingController（Core。idle → starting → recording → processing → id
 - 起動して数秒後に、GitHub の最新のリリースを確かめる（初回の起動と、手元のビルド＝版の先頭が 0 のときはしない。設定 → 一般 →「起動時にアップデートを確認する」で切れる）。失敗しても何も出さない（ログだけ）。
 - タスクトレイのメニュー →「アップデートを確認…」（設定 → 一般 →「今すぐ確認」も同じ）で、いつでも確かめられる。最新なら「Hanasu は最新です」と出し、失敗したときは理由を出す。
 - 新しい版があると、「アップデート」「あとで」「この版をスキップ」を選ぶ確認が出る。スキップした版は起動時には知らせない（手動の確認では知らせる。もっと新しい版が出れば、また知らせる）。
-- 「アップデート」を選ぶと、zip（`Hanasu-<版>-Windows-x64.zip`）をダウンロードし、API の SHA-256 と大きさで確かめ、Hanasu のフォルダの隣の `Hanasu.update` に展開して、PowerShell のスクリプトで入れ替えて起動し直す（失敗すれば元に戻す）。録音中・会議の記録中は入れ替えない。フォルダに書き込めないとき（Program Files など）や zip が見つからないときは、リリースのページを開く案内になる。フォルダごと取り替えるので、Hanasu のフォルダに Hanasu のものでないファイルやフォルダがあるとき（デスクトップに `Hanasu.exe` を置いたときなど）も入れ替えず、名前を挙げて案内する。入れ替えが終わらなかったときは、次の起動で知らせる（`update-pending.txt`）。
-- 通信は https の GitHub のホストだけ。コードは `Hanasu.Core/Update/`（`AppVersion`・`ReleaseParser`・`ReleaseNotesFormatter`・`UpdateChecker`・`UpdateHosts`・`UpdatePackage`。テストは `UpdateTests`・`ReleaseNotesFormatterTests`）と、`Hanasu.Windows` の `Services/UpdateService.cs`・`Views/UpdatePromptWindow.cs`。ダウンロードは `ModelDownload` を使う。設定は `AppSettings.CheckForUpdatesOnLaunch`・`SkippedUpdateVersion`。
+- 「アップデート」を選ぶと、zip（`Hanasu-<版>-Windows-x64.zip`）をダウンロードし（その間は小さな窓に、進み具合のバーと「45% (12 MB / 27 MB)」の形の割合と大きさを出す。窓の「中止」か閉じるボタンでやめられ、やめたときは何も出さない。展開の間はバーが動き続ける形になり、やめられない）、API の SHA-256 と大きさで確かめ、Hanasu のフォルダの隣の `Hanasu.update` に展開して、PowerShell のスクリプトで入れ替えて起動し直す（失敗すれば元に戻す）。録音中・会議の記録中は入れ替えない。フォルダに書き込めないとき（Program Files など）や zip が見つからないときは、リリースのページを開く案内になる。フォルダごと取り替えるので、Hanasu のフォルダに Hanasu のものでないファイルやフォルダがあるとき（デスクトップに `Hanasu.exe` を置いたときなど）も入れ替えず、名前を挙げて案内する。入れ替えが終わらなかったときは、次の起動で知らせる（`update-pending.txt`）。
+- 通信は https の GitHub のホストだけ。コードは `Hanasu.Core/Update/`（`AppVersion`・`ReleaseParser`・`ReleaseNotesFormatter`・`UpdateChecker`・`UpdateHosts`・`UpdatePackage`・`UpdateDownloadProgress`（進み具合の割合と間引き）。テストは `UpdateTests`・`ReleaseNotesFormatterTests`）と、`Hanasu.Windows` の `Services/UpdateService.cs`・`Views/UpdatePromptWindow.cs`・`Views/UpdateProgressWindow.cs`。ダウンロードは `ModelDownload` を使う。設定は `AppSettings.CheckForUpdatesOnLaunch`・`SkippedUpdateVersion`。
 
 ## ビルド・テスト・配布
 

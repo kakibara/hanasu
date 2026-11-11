@@ -1117,14 +1117,17 @@ Puoi anche reinstallarlo dalla pagina della release. Vuoi aprirla nel browser?</
   <data name="Update_Downloading" xml:space="preserve">
     <value>Download dell’aggiornamento</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} MB)</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Download di Hanasu {0}…</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0}% ({1} / {2})</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>Interrompi</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>Il download non è terminato entro 10 minuti, quindi è stato interrotto</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>Preparazione dell’aggiornamento</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>Estrazione dello zip scaricato.</value>
