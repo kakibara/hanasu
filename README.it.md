@@ -40,7 +40,7 @@ Si ispira a Typeless, Wispr Flow, Aqua Voice e Granola. Il suo codice sorgente �
 
 | | |
 | --- | --- |
-| **Parla → testo rifinito** | Premi <kbd>⌥ Space</kbd>, parla e premilo di nuovo (oppure fai clic su **■ Interrompi**). Hanasu rimuove i riempitivi, corregge gli omofoni, applica le tue autocorrezioni e incolla il testo nel punto del cursore. |
+| **Parla → testo rifinito** | Premi <kbd>⌥ Space</kbd>, parla e premilo di nuovo (oppure fai clic su **■ Fatto**). Hanasu rimuove i riempitivi, corregge gli omofoni, applica le tue autocorrezioni e incolla il testo nel punto del cursore. |
 | **Parla e digita la traduzione** | Premi <kbd>⌥⇧ Space</kbd>, oppure passa l'HUD a **English**, **日本語** o a un'altra lingua mentre parli. Le formule di cortesia vengono tradotte in modo naturale, così お疲れ様です diventa "Hi,". Scegli le lingue da proporre (una qualsiasi delle 17 lingue supportate) in **Impostazioni → Generali**. L'inglese è il predefinito. Su Mac, in **Impostazioni → Per app** puoi far partire un'app in una di queste lingue. |
 | **Le lingue miste restano come le pronunci** | Per impostazione predefinita, le parti che dici in inglese restano in inglese. In alternativa puoi scegliere di uniformare l'output in giapponese. |
 | **Modifica con la voce** | Seleziona del testo, premi <kbd>⌃⌥⌘ E</kbd> e di' "rendilo più cortese", "trasformalo in un elenco puntato" o "traduci in inglese". |

@@ -40,7 +40,7 @@ Il s'inspire de Typeless, Wispr Flow, Aqua Voice et Granola. Son code source est
 
 | | |
 | --- | --- |
-| **Parlez → texte soigné** | Appuyez sur <kbd>⌥ Space</kbd>, parlez, puis appuyez à nouveau (ou cliquez sur **■ Arrêter**). Hanasu supprime les mots de remplissage, corrige les homophones, applique vos autocorrections et colle le texte au niveau du curseur. |
+| **Parlez → texte soigné** | Appuyez sur <kbd>⌥ Space</kbd>, parlez, puis appuyez à nouveau (ou cliquez sur **■ Terminé**). Hanasu supprime les mots de remplissage, corrige les homophones, applique vos autocorrections et colle le texte au niveau du curseur. |
 | **Parlez, saisissez la traduction** | Appuyez sur <kbd>⌥⇧ Space</kbd>, ou basculez le HUD sur **English**, **日本語** ou une autre langue pendant que vous parlez. Les formules toutes faites sont traduites naturellement : お疲れ様です devient "Hi,". Choisissez les langues proposées (n'importe laquelle des 17 langues prises en charge) dans **Réglages → Général**. L'anglais est la valeur par défaut. Sur Mac, **Réglages → Par app** permet de faire démarrer une application dans l'une de ces langues. |
 | **Les langues mélangées restent telles quelles** | Par défaut, les passages que vous dites en anglais restent en anglais. Vous pouvez choisir d'unifier la sortie en japonais. |
 | **Modifier à la voix** | Sélectionnez du texte, appuyez sur <kbd>⌃⌥⌘ E</kbd> et dites « rends-le plus poli », « transforme-le en liste à puces » ou « traduis en anglais ». |

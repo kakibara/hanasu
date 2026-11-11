@@ -258,7 +258,7 @@ final class DictationController {
 
     // 要件: REQ-DIC-012
     // 設計判断: DEC-DIC-026
-    /// HUD の「停止」。ショートカットをもう一度押したときと同じく、録音を止めて入力する
+    /// HUD の「■ 完了」。ショートカットをもう一度押したときと同じく、録音を止めて入力する
     func stopFromHUD() {
         switch state {
         case .recording: Task { await finishDictation() }

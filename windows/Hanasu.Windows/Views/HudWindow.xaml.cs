@@ -14,7 +14,7 @@ namespace Hanasu.Windows.Views;
 /// <summary>
 /// 画面の下に出る小さな状態表示（Mac 版の HUDPanel）。
 /// WS_EX_NOACTIVATE で、前面に出てもクリックされても入力先アプリのフォーカスを奪わない。
-/// 「話した言語 / 翻訳の言語（English・日本語 …）」「取消」「■ 停止」を押せる準備中・録音中だけクリックを受け取り、それ以外は WS_EX_TRANSPARENT でマウスを素通しする。
+/// 「話した言語 / 翻訳の言語（English・日本語 …）」「取消」「■ 完了」を押せる準備中・録音中だけクリックを受け取り、それ以外は WS_EX_TRANSPARENT でマウスを素通しする。
 /// 貼り付けなかったとき（HudPhase.Unpasted）は、広げて結果の全文・「コピー」「閉じる」を出し、自動では閉じない。
 /// 文章をクリックしたときだけ前面に出して（文字の選択・Ctrl+C・Esc のため）、閉じるときに元のウインドウへフォーカスを返す。
 /// IHud のメソッドはどのスレッドから呼んでもよい（UI スレッドに回す）。
@@ -24,7 +24,7 @@ namespace Hanasu.Windows.Views;
 public partial class HudWindow : Window, IHud
 {
     private const double NormalWidth = 500;
-    /// <summary>言語の切り替えを出すとき、切り替えと題名のほかに要る幅（左右の余白・状態のアイコン・経過時間・取消・停止）。DEC-DIC-146</summary>
+    /// <summary>言語の切り替えを出すとき、切り替えと題名のほかに要る幅（左右の余白・状態のアイコン・経過時間・取消・完了）。DEC-DIC-146</summary>
     private const double ReservedWidth = 260;
     /// <summary>言語の切り替えを出すときの幅の上限</summary>
     private const double MaxWidthWithLanguages = 760;
