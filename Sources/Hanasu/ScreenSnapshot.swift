@@ -163,7 +163,7 @@ enum ScreenSnapshotPolicy {
             switch self {
             case .refineOff: tr("整形がオフなので、この録音では使われません（翻訳の言語を選ぶと使われます）")
             case .excludedApp: tr("入力先のアプリが除外アプリなので、この録音では使われません")
-            case .noCredentials: tr("音声入力の AI の認証情報がないので、この録音では使われません")
+            case .noCredentials: tr("音声入力整形の AI の認証情報がないので、この録音では使われません")
             }
         }
     }

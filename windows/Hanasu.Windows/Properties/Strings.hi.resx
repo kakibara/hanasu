@@ -378,7 +378,7 @@
     <value>प्रोसेस हो रहा है…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>अभी तक कोई कार्यवृत्त नहीं. आप इसे "कार्यवृत्त फिर से बनाएँ" से बना सकते हैं (इसके लिए सेटिंग्स → AI में "मीटिंग" के लिए AI सेटिंग्स आवश्यक हैं).</value>
+    <value>अभी तक कोई कार्यवृत्त नहीं. आप इसे "कार्यवृत्त फिर से बनाएँ" से बना सकते हैं (इसके लिए सेटिंग्स → AI में "मिनट्स" के AI की सेटिंग्स आवश्यक हैं).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>रिकॉर्डिंग रोकने के बाद ट्रांसक्रिप्शन होता है.</value>
@@ -525,8 +525,17 @@
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>केवल दबाए रखने तक रिकॉर्ड करें</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>ट्रांसक्रिप्शन इंजन</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>ट्रांसक्रिप्शन AI</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>वॉइस इनपुट</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>मीटिंग रिकॉर्डिंग</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>ट्रांसक्रिप्शन मॉडल (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Windows वाक् पहचान (डिफ़ॉल्ट)</value>
@@ -538,7 +547,7 @@
     <value>Gemini (ऑडियो Google को भेजता है)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Windows वाक् पहचान (डिक्टेशन) से वाक् पहचानता है और बोलते समय आंशिक परिणाम दिखाता है. यह Microsoft की ऑनलाइन वाक् पहचान का उपयोग करता है, इसलिए Windows सेटिंग्स → गोपनीयता और सुरक्षा → वाक् में "ऑनलाइन वाक् पहचान" चालू करें. यह Windows डिफ़ॉल्ट माइक्रोफ़ोन का उपयोग करता है (नीचे का चयन उपयोग नहीं होता).</value>
+    <value>Windows वाक् पहचान (डिक्टेशन) से वाक् पहचानता है और बोलते समय आंशिक परिणाम दिखाता है. यह Microsoft की ऑनलाइन वाक् पहचान का उपयोग करता है, इसलिए Windows सेटिंग्स → गोपनीयता और सुरक्षा → वाक् में "ऑनलाइन वाक् पहचान" चालू करें. यह Windows डिफ़ॉल्ट माइक्रोफ़ोन का उपयोग करता है ("सामान्य" टैब पर माइक्रोफ़ोन का चयन उपयोग नहीं होता).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>वाक् सेटिंग्स खोलें</value>
@@ -559,7 +568,7 @@
     <value>रद्द करें</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>रिकॉर्ड किया गया ऑडियो ट्रांसक्रिप्शन के लिए Google के Gemini API को भेजता है (AI टैब पर सेट Gemini क्रेडेंशियल और डिक्टेशन के Gemini मॉडल का उपयोग करके). ध्यान दें कि आपका ऑडियो Google को भेजा जाता है. यह रिकॉर्डिंग रोकने के बाद भेजा जाता है (एक बार में अधिकतम 7 मिनट).</value>
+    <value>रिकॉर्ड किया गया ऑडियो ट्रांसक्रिप्शन के लिए Google के Gemini API को भेजता है (इस टैब के Gemini क्रेडेंशियल और नीचे चुने गए ट्रांसक्रिप्शन मॉडल का उपयोग करके). ध्यान दें कि आपका ऑडियो Google को भेजा जाता है. यह रिकॉर्डिंग रोकने के बाद भेजा जाता है (एक बार में अधिकतम 7 मिनट).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>माइक्रोफ़ोन</value>
@@ -589,19 +598,19 @@
     <value>सेटिंग्स फ़ोल्डर खोलें</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>AI और मॉडल</value>
+    <value>ट्रांसक्रिप्शन के बाद का AI</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>डिक्टेशन (सुधार, अनुवाद)</value>
+    <value>वॉइस इनपुट सुधार</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>स्थानीय</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>मीटिंग (कार्यवृत्त)</value>
+    <value>मिनट्स</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>आप डिक्टेशन और मीटिंग के लिए AI और मॉडल अलग-अलग चुन सकते हैं. डिफ़ॉल्ट Gemini के लिए gemini-3.5-flash-lite (डिक्टेशन) और gemini-3.8-flash (कार्यवृत्त), और Claude के लिए Haiku 5.5 (डिक्टेशन) और Sonnet 5.5 (कार्यवृत्त) हैं. Claude का उपयोग केवल टेक्स्ट प्रोसेस करने के लिए होता है, ऑडियो ट्रांसक्राइब करने के लिए नहीं (ट्रांसक्रिप्शन इंजन "सामान्य" और "मीटिंग" टैब पर है).</value>
+    <value>आप वॉइस इनपुट सुधार और मिनट्स के लिए AI और मॉडल अलग-अलग चुन सकते हैं. डिफ़ॉल्ट Gemini के लिए gemini-3.5-flash-lite (वॉइस इनपुट सुधार) और gemini-3.8-flash (मिनट्स), और Claude के लिए Haiku 5.5 (वॉइस इनपुट सुधार) और Sonnet 5.5 (मिनट्स) हैं. Claude का उपयोग केवल टेक्स्ट प्रोसेस करने के लिए होता है, ऑडियो ट्रांसक्राइब करने के लिए नहीं (ट्रांसक्रिप्शन इंजन ऊपर "ट्रांसक्रिप्शन AI" में है).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>स्थानीय मॉडल (इस PC पर चलने वाले छोटे LLM)</value>
@@ -673,7 +682,7 @@
     <value>कुंजियाँ settings.json में नहीं, बल्कि %LOCALAPPDATA%\Hanasu\secrets.json में एन्क्रिप्ट करके संग्रहीत की जाती हैं. डिफ़ॉल्ट DPAPI के साथ, केवल यही Windows उपयोगकर्ता उन्हें पढ़ सकता है, लेकिन उसी उपयोगकर्ता के रूप में चलने वाले अन्य ऐप्स उन्हें बिना पुष्टि के पढ़ सकते हैं. Windows Hello के साथ, अन्य ऐप्स के उन्हें पढ़ने का प्रयास करने पर Windows Hello संकेत दिखाई देता है (शुरू होने के बाद पहले उपयोग पर एक बार, और स्क्रीन लॉक करने के बाद फिर से सत्यापन होता है). यह Hanasu के चलते समय उसी उपयोगकर्ता के रूप में चलने वाले ऐप्स को मेमोरी पढ़ने से नहीं रोक सकता.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>आज़माएँ (डिक्टेशन AI)</value>
+    <value>आज़माएँ (वॉइस इनपुट सुधार)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>अम्म तो कल की मीटिंग के लिए वो मैं जेमिनी से बनाई हुई स्लाइड्स इस्तेमाल करूँगा</value>
@@ -702,9 +711,6 @@
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>"महत्वपूर्ण" शॉर्टकट का उपयोग करें (केवल रिकॉर्डिंग के दौरान सक्रिय)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>ट्रांसक्रिप्शन</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (इस PC पर चलता है; डिफ़ॉल्ट)</value>
   </data>
@@ -727,7 +733,7 @@
     <value>रिकॉर्डिंग के बाद AI से कार्यवृत्त बनाएँ</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>"AI" टैब पर "मीटिंग (कार्यवृत्त)" में कार्यवृत्त के लिए AI और मॉडल चुनें. केवल ट्रांसक्रिप्ट का टेक्स्ट भेजा जाता है (जब ट्रांसक्रिप्शन इंजन Gemini हो, तो ऑडियो भी Google को भेजा जाता है). कार्यवृत्त टेम्पलेट मीटिंग नोट्स में चुनें.</value>
+    <value>"AI" टैब पर "मिनट्स" में मिनट्स के लिए AI और मॉडल चुनें. केवल ट्रांसक्रिप्ट का टेक्स्ट भेजा जाता है (जब ट्रांसक्रिप्शन इंजन Gemini हो, तो ऑडियो भी Google को भेजा जाता है). मिनट्स का टेम्पलेट मीटिंग नोट्स में चुनें.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>संग्रहण</value>
@@ -883,13 +889,13 @@
     <value>{0} ({1}) ने {2} से. लिए</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>रिकॉर्ड किया गया मीटिंग ऑडियो 5-मिनट के हिस्सों में बाँटकर Gemini को भेजा जाता है (AI टैब पर सेट Gemini क्रेडेंशियल और डिक्टेशन के Gemini मॉडल का उपयोग करके). ध्यान दें कि आपका ऑडियो Google को भेजा जाता है.</value>
+    <value>रिकॉर्ड किया गया मीटिंग ऑडियो 5-मिनट के हिस्सों में बाँटकर Gemini को भेजा जाता है (इस टैब के Gemini क्रेडेंशियल और नीचे चुने गए ट्रांसक्रिप्शन मॉडल का उपयोग करके). ध्यान दें कि आपका ऑडियो Google को भेजा जाता है.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>"सामान्य" टैब पर चुने गए Whisper मॉडल का उपयोग करता है ({0}).</value>
+    <value>नीचे चुने गए Whisper मॉडल का उपयोग करता है ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> यह अभी तक डाउनलोड नहीं हुआ है (इसे "सामान्य" टैब पर डाउनलोड करें).</value>
+    <value> यह अभी तक डाउनलोड नहीं हुआ है (इसे नीचे डाउनलोड करें).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>मीटिंग सहेजने का स्थान चुनें</value>

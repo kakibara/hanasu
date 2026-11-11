@@ -378,7 +378,7 @@ Original: {2}</value>
     <value>Processando…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Ainda não há ata. Você pode criá-la com "Gerar ata novamente" (requer as configurações de IA para "Reuniões" em Configurações → AI).</value>
+    <value>Ainda não há ata. Você pode criá-la com "Gerar ata novamente" (requer as configurações de IA para "Ata" em Configurações → AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>A transcrição é feita depois que você para a gravação.</value>
@@ -525,8 +525,17 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Gravar somente enquanto pressionado</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Mecanismo de transcrição</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>IA de transcrição</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Ditado</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Gravação de reunião</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Modelo de transcrição (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Reconhecimento de fala do Windows (padrão)</value>
@@ -538,7 +547,7 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
     <value>Gemini (envia o áudio ao Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Reconhece a fala com o reconhecimento de fala do Windows (ditado) e mostra resultados parciais enquanto você fala. Ele usa o reconhecimento de fala online da Microsoft, por isso ative "Reconhecimento de fala online" em Configurações do Windows → Privacidade e segurança → Fala. Ele usa o microfone padrão do Windows (a seleção abaixo não é usada).</value>
+    <value>Reconhece a fala com o reconhecimento de fala do Windows (ditado) e mostra resultados parciais enquanto você fala. Ele usa o reconhecimento de fala online da Microsoft, por isso ative "Reconhecimento de fala online" em Configurações do Windows → Privacidade e segurança → Fala. Ele usa o microfone padrão do Windows (a seleção de microfone na guia "Geral" não é usada).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Abrir configurações de fala</value>
@@ -559,7 +568,7 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
     <value>Cancelar</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Envia o áudio gravado para a API do Gemini do Google (usando as credenciais do Gemini definidas na guia AI e o modelo do Gemini para ditado) para transcrição. Observe que seu áudio é enviado ao Google. Ele é enviado depois que você para a gravação (até 7 minutos por vez).</value>
+    <value>Envia o áudio gravado para a API do Gemini do Google (usando as credenciais do Gemini desta guia e o modelo de transcrição escolhido abaixo) para transcrição. Observe que seu áudio é enviado ao Google. Ele é enviado depois que você para a gravação (até 7 minutos por vez).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Microfone</value>
@@ -589,19 +598,19 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
     <value>Abrir pasta de configurações</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>IA e modelos</value>
+    <value>IA após a transcrição</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Ditado (refinamento, tradução)</value>
+    <value>Refinamento do ditado</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Local</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Reuniões (ata)</value>
+    <value>Ata</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>Você pode escolher a IA e o modelo separadamente para ditado e reuniões. Os padrões são gemini-3.5-flash-lite (ditado) e gemini-3.8-flash (ata) para o Gemini, e Haiku 5.5 (ditado) e Sonnet 5.5 (ata) para o Claude. O Claude é usado apenas para processar texto, não para transcrever áudio (o mecanismo de transcrição fica nas guias "Geral" e "Reuniões").</value>
+    <value>Você pode escolher a IA e o modelo separadamente para o refinamento do ditado e a ata. Os padrões são gemini-3.5-flash-lite (refinamento do ditado) e gemini-3.8-flash (ata) para o Gemini, e Haiku 5.5 (refinamento do ditado) e Sonnet 5.5 (ata) para o Claude. O Claude é usado apenas para processar texto, não para transcrever áudio (o mecanismo de transcrição fica acima, em "IA de transcrição").</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Modelos locais (LLMs pequenos executados neste PC)</value>
@@ -673,7 +682,7 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
     <value>As chaves são armazenadas criptografadas em %LOCALAPPDATA%\Hanasu\secrets.json, não em settings.json. Com o DPAPI padrão, somente este usuário do Windows pode lê-las, mas outros aplicativos executados como o mesmo usuário podem lê-las sem confirmação. Com o Windows Hello, outros aplicativos que tentarem lê-las acionam uma solicitação do Windows Hello (você verifica uma vez no primeiro uso após iniciar e novamente após bloquear a tela). Isso não impede que aplicativos executados como o mesmo usuário leiam a memória enquanto o Hanasu está em execução.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Experimentar (IA de ditado)</value>
+    <value>Experimentar (refinamento do ditado)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>é então pra reunião de amanhã hã eu vou usar os slides que eu fiz com o gemini</value>
@@ -702,9 +711,6 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>Usar o atalho de "Importante" (ativo somente durante a gravação)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Transcrição</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (executado neste PC; padrão)</value>
   </data>
@@ -727,7 +733,7 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
     <value>Criar ata com IA após a gravação</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>Escolha a IA e o modelo para a ata em "Reuniões (ata)" na guia "AI". Somente o texto da transcrição é enviado (quando o mecanismo de transcrição é o Gemini, o áudio também é enviado ao Google). Escolha o modelo de ata nas Notas da reunião.</value>
+    <value>Escolha a IA e o modelo para a ata em "Ata" na guia "AI". Somente o texto da transcrição é enviado (quando o mecanismo de transcrição é o Gemini, o áudio também é enviado ao Google). Escolha o modelo de ata nas Notas da reunião.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Armazenamento</value>
@@ -883,13 +889,13 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
     <value>{0} ({1}) levou {2} s</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>O áudio gravado da reunião é dividido em partes de 5 minutos e enviado ao Gemini (usando as credenciais do Gemini da guia AI e o modelo do Gemini para ditado). Observe que seu áudio é enviado ao Google.</value>
+    <value>O áudio gravado da reunião é dividido em partes de 5 minutos e enviado ao Gemini (usando as credenciais do Gemini desta guia e o modelo de transcrição escolhido abaixo). Observe que seu áudio é enviado ao Google.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Usa o modelo do Whisper selecionado na guia "Geral" ({0}).</value>
+    <value>Usa o modelo do Whisper selecionado abaixo ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Ele ainda não foi baixado (baixe-o na guia "Geral").</value>
+    <value> Ele ainda não foi baixado (baixe-o abaixo).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Escolher onde salvar as reuniões</value>

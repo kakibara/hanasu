@@ -634,7 +634,7 @@
     <value>"{0}" cũng có ở một dòng phía trên nên dòng đó sẽ được dùng.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Chưa tải xuống mô hình Whisper ({0}). Hãy tải xuống trong menu → Cài đặt → Chung.</value>
+    <value>Chưa tải xuống mô hình Whisper ({0}). Hãy tải xuống ở "AI chép lời" trong menu → Cài đặt → AI.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Không thể chạy Whisper. Hãy cài đặt Microsoft Visual C++ Redistributable (2015–2022, x64) rồi thử lại. ({0})</value>

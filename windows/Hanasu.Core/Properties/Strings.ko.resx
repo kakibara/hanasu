@@ -634,7 +634,7 @@
     <value>'{0}'이(가) 위의 줄에도 있으므로 위의 줄을 사용합니다.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Whisper 모델({0})을 아직 다운로드하지 않았습니다. 메뉴 → 설정 → 일반에서 다운로드하세요.</value>
+    <value>Whisper 모델({0})을 아직 다운로드하지 않았습니다. 메뉴 → 설정 → AI의 '텍스트 변환 AI'에서 다운로드하세요.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Whisper를 실행할 수 없습니다. Microsoft Visual C++ 재배포 가능 패키지(2015–2022, x64)를 설치한 후 다시 시도하세요. ({0})</value>

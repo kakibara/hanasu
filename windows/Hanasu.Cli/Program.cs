@@ -148,6 +148,8 @@ static AppSettings CliSettings(string[] args)
     var settings = new AppSettings
     {
         Model = Option(args, "--model") ?? AppSettings.SuggestedModels[0],
+        // CLI では整形と文字起こしを同じ --model で試す（アプリの設定では別。DEC-COM-173）
+        GeminiTranscriptionModel = Option(args, "--model") ?? AppSettings.SuggestedModels[0],
         DictionaryText = Option(args, "--dict") is { } file ? File.ReadAllText(file) : "",
         ExtraInstructions = Option(args, "--rules") ?? "",
     };
@@ -173,7 +175,7 @@ static async Task TranscribeGemini(string[] args)
     var samples = WavFile.DecodeTo16kMono(File.ReadAllBytes(args[1]));
     var settings = CliSettings(args);
     var transcriber = new GeminiBatchTranscriber(() => new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(60) },
-        () => settings.Model, () => settings.DictionaryWords);
+        () => settings.GeminiTranscriptionModel, () => settings.DictionaryWords);
     var context = new TranscriptionContext("ja-JP", settings.UserDictionary.ContextualStrings, "");
     await transcriber.PrepareAsync(context);
     var sw = Stopwatch.StartNew();
@@ -223,7 +225,7 @@ static async Task Dictation(string[] args)
     IBatchTranscriber batch = engine == "whisper"
         ? new WhisperBatchTranscriber(() => EnsureWhisperModel(args, "--whisper-model").GetAwaiter().GetResult(), () => "whisper")
         : new GeminiBatchTranscriber(() => new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(60) },
-            () => settings.Model, () => settings.DictionaryWords);
+            () => settings.GeminiTranscriptionModel, () => settings.DictionaryWords);
     var transcriber = new RecordThenTranscribe(new WavRecorder(samples), batch);
     var context = new TranscriptionContext("ja-JP", settings.UserDictionary.ContextualStrings, "");
     var sw = Stopwatch.StartNew();
@@ -286,7 +288,7 @@ static async Task MeetingFiles(string[] args)
 
     var engine = Option(args, "--engine") ?? "whisper";
     ISegmentTranscriber transcriber = engine == "gemini"
-        ? new GeminiSegmentTranscriber(() => new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(300) }, () => settings.Model)
+        ? new GeminiSegmentTranscriber(() => new GeminiClient(AuthFromEnvironment()) { Timeout = TimeSpan.FromSeconds(300) }, () => settings.GeminiTranscriptionModel)
         : new WhisperBatchTranscriber(() => EnsureWhisperModel(args, "--whisper-model").GetAwaiter().GetResult(), () => "whisper");
     var diarizationDir = Option(args, "--diarization-models-dir") ?? Path.Combine(HanasuPaths.ModelsDirectory, "diarization");
     var processor = new MeetingPostProcessor

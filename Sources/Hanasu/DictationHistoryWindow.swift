@@ -497,7 +497,7 @@ private struct DictationHistoryDetail: View {
                 }
             }
             .disabled(retrying != nil)
-            Text(tr("原文を AI（設定の「AI」で音声入力に選んだもの）に渡して整形し直します。結果はこの履歴に上書きし、クリップボードにもコピーします。"))
+            Text(tr("原文を AI（設定の「AI」の「音声入力整形」で選んだもの）に渡して整形し直します。結果はこの履歴に上書きし、クリップボードにもコピーします。"))
                 .font(.caption).foregroundStyle(.secondary)
             if let message {
                 Label(message.text, systemImage: message.isError ? "exclamationmark.triangle.fill" : "checkmark.circle.fill")

@@ -116,7 +116,7 @@ struct MeetingDictionarySheet: View {
             Divider()
             Toggle(tr("この会議の文字起こしにも辞書を当てる"), isOn: $applyToMeeting)
                 .toggleStyle(.checkbox)
-            Text(tr("固有名詞や誤認識しやすい語を、この会議の文字起こしと議事録から AI が挙げます。選んだものだけを辞書に追加します。会議の中身は、設定の「AI」で会議に選んだ AI にだけ渡します（「ローカル」か「Apple」なら、この Mac の外には送りません）。"))
+            Text(tr("固有名詞や誤認識しやすい語を、この会議の文字起こしと議事録から AI が挙げます。選んだものだけを辞書に追加します。会議の中身は、設定の「AI」で「議事録」に選んだ AI にだけ渡します（「ローカル」か「Apple」なら、この Mac の外には送りません）。"))
                 .font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             HStack {

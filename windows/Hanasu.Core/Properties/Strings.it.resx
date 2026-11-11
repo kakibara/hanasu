@@ -634,7 +634,7 @@
     <value>"{0}" compare anche in una riga precedente, quindi verrà usata quella riga.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Il modello Whisper ({0}) non è ancora stato scaricato. Scaricalo da menu → Impostazioni → Generale.</value>
+    <value>Il modello Whisper ({0}) non è ancora stato scaricato. Scaricalo da menu → Impostazioni → AI, in "IA di trascrizione".</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Impossibile eseguire Whisper. Installa Microsoft Visual C++ Redistributable (2015–2022, x64) e riprova. ({0})</value>

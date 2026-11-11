@@ -105,7 +105,7 @@ internal sealed class AppHost : IDisposable
         if (settings.MeetingEngine == TranscriptionEngine.Gemini)
         {
             // 5 分の区切りを送るので、待ち時間は長めにする（Mac 版と同じ 300 秒）
-            return new GeminiSegmentTranscriber(() => CreateGeminiClient(settings, TimeSpan.FromSeconds(300)), () => settings.Model);
+            return new GeminiSegmentTranscriber(() => CreateGeminiClient(settings, TimeSpan.FromSeconds(300)), () => settings.GeminiTranscriptionModel);
         }
         var model = WhisperModelCatalog.Find(settings.WhisperModel) ?? WhisperModelCatalog.Find("small")!;
         return new WhisperBatchTranscriber(() => WhisperModels.PathFor(model), () => model.Id);
@@ -170,7 +170,7 @@ internal sealed class AppHost : IDisposable
                     new WhisperBatchTranscriber(() => WhisperModels.PathFor(model), () => model.Id));
             case TranscriptionEngine.Gemini:
                 return new RecordThenTranscribe(new WasapiRecorder(),
-                    new GeminiBatchTranscriber(() => CreateGeminiClient(settings, TimeSpan.FromSeconds(60)), () => settings.Model, () => settings.DictionaryWords));
+                    new GeminiBatchTranscriber(() => CreateGeminiClient(settings, TimeSpan.FromSeconds(60)), () => settings.GeminiTranscriptionModel, () => settings.DictionaryWords));
             default:
                 return new WindowsSpeechTranscriber();
         }

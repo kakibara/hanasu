@@ -1,8 +1,8 @@
 import SwiftUI
 
 // 要件: REQ-COM-001
-// 設計判断: DEC-COM-020
-/// 設定の「一般」タブの「文字起こし」欄。音声入力と会議の記録で、エンジンを別々に選ぶ。
+// 設計判断: DEC-COM-020, DEC-COM-173
+/// 設定の「AI」タブの先頭の「文字起こし AI」欄。音声入力と会議の記録で、エンジンを別々に選ぶ。
 /// Whisper を選ぶとモデルのダウンロードを始め、Gemini を選ぶと音声が送られることを示す。
 struct TranscriptionEngineSettingsSection: View {
     @ObservedObject var settings: AppSettings
@@ -28,13 +28,13 @@ struct TranscriptionEngineSettingsSection: View {
                 }
             }
             // 要件: REQ-COM-004
-            Picker(tr("言語"), selection: $settings.localeIdentifier) {
+            Picker(tr("文字起こしの言語"), selection: $settings.localeIdentifier) {
                 ForEach(languageOptions, id: \.self) { id in
                     Text(UILanguage.locale.localizedString(forIdentifier: id) ?? id).tag(id)
                 }
             }
         } header: {
-            Text(tr("文字起こし"))
+            Text(tr("文字起こし AI"))
         } footer: {
             // 設計判断: DEC-COM-028
             // Whisper を選ぶとすぐダウンロードが始まる（REQ-COM-003）ので、何がどれだけ落ちてくるかを選ぶ前に見せる
@@ -163,7 +163,7 @@ private struct GeminiTranscriptionSection: View {
         } header: {
             Text(tr("Gemini で文字起こし"))
         } footer: {
-            Text(tr("認証は設定の「AI」にある Gemini の認証情報を使います。音声入力では、文字起こしのあとに辞書・スニペットを当ててから、いつもどおり整形します（整形の AI も Gemini なら、Gemini を 2 回呼びます）。長い会議は 5 分ごとに分けて送ります。"))
+            Text(tr("認証は下の Gemini の認証情報を使います。音声入力では、文字起こしのあとに辞書・スニペットを当ててから、いつもどおり整形します（整形の AI も Gemini なら、Gemini を 2 回呼びます）。長い会議は 5 分ごとに分けて送ります。"))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }

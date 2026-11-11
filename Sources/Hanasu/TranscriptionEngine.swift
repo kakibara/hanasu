@@ -2,7 +2,7 @@
 import Foundation
 
 // 要件: REQ-COM-001
-/// 文字起こしのエンジン。音声入力と会議の記録で別々に選べる（設定の「一般」→「文字起こし」）。
+/// 文字起こしのエンジン。音声入力と会議の記録で別々に選べる（設定の「AI」→「文字起こし AI」）。
 enum TranscriptionEngine: String, CaseIterable, Identifiable, Sendable {
     /// macOS の SpeechAnalyzer（細かい選択は RecognizerEngine）
     case apple
@@ -247,7 +247,7 @@ enum BatchTranscriptionError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .whisperModelMissing(let model):
-            tr("Whisper のモデル（%@）がまだダウンロードされていません。設定の「一般」→「文字起こし」でダウンロードしてください", "\(model.rawValue)")
+            tr("Whisper のモデル（%@）がまだダウンロードされていません。設定の「AI」→「文字起こし AI」でダウンロードしてください", "\(model.rawValue)")
         case .noCredentials:
             tr("Gemini で文字起こしするには、Gemini の認証情報（設定の「AI」）が必要です")
         case .appleNotBatch:
