@@ -37,9 +37,10 @@ public class SharedFileTests
         Assert.Equal(1, attempts);
     }
 
-    // 確かめ方: REQ-COM-183（hanasu と同じ開き方で開いている間も、アプリの保存は失敗しない。Windows のランナーで意味がある）
+    // 確かめ方: REQ-COM-183（hanasu が読んでいる最中にアプリが保存しても失敗しない。Windows のランナーで意味がある）
+    // hanasu は開いてすぐ閉じるので、読み手が開いている短い間（ここでは 200 ms）は、保存の置き換えがやり直して待つ
     [Fact]
-    public void SaveSucceedsWhileAnotherReaderHoldsTheFile()
+    public async Task SaveSucceedsWhileAnotherReaderBrieflyHoldsTheFile()
     {
         var dir = TestKeys.TempDirectory();
         var store = new MeetingStore(dir);
@@ -47,11 +48,12 @@ public class SharedFileTests
         meeting.Title = "一回目";
         store.Save(meeting);
         var path = Path.Combine(dir, meeting.Id, "meeting.json");
-        using (var reader = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete))
-        {
-            meeting.Title = "二回目";
-            store.Save(meeting);
-        }
+        var reader = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+        meeting.Title = "二回目";
+        var save = Task.Run(() => store.Save(meeting));
+        await Task.Delay(200);
+        reader.Dispose();
+        await save;
         Assert.Equal("二回目", store.Load(meeting.Id)!.Title);
     }
 
