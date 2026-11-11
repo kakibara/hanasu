@@ -101,27 +101,6 @@ Oryginał: {2}</value>
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>Trwa nagrywanie spotkania (lub przetwarzanie po nagraniu). Jeśli zakończysz, dla tego spotkania nie zostanie utworzona transkrypcja ani protokół (pliki audio zostaną zachowane). Czy mimo to zakończyć?</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Windows Hello nie jest skonfigurowane (skonfiguruj PIN lub inną metodę w Ustawienia systemu Windows → Konta → Opcje logowania).</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Weryfikacja Windows Hello została anulowana, więc nie udało się odczytać klucza API.</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Weryfikacja Windows Hello nie powiodła się ({0}).</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>Nie znaleziono klucza Windows Hello (Windows Hello mogło zostać skonfigurowane ponownie). Wprowadź ponownie klucz API w Ustawienia → AI.</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Nie udało się otworzyć klucza Windows Hello ({0}).</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Weryfikacja Windows Hello została anulowana.</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Nie udało się utworzyć klucza Windows Hello ({0}).</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>Nie znaleziono mikrofonu. Sprawdź, czy mikrofon jest podłączony, w Ustawienia systemu Windows → System → Dźwięk.</value>
   </data>

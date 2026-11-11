@@ -11,12 +11,6 @@
           "NAudio.Core": "2.2.1"
         }
       },
-      "System.Security.Cryptography.ProtectedData": {
-        "type": "Direct",
-        "requested": "[8.0.0, )",
-        "resolved": "8.0.0",
-        "contentHash": "+TUFINV2q2ifyXauQXRwy4CiBhqvDEDZeVJU7qfxya4aRYOKzVBpN+4acx25VcPB9ywUN6C0n8drWl110PhZEg=="
-      },
       "Anthropic": {
         "type": "Transitive",
         "resolved": "13.4.0",
@@ -111,6 +105,11 @@
         "resolved": "10.0.1",
         "contentHash": "JFvLk6SHowCHY2fsCIyF/Adp1eM9JY3kF3Vf/t1FrN7mDe6f5/MEvKybRtvayq/JmymZbPxAEKeLvEbiRIYnew=="
       },
+      "System.Security.Cryptography.ProtectedData": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "+TUFINV2q2ifyXauQXRwy4CiBhqvDEDZeVJU7qfxya4aRYOKzVBpN+4acx25VcPB9ywUN6C0n8drWl110PhZEg=="
+      },
       "System.Text.Encodings.Web": {
         "type": "Transitive",
         "resolved": "10.0.6",
@@ -157,6 +156,13 @@
         "dependencies": {
           "Hanasu.Core": "[0.1.0, )",
           "org.k2fsa.sherpa.onnx": "[1.13.8, )"
+        }
+      },
+      "hanasu.platform": {
+        "type": "Project",
+        "dependencies": {
+          "Hanasu.Core": "[0.1.0, )",
+          "System.Security.Cryptography.ProtectedData": "[8.0.0, )"
         }
       },
       "hanasu.whisper": {

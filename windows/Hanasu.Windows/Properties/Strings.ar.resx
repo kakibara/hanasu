@@ -101,27 +101,6 @@
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>يجري تسجيل اجتماع (أو معالجته بعد التسجيل). إذا أنهيت التطبيق، فلن يتم إنشاء نص مكتوب أو محضر لهذا الاجتماع (سيتم الاحتفاظ بالملفات الصوتية). هل تريد الإنهاء على أي حال؟</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>لم يتم إعداد Windows Hello (قم بإعداد رقم PIN أو ما شابه في إعدادات Windows ← الحسابات ← خيارات تسجيل الدخول).</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>تم إلغاء التحقق من Windows Hello، لذا تعذرت قراءة مفتاح API.</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>فشل التحقق من Windows Hello ({0}).</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>لم يتم العثور على مفتاح Windows Hello (ربما تم إعداد Windows Hello مرة أخرى). أدخل مفتاح API مرة أخرى في الإعدادات ← AI.</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>تعذر فتح مفتاح Windows Hello ({0}).</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>تم إلغاء التحقق من Windows Hello.</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>تعذر إنشاء مفتاح Windows Hello ({0}).</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>لم يتم العثور على ميكروفون. تحقق من توصيل ميكروفون، في إعدادات Windows ← النظام ← الصوت.</value>
   </data>

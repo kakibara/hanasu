@@ -101,27 +101,6 @@ Sonuç: {1}
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>Bir toplantı kaydediliyor (veya kayıt sonrası işleniyor). Çıkarsanız bu toplantı için döküm ve tutanak oluşturulmaz (ses dosyaları saklanır). Yine de çıkılsın mı?</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Windows Hello ayarlanmamış (Windows Ayarları → Hesaplar → Oturum açma seçenekleri bölümünden PIN veya benzerini ayarlayın).</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Windows Hello doğrulaması iptal edildiğinden API anahtarı okunamadı.</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Windows Hello doğrulaması başarısız oldu ({0}).</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>Windows Hello anahtarı bulunamadı (Windows Hello yeniden ayarlanmış olabilir). API anahtarını Ayarlar → AI bölümünde yeniden girin.</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Windows Hello anahtarı açılamadı ({0}).</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Windows Hello doğrulaması iptal edildi.</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Windows Hello anahtarı oluşturulamadı ({0}).</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>Mikrofon bulunamadı. Windows Ayarları → Sistem → Ses bölümünden bir mikrofonun bağlı olduğunu kontrol edin.</value>
   </data>

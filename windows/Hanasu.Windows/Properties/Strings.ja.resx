@@ -101,27 +101,6 @@
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>会議の記録中（または記録のあとの処理中）です。終了すると、この会議の文字起こしと議事録は作られません（音声ファイルは残ります）。終了しますか？</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Windows Hello が設定されていません（Windows の設定 → アカウント → サインイン オプション で PIN などを設定してください）</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Windows Hello の確認が取り消されたため、API キーを読めませんでした</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Windows Hello で確認できませんでした（{0}）</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>Windows Hello の鍵が見つかりません（Windows Hello を設定し直した可能性があります）。設定 → AI で API キーを入れ直してください</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Windows Hello の鍵を開けませんでした（{0}）</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Windows Hello の確認が取り消されました</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Windows Hello の鍵を作れませんでした（{0}）</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>マイクが見つかりません。マイクがつながっているか、Windows の設定 → システム → サウンド で確かめてください。</value>
   </data>

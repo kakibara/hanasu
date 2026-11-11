@@ -204,7 +204,7 @@ def check_mac_strings(errors: list[str], warnings: list[str], counts: dict[str, 
                                   "（UI なら tr(\"…\") にする。言語の決まりに使う語なら行末に // skip-tr）")
 
 
-WINDOWS_APP_DIRS = ["windows/Hanasu.Windows", "windows/Hanasu.Core", "windows/Hanasu.Whisper", "windows/Hanasu.Diarization"]
+WINDOWS_APP_DIRS = ["windows/Hanasu.Windows", "windows/Hanasu.Platform", "windows/Hanasu.Core", "windows/Hanasu.Whisper", "windows/Hanasu.Diarization"]
 
 
 def check_windows_strings(errors: list[str]) -> None:

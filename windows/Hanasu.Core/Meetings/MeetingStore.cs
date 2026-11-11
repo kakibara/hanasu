@@ -120,7 +120,7 @@ public sealed class MeetingStore
         if (!File.Exists(path)) return null;
         try
         {
-            var meeting = MeetingJson.Deserialize(File.ReadAllText(path));
+            var meeting = MeetingJson.Deserialize(IO.SharedFile.ReadAllText(path));
             // フォルダの名前を正とする（フォルダを手で付け替えた場合に備える）
             meeting.Id = id;
             return meeting;
@@ -140,6 +140,47 @@ public sealed class MeetingStore
             .OfType<Meeting>()
             .OrderByDescending(m => m.StartedAt)
             .ToList();
+    }
+
+    /// <summary>読んだ会議（新しい順）と、meeting.json があるのに開けない・読めなかった会議のフォルダの名前（会議の ID）</summary>
+    public sealed record LoadReport(IReadOnlyList<Meeting> Meetings, IReadOnlyList<string> Unreadable);
+
+    // 要件: REQ-MTG-120, REQ-COM-185
+    // 設計判断: DEC-MTG-123, DEC-MTG-153
+    /// <summary>
+    /// hanasu コマンド用。会議を並べて読み、開けない・読めない meeting.json の数も返す（壊れた JSON は数えずに飛ばす）。
+    /// フォルダがなければ空。フォルダそのものを読めなければ投げる（権限がないことを「会議がない」と取り違えない）
+    /// </summary>
+    public LoadReport LoadAllReporting()
+    {
+        if (!Directory.Exists(BaseDirectory)) return new(Array.Empty<Meeting>(), Array.Empty<string>());
+        var dirs = Directory.GetDirectories(BaseDirectory);
+        var meetings = new Meeting?[dirs.Length];
+        var unreadable = new bool[dirs.Length];
+        Parallel.For(0, dirs.Length, i =>
+        {
+            var path = Path.Combine(dirs[i], "meeting.json");
+            string text;
+            try
+            {
+                text = IO.SharedFile.ReadAllText(path);
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                // ファイルがない（会議のフォルダでない）ものは数えない
+                unreadable[i] = e is not (FileNotFoundException or DirectoryNotFoundException) && File.Exists(path);
+                return;
+            }
+            try
+            {
+                var meeting = MeetingJson.Deserialize(text);
+                meeting.Id = Path.GetFileName(dirs[i]);
+                meetings[i] = meeting;
+            }
+            catch (Exception e) when (e is JsonException or FormatException or ArgumentException or NotSupportedException) { }
+        });
+        var names = dirs.Where((_, i) => unreadable[i]).Select(d => Path.GetFileName(d)!).Order(StringComparer.Ordinal).ToList();
+        return new(meetings.OfType<Meeting>().OrderByDescending(m => m.StartedAt).ToList(), names);
     }
 
     // 設計判断: DEC-MTG-018, DEC-MTG-140
@@ -236,10 +277,7 @@ public sealed class MeetingStore
         return failures;
     }
 
-    private static void WriteAtomically(string path, string text)
-    {
-        var temp = path + ".tmp";
-        File.WriteAllText(temp, text);
-        File.Move(temp, path, overwrite: true);
-    }
+    // 要件: REQ-COM-183
+    // 設計判断: DEC-COM-194（hanasu が読んでいる間も、置き換えに失敗しない）
+    private static void WriteAtomically(string path, string text) => IO.SharedFile.WriteAllTextAtomically(path, text);
 }

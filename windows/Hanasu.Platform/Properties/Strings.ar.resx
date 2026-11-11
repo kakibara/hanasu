@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>لم يتم إعداد Windows Hello (قم بإعداد رقم PIN أو ما شابه في إعدادات Windows ← الحسابات ← خيارات تسجيل الدخول).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>تم إلغاء التحقق من Windows Hello، لذا تعذرت قراءة مفتاح API.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>فشل التحقق من Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>لم يتم العثور على مفتاح Windows Hello (ربما تم إعداد Windows Hello مرة أخرى). أدخل مفتاح API مرة أخرى في الإعدادات ← AI.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>تعذر فتح مفتاح Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>تم إلغاء التحقق من Windows Hello.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>تعذر إنشاء مفتاح Windows Hello ({0}).</value>
+  </data>
+</root>

@@ -88,7 +88,7 @@
 - 出典: ユーザーの依頼（2026-11-03「APIキーは重要な情報なので、他のアプリからは読み取れない状態で保存して」）
 - 対象: Mac / Windows
 - 実装の場所: `Keychain`（`save`・`load`・`hint`・`delete`）、`ClaudeKeySection`、`ClaudeClient.redacted`
-- Windows の実装: `windows/Hanasu.Core/Settings/SecretStore.cs`、`windows/Hanasu.Windows/Services/WindowsSecurity.cs`（`WindowsHelloKey`）、`windows/Hanasu.Windows/Services/SmallServices.cs`（`DpapiDataProtector`）
+- Windows の実装: `windows/Hanasu.Core/Settings/SecretStore.cs`、`windows/Hanasu.Platform/WindowsHelloKey.cs`（`WindowsHelloKey`）、`windows/Hanasu.Platform/DpapiDataProtector.cs`（`DpapiDataProtector`）
 - 確かめ方: Mac は `.build/debug/Hanasu --keychain-selftest`（名前を変えた一時的な項目で、保存・末尾 4 文字・読み出し・ACL・削除。`--keep` で残し、`--keychain-selftest-delete <サービス名>` で消す）
   - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`SecretStoreTests`。DPAPI と Windows Hello は偽物）。Windows Hello の確認が出ることは Windows の実機で確かめる（まだ確かめていない）
 
@@ -288,7 +288,7 @@
 
 ### REQ-COM-183 `hanasu` コマンドは、アプリが起動していてもいなくても動き、会議のファイルを書き換えない
 - 内容: 会議を読むコマンドは、Hanasu のアプリが起動していなくても、起動していても動く。アプリの起動時の処理（`AppDelegate`）を通らず、記録中・処理中の会議を「失敗」にする処理（`MeetingStore.markInterruptedMeetings`）と保存（`MeetingStore.save`）を呼ばない。
-- 受け入れ条件: すべてのコマンドを動かしたあとも、会議のフォルダの `meeting.json` は 1 バイトも変わらない。「処理中」の会議は「処理中」のまま。
+- 受け入れ条件: すべてのコマンドを動かしたあとも、会議のフォルダの `meeting.json` は 1 バイトも変わらない。「処理中」の会議は「処理中」のまま。Windows で、アプリが会議・設定・秘密を保存している最中に `hanasu` が読んでも、アプリの保存は失敗しない（DEC-COM-194）。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C6）
 - 関係する要件: REQ-MTG-025
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
@@ -852,7 +852,7 @@
 - 関係する要件: REQ-COM-030, REQ-COM-022
 - 対象: Mac / Windows
 - 実装の場所: `LocalLLMServer`
-- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Windows/Services/ChildProcessJob.cs`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Platform/ChildProcessJob.cs`
 
 ### DEC-COM-064 文脈の長さと生成の設定は、モデルごとに決める
 - 決めたこと: 文脈の長さ（`-c`）は、Gemma 4 E4B・LFM2.5・Qwen3.5 は 32,768、Sarashina2.2 は 8,192（モデルの上限）。出力の上限は、短い処理（整形・英訳・選択の編集・辞書の候補・会議の AI チャット）は 2,048、長い処理（議事録・会議への質問）は 4,096 で、どちらも文脈の半分を超えない。サンプリングは開発元の推奨にする（Gemma 4: temperature 1.0・top_p 0.95・top_k 64、LFM2.5: temperature 0.1・top_k 50・repetition_penalty 1.05）。Sarashina2.2 は推奨がないので temperature 0.2・top_p 0.95・repetition_penalty 1.05。Qwen3.5-4B は考えない使い方の推奨（temperature 0.7・top_p 0.8・top_k 20）にし、推奨の presence_penalty 1.5 は付けない。待つ時間は、音声入力は 1 回 120 秒、会議は 1 回 30 分（モデルの読み込みを含む）。
@@ -1099,7 +1099,7 @@
 - 決めた場面: Claude API に対応した PR
 - 関係する要件: REQ-COM-021
 - 対象: Windows
-- 実装の場所: `windows/Hanasu.Core/Settings/SecretStore.cs`、`windows/Hanasu.Windows/Services/WindowsSecurity.cs`（`WindowsHelloKey`）、`windows/Hanasu.Core/Settings/SettingsStore.cs`（`SettingsService.MigrateSecrets`）
+- 実装の場所: `windows/Hanasu.Core/Settings/SecretStore.cs`、`windows/Hanasu.Platform/WindowsHelloKey.cs`（`WindowsHelloKey`。アプリと hanasu コマンドで共有。DEC-COM-193）、`windows/Hanasu.Core/Settings/SettingsStore.cs`（`SettingsService.MigrateSecrets`）
 
 ### DEC-COM-145 Windows 版の API の通信は https だけで、リダイレクトに従わない
 - 決めたこと: Gemini・Claude・サービスアカウントのトークンの通信は `SafeHttp.Create`（リダイレクトに従わない HttpClient）で行う。証明書の検証は OS に任せ、外す設定は置かない。サービスアカウントの JSON の `token_uri` が https でなければ使わない。Claude の送り先は固定し、環境変数で変えられないようにする（DEC-COM-141）。
@@ -1123,7 +1123,7 @@
 - 決めた場面: Claude API に対応した PR
 - 関係する要件: REQ-COM-021, REQ-COM-022
 - 対象: Windows
-- 実装の場所: `windows/Hanasu.Core/Ai/SecretRedactor.cs`、`windows/Hanasu.Windows/Services/SmallServices.cs`（`AppLog`）
+- 実装の場所: `windows/Hanasu.Core/Ai/SecretRedactor.cs`、`windows/Hanasu.Platform/AppLog.cs`（`AppLog`。DEC-COM-193）
 
 ### DEC-COM-148 Windows 版は、起動の最初に DLL を探す場所を絞る
 - 決めたこと: `App` の静的コンストラクターで `SetDllDirectory("")` と `SetDefaultDllDirectories`（exe のフォルダ・System32・`AddDllDirectory` で足したフォルダ）を呼び、作業フォルダと PATH を DLL の探索から外す。Whisper のネイティブライブラリのフォルダ（`runtimes/win-*/`）は `AddDllDirectory` で足す。Hanasu 自身の P/Invoke（user32 / kernel32 / advapi32）は `DefaultDllImportSearchPaths(System32)` で System32 からだけ読む。`onnxruntime.dll` と `sherpa-onnx-c-api.dll` は今までどおり exe の隣に置く（exe のフォルダは System32 より先に探されるので、Windows 11 の System32 の別の版と取り違えない）。
@@ -1131,7 +1131,7 @@
 - 決めた場面: Claude API に対応した PR
 - 関係する要件: REQ-COM-022
 - 対象: Windows
-- 実装の場所: `windows/Hanasu.Windows/Services/WindowsSecurity.cs`（`HardenDllSearch`）、`windows/Hanasu.Windows/Native/NativeMethods.cs`
+- 実装の場所: `windows/Hanasu.Platform/DllSearch.cs`（`DllSearch.Harden`。アプリと hanasu コマンドが起動の最初に呼ぶ。DEC-COM-193）、`windows/Hanasu.Platform/PlatformNative.cs`、`windows/Hanasu.Windows/Native/NativeMethods.cs`
 
 ### DEC-COM-149 Windows 版は、Hanasu より権限の高いウインドウには貼り付けを送らない
 - 決めたこと: Ctrl+V を送る前に、前面のウインドウのプロセスの整合性レベルを調べ、Hanasu より高い（管理者として実行など）か調べられなければ、送らずに結果を画面に残す（入力できる場所がないときと同じ表示。DEC-DIC-123）。クリップボードに残すかは設定に従う（既定は残す。REQ-DIC-081・DEC-DIC-122）。クリップボードに置く文章には、履歴（Win+V）・クラウドのクリップボード・監視アプリに残さない印（`ExcludeClipboardContentFromMonitorProcessing`・`CanIncludeInClipboardHistory`=0・`CanUploadToCloudClipboard`=0）を付ける（PR #19 から付いていることを確かめた）。メニューの「最近の結果」と会議の「Markdown をコピー」は、ユーザーが自分でコピーする操作なので印を付けない。Hanasu は管理者権限を求めず（`asInvoker`）、`uiAccess` も使わない。
@@ -1368,6 +1368,22 @@
 - 関係する要件: REQ-COM-180, REQ-COM-181
 - 対象: Mac / Windows
 - 実装の場所: `HanasuGoldenCLI`、`SettingsDefaults`、`HanasuClock`
+
+### DEC-COM-193 Windows に依る部品のうちアプリと `hanasu` が両方使うものは、共有のライブラリ `Hanasu.Platform` に置く
+- 決めたこと: DPAPI（`DpapiDataProtector`）・Windows Hello の鍵（`WindowsHelloKey`）・DLL を探す場所を絞る処理（`DllSearch.Harden`）・子プロセスのジョブオブジェクト（`ChildProcessJob`）・動作の記録（`AppLog`）と、その失敗の理由の文（`Hello_*`、17 言語）を、`windows/Hanasu.Platform`（`net8.0-windows10.0.19041.0` のライブラリ）に置き、アプリ（`Hanasu.Windows`）と `hanasu`（`Hanasu.Command`）の両方が参照する。使う Win32 API は `PlatformNative` に、使うものだけを宣言する。入力先の整合性レベルの確かめ（DEC-COM-149）はアプリだけが使うので、`Hanasu.Windows` に残す。
+- 理由: 秘密の読み方を 1 つにし、アプリと `hanasu` で守り方がずれないようにする。Windows Hello（WinRT）は Windows の TFM が要るので、Mac でテストする `Hanasu.Core`（net8.0）には置けない。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（WD1）
+- 関係する要件: REQ-COM-021, REQ-COM-022, REQ-COM-186
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Platform`
+
+### DEC-COM-194 Windows では、`hanasu` は置き換えを妨げない開き方で読み、アプリの保存は共有違反のときだけやり直す
+- 決めたこと: 会議・設定・秘密のファイルは `SharedFile.ReadAllText`（読み書きと削除を共有して開き、すぐ閉じる）で読む。保存（一時ファイルに書いて置き換える）は `SharedFile.WriteAllTextAtomically` で行い、置き換えが共有違反（`ERROR_SHARING_VIOLATION`・`ERROR_LOCK_VIOLATION`・アクセス拒否）で失敗したら、50 ms おいて最大 20 回（合わせて約 1 秒）やり直す。ファイル・フォルダがないときはやり直さない。
+- 理由: Windows では、ほかのプロセスが削除の共有なしで開いている間、置き換え（`MoveFileEx`）が失敗する（Mac の rename では起きない）。`hanasu`（MCP の連続の呼び出しを含む）が読んでいる最中にアプリが会議を保存すると、保存に失敗して会議が「失敗」になりうる（1 回目のレビューの指摘）。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（W6）
+- 関係する要件: REQ-COM-183
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/IO/SharedFile.cs`、`MeetingStore.WriteAtomically`、`SettingsStore.Save`、`SecretStore.Mutate`
 
 ---
 

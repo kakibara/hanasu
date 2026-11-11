@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>Windows Hello सेट अप नहीं है (Windows सेटिंग्स → खाते → साइन-इन विकल्प में PIN या ऐसा कुछ सेट अप करें).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Windows Hello सत्यापन रद्द कर दिया गया, इसलिए API कुंजी पढ़ी नहीं जा सकी.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Windows Hello सत्यापन विफल रहा ({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>Windows Hello कुंजी नहीं मिली (हो सकता है Windows Hello फिर से सेट अप किया गया हो). सेटिंग्स → AI में API कुंजी फिर से दर्ज करें.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Windows Hello कुंजी खोली नहीं जा सकी ({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Windows Hello सत्यापन रद्द कर दिया गया.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Windows Hello कुंजी नहीं बनाई जा सकी ({0}).</value>
+  </data>
+</root>

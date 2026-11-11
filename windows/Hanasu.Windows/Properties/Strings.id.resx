@@ -101,27 +101,6 @@ Asli: {2}</value>
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>Rapat sedang direkam (atau diproses setelah perekaman). Jika Anda keluar, transkrip dan notulen untuk rapat ini tidak akan dibuat (file audio tetap disimpan). Tetap keluar?</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Windows Hello belum diatur (atur PIN atau sejenisnya di Pengaturan Windows → Akun → Opsi masuk).</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Verifikasi Windows Hello dibatalkan, jadi kunci API tidak dapat dibaca.</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Verifikasi Windows Hello gagal ({0}).</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>Kunci Windows Hello tidak ditemukan (Windows Hello mungkin telah diatur ulang). Masukkan lagi kunci API di Pengaturan → AI.</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Tidak dapat membuka kunci Windows Hello ({0}).</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Verifikasi Windows Hello dibatalkan.</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Tidak dapat membuat kunci Windows Hello ({0}).</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>Mikrofon tidak ditemukan. Periksa apakah mikrofon tersambung, di Pengaturan Windows → Sistem → Suara.</value>
   </data>

@@ -101,27 +101,6 @@
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>Идет запись встречи (или ее обработка после записи). Если выйти, расшифровка и протокол этой встречи не будут созданы (аудиофайлы сохранятся). Все равно выйти?</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Windows Hello не настроен (настройте ПИН-код или другой способ в разделе Параметры Windows → Учетные записи → Варианты входа).</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Проверка Windows Hello отменена, поэтому ключ API не удалось прочитать.</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Ошибка проверки Windows Hello ({0}).</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>Ключ Windows Hello не найден (возможно, Windows Hello был настроен заново). Снова введите ключ API в разделе Параметры → AI.</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Не удалось открыть ключ Windows Hello ({0}).</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Проверка Windows Hello отменена.</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Не удалось создать ключ Windows Hello ({0}).</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>Микрофон не найден. Проверьте, подключен ли микрофон, в разделе Параметры Windows → Система → Звук.</value>
   </data>

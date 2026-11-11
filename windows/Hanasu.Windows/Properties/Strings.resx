@@ -130,34 +130,6 @@ Original: {2}</value>
     <value>A meeting is being recorded (or processed after recording). If you quit, no transcript or minutes will be created for this meeting (the audio files are kept). Quit anyway?</value>
     <comment>Confirmation when quitting</comment>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Windows Hello isn't set up (set up a PIN or similar in Windows Settings → Accounts → Sign-in options).</value>
-    <comment>Error; use the names shown in Windows Settings</comment>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Windows Hello verification was canceled, so the API key couldn't be read.</value>
-    <comment>Error</comment>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Windows Hello verification failed ({0}).</value>
-    <comment>Error. {0} = status code</comment>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>The Windows Hello key wasn't found (Windows Hello may have been set up again). Enter the API key again in Settings → AI.</value>
-    <comment>Error</comment>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Couldn't open the Windows Hello key ({0}).</value>
-    <comment>Error. {0} = status code</comment>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Windows Hello verification was canceled.</value>
-    <comment>Error</comment>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Couldn't create the Windows Hello key ({0}).</value>
-    <comment>Error. {0} = status code</comment>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>No microphone was found. Check that a microphone is connected, in Windows Settings → System → Sound.</value>
     <comment>Error; use the names shown in Windows Settings</comment>

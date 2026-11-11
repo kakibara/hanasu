@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Windows に依る部品のうち、アプリ（Hanasu.Windows）と hanasu コマンド（Hanasu.Command）の両方が使うもの。
+       DPAPI・Windows Hello で API キーを守る部品、DLL を探す場所を絞る処理、子プロセスのジョブオブジェクト、動作の記録（AppLog）。
+       設計判断: DEC-COM-193（docs/plans/cli-windows.md の WD1）。Windows Hello（WinRT）を使うので Windows の TFM にする -->
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <RootNamespace>Hanasu.Platform</RootNamespace>
+    <!-- LibraryImport（P/Invoke のソース生成）に要る -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- 要件: REQ-COM-060 -->
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="Hanasu.Platform.Properties" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hanasu.Core\Hanasu.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+  </ItemGroup>
+
+  <!-- 要件: REQ-COM-060 -->
+  <!-- 画面に出る文字列（Windows Hello の失敗の理由）。Strings.resx は英語、Strings.<カルチャ>.resx が各言語。訳の出し入れは scripts/i18n-resx.py -->
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Strings.resx">
+      <StronglyTypedFileName>$(IntermediateOutputPath)Strings.Designer.cs</StronglyTypedFileName>
+      <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+      <StronglyTypedNamespace>Hanasu.Platform.Properties</StronglyTypedNamespace>
+      <StronglyTypedClassName>Strings</StronglyTypedClassName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

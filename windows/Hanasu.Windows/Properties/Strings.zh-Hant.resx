@@ -101,27 +101,6 @@
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>正在錄製會議（或正在進行錄製後的處理）。如果結束，將不會為此會議建立逐字稿和會議記錄（音訊檔案會保留）。仍要結束嗎？</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>尚未設定 Windows Hello（請在 Windows 設定 → 帳戶 → 登入選項中設定 PIN 等）。</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Windows Hello 驗證已取消，因此無法讀取 API 金鑰。</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Windows Hello 驗證失敗（{0}）。</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>找不到 Windows Hello 金鑰（Windows Hello 可能已重新設定）。請在設定 → AI 中重新輸入 API 金鑰。</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>無法開啟 Windows Hello 金鑰（{0}）。</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Windows Hello 驗證已取消。</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>無法建立 Windows Hello 金鑰（{0}）。</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>找不到麥克風。請在 Windows 設定 → 系統 → 音效中確認麥克風是否已連接。</value>
   </data>

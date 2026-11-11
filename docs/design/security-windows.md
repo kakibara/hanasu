@@ -113,6 +113,6 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 
 2026-11-05 に見直した（REQ-COM-030、DEC-COM-060〜063）。Mac 版の [security.md](security.md) の 10 章と同じ考え。
 
-- 確かめたこと: `llama-server.exe` は `--host 127.0.0.1` の空いたポートで、起動のたびに作る乱数のキー（環境変数 `LLAMA_API_KEY`）を付けて動き、Hanasu と一緒に終わるジョブオブジェクトに入れる（`ChildProcessJob`）。クライアント（`LocalLlmClient.CreateHttp`）はプロキシを通さず、リダイレクトに従わない。llama.cpp の配布物は版と SHA-256 を固定して取る（`scripts/fetch-llama-cpp.ps1`）。モデルは `ModelDownload` で取る（2.3）。
+- 確かめたこと: `llama-server.exe` は `--host 127.0.0.1` の空いたポートで、起動のたびに作る乱数のキー（環境変数 `LLAMA_API_KEY`）を付けて動き、Hanasu と一緒に終わるジョブオブジェクトに入れる（`ChildProcessJob`。`Hanasu.Platform`）。クライアント（`LocalLlmClient.CreateHttp`）はプロキシを通さず、リダイレクトに従わない。llama.cpp の配布物は版と SHA-256 を固定して取る（`scripts/fetch-llama-cpp.ps1`）。モデルは `ModelDownload` で取る（2.3）。
 - 直したこと（DEC-COM-063）: キーなしで読める `/models` にモデルのファイルのパス（ユーザー名を含む）が出ていたので、`--alias <モデルの id>` を付けた。子プロセスの環境から、CLI が環境変数で受け取るほかのサービスの秘密（`ANTHROPIC_API_KEY`・`GEMINI_API_KEY` など。`LocalLlmServer.SecretEnvironmentKeys`）を外した。
 - 残る危険: 同じユーザーのプロセスは、llama-server の環境からキーとポートを読める（1 章の表のとおり）。環境変数 `HANASU_LLAMA_SERVER` で動かす実行ファイルを差し替えられる（開発と確認に要るので残している）。置いてあるモデルは大きさだけで確かめる（2.3）。

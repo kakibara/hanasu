@@ -101,27 +101,6 @@ Originale: {2}</value>
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>È in corso la registrazione di una riunione (o la sua elaborazione dopo la registrazione). Se esci, per questa riunione non verranno creati né la trascrizione né il verbale (i file audio vengono conservati). Uscire comunque?</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Windows Hello non è configurato (configura un PIN o un metodo simile in Impostazioni di Windows → Account → Opzioni di accesso).</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>La verifica di Windows Hello è stata annullata, quindi non è stato possibile leggere la chiave API.</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Verifica di Windows Hello non riuscita ({0}).</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>La chiave di Windows Hello non è stata trovata (Windows Hello potrebbe essere stato configurato di nuovo). Immetti di nuovo la chiave API in Impostazioni → AI.</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Impossibile aprire la chiave di Windows Hello ({0}).</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>La verifica di Windows Hello è stata annullata.</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Impossibile creare la chiave di Windows Hello ({0}).</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>Nessun microfono trovato. Verifica che sia collegato un microfono in Impostazioni di Windows → Sistema → Audio.</value>
   </data>

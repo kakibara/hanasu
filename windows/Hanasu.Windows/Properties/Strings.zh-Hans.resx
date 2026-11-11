@@ -101,27 +101,6 @@
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>正在录制会议（或正在进行录制后的处理）。如果退出，将不会为此会议生成转录稿和会议纪要（音频文件会保留）。仍要退出吗？</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>尚未设置 Windows Hello（请在 Windows 设置 → 账户 → 登录选项中设置 PIN 等）。</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Windows Hello 验证已取消，因此无法读取 API 密钥。</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Windows Hello 验证失败（{0}）。</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>找不到 Windows Hello 密钥（Windows Hello 可能已重新设置）。请在设置 → AI 中重新输入 API 密钥。</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>无法打开 Windows Hello 密钥（{0}）。</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Windows Hello 验证已取消。</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>无法创建 Windows Hello 密钥（{0}）。</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>找不到麦克风。请在 Windows 设置 → 系统 → 声音中检查麦克风是否已连接。</value>
   </data>

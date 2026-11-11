@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>Windows Hello가 설정되지 않았습니다(Windows 설정 → 계정 → 로그인 옵션에서 PIN 등을 설정하세요).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Windows Hello 확인이 취소되어 API 키를 읽을 수 없습니다.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Windows Hello로 확인하지 못했습니다({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>Windows Hello 키를 찾을 수 없습니다(Windows Hello를 다시 설정했을 수 있습니다). 설정 → AI에서 API 키를 다시 입력하세요.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Windows Hello 키를 열 수 없습니다({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Windows Hello 확인이 취소되었습니다.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Windows Hello 키를 만들 수 없습니다({0}).</value>
+  </data>
+</root>

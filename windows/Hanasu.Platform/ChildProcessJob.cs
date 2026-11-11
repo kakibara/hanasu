@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Hanasu.Windows.Services;
+namespace Hanasu.Platform;
 
 /// <summary>
 /// 子プロセス（ローカルの LLM の llama-server）を、Hanasu と一緒に終わるジョブオブジェクトに入れる。
@@ -10,7 +10,7 @@ namespace Hanasu.Windows.Services;
 /// </summary>
 // 要件: REQ-COM-030
 // 設計判断: DEC-COM-063
-internal static partial class ChildProcessJob
+public static partial class ChildProcessJob
 {
     private const int JobObjectExtendedLimitInformation = 9;
     private const uint JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE = 0x2000;
@@ -48,7 +48,7 @@ internal static partial class ChildProcessJob
             Marshal.StructureToPtr(info, pointer, false);
             if (!SetInformationJobObject(job, JobObjectExtendedLimitInformation, pointer, (uint)size))
             {
-                Native.NativeMethods.CloseHandle(job);
+                PlatformNative.CloseHandle(job);
                 return IntPtr.Zero;
             }
         }
