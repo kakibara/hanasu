@@ -378,7 +378,7 @@ Original: {2}</value>
     <value>Wird verarbeitet…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Noch kein Protokoll. Es kann mit „Protokoll neu erstellen“ erstellt werden (erfordert die KI-Einstellungen für „Besprechungen“ unter Einstellungen → AI).</value>
+    <value>Noch kein Protokoll. Es kann mit „Protokoll neu erstellen“ erstellt werden (erfordert die KI-Einstellungen für „Protokoll“ unter Einstellungen → AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>Die Transkription erfolgt nach dem Beenden der Aufnahme.</value>
@@ -525,8 +525,17 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Nur aufnehmen, solange gedrückt</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Transkriptions-Engine</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>Transkriptions-KI</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Diktat</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Besprechungsaufzeichnung</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Transkriptionsmodell (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Windows-Spracherkennung (Standard)</value>
@@ -538,7 +547,7 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
     <value>Gemini (sendet Audio an Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Erkennt Sprache mit der Windows-Spracherkennung (Diktat) und zeigt Zwischenergebnisse während des Sprechens an. Es wird die Online-Spracherkennung von Microsoft verwendet; daher unter Windows-Einstellungen → Datenschutz und Sicherheit → Spracherkennung die Option „Online-Spracherkennung“ aktivieren. Verwendet wird das Windows-Standardmikrofon (die Auswahl unten wird nicht verwendet).</value>
+    <value>Erkennt Sprache mit der Windows-Spracherkennung (Diktat) und zeigt Zwischenergebnisse während des Sprechens an. Es wird die Online-Spracherkennung von Microsoft verwendet; daher unter Windows-Einstellungen → Datenschutz und Sicherheit → Spracherkennung die Option „Online-Spracherkennung“ aktivieren. Verwendet wird das Windows-Standardmikrofon (die Mikrofonauswahl im Tab „Allgemein“ wird nicht verwendet).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Spracherkennungseinstellungen öffnen</value>
@@ -559,7 +568,7 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
     <value>Abbrechen</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Sendet das aufgenommene Audio zur Transkription an die Gemini API von Google (mit den im Tab „AI“ festgelegten Gemini-Anmeldedaten und dem Gemini-Modell für das Diktat). Hinweis: Das Audio wird an Google gesendet. Es wird nach dem Beenden der Aufnahme gesendet (jeweils maximal 7 Minuten).</value>
+    <value>Sendet das aufgenommene Audio zur Transkription an die Gemini API von Google (mit den Gemini-Anmeldedaten in diesem Tab und dem unten ausgewählten Transkriptionsmodell). Hinweis: Das Audio wird an Google gesendet. Es wird nach dem Beenden der Aufnahme gesendet (jeweils maximal 7 Minuten).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Mikrofon</value>
@@ -589,19 +598,19 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
     <value>Einstellungsordner öffnen</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>KI und Modelle</value>
+    <value>KI nach der Transkription</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Diktat (Überarbeitung, Übersetzung)</value>
+    <value>Diktat-Überarbeitung</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Lokal</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Besprechungen (Protokoll)</value>
+    <value>Protokoll</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>KI und Modell können für Diktat und Besprechungen getrennt ausgewählt werden. Standard sind bei Gemini gemini-3.5-flash-lite (Diktat) und gemini-3.8-flash (Protokoll), bei Claude Haiku 5.5 (Diktat) und Sonnet 5.5 (Protokoll). Claude wird nur zur Textverarbeitung verwendet, nicht zur Transkription von Audio (die Transkriptions-Engine befindet sich in den Tabs „Allgemein“ und „Besprechungen“).</value>
+    <value>KI und Modell können für Diktat-Überarbeitung und Protokoll getrennt ausgewählt werden. Standard sind bei Gemini gemini-3.5-flash-lite (Diktat-Überarbeitung) und gemini-3.8-flash (Protokoll), bei Claude Haiku 5.5 (Diktat-Überarbeitung) und Sonnet 5.5 (Protokoll). Claude wird nur zur Textverarbeitung verwendet, nicht zur Transkription von Audio (die Transkriptions-Engine befindet sich oben unter „Transkriptions-KI“).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Lokale Modelle (kleine LLMs, die auf diesem PC laufen)</value>
@@ -673,7 +682,7 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
     <value>Schlüssel werden verschlüsselt in %LOCALAPPDATA%\Hanasu\secrets.json gespeichert, nicht in settings.json. Mit dem Standard DPAPI kann nur dieser Windows-Benutzer sie lesen, aber andere Apps, die unter demselben Benutzer laufen, können sie ohne Bestätigung lesen. Mit Windows Hello lösen andere Apps beim Lesen eine Windows Hello-Abfrage aus (die Bestätigung erfolgt einmal bei der ersten Verwendung nach dem Start und erneut nach dem Sperren des Bildschirms). Es kann nicht verhindert werden, dass Apps desselben Benutzers den Arbeitsspeicher lesen, während Hanasu läuft.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Ausprobieren (Diktat-KI)</value>
+    <value>Ausprobieren (Diktat-Überarbeitung)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>ähm also für das meeting morgen äh da nehme ich die folien die ich mit gemini gemacht habe</value>
@@ -702,9 +711,6 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>Tastenkombination für „Wichtig“ verwenden (nur während der Aufnahme aktiv)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Transkription</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (läuft auf diesem PC; Standard)</value>
   </data>
@@ -727,7 +733,7 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
     <value>Nach der Aufnahme ein Protokoll mit KI erstellen</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>KI und Modell für das Protokoll unter „Besprechungen (Protokoll)“ im Tab „AI“ auswählen. Gesendet wird nur der Transkripttext (wenn Gemini die Transkriptions-Engine ist, wird auch das Audio an Google gesendet). Die Protokollvorlage in den Besprechungsnotizen auswählen.</value>
+    <value>KI und Modell für das Protokoll unter „Protokoll“ im Tab „AI“ auswählen. Gesendet wird nur der Transkripttext (wenn Gemini die Transkriptions-Engine ist, wird auch das Audio an Google gesendet). Die Protokollvorlage in den Besprechungsnotizen auswählen.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Speicherung</value>
@@ -883,13 +889,13 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
     <value>{0} ({1}) hat {2} s benötigt</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>Das aufgenommene Besprechungsaudio wird in 5-Minuten-Abschnitte geteilt und an Gemini gesendet (mit den Gemini-Anmeldedaten im Tab „AI“ und dem Gemini-Modell für das Diktat). Hinweis: Das Audio wird an Google gesendet.</value>
+    <value>Das aufgenommene Besprechungsaudio wird in 5-Minuten-Abschnitte geteilt und an Gemini gesendet (mit den Gemini-Anmeldedaten in diesem Tab und dem unten ausgewählten Transkriptionsmodell). Hinweis: Das Audio wird an Google gesendet.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Verwendet das im Tab „Allgemein“ ausgewählte Whisper-Modell ({0}).</value>
+    <value>Verwendet das unten ausgewählte Whisper-Modell ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Es wurde noch nicht heruntergeladen (im Tab „Allgemein“ herunterladen).</value>
+    <value> Es wurde noch nicht heruntergeladen (unten herunterladen).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Speicherort für Besprechungen auswählen</value>

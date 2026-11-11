@@ -378,7 +378,7 @@ Sonuç: {1}
     <value>İşleniyor…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Henüz tutanak yok. "Tutanağı Yeniden Oluştur" ile oluşturabilirsiniz (Ayarlar → AI bölümünde "Toplantılar" için yapay zeka ayarları gerekir).</value>
+    <value>Henüz tutanak yok. "Tutanağı Yeniden Oluştur" ile oluşturabilirsiniz (Ayarlar → AI bölümünde "Tutanak" için AI ayarları gerekir).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>Yazıya dökme, kaydı durdurduktan sonra yapılır.</value>
@@ -525,8 +525,17 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Yalnızca basılı tutulurken kaydet</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Yazıya dökme motoru</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>Yazıya dökme AI'ı</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Dikte</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Toplantı kaydı</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Yazıya dökme modeli (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Windows konuşma tanıma (varsayılan)</value>
@@ -538,7 +547,7 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
     <value>Gemini (sesi Google'a gönderir)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Konuşmayı Windows konuşma tanıma (dikte) ile tanır ve siz konuşurken ara sonuçları gösterir. Microsoft'un çevrimiçi konuşma tanıma hizmetini kullandığından Windows Ayarları → Gizlilik ve güvenlik → Konuşma bölümünde "Çevrimiçi konuşma tanıma"yı açın. Windows varsayılan mikrofonunu kullanır (aşağıdaki seçim kullanılmaz).</value>
+    <value>Konuşmayı Windows konuşma tanıma (dikte) ile tanır ve siz konuşurken ara sonuçları gösterir. Microsoft'un çevrimiçi konuşma tanıma hizmetini kullandığından Windows Ayarları → Gizlilik ve güvenlik → Konuşma bölümünde "Çevrimiçi konuşma tanıma"yı açın. Windows varsayılan mikrofonunu kullanır ("Genel" sekmesindeki mikrofon seçimi kullanılmaz).</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Konuşma Ayarlarını Aç</value>
@@ -559,7 +568,7 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
     <value>İptal</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Kaydedilen sesi yazıya dökmek için Google'ın Gemini API'sine gönderir (AI sekmesinde ayarlanan Gemini kimlik bilgileri ve dikte için Gemini modeli kullanılır). Sesinizin Google'a gönderildiğini unutmayın. Kaydı durdurduktan sonra gönderilir (tek seferde en fazla 7 dakika).</value>
+    <value>Kaydedilen sesi yazıya dökmek için Google'ın Gemini API'sine gönderir (bu sekmedeki Gemini kimlik bilgileri ve aşağıda seçilen yazıya dökme modeli kullanılır). Sesinizin Google'a gönderildiğini unutmayın. Kaydı durdurduktan sonra gönderilir (tek seferde en fazla 7 dakika).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Mikrofon</value>
@@ -589,19 +598,19 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
     <value>Ayarlar Klasörünü Aç</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>Yapay zeka ve modeller</value>
+    <value>Yazıya dökme sonrası AI</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Dikte (düzenleme, çeviri)</value>
+    <value>Dikte iyileştirmesi</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Yerel</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Toplantılar (tutanak)</value>
+    <value>Tutanak</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>Dikte ve toplantılar için yapay zekayı ve modeli ayrı ayrı seçebilirsiniz. Varsayılanlar: Gemini için gemini-3.5-flash-lite (dikte) ve gemini-3.8-flash (tutanak); Claude için Haiku 5.5 (dikte) ve Sonnet 5.5 (tutanak). Claude yalnızca metin işlemek için kullanılır, sesi yazıya dökmek için kullanılmaz (yazıya dökme motoru "Genel" ve "Toplantılar" sekmelerindedir).</value>
+    <value>Dikte iyileştirmesi ve tutanak için AI'ı ve modeli ayrı ayrı seçebilirsiniz. Varsayılanlar: Gemini için gemini-3.5-flash-lite (dikte iyileştirmesi) ve gemini-3.8-flash (tutanak); Claude için Haiku 5.5 (dikte iyileştirmesi) ve Sonnet 5.5 (tutanak). Claude yalnızca metin işlemek için kullanılır, sesi yazıya dökmek için kullanılmaz (yazıya dökme motoru yukarıdaki "Yazıya dökme AI'ı" bölümündedir).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Yerel modeller (bu bilgisayarda çalışan küçük LLM'ler)</value>
@@ -673,7 +682,7 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
     <value>Anahtarlar settings.json yerine %LOCALAPPDATA%\Hanasu\secrets.json içinde şifrelenmiş olarak saklanır. Varsayılan DPAPI ile yalnızca bu Windows kullanıcısı okuyabilir, ancak aynı kullanıcı olarak çalışan diğer uygulamalar onay olmadan okuyabilir. Windows Hello ile, bunları okumaya çalışan diğer uygulamalar bir Windows Hello istemi tetikler (başlattıktan sonraki ilk kullanımda ve ekran kilitlendikten sonra bir kez doğrularsınız). Bu, Hanasu çalışırken aynı kullanıcı olarak çalışan uygulamaların belleği okumasını engelleyemez.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Deneyin (dikte yapay zekası)</value>
+    <value>Deneyin (dikte iyileştirmesi)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>ee şey yarınki toplantı için hani gemini ile hazırladığım slaytları kullanacağım</value>
@@ -702,9 +711,6 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>"Önemli" kısayolunu kullan (yalnızca kayıt sırasında etkin)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Yazıya dökme</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (bu bilgisayarda çalışır; varsayılan)</value>
   </data>
@@ -727,7 +733,7 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
     <value>Kayıttan sonra yapay zeka ile tutanak oluştur</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>Tutanak için yapay zekayı ve modeli "AI" sekmesindeki "Toplantılar (tutanak)" altında seçin. Yalnızca döküm metni gönderilir (yazıya dökme motoru Gemini ise ses de Google'a gönderilir). Tutanak şablonunu Toplantı Notları'nda seçin.</value>
+    <value>Tutanak için AI'ı ve modeli "AI" sekmesindeki "Tutanak" altında seçin. Yalnızca döküm metni gönderilir (yazıya dökme motoru Gemini ise ses de Google'a gönderilir). Tutanak şablonunu Toplantı Notları'nda seçin.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Depolama</value>
@@ -883,13 +889,13 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
     <value>{0} ({1}) {2} sn sürdü</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>Kaydedilen toplantı sesi 5 dakikalık parçalara bölünüp Gemini'ye gönderilir (AI sekmesindeki Gemini kimlik bilgileri ve dikte için Gemini modeli kullanılır). Sesinizin Google'a gönderildiğini unutmayın.</value>
+    <value>Kaydedilen toplantı sesi 5 dakikalık parçalara bölünüp Gemini'ye gönderilir (bu sekmedeki Gemini kimlik bilgileri ve aşağıda seçilen yazıya dökme modeli kullanılır). Sesinizin Google'a gönderildiğini unutmayın.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>"Genel" sekmesinde seçilen Whisper modelini kullanır ({0}).</value>
+    <value>Aşağıda seçilen Whisper modelini kullanır ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Henüz indirilmedi ("Genel" sekmesinden indirin).</value>
+    <value> Henüz indirilmedi (aşağıdan indirin).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Toplantıların Kaydedileceği Yeri Seçin</value>

@@ -634,7 +634,7 @@
     <value>"{0}" juga ada di baris sebelumnya, jadi baris itu yang digunakan.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Model Whisper ({0}) belum diunduh. Unduh di menu → Pengaturan → Umum.</value>
+    <value>Model Whisper ({0}) belum diunduh. Unduh di "AI transkripsi" pada menu → Pengaturan → AI.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Tidak dapat menjalankan Whisper. Instal Microsoft Visual C++ Redistributable (2015–2022, x64) lalu coba lagi. ({0})</value>

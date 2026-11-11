@@ -378,7 +378,7 @@
     <value>جارٍ المعالجة…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>لا يوجد محضر بعد. يمكنك إنشاؤه باستخدام "إعادة إنشاء المحضر" (يتطلب إعدادات AI لـ "الاجتماعات" في الإعدادات ← AI).</value>
+    <value>لا يوجد محضر بعد. يمكنك إنشاؤه باستخدام "إعادة إنشاء المحضر" (يتطلب إعدادات AI لـ "المحضر" في الإعدادات ← AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>يتم النسخ بعد إيقاف التسجيل.</value>
@@ -525,8 +525,17 @@
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>التسجيل فقط أثناء الضغط مع الاستمرار</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>محرك النسخ</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>AI للتفريغ النصي</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>الإدخال الصوتي</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>تسجيل الاجتماعات</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>نموذج التفريغ النصي (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>التعرف على الكلام في Windows (افتراضي)</value>
@@ -538,7 +547,7 @@
     <value>Gemini (يرسل الصوت إلى Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>يتعرف على الكلام باستخدام التعرف على الكلام في Windows (الإملاء) ويعرض نتائج جزئية أثناء التحدث. يستخدم التعرف على الكلام عبر الإنترنت من Microsoft، لذا شغّل "التعرف على الكلام عبر الإنترنت" في إعدادات Windows ← الخصوصية والأمان ← الكلام. يستخدم الميكروفون الافتراضي في Windows (لا يتم استخدام التحديد أدناه).</value>
+    <value>يتعرف على الكلام باستخدام التعرف على الكلام في Windows (الإملاء) ويعرض نتائج جزئية أثناء التحدث. يستخدم التعرف على الكلام عبر الإنترنت من Microsoft، لذا شغّل "التعرف على الكلام عبر الإنترنت" في إعدادات Windows ← الخصوصية والأمان ← الكلام. يستخدم الميكروفون الافتراضي في Windows (لا يُستخدم اختيار الميكروفون في علامة التبويب "عام").</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>فتح إعدادات الكلام</value>
@@ -559,7 +568,7 @@
     <value>إلغاء</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>يرسل الصوت المسجّل إلى Gemini API من Google (باستخدام بيانات اعتماد Gemini المعيّنة في علامة التبويب AI ونموذج Gemini للإملاء) لنسخه. لاحظ أن صوتك يُرسل إلى Google. يُرسل بعد إيقاف التسجيل (حتى 7 دقائق في كل مرة).</value>
+    <value>يرسل الصوت المسجّل إلى Gemini API من Google (باستخدام بيانات اعتماد Gemini في علامة التبويب هذه ونموذج التفريغ النصي المختار أدناه) لتفريغه نصيًا. لاحظ أن صوتك يُرسل إلى Google. يُرسل بعد إيقاف التسجيل (حتى 7 دقائق في كل مرة).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>الميكروفون</value>
@@ -589,19 +598,19 @@
     <value>فتح مجلد الإعدادات</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>AI والنماذج</value>
+    <value>AI بعد التفريغ النصي</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>الإملاء (التحسين، الترجمة)</value>
+    <value>تنقيح الإدخال الصوتي</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>محلي</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>الاجتماعات (المحاضر)</value>
+    <value>المحضر</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>يمكنك اختيار AI والنموذج بشكل منفصل للإملاء والاجتماعات. القيم الافتراضية هي gemini-3.5-flash-lite (الإملاء) وgemini-3.8-flash (المحاضر) لـ Gemini، وHaiku 5.5 (الإملاء) وSonnet 5.5 (المحاضر) لـ Claude. يُستخدم Claude لمعالجة النصوص فقط، وليس لنسخ الصوت (محرك النسخ موجود في علامتي التبويب "عام" و"الاجتماعات").</value>
+    <value>يمكنك اختيار AI والنموذج بشكل منفصل لتنقيح الإدخال الصوتي وللمحضر. القيم الافتراضية هي gemini-3.5-flash-lite (تنقيح الإدخال الصوتي) وgemini-3.8-flash (المحضر) لـ Gemini، وHaiku 5.5 (تنقيح الإدخال الصوتي) وSonnet 5.5 (المحضر) لـ Claude. يُستخدم Claude لمعالجة النصوص فقط، وليس للتفريغ النصي للصوت (محرك النسخ موجود في "AI للتفريغ النصي" أعلاه).</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>النماذج المحلية (نماذج LLM صغيرة تعمل على هذا الكمبيوتر)</value>
@@ -673,7 +682,7 @@
     <value>يتم تخزين المفاتيح مشفرة في %LOCALAPPDATA%\Hanasu\secrets.json، وليس في settings.json. مع DPAPI الافتراضي، لا يمكن قراءتها إلا لمستخدم Windows هذا، لكن التطبيقات الأخرى التي تعمل باسم المستخدم نفسه يمكنها قراءتها دون تأكيد. مع Windows Hello، تؤدي محاولة التطبيقات الأخرى قراءتها إلى ظهور مطالبة Windows Hello (تتحقق مرة واحدة عند أول استخدام بعد البدء، ومرة أخرى بعد قفل الشاشة). لا يمكن لهذا منع التطبيقات التي تعمل باسم المستخدم نفسه من قراءة الذاكرة أثناء تشغيل Hanasu.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>التجربة (AI الإملاء)</value>
+    <value>التجربة (تنقيح الإدخال الصوتي)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>اممم بالنسبة لاجتماع بكرة يعني راح أستخدم الشرائح اللي عملتها بجيميناي</value>
@@ -702,9 +711,6 @@
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>استخدام اختصار "مهم" (نشط فقط أثناء التسجيل)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>النسخ</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (يعمل على هذا الكمبيوتر؛ افتراضي)</value>
   </data>
@@ -727,7 +733,7 @@
     <value>إنشاء محضر باستخدام AI بعد التسجيل</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>اختر AI والنموذج للمحاضر ضمن "الاجتماعات (المحاضر)" في علامة التبويب "AI". يُرسل نص النسخ فقط (عندما يكون محرك النسخ Gemini، يُرسل الصوت أيضًا إلى Google). اختر قالب المحضر في ملاحظات الاجتماعات.</value>
+    <value>اختر AI والنموذج للمحضر ضمن "المحضر" في علامة التبويب "AI". يُرسل النص المفرّغ فقط (عندما يكون محرك النسخ Gemini، يُرسل الصوت أيضًا إلى Google). اختر قالب المحضر في ملاحظات الاجتماعات.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>التخزين</value>
@@ -883,13 +889,13 @@
     <value>استغرق {0} ({1}) مدة {2} ث</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>يتم تقسيم صوت الاجتماع المسجّل إلى أجزاء مدة كل منها 5 دقائق وإرسالها إلى Gemini (باستخدام بيانات اعتماد Gemini في علامة التبويب AI ونموذج Gemini للإملاء). لاحظ أن صوتك يُرسل إلى Google.</value>
+    <value>يتم تقسيم صوت الاجتماع المسجّل إلى أجزاء مدة كل منها 5 دقائق وإرسالها إلى Gemini (باستخدام بيانات اعتماد Gemini في علامة التبويب هذه ونموذج التفريغ النصي المختار أدناه). لاحظ أن صوتك يُرسل إلى Google.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>يستخدم نموذج Whisper المحدد في علامة التبويب "عام" ({0}).</value>
+    <value>يستخدم نموذج Whisper المحدد أدناه ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> لم يتم تنزيله بعد (قم بتنزيله في علامة التبويب "عام").</value>
+    <value> لم يتم تنزيله بعد (قم بتنزيله أدناه).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>اختيار مكان حفظ الاجتماعات</value>

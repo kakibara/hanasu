@@ -7,7 +7,7 @@ import SwiftUI
 //   Hanasu --meeting-files <自分> <相手> --engine whisper|gemini   会議の後処理を Whisper / Gemini で（main.swift）
 //   Hanasu --download-whisper <tiny|base|small|largeV3Turbo>      モデルをダウンロードする（進み具合を表示）
 //   Hanasu --render-engine-settings <出力.png> [-dictationTranscriptionEngine whisper] [-meetingTranscriptionEngine gemini]
-//          [--downloading]   設定の「一般」の「文字起こし」欄を PNG にする（--downloading は選んでいるモデルをダウンロード中の見た目にする）
+//          [--downloading]   設定の「AI」の「文字起こし AI」欄を PNG にする（--downloading は選んでいるモデルをダウンロード中の見た目にする）
 // -whisperModel / -geminiTranscriptionModel は UserDefaults の引数で、その回だけ設定を上書きする（保存しない）。
 // モデルの保存先は環境変数 HANASU_MODELS_DIR で変えられる（既定は ~/Library/Application Support/Hanasu/Models/whisper）。
 // 確かめ方: REQ-COM-001, REQ-COM-002, REQ-COM-003
@@ -73,7 +73,7 @@ enum TranscriptionEngineCLI {
         }
     }
 
-    /// 設定の「一般」の「文字起こし」欄を PNG にする
+    /// 設定の「AI」の「文字起こし AI」欄を PNG にする
     static func renderSettings(to url: URL, args: [String]) {
         _ = NSApplication.shared
         let settings = AppSettings.shared
@@ -81,7 +81,7 @@ enum TranscriptionEngineCLI {
             WhisperModelStore.shared.showDownloadingForRendering(settings.whisperModel, fraction: 0.42)
         }
         let height: CGFloat = 820
-        // 設定の「一般」のうち、この欄だけを同じ Form の見た目で描く（設定画面全体は画面外では描きにくいため）
+        // 設定の「AI」のうち、この欄だけを同じ Form の見た目で描く（設定画面全体は画面外では描きにくいため）
         let view = Form { TranscriptionEngineSettingsSection(settings: settings) }
             .formStyle(.grouped)
             .frame(width: 560, height: height)

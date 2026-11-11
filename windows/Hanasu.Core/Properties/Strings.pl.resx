@@ -634,7 +634,7 @@
     <value>„{0}” występuje też w wierszu powyżej; zostanie użyty tamten wiersz.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Model Whisper ({0}) nie został jeszcze pobrany. Pobierz go w menu → Ustawienia → Ogólne.</value>
+    <value>Model Whisper ({0}) nie został jeszcze pobrany. Pobierz go w sekcji „AI do transkrypcji” w menu → Ustawienia → AI.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Nie udało się uruchomić Whisper. Zainstaluj Microsoft Visual C++ Redistributable (2015–2022, x64) i spróbuj ponownie. ({0})</value>

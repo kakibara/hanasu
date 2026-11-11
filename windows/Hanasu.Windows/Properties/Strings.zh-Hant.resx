@@ -378,7 +378,7 @@
     <value>正在處理…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>尚無會議記錄。可以按「重新建立會議記錄」來建立（需要在設定 → AI 中設定「會議」的 AI）。</value>
+    <value>尚無會議記錄。可以按「重新建立會議記錄」來建立（需要在設定 → AI 的「會議記錄」中設定 AI）。</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>停止錄製後才會進行轉錄。</value>
@@ -525,8 +525,17 @@
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>只在按住時錄音</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>轉錄引擎</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>轉錄 AI</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>語音輸入</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>會議錄製</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>轉錄模型（Gemini）</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Windows 語音辨識（預設）</value>
@@ -538,7 +547,7 @@
     <value>Gemini（將音訊傳送給 Google）</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>使用 Windows 語音辨識（聽寫）辨識語音，並在您說話時顯示中間結果。由於使用 Microsoft 的線上語音辨識，請在 Windows 設定 → 隱私權與安全性 → 語音中開啟「線上語音辨識」。使用 Windows 預設麥克風（不使用下方的選擇）。</value>
+    <value>使用 Windows 語音辨識（聽寫）辨識語音，並在您說話時顯示中間結果。由於使用 Microsoft 的線上語音辨識，請在 Windows 設定 → 隱私權與安全性 → 語音中開啟「線上語音辨識」。使用 Windows 預設麥克風（不使用「一般」索引標籤中的麥克風選擇）。</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>開啟語音設定</value>
@@ -559,7 +568,7 @@
     <value>取消</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>將錄製的音訊傳送到 Google 的 Gemini API 進行轉錄（使用「AI」索引標籤中設定的 Gemini 認證資訊和語音輸入的 Gemini 模型）。請注意，您的音訊會傳送給 Google。停止錄音後才傳送（每次最長 7 分鐘）。</value>
+    <value>將錄製的音訊傳送到 Google 的 Gemini API 進行轉錄（使用此索引標籤中的 Gemini 認證資訊和下方選擇的轉錄模型）。請注意，您的音訊會傳送給 Google。停止錄音後才傳送（每次最長 7 分鐘）。</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>麥克風</value>
@@ -589,19 +598,19 @@
     <value>開啟設定資料夾</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>AI 與模型</value>
+    <value>轉錄後的 AI</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>語音輸入（潤飾、翻譯）</value>
+    <value>語音輸入潤飾</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>本機</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>會議（會議記錄）</value>
+    <value>會議記錄</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>可以分別為語音輸入和會議選擇 AI 與模型。預設值：Gemini 為 gemini-3.5-flash-lite（語音輸入）和 gemini-3.8-flash（會議記錄），Claude 為 Haiku 5.5（語音輸入）和 Sonnet 5.5（會議記錄）。Claude 只用於處理文字，不用於轉錄音訊（轉錄引擎位於「一般」和「會議」索引標籤）。</value>
+    <value>可以分別為語音輸入潤飾和會議記錄選擇 AI 與模型。預設值：Gemini 為 gemini-3.5-flash-lite（語音輸入潤飾）和 gemini-3.8-flash（會議記錄），Claude 為 Haiku 5.5（語音輸入潤飾）和 Sonnet 5.5（會議記錄）。Claude 只用於處理文字，不用於轉錄音訊（轉錄引擎請在上方的「轉錄 AI」中選擇）。</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>本機模型（在此電腦上執行的小型 LLM）</value>
@@ -673,7 +682,7 @@
     <value>金鑰會加密儲存在 %LOCALAPPDATA%\Hanasu\secrets.json，而不是 settings.json。使用預設的 DPAPI 時，只有此 Windows 使用者可以讀取，但以同一使用者身分執行的其他應用程式不需確認即可讀取。使用 Windows Hello 時，其他應用程式嘗試讀取會出現 Windows Hello 驗證（啟動後第一次使用時驗證一次，鎖定畫面後會再次要求）。這無法防止以同一使用者身分執行的應用程式在 Hanasu 執行期間讀取記憶體。</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>試用（語音輸入 AI）</value>
+    <value>試用（語音輸入潤飾）</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>嗯那個明天的會議喔 呃 我打算用之前拿 gemini 做的那份簡報</value>
@@ -702,9 +711,6 @@
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>使用「重要」快速鍵（只在錄製期間有效）</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>轉錄</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper（在此電腦上執行；預設）</value>
   </data>
@@ -727,7 +733,7 @@
     <value>錄製後使用 AI 建立會議記錄</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>在「AI」索引標籤的「會議（會議記錄）」中選擇會議記錄的 AI 與模型。只會傳送逐字稿文字（轉錄引擎為 Gemini 時，音訊也會傳送給 Google）。會議記錄範本請在會議筆記中選擇。</value>
+    <value>在「AI」索引標籤的「會議記錄」中選擇會議記錄的 AI 與模型。只會傳送逐字稿文字（轉錄引擎為 Gemini 時，音訊也會傳送給 Google）。會議記錄範本請在會議筆記中選擇。</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>儲存</value>
@@ -883,13 +889,13 @@
     <value>{0}（{1}）耗時 {2} 秒</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>錄製的會議音訊會切成每段 5 分鐘傳送給 Gemini（使用「AI」索引標籤中的 Gemini 認證資訊和語音輸入的 Gemini 模型）。請注意，您的音訊會傳送給 Google。</value>
+    <value>錄製的會議音訊會切成每段 5 分鐘傳送給 Gemini（使用此索引標籤中的 Gemini 認證資訊和下方選擇的轉錄模型）。請注意，您的音訊會傳送給 Google。</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>使用在「一般」索引標籤中選擇的 Whisper 模型（{0}）。</value>
+    <value>使用下方選擇的 Whisper 模型（{0}）。</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> 該模型尚未下載（請在「一般」索引標籤中下載）。</value>
+    <value>該模型尚未下載（請在下方下載）。</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>選擇會議的儲存位置</value>

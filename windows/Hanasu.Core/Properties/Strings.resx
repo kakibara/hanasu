@@ -841,7 +841,7 @@
     <comment>Settings → Dictionary: rule issue. {0} = word</comment>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>The Whisper model ({0}) hasn't been downloaded yet. Download it in menu → Settings → General.</value>
+    <value>The Whisper model ({0}) hasn't been downloaded yet. Download it under "Transcription AI" in menu → Settings → AI.</value>
     <comment>Error. {0} = model label</comment>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">

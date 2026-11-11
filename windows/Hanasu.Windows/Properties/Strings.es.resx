@@ -378,7 +378,7 @@ Original: {2}</value>
     <value>Procesando…</value>
   </data>
   <data name="Meeting_NoMinutesYet" xml:space="preserve">
-    <value>Aún no hay acta. Puedes crearla con "Regenerar el acta" (requiere configurar la IA de "Reuniones" en Configuración → AI).</value>
+    <value>Aún no hay acta. Puedes crearla con "Regenerar el acta" (requiere configurar la IA de "Acta" en Configuración → AI).</value>
   </data>
   <data name="Meeting_TranscriptAfterRecording" xml:space="preserve">
     <value>La transcripción se hace después de detener la grabación.</value>
@@ -525,8 +525,17 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
   <data name="Settings_PushToTalk" xml:space="preserve">
     <value>Grabar solo mientras se mantiene presionado</value>
   </data>
-  <data name="Settings_Engine" xml:space="preserve">
-    <value>Motor de transcripción</value>
+  <data name="Settings_TranscriptionAi" xml:space="preserve">
+    <value>IA de transcripción</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Dictation" xml:space="preserve">
+    <value>Dictado</value>
+  </data>
+  <data name="Settings_TranscriptionAi_Meeting" xml:space="preserve">
+    <value>Grabación de reuniones</value>
+  </data>
+  <data name="Settings_GeminiTranscriptionModel" xml:space="preserve">
+    <value>Modelo de transcripción (Gemini)</value>
   </data>
   <data name="Settings_Engine_Windows" xml:space="preserve">
     <value>Reconocimiento de voz de Windows (predeterminado)</value>
@@ -538,7 +547,7 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
     <value>Gemini (envía el audio a Google)</value>
   </data>
   <data name="Settings_Engine_WindowsNote" xml:space="preserve">
-    <value>Reconoce la voz con el reconocimiento de voz de Windows (dictado) y muestra resultados parciales mientras hablas. Usa el reconocimiento de voz en línea de Microsoft, así que activa "Reconocimiento de voz en línea" en Configuración de Windows → Privacidad y seguridad → Voz. Usa el micrófono predeterminado de Windows (no se usa la selección de abajo).</value>
+    <value>Reconoce la voz con el reconocimiento de voz de Windows (dictado) y muestra resultados parciales mientras hablas. Usa el reconocimiento de voz en línea de Microsoft, así que activa "Reconocimiento de voz en línea" en Configuración de Windows → Privacidad y seguridad → Voz. Usa el micrófono predeterminado de Windows (no se usa el micrófono elegido en la pestaña "General").</value>
   </data>
   <data name="Settings_OpenSpeechSettings" xml:space="preserve">
     <value>Abrir la configuración de voz</value>
@@ -559,7 +568,7 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
     <value>Cancelar</value>
   </data>
   <data name="Settings_Engine_GeminiNote" xml:space="preserve">
-    <value>Envía el audio grabado a la API de Gemini de Google para transcribirlo (con las credenciales de Gemini configuradas en la pestaña AI y el modelo de Gemini para el dictado). Ten en cuenta que tu audio se envía a Google. Se envía después de detener la grabación (hasta 7 minutos cada vez).</value>
+    <value>Envía el audio grabado a la API de Gemini de Google para transcribirlo (con las credenciales de Gemini de esta pestaña y el modelo de transcripción elegido abajo). Ten en cuenta que tu audio se envía a Google. Se envía después de detener la grabación (hasta 7 minutos cada vez).</value>
   </data>
   <data name="Settings_Microphone" xml:space="preserve">
     <value>Micrófono</value>
@@ -589,19 +598,19 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
     <value>Abrir la carpeta de configuración</value>
   </data>
   <data name="Settings_AiAndModels" xml:space="preserve">
-    <value>IA y modelos</value>
+    <value>IA tras la transcripción</value>
   </data>
   <data name="Settings_Ai_Dictation" xml:space="preserve">
-    <value>Dictado (pulido, traducción)</value>
+    <value>Pulido del dictado</value>
   </data>
   <data name="Settings_Ai_Local" xml:space="preserve">
     <value>Local</value>
   </data>
   <data name="Settings_Ai_Meeting" xml:space="preserve">
-    <value>Reuniones (actas)</value>
+    <value>Acta</value>
   </data>
   <data name="Settings_AiNote" xml:space="preserve">
-    <value>Puedes elegir la IA y el modelo por separado para el dictado y las reuniones. Los valores predeterminados son gemini-3.5-flash-lite (dictado) y gemini-3.8-flash (actas) para Gemini, y Haiku 5.5 (dictado) y Sonnet 5.5 (actas) para Claude. Claude solo se usa para procesar texto, no para transcribir audio (el motor de transcripción está en las pestañas "General" y "Reuniones").</value>
+    <value>Puedes elegir la IA y el modelo por separado para el pulido del dictado y el acta. Los valores predeterminados son gemini-3.5-flash-lite (pulido del dictado) y gemini-3.8-flash (acta) para Gemini, y Haiku 5.5 (pulido del dictado) y Sonnet 5.5 (acta) para Claude. Claude solo se usa para procesar texto, no para transcribir audio (el motor de transcripción está arriba, en "IA de transcripción").</value>
   </data>
   <data name="Settings_LocalModels" xml:space="preserve">
     <value>Modelos locales (LLM pequeños que se ejecutan en este equipo)</value>
@@ -673,7 +682,7 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
     <value>Las claves se guardan cifradas en %LOCALAPPDATA%\Hanasu\secrets.json, no en settings.json. Con DPAPI (predeterminado), solo este usuario de Windows puede leerlas, pero otras aplicaciones que se ejecutan con el mismo usuario pueden leerlas sin confirmación. Con Windows Hello, si otras aplicaciones intentan leerlas, aparece una solicitud de Windows Hello (verificas una vez en el primer uso tras iniciar y de nuevo después de bloquear la pantalla). Esto no impide que las aplicaciones que se ejecutan con el mismo usuario lean la memoria mientras Hanasu está en ejecución.</value>
   </data>
   <data name="Settings_Trial" xml:space="preserve">
-    <value>Probar (IA del dictado)</value>
+    <value>Probar (pulido del dictado)</value>
   </data>
   <data name="Settings_TrialSample" xml:space="preserve">
     <value>eh bueno pues para la reunión de mañana este voy a usar las diapositivas que hice con gemini</value>
@@ -702,9 +711,6 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
   <data name="Settings_UseHighlightHotKey" xml:space="preserve">
     <value>Usar el acceso directo de "Importante" (activo solo durante la grabación)</value>
   </data>
-  <data name="Settings_Transcription" xml:space="preserve">
-    <value>Transcripción</value>
-  </data>
   <data name="Settings_MeetingEngine_Whisper" xml:space="preserve">
     <value>Whisper (se ejecuta en este equipo; predeterminado)</value>
   </data>
@@ -727,7 +733,7 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
     <value>Crear el acta con IA después de la grabación</value>
   </data>
   <data name="Settings_MinutesNote" xml:space="preserve">
-    <value>Elige la IA y el modelo para las actas en "Reuniones (actas)" de la pestaña "AI". Solo se envía el texto de la transcripción (si el motor de transcripción es Gemini, el audio también se envía a Google). Elige la plantilla del acta en Notas de reuniones.</value>
+    <value>Elige la IA y el modelo para el acta en "Acta" de la pestaña "AI". Solo se envía el texto de la transcripción (si el motor de transcripción es Gemini, el audio también se envía a Google). Elige la plantilla del acta en Notas de reuniones.</value>
   </data>
   <data name="Settings_Storage" xml:space="preserve">
     <value>Almacenamiento</value>
@@ -883,13 +889,13 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
     <value>{0} ({1}) tardó {2} s</value>
   </data>
   <data name="Settings_MeetingEngine_GeminiNote" xml:space="preserve">
-    <value>El audio grabado de la reunión se divide en fragmentos de 5 minutos y se envía a Gemini (con las credenciales de Gemini de la pestaña AI y el modelo de Gemini para el dictado). Ten en cuenta que tu audio se envía a Google.</value>
+    <value>El audio grabado de la reunión se divide en fragmentos de 5 minutos y se envía a Gemini (con las credenciales de Gemini de esta pestaña y el modelo de transcripción elegido abajo). Ten en cuenta que tu audio se envía a Google.</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperNote" xml:space="preserve">
-    <value>Usa el modelo de Whisper seleccionado en la pestaña "General" ({0}).</value>
+    <value>Usa el modelo de Whisper seleccionado abajo ({0}).</value>
   </data>
   <data name="Settings_MeetingEngine_WhisperMissing" xml:space="preserve">
-    <value> Aún no se ha descargado (descárgalo en la pestaña "General").</value>
+    <value> Aún no se ha descargado (descárgalo abajo).</value>
   </data>
   <data name="Settings_MeetingsFolderDialogTitle" xml:space="preserve">
     <value>Elegir dónde guardar las reuniones</value>

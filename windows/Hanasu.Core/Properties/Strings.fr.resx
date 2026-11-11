@@ -634,7 +634,7 @@
     <value>« {0} » figure aussi sur une ligne précédente ; c'est cette ligne qui sera utilisée.</value>
   </data>
   <data name="Whisper_ModelNotDownloaded" xml:space="preserve">
-    <value>Le modèle Whisper ({0}) n'a pas encore été téléchargé. Téléchargez-le dans menu → Paramètres → Général.</value>
+    <value>Le modèle Whisper ({0}) n'a pas encore été téléchargé. Téléchargez-le sous « IA de transcription » dans menu → Paramètres → AI.</value>
   </data>
   <data name="Whisper_CannotRun" xml:space="preserve">
     <value>Impossible d'exécuter Whisper. Installez Microsoft Visual C++ Redistributable (2015–2022, x64), puis réessayez. ({0})</value>
