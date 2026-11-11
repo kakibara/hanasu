@@ -396,6 +396,8 @@ public partial class SettingsWindow : Window
             WhisperModelStatus.Failed => string.Format(Strings.Settings_DownloadFailed, state.Error),
             _ => Strings.Settings_NotDownloaded,
         };
+        // 会議の記録の注記も同じ画面にあり、Whisper のモデルの名前とダウンロードの状態を出すので合わせる（DEC-COM-173）
+        UpdateMeetingEngineNote(settings.Current.MeetingEngine);
     }
 
     // MARK: - AI（音声入力と会議で別々に選ぶ）

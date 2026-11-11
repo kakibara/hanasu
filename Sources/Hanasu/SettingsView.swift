@@ -198,7 +198,6 @@ private struct GeneralTab: View {
                 Text(tr("音声入力と「選択を声で編集」で使うマイク。録音中の画面（HUD）のマイクのボタンからも切り替えられます。会議の記録のマイクは「会議」タブで選びます。"))
                     .font(.caption).foregroundStyle(.secondary)
             }
-            // 音声入力と会議の記録の文字起こしのエンジン（TranscriptionEngineSettingsView.swift）
             // 入力できる場所がないときのクリップボードの扱い（PasteFallbackPanel.swift）
             PasteFallbackSettingsSection()
             PasteUnconfirmedSettingsSection()

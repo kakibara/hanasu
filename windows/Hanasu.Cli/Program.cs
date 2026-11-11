@@ -180,7 +180,7 @@ static async Task TranscribeGemini(string[] args)
     await transcriber.PrepareAsync(context);
     var sw = Stopwatch.StartNew();
     var text = await transcriber.TranscribeAsync(samples, context);
-    Console.WriteLine($"[Gemini 文字起こし {settings.Model} 音声 {samples.Length / (double)AudioFormat.SampleRate:0.0}s / {sw.Elapsed.TotalSeconds:0.0}s]");
+    Console.WriteLine($"[Gemini 文字起こし {settings.GeminiTranscriptionModel} 音声 {samples.Length / (double)AudioFormat.SampleRate:0.0}s / {sw.Elapsed.TotalSeconds:0.0}s]");
     Console.WriteLine(text);
 }
 
