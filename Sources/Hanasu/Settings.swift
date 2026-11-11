@@ -120,26 +120,40 @@ final class AppSettings: ObservableObject {
 
     // 設計判断: DEC-COM-005
     static let suggestedModels = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-flash-latest"]
+    // 要件: REQ-COM-025
+    // 設計判断: DEC-COM-171
+    /// AI チャット・質問で Gemini を選んだときの既定のモデル（lite は長い記録からの答えで質が落ちやすい）
+    static let defaultGeminiChatModel = "gemini-3.8-flash"
 
-    private let defaults = UserDefaults.standard
+    private let defaults: UserDefaults
 
     @Published var model: String { didSet { defaults.set(model, forKey: Keys.model) } }
     // 要件: REQ-COM-020, REQ-COM-024
     // 設計判断: DEC-COM-040
     /// 音声入力（整形・英訳・選択の編集）に使う AI（Gemini・Claude・ローカル・Apple）。文字起こしのエンジンとは別
     @Published var dictationAIProvider: TextAIProvider { didSet { defaults.set(dictationAIProvider.rawValue, forKey: Keys.dictationAIProvider) } }
-    /// 会議（議事録・会議への質問・辞書の候補）に使う AI
+    /// 会議（議事録・辞書の候補）に使う AI
     @Published var meetingAIProvider: TextAIProvider { didSet { defaults.set(meetingAIProvider.rawValue, forKey: Keys.meetingAIProvider) } }
+    // 要件: REQ-COM-025
+    // 設計判断: DEC-COM-171
+    /// AI チャット・質問（会議の AI チャット・会議への質問）に使う AI。会議とは独立
+    @Published var chatAIProvider: TextAIProvider { didSet { defaults.set(chatAIProvider.rawValue, forKey: Keys.chatAIProvider) } }
+    /// Gemini を選んだときの、AI チャット・質問のモデル
+    @Published var geminiChatModel: String { didSet { defaults.set(geminiChatModel, forKey: Keys.geminiChatModel) } }
     /// Claude を選んだときの、音声入力のモデル
     @Published var claudeModel: String { didSet { defaults.set(claudeModel, forKey: Keys.claudeModel) } }
     /// Claude を選んだときの、会議のモデル
     @Published var claudeMinutesModel: String { didSet { defaults.set(claudeMinutesModel, forKey: Keys.claudeMinutesModel) } }
+    /// Claude を選んだときの、AI チャット・質問のモデル
+    @Published var claudeChatModel: String { didSet { defaults.set(claudeChatModel, forKey: Keys.claudeChatModel) } }
     // 要件: REQ-COM-030
     // 設計判断: DEC-COM-067
     /// ローカルを選んだときの、音声入力のモデル（LocalLLMModel の rawValue）
     @Published var localDictationModel: LocalLLMModel { didSet { defaults.set(localDictationModel.rawValue, forKey: Keys.localDictationModel) } }
     /// ローカルを選んだときの、会議のモデル
     @Published var localMeetingModel: LocalLLMModel { didSet { defaults.set(localMeetingModel.rawValue, forKey: Keys.localMeetingModel) } }
+    /// ローカルを選んだときの、AI チャット・質問のモデル
+    @Published var localChatModel: LocalLLMModel { didSet { defaults.set(localChatModel.rawValue, forKey: Keys.localChatModel) } }
     @Published var authMode: GeminiAuthMode { didSet { defaults.set(authMode.rawValue, forKey: Keys.authMode) } }
     @Published var serviceAccountPath: String { didSet { defaults.set(serviceAccountPath, forKey: Keys.serviceAccountPath) } }
     @Published var vertexLocation: String { didSet { defaults.set(vertexLocation, forKey: Keys.vertexLocation) } }
@@ -262,26 +276,60 @@ final class AppSettings: ObservableObject {
 
     // 要件: REQ-COM-024
     // 設計判断: DEC-COM-040
+    // 要件: REQ-COM-025
+    // 設計判断: DEC-COM-171（3 用途を網羅する switch にして、用途を足したらコンパイルで気づけるようにする）
     func aiProvider(for purpose: TextAIPurpose) -> TextAIProvider {
-        purpose == .dictation ? dictationAIProvider : meetingAIProvider
+        switch purpose {
+        case .dictation: dictationAIProvider
+        case .meeting: meetingAIProvider
+        case .chat: chatAIProvider
+        }
     }
 
-    /// 用途ごとの、選んだ AI のモデル（Gemini の音声入力は model、会議は meetingMinutesModel）
+    /// 用途ごとの、選んだ AI のモデル
     func textModel(for purpose: TextAIPurpose) -> String {
-        switch (purpose, aiProvider(for: purpose)) {
-        case (.dictation, .gemini): model
-        case (.dictation, .claude): claudeModel
-        case (.meeting, .gemini): meetingMinutesModel
-        case (.meeting, .claude): claudeMinutesModel
-        case (_, .local): localModel(for: purpose).rawValue
-        case (_, .appleFM): AppleFMClient.modelName
+        model(for: purpose, provider: aiProvider(for: purpose))
+    }
+
+    /// その用途でその AI を選んだときのモデル（Gemini の音声入力は model、会議は meetingMinutesModel）
+    func model(for purpose: TextAIPurpose, provider: TextAIProvider) -> String {
+        switch provider {
+        case .gemini: geminiModel(for: purpose)
+        case .claude: claudeModel(for: purpose)
+        case .local: localModel(for: purpose).rawValue
+        case .appleFM: AppleFMClient.modelName
+        }
+    }
+
+    /// 用途ごとの、送り先の AI とモデル
+    func aiChoice(for purpose: TextAIPurpose) -> TextAIChoice {
+        TextAIChoice(provider: aiProvider(for: purpose), model: textModel(for: purpose))
+    }
+
+    func geminiModel(for purpose: TextAIPurpose) -> String {
+        switch purpose {
+        case .dictation: model
+        case .meeting: meetingMinutesModel
+        case .chat: geminiChatModel
+        }
+    }
+
+    func claudeModel(for purpose: TextAIPurpose) -> String {
+        switch purpose {
+        case .dictation: claudeModel
+        case .meeting: claudeMinutesModel
+        case .chat: claudeChatModel
         }
     }
 
     // 要件: REQ-COM-030
     /// 用途ごとの、ローカルのモデル
     func localModel(for purpose: TextAIPurpose) -> LocalLLMModel {
-        purpose == .dictation ? localDictationModel : localMeetingModel
+        switch purpose {
+        case .dictation: localDictationModel
+        case .meeting: localMeetingModel
+        case .chat: localChatModel
+        }
     }
 
     /// ユーザー辞書の正しい表記の一覧（語だけの行と、置き換えルールの右側）。書き方は UserDictionary を参照
@@ -322,9 +370,11 @@ final class AppSettings: ObservableObject {
         Bundle.main.bundleIdentifier ?? ProcessInfo.processInfo.processName
     }
 
-    private init() {
-        // 設計判断: DEC-COM-068
-        Self.preserveAIProviderForExistingUsers(defaults, domainName: Self.defaultsDomainName)
+    /// defaults と domainName は確かめるときだけ変える（--test-ai-purposes の使い捨ての設定）
+    init(defaults: UserDefaults = .standard, domainName: String = AppSettings.defaultsDomainName) {
+        self.defaults = defaults
+        // 設計判断: DEC-COM-068（AI チャット・質問の用途は対象にしない。DEC-COM-171）
+        Self.preserveAIProviderForExistingUsers(defaults, domainName: domainName)
         defaults.register(defaults: [
             Keys.model: Self.suggestedModels[0],
             Keys.authMode: GeminiAuthMode.apiKey.rawValue,
@@ -333,12 +383,18 @@ final class AppSettings: ObservableObject {
             // 既定はローカル（モデルは Gemma 4 E4B。DEC-COM-067）。以前から使っている人は Gemini のまま（上の preserveAIProviderForExistingUsers）
             Keys.dictationAIProvider: TextAIProvider.local.rawValue,
             Keys.meetingAIProvider: TextAIProvider.local.rawValue,
+            // 要件: REQ-COM-025
+            // 設計判断: DEC-COM-171（会議の値は写さない。以前から使っている人もローカル）
+            Keys.chatAIProvider: TextAIProvider.local.rawValue,
+            Keys.geminiChatModel: Self.defaultGeminiChatModel,
             // 要件: REQ-COM-023
             Keys.claudeModel: ClaudeClient.Model.defaultDictation.rawValue,
             Keys.claudeMinutesModel: ClaudeClient.Model.defaultMeeting.rawValue,
+            Keys.claudeChatModel: ClaudeClient.Model.defaultChat.rawValue,
             // 設計判断: DEC-COM-067
             Keys.localDictationModel: LocalLLMModel.defaultDictation.rawValue,
             Keys.localMeetingModel: LocalLLMModel.defaultMeeting.rawValue,
+            Keys.localChatModel: LocalLLMModel.defaultChat.rawValue,
             // ターミナルから起動した場合は環境変数のパスを初期値にする
             Keys.serviceAccountPath: ProcessInfo.processInfo.environment["GEMINI_SERVICE_ACCOUNT_JSON"] ?? "",
             // 設計判断: DEC-COM-004
@@ -385,10 +441,14 @@ final class AppSettings: ObservableObject {
         authMode = GeminiAuthMode(rawValue: defaults.string(forKey: Keys.authMode)!) ?? .apiKey
         dictationAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.dictationAIProvider)!) ?? .local
         meetingAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.meetingAIProvider)!) ?? .local
+        chatAIProvider = TextAIProvider(rawValue: defaults.string(forKey: Keys.chatAIProvider)!) ?? .local
+        geminiChatModel = defaults.string(forKey: Keys.geminiChatModel)!
         claudeModel = defaults.string(forKey: Keys.claudeModel)!
         claudeMinutesModel = defaults.string(forKey: Keys.claudeMinutesModel)!
+        claudeChatModel = defaults.string(forKey: Keys.claudeChatModel)!
         localDictationModel = LocalLLMModel(rawValue: defaults.string(forKey: Keys.localDictationModel)!) ?? .defaultDictation
         localMeetingModel = LocalLLMModel(rawValue: defaults.string(forKey: Keys.localMeetingModel)!) ?? .defaultMeeting
+        localChatModel = LocalLLMModel(rawValue: defaults.string(forKey: Keys.localChatModel)!) ?? .defaultChat
         serviceAccountPath = defaults.string(forKey: Keys.serviceAccountPath)!
         vertexLocation = defaults.string(forKey: Keys.vertexLocation)!
         hotKey = HotKeyCombo(
@@ -431,6 +491,10 @@ final class AppSettings: ObservableObject {
         static let authMode = "geminiAuthMode"
         static let dictationAIProvider = "dictationTextAIProvider"
         static let meetingAIProvider = "meetingTextAIProvider"
+        static let chatAIProvider = "chatTextAIProvider"
+        static let geminiChatModel = "geminiChatModel"
+        static let claudeChatModel = "claudeChatModel"
+        static let localChatModel = "localChatModel"
         static let aiProviderDefaultsVersion = "aiProviderDefaultsVersion"
         static let claudeModel = "claudeModel"
         static let claudeMinutesModel = "claudeMinutesModel"

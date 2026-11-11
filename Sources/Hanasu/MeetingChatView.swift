@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 // 要件: REQ-MTG-041
@@ -15,6 +16,18 @@ final class MeetingChatModel: ObservableObject {
     @Published private(set) var savedToNotes: Set<UUID> = []
     /// 入力欄にフォーカスを移す（⌘J）
     @Published private(set) var focusRequest = UUID()
+    // 要件: REQ-MTG-048
+    // 設計判断: DEC-MTG-150
+    /// この会議の会話だけ、既定から切り替えた送り先。nil なら既定（設定の「AI チャット・質問」）。
+    /// 「新しい会話」では戻さず、アプリを終了するか会議を消すまで残す
+    @Published var override: TextAIChoice?
+    /// 送り先が使えるか（画面が出たとき・設定が変わったとき・ウインドウが前に出たとき・送る前に見直す）
+    @Published private(set) var availability: AIRoute.Availability?
+    /// Apple の fm の判定（署名を確かめるので、1 回だけ）
+    private var appleFMReason: String??
+    // 設計判断: DEC-COM-172
+    /// ローカルの AI で、ほかの処理が終わるのを待っている
+    @Published private(set) var waitingForOtherModel = false
     // 設計判断: DEC-MTG-098
     /// 会話の世代。「新しい会話」で増やす（押したあとに会話を消したら、「何を聞かれた？」の答えを入れないため）
     private(set) var generation = 0
@@ -29,6 +42,18 @@ final class MeetingChatModel: ObservableObject {
 
     var lastQuestionFailed: Bool { error != nil && messages.last?.role == .user }
 
+    /// 次の質問を送る先
+    func effectiveChoice(settings: AppSettings) -> TextAIChoice {
+        override ?? settings.aiChoice(for: .chat)
+    }
+
+    /// 送り先が使えるかを見直す。Apple の判定は最初の 1 回だけ
+    func refreshAvailability(settings: AppSettings) {
+        guard !availabilityFixedForPreview else { return }
+        if appleFMReason == nil { appleFMReason = .some(AIRoute.appleFMReason()) }
+        availability = AIRoute.availability(settings: settings, appleFMReason: appleFMReason ?? nil)
+    }
+
     /// 質問を送る。material は送る時点の記録
     func send(_ text: String, material: MeetingChat.Material) {
         let question = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -42,16 +67,27 @@ final class MeetingChatModel: ObservableObject {
         running = true
         let token = UUID()
         pending = (token, question)
+        // 要件: REQ-COM-025, REQ-MTG-048
+        // 設計判断: DEC-MTG-081, DEC-MTG-150
+        let settings = AppSettings.shared
+        refreshAvailability(settings: settings)
+        let choice = effectiveChoice(settings: settings)
         task = Task { [weak self] in
             do {
-                let settings = AppSettings.shared
-                let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 120)
-                let result = try await MeetingChat.reply(question: question, material: material, history: history,
-                                                         client: client, model: settings.textModel(for: .meeting))
+                let client = try TextAIClient.require(choice, settings: settings, for: .chat, timeout: 120)
+                // 設計判断: DEC-COM-172（実際に待っている間だけ「待っています」と出す）
+                let result = try await LocalLLMServer.observingWait({ [weak self] waiting in
+                    guard let self, self.pending?.token == token else { return }
+                    self.waitingForOtherModel = waiting
+                }) {
+                    try await MeetingChat.reply(question: question, material: material, history: history,
+                                                client: client, model: choice.model)
+                }
                 guard let self, self.pending?.token == token else { return }
                 self.messages.append(MeetingChat.Message(role: .assistant, text: result.text,
                                                          coveredUntil: result.prompt.coveredUntil,
-                                                         lineCount: result.prompt.lineCount))
+                                                         lineCount: result.prompt.lineCount,
+                                                         modelLabel: choice.label))
                 self.finish()
             } catch {
                 guard let self, self.pending?.token == token else { return }
@@ -108,9 +144,16 @@ final class MeetingChatModel: ObservableObject {
         self.draft = draft
     }
     func requestFocus() { focusRequest = UUID() }
+    /// 確認用: 送り先が使えるかを決めて描く（--render-meeting-chat）
+    func setAvailabilityForPreview(_ availability: AIRoute.Availability) {
+        self.availability = availability
+        availabilityFixedForPreview = true
+    }
+    private var availabilityFixedForPreview = false
 
     private func finish() {
         running = false
+        waitingForOtherModel = false
         pending = nil
         task = nil
     }
@@ -173,6 +216,9 @@ struct MeetingChatView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
+                        if let unavailable = defaultUnavailableReason {
+                            AIRouteUnavailableNotice(defaultChoice: settings.aiChoice(for: .chat), reason: unavailable)
+                        }
                         if model.messages.isEmpty, !model.running {
                             emptyState
                         }
@@ -208,7 +254,9 @@ struct MeetingChatView: View {
                         if model.running {
                             HStack(spacing: 8) {
                                 ProgressView().controlSize(.small)
-                                Text(live ? tr("ここまでの記録を読んでいます…") : tr("記録を読んでいます…"))
+                                Text(model.waitingForOtherModel
+                                     ? tr("ほかの処理が終わるのを待っています…")
+                                     : (live ? tr("ここまでの記録を読んでいます…") : tr("記録を読んでいます…")))
                                     .font(.callout).foregroundStyle(.secondary)
                                 Spacer()
                                 Button(tr("止める")) { model.cancel() }
@@ -244,6 +292,18 @@ struct MeetingChatView: View {
             inputArea
         }
         .onChange(of: model.focusRequest) { inputFocused = true }
+        // 設計判断: DEC-MTG-150（使えるかは、画面が出たとき・設定が変わったとき・ウインドウが前に出たとき・送る前に見直す）
+        .onAppear { model.refreshAvailability(settings: settings) }
+        .onReceive(AIRoute.availabilityRefreshes(settings: settings)) { _ in
+            model.refreshAvailability(settings: settings)
+        }
+    }
+
+    // 要件: REQ-COM-025
+    /// 既定のまま送ると使えないときの理由（切り替えていれば出さない）
+    private var defaultUnavailableReason: String? {
+        guard model.override == nil, let availability = model.availability else { return nil }
+        return availability.unavailableReason(settings.aiChoice(for: .chat))
     }
 
     // MARK: 部品
@@ -328,10 +388,11 @@ struct MeetingChatView: View {
             .overlay(RoundedRectangle(cornerRadius: 10)
                 .strokeBorder(inputFocused ? Color.accentColor.opacity(0.6) : Color.secondary.opacity(0.3)))
             HStack(spacing: 6) {
-                Text(privacyNote)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(3)
+                // 要件: REQ-MTG-048
+                if let availability = model.availability {
+                    AIRouteMenu(defaultChoice: settings.aiChoice(for: .chat), override: $model.override,
+                                availability: availability, settings: settings, disabled: model.running)
+                }
                 Spacer(minLength: 4)
                 if !model.messages.isEmpty {
                     Button(tr("新しい会話")) { model.clear() }
@@ -340,14 +401,20 @@ struct MeetingChatView: View {
                         .help(tr("今の会話を消して、新しく始める"))
                 }
             }
+            Text(privacyNote)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(3)
         }
         .padding(10)
     }
 
+    // 要件: REQ-MTG-048
     // 設計判断: DEC-MTG-085
     private var privacyNote: String {
-        let provider = settings.aiProvider(for: .meeting).name
-        return tr("文字起こしとメモを %@（%@）に送ります。会話は保存しません。", "\(provider)", "\(settings.textModel(for: .meeting))")
+        model.effectiveChoice(settings: settings).sendsOutside
+            ? tr("文字起こしとメモをこの AI に送ります。会話は保存しません。")
+            : tr("この Mac の外には送りません。会話は保存しません。")
     }
 
     private var canSend: Bool {
@@ -416,9 +483,18 @@ private struct MeetingChatMessageRow: View {
             }
         case .assistant:
             VStack(alignment: .leading, spacing: 6) {
-                Label("AI", systemImage: "sparkles")
-                    .font(.caption.bold())
-                    .foregroundStyle(.purple)
+                HStack(spacing: 6) {
+                    Label("AI", systemImage: "sparkles")
+                        .font(.caption.bold())
+                        .foregroundStyle(.purple)
+                    // 要件: REQ-MTG-048（その答えを作った AI とモデル）
+                    if let modelLabel = message.modelLabel {
+                        Text(modelLabel)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                }
                 MarkdownText(markdown: MeetingChat.linkingTimes(in: message.text))
                     .environment(\.openURL, OpenURLAction { url in
                         guard let seconds = MeetingChat.seconds(from: url) else { return .systemAction }

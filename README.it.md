@@ -69,7 +69,7 @@ Si ispira a Typeless, Wispr Flow, Aqua Voice e Granola. Il suo codice sorgente �
 | **Verifica la fonte e riascolta** *(Mac)* | Il verbale si apre in un'unica pagina: prima il riepilogo e le azioni da svolgere, con la trascrizione accanto. Fai clic sulla marca temporale dopo un punto per passare all'intervento da cui proviene. Riproduci la registrazione da qualsiasi intervento e silenzia la tua parte o la loro se nella chiamata c'era eco. |
 | **Note dal vivo e momenti salienti** | Scrivi note con marca temporale durante la chiamata, oppure premi <kbd>⌃⌥⌘ H</kbd> per segnare "questo è importante" (puoi annullarlo per 10 secondi). Il verbale dà priorità a quelle parti, e in seguito puoi rileggere la conversazione intorno a ogni segno. |
 | **Sottotitoli fluttuanti** *(Mac)* | Mostra la trascrizione dal vivo come sottotitoli sopra l'app della riunione. Se li lasci attivi, ricompaiono anche alla riunione successiva. |
-| **Chat IA durante la riunione** *(Mac)* | Durante la registrazione, chiedi all'IA della conversazione fin qui (<kbd>⌘J</kbd>). Un clic per "riassunto fin qui" o "decisioni e cose da fare". Fai domande di approfondimento e fai clic su una marca temporale in una risposta per passare a quel punto della trascrizione. Ti fanno una domanda all'improvviso mentre stai facendo altro? Premi **Cosa mi hanno chiesto?** nei sottotitoli (oppure <kbd>⌃⌥⌘ A</kbd>) senza lasciare l'app della riunione: un pannello fluttuante mostra cosa hanno appena detto gli altri, poi il riepilogo dell'IA con la domanda e il contesto da cui è nata. |
+| **Chat IA durante la riunione** *(Mac)* | Durante la registrazione, chiedi all'IA della conversazione fin qui (<kbd>⌘J</kbd>). Un clic per "riassunto fin qui" o "decisioni e cose da fare". Fai domande di approfondimento e fai clic su una marca temporale in una risposta per passare a quel punto della trascrizione. Ti fanno una domanda all'improvviso mentre stai facendo altro? Premi **Cosa mi hanno chiesto?** nei sottotitoli (oppure <kbd>⌃⌥⌘ A</kbd>) senza lasciare l'app della riunione: un pannello fluttuante mostra cosa hanno appena detto gli altri, poi il riepilogo dell'IA con la domanda e il contesto da cui è nata. Dal menu sotto il campo di testo puoi cambiare l'IA e il modello per quella conversazione. |
 | **Rilevamento delle riunioni** | Quando un'app di riunioni inizia a usare il microfono, Hanasu chiede se registrare. Non inizia mai a registrare da solo. |
 | **Cerca e chiedi** | Cerca nel testo di tutte le riunioni, oppure chiedi "Cosa abbiamo deciso nella riunione della settimana scorsa?". La risposta cita le riunioni che ha usato. |
 | **Esporta** | Copia come Markdown o come riepilogo pronto per Slack, salva come `.md` / `.txt`, oppure invia le azioni da svolgere a Promemoria. |
@@ -86,12 +86,12 @@ Si ispira a Typeless, Wispr Flow, Aqua Voice e Granola. Il suo codice sorgente �
 
 ### 🤖 Scegli la tua IA
 
-Scegli l'IA che rifinisce il testo, separatamente per la **dettatura vocale** e per le **riunioni**.
+Scegli l'IA che rifinisce il testo, separatamente per la **dettatura vocale** e per le **riunioni** (verbali). Sul Mac ne scegli una anche per **Chat IA e domande** (la chat IA della riunione e le domande sulle riunioni passate).
 
 | IA | Modello predefinito | Accesso |
 | --- | --- | --- |
-| **Gemini** (predefinita su Windows) | dettatura vocale `gemini-3.5-flash-lite`, riunioni `gemini-3.8-flash` | Chiave API di Google AI Studio o service account di Vertex AI |
-| **Claude** | dettatura vocale `claude-haiku-5-5`, riunioni `claude-sonnet-5-5` (disponibile anche Opus 5.5) | Chiave API di Anthropic |
+| **Gemini** (predefinita su Windows) | dettatura vocale `gemini-3.5-flash-lite`, riunioni e Chat IA e domande `gemini-3.8-flash` | Chiave API di Google AI Studio o service account di Vertex AI |
+| **Claude** | dettatura vocale e Chat IA e domande `claude-haiku-5-5`, riunioni `claude-sonnet-5-5` (disponibile anche Opus 5.5) | Chiave API di Anthropic |
 | **Locale** (sul tuo dispositivo; predefinita su Mac) | Gemma 4 E4B (consigliato). Vedi la tabella qui sotto | Nessuno. Scarica il modello in **Impostazioni → IA**. Su Mac, se il modello manca quando Hanasu inizia a rifinire il testo, ti chiede se scaricarlo |
 | **Apple** *(Mac, macOS 27)* | Il modello Apple Intelligence sul dispositivo, tramite il comando `fm` | Nessuno |
 
@@ -172,7 +172,7 @@ Quando esce una nuova versione, Hanasu te lo segnala all'avvio e te lo chiede pr
 
 Su Mac, il primo avvio apre un breve tour guidato. Ti permette di scegliere l'IA (Gemma 4 E4B, il modello locale consigliato, si scarica direttamente lì), mostra le funzionalità principali e alcuni consigli sulle impostazioni, e chiede i permessi di cui Hanasu ha bisogno. Puoi riaprirlo in qualsiasi momento da **Come usare Hanasu…** nel menu.
 
-1. **Scegli un'IA.** Apri **Impostazioni → IA** e scegli un'IA per la dettatura vocale e per le riunioni. Per Gemini, incolla una chiave API da [Google AI Studio](https://aistudio.google.com/apikey) oppure seleziona un file JSON di service account di Vertex AI. Per Claude, incolla una chiave API dalla [Claude Console](https://console.anthropic.com/settings/keys). Per Locale, scarica un modello (si consiglia Gemma 4 E4B). Non serve alcuna chiave. Fai clic sul pulsante di prova per verificare che funzioni.
+1. **Scegli un'IA.** Apri **Impostazioni → IA** e scegli un'IA per la dettatura vocale e per le riunioni (sul Mac, anche per Chat IA e domande). Per Gemini, incolla una chiave API da [Google AI Studio](https://aistudio.google.com/apikey) oppure seleziona un file JSON di service account di Vertex AI. Per Claude, incolla una chiave API dalla [Claude Console](https://console.anthropic.com/settings/keys). Per Locale, scarica un modello (si consiglia Gemma 4 E4B). Non serve alcuna chiave. Fai clic sul pulsante di prova per verificare che funzioni.
 2. **Detta.** Metti il cursore dove vuoi il testo, premi la scorciatoia, parla e premi di nuovo la scorciatoia.
 3. **Registra una riunione.** Usa il menu nella barra dei menu (Mac) o nell'area di notifica (Windows), oppure la scorciatoia. Le cuffie aiutano a tenere separate le due parti.
 

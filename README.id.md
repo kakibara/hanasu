@@ -69,7 +69,7 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 | **Cek sumber & dengarkan lagi** *(Mac)* | Notulen terbuka dalam satu halaman: ringkasan dan item tindakan di bagian atas, dengan transkrip di sampingnya. Klik tanda waktu di akhir sebuah poin untuk melompat ke ucapan asalnya. Putar rekaman dari ucapan mana pun, dan bisukan suara Anda atau suara mereka jika panggilan bergema. |
 | **Catatan langsung & sorotan** | Ketik catatan bertanda waktu selama panggilan, atau tekan <kbd>⌃⌥⌘ H</kbd> untuk menandai "ini penting" (dapat dibatalkan dalam 10 detik). Notulen memprioritaskan bagian-bagian tersebut, dan setelahnya Anda dapat membaca percakapan di sekitar setiap tanda. |
 | **Teks terjemahan mengambang** *(Mac)* | Tampilkan transkrip langsung sebagai teks di atas aplikasi rapat Anda. Jika Anda membiarkannya menyala, teks ini akan muncul lagi di rapat berikutnya. |
-| **Obrolan AI selama rapat** *(Mac)* | Saat merekam, tanyakan kepada AI tentang percakapan sejauh ini (<kbd>⌘J</kbd>). Sekali klik untuk "ringkasan sejauh ini" atau "keputusan & tugas". Ajukan pertanyaan lanjutan, dan klik tanda waktu dalam jawaban untuk melompat ke bagian transkrip tersebut. Tiba-tiba ditanya saat sedang mengerjakan hal lain? Klik **Saya ditanya apa?** pada teks (atau tekan <kbd>⌃⌥⌘ A</kbd>) tanpa meninggalkan aplikasi rapat: panel mengambang menampilkan apa yang baru saja dikatakan peserta lain, lalu ringkasan AI tentang pertanyaannya dan bagaimana pembahasan sampai ke sana. |
+| **Obrolan AI selama rapat** *(Mac)* | Saat merekam, tanyakan kepada AI tentang percakapan sejauh ini (<kbd>⌘J</kbd>). Sekali klik untuk "ringkasan sejauh ini" atau "keputusan & tugas". Ajukan pertanyaan lanjutan, dan klik tanda waktu dalam jawaban untuk melompat ke bagian transkrip tersebut. Tiba-tiba ditanya saat sedang mengerjakan hal lain? Klik **Saya ditanya apa?** pada teks (atau tekan <kbd>⌃⌥⌘ A</kbd>) tanpa meninggalkan aplikasi rapat: panel mengambang menampilkan apa yang baru saja dikatakan peserta lain, lalu ringkasan AI tentang pertanyaannya dan bagaimana pembahasan sampai ke sana. Ganti AI dan model untuk percakapan itu dari menu di bawah kotak input. |
 | **Deteksi rapat** | Saat aplikasi rapat mulai memakai mikrofon, Hanasu bertanya apakah Anda ingin merekam. Hanasu tidak pernah mulai merekam dengan sendirinya. |
 | **Cari & Tanya** | Cari teks di semua rapat, atau tanyakan "Apa yang kita putuskan di rapat mingguan lalu?". Jawabannya mencantumkan rapat yang menjadi sumbernya. |
 | **Ekspor** | Salin sebagai Markdown atau sebagai ringkasan yang siap untuk Slack, simpan sebagai `.md` / `.txt`, atau kirim butir tindakan ke Pengingat. |
@@ -86,12 +86,12 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 
 ### 🤖 Pilih AI Anda
 
-Pilih AI yang merapikan teks Anda, secara terpisah untuk **input suara** dan **rapat**.
+Pilih AI yang merapikan teks Anda, secara terpisah untuk **input suara** dan **rapat** (notulen). Di Mac, Anda juga memilih AI untuk **obrolan AI & tanya jawab** (obrolan AI selama rapat dan pertanyaan tentang rapat sebelumnya).
 
 | AI | Model bawaan | Masuk |
 | --- | --- | --- |
-| **Gemini** (bawaan di Windows) | input suara `gemini-3.5-flash-lite`, rapat `gemini-3.8-flash` | Kunci API Google AI Studio atau akun layanan Vertex AI |
-| **Claude** | input suara `claude-haiku-5-5`, rapat `claude-sonnet-5-5` (Opus 5.5 juga tersedia) | Kunci API Anthropic |
+| **Gemini** (bawaan di Windows) | input suara `gemini-3.5-flash-lite`, rapat serta obrolan AI & tanya jawab `gemini-3.8-flash` | Kunci API Google AI Studio atau akun layanan Vertex AI |
+| **Claude** | input suara serta obrolan AI & tanya jawab `claude-haiku-5-5`, rapat `claude-sonnet-5-5` (Opus 5.5 juga tersedia) | Kunci API Anthropic |
 | **Lokal** (di perangkat Anda; bawaan di Mac) | Gemma 4 E4B (disarankan). Lihat tabel di bawah | Tidak perlu. Unduh model di **Pengaturan → AI**. Di Mac, jika model belum ada saat Hanasu mulai merapikan teks, Hanasu akan menanyakan apakah model perlu diunduh |
 | **Apple** *(Mac, macOS 27)* | Model Apple Intelligence di perangkat, melalui perintah `fm` | Tidak perlu |
 
@@ -172,7 +172,7 @@ Saat versi baru dirilis, Hanasu memberi tahu Anda ketika dibuka dan bertanya seb
 
 Di Mac, saat pertama kali dibuka akan muncul tur panduan singkat. Tur ini memungkinkan Anda memilih AI (Gemma 4 E4B, model lokal yang disarankan, langsung diunduh di sana), menunjukkan fitur utama dan tips pengaturan, serta meminta izin yang dibutuhkan Hanasu. Buka kembali kapan saja dari **Cara menggunakan Hanasu…** di menu.
 
-1. **Pilih AI.** Buka **Pengaturan → AI** dan pilih AI untuk input suara dan untuk rapat. Untuk Gemini, tempelkan kunci API dari [Google AI Studio](https://aistudio.google.com/apikey) atau pilih berkas JSON akun layanan Vertex AI. Untuk Claude, tempelkan kunci API dari [Claude Console](https://console.anthropic.com/settings/keys). Untuk Lokal, unduh sebuah model (Gemma 4 E4B disarankan). Tidak perlu kunci. Klik tombol uji untuk memastikan semuanya berfungsi.
+1. **Pilih AI.** Buka **Pengaturan → AI** dan pilih AI untuk input suara dan untuk rapat (di Mac, juga untuk obrolan AI & tanya jawab). Untuk Gemini, tempelkan kunci API dari [Google AI Studio](https://aistudio.google.com/apikey) atau pilih berkas JSON akun layanan Vertex AI. Untuk Claude, tempelkan kunci API dari [Claude Console](https://console.anthropic.com/settings/keys). Untuk Lokal, unduh sebuah model (Gemma 4 E4B disarankan). Tidak perlu kunci. Klik tombol uji untuk memastikan semuanya berfungsi.
 2. **Dikte.** Letakkan kursor di tempat Anda menginginkan teks, tekan pintasan, bicara, lalu tekan pintasan lagi.
 3. **Rekam rapat.** Gunakan menu di bilah menu (Mac) atau baki sistem (Windows), atau pintasan. Headphone membantu memisahkan suara kedua pihak.
 

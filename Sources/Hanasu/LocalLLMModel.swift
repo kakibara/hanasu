@@ -19,6 +19,8 @@ enum LocalLLMModel: String, CaseIterable, Identifiable, Sendable {
     /// 用途の AI を初めてローカルにしたときのモデル（DEC-COM-067）
     static let defaultDictation = recommended
     static let defaultMeeting = recommended
+    // 設計判断: DEC-COM-171
+    static let defaultChat = recommended
 
     var isRecommended: Bool { self == Self.recommended }
 

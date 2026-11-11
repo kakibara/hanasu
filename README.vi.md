@@ -69,7 +69,7 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 | **Kiểm tra nguồn & nghe lại** *(Mac)* | Biên bản mở ra thành một trang: tóm tắt và các đầu việc ở trên, bản chép lời nằm bên cạnh. Bấm vào mốc thời gian sau mỗi ý để chuyển đến lời nói làm căn cứ cho ý đó. Phát bản ghi từ bất kỳ lời nói nào, và tắt tiếng phía bạn hoặc phía bên kia nếu cuộc gọi bị vọng tiếng. |
 | **Ghi chú trực tiếp & đánh dấu** | Gõ ghi chú có dấu thời gian trong cuộc gọi, hoặc nhấn <kbd>⌃⌥⌘ H</kbd> để đánh dấu "chỗ này quan trọng" (có thể hoàn tác trong 10 giây). Biên bản sẽ ưu tiên những phần đó, và sau này bạn có thể đọc lại đoạn hội thoại quanh mỗi dấu. |
 | **Phụ đề nổi** *(Mac)* | Hiển thị bản chép lời trực tiếp dưới dạng phụ đề phía trên ứng dụng họp của bạn. Nếu bạn để phụ đề bật, lần họp sau phụ đề sẽ lại hiện ra. |
-| **Trò chuyện với AI trong cuộc họp** *(Mac)* | Trong lúc ghi âm, hãy hỏi AI về cuộc hội thoại cho đến lúc này (<kbd>⌘J</kbd>). Chỉ một cú nhấp để có "tóm tắt đến giờ" hoặc "quyết định & việc cần làm". Hãy hỏi tiếp, và bấm vào dấu thời gian trong câu trả lời để chuyển đến đoạn đó trong bản chép lời. Bị hỏi bất ngờ khi đang làm việc khác? Hãy bấm **Tôi vừa được hỏi gì?** trên phụ đề (hoặc nhấn <kbd>⌃⌥⌘ A</kbd>) mà không cần rời ứng dụng họp: một bảng nổi sẽ hiện những gì người khác vừa nói, kèm phần AI tóm tắt câu hỏi và bối cảnh dẫn đến câu hỏi đó. |
+| **Trò chuyện với AI trong cuộc họp** *(Mac)* | Trong lúc ghi âm, hãy hỏi AI về cuộc hội thoại cho đến lúc này (<kbd>⌘J</kbd>). Chỉ một cú nhấp để có "tóm tắt đến giờ" hoặc "quyết định & việc cần làm". Hãy hỏi tiếp, và bấm vào dấu thời gian trong câu trả lời để chuyển đến đoạn đó trong bản chép lời. Bị hỏi bất ngờ khi đang làm việc khác? Hãy bấm **Tôi vừa được hỏi gì?** trên phụ đề (hoặc nhấn <kbd>⌃⌥⌘ A</kbd>) mà không cần rời ứng dụng họp: một bảng nổi sẽ hiện những gì người khác vừa nói, kèm phần AI tóm tắt câu hỏi và bối cảnh dẫn đến câu hỏi đó. Có thể đổi AI và mô hình dùng cho cuộc trò chuyện đó bằng menu bên dưới ô nhập. |
 | **Phát hiện cuộc họp** | Khi một ứng dụng họp bắt đầu dùng micrô, Hanasu hỏi bạn có muốn ghi âm không. Ứng dụng không bao giờ tự bắt đầu ghi âm. |
 | **Tìm kiếm & Hỏi đáp** | Tìm trong nội dung của mọi cuộc họp, hoặc hỏi "Cuộc họp tuần trước chúng ta đã quyết định gì?". Câu trả lời có trích dẫn các cuộc họp được dùng làm nguồn. |
 | **Xuất** | Sao chép dưới dạng Markdown hoặc bản tóm tắt sẵn để gửi lên Slack, lưu thành `.md` / `.txt`, hoặc gửi các đầu việc sang Lời nhắc. |
@@ -86,12 +86,12 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 
 ### 🤖 Chọn AI
 
-Chọn AI dùng để chỉnh sửa văn bản, riêng cho **nhập liệu bằng giọng nói** và **cuộc họp**.
+Chọn AI dùng để chỉnh sửa văn bản, riêng cho **nhập liệu bằng giọng nói** và **cuộc họp** (biên bản họp). Trên Mac, bạn cũng chọn một AI cho **trò chuyện AI & hỏi đáp** (trò chuyện với AI trong cuộc họp và đặt câu hỏi về các cuộc họp đã qua).
 
 | AI | Mô hình mặc định | Đăng nhập |
 | --- | --- | --- |
-| **Gemini** (mặc định trên Windows) | nhập liệu bằng giọng nói `gemini-3.5-flash-lite`, cuộc họp `gemini-3.8-flash` | Khóa API Google AI Studio hoặc tài khoản dịch vụ Vertex AI |
-| **Claude** | nhập liệu bằng giọng nói `claude-haiku-5-5`, cuộc họp `claude-sonnet-5-5` (có cả Opus 5.5) | Khóa API Anthropic |
+| **Gemini** (mặc định trên Windows) | nhập liệu bằng giọng nói `gemini-3.5-flash-lite`, cuộc họp và trò chuyện AI & hỏi đáp `gemini-3.8-flash` | Khóa API Google AI Studio hoặc tài khoản dịch vụ Vertex AI |
+| **Claude** | nhập liệu bằng giọng nói và trò chuyện AI & hỏi đáp `claude-haiku-5-5`, cuộc họp `claude-sonnet-5-5` (có cả Opus 5.5) | Khóa API Anthropic |
 | **Cục bộ** (trên thiết bị của bạn; mặc định trên Mac) | Gemma 4 E4B (khuyên dùng). Xem bảng bên dưới | Không cần. Tải mô hình trong **Cài đặt → AI**. Trên Mac, nếu chưa có mô hình khi Hanasu bắt đầu chỉnh sửa văn bản, ứng dụng sẽ hỏi bạn có muốn tải về không |
 | **Apple** *(Mac, macOS 27)* | Mô hình Apple Intelligence trên thiết bị, thông qua lệnh `fm` | Không cần |
 
@@ -172,7 +172,7 @@ Khi có phiên bản mới, Hanasu sẽ báo cho bạn lúc khởi động và h
 
 Trên Mac, lần mở đầu tiên sẽ hiện một phần hướng dẫn ngắn. Phần này cho bạn chọn AI (Gemma 4 E4B, mô hình cục bộ được khuyên dùng, có thể tải ngay tại đó), giới thiệu các tính năng chính và mẹo cài đặt, đồng thời xin các quyền mà Hanasu cần. Bạn có thể mở lại bất cứ lúc nào từ mục **Cách dùng Hanasu…** trong menu.
 
-1. **Chọn AI.** Mở **Cài đặt → AI** và chọn AI cho nhập liệu bằng giọng nói và cho cuộc họp. Với Gemini, dán khóa API lấy từ [Google AI Studio](https://aistudio.google.com/apikey) hoặc chọn tệp JSON của tài khoản dịch vụ Vertex AI. Với Claude, dán khóa API lấy từ [Claude Console](https://console.anthropic.com/settings/keys). Với Cục bộ, tải một mô hình về (khuyên dùng Gemma 4 E4B). Không cần khóa. Bấm nút kiểm tra để xác nhận mọi thứ hoạt động.
+1. **Chọn AI.** Mở **Cài đặt → AI** và chọn AI cho nhập liệu bằng giọng nói và cho cuộc họp (trên Mac, cả cho trò chuyện AI & hỏi đáp). Với Gemini, dán khóa API lấy từ [Google AI Studio](https://aistudio.google.com/apikey) hoặc chọn tệp JSON của tài khoản dịch vụ Vertex AI. Với Claude, dán khóa API lấy từ [Claude Console](https://console.anthropic.com/settings/keys). Với Cục bộ, tải một mô hình về (khuyên dùng Gemma 4 E4B). Không cần khóa. Bấm nút kiểm tra để xác nhận mọi thứ hoạt động.
 2. **Đọc chính tả.** Đặt con trỏ ở nơi bạn muốn có văn bản, nhấn phím tắt, nói, rồi nhấn lại phím tắt.
 3. **Ghi âm cuộc họp.** Dùng menu trên thanh menu (Mac) hoặc khay hệ thống (Windows), hoặc dùng phím tắt. Đeo tai nghe sẽ giúp tách biệt âm thanh của hai phía.
 

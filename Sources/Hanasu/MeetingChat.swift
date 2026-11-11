@@ -3,7 +3,7 @@ import Foundation
 // 要件: REQ-MTG-040, REQ-MTG-041
 /// 会議の AI チャット: その時点までの文字起こし・メモ・印と、それまでの会話を AI に渡して答えさせる。
 /// 記録中はライブの文字起こし（確定前の途中結果も）を、記録のあとは確定した文字起こしを使う。
-/// 会議の内容を送る先は、設定の「AI」で会議に選んだ AI だけ。
+/// 会議の内容を送る先は、設定の「AI」で「AI チャット・質問」に選んだ AI（画面で切り替えたときはその AI）だけ。
 enum MeetingChat {
     /// 会話の 1 件
     struct Message: Identifiable, Hashable {
@@ -23,6 +23,9 @@ enum MeetingChat {
         var coveredUntil: Double?
         /// 答えのとき: 渡した発言の数
         var lineCount: Int?
+        // 要件: REQ-MTG-048
+        /// 答えのとき: その答えを作った AI とモデル（「Claude · Haiku 5.5」）
+        var modelLabel: String?
     }
 
     /// 文字起こしの 1 行

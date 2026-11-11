@@ -69,7 +69,7 @@ Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Der Quellcod
 | **Quelle prüfen & nachhören** *(Mac)* | Das Protokoll öffnet sich als eine Seite: oben Zusammenfassung und Aufgaben, daneben das Transkript. Klicke auf den Zeitstempel hinter einem Punkt, um zu der Äußerung zu springen, auf der er beruht. Starte die Wiedergabe bei jeder beliebigen Äußerung und schalte deine Seite oder die der anderen stumm, wenn es im Call ein Echo gab. |
 | **Live-Notizen & Markierungen** | Tippe während des Calls Notizen mit Zeitstempel oder drücke <kbd>⌃⌥⌘ H</kbd>, um „das ist wichtig“ zu markieren (10 Sekunden lang rückgängig zu machen). Das Protokoll berücksichtigt diese Stellen bevorzugt, und hinterher kannst du das Gespräch rund um jede Markierung nachlesen. |
 | **Schwebende Untertitel** *(Mac)* | Zeige das Live-Transkript als Untertitel über deiner Besprechungs-App an. Wenn du sie eingeschaltet lässt, erscheinen sie auch in der nächsten Besprechung wieder. |
-| **KI-Chat während der Besprechung** *(Mac)* | Frag die KI während der Aufnahme zum bisherigen Gespräch (<kbd>⌘J</kbd>). „Bisher zusammenfassen“ oder „Entscheidungen & To-dos“ mit einem Klick. Stell Folgefragen und klicke auf einen Zeitstempel in einer Antwort, um zu dieser Stelle im Transkript zu springen. Mitten in einer anderen Aufgabe plötzlich etwas gefragt? Drücke in den Untertiteln auf **Was wurde ich gefragt?** (oder <kbd>⌃⌥⌘ A</kbd>), ohne deine Besprechungs-App zu verlassen: Ein schwebendes Fenster zeigt, was die anderen gerade gesagt haben, und danach die Zusammenfassung der KI – worum es in der Frage geht und wie das Gespräch dorthin gekommen ist. |
+| **KI-Chat während der Besprechung** *(Mac)* | Frag die KI während der Aufnahme zum bisherigen Gespräch (<kbd>⌘J</kbd>). „Bisher zusammenfassen“ oder „Entscheidungen & To-dos“ mit einem Klick. Stell Folgefragen und klicke auf einen Zeitstempel in einer Antwort, um zu dieser Stelle im Transkript zu springen. Mitten in einer anderen Aufgabe plötzlich etwas gefragt? Drücke in den Untertiteln auf **Was wurde ich gefragt?** (oder <kbd>⌃⌥⌘ A</kbd>), ohne deine Besprechungs-App zu verlassen: Ein schwebendes Fenster zeigt, was die anderen gerade gesagt haben, und danach die Zusammenfassung der KI – worum es in der Frage geht und wie das Gespräch dorthin gekommen ist. KI und Modell für dieses Gespräch wechselst du über das Menü unter dem Eingabefeld. |
 | **Besprechungserkennung** | Sobald eine Besprechungs-App das Mikrofon nutzt, fragt Hanasu, ob aufgenommen werden soll. Es startet nie von selbst eine Aufnahme. |
 | **Suchen & Fragen** | Durchsuche den Text aller Besprechungen oder frage „Was haben wir im Meeting letzte Woche beschlossen?“. Die Antwort nennt die Besprechungen, auf die sie sich stützt. |
 | **Export** | Als Markdown oder als Slack-fertige Zusammenfassung kopieren, als `.md` / `.txt` speichern oder Aufgaben an Erinnerungen senden. |
@@ -86,12 +86,12 @@ Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Der Quellcod
 
 ### 🤖 KI wählen
 
-Wähle die KI, die deinen Text aufbereitet, getrennt für **Spracheingabe** und **Besprechungen**.
+Wähle die KI, die deinen Text aufbereitet, getrennt für **Spracheingabe** und **Besprechungen** (Protokolle). Auf dem Mac wählst du außerdem eine für **KI-Chat & Fragen** (den KI-Chat in Besprechungen und Fragen zu vergangenen Besprechungen).
 
 | KI | Standardmodell | Anmeldung |
 | --- | --- | --- |
-| **Gemini** (Standard unter Windows) | Spracheingabe `gemini-3.5-flash-lite`, Besprechungen `gemini-3.8-flash` | API-Schlüssel von Google AI Studio oder Vertex-AI-Dienstkonto |
-| **Claude** | Spracheingabe `claude-haiku-5-5`, Besprechungen `claude-sonnet-5-5` (auch Opus 5.5 verfügbar) | Anthropic-API-Schlüssel |
+| **Gemini** (Standard unter Windows) | Spracheingabe `gemini-3.5-flash-lite`, Besprechungen und KI-Chat & Fragen `gemini-3.8-flash` | API-Schlüssel von Google AI Studio oder Vertex-AI-Dienstkonto |
+| **Claude** | Spracheingabe und KI-Chat & Fragen `claude-haiku-5-5`, Besprechungen `claude-sonnet-5-5` (auch Opus 5.5 verfügbar) | Anthropic-API-Schlüssel |
 | **Lokal** (auf deinem Gerät; Standard auf dem Mac) | Gemma 4 E4B (empfohlen). Siehe Tabelle unten | Keine. Lade das Modell unter **Einstellungen → KI** herunter. Fehlt auf dem Mac das Modell, wenn Hanasu mit dem Aufbereiten des Textes beginnt, fragt es, ob es heruntergeladen werden soll |
 | **Apple** *(Mac, macOS 27)* | Das Apple-Intelligence-Modell auf dem Gerät, über den Befehl `fm` | Keine |
 
@@ -172,7 +172,7 @@ Wenn eine neue Version erscheint, informiert dich Hanasu beim Start und fragt na
 
 Auf dem Mac öffnet sich beim ersten Start eine kurze Einführung. Dort wählst du deine KI aus (Gemma 4 E4B, das empfohlene lokale Modell, wird direkt dort heruntergeladen), siehst die wichtigsten Funktionen und Tipps zu den Einstellungen und erteilst die Berechtigungen, die Hanasu braucht. Du kannst sie jederzeit über **So verwendest du Hanasu …** im Menü erneut öffnen.
 
-1. **KI wählen.** Öffne **Einstellungen → KI** und wähle eine KI für Spracheingabe und für Besprechungen. Für Gemini fügst du einen API-Schlüssel aus [Google AI Studio](https://aistudio.google.com/apikey) ein oder wählst eine JSON-Datei eines Vertex-AI-Dienstkontos. Für Claude fügst du einen API-Schlüssel aus der [Claude Console](https://console.anthropic.com/settings/keys) ein. Für Lokal lädst du ein Modell herunter (Gemma 4 E4B wird empfohlen); ein Schlüssel ist nicht nötig. Klicke auf die Testschaltfläche, um zu prüfen, ob alles funktioniert.
+1. **KI wählen.** Öffne **Einstellungen → KI** und wähle eine KI für Spracheingabe und für Besprechungen (auf dem Mac auch für KI-Chat & Fragen). Für Gemini fügst du einen API-Schlüssel aus [Google AI Studio](https://aistudio.google.com/apikey) ein oder wählst eine JSON-Datei eines Vertex-AI-Dienstkontos. Für Claude fügst du einen API-Schlüssel aus der [Claude Console](https://console.anthropic.com/settings/keys) ein. Für Lokal lädst du ein Modell herunter (Gemma 4 E4B wird empfohlen); ein Schlüssel ist nicht nötig. Klicke auf die Testschaltfläche, um zu prüfen, ob alles funktioniert.
 2. **Diktieren.** Setze den Cursor an die gewünschte Stelle, drücke das Tastenkürzel, sprich und drücke das Tastenkürzel erneut.
 3. **Besprechung aufnehmen.** Nutze das Menü in der Menüleiste (Mac) bzw. im Infobereich (Windows) oder das Tastenkürzel. Kopfhörer helfen, die beiden Seiten sauber zu trennen.
 

@@ -53,7 +53,8 @@ final class MeetingAskedQuestion: ObservableObject {
     @Published private(set) var openChatRequest: OpenChatRequest?
 
     /// AI を呼ぶ部分（確認用に差し替える）。渡すのは組み立てたプロンプト
-    var reply: (MeetingChat.Prompt) async throws -> String = MeetingAskedQuestion.replyWithSettings
+    // 要件: REQ-COM-025, REQ-MTG-048（答えを入れる AI チャットの会話と同じ送り先に聞く）
+    var reply: (MeetingChat.Prompt, TextAIChoice) async throws -> String = MeetingAskedQuestion.replyWithSettings
     /// 会議ノートのウインドウを前に出す（AppDelegate が入れる）
     var openMeetingWindow: () -> Void = {}
 
@@ -209,6 +210,9 @@ final class MeetingAskedQuestion: ObservableObject {
         let quick = MeetingChat.askedPrompt
         let prompt = MeetingChat.prompt(question: quick.question, material: material, history: [])
         let generation = model.generation
+        // 要件: REQ-COM-025, REQ-MTG-048
+        // 設計判断: DEC-MTG-150（その会議のチャットで切り替えた送り先。なければ設定の「AI チャット・質問」）
+        let choice = model.effectiveChoice(settings: AppSettings.shared)
         let new = Request(meetingID: meetingID, origin: origin, at: material.elapsed,
                           recentOthers: MeetingChat.recentOthers(in: material), notice: notice, phase: .running,
                           generation: generation)
@@ -217,14 +221,14 @@ final class MeetingAskedQuestion: ObservableObject {
         let reply = self.reply
         task = Task { [weak self] in
             do {
-                let text = try await reply(prompt)
+                let text = try await reply(prompt, choice)
                 guard let self, !Task.isCancelled, self.request?.id == new.id else { return }
                 self.request?.phase = .answered(text)
                 self.task = nil
                 model.insertAnsweredTurn(
                     question: MeetingChat.Message(role: .user, text: quick.question, label: quick.label),
                     answer: MeetingChat.Message(role: .assistant, text: text, coveredUntil: prompt.coveredUntil,
-                                                lineCount: prompt.lineCount),
+                                                lineCount: prompt.lineCount, modelLabel: choice.label),
                     generation: generation)
             } catch {
                 guard let self, !Task.isCancelled, self.request?.id == new.id else { return }
@@ -234,12 +238,11 @@ final class MeetingAskedQuestion: ObservableObject {
         }
     }
 
-    /// 設定の「AI」で会議に選んだ AI とモデルに聞く（チャットと同じ指示。会議中は速さを優先して effort は low）
-    static func replyWithSettings(_ prompt: MeetingChat.Prompt) async throws -> String {
-        let settings = AppSettings.shared
-        let client = try TextAIClient.requireFromSettings(settings, for: .meeting, timeout: 120)
+    /// AI チャットの送り先（既定は設定の「AI」の「AI チャット・質問」）に聞く（チャットと同じ指示。会議中は速さを優先して effort は low）
+    static func replyWithSettings(_ prompt: MeetingChat.Prompt, choice: TextAIChoice) async throws -> String {
+        let client = try TextAIClient.require(choice, settings: AppSettings.shared, for: .chat, timeout: 120)
         let text = try await client.generate(systemInstruction: MeetingChat.instruction, userText: prompt.text,
-                                             model: settings.textModel(for: .meeting), effort: .low)
+                                             model: choice.model, effort: .low)
         return text.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 

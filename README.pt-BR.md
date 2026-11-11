@@ -69,7 +69,7 @@ Ele é inspirado no Typeless, Wispr Flow, Aqua Voice e Granola. O código-fonte 
 | **Confira a origem e ouça de novo** *(Mac)* | A ata abre em uma única página: resumo e itens de ação primeiro, com a transcrição ao lado. Clique no horário depois de um ponto para ir à fala de onde ele veio. Reproduza a gravação a partir de qualquer fala e silencie o seu lado ou o deles se a chamada teve eco. |
 | **Notas ao vivo e destaques** | Digite notas com horário durante a chamada, ou pressione <kbd>⌃⌥⌘ H</kbd> para marcar "isto é importante" (dá para desfazer por 10 segundos). A ata dá prioridade a esses trechos, e depois você pode ler a conversa em torno de cada marcação. |
 | **Legendas flutuantes** *(Mac)* | Mostre a transcrição ao vivo como legendas sobre o app da reunião. Se você deixá-las ativadas, elas aparecem de novo na próxima reunião. |
-| **Chat com IA durante a reunião** *(Mac)* | Enquanto grava, pergunte à IA sobre a conversa até agora (<kbd>⌘J</kbd>). Um clique para "resumo até agora" ou "decisões e tarefas". Faça perguntas de acompanhamento e clique em um horário numa resposta para ir àquele trecho da transcrição. Foi pego de surpresa por uma pergunta enquanto fazia outra coisa? Pressione **O que me perguntaram?** nas legendas (ou <kbd>⌃⌥⌘ A</kbd>) sem sair do app da reunião: um painel flutuante mostra o que os outros acabaram de dizer e, em seguida, o resumo da IA com a pergunta e o contexto que levou até ela. |
+| **Chat com IA durante a reunião** *(Mac)* | Enquanto grava, pergunte à IA sobre a conversa até agora (<kbd>⌘J</kbd>). Um clique para "resumo até agora" ou "decisões e tarefas". Faça perguntas de acompanhamento e clique em um horário numa resposta para ir àquele trecho da transcrição. Foi pego de surpresa por uma pergunta enquanto fazia outra coisa? Pressione **O que me perguntaram?** nas legendas (ou <kbd>⌃⌥⌘ A</kbd>) sem sair do app da reunião: um painel flutuante mostra o que os outros acabaram de dizer e, em seguida, o resumo da IA com a pergunta e o contexto que levou até ela. Troque a IA e o modelo dessa conversa pelo menu abaixo da caixa de texto. |
 | **Detecção de reuniões** | Quando um app de reunião começa a usar o microfone, o Hanasu pergunta se deve gravar. Ele nunca começa a gravar sozinho. |
 | **Pesquisar e perguntar** | Pesquise o texto de todas as reuniões, ou pergunte "O que decidimos na reunião semanal passada?". A resposta cita as reuniões que usou. |
 | **Exportar** | Copie como Markdown ou como um resumo pronto para o Slack, salve como `.md` / `.txt`, ou envie os itens de ação para o Lembretes. |
@@ -86,12 +86,12 @@ Ele é inspirado no Typeless, Wispr Flow, Aqua Voice e Granola. O código-fonte 
 
 ### 🤖 Escolha a sua IA
 
-Escolha a IA que refina o seu texto, separadamente para **entrada por voz** e **reuniões**.
+Escolha a IA que refina o seu texto, separadamente para **entrada por voz** e **reuniões** (atas). No Mac, você também escolhe uma para **Chat de IA e perguntas** (o chat com IA da reunião e as perguntas sobre reuniões anteriores).
 
 | IA | Modelo padrão | Acesso |
 | --- | --- | --- |
-| **Gemini** (padrão no Windows) | entrada por voz `gemini-3.5-flash-lite`, reuniões `gemini-3.8-flash` | Chave de API do Google AI Studio ou conta de serviço do Vertex AI |
-| **Claude** | entrada por voz `claude-haiku-5-5`, reuniões `claude-sonnet-5-5` (Opus 5.5 também disponível) | Chave de API da Anthropic |
+| **Gemini** (padrão no Windows) | entrada por voz `gemini-3.5-flash-lite`, reuniões e Chat de IA e perguntas `gemini-3.8-flash` | Chave de API do Google AI Studio ou conta de serviço do Vertex AI |
+| **Claude** | entrada por voz e Chat de IA e perguntas `claude-haiku-5-5`, reuniões `claude-sonnet-5-5` (Opus 5.5 também disponível) | Chave de API da Anthropic |
 | **Local** (no seu dispositivo; padrão no Mac) | Gemma 4 E4B (recomendado). Veja a tabela abaixo | Nenhum. Baixe o modelo em **Ajustes → IA**. No Mac, se o modelo não estiver presente quando o Hanasu começar a refinar o texto, ele pergunta se você quer baixá-lo |
 | **Apple** *(Mac, macOS 27)* | O modelo do Apple Intelligence no dispositivo, pelo comando `fm` | Nenhum |
 
@@ -172,7 +172,7 @@ Quando uma nova versão é lançada, o Hanasu avisa você ao abrir e pergunta an
 
 No Mac, a primeira execução abre um breve tour guiado. Ele permite escolher a sua IA (o Gemma 4 E4B, modelo local recomendado, é baixado ali mesmo), mostra os principais recursos e dicas de configuração, e pede as permissões de que o Hanasu precisa. Abra-o de novo quando quiser em **Como usar o Hanasu…** no menu.
 
-1. **Escolha uma IA.** Abra **Ajustes → IA** e escolha uma IA para entrada por voz e para reuniões. Para o Gemini, cole uma chave de API do [Google AI Studio](https://aistudio.google.com/apikey) ou selecione um arquivo JSON de conta de serviço do Vertex AI. Para o Claude, cole uma chave de API do [Claude Console](https://console.anthropic.com/settings/keys). Para Local, baixe um modelo (recomenda-se o Gemma 4 E4B). Nenhuma chave é necessária. Clique no botão de teste para conferir se funciona.
+1. **Escolha uma IA.** Abra **Ajustes → IA** e escolha uma IA para entrada por voz e para reuniões (no Mac, também para Chat de IA e perguntas). Para o Gemini, cole uma chave de API do [Google AI Studio](https://aistudio.google.com/apikey) ou selecione um arquivo JSON de conta de serviço do Vertex AI. Para o Claude, cole uma chave de API do [Claude Console](https://console.anthropic.com/settings/keys). Para Local, baixe um modelo (recomenda-se o Gemma 4 E4B). Nenhuma chave é necessária. Clique no botão de teste para conferir se funciona.
 2. **Dite.** Coloque o cursor onde quer o texto, pressione o atalho, fale e pressione o atalho de novo.
 3. **Grave uma reunião.** Use o menu da barra de menus (Mac) ou da bandeja (Windows), ou o atalho. Fones de ouvido ajudam a manter os dois lados separados.
 

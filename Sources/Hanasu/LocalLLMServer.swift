@@ -28,6 +28,8 @@ actor LocalLLMServer {
         case modelNotDownloaded(LocalLLMModel)
         case exited(status: Int32, log: String)
         case startupTimedOut
+        /// 違うモデルの処理が終わるのを待ちきれなかった（DEC-COM-172）
+        case busy
 
         var errorDescription: String? {
             switch self {
@@ -41,6 +43,8 @@ actor LocalLLMServer {
                 tr("ローカルの LLM が起動できませんでした（終了コード %@）", "\(status)") + (log.isEmpty ? "" : "\n" + log)
             case .startupTimedOut:
                 tr("ローカルの LLM の起動が %@ 秒たっても終わりませんでした", "\(Int(LocalLLMServer.startupTimeout))")
+            case .busy:
+                tr("ほかの処理（議事録の作成など）が終わらないため、ローカルの AI を使えませんでした")
             }
         }
     }
@@ -48,8 +52,21 @@ actor LocalLLMServer {
     private var process: Process?
     private var model: LocalLLMModel?
     private var endpoint: Endpoint?
-    private var activeRequests = 0
+    // 設計判断: DEC-COM-172
+    private var gate = LocalLLMGate()
     private var lastUsed = Date()
+    /// 確かめるとき（--test-local-llm-wait）だけ: llama-server を起こさずに、起動したことにする
+    private let fakeLaunch: (@Sendable (LocalLLMModel) async throws -> Endpoint)?
+    /// 待っている処理が、進めるかを見直す間隔
+    private let pollInterval: Duration
+    /// 確かめる用: サーバーを起動した回数
+    private(set) var launchCount = 0
+
+    init(fakeLaunch: (@Sendable (LocalLLMModel) async throws -> Endpoint)? = nil,
+         pollInterval: Duration = .milliseconds(500)) {
+        self.fakeLaunch = fakeLaunch
+        self.pollInterval = pollInterval
+    }
     private var idleTask: Task<Void, Never>?
     private let stderrTail = OutputTail()
 
@@ -70,23 +87,80 @@ actor LocalLLMServer {
         return candidates.first { FileManager.default.isExecutableFile(atPath: $0.path) }
     }
 
-    /// 処理を 1 つ始める。そのモデルでサーバーが動いていなければ起動する。終わったら finishRequest を呼ぶ
-    func beginRequest(_ model: LocalLLMModel) async throws -> Endpoint {
-        activeRequests += 1
-        do {
-            let endpoint = try await ensureRunning(model)
-            lastUsed = Date()
-            return endpoint
-        } catch {
-            activeRequests -= 1
-            throw error
+    /// 処理を 1 つ始める。そのモデルでサーバーが動いていなければ起動する。終わったら finishRequest を呼ぶ。
+    /// waitsForOtherModel が真なら、違うモデルを使っている処理が終わるまで deadline まで待つ（DEC-COM-172）。
+    /// 偽（音声入力）なら今までどおり、処理中でも止めて起動し直す
+    func beginRequest(_ model: LocalLLMModel, waitsForOtherModel: Bool = false, deadline: Date? = nil) async throws -> Endpoint {
+        let ticket = UUID()
+        gate.enqueue(ticket)
+        // 待ち始めたら真、待ちを抜けたら（進んだ・期限・取り消しのどれでも）偽を、見ている画面に知らせる
+        let observer = Self.waitObserver
+        var notifiedWaiting = false
+        defer { if notifiedWaiting { observer?(false) } }
+        while true {
+            switch gate.decision(for: ticket, model: model, serving: servingModel, waitsForOtherModel: waitsForOtherModel) {
+            case .proceed, .start:
+                gate.admit(ticket)
+                if notifiedWaiting {
+                    notifiedWaiting = false
+                    observer?(false)
+                }
+                do {
+                    let endpoint = try await ensureRunning(model)
+                    lastUsed = Date()
+                    return endpoint
+                } catch {
+                    gate.finish()
+                    throw error
+                }
+            case .wait:
+                if !notifiedWaiting {
+                    notifiedWaiting = true
+                    observer?(true)
+                }
+                if let deadline, Date() >= deadline {
+                    gate.leave(ticket)
+                    throw Failure.busy
+                }
+                do {
+                    try await Task.sleep(for: pollInterval)
+                } catch {
+                    gate.leave(ticket)
+                    throw error
+                }
+            }
         }
     }
 
     func finishRequest() {
-        activeRequests = max(0, activeRequests - 1)
+        gate.finish()
         lastUsed = Date()
         scheduleIdleStop()
+    }
+
+    /// そのモデルの処理を今送ると、ほかの処理が終わるのを待つことになるか
+    func wouldWait(for model: LocalLLMModel, waitsForOtherModel: Bool) -> Bool {
+        gate.wouldWait(for: model, serving: servingModel, waitsForOtherModel: waitsForOtherModel)
+    }
+
+    /// beginRequest が、ほかの処理の終わりを待ち始めた（真）・待ちを抜けた（偽）ことを知らせる先。
+    /// 呼び出す側のタスクに付ける（observingWait）ので、間に挟まる AI の呼び出しの層を変えずに届く
+    @TaskLocal static var waitObserver: (@Sendable (Bool) -> Void)?
+
+    // 設計判断: DEC-COM-172
+    /// body の中で始めたローカルの AI の処理が、ほかの処理の終わりを待っている間だけ、
+    /// onChange に真を渡す（抜けたら偽）。onChange はメインスレッドで、起きた順に呼ぶ
+    nonisolated static func observingWait<T>(_ onChange: @escaping @MainActor @Sendable (Bool) -> Void,
+                                             _ body: () async throws -> T) async rethrows -> T {
+        try await $waitObserver.withValue({ waiting in
+            DispatchQueue.main.async { MainActor.assumeIsolated { onChange(waiting) } }
+        }, operation: body)
+    }
+
+    /// 使える状態で動いているモデル（起動中は nil）
+    private var servingModel: LocalLLMModel? {
+        guard endpoint != nil, fakeLaunch != nil || process?.isRunning == true else { return nil }
+        return model
     }
 
     /// そのモデルを動かしていれば止める（モデルを消すとき）
@@ -116,6 +190,15 @@ actor LocalLLMServer {
 
     private func ensureRunning(_ model: LocalLLMModel) async throws -> Endpoint {
         if let process, process.isRunning, self.model == model, let endpoint {
+            return endpoint
+        }
+        if let fakeLaunch {
+            if self.model == model, let endpoint { return endpoint }
+            stop()
+            self.model = model
+            launchCount += 1
+            let endpoint = try await fakeLaunch(model)
+            self.endpoint = endpoint
             return endpoint
         }
         stop()
@@ -149,6 +232,7 @@ actor LocalLLMServer {
         try process.run()
         self.process = process
         self.model = model
+        launchCount += 1
         Self.setRunningPID(process.processIdentifier)
         Self.writePIDFile(pid: process.processIdentifier, executable: executable)
         appLog.notice("local llm server started: \(model.rawValue, privacy: .public) port=\(port)")
@@ -204,7 +288,8 @@ actor LocalLLMServer {
     }
 
     private func stopIfIdle() {
-        guard activeRequests == 0, Date().timeIntervalSince(lastUsed) >= Self.idleSeconds - 1, process != nil else { return }
+        // 設計判断: DEC-COM-172（待っている処理があるときも止めない）
+        guard gate.isIdle, Date().timeIntervalSince(lastUsed) >= Self.idleSeconds - 1, process != nil else { return }
         appLog.notice("local llm server stopped (idle)")
         stop()
     }

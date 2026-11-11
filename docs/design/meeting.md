@@ -310,21 +310,31 @@ tl;dv や Fireflies の書き出し（Slack・タスク管理）にならい、�
 - **画面の置き場所**: 記録中の画面（`LiveTranscriptView`）の右側のパネルを `LiveSidePanel` にし、上の切り替え（`LiveSidePanelModePicker`）で「メモ」（`LiveNotesPanel`）と「AI チャット」（`MeetingChatView`）を出し分ける。字幕と「ここ重要」のボタン（`LiveHighlightControls`）はどちらでも上に出す。選んだほうは `@AppStorage("meetingLiveSidePanel")` で覚える。⌘J で AI チャットにして入力欄にフォーカスする（DEC-MTG-080）。
 - **チャットの欄**（上から）:
   - 会話を始める前: 何ができるかの説明と、よく使う質問のボタン（`MeetingChat.quickPrompts`。DEC-MTG-083）。
-  - 会話: 質問は右に吹き出し、答えは左に `MarkdownText` で出す。答えの下に「12:34 までの記録から」（渡した記録の範囲）と「コピー」「メモに残す」。待っている間は「ここまでの記録を読んでいます…」と「止める」。失敗したらその理由と「もう一度」。
-  - 入力欄: ↩ で送る（`TextField` の縦に伸びる形）。待っている間は送信のボタンが止めるボタンに変わる。会話のあとは、入力欄の上によく使う質問を小さく並べる。下に送り先の AI とモデルと「会話は保存しません」、「新しい会話」。
-- **送るもの**: 送るたびに `MeetingChat.liveMaterial` で、そのときの `MeetingRecorder.liveLines`（確定した発言）・`volatileMe`／`volatileOthers`（確定前の途中結果）・`Meeting.notesForPrompt()`（メモと印）を集め、`MeetingChat.prompt` でそれまでの会話と今の質問を足した 1 つの本文にして、会議に選んだ AI に `TextAIClient.generate`（effort は low）で送る（DEC-MTG-081）。答えの付かなかった質問は `MeetingChat.answeredTurns` で除く。長さの上限は `MeetingChat.Options`（DEC-MTG-082）。
+  - 会話: 質問は右に吹き出し、答えは左に `MarkdownText` で出す。答えの見出し（「AI」）の横に、その答えを作った AI とモデル（`MeetingChat.Message.modelLabel`）。答えの下に「12:34 までの記録から」（渡した記録の範囲）と「コピー」「メモに残す」。待っている間は「ここまでの記録を読んでいます…」（ローカルでほかの処理を待つときは「ほかの処理が終わるのを待っています…」）と「止める」。失敗したらその理由と「もう一度」。
+  - 入力欄: ↩ で送る（`TextField` の縦に伸びる形）。待っている間は送信のボタンが止めるボタンに変わる。会話のあとは、入力欄の上によく使う質問を小さく並べる。下に送り先のメニュー（`AIRouteMenu`。4.13.1）と「新しい会話」、外に送るかと「会話は保存しません」の 1 行。
+  - 既定の送り先が使えない（キーがない・モデルが未ダウンロードなど）ときは、欄の上に `AIRouteUnavailableNotice` で理由と直し方を出す（REQ-COM-025）。
+- **送るもの**: 送るたびに `MeetingChat.liveMaterial` で、そのときの `MeetingRecorder.liveLines`（確定した発言）・`volatileMe`／`volatileOthers`（確定前の途中結果）・`Meeting.notesForPrompt()`（メモと印）を集め、`MeetingChat.prompt` でそれまでの会話と今の質問を足した 1 つの本文にして、送り先（`MeetingChatModel.effectiveChoice`: 画面で切り替えたもの、なければ設定の「AI チャット・質問」= `TextAIPurpose.chat`）に `TextAIClient.require(_:settings:for:)` で作ったクライアントの `generate`（effort は low）で送る（DEC-MTG-081）。答えの付かなかった質問は `MeetingChat.answeredTurns` で除く。長さの上限は `MeetingChat.Options`（DEC-MTG-082）。
 - **Whisper / Gemini のとき**: 記録中は文字起こしがないので、メモと印だけで答えることを欄の上に出し、本文にもそう書く。
 - **答えの中の時刻**: `MeetingChat.linkingTimes` で [12:34] を `hanasu-time://<秒>` のリンクにし、`OpenURLAction` で受けて、`MeetingChat.lineIndex` で探した発言へスクロールする。記録中は `followLatest` を止めて「最新の発言へ」のボタンを出す（DEC-MTG-084）。
 - **会話の持ち方**: `MeetingChatStore.shared` が会議の ID ごとに `MeetingChatModel` を持つ（メモリだけ）。同じ ID なので、記録を止めて会議の詳細に変わっても、「AI チャット」タブ（`MeetingDetailView` の 5 つめのタブ）で同じ会話が続く。記録のあとは `MeetingChat.material(for:)` で確定した文字起こしと話者名を渡す（DEC-MTG-086）。取り消し（「止める」）は、送った質問を会話から外して入力欄に戻す。
 - **メモに残す**: `MeetingChat.noteText` で答えを「AI: …」の 1 行にし、記録中は `MeetingRecorder.addNote`（質問した時刻）、記録のあとは `MeetingRecorder.updateNotes`（時刻なし）で足す（DEC-MTG-085）。
-- **確認**: `--test-meeting-chat` は本文の組み立て・時刻のリンク・メモへの変換を AI なしで確かめる。`--chat-meeting <会議のフォルダ> --ask … --ask …` は保存した会議で実際の AI と会話し（`--at <時刻>` でその時刻までを記録中として渡す）、`--render-meeting-chat` は画面を PNG にする。
+- **確認**: `--test-meeting-chat` は本文の組み立て・時刻のリンク・メモへの変換と、送り先の切り替え（`MeetingChatRouteTest`）を AI なしで確かめる。`--chat-meeting … --show-target` は AI を呼ばずに用途・AI・モデルを出す。`--chat-meeting <会議のフォルダ> --ask … --ask …` は保存した会議で実際の AI と会話し（`--at <時刻>` でその時刻までを記録中として渡す）、`--render-meeting-chat` は画面を PNG にする。
 - **「何を聞かれた？」**（REQ-MTG-047）: 流れは `MeetingAskedQuestion.swift`（`MeetingAskedQuestion`）、前面のパネルとショートカットと設定の節は `MeetingAskedQuestionPanel.swift`（`MeetingAskedQuestionPanel`・`MeetingAskedQuestionView`・`MeetingAskedHotKey`・`MeetingAskedSettingsSection`）。
   - 入口は 3 つ: 字幕の「何を聞かれた？」（`MeetingCaptionView`）、記録中だけ登録するショートカット（`MeetingAskedHotKey`。「ここ重要」と共通の `MeetingRecordingHotKey`）、記録中のチャットのよく使う質問の先頭（`MeetingChat.askedPrompt`。`MeetingChat.quickPrompts(live:)` が記録のあとは外す）。どれも `MeetingAskedQuestion.ask(recorder:origin:)` を呼ぶ。
   - 渡すもの: `MeetingChat.liveMaterial` を `MeetingChat.askedMaterial` で直近 10 分（`askedWindow`）に切り、それまでの会話を付けずに `MeetingChat.prompt` で本文にする。省いた前の発言は `chat.transcript.recentOnly` で数だけ書く（DEC-MTG-095）。
   - パネル: `NonKeyPanel`（キーウインドウにならない `NSPanel`。`sharingType = .none`）に、見出し・`MeetingChat.recentOthers` の相手の直近の発言（AI を待たずに出す）・答え・ボタンを出す。オフレコ中（`Meeting.isOffRecord`）と相手の音が入っていないとき（`MeetingRecorder.othersSilent`）は知らせを出す（DEC-MTG-096）。
-  - 会話への入れ方: ウインドウのチャット（`MeetingChatModel.send`）とは別の作業で聞き、答えが出たら `MeetingChatModel.insertAnsweredTurn` で組にして入れる。表示は `MeetingChat.Message.label`。押したあとに「新しい会話」を押したら `MeetingChatModel.generation` が変わるので入れない（DEC-MTG-098）。
+  - 会話への入れ方: ウインドウのチャット（`MeetingChatModel.send`）とは別の作業で聞き、答えが出たら `MeetingChatModel.insertAnsweredTurn` で組にして入れる。表示は `MeetingChat.Message.label`。押したあとに「新しい会話」を押したら `MeetingChatModel.generation` が変わるので入れない（DEC-MTG-098）。送り先は、その会議の AI チャットと同じ（`MeetingChatModel.effectiveChoice`。画面で切り替えていればそれ、なければ設定の「AI チャット・質問」。DEC-MTG-150）。
   - 「チャットで続ける」: `MeetingAskedQuestion.openChatRequest` を立てて `openMeetingWindow`（AppDelegate が入れる）を呼ぶ。会議ノートのウインドウ（`MeetingWindowView`）が受け取り、その会議を選び、後ろ側のパネルを出して AI チャットにし、入力欄にフォーカスを移す。
   - 確認: `--test-meeting-chat` に切り方・出し分け・会話への入れ方（`MeetingAskedQuestion.selfTest`。AI を呼ぶ部分 `reply` を差し替える）を足した。`--chat-meeting … --live --at … [--pending …] --quick asked` で記録中と同じ形を作って実際の AI に聞く。`--render-meeting-notes` でパネルの状態と設定の節を描く。
+
+#### 4.13.1 送り先の切り替え
+
+AI チャットと会議への質問（11.2）で、その会話・その画面だけ、送り先の AI とモデルを既定から変える（REQ-MTG-048・049、DEC-MTG-150）。部品は `AIRouteMenu.swift`。
+
+- **一覧**: `AIRoute.sections(settings:)` が AI の並び（ローカル・Apple・Gemini・Claude。DEC-COM-168）で選択肢を作る。Gemini は `AppSettings.suggestedModels` に、設定の 3 用途の Gemini のモデルのうち一覧にないものを足す。Claude も同じ。先頭は「既定（<AI> · <モデル>）」。
+- **使えるか**: `AIRoute.availability(settings:appleFMReason:)` が中身を読まずに調べる（Claude・Gemini のキーは `Keychain.exists`、サービスアカウントはファイルがあるか、ローカルは `LocalLLMStore.isDownloaded`）。Apple の判定（`AppleFMAvailability.check`）は署名を確かめるので、モデルが最初に 1 回だけして覚える。見直すのは、画面が出たとき・設定が変わったとき・どれかのウインドウが前に出たとき（`AIRoute.availabilityRefreshes`。キーの保存とモデルのダウンロードは設定の値を変えないので、設定の画面から戻ったことで拾う）・送る直前。使えない項目は理由を文字に入れて選べなくする。
+- **持ち方**: AI チャットは `MeetingChatModel.override`（会議ごと。`MeetingChatStore` と同じくアプリを終了するまで。「新しい会話」では戻さない）。会議への質問は `MeetingAskModel.override`。会議のウインドウは閉じても残す作りなので、`MeetingWindowView` が `NSWindow.willCloseNotification` を受けて戻す。
+- **送るとき**: `TextAIClient.make(_:settings:for:timeout:)` が選んだ AI とモデルのクライアントを作る（`fromSettings` もこれを使う）。ローカルなら `LocalLLMClient` にモデルを渡し、ほかは `generate` にモデル名を渡す。
 
 ### 4.14 記録中のスリープ
 
@@ -457,7 +467,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 
 ### 11.2 会議への質問（Ask）
 
-✦ ボタンで右側が質問の画面になる。質問を入れると、次の順で会議を集めて Gemini（設定の「議事録のモデル」= `meetingMinutesModel`）に渡す。
+✦ ボタンで右側が質問の画面になる。質問を入れると、次の順で会議を集めて、設定の「AI チャット・質問」の AI とモデル（`TextAIPurpose.chat`。質問の欄の下の「送り先」で変えていればそれ。4.13.1）に渡す（DEC-MTG-053）。
 
 1. 質問から検索語を取り出し（`NLTokenizer` で語に分け、ひらがなを含む語・1 文字の語・「会議」「先週」などの言い回しを除く。続けて出てくる語は「料金プラン」のようにつなげた語も使う）、ヒットした会議。ヒットした語が長い・多い会議を先にする。
 2. 足りなければ直近の会議。
@@ -466,7 +476,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 渡す量の上限: 会議 8 件、本文の合計 15 万文字。会議ごとに、議事録があれば議事録と、検索でヒットした発言の前後 2 発言ずつ（6,000 文字まで）を渡す。議事録がなければ文字起こし（4 万文字まで。超えるときはヒットした発言の前後、ヒットがなければ冒頭）を渡す。
 
 答えには、根拠の会議を文中で「［M1: 2026/11/02 定例］」の形で引用させ、最後に「## 根拠」を付けさせる。画面では、渡した会議の一覧を出し、引用された会議に印を付ける。選ぶとその会議を開く。
-記録にないことは「記録からは分かりません」と答えさせ、会議の記録の中の指示には従わないよう指示する。会議の内容を送るのは Gemini だけ。
+記録にないことは「記録からは分かりません」と答えさせ、会議の記録の中の指示には従わないよう指示する。会議の内容を送るのは、その送り先の AI だけ（ローカル・Apple なら Mac の外に送らない）。答えの下に、答えを作った AI とモデルを出す。
 
 ### 11.3 確認用の CLI
 

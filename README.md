@@ -67,7 +67,7 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 | **Check the source & listen again** *(Mac)* | The minutes open as one page: summary and action items first, with the transcript beside them. Click the timestamp after a point to jump to the remark it came from. Play the recording from any remark, and mute your side or theirs if the call echoed. |
 | **Live notes & highlights** | Type timestamped notes during the call, or press <kbd>⌃⌥⌘ H</kbd> to mark "this matters" (you can undo it for 10 seconds). The minutes give those parts priority, and afterwards you can read the conversation around each mark. |
 | **Floating captions** *(Mac)* | Show the live transcript as captions on top of your meeting app. If you leave them on, they come back for the next meeting. |
-| **AI chat during the meeting** *(Mac)* | While recording, ask the AI about the conversation so far (<kbd>⌘J</kbd>). One click for "summarize so far" or "decisions & to-dos". Ask follow-ups, and click a timestamp in an answer to jump to that part of the transcript. Put on the spot while doing something else? Press **What was I asked?** on the captions (or <kbd>⌃⌥⌘ A</kbd>) without leaving your meeting app: a floating panel shows what the others just said, then the AI's summary of the question and how the discussion got there. |
+| **AI chat during the meeting** *(Mac)* | While recording, ask the AI about the conversation so far (<kbd>⌘J</kbd>). One click for "summarize so far" or "decisions & to-dos". Ask follow-ups, and click a timestamp in an answer to jump to that part of the transcript. Put on the spot while doing something else? Press **What was I asked?** on the captions (or <kbd>⌃⌥⌘ A</kbd>) without leaving your meeting app: a floating panel shows what the others just said, then the AI's summary of the question and how the discussion got there. Switch the AI and model for that conversation from the menu under the input box. |
 | **Meeting detection** | When a meeting app starts using the mic, Hanasu asks whether to record. It never starts recording on its own. |
 | **Search & Ask** | Search the text of every meeting, or ask "What did we decide in last week's sync?". The answer cites the meetings it used. |
 | **Export** | Copy as Markdown or as a summary ready for Slack, save as `.md` / `.txt`, or send action items to Reminders. |
@@ -84,12 +84,12 @@ It is inspired by Typeless, Wispr Flow, Aqua Voice and Granola. Its source code 
 
 ### 🤖 Choose your AI
 
-Pick the AI that polishes your text, separately for **voice input** and **meetings**.
+Pick the AI that polishes your text, separately for **voice input** and **meetings** (minutes). On the Mac, you also pick one for **AI chat & Ask** (the meeting AI chat and questions about past meetings).
 
 | AI | Default model | Sign-in |
 | --- | --- | --- |
-| **Gemini** (default on Windows) | voice input `gemini-3.5-flash-lite`, meetings `gemini-3.8-flash` | Google AI Studio API key or Vertex AI service account |
-| **Claude** | voice input `claude-haiku-5-5`, meetings `claude-sonnet-5-5` (Opus 5.5 also available) | Anthropic API key |
+| **Gemini** (default on Windows) | voice input `gemini-3.5-flash-lite`, meetings and AI chat & Ask `gemini-3.8-flash` | Google AI Studio API key or Vertex AI service account |
+| **Claude** | voice input and AI chat & Ask `claude-haiku-5-5`, meetings `claude-sonnet-5-5` (Opus 5.5 also available) | Anthropic API key |
 | **Local** (on your device; default on Mac) | Gemma 4 E4B (recommended). See the table below | None. Download the model in **Settings → AI**. On the Mac, if the model is missing when Hanasu starts to polish text, it asks whether to download it |
 | **Apple** *(Mac, macOS 27)* | The on-device Apple Intelligence model, through the `fm` command | None |
 
@@ -170,7 +170,7 @@ When a new version is released, Hanasu tells you at launch and asks before it up
 
 On Mac, the first launch opens a short guided tour. It lets you pick your AI (Gemma 4 E4B, the recommended local model, downloads right there), shows the main features and settings tips, and asks for the permissions Hanasu needs. Open it again any time from **How to use Hanasu…** in the menu.
 
-1. **Choose an AI.** Open **Settings → AI** and choose an AI for voice input and for meetings. For Gemini, paste an API key from [Google AI Studio](https://aistudio.google.com/apikey) or select a Vertex AI service-account JSON file. For Claude, paste an API key from the [Claude Console](https://console.anthropic.com/settings/keys). For Local, download a model (Gemma 4 E4B is recommended). No key is needed. Click the test button to check that it works.
+1. **Choose an AI.** Open **Settings → AI** and choose an AI for voice input and for meetings (on the Mac, also for AI chat & Ask). For Gemini, paste an API key from [Google AI Studio](https://aistudio.google.com/apikey) or select a Vertex AI service-account JSON file. For Claude, paste an API key from the [Claude Console](https://console.anthropic.com/settings/keys). For Local, download a model (Gemma 4 E4B is recommended). No key is needed. Click the test button to check that it works.
 2. **Dictate.** Put the cursor where you want the text, press the shortcut, speak, and press the shortcut again.
 3. **Record a meeting.** Use the menu-bar (Mac) or tray (Windows) menu, or the shortcut. Headphones help keep the two sides apart.
 
