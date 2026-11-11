@@ -615,8 +615,9 @@
 - 受け入れ条件:
   - `hanasu meetings list --json` で、会議ごとに `id`・`slug`・`startedAt`・`durationSeconds`・`title`・`status`・`hasMinutes`・`actionItemCount` が出る。
   - `--since 2026-10-02 --until 2026-10-02` で、10 月 2 日の会議だけが出る（日付の `--until` はその日を含む）。
-  - 読めない `meeting.json` は飛ばす。
-- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の M1・M8）
+  - 壊れた `meeting.json`（読めたが JSON として読めない）は飛ばす。
+  - `meeting.json` があるのに開けない・読めない会議（フォルダのアクセス権、同期でファイルが手元にない）は飛ばし、その数を `--json` の `unreadableMeetingCount`（0 のときも出す）に出す。文の出力では、1 以上なら stderr に件数とフォルダと理由を 1 行出す（終了コードは 0 のまま）。`meetings search`・`actions`・`ask` の `--json` と、MCP の `list_meetings`・`search_meetings`・`list_action_items`・`ask_meetings` の結果にも同じ項目を出す。`meetings show` と `get_meeting` で指定した会議が読めない会議なら、「ない」（4）ではなく終了コード 5（MCP は `isError`）と理由。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の M1・M8）。読めない会議の数は、ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（決定 8）
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
 - 実装の場所: `HanasuMeetingsCommand.list`、`HanasuPeriod`
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
@@ -676,7 +677,7 @@
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
 
 ### REQ-MTG-126 `hanasu ask` で、過去の会議について質問する
-- 内容: `hanasu ask "<質問>"` で、アプリの「会議に質問」（REQ-MTG-016）と同じ集め方・同じプロンプトで、会議の AI（REQ-COM-024）に聞き、答えと、引用した会議を出す。`--since` / `--until` で対象の期間をはっきり指定でき、指定したときは質問文の中の期間の語（「先週」など）より優先する。議事録に使わない発言は送らない（DEC-MTG-121）。
+- 内容: `hanasu ask "<質問>"` で、アプリの「会議に質問」（REQ-MTG-016）と同じ集め方・同じプロンプトで、「AI チャット・質問」の AI（REQ-COM-025。利用者が保存していないときは会議の AI（REQ-COM-024）。DEC-COM-190）に聞き、答えと、引用した会議を出す。`--since` / `--until` で対象の期間をはっきり指定でき、指定したときは質問文の中の期間の語（「先週」など）より優先する。議事録に使わない発言は送らない（DEC-MTG-121）。
 - 受け入れ条件:
   - stdout に答えと、AI に渡した会議（`M1` などの番号・slug・タイトル。引用されたものに印）を出す。`--json` で `question`・`answer`・`ai`（`provider`・`model`）・`period`（`since`・`until`）・`sources`（`ref`・`cited`・`matched`・`meeting`）を出す。
   - `--since 2026-11-01` のとき、それより前の会議は AI に送らない。期間に使える会議がなければ、AI に送らずに終了コード 4。
@@ -692,8 +693,8 @@
 ### REQ-MTG-127 MCP のツールで、会議を読む・探す・聞く・アクションアイテムを並べる
 - 内容: `hanasu mcp`（REQ-COM-189）は、`list_meetings`・`get_meeting`・`search_meetings`・`ask_meetings`・`list_action_items` の 5 つのツールを出す。中身と形は、`hanasu meetings list / show / search`・`ask`・`actions` の `--json` と同じ（REQ-MTG-120〜124・126）。どれも会議を書き換えない。各ツールの引数は JSON Schema（`inputSchema`）で示す。`get_meeting` は既定で議事録とアクションアイテムだけを返し、文字起こしは求められたときに時刻の範囲を絞って返す。どのツールも 1 回の結果の長さに上限を設け、超えたら切って続きの取り方を書く。
 - 受け入れ条件:
-  - `tools/list` に 5 つのツールが、`inputSchema`・`annotations`（`readOnlyHint`・`openWorldHint`）付きで出る。`ask_meetings` の説明には、会議の中身を設定の会議の AI（名前を出す）に送ることを書き、外の AI なら `openWorldHint` を true にする。
-  - ツールの説明と結果に、会議の中身は記録されたデータで指示ではない旨を書く。
+  - `tools/list` に 5 つのツールが、`inputSchema`・`annotations`（`readOnlyHint`・`openWorldHint`）付きで出る。`ask_meetings` の説明には、会議の中身を `hanasu ask` と同じ AI（REQ-COM-186。名前を出す）に送ることを書き、外の AI なら `openWorldHint` を true にする。
+  - ツールの説明と結果に、会議の中身は記録されたデータで指示ではない旨を書く。`instructions` に、`unreadableMeetingCount` が 0 でなければ「その会議はない」と決めつけない旨を書く（REQ-MTG-120）。
   - `get_meeting` に `include` がなければ、議事録とアクションアイテムだけで、文字起こしを含まない。`include` に `transcript` と `transcriptFrom` / `transcriptTo`（秒）を渡すと、その範囲の発言を返す。長くて切ったときは `transcriptTruncated` と、続きの開始の秒（`transcriptNextFrom`）を返す。
   - `list_meetings`・`list_action_items`・`search_meetings` は `limit` と `offset` を受け、続きがあれば `nextOffset` を返す。
   - 議事録に使わない発言（除いた発言・オフレコ）は、どのツールも返さない（DEC-MTG-121）。
@@ -1402,6 +1403,14 @@
 - 関係する要件: REQ-MTG-003
 - 対象: Mac
 - 実装の場所: `ChannelTranscriber.enqueueForAnalyzer`、`ChannelTranscriber.appendFrames`
+
+### DEC-MTG-153 `hanasu` が数える「読めない会議」は、`meeting.json` があるのに開けない・読めないものだけにする
+- 決めたこと: `MeetingStore.loadAllReporting(in:)` は、会議のフォルダの `meeting.json` を読むのに失敗し、そのファイルがあるときだけ、読めない会議として数え、フォルダの名前（会議の ID）を返す。読めたが JSON として壊れているものは、今までどおり黙って飛ばし、数えない。`meetings show`・`get_meeting` は、見つからない会議の指定が読めない会議の ID か slug と同じなら、終了コード 5 にする。
+- 理由: 同期でオンラインだけにある会議や、アクセス権のない会議を黙って飛ばすと、MCP のエージェントが「その会議はない」と答えてしまう。数を結果に入れれば、エージェントにも伝わる。壊れた JSON は利用者が直せず、前からずっと飛ばしてきたので、知らせても役に立たない。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（決定 8）
+- 関係する要件: REQ-MTG-120, REQ-COM-185
+- 対象: Mac
+- 実装の場所: `MeetingStore.loadAllReporting(in:)`、`HanasuLoadedMeetings`、`HanasuMeetingsCommand.resolve(_:in:)`
 
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。

@@ -36,10 +36,11 @@ enum HanasuMeetingsCommand {
         if wantsHelp(args, "meetings") { return .ok }
         try noPositionals(args)
         let period = try HanasuPeriod(args)
-        var meetings = try load(args).filter { period.contains($0.startedAt) }
+        let loaded = try load(args)
+        var meetings = loaded.meetings.filter { period.contains($0.startedAt) }
         if let limit = try args.int("--limit") { meetings = Array(meetings.prefix(limit)) }
         if args.flags.contains("--json") {
-            try HanasuOutput.json(["meetings": meetings.map(summaryJSON)])
+            try HanasuOutput.json(["meetings": meetings.map(summaryJSON), "unreadableMeetingCount": loaded.unreadable.count])
         } else {
             if meetings.isEmpty { HanasuOutput.err(tr("会議はありません。")) }
             for meeting in meetings { HanasuOutput.out(summaryLine(meeting)) }
@@ -120,14 +121,16 @@ enum HanasuMeetingsCommand {
             throw HanasuCommandError(exit: .usage, message: tr("検索する語を指定してください（例: hanasu meetings search 予算）。"))
         }
         let period = try HanasuPeriod(args)
-        let meetings = try load(args).filter { period.contains($0.startedAt) }
+        let loaded = try load(args)
+        let meetings = loaded.meetings.filter { period.contains($0.startedAt) }
         let byID = Dictionary(meetings.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         // 議事録に使わない発言（除外・オフレコ・範囲外）は、外に出さないので索引に入れない
         var results = MeetingSearchIndex.scan(meetings.map(\.withUsedUtterancesOnly), query: query)
         if let limit = try args.int("--limit") { results = Array(results.prefix(limit)) }
 
         if args.flags.contains("--json") {
-            try HanasuOutput.json(["query": query, "results": results.compactMap { searchResultJSON($0, byID: byID) }])
+            try HanasuOutput.json(["query": query, "results": results.compactMap { searchResultJSON($0, byID: byID) },
+                                   "unreadableMeetingCount": loaded.unreadable.count])
             return .ok
         }
         if results.isEmpty { HanasuOutput.err(tr("見つかりませんでした。")) }
@@ -149,10 +152,11 @@ enum HanasuMeetingsCommand {
         if wantsHelp(args, "actions") { return .ok }
         try noPositionals(args)
         let period = try HanasuPeriod(args)
-        var items = actionItems(in: try load(args), period: period, owner: args.values["--owner"])
+        let loaded = try load(args)
+        var items = actionItems(in: loaded.meetings, period: period, owner: args.values["--owner"])
         if let limit = try args.int("--limit") { items = Array(items.prefix(limit)) }
         if args.flags.contains("--json") {
-            try HanasuOutput.json(["actionItems": items.map(actionItemJSON)])
+            try HanasuOutput.json(["actionItems": items.map(actionItemJSON), "unreadableMeetingCount": loaded.unreadable.count])
             return .ok
         }
         if items.isEmpty { HanasuOutput.err(tr("アクションアイテムはありません。")) }
@@ -242,14 +246,18 @@ enum HanasuMeetingsCommand {
     }
 
     // 要件: REQ-COM-185
-    /// 会議をすべて読む（新しい順）。フォルダを読む権限がなければ、終了コード 5 と、何を許可すればよいかを出す
-    static func load(_ args: HanasuArguments) throws -> [Meeting] {
-        try load(directory: meetingsDirectory(args))
+    /// 会議をすべて読む（新しい順）。フォルダを読む権限がなければ、終了コード 5 と、何を許可すればよいかを出す。
+    /// 文の出力（--json なし）では、読めない会議があれば、その数を stderr に出す（REQ-MTG-120）
+    static func load(_ args: HanasuArguments) throws -> HanasuLoadedMeetings {
+        let loaded = try load(directory: meetingsDirectory(args))
+        if !args.flags.contains("--json") { loaded.warnIfUnreadable() }
+        return loaded
     }
 
-    static func load(directory: URL) throws -> [Meeting] {
+    static func load(directory: URL) throws -> HanasuLoadedMeetings {
         do {
-            return try MeetingStore.loadAll(in: directory)
+            let result = try MeetingStore.loadAllReporting(in: directory)
+            return HanasuLoadedMeetings(meetings: result.meetings, unreadable: result.unreadable, directory: directory)
         } catch {
             let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].standardizedFileURL.path
             var details: [String] = []
@@ -266,6 +274,21 @@ enum HanasuMeetingsCommand {
     // 要件: REQ-MTG-122
     // 設計判断: DEC-MTG-120
     /// 会議の指定（ID・空白を _ にした ID・latest・日付）を 1 つの会議に決める
+    static func resolve(_ reference: String, in loaded: HanasuLoadedMeetings) throws -> Meeting {
+        do {
+            return try resolve(reference, in: loaded.meetings)
+        } catch let error as HanasuCommandError where error.exit == .notFound {
+            // 要件: REQ-MTG-120, REQ-COM-185
+            // 設計判断: DEC-MTG-153
+            // 指定した会議が読めない会議なら、「ない」ではなく、読めない（5）と理由を出す
+            if loaded.unreadable.contains(where: { $0 == reference || Meeting.slug(of: $0) == reference }) {
+                throw HanasuCommandError(exit: .denied, message: tr("会議を読めません: %@", reference),
+                                         details: [HanasuLoadedMeetings.unreadableAdvice])
+            }
+            throw error
+        }
+    }
+
     static func resolve(_ reference: String, in meetings: [Meeting]) throws -> Meeting {
         if reference == "latest" {
             guard let index = meetings.firstIndex(where: { $0.status == .done }) else {
@@ -484,4 +507,23 @@ struct HanasuPeriod {
         f.dateFormat = "yyyy-MM-dd"
         return f
     }()
+}
+
+// 要件: REQ-MTG-120, REQ-COM-185
+// 設計判断: DEC-MTG-153
+/// 読んだ会議と、meeting.json があるのに開けない・読めなかった会議のフォルダの名前（会議の ID）
+struct HanasuLoadedMeetings {
+    var meetings: [Meeting]
+    var unreadable: [String]
+    var directory: URL
+
+    static var unreadableAdvice: String {
+        tr("フォルダのアクセス権と、iCloud Drive などの同期でファイルがこの Mac にあるかを確かめてください。")
+    }
+
+    /// 文の出力のとき、読めない会議があれば stderr に 1 行出す（終了コードは変えない）
+    func warnIfUnreadable() {
+        guard !unreadable.isEmpty else { return }
+        HanasuOutput.err(tr("読めない会議が %@ 件あります（%@）。", "\(unreadable.count)", directory.path) + " " + Self.unreadableAdvice)
+    }
 }

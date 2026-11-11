@@ -396,7 +396,7 @@ enum HanasuHelp {
     private static var askUsage: [String] {
         [
             "  hanasu ask \(tr("<質問>")) [--since \(period)] [--until \(period)] \(ai) [--show-prompt] [--json]",
-            "      " + tr("過去の会議について AI に質問する（関係する会議の中身を、会議の AI に送る）"),
+            "      " + tr("過去の会議について AI に質問する（関係する会議の中身を、「AI チャット・質問」を選んでいればその AI、なければ会議の AI に送る）"),
         ]
     }
 
@@ -432,7 +432,7 @@ enum HanasuHelp {
     /// MCP で会議の中身がどこへ渡るか（計画の 4.4）と、登録のしかた
     static var mcpNotes: [String] {
         [
-            tr("MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を Hanasu の会議の AI にも送ります。"),
+            tr("MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を hanasu ask と同じ AI（hanasu doctor の ask の行）にも送ります。"),
             tr("ツール: list_meetings・get_meeting・search_meetings・ask_meetings・list_action_items（どれも読むだけ）"),
             tr("Claude Code への登録の例: %@", HanasuInstall.claudeCodeCommand()),
             tr("Claude Desktop などへの登録の JSON は、hanasu doctor と設定画面の「コマンドと MCP」に出ます。"),

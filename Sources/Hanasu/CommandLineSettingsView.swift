@@ -84,7 +84,7 @@ struct CommandLineSettingsTab: View {
                 Text("MCP")
             } footer: {
                 if !mcpDisabled {
-                    Text(tr("MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を Hanasu の会議の AI にも送ります。"))
+                    Text(tr("MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を hanasu ask と同じ AI（hanasu doctor の ask の行）にも送ります。"))
                         .font(.caption).foregroundStyle(.secondary)
                 }
             }

@@ -114,9 +114,17 @@ enum KeyNames {
     }
 }
 
+/// 設定を読む UserDefaults。自己テストが子プロセスの設定を決めた値にするときだけ、
+/// 環境変数 HANASU_TEST_DEFAULTS_SUITE の suite を使う（作った人の辞書や設定がテストの結果に混ざらないように）
+enum SettingsDefaults {
+    static let testSuite: String? = ProcessInfo.processInfo.environment["HANASU_TEST_DEFAULTS_SUITE"].flatMap { $0.isEmpty ? nil : $0 }
+    static let store: UserDefaults = testSuite.flatMap(UserDefaults.init(suiteName:)) ?? .standard
+    static var domainName: String { testSuite ?? AppSettings.defaultsDomainName }
+}
+
 // 設計判断: DEC-COM-013
 final class AppSettings: ObservableObject {
-    static let shared = AppSettings()
+    static let shared = AppSettings(defaults: SettingsDefaults.store, domainName: SettingsDefaults.domainName)
 
     // 設計判断: DEC-COM-005
     static let suggestedModels = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-flash-latest"]
@@ -126,6 +134,7 @@ final class AppSettings: ObservableObject {
     static let defaultGeminiChatModel = "gemini-3.8-flash"
 
     private let defaults: UserDefaults
+    private let domainName: String
 
     @Published var model: String { didSet { defaults.set(model, forKey: Keys.model) } }
     // 要件: REQ-COM-020, REQ-COM-024
@@ -278,6 +287,14 @@ final class AppSettings: ObservableObject {
     // 設計判断: DEC-COM-040
     // 要件: REQ-COM-025
     // 設計判断: DEC-COM-171（3 用途を網羅する switch にして、用途を足したらコンパイルで気づけるようにする）
+    // 要件: REQ-COM-186
+    // 設計判断: DEC-COM-190
+    /// 「AI チャット・質問」の送り先を、利用者が自分で選んで保存したか（既定の登録だけなら false）。
+    /// hanasu ask は、保存した人だけその AI を使い、ほかは会議の AI を使う
+    var isChatAIProviderSaved: Bool {
+        defaults.persistentDomain(forName: domainName)?[Keys.chatAIProvider] != nil
+    }
+
     func aiProvider(for purpose: TextAIPurpose) -> TextAIProvider {
         switch purpose {
         case .dictation: dictationAIProvider
@@ -373,6 +390,7 @@ final class AppSettings: ObservableObject {
     /// defaults と domainName は確かめるときだけ変える（--test-ai-purposes の使い捨ての設定）
     init(defaults: UserDefaults = .standard, domainName: String = AppSettings.defaultsDomainName) {
         self.defaults = defaults
+        self.domainName = domainName
         // 設計判断: DEC-COM-068（AI チャット・質問の用途は対象にしない。DEC-COM-171）
         Self.preserveAIProviderForExistingUsers(defaults, domainName: domainName)
         defaults.register(defaults: [

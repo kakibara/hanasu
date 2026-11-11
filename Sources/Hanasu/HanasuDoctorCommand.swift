@@ -16,6 +16,7 @@ enum HanasuDoctorCommand {
         let executable = HanasuInstall.executablePath
         let directory = HanasuMeetingsCommand.meetingsDirectory(args)
         let folder = folderStatus(directory)
+        let askPurpose = HanasuAI.askPurpose(settings)
         let purposes = TextAIPurpose.allCases.map { purpose in
             (purpose, HanasuAI.Choice(provider: settings.aiProvider(for: purpose), model: settings.textModel(for: purpose)))
         }
@@ -41,6 +42,9 @@ enum HanasuDoctorCommand {
             }
             var ai: [String: Any] = [:]
             for (purpose, choice) in purposes { ai[purpose.rawValue] = choice.json }
+            // 要件: REQ-COM-186
+            // 設計判断: DEC-COM-190
+            ai["askPurpose"] = askPurpose.rawValue
             try HanasuOutput.json([
                 "version": HanasuCommand.version,
                 "executable": executable,
@@ -99,8 +103,9 @@ enum HanasuDoctorCommand {
             tr("使う AI:"),
         ]
         for (purpose, choice) in purposes {
-            let commands = purpose == .meeting ? "ask" : "refine, edit"
-            lines.append("  " + tr("%@（%@）", purpose.label, commands) + ": " + tr("%@（%@）", choice.provider.name, choice.model))
+            let commands = [purpose == .dictation ? "refine, edit" : nil, purpose == askPurpose ? "ask" : nil].compactMap { $0 }
+            let label = commands.isEmpty ? purpose.label : tr("%@（%@）", purpose.label, commands.joined(separator: ", "))
+            lines.append("  " + label + ": " + tr("%@（%@）", choice.provider.name, choice.model))
         }
         lines += [
             tr("認証情報:"),

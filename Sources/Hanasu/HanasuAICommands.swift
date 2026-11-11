@@ -10,6 +10,14 @@ import Foundation
 enum HanasuAI {
     static let options: Set<String> = ["--ai", "--model"]
 
+    // 要件: REQ-COM-186, REQ-MTG-126
+    // 設計判断: DEC-COM-190
+    /// hanasu ask・ask_meetings の AI の用途。「AI チャット・質問」を自分で保存した人はそれ、ほかは会議の AI
+    /// （既定のままの「AI チャット・質問」はローカルで、hanasu はアプリのローカルの AI のサーバーを共有できないため）
+    static func askPurpose(_ settings: AppSettings) -> TextAIPurpose {
+        settings.isChatAIProviderSaved ? .chat : .meeting
+    }
+
     struct Choice {
         var provider: TextAIProvider
         var model: String
@@ -255,12 +263,16 @@ enum HanasuAICommands {
         }
 
         let settings = AppSettings.shared
-        let choice = try HanasuAI.choice(args, for: .meeting, settings: settings)
-        let client = try HanasuAI.makeClient(choice, for: .meeting, settings: settings, timeout: 180)
+        let purpose = HanasuAI.askPurpose(settings)
+        let choice = try HanasuAI.choice(args, for: purpose, settings: settings)
+        let client = try HanasuAI.makeClient(choice, for: purpose, settings: settings, timeout: 180)
+        let loaded = try HanasuMeetingsCommand.load(args)
         let outcome = try await ask(question: question, period: period, choice: choice, client: client,
-                                    meetings: try HanasuMeetingsCommand.load(args), printPrompt: args.flags.contains("--show-prompt"))
+                                    meetings: loaded.meetings, printPrompt: args.flags.contains("--show-prompt"))
         if args.flags.contains("--json") {
-            try HanasuOutput.json(outcome.json)
+            var json = outcome.json
+            json["unreadableMeetingCount"] = loaded.unreadable.count
+            try HanasuOutput.json(json)
             return .ok
         }
         let answer = outcome.answer

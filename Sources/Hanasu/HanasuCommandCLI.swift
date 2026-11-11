@@ -244,6 +244,40 @@ enum HanasuCommandCLI {
         check(denied.status == 5 && denied.stdout.isEmpty && denied.stderr.contains(locked.path), "フォルダを読めなければ 5 と、どこを読めないか")
         try? fm.setAttributes([.posixPermissions: 0o700], ofItemAtPath: locked.path)
 
+        // 確かめ方: REQ-MTG-120, REQ-COM-181（DEC-MTG-153。開けない meeting.json は数え、壊れた JSON は数えない）
+        let partial = root.appendingPathComponent("Partial", isDirectory: true)
+        try? fm.createDirectory(at: partial, withIntermediateDirectories: true)
+        for name in (try? fm.contentsOfDirectory(atPath: base.path)) ?? [] {
+            try? fm.copyItem(at: base.appendingPathComponent(name), to: partial.appendingPathComponent(name))
+        }
+        var lockedFiles: [URL] = []
+        for name in ["2026-09-01 0900", "2026-09-02 0900"] {
+            let folder = partial.appendingPathComponent(name, isDirectory: true)
+            try? fm.createDirectory(at: folder, withIntermediateDirectories: true)
+            let file = folder.appendingPathComponent("meeting.json")
+            try? Data("{}".utf8).write(to: file)
+            try? fm.setAttributes([.posixPermissions: 0], ofItemAtPath: file.path)
+            lockedFiles.append(file)
+        }
+        let broken = partial.appendingPathComponent("2026-09-03 0900", isDirectory: true)
+        try? fm.createDirectory(at: broken, withIntermediateDirectories: true)
+        try? Data("not json".utf8).write(to: broken.appendingPathComponent("meeting.json"))
+        let partialDir = ["--meetings-dir", partial.path]
+        let partialJSON = call(exe, ["meetings", "list", "--json"] + partialDir)
+        check(partialJSON.status == 0 && (partialJSON.json?["meetings"] as? [Any])?.count == 4
+              && partialJSON.json?["unreadableMeetingCount"] as? Int == 2 && partialJSON.stderr.isEmpty,
+              "読めない会議の数を JSON に出し、壊れた JSON は数えない（\(partialJSON.json?["unreadableMeetingCount"] ?? "nil")）")
+        check(call(exe, ["meetings", "list", "--json"] + dir).json?["unreadableMeetingCount"] as? Int == 0, "読めない会議がなければ 0")
+        let partialText = call(exe, ["meetings", "list"] + partialDir)
+        check(partialText.status == 0 && partialText.stderr.contains("2") && partialText.stderr.contains(partial.path),
+              "文の出力では、読めない会議の数とフォルダを stderr に出す")
+        let unreadableShow = call(exe, ["meetings", "show", "2026-09-01_0900"] + partialDir)
+        check(unreadableShow.status == 5 && unreadableShow.stdout.isEmpty, "指定した会議が読めなければ 5")
+        check(call(exe, ["meetings", "search", "予算", "--json"] + partialDir).json?["unreadableMeetingCount"] as? Int == 2
+              && call(exe, ["actions", "--json"] + partialDir).json?["unreadableMeetingCount"] as? Int == 2,
+              "search・actions の JSON にも読めない会議の数")
+        for file in lockedFiles { try? fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: file.path) }
+
         // 使い方の誤り（REQ-COM-182）
         let badOption = call(exe, ["meetings", "list", "--bogus"] + dir)
         check(badOption.status == 2 && badOption.stdout.isEmpty, "知らないオプションは 2 で、stdout に何も出さない")
@@ -392,6 +426,33 @@ enum HanasuCommandCLI {
         check(call(exe, ["ask"] + dir, environment: env).status == 2, "質問がなければ 2")
         let askPrompt = call(exe, ["ask", "予算", "--ai", "apple", "--show-prompt"] + dir, environment: env)
         check(askPrompt.stderr.contains("<question>") && !askPrompt.stdout.contains("<question>"), "--show-prompt は送る内容を stderr に出す")
+
+        // 確かめ方: REQ-COM-186, REQ-MTG-126（DEC-COM-190。「AI チャット・質問」を保存した人だけそれを使う）
+        let suiteName = "dev.mactypeless.Hanasu.selftest-ask-\(ProcessInfo.processInfo.processIdentifier)"
+        func withSuite(_ values: [String: String], _ body: ([String: String]) -> Void) {
+            let suite = UserDefaults(suiteName: suiteName)!
+            suite.removePersistentDomain(forName: suiteName)
+            for (key, value) in values { suite.set(value, forKey: key) }
+            suite.synchronize()
+            body(env.merging(["HANASU_TEST_DEFAULTS_SUITE": suiteName]) { _, new in new })
+            suite.removePersistentDomain(forName: suiteName)
+        }
+        withSuite(["chatTextAIProvider": "apple", "meetingTextAIProvider": "gemini"]) { suiteEnv in
+            clearLog()
+            let saved = call(exe, ["ask", "予算", "--json"] + dir, environment: suiteEnv)
+            check(saved.status == 0 && (saved.json?["ai"] as? [String: Any])?["provider"] as? String == "apple" && sent().contains("予算"),
+                  "「AI チャット・質問」を保存した人は、その AI で ask する（\(saved.stderr)）")
+            let doctor = call(exe, ["doctor", "--json"] + dir, environment: suiteEnv)
+            check((doctor.json?["ai"] as? [String: Any])?["askPurpose"] as? String == "chat", "doctor の askPurpose は chat")
+        }
+        withSuite(["meetingTextAIProvider": "apple"]) { suiteEnv in
+            clearLog()
+            let unsaved = call(exe, ["ask", "予算", "--json"] + dir, environment: suiteEnv)
+            check(unsaved.status == 0 && (unsaved.json?["ai"] as? [String: Any])?["provider"] as? String == "apple",
+                  "「AI チャット・質問」を保存していない人は、会議の AI で ask する（\(unsaved.stderr)）")
+            let doctor = call(exe, ["doctor", "--json"] + dir, environment: suiteEnv)
+            check((doctor.json?["ai"] as? [String: Any])?["askPurpose"] as? String == "meeting", "doctor の askPurpose は meeting")
+        }
 
         // refine（REQ-DIC-160）
         clearLog()

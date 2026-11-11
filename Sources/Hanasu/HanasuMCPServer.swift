@@ -46,7 +46,7 @@ final class HanasuMCPServer: @unchecked Sendable {
                 message: tr("管理者のポリシーで、hanasu mcp は使えないようにされています（%@）。", HanasuPolicy.Key.disableMCP.rawValue))
         }
         // --ai に知らない名前があれば、ここで使い方の誤りにする（ask_meetings で初めて分かるのでは遅い）
-        _ = try HanasuAI.choice(args, for: .meeting, settings: AppSettings.shared)
+        _ = try HanasuAI.choice(args, for: HanasuAI.askPurpose(AppSettings.shared), settings: AppSettings.shared)
 
         // 設計判断: DEC-COM-186
         // 本当の stdout を複製し、1 番は stderr に付け替える。どこかのコードや子プロセスが stdout に書いても、接続を壊さない

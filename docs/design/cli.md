@@ -26,12 +26,13 @@
 
 ## 3. 会議を読む
 
-- `HanasuMeetingsCommand.load` が `MeetingStore.loadAll(in:)` で全会議を並べて読む（DEC-MTG-123）。読めないフォルダは、会議がないことと区別して終了コード 5 にする（REQ-COM-185）。
+- `HanasuMeetingsCommand.load` が `MeetingStore.loadAllReporting(in:)` で全会議を並べて読み（DEC-MTG-123）、読んだ会議と読めない会議の名前を `HanasuLoadedMeetings` で返す。読めないフォルダは、会議がないことと区別して終了コード 5 にする（REQ-COM-185）。読めない会議（DEC-MTG-153）の数は、`--json` と MCP の結果では `unreadableMeetingCount`、文の出力では `warnIfUnreadable` が stderr に出す。指定した会議が読めない会議なら、`resolve(_:in:)` が 5 にする。
 - 出す前に `Meeting.withUsedUtterancesOnly` で、議事録に使わない発言（除いた発言・オフレコ）を外す（DEC-MTG-121）。検索は索引を作らない `MeetingSearchIndex.scan`。
 
 ## 4. AI を使うコマンド
 
 - AI は `HanasuAI.choice` で決める（`--ai`・`--model`、なければその用途の設定）。`HanasuAI.makeClient` が、ポリシー `AllowedAIProviders`、ローカルならほかのプロセスのサーバー（`LocalLLMServer.otherProcessServerRunning`）、認証情報（`HanasuAI.credentialStatus`）を確かめてから、`TextAIClient.cli` でクライアントを作る（DEC-COM-185）。誤りは `HanasuAI.mapped` で終了コードに分ける。
+- `ask`・`ask_meetings` の AI は `HanasuAI.askPurpose`（「AI チャット・質問」を保存した人は `chat`、ほかは `meeting`。DEC-COM-190）。保存したかは `AppSettings.isChatAIProviderSaved`。自己テストは、子プロセスの設定を `HANASU_TEST_DEFAULTS_SUITE` の suite（`SettingsDefaults`）に差し替えて確かめる。
 - `ask` は `MeetingAsk.gatherContext` に、検索の仕方として `MeetingSearchIndex.scan` と、指定した期間（`MeetingAsk.Options.period`）を渡し（DEC-MTG-124）、`MeetingAsk.answer` で聞く。アプリの「会議に質問」と同じプロンプト。
 - `refine` は音声入力と同じ `GeminiClient.Request` を作り（辞書・追加のルール・出力の言語・`--app` / `--style` の文体）、`TextAIClient.refine` か `translate` に渡す。`edit` は `TextAIClient.editSelection`。どちらも `DictationHistoryStore` には書かない。失敗したら stdout に出さず、`--fallback-raw` のときだけ原文を出す（DEC-DIC-161）。
 - 文章は `HanasuTextInput.read` が、位置の引数か stdin のどちらかから受け取る（DEC-DIC-160）。

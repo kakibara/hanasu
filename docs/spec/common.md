@@ -270,7 +270,7 @@
 ### REQ-COM-181 `hanasu` コマンドの stdout には結果だけを出し、`--json` で決まった形の JSON を出す
 - 内容: stdout には結果だけを出し、途中経過・警告・エラーは stderr に出す。`--json` で、版（`schemaVersion`）の付いた決まった形の JSON を出す。版を上げずに項目を消したり意味を変えたりしない。日時は ISO 8601 で時差を付け、長さは秒の数にする。
 - 受け入れ条件:
-  - `hanasu meetings list --json` の stdout はそのまま JSON として読め、`schemaVersion` が 1。成功したときの stderr は空。
+  - `hanasu meetings list --json` の stdout はそのまま JSON として読め、`schemaVersion` が 1。成功したときの stderr は空（読めない会議があったときの知らせ（REQ-MTG-120）を除く）。
   - 日時は `2026-11-02T13:12:00+09:00` の形、長さは `durationSeconds` の整数。
   - 失敗したときは stdout に何も出さない。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C3・C4）
@@ -312,14 +312,15 @@
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（読めないフォルダで確かめる。「書類」フォルダの許可を誰に求められるかは実機）
 
 ### REQ-COM-186 `hanasu` の AI を使うコマンドは、アプリの設定の AI と認証情報を使い、その回だけ変えられる
-- 内容: `ask`・`refine`・`edit` は、アプリの設定の用途ごとの AI とモデル（REQ-COM-024。`ask` は「会議」、`refine`・`edit` は「音声入力」）と、キーチェーンの認証情報をそのまま使う。`--ai local|apple|gemini|claude` と `--model <id>` で、その回だけ変えられる。環境変数（`ANTHROPIC_API_KEY`・`GEMINI_SERVICE_ACCOUNT_JSON`・`GEMINI_API_KEY`）は、開発用の CLI と同じ順に見る。`hanasu doctor` で、使う AI と、その認証情報を読めるか（値は出さない）を確かめられる。
+- 内容: `ask`・`refine`・`edit` は、アプリの設定の用途ごとの AI とモデル（REQ-COM-024・025。`ask` は「AI チャット・質問」を利用者が保存していればそれ、していなければ「会議」（DEC-COM-190）。`refine`・`edit` は「音声入力」）と、キーチェーンの認証情報をそのまま使う。`--ai local|apple|gemini|claude` と `--model <id>` で、その回だけ変えられる。環境変数（`ANTHROPIC_API_KEY`・`GEMINI_SERVICE_ACCOUNT_JSON`・`GEMINI_API_KEY`）は、開発用の CLI と同じ順に見る。`hanasu doctor` で、使う AI と、その認証情報を読めるか（値は出さない）を確かめられる。
 - 受け入れ条件:
   - 認証情報・モデルがないときは、終了コード 3 と、何が足りないか（設定のどこで入れるか）を stderr に出す。`--ai` に知らない名前を渡すと 2。
   - キーの値は stdout・stderr・JSON に出さない。
   - `hanasu`（シンボリックリンク）から呼んでも、キーチェーンでパスワードを求められずに読める（DEC-COM-183 で実際のパスで起動し直すので、アプリと同じ実行ファイルとして読む）。
-  - `hanasu doctor` は、版・実行ファイルの実際のパス・会議のフォルダとそれを読めるか・用途ごとの AI とモデルと認証情報を読めるか・効いている管理者のポリシーを出す（`--json` も）。MCP の登録のしかたと PATH の状態は REQ-COM-190・191（段階 4）。
+  - `hanasu doctor` は、版・実行ファイルの実際のパス・会議のフォルダとそれを読めるか・用途ごとの AI とモデルと認証情報を読めるか・`ask` がどの用途の AI を使うか（`ai.askPurpose`）・効いている管理者のポリシーを出す（`--json` も）。
+  - 「AI チャット・質問」を保存した人の `ask` はその AI に、保存していない人の `ask` は会議の AI に送る。MCP の登録のしかたと PATH の状態は REQ-COM-190・191（段階 4）。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の C7・C8）
-- 関係する要件: REQ-COM-020, REQ-COM-021, REQ-COM-024
+- 関係する要件: REQ-COM-020, REQ-COM-021, REQ-COM-024, REQ-COM-025
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
 - 実装の場所: `HanasuAI`、`HanasuDoctorCommand`
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（AI は偽の `fm`。キーチェーンは一時的な項目を作り、シンボリックリンク経由の `doctor` で読めるかを確かめる。インストールしたアプリのキーで確かめるのは実機）
@@ -356,7 +357,7 @@
   - ツールを実行した結果のエラー（会議が見つからない・1 つに決まらない・ポリシーで止められている・AI の失敗・引数の値の誤り）は、ツールの結果（`isError: true` と理由の文）で返す。
   - ローカルの AI を使うあいだも含め、stdout の各行は JSON-RPC のメッセージとして読める。ログ・警告・子プロセスの出力は stderr に出す。stdin が閉じたら終わる。
   - `DisableMCP` が管理された値として true のとき、`hanasu mcp` は何も読まずに終了コード 5 と理由を stderr に出す。`DisableCLI` も同じく効く。
-- 計画からの変更（ユーザーの確認待ち）: 計画の M12 は「引数の形の誤りは JSON-RPC のエラー」としていたが、MCP の 2025-11-25 の版（SEP-1303）から、ツールの引数の値の誤りは、モデルが直してやり直せるよう、ツールの結果（`isError`）で返す決まりになった。これに合わせ、JSON-RPC のエラーにするのはリクエストそのものの形の崩れだけにした。
+- 計画からの変更: 計画の M12 は「引数の形の誤りは JSON-RPC のエラー」としていたが、MCP の 2025-11-25 の版（SEP-1303）から、ツールの引数の値の誤りは、モデルが直してやり直せるよう、ツールの結果（`isError`）で返す決まりになった。これに合わせ、JSON-RPC のエラーにするのはリクエストそのものの形の崩れだけにした（2026-11-11 にユーザーが了承）。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の M7・M11・M12・E6・4.4）
 - 関係する要件: REQ-MTG-127, REQ-COM-184, REQ-COM-181
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
@@ -1343,6 +1344,14 @@
 - 関係する要件: REQ-COM-192
 - 対象: Mac
 - 実装の場所: `HanasuInstall.isTranslocated`
+
+### DEC-COM-190 `hanasu ask` は、「AI チャット・質問」を利用者が保存したときだけその AI を使い、ほかは会議の AI を使う
+- 決めたこと: `hanasu ask`・MCP の `ask_meetings` の AI は、「AI チャット・質問」の送り先（REQ-COM-025）が利用者の設定に保存されていれば（UserDefaults の既定の登録ではなく、アプリの領域に値がある）その用途の AI とモデル、なければ「会議」の AI とモデルにする。`hanasu doctor` は、どちらを使うかを `ai.askPurpose`（`chat` か `meeting`）で出す。
+- 理由: アプリの「会議に質問」は「AI チャット・質問」の AI を使う（#95）ので、`hanasu ask` もそろえたい。ただ、その既定はローカルで、前から使っている人にも会議の値を写さない（DEC-COM-171）。`hanasu` はアプリのローカルの AI のサーバーを共有できない（DEC-COM-184）ので、会議を Claude などにして「AI チャット・質問」を既定のままにしている人では、そのまま変えると、アプリがローカルの AI を使った直後は失敗し、ほかのときは呼ぶたびに数 GB のモデルを読み込み直す。自分で選んだ人だけ、その選択に従う。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（決定 4・7）
+- 関係する要件: REQ-COM-186, REQ-COM-025, REQ-MTG-126, REQ-MTG-127
+- 対象: Mac
+- 実装の場所: `HanasuAI.askPurpose`、`AppSettings.isChatAIProviderSaved`
 
 ---
 
