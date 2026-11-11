@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.4.2](https://github.com/kakibara/hanasu/compare/v2.4.1...v2.4.2) - 2026-11-11
+## [v2.5.0](https://github.com/kakibara/hanasu/compare/v2.4.1...v2.5.0) - 2026-11-11
 
 - 設定の「AI」タブに文字起こし AI を移し、文章の AI を「音声入力整形」「議事録」と呼ぶ by @kakibara in https://github.com/kakibara/hanasu/pull/102
 
