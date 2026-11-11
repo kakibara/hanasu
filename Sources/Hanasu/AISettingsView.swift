@@ -15,12 +15,14 @@ struct AISettingsTab: View {
     var body: some View {
         Form {
             Section {
-                AIChoiceRow(settings: settings, purpose: .dictation)
-                AIChoiceRow(settings: settings, purpose: .meeting)
+                // 要件: REQ-COM-025
+                ForEach(TextAIPurpose.allCases) { purpose in
+                    AIChoiceRow(settings: settings, purpose: purpose)
+                }
             } header: {
                 Text(tr("使う AI とモデル"))
             } footer: {
-                Text(tr("文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、ここで選ぶ AI には音声を送りません。辞書の候補探しは「会議」の AI を使います。「ローカル」は、この Mac の中で小型の LLM を動かします。「Apple」は macOS 27 の Foundation Models（fm）の、この Mac の中のモデルを使います（どちらも文章をネットに送りません）。"))
+                Text(tr("文章を整える処理だけに使います。音声の文字起こしは「一般」→「文字起こし」で選んだエンジンが行い、ここで選ぶ AI には音声を送りません。辞書の候補探しは「会議」の AI、会議の AI チャットと会議への質問は「AI チャット・質問」の AI を使います（チャットと質問の画面で、その場で変えることもできます）。「ローカル」は、この Mac の中で小型の LLM を動かします。「Apple」は macOS 27 の Foundation Models（fm）の、この Mac の中のモデルを使います（どちらも文章をネットに送りません）。"))
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section {
@@ -86,26 +88,51 @@ struct AISettingsTab: View {
     }
 }
 
-// 要件: REQ-COM-024, REQ-COM-030
-// 設計判断: DEC-COM-092
-/// 1 つの用途（音声入力 / 会議）の、AI とモデルの選択。オンボーディングの「設定の Tips」でも使う
+// 要件: REQ-COM-024, REQ-COM-025, REQ-COM-030
+// 設計判断: DEC-COM-092, DEC-COM-171
+/// 1 つの用途（音声入力 / 会議 / AI チャット・質問）の、AI とモデルの選択。オンボーディングの「設定の Tips」でも使う
 struct AIChoiceRow: View {
     @ObservedObject var settings: AppSettings
     var purpose: TextAIPurpose
     /// AI の切り替え（右上のセグメント）を出すか。オンボーディングの AI のページでは、AI はカードで選ぶので出さない
     var showsProviderPicker = true
 
+    // 設計判断: DEC-COM-171（用途を網羅する switch）
     private var provider: Binding<TextAIProvider> {
-        purpose == .dictation ? $settings.dictationAIProvider : $settings.meetingAIProvider
+        switch purpose {
+        case .dictation: $settings.dictationAIProvider
+        case .meeting: $settings.meetingAIProvider
+        case .chat: $settings.chatAIProvider
+        }
     }
     private var geminiModel: Binding<String> {
-        purpose == .dictation ? $settings.model : $settings.meetingMinutesModel
+        switch purpose {
+        case .dictation: $settings.model
+        case .meeting: $settings.meetingMinutesModel
+        case .chat: $settings.geminiChatModel
+        }
     }
     private var claudeModel: Binding<String> {
-        purpose == .dictation ? $settings.claudeModel : $settings.claudeMinutesModel
+        switch purpose {
+        case .dictation: $settings.claudeModel
+        case .meeting: $settings.claudeMinutesModel
+        case .chat: $settings.claudeChatModel
+        }
     }
     private var localModel: Binding<LocalLLMModel> {
-        purpose == .dictation ? $settings.localDictationModel : $settings.localMeetingModel
+        switch purpose {
+        case .dictation: $settings.localDictationModel
+        case .meeting: $settings.localMeetingModel
+        case .chat: $settings.localChatModel
+        }
+    }
+    // 設計判断: DEC-COM-043（effort は処理で決まる）
+    private var claudeEffortNote: String {
+        switch purpose {
+        case .dictation: tr("考える量（effort）は low。待ち時間を短くするため")
+        case .meeting: tr("考える量（effort）は medium。長い会議の記録をまとめるため")
+        case .chat: tr("考える量（effort）は、AI チャットは low、会議への質問は medium")
+        }
     }
 
     var body: some View {
@@ -113,7 +140,7 @@ struct AIChoiceRow: View {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(purpose.label).font(.headline)
-                    Text(purpose == .dictation ? tr("整形・翻訳・選択の編集") : tr("議事録（作り直しも）・会議への質問・辞書の候補"))
+                    Text(purpose.detail)
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Spacer()
@@ -150,9 +177,7 @@ struct AIChoiceRow: View {
                         Text(claudeModel.wrappedValue).tag(claudeModel.wrappedValue)
                     }
                 }
-                Text(purpose == .dictation
-                     ? tr("考える量（effort）は low。待ち時間を短くするため")
-                     : tr("考える量（effort）は medium。長い会議の記録をまとめるため"))
+                Text(claudeEffortNote)
                     .font(.caption).foregroundStyle(.secondary)
             case .local:
                 LocalModelChoice(model: localModel)
@@ -237,7 +262,9 @@ struct ClaudeKeySection: View {
         guard let client = ClaudeClient.fromKeychain() else { refresh(); return }
         isTesting = true
         status = nil
-        let model = settings.aiProvider(for: .dictation) == .claude ? settings.claudeModel : settings.claudeMinutesModel
+        // Claude を選んでいる用途のうち先のもののモデル（どれでもなければ音声入力の既定）
+        let model = TextAIPurpose.allCases.first { settings.aiProvider(for: $0) == .claude }
+            .map { settings.claudeModel(for: $0) } ?? settings.claudeModel
         Task {
             do {
                 try await client.testConnection(model: model)
@@ -333,7 +360,7 @@ struct GeminiAuthSection: View {
         }
     }
 
-    /// 「接続を試す」。設定の認証（保存したキーかサービスアカウント）で、音声入力か会議に選んでいる Gemini のモデルの情報を取る
+    /// 「接続を試す」。設定の認証（保存したキーかサービスアカウント）で、Gemini を選んでいる用途のモデルの情報を取る
     private func testConnection() {
         let auth: GeminiClient.Auth?
         do {
@@ -347,9 +374,9 @@ struct GeminiAuthSection: View {
             savedMessage = "⚠️ " + GeminiError.missingAPIKey.localizedDescription
             return
         }
-        // 音声入力に Gemini を選んでいればそのモデル、そうでなければ会議のモデル（どちらでもなければ音声入力の既定）
-        let model = settings.aiProvider(for: .meeting) == .gemini && settings.aiProvider(for: .dictation) != .gemini
-            ? settings.meetingMinutesModel : settings.model
+        // Gemini を選んでいる用途のうち先のもののモデル（どれでもなければ音声入力の既定）
+        let model = TextAIPurpose.allCases.first { settings.aiProvider(for: $0) == .gemini }
+            .map { settings.geminiModel(for: $0) } ?? settings.model
         isTesting = true
         savedMessage = nil
         Task {

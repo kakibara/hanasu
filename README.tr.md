@@ -69,7 +69,7 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herk
 | **Kaynağı kontrol edin ve yeniden dinleyin** *(Mac)* | Tutanak tek sayfa olarak açılır: önce özet ve aksiyon maddeleri, yanında da döküm. Bir maddenin sonundaki zamana tıklayarak o maddenin dayandığı konuşmaya gidin. Kaydı herhangi bir konuşmadan itibaren oynatın; görüşmede yankı olduysa kendi tarafınızın ya da karşı tarafın sesini kapatın. |
 | **Canlı notlar ve önemli anlar** | Görüşme sırasında zaman damgalı notlar yazın ya da "bu önemli" diye işaretlemek için <kbd>⌃⌥⌘ H</kbd> tuşlarına basın (10 saniye içinde geri alabilirsiniz). Tutanaklar bu bölümlere öncelik verir; sonrasında her işaretin çevresindeki konuşmayı okuyabilirsiniz. |
 | **Yüzen altyazılar** *(Mac)* | Canlı dökümü toplantı uygulamanızın üzerinde altyazı olarak gösterin. Açık bırakırsanız bir sonraki toplantıda da görünürler. |
-| **Toplantı sırasında yapay zekâ sohbeti** *(Mac)* | Kayıt sırasında, o ana kadarki konuşma hakkında yapay zekâya soru sorun (<kbd>⌘J</kbd>). "Şu ana kadarki özet" ya da "kararlar ve yapılacaklar" tek tıkla. Ek sorular sorun ve dökümün o bölümüne gitmek için yanıttaki bir zaman damgasına tıklayın. Başka bir işle uğraşırken aniden size soru mu yöneltildi? Toplantı uygulamanızdan ayrılmadan altyazılardaki **Bana ne soruldu?** düğmesine (ya da <kbd>⌃⌥⌘ A</kbd> tuşlarına) basın: yüzen bir panelde diğerlerinin az önce söyledikleri, ardından yapay zekânın özeti, yani sorunun ne olduğu ve konuşmanın oraya nasıl geldiği görünür. |
+| **Toplantı sırasında yapay zekâ sohbeti** *(Mac)* | Kayıt sırasında, o ana kadarki konuşma hakkında yapay zekâya soru sorun (<kbd>⌘J</kbd>). "Şu ana kadarki özet" ya da "kararlar ve yapılacaklar" tek tıkla. Ek sorular sorun ve dökümün o bölümüne gitmek için yanıttaki bir zaman damgasına tıklayın. Başka bir işle uğraşırken aniden size soru mu yöneltildi? Toplantı uygulamanızdan ayrılmadan altyazılardaki **Bana ne soruldu?** düğmesine (ya da <kbd>⌃⌥⌘ A</kbd> tuşlarına) basın: yüzen bir panelde diğerlerinin az önce söyledikleri, ardından yapay zekânın özeti, yani sorunun ne olduğu ve konuşmanın oraya nasıl geldiği görünür. O sohbette kullanılacak yapay zekâyı ve modeli, giriş kutusunun altındaki menüden değiştirebilirsiniz. |
 | **Toplantı algılama** | Bir toplantı uygulaması mikrofonu kullanmaya başladığında Hanasu kayıt yapılıp yapılmayacağını sorar. Kaydı asla kendiliğinden başlatmaz. |
 | **Arama ve Sorma** | Tüm toplantıların metninde arama yapın ya da "Geçen haftaki toplantıda ne karar verdik?" diye sorun. Yanıt, kullandığı toplantıları kaynak olarak gösterir. |
 | **Dışa aktarma** | Markdown olarak ya da Slack'e hazır bir özet olarak kopyalayın, `.md` / `.txt` olarak kaydedin veya aksiyon maddelerini Anımsatıcılar'a gönderin. |
@@ -86,12 +86,12 @@ Typeless, Wispr Flow, Aqua Voice ve Granola'dan esinlenmiştir. Kaynak kodu herk
 
 ### 🤖 Yapay zekânızı seçin
 
-Metninizi düzelten yapay zekâyı **sesle yazma** ve **toplantılar** için ayrı ayrı seçin.
+Metninizi düzelten yapay zekâyı **sesle yazma** ve **toplantılar** (tutanaklar) için ayrı ayrı seçin. Mac'te ayrıca **yapay zekâ sohbeti ve sorular** (toplantı sırasındaki yapay zekâ sohbeti ve geçmiş toplantılara sorulan sorular) için de bir yapay zekâ seçersiniz.
 
 | Yapay zekâ | Varsayılan model | Oturum açma |
 | --- | --- | --- |
-| **Gemini** (Windows'ta varsayılan) | sesle yazma `gemini-3.5-flash-lite`, toplantılar `gemini-3.8-flash` | Google AI Studio API anahtarı veya Vertex AI hizmet hesabı |
-| **Claude** | sesle yazma `claude-haiku-5-5`, toplantılar `claude-sonnet-5-5` (Opus 5.5 de kullanılabilir) | Anthropic API anahtarı |
+| **Gemini** (Windows'ta varsayılan) | sesle yazma `gemini-3.5-flash-lite`, toplantılar ile yapay zekâ sohbeti ve sorular `gemini-3.8-flash` | Google AI Studio API anahtarı veya Vertex AI hizmet hesabı |
+| **Claude** | sesle yazma ile yapay zekâ sohbeti ve sorular `claude-haiku-5-5`, toplantılar `claude-sonnet-5-5` (Opus 5.5 de kullanılabilir) | Anthropic API anahtarı |
 | **Yerel** (cihazınızda; Mac'te varsayılan) | Gemma 4 E4B (önerilen). Aşağıdaki tabloya bakın | Gerekmez. Modeli **Ayarlar → Yapay Zekâ** bölümünden indirin. Mac'te, Hanasu metni düzeltmeye başladığında model yoksa indirmek isteyip istemediğinizi sorar |
 | **Apple** *(Mac, macOS 27)* | `fm` komutu üzerinden cihaz üzerindeki Apple Intelligence modeli | Gerekmez |
 
@@ -158,7 +158,7 @@ Yeni bir sürüm yayımlandığında Hanasu bunu açılışta size bildirir ve k
 
 Mac'te ilk açılışta kısa bir rehberli tur başlar. Tur, yapay zekânızı seçmenizi sağlar (önerilen yerel model Gemma 4 E4B orada hemen indirilir), ana özellikleri ve ayar ipuçlarını gösterir ve Hanasu'nun ihtiyaç duyduğu izinleri ister. Turu istediğiniz zaman menüdeki **Hanasu nasıl kullanılır…** öğesinden yeniden açabilirsiniz.
 
-1. **Bir yapay zekâ seçin.** **Ayarlar → Yapay Zekâ** bölümünü açın ve sesle yazma ile toplantılar için birer yapay zekâ seçin. Gemini için [Google AI Studio](https://aistudio.google.com/apikey)'dan aldığınız API anahtarını yapıştırın ya da bir Vertex AI hizmet hesabı JSON dosyası seçin. Claude için [Claude Console](https://console.anthropic.com/settings/keys)'dan aldığınız API anahtarını yapıştırın. Yerel için bir model indirin (Gemma 4 E4B önerilir). Anahtar gerekmez. Çalıştığını doğrulamak için test düğmesine tıklayın.
+1. **Bir yapay zekâ seçin.** **Ayarlar → Yapay Zekâ** bölümünü açın ve sesle yazma ile toplantılar için (Mac'te ayrıca yapay zekâ sohbeti ve sorular için de) birer yapay zekâ seçin. Gemini için [Google AI Studio](https://aistudio.google.com/apikey)'dan aldığınız API anahtarını yapıştırın ya da bir Vertex AI hizmet hesabı JSON dosyası seçin. Claude için [Claude Console](https://console.anthropic.com/settings/keys)'dan aldığınız API anahtarını yapıştırın. Yerel için bir model indirin (Gemma 4 E4B önerilir). Anahtar gerekmez. Çalıştığını doğrulamak için test düğmesine tıklayın.
 2. **Dikte edin.** İmleci metnin gelmesini istediğiniz yere koyun, kısayola basın, konuşun ve kısayola tekrar basın.
 3. **Bir toplantı kaydedin.** Menü çubuğu (Mac) veya sistem tepsisi (Windows) menüsünü ya da kısayolu kullanın. Kulaklık kullanmak iki tarafın birbirinden ayrı tutulmasına yardımcı olur.
 

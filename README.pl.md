@@ -69,7 +69,7 @@ Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Kod źródłowy Ha
 | **Sprawdzanie źródła i ponowne odsłuchanie** *(Mac)* | Protokół otwiera się jako jedna strona: najpierw podsumowanie i zadania, obok transkrypcja. Kliknij znacznik czasu na końcu punktu, aby przejść do wypowiedzi, z której pochodzi. Odtwórz nagranie od dowolnej wypowiedzi, a jeśli w rozmowie było echo, wycisz swoją stronę albo drugą. |
 | **Notatki na żywo i wyróżnienia** | Pisz notatki ze znacznikiem czasu w trakcie rozmowy albo naciśnij <kbd>⌃⌥⌘ H</kbd>, aby oznaczyć „to ważne” (możesz to cofnąć przez 10 sekund). Protokół traktuje te fragmenty priorytetowo, a później możesz przeczytać rozmowę wokół każdego oznaczenia. |
 | **Pływające napisy** *(Mac)* | Wyświetlaj transkrypcję na żywo jako napisy nad aplikacją do spotkań. Jeśli ich nie wyłączysz, pojawią się też na następnym spotkaniu. |
-| **Czat z AI w trakcie spotkania** *(Mac)* | Podczas nagrywania pytaj AI o dotychczasową rozmowę (<kbd>⌘J</kbd>). Jednym kliknięciem: „podsumuj dotąd” albo „decyzje i zadania”. Zadawaj pytania uzupełniające i kliknij znacznik czasu w odpowiedzi, aby przejść do tego miejsca w transkrypcji. Ktoś nagle zadał Ci pytanie, gdy zajmowałeś się czymś innym? Kliknij **O co mnie zapytano?** na napisach (lub naciśnij <kbd>⌃⌥⌘ A</kbd>), nie wychodząc z aplikacji do spotkań: w pływającym panelu zobaczysz, co przed chwilą powiedzieli inni, a potem podsumowanie AI – o co padło pytanie i jak rozmowa do niego doszła. |
+| **Czat z AI w trakcie spotkania** *(Mac)* | Podczas nagrywania pytaj AI o dotychczasową rozmowę (<kbd>⌘J</kbd>). Jednym kliknięciem: „podsumuj dotąd” albo „decyzje i zadania”. Zadawaj pytania uzupełniające i kliknij znacznik czasu w odpowiedzi, aby przejść do tego miejsca w transkrypcji. Ktoś nagle zadał Ci pytanie, gdy zajmowałeś się czymś innym? Kliknij **O co mnie zapytano?** na napisach (lub naciśnij <kbd>⌃⌥⌘ A</kbd>), nie wychodząc z aplikacji do spotkań: w pływającym panelu zobaczysz, co przed chwilą powiedzieli inni, a potem podsumowanie AI – o co padło pytanie i jak rozmowa do niego doszła. W menu pod polem wpisywania przełączysz AI i model dla tej rozmowy. |
 | **Wykrywanie spotkań** | Gdy aplikacja do spotkań zaczyna używać mikrofonu, Hanasu pyta, czy nagrywać. Nigdy nie zaczyna nagrywać samo. |
 | **Wyszukiwanie i pytania** | Przeszukuj tekst wszystkich spotkań albo zapytaj: „Co ustaliliśmy na zeszłotygodniowym spotkaniu?”. Odpowiedź wskazuje spotkania, z których korzystała. |
 | **Eksport** | Kopiuj jako Markdown lub jako podsumowanie gotowe do Slacka, zapisuj jako `.md` / `.txt` albo wysyłaj zadania do Przypomnień. |
@@ -86,12 +86,12 @@ Inspiracją były Typeless, Wispr Flow, Aqua Voice i Granola. Kod źródłowy Ha
 
 ### 🤖 Wybierz AI
 
-Wybierz AI, które dopracowuje tekst, osobno dla **wprowadzania głosem** i **spotkań**.
+Wybierz AI, które dopracowuje tekst, osobno dla **wprowadzania głosem** i **spotkań** (protokół). Na Macu wybierasz też AI dla **czatu AI i pytań** (czat AI w trakcie spotkania i pytania o wcześniejsze spotkania).
 
 | AI | Model domyślny | Logowanie |
 | --- | --- | --- |
-| **Gemini** (domyślnie na Windows) | wprowadzanie głosem `gemini-3.5-flash-lite`, spotkania `gemini-3.8-flash` | Klucz API Google AI Studio lub konto usługi Vertex AI |
-| **Claude** | wprowadzanie głosem `claude-haiku-5-5`, spotkania `claude-sonnet-5-5` (dostępny też Opus 5.5) | Klucz API Anthropic |
+| **Gemini** (domyślnie na Windows) | wprowadzanie głosem `gemini-3.5-flash-lite`, spotkania oraz czat AI i pytania `gemini-3.8-flash` | Klucz API Google AI Studio lub konto usługi Vertex AI |
+| **Claude** | wprowadzanie głosem oraz czat AI i pytania `claude-haiku-5-5`, spotkania `claude-sonnet-5-5` (dostępny też Opus 5.5) | Klucz API Anthropic |
 | **Lokalnie** (na Twoim urządzeniu; domyślnie na Macu) | Gemma 4 E4B (zalecany). Zobacz tabelę poniżej | Brak. Pobierz model w **Ustawienia → AI**. Jeśli na Macu brakuje modelu, gdy Hanasu zaczyna dopracowywać tekst, aplikacja zapyta, czy go pobrać |
 | **Apple** *(Mac, macOS 27)* | Model Apple Intelligence działający na urządzeniu, przez polecenie `fm` | Brak |
 
@@ -158,7 +158,7 @@ Gdy pojawi się nowa wersja, Hanasu poinformuje cię o tym przy uruchomieniu i z
 
 Na Macu przy pierwszym uruchomieniu otwiera się krótki przewodnik. Pozwala wybrać AI (Gemma 4 E4B, zalecany model lokalny, pobiera się od razu na miejscu), pokazuje główne funkcje i wskazówki dotyczące ustawień oraz prosi o uprawnienia potrzebne Hanasu. W każdej chwili możesz go otworzyć ponownie z menu, wybierając **Jak używać Hanasu…**.
 
-1. **Wybierz AI.** Otwórz **Ustawienia → AI** i wybierz AI dla wprowadzania głosem i dla spotkań. Dla Gemini wklej klucz API z [Google AI Studio](https://aistudio.google.com/apikey) lub wybierz plik JSON konta usługi Vertex AI. Dla Claude wklej klucz API z [Claude Console](https://console.anthropic.com/settings/keys). Dla trybu Lokalnie pobierz model (zalecany jest Gemma 4 E4B). Klucz nie jest potrzebny. Kliknij przycisk testu, aby sprawdzić, czy wszystko działa.
+1. **Wybierz AI.** Otwórz **Ustawienia → AI** i wybierz AI dla wprowadzania głosem i dla spotkań (na Macu także dla czatu AI i pytań). Dla Gemini wklej klucz API z [Google AI Studio](https://aistudio.google.com/apikey) lub wybierz plik JSON konta usługi Vertex AI. Dla Claude wklej klucz API z [Claude Console](https://console.anthropic.com/settings/keys). Dla trybu Lokalnie pobierz model (zalecany jest Gemma 4 E4B). Klucz nie jest potrzebny. Kliknij przycisk testu, aby sprawdzić, czy wszystko działa.
 2. **Dyktuj.** Ustaw kursor tam, gdzie ma się pojawić tekst, naciśnij skrót, mów i naciśnij skrót ponownie.
 3. **Nagraj spotkanie.** Użyj menu na pasku menu (Mac) lub w zasobniku systemowym (Windows) albo skrótu. Słuchawki pomagają rozdzielić obie strony.
 

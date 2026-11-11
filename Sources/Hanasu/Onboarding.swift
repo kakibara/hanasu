@@ -83,16 +83,19 @@ final class OnboardingModel: ObservableObject {
 
     // 要件: REQ-COM-050
     // 設計判断: DEC-COM-092
-    /// 既定の AI を選ぶ。音声入力と会議の両方をその AI にし、その場で保存する。
-    /// ローカル（Gemma）なら、両方のモデルを Gemma 4 E4B にする（ダウンロードは 1 つで済む）。
+    // 要件: REQ-COM-025
+    /// 既定の AI を選ぶ。音声入力・会議・AI チャット・質問の 3 つをその AI にし、その場で保存する。
+    /// ローカル（Gemma）なら、3 つのモデルを Gemma 4 E4B にする（ダウンロードは 1 つで済む）。
     /// Gemini・Claude のモデルは各 AI の既定のまま。ダウンロードはここでは始めない（DEC-COM-094）
     func chooseDefaultAI(_ provider: TextAIProvider) {
         chosenAI = provider
         settings.dictationAIProvider = provider
         settings.meetingAIProvider = provider
+        settings.chatAIProvider = provider
         if provider == .local {
             settings.localDictationModel = OnboardingAIChoice.gemmaModel
             settings.localMeetingModel = OnboardingAIChoice.gemmaModel
+            settings.localChatModel = OnboardingAIChoice.gemmaModel
         }
     }
 
@@ -634,12 +637,14 @@ struct OnboardingTipsPage: View {
                              subtitle: tr("よく変える設定です。AI とモデルは、ここで選べます。"))
             Form {
                 Section {
-                    AIChoiceRow(settings: settings, purpose: .dictation)
-                    AIChoiceRow(settings: settings, purpose: .meeting)
+                    // 要件: REQ-COM-051, REQ-COM-025
+                    ForEach(TextAIPurpose.allCases) { purpose in
+                        AIChoiceRow(settings: settings, purpose: purpose)
+                    }
                 } header: {
                     Text(tr("AI とモデルを選べる（設定 →「AI」）"))
                 } footer: {
-                    Text(tr("音声入力は速いモデル、会議は賢いモデル、のように分けられます。選ぶとすぐに保存します。"))
+                    Text(tr("音声入力と AI チャットは速いモデル、議事録は賢いモデル、のように分けられます。選ぶとすぐに保存します。"))
                         .font(.caption).foregroundStyle(.secondary)
                 }
                 Section(tr("ほかの Tips")) {
@@ -766,7 +771,7 @@ struct OnboardingPermissionsPage: View {
             let model = provider == .local ? settings.localModel(for: purpose).name : settings.textModel(for: purpose)
             return tr("%@（%@）", provider.name, model)
         }
-        return tr("音声入力 %@・会議 %@", "\(label(.dictation))", "\(label(.meeting))")
+        return tr("音声入力 %@・会議 %@・AI チャット・質問 %@", "\(label(.dictation))", "\(label(.meeting))", "\(label(.chat))")
     }
 
     private func row(title: String, detail: String, granted: Bool, actionTitle: String,
@@ -885,8 +890,8 @@ enum OnboardingCLI {
         }
         let chosen = value(after: "--ai", in: args).flatMap(TextAIProvider.init(rawValue:))
         let settings = AppSettings.shared
-        let saved = (settings.dictationAIProvider, settings.meetingAIProvider)
-        let savedLocal = (settings.localDictationModel, settings.localMeetingModel)
+        let saved = (settings.dictationAIProvider, settings.meetingAIProvider, settings.chatAIProvider)
+        let savedLocal = (settings.localDictationModel, settings.localMeetingModel, settings.localChatModel)
         if args.contains("--downloading") {
             LocalLLMStore.shared.showDownloadingForRendering(OnboardingAIChoice.gemmaModel, fraction: 0.42)
         }
@@ -901,8 +906,10 @@ enum OnboardingCLI {
         }
         settings.dictationAIProvider = saved.0
         settings.meetingAIProvider = saved.1
+        settings.chatAIProvider = saved.2
         settings.localDictationModel = savedLocal.0
         settings.localMeetingModel = savedLocal.1
+        settings.localChatModel = savedLocal.2
         exit(0)
     }
 

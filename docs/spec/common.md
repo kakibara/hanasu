@@ -70,7 +70,7 @@
 ### REQ-COM-020 整形などに使う AI として、Claude API を選べる
 - 内容: 整形・英訳などの文章の処理に使う AI を、Gemini と Claude（Anthropic の Claude API）から選べる。Claude の認証は、ユーザーが入力する API キーで行う。音声の文字起こしには使わない。
 - 受け入れ条件: 設定で Claude を選び API キーを入れると、整形・英訳などが Claude で行われる。キーが正しくないときは、そう分かる文言で知らせる。
-  - Mac: 設定の「AI」タブで、音声入力か会議の AI を Claude にし、「Claude（Anthropic）の API キー」に保存すると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）が Claude で行われる。キーが正しくないときは「Claude の API キーが正しくありません（401）」と出る（「接続を試す」でも、整形のときも）。音声は Claude に送らない（文字起こしは「一般」→「文字起こし」のエンジンのまま）。
+  - Mac: 設定の「AI」タブで、音声入力・会議・AI チャット・質問のどれかの AI を Claude にし、「Claude（Anthropic）の API キー」に保存すると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・辞書の候補、AI チャット・質問: 会議の AI チャット・会議への質問。REQ-COM-025）が Claude で行われる。キーが正しくないときは「Claude の API キーが正しくありません（401）」と出る（「接続を試す」でも、整形のときも）。音声は Claude に送らない（文字起こしは「一般」→「文字起こし」のエンジンのまま）。
   - Windows: 設定 → AI で「音声入力」か「会議」の AI を Claude にし、「Claude の API キー」を保存すると、整形・英訳・議事録（作り直しを含む）が Claude で行われる。キーが正しくなければ、HUD・会議ノート・「接続を試す」に「Claude の API キーが正しくありません（401）」と出る（音声入力では整える前の文章を入力する）。
 - 出典: ユーザーの依頼（2026-11-03「claude APIも利用できるようにして。認証はAPIキーを入力する形にして」）
 - 対象: Mac / Windows
@@ -105,32 +105,45 @@
   - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`DownloadWithWrongHashIsRejected`・`DownloadsOnlyFromAllowedHosts`・`PromptSafetyTests`）、CI（`.github/workflows/windows.yml` の locked restore と SHA-256）。DLL の探索と UIPI は Windows の実機で確かめる（まだ確かめていない）
 
 ### REQ-COM-023 Claude の既定のモデルは、音声入力は Haiku 5.5、会議は Sonnet 5.5 にする
-- 内容: Claude を選んだときの既定のモデルは、音声入力（整形・英訳・選択の編集）が `claude-haiku-5-5`、会議（議事録・会議への質問）が `claude-sonnet-5-5`。どちらも設定で Haiku 5.5 / Sonnet 5.5 / Opus 5.5 から変えられる。
+- 内容: Claude を選んだときの既定のモデルは、音声入力（整形・英訳・選択の編集）が `claude-haiku-5-5`、会議（議事録・辞書の候補）が `claude-sonnet-5-5`。Mac の AI チャット・質問（会議の AI チャット・会議への質問。REQ-COM-025）は `claude-haiku-5-5`。どれも設定で Haiku 5.5 / Sonnet 5.5 / Opus 5.5 から変えられる。
 - 受け入れ条件: 設定を変えていない状態で Claude を選ぶと、音声入力は `claude-haiku-5-5`、会議は `claude-sonnet-5-5` で送られる（Mac: `--refine-text … --ai claude --show-request` の `model`、`--render-ai-settings`）。「AI」タブのモデルの選択で 3 つから変えられる。
   - Windows: 設定を変えていない状態で Claude を選ぶと、音声入力は `claude-haiku-5-5`、議事録は `claude-sonnet-5-5` で送る。設定 → AI のモデルの欄で 3 つから選べる。一覧にない ID が設定に残っていたら既定に戻す。
-- 出典: ユーザーの指示（2026-11-03「規定モデルは haiku にして」、2026-11-04「Claude は議事録は sonnet にして」）
+- 出典: ユーザーの指示（2026-11-03「規定モデルは haiku にして」、2026-11-04「Claude は議事録は sonnet にして」）。AI チャット・質問の既定は 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承（Haiku 5.5 にすることも同日の回答）
 - 対象: Mac / Windows
-- 実装の場所: `ClaudeClient.Model`（`defaultDictation`・`defaultMeeting`）、`AppSettings.init`（`claudeModel`・`claudeMinutesModel` の初期値）
+- 実装の場所: `ClaudeClient.Model`（`defaultDictation`・`defaultMeeting`・`defaultChat`）、`AppSettings.init`（`claudeModel`・`claudeMinutesModel`・`claudeChatModel` の初期値）
 - Windows の実装: `windows/Hanasu.Core/Claude/ClaudeModels.cs`、`windows/Hanasu.Core/Settings/AppSettings.cs`
 - 確かめ方: Mac は `.build/debug/Hanasu --refine-text <文> --ai claude --show-request`、`--render-ai-settings /tmp/ai.png --claude`
   - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`ClaudeClientTests.ModelsAndDefaults`・`UnknownModelFallsBackToTheDefaultForThePurpose`）、`dotnet run --project Hanasu.Cli -- claude-request "<文章>" [--minutes]`
 
 ### REQ-COM-024 音声入力と会議で、使う AI とモデルを別々に選べる
-- 内容: 音声入力（整形・英訳・選択の編集）と会議（議事録・会議への質問）のそれぞれで、AI（Gemini / Claude）とモデルを別々に選べる。
+- 内容: 音声入力（整形・英訳・選択の編集）と会議（議事録・辞書の候補）のそれぞれで、AI とモデルを別々に選べる。Mac では、AI チャット・質問（会議の AI チャット・会議への質問）も別に選べる（REQ-COM-025）。
 - 受け入れ条件:
-  - Mac: 設定の「AI」タブの「使う AI とモデル」に「音声入力」と「会議」が並び、それぞれで Gemini / Claude とモデルを選べる（例: 音声入力は Gemini の flash-lite、会議は Claude Sonnet 5.5）。既定は、両方ローカルの Gemma 4 E4B（REQ-COM-030。2026-11-04 の依頼で Gemini から変えた）。以前から使っている人で、AI を選んで保存していない人は、今までどおり Gemini のまま（DEC-COM-068）。辞書の候補探しは会議の設定を使う（DEC-COM-040）。
+  - Mac: 設定の「AI」タブの「使う AI とモデル」に「音声入力」「会議」「AI チャット・質問」が並び、それぞれで AI とモデルを選べる（例: 音声入力は Gemini の flash-lite、会議は Claude Sonnet 5.5、AI チャット・質問は Claude Haiku 5.5）。既定は、両方ローカルの Gemma 4 E4B（REQ-COM-030。2026-11-04 の依頼で Gemini から変えた）。以前から使っている人で、AI を選んで保存していない人は、今までどおり Gemini のまま（DEC-COM-068）。辞書の候補探しは会議の設定を使う（DEC-COM-040）。
   - Windows: 設定 → AI の「使う AI とモデル」に「音声入力（整形・英訳）」と「会議（議事録）」の 2 行があり、行ごとに AI とモデルを選べる。既定は今までどおり（どちらも Gemini、モデルは gemini-3.5-flash-lite と gemini-3.8-flash）。Windows 版には選択の編集・会議への質問がないので、音声入力は整形・英訳、会議は議事録（作り直しを含む）に効く。
-- 出典: ユーザーの指示（2026-11-03「会議の要約モデルと音声入力モデルは個別に指定できるようにして」）。Mac の既定をローカルの Gemma にしたのは 2026-11-04 の依頼「デフォルトの文字起こしモデルを Google のローカルモデルの Gemma にして」
+- 出典: ユーザーの指示（2026-11-03「会議の要約モデルと音声入力モデルは個別に指定できるようにして」）。AI チャット・質問を分けたのは 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承。Mac の既定をローカルの Gemma にしたのは 2026-11-04 の依頼「デフォルトの文字起こしモデルを Google のローカルモデルの Gemma にして」
 - 対象: Mac / Windows
-- 実装の場所: `TextAIPurpose`、`AppSettings`（`dictationAIProvider`・`meetingAIProvider`・`aiProvider(for:)`・`textModel(for:)`）、`AIChoiceRow`
+- 実装の場所: `TextAIPurpose`、`AppSettings`（`dictationAIProvider`・`meetingAIProvider`・`chatAIProvider`・`aiProvider(for:)`・`textModel(for:)`）、`AIChoiceRow`
 - Windows の実装: `windows/Hanasu.Core/Ai/TextAiFactory.cs`、`windows/Hanasu.Core/Settings/AppSettings.cs`（`DictationAi` / `MeetingAi`）、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`
 - 確かめ方: Mac は `.build/debug/Hanasu --render-ai-settings /tmp/ai.png --claude`（音声入力は Gemini、会議は Claude の見た目）、`--test-ai-defaults`（既定のローカルと、以前から使っている人を Gemini のままにする引き継ぎ）
   - Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`TextAiSelectionTests`）
 
+### REQ-COM-025 AI チャットと会議への質問に使う AI とモデルを、議事録とは別に選べる（Mac）
+- 内容: 設定の「AI」→「使う AI とモデル」に、「音声入力」「会議」に加えて「AI チャット・質問」の行があり、会議の AI チャット（記録中・会議ノート。REQ-MTG-040）と会議への質問（REQ-MTG-016）に使う AI（ローカル / Apple / Gemini / Claude）とモデルを選べる。「会議」の行は議事録（作り直しを含む）と辞書の候補探しだけに使う。
+- 受け入れ条件:
+  - 設定の「AI」タブに 3 行が並び、それぞれの説明は「整形・翻訳・選択の編集」「議事録（作り直しも）・辞書の候補」「会議の AI チャット・会議への質問」。「AI チャット・質問」の行で AI とモデルを選べる。
+  - 「AI チャット・質問」に Claude Haiku 5.5、「会議」に Claude Sonnet 5.5 を選ぶと、議事録は Sonnet、AI チャットと会議への質問は Haiku で送る。
+  - 既定は、新しく使い始めた人も以前から使っている人も、ローカルの Gemma 4 E4B（会議の値は写さない）。この行で Claude を選んだときの既定のモデルは Haiku 5.5、Gemini は gemini-3.8-flash（DEC-COM-171）。
+  - 既定のままの送り先が使えない（Gemma をまだダウンロードしていない、など）とき、AI チャットと会議に質問の画面は、送る前にそのことと直し方（画面の送り先のメニューで選ぶ・設定の「AI」）を出す。そのまま送ったときは、今のエラーの文言で知らせる（何も送らない）。
+  - 初回起動のオンボーディングで AI を選ぶと、3 つの用途すべてにその AI を入れ、「設定の Tips」のページにも 3 行を出す（REQ-COM-050・051、DEC-COM-092）。
+- 出典: 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承
+- 対象: Mac（Windows 版には AI チャットと会議への質問がない。FUT-003）
+- 実装の場所: `TextAIPurpose.chat`、`AppSettings`（`chatAIProvider`・`claudeChatModel`・`geminiChatModel`・`localChatModel`・`aiProvider(for:)`・`textModel(for:)`・`localModel(for:)`）、`AIChoiceRow`、`AISettingsTab`、`OnboardingModel.chooseDefaultAI`、`OnboardingTipsPage`
+- 確かめ方: `.build/debug/Hanasu --test-ai-purposes`（用途ごとの AI とモデル・既定値。AI を呼ばない）、`--chat-meeting <会議のフォルダ> --ask "<質問>" --show-target`・`--ask-meetings "<質問>" --show-target`（用途 chat）、`--minutes-from-transcript <文字起こし> --show-target`（用途 meeting）、`--render-ai-settings /tmp/ai.png --claude`
+
 ### REQ-COM-030 整形と議事録に使う AI として、端末の中で動く小型の LLM（Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-4B）を選べ、Gemma 4 E4B を勧める
 - 内容: 文字起こしのあとの整形などと、議事録などの文章の処理に使う AI として、Gemini・Claude のほかに、端末の中で動く小型の LLM（ローカル）を選べる。モデルは Gemma 4 E4B・LFM2.5-1.2B-JP・Sarashina2.2・Qwen3.5-4B の 4 つから選ぶ。おすすめは Gemma 4 E4B（Google）で、選ぶ欄に「おすすめ」と出し、初めてローカルにしたときの既定にする（DEC-COM-067）。文章は端末の外に送らない。
 - 受け入れ条件:
-  - Mac: 設定の「AI」タブで、音声入力か会議の AI を「ローカル」にし、モデルを 4 つから選べる。Gemma 4 E4B に「おすすめ」と出る。選んだモデルがまだなければ、その場でダウンロードでき、進み具合が出る。ダウンロードしたモデルは消せる。ローカルにすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）がそのモデルで行われ、文章をネットに送らない。音声入力の整形・英訳と議事録の作成（作り直しを含む）・音声入力の履歴のやり直しでは、モデルがないとダウンロードするかを尋ねる（REQ-COM-032）。そのほかの処理（選択の編集・会議への質問・辞書の候補）でモデルがないまま使おうとすると、設定でダウンロードするよう知らせる。
+  - Mac: 設定の「AI」タブで、音声入力・会議・AI チャット・質問のどれかの AI を「ローカル」にし、モデルを 4 つから選べる。Gemma 4 E4B に「おすすめ」と出る。選んだモデルがまだなければ、その場でダウンロードでき、進み具合が出る。ダウンロードしたモデルは消せる。ローカルにすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・辞書の候補、AI チャット・質問: 会議の AI チャット・会議への質問）がそのモデルで行われ、文章をネットに送らない。音声入力の整形・英訳と議事録の作成（作り直しを含む）・音声入力の履歴のやり直しでは、モデルがないとダウンロードするかを尋ねる（REQ-COM-032）。そのほかの処理（選択の編集・AI チャット・会議への質問・辞書の候補）でモデルがないまま使おうとすると、設定でダウンロードするよう知らせる（AI チャットと会議への質問は、画面の送り先のメニューでも選び直せる。REQ-MTG-048・049）。
   - Mac: 文脈に入らない長い会議でも議事録ができる（DEC-COM-065）。
   - Windows: 設定 → AI で「音声入力」か「会議」の AI を「ローカル」にし、モデルを 4 つから選べる。Gemma 4 E4B に「おすすめ」と出る。ダウンロード・削除・進み具合は Mac と同じ。整形・英訳・議事録（作り直しを含む）がそのモデルで行われる。
   - モデルのライセンス（とくに LFM2.5 の、年間売上 1,000 万ドル以上の組織の商用利用を許さない条件）が、選ぶ画面に出る（DEC-COM-066）。
@@ -144,8 +157,8 @@
 ### REQ-COM-031 整形と議事録に使う AI として、Apple の Foundation Models の CLI（fm）を選べる（Mac）
 - 内容: 整形などと議事録などの文章の処理に使う AI として、macOS 27 から入っている Apple の Foundation Models の CLI（`fm`）を、ローカルの LLM（REQ-COM-030）と並べて選べる。端末の中のモデル（Apple Intelligence のオンデバイスのモデル）で処理し、文章を端末の外に送らない。
 - 受け入れ条件:
-  - Mac: 設定の「AI」タブで、音声入力か会議の AI を「Apple」にできる。macOS 27 以上で、Apple が署名した `fm` が見つかるときだけ使え、そうでないときは選んだ欄に理由（「macOS 27 以降で使えます（この Mac は macOS 26.6）」など）が出る。
-  - Mac: 「Apple」にすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・会議への質問・辞書の候補）が `fm` で行われる。使えないまま処理しようとすると、理由を知らせる。
+  - Mac: 設定の「AI」タブで、音声入力・会議・AI チャット・質問のどれかの AI を「Apple」にできる。macOS 27 以上で、Apple が署名した `fm` が見つかるときだけ使え、そうでないときは選んだ欄に理由（「macOS 27 以降で使えます（この Mac は macOS 26.6）」など）が出る。
+  - Mac: 「Apple」にすると、その用途の処理（音声入力: 整形・英訳・選択の編集、会議: 議事録・辞書の候補、AI チャット・質問: 会議の AI チャット・会議への質問）が `fm` で行われる。使えないまま処理しようとすると、理由を知らせる。
   - Mac: 文脈（8,192 トークン。未確認）に入らない長い会議でも、議事録ができる（DEC-COM-065 の分け方を使う）。
   - Windows には出さない（Windows に `fm` はない）。
 - 出典: ユーザーの依頼（2026-11-04「mac os 27で登場したApple Foundation Models CLIも選択肢に加えて」）
@@ -182,8 +195,8 @@
 - 内容: Hanasu を初めて起動したとき、オンボーディングの中で、整形・翻訳・議事録などに使う既定の AI を選ばせる。おすすめ（既定）は、この Mac の中で動く Gemma 4 E4B。Gemma はモデルのダウンロードが要るので、黙って最初から選んでおくのではなく、チュートリアルの中でユーザーが Gemma を選び、その場でダウンロードする。ほかの AI（Gemini / Claude / Apple）も選べ、その AI を使う準備（API キー・サービスアカウント）もその画面でできる。選んだ AI は設定に保存する。
 - 受け入れ条件:
   - 初回起動で開くオンボーディングに「使う AI を選ぶ」ページがあり、いちばん上（左上）に「おすすめ」の印を付けた Gemma 4 E4B のカード、続いて Gemini・Claude・Apple のカードが、それぞれの特徴（文章をネットに送るか・要る準備）とともに並ぶ。はじめはどれも選ばれておらず、どれかを選ぶまで、そのページから先へ進めない。
-  - Gemma を選ぶと、音声入力と会議の両方の AI が「ローカル」の Gemma 4 E4B になり、その場で保存される（設定の「AI」タブを開くと同じ選択になっている）。同じページに、ダウンロードの大きさ・進み具合・中止のボタンが出る。まだダウンロードしていなければ「次へ」は「ダウンロードして次へ」になり、押すとダウンロードを始めて次のページへ進む。ダウンロードは、次のページを見ている間も続く。
-  - ほかの AI を選ぶと、音声入力と会議の両方がその AI になり、その AI に要る準備の欄が同じページに出る: Gemini は API キーかサービスアカウント、Claude は API キー、Apple は使えるかどうか。準備はあとからでもよい（設定の「AI」でできる）。
+  - Gemma を選ぶと、音声入力・会議・AI チャット・質問の 3 つの AI が「ローカル」の Gemma 4 E4B になり、その場で保存される（設定の「AI」タブを開くと同じ選択になっている）。同じページに、ダウンロードの大きさ・進み具合・中止のボタンが出る。まだダウンロードしていなければ「次へ」は「ダウンロードして次へ」になり、押すとダウンロードを始めて次のページへ進む。ダウンロードは、次のページを見ている間も続く。
+  - ほかの AI を選ぶと、音声入力・会議・AI チャット・質問の 3 つがその AI になり、その AI に要る準備の欄が同じページに出る: Gemini は API キーかサービスアカウント、Claude は API キー、Apple は使えるかどうか。準備はあとからでもよい（設定の「AI」でできる）。
   - 最後のページで、Gemma のダウンロードがまだ終わっていなければ、その進み具合が分かる。
 - 出典: ユーザーの依頼（2026-11-04「初回起動時にデフォルトのAIを選択させるようにして」）。同じ日の追加の依頼「デフォルトのモデルはgemmaにしてください。ただし、gemmaはモデルをダウンロードする必要があるので、何も言わずに（Gemma を）最初に選択するのではなく、チュートリアルの中で（Gemma を選択）して、ダウンロードするというプロセスを採用してください」（音声入力で「Gemma」が「現場」と書き起こされていたのを直して引いた）
 - 対象: Mac（Windows 版は対象外。FUT-003）
@@ -195,7 +208,7 @@
 - 受け入れ条件:
   - 初回起動でオンボーディングのウインドウが前面に出る。「次へ」「戻る」でページを移り、今のページが分かる印がある。最後のページの「はじめる」かウインドウを閉じると終わり、次からの起動では出ない。
   - 機能の説明には、今の設定のショートカット（音声入力・翻訳・選択を声で編集・会議の記録・「ここ重要」・最後の結果の再入力）を出す。
-  - 「設定の Tips」のページで、音声入力と会議のそれぞれの AI とモデルを選べ、選ぶとその場で設定に保存される。ほかの Tips には、設定のどのタブのどこで変えるかを書く。
+  - 「設定の Tips」のページで、音声入力・会議・AI チャット・質問のそれぞれの AI とモデルを選べ、選ぶとその場で設定に保存される。ほかの Tips には、設定のどのタブのどこで変えるかを書く。
   - 最後のページで、自動入力に要るアクセシビリティと、録音に要るマイク・音声認識の許可の状態を見られ、その場で許可を求められる。
   - メニューから、いつでももう一度開ける（DEC-COM-091）。
 - 出典: ユーザーの依頼（2026-11-04「チュートリアルを作成して、アプリのオンボーディングを実施するようにして。主だった機能の説明と、設定のTips(AIモデルが選択できる(その場で選択させる)、など)」）
@@ -504,7 +517,7 @@
 - 実装の場所: `TranscriptionEngine.label`、`GeminiTranscriptionSection`
 
 ### DEC-COM-040 AI は用途ごとに 1 つ選び、文字起こしのエンジンとは別にする
-- 決めたこと: 文章の処理に使う AI（Gemini / Claude / ローカル。ローカルは REQ-COM-030）を、「音声入力」（整形・英訳・選択の編集・音声入力の履歴のやり直し）と「会議」（議事録とその作り直し・会議への質問・辞書の候補探し）の 2 つの用途で別々に選ぶ。Mac の既定はどちらもローカルの Gemma 4 E4B（DEC-COM-068。以前から使っている人は Gemini のまま）。Windows の既定はどちらも Gemini。辞書の候補探しは会議の記録を読む長い処理なので、会議の設定（AI とモデル、Gemini なら `meetingMinutesModel`）を使う。文字起こしのエンジン（OS 標準 / Whisper / Gemini）は今までどおり別に選び、Claude には音声を送らない。設定画面は「Gemini」タブを「AI」タブにし、先頭に 2 つの用途を並べる。Gemini の認証の欄は、文字起こしのエンジン「Gemini」でも使うので、AI の選択に関わらず出す。
+- 決めたこと: 文章の処理に使う AI（Gemini / Claude / ローカル。ローカルは REQ-COM-030）を、「音声入力」（整形・英訳・選択の編集・音声入力の履歴のやり直し）と「会議」（議事録とその作り直し・辞書の候補探し）の用途で別々に選ぶ。Mac は、会議の AI チャットと会議への質問を「AI チャット・質問」の用途に分ける（REQ-COM-025、DEC-COM-171。2026-11-10 までは会議の用途だった）。Mac の既定はどちらもローカルの Gemma 4 E4B（DEC-COM-068。以前から使っている人は Gemini のまま）。Windows の既定はどちらも Gemini。辞書の候補探しは会議の記録を読む長い処理なので、会議の設定（AI とモデル、Gemini なら `meetingMinutesModel`）を使う。文字起こしのエンジン（OS 標準 / Whisper / Gemini）は今までどおり別に選び、Claude には音声を送らない。設定画面は「Gemini」タブを「AI」タブにし、先頭に用途を並べる（Mac は 3 つ）。Gemini の認証の欄は、文字起こしのエンジン「Gemini」でも使うので、AI の選択に関わらず出す。
 - 理由: ユーザーの指示（REQ-COM-024）。音声入力は速さ、会議は長い記録のまとめと、求めるものが違う。辞書の候補探しは、今まで議事録のモデルを使っていた（DEC-DIC-088 の作り）のに合わせた。
 - 決めた場面: この PR（Claude API の対応）
 - 関係する要件: REQ-COM-020, REQ-COM-024
@@ -529,7 +542,7 @@
 - 実装の場所: `ClaudeClient.requestBody`・`headers`・`generate`・`parseMessage`
 
 ### DEC-COM-042 Claude のモデルは 3 つから選ぶ
-- 決めたこと: `claude-haiku-5-5`・`claude-sonnet-5-5`・`claude-opus-5-5`（日付を付けない ID）から選ぶ。音声入力と会議で別々に持つ（`claudeModel`・`claudeMinutesModel`）。既定は REQ-COM-023。一覧にない ID が設定に入っていても、そのまま送る。設定画面に料金の目安（2026-11 時点）を書く。
+- 決めたこと: `claude-haiku-5-5`・`claude-sonnet-5-5`・`claude-opus-5-5`（日付を付けない ID）から選ぶ。音声入力・会議・AI チャット・質問で別々に持つ（`claudeModel`・`claudeMinutesModel`・`claudeChatModel`）。既定は REQ-COM-023。一覧にない ID が設定に入っていても、そのまま送る。設定画面に料金の目安（2026-11 時点）を書く。
 - 理由: 速さ・費用・賢さの違う 3 段階で足りる。料金は使う人が選ぶときの判断材料になるが、変わるので時点を書く。
 - 決めた場面: この PR
 - 関係する要件: REQ-COM-020, REQ-COM-023, REQ-COM-024
@@ -537,7 +550,7 @@
 - 実装の場所: `ClaudeClient.Model`、`AIChoiceRow`、`ClaudeKeySection`
 
 ### DEC-COM-043 Claude の考える量は effort で決め、thinking は送らない
-- 決めたこと: 音声入力の処理（整形・英訳・選択の編集）は `output_config.effort: "low"`、`max_tokens` 8192。会議の処理（議事録・会議への質問・辞書の候補）は `"medium"`、`max_tokens` 32000、タイムアウトは最低 600 秒。`thinking` は送らない（3 つとも adaptive が既定）。
+- 決めたこと: effort は用途ではなく処理で決める。短い処理（整形・英訳・選択の編集・会議の AI チャット）は `output_config.effort: "low"`、`max_tokens` 8192。長い処理（議事録・会議への質問・辞書の候補）は `"medium"`、`max_tokens` 32000、タイムアウトは最低 600 秒。`thinking` は送らない（3 つとも adaptive が既定）。
 - 理由: Opus 5.5 は thinking を無効にできず（`disabled` は 400）、Sonnet 5.5 は `disabled` が 400（`between_tools` は Sonnet 5.5 だけ）、Haiku 5.5 は `disabled` を受け付けるが、3 つで形をそろえるため effort だけで決める。資料では、軽い処理は low で考えるのを省くことが多い。thinking も max_tokens に数えられるので、返ってくる文章より大きく取る。議事録は streaming を使わないので、出力が長くても切れないだけのタイムアウトにする。
 - 決めた場面: この PR
 - 関係する要件: REQ-COM-020
@@ -684,7 +697,7 @@
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Windows/Services/ChildProcessJob.cs`
 
 ### DEC-COM-064 文脈の長さと生成の設定は、モデルごとに決める
-- 決めたこと: 文脈の長さ（`-c`）は、Gemma 4 E4B・LFM2.5・Qwen3.5 は 32,768、Sarashina2.2 は 8,192（モデルの上限）。出力の上限は、音声入力（整形・英訳・選択の編集・辞書の候補）は 2,048、会議（議事録・会議への質問）は 4,096 で、どちらも文脈の半分を超えない。サンプリングは開発元の推奨にする（Gemma 4: temperature 1.0・top_p 0.95・top_k 64、LFM2.5: temperature 0.1・top_k 50・repetition_penalty 1.05）。Sarashina2.2 は推奨がないので temperature 0.2・top_p 0.95・repetition_penalty 1.05。Qwen3.5-4B は考えない使い方の推奨（temperature 0.7・top_p 0.8・top_k 20）にし、推奨の presence_penalty 1.5 は付けない。待つ時間は、音声入力は 1 回 120 秒、会議は 1 回 30 分（モデルの読み込みを含む）。
+- 決めたこと: 文脈の長さ（`-c`）は、Gemma 4 E4B・LFM2.5・Qwen3.5 は 32,768、Sarashina2.2 は 8,192（モデルの上限）。出力の上限は、短い処理（整形・英訳・選択の編集・辞書の候補・会議の AI チャット）は 2,048、長い処理（議事録・会議への質問）は 4,096 で、どちらも文脈の半分を超えない。サンプリングは開発元の推奨にする（Gemma 4: temperature 1.0・top_p 0.95・top_k 64、LFM2.5: temperature 0.1・top_k 50・repetition_penalty 1.05）。Sarashina2.2 は推奨がないので temperature 0.2・top_p 0.95・repetition_penalty 1.05。Qwen3.5-4B は考えない使い方の推奨（temperature 0.7・top_p 0.8・top_k 20）にし、推奨の presence_penalty 1.5 は付けない。待つ時間は、音声入力は 1 回 120 秒、会議は 1 回 30 分（モデルの読み込みを含む）。
 - 理由: Gemma 4 と LFM2.5 は 128K まで（Qwen3.5 は 256K まで）読めるが、KV キャッシュのメモリを抑える（32K で 1 時間ほどの会議の文字起こしが入る）。整形は短い文なので、出力の上限は小さくてよい。端末の CPU・GPU で動くので、Gemini・Claude より長く待つ。presence_penalty は一度出た語を避けさせるので、元の言葉をなるべく残す整形には合わない。
 - 決めた場面: ローカル LLM に対応した PR
 - 関係する要件: REQ-COM-030
@@ -803,7 +816,7 @@
 - 実装の場所: `AppDelegate.populateMenu`、`AppDelegate.makeMainMenu`、`AppDelegate.openOnboarding`
 
 ### DEC-COM-092 オンボーディングは 7 ページにし、AI の選択は音声入力と会議の両方に当て、どれかを選ぶまで先に進めない。Gemma を選んだら両方を Gemma 4 E4B にする
-- 決めたこと: ページは「ようこそ」「使う AI を選ぶ」「音声入力」「会議の記録」「履歴・辞書・スニペット」「設定の Tips」「許可と準備」の 7 つ。大きさを変えられないウインドウ（640×600）で、下に「戻る」「次へ」とページの点を置く。AI のページのカードは「Gemma 4 E4B（おすすめ）」「Gemini」「Claude」「Apple」の 4 つ。そのページで押したものを選んだことにし（今の設定の値には、はじめは選んだ印を付けない）、押すまで「次へ」を押せない。押すと `dictationAIProvider` と `meetingAIProvider` の両方をその AI にする。Gemma のときは `localDictationModel` と `localMeetingModel` も両方 Gemma 4 E4B にする（前に保存してあるモデルがあっても書き換える。既定も Gemma 4 E4B。DEC-COM-067）。Gemini・Claude のモデルは各 AI の既定のまま（REQ-COM-023、DEC-COM-005、DEC-MTG-014）。モデルを変えたい人（音声入力だけ速い LFM2.5 にする など）には「設定の Tips」のページの欄（設定の「AI」タブと同じ `AIChoiceRow`）で選ばせる。準備の欄は設定の「AI」タブの部品をそのまま使う。Apple の Foundation Models が使えない Mac（`AppleFMAvailability` が理由を返す。macOS 27 より前など）では、そのカードを薄くして押せなくし、理由はカードの上に指を置くと出す。アプリの設定の既定（オンボーディングを通らないときの値）は、両方ローカルの Gemma 4 E4B（DEC-COM-068）。
+- 決めたこと: ページは「ようこそ」「使う AI を選ぶ」「音声入力」「会議の記録」「履歴・辞書・スニペット」「設定の Tips」「許可と準備」の 7 つ。大きさを変えられないウインドウ（640×600）で、下に「戻る」「次へ」とページの点を置く。AI のページのカードは「Gemma 4 E4B（おすすめ）」「Gemini」「Claude」「Apple」の 4 つ。そのページで押したものを選んだことにし（今の設定の値には、はじめは選んだ印を付けない）、押すまで「次へ」を押せない。押すと `dictationAIProvider`・`meetingAIProvider`・`chatAIProvider` の 3 つをその AI にする（AI チャット・質問は 2026-11-10 に足した。REQ-COM-025）。Gemma のときは `localDictationModel`・`localMeetingModel`・`localChatModel` も Gemma 4 E4B にする（前に保存してあるモデルがあっても書き換える。既定も Gemma 4 E4B。DEC-COM-067）。Gemini・Claude のモデルは各 AI の既定のまま（REQ-COM-023、DEC-COM-005、DEC-MTG-014）。モデルを変えたい人（音声入力だけ速い LFM2.5 にする など）には「設定の Tips」のページの欄（設定の「AI」タブと同じ `AIChoiceRow`）で選ばせる。準備の欄は設定の「AI」タブの部品をそのまま使う。Apple の Foundation Models が使えない Mac（`AppleFMAvailability` が理由を返す。macOS 27 より前など）では、そのカードを薄くして押せなくし、理由はカードの上に指を置くと出す。アプリの設定の既定（オンボーディングを通らないときの値）は、両方ローカルの Gemma 4 E4B（DEC-COM-068）。
 - 理由: 依頼が「デフォルトの AI を選択させる」「デフォルトのモデルは Gemma」「黙って最初に選ばず、チュートリアルの中で選んでダウンロードする」なので、Gemma を「おすすめ」としていちばん目立つ場所に置きつつ、選ぶのはユーザーに任せる。用途ごとに別のモデルにすると 2 つ（Gemma と LFM2.5 で約 5.8 GB）をダウンロードすることになるので、両方 Gemma にして 1 回（約 4.6 GB）で済ませる。設定の既定は、はじめ Gemini のままにしていた（ダウンロードしていない人の整形が黙って失敗するため）が、モデルがないときにダウンロードするかを尋ねるようにした（REQ-COM-032）ので、Gemma に変えた（DEC-COM-068）。初めての人に用途ごとの選び分けを先に求めると迷うので、まず 1 つ選ばせ、別々にできることは Tips で見せる。部品を共有して、設定画面と見た目・保存先・文言が食い違わないようにする。
 - 決めた場面: オンボーディングを入れた PR #53（REQ-COM-050・051）。Gemma をおすすめにしたのも同じ PR
 - 関係する要件: REQ-COM-050, REQ-COM-051, REQ-COM-024, REQ-COM-030
@@ -1075,6 +1088,24 @@
 - 対象: Mac / Windows（自動で描くのは Mac だけ）
 - 実装の場所: `common/testdata/ui/`、`scripts/ui-cases.py`、`.claude/skills/ui-test/SKILL.md`、`.github/workflows/spec.yml`
 - 確かめ方: `python3 scripts/ui-cases.py check`、`python3 scripts/ui-cases.py render --priority P1`
+
+### DEC-COM-171 AI チャット・質問の設定は会議と独立させ、既定は速さを優先する
+- 決めたこと: 用途 `TextAIPurpose.chat`（表示は「AI チャット・質問」）を足し、設定のキーを `chatTextAIProvider`・`claudeChatModel`・`geminiChatModel`・`localChatModel` にする。既定は AI がローカル、モデルはローカル Gemma 4 E4B・Claude `claude-haiku-5-5`・Gemini `gemini-3.8-flash`。以前から使っている人にも会議の値を写さず、引き継ぎの印も足さない（DEC-COM-068 の Gemini への引き継ぎも、この用途には当てない）。用途で分ける場所（`AIChoiceRow`、`AppSettings.aiProvider(for:)`・`textModel(for:)`・`localModel(for:)`、`TextAIClient.cliModel`）は、3 用途を網羅する switch で書く。ローカル・Apple の最低の待ち時間（`LocalLLMClient.minimumTimeout`・`AppleFMClient.minimumTimeout`）は「音声入力か、それ以外か」なので、AI チャット・質問は会議と同じ長いほう。
+- 理由: ユーザーが「最初から独立した値」「以前から使っている人にも写さない」を選んだ（2026-11-10）。対話は待ち時間が短いほうがよい。Gemini の lite は長い記録からの答えで質が落ちやすいので、議事録と同じ flash にする。新しい印を書くと `AppSettings.hasSavedSettings` が数え、新しい人にオンボーディングが出なくなる（`OnboardingState.shouldShowOnLaunch`）ので、印は足さない。網羅の switch にすれば、次に用途を足したときにコンパイルで気づける。
+- 影響: 以前から使っている人で、会議を Gemini・Claude にしている人は、この版で AI チャットと会議への質問の送り先がローカルになる。Gemma 4 E4B がなければ、画面に案内を出す（REQ-COM-025）。あれば止まらずにローカルで答え、会議への質問は文脈に入らない分を省く（DEC-COM-065）ので答えが浅くなりうる。送り先は画面の送り先のメニューに常に出し（REQ-MTG-048・049）、リリース文でも知らせる。
+- 決めた場面: 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承
+- 関係する要件: REQ-COM-025, REQ-COM-023, REQ-COM-024
+- 対象: Mac
+- 実装の場所: `TextAIPurpose`、`AppSettings`（`Keys.chatAIProvider`・`claudeChatModel`・`geminiChatModel`・`localChatModel`）、`ClaudeClient.Model.defaultChat`、`AppSettings.defaultGeminiChatModel`
+
+### DEC-COM-172 AI チャット・質問と議事録は、ローカルのモデルを切り替えるとき、使っている処理が終わるのを待つ（音声入力は今のまま）
+- 決めたこと: `LocalLLMServer` で、サーバーを使っている処理と、起動を待っている処理を分けて数える（`LocalLLMGate`）。`LocalLLMClient.waitsForOtherModel` が真の処理（AI チャット・会議への質問（`.chat`）と、議事録・辞書の候補（`.meeting`））は、動いているモデルと違うモデルを求めたとき、使っている処理が 0 になるまで待ってから起動し直す。待っている処理は来た順に進み、先に進んだ処理と同じモデルを待っていた処理は、起動し直さずにそのまま通る。待ちには期限（その処理のタイムアウト）を付け、過ぎたら「ほかの処理（議事録の作成など）が終わらないため、ローカルの AI を使えませんでした」で失敗させる。取り消し（「止める」）にも従う。待っている処理があるときは、5 分で止める判定（DEC-COM-063）でも止めない。音声入力（`.dictation`）は今のまま、違うモデルを求めたら処理中でもサーバーを止めて起動し直す。AI チャットと会議に質問は、実際に待っている間だけ「ほかの処理が終わるのを待っています…」と出す（`beginRequest` が待ち始めたときと抜けたときに、呼び出した画面へ知らせる。`LocalLLMServer.observingWait`。送る前の判定だけで決めると、待ちが終わってモデルの起動と生成に入っても出続けるため。PR #95 のレビュー）。
+- 理由: 今は違うモデルを求められると、処理中でもサーバーを止める。AI チャット・質問のローカルのモデルを会議と別にできるので、記録を止めた直後の議事録の作成（ローカルでは最大 30 分）中にチャットで聞くと、議事録が途中で切れてしまう（DEC-MTG-086 の「会議が終わった直後に続けたい」場面）。待てば議事録は守られ、チャットは遅れるだけ。待っている処理を使っている処理と同じに数えると、待つ処理どうしが止まり合うので分ける。音声入力は依頼の外で、待たせると整形が最大 120 秒遅れたうえ失敗しうる（REQ-DIC-007）ので、今の振る舞いを変えない（音声入力が議事録を止めうるのは今と同じ）。
+- 決めた場面: 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承
+- 関係する要件: REQ-COM-030, REQ-COM-025, REQ-MTG-048, REQ-MTG-049
+- 対象: Mac（Windows の `LocalLlmServer` にも違うモデルで止める同じ作りがあるが、Windows には AI チャットと会議への質問がなく、今のまま）
+- 実装の場所: `LocalLLMGate`、`LocalLLMServer.beginRequest`・`ensureRunning`・`wouldWait(for:)`・`observingWait`、`LocalLLMClient.waitsForOtherModel`、`TextAIClient.make`
+- 確かめ方: `.build/debug/Hanasu --test-local-llm-wait`（サーバーを起こさずに、待つ・通す・期限・取り消しを確かめる）
 
 ---
 

@@ -586,6 +586,40 @@
           "remaining": "macOS 27 の実機で、fm で整形と議事録ができること"
         }
       }
+    },
+    {
+      "id": "UX-182",
+      "steps": "設定の「AI」タブを開き、「使う AI とモデル」を見る。「AI チャット・質問」の行で AI を Claude にする。オンボーディングの「設定の Tips」のページを見る",
+      "expected": "「音声入力」「会議」「AI チャット・質問」の 3 行が並び、説明はそれぞれ「整形・翻訳・選択の編集」「議事録（作り直しも）・辞書の候補」「会議の AI チャット・会議への質問」。AI チャット・質問で Claude を選ぶと、既定は Haiku 5.5。オンボーディングの Tips のページにも 3 行がある",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-025",
+        "REQ-COM-024",
+        "REQ-COM-051"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-ai-settings",
+              "{out}/ai-claude.png",
+              "--claude"
+            ],
+            [
+              "--render-onboarding",
+              "{out}",
+              "--page",
+              "tips"
+            ]
+          ],
+          "look": "ai-claude.png の「使う AI とモデル」に 3 行があり、「会議」は Claude Sonnet 5.5、「AI チャット・質問」は Claude Haiku 5.5 で、それぞれの説明が用途に合っている。オンボーディングの Tips のページに 3 行の AI の選択がある",
+          "remaining": "実際に選んで保存されること"
+        }
+      }
     }
   ]
 }
