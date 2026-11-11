@@ -20,3 +20,4 @@ Mac と Windows の `hanasu` が同じ出力を出すことを確かめるため
 - 共有の英語の文の `this Mac` と `this PC`
 - `compare` が `mcp-error` のものは、`isError` だけを比べる（理由の文は表示の言語）
 - 文の出力（`--json` なし）は比べない
+- 文字は合成済みの形（NFC）にそろえてから比べる（Mac の自己テストが使う Foundation の `Process` は、子プロセスに渡す引数を分解した形にするため）

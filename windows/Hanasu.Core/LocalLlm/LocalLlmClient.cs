@@ -104,7 +104,7 @@ public sealed class LocalLlmClient(LocalLlmModel model, LocalLlmServer server, H
             var endpoint = await server.BeginRequestAsync(Model, timeout.Token).ConfigureAwait(false);
             try
             {
-                var maxOutput = Model.MaxOutputTokens(purpose == TextPurpose.Minutes);
+                var maxOutput = Model.MaxOutputTokens(purpose.IsLong());
                 var fitter = new LongInputFitter(Model.ContextLength, maxOutput,
                     (text, ct) => CountTokensAsync(endpoint, text, ct),
                     (part, index, total, ct) => ChatAsync(endpoint, LongInputFitter.PartInstruction(index, total), LongInputFitter.PartUserText(part),

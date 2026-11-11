@@ -711,4 +711,379 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>이 회의를 변경할 수 없습니다: {0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>액션 {0}개</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — 액션 아이템</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>AI로 처리할 수 없습니다: {0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>사용할 AI:</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>사용할 수 있는 값: {0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>{0}에 해당하는 회의가 {1}개 있습니다. ID로 지정하세요.</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple(Apple의 Foundation Models)는 Windows에서 사용할 수 없습니다.</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>AI에 보낸 회의(*는 답변에서 인용한 회의):</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>{0} 옵션의 값을 읽을 수 없습니다: {1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>파일을 읽을 수 없습니다: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>회의 폴더를 읽을 수 없습니다: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>회의를 읽을 수 없습니다: {0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0}(읽을 수 있음)</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0}(읽을 수 없음: {1})</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>인증 정보:</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>Claude Desktop 설정(claude_desktop_config.json)에 추가할 내용:</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>환경 변수 {0}</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>실행 파일: {0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>불필요한 인수입니다: {0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>다듬지 못해서 다듬기 전의 텍스트를 출력합니다(--fallback-raw).</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>폴더가 있는지, 이 사용자가 읽을 수 있는지 확인하세요.</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0}(아직 없음)</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>여러 회의의 액션 아이템 나열</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>AI 에이전트 지침(CLAUDE.md 등)에 붙여 넣을 hanasu 사용 설명을 출력(영어)</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>지난 회의에 대해 AI에 질문(관련 회의 내용을 회의용 AI에 보냄)</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>사전의 치환 규칙만 적용(AI에는 보내지 않음)</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>사용하는 AI와 인증 정보, 회의 폴더, PATH를 확인합니다(키 값은 표시하지 않음)</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>텍스트를 지시대로 고쳐 쓰기(선택 항목을 음성으로 편집과 같음). 텍스트는 인수나 표준 입력으로 전달</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>회의를 최신순으로 나열</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>AI 에이전트에서 사용하는 MCP 서버로 실행(표준 입출력). 회의를 읽는 도구를 제공</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>음성 입력과 같은 방식으로 텍스트 다듬기(--translate를 붙이면 번역). 텍스트는 인수나 표준 입력으로 전달</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>여러 회의를 통틀어 검색(공백으로 구분하면 모두 포함하는 회의만)</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>회의 내용 출력(기본값은 회의록)</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — Hanasu의 회의 기록과 텍스트 다듬기를 터미널이나 AI 에이전트에서 사용</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>사용법:</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>회의록 {0}번째 줄: {1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>제목: {0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>일치 {0}건</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0}(추측)</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>Hanasu 앱이 로컬 AI를 사용하고 있습니다.</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>앱을 종료하거나 --ai로 다른 AI를 선택하세요(같은 모델을 이중으로 불러오지 않기 위해).</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>로컬: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>Claude Code에 등록하는 예: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>MCP로 반환한 회의 내용은 MCP를 사용하는 에이전트와 그 AI 제공업체에 전달됩니다. ask_meetings는 회의 내용을 hanasu ask와 같은 AI(hanasu doctor의 ask 줄 참고)에도 보냅니다.</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>Claude Desktop 등에 등록할 JSON은 hanasu doctor와 설정 → "명령 및 MCP"에 표시됩니다.</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>도구: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items(모두 읽기 전용)</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp: MCP 서버로 실행 중입니다. 표준 입력이 닫히면 종료됩니다.</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>회의를 찾을 수 없습니다: {0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>이 회의는 "{0}" 상태입니다. 저장된 부분만 출력합니다.</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>회의 폴더: {0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>회의록에 사용할 발언을 변경한 뒤 회의록을 다시 만들지 않았습니다.</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>{0} 옵션에는 1 이상의 정수를 지정하세요: {1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>{0} 옵션에는 값이 필요합니다.</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>이보다 최근 회의가 {0}개 있습니다(기록 중·처리 중·실패): {1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>액션 아이템이 없습니다.</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>이 회의에는 액션 아이템이 없습니다.</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>질문에 사용할 수 있는 회의 기록이 없습니다.</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>완료된 회의가 없습니다.</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>다운로드한 모델이 없습니다</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>회의가 없습니다.</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>이 회의에는 회의록이 없습니다.</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>회의록 없음</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>이 회의에는 메모가 없습니다.</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>결과를 찾을 수 없습니다.</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>(이 셸의 PATH에 없음)</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>설정 안 됨</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;AI&gt;: local, gemini, claude(생략하면 설정의 AI). &lt;문체&gt;: none, chat, email, document-polite, document-plain. &lt;언어&gt;: en, ja, ko 등</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>AI가 실패하면 아무것도 출력하지 않고 종료합니다. --fallback-raw를 붙이면 다듬기 전의 텍스트를 출력합니다. --show-prompt를 붙이면 AI에 보내는 내용을 표준 오류 출력(stderr)에 출력합니다.</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>PowerShell에서 출력을 읽을 때는 먼저 [Console]::OutputEncoding = [Text.UTF8Encoding]::new()를 실행하세요(Windows PowerShell 5.1에서는 $OutputEncoding = [Text.UTF8Encoding]::new()도). 5.1의 &gt;는 UTF-16으로 쓰므로, 파일에 쓸 때는 | Out-File -Encoding utf8을 사용하세요.</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>종료 코드: 0 성공, 1 실패, 2 사용법 오류, 3 인증 정보 없음, 4 회의를 찾을 수 없음, 5 정책 또는 권한으로 차단됨</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>Windows Hello로 보호한 API 키는 AI를 쓰는 명령을 실행할 때마다 확인을 요청합니다(hanasu mcp는 처음과 화면 잠금 후에 요청).</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>--json을 붙이면 정해진 형식의 JSON을 출력합니다. --meetings-dir &lt;폴더&gt;(또는 환경 변수 HANASU_MEETINGS_DIR)로 회의 폴더를 바꿀 수 있습니다.</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>로컬 AI는 호출할 때마다 모델을 불러오므로 시간이 걸립니다. 앱이 로컬 AI를 사용하는 동안에는 사용할 수 없습니다.</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>회의 지정: ID(예: 2026-11-02_1312), latest(가장 최근에 완료된 회의), 날짜(예: 2026-11-02)</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>기간 지정: 7d, 24h, 2w(지금부터 거슬러 올라감), 날짜(예: 2026-11-01)</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0}({1})</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH: 추가되지 않음(설정 → "명령 및 MCP"에서 추가할 수 있습니다. 전체 경로를 쓰면 추가하지 않아도 됩니다)</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH: {0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH: {0} (다른 위치의 Hanasu를 가리킴)</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;개수&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;폴더&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;지시&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;언어&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;회의&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;모델&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;이름&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;기간&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;질문&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;문체&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;텍스트&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;검색어&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>음성 입력</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>회의</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>저장된 API 키(DPAPI)</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>저장된 API 키(Windows Hello. 읽을 때마다 확인을 요청하므로 여기서는 읽지 않음)</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>사용법은 hanasu help로 볼 수 있습니다.</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>회의 목록은 hanasu meetings list로 볼 수 있습니다.</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>서비스 계정({0})</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>--since는 --until보다 앞이어야 합니다.</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>고쳐 쓸 지시를 지정하세요.</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>회의를 하나 지정하세요(예: hanasu meetings show latest).</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>질문을 지정하세요.</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>검색할 단어를 지정하세요(예: hanasu meetings search 예산).</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>완료</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>실패</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>처리 중</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>기록 중</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>Hanasu가 임시 폴더(zip 내부 등)에서 실행 중입니다. zip 전체를 압축 해제한 폴더에서 다시 연 뒤 PATH와 MCP에 등록하세요.</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>텍스트는 인수와 표준 입력 중 하나로만 전달하세요(둘 다 사용할 수 없음).</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>텍스트가 비어 있습니다.</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>텍스트를 인수나 표준 입력(파이프)으로 전달하세요.</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>텍스트가 너무 깁니다({0}자). {1}자 이내로 해 주세요.</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- 일시: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — 전사본</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- 길이: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- 회의록에 사용하지 않는 발언({0}건)은 포함하지 않았습니다</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>--ai에 알 수 없는 AI를 지정했습니다: {0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>알 수 없는 인수입니다: {0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>알 수 없는 명령입니다: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>--translate에 알 수 없는 언어를 지정했습니다: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>알 수 없는 로컬 모델입니다: {0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>알 수 없는 옵션입니다: {0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>--style에 알 수 없는 문체를 지정했습니다: {0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>폴더 접근 권한과, OneDrive 등의 동기화로 파일이 이 PC에 내려받아져 있는지 확인하세요.</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>읽을 수 없는 회의가 {0}개 있습니다({1}).</value>
+  </data>
 </root>

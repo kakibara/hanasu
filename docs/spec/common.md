@@ -1385,6 +1385,22 @@
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/IO/SharedFile.cs`、`MeetingStore.WriteAtomically`、`SettingsStore.Save`、`SecretStore.Mutate`
 
+### DEC-COM-196 Windows の AI の用途に、選択の書き換え（Edit）と会議への質問（Ask）を足す
+- 決めたこと: `TextPurpose` に `Edit`（整形と同じ短い処理）と `Ask`（議事録と同じ長い処理）を足す。`Ask` は、Claude の考える量（medium）・出力の上限（32,000）・知らないモデルのときの既定（議事録のモデル）と、ローカルの AI の出力の上限を、議事録と同じにする（`TextPurposes.IsLong`）。`hanasu edit` は音声入力の AI、`hanasu ask`・`ask_meetings` は会議の AI に送る（Windows には「AI チャット・質問」の設定がない。DEC-COM-190）。
+- 理由: Mac の `MeetingAsk.answer` は質問を medium の考える量で送り、書き換えは短い処理で送る。Windows の今の用途（整形・英訳・議事録）だけでは、質問が短い処理の上限で切れるか、書き換えが議事録の重さで遅くなる。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（手順 6）
+- 関係する要件: REQ-MTG-126, REQ-DIC-161, REQ-COM-024
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Ai/TextAi.cs`（`TextPurpose`・`TextPurposes.IsLong`）、`ClaudeModels.Effort`・`ClaudeModels.MaxTokens`、`LocalLlmClient.GenerateTextAsync`
+
+### DEC-COM-197 Windows の `hanasu doctor --json` は、Mac と同じキーに、Windows の形の `install` を出す
+- 決めたこと: `version`・`executable`・`meetingsDirectory`・`ai`・`credentials`・`mcp` は Mac と同じキーにする。違いは次のとおり。`ai` に `chat` はなく、`askPurpose` はいつも `meeting`。`credentials.*.source` は `dpapi`・`windowsHello`・`serviceAccount`・`env:<名前>`（Mac は `keychain`）。Windows Hello で守ったキーは読まずに `readable: true` とする（読むと確認が出るため。W3）。`credentials.apple` は `available: false` と理由。`policies` はない（管理者のポリシーは FUT-020）。`install` は `{ cliPath, temporaryFolder, onPath, pathEntries: [{ path, state: current | otherHanasu }] }`（Mac は `{ translocated, links }`）。
+- 理由: エージェントやスクリプトは、多くのキーを OS を問わずに読める。OS で中身が違うもの（PATH の入れ方・秘密の守り方）は、同じキーで違う意味にせず、違う形にする（2 回目のレビューの指摘）。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（W1）
+- 関係する要件: REQ-COM-186, REQ-COM-191
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Command/DoctorCommand.cs`
+
 ---
 
 ## 廃止

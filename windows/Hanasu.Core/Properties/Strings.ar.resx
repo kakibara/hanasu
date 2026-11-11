@@ -711,4 +711,379 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>تعذّر تغيير هذا الاجتماع: {0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>عناصر الإجراءات: {0}</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — عناصر الإجراءات</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>تعذّرت المعالجة باستخدام AI: {0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>AI المستخدم:</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>القيم المتاحة: {0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>عدد الاجتماعات في {0}: {1}. حدّد الاجتماع باستخدام ID.</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple (نماذج Foundation Models من Apple) غير متاح على Windows.</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>الاجتماعات المرسلة إلى AI (* = مُقتبس في الإجابة):</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>تعذّرت قراءة قيمة {0}: {1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>تعذّرت قراءة الملف: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>تعذّرت قراءة مجلد الاجتماعات: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>تعذّرت قراءة الاجتماع: {0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0} (قابل للقراءة)</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0} (غير قابل للقراءة: {1})</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>بيانات الاعتماد:</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>للإضافة إلى إعدادات Claude Desktop ‏(claude_desktop_config.json):</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>متغير البيئة {0}</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>الملف التنفيذي: {0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>وسيطة زائدة: {0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>تعذّر التنقيح، لذا يُخرج النص قبل التنقيح (--fallback-raw).</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>تأكد من وجود المجلد ومن أن هذا المستخدم يستطيع قراءته.</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0} (غير موجود بعد)</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>عرض عناصر الإجراءات من كل الاجتماعات</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>عرض تعليمات استخدام hanasu للصقها في تعليمات وكيل AI (مثل CLAUDE.md). بالإنجليزية دائمًا</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>طرح سؤال على AI حول الاجتماعات السابقة (يُرسَل محتوى الاجتماعات ذات الصلة إلى AI المخصص للاجتماعات)</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>تطبيق قواعد الاستبدال في القاموس فقط (دون الإرسال إلى AI)</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>يتحقق من الذكاء الاصطناعي وبيانات الاعتماد المستخدمة ومجلد الاجتماعات وPATH (لا يعرض قيم المفاتيح أبدًا)</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>إعادة كتابة النص وفق التعليمات (مثل «تحرير التحديد بالصوت»). يُمرَّر النص عبر وسيط أو الإدخال القياسي (stdin)</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>عرض الاجتماعات من الأحدث إلى الأقدم</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>التشغيل كخادم MCP لوكلاء AI (stdio). يوفّر أدوات لقراءة الاجتماعات</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>تنقيح النص كما في الإدخال الصوتي (أو ترجمته مع --translate). يُمرَّر النص عبر وسيط أو الإدخال القياسي (stdin)</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>البحث في كل الاجتماعات (عند الفصل بمسافات، تظهر فقط النتائج التي تحتوي على كل الكلمات)</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>عرض محتوى اجتماع (المحضر افتراضيًا)</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — استخدام تسجيلات الاجتماعات وتنقيح النصوص في Hanasu من الطرفية أو وكلاء AI</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>الاستخدام:</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>المحضر، السطر {0}: {1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>العنوان: {0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>النتائج المطابقة: {0}</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0} (مُستنتَج)</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>تطبيق Hanasu يستخدم AI المحلي حاليًا.</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>أغلق التطبيق أو اختر AI آخر عبر --ai (لتجنّب تحميل النموذج نفسه مرتين).</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>محلي: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>مثال على التسجيل في Claude Code: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>يذهب محتوى الاجتماعات الذي يُعاد عبر MCP إلى الوكيل الذي يستخدم MCP وإلى مزوّد الذكاء الاصطناعي الخاص به. ويرسل ask_meetings محتوى الاجتماعات أيضًا إلى الذكاء الاصطناعي نفسه الذي يستخدمه hanasu ask (انظر سطر ask في hanasu doctor).</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>يظهر JSON الخاص بـ Claude Desktop والتطبيقات الأخرى في hanasu doctor وفي الإعدادات ← «الأمر وMCP».</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>الأدوات: list_meetings، get_meeting، search_meetings، ask_meetings، list_action_items (كلها للقراءة فقط)</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp: يعمل كخادم MCP. ينتهي عند إغلاق الإدخال القياسي.</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>لم يُعثر على الاجتماع: {0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>حالة هذا الاجتماع «{0}». سيُعرض الجزء المحفوظ فقط.</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>مجلد الاجتماعات: {0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>لم يُعَد إنشاء المحضر بعد تغيير الأقوال المستخدمة.</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>يجب أن تكون قيمة {0} عددًا صحيحًا يساوي 1 أو أكثر: {1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>يتطلب {0} قيمة.</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>توجد اجتماعات أحدث (قيد التسجيل أو قيد المعالجة أو فاشلة)، عددها {0}: {1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>لا توجد عناصر إجراءات.</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>لا توجد عناصر إجراءات في هذا الاجتماع.</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>لا توجد تسجيلات اجتماعات يمكن استخدامها للسؤال.</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>لا توجد اجتماعات مكتملة.</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>لا توجد نماذج مُنزّلة</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>لا توجد اجتماعات.</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>لا يوجد محضر لهذا الاجتماع.</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>لا يوجد محضر</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>لا توجد ملاحظات في هذا الاجتماع.</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>لم يُعثر على شيء.</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>(غير موجود في PATH لهذه الصدفة)</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>غير معيَّن</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;AI&gt;: local أو gemini أو claude (اتركه لاستخدام الذكاء الاصطناعي في الإعدادات). &lt;الأسلوب&gt;: none أو chat أو email أو document-polite أو document-plain. &lt;اللغة&gt;: en أو ja أو ko وغيرها</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>إذا فشل AI ينتهي الأمر دون أي مخرجات. مع --fallback-raw يُخرج النص قبل التنقيح. ويعرض --show-prompt ما يُرسَل إلى AI على الخطأ القياسي (stderr).</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>عند قراءة المخرجات في PowerShell، شغّل أولًا [Console]::OutputEncoding = [Text.UTF8Encoding]::new() (وفي Windows PowerShell 5.1 شغّل أيضًا $OutputEncoding = [Text.UTF8Encoding]::new()). في 5.1 يكتب &gt; بترميز UTF-16، لذا استخدم | Out-File -Encoding utf8 للكتابة إلى ملف.</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>رموز الخروج: 0 نجاح، 1 فشل، 2 خطأ في الاستخدام، 3 بيانات الاعتماد غير موجودة، 4 لم يُعثر على الاجتماع، 5 منعته السياسة أو الأذونات</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>تطلب مفاتيح API المحمية بـ Windows Hello التأكيد في كل مرة يعمل فيها أمر يستخدم الذكاء الاصطناعي (يطلبه hanasu mcp في المرة الأولى وبعد قفل الشاشة).</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>يُخرج --json بيانات JSON بتنسيق ثابت. يمكنك تغيير مجلد الاجتماعات باستخدام --meetings-dir &lt;المجلد&gt; (أو متغير البيئة HANASU_MEETINGS_DIR).</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>يحمّل AI المحلي النموذج في كل استدعاء، لذا يستغرق وقتًا. ولا يمكن استخدامه بينما يستخدم التطبيق AI المحلي.</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>تحديد الاجتماع: ID (مثال: 2026-11-02_1312)، أو latest (أحدث اجتماع مكتمل)، أو تاريخ (مثال: 2026-11-02)</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>تحديد المدة: 7d، 24h، 2w (رجوعًا من الآن)، أو تاريخ (مثال: 2026-11-01)</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH: غير مُضاف (يمكنك إضافته من الإعدادات ← «الأمر وMCP»؛ ويعمل المسار الكامل من دونه)</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH: {0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH: {0} (يشير إلى Hanasu في موقع آخر)</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;العدد&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;المجلد&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;التعليمات&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;اللغة&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;الاجتماع&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;النموذج&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;الاسم&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;المدة&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;السؤال&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;الأسلوب&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;النص&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;الكلمة&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>الإدخال الصوتي</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>الاجتماعات</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>مفتاح API المحفوظ (DPAPI)</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>مفتاح API المحفوظ (Windows Hello؛ لا يُقرأ هنا لأن كل قراءة تطلب التأكيد)</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>يمكنك عرض طريقة الاستخدام باستخدام hanasu help.</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>يمكنك عرض قائمة الاجتماعات باستخدام hanasu meetings list.</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>حساب خدمة ({0})</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>يجب أن يكون --since قبل --until.</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>حدّد تعليمات إعادة الكتابة.</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>حدّد اجتماعًا واحدًا (مثال: hanasu meetings show latest).</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>حدّد السؤال.</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>حدّد الكلمة التي تريد البحث عنها (مثال: hanasu meetings search الميزانية).</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>تم</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>فشل</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>جارٍ المعالجة</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>جارٍ التسجيل</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>يعمل Hanasu من مجلد مؤقت (مثل داخل ملف zip). استخرج ملف zip كاملًا، وافتح Hanasu من ذلك المجلد، ثم أضفه إلى PATH وMCP.</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>مرّر النص عبر وسيط أو عبر الإدخال القياسي (stdin)، وليس كليهما.</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>النص فارغ.</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>مرّر النص عبر وسيط أو عبر الإدخال القياسي (stdin، عبر أنبوب).</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>النص طويل جدًا (عدد الأحرف: {0}). الحد الأقصى: {1} حرف.</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- التاريخ والوقت: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — النص المفرّغ</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- المدة: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- لم تُضمَّن الأقوال غير المستخدمة في المحضر ({0})</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>AI غير معروف في --ai: {0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>وسيطة غير معروفة: {0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>أمر غير معروف: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>لغة غير معروفة في --translate: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>نموذج محلي غير معروف: {0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>خيار غير معروف: {0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>أسلوب غير معروف في --style: {0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>تحقّق من أذونات المجلد، ومن أن المزامنة (مثل OneDrive) قد نزّلت الملفات على هذا الكمبيوتر.</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>تعذّرت قراءة {0} من الاجتماعات ({1}).</value>
+  </data>
 </root>

@@ -20,6 +20,9 @@ public sealed record RefineRequest
     // 要件: REQ-DIC-082
     /// <summary>整形の出力の言語（翻訳では使わない）</summary>
     public RefineOutputLanguage OutputLanguage { get; init; } = RefineOutputLanguage.AsSpoken;
+    // 要件: REQ-DIC-020, REQ-DIC-160
+    /// <summary>入力先アプリの文体（hanasu refine の --style・--app だけが使う。アプリの音声入力では null）</summary>
+    public Dictation.AppStyle? AppStyle { get; init; }
 }
 
 /// <summary>
@@ -132,6 +135,11 @@ public static class GeminiPrompts
         if (extra.Length > 0)
         {
             lines.Add(Ai.Prompts.Text("user.extraRules", language) + "\n" + extra);
+        }
+        // 要件: REQ-DIC-020（Mac 版と同じく、追加ルールのあとに文体の節）
+        if (request.AppStyle?.PromptSection(request.AppName, translation, extra.Length > 0) is { } section)
+        {
+            lines.Add(section);
         }
         // 文字起こしの中の区切りのタグは無害にしてから埋め込む（プロンプトインジェクションの対策。Windows 版で足した）
         lines.Add($"<transcript>\n{Ai.PromptText.NeutralizeDelimiters(request.Transcript)}\n</transcript>");

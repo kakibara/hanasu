@@ -711,4 +711,379 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>無法變更此會議：{0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>待辦事項 {0} 項</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — 待辦事項</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>AI 無法處理：{0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>使用的 AI：</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>可使用的值：{0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>與 {0} 相符的會議有 {1} 場。請使用 ID 指定。</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple（Apple 的 Foundation Models）在 Windows 上無法使用。</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>傳送給 AI 的會議（* 表示回答中引用的會議）：</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>{0} 的值無效：{1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>無法讀取檔案：{0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>無法讀取會議檔案夾：{0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>無法讀取會議：{0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0}（可讀取）</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0}（無法讀取：{1}）</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>憑證：</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>加入 Claude Desktop 設定（claude_desktop_config.json）的內容：</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>環境變數 {0}</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>執行檔：{0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>多餘的引數：{0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>無法潤飾，因此輸出潤飾前的文字（--fallback-raw）。</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>請確認該檔案夾存在，且目前的使用者可以讀取。</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0}（尚不存在）</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>跨會議列出待辦事項</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>輸出 hanasu 的使用說明（英文），用來貼到 AI 代理程式的指示（例如 CLAUDE.md）中</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>就過去的會議向 AI 提問（將相關會議的內容傳送給會議使用的 AI）</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>僅套用辭典的取代規則（不傳送給 AI）</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>檢查使用的 AI 與憑證、會議資料夾以及 PATH（不顯示金鑰的值）</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>依指示改寫文字（與「用語音編輯選取內容」相同）。文字透過引數或標準輸入傳入</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>依從新到舊的順序列出會議</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>作為供 AI 代理程式使用的 MCP 伺服器執行（標準輸入輸出）。提供讀取會議的工具</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>像語音輸入一樣潤飾文字（使用 --translate 時進行翻譯）。文字透過引數或標準輸入傳入</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>跨會議搜尋（以空格分隔多個詞時，只顯示包含所有詞的結果）</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>輸出會議內容（預設為會議紀錄）</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — 在終端機或 AI 代理程式中使用 Hanasu 的會議記錄與文字潤飾</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>用法：</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>會議紀錄第 {0} 行：{1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>標題：{0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>命中 {0} 處</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0}（推測）</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>Hanasu App 正在使用本機 AI。</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>請結束 App，或用 --ai 選擇其他 AI（以免重複載入同一模型）。</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>本機：{0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>在 Claude Code 中註冊的範例：{0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>透過 MCP 傳回的會議內容會交給使用 MCP 的代理程式及其 AI 提供者。ask_meetings 也會把會議內容傳送給與 hanasu ask 相同的 AI（見 hanasu doctor 中 ask 那一行）。</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>用來在 Claude Desktop 等 App 中登錄的 JSON，可在 hanasu doctor 和設定 →「指令與 MCP」中查看。</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>工具：list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items（皆為唯讀）</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp：正在作為 MCP 伺服器執行。標準輸入關閉時結束。</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>找不到會議：{0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>此會議的狀態為「{0}」。僅輸出已儲存的部分。</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>會議檔案夾：{0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>變更用於會議紀錄的發言後，尚未重新製作會議紀錄。</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>{0} 必須是大於或等於 1 的整數：{1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>{0} 需要指定值。</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>有 {0} 場較新的會議（錄製中、處理中或失敗）：{1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>沒有待辦事項。</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>此會議沒有待辦事項。</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>沒有可用於提問的會議記錄。</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>沒有已完成的會議。</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>沒有已下載的模型</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>沒有會議。</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>此會議沒有會議紀錄。</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>無會議紀錄</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>此會議沒有備註。</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>找不到結果。</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>（不在此 shell 的 PATH 中）</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>未設定</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;AI&gt;：local、gemini、claude（省略時使用設定中的 AI）。&lt;文體&gt;：none、chat、email、document-polite、document-plain。&lt;語言&gt;：en、ja、ko 等</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>AI 失敗時不輸出任何內容並結束。使用 --fallback-raw 時，輸出潤飾前的文字。使用 --show-prompt 時，將傳送給 AI 的內容輸出到標準錯誤輸出（stderr）。</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>在 PowerShell 中讀取輸出前，請先執行 [Console]::OutputEncoding = [Text.UTF8Encoding]::new()（Windows PowerShell 5.1 中還要執行 $OutputEncoding = [Text.UTF8Encoding]::new()）。5.1 的 &gt; 會以 UTF-16 寫入，寫入檔案時請使用 | Out-File -Encoding utf8。</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>結束代碼：0 成功，1 失敗，2 用法錯誤，3 缺少憑證，4 找不到會議，5 被政策或權限阻擋</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>受 Windows Hello 保護的 API 金鑰，每次執行使用 AI 的指令時都會要求確認（hanasu mcp 在第一次以及螢幕鎖定之後要求確認）。</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>使用 --json 可輸出固定格式的 JSON。使用 --meetings-dir &lt;檔案夾&gt;（或環境變數 HANASU_MEETINGS_DIR）可變更會議檔案夾。</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>本機 AI 每次呼叫都會載入模型，因此較耗時。App 正在使用本機 AI 時無法使用。</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>指定會議：ID（例如 2026-11-02_1312）、latest（最近一場已完成的會議）、日期（例如 2026-11-02）</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>指定時間：7d、24h、2w（從現在往前推算）、日期（例如 2026-11-01）</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH：未加入（可在設定 →「指令與 MCP」中加入；使用完整路徑則不需加入）</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH：{0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH：{0}（指向另一個位置的 Hanasu）</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;數量&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;檔案夾&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;指示&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;語言&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;會議&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;模型&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;名稱&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;時間&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;問題&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;文體&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;文字&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;關鍵字&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>語音輸入</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>會議</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>已儲存的 API 金鑰（DPAPI）</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>已儲存的 API 金鑰（Windows Hello。每次讀取都需要確認，因此這裡不讀取）</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>執行 hanasu help 可查看用法。</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>執行 hanasu meetings list 可查看會議列表。</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>服務帳號（{0}）</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>--since 必須早於 --until。</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>請指定改寫的指示。</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>請指定一場會議（例如 hanasu meetings show latest）。</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>請指定問題。</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>請指定要搜尋的詞（例如 hanasu meetings search 預算）。</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>完成</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>失敗</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>處理中</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>錄製中</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>Hanasu 正從暫存資料夾（例如 zip 內部）執行。請解壓縮整個 zip，從解壓縮後的資料夾重新開啟，再加入 PATH 和 MCP。</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>請透過引數或標準輸入擇一傳入文字（不能同時使用）。</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>文字為空。</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>請透過引數或標準輸入（管線）傳入文字。</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>文字過長（{0} 個字元）。請控制在 {1} 個字元以內。</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- 日期時間：{0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — 逐字稿</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- 長度：{0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- 未包含不用於會議紀錄的發言（{0} 則）</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>--ai 指定了未知的 AI：{0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>未知的引數：{0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>未知的指令：{0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>--translate 指定了未知的語言：{0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>未知的本機模型：{0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>未知的選項：{0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>--style 指定了未知的文體：{0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>請檢查資料夾的存取權限，以及 OneDrive 等同步服務是否已將檔案下載到這台電腦。</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>有 {0} 個會議無法讀取（{1}）。</value>
+  </data>
 </root>

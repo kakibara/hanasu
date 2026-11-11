@@ -711,4 +711,379 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>Tidak dapat mengubah rapat ini: {0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>{0} item tindakan</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — Item tindakan</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>AI gagal memproses: {0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>AI yang dipakai:</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>Nilai yang valid: {0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>Ada {1} rapat untuk {0}. Tentukan dengan ID.</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple (Foundation Models dari Apple) tidak tersedia di Windows.</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>Rapat yang dikirim ke AI (* = dikutip dalam jawaban):</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>Tidak dapat membaca nilai {0}: {1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>Tidak dapat membaca file: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>Tidak dapat membaca folder rapat: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>Rapat tidak bisa dibaca: {0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0} (dapat dibaca)</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0} (tidak dapat dibaca: {1})</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>Kredensial:</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>Untuk ditambahkan ke konfigurasi Claude Desktop (claude_desktop_config.json):</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>Variabel lingkungan {0}</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>File eksekusi: {0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>Argumen berlebih: {0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>Gagal merapikan, jadi teks sebelum dirapikan dikeluarkan (--fallback-raw).</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>Pastikan folder tersebut ada dan dapat dibaca oleh pengguna ini.</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0} (belum ada)</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>Tampilkan item tindakan dari semua rapat</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>Tampilkan petunjuk penggunaan hanasu untuk ditempelkan ke instruksi agen AI (seperti CLAUDE.md). Selalu dalam bahasa Inggris</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>Tanya AI tentang rapat sebelumnya (isi rapat terkait dikirim ke AI untuk rapat)</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>Hanya terapkan aturan penggantian kamus (tidak dikirim ke AI)</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>Memeriksa AI dan kredensial yang dipakai, folder rapat, dan PATH (nilai kunci tidak pernah ditampilkan)</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>Tulis ulang teks sesuai instruksi (sama seperti “Edit pilihan dengan suara”). Teks diberikan lewat argumen atau stdin</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>Tampilkan rapat, mulai dari yang terbaru</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>Jalankan sebagai server MCP untuk agen AI (stdio). Menyediakan alat untuk membaca rapat</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>Rapikan teks seperti dikte (terjemahkan jika ada --translate). Teks diberikan lewat argumen atau stdin</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>Cari di semua rapat (jika dipisahkan spasi, hanya yang memuat semua kata)</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>Tampilkan isi rapat (bawaan: notulen)</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — Gunakan rekaman rapat dan perapian teks Hanasu dari terminal atau agen AI</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>Penggunaan:</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>Notulen baris {0}: {1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>Judul: {0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>{0} kecocokan</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0} (tebakan)</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>App Hanasu sedang memakai AI lokal.</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>Tutup app atau pilih AI lain dengan --ai (agar model yang sama tidak dimuat dua kali).</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>Lokal: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>Contoh pendaftaran ke Claude Code: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>Isi rapat yang dikembalikan lewat MCP akan sampai ke agen yang memakai MCP dan ke penyedia AI-nya. ask_meetings juga mengirim isi rapat ke AI yang sama dengan hanasu ask (lihat baris ask di hanasu doctor).</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>JSON untuk Claude Desktop dan app lainnya ditampilkan oleh hanasu doctor dan di Pengaturan → Perintah &amp; MCP.</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>Alat: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (semuanya hanya baca)</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp: berjalan sebagai server MCP. Akan berhenti saat stdin ditutup.</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>Rapat tidak ditemukan: {0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>Status rapat ini “{0}”. Hanya bagian yang sudah tersimpan yang ditampilkan.</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>Folder rapat: {0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>Notulen belum dibuat ulang setelah ucapan yang digunakan diubah.</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>{0} harus berupa bilangan bulat 1 atau lebih: {1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>{0} memerlukan nilai.</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>Ada {0} rapat yang lebih baru (sedang merekam, sedang diproses, atau gagal): {1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>Tidak ada item tindakan.</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>Rapat ini tidak memiliki item tindakan.</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>Tidak ada rekaman rapat yang bisa dipakai untuk pertanyaan.</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>Tidak ada rapat yang sudah selesai.</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>Belum ada model yang diunduh</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>Tidak ada rapat.</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>Rapat ini tidak memiliki notulen.</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>Tanpa notulen</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>Rapat ini tidak memiliki catatan.</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>Tidak ditemukan.</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>(tidak ada di PATH shell ini)</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>Belum diatur</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;AI&gt;: local, gemini, atau claude (kosongkan untuk memakai AI di Pengaturan). &lt;gaya&gt;: none, chat, email, document-polite, atau document-plain. &lt;bahasa&gt;: en, ja, ko, dan lainnya</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>Jika AI gagal, perintah selesai tanpa keluaran. Dengan --fallback-raw, teks sebelum dirapikan yang dikeluarkan. --show-prompt menampilkan isi yang dikirim ke AI di stderr.</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>Saat PowerShell membaca keluaran, jalankan dulu [Console]::OutputEncoding = [Text.UTF8Encoding]::new() (di Windows PowerShell 5.1, juga $OutputEncoding = [Text.UTF8Encoding]::new()). Di 5.1, &gt; menulis dalam UTF-16, jadi untuk menulis file gunakan | Out-File -Encoding utf8.</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>Kode keluar: 0 berhasil, 1 gagal, 2 penggunaan salah, 3 kredensial tidak ada, 4 rapat tidak ditemukan, 5 diblokir oleh kebijakan atau izin</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>Kunci API yang dilindungi Windows Hello meminta konfirmasi setiap kali perintah yang memakai AI dijalankan (hanasu mcp memintanya pertama kali dan setelah layar dikunci).</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>--json mengeluarkan JSON dengan format tetap. --meetings-dir &lt;folder&gt; (atau variabel lingkungan HANASU_MEETINGS_DIR) mengubah folder rapat.</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>AI lokal memuat model setiap kali dipanggil, jadi butuh waktu. Tidak bisa dipakai saat app sedang memakai AI lokal.</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>Menentukan rapat: ID (contoh: 2026-11-02_1312), latest (rapat selesai terbaru), tanggal (contoh: 2026-11-02)</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>Menentukan periode: 7d, 24h, 2w (mundur dari sekarang), tanggal (contoh: 2026-11-01)</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH: belum ditambahkan (tambahkan di Pengaturan → Perintah &amp; MCP; jalur lengkap tetap berfungsi tanpanya)</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH: {0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH: {0} (mengarah ke Hanasu di lokasi lain)</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;jumlah&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;folder&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;instruksi&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;bahasa&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;rapat&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;model&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;nama&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;periode&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;pertanyaan&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;gaya&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;teks&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;kata&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>Dikte</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>Rapat</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>Kunci API yang disimpan (DPAPI)</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>Kunci API yang disimpan (Windows Hello; tidak dibaca di sini karena setiap pembacaan meminta konfirmasi)</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>Cara penggunaan dapat ditampilkan dengan hanasu help.</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>Daftar rapat dapat ditampilkan dengan hanasu meetings list.</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>Akun layanan ({0})</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>--since harus lebih awal daripada --until.</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>Tentukan instruksi penulisan ulang.</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>Tentukan satu rapat (contoh: hanasu meetings show latest).</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>Masukkan pertanyaan.</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>Tentukan kata yang dicari (contoh: hanasu meetings search anggaran).</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>Selesai</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>Gagal</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>Memproses</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>Merekam</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>Hanasu sedang berjalan dari folder sementara (misalnya di dalam zip). Ekstrak seluruh zip, buka Hanasu dari folder itu, lalu tambahkan ke PATH dan MCP.</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>Berikan teks lewat argumen atau stdin, salah satu saja (tidak bisa keduanya).</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>Teks kosong.</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>Berikan teks lewat argumen atau stdin (pipe).</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>Teks terlalu panjang ({0} karakter). Batasi hingga {1} karakter.</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- Waktu: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — Transkrip</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- Durasi: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- Ucapan yang tidak digunakan untuk notulen ({0}) tidak disertakan</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>AI tidak dikenal untuk --ai: {0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>Argumen tidak dikenal: {0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>Perintah tidak dikenal: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>Bahasa tidak dikenal untuk --translate: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>Model lokal tidak dikenal: {0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>Opsi tidak dikenal: {0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>Gaya bahasa tidak dikenal untuk --style: {0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>Periksa izin akses folder, dan apakah sinkronisasi (seperti OneDrive) sudah menyimpan file di PC ini.</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>Ada {0} rapat yang tidak bisa dibaca ({1}).</value>
+  </data>
 </root>

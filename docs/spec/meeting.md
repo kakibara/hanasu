@@ -1410,7 +1410,15 @@
 - 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（決定 8）
 - 関係する要件: REQ-MTG-120, REQ-COM-185
 - 対象: Mac
-- 実装の場所: `MeetingStore.loadAllReporting(in:)`、`HanasuLoadedMeetings`、`HanasuMeetingsCommand.resolve(_:in:)`
+- 実装の場所: `MeetingStore.loadAllReporting(in:)`、`HanasuLoadedMeetings`、`HanasuMeetingsCommand.resolve(_:in:)`、`windows/Hanasu.Core/Meetings/MeetingStore.cs`（`LoadAllReporting`）、`windows/Hanasu.Core/Command/MeetingsCommand.cs`（`LoadedMeetings`・`Resolve`）
+
+### DEC-MTG-154 Windows の `hanasu ask` は、質問から検索語を、文字の種類の切れ目で取り出す
+- 決めたこと: Windows の `MeetingAsk.Keywords` は、質問を畳んだ（DEC-MTG-051）あと、漢字・カタカナ・ひらがな・英数字の切れ目で語に分ける。ひらがなを含む語・1 文字の語・言い回しの語（Mac と同じ一覧）は除き、続いて出てくる語をつなげた複合語も加える（DEC-MTG-052 と同じ）。Mac は今のまま `NLTokenizer`（日本語の辞書で分ける）を使う。
+- 理由: `NLTokenizer` は Apple の OS にしかなく、.NET に同じ分け方はない。文字の種類の切れ目なら、日本語の質問のよくある形（「料金プランはどうなった」「予算の件」）で同じ語になる。漢字が続く語（「予算案」）は、Mac は「予算」、Windows は「予算案」になり、選ぶ会議が変わることがある。この違いは共有のテストデータの対象外にし（同じ語になる質問だけを比べる）、`windows/README.md` の差の表に書く。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（手順 6）
+- 関係する要件: REQ-MTG-126
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Core/Command/MeetingAsk.cs`（`Keywords`）
 
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。

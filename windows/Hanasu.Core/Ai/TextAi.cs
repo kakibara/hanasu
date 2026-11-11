@@ -9,6 +9,20 @@ public enum TextPurpose
     Translate,
     /// <summary>会議の議事録</summary>
     Minutes,
+    // 要件: REQ-DIC-161
+    // 設計判断: DEC-COM-196
+    /// <summary>選択の書き換え（hanasu edit。整形と同じ短い処理）</summary>
+    Edit,
+    // 要件: REQ-MTG-126
+    // 設計判断: DEC-COM-196
+    /// <summary>会議への質問（hanasu ask・ask_meetings。議事録と同じ長い処理）</summary>
+    Ask,
+}
+
+public static class TextPurposes
+{
+    /// <summary>会議の記録を読む長い処理か（議事録・質問）。考える量・出力の上限・既定のモデルを議事録に合わせる</summary>
+    public static bool IsLong(this TextPurpose purpose) => purpose is TextPurpose.Minutes or TextPurpose.Ask;
 }
 
 /// <summary>

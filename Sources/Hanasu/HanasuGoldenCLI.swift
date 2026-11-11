@@ -116,7 +116,8 @@ enum HanasuGoldenCLI {
         return String(stderr[start.upperBound..<end.lowerBound])
     }
 
-    /// 比べないキーを除き、OS で違う語を置き換える
+    /// 比べないキーを除き、OS で違う語を置き換え、文字を合成済みの形（NFC）にそろえる
+    /// （Foundation の Process は、子プロセスに渡す引数を分解した形にするため）
     static func normalize(_ value: Any, ignoreKeys: Set<String>, replace: [String: String]) -> Any {
         switch value {
         case let object as [String: Any]:
@@ -128,7 +129,7 @@ enum HanasuGoldenCLI {
         case let array as [Any]:
             return array.map { normalize($0, ignoreKeys: ignoreKeys, replace: replace) }
         case let text as String:
-            return replace.reduce(text) { $0.replacingOccurrences(of: $1.key, with: $1.value) }
+            return replace.reduce(text) { $0.replacingOccurrences(of: $1.key, with: $1.value) }.precomposedStringWithCanonicalMapping
         default:
             return value
         }

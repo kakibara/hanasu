@@ -711,4 +711,379 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>Không thể thay đổi cuộc họp này: {0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>{0} việc cần làm</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — Việc cần làm</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>AI không xử lý được: {0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>AI được dùng:</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>Giá trị hợp lệ: {0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>Có {1} cuộc họp vào {0}. Hãy chỉ định bằng ID.</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple (Foundation Models của Apple) không dùng được trên Windows.</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>Các cuộc họp đã gửi cho AI (* = được trích dẫn trong câu trả lời):</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>Không đọc được giá trị của {0}: {1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>Không đọc được tệp: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>Không đọc được thư mục cuộc họp: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>Không đọc được cuộc họp: {0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0} (đọc được)</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0} (không đọc được: {1})</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>Thông tin xác thực:</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>Đoạn cần thêm vào cấu hình Claude Desktop (claude_desktop_config.json):</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>Biến môi trường {0}</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>Tệp thực thi: {0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>Đối số thừa: {0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>Không chỉnh sửa được nên xuất văn bản trước khi chỉnh sửa (--fallback-raw).</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>Hãy kiểm tra thư mục đó có tồn tại và người dùng này có quyền đọc hay không.</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0} (chưa có)</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>Liệt kê việc cần làm của nhiều cuộc họp</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>In hướng dẫn dùng hanasu để dán vào chỉ dẫn của AI agent (như CLAUDE.md). Luôn bằng tiếng Anh</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>Hỏi AI về các cuộc họp trước (gửi nội dung các cuộc họp liên quan cho AI dùng cho cuộc họp)</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>Chỉ áp dụng quy tắc thay thế của từ điển (không gửi cho AI)</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>Kiểm tra AI và thông tin xác thực đang dùng, thư mục cuộc họp và PATH (không hiển thị giá trị khóa)</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>Viết lại văn bản theo chỉ dẫn (giống “Sửa vùng chọn bằng giọng nói”). Truyền văn bản qua đối số hoặc stdin</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>Liệt kê cuộc họp, mới nhất trước</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>Chạy như máy chủ MCP cho AI agent (stdio). Cung cấp công cụ để đọc cuộc họp</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>Chỉnh sửa văn bản như khi nhập bằng giọng nói (dịch nếu có --translate). Truyền văn bản qua đối số hoặc stdin</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>Tìm kiếm trên mọi cuộc họp (nhiều từ cách nhau bằng dấu cách: chỉ lấy kết quả chứa tất cả)</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>Xuất nội dung cuộc họp (mặc định là biên bản họp)</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — Dùng bản ghi cuộc họp và tính năng chỉnh sửa văn bản của Hanasu từ terminal hoặc AI agent</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>Cách dùng:</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>Biên bản họp, dòng {0}: {1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>Tiêu đề: {0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>{0} chỗ khớp</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0} (đoán)</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>Ứng dụng Hanasu đang dùng AI cục bộ.</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>Hãy thoát ứng dụng hoặc chọn AI khác bằng --ai (để không tải cùng một mô hình hai lần).</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>Cục bộ: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>Ví dụ đăng ký với Claude Code: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>Nội dung cuộc họp trả về qua MCP sẽ đến tác nhân dùng MCP và nhà cung cấp AI của tác nhân đó. ask_meetings cũng gửi nội dung cuộc họp đến cùng AI với hanasu ask (xem dòng ask trong hanasu doctor).</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>JSON dùng cho Claude Desktop và các ứng dụng khác được hiển thị bởi hanasu doctor và trong Cài đặt → Lệnh &amp; MCP.</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>Công cụ: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (tất cả chỉ đọc)</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp: đang chạy dưới dạng máy chủ MCP. Sẽ thoát khi stdin bị đóng.</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>Không tìm thấy cuộc họp: {0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>Cuộc họp này đang ở trạng thái “{0}”. Chỉ xuất phần đã được lưu.</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>Thư mục cuộc họp: {0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>Biên bản họp chưa được tạo lại sau khi thay đổi lời nói được dùng.</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>{0} phải là số nguyên từ 1 trở lên: {1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>{0} cần có giá trị.</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>Có {0} cuộc họp mới hơn (đang ghi, đang xử lý hoặc thất bại): {1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>Không có việc cần làm.</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>Cuộc họp này không có việc cần làm.</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>Không có bản ghi cuộc họp nào để dùng cho câu hỏi.</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>Không có cuộc họp nào đã hoàn tất.</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>Chưa có mô hình nào được tải về</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>Không có cuộc họp nào.</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>Cuộc họp này không có biên bản họp.</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>Không có biên bản họp</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>Cuộc họp này không có ghi chú.</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>Không tìm thấy kết quả nào.</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>(không có trong PATH của shell này)</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>Chưa thiết lập</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;AI&gt;: local, gemini hoặc claude (bỏ trống thì dùng AI trong Cài đặt). &lt;văn phong&gt;: none, chat, email, document-polite, document-plain. &lt;ngôn ngữ&gt;: en, ja, ko, v.v.</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>Nếu AI thất bại, lệnh kết thúc mà không xuất gì. Với --fallback-raw, lệnh xuất văn bản trước khi chỉnh sửa. --show-prompt in nội dung gửi cho AI ra stderr.</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>Khi đọc đầu ra trong PowerShell, hãy chạy [Console]::OutputEncoding = [Text.UTF8Encoding]::new() trước (trong Windows PowerShell 5.1 thì chạy thêm $OutputEncoding = [Text.UTF8Encoding]::new()). Trong 5.1, &gt; ghi bằng UTF-16, nên khi ghi ra tệp hãy dùng | Out-File -Encoding utf8.</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>Mã thoát: 0 thành công, 1 thất bại, 2 dùng sai cách, 3 thiếu thông tin xác thực, 4 không tìm thấy cuộc họp, 5 bị chặn bởi chính sách hoặc quyền truy cập</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>Khóa API được Windows Hello bảo vệ sẽ yêu cầu xác nhận mỗi lần chạy lệnh dùng AI (hanasu mcp yêu cầu lần đầu và sau khi khóa màn hình).</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>Với --json, kết quả được xuất ra dạng JSON có cấu trúc cố định. Dùng --meetings-dir &lt;thư mục&gt; (hoặc biến môi trường HANASU_MEETINGS_DIR) để đổi thư mục chứa cuộc họp.</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>AI cục bộ tải mô hình mỗi lần được gọi nên sẽ mất thời gian. Không dùng được khi ứng dụng đang dùng AI cục bộ.</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>Chỉ định cuộc họp: ID (ví dụ: 2026-11-02_1312), latest (cuộc họp đã hoàn tất gần nhất) hoặc ngày (ví dụ: 2026-11-02)</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>Chỉ định thời gian: 7d, 24h, 2w (tính lùi từ bây giờ) hoặc ngày (ví dụ: 2026-11-01)</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH: chưa thêm (thêm trong Cài đặt → Lệnh &amp; MCP; đường dẫn đầy đủ vẫn dùng được mà không cần thêm)</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH: {0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH: {0} (trỏ đến Hanasu ở vị trí khác)</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;số lượng&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;thư mục&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;chỉ dẫn&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;ngôn ngữ&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;cuộc họp&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;mô hình&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;tên&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;thời gian&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;câu hỏi&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;văn phong&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;văn bản&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;từ khóa&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>Nhập bằng giọng nói</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>Cuộc họp</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>Khóa API đã lưu (DPAPI)</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>Khóa API đã lưu (Windows Hello; không đọc ở đây vì mỗi lần đọc đều cần xác nhận)</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>Xem cách dùng bằng hanasu help.</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>Xem danh sách cuộc họp bằng hanasu meetings list.</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>Tài khoản dịch vụ ({0})</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>--since phải sớm hơn --until.</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>Hãy chỉ định chỉ dẫn viết lại.</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>Hãy chỉ định một cuộc họp (ví dụ: hanasu meetings show latest).</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>Hãy nhập câu hỏi.</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>Hãy chỉ định từ khóa tìm kiếm (ví dụ: hanasu meetings search ngân sách).</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>Xong</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>Thất bại</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>Đang xử lý</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>Đang ghi</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>Hanasu đang chạy từ thư mục tạm (chẳng hạn bên trong tệp zip). Hãy giải nén toàn bộ zip, mở lại Hanasu từ thư mục đó rồi mới thêm vào PATH và MCP.</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>Hãy truyền văn bản qua đối số hoặc stdin, chỉ một trong hai (không dùng cả hai).</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>Văn bản trống.</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>Hãy truyền văn bản qua đối số hoặc stdin (pipe).</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>Văn bản quá dài ({0} ký tự). Hãy giữ trong {1} ký tự.</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- Thời gian: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — Bản chép lời</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- Thời lượng: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- Không bao gồm {0} lời nói không dùng cho biên bản họp</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>AI không xác định cho --ai: {0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>Đối số không xác định: {0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>Lệnh không xác định: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>Ngôn ngữ không xác định cho --translate: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>Mô hình cục bộ không xác định: {0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>Tùy chọn không xác định: {0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>Văn phong không xác định cho --style: {0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>Hãy kiểm tra quyền truy cập thư mục và xem dịch vụ đồng bộ (như OneDrive) đã tải tệp về máy tính này chưa.</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>Có {0} cuộc họp không đọc được ({1}).</value>
+  </data>
 </root>
