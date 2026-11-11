@@ -63548,7 +63548,7 @@
       }
     },
     "停止" : {
-      "comment" : "DictationHistoryWindow.swift:525, HUDPanel.swift:333",
+      "comment" : "DictationHistoryWindow.swift:525",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63955,104 +63955,104 @@
         }
       }
     },
-    "入力したい場所で押して話し、もう一度押す（画面下の表示の「■ 停止」でも）と、AI が整えた文章を入力します。Esc で取り消し。押している間だけ録音する使い方も選べます。" : {
+    "入力したい場所で押して話し、もう一度押す（画面下の表示の「■ 完了」でも）と、AI が整えた文章を入力します。Esc で取り消し。押している間だけ録音する使い方も選べます。" : {
       "comment" : "Onboarding.swift:543",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "في المكان الذي تريد الإدخال فيه، اضغط وتحدّث ثم اضغط مرة أخرى (أو «■ إيقاف» في العرض أسفل الشاشة)، فيُدخل AI النص بعد تنقيحه. Esc للإلغاء. يمكنك أيضًا اختيار التسجيل أثناء الضغط المستمر فقط."
+            "value" : "في المكان الذي تريد الإدخال فيه، اضغط وتحدّث ثم اضغط مرة أخرى (أو «■ تم» في العرض أسفل الشاشة)، فيُدخل AI النص بعد تنقيحه. Esc للإلغاء. يمكنك أيضًا اختيار التسجيل أثناء الضغط المستمر فقط."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drücke an der gewünschten Stelle, sprich und drücke erneut (oder klicke unten auf dem Bildschirm auf „■ Stopp“), um den von der KI überarbeiteten Text einzugeben. Mit Esc brichst du ab. Du kannst auch einstellen, dass nur aufgenommen wird, solange die Taste gedrückt ist."
+            "value" : "Drücke an der gewünschten Stelle, sprich und drücke erneut (oder klicke unten auf dem Bildschirm auf „■ Fertig“), um den von der KI überarbeiteten Text einzugeben. Mit Esc brichst du ab. Du kannst auch einstellen, dass nur aufgenommen wird, solange die Taste gedrückt ist."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Press where you want to type and speak, then press again (or click “■ Stop” at the bottom of the screen) to enter text refined by AI. Press Esc to cancel. You can also choose to record only while holding the key."
+            "value" : "Press where you want to type and speak, then press again (or click “■ Done” at the bottom of the screen) to enter text refined by AI. Press Esc to cancel. You can also choose to record only while holding the key."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pulsa donde quieras escribir y habla; al volver a pulsar (o con «■ Detener» en el indicador de la parte inferior de la pantalla), se introduce el texto pulido por la IA. Esc para cancelar. También puedes grabar solo mientras mantienes pulsada la tecla."
+            "value" : "Pulsa donde quieras escribir y habla; al volver a pulsar (o con «■ Listo» en el indicador de la parte inferior de la pantalla), se introduce el texto pulido por la IA. Esc para cancelar. También puedes grabar solo mientras mantienes pulsada la tecla."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Appuyez là où vous voulez écrire, parlez, puis appuyez de nouveau (ou cliquez sur « ■ Arrêter » en bas de l’écran) pour saisir le texte mis en forme par l’IA. Appuyez sur Échap pour annuler. Vous pouvez aussi choisir d’enregistrer uniquement tant que la touche est maintenue."
+            "value" : "Appuyez là où vous voulez écrire, parlez, puis appuyez de nouveau (ou cliquez sur « ■ Terminé » en bas de l’écran) pour saisir le texte mis en forme par l’IA. Appuyez sur Échap pour annuler. Vous pouvez aussi choisir d’enregistrer uniquement tant que la touche est maintenue."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "जहाँ इनपुट करना है वहाँ दबाकर बोलें, फिर से दबाएँ (या स्क्रीन के नीचे डिस्प्ले में “■ रोकें”), तो AI सुधारा हुआ टेक्स्ट दर्ज कर देगा। रद्द करने के लिए Esc। सिर्फ़ दबाए रखने तक रिकॉर्ड करने का तरीका भी चुन सकते हैं।"
+            "value" : "जहाँ इनपुट करना है वहाँ दबाकर बोलें, फिर से दबाएँ (या स्क्रीन के नीचे डिस्प्ले में “■ हो गया”), तो AI सुधारा हुआ टेक्स्ट दर्ज कर देगा। रद्द करने के लिए Esc। सिर्फ़ दबाए रखने तक रिकॉर्ड करने का तरीका भी चुन सकते हैं।"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tekan di tempat Anda ingin mengetik, bicara, lalu tekan lagi (atau “■ Hentikan” di tampilan bawah layar), maka teks yang dirapikan AI dimasukkan. Tekan Esc untuk membatalkan. Anda juga bisa memilih mode merekam hanya selama tombol ditekan."
+            "value" : "Tekan di tempat Anda ingin mengetik, bicara, lalu tekan lagi (atau “■ Selesai” di tampilan bawah layar), maka teks yang dirapikan AI dimasukkan. Tekan Esc untuk membatalkan. Anda juga bisa memilih mode merekam hanya selama tombol ditekan."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Premi dove vuoi scrivere e parla; premendo di nuovo (o con «■ Interrompi» nell'indicatore in basso sullo schermo) viene inserito il testo rifinito dall'IA. Esc per annullare. Puoi anche registrare solo mentre tieni premuto il tasto."
+            "value" : "Premi dove vuoi scrivere e parla; premendo di nuovo (o con «■ Fatto» nell'indicatore in basso sullo schermo) viene inserito il testo rifinito dall'IA. Esc per annullare. Puoi anche registrare solo mentre tieni premuto il tasto."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "입력할 위치에서 누르고 말한 다음 한 번 더 누르면(화면 아래 표시의 \"■ 정지\"로도 가능) AI가 다듬은 텍스트를 입력합니다. Esc로 취소. 누르고 있는 동안만 녹음하는 방식도 선택할 수 있습니다."
+            "value" : "입력할 위치에서 누르고 말한 다음 한 번 더 누르면(화면 아래 표시의 \"■ 완료\"로도 가능) AI가 다듬은 텍스트를 입력합니다. Esc로 취소. 누르고 있는 동안만 녹음하는 방식도 선택할 수 있습니다."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Naciśnij w miejscu wprowadzania, mów i naciśnij ponownie (lub „■ Zatrzymaj” na panelu u dołu ekranu) — AI wprowadzi zredagowany tekst. Esc anuluje. Można też nagrywać tylko podczas przytrzymania klawisza."
+            "value" : "Naciśnij w miejscu wprowadzania, mów i naciśnij ponownie (lub „■ Gotowe” na panelu u dołu ekranu) — AI wprowadzi zredagowany tekst. Esc anuluje. Można też nagrywać tylko podczas przytrzymania klawisza."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pressione onde deseja escrever e fale; ao pressionar de novo (ou com “■ Parar” no indicador na parte inferior da tela), o texto refinado pela IA é inserido. Esc para cancelar. Também é possível gravar só enquanto mantém a tecla pressionada."
+            "value" : "Pressione onde deseja escrever e fale; ao pressionar de novo (ou com “■ Pronto” no indicador na parte inferior da tela), o texto refinado pela IA é inserido. Esc para cancelar. Também é possível gravar só enquanto mantém a tecla pressionada."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Нажмите в месте ввода, скажите текст и нажмите ещё раз (или «■ Стоп» на панели внизу экрана) — AI введёт обработанный текст. Esc — отмена. Можно также записывать только пока клавиша нажата."
+            "value" : "Нажмите в месте ввода, скажите текст и нажмите ещё раз (или «■ Готово» на панели внизу экрана) — AI введёт обработанный текст. Esc — отмена. Можно также записывать только пока клавиша нажата."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Metin girmek istediğiniz yerde basıp konuşun, tekrar basın (veya ekranın altındaki göstergede “■ Durdur”); AI’ın düzenlediği metin girilir. Esc ile iptal. Yalnızca tuş basılıyken kayıt yapma seçeneği de var."
+            "value" : "Metin girmek istediğiniz yerde basıp konuşun, tekrar basın (veya ekranın altındaki göstergede “■ Bitti”); AI’ın düzenlediği metin girilir. Esc ile iptal. Yalnızca tuş basılıyken kayıt yapma seçeneği de var."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nhấn ở nơi muốn nhập rồi nói, nhấn lần nữa (hoặc “■ Dừng” ở phần hiển thị cuối màn hình) để nhập văn bản đã được AI chỉnh sửa. Nhấn Esc để hủy. Cũng có thể chọn cách chỉ ghi âm khi đang giữ phím."
+            "value" : "Nhấn ở nơi muốn nhập rồi nói, nhấn lần nữa (hoặc “■ Xong” ở phần hiển thị cuối màn hình) để nhập văn bản đã được AI chỉnh sửa. Nhấn Esc để hủy. Cũng có thể chọn cách chỉ ghi âm khi đang giữ phím."
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在要输入的位置按下并说话，再按一次（或点按屏幕下方显示中的“■ 停止”），就会输入 AI 润色后的文本。按 Esc 取消。也可以选择仅在按住时录音。"
+            "value" : "在要输入的位置按下并说话，再按一次（或点按屏幕下方显示中的“■ 完成”），就会输入 AI 润色后的文本。按 Esc 取消。也可以选择仅在按住时录音。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在要輸入的位置按下並說話，再按一次（或按一下螢幕下方顯示中的「■ 停止」），就會輸入 AI 潤飾後的文字。按 Esc 取消。也可以選擇僅在按住時錄音。"
+            "value" : "在要輸入的位置按下並說話，再按一次（或按一下螢幕下方顯示中的「■ 完成」），就會輸入 AI 潤飾後的文字。按 Esc 取消。也可以選擇僅在按住時錄音。"
           }
         }
       }
@@ -70377,6 +70377,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "將字幕顯示在最前面"
+          }
+        }
+      }
+    },
+    "完了" : {
+      "comment" : "HUDPanel.swift:333",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हो गया"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selesai"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fatto"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gotowe"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronto"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitti"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xong"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
           }
         }
       }
@@ -111793,108 +111895,6 @@
         }
       }
     },
-    "録音を止めて入力します（ショートカットをもう一度押すのと同じ）" : {
-      "comment" : "HUDPanel.swift:343",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "إيقاف التسجيل والإدخال (مثل الضغط على الاختصار مرة أخرى)"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Beendet die Aufnahme und gibt den Text ein (wie erneutes Drücken des Kurzbefehls)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stops recording and enters the text (same as pressing the shortcut again)"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detiene la grabación e introduce el texto (igual que volver a pulsar el atajo)"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Arrête l’enregistrement et saisit le texte (comme appuyer de nouveau sur le raccourci)"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "रिकॉर्डिंग रोककर दर्ज करें (शॉर्टकट दोबारा दबाने जैसा ही)"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hentikan perekaman dan masukkan teks (sama seperti menekan pintasan lagi)"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Interrompe la registrazione e inserisce il testo (come premere di nuovo l'abbreviazione)"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "녹음을 정지하고 입력합니다(단축키를 한 번 더 누르는 것과 같음)"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zatrzymuje nagrywanie i wprowadza tekst (to samo co ponowne naciśnięcie skrótu)"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Para a gravação e insere o texto (o mesmo que pressionar o atalho de novo)"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Остановить запись и ввести текст (то же, что повторное нажатие сочетания)"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kaydı durdurup girer (kısayola yeniden basmakla aynı)"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dừng ghi âm và nhập (giống như nhấn phím tắt lần nữa)"
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "停止录音并输入（与再按一次快捷键相同）"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "停止錄音並輸入（與再按一次快速鍵相同）"
-          }
-        }
-      }
-    },
     "録音を残す期間" : {
       "comment" : "MeetingAudioManager.swift:361",
       "extractionState" : "manual",
@@ -112095,6 +112095,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "管理錄音…"
+          }
+        }
+      }
+    },
+    "録音を終えて入力します（ショートカットをもう一度押すのと同じ）" : {
+      "comment" : "HUDPanel.swift:343",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إنهاء التسجيل والإدخال (مثل الضغط على الاختصار مرة أخرى)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beendet die Aufnahme und gibt den Text ein (wie erneutes Drücken des Kurzbefehls)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finishes recording and enters the text (same as pressing the shortcut again)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termina la grabación e introduce el texto (igual que volver a pulsar el atajo)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termine l’enregistrement et saisit le texte (comme appuyer de nouveau sur le raccourci)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रिकॉर्डिंग पूरी करके दर्ज करें (शॉर्टकट दोबारा दबाने जैसा ही)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selesaikan perekaman dan masukkan teks (sama seperti menekan pintasan lagi)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termina la registrazione e inserisce il testo (come premere di nuovo l'abbreviazione)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "녹음을 마치고 입력합니다(단축키를 한 번 더 누르는 것과 같음)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kończy nagrywanie i wprowadza tekst (to samo co ponowne naciśnięcie skrótu)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encerra a gravação e insere o texto (o mesmo que pressionar o atalho de novo)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершить запись и ввести текст (то же, что повторное нажатие сочетания)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaydı bitirip girer (kısayola yeniden basmakla aynı)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kết thúc ghi âm và nhập (giống như nhấn phím tắt lần nữa)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结束录音并输入（与再按一次快捷键相同）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結束錄音並輸入（與再按一次快速鍵相同）"
           }
         }
       }

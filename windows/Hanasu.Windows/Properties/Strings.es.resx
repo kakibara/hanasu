@@ -168,10 +168,10 @@ Original: {2}</value>
     <value>Otros idiomas</value>
   </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
-    <value>Detiene la grabación y escribe el texto (igual que volver a presionar el acceso directo)</value>
+    <value>Termina la grabación y escribe el texto (igual que volver a presionar el acceso directo)</value>
   </data>
   <data name="Hud_Stop" xml:space="preserve">
-    <value>Detener</value>
+    <value>Listo</value>
   </data>
   <data name="Hud_Cancel" xml:space="preserve">
     <value>Cancelar</value>

@@ -533,7 +533,7 @@ Mac 標準（SpeechAnalyzer）は速く途中経過も出るが、専門用語�
 
 - 画面下部中央の小さな角丸パネル。`NSPanel` の `.nonactivatingPanel` で、入力先アプリのフォーカスを奪わない。
 - 表示: 状態（● 録音中 / 整形中… / エラー）、経過秒数、認識中テキストの末尾
-- 録音中は右上に「取消」と「■ 停止」のボタンを出す。停止はショートカットをもう一度押すのと同じ（録音を止めて入力する）、取消は Esc と同じ。準備中・録音中だけクリックを受け取り（`ignoresMouseEvents` を切り替える）、`acceptsFirstMouse` で前面にないパネルでも 1 回で押せる。選択を声で編集するモードの HUD でも同じ。
+- 録音中は右上に「取消」と「■ 完了」のボタンを出す。完了はショートカットをもう一度押すのと同じ（録音を止めて入力する）、取消は Esc と同じ。準備中・録音中だけクリックを受け取り（`ignoresMouseEvents` を切り替える）、`acceptsFirstMouse` で前面にないパネルでも 1 回で押せる。選択を声で編集するモードの HUD でも同じ。
 - 録音中は 2 行目の右端にマイクのボタンを出す。押すとマイクの一覧を `NSMenu`（`DictationMicrophoneMenu`）で出し、選ぶとその場で切り替えて設定にも残す（REQ-DIC-140、DEC-DIC-142）。
 - 録音中は、マイクのボタンのすぐ左に音量の目安（`LevelMeter`、12 本のバー）を出す。エンジンによらない（REQ-DIC-014、DEC-DIC-143）。音量は `SpeechRecognizer.onLevel` が 0.1 秒ごとに渡し、`HUDModel.level` に入る。Mac 標準では認識に渡すタップの中で `AudioLevelBox` が測り、Whisper / Gemini では `BatchCapture` がためるときに測る。
 - 完了は 1.2 秒後、エラーは 4 秒後に自動で消える（DEC-DIC-016）。

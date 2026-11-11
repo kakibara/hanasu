@@ -168,10 +168,10 @@
     <value>其他語言</value>
   </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
-    <value>停止錄音並輸入文字（與再按一次快速鍵相同）</value>
+    <value>結束錄音並輸入文字（與再按一次快速鍵相同）</value>
   </data>
   <data name="Hud_Stop" xml:space="preserve">
-    <value>停止</value>
+    <value>完成</value>
   </data>
   <data name="Hud_Cancel" xml:space="preserve">
     <value>取消</value>

@@ -40,7 +40,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!-- 「取消」「■ 停止」。押してもフォーカスを取らない -->
+        <!-- 「取消」「■ 完了」。押してもフォーカスを取らない -->
         <Style x:Key="HudButton" TargetType="Button">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="Cursor" Value="Hand" />
@@ -81,7 +81,7 @@
 
             <DockPanel Grid.Row="0" LastChildFill="False">
                 <!-- 設計判断: DEC-DIC-146 -->
-                <!-- 右側は「経過時間・取消・■ 停止」の順（DockPanel の Right は先に書いたものほど右に来る）。
+                <!-- 右側は「経過時間・取消・■ 完了」の順（DockPanel の Right は先に書いたものほど右に来る）。
                      左の題名・言語の切り替えより先に書き、先に幅を確保する（DockPanel は書いた順に測るので、
                      後に書いた右のボタンが幅 500 で切れることがあった。題名のほうが … で省略される） -->
                 <Button x:Name="StopButton" DockPanel.Dock="Right" Style="{StaticResource HudButton}" Background="#FFE5352B" Margin="6,0,0,0"
