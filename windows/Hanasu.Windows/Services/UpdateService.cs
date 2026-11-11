@@ -182,7 +182,8 @@ internal sealed class UpdateService
         MessageBox.Show(Strings.Update_Busy,
             "Hanasu", MessageBoxButton.OK, MessageBoxImage.Information);
 
-    // 設計判断: DEC-REL-021, DEC-REL-030
+    // 要件: REQ-REL-012
+    // 設計判断: DEC-REL-021, DEC-REL-028, DEC-REL-030
     private async Task InstallAsync(ReleaseInfo release)
     {
         if (IsRecordingOrProcessing())
@@ -201,25 +202,54 @@ internal sealed class UpdateService
             return;
         }
         var staging = Path.Combine(parent, "Hanasu.update");
+        // 案内やエラーは、進み具合の窓を閉じてから出す（窓はどの終わり方でも finally で閉じる）
+        Action? afterClose = null;
+        var progressWindow = new UpdateProgressWindow(release.Version, asset.Size);
+        using var userCancel = new CancellationTokenSource();
+        progressWindow.CancelRequested += (_, _) => userCancel.Cancel();
+        progressWindow.Show();
         try
         {
-            host.NotifyUpdate(Strings.Update_Downloading, string.Format(Strings.Update_DownloadingBody, release.Version, asset.Size / (1024 * 1024)));
             PrepareStagingDirectory(staging);
             var zipPath = Path.Combine(staging, asset.Name);
             // 設計判断: DEC-REL-030（通信が止まったまま待ち続けないよう、全体で 10 分に区切る）
             using (var http = UpdateChecker.CreateDownloadClient(CurrentVersion.ToString()))
             using (var timeout = new CancellationTokenSource(DownloadTimeout))
+            using (var linked = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, userCancel.Token))
             {
+                // 進み具合はスレッドプールから来るので、0.1 秒ごとに間引いてから UI のスレッドへ送る
+                var gate = new object();
+                DateTime? lastPublishedAt = null;
+                long lastReceived = 0;
+                void Report(long received, long total)
+                {
+                    lock (gate)
+                    {
+                        var now = DateTime.UtcNow;
+                        if (!UpdateDownloadProgress.ShouldPublish(lastPublishedAt, lastReceived, now, received, asset.Size)) return;
+                        lastPublishedAt = now;
+                        lastReceived = received;
+                    }
+                    progressWindow.Dispatcher.BeginInvoke(() => progressWindow.SetProgress(received, asset.Size));
+                }
                 try
                 {
-                    await UpdateChecker.DownloadAsync(http, asset, zipPath, null, timeout.Token);
+                    await UpdateChecker.DownloadAsync(http, asset, zipPath, Report, linked.Token);
+                }
+                catch (OperationCanceledException) when (userCancel.IsCancellationRequested)
+                {
+                    // 「中止」: 何も出さずにやめる（メニューの「アップデートを確認…」から選び直せる）
+                    AppLog.Write($"update: download of {release.Tag} canceled by the user");
+                    TryDeleteDirectory(staging);
+                    return;
                 }
                 catch (OperationCanceledException) when (timeout.IsCancellationRequested)
                 {
                     throw new UpdateException(Strings.Update_DownloadTimeout);
                 }
             }
-            host.NotifyUpdate(Strings.Update_Preparing, Strings.Update_PreparingBody);
+            progressWindow.SetProgress(asset.Size, asset.Size);
+            progressWindow.SetPreparing();
             var staged = await Task.Run(() => UpdatePackage.Extract(zipPath, Path.Combine(staging, "pkg")));
 
             // 設計判断: DEC-REL-030（入れ替えは今のフォルダごと消すので、Hanasu 専用のフォルダでなければ進まない）
@@ -230,7 +260,7 @@ internal sealed class UpdateService
                 TryDeleteDirectory(staging);
                 var shown = string.Join("\n", foreign.Take(5).Select(n => string.Format(Strings.Update_ForeignItem, n)));
                 var more = foreign.Count > 5 ? string.Format(Strings.Update_ForeignMore, foreign.Count - 5) : "";
-                OfferReleasePage(release,
+                afterClose = () => OfferReleasePage(release,
                     string.Format(Strings.Update_ForeignEntries, installDir, shown, more));
                 return;
             }
@@ -241,12 +271,13 @@ internal sealed class UpdateService
             if (IsRecordingOrProcessing())
             {
                 TryDeleteDirectory(staging);
-                ShowBusyMessage();
+                afterClose = ShowBusyMessage;
                 return;
             }
             // 入れ替えが失敗したら、次の起動で知らせるための印
             Directory.CreateDirectory(HanasuPaths.LocalDataDirectory);
             await File.WriteAllTextAsync(PendingFile, $"{release.Version}\n{release.ReleaseUrl.AbsoluteUri}\n");
+            progressWindow.CloseForGood();
             StartSwapScript(scriptPath, installDir, staged, parent);
         }
         catch (Exception e) when (e is UpdateException or global::Hanasu.Core.ModelVerificationException or IOException or UnauthorizedAccessException
@@ -257,7 +288,7 @@ internal sealed class UpdateService
             TryDeleteDirectory(staging);
             TryDeletePendingFile();
             var reason = e is UnauthorizedAccessException ? Strings.Update_FolderNotWritable : e.Message;
-            OfferReleasePage(release, string.Format(Strings.Update_Failed, reason));
+            afterClose = () => OfferReleasePage(release, string.Format(Strings.Update_Failed, reason));
         }
         catch (Exception e)
         {
@@ -265,7 +296,13 @@ internal sealed class UpdateService
             AppLog.Write($"update: install failed (unexpected): {e}");
             TryDeleteDirectory(staging);
             TryDeletePendingFile();
-            OfferReleasePage(release, string.Format(Strings.Update_Failed, e.Message));
+            afterClose = () => OfferReleasePage(release, string.Format(Strings.Update_Failed, e.Message));
+        }
+        finally
+        {
+            // return で抜けたときも、窓を閉じてから案内を出す
+            progressWindow.CloseForGood();
+            afterClose?.Invoke();
         }
     }
 

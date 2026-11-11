@@ -1479,23 +1479,27 @@ You can also reinstall from the release page. Open it in your browser?</value>
   </data>
   <data name="Update_Downloading" xml:space="preserve">
     <value>Downloading the update</value>
-    <comment>Notification title</comment>
+    <comment>Update progress window title</comment>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} MB)</value>
-    <comment>Notification body. {0} = version, {1} = size in MB</comment>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Downloading Hanasu {0}…</value>
+    <comment>Update progress window heading. {0} = version</comment>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0}% ({1} / {2})</value>
+    <comment>Update progress window. {0} = whole percent (0-100), {1} = downloaded size, {2} = total size (e.g. 12 MB)</comment>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Update progress window: button that stops the download</comment>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>The download didn't finish within 10 minutes, so it was stopped</value>
     <comment>Update error</comment>
   </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>Preparing the update</value>
-    <comment>Notification title</comment>
-  </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>Extracting the downloaded zip.</value>
-    <comment>Notification body</comment>
+    <comment>Update progress window: shown under the indeterminate bar while the downloaded zip is extracted</comment>
   </data>
   <data name="Update_ForeignItem" xml:space="preserve">
     <value>• {0}</value>

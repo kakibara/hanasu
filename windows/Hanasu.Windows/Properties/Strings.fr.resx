@@ -1117,14 +1117,17 @@ Vous pouvez aussi le réinstaller depuis la page de la version. L’ouvrir dans 
   <data name="Update_Downloading" xml:space="preserve">
     <value>Téléchargement de la mise à jour</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} Mo)</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Téléchargement de Hanasu {0}…</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0} % ({1} / {2})</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>Annuler</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>Le téléchargement ne s’est pas terminé en 10 minutes : il a été arrêté</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>Préparation de la mise à jour</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>Décompression du zip téléchargé.</value>

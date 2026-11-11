@@ -1117,14 +1117,17 @@
   <data name="Update_Downloading" xml:space="preserve">
     <value>正在下载更新</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0}（{1} MB）</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>正在下载 Hanasu {0}…</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0}%（{1} / {2}）</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>停止</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>下载未在 10 分钟内完成，因此已停止</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>正在准备更新</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>正在解压下载的 zip。</value>

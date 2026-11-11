@@ -1117,14 +1117,17 @@ Anda juga dapat memasang ulang dari halaman rilis. Buka di browser?</value>
   <data name="Update_Downloading" xml:space="preserve">
     <value>Mengunduh pembaruan</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} MB)</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Mengunduh Hanasu {0}…</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0}% ({1} / {2})</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>Batal</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>Unduhan tidak selesai dalam 10 menit, jadi dihentikan</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>Menyiapkan pembaruan</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>Mengekstrak zip yang diunduh.</value>

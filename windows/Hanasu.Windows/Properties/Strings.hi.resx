@@ -1117,14 +1117,17 @@
   <data name="Update_Downloading" xml:space="preserve">
     <value>अपडेट डाउनलोड हो रहा है</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} MB)</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Hanasu {0} डाउनलोड हो रहा है…</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0}% ({1} / {2})</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>रोकें</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>डाउनलोड 10 मिनट में पूरा नहीं हुआ, इसलिए रोक दिया गया</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>अपडेट तैयार हो रहा है</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>डाउनलोड किया गया zip खोला जा रहा है।</value>

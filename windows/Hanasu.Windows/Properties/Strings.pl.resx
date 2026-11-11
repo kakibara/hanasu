@@ -1117,14 +1117,17 @@ Możesz też zainstalować ponownie ze strony wydania. Otworzyć ją w przegląd
   <data name="Update_Downloading" xml:space="preserve">
     <value>Pobieranie aktualizacji</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} MB)</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Pobieranie Hanasu {0}…</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0}% ({1} / {2})</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>Przerwij</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>Pobieranie nie zakończyło się w ciągu 10 minut, więc je przerwano</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>Przygotowywanie aktualizacji</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>Rozpakowywanie pobranego pliku zip.</value>

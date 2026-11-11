@@ -398,23 +398,33 @@ enum UpdateHTTP {
         return try UpdateRelease.parse(data)
     }
 
-    /// zip を directory に落とし、大きさと SHA-256 を確かめる
-    static func download(_ asset: UpdateRelease.Asset, into directory: URL) async throws -> URL {
+    // 設計判断: DEC-REL-028
+    /// zip を directory に落とす（大きさと SHA-256 はこのあと verify で確かめる）。
+    /// progress には落とした量（バイト）を渡す（URLSession のスレッドから呼ぶ）。呼んだ Task をキャンセルすると、やめて CancellationError を投げる
+    static func download(_ asset: UpdateRelease.Asset, into directory: URL,
+                         progress: @escaping @Sendable (Int64) -> Void = { _ in }) async throws -> URL {
         guard isAllowed(asset.url) else { throw Failure.disallowed(asset.url.host ?? "") }
         var request = makeRequest(asset.url, accept: "application/octet-stream")
         request.timeoutInterval = 60
-        let (temporary, response) = try await session.download(for: request)
         let destination = directory.appendingPathComponent(asset.name)
         try? FileManager.default.removeItem(at: destination)
-        try FileManager.default.moveItem(at: temporary, to: destination)
-        try check(response)
-        let size = (try FileManager.default.attributesOfItem(atPath: destination.path)[.size] as? NSNumber)?.int64Value ?? -1
-        guard size == asset.size else { throw Failure.sizeMismatch(expected: asset.size, actual: size) }
-        guard try LocalLLMStore.sha256(of: destination) == asset.sha256 else { throw Failure.hashMismatch }
+        let delegate = UpdateDownloadDelegate(expectedBytes: asset.size, destination: destination, progress: progress)
+        try await withTaskCancellationHandler {
+            try await delegate.run(request)
+        } onCancel: {
+            delegate.cancel()
+        }
         return destination
     }
 
-    private static func check(_ response: URLResponse) throws {
+    /// 落とした zip の大きさと SHA-256 がリリースの値と合うかを確かめる（数十 MB で 1 秒ほどかかるので、UI のスレッドの外で呼ぶ）
+    static func verify(_ file: URL, asset: UpdateRelease.Asset) throws {
+        let size = (try FileManager.default.attributesOfItem(atPath: file.path)[.size] as? NSNumber)?.int64Value ?? -1
+        guard size == asset.size else { throw Failure.sizeMismatch(expected: asset.size, actual: size) }
+        guard try LocalLLMStore.sha256(of: file) == asset.sha256 else { throw Failure.hashMismatch }
+    }
+
+    fileprivate static func check(_ response: URLResponse) throws {
         if let url = response.url, !isAllowed(url) { throw Failure.disallowed(url.host ?? "") }
         if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) { throw Failure.status(http.statusCode) }
     }
@@ -426,6 +436,108 @@ enum UpdateHTTP {
             guard let url = request.url, UpdateHTTP.isAllowed(url) else { return nil }
             return request
         }
+    }
+}
+
+// 設計判断: DEC-REL-021, DEC-REL-028
+/// アップデートの zip を 1 つ取る。落とした量を返し、リリースの大きさを超えたら止める。
+/// UpdateHTTP.session と同じ設定の 1 回きりの URLSession で、転送は https の GitHub のホストへだけ従い、最終の応答も確かめる
+final class UpdateDownloadDelegate: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {
+    let expectedBytes: Int64
+    let destination: URL
+    let progress: @Sendable (Int64) -> Void
+    private let lock = NSLock()
+    private var continuation: CheckedContinuation<Void, Error>?
+    private var session: URLSession?
+    private var failure: Error?
+    private var cancelled = false
+
+    init(expectedBytes: Int64, destination: URL, progress: @escaping @Sendable (Int64) -> Void) {
+        self.expectedBytes = expectedBytes
+        self.destination = destination
+        self.progress = progress
+    }
+
+    func run(_ request: URLRequest) async throws {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.urlCache = nil
+        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        configuration.httpCookieStorage = nil
+        configuration.httpShouldSetCookies = false
+        configuration.urlCredentialStorage = nil
+        configuration.tlsMinimumSupportedProtocolVersion = .TLSv12
+        configuration.timeoutIntervalForRequest = 60
+        let session = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            let start = lock.withLock { () -> Bool in
+                guard !cancelled else { return false }
+                self.continuation = continuation
+                self.session = session
+                return true
+            }
+            if start {
+                session.downloadTask(with: request).resume()
+            } else {
+                session.invalidateAndCancel()
+                continuation.resume(throwing: CancellationError())
+            }
+        }
+    }
+
+    /// 「中止」。この後の終わりは CancellationError になる
+    func cancel() {
+        let session = lock.withLock { () -> URLSession? in
+            cancelled = true
+            return self.session
+        }
+        session?.invalidateAndCancel()
+    }
+
+    private func finish(_ error: Error?) {
+        let (continuation, stored, cancelled) = lock.withLock { () -> (CheckedContinuation<Void, Error>?, Error?, Bool) in
+            let c = self.continuation
+            self.continuation = nil
+            return (c, failure, self.cancelled)
+        }
+        if cancelled {
+            continuation?.resume(throwing: CancellationError())
+        } else if let error = stored ?? error {
+            continuation?.resume(throwing: error)
+        } else {
+            continuation?.resume()
+        }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse,
+                    newRequest request: URLRequest) async -> URLRequest? {
+        guard let url = request.url, UpdateHTTP.isAllowed(url) else { return nil }
+        return request
+    }
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64,
+                    totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        // リリースの大きさより大きいものを書き続けない
+        if totalBytesWritten > expectedBytes {
+            lock.withLock { failure = UpdateHTTP.Failure.sizeMismatch(expected: expectedBytes, actual: totalBytesWritten) }
+            downloadTask.cancel()
+            return
+        }
+        progress(totalBytesWritten)
+    }
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        do {
+            if let response = downloadTask.response { try UpdateHTTP.check(response) }
+            try? FileManager.default.removeItem(at: destination)
+            try FileManager.default.moveItem(at: location, to: destination)
+        } catch {
+            lock.withLock { if failure == nil { failure = error } }
+        }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        finish(error)
+        session.finishTasksAndInvalidate()
     }
 }
 
@@ -841,7 +953,8 @@ final class AppUpdater {
         return scroll
     }
 
-    // 設計判断: DEC-REL-023, DEC-REL-025, DEC-REL-026
+    // 要件: REQ-REL-012
+    // 設計判断: DEC-REL-023, DEC-REL-025, DEC-REL-026, DEC-REL-028
     private func install(_ release: UpdateRelease) async {
         guard let asset = release.asset else {
             NSWorkspace.shared.open(release.pageURL)
@@ -852,15 +965,29 @@ final class AppUpdater {
             return
         }
         var workDirectory: URL?
+        // 進み具合の窓は、どの終わり方でも閉じる（ダイアログは閉じてから出す）
+        defer { closeProgress() }
         do {
             try UpdateInstaller.checkInstallLocation()
             let work = try UpdateInstaller.makeWorkDirectory()
             workDirectory = work
-            showProgress(tr("Hanasu %@ をダウンロードしています…", "\(release.version)"))
-            let zip = try await UpdateHTTP.download(asset, into: work)
-            // 展開と署名の確認は数秒かかるので、UI のスレッドの外で行う
+            let progress = UpdateProgressModel(version: release.version.description, total: asset.size)
+            let throttle = UpdateProgressThrottle(total: asset.size)
+            let download = Task {
+                try await UpdateHTTP.download(asset, into: work) { received in
+                    guard throttle.shouldPublish(received) else { return }
+                    Task { @MainActor in progress.received = max(progress.received, received) }
+                }
+            }
+            progress.onCancel = { download.cancel() }
+            showProgress(progress)
+            let zip = try await download.value
+            progress.received = asset.size
+            progress.verifying = true
+            // 大きさと SHA-256 の確認・展開・署名の確認は数秒かかるので、UI のスレッドの外で行う
             let current = Bundle.main.bundleURL, version = release.version
             let newApp = try await Task.detached {
+                try UpdateHTTP.verify(zip, asset: asset)
                 let app = try UpdateInstaller.extract(zip, into: work)
                 try UpdateSignature.verify(newApp: app, current: current, expectedVersion: version)
                 return app
@@ -881,6 +1008,11 @@ final class AppUpdater {
             if let workDirectory { try? FileManager.default.removeItem(at: workDirectory) }
             // スクリプトを始める前の失敗はここで知らせるので、次の起動ではもう知らせない
             try? FileManager.default.removeItem(at: UpdateInstaller.pendingFile)
+            // 「中止」を押したときは、何も出さない（メニューの「アップデートを確認…」から選び直せる）
+            if error is CancellationError {
+                appLog.notice("update: download of \(release.tag, privacy: .public) canceled")
+                return
+            }
             appLog.error("update failed: \(error.localizedDescription, privacy: .public)")
             let alert = NSAlert()
             alert.messageText = tr("アップデートできませんでした")
@@ -891,15 +1023,10 @@ final class AppUpdater {
         }
     }
 
-    private func showProgress(_ message: String) {
-        let view = HStack(spacing: 12) {
-            ProgressView().controlSize(.small)
-            Text(message)
-        }
-        .padding(20)
-        .frame(width: 360)
-        let window = NSWindow(contentViewController: NSHostingController(rootView: view))
+    private func showProgress(_ model: UpdateProgressModel) {
+        let window = NSWindow(contentViewController: NSHostingController(rootView: UpdateProgressView(model: model)))
         window.title = tr("アップデート")
+        // 閉じるボタンは付けない（やめるのは「中止」）
         window.styleMask = [.titled]
         window.isReleasedWhenClosed = false
         window.level = .floating
@@ -923,6 +1050,105 @@ final class AppUpdater {
         alert.messageText = message
         alert.informativeText = info
         _ = await Self.runModal(alert)
+    }
+}
+
+// MARK: - ダウンロードの進み具合
+
+// 要件: REQ-REL-012
+// 設計判断: DEC-REL-028
+/// アップデートのダウンロードの進み具合（窓に出す）
+@MainActor
+final class UpdateProgressModel: ObservableObject {
+    let version: String
+    /// zip の大きさ（リリースの API の size）
+    let total: Int64
+    @Published var received: Int64 = 0
+    /// ダウンロードが終わり、確かめ・展開をしている（「中止」は押せない）
+    @Published var verifying = false
+    var onCancel: () -> Void = {}
+
+    init(version: String, total: Int64) {
+        self.version = version
+        self.total = total
+    }
+
+    /// 0〜1（全体を超えない）
+    nonisolated static func fraction(received: Int64, total: Int64) -> Double {
+        guard total > 0 else { return 0 }
+        return min(1, max(0, Double(received) / Double(total)))
+    }
+
+    /// 切り捨てた整数の %（0〜100）
+    nonisolated static func percent(received: Int64, total: Int64) -> Int {
+        guard total > 0 else { return 0 }
+        return Int(min(100, max(0, received * 100 / total)))
+    }
+
+    /// 「45%（12.3 MB / 27.1 MB）」
+    nonisolated static func label(received: Int64, total: Int64) -> String {
+        tr("%@%%（%@ / %@）", "\(percent(received: received, total: total))",
+           ByteCountFormatter.string(fromByteCount: min(max(0, received), max(0, total)), countStyle: .file),
+           ByteCountFormatter.string(fromByteCount: max(0, total), countStyle: .file))
+    }
+
+    /// 画面に出すか: 前に出してから 0.1 秒以上たち、かつ落とした量が変わったとき。全体に達したときは必ず出す
+    nonisolated static func shouldPublish(lastPublishedAt: Date?, lastReceived: Int64, now: Date,
+                                          received: Int64, total: Int64) -> Bool {
+        guard received != lastReceived else { return false }
+        if received >= total { return true }
+        guard let lastPublishedAt else { return true }
+        return now.timeIntervalSince(lastPublishedAt) >= 0.1
+    }
+}
+
+/// URLSession のスレッドから来る落とした量を間引く（UpdateProgressModel.shouldPublish）
+final class UpdateProgressThrottle: @unchecked Sendable {
+    private let total: Int64
+    private let lock = NSLock()
+    private var lastPublishedAt: Date?
+    private var lastReceived: Int64 = 0
+
+    init(total: Int64) { self.total = total }
+
+    func shouldPublish(_ received: Int64, now: Date = Date()) -> Bool {
+        lock.withLock {
+            guard UpdateProgressModel.shouldPublish(lastPublishedAt: lastPublishedAt, lastReceived: lastReceived,
+                                                    now: now, received: received, total: total) else { return false }
+            lastPublishedAt = now
+            lastReceived = received
+            return true
+        }
+    }
+}
+
+// 要件: REQ-REL-012
+// 設計判断: DEC-REL-028
+/// 進み具合の窓の中身。ローカルのモデルのダウンロード（LocalModelDownloadView）と同じ形: 見出し・バー・割合と大きさ・「中止」
+struct UpdateProgressView: View {
+    @ObservedObject var model: UpdateProgressModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label(tr("Hanasu %@ をダウンロードしています…", "\(model.version)"), systemImage: "arrow.down.circle")
+                .font(.headline)
+            if model.verifying {
+                ProgressView().progressViewStyle(.linear)
+                Text(tr("ダウンロードしたファイルを確かめています…")).font(.caption).foregroundStyle(.secondary)
+            } else {
+                ProgressView(value: UpdateProgressModel.fraction(received: model.received, total: model.total))
+                Text(UpdateProgressModel.label(received: model.received, total: model.total))
+                    .font(.caption).monospacedDigit().foregroundStyle(.secondary)
+            }
+            HStack {
+                Spacer()
+                Button(tr("中止")) { model.onCancel() }
+                    .keyboardShortcut(.cancelAction)
+                    .disabled(model.verifying)
+            }
+        }
+        .padding(20)
+        .frame(width: 400)
     }
 }
 

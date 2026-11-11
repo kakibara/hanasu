@@ -1117,14 +1117,17 @@ Você também pode reinstalar pela página da versão. Abrir no navegador?</valu
   <data name="Update_Downloading" xml:space="preserve">
     <value>Baixando a atualização</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} MB)</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Baixando o Hanasu {0}…</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0}% ({1} / {2})</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>Interromper</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>O download não terminou em 10 minutos, então foi interrompido</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>Preparando a atualização</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>Extraindo o zip baixado.</value>

@@ -389,9 +389,6 @@ internal sealed class AppHost : IDisposable
         app.Shutdown();
     }
 
-    /// <summary>アップデートの進み具合をトレイの通知で知らせる</summary>
-    public void NotifyUpdate(string title, string message) => tray?.ShowBalloon(title, message);
-
     // 設計判断: DEC-REL-030
     /// <summary>
     /// アップデートの入れ替えのために終わる。確認は済んでいる（録音中・会議の記録中は入れ替えに進まない）ので、Quit と違って尋ねない。

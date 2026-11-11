@@ -1117,14 +1117,17 @@ Du kannst Hanasu auch von der Release-Seite neu installieren. Im Browser öffnen
   <data name="Update_Downloading" xml:space="preserve">
     <value>Update wird heruntergeladen</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} MB)</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Hanasu {0} wird geladen …</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0} % ({1} / {2})</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>Der Download wurde nicht innerhalb von 10 Minuten abgeschlossen und daher abgebrochen</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>Update wird vorbereitet</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>Das heruntergeladene ZIP wird entpackt.</value>

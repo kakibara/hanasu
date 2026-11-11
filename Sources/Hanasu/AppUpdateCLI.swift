@@ -1,4 +1,5 @@
 import AppKit
+import SwiftUI
 import Foundation
 
 // MARK: - 確認用の CLI
@@ -12,7 +13,12 @@ import Foundation
 ///       zip を展開し、入れ替えの前と同じ確認（署名・証明書・bundle ID・版）をする。Hanasu.app の中の実行ファイルで動かす
 ///   Hanasu --preview-update-dialog [<リリース文の .md>]
 ///       新しい版を尋ねるダイアログを、そのリリース文で出す（通信もダウンロードもしない。ダイアログに出す分に絞った文と、選んだボタンを出して終わる）
-// 確かめ方: REQ-REL-010, REQ-REL-011
+///   Hanasu --render-update-progress <出力.png> [--fraction 0.42 | --verifying]
+///       ダウンロードの進み具合の窓を PNG に描く（ダウンロードはしない。大きさは 27.1 MB の例）
+///   Hanasu --download-update [--cancel-after <秒>]
+///       GitHub から最新の zip を一時フォルダに実際に落とし、進み具合を 10% ごとに出し、大きさと SHA-256 を確かめて消す（入れ替えない）。
+///       --cancel-after を付けると、その秒数で「中止」と同じくキャンセルし、止まって CancellationError になるかを確かめる
+// 確かめ方: REQ-REL-010, REQ-REL-011, REQ-REL-012
 @MainActor
 enum AppUpdateCLI {
     static func runIfRequested() {
@@ -57,6 +63,55 @@ enum AppUpdateCLI {
                 print("選んだもの: \(choice)")
             }
         }
+        // 確かめ方: REQ-REL-012
+        if let output = value(after: "--render-update-progress", in: args) {
+            renderProgress(to: URL(fileURLWithPath: output),
+                           fraction: args.contains("--verifying") ? nil : (value(after: "--fraction", in: args).flatMap(Double.init) ?? 0.42))
+        }
+        // 確かめ方: REQ-REL-012
+        if args.contains("--download-update") {
+            run {
+                guard let release = try await UpdateHTTP.fetchLatestRelease(), let asset = release.asset else {
+                    print("落とせる zip がありません")
+                    exit(1)
+                }
+                print("落とします: \(asset.name)（\(ByteCountFormatter.string(fromByteCount: asset.size, countStyle: .file))）")
+                let work = FileManager.default.temporaryDirectory.appendingPathComponent("hanasu-download-update-\(UUID().uuidString)")
+                try FileManager.default.createDirectory(at: work, withIntermediateDirectories: true)
+                defer { try? FileManager.default.removeItem(at: work) }
+                let throttle = UpdateProgressThrottle(total: asset.size)
+                let lastTenth = Locked(-1)
+                let published = Locked(0)
+                let started = Date()
+                let download = Task {
+                    try await UpdateHTTP.download(asset, into: work) { received in
+                        guard throttle.shouldPublish(received) else { return }
+                        published.mutate { $0 += 1 }
+                        let tenth = UpdateProgressModel.percent(received: received, total: asset.size) / 10
+                        guard lastTenth.exchange(tenth) != tenth else { return }
+                        print(UpdateProgressModel.label(received: received, total: asset.size))
+                        fflush(stdout)
+                    }
+                }
+                if let cancelAfter = value(after: "--cancel-after", in: args).flatMap(Double.init) {
+                    try? await Task.sleep(for: .seconds(cancelAfter))
+                    download.cancel()
+                    do {
+                        _ = try await download.value
+                        print("ng: キャンセルの前に落とし終えました（--cancel-after を短くしてください）")
+                        exit(1)
+                    } catch is CancellationError {
+                        let left = (try? FileManager.default.contentsOfDirectory(atPath: work.path)) ?? []
+                        print("ok: 中止で止まりました（\(String(format: "%.1f", Date().timeIntervalSince(started))) 秒、作業フォルダの中身 \(left.count) 個）")
+                        return
+                    }
+                }
+                let zip = try await download.value
+                let seconds = Date().timeIntervalSince(started)
+                try UpdateHTTP.verify(zip, asset: asset)
+                print("ok: 大きさと SHA-256 が合いました（\(String(format: "%.1f", seconds)) 秒、画面への更新 \(published.value) 回）")
+            }
+        }
         if let zip = value(after: "--verify-update", in: args) {
             guard let version = value(after: "--version", in: args).flatMap(AppVersion.init) else {
                 print("--version <版> を付けてください")
@@ -91,6 +146,45 @@ enum AppUpdateCLI {
         }
         RunLoop.main.run()
         exit(0)
+    }
+
+    /// 進み具合の窓を PNG に描く。fraction が nil なら確かめているところ
+    private static func renderProgress(to url: URL, fraction: Double?) -> Never {
+        _ = NSApplication.shared
+        let total: Int64 = 27_100_000
+        let model = UpdateProgressModel(version: "2.3.1", total: total)
+        if let fraction {
+            model.received = Int64(Double(total) * fraction)
+        } else {
+            model.received = total
+            model.verifying = true
+        }
+        let hosting = NSHostingView(rootView: UpdateProgressView(model: model)
+            .background(Color(nsColor: .windowBackgroundColor)))
+        hosting.frame = NSRect(origin: .zero, size: hosting.fittingSize)
+        let window = NSWindow(contentRect: hosting.frame, styleMask: [.borderless], backing: .buffered, defer: false)
+        window.contentView = hosting
+        hosting.layoutSubtreeIfNeeded()
+        guard let rep = hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds) else { exit(1) }
+        hosting.cacheDisplay(in: hosting.bounds, to: rep)
+        do {
+            try rep.representation(using: .png, properties: [:])?.write(to: url)
+            print("書き出しました: \(url.path)")
+            exit(0)
+        } catch {
+            FileHandle.standardError.write(Data("error: \(error.localizedDescription)\n".utf8))
+            exit(1)
+        }
+    }
+
+    /// --download-update の進み具合の受け口（URLSession のスレッドから呼ばれる）で使う、鍵付きの値
+    private final class Locked<Value>: @unchecked Sendable {
+        private let lock = NSLock()
+        private var stored: Value
+        init(_ value: Value) { stored = value }
+        var value: Value { lock.withLock { stored } }
+        func mutate(_ body: (inout Value) -> Void) { lock.withLock { body(&stored) } }
+        func exchange(_ new: Value) -> Value { lock.withLock { let old = stored; stored = new; return old } }
     }
 
     private static func value(after flag: String, in args: [String]) -> String? {
@@ -222,6 +316,29 @@ enum AppUpdateCLI {
         expect(!UpdateHTTP.isAllowed(URL(string: "http://github.com/x")!), "http には従わない")
         expect(!UpdateHTTP.isAllowed(URL(string: "https://github.com.example.com/x")!), "似た名前のホストには従わない")
         expect(!UpdateHTTP.isAllowed(URL(string: "https://evilgithubusercontent.com/x")!), "githubusercontent.com で終わるだけのホストには従わない")
+
+        // ダウンロードの進み具合（REQ-REL-012、DEC-REL-028）
+        expect(UpdateProgressModel.percent(received: 0, total: 1000) == 0
+               && UpdateProgressModel.percent(received: 429, total: 1000) == 42
+               && UpdateProgressModel.percent(received: 1000, total: 1000) == 100, "割合は切り捨てた整数の %")
+        expect(UpdateProgressModel.percent(received: 2000, total: 1000) == 100
+               && UpdateProgressModel.fraction(received: 2000, total: 1000) == 1, "全体を超えても 100% まで")
+        expect(UpdateProgressModel.percent(received: 10, total: 0) == 0
+               && UpdateProgressModel.fraction(received: 10, total: 0) == 0, "全体が 0 なら 0%")
+        let progressLabel = UpdateProgressModel.label(received: 12_300_000, total: 27_100_000)
+        expect(progressLabel.contains("45") && progressLabel.contains("12.3 MB") && progressLabel.contains("27.1 MB"),
+               "文は割合と、落とした大きさ / 全体（\(progressLabel)）")
+        let t0 = Date(timeIntervalSince1970: 0)
+        expect(UpdateProgressModel.shouldPublish(lastPublishedAt: nil, lastReceived: 0, now: t0, received: 65_536, total: 1_000_000),
+               "最初は出す")
+        expect(!UpdateProgressModel.shouldPublish(lastPublishedAt: t0, lastReceived: 65_536, now: t0.addingTimeInterval(0.05),
+                                                  received: 131_072, total: 1_000_000), "0.1 秒たっていなければ出さない")
+        expect(UpdateProgressModel.shouldPublish(lastPublishedAt: t0, lastReceived: 65_536, now: t0.addingTimeInterval(0.1),
+                                                 received: 70_000, total: 1_000_000), "0.1 秒たって量が変わっていれば、1% 未満でも出す")
+        expect(!UpdateProgressModel.shouldPublish(lastPublishedAt: t0, lastReceived: 65_536, now: t0.addingTimeInterval(5),
+                                                  received: 65_536, total: 1_000_000), "量が変わっていなければ出さない")
+        expect(UpdateProgressModel.shouldPublish(lastPublishedAt: t0, lastReceived: 990_000, now: t0.addingTimeInterval(0.01),
+                                                 received: 1_000_000, total: 1_000_000), "全体に達したら必ず出す")
 
         // 入れ替えのスクリプトは、パスを引数で受け取る（文に埋め込まない）
         expect(UpdateInstaller.swapScript.contains("result=\"$5\"") && UpdateInstaller.swapScript.contains("if [ -e \"$target\" ]") && UpdateInstaller.swapScript.contains("target=\"$2\"") && !UpdateInstaller.swapScript.contains("/Applications"),
