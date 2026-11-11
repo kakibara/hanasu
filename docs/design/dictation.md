@@ -543,7 +543,7 @@ Mac 標準（SpeechAnalyzer）は速く途中経過も出るが、専門用語�
 
 ### 5.2.1 オンボーディング（初回起動）
 
-- 初めて起動したとき、設定画面の代わりにオンボーディングのウインドウ（`OnboardingWindowController`・`OnboardingView`。`Onboarding.swift`）を出す。起動時のアクセシビリティの許可のダイアログも出さず、最後のページのボタンで求める（DEC-COM-093）。
+- 初めて起動したとき、オンボーディングのウインドウ（`OnboardingWindowController`・`OnboardingView`。`Onboarding.swift`）を出す。起動時のアクセシビリティの許可のダイアログも出さず、最後のページのボタンで求める（DEC-COM-093）。
 - 出すかどうかは `OnboardingState.shouldShowOnLaunch` が、`applicationDidFinishLaunching` の最初（メニューバーのアイコンを作る前）に決める。UserDefaults の `onboardingCompletedVersion` がなく、Hanasu の設定もまだ保存されていないときだけ出す。閉じたら（「はじめる」でも途中でも）`onboardingCompletedVersion` を書く（DEC-COM-090）。
 - ページは `OnboardingPage` の 7 つ。状態（今のページ・AI のページで選んだ AI）は `OnboardingModel` が持つ。AI のページ（`OnboardingAIPage`）のカードは `OnboardingAIChoice`（おすすめの Gemma 4 E4B・Gemini・Claude・Apple）。押すと `OnboardingModel.chooseDefaultAI` が音声入力と会議の両方の AI を書き換え（Gemma なら両方のローカルのモデルも Gemma 4 E4B に）、その AI の準備の欄を出す。Gemma は `OnboardingGemmaDownload`（`LocalLLMStore` のダウンロードをボタンで始め、進み具合と中止を出す）、ほかは設定の「AI」の部品（`GeminiAuthSection`・`ClaudeKeySection`・`AppleFMChoice`）。Gemma をまだダウンロードしていなければ「次へ」が「ダウンロードして次へ」になり、ダウンロードを始めて待たずに進む（`OnboardingModel.next`。DEC-COM-094）。最後のページにも、終わっていなければ進み具合を出す。「設定の Tips」のページ（`OnboardingTipsPage`）も `AIChoiceRow` を使う（REQ-COM-050・051、DEC-COM-092）。
 - メニューバーのメニューとアプリのメニューの「Hanasu の使い方…」で、最初のページから開き直せる（DEC-COM-091）。オンボーディングを出している間に Finder から開き直すと、設定画面ではなくオンボーディングを前に出す。

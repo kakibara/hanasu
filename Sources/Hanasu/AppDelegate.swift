@@ -118,13 +118,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         // 要件: REQ-COM-050, REQ-COM-051
         // 設計判断: DEC-COM-093
-        // 初めての起動では、設定画面と許可のダイアログの代わりにオンボーディングを出す（許可はその最後のページで求める）
+        // 初めての起動では、許可のダイアログの代わりにオンボーディングを出す（許可はその最後のページで求める）
         if showsOnboarding {
             openOnboarding()
             return
         }
-        // メニューバーのアイコンが隠れていても設定に辿り着けるよう、起動時は設定画面を開く
-        openSettings()
+        // 設計判断: DEC-COM-009
+        // 起動では設定画面を開かない（Dock・Finder で開き直すと applicationShouldHandleReopen で出す）
         // 自動入力（⌘V の送信）にはアクセシビリティ権限が要る
         _ = Permissions.isAccessibilityTrusted(prompt: true)
         // 要件: REQ-REL-010

@@ -410,7 +410,12 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 - **保存期間**: 設定 `meetingAudioRetentionDays`（0 は無期限）。`MeetingRecorder.pruneExpiredAudio` を、起動時（`AppDelegate` で `markInterruptedMeetings` のあと）と、`stop` で `process` が返ったあとに呼ぶ（`process` は CLI からも呼ばれるので、そこでは呼ばない）。設定で期間を短くして今すぐ消える録音があれば、`MeetingAudioSettingsRows` が確かめてから消す（DEC-MTG-143）。
 - **消したファイル**: 完全に消すが、同期するフォルダ（iCloud Drive など）やバックアップには残ることがある（[security.md](security.md) 5）。
 
-### 5.2 保存形式
+### 5.2 記録中に何度も変わる値
+
+- **音量と途中結果**: `MeetingRecorder.updateLevels`（0.25 秒ごと）の音量と、`ChannelTranscriber.onVolatile` の途中結果は `MeetingLiveSignals`（`MeetingRecorder.signals`）に入れる。`MeetingRecorder` の `@Published` に置くと会議ノートの全体が描き直されるため（DEC-MTG-151）。これを `@ObservedObject` で見るのは `LiveLevelMeters`・`LiveVolatileLines`・`LiveTranscriptPlaceholder`・`MeetingCaptionView` だけ。記録中の値を足すときも、頻繁に変わるものはこちらに置く。
+- **文字起こしに渡す単位**: `ChannelTranscriber.enqueueForAnalyzer` が、変換したバッファを `analyzerChunkSeconds` までためてから SpeechAnalyzer に渡す（DEC-MTG-152）。音声ファイルへの書き出しと音量の測定は、届いたバッファごと。
+
+### 5.3 保存形式
 
 ```
 ~/Documents/Hanasu/Meetings/2026-11-02 1430 定例/

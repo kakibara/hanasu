@@ -26,12 +26,17 @@ final class MeetingRecorder: ObservableObject {
     @Published private(set) var meetings: [Meeting] = []
     @Published private(set) var current: Meeting?
     @Published private(set) var liveLines: [LiveLine] = []
-    @Published private(set) var volatileMe = ""
-    @Published private(set) var volatileOthers = ""
     @Published var lastError: String?
+    // 設計判断: DEC-MTG-151
+    /// 記録中に何度も変わる値（音量と確定前の途中結果）。MeetingRecorder の @Published に置くと、
+    /// 変わるたびに会議ノートの全体（一覧・ツールバー・チャットの欄）が描き直されるので、別に持つ。
+    /// 画面ではこれを見る小さなビューだけが描き直される
+    let signals = MeetingLiveSignals()
+    var volatileMe: String { signals.volatileMe }
+    var volatileOthers: String { signals.volatileOthers }
     /// 記録中の音量（0〜1）
-    @Published private(set) var meLevel: Float = 0
-    @Published private(set) var othersLevel: Float = 0
+    var meLevel: Float { signals.meLevel }
+    var othersLevel: Float { signals.othersLevel }
     /// 音が入っていないときの注意
     @Published private(set) var warnings: [String] = []
     // 要件: REQ-MTG-047
@@ -116,8 +121,8 @@ final class MeetingRecorder: ObservableObject {
         noteDraft = ""
         noteDraftStartedAt = nil
         liveLines = []
-        volatileMe = ""
-        volatileOthers = ""
+        signals.volatileMe = ""
+        signals.volatileOthers = ""
         sleepPoint = nil
         sleptAt = nil
         sleepGap = 0
@@ -171,7 +176,7 @@ final class MeetingRecorder: ObservableObject {
             for transcriber in [me, others] {
                 transcriber.onPhrase = { [weak self] phrase in self?.receive(phrase) }
                 transcriber.onVolatile = { [weak self, channel = transcriber.channel] text in
-                    if channel == .me { self?.volatileMe = text } else { self?.volatileOthers = text }
+                    if channel == .me { self?.signals.volatileMe = text } else { self?.signals.volatileOthers = text }
                 }
             }
             let words = settings.userDictionary.contextualStrings
@@ -806,7 +811,7 @@ final class MeetingRecorder: ObservableObject {
     func showPreviewForRendering(_ meeting: Meeting, lines: [LiveLine], volatileOthers: String = "") {
         current = meeting
         liveLines = lines
-        self.volatileOthers = volatileOthers
+        signals.volatileOthers = volatileOthers
         state = .recording
     }
 
@@ -829,7 +834,7 @@ final class MeetingRecorder: ObservableObject {
     private func receive(_ phrase: TranscribedPhrase) {
         liveLines.append(LiveLine(channel: phrase.channel, start: phrase.start, text: phrase.text))
         liveLines.sort { $0.start < $1.start }
-        if phrase.channel == .me { volatileMe = "" } else { volatileOthers = "" }
+        if phrase.channel == .me { signals.volatileMe = "" } else { signals.volatileOthers = "" }
     }
 
     private func teardownAudio() async {
@@ -840,8 +845,8 @@ final class MeetingRecorder: ObservableObject {
         systemTap = nil
         levelTimer?.invalidate()
         levelTimer = nil
-        meLevel = 0
-        othersLevel = 0
+        signals.meLevel = 0
+        signals.othersLevel = 0
         warnings = []
         othersSilent = false
     }
@@ -979,8 +984,8 @@ final class MeetingRecorder: ObservableObject {
     // 設計判断: DEC-MTG-020
     private func updateLevels() {
         guard let me = meTranscriber, let others = othersTranscriber else { return }
-        meLevel = me.level
-        othersLevel = others.level
+        signals.meLevel = me.level
+        signals.othersLevel = others.level
         // 始めてから 10 秒たっても一度も音が入らなければ、機器の選び方が違う可能性が高い
         var notes: [String] = []
         if Date().timeIntervalSince(recordingStartedAt) > 10 {
@@ -1000,6 +1005,20 @@ final class MeetingRecorder: ObservableObject {
         state = newState
         onStateChange?(newState)
     }
+}
+
+// 設計判断: DEC-MTG-151
+/// 記録中に何度も変わる値（0.25 秒ごとの音量と、話すたびの途中結果）。
+/// 音量計・途中結果の行・字幕のように、これを出すビューだけが @ObservedObject で見る
+@MainActor
+final class MeetingLiveSignals: ObservableObject {
+    @Published fileprivate(set) var meLevel: Float = 0
+    @Published fileprivate(set) var othersLevel: Float = 0
+    @Published fileprivate(set) var volatileMe = ""
+    @Published fileprivate(set) var volatileOthers = ""
+
+    /// 確定前の途中結果がどちらのチャンネルにもない
+    var volatileIsEmpty: Bool { volatileMe.isEmpty && volatileOthers.isEmpty }
 }
 
 /// オーディオスレッドから、あとで用意できた ChannelTranscriber を参照するための入れ物
