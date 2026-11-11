@@ -21,6 +21,8 @@ public sealed record AiChoice(TextAiProvider Provider, string Model)
 /// <param name="Problem">読めなかった理由</param>
 public sealed record CredentialStatus(string? Source = null, string? Label = null, string? Problem = null);
 
+// 要件: REQ-COM-180
+// 設計判断: DEC-COM-192, DEC-COM-193
 /// <summary>
 /// コマンドが外の世界から受け取るもの。exe は本物を、テストは固定した値と偽物を入れる。
 /// 時計と時差は引数で渡す（共有のテストデータで、Mac と同じ「今」と時差で動かすため。DEC-COM-192）
