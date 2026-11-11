@@ -410,7 +410,7 @@
       }
     },
     "%@\n\nリリースのページから zip をダウンロードして、手で入れ替えることもできます。" : {
-      "comment" : "AppUpdate.swift:887",
+      "comment" : "AppUpdate.swift:1024",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -2654,7 +2654,7 @@
       }
     },
     "%@ に書き込めないので、入れ替えられません" : {
-      "comment" : "AppUpdate.swift:535",
+      "comment" : "AppUpdate.swift:647",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5306,7 +5306,7 @@
       }
     },
     "%@%%（%@ / %@）" : {
-      "comment" : "LocalModelDownloadPrompt.swift:147",
+      "comment" : "AppUpdate.swift:1097, LocalModelDownloadPrompt.swift:147",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20198,7 +20198,7 @@
       }
     },
     "Hanasu %@ があります" : {
-      "comment" : "AppUpdate.swift:772",
+      "comment" : "AppUpdate.swift:884",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20300,7 +20300,7 @@
       }
     },
     "Hanasu %@ へのアップデートができませんでした" : {
-      "comment" : "AppUpdate.swift:681",
+      "comment" : "AppUpdate.swift:793",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20402,7 +20402,7 @@
       }
     },
     "Hanasu %@ をダウンロードしています…" : {
-      "comment" : "AppUpdate.swift:859",
+      "comment" : "AppUpdate.swift:1140",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20504,7 +20504,7 @@
       }
     },
     "Hanasu が 60 秒たっても終わらなかったので、入れ替えませんでした" : {
-      "comment" : "AppUpdate.swift:645",
+      "comment" : "AppUpdate.swift:757",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20606,7 +20606,7 @@
       }
     },
     "Hanasu が「ダウンロード」などから直接開かれているので、入れ替えられません。Hanasu.app を「アプリケーション」フォルダに移してから開き直してください" : {
-      "comment" : "AppUpdate.swift:534",
+      "comment" : "AppUpdate.swift:646",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -21524,7 +21524,7 @@
       }
     },
     "Hanasu は最新です" : {
-      "comment" : "AppUpdate.swift:735",
+      "comment" : "AppUpdate.swift:847",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22340,7 +22340,7 @@
       }
     },
     "Hanasu.app として動いていないため、アップデートを確かめられません。" : {
-      "comment" : "AppUpdate.swift:717",
+      "comment" : "AppUpdate.swift:829",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22442,7 +22442,7 @@
       }
     },
     "Hanasu.app として動いていないので、入れ替えられません" : {
-      "comment" : "AppUpdate.swift:533",
+      "comment" : "AppUpdate.swift:645",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22544,7 +22544,7 @@
       }
     },
     "Hanasu.app を入れ替えられませんでした（macOS がアプリの書き換えを止めたときなど）。リリースのページから zip をダウンロードして、手で入れ替えてください。" : {
-      "comment" : "AppUpdate.swift:683",
+      "comment" : "AppUpdate.swift:795",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30500,7 +30500,7 @@
       }
     },
     "あとで" : {
-      "comment" : "AppUpdate.swift:777",
+      "comment" : "AppUpdate.swift:889",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30602,7 +30602,7 @@
       }
     },
     "いま確かめているか、アップデートの確認を出しているところです。" : {
-      "comment" : "AppUpdate.swift:713",
+      "comment" : "AppUpdate.swift:825",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35702,7 +35702,7 @@
       }
     },
     "この版をスキップ" : {
-      "comment" : "AppUpdate.swift:778",
+      "comment" : "AppUpdate.swift:890",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42944,7 +42944,7 @@
       }
     },
     "アップデート" : {
-      "comment" : "AppUpdate.swift:776, AppUpdate.swift:902, AppUpdate.swift:954",
+      "comment" : "AppUpdate.swift:888, AppUpdate.swift:1033, AppUpdate.swift:1187",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43046,7 +43046,7 @@
       }
     },
     "アップデートできませんでした" : {
-      "comment" : "AppUpdate.swift:886",
+      "comment" : "AppUpdate.swift:1023",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43148,7 +43148,7 @@
       }
     },
     "アップデートを確かめています" : {
-      "comment" : "AppUpdate.swift:713",
+      "comment" : "AppUpdate.swift:825",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43250,7 +43250,7 @@
       }
     },
     "アップデートを確かめられませんでした" : {
-      "comment" : "AppUpdate.swift:728",
+      "comment" : "AppUpdate.swift:840",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43658,7 +43658,7 @@
       }
     },
     "アプリの ID が違います" : {
-      "comment" : "AppUpdate.swift:513",
+      "comment" : "AppUpdate.swift:625",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51716,7 +51716,7 @@
       }
     },
     "ダウンロードした zip に Hanasu.app がありません" : {
-      "comment" : "AppUpdate.swift:536",
+      "comment" : "AppUpdate.swift:648",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51818,7 +51818,7 @@
       }
     },
     "ダウンロードした zip を展開できませんでした（ditto %@）" : {
-      "comment" : "AppUpdate.swift:537",
+      "comment" : "AppUpdate.swift:649",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52022,7 +52022,7 @@
       }
     },
     "ダウンロードしたファイルを確かめています…" : {
-      "comment" : "LocalModelDownloadPrompt.swift:151",
+      "comment" : "AppUpdate.swift:1144, LocalModelDownloadPrompt.swift:151",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59774,7 +59774,7 @@
       }
     },
     "リリースのページで全文を見る" : {
-      "comment" : "AppUpdate.swift:817",
+      "comment" : "AppUpdate.swift:929",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59876,7 +59876,7 @@
       }
     },
     "リリースのページを開く" : {
-      "comment" : "AppUpdate.swift:684, AppUpdate.swift:888",
+      "comment" : "AppUpdate.swift:796, AppUpdate.swift:1025",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62936,7 +62936,7 @@
       }
     },
     "不明" : {
-      "comment" : "AppUpdate.swift:949",
+      "comment" : "AppUpdate.swift:1182",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63038,7 +63038,7 @@
       }
     },
     "中止" : {
-      "comment" : "LocalLLMSettingsView.swift:48, LocalModelDownloadPrompt.swift:135, Onboarding.swift:504",
+      "comment" : "AppUpdate.swift:1152, LocalLLMSettingsView.swift:48, LocalModelDownloadPrompt.swift:135",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63242,7 +63242,7 @@
       }
     },
     "今すぐ確認" : {
-      "comment" : "AppUpdate.swift:950",
+      "comment" : "AppUpdate.swift:1183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63344,7 +63344,7 @@
       }
     },
     "今の Hanasu が配布用の証明書で署名されていない（手元でビルドしたものなど）ので、自動では入れ替えません" : {
-      "comment" : "AppUpdate.swift:475",
+      "comment" : "AppUpdate.swift:587",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63854,7 +63854,7 @@
       }
     },
     "今の版" : {
-      "comment" : "AppUpdate.swift:947",
+      "comment" : "AppUpdate.swift:1180",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63956,7 +63956,7 @@
       }
     },
     "今の版が分かりません" : {
-      "comment" : "AppUpdate.swift:717",
+      "comment" : "AppUpdate.swift:829",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64058,7 +64058,7 @@
       }
     },
     "今の版は %@ です。「アップデート」を押すと、新しい版をダウンロードして確かめてから、Hanasu を終えて入れ替え、開き直します。" : {
-      "comment" : "AppUpdate.swift:775",
+      "comment" : "AppUpdate.swift:887",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64160,7 +64160,7 @@
       }
     },
     "今の版は %@ です。この版は自動では入れ替えられないので、「アップデート」でリリースのページを開きます。" : {
-      "comment" : "AppUpdate.swift:774",
+      "comment" : "AppUpdate.swift:886",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64262,7 +64262,7 @@
       }
     },
     "今の版（%@）が最新です。" : {
-      "comment" : "AppUpdate.swift:735",
+      "comment" : "AppUpdate.swift:847",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64772,7 +64772,7 @@
       }
     },
     "今はアップデートできません" : {
-      "comment" : "AppUpdate.swift:851, AppUpdate.swift:872",
+      "comment" : "AppUpdate.swift:964, AppUpdate.swift:1004",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79256,7 +79256,7 @@
       }
     },
     "前の Hanasu.app は次の場所に残っています:" : {
-      "comment" : "AppUpdate.swift:646",
+      "comment" : "AppUpdate.swift:758",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91292,7 +91292,7 @@
       }
     },
     "新しい Hanasu が、今の Hanasu と違う証明書で署名されているので、入れ替えません" : {
-      "comment" : "AppUpdate.swift:477",
+      "comment" : "AppUpdate.swift:589",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91394,7 +91394,7 @@
       }
     },
     "新しい Hanasu の署名を確かめられませんでした（%@）" : {
-      "comment" : "AppUpdate.swift:476",
+      "comment" : "AppUpdate.swift:588",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92210,7 +92210,7 @@
       }
     },
     "新しい版があれば、入れ替えてよいかを尋ねます。「アップデート」を選んだときだけ、GitHub のリリースから新しい版をダウンロードし、SHA-256 と署名を確かめてから入れ替えます。" : {
-      "comment" : "AppUpdate.swift:956",
+      "comment" : "AppUpdate.swift:1189",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98942,7 +98942,7 @@
       }
     },
     "版がリリースと違います" : {
-      "comment" : "AppUpdate.swift:516",
+      "comment" : "AppUpdate.swift:628",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -116384,7 +116384,7 @@
       }
     },
     "読み込めません" : {
-      "comment" : "AppUpdate.swift:499",
+      "comment" : "AppUpdate.swift:611",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -121382,7 +121382,7 @@
       }
     },
     "起動時にアップデートを確認する" : {
-      "comment" : "AppUpdate.swift:946",
+      "comment" : "AppUpdate.swift:1179",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -129032,7 +129032,7 @@
       }
     },
     "録音中・会議の記録中・処理中は入れ替えません。終わってから、メニューの「アップデートを確認…」でもう一度選んでください。" : {
-      "comment" : "AppUpdate.swift:851, AppUpdate.swift:872",
+      "comment" : "AppUpdate.swift:964, AppUpdate.swift:1004",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -129338,7 +129338,7 @@
       }
     },
     "閉じる" : {
-      "comment" : "AppDelegate.swift:336, AppUpdate.swift:685, AppUpdate.swift:889",
+      "comment" : "AppDelegate.swift:336, AppUpdate.swift:797, AppUpdate.swift:1026",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

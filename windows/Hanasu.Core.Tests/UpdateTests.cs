@@ -7,7 +7,7 @@ using Hanasu.Core.Update;
 
 namespace Hanasu.Core.Tests;
 
-// 確かめ方: REQ-REL-010, REQ-REL-011
+// 確かめ方: REQ-REL-010, REQ-REL-011, REQ-REL-012
 public class UpdateTests
 {
     private const string Sha = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
@@ -30,6 +30,42 @@ public class UpdateTests
           ]
         }
         """;
+    }
+
+    // MARK: - ダウンロードの進み具合（REQ-REL-012、DEC-REL-028）
+
+    [Theory]
+    [InlineData(0, 1000, 0)]
+    [InlineData(429, 1000, 42)]
+    [InlineData(1000, 1000, 100)]
+    [InlineData(2000, 1000, 100)]
+    [InlineData(10, 0, 0)]
+    public void DownloadPercentIsFlooredAndCapped(long received, long total, int expected) =>
+        Assert.Equal(expected, UpdateDownloadProgress.Percent(received, total));
+
+    [Fact]
+    public void DownloadFractionStaysBetweenZeroAndOne()
+    {
+        Assert.Equal(0, UpdateDownloadProgress.Fraction(0, 1000));
+        Assert.Equal(0.5, UpdateDownloadProgress.Fraction(500, 1000));
+        Assert.Equal(1, UpdateDownloadProgress.Fraction(2000, 1000));
+        Assert.Equal(0, UpdateDownloadProgress.Fraction(10, 0));
+    }
+
+    [Fact]
+    public void DownloadProgressIsThrottledToTenthOfSecond()
+    {
+        var t0 = new DateTime(2026, 11, 11, 0, 0, 0, DateTimeKind.Utc);
+        // 最初は出す
+        Assert.True(UpdateDownloadProgress.ShouldPublish(null, 0, t0, 65_536, 1_000_000));
+        // 0.1 秒たっていなければ出さない
+        Assert.False(UpdateDownloadProgress.ShouldPublish(t0, 65_536, t0.AddMilliseconds(50), 131_072, 1_000_000));
+        // 0.1 秒たって量が変わっていれば、1% 未満でも出す（遅い回線でも止まって見えない）
+        Assert.True(UpdateDownloadProgress.ShouldPublish(t0, 65_536, t0.AddMilliseconds(100), 70_000, 1_000_000));
+        // 量が変わっていなければ出さない
+        Assert.False(UpdateDownloadProgress.ShouldPublish(t0, 65_536, t0.AddSeconds(5), 65_536, 1_000_000));
+        // 全体に達したら必ず出す
+        Assert.True(UpdateDownloadProgress.ShouldPublish(t0, 990_000, t0.AddMilliseconds(10), 1_000_000, 1_000_000));
     }
 
     // MARK: - 版

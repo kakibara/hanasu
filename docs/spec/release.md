@@ -79,6 +79,20 @@
 - 実装の場所: Mac は `AppDelegate.checkForUpdates`（メニューバーとアプリのメニュー）、`UpdateSettingsSection`（設定の「一般」）。Windows は `TrayIcon`（タスクトレイのメニュー）、`SettingsWindow`（「一般」）、`UpdateService.CheckManuallyAsync`
 - 確かめ方: `Hanasu --check-update`、`Hanasu --update-selftest`、`cd windows && dotnet test Hanasu.Core.Tests`。Mac のダイアログの見た目は `Hanasu --preview-update-dialog [<リリース文の .md>]` で出せる。ダイアログは実機で確かめる
 
+### REQ-REL-012 アップデートのダウンロード中は、進み具合をバーと大きさで見せ、途中でやめられる
+- 内容: 「アップデート」を選んで新しい版の zip をダウンロードしている間、進み具合のバーと「割合・落とした大きさ / 全体の大きさ」を 1 つの窓に出し、進むにつれて更新する。窓の「中止」で、ダウンロードをやめられる。ダウンロードが終わって確かめ・展開をしている間は、そのことを出す。
+- 受け入れ条件:
+  - ダウンロード中は、0 から 100% へ進むバーと「<割合>%（<落とした大きさ> / <全体の大きさ>）」が出る。落とした量が増えていれば、少なくとも 1 秒に 1 回は新しい値になる。全体の大きさはリリースの API が返す zip の大きさ（`size`）。割合は整数で、100% を超えない。
+  - 大きさは KB / MB / GB の 1000 区切り。Mac は `ByteCountFormatter` の `.file`（例「12.3 MB / 27.1 MB」）、Windows は `MeetingAudioCleanup.FormatSize`（10 MB 以上は整数。例「12 MB / 27 MB」）。
+  - ダウンロードが終わったら（Mac は SHA-256 の計算の前から）、確かめ・展開の間はバーを不定（動き続ける形）にして、そのことを出す（Mac は「ダウンロードしたファイルを確かめています…」、Windows は「ダウンロードした zip を展開しています。」）。
+  - 「中止」はダウンロード中だけ押せる（確かめ・展開の間は押せない）。押すとダウンロードをやめ、作業フォルダを消し、窓を閉じ、入れ替えない。エラーのダイアログは出さない。あとでメニューの「アップデートを確認…」から選び直せる。
+  - 窓は、どの終わり方（入れ替えに進む・失敗・中止・録音中で入れ替えない・Windows の「Hanasu のものでないファイルがある」）でも閉じる。案内やエラーのダイアログは、窓を閉じてから出す。
+  - Windows は、ダウンロードと展開の通知の吹き出しを出さず、この窓に置き換える。
+- 出典: ユーザーの依頼（2026-11-11「更新のダウンロードをバーでダウンロード進捗を表現して。容量も」。対象は Mac と Windows の両方、「中止」を付ける（同日の答え）。計画の了承は同日）
+- 対象: Mac / Windows
+- 実装の場所: Mac は `UpdateHTTP.download`・`UpdateDownloadDelegate`、`AppUpdater.install`・`UpdateProgressModel`・`UpdateProgressView`（`Sources/Hanasu/AppUpdate.swift`）。Windows は `UpdateService.InstallAsync`、`UpdateProgressWindow`（`windows/Hanasu.Windows/Views/UpdateProgressWindow.cs`）、`UpdateDownloadProgress`（`windows/Hanasu.Core/Update/UpdateDownloadProgress.cs`）
+- 確かめ方: Mac は `Hanasu --update-selftest`（割合・文・間引き）、`Hanasu --render-update-progress <出力.png> [--fraction 0.42 | --verifying]`（窓の見た目。UX-186）、`Hanasu --download-update [--cancel-after <秒>]`（GitHub から最新の zip を実際に落とし、進み具合を行で出し、大きさと SHA-256 を確かめて消す。入れ替えない。`--cancel-after` で中止して止まるかを見る）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`UpdateTests`）。窓が進む・中止で止まるのは実機で確かめる（UX-186）
+
 ---
 
 ## 設計判断
@@ -186,7 +200,7 @@
 - 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認）
 - 関係する要件: REQ-REL-010
 - 対象: Mac / Windows
-- 実装の場所: Mac は `UpdateHTTP`（`isAllowed`・`download`）。Windows は `UpdateHosts`、`UpdateChecker.DownloadAsync`、`ModelDownload.DownloadVerifiedAsync`
+- 実装の場所: Mac は `UpdateHTTP`（`isAllowed`・`download`・`verify`）、`UpdateDownloadDelegate`（転送の制限と大きさの上限）。Windows は `UpdateHosts`、`UpdateChecker.DownloadAsync`、`ModelDownload.DownloadVerifiedAsync`
 
 ### DEC-REL-022 尋ねるのは「アップデート / あとで / この版をスキップ」。スキップした版は起動時には知らせない
 - 決めたこと: 新しい版の確認では、版・今の版・リリース文を出し、「アップデート」「あとで」「この版をスキップ」から選ばせる。スキップした版は設定に覚え、起動時の確認ではその版を知らせない（もっと新しい版が出れば知らせる）。メニューからの確認はスキップを見ずに知らせ、新しい版がなければ「最新です」と出す。確かめている・尋ねている途中にメニューから確かめると、「確かめています」と出す（ダイアログを 2 つ出さない）。起動時の確認が録音の終わりを待つ間にメニューから尋ねた版は、待ち終えてももう尋ねない（Mac）。
@@ -235,6 +249,22 @@
 - 関係する要件: REQ-REL-010, REQ-REL-011
 - 対象: Mac / Windows
 - 実装の場所: Mac は `AppUpdater.presentAsk`・`AppUpdater.runModal`、`UpdateRelease.appNotes`・`ReleaseNotesFormatter`（`Sources/Hanasu/AppUpdate.swift`）。確かめるのは `Hanasu --preview-update-dialog [<リリース文の .md>]` と `Hanasu --update-selftest`。Windows は `ReleaseNotesFormatter.ForApp`・`ReleaseNotesFormatter.Parse`（`windows/Hanasu.Core/Update/ReleaseNotesFormatter.cs`。テストは `ReleaseNotesFormatterTests`。絞り込みは Mac の selfTest と同じ見本で確かめる）と `UpdatePromptWindow.ReleaseNotesDocument`
+
+### DEC-REL-028 進み具合はモデルのダウンロードと同じ形の 1 つの窓に出し、更新は 0.1 秒ごとに間引く。中止はダウンロード中だけ
+- 決めたこと:
+  - 見せ方はローカルのモデルのダウンロード（`LocalModelDownloadPrompt`）と同じにする: 見出し「Hanasu <版> をダウンロードしています…」、確定のバー、小さな字の「<割合>%（<落とした大きさ> / <全体>）」（数字は等幅）、右下に「中止」。
+  - 全体は API の `asset.size` を使う（`Content-Length` は見ない）。割合は `min(1, 落とした量 / size)` を切り捨てた整数の %。
+  - 間引き: 前に出してから 0.1 秒以上たち、かつ落とした量が変わっていれば出す。落とした量が size に達したときは必ず出す。判定は純粋な関数（Mac は `UpdateProgressModel.shouldPublish`、Windows は `UpdateDownloadProgress.ShouldPublish`）にしてテストする。
+  - 割合の文: Mac はモデルのダウンロードと同じ `tr("%@%%（%@ / %@）", …)`。Windows は `Update_Progress`（`{0}% ({1} / {2})`、{0} は整数）。`P0` の書式は言語によって「45 %」「%45」となり Mac の訳とそろわないので使わない。
+  - 確かめ・展開の間はバーを不定にし、「中止」を押せなくする。Mac は SHA-256 の計算を `UpdateHTTP.download` の外（`UpdateHTTP.verify`）に出し、落とし終えた時点で切り替える。
+  - 中止: Mac はダウンロードの `Task` をキャンセルし、`UpdateDownloadDelegate` の `URLSession` を `invalidateAndCancel` する。キャンセルはダイアログを出さずに作業フォルダを消して戻る。Windows は 10 分の打ち切り（DEC-REL-030）のトークンとつないだ `CancellationTokenSource` を「中止」で取り消し、中止による `OperationCanceledException` はダイアログを出さずに作業フォルダを消して戻る（10 分の打ち切りは今のまま `Update_DownloadTimeout`）。
+  - 窓: Mac は今の `.titled`・`.floating` のまま（閉じるボタンなし。やめるのは「中止」）。Windows は `Topmost` にせず、最小化でき、閉じる操作（閉じるボタン・Alt+F4）はダウンロード中なら「中止」と同じにし、確かめ・展開の間は取り消す。どちらも必ず閉じ（Mac は `defer`、Windows は `try/finally`）、ダイアログはそのあとに出す。
+  - Mac の通信: `UpdateHTTP.download` は、`URLSessionDownloadDelegate` を持つ 1 回きりの `URLSession`（`UpdateDownloadDelegate`）で行う（`LocalLLMStore.DownloadDelegate` と同じ作り）。設定は `UpdateHTTP.session` と同じ（ephemeral・Cookie と認証の保存なし・TLS 1.2 以上・`timeoutIntervalForRequest` 60 秒）。転送は `UpdateHTTP.isAllowed` のホストへだけ従い、落とした量が `asset.size` を超えたら止める。Mac には全体の時間の上限を設けない（「中止」で止められるため）。
+- 理由: ユーザーがすでに見ているモデルのダウンロードと同じ見た目・操作にすれば迷わない。Mac は既存の文字列を使える。`asset.size` は確かめ（DEC-REL-021）にも使っている確かな値で、転送先の CDN が `Content-Length` を返さなくても出せる。async の `session.download(for:)` は進み具合を返さないので delegate の作りにする。0.1 秒の間引きなら、速い回線でも UI のスレッドに何百回も投げず、遅い回線でも 1 秒に何度も更新される（「割合が 1% 変わったら」では、遅い回線で数秒止まって見える。計画のレビュー）。確かめ・展開は数秒で終わり、途中でやめると後始末が複雑になるので、中止はダウンロード中だけ。Mac には全体の時間の上限がなく、進み具合が見えると「遅いからやめたい」場面が増えるので「中止」を付ける（モデルのダウンロードの窓にもある）。Windows は今、吹き出しで作業を邪魔しない作りなので、前面に固定せず最小化できるようにする。Windows の展開のあとには、例外を通らずに戻る道（Hanasu のものでないファイルがある）があるので、閉じるのは `finally` にする（計画のレビュー）。
+- 決めた場面: ユーザーの依頼（2026-11-11「更新のダウンロードをバーでダウンロード進捗を表現して。容量も」）と、同日の答え（Mac と Windows の両方・「中止」を付ける）
+- 関係する要件: REQ-REL-012, REQ-REL-010
+- 対象: Mac / Windows
+- 実装の場所: Mac は `UpdateDownloadDelegate`、`UpdateHTTP.download`・`UpdateHTTP.verify`、`UpdateProgressModel`・`UpdateProgressView`、`AppUpdater.install`・`AppUpdater.showProgress`（`Sources/Hanasu/AppUpdate.swift`）。Windows は `UpdateDownloadProgress`（`windows/Hanasu.Core/Update/UpdateDownloadProgress.cs`）、`UpdateProgressWindow`（`windows/Hanasu.Windows/Views/UpdateProgressWindow.cs`）、`UpdateService.InstallAsync`
 
 ### DEC-REL-030 Windows の入れ替えは、隣のフォルダに展開し、PowerShell のスクリプトでフォルダごと取り替える
 - 決めたこと: zip は `Hanasu.exe` のあるフォルダの隣の `Hanasu.update` に落として展開する（どのエントリーもそのフォルダの外に書かない。`Hanasu\Hanasu.exe` がなければ使わない。ダウンロードは 10 分で打ち切る）。今のフォルダの直下に、新しい `Hanasu` フォルダにないもの（`.dll`・`.pdb` のファイルと、エクスプローラーが作る `desktop.ini`・`Thumbs.db` を除く）があれば、Hanasu 専用のフォルダではないので入れ替えず、名前を挙げてリリースのページを案内する（ドライブの直下も断る）。固定の中身の PowerShell のスクリプト（パスは引数で渡す）を動かしてから Hanasu を終える。スクリプトは Hanasu の終了を待ち（60 秒まで）、今のフォルダを `<フォルダ>.old` に改名し（ファイルがまだ放されていなければ数秒やり直す）、新しいフォルダを今の名前に移す（これも数秒やり直し、失敗したら元に戻す）。`Hanasu.exe` を起動し直し、`.old` と作業フォルダを消す。経過は `%LOCALAPPDATA%\Hanasu\Logs\update.log` に書く。スクリプトを動かす前に入れ替える版を `%LOCALAPPDATA%\Hanasu\update-pending.txt` に書き、次の起動で版が上がっていなければ、ログの場所とリリースのページを案内する。フォルダに書き込めない（Program Files など）ときは、リリースのページを案内する。手元のビルド（版の先頭が 0）は入れ替えず、リリースのページを開く。

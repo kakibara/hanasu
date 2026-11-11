@@ -1117,14 +1117,17 @@ Bạn cũng có thể cài lại từ trang phát hành. Mở trong trình duy�
   <data name="Update_Downloading" xml:space="preserve">
     <value>Đang tải bản cập nhật</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} MB)</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Đang tải về Hanasu {0}…</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0}% ({1} / {2})</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>Hủy</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>Tải về không xong trong 10 phút nên đã dừng</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>Đang chuẩn bị bản cập nhật</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>Đang giải nén tệp zip đã tải về.</value>

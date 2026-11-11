@@ -1117,14 +1117,17 @@
   <data name="Update_Downloading" xml:space="preserve">
     <value>Загрузка обновления</value>
   </data>
-  <data name="Update_DownloadingBody" xml:space="preserve">
-    <value>Hanasu {0} ({1} МБ)</value>
+  <data name="Update_DownloadingHeading" xml:space="preserve">
+    <value>Загрузка Hanasu {0}…</value>
+  </data>
+  <data name="Update_Progress" xml:space="preserve">
+    <value>{0}% ({1} / {2})</value>
+  </data>
+  <data name="Update_Cancel" xml:space="preserve">
+    <value>Остановить</value>
   </data>
   <data name="Update_DownloadTimeout" xml:space="preserve">
     <value>Загрузка не завершилась за 10 минут, поэтому остановлена</value>
-  </data>
-  <data name="Update_Preparing" xml:space="preserve">
-    <value>Подготовка обновления</value>
   </data>
   <data name="Update_PreparingBody" xml:space="preserve">
     <value>Распаковка скачанного zip.</value>
