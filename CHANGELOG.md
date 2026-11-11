@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.3.1](https://github.com/kakibara/hanasu/compare/v2.3.0...v2.3.1) - 2026-11-11
+## [v2.4.0](https://github.com/kakibara/hanasu/compare/v2.3.0...v2.4.0) - 2026-11-11
 
 - AI チャットと会議に質問の送り先を、議事録とは別に選べるようにし、画面でも切り替えられるようにする（Mac） by @kakibara in https://github.com/kakibara/hanasu/pull/95
 - 更新のダウンロード中に、進み具合のバーと大きさ・「中止」を出す by @kakibara in https://github.com/kakibara/hanasu/pull/98
