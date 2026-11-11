@@ -263,9 +263,10 @@
   - ヘルプとエラーは表示の言語（REQ-COM-060）で出す。`--` で始まるオプションがあっても、日本語に固定しない（DEC-COM-166 の判定より前に振り分ける）。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C1・C2）
 - 関係する要件: REQ-COM-060
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuCommand.handles`、`HanasuCommand.run`、`HanasuHelp`、`main.swift`（冒頭の振り分け）
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+- Windows の実装: Windows は配布の zip の `cli\hanasu.exe`（アプリと同じ zip。別のインストールは要らない。自己完結・単一ファイル）。中身は `windows/Hanasu.Core/Command/HanasuCommand.cs`、入り口は `windows/Hanasu.Command/Program.cs`。入出力の文字コードは DEC-COM-195
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-181 `hanasu` コマンドの stdout には結果だけを出し、`--json` で決まった形の JSON を出す
 - 内容: stdout には結果だけを出し、途中経過・警告・エラーは stderr に出す。`--json` で、版（`schemaVersion`）の付いた決まった形の JSON を出す。版を上げずに項目を消したり意味を変えたりしない。日時は ISO 8601 で時差を付け、長さは秒の数にする。
@@ -274,32 +275,35 @@
   - 日時は `2026-11-02T13:12:00+09:00` の形、長さは `durationSeconds` の整数。
   - 失敗したときは stdout に何も出さない。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C3・C4）
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuOutput`、`HanasuJSON`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+- Windows の実装: `windows/Hanasu.Core/Command/CommandBasics.cs`（`CommandOutput`・`CommandJson`）。Mac と同じ JSON になることは共有のテストデータで確かめる（DEC-COM-192）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-182 `hanasu` コマンドの終了コードを、失敗の理由で分ける
 - 内容: 0 成功、1 失敗（AI の失敗など）、2 使い方の誤り、3 認証情報・モデルがない、4 会議が見つからない・1 つに決まらない、5 管理者のポリシーで止められている・会議のフォルダを読む権限がない。
 - 受け入れ条件: 知らないオプション・読めない期間・検索する語がない、は 2。ない会議・日付で複数当たる会議は 4。ポリシーで止めたとき・会議のフォルダを読めないときは 5。どれも理由を stderr に出す。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C5）
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuExit`、`HanasuCommandError`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+- Windows の実装: `windows/Hanasu.Core/Command/CommandBasics.cs`（`HanasuExit`・`CommandArguments`）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-183 `hanasu` コマンドは、アプリが起動していてもいなくても動き、会議のファイルを書き換えない
 - 内容: 会議を読むコマンドは、Hanasu のアプリが起動していなくても、起動していても動く。アプリの起動時の処理（`AppDelegate`）を通らず、記録中・処理中の会議を「失敗」にする処理（`MeetingStore.markInterruptedMeetings`）と保存（`MeetingStore.save`）を呼ばない。
 - 受け入れ条件: すべてのコマンドを動かしたあとも、会議のフォルダの `meeting.json` は 1 バイトも変わらない。「処理中」の会議は「処理中」のまま。Windows で、アプリが会議・設定・秘密を保存している最中に `hanasu` が読んでも、アプリの保存は失敗しない（DEC-COM-194）。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の C6）
 - 関係する要件: REQ-MTG-025
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuCommand.main`、`main.swift`（アプリを起動する前に振り分ける）
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+- Windows の実装: `windows/Hanasu.Command/Program.cs`（アプリを起動しない）、`SharedFile`（DEC-COM-194）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-184 管理者のポリシーで、`hanasu` コマンドを使えないようにできる
 - 内容: 会社の管理者が、構成プロファイル（MDM）でアプリのドメイン（`dev.mactypeless.Hanasu`）に `DisableCLI` を true で配ると、`hanasu` コマンドが動かなくなる。ほかのポリシー（MCP を止める・使える AI を絞る）は、それぞれのコマンドと一緒に足す（計画の 4.7 の 7）。
 - 受け入れ条件: `DisableCLI` が管理された値として true のとき、どのコマンドも終了コード 5 と、ポリシーで止められている旨（キーの名前）を stderr に出す。ユーザーが自分で書いた（管理されていない）値は効かない。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の E6）
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac（Windows の管理者のポリシーは FUT-020）
 - 実装の場所: `HanasuPolicy`
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（ポリシーの値を差し替えて確かめる。構成プロファイルで配ったときの動きは実機）
 
@@ -307,9 +311,10 @@
 - 内容: 会議のフォルダを読めないとき（Mac の「書類」フォルダへのアクセスを許可していない、など）は、「会議がない」と取り違えずに止め、どのフォルダを読めないかと、何を許可すればよいかを出す。
 - 受け入れ条件: 会議のフォルダが読めないとき、終了コード 5 で、フォルダのパスと、「システム設定」の「ファイルとフォルダ」で呼び出したアプリに「書類」フォルダへのアクセスを許可する旨（書類の外のフォルダなら、読めるかを確かめる旨）を stderr に出す。フォルダがないだけなら、会議がないとして 0。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の E9）
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuMeetingsCommand.load`、`MeetingStore.loadAll(in:)`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（読めないフォルダで確かめる。「書類」フォルダの許可を誰に求められるかは実機）
+- Windows の実装: `MeetingsCommand.Load`（`windows/Hanasu.Core/Command/MeetingsCommand.cs`）。Windows の知らせは、フォルダのアクセス権と OneDrive の同期でファイルがこの PC にあるか
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（読めないフォルダで確かめる。「書類」フォルダの許可を誰に求められるかは実機）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-186 `hanasu` の AI を使うコマンドは、アプリの設定の AI と認証情報を使い、その回だけ変えられる
 - 内容: `ask`・`refine`・`edit` は、アプリの設定の用途ごとの AI とモデル（REQ-COM-024・025。`ask` は「AI チャット・質問」を利用者が保存していればそれ、していなければ「会議」（DEC-COM-190）。`refine`・`edit` は「音声入力」）と、キーチェーンの認証情報をそのまま使う。`--ai local|apple|gemini|claude` と `--model <id>` で、その回だけ変えられる。環境変数（`ANTHROPIC_API_KEY`・`GEMINI_SERVICE_ACCOUNT_JSON`・`GEMINI_API_KEY`）は、開発用の CLI と同じ順に見る。`hanasu doctor` で、使う AI と、その認証情報を読めるか（値は出さない）を確かめられる。
@@ -321,9 +326,10 @@
   - 「AI チャット・質問」を保存した人の `ask` はその AI に、保存していない人の `ask` は会議の AI に送る。MCP の登録のしかたと PATH の状態は REQ-COM-190・191（段階 4）。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の C7・C8）
 - 関係する要件: REQ-COM-020, REQ-COM-021, REQ-COM-024, REQ-COM-025
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuAI`、`HanasuDoctorCommand`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（AI は偽の `fm`。キーチェーンは一時的な項目を作り、シンボリックリンク経由の `doctor` で読めるかを確かめる。インストールしたアプリのキーで確かめるのは実機）
+- Windows の実装: `windows/Hanasu.Core/Command/CommandAi.cs`、`DoctorCommand`。認証情報は環境変数と `secrets.json`（DPAPI か Windows Hello。DEC-COM-198）。`ask` はいつも会議の AI（「AI チャット・質問」の設定がない）。`--ai apple` は終了コード 2 と「Windows では使えません」、doctor の `credentials.apple` は `available: false` と理由（DEC-COM-197）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（AI は偽の `fm`。キーチェーンは一時的な項目を作り、シンボリックリンク経由の `doctor` で読めるかを確かめる。インストールしたアプリのキーで確かめるのは実機）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-187 ローカルの AI を `hanasu` とアプリで同時に使っても、アプリのサーバーを止めない
 - 内容: `hanasu` がローカルの AI を使うとき、アプリが動かしている llama-server を止めたり、その記録を消したりしない。同じモデルを二重に読み込まない（数 GB のメモリを使うため）よう、ほかのプロセスのサーバーが動いているときは、`hanasu` は自分のサーバーを起動しない。
@@ -333,9 +339,10 @@
   - アプリの起動時に止める「前回の残り」は、記録した持ち主のプロセスが終わっているものだけ。動いているほかのプロセスのサーバーは止めない。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の C9・4.7 の 9）
 - 関係する要件: REQ-COM-030
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `LocalLLMServer`（`otherProcessServerRunning`・`cleanUpStaleServer`）、`HanasuAI.makeClient`、`HanasuCommand.main`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（ほかのプロセスの記録を作って確かめる。実際にアプリと同時に動かすのは実機）
+- Windows の実装: `LocalLlmServerRecords`、`CommandAi.MakeClient`（DEC-COM-184 の Windows）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（ほかのプロセスの記録を作って確かめる。実際にアプリと同時に動かすのは実機）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-188 管理者のポリシーで、`hanasu` コマンドが使える AI を絞れる
 - 内容: 会社の管理者が、構成プロファイルでアプリのドメインに `AllowedAIProviders`（使ってよい AI の名前の配列。`local`・`apple`・`gemini`・`claude`）を配ると、`hanasu` の AI を使うコマンドは、そのほかの AI を使わない。設定の AI でも `--ai` で選んだ AI でも同じ。アプリ自体の音声入力・会議に効かせるのは、計画の段階 5（E6）。
@@ -345,7 +352,7 @@
   - `hanasu doctor` に、効いているポリシーとして出る。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E6・4.7 の 7）
 - 関係する要件: REQ-COM-184
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac（Windows の管理者のポリシーは FUT-020）
 - 実装の場所: `HanasuPolicy.allowedAIProviders`、`HanasuAI.makeClient`
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（ポリシーの値を差し替えて確かめる。構成プロファイルで配ったときの動きは実機）
 
@@ -360,9 +367,10 @@
 - 計画からの変更: 計画の M12 は「引数の形の誤りは JSON-RPC のエラー」としていたが、MCP の 2025-11-25 の版（SEP-1303）から、ツールの引数の値の誤りは、モデルが直してやり直せるよう、ツールの結果（`isError`）で返す決まりになった。これに合わせ、JSON-RPC のエラーにするのはリクエストそのものの形の崩れだけにした（2026-11-11 にユーザーが了承）。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の M7・M11・M12・E6・4.4）
 - 関係する要件: REQ-MTG-127, REQ-COM-184, REQ-COM-181
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows（`DisableMCP` は Mac だけ。FUT-020）
 - 実装の場所: `HanasuMCPServer`、`HanasuPolicy`（`DisableMCP`）
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（`hanasu mcp` を子プロセスで動かし、新旧の版の手順でやりとりする。Claude Code などに登録して使うのは実機）
+- Windows の実装: `windows/Hanasu.Core/Command/McpServer.cs`（`McpServer`）。本当の stdout を取っておく守り方は `WindowsConsole.Create`（DEC-COM-186）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（`hanasu mcp` を子プロセスで動かし、新旧の版の手順でやりとりする。Claude Code などに登録して使うのは実機）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-190 設定画面と `hanasu doctor` に、実行ファイルの絶対パスと MCP の登録のしかたを、コピーできる形で出す
 - 内容: 設定画面に「コマンドと MCP」の項目を足し、`hanasu` の実行ファイルの実際のパス（アプリの中の実行ファイル）、Claude Code に登録するコマンド（`claude mcp add hanasu -- <絶対パス> mcp`）、Claude Desktop の設定（`claude_desktop_config.json` の `mcpServers`）に足す JSON を出し、それぞれコピーのボタンで写せるようにする。どれも絶対パスで書くので、PATH に入れなくても登録できる。`hanasu doctor` にも同じものを出す（`--json` では `mcp.claudeCode`・`mcp.claudeDesktop`）。
@@ -373,9 +381,10 @@
   - MCP で返した会議の中身がエージェントとその AI の提供元に渡ることを、登録のしかたの下に書く（REQ-COM-189 と同じ文）。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E4・C8）
 - 関係する要件: REQ-COM-186, REQ-COM-189, REQ-COM-184
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `CommandLineSettingsTab`、`HanasuInstall`（`claudeCodeCommand`・`claudeDesktopJSON`）、`HanasuDoctorCommand`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（登録の文と doctor）、`.build/debug/Hanasu --render-settings <フォルダ> --pane commandLine`（UX-183）。実際に Claude Desktop に貼って使うのは実機
+- Windows の実装: 設定の「コマンドと MCP」のタブ（`windows/Hanasu.Windows/Views/SettingsWindow.CommandLine.cs`）と `DoctorCommand`。登録の文は `CommandInstall`（PowerShell・cmd でそのまま動く形）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（登録の文と doctor）、`.build/debug/Hanasu --render-settings <フォルダ> --pane commandLine`（UX-183）。実際に Claude Desktop に貼って使うのは実機。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-191 設定画面から、`hanasu` を PATH に入れる・外す
 - 内容: 設定の「コマンドと MCP」の「PATH に入れる…」で、`/usr/local/bin/hanasu` にアプリの実行ファイルへのシンボリックリンクを作る（書けなければ macOS の管理者の確認を出す）。入れられなかった（確認を取り消した・失敗した）ときは、確かめてから、管理者の権限の要らない `~/.local/bin/hanasu` に作る。ログインシェルが zsh で `~/.local/bin` が PATH にないときは、確かめてから `~/.zprofile` に PATH の 1 行を足す。ほかのシェルでは、足す行を出す。「PATH から外す…」で、作ったリンクと足した行を消す。どれも任意で、使わなくても絶対パスで動く（REQ-COM-180）。
@@ -387,9 +396,10 @@
   - `DisableCLI` のポリシーのときは、入れるボタンを使えなくする。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E3・4.7 の 4）
 - 関係する要件: REQ-COM-180, REQ-COM-184, REQ-COM-192
-- 対象: Mac（Windows のユーザーの PATH への登録は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuInstall`（`installSystemLink`・`installUserLink`・`addProfileLine`・`removeProfileLine`・`linkState`）、`CommandLineSettingsTab`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（一時フォルダをホームに見立てて、リンクと `~/.zprofile` の行を作って外す）。管理者の確認で `/usr/local/bin` に入れるのと、新しいターミナルで動くことは実機
+- Windows の実装: ユーザーの PATH（`HKCU\Environment` の `Path`）に `cli` のフォルダを足す・外す（`UserPath`・`CommandPath`。DEC-COM-199）。管理者の権限は要らない。開いたままのターミナルには届かないことを画面に出す
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（一時フォルダをホームに見立てて、リンクと `~/.zprofile` の行を作って外す）。管理者の確認で `/usr/local/bin` に入れるのと、新しいターミナルで動くことは実機。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-192 アプリがダウンロードした場所から移されずに動いているときは、知らせて、PATH と MCP に登録させない
 - 内容: アプリが App Translocation（ダウンロードした場所から移さずに開いたときに、macOS が読み取り専用の仮の場所で動かすこと）で動いているときは、パスが起動のたびに変わるので、設定の「コマンドと MCP」と `hanasu doctor` で「アプリケーションフォルダに移して開き直す」よう知らせ、PATH に入れるボタンと、登録のしかたのコピーのボタンを使えなくする。
@@ -409,9 +419,10 @@
   - 設定画面で、説明を見る・コピーできる。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E7・4.7 の 1）
 - 関係する要件: REQ-COM-189, REQ-COM-190
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuHelp.agentGuide`、`CommandLineSettingsTab`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+- Windows の実装: `CommandHelp.AgentGuide`（PowerShell の `& "…"` の書き方と、Git Bash・cmd の書き方を添える。DEC-COM-191）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ---
 
@@ -1054,7 +1065,7 @@
 - 実装の場所: `windows/Hanasu.Core/Transcription/Transcribers.cs`、`windows/Hanasu.Core/Gemini/GeminiPrompts.cs`
 
 ### DEC-COM-107 Windows 版は、Mac 版の一部の機能を持たない
-- 決めたこと: Windows 版には、アプリ別の文体・スニペット・画面の文脈（スクリーンショットの文字 REQ-DIC-041・042 を含む）・履歴の整え直しと録音・最後の結果の再入力・選択を声で編集・設定からの辞書の候補の提案（会議ノートからは REQ-DIC-072 で足した）・会議の字幕・会議中の「何を聞かれた？」・マイク側の話者分離・会議の自動検出・会議の横断検索と質問・議事録のファイル保存・Slack 向けのコピー・リマインダーへの登録がない（REQ-DIC-020〜071 の一部、REQ-MTG-009・014〜016・019・047 は「対象: Mac」のまま）。一覧は [windows/README.md](../../windows/README.md) の「Mac 版との差」。
+- 決めたこと: Windows 版には、アプリ別の文体・スニペット・画面の文脈（スクリーンショットの文字 REQ-DIC-041・042 を含む）・履歴の整え直しと録音・最後の結果の再入力・選択を声で編集・設定からの辞書の候補の提案（会議ノートからは REQ-DIC-072 で足した）・会議の字幕・会議中の「何を聞かれた？」・マイク側の話者分離・会議の自動検出・会議の横断検索と質問・議事録のファイル保存・Slack 向けのコピー・リマインダーへの登録がない（REQ-DIC-020〜071 の一部、REQ-MTG-009・014〜016・019・047 は「対象: Mac」のまま）。ただし、会議の横断検索と質問・選択の書き換え・アプリ別の文体（既定の一覧だけ）は、`hanasu` コマンドからは使える（REQ-MTG-123・126、REQ-DIC-160・161。アプリの画面にはない）。一覧は [windows/README.md](../../windows/README.md) の「Mac 版との差」。
 - 理由: PR #19 の範囲を、音声入力（第 1 段階）と会議の記録（第 2 段階）の中心にした。足すかどうかは [roadmap.md](../roadmap.md) FUT-003。
 - 決めた場面: PR #19
 - 関係する要件: REQ-COM-010, REQ-COM-011
@@ -1270,7 +1281,7 @@
 - 理由: 会社で許可を取るときに、アプリを許可すれば CLI も許可される（実行ファイルが 1 つ）。アプリと版がずれず、配り方（`.app` の zip）も変えなくてよい（[plans/cli.md](../plans/cli.md) の 5.2）。`--` の判定より後だと、`hanasu meetings list --json` の表示が日本語に固定される。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)
 - 関係する要件: REQ-COM-180, REQ-COM-183
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac
 - 実装の場所: `HanasuCommand`、`main.swift`
 
 ### DEC-COM-181 `--json` の形は、中の `meeting.json` と分け、キーは英語で固定する
@@ -1278,15 +1289,16 @@
 - 理由: 中の形（`meeting.json`）を変えても、エージェントやスクリプトとの約束が壊れないように。キーを訳すと、表示の言語で読み取りが壊れる。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)
 - 関係する要件: REQ-COM-181
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuOutput.json`、`HanasuJSON`、`HanasuMeetingsCommand.summaryJSON`
+- Windows の実装: `CommandJson`（`windows/Hanasu.Core/Command/CommandBasics.cs`）
 
 ### DEC-COM-182 管理者のポリシーは、アプリのドメインの管理された設定（構成プロファイル）だけを読む
 - 決めたこと: ポリシーは `CFPreferencesAppValueIsForced` で「管理された値か」を確かめ、管理された値だけを読む。ドメインは `Bundle.main.bundleIdentifier`（`.app` の外で動かしたときは `dev.mactypeless.Hanasu`）。キーの名前は英語（`DisableCLI`）で、管理者が構成プロファイルに書く。
 - 理由: 管理者が配る構成プロファイル（MDM）が、会社の Mac の設定を決める普通の方法。管理された値だけを見れば、ユーザーが `defaults write` で書き換えてポリシーを外せない。シンボリックリンク経由でも同じドメインを見るように、名前で開く。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（計画の 4.7 の 7）
 - 関係する要件: REQ-COM-184
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac（Windows の管理者のポリシーは FUT-020）
 - 実装の場所: `HanasuPolicy`
 
 ### DEC-COM-183 シンボリックリンクから起動したら、リンクをたどった先の実際のパスで起動し直す
@@ -1294,7 +1306,7 @@
 - 理由: 2026-11-09 に確かめたところ、`/usr/local/bin/hanasu` のようなリンクから起動すると、`Bundle.main` が `.app` として解決されず（Info.plist の版も読めなかった）、訳（`Localizable.xcstrings`）・アプリの設定（UserDefaults）・管理者のポリシーのドメインを読めなかった。計画（[plans/cli.md](../plans/cli.md) の 5.2）で心配していたこと。読む場所ごとに `Bundle(url:)` で開き直すと、`Bundle.main` を使う場所（今あるものも、これから足すものも）を漏れなく直す必要があり、漏れやすい。起動し直せば 1 か所で済み、アプリと同じ `Bundle.main` になる。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」）。計画 [plans/cli.md](../plans/cli.md)（段階 1 の確かめ）
 - 関係する要件: REQ-COM-180
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac
 - 実装の場所: `HanasuCommand.reexecIfSymlinked`
 
 ### DEC-COM-184 ローカルの AI のサーバーの記録は、起動したプロセスごとに分ける
@@ -1311,24 +1323,27 @@
 - 理由: 空のキーで送って AI の側のエラー（401 など）になると、エージェントが「認証情報がない」と「AI の失敗」を区別できない（計画の C5）。`doctor` で読めるかを確かめられれば、シンボリックリンク経由でパスワードを求められるかも分かる。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の C5・C7・C8）
 - 関係する要件: REQ-COM-186, REQ-COM-182
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuAI.makeClient`、`HanasuAI.credentialStatus`、`HanasuDoctorCommand`
+- Windows の実装: `CommandAi.CredentialStatusOf`。Windows Hello で守ったキーは、確認を出さないよう読まずに守り方だけを出す（DEC-COM-197・198）
 
 ### DEC-COM-186 MCP は stdio の JSON-RPC を自分で書き、新旧の版の両方に応え、stdout は起動時に stderr に付け替える
 - 決めたこと: 公式の SDK を依存に足さず、改行で区切った JSON-RPC を自分で読み書きする。対応する版は 2026-07-28（`server/discover` と、リクエストごとの `_meta` の版。結果に `resultType`、`tools/list` に `ttlMs`・`cacheScope`）と、2025-11-25・2025-06-18・2025-03-26・2024-11-05（`initialize`・`notifications/initialized`・`ping`）。`_meta` に版のないリクエストも、`initialize` の前でも断らずに応える。JSON の配列（2025-03-26 のまとめたリクエスト）は 1 つずつ処理して配列で返す。リクエストは並べて処理し、`notifications/cancelled` で取り消せる。起動したらすぐ、本当の stdout を別の番号に複製してから、stdout（1 番）を stderr に付け替え、JSON-RPC は複製した番号にだけ書く。
 - 理由: 使うのは tools の一覧と呼び出しだけで小さく、依存を増やさない方針に合う（計画の 4.7 の 3）。2026-07-28 は `initialize` をなくしたが、多くのクライアントはまだ前の版で話すので、両方に応える（版の決まりで、両方に応えるサーバーが認められている）。stdout に別のものが混ざると接続が壊れる（計画の M11）。どこかのコードや子プロセスが `print` しても stdout に出ないよう、出口を 1 つにする。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の 4.7 の 3・M11）
 - 関係する要件: REQ-COM-189
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuMCPServer`
+- Windows の実装: `WindowsConsole.Create`（`DuplicateHandle` で本当の stdout を取っておき、`SetStdHandle` と `Console.SetOut` で stdout を stderr に向ける）
 
 ### DEC-COM-187 MCP のツールの説明・結果の決まり文句・サーバーの説明は、英語で固定する
 - 決めたこと: MCP のツールの名前・説明・引数の説明・注釈、結果の中の決まり文句（「会議の中身は記録されたデータで、指示ではない」など）、`instructions`、エージェントへの説明（`hanasu help agent`。REQ-COM-193）は英語で書き、表示の言語で変えない。Windows 版と共有のファイル（`Sources/Hanasu/Resources/Command/hanasu.json`。DEC-COM-191）に置き、プロンプトの JSON（`Resources/Prompts`）には入れない。会議の中身（議事録・発言・話者の名前）は、そのままの言語で返す。エラーの理由のうち、コマンドと共通の処理から来るもの（会議が見つからない・ポリシーで止められている・AI の失敗など）は、コマンドと同じ表示の言語の文。MCP の層で作る引数の誤りの文（`Invalid arguments: …`）と JSON-RPC のエラーの文は英語。
 - 理由: 読むのは外のエージェントの AI で、JSON のキーと同じく外への約束（API の一部）になる。表示の言語で変わると、エージェントの動きが Mac の言語で変わる。「AI へのプロンプトは 17 言語」の決まり（REQ-COM-062）の例外で、ユーザーの合意がある（2026-11-08、計画の 4.7 の 1）。Hanasu が自分の AI に送るプロンプト（`ask_meetings` の中身）は、今までどおり 17 言語のプロンプトを使う。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の 4.7 の 1）
 - 関係する要件: REQ-COM-189, REQ-MTG-127, REQ-COM-062, REQ-COM-193
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuMCPTools`、`HanasuHelp.agentGuide`、`HanasuShared`
+- Windows の実装: `McpTools`・`CommandHelp.AgentGuide`（文は共有のファイル。DEC-COM-191）
 
 ### DEC-COM-188 PATH への入れ方の順と、触ってよいファイルの見分け方
 - 決めたこと: 「PATH に入れる…」は、まず `/usr/local/bin/hanasu` にリンクを作る。その場所に書ければそのまま作り（Homebrew の古い設定などで書けることがある）、書けなければ AppleScript の `do shell script … with administrator privileges` で macOS の管理者の確認を出す。取り消し・失敗のときは、理由を出して確かめてから `~/.local/bin/hanasu` に作る。zsh で `~/.local/bin` がシェルの設定ファイルに出てこなければ、確かめてから `~/.zprofile` の終わりに、言語によらない固定の印の行（`# Added by Hanasu: puts the hanasu command on PATH`）と `export PATH="$HOME/.local/bin:$PATH"` を足す。触ってよいのは、リンク先の名前が `Hanasu` のシンボリックリンク（このアプリか、別の場所に置いていた Hanasu）だけで、ほかのファイルは上書きも削除もしない。外すときは、印の行とそのすぐ次の行が足した行のままのときだけ、その行も消す。

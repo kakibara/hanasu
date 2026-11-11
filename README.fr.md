@@ -122,19 +122,21 @@ Avec **Local**, Hanasu fait tourner un petit modèle de langage sur votre propre
 Vous pouvez choisir un moteur différent pour la saisie vocale et pour les réunions. Sur Windows, les réunions utilisent Whisper ou Gemini.
 Sur Mac, choisissez la langue de transcription dans une liste (japonais, anglais, chinois, coréen, français, allemand, espagnol, italien, portugais). Elle correspond au départ à la langue de votre système.
 
-### ⌨️ Utilisez-le depuis le terminal et des agents IA *(Mac)*
+### ⌨️ Utilisez-le depuis le terminal et des agents IA
 
-La commande `hanasu` permet aux scripts et aux agents IA (Claude Code, Claude Desktop et autres) de lire vos enregistrements de réunions et de mettre du texte au propre comme la saisie vocale. C'est l'application elle-même : il n'y a rien d'autre à installer. Ouvrez **Réglages → Commande et MCP** pour l'ajouter à votre PATH ou copier la configuration MCP.
+La commande `hanasu` permet aux scripts et aux agents IA (Claude Code, Claude Desktop et autres) de lire vos enregistrements de réunions et de mettre du texte au propre comme la saisie vocale. Elle est fournie avec l'application : il n'y a rien d'autre à installer. Sur le Mac, c'est l'application elle-même ; sur Windows, c'est `cli\hanasu.exe` dans le dossier de Hanasu. Ouvrez **Réglages → Commande et MCP** pour l'ajouter à votre PATH ou copier la configuration MCP.
 
 | | |
 | --- | --- |
 | **Lire les réunions** | `hanasu meetings list / show / search` et `hanasu actions` affichent les réunions, comptes rendus, transcriptions et actions, en texte ou en `--json`. Rien n'est envoyé nulle part. |
-| **Demander** | `hanasu ask "Qu'avons-nous décidé la semaine dernière ?"` répond à partir de vos réunions, avec l'IA choisie pour les réunions. |
-| **Mettre du texte au propre** | `hanasu refine` met au propre ou traduit du texte comme la saisie vocale, et `hanasu edit "<instruction>"` le réécrit. Les deux s'utilisent aussi dans un pipe. |
+| **Demander** | `hanasu ask "Qu'avons-nous décidé la semaine dernière ?"` répond à partir de vos réunions. Sur le Mac, la commande utilise l'IA choisie pour **Chat IA et questions** (ou celle des réunions si vous n'en avez pas choisi) ; sur Windows, celle des réunions. |
+| **Mettre du texte au propre** | `hanasu refine` met au propre ou traduit du texte comme la saisie vocale, et `hanasu edit "<instruction>"` le réécrit. Les deux s'utilisent aussi dans un pipe. `--app` choisit le style d'une application (un identifiant de bundle sur le Mac, un nom d'exécutable comme `slack.exe` sur Windows). |
 | **MCP pour les agents IA** | `hanasu mcp` est un serveur MCP (stdio). Les agents peuvent lister, lire et rechercher vos réunions, et leur poser des questions. Le contenu des réunions partagé de cette façon est transmis à l'agent et au fournisseur de son IA. |
 | **Vérifier la configuration** | `hanasu doctor` indique l'IA et les identifiants utilisés, le dossier des réunions et comment enregistrer MCP. Exécutez `hanasu help` pour voir toutes les options. |
 
-Les administrateurs peuvent désactiver la commande, MCP ou certaines IA avec un profil de configuration.
+Sur Windows, exécutez `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` avant de lire la sortie dans PowerShell. Les clés d'API protégées par Windows Hello vous demandent une confirmation chaque fois qu'une commande les utilise.
+
+Sur le Mac, les administrateurs peuvent désactiver la commande, MCP ou certaines IA avec un profil de configuration.
 
 ## Téléchargement
 

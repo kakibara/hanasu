@@ -122,19 +122,21 @@ Với **Cục bộ**, Hanasu chạy một mô hình ngôn ngữ nhỏ ngay trên
 Bạn có thể chọn công cụ khác nhau cho nhập liệu bằng giọng nói và cho cuộc họp. Trên Windows, cuộc họp dùng Whisper hoặc Gemini.
 Trên Mac, chọn ngôn ngữ chép lời từ danh sách (tiếng Nhật, tiếng Anh, tiếng Trung, tiếng Hàn, tiếng Pháp, tiếng Đức, tiếng Tây Ban Nha, tiếng Ý, tiếng Bồ Đào Nha). Ban đầu ngôn ngữ này được đặt theo ngôn ngữ hệ thống của bạn.
 
-### ⌨️ Dùng từ terminal và AI agent *(Mac)*
+### ⌨️ Dùng từ terminal và AI agent
 
-Lệnh `hanasu` cho phép script và AI agent (Claude Code, Claude Desktop và các agent khác) đọc bản ghi cuộc họp của bạn và dùng cách chỉnh sửa văn bản giống như bạn đã thiết lập. Lệnh này chính là ứng dụng, nên không cần cài thêm gì. Mở **Cài đặt → Lệnh & MCP** để thêm lệnh vào PATH hoặc sao chép cấu hình MCP.
+Lệnh `hanasu` cho phép script và AI agent (Claude Code, Claude Desktop và các agent khác) đọc bản ghi cuộc họp của bạn và dùng cách chỉnh sửa văn bản giống như bạn đã thiết lập. Lệnh này đi kèm ứng dụng, nên không cần cài thêm gì: trên Mac, lệnh chính là ứng dụng; trên Windows, đó là `cli\hanasu.exe` trong thư mục Hanasu. Mở **Cài đặt → Lệnh & MCP** để thêm lệnh vào PATH hoặc sao chép cấu hình MCP.
 
 | | |
 | --- | --- |
 | **Đọc cuộc họp** | `hanasu meetings list / show / search` và `hanasu actions` in ra cuộc họp, biên bản, bản chép lời và các đầu việc, dưới dạng văn bản hoặc `--json`. Không gửi gì đi đâu cả. |
-| **Hỏi đáp** | `hanasu ask "Tuần trước chúng ta đã quyết định gì?"` trả lời dựa trên các cuộc họp của bạn, bằng AI bạn chọn cho cuộc họp. |
-| **Chỉnh sửa văn bản** | `hanasu refine` chỉnh sửa hoặc dịch văn bản giống như nhập liệu bằng giọng nói, còn `hanasu edit "<chỉ dẫn>"` viết lại văn bản. Cả hai đều dùng được trong pipe. |
+| **Hỏi đáp** | `hanasu ask "Tuần trước chúng ta đã quyết định gì?"` trả lời dựa trên các cuộc họp của bạn. Trên Mac, lệnh dùng AI bạn chọn cho **trò chuyện AI & hỏi đáp** (hoặc AI cho cuộc họp nếu bạn chưa chọn); trên Windows, lệnh dùng AI cho cuộc họp. |
+| **Chỉnh sửa văn bản** | `hanasu refine` chỉnh sửa hoặc dịch văn bản giống như nhập liệu bằng giọng nói, còn `hanasu edit "<chỉ dẫn>"` viết lại văn bản. Cả hai đều dùng được trong pipe. `--app` chọn văn phong theo ứng dụng (bundle ID trên Mac, tên tệp exe như `slack.exe` trên Windows). |
 | **MCP cho AI agent** | `hanasu mcp` là một máy chủ MCP (stdio). Agent có thể liệt kê, đọc, tìm kiếm và đặt câu hỏi về các cuộc họp của bạn. Nội dung cuộc họp bạn chia sẻ theo cách này sẽ được chuyển cho agent và nhà cung cấp AI của agent đó. |
 | **Kiểm tra thiết lập** | `hanasu doctor` cho biết AI và thông tin xác thực nào đang được dùng, thư mục cuộc họp, và cách đăng ký MCP. Chạy `hanasu help` để xem mọi tùy chọn. |
 
-Quản trị viên có thể tắt lệnh, MCP hoặc một số AI bằng hồ sơ cấu hình.
+Trên Windows, hãy chạy `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` trước khi đọc kết quả trong PowerShell. Với khóa API được bảo vệ bằng Windows Hello, bạn sẽ được yêu cầu xác nhận mỗi lần một lệnh dùng đến khóa đó.
+
+Trên Mac, quản trị viên có thể tắt lệnh, MCP hoặc một số AI bằng hồ sơ cấu hình.
 
 ## Tải về
 

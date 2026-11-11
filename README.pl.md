@@ -122,19 +122,21 @@ W trybie **Lokalnie** Hanasu uruchamia mały model językowy na Twoim Macu lub P
 Możesz wybrać inny silnik dla wprowadzania głosem i dla spotkań. Na Windows spotkania używają Whisper lub Gemini.
 Na Macu język transkrypcji wybierasz z listy (japoński, angielski, chiński, koreański, francuski, niemiecki, hiszpański, włoski, portugalski). Domyślnie jest to język systemu.
 
-### ⌨️ Używaj z terminala i agentów AI *(Mac)*
+### ⌨️ Używaj z terminala i agentów AI
 
-Polecenie `hanasu` pozwala skryptom i agentom AI (Claude Code, Claude Desktop i innym) czytać zapisy Twoich spotkań i korzystać z Twojego sposobu dopracowywania tekstu. To sama aplikacja, więc nie trzeba niczego dodatkowo instalować. Otwórz **Ustawienia → Polecenie i MCP**, aby dodać je do PATH lub skopiować konfigurację MCP.
+Polecenie `hanasu` pozwala skryptom i agentom AI (Claude Code, Claude Desktop i innym) czytać zapisy Twoich spotkań i korzystać z Twojego sposobu dopracowywania tekstu. Jest dostarczane razem z aplikacją, więc nie trzeba niczego dodatkowo instalować: na Macu to sama aplikacja, a na Windows — plik `cli\hanasu.exe` w folderze Hanasu. Otwórz **Ustawienia → Polecenie i MCP**, aby dodać je do PATH lub skopiować konfigurację MCP.
 
 | | |
 | --- | --- |
 | **Czytanie spotkań** | `hanasu meetings list / show / search` i `hanasu actions` wypisują spotkania, protokoły, transkrypcje i zadania jako tekst lub `--json`. Nic nie jest nigdzie wysyłane. |
-| **Pytania** | `hanasu ask "Co ustaliliśmy w zeszłym tygodniu?"` odpowiada na podstawie Twoich spotkań za pomocą AI wybranego dla spotkań. |
-| **Dopracowywanie tekstu** | `hanasu refine` dopracowuje lub tłumaczy tekst tak samo jak wprowadzanie głosem, a `hanasu edit "<polecenie>"` go przepisuje. Oba działają w potokach. |
+| **Pytania** | `hanasu ask "Co ustaliliśmy w zeszłym tygodniu?"` odpowiada na podstawie Twoich spotkań. Na Macu używa AI wybranego dla **czatu AI i pytań** (a jeśli go nie wybrano — AI dla spotkań), a na Windows — AI dla spotkań. |
+| **Dopracowywanie tekstu** | `hanasu refine` dopracowuje lub tłumaczy tekst tak samo jak wprowadzanie głosem, a `hanasu edit "<polecenie>"` go przepisuje. Oba działają w potokach. `--app` wybiera styl danej aplikacji (na Macu jej bundle ID, na Windows nazwę pliku exe, np. `slack.exe`). |
 | **MCP dla agentów AI** | `hanasu mcp` to serwer MCP (stdio). Agenci mogą wyświetlać listę Twoich spotkań, czytać je, przeszukiwać i zadawać o nie pytania. Treść spotkań udostępniona w ten sposób trafia do agenta i jego dostawcy AI. |
 | **Sprawdzanie konfiguracji** | `hanasu doctor` pokazuje, które AI i dane uwierzytelniające są używane, folder spotkań oraz sposób rejestracji MCP. Wszystkie opcje wyświetlisz poleceniem `hanasu help`. |
 
-Administratorzy mogą wyłączyć polecenie, MCP lub niektóre AI za pomocą profilu konfiguracyjnego.
+Na Windows przed odczytaniem wyniku w PowerShell uruchom `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()`. Klucze API chronione przez Windows Hello wymagają potwierdzenia za każdym razem, gdy polecenie z nich korzysta.
+
+Na Macu administratorzy mogą wyłączyć polecenie, MCP lub niektóre AI za pomocą profilu konfiguracyjnego.
 
 ## Pobieranie
 

@@ -122,19 +122,21 @@ Bu yapay zekâlar yalnızca metinle çalışır. Konuşma, aşağıdaki motor ta
 Sesle yazma ve toplantılar için farklı motorlar seçebilirsiniz. Windows'ta toplantılar Whisper veya Gemini kullanır.
 Mac'te döküm dilini bir listeden seçin (Japonca, İngilizce, Çince, Korece, Fransızca, Almanca, İspanyolca, İtalyanca, Portekizce). Başlangıçta sistem dilinize ayarlıdır.
 
-### ⌨️ Terminalden ve yapay zekâ ajanlarından kullanın *(Mac)*
+### ⌨️ Terminalden ve yapay zekâ ajanlarından kullanın
 
-`hanasu` komutu sayesinde betikler ve yapay zekâ ajanları (Claude Code, Claude Desktop ve diğerleri) toplantı kayıtlarınızı okuyabilir ve metin iyileştirme stilinizi kullanabilir. Komut uygulamanın kendisidir, bu yüzden başka bir şey kurmanız gerekmez. PATH'e eklemek veya MCP kurulumunu kopyalamak için **Ayarlar → Komut ve MCP** bölümünü açın.
+`hanasu` komutu sayesinde betikler ve yapay zekâ ajanları (Claude Code, Claude Desktop ve diğerleri) toplantı kayıtlarınızı okuyabilir ve metin iyileştirme stilinizi kullanabilir. Komut uygulamayla birlikte gelir, bu yüzden başka bir şey kurmanız gerekmez: Mac'te uygulamanın kendisidir, Windows'ta ise Hanasu klasöründeki `cli\hanasu.exe` dosyasıdır. PATH'e eklemek veya MCP kurulumunu kopyalamak için **Ayarlar → Komut ve MCP** bölümünü açın.
 
 | | |
 | --- | --- |
 | **Toplantıları okuma** | `hanasu meetings list / show / search` ve `hanasu actions` toplantıları, tutanakları, dökümleri ve aksiyon maddelerini metin veya `--json` olarak yazdırır. Hiçbir yere hiçbir şey gönderilmez. |
-| **Sorma** | `hanasu ask "Geçen hafta ne karar verdik?"`, toplantılar için seçtiğiniz yapay zekâyla toplantılarınıza dayanarak yanıt verir. |
-| **Metni iyileştirme** | `hanasu refine` metni sesle yazmadaki gibi düzenler veya çevirir; `hanasu edit "<talimat>"` ise metni yeniden yazar. İkisi de borularda (pipe) çalışır. |
+| **Sorma** | `hanasu ask "Geçen hafta ne karar verdik?"`, toplantılarınıza dayanarak yanıt verir. Mac'te **yapay zekâ sohbeti ve sorular** için seçtiğiniz yapay zekâyı (seçmediyseniz toplantılar için seçtiğiniz yapay zekâyı), Windows'ta ise toplantılar için seçtiğiniz yapay zekâyı kullanır. |
+| **Metni iyileştirme** | `hanasu refine` metni sesle yazmadaki gibi düzenler veya çevirir; `hanasu edit "<talimat>"` ise metni yeniden yazar. İkisi de borularda (pipe) çalışır. `--app` ile bir uygulamanın stilini seçebilirsiniz (Mac'te bundle ID, Windows'ta `slack.exe` gibi bir exe adı). |
 | **Yapay zekâ ajanları için MCP** | `hanasu mcp` bir MCP sunucusudur (stdio). Ajanlar toplantılarınızı listeleyebilir, okuyabilir, arayabilir ve onlar hakkında soru sorabilir. Bu yolla paylaştığınız toplantı içeriği ajana ve onun yapay zekâ sağlayıcısına gider. |
 | **Kurulumu kontrol etme** | `hanasu doctor`, hangi yapay zekânın ve kimlik bilgilerinin kullanıldığını, toplantı klasörünü ve MCP'nin nasıl kaydedileceğini gösterir. Tüm seçenekler için `hanasu help` komutunu çalıştırın. |
 
-Yöneticiler komutu, MCP'yi veya bazı yapay zekâları bir yapılandırma profiliyle kapatabilir.
+Windows'ta, çıktıyı PowerShell'de okumadan önce `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` komutunu çalıştırın. Windows Hello ile korunan API anahtarları, bir komut onları her kullandığında onayınızı ister.
+
+Mac'te yöneticiler komutu, MCP'yi veya bazı yapay zekâları bir yapılandırma profiliyle kapatabilir.
 
 ## İndirme
 

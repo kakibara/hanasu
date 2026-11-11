@@ -122,19 +122,21 @@ Hanasu 會把轉錄結果交給 AI（Gemini、Claude，或你裝置上的本機�
 語音輸入和會議可以選擇不同的引擎。在 Windows 上，會議使用 Whisper 或 Gemini。
 在 Mac 上，可以從清單中選擇轉錄語言（日語、英語、中文、韓語、法語、德語、西班牙語、義大利語、葡萄牙語）。初始值為你的系統語言。
 
-### ⌨️ 從終端機和 AI 代理程式使用 *（Mac）*
+### ⌨️ 從終端機和 AI 代理程式使用
 
-透過 `hanasu` 指令，腳本和 AI 代理程式（Claude Code、Claude Desktop 等）可以讀取你的會議記錄，並使用你的潤飾風格。它就是應用程式本身，不需要另外安裝任何東西。開啟 **設定 → 指令與 MCP**，即可將它加入 PATH，或複製 MCP 的設定。
+透過 `hanasu` 指令，腳本和 AI 代理程式（Claude Code、Claude Desktop 等）可以讀取你的會議記錄，並使用你的潤飾風格。它隨應用程式一起提供，不需要另外安裝任何東西：在 Mac 上它就是應用程式本身，在 Windows 上則是 Hanasu 資料夾中的 `cli\hanasu.exe`。開啟 **設定 → 指令與 MCP**，即可將它加入 PATH，或複製 MCP 的設定。
 
 | | |
 | --- | --- |
 | **讀取會議** | `hanasu meetings list / show / search` 和 `hanasu actions` 以文字或 `--json` 輸出會議、會議記錄、轉錄和待辦事項。不會傳送到任何地方。 |
-| **提問** | `hanasu ask "上週我們決定了什麼？"` 會用你為會議選擇的 AI，根據你的會議內容回答。 |
-| **潤飾文字** | `hanasu refine` 會像語音輸入一樣潤飾或翻譯文字，`hanasu edit "<指示>"` 則會改寫文字。兩者都可以在管線中使用。 |
+| **提問** | `hanasu ask "上週我們決定了什麼？"` 會根據你的會議內容回答。在 Mac 上使用你為 **AI 聊天·提問** 選擇的 AI（若未選擇，則使用會議的 AI）；在 Windows 上使用會議的 AI。 |
+| **潤飾文字** | `hanasu refine` 會像語音輸入一樣潤飾或翻譯文字，`hanasu edit "<指示>"` 則會改寫文字。兩者都可以在管線中使用。`--app` 可選擇某個應用程式的風格（在 Mac 上用 bundle ID，在 Windows 上用 `slack.exe` 這類 exe 名稱）。 |
 | **給 AI 代理程式用的 MCP** | `hanasu mcp` 是一個 MCP 伺服器（stdio）。代理程式可以列出、讀取、搜尋你的會議，並針對會議提問。以這種方式分享的會議內容會傳給代理程式及其 AI 供應商。 |
 | **檢查設定** | `hanasu doctor` 會顯示使用的 AI 和憑證、會議檔案夾，以及登錄 MCP 的方法。執行 `hanasu help` 可查看所有選項。 |
 
-管理員可以透過設定描述檔關閉此指令、MCP 或部分 AI。
+在 Windows 上用 PowerShell 讀取輸出前，請先執行 `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()`。以 Windows Hello 保護的 API 金鑰，每次被指令使用時都會請你確認。
+
+在 Mac 上，管理員可以透過設定描述檔關閉此指令、MCP 或部分 AI。
 
 ## 下載
 

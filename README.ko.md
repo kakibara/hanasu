@@ -122,19 +122,21 @@ Typeless, Wispr Flow, Aqua Voice, Granola에서 영감을 받았습니다. Hanas
 음성 입력과 회의에 서로 다른 엔진을 고를 수 있습니다. Windows에서는 회의에 Whisper 또는 Gemini를 사용합니다.
 Mac에서는 목록(일본어, 영어, 중국어, 한국어, 프랑스어, 독일어, 스페인어, 이탈리아어, 포르투갈어)에서 전사 언어를 고릅니다. 처음에는 시스템 언어로 설정됩니다.
 
-### ⌨️ 터미널과 AI 에이전트에서 사용 *(Mac)*
+### ⌨️ 터미널과 AI 에이전트에서 사용
 
-`hanasu` 명령으로 스크립트와 AI 에이전트(Claude Code, Claude Desktop 등)가 회의 기록을 읽고 내 다듬기 스타일을 사용할 수 있습니다. 앱 자체이므로 따로 설치할 것이 없습니다. **설정 → 명령 및 MCP**에서 PATH에 추가하거나 MCP 설정을 복사할 수 있습니다.
+`hanasu` 명령으로 스크립트와 AI 에이전트(Claude Code, Claude Desktop 등)가 회의 기록을 읽고 내 다듬기 스타일을 사용할 수 있습니다. 앱에 함께 들어 있으므로 따로 설치할 것이 없습니다. Mac에서는 앱 자체이고, Windows에서는 Hanasu 폴더의 `cli\hanasu.exe`입니다. **설정 → 명령 및 MCP**에서 PATH에 추가하거나 MCP 설정을 복사할 수 있습니다.
 
 | | |
 | --- | --- |
 | **회의 읽기** | `hanasu meetings list / show / search`와 `hanasu actions`는 회의, 회의록, 전사, 액션 아이템을 텍스트나 `--json`으로 출력합니다. 어디에도 전송하지 않습니다. |
-| **질문하기** | `hanasu ask "지난주에 무엇을 결정했지?"`는 회의용으로 고른 AI가 내 회의 내용을 바탕으로 답합니다. |
-| **텍스트 다듬기** | `hanasu refine`은 음성 입력과 같은 방식으로 텍스트를 다듬거나 번역하고, `hanasu edit "<지시>"`는 텍스트를 고쳐 씁니다. 둘 다 파이프에서 쓸 수 있습니다. |
+| **질문하기** | `hanasu ask "지난주에 무엇을 결정했지?"`는 내 회의 내용을 바탕으로 답합니다. Mac에서는 **AI 채팅 · 질문**용으로 고른 AI(고르지 않았다면 회의용 AI)를, Windows에서는 회의용 AI를 사용합니다. |
+| **텍스트 다듬기** | `hanasu refine`은 음성 입력과 같은 방식으로 텍스트를 다듬거나 번역하고, `hanasu edit "<지시>"`는 텍스트를 고쳐 씁니다. 둘 다 파이프에서 쓸 수 있습니다. `--app`으로 앱별 스타일을 고를 수 있습니다(Mac에서는 bundle ID, Windows에서는 `slack.exe` 같은 exe 이름). |
 | **AI 에이전트용 MCP** | `hanasu mcp`는 MCP 서버(stdio)입니다. 에이전트가 회의 목록을 보고, 읽고, 검색하고, 질문할 수 있습니다. 이렇게 공유한 회의 내용은 에이전트와 그 AI 제공업체에 전달됩니다. |
 | **설정 확인** | `hanasu doctor`는 사용하는 AI와 인증 정보, 회의 폴더, MCP 등록 방법을 보여 줍니다. 모든 옵션은 `hanasu help`로 확인하세요. |
 
-관리자는 구성 프로파일로 명령, MCP 또는 일부 AI를 끌 수 있습니다.
+Windows의 PowerShell에서 출력을 읽기 전에 `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()`를 실행하세요. Windows Hello로 보호한 API 키는 명령이 사용할 때마다 확인을 요청합니다.
+
+Mac에서는 관리자가 구성 프로파일로 명령, MCP 또는 일부 AI를 끌 수 있습니다.
 
 ## 다운로드
 

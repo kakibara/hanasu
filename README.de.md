@@ -122,19 +122,21 @@ Mit **Lokal** führt Hanasu mithilfe des mitgelieferten [llama.cpp](https://gith
 Für Spracheingabe und Besprechungen kannst du unterschiedliche Engines wählen. Unter Windows nutzen Besprechungen Whisper oder Gemini.
 Auf dem Mac wählst du die Transkriptionssprache aus einer Liste (Japanisch, Englisch, Chinesisch, Koreanisch, Französisch, Deutsch, Spanisch, Italienisch, Portugiesisch). Voreingestellt ist deine Systemsprache.
 
-### ⌨️ Im Terminal und mit KI-Agenten nutzen *(Mac)*
+### ⌨️ Im Terminal und mit KI-Agenten nutzen
 
-Mit dem Befehl `hanasu` können Skripte und KI-Agenten (Claude Code, Claude Desktop und andere) deine Besprechungsaufzeichnungen lesen und Text genauso aufbereiten wie bei der Spracheingabe. Der Befehl ist die App selbst, du musst also nichts weiter installieren. Unter **Einstellungen → Befehl & MCP** fügst du ihn zu deinem PATH hinzu oder kopierst die Einrichtung für MCP.
+Mit dem Befehl `hanasu` können Skripte und KI-Agenten (Claude Code, Claude Desktop und andere) deine Besprechungsaufzeichnungen lesen und Text genauso aufbereiten wie bei der Spracheingabe. Er wird mit der App mitgeliefert, du musst also nichts weiter installieren: Auf dem Mac ist er die App selbst, unter Windows `cli\hanasu.exe` im Hanasu-Ordner. Unter **Einstellungen → Befehl & MCP** fügst du ihn zu deinem PATH hinzu oder kopierst die Einrichtung für MCP.
 
 | | |
 | --- | --- |
 | **Besprechungen lesen** | `hanasu meetings list / show / search` und `hanasu actions` geben Besprechungen, Protokolle, Transkripte und Aufgaben als Text oder als `--json` aus. Dabei wird nichts gesendet. |
-| **Fragen** | `hanasu ask "Was haben wir letzte Woche beschlossen?"` beantwortet die Frage anhand deiner Besprechungen, mit der KI, die du für Besprechungen gewählt hast. |
-| **Text aufbereiten** | `hanasu refine` bereitet Text auf oder übersetzt ihn, genauso wie die Spracheingabe, und `hanasu edit "<Anweisung>"` formuliert ihn um. Beides funktioniert auch in Pipes. |
+| **Fragen** | `hanasu ask "Was haben wir letzte Woche beschlossen?"` beantwortet die Frage anhand deiner Besprechungen. Auf dem Mac nutzt er die KI, die du für **KI-Chat & Fragen** gewählt hast (oder die KI für Besprechungen, falls du dort keine gewählt hast), unter Windows die KI für Besprechungen. |
+| **Text aufbereiten** | `hanasu refine` bereitet Text auf oder übersetzt ihn, genauso wie die Spracheingabe, und `hanasu edit "<Anweisung>"` formuliert ihn um. Beides funktioniert auch in Pipes. Mit `--app` wählst du den Stil einer App (auf dem Mac über die Bundle-ID, unter Windows über den EXE-Namen, etwa `slack.exe`). |
 | **MCP für KI-Agenten** | `hanasu mcp` ist ein MCP-Server (stdio). Agenten können deine Besprechungen auflisten, lesen, durchsuchen und Fragen dazu stellen. Besprechungsinhalte, die du so teilst, gehen an den Agenten und dessen KI-Anbieter. |
 | **Einrichtung prüfen** | `hanasu doctor` zeigt, welche KI und welche Zugangsdaten verwendet werden, den Besprechungsordner und wie du MCP registrierst. Mit `hanasu help` siehst du alle Optionen. |
 
-Administratoren können den Befehl, MCP oder einzelne KIs mit einem Konfigurationsprofil deaktivieren.
+Unter Windows führst du in PowerShell `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` aus, bevor du die Ausgabe liest. API-Schlüssel, die mit Windows Hello geschützt sind, musst du jedes Mal bestätigen, wenn ein Befehl sie verwendet.
+
+Auf dem Mac können Administratoren den Befehl, MCP oder einzelne KIs mit einem Konfigurationsprofil deaktivieren.
 
 ## Download
 

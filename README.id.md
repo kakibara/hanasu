@@ -122,19 +122,21 @@ Dengan **Lokal**, Hanasu menjalankan model bahasa kecil di Mac atau PC Anda send
 Anda dapat memilih mesin yang berbeda untuk input suara dan untuk rapat. Di Windows, rapat memakai Whisper atau Gemini.
 Di Mac, pilih bahasa transkripsi dari daftar (Jepang, Inggris, Tionghoa, Korea, Prancis, Jerman, Spanyol, Italia, Portugis). Awalnya bahasa ini mengikuti bahasa sistem Anda.
 
-### ⌨️ Gunakan dari terminal dan agen AI *(Mac)*
+### ⌨️ Gunakan dari terminal dan agen AI
 
-Perintah `hanasu` memungkinkan skrip dan agen AI (Claude Code, Claude Desktop, dan lainnya) membaca catatan rapat Anda dan memakai gaya perapian teks Anda. Perintah ini adalah aplikasinya sendiri, jadi tidak ada yang perlu dipasang lagi. Buka **Pengaturan → Perintah & MCP** untuk menambahkannya ke PATH atau menyalin pengaturan MCP.
+Perintah `hanasu` memungkinkan skrip dan agen AI (Claude Code, Claude Desktop, dan lainnya) membaca catatan rapat Anda dan memakai gaya perapian teks Anda. Perintah ini sudah disertakan bersama aplikasi, jadi tidak ada yang perlu dipasang lagi: di Mac, perintah ini adalah aplikasinya sendiri, dan di Windows berupa `cli\hanasu.exe` di dalam folder Hanasu. Buka **Pengaturan → Perintah & MCP** untuk menambahkannya ke PATH atau menyalin pengaturan MCP.
 
 | | |
 | --- | --- |
 | **Baca rapat** | `hanasu meetings list / show / search` dan `hanasu actions` menampilkan rapat, notulen, transkrip, dan item tindakan, sebagai teks atau `--json`. Tidak ada yang dikirim ke mana pun. |
-| **Tanya** | `hanasu ask "Apa yang kita putuskan minggu lalu?"` menjawab dari rapat Anda dengan AI yang Anda pilih untuk rapat. |
-| **Rapikan teks** | `hanasu refine` merapikan atau menerjemahkan teks dengan cara yang sama seperti input suara, dan `hanasu edit "<instruksi>"` menulis ulang teks. Keduanya bisa dipakai dalam pipe. |
+| **Tanya** | `hanasu ask "Apa yang kita putuskan minggu lalu?"` menjawab berdasarkan rapat Anda. Di Mac, perintah ini memakai AI yang Anda pilih untuk **obrolan AI & tanya jawab** (atau AI rapat jika Anda belum memilihnya); di Windows, AI rapat. |
+| **Rapikan teks** | `hanasu refine` merapikan atau menerjemahkan teks dengan cara yang sama seperti input suara, dan `hanasu edit "<instruksi>"` menulis ulang teks. Keduanya bisa dipakai dalam pipe. `--app` memilih gaya untuk aplikasi tertentu (bundle ID di Mac, nama exe seperti `slack.exe` di Windows). |
 | **MCP untuk agen AI** | `hanasu mcp` adalah server MCP (stdio). Agen dapat membuat daftar, membaca, mencari, dan bertanya tentang rapat Anda. Isi rapat yang Anda bagikan dengan cara ini diteruskan ke agen dan penyedia AI-nya. |
 | **Periksa pengaturan** | `hanasu doctor` menampilkan AI dan kredensial yang dipakai, folder rapat, dan cara mendaftarkan MCP. Jalankan `hanasu help` untuk melihat semua opsi. |
 
-Administrator dapat menonaktifkan perintah, MCP, atau sebagian AI dengan profil konfigurasi.
+Di Windows, jalankan `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` sebelum membaca keluarannya di PowerShell. Kunci API yang dilindungi dengan Windows Hello akan meminta konfirmasi Anda setiap kali perintah memakainya.
+
+Di Mac, administrator dapat menonaktifkan perintah, MCP, atau sebagian AI dengan profil konfigurasi.
 
 ## Unduh
 

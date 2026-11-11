@@ -120,19 +120,21 @@ With **Local**, Hanasu runs a small language model on your own Mac or PC with th
 You can choose a different engine for voice input and for meetings. On Windows, meetings use Whisper or Gemini.
 On Mac, pick the transcription language from a list (Japanese, English, Chinese, Korean, French, German, Spanish, Italian, Portuguese). It starts as your system language.
 
-### ⌨️ Use it from the terminal and AI agents *(Mac)*
+### ⌨️ Use it from the terminal and AI agents
 
-The `hanasu` command lets scripts and AI agents (Claude Code, Claude Desktop, and others) read your meeting records and use your clean-up style. It is the app itself, so there is nothing else to install. Open **Settings → Command & MCP** to add it to your PATH or to copy the setup for MCP.
+The `hanasu` command lets scripts and AI agents (Claude Code, Claude Desktop, and others) read your meeting records and use your clean-up style. It comes with the app, so there is nothing else to install: on the Mac it is the app itself, and on Windows it is `cli\hanasu.exe` in the Hanasu folder. Open **Settings → Command & MCP** to add it to your PATH or to copy the setup for MCP.
 
 | | |
 | --- | --- |
 | **Read meetings** | `hanasu meetings list / show / search` and `hanasu actions` print meetings, minutes, transcripts and action items, as text or `--json`. Nothing is sent anywhere. |
-| **Ask** | `hanasu ask "What did we decide last week?"` answers from your meetings with the AI you chose for meetings. |
-| **Clean up text** | `hanasu refine` polishes or translates text the same way voice input does, and `hanasu edit "<instruction>"` rewrites it. Both work in pipes. |
+| **Ask** | `hanasu ask "What did we decide last week?"` answers from your meetings. On the Mac it uses the AI you chose for **AI chat & Ask** (or the meeting AI if you haven't chosen one); on Windows, the meeting AI. |
+| **Clean up text** | `hanasu refine` polishes or translates text the same way voice input does, and `hanasu edit "<instruction>"` rewrites it. Both work in pipes. `--app` picks the style for an app (a bundle ID on the Mac, an exe name such as `slack.exe` on Windows). |
 | **MCP for AI agents** | `hanasu mcp` is an MCP server (stdio). Agents can list, read, search and ask your meetings. The meeting content you share this way goes to the agent and its AI provider. |
 | **Check the setup** | `hanasu doctor` shows which AI and credentials are used, the meeting folder, and how to register MCP. Run `hanasu help` for every option. |
 
-Administrators can turn off the command, MCP, or some AIs with a configuration profile.
+On Windows, run `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` before reading the output in PowerShell. API keys protected with Windows Hello ask you to confirm each time a command uses them.
+
+On the Mac, administrators can turn off the command, MCP, or some AIs with a configuration profile.
 
 ## Download
 

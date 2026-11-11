@@ -122,19 +122,21 @@ Com **Local**, o Hanasu roda um modelo de linguagem pequeno no seu próprio Mac 
 Você pode escolher um mecanismo diferente para entrada por voz e para reuniões. No Windows, as reuniões usam Whisper ou Gemini.
 No Mac, escolha o idioma da transcrição em uma lista (japonês, inglês, chinês, coreano, francês, alemão, espanhol, italiano, português). Ele começa como o idioma do sistema.
 
-### ⌨️ Use pelo terminal e por agentes de IA *(Mac)*
+### ⌨️ Use pelo terminal e por agentes de IA
 
-O comando `hanasu` permite que scripts e agentes de IA (Claude Code, Claude Desktop e outros) leiam os registros das suas reuniões e usem o seu estilo de refinamento. Ele é o próprio app, então não há mais nada para instalar. Abra **Ajustes → Comando e MCP** para adicioná-lo ao PATH ou copiar a configuração para MCP.
+O comando `hanasu` permite que scripts e agentes de IA (Claude Code, Claude Desktop e outros) leiam os registros das suas reuniões e usem o seu estilo de refinamento. Ele vem com o app, então não há mais nada para instalar: no Mac, ele é o próprio app; no Windows, é o `cli\hanasu.exe` na pasta do Hanasu. Abra **Ajustes → Comando e MCP** para adicioná-lo ao PATH ou copiar a configuração para MCP.
 
 | | |
 | --- | --- |
 | **Ler reuniões** | `hanasu meetings list / show / search` e `hanasu actions` mostram reuniões, atas, transcrições e itens de ação, como texto ou `--json`. Nada é enviado a lugar nenhum. |
-| **Perguntar** | `hanasu ask "O que decidimos na semana passada?"` responde a partir das suas reuniões com a IA que você escolheu para reuniões. |
-| **Refinar texto** | `hanasu refine` refina ou traduz texto do mesmo jeito que a entrada por voz, e `hanasu edit "<instrução>"` o reescreve. Os dois funcionam em pipes. |
+| **Perguntar** | `hanasu ask "O que decidimos na semana passada?"` responde a partir das suas reuniões. No Mac, usa a IA que você escolheu para **Chat de IA e perguntas** (ou a IA das reuniões, se você não tiver escolhido nenhuma); no Windows, a IA das reuniões. |
+| **Refinar texto** | `hanasu refine` refina ou traduz texto do mesmo jeito que a entrada por voz, e `hanasu edit "<instrução>"` o reescreve. Os dois funcionam em pipes. `--app` escolhe o estilo de um app (um bundle ID no Mac, um nome de exe como `slack.exe` no Windows). |
 | **MCP para agentes de IA** | `hanasu mcp` é um servidor MCP (stdio). Os agentes podem listar, ler, pesquisar e fazer perguntas sobre as suas reuniões. O conteúdo das reuniões compartilhado assim vai para o agente e para o provedor da IA dele. |
 | **Conferir a configuração** | `hanasu doctor` mostra qual IA e quais credenciais são usadas, a pasta de reuniões e como registrar o MCP. Execute `hanasu help` para ver todas as opções. |
 
-Administradores podem desativar o comando, o MCP ou algumas IAs com um perfil de configuração.
+No Windows, execute `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` antes de ler a saída no PowerShell. Chaves de API protegidas com o Windows Hello pedem a sua confirmação toda vez que um comando as usa.
+
+No Mac, administradores podem desativar o comando, o MCP ou algumas IAs com um perfil de configuração.
 
 ## Download
 

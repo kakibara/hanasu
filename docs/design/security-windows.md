@@ -22,6 +22,8 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
   その間に、同じユーザーで動くマルウェアが Hanasu のメモリを読んだり、Hanasu に DLL を入れたりすれば、キーを取れる。
 - 同じユーザーのほかのアプリが Windows Hello の鍵（名前は `Hanasu.ApiKeys`）で署名を求めると、確認の画面が出る。ユーザーが中身を見ずに通すと読まれる。
 - 管理者・SYSTEM は、どの方法でも読める。
+- `hanasu` コマンド（`cli\hanasu.exe`）も同じ `secrets.json` を読む（`Hanasu.Platform` の DPAPI・Windows Hello。DEC-COM-193）。Windows Hello のときは、鍵をそのプロセスの中でだけ持つので、呼ぶたびに確認が出る。呼ぶたびの確認に慣れて、中身を見ずに通す危険がある（エージェントから頻繁に呼ぶなら、キーの使い分けか DPAPI を選ぶ）。`hanasu mcp` は鍵を持ち続け、画面のロック・ログオフ・切断・スリープで捨てる（アプリと同じ）。画面のないセッション（SSH など）では確認を出さず、確認が 60 秒で終わらなければ諦める（DEC-COM-198）。`hanasu doctor` は Windows Hello のキーを読まない。
+- `hanasu` は起動の最初に DLL を探す場所を絞る（`DllSearch.Harden`。DEC-COM-148）。PATH に入れる `cli\` には `hanasu.exe` だけを置き、ほかの DLL を混ぜない（ほかのプログラムの DLL の探し先に入るため。CI で確かめる）。ログ（`hanasu.log`）には起動と終了コードだけを書き、質問・会議・整える文の中身は書かない。
 - 残る危険を減らすには、キーを使い分ける（Hanasu 専用のキーを作る。Claude Console で使う上限を決める）、漏れたと思ったらすぐ無効にする、が効く。
 
 ### 保存の形

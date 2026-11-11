@@ -414,9 +414,10 @@
   - 実行のあとも、音声入力の履歴が増えない。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R1〜R3・R5〜R8）
 - 関係する要件: REQ-DIC-003, REQ-DIC-070, REQ-DIC-082, REQ-DIC-020, REQ-DIC-021, REQ-DIC-013, REQ-DIC-060, REQ-COM-186
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuAICommands.runRefine`、`HanasuTextInput`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（偽の `fm` に送られた内容と、失敗したときの出力で確かめる）
+- Windows の実装: `AiCommands.RefineAsync`（`windows/Hanasu.Core/Command/AiCommands.cs`）。`--app` は exe の名前（例: `slack.exe`。DEC-DIC-190）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（偽の `fm` に送られた内容と、失敗したときの出力で確かめる）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-DIC-161 `hanasu edit` で、選択を声で編集と同じ書き換えをする
 - 内容: `hanasu edit "<指示>" [文章]` で、文章（引数か stdin）を、選択を声で編集（REQ-DIC-050）と同じプロンプトで、指示どおりに書き換える。入力の受け取り方・失敗したときの出力・履歴に残さないことは `refine` と同じ。
@@ -426,18 +427,20 @@
   - `--json` で `text`・`ai`・`fallback` を出す。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R4〜R8）
 - 関係する要件: REQ-DIC-050, REQ-DIC-060, REQ-COM-186
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuAICommands.runEdit`、`HanasuTextInput`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+- Windows の実装: `AiCommands.EditAsync`・`EditPrompt`（`TextPurpose.Edit`。DEC-COM-196）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-DIC-162 `hanasu dict apply` で、辞書の置き換えルールだけを当てる
 - 内容: 引数か stdin の文章に、辞書の置き換えルール（REQ-DIC-070）だけを当てて出す。AI には何も送らない。
 - 受け入れ条件: 置き換えルールを当てた文章が stdout に出る（`--json` なら `text`）。入力の受け取り方は `refine` と同じ。ネットワークに何も送らない。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R9）
 - 関係する要件: REQ-DIC-070
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuAICommands.runDict`
-- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`
+- Windows の実装: `AiCommands.Dict`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ---
 
@@ -1484,16 +1487,18 @@
 - 理由: 両方を受け付けると、どちらを使ったかがエージェントに分からない。端末で入力を待つと、エージェントやスクリプトから呼んだときに止まったままになる。整形のプロンプトは話した長さの文を前提にしているので、長い書き言葉を崩さないよう上限を設ける（計画の R6）。1 万文字は、選択を声で編集で使っている上限で、話した文よりは十分に長い。スニペットの起動フレーズは話し言葉のためのもので、書いた文章にたまたま含まれると思わぬ置き換えになる。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R1・R6）
 - 関係する要件: REQ-DIC-160, REQ-DIC-161, REQ-DIC-162
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuTextInput`
+- Windows の実装: `CommandTextInput`（パイプは UTF-8 で読み、正しくなければコンソールのコードページで読み直す。DEC-COM-195）
 
 ### DEC-DIC-161 `hanasu` の整形・書き換えが失敗したら stdout に何も出さず、`--fallback-raw` のときだけ原文を出す
 - 決めたこと: AI が失敗したときは、stdout に何も出さずに 0 以外で終える。`--fallback-raw` を付けたときだけ、`refine` は辞書を当てた原文、`edit` は元の文章を stdout に出し、整えられなかった理由を stderr に出して 0 で終える（`--json` なら `fallback` が true）。`--show-prompt` の内容は stderr に出す。
 - 理由: パイプの先に壊れたものや途中のものを流さない（計画の R5）。音声入力（REQ-DIC-007）のように内容を失わない使い方も、明示すれば選べる。stdout は結果だけにする（REQ-COM-181）。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R5・R8）
 - 関係する要件: REQ-DIC-160, REQ-DIC-161, REQ-COM-181
-- 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
+- 対象: Mac / Windows
 - 実装の場所: `HanasuAICommands.runRefine`、`HanasuAICommands.runEdit`
+- Windows の実装: `AiCommands`（`FallbackOrThrow`）
 
 ### DEC-DIC-170 会議 1 件の材料と呼び出し
 - 決めたこと: 材料は、その会議の議事録に使う発言（`blocksForMinutes`。オフレコと除いた発言は入らない）を認識したままの文で並べたもの（話者名つき）を先に、議事録の本文をあとに置く。議事録は文字起こしを入れて残った分だけ入れる。作り直しを促している議事録（`minutesOutdated`）は入れない（議事録を作ったあとで除いた発言の中身を含みうるため）。長さの上限は会議の AI で変える。Gemini・Claude は全体で 60,000 字。ローカルの LLM と Apple は、モデルの文脈の長さから、出力・system instruction・既存の辞書の分を引いたトークン数まで（数え方は、どちらも全角 1 字 1 トークン・半角 3 字 1 トークンの多めの見積もり。Mac `AppleFMClient.estimateTokens`、Windows `DictionarySuggester.EstimateTokens`。ローカルの /tokenize はサーバーを起こしてからでないと使えないので使わない）。文字起こしを切ったときだけ、切った位置の発言の時刻から「最初の約 N 分」を出す。音声入力の結果は入れない。AI は会議の AI（DEC-COM-040）で、タイムアウトは Mac 120 秒、Windows は会議の既定。プロンプトは今の `dictionarySuggest.*` を使う（Windows の `TextPurpose` は `Minutes`）。材料を囲む `<material>` を区切りのタグを無害にする一覧に足し、材料はそれに通してから送り、`filter` も通したあとの材料で照合する。キャンセルで閉じたら呼び出しを止める。

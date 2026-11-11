@@ -1,6 +1,6 @@
-# `hanasu` コマンドの作り（Mac）
+# `hanasu` コマンドの作り（Mac・Windows）
 
-利用者向けの `hanasu` コマンドが、今どう作られているか。要件は spec の REQ-COM-180〜193・REQ-MTG-120〜127・REQ-DIC-160〜162、計画（まだ作っていない段階）は [plans/cli.md](../plans/cli.md)。オプションの一覧は `hanasu help` が正で、ここには写さない。
+利用者向けの `hanasu` コマンドが、今どう作られているか。要件は spec の REQ-COM-180〜193・REQ-MTG-120〜127・REQ-DIC-160〜162、計画は [plans/cli.md](../plans/cli.md) と [plans/cli-windows.md](../plans/cli-windows.md)。1〜8 章は Mac、9 章は Windows。オプションの一覧は `hanasu help` が正で、ここには写さない。
 
 ## 1. 入り口
 
@@ -66,3 +66,28 @@
 - 配る部分は、一時フォルダをホームに見立てて、リンクと `~/.zprofile` の行を作って外し、登録の文・doctor・`help agent` を確かめる（同じ自己テスト）。画面は `--render-settings <フォルダ> --pane commandLine`（UX-183）。`/usr/local/bin` への管理者の確認と App Translocation は実機（UX-184）。
 - 共有のテストデータ（DEC-COM-192）: 同じ自己テストの最後に、`common/testdata/cli/cases.json` のコマンドを動かし、`expected.json` と比べる（リポジトリのルートで動かす）。子プロセスの設定は `SettingsDefaults`（`HANASU_TEST_DEFAULTS_SUITE`）、「今」と乱数は `HanasuClock` が読む。期待する出力を書き直すのは `--write-cli-golden`。Windows 版も同じデータで比べる。
 - `.build/debug/Hanasu --bench-hanasu-command [件数]`: 架空の会議での速さ。
+
+## 9. Windows（`cli\hanasu.exe`）
+
+Mac と同じコマンド・同じ JSON・同じ終了コード。中身は `windows/Hanasu.Core/Command/`（net8.0。Mac でも `dotnet test` で動く）にあり、exe（`windows/Hanasu.Command`）は入出力と Windows の部品をつなぐだけ（DEC-COM-193）。
+
+| ファイル（`windows/Hanasu.Core/Command/`） | 中身 |
+| --- | --- |
+| `HanasuCommand.cs` | 振り分け（`RunAsync`）。プロンプトの言語を設定から決める |
+| `CommandBasics.cs` | 終了コード・出力（`ICommandConsole`・`CommandOutput`・`CommandJson`）・引数（`CommandArguments`）・期間（`CommandPeriod`。時差は引数）・書記素の数え方 |
+| `CommandContext.cs` | 外から受け取るもの（設定・秘密・「今」・時差・環境変数・AI のクライアントの作り方・ローカルの AI の記録・PATH） |
+| `MeetingsCommand.cs` | `meetings list / show / search`・`actions`、会議の JSON、会議の指定（`Resolve`）、読めない会議（`LoadedMeetings`） |
+| `MeetingSearch.cs`・`MeetingAsk.cs` | Mac の `MeetingSearchIndex.scan`・`MeetingAsk` の移植（`Fold` は全角半角・大文字小文字・半角カナを畳む。検索語の分け方だけ違う。DEC-MTG-154） |
+| `CommandAi.cs`・`AiCommands.cs` | AI の選び方と認証情報（環境変数・`secrets.json`）、`ask`・`refine`・`edit`・`dict apply`、選択の書き換えのプロンプト（`EditPrompt`） |
+| `SharedText.cs` | Mac と共有のファイル（`Sources/Hanasu/Resources/Command/hanasu.json`。埋め込み）。MCP の英語の文・エージェントへの説明・`--app` の exe の名前の既定の文体 |
+| `DoctorCommand.cs`・`CommandHelp.cs` | `doctor`（Windows の形の `install`。DEC-COM-197）、ヘルプ・エージェントへの説明・登録の文（`CommandInstall`） |
+| `McpServer.cs` | `hanasu mcp`（`McpServer`・`McpTools`） |
+| `CommandPlatformParts.cs` | Windows Hello の確認の守り（`GuardedPresenceKey`）・入力の読み直し（`CommandEncoding`）・ユーザーの PATH の項目（`CommandPath`） |
+
+- 入出力（`windows/Hanasu.Command/WindowsConsole.cs`）: コンソールには `WriteConsoleW`、パイプ・ファイルには UTF-8（DEC-COM-195）。`hanasu mcp` は `DuplicateHandle` で本当の stdout を取っておき、`SetStdHandle` で stdout を stderr に向ける。
+- 秘密: アプリと同じ `SecretStore`（`Hanasu.Platform` の DPAPI・Windows Hello）。Windows Hello は `GuardedPresenceKey` で包み、`hanasu mcp` はロック・スリープ（`SystemEvents`）で鍵を捨てる（DEC-COM-198）。
+- ローカルの AI: `LocalLlmServerRecords` が起動したプロセスごとの記録を書き、ほかの生きている持ち主のサーバーがあれば起動しない。llama-server は `ChildProcessJob` に入れる。`cli\` から `..\llama\` を探す。
+- アプリの保存: `SharedFile`（DEC-COM-194）で、`hanasu` が読んでいる間も置き換えが失敗しない。
+- 設定の「コマンドと MCP」: `windows/Hanasu.Windows/Views/SettingsWindow.CommandLine.cs`。PATH は `UserPath`（`HKCU\Environment`）と `CommandPath`（DEC-COM-199）。
+- 自動アップデート: 動いている `hanasu` を `RunningCommands` で数えて確認に出し、`UpdateSwapScript` が名前を変える直前に終わらせる（REQ-REL-013・DEC-REL-031）。
+- 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests` は `common/testdata/cli` の 29 件で Mac の期待する出力と比べる。`CommandTests`・`CommandPlatformTests`）。CI（`windows.yml`）は publish した `cli\hanasu.exe` を動かし（共有の会議・MCP・コードページ 932 と 437 のパイプとファイル）、架空の会議 1,000 件で速さを測る。画面と Windows Hello・PATH・アップデート・MCP のクライアントは実機（UX-187〜192）。

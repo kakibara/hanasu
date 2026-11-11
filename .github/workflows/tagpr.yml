@@ -207,6 +207,8 @@ jobs:
               echo "1. \`${WIN_ASSET}\` を展開し、\`Hanasu\` フォルダを好きな場所（例: \`%LOCALAPPDATA%\\Programs\`）に置いて \`Hanasu.exe\` を開きます。"
               echo "2. コード署名をしていないので、初回は SmartScreen の確認が出ます。「詳細情報」→「実行」を押してください。"
               echo "3. Windows 10（2004 以降）/ 11、x64 が必要です。"
+              # 要件: REQ-COM-180
+              echo "4. ターミナルや AI エージェントからは、同じフォルダの \`cli\\hanasu.exe\` で使えます（設定 →「コマンドと MCP」で PATH に入れられます）。"
             fi
             echo
             echo "詳しくは [README](https://github.com/${GITHUB_REPOSITORY}#readme) を見てください。"
