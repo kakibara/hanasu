@@ -16,6 +16,10 @@ enum HanasuCommandCLI {
         if args.contains("--test-hanasu-command") {
             runSelfTest()
         }
+        if args.contains("--write-cli-golden") {
+            let failures = HanasuGoldenCLI.run(write: true) { ok, label in print("\(ok ? "OK  " : "NG  ") \(label)") }
+            exit(failures == 0 ? 0 : 1)
+        }
         if let index = args.firstIndex(of: "--bench-hanasu-command") {
             let count = args.indices.contains(index + 1) ? Int(args[index + 1]) ?? 1000 : 1000
             runBenchmark(count: count)
@@ -355,6 +359,9 @@ enum HanasuCommandCLI {
         check(sevenDays == now.addingTimeInterval(-7 * 86400), "7d は 7 日前")
         let untilDay = try? HanasuPeriod.parse("2026-11-05", option: "--until", endOfDay: true, now: now)
         check(untilDay == date("2026-11-06 00:00"), "--until の日付は翌日の 0 時より前")
+
+        // 共有のテストデータで、Windows 版と同じ出力か（DEC-COM-192）
+        _ = HanasuGoldenCLI.run(write: false) { ok, label in check(ok, label) }
 
         print(failures == 0 ? "すべて OK" : "NG が \(failures) 件")
         exit(failures == 0 ? 0 : 1)

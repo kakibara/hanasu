@@ -313,7 +313,7 @@ enum HanasuAICommands {
         }
         let context = await MeetingAsk.gatherContext(
             question: question, meetings: meetings,
-            search: { MeetingSearchIndex.scan(meetings, query: $0, hitsPerMeeting: 50) }, options: options)
+            search: { MeetingSearchIndex.scan(meetings, query: $0, hitsPerMeeting: 50) }, options: options, now: HanasuClock.now)
         guard !context.sources.isEmpty else {
             throw HanasuCommandError(exit: .notFound, message: tr("質問に使える会議の記録がありません。"))
         }
@@ -439,7 +439,7 @@ enum HanasuAICommands {
             selection: selection, instruction: instruction, model: choice.model,
             appName: nil, dictionary: settings.dictionaryWords)
         if args.flags.contains("--show-prompt") {
-            showPrompt(system: GeminiClient.editInstruction, user: GeminiClient.editPrompt(for: request))
+            showPrompt(system: GeminiClient.editInstruction, user: GeminiClient.editPrompt(for: request, nonce: HanasuClock.testNonce ?? GeminiClient.makeNonce()))
         }
 
         let output: String

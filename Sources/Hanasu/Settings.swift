@@ -122,6 +122,23 @@ enum SettingsDefaults {
     static var domainName: String { testSuite ?? AppSettings.defaultsDomainName }
 }
 
+// 設計判断: DEC-COM-192
+/// hanasu コマンドの「今」。共有のテストデータで Mac と Windows の出力を比べるときだけ、HANASU_TEST_NOW（ISO 8601）に固定する。
+/// 設定の suite（HANASU_TEST_DEFAULTS_SUITE）も渡したときだけ読む（ふだんの利用で、環境変数だけで時刻が変わらないように）
+enum HanasuClock {
+    static var now: Date {
+        guard SettingsDefaults.testSuite != nil, let raw = ProcessInfo.processInfo.environment["HANASU_TEST_NOW"],
+              let date = ISO8601DateFormatter().date(from: raw) else { return Date() }
+        return date
+    }
+
+    /// 選択の書き換えのタグの乱数（--show-prompt を比べるため）。テストのときだけ HANASU_TEST_NONCE
+    static var testNonce: String? {
+        guard SettingsDefaults.testSuite != nil else { return nil }
+        return ProcessInfo.processInfo.environment["HANASU_TEST_NONCE"].flatMap { $0.isEmpty ? nil : $0 }
+    }
+}
+
 // 設計判断: DEC-COM-013
 final class AppSettings: ObservableObject {
     static let shared = AppSettings(defaults: SettingsDefaults.store, domainName: SettingsDefaults.domainName)

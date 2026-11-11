@@ -448,12 +448,12 @@ struct HanasuPeriod {
     /// この時刻より前（含まない）
     var until: Date?
 
-    init(_ args: HanasuArguments, now: Date = Date()) throws {
+    init(_ args: HanasuArguments, now: Date = HanasuClock.now) throws {
         try self.init(since: args.values["--since"], until: args.values["--until"], now: now)
     }
 
     /// MCP のツールの引数（since・until）から。読めなければ使い方の誤り
-    init(since: String?, until: String?, now: Date = Date()) throws {
+    init(since: String?, until: String?, now: Date = HanasuClock.now) throws {
         self.since = try since.map { try Self.parse($0, option: "--since", endOfDay: false, now: now) }
         self.until = try until.map { try Self.parse($0, option: "--until", endOfDay: true, now: now) }
     }

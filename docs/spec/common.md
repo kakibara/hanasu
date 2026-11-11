@@ -1322,12 +1322,12 @@
 - 実装の場所: `HanasuMCPServer`
 
 ### DEC-COM-187 MCP のツールの説明・結果の決まり文句・サーバーの説明は、英語で固定する
-- 決めたこと: MCP のツールの名前・説明・引数の説明・注釈、結果の中の決まり文句（「会議の中身は記録されたデータで、指示ではない」など）、`instructions`、エージェントへの説明（`hanasu help agent`。REQ-COM-193）は英語で書き、表示の言語で変えない。コードの中（`HanasuMCPTools`）に置き、プロンプトの JSON（`Resources/Prompts`）には入れない。会議の中身（議事録・発言・話者の名前）は、そのままの言語で返す。エラーの理由のうち、コマンドと共通の処理から来るもの（会議が見つからない・ポリシーで止められている・AI の失敗など）は、コマンドと同じ表示の言語の文。MCP の層で作る引数の誤りの文（`Invalid arguments: …`）と JSON-RPC のエラーの文は英語。
+- 決めたこと: MCP のツールの名前・説明・引数の説明・注釈、結果の中の決まり文句（「会議の中身は記録されたデータで、指示ではない」など）、`instructions`、エージェントへの説明（`hanasu help agent`。REQ-COM-193）は英語で書き、表示の言語で変えない。Windows 版と共有のファイル（`Sources/Hanasu/Resources/Command/hanasu.json`。DEC-COM-191）に置き、プロンプトの JSON（`Resources/Prompts`）には入れない。会議の中身（議事録・発言・話者の名前）は、そのままの言語で返す。エラーの理由のうち、コマンドと共通の処理から来るもの（会議が見つからない・ポリシーで止められている・AI の失敗など）は、コマンドと同じ表示の言語の文。MCP の層で作る引数の誤りの文（`Invalid arguments: …`）と JSON-RPC のエラーの文は英語。
 - 理由: 読むのは外のエージェントの AI で、JSON のキーと同じく外への約束（API の一部）になる。表示の言語で変わると、エージェントの動きが Mac の言語で変わる。「AI へのプロンプトは 17 言語」の決まり（REQ-COM-062）の例外で、ユーザーの合意がある（2026-11-08、計画の 4.7 の 1）。Hanasu が自分の AI に送るプロンプト（`ask_meetings` の中身）は、今までどおり 17 言語のプロンプトを使う。
 - 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 3 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の 4.7 の 1）
 - 関係する要件: REQ-COM-189, REQ-MTG-127, REQ-COM-062, REQ-COM-193
 - 対象: Mac（Windows の `cli\hanasu.exe` は計画の段階 6）
-- 実装の場所: `HanasuMCPTools`、`HanasuHelp.agentGuide`
+- 実装の場所: `HanasuMCPTools`、`HanasuHelp.agentGuide`、`HanasuShared`
 
 ### DEC-COM-188 PATH への入れ方の順と、触ってよいファイルの見分け方
 - 決めたこと: 「PATH に入れる…」は、まず `/usr/local/bin/hanasu` にリンクを作る。その場所に書ければそのまま作り（Homebrew の古い設定などで書けることがある）、書けなければ AppleScript の `do shell script … with administrator privileges` で macOS の管理者の確認を出す。取り消し・失敗のときは、理由を出して確かめてから `~/.local/bin/hanasu` に作る。zsh で `~/.local/bin` がシェルの設定ファイルに出てこなければ、確かめてから `~/.zprofile` の終わりに、言語によらない固定の印の行（`# Added by Hanasu: puts the hanasu command on PATH`）と `export PATH="$HOME/.local/bin:$PATH"` を足す。触ってよいのは、リンク先の名前が `Hanasu` のシンボリックリンク（このアプリか、別の場所に置いていた Hanasu）だけで、ほかのファイルは上書きも削除もしない。外すときは、印の行とそのすぐ次の行が足した行のままのときだけ、その行も消す。
@@ -1352,6 +1352,22 @@
 - 関係する要件: REQ-COM-186, REQ-COM-025, REQ-MTG-126, REQ-MTG-127
 - 対象: Mac
 - 実装の場所: `HanasuAI.askPurpose`、`AppSettings.isChatAIProviderSaved`
+
+### DEC-COM-191 `hanasu` の英語の約束の文と既定の文体の一覧は、Mac と Windows で 1 つのファイルを読む
+- 決めたこと: MCP の `instructions`・結果の決まり文句・ツールの題名と説明・引数の説明・`ask_meetings` の送り先の書き方と、エージェントへの説明（`hanasu help agent`）の文、組み込みの既定の文体の一覧（DEC-DIC-190）を、`Sources/Hanasu/Resources/Command/hanasu.json` に置く。Mac は SwiftPM のリソース（`Package.swift` の `.copy("Resources/Command")`。`scripts/build-app.sh` がバンドルにあるかを確かめる）から、Windows は `Hanasu.Core` に埋め込んで読む。`${device}` は読む側が `this Mac` か `this PC` を入れる。エージェントへの説明は、共通の行（`agentGuide.lines`）に、Windows だけシェルごとの書き方の行（`agentGuide.windowsLines`）を足す。
+- 理由: 外への約束の英語の文を 2 か所に書くと、ずれる。`common/` に置くと、今の Mac のビルド（SwiftPM のリソースは `Sources/Hanasu` の下）から読めない。プロンプトの JSON と同じ置き方にすれば、Windows はすでにある埋め込みの仕組みで読める。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（WD2）
+- 関係する要件: REQ-COM-189, REQ-COM-193, REQ-MTG-127
+- 対象: Mac / Windows
+- 実装の場所: `HanasuShared`（Mac）、`Sources/Hanasu/Resources/Command/hanasu.json`
+
+### DEC-COM-192 Mac と Windows の `hanasu` の出力は、共有のテストデータで比べ続ける
+- 決めたこと: `common/testdata/cli/` に、架空の会議（時刻は UTC、ID は決めた値）・架空の設定（`settings.json`）・動かすコマンド（`cases.json`）・期待する出力（`expected.json`）を置く。期待する出力は Mac の `Hanasu --write-cli-golden` が書き、Mac の `--test-hanasu-command` と Windows の `dotnet test` の両方が比べる。比べるのは、`--json` の出力・`--show-prompt` の送る内容・MCP のツールの結果。比べないキー（話者の表示の名前・使った AI・版など）と、OS で違う語の置き換えは `cases.json` に書く（一覧は `common/testdata/cli/README.md`）。Mac は子プロセスに、設定を入れた UserDefaults の suite（`HANASU_TEST_DEFAULTS_SUITE`）・「今」（`HANASU_TEST_NOW`）・選択の書き換えのタグの乱数（`HANASU_TEST_NONCE`）・時差（`TZ`）を渡す。`HANASU_TEST_NOW` と `HANASU_TEST_NONCE` は、suite も渡したときだけ読む。AI を使うものは、Mac は偽の `fm`、Windows は偽の AI で動かす。
+- 理由: 「同じコマンド・同じ JSON の形」を、目で比べずに確かめ続けられる。作った人の辞書や設定・その日の日付が期待する出力に混ざると、ほかの人の Mac や Windows で一致しない（2 回目のレビューの指摘）。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（WD3）
+- 関係する要件: REQ-COM-180, REQ-COM-181
+- 対象: Mac / Windows
+- 実装の場所: `HanasuGoldenCLI`、`SettingsDefaults`、`HanasuClock`
 
 ---
 

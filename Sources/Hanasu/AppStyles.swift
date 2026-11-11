@@ -172,27 +172,19 @@ struct AppStyle: Codable, Identifiable, Equatable {
 final class AppStyleStore: ObservableObject {
     static let shared = AppStyleStore()
 
-    /// 初期状態のプリセットの割り当て
-    static let defaultStyles: [AppStyle] = [
-        // チャット
-        AppStyle(bundleID: "com.tinyspeck.slackmacgap", name: "Slack", preset: .chat),
-        AppStyle(bundleID: "com.microsoft.teams2", name: "Microsoft Teams", preset: .chat),
-        AppStyle(bundleID: "com.microsoft.teams", name: "Microsoft Teams (classic)", preset: .chat),
-        AppStyle(bundleID: "com.hnc.Discord", name: "Discord", preset: .chat),
-        AppStyle(bundleID: "jp.naver.line.mac", name: "LINE", preset: .chat),
-        AppStyle(bundleID: "com.apple.MobileSMS", name: tr("メッセージ"), preset: .chat),
-        // メール
-        AppStyle(bundleID: "com.apple.mail", name: tr("メール"), preset: .email),
-        AppStyle(bundleID: "com.microsoft.Outlook", name: "Microsoft Outlook", preset: .email),
-        AppStyle(bundleID: "com.readdle.SparkDesktop", name: "Spark", preset: .email),
-        AppStyle(bundleID: "com.readdle.smartemail-Mac", name: "Spark (classic)", preset: .email),
-        // 文書
-        AppStyle(bundleID: "com.apple.iWork.Pages", name: "Pages", preset: .documentPolite),
-        AppStyle(bundleID: "com.microsoft.Word", name: "Microsoft Word", preset: .documentPolite),
-        AppStyle(bundleID: "notion.id", name: "Notion", preset: .documentPolite),
-    ]
+    // 設計判断: DEC-DIC-190
+    /// 初期状態のプリセットの割り当て。固有名のアプリは Windows 版と共有のファイル（HanasuShared）から読み、
+    /// 名前を訳す Mac だけのアプリ（メッセージ・メール）は、ここで訳して足す
+    static var defaultStyles: [AppStyle] {
+        var styles = HanasuShared.defaultAppStyles
+        let messages = AppStyle(bundleID: "com.apple.MobileSMS", name: tr("メッセージ"), preset: .chat)
+        let mail = AppStyle(bundleID: "com.apple.mail", name: tr("メール"), preset: .email)
+        styles.insert(messages, at: (styles.firstIndex { $0.bundleID == "jp.naver.line.mac" }).map { $0 + 1 } ?? styles.count)
+        styles.insert(mail, at: styles.firstIndex { $0.bundleID == "com.microsoft.Outlook" } ?? styles.count)
+        return styles
+    }
 
-    private let defaults = UserDefaults.standard
+    private let defaults = SettingsDefaults.store
 
     @Published var enabled: Bool { didSet { defaults.set(enabled, forKey: Keys.enabled) } }
     @Published var styles: [AppStyle] { didSet { save() } }

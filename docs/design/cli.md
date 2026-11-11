@@ -20,7 +20,9 @@
 | `HanasuMCPTools.swift` | MCP のツールの定義（英語の説明・`inputSchema`・注釈）と呼び出し |
 | `HanasuInstall.swift` | 配る部分。PATH へのリンク（`/usr/local/bin`・`~/.local/bin`）と `~/.zprofile` の 1 行、App Translocation の判定、MCP の登録の文（Claude Code のコマンド・Claude Desktop の JSON） |
 | `CommandLineSettingsView.swift` | 設定画面の「コマンドと MCP」（`CommandLineSettingsTab`） |
+| `HanasuShared.swift` | Windows 版と共有のファイル（`Resources/Command/hanasu.json`。DEC-COM-191）を読む。MCP の英語の文・エージェントへの説明・既定の文体の一覧 |
 | `HanasuCommandCLI.swift` | 開発用の自己テスト（`--test-hanasu-command`）と速さの測定（`--bench-hanasu-command`） |
+| `HanasuGoldenCLI.swift` | 共有のテストデータ（`common/testdata/cli`。DEC-COM-192）を動かし、期待する出力を書く（`--write-cli-golden`）・比べる |
 
 名前が `CLI.swift` で終わるファイルは訳の検査の外なので、利用者に見える文はそれ以外のファイルに置き、`tr()` で書く。
 
@@ -62,4 +64,5 @@
 - `.build/debug/Hanasu --test-hanasu-command`: 架空の会議と偽の `fm`（`HANASU_FM_PATH`）を使い、本物の実行ファイルをコマンドとして呼んで確かめる。ネットワークには送らない。キーチェーンは自己テストの一時的な項目（`HANASU_KEYCHAIN_SERVICE` で、`…selftest-` の名前だけを読ませられる）を、シンボリックリンク経由の `doctor` で読む。
 - MCP は、`hanasu mcp` を子プロセスで動かし、新旧の版の手順・ツール・エラー・長い会議の切り方・ポリシーを確かめる（同じ自己テスト）。
 - 配る部分は、一時フォルダをホームに見立てて、リンクと `~/.zprofile` の行を作って外し、登録の文・doctor・`help agent` を確かめる（同じ自己テスト）。画面は `--render-settings <フォルダ> --pane commandLine`（UX-183）。`/usr/local/bin` への管理者の確認と App Translocation は実機（UX-184）。
+- 共有のテストデータ（DEC-COM-192）: 同じ自己テストの最後に、`common/testdata/cli/cases.json` のコマンドを動かし、`expected.json` と比べる（リポジトリのルートで動かす）。子プロセスの設定は `SettingsDefaults`（`HANASU_TEST_DEFAULTS_SUITE`）、「今」と乱数は `HanasuClock` が読む。期待する出力を書き直すのは `--write-cli-golden`。Windows 版も同じデータで比べる。
 - `.build/debug/Hanasu --bench-hanasu-command [件数]`: 架空の会議での速さ。

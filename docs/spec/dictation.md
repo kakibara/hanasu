@@ -1002,6 +1002,14 @@
 - 対象: Mac
 - 実装の場所: `ScreenRecordingPermission`、`ScreenContextSettingsSection`、`ScreenshotButton`
 
+### DEC-DIC-190 組み込みの既定の文体の一覧は、Mac の bundle ID と Windows の exe の名前の対応として共有する
+- 決めたこと: 既定の文体（Slack・Teams・Discord・LINE はチャット、Outlook・Spark はメール、Word・Pages・Notion は文書（です・ます））を、`hanasu.json` の `defaultAppStyles` に、Mac の bundle ID・Windows の exe の名前（小文字。大文字小文字を区別せずに比べる）・訳さないアプリ名・文体の組で置く（DEC-COM-191）。Mac の `AppStyleStore.defaultStyles` はこれを読み、名前を訳す Mac だけのアプリ（メッセージ・メール）は Swift のコードで `tr()` して足す。Windows の `hanasu refine --app <exe の名前>` はこの一覧だけを使い（Windows のアプリにアプリ別の文体の設定はない）、AI に送るアプリ名は一覧の名前、一覧になければ exe の名前から拡張子を外したもの。
+- 理由: 一覧を 2 か所に書くと、ずれる。訳した名前を JSON に置くと、`check-i18n.py` で訳の漏れを調べられない。対応する bundle ID と exe の名前で、文体と送るアプリ名が同じになる。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（決定 5・WD5）
+- 関係する要件: REQ-DIC-020, REQ-DIC-160
+- 対象: Mac / Windows
+- 実装の場所: `HanasuShared.defaultAppStyles`、`AppStyleStore.defaultStyles`
+
 ### DEC-DIC-070 履歴は 1 つの JSON ファイルに、本人だけが読める権限で保存する
 - 決めたこと: `~/Library/Application Support/Hanasu/History/history.json` に新しい順で保存する。フォルダは 0700、ファイルは 0600、書き込みは atomic。読めないファイルは上書きせず、ウインドウにエラーを出す。Mac 版は、変更のたびに書かず、1 秒まとめてから 1 回書く。エンコードとファイル書き込みはバックグラウンドの直列キューで行い（書く順番は予約した順）、アプリの終了時・読み直しの前には、まとまっていない変更を先に書き切る。追加は日時の合う位置に挿入し、全件の並べ替えはしない。Mac 版の起動時の読み込みは、アプリの起動時に裏で先に読み（読み込みとデコード）、終わったらメインで中身を当てる。先読みが終わる前にメニュー・再入力・音声入力が履歴を使ったら、そこで同期で読み、先読みの結果は捨てる。
 - 理由: 1000 件でも 1 MB 前後で、1 ファイルのままで足りる。ただし 1 件ごとに全件をメインスレッドでエンコードして書くと、音声入力のたびに止まりうるため、遅らせて裏で書く。強制終了などで失いうるのは直近 1 秒の変更だけで、通常の終了では失わない。話した内容が入るので本人だけが読めるようにする。起動時の読み込みも、件数が多いとメインを止めるので裏で行う。ただしメニューと再入力はすぐに履歴が要るので、間に合わなければ同期で読む。履歴のストアができるまではアプリの中で history.json に書くものがないので、先読みした中身が古くなることはなく、遅延保存（flush）とも競合しない。
