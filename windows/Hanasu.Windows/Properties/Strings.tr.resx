@@ -168,10 +168,10 @@ Sonuç: {1}
     <value>Diğer diller</value>
   </data>
   <data name="Hud_Stop_Tip" xml:space="preserve">
-    <value>Kaydı durdurur ve metni yazar (kısayola yeniden basmakla aynı)</value>
+    <value>Kaydı bitirir ve metni yazar (kısayola yeniden basmakla aynı)</value>
   </data>
   <data name="Hud_Stop" xml:space="preserve">
-    <value>Durdur</value>
+    <value>Bitti</value>
   </data>
   <data name="Hud_Cancel" xml:space="preserve">
     <value>İptal</value>

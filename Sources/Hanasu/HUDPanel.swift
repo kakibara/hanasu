@@ -35,7 +35,7 @@ final class HUDModel: ObservableObject {
     @Published var level: Float = 0
     /// まとめての文字起こしをしている間は true（「Whisper で文字起こししています…」）
     @Published var transcribing = false
-    /// HUD の「停止」を押したとき（ショートカットをもう一度押したときと同じく、録音を止めて入力する）
+    /// HUD の「■ 完了」を押したとき（ショートカットをもう一度押したときと同じく、録音を止めて入力する）
     var onStop: (() -> Void)?
     /// HUD の「取消」を押したとき（Esc と同じ）
     var onCancel: (() -> Void)?
@@ -65,7 +65,7 @@ final class HUDModel: ObservableObject {
     }
 
     // 設計判断: DEC-DIC-025
-    /// 準備中と録音中は、ボタン（言語の切り替え・停止・取消）のクリックを受け取る
+    /// 準備中と録音中は、ボタン（言語の切り替え・完了・取消）のクリックを受け取る
     var acceptsClicks: Bool {
         switch phase {
         case .preparing, .recording: true
@@ -165,7 +165,7 @@ final class HUDController {
 }
 
 // 要件: REQ-COM-060
-/// HUD の大きさ。日本語は今までどおり 440。ほかの言語は語が長く、1 行目（見出し・言語の切り替え・取消・停止）が
+/// HUD の大きさ。日本語は今までどおり 440。ほかの言語は語が長く、1 行目（見出し・言語の切り替え・取消・完了）が
 /// 収まらないので広げる
 enum HUDLayout {
     static var width: CGFloat { UILanguage.current == .ja ? 440 : 680 }
@@ -185,7 +185,7 @@ private struct HUDView: View {
             HStack(spacing: 6) {
                 statusIcon
                 Text(title).font(.system(size: 13, weight: .semibold)).lineLimit(1)
-                    // 言語の切り替えや停止のボタンに押されて、見出しが消えないようにする
+                    // 言語の切り替えや完了のボタンに押されて、見出しが消えないようにする
                     .layoutPriority(1)
                 if let editBadge {
                     Text(editBadge)
@@ -252,7 +252,7 @@ private struct HUDView: View {
 
     // 要件: REQ-DIC-140
     // 設計判断: DEC-DIC-142
-    /// 録音中だけ、2 行目の右端にマイクのボタンを出す（1 行目は言語の切り替えと停止・取消でいっぱいのため）
+    /// 録音中だけ、2 行目の右端にマイクのボタンを出す（1 行目は言語の切り替えと完了・取消でいっぱいのため）
     private var microphoneButton: some View {
         MicrophoneButton { uid in model.onSelectMicrophone?(uid) }
     }
@@ -322,7 +322,7 @@ private struct HUDView: View {
 }
 
 // 設計判断: DEC-DIC-026
-/// 録音を止めて入力するボタン。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
+/// 録音を終えて入力する「■ 完了」ボタン。前面にないパネルでも押せるよう、AppKit の部品ではなくボタンで作る
 private struct StopButton: View {
     var action: () -> Void
 
@@ -330,7 +330,7 @@ private struct StopButton: View {
         Button(action: action) {
             HStack(spacing: 4) {
                 Image(systemName: "stop.fill").font(.system(size: 9))
-                Text(tr("停止")).font(.system(size: 11, weight: .semibold))
+                Text(tr("完了")).font(.system(size: 11, weight: .semibold))
             }
             .foregroundStyle(.white)
             .padding(.horizontal, 9)
@@ -340,7 +340,7 @@ private struct StopButton: View {
         }
         .buttonStyle(.plain)
         .fixedSize()
-        .help(tr("録音を止めて入力します（ショートカットをもう一度押すのと同じ）"))
+        .help(tr("録音を終えて入力します（ショートカットをもう一度押すのと同じ）"))
     }
 }
 

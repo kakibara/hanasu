@@ -543,7 +543,7 @@ private struct OnboardingDictationPage: View {
                              subtitle: tr("どのアプリでも、カーソルのある場所に、話した内容を整えて入力します。"))
             OnboardingFeatureList {
                 OnboardingFeatureRow(
-                    symbol: "mic.fill", title: tr("話して入力"), detail: tr("入力したい場所で押して話し、もう一度押す（画面下の表示の「■ 停止」でも）と、AI が整えた文章を入力します。Esc で取り消し。押している間だけ録音する使い方も選べます。"),
+                    symbol: "mic.fill", title: tr("話して入力"), detail: tr("入力したい場所で押して話し、もう一度押す（画面下の表示の「■ 完了」でも）と、AI が整えた文章を入力します。Esc で取り消し。押している間だけ録音する使い方も選べます。"),
                     shortcut: settings.hotKey.displayString)
                 OnboardingFeatureRow(
                     symbol: "globe", title: tr("翻訳して入力"),

@@ -13,7 +13,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
    - Claude: API キー（[Claude Console](https://platform.claude.com/) で作る）。「接続を試す」で確かめられる（料金はかからない）
    - API キーは暗号化して保存する。「API キーを Windows Hello で守る」をオンにすると、使うときに PIN・顔・指紋で確認する（下の「セキュリティ」）
 3. 入力したい場所にカーソルを置き、**Ctrl + Alt + Space** で録音を始める。画面の下に HUD が出る。
-4. もう一度 **Ctrl + Alt + Space**（または HUD の「■ 停止」）で止めると、文字起こし → AI で整形 → 貼り付け まで進む。
+4. もう一度 **Ctrl + Alt + Space**（または HUD の「■ 完了」）で止めると、文字起こし → AI で整形 → 貼り付け まで進む。
    - **Ctrl + Alt + Shift + Space** で始めると翻訳して入力する（既定は英訳。設定 → 一般 →「翻訳する言語」で日本語も選べる）。録音中に HUD の「話した言語 / English（/ 日本語）」を押して切り替えてもよい（止めた時点の選択で決まる）。
    - 録音中は **Esc**（または HUD の「取消」）で取り消す。
    - 「押している間だけ録音」も選べる（設定 → 一般 → 録音のしかた）。
@@ -113,7 +113,7 @@ HotKeyService（RegisterHotKey + 離したかの見張り）
         ├─ DictationTextProcessor（辞書の置き換え → 音声入力の AI（Gemini / Claude）で整形 / 英訳。認証がない・失敗したら原文を入れて知らせる）
         ├─ ClipboardTextInserter（修飾キーを離すのを待つ → 貼り付け先の確認 → クリップボード退避 → 文章 → Ctrl+V → 元に戻す）
         │     └─ 貼り付け先の確認: WindowsSecurity.IsHigherIntegrity（UIPI）→ FocusProbe（Win32・UI Automation）→ PasteTargetJudge（Core）
-        └─ IHud ── HudWindow（録音中・経過時間・途中経過・処理中・完了・エラー・日本語/English・取消・■ 停止・貼り付けなかった結果）
+        └─ IHud ── HudWindow（録音中・経過時間・途中経過・処理中・完了・エラー・日本語/English・取消・■ 完了・貼り付けなかった結果）
 ```
 
 - 状態遷移・HUD の文言・整形の失敗時の扱いは Core にあり、UI なしでテストしている（`DictationControllerTests`）。

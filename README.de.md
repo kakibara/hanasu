@@ -40,7 +40,7 @@ Inspiriert ist es von Typeless, Wispr Flow, Aqua Voice und Granola. Der Quellcod
 
 | | |
 | --- | --- |
-| **Sprechen → ausgefeilter Text** | Drücke <kbd>⌥ Space</kbd>, sprich und drücke die Taste erneut (oder klicke auf **■ Stopp**). Hanasu entfernt Füllwörter, korrigiert Homophone, übernimmt deine Selbstkorrekturen und fügt den Text an der Cursorposition ein. |
+| **Sprechen → ausgefeilter Text** | Drücke <kbd>⌥ Space</kbd>, sprich und drücke die Taste erneut (oder klicke auf **■ Fertig**). Hanasu entfernt Füllwörter, korrigiert Homophone, übernimmt deine Selbstkorrekturen und fügt den Text an der Cursorposition ein. |
 | **Sprechen, übersetzt eintippen** | Drücke <kbd>⌥⇧ Space</kbd> oder stelle das HUD während des Sprechens auf **English**, **日本語** oder eine andere Sprache um. Feste Wendungen werden natürlich übersetzt, so wird お疲れ様です zu "Hi,". Welche Sprachen angeboten werden (jede der 17 unterstützten Sprachen), wählst du unter **Einstellungen → Allgemein**. Standard ist Englisch. Auf dem Mac kannst du unter **Einstellungen → Pro App** festlegen, dass eine App in einer dieser Sprachen startet. |
 | **Gemischte Sprachen bleiben wie gesprochen** | Standardmäßig bleiben Teile, die du auf Englisch sagst, auf Englisch. Du kannst die Ausgabe stattdessen auch einheitlich auf Japanisch ausgeben lassen. |
 | **Per Sprache bearbeiten** | Markiere einen Text, drücke <kbd>⌃⌥⌘ E</kbd> und sage „formuliere es höflicher“, „mach eine Aufzählung daraus“ oder „übersetze ins Englische“. |
