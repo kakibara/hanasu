@@ -206,14 +206,14 @@ AI チャット・会議への質問のモデルを議事録と分けて選び�
 
 ## 11. 2026-11-11 文字起こし AI を「AI」タブへ移し、用途を「音声入力整形」「議事録」と呼ぶ（0d2b3f3 の上の作業中の変更、macOS 26.6.2）
 
-- 描いたもの: `python3 scripts/ui-cases.py render --ids UX-182,UX-187,UX-077`（3 件、言語: ja）。英語は `Hanasu --ui-language en --render-settings <dir> --pane ai` で別に描いた。
+- 描いたもの: `python3 scripts/ui-cases.py render --ids UX-182,UX-188,UX-077`（3 件、言語: ja）。英語は `Hanasu --ui-language en --render-settings <dir> --pane ai` で別に描いた。
 - 判定: OK 4・NG 0・判断できない 0・描けなかった 0
 
 | ID | 言語 | 判定 | メモ |
 | --- | --- | --- | --- |
 | UX-182 | ja | OK | 「文字起こしのあとの AI」に「音声入力整形」「議事録」「AI チャット・質問」。議事録の説明は「作り直しも含む・辞書の候補」。オンボーディングの Tips のページも同じ 3 行 |
-| UX-187 | ja | OK | AI タブの先頭に「文字起こし AI」（音声入力・会議の記録・Mac 標準の認識モデル・文字起こしの言語）、その下に「文字起こしのあとの AI」。一般タブのコードから文字起こしの欄を外した（描いた画像は上の部分だけで、一般タブの下までは写らない） |
+| UX-188 | ja | OK | AI タブの先頭に「文字起こし AI」（音声入力・会議の記録・Mac 標準の認識モデル・文字起こしの言語）、その下に「文字起こしのあとの AI」。一般タブのコードから文字起こしの欄を外した（描いた画像は上の部分だけで、一般タブの下までは写らない） |
 | UX-077 | ja | OK | 見出しが「文字起こし AI」、言語のラベルが「文字起こしの言語」 |
-| UX-187 | en | OK | 「Transcription AI」「Transcription Language」「AI After Transcription」「Dictation Refinement」「Minutes」が切れない |
+| UX-188 | en | OK | 「Transcription AI」「Transcription Language」「AI After Transcription」「Dictation Refinement」「Minutes」が切れない |
 
 - Windows: `dotnet build Hanasu.Windows/Hanasu.Windows.csproj -p:EnableWindowsTargeting=true`（Mac の上）で XAML ごとビルドが通った。画面の見た目と出し分けは、まだ Windows の実機で見ていない（UX-187 の Windows は手）。
