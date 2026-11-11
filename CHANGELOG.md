@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.3.0](https://github.com/kakibara/hanasu/compare/v2.2.0...v2.3.0) - 2026-11-11
+
+- 会議の録音を消す機能: 会議ごとに文字起こしのあとに消す・あとから消す・録音の管理・保存期間（Mac と Windows） by @kakibara in https://github.com/kakibara/hanasu/pull/91
+- 会議中に「何を聞かれた？」をボタン 1 つで確かめられるようにする（Mac） by @kakibara in https://github.com/kakibara/hanasu/pull/94
+- 音声入力で、画面のスクリーンショットの文字を AI の整形に渡せるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/93
+- 録音中の HUD の「■ 停止」を「■ 完了」にする by @kakibara in https://github.com/kakibara/hanasu/pull/92
+
 ## [v2.2.0](https://github.com/kakibara/hanasu/compare/v2.1.0...v2.2.0) - 2026-11-09
 
 - UI のテスト項目をデータにし、Mac は画面を PNG に描いて確かめる（DEC-COM-170） by @kakibara in https://github.com/kakibara/hanasu/pull/86
