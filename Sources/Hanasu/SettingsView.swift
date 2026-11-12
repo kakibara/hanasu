@@ -4,7 +4,7 @@ import SwiftUI
 // 設計判断: DEC-COM-151
 /// 設定画面の項目（左のサイドバーに並べる）
 enum SettingsPane: String, CaseIterable, Identifiable {
-    case general, ai, words, appStyles, snippets, meeting, history, permissions
+    case general, ai, words, appStyles, snippets, meeting, history, commandLine, permissions
 
     var id: Self { self }
 
@@ -17,6 +17,7 @@ enum SettingsPane: String, CaseIterable, Identifiable {
         case .snippets: tr("スニペット")
         case .meeting: tr("会議")
         case .history: tr("履歴")
+        case .commandLine: tr("コマンドと MCP")
         case .permissions: tr("権限")
         }
     }
@@ -30,6 +31,7 @@ enum SettingsPane: String, CaseIterable, Identifiable {
         case .snippets: "text.badge.plus"
         case .meeting: "person.2.wave.2.fill"
         case .history: "clock.arrow.circlepath"
+        case .commandLine: "terminal.fill"
         case .permissions: "lock.shield.fill"
         }
     }
@@ -44,6 +46,7 @@ enum SettingsPane: String, CaseIterable, Identifiable {
         case .snippets: .teal
         case .meeting: .green
         case .history: .indigo
+        case .commandLine: .brown
         case .permissions: .red
         }
     }
@@ -149,6 +152,10 @@ struct SettingsView: View {
                 onOpenHistory: onOpenHistory,
                 onBeginShortcutRecording: onBeginShortcutRecording,
                 onEndShortcutRecording: onEndShortcutRecording)
+        case .commandLine:
+            // 要件: REQ-COM-190, REQ-COM-191, REQ-COM-192, REQ-COM-193
+            // hanasu コマンドと MCP の登録（CommandLineSettingsView.swift）
+            CommandLineSettingsTab()
         case .permissions:
             PermissionsTab()
         }

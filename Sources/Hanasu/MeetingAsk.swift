@@ -13,6 +13,10 @@ enum MeetingAsk {
         var maxCharacters = 150_000
         /// 議事録がない会議で、文字起こしを渡す上限（文字数）
         var maxTranscriptCharacters = 40_000
+        // 要件: REQ-MTG-126
+        // 設計判断: DEC-MTG-124
+        /// はっきり指定した期間（hanasu ask の --since / --until）。あれば質問文の期間の語より優先し、期間の外の会議は使わない
+        var period: DateInterval?
     }
 
     /// Gemini に渡した会議 1 件
@@ -54,13 +58,28 @@ enum MeetingAsk {
     /// 質問に「先週」「昨日」などがあれば、その期間の会議に絞る（期間に会議がなければ絞らない）。
     static func gatherContext(question: String, meetings: [Meeting], index: MeetingSearchIndex,
                               options: Options = Options(), now: Date = Date()) async -> Context {
+        await gatherContext(question: question, meetings: meetings, search: { await index.search($0, hitsPerMeeting: 50) },
+                            options: options, now: now)
+    }
+
+    // 設計判断: DEC-MTG-124
+    /// search: 語 1 つで会議を検索する（アプリは索引、hanasu ask は索引を作らない MeetingSearchIndex.scan）
+    static func gatherContext(question: String, meetings: [Meeting], search: (String) async -> [MeetingSearchResult],
+                              options: Options = Options(), now: Date = Date()) async -> Context {
         let keywords = keywords(in: question)
-        let period = period(in: question, now: now)
         var pool = meetings.filter { $0.status == .done || $0.status == .failed }
             .filter { !$0.utterances.isEmpty || $0.minutes != nil }
-        if let period {
-            let inPeriod = pool.filter { period.contains($0.startedAt) }
-            if !inPeriod.isEmpty { pool = inPeriod }
+        let period: DateInterval?
+        if let explicit = options.period {
+            // はっきり指定した期間は、会議がなくても広げない
+            period = explicit
+            pool = pool.filter { explicit.contains($0.startedAt) }
+        } else {
+            period = Self.period(in: question, now: now)
+            if let period {
+                let inPeriod = pool.filter { period.contains($0.startedAt) }
+                if !inPeriod.isEmpty { pool = inPeriod }
+            }
         }
         let poolIDs = Set(pool.map(\.id))
 
@@ -68,7 +87,7 @@ enum MeetingAsk {
         var score: [String: Double] = [:]
         var hitBlocks: [String: Set<UUID>] = [:]
         for keyword in keywords {
-            for result in await index.search(keyword, hitsPerMeeting: 50) where poolIDs.contains(result.meetingID) {
+            for result in await search(keyword) where poolIDs.contains(result.meetingID) {
                 // 長い語（複合語）ほど重く、ヒット数は少しだけ効かせる
                 score[result.meetingID, default: 0] += Double(keyword.count) + min(Double(result.totalHits), 10) * 0.1
                 for hit in result.hits {
@@ -169,6 +188,11 @@ enum MeetingAsk {
         guard !context.sources.isEmpty else {
             return Answer(text: tr("質問に使える会議の記録がありません。"), sources: [], cited: [], keywords: context.keywords)
         }
+        return try await answer(context, client: client, model: model)
+    }
+
+    /// 集めた会議（sources が 1 件以上）で AI に聞く。hanasu ask も同じものを使う
+    static func answer(_ context: Context, client: TextAIClient, model: String) async throws -> Answer {
         let text = try await client.generate(systemInstruction: instruction, userText: context.prompt, model: model, effort: .medium)
         return Answer(text: text, sources: context.sources, cited: cited(in: text, sources: context.sources),
                       keywords: context.keywords)

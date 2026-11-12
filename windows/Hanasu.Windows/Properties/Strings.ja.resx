@@ -101,27 +101,6 @@
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>会議の記録中（または記録のあとの処理中）です。終了すると、この会議の文字起こしと議事録は作られません（音声ファイルは残ります）。終了しますか？</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Windows Hello が設定されていません（Windows の設定 → アカウント → サインイン オプション で PIN などを設定してください）</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Windows Hello の確認が取り消されたため、API キーを読めませんでした</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Windows Hello で確認できませんでした（{0}）</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>Windows Hello の鍵が見つかりません（Windows Hello を設定し直した可能性があります）。設定 → AI で API キーを入れ直してください</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Windows Hello の鍵を開けませんでした（{0}）</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Windows Hello の確認が取り消されました</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Windows Hello の鍵を作れませんでした（{0}）</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>マイクが見つかりません。マイクがつながっているか、Windows の設定 → システム → サウンド で確かめてください。</value>
   </data>
@@ -1479,6 +1458,188 @@
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>{0} 件の会議の録音を削除しきれませんでした。残ったファイルはそのままです。</value>
+  </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>PATH に入れられませんでした: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>PATH に入れました。新しく開いた PowerShell やコマンドプロンプトで hanasu と打つと使えます（開いたままのターミナルや、そこから起動したアプリには届かないので、開き直してください）。</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>MCP を登録できないときは、この説明（英語）をエージェントの指示（Claude Code の CLAUDE.md やスキルなど）に貼ると、エージェントがシェルから hanasu を呼んで会議を読めます。ターミナルでは hanasu help agent で出せます。</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>エージェントへの説明</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>コピーしました</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>Claude Desktop の設定ファイル（claude_desktop_config.json）の mcpServers に足します。ほかのアプリも、command と args に同じものを書きます。</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>PowerShell で出力を読むときは、先に [Console]::OutputEncoding = [Text.UTF8Encoding]::new() を実行してください（Windows PowerShell 5.1 では $OutputEncoding = [Text.UTF8Encoding]::new() も）。5.1 の &gt; は UTF-16 で書くので、ファイルに書くときは | Out-File -Encoding utf8 を使ってください。</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>実行ファイル</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>説明を隠す</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>ターミナルやスクリプト、AI エージェントから、会議の記録を読んだり、文章を整えたりできます。PATH に入れなくても、上の実行ファイルのパスで呼べます。使い方はターミナルで hanasu help を見てください。</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を hanasu ask と同じ AI（hanasu doctor の ask の行）にも送ります。</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>cli\hanasu.exe がありません。配布の zip をすべて展開したフォルダから Hanasu を開いてください。</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>入っていません</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>{0} に入っています</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>{0} は、別の場所の Hanasu を指しています。入れ直すと、このアプリを指します。</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>PATH に入れる</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>PATH から外す</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>PATH から外せませんでした: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>PATH から外しました。</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>hanasu コマンド</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>説明を見る</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>Hanasu が一時フォルダ（zip の中など）から動いています。zip をすべて展開したフォルダから開き直してから、PATH と MCP に登録してください。</value>
+  </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>AI アプリにつなぐ</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop（{0}）</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT（Codex）</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code（ターミナルと Claude Desktop の Code）</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>つないでいます</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>つないでいません</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>別の場所の Hanasu を指しています（つなぎ直すと、このアプリを指します）</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Hanasu のものでない hanasu が登録されています（{0}）</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>設定ファイルを読めません: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>{0} が見つかりません</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>JSON として読めません</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>思っていた形ではありません</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>mcp_servers をこの書き方で書いたファイルは、Hanasu では書き換えられません</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>つなぐ…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>外す…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>ChatGPT のふつうのチャットでは、今は使えません（OpenAI の不具合）。Codex で使えます。</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Claude Code は見つかりませんでした。入れると、この登録が使われます。</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>下の MCP の欄の内容を、手で足してください。</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>一部のフォルダだけの登録もあります（claude mcp add をスコープなしで動かしたもの）。</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>{0} を終了してから、もう一度押してください。</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>{0} に Hanasu をつなぎますか？</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>次のファイルに hanasu を足します。書く前のファイルは、同じフォルダに {0} として写しておきます。
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Claude Code の claude mcp add で、どのフォルダからも使える hanasu を登録します。</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>今の登録（{0}）を、Hanasu に置き換えますか？</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>{0} から Hanasu を外しますか？</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Hanasu の hanasu の登録だけを消します。</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>登録しています…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>つなぎました。{0} を開き直すと使えます。初めて会議を読むときにアクセスの確認が出たら、許可してください。</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>つなぎました。新しい Claude Code のセッションから使えます。</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>外しました。{0} を開き直すと反映されます。</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>すでにつないでいます。</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>外す登録がありません。</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>書き換えられませんでした: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>claude コマンドが 30 秒で終わらなかったので、打ち切りました。</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>コマンドと MCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>Hanasu のフォルダの名前を変えられなかったため、入れ替えられませんでした。管理者として動かしている hanasu があれば終わらせ、ターミナルの作業フォルダが Hanasu の cli の中にあれば出てから、もう一度アップデートしてください。</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>動いている hanasu（{0} 個）を終わらせてから入れ替えます。MCP を使うアプリ（Claude Desktop など）は、Hanasu のツールが使えなくなったら再起動してください。</value>
   </data>
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0}（{1}）</value>

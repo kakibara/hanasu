@@ -63,7 +63,7 @@ public sealed class ClaudeClient : ITextAiClient
     public async Task<string> GenerateTextAsync(TextPurpose purpose, string systemInstruction, string userText, string model,
         CancellationToken cancellationToken = default)
     {
-        model = ClaudeModels.Normalize(model, purpose == TextPurpose.Minutes ? ClaudeModels.DefaultMinutesModel : ClaudeModels.DefaultModel);
+        model = ClaudeModels.Normalize(model, purpose.IsLong() ? ClaudeModels.DefaultMinutesModel : ClaudeModels.DefaultModel);
         var parameters = BuildParams(purpose, systemInstruction, userText, model);
         // キーは待ち時間を数え始める前に読む（Windows Hello の確認に時間がかかっても、時間切れにしない）
         var client = await CreateSdkClientAsync(cancellationToken).ConfigureAwait(false);

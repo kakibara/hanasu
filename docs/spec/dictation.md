@@ -406,6 +406,44 @@
 - 実装の場所: `AppSettings.dictationInputDeviceUID`、`DictationMicrophonePicker`、`DictationMicrophoneMenu`、`HUDPanel.swift` の `MicrophoneButton`、`DictationController.selectMicrophone`、`EditModeController.selectMicrophone`、`SpeechRecognizer.switchInput`
 - 確かめ方: `.build/debug/Hanasu --list-dictation-microphones`（選択肢）、`--test-dictation-mic-switch [秒]`（つながっているマイクへ順に切り替えて音声が届くか。マイクの許可が要る）、`--render-dictation-mic-settings /tmp/mic.png`、`--render-hud /tmp/hud.png`。HUD のメニューのクリックは実機で確かめる
 
+### REQ-DIC-160 `hanasu refine` で、音声入力と同じ整形・翻訳をする
+- 内容: 引数か stdin の文章を、音声入力と同じ整形（REQ-DIC-003）で整える。先に辞書の置き換えルールを当て（REQ-DIC-070）、出力の言語は設定に従う（REQ-DIC-082）。`--app <bundle ID>` でそのアプリ向けの文体と既定の出力言語（REQ-DIC-020・021）を、`--style none|chat|email|document-polite|document-plain` で文体のプリセットを直接選べる。`--translate <言語のコード>` で、整形の代わりに翻訳する（REQ-DIC-010・013）。`--show-prompt` で、AI に送る内容を stderr に出す。音声入力の履歴（REQ-DIC-060）には残さない。
+- 受け入れ条件:
+  - `echo … | hanasu refine | cat` で、stdout に整えた文章だけが出る。
+  - 引数と stdin の両方があるとき、引数がなく stdin が端末（パイプでない）のとき、文章が空のときは、入力を待たずに終了コード 2。1 万文字を超える文章も 2。
+  - AI が失敗したときは、stdout に何も出さず、終了コード 1（認証情報がなければ 3）。`--fallback-raw` を付けたときだけ、辞書を当てた原文を stdout に出して 0 で終え、整えられなかった旨を stderr に出す。
+  - `--json` で `text`・`ai`（`provider`・`model`）・`translation`（言語のコードか null）・`fallback` を出す。
+  - 実行のあとも、音声入力の履歴が増えない。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R1〜R3・R5〜R8）
+- 関係する要件: REQ-DIC-003, REQ-DIC-070, REQ-DIC-082, REQ-DIC-020, REQ-DIC-021, REQ-DIC-013, REQ-DIC-060, REQ-COM-186
+- 対象: Mac / Windows
+- 実装の場所: `HanasuAICommands.runRefine`、`HanasuTextInput`
+- Windows の実装: `AiCommands.RefineAsync`（`windows/Hanasu.Core/Command/AiCommands.cs`）。`--app` は exe の名前（例: `slack.exe`。DEC-DIC-190）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（偽の `fm` に送られた内容と、失敗したときの出力で確かめる）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
+
+### REQ-DIC-161 `hanasu edit` で、選択を声で編集と同じ書き換えをする
+- 内容: `hanasu edit "<指示>" [文章]` で、文章（引数か stdin）を、選択を声で編集（REQ-DIC-050）と同じプロンプトで、指示どおりに書き換える。入力の受け取り方・失敗したときの出力・履歴に残さないことは `refine` と同じ。
+- 受け入れ条件:
+  - 指示がなければ終了コード 2。文章の上限は、選択を声で編集と同じ 1 万文字。
+  - AI が失敗したときは、stdout に何も出さず 0 以外。`--fallback-raw` を付けたときだけ、元の文章を出して 0 で終える。
+  - `--json` で `text`・`ai`・`fallback` を出す。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R4〜R8）
+- 関係する要件: REQ-DIC-050, REQ-DIC-060, REQ-COM-186
+- 対象: Mac / Windows
+- 実装の場所: `HanasuAICommands.runEdit`、`HanasuTextInput`
+- Windows の実装: `AiCommands.EditAsync`・`EditPrompt`（`TextPurpose.Edit`。DEC-COM-196）
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
+
+### REQ-DIC-162 `hanasu dict apply` で、辞書の置き換えルールだけを当てる
+- 内容: 引数か stdin の文章に、辞書の置き換えルール（REQ-DIC-070）だけを当てて出す。AI には何も送らない。
+- 受け入れ条件: 置き換えルールを当てた文章が stdout に出る（`--json` なら `text`）。入力の受け取り方は `refine` と同じ。ネットワークに何も送らない。
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R9）
+- 関係する要件: REQ-DIC-070
+- 対象: Mac / Windows
+- 実装の場所: `HanasuAICommands.runDict`
+- Windows の実装: `AiCommands.Dict`
+- 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
+
 ---
 
 ## 設計判断
@@ -969,6 +1007,14 @@
 - 対象: Mac
 - 実装の場所: `ScreenRecordingPermission`、`ScreenContextSettingsSection`、`ScreenshotButton`
 
+### DEC-DIC-190 組み込みの既定の文体の一覧は、Mac の bundle ID と Windows の exe の名前の対応として共有する
+- 決めたこと: 既定の文体（Slack・Teams・Discord・LINE はチャット、Outlook・Spark はメール、Word・Pages・Notion は文書（です・ます））を、`hanasu.json` の `defaultAppStyles` に、Mac の bundle ID・Windows の exe の名前（小文字。大文字小文字を区別せずに比べる）・訳さないアプリ名・文体の組で置く（DEC-COM-191）。Mac の `AppStyleStore.defaultStyles` はこれを読み、名前を訳す Mac だけのアプリ（メッセージ・メール）は Swift のコードで `tr()` して足す。Windows の `hanasu refine --app <exe の名前>` はこの一覧だけを使い（Windows のアプリにアプリ別の文体の設定はない）、AI に送るアプリ名は一覧の名前、一覧になければ exe の名前から拡張子を外したもの。
+- 理由: 一覧を 2 か所に書くと、ずれる。訳した名前を JSON に置くと、`check-i18n.py` で訳の漏れを調べられない。対応する bundle ID と exe の名前で、文体と送るアプリ名が同じになる。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（決定 5・WD5）
+- 関係する要件: REQ-DIC-020, REQ-DIC-160
+- 対象: Mac / Windows
+- 実装の場所: `HanasuShared.defaultAppStyles`、`AppStyleStore.defaultStyles`
+
 ### DEC-DIC-070 履歴は 1 つの JSON ファイルに、本人だけが読める権限で保存する
 - 決めたこと: `~/Library/Application Support/Hanasu/History/history.json` に新しい順で保存する。フォルダは 0700、ファイルは 0600、書き込みは atomic。読めないファイルは上書きせず、ウインドウにエラーを出す。Mac 版は、変更のたびに書かず、1 秒まとめてから 1 回書く。エンコードとファイル書き込みはバックグラウンドの直列キューで行い（書く順番は予約した順）、アプリの終了時・読み直しの前には、まとまっていない変更を先に書き切る。追加は日時の合う位置に挿入し、全件の並べ替えはしない。Mac 版の起動時の読み込みは、アプリの起動時に裏で先に読み（読み込みとデコード）、終わったらメインで中身を当てる。先読みが終わる前にメニュー・再入力・音声入力が履歴を使ったら、そこで同期で読み、先読みの結果は捨てる。
 - 理由: 1000 件でも 1 MB 前後で、1 ファイルのままで足りる。ただし 1 件ごとに全件をメインスレッドでエンコードして書くと、音声入力のたびに止まりうるため、遅らせて裏で書く。強制終了などで失いうるのは直近 1 秒の変更だけで、通常の終了では失わない。話した内容が入るので本人だけが読めるようにする。起動時の読み込みも、件数が多いとメインを止めるので裏で行う。ただしメニューと再入力はすぐに履歴が要るので、間に合わなければ同期で読む。履歴のストアができるまではアプリの中で history.json に書くものがないので、先読みした中身が古くなることはなく、遅延保存（flush）とも競合しない。
@@ -1437,6 +1483,24 @@
 - 関係する要件: REQ-DIC-021
 - 対象: Mac
 - 実装の場所: `AppOutputLanguage`
+
+### DEC-DIC-160 `hanasu` の文章の入力は、引数か stdin のどちらかで、上限は 1 万文字。スニペットは当てない
+- 決めたこと: `refine`・`edit`・`dict apply` の文章は、位置の引数（複数なら空白でつなぐ）か stdin のどちらか。両方あれば終了コード 2。引数がなく stdin が端末なら、入力を待たずに使い方を出して 2。stdin の前後の空白・改行は落とす。上限は 1 万文字（選択を声で編集の `EditModeSettings.maxSelectionLength` と同じ）。スニペット（起動フレーズの置き換え）と画面の文脈は使わない。入力先のアプリ名は、`--app` を付けて、設定の「アプリ名を AI に伝える」がオンのときだけ送る。
+- 理由: 両方を受け付けると、どちらを使ったかがエージェントに分からない。端末で入力を待つと、エージェントやスクリプトから呼んだときに止まったままになる。整形のプロンプトは話した長さの文を前提にしているので、長い書き言葉を崩さないよう上限を設ける（計画の R6）。1 万文字は、選択を声で編集で使っている上限で、話した文よりは十分に長い。スニペットの起動フレーズは話し言葉のためのもので、書いた文章にたまたま含まれると思わぬ置き換えになる。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R1・R6）
+- 関係する要件: REQ-DIC-160, REQ-DIC-161, REQ-DIC-162
+- 対象: Mac / Windows
+- 実装の場所: `HanasuTextInput`
+- Windows の実装: `CommandTextInput`（パイプは UTF-8 で読み、正しくなければコンソールのコードページで読み直す。DEC-COM-195）
+
+### DEC-DIC-161 `hanasu` の整形・書き換えが失敗したら stdout に何も出さず、`--fallback-raw` のときだけ原文を出す
+- 決めたこと: AI が失敗したときは、stdout に何も出さずに 0 以外で終える。`--fallback-raw` を付けたときだけ、`refine` は辞書を当てた原文、`edit` は元の文章を stdout に出し、整えられなかった理由を stderr に出して 0 で終える（`--json` なら `fallback` が true）。`--show-prompt` の内容は stderr に出す。
+- 理由: パイプの先に壊れたものや途中のものを流さない（計画の R5）。音声入力（REQ-DIC-007）のように内容を失わない使い方も、明示すれば選べる。stdout は結果だけにする（REQ-COM-181）。
+- 決めた場面: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-09「この plan 通りに実際に進めて」・段階 2 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の R5・R8）
+- 関係する要件: REQ-DIC-160, REQ-DIC-161, REQ-COM-181
+- 対象: Mac / Windows
+- 実装の場所: `HanasuAICommands.runRefine`、`HanasuAICommands.runEdit`
+- Windows の実装: `AiCommands`（`FallbackOrThrow`）
 
 ### DEC-DIC-170 会議 1 件の材料と呼び出し
 - 決めたこと: 材料は、その会議の議事録に使う発言（`blocksForMinutes`。オフレコと除いた発言は入らない）を認識したままの文で並べたもの（話者名つき）を先に、議事録の本文をあとに置く。議事録は文字起こしを入れて残った分だけ入れる。作り直しを促している議事録（`minutesOutdated`）は入れない（議事録を作ったあとで除いた発言の中身を含みうるため）。長さの上限は会議の AI で変える。Gemini・Claude は全体で 60,000 字。ローカルの LLM と Apple は、モデルの文脈の長さから、出力・system instruction・既存の辞書の分を引いたトークン数まで（数え方は、どちらも全角 1 字 1 トークン・半角 3 字 1 トークンの多めの見積もり。Mac `AppleFMClient.estimateTokens`、Windows `DictionarySuggester.EstimateTokens`。ローカルの /tokenize はサーバーを起こしてからでないと使えないので使わない）。文字起こしを切ったときだけ、切った位置の発言の時刻から「最初の約 N 分」を出す。音声入力の結果は入れない。AI は会議の AI（DEC-COM-040）で、タイムアウトは Mac 120 秒、Windows は会議の既定。プロンプトは今の `dictionarySuggest.*` を使う（Windows の `TextPurpose` は `Minutes`）。材料を囲む `<material>` を区切りのタグを無害にする一覧に足し、材料はそれに通してから送り、`filter` も通したあとの材料で照合する。キャンセルで閉じたら呼び出しを止める。

@@ -711,4 +711,385 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>Impossible de modifier cette réunion : {0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>Actions : {0}</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — Actions à mener</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>L’IA n’a pas pu traiter la demande : {0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>IA utilisée :</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>Valeurs possibles : {0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>{1} réunions correspondent à {0}. Indiquez un ID.</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple (Foundation Models d'Apple) n'est pas disponible sous Windows.</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>Réunions transmises à l’IA (* = citée dans la réponse) :</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>Valeur de {0} illisible : {1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>Impossible de lire le fichier : {0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>Impossible de lire le dossier des réunions : {0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>Impossible de lire la réunion : {0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0} (lisible)</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0} (illisible : {1})</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>Identifiants :</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>À ajouter à la configuration de Claude Desktop (claude_desktop_config.json) :</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>Variable d’environnement {0}</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>Exécutable : {0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>Argument en trop : {0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>Mise en forme impossible : le texte est affiché tel quel (--fallback-raw).</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>Vérifiez que le dossier existe et que cet utilisateur peut le lire.</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0} (n’existe pas encore)</value>
+  </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>Dans une session sans écran (SSH, par exemple), Windows Hello ne peut pas demander de confirmation : les clés d'API protégées par Windows Hello sont donc inutilisables. Protégez-les avec DPAPI, ou passez la clé dans une variable d'environnement.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>La confirmation Windows Hello ne s'est pas terminée en {0} secondes. Vérifiez si la fenêtre de confirmation n'est pas cachée derrière d'autres fenêtres.</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>Lister les actions à mener de toutes les réunions</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>Afficher les instructions d’utilisation de hanasu, à coller dans les instructions d’un agent IA (comme CLAUDE.md). Toujours en anglais</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>Interroger l’IA sur des réunions passées (le contenu des réunions concernées est envoyé à l’IA des réunions)</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>Appliquer uniquement les règles de remplacement du dictionnaire (rien n’est envoyé à l’IA)</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>Vérifie l'IA et les identifiants utilisés, le dossier des réunions et le PATH (n'affiche jamais la valeur des clés)</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>Réécrire le texte selon l’instruction (comme « Modifier la sélection à la voix »). Le texte est passé en argument ou sur l’entrée standard</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>Lister les réunions, des plus récentes aux plus anciennes</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>Exécuter comme serveur MCP pour les agents IA (stdio), avec des outils pour lire les réunions</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>Mettre en forme le texte comme la dictée (ou le traduire avec --translate). Le texte est passé en argument ou sur l’entrée standard</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>Rechercher dans toutes les réunions (avec plusieurs mots séparés par des espaces, seules celles qui les contiennent tous)</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>Afficher le contenu d’une réunion (par défaut, le compte rendu)</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — utiliser les enregistrements de réunions et la mise en forme de texte de Hanasu depuis le terminal ou un agent IA</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>Utilisation :</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>Compte rendu, ligne {0} : {1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>Titre : {0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>Occurrences : {0}</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0} (déduit)</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>L’app Hanasu utilise actuellement l’IA locale.</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>Quittez l’app ou choisissez une autre IA avec --ai (pour ne pas charger deux fois le même modèle).</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>Local : {0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>Exemple d’enregistrement dans Claude Code : {0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>Le contenu des réunions renvoyé par MCP est transmis à l'agent qui utilise MCP et à son fournisseur d'IA. ask_meetings envoie aussi le contenu des réunions à la même IA que hanasu ask (voir la ligne ask de hanasu doctor).</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>Le JSON pour Claude Desktop et d’autres apps est affiché par hanasu doctor et dans Réglages → « Commande et MCP ».</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>Outils : list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (tous en lecture seule)</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp : fonctionne comme serveur MCP. S’arrête à la fermeture de l’entrée standard.</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>Réunion introuvable : {0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>Cette réunion est à l’état « {0} ». Seul le contenu déjà enregistré est affiché.</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>Dossier des réunions : {0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>Le compte rendu n’a pas été recréé depuis la modification des propos utilisés.</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>{0} doit être un entier supérieur ou égal à 1 : {1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>{0} nécessite une valeur.</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>{0} réunions plus récentes (en cours d’enregistrement, en traitement ou en échec) : {1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>Aucune action à mener.</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>Cette réunion ne contient aucune action à mener.</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>Aucune réunion enregistrée sur laquelle poser une question.</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>Aucune réunion terminée.</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>Aucun modèle téléchargé</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>Aucune réunion.</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>Cette réunion n’a pas de compte rendu.</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>Pas de compte rendu</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>Cette réunion ne contient aucune note.</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>Aucun résultat.</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>(absent du PATH de ce shell)</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>Non configurée</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;AI&gt; : local, gemini ou claude (à omettre pour l'IA des Réglages). &lt;style&gt; : none, chat, email, document-polite ou document-plain. &lt;langue&gt; : en, ja, ko, etc.</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>Si l’IA échoue, la commande se termine sans rien afficher. Avec --fallback-raw, le texte est affiché sans mise en forme. Avec --show-prompt, ce qui est envoyé à l’IA est affiché sur la sortie d’erreur standard (stderr).</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>Pour lire la sortie dans PowerShell, exécutez d'abord [Console]::OutputEncoding = [Text.UTF8Encoding]::new() (sous Windows PowerShell 5.1, aussi $OutputEncoding = [Text.UTF8Encoding]::new()). Sous 5.1, &gt; écrit en UTF-16 : pour écrire un fichier, utilisez | Out-File -Encoding utf8.</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>Codes de sortie : 0 succès, 1 échec, 2 utilisation incorrecte, 3 identifiants manquants, 4 réunion introuvable, 5 bloqué par une règle ou des autorisations</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>Les clés d'API protégées par Windows Hello demandent une confirmation à chaque commande qui utilise l'IA (hanasu mcp la demande la première fois, puis après le verrouillage de l'écran).</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>Avec --json, la sortie est au format JSON fixe. Avec --meetings-dir &lt;dossier&gt; (ou la variable d’environnement HANASU_MEETINGS_DIR), vous pouvez changer le dossier des réunions.</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>L’IA locale est lente, car elle charge le modèle à chaque appel. Elle n’est pas disponible tant que l’app utilise l’IA locale.</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>Désigner une réunion : ID (ex. 2026-11-02_1312), latest (la dernière réunion terminée) ou une date (ex. 2026-11-02)</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>Désigner une période : 7d, 24h, 2w (en remontant depuis maintenant) ou une date (ex. 2026-11-01)</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH : non ajouté (ajoutez-le dans Réglages → « Commande et MCP » ; avec le chemin complet, cela fonctionne sans)</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH : {0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH : {0} (pointe vers Hanasu à un autre emplacement)</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;nombre&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;dossier&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;instruction&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;langue&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;réunion&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;modèle&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;nom&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;période&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;question&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;style&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;texte&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;mot&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>Dictée</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>Réunions</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>Clé d'API enregistrée (DPAPI)</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>Clé d'API enregistrée (Windows Hello ; non lue ici, car chaque lecture demande une confirmation)</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>Pour afficher l’aide, utilisez hanasu help.</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>Pour afficher la liste des réunions, utilisez hanasu meetings list.</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>Compte de service ({0})</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>--since doit être antérieur à --until.</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>Indiquez l’instruction de réécriture.</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>Indiquez une réunion (ex. hanasu meetings show latest).</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>Indiquez la question.</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>Indiquez les mots à rechercher (ex. hanasu meetings search budget).</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>Échec</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>Traitement en cours</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>Enregistrement</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>Hanasu s'exécute depuis un dossier temporaire (par exemple dans le zip). Extrayez tout le zip, rouvrez Hanasu depuis ce dossier, puis ajoutez-le au PATH et à MCP.</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>Passez le texte soit en argument, soit sur l’entrée standard (stdin), mais pas les deux.</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>Le texte est vide.</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>Passez le texte en argument ou sur l’entrée standard (pipe).</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>Texte trop long ({0} caractères). Maximum : {1} caractères.</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- Date : {0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — Transcription</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- Durée : {0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- Les propos non utilisés pour le compte rendu ne sont pas inclus ({0})</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>IA inconnue pour --ai : {0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>Argument inconnu : {0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>Commande inconnue : {0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>Langue inconnue pour --translate : {0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>Modèle local inconnu : {0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>Option inconnue : {0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>Style inconnu pour --style : {0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>Vérifiez les autorisations du dossier, et que la synchronisation (OneDrive, par exemple) a bien les fichiers sur ce PC.</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>{0} réunions n'ont pas pu être lues ({1}).</value>
+  </data>
 </root>

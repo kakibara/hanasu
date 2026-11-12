@@ -1,0 +1,24 @@
+{
+  "id": "2026-10-02 1500",
+  "title": "週次の振り返り",
+  "startedAt": "2026-10-02T06:00:00Z",
+  "duration": 600,
+  "status": "done",
+  "speakerNames": {},
+  "utterances": [
+    {
+      "id": "7A2B3C4D-0000-4000-8000-000000000021",
+      "speaker": "me",
+      "start": 0,
+      "end": 3,
+      "text": "今週の予算の進み具合を振り返ります"
+    },
+    {
+      "id": "7A2B3C4D-0000-4000-8000-000000000022",
+      "speaker": "room1",
+      "start": 4,
+      "end": 8,
+      "text": "BUDGET は順調です"
+    }
+  ]
+}

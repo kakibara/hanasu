@@ -36,6 +36,12 @@ if [[ ! -f "$BUNDLE/Localizable.xcstrings" && ! -f "$BUNDLE/Contents/Resources/L
   echo "error: $BUNDLE に Localizable.xcstrings がありません" >&2
   exit 1
 fi
+# 設計判断: DEC-COM-191
+# hanasu コマンドの共有の文（MCP のツールの説明など）。ないと MCP のツールの説明が空になるので止める
+if [[ ! -f "$BUNDLE/Command/hanasu.json" && ! -f "$BUNDLE/Contents/Resources/Command/hanasu.json" ]]; then
+  echo "error: $BUNDLE に Command/hanasu.json がありません" >&2
+  exit 1
+fi
 cp -R "$BUNDLE" "$APP/Contents/Resources/"
 # 要件: REQ-COM-060
 # 設計判断: DEC-COM-166

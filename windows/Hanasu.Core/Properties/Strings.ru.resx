@@ -711,4 +711,385 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>Не удалось изменить встречу: {0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>Задач: {0}</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — задачи</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>Не удалось обработать с помощью AI: {0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>Используемый AI:</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>Допустимые значения: {0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>Встреч за {0}: {1}. Укажите встречу по ID.</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple (Foundation Models от Apple) недоступен в Windows.</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>Встречи, переданные AI (* — процитированы в ответе):</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>Не удалось распознать значение {0}: {1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>Не удалось прочитать файл: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>Не удалось прочитать папку встреч: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>Не удаётся прочитать встречу: {0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0} (чтение возможно)</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0} (чтение невозможно: {1})</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>Учётные данные:</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>Для добавления в настройки Claude Desktop (claude_desktop_config.json):</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>Переменная окружения {0}</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>Исполняемый файл: {0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>Лишний аргумент: {0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>Обработать не удалось, поэтому выводится текст до обработки (--fallback-raw).</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>Проверьте, что папка существует и этот пользователь может её читать.</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0} (пока не существует)</value>
+  </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>В сеансе без экрана (например, SSH) Windows Hello не может запросить подтверждение, поэтому API-ключи, защищённые Windows Hello, использовать нельзя. Защитите их с помощью DPAPI или передайте ключ в переменной окружения.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Подтверждение Windows Hello не завершилось за {0} с. Проверьте, не скрыто ли окно подтверждения за другими окнами.</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>Вывести задачи из всех встреч</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>Вывести инструкцию по использованию hanasu для вставки в инструкции AI-агента (например, CLAUDE.md). Всегда на английском</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>Задать AI вопрос о прошлых встречах (содержимое подходящих встреч отправляется в AI для встреч)</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>Применить только правила замены из словаря (без отправки в AI)</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>Проверяет используемый ИИ и учётные данные, папку встреч и PATH (значения ключей не показываются)</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>Переписать текст по инструкции (как «Редактирование выделенного голосом»). Текст передаётся аргументом или через стандартный ввод</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>Вывести встречи, начиная с последних</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>Запустить как MCP-сервер для AI-агентов (stdio). Предоставляет инструменты для чтения встреч</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>Обработать текст так же, как при диктовке (с --translate — перевести). Текст передаётся аргументом или через стандартный ввод</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>Искать по всем встречам (если слова разделены пробелами — только то, где есть все)</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>Вывести содержимое встречи (по умолчанию — протокол)</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — записи встреч и обработка текста Hanasu из терминала и AI-агентов</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>Использование:</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>Протокол, строка {0}: {1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>Название: {0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>Совпадений: {0}</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0} (предположительно)</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>Приложение Hanasu сейчас использует локальный AI.</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>Закройте приложение или выберите другой AI с помощью --ai (чтобы не загружать одну и ту же модель дважды).</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>Локально: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>Пример регистрации в Claude Code: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>Содержимое встреч, которое возвращается через MCP, попадает к агенту, использующему MCP, и к его поставщику ИИ. ask_meetings также отправляет содержимое встреч тому же ИИ, что и hanasu ask (см. строку ask в hanasu doctor).</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>JSON для Claude Desktop и других приложений показывают hanasu doctor и Настройки → «Команда и MCP».</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>Инструменты: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (все только для чтения)</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp: работает как MCP-сервер. Завершится, когда закроется стандартный ввод.</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>Встреча не найдена: {0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>Статус встречи: «{0}». Выводится только то, что уже сохранено.</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>Папка встреч: {0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>Протокол не пересоздан после изменения используемых реплик.</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>Для {0} укажите целое число не меньше 1: {1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>Для {0} нужно указать значение.</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>Есть более новые встречи — {0} (идёт запись, обработка или ошибка): {1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>Задач нет.</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>У этой встречи нет задач.</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>Нет записей встреч, по которым можно задать вопрос.</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>Нет завершённых встреч.</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>Нет загруженных моделей</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>Встреч нет.</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>У этой встречи нет протокола.</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>Без протокола</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>У этой встречи нет заметок.</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>Ничего не найдено.</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>(нет в PATH этой оболочки)</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>Не задано</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;ИИ&gt;: local, gemini или claude (без него — ИИ из настроек). &lt;стиль&gt;: none, chat, email, document-polite или document-plain. &lt;язык&gt;: en, ja, ko и т. д.</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>Если AI не справится, команда завершится без вывода. С --fallback-raw выводится текст до обработки. С --show-prompt то, что отправляется в AI, выводится в стандартный поток ошибок (stderr).</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>Чтобы PowerShell правильно читал вывод, сначала выполните [Console]::OutputEncoding = [Text.UTF8Encoding]::new() (в Windows PowerShell 5.1 также $OutputEncoding = [Text.UTF8Encoding]::new()). В 5.1 &gt; пишет в UTF-16, поэтому для записи в файл используйте | Out-File -Encoding utf8.</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>Коды выхода: 0 — успех, 1 — ошибка, 2 — неверное использование, 3 — нет учётных данных, 4 — встреча не найдена, 5 — запрещено политикой или правами доступа</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>API-ключи, защищённые Windows Hello, запрашивают подтверждение при каждом запуске команды с ИИ (hanasu mcp — в первый раз и после блокировки экрана).</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>С --json выводится JSON фиксированной структуры. С помощью --meetings-dir &lt;папка&gt; (или переменной окружения HANASU_MEETINGS_DIR) можно указать другую папку встреч.</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>Локальный AI загружает модель при каждом вызове, поэтому работает медленно. Его нельзя использовать, пока приложение использует локальный AI.</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>Как указать встречу: ID (например, 2026-11-02_1312), latest (последняя завершённая встреча) или дата (например, 2026-11-02)</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>Как указать период: 7d, 24h, 2w (назад от текущего момента) или дата (например, 2026-11-01)</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH: не добавлено (добавить можно в Настройки → «Команда и MCP»; полный путь работает и без этого)</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH: {0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH: {0} (указывает на Hanasu в другом месте)</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;число&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;папка&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;инструкция&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;язык&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;встреча&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;модель&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;имя&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;период&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;вопрос&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;стиль&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;текст&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;слово&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>Диктовка</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>Встречи</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>Сохранённый API-ключ (DPAPI)</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>Сохранённый API-ключ (Windows Hello; здесь не читается, потому что каждое чтение требует подтверждения)</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>Справку можно вывести командой hanasu help.</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>Список встреч можно вывести командой hanasu meetings list.</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>Сервисный аккаунт ({0})</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>--since должно быть раньше --until.</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>Укажите инструкцию для переписывания.</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>Укажите одну встречу (например, hanasu meetings show latest).</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>Укажите вопрос.</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>Укажите слово для поиска (например, hanasu meetings search бюджет).</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>Обработка</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>Идёт запись</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>Hanasu запущен из временной папки (например, из zip-архива). Распакуйте весь архив, откройте Hanasu из этой папки, а затем добавьте его в PATH и MCP.</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>Передайте текст либо аргументом, либо через стандартный ввод (stdin), но не обоими способами.</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>Текст пуст.</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>Передайте текст аргументом или через стандартный ввод (конвейер).</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>Текст слишком длинный (символов: {0}). Допустимо не более {1}.</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- Дата и время: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — расшифровка</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- Длительность: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- Реплики, не используемые в протоколе ({0}), не включены</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>Неизвестный AI в --ai: {0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>Неизвестный аргумент: {0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>Неизвестная команда: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>Неизвестный язык в --translate: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>Неизвестная локальная модель: {0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>Неизвестный параметр: {0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>Неизвестный стиль в --style: {0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>Проверьте права доступа к папке и то, что синхронизация (например, OneDrive) загрузила файлы на этот компьютер.</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>Не удалось прочитать встреч: {0} ({1}).</value>
+  </data>
 </root>

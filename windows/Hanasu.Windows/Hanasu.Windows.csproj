@@ -33,17 +33,22 @@
     <Using Remove="System.Drawing" />
     <!-- 画面の文字列（Properties/Strings.resx から作る Strings） -->
     <Using Include="Hanasu.Windows.Properties" />
+    <!-- アプリと hanasu コマンドで共有する Windows の部品（AppLog・DPAPI・Windows Hello など。DEC-COM-193） -->
+    <Using Include="Hanasu.Platform" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Hanasu.Core\Hanasu.Core.csproj" />
+    <ProjectReference Include="..\Hanasu.Platform\Hanasu.Platform.csproj" />
     <ProjectReference Include="..\Hanasu.Whisper\Hanasu.Whisper.csproj" />
     <ProjectReference Include="..\Hanasu.Diarization\Hanasu.Diarization.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+    <!-- 要件: REQ-COM-194 -->
+    <!-- 動いている Claude Desktop の起動の引数（Win32_Process.CommandLine）を読む（Services/AgentApps.cs。設計判断: DEC-COM-202） -->
+    <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

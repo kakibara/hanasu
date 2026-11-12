@@ -41,4 +41,10 @@
     <EmbeddedResource Include="..\..\Sources\Hanasu\Resources\Prompts\*.json" LogicalName="Hanasu.Prompts.%(Filename)%(Extension)" Link="Prompts\%(Filename)%(Extension)" />
   </ItemGroup>
 
+  <!-- 設計判断: DEC-COM-191 -->
+  <!-- hanasu コマンドの、Mac 版と共有する英語の約束の文（MCP の説明・エージェントへの説明）と既定の文体の一覧。写さずに埋め込む（Command/SharedText.cs が読む） -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\Sources\Hanasu\Resources\Command\hanasu.json" LogicalName="Hanasu.Command.hanasu.json" Link="Command\hanasu.json" />
+  </ItemGroup>
+
 </Project>

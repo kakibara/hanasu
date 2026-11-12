@@ -122,6 +122,22 @@ Hanasu 會把轉錄結果交給 AI（Gemini、Claude，或你裝置上的本機�
 語音輸入和會議可以選擇不同的引擎。在 Windows 上，會議使用 Whisper 或 Gemini。
 在 Mac 上，可以從清單中選擇轉錄語言（日語、英語、中文、韓語、法語、德語、西班牙語、義大利語、葡萄牙語）。初始值為你的系統語言。
 
+### ⌨️ 從終端機和 AI 代理程式使用
+
+透過 `hanasu` 指令，腳本和 AI 代理程式（Claude Code、Claude Desktop 等）可以讀取你的會議記錄，並使用你的潤飾風格。它隨應用程式一起提供，不需要另外安裝任何東西：在 Mac 上它就是應用程式本身，在 Windows 上則是 Hanasu 資料夾中的 `cli\hanasu.exe`。開啟 **設定 → 指令與 MCP**，即可一鍵將它連接到 Claude Desktop、ChatGPT（Codex）或 Claude Code，將它加入 PATH，或複製供其他 App 使用的 MCP 設定。（由於 OpenAI 的問題，ChatGPT 的一般聊天目前還無法使用本機 MCP 工具；Codex 可以。）
+
+| | |
+| --- | --- |
+| **讀取會議** | `hanasu meetings list / show / search` 和 `hanasu actions` 以文字或 `--json` 輸出會議、會議記錄、轉錄和待辦事項。不會傳送到任何地方。 |
+| **提問** | `hanasu ask "上週我們決定了什麼？"` 會根據你的會議內容回答。在 Mac 上使用你為 **AI 聊天·提問** 選擇的 AI（若未選擇，則使用會議的 AI）；在 Windows 上使用會議的 AI。 |
+| **潤飾文字** | `hanasu refine` 會像語音輸入一樣潤飾或翻譯文字，`hanasu edit "<指示>"` 則會改寫文字。兩者都可以在管線中使用。`--app` 可選擇某個應用程式的風格（在 Mac 上用 bundle ID，在 Windows 上用 `slack.exe` 這類 exe 名稱）。 |
+| **給 AI 代理程式用的 MCP** | `hanasu mcp` 是一個 MCP 伺服器（stdio）。代理程式可以列出、讀取、搜尋你的會議，並針對會議提問。以這種方式分享的會議內容會傳給代理程式及其 AI 供應商。 |
+| **檢查設定** | `hanasu doctor` 會顯示使用的 AI 和憑證、會議檔案夾，以及登錄 MCP 的方法。執行 `hanasu help` 可查看所有選項。 |
+
+在 Windows 上用 PowerShell 讀取輸出前，請先執行 `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()`。以 Windows Hello 保護的 API 金鑰，每次被指令使用時都會請你確認。
+
+在 Mac 上，管理員可以透過設定描述檔關閉此指令、MCP 或部分 AI。
+
 ## 下載
 
 從 [**Releases**](https://github.com/kakibara/hanasu/releases/latest) 取得最新版本。
@@ -185,6 +201,7 @@ Hanasu 會把轉錄結果交給 AI（Gemini、Claude，或你裝置上的本機�
 - **AI 收到的是文字，而不是音訊。** Gemini 或 Claude 收到的是轉錄結果。依你的設定，它還可能收到你正在輸入的應用程式名稱、畫面情境、從螢幕截圖中讀取的文字（絕不包括影像本身），以及提問功能和會議 AI 聊天所用的會議轉錄。
 - **本機模型和 Apple 同樣會把文字留在裝置上。** 選擇其中任何一個時，不會傳送任何內容給 AI 服務。唯一的下載是模型本身。
 - **只有你選擇時，音訊才會傳送給 Google。** 如果選擇 Gemini 語音引擎，錄下的音訊會傳送給 Google。
+- **只有你連接代理程式時，它才會取得會議。** `hanasu` 指令及其 MCP 伺服器只在你或代理程式呼叫時才讀取會議，傳回的內容會交給該代理程式及其 AI 供應商。
 - **會議就是一般檔案。** 會議以 JSON 和 Markdown 格式儲存在 `~/Documents/Hanasu/Meetings/`（Windows：`Documents\Hanasu\Meetings\`）下。Mac 和 Windows 使用相同的格式。
 - **沒有遙測。** Hanasu 不會收集任何分析資料。
 - **API 金鑰受作業系統保護。** 在 macOS 上，金鑰儲存在 Keychain 中，其他應用程式必須輸入你的登入密碼才能讀取。在 Windows 上，金鑰以 DPAPI 加密，也可以選擇以 Windows Hello 金鑰加密。兩者都無法完全阻擋以你的使用者身分執行的惡意軟體。請參閱 [docs/design/security.md](docs/design/security.md)。

@@ -57,6 +57,17 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 | Ctrl + Space / Shift + Space | 日本語入力のオン／オフ（IME による）、全角／半角スペース |
 | Ctrl + Shift + M・Alt + M など（会議） | Teams・Zoom などの会議ツールのミュートなど。会議のショートカットは修飾キーを 3 つ（Ctrl + Alt + Shift）にした |
 
+### ターミナルと AI エージェントから使う（`hanasu` コマンド）
+
+配布の zip の `cli\hanasu.exe` で、会議の記録を読む・探す・質問する、文章を整える・書き換える、MCP のサーバーとして動く、ができる（Mac 版の `hanasu` と同じコマンド・同じ JSON・同じ終了コード。docs/design/cli.md）。
+
+- 設定 →「コマンドと MCP」の「AI アプリにつなぐ」で、Claude Desktop（`%APPDATA%\Claude` など、設定の場所ごと）・ChatGPT（Codex。`%USERPROFILE%\.codex\config.toml`）・Claude Code（`claude mcp add --scope user`。`claude` がなければ `%USERPROFILE%\.claude.json`）に、ボタン 1 つで hanasu の MCP をつなぐ・外す（REQ-COM-194）。アプリが動いているあいだは書かない。
+- 設定 →「コマンドと MCP」で、絶対パスのコピー、ユーザーの PATH に入れる・外す（管理者の権限は要らない。入れたあとに開いたターミナルから使える）、Claude Code のコマンドと Claude Desktop の JSON のコピー、エージェントへの説明（英語）が出る。
+- 使い方は `hanasu help`、設定の確かめは `hanasu doctor`。
+- PowerShell で出力を読むときは、先に `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()`（Windows PowerShell 5.1 では `$OutputEncoding = [Text.UTF8Encoding]::new()` も）。5.1 の `>` は UTF-16 で書くので、ファイルには `| Out-File -Encoding utf8` を使う。
+- API キーを Windows Hello で守っているときは、AI を使うコマンドのたびに確認が出る（`hanasu mcp` は最初と、画面のロックのあと）。SSH などの画面のないセッションでは使えない（DPAPI にするか、環境変数でキーを渡す）。
+- アプリがローカルの AI を使っている間は、`hanasu` のローカルの AI は使えない（同じモデルを二重に読み込まない）。
+
 ## 必要なもの
 
 - Windows 10 バージョン 2004（ビルド 19041）以降、または Windows 11。x64
@@ -77,6 +88,8 @@ windows/
 ├── Hanasu.Windows.sln
 ├── Directory.Build.props        共通の設定（C# 12、Nullable、EnableWindowsTargeting など）
 ├── Hanasu.Core/                 net8.0。OS に依存しない部品（Mac でもテストできる）
+│   ├── Command/                 hanasu コマンドの中身（引数・JSON・会議の検索と質問・AI のコマンド・doctor・MCP。Mac 版の移植。共有のテストデータで Mac と比べる）
+│   ├── IO/SharedFile.cs         アプリと hanasu が同じファイルを読み書きしても失敗しない読み方と置き換え方
 │   ├── Ai/                      文章の処理の AI の共通の形（ITextGenerator）・用途ごとの選び方（TextAiFactory）・区切りのタグの無害化・ログの伏せ字・プロンプトの言語と文面の読み込み（Prompts.cs）
 │   ├── Claude/                  Claude API（公式の C# SDK）での整形・英訳・議事録・エラーの分類・モデルの一覧
 │   ├── Gemini/                  プロンプト（文面は Mac 版と共有の Sources/Hanasu/Resources/Prompts/<言語>.json を埋め込んで読む。Claude にも同じものを送る）・REST クライアント・サービスアカウントの JWT（RS256）・認証の決め方
@@ -91,11 +104,13 @@ windows/
 │                                話者の割り当てと回り込みの除去・Gemini の時刻つき文字起こし・後処理・記録の流れ（MeetingController）
 ├── Hanasu.Whisper/              net8.0。Whisper.net（whisper.cpp）での文字起こし（会議用に時刻つきの区間も返す）
 ├── Hanasu.Diarization/          net8.0。sherpa-onnx での相手側の話者分離と、そのモデルのダウンロード
+├── Hanasu.Platform/             net8.0-windows10.0.19041.0。アプリと hanasu の両方が使う Windows の部品（DPAPI・Windows Hello・DLL の探索・ジョブオブジェクト・ログ）
+├── Hanasu.Command/              net8.0-windows10.0.19041.0。cli\hanasu.exe（入出力の文字コードと Windows Hello の確認をつなぐだけ）
 ├── Hanasu.Windows/              net8.0-windows10.0.19041.0。WPF の本体（タスクトレイ・ホットキー・録音・HUD・設定画面）
 │   ├── AppHost.cs               部品を組み立てる場所
 │   ├── TrayIcon.cs              タスクトレイのメニュー（WinForms の NotifyIcon）
 │   ├── Services/                RegisterHotKey、WASAPI の録音（NAudio。会議はマイクとループバック）、Windows の音声認識（WinRT）、
-│   │                            クリップボード + SendInput の入力、貼り付け先の様子（FocusProbe）、前面アプリ、DPAPI・Windows Hello・DLL の探索・UIPI（WindowsSecurity）、効果音、ログ
+│   │                            クリップボード + SendInput の入力、貼り付け先の様子（FocusProbe）、前面アプリ、UIPI（WindowsSecurity）、効果音、ユーザーの PATH（UserPath）
 │   └── Views/                   HUD（WS_EX_NOACTIVATE）・設定画面・会議ノート・音声入力の履歴・ショートカットの記録欄
 ├── Hanasu.Cli/                  net8.0。確認用の CLI（Mac でも動く）
 └── Hanasu.Core.Tests/           xUnit。Mac でも Windows でも dotnet test で動く
@@ -188,7 +203,7 @@ MeetingController（Core。idle → starting → recording → processing → id
 - 起動して数秒後に、GitHub の最新のリリースを確かめる（初回の起動と、手元のビルド＝版の先頭が 0 のときはしない。設定 → 一般 →「起動時にアップデートを確認する」で切れる）。失敗しても何も出さない（ログだけ）。
 - タスクトレイのメニュー →「アップデートを確認…」（設定 → 一般 →「今すぐ確認」も同じ）で、いつでも確かめられる。最新なら「Hanasu は最新です」と出し、失敗したときは理由を出す。
 - 新しい版があると、「アップデート」「あとで」「この版をスキップ」を選ぶ確認が出る。スキップした版は起動時には知らせない（手動の確認では知らせる。もっと新しい版が出れば、また知らせる）。
-- 「アップデート」を選ぶと、zip（`Hanasu-<版>-Windows-x64.zip`）をダウンロードし（その間は小さな窓に、進み具合のバーと「45% (12 MB / 27 MB)」の形の割合と大きさを出す。窓の「中止」か閉じるボタンでやめられ、やめたときは何も出さない。展開の間はバーが動き続ける形になり、やめられない）、API の SHA-256 と大きさで確かめ、Hanasu のフォルダの隣の `Hanasu.update` に展開して、PowerShell のスクリプトで入れ替えて起動し直す（失敗すれば元に戻す）。録音中・会議の記録中は入れ替えない。フォルダに書き込めないとき（Program Files など）や zip が見つからないときは、リリースのページを開く案内になる。フォルダごと取り替えるので、Hanasu のフォルダに Hanasu のものでないファイルやフォルダがあるとき（デスクトップに `Hanasu.exe` を置いたときなど）も入れ替えず、名前を挙げて案内する。入れ替えが終わらなかったときは、次の起動で知らせる（`update-pending.txt`）。
+- 「アップデート」を選ぶと、zip（`Hanasu-<版>-Windows-x64.zip`）をダウンロードし（その間は小さな窓に、進み具合のバーと「45% (12 MB / 27 MB)」の形の割合と大きさを出す。窓の「中止」か閉じるボタンでやめられ、やめたときは何も出さない。展開の間はバーが動き続ける形になり、やめられない）、API の SHA-256 と大きさで確かめ、Hanasu のフォルダの隣の `Hanasu.update` に展開して、PowerShell のスクリプトで入れ替えて起動し直す（失敗すれば元に戻す）。録音中・会議の記録中は入れ替えない。フォルダに書き込めないとき（Program Files など）や zip が見つからないときは、リリースのページを開く案内になる。フォルダごと取り替えるので、Hanasu のフォルダに Hanasu のものでないファイルやフォルダがあるとき（デスクトップに `Hanasu.exe` を置いたときなど）も入れ替えず、名前を挙げて案内する。入れ替えが終わらなかったときは、次の起動で知らせる（`update-pending.txt`）。`cli\hanasu.exe` が動いていれば（MCP のサーバーなど）、確認にそのことを出し、入れ替えの直前に終わらせる。管理者として動いている `hanasu` や、作業フォルダが `cli` の中にあるターミナルがあって入れ替えられなかったときは、次の起動でそのことを知らせる。MCP を使うアプリ（Claude Desktop など）は、Hanasu のツールが使えなくなったら再起動する。
 - 通信は https の GitHub のホストだけ。コードは `Hanasu.Core/Update/`（`AppVersion`・`ReleaseParser`・`ReleaseNotesFormatter`・`UpdateChecker`・`UpdateHosts`・`UpdatePackage`・`UpdateDownloadProgress`（進み具合の割合と間引き）。テストは `UpdateTests`・`ReleaseNotesFormatterTests`）と、`Hanasu.Windows` の `Services/UpdateService.cs`・`Views/UpdatePromptWindow.cs`・`Views/UpdateProgressWindow.cs`。ダウンロードは `ModelDownload` を使う。設定は `AppSettings.CheckForUpdatesOnLaunch`・`SkippedUpdateVersion`。
 
 ## ビルド・テスト・配布
@@ -279,13 +294,13 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | --- | --- |
 | 音声認識 | Windows 標準（`Windows.Media.SpeechRecognition`）・Whisper・Gemini から選ぶ。Mac 版の SpeechAnalyzer の代わり |
 | 入力 | クリップボード + `SendInput` の Ctrl+V。クリップボードの履歴（Win+V）とクラウド同期に残さない印を付ける |
-| アプリ別スタイル | **未実装**（入力先アプリ名を AI に伝えるだけ） |
+| アプリ別スタイル | 音声入力では**未実装**（入力先アプリ名を AI に伝えるだけ）。`hanasu refine --style`・`--app <exe の名前>` は既定の文体を使える（アプリ別の設定はない） |
 | スニペット | **未実装** |
 | 画面の文脈 | **未実装** |
 | スクリーンショットの文字（REQ-DIC-041・042） | **未実装** |
 | 履歴ウインドウ | 検索・絞り込み・コピー・削除はできる。**整え直し（整形し直す・英訳し直す）と録音の保存は未実装** |
 | 最後の結果をもう一度入力（`⌥⇧ V`） | **未実装**（「最近の結果」からコピーして貼る） |
-| 選択を声で編集 | **未実装** |
+| 選択を声で編集 | **未実装**（`hanasu edit` で、渡した文章を指示どおりに書き換えることはできる） |
 | 辞書の候補を探す（AI で提案） | 会議ノートの会議からは作った（「辞書…」）。設定の「辞書・ルール」から音声入力の結果と最近の会議をまとめて読むのは**未実装** |
 | 会議の記録 | 作った（下の表は会議の記録での差） |
 
@@ -304,14 +319,26 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | 音声ファイル | AAC（m4a）ではなく WAV（me.wav / others.wav）。Mac で作った会議の音声（m4a）は Windows 版では文字起こしし直せない（会議ノートで読むのはできる） |
 | 書き出し | 「Markdown をコピー」だけ。**ファイルとして保存・Slack 向けのコピー・リマインダーへの登録は未実装**（`reminderID` は読み書きで落とさない） |
 | 会議の自動検出（会議アプリがマイクを使い始めたら知らせる） | **未実装** |
-| 会議の横断検索・会議への質問（Ask） | **未実装** |
+| 会議の横断検索・会議への質問（Ask） | アプリの画面には**ない**。`hanasu meetings search`・`hanasu ask`・MCP では使える（質問は会議の AI に送る。Mac は「AI チャット・質問」の AI。質問から検索語を取り出す分け方が Mac と違い、漢字が続く語は分けない） |
+
+`hanasu` コマンドでの差:
+
+| 機能 | Windows 版 |
+| --- | --- |
+| 置き場所 | 配布の zip の `cli\hanasu.exe`（アプリと同じ zip）。Mac はアプリと同じ実行ファイル |
+| `--ai apple` | 使えない（終了コード 2） |
+| `ask` の AI | 会議の AI（「AI チャット・質問」の設定がない） |
+| 管理者のポリシー | なし（FUT-020） |
+| PATH | 設定でユーザーの PATH に `cli` を足す（Mac は `/usr/local/bin` か `~/.local/bin` のリンク） |
+| `doctor --json` | `install` の形と、認証情報の置き場所（`dpapi`・`windowsHello`）が違う（DEC-COM-197） |
+| Windows Hello のキー | AI を使うコマンドのたびに確認が出る。`doctor` は読まない |
 
 ## セキュリティ
 
 詳しくは [docs/design/security-windows.md](../docs/design/security-windows.md)。
 
 - **API キー**: 既定の DPAPI は、この Windows ユーザーでしか読めないが、**同じユーザーで動くほかのアプリは確認なしに読める**（署名もパッケージ化もしていないアプリは、Windows に見分けてもらえないため）。
-  設定 → AI →「API キーを Windows Hello で守る」をオンにすると、ほかのアプリが読もうとすると Windows Hello の確認が出る。確認は起動してから最初に使うとき 1 回で、画面をロックするとまた求める。Hanasu が動いている間のメモリまでは守れない。
+  設定 → AI →「API キーを Windows Hello で守る」をオンにすると、ほかのアプリが読もうとすると Windows Hello の確認が出る。確認は起動してから最初に使うとき 1 回で、画面をロックするとまた求める。Hanasu が動いている間のメモリまでは守れない。`hanasu` コマンドも、呼ぶたびに同じ確認を出す（`hanasu mcp` は最初と、画面のロック・スリープのあと）。
 - **配布物は署名していない**。初めて起動すると SmartScreen が「Windows によって PC が保護されました」と出す。ダウンロードした zip の SHA-256 を、リリースの `.sha256` と比べてから使う（PowerShell: `Get-FileHash Hanasu-windows-x64.zip`）。
 - **zip は専用のフォルダに展開する**（「ダウンロード」フォルダの直下で展開しない）。exe は起動するときに同じフォルダの DLL を読むことがあり、知らない DLL が混ざっていると乗っ取られるおそれがある。
 - 管理者として動いているアプリには貼り付けを送らない（届かないので）。入力できる場所がないときと同じく結果を画面に残す（既定ではクリップボードにも残すので、Ctrl+V で貼る）。

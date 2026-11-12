@@ -7,6 +7,9 @@ on:
       - "windows/**"
       # Windows 版も同じプロンプトの JSON を埋め込む（DEC-COM-160）
       - "Sources/Hanasu/Resources/Prompts/**"
+      # hanasu コマンドの共有の文（DEC-COM-191）と、Mac と比べる共有のテストデータ（DEC-COM-192）
+      - "Sources/Hanasu/Resources/Command/**"
+      - "common/testdata/cli/**"
       - ".github/workflows/windows.yml"
       - "scripts/llama-cpp.lock"
       - "scripts/fetch-llama-cpp.ps1"
@@ -52,6 +55,12 @@ jobs:
       - name: Publish (win-x64, self-contained, single file)
         run: dotnet publish Hanasu.Windows/Hanasu.Windows.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:RestoreLockedMode=false -o publish/win-x64
 
+      # 要件: REQ-COM-180
+      # 設計判断: DEC-COM-193
+      # 利用者向けの hanasu コマンド（cli\hanasu.exe）。PATH に入れるフォルダなので、hanasu.exe だけを置く
+      - name: Publish hanasu (cli)
+        run: dotnet publish Hanasu.Command/Hanasu.Command.csproj -c Release -r win-x64 --self-contained -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:RestoreLockedMode=false -o publish/win-x64/cli
+
       # 設計判断: DEC-COM-061
       # ローカルの LLM の llama-server（llama.cpp）を、SHA-256 を確かめてから llama/ に入れる
       - name: Add llama-server
@@ -79,12 +88,88 @@ jobs:
             "publish/win-x64/llama/llama-server.exe",
             "publish/win-x64/llama/llama-server-impl.dll",
             "publish/win-x64/llama/llama.dll",
-            "publish/win-x64/llama/ggml-base.dll"
+            "publish/win-x64/llama/ggml-base.dll",
+            # 確かめ方: REQ-COM-180
+            "publish/win-x64/cli/hanasu.exe"
           )
           foreach ($path in $expected) {
             if (-not (Test-Path $path)) { throw "見つかりません: $path" }
           }
+          # 設計判断: DEC-COM-193（PATH に入れる cli\ に、ほかの DLL を混ぜない）
+          $cli = @(Get-ChildItem publish/win-x64/cli | ForEach-Object Name)
+          if ($cli.Count -ne 1 -or $cli[0] -ne "hanasu.exe") { throw "cli\ に hanasu.exe 以外があります: $($cli -join ', ')" }
           Get-ChildItem -Recurse publish/win-x64 | Select-Object FullName, Length | Format-Table -AutoSize
+
+      # 確かめ方: REQ-COM-180, REQ-COM-181, REQ-COM-189, REQ-MTG-120
+      # 設計判断: DEC-COM-195
+      # publish した cli\hanasu.exe を動かす（共有の架空の会議・MCP の手順・コードページを変えたコンソールでのパイプとファイル）
+      - name: Run hanasu
+        shell: pwsh
+        run: |
+          $exe = (Resolve-Path publish/win-x64/cli/hanasu.exe).Path
+          $env:HANASU_MEETINGS_DIR = (Resolve-Path ../common/testdata/cli/meetings).Path
+          [Console]::OutputEncoding = [Text.UTF8Encoding]::new()
+          $version = & $exe --version
+          if ($LASTEXITCODE -ne 0 -or $version -notlike "hanasu *") { throw "--version: $version" }
+          $list = & $exe meetings list --json | Out-String | ConvertFrom-Json
+          if ($list.meetings.Count -ne 4 -or $list.unreadableMeetingCount -ne 0 -or $list.meetings[3].title -ne "予算の定例") { throw "meetings list: $($list | ConvertTo-Json -Depth 5)" }
+          $search = & $exe meetings search ガイド --json | Out-String | ConvertFrom-Json
+          if ($search.results.Count -ne 1) { throw "meetings search: $($search | ConvertTo-Json -Depth 6)" }
+          & $exe meetings show 2020-01-01_0000 2>$null
+          if ($LASTEXITCODE -ne 4) { throw "ない会議は 4: $LASTEXITCODE" }
+          & $exe refine テスト --ai apple 2>$null
+          if ($LASTEXITCODE -ne 2) { throw "--ai apple は 2: $LASTEXITCODE" }
+          # MCP: stdout の各行が JSON-RPC
+          $requests = @(
+            '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"ci","version":"1"}}}',
+            '{"jsonrpc":"2.0","id":2,"method":"tools/list"}',
+            '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"list_meetings","arguments":{"limit":2}}}'
+          ) -join "`n"
+          $lines = $requests | & $exe mcp 2>$null
+          if ($lines.Count -ne 3) { throw "mcp: $lines" }
+          foreach ($line in $lines) { $null = $line | ConvertFrom-Json }
+          # コードページを変えたコンソール（日本語 932・英語 437）でも、ファイルは UTF-8 の JSON、cmd の echo からのパイプは化けない
+          foreach ($cp in 932, 437) {
+            cmd /c "chcp $cp >nul && `"$exe`" meetings list --json > out-$cp.json"
+            $json = [IO.File]::ReadAllText("out-$cp.json", [Text.UTF8Encoding]::new($false, $true)) | ConvertFrom-Json
+            if ($json.meetings[3].title -ne "予算の定例") { throw "chcp $cp のファイル: $($json.meetings[3].title)" }
+          }
+          cmd /c "chcp 932 >nul && echo 予算の定例| `"$exe`" dict apply --json > dict-932.json"
+          $dict = [IO.File]::ReadAllText("dict-932.json", [Text.UTF8Encoding]::new($false, $true)) | ConvertFrom-Json
+          if ($dict.text -ne "予算の定例") { throw "chcp 932 の echo: $($dict.text)" }
+
+      # 確かめ方: REQ-COM-185（W7。架空の会議 1,000 件で、3 回のうちいちばん速い値が 2 秒以内）
+      - name: Measure hanasu speed
+        shell: pwsh
+        run: |
+          $exe = (Resolve-Path publish/win-x64/cli/hanasu.exe).Path
+          $dir = Join-Path $env:RUNNER_TEMP "hanasu-bench"
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          $sb = [Text.StringBuilder]::new()
+          for ($u = 0; $u -lt 600; $u++) {
+            if ($u -gt 0) { [void]$sb.Append(",") }
+            [void]$sb.Append('{"id":"00000000-0000-4000-8000-' + $u.ToString("000000000000") + '","speaker":"spk' + ($u % 3) + '","start":' + ($u * 5) + ',"end":' + ($u * 5 + 4) + ',"text":"架空の発言です。予算と日程について話しています。番号 ' + $u + '"}')
+          }
+          $utterances = $sb.ToString()
+          $start = [DateTime]::new(2025, 1, 1, 0, 0, 0, [DateTimeKind]::Utc)
+          for ($i = 0; $i -lt 1000; $i++) {
+            $at = $start.AddHours($i * 7)
+            $id = $at.ToString("yyyy-MM-dd HHmm")
+            $folder = Join-Path $dir $id
+            New-Item -ItemType Directory -Force $folder | Out-Null
+            $json = '{"id":"' + $id + '","title":"架空の会議 ' + $i + '","startedAt":"' + $at.ToString("yyyy-MM-ddTHH:mm:ssZ") + '","duration":3000,"status":"done","speakerNames":{},"utterances":[' + $utterances + '],"minutes":"# 架空の会議 — 議事録\n\n- 予算を確認する"}'
+            [IO.File]::WriteAllText((Join-Path $folder "meeting.json"), $json)
+          }
+          $env:HANASU_MEETINGS_DIR = $dir
+          foreach ($command in @(@("meetings", "list", "--json"), @("meetings", "show", "latest", "--json"), @("meetings", "search", "予算", "--json"))) {
+            $best = [double]::MaxValue
+            for ($run = 0; $run -lt 3; $run++) {
+              $elapsed = (Measure-Command { & $exe @command | Out-Null }).TotalSeconds
+              $best = [Math]::Min($best, $elapsed)
+            }
+            Write-Output ("hanasu {0}: {1:N2} s" -f ($command -join " "), $best)
+            if ($best -gt 2) { throw "hanasu $($command -join ' ') が 2 秒を超えました: $best" }
+          }
 
       - name: Zip
         shell: pwsh

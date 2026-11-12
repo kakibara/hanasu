@@ -115,6 +115,22 @@ Typeless・Wispr Flow・Aqua Voice・Granola を参考に作りました。ソ�
 音声入力と会議の記録で、別々のエンジンを選べます。Windows 版の会議の記録は、Whisper か Gemini を使います。
 Mac 版では、文字起こしの言語を一覧（日本語・英語・中国語・韓国語・フランス語・ドイツ語・スペイン語・イタリア語・ポルトガル語）から選べます。初期値はシステムの言語です。
 
+### ⌨️ ターミナルや AI エージェントから使える
+
+`hanasu` コマンドで、スクリプトや AI エージェント（Claude Code・Claude Desktop など）から、会議の記録を読んだり、音声入力と同じ整え方を使ったりできます。アプリに付いてくるので、ほかに入れるものはありません。Mac ではアプリそのもの、Windows では Hanasu のフォルダの `cli\hanasu.exe` です。**設定 →「コマンドと MCP」** で、Claude Desktop・ChatGPT（Codex）・Claude Code にボタン 1 つでつないだり、PATH に入れたり、ほかのアプリ向けに MCP の登録のしかたをコピーしたりできます（ChatGPT のふつうのチャットは、OpenAI の不具合で、今は手元の MCP のツールを使えません。Codex では使えます）。
+
+| | |
+| --- | --- |
+| **会議を読む** | `hanasu meetings list / show / search` と `hanasu actions` で、会議・議事録・文字起こし・アクションアイテムを、文字か `--json` で出します。どこにも送りません。 |
+| **質問する** | `hanasu ask "先週何を決めた？"` で、会議の中身から答えさせます。Mac では「AI チャット・質問」で選んだ AI（選んでいなければ会議の AI）、Windows では会議の AI が答えます。 |
+| **文章を整える** | `hanasu refine` で、音声入力と同じように整えたり翻訳したりし、`hanasu edit "<指示>"` で書き換えます。パイプでも使えます。`--app` で、アプリごとの文体を選べます（Mac では bundle ID、Windows では `slack.exe` のような exe の名前）。 |
+| **AI エージェント向けの MCP** | `hanasu mcp` は MCP サーバー（stdio）です。エージェントが会議を並べる・読む・探す・質問できます。こうして渡した会議の中身は、エージェントとその AI の提供元に渡ります。 |
+| **設定を確かめる** | `hanasu doctor` で、使う AI と認証情報、会議のフォルダ、MCP の登録のしかたを確かめられます。オプションはすべて `hanasu help` で見られます。 |
+
+Windows の PowerShell で出力を読むときは、先に `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` を実行してください。Windows Hello で守った API キーは、コマンドが使うたびに確認を求めます。
+
+Mac では、管理者が構成プロファイルで、コマンド・MCP・一部の AI を使えないようにできます。
+
 ## ダウンロード
 
 [**Releases**](https://github.com/kakibara/hanasu/releases/latest) から、最新版をダウンロードしてください。
@@ -177,6 +193,7 @@ Mac 版では、Hanasu のアイコンはいつも Dock に出て、メニュー
 - **AI に送るのはテキストです。** Gemini か Claude に送るのは文字起こしです。設定によっては、入力先のアプリ名、画面の文脈、画面のスクリーンショットから読み取った文字（画像は送りません）、質問や AI チャットに使う会議の文字起こしも送ります。
 - **ローカルと Apple なら、文章も端末の外に出ません。** どちらかを選ぶと、AI のサービスには何も送りません。ダウンロードするのはモデルだけです。
 - **音声を Google に送るのは、選んだときだけです。** 文字起こしのエンジンに Gemini を選ぶと、録った音声を送ります。
+- **エージェントに会議を渡すのは、つないだときだけです。** `hanasu` コマンドと MCP サーバーは、自分かエージェントが呼んだときにだけ会議を読み、返した中身はそのエージェントと AI の提供元に渡ります。
 - **会議の記録は、ただのファイルです。** `~/Documents/Hanasu/Meetings/`（Windows は `ドキュメント\Hanasu\Meetings\`）に、JSON と Markdown で保存します。Mac 版と Windows 版で形式は同じです。
 - **利用状況は集めません。**
 - **API キーは OS の仕組みで守ります。** macOS ではキーチェーンに保存し、ほかのアプリが読むにはログインのパスワードが要ります。Windows では DPAPI か、選べば Windows Hello の鍵で暗号化します。どちらも、同じユーザーで動くマルウェアからは守りきれません（[docs/design/security.md](docs/design/security.md)）。

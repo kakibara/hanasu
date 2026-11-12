@@ -39,6 +39,7 @@ public partial class SettingsWindow : Window
         InitializeComponent();
         WindowFit.FitToMouseScreen(this);
         LoadValues();
+        LoadCommandLineTab();
         loading = false;
 
         DictationHotKeyBox.Recorded += (_, combo) => SetHotKey(combo, translate: false);

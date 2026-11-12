@@ -711,4 +711,385 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>Bu toplantı değiştirilemedi: {0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>{0} eylem maddesi</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — eylem maddeleri</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>AI ile işlenemedi: {0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>Kullanılan AI:</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>Geçerli değerler: {0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>{0} tarihinde {1} toplantı var. Toplantıyı ID ile belirtin.</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple (Apple'ın Foundation Models'i) Windows'ta kullanılamaz.</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>AI’ye gönderilen toplantılar (* = yanıtta alıntılananlar):</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>{0} değeri okunamadı: {1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>Dosya okunamıyor: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>Toplantı klasörü okunamadı: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>Toplantı okunamıyor: {0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0} (okunabiliyor)</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0} (okunamıyor: {1})</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>Kimlik bilgileri:</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>Claude Desktop yapılandırmasına (claude_desktop_config.json) eklenecek biçim:</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>{0} ortam değişkeni</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>Yürütülebilir dosya: {0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>Fazla argüman: {0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>İyileştirilemediği için iyileştirilmemiş metin yazdırılıyor (--fallback-raw).</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>Klasörün var olduğunu ve bu kullanıcının okuyabildiğini kontrol edin.</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0} (henüz yok)</value>
+  </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>Ekranı olmayan bir oturumda (SSH gibi) Windows Hello onay isteyemez; bu yüzden Windows Hello ile korunan API anahtarları kullanılamaz. Anahtarları DPAPI ile koruyun veya anahtarı bir ortam değişkeniyle verin.</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Windows Hello onayı {0} saniye içinde tamamlanmadı. Onay penceresinin başka pencerelerin arkasında kalıp kalmadığını kontrol edin.</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>Tüm toplantılardaki eylem maddelerini listeler</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>AI ajanının talimatlarına (CLAUDE.md gibi) yapıştırmak için hanasu kullanım talimatlarını yazdırır. Her zaman İngilizce</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>Geçmiş toplantılar hakkında AI’ye soru sorar (ilgili toplantıların içeriği toplantılar için ayarlanan AI’ye gönderilir)</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>Yalnızca sözlüğün değiştirme kurallarını uygular (AI’ye göndermez)</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>Kullanılan yapay zekâyı ve kimlik bilgilerini, toplantı klasörünü ve PATH'i denetler (anahtar değerlerini göstermez)</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>Metni talimata göre yeniden yazar (“Seçimi sesle düzenle” ile aynı). Metin argüman olarak veya standart girdiden verilir</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>Toplantıları en yeniden eskiye listeler</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>AI ajanlarının kullanacağı bir MCP sunucusu olarak çalışır (stdio). Toplantıları okumaya yarayan araçlar sunar</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>Metni dikteyle aynı şekilde iyileştirir (--translate ile çevirir). Metin argüman olarak veya standart girdiden verilir</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>Tüm toplantılarda arar (boşlukla ayrılmış sözcüklerde yalnızca hepsini içerenler)</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>Toplantının içeriğini gösterir (varsayılan: tutanak)</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — Hanasu’nun toplantı kayıtlarını ve metin iyileştirmesini terminalden veya AI ajanlarından kullanın</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>Kullanım:</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>Tutanak, {0}. satır: {1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>Başlık: {0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>{0} eşleşme</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0} (tahmini)</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>Hanasu uygulaması yerel AI’yi kullanıyor.</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>Uygulamadan çıkın veya --ai ile başka bir AI seçin (aynı model iki kez yüklenmesin diye).</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>Yerel: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>Claude Code’a kayıt örneği: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>MCP üzerinden döndürülen toplantı içeriği, MCP'yi kullanan ajana ve onun yapay zekâ sağlayıcısına gider. ask_meetings, toplantı içeriğini hanasu ask ile aynı yapay zekâya da gönderir (hanasu doctor'daki ask satırına bakın).</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>Claude Desktop ve diğer uygulamalar için JSON, hanasu doctor çıktısında ve Ayarlar → Komut ve MCP bölümünde gösterilir.</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>Araçlar: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (hepsi salt okunur)</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp: MCP sunucusu olarak çalışıyor. Standart girdi kapanınca sonlanır.</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>Toplantı bulunamadı: {0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>Bu toplantının durumu: “{0}”. Yalnızca kaydedilmiş kısım gösteriliyor.</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>Toplantı klasörü: {0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>Kullanılacak konuşmalar değiştirildikten sonra tutanak yeniden oluşturulmadı.</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>{0} için 1 veya daha büyük bir tam sayı belirtin: {1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>{0} için bir değer gerekir.</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>Bundan daha yeni {0} toplantı var (kaydediliyor, işleniyor veya başarısız): {1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>Eylem maddesi yok.</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>Bu toplantının eylem maddesi yok.</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>Soru sorulabilecek toplantı kaydı yok.</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>Tamamlanmış toplantı yok.</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>İndirilmiş model yok</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>Toplantı yok.</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>Bu toplantının tutanağı yok.</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>Tutanak yok</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>Bu toplantının notu yok.</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>Sonuç bulunamadı.</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>(bu kabuğun PATH'inde yok)</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>Ayarlanmadı</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;AI&gt;: local, gemini veya claude (yazılmazsa Ayarlar'daki yapay zekâ). &lt;üslup&gt;: none, chat, email, document-polite veya document-plain. &lt;dil&gt;: en, ja, ko vb.</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>AI başarısız olursa hiçbir şey yazdırmadan sonlanır. --fallback-raw ile iyileştirilmemiş metni yazdırır. --show-prompt ile AI’ye gönderilen içeriği standart hataya (stderr) yazdırır.</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>PowerShell'de çıktıyı okumadan önce [Console]::OutputEncoding = [Text.UTF8Encoding]::new() komutunu çalıştırın (Windows PowerShell 5.1'de ayrıca $OutputEncoding = [Text.UTF8Encoding]::new()). 5.1'de &gt; UTF-16 yazar; dosyaya yazarken | Out-File -Encoding utf8 kullanın.</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>Çıkış kodları: 0 başarılı, 1 başarısız, 2 hatalı kullanım, 3 kimlik bilgisi yok, 4 toplantı bulunamadı, 5 ilke veya izin nedeniyle engellendi</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>Windows Hello ile korunan API anahtarları, yapay zekâ kullanan her komutta onay ister (hanasu mcp ilk seferde ve ekran kilitlendikten sonra ister).</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>--json ile sabit yapıda JSON çıktısı verilir. --meetings-dir &lt;klasör&gt; (veya HANASU_MEETINGS_DIR ortam değişkeni) ile toplantı klasörünü değiştirebilirsiniz.</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>Yerel AI her çağrıda modeli yüklediği için zaman alır. Uygulama yerel AI’yi kullanırken kullanılamaz.</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>Toplantı belirtme: ID (ör. 2026-11-02_1312), latest (en son tamamlanan toplantı) veya tarih (ör. 2026-11-02)</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>Zaman belirtme: 7d, 24h, 2w (şu andan geriye doğru) veya tarih (ör. 2026-11-01)</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH: eklenmedi (Ayarlar → Komut ve MCP bölümünden ekleyebilirsiniz; tam yol bu olmadan da çalışır)</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH: {0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH: {0} (başka bir konumdaki Hanasu'yu gösteriyor)</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;sayı&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;klasör&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;talimat&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;dil&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;toplantı&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;model&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;ad&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;zaman&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;soru&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;üslup&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;metin&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;sözcük&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>Dikte</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>Toplantılar</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>Kayıtlı API anahtarı (DPAPI)</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>Kayıtlı API anahtarı (Windows Hello; her okumada onay istendiği için burada okunmaz)</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>Kullanım bilgisini hanasu help ile görebilirsiniz.</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>Toplantı listesini hanasu meetings list ile görebilirsiniz.</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>Hizmet hesabı ({0})</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>--since değeri --until değerinden önce olmalı.</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>Yeniden yazma talimatını belirtin.</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>Bir toplantı belirtin (ör. hanasu meetings show latest).</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>Soruyu belirtin.</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>Aranacak sözcüğü belirtin (ör. hanasu meetings search bütçe).</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>Bitti</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>Başarısız</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>İşleniyor</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>Kaydediliyor</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>Hanasu geçici bir klasörden (örneğin zip'in içinden) çalışıyor. Zip'in tamamını çıkarın, Hanasu'yu o klasörden yeniden açın, sonra PATH'e ve MCP'ye ekleyin.</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>Metni ya argüman olarak ya da standart girdiden (stdin) verin (ikisi birden kullanılamaz).</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>Metin boş.</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>Metni argüman olarak veya standart girdiden (pipe) verin.</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>Metin çok uzun ({0} karakter). En fazla {1} karakter olmalı.</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- Tarih ve saat: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — transkript</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- Süre: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- Tutanakta kullanılmayan konuşmalar ({0}) dahil edilmedi</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>--ai için bilinmeyen AI: {0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>Bilinmeyen argüman: {0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>Bilinmeyen komut: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>--translate için bilinmeyen dil: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>Bilinmeyen yerel model: {0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>Bilinmeyen seçenek: {0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>--style için bilinmeyen üslup: {0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>Klasörün erişim izinlerini ve OneDrive gibi eşitlemenin dosyaları bu bilgisayara indirip indirmediğini kontrol edin.</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>{0} toplantı okunamadı ({1}).</value>
+  </data>
 </root>
