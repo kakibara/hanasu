@@ -46,7 +46,7 @@ jobs:
           for case in cases:
               after = case.get("expect", {}).get("after")
               if case["kind"] == "toml" and isinstance(after, str):
-                  tomllib.loads(after)
+                  tomllib.loads(after.removeprefix("\ufeff"))
                   count += 1
           print(f"{count} 件の config.toml を TOML として読めた")
           PY

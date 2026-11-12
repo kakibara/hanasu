@@ -32,7 +32,7 @@ public interface IAgentEnvironment
     /// <summary>claude の場所（なければ null）</summary>
     string? FindClaude();
     /// <summary>claude を動かす（バックグラウンドで呼ぶ）</summary>
-    AgentProcessOutput RunClaude(string claude, IReadOnlyList<string> arguments);
+    AgentProcessOutput RunClaude(string claude, IReadOnlyList<string> arguments, TimeSpan timeout);
 }
 
 // 要件: REQ-COM-194
@@ -209,6 +209,8 @@ public static class AgentConnect
         /// <summary>空のファイル・ないファイルは {}。一番上がオブジェクトでないか、mcpServers がオブジェクトでなければ読めない</summary>
         internal static (JsonObject? Root, Problem? Problem) Parse(string? text)
         {
+            // 先頭の BOM は読み飛ばす（書くときは付けない。Mac と同じ）
+            if (text is not null && text.StartsWith('\uFEFF')) text = text[1..];
             if (string.IsNullOrWhiteSpace(text)) return (new JsonObject(), null);
             JsonNode? node;
             try
@@ -335,6 +337,8 @@ public static class AgentConnect
             public bool TrailingNewline;
             public bool Crlf;
             public bool Unsupported;
+            /// <summary>先頭に BOM（U+FEFF）があったか（書くときも付ける）</summary>
+            public bool Bom;
 
             public string Content(int index)
             {
@@ -350,14 +354,16 @@ public static class AgentConnect
         private static Scan ScanText(string? text)
         {
             text ??= "";
+            var bom = text.StartsWith('\uFEFF');
+            if (bom) text = text[1..];
             var raw = text.Split('\n').ToList();
-            // Mac 版（Swift）の hasSuffix("\n") は、CRLF（1 つの文字として扱う）で終わる文字列では false になる。同じにする
-            var trailingNewline = text.EndsWith('\n') && !text.EndsWith("\r\n", StringComparison.Ordinal);
+            var trailingNewline = text.EndsWith('\n');
             if (trailingNewline || text.Length == 0) raw.RemoveAt(raw.Count - 1);
             var result = new Scan
             {
                 Raw = raw,
                 TrailingNewline = trailingNewline,
+                Bom = bom,
                 Crlf = text.Contains("\r\n", StringComparison.Ordinal),
                 Unsupported = text.Contains("\"\"\"", StringComparison.Ordinal) || text.Contains("'''", StringComparison.Ordinal),
             };
@@ -725,25 +731,22 @@ public static class AgentConnect
             // 別の場所の Hanasu: command と args の行だけを書き換える
             if (FindHanasuTable(scan).Found is not { } found) return Edit.UnreadableFile(Problem.TomlUnsupported);
             var end = scan.Crlf ? "\r" : "";
-            string Replacing(string line, int index)
-            {
-                var content = scan.Content(index);
-                var indent = new string(content.TakeWhile(c => c is ' ' or '\t').ToArray());
-                return indent + line + end;
-            }
+            // 書き換える行は、元の行の終わり（\r があるか）と字下げを保つ
+            string Indent(int index) => new(scan.Content(index).TakeWhile(c => c is ' ' or '\t').ToArray());
+            string Replacing(string line, int index) => Indent(index) + line + (scan.Raw[index].EndsWith('\r') ? "\r" : "");
             var command = "command = " + Quote(executable);
             const string args = "args = [\"mcp\"]";
             if (found.CommandLine is { } commandLine)
             {
                 scan.Raw[commandLine] = Replacing(command, commandLine);
                 if (found.ArgsLine is { } argsLine) scan.Raw[argsLine] = Replacing(args, argsLine);
-                else scan.Raw.Insert(commandLine + 1, Replacing(args, commandLine));
+                else Insert(scan, [Indent(commandLine) + args + end], commandLine + 1);
             }
             else
             {
-                scan.Raw.InsertRange(found.Table.Header + 1, [command + end, args + end]);
+                Insert(scan, [command + end, args + end], found.Table.Header + 1);
             }
-            return Edit.Written(Join(scan.Raw, scan.TrailingNewline));
+            return Edit.Written(Join(scan));
         }
 
         public static Edit Disconnect(string? text, string executable, bool windows, Func<string, string>? resolve = null)
@@ -753,7 +756,7 @@ public static class AgentConnect
             if (state.Kind == StateKind.Unreadable) return Edit.UnreadableFile(state.Problem!);
             if (!state.Removable) return Edit.Nothing;
             RemoveHanasu(scan);
-            return Edit.Written(Join(scan.Raw, scan.TrailingNewline));
+            return Edit.Written(Join(scan));
         }
 
         /// <summary>
@@ -792,6 +795,17 @@ public static class AgentConnect
             scan.Raw = lines;
         }
 
+        /// <summary>行を足す。ファイルの終わり（改行のない最後の行のあと）に足すときは、最後の行を改行で終える</summary>
+        private static void Insert(Scan scan, IEnumerable<string> lines, int index)
+        {
+            if (index >= scan.Raw.Count && !scan.TrailingNewline && scan.Raw.Count > 0)
+            {
+                if (scan.Crlf && !scan.Raw[^1].EndsWith('\r')) scan.Raw[^1] += "\r";
+                scan.TrailingNewline = true;
+            }
+            scan.Raw.InsertRange(Math.Min(index, scan.Raw.Count), lines);
+        }
+
         private static string Append(Scan scan, string executable)
         {
             var raw = new List<string>(scan.Raw);
@@ -802,11 +816,13 @@ public static class AgentConnect
             {
                 raw.Add(line + end);
             }
-            return Join(raw, trailingNewline: true);
+            return Join(raw, trailingNewline: true, scan.Bom);
         }
 
-        private static string Join(List<string> raw, bool trailingNewline) =>
-            raw.Count == 0 ? "" : string.Join("\n", raw) + (trailingNewline ? "\n" : "");
+        private static string Join(Scan scan) => Join(scan.Raw, scan.TrailingNewline, scan.Bom);
+
+        private static string Join(List<string> raw, bool trailingNewline, bool bom) =>
+            (bom ? "\uFEFF" : "") + (raw.Count == 0 ? "" : string.Join("\n", raw) + (trailingNewline ? "\n" : ""));
 
         /// <summary>空白（タブと Unicode の空白。改行は含まない）を両端から除く（Swift の .whitespaces と同じ）</summary>
         private static string TrimSpaces(string text)
@@ -1133,7 +1149,8 @@ public static class AgentConnect
             : ConfigJson.Disconnect(text, executable, Windows, ResolveLink));
     }
 
-    private static bool IsRunning(Row row, IAgentEnvironment env)
+    /// <summary>今そのアプリが動いていて書けないか（押したときに確かめ直す）。Claude Code は claude に任せるときは見ない</summary>
+    public static bool IsRunning(Row row, IAgentEnvironment env)
     {
         switch (row.Target.Kind)
         {
@@ -1143,7 +1160,7 @@ public static class AgentConnect
             case TargetKind.Codex:
                 return env.IsChatGPTRunning();
             default:
-                return env.IsClaudeCodeRunning();
+                return row.ClaudePath is null && env.IsClaudeCodeRunning();
         }
     }
 
@@ -1202,21 +1219,29 @@ public static class AgentConnect
                 case StateKind.Unreadable:
                     return Outcome.UnreadableFile(state.Problem!);
             }
+            // 全部で 30 秒まで（remove・add・入れ直しの合計）
+            var deadline = DateTime.UtcNow + Timeout;
+            TimeSpan Remaining() => TimeSpan.FromTicks(Math.Max(TimeSpan.FromSeconds(1).Ticks, (deadline - DateTime.UtcNow).Ticks));
             // claude mcp add は同じ名前があると失敗するので、先に外す
             if (hasPrevious)
             {
-                var removed = env.RunClaude(claude, ["mcp", "remove", "--scope", "user", "hanasu"]);
+                var removed = env.RunClaude(claude, ["mcp", "remove", "--scope", "user", "hanasu"], Remaining());
                 if (removed.TimedOut) return Outcome.TimedOut;
                 if (removed.Status != 0) return Outcome.Failed(Message(removed));
             }
-            var added = env.RunClaude(claude, ["mcp", "add", "--scope", "user", "hanasu", "--", executable, "mcp"]);
+            var added = env.RunClaude(claude, ["mcp", "add", "--scope", "user", "hanasu", "--", executable, "mcp"], Remaining());
             if (added.Status == 0 && !added.TimedOut) return Outcome.Done;
-            // 足せなかったら、前の項目を入れ直す
+            var reasons = new List<string>();
+            if (!added.TimedOut) reasons.Add(Message(added));
+            // 足せなかったら、前の項目を入れ直す。入れ直せなかったら、そのことも出す
             if (previous is not null)
             {
-                env.RunClaude(claude, ["mcp", "add-json", "--scope", "user", "hanasu", previous.ToJsonString(ConfigJson.Compact)]);
+                var restored = env.RunClaude(claude, ["mcp", "add-json", "--scope", "user", "hanasu", previous.ToJsonString(ConfigJson.Compact)], Remaining());
+                if (restored.TimedOut) reasons.Add("claude mcp add-json: timeout");
+                else if (restored.Status != 0) reasons.Add("claude mcp add-json: " + Message(restored));
             }
-            return added.TimedOut ? Outcome.TimedOut : Outcome.Failed(Message(added));
+            if (added.TimedOut && reasons.Count == 0) return Outcome.TimedOut;
+            return Outcome.Failed(string.Join("\n", reasons));
         }
 
         public static Outcome Disconnect(string claude, string file, IAgentEnvironment env, string executable)
@@ -1224,7 +1249,7 @@ public static class AgentConnect
             var (text, problem) = Read(file);
             if (problem is not null) return Outcome.UnreadableFile(problem);
             if (!ConfigJson.StateOf(text, executable, Windows, ResolveLink).Removable) return Outcome.Nothing;
-            var removed = env.RunClaude(claude, ["mcp", "remove", "--scope", "user", "hanasu"]);
+            var removed = env.RunClaude(claude, ["mcp", "remove", "--scope", "user", "hanasu"], Timeout);
             if (removed.TimedOut) return Outcome.TimedOut;
             return removed.Status == 0 ? Outcome.Done : Outcome.Failed(Message(removed));
         }

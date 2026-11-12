@@ -135,6 +135,28 @@ enum AgentConnectSelfTest {
         check(linked && isLink && (try? String(contentsOf: real, encoding: .utf8)) == "b = 2\n" && mode(real) == 0o600,
               "設定ファイルがシンボリックリンクなら、リンクを残してリンク先を書き換える（権限も保つ）")
 
+        // 行き先のないシンボリックリンクは、普通のファイルで置き換えずに失敗する
+        let dangling = dir.appendingPathComponent("dangling.toml")
+        try? fm.createSymbolicLink(atPath: dangling.path, withDestinationPath: dir.appendingPathComponent("nowhere/real.toml").path)
+        let refused = (try? AgentConnect.write("c = 1\n", to: dangling)) == nil
+        check(refused && (try? fm.destinationOfSymbolicLink(atPath: dangling.path)) != nil,
+              "行き先のないシンボリックリンクは書かず、リンクを残す")
+
+        // BOM 付きのファイルは、読んで書き戻しても BOM が残る（config.toml を 1 バイトも変えない）
+        let bomFile = dir.appendingPathComponent("bom.toml")
+        try? Data([0xEF, 0xBB, 0xBF] + Array("model = \"x\"\n".utf8)).write(to: bomFile)
+        if case .success(let text) = AgentConnect.read(bomFile),
+           case .written(let added) = AgentConnect.ConfigTOML.connect(text, executable: "/Applications/Hanasu.app/Contents/MacOS/Hanasu", windows: false, overwrite: false),
+           (try? AgentConnect.write(added, to: bomFile)) != nil,
+           case .success(let again) = AgentConnect.read(bomFile),
+           case .written(let removed) = AgentConnect.ConfigTOML.disconnect(again, executable: "/Applications/Hanasu.app/Contents/MacOS/Hanasu", windows: false),
+           (try? AgentConnect.write(removed, to: bomFile)) != nil {
+            check((try? Data(contentsOf: bomFile)) == Data([0xEF, 0xBB, 0xBF] + Array("model = \"x\"\n".utf8)),
+                  "BOM 付きの config.toml は、つないで外すと元のバイトに戻る")
+        } else {
+            check(false, "BOM 付きの config.toml は、つないで外すと元のバイトに戻る")
+        }
+
         // 新しく作るファイルは 0600
         let fresh = dir.appendingPathComponent("new/claude_desktop_config.json")
         let created = (try? AgentConnect.write("{}\n", to: fresh)) != nil
@@ -145,7 +167,7 @@ enum AgentConnectSelfTest {
 
     static func fakeEnvironment(home: URL, desktopArguments: [[String]?] = [], chatGPTRunning: Bool = false,
                                 claudeRunning: Bool = false, installed: Set<String> = [], claude: String? = nil,
-                                runClaude: @escaping (String, [String]) -> AgentConnect.ProcessOutput = { _, _ in .init(status: 0, stdout: "", stderr: "") })
+                                runClaude: @escaping (String, [String], TimeInterval) -> AgentConnect.ProcessOutput = { _, _, _ in .init(status: 0, stdout: "", stderr: "") })
         -> AgentConnect.Environment {
         AgentConnect.Environment(
             home: home,
@@ -240,7 +262,7 @@ enum AgentConnectSelfTest {
             var hang = false
             let file: URL
             init(file: URL) { self.file = file }
-            func run(_ claude: String, _ arguments: [String]) -> AgentConnect.ProcessOutput {
+            func run(_ claude: String, _ arguments: [String], _ timeout: TimeInterval) -> AgentConnect.ProcessOutput {
                 calls.append(arguments)
                 if hang { return .init(status: -1, stdout: "", stderr: "", timedOut: true) }
                 var root = (try? JSONSerialization.jsonObject(with: Data(contentsOf: file))) as? [String: Any] ?? [:]
@@ -266,6 +288,7 @@ enum AgentConnectSelfTest {
         let env = fakeEnvironment(home: home, claudeRunning: true, claude: "/fake/claude", runClaude: fake.run)
         func row() -> AgentConnect.Row { AgentConnect.rows(env: env, executable: exe).first { $0.target == .claudeCode }! }
 
+        check(!AgentConnect.isRunning(row(), env: env), "claude に任せる Claude Code の行は、Claude Code が動いていても書ける")
         // つなぐ（claude があれば、Claude Code が動いていても claude に任せる）
         check(AgentConnect.connect(row(), env: env, executable: exe, overwrite: false) == .done
               && fake.calls.last == ["mcp", "add", "--scope", "user", "hanasu", "--", exe, "mcp"] && row().state == .connected,
@@ -285,6 +308,13 @@ enum AgentConnectSelfTest {
         fake.failAdd = true
         let failed = AgentConnect.connect(row(), env: env, executable: exe, overwrite: true)
         check(failed == .failed("boom") && row().state == .foreign("npx"), "足すのに失敗したら、前の項目を元どおりに入れ直す")
+        fake.failAdd = false
+
+        // 前の項目がオブジェクトでない（null）とき、足すのに失敗しても落ちない
+        try? Data("{\"mcpServers\": {\"hanasu\": null}}".utf8).write(to: claudeJSON)
+        fake.failAdd = true
+        check(AgentConnect.connect(row(), env: env, executable: exe, overwrite: true) == .failed("boom"),
+              "前の hanasu が null でも、足すのに失敗したときに落ちない（入れ直しは、オブジェクトのときだけ）")
         fake.failAdd = false
 
         // 打ち切り

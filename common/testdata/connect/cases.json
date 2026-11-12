@@ -1,5 +1,5 @@
 {
-  "comment": "AI アプリにつなぐ（REQ-COM-194・DEC-COM-200〜203）の決まりを、Mac（.build/debug/Hanasu --test-hanasu-command）と Windows（AgentConnectTests）で同じに確かめる。kind: owner（実行ファイルの見分け）・dataDir（Claude Desktop の引数）・json（claude_desktop_config.json と ~/.claude.json）・toml（~/.codex/config.toml）。json の after は中身（値）で比べ、toml の after は 1 バイトずつ比べる。toml の after は CI で tomllib で読めることを確かめる。手で書いたもの（実装の出力を写したものではない）。表を外すときは、表の見出しから最後のキーの行まで（後ろの空行と、次の表の前のコメントは残す）を消し、ファイルの終わりまで消したときは前の空行を 1 つ、そうでなく前が空行（かファイルの始め）で後ろも空行なら後ろの空行を 1 つ消す。印の行 # Added by Hanasu は表と一緒に消す",
+  "comment": "AI アプリにつなぐ（REQ-COM-194・DEC-COM-200〜203）の決まりを、Mac（.build/debug/Hanasu --test-hanasu-command）と Windows（AgentConnectTests）で同じに確かめる。kind: owner（実行ファイルの見分け）・dataDir（Claude Desktop の引数）・json（claude_desktop_config.json と ~/.claude.json）・toml（~/.codex/config.toml）。json の after は中身（値）で比べ、toml の after は 1 バイトずつ比べる。toml の after は CI で tomllib で読めることを確かめる（先頭の BOM は外して読む）。手で書いたもの（実装の出力を写したものではない）。表を外すときは、表の見出しから最後のキーの行まで（後ろの空行と、次の表の前のコメントは残す）を消し、ファイルの終わりまで消したときは前の空行を 1 つ、そうでなく前が空行（かファイルの始め）で後ろも空行なら後ろの空行を 1 つ消す。印の行 # Added by Hanasu は表と一緒に消す。CRLF のファイルは CRLF で足し、書き換える行は元の行の終わりを保つ。先頭の BOM は TOML では残し、JSON では読み飛ばして書くときに付けない",
   "cases": [
     {
       "name": "owner: /Applications/Hanasu.app/Contents/MacOS/Hanasu",
@@ -797,6 +797,142 @@
       "expect": {
         "stateBefore": "notConnected",
         "result": "nothing"
+      }
+    },
+    {
+      "name": "toml: CRLF のファイルにつなぐ",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "model = \"gpt-5\"\r\n[profiles.x]\r\nmodel = \"o3\"\r\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "model = \"gpt-5\"\r\n[profiles.x]\r\nmodel = \"o3\"\r\n\r\n# Added by Hanasu\r\n[mcp_servers.hanasu]\r\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\r\nargs = [\"mcp\"]\r\ntool_timeout_sec = 300\r\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: CRLF のファイルから外すと元に戻る",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "model = \"gpt-5\"\r\n[profiles.x]\r\nmodel = \"o3\"\r\n\r\n# Added by Hanasu\r\n[mcp_servers.hanasu]\r\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\r\nargs = [\"mcp\"]\r\ntool_timeout_sec = 300\r\n",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "written",
+        "after": "model = \"gpt-5\"\r\n[profiles.x]\r\nmodel = \"o3\"\r\n",
+        "stateAfter": "notConnected"
+      }
+    },
+    {
+      "name": "toml: CRLF で改行で終わらない表をつなぎ直す（最後の行に \\r を足さない）",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\r\ncommand = \"/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu\"\r\nargs = [\"mcp\"]",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": "[mcp_servers.hanasu]\r\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\r\nargs = [\"mcp\"]",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: CRLF で最後の行の command のあとに args を足す",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\r\ncommand = '/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu'",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": "[mcp_servers.hanasu]\r\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\r\nargs = [\"mcp\"]\r\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: 改行で終わらない表の command のあとに args を足す",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\ncommand = '/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu'",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": "[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: BOM 付きのファイルの見出しを読む",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "﻿[mcp_servers.hanasu]\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\nargs = [\"mcp\"]\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "unchanged"
+      }
+    },
+    {
+      "name": "toml: BOM 付きのファイルに足すと BOM を残す",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "﻿model = \"x\"\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "﻿model = \"x\"\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: BOM 付きのファイルから外す",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "﻿[mcp_servers]\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "written",
+        "after": "﻿[mcp_servers]\n",
+        "stateAfter": "notConnected"
+      }
+    },
+    {
+      "name": "json: BOM 付きのファイル",
+      "kind": "json",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "﻿{\"preferences\": {\"a\": 1}}",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": {
+          "preferences": {
+            "a": 1
+          },
+          "mcpServers": {
+            "hanasu": {
+              "command": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+              "args": [
+                "mcp"
+              ]
+            }
+          }
+        },
+        "stateAfter": "connected"
       }
     }
   ]

@@ -90,8 +90,8 @@ internal sealed class AgentApps : IAgentEnvironment
                 || (line.EndsWith(".cmd", StringComparison.OrdinalIgnoreCase) && AgentConnect.ClaudeCli.IsSafeCmdPath(line))));
     }
 
-    /// <summary>claude を動かす（バックグラウンドで呼ぶ）。.exe は直接、.cmd は cmd /c で。30 秒で打ち切る</summary>
-    public AgentProcessOutput RunClaude(string claude, IReadOnlyList<string> arguments)
+    /// <summary>claude を動かす（バックグラウンドで呼ぶ）。.exe は直接、.cmd は cmd /c で。timeout で打ち切る</summary>
+    public AgentProcessOutput RunClaude(string claude, IReadOnlyList<string> arguments, TimeSpan timeout)
     {
         ProcessStartInfo info;
         if (claude.EndsWith(".cmd", StringComparison.OrdinalIgnoreCase) || claude.EndsWith(".bat", StringComparison.OrdinalIgnoreCase))
@@ -109,7 +109,7 @@ internal sealed class AgentApps : IAgentEnvironment
         }
         // どのフォルダで動かしても --scope user の登録は同じ。アプリのフォルダをプロジェクトと見なされないよう、ホームで動かす
         info.WorkingDirectory = Home;
-        return AgentConnect.RunProcess(info, AgentConnect.ClaudeCli.Timeout);
+        return AgentConnect.RunProcess(info, timeout);
     }
 
     // ---- プロセス ----

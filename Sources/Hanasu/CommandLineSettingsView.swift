@@ -402,7 +402,8 @@ struct AgentConnectSection: View {
     @MainActor
     private func connect(_ row: AgentConnect.Row) {
         messages[row.target] = nil
-        if row.running {
+        // 画面を開いたときの状態でなく、押したときに確かめ直す（終了してから押し直したときに通るように）
+        if AgentConnect.isRunning(row, env: environment) {
             messages[row.target] = tr("%@ を終了してから、もう一度押してください。", appName(row))
             return
         }
@@ -441,7 +442,8 @@ struct AgentConnectSection: View {
     @MainActor
     private func disconnect(_ row: AgentConnect.Row) {
         messages[row.target] = nil
-        if row.running {
+        // 画面を開いたときの状態でなく、押したときに確かめ直す（終了してから押し直したときに通るように）
+        if AgentConnect.isRunning(row, env: environment) {
             messages[row.target] = tr("%@ を終了してから、もう一度押してください。", appName(row))
             return
         }

@@ -293,7 +293,7 @@ public class AgentConnectTests : IDisposable
         public bool IsChatGPTRunning() => ChatGPTRunning;
         public bool IsClaudeCodeRunning() => ClaudeRunning;
         public string? FindClaude() => Claude;
-        public AgentProcessOutput RunClaude(string claude, IReadOnlyList<string> arguments) => Run(claude, arguments);
+        public AgentProcessOutput RunClaude(string claude, IReadOnlyList<string> arguments, TimeSpan timeout) => Run(claude, arguments);
     }
 
     [Fact]

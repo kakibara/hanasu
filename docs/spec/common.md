@@ -433,6 +433,7 @@
   - 状態は「つないでいます」「つないでいません」「別の場所の Hanasu を指しています（つなぎ直すと、このアプリを指します）」「Hanasu のものでない hanasu が登録されています」「設定ファイルを読めません（理由）」「（アプリ）が見つかりません」のどれかで、設定画面を開いたときとボタンを押したあとに読み直す。
   - つないでも外しても、ほかの項目（ほかの MCP のサーバー、`preferences` などの設定、config.toml のほかの表・コメント・Hanasu の表に利用者が足したキー）は値も意味も変わらない。書く前のファイルを、同じフォルダに元と同じ権限で `<名前>.hanasu-backup` として写す（前の写しは上書き）。一時ファイルに書いて置き換え、途中で止まっても元のファイルが壊れない。設定ファイルがシンボリックリンクなら、リンクは残してリンク先を書き換える。書いたあとの本体の権限は元と同じ。
   - Hanasu のものでない `hanasu` があれば、上書きするかを確かめる。取り消せば何も書かない。
+  - 設定ファイルが行き先のないシンボリックリンクなら、リンクを普通のファイルで置き換えずに失敗を出す。
   - ファイルが読めない・JSON として壊れている・config.toml の書き方が読み取れない（DEC-COM-201）ときは、何も書かず、理由と、手で足す内容（REQ-COM-190 のコピーの欄）を案内する。
   - 外すと、Hanasu の項目（DEC-COM-203）だけを消す。Hanasu のものでない `hanasu` は消さない。
   - Claude Desktop がその設定の場所で、ChatGPT（Codex）のアプリが、Claude Code（直接書くとき）が動いているあいだは、つなぐのも外すのも書かずに「（アプリ）を終了してから、もう一度押してください」と出す（DEC-COM-202）。
@@ -1465,7 +1466,7 @@
 
 ### DEC-COM-200 Claude Desktop は、`.mcpb`（拡張機能）でなく `claude_desktop_config.json` に書いて登録し、設定の場所ごとに扱う
 - 決めたこと:
-  - `claude_desktop_config.json` の `mcpServers.hanasu` に `{"command": <実行ファイルの絶対パス>, "args": ["mcp"]}` を足す。ほかのキーは読んだまま残す（キーの並びと字下げは変わることがある）。
+  - `claude_desktop_config.json` の `mcpServers.hanasu` に `{"command": <実行ファイルの絶対パス>, "args": ["mcp"]}` を足す。ほかのキーは読んだまま残す（値は同じだが、キーの並び・字下げ・数の書き方（Mac は `0.1` を `0.10000000000000001` と書くことがある）は変わることがある。先頭の BOM は読み飛ばし、書くときは付けない）。
   - 設定の場所は、Mac は `~/Library/Application Support/` の、Windows は `%APPDATA%\` の、`Claude` と `Claude-` で始まるフォルダのうち `claude_desktop_config.json` があるもの（`Claude` はファイルがなくてもフォルダがあれば）。設定に `deploymentMode` のキーがあるフォルダ（Claude Desktop が配置のモードのために自分で使う `Claude-3p` など）は出さない。Windows のストアの版で `%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude` があれば、`%APPDATA%\Claude` の代わりにそちら。行の名前は、`Claude` なら「Claude Desktop」、ほかは「Claude Desktop（フォルダの名前）」。
 - 理由:
   - 質問のときは `.mcpb` を推奨したが、調べ直すと、`.mcpb` の `command` に束の外の絶対パスを書いてよいか（仕様の例は束の中の相対パスだけ）、署名のない `.mcpb` の扱い、入れ直したときに置き換わるか、会社の管理で拡張機能の許可リストが有効なときに入れられるか、入れたかを Hanasu から確かめる方法が分からなかった。`.mcpb` は FUT-021。
@@ -1482,6 +1483,7 @@
   - Hanasu の表: 見出し `[mcp_servers.hanasu]`・`[mcp_servers."hanasu"]`・`[mcp_servers.'hanasu']`（空白と行末のコメントを許す）から、次の見出しまで。外すときは `[mcp_servers.hanasu.env]` のような下の表と、印の行とその前の空行も消す。
   - 書かない（読み取れない）ファイル: 見出し `[mcp_servers]`・`[mcp_servers.<名前>]` 以外で `mcp_servers` を作っているもの（一番上の `mcp_servers = …`・`mcp_servers.<名前>.… =`・`[mcp_servers]` の中の `<名前> = …`）、`[[mcp_servers…]]`、`'''`・`"""` の複数行の文字列があるもの、Hanasu の表の `command`・`args` が 1 行で閉じていないもの。
   - 書いたあとで読み直し、Hanasu の表が期待どおりでなければ、写しに戻して失敗を出す。
+  - 改行が CRLF のファイルは CRLF で足し、書き換える行は元の行の終わり（`\r` があるか）を保つ。改行で終わらない最後の行のあとに足すときは、その行を改行で終える。先頭の BOM は残す（読み飛ばして、書くときに付ける）。
   - `CODEX_HOME` は見ない。Finder から開いたアプリにはシェルの環境変数が届かない（DEC-COM-188 と同じ）。既定の場所だけを扱い、画面に場所を出す。
   - `tool_timeout_sec` は、ローカルの AI で `ask_meetings` を動かすと Codex の既定（60 秒）を超えうるため。
 - 理由: Swift と .NET に TOML の読み書きの部品がなく、足すと依存が増える。読んで書き直すと利用者のコメントや並びが消える。Hanasu が触るのを自分の表だけにすれば、ほかの行は 1 バイトも変わらない。`codex mcp add` を使う道もあるが、Codex CLI を入れていない人（ChatGPT のアプリだけの人）が多い。
@@ -1495,7 +1497,7 @@
   - Claude Desktop: 動いている Claude Desktop のプロセスの引数を読み、`--user-data-dir` がその設定の場所（ないときは既定の `Claude`）なら「動いている」とする。引数を読めなかったプロセスがあれば、どの場所も「動いている」とする。Mac は `NSRunningApplication`（バンドル ID `com.anthropic.claudefordesktop`）の pid の引数を `sysctl`（`KERN_PROCARGS2`）で、Windows は `Claude.exe` のうち実行ファイルのパスが `AnthropicClaude` か `WindowsApps\Claude_` の下にあるものの引数を読む（名前だけでは Claude Code の `claude.exe` と見分けられない）。引数の読み分けは共有のテストデータで確かめる純粋な関数にする。
   - ChatGPT（Codex）: Mac はバンドル ID `com.openai.codex`・`com.openai.chat`、Windows は実行ファイルのパスが `WindowsApps\OpenAI.` の下にあるプロセスが動いていれば書かない。Codex CLI の `codex` は見ない。
   - Claude Code（`~/.claude.json` に直接書くとき）: 名前が `claude`（Windows は `claude.exe`）のプロセスが動いていれば書かない。
-  - 動いていれば、つなぐ・外すのどちらも書かずに「（アプリ）を終了してから、もう一度押してください」と出す。Hanasu がアプリを終了させることはしない。
+  - 動いていれば、つなぐ・外すのどちらも書かずに「（アプリ）を終了してから、もう一度押してください」と出す。動いているかは、画面を開いたときでなくボタンを押したときに確かめ直す。Hanasu がアプリを終了させることはしない。
 - 理由:
   - Claude Desktop は動いているあいだ、このファイルの `preferences` を自分で書くので、Hanasu の足した項目を古い中身で上書きするおそれがある。起動のときにしか MCP のサーバーを読まないので、どのみち開き直しが要る。
   - ChatGPT（Codex）の Windows のアプリは `config.toml` を一度に置き換えずに書いていて、落ちると NUL で埋まる不具合がある（openai/codex#26421）。同時に書くと、どちらかの変更が消えるか、ファイルが壊れうる。
@@ -1517,7 +1519,8 @@
 - 決めたこと:
   - `claude` があれば、`claude mcp add --scope user hanasu -- <絶対パス> mcp` で登録し、`claude mcp remove --scope user hanasu` で外す。`claude mcp add` は同じ名前があると失敗するので、`~/.claude.json` の一番上の `mcpServers.hanasu` があれば先に remove してから add する。add が失敗したら、remove の前に読んだ項目を `claude mcp add-json --scope user` で入れ直す。
   - `claude` の場所は、Mac は `~/.local/bin/claude`・`/opt/homebrew/bin/claude`・`/usr/local/bin/claude`・`~/.claude/local/claude`・Claude Desktop に入っている Claude Code（`~/Library/Application Support/Claude/claude-code/<版>/<ハッシュ>/claude.app/Contents/MacOS/claude` のいちばん新しい版）を順に見て、なければログインシェルで `command -v claude`（5 秒まで）。Windows は `%USERPROFILE%\.local\bin\claude.exe`・`%APPDATA%\Claude\claude-code` の下の `claude.exe`・`%APPDATA%\npm\claude.cmd`、なければ `where.exe claude`。
-  - Mac は、見つけた `claude` のフォルダ（とリンクの先のフォルダ）と `/opt/homebrew/bin`・`/usr/local/bin` を PATH の先に足して直接動かす（npm で入れた `claude` は `#!/usr/bin/env node` で、Finder から開いたアプリの PATH では `node` が見つからない。`node` はふつう `claude` と同じフォルダにある。ログインシェルを通さないのは、fish などで引数の引用の決まりが違うため）。Windows は `claude.exe` を直接、`.cmd` はパスに `&`・`%`・`^`・`"` がなければ `cmd /c` で。どちらもバックグラウンドで、30 秒で打ち切る。
+  - 入れ直すのは、前の項目がオブジェクトのときだけ（`null` などは入れ直さない）。
+  - Mac は、見つけた `claude` のフォルダ（とリンクの先のフォルダ）と `/opt/homebrew/bin`・`/usr/local/bin` を PATH の先に足して直接動かす（npm で入れた `claude` は `#!/usr/bin/env node` で、Finder から開いたアプリの PATH では `node` が見つからない。`node` はふつう `claude` と同じフォルダにある。ログインシェルを通さないのは、fish などで引数の引用の決まりが違うため）。Windows は `claude.exe` を直接、`.cmd` はパスに `&`・`%`・`^`・`"` がなければ `cmd /c` で。どちらもバックグラウンドで、作業フォルダはホーム（Finder から開いたアプリの `/` をプロジェクトとして記録させない）。remove・add・入れ直しの合計で 30 秒までにする。入れ直しに失敗したら、そのことも出す。
   - `claude` が見つからないとき（Claude Code をまだ入れていない環境）は、`~/.claude.json`（Windows は `%USERPROFILE%\.claude.json`）の一番上の `mcpServers.hanasu` に直接書く。ファイルがなければ `mcpServers` だけのファイルを作る。書き方は Claude Desktop と同じ（REQ-COM-194 の受け入れ条件）。
   - 状態は `~/.claude.json` の一番上の `mcpServers.hanasu` を読んで決める。プロジェクトだけの登録（`projects[<フォルダ>].mcpServers.hanasu`）は、「一部のフォルダだけの登録もあります」と出すだけで触らない。
   - 行の名前は「Claude Code（ターミナルと Claude Desktop の Code）」。どちらも `~/.claude.json` の同じ登録を読む。`CLAUDE_CONFIG_DIR` は見ない（DEC-COM-201 の `CODEX_HOME` と同じ理由）。

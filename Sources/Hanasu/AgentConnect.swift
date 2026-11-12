@@ -138,6 +138,8 @@ enum AgentConnect {
     // 設計判断: DEC-COM-200, DEC-COM-204
     enum ConfigJSON {
         static func parse(_ text: String?) -> Result<[String: Any], Problem> {
+            // 先頭の BOM は読み飛ばす（書くときは付けない）
+            let text = text.map { $0.unicodeScalars.first == "\u{FEFF}" ? String($0.unicodeScalars.dropFirst()) : $0 }
             guard let text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return .success([:]) }
             guard let object = try? JSONSerialization.jsonObject(with: Data(text.utf8), options: [.fragmentsAllowed]) else {
                 return .failure(.invalidJSON)
@@ -235,6 +237,8 @@ enum AgentConnect {
             var trailingNewline: Bool
             var crlf: Bool
             var unsupported: Bool
+            /// 先頭に BOM（U+FEFF）があったか（書くときも付ける）
+            var bom = false
 
             func content(_ index: Int) -> String {
                 let line = raw[index]
@@ -249,12 +253,16 @@ enum AgentConnect {
         }
 
         private static func scan(_ text: String?) -> Scan {
-            let text = text ?? ""
+            var text = text ?? ""
+            let bom = text.unicodeScalars.first == "\u{FEFF}"
+            if bom { text.unicodeScalars.removeFirst() }
             var raw = text.components(separatedBy: "\n")
-            let trailingNewline = text.hasSuffix("\n")
+            // hasSuffix("\n") は、CRLF（\r\n を 1 つの文字として扱う）で終わる文字列では false になるので、バイトで見る
+            let trailingNewline = text.utf8.last == UInt8(ascii: "\n")
             if trailingNewline || text.isEmpty { raw.removeLast() }
             var result = Scan(raw: raw, kinds: [], depthAfter: [], trailingNewline: trailingNewline,
-                              crlf: text.contains("\r\n"), unsupported: text.contains("\"\"\"") || text.contains("'''"))
+                              crlf: text.contains("\r\n"), unsupported: text.contains("\"\"\"") || text.contains("'''"),
+                              bom: bom)
             var depth = 0
             var table: [String] = []
             for index in raw.indices {
@@ -539,10 +547,11 @@ enum AgentConnect {
             case .other:
                 guard let found = hanasuTable(scan).found else { return .unreadable(.tomlUnsupported) }
                 let end = scan.crlf ? "\r" : ""
+                /// 書き換える行は、元の行の終わり（\r があるか）と字下げを保つ
                 func line(_ text: String, replacing index: Int) -> String {
                     let content = scan.content(index)
                     let indent = String(content.prefix { $0 == " " || $0 == "\t" })
-                    return indent + text + end
+                    return indent + text + (scan.raw[index].hasSuffix("\r") ? "\r" : "")
                 }
                 let command = "command = \(quote(executable))"
                 let args = "args = [\"mcp\"]"
@@ -551,10 +560,11 @@ enum AgentConnect {
                     if let argsLine = found.argsLine {
                         scan.raw[argsLine] = line(args, replacing: argsLine)
                     } else {
-                        scan.raw.insert(line(args, replacing: commandLine), at: commandLine + 1)
+                        let indent = String(scan.content(commandLine).prefix { $0 == " " || $0 == "\t" })
+                        insert(&scan, [indent + args + end], at: commandLine + 1)
                     }
                 } else {
-                    scan.raw.insert(contentsOf: [command + end, args + end], at: found.table.header + 1)
+                    insert(&scan, [command + end, args + end], at: found.table.header + 1)
                 }
                 return .written(join(scan))
             }
@@ -602,6 +612,15 @@ enum AgentConnect {
             scan.raw = lines
         }
 
+        /// 行を足す。ファイルの終わり（改行のない最後の行のあと）に足すときは、最後の行を改行で終える
+        private static func insert(_ scan: inout Scan, _ lines: [String], at index: Int) {
+            if index >= scan.raw.count, !scan.trailingNewline, let last = scan.raw.last {
+                if scan.crlf, !last.hasSuffix("\r") { scan.raw[scan.raw.count - 1] = last + "\r" }
+                scan.trailingNewline = true
+            }
+            scan.raw.insert(contentsOf: lines, at: min(index, scan.raw.count))
+        }
+
         private static func append(_ scan: Scan, executable: String) -> String {
             var scan = scan
             let end = scan.crlf ? "\r" : ""
@@ -619,8 +638,8 @@ enum AgentConnect {
         }
 
         private static func join(_ scan: Scan) -> String {
-            guard !scan.raw.isEmpty else { return "" }
-            return scan.raw.joined(separator: "\n") + (scan.trailingNewline ? "\n" : "")
+            let body = scan.raw.isEmpty ? "" : scan.raw.joined(separator: "\n") + (scan.trailingNewline ? "\n" : "")
+            return (scan.bom ? "\u{FEFF}" : "") + body
         }
     }
 
@@ -632,8 +651,11 @@ enum AgentConnect {
         guard FileManager.default.fileExists(atPath: real.path) else { return .success(nil) }
         do {
             let data = try Data(contentsOf: real)
-            guard let text = String(data: data, encoding: .utf8) else { return .failure(.io("UTF-8")) }
-            return .success(text)
+            // String(data:encoding:) は先頭の BOM を消すので、残す（config.toml を 1 バイトも変えずに書き戻すため。Windows 版と同じ）
+            let bom: [UInt8] = [0xEF, 0xBB, 0xBF]
+            let hasBOM = data.starts(with: bom)
+            guard let text = String(data: hasBOM ? data.dropFirst(3) : data, encoding: .utf8) else { return .failure(.io("UTF-8")) }
+            return .success(hasBOM ? "\u{FEFF}" + text : text)
         } catch {
             return .failure(.io(error.localizedDescription))
         }
@@ -646,23 +668,40 @@ enum AgentConnect {
     static func write(_ text: String, to file: URL) throws {
         let fm = FileManager.default
         let real = file.resolvingSymlinksInPath()
-        var permissions: NSNumber?
+        // 行き先のないシンボリックリンクは、たどれずに同じパスが返る。リンクを普通のファイルで置き換えないよう、書かない
+        if (try? fm.destinationOfSymbolicLink(atPath: file.path)) != nil, !fm.fileExists(atPath: real.path) {
+            throw CocoaError(.fileNoSuchFile, userInfo: [NSFilePathErrorKey: real.path])
+        }
+        var permissions = mode_t(0o600)
         let backup = real.deletingLastPathComponent().appendingPathComponent(real.lastPathComponent + backupSuffix)
-        if fm.fileExists(atPath: real.path) {
-            permissions = (try? fm.attributesOfItem(atPath: real.path))?[.posixPermissions] as? NSNumber
+        let existed = fm.fileExists(atPath: real.path)
+        if existed {
+            if let mode = (try? fm.attributesOfItem(atPath: real.path))?[.posixPermissions] as? NSNumber {
+                permissions = mode_t(mode.uint16Value)
+            }
             try? fm.removeItem(at: backup)
             try fm.copyItem(at: real, to: backup)
         } else {
             try fm.createDirectory(at: real.deletingLastPathComponent(), withIntermediateDirectories: true)
         }
-        try Data(text.utf8).write(to: real, options: .atomic)
-        // 新しく作るファイルは、ほかのサーバーの鍵が入りうるので本人だけが読めるようにする
-        try fm.setAttributes([.posixPermissions: permissions ?? NSNumber(value: 0o600)], ofItemAtPath: real.path)
-        let back = (try? String(contentsOf: real, encoding: .utf8)) ?? ""
-        if back != text {
-            if fm.fileExists(atPath: backup.path) {
-                _ = try? fm.replaceItemAt(real, withItemAt: backup, options: [])
-            }
+        // 一時ファイルは、はじめから元の権限（新しいファイルは 0600。ほかのサーバーの鍵が入りうる）で作り、置き換える
+        let temp = real.deletingLastPathComponent().appendingPathComponent(".\(real.lastPathComponent).\(UUID().uuidString).tmp")
+        let descriptor = open(temp.path, O_WRONLY | O_CREAT | O_EXCL, permissions)
+        guard descriptor >= 0 else { throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO) }
+        let data = Data(text.utf8)
+        let written = data.withUnsafeBytes { Darwin.write(descriptor, $0.baseAddress, data.count) }
+        fchmod(descriptor, permissions)
+        fsync(descriptor)
+        close(descriptor)
+        guard written == data.count, rename(temp.path, real.path) == 0 else {
+            let code = POSIXErrorCode(rawValue: errno) ?? .EIO
+            try? fm.removeItem(at: temp)
+            throw POSIXError(code)
+        }
+        let back = (try? Data(contentsOf: real)) ?? Data()
+        if back != data {
+            try? fm.removeItem(at: real)
+            if existed { try? fm.copyItem(at: backup, to: real) }
             throw CocoaError(.fileWriteUnknown)
         }
     }
@@ -730,7 +769,7 @@ enum AgentConnect {
         var isInstalled: (String) -> Bool
         var findClaude: () -> String?
         /// claude を動かす（バックグラウンドで呼ぶ）
-        var runClaude: (_ claude: String, _ arguments: [String]) -> ProcessOutput
+        var runClaude: (_ claude: String, _ arguments: [String], _ timeout: TimeInterval) -> ProcessOutput
 
         static let claudeDesktopBundleID = "com.anthropic.claudefordesktop"
         static let chatGPTBundleIDs = ["com.openai.codex", "com.openai.chat"]
@@ -750,7 +789,7 @@ enum AgentConnect {
                 isClaudeCodeRunning: { isProcessRunning(named: "claude") },
                 isInstalled: { NSWorkspace.shared.urlForApplication(withBundleIdentifier: $0) != nil },
                 findClaude: { ClaudeCLI.find(home: home) },
-                runClaude: { claude, arguments in ClaudeCLI.run(claude, arguments) }
+                runClaude: { claude, arguments, timeout in ClaudeCLI.run(claude, arguments, timeout: timeout, home: home) }
             )
         }
     }
@@ -867,13 +906,14 @@ enum AgentConnect {
         }
     }
 
-    private static func isRunning(_ row: Row, env: Environment) -> Bool {
+    /// 今そのアプリが動いていて書けないか（押したときに確かめ直す）。Claude Code は claude に任せるときは見ない
+    static func isRunning(_ row: Row, env: Environment) -> Bool {
         switch row.target {
         case .claudeDesktop(let dir):
             let running = runningClaudeDirectories(env)
             return running.all || running.directories.contains(dir.standardizedFileURL.path)
         case .codex: return env.isChatGPTRunning()
-        case .claudeCode: return env.isClaudeCodeRunning()
+        case .claudeCode: return row.claudePath == nil && env.isClaudeCodeRunning()
         }
     }
 
@@ -915,27 +955,37 @@ enum AgentConnect {
             case .failure(let problem): return .unreadable(problem)
             case .success(let value): text = value
             }
-            let previous = ((try? JSONSerialization.jsonObject(with: Data((text ?? "{}").utf8))) as? [String: Any])
-                .flatMap { ($0["mcpServers"] as? [String: Any])?["hanasu"] }
+            var root: [String: Any] = [:]
+            if case .success(let value) = ConfigJSON.parse(text) { root = value }
+            let entry = (root["mcpServers"] as? [String: Any])?["hanasu"]
+            // 入れ直せるのはオブジェクトのときだけ（null や文字列を JSONSerialization に渡すと落ちる）
+            let previous = entry as? [String: Any]
             switch ConfigJSON.state(text, executable: executable, windows: false, resolve: resolveLink) {
             case .connected: return .unchanged
             case .foreign(let command) where !overwrite: return .needsOverwrite(command)
             case .unreadable(let problem): return .unreadable(problem)
             default: break
             }
+            // 全部で 30 秒まで（remove・add・入れ直しの合計）
+            let deadline = Date().addingTimeInterval(timeout)
+            func remaining() -> TimeInterval { max(1, deadline.timeIntervalSinceNow) }
             // claude mcp add は同じ名前があると失敗するので、先に外す
-            if previous != nil {
-                let removed = env.runClaude(claude, ["mcp", "remove", "--scope", "user", "hanasu"])
+            if entry != nil {
+                let removed = env.runClaude(claude, ["mcp", "remove", "--scope", "user", "hanasu"], remaining())
                 if removed.timedOut { return .timedOut }
                 if removed.status != 0 { return .failed(message(removed)) }
             }
-            let added = env.runClaude(claude, ["mcp", "add", "--scope", "user", "hanasu", "--", executable, "mcp"])
+            let added = env.runClaude(claude, ["mcp", "add", "--scope", "user", "hanasu", "--", executable, "mcp"], remaining())
             if added.status == 0, !added.timedOut { return .done }
-            // 足せなかったら、前の項目を入れ直す
+            var reasons = added.timedOut ? [] : [message(added)]
+            // 足せなかったら、前の項目を入れ直す。入れ直せなかったら、そのことも出す
             if let previous, let data = try? JSONSerialization.data(withJSONObject: previous, options: [.withoutEscapingSlashes]) {
-                _ = env.runClaude(claude, ["mcp", "add-json", "--scope", "user", "hanasu", String(decoding: data, as: UTF8.self)])
+                let restored = env.runClaude(claude, ["mcp", "add-json", "--scope", "user", "hanasu", String(decoding: data, as: UTF8.self)], remaining())
+                if restored.timedOut { reasons.append("claude mcp add-json: timeout") }
+                else if restored.status != 0 { reasons.append("claude mcp add-json: " + message(restored)) }
             }
-            return added.timedOut ? .timedOut : .failed(message(added))
+            if added.timedOut, reasons.isEmpty { return .timedOut }
+            return .failed(reasons.joined(separator: "\n"))
         }
 
         static func disconnect(claude: String, file: URL, env: Environment, executable: String) -> Outcome {
@@ -945,7 +995,7 @@ enum AgentConnect {
             case .success(let value): text = value
             }
             guard ConfigJSON.state(text, executable: executable, windows: false, resolve: resolveLink).removable else { return .nothing }
-            let removed = env.runClaude(claude, ["mcp", "remove", "--scope", "user", "hanasu"])
+            let removed = env.runClaude(claude, ["mcp", "remove", "--scope", "user", "hanasu"], timeout)
             if removed.timedOut { return .timedOut }
             return removed.status == 0 ? .done : .failed(message(removed))
         }
@@ -990,19 +1040,23 @@ enum AgentConnect {
         }
 
         /// 見つけた claude のフォルダを PATH の先に足して動かす（npm の claude は #!/usr/bin/env node なので、node を見つけられるように）
-        static func run(_ claude: String, _ arguments: [String]) -> ProcessOutput {
+        /// 作業フォルダはホーム（Finder から開いたアプリは / で動くので、/ をプロジェクトとして記録させない）
+        static func run(_ claude: String, _ arguments: [String], timeout: TimeInterval, home: URL) -> ProcessOutput {
             let dir = URL(fileURLWithPath: claude).deletingLastPathComponent().path
             let resolvedDir = URL(fileURLWithPath: claude).resolvingSymlinksInPath().deletingLastPathComponent().path
             return runProcess(claude, arguments, timeout: timeout,
-                              path: [dir, resolvedDir, "/opt/homebrew/bin", "/usr/local/bin", "/usr/bin", "/bin", "/usr/sbin", "/sbin"].joined(separator: ":"))
+                              path: [dir, resolvedDir, "/opt/homebrew/bin", "/usr/local/bin", "/usr/bin", "/bin", "/usr/sbin", "/sbin"].joined(separator: ":"),
+                              directory: home)
         }
     }
 
     /// 子プロセスを動かし、timeout 秒で打ち切る
-    static func runProcess(_ executable: String, _ arguments: [String], timeout: TimeInterval, path: String?) -> ProcessOutput {
+    static func runProcess(_ executable: String, _ arguments: [String], timeout: TimeInterval, path: String?,
+                           directory: URL? = nil) -> ProcessOutput {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: executable)
         process.arguments = arguments
+        if let directory { process.currentDirectoryURL = directory }
         var environment = ProcessInfo.processInfo.environment
         if let path { environment["PATH"] = path }
         process.environment = environment
@@ -1017,22 +1071,29 @@ enum AgentConnect {
             return ProcessOutput(status: -1, stdout: "", stderr: error.localizedDescription)
         }
         // パイプがいっぱいで止まらないように、並べて読む
+        /// 読み終えた出力（読むスレッドと取り出すスレッドがぶつからないよう、鍵をかける）
+        final class Output: @unchecked Sendable {
+            private let lock = NSLock()
+            private var values: [Int: Data] = [:]
+            func set(_ index: Int, _ data: Data) { lock.lock(); values[index] = data; lock.unlock() }
+            func get(_ index: Int) -> Data { lock.lock(); defer { lock.unlock() }; return values[index] ?? Data() }
+        }
+        let output = Output()
         let group = DispatchGroup()
-        var stdout = Data()
-        var stderr = Data()
-        group.enter()
-        DispatchQueue.global().async { stdout = out.fileHandleForReading.readDataToEndOfFile(); group.leave() }
-        group.enter()
-        DispatchQueue.global().async { stderr = err.fileHandleForReading.readDataToEndOfFile(); group.leave() }
+        for (index, pipe) in [out, err].enumerated() {
+            group.enter()
+            DispatchQueue.global().async { output.set(index, pipe.fileHandleForReading.readDataToEndOfFile()); group.leave() }
+        }
         if done.wait(timeout: .now() + timeout) == .timedOut {
             process.terminate()
             _ = done.wait(timeout: .now() + 2)
             _ = group.wait(timeout: .now() + 2)
             return ProcessOutput(status: -1, stdout: "", stderr: "", timedOut: true)
         }
+        // 孫プロセスがパイプを持ったままだと読み終わらない。そのときは、そこまでに読めた分だけを使う
         _ = group.wait(timeout: .now() + 5)
         return ProcessOutput(status: process.terminationStatus,
-                             stdout: String(decoding: stdout, as: UTF8.self), stderr: String(decoding: stderr, as: UTF8.self))
+                             stdout: String(decoding: output.get(0), as: UTF8.self), stderr: String(decoding: output.get(1), as: UTF8.self))
     }
 
     // MARK: - プロセス

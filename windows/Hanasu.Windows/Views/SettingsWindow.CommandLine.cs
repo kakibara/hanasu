@@ -155,7 +155,8 @@ public partial class SettingsWindow
     {
         ShowConnectResult(null);
         // 動いているあいだは書かない（DEC-COM-202）。確かめる前に知らせる
-        if (row.Running)
+        // 画面を開いたときの状態でなく、押したときに確かめ直す（終了してから押し直したときに通るように）
+        if (await Task.Run(() => AgentConnect.IsRunning(row, agentApps)))
         {
             ShowConnectResult(string.Format(Strings.Settings_Connect_Running, ConnectAppName(row)));
             return;
@@ -188,7 +189,8 @@ public partial class SettingsWindow
     private async void OnDisconnectAgent(AgentConnect.Row row)
     {
         ShowConnectResult(null);
-        if (row.Running)
+        // 画面を開いたときの状態でなく、押したときに確かめ直す（終了してから押し直したときに通るように）
+        if (await Task.Run(() => AgentConnect.IsRunning(row, agentApps)))
         {
             ShowConnectResult(string.Format(Strings.Settings_Connect_Running, ConnectAppName(row)));
             return;
