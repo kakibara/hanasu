@@ -773,7 +773,7 @@
     <value>追加の整形ルール</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>整形のときに AI（Gemini・Claude）に渡すルール（例: です・ます調に統一）。英訳では使いません（和訳では使います）。</value>
+    <value>整形のときに AI（Gemini・Claude）に渡すルール（例: です・ます調に統一）。翻訳では使いません（文字起こしの言語が日本語のときの和訳では使います）。</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>1 行に 1 つ。語だけ書くと、AI にその表記を伝えます。「読み =&gt; 表記」と書くと、認識結果のその読みを表記に置き換えます（例: ストックマーク =&gt; Stockmark、左は「,」で区切って複数書ける）。「#」で始まる行はメモです。</value>
@@ -1640,5 +1640,8 @@
   </data>
   <data name="Update_CliRunning" xml:space="preserve">
     <value>動いている hanasu（{0} 個）を終わらせてから入れ替えます。MCP を使うアプリ（Claude Desktop など）は、Hanasu のツールが使えなくなったら再起動してください。</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0}（{1}）</value>
   </data>
 </root>

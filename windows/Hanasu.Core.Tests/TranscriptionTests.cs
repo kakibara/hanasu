@@ -124,6 +124,8 @@ public class TranscriptionTests
     {
         var words = Enumerable.Range(0, 100).Select(i => $"用語{i:000}").ToArray();
         Assert.True(WhisperBatchTranscriber.WhisperPrompt(words).Length <= 130);
+        // 区切りは文字起こしの言語の読点（日本語は「、」。英語などは MultilingualTextTests）
+        Assert.Equal("Hanasu、Gemini", WhisperBatchTranscriber.WhisperPrompt(["Hanasu", "Gemini"], Ai.PromptLanguage.Ja));
         Assert.Equal("Hanasu、Gemini", WhisperBatchTranscriber.WhisperPrompt(["Hanasu", "Gemini"]));
     }
 }

@@ -34,6 +34,10 @@ enum UserDictionarySelfTest {
         Case(name: "英字の後ろ側の境界", dictionary: "gpt => GPT", input: "gptsとchatgptとgpt", expected: "gptsとchatgptとGPT"),
         Case(name: "カタカナは語の途中で置き換えない", dictionary: "マーク => Mark", input: "マークダウンとストックマークとマークを付ける", expected: "マークダウンとストックマークとMarkを付ける"),
         Case(name: "中黒と括弧は境界になる", dictionary: "マーク => Mark", input: "「マーク」・マーク", expected: "「Mark」・Mark"),
+        // 空白で語を区切るほかの文字も、語の途中で置き換えない（DEC-DIC-082）
+        Case(name: "キリル文字は単語の途中で置き換えない", dictionary: "кот => Кот", input: "котлета и кот", expected: "котлета и Кот"),
+        Case(name: "アクセント付きの文字は単語の途中で置き換えない", dictionary: "muller => Müller", input: "mullerérie muller", expected: "mullerérie Müller"),
+        Case(name: "ハングルは助詞が続いても効く", dictionary: "스톡마크 => Stockmark", input: "스톡마크에서 일해요", expected: "Stockmark에서 일해요"),
         Case(name: "1 文字の読みは使わない", dictionary: "株 => カブ", input: "株式会社", expected: "株式会社"),
         Case(name: "長い読みを優先する", dictionary: "ストック => Stock\nストックマーク => Stockmark", input: "ストックマークとストック", expected: "StockmarkとStock"),
         Case(name: "同じ読みは上の行を使う", dictionary: "ストックマーク => Stockmark\nストックマーク => STOCKMARK", input: "ストックマーク", expected: "Stockmark"),

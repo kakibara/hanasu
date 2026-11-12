@@ -181,8 +181,9 @@ struct Meeting: Codable, Identifiable, Hashable {
     /// 続く発言をつなぐ。どちらかを辞書で置き換えていれば、認識したままの文もつなぐ（text だけをつなぐと読みが消える）
     static func joinUtterances(_ a: Utterance, _ b: Utterance) -> Utterance {
         var joined = a
-        if a.rawText != nil || b.rawText != nil { joined.rawText = a.recognizedText + b.recognizedText }
-        joined.text = a.text + b.text
+        // 設計判断: DEC-COM-174（空白で語を区切る言語では、あいだに空白を入れる）
+        if a.rawText != nil || b.rawText != nil { joined.rawText = TextSpacing.join(a.recognizedText, b.recognizedText) }
+        joined.text = TextSpacing.join(a.text, b.text)
         joined.end = max(a.end, b.end)
         return joined
     }
@@ -194,12 +195,8 @@ struct Meeting: Codable, Identifiable, Hashable {
             : String(format: "%02d:%02d", s / 60, s % 60)
     }
 
-    static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = UILanguage.locale
-        f.dateFormat = "yyyy/MM/dd (E) HH:mm"
-        return f
-    }()
+    /// 画面・書き出しに出す会議の日時（日本語は「2026/11/02 (月) 14:30」、ほかの言語はその言語の並び。DEC-COM-166）
+    static let dateFormatter = UILanguage.dateFormatter(japanese: "yyyy/MM/dd (E) HH:mm", template: "yMdEjmm")
 }
 
 // 要件: REQ-MTG-025
@@ -215,7 +212,10 @@ enum MeetingStore {
     }
 
     static func newMeeting(at date: Date = Date()) throws -> Meeting {
+        // フォルダの名前は、地域の暦・数字（ヒジュラ暦・和暦・アラビア数字など）によらず西暦の ASCII の数字にする
         let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.calendar = Calendar(identifier: .gregorian)
         f.dateFormat = "yyyy-MM-dd HHmm"
         var id = f.string(from: date)
         var suffix = 2

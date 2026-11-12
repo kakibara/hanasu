@@ -23,6 +23,20 @@ enum UILanguage {
 
     /// 日付・数の書式に使うロケール
     static var locale: Locale { current.locale }
+
+    // 設計判断: DEC-COM-166
+    /// 画面に出す日付の書式。日本語は今までの形（japanese。例「yyyy/MM/dd (E) HH:mm」）のまま、
+    /// ほかの言語はその言語のロケールの並び（template から作る。ドイツ語なら日.月.年、英語（米国）なら 12 時間表示）
+    static func dateFormatter(japanese: String, template: String) -> DateFormatter {
+        let f = DateFormatter()
+        f.locale = locale
+        if current == .ja {
+            f.dateFormat = japanese
+        } else {
+            f.setLocalizedDateFormatFromTemplate(template)
+        }
+        return f
+    }
 }
 
 // 要件: REQ-COM-060

@@ -84,6 +84,8 @@ enum MeetingProcessor {
             let coreStart = max(word.start, word.end - 0.4)
             let speaker = speaker(at: (coreStart + word.end) / 2, wordStart: coreStart, in: turns)
             if var last = result.last, last.speaker == speaker {
+                // 語は 1 つの区間の中のもので、語の前の空白（英語など）を持つのでそのままつなぐ。Whisper の語はトークンなので
+                // 語の途中（「Gem」「ini」）で切れることがあり、空白を足すと崩れる。区間どうしは joinUtterances でつなぐ（DEC-COM-174）
                 last.text += word.text
                 last.end = word.end
                 result[result.count - 1] = last
@@ -167,7 +169,7 @@ enum MeetingProcessor {
                 // 句読点だけの断片は直前の自分の発言にくっつける
                 if text.allSatisfy({ $0.isPunctuation || $0.isWhitespace }) {
                     if var prev = result.last, var lastWord = prev.popLast() {
-                        lastWord.text += text
+                        lastWord.text = TextSpacing.join(lastWord.text, text)
                         prev.append(lastWord)
                         result[result.count - 1] = prev
                     }

@@ -153,7 +153,7 @@ struct DictionaryCandidateRow: View {
         Toggle(isOn: $isOn) {
             Text(candidate.readings.isEmpty
                  ? candidate.spelling
-                 : "\(candidate.readings.joined(separator: "、")) → \(candidate.spelling)")
+                 : "\(candidate.readings.joined(separator: tr("、"))) → \(candidate.spelling)")
             if !candidate.reason.isEmpty { Text(candidate.reason) }
         }
         .toggleStyle(.checkbox)

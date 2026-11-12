@@ -1,4 +1,5 @@
 using Hanasu.Core.Gemini;
+using Hanasu.Core.Text;
 
 namespace Hanasu.Core.Meetings;
 
@@ -31,7 +32,8 @@ public static class MeetingProcessor
         }
         else
         {
-            foreach (var phrase in others) theirs.AddRange(AbsorbShortEdges(Split(WordsOf(phrase), turns)));
+            // 設計判断: DEC-COM-174（端のかけらをまとめてから前後の空白を外す。先に外すと、英語などで語のあいだの空白が消える）
+            foreach (var phrase in others) theirs.AddRange(Trimmed(AbsorbShortEdges(SplitKeepingSpaces(WordsOf(phrase), turns))));
             theirs = RenumberSpeakers(theirs);
         }
 
@@ -48,7 +50,23 @@ public static class MeetingProcessor
         phrase.Words.Count == 0 ? [new TimedWord(phrase.Text, phrase.Start, phrase.End)] : phrase.Words;
 
     /// <summary>語を話者へ割り当て、同じ話者が続く語をまとめる</summary>
-    public static List<Utterance> Split(IReadOnlyList<TimedWord> words, IReadOnlyList<SpeakerTurn> turns)
+    public static List<Utterance> Split(IReadOnlyList<TimedWord> words, IReadOnlyList<SpeakerTurn> turns) =>
+        Trimmed(SplitKeepingSpaces(words, turns));
+
+    /// <summary>まとめた発言の前後の空白を外し、空になったものを除く</summary>
+    private static List<Utterance> Trimmed(List<Utterance> utterances)
+    {
+        foreach (var u in utterances) u.Text = u.Text.Trim(' ');
+        return utterances.Where(u => u.Text.Length > 0).ToList();
+    }
+
+    // 設計判断: DEC-COM-174
+    /// <summary>
+    /// Split の前後の空白を外す前のもの。語は Whisper のトークン（1 つの語の途中で切れた「Gem」「ini」のようなもの）で、
+    /// 語の前の空白（英語など）を含んでいる（WhisperBatchTranscriber.Words）ので、そのままつなぐと区間の文に戻る。
+    /// TextSpacing で空白を足すと、語の途中に空白が入る（日本語の文の中の英単語も）ので、ここでは足さない
+    /// </summary>
+    private static List<Utterance> SplitKeepingSpaces(IReadOnlyList<TimedWord> words, IReadOnlyList<SpeakerTurn> turns)
     {
         var result = new List<Utterance>();
         foreach (var word in words)
@@ -66,8 +84,7 @@ public static class MeetingProcessor
                 result.Add(new Utterance(speaker, word.Start, word.End, word.Text));
             }
         }
-        foreach (var u in result) u.Text = u.Text.Trim(' ');
-        return result.Where(u => u.Text.Length > 0).ToList();
+        return result;
     }
 
     /// <summary>
@@ -178,7 +195,8 @@ public static class MeetingProcessor
                     if (result.Count > 0 && result[^1].Count > 0)
                     {
                         var last = result[^1][^1];
-                        result[^1][^1] = last with { Text = last.Text + text };
+                        // 設計判断: DEC-COM-174（句読点の前には空白を入れない。「-」のような記号は、英語などでは空白を入れてつなぐ）
+                        result[^1][^1] = last with { Text = TextSpacing.Join(last.Text, text) };
                     }
                     continue;
                 }

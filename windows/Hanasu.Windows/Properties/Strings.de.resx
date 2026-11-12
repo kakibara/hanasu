@@ -769,7 +769,7 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
     <value>Zusätzliche Überarbeitungsregeln</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Regeln, die beim Überarbeiten an die KI (Gemini, Claude) übergeben werden (z. B. „förmlichen Ton verwenden“). Bei der Übersetzung ins Englische werden sie nicht verwendet (bei der Übersetzung ins Japanische schon).</value>
+    <value>Regeln, die beim Überarbeiten an die KI (Gemini, Claude) übergeben werden (z. B. „förmlichen Ton verwenden“). Beim Übersetzen werden sie nicht verwendet (außer bei der Übersetzung ins Japanische, wenn die Transkriptionssprache Japanisch ist).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Eine pro Zeile. Ein einzelnes Wort teilt der KI die Schreibweise mit. „Gehörtes =&gt; Schreibweise“ ersetzt das Erkannte durch die Schreibweise (z. B. stock mark =&gt; Stockmark; mehrere links mit „,“ trennen). Zeilen, die mit „#“ beginnen, sind Kommentare.</value>
@@ -1636,5 +1636,8 @@ Release-Seite im Browser öffnen?</value>
   </data>
   <data name="Update_CliRunning" xml:space="preserve">
     <value>Die laufenden hanasu-Befehle ({0}) werden vor der Installation des Updates beendet. Wenn eine App, die MCP nutzt (etwa Claude Desktop), die Hanasu-Werkzeuge verliert, starte sie neu.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

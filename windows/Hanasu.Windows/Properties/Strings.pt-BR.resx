@@ -769,7 +769,7 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
     <value>Regras adicionais de refinamento</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Regras passadas à IA (Gemini, Claude) ao refinar (por exemplo, "use um tom formal"). Não são usadas ao traduzir para inglês (são usadas ao traduzir para japonês).</value>
+    <value>Regras passadas à IA (Gemini, Claude) ao refinar (por exemplo, "use um tom formal"). Não são usadas ao traduzir (exceto ao traduzir para japonês quando o idioma da transcrição é o japonês).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Uma por linha. Uma palavra sozinha informa à IA como escrevê-la. "ouvido =&gt; grafia" substitui o que foi reconhecido pela grafia (por exemplo, stock mark =&gt; Stockmark; separe vários à esquerda com ","). Linhas que começam com "#" são comentários.</value>
@@ -1636,5 +1636,8 @@ Abrir a página da versão no navegador?</value>
   </data>
   <data name="Update_CliRunning" xml:space="preserve">
     <value>Os hanasu em execução ({0}) serão encerrados antes de instalar a atualização. Se um app que usa MCP (como o Claude Desktop) perder as ferramentas do Hanasu, reinicie-o.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

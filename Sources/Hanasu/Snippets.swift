@@ -107,7 +107,7 @@ struct SnippetMatch {
     // 設計判断: DEC-DIC-052
     /// HUD の表示。例: 「スニペット『メールの署名』を入力しました」
     var hudMessage: String {
-        tr("スニペット%@を入力しました", snippets.map { tr("『%@』", $0.displayName) }.joined())
+        tr("スニペット%@を入力しました", snippets.map { tr("『%@』", $0.displayName) }.joined(separator: UILanguage.current == .ja ? "" : tr("、")))
     }
 
     /// 文の部分をそのまま使ってつないだもの（整形しないとき・Gemini が失敗したとき）
@@ -145,7 +145,13 @@ struct SnippetMatch {
 
     // 設計判断: DEC-DIC-053
     /// 文とスニペットをつなぐ。複数行の本文は前後で改行し、1 行の本文はそのまま続ける。
-    /// 英字どうしが接するとき（英訳した文と URL など）は半角スペースを入れる。
+    /// 空白で語を区切る文字どうしが接するとき（英訳した文と URL、韓国語の文とスニペットなど）は半角スペースを入れる（DEC-COM-174）。
+    /// 英字・数字・記号どうし（ASCII の空白以外）が接するか。前からの決まりで、「.NET」のように記号で始まるスニペットの前にも空白を入れる
+    private static func asciiTouch(_ a: String, _ b: String) -> Bool {
+        guard let last = a.last, let first = b.first else { return false }
+        return last.isASCII && first.isASCII && !last.isWhitespace && !first.isWhitespace
+    }
+
     static func join(_ pieces: [(text: String, isSnippet: Bool)]) -> String {
         var result = ""
         var previousIsMultilineSnippet = false
@@ -154,9 +160,7 @@ struct SnippetMatch {
             if !result.isEmpty {
                 if previousIsMultilineSnippet || isMultilineSnippet {
                     if !result.hasSuffix("\n"), !piece.text.hasPrefix("\n") { result += "\n" }
-                } else if let last = result.last, let first = piece.text.first,
-                          last.isASCII, first.isASCII, !last.isWhitespace, !first.isWhitespace
-                {
+                } else if TextSpacing.needsSpace(result, piece.text) || Self.asciiTouch(result, piece.text) {
                     result += " "
                 }
             }

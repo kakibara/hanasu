@@ -1,6 +1,7 @@
-using System.Text;
+using Hanasu.Core.Ai;
 using Hanasu.Core.Meetings;
 using Hanasu.Core.Properties;
+using Hanasu.Core.Text;
 using Hanasu.Core.Transcription;
 using Whisper.net;
 
@@ -90,7 +91,7 @@ public sealed class WhisperBatchTranscriber : IBatchTranscriber, ISegmentTranscr
             .WithThreads(Math.Clamp(Environment.ProcessorCount - 1, 1, 8))
             .WithTokenTimestamps();
         if (progress is not null) builder = builder.WithProgressHandler(percent => progress.Report($"{percent}%"));
-        var prompt = WhisperPrompt(context.ContextualStrings);
+        var prompt = WhisperPrompt(context.ContextualStrings, PromptLanguageOf(context));
         if (prompt.Length > 0) builder = builder.WithPrompt(prompt);
 
         await using var processor = builder.Build();
@@ -117,6 +118,7 @@ public sealed class WhisperBatchTranscriber : IBatchTranscriber, ISegmentTranscr
     /// トークンを、区間の文字に合わせて語にする。日本語のトークンは 1 文字の途中で切れることがあり、Whisper.net はその断片を
     /// U+FFFD（文字化け）にして渡すので、前後の読めるトークンの位置から、その間の文字をまとめて 1 語にする。
     /// 「(字幕)」のような括弧書きの注釈（Whisper が無音や雑音に書きがちなもの）は、文字からも語からも除く。
+    /// 語の前の空白（英語など）は語に残す（Mac 版の WhisperEngine.transcribe と同じ。会議の後処理では語をそのままつないで発言にする）。
     /// 合わせられなければ語は空（区間を 1 語として扱う）。
     /// </summary>
     internal static (string Text, List<TimedWord> Words) Words(string text, IReadOnlyList<(string Text, double Start, double End)> tokens,
@@ -146,13 +148,23 @@ public sealed class WhisperBatchTranscriber : IBatchTranscriber, ISegmentTranscr
                 aligned = false;
                 break;
             }
+            var from = index;
             if (index > cursor)
             {
-                // 間の文字（文字化けしたトークンの分）
-                spans.Add((cursor, index, pendingStart ?? start, pendingStart is null ? start : pendingEnd));
+                if (pendingStart is null && string.IsNullOrWhiteSpace(text[cursor..index]))
+                {
+                    // 設計判断: DEC-COM-174
+                    // 語の前の空白（英語など）は、その語に含めて残す。捨てると、つないだ文字が区間の文字と合わず語が空になる
+                    from = cursor;
+                }
+                else
+                {
+                    // 間の文字（文字化けしたトークンの分）
+                    spans.Add((cursor, index, pendingStart ?? start, pendingStart is null ? start : pendingEnd));
+                }
             }
             pendingStart = null;
-            spans.Add((index, index + token.Length, start, end));
+            spans.Add((from, index + token.Length, start, end));
             cursor = index + token.Length;
         }
         if (aligned && cursor < text.Length) spans.Add((cursor, text.Length, pendingStart ?? segmentEnd, pendingStart is null ? segmentEnd : pendingEnd));
@@ -183,30 +195,41 @@ public sealed class WhisperBatchTranscriber : IBatchTranscriber, ISegmentTranscr
             .WithLanguage(string.IsNullOrEmpty(language) ? "ja" : language)
             .WithThreads(Math.Clamp(Environment.ProcessorCount - 1, 1, 8));
         // 辞書の語をプロンプトに入れると、固有名詞の表記が辞書に寄る
-        var prompt = WhisperPrompt(context.ContextualStrings);
+        var prompt = WhisperPrompt(context.ContextualStrings, PromptLanguageOf(context));
         if (prompt.Length > 0) builder = builder.WithPrompt(prompt);
 
         await using var processor = builder.Build();
-        var sb = new StringBuilder();
+        var pieces = new List<string>();
         await foreach (var segment in processor.ProcessAsync(samples, cancellationToken).ConfigureAwait(false))
         {
-            if (!WhisperText.IsHallucination(segment.Text)) sb.Append(WhisperText.RemoveAnnotations(segment.Text.Trim()));
+            if (!WhisperText.IsHallucination(segment.Text)) pieces.Add(WhisperText.RemoveAnnotations(segment.Text.Trim()));
         }
-        return sb.ToString().Trim();
+        // 設計判断: DEC-COM-174（区間は前後の空白を外してあるので、空白で語を区切る言語では空白を入れてつなぐ。日本語・中国語は入れない）
+        return TextSpacing.Join(pieces, language).Trim();
     }
 
-    /// <summary>プロンプトは短くする（長いと Whisper がプロンプトの文をそのまま書くことがある）</summary>
-    internal static string WhisperPrompt(IReadOnlyList<string> words)
+    /// <summary>文字起こしの言語のプロンプトの言語（言語が空なら、今のプロンプトの言語）</summary>
+    private static PromptLanguage PromptLanguageOf(TranscriptionContext context) =>
+        string.IsNullOrWhiteSpace(context.LocaleIdentifier) ? PromptLanguage.Current : PromptLanguage.FromLocaleIdentifier(context.LocaleIdentifier);
+
+    // 設計判断: DEC-COM-024
+    /// <summary>
+    /// プロンプトは短くする（長いと Whisper がプロンプトの文をそのまま書くことがある）。
+    /// 区切りは文字起こしの言語の読点（プロンプトの user.dictionaryRuleSeparator。日本語は「、」、英語は「, 」。前置きの書き方は認識の文体に効くため）。
+    /// language を省くと今のプロンプトの言語
+    /// </summary>
+    internal static string WhisperPrompt(IReadOnlyList<string> words, PromptLanguage? language = null)
     {
+        var separator = Prompts.Text("user.dictionaryRuleSeparator", language ?? PromptLanguage.Current);
         var picked = new List<string>();
         var length = 0;
         foreach (var w in words)
         {
             if (length + w.Length > 120) break;
             picked.Add(w);
-            length += w.Length + 1;
+            length += w.Length + separator.Length;
         }
-        return string.Join("、", picked);
+        return string.Join(separator, picked);
     }
 
     private static async Task<WhisperFactory> LoadFactoryAsync(string path, CancellationToken cancellationToken)
@@ -246,17 +269,45 @@ public sealed class WhisperBatchTranscriber : IBatchTranscriber, ISegmentTranscr
 /// <summary>Whisper の出力の後始末。</summary>
 public static class WhisperText
 {
-    /// <summary>無音や雑音に Whisper が書きがちな決まり文句（YouTube の字幕から覚えたもの）</summary>
-    private static readonly string[] Hallucinations =
+    // 設計判断: DEC-COM-026
+    /// <summary>
+    /// 無音や雑音に Whisper が書きがちな決まり文句（動画の字幕から覚えたもの）。区間の全体がこれなら捨てる。
+    /// 文字起こしの言語によらず、17 言語のものをすべて見る。照らすときは大文字小文字と前後の句読点を無視する。
+    /// Mac 版の WhisperEngine.hallucinations と同じ並び（両方を直す）
+    /// </summary>
+    private static readonly HashSet<string> Hallucinations = new string[]
+    {
+        "ご視聴ありがとうございました", "最後までご視聴いただきありがとうございました",  // skip-tr（Whisper の出力と照らす語）
+        "チャンネル登録よろしくお願いします", "チャンネル登録お願いします",  // skip-tr（Whisper の出力と照らす語）
+        "thank you for watching", "thanks for watching", "please subscribe to my channel",  // skip-tr（Whisper の出力と照らす語）
+        "谢谢观看", "感谢观看", "謝謝觀看", "感謝觀看", "请不吝点赞 订阅 转发 打赏支持明镜与点点栏目",  // skip-tr（Whisper の出力と照らす語）
+        "시청해주셔서 감사합니다", "시청해 주셔서 감사합니다", "구독과 좋아요 부탁드립니다",  // skip-tr（Whisper の出力と照らす語）
+        "gracias por ver", "gracias por ver el video", "merci d'avoir regardé", "vielen dank fürs zuschauen",  // skip-tr（Whisper の出力と照らす語）
+        "grazie per la visione", "obrigado por assistir", "спасибо за просмотр", "продолжение следует",  // skip-tr（Whisper の出力と照らす語）
+        "izlediğiniz için teşekkür ederim", "cảm ơn các bạn đã theo dõi", "terima kasih telah menonton",  // skip-tr（Whisper の出力と照らす語）
+        "dzięki za obejrzenie", "شكرا للمشاهدة", "देखने के लिए धन्यवाद",  // skip-tr（Whisper の出力と照らす語）
+    }.Select(NoiseKey).ToHashSet(StringComparer.Ordinal);
+
+    /// <summary>この語で始まる区間も決まり文句として捨てる（字幕の作り手の名前や年が続くもの）。「amara.org」を含む区間も捨てる</summary>
+    private static readonly string[] HallucinationPrefixes =
     [
-        "ご視聴ありがとうございました",  // skip-tr（Whisper の出力と照らす語）
-        "ご視聴ありがとうございました。",  // skip-tr（Whisper の出力と照らす語）
-        "最後までご視聴いただきありがとうございました",  // skip-tr（Whisper の出力と照らす語）
-        "チャンネル登録よろしくお願いします",  // skip-tr（Whisper の出力と照らす語）
-        "[音楽]",  // skip-tr（Whisper の出力と照らす語）
-        "(音楽)",  // skip-tr（Whisper の出力と照らす語）
-        "[BLANK_AUDIO]",
+        "untertitel im auftrag des zdf", "untertitelung des zdf", "untertitelung im auftrag des zdf",  // skip-tr（Whisper の出力と照らす語）
+        "субтитры сделал", "субтитры создавал", "редактор субтитров",  // skip-tr（Whisper の出力と照らす語）
+        "字幕由", "字幕製作", "字幕制作",  // skip-tr（Whisper の出力と照らす語）
     ];
+
+    /// <summary>無音や雑音のところに付く「(音楽)」「[拍手]」のような注記。かっこを外してこれだけなら捨てる（17 言語。大文字小文字を無視する）</summary>
+    private static readonly HashSet<string> SoundTags = new(StringComparer.Ordinal)
+    {
+        "音楽", "拍手", "笑", "笑い", "bgm", "music", "applause", "laughter", "silence", "blank_audio",  // skip-tr（Whisper の出力と照らす語）
+        "音乐", "音樂", "掌声", "掌聲", "笑声", "笑聲", "음악", "박수", "웃음",  // skip-tr（Whisper の出力と照らす語）
+        "música", "musique", "musik", "musica", "музыка", "müzik", "âm nhạc", "muzyka", "موسيقى", "संगीत",  // skip-tr（Whisper の出力と照らす語）
+        "aplausos", "applaudissements", "applaus", "applausi", "аплодисменты", "alkış", "vỗ tay", "tepuk tangan", "brawa", "تصفيق", "तालियाँ",  // skip-tr（Whisper の出力と照らす語）
+        "risas", "rires", "lachen", "risate", "risos", "смех", "gülüşler", "tiếng cười", "tertawa", "śmiech", "ضحك", "हँसी",  // skip-tr（Whisper の出力と照らす語）
+    };
+
+    private const string KeyTrim = " 　。.、,!！?？…♪〜~¡¿";  // skip-tr（照らし合わせ・区切りに使う記号）
+    private const string TagTrim = "()（）[]［］【】♪〜~ 　。.、*";  // skip-tr（照らし合わせ・区切りに使う記号）
 
     private static readonly System.Text.RegularExpressions.Regex Annotation = new(@"[\(（\[［][^\)）\]］]{1,10}[\)）\]］]\s*");
 
@@ -267,10 +318,32 @@ public static class WhisperText
     /// <summary>括弧書きの注釈を除く（Whisper は無音や雑音に注釈を書くことがある。話した言葉ではないので会議の記録には残さない）</summary>
     public static string RemoveAnnotations(string text) => Annotation.Replace(text, "").Trim();
 
+    /// <summary>照らすための形（小文字にし、前後の空白と句読点を外す）。Mac 版の WhisperEngine.noiseKey と同じ</summary>
+    internal static string NoiseKey(string text) => TrimEnds(Fold(text), KeyTrim);
+
+    /// <summary>
+    /// 小文字にそろえる。トルコ語の「İ」は、小文字にする方法によって「i」と結合文字の 2 つになることがあるので、先に「i」にする
+    /// （Mac の WhisperEngine.folded と同じ）
+    /// </summary>
+    internal static string Fold(string text) => text.Replace("İ", "i").ToLowerInvariant();  // skip-tr（照らし合わせに使う文字）
+
+    // 設計判断: DEC-COM-026
+    /// <summary>区間の全体が、決まり文句か注記だけか（Mac 版の WhisperEngine.isNoise と同じ）</summary>
     public static bool IsHallucination(string segment)
     {
-        var s = segment.Trim().Trim('。', '!', '！');
-        if (s.Length == 0) return true;
-        return Hallucinations.Any(h => string.Equals(h.Trim('。'), s, StringComparison.OrdinalIgnoreCase));
+        var key = NoiseKey(segment);
+        if (Hallucinations.Contains(key) || key.Contains("amara.org", StringComparison.Ordinal)) return true;
+        if (HallucinationPrefixes.Any(p => key.StartsWith(p, StringComparison.Ordinal))) return true;
+        var stripped = TrimEnds(Fold(segment), TagTrim);
+        return stripped.Length == 0 || SoundTags.Contains(stripped);
+    }
+
+    /// <summary>前後から、空白と chars にある文字を外す</summary>
+    private static string TrimEnds(string text, string chars)
+    {
+        int from = 0, to = text.Length;
+        while (from < to && (char.IsWhiteSpace(text[from]) || chars.Contains(text[from]))) from++;
+        while (to > from && (char.IsWhiteSpace(text[to - 1]) || chars.Contains(text[to - 1]))) to--;
+        return text[from..to];
     }
 }

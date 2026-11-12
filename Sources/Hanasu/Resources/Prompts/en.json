@@ -164,8 +164,8 @@
   "style.header": "Style rules for the app being typed into:",
   "style.custom": "- Additional rules for this app:",
   "style.customOverridesPreset": "- Additional rules for this app (these take priority if they conflict with the items above):",
-  "style.customTranslationNote": "  (Read rules about sentence endings or politeness in the spoken language as the level of formality in English)",
-  "style.customTranslationNoteOther": "  (Read rules about sentence endings or politeness in the spoken language as the level of formality in ${language})",
+  "style.customTranslationNote": "  (Read rules about tone or politeness in the spoken language as the level of formality in English)",
+  "style.customTranslationNoteOther": "  (Read rules about tone or politeness in the spoken language as the level of formality in ${language})",
   "style.overrides.translation": "\"keep the tone and level of politeness\"",
   "style.overrides.refine": "\"do not change the tone\" and \"do not change the wording\"",
   "style.priority": "- These style rules take priority over ${overridden}. You may change sentence endings, phrasing, and line breaks, but do not change what was said (facts, the point, the intent)",
@@ -383,7 +383,7 @@
     "${placeholder}",
     "",
     "## ${speakerNotesHeading}",
-    "(Only if a speaker's name can be inferred from how they are addressed, write something like \"Speaker 1: addressed as Tanaka\". It is a guess, so do not state it as fact)"
+    "(Only if a speaker's name can be inferred from how they are addressed, write something like \"Speaker 1: addressed as Taylor\". It is a guess, so do not state it as fact)"
   ],
   "minutes.custom": [
     "The user has specified the headings, structure, and style of the minutes as follows. Follow these instructions and write in Markdown.",
@@ -428,11 +428,11 @@
   "minutes.speakerNames": [
     "Finally, of the speakers without names in the transcript, such as \"Speaker 1\", \"Room 1\", and \"Others\", output only those whose names are clear from the conversation, as JSON in the following form.",
     "<speaker_names>",
-    "{\"Speaker 1\": \"Tanaka\"}",
+    "{\"Speaker 1\": \"Taylor\"}",
     "</speaker_names>",
     "- A name is clear only when the conversation shows it plainly, for example the speaker gave their name or introduced themselves, or was addressed by name and responded. If you are not sure, leave them out",
     "- Do not include \"Me\" (the person recording)",
-    "- Write names without honorifics or titles (such as Mr., Ms., -san), as written in the transcript (a family name alone is fine)",
+    "- Write names without honorifics or titles (such as Mr., Ms., Dr.), as written in the transcript (a family name alone is fine)",
     "- If no speaker's name is clear, output {}. Do not write explanations outside <speaker_names>."
   ],
   "minutes.customDefault": [
@@ -483,7 +483,7 @@
     "",
     "How to answer:",
     "- Base your answer only on the meetings provided. Do not guess at anything not in the records; write \"The records don't say.\"",
-    "- Cite the meetings you used in the text by number, date, and title, like ［M2: 2026/11/02 Weekly sync］.",
+    "- Cite the meetings you used in the text by number, date, and title, like [M2: 2026/11/02 Weekly sync].",
     "- At the end, add a heading \"## Sources\" and list the meetings you used in the form \"- M2: 2026/11/02 (Mon) 14:30 Weekly sync\".",
     "- Interpret dates such as \"last week\" or \"yesterday\" based on the \"Today\" date. If there are no meetings in that period, say so.",
     "- Answer concisely, in English. You may use headings and bullet points (Markdown)."

@@ -485,7 +485,7 @@
     "",
     "Nasıl yanıtlanır:",
     "- Yanıtını yalnızca verilen toplantılara dayandır. Kayıtlarda olmayan hiçbir şeyi tahmin etme; “Kayıtlarda bu bilgi yok.” yaz.",
-    "- Kullandığın toplantıları metin içinde numara, tarih ve başlıkla belirt; örneğin ［M2: 2026/11/02 Haftalık toplantı］.",
+    "- Kullandığın toplantıları metin içinde numara, tarih ve başlıkla belirt; örneğin [M2: 2026/11/02 Haftalık toplantı].",
     "- Sonunda “## Kaynaklar” başlığını ekle ve kullandığın toplantıları “- M2: 2026/11/02 (Pzt) 14:30 Haftalık toplantı” biçiminde listele.",
     "- “Geçen hafta” ya da “dün” gibi tarihleri “Bugün” tarihine göre yorumla. O dönemde toplantı yoksa bunu belirt.",
     "- Kısa ve Türkçe yanıt ver. Başlık ve madde işaretleri (Markdown) kullanabilirsin."

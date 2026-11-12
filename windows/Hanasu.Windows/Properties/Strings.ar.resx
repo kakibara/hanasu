@@ -769,7 +769,7 @@
     <value>قواعد تحسين إضافية</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>قواعد تُمرَّر إلى AI (Gemini، Claude) عند التحسين (على سبيل المثال، "استخدم أسلوبًا رسميًا"). لا تُستخدم عند الترجمة إلى الإنجليزية (تُستخدم عند الترجمة إلى اليابانية).</value>
+    <value>قواعد تُمرَّر إلى AI (Gemini، Claude) عند التحسين (على سبيل المثال، "استخدم أسلوبًا رسميًا"). لا تُستخدم عند الترجمة (إلا عند الترجمة إلى اليابانية حين تكون لغة النسخ هي اليابانية).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>عنصر واحد في كل سطر. الكلمة بمفردها تخبر AI بكيفية تهجئتها. "المسموع =&gt; التهجئة" يستبدل ما تم التعرف عليه بالتهجئة (على سبيل المثال، stock mark =&gt; Stockmark؛ افصل بين عدة عناصر على اليسار باستخدام ","). الأسطر التي تبدأ بـ "#" هي تعليقات.</value>
@@ -1636,5 +1636,8 @@
   </data>
   <data name="Update_CliRunning" xml:space="preserve">
     <value>سيتم إيقاف أوامر hanasu العاملة ({0}) قبل تثبيت التحديث. إذا فقد تطبيق يستخدم MCP (مثل Claude Desktop) أدوات Hanasu، فأعد تشغيله.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

@@ -283,10 +283,10 @@
     <value>{0} ({1}) — {2}</value>
   </data>
   <data name="WhisperModel_Tiny" xml:space="preserve">
-    <value>Terkecil. Akurasi rendah untuk bahasa Jepang (untuk pengujian).</value>
+    <value>Terkecil. Akurasi rendah, terutama untuk bahasa seperti bahasa Jepang (untuk pengujian).</value>
   </data>
   <data name="WhisperModel_Base" xml:space="preserve">
-    <value>Kecil. Akurasi lebih rendah untuk bahasa Jepang.</value>
+    <value>Kecil. Akurasi lebih rendah, terutama untuk bahasa seperti bahasa Jepang.</value>
   </data>
   <data name="WhisperModel_Small" xml:space="preserve">
     <value>Cocok untuk penggunaan sehari-hari. Keseimbangan baik antara kecepatan dan akurasi.</value>

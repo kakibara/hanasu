@@ -769,7 +769,7 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
     <value>Quy tắc chỉnh sửa bổ sung</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Các quy tắc được chuyển cho AI (Gemini, Claude) khi chỉnh sửa (ví dụ: "dùng giọng văn trang trọng"). Không dùng khi dịch sang tiếng Anh (có dùng khi dịch sang tiếng Nhật).</value>
+    <value>Các quy tắc được chuyển cho AI (Gemini, Claude) khi chỉnh sửa (ví dụ: "dùng giọng văn trang trọng"). Không dùng khi dịch (trừ khi dịch sang tiếng Nhật lúc ngôn ngữ chép lời là tiếng Nhật).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Mỗi dòng một mục. Một từ đứng riêng cho AI biết cách viết từ đó. "nghe được =&gt; cách viết" thay thế phần được nhận dạng bằng cách viết đó (ví dụ: stóc mác =&gt; Stockmark; tách nhiều từ bên trái bằng ","). Dòng bắt đầu bằng "#" là chú thích.</value>
@@ -1636,5 +1636,8 @@ Mở trang phát hành trong trình duyệt?</value>
   </data>
   <data name="Update_CliRunning" xml:space="preserve">
     <value>Trước khi cài bản cập nhật, các hanasu đang chạy ({0}) sẽ bị dừng. Nếu ứng dụng dùng MCP (như Claude Desktop) mất công cụ của Hanasu, hãy khởi động lại ứng dụng đó.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

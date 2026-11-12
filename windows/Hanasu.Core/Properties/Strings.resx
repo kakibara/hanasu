@@ -373,11 +373,11 @@
     <comment>Settings: Whisper model list item. {0} = model ID, {1} = size, {2} = description</comment>
   </data>
   <data name="WhisperModel_Tiny" xml:space="preserve">
-    <value>Smallest. Low accuracy for Japanese (for testing).</value>
+    <value>Smallest. Low accuracy, especially for languages like Japanese (for testing).</value>
     <comment>Settings: Whisper model description (tiny)</comment>
   </data>
   <data name="WhisperModel_Base" xml:space="preserve">
-    <value>Small. Lower accuracy for Japanese.</value>
+    <value>Small. Lower accuracy, especially for languages like Japanese.</value>
     <comment>Settings: Whisper model description (base)</comment>
   </data>
   <data name="WhisperModel_Small" xml:space="preserve">

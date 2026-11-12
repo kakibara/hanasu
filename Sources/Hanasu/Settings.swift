@@ -268,9 +268,9 @@ final class AppSettings: ObservableObject {
     /// 文字起こしの言語の候補。設定の一覧に出す（一覧にない言語は `nearestTranscriptionLocale` で近いものに寄せる）
     static let transcriptionLocaleIdentifiers = ["ja-JP", "en-US", "en-GB", "zh-CN", "zh-TW", "ko-KR", "fr-FR", "de-DE", "es-ES", "it-IT", "pt-BR"]
 
-    /// システムの言語。文字起こしの言語の初期値にする（一覧の近いものに寄せる）。読めなければ ja-JP
+    /// システムの言語。文字起こしの言語の初期値にする（一覧の近いものに寄せる）。読めなければ en-US（Windows 版と同じ）
     static var systemLocaleIdentifier: String {
-        nearestTranscriptionLocale(Locale.preferredLanguages.first ?? "ja-JP")
+        nearestTranscriptionLocale(Locale.preferredLanguages.first ?? "en-US")
     }
 
     // 要件: REQ-COM-004
@@ -278,7 +278,8 @@ final class AppSettings: ObservableObject {
     /// 中国語は、繁体字（Hant）か台湾・香港・マカオなら zh-TW、それ以外は zh-CN。
     /// 同じ言語コードの項目がなければそのまま返す（空なら ja-JP）
     static func nearestTranscriptionLocale(_ identifier: String) -> String {
-        let trimmed = identifier.trimmingCharacters(in: .whitespacesAndNewlines)
+        // 「_」の区切り（ru_RU など）も「-」にそろえる（Windows 版と同じ）。空は前の版の既定の ja-JP
+        let trimmed = identifier.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "_", with: "-")
         if trimmed.isEmpty { return "ja-JP" }
         if transcriptionLocaleIdentifiers.contains(trimmed) { return trimmed }
         let language = Locale.Language(identifier: trimmed)

@@ -485,7 +485,7 @@
     "",
     "Cara menjawab:",
     "- Jawab hanya berdasarkan rapat yang diberikan. Jangan menebak hal yang tidak ada dalam catatan; tulis \"Catatan rapat tidak menyebutkannya.\"",
-    "- Sebutkan rapat yang Anda gunakan di dalam teks dengan nomor, tanggal, dan judulnya, seperti ［M2: 2026/11/02 Rapat mingguan］.",
+    "- Sebutkan rapat yang Anda gunakan di dalam teks dengan nomor, tanggal, dan judulnya, seperti [M2: 2026/11/02 Rapat mingguan].",
     "- Di akhir, buat judul \"## Sumber\" dan daftarkan rapat yang Anda gunakan dengan bentuk \"- M2: 2026/11/02 (Sen) 14:30 Rapat mingguan\".",
     "- Tafsirkan tanggal seperti \"minggu lalu\" atau \"kemarin\" berdasarkan tanggal \"Hari ini\". Jika tidak ada rapat pada periode itu, sampaikan demikian.",
     "- Jawab dengan ringkas dalam bahasa Indonesia. Anda boleh memakai judul dan daftar berpoin (Markdown)."

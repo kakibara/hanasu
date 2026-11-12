@@ -769,7 +769,7 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
     <value>Reglas adicionales de pulido</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Reglas que se pasan a la IA (Gemini, Claude) al pulir (por ejemplo, "usa un tono formal"). No se usan al traducir al inglés (sí se usan al traducir al japonés).</value>
+    <value>Reglas que se pasan a la IA (Gemini, Claude) al pulir (por ejemplo, "usa un tono formal"). No se usan al traducir (salvo al traducir al japonés cuando el idioma de transcripción es el japonés).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Una por línea. Una palabra sola indica a la IA cómo escribirla. "oído =&gt; ortografía" reemplaza lo reconocido por la ortografía (por ejemplo, stock mark =&gt; Stockmark; separa varias a la izquierda con ","). Las líneas que empiezan por "#" son comentarios.</value>
@@ -1636,5 +1636,8 @@ Las actualizaciones desde la app reemplazan la carpeta entera, así que solo fun
   </data>
   <data name="Update_CliRunning" xml:space="preserve">
     <value>Antes de instalar la actualización se detendrán los hanasu en ejecución ({0}). Si una app que usa MCP (como Claude Desktop) pierde las herramientas de Hanasu, reiníciala.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

@@ -769,7 +769,7 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
     <value>Aturan perapian tambahan</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Aturan yang diberikan ke AI (Gemini, Claude) saat merapikan (misalnya, "gunakan nada formal"). Aturan ini tidak digunakan saat menerjemahkan ke bahasa Inggris (digunakan saat menerjemahkan ke bahasa Jepang).</value>
+    <value>Aturan yang diberikan ke AI (Gemini, Claude) saat merapikan (misalnya, "gunakan nada formal"). Aturan ini tidak digunakan saat menerjemahkan (kecuali saat menerjemahkan ke bahasa Jepang ketika bahasa transkripsinya bahasa Jepang).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Satu per baris. Kata saja memberi tahu AI cara mengejanya. "yang terdengar =&gt; ejaan" mengganti hasil pengenalan dengan ejaan tersebut (misalnya, stock mark =&gt; Stockmark; pisahkan beberapa di sebelah kiri dengan ","). Baris yang diawali "#" adalah komentar.</value>
@@ -1636,5 +1636,8 @@ Buka halaman rilis di browser?</value>
   </data>
   <data name="Update_CliRunning" xml:space="preserve">
     <value>hanasu yang sedang berjalan ({0}) akan dihentikan sebelum pembaruan dipasang. Jika aplikasi yang memakai MCP (seperti Claude Desktop) kehilangan alat Hanasu, mulai ulang aplikasinya.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

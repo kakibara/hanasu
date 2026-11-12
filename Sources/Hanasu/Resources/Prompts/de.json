@@ -485,7 +485,7 @@
     "",
     "Wie geantwortet wird:",
     "- Stütze die Antwort nur auf die bereitgestellten Besprechungen. Rate nichts, was nicht in den Aufzeichnungen steht; schreibe dann „Aus den Aufzeichnungen geht das nicht hervor.“",
-    "- Nenne die verwendeten Besprechungen im Text mit Nummer, Datum und Titel, etwa ［M2: 2026/11/02 Jour fixe］.",
+    "- Nenne die verwendeten Besprechungen im Text mit Nummer, Datum und Titel, etwa [M2: 2026/11/02 Jour fixe].",
     "- Füge am Ende eine Überschrift „## Quellen“ hinzu und liste die verwendeten Besprechungen in der Form „- M2: 2026/11/02 (Mo.) 14:30 Jour fixe“ auf.",
     "- Deute Angaben wie „letzte Woche“ oder „gestern“ ausgehend vom Datum bei „Heute“. Gibt es in diesem Zeitraum keine Besprechungen, sag das.",
     "- Antworte knapp, auf Deutsch. Überschriften und Aufzählungen (Markdown) sind erlaubt."

@@ -486,7 +486,7 @@
     "",
     "Cómo responder:",
     "- Básate solo en las reuniones proporcionadas. No supongas nada que no esté en los registros; escribe «Los registros no lo indican».",
-    "- Cita en el texto las reuniones que uses con el número, la fecha y el título, así: ［M2: 2026/11/02 Reunión semanal］.",
+    "- Cita en el texto las reuniones que uses con el número, la fecha y el título, así: [M2: 2026/11/02 Reunión semanal].",
     "- Al final, añade un encabezado «## Fuentes» y enumera las reuniones que usaste con la forma «- M2: 2026/11/02 (lun) 14:30 Reunión semanal».",
     "- Interpreta fechas como «la semana pasada» o «ayer» a partir de la fecha de «Hoy». Si no hay reuniones en ese periodo, dilo.",
     "- Responde de forma concisa, en español. Puedes usar encabezados y viñetas (Markdown)."

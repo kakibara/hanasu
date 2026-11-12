@@ -1097,10 +1097,11 @@
 ### DEC-MTG-061 型は記録の開始時に会議へ記録し、あとから選び直せる
 - 決めたこと: 記録を始める前に会議ノートの左下で選び、開始時に `meeting.json` に記録する（記録中は変えられない）。あとから「型: 〇〇」で選び直すと、確認のあと議事録を作り直し、失敗したら型も議事録も元のまま。選んだ型は UserDefaults に置き、設定画面には出さない。
 - 理由: 録音機器の選択欄と同じ扱いにする。共有の設定ファイルへの変更を避けた。
+- 「カスタム」の指示の既定の文（`minutes.customDefault`）は設定に保存せず、空なら読むたびに今のプロンプトの言語の既定を使う。Windows では設定のファイルに入れるが、既定のままなら空で保存し、前の版が保存した既定の文（どの言語のものでも）も空として読む。設定を読み込む時点ではプロンプトの言語がまだ決まっておらず、既定を保存すると、どの言語でも日本語の例文が残ったため（2026-11-11 の多言語の見直し）。
 - 決めた場面: PR #13
 - 関係する要件: REQ-MTG-017
-- 対象: Mac
-- 実装の場所: `MinutesTemplateStore`、`MeetingRecorder.regenerateMinutes`
+- 対象: Mac / Windows
+- 実装の場所: `MinutesTemplateStore`、`MeetingRecorder.regenerateMinutes`。Windows の既定の扱いは `windows/Hanasu.Core/Meetings/MinutesTemplate.cs`（`CustomPromptOrDefault`・`CustomPromptToStore`）、`SettingsStore.Normalize`
 
 ### DEC-MTG-062 アクションアイテムは、議事録の末尾の JSON で受け取る
 - 決めたこと: 本文の「## アクションアイテム」には目印 `{{ACTION_ITEMS}}` だけを書かせ、Markdown のあとに `<action_items>` で囲んだ JSON（`owner`・`task`・`due`・`due_note`）を出させる。アプリが目印を一覧に置き換え、`meeting.json` の `actionItems` に保存する。JSON モード（`responseSchema`）は使わない。

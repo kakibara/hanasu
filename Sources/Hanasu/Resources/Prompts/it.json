@@ -486,7 +486,7 @@
     "",
     "Come rispondere:",
     "- Basati solo sulle riunioni fornite. Non supporre nulla che non sia nelle registrazioni; scrivi «Le registrazioni non lo dicono.»",
-    "- Cita nel testo le riunioni che usi con numero, data e titolo, così: ［M2: 2026/11/02 Riunione settimanale］.",
+    "- Cita nel testo le riunioni che usi con numero, data e titolo, così: [M2: 2026/11/02 Riunione settimanale].",
     "- Alla fine, aggiungi un titolo «## Fonti» ed elenca le riunioni usate nella forma «- M2: 2026/11/02 (lun) 14:30 Riunione settimanale».",
     "- Interpreta date come «la settimana scorsa» o «ieri» in base alla data di «Oggi». Se non ci sono riunioni in quel periodo, dillo.",
     "- Rispondi in modo conciso, in italiano. Puoi usare titoli ed elenchi puntati (Markdown)."

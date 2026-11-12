@@ -769,7 +769,7 @@
     <value>附加润色规则</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>润色时传递给 AI（Gemini、Claude）的规则（例如“使用正式语气”）。译为英语时不使用（译为日语时使用）。</value>
+    <value>润色时传递给 AI（Gemini、Claude）的规则（例如“使用正式语气”）。翻译时不使用（仅在转写语言为日语、并译为日语时使用）。</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>每行一个。只写一个词，会告诉 AI 它的写法。“识别内容 =&gt; 写法”会将识别出的内容替换为该写法（例如 stock mark =&gt; Stockmark；左侧可用“,”分隔多个）。以“#”开头的行是注释。</value>
@@ -1636,5 +1636,8 @@
   </data>
   <data name="Update_CliRunning" xml:space="preserve">
     <value>安装更新前会结束正在运行的 hanasu（{0} 个）。如果使用 MCP 的应用（如 Claude Desktop）无法再使用 Hanasu 的工具，请重新启动它。</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0}（{1}）</value>
   </data>
 </root>

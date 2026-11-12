@@ -34,9 +34,10 @@ enum AppStylePreset: String, Codable, CaseIterable, Identifiable {
     }
 
     // 要件: REQ-COM-061
-    /// 話した言語で整えるときのルール（文面は Resources/Prompts/<言語>.json の style.<プリセット>.refine）
-    var refineRules: [String] {
-        self == .none ? [] : Prompts.list("style.\(rawValue).refine")
+    /// 話した言語で整えるときのルール（文面は Resources/Prompts/<言語>.json の style.<プリセット>.refine）。
+    /// 出力が日本語（和訳・整形の「日本語に統一」）なら、language に .ja を渡して日本語の文体のルールにする（DEC-DIC-028）
+    func refineRules(language: PromptLanguage = .current) -> [String] {
+        self == .none ? [] : Prompts.list("style.\(rawValue).refine", language: language)
     }
 
     // 要件: REQ-COM-061
@@ -133,11 +134,14 @@ struct AppStyle: Codable, Identifiable, Equatable {
     /// - appName: 入力先アプリ名を Gemini に伝える設定がオフなら nil（名前を出さない）
     /// - translation: 翻訳の言語（整形なら nil）。和訳は出力が日本語なので、整形と同じ日本語の文体ルールを使う
     /// - hasCommonRules: 共通の追加ルールがプロンプトに入っているか（入っていれば優先順位を書く）
-    func promptSection(appName: String?, translation: TranslationLanguage?, hasCommonRules: Bool) -> String? {
+    /// - japaneseOutput: 整形の出力を日本語に統一するか（REQ-DIC-082。和訳と同じく日本語の文体のルールにする）
+    func promptSection(appName: String?, translation: TranslationLanguage?, hasCommonRules: Bool, japaneseOutput: Bool = false) -> String? {
         guard hasRules else { return nil }
-        // 日本語以外に訳すときは、訳す先の言語向けのルールにする（和訳は整形と同じ日本語のルール）
-        let target = translation.flatMap { $0.outputsJapanese ? nil : $0 }
-        let presetRules = target.map(preset.translationRules(for:)) ?? preset.refineRules
+        // 日本語以外に訳すときは、訳す先の言語向けのルールにする。出力が日本語（和訳・日本語に統一）なら、
+        // プロンプトの言語によらず日本語の文体のルール（ja.json）にする
+        let japanese = translation?.outputsJapanese ?? japaneseOutput
+        let target = japanese ? nil : translation
+        let presetRules = target.map(preset.translationRules(for:)) ?? preset.refineRules(language: japanese ? .ja : .current)
         let custom = rules.trimmingCharacters(in: .whitespacesAndNewlines)
 
         var lines: [String] = []

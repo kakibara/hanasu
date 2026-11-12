@@ -383,7 +383,7 @@ struct MeetingAskView: View {
                     .buttonStyle(.link)
                 }
                 if !answer.keywords.isEmpty {
-                    Text(tr("検索した語: %@", "\(answer.keywords.joined(separator: "、"))")).font(.caption).foregroundStyle(.secondary)
+                    Text(tr("検索した語: %@", "\(answer.keywords.joined(separator: tr("、")))")).font(.caption).foregroundStyle(.secondary)
                 }
             }
         }

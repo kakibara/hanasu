@@ -49,7 +49,8 @@ public partial class MeetingWindow : Window
         var s = host.Settings.Current;
         NextTemplateCombo.SelectedItem = NextTemplateCombo.Items.OfType<ComboBoxItem>()
             .First(i => (MinutesTemplate)i.Tag == (MinutesTemplates.FromRawValue(s.MeetingMinutesTemplate) ?? MinutesTemplate.Auto));
-        CustomPromptBox.Text = s.MeetingCustomMinutesPrompt;
+        // 設計判断: DEC-MTG-061（設定が空なら今の言語の既定を出す）
+        CustomPromptBox.Text = MinutesTemplates.CustomPromptOrDefault(s.MeetingCustomMinutesPrompt);
         DeleteAudioDefaultCheck.IsChecked = !s.KeepMeetingAudio;
         loading = false;
         UpdateNextTemplate();
@@ -1090,6 +1091,7 @@ public partial class MeetingWindow : Window
     private void OnCustomPromptChanged(object sender, RoutedEventArgs e)
     {
         var text = CustomPromptBox.Text;
-        host.Settings.Update(s => s.MeetingCustomMinutesPrompt = text);
+        // 設計判断: DEC-MTG-061（既定のままなら保存しない）
+        host.Settings.Update(s => s.MeetingCustomMinutesPrompt = MinutesTemplates.CustomPromptToStore(text));
     }
 }

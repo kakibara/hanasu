@@ -283,10 +283,10 @@
     <value>{0}（{1}）— {2}</value>
   </data>
   <data name="WhisperModel_Tiny" xml:space="preserve">
-    <value>最小。日文準確度低（用於測試）。</value>
+    <value>最小。準確度低（尤其是日文等語言。用於測試）。</value>
   </data>
   <data name="WhisperModel_Base" xml:space="preserve">
-    <value>較小。日文準確度較低。</value>
+    <value>較小。準確度較低（尤其是日文等語言）。</value>
   </data>
   <data name="WhisperModel_Small" xml:space="preserve">
     <value>適合日常使用。速度與準確度的平衡良好。</value>

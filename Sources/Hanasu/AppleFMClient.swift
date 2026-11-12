@@ -114,11 +114,12 @@ struct AppleFMClient {
     }
 
     // 設計判断: DEC-COM-073
-    /// トークン数の見積もり。漢字・かな・全角は 1 文字 1 トークン、ほかは 3 文字で 1 トークン（多めに見積もる）
+    /// トークン数の見積もり。ASCII は 3 文字で 1 トークン、ほか（漢字・かな・ハングル・キリル文字・アラビア文字・
+    /// デーヴァナーガリー・アクセント付きの文字など）は 1 文字 1 トークン（多めに見積もる。Windows 版の DictionarySuggester と同じ）
     static func estimateTokens(_ text: String) -> Int {
         var wide = 0, narrow = 0
         for scalar in text.unicodeScalars {
-            if scalar.value >= 0x2E80 { wide += 1 } else { narrow += 1 }
+            if scalar.isASCII { narrow += 1 } else { wide += 1 }
         }
         return wide + (narrow + 2) / 3
     }

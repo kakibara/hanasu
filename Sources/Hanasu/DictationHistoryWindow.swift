@@ -315,26 +315,10 @@ struct DictationHistoryView: View {
         return dayFormatter.string(from: day)
     }
 
-    static let dayFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = UILanguage.locale
-        f.dateFormat = "yyyy/MM/dd (E)"
-        return f
-    }()
-
-    static let timeFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = UILanguage.locale
-        f.dateFormat = "HH:mm"
-        return f
-    }()
-
-    static let fullFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = UILanguage.locale
-        f.dateFormat = "yyyy/MM/dd (E) HH:mm:ss"
-        return f
-    }()
+    // 設計判断: DEC-COM-166（日本語は今までの形、ほかの言語はその言語の並び）
+    static let dayFormatter = UILanguage.dateFormatter(japanese: "yyyy/MM/dd (E)", template: "yMdE")
+    static let timeFormatter = UILanguage.dateFormatter(japanese: "HH:mm", template: "jmm")
+    static let fullFormatter = UILanguage.dateFormatter(japanese: "yyyy/MM/dd (E) HH:mm:ss", template: "yMdEjmmss")
 }
 
 // 要件: REQ-DIC-061

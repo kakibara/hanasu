@@ -31,6 +31,38 @@ public static class TranscriptionLocales
         return Identifiers.FirstOrDefault(i => i.Split('-')[0] == code) ?? trimmed;
     }
 
+    // 設計判断: DEC-COM-104
+    /// <summary>
+    /// Windows 標準の音声認識に使う言語を選ぶ。文字起こしの言語（requested）がちょうど入っていれば、それ。
+    /// なければ、Windows の表示の言語（preferred。並びの順）のうち入っていて言語コードが同じもの、
+    /// それもなければ入っている言語のうち言語コードが同じもの（地域の違うもの。es-ES に寄せた es-MX の人など）。
+    /// 中国語は簡体字（zh-CN など）と繁体字（zh-TW・zh-HK など）をそろえる。どれもなければ null
+    /// </summary>
+    public static string? SpeechRecognitionLanguage(string requested, IEnumerable<string> preferred, IReadOnlyList<string> installed)
+    {
+        static bool Same(string a, string b) => string.Equals(a.Replace('_', '-'), b.Replace('_', '-'), StringComparison.OrdinalIgnoreCase);
+        if (installed.FirstOrDefault(i => Same(i, requested)) is { } exact) return exact;
+        var key = LanguageKey(requested);
+        if (key.Length == 0) return null;
+        foreach (var p in preferred)
+        {
+            if (LanguageKey(p) != key) continue;
+            if (installed.FirstOrDefault(i => Same(i, p)) is { } hit) return hit;
+        }
+        return installed.FirstOrDefault(i => LanguageKey(i) == key);
+    }
+
+    /// <summary>言語コード（小文字）。中国語は zh-hans か zh-hant</summary>
+    private static string LanguageKey(string? identifier)
+    {
+        var parts = (identifier ?? "").Trim().Replace('_', '-').Split('-', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 0) return "";
+        var code = parts[0].ToLowerInvariant();
+        if (code != "zh") return code;
+        var subtags = parts.Skip(1).Select(p => p.ToUpperInvariant()).ToList();
+        return subtags.Contains("HANT") || subtags.Any(p => p is "TW" or "HK" or "MO") ? "zh-hant" : "zh-hans";
+    }
+
     /// <summary>
     /// 設定がまだないときの文字起こしの言語。Windows の表示の言語（UiLanguage.Apply で置き換える前のもの）を一覧に寄せる。
     /// 表示の言語が分からなければ en-US
