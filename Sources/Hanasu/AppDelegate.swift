@@ -52,13 +52,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let menu = NSMenu()
         menu.delegate = self
         statusItem.menu = menu
-        applyPresence(AppPresenceSettings.shared.presence, isLaunching: true)
+        applyPresence(AppPresenceSettings.shared.presence)
         AppPresenceSettings.shared.$presence
             .dropFirst()
             .removeDuplicates()
             // @Published は値が変わる前に流れるので、変わったあと（updateIcon が新しい値を読める）に当てる
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] presence in self?.applyPresence(presence, isLaunching: false) }
+            .sink { [weak self] presence in self?.applyPresence(presence) }
             .store(in: &cancellables)
         updateIcon(for: .idle)
 
@@ -124,7 +124,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             return
         }
         // 設計判断: DEC-COM-009
-        // 起動では設定画面を開かない（Dock・Finder で開き直すと applicationShouldHandleReopen で出す）
+        // 起動では設定画面を開かない（Dock・Finder で開き直しても出さない。applicationShouldHandleReopen）
         // 自動入力（⌘V の送信）にはアクセシビリティ権限が要る
         _ = Permissions.isAccessibilityTrusted(prompt: true)
         // 要件: REQ-REL-010
@@ -137,20 +137,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     // 要件: REQ-COM-040
     // 設計判断: DEC-COM-080
-    /// メニューバーのアイコンと Dock のアイコンを、設定どおりに出し入れする
-    private func applyPresence(_ presence: AppPresence, isLaunching: Bool) {
+    /// メニューバーのアイコンを、設定どおりに出し入れする（Dock にはいつも出す。main.swift）
+    private func applyPresence(_ presence: AppPresence) {
         statusItem.isVisible = presence.showsMenuBar
-        if NSApp.activationPolicy() != presence.activationPolicy {
-            NSApp.setActivationPolicy(presence.activationPolicy)
-            // .accessory に変えた直後はアプリが後ろに回り、設定画面が他のアプリの裏に隠れる。
-            // .regular に変えた直後は、前に出し直さないとメニューバーに Hanasu のメニューが出ないことがある
-            if !isLaunching {
-                DispatchQueue.main.async { [weak self] in
-                    NSApp.activate()
-                    self?.settingsWindow?.makeKeyAndOrderFront(nil)
-                }
-            }
-        }
         updateIcon(for: controller.state)
     }
 
@@ -260,16 +249,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     // MARK: - Dock
 
+    // 要件: REQ-COM-040
     // 設計判断: DEC-COM-009
-    /// Dock や Finder でアイコンをクリックしたら、設定画面を前に出す
+    /// Dock のアイコンを押したときや、Finder・Launchpad・Spotlight で開き直したとき。
+    /// 設定画面は出さず、AppKit の既定の動き（アプリを前に出す）に任せる。
+    /// 設定画面へは、メニューバーのメニュー・Dock の右クリックのメニュー・アプリのメニューから行く
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         // 設計判断: DEC-COM-093
-        // オンボーディングの途中なら、設定画面ではなくオンボーディングを前に出す
+        // オンボーディングの途中なら、オンボーディングを前に出す
         if onboarding.isVisible {
             onboarding.show()
-            return true
         }
-        openSettings()
         return true
     }
 

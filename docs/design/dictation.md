@@ -4,7 +4,7 @@ Typeless のような「話した内容を、自然な文章に整えて今カ�
 音声認識は macOS 標準の音声入力エンジン（設定で Whisper・Gemini にも切り替えられる。4.10）、整形は Gemini API で行う。
 
 - 対象 OS: macOS 26 (Tahoe) 以降 / Apple Silicon
-- 形態: 常駐アプリ。アイコンはメニューバーと Dock の両方（既定）か、どちらか一方に出す（REQ-COM-040）
+- 形態: 常駐アプリ。アイコンは Dock にいつも出し、メニューバーにも出すか（両方が既定）を選べる（REQ-COM-040）。Dock のアイコンを押しても設定画面は開かない（DEC-COM-009）
 - 作成日: 2026-11-02
 
 > **この文書は「今こう作られている」の説明（as-is）。** コードと食い違ったら、コードが正しい（気づいたら、この文書を直す）。「こうあるべき」（要件と設計判断）は spec に書く。プロンプトの全文・既定値の一覧・CLI のオプションの一覧のようなコードの写しは置かず、ファイルと型・関数の名前で誘導する。
@@ -160,7 +160,7 @@ Typeless のような「話した内容を、自然な文章に整えて今カ�
 - Xcode プロジェクトは使わず **Swift Package Manager** でビルドし、スクリプトで `.app` バンドルに組み立てる。
   - この Mac には Command Line Tools しかなく Xcode がないため。
   - マイクや音声認識の権限ダイアログには `Info.plist` の利用目的文字列が要るので、`.app` として起動する必要がある。
-- `Info.plist` に `LSUIElement` は置かない。Dock に出すかは `AppPresenceSettings`（`AppPresence.swift`）の設定で、起動前に `main.swift` が活性化ポリシー（`.regular` / `.accessory`）を決め、設定を変えたら `AppDelegate.applyPresence` がその場でポリシーとメニューバーのアイコンの `isVisible` を当て直す。メニューバーに出さないときは、Dock のメニューを `AppDelegate.populateMenu` で同じ作りにし、録音中は Dock のバッジで示す（DEC-COM-080・081）
+- `Info.plist` に `LSUIElement` は置かない。活性化ポリシーは、起動前に `main.swift` がいつも `.regular` にする（Dock にいつも出す）。メニューバーにも出すかは `AppPresenceSettings`（`AppPresence.swift`。保存値の読み替えは `AppPresence.resolve`）の設定で、`AppDelegate.applyPresence` がメニューバーのアイコンの `isVisible` をその場で当て直す。メニューバーに出さないときは、Dock のメニューを `AppDelegate.populateMenu` で同じ作りにし、録音中は Dock のバッジで示す（DEC-COM-080・081）
 - 署名: 環境変数 `SIGN_IDENTITY` か、キーチェーン上の開発用証明書を使う。なければアドホック署名。
   - アドホック署名だとビルドごとに署名が変わり、アクセシビリティ権限を毎回付け直す必要がある（後述）。
 - 外部依存ライブラリ: FluidAudio（会議の話者分離。[design/meeting.md](meeting.md)）、WhisperKit（文字起こしのエンジン「Whisper」。4.10）
@@ -546,7 +546,7 @@ Mac 標準（SpeechAnalyzer）は速く途中経過も出るが、専門用語�
 - 初めて起動したとき、オンボーディングのウインドウ（`OnboardingWindowController`・`OnboardingView`。`Onboarding.swift`）を出す。起動時のアクセシビリティの許可のダイアログも出さず、最後のページのボタンで求める（DEC-COM-093）。
 - 出すかどうかは `OnboardingState.shouldShowOnLaunch` が、`applicationDidFinishLaunching` の最初（メニューバーのアイコンを作る前）に決める。UserDefaults の `onboardingCompletedVersion` がなく、Hanasu の設定もまだ保存されていないときだけ出す。閉じたら（「はじめる」でも途中でも）`onboardingCompletedVersion` を書く（DEC-COM-090）。
 - ページは `OnboardingPage` の 7 つ。状態（今のページ・AI のページで選んだ AI）は `OnboardingModel` が持つ。AI のページ（`OnboardingAIPage`）のカードは `OnboardingAIChoice`（おすすめの Gemma 4 E4B・Gemini・Claude・Apple）。押すと `OnboardingModel.chooseDefaultAI` が音声入力と会議の両方の AI を書き換え（Gemma なら両方のローカルのモデルも Gemma 4 E4B に）、その AI の準備の欄を出す。Gemma は `OnboardingGemmaDownload`（`LocalLLMStore` のダウンロードをボタンで始め、進み具合と中止を出す）、ほかは設定の「AI」の部品（`GeminiAuthSection`・`ClaudeKeySection`・`AppleFMChoice`）。Gemma をまだダウンロードしていなければ「次へ」が「ダウンロードして次へ」になり、ダウンロードを始めて待たずに進む（`OnboardingModel.next`。DEC-COM-094）。最後のページにも、終わっていなければ進み具合を出す。「設定の Tips」のページ（`OnboardingTipsPage`）も `AIChoiceRow` を使う（REQ-COM-050・051、DEC-COM-092）。
-- メニューバーのメニューとアプリのメニューの「Hanasu の使い方…」で、最初のページから開き直せる（DEC-COM-091）。オンボーディングを出している間に Finder から開き直すと、設定画面ではなくオンボーディングを前に出す。
+- メニューバーのメニューとアプリのメニューの「Hanasu の使い方…」で、最初のページから開き直せる（DEC-COM-091）。オンボーディングを出している間に Dock や Finder から開き直すと、オンボーディングを前に出す（それ以外の開き直しでは何も開かない。`AppDelegate.applicationShouldHandleReopen`、DEC-COM-009）。
 
 ### 5.3 設定（UserDefaults、API キーのみキーチェーン）
 

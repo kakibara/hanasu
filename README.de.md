@@ -178,7 +178,7 @@ Auf dem Mac öffnet sich beim ersten Start eine kurze Einführung. Dort wählst 
 2. **Diktieren.** Setze den Cursor an die gewünschte Stelle, drücke das Tastenkürzel, sprich und drücke das Tastenkürzel erneut.
 3. **Besprechung aufnehmen.** Nutze das Menü in der Menüleiste (Mac) bzw. im Infobereich (Windows) oder das Tastenkürzel. Kopfhörer helfen, die beiden Seiten sauber zu trennen.
 
-Auf dem Mac kannst du das Hanasu-Symbol in der Menüleiste, im Dock oder an beiden Stellen anzeigen (Einstellungen → Allgemein).
+Auf dem Mac ist das Hanasu-Symbol immer im Dock; zusätzlich kannst du es in der Menüleiste anzeigen (Einstellungen → Allgemein). Ein Klick auf das Dock-Symbol öffnet nicht die Einstellungen – öffne sie über das Menüleistensymbol oder das Rechtsklickmenü des Dock-Symbols.
 
 ### Standard-Tastenkürzel
 

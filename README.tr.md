@@ -178,7 +178,7 @@ Mac'te ilk açılışta kısa bir rehberli tur başlar. Tur, yapay zekânızı s
 2. **Dikte edin.** İmleci metnin gelmesini istediğiniz yere koyun, kısayola basın, konuşun ve kısayola tekrar basın.
 3. **Bir toplantı kaydedin.** Menü çubuğu (Mac) veya sistem tepsisi (Windows) menüsünü ya da kısayolu kullanın. Kulaklık kullanmak iki tarafın birbirinden ayrı tutulmasına yardımcı olur.
 
-Mac'te Hanasu simgesini menü çubuğunda, Dock'ta ya da her ikisinde gösterebilirsiniz (Ayarlar → Genel).
+Mac'te Hanasu simgesi her zaman Dock'tadır; isterseniz menü çubuğunda da gösterebilirsiniz (Ayarlar → Genel). Dock simgesine tıklamak ayarları açmaz; ayarları menü çubuğu simgesinden ya da Dock simgesinin sağ tık menüsünden açın.
 
 ### Varsayılan kısayollar
 

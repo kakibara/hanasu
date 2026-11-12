@@ -176,7 +176,7 @@ On Mac, the first launch opens a short guided tour. It lets you pick your AI (Ge
 2. **Dictate.** Put the cursor where you want the text, press the shortcut, speak, and press the shortcut again.
 3. **Record a meeting.** Use the menu-bar (Mac) or tray (Windows) menu, or the shortcut. Headphones help keep the two sides apart.
 
-On Mac, you can show the Hanasu icon in the menu bar, in the Dock, or in both (Settings → General).
+On Mac, the Hanasu icon is always in the Dock; you can also show it in the menu bar (Settings → General). Clicking the Dock icon doesn't open Settings — open them from the menu bar icon or the Dock icon's right-click menu.
 
 ### Default shortcuts
 

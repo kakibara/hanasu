@@ -178,7 +178,7 @@ Di Mac, saat pertama kali dibuka akan muncul tur panduan singkat. Tur ini memung
 2. **Dikte.** Letakkan kursor di tempat Anda menginginkan teks, tekan pintasan, bicara, lalu tekan pintasan lagi.
 3. **Rekam rapat.** Gunakan menu di bilah menu (Mac) atau baki sistem (Windows), atau pintasan. Headphone membantu memisahkan suara kedua pihak.
 
-Di Mac, Anda dapat menampilkan ikon Hanasu di bilah menu, di Dock, atau di keduanya (Pengaturan → Umum).
+Di Mac, ikon Hanasu selalu ada di Dock, dan Anda juga dapat menampilkannya di bilah menu (Pengaturan → Umum). Mengeklik ikon Dock tidak membuka pengaturan — buka dari ikon bilah menu atau menu klik kanan ikon Dock.
 
 ### Pintasan bawaan
 

@@ -476,7 +476,7 @@ MainActor.assumeIsolated { MeetingDictionaryCLI.runIfRequested() }
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 // 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）
 SpeakerNameInferenceCLI.runIfRequested()
-// アイコンの表示の設定欄の確認（AppPresence.swift）
+// アイコンの表示の設定欄と、保存値の読み替えの確認（--render-presence-settings / --presence-migration。AppPresence.swift）
 MainActor.assumeIsolated { AppPresenceCLI.runIfRequested() }
 // オンボーディングの各ページの確認（--render-onboarding <出力フォルダ>）。Onboarding.swift
 MainActor.assumeIsolated { OnboardingCLI.runIfRequested() }
@@ -487,7 +487,8 @@ MainActor.assumeIsolated {
     app.delegate = delegate
     // 要件: REQ-COM-040
     // 設計判断: DEC-COM-008, DEC-COM-080
-    // Dock に出すかは起動前に決める（.regular で始めてから変えると、Dock のアイコンが一瞬出る）
-    app.setActivationPolicy(AppPresenceSettings.shared.presence.activationPolicy)
+    // Dock にはいつも出す（メニューバーにも出すかは AppDelegate.applyPresence で当てる）。
+    // ここで AppPresenceSettings に触らない（オンボーディングの判定より先に設定を書かないように。DEC-COM-090）
+    app.setActivationPolicy(.regular)
     app.run()
 }

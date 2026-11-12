@@ -178,7 +178,7 @@ Na Macu przy pierwszym uruchomieniu otwiera się krótki przewodnik. Pozwala wyb
 2. **Dyktuj.** Ustaw kursor tam, gdzie ma się pojawić tekst, naciśnij skrót, mów i naciśnij skrót ponownie.
 3. **Nagraj spotkanie.** Użyj menu na pasku menu (Mac) lub w zasobniku systemowym (Windows) albo skrótu. Słuchawki pomagają rozdzielić obie strony.
 
-Na Macu ikonę Hanasu możesz wyświetlać na pasku menu, w Docku lub w obu miejscach (Ustawienia → Ogólne).
+Na Macu ikona Hanasu jest zawsze w Docku, a dodatkowo możesz ją pokazać na pasku menu (Ustawienia → Ogólne). Kliknięcie ikony w Docku nie otwiera ustawień — otwórz je z ikony na pasku menu albo z menu prawego przycisku ikony w Docku.
 
 ### Domyślne skróty
 

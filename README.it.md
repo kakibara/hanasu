@@ -178,7 +178,7 @@ Su Mac, il primo avvio apre un breve tour guidato. Ti permette di scegliere l'IA
 2. **Detta.** Metti il cursore dove vuoi il testo, premi la scorciatoia, parla e premi di nuovo la scorciatoia.
 3. **Registra una riunione.** Usa il menu nella barra dei menu (Mac) o nell'area di notifica (Windows), oppure la scorciatoia. Le cuffie aiutano a tenere separate le due parti.
 
-Su Mac puoi mostrare l'icona di Hanasu nella barra dei menu, nel Dock o in entrambi (Impostazioni → Generali).
+Su Mac l'icona di Hanasu è sempre nel Dock e puoi mostrarla anche nella barra dei menu (Impostazioni → Generali). Fare clic sull'icona del Dock non apre le impostazioni: aprile dall'icona nella barra dei menu o dal menu del clic destro sull'icona del Dock.
 
 ### Scorciatoie predefinite
 
