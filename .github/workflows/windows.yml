@@ -161,6 +161,8 @@ jobs:
             [IO.File]::WriteAllText((Join-Path $folder "meeting.json"), $json)
           }
           $env:HANASU_MEETINGS_DIR = $dir
+          # 上限は一覧と表示が 2 秒、検索が 3 秒（全部の発言を読んで調べる。DEC-MTG-123。CI の機械では起動だけで 0.9 秒ほどかかる）
+          $limits = @{ "list" = 2; "show" = 2; "search" = 3 }
           foreach ($command in @(@("meetings", "list", "--json"), @("meetings", "show", "latest", "--json"), @("meetings", "search", "予算", "--json"))) {
             $best = [double]::MaxValue
             for ($run = 0; $run -lt 3; $run++) {
@@ -168,7 +170,8 @@ jobs:
               $best = [Math]::Min($best, $elapsed)
             }
             Write-Output ("hanasu {0}: {1:N2} s" -f ($command -join " "), $best)
-            if ($best -gt 2) { throw "hanasu $($command -join ' ') が 2 秒を超えました: $best" }
+            $limit = $limits[$command[1]]
+            if ($best -gt $limit) { throw "hanasu $($command -join ' ') が $limit 秒を超えました: $best" }
           }
 
       - name: Zip
