@@ -31,7 +31,7 @@ func cliRefine(_ raw: String, args: [String]) async throws {
         outputLanguage: settings.refineOutputLanguage)
     if args.contains("--show-prompt") {
         var shown = request
-        if let translation, !translation.outputsJapanese { shown.extraInstructions = "" }  // translationPrompt と同じく、和訳のほかの翻訳では共通の追加ルールを外す
+        if let translation, !translation.keepsExtraRules { shown.extraInstructions = "" }  // translationPrompt と同じく、和訳（プロンプトの言語が日本語）のほかの翻訳では共通の追加ルールを外す
         print(GeminiClient.userPrompt(for: shown, translation: translation))
     }
     // 確かめ方: REQ-COM-020

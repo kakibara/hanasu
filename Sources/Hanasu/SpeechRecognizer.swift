@@ -185,7 +185,7 @@ final class SpeechRecognizer {
             appLog.error("finalize error: \(String(describing: error), privacy: .public)")
         }
         await resultsTask?.value
-        let text = (finalizedText + volatileText).trimmingCharacters(in: .whitespacesAndNewlines)
+        let text = TextSpacing.join(finalizedText, volatileText).trimmingCharacters(in: .whitespacesAndNewlines)
         reset()
         return text
     }
@@ -240,7 +240,7 @@ final class SpeechRecognizer {
         continuation.finish()
         try await analyzer.finalizeAndFinishThroughEndOfInput()
         await resultsTask.value
-        return (finalizedText + volatileText).trimmingCharacters(in: .whitespacesAndNewlines)
+        return TextSpacing.join(finalizedText, volatileText).trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     // MARK: - Whisper / Gemini（録音を止めてからまとめて文字起こしする）
@@ -375,12 +375,13 @@ final class SpeechRecognizer {
 
     private func receive(text: String, isFinal: Bool) {
         if isFinal {
-            finalizedText += text
+            // 設計判断: DEC-COM-174（確定した区切りの先頭に空白がなくても、英語などで語がくっつかないようにする）
+            finalizedText = TextSpacing.join(finalizedText, text)
             volatileText = ""
         } else {
             volatileText = text
         }
-        onPartialText?(finalizedText + volatileText)
+        onPartialText?(TextSpacing.join(finalizedText, volatileText))
     }
 
     /// 選んだエンジンの SpeechModule と、(テキスト, 確定か) の結果ストリームを作る。

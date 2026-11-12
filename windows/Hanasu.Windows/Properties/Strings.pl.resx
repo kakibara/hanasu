@@ -790,7 +790,7 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
     <value>Dodatkowe reguły dopracowania</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Reguły przekazywane AI (Gemini, Claude) podczas dopracowania (np. „używaj formalnego tonu”). Nie są używane przy tłumaczeniu na angielski (są używane przy tłumaczeniu na japoński).</value>
+    <value>Reguły przekazywane AI (Gemini, Claude) podczas dopracowania (np. „używaj formalnego tonu”). Nie są używane przy tłumaczeniu (z wyjątkiem tłumaczenia na japoński, gdy językiem transkrypcji jest japoński).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Jedna na wiersz. Samo słowo informuje AI, jak je zapisywać. „usłyszane =&gt; pisownia” zastępuje rozpoznany tekst podaną pisownią (np. stock mark =&gt; Stockmark; kilka wariantów po lewej oddziel znakiem „,”). Wiersze zaczynające się od „#” to komentarze.</value>
@@ -1475,5 +1475,8 @@ Otworzyć stronę wydania w przeglądarce?</value>
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>Nie udało się całkowicie usunąć nagrań spotkań (liczba: {0}). Pozostałe pliki zostały zachowane.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

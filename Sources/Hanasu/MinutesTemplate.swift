@@ -136,12 +136,8 @@ struct ActionItem: Codable, Hashable, Identifiable {
         return f
     }()
 
-    static let shortFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = UILanguage.locale
-        f.dateFormat = "M/d (E)"
-        return f
-    }()
+    // 設計判断: DEC-COM-166（日本語は「11/2 (月)」、ほかの言語はその言語の月と日の並び。日.月の国で取り違えない）
+    static let shortFormatter = UILanguage.dateFormatter(japanese: "M/d (E)", template: "MdE")
 
     // 要件: REQ-COM-061
     /// 議事録の言語はそのときのプロンプトの言語なので、読むときはすべての言語の言い方を受け付ける。

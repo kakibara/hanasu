@@ -86,6 +86,26 @@ public static class MinutesTemplates
     // 要件: REQ-COM-061
     /// <summary>「カスタム」の初期の指示（minutes.customDefault。Mac 版 MinutesTemplateStore.defaultCustomPrompt と同じキー）</summary>
     public static string DefaultCustomPrompt => Prompts.Text("minutes.customDefault");
+
+    // 要件: REQ-COM-061
+    // 設計判断: DEC-MTG-061
+    /// <summary>
+    /// 設定のカスタムの指示（AppSettings.MeetingCustomMinutesPrompt）を読む。空か既定の文なら、今のプロンプトの言語の既定。
+    /// 既定は設定に保存しない（設定を読み込む時点ではプロンプトの言語がまだ決まっていないので、保存するとどの言語でも日本語の例文になる）。
+    /// 前の版が保存した既定の文（どの言語のものでも）も既定として扱う。Mac 版の MinutesTemplateStore.customPrompt と同じ考え方
+    /// </summary>
+    public static string CustomPromptOrDefault(string? stored) => IsDefaultCustomPrompt(stored) ? DefaultCustomPrompt : stored!;
+
+    /// <summary>設定に書く値。既定のまま（空・どれかの言語の既定の文）なら空にする</summary>
+    public static string CustomPromptToStore(string? text) => IsDefaultCustomPrompt(text) ? "" : text!;
+
+    /// <summary>空か、どれかの言語の既定の文（minutes.customDefault）と同じか（改行の書き方と前後の空白は区別しない）</summary>
+    public static bool IsDefaultCustomPrompt(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return true;
+        var normalized = text.ReplaceLineEndings("\n").Trim();
+        return Prompts.AllTexts("minutes.customDefault").Any(d => d.ReplaceLineEndings("\n").Trim() == normalized);
+    }
 }
 
 /// <summary>議事録の作成結果</summary>

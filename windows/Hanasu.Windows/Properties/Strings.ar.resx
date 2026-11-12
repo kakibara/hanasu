@@ -790,7 +790,7 @@
     <value>قواعد تحسين إضافية</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>قواعد تُمرَّر إلى AI (Gemini، Claude) عند التحسين (على سبيل المثال، "استخدم أسلوبًا رسميًا"). لا تُستخدم عند الترجمة إلى الإنجليزية (تُستخدم عند الترجمة إلى اليابانية).</value>
+    <value>قواعد تُمرَّر إلى AI (Gemini، Claude) عند التحسين (على سبيل المثال، "استخدم أسلوبًا رسميًا"). لا تُستخدم عند الترجمة (إلا عند الترجمة إلى اليابانية حين تكون لغة النسخ هي اليابانية).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>عنصر واحد في كل سطر. الكلمة بمفردها تخبر AI بكيفية تهجئتها. "المسموع =&gt; التهجئة" يستبدل ما تم التعرف عليه بالتهجئة (على سبيل المثال، stock mark =&gt; Stockmark؛ افصل بين عدة عناصر على اليسار باستخدام ","). الأسطر التي تبدأ بـ "#" هي تعليقات.</value>
@@ -1475,5 +1475,8 @@
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>تعذر حذف تسجيلات بعض الاجتماعات بالكامل (العدد: {0}). تم الاحتفاظ بالملفات المتبقية.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

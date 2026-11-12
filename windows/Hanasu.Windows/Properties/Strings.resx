@@ -1047,7 +1047,7 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <comment>Settings: section heading</comment>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Rules passed to the AI (Gemini, Claude) when refining (for example, "use a formal tone"). They aren't used when translating into English (they are used when translating into Japanese).</value>
+    <value>Rules passed to the AI (Gemini, Claude) when refining (for example, "use a formal tone"). They aren't used when translating (except when translating into Japanese while the transcription language is Japanese).</value>
     <comment>Settings: note</comment>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
@@ -1956,5 +1956,9 @@ Open the release page in your browser?</value>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>The recordings of {0} meetings couldn't be fully deleted. The remaining files are kept.</value>
     <comment>Error. {0} = number of meetings</comment>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
+    <comment>Settings: local AI model row. {0} = license note, {1} = license URL</comment>
   </data>
 </root>

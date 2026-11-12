@@ -1,7 +1,9 @@
-using System.Text;
+using Hanasu.Core.Settings;
+using Hanasu.Core.Text;
 using Hanasu.Core.Transcription;
 using Windows.Globalization;
 using Windows.Media.SpeechRecognition;
+using Windows.System.UserProfile;
 
 namespace Hanasu.Windows.Services;
 
@@ -20,7 +22,7 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
     private const uint PrivacyPolicyNotAccepted = 0x80045509;
 
     private readonly object gate = new();
-    private readonly StringBuilder finals = new();
+    private string finals = "";
     private SpeechRecognizer? recognizer;
     private TaskCompletionSource<SpeechRecognitionResultStatus>? completed;
     private string hypothesis = "";
@@ -32,13 +34,18 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
 
     public async Task StartAsync(TranscriptionContext context, CancellationToken cancellationToken = default)
     {
-        var language = new Language(string.IsNullOrEmpty(context.LocaleIdentifier) ? "ja-JP" : context.LocaleIdentifier);
-        if (!SpeechRecognizer.SupportedTopicLanguages.Any(l => string.Equals(l.LanguageTag, language.LanguageTag, StringComparison.OrdinalIgnoreCase)))
+        var requested = new Language(string.IsNullOrEmpty(context.LocaleIdentifier) ? "ja-JP" : context.LocaleIdentifier);
+        // 設計判断: DEC-COM-104
+        // 文字起こしの言語がちょうど入っていなければ、表示の言語・入っている言語のうち言語コードが同じもの（地域の違うもの）を使う
+        var installed = SpeechRecognizer.SupportedTopicLanguages.Select(l => l.LanguageTag).ToList();
+        var preferred = GlobalizationPreferences.Languages.Append(SpeechRecognizer.SystemSpeechLanguage?.LanguageTag ?? "");
+        if (TranscriptionLocales.SpeechRecognitionLanguage(requested.LanguageTag, preferred, installed) is not { } tag)
         {
             throw new TranscriptionException(
-                string.Format(Strings.Speech_LanguageNotInstalled, language.DisplayName),
+                string.Format(Strings.Speech_LanguageNotInstalled, requested.DisplayName),
                 "ms-settings:regionlanguage");
         }
+        var language = new Language(tag);
 
         try
         {
@@ -112,7 +119,7 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
 
     private string Text()
     {
-        lock (gate) return finals.ToString().Trim();
+        lock (gate) return finals.Trim();
     }
 
     private void OnHypothesis(SpeechRecognizer sender, SpeechRecognitionHypothesisGeneratedEventArgs args)
@@ -121,7 +128,8 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
         lock (gate)
         {
             hypothesis = args.Hypothesis.Text;
-            text = finals + hypothesis;
+            // 設計判断: DEC-COM-174（確定した区切りと途中経過のあいだも、英語などでは語がくっつかないようにする）
+            text = TextSpacing.Join(finals, hypothesis);
         }
         PartialTextChanged?.Invoke(this, text);
     }
@@ -132,9 +140,10 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
         string text;
         lock (gate)
         {
-            finals.Append(args.Result.Text);
+            // 設計判断: DEC-COM-174（確定した区切りの先頭に空白がなくても、英語などで語がくっつかないようにする）
+            finals = TextSpacing.Join(finals, args.Result.Text);
             hypothesis = "";
-            text = finals.ToString();
+            text = finals;
         }
         PartialTextChanged?.Invoke(this, text);
     }

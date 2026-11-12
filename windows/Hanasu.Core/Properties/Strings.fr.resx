@@ -283,10 +283,10 @@
     <value>{0} ({1}) — {2}</value>
   </data>
   <data name="WhisperModel_Tiny" xml:space="preserve">
-    <value>Le plus petit. Faible précision en japonais (pour les tests).</value>
+    <value>Le plus petit. Faible précision, surtout pour des langues comme le japonais (pour les tests).</value>
   </data>
   <data name="WhisperModel_Base" xml:space="preserve">
-    <value>Petit. Précision moindre en japonais.</value>
+    <value>Petit. Précision moindre, surtout pour des langues comme le japonais.</value>
   </data>
   <data name="WhisperModel_Small" xml:space="preserve">
     <value>Idéal au quotidien. Bon équilibre entre vitesse et précision.</value>

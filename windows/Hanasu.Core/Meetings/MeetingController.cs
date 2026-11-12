@@ -170,7 +170,9 @@ public sealed class MeetingController
 
             meeting = store.NewMeeting(services.Now());
             meeting.MinutesTemplateId = settings.MeetingMinutesTemplate;
-            meeting.CustomMinutesPrompt = settings.MeetingMinutesTemplate == MinutesTemplate.Custom.RawValue() ? settings.MeetingCustomMinutesPrompt : null;
+            // 設計判断: DEC-MTG-061（設定が空なら今の言語の既定）
+            meeting.CustomMinutesPrompt = settings.MeetingMinutesTemplate == MinutesTemplate.Custom.RawValue()
+                ? MinutesTemplates.CustomPromptOrDefault(settings.MeetingCustomMinutesPrompt) : null;
             // 要件: REQ-MTG-010
             // 設計判断: DEC-MTG-139（どの入口から始めても、その時点の既定をこの会議の値にする）
             MeetingAudioPolicy.Apply(meeting, settings);
@@ -639,7 +641,7 @@ public sealed class MeetingController
         if (template is { } t)
         {
             draft.MinutesTemplateId = t.RawValue();
-            draft.CustomMinutesPrompt = t == MinutesTemplate.Custom ? customPrompt ?? settings.MeetingCustomMinutesPrompt : null;
+            draft.CustomMinutesPrompt = t == MinutesTemplate.Custom ? customPrompt ?? MinutesTemplates.CustomPromptOrDefault(settings.MeetingCustomMinutesPrompt) : null;
         }
         var result = await MeetingProcessor.MakeMinutesAsync(draft, client, settings.MinutesModel, cancellationToken).ConfigureAwait(false);
         meeting.MinutesTemplateId = draft.MinutesTemplateId;

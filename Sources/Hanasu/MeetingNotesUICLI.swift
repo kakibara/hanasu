@@ -446,6 +446,17 @@ enum MeetingNotesUICLI {
         - 話者1: 田中さん
         """
         let doc = MinutesDocument(markdown: minutes, hidesActionSection: true)
+        // 設計判断: DEC-COM-174（続く発言をまとめるとき、空白で語を区切る言語でだけ空白を入れる）
+        func joined(_ a: String, _ b: String) -> String {
+            Meeting.joinUtterances(Utterance(speaker: "me", start: 0, end: 1, text: a), Utterance(speaker: "me", start: 1, end: 2, text: b)).text
+        }
+        c.check(joined("Sounds good.", "Let's move on.") == "Sounds good. Let's move on.", "英語の発言は空白を入れてつなぐ")
+        c.check(joined("좋아요.", "다음으로 넘어가죠.") == "좋아요. 다음으로 넘어가죠.", "韓国語の発言も空白を入れてつなぐ")
+        c.check(joined("了解です。", "次に進みます。") == "了解です。次に進みます。" && joined("Hanasu", "を使う") == "Hanasuを使う",
+                "日本語の発言は今までどおり空白なしでつなぐ")
+        c.check(joined("好的。", "我们继续。") == "好的。我们继续。", "中国語の発言も空白なしでつなぐ")
+        c.check(TextSpacing.join("Hello", ", world") == "Hello, world" && TextSpacing.join("Hello ", "world") == "Hello world",
+                "句読点の前と、すでに空白があるところには入れない")
         c.check(doc.titleLine == 0, "先頭のタイトルは文書に出さない")
         c.check(doc.summary.first?.text == "## 概要" && doc.summary.count == 2, "最初の節を要約にする")
         c.check(!doc.body.contains { $0.text.contains("アクションアイテム") || $0.text.contains("見積を送る") },

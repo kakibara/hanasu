@@ -121,8 +121,9 @@ enum ScreenSnapshotLayout {
     }
 
     private static let termPatterns: [NSRegularExpression] = [
-        // 英数字を含む語（J3・v2.1・Kubernetes・C++ など）。数字だけのものは下で除く
-        #"[A-Za-z0-9][A-Za-z0-9._+#/\-]*[A-Za-z0-9+#]"#,
+        // 空白で語を区切る文字の語（J3・v2.1・Kubernetes・C++・Müller・Иванов・김예린 など。アクセント付きの文字・
+        // キリル文字・ハングル・アラビア文字・デーヴァナーガリーを含む）。漢字・かなは下の 2 つで取る。数字だけのものは下で除く
+        #"[[\p{L}\p{N}]--[\p{Han}\p{Hiragana}\p{Katakana}ー々〆ヶ・]][[\p{L}\p{M}\p{N}._+#/\-]--[\p{Han}\p{Hiragana}\p{Katakana}ー々〆ヶ・]]*[[\p{L}\p{M}\p{N}+#]--[\p{Han}\p{Hiragana}\p{Katakana}ー々〆ヶ・]]"#,  // skip-tr
         // カタカナの語（2 文字以上）
         #"[ァ-ヺ][ァ-ヺー・]+"#,  // skip-tr
         // 漢字の並び（2 文字以上）
@@ -326,10 +327,24 @@ enum ScreenSnapshotReader {
         }
     }
 
-    /// OCR の言語。文字起こしの言語と英語
-    static func languages(localeIdentifier: String) -> [String] {
-        var result = [localeIdentifier.replacingOccurrences(of: "_", with: "-")]
-        if !result[0].lowercased().hasPrefix("en") { result.append("en-US") }
+    /// OCR の言語。文字起こしの言語と英語。Vision が読める言語（`supported`）の中から選ぶ
+    /// （Vision の中国語は zh-Hans・zh-Hant なので、zh-CN・zh-TW を書くと合わない。読めない言語を渡すと読み取りがまるごと失敗する）。
+    /// 文字起こしの言語を読めなければ英語だけ
+    static func languages(localeIdentifier: String, supported: [Locale.Language] = RecognizeTextRequest().supportedRecognitionLanguages) -> [String] {
+        func pick(_ identifier: String) -> String? {
+            let wanted = Locale.Language(identifier: identifier.replacingOccurrences(of: "_", with: "-"))
+            guard let code = wanted.languageCode else { return nil }
+            let sameCode = supported.filter { $0.languageCode == code }
+            let script = wanted.maximalIdentifier.split(separator: "-").dropFirst().first.map(String.init)
+            let match = sameCode.first { $0.maximalIdentifier.split(separator: "-").dropFirst().first.map(String.init) == script
+                && $0.region == wanted.region } ?? sameCode.first {
+                    $0.maximalIdentifier.split(separator: "-").dropFirst().first.map(String.init) == script
+                } ?? sameCode.first
+            return match.map { $0.minimalIdentifier }
+        }
+        var result: [String] = []
+        if let own = pick(localeIdentifier) { result.append(own) }
+        if !result.contains(where: { $0.lowercased().hasPrefix("en") }) { result.append(pick("en-US") ?? "en-US") }
         return result
     }
 }

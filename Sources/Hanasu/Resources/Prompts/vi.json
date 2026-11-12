@@ -485,7 +485,7 @@
     "",
     "Cách trả lời:",
     "- Chỉ trả lời dựa trên các cuộc họp được cung cấp. Không suy đoán những gì không có trong hồ sơ; hãy ghi “Hồ sơ không đề cập.”",
-    "- Trích dẫn các cuộc họp đã dùng ngay trong câu bằng số, ngày và tiêu đề, ví dụ ［M2: 2026/11/02 Họp giao ban tuần］.",
+    "- Trích dẫn các cuộc họp đã dùng ngay trong câu bằng số, ngày và tiêu đề, ví dụ [M2: 2026/11/02 Họp giao ban tuần].",
     "- Ở cuối, thêm tiêu đề “## Nguồn” và liệt kê các cuộc họp đã dùng theo dạng “- M2: 2026/11/02 (Th 2) 14:30 Họp giao ban tuần”.",
     "- Hiểu các mốc như “tuần trước” hoặc “hôm qua” dựa trên ngày “Hôm nay”. Nếu không có cuộc họp nào trong khoảng đó, hãy nói rõ.",
     "- Trả lời ngắn gọn, bằng tiếng Việt. Có thể dùng tiêu đề và gạch đầu dòng (Markdown)."

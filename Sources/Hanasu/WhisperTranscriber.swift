@@ -141,21 +141,49 @@ actor WhisperEngine {
 
     private var loaded: (model: WhisperModel, kit: WhisperKit)?
 
-    /// 無音のときなどに Whisper が出しがちな決まり文句。区間の全体がこれなら捨てる
-    static let hallucinations: Set<String> = [
-        "ご視聴ありがとうございました", "ご視聴ありがとうございました。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
-        "最後までご視聴いただきありがとうございました", "最後までご視聴いただきありがとうございました。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
-        "チャンネル登録よろしくお願いします", "チャンネル登録よろしくお願いします。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
-        "チャンネル登録お願いします", "チャンネル登録お願いします。",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+    // 設計判断: DEC-COM-026
+    /// 無音のときなどに Whisper が出しがちな決まり文句（動画の字幕から覚えたもの）。区間の全体がこれなら捨てる。
+    /// 文字起こしの言語によらず、17 言語のものをすべて見る。照らすときは大文字小文字と前後の句読点を無視する。
+    /// Windows 版の `WhisperText.Hallucinations` と同じ並び（両方を直す）
+    static let hallucinations: Set<String> = Set([
+        "ご視聴ありがとうございました", "最後までご視聴いただきありがとうございました",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "チャンネル登録よろしくお願いします", "チャンネル登録お願いします",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "thank you for watching", "thanks for watching", "please subscribe to my channel",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "谢谢观看", "感谢观看", "謝謝觀看", "感謝觀看", "请不吝点赞 订阅 转发 打赏支持明镜与点点栏目",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "시청해주셔서 감사합니다", "시청해 주셔서 감사합니다", "구독과 좋아요 부탁드립니다",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "gracias por ver", "gracias por ver el video", "merci d'avoir regardé", "vielen dank fürs zuschauen",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "grazie per la visione", "obrigado por assistir", "спасибо за просмотр", "продолжение следует",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "izlediğiniz için teşekkür ederim", "cảm ơn các bạn đã theo dõi", "terima kasih telah menonton",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "dzięki za obejrzenie", "شكرا للمشاهدة", "देखने के लिए धन्यवाद",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+    ].map(noiseKey))
+
+    /// この語で始まる区間も決まり文句として捨てる（字幕の作り手の名前や年が続くもの）。「amara.org」を含む区間も捨てる
+    static let hallucinationPrefixes = [
+        "untertitel im auftrag des zdf", "untertitelung des zdf", "untertitelung im auftrag des zdf",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "субтитры сделал", "субтитры создавал", "редактор субтитров",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "字幕由", "字幕製作", "字幕制作",  // skip-tr（Whisper の出力と照らす語。UI ではない）
     ]
 
-    /// 無音や雑音のところに付く「(音楽)」「[拍手]」のような注記。かっこを外してこれだけなら捨てる
-    static let soundTags: Set<String> = ["音楽", "拍手", "笑", "笑い", "BGM", "music", "Music", "MUSIC", "applause", "laughter"]  // skip-tr（Whisper の出力と照らす語。UI ではない）
+    /// 無音や雑音のところに付く「(音楽)」「[拍手]」のような注記。かっこを外してこれだけなら捨てる（17 言語。大文字小文字を無視する）
+    static let soundTags: Set<String> = Set([
+        "音楽", "拍手", "笑", "笑い", "bgm", "music", "applause", "laughter", "silence", "blank_audio",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "音乐", "音樂", "掌声", "掌聲", "笑声", "笑聲", "음악", "박수", "웃음",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "música", "musique", "musik", "musica", "музыка", "müzik", "âm nhạc", "muzyka", "موسيقى", "संगीत",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "aplausos", "applaudissements", "applaus", "applausi", "аплодисменты", "alkış", "vỗ tay", "tepuk tangan", "brawa", "تصفيق", "तालियाँ",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+        "risas", "rires", "lachen", "risate", "risos", "смех", "gülüşler", "tiếng cười", "tertawa", "śmiech", "ضحك", "हँसी",  // skip-tr（Whisper の出力と照らす語。UI ではない）
+    ])
+
+    /// 照らすための形（小文字にし、前後の空白と句読点を外す）
+    static func noiseKey(_ text: String) -> String {
+        text.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: " 　。.、,!！?？…♪〜~¡¿").union(.whitespacesAndNewlines))  // skip-tr（照らし合わせ・区切りに使う記号）
+    }
 
     // 設計判断: DEC-COM-026
     static func isNoise(_ text: String) -> Bool {
-        if hallucinations.contains(text) { return true }
-        let stripped = text.trimmingCharacters(in: CharacterSet(charactersIn: "()（）[]［］【】♪〜~ 　。.、"))  // skip-tr（照らし合わせ・区切りに使う記号）
+        let key = noiseKey(text)
+        if hallucinations.contains(key) || key.contains("amara.org") { return true }
+        if hallucinationPrefixes.contains(where: key.hasPrefix) { return true }
+        let stripped = text.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: "()（）[]［］【】♪〜~ 　。.、*").union(.whitespacesAndNewlines))  // skip-tr（照らし合わせ・区切りに使う記号）
         return stripped.isEmpty || soundTags.contains(stripped)
     }
 
@@ -282,10 +310,11 @@ actor WhisperEngine {
     }
 
     // 設計判断: DEC-COM-024
-    /// 辞書の語から、Whisper に渡す前置きを作る（長すぎると認識に影響するので 30 語まで）
-    static func prompt(from hints: [String]) -> String? {
+    /// 辞書の語から、Whisper に渡す前置きを作る（長すぎると認識に影響するので 30 語まで）。
+    /// 区切りは文字起こしの言語の読点（日本語は「、」、英語は「, 」。前置きの書き方は認識の文体に効くため）
+    static func prompt(from hints: [String], language: PromptLanguage = .current) -> String? {
         let words = Array(NSOrderedSet(array: hints.map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty })
             .compactMap { $0 as? String }.prefix(30))
-        return words.isEmpty ? nil : words.joined(separator: "、")  // skip-tr（照らし合わせ・区切りに使う記号）
+        return words.isEmpty ? nil : words.joined(separator: Prompts.text("user.dictionaryRuleSeparator", language: language))
     }
 }

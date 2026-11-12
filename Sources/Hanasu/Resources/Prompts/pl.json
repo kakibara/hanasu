@@ -485,7 +485,7 @@
     "",
     "Jak odpowiadać:",
     "- Opieraj odpowiedź wyłącznie na przekazanych spotkaniach. Nie zgaduj niczego, czego nie ma w zapisach; napisz wtedy „Z zapisów to nie wynika.”",
-    "- Wskazuj w tekście wykorzystane spotkania numerem, datą i tytułem, np. ［M2: 2026/11/02 Spotkanie tygodniowe］.",
+    "- Wskazuj w tekście wykorzystane spotkania numerem, datą i tytułem, np. [M2: 2026/11/02 Spotkanie tygodniowe].",
     "- Na końcu dodaj nagłówek „## Źródła” i wypisz wykorzystane spotkania w postaci „- M2: 2026/11/02 (pon.) 14:30 Spotkanie tygodniowe”.",
     "- Określenia takie jak „w zeszłym tygodniu” czy „wczoraj” interpretuj na podstawie daty „Dzisiaj”. Jeśli w tym okresie nie było spotkań, napisz to.",
     "- Odpowiadaj zwięźle, po polsku. Możesz używać nagłówków i wypunktowań (Markdown)."

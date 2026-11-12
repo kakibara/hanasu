@@ -90,7 +90,7 @@ public partial class HistoryWindow : Window
         }
         var parts = new List<string>
         {
-            entry.Date.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"),
+            DictationHistoryStore.DetailDateLabel(entry.Date),
             DictationHistoryEntry.ModeLabel(entry.Mode),
             DictationHistoryEntry.StatusLabel(entry.Status),
         };

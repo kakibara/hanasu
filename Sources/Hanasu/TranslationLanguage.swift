@@ -96,8 +96,14 @@ struct TranslationLanguage: Hashable, Identifiable, Sendable, Codable {
     }
 
     // 設計判断: DEC-DIC-022, DEC-DIC-028
-    /// 訳した結果が日本語か。日本語なら、整形と同じ日本語向けのルール（共通の追加ルール・アプリ別の整形のルール・画面の文脈の整形の指示）を使う
+    /// 訳した結果が日本語か。日本語なら、整形と同じ日本語向けのルール（アプリ別の整形のルール・画面の文脈の整形の指示）を使う。
+    /// ルールの文面は、プロンプトの言語によらず日本語のもの（ja.json）。ほかの言語の文面は、その言語の文体のルールなので日本語の出力に合わない
     var outputsJapanese: Bool { self == .japanese }
+
+    // 設計判断: DEC-DIC-023, DEC-DIC-028
+    /// 共通の追加ルールを使うか。追加ルールは話す人の言語の文体向けに書くもの（日本語の利用者なら日本語）なので、
+    /// 和訳で、しかもプロンプトの言語が日本語のときだけ使う（韓国語で話す人の追加ルールを、日本語の出力には付けない）
+    var keepsExtraRules: Bool { outputsJapanese && PromptLanguage.current == .ja }
 
     /// 設定の並びにそろえ、重複と空を直す（空なら English だけ）
     static func normalized(_ languages: [TranslationLanguage]) -> [TranslationLanguage] {

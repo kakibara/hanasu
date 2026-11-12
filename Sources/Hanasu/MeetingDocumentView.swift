@@ -224,7 +224,8 @@ struct MeetingParticipantsButton: View {
                             .overlay(Circle().stroke(Color(nsColor: .windowBackgroundColor), lineWidth: 2))
                     }
                 }
-                Text(speakers.map { meeting.displayName(for: $0) }.joined(separator: tr("・")))
+                // 話者名の区切り（日本語は「・」、ほかの言語は「 · 」）。tr("・") は箇条書きの印なので使わない
+                Text(speakers.map { meeting.displayName(for: $0) }.reduce("") { $0.isEmpty ? $1 : tr("%@・%@", $0, $1) })
                     .lineLimit(1)
                     .truncationMode(.tail)
             }

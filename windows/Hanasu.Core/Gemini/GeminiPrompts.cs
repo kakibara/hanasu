@@ -126,9 +126,10 @@ public static class GeminiPrompts
             var rules = request.DictionaryRules.Select(r => $"- {string.Join(separator, r.Sources)} → {r.Target}");
             lines.Add(Ai.Prompts.Text("user.dictionaryRules", language) + "\n" + string.Join("\n", rules));
         }
-        // 設計判断: DEC-DIC-028, DEC-DIC-151
-        // 追加ルールは日本語の文体向けなので、整形と和訳（出力が日本語）だけで使い、ほかの言語への翻訳では使わない
-        var extra = translation is { } target && target != Dictation.TranslationLanguage.Japanese ? "" : request.ExtraInstructions.Trim();
+        // 設計判断: DEC-DIC-023, DEC-DIC-028, DEC-DIC-151
+        // 追加ルールは話す人の言語の文体向けなので、整形と、和訳（プロンプトの言語が日本語のとき）だけで使う。
+        // ほかの言語への翻訳と、日本語以外で話す人の和訳では使わない（Mac 版の GeminiClient.translationPrompt と同じ）
+        var extra = translation is { } target && !target.KeepsExtraRules ? "" : request.ExtraInstructions.Trim();
         if (extra.Length > 0)
         {
             lines.Add(Ai.Prompts.Text("user.extraRules", language) + "\n" + extra);
