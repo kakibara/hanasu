@@ -48,6 +48,15 @@ func cliRefine(_ raw: String, args: [String]) async throws {
     print(String(format: "[%@ %@ %@ %.1fs] %@", translation?.verb ?? "整形", client.provider.name, model, Date().timeIntervalSince(started), output))
 }
 
+// 要件: REQ-COM-180, REQ-COM-183
+// 設計判断: DEC-COM-180
+// 利用者向けの hanasu コマンド（hanasu meetings list など。HanasuCommand.swift）。サブコマンドにも -- のオプションが付くので、
+// 下の「-- で始まる引数があれば表示の言語を日本語にする」判定とプロンプトの言語の読み取りより前に振り分ける。
+// アプリ（AppDelegate）は起動しないので、起動時の処理（記録中の会議を「失敗」にする）も通らない
+if HanasuCommand.handles(CommandLine.arguments) {
+    HanasuCommand.main(CommandLine.arguments)
+}
+
 // 設計判断: DEC-COM-063
 // アプリ・CLI を終えるとき（exit も NSApp の終了も）に、起動したローカルの LLM のサーバーを止める
 // 要件: REQ-COM-061
@@ -85,6 +94,8 @@ MainActor.assumeIsolated { AIPurposeCLI.runIfRequested() }
 MainActor.assumeIsolated { TranscriptionEngineCLI.runIfRequested() }
 // 音声入力のマイクの確認（--list-dictation-microphones / --render-dictation-mic-settings / --test-dictation-mic-switch）。DictationMicrophoneCLI.swift
 MainActor.assumeIsolated { DictationMicrophoneCLI.runIfRequested() }
+// 「AI アプリにつなぐ」の実機の確認（--agent-connect-list / --agent-connect <番号> connect|disconnect）。AgentConnectSelfTest.swift の AgentConnectCLI
+MainActor.assumeIsolated { AgentConnectCLI.runIfRequested() }
 // Claude API・キーチェーン・設定の「AI」の確認（--claude-test / --keychain-selftest / --render-ai-settings）。ClaudeCLI.swift
 MainActor.assumeIsolated { ClaudeCLI.runIfRequested() }
 // 選択を声で編集するモードの確認（--edit-text / --render-edit-hud / --render-edit-settings）。中身は EditModeCLI.swift
@@ -441,6 +452,9 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-meeting-notes"),
 
 // 音声入力の履歴の確認（--render-history / --history-check）。中身は DictationHistoryCLI.swift
 MainActor.assumeIsolated { DictationHistoryCLI.runIfRequested() }
+
+// 利用者向けの hanasu コマンドの確認（--test-hanasu-command / --bench-hanasu-command。HanasuCommandCLI.swift）
+HanasuCommandCLI.runIfRequested()
 
 // 会議の横断検索・質問の確認（--search-meetings / --ask-meetings など。MeetingSearchCLI.swift）
 MainActor.assumeIsolated { MeetingSearchCLI.runIfRequested(CommandLine.arguments) }

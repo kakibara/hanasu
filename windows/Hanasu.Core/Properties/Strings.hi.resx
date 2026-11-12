@@ -711,4 +711,385 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>इस मीटिंग को बदला नहीं जा सका: {0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>ऐक्शन आइटम: {0}</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — ऐक्शन आइटम</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>AI से प्रोसेस नहीं हो सका: {0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>इस्तेमाल होने वाला AI:</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>मान्य मान: {0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>{0} की {1} मीटिंग मिलीं। ID से चुनें।</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple (Apple के Foundation Models) Windows पर उपलब्ध नहीं है।</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>AI को भेजी गई मीटिंग (* = जवाब में उद्धृत):</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>{0} का मान पढ़ा नहीं जा सका: {1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>फ़ाइल पढ़ी नहीं जा सकी: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>मीटिंग का फ़ोल्डर पढ़ा नहीं जा सका: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>मीटिंग नहीं पढ़ी जा सकी: {0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0} (पढ़ा जा सकता है)</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0} (पढ़ा नहीं जा सकता: {1})</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>क्रेडेंशियल:</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>Claude Desktop के कॉन्फ़िगरेशन (claude_desktop_config.json) में जोड़ने के लिए:</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>एनवायरनमेंट वेरिएबल {0}</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>एक्ज़ीक्यूटेबल फ़ाइल: {0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>अतिरिक्त आर्ग्युमेंट: {0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>सुधार नहीं हो सका, इसलिए सुधार से पहले का टेक्स्ट आउटपुट किया जा रहा है (--fallback-raw)।</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>जाँचें कि वह फ़ोल्डर मौजूद है और यह यूज़र उसे पढ़ सकता है।</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0} (अभी मौजूद नहीं)</value>
+  </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>बिना स्क्रीन वाले सत्र (जैसे SSH) में Windows Hello पुष्टि नहीं माँग सकता, इसलिए Windows Hello से सुरक्षित API कुंजियाँ इस्तेमाल नहीं हो सकतीं। उन्हें DPAPI से सुरक्षित करें, या कुंजी किसी एनवायरनमेंट वेरिएबल में दें।</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Windows Hello की पुष्टि {0} सेकंड में पूरी नहीं हुई। देखें कि पुष्टि वाली विंडो दूसरी विंडो के पीछे तो नहीं छिपी है।</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>सभी मीटिंग के ऐक्शन आइटम एक साथ दिखाएँ</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>AI एजेंट के निर्देशों (जैसे CLAUDE.md) में पेस्ट करने के लिए hanasu के इस्तेमाल के निर्देश दिखाएँ। हमेशा अंग्रेज़ी में</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>पिछली मीटिंग के बारे में AI से सवाल पूछें (संबंधित मीटिंग की सामग्री मीटिंग वाले AI को भेजी जाती है)</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>सिर्फ़ शब्दकोश के बदलने के नियम लागू करें (AI को नहीं भेजा जाता)</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>इस्तेमाल हो रहे AI और क्रेडेंशियल, मीटिंग फ़ोल्डर और PATH की जाँच करता है (कुंजी के मान कभी नहीं दिखाता)</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>निर्देश के अनुसार टेक्स्ट दोबारा लिखें (“चुने गए टेक्स्ट को आवाज़ से संपादित करें” की तरह)। टेक्स्ट आर्ग्युमेंट या stdin से दें</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>मीटिंग को सबसे नई से शुरू करके दिखाएँ</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>AI एजेंट के लिए MCP सर्वर के रूप में चलाएँ (stdio)। मीटिंग पढ़ने के टूल देता है</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>वॉइस इनपुट की तरह टेक्स्ट सुधारें (--translate देने पर अनुवाद करें)। टेक्स्ट आर्ग्युमेंट या stdin से दें</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>सभी मीटिंग में खोजें (स्पेस से अलग करने पर, सिर्फ़ वे नतीजे जिनमें सभी शब्द हों)</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>मीटिंग की सामग्री दिखाएँ (डिफ़ॉल्ट: मिनट्स)</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — Hanasu की मीटिंग रिकॉर्डिंग और टेक्स्ट सुधार को टर्मिनल या AI एजेंट से इस्तेमाल करें</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>उपयोग:</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>मिनट्स, पंक्ति {0}: {1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>शीर्षक: {0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>मिलान: {0}</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0} (अनुमानित)</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>Hanasu ऐप लोकल AI इस्तेमाल कर रहा है।</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>ऐप बंद करें या --ai से कोई दूसरा AI चुनें (ताकि एक ही मॉडल दो बार लोड न हो)।</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>लोकल: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>Claude Code में रजिस्टर करने का उदाहरण: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>MCP से लौटाई गई मीटिंग की सामग्री, MCP इस्तेमाल करने वाले एजेंट और उसके AI प्रदाता तक जाती है। ask_meetings मीटिंग की सामग्री उसी AI को भी भेजता है जिसे hanasu ask इस्तेमाल करता है (hanasu doctor की ask वाली पंक्ति देखें)।</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>Claude Desktop और दूसरे ऐप्स के लिए JSON, hanasu doctor में और सेटिंग्ज़ → “कमांड और MCP” में दिखता है।</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>टूल: list_meetings, get_meeting, search_meetings, ask_meetings, list_action_items (सभी सिर्फ़ पढ़ने के लिए)</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp: MCP सर्वर के रूप में चल रहा है। stdin बंद होने पर बंद हो जाएगा।</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>मीटिंग नहीं मिली: {0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>इस मीटिंग की स्थिति “{0}” है। सिर्फ़ सहेजा गया हिस्सा दिखाया जाएगा।</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>मीटिंग का फ़ोल्डर: {0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>इस्तेमाल होने वाले कथन बदलने के बाद मिनट्स दोबारा नहीं बनाए गए हैं।</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>{0} के लिए 1 या उससे बड़ी पूर्ण संख्या दें: {1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>{0} के लिए मान देना ज़रूरी है।</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>इससे नई {0} मीटिंग हैं (रिकॉर्डिंग हो रही है, प्रोसेस हो रही है या विफल): {1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>कोई ऐक्शन आइटम नहीं है।</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>इस मीटिंग में कोई ऐक्शन आइटम नहीं है।</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>सवाल के लिए कोई मीटिंग रिकॉर्डिंग उपलब्ध नहीं है।</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>कोई पूरी हुई मीटिंग नहीं है।</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>कोई डाउनलोड किया गया मॉडल नहीं है</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>कोई मीटिंग नहीं है।</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>इस मीटिंग के मिनट्स नहीं हैं।</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>मिनट्स नहीं</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>इस मीटिंग के कोई नोट्स नहीं हैं।</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>कुछ नहीं मिला।</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>(इस शेल के PATH में नहीं है)</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>सेट नहीं</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;AI&gt;: local, gemini या claude (छोड़ने पर सेटिंग्स वाला AI)। &lt;शैली&gt;: none, chat, email, document-polite या document-plain। &lt;भाषा&gt;: en, ja, ko आदि</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>AI विफल होने पर कुछ भी आउटपुट किए बिना समाप्त होता है। --fallback-raw देने पर सुधार से पहले का टेक्स्ट आउटपुट होता है। --show-prompt से AI को भेजी जाने वाली सामग्री stderr पर दिखती है।</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>PowerShell में आउटपुट पढ़ने से पहले [Console]::OutputEncoding = [Text.UTF8Encoding]::new() चलाएँ (Windows PowerShell 5.1 में $OutputEncoding = [Text.UTF8Encoding]::new() भी)। 5.1 में &gt; UTF-16 में लिखता है, इसलिए फ़ाइल में लिखने के लिए | Out-File -Encoding utf8 इस्तेमाल करें।</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>एग्ज़िट कोड: 0 सफल, 1 विफल, 2 उपयोग में गलती, 3 क्रेडेंशियल नहीं हैं, 4 मीटिंग नहीं मिली, 5 नीति या अनुमति के कारण रोका गया</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>Windows Hello से सुरक्षित API कुंजियाँ, AI वाला हर कमांड चलाने पर पुष्टि माँगती हैं (hanasu mcp पहली बार और स्क्रीन लॉक होने के बाद माँगता है)।</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>--json से तय फ़ॉर्मैट में JSON मिलता है। --meetings-dir &lt;फ़ोल्डर&gt; (या एनवायरनमेंट वेरिएबल HANASU_MEETINGS_DIR) से मीटिंग का फ़ोल्डर बदला जा सकता है।</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>लोकल AI हर बार बुलाने पर मॉडल लोड करता है, इसलिए समय लगता है। जब ऐप लोकल AI इस्तेमाल कर रहा हो, तब इसका उपयोग नहीं किया जा सकता।</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>मीटिंग कैसे बताएँ: ID (उदाहरण: 2026-11-02_1312), latest (सबसे नई पूरी हुई मीटिंग), तारीख (उदाहरण: 2026-11-02)</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>अवधि कैसे बताएँ: 7d, 24h, 2w (अभी से पीछे की ओर), तारीख (उदाहरण: 2026-11-01)</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH: नहीं जोड़ा गया (सेटिंग्ज़ → “कमांड और MCP” में जोड़ सकते हैं; पूरा पाथ इसके बिना भी काम करता है)</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH: {0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH: {0} (दूसरी जगह के Hanasu की ओर इशारा करता है)</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;संख्या&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;फ़ोल्डर&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;निर्देश&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;भाषा&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;मीटिंग&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;मॉडल&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;नाम&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;अवधि&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;सवाल&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;शैली&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;टेक्स्ट&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;शब्द&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>वॉइस इनपुट</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>मीटिंग</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>सहेजी गई API कुंजी (DPAPI)</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>सहेजी गई API कुंजी (Windows Hello; यहाँ नहीं पढ़ी जाती, क्योंकि हर बार पढ़ने पर पुष्टि माँगी जाती है)</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>उपयोग का तरीका hanasu help से देखें।</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>मीटिंग की सूची hanasu meetings list से देखें।</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>सर्विस अकाउंट ({0})</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>--since को --until से पहले रखें।</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>दोबारा लिखने का निर्देश दें।</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>एक मीटिंग बताएँ (उदाहरण: hanasu meetings show latest)।</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>कृपया सवाल दें।</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>खोजने के लिए शब्द दें (उदाहरण: hanasu meetings search बजट)।</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>हो गया</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>विफल</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>प्रोसेस हो रहा है</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>रिकॉर्डिंग हो रही है</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>Hanasu एक अस्थायी फ़ोल्डर (जैसे zip के अंदर) से चल रहा है। पूरी zip निकालें, उस फ़ोल्डर से Hanasu दोबारा खोलें, फिर उसे PATH और MCP में जोड़ें।</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>टेक्स्ट आर्ग्युमेंट या stdin में से किसी एक से दें (दोनों एक साथ नहीं)।</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>टेक्स्ट खाली है।</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>टेक्स्ट आर्ग्युमेंट या stdin (पाइप) से दें।</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>टेक्स्ट बहुत लंबा है ({0} अक्षर)। इसे {1} अक्षरों के भीतर रखें।</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- तारीख और समय: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — ट्रांसक्रिप्ट</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- अवधि: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- मिनट्स में इस्तेमाल न होने वाले कथन ({0}) शामिल नहीं हैं</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>--ai में अज्ञात AI दिया गया: {0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>अज्ञात आर्ग्युमेंट: {0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>अज्ञात कमांड: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>--translate में अज्ञात भाषा दी गई: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>अज्ञात स्थानीय मॉडल: {0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>अज्ञात विकल्प: {0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>--style में अज्ञात शैली दी गई: {0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>फ़ोल्डर की अनुमतियाँ जाँचें, और देखें कि सिंक (जैसे OneDrive) ने फ़ाइलें इस PC पर रखी हैं या नहीं।</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>{0} मीटिंग नहीं पढ़ी जा सकीं ({1})।</value>
+  </data>
 </root>

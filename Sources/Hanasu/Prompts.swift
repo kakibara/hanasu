@@ -42,7 +42,7 @@ enum PromptLanguage: String, CaseIterable, Sendable {
     /// いまのプロンプトの言語（設定の文字起こしの言語。保存されていなければシステムの言語）
     static var current: PromptLanguage {
         if let override { return override }
-        let stored = UserDefaults.standard.string(forKey: "localeIdentifier")
+        let stored = SettingsDefaults.store.string(forKey: "localeIdentifier")
         return from(localeIdentifier: stored ?? AppSettings.systemLocaleIdentifier)
     }
 

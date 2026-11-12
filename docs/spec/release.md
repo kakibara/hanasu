@@ -93,6 +93,19 @@
 - 実装の場所: Mac は `UpdateHTTP.download`・`UpdateDownloadDelegate`、`AppUpdater.install`・`UpdateProgressModel`・`UpdateProgressView`（`Sources/Hanasu/AppUpdate.swift`）。Windows は `UpdateService.InstallAsync`、`UpdateProgressWindow`（`windows/Hanasu.Windows/Views/UpdateProgressWindow.cs`）、`UpdateDownloadProgress`（`windows/Hanasu.Core/Update/UpdateDownloadProgress.cs`）
 - 確かめ方: Mac は `Hanasu --update-selftest`（割合・文・間引き）、`Hanasu --render-update-progress <出力.png> [--fraction 0.42 | --verifying]`（窓の見た目。UX-186）、`Hanasu --download-update [--cancel-after <秒>]`（GitHub から最新の zip を実際に落とし、進み具合を行で出し、大きさと SHA-256 を確かめて消す。入れ替えない。`--cancel-after` で中止して止まるかを見る）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`UpdateTests`）。窓が進む・中止で止まるのは実機で確かめる（UX-186）
 
+### REQ-REL-013 Windows の自動アップデートで `hanasu` が動いていたら、知らせてから終わらせる
+- 内容: 入れ替える前に、インストールしたフォルダの `cli\hanasu.exe` で動いているプロセス（MCP のサーバー・実行中のコマンド）があれば、アップデートの確認（DEC-REL-022）に、それを終わらせてから入れ替えることと、MCP を使うアプリはツールが使えなくなったら再起動することを出す。「アップデート」を選ぶと、入れ替えのスクリプトが、名前を変える直前に同じパスの `hanasu.exe` を探し直して終わらせる（確認のあと、ダウンロードの間に起動したものも含める）。「あとで」なら入れ替えない。
+- 受け入れ条件:
+  - `hanasu mcp` を動かしたまま「アップデート」を選ぶと、入れ替わって新しい版が起動する（前は失敗して古い版のまま）。「あとで」なら、今の版のまま動く。
+  - 動いている `hanasu` がなければ、確認の文は増えない。
+  - 終わらせられない `hanasu`（管理者として動かしたもの）があるときや、ターミナルの作業フォルダが `cli` の中にあってフォルダの名前を変えられないときは、今までどおり古い版のまま起動し直し、起動したアプリが「`hanasu` を終わらせ、`cli` のフォルダから出てから、もう一度アップデートしてください」の旨を知らせる（黙って失敗しない）。
+  - Claude Desktop と Claude Code が実際にどうなるか（自動で戻るか、再起動が要るか）は、実機で確かめて `docs/verification/` に記録する（UX-194）。
+- 出典: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（W5、決定 6）
+- 関係する要件: REQ-REL-010, REQ-REL-011, REQ-COM-189
+- 対象: Windows
+- 実装の場所: `UpdateService.PromptAndInstallAsync`・`ReportPreviousAttempt`・`StartSwapScript`（`windows/Hanasu.Windows/Services/UpdateService.cs`）、`UpdatePromptWindow`、`RunningCommands`・`UpdateSwapScript`（`windows/Hanasu.Core/Update/`）
+- 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`CommandPlatformTests` の数え方とスクリプト）。実際の入れ替えと MCP のクライアントの振る舞いは実機（UX-194）
+
 ---
 
 ## 設計判断
@@ -272,7 +285,15 @@
 - 決めた場面: ユーザーの依頼（2026-11-05、起動時のアップデートの確認）
 - 関係する要件: REQ-REL-010
 - 対象: Windows
-- 実装の場所: `UpdateService.InstallAsync`・`SwapScript`（`windows/Hanasu.Windows/Services/UpdateService.cs`）、`UpdatePackage.Extract`
+- 実装の場所: `UpdateService.InstallAsync`・`StartSwapScript`（`windows/Hanasu.Windows/Services/UpdateService.cs`）、`UpdateSwapScript`（`windows/Hanasu.Core/Update/UpdateSwapScript.cs`）、`UpdatePackage.Extract`
+
+### DEC-REL-031 Windows の入れ替えのスクリプトは、名前を変える直前に `cli\hanasu.exe` を探し直して終わらせ、改名できなければ印に理由を残す
+- 決めたこと: アップデートの確認を出す前に、`<フォルダ>\cli\hanasu.exe` のパスで動いている `hanasu` を数え（パスを読めない `hanasu` も数える）、1 つ以上なら確認に出す。入れ替えのスクリプトには `-Cli`（そのパス）と `-Pending`（`update-pending.txt`）を渡す。スクリプトは、アプリの終了を待ったあと、名前が `hanasu` でパスが `-Cli` と同じプロセスを終わらせ、それからフォルダの名前を変える。名前を変えられなければ、`update-pending.txt` に `rename-failed` を足す。次に起動したアプリ（古い版のまま）は、それを見て、管理者として動いている `hanasu` と、`cli` の中を作業フォルダにしたターミナルを挙げて知らせる。スクリプトの中身は `Hanasu.Core` に置き、テストで並びを確かめる。
+- 理由: 動いている `hanasu.exe` があると、フォルダの名前を変えられず、黙って古い版のまま起動し直していた。ダウンロードは最大 10 分かかるので、確認のときに数えただけでは足りない。管理者として動いているプロセスと、作業フォルダが中にあるターミナルは、アプリから終わらせられない（2 回目のレビューの指摘）。
+- 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（WD8、決定 6）
+- 関係する要件: REQ-REL-013
+- 対象: Windows
+- 実装の場所: `UpdateSwapScript`、`RunningCommands`（`windows/Hanasu.Core/Update/`）、`UpdateService.PromptAndInstallAsync`・`ReportPreviousAttempt`
 
 ---
 

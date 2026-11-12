@@ -11,11 +11,14 @@
           "NAudio.Core": "2.2.1"
         }
       },
-      "System.Security.Cryptography.ProtectedData": {
+      "System.Management": {
         "type": "Direct",
         "requested": "[8.0.0, )",
         "resolved": "8.0.0",
-        "contentHash": "+TUFINV2q2ifyXauQXRwy4CiBhqvDEDZeVJU7qfxya4aRYOKzVBpN+4acx25VcPB9ywUN6C0n8drWl110PhZEg=="
+        "contentHash": "jrK22i5LRzxZCfGb+tGmke2VH7oE0DvcDlJ1HAKYU8cPmD8XnpUT0bYn2Gy98GEhGjtfbR/sxKTVb+dE770pfA==",
+        "dependencies": {
+          "System.CodeDom": "8.0.0"
+        }
       },
       "Anthropic": {
         "type": "Transitive",
@@ -101,6 +104,11 @@
         "resolved": "1.13.8",
         "contentHash": "QbpkOX0LBcYq/AUZTIlrwz7tPunhqVAFT8A9+JnVw6a6TYRFKvSBwxIWUPbNfpyGYPkTFNunpFIJzcLyiek0gg=="
       },
+      "System.CodeDom": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "WTlRjL6KWIMr/pAaq3rYqh0TJlzpouaQ/W1eelssHgtlwHAH25jXTkUphTYx9HaIIf7XA6qs/0+YhtLEQRkJ+Q=="
+      },
       "System.IO.Pipelines": {
         "type": "Transitive",
         "resolved": "10.0.6",
@@ -110,6 +118,11 @@
         "type": "Transitive",
         "resolved": "10.0.1",
         "contentHash": "JFvLk6SHowCHY2fsCIyF/Adp1eM9JY3kF3Vf/t1FrN7mDe6f5/MEvKybRtvayq/JmymZbPxAEKeLvEbiRIYnew=="
+      },
+      "System.Security.Cryptography.ProtectedData": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "+TUFINV2q2ifyXauQXRwy4CiBhqvDEDZeVJU7qfxya4aRYOKzVBpN+4acx25VcPB9ywUN6C0n8drWl110PhZEg=="
       },
       "System.Text.Encodings.Web": {
         "type": "Transitive",
@@ -159,6 +172,13 @@
           "org.k2fsa.sherpa.onnx": "[1.13.8, )"
         }
       },
+      "hanasu.platform": {
+        "type": "Project",
+        "dependencies": {
+          "Hanasu.Core": "[0.1.0, )",
+          "System.Security.Cryptography.ProtectedData": "[8.0.0, )"
+        }
+      },
       "hanasu.whisper": {
         "type": "Project",
         "dependencies": {
@@ -169,6 +189,15 @@
       }
     },
     "net8.0-windows10.0.19041/win-arm64": {
+      "System.Management": {
+        "type": "Direct",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "jrK22i5LRzxZCfGb+tGmke2VH7oE0DvcDlJ1HAKYU8cPmD8XnpUT0bYn2Gy98GEhGjtfbR/sxKTVb+dE770pfA==",
+        "dependencies": {
+          "System.CodeDom": "8.0.0"
+        }
+      },
       "org.k2fsa.sherpa.onnx.runtime.android-arm64": {
         "type": "Transitive",
         "resolved": "1.13.8",
@@ -221,6 +250,15 @@
       }
     },
     "net8.0-windows10.0.19041/win-x64": {
+      "System.Management": {
+        "type": "Direct",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "jrK22i5LRzxZCfGb+tGmke2VH7oE0DvcDlJ1HAKYU8cPmD8XnpUT0bYn2Gy98GEhGjtfbR/sxKTVb+dE770pfA==",
+        "dependencies": {
+          "System.CodeDom": "8.0.0"
+        }
+      },
       "org.k2fsa.sherpa.onnx.runtime.android-arm64": {
         "type": "Transitive",
         "resolved": "1.13.8",

@@ -132,26 +132,63 @@ actor MeetingSearchIndex {
 
     private func addMeetingUnits(_ meeting: Meeting) {
         var ids: [Int] = []
-        func add(_ location: MeetingSearchHit.Location, _ text: String) {
-            let trimmed = text.trimmingCharacters(in: .whitespaces)
-            guard !trimmed.isEmpty else { return }
+        for (location, original) in Self.searchUnits(of: meeting) {
             let id = units.count
-            let folded = Self.fold(trimmed)
-            units.append(Unit(meetingID: meeting.id, location: location, original: trimmed, folded: folded))
+            let folded = Self.fold(original)
+            units.append(Unit(meetingID: meeting.id, location: location, original: original, folded: folded))
             for key in Self.bigramKeys(folded) { postings[key, default: []].append(Int32(id)) }
             ids.append(id)
+        }
+        entries[meeting.id] = MeetingEntry(fingerprint: meeting.hashValue, unitIDs: ids,
+                                           title: meeting.title, startedAt: meeting.startedAt)
+    }
+
+    /// 会議を検索する単位（タイトル・議事録の行・文字起こしのまとまり）と、その文（前後の空白を除いたもの。空は除く）。
+    /// 索引（addMeetingUnits）と、索引を作らない検索（scan）で同じものを使う
+    static func searchUnits(of meeting: Meeting) -> [(location: MeetingSearchHit.Location, text: String)] {
+        var result: [(location: MeetingSearchHit.Location, text: String)] = []
+        func add(_ location: MeetingSearchHit.Location, _ text: String) {
+            let trimmed = text.trimmingCharacters(in: .whitespaces)
+            if !trimmed.isEmpty { result.append((location, trimmed)) }
         }
         add(.title, meeting.title)
         if let minutes = meeting.minutes {
             for (line, text) in minutes.components(separatedBy: "\n").enumerated() {
-                add(.minutes(line: line), Self.stripMarkdown(text))
+                add(.minutes(line: line), stripMarkdown(text))
             }
         }
         for block in meeting.mergedBlocks() {
             add(.transcript(blockID: block.id, start: block.start, speaker: meeting.displayName(for: block.speaker)), block.text)
         }
-        entries[meeting.id] = MeetingEntry(fingerprint: meeting.hashValue, unitIDs: ids,
-                                           title: meeting.title, startedAt: meeting.startedAt)
+        return result
+    }
+
+    // 要件: REQ-MTG-123
+    // 設計判断: DEC-MTG-123
+    /// 索引を作らずに 1 回だけ検索する（hanasu コマンド用。1 回のために索引を作るより速い）。
+    /// 検索の単位・一致の決まり・並び・抜粋・上限は search と同じ
+    static func scan(_ meetings: [Meeting], query: String, hitsPerMeeting: Int = 20, maxMeetings: Int = 200) -> [MeetingSearchResult] {
+        let terms = terms(of: query)
+        guard !terms.isEmpty else { return [] }
+        var found = [MeetingSearchResult?](repeating: nil, count: meetings.count)
+        let lock = NSLock()
+        DispatchQueue.concurrentPerform(iterations: meetings.count) { index in
+            let meeting = meetings[index]
+            let hits = searchUnits(of: meeting).filter { unit in
+                let folded = fold(unit.text)
+                return terms.allSatisfy { folded.contains($0) }
+            }
+            guard !hits.isEmpty else { return }
+            let sorted = hits.sorted { order($0.location) < order($1.location) }
+            let result = MeetingSearchResult(
+                meetingID: meeting.id, title: meeting.title, startedAt: meeting.startedAt,
+                hits: sorted.prefix(hitsPerMeeting).map { MeetingSearchHit(meetingID: meeting.id, location: $0.location, snippet: snippet($0.text, terms: terms)) },
+                totalHits: hits.count)
+            lock.lock()
+            found[index] = result
+            lock.unlock()
+        }
+        return Array(found.compactMap { $0 }.sorted { $0.startedAt > $1.startedAt }.prefix(maxMeetings))
     }
 
     private func removeMeeting(_ id: String) {
@@ -206,7 +243,7 @@ actor MeetingSearchIndex {
         return keys
     }
 
-    private static func order(_ location: MeetingSearchHit.Location) -> Double {
+    static func order(_ location: MeetingSearchHit.Location) -> Double {
         switch location {
         case .title: -2
         case .minutes(let line): -1 + Double(line) / 1_000_000

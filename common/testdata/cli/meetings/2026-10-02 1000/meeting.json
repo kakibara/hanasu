@@ -1,0 +1,32 @@
+{
+  "id": "2026-10-02 1000",
+  "title": "採用の相談",
+  "startedAt": "2026-10-02T01:00:00Z",
+  "duration": 900,
+  "status": "done",
+  "speakerNames": {},
+  "utterances": [
+    {
+      "id": "7A2B3C4D-0000-4000-8000-000000000011",
+      "speaker": "me",
+      "start": 0,
+      "end": 4,
+      "text": "採用の予算について相談です"
+    },
+    {
+      "id": "7A2B3C4D-0000-4000-8000-000000000012",
+      "speaker": "spk1",
+      "start": 5,
+      "end": 9,
+      "text": "Budget review は来週です"
+    }
+  ],
+  "minutes": "# 採用の相談 — 議事録\n\n- 候補者に連絡する",
+  "actionItems": [
+    {
+      "id": "7A2B3C4D-0000-4000-8000-000000000202",
+      "owner": "佐藤",
+      "task": "候補者に連絡する"
+    }
+  ]
+}

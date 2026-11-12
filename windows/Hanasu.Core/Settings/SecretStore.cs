@@ -344,7 +344,7 @@ public sealed class SecretStore
         if (!File.Exists(Path)) return new SecretsFile();
         try
         {
-            return JsonSerializer.Deserialize<SecretsFile>(File.ReadAllText(Path), JsonOptions) ?? new SecretsFile();
+            return JsonSerializer.Deserialize<SecretsFile>(IO.SharedFile.ReadAllText(Path), JsonOptions) ?? new SecretsFile();
         }
         catch (JsonException)
         {
@@ -362,9 +362,8 @@ public sealed class SecretStore
             mutate(file);
             var dir = System.IO.Path.GetDirectoryName(Path);
             if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
-            var temp = Path + ".tmp";
-            File.WriteAllText(temp, JsonSerializer.Serialize(file, JsonOptions));
-            File.Move(temp, Path, overwrite: true);
+            // 設計判断: DEC-COM-194
+            IO.SharedFile.WriteAllTextAtomically(Path, JsonSerializer.Serialize(file, JsonOptions));
         }
     }
 

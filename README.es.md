@@ -122,6 +122,22 @@ Con **Local**, Hanasu ejecuta un modelo de lenguaje pequeño en tu propio Mac o 
 Puedes elegir un motor distinto para el dictado por voz y para las reuniones. En Windows, las reuniones usan Whisper o Gemini.
 En Mac, elige el idioma de transcripción de una lista (japonés, inglés, chino, coreano, francés, alemán, español, italiano, portugués). Empieza con el idioma de tu sistema.
 
+### ⌨️ Úsalo desde la terminal y agentes de IA
+
+El comando `hanasu` permite que scripts y agentes de IA (Claude Code, Claude Desktop y otros) lean tus grabaciones de reuniones y pulan texto igual que el dictado por voz. Viene con la app, así que no hay que instalar nada más: en el Mac es la propia app, y en Windows es `cli\hanasu.exe`, dentro de la carpeta de Hanasu. Abre **Ajustes → Comando y MCP** para conectarlo a Claude Desktop, ChatGPT (Codex) o Claude Code con un clic, añadirlo a tu PATH o copiar la configuración de MCP para otras apps. (Por ahora, el chat normal de ChatGPT no puede usar herramientas MCP locales por un error de OpenAI; Codex sí puede).
+
+| | |
+| --- | --- |
+| **Leer reuniones** | `hanasu meetings list / show / search` y `hanasu actions` muestran reuniones, actas, transcripciones y tareas, como texto o en `--json`. No se envía nada a ningún sitio. |
+| **Preguntar** | `hanasu ask "¿Qué decidimos la semana pasada?"` responde a partir de tus reuniones. En el Mac usa la IA que elegiste para **Chat con IA y preguntas** (o la de las reuniones si no has elegido ninguna); en Windows, la de las reuniones. |
+| **Pulir texto** | `hanasu refine` pule o traduce texto igual que el dictado por voz, y `hanasu edit "<instrucción>"` lo reescribe. Los dos funcionan en tuberías (pipes). `--app` elige el estilo de una app (un bundle ID en el Mac, o el nombre de un ejecutable como `slack.exe` en Windows). |
+| **MCP para agentes de IA** | `hanasu mcp` es un servidor MCP (stdio). Los agentes pueden listar, leer y buscar tus reuniones, y hacer preguntas sobre ellas. El contenido de las reuniones que compartes así llega al agente y al proveedor de su IA. |
+| **Comprobar la configuración** | `hanasu doctor` muestra qué IA y qué credenciales se usan, la carpeta de reuniones y cómo registrar MCP. Ejecuta `hanasu help` para ver todas las opciones. |
+
+En Windows, ejecuta `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` antes de leer la salida en PowerShell. Si tus claves de API están protegidas con Windows Hello, se te pedirá confirmación cada vez que un comando las use.
+
+En el Mac, los administradores pueden desactivar el comando, MCP o algunas IA con un perfil de configuración.
+
 ## Descarga
 
 Consigue la última versión en [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
@@ -185,6 +201,7 @@ Puedes cambiar todos los atajos en Ajustes. La guía de usuario completa (en jap
 - **La IA recibe texto, no audio.** Gemini o Claude reciben la transcripción. Según tu configuración, también pueden recibir el nombre de la app en la que escribes, el contexto de pantalla, el texto leído de una captura de tu pantalla (nunca la imagen) y las transcripciones de reuniones para preguntar y para el chat con IA de la reunión.
 - **Local y Apple también mantienen el texto en tu dispositivo.** Si eliges cualquiera de los dos, no se envía nada a ningún servicio de IA. Lo único que se descarga es el propio modelo.
 - **El audio va a Google solo si así lo eliges.** Si seleccionas el motor de voz Gemini, el audio grabado se envía a Google.
+- **Los agentes solo reciben reuniones si los conectas.** El comando `hanasu` y su servidor MCP solo leen reuniones cuando los llamas tú o los llama un agente, y lo que devuelven llega a ese agente y al proveedor de su IA.
 - **Las reuniones son archivos normales.** Se guardan como JSON y Markdown en `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac y Windows usan el mismo formato.
 - **Sin telemetría.** Hanasu no recopila analíticas.
 - **Las claves de API están protegidas por el SO.** En macOS se guardan en el Keychain, y otras apps deben pedir tu contraseña de inicio de sesión para leerlas. En Windows se cifran con DPAPI o, si lo eliges, con una clave de Windows Hello. Ninguno de los dos puede detener por completo el malware que se ejecuta con tu usuario. Consulta [docs/design/security.md](docs/design/security.md).

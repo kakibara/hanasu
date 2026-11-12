@@ -27,7 +27,8 @@ internal sealed class UpdatePromptWindow : Window
 {
     public UpdateChoice Choice { get; private set; } = UpdateChoice.Later;
 
-    public UpdatePromptWindow(AppVersion current, ReleaseInfo release, bool canInstall)
+    /// <param name="note">入れ替えの前に知らせること（動いている hanasu を終わらせる。REQ-REL-013）。なければ null</param>
+    public UpdatePromptWindow(AppVersion current, ReleaseInfo release, bool canInstall, string? note = null)
     {
         Title = Strings.UpdatePrompt_Title;
         SizeToContent = SizeToContent.Height;
@@ -54,6 +55,16 @@ internal sealed class UpdatePromptWindow : Window
             Margin = new Thickness(0, 8, 0, 0),
             TextWrapping = TextWrapping.Wrap,
         });
+        if (note is not null)
+        {
+            panel.Children.Add(new TextBlock
+            {
+                Text = note,
+                Margin = new Thickness(0, 8, 0, 0),
+                TextWrapping = TextWrapping.Wrap,
+                FontWeight = FontWeights.SemiBold,
+            });
+        }
 
         // アプリの機能の節と Windows の項目だけ出す（全文は「リリースのページを開く」で読む）
         var notes = ReleaseNotesFormatter.Parse(ReleaseNotesFormatter.ForApp(release.Notes, ReleasePlatform.Windows));

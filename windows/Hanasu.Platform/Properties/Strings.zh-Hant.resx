@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>尚未設定 Windows Hello（請在 Windows 設定 → 帳戶 → 登入選項中設定 PIN 等）。</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>Windows Hello 驗證已取消，因此無法讀取 API 金鑰。</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Windows Hello 驗證失敗（{0}）。</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>找不到 Windows Hello 金鑰（Windows Hello 可能已重新設定）。請在設定 → AI 中重新輸入 API 金鑰。</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>無法開啟 Windows Hello 金鑰（{0}）。</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>Windows Hello 驗證已取消。</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>無法建立 Windows Hello 金鑰（{0}）。</value>
+  </data>
+</root>

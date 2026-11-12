@@ -711,4 +711,385 @@
   <data name="Meeting_Dictionary_Failed" xml:space="preserve">
     <value>この会議を変えられませんでした: {0}</value>
   </data>
+  <data name="Cmd_ActionCount" xml:space="preserve">
+    <value>アクション {0} 件</value>
+  </data>
+  <data name="Cmd_ActionsHeading" xml:space="preserve">
+    <value># {0} — アクションアイテム</value>
+  </data>
+  <data name="Cmd_AiFailed" xml:space="preserve">
+    <value>AI で処理できませんでした: {0}</value>
+  </data>
+  <data name="Cmd_AiHeading" xml:space="preserve">
+    <value>使う AI:</value>
+  </data>
+  <data name="Cmd_AllowedValues" xml:space="preserve">
+    <value>使える値: {0}</value>
+  </data>
+  <data name="Cmd_AmbiguousDate" xml:space="preserve">
+    <value>{0} の会議が {1} 件あります。ID で指定してください。</value>
+  </data>
+  <data name="Cmd_AppleUnavailable" xml:space="preserve">
+    <value>apple（Apple の Foundation Models）は Windows では使えません。</value>
+  </data>
+  <data name="Cmd_AskSources" xml:space="preserve">
+    <value>AI に渡した会議（* は答えで引用したもの）:</value>
+  </data>
+  <data name="Cmd_CannotParseValue" xml:space="preserve">
+    <value>{0} の値を読めません: {1}</value>
+  </data>
+  <data name="Cmd_CannotReadFile" xml:space="preserve">
+    <value>ファイルを読めません: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadFolder" xml:space="preserve">
+    <value>会議のフォルダを読めません: {0}</value>
+  </data>
+  <data name="Cmd_CannotReadMeeting" xml:space="preserve">
+    <value>会議を読めません: {0}</value>
+  </data>
+  <data name="Cmd_CredentialReadable" xml:space="preserve">
+    <value>{0}（読めます）</value>
+  </data>
+  <data name="Cmd_CredentialUnreadable" xml:space="preserve">
+    <value>{0}（読めません: {1}）</value>
+  </data>
+  <data name="Cmd_CredentialsHeading" xml:space="preserve">
+    <value>認証情報:</value>
+  </data>
+  <data name="Cmd_DesktopConfig" xml:space="preserve">
+    <value>Claude Desktop の設定（claude_desktop_config.json）に足す形:</value>
+  </data>
+  <data name="Cmd_EnvVariable" xml:space="preserve">
+    <value>環境変数 {0}</value>
+  </data>
+  <data name="Cmd_Executable" xml:space="preserve">
+    <value>実行ファイル: {0}</value>
+  </data>
+  <data name="Cmd_ExtraArgument" xml:space="preserve">
+    <value>余分な引数です: {0}</value>
+  </data>
+  <data name="Cmd_FallbackRaw" xml:space="preserve">
+    <value>整えられなかったので、整える前の文章を出します（--fallback-raw）。</value>
+  </data>
+  <data name="Cmd_FolderCheck" xml:space="preserve">
+    <value>そのフォルダがあり、このユーザーで読めるかを確かめてください。</value>
+  </data>
+  <data name="Cmd_FolderMissing" xml:space="preserve">
+    <value>{0}（まだありません）</value>
+  </data>
+  <data name="Cmd_HelloNoDesktop" xml:space="preserve">
+    <value>画面のないセッション（SSH など）では、Windows Hello の確認を出せないので、Windows Hello で守った API キーを使えません。DPAPI で守るか、環境変数でキーを渡してください。</value>
+  </data>
+  <data name="Cmd_HelloTimeout" xml:space="preserve">
+    <value>Windows Hello の確認が {0} 秒以内に終わりませんでした。確認の画面がほかのウインドウの裏に隠れていないか確かめてください。</value>
+  </data>
+  <data name="Cmd_HelpActions" xml:space="preserve">
+    <value>会議をまたいでアクションアイテムを並べる</value>
+  </data>
+  <data name="Cmd_HelpAgent" xml:space="preserve">
+    <value>AI エージェント（CLAUDE.md など）に貼る、hanasu の使い方の説明を出す（英語）</value>
+  </data>
+  <data name="Cmd_HelpAsk" xml:space="preserve">
+    <value>過去の会議について AI に質問する（関係する会議の中身を、会議の AI に送る）</value>
+  </data>
+  <data name="Cmd_HelpDict" xml:space="preserve">
+    <value>辞書の置き換えルールだけを当てる（AI には送らない）</value>
+  </data>
+  <data name="Cmd_HelpDoctor" xml:space="preserve">
+    <value>使う AI と認証情報・会議のフォルダ・PATH を確かめる（キーの値は出さない）</value>
+  </data>
+  <data name="Cmd_HelpEdit" xml:space="preserve">
+    <value>文章を指示どおりに書き換える（選択を声で編集と同じ）。文章は引数か標準入力で渡す</value>
+  </data>
+  <data name="Cmd_HelpList" xml:space="preserve">
+    <value>会議を新しい順に並べる</value>
+  </data>
+  <data name="Cmd_HelpMcp" xml:space="preserve">
+    <value>AI エージェントから使う MCP サーバーとして動く（標準入出力）。会議を読むツールを出す</value>
+  </data>
+  <data name="Cmd_HelpRefine" xml:space="preserve">
+    <value>音声入力と同じように文章を整える（--translate なら翻訳する）。文章は引数か標準入力で渡す</value>
+  </data>
+  <data name="Cmd_HelpSearch" xml:space="preserve">
+    <value>会議を横断して検索する（空白で区切ると、すべてを含むものだけ）</value>
+  </data>
+  <data name="Cmd_HelpShow" xml:space="preserve">
+    <value>会議の中身を出す（既定は議事録）</value>
+  </data>
+  <data name="Cmd_HelpTitle" xml:space="preserve">
+    <value>hanasu — Hanasu の会議の記録と文章の整え方を、ターミナルや AI エージェントから使う</value>
+  </data>
+  <data name="Cmd_HelpUsage" xml:space="preserve">
+    <value>使い方:</value>
+  </data>
+  <data name="Cmd_HitMinutes" xml:space="preserve">
+    <value>議事録 {0} 行目: {1}</value>
+  </data>
+  <data name="Cmd_HitTitle" xml:space="preserve">
+    <value>タイトル: {0}</value>
+  </data>
+  <data name="Cmd_Hits" xml:space="preserve">
+    <value>ヒット {0} 件</value>
+  </data>
+  <data name="Cmd_InferredName" xml:space="preserve">
+    <value>{0}（推測）</value>
+  </data>
+  <data name="Cmd_LocalInUse" xml:space="preserve">
+    <value>Hanasu のアプリがローカルの AI を使っています。</value>
+  </data>
+  <data name="Cmd_LocalInUseAdvice" xml:space="preserve">
+    <value>アプリを終了するか、--ai でほかの AI を選んでください（同じモデルを二重に読み込まないため）。</value>
+  </data>
+  <data name="Cmd_LocalModels" xml:space="preserve">
+    <value>ローカル: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteClaudeCode" xml:space="preserve">
+    <value>Claude Code への登録の例: {0}</value>
+  </data>
+  <data name="Cmd_McpNoteData" xml:space="preserve">
+    <value>MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を hanasu ask と同じ AI（hanasu doctor の ask の行）にも送ります。</value>
+  </data>
+  <data name="Cmd_McpNoteDesktop" xml:space="preserve">
+    <value>Claude Desktop などへの登録の JSON は、hanasu doctor と設定画面の「コマンドと MCP」に出ます。</value>
+  </data>
+  <data name="Cmd_McpNoteTools" xml:space="preserve">
+    <value>ツール: list_meetings・get_meeting・search_meetings・ask_meetings・list_action_items（どれも読むだけ）</value>
+  </data>
+  <data name="Cmd_McpRunning" xml:space="preserve">
+    <value>hanasu mcp: MCP サーバーとして動いています。標準入力が閉じると終わります。</value>
+  </data>
+  <data name="Cmd_MeetingNotFound" xml:space="preserve">
+    <value>会議が見つかりません: {0}</value>
+  </data>
+  <data name="Cmd_MeetingStatusPartial" xml:space="preserve">
+    <value>この会議は「{0}」です。保存されている分だけを出します。</value>
+  </data>
+  <data name="Cmd_MeetingsFolder" xml:space="preserve">
+    <value>会議のフォルダ: {0}</value>
+  </data>
+  <data name="Cmd_MinutesOutdated" xml:space="preserve">
+    <value>議事録は、使う発言を変えたあとに作り直されていません。</value>
+  </data>
+  <data name="Cmd_NeedsPositiveInt" xml:space="preserve">
+    <value>{0} には 1 以上の整数を指定してください: {1}</value>
+  </data>
+  <data name="Cmd_NeedsValue" xml:space="preserve">
+    <value>{0} には値が要ります。</value>
+  </data>
+  <data name="Cmd_NewerMeetings" xml:space="preserve">
+    <value>これより新しい会議が {0} 件あります（記録中・処理中・失敗）: {1}</value>
+  </data>
+  <data name="Cmd_NoActionItems" xml:space="preserve">
+    <value>アクションアイテムはありません。</value>
+  </data>
+  <data name="Cmd_NoActions" xml:space="preserve">
+    <value>この会議にはアクションアイテムがありません。</value>
+  </data>
+  <data name="Cmd_NoAskMeetings" xml:space="preserve">
+    <value>質問に使える会議の記録がありません。</value>
+  </data>
+  <data name="Cmd_NoDoneMeeting" xml:space="preserve">
+    <value>完了した会議がありません。</value>
+  </data>
+  <data name="Cmd_NoLocalModels" xml:space="preserve">
+    <value>ダウンロード済みのモデルはありません</value>
+  </data>
+  <data name="Cmd_NoMeetings" xml:space="preserve">
+    <value>会議はありません。</value>
+  </data>
+  <data name="Cmd_NoMinutes" xml:space="preserve">
+    <value>この会議には議事録がありません。</value>
+  </data>
+  <data name="Cmd_NoMinutesShort" xml:space="preserve">
+    <value>議事録なし</value>
+  </data>
+  <data name="Cmd_NoNotes" xml:space="preserve">
+    <value>この会議にはメモがありません。</value>
+  </data>
+  <data name="Cmd_NoSearchResults" xml:space="preserve">
+    <value>見つかりませんでした。</value>
+  </data>
+  <data name="Cmd_NotOnShellPath" xml:space="preserve">
+    <value>（このシェルの PATH にはありません）</value>
+  </data>
+  <data name="Cmd_NotSet" xml:space="preserve">
+    <value>未設定</value>
+  </data>
+  <data name="Cmd_NoteAi" xml:space="preserve">
+    <value>&lt;AI&gt;: local・gemini・claude（省くと設定の AI）。&lt;文体&gt;: none・chat・email・document-polite・document-plain。&lt;言語&gt;: en・ja・ko など</value>
+  </data>
+  <data name="Cmd_NoteAiFailure" xml:space="preserve">
+    <value>AI が失敗したときは何も出さずに終わります。--fallback-raw なら、整える前の文章を出します。--show-prompt で、AI に送る内容を標準エラー出力に出します。</value>
+  </data>
+  <data name="Cmd_NoteEncoding" xml:space="preserve">
+    <value>PowerShell で出力を読むときは、先に [Console]::OutputEncoding = [Text.UTF8Encoding]::new() を実行してください（Windows PowerShell 5.1 では $OutputEncoding = [Text.UTF8Encoding]::new() も）。5.1 の &gt; は UTF-16 で書くので、ファイルに書くときは | Out-File -Encoding utf8 を使ってください。</value>
+  </data>
+  <data name="Cmd_NoteExit" xml:space="preserve">
+    <value>終了コード: 0 成功、1 失敗、2 使い方の誤り、3 認証情報がない、4 会議が見つからない、5 ポリシーか権限で止められた</value>
+  </data>
+  <data name="Cmd_NoteHello" xml:space="preserve">
+    <value>Windows Hello で守った API キーは、AI を使うコマンドを呼ぶたびに確認が出ます（hanasu mcp は最初と、画面のロックのあと）。</value>
+  </data>
+  <data name="Cmd_NoteJson" xml:space="preserve">
+    <value>--json で、決まった形の JSON を出します。--meetings-dir &lt;フォルダ&gt;（か環境変数 HANASU_MEETINGS_DIR）で、会議のフォルダを変えられます。</value>
+  </data>
+  <data name="Cmd_NoteLocal" xml:space="preserve">
+    <value>ローカルの AI は、呼ぶたびにモデルを読み込むので時間がかかります。アプリがローカルの AI を使っている間は使えません。</value>
+  </data>
+  <data name="Cmd_NoteMeeting" xml:space="preserve">
+    <value>会議の指定: ID（例: 2026-11-02_1312）、latest（最新の完了した会議）、日付（例: 2026-11-02）</value>
+  </data>
+  <data name="Cmd_NotePeriod" xml:space="preserve">
+    <value>期間の指定: 7d・24h・2w（今からさかのぼる）、日付（例: 2026-11-01）</value>
+  </data>
+  <data name="Cmd_Pair" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
+  <data name="Cmd_PathNotOn" xml:space="preserve">
+    <value>PATH: 入っていません（設定画面の「コマンドと MCP」で入れられます。絶対パスならそのまま使えます）</value>
+  </data>
+  <data name="Cmd_PathOn" xml:space="preserve">
+    <value>PATH: {0}</value>
+  </data>
+  <data name="Cmd_PathOther" xml:space="preserve">
+    <value>PATH: {0}（別の場所の Hanasu を指しています）</value>
+  </data>
+  <data name="Cmd_PhCount" xml:space="preserve">
+    <value>&lt;件数&gt;</value>
+  </data>
+  <data name="Cmd_PhFolder" xml:space="preserve">
+    <value>&lt;フォルダ&gt;</value>
+  </data>
+  <data name="Cmd_PhInstruction" xml:space="preserve">
+    <value>&lt;指示&gt;</value>
+  </data>
+  <data name="Cmd_PhLanguage" xml:space="preserve">
+    <value>&lt;言語&gt;</value>
+  </data>
+  <data name="Cmd_PhMeeting" xml:space="preserve">
+    <value>&lt;会議&gt;</value>
+  </data>
+  <data name="Cmd_PhModel" xml:space="preserve">
+    <value>&lt;モデル&gt;</value>
+  </data>
+  <data name="Cmd_PhName" xml:space="preserve">
+    <value>&lt;名前&gt;</value>
+  </data>
+  <data name="Cmd_PhPeriod" xml:space="preserve">
+    <value>&lt;期間&gt;</value>
+  </data>
+  <data name="Cmd_PhQuestion" xml:space="preserve">
+    <value>&lt;質問&gt;</value>
+  </data>
+  <data name="Cmd_PhStyle" xml:space="preserve">
+    <value>&lt;文体&gt;</value>
+  </data>
+  <data name="Cmd_PhText" xml:space="preserve">
+    <value>&lt;文章&gt;</value>
+  </data>
+  <data name="Cmd_PhWord" xml:space="preserve">
+    <value>&lt;語&gt;</value>
+  </data>
+  <data name="Cmd_PurposeDictation" xml:space="preserve">
+    <value>音声入力</value>
+  </data>
+  <data name="Cmd_PurposeMeeting" xml:space="preserve">
+    <value>会議</value>
+  </data>
+  <data name="Cmd_SavedKeyDpapi" xml:space="preserve">
+    <value>保存した API キー（DPAPI）</value>
+  </data>
+  <data name="Cmd_SavedKeyHello" xml:space="preserve">
+    <value>保存した API キー（Windows Hello。読むたびに確認が出るので、ここでは読みません）</value>
+  </data>
+  <data name="Cmd_SeeHelp" xml:space="preserve">
+    <value>使い方は hanasu help で表示できます。</value>
+  </data>
+  <data name="Cmd_SeeMeetingsList" xml:space="preserve">
+    <value>会議の一覧は hanasu meetings list で表示できます。</value>
+  </data>
+  <data name="Cmd_ServiceAccount" xml:space="preserve">
+    <value>サービスアカウント（{0}）</value>
+  </data>
+  <data name="Cmd_SinceBeforeUntil" xml:space="preserve">
+    <value>--since は --until より前にしてください。</value>
+  </data>
+  <data name="Cmd_SpecifyInstruction" xml:space="preserve">
+    <value>書き換えの指示を指定してください。</value>
+  </data>
+  <data name="Cmd_SpecifyOneMeeting" xml:space="preserve">
+    <value>会議を 1 つ指定してください（例: hanasu meetings show latest）。</value>
+  </data>
+  <data name="Cmd_SpecifyQuestion" xml:space="preserve">
+    <value>質問を指定してください。</value>
+  </data>
+  <data name="Cmd_SpecifySearchWords" xml:space="preserve">
+    <value>検索する語を指定してください（例: hanasu meetings search 予算）。</value>
+  </data>
+  <data name="Cmd_StatusDone" xml:space="preserve">
+    <value>完了</value>
+  </data>
+  <data name="Cmd_StatusFailed" xml:space="preserve">
+    <value>失敗</value>
+  </data>
+  <data name="Cmd_StatusProcessing" xml:space="preserve">
+    <value>処理中</value>
+  </data>
+  <data name="Cmd_StatusRecording" xml:space="preserve">
+    <value>記録中</value>
+  </data>
+  <data name="Cmd_TemporaryFolder" xml:space="preserve">
+    <value>Hanasu が一時フォルダ（zip の中など）から動いています。zip をすべて展開したフォルダから開き直してから、PATH と MCP に登録してください。</value>
+  </data>
+  <data name="Cmd_TextBoth" xml:space="preserve">
+    <value>文章は、引数か標準入力のどちらかで渡してください（両方は使えません）。</value>
+  </data>
+  <data name="Cmd_TextEmpty" xml:space="preserve">
+    <value>文章が空です。</value>
+  </data>
+  <data name="Cmd_TextMissing" xml:space="preserve">
+    <value>文章を、引数か標準入力（パイプ）で渡してください。</value>
+  </data>
+  <data name="Cmd_TextTooLong" xml:space="preserve">
+    <value>文章が長すぎます（{0} 文字）。{1} 文字以内にしてください。</value>
+  </data>
+  <data name="Cmd_TranscriptDate" xml:space="preserve">
+    <value>- 日時: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptHeading" xml:space="preserve">
+    <value># {0} — 文字起こし</value>
+  </data>
+  <data name="Cmd_TranscriptLength" xml:space="preserve">
+    <value>- 長さ: {0}</value>
+  </data>
+  <data name="Cmd_TranscriptOmitted" xml:space="preserve">
+    <value>- 議事録に使わない発言（{0} 件）は含めていません</value>
+  </data>
+  <data name="Cmd_UnknownAi" xml:space="preserve">
+    <value>--ai に知らない AI を指定しました: {0}</value>
+  </data>
+  <data name="Cmd_UnknownArgument" xml:space="preserve">
+    <value>知らない引数です: {0}</value>
+  </data>
+  <data name="Cmd_UnknownCommand" xml:space="preserve">
+    <value>知らないコマンドです: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLanguage" xml:space="preserve">
+    <value>--translate に知らない言語を指定しました: {0}</value>
+  </data>
+  <data name="Cmd_UnknownLocalModel" xml:space="preserve">
+    <value>知らないローカルのモデルです: {0}</value>
+  </data>
+  <data name="Cmd_UnknownOption" xml:space="preserve">
+    <value>知らないオプションです: {0}</value>
+  </data>
+  <data name="Cmd_UnknownStyle" xml:space="preserve">
+    <value>--style に知らない文体を指定しました: {0}</value>
+  </data>
+  <data name="Cmd_UnreadableAdvice" xml:space="preserve">
+    <value>フォルダのアクセス権と、OneDrive などの同期でファイルがこの PC にあるかを確かめてください。</value>
+  </data>
+  <data name="Cmd_UnreadableCount" xml:space="preserve">
+    <value>読めない会議が {0} 件あります（{1}）。</value>
+  </data>
 </root>

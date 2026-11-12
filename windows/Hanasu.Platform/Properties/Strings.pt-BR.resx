@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Hello_NotSetUp" xml:space="preserve">
+    <value>O Windows Hello não está configurado (configure um PIN ou similar em Configurações do Windows → Contas → Opções de entrada).</value>
+  </data>
+  <data name="Hello_CanceledCannotRead" xml:space="preserve">
+    <value>A verificação do Windows Hello foi cancelada, por isso não foi possível ler a chave de API.</value>
+  </data>
+  <data name="Hello_VerifyFailed" xml:space="preserve">
+    <value>Falha na verificação do Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_KeyNotFound" xml:space="preserve">
+    <value>A chave do Windows Hello não foi encontrada (o Windows Hello pode ter sido configurado novamente). Insira a chave de API novamente em Configurações → AI.</value>
+  </data>
+  <data name="Hello_OpenFailed" xml:space="preserve">
+    <value>Não foi possível abrir a chave do Windows Hello ({0}).</value>
+  </data>
+  <data name="Hello_Canceled" xml:space="preserve">
+    <value>A verificação do Windows Hello foi cancelada.</value>
+  </data>
+  <data name="Hello_CreateFailed" xml:space="preserve">
+    <value>Não foi possível criar a chave do Windows Hello ({0}).</value>
+  </data>
+</root>

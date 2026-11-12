@@ -22,6 +22,8 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
   その間に、同じユーザーで動くマルウェアが Hanasu のメモリを読んだり、Hanasu に DLL を入れたりすれば、キーを取れる。
 - 同じユーザーのほかのアプリが Windows Hello の鍵（名前は `Hanasu.ApiKeys`）で署名を求めると、確認の画面が出る。ユーザーが中身を見ずに通すと読まれる。
 - 管理者・SYSTEM は、どの方法でも読める。
+- `hanasu` コマンド（`cli\hanasu.exe`）も同じ `secrets.json` を読む（`Hanasu.Platform` の DPAPI・Windows Hello。DEC-COM-193）。Windows Hello のときは、鍵をそのプロセスの中でだけ持つので、呼ぶたびに確認が出る。呼ぶたびの確認に慣れて、中身を見ずに通す危険がある（エージェントから頻繁に呼ぶなら、キーの使い分けか DPAPI を選ぶ）。`hanasu mcp` は鍵を持ち続け、画面のロック・ログオフ・切断・スリープで捨てる（アプリと同じ）。画面のないセッション（SSH など）では確認を出さず、確認が 60 秒で終わらなければ諦める（DEC-COM-198）。`hanasu doctor` は Windows Hello のキーを読まない。
+- `hanasu` は起動の最初に DLL を探す場所を絞る（`DllSearch.Harden`。DEC-COM-148）。PATH に入れる `cli\` には `hanasu.exe` だけを置き、ほかの DLL を混ぜない（ほかのプログラムの DLL の探し先に入るため。CI で確かめる）。ログ（`hanasu.log`）には起動と終了コードだけを書き、質問・会議・整える文の中身は書かない。
 - 残る危険を減らすには、キーを使い分ける（Hanasu 専用のキーを作る。Claude Console で使う上限を決める）、漏れたと思ったらすぐ無効にする、が効く。
 
 ### 保存の形
@@ -74,6 +76,9 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 - 直したこと: なし（API キーの置き場所は 1 章）。
 - 残る危険: 会議の保存先は、ユーザーが選べる（共有フォルダや同期するフォルダを選ぶと、会議の中身がそこに置かれる）。録音を消すのは削除だけで、ディスクからの完全な消去（上書き）はしない。保存先を OneDrive などで同期していると、同期先の削除済みの項目にしばらく残る（録音の管理の画面に注意を出す）。バックアップ（ファイル履歴・クラウドのバックアップ）にとった分は Hanasu からは消せない。消した録音のぶん、文字起こしに欠けがある会議の会話は戻せない（確かめのダイアログで知らせる）。
 
+- 確かめたこと（2026-11-12）: 設定の「AI アプリにつなぐ」（REQ-COM-194）は、ほかのアプリの設定ファイル（`%APPDATA%\Claude\claude_desktop_config.json`、`%USERPROFILE%\.codex\config.toml`、`%USERPROFILE%\.claude.json`）を書き換える。書く前の写し（`<名前>.hanasu-backup`）を同じフォルダに残し、一時ファイルに書いて置き換え、読み直して確かめる。ファイルの ACL はフォルダから受け継ぐ（ユーザーのプロファイルの下なので、本人と管理者だけ）。
+- 残る危険: これらのファイルと写しには、ほかの MCP のサーバーの `env` に書いた鍵が入りうる。写しは 1 つだけで、次に書くときに上書きする。
+
 ### 2.5 クリップボード
 
 - 確かめたこと: 入力のためにクリップボードに置く文章には、PR #19 から `ExcludeClipboardContentFromMonitorProcessing`・`CanIncludeInClipboardHistory`=0・`CanUploadToCloudClipboard`=0 を付けている（`ClipboardTextInserter`）。貼り付けのあと、元のクリップボードに戻す（その間にユーザーがコピーしていたら戻さない）。
@@ -102,6 +107,8 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 - 直したこと（DEC-COM-150）: `packages.lock.json` を使い、CI の Restore の段では locked mode で restore する（lock と食い違えば失敗）。publish の段は RID を足して restore し直すので locked mode を外している（同じ版に決まる）。
 - 残る危険: GitHub Actions（`actions/checkout@v6` など）は版のタグで指していて、コミットの SHA で固定していない（ほかのワークフローと合わせて直すのがよい）。Anthropic の SDK は推移的に Microsoft.Extensions.AI.Abstractions などを取り込む（[THIRD_PARTY_NOTICES.md](../../windows/THIRD_PARTY_NOTICES.md)）。
 
+- 足したもの（2026-11-12）: 設定の「AI アプリにつなぐ」（REQ-COM-194）で、動いている Claude Desktop の起動の引数を読むために `System.Management`（WMI の `Win32_Process.CommandLine`。Microsoft のパッケージ。`System.CodeDom` が付いてくる）をアプリ（`Hanasu.Windows`）にだけ足した。`hanasu.exe` には入れていない。版は lock で固定し、`THIRD_PARTY_NOTICES.md` に書いた。
+
 ### 2.9 配布
 
 - 確かめたこと: 配布物（zip）はコード署名をしていない。Windows の SmartScreen が「認識されないアプリ」と出す。
@@ -113,6 +120,6 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 
 2026-11-05 に見直した（REQ-COM-030、DEC-COM-060〜063）。Mac 版の [security.md](security.md) の 10 章と同じ考え。
 
-- 確かめたこと: `llama-server.exe` は `--host 127.0.0.1` の空いたポートで、起動のたびに作る乱数のキー（環境変数 `LLAMA_API_KEY`）を付けて動き、Hanasu と一緒に終わるジョブオブジェクトに入れる（`ChildProcessJob`）。クライアント（`LocalLlmClient.CreateHttp`）はプロキシを通さず、リダイレクトに従わない。llama.cpp の配布物は版と SHA-256 を固定して取る（`scripts/fetch-llama-cpp.ps1`）。モデルは `ModelDownload` で取る（2.3）。
+- 確かめたこと: `llama-server.exe` は `--host 127.0.0.1` の空いたポートで、起動のたびに作る乱数のキー（環境変数 `LLAMA_API_KEY`）を付けて動き、Hanasu と一緒に終わるジョブオブジェクトに入れる（`ChildProcessJob`。`Hanasu.Platform`）。クライアント（`LocalLlmClient.CreateHttp`）はプロキシを通さず、リダイレクトに従わない。llama.cpp の配布物は版と SHA-256 を固定して取る（`scripts/fetch-llama-cpp.ps1`）。モデルは `ModelDownload` で取る（2.3）。
 - 直したこと（DEC-COM-063）: キーなしで読める `/models` にモデルのファイルのパス（ユーザー名を含む）が出ていたので、`--alias <モデルの id>` を付けた。子プロセスの環境から、CLI が環境変数で受け取るほかのサービスの秘密（`ANTHROPIC_API_KEY`・`GEMINI_API_KEY` など。`LocalLlmServer.SecretEnvironmentKeys`）を外した。
 - 残る危険: 同じユーザーのプロセスは、llama-server の環境からキーとポートを読める（1 章の表のとおり）。環境変数 `HANASU_LLAMA_SERVER` で動かす実行ファイルを差し替えられる（開発と確認に要るので残している）。置いてあるモデルは大きさだけで確かめる（2.3）。

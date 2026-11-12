@@ -38,8 +38,8 @@ public static class ClaudeModels
     /// Haiku 5.5・Opus 5.5 の既定は medium で、モデルで違うため）。
     /// thinking は送らない（3 つのモデルとも既定で adaptive。Opus 5.5 は止められず、Sonnet 5.5 は disabled が 400 になる）
     /// </summary>
-    public static string Effort(TextPurpose purpose) => purpose == TextPurpose.Minutes ? "medium" : "low";
+    public static string Effort(TextPurpose purpose) => purpose.IsLong() ? "medium" : "low";
 
     /// <summary>出力の上限。thinking も数に入るので、返す文章より大きめにする（議事録は長いので 32,000。待ち時間は呼ぶ側で 5 分にする）</summary>
-    public static int MaxTokens(TextPurpose purpose) => purpose == TextPurpose.Minutes ? 32_000 : 8_000;
+    public static int MaxTokens(TextPurpose purpose) => purpose.IsLong() ? 32_000 : 8_000;
 }

@@ -197,6 +197,10 @@ public sealed class AppSettings
     public string MeetingOutputDeviceId { get; set; } = "";
     /// <summary>会議の保存先。空なら ドキュメント\Hanasu\Meetings</summary>
     public string MeetingsDirectory { get; set; } = "";
+    // 要件: REQ-COM-191
+    // 設計判断: DEC-COM-199
+    /// <summary>設定の「コマンドと MCP」でユーザーの PATH に足した項目（外すときと、別の場所の Hanasu の項目を見分けるときに使う）。足していなければ null</summary>
+    public string? CommandPathEntry { get; set; }
     /// <summary>次に記録する会議の議事録の型（Meeting.MinutesTemplate の値）</summary>
     public string MeetingMinutesTemplate { get; set; } = "auto";
     // 設計判断: DEC-MTG-061

@@ -122,6 +122,22 @@ Avec **Local**, Hanasu fait tourner un petit modèle de langage sur votre propre
 Vous pouvez choisir un moteur différent pour la saisie vocale et pour les réunions. Sur Windows, les réunions utilisent Whisper ou Gemini.
 Sur Mac, choisissez la langue de transcription dans une liste (japonais, anglais, chinois, coréen, français, allemand, espagnol, italien, portugais). Elle correspond au départ à la langue de votre système.
 
+### ⌨️ Utilisez-le depuis le terminal et des agents IA
+
+La commande `hanasu` permet aux scripts et aux agents IA (Claude Code, Claude Desktop et autres) de lire vos enregistrements de réunions et de mettre du texte au propre comme la saisie vocale. Elle est fournie avec l'application : il n'y a rien d'autre à installer. Sur le Mac, c'est l'application elle-même ; sur Windows, c'est `cli\hanasu.exe` dans le dossier de Hanasu. Ouvrez **Réglages → Commande et MCP** pour le connecter à Claude Desktop, ChatGPT (Codex) ou Claude Code en un clic, l'ajouter à votre PATH ou copier la configuration MCP pour d'autres apps. (Pour l'instant, le chat ChatGPT classique ne peut pas utiliser les outils MCP locaux à cause d'un bug d'OpenAI ; Codex, si.)
+
+| | |
+| --- | --- |
+| **Lire les réunions** | `hanasu meetings list / show / search` et `hanasu actions` affichent les réunions, comptes rendus, transcriptions et actions, en texte ou en `--json`. Rien n'est envoyé nulle part. |
+| **Demander** | `hanasu ask "Qu'avons-nous décidé la semaine dernière ?"` répond à partir de vos réunions. Sur le Mac, la commande utilise l'IA choisie pour **Chat IA et questions** (ou celle des réunions si vous n'en avez pas choisi) ; sur Windows, celle des réunions. |
+| **Mettre du texte au propre** | `hanasu refine` met au propre ou traduit du texte comme la saisie vocale, et `hanasu edit "<instruction>"` le réécrit. Les deux s'utilisent aussi dans un pipe. `--app` choisit le style d'une application (un identifiant de bundle sur le Mac, un nom d'exécutable comme `slack.exe` sur Windows). |
+| **MCP pour les agents IA** | `hanasu mcp` est un serveur MCP (stdio). Les agents peuvent lister, lire et rechercher vos réunions, et leur poser des questions. Le contenu des réunions partagé de cette façon est transmis à l'agent et au fournisseur de son IA. |
+| **Vérifier la configuration** | `hanasu doctor` indique l'IA et les identifiants utilisés, le dossier des réunions et comment enregistrer MCP. Exécutez `hanasu help` pour voir toutes les options. |
+
+Sur Windows, exécutez `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` avant de lire la sortie dans PowerShell. Les clés d'API protégées par Windows Hello vous demandent une confirmation chaque fois qu'une commande les utilise.
+
+Sur le Mac, les administrateurs peuvent désactiver la commande, MCP ou certaines IA avec un profil de configuration.
+
 ## Téléchargement
 
 Récupérez la dernière version depuis les [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
@@ -185,6 +201,7 @@ Vous pouvez modifier chaque raccourci dans les Réglages. Le guide d'utilisation
 - **L'IA reçoit du texte, pas de l'audio.** Gemini ou Claude reçoit la transcription. Selon vos réglages, il peut aussi recevoir le nom de l'application dans laquelle vous saisissez, le contexte de l'écran, le texte lu sur une capture de votre écran (jamais l'image) et les transcriptions de réunion pour les questions et pour le chat IA de la réunion.
 - **Local et Apple gardent aussi le texte sur votre appareil.** Si vous choisissez l'un des deux, rien n'est envoyé à un service d'IA. Le seul téléchargement est le modèle lui-même.
 - **L'audio n'est envoyé à Google que si vous le choisissez.** Si vous sélectionnez le moteur de reconnaissance vocale Gemini, l'audio enregistré est envoyé à Google.
+- **Les agents ne reçoivent les réunions que si vous les connectez.** La commande `hanasu` et son serveur MCP ne lisent les réunions que lorsqu'ils sont appelés par vous ou par un agent, et ce qu'ils renvoient est transmis à cet agent et au fournisseur de son IA.
 - **Les réunions sont de simples fichiers.** Elles sont enregistrées en JSON et en Markdown dans `~/Documents/Hanasu/Meetings/` (Windows : `Documents\Hanasu\Meetings\`). Mac et Windows utilisent le même format.
 - **Aucune télémétrie.** Hanasu ne collecte aucune donnée d'analyse.
 - **Les clés d'API sont protégées par le système.** Sur macOS, elles sont conservées dans le Keychain, et les autres applications doivent demander votre mot de passe de session pour les lire. Sur Windows, elles sont chiffrées avec DPAPI, ou avec une clé Windows Hello si vous le choisissez. Aucun des deux ne peut totalement empêcher un logiciel malveillant exécuté sous votre compte. Voir [docs/design/security.md](docs/design/security.md).

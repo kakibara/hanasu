@@ -101,27 +101,6 @@ Bản gốc: {2}</value>
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>Đang ghi âm cuộc họp (hoặc đang xử lý sau khi ghi). Nếu thoát, bản ghi lời và biên bản của cuộc họp này sẽ không được tạo (các tệp âm thanh vẫn được giữ lại). Vẫn thoát?</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Chưa thiết lập Windows Hello (hãy thiết lập mã PIN hoặc phương thức khác trong Cài đặt Windows → Tài khoản → Tùy chọn đăng nhập).</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>Đã hủy xác minh Windows Hello nên không thể đọc khóa API.</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>Xác minh Windows Hello không thành công ({0}).</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>Không tìm thấy khóa Windows Hello (có thể Windows Hello đã được thiết lập lại). Hãy nhập lại khóa API trong Cài đặt → AI.</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Không thể mở khóa Windows Hello ({0}).</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>Đã hủy xác minh Windows Hello.</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Không thể tạo khóa Windows Hello ({0}).</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>Không tìm thấy micrô. Hãy kiểm tra micrô đã được kết nối chưa trong Cài đặt Windows → Hệ thống → Âm thanh.</value>
   </data>
@@ -1475,6 +1454,188 @@ Mở trang phát hành trong trình duyệt?</value>
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>Không thể xóa hết bản ghi âm của {0} cuộc họp. Các tệp còn lại vẫn được giữ nguyên.</value>
+  </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>Không thể thêm vào PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>Đã thêm vào PATH. Gõ hanasu trong PowerShell hoặc Command Prompt mới mở (các terminal đang mở và ứng dụng chạy từ đó không thấy thay đổi, hãy mở lại).</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>Nếu không thể thêm máy chủ MCP, hãy dán hướng dẫn này (bằng tiếng Anh) vào chỉ dẫn của agent, chẳng hạn CLAUDE.md hoặc một skill trong Claude Code. Khi đó agent có thể chạy hanasu từ shell để đọc các cuộc họp của bạn. Trong Terminal, chạy hanasu help agent để in hướng dẫn này.</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>Hướng dẫn cho agent</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>Đã sao chép</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>Thêm đoạn này vào mcpServers trong tệp cấu hình của Claude Desktop (claude_desktop_config.json). Với các ứng dụng khác, dùng cùng command và args.</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>Khi đọc đầu ra trong PowerShell, hãy chạy [Console]::OutputEncoding = [Text.UTF8Encoding]::new() trước (trong Windows PowerShell 5.1 thì chạy thêm $OutputEncoding = [Text.UTF8Encoding]::new()). Trong 5.1, &gt; ghi bằng UTF-16, nên khi ghi ra tệp hãy dùng | Out-File -Encoding utf8.</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>Tệp thực thi</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>Ẩn</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>Đọc bản ghi cuộc họp và chỉnh sửa văn bản từ Terminal, script và AI agent. Bạn có thể chạy lệnh bằng đường dẫn đầy đủ ở trên mà không cần thêm vào PATH. Chạy hanasu help trong Terminal để xem cách dùng.</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>Nội dung cuộc họp trả về qua MCP sẽ đến tác nhân dùng MCP và nhà cung cấp AI của tác nhân đó. ask_meetings cũng gửi nội dung cuộc họp đến cùng AI với hanasu ask (xem dòng ask trong hanasu doctor).</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>Thiếu cli\hanasu.exe. Hãy mở Hanasu từ thư mục đã giải nén toàn bộ tệp zip tải về.</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>Chưa thêm</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>Có trong {0}</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>{0} đang trỏ đến một bản Hanasu ở vị trí khác. Hãy thêm lại để trỏ đến ứng dụng này.</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>Thêm vào PATH</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>Gỡ khỏi PATH</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>Không thể gỡ khỏi PATH: {0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>Đã xóa khỏi PATH.</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>Lệnh hanasu</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>Hiện</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>Hanasu đang chạy từ thư mục tạm (chẳng hạn bên trong tệp zip). Hãy giải nén toàn bộ zip, mở lại Hanasu từ thư mục đó rồi mới thêm vào PATH và MCP.</value>
+  </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>Kết nối với ứng dụng AI</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (Terminal và Code trong Claude Desktop)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>Đã kết nối</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>Chưa kết nối</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>Đang trỏ đến Hanasu ở vị trí khác (kết nối lại để trỏ đến ứng dụng này)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Đã có một mục hanasu không thuộc Hanasu ({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>Không đọc được tệp cấu hình: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>Không tìm thấy {0}</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>không phải JSON hợp lệ</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>không đúng định dạng mong đợi</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>Hanasu không thể sửa tệp ghi mcp_servers theo cách này</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>Kết nối…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>Xóa…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>Hiện chưa dùng được trong cuộc trò chuyện thông thường của ChatGPT (do lỗi của OpenAI). Có thể dùng trong Codex.</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Không tìm thấy Claude Code. Khi bạn cài đặt, Claude Code sẽ dùng mục đăng ký này.</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>Hãy tự thêm nội dung trong phần MCP bên dưới.</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>Cũng có mục đăng ký chỉ dùng cho một số thư mục (do chạy claude mcp add mà không chỉ định phạm vi).</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>Hãy thoát {0} rồi nhấn lại.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>Kết nối Hanasu với {0}?</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>hanasu sẽ được thêm vào tệp bên dưới. Trước khi ghi, một bản sao của tệp sẽ được lưu trong cùng thư mục với tên {0}.
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Đăng ký hanasu bằng lệnh claude mcp add của Claude Code để dùng được từ mọi thư mục.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>Thay mục hiện tại ({0}) bằng Hanasu?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>Xóa Hanasu khỏi {0}?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Chỉ xóa mục hanasu do Hanasu thêm vào.</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>Đang cập nhật cấu hình…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>Đã kết nối. Hãy mở lại {0} để bắt đầu dùng. Lần đầu đọc cuộc họp, nếu được yêu cầu quyền truy cập, hãy cho phép.</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>Đã kết nối. Có thể dùng trong các phiên Claude Code mới.</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>Đã xóa. Hãy mở lại {0} để áp dụng thay đổi.</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>Đã kết nối rồi.</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>Không có mục nào để xóa.</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>Không thể sửa đổi: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>Lệnh claude không chạy xong trong 30 giây nên đã bị dừng.</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>Lệnh &amp; MCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>Không thể cài bản cập nhật vì không đổi tên được thư mục Hanasu. Hãy dừng các hanasu đang chạy với quyền quản trị, thoát khỏi thư mục cli của Hanasu trong các terminal đang ở đó rồi cập nhật lại.</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>Trước khi cài bản cập nhật, các hanasu đang chạy ({0}) sẽ bị dừng. Nếu ứng dụng dùng MCP (như Claude Desktop) mất công cụ của Hanasu, hãy khởi động lại ứng dụng đó.</value>
   </data>
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0} ({1})</value>

@@ -273,14 +273,55 @@ enum MeetingStore {
     }
 
     static func loadAll() -> [Meeting] {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        let dirs = (try? FileManager.default.contentsOfDirectory(at: baseDirectory, includingPropertiesForKeys: nil)) ?? []
-        return dirs.compactMap { dir in
-            guard let data = try? Data(contentsOf: dir.appendingPathComponent("meeting.json")) else { return nil }
-            return try? decoder.decode(Meeting.self, from: data)
+        (try? loadAll(in: baseDirectory)) ?? []
+    }
+
+    // 要件: REQ-COM-185
+    /// フォルダの中の会議をすべて読む（新しい順）。フォルダがなければ空。フォルダを読めなければ投げる
+    /// （hanasu コマンドが、権限がないことを「会議がない」と取り違えないため）。読めない会議は飛ばす
+    static func loadAll(in directory: URL) throws -> [Meeting] {
+        try loadAllReporting(in: directory).meetings
+    }
+
+    // 要件: REQ-MTG-120, REQ-COM-185
+    // 設計判断: DEC-MTG-153
+    /// loadAll(in:) と同じに読み、meeting.json があるのに開けない・読めなかった会議のフォルダの名前（会議の ID）も返す。
+    /// 読めたが壊れている meeting.json は数えない（今までどおり黙って飛ばす）
+    static func loadAllReporting(in directory: URL) throws -> (meetings: [Meeting], unreadable: [String]) {
+        let dirs: [URL]
+        do {
+            dirs = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+        } catch let error as CocoaError where error.code == .fileReadNoSuchFile {
+            return ([], [])
         }
-        .sorted { $0.startedAt > $1.startedAt }
+        // 設計判断: DEC-MTG-123
+        // 会議ごとに並べて読む（会議が多いと、1 つずつ読むより速い。hanasu コマンドは呼ぶたびに全部を読む）
+        var meetings = [Meeting?](repeating: nil, count: dirs.count)
+        var unreadable = [Bool](repeating: false, count: dirs.count)
+        let lock = NSLock()
+        DispatchQueue.concurrentPerform(iterations: dirs.count) { index in
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let file = dirs[index].appendingPathComponent("meeting.json")
+            let data: Data
+            do {
+                data = try Data(contentsOf: file)
+            } catch {
+                // ファイルがない（会議のフォルダでない）ものは数えない
+                if FileManager.default.fileExists(atPath: file.path) {
+                    lock.lock()
+                    unreadable[index] = true
+                    lock.unlock()
+                }
+                return
+            }
+            guard let meeting = try? decoder.decode(Meeting.self, from: data) else { return }
+            lock.lock()
+            meetings[index] = meeting
+            lock.unlock()
+        }
+        let names = dirs.indices.filter { unreadable[$0] }.map { dirs[$0].lastPathComponent }.sorted()
+        return (meetings.compactMap { $0 }.sorted { $0.startedAt > $1.startedAt }, names)
     }
 
     // 要件: REQ-MTG-028

@@ -1,0 +1,340 @@
+{
+  "_comment": "Mac（.build/debug/Hanasu --test-hanasu-command）と Windows（dotnet test）の両方が動かして、expected.json と比べるコマンド。args の {\"mac\":…,\"windows\":…} は OS ごとの値。ai が true のものは、Mac は偽の fm（--ai apple）、Windows は偽の AI で動かす。compare: json は stdout の JSON、prompt は --show-prompt の送る内容、mcp はツールの結果",
+  "now": "2026-10-05T03:00:00Z",
+  "timeZone": "Asia/Tokyo",
+  "nonce": "0123456789ab",
+  "fakeAnswer": "来期の予算案をまとめます（M1: 予算の定例）",
+  "cases": [
+    {
+      "name": "list",
+      "args": [
+        "meetings",
+        "list",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "list-day",
+      "args": [
+        "meetings",
+        "list",
+        "--since",
+        "2026-10-02",
+        "--until",
+        "2026-10-02",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "list-relative",
+      "args": [
+        "meetings",
+        "list",
+        "--since",
+        "3d",
+        "--limit",
+        "2",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "show-all",
+      "args": [
+        "meetings",
+        "show",
+        "2026-10-01_0900",
+        "--all",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "show-latest",
+      "args": [
+        "meetings",
+        "show",
+        "latest",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "show-date",
+      "args": [
+        "meetings",
+        "show",
+        "2026-10-01",
+        "--actions",
+        "--notes",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "search",
+      "args": [
+        "meetings",
+        "search",
+        "予算",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "search-width",
+      "args": [
+        "meetings",
+        "search",
+        "abc",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "search-kana",
+      "args": [
+        "meetings",
+        "search",
+        "ガイド",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "search-case",
+      "args": [
+        "meetings",
+        "search",
+        "budget",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "search-and",
+      "args": [
+        "meetings",
+        "search",
+        "予算　来期",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "actions",
+      "args": [
+        "actions",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "actions-owner",
+      "args": [
+        "actions",
+        "--owner",
+        "田中",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "dict",
+      "args": [
+        "dict",
+        "apply",
+        "はなすの見積もりはえーびーしーです",
+        "--json"
+      ],
+      "compare": "json"
+    },
+    {
+      "name": "refine",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "refine-style",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--style",
+        "document-polite",
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "refine-app",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--app",
+        {
+          "mac": "com.tinyspeck.slackmacgap",
+          "windows": "slack.exe"
+        },
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "refine-translate",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--translate",
+        "en",
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "refine-translate-style",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--translate",
+        "ko",
+        "--style",
+        "email",
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "edit",
+      "args": [
+        "edit",
+        "もっと丁寧に",
+        "明日は10時からです",
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "ask",
+      "args": [
+        "ask",
+        "予算はどうなった",
+        "--show-prompt",
+        "--json"
+      ],
+      "ai": true,
+      "compare": "prompt+json"
+    },
+    {
+      "name": "ask-period",
+      "args": [
+        "ask",
+        "先週のABC社の見積もり",
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "ask-since",
+      "args": [
+        "ask",
+        "予算",
+        "--since",
+        "2026-10-02",
+        "--show-prompt",
+        "--json"
+      ],
+      "ai": true,
+      "compare": "prompt+json"
+    },
+    {
+      "name": "mcp-list",
+      "mcp": {
+        "name": "list_meetings",
+        "arguments": {
+          "limit": 2,
+          "offset": 1
+        }
+      },
+      "compare": "mcp"
+    },
+    {
+      "name": "mcp-get",
+      "mcp": {
+        "name": "get_meeting",
+        "arguments": {
+          "meeting": "2026-10-01_0900",
+          "include": [
+            "minutes",
+            "transcript"
+          ],
+          "transcriptFrom": 5
+        }
+      },
+      "compare": "mcp"
+    },
+    {
+      "name": "mcp-search",
+      "mcp": {
+        "name": "search_meetings",
+        "arguments": {
+          "query": "予算",
+          "limit": 2
+        }
+      },
+      "compare": "mcp"
+    },
+    {
+      "name": "mcp-actions",
+      "mcp": {
+        "name": "list_action_items",
+        "arguments": {
+          "owner": "佐藤"
+        }
+      },
+      "compare": "mcp"
+    },
+    {
+      "name": "mcp-bad-limit",
+      "mcp": {
+        "name": "list_meetings",
+        "arguments": {
+          "limit": "many"
+        }
+      },
+      "compare": "mcp"
+    },
+    {
+      "name": "mcp-missing",
+      "mcp": {
+        "name": "get_meeting",
+        "arguments": {
+          "meeting": "2020-01-01_0000"
+        }
+      },
+      "compare": "mcp-error"
+    }
+  ],
+  "ignoreKeys": [
+    "speakerName",
+    "name",
+    "ai",
+    "version",
+    "executable"
+  ],
+  "replace": {
+    "this PC": "this Mac"
+  }
+}

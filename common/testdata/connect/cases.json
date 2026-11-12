@@ -1,0 +1,939 @@
+{
+  "comment": "AI アプリにつなぐ（REQ-COM-194・DEC-COM-200〜203）の決まりを、Mac（.build/debug/Hanasu --test-hanasu-command）と Windows（AgentConnectTests）で同じに確かめる。kind: owner（実行ファイルの見分け）・dataDir（Claude Desktop の引数）・json（claude_desktop_config.json と ~/.claude.json）・toml（~/.codex/config.toml）。json の after は中身（値）で比べ、toml の after は 1 バイトずつ比べる。toml の after は CI で tomllib で読めることを確かめる（先頭の BOM は外して読む）。手で書いたもの（実装の出力を写したものではない）。表を外すときは、表の見出しから最後のキーの行まで（後ろの空行と、次の表の前のコメントは残す）を消し、ファイルの終わりまで消したときは前の空行を 1 つ、そうでなく前が空行（かファイルの始め）で後ろも空行なら後ろの空行を 1 つ消す。印の行 # Added by Hanasu は表と一緒に消す。CRLF のファイルは CRLF で足し、書き換える行は元の行の終わりを保つ。先頭の BOM は TOML では残し、JSON では読み飛ばして書くときに付けない",
+  "cases": [
+    {
+      "name": "owner: /Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "kind": "owner",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "command": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "expect": {
+        "owner": "current"
+      }
+    },
+    {
+      "name": "owner: /Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu",
+      "kind": "owner",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "command": "/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu",
+      "expect": {
+        "owner": "other"
+      }
+    },
+    {
+      "name": "owner: hanasu",
+      "kind": "owner",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "command": "hanasu",
+      "expect": {
+        "owner": "foreign"
+      }
+    },
+    {
+      "name": "owner: /usr/local/bin/hanasu",
+      "kind": "owner",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "command": "/usr/local/bin/hanasu",
+      "expect": {
+        "owner": "foreign"
+      }
+    },
+    {
+      "name": "owner: npx",
+      "kind": "owner",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "command": "npx",
+      "expect": {
+        "owner": "foreign"
+      }
+    },
+    {
+      "name": "owner: /Users/me/dev/hanasu/.build/debug/Hanasu",
+      "kind": "owner",
+      "windows": false,
+      "executable": "/Users/me/dev/hanasu/.build/debug/Hanasu",
+      "command": "/Users/me/dev/hanasu/.build/debug/Hanasu",
+      "expect": {
+        "owner": "current"
+      }
+    },
+    {
+      "name": "owner: /Applications/hanasu.app/Contents/MacOS/Hanasu",
+      "kind": "owner",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "command": "/Applications/hanasu.app/Contents/MacOS/Hanasu",
+      "expect": {
+        "owner": "foreign"
+      }
+    },
+    {
+      "name": "owner: c:\\program files\\hanasu\\CLI\\Hanasu.exe",
+      "kind": "owner",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "command": "c:\\program files\\hanasu\\CLI\\Hanasu.exe",
+      "expect": {
+        "owner": "current"
+      }
+    },
+    {
+      "name": "owner: D:\\Apps\\Hanasu\\cli\\hanasu.exe",
+      "kind": "owner",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "command": "D:\\Apps\\Hanasu\\cli\\hanasu.exe",
+      "expect": {
+        "owner": "other"
+      }
+    },
+    {
+      "name": "owner: C:\\Hanasu\\Hanasu.exe",
+      "kind": "owner",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "command": "C:\\Hanasu\\Hanasu.exe",
+      "expect": {
+        "owner": "foreign"
+      }
+    },
+    {
+      "name": "owner: hanasu",
+      "kind": "owner",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "command": "hanasu",
+      "expect": {
+        "owner": "foreign"
+      }
+    },
+    {
+      "name": "dataDir: 引数なしは既定",
+      "kind": "dataDir",
+      "arguments": [
+        "/Applications/Claude.app/Contents/MacOS/Claude"
+      ],
+      "expect": {
+        "dataDir": null
+      }
+    },
+    {
+      "name": "dataDir: --user-data-dir=…",
+      "kind": "dataDir",
+      "arguments": [
+        "/Applications/Claude.app/Contents/MacOS/Claude",
+        "--user-data-dir=/Users/me/Library/Application Support/Claude-Personal"
+      ],
+      "expect": {
+        "dataDir": "/Users/me/Library/Application Support/Claude-Personal"
+      }
+    },
+    {
+      "name": "dataDir: --user-data-dir …",
+      "kind": "dataDir",
+      "arguments": [
+        "C:\\Users\\me\\AppData\\Local\\AnthropicClaude\\app-1.0\\Claude.exe",
+        "--user-data-dir",
+        "C:\\Users\\me\\AppData\\Roaming\\Claude-Work"
+      ],
+      "expect": {
+        "dataDir": "C:\\Users\\me\\AppData\\Roaming\\Claude-Work"
+      }
+    },
+    {
+      "name": "dataDir: 引用符で囲んだ値",
+      "kind": "dataDir",
+      "arguments": [
+        "Claude.exe",
+        "--user-data-dir=\"C:\\Users\\me\\AppData\\Roaming\\Claude-Work\""
+      ],
+      "expect": {
+        "dataDir": "C:\\Users\\me\\AppData\\Roaming\\Claude-Work"
+      }
+    },
+    {
+      "name": "json: ファイルがなければ作る",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": null,
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": {
+          "mcpServers": {
+            "hanasu": {
+              "command": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+              "args": [
+                "mcp"
+              ]
+            }
+          }
+        },
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "json: 空のファイル",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": {
+          "mcpServers": {
+            "hanasu": {
+              "command": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+              "args": [
+                "mcp"
+              ]
+            }
+          }
+        },
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "json: ほかのサーバーと設定を残す",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\n  \"mcpServers\": {\n    \"other\": {\n      \"command\": \"npx\",\n      \"args\": [\n        \"-y\",\n        \"x\"\n      ],\n      \"env\": {\n        \"KEY\": \"v\"\n      }\n    }\n  },\n  \"preferences\": {\n    \"quickEntry\": true,\n    \"scale\": 1.5\n  },\n  \"coworkUserFilesPath\": \"/Users/me/日本語\"\n}",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": {
+          "mcpServers": {
+            "other": {
+              "command": "npx",
+              "args": [
+                "-y",
+                "x"
+              ],
+              "env": {
+                "KEY": "v"
+              }
+            },
+            "hanasu": {
+              "command": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+              "args": [
+                "mcp"
+              ]
+            }
+          },
+          "preferences": {
+            "quickEntry": true,
+            "scale": 1.5
+          },
+          "coworkUserFilesPath": "/Users/me/日本語"
+        },
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "json: 外すと hanasu だけ消える",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {\"other\": {\"command\": \"npx\", \"args\": [\"-y\", \"x\"], \"env\": {\"KEY\": \"v\"}}, \"hanasu\": {\"command\": \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\", \"args\": [\"mcp\"]}}, \"preferences\": {\"quickEntry\": true, \"scale\": 1.5}, \"coworkUserFilesPath\": \"/Users/me/日本語\"}",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "written",
+        "after": {
+          "mcpServers": {
+            "other": {
+              "command": "npx",
+              "args": [
+                "-y",
+                "x"
+              ],
+              "env": {
+                "KEY": "v"
+              }
+            }
+          },
+          "preferences": {
+            "quickEntry": true,
+            "scale": 1.5
+          },
+          "coworkUserFilesPath": "/Users/me/日本語"
+        },
+        "stateAfter": "notConnected"
+      }
+    },
+    {
+      "name": "json: つないでいれば書かない",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {\"other\": {\"command\": \"npx\", \"args\": [\"-y\", \"x\"], \"env\": {\"KEY\": \"v\"}}, \"hanasu\": {\"command\": \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\", \"args\": [\"mcp\"]}}, \"preferences\": {\"quickEntry\": true, \"scale\": 1.5}, \"coworkUserFilesPath\": \"/Users/me/\\u65e5\\u672c\\u8a9e\"}",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "unchanged"
+      }
+    },
+    {
+      "name": "json: 壊れた JSON",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "unreadable:invalidJSON",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "json: 一番上が配列",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[1, 2]",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "unreadable:unexpectedShape",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "json: mcpServers がオブジェクトでない",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": []}",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "unreadable:unexpectedShape",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "json: Hanasu のものでない hanasu は確かめる",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {\"hanasu\": {\"command\": \"npx\", \"args\": [\"hanasu-server\"], \"env\": {\"A\": \"1\"}}}}",
+      "action": "connect",
+      "overwrite": false,
+      "expect": {
+        "stateBefore": "foreign",
+        "result": "needsOverwrite"
+      }
+    },
+    {
+      "name": "json: 確かめたら置き換える（前の項目のキーは残さない）",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {\"hanasu\": {\"command\": \"npx\", \"args\": [\"hanasu-server\"], \"env\": {\"A\": \"1\"}}}}",
+      "action": "connect",
+      "overwrite": true,
+      "expect": {
+        "stateBefore": "foreign",
+        "result": "written",
+        "after": {
+          "mcpServers": {
+            "hanasu": {
+              "command": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+              "args": [
+                "mcp"
+              ]
+            }
+          }
+        },
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "json: Hanasu のものでない hanasu は外さない",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {\"hanasu\": {\"command\": \"npx\", \"args\": [\"hanasu-server\"], \"env\": {\"A\": \"1\"}}}}",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "foreign",
+        "result": "nothing"
+      }
+    },
+    {
+      "name": "json: hanasu がオブジェクトでなければ Hanasu のものでない",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {\"hanasu\": \"x\"}}",
+      "action": "connect",
+      "overwrite": false,
+      "expect": {
+        "stateBefore": "foreign",
+        "result": "needsOverwrite"
+      }
+    },
+    {
+      "name": "json: 別の場所の Hanasu はつなぎ直し、足したキーは残す",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {\"hanasu\": {\"command\": \"/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu\", \"args\": [\"mcp\"], \"env\": {\"TZ\": \"Asia/Tokyo\"}}}}",
+      "action": "connect",
+      "overwrite": false,
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": {
+          "mcpServers": {
+            "hanasu": {
+              "command": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+              "args": [
+                "mcp"
+              ],
+              "env": {
+                "TZ": "Asia/Tokyo"
+              }
+            }
+          }
+        },
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "json: 別の場所の Hanasu も外せる",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {\"hanasu\": {\"command\": \"/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu\", \"args\": [\"mcp\"], \"env\": {\"TZ\": \"Asia/Tokyo\"}}}}",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": {
+          "mcpServers": {}
+        },
+        "stateAfter": "notConnected"
+      }
+    },
+    {
+      "name": "json: つないでいなければ外すものがない",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"preferences\": {}}",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "nothing"
+      }
+    },
+    {
+      "name": "json: Windows のパス",
+      "kind": "json",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": null,
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": {
+          "mcpServers": {
+            "hanasu": {
+              "command": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+              "args": [
+                "mcp"
+              ]
+            }
+          }
+        },
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "json: プロジェクトだけの登録を見分ける",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"projects\": {\"/Users/me/work\": {\"mcpServers\": {\"hanasu\": {\"command\": \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\", \"args\": [\"mcp\"]}}}}, \"numStartups\": 3}",
+      "action": "state",
+      "expect": {
+        "stateBefore": "notConnected",
+        "projectEntry": true
+      }
+    },
+    {
+      "name": "json: 一番上の登録はプロジェクトだけの登録でない",
+      "kind": "json",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "{\"mcpServers\": {\"other\": {\"command\": \"npx\", \"args\": [\"-y\", \"x\"], \"env\": {\"KEY\": \"v\"}}, \"hanasu\": {\"command\": \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\", \"args\": [\"mcp\"]}}, \"preferences\": {\"quickEntry\": true, \"scale\": 1.5}, \"coworkUserFilesPath\": \"/Users/me/\\u65e5\\u672c\\u8a9e\"}",
+      "action": "state",
+      "expect": {
+        "stateBefore": "connected",
+        "projectEntry": false
+      }
+    },
+    {
+      "name": "toml: ファイルがなければ作る",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": null,
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: ほかの行は 1 バイトも変えずに終わりに足す",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "model = \"gpt-5\"\n\n[mcp_servers.other]\ncommand = \"npx\"\nargs = [\"-y\", \"x\"]\n\n[mcp_servers.other.env]\nKEY = \"v\"\n# 終わりのコメント\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "model = \"gpt-5\"\n\n[mcp_servers.other]\ncommand = \"npx\"\nargs = [\"-y\", \"x\"]\n\n[mcp_servers.other.env]\nKEY = \"v\"\n# 終わりのコメント\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: 外すと元に戻る",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "model = \"gpt-5\"\n\n[mcp_servers.other]\ncommand = \"npx\"\nargs = [\"-y\", \"x\"]\n\n[mcp_servers.other.env]\nKEY = \"v\"\n# 終わりのコメント\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "written",
+        "after": "model = \"gpt-5\"\n\n[mcp_servers.other]\ncommand = \"npx\"\nargs = [\"-y\", \"x\"]\n\n[mcp_servers.other.env]\nKEY = \"v\"\n# 終わりのコメント\n",
+        "stateAfter": "notConnected"
+      }
+    },
+    {
+      "name": "toml: 改行で終わらないファイル",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "model = \"gpt-5\"",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "model = \"gpt-5\"\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: CRLF のファイルは CRLF で足す",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "model = \"gpt-5\"\r\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "model = \"gpt-5\"\r\n\r\n# Added by Hanasu\r\n[mcp_servers.hanasu]\r\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\r\nargs = [\"mcp\"]\r\ntool_timeout_sec = 300\r\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: Windows のパスを TOML の文字列にする",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": null,
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: 引用符を含むパス",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Users\\a \"b\"\\Hanasu\\cli\\hanasu.exe",
+      "before": null,
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"C:\\\\Users\\\\a \\\"b\\\"\\\\Hanasu\\\\cli\\\\hanasu.exe\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: 途中にある表を外すと、次の表の前のコメントは残る",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[a]\nx = 1\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n\n# b の説明\n[b]\ny = 2\n",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "written",
+        "after": "[a]\nx = 1\n\n# b の説明\n[b]\ny = 2\n",
+        "stateAfter": "notConnected"
+      }
+    },
+    {
+      "name": "toml: 別の場所の Hanasu は command と args の行だけ書き換える",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\ncommand = \"/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\nenabled = false\n\n[mcp_servers.hanasu.env]\nFOO = \"1\"\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": "[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\nenabled = false\n\n[mcp_servers.hanasu.env]\nFOO = \"1\"\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: 外すと下の表も消える",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "a = 1\n\n[mcp_servers.hanasu]\ncommand = \"/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\nenabled = false\n\n[mcp_servers.hanasu.env]\nFOO = \"1\"\n",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": "a = 1\n",
+        "stateAfter": "notConnected"
+      }
+    },
+    {
+      "name": "toml: 引用した見出しと行末のコメント",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[ mcp_servers . \"hanasu\" ]  # mine\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [ \"mcp\" ]\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "unchanged"
+      }
+    },
+    {
+      "name": "toml: リテラル文字列の command",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.'hanasu']\ncommand = '/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu'\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": "[mcp_servers.'hanasu']\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: Hanasu のものでない hanasu は確かめる",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\ncommand = \"npx\"\nargs = [\"hanasu-server\"]\n\n[mcp_servers.hanasu.env]\nA = \"1\"\n\n[other]\nz = 1\n",
+      "action": "connect",
+      "overwrite": false,
+      "expect": {
+        "stateBefore": "foreign",
+        "result": "needsOverwrite"
+      }
+    },
+    {
+      "name": "toml: 確かめたら表ごと置き換える",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\ncommand = \"npx\"\nargs = [\"hanasu-server\"]\n\n[mcp_servers.hanasu.env]\nA = \"1\"\n\n[other]\nz = 1\n",
+      "action": "connect",
+      "overwrite": true,
+      "expect": {
+        "stateBefore": "foreign",
+        "result": "written",
+        "after": "[other]\nz = 1\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: Hanasu のものでない hanasu は外さない",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\ncommand = \"npx\"\nargs = [\"hanasu-server\"]\n\n[mcp_servers.hanasu.env]\nA = \"1\"\n\n[other]\nz = 1\n",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "foreign",
+        "result": "nothing"
+      }
+    },
+    {
+      "name": "toml: 書かない: 一番上のインラインの mcp_servers",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "mcp_servers = { other = { command = \"x\" } }\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "unreadable:tomlUnsupported",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "toml: 書かない: 一番上のドットのキー",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "mcp_servers.other.command = \"x\"\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "unreadable:tomlUnsupported",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "toml: 書かない: [mcp_servers] の中のキー",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers]\nother = { command = \"x\" }\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "unreadable:tomlUnsupported",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "toml: 書かない: 配列の表",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[[mcp_servers.list]]\nname = \"x\"\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "unreadable:tomlUnsupported",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "toml: 書かない: 複数行の文字列",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "note = \"\"\"\n[mcp_servers.hanasu]\n\"\"\"\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "unreadable:tomlUnsupported",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "toml: 書かない: 複数行のリテラル文字列",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "note = '''\nx\n'''\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "unreadable:tomlUnsupported",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "toml: 書かない: Hanasu の表の args が複数行",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\n  \"mcp\",\n]\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "unreadable:tomlUnsupported",
+        "result": "unreadable"
+      }
+    },
+    {
+      "name": "toml: [mcp_servers] の見出しだけならよい",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers]\n\n[mcp_servers.a]\ncommand = \"x\"\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "[mcp_servers]\n\n[mcp_servers.a]\ncommand = \"x\"\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: つないでいなければ外すものがない",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "model = \"gpt-5\"\n\n[mcp_servers.other]\ncommand = \"npx\"\nargs = [\"-y\", \"x\"]\n\n[mcp_servers.other.env]\nKEY = \"v\"\n# 終わりのコメント\n",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "nothing"
+      }
+    },
+    {
+      "name": "toml: CRLF のファイルにつなぐ",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "model = \"gpt-5\"\r\n[profiles.x]\r\nmodel = \"o3\"\r\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "model = \"gpt-5\"\r\n[profiles.x]\r\nmodel = \"o3\"\r\n\r\n# Added by Hanasu\r\n[mcp_servers.hanasu]\r\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\r\nargs = [\"mcp\"]\r\ntool_timeout_sec = 300\r\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: CRLF のファイルから外すと元に戻る",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "model = \"gpt-5\"\r\n[profiles.x]\r\nmodel = \"o3\"\r\n\r\n# Added by Hanasu\r\n[mcp_servers.hanasu]\r\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\r\nargs = [\"mcp\"]\r\ntool_timeout_sec = 300\r\n",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "written",
+        "after": "model = \"gpt-5\"\r\n[profiles.x]\r\nmodel = \"o3\"\r\n",
+        "stateAfter": "notConnected"
+      }
+    },
+    {
+      "name": "toml: CRLF で改行で終わらない表をつなぎ直す（最後の行に \\r を足さない）",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\r\ncommand = \"/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu\"\r\nargs = [\"mcp\"]",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": "[mcp_servers.hanasu]\r\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\r\nargs = [\"mcp\"]",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: CRLF で最後の行の command のあとに args を足す",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\r\ncommand = '/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu'",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": "[mcp_servers.hanasu]\r\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\r\nargs = [\"mcp\"]\r\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: 改行で終わらない表の command のあとに args を足す",
+      "kind": "toml",
+      "windows": false,
+      "executable": "/Applications/Hanasu.app/Contents/MacOS/Hanasu",
+      "before": "[mcp_servers.hanasu]\ncommand = '/Users/me/Downloads/Hanasu.app/Contents/MacOS/Hanasu'",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "other",
+        "result": "written",
+        "after": "[mcp_servers.hanasu]\ncommand = \"/Applications/Hanasu.app/Contents/MacOS/Hanasu\"\nargs = [\"mcp\"]\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: BOM 付きのファイルの見出しを読む",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "﻿[mcp_servers.hanasu]\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\nargs = [\"mcp\"]\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "unchanged"
+      }
+    },
+    {
+      "name": "toml: BOM 付きのファイルに足すと BOM を残す",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "﻿model = \"x\"\n",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": "﻿model = \"x\"\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+        "stateAfter": "connected"
+      }
+    },
+    {
+      "name": "toml: BOM 付きのファイルから外す",
+      "kind": "toml",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "﻿[mcp_servers]\n\n# Added by Hanasu\n[mcp_servers.hanasu]\ncommand = \"C:\\\\Program Files\\\\Hanasu\\\\cli\\\\hanasu.exe\"\nargs = [\"mcp\"]\ntool_timeout_sec = 300\n",
+      "action": "disconnect",
+      "expect": {
+        "stateBefore": "connected",
+        "result": "written",
+        "after": "﻿[mcp_servers]\n",
+        "stateAfter": "notConnected"
+      }
+    },
+    {
+      "name": "json: BOM 付きのファイル",
+      "kind": "json",
+      "windows": true,
+      "executable": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+      "before": "﻿{\"preferences\": {\"a\": 1}}",
+      "action": "connect",
+      "expect": {
+        "stateBefore": "notConnected",
+        "result": "written",
+        "after": {
+          "preferences": {
+            "a": 1
+          },
+          "mcpServers": {
+            "hanasu": {
+              "command": "C:\\Program Files\\Hanasu\\cli\\hanasu.exe",
+              "args": [
+                "mcp"
+              ]
+            }
+          }
+        },
+        "stateAfter": "connected"
+      }
+    }
+  ]
+}

@@ -24,7 +24,7 @@ enum ClaudeCLI {
             exit(keychainSelfTest(keep: args.contains("--keep")) ? 0 : 1)
         }
         if let service = value(after: "--keychain-selftest-delete", in: args) {
-            guard service.hasPrefix(Keychain.defaultService + ".selftest-") else {
+            guard service.hasPrefix(Keychain.productionService + ".selftest-") else {
                 print("selftest- の項目だけを消せます")
                 exit(1)
             }
@@ -73,7 +73,7 @@ enum ClaudeCLI {
 
     // 確かめ方: REQ-COM-021
     private static func keychainSelfTest(keep: Bool) -> Bool {
-        let service = Keychain.defaultService + ".selftest-" + String(UUID().uuidString.prefix(8)).lowercased()
+        let service = Keychain.productionService + ".selftest-" + String(UUID().uuidString.prefix(8)).lowercased()
         let item = Keychain.Item.claudeAPIKey
         let fakeKey = "sk-ant-selftest-" + UUID().uuidString.replacingOccurrences(of: "-", with: "").lowercased()
         var failures = 0

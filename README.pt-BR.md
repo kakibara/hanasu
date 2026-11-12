@@ -122,6 +122,22 @@ Com **Local**, o Hanasu roda um modelo de linguagem pequeno no seu próprio Mac 
 Você pode escolher um mecanismo diferente para entrada por voz e para reuniões. No Windows, as reuniões usam Whisper ou Gemini.
 No Mac, escolha o idioma da transcrição em uma lista (japonês, inglês, chinês, coreano, francês, alemão, espanhol, italiano, português). Ele começa como o idioma do sistema.
 
+### ⌨️ Use pelo terminal e por agentes de IA
+
+O comando `hanasu` permite que scripts e agentes de IA (Claude Code, Claude Desktop e outros) leiam os registros das suas reuniões e usem o seu estilo de refinamento. Ele vem com o app, então não há mais nada para instalar: no Mac, ele é o próprio app; no Windows, é o `cli\hanasu.exe` na pasta do Hanasu. Abra **Ajustes → Comando e MCP** para conectá-lo ao Claude Desktop, ao ChatGPT (Codex) ou ao Claude Code com um clique, adicioná-lo ao PATH ou copiar a configuração de MCP para outros apps. (O chat comum do ChatGPT ainda não consegue usar ferramentas MCP locais por causa de um bug da OpenAI; o Codex consegue.)
+
+| | |
+| --- | --- |
+| **Ler reuniões** | `hanasu meetings list / show / search` e `hanasu actions` mostram reuniões, atas, transcrições e itens de ação, como texto ou `--json`. Nada é enviado a lugar nenhum. |
+| **Perguntar** | `hanasu ask "O que decidimos na semana passada?"` responde a partir das suas reuniões. No Mac, usa a IA que você escolheu para **Chat de IA e perguntas** (ou a IA das reuniões, se você não tiver escolhido nenhuma); no Windows, a IA das reuniões. |
+| **Refinar texto** | `hanasu refine` refina ou traduz texto do mesmo jeito que a entrada por voz, e `hanasu edit "<instrução>"` o reescreve. Os dois funcionam em pipes. `--app` escolhe o estilo de um app (um bundle ID no Mac, um nome de exe como `slack.exe` no Windows). |
+| **MCP para agentes de IA** | `hanasu mcp` é um servidor MCP (stdio). Os agentes podem listar, ler, pesquisar e fazer perguntas sobre as suas reuniões. O conteúdo das reuniões compartilhado assim vai para o agente e para o provedor da IA dele. |
+| **Conferir a configuração** | `hanasu doctor` mostra qual IA e quais credenciais são usadas, a pasta de reuniões e como registrar o MCP. Execute `hanasu help` para ver todas as opções. |
+
+No Windows, execute `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` antes de ler a saída no PowerShell. Chaves de API protegidas com o Windows Hello pedem a sua confirmação toda vez que um comando as usa.
+
+No Mac, administradores podem desativar o comando, o MCP ou algumas IAs com um perfil de configuração.
+
 ## Download
 
 Baixe a versão mais recente em [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
@@ -185,6 +201,7 @@ Você pode mudar todos os atalhos nos Ajustes. O guia completo do usuário (em j
 - **A IA recebe texto, não áudio.** O Gemini ou o Claude recebe a transcrição. Dependendo dos seus ajustes, também pode receber o nome do app em que você está digitando, o contexto da tela, o texto lido de uma captura da sua tela (nunca a imagem) e as transcrições de reuniões para a função Perguntar e para o chat com IA da reunião.
 - **Local e Apple também mantêm o texto no seu dispositivo.** Se você escolher qualquer um dos dois, nada é enviado a um serviço de IA. O único download é o próprio modelo.
 - **O áudio só vai para o Google se você escolher.** Se você selecionar o mecanismo de fala Gemini, o áudio gravado é enviado ao Google.
+- **Os agentes só recebem reuniões se você os conectar.** O comando `hanasu` e o servidor MCP dele só leem reuniões quando você ou um agente os chamam, e o que eles retornam vai para esse agente e para o provedor da IA dele.
 - **Reuniões são arquivos comuns.** Elas são salvas como JSON e Markdown em `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac e Windows usam o mesmo formato.
 - **Sem telemetria.** O Hanasu não coleta dados de análise.
 - **As chaves de API são protegidas pelo sistema operacional.** No macOS, elas ficam no Keychain, e outros apps precisam pedir a sua senha de login para lê-las. No Windows, são criptografadas com DPAPI, ou com uma chave do Windows Hello se você preferir. Nenhum dos dois consegue impedir totalmente um malware executado com o seu usuário. Veja [docs/design/security.md](docs/design/security.md).

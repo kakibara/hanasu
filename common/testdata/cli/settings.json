@@ -1,0 +1,7 @@
+{
+  "localeIdentifier": "ja-JP",
+  "dictionaryText": "はなす, 花須 => Hanasu\nクロード\nえーびーしー => ABC社",
+  "extraInstructions": "句読点は「、。」を使う",
+  "sendAppName": true,
+  "_comment": "共有のテストデータの設定（架空の値だけ）。Mac は UserDefaults の suite に、Windows は AppSettings に入れて動かす（DEC-COM-192）"
+}

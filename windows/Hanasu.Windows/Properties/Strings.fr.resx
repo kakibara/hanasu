@@ -101,27 +101,6 @@ Original : {2}</value>
   <data name="Quit_MeetingInProgress" xml:space="preserve">
     <value>Une réunion est en cours d'enregistrement (ou de traitement après l'enregistrement). Si vous quittez, aucune transcription ni aucun compte rendu ne sera créé pour cette réunion (les fichiers audio sont conservés). Quitter quand même ?</value>
   </data>
-  <data name="Hello_NotSetUp" xml:space="preserve">
-    <value>Windows Hello n'est pas configuré (configurez un code PIN ou une autre méthode dans Paramètres Windows → Comptes → Options de connexion).</value>
-  </data>
-  <data name="Hello_CanceledCannotRead" xml:space="preserve">
-    <value>La vérification Windows Hello a été annulée ; la clé API n'a donc pas pu être lue.</value>
-  </data>
-  <data name="Hello_VerifyFailed" xml:space="preserve">
-    <value>La vérification Windows Hello a échoué ({0}).</value>
-  </data>
-  <data name="Hello_KeyNotFound" xml:space="preserve">
-    <value>La clé Windows Hello est introuvable (Windows Hello a peut-être été reconfiguré). Saisissez à nouveau la clé API dans Paramètres → AI.</value>
-  </data>
-  <data name="Hello_OpenFailed" xml:space="preserve">
-    <value>Impossible d'ouvrir la clé Windows Hello ({0}).</value>
-  </data>
-  <data name="Hello_Canceled" xml:space="preserve">
-    <value>La vérification Windows Hello a été annulée.</value>
-  </data>
-  <data name="Hello_CreateFailed" xml:space="preserve">
-    <value>Impossible de créer la clé Windows Hello ({0}).</value>
-  </data>
   <data name="Mic_NotFound" xml:space="preserve">
     <value>Aucun microphone trouvé. Vérifiez qu'un microphone est connecté dans Paramètres Windows → Système → Son.</value>
   </data>
@@ -1475,6 +1454,188 @@ Ouvrir la page de la version dans le navigateur ?</value>
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>Les enregistrements de {0} réunions n'ont pas pu être entièrement supprimés. Les fichiers restants sont conservés.</value>
+  </data>
+  <data name="Settings_Cmd_AddFailed" xml:space="preserve">
+    <value>Impossible d'ajouter au PATH : {0}</value>
+  </data>
+  <data name="Settings_Cmd_Added" xml:space="preserve">
+    <value>Ajouté au PATH. Tapez hanasu dans un PowerShell ou une Invite de commandes nouvellement ouverts (les terminaux déjà ouverts, et les apps lancées depuis eux, ne voient pas le changement : rouvrez-les).</value>
+  </data>
+  <data name="Settings_Cmd_AgentNote" xml:space="preserve">
+    <value>Si vous ne pouvez pas ajouter de serveur MCP, collez ces instructions (en anglais) dans les instructions de l’agent, comme CLAUDE.md ou une skill de Claude Code. L’agent pourra alors exécuter hanasu depuis le shell pour lire vos réunions. Dans Terminal, exécutez hanasu help agent pour les afficher.</value>
+  </data>
+  <data name="Settings_Cmd_AgentSection" xml:space="preserve">
+    <value>Instructions pour les agents</value>
+  </data>
+  <data name="Settings_Cmd_Copied" xml:space="preserve">
+    <value>Copié</value>
+  </data>
+  <data name="Settings_Cmd_Copy" xml:space="preserve">
+    <value>Copier</value>
+  </data>
+  <data name="Settings_Cmd_DesktopNote" xml:space="preserve">
+    <value>Ajoutez ceci à mcpServers dans le fichier de configuration de Claude Desktop (claude_desktop_config.json). Pour les autres apps, indiquez la même chose dans command et args.</value>
+  </data>
+  <data name="Settings_Cmd_Encoding" xml:space="preserve">
+    <value>Pour lire la sortie dans PowerShell, exécutez d'abord [Console]::OutputEncoding = [Text.UTF8Encoding]::new() (sous Windows PowerShell 5.1, aussi $OutputEncoding = [Text.UTF8Encoding]::new()). Sous 5.1, &gt; écrit en UTF-16 : pour écrire un fichier, utilisez | Out-File -Encoding utf8.</value>
+  </data>
+  <data name="Settings_Cmd_Executable" xml:space="preserve">
+    <value>Exécutable</value>
+  </data>
+  <data name="Settings_Cmd_HideGuide" xml:space="preserve">
+    <value>Masquer</value>
+  </data>
+  <data name="Settings_Cmd_Intro" xml:space="preserve">
+    <value>Lisez vos enregistrements de réunions et mettez du texte au propre depuis Terminal, des scripts et des agents IA. Vous pouvez exécuter la commande avec son chemin complet ci-dessus sans l’ajouter au PATH. Exécutez hanasu help dans Terminal pour savoir comment l’utiliser.</value>
+  </data>
+  <data name="Settings_Cmd_McpNote" xml:space="preserve">
+    <value>Le contenu des réunions renvoyé par MCP est transmis à l'agent qui utilise MCP et à son fournisseur d'IA. ask_meetings envoie aussi le contenu des réunions à la même IA que hanasu ask (voir la ligne ask de hanasu doctor).</value>
+  </data>
+  <data name="Settings_Cmd_Missing" xml:space="preserve">
+    <value>cli\hanasu.exe est introuvable. Ouvrez Hanasu depuis un dossier où tout le zip téléchargé a été extrait.</value>
+  </data>
+  <data name="Settings_Cmd_NotOnPath" xml:space="preserve">
+    <value>Non ajouté</value>
+  </data>
+  <data name="Settings_Cmd_OnPath" xml:space="preserve">
+    <value>Dans {0}</value>
+  </data>
+  <data name="Settings_Cmd_OtherHanasu" xml:space="preserve">
+    <value>{0} pointe vers une copie de Hanasu située ailleurs. Ajoutez-le à nouveau pour qu’il pointe vers cette app.</value>
+  </data>
+  <data name="Settings_Cmd_PathAdd" xml:space="preserve">
+    <value>Ajouter au PATH</value>
+  </data>
+  <data name="Settings_Cmd_PathRemove" xml:space="preserve">
+    <value>Retirer du PATH</value>
+  </data>
+  <data name="Settings_Cmd_RemoveFailed" xml:space="preserve">
+    <value>Impossible de retirer du PATH : {0}</value>
+  </data>
+  <data name="Settings_Cmd_Removed" xml:space="preserve">
+    <value>Retiré du PATH.</value>
+  </data>
+  <data name="Settings_Cmd_Section" xml:space="preserve">
+    <value>Commande hanasu</value>
+  </data>
+  <data name="Settings_Cmd_ShowGuide" xml:space="preserve">
+    <value>Afficher</value>
+  </data>
+  <data name="Settings_Cmd_Temporary" xml:space="preserve">
+    <value>Hanasu s'exécute depuis un dossier temporaire (par exemple dans le zip). Extrayez tout le zip, rouvrez Hanasu depuis ce dossier, puis ajoutez-le au PATH et à MCP.</value>
+  </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>Connecter aux apps d'IA</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (Terminal et Code dans Claude Desktop)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>Connecté</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>Non connecté</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>Pointe vers Hanasu à un autre emplacement (reconnectez pour pointer vers cette app)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Une entrée hanasu qui n'appartient pas à Hanasu existe déjà ({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>Impossible de lire le fichier de configuration : {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>{0} introuvable</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>JSON illisible</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>Format inattendu</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>Hanasu ne peut pas modifier un fichier où mcp_servers est écrit sous cette forme</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>Connecter…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>Retirer…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>Pour l'instant, cela ne fonctionne pas dans le chat ChatGPT classique (bug d'OpenAI). Cela fonctionne dans Codex.</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Claude Code est introuvable. Une fois installé, il utilisera cette entrée.</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>Ajoutez manuellement le contenu de la section MCP ci-dessous.</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>Il existe aussi une entrée limitée à certains dossiers (créée en exécutant claude mcp add sans portée).</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>Quittez {0}, puis cliquez à nouveau.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>Connecter Hanasu à {0} ?</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>L'entrée hanasu sera ajoutée au fichier suivant. Une copie du fichier d'origine sera d'abord enregistrée dans le même dossier sous le nom {0}.
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Ajoute hanasu avec claude mcp add de Claude Code, pour pouvoir l'utiliser depuis n'importe quel dossier.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>Remplacer l'entrée actuelle ({0}) par Hanasu ?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>Retirer Hanasu de {0} ?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Seule l'entrée hanasu de Hanasu sera supprimée.</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>Ajout en cours…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>Connecté. Rouvrez {0} pour l'utiliser. Si un accès vous est demandé la première fois qu'une réunion est lue, autorisez-le.</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>Connecté. Vous pouvez l'utiliser depuis une nouvelle session Claude Code.</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>Retiré. Rouvrez {0} pour appliquer le changement.</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>Déjà connecté.</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>Aucune entrée à retirer.</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>Modification impossible : {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>La commande claude ne s'est pas terminée en 30 secondes ; elle a été interrompue.</value>
+  </data>
+  <data name="Settings_Tab_Command" xml:space="preserve">
+    <value>Commande et MCP</value>
+  </data>
+  <data name="Update_CliRenameFailed" xml:space="preserve">
+    <value>La mise à jour n'a pas pu être installée, car le dossier de Hanasu n'a pas pu être renommé. Arrêtez tout hanasu exécuté en tant qu'administrateur, sortez du dossier cli de Hanasu dans tout terminal qui s'y trouve, puis relancez la mise à jour.</value>
+  </data>
+  <data name="Update_CliRunning" xml:space="preserve">
+    <value>Les hanasu en cours d'exécution ({0}) seront arrêtés avant l'installation de la mise à jour. Si une app qui utilise MCP (Claude Desktop, par exemple) perd les outils de Hanasu, redémarrez-la.</value>
   </data>
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0} ({1})</value>

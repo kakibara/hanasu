@@ -26,7 +26,18 @@ enum KeychainError: LocalizedError {
 /// Apple Developer の Team ID と keychain-access-groups の entitlement がないと使えない（-34018）ので使わない。
 /// 調べた結果は docs/design/security.md の 1 章。
 enum Keychain {
-    static let defaultService = "dev.mactypeless.Hanasu"
+    static let productionService = "dev.mactypeless.Hanasu"
+
+    // 確かめ方: REQ-COM-186
+    /// 項目のサービス名。確かめるとき（hanasu の自己テスト）だけ、環境変数 HANASU_KEYCHAIN_SERVICE で、
+    /// 自己テストの一時的な項目（dev.mactypeless.Hanasu.selftest-…）を読ませられる。それ以外の名前は無視する
+    static var defaultService: String {
+        if let service = ProcessInfo.processInfo.environment["HANASU_KEYCHAIN_SERVICE"],
+           service.hasPrefix(productionService + ".selftest-") {
+            return service
+        }
+        return productionService
+    }
 
     enum Item: String, CaseIterable {
         case geminiAPIKey = "gemini-api-key"

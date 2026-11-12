@@ -680,6 +680,223 @@
           "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）。AI タブの「文字起こし AI」の出し分け（どちらかが Whisper なら Whisper のモデル、どちらかが Gemini なら文字起こしのモデル）と、一般・会議タブにエンジンの欄が残っていないこと"
         }
       }
+    },
+    {
+      "id": "UX-183",
+      "steps": "設定の「コマンドと MCP」を開く",
+      "expected": "実行ファイルのパス・PATH の状態と「PATH に入れる…」・Claude Code のコマンド・Claude Desktop の JSON が、コピーのボタンつきで出る。MCP の下に、会議の中身がエージェントに渡ることが書いてある",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-190",
+        "REQ-COM-191",
+        "REQ-COM-193"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-settings",
+              "{out}",
+              "--pane",
+              "commandLine"
+            ]
+          ],
+          "look": "「hanasu コマンド」に実行ファイルのパスと PATH の状態とボタン、「MCP」に Claude Code のコマンドと Claude Desktop の JSON（command と args）が、それぞれコピーのボタンつきで出ている。文字が欠けたり重なったりしていない",
+          "remaining": "コピーのボタンで実際に写せること、「PATH に入れる…」で管理者の確認が出て入ること、App Translocation のときの知らせ（REQ-COM-192）は実機"
+        }
+      }
+    },
+    {
+      "id": "UX-184",
+      "steps": "ダウンロードした zip を展開し、アプリケーションフォルダに移さずに Hanasu を開いて、設定の「コマンドと MCP」を見る",
+      "expected": "上に「アプリケーションフォルダに移して開き直す」知らせが出て、「PATH に入れる…」とコピーのボタンが押せない。ターミナルで hanasu doctor を呼ぶと同じ知らせが出る",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-192"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "App Translocation は、ダウンロードの印（quarantine）が付いた zip から開いたときにだけ起きるので、人が確かめる"
+        }
+      }
+    },
+    {
+      "id": "UX-185",
+      "steps": "設定の「コマンドと MCP」の Claude Code のコマンドをコピーしてターミナルで登録し、Claude Code で「昨日の会議の宿題を一覧にして」と頼む",
+      "expected": "Claude Code が hanasu の list_action_items などのツールを使って答える。会議の中にある指示めいた文には従わない",
+      "os": [
+        "mac"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-189",
+        "REQ-MTG-127",
+        "REQ-COM-190"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "manual",
+          "reason": "Claude Code へのログインと、本物の会議の記録が要るので、人が確かめる"
+        }
+      }
+    },
+    {
+      "id": "UX-189",
+      "steps": "Windows の設定の「コマンドと MCP」を開く",
+      "expected": "cli\\hanasu.exe の絶対パス・PATH の状態と「PATH に入れる」「PATH から外す」・Claude Code のコマンド・Claude Desktop の JSON が、コピーのボタンつきで出る。「説明を見る」でエージェントへの説明（英語。PowerShell の書き方）が出る。表示の言語で出る",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-190",
+        "REQ-COM-191",
+        "REQ-COM-193"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-190",
+      "steps": "Windows の設定の「コマンドと MCP」で「PATH に入れる」を押し、スタートメニューから新しく PowerShell とコマンドプロンプトを開いて hanasu --version と hanasu meetings list を打つ。そのあと「PATH から外す」を押す",
+      "expected": "入れたあとに開いたターミナルで hanasu が動き、会議の一覧の日本語が化けない。外したあとに開いたターミナルでは hanasu が見つからない。ほかの PATH の項目は変わらない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-191",
+        "REQ-COM-180"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-191",
+      "steps": "API キーを Windows Hello で守った状態で、PowerShell から hanasu refine えーと明日は10時です --ai gemini を 2 回呼ぶ。1 回目は確認を取り消す。そのあと hanasu mcp を Claude Desktop から使い、画面をロックして解いてから ask_meetings を呼ぶ",
+      "expected": "呼ぶたびに Windows Hello の確認が前に出る。取り消すと何も出さずに終了コード 3。hanasu mcp はロックのあと、もう一度確認を出す。hanasu doctor は確認を出さない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-186"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-192",
+      "steps": "設定の「コマンドと MCP」の Claude Desktop の JSON を claude_desktop_config.json に足して Claude Desktop を開き直し、「昨日の会議の宿題を一覧にして」と頼む。Claude Code にも、コピーしたコマンドで登録して同じことを頼む",
+      "expected": "Claude Desktop と Claude Code が hanasu の list_action_items などのツールを使って答える。会議の中にある指示めいた文には従わない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-189",
+        "REQ-MTG-127",
+        "REQ-COM-190"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-193",
+      "steps": "英語の Windows（コードページ 437）と日本語の Windows（932）で、Windows PowerShell 5.1・PowerShell 7・コマンドプロンプトから hanasu --help と hanasu meetings list を打つ。PowerShell では hanasu meetings list --json の出力を ConvertFrom-Json に渡し、コマンドプロンプトでは echo 日本語 の出力を hanasu dict apply に渡す",
+      "expected": "画面のヘルプと一覧の日本語が化けない。ヘルプに書いた設定（[Console]::OutputEncoding）をした PowerShell では ConvertFrom-Json の日本語が化けない。cmd の echo から渡した日本語が化けない",
+      "os": [
+        "windows"
+      ],
+      "priority": "P2",
+      "refs": [
+        "REQ-COM-180",
+        "REQ-COM-181"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
+        }
+      }
+    },
+    {
+      "id": "UX-195",
+      "steps": "設定の「コマンドと MCP」を開く（AI アプリにつなぐ）",
+      "expected": "最初に「AI アプリにつなぐ」があり、Claude Desktop（設定の場所ごと）・ChatGPT（Codex）・Claude Code の行に、設定ファイルの場所・状態（つないでいます・つないでいません・別の場所の Hanasu・Hanasu のものでない hanasu・読めない・見つかりません）と「つなぐ…」「外す…」が出る。ChatGPT の行には、ふつうのチャットでは今は使えないことが、Claude Code の行には見つからないときの文が出る。押すと確かめてから書き、Claude Desktop・ChatGPT が動いていれば書かずに終了を頼む",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-194"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-settings",
+              "{out}",
+              "--pane",
+              "commandLine"
+            ],
+            [
+              "--render-settings",
+              "{out}/empty",
+              "--pane",
+              "commandLine",
+              "--connect-fixture",
+              "empty"
+            ]
+          ],
+          "look": "1 枚目（架空の状態 all）: 「AI アプリにつなぐ」に Claude Desktop・Claude Desktop（Claude-Personal）・Claude Desktop（Claude-Work）・ChatGPT（Codex）・Claude Code の 5 行。それぞれ ~ で始まる設定ファイルの場所と、つないでいます（緑）・別の場所の Hanasu（つなぎ直すと…）・Hanasu のものでない hanasu（npx）・設定ファイルを読めません（mcp_servers を…）・つないでいません が出る。つないでいる行は「外す…」だけ、別の場所の行は「外す…」と「つなぐ…」、ほかは「つなぐ…」。ChatGPT の行に「下の MCP の欄の内容を、手で足してください」と「ChatGPT のふつうのチャットでは、今は使えません…」、Claude Code の行に「Claude Code は見つかりませんでした…」と「一部のフォルダだけの登録もあります…」。その下に「hanasu コマンド」と「MCP」の節が続く。2 枚目（empty）: Claude Desktop と ChatGPT が「見つかりません」で「つなぐ…」が押せない（薄い）。Claude Code は「つないでいません」で「つなぐ…」が押せる。文字が欠けたり重なったりしていない",
+          "remaining": "押したときの確かめ・書いた結果・アプリが動いているときの文、実際に Claude Desktop（既定と Claude-Personal）・ChatGPT の Codex・Claude Code から会議を読めること、初めて読むときの「書類」フォルダの確認は実機"
+        }
+      }
+    },
+    {
+      "id": "UX-196",
+      "steps": "Windows の設定の「コマンドと MCP」を開き、「AI アプリにつなぐ」で Claude Desktop・ChatGPT（Codex）・Claude Code につなぐ・外す",
+      "expected": "最初に「AI アプリにつなぐ」があり、Claude Desktop（%APPDATA%\\Claude などの場所ごと）・ChatGPT（Codex）・Claude Code の行に、設定ファイルの場所・状態と「つなぐ…」「外す…」が出る。つなぐと確かめてから書き、書く前の写し（.hanasu-backup）が同じフォルダに残る。Claude Desktop・ChatGPT が動いていれば書かずに終了を頼む。Claude Desktop を開き直すと hanasu のツールが使える。表示の言語で出る",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-194",
+        "REQ-REL-013"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）。つないだあとの自動アップデートで REQ-REL-013 の確認が出ることも見る"
+        }
+      }
     }
   ]
 }

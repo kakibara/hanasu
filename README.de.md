@@ -122,6 +122,22 @@ Mit **Lokal** führt Hanasu mithilfe des mitgelieferten [llama.cpp](https://gith
 Für Spracheingabe und Besprechungen kannst du unterschiedliche Engines wählen. Unter Windows nutzen Besprechungen Whisper oder Gemini.
 Auf dem Mac wählst du die Transkriptionssprache aus einer Liste (Japanisch, Englisch, Chinesisch, Koreanisch, Französisch, Deutsch, Spanisch, Italienisch, Portugiesisch). Voreingestellt ist deine Systemsprache.
 
+### ⌨️ Im Terminal und mit KI-Agenten nutzen
+
+Mit dem Befehl `hanasu` können Skripte und KI-Agenten (Claude Code, Claude Desktop und andere) deine Besprechungsaufzeichnungen lesen und Text genauso aufbereiten wie bei der Spracheingabe. Er wird mit der App mitgeliefert, du musst also nichts weiter installieren: Auf dem Mac ist er die App selbst, unter Windows `cli\hanasu.exe` im Hanasu-Ordner. Unter **Einstellungen → Befehl & MCP** verbindest du ihn mit einem Klick mit Claude Desktop, ChatGPT (Codex) oder Claude Code, fügst ihn zu deinem PATH hinzu oder kopierst die MCP-Einrichtung für andere Apps. (Der normale ChatGPT-Chat kann wegen eines Fehlers bei OpenAI derzeit keine lokalen MCP-Werkzeuge nutzen; Codex schon.)
+
+| | |
+| --- | --- |
+| **Besprechungen lesen** | `hanasu meetings list / show / search` und `hanasu actions` geben Besprechungen, Protokolle, Transkripte und Aufgaben als Text oder als `--json` aus. Dabei wird nichts gesendet. |
+| **Fragen** | `hanasu ask "Was haben wir letzte Woche beschlossen?"` beantwortet die Frage anhand deiner Besprechungen. Auf dem Mac nutzt er die KI, die du für **KI-Chat & Fragen** gewählt hast (oder die KI für Besprechungen, falls du dort keine gewählt hast), unter Windows die KI für Besprechungen. |
+| **Text aufbereiten** | `hanasu refine` bereitet Text auf oder übersetzt ihn, genauso wie die Spracheingabe, und `hanasu edit "<Anweisung>"` formuliert ihn um. Beides funktioniert auch in Pipes. Mit `--app` wählst du den Stil einer App (auf dem Mac über die Bundle-ID, unter Windows über den EXE-Namen, etwa `slack.exe`). |
+| **MCP für KI-Agenten** | `hanasu mcp` ist ein MCP-Server (stdio). Agenten können deine Besprechungen auflisten, lesen, durchsuchen und Fragen dazu stellen. Besprechungsinhalte, die du so teilst, gehen an den Agenten und dessen KI-Anbieter. |
+| **Einrichtung prüfen** | `hanasu doctor` zeigt, welche KI und welche Zugangsdaten verwendet werden, den Besprechungsordner und wie du MCP registrierst. Mit `hanasu help` siehst du alle Optionen. |
+
+Unter Windows führst du in PowerShell `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` aus, bevor du die Ausgabe liest. API-Schlüssel, die mit Windows Hello geschützt sind, musst du jedes Mal bestätigen, wenn ein Befehl sie verwendet.
+
+Auf dem Mac können Administratoren den Befehl, MCP oder einzelne KIs mit einem Konfigurationsprofil deaktivieren.
+
 ## Download
 
 Die neueste Version gibt es unter [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
@@ -185,6 +201,7 @@ Alle Tastenkürzel lassen sich in den Einstellungen ändern. Das vollständige B
 - **Die KI erhält Text, kein Audio.** Gemini oder Claude bekommt das Transkript. Je nach Einstellungen kann es außerdem den Namen der App erhalten, in die du tippst, den Bildschirmkontext, aus einem Bildschirmfoto gelesenen Text (nie das Bild selbst) sowie Besprechungstranskripte für Fragen und den KI-Chat in Besprechungen.
 - **Lokal und Apple halten auch den Text auf deinem Gerät.** Wenn du eine der beiden Optionen wählst, wird nichts an einen KI-Dienst gesendet. Heruntergeladen wird nur das Modell selbst.
 - **Audio geht nur an Google, wenn du das so wählst.** Wenn du die Gemini-Sprach-Engine auswählst, wird das aufgenommene Audio an Google gesendet.
+- **Agenten erhalten Besprechungen nur, wenn du sie verbindest.** Der Befehl `hanasu` und sein MCP-Server lesen Besprechungen nur, wenn sie von dir oder einem Agenten aufgerufen werden, und was sie zurückgeben, geht an diesen Agenten und dessen KI-Anbieter.
 - **Besprechungen sind einfache Dateien.** Sie werden als JSON und Markdown unter `~/Documents/Hanasu/Meetings/` gespeichert (Windows: `Documents\Hanasu\Meetings\`). Mac und Windows verwenden dasselbe Format.
 - **Keine Telemetrie.** Hanasu erhebt keine Nutzungsdaten.
 - **API-Schlüssel sind durch das Betriebssystem geschützt.** Unter macOS liegen sie im Keychain, und andere Apps müssen dein Anmeldepasswort abfragen, um sie zu lesen. Unter Windows werden sie mit DPAPI verschlüsselt oder, wenn du das wählst, mit einem Windows-Hello-Schlüssel. Beides kann Schadsoftware, die unter deinem Benutzerkonto läuft, nicht vollständig aufhalten. Siehe [docs/design/security.md](docs/design/security.md).

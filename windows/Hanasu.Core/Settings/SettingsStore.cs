@@ -62,7 +62,7 @@ public sealed class SettingsStore
         {
             try
             {
-                settings = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(Path), JsonOptions) ?? new AppSettings();
+                settings = JsonSerializer.Deserialize<AppSettings>(IO.SharedFile.ReadAllText(Path), JsonOptions) ?? new AppSettings();
             }
             catch (JsonException)
             {
@@ -79,9 +79,8 @@ public sealed class SettingsStore
     {
         var dir = System.IO.Path.GetDirectoryName(Path);
         if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
-        var temp = Path + ".tmp";
-        File.WriteAllText(temp, JsonSerializer.Serialize(settings, JsonOptions));
-        File.Move(temp, Path, overwrite: true);
+        // 設計判断: DEC-COM-194
+        IO.SharedFile.WriteAllTextAtomically(Path, JsonSerializer.Serialize(settings, JsonOptions));
     }
 
     /// <summary>会議の記録の設定を補う。ショートカットは音声入力のものと重ならないようにする</summary>

@@ -122,6 +122,22 @@ W trybie **Lokalnie** Hanasu uruchamia mały model językowy na Twoim Macu lub P
 Możesz wybrać inny silnik dla wprowadzania głosem i dla spotkań. Na Windows spotkania używają Whisper lub Gemini.
 Na Macu język transkrypcji wybierasz z listy (japoński, angielski, chiński, koreański, francuski, niemiecki, hiszpański, włoski, portugalski). Domyślnie jest to język systemu.
 
+### ⌨️ Używaj z terminala i agentów AI
+
+Polecenie `hanasu` pozwala skryptom i agentom AI (Claude Code, Claude Desktop i innym) czytać zapisy Twoich spotkań i korzystać z Twojego sposobu dopracowywania tekstu. Jest dostarczane razem z aplikacją, więc nie trzeba niczego dodatkowo instalować: na Macu to sama aplikacja, a na Windows — plik `cli\hanasu.exe` w folderze Hanasu. Otwórz **Ustawienia → Polecenie i MCP**, aby jednym kliknięciem połączyć je z Claude Desktop, ChatGPT (Codex) lub Claude Code, dodać je do PATH albo skopiować konfigurację MCP dla innych aplikacji. (Zwykły czat ChatGPT nie może jeszcze korzystać z lokalnych narzędzi MCP z powodu błędu po stronie OpenAI; Codex może.)
+
+| | |
+| --- | --- |
+| **Czytanie spotkań** | `hanasu meetings list / show / search` i `hanasu actions` wypisują spotkania, protokoły, transkrypcje i zadania jako tekst lub `--json`. Nic nie jest nigdzie wysyłane. |
+| **Pytania** | `hanasu ask "Co ustaliliśmy w zeszłym tygodniu?"` odpowiada na podstawie Twoich spotkań. Na Macu używa AI wybranego dla **czatu AI i pytań** (a jeśli go nie wybrano — AI dla spotkań), a na Windows — AI dla spotkań. |
+| **Dopracowywanie tekstu** | `hanasu refine` dopracowuje lub tłumaczy tekst tak samo jak wprowadzanie głosem, a `hanasu edit "<polecenie>"` go przepisuje. Oba działają w potokach. `--app` wybiera styl danej aplikacji (na Macu jej bundle ID, na Windows nazwę pliku exe, np. `slack.exe`). |
+| **MCP dla agentów AI** | `hanasu mcp` to serwer MCP (stdio). Agenci mogą wyświetlać listę Twoich spotkań, czytać je, przeszukiwać i zadawać o nie pytania. Treść spotkań udostępniona w ten sposób trafia do agenta i jego dostawcy AI. |
+| **Sprawdzanie konfiguracji** | `hanasu doctor` pokazuje, które AI i dane uwierzytelniające są używane, folder spotkań oraz sposób rejestracji MCP. Wszystkie opcje wyświetlisz poleceniem `hanasu help`. |
+
+Na Windows przed odczytaniem wyniku w PowerShell uruchom `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()`. Klucze API chronione przez Windows Hello wymagają potwierdzenia za każdym razem, gdy polecenie z nich korzysta.
+
+Na Macu administratorzy mogą wyłączyć polecenie, MCP lub niektóre AI za pomocą profilu konfiguracyjnego.
+
 ## Pobieranie
 
 Najnowszą wersję pobierzesz z [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
@@ -185,6 +201,7 @@ Każdy skrót możesz zmienić w Ustawieniach. Pełny podręcznik użytkownika (
 - **AI dostaje tekst, nie dźwięk.** Gemini lub Claude otrzymuje transkrypcję. W zależności od ustawień może też otrzymać nazwę aplikacji, w której piszesz, kontekst ekranu, tekst odczytany ze zrzutu ekranu (nigdy sam obraz) oraz transkrypcje spotkań na potrzeby pytań i czatu z AI w trakcie spotkania.
 - **Tryby Lokalnie i Apple również zatrzymują tekst na urządzeniu.** Jeśli wybierzesz którykolwiek z nich, nic nie jest wysyłane do usługi AI. Jedyne, co się pobiera, to sam model.
 - **Dźwięk trafia do Google tylko wtedy, gdy tak wybierzesz.** Jeśli wybierzesz silnik mowy Gemini, nagrany dźwięk jest wysyłany do Google.
+- **Agenci dostają spotkania tylko wtedy, gdy ich podłączysz.** Polecenie `hanasu` i jego serwer MCP czytają spotkania tylko wtedy, gdy wywołasz je Ty lub agent, a to, co zwrócą, trafia do tego agenta i jego dostawcy AI.
 - **Spotkania to zwykłe pliki.** Są zapisywane jako JSON i Markdown w `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac i Windows używają tego samego formatu.
 - **Brak telemetrii.** Hanasu nie zbiera żadnych danych analitycznych.
 - **Klucze API są chronione przez system.** Na macOS są przechowywane w Keychain, a inne aplikacje muszą poprosić o Twoje hasło logowania, aby je odczytać. Na Windows są szyfrowane za pomocą DPAPI lub — jeśli tak wybierzesz — klucza Windows Hello. Żadne z tych rozwiązań nie zatrzyma w pełni złośliwego oprogramowania działającego na Twoim koncie. Zobacz [docs/design/security.md](docs/design/security.md).

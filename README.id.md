@@ -122,6 +122,22 @@ Dengan **Lokal**, Hanasu menjalankan model bahasa kecil di Mac atau PC Anda send
 Anda dapat memilih mesin yang berbeda untuk input suara dan untuk rapat. Di Windows, rapat memakai Whisper atau Gemini.
 Di Mac, pilih bahasa transkripsi dari daftar (Jepang, Inggris, Tionghoa, Korea, Prancis, Jerman, Spanyol, Italia, Portugis). Awalnya bahasa ini mengikuti bahasa sistem Anda.
 
+### ⌨️ Gunakan dari terminal dan agen AI
+
+Perintah `hanasu` memungkinkan skrip dan agen AI (Claude Code, Claude Desktop, dan lainnya) membaca catatan rapat Anda dan memakai gaya perapian teks Anda. Perintah ini sudah disertakan bersama aplikasi, jadi tidak ada yang perlu dipasang lagi: di Mac, perintah ini adalah aplikasinya sendiri, dan di Windows berupa `cli\hanasu.exe` di dalam folder Hanasu. Buka **Pengaturan → Perintah & MCP** untuk menghubungkannya ke Claude Desktop, ChatGPT (Codex), atau Claude Code dengan satu klik, menambahkannya ke PATH, atau menyalin pengaturan MCP untuk app lain. (Chat ChatGPT biasa belum dapat memakai alat MCP lokal karena bug di OpenAI; Codex sudah bisa.)
+
+| | |
+| --- | --- |
+| **Baca rapat** | `hanasu meetings list / show / search` dan `hanasu actions` menampilkan rapat, notulen, transkrip, dan item tindakan, sebagai teks atau `--json`. Tidak ada yang dikirim ke mana pun. |
+| **Tanya** | `hanasu ask "Apa yang kita putuskan minggu lalu?"` menjawab berdasarkan rapat Anda. Di Mac, perintah ini memakai AI yang Anda pilih untuk **obrolan AI & tanya jawab** (atau AI rapat jika Anda belum memilihnya); di Windows, AI rapat. |
+| **Rapikan teks** | `hanasu refine` merapikan atau menerjemahkan teks dengan cara yang sama seperti input suara, dan `hanasu edit "<instruksi>"` menulis ulang teks. Keduanya bisa dipakai dalam pipe. `--app` memilih gaya untuk aplikasi tertentu (bundle ID di Mac, nama exe seperti `slack.exe` di Windows). |
+| **MCP untuk agen AI** | `hanasu mcp` adalah server MCP (stdio). Agen dapat membuat daftar, membaca, mencari, dan bertanya tentang rapat Anda. Isi rapat yang Anda bagikan dengan cara ini diteruskan ke agen dan penyedia AI-nya. |
+| **Periksa pengaturan** | `hanasu doctor` menampilkan AI dan kredensial yang dipakai, folder rapat, dan cara mendaftarkan MCP. Jalankan `hanasu help` untuk melihat semua opsi. |
+
+Di Windows, jalankan `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()` sebelum membaca keluarannya di PowerShell. Kunci API yang dilindungi dengan Windows Hello akan meminta konfirmasi Anda setiap kali perintah memakainya.
+
+Di Mac, administrator dapat menonaktifkan perintah, MCP, atau sebagian AI dengan profil konfigurasi.
+
 ## Unduh
 
 Dapatkan build terbaru dari [**Releases**](https://github.com/kakibara/hanasu/releases/latest).
@@ -185,6 +201,7 @@ Anda dapat mengubah semua pintasan di Pengaturan. Panduan pengguna lengkap (dala
 - **AI menerima teks, bukan audio.** Gemini atau Claude menerima transkrip. Tergantung pengaturan Anda, AI juga dapat menerima nama aplikasi tempat Anda mengetik, konteks layar, teks yang dibaca dari tangkapan layar Anda (tidak pernah gambarnya), dan transkrip rapat untuk fitur Tanya dan obrolan AI selama rapat.
 - **Lokal dan Apple juga menyimpan teks di perangkat Anda.** Jika Anda memilih salah satunya, tidak ada yang dikirim ke layanan AI. Satu-satunya yang diunduh adalah model itu sendiri.
 - **Audio dikirim ke Google hanya jika Anda memilihnya.** Jika Anda memilih mesin ucapan Gemini, audio rekaman dikirim ke Google.
+- **Agen mendapat rapat hanya jika Anda menghubungkannya.** Perintah `hanasu` dan server MCP-nya hanya membaca rapat saat Anda atau agen memanggilnya, dan isi yang dikembalikan diteruskan ke agen tersebut dan penyedia AI-nya.
 - **Rapat disimpan sebagai berkas biasa.** Rapat disimpan dalam format JSON dan Markdown di `~/Documents/Hanasu/Meetings/` (Windows: `Documents\Hanasu\Meetings\`). Mac dan Windows memakai format yang sama.
 - **Tanpa telemetri.** Hanasu tidak mengumpulkan data analitik apa pun.
 - **Kunci API dilindungi oleh OS.** Di macOS, kunci disimpan di Keychain, dan aplikasi lain harus meminta kata sandi login Anda untuk membacanya. Di Windows, kunci dienkripsi dengan DPAPI, atau dengan kunci Windows Hello jika Anda memilihnya. Keduanya tidak dapat sepenuhnya menghentikan malware yang berjalan sebagai pengguna Anda. Lihat [docs/design/security.md](docs/design/security.md).
