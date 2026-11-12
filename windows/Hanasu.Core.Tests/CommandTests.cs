@@ -185,7 +185,7 @@ public class CommandTests
     public void RegistrationText()
     {
         const string exe = @"C:\Users\Taro Yamada\AppData\Local\Hanasu\cli\hanasu.exe";
-        Assert.Equal($"claude mcp add hanasu \"{exe}\" mcp", CommandInstall.ClaudeCodeCommand(exe));
+        Assert.Equal($"claude mcp add --scope user hanasu \"{exe}\" mcp", CommandInstall.ClaudeCodeCommand(exe));
         var json = JsonNode.Parse(CommandInstall.ClaudeDesktopJson(exe))!;
         Assert.Equal(exe, json["mcpServers"]!["hanasu"]!["command"]!.GetValue<string>());
         Assert.Equal("'/c/Users/Taro Yamada/AppData/Local/Hanasu/cli/hanasu.exe'", CommandInstall.PosixPath(exe));

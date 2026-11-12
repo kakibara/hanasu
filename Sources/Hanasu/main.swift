@@ -94,6 +94,8 @@ MainActor.assumeIsolated { AIPurposeCLI.runIfRequested() }
 MainActor.assumeIsolated { TranscriptionEngineCLI.runIfRequested() }
 // 音声入力のマイクの確認（--list-dictation-microphones / --render-dictation-mic-settings / --test-dictation-mic-switch）。DictationMicrophoneCLI.swift
 MainActor.assumeIsolated { DictationMicrophoneCLI.runIfRequested() }
+// 「AI アプリにつなぐ」の実機の確認（--agent-connect-list / --agent-connect <番号> connect|disconnect）。AgentConnectSelfTest.swift の AgentConnectCLI
+MainActor.assumeIsolated { AgentConnectCLI.runIfRequested() }
 // Claude API・キーチェーン・設定の「AI」の確認（--claude-test / --keychain-selftest / --render-ai-settings）。ClaudeCLI.swift
 MainActor.assumeIsolated { ClaudeCLI.runIfRequested() }
 // 選択を声で編集するモードの確認（--edit-text / --render-edit-hud / --render-edit-settings）。中身は EditModeCLI.swift

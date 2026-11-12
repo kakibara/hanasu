@@ -117,7 +117,7 @@ Mac 版では、文字起こしの言語を一覧（日本語・英語・中国�
 
 ### ⌨️ ターミナルや AI エージェントから使える
 
-`hanasu` コマンドで、スクリプトや AI エージェント（Claude Code・Claude Desktop など）から、会議の記録を読んだり、音声入力と同じ整え方を使ったりできます。アプリに付いてくるので、ほかに入れるものはありません。Mac ではアプリそのもの、Windows では Hanasu のフォルダの `cli\hanasu.exe` です。**設定 →「コマンドと MCP」** で、PATH に入れたり、MCP の登録のしかたをコピーしたりできます。
+`hanasu` コマンドで、スクリプトや AI エージェント（Claude Code・Claude Desktop など）から、会議の記録を読んだり、音声入力と同じ整え方を使ったりできます。アプリに付いてくるので、ほかに入れるものはありません。Mac ではアプリそのもの、Windows では Hanasu のフォルダの `cli\hanasu.exe` です。**設定 →「コマンドと MCP」** で、Claude Desktop・ChatGPT（Codex）・Claude Code にボタン 1 つでつないだり、PATH に入れたり、ほかのアプリ向けに MCP の登録のしかたをコピーしたりできます（ChatGPT のふつうのチャットは、OpenAI の不具合で、今は手元の MCP のツールを使えません。Codex では使えます）。
 
 | | |
 | --- | --- |

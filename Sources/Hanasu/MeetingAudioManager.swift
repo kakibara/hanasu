@@ -440,6 +440,8 @@ struct MeetingAudioSettingsRows: View {
 @MainActor
 enum SettingsRenderOverrides {
     static var meetingAudioEntries: [MeetingAudioEntry]?
+    /// 要件: REQ-COM-194（「AI アプリにつなぐ」の状態は、本物のホームを読まずに架空のものを描く）
+    nonisolated(unsafe) static var agentConnect: (environment: AgentConnect.Environment, executable: String)?
 }
 
 @MainActor

@@ -1524,6 +1524,110 @@ Buka halaman rilis di browser?</value>
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu sedang berjalan dari folder sementara (misalnya di dalam zip). Ekstrak seluruh zip, buka Hanasu dari folder itu, lalu tambahkan ke PATH dan MCP.</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>Hubungkan ke app AI</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (Terminal dan Code di Claude Desktop)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>Terhubung</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>Tidak terhubung</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>Mengarah ke Hanasu di lokasi lain (hubungkan ulang agar mengarah ke app ini)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Ada hanasu terdaftar yang bukan milik Hanasu ({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>Tidak dapat membaca file pengaturan: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>{0} tidak ditemukan</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>Tidak dapat dibaca sebagai JSON</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>Formatnya tidak sesuai harapan</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>Hanasu tidak dapat mengubah file yang menulis mcp_servers dalam format ini</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>Hubungkan…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>Hapus…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>Belum dapat dipakai di chat ChatGPT biasa (bug di OpenAI). Dapat dipakai di Codex.</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Claude Code tidak ditemukan. Setelah Anda memasangnya, pendaftaran ini akan dipakai.</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>Tambahkan isi bagian MCP di bawah secara manual.</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>Ada juga pendaftaran yang hanya berlaku untuk folder tertentu (dari claude mcp add yang dijalankan tanpa scope).</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>Keluar dari {0}, lalu klik lagi.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>Hubungkan Hanasu ke {0}?</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>Hanasu akan menambahkan hanasu ke file berikut. Salinan file sebelum diubah disimpan di folder yang sama sebagai {0}.
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Ini mendaftarkan hanasu dengan claude mcp add di Claude Code agar dapat dipakai dari folder mana pun.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>Ganti pendaftaran saat ini ({0}) dengan Hanasu?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>Hapus Hanasu dari {0}?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Hanya pendaftaran hanasu milik Hanasu yang akan dihapus.</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>Mendaftarkan…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>Terhubung. Buka ulang {0} untuk mulai memakainya. Saat pertama kali membaca rapat, jika diminta akses, izinkan.</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>Terhubung. Dapat dipakai dari sesi Claude Code yang baru.</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>Dihapus. Buka ulang {0} agar perubahan berlaku.</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>Sudah terhubung.</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>Tidak ada pendaftaran yang perlu dihapus.</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>Tidak dapat mengubah file: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>Perintah claude tidak selesai dalam 30 detik, jadi dihentikan.</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>Perintah &amp; MCP</value>
   </data>

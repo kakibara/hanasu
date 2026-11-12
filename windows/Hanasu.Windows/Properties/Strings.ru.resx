@@ -1524,6 +1524,110 @@
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu запущен из временной папки (например, из zip-архива). Распакуйте весь архив, откройте Hanasu из этой папки, а затем добавьте его в PATH и MCP.</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>Подключение к ИИ-приложениям</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (терминал и Code в Claude Desktop)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>Подключено</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>Не подключено</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>Указывает на Hanasu в другом месте (после повторного подключения будет указывать на это приложение)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Уже есть запись hanasu, которая не относится к Hanasu ({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>Не удалось прочитать файл настроек: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>Не удалось найти {0}</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>это некорректный JSON</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>неожиданный формат</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>Hanasu не может изменять файлы, в которых mcp_servers записан в таком виде</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>Подключить…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>Убрать…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>В обычном чате ChatGPT пока не работает (ошибка на стороне OpenAI). В Codex работает.</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Claude Code не найден. Когда вы его установите, он будет использовать эту настройку.</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>Добавьте вручную содержимое раздела MCP ниже.</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>Есть также записи только для отдельных папок (добавленные командой claude mcp add без указания области).</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>Завершите {0} и нажмите ещё раз.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>Подключить Hanasu к {0}?</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>hanasu будет добавлен в файл ниже. Перед изменением копия файла будет сохранена в той же папке под именем {0}.
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>hanasu будет зарегистрирован командой claude mcp add в Claude Code и станет доступен из любой папки.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>Заменить текущую запись ({0}) на Hanasu?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>Убрать Hanasu из {0}?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Будет удалена только запись hanasu, добавленная Hanasu.</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>Обновление настроек…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>Подключено. Откройте {0} заново, чтобы начать пользоваться. Если при первом чтении встречи появится запрос доступа, разрешите его.</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>Подключено. Работает в новых сеансах Claude Code.</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>Убрано. Откройте {0} заново, чтобы изменения вступили в силу.</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>Уже подключено.</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>Убирать нечего.</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>Не удалось внести изменения: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>Команда claude не завершилась за 30 секунд и была прервана.</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>Команда и MCP</value>
   </data>

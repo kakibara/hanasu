@@ -1524,6 +1524,110 @@
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>يعمل Hanasu من مجلد مؤقت (مثل داخل ملف zip). استخرج ملف zip كاملًا، وافتح Hanasu من ذلك المجلد، ثم أضفه إلى PATH وMCP.</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>الربط بتطبيقات الذكاء الاصطناعي</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (الطرفية وCode في Claude Desktop)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>متصل</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>غير متصل</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>يشير إلى Hanasu في موقع آخر (أعد الربط ليشير إلى هذا التطبيق)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>يوجد hanasu مسجَّل لا يخص Hanasu ({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>تتعذّر قراءة ملف الإعدادات: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>تعذّر العثور على {0}</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>تتعذّر قراءته بصيغة JSON</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>ليس بالشكل المتوقع</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>لا يستطيع Hanasu تعديل الملفات التي كُتب فيها mcp_servers بهذه الصيغة</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>ربط…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>إزالة…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>لا يعمل حاليًا في دردشة ChatGPT العادية (بسبب خلل لدى OpenAI). ويعمل في Codex.</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>لم يُعثر على Claude Code. بعد تثبيته، سيُستخدم هذا التسجيل.</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>أضف محتوى قسم MCP أدناه يدويًا.</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>يوجد أيضًا تسجيل لبعض المجلدات فقط (من تشغيل claude mcp add دون نطاق).</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>أغلق {0} ثم انقر مرة أخرى.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>هل تريد ربط Hanasu بـ {0}؟</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>سيضيف Hanasu الأمر hanasu إلى الملف التالي، وسيحفظ نسخة من الملف قبل التعديل في المجلد نفسه باسم {0}.
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>سيُسجِّل Hanasu الأمر hanasu عبر claude mcp add في Claude Code ليكون متاحًا من أي مجلد.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>هل تريد استبدال التسجيل الحالي ({0}) بـ Hanasu؟</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>هل تريد إزالة Hanasu من {0}؟</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>سيُحذف تسجيل hanasu الخاص بـ Hanasu فقط.</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>جارٍ التسجيل…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>تم الربط. أعد فتح {0} لبدء استخدامه. عند قراءة اجتماع لأول مرة، إذا طُلب منك الوصول، فاسمح بذلك.</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>تم الربط. يمكنك استخدامه من جلسة Claude Code جديدة.</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>تمت الإزالة. أعد فتح {0} لتطبيق التغيير.</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>متصل بالفعل.</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>لا يوجد تسجيل لإزالته.</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>تعذّر تعديل الملف: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>لم ينتهِ الأمر claude خلال 30 ثانية، فتم إيقافه.</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>الأمر وMCP</value>
   </data>

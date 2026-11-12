@@ -124,7 +124,7 @@ Na Macu język transkrypcji wybierasz z listy (japoński, angielski, chiński, k
 
 ### ⌨️ Używaj z terminala i agentów AI
 
-Polecenie `hanasu` pozwala skryptom i agentom AI (Claude Code, Claude Desktop i innym) czytać zapisy Twoich spotkań i korzystać z Twojego sposobu dopracowywania tekstu. Jest dostarczane razem z aplikacją, więc nie trzeba niczego dodatkowo instalować: na Macu to sama aplikacja, a na Windows — plik `cli\hanasu.exe` w folderze Hanasu. Otwórz **Ustawienia → Polecenie i MCP**, aby dodać je do PATH lub skopiować konfigurację MCP.
+Polecenie `hanasu` pozwala skryptom i agentom AI (Claude Code, Claude Desktop i innym) czytać zapisy Twoich spotkań i korzystać z Twojego sposobu dopracowywania tekstu. Jest dostarczane razem z aplikacją, więc nie trzeba niczego dodatkowo instalować: na Macu to sama aplikacja, a na Windows — plik `cli\hanasu.exe` w folderze Hanasu. Otwórz **Ustawienia → Polecenie i MCP**, aby jednym kliknięciem połączyć je z Claude Desktop, ChatGPT (Codex) lub Claude Code, dodać je do PATH albo skopiować konfigurację MCP dla innych aplikacji. (Zwykły czat ChatGPT nie może jeszcze korzystać z lokalnych narzędzi MCP z powodu błędu po stronie OpenAI; Codex może.)
 
 | | |
 | --- | --- |

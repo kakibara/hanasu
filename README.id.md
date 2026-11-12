@@ -124,7 +124,7 @@ Di Mac, pilih bahasa transkripsi dari daftar (Jepang, Inggris, Tionghoa, Korea, 
 
 ### ⌨️ Gunakan dari terminal dan agen AI
 
-Perintah `hanasu` memungkinkan skrip dan agen AI (Claude Code, Claude Desktop, dan lainnya) membaca catatan rapat Anda dan memakai gaya perapian teks Anda. Perintah ini sudah disertakan bersama aplikasi, jadi tidak ada yang perlu dipasang lagi: di Mac, perintah ini adalah aplikasinya sendiri, dan di Windows berupa `cli\hanasu.exe` di dalam folder Hanasu. Buka **Pengaturan → Perintah & MCP** untuk menambahkannya ke PATH atau menyalin pengaturan MCP.
+Perintah `hanasu` memungkinkan skrip dan agen AI (Claude Code, Claude Desktop, dan lainnya) membaca catatan rapat Anda dan memakai gaya perapian teks Anda. Perintah ini sudah disertakan bersama aplikasi, jadi tidak ada yang perlu dipasang lagi: di Mac, perintah ini adalah aplikasinya sendiri, dan di Windows berupa `cli\hanasu.exe` di dalam folder Hanasu. Buka **Pengaturan → Perintah & MCP** untuk menghubungkannya ke Claude Desktop, ChatGPT (Codex), atau Claude Code dengan satu klik, menambahkannya ke PATH, atau menyalin pengaturan MCP untuk app lain. (Chat ChatGPT biasa belum dapat memakai alat MCP lokal karena bug di OpenAI; Codex sudah bisa.)
 
 | | |
 | --- | --- |

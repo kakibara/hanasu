@@ -1524,6 +1524,110 @@
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu가 임시 폴더(zip 내부 등)에서 실행 중입니다. zip 전체를 압축 해제한 폴더에서 다시 연 뒤 PATH와 MCP에 등록하세요.</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>AI 앱에 연결</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT(Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code(터미널 및 Claude Desktop의 Code)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>연결됨</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>연결되지 않음</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>다른 위치의 Hanasu를 가리키고 있습니다(다시 연결하면 이 앱을 가리킵니다)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Hanasu가 아닌 hanasu가 등록되어 있습니다({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>설정 파일을 읽을 수 없습니다: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>{0}을(를) 찾을 수 없습니다</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>JSON으로 읽을 수 없습니다</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>예상한 형식이 아닙니다</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>mcp_servers를 이 방식으로 작성한 파일은 Hanasu에서 수정할 수 없습니다</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>연결…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>연결 해제…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>ChatGPT의 일반 채팅에서는 아직 사용할 수 없습니다(OpenAI의 버그). Codex에서는 사용할 수 있습니다.</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Claude Code를 찾지 못했습니다. 설치하면 이 등록이 사용됩니다.</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>아래 MCP 항목의 내용을 직접 추가해 주세요.</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>일부 폴더에서만 쓰이는 등록도 있습니다(scope 없이 claude mcp add를 실행해 만든 것).</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>{0}을(를) 종료한 다음 다시 눌러 주세요.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>{0}에 Hanasu를 연결할까요?</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>다음 파일에 hanasu를 추가합니다. 수정 전 파일은 같은 폴더에 {0}(으)로 복사해 둡니다.
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Claude Code의 claude mcp add로 어느 폴더에서든 쓸 수 있는 hanasu를 등록합니다.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>현재 등록({0})을 Hanasu로 바꿀까요?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>{0}에서 Hanasu 연결을 해제할까요?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Hanasu의 hanasu 등록만 삭제합니다.</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>등록 중…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>연결했습니다. {0}을(를) 다시 열면 사용할 수 있습니다. 처음 회의를 읽을 때 접근 권한을 요청받으면 허용해 주세요.</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>연결했습니다. 새 Claude Code 세션에서 사용할 수 있습니다.</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>연결을 해제했습니다. {0}을(를) 다시 열면 반영됩니다.</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>이미 연결되어 있습니다.</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>해제할 등록이 없습니다.</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>수정할 수 없습니다: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>claude 명령이 30초 안에 끝나지 않아 중단했습니다.</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>명령 및 MCP</value>
   </data>

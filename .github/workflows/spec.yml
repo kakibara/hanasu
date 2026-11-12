@@ -35,6 +35,21 @@ jobs:
       # UI のテスト項目（common/testdata/ui）の形・要件との対応・生成した一覧が最新か。描画と判定は CI ではしない
       - name: Check UI test cases
         run: python3 scripts/ui-cases.py check --summary
+      # 確かめ方: REQ-COM-194
+      # 「AI アプリにつなぐ」の共有のテストデータで、Hanasu が書く config.toml（期待する出力）が TOML として読めるか（DEC-COM-201）
+      - name: Check connect test data
+        run: |
+          python3 - <<'PY'
+          import json, tomllib
+          cases = json.load(open("common/testdata/connect/cases.json", encoding="utf-8"))["cases"]
+          count = 0
+          for case in cases:
+              after = case.get("expect", {}).get("after")
+              if case["kind"] == "toml" and isinstance(after, str):
+                  tomllib.loads(after)
+                  count += 1
+          print(f"{count} 件の config.toml を TOML として読めた")
+          PY
       - name: Check spec against the diff
         if: github.event_name == 'pull_request'
         env:

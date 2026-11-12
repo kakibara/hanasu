@@ -373,14 +373,14 @@
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（`hanasu mcp` を子プロセスで動かし、新旧の版の手順でやりとりする。Claude Code などに登録して使うのは実機）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-190 設定画面と `hanasu doctor` に、実行ファイルの絶対パスと MCP の登録のしかたを、コピーできる形で出す
-- 内容: 設定画面に「コマンドと MCP」の項目を足し、`hanasu` の実行ファイルの実際のパス（アプリの中の実行ファイル）、Claude Code に登録するコマンド（`claude mcp add hanasu -- <絶対パス> mcp`）、Claude Desktop の設定（`claude_desktop_config.json` の `mcpServers`）に足す JSON を出し、それぞれコピーのボタンで写せるようにする。どれも絶対パスで書くので、PATH に入れなくても登録できる。`hanasu doctor` にも同じものを出す（`--json` では `mcp.claudeCode`・`mcp.claudeDesktop`）。
+- 内容: 設定画面に「コマンドと MCP」の項目を足し、`hanasu` の実行ファイルの実際のパス（アプリの中の実行ファイル）、Claude Code に登録するコマンド（`claude mcp add --scope user hanasu -- <絶対パス> mcp`。`--scope user` で、どのフォルダの Claude Code からも使える。Windows は PowerShell 5.1 のために `--` を付けない）、Claude Desktop の設定（`claude_desktop_config.json` の `mcpServers`）に足す JSON を出し、それぞれコピーのボタンで写せるようにする。どれも絶対パスで書くので、PATH に入れなくても登録できる。`hanasu doctor` にも同じものを出す（`--json` では `mcp.claudeCode`・`mcp.claudeDesktop`）。
 - 受け入れ条件:
   - 設定の「コマンドと MCP」に、実行ファイルのパス・Claude Code のコマンド・Claude Desktop の JSON が、コピーのボタンつきで出る。
   - Claude Desktop の JSON は、空白・引用符・`\` を含むパスでも、そのまま貼れる正しい JSON になる。Claude Code のコマンドは、空白などを含むパスを引用する。
   - 管理者のポリシーで `hanasu mcp` を止めている（`DisableMCP`）ときは、登録のしかたの代わりに、止められていることを出す。`DisableCLI` のときは、コピーのボタンを使えなくする。
   - MCP で返した会議の中身がエージェントとその AI の提供元に渡ることを、登録のしかたの下に書く（REQ-COM-189 と同じ文）。
-- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E4・C8）
-- 関係する要件: REQ-COM-186, REQ-COM-189, REQ-COM-184
+- 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E4・C8）。2026-11-12 に `--scope user` を足した（計画 [plans/agent-connect.md](../plans/agent-connect.md)。同日に了承）
+- 関係する要件: REQ-COM-186, REQ-COM-189, REQ-COM-184, REQ-COM-194
 - 対象: Mac / Windows
 - 実装の場所: `CommandLineSettingsTab`、`HanasuInstall`（`claudeCodeCommand`・`claudeDesktopJSON`）、`HanasuDoctorCommand`
 - Windows の実装: 設定の「コマンドと MCP」のタブ（`windows/Hanasu.Windows/Views/SettingsWindow.CommandLine.cs`）と `DoctorCommand`。登録の文は `CommandInstall`（PowerShell・cmd でそのまま動く形）
@@ -402,12 +402,12 @@
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（一時フォルダをホームに見立てて、リンクと `~/.zprofile` の行を作って外す）。管理者の確認で `/usr/local/bin` に入れるのと、新しいターミナルで動くことは実機。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-COM-192 アプリがダウンロードした場所から移されずに動いているときは、知らせて、PATH と MCP に登録させない
-- 内容: アプリが App Translocation（ダウンロードした場所から移さずに開いたときに、macOS が読み取り専用の仮の場所で動かすこと）で動いているときは、パスが起動のたびに変わるので、設定の「コマンドと MCP」と `hanasu doctor` で「アプリケーションフォルダに移して開き直す」よう知らせ、PATH に入れるボタンと、登録のしかたのコピーのボタンを使えなくする。
+- 内容: アプリが App Translocation（ダウンロードした場所から移さずに開いたときに、macOS が読み取り専用の仮の場所で動かすこと）で動いているときは、パスが起動のたびに変わるので、設定の「コマンドと MCP」と `hanasu doctor` で「アプリケーションフォルダに移して開き直す」よう知らせ、PATH に入れるボタンと、登録のしかたのコピーのボタンと、AI アプリにつなぐボタン（REQ-COM-194）を使えなくする。
 - 受け入れ条件:
-  - 仮の場所で動いているとき、設定の「コマンドと MCP」の上に知らせが出て、「PATH に入れる…」とコピーのボタンが押せない。`hanasu doctor` にも同じ知らせが出る（`--json` では `install.translocated`）。
+  - 仮の場所で動いているとき、設定の「コマンドと MCP」の上に知らせが出て、「PATH に入れる…」とコピーのボタンと「つなぐ…」が押せない。`hanasu doctor` にも同じ知らせが出る（`--json` では `install.translocated`）。
   - `/Applications` や `~/Applications` から動いているときは、知らせが出ない。
 - 出典: ユーザーの依頼（2026-11-06〜08「hanasu コマンドを作る」「価値 1・2 の要件定義」「会社の環境でも使える」、2026-11-10「実装に移って」・段階 4 に進む）。計画 [plans/cli.md](../plans/cli.md)（計画の E5）
-- 関係する要件: REQ-COM-190, REQ-COM-191
+- 関係する要件: REQ-COM-190, REQ-COM-191, REQ-COM-194
 - 対象: Mac
 - 実装の場所: `HanasuInstall.isTranslocated`、`CommandLineSettingsTab`、`HanasuDoctorCommand`
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（場所の見分け方）。ダウンロードした zip から開いて知らせが出ることは実機
@@ -423,6 +423,28 @@
 - 実装の場所: `HanasuHelp.agentGuide`、`CommandLineSettingsTab`
 - Windows の実装: `CommandHelp.AgentGuide`（PowerShell の `& "…"` の書き方と、Git Bash・cmd の書き方を添える。DEC-COM-191）
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
+
+### REQ-COM-194 設定の「コマンドと MCP」から、AI アプリにボタン 1 つで Hanasu をつなぐ・外す
+- 内容: 設定の「コマンドと MCP」の最初に「AI アプリにつなぐ」の節を置き、Claude Desktop・ChatGPT（Codex）・Claude Code の行を並べる。Claude Desktop は、見つかった設定の場所ごとに 1 行（既定の `Claude` と、`Claude-Personal` のように `--user-data-dir` で別の場所を使っているもの）。各行に、今の状態と「つなぐ…」「外す…」のボタンを出す。つなぐときは、何をどこに書くかを確かめてから書き、書いたあとで、使い始めるまでにすること（アプリを開き直す・初めて会議を読むときに出る「書類」フォルダへのアクセスの確認を許可する）を出す。どれも MCP（REQ-COM-189）で登録する。
+  - Claude Desktop: その場所の `claude_desktop_config.json` の `mcpServers` に `hanasu`（実行ファイルの絶対パスと `mcp`）を足す。
+  - ChatGPT（Codex）: `~/.codex/config.toml` に `[mcp_servers.hanasu]` の表を足す。ChatGPT のふつうのチャットは、今は手元の MCP のツールを使えない（OpenAI の不具合 openai/codex#38162。2026-11-12 の時点で直っていない）ので、行の下にそのことと「Codex で使えます」を出す。
+  - Claude Code: `claude mcp add --scope user hanasu -- <絶対パス> mcp` を動かす（外すのは `claude mcp remove --scope user hanasu`）。`claude` が見つからない（Claude Code を入れていない）ときも押せて、`~/.claude.json` の `mcpServers` に直接書く。あとで Claude Code を入れれば使える。
+- 受け入れ条件:
+  - 状態は「つないでいます」「つないでいません」「別の場所の Hanasu を指しています（つなぎ直すと、このアプリを指します）」「Hanasu のものでない hanasu が登録されています」「設定ファイルを読めません（理由）」「（アプリ）が見つかりません」のどれかで、設定画面を開いたときとボタンを押したあとに読み直す。
+  - つないでも外しても、ほかの項目（ほかの MCP のサーバー、`preferences` などの設定、config.toml のほかの表・コメント・Hanasu の表に利用者が足したキー）は値も意味も変わらない。書く前のファイルを、同じフォルダに元と同じ権限で `<名前>.hanasu-backup` として写す（前の写しは上書き）。一時ファイルに書いて置き換え、途中で止まっても元のファイルが壊れない。設定ファイルがシンボリックリンクなら、リンクは残してリンク先を書き換える。書いたあとの本体の権限は元と同じ。
+  - Hanasu のものでない `hanasu` があれば、上書きするかを確かめる。取り消せば何も書かない。
+  - ファイルが読めない・JSON として壊れている・config.toml の書き方が読み取れない（DEC-COM-201）ときは、何も書かず、理由と、手で足す内容（REQ-COM-190 のコピーの欄）を案内する。
+  - 外すと、Hanasu の項目（DEC-COM-203）だけを消す。Hanasu のものでない `hanasu` は消さない。
+  - Claude Desktop がその設定の場所で、ChatGPT（Codex）のアプリが、Claude Code（直接書くとき）が動いているあいだは、つなぐのも外すのも書かずに「（アプリ）を終了してから、もう一度押してください」と出す（DEC-COM-202）。
+  - Claude Code の `claude` コマンドは、画面を止めずに動かし、そのあいだはボタンを押せなくして登録中であることを出す。30 秒で終わらなければ打ち切って、そのことを出す。失敗したら、その出力（stderr）を出し、状態は読み直したとおりに出す。つなぎ直し（前の項目を外して足す）の途中で足すのに失敗したら、前の項目を元どおりに入れ直す。
+  - 「つなぐ…」を押せないとき: アプリが App Translocation で動いている（Mac。REQ-COM-192）、`cli\hanasu.exe` がないか一時フォルダで動いている（Windows）、`DisableCLI` か `DisableMCP`（Mac。Windows のポリシーは FUT-020）、アプリが見つからない（DEC-COM-205）。「外す…」は、外せる Hanasu の項目があるときに押せる。
+  - 節の下に、REQ-COM-190 と同じ「会議の中身がエージェントとその AI の提供元に渡る」文を出す。
+- 出典: 2026-11-12 の依頼「メインにする前に、Claude や ChatGPT、Anthropic に接続するための設定を簡単にできる画面を追加してください」、同日の答え「A（Hanasu の AI ではなく、会議の DB へのアクセス・検索ができるようにしたい）、推奨で」「Claude Code を入れていない環境でも追加できるようにして欲しい」、同日に計画を了承（「実装に入って」）。計画 [plans/agent-connect.md](../plans/agent-connect.md)
+- 関係する要件: REQ-COM-184, REQ-COM-185, REQ-COM-189, REQ-COM-190, REQ-COM-192, REQ-REL-013
+- 対象: Mac / Windows
+- 実装の場所: `AgentConnect`（`Sources/Hanasu/AgentConnect.swift`）、`CommandLineSettingsTab`（`AgentConnectSection`）
+- Windows の実装: `windows/Hanasu.Core/Command/AgentConnect.cs`（`AgentConnect`）、設定の「コマンドと MCP」のタブ（`windows/Hanasu.Windows/Views/SettingsWindow.CommandLine.cs`）、動いているアプリと `claude` を探す部品（`windows/Hanasu.Windows/Services/AgentApps.cs`）
+- 確かめ方: 共有のテストデータ `common/testdata/connect/` を、`.build/debug/Hanasu --test-hanasu-command` と `cd windows && dotnet test Hanasu.Core.Tests`（`AgentConnectTests`）で流す。期待する config.toml は CI（spec.yml）で Python の `tomllib` で読む。画面は `.build/debug/Hanasu --render-settings <フォルダ> --pane commandLine --connect-fixture <名前>`（UX-195）。AI アプリから実際に会議を読めることは実機（UX-195・196）
 
 ---
 
@@ -1440,6 +1462,78 @@
 - 関係する要件: REQ-COM-191
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/Command/CommandPlatformParts.cs`（`CommandPath`）、`windows/Hanasu.Command/WindowsCommandPlatform.cs`、`AppSettings.CommandPathEntry`
+
+### DEC-COM-200 Claude Desktop は、`.mcpb`（拡張機能）でなく `claude_desktop_config.json` に書いて登録し、設定の場所ごとに扱う
+- 決めたこと:
+  - `claude_desktop_config.json` の `mcpServers.hanasu` に `{"command": <実行ファイルの絶対パス>, "args": ["mcp"]}` を足す。ほかのキーは読んだまま残す（キーの並びと字下げは変わることがある）。
+  - 設定の場所は、Mac は `~/Library/Application Support/` の、Windows は `%APPDATA%\` の、`Claude` と `Claude-` で始まるフォルダのうち `claude_desktop_config.json` があるもの（`Claude` はファイルがなくてもフォルダがあれば）。設定に `deploymentMode` のキーがあるフォルダ（Claude Desktop が配置のモードのために自分で使う `Claude-3p` など）は出さない。Windows のストアの版で `%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude` があれば、`%APPDATA%\Claude` の代わりにそちら。行の名前は、`Claude` なら「Claude Desktop」、ほかは「Claude Desktop（フォルダの名前）」。
+- 理由:
+  - 質問のときは `.mcpb` を推奨したが、調べ直すと、`.mcpb` の `command` に束の外の絶対パスを書いてよいか（仕様の例は束の中の相対パスだけ）、署名のない `.mcpb` の扱い、入れ直したときに置き換わるか、会社の管理で拡張機能の許可リストが有効なときに入れられるか、入れたかを Hanasu から確かめる方法が分からなかった。`.mcpb` は FUT-021。
+  - `mcpServers` は Anthropic の手引きにある決まった形で、状態を読んで確かめられ、外すのも同じ場所でできる。
+  - 同じ Claude.app を `--user-data-dir` で別の場所を指して動かす人がいる。既定の場所にだけ書くと、ふだん使っている Claude では使えない。
+- 決めた場面: 2026-11-12 の依頼「メインにする前に、Claude や ChatGPT、Anthropic に接続するための設定を簡単にできる画面を追加してください」、同日の答え「A（Hanasu の AI ではなく、会議の DB へのアクセス・検索ができるようにしたい）、推奨で」「Claude Code を入れていない環境でも追加できるようにして欲しい」、同日に計画を了承（「実装に入って」）。計画 [plans/agent-connect.md](../plans/agent-connect.md)。敵対的レビューの指摘
+- 関係する要件: REQ-COM-194
+- 対象: Mac / Windows
+- 実装の場所: `AgentConnect.claudeDesktopLocations`（Windows は `AgentConnect.ClaudeDesktopLocations`）
+
+### DEC-COM-201 config.toml は、TOML を全部は読まず、`hanasu` の表だけを行で扱う
+- 決めたこと: `~/.codex/config.toml`（Windows は `%USERPROFILE%\.codex\config.toml`）を行で読む。
+  - つなぐ: 印の行 `# Added by Hanasu` と `[mcp_servers.hanasu]`・`command = "<パス>"`・`args = ["mcp"]`・`tool_timeout_sec = 300` を、ファイルの終わりに足す（前に空行 1 つ）。パスは TOML の基本文字列の決まりで `\`・`"`・制御文字をエスケープする。すでに Hanasu の表があれば、その表の `command` と `args` の行だけを書き換え、利用者が足したキー（`enabled`・`env` など）は残す。
+  - Hanasu の表: 見出し `[mcp_servers.hanasu]`・`[mcp_servers."hanasu"]`・`[mcp_servers.'hanasu']`（空白と行末のコメントを許す）から、次の見出しまで。外すときは `[mcp_servers.hanasu.env]` のような下の表と、印の行とその前の空行も消す。
+  - 書かない（読み取れない）ファイル: 見出し `[mcp_servers]`・`[mcp_servers.<名前>]` 以外で `mcp_servers` を作っているもの（一番上の `mcp_servers = …`・`mcp_servers.<名前>.… =`・`[mcp_servers]` の中の `<名前> = …`）、`[[mcp_servers…]]`、`'''`・`"""` の複数行の文字列があるもの、Hanasu の表の `command`・`args` が 1 行で閉じていないもの。
+  - 書いたあとで読み直し、Hanasu の表が期待どおりでなければ、写しに戻して失敗を出す。
+  - `CODEX_HOME` は見ない。Finder から開いたアプリにはシェルの環境変数が届かない（DEC-COM-188 と同じ）。既定の場所だけを扱い、画面に場所を出す。
+  - `tool_timeout_sec` は、ローカルの AI で `ask_meetings` を動かすと Codex の既定（60 秒）を超えうるため。
+- 理由: Swift と .NET に TOML の読み書きの部品がなく、足すと依存が増える。読んで書き直すと利用者のコメントや並びが消える。Hanasu が触るのを自分の表だけにすれば、ほかの行は 1 バイトも変わらない。`codex mcp add` を使う道もあるが、Codex CLI を入れていない人（ChatGPT のアプリだけの人）が多い。
+- 決めた場面: 2026-11-12 の依頼「メインにする前に、Claude や ChatGPT、Anthropic に接続するための設定を簡単にできる画面を追加してください」、同日の答え「A（Hanasu の AI ではなく、会議の DB へのアクセス・検索ができるようにしたい）、推奨で」「Claude Code を入れていない環境でも追加できるようにして欲しい」、同日に計画を了承（「実装に入って」）。計画 [plans/agent-connect.md](../plans/agent-connect.md)
+- 関係する要件: REQ-COM-194
+- 対象: Mac / Windows
+- 実装の場所: `AgentConnect.TOML`（Windows は `AgentConnect.Toml`）
+
+### DEC-COM-202 AI アプリが動いているあいだは、その設定ファイルに書かない
+- 決めたこと:
+  - Claude Desktop: 動いている Claude Desktop のプロセスの引数を読み、`--user-data-dir` がその設定の場所（ないときは既定の `Claude`）なら「動いている」とする。引数を読めなかったプロセスがあれば、どの場所も「動いている」とする。Mac は `NSRunningApplication`（バンドル ID `com.anthropic.claudefordesktop`）の pid の引数を `sysctl`（`KERN_PROCARGS2`）で、Windows は `Claude.exe` のうち実行ファイルのパスが `AnthropicClaude` か `WindowsApps\Claude_` の下にあるものの引数を読む（名前だけでは Claude Code の `claude.exe` と見分けられない）。引数の読み分けは共有のテストデータで確かめる純粋な関数にする。
+  - ChatGPT（Codex）: Mac はバンドル ID `com.openai.codex`・`com.openai.chat`、Windows は実行ファイルのパスが `WindowsApps\OpenAI.` の下にあるプロセスが動いていれば書かない。Codex CLI の `codex` は見ない。
+  - Claude Code（`~/.claude.json` に直接書くとき）: 名前が `claude`（Windows は `claude.exe`）のプロセスが動いていれば書かない。
+  - 動いていれば、つなぐ・外すのどちらも書かずに「（アプリ）を終了してから、もう一度押してください」と出す。Hanasu がアプリを終了させることはしない。
+- 理由:
+  - Claude Desktop は動いているあいだ、このファイルの `preferences` を自分で書くので、Hanasu の足した項目を古い中身で上書きするおそれがある。起動のときにしか MCP のサーバーを読まないので、どのみち開き直しが要る。
+  - ChatGPT（Codex）の Windows のアプリは `config.toml` を一度に置き換えずに書いていて、落ちると NUL で埋まる不具合がある（openai/codex#26421）。同時に書くと、どちらかの変更が消えるか、ファイルが壊れうる。
+  - Hanasu が終了させると、返事を作っている途中の会話や、Claude Desktop の中で動いている Claude Code の作業を止めてしまう。
+- 決めた場面: 2026-11-12 の依頼「メインにする前に、Claude や ChatGPT、Anthropic に接続するための設定を簡単にできる画面を追加してください」、同日の答え「A（Hanasu の AI ではなく、会議の DB へのアクセス・検索ができるようにしたい）、推奨で」「Claude Code を入れていない環境でも追加できるようにして欲しい」、同日に計画を了承（「実装に入って」）。計画 [plans/agent-connect.md](../plans/agent-connect.md)。敵対的レビューの指摘
+- 関係する要件: REQ-COM-194
+- 対象: Mac / Windows
+- 実装の場所: `AgentConnect.runningDataDirectories`・`AgentApps`（Mac は `AgentConnect.swift`、Windows は `windows/Hanasu.Windows/Services/AgentApps.cs` と Core の `AgentConnect.RunningDataDirectories`）
+
+### DEC-COM-203 Hanasu の項目かどうかは、指している実行ファイルで見分ける
+- 決めたこと: Claude Desktop の `command`、config.toml の `command`、`~/.claude.json` の `mcpServers.hanasu.command` が、Hanasu の実行ファイルの形（Mac は末尾が `/Hanasu.app/Contents/MacOS/Hanasu`、Windows は末尾が `\cli\hanasu.exe`。大文字・小文字は Windows だけ無視）なら Hanasu の項目とみなす。シンボリックリンク（PATH に入れた `/usr/local/bin/hanasu` など）はたどった先で見る。今のアプリのパスと同じなら（開発用のビルドもこれで）「つないでいます」、違う Hanasu なら「別の場所の Hanasu を指しています」。素の `hanasu`（PATH で探す）は Hanasu のものでないとみなす。
+- 理由: 利用者が `hanasu` という名前で別のサーバーを登録していることがあり、それを消したり上書きしたりしない。アプリを移したあと、前の場所を指す項目を、確かめなしにつなぎ直せるようにする（REQ-COM-191 のリンクと同じ考え方）。
+- 決めた場面: 2026-11-12 の依頼「メインにする前に、Claude や ChatGPT、Anthropic に接続するための設定を簡単にできる画面を追加してください」、同日の答え「A（Hanasu の AI ではなく、会議の DB へのアクセス・検索ができるようにしたい）、推奨で」「Claude Code を入れていない環境でも追加できるようにして欲しい」、同日に計画を了承（「実装に入って」）。計画 [plans/agent-connect.md](../plans/agent-connect.md)
+- 関係する要件: REQ-COM-194
+- 対象: Mac / Windows
+- 実装の場所: `AgentConnect.ownership`（Windows は `AgentConnect.Ownership`）
+
+### DEC-COM-204 Claude Code は `claude` コマンドで登録し、`claude` がなければ `~/.claude.json` に直接書く
+- 決めたこと:
+  - `claude` があれば、`claude mcp add --scope user hanasu -- <絶対パス> mcp` で登録し、`claude mcp remove --scope user hanasu` で外す。`claude mcp add` は同じ名前があると失敗するので、`~/.claude.json` の一番上の `mcpServers.hanasu` があれば先に remove してから add する。add が失敗したら、remove の前に読んだ項目を `claude mcp add-json --scope user` で入れ直す。
+  - `claude` の場所は、Mac は `~/.local/bin/claude`・`/opt/homebrew/bin/claude`・`/usr/local/bin/claude`・`~/.claude/local/claude`・Claude Desktop に入っている Claude Code（`~/Library/Application Support/Claude/claude-code/<版>/<ハッシュ>/claude.app/Contents/MacOS/claude` のいちばん新しい版）を順に見て、なければログインシェルで `command -v claude`（5 秒まで）。Windows は `%USERPROFILE%\.local\bin\claude.exe`・`%APPDATA%\Claude\claude-code` の下の `claude.exe`・`%APPDATA%\npm\claude.cmd`、なければ `where.exe claude`。
+  - Mac は、見つけた `claude` のフォルダ（とリンクの先のフォルダ）と `/opt/homebrew/bin`・`/usr/local/bin` を PATH の先に足して直接動かす（npm で入れた `claude` は `#!/usr/bin/env node` で、Finder から開いたアプリの PATH では `node` が見つからない。`node` はふつう `claude` と同じフォルダにある。ログインシェルを通さないのは、fish などで引数の引用の決まりが違うため）。Windows は `claude.exe` を直接、`.cmd` はパスに `&`・`%`・`^`・`"` がなければ `cmd /c` で。どちらもバックグラウンドで、30 秒で打ち切る。
+  - `claude` が見つからないとき（Claude Code をまだ入れていない環境）は、`~/.claude.json`（Windows は `%USERPROFILE%\.claude.json`）の一番上の `mcpServers.hanasu` に直接書く。ファイルがなければ `mcpServers` だけのファイルを作る。書き方は Claude Desktop と同じ（REQ-COM-194 の受け入れ条件）。
+  - 状態は `~/.claude.json` の一番上の `mcpServers.hanasu` を読んで決める。プロジェクトだけの登録（`projects[<フォルダ>].mcpServers.hanasu`）は、「一部のフォルダだけの登録もあります」と出すだけで触らない。
+  - 行の名前は「Claude Code（ターミナルと Claude Desktop の Code）」。どちらも `~/.claude.json` の同じ登録を読む。`CLAUDE_CONFIG_DIR` は見ない（DEC-COM-201 の `CODEX_HOME` と同じ理由）。
+- 理由: `~/.claude.json` は Claude Code が動いているあいだ常に書き換えるので、`claude` があればそれに任せる。`claude` がない環境では Claude Code も動いていないので、直接書いてもぶつからない。直接書く道は、Claude Code を入れる前につないでおきたい人のため（2026-11-12 に、`mcpServers` だけの `.claude.json` を `claude mcp get hanasu` が「User config」の登録として読み、Claude Code が自分のキーを足しても残ることを確かめた）。MCP にしたのは、スキル（CLI の使い方を書いたファイル）だと Hanasu の更新で古くなり、Claude Code のサンドボックスで `hanasu ask` が絞られうるため。
+- 決めた場面: 2026-11-12 の依頼「メインにする前に、Claude や ChatGPT、Anthropic に接続するための設定を簡単にできる画面を追加してください」、同日の答え「A（Hanasu の AI ではなく、会議の DB へのアクセス・検索ができるようにしたい）、推奨で」「Claude Code を入れていない環境でも追加できるようにして欲しい」、同日に計画を了承（「実装に入って」）。計画 [plans/agent-connect.md](../plans/agent-connect.md)。敵対的レビューの指摘
+- 関係する要件: REQ-COM-194, REQ-COM-190
+- 対象: Mac / Windows
+- 実装の場所: `AgentConnect.ClaudeCLI`（Mac）、`AgentApps.FindClaude`（Windows）
+
+### DEC-COM-205 アプリが見つからないときは、「つなぐ…」を押せなくする（Claude Code を除く）
+- 決めたこと: Claude Desktop は設定の場所（DEC-COM-200）が 1 つもなく、Mac ならバンドル ID のアプリもないとき、ChatGPT（Codex）は `~/.codex` がなく、Mac ならバンドル ID `com.openai.codex`・`com.openai.chat` のアプリもないときに「見つかりません」と出し、「つなぐ…」を押せなくする。Claude Code は `claude` が見つからなくても押せる（DEC-COM-204。状態の下に「Claude Code は見つかりませんでした。入れると、この登録が使われます」と出す）。
+- 理由: 入っていないアプリのために、ホームに使われないフォルダとファイルを作らない。Claude Code だけは、利用者の依頼（2026-11-12「Claude Code を入れていない環境でも追加できるようにして欲しい」）で、入れる前に登録できるようにする。
+- 決めた場面: 2026-11-12 の依頼「メインにする前に、Claude や ChatGPT、Anthropic に接続するための設定を簡単にできる画面を追加してください」、同日の答え「A（Hanasu の AI ではなく、会議の DB へのアクセス・検索ができるようにしたい）、推奨で」「Claude Code を入れていない環境でも追加できるようにして欲しい」、同日に計画を了承（「実装に入って」）。計画 [plans/agent-connect.md](../plans/agent-connect.md)
+- 関係する要件: REQ-COM-194
+- 対象: Mac / Windows
+- 実装の場所: `AgentConnect.state`（Windows は `AgentConnect.State`）
 
 ### DEC-COM-173 文字起こしの AI と文章の AI を「AI」タブに並べ、文章の AI の用途は処理の名前で呼ぶ
 - 決めたこと:

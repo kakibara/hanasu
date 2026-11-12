@@ -1524,6 +1524,110 @@
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu एक अस्थायी फ़ोल्डर (जैसे zip के अंदर) से चल रहा है। पूरी zip निकालें, उस फ़ोल्डर से Hanasu दोबारा खोलें, फिर उसे PATH और MCP में जोड़ें।</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>AI ऐप्स से जोड़ें</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (टर्मिनल और Claude Desktop का Code)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>जुड़ा है</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>जुड़ा नहीं है</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>दूसरी जगह के Hanasu की ओर इशारा करता है (फिर से जोड़ने पर यह इस ऐप की ओर इशारा करेगा)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>ऐसा hanasu रजिस्टर है जो Hanasu का नहीं है ({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>सेटिंग्ज़ फ़ाइल नहीं पढ़ी जा सकी: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>{0} नहीं मिला</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>JSON के रूप में नहीं पढ़ा जा सकता</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>फ़ॉर्मैट उम्मीद के मुताबिक़ नहीं है</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>जिस फ़ाइल में mcp_servers इस तरह लिखा गया है, उसे Hanasu नहीं बदल सकता</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>जोड़ें…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>हटाएँ…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>ChatGPT की सामान्य चैट में यह अभी काम नहीं करता (OpenAI की गड़बड़ी)। Codex में काम करता है।</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Claude Code नहीं मिला। इसे इंस्टॉल करने पर यही रजिस्ट्रेशन इस्तेमाल होगा।</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>नीचे दिए MCP सेक्शन की सामग्री ख़ुद जोड़ें।</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>कुछ ही फ़ोल्डरों के लिए भी एक रजिस्ट्रेशन है (बिना स्कोप के चलाए गए claude mcp add से)।</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>{0} बंद करें, फिर दोबारा क्लिक करें।</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>Hanasu को {0} से जोड़ें?</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>Hanasu नीचे दी गई फ़ाइल में hanasu जोड़ेगा। बदलाव से पहले की फ़ाइल की कॉपी उसी फ़ोल्डर में {0} नाम से रखी जाएगी।
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Claude Code के claude mcp add से hanasu को इस तरह रजिस्टर किया जाएगा कि वह किसी भी फ़ोल्डर से इस्तेमाल हो सके।</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>मौजूदा रजिस्ट्रेशन ({0}) को Hanasu से बदलें?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>{0} से Hanasu हटाएँ?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>सिर्फ़ Hanasu का hanasu रजिस्ट्रेशन हटाया जाएगा।</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>रजिस्टर किया जा रहा है…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>जुड़ गया। इस्तेमाल शुरू करने के लिए {0} को फिर से खोलें। पहली बार मीटिंग पढ़ते समय अगर पहुँच की अनुमति माँगी जाए, तो अनुमति दें।</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>जुड़ गया। नए Claude Code सेशन से इसका इस्तेमाल कर सकते हैं।</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>हटा दिया गया। बदलाव लागू करने के लिए {0} को फिर से खोलें।</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>पहले से जुड़ा है।</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>हटाने के लिए कोई रजिस्ट्रेशन नहीं है।</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>फ़ाइल नहीं बदली जा सकी: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>claude कमांड 30 सेकंड में पूरी नहीं हुई, इसलिए उसे रोक दिया गया।</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>कमांड और MCP</value>
   </data>

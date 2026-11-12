@@ -843,6 +843,60 @@
           "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）"
         }
       }
+    },
+    {
+      "id": "UX-195",
+      "steps": "設定の「コマンドと MCP」を開く（AI アプリにつなぐ）",
+      "expected": "最初に「AI アプリにつなぐ」があり、Claude Desktop（設定の場所ごと）・ChatGPT（Codex）・Claude Code の行に、設定ファイルの場所・状態（つないでいます・つないでいません・別の場所の Hanasu・Hanasu のものでない hanasu・読めない・見つかりません）と「つなぐ…」「外す…」が出る。ChatGPT の行には、ふつうのチャットでは今は使えないことが、Claude Code の行には見つからないときの文が出る。押すと確かめてから書き、Claude Desktop・ChatGPT が動いていれば書かずに終了を頼む",
+      "os": [
+        "mac"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-194"
+      ],
+      "automation": {
+        "mac": {
+          "kind": "render",
+          "renders": [
+            [
+              "--render-settings",
+              "{out}",
+              "--pane",
+              "commandLine"
+            ],
+            [
+              "--render-settings",
+              "{out}/empty",
+              "--pane",
+              "commandLine",
+              "--connect-fixture",
+              "empty"
+            ]
+          ],
+          "look": "1 枚目（架空の状態 all）: 「AI アプリにつなぐ」に Claude Desktop・Claude Desktop（Claude-Personal）・Claude Desktop（Claude-Work）・ChatGPT（Codex）・Claude Code の 5 行。それぞれ ~ で始まる設定ファイルの場所と、つないでいます（緑）・別の場所の Hanasu（つなぎ直すと…）・Hanasu のものでない hanasu（npx）・設定ファイルを読めません（mcp_servers を…）・つないでいません が出る。つないでいる行は「外す…」だけ、別の場所の行は「外す…」と「つなぐ…」、ほかは「つなぐ…」。ChatGPT の行に「下の MCP の欄の内容を、手で足してください」と「ChatGPT のふつうのチャットでは、今は使えません…」、Claude Code の行に「Claude Code は見つかりませんでした…」と「一部のフォルダだけの登録もあります…」。その下に「hanasu コマンド」と「MCP」の節が続く。2 枚目（empty）: Claude Desktop と ChatGPT が「見つかりません」で「つなぐ…」が押せない（薄い）。Claude Code は「つないでいません」で「つなぐ…」が押せる。文字が欠けたり重なったりしていない",
+          "remaining": "押したときの確かめ・書いた結果・アプリが動いているときの文、実際に Claude Desktop（既定と Claude-Personal）・ChatGPT の Codex・Claude Code から会議を読めること、初めて読むときの「書類」フォルダの確認は実機"
+        }
+      }
+    },
+    {
+      "id": "UX-196",
+      "steps": "Windows の設定の「コマンドと MCP」を開き、「AI アプリにつなぐ」で Claude Desktop・ChatGPT（Codex）・Claude Code につなぐ・外す",
+      "expected": "最初に「AI アプリにつなぐ」があり、Claude Desktop（%APPDATA%\\Claude などの場所ごと）・ChatGPT（Codex）・Claude Code の行に、設定ファイルの場所・状態と「つなぐ…」「外す…」が出る。つなぐと確かめてから書き、書く前の写し（.hanasu-backup）が同じフォルダに残る。Claude Desktop・ChatGPT が動いていれば書かずに終了を頼む。Claude Desktop を開き直すと hanasu のツールが使える。表示の言語で出る",
+      "os": [
+        "windows"
+      ],
+      "priority": "P1",
+      "refs": [
+        "REQ-COM-194",
+        "REQ-REL-013"
+      ],
+      "automation": {
+        "windows": {
+          "kind": "manual",
+          "reason": "Windows で人が確かめる（Windows の画面を描く CLI は FUT-019）。つないだあとの自動アップデートで REQ-REL-013 の確認が出ることも見る"
+        }
+      }
     }
   ]
 }

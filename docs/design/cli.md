@@ -19,7 +19,8 @@
 | `HanasuMCPServer.swift` | `mcp`。stdio の JSON-RPC の読み書きと、MCP の手順（新旧の版） |
 | `HanasuMCPTools.swift` | MCP のツールの定義（英語の説明・`inputSchema`・注釈）と呼び出し |
 | `HanasuInstall.swift` | 配る部分。PATH へのリンク（`/usr/local/bin`・`~/.local/bin`）と `~/.zprofile` の 1 行、App Translocation の判定、MCP の登録の文（Claude Code のコマンド・Claude Desktop の JSON） |
-| `CommandLineSettingsView.swift` | 設定画面の「コマンドと MCP」（`CommandLineSettingsTab`） |
+| `CommandLineSettingsView.swift` | 設定画面の「コマンドと MCP」（`CommandLineSettingsTab`、「AI アプリにつなぐ」の `AgentConnectSection`） |
+| `AgentConnect.swift` | AI アプリ（Claude Desktop・ChatGPT（Codex）・Claude Code）の設定に hanasu の MCP を足す・外す（REQ-COM-194）。自己テストは `AgentConnectSelfTest.swift` |
 | `HanasuShared.swift` | Windows 版と共有のファイル（`Resources/Command/hanasu.json`。DEC-COM-191）を読む。MCP の英語の文・エージェントへの説明・既定の文体の一覧 |
 | `HanasuCommandCLI.swift` | 開発用の自己テスト（`--test-hanasu-command`）と速さの測定（`--bench-hanasu-command`） |
 | `HanasuGoldenCLI.swift` | 共有のテストデータ（`common/testdata/cli`。DEC-COM-192）を動かし、期待する出力を書く（`--write-cli-golden`）・比べる |
@@ -58,6 +59,12 @@
 - アプリからはターミナルの PATH が見えないので、`~/.local/bin` が PATH にあるかは、シェルの設定ファイルに `.local/bin` が書いてあるかで見る（`userDirectoryOnPath`）。`doctor` はターミナルから呼ばれるので、本当の `PATH` を見る。
 - App Translocation（`isTranslocated`。DEC-COM-189）なら、知らせを出し、PATH とコピーのボタンを使えなくする。`DisableCLI` でも使えなくし、`DisableMCP` なら登録のしかたの代わりに止められていることを出す。
 - エージェントへの説明は `HanasuHelp.agentGuide`（英語で固定。DEC-COM-187）。`hanasu help agent` と設定画面で同じ文を出す。
+- 「AI アプリにつなぐ」（REQ-COM-194）は `AgentConnect.swift`（中身）と `CommandLineSettingsView.swift` の `AgentConnectSection`（画面）。
+  - 行は `AgentConnect.rows`。Claude Desktop は `claudeDesktopLocations`（`~/Library/Application Support/Claude` と `Claude-*`。`deploymentMode` のあるものは除く。DEC-COM-200）ごと、ChatGPT（Codex）は `~/.codex/config.toml`、Claude Code は `~/.claude.json`。
+  - 書き換えの決まりは純粋な関数（`ConfigJSON`・`ConfigTOML`・`owner`・`userDataDirectory`）にして、Windows の `AgentConnect.cs` と共有のテストデータ `common/testdata/connect/cases.json` で比べる。TOML は行で扱い、`[mcp_servers.hanasu]` の表だけを触る（DEC-COM-201）。
+  - ファイルは `AgentConnect.write`（写し `<名前>.hanasu-backup`・一時ファイルで置き換え・権限・シンボリックリンクの先・読み直し）。
+  - 動いているかは `Environment`（Claude Desktop は `KERN_PROCARGS2` で起動の引数の `--user-data-dir` を読む。DEC-COM-202）。テストと描画（`--connect-fixture`）では `Environment` を差し替える。
+  - Claude Code は `ClaudeCLI`（`claude` を探して `claude mcp add --scope user`。なければ `~/.claude.json` に直接書く。DEC-COM-204）。`claude` はバックグラウンドで 30 秒まで。
 
 ## 8. 確かめ方
 
@@ -88,6 +95,6 @@ Mac と同じコマンド・同じ JSON・同じ終了コード。中身は `win
 - 秘密: アプリと同じ `SecretStore`（`Hanasu.Platform` の DPAPI・Windows Hello）。Windows Hello は `GuardedPresenceKey` で包み、`hanasu mcp` はロック・スリープ（`SystemEvents`）で鍵を捨てる（DEC-COM-198）。
 - ローカルの AI: `LocalLlmServerRecords` が起動したプロセスごとの記録を書き、ほかの生きている持ち主のサーバーがあれば起動しない。llama-server は `ChildProcessJob` に入れる。`cli\` から `..\llama\` を探す。
 - アプリの保存: `SharedFile`（DEC-COM-194）で、`hanasu` が読んでいる間も置き換えが失敗しない。
-- 設定の「コマンドと MCP」: `windows/Hanasu.Windows/Views/SettingsWindow.CommandLine.cs`。PATH は `UserPath`（`HKCU\Environment`）と `CommandPath`（DEC-COM-199）。
+- 設定の「コマンドと MCP」: `windows/Hanasu.Windows/Views/SettingsWindow.CommandLine.cs`。PATH は `UserPath`（`HKCU\Environment`）と `CommandPath`（DEC-COM-199）。 「AI アプリにつなぐ」は Core の `AgentConnect.cs`（決まりは Mac と同じ）と、動いているアプリと `claude` を探す `Hanasu.Windows/Services/AgentApps.cs`。
 - 自動アップデート: 動いている `hanasu` を `RunningCommands` で数えて確認に出し、`UpdateSwapScript` が名前を変える直前に終わらせる（REQ-REL-013・DEC-REL-031）。
 - 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests` は `common/testdata/cli` の 29 件で Mac の期待する出力と比べる。`CommandTests`・`CommandPlatformTests`）。CI（`windows.yml`）は publish した `cli\hanasu.exe` を動かし（共有の会議・MCP・コードページ 932 と 437 のパイプとファイル）、架空の会議 1,000 件で速さを測る。画面と Windows Hello・PATH・アップデート・MCP のクライアントは実機（UX-189〜194）。

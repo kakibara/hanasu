@@ -124,7 +124,7 @@ Hanasu 會把轉錄結果交給 AI（Gemini、Claude，或你裝置上的本機�
 
 ### ⌨️ 從終端機和 AI 代理程式使用
 
-透過 `hanasu` 指令，腳本和 AI 代理程式（Claude Code、Claude Desktop 等）可以讀取你的會議記錄，並使用你的潤飾風格。它隨應用程式一起提供，不需要另外安裝任何東西：在 Mac 上它就是應用程式本身，在 Windows 上則是 Hanasu 資料夾中的 `cli\hanasu.exe`。開啟 **設定 → 指令與 MCP**，即可將它加入 PATH，或複製 MCP 的設定。
+透過 `hanasu` 指令，腳本和 AI 代理程式（Claude Code、Claude Desktop 等）可以讀取你的會議記錄，並使用你的潤飾風格。它隨應用程式一起提供，不需要另外安裝任何東西：在 Mac 上它就是應用程式本身，在 Windows 上則是 Hanasu 資料夾中的 `cli\hanasu.exe`。開啟 **設定 → 指令與 MCP**，即可一鍵將它連接到 Claude Desktop、ChatGPT（Codex）或 Claude Code，將它加入 PATH，或複製供其他 App 使用的 MCP 設定。（由於 OpenAI 的問題，ChatGPT 的一般聊天目前還無法使用本機 MCP 工具；Codex 可以。）
 
 | | |
 | --- | --- |

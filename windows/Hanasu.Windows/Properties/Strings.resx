@@ -1998,6 +1998,144 @@ Open the release page in your browser?</value>
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu is running from a temporary folder (such as inside the zip). Extract the whole zip, open Hanasu from that folder, and then add it to PATH and MCP.</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>Connect to AI apps</value>
+    <comment>Settings &gt; Command and MCP: section title</comment>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+    <comment>Row title. {0} = name of the Claude Desktop settings folder (e.g. Claude-Personal)</comment>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+    <comment>Row title</comment>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (Terminal and Code in Claude Desktop)</value>
+    <comment>Row title. Both read the same registration</comment>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>Connected</value>
+    <comment>Row state</comment>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>Not connected</value>
+    <comment>Row state</comment>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>Points to a copy of Hanasu in another location (connect again to point it to this app)</value>
+    <comment>Row state</comment>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>A hanasu entry that isn’t from Hanasu is registered ({0})</value>
+    <comment>Row state. {0} = the command of the current entry</comment>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>Can’t read the settings file: {0}</value>
+    <comment>Row state. {0} = reason</comment>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>{0} wasn't found</value>
+    <comment>Row state. {0} = app name</comment>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>Can’t be read as JSON</value>
+    <comment>Reason the config file can't be read</comment>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>Not in the expected format</value>
+    <comment>Reason the config file can't be read</comment>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>Hanasu can’t edit a file that writes mcp_servers this way</value>
+    <comment>Reason config.toml can't be edited. Keep mcp_servers as is</comment>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>Connect…</value>
+    <comment>Button</comment>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>Disconnect…</value>
+    <comment>Button</comment>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>Not available in regular ChatGPT chats yet (an OpenAI bug). Works in Codex.</value>
+    <comment>Note under the ChatGPT (Codex) row</comment>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Claude Code wasn’t found. Once you install it, it will use this registration.</value>
+    <comment>Note under the Claude Code row</comment>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>Add the setup from the MCP section below by hand.</value>
+    <comment>Note under a row whose settings file Hanasu cannot change</comment>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>There are also entries for specific folders only (from running claude mcp add without a scope).</value>
+    <comment>Note under the Claude Code row. Keep claude mcp add as is</comment>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>Quit {0}, then click again.</value>
+    <comment>{0} = app name</comment>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>Connect Hanasu to {0}?</value>
+    <comment>Confirmation title. {0} = app name</comment>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>Hanasu will add hanasu to the following file. Before writing, it saves a copy of the file as {0} in the same folder.
+
+{1}</value>
+    <comment>Confirmation. {0} = backup file name, {1} = config file path</comment>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Hanasu will register hanasu with Claude Code's claude mcp add so it can be used from any folder.</value>
+    <comment>Confirmation. Keep claude mcp add as is</comment>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>Replace the current registration ({0}) with Hanasu?</value>
+    <comment>Confirmation. {0} = the command of the current entry</comment>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>Disconnect Hanasu from {0}?</value>
+    <comment>Confirmation title. {0} = app name</comment>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Removes only Hanasu’s hanasu entry.</value>
+    <comment>Confirmation</comment>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>Registering…</value>
+    <comment>Shown while the claude command runs</comment>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>Connected. Reopen {0} to start using it. If you're asked for access the first time it reads a meeting, allow it.</value>
+    <comment>Result. {0} = app name</comment>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>Connected. You can use it in new Claude Code sessions.</value>
+    <comment>Result</comment>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>Disconnected. Reopen {0} for the change to take effect.</value>
+    <comment>Result. {0} = app name</comment>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>Already connected.</value>
+    <comment>Result</comment>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>Nothing to disconnect.</value>
+    <comment>Result</comment>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>Couldn't make the change: {0}</value>
+    <comment>Result. {0} = reason</comment>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>The claude command didn’t finish within 30 seconds, so it was stopped.</value>
+    <comment>Result</comment>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>Command &amp; MCP</value>
   </data>

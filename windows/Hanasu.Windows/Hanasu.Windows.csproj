@@ -46,6 +46,9 @@
 
   <ItemGroup>
     <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
+    <!-- 要件: REQ-COM-194 -->
+    <!-- 動いている Claude Desktop の起動の引数（Win32_Process.CommandLine）を読む（Services/AgentApps.cs。設計判断: DEC-COM-202） -->
+    <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

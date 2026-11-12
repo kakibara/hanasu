@@ -124,7 +124,7 @@ Mac에서는 목록(일본어, 영어, 중국어, 한국어, 프랑스어, 독�
 
 ### ⌨️ 터미널과 AI 에이전트에서 사용
 
-`hanasu` 명령으로 스크립트와 AI 에이전트(Claude Code, Claude Desktop 등)가 회의 기록을 읽고 내 다듬기 스타일을 사용할 수 있습니다. 앱에 함께 들어 있으므로 따로 설치할 것이 없습니다. Mac에서는 앱 자체이고, Windows에서는 Hanasu 폴더의 `cli\hanasu.exe`입니다. **설정 → 명령 및 MCP**에서 PATH에 추가하거나 MCP 설정을 복사할 수 있습니다.
+`hanasu` 명령으로 스크립트와 AI 에이전트(Claude Code, Claude Desktop 등)가 회의 기록을 읽고 내 다듬기 스타일을 사용할 수 있습니다. 앱에 함께 들어 있으므로 따로 설치할 것이 없습니다. Mac에서는 앱 자체이고, Windows에서는 Hanasu 폴더의 `cli\hanasu.exe`입니다. **설정 → 명령 및 MCP**에서 버튼 하나로 Claude Desktop, ChatGPT(Codex), Claude Code에 연결하거나, PATH에 추가하거나, 다른 앱용 MCP 설정을 복사할 수 있습니다. (OpenAI의 버그로 ChatGPT의 일반 채팅에서는 아직 로컬 MCP 도구를 쓸 수 없습니다. Codex에서는 쓸 수 있습니다.)
 
 | | |
 | --- | --- |

@@ -76,6 +76,9 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 - 直したこと: なし（API キーの置き場所は 1 章）。
 - 残る危険: 会議の保存先は、ユーザーが選べる（共有フォルダや同期するフォルダを選ぶと、会議の中身がそこに置かれる）。録音を消すのは削除だけで、ディスクからの完全な消去（上書き）はしない。保存先を OneDrive などで同期していると、同期先の削除済みの項目にしばらく残る（録音の管理の画面に注意を出す）。バックアップ（ファイル履歴・クラウドのバックアップ）にとった分は Hanasu からは消せない。消した録音のぶん、文字起こしに欠けがある会議の会話は戻せない（確かめのダイアログで知らせる）。
 
+- 確かめたこと（2026-11-12）: 設定の「AI アプリにつなぐ」（REQ-COM-194）は、ほかのアプリの設定ファイル（`%APPDATA%\Claude\claude_desktop_config.json`、`%USERPROFILE%\.codex\config.toml`、`%USERPROFILE%\.claude.json`）を書き換える。書く前の写し（`<名前>.hanasu-backup`）を同じフォルダに残し、一時ファイルに書いて置き換え、読み直して確かめる。ファイルの ACL はフォルダから受け継ぐ（ユーザーのプロファイルの下なので、本人と管理者だけ）。
+- 残る危険: これらのファイルと写しには、ほかの MCP のサーバーの `env` に書いた鍵が入りうる。写しは 1 つだけで、次に書くときに上書きする。
+
 ### 2.5 クリップボード
 
 - 確かめたこと: 入力のためにクリップボードに置く文章には、PR #19 から `ExcludeClipboardContentFromMonitorProcessing`・`CanIncludeInClipboardHistory`=0・`CanUploadToCloudClipboard`=0 を付けている（`ClipboardTextInserter`）。貼り付けのあと、元のクリップボードに戻す（その間にユーザーがコピーしていたら戻さない）。
@@ -103,6 +106,8 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 - 確かめたこと: パッケージは版を固定していた（`PackageReference` の Version）が、推移的な依存とハッシュは固定していなかった。CI（`windows.yml`）は秘密を使わず、`permissions: contents: read`・`persist-credentials: false`。
 - 直したこと（DEC-COM-150）: `packages.lock.json` を使い、CI の Restore の段では locked mode で restore する（lock と食い違えば失敗）。publish の段は RID を足して restore し直すので locked mode を外している（同じ版に決まる）。
 - 残る危険: GitHub Actions（`actions/checkout@v6` など）は版のタグで指していて、コミットの SHA で固定していない（ほかのワークフローと合わせて直すのがよい）。Anthropic の SDK は推移的に Microsoft.Extensions.AI.Abstractions などを取り込む（[THIRD_PARTY_NOTICES.md](../../windows/THIRD_PARTY_NOTICES.md)）。
+
+- 足したもの（2026-11-12）: 設定の「AI アプリにつなぐ」（REQ-COM-194）で、動いている Claude Desktop の起動の引数を読むために `System.Management`（WMI の `Win32_Process.CommandLine`。Microsoft のパッケージ。`System.CodeDom` が付いてくる）をアプリ（`Hanasu.Windows`）にだけ足した。`hanasu.exe` には入れていない。版は lock で固定し、`THIRD_PARTY_NOTICES.md` に書いた。
 
 ### 2.9 配布
 

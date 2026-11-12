@@ -250,9 +250,9 @@ enum HanasuInstall {
         return "'" + text.replacingOccurrences(of: "'", with: "'\\''") + "'"
     }
 
-    /// Claude Code に登録するコマンド（絶対パスで書くので、PATH が要らない）
+    /// Claude Code に登録するコマンド（絶対パスで書くので、PATH が要らない。--scope user で、どのフォルダの Claude Code からも使える）
     static func claudeCodeCommand(executable: String = executablePath) -> String {
-        "claude mcp add hanasu -- \(shellQuoted(executable)) mcp"
+        "claude mcp add --scope user hanasu -- \(shellQuoted(executable)) mcp"
     }
 
     /// Claude Desktop の設定（claude_desktop_config.json）の mcpServers に足す形

@@ -61,6 +61,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 
 配布の zip の `cli\hanasu.exe` で、会議の記録を読む・探す・質問する、文章を整える・書き換える、MCP のサーバーとして動く、ができる（Mac 版の `hanasu` と同じコマンド・同じ JSON・同じ終了コード。docs/design/cli.md）。
 
+- 設定 →「コマンドと MCP」の「AI アプリにつなぐ」で、Claude Desktop（`%APPDATA%\Claude` など、設定の場所ごと）・ChatGPT（Codex。`%USERPROFILE%\.codex\config.toml`）・Claude Code（`claude mcp add --scope user`。`claude` がなければ `%USERPROFILE%\.claude.json`）に、ボタン 1 つで hanasu の MCP をつなぐ・外す（REQ-COM-194）。アプリが動いているあいだは書かない。
 - 設定 →「コマンドと MCP」で、絶対パスのコピー、ユーザーの PATH に入れる・外す（管理者の権限は要らない。入れたあとに開いたターミナルから使える）、Claude Code のコマンドと Claude Desktop の JSON のコピー、エージェントへの説明（英語）が出る。
 - 使い方は `hanasu help`、設定の確かめは `hanasu doctor`。
 - PowerShell で出力を読むときは、先に `[Console]::OutputEncoding = [Text.UTF8Encoding]::new()`（Windows PowerShell 5.1 では `$OutputEncoding = [Text.UTF8Encoding]::new()` も）。5.1 の `>` は UTF-16 で書くので、ファイルには `| Out-File -Encoding utf8` を使う。

@@ -124,7 +124,7 @@ Sur Mac, choisissez la langue de transcription dans une liste (japonais, anglais
 
 ### ⌨️ Utilisez-le depuis le terminal et des agents IA
 
-La commande `hanasu` permet aux scripts et aux agents IA (Claude Code, Claude Desktop et autres) de lire vos enregistrements de réunions et de mettre du texte au propre comme la saisie vocale. Elle est fournie avec l'application : il n'y a rien d'autre à installer. Sur le Mac, c'est l'application elle-même ; sur Windows, c'est `cli\hanasu.exe` dans le dossier de Hanasu. Ouvrez **Réglages → Commande et MCP** pour l'ajouter à votre PATH ou copier la configuration MCP.
+La commande `hanasu` permet aux scripts et aux agents IA (Claude Code, Claude Desktop et autres) de lire vos enregistrements de réunions et de mettre du texte au propre comme la saisie vocale. Elle est fournie avec l'application : il n'y a rien d'autre à installer. Sur le Mac, c'est l'application elle-même ; sur Windows, c'est `cli\hanasu.exe` dans le dossier de Hanasu. Ouvrez **Réglages → Commande et MCP** pour le connecter à Claude Desktop, ChatGPT (Codex) ou Claude Code en un clic, l'ajouter à votre PATH ou copier la configuration MCP pour d'autres apps. (Pour l'instant, le chat ChatGPT classique ne peut pas utiliser les outils MCP locaux à cause d'un bug d'OpenAI ; Codex, si.)
 
 | | |
 | --- | --- |

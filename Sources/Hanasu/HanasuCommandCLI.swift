@@ -327,6 +327,7 @@ enum HanasuCommandCLI {
 
         runAITests(exe: exe, root: root, base: base, link: link)
         runInstallTests(exe: exe, root: root, base: base)
+        AgentConnectSelfTest.run(root: root, check: check)
 
         // 書き換えない（REQ-COM-183）
         check(fingerprints(base) == before, "どのコマンドも meeting.json を書き換えない（処理中の会議も「失敗」にしない）")
@@ -655,7 +656,7 @@ enum HanasuCommandCLI {
         let doctor = call(exe, ["doctor", "--json", "--meetings-dir", base.path], environment: ["PATH": "/usr/bin:/bin"])
         let mcpJSON = doctor.json?["mcp"] as? [String: Any]
         let doctorServer = ((mcpJSON?["claudeDesktop"] as? [String: Any])?["mcpServers"] as? [String: Any])?["hanasu"] as? [String: Any]
-        check(doctorServer?["command"] as? String == real && (mcpJSON?["claudeCode"] as? String)?.hasPrefix("claude mcp add hanasu -- ") == true,
+        check(doctorServer?["command"] as? String == real && (mcpJSON?["claudeCode"] as? String)?.hasPrefix("claude mcp add --scope user hanasu -- ") == true,
               "doctor に、Claude Code のコマンドと Claude Desktop の JSON")
         let links = (doctor.json?["install"] as? [String: Any])?["links"] as? [[String: Any]]
         check(links?.count == 2 && links?.allSatisfy { ($0["state"] as? String) != nil && $0["onPath"] as? Bool == false } == true

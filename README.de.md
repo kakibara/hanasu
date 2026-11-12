@@ -124,7 +124,7 @@ Auf dem Mac wählst du die Transkriptionssprache aus einer Liste (Japanisch, Eng
 
 ### ⌨️ Im Terminal und mit KI-Agenten nutzen
 
-Mit dem Befehl `hanasu` können Skripte und KI-Agenten (Claude Code, Claude Desktop und andere) deine Besprechungsaufzeichnungen lesen und Text genauso aufbereiten wie bei der Spracheingabe. Er wird mit der App mitgeliefert, du musst also nichts weiter installieren: Auf dem Mac ist er die App selbst, unter Windows `cli\hanasu.exe` im Hanasu-Ordner. Unter **Einstellungen → Befehl & MCP** fügst du ihn zu deinem PATH hinzu oder kopierst die Einrichtung für MCP.
+Mit dem Befehl `hanasu` können Skripte und KI-Agenten (Claude Code, Claude Desktop und andere) deine Besprechungsaufzeichnungen lesen und Text genauso aufbereiten wie bei der Spracheingabe. Er wird mit der App mitgeliefert, du musst also nichts weiter installieren: Auf dem Mac ist er die App selbst, unter Windows `cli\hanasu.exe` im Hanasu-Ordner. Unter **Einstellungen → Befehl & MCP** verbindest du ihn mit einem Klick mit Claude Desktop, ChatGPT (Codex) oder Claude Code, fügst ihn zu deinem PATH hinzu oder kopierst die MCP-Einrichtung für andere Apps. (Der normale ChatGPT-Chat kann wegen eines Fehlers bei OpenAI derzeit keine lokalen MCP-Werkzeuge nutzen; Codex schon.)
 
 | | |
 | --- | --- |

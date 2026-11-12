@@ -228,3 +228,21 @@ AI チャット・会議への質問のモデルを議事録と分けて選び�
 | UX-183 | ja・en・ar | OK | 実行ファイルのパス・PATH の状態と「PATH に入れる…」・Claude Code のコマンド・Claude Desktop の JSON に、コピーのボタン。ウインドウの高さで、下の「エージェントへの説明」の節は描き出しの外（`hanasu help agent` の出力を自己テストで確かめた）。サイドバーが空なのは、ほかの項目の描き出しと同じ |
 
 - 残り: UX-184（App Translocation）と UX-185（Claude Code に登録して質問）は人が確かめる。「PATH に入れる…」で管理者の確認が出て `/usr/local/bin` に入ることも実機。
+
+## 13. 2026-11-12 設定の「AI アプリにつなぐ」（REQ-COM-194。b21a709 の上の作業中の変更、macOS 26.6.2）
+
+- 描いたもの: `python3 scripts/ui-cases.py render --ids UX-195,UX-183 --lang en,ar`、ja は `.build/debug/Hanasu --render-settings <フォルダ> --pane commandLine [--connect-fixture empty]`。
+- 判定: OK 2
+
+| ID | 言語 | 判定 | メモ |
+| --- | --- | --- | --- |
+| UX-195 | ja・en・ar | OK | 架空の状態 all で 5 行（Claude Desktop・Claude-Personal・Claude-Work・ChatGPT（Codex）・Claude Code）。つないでいます（緑）・別の場所・Hanasu のものでない（npx）・読めない・つないでいません と、ボタンの出し分け、ChatGPT と Claude Code の注記が出る。empty では Claude Desktop と ChatGPT が「見つかりません」で「つなぐ…」が薄い。文字の欠け・重なりなし |
+| UX-183 | en・ar | OK | 「AI アプリにつなぐ」の下に、実行ファイル・PATH・MCP のコピーの欄が続く（commandLine の描画は縦 2700 にした） |
+
+- 実機（この Mac、本物の設定ファイル。2026-11-12 にユーザーが了承）: `.build/debug/Hanasu --agent-connect-list` / `--agent-connect <番号> connect|disconnect`（設定画面のボタンと同じ処理）で確かめた。
+  - 状態の読み取り: 既定の Claude（このセッションが動いている）は running、`Claude-Personal` は止まっている、`Claude-3p`（`deploymentMode` あり）は出ない、ChatGPT は止まっている、`claude` は `~/.local/bin/claude`。
+  - 既定の Claude Desktop: `running` で書かれなかった。
+  - `Claude-Personal`: つないだ。`.hanasu-backup` が 0600 で残り、ほかのキー（`coworkUserFilesPath`・`preferences`）は値が同じ。
+  - ChatGPT（Codex）: つないだ。`~/.codex/config.toml` の差分は終わりの 6 行（印の行・表）だけで、`tomllib` で読める。0600 のまま。
+  - Claude Code: `claude mcp add --scope user` で登録し、`claude mcp get hanasu` が「✔ Connected」（`hanasu mcp` が起動して応えた）。外す → 消えた。前の場所の Hanasu を登録しておいてつなぐ → remove してから add され「connected」。最後に外した。
+- 残り: `Claude-Personal` と ChatGPT のアプリを開いて、チャット（ChatGPT は Codex）で会議を読めるかと、既定の Claude Desktop を終了してつなぐのは、ユーザーに頼む。Windows（UX-196）は Windows の実機。

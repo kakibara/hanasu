@@ -1524,6 +1524,110 @@ Mở trang phát hành trong trình duyệt?</value>
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu đang chạy từ thư mục tạm (chẳng hạn bên trong tệp zip). Hãy giải nén toàn bộ zip, mở lại Hanasu từ thư mục đó rồi mới thêm vào PATH và MCP.</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>Kết nối với ứng dụng AI</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (Terminal và Code trong Claude Desktop)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>Đã kết nối</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>Chưa kết nối</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>Đang trỏ đến Hanasu ở vị trí khác (kết nối lại để trỏ đến ứng dụng này)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Đã có một mục hanasu không thuộc Hanasu ({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>Không đọc được tệp cấu hình: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>Không tìm thấy {0}</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>không phải JSON hợp lệ</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>không đúng định dạng mong đợi</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>Hanasu không thể sửa tệp ghi mcp_servers theo cách này</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>Kết nối…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>Xóa…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>Hiện chưa dùng được trong cuộc trò chuyện thông thường của ChatGPT (do lỗi của OpenAI). Có thể dùng trong Codex.</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Không tìm thấy Claude Code. Khi bạn cài đặt, Claude Code sẽ dùng mục đăng ký này.</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>Hãy tự thêm nội dung trong phần MCP bên dưới.</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>Cũng có mục đăng ký chỉ dùng cho một số thư mục (do chạy claude mcp add mà không chỉ định phạm vi).</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>Hãy thoát {0} rồi nhấn lại.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>Kết nối Hanasu với {0}?</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>hanasu sẽ được thêm vào tệp bên dưới. Trước khi ghi, một bản sao của tệp sẽ được lưu trong cùng thư mục với tên {0}.
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Đăng ký hanasu bằng lệnh claude mcp add của Claude Code để dùng được từ mọi thư mục.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>Thay mục hiện tại ({0}) bằng Hanasu?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>Xóa Hanasu khỏi {0}?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Chỉ xóa mục hanasu do Hanasu thêm vào.</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>Đang cập nhật cấu hình…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>Đã kết nối. Hãy mở lại {0} để bắt đầu dùng. Lần đầu đọc cuộc họp, nếu được yêu cầu quyền truy cập, hãy cho phép.</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>Đã kết nối. Có thể dùng trong các phiên Claude Code mới.</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>Đã xóa. Hãy mở lại {0} để áp dụng thay đổi.</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>Đã kết nối rồi.</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>Không có mục nào để xóa.</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>Không thể sửa đổi: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>Lệnh claude không chạy xong trong 30 giây nên đã bị dừng.</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>Lệnh &amp; MCP</value>
   </data>

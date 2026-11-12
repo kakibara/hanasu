@@ -1524,6 +1524,110 @@
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu 正从临时文件夹（例如 zip 内部）运行。请解压整个 zip，从解压后的文件夹重新打开，然后再添加到 PATH 和 MCP。</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>连接到 AI 应用</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop（{0}）</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT（Codex）</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code（终端和 Claude Desktop 中的 Code）</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>已连接</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>未连接</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>指向另一个位置的 Hanasu（重新连接后，会指向此应用）</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>已注册了一个不属于 Hanasu 的 hanasu（{0}）</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>无法读取设置文件：{0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>未找到 {0}</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>无法作为 JSON 读取</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>格式与预期不符</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>Hanasu 无法修改以这种写法写入 mcp_servers 的文件</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>连接…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>断开连接…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>ChatGPT 的普通聊天目前还不能使用（OpenAI 的问题）。可以在 Codex 中使用。</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>未找到 Claude Code。安装后就会使用此注册。</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>请手动添加下方 MCP 一栏中的内容。</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>还有仅对部分文件夹生效的注册（不指定 scope 运行 claude mcp add 时创建的）。</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>请先退出 {0}，然后再点一次。</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>要将 Hanasu 连接到 {0} 吗？</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>将把 hanasu 添加到以下文件。修改前的文件会以 {0} 为名备份在同一文件夹中。
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>通过 Claude Code 的 claude mcp add 注册 hanasu，在任何文件夹中都能使用。</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>要将当前的注册（{0}）替换为 Hanasu 吗？</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>要将 Hanasu 与 {0} 断开连接吗？</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>只删除 Hanasu 的 hanasu 注册。</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>正在注册…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>已连接。重新打开 {0} 后即可使用。第一次读取会议时，如果被要求授予访问权限，请允许。</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>已连接。在新的 Claude Code 会话中即可使用。</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>已断开连接。重新打开 {0} 后生效。</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>已经连接。</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>没有可以断开的注册。</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>无法修改：{0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>claude 命令在 30 秒内没有完成，已中止。</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>命令与 MCP</value>
   </data>

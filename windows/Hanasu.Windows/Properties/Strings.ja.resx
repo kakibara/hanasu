@@ -1528,6 +1528,110 @@
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu が一時フォルダ（zip の中など）から動いています。zip をすべて展開したフォルダから開き直してから、PATH と MCP に登録してください。</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>AI アプリにつなぐ</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop（{0}）</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT（Codex）</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code（ターミナルと Claude Desktop の Code）</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>つないでいます</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>つないでいません</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>別の場所の Hanasu を指しています（つなぎ直すと、このアプリを指します）</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Hanasu のものでない hanasu が登録されています（{0}）</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>設定ファイルを読めません: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>{0} が見つかりません</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>JSON として読めません</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>思っていた形ではありません</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>mcp_servers をこの書き方で書いたファイルは、Hanasu では書き換えられません</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>つなぐ…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>外す…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>ChatGPT のふつうのチャットでは、今は使えません（OpenAI の不具合）。Codex で使えます。</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Claude Code は見つかりませんでした。入れると、この登録が使われます。</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>下の MCP の欄の内容を、手で足してください。</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>一部のフォルダだけの登録もあります（claude mcp add をスコープなしで動かしたもの）。</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>{0} を終了してから、もう一度押してください。</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>{0} に Hanasu をつなぎますか？</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>次のファイルに hanasu を足します。書く前のファイルは、同じフォルダに {0} として写しておきます。
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Claude Code の claude mcp add で、どのフォルダからも使える hanasu を登録します。</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>今の登録（{0}）を、Hanasu に置き換えますか？</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>{0} から Hanasu を外しますか？</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Hanasu の hanasu の登録だけを消します。</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>登録しています…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>つなぎました。{0} を開き直すと使えます。初めて会議を読むときにアクセスの確認が出たら、許可してください。</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>つなぎました。新しい Claude Code のセッションから使えます。</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>外しました。{0} を開き直すと反映されます。</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>すでにつないでいます。</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>外す登録がありません。</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>書き換えられませんでした: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>claude コマンドが 30 秒で終わらなかったので、打ち切りました。</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>コマンドと MCP</value>
   </data>

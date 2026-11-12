@@ -124,7 +124,7 @@ Mac'te döküm dilini bir listeden seçin (Japonca, İngilizce, Çince, Korece, 
 
 ### ⌨️ Terminalden ve yapay zekâ ajanlarından kullanın
 
-`hanasu` komutu sayesinde betikler ve yapay zekâ ajanları (Claude Code, Claude Desktop ve diğerleri) toplantı kayıtlarınızı okuyabilir ve metin iyileştirme stilinizi kullanabilir. Komut uygulamayla birlikte gelir, bu yüzden başka bir şey kurmanız gerekmez: Mac'te uygulamanın kendisidir, Windows'ta ise Hanasu klasöründeki `cli\hanasu.exe` dosyasıdır. PATH'e eklemek veya MCP kurulumunu kopyalamak için **Ayarlar → Komut ve MCP** bölümünü açın.
+`hanasu` komutu sayesinde betikler ve yapay zekâ ajanları (Claude Code, Claude Desktop ve diğerleri) toplantı kayıtlarınızı okuyabilir ve metin iyileştirme stilinizi kullanabilir. Komut uygulamayla birlikte gelir, bu yüzden başka bir şey kurmanız gerekmez: Mac'te uygulamanın kendisidir, Windows'ta ise Hanasu klasöründeki `cli\hanasu.exe` dosyasıdır. Komutu tek tıkla Claude Desktop'a, ChatGPT'ye (Codex) veya Claude Code'a bağlamak, PATH'e eklemek ya da diğer uygulamalar için MCP kurulumunu kopyalamak için **Ayarlar → Komut ve MCP** bölümünü açın. (OpenAI kaynaklı bir hata nedeniyle normal ChatGPT sohbeti henüz yerel MCP araçlarını kullanamıyor; Codex kullanabiliyor.)
 
 | | |
 | --- | --- |

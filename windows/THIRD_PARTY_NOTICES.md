@@ -7,6 +7,7 @@ Hanasu は PolyForm Noncommercial License 1.0.0（同梱の `LICENSE.txt`）と 
 | --- | --- | --- | --- |
 | .NET ランタイム（self-contained で `Hanasu.exe` に入る） | 8.0 | `Hanasu.exe` | MIT（ランタイムが含む第三者のコードは `dotnet-THIRD-PARTY-NOTICES.txt`） |
 | System.Security.Cryptography.ProtectedData | 8.0.0 | `Hanasu.exe` | MIT |
+| System.Management・System.CodeDom（動いている AI アプリの起動の引数を読む） | 8.0.0・8.0.0 | `Hanasu.exe` | MIT |
 | [NAudio](https://github.com/naudio/NAudio)（NAudio.Wasapi / NAudio.Core） | 2.2.1 | `Hanasu.exe` | MIT |
 | [Whisper.net](https://github.com/sandrohanea/whisper.net) | 1.9.1 | `Hanasu.exe` | MIT |
 | [whisper.cpp / ggml](https://github.com/ggml-org/whisper.cpp)（Whisper.net.Runtime に入っている） | Whisper.net.Runtime 1.9.1 | `runtimes/win-x64/*.dll` | MIT |
@@ -30,7 +31,7 @@ Hanasu は PolyForm Noncommercial License 1.0.0（同梱の `LICENSE.txt`）と 
 
 次の著作権表示のそれぞれに、下の MIT License の条文が適用されます。
 
-- .NET ランタイム、System.Security.Cryptography.ProtectedData、Microsoft.Extensions.AI.Abstractions、System.Text.Json、System.Text.Encodings.Web、System.IO.Pipelines、System.Net.ServerSentEvents: Copyright (c) .NET Foundation and Contributors
+- .NET ランタイム、System.Security.Cryptography.ProtectedData、System.Management、System.CodeDom、Microsoft.Extensions.AI.Abstractions、System.Text.Json、System.Text.Encodings.Web、System.IO.Pipelines、System.Net.ServerSentEvents: Copyright (c) .NET Foundation and Contributors
 - NAudio: Copyright (c) 2020 Mark Heath
 - Whisper.net: Copyright (c) 2024 sandrohanea
 - whisper.cpp / ggml: Copyright (c) 2023-2024 The ggml authors

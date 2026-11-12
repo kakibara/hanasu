@@ -156,9 +156,10 @@ public static class CommandInstall
 {
     /// <summary>
     /// Claude Code に登録するコマンド。PowerShell（5.1・7）・cmd のどちらでもそのまま動くよう、-- は付けない
-    /// （Windows PowerShell 5.1 は外のコマンドに渡す -- を取り除くため。mcp は - で始まらないので要らない）
+    /// （Windows PowerShell 5.1 は外のコマンドに渡す -- を取り除くため。mcp は - で始まらないので要らない）。
+    /// --scope user で、どのフォルダの Claude Code からも使える（REQ-COM-194）
     /// </summary>
-    public static string ClaudeCodeCommand(string executable) => $"claude mcp add hanasu \"{executable}\" mcp";
+    public static string ClaudeCodeCommand(string executable) => $"claude mcp add --scope user hanasu \"{executable}\" mcp";
 
     /// <summary>Claude Desktop の設定（claude_desktop_config.json）の mcpServers に足す形。\ を含むパスもそのまま貼れる JSON</summary>
     public static string ClaudeDesktopJson(string executable)

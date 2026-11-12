@@ -4,7 +4,7 @@ import SwiftUI
 // 設定画面の「コマンドと MCP」（計画は docs/plans/cli.md の段階 4。E3〜E5・E7）。
 // 中身の処理（リンク・シェルの設定・登録の文）は HanasuInstall.swift。
 
-// 要件: REQ-COM-190, REQ-COM-191, REQ-COM-192, REQ-COM-193
+// 要件: REQ-COM-190, REQ-COM-191, REQ-COM-192, REQ-COM-193, REQ-COM-194
 // 設計判断: DEC-COM-188
 struct CommandLineSettingsTab: View {
     /// リンクやシェルの設定を変えたあとに、状態を読み直す
@@ -39,6 +39,9 @@ struct CommandLineSettingsTab: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
+
+            AgentConnectSection(executable: SettingsRenderOverrides.agentConnect?.executable ?? executable,
+                                connectBlocked: registrationBlocked || mcpDisabled)
 
             Section {
                 CopyableValue(title: tr("実行ファイル"), value: executable, disabled: registrationBlocked)
@@ -224,6 +227,267 @@ struct CommandLineSettingsTab: View {
         do { try HanasuInstall.removeUserLink(executable: executable) } catch { problems.append(error.localizedDescription) }
         do { try HanasuInstall.removeProfileLine() } catch { problems.append(error.localizedDescription) }
         message = problems.isEmpty ? tr("PATH から外しました。") : problems.joined(separator: "\n")
+    }
+}
+
+// MARK: - AI アプリにつなぐ
+
+// 要件: REQ-COM-194
+// 設計判断: DEC-COM-202, DEC-COM-204, DEC-COM-205
+/// Claude Desktop（設定の場所ごと）・ChatGPT（Codex）・Claude Code に、hanasu の MCP をボタンでつなぐ・外す。中身は AgentConnect.swift
+struct AgentConnectSection: View {
+    let executable: String
+    /// App Translocation・DisableCLI・DisableMCP のとき（つなぐボタンを押せない。外すのはできる）
+    let connectBlocked: Bool
+
+    @State private var rows: [AgentConnect.Row] = []
+    @State private var loaded = false
+    @State private var busy: AgentConnect.Target?
+    @State private var messages: [AgentConnect.Target: String] = [:]
+
+    private var environment: AgentConnect.Environment { SettingsRenderOverrides.agentConnect?.environment ?? .live }
+
+    var body: some View {
+        Section {
+            if !loaded {
+                ProgressView().controlSize(.small)
+            }
+            ForEach(rows) { row in
+                rowView(row)
+            }
+        } header: {
+            Text(tr("AI アプリにつなぐ"))
+        } footer: {
+            Text(tr("MCP で返した会議の中身は、MCP を使うエージェントと、その AI の提供元に渡ります。ask_meetings は、会議の中身を hanasu ask と同じ AI（hanasu doctor の ask の行）にも送ります。"))
+                .font(.caption).foregroundStyle(.secondary)
+        }
+        .task { await reload() }
+    }
+
+    @ViewBuilder
+    private func rowView(_ row: AgentConnect.Row) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title(row))
+                    Text(abbreviated(row.file.path))
+                        .font(.caption).foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                }
+                Spacer()
+                if busy == row.target {
+                    ProgressView().controlSize(.small)
+                }
+                if row.state.removable {
+                    Button(tr("外す…")) { disconnect(row) }
+                        .disabled(busy != nil)
+                }
+                if row.state != .connected {
+                    Button(tr("つなぐ…")) { connect(row) }
+                        .disabled(busy != nil || connectBlocked || !row.found)
+                }
+            }
+            Label(stateText(row), systemImage: icon(row))
+                .font(.callout)
+                .foregroundStyle(color(row))
+                .fixedSize(horizontal: false, vertical: true)
+            ForEach(notes(row), id: \.self) { note in
+                Text(note).font(.caption).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            if busy == row.target {
+                Text(tr("登録しています…")).font(.caption).foregroundStyle(.secondary)
+            } else if let message = messages[row.target] {
+                Text(message).font(.caption)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(.vertical, 2)
+    }
+
+    // MARK: - 文
+
+    private func title(_ row: AgentConnect.Row) -> String {
+        switch row.target {
+        case .claudeDesktop(let dir):
+            dir.lastPathComponent == "Claude" ? "Claude Desktop" : tr("Claude Desktop（%@）", dir.lastPathComponent)
+        case .codex: tr("ChatGPT（Codex）")
+        case .claudeCode: tr("Claude Code（ターミナルと Claude Desktop の Code）")
+        }
+    }
+
+    /// 確かめ・結果の文で使うアプリの名前
+    private func appName(_ row: AgentConnect.Row) -> String {
+        switch row.target {
+        case .claudeDesktop: title(row)
+        case .codex: "ChatGPT"
+        case .claudeCode: "Claude Code"
+        }
+    }
+
+    /// ホームの下は ~ で書く（描画の架空のホームも）
+    private func abbreviated(_ path: String) -> String {
+        let home = environment.home.standardizedFileURL.path
+        return path.hasPrefix(home + "/") ? "~" + path.dropFirst(home.count) : path
+    }
+
+    private func stateText(_ row: AgentConnect.Row) -> String {
+        if !row.found { return tr("%@ が見つかりません", appName(row)) }
+        return stateText(row.state)
+    }
+
+    private func stateText(_ state: AgentConnect.State) -> String {
+        switch state {
+        case .connected: return tr("つないでいます")
+        case .notConnected: return tr("つないでいません")
+        case .other: return tr("別の場所の Hanasu を指しています（つなぎ直すと、このアプリを指します）")
+        case .foreign(let command): return tr("Hanasu のものでない hanasu が登録されています（%@）", command)
+        case .unreadable(let problem): return tr("設定ファイルを読めません: %@", problemText(problem))
+        }
+    }
+
+    private func problemText(_ problem: AgentConnect.Problem) -> String {
+        switch problem {
+        case .invalidJSON: tr("JSON として読めません")
+        case .unexpectedShape: tr("思っていた形ではありません")
+        case .tomlUnsupported: tr("mcp_servers をこの書き方で書いたファイルは、Hanasu では書き換えられません")
+        case .io(let message): message
+        }
+    }
+
+    private func icon(_ row: AgentConnect.Row) -> String {
+        guard row.found else { return "questionmark.circle" }
+        switch row.state {
+        case .connected: return "checkmark.circle.fill"
+        case .notConnected: return "circle"
+        case .other, .foreign, .unreadable: return "exclamationmark.triangle.fill"
+        }
+    }
+
+    private func color(_ row: AgentConnect.Row) -> Color {
+        guard row.found else { return .secondary }
+        switch row.state {
+        case .connected: return .green
+        case .notConnected: return .secondary
+        case .other, .foreign, .unreadable: return .orange
+        }
+    }
+
+    private func notes(_ row: AgentConnect.Row) -> [String] {
+        var notes: [String] = []
+        if case .unreadable = row.state, row.found {
+            notes.append(tr("下の MCP の欄の内容を、手で足してください。"))
+        }
+        switch row.target {
+        case .codex:
+            notes.append(tr("ChatGPT のふつうのチャットでは、今は使えません（OpenAI の不具合）。Codex で使えます。"))
+        case .claudeCode:
+            if row.claudePath == nil { notes.append(tr("Claude Code は見つかりませんでした。入れると、この登録が使われます。")) }
+            if row.projectEntry { notes.append(tr("一部のフォルダだけの登録もあります（claude mcp add をスコープなしで動かしたもの）。")) }
+        case .claudeDesktop: break
+        }
+        return notes
+    }
+
+    // MARK: - つなぐ・外す
+
+    private func reload() async {
+        let environment = environment
+        let executable = executable
+        let result = await Task.detached { AgentConnect.rows(env: environment, executable: executable) }.value
+        rows = result
+        loaded = true
+    }
+
+    @MainActor
+    private func connect(_ row: AgentConnect.Row) {
+        messages[row.target] = nil
+        if row.running {
+            messages[row.target] = tr("%@ を終了してから、もう一度押してください。", appName(row))
+            return
+        }
+        let alert = NSAlert()
+        alert.messageText = tr("%@ に Hanasu をつなぎますか？", appName(row))
+        if case .claudeCode = row.target, row.claudePath != nil {
+            alert.informativeText = tr("Claude Code の claude mcp add で、どのフォルダからも使える hanasu を登録します。")
+        } else {
+            alert.informativeText = tr("次のファイルに hanasu を足します。書く前のファイルは、同じフォルダに %@ として写しておきます。\n\n%@",
+                                       row.file.lastPathComponent + AgentConnect.backupSuffix, abbreviated(row.file.path))
+        }
+        alert.addButton(withTitle: tr("つなぐ"))
+        alert.addButton(withTitle: tr("キャンセル"))
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        var overwrite = false
+        if case .foreign(let command) = row.state {
+            guard confirmOverwrite(command) else { return }
+            overwrite = true
+        }
+        let replace = overwrite
+        perform(row, connecting: true) { env, exe in
+            AgentConnect.connect(row, env: env, executable: exe, overwrite: replace)
+        }
+    }
+
+    @MainActor
+    private func confirmOverwrite(_ command: String) -> Bool {
+        let alert = NSAlert()
+        alert.messageText = tr("Hanasu のものでない hanasu が登録されています（%@）", command)
+        alert.informativeText = tr("今の登録（%@）を、Hanasu に置き換えますか？", command)
+        alert.addButton(withTitle: tr("置き換える"))
+        alert.addButton(withTitle: tr("キャンセル"))
+        return alert.runModal() == .alertFirstButtonReturn
+    }
+
+    @MainActor
+    private func disconnect(_ row: AgentConnect.Row) {
+        messages[row.target] = nil
+        if row.running {
+            messages[row.target] = tr("%@ を終了してから、もう一度押してください。", appName(row))
+            return
+        }
+        let alert = NSAlert()
+        alert.messageText = tr("%@ から Hanasu を外しますか？", appName(row))
+        alert.informativeText = tr("Hanasu の hanasu の登録だけを消します。")
+        alert.addButton(withTitle: tr("外す"))
+        alert.addButton(withTitle: tr("キャンセル"))
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        perform(row, connecting: false) { env, exe in
+            AgentConnect.disconnect(row, env: env, executable: exe)
+        }
+    }
+
+    /// 画面を止めずに動かし（claude は数秒かかる）、終わったら結果を出して読み直す
+    @MainActor
+    private func perform(_ row: AgentConnect.Row, connecting: Bool,
+                         _ action: @escaping @Sendable (AgentConnect.Environment, String) -> AgentConnect.Outcome) {
+        busy = row.target
+        let environment = environment
+        let executable = executable
+        Task { @MainActor in
+            let outcome = await Task.detached { action(environment, executable) }.value
+            busy = nil
+            messages[row.target] = outcomeText(outcome, row: row, connecting: connecting)
+            await reload()
+        }
+    }
+
+    private func outcomeText(_ outcome: AgentConnect.Outcome, row: AgentConnect.Row, connecting: Bool) -> String {
+        switch outcome {
+        case .done:
+            if !connecting { return tr("外しました。%@ を開き直すと反映されます。", appName(row)) }
+            if case .claudeCode = row.target {
+                return tr("つなぎました。新しい Claude Code のセッションから使えます。初めて会議を読むときに「書類」フォルダへのアクセスを求められたら、許可してください。")
+            }
+            return tr("つなぎました。%@ を開き直すと使えます。初めて会議を読むときに、macOS が「書類」フォルダへのアクセスを求めたら、許可してください。", appName(row))
+        case .unchanged: return tr("すでにつないでいます。")
+        case .nothing: return tr("外す登録がありません。")
+        case .needsOverwrite(let command): return tr("Hanasu のものでない hanasu が登録されています（%@）", command)
+        case .running: return tr("%@ を終了してから、もう一度押してください。", appName(row))
+        case .unreadable(let problem):
+            return tr("設定ファイルを読めません: %@", problemText(problem)) + "\n" + tr("下の MCP の欄の内容を、手で足してください。")
+        case .failed(let message): return tr("書き換えられませんでした: %@", message)
+        case .timedOut: return tr("claude コマンドが 30 秒で終わらなかったので、打ち切りました。")
+        }
     }
 }
 

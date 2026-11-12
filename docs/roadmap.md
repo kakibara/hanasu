@@ -99,6 +99,10 @@
 - 中身: セキュリティを重く見る会社で、管理者が Hanasu を許可できるようにする。管理者のポリシーで、使える AI の制限をアプリにも効かせる・環境変数のキーを使わせない・会議の保存先を決める・`~/.local/bin` への登録を使わせない・`hanasu` と MCP の利用を記録する。あわせて、利用者が設定で会議の保存先を変えられる（今までの会議を移す）・ローカルのモデルをファイルから取り込む・会議のファイルの形と管理者向けの説明を文書にする。Windows のポリシー（`HKLM\SOFTWARE\Policies\Hanasu`）、管理者が配る .pkg（FUT-010 のあと）、話者分離と Whisper のモデルの取り込み（FUT-011 のあと）もここで扱う。
 - 出どころ: `hanasu` コマンドの計画の段階 5 として 2026-11-10〜11 に詰め、3 回レビューした。2026-11-11 にユーザーが「管理者ポリシーの話と cli の話は異なる話なので、まずは cli/mcp の実装を行なって、管理機能は将来の計画として」と決め、FUT-015 から分けた
 
+### FUT-021 Claude Desktop に `.mcpb`（拡張機能）で Hanasu を入れる
+- 中身: 設定の「AI アプリにつなぐ」（REQ-COM-194）の Claude Desktop を、設定ファイルに書く代わりに `.mcpb` を作って開き、Claude Desktop の確認で入れる。Claude Desktop を終了しなくても入れられる。
+- 出どころ: 2026-11-12 の計画 [plans/agent-connect.md](plans/agent-connect.md)（DEC-COM-200）。`.mcpb` の `command` に束の外の絶対パスを書いてよいか、署名のない `.mcpb` の扱い、入れ直したときの置き換え、許可リストのときの扱い、入れたかを確かめる方法が分かったら考え直す
+
 ### FUT-019 Windows 版の UI のテスト項目を自動で確かめる
 - 状態: 未着手
 - 中身: Windows 版には画面を PNG にする CLI がないので、`common/testdata/ui` の Windows の項目はすべて `manual`。WPF の画面を決まった状態で PNG にする CLI を `Hanasu.Windows` に足し、Windows の上で `scripts/ui-cases.py render` と同じ流れで確かめられるようにする。

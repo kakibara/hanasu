@@ -122,7 +122,7 @@ On Mac, pick the transcription language from a list (Japanese, English, Chinese,
 
 ### ⌨️ Use it from the terminal and AI agents
 
-The `hanasu` command lets scripts and AI agents (Claude Code, Claude Desktop, and others) read your meeting records and use your clean-up style. It comes with the app, so there is nothing else to install: on the Mac it is the app itself, and on Windows it is `cli\hanasu.exe` in the Hanasu folder. Open **Settings → Command & MCP** to add it to your PATH or to copy the setup for MCP.
+The `hanasu` command lets scripts and AI agents (Claude Code, Claude Desktop, and others) read your meeting records and use your clean-up style. It comes with the app, so there is nothing else to install: on the Mac it is the app itself, and on Windows it is `cli\hanasu.exe` in the Hanasu folder. Open **Settings → Command & MCP** to connect it to Claude Desktop, ChatGPT (Codex), or Claude Code with one click, to add it to your PATH, or to copy the MCP setup for other apps. (The regular ChatGPT chat can't use local MCP tools yet because of an OpenAI bug; Codex can.)
 
 | | |
 | --- | --- |

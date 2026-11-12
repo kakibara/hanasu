@@ -1524,6 +1524,110 @@ Sürüm sayfası tarayıcıda açılsın mı?</value>
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu geçici bir klasörden (örneğin zip'in içinden) çalışıyor. Zip'in tamamını çıkarın, Hanasu'yu o klasörden yeniden açın, sonra PATH'e ve MCP'ye ekleyin.</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>Yapay zekâ uygulamalarına bağla</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (Terminal ve Claude Desktop'taki Code)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>Bağlı</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>Bağlı değil</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>Başka bir konumdaki Hanasu'yu gösteriyor (yeniden bağlarsanız bu uygulamayı gösterir)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Hanasu'ya ait olmayan bir hanasu kaydı var ({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>Yapılandırma dosyası okunamıyor: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>{0} bulunamadı</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>geçerli bir JSON değil</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>beklenen biçimde değil</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>Hanasu, mcp_servers bu biçimde yazılmış dosyaları düzenleyemez</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>Bağla…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>Kaldır…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>Normal ChatGPT sohbetinde şimdilik çalışmıyor (OpenAI kaynaklı bir hata). Codex'te çalışır.</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>Claude Code bulunamadı. Yüklediğinizde bu kaydı kullanır.</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>Aşağıdaki MCP bölümündeki içeriği elle ekleyin.</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>Yalnızca bazı klasörlerde geçerli kayıtlar da var (claude mcp add kapsam belirtilmeden çalıştırılarak eklenmiş).</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>{0} uygulamasından çıkın ve tekrar tıklayın.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>Hanasu, {0} uygulamasına bağlansın mı?</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>hanasu aşağıdaki dosyaya eklenecek. Dosyanın önceki hâli aynı klasöre {0} adıyla yedeklenir.
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>hanasu, Claude Code'un claude mcp add komutuyla her klasörden kullanılabilecek şekilde kaydedilir.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>Mevcut kayıt ({0}) Hanasu ile değiştirilsin mi?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>Hanasu, {0} uygulamasından kaldırılsın mı?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Yalnızca Hanasu'ya ait hanasu kaydı silinir.</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>Ayarlar güncelleniyor…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>Bağlandı. Kullanmaya başlamak için {0} uygulamasını yeniden açın. Bir toplantı ilk kez okunurken erişim izni istenirse izin verin.</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>Bağlandı. Yeni Claude Code oturumlarında kullanılabilir.</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>Kaldırıldı. Değişikliğin uygulanması için {0} uygulamasını yeniden açın.</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>Zaten bağlı.</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>Kaldırılacak bir kayıt yok.</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>Değişiklik yapılamadı: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>claude komutu 30 saniye içinde bitmediği için durduruldu.</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>Komut ve MCP</value>
   </data>

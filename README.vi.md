@@ -124,7 +124,7 @@ Trên Mac, chọn ngôn ngữ chép lời từ danh sách (tiếng Nhật, tiế
 
 ### ⌨️ Dùng từ terminal và AI agent
 
-Lệnh `hanasu` cho phép script và AI agent (Claude Code, Claude Desktop và các agent khác) đọc bản ghi cuộc họp của bạn và dùng cách chỉnh sửa văn bản giống như bạn đã thiết lập. Lệnh này đi kèm ứng dụng, nên không cần cài thêm gì: trên Mac, lệnh chính là ứng dụng; trên Windows, đó là `cli\hanasu.exe` trong thư mục Hanasu. Mở **Cài đặt → Lệnh & MCP** để thêm lệnh vào PATH hoặc sao chép cấu hình MCP.
+Lệnh `hanasu` cho phép script và AI agent (Claude Code, Claude Desktop và các agent khác) đọc bản ghi cuộc họp của bạn và dùng cách chỉnh sửa văn bản giống như bạn đã thiết lập. Lệnh này đi kèm ứng dụng, nên không cần cài thêm gì: trên Mac, lệnh chính là ứng dụng; trên Windows, đó là `cli\hanasu.exe` trong thư mục Hanasu. Mở **Cài đặt → Lệnh & MCP** để kết nối lệnh với Claude Desktop, ChatGPT (Codex) hoặc Claude Code chỉ bằng một cú nhấp, thêm lệnh vào PATH hoặc sao chép cấu hình MCP cho các ứng dụng khác. (Hiện cuộc trò chuyện thông thường của ChatGPT chưa dùng được công cụ MCP cục bộ do lỗi của OpenAI; Codex thì dùng được.)
 
 | | |
 | --- | --- |

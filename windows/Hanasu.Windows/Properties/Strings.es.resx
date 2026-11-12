@@ -1524,6 +1524,110 @@ Las actualizaciones desde la app reemplazan la carpeta entera, así que solo fun
   <data name="Settings_Cmd_Temporary" xml:space="preserve">
     <value>Hanasu se está ejecutando desde una carpeta temporal (por ejemplo, dentro del zip). Extrae todo el zip, abre Hanasu desde esa carpeta y después añádelo al PATH y a MCP.</value>
   </data>
+  <data name="Settings_Connect_Header" xml:space="preserve">
+    <value>Conectar a apps de IA</value>
+  </data>
+  <data name="Settings_Connect_TitleDesktopFolder" xml:space="preserve">
+    <value>Claude Desktop ({0})</value>
+  </data>
+  <data name="Settings_Connect_TitleCodex" xml:space="preserve">
+    <value>ChatGPT (Codex)</value>
+  </data>
+  <data name="Settings_Connect_TitleClaudeCode" xml:space="preserve">
+    <value>Claude Code (Terminal y Code en Claude Desktop)</value>
+  </data>
+  <data name="Settings_Connect_StateConnected" xml:space="preserve">
+    <value>Conectado</value>
+  </data>
+  <data name="Settings_Connect_StateNotConnected" xml:space="preserve">
+    <value>No conectado</value>
+  </data>
+  <data name="Settings_Connect_StateOther" xml:space="preserve">
+    <value>Apunta a Hanasu en otra ubicación (si vuelves a conectar, apuntará a esta app)</value>
+  </data>
+  <data name="Settings_Connect_StateForeign" xml:space="preserve">
+    <value>Hay una entrada hanasu que no es de Hanasu ({0})</value>
+  </data>
+  <data name="Settings_Connect_StateUnreadable" xml:space="preserve">
+    <value>No se puede leer el archivo de configuración: {0}</value>
+  </data>
+  <data name="Settings_Connect_StateNotFound" xml:space="preserve">
+    <value>No se encuentra {0}</value>
+  </data>
+  <data name="Settings_Connect_ProblemInvalidJson" xml:space="preserve">
+    <value>No se puede leer como JSON</value>
+  </data>
+  <data name="Settings_Connect_ProblemUnexpectedShape" xml:space="preserve">
+    <value>El formato no es el esperado</value>
+  </data>
+  <data name="Settings_Connect_ProblemTomlUnsupported" xml:space="preserve">
+    <value>Hanasu no puede modificar archivos en los que mcp_servers está escrito de esta forma</value>
+  </data>
+  <data name="Settings_Connect_Connect" xml:space="preserve">
+    <value>Conectar…</value>
+  </data>
+  <data name="Settings_Connect_Disconnect" xml:space="preserve">
+    <value>Quitar…</value>
+  </data>
+  <data name="Settings_Connect_NoteChatGPT" xml:space="preserve">
+    <value>Por ahora no funciona en el chat normal de ChatGPT (por un error de OpenAI). Funciona en Codex.</value>
+  </data>
+  <data name="Settings_Connect_NoteClaudeMissing" xml:space="preserve">
+    <value>No se ha encontrado Claude Code. Cuando lo instales, usará esta entrada.</value>
+  </data>
+  <data name="Settings_Connect_NoteManual" xml:space="preserve">
+    <value>Añade a mano el contenido de la sección MCP de abajo.</value>
+  </data>
+  <data name="Settings_Connect_NoteProjectEntry" xml:space="preserve">
+    <value>También hay una entrada solo para algunas carpetas (creada al ejecutar claude mcp add sin indicar un ámbito).</value>
+  </data>
+  <data name="Settings_Connect_Running" xml:space="preserve">
+    <value>Cierra {0} y vuelve a pulsar el botón.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmTitle" xml:space="preserve">
+    <value>¿Conectar Hanasu a {0}?</value>
+  </data>
+  <data name="Settings_Connect_ConfirmFile" xml:space="preserve">
+    <value>Se añadirá hanasu al siguiente archivo. Antes de modificarlo, se guardará una copia en la misma carpeta con el nombre {0}.
+
+{1}</value>
+  </data>
+  <data name="Settings_Connect_ConfirmCli" xml:space="preserve">
+    <value>Se añadirá hanasu con claude mcp add de Claude Code para que puedas usarlo desde cualquier carpeta.</value>
+  </data>
+  <data name="Settings_Connect_ConfirmForeign" xml:space="preserve">
+    <value>¿Sustituir la entrada actual ({0}) por Hanasu?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectTitle" xml:space="preserve">
+    <value>¿Quitar Hanasu de {0}?</value>
+  </data>
+  <data name="Settings_Connect_DisconnectBody" xml:space="preserve">
+    <value>Solo se eliminará la entrada hanasu de Hanasu.</value>
+  </data>
+  <data name="Settings_Connect_Busy" xml:space="preserve">
+    <value>Añadiendo…</value>
+  </data>
+  <data name="Settings_Connect_Done" xml:space="preserve">
+    <value>Conectado. Vuelve a abrir {0} para usarlo. Si la primera vez que lea una reunión se te pide acceso, permítelo.</value>
+  </data>
+  <data name="Settings_Connect_DoneCli" xml:space="preserve">
+    <value>Conectado. Puedes usarlo desde una nueva sesión de Claude Code.</value>
+  </data>
+  <data name="Settings_Connect_Removed" xml:space="preserve">
+    <value>Quitado. Los cambios se aplicarán al volver a abrir {0}.</value>
+  </data>
+  <data name="Settings_Connect_AlreadyConnected" xml:space="preserve">
+    <value>Ya está conectado.</value>
+  </data>
+  <data name="Settings_Connect_NothingToRemove" xml:space="preserve">
+    <value>No hay ninguna entrada que quitar.</value>
+  </data>
+  <data name="Settings_Connect_WriteFailed" xml:space="preserve">
+    <value>No se ha podido modificar: {0}</value>
+  </data>
+  <data name="Settings_Connect_TimedOut" xml:space="preserve">
+    <value>El comando claude no terminó en 30 segundos, así que se ha detenido.</value>
+  </data>
   <data name="Settings_Tab_Command" xml:space="preserve">
     <value>Comando y MCP</value>
   </data>
