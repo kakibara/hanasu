@@ -26,6 +26,8 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
     private SpeechRecognizer? recognizer;
     private TaskCompletionSource<SpeechRecognitionResultStatus>? completed;
     private string hypothesis = "";
+    /// <summary>認識の区切りをつなぐときの言語（DEC-COM-174。日本語・中国語は空白を入れない）</summary>
+    private string spacingLocale = "";
     private bool running;
 
     public event EventHandler<string>? PartialTextChanged;
@@ -35,6 +37,7 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
     public async Task StartAsync(TranscriptionContext context, CancellationToken cancellationToken = default)
     {
         var requested = new Language(string.IsNullOrEmpty(context.LocaleIdentifier) ? "ja-JP" : context.LocaleIdentifier);
+        spacingLocale = requested.LanguageTag;
         // 設計判断: DEC-COM-104
         // 文字起こしの言語がちょうど入っていなければ、表示の言語・入っている言語のうち言語コードが同じもの（地域の違うもの）を使う
         var installed = SpeechRecognizer.SupportedTopicLanguages.Select(l => l.LanguageTag).ToList();
@@ -129,7 +132,7 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
         {
             hypothesis = args.Hypothesis.Text;
             // 設計判断: DEC-COM-174（確定した区切りと途中経過のあいだも、英語などでは語がくっつかないようにする）
-            text = TextSpacing.Join(finals, hypothesis);
+            text = TextSpacing.Join(finals, hypothesis, spacingLocale);
         }
         PartialTextChanged?.Invoke(this, text);
     }
@@ -141,7 +144,7 @@ internal sealed class WindowsSpeechTranscriber : IDictationTranscriber
         lock (gate)
         {
             // 設計判断: DEC-COM-174（確定した区切りの先頭に空白がなくても、英語などで語がくっつかないようにする）
-            finals = TextSpacing.Join(finals, args.Result.Text);
+            finals = TextSpacing.Join(finals, args.Result.Text, spacingLocale);
             hypothesis = "";
             text = finals;
         }

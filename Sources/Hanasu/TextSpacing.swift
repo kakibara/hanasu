@@ -15,12 +15,28 @@ enum TextSpacing {
         pieces.reduce("") { $1.isEmpty ? $0 : join($0, $1) }
     }
 
+    /// 音声入力の認識の区切りをつなぐ。文字起こしの言語が日本語・中国語なら、境目の文字によらず空白を入れない
+    /// （「090」と「1234」のように、数字や英字の途中で区切りが確定しても前と同じにする）
+    static func join(_ a: String, _ b: String, localeIdentifier: String) -> String {
+        usesSpaces(localeIdentifier: localeIdentifier) ? join(a, b) : a + b
+    }
+
+    static func join(_ pieces: [String], localeIdentifier: String) -> String {
+        usesSpaces(localeIdentifier: localeIdentifier) ? join(pieces) : pieces.joined()
+    }
+
+    /// 文字起こしの言語が、語のあいだに空白を書く言語か（日本語・中国語は書かない。空は日本語として扱う）
+    static func usesSpaces(localeIdentifier: String) -> Bool {
+        let code = localeIdentifier.split(whereSeparator: { $0 == "-" || $0 == "_" }).first.map { $0.lowercased() } ?? "ja"
+        return !["ja", "zh", "yue"].contains(code)
+    }
+
     static func needsSpace(_ a: String, _ b: String) -> Bool {
         guard let last = a.unicodeScalars.last, let first = b.unicodeScalars.first else { return false }
         if CharacterSet.whitespacesAndNewlines.contains(last) || CharacterSet.whitespacesAndNewlines.contains(first) { return false }
         if writesWithoutSpaces(last) || writesWithoutSpaces(first) { return false }
         // 閉じる記号・句読点の前、開く記号の後には入れない
-        if ".,!?;:%)]}…'’”»".unicodeScalars.contains(first) { return false }  // skip-tr（照らし合わせに使う記号）
+        if ".,!?;:%)]}…'’”»،؛؟۔।॥".unicodeScalars.contains(first) { return false }  // skip-tr（照らし合わせに使う記号）
         if "([{‘“«¿¡".unicodeScalars.contains(last) { return false }  // skip-tr（照らし合わせに使う記号）
         return true
     }

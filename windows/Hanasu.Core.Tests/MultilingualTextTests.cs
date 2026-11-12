@@ -32,6 +32,8 @@ public class MultilingualTextTests
     [InlineData("Привет", "мир", "Привет мир")]
     [InlineData("", "world", "world")]
     [InlineData("Hello", "", "Hello")]
+    [InlineData("مرحبا", "؟", "مرحبا؟")]
+    [InlineData("नमस्ते", "।", "नमस्ते।")]
     public void JoinsPiecesWithSpacesOnlyWhereWordsAreSpaced(string a, string b, string expected) =>
         Assert.Equal(expected, TextSpacing.Join(a, b));
 
@@ -40,6 +42,19 @@ public class MultilingualTextTests
     {
         Assert.Equal("One two three", TextSpacing.Join(["One", "", "two", "three"]));
         Assert.Equal("一つ目。二つ目。", TextSpacing.Join(["一つ目。", "二つ目。"]));
+    }
+
+    // 設計判断: DEC-COM-174
+    [Theory]
+    [InlineData("090", "1234", "ja-JP", "0901234")]
+    [InlineData("GPT", "4o", "zh-CN", "GPT4o")]
+    [InlineData("GPT", "4o", "", "GPT4o")]
+    [InlineData("Sounds good.", "Thanks", "en-US", "Sounds good. Thanks")]
+    [InlineData("좋아요.", "감사합니다", "ko", "좋아요. 감사합니다")]
+    public void DictationPiecesAreNeverSpacedInJapaneseOrChinese(string a, string b, string locale, string expected)
+    {
+        Assert.Equal(expected, TextSpacing.Join(a, b, locale));
+        Assert.Equal(expected, TextSpacing.Join([a, b], locale));
     }
 
     // 設計判断: DEC-COM-174
@@ -115,6 +130,7 @@ public class MultilingualTextTests
     [InlineData("*risas*", true)]
     [InlineData("[音楽]", true)]
     [InlineData("チャンネル登録お願いします。", true)]
+    [InlineData("İzlediğiniz için teşekkür ederim.", true)]
     [InlineData("Thank you for the update", false)]
     [InlineData("音楽の話をしましょう", false)]
     [InlineData("Gracias por venir", false)]

@@ -269,8 +269,8 @@ enum BatchTranscriber {
         case .whisper:
             let segments = try await WhisperEngine.shared.transcribe(
                 samples, model: settings.whisperModel, language: settings.whisperLanguage, hints: hints, wordTimestamps: false)
-            // 設計判断: DEC-COM-174（区間は前後の空白を外してあるので、空白で語を区切る言語では空白を入れてつなぐ）
-            return TextSpacing.join(segments.map(\.text)).trimmingCharacters(in: .whitespacesAndNewlines)
+            // 設計判断: DEC-COM-174（区間は前後の空白を外してあるので、空白で語を区切る言語では空白を入れてつなぐ。日本語・中国語は入れない）
+            return TextSpacing.join(segments.map(\.text), localeIdentifier: settings.whisperLanguage).trimmingCharacters(in: .whitespacesAndNewlines)
         case .gemini:
             guard let auth = try GeminiTranscriber.auth(settings: settings) else {
                 throw BatchTranscriptionError.noCredentials

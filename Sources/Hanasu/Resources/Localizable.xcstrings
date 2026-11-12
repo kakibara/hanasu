@@ -1736,7 +1736,7 @@
       }
     },
     "%@ で文字起こしできませんでした: %@" : {
-      "comment" : "SpeechRecognizer.swift:293",
+      "comment" : "SpeechRecognizer.swift:297",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -111182,7 +111182,7 @@
       }
     },
     "録音が上限の 10 分に達したため、ここまでの音声を処理します" : {
-      "comment" : "SpeechRecognizer.swift:63",
+      "comment" : "SpeechRecognizer.swift:65",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

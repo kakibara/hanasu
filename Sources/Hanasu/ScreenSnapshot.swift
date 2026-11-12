@@ -123,7 +123,7 @@ enum ScreenSnapshotLayout {
     private static let termPatterns: [NSRegularExpression] = [
         // 空白で語を区切る文字の語（J3・v2.1・Kubernetes・C++・Müller・Иванов・김예린 など。アクセント付きの文字・
         // キリル文字・ハングル・アラビア文字・デーヴァナーガリーを含む）。漢字・かなは下の 2 つで取る。数字だけのものは下で除く
-        #"[[\p{L}\p{N}]--[\p{Han}\p{Hiragana}\p{Katakana}ー々〆ヶ・]][[\p{L}\p{M}\p{N}._+#/\-]--[\p{Han}\p{Hiragana}\p{Katakana}ー々〆ヶ・]]*[[\p{L}\p{M}\p{N}+#]--[\p{Han}\p{Hiragana}\p{Katakana}ー々〆ヶ・]]"#,  // skip-tr
+        #"[[\p{L}\p{N}]--[\p{Han}\p{Hiragana}\p{Katakana}ー々〆ヶ・\x{FF00}-\x{FFEF}]][[\p{L}\p{M}\p{N}._+#/\-]--[\p{Han}\p{Hiragana}\p{Katakana}ー々〆ヶ・\x{FF00}-\x{FFEF}]]*[[\p{L}\p{M}\p{N}+#]--[\p{Han}\p{Hiragana}\p{Katakana}ー々〆ヶ・\x{FF00}-\x{FFEF}]]"#,  // skip-tr
         // カタカナの語（2 文字以上）
         #"[ァ-ヺ][ァ-ヺー・]+"#,  // skip-tr
         // 漢字の並び（2 文字以上）

@@ -175,7 +175,13 @@ actor WhisperEngine {
 
     /// 照らすための形（小文字にし、前後の空白と句読点を外す）
     static func noiseKey(_ text: String) -> String {
-        text.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: " 　。.、,!！?？…♪〜~¡¿").union(.whitespacesAndNewlines))  // skip-tr（照らし合わせ・区切りに使う記号）
+        folded(text).trimmingCharacters(in: CharacterSet(charactersIn: " 　。.、,!！?？…♪〜~¡¿").union(.whitespacesAndNewlines))  // skip-tr（照らし合わせ・区切りに使う記号）
+    }
+
+    /// 小文字にそろえる。トルコ語の「İ」は lowercased() だと「i」と結合文字の 2 つになり、一覧の「i」と合わないので先に「i」にする
+    /// （Windows の WhisperText.Fold と同じ）
+    static func folded(_ text: String) -> String {
+        text.replacingOccurrences(of: "İ", with: "i").lowercased()  // skip-tr（照らし合わせに使う文字）
     }
 
     // 設計判断: DEC-COM-026
@@ -183,7 +189,7 @@ actor WhisperEngine {
         let key = noiseKey(text)
         if hallucinations.contains(key) || key.contains("amara.org") { return true }
         if hallucinationPrefixes.contains(where: key.hasPrefix) { return true }
-        let stripped = text.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: "()（）[]［］【】♪〜~ 　。.、*").union(.whitespacesAndNewlines))  // skip-tr（照らし合わせ・区切りに使う記号）
+        let stripped = folded(text).trimmingCharacters(in: CharacterSet(charactersIn: "()（）[]［］【】♪〜~ 　。.、*").union(.whitespacesAndNewlines))  // skip-tr（照らし合わせ・区切りに使う記号）
         return stripped.isEmpty || soundTags.contains(stripped)
     }
 

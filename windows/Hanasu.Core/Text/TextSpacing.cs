@@ -12,7 +12,7 @@ namespace Hanasu.Core.Text;
 public static class TextSpacing
 {
     // 閉じる記号・句読点の前、開く記号の後には入れない
-    private const string NoSpaceBefore = ".,!?;:%)]}…'’”»";  // skip-tr（照らし合わせに使う記号）
+    private const string NoSpaceBefore = ".,!?;:%)]}…'’”»،؛؟۔।॥";  // skip-tr（照らし合わせに使う記号）
     private const string NoSpaceAfter = "([{‘“«¿¡";  // skip-tr（照らし合わせに使う記号）
 
     /// <summary>a と b をつなぐ。境目に空白がなく、どちらの側も空白を書かない文字（漢字・かな・全角の記号）でなければ空白を 1 つ入れる</summary>
@@ -21,6 +21,23 @@ public static class TextSpacing
     /// <summary>並びをつなぐ（空のかけらは飛ばす）</summary>
     public static string Join(IEnumerable<string> pieces) =>
         pieces.Aggregate("", (joined, piece) => piece.Length == 0 ? joined : Join(joined, piece));
+
+    /// <summary>
+    /// 音声入力の認識の区切りをつなぐ。文字起こしの言語が日本語・中国語なら、境目の文字によらず空白を入れない
+    /// （「090」と「1234」のように、数字や英字の途中で区切りが確定しても前と同じにする）
+    /// </summary>
+    public static string Join(string a, string b, string localeIdentifier) =>
+        UsesSpaces(localeIdentifier) ? Join(a, b) : a + b;
+
+    public static string Join(IEnumerable<string> pieces, string localeIdentifier) =>
+        UsesSpaces(localeIdentifier) ? Join(pieces) : string.Concat(pieces);
+
+    /// <summary>文字起こしの言語が、語のあいだに空白を書く言語か（日本語・中国語は書かない。空は日本語として扱う）</summary>
+    public static bool UsesSpaces(string localeIdentifier)
+    {
+        var code = (localeIdentifier ?? "").Split('-', '_')[0].ToLowerInvariant();
+        return code is not ("" or "ja" or "zh" or "yue");
+    }
 
     public static bool NeedsSpace(string a, string b)
     {

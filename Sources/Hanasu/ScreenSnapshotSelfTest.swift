@@ -19,6 +19,8 @@ enum ScreenSnapshotSelfTest {
         let otherTerms = ScreenSnapshotLayout.terms(in: "Herr Müller, Иванов и 김예린 — São Paulo")
         check("語: アクセント付きの文字・キリル文字・ハングルの語も切らずに取り出す", otherTerms.contains("Müller") && otherTerms.contains("Иванов")
             && otherTerms.contains("김예린") && otherTerms.contains("São") && !otherTerms.contains("ller"))
+        let fullWidth = ScreenSnapshotLayout.terms(in: "Ｊ３ の件と ＡＩ と Ｗｉ－Ｆｉ")
+        check("語: 全角の英数字は今までどおり語として取らない", !fullWidth.contains { $0.unicodeScalars.contains { (0xFF00...0xFFEF).contains($0.value) } })
         let zh = ScreenSnapshotReader.languages(localeIdentifier: "zh-TW", supported: ["en-US", "zh-Hans", "zh-Hant", "ja-JP"].map { Locale.Language(identifier: $0) })
         check("OCR の言語: zh-TW は Vision の zh-Hant にする", zh.first.map { Locale.Language(identifier: $0).maximalIdentifier.hasPrefix("zh-Hant") } ?? false)
         let hi = ScreenSnapshotReader.languages(localeIdentifier: "hi-IN", supported: ["en-US", "ja-JP"].map { Locale.Language(identifier: $0) })

@@ -204,8 +204,8 @@ public sealed class WhisperBatchTranscriber : IBatchTranscriber, ISegmentTranscr
         {
             if (!WhisperText.IsHallucination(segment.Text)) pieces.Add(WhisperText.RemoveAnnotations(segment.Text.Trim()));
         }
-        // 設計判断: DEC-COM-174（区間は前後の空白を外してあるので、空白で語を区切る言語では空白を入れてつなぐ）
-        return TextSpacing.Join(pieces).Trim();
+        // 設計判断: DEC-COM-174（区間は前後の空白を外してあるので、空白で語を区切る言語では空白を入れてつなぐ。日本語・中国語は入れない）
+        return TextSpacing.Join(pieces, language).Trim();
     }
 
     /// <summary>文字起こしの言語のプロンプトの言語（言語が空なら、今のプロンプトの言語）</summary>
@@ -319,7 +319,13 @@ public static class WhisperText
     public static string RemoveAnnotations(string text) => Annotation.Replace(text, "").Trim();
 
     /// <summary>照らすための形（小文字にし、前後の空白と句読点を外す）。Mac 版の WhisperEngine.noiseKey と同じ</summary>
-    internal static string NoiseKey(string text) => TrimEnds(text.ToLowerInvariant(), KeyTrim);
+    internal static string NoiseKey(string text) => TrimEnds(Fold(text), KeyTrim);
+
+    /// <summary>
+    /// 小文字にそろえる。トルコ語の「İ」は、小文字にする方法によって「i」と結合文字の 2 つになることがあるので、先に「i」にする
+    /// （Mac の WhisperEngine.folded と同じ）
+    /// </summary>
+    internal static string Fold(string text) => text.Replace("İ", "i").ToLowerInvariant();  // skip-tr（照らし合わせに使う文字）
 
     // 設計判断: DEC-COM-026
     /// <summary>区間の全体が、決まり文句か注記だけか（Mac 版の WhisperEngine.isNoise と同じ）</summary>
@@ -328,7 +334,7 @@ public static class WhisperText
         var key = NoiseKey(segment);
         if (Hallucinations.Contains(key) || key.Contains("amara.org", StringComparison.Ordinal)) return true;
         if (HallucinationPrefixes.Any(p => key.StartsWith(p, StringComparison.Ordinal))) return true;
-        var stripped = TrimEnds(segment.ToLowerInvariant(), TagTrim);
+        var stripped = TrimEnds(Fold(segment), TagTrim);
         return stripped.Length == 0 || SoundTags.Contains(stripped);
     }
 
