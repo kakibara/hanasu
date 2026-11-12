@@ -13,6 +13,10 @@
     <!-- 呼ぶたびに起動するので、起動の速さを優先する（圧縮しない。DEC-MTG-123 の Windows の速さ）。
          ReadyToRun は publish のときに -p:PublishReadyToRun=true で付ける（ここに書くと、restore のたびにそのマシンの RID が lock ファイルに入り、CI の locked mode と合わなくなる） -->
     <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
+    <!-- 会議を並べて読むと、細かいオブジェクトを大量に作る。Server GC（コアごとのヒープ）で GC の回数を減らす（DEC-MTG-123。
+         架空の会議 1,000 件の検索の中身が、手元で 1.1〜1.4 秒から 0.95 秒ほどに縮んだ）。止まる時間より量を優先するので、並行の GC は使わない -->
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
     <!-- LibraryImport（P/Invoke のソース生成）に要る -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NeutralLanguage>en</NeutralLanguage>
