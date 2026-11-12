@@ -98,7 +98,8 @@ public sealed class SettingsStore
         s.MeetingOutputDeviceId ??= "";
         s.MeetingsDirectory ??= "";
         if (Meetings.MinutesTemplates.FromRawValue(s.MeetingMinutesTemplate) is null) s.MeetingMinutesTemplate = "auto";
-        s.MeetingCustomMinutesPrompt ??= Meetings.MinutesTemplates.DefaultCustomPrompt;
+        // 設計判断: DEC-MTG-061（既定の文は保存しない。前の版が保存した日本語の既定も空にして、読むたびに今の言語の既定を使う）
+        s.MeetingCustomMinutesPrompt = Meetings.MinutesTemplates.CustomPromptToStore(s.MeetingCustomMinutesPrompt);
         // 設計判断: DEC-MTG-143（負の値は無期限）
         if (s.MeetingAudioRetentionDays < 0) s.MeetingAudioRetentionDays = 0;
 

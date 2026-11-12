@@ -492,7 +492,9 @@ public partial class SettingsWindow : Window
                 LocalLlmModelStatus.Failed => string.Format(Strings.Settings_DownloadFailed, state.Error),
                 _ => Strings.Settings_NotDownloaded,
             };
-            return new LocalModelRow(model.Id, model.Label, $"{status}　{model.Summary}", $"{model.LicenseNote}（{model.LicenseUrl}）",
+            // 要件: REQ-COM-060（区切りと括弧は表示の言語の書き方）
+            return new LocalModelRow(model.Id, model.Label, status + Strings.WideSeparator + model.Summary,
+                string.Format(Strings.Settings_LocalModelLicense, model.LicenseNote, model.LicenseUrl),
                 model == LocalLlmModel.Lfm25JP ? Brushes.DarkOrange : Brushes.Gray, state.Progress,
                 Show(state.Status is LocalLlmModelStatus.NotDownloaded or LocalLlmModelStatus.Failed),
                 Show(state.Status == LocalLlmModelStatus.Downloading),

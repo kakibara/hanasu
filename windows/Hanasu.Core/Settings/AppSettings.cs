@@ -199,7 +199,9 @@ public sealed class AppSettings
     public string MeetingsDirectory { get; set; } = "";
     /// <summary>次に記録する会議の議事録の型（Meeting.MinutesTemplate の値）</summary>
     public string MeetingMinutesTemplate { get; set; } = "auto";
-    public string MeetingCustomMinutesPrompt { get; set; } = Meetings.MinutesTemplates.DefaultCustomPrompt;
+    // 設計判断: DEC-MTG-061
+    /// <summary>議事録の「カスタム」の指示。空なら今のプロンプトの言語の既定（読むときは MinutesTemplates.CustomPromptOrDefault）</summary>
+    public string MeetingCustomMinutesPrompt { get; set; } = "";
 
     // 辞書・ルール
     public string DictionaryText { get; set; } = "";

@@ -136,7 +136,9 @@ struct GeminiClient {
         if !extra.isEmpty {
             lines.append(Prompts.text("user.extraRules") + "\n" + extra)
         }
-        if let section = request.appStyle?.promptSection(appName: request.appName, translation: translation, hasCommonRules: !extra.isEmpty) {
+        // 設計判断: DEC-DIC-028（出力が日本語なら、日本語の文体のルール）
+        if let section = request.appStyle?.promptSection(appName: request.appName, translation: translation, hasCommonRules: !extra.isEmpty,
+                                                          japaneseOutput: translation == nil && request.outputLanguage == .japanese) {
             lines.append(section)
         }
         if let block = request.screenContext?.promptBlock() {
@@ -164,7 +166,7 @@ struct GeminiClient {
     static func refinePrompt(_ request: Request) -> (system: String, user: String) {
         // 要件: REQ-DIC-082
         (systemInstruction + "\n\n" + request.outputLanguage.instruction
-            + ScreenContext.instruction(for: request.screenContext, translation: nil),
+            + ScreenContext.instruction(for: request.screenContext, translation: nil, japaneseOutput: request.outputLanguage == .japanese),
          userPrompt(for: request))
     }
 
@@ -178,10 +180,11 @@ struct GeminiClient {
     // 設計判断: DEC-DIC-022, DEC-DIC-023, DEC-DIC-028, DEC-DIC-151, DEC-COM-047
     /// 話した内容を翻訳するときのプロンプト。
     /// 英訳・ほかの言語への翻訳: 追加の整形ルールは日本語の文体向けなので使わない。アプリ別の文体ルールは、翻訳向けのルールに切り替えて使う。
-    /// 和訳: 出力が日本語なので、追加の整形ルールとアプリ別の日本語の文体ルールをそのまま使う。
+    /// 和訳: 出力が日本語なので、アプリ別の日本語の文体ルールを使う（プロンプトの言語によらず ja.json の文面）。
+    /// 追加の整形ルールは、プロンプトの言語が日本語のときだけ使う（ほかの言語の人が書いたルールは、その言語の文体向け）。
     static func translationPrompt(_ request: Request, to language: TranslationLanguage) -> (system: String, user: String) {
         var request = request
-        if !language.outputsJapanese {
+        if !language.keepsExtraRules {
             request.extraInstructions = ""
         }
         let system: String = switch language {

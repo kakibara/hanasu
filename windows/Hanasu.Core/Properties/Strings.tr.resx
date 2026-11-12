@@ -283,10 +283,10 @@
     <value>{0} ({1}) — {2}</value>
   </data>
   <data name="WhisperModel_Tiny" xml:space="preserve">
-    <value>En küçük. Japonca için doğruluk düşük (deneme amaçlı).</value>
+    <value>En küçük. Doğruluk düşük, özellikle Japonca gibi dillerde (deneme amaçlı).</value>
   </data>
   <data name="WhisperModel_Base" xml:space="preserve">
-    <value>Küçük. Japonca için doğruluk daha düşük.</value>
+    <value>Küçük. Doğruluk daha düşük, özellikle Japonca gibi dillerde.</value>
   </data>
   <data name="WhisperModel_Small" xml:space="preserve">
     <value>Günlük kullanım için iyi. Hız ve doğruluk dengesi iyi.</value>

@@ -790,7 +790,7 @@
     <value>額外的潤飾規則</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>潤飾時傳遞給 AI（Gemini、Claude）的規則（例如「使用正式語氣」）。譯為英文時不使用（譯為日文時會使用）。</value>
+    <value>潤飾時傳遞給 AI（Gemini、Claude）的規則（例如「使用正式語氣」）。翻譯時不使用（只有在轉錄語言為日文、並譯為日文時才會使用）。</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>每行一個。只寫一個詞時，會告訴 AI 該詞的寫法。「辨識內容 =&gt; 寫法」會將辨識出的內容取代為該寫法（例如 stock mark =&gt; Stockmark；左側可用「,」分隔多個）。以「#」開頭的行是註解。</value>
@@ -1475,5 +1475,8 @@ App 內更新會替換整個資料夾，因此只有在 Hanasu 位於專用資�
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>{0} 場會議的錄音未能完全刪除。其餘檔案維持不變。</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0}（{1}）</value>
   </data>
 </root>

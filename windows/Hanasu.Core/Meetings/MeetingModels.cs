@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.Json.Serialization;
 using Hanasu.Core.Ai;
+using Hanasu.Core.Text;
 
 namespace Hanasu.Core.Meetings;
 
@@ -471,8 +472,9 @@ public sealed partial class Meeting
     /// <summary>続く発言をつなぐ（into を書き換える）。どちらかを辞書で置き換えていれば、認識したままの文もつなぐ（Text だけをつなぐと読みが消える）</summary>
     public static void JoinInto(Utterance into, Utterance next)
     {
-        if (into.RawText != null || next.RawText != null) into.RawText = into.RecognizedText + next.RecognizedText;
-        into.Text += next.Text;
+        // 設計判断: DEC-COM-174（空白で語を区切る言語では、あいだに空白を入れる）
+        if (into.RawText != null || next.RawText != null) into.RawText = TextSpacing.Join(into.RecognizedText, next.RecognizedText);
+        into.Text = TextSpacing.Join(into.Text, next.Text);
         into.End = Math.Max(into.End, next.End);
     }
 

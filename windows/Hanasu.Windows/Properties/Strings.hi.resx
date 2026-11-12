@@ -790,7 +790,7 @@
     <value>अतिरिक्त सुधार नियम</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>सुधार करते समय AI (Gemini, Claude) को दिए जाने वाले नियम (उदाहरण के लिए, "औपचारिक लहजे का उपयोग करें"). अंग्रेज़ी में अनुवाद करते समय इनका उपयोग नहीं होता (जापानी में अनुवाद करते समय होता है).</value>
+    <value>सुधार करते समय AI (Gemini, Claude) को दिए जाने वाले नियम (उदाहरण के लिए, "औपचारिक लहजे का उपयोग करें"). अनुवाद करते समय इनका उपयोग नहीं होता (सिवाय तब, जब ट्रांसक्रिप्शन की भाषा जापानी हो और जापानी में अनुवाद किया जाए).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>प्रति पंक्ति एक. अकेला शब्द AI को बताता है कि उसकी वर्तनी कैसे लिखें. "सुना गया =&gt; वर्तनी" पहचाने गए शब्द को उस वर्तनी से बदलता है (उदाहरण के लिए, stock mark =&gt; Stockmark; बाईं ओर कई शब्दों को "," से अलग करें). "#" से शुरू होने वाली पंक्तियाँ टिप्पणियाँ हैं.</value>
@@ -1475,5 +1475,8 @@
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>{0} मीटिंग की रिकॉर्डिंग पूरी तरह हटाई नहीं जा सकीं. बाकी फ़ाइलें रखी गई हैं.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

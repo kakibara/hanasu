@@ -421,6 +421,17 @@ public sealed class DictationHistoryStore
         return day.ToString(pattern, Meetings.Meeting.DisplayLanguage.Culture);
     }
 
+    // 要件: REQ-COM-060
+    /// <summary>
+    /// 詳しい欄の日時。日本語は今までの形（"yyyy/MM/dd HH:mm:ss"）、ほかの言語は表示の言語のカルチャの短い日付と、
+    /// 秒つきの時刻（"G"）。暦はグレゴリオ暦にそろえる（DayLabel と同じカルチャ）
+    /// </summary>
+    public static string DetailDateLabel(DateTimeOffset date)
+    {
+        var language = Meetings.Meeting.DisplayLanguage;
+        return date.ToLocalTime().ToString(language == Ai.PromptLanguage.Ja ? "yyyy/MM/dd HH:mm:ss" : "G", language.Culture);
+    }
+
     /// <summary>メニューに出す 1 行（失敗したものには ⚠ を付け、長ければ途中で切る）</summary>
     public static string MenuLabel(DictationHistoryEntry entry, int maxChars = 40)
     {

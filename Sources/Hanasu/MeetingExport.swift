@@ -117,7 +117,9 @@ enum MeetingExport {
                 case .checked: "☑"
                 case .bullet: tr("・")
                 }
-                lines.append("\(indent)\(bullet)\(bullet == "・" ? "" : " ")\(stripInline(rest))")
+                // 訳の印（英語などは「• 」）は後ろに空白を持つので、外してから 1 つだけ付ける（日本語の「・」には付けない）
+                let mark = bullet.trimmingCharacters(in: .whitespaces)
+                lines.append("\(indent)\(mark)\(mark == "・" ? "" : " ")\(stripInline(rest))")
             } else {
                 lines.append(stripInline(trimmed))
             }

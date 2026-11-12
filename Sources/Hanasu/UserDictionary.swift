@@ -265,17 +265,21 @@ struct UserDictionary: Equatable {
     }
 
     // 設計判断: DEC-DIC-082
+    /// 語の種類。latin は、空白で語を区切る文字（アクセント付きを含むラテン文字・ギリシャ文字・キリル文字・アラビア文字・
+    /// デーヴァナーガリーなど）の英数字。漢字・ひらがな・ハングルは語の区切りがなく助詞が続くので other
     static func charClass(_ c: Character) -> CharClass {
-        if c.isASCII, c.isLetter || c.isNumber { return .latin }
         guard let scalar = c.unicodeScalars.first else { return .other }
         switch scalar.value {
         case 0x30A1...0x30FA, 0x30FC...0x30FE, 0x31F0...0x31FF: return .katakana  // 「・」(30FB) は区切りとして扱う
-        default: return .other
+        case 0x1100...0x11FF, 0x3130...0x318F, 0xA960...0xA97F, 0xAC00...0xD7FF: return .other  // ハングル
+        default:
+            if TextSpacing.writesWithoutSpaces(scalar) { return .other }
+            return c.isLetter || c.isNumber ? .latin : .other
         }
     }
 
     // 設計判断: DEC-DIC-082
-    /// 2 つの文字が同じ語の一部としてつながるか（英数字どうし、カタカナどうし）
+    /// 2 つの文字が同じ語の一部としてつながるか（空白で語を区切る文字の英数字どうし、カタカナどうし）
     static func joins(_ a: CharClass, _ b: CharClass) -> Bool {
         a == b && a != .other
     }

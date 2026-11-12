@@ -790,7 +790,7 @@ Tutanak, döküm, notlar ve ses Geri Dönüşüm Kutusu'na taşınacak. Bunları
     <value>Ek düzenleme kuralları</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Düzenleme sırasında yapay zekaya (Gemini, Claude) iletilen kurallar (örneğin "resmi bir dil kullan"). İngilizceye çeviride kullanılmaz (Japoncaya çeviride kullanılır).</value>
+    <value>Düzenleme sırasında yapay zekaya (Gemini, Claude) iletilen kurallar (örneğin "resmi bir dil kullan"). Çeviride kullanılmaz (yazıya dökme dili Japonca iken Japoncaya yapılan çeviri hariç).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Her satıra bir tane. Tek başına bir kelime, yapay zekaya nasıl yazılacağını söyler. "duyulan =&gt; yazım", tanınan ifadeyi verilen yazımla değiştirir (örneğin stok mark =&gt; Stockmark; soldaki birden fazla ifadeyi "," ile ayırın). "#" ile başlayan satırlar açıklamadır.</value>
@@ -1475,5 +1475,8 @@ Sürüm sayfası tarayıcıda açılsın mı?</value>
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>{0} toplantının ses kayıtları tamamen silinemedi. Kalan dosyalar olduğu gibi bırakıldı.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

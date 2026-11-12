@@ -318,18 +318,25 @@ public sealed class UserDictionary
 
     public static bool IsWhitespace(string grapheme) => grapheme.Length > 0 && grapheme.All(char.IsWhiteSpace);
 
+    // 設計判断: DEC-DIC-082
+    /// <summary>
+    /// 語の種類。Latin は、空白で語を区切る文字（アクセント付きを含むラテン文字・ギリシャ文字・キリル文字・アラビア文字・
+    /// デーヴァナーガリーなど）の英数字。漢字・ひらがな・ハングルは語の区切りがなく助詞が続くので Other。
+    /// Mac 版の UserDictionary.charClass と同じ決まり（両方を直す）
+    /// </summary>
     public static CharClass ClassOf(string grapheme)
     {
-        if (grapheme.Length == 1 && grapheme[0] < 0x80 && char.IsLetterOrDigit(grapheme[0])) return CharClass.Latin;
         if (grapheme.Length == 0 || !Rune.TryGetRuneAt(grapheme, 0, out var rune)) return CharClass.Other;
         var scalar = rune.Value;
         // 「・」(30FB) は区切りとして扱う
-        return scalar is >= 0x30A1 and <= 0x30FA or >= 0x30FC and <= 0x30FE or >= 0x31F0 and <= 0x31FF
-            ? CharClass.Katakana
-            : CharClass.Other;
+        if (scalar is >= 0x30A1 and <= 0x30FA or >= 0x30FC and <= 0x30FE or >= 0x31F0 and <= 0x31FF) return CharClass.Katakana;
+        // ハングル
+        if (scalar is >= 0x1100 and <= 0x11FF or >= 0x3130 and <= 0x318F or >= 0xA960 and <= 0xA97F or >= 0xAC00 and <= 0xD7FF) return CharClass.Other;
+        if (TextSpacing.WritesWithoutSpaces(scalar)) return CharClass.Other;
+        return Rune.IsLetter(rune) || Rune.IsNumber(rune) ? CharClass.Latin : CharClass.Other;
     }
 
-    /// <summary>2 つの文字が同じ語の一部としてつながるか（英数字どうし、カタカナどうし）</summary>
+    /// <summary>2 つの文字が同じ語の一部としてつながるか（空白で語を区切る文字の英数字どうし、カタカナどうし）</summary>
     public static bool Joins(CharClass a, CharClass b) => a == b && a != CharClass.Other;
 
     private static IReadOnlyList<string> Unique(IEnumerable<string> items)

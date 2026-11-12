@@ -32,15 +32,17 @@ public static class DictionarySuggester
     /// <summary>Gemini・Claude に送る材料の上限（Mac 版の設定の欄の全体の上限と同じ）</summary>
     public const int CharacterLimit = 60_000;
 
+    // 設計判断: DEC-COM-073
     /// <summary>
-    /// トークン数の見積もり（Mac 版 AppleFMClient.estimateTokens と同じ）。漢字・かな・全角は 1 文字 1 トークン、ほかは 3 文字で 1 トークン（多めに見積もる）
+    /// トークン数の見積もり（Mac 版 AppleFMClient.estimateTokens と同じ）。ASCII の文字は 3 文字で 1 トークン、
+    /// それ以外（漢字・かな・ハングル・キリル文字・アラビア文字・デーヴァナーガリー・アクセント付きの文字など）は 1 文字 1 トークン（多めに見積もる）
     /// </summary>
     public static int EstimateTokens(string text)
     {
         int wide = 0, narrow = 0;
         foreach (var rune in text.EnumerateRunes())
         {
-            if (rune.Value >= 0x2E80) wide++; else narrow++;
+            if (rune.IsAscii) narrow++; else wide++;
         }
         return wide + (narrow + 2) / 3;
     }

@@ -44,6 +44,8 @@ final class SpeechRecognizer {
     private var analyzerFormat: AVAudioFormat?
     private var resultsTask: Task<Void, Never>?
     private var finalizedText = ""
+    /// 認識の区切りをつなぐときの言語（DEC-COM-174。日本語・中国語は空白を入れない）
+    private var spacingLocale = ""
     private var volatileText = ""
     /// 録音を残すときの書き出し先（履歴の「音声も残す」）
     private var audioWriter: DictationAudioWriter?
@@ -69,6 +71,7 @@ final class SpeechRecognizer {
                inputDeviceUID: String = "") async throws {
         guard analyzer == nil, batch == nil else { throw SpeechRecognizerError.alreadyRunning }
         finalizedText = ""
+        spacingLocale = localeIdentifier
         volatileText = ""
         lastError = nil
         if transcription != .apple {
@@ -185,7 +188,7 @@ final class SpeechRecognizer {
             appLog.error("finalize error: \(String(describing: error), privacy: .public)")
         }
         await resultsTask?.value
-        let text = (finalizedText + volatileText).trimmingCharacters(in: .whitespacesAndNewlines)
+        let text = TextSpacing.join(finalizedText, volatileText, localeIdentifier: spacingLocale).trimmingCharacters(in: .whitespacesAndNewlines)
         reset()
         return text
     }
@@ -206,6 +209,7 @@ final class SpeechRecognizer {
     /// 音声ファイルを文字に起こす（動作確認用。マイクの代わりにファイルを同じ経路へ流す）
     func transcribeFile(at url: URL, localeIdentifier: String, engine: RecognizerEngine) async throws -> String {
         finalizedText = ""
+        spacingLocale = localeIdentifier
         volatileText = ""
         let (module, results) = try await makeModule(localeIdentifier: localeIdentifier, engine: engine)
         try await ensureAssetsInstalled(for: module)
@@ -240,7 +244,7 @@ final class SpeechRecognizer {
         continuation.finish()
         try await analyzer.finalizeAndFinishThroughEndOfInput()
         await resultsTask.value
-        return (finalizedText + volatileText).trimmingCharacters(in: .whitespacesAndNewlines)
+        return TextSpacing.join(finalizedText, volatileText, localeIdentifier: spacingLocale).trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     // MARK: - Whisper / Gemini（録音を止めてからまとめて文字起こしする）
@@ -375,12 +379,13 @@ final class SpeechRecognizer {
 
     private func receive(text: String, isFinal: Bool) {
         if isFinal {
-            finalizedText += text
+            // 設計判断: DEC-COM-174（確定した区切りの先頭に空白がなくても、英語などで語がくっつかないようにする）
+            finalizedText = TextSpacing.join(finalizedText, text, localeIdentifier: spacingLocale)
             volatileText = ""
         } else {
             volatileText = text
         }
-        onPartialText?(finalizedText + volatileText)
+        onPartialText?(TextSpacing.join(finalizedText, volatileText, localeIdentifier: spacingLocale))
     }
 
     /// 選んだエンジンの SpeechModule と、(テキスト, 確定か) の結果ストリームを作る。

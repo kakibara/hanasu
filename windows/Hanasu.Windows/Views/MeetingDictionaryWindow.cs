@@ -121,7 +121,7 @@ internal sealed class MeetingDictionaryWindow : Window
             var content = new StackPanel();
             content.Children.Add(new TextBlock
             {
-                Text = candidate.Readings.Count == 0 ? candidate.Spelling : $"{string.Join("、", candidate.Readings)} → {candidate.Spelling}",
+                Text = candidate.Readings.Count == 0 ? candidate.Spelling : $"{string.Join(Strings.ListSeparator, candidate.Readings)} → {candidate.Spelling}",
                 TextWrapping = TextWrapping.Wrap,
             });
             if (candidate.Reason.Length > 0)

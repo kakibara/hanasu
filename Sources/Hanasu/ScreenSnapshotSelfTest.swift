@@ -16,6 +16,15 @@ enum ScreenSnapshotSelfTest {
         check("語: 英数字・カタカナ・漢字を取り出す", terms.contains("J3") && terms.contains("v2.1") && terms.contains("Kubernetes")
             && terms.contains("クラウドネイティブ") && terms.contains("東海林"))
         check("語: 数字と記号だけ（日付・時刻）は取らない", !terms.contains("2026/11/10") && !terms.contains("12:30"))
+        let otherTerms = ScreenSnapshotLayout.terms(in: "Herr Müller, Иванов и 김예린 — São Paulo")
+        check("語: アクセント付きの文字・キリル文字・ハングルの語も切らずに取り出す", otherTerms.contains("Müller") && otherTerms.contains("Иванов")
+            && otherTerms.contains("김예린") && otherTerms.contains("São") && !otherTerms.contains("ller"))
+        let fullWidth = ScreenSnapshotLayout.terms(in: "Ｊ３ の件と ＡＩ と Ｗｉ－Ｆｉ")
+        check("語: 全角の英数字は今までどおり語として取らない", !fullWidth.contains { $0.unicodeScalars.contains { (0xFF00...0xFFEF).contains($0.value) } })
+        let zh = ScreenSnapshotReader.languages(localeIdentifier: "zh-TW", supported: ["en-US", "zh-Hans", "zh-Hant", "ja-JP"].map { Locale.Language(identifier: $0) })
+        check("OCR の言語: zh-TW は Vision の zh-Hant にする", zh.first.map { Locale.Language(identifier: $0).maximalIdentifier.hasPrefix("zh-Hant") } ?? false)
+        let hi = ScreenSnapshotReader.languages(localeIdentifier: "hi-IN", supported: ["en-US", "ja-JP"].map { Locale.Language(identifier: $0) })
+        check("OCR の言語: Vision が読めない言語は渡さず英語だけ", hi.count == 1 && hi[0].hasPrefix("en"))
 
         // 設計判断: DEC-DIC-183
         // 入力先のウインドウが文字でいっぱいでも、別のウインドウの語が上限の中に残る
@@ -88,10 +97,10 @@ enum ScreenSnapshotSelfTest {
         both.windowTitle = "#general"
         let bothInstruction = ScreenContext.instruction(for: both, translation: nil)
         check("注意: 両方なら AX の文脈の注意のあとに screen.ocr を足す",
-              bothInstruction == ScreenContext.refineInstruction + ScreenContext.ocrInstruction)
+              bothInstruction == ScreenContext.refineInstruction() + ScreenContext.ocrInstruction)
         var axOnly = both
         axOnly.ocr = nil
-        check("注意: AX の文脈だけなら今までと同じ", ScreenContext.instruction(for: axOnly, translation: nil) == ScreenContext.refineInstruction)
+        check("注意: AX の文脈だけなら今までと同じ", ScreenContext.instruction(for: axOnly, translation: nil) == ScreenContext.refineInstruction())
         let request = GeminiClient.Request(transcript: "Jスリーの件", model: "m", appName: nil, dictionary: [], extraInstructions: "",
                                            screenContext: both)
         let user = GeminiClient.userPrompt(for: request)

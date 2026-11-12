@@ -818,7 +818,7 @@
       }
     },
     "%@ から · 話者の区別（話者1・話者2…）は記録を止めたあとに行います" : {
-      "comment" : "MeetingWindow.swift:968",
+      "comment" : "MeetingWindow.swift:996",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1634,7 +1634,7 @@
       }
     },
     "%@ で文字起こしできなかった部分があります。" : {
-      "comment" : "MeetingRecorder.swift:350",
+      "comment" : "MeetingRecorder.swift:355",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1736,7 +1736,7 @@
       }
     },
     "%@ で文字起こしできませんでした: %@" : {
-      "comment" : "SpeechRecognizer.swift:293",
+      "comment" : "SpeechRecognizer.swift:297",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1838,7 +1838,7 @@
       }
     },
     "%@ にやり直し" : {
-      "comment" : "DictationHistoryWindow.swift:450",
+      "comment" : "DictationHistoryWindow.swift:434",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1940,7 +1940,7 @@
       }
     },
     "%@ にスリープしてから、記録を続けています。スリープする前までで記録を止めるか、このまま記録を続けるかを選んでください。" : {
-      "comment" : "MeetingRecorder.swift:953",
+      "comment" : "MeetingRecorder.swift:958",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3266,7 +3266,7 @@
       }
     },
     "%@ 件" : {
-      "comment" : "DictationHistoryWindow.swift:271, DictationHistoryWindow.swift:622",
+      "comment" : "DictationHistoryWindow.swift:271, DictationHistoryWindow.swift:606",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3572,7 +3572,7 @@
       }
     },
     "%@ 件の履歴と、残している録音を削除します。元に戻せません。" : {
-      "comment" : "DictationHistoryWindow.swift:662",
+      "comment" : "DictationHistoryWindow.swift:646",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -4286,7 +4286,7 @@
       }
     },
     "%@ 日" : {
-      "comment" : "DictationHistoryWindow.swift:627, MeetingAudioManager.swift:358",
+      "comment" : "DictationHistoryWindow.swift:611, MeetingAudioManager.swift:358",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -4490,7 +4490,7 @@
       }
     },
     "%@%%（%@）" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:110",
+      "comment" : "TranscriptionEngineSettingsView.swift:118",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5204,7 +5204,7 @@
       }
     },
     "%@し直して、クリップボードにコピーしました" : {
-      "comment" : "DictationHistoryWindow.swift:537",
+      "comment" : "DictationHistoryWindow.swift:521",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5306,7 +5306,7 @@
       }
     },
     "%@し直す" : {
-      "comment" : "DictationHistoryWindow.swift:492",
+      "comment" : "DictationHistoryWindow.swift:476",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5510,7 +5510,7 @@
       }
     },
     "%@のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:428",
+      "comment" : "SettingsView.swift:427",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5918,7 +5918,7 @@
       }
     },
     "%@の音声: %@" : {
-      "comment" : "MeetingRecorder.swift:345",
+      "comment" : "MeetingRecorder.swift:350",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6224,7 +6224,7 @@
       }
     },
     "%@の音量" : {
-      "comment" : "MeetingWindow.swift:991",
+      "comment" : "MeetingWindow.swift:1019",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6428,7 +6428,7 @@
       }
     },
     "%@を許可する" : {
-      "comment" : "SettingsView.swift:424",
+      "comment" : "SettingsView.swift:423",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6734,7 +6734,7 @@
       }
     },
     "%@・%@" : {
-      "comment" : "MeetingExport.swift:24",
+      "comment" : "MeetingDocumentView.swift:228, MeetingExport.swift:24",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7142,7 +7142,7 @@
       }
     },
     "%@（%@ 件）" : {
-      "comment" : "DictationHistoryWindow.swift:647",
+      "comment" : "DictationHistoryWindow.swift:631",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8570,7 +8570,7 @@
       }
     },
     "AI で%@しています…" : {
-      "comment" : "DictationHistoryWindow.swift:496",
+      "comment" : "DictationHistoryWindow.swift:480",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8774,7 +8774,7 @@
       }
     },
     "AI での%@に失敗したため、原文のまま入力しました。" : {
-      "comment" : "DictationHistoryWindow.swift:462",
+      "comment" : "DictationHistoryWindow.swift:446",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -9488,7 +9488,7 @@
       }
     },
     "AI の認証情報が未設定だったため、原文のまま入力しました。" : {
-      "comment" : "DictationHistoryWindow.swift:464",
+      "comment" : "DictationHistoryWindow.swift:448",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -13772,7 +13772,7 @@
       }
     },
     "Finder で表示" : {
-      "comment" : "DictationHistoryWindow.swift:526, MeetingWindow.swift:704",
+      "comment" : "DictationHistoryWindow.swift:510, MeetingWindow.swift:704",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -14282,7 +14282,7 @@
       }
     },
     "Gemini で文字起こし" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:164",
+      "comment" : "TranscriptionEngineSettingsView.swift:172",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -18770,7 +18770,7 @@
       }
     },
     "Mac 標準の認識モデル" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:26",
+      "comment" : "TranscriptionEngineSettingsView.swift:34",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -18872,7 +18872,7 @@
       }
     },
     "Mac 標準は、話している途中から文字が出ます。Whisper と Gemini は、録音を止めてからまとめて文字起こしします（会議の記録では、記録中の文字起こしは出ず、記録のあとに行います）。「選択を声で編集」も、音声入力と同じエンジンを使います。Whisper を選ぶと、モデル（%@・%@）のダウンロードがすぐ始まります。下の「Whisper」の欄で取り消したり、ほかのモデルに変えたりできます。" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:41",
+      "comment" : "TranscriptionEngineSettingsView.swift:49",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20504,7 +20504,7 @@
       }
     },
     "Whisper のモデル「%@」を削除しますか？" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:125",
+      "comment" : "TranscriptionEngineSettingsView.swift:133",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20708,7 +20708,7 @@
       }
     },
     "WhisperKit（CoreML 版の Whisper）を、この Mac の上で動かします。音声は Mac の外に送られません。日本語は small 以上がおすすめです。モデルの保存先: ~/Library/Application Support/Hanasu/Models/whisper" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:85",
+      "comment" : "TranscriptionEngineSettingsView.swift:93",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -21014,7 +21014,7 @@
       }
     },
     "m4a（32 kbps）で 1 分あたり約 0.25 MB。履歴と一緒に、件数・期間の上限で消えます。" : {
-      "comment" : "DictationHistoryWindow.swift:633",
+      "comment" : "DictationHistoryWindow.swift:617",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -21728,7 +21728,7 @@
       }
     },
     "、" : {
-      "comment" : "HUDPanel.swift:457",
+      "comment" : "DictionarySettingsView.swift:156, HUDPanel.swift:457, MeetingSearchView.swift:386",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22646,7 +22646,7 @@
       }
     },
     "「AI で整える」がオフだったため、原文のまま入力しました。" : {
-      "comment" : "DictationHistoryWindow.swift:466",
+      "comment" : "DictationHistoryWindow.swift:450",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22748,7 +22748,7 @@
       }
     },
     "「Mac 全体の音」は、どのスピーカー・イヤホンから出ている音も録ります。特定の機器の音だけを録りたいときに選んでください。マイクは、会議ツールで使っているマイクと同じものを選ぶのが確実です。" : {
-      "comment" : "SettingsView.swift:260",
+      "comment" : "SettingsView.swift:259",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -25706,7 +25706,7 @@
       }
     },
     "ここ重要" : {
-      "comment" : "MeetingDocumentView.swift:597, MeetingDocumentView.swift:605, MeetingNotesViews.swift:144",
+      "comment" : "MeetingDocumentView.swift:598, MeetingDocumentView.swift:606, MeetingNotesViews.swift:144",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28562,7 +28562,7 @@
       }
     },
     "この前後（30 秒前〜15 秒後）の発言はありません" : {
-      "comment" : "MeetingDocumentView.swift:613",
+      "comment" : "MeetingDocumentView.swift:614",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -28766,7 +28766,7 @@
       }
     },
     "この履歴を削除" : {
-      "comment" : "DictationHistoryWindow.swift:428",
+      "comment" : "DictationHistoryWindow.swift:412",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30194,7 +30194,7 @@
       }
     },
     "これから" : {
-      "comment" : "MeetingDocumentView.swift:447",
+      "comment" : "MeetingDocumentView.swift:448",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31316,7 +31316,7 @@
       }
     },
     "すべて削除" : {
-      "comment" : "DictationHistoryWindow.swift:660",
+      "comment" : "DictationHistoryWindow.swift:644",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31418,7 +31418,7 @@
       }
     },
     "その他" : {
-      "comment" : "MeetingWindow.swift:684, SettingsView.swift:208",
+      "comment" : "MeetingWindow.swift:684, SettingsView.swift:207",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33356,7 +33356,7 @@
       }
     },
     "まだ求めていません" : {
-      "comment" : "SettingsView.swift:411",
+      "comment" : "SettingsView.swift:410",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33866,7 +33866,7 @@
       }
     },
     "もう一度使うには、ダウンロードし直します（%@）。" : {
-      "comment" : "LocalLLMSettingsView.swift:58, TranscriptionEngineSettingsView.swift:128",
+      "comment" : "LocalLLMSettingsView.swift:58, TranscriptionEngineSettingsView.swift:136",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34784,7 +34784,7 @@
       }
     },
     "アクションアイテム" : {
-      "comment" : "MeetingDocumentView.swift:505",
+      "comment" : "MeetingDocumentView.swift:506",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34988,7 +34988,7 @@
       }
     },
     "アクセシビリティ" : {
-      "comment" : "Onboarding.swift:704, SettingsView.swift:329",
+      "comment" : "Onboarding.swift:704, SettingsView.swift:328",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -35498,7 +35498,7 @@
       }
     },
     "アクセシビリティの許可がないため、ウインドウと入力欄を読めません" : {
-      "comment" : "ScreenContext.swift:209",
+      "comment" : "ScreenContext.swift:214",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39986,7 +39986,7 @@
       }
     },
     "クリックしてタイトルを変更" : {
-      "comment" : "MeetingDocumentView.swift:706",
+      "comment" : "MeetingDocumentView.swift:707",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40292,7 +40292,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:329, DictationHistoryWindow.swift:556, MeetingChatView.swift:522",
+      "comment" : "AppDelegate.swift:329, DictationHistoryWindow.swift:540, MeetingChatView.swift:522",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41516,7 +41516,7 @@
       }
     },
     "システムオーディオ録音" : {
-      "comment" : "SettingsView.swift:381",
+      "comment" : "SettingsView.swift:380",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41618,7 +41618,7 @@
       }
     },
     "システムオーディオ録音のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:376",
+      "comment" : "SettingsView.swift:375",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41720,7 +41720,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → アクセシビリティ で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:331",
+      "comment" : "SettingsView.swift:330",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41822,7 +41822,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → マイク で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:318",
+      "comment" : "SettingsView.swift:317",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -41924,7 +41924,7 @@
       }
     },
     "システム設定 → プライバシーとセキュリティ → 音声認識 で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:325",
+      "comment" : "SettingsView.swift:324",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42026,7 +42026,7 @@
       }
     },
     "システム設定を開く" : {
-      "comment" : "ReminderExport.swift:145, SettingsView.swift:349, SettingsView.swift:374",
+      "comment" : "ReminderExport.swift:145, SettingsView.swift:348, SettingsView.swift:373",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42842,7 +42842,7 @@
       }
     },
     "スクリーンショットの文字をオンにするときに求めます" : {
-      "comment" : "SettingsView.swift:347",
+      "comment" : "SettingsView.swift:346",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43556,7 +43556,7 @@
       }
     },
     "スリープ前までで止める" : {
-      "comment" : "MeetingRecorder.swift:954",
+      "comment" : "MeetingRecorder.swift:959",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43658,7 +43658,7 @@
       }
     },
     "タイトル" : {
-      "comment" : "MeetingDocumentView.swift:673, MeetingSearchView.swift:255",
+      "comment" : "MeetingDocumentView.swift:674, MeetingSearchView.swift:255",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43760,7 +43760,7 @@
       }
     },
     "タイトルを変更できます" : {
-      "comment" : "MeetingDocumentView.swift:707",
+      "comment" : "MeetingDocumentView.swift:708",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -44882,7 +44882,7 @@
       }
     },
     "ダウンロード済み" : {
-      "comment" : "LocalLLMSettingsView.swift:52, TranscriptionEngineSettingsView.swift:119",
+      "comment" : "LocalLLMSettingsView.swift:52, TranscriptionEngineSettingsView.swift:127",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46004,7 +46004,7 @@
       }
     },
     "パスワード欄なので入力欄の文章は読みません" : {
-      "comment" : "ScreenContext.swift:239",
+      "comment" : "ScreenContext.swift:244",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46106,7 +46106,7 @@
       }
     },
     "フォーカスしている要素を取れませんでした" : {
-      "comment" : "ScreenContext.swift:229",
+      "comment" : "ScreenContext.swift:234",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47330,7 +47330,7 @@
       }
     },
     "マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。システムオーディオ録音の許可の状態は、macOS から取れないためここには出ません。" : {
-      "comment" : "SettingsView.swift:393",
+      "comment" : "SettingsView.swift:392",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47636,7 +47636,7 @@
       }
     },
     "マイクを「自分」、スピーカーの音（Meet・Slack ハドル・Teams など）を「相手」として録ります。スピーカーだと相手の声がマイクにも入るので、イヤホンを使うと正確になります。" : {
-      "comment" : "SettingsView.swift:296",
+      "comment" : "SettingsView.swift:295",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47738,7 +47738,7 @@
       }
     },
     "マイクを再開できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:887",
+      "comment" : "MeetingRecorder.swift:892",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48146,7 +48146,7 @@
       }
     },
     "マイク側も話者を分ける" : {
-      "comment" : "SettingsView.swift:273",
+      "comment" : "SettingsView.swift:272",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48248,7 +48248,7 @@
       }
     },
     "マイク（自分）の音が入っていません。設定の「会議」→「録音するマイク」を確認してください。" : {
-      "comment" : "MeetingRecorder.swift:988",
+      "comment" : "MeetingRecorder.swift:993",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48350,7 +48350,7 @@
       }
     },
     "メッセージ" : {
-      "comment" : "AppStyles.swift:183",
+      "comment" : "AppStyles.swift:187",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48962,7 +48962,7 @@
       }
     },
     "メモ" : {
-      "comment" : "MeetingChatView.swift:667, MeetingDocumentView.swift:640, MeetingNotesViews.swift:27",
+      "comment" : "MeetingChatView.swift:667, MeetingDocumentView.swift:641, MeetingNotesViews.swift:27",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49574,7 +49574,7 @@
       }
     },
     "メモはありません。" : {
-      "comment" : "MeetingDocumentView.swift:648",
+      "comment" : "MeetingDocumentView.swift:649",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49880,7 +49880,7 @@
       }
     },
     "メール" : {
-      "comment" : "AppStyles.swift:19, AppStyles.swift:185",
+      "comment" : "AppStyles.swift:19, AppStyles.swift:189",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -50084,7 +50084,7 @@
       }
     },
     "モデル" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:69",
+      "comment" : "TranscriptionEngineSettingsView.swift:77",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51002,7 +51002,7 @@
       }
     },
     "リマインダーに登録…" : {
-      "comment" : "MeetingDocumentView.swift:512",
+      "comment" : "MeetingDocumentView.swift:513",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51104,7 +51104,7 @@
       }
     },
     "リマインダーに登録済み" : {
-      "comment" : "MeetingDocumentView.swift:538, MeetingDocumentView.swift:539",
+      "comment" : "MeetingDocumentView.swift:539, MeetingDocumentView.swift:540",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53450,7 +53450,7 @@
       }
     },
     "・" : {
-      "comment" : "MeetingDocumentView.swift:227, MeetingExport.swift:118",
+      "comment" : "MeetingExport.swift:118",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -56918,7 +56918,7 @@
       }
     },
     "会話から推測した名前です。違っていたら直してください" : {
-      "comment" : "MeetingDocumentView.swift:837",
+      "comment" : "MeetingDocumentView.swift:838",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58244,7 +58244,7 @@
       }
     },
     "会議の記録" : {
-      "comment" : "Onboarding.swift:576, SettingsView.swift:263, TranscriptionEngineSettingsView.swift:22",
+      "comment" : "Onboarding.swift:576, SettingsView.swift:262, TranscriptionEngineSettingsView.swift:30",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58652,7 +58652,7 @@
       }
     },
     "会議の記録で相手の声に必要" : {
-      "comment" : "SettingsView.swift:382",
+      "comment" : "SettingsView.swift:381",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59468,7 +59468,7 @@
       }
     },
     "会議の記録中に Mac がスリープしました" : {
-      "comment" : "MeetingRecorder.swift:952",
+      "comment" : "MeetingRecorder.swift:957",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59570,7 +59570,7 @@
       }
     },
     "会議の長さを超える時刻です（根拠の発言はありません）" : {
-      "comment" : "MeetingDocumentView.swift:579",
+      "comment" : "MeetingDocumentView.swift:580",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60896,7 +60896,7 @@
       }
     },
     "会議ノートを開く" : {
-      "comment" : "AppDelegate.swift:291, AppDelegate.swift:319, SettingsView.swift:252",
+      "comment" : "AppDelegate.swift:291, AppDelegate.swift:319, SettingsView.swift:251",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -61304,7 +61304,7 @@
       }
     },
     "会議室などで 1 つのマイクを複数人で使うときにオン。いちばん長く話した人を「自分」、ほかを「同席者1」「同席者2」…にします。1 人で参加するときはオフのままにしてください（自分の声が 2 人に分かれることがあります）。" : {
-      "comment" : "SettingsView.swift:274",
+      "comment" : "SettingsView.swift:273",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62324,7 +62324,7 @@
       }
     },
     "例: 「です・ます調に統一する」「英単語は半角で書く」「文末に句点を付けない」" : {
-      "comment" : "SettingsView.swift:232",
+      "comment" : "SettingsView.swift:231",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62834,7 +62834,7 @@
       }
     },
     "保存" : {
-      "comment" : "AISettingsView.swift:230, AISettingsView.swift:326, DictationHistoryWindow.swift:637",
+      "comment" : "AISettingsView.swift:230, AISettingsView.swift:326, DictationHistoryWindow.swift:621",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63548,7 +63548,7 @@
       }
     },
     "保存しない間も、直近 %@ 件はアプリを終了するまでメニューと再入力に使えます。保存済みの履歴は残るので、消すには下の「すべて削除」を使ってください。" : {
-      "comment" : "DictationHistoryWindow.swift:641",
+      "comment" : "DictationHistoryWindow.swift:625",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63650,7 +63650,7 @@
       }
     },
     "保存できませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:432, MinutesTemplateViews.swift:213",
+      "comment" : "MeetingRecorder.swift:437, MinutesTemplateViews.swift:213",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63854,7 +63854,7 @@
       }
     },
     "保存先: ~/Documents/Hanasu/Meetings" : {
-      "comment" : "SettingsView.swift:298",
+      "comment" : "SettingsView.swift:297",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -63956,7 +63956,7 @@
       }
     },
     "保存先: ~/Library/Application Support/Hanasu/History（本人だけが読めるファイル）。上限を超えたものは古い順に消えます。" : {
-      "comment" : "DictationHistoryWindow.swift:640",
+      "comment" : "DictationHistoryWindow.swift:624",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64160,7 +64160,7 @@
       }
     },
     "候補" : {
-      "comment" : "AISettingsView.swift:164, TranscriptionEngineSettingsView.swift:156",
+      "comment" : "AISettingsView.swift:164, TranscriptionEngineSettingsView.swift:164",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64466,7 +64466,7 @@
       }
     },
     "停止" : {
-      "comment" : "DictationHistoryWindow.swift:525",
+      "comment" : "DictationHistoryWindow.swift:509",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65282,7 +65282,7 @@
       }
     },
     "入力先がずれて結果が消えたときに、いま前面にあるアプリへ最後の結果を入力し直します。" : {
-      "comment" : "DictationHistoryWindow.swift:616",
+      "comment" : "DictationHistoryWindow.swift:600",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65486,7 +65486,7 @@
       }
     },
     "入力先のアプリが除外アプリなので、この録音では使われません" : {
-      "comment" : "ScreenSnapshot.swift:165",
+      "comment" : "ScreenSnapshot.swift:166",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65894,7 +65894,7 @@
       }
     },
     "入力欄の文章を取れませんでした（%@）" : {
-      "comment" : "ScreenContext.swift:245",
+      "comment" : "ScreenContext.swift:250",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -66200,7 +66200,7 @@
       }
     },
     "再生" : {
-      "comment" : "DictationHistoryWindow.swift:520, MeetingPlayerBar.swift:113",
+      "comment" : "DictationHistoryWindow.swift:504, MeetingPlayerBar.swift:113",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -66914,7 +66914,7 @@
       }
     },
     "再確認" : {
-      "comment" : "SettingsView.swift:395",
+      "comment" : "SettingsView.swift:394",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67016,7 +67016,7 @@
       }
     },
     "再試行" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:135",
+      "comment" : "TranscriptionEngineSettingsView.swift:143",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67118,7 +67118,7 @@
       }
     },
     "処理中" : {
-      "comment" : "HUDPanel.swift:267, MeetingDocumentView.swift:447",
+      "comment" : "HUDPanel.swift:267, MeetingDocumentView.swift:448",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67424,7 +67424,7 @@
       }
     },
     "初めて会議の記録を始めるときに macOS が求めます" : {
-      "comment" : "SettingsView.swift:372",
+      "comment" : "SettingsView.swift:371",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -67628,7 +67628,7 @@
       }
     },
     "初回の最適化中…" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:113",
+      "comment" : "TranscriptionEngineSettingsView.swift:121",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68648,7 +68648,7 @@
       }
     },
     "前後の会話を見る" : {
-      "comment" : "MeetingDocumentView.swift:608",
+      "comment" : "MeetingDocumentView.swift:609",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68852,7 +68852,7 @@
       }
     },
     "原文を AI（設定の「AI」の「音声入力整形」で選んだもの）に渡して整形し直します。結果はこの履歴に上書きし、クリップボードにもコピーします。" : {
-      "comment" : "DictationHistoryWindow.swift:500",
+      "comment" : "DictationHistoryWindow.swift:484",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -68954,7 +68954,7 @@
       }
     },
     "原文をクリップボードにコピーしました" : {
-      "comment" : "DictationHistoryWindow.swift:421",
+      "comment" : "DictationHistoryWindow.swift:405",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69668,7 +69668,7 @@
       }
     },
     "同じ部屋の話者を分けています…" : {
-      "comment" : "MeetingRecorder.swift:378",
+      "comment" : "MeetingRecorder.swift:383",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -70790,7 +70790,7 @@
       }
     },
     "失敗" : {
-      "comment" : "DictationHistoryWindow.swift:375, MeetingWindow.swift:336",
+      "comment" : "DictationHistoryWindow.swift:359, MeetingWindow.swift:336",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -71912,7 +71912,7 @@
       }
     },
     "履歴の文章は残り、録音（音声ファイル）だけを削除します。元に戻せません。" : {
-      "comment" : "DictationHistoryWindow.swift:667",
+      "comment" : "DictationHistoryWindow.swift:651",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72014,7 +72014,7 @@
       }
     },
     "履歴をすべて削除…" : {
-      "comment" : "DictationHistoryWindow.swift:653",
+      "comment" : "DictationHistoryWindow.swift:637",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72116,7 +72116,7 @@
       }
     },
     "履歴をファイルに保存する" : {
-      "comment" : "DictationHistoryWindow.swift:620",
+      "comment" : "DictationHistoryWindow.swift:604",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72524,7 +72524,7 @@
       }
     },
     "履歴を開く" : {
-      "comment" : "DictationHistoryWindow.swift:603",
+      "comment" : "DictationHistoryWindow.swift:587",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73238,7 +73238,7 @@
       }
     },
     "役割不明" : {
-      "comment" : "PasteTarget.swift:112",
+      "comment" : "PasteTarget.swift:112, ScreenContext.swift:250",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -73850,7 +73850,7 @@
       }
     },
     "担当 %@" : {
-      "comment" : "MeetingDocumentView.swift:542",
+      "comment" : "MeetingDocumentView.swift:543",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74054,7 +74054,7 @@
       }
     },
     "拒否した場合は、システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:383",
+      "comment" : "SettingsView.swift:382",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75074,7 +75074,7 @@
       }
     },
     "推測" : {
-      "comment" : "MeetingDocumentView.swift:834",
+      "comment" : "MeetingDocumentView.swift:835",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75380,7 +75380,7 @@
       }
     },
     "整形がオフなので、この録音では使われません（翻訳の言語を選ぶと使われます）" : {
-      "comment" : "ScreenSnapshot.swift:164",
+      "comment" : "ScreenSnapshot.swift:165",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75482,7 +75482,7 @@
       }
     },
     "整形し直す" : {
-      "comment" : "DictationHistoryWindow.swift:490",
+      "comment" : "DictationHistoryWindow.swift:474",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76502,7 +76502,7 @@
       }
     },
     "文字起こし" : {
-      "comment" : "MeetingExport.swift:141, MeetingInspector.swift:32, MinutesDocument.swift:92",
+      "comment" : "MeetingExport.swift:143, MeetingInspector.swift:32, MinutesDocument.swift:92",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76604,7 +76604,7 @@
       }
     },
     "文字起こし AI" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:37",
+      "comment" : "TranscriptionEngineSettingsView.swift:45",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76706,7 +76706,7 @@
       }
     },
     "文字起こしか、議事録に使う発言を変えました。作り直すと反映されます。" : {
-      "comment" : "MeetingDocumentView.swift:331, MinutesSelectionViews.swift:146",
+      "comment" : "MeetingDocumentView.swift:332, MinutesSelectionViews.swift:146",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -76910,7 +76910,7 @@
       }
     },
     "文字起こしが欠けているため、録音を消さずに残しています。要らなければ「…」の「録音を削除…」で消せます。" : {
-      "comment" : "MeetingDocumentView.swift:327",
+      "comment" : "MeetingDocumentView.swift:328",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77420,7 +77420,7 @@
       }
     },
     "文字起こしに辞書の置き換えルールを当てる" : {
-      "comment" : "SettingsView.swift:278",
+      "comment" : "SettingsView.swift:277",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77522,7 +77522,7 @@
       }
     },
     "文字起こしの %@ の発言へ" : {
-      "comment" : "MeetingDocumentView.swift:579",
+      "comment" : "MeetingDocumentView.swift:580",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78134,7 +78134,7 @@
       }
     },
     "文字起こしのモデル" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:155",
+      "comment" : "TranscriptionEngineSettingsView.swift:163",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78236,7 +78236,7 @@
       }
     },
     "文字起こしの原文" : {
-      "comment" : "DictationHistoryWindow.swift:419",
+      "comment" : "DictationHistoryWindow.swift:403",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78338,7 +78338,7 @@
       }
     },
     "文字起こしの言語" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:31",
+      "comment" : "TranscriptionEngineSettingsView.swift:39",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78440,7 +78440,7 @@
       }
     },
     "文字起こしは、記録を止めたあとに %@ で行います。記録中はここに文字が出ません。" : {
-      "comment" : "MeetingWindow.swift:897",
+      "comment" : "MeetingWindow.swift:934",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -78644,7 +78644,7 @@
       }
     },
     "文字起こしを確定しています…" : {
-      "comment" : "MeetingRecorder.swift:238",
+      "comment" : "MeetingRecorder.swift:243",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82214,7 +82214,7 @@
       }
     },
     "最後の結果をもう一度入力" : {
-      "comment" : "DictationHistoryWindow.swift:607, Onboarding.swift:557, ShortcutRecorder.swift:20",
+      "comment" : "DictationHistoryWindow.swift:591, Onboarding.swift:557, ShortcutRecorder.swift:20",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82520,7 +82520,7 @@
       }
     },
     "最新の発言へ" : {
-      "comment" : "MeetingWindow.swift:953",
+      "comment" : "MeetingWindow.swift:981",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82724,7 +82724,7 @@
       }
     },
     "期限 %@" : {
-      "comment" : "MeetingDocumentView.swift:542",
+      "comment" : "MeetingDocumentView.swift:543",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82928,7 +82928,7 @@
       }
     },
     "未ダウンロード" : {
-      "comment" : "AIRouteMenu.swift:23, TranscriptionEngineSettingsView.swift:102",
+      "comment" : "AIRouteMenu.swift:23, TranscriptionEngineSettingsView.swift:110",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83030,7 +83030,7 @@
       }
     },
     "未整形" : {
-      "comment" : "DictationHistoryWindow.swift:375, DictationHistoryWindow.swift:376",
+      "comment" : "DictationHistoryWindow.swift:359, DictationHistoryWindow.swift:360",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83336,7 +83336,7 @@
       }
     },
     "未許可" : {
-      "comment" : "SettingsView.swift:411",
+      "comment" : "SettingsView.swift:410",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83744,7 +83744,7 @@
       }
     },
     "根拠の発言 %@" : {
-      "comment" : "MeetingDocumentView.swift:580",
+      "comment" : "MeetingDocumentView.swift:581",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85274,7 +85274,7 @@
       }
     },
     "残している録音をすべて削除しますか？" : {
-      "comment" : "DictationHistoryWindow.swift:664",
+      "comment" : "DictationHistoryWindow.swift:648",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85376,7 +85376,7 @@
       }
     },
     "残す件数" : {
-      "comment" : "DictationHistoryWindow.swift:621",
+      "comment" : "DictationHistoryWindow.swift:605",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85478,7 +85478,7 @@
       }
     },
     "残す期間" : {
-      "comment" : "DictationHistoryWindow.swift:625",
+      "comment" : "DictationHistoryWindow.swift:609",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86192,7 +86192,7 @@
       }
     },
     "済み" : {
-      "comment" : "MeetingDocumentView.swift:447, Onboarding.swift:820",
+      "comment" : "MeetingDocumentView.swift:448, Onboarding.swift:820",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -86804,7 +86804,7 @@
       }
     },
     "無期限" : {
-      "comment" : "DictationHistoryWindow.swift:627, MeetingAudioManager.swift:358",
+      "comment" : "DictationHistoryWindow.swift:611, MeetingAudioManager.swift:358",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87212,7 +87212,7 @@
       }
     },
     "状態" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:98",
+      "comment" : "TranscriptionEngineSettingsView.swift:106",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87722,7 +87722,7 @@
       }
     },
     "画面収録" : {
-      "comment" : "SettingsView.swift:357",
+      "comment" : "SettingsView.swift:356",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87926,7 +87926,7 @@
       }
     },
     "画面収録のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:351",
+      "comment" : "SettingsView.swift:350",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -88028,7 +88028,7 @@
       }
     },
     "画面収録の許可がありません" : {
-      "comment" : "ScreenSnapshot.swift:271",
+      "comment" : "ScreenSnapshot.swift:272",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89762,7 +89762,7 @@
       }
     },
     "相手側（スピーカー）の音が入っていません。会議の音が出ている機器を、設定の「会議」→「録音するスピーカー」で選んでください。" : {
-      "comment" : "MeetingRecorder.swift:991",
+      "comment" : "MeetingRecorder.swift:996",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91190,7 +91190,7 @@
       }
     },
     "終わるまで、今の議事録を出しています。" : {
-      "comment" : "MeetingDocumentView.swift:303",
+      "comment" : "MeetingDocumentView.swift:304",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91496,7 +91496,7 @@
       }
     },
     "結果をクリップボードにコピーしました" : {
-      "comment" : "DictationHistoryWindow.swift:417",
+      "comment" : "DictationHistoryWindow.swift:401",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91802,7 +91802,7 @@
       }
     },
     "結果（%@）" : {
-      "comment" : "DictationHistoryWindow.swift:110, DictationHistoryWindow.swift:483, DictationHistoryWindow.swift:484",
+      "comment" : "DictationHistoryWindow.swift:110, DictationHistoryWindow.swift:467, DictationHistoryWindow.swift:468",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91904,7 +91904,7 @@
       }
     },
     "結果（原文のまま）" : {
-      "comment" : "DictationHistoryWindow.swift:482",
+      "comment" : "DictationHistoryWindow.swift:466",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92006,7 +92006,7 @@
       }
     },
     "結果（整形後）" : {
-      "comment" : "DictationHistoryWindow.swift:484",
+      "comment" : "DictationHistoryWindow.swift:468",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92618,7 +92618,7 @@
       }
     },
     "翻訳" : {
-      "comment" : "DictationController.swift:414, TranslationLanguage.swift:110",
+      "comment" : "DictationController.swift:414, TranslationLanguage.swift:116",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94250,7 +94250,7 @@
       }
     },
     "自動入力に必要" : {
-      "comment" : "SettingsView.swift:329",
+      "comment" : "SettingsView.swift:328",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -95780,7 +95780,7 @@
       }
     },
     "記録した会議の議事録・文字起こし" : {
-      "comment" : "SettingsView.swift:250",
+      "comment" : "SettingsView.swift:249",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96596,7 +96596,7 @@
       }
     },
     "記録の途中で音声認識が止まったため、文字起こしできなかった部分があります（%@）。" : {
-      "comment" : "MeetingRecorder.swift:287",
+      "comment" : "MeetingRecorder.swift:292",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96698,7 +96698,7 @@
       }
     },
     "記録の開始／停止" : {
-      "comment" : "AppDelegate.swift:318, Onboarding.swift:580, SettingsView.swift:264",
+      "comment" : "AppDelegate.swift:318, Onboarding.swift:580, SettingsView.swift:263",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96902,7 +96902,7 @@
       }
     },
     "記録を止めたあとに %@ で文字起こしします" : {
-      "comment" : "MeetingNotesViews.swift:421",
+      "comment" : "MeetingNotesViews.swift:428",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97106,7 +97106,7 @@
       }
     },
     "記録を止めたあとの文字起こしに、「辞書・ルール」の置き換えルールを当てます。議事録は当てたあとの文から作ります。認識したままの文も残すので、会議ノートの「辞書」から戻せます。" : {
-      "comment" : "SettingsView.swift:279",
+      "comment" : "SettingsView.swift:278",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -97412,7 +97412,7 @@
       }
     },
     "記録を続ける" : {
-      "comment" : "MeetingRecorder.swift:955",
+      "comment" : "MeetingRecorder.swift:960",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98534,7 +98534,7 @@
       }
     },
     "記録後に AI で議事録を作る" : {
-      "comment" : "SettingsView.swift:282",
+      "comment" : "SettingsView.swift:281",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99452,7 +99452,7 @@
       }
     },
     "許可する" : {
-      "comment" : "Onboarding.swift:715, Onboarding.swift:728, SettingsView.swift:417",
+      "comment" : "Onboarding.swift:715, Onboarding.swift:728, SettingsView.swift:416",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99656,7 +99656,7 @@
       }
     },
     "許可済み" : {
-      "comment" : "Onboarding.swift:790, SettingsView.swift:340, SettingsView.swift:411",
+      "comment" : "Onboarding.swift:790, SettingsView.swift:339, SettingsView.swift:410",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100370,7 +100370,7 @@
       }
     },
     "話した言語" : {
-      "comment" : "AppStyles.swift:101, GeminiClient.swift:56, HUDPanel.swift:433",
+      "comment" : "AppStyles.swift:102, GeminiClient.swift:56, HUDPanel.swift:433",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100676,7 +100676,7 @@
       }
     },
     "話し始めると、ここに文字起こしが出ます" : {
-      "comment" : "MeetingNotesViews.swift:423, MeetingWindow.swift:902",
+      "comment" : "MeetingNotesViews.swift:430, MeetingWindow.swift:879",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101186,7 +101186,7 @@
       }
     },
     "話者を分けています…（初回はモデルをダウンロードします）" : {
-      "comment" : "MeetingRecorder.swift:367",
+      "comment" : "MeetingRecorder.swift:372",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101390,7 +101390,7 @@
       }
     },
     "話者名" : {
-      "comment" : "MeetingDocumentView.swift:823",
+      "comment" : "MeetingDocumentView.swift:824",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101594,7 +101594,7 @@
       }
     },
     "話者名を変える" : {
-      "comment" : "MeetingDocumentView.swift:237, MeetingDocumentView.swift:238",
+      "comment" : "MeetingDocumentView.swift:238, MeetingDocumentView.swift:239",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101798,7 +101798,7 @@
       }
     },
     "詳しく" : {
-      "comment" : "MeetingDocumentView.swift:307",
+      "comment" : "MeetingDocumentView.swift:308",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -102002,7 +102002,7 @@
       }
     },
     "認証は下の Gemini の認証情報を使います。音声入力では、文字起こしのあとに辞書・スニペットを当ててから、いつもどおり整形します（整形の AI も Gemini なら、Gemini を 2 回呼びます）。長い会議は 5 分ごとに分けて送ります。" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:166",
+      "comment" : "TranscriptionEngineSettingsView.swift:174",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -102716,7 +102716,7 @@
       }
     },
     "議事録" : {
-      "comment" : "MeetingExport.swift:141, MeetingSearchView.swift:257, MinutesDocument.swift:94",
+      "comment" : "MeetingExport.swift:143, MeetingSearchView.swift:257, MinutesDocument.swift:94",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -102920,7 +102920,7 @@
       }
     },
     "議事録ができたら書き足せます" : {
-      "comment" : "MeetingDocumentView.swift:642",
+      "comment" : "MeetingDocumentView.swift:643",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -103634,7 +103634,7 @@
       }
     },
     "議事録の「話者についてのメモ」も参考にしてください。「推測」は、議事録を作るときに会話から推測して付けた名前です。変更は文字起こしに反映されます（議事録は作り直すと反映されます）。" : {
-      "comment" : "MeetingDocumentView.swift:824",
+      "comment" : "MeetingDocumentView.swift:825",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -103838,7 +103838,7 @@
       }
     },
     "議事録のモデル: %@ · %@（設定の「AI」の「議事録」で選べます）" : {
-      "comment" : "SettingsView.swift:284",
+      "comment" : "SettingsView.swift:283",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -103940,7 +103940,7 @@
       }
     },
     "議事録の作成" : {
-      "comment" : "MeetingRecorder.swift:407, MeetingRecorder.swift:475",
+      "comment" : "MeetingRecorder.swift:412, MeetingRecorder.swift:480",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -104552,7 +104552,7 @@
       }
     },
     "議事録は作り直しません" : {
-      "comment" : "MeetingRecorder.swift:475",
+      "comment" : "MeetingRecorder.swift:480",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -104858,7 +104858,7 @@
       }
     },
     "議事録を作らずに、文字起こしだけを残します" : {
-      "comment" : "MeetingRecorder.swift:407",
+      "comment" : "MeetingRecorder.swift:412",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -104960,7 +104960,7 @@
       }
     },
     "議事録を作り直しています…" : {
-      "comment" : "MeetingDocumentView.swift:347, MeetingRecorder.swift:466",
+      "comment" : "MeetingDocumentView.swift:348, MeetingRecorder.swift:471",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105266,7 +105266,7 @@
       }
     },
     "議事録を作り直す" : {
-      "comment" : "MeetingDocumentView.swift:318, MeetingDocumentView.swift:332, MeetingWindow.swift:590",
+      "comment" : "MeetingDocumentView.swift:319, MeetingDocumentView.swift:333, MeetingWindow.swift:590",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105470,7 +105470,7 @@
       }
     },
     "議事録を作れませんでした: %@" : {
-      "comment" : "MeetingRecorder.swift:415, MeetingRecorder.swift:495",
+      "comment" : "MeetingRecorder.swift:420, MeetingRecorder.swift:500",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105572,7 +105572,7 @@
       }
     },
     "議事録を作成しています…" : {
-      "comment" : "MeetingRecorder.swift:403",
+      "comment" : "MeetingRecorder.swift:408",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105674,7 +105674,7 @@
       }
     },
     "議事録を作成中" : {
-      "comment" : "MeetingDocumentView.swift:297, MeetingWindow.swift:335",
+      "comment" : "MeetingDocumentView.swift:298, MeetingWindow.swift:335",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105776,7 +105776,7 @@
       }
     },
     "議事録を作成中です…" : {
-      "comment" : "MeetingDocumentView.swift:482",
+      "comment" : "MeetingDocumentView.swift:483",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -108326,7 +108326,7 @@
       }
     },
     "追加の整形ルール" : {
-      "comment" : "SettingsView.swift:230",
+      "comment" : "SettingsView.swift:229",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -110978,7 +110978,7 @@
       }
     },
     "録った音声を Google（Gemini API / Vertex AI）に送って文字起こしします。会議の記録では、会議の音声（自分と相手の声）がすべて送られます。" : {
-      "comment" : "TranscriptionEngineSettingsView.swift:150",
+      "comment" : "TranscriptionEngineSettingsView.swift:158",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -111080,7 +111080,7 @@
       }
     },
     "録音" : {
-      "comment" : "DictationHistoryWindow.swift:519",
+      "comment" : "DictationHistoryWindow.swift:503",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -111182,7 +111182,7 @@
       }
     },
     "録音が上限の 10 分に達したため、ここまでの音声を処理します" : {
-      "comment" : "SpeechRecognizer.swift:63",
+      "comment" : "SpeechRecognizer.swift:65",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -111386,7 +111386,7 @@
       }
     },
     "録音した音声も残す" : {
-      "comment" : "DictationHistoryWindow.swift:632",
+      "comment" : "DictationHistoryWindow.swift:616",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -111692,7 +111692,7 @@
       }
     },
     "録音する前に、参加者の了承を得てください。" : {
-      "comment" : "MeetingSuggestionPanel.swift:145, SettingsView.swift:297",
+      "comment" : "MeetingSuggestionPanel.swift:145, SettingsView.swift:296",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -111794,7 +111794,7 @@
       }
     },
     "録音する機器" : {
-      "comment" : "SettingsView.swift:258",
+      "comment" : "SettingsView.swift:257",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -111896,7 +111896,7 @@
       }
     },
     "録音だけをすべて削除…" : {
-      "comment" : "DictationHistoryWindow.swift:650",
+      "comment" : "DictationHistoryWindow.swift:634",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -111998,7 +111998,7 @@
       }
     },
     "録音の使用量" : {
-      "comment" : "DictationHistoryWindow.swift:646",
+      "comment" : "DictationHistoryWindow.swift:630",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -112610,7 +112610,7 @@
       }
     },
     "録音をすべて削除" : {
-      "comment" : "DictationHistoryWindow.swift:665",
+      "comment" : "DictationHistoryWindow.swift:649",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -114956,7 +114956,7 @@
       }
     },
     "開始・終了の効果音を鳴らす" : {
-      "comment" : "SettingsView.swift:209",
+      "comment" : "SettingsView.swift:208",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -115568,7 +115568,7 @@
       }
     },
     "音声ファイルは残しています" : {
-      "comment" : "MeetingDocumentView.swift:326",
+      "comment" : "MeetingDocumentView.swift:327",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -115670,7 +115670,7 @@
       }
     },
     "音声入力" : {
-      "comment" : "Onboarding.swift:542, TranscriptionEngineSettingsView.swift:19",
+      "comment" : "Onboarding.swift:542, TranscriptionEngineSettingsView.swift:27",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -115874,7 +115874,7 @@
       }
     },
     "音声入力でスクリーンショットの文字を使うときだけ必要（設定の「AI」→「画面の文脈」）" : {
-      "comment" : "SettingsView.swift:358",
+      "comment" : "SettingsView.swift:357",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -116384,7 +116384,7 @@
       }
     },
     "音声入力の履歴をすべて削除しますか？" : {
-      "comment" : "DictationHistoryWindow.swift:659",
+      "comment" : "DictationHistoryWindow.swift:643",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -116690,7 +116690,7 @@
       }
     },
     "音声入力の結果と文字起こしの原文（%@ 件）" : {
-      "comment" : "DictationHistoryWindow.swift:601",
+      "comment" : "DictationHistoryWindow.swift:585",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -117302,7 +117302,7 @@
       }
     },
     "音声入力整形の AI の認証情報がないので、この録音では使われません" : {
-      "comment" : "ScreenSnapshot.swift:166",
+      "comment" : "ScreenSnapshot.swift:167",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -117404,7 +117404,7 @@
       }
     },
     "音声認識" : {
-      "comment" : "Onboarding.swift:725, SettingsView.swift:322",
+      "comment" : "Onboarding.swift:725, SettingsView.swift:321",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -118424,7 +118424,7 @@
       }
     },
     "（不明）" : {
-      "comment" : "DictationHistoryWindow.swift:446",
+      "comment" : "DictationHistoryWindow.swift:430",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

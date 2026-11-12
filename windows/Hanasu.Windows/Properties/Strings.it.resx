@@ -790,7 +790,7 @@ Verbale, trascrizione, note e audio verranno spostati nel Cestino. Puoi ripristi
     <value>Regole di rifinitura aggiuntive</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Regole passate all'IA (Gemini, Claude) durante la rifinitura (ad esempio, "usa un tono formale"). Non vengono usate per la traduzione in inglese (vengono usate per la traduzione in giapponese).</value>
+    <value>Regole passate all'IA (Gemini, Claude) durante la rifinitura (ad esempio, "usa un tono formale"). Non vengono usate per le traduzioni (tranne la traduzione in giapponese quando la lingua di trascrizione è il giapponese).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Una per riga. Una parola da sola indica all'IA come scriverla. "sentito =&gt; grafia" sostituisce ciò che è stato riconosciuto con la grafia (ad esempio, stock mark =&gt; Stockmark; separa più voci a sinistra con ","). Le righe che iniziano con "#" sono commenti.</value>
@@ -1475,5 +1475,8 @@ Vuoi aprire la pagina della release nel browser?</value>
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>Non è stato possibile eliminare completamente le registrazioni di {0} riunioni. I file rimasti vengono conservati.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

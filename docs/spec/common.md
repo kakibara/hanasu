@@ -412,7 +412,7 @@
 - Windows の実装: `windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`（`ConflictingShortcut`）
 
 ### DEC-COM-020 エンジンは、音声入力と会議の記録で別々に選ぶ
-- 決めたこと: 「音声入力」と「会議の記録」でエンジンを別々に選ぶ。「選択を声で編集」は音声入力と同じエンジンを使う。Mac 標準を選んでいる間だけ「Mac 標準の認識モデル」を出す。言語（`ja-JP`）は共通。設定は「AI」タブの先頭の「文字起こし AI」欄に置き、タブは増やさない（2026-11-11 までは「一般」タブの「文字起こし」欄。DEC-COM-173）。
+- 決めたこと: 「音声入力」と「会議の記録」でエンジンを別々に選ぶ。「選択を声で編集」は音声入力と同じエンジンを使う。Mac 標準を選んでいる間だけ「Mac 標準の認識モデル」を出す。言語（文字起こしの言語。REQ-COM-004）は共通。設定は「AI」タブの先頭の「文字起こし AI」欄に置き、タブは増やさない（2026-11-11 までは「一般」タブの「文字起こし」欄。DEC-COM-173）。
 - 理由: 音声入力は待ち時間と途中経過が大事で、会議は記録のあとに待てるので精度を優先したい。自分の短い発話は Gemini に送ってよくても相手の声を含む会議の音声は送りたくない、という使い分けができる。
 - 決めた場面: PR #17
 - 関係する要件: REQ-COM-001
@@ -444,12 +444,12 @@
 - 実装の場所: `WhisperModelStore`
 
 ### DEC-COM-024 Whisper の言語は設定の言語に合わせ、辞書の語をヒントに渡す
-- 決めたこと: 言語は設定の言語から決め（`ja-JP` → `ja`）、自動判定はしない。辞書の語とスニペットの起動フレーズを、前の文脈（prompt tokens）として最大 30 語渡す。
-- 理由: 検証で、辞書の語を渡すと「Whisper」「Gemini」「スプレッドシート」の表記が直った。
+- 決めたこと: 言語は設定の言語から決め（`ja-JP` → `ja`）、自動判定はしない。辞書の語とスニペットの起動フレーズを、前の文脈（prompt tokens）として最大 30 語渡す。語の区切りは文字起こしの言語の読点（プロンプトの `user.dictionaryRuleSeparator`。日本語は「、」、英語は「, 」）にする。Gemini での文字起こしに添える辞書の語も同じ。
+- 理由: 検証で、辞書の語を渡すと「Whisper」「Gemini」「スプレッドシート」の表記が直った。前の文脈の書き方は認識の文体に効くので、日本語の読点のままだと、ほかの言語の文字起こしに「、」が混ざりやすい（2026-11-11 の多言語の見直し）。
 - 決めた場面: PR #17
 - 関係する要件: REQ-COM-001
-- 対象: Mac
-- 実装の場所: `AppSettings.whisperLanguage`、`WhisperEngine.prompt`
+- 対象: Mac / Windows
+- 実装の場所: `AppSettings.whisperLanguage`、`WhisperEngine.prompt`。Windows は `windows/Hanasu.Whisper/WhisperBatchTranscriber.cs`（`WhisperPrompt`）
 
 ### DEC-COM-025 長い音声は、Whisper の VAD を使わず自分で区切る
 - 決めたこと: 30 秒を超える音声は、20〜30 秒ごとに、目安の前 5 秒のうちいちばん静かなところで切り、無音だけの区切りは飛ばして、まとめて WhisperKit に渡す（並行して処理される）。
@@ -460,12 +460,12 @@
 - 実装の場所: `WhisperEngine.transcribe`
 
 ### DEC-COM-026 Whisper の結果から、注記や決まり文句だけの区間を捨てる
-- 決めたこと: 区切りの長さを超える時刻の区間、「(音楽)」「[拍手]」のような注記だけの区間、無音で出がちな決まり文句（「ご視聴ありがとうございました」など）を捨てる。声があるのに何も返らない区切りは 1 回だけやり直す。
-- 理由: 無音から作り話の文が出るのを防ぐ。tiny で時々、声があるのに空になった。
-- 決めた場面: PR #17
+- 決めたこと: 区切りの長さを超える時刻の区間、「(音楽)」「[拍手]」のような注記だけの区間、無音で出がちな決まり文句（「ご視聴ありがとうございました」「Thank you for watching」「시청해 주셔서 감사합니다」など）を捨てる。決まり文句と注記の語は 17 言語のものを、文字起こしの言語によらずすべて見る（大文字小文字と前後の句読点は無視する。トルコ語の「İ」は「i」にそろえてから比べる）。字幕の作り手の名前や年が続くもの（「Untertitel im Auftrag des ZDF …」「Субтитры сделал …」「字幕由 …」）は始まりの語で、「amara.org」を含む区間はまるごと捨てる。声があるのに何も返らない区切りは 1 回だけやり直す。
+- 理由: 無音から作り話の文が出るのを防ぐ。tiny で時々、声があるのに空になった。Whisper は動画の字幕から、言語ごとに決まった文句を覚えていて、日本語のものだけでは、ほかの言語の会議や音声入力に残った（2026-11-11 の多言語の見直し）。会議で区間の全体がこれらの文句だけになることはまずない。
+- 決めた場面: PR #17。17 言語に広げたのは 2026-11-11 の多言語の見直し
 - 関係する要件: REQ-COM-001
-- 対象: Mac
-- 実装の場所: `WhisperEngine.isNoise`、`WhisperEngine.transcribe`
+- 対象: Mac / Windows
+- 実装の場所: `WhisperEngine.isNoise`・`hallucinations`・`soundTags`、`WhisperEngine.transcribe`。Windows は `windows/Hanasu.Whisper/WhisperBatchTranscriber.cs` の `WhisperText`（同じ並び。両方を直す）
 
 ### DEC-COM-027 読み込んだ Whisper のモデルは使い回し、録音を始めたときに読み込む
 - 決めたこと: `WhisperEngine` actor で読み込んだモデルを使い回し、録音を始めたときに読み込みを始める。
@@ -776,12 +776,12 @@
 - 実装の場所: `AppleFMClient.arguments`
 
 ### DEC-COM-073 `fm` の文脈は 8,192 トークンとし、トークン数は文字の種類から多めに見積もる
-- 決めたこと: 文脈は 8,192 トークン（コミュニティの文書の値。Apple の文書では未確認）として、DEC-COM-065 の分け方（`LongInputFitter`）をそのまま使う。出力の上限は、音声入力は 1,536、会議は 2,048 として入力の分を空ける。`fm` にはトークン数を数える方法がないので、漢字・かな・全角の文字は 1 文字 1 トークン、ほかは 3 文字で 1 トークンと多めに見積もる。見えないシステムの指示（約 54 トークン）は余白（256）に含める。
-- 理由: 1 時間の会議（2〜4 万トークン）は入らないので、文字起こしを部分ごとの要点にしてから議事録にする。見積もりが少なすぎると文脈を超えて失敗するので、多めにとる（日本語の多くのトークナイザーは 1 文字 1 トークン以下）。
+- 決めたこと: 文脈は 8,192 トークン（コミュニティの文書の値。Apple の文書では未確認）として、DEC-COM-065 の分け方（`LongInputFitter`）をそのまま使う。出力の上限は、音声入力は 1,536、会議は 2,048 として入力の分を空ける。`fm` にはトークン数を数える方法がないので、ASCII の文字は 3 文字で 1 トークン、ほか（漢字・かな・ハングル・キリル文字・アラビア文字・デーヴァナーガリーなど）は 1 文字 1 トークンと多めに見積もる。見えないシステムの指示（約 54 トークン）は余白（256）に含める。
+- 理由: 1 時間の会議（2〜4 万トークン）は入らないので、文字起こしを部分ごとの要点にしてから議事録にする。見積もりが少なすぎると文脈を超えて失敗するので、多めにとる（日本語の多くのトークナイザーは 1 文字 1 トークン以下。ロシア語・アラビア語・ヒンディー語も 1 トークンあたりの文字は少ないので、2026-11-11 の多言語の見直しで、ASCII 以外をすべて 1 文字 1 トークンにした）。
 - 決めた場面: ローカル LLM に対応した PR（Apple の Foundation Models を足した分）
 - 関係する要件: REQ-COM-031
-- 対象: Mac
-- 実装の場所: `AppleFMClient.contextLength`・`estimateTokens`、`LongInputFitter`
+- 対象: Mac（見積もりの決まりは Windows の `DictionarySuggester.EstimateTokens` も同じ）
+- 実装の場所: `AppleFMClient.contextLength`・`estimateTokens`、`LongInputFitter`。Windows は `windows/Hanasu.Core/Text/DictionarySuggester.cs`
 
 ### DEC-COM-080 Dock は活性化ポリシー、メニューバーは NSStatusItem.isVisible で出し入れする
 - 決めたこと: 設定は `AppPresenceSettings`（UserDefaults の `appPresence`）に `menuBar` / `dock` / `both` で持ち、既定は `both`。Dock に出すときは `.regular`、出さないときは `.accessory`（Dock・⌘Tab に出ないが、ウインドウとメニューの ⌘C などは使える）。メニューバーのアイコンは作ったまま `isVisible` で隠す。設定を変えたら、その場で両方を当て直し、ポリシーを変えたあとは Hanasu を前に出し直して設定画面を前面に戻す。起動時は `app.run()` の前にポリシーを決める。
@@ -872,12 +872,12 @@
 - 実装の場所: `windows/Hanasu.Core/Settings/SettingsStore.cs`、`windows/Hanasu.Core/Settings/SecretStore.cs`
 
 ### DEC-COM-104 Windows 標準のエンジンは、Windows の既定のマイクを使う
-- 決めたこと: Windows 標準（`Windows.Media.SpeechRecognition` の連続認識）を選んだときは、Windows の既定のマイクを使い、設定画面でマイクの選択を無効にする（そう書く）。マイクの選択は Whisper / Gemini で使う。オンライン音声認識がオフ・日本語の音声認識がない・マイクが許可されていないときは、HUD に理由と直し方を出し、該当の設定ページ（`ms-settings:`）を開く。
-- 理由: この API は録音デバイスを受け取れない。
+- 決めたこと: Windows 標準（`Windows.Media.SpeechRecognition` の連続認識）を選んだときは、Windows の既定のマイクを使い、設定画面でマイクの選択を無効にする（そう書く）。マイクの選択は Whisper / Gemini で使う。認識の言語は、文字起こしの言語がちょうど入っていればそれ、なければ Windows の表示の言語のうち言語コードが同じもの、それもなければ入っている言語のうち言語コードが同じもの（地域の違うもの。中国語は簡体字と繁体字をそろえる）にする。オンライン音声認識がオフ・文字起こしの言語の音声認識がない・マイクが許可されていないときは、HUD に理由と直し方を出し、該当の設定ページ（`ms-settings:`）を開く。
+- 理由: この API は録音デバイスを受け取れない。文字起こしの言語は一覧の代表の地域に寄せる（REQ-COM-004。es-MX → es-ES）ので、ちょうど一致する言語しか使わないと、メキシコのスペイン語の認識を入れている人でも「音声認識がない」になった（2026-11-11 の多言語の見直し）。
 - 決めた場面: PR #19
 - 関係する要件: REQ-COM-001, REQ-COM-002
 - 対象: Windows
-- 実装の場所: `windows/Hanasu.Windows/Services/WindowsSpeechTranscriber.cs`
+- 実装の場所: `windows/Hanasu.Windows/Services/WindowsSpeechTranscriber.cs`、`windows/Hanasu.Core/Settings/TranscriptionLocales.cs`（`SpeechRecognitionLanguage`）
 
 ### DEC-COM-105 Windows 版の Whisper は Whisper.net で動かし、既定は small
 - 決めたこと: Whisper.net（whisper.cpp）で動かす。モデルは tiny〜large-v3-turbo（q5_0 を含む）から選び、既定は small。設定でモデルを選んだ時点で `%LOCALAPPDATA%\Hanasu\Models` にダウンロードする（進み具合・取り消し・削除あり）。無音（約 -46 dBFS 未満）なら Whisper / Gemini に送らず、決まり文句の段は捨てる。
@@ -1008,7 +1008,7 @@
 - 実装の場所: `PromptLanguage.from(localeIdentifier:)`、`PromptLanguage.current`
 
 ### DEC-COM-162 日本語の文面は変えず、ほかの言語は訳ではなく、その言語の話し言葉に合わせて書き直す
-- 決めたこと: ja.json は今までのプロンプトと一字一句同じにする（Windows の Gemini での文字起こしの指示だけ、「主に日本語で、英語などが」を「主に${language}で、ほかの言語が」にした）。en.json を言語によらない形で書き、ほかの 15 言語はそれをもとに、フィラー・言い直し・口頭の記号の指示・決まり文句・誤認識の例・文体のプリセット（敬語や T–V の区別）をその言語のものに書き直す。整形の言語の「日本語に統一」（REQ-DIC-082）と、翻訳の言語（英語・日本語。REQ-DIC-013）は、プロンプトの言語によらず今のまま（「日本語に統一」はどの言語でも日本語にする）。
+- 決めたこと: ja.json は今までのプロンプトと一字一句同じにする（Windows の Gemini での文字起こしの指示だけ、「主に日本語で、英語などが」を「主に${language}で、ほかの言語が」にした）。en.json を言語によらない形で書き、ほかの 15 言語はそれをもとに、フィラー・言い直し・口頭の記号の指示・決まり文句・誤認識の例・文体のプリセット（敬語や T–V の区別）をその言語のものに書き直す。整形の言語の「日本語に統一」（REQ-DIC-082）は、プロンプトの言語によらず今のまま（どの言語でも日本語にする）。翻訳の言語は、のちに 17 言語に広げた（REQ-DIC-013・DEC-DIC-150・151）。出力が日本語（和訳・日本語に統一）のときの文体のルールは、プロンプトの言語によらず ja.json の文面を使う（DEC-DIC-028）。
 - 理由: 日本語の整形の質を落とさない。直訳したプロンプトでは、日本語の例（「えー」「改行」）がほかの言語の話し方に合わない。要件（REQ-DIC-082・013）は変えない。
 - 決めた場面: 多言語化の PR（2026-11-05。言語ごとに書き直すことはユーザーに確かめた）
 - 関係する要件: REQ-COM-061, REQ-DIC-003, REQ-DIC-082, REQ-DIC-013
@@ -1040,7 +1040,7 @@
 - 実装の場所: `tr`、`L10n`、`scripts/i18n-strings.py`
 
 ### DEC-COM-166 表示の言語は、優先する言語の並びのうち対応している最初の言語。.app は 17 言語の .lproj を持つ
-- 決めたこと: `UILanguage` は `Locale.preferredLanguages` を前から見て、17 言語のどれかに寄せられる最初の言語にする（寄せ方は `PromptLanguage.supported(localeIdentifier:)`。DEC-COM-161 と同じ）。どれにもなければ英語。日付・曜日の表示もこの言語のロケールで書く。.app の Info.plist は開発の言語を en にし、`CFBundleLocalizations` に 17 言語を並べ、`scripts/build-app.sh` が言語ごとの `<言語>.lproj/InfoPlist.strings`（権限を求めるときの説明）を作る。開発用の CLI（`--` で始まる引数があるとき）は出力を訳さないので日本語にし、`--ui-language <言語>` で変えられる（画面を PNG にする CLI で、ほかの言語を確かめる）。自己テストのプロンプトは日本語に固定する。
+- 決めたこと: `UILanguage` は `Locale.preferredLanguages` を前から見て、17 言語のどれかに寄せられる最初の言語にする（寄せ方は `PromptLanguage.supported(localeIdentifier:)`。DEC-COM-161 と同じ）。どれにもなければ英語。日付・曜日の表示もこの言語のロケールで書く。日付の並びは、日本語では今までの形（「2026/11/02 (月) 14:30」）、ほかの言語ではその言語の並び（`UILanguage.dateFormatter` がテンプレートから作る。ドイツ語なら日.月.年、英語（米国）なら 12 時間表示）にする（会議の日時・履歴の日付・議事録の期限）。会議のフォルダの名前は、地域の暦や数字によらず、西暦の ASCII の数字（`en_US_POSIX`・グレゴリオ暦）で作る。.app の Info.plist は開発の言語を en にし、`CFBundleLocalizations` に 17 言語を並べ、`scripts/build-app.sh` が言語ごとの `<言語>.lproj/InfoPlist.strings`（権限を求めるときの説明）を作る。開発用の CLI（`--` で始まる引数があるとき）は出力を訳さないので日本語にし、`--ui-language <言語>` で変えられる（画面を PNG にする CLI で、ほかの言語を確かめる）。自己テストのプロンプトは日本語に固定する。
 - 理由: macOS がアプリの言語を選ぶのと同じ決め方にして、AppKit が出す部分（標準のメニュー項目・権限のダイアログ）とアプリの文言の言語をそろえる。.lproj がないと、macOS はアプリが日本語だけだと見なす。
 - 決めた場面: 多言語化の PR（Mac の表示。2026-11-05）
 - 関係する要件: REQ-COM-060
@@ -1122,6 +1122,15 @@
 - 対象: Mac / Windows
 - 実装の場所: `AISettingsTab`、`TranscriptionEngineSettingsSection`、`TextAIPurpose.label`・`detail`。Windows は `windows/Hanasu.Windows/Views/SettingsWindow.xaml`（AI タブ）、`SettingsWindow.xaml.cs`（`UpdateEnginePanels`）、`windows/Hanasu.Core/Settings/AppSettings.cs`（`GeminiTranscriptionModel`）、`SettingsStore`
 - 確かめ方: `.build/debug/Hanasu --render-ai-settings /tmp/ai.png`、`--render-engine-settings /tmp/engine.png`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`SettingsTests` の文字起こしのモデルの引き継ぎ）
+
+### DEC-COM-174 文のかけらをつなぐときは、空白で語を区切る言語でだけ空白を入れる
+- 決めたこと: 認識の区切り・続く発言・スニペットのように、前後の空白を外した文のかけらをつなぐときは、`TextSpacing.join` を使う。境目に空白がなく、境目の両側がどちらも「空白を書かない文字」（漢字・ひらがな・カタカナ・注音・CJK の記号と句読点・全角の形）でなく、後ろのかけらが閉じる記号・句読点（`.,!?;:%)]}…'’”»` と、アラビア語の `،؛؟۔`・ヒンディー語の `।॥`）で始まらず、前のかけらが開く記号（`([{‘“«¿¡`）で終わらなければ、空白を 1 つ入れる。ハングルは空白で語を区切るので、空白を入れる側に入る。音声入力の認識の区切り（Mac 標準・Windows 標準の確定した区切り、Whisper の区間）をつなぐときは、文字起こしの言語が日本語・中国語なら境目の文字によらず空白を入れない（「090」と「1234」のように、数字や英字の途中で区切りが確定しても前と同じにする）。使う場所: 会議の続く発言をまとめるとき（`Meeting.joinUtterances`）、語のない区間を話者に割り当ててつなぐとき（`MeetingProcessor.split`）、句読点だけの断片を前の語に付けるとき、Whisper の音声入力で区間をつなぐとき、Mac 標準の音声入力で確定した区切りをつなぐとき、スニペットと前後の文をつなぐとき（DEC-DIC-053）。Windows も同じ決まり（`windows/Hanasu.Core/Text/TextSpacing.cs`。Windows 標準の音声認識の確定した結果・Whisper の区間・続く発言・句読点だけの断片）。1 つの区間の中の語（Whisper のトークン）をつなぐところでは使わない。語は前の空白（英語など）を持っていて、Whisper の語は語の途中（「Gem」「ini」）で切れることがあるので、空白を足すと崩れる（Windows の `MeetingProcessor.Split` は、短いかけらをまとめたあとに前後の空白を外す）。
+- 理由: もとは日本語だけを考え、かけらを空白なしでつないでいた。英語などでは「Sounds good.Let's move on.」のように文や語がくっつき、会議ノート・transcript.md・議事録に送る文字起こしにそのまま出た（2026-11-11 の多言語の見直し）。日本語・中国語の文はどちらかの側が漢字・かな・全角の句読点になるので、今までと同じ結果になる。
+- 決めた場面: 2026-11-11 の依頼「日本語から英語、母語が日本語というところを前提にした設定が残っている場所がないか全体確認して、残っていたら修正してください」
+- 関係する要件: REQ-COM-061, REQ-MTG-001, REQ-DIC-001, REQ-DIC-030
+- 対象: Mac / Windows
+- 実装の場所: `TextSpacing`（`Sources/Hanasu/TextSpacing.swift`）。Windows は `windows/Hanasu.Core/Text/TextSpacing.cs`（同じ決まり。両方を直す）
+- 確かめ方: `.build/debug/Hanasu --test-minutes-document`（発言のまとめ・句読点・音声入力の区切り）。Windows は `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MultilingualTextTests"`
 
 ---
 

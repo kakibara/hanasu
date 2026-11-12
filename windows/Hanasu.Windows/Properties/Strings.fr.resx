@@ -790,7 +790,7 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
     <value>Règles d'affinage supplémentaires</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Règles transmises à l'IA (Gemini, Claude) lors de l'affinage (par exemple, « utiliser un ton formel »). Elles ne sont pas utilisées pour la traduction en anglais (elles le sont pour la traduction en japonais).</value>
+    <value>Règles transmises à l'IA (Gemini, Claude) lors de l'affinage (par exemple, « utiliser un ton formel »). Elles ne sont pas utilisées pour la traduction (sauf pour la traduction en japonais lorsque la langue de transcription est le japonais).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Une par ligne. Un mot seul indique à l'IA son orthographe. « entendu =&gt; orthographe » remplace ce qui a été reconnu par l'orthographe (par exemple, stock mark =&gt; Stockmark ; séparez plusieurs termes à gauche par « , »). Les lignes commençant par « # » sont des commentaires.</value>
@@ -1475,5 +1475,8 @@ Ouvrir la page de la version dans le navigateur ?</value>
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>Les enregistrements de {0} réunions n'ont pas pu être entièrement supprimés. Les fichiers restants sont conservés.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

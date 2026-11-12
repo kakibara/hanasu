@@ -283,10 +283,10 @@
     <value>{0} ({1}) — {2}</value>
   </data>
   <data name="WhisperModel_Tiny" xml:space="preserve">
-    <value>가장 작음. 일본어 정확도가 낮음(테스트용).</value>
+    <value>가장 작음. 정확도가 낮음(특히 일본어 등. 테스트용).</value>
   </data>
   <data name="WhisperModel_Base" xml:space="preserve">
-    <value>작음. 일본어 정확도가 낮은 편.</value>
+    <value>작음. 정확도가 낮은 편(특히 일본어 등).</value>
   </data>
   <data name="WhisperModel_Small" xml:space="preserve">
     <value>일상적인 사용에 적합. 속도와 정확도의 균형이 좋음.</value>

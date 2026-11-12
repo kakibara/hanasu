@@ -485,7 +485,7 @@
     "",
     "Comment répondre :",
     "- Appuie-toi uniquement sur les réunions fournies. Ne suppose rien qui ne figure pas dans les enregistrements ; écris « Les enregistrements ne le précisent pas. »",
-    "- Cite dans le texte les réunions utilisées par leur numéro, leur date et leur titre, comme ceci : ［M2: 2026/11/02 Point hebdo］.",
+    "- Cite dans le texte les réunions utilisées par leur numéro, leur date et leur titre, comme ceci : [M2: 2026/11/02 Point hebdo].",
     "- À la fin, ajoute un titre « ## Sources » et liste les réunions utilisées sous la forme « - M2: 2026/11/02 (lun.) 14:30 Point hebdo ».",
     "- Interprète les dates comme « la semaine dernière » ou « hier » par rapport à la date d'« Aujourd'hui ». S'il n'y a pas de réunion sur cette période, dis-le.",
     "- Réponds de façon concise, en français. Tu peux utiliser des titres et des puces (Markdown)."

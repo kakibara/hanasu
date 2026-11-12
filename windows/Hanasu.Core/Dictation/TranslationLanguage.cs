@@ -53,6 +53,18 @@ public readonly record struct TranslationLanguage
         return PromptLanguage.FromCode(trimmed) is { } language ? Of(language) : null;
     }
 
+    // 設計判断: DEC-DIC-022, DEC-DIC-028
+    /// <summary>訳した結果が日本語か（Mac 版の TranslationLanguage.outputsJapanese と同じ）</summary>
+    public bool OutputsJapanese => this == Japanese;
+
+    // 設計判断: DEC-DIC-023, DEC-DIC-028
+    /// <summary>
+    /// 共通の追加ルールを使うか。追加ルールは話す人の言語の文体向けに書くもの（日本語の利用者なら日本語）なので、
+    /// 和訳で、しかもプロンプトの言語が日本語のときだけ使う（韓国語で話す人の追加ルールを、日本語の出力には付けない）。
+    /// Mac 版の TranslationLanguage.keepsExtraRules と同じ決まり（両方を直す）
+    /// </summary>
+    public bool KeepsExtraRules => OutputsJapanese && PromptLanguage.Current == PromptLanguage.Ja;
+
     // 設計判断: DEC-DIC-150
     /// <summary>この言語の名前を、言語 in で書いたもの（プロンプトの JSON の languageName.&lt;コード&gt;）</summary>
     public string NameIn(PromptLanguage @in) => Prompts.Text("languageName." + Code, @in);

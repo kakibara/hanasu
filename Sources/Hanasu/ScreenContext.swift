@@ -86,10 +86,14 @@ extension ScreenContext {
     /// 英訳は英語向けの screen.translation、ほかの言語への翻訳は訳す先の言語名を埋めた screen.translationOther
     // 設計判断: DEC-DIC-186
     /// スクリーンショットの文字（<screen_ocr>）を渡すときは、その注意（screen.ocr）を後ろに足す。AX の文脈の注意は今までどおり
-    static func instruction(for context: ScreenContext?, translation: TranslationLanguage?) -> String {
+    /// 出力が日本語（和訳・整形の「日本語に統一」）なら、整形の指示は日本語の文面（ja.json）にする（DEC-DIC-028）
+    static func instruction(for context: ScreenContext?, translation: TranslationLanguage?, japaneseOutput: Bool = false) -> String {
         let ocr = context?.ocrBlock() != nil ? ocrInstruction : ""
         guard context?.promptBlock() != nil else { return ocr }
-        guard let translation, !translation.outputsJapanese else { return refineInstruction + ocr }
+        guard let translation, !translation.outputsJapanese else {
+            let japanese = translation?.outputsJapanese ?? japaneseOutput
+            return refineInstruction(language: japanese ? .ja : .current) + ocr
+        }
         return (translation == .english ? translationInstruction : otherTranslationInstruction(to: translation)) + ocr
     }
 
@@ -100,8 +104,9 @@ extension ScreenContext {
 
     // 要件: REQ-COM-061
     /// 文面は Resources/Prompts/<言語>.json の screen.*
-    static var refineInstruction: String {
-        "\n\n" + Prompts.text("screen.title") + "\n" + Prompts.text("screen.common") + "\n" + Prompts.text("screen.refine")
+    static func refineInstruction(language: PromptLanguage = .current) -> String {
+        "\n\n" + Prompts.text("screen.title", language: language) + "\n" + Prompts.text("screen.common", language: language)
+            + "\n" + Prompts.text("screen.refine", language: language)
     }
 
     static var translationInstruction: String {
@@ -242,7 +247,7 @@ enum ScreenContextReader {
 
         readText(of: focused, into: &context, maxChars: maxChars)
         if context.textBefore == nil, context.textAfter == nil {
-            context.notes.append(tr("入力欄の文章を取れませんでした（%@）", "\(context.focusedRole ?? "役割不明")"))
+            context.notes.append(tr("入力欄の文章を取れませんでした（%@）", "\(context.focusedRole ?? tr("役割不明"))"))
         }
         return context
     }

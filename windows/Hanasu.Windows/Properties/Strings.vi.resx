@@ -790,7 +790,7 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
     <value>Quy tắc chỉnh sửa bổ sung</value>
   </data>
   <data name="Settings_ExtraRulesNote" xml:space="preserve">
-    <value>Các quy tắc được chuyển cho AI (Gemini, Claude) khi chỉnh sửa (ví dụ: "dùng giọng văn trang trọng"). Không dùng khi dịch sang tiếng Anh (có dùng khi dịch sang tiếng Nhật).</value>
+    <value>Các quy tắc được chuyển cho AI (Gemini, Claude) khi chỉnh sửa (ví dụ: "dùng giọng văn trang trọng"). Không dùng khi dịch (trừ khi dịch sang tiếng Nhật lúc ngôn ngữ chép lời là tiếng Nhật).</value>
   </data>
   <data name="Settings_DictionaryHelp" xml:space="preserve">
     <value>Mỗi dòng một mục. Một từ đứng riêng cho AI biết cách viết từ đó. "nghe được =&gt; cách viết" thay thế phần được nhận dạng bằng cách viết đó (ví dụ: stóc mác =&gt; Stockmark; tách nhiều từ bên trái bằng ","). Dòng bắt đầu bằng "#" là chú thích.</value>
@@ -1475,5 +1475,8 @@ Mở trang phát hành trong trình duyệt?</value>
   </data>
   <data name="MeetingAudio_DeleteFailed" xml:space="preserve">
     <value>Không thể xóa hết bản ghi âm của {0} cuộc họp. Các tệp còn lại vẫn được giữ nguyên.</value>
+  </data>
+  <data name="Settings_LocalModelLicense" xml:space="preserve">
+    <value>{0} ({1})</value>
   </data>
 </root>

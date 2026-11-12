@@ -11,8 +11,16 @@ struct TranscriptionEngineSettingsSection: View {
     private var engines: [TranscriptionEngine] { [settings.dictationEngine, settings.meetingEngine] }
 
     // 要件: REQ-COM-004
-    /// 言語の候補。保存されている言語は読み込むときに一覧のものへ寄せてある（`AppSettings.nearestTranscriptionLocale`）
-    private var languageOptions: [String] { AppSettings.transcriptionLocaleIdentifiers }
+    /// 言語の候補。保存されている言語は読み込むときに一覧のものへ寄せてある（`AppSettings.nearestTranscriptionLocale`）。
+    /// 言語コードが同じ項目がなくそのまま使っている言語（ロシア語など）と、システムの言語も並べる
+    /// （一覧にない値は Picker に出ず、選んでいる言語が空に見え、ほかの言語に変えると戻せなくなるため）
+    private var languageOptions: [String] {
+        var options = AppSettings.transcriptionLocaleIdentifiers
+        for id in [settings.localeIdentifier, AppSettings.systemLocaleIdentifier] where !id.isEmpty && !options.contains(id) {
+            options.append(id)
+        }
+        return options
+    }
 
     var body: some View {
         Section {
