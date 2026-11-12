@@ -202,7 +202,7 @@ private struct GeneralTab: View {
             PasteFallbackSettingsSection()
             PasteUnconfirmedSettingsSection()
             // 要件: REQ-COM-040
-            // アイコンを出す場所（メニューバー / Dock / 両方。AppPresence.swift）
+            // アイコンを出す場所（Dock だけ / メニューバーと Dock の両方。AppPresence.swift）
             AppPresenceSettingsSection()
             Section(tr("その他")) {
                 Toggle(tr("開始・終了の効果音を鳴らす"), isOn: $settings.playSounds)

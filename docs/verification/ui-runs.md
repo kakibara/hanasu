@@ -217,3 +217,16 @@ AI チャット・会議への質問のモデルを議事録と分けて選び�
 | UX-188 | en | OK | 「Transcription AI」「Transcription Language」「AI After Transcription」「Dictation Refinement」「Minutes」が切れない |
 
 - Windows: `dotnet build Hanasu.Windows/Hanasu.Windows.csproj -p:EnableWindowsTargeting=true`（Mac の上）で XAML ごとビルドが通った。画面の見た目と出し分けは、まだ Windows の実機で見ていない（UX-187 の Windows は手）。
+
+## 12. 2026-11-12 Dock のアイコンを押しても設定画面を出さない・「メニューバーだけ」をなくす（a4ed717 の上の作業中の変更、macOS 26.6.2）
+
+- 描いたもの: `.build/debug/Hanasu --render-presence-settings`（ja・en・de。`--ui-language`）、`--render-onboarding --page tips`（ja・en。アイコンの Tips はスクロールの下で写らない）。読み替えは `.build/debug/Hanasu --presence-migration`（6 件すべて OK）。
+- 判定: OK 3・NG 0
+
+| ID | 言語 | 判定 | メモ |
+| --- | --- | --- | --- |
+| UX-078 | ja | OK | 選択肢は「Dock だけ」「メニューバーと Dock の両方」の 2 つ。説明に「選ぶとすぐ切り替わります」と設定画面の開き方がある（2026-11-08 の NG が直った） |
+| UX-078 | en | OK | 「Dock Only」「Menu Bar and Dock」と 3 行の説明が切れない |
+| UX-078 | de | OK | 4 行の説明が切れない |
+
+- UX-187（操作）は、まだ実機で見ていない（Dock・Finder・Spotlight からの開き直し、最小化したウインドウが戻るか、前の版の `menuBar` からの移り替わり）。

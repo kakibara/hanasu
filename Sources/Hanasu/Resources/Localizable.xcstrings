@@ -5102,7 +5102,7 @@
       }
     },
     "%@して入力を開始　%@" : {
-      "comment" : "AppDelegate.swift:210",
+      "comment" : "AppDelegate.swift:199",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -13568,7 +13568,7 @@
       }
     },
     "Dock だけ" : {
-      "comment" : "AppPresence.swift:16",
+      "comment" : "AppPresence.swift:15",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -13665,6 +13665,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "僅 Dock"
+          }
+        }
+      }
+    },
+    "Dock だけか、メニューバーと Dock の両方かを選べます（設定 →「一般」→「アイコンの表示」）。" : {
+      "comment" : "Onboarding.swift:662",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختر Dock فقط، أو شريط القائمة وDock معًا (الإعدادات ← عام ← عرض الأيقونة)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle „Nur Dock“ oder „Menüleiste und Dock“ (Einstellungen → Allgemein → Symbolanzeige)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Dock only, or both the menu bar and the Dock (Settings → General → Icon Display)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige solo en el Dock, o en la barra de menús y en el Dock (Ajustes → General → Mostrar icono)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez Dock uniquement, ou barre des menus et Dock (Réglages → Général → Affichage de l’icône)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सिर्फ़ Dock या मेनू बार और Dock दोनों में से चुनें (सेटिंग्ज़ → सामान्य → आइकन का डिस्प्ले)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih hanya Dock, atau bar menu dan Dock (Pengaturan → Umum → Tampilan ikon)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli solo nel Dock oppure nella barra dei menu e nel Dock (Impostazioni → Generali → Mostra icona)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock만 또는 메뉴 막대와 Dock 모두 중에서 고를 수 있습니다(설정 → 일반 → 아이콘 표시)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz tylko Dock albo pasek menu i Dock (Ustawienia → Ogólne → Wyświetlanie ikony)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolha só no Dock ou na barra de menus e no Dock (Ajustes → Geral → Exibição do ícone)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите «Только Dock» или «Строка меню и Dock» (Настройки → Основные → Отображение значка)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yalnızca Dock'u ya da hem menü çubuğunu hem Dock'u seçebilirsiniz (Ayarlar → Genel → Simge görünümü)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chọn chỉ Dock, hoặc cả thanh menu và Dock (Cài đặt → Chung → Hiển thị biểu tượng)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可以选择仅程序坞，或菜单栏和程序坞（设置 →“通用”→“图标显示”）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可以選擇僅 Dock，或選單列和 Dock（設定 →「一般」→「圖像顯示」）。"
+          }
+        }
+      }
+    },
+    "Dock のアイコンはいつも出ます。選ぶとすぐ切り替わります。「Dock だけ」では、Dock のアイコンを右クリックするとメニューバーと同じメニューが出て、録音中はアイコンに ● が付きます。設定画面は、メニューバーのアイコンか Dock のアイコンを右クリックしたメニューの「設定…」から開きます。" : {
+      "comment" : "AppPresence.swift:65",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تظهر أيقونة Dock دائمًا. يُطبَّق اختيارك فورًا. في وضع «Dock فقط»، انقر بزر الماوس الأيمن على أيقونة Dock لتظهر القائمة نفسها الموجودة في شريط القائمة، وتظهر علامة ● على الأيقونة أثناء التسجيل. لفتح الإعدادات، اختر «الإعدادات…» من أيقونة شريط القائمة أو من قائمة النقر بزر الماوس الأيمن على أيقونة Dock."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Dock-Symbol wird immer angezeigt. Die Auswahl wirkt sofort. Bei „Nur Dock“ öffnet ein Rechtsklick auf das Dock-Symbol dasselbe Menü wie in der Menüleiste, und während der Aufnahme trägt das Symbol einen ●. Die Einstellungen öffnest du über „Einstellungen …“ im Menü des Menüleistensymbols oder im Rechtsklickmenü des Dock-Symbols."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Dock icon is always shown. Changes take effect immediately. With “Dock Only”, right-click the Dock icon to get the same menu as the menu bar, and the icon shows a ● while recording. To open Settings, choose “Settings…” from the menu bar icon or from the Dock icon’s right-click menu."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El icono del Dock se muestra siempre. El cambio se aplica al momento. Con «Solo en el Dock», al hacer clic derecho en el icono del Dock aparece el mismo menú que en la barra de menús, y el icono muestra un ● mientras se graba. Para abrir los ajustes, elige «Ajustes…» en el icono de la barra de menús o en el menú de clic derecho del icono del Dock."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’icône du Dock est toujours affichée. Le changement s’applique immédiatement. En mode « Dock uniquement », un clic droit sur l’icône du Dock affiche le même menu que la barre des menus, et l’icône porte un ● pendant l’enregistrement. Pour ouvrir les réglages, choisissez « Réglages… » dans le menu de l’icône de la barre des menus ou dans le menu contextuel de l’icône du Dock."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock में आइकन हमेशा दिखता है। चुनते ही बदलाव लागू हो जाता है। “सिर्फ़ Dock” में Dock आइकन पर राइट-क्लिक करने से मेनू बार वाला ही मेनू खुलता है, और रिकॉर्डिंग के दौरान आइकन पर ● दिखता है। सेटिंग्ज़ खोलने के लिए मेनू बार आइकन के मेनू या Dock आइकन के राइट-क्लिक मेनू में “सेटिंग्ज़…” चुनें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikon Dock selalu ditampilkan. Pilihan langsung berlaku. Pada “Hanya Dock”, klik kanan ikon Dock untuk membuka menu yang sama dengan bar menu, dan ikon diberi tanda ● selama merekam. Untuk membuka pengaturan, pilih “Pengaturan…” dari ikon bar menu atau dari menu klik kanan ikon Dock."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L'icona nel Dock è sempre visibile. La scelta ha effetto subito. Con «Solo nel Dock», facendo clic destro sull'icona del Dock compare lo stesso menu della barra dei menu, e durante la registrazione l'icona mostra un ●. Per aprire le impostazioni, scegli «Impostazioni…» dall'icona nella barra dei menu o dal menu del clic destro sull'icona del Dock."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock 아이콘은 항상 표시됩니다. 고르면 바로 바뀝니다. 'Dock만'에서는 Dock 아이콘을 오른쪽 클릭하면 메뉴 막대와 같은 메뉴가 나오고, 녹음 중에는 아이콘에 ●가 붙습니다. 설정은 메뉴 막대 아이콘이나 Dock 아이콘의 오른쪽 클릭 메뉴에서 '설정…'을 골라 엽니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikona w Docku jest zawsze widoczna. Zmiana działa od razu. W trybie „Tylko Dock” kliknięcie prawym przyciskiem ikony w Docku otwiera to samo menu co na pasku menu, a podczas nagrywania ikona ma znak ●. Aby otworzyć ustawienia, wybierz „Ustawienia…” z ikony na pasku menu albo z menu otwieranego prawym przyciskiem na ikonie w Docku."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O ícone do Dock aparece sempre. A mudança vale na hora. Em “Só no Dock”, clique com o botão direito no ícone do Dock para abrir o mesmo menu da barra de menus, e o ícone mostra um ● durante a gravação. Para abrir os ajustes, escolha “Ajustes…” no ícone da barra de menus ou no menu do botão direito do ícone do Dock."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Значок в Dock показывается всегда. Выбор применяется сразу. В режиме «Только Dock» по правому щелчку на значке в Dock открывается то же меню, что и в строке меню, а во время записи на значке появляется ●. Чтобы открыть настройки, выберите «Настройки…» в меню значка в строке меню или в меню правого щелчка на значке в Dock."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock simgesi her zaman görünür. Seçim hemen uygulanır. “Yalnızca Dock” seçiliyken Dock simgesine sağ tıklayınca menü çubuğundakiyle aynı menü açılır ve kayıt sırasında simgede ● görünür. Ayarları açmak için menü çubuğu simgesinden ya da Dock simgesinin sağ tık menüsünden “Ayarlar…” öğesini seçin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biểu tượng trên Dock luôn hiển thị. Lựa chọn có hiệu lực ngay. Ở chế độ “Chỉ Dock”, nhấp chuột phải vào biểu tượng trên Dock sẽ mở menu giống thanh menu, và biểu tượng có dấu ● khi đang ghi âm. Để mở cài đặt, chọn “Cài đặt…” từ biểu tượng trên thanh menu hoặc từ menu chuột phải của biểu tượng trên Dock."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "程序坞中始终显示图标。选择后立即生效。选择“仅程序坞”时，右键点按程序坞图标会显示与菜单栏相同的菜单，录音时图标上会显示 ●。要打开设置，请在菜单栏图标或程序坞图标的右键菜单中选择“设置…”。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock 中一律會顯示圖像。選擇後立即生效。選擇「僅 Dock」時，在 Dock 圖像上按右鍵會出現與選單列相同的選單，錄音時圖像上會顯示 ●。若要打開設定，請從選單列圖像或 Dock 圖像的右鍵選單選擇「設定…」。"
           }
         }
       }
@@ -16526,7 +16730,7 @@
       }
     },
     "Hanasu について" : {
-      "comment" : "AppDelegate.swift:301",
+      "comment" : "AppDelegate.swift:291",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -16730,7 +16934,7 @@
       }
     },
     "Hanasu の使い方…" : {
-      "comment" : "AppDelegate.swift:249, AppDelegate.swift:306",
+      "comment" : "AppDelegate.swift:238, AppDelegate.swift:296",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17036,7 +17240,7 @@
       }
     },
     "Hanasu を終了" : {
-      "comment" : "AppDelegate.swift:254, AppDelegate.swift:314",
+      "comment" : "AppDelegate.swift:243, AppDelegate.swift:304",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17138,7 +17342,7 @@
       }
     },
     "Hanasu を隠す" : {
-      "comment" : "AppDelegate.swift:309",
+      "comment" : "AppDelegate.swift:299",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17240,7 +17444,7 @@
       }
     },
     "Hanasu 会議ノート" : {
-      "comment" : "AppDelegate.swift:367",
+      "comment" : "AppDelegate.swift:357",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -17444,7 +17648,7 @@
       }
     },
     "Hanasu 設定" : {
-      "comment" : "AppDelegate.swift:444",
+      "comment" : "AppDelegate.swift:434",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23253,108 +23457,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "按一下「開始」後，請在要輸入的位置按 %@ 並試著說話。"
-          }
-        }
-      }
-    },
-    "「メニューバーだけ」では Dock と ⌘Tab に出ません。「Dock だけ」では、Dock のアイコンを右クリックするとメニューバーと同じメニューが出て、録音中はアイコンに ● が付きます。どの場合も、Finder から Hanasu をもう一度開くと設定画面が出ます。" : {
-      "comment" : "AppPresence.swift:57",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "مع «شريط القائمة فقط» لا يظهر التطبيق في Dock ولا في ⌘Tab. ومع «Dock فقط»، يؤدي النقر بزر الماوس الأيمن على أيقونة Dock إلى إظهار القائمة نفسها الموجودة في شريط القائمة، وتظهر ● على الأيقونة أثناء التسجيل. في كل الحالات، فتح Hanasu مجددًا من Finder يعرض الإعدادات."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mit „Nur Menüleiste“ erscheint Hanasu weder im Dock noch bei ⌘Tab. Mit „Nur Dock“ öffnet ein Rechtsklick auf das Dock-Symbol dasselbe Menü wie in der Menüleiste, und während der Aufnahme zeigt das Symbol einen ●. In jedem Fall öffnen sich die Einstellungen, wenn du Hanasu erneut im Finder öffnest."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "With “Menu Bar Only”, Hanasu doesn't appear in the Dock or in ⌘Tab. With “Dock Only”, right-click the Dock icon to get the same menu as in the menu bar, and the icon shows a ● while recording. In either case, opening Hanasu again from the Finder shows Settings."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Con «Solo en la barra de menús», no aparece en el Dock ni en ⌘Tab. Con «Solo en el Dock», al hacer clic derecho en el icono del Dock aparece el mismo menú que en la barra de menús, y el icono muestra un ● mientras se graba. En cualquier caso, si vuelves a abrir Hanasu desde el Finder, se muestran los ajustes."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Avec « Barre des menus uniquement », Hanasu n’apparaît ni dans le Dock ni dans ⌘Tab. Avec « Dock uniquement », un clic droit sur l’icône du Dock affiche le même menu que dans la barre des menus, et l’icône affiche un ● pendant l’enregistrement. Dans tous les cas, rouvrir Hanasu depuis le Finder affiche les Réglages."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "“सिर्फ़ मेनू बार” में ऐप Dock और ⌘Tab में नहीं दिखता। “सिर्फ़ Dock” में, Dock आइकन पर राइट-क्लिक करने से मेनू बार वाला ही मेनू दिखता है, और रिकॉर्डिंग के दौरान आइकन पर ● दिखता है। हर स्थिति में, Finder से Hanasu को दोबारा खोलने पर सेटिंग्ज़ खुलती हैं।"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dengan “Hanya bar menu”, Hanasu tidak muncul di Dock maupun ⌘Tab. Dengan “Hanya Dock”, klik kanan ikon Dock untuk membuka menu yang sama dengan bar menu, dan ikon diberi tanda ● saat merekam. Dalam semua mode, membuka Hanasu lagi dari Finder akan menampilkan Pengaturan."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Con «Solo nella barra dei menu» non compare nel Dock né in ⌘Tab. Con «Solo nel Dock», facendo clic destro sull'icona del Dock compare lo stesso menu della barra dei menu, e durante la registrazione l'icona mostra un ●. In ogni caso, riaprendo Hanasu dal Finder compaiono le impostazioni."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "\"메뉴 막대만\"을 선택하면 Dock과 ⌘Tab에 나타나지 않습니다. \"Dock만\"을 선택하면 Dock 아이콘을 오른쪽 클릭했을 때 메뉴 막대와 같은 메뉴가 나오고, 녹음 중에는 아이콘에 ●가 붙습니다. 어느 경우든 Finder에서 Hanasu를 다시 열면 설정 화면이 나타납니다."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "W trybie „Tylko pasek menu” Hanasu nie pojawia się w Docku ani w ⌘Tab. W trybie „Tylko Dock” kliknięcie ikony w Docku prawym przyciskiem otwiera to samo menu co na pasku menu, a podczas nagrywania na ikonie pojawia się ●. W każdym trybie ponowne otwarcie Hanasu z Findera wyświetla ustawienia."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Com “Só na barra de menus”, ele não aparece no Dock nem no ⌘Tab. Com “Só no Dock”, ao clicar com o botão direito no ícone do Dock aparece o mesmo menu da barra de menus, e o ícone mostra um ● durante a gravação. Em qualquer caso, ao abrir o Hanasu novamente pelo Finder, os ajustes são exibidos."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "В режиме «Только строка меню» Hanasu не отображается в Dock и в ⌘Tab. В режиме «Только Dock» правый щелчок по значку в Dock открывает то же меню, что и в строке меню, а во время записи на значке появляется ●. В любом режиме повторный запуск Hanasu из Finder открывает настройки."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "“Yalnızca menü çubuğu” seçeneğinde Hanasu, Dock’ta ve ⌘Tab’de görünmez. “Yalnızca Dock” seçeneğinde Dock’taki simgeye sağ tıklayınca menü çubuğundakiyle aynı menü açılır ve kayıt sırasında simgede ● görünür. Her durumda, Hanasu’yu Finder’dan yeniden açmak ayarları gösterir."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Với “Chỉ thanh menu”, Hanasu không xuất hiện trên Dock và trong ⌘Tab. Với “Chỉ Dock”, nhấp chuột phải vào biểu tượng trên Dock sẽ hiện menu giống thanh menu, và biểu tượng có dấu ● khi đang ghi âm. Trong mọi trường hợp, mở lại Hanasu từ Finder sẽ hiện cửa sổ Cài đặt."
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择“仅菜单栏”时，不会出现在程序坞和 ⌘Tab 中。选择“仅程序坞”时，右键点按程序坞图标会显示与菜单栏相同的菜单，录音时图标上会显示 ●。无论哪种情况，从访达再次打开 Hanasu 都会显示设置窗口。"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選擇「僅選單列」時，不會出現在 Dock 和 ⌘Tab 中。選擇「僅 Dock」時，在 Dock 圖像上按右鍵會顯示與選單列相同的選單，錄音時圖像上會顯示 ●。無論哪種情況，從 Finder 再次打開 Hanasu 都會顯示設定視窗。"
           }
         }
       }
@@ -30296,7 +30398,7 @@
       }
     },
     "しまう" : {
-      "comment" : "AppDelegate.swift:335",
+      "comment" : "AppDelegate.swift:325",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31010,7 +31112,7 @@
       }
     },
     "すべてを表示" : {
-      "comment" : "AppDelegate.swift:312",
+      "comment" : "AppDelegate.swift:302",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -31112,7 +31214,7 @@
       }
     },
     "すべてを選択" : {
-      "comment" : "AppDelegate.swift:331",
+      "comment" : "AppDelegate.swift:321",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -32744,7 +32846,7 @@
       }
     },
     "ほかを隠す" : {
-      "comment" : "AppDelegate.swift:310",
+      "comment" : "AppDelegate.swift:300",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34376,7 +34478,7 @@
       }
     },
     "やり直す" : {
-      "comment" : "AppDelegate.swift:325",
+      "comment" : "AppDelegate.swift:315",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34580,7 +34682,7 @@
       }
     },
     "アイコンの表示" : {
-      "comment" : "AppPresence.swift:55",
+      "comment" : "AppPresence.swift:63",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34682,7 +34784,7 @@
       }
     },
     "アイコンを出す場所" : {
-      "comment" : "AppPresence.swift:50, Onboarding.swift:661",
+      "comment" : "AppPresence.swift:58, Onboarding.swift:661",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -36314,7 +36416,7 @@
       }
     },
     "アップデートを確認…" : {
-      "comment" : "AppDelegate.swift:251, AppDelegate.swift:303",
+      "comment" : "AppDelegate.swift:240, AppDelegate.swift:293",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37538,7 +37640,7 @@
       }
     },
     "ウインドウ" : {
-      "comment" : "AppDelegate.swift:334, AppDelegate.swift:337",
+      "comment" : "AppDelegate.swift:324, AppDelegate.swift:327",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39068,7 +39170,7 @@
       }
     },
     "カット" : {
-      "comment" : "AppDelegate.swift:328",
+      "comment" : "AppDelegate.swift:318",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40292,7 +40394,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:329, DictationHistoryWindow.swift:540, MeetingChatView.swift:522",
+      "comment" : "AppDelegate.swift:319, DictationHistoryWindow.swift:540, MeetingChatView.swift:522",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47024,7 +47126,7 @@
       }
     },
     "ペースト" : {
-      "comment" : "AppDelegate.swift:330",
+      "comment" : "AppDelegate.swift:320",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48553,110 +48655,8 @@
         }
       }
     },
-    "メニューバーだけ" : {
-      "comment" : "AppPresence.swift:15",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "شريط القائمة فقط"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nur Menüleiste"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Menu Bar Only"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Solo en la barra de menús"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Barre des menus uniquement"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "सिर्फ़ मेनू बार"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hanya bar menu"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Solo nella barra dei menu"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "메뉴 막대만"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tylko pasek menu"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Só na barra de menus"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Только строка меню"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yalnızca menü çubuğu"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Chỉ thanh menu"
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "仅菜单栏"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "僅選單列"
-          }
-        }
-      }
-    },
     "メニューバーと Dock の両方" : {
-      "comment" : "AppPresence.swift:17",
+      "comment" : "AppPresence.swift:16",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48855,108 +48855,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "所有功能都可以從選單列中的 Hanasu 圖像開始。錄音時圖像會變紅。"
-          }
-        }
-      }
-    },
-    "メニューバー・Dock・両方から選べます（設定 →「一般」→「アイコンの表示」）。" : {
-      "comment" : "Onboarding.swift:662",
-      "extractionState" : "manual",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "يمكنك الاختيار بين شريط القائمة أو Dock أو كليهما (الإعدادات ← «عام» ← «عرض الأيقونة»)."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wähle Menüleiste, Dock oder beides (Einstellungen → „Allgemein“ → „Symbolanzeige“)."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose the menu bar, the Dock, or both (Settings → “General” → “Icon Display”)."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Puedes elegir barra de menús, Dock o ambos (Ajustes → «General» → «Mostrar icono»)."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choisissez la barre des menus, le Dock ou les deux (Réglages → « Général » → « Affichage de l’icône »)."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "मेनू बार, Dock या दोनों में से चुन सकते हैं (सेटिंग्ज़ → “सामान्य” → “आइकन का डिस्प्ले”)।"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pilih bar menu, Dock, atau keduanya (Pengaturan → “Umum” → “Tampilan ikon”)."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Puoi scegliere barra dei menu, Dock o entrambi (Impostazioni → «Generali» → «Mostra icona»)."
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "메뉴 막대, Dock, 둘 다 중에서 선택할 수 있습니다(설정 → \"일반\" → \"아이콘 표시\")."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Do wyboru: pasek menu, Dock lub oba (Ustawienia → „Ogólne” → „Wyświetlanie ikony”)."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Escolha entre barra de menus, Dock ou ambos (Ajustes → “Geral” → “Exibição do ícone”)."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Можно выбрать строку меню, Dock или оба варианта (Настройки → «Основные» → «Отображение значка»)."
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Menü çubuğu, Dock veya her ikisi seçilebilir (Ayarlar → “Genel” → “Simge görünümü”)."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Có thể chọn thanh menu, Dock hoặc cả hai (Cài đặt → “Chung” → “Hiển thị biểu tượng”)."
-          }
-        },
-        "zh-CN" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "可以选择菜单栏、程序坞或两者（设置 →“通用”→“图标显示”）。"
-          }
-        },
-        "zh-TW" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "可以選擇選單列、Dock 或兩者（設定 →「一般」→「圖像顯示」）。"
           }
         }
       }
@@ -57020,7 +56918,7 @@
       }
     },
     "会議" : {
-      "comment" : "AppDelegate.swift:317, AppDelegate.swift:320, SettingsView.swift:18",
+      "comment" : "AppDelegate.swift:307, AppDelegate.swift:310, SettingsView.swift:18",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -58958,7 +58856,7 @@
       }
     },
     "会議の記録を停止" : {
-      "comment" : "AppDelegate.swift:287",
+      "comment" : "AppDelegate.swift:277",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59060,7 +58958,7 @@
       }
     },
     "会議の記録を停止（%@）" : {
-      "comment" : "AppDelegate.swift:225",
+      "comment" : "AppDelegate.swift:214",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59162,7 +59060,7 @@
       }
     },
     "会議の記録を準備中…" : {
-      "comment" : "AppDelegate.swift:222",
+      "comment" : "AppDelegate.swift:211",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59264,7 +59162,7 @@
       }
     },
     "会議の記録を開始" : {
-      "comment" : "AppDelegate.swift:221, AppDelegate.swift:287, MeetingWindow.swift:374",
+      "comment" : "AppDelegate.swift:210, AppDelegate.swift:277, MeetingWindow.swift:374",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60896,7 +60794,7 @@
       }
     },
     "会議ノートを開く" : {
-      "comment" : "AppDelegate.swift:291, AppDelegate.swift:319, SettingsView.swift:251",
+      "comment" : "AppDelegate.swift:281, AppDelegate.swift:309, SettingsView.swift:251",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60998,7 +60896,7 @@
       }
     },
     "会議ノートを開く…" : {
-      "comment" : "AppDelegate.swift:232",
+      "comment" : "AppDelegate.swift:221",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69260,7 +69158,7 @@
       }
     },
     "取り消す" : {
-      "comment" : "AppDelegate.swift:324, MeetingNotesViews.swift:65, MeetingNotesViews.swift:183",
+      "comment" : "AppDelegate.swift:314, MeetingNotesViews.swift:65, MeetingNotesViews.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72626,7 +72524,7 @@
       }
     },
     "履歴を開く…" : {
-      "comment" : "AppDelegate.swift:238",
+      "comment" : "AppDelegate.swift:227",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75992,7 +75890,7 @@
       }
     },
     "整形中…" : {
-      "comment" : "AppDelegate.swift:201",
+      "comment" : "AppDelegate.swift:190",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82622,7 +82520,7 @@
       }
     },
     "最近の結果" : {
-      "comment" : "AppDelegate.swift:235",
+      "comment" : "AppDelegate.swift:224",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92210,7 +92108,7 @@
       }
     },
     "編集" : {
-      "comment" : "AppDelegate.swift:323, AppDelegate.swift:332",
+      "comment" : "AppDelegate.swift:313, AppDelegate.swift:322",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94046,7 +93944,7 @@
       }
     },
     "自動入力: 有効（アクセシビリティ許可済み）" : {
-      "comment" : "AppDelegate.swift:242",
+      "comment" : "AppDelegate.swift:231",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -94148,7 +94046,7 @@
       }
     },
     "自動入力: 無効 — アクセシビリティを許可…" : {
-      "comment" : "AppDelegate.swift:242",
+      "comment" : "AppDelegate.swift:231",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96698,7 +96596,7 @@
       }
     },
     "記録の開始／停止" : {
-      "comment" : "AppDelegate.swift:318, Onboarding.swift:580, SettingsView.swift:263",
+      "comment" : "AppDelegate.swift:308, Onboarding.swift:580, SettingsView.swift:263",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98942,7 +98840,7 @@
       }
     },
     "設定…" : {
-      "comment" : "AppDelegate.swift:252, AppDelegate.swift:292, AppDelegate.swift:307",
+      "comment" : "AppDelegate.swift:241, AppDelegate.swift:282, AppDelegate.swift:297",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99146,7 +99044,7 @@
       }
     },
     "設定の「会議」で別のキーを選んでください。" : {
-      "comment" : "AppDelegate.swift:402",
+      "comment" : "AppDelegate.swift:392",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -112712,7 +112610,7 @@
       }
     },
     "録音を停止して入力" : {
-      "comment" : "AppDelegate.swift:200",
+      "comment" : "AppDelegate.swift:189",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -113936,7 +113834,7 @@
       }
     },
     "録音を開始" : {
-      "comment" : "AppDelegate.swift:199",
+      "comment" : "AppDelegate.swift:188",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -114650,7 +114548,7 @@
       }
     },
     "閉じる" : {
-      "comment" : "AppDelegate.swift:336, AppUpdate.swift:797, AppUpdate.swift:1026",
+      "comment" : "AppDelegate.swift:326, AppUpdate.swift:797, AppUpdate.swift:1026",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {

@@ -179,17 +179,18 @@
 - 実装の場所: `LocalModelDownloadPrompt`、`LocalModelDownloadView`、`DictationController.finishDictation`、`MeetingRecorder`（議事録の作成と作り直し）、`DictationHistoryStore.retry`
 - 確かめ方: `.build/debug/Hanasu --render-local-model-download /tmp/download.png`（進み具合のウインドウの見た目）。ダイアログ・ダウンロード・続けて整形することは実機で確かめる（`HANASU_MODELS_DIR` を空のフォルダにして起動し、音声入力の AI をローカルにして録音する）
 
-### REQ-COM-040 アイコンを出す場所を、メニューバー / Dock / 両方から選べる（Mac）
-- 内容: Moom のように、Hanasu のアイコンを出す場所を「メニューバーだけ」「Dock だけ」「メニューバーと Dock の両方」から設定で選べる。既定は両方（今までの出し方）。
+### REQ-COM-040 メニューバーにもアイコンを出すかを選べる（Mac）
+- 内容: Hanasu のアイコンは Dock にいつも出す（⌘Tab の一覧にもいつも出る）。メニューバーにも出すか（「メニューバーと Dock の両方」）、出さないか（「Dock だけ」）を設定で選べる。既定は両方。もとは Moom のように「メニューバーだけ」も選べたが、2026-11-12 になくした（開き直しで設定画面を出さなくしたので、メニューバーのアイコンがノッチなどで隠れると、設定・終了・出し方の切り替えに辿り着けなくなるため。DEC-COM-009）。
 - 受け入れ条件:
-  - 設定の「一般」→「アイコンの表示」で選ぶと、アプリを起動し直さずにすぐ切り替わる。次に起動したときも、選んだ出し方で始まる（起動の途中で Dock のアイコンが一瞬出たりしない）。
-  - 「メニューバーだけ」: Dock にアイコンが出ず、⌘Tab の一覧にも出ない。メニューバーのアイコンとメニューは今までどおり。
+  - 設定の「一般」→「アイコンの表示」で「Dock だけ」「メニューバーと Dock の両方」の 2 つから選ぶと、アプリを起動し直さずにすぐ切り替わる（欄の説明にもそう書く）。次に起動したときも、選んだ出し方で始まる。
   - 「Dock だけ」: メニューバーにアイコンが出ない。Dock のアイコンを右クリックすると、メニューバーのメニューと同じ操作（録音・英訳・選択を声で編集・会議の記録・会議ノート・最近の結果・履歴・設定）ができる。録音中・会議の記録中は Dock のアイコンに印が付く。
-  - どの出し方でも、Finder や Launchpad からもう一度開くと設定画面が前に出る（DEC-COM-009）。
-- 出典: ユーザーの依頼（2026-11-04「hanasuはmoomと同様にステータスバーモードと、Dockモード、その両方を設定で選べるようにしてください」）
+  - 前の版で「メニューバーだけ」を選んでいた人は、新しい版の起動で「メニューバーと Dock の両方」になる（Dock と ⌘Tab に Hanasu が出るようになる。メニューバーのアイコンは今までどおり）。
+  - どの出し方でも、動いている Hanasu の Dock のアイコンを押したり、Finder・Launchpad・Spotlight からもう一度開いたりしても、設定画面は開かない。開いているウインドウがあれば前に出る（DEC-COM-009）。
+  - 設定画面を開く入口: 「Dock だけ」では Dock の右クリックのメニューと、アプリのメニュー（Hanasu が前にあるとき。⌘,）の「設定…」。「両方」では、それに加えてメニューバーのメニューの「設定…」。
+- 出典: ユーザーの依頼（2026-11-04「hanasuはmoomと同様にステータスバーモードと、Dockモード、その両方を設定で選べるようにしてください」）。「メニューバーだけ」をなくし、開き直しで設定画面を出さなくしたのは、2026-11-12 の依頼「Dockアイコンを押したら設定画面が自動で出てくるというところをやめたい」と、同日の答え「メニューバーのみモードをなくすことにする」（同日に計画を了承）
 - 対象: Mac
-- 実装の場所: `AppPresence`、`AppPresenceSettings`、`AppPresenceSettingsSection`、`AppDelegate.applyPresence`、`AppDelegate.applicationDockMenu`
-- 確かめ方: `.build/debug/Hanasu --render-presence-settings /tmp/presence.png`（設定の欄）。切り替えは実機で確かめる（`.app` を起動して 3 つを順に選び、Dock・メニューバー・⌘Tab・Dock のメニューを見る）
+- 実装の場所: `AppPresence`、`AppPresenceSettings`、`AppPresenceSettingsSection`、`AppDelegate.applyPresence`、`AppDelegate.applicationDockMenu`、`AppDelegate.applicationShouldHandleReopen`
+- 確かめ方: `.build/debug/Hanasu --render-presence-settings /tmp/presence.png`（設定の欄）、`.build/debug/Hanasu --presence-migration`（保存値の読み替え）。切り替えと開き直しは実機で確かめる（UX-078・UX-187）
 
 ### REQ-COM-050 初回起動時に、整形などに使う既定の AI をその場で選ばせる。おすすめ（既定）は Gemma 4 E4B で、チュートリアルの中で選んでダウンロードする（Mac）
 - 内容: Hanasu を初めて起動したとき、オンボーディングの中で、整形・翻訳・議事録などに使う既定の AI を選ばせる。おすすめ（既定）は、この Mac の中で動く Gemma 4 E4B。Gemma はモデルのダウンロードが要るので、黙って最初から選んでおくのではなく、チュートリアルの中でユーザーが Gemma を選び、その場でダウンロードする。ほかの AI（Gemini / Claude / Apple）も選べ、その AI を使う準備（API キー・サービスアカウント）もその画面でできる。選んだ AI は設定に保存する。
@@ -315,19 +316,19 @@
 - 対象: Mac
 - 実装の場所: `GeminiClient.generate`
 
-### DEC-COM-008 メニューバーに常駐し、既定では Dock にも出す
-- 決めたこと: メニューバーにアイコンを置いて常駐する。Dock には、既定では出す（`Info.plist` に `LSUIElement` を置かず、起動時に `NSApp.setActivationPolicy` で決める）。出す場所は設定で変えられる（REQ-COM-040、DEC-COM-080）。対象は macOS 26 (Tahoe) 以降の Apple Silicon。
-- 理由: どのアプリの上でも使う道具なので、ウインドウを持たずに待つ。SpeechAnalyzer が macOS 26 の API。初版の文書は「`LSUIElement = true` で Dock に出さない」だったが、コードは初版から `.regular` で Dock にも出し、Dock のメニュー（`applicationDockMenu`）も持っていた。REQ-COM-040 の既定（両方）で、その出し方を引き継いだ。
-- 決めた場面: 初版（a787da8）。文書とコードの食い違いを直し、出す場所を選べるようにしたのはこの PR（REQ-COM-040）
+### DEC-COM-008 メニューバーに常駐し、Dock にもいつも出す
+- 決めたこと: メニューバーにアイコンを置いて常駐する。Dock にもいつも出す（`Info.plist` に `LSUIElement` を置かず、起動時に `NSApp.setActivationPolicy(.regular)` にする）。メニューバーにも出すかは設定で変えられる（REQ-COM-040、DEC-COM-080）。対象は macOS 26 (Tahoe) 以降の Apple Silicon。
+- 理由: どのアプリの上でも使う道具なので、ウインドウを持たずに待つ。SpeechAnalyzer が macOS 26 の API。初版の文書は「`LSUIElement = true` で Dock に出さない」だったが、コードは初版から `.regular` で Dock にも出し、Dock のメニュー（`applicationDockMenu`）も持っていた。REQ-COM-040 の既定（両方）で、その出し方を引き継いだ。2026-11-12 に「メニューバーだけ」をなくし、Dock にはいつも出すことにした（REQ-COM-040）。
+- 決めた場面: 初版（a787da8）。文書とコードの食い違いを直し、出す場所を選べるようにしたのは REQ-COM-040 の PR。Dock にいつも出すことにしたのは 2026-11-12 の依頼の PR
 - 関係する要件: REQ-DIC-001, REQ-COM-040
 - 対象: Mac
 - 実装の場所: `main.swift`（起動時の `setActivationPolicy`）、`AppDelegate.applicationDidFinishLaunching`
 
-### DEC-COM-009 起動では設定画面を開かずにアクセシビリティの許可を求め、Dock などで開き直すと設定画面を出す
-- 決めたこと: 起動しても設定画面は開かない。起動したら、⌘V の送信に要るアクセシビリティの許可を求める。動いている Hanasu を Dock・Finder・Launchpad で開き直したとき（`applicationShouldHandleReopen`）は、設定画面を前に出す。起動のしかた（手で起動・ログイン時の起動・アップデートのあとの開き直し）と、アイコンの出し方（REQ-COM-040 の 3 つ）で分けない。オンボーディングを出す初回の起動では、許可も求めずにオンボーディングを出す（DEC-COM-093）。
-- 理由: 起動のたびに設定画面が前に出ると、ログイン時の起動やアップデートのあとの開き直しのたびにウインドウが出て邪魔になる。設定には、Dock のアイコンのクリック・Dock の右クリックのメニュー・メニューバーのメニュー・Finder や Launchpad からの開き直しで辿り着ける。代わりに次のことを受け入れた: 止まっている Hanasu を Dock のアイコンで起動したときは、もう一度押すまで設定画面が出ない。「メニューバーだけ」で、メニューバーのアイコンがノッチなどで隠れているときは、起動しても何も見えない（Finder からもう一度開けば設定画面が出る）。アップデートのあとの開き直しも、見て分かる変化がない。もとは「メニューバーのアイコンが隠れていても設定に辿り着けるよう、起動のたびに開く」としていた（初版のコード）。
-- 決めた場面: 初版（a787da8）のコード。起動で開くのをやめたのは、ユーザーの依頼（2026-11-11「hanasu dockアイコンをクリックすると設定画面が表示されるが、自動では開かないようにして」。どの起動でも、どの出し方でも開かないことを確かめて合意）
-- 関係する要件: REQ-DIC-004
+### DEC-COM-009 起動でも開き直しでも設定画面を開かず、起動ではアクセシビリティの許可を求める
+- 決めたこと: 起動しても設定画面は開かない。起動したら、⌘V の送信に要るアクセシビリティの許可を求める。動いている Hanasu を Dock・Finder・Launchpad・Spotlight で開き直したとき（`applicationShouldHandleReopen`）も設定画面は開かず、`true` を返して AppKit の既定の動き（アプリを前に出す）に任せる。起動のしかた（手で起動・ログイン時の起動・アップデートのあとの開き直し）と、アイコンの出し方（REQ-COM-040）で分けない。オンボーディングを出す初回の起動では、許可も求めずにオンボーディングを出し、その表示中に開き直したらオンボーディングを前に出す（DEC-COM-093）。
+- 理由: 起動のたびに設定画面が前に出ると、ログイン時の起動やアップデートのあとの開き直しのたびにウインドウが出て邪魔になる。Dock のアイコンを押すたびに出るのも邪魔（2026-11-12 の依頼）。Dock のアイコンはいつも出す（REQ-COM-040）ので、設定には Dock の右クリックのメニューとアプリのメニュー（⌘,）、両方のときはメニューバーのメニューでも、必ず辿り着ける。Dock のクリックと Finder などからの開き直しは、どちらも `applicationShouldHandleReopen` に来る（送り手で見分けられるかは確かめていない）。どこから開き直しても出さないのは、ユーザーの選択（2026-11-12）。代わりに次のことを受け入れた: 起動しても、Dock のアイコンを押しても、何も開いていなければ見て分かる変化がない（動いているかは Dock の点とメニューバーのアイコンで分かる）。設定へは右クリックのメニューか ⌘, で行く。もとは「起動のたびに開く」（初版のコード）、次に「起動では開かず、Dock・Finder で開き直すと設定画面を出す」（2026-11-11）としていた。
+- 決めた場面: 初版（a787da8）のコード。起動で開くのをやめたのは、ユーザーの依頼（2026-11-11「hanasu dockアイコンをクリックすると設定画面が表示されるが、自動では開かないようにして」。どの起動でも、どの出し方でも開かないことを確かめて合意）。開き直しでも開かないことにしたのは、ユーザーの依頼（2026-11-12「Dockアイコンを押したら設定画面が自動で出てくるというところをやめたい」。同日に計画を了承）
+- 関係する要件: REQ-DIC-004, REQ-COM-040
 - 対象: Mac
 - 実装の場所: `AppDelegate.applicationDidFinishLaunching`、`AppDelegate.applicationShouldHandleReopen`
 
@@ -783,13 +784,13 @@
 - 対象: Mac（見積もりの決まりは Windows の `DictionarySuggester.EstimateTokens` も同じ）
 - 実装の場所: `AppleFMClient.contextLength`・`estimateTokens`、`LongInputFitter`。Windows は `windows/Hanasu.Core/Text/DictionarySuggester.cs`
 
-### DEC-COM-080 Dock は活性化ポリシー、メニューバーは NSStatusItem.isVisible で出し入れする
-- 決めたこと: 設定は `AppPresenceSettings`（UserDefaults の `appPresence`）に `menuBar` / `dock` / `both` で持ち、既定は `both`。Dock に出すときは `.regular`、出さないときは `.accessory`（Dock・⌘Tab に出ないが、ウインドウとメニューの ⌘C などは使える）。メニューバーのアイコンは作ったまま `isVisible` で隠す。設定を変えたら、その場で両方を当て直し、ポリシーを変えたあとは Hanasu を前に出し直して設定画面を前面に戻す。起動時は `app.run()` の前にポリシーを決める。
-- 理由: ポリシーは実行中に変えられるので、起動し直さずに切り替えられる。`.accessory` に変えた直後はアプリが後ろに回り、設定画面が他のアプリの裏に隠れるので、前に出し直す。アイコンを消して作り直すより、隠すほうが状態（録音中のアイコン）を持ち続けられる。`.regular` で起動してから変えると Dock のアイコンが一瞬出るので、起動前に決める。3 つの選択肢にして、どちらも出ない状態を作れないようにした（Hanasu に戻る道がなくなる）。
-- 決めた場面: この PR（REQ-COM-040）
+### DEC-COM-080 メニューバーのアイコンは NSStatusItem.isVisible で出し入れし、活性化ポリシーはいつも .regular にする
+- 決めたこと: 設定は `AppPresenceSettings`（UserDefaults の `appPresence`）に `dock` / `both` で持ち、既定は `both`。保存されている値が `dock` / `both` 以外（前の版の `menuBar`・分からない値）なら `both` として読み、値が保存されていてそれが `dock` / `both` 以外のときだけ `both` を書き戻す（読み替えは `AppPresence.resolve`）。保存されていないときは書かない。活性化ポリシーはいつも `.regular`（起動時、`app.run()` の前に `main.swift` で決める。`.accessory` は使わない）。メニューバーのアイコンは作ったまま `isVisible` で隠す。設定を変えたら、その場で `isVisible` を当て直す。設定の欄は 2 つのラジオボタン（トグルにしない）。
+- 理由: アイコンを消して作り直すより、隠すほうが状態（録音中のアイコン）を持ち続けられる。どちらも出ない状態を作れないようにする（Hanasu に戻る道がなくなる）。「メニューバーだけ」をなくした（REQ-COM-040）ので、Dock を隠す（`.accessory`）道はなくした。`menuBar` を `both` に読み替えるのは、その人が見ていたメニューバーのアイコンを消さないため。保存されていないときに書き戻すと、新しく入れた人が「以前から使っている人」と見なされてオンボーディングが出なくなる（DEC-COM-090）。ラジオボタンのままにしたのは、見た目と訳の変更を小さくするため。もとは `menuBar` / `dock` / `both` の 3 つで、Dock の出し入れを活性化ポリシー（`.regular` / `.accessory`）で切り替えていた。
+- 決めた場面: REQ-COM-040 の PR。`menuBar` をなくし、ポリシーを `.regular` に固定したのは 2026-11-12 の依頼の PR
 - 関係する要件: REQ-COM-040
 - 対象: Mac
-- 実装の場所: `AppPresence`、`AppPresenceSettings`、`AppDelegate.applyPresence`、`main.swift`
+- 実装の場所: `AppPresence`、`AppPresence.resolve`、`AppPresenceSettings`、`AppDelegate.applyPresence`、`main.swift`
 
 ### DEC-COM-081 「Dock だけ」のときは、Dock のメニューをメニューバーのメニューと同じにし、録音中は Dock のアイコンに印を付ける
 - 決めたこと: メニューバーのアイコンを出さないときは、Dock のメニューを、メニューバーのメニューと同じ作り（`AppDelegate.populateMenu`）で出す（「Hanasu を終了」は Dock に元からあるので除く）。音声入力の録音中・会議の記録中は、Dock のアイコンのバッジに「●」を出す。メニューバーにも出すとき（両方）は、Dock のメニューは今までどおり会議の操作と設定だけにし、バッジも出さない。
@@ -824,7 +825,7 @@
 - 実装の場所: `OnboardingPage`、`OnboardingAIChoice`、`OnboardingAIPage`、`OnboardingTipsPage`、`OnboardingModel.chooseDefaultAI`
 
 ### DEC-COM-093 初回の起動では、アクセシビリティの許可の代わりにオンボーディングを出す
-- 決めたこと: オンボーディングを出す起動では、起動時のアクセシビリティの許可のダイアログを出さない（DEC-COM-009 の例外）。許可は、オンボーディングの最後のページのボタンで求める。2 回目からの起動は DEC-COM-009 のまま（設定画面は開かずに許可を求める）。オンボーディングを出している間に Finder や Dock から開き直したときは、設定画面ではなくオンボーディングを前に出す。
+- 決めたこと: オンボーディングを出す起動では、起動時のアクセシビリティの許可のダイアログを出さない（DEC-COM-009 の例外）。許可は、オンボーディングの最後のページのボタンで求める。2 回目からの起動は DEC-COM-009 のまま（設定画面は開かずに許可を求める）。オンボーディングを出している間に Finder や Dock から開き直したときは、オンボーディングを前に出す。
 - 理由: システムの許可のダイアログ（2026-11-11 までは起動で開いていた設定画面も）がオンボーディングに重なると、どれを見ればよいか分からなくなる。許可が要る理由（自動入力に要る）を説明してから求めたほうが、許可してもらいやすい。許可しないまま閉じても、次の起動で今までどおり求める。
 - 決めた場面: オンボーディングを入れた PR（REQ-COM-051）
 - 関係する要件: REQ-COM-051, REQ-DIC-004

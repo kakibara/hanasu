@@ -659,7 +659,7 @@ struct OnboardingTipsPage: View {
                     tip("text.viewfinder", tr("画面の文脈を参考にできる"),
                         tr("設定 →「AI」でオンにすると、画面にある名前の表記に合わせて整えます（既定はオフ）。"))
                     tip("menubar.rectangle", tr("アイコンを出す場所"),
-                        tr("メニューバー・Dock・両方から選べます（設定 →「一般」→「アイコンの表示」）。"))
+                        tr("Dock だけか、メニューバーと Dock の両方かを選べます（設定 →「一般」→「アイコンの表示」）。"))
                 }
             }
             .formStyle(.grouped)

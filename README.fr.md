@@ -162,7 +162,7 @@ Sur Mac, le premier lancement ouvre une courte visite guidée. Elle vous permet 
 2. **Dictez.** Placez le curseur là où vous voulez le texte, appuyez sur le raccourci, parlez, puis appuyez à nouveau sur le raccourci.
 3. **Enregistrez une réunion.** Utilisez le menu de la barre des menus (Mac) ou de la zone de notification (Windows), ou le raccourci. Un casque aide à bien séparer les deux côtés.
 
-Sur Mac, vous pouvez afficher l'icône de Hanasu dans la barre des menus, dans le Dock, ou dans les deux (Réglages → Général).
+Sur Mac, l'icône de Hanasu est toujours dans le Dock, et vous pouvez aussi l'afficher dans la barre des menus (Réglages → Général). Cliquer sur l'icône du Dock n'ouvre pas les réglages : ouvrez-les depuis l'icône de la barre des menus ou le menu contextuel de l'icône du Dock.
 
 ### Raccourcis par défaut
 

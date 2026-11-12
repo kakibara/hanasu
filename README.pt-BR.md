@@ -162,7 +162,7 @@ No Mac, a primeira execução abre um breve tour guiado. Ele permite escolher a 
 2. **Dite.** Coloque o cursor onde quer o texto, pressione o atalho, fale e pressione o atalho de novo.
 3. **Grave uma reunião.** Use o menu da barra de menus (Mac) ou da bandeja (Windows), ou o atalho. Fones de ouvido ajudam a manter os dois lados separados.
 
-No Mac, você pode mostrar o ícone do Hanasu na barra de menus, no Dock ou em ambos (Ajustes → Geral).
+No Mac, o ícone do Hanasu fica sempre no Dock, e você também pode mostrá-lo na barra de menus (Ajustes → Geral). Clicar no ícone do Dock não abre os ajustes — abra-os pelo ícone da barra de menus ou pelo menu do botão direito do ícone do Dock.
 
 ### Atalhos padrão
 

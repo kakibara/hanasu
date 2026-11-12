@@ -162,7 +162,7 @@ En Mac, el primer inicio abre un breve recorrido guiado. Te permite elegir tu IA
 2. **Dicta.** Coloca el cursor donde quieras el texto, pulsa el atajo, habla y vuelve a pulsar el atajo.
 3. **Graba una reunión.** Usa el menú de la barra de menús (Mac) o de la bandeja (Windows), o el atajo. Los auriculares ayudan a mantener separados los dos lados.
 
-En Mac, puedes mostrar el icono de Hanasu en la barra de menús, en el Dock o en ambos (Ajustes → General).
+En Mac, el icono de Hanasu está siempre en el Dock y también puedes mostrarlo en la barra de menús (Ajustes → General). Hacer clic en el icono del Dock no abre los ajustes: ábrelos desde el icono de la barra de menús o desde el menú de clic derecho del icono del Dock.
 
 ### Atajos predeterminados
 

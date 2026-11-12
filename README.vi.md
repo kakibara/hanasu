@@ -162,7 +162,7 @@ Trên Mac, lần mở đầu tiên sẽ hiện một phần hướng dẫn ngắ
 2. **Đọc chính tả.** Đặt con trỏ ở nơi bạn muốn có văn bản, nhấn phím tắt, nói, rồi nhấn lại phím tắt.
 3. **Ghi âm cuộc họp.** Dùng menu trên thanh menu (Mac) hoặc khay hệ thống (Windows), hoặc dùng phím tắt. Đeo tai nghe sẽ giúp tách biệt âm thanh của hai phía.
 
-Trên Mac, bạn có thể hiện biểu tượng Hanasu trên thanh menu, trên Dock hoặc cả hai (Cài đặt → Chung).
+Trên Mac, biểu tượng Hanasu luôn có trên Dock, và bạn có thể hiện thêm trên thanh menu (Cài đặt → Chung). Nhấp vào biểu tượng trên Dock không mở cài đặt — hãy mở từ biểu tượng trên thanh menu hoặc menu chuột phải của biểu tượng trên Dock.
 
 ### Phím tắt mặc định
 
