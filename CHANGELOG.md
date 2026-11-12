@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.6.1](https://github.com/kakibara/hanasu/compare/v2.6.0...v2.6.1) - 2026-11-12
+
+- Windows の hanasu を Server GC で動かし、CI の検索の速さの上限を 3 秒にする by @kakibara in https://github.com/kakibara/hanasu/pull/107
+
 ## [v2.6.0](https://github.com/kakibara/hanasu/compare/v2.5.0...v2.6.0) - 2026-11-12
 
 - 多言語に対応したあとも日本語・英語を前提にしていた所を、Mac と Windows の両方で直す by @kakibara in https://github.com/kakibara/hanasu/pull/104
