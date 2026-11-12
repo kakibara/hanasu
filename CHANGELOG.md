@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.5.1](https://github.com/kakibara/hanasu/compare/v2.5.0...v2.5.1) - 2026-11-12
+## [v2.6.0](https://github.com/kakibara/hanasu/compare/v2.5.0...v2.6.0) - 2026-11-12
 
 - 多言語に対応したあとも日本語・英語を前提にしていた所を、Mac と Windows の両方で直す by @kakibara in https://github.com/kakibara/hanasu/pull/104
 - hanasu コマンドを Mac と Windows に足す（会議を読む・探す・聞く・MCP、文章の整形） by @kakibara in https://github.com/kakibara/hanasu/pull/78
