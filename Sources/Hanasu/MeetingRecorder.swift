@@ -48,6 +48,10 @@ final class MeetingRecorder: ObservableObject {
     /// 議事録を作り直している会議。その間は削除させず（DEC-MTG-023）、会議ノートで作り直し中だとわかるように出す（DEC-MTG-070）。
     /// 描き出しの CLI からも入れる
     @Published var regeneratingID: String?
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-158
+    /// 録音から文字起こしと議事録を作り直している会議。current には入れない（一覧の「記録中」に移らない）。描き出しの CLI からも入れる
+    @Published var recoveringID: String?
     // 要件: REQ-MTG-054
     // 設計判断: DEC-MTG-136
     /// 記録のあとの処理で出す段階（順番どおり）と、今の段階。処理していなければ空と nil。描き出しの CLI からも入れる
@@ -77,6 +81,9 @@ final class MeetingRecorder: ObservableObject {
     private var micObserver: NSObjectProtocol?
     private var levelTimer: Timer?
     private var recordingStartedAt = Date()
+    // 設計判断: DEC-MTG-157
+    /// 記録中に meeting.json へ保存した、先頭のずれのチャンネル
+    private var persistedOffsetChannels: Set<MeetingChannel> = []
 
     // 要件: REQ-MTG-043
     /// 記録中に最初にスリープした時点（確認に答えるまで持つ）
@@ -126,6 +133,7 @@ final class MeetingRecorder: ObservableObject {
         sleepPoint = nil
         sleptAt = nil
         sleepGap = 0
+        persistedOffsetChannels = []
         // prepare の途中で失敗したときに止めるための、まだ meTranscriber / othersTranscriber に入れていない文字起こし
         var preparing: [ChannelTranscriber] = []
 
@@ -294,6 +302,14 @@ final class MeetingRecorder: ObservableObject {
                 meeting.errorMessage = meeting.errorMessage.map { $0 + "\n" + message } ?? message
             }
         }
+        // 要件: REQ-MTG-128
+        // 設計判断: DEC-MTG-156（記録中に録音の書き出しが失敗したチャンネルは、止めたあとのエラーの文に出す）
+        let unwritten = [me, others].filter(\.audioWriteFailed).map(\.channel)
+        if !unwritten.isEmpty {
+            let message = tr("録音の一部を書けませんでした（%@）。",
+                             unwritten.map { $0 == .me ? tr("自分") : tr("相手") }.joined(separator: " / "))
+            meeting.errorMessage = meeting.errorMessage.map { $0 + "\n" + message } ?? message
+        }
         // 失敗がなくても空の配列を書く（キーがないのは、この機能より前の会議だけにする。DEC-MTG-142）
         meeting.transcriptionFailedChannels = failedChannels
         if let point {
@@ -362,8 +378,10 @@ final class MeetingRecorder: ObservableObject {
     /// 会議の値（deleteAudioAfterTranscription）がオンで、文字起こしがすべてそろっていれば、最後（話者分離と文字起こしのあと）に
     /// 音声ファイルを消す（設定は見ない）。保存期間の削除はここでは行わない（DEC-MTG-143）
     /// dictionary と applyDictionary を渡すと、設定の代わりにそれを使う（CLI の確かめで、本物の設定を書き換えないため。DEC-DIC-173）
+    /// recovering なら録音から作り直している（REQ-MTG-128。DEC-MTG-158）: 録音は消さず、両方のチャンネルとも文字起こしできずに
+    /// 発言が 0 件なら「失敗」のままにする（作り直すボタンをまた出すため）
     func process(_ meeting: Meeting, me mine: [TranscribedPhrase], others theirs: [TranscribedPhrase],
-                 dictionary: UserDictionary? = nil, applyDictionary: Bool? = nil) async -> Meeting {
+                 dictionary: UserDictionary? = nil, applyDictionary: Bool? = nil, recovering: Bool = false) async -> Meeting {
         var meeting = meeting
         var turns: [SpeakerTurn] = []
         let othersAudio = MeetingStore.audioURL(for: meeting, channel: .others)
@@ -424,7 +442,10 @@ final class MeetingRecorder: ObservableObject {
         }
 
         meeting.status = .done
-        if MeetingAudioPolicy.shouldDeleteAfterProcessing(meeting) {
+        // 要件: REQ-MTG-128
+        // 設計判断: DEC-MTG-158
+        if recovering { meeting.status = MeetingRecovery.statusAfterRecovery(meeting) }
+        if !recovering, MeetingAudioPolicy.shouldDeleteAfterProcessing(meeting) {
             let failures = MeetingStore.deleteAudio(for: meeting)
             for failure in failures {
                 appLog.error("meeting audio delete failed (\(failure.file, privacy: .public)): \(failure.reason, privacy: .public)")
@@ -504,12 +525,118 @@ final class MeetingRecorder: ObservableObject {
         setState(.idle)
     }
 
+    // MARK: - 録音から作り直す（MeetingRecovery.swift）
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-158
+    /// 録音から文字起こしと議事録を作り直せるか（作り直すボタンを出すか）
+    func canRecover(_ meeting: Meeting) -> Bool {
+        let _ = audioRevision
+        let busy = state != .idle || current != nil || recoveringID != nil || regeneratingID != nil
+        return MeetingRecovery.canRecover(meeting, readableAudioSeconds: MeetingRecovery.readableAudioSeconds(of: meeting), busy: busy)
+    }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-158, DEC-MTG-007
+    /// 作り直す前の準備の確かめ（記録を始めるときと同じ。Mac 標準なら音声認識の許可だけ。マイクと画面収録は使わない）。
+    /// 通らなければ、記録を始めるときと同じ文のエラーを投げる（会議は変えない）
+    func prepareRecovery(engine: TranscriptionEngine) async throws {
+        try Self.checkReady(engine)
+        if engine.isLive { try await Permissions.ensureSpeechRecognitionPermission() }
+    }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-158, DEC-MTG-136
+    /// 落ちた会議の録音から、文字起こし → 話者分離 → 議事録を作り直す（記録を止めたあとと同じ処理）。
+    /// engine は押した時点の設定（確かめに出したもの）。作り直せない会議・ほかの処理中なら何もしない
+    func recoverFromAudio(_ meeting: Meeting, engine: TranscriptionEngine) async {
+        // ビューの会議は古いことがある。一覧の最新から作る
+        let latest = meetings.first { $0.id == meeting.id } ?? meeting
+        guard canRecover(latest) else { return }
+        recoveringID = latest.id
+        // 要件: REQ-MTG-053（作り直しの間は、その会議の再生を止める）
+        if MeetingPlayer.shared.meetingID == latest.id { MeetingPlayer.shared.stop() }
+        lastError = nil
+        processingStages = [.transcribing, .diarizing] + (settings.makeMeetingMinutes ? [.minutes] : [])
+        processingStage = .transcribing
+        setState(.processing(tr("録音から文字起こししています…")))
+
+        let audio = MeetingRecovery.readableAudioSeconds(of: latest)
+        var updated = MeetingRecovery.prepared(latest, audioSeconds: audio)
+        try? MeetingStore.save(updated)
+        reloadMeetings()
+        appLog.notice("meeting recovery started: \(updated.id, privacy: .public) engine=\(engine.rawValue, privacy: .public)")
+
+        let offsets = MeetingRecovery.offsets(of: updated)
+        var phrases: [MeetingChannel: [TranscribedPhrase]] = [:]
+        var failed: [MeetingChannel] = []
+        if engine.isLive {
+            var errors: [String] = []
+            for channel in [MeetingChannel.me, .others] {
+                let name = channel == .me ? tr("自分") : tr("相手")
+                guard audio[channel] != nil else {
+                    failed.append(channel)
+                    errors.append(tr("%@の音声: %@", name, tr("録音を開けませんでした。")))
+                    continue
+                }
+                do {
+                    let result = try await ChannelTranscriber.transcribe(
+                        file: MeetingStore.audioURL(for: updated, channel: channel), channel: channel,
+                        offset: offsets[channel] ?? 0, live: true,
+                        localeIdentifier: settings.localeIdentifier, contextualStrings: settings.userDictionary.contextualStrings)
+                    phrases[channel] = result.phrases
+                    if result.recognitionFailed {
+                        failed.append(channel)
+                        errors.append(tr("%@の音声: %@", name, tr("音声認識が途中で止まりました。")))
+                    }
+                } catch {
+                    appLog.error("meeting recovery transcription failed (\(channel.rawValue, privacy: .public)): \(String(describing: error), privacy: .public)")
+                    failed.append(channel)
+                    errors.append(tr("%@の音声: %@", name, "\(error.localizedDescription)"))
+                }
+            }
+            if !errors.isEmpty {
+                updated.errorMessage = tr("%@ で文字起こしできなかった部分があります。", "\(engine.shortName)") + errors.joined(separator: " / ")
+            }
+        } else {
+            let result = await transcribeRecordedAudio(updated, engine: engine, offsets: offsets)
+            phrases = [.me: result.me, .others: result.others]
+            if let error = result.error { updated.errorMessage = error }
+            failed = result.failedChannels
+        }
+        // 設計判断: DEC-MTG-142（失敗がなくても空の配列を書く）
+        updated.transcriptionFailedChannels = failed
+        // 設計判断: DEC-MTG-143（作り直しのあとは保存期間の削除を呼ばない）
+        updated = await process(updated, me: phrases[.me] ?? [], others: phrases[.others] ?? [], recovering: true)
+        appLog.notice("meeting recovery finished: \(updated.id, privacy: .public) status=\(updated.status.rawValue, privacy: .public) utterances=\(updated.utterances.count)")
+        processingStages = []
+        processingStage = nil
+        recoveringID = nil
+        audioRevision += 1
+        reloadMeetings()
+        setState(.idle)
+    }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-160
+    /// アプリを終えるときに、記録中の録音を閉じる（音声の取り込みを止め、2 つの録音のファイルを閉じる。最大 5 秒）。
+    /// 会議は「記録中」のまま残し、次の起動で「失敗」になる（録音から作り直せる）
+    func closeForTermination() async {
+        guard state == .recording || state == .starting else { return }
+        commitNoteDraft()
+        await teardownAudio()
+        async let closeMe: Void = meTranscriber?.closeAudioFile() ?? ()
+        async let closeOthers: Void = othersTranscriber?.closeAudioFile() ?? ()
+        _ = await (closeMe, closeOthers)
+        appLog.notice("meeting audio closed for termination: \(self.current?.id ?? "-", privacy: .public)")
+    }
+
     // MARK: - 議事録に使う発言（MinutesSelection.swift）
 
     // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
     /// 議事録に使う発言の選び方を変えられるか。記録中・処理中・議事録の作り直し中の会議は変えない（処理の保存で消えるため）
     func canEditMinutesSelection(_ meeting: Meeting) -> Bool {
-        meeting.id != current?.id && meeting.id != regeneratingID && meeting.status != .processing
+        meeting.id != current?.id && meeting.id != regeneratingID && meeting.id != recoveringID && meeting.status != .processing
     }
 
     // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
@@ -635,7 +762,7 @@ final class MeetingRecorder: ObservableObject {
     // 設計判断: DEC-MTG-023
     /// 消してよい会議か。記録中・処理中の会議と、議事録を作り直している会議は消さない
     func canDelete(_ meeting: Meeting) -> Bool {
-        meeting.id != current?.id && meeting.id != regeneratingID
+        meeting.id != current?.id && meeting.id != regeneratingID && meeting.id != recoveringID
     }
 
     // 要件: REQ-MTG-028
@@ -664,7 +791,7 @@ final class MeetingRecorder: ObservableObject {
     // 設計判断: DEC-MTG-140
     /// 録音を消せる会議か。記録中・処理中の会議は消さない（議事録の作り直し中は消せる）。録音がなければ消すものがない
     func canDeleteAudio(_ meeting: Meeting) -> Bool {
-        meeting.id != current?.id && MeetingStore.hasAudio(meeting)
+        meeting.id != current?.id && meeting.id != recoveringID && MeetingStore.hasAudio(meeting)
     }
 
     // 要件: REQ-MTG-055, REQ-MTG-056, REQ-MTG-057
@@ -802,6 +929,16 @@ final class MeetingRecorder: ObservableObject {
                                     stage: MeetingProcessingStage, message: String) {
         current = meeting
         liveLines = lines
+        processingStages = stages
+        processingStage = stage
+        state = .processing(message)
+    }
+
+    // 要件: REQ-MTG-128
+    /// 確認用に、録音から作り直している状態にする（current には入れない。CLI の --render-meeting-window）
+    func showRecoveringForRendering(_ meetingID: String, stages: [MeetingProcessingStage], stage: MeetingProcessingStage,
+                                    message: String) {
+        recoveringID = meetingID
         processingStages = stages
         processingStage = stage
         state = .processing(message)
@@ -986,6 +1123,7 @@ final class MeetingRecorder: ObservableObject {
         guard let me = meTranscriber, let others = othersTranscriber else { return }
         signals.meLevel = me.level
         signals.othersLevel = others.level
+        persistStartOffsetsIfKnown(me: me, others: others)
         // 始めてから 10 秒たっても一度も音が入らなければ、機器の選び方が違う可能性が高い
         var notes: [String] = []
         if Date().timeIntervalSince(recordingStartedAt) > 10 {
@@ -999,6 +1137,26 @@ final class MeetingRecorder: ObservableObject {
         let silent = Date().timeIntervalSince(recordingStartedAt) > 10 && others.lastSoundAt == nil
         if silent != othersSilent { othersSilent = silent }
         if notes != warnings { warnings = notes }
+    }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-157
+    /// 2 つの録音の先頭のずれが分かったら、記録中のうちに meeting.json に保存する（落ちても録音の時刻をそろえられるように）。
+    /// チャンネルごとに 1 回だけ
+    private func persistStartOffsetsIfKnown(me: ChannelTranscriber, others: ChannelTranscriber) {
+        guard state == .recording, var meeting = current else { return }
+        var changed = false
+        for transcriber in [me, others] where !persistedOffsetChannels.contains(transcriber.channel) {
+            guard let offset = transcriber.knownStartOffset else { continue }
+            var offsets = meeting.audioStartOffsets ?? [:]
+            offsets[transcriber.channel.rawValue] = offset
+            meeting.audioStartOffsets = offsets
+            persistedOffsetChannels.insert(transcriber.channel)
+            changed = true
+        }
+        guard changed else { return }
+        current = meeting
+        try? MeetingStore.save(meeting)
     }
 
     private func setState(_ newState: State) {

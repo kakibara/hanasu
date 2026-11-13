@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Tidak dapat mulai merekam rapat</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>Tidak dapat mulai merekam selama rapat sedang dibuat ulang dari rekamannya.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>Dikte sedang merekam. Coba lagi setelah selesai.</value>
   </data>
@@ -647,6 +650,9 @@
   </data>
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Laju sampel model pemisahan pembicara tidak sesuai harapan ({0} Hz).</value>
+  </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Model pemisahan pembicara tidak dapat dimuat.</value>
   </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Wilayah Vertex AI “{0}” tidak dapat digunakan (hanya huruf kecil, angka, dan tanda hubung; mis. global, us-central1).</value>

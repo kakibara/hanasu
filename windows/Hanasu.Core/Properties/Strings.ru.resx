@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Не удается начать запись встречи</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>Нельзя начать запись, пока встреча восстанавливается по записи.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>Идет запись диктовки. Повторите попытку после ее завершения.</value>
   </data>
@@ -647,6 +650,9 @@
   </data>
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Частота дискретизации модели разделения говорящих не соответствует ожидаемой ({0} Гц).</value>
+  </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Не удалось загрузить модель разделения говорящих.</value>
   </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Регион Vertex AI «{0}» нельзя использовать (только строчные буквы, цифры и дефисы; например, global, us-central1).</value>

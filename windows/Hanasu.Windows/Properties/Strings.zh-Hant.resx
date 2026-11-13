@@ -287,6 +287,24 @@
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>重新建立會議記錄</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>從錄音建立逐字稿與會議記錄</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>從保留下來的錄音轉成文字、區分說話者並建立會議記錄</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>要從錄音重新建立嗎？</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>將以目前的設定（{0}）轉成文字、區分說話者並建立會議記錄。</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>會議音訊將傳送給 Google。</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>正在從錄音重新建立</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>範本：</value>
   </data>

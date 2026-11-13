@@ -287,6 +287,24 @@ Original : {2}</value>
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>Régénérer le compte rendu</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Transcrire et créer le compte rendu à partir de l'enregistrement</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Transcrit l'enregistrement conservé, distingue les intervenants et crée le compte rendu.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>Reconstruire la réunion à partir de l'enregistrement ?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>La transcription se fera avec les réglages actuels ({0}), puis les intervenants seront distingués et le compte rendu créé.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>L'audio de la réunion sera envoyé à Google.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Reconstruction à partir de l'enregistrement</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Modèle :</value>
   </data>

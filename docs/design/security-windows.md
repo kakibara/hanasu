@@ -95,7 +95,7 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 
 ### 2.7 権限（DLL の探索・UIPI・マニフェスト）
 
-- 確かめたこと: マニフェストは `asInvoker`・`uiAccess="false"`（管理者権限を求めない）。`onnxruntime.dll` と `sherpa-onnx-c-api.dll` は exe の隣、Whisper は `runtimes/win-*/` に置く。exe のフォルダは System32 より先に探されるので、Windows 11 の System32 の `onnxruntime.dll` と取り違えない。
+- 確かめたこと: マニフェストは `asInvoker`・`uiAccess="false"`（管理者権限を求めない）。ANSI のコードページは UTF-8（`activeCodePage`。sherpa-onnx に ASCII 以外のパスを渡すため。DEC-COM-206）。`onnxruntime.dll` と `sherpa-onnx-c-api.dll` は exe の隣、Whisper は `runtimes/win-*/` に置く。exe のフォルダは System32 より先に探されるので、Windows 11 の System32 の `onnxruntime.dll` と取り違えない。
 - 直したこと（DEC-COM-148・149）:
   - 起動の最初（`App` の静的コンストラクター）に `SetDllDirectory("")` と `SetDefaultDllDirectories`（exe のフォルダ・System32・足したフォルダ）を呼び、作業フォルダと PATH を DLL の探索から外す。Whisper のフォルダは `AddDllDirectory` で足す。
   - Hanasu 自身の P/Invoke は `DefaultDllImportSearchPaths(System32)` で System32 からだけ読む。
@@ -107,6 +107,8 @@ Hanasu の Windows 版は、署名もパッケージ化（MSIX）もしていな
 - 確かめたこと: パッケージは版を固定していた（`PackageReference` の Version）が、推移的な依存とハッシュは固定していなかった。CI（`windows.yml`）は秘密を使わず、`permissions: contents: read`・`persist-credentials: false`。
 - 直したこと（DEC-COM-150）: `packages.lock.json` を使い、CI の Restore の段では locked mode で restore する（lock と食い違えば失敗）。publish の段は RID を足して restore し直すので locked mode を外している（同じ版に決まる）。
 - 残る危険: GitHub Actions（`actions/checkout@v6` など）は版のタグで指していて、コミットの SHA で固定していない（ほかのワークフローと合わせて直すのがよい）。Anthropic の SDK は推移的に Microsoft.Extensions.AI.Abstractions などを取り込む（[THIRD_PARTY_NOTICES.md](../../windows/THIRD_PARTY_NOTICES.md)）。
+
+- ライセンス（2026-11-13、REQ-REL-005・DEC-REL-012）: sherpa-onnx 1.13.8 の NuGet のネイティブ DLL は、表示が Apache-2.0 なのに、音声合成用の espeak-ng（GPL-3.0）を静的にリンクしていた。espeak-ng を取り除いた 2.0.1 に上げた（DEC-MTG-104）。配布物に入る依存は、静的にリンクされたものも含めて `common/third-party-licenses.json` に書き、`scripts/check-licenses.py`（CI の `spec.yml`）が lock ファイルの版・許すライセンス・THIRD_PARTY_NOTICES の表示と突き合わせる。`windows.yml`・`tagpr.yml` の「Check publish output」は、配布物の DLL に espeak-ng の関数名がないことを確かめる。残る危険: パッケージの表示が中身を隠す場合は、依存を足す・上げる人が DLL の中身を見ないと気づけない（一覧はその場面を作るだけ）。
 
 - 足したもの（2026-11-12）: 設定の「AI アプリにつなぐ」（REQ-COM-194）で、動いている Claude Desktop の起動の引数を読むために `System.Management`（WMI の `Win32_Process.CommandLine`。Microsoft のパッケージ。`System.CodeDom` が付いてくる）をアプリ（`Hanasu.Windows`）にだけ足した。`hanasu.exe` には入れていない。版は lock で固定し、`THIRD_PARTY_NOTICES.md` に書いた。
 

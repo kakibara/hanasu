@@ -148,6 +148,32 @@ jobs:
         if: steps.check.outputs.exists == 'true'
         run: ./scripts/fetch-llama-cpp.ps1 -Destination build/windows/Hanasu
 
+      # 確かめ方: REQ-REL-005
+      # 設計判断: DEC-REL-006
+      # zip にする前に中身を確かめる。GPL-3.0 の espeak-ng を含む DLL（sherpa-onnx 1.13.8 の TTS 付きの DLL）があれば、上げずに失敗させる。
+      # 古いタグ（v1.3.0〜v2.6.1）を作り直そうとしても、ここで止まる。チェックアウトした古いタグにはない検査なので、scripts/ に置かずここに書く
+      - name: Check publish output
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          $expected = @(
+            "build/windows/Hanasu/Hanasu.exe",
+            "build/windows/Hanasu/sherpa-onnx-c-api.dll",
+            "build/windows/Hanasu/onnxruntime.dll",
+            "build/windows/Hanasu/THIRD_PARTY_NOTICES.md",
+            "build/windows/Hanasu/cli/hanasu.exe"
+          )
+          foreach ($path in $expected) {
+            if (-not (Test-Path $path)) { throw "見つかりません: $path" }
+          }
+          # 大文字と小文字を区別する（"OfflineSpeakerDiarization" や "wespeaker" に当たらないように）
+          $latin1 = [System.Text.Encoding]::Latin1
+          foreach ($dll in Get-ChildItem -Recurse build/windows/Hanasu -Filter *.dll) {
+            $text = $latin1.GetString([System.IO.File]::ReadAllBytes($dll.FullName))
+            foreach ($marker in @("espeak_ng_", "espeak_Initialize")) {
+              if ($text.Contains($marker, [System.StringComparison]::Ordinal)) { throw "GPL-3.0 の espeak-ng が入っています: $($dll.FullName)（$marker）。v1.3.0〜v2.6.1 は作り直さない（DEC-REL-006）" }
+            }
+          }
+
       - name: Upload zip
         id: upload
         if: steps.check.outputs.exists == 'true'

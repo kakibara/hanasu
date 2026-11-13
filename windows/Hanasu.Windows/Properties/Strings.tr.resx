@@ -287,6 +287,24 @@ Sonuç: {1}
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>Tutanağı Yeniden Oluştur</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Kayıttan Metne Dönüştür ve Tutanak Oluştur</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Kalan kaydı metne dönüştürür, konuşmacıları ayırır ve tutanağı oluşturur.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>Toplantı kayıttan yeniden oluşturulsun mu?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>Geçerli ayarlarla ({0}) metne dönüştürülecek, konuşmacılar ayrılacak ve tutanak oluşturulacak.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>Toplantının sesi Google'a gönderilecek.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Kayıttan yeniden oluşturuluyor</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Şablon:</value>
   </data>

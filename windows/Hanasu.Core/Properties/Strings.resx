@@ -720,6 +720,10 @@
     <value>Can't start recording the meeting</value>
     <comment>Notification title</comment>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>You can't start recording while a meeting is being rebuilt from its recording.</value>
+    <comment>Notification body (title Meeting_CannotStart) when the user tries to start recording while a crashed meeting is being transcribed again from its saved audio (REQ-MTG-128)</comment>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>Dictation is recording. Try again when it's finished.</value>
     <comment>Notification body</comment>
@@ -859,6 +863,10 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>The speaker separation model's sample rate isn't what was expected ({0} Hz).</value>
     <comment>Error. {0} = sample rate</comment>
+  </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>The speaker separation engine couldn't load its models.</value>
+    <comment>Error, shown inside Meeting_DiarizationFailed as {0}. Shown when sherpa-onnx can't be prepared (model files missing, unreadable or damaged)</comment>
   </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>The Vertex AI region “{0}” can't be used (lowercase letters, digits, and hyphens only; e.g. global, us-central1).</value>

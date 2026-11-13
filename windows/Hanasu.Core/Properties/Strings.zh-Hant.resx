@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>無法開始錄製會議</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>從錄音重新建立期間，無法開始記錄。</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>語音輸入正在錄音。請在結束後再試一次。</value>
   </data>
@@ -647,6 +650,9 @@
   </data>
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>說話者分離模型的取樣率與預期不符（{0} Hz）。</value>
+  </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>無法載入說話者分離模型。</value>
   </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>無法使用 Vertex AI 區域「{0}」（只能使用小寫英文字母、數字和連字號；例如 global、us-central1）。</value>

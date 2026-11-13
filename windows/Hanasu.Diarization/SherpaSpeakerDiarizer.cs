@@ -115,6 +115,7 @@ public sealed class SherpaSpeakerDiarizer : ISpeakerDiarizer
         config.MinDurationOn = 0.3f;
         config.MinDurationOff = 0.5f;
         using var diarizer = new OfflineSpeakerDiarization(config);
+        EnsureCreated(diarizer);
         if (diarizer.SampleRate != Core.Audio.AudioFormat.SampleRate)
         {
             throw new InvalidOperationException(string.Format(Strings.Diarization_SampleRateMismatch, diarizer.SampleRate));
@@ -125,5 +126,39 @@ public sealed class SherpaSpeakerDiarizer : ISpeakerDiarizer
             .Select(s => new SpeakerTurn(s.Speaker.ToString(System.Globalization.CultureInfo.InvariantCulture), s.Start, s.End))
             .OrderBy(t => t.Start)
             .ToList();
+    }
+
+    /// <summary>
+    /// sherpa-onnx の C# の OfflineSpeakerDiarization が持つネイティブのハンドル（private のフィールド）。
+    /// 版を上げて名前が変わったら null になる（テストで気づく）
+    /// </summary>
+    internal static readonly System.Reflection.FieldInfo? HandleField =
+        typeof(OfflineSpeakerDiarization).GetField("_handle", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+    // 設計判断: DEC-MTG-104
+    // sherpa-onnx の C の API は、話者分離を作れないと NULL を返す（設定の検査に通らないとき、2.0 からはモデルを読めない例外のときも）。
+    // C# の側は NULL を確かめないので、そのまま SampleRate などを呼ぶと NULL を参照してプロセスが落ちる。
+    // 作れなかった（か、ハンドルを読めなかった）ときは例外にして、呼び出し元で「相手」1 人にまとめる
+    internal void EnsureCreated(OfflineSpeakerDiarization diarizer)
+    {
+        if (HandleField?.GetValue(diarizer) is System.Runtime.InteropServices.HandleRef handle && handle.Handle != IntPtr.Zero) return;
+        var error = new InvalidOperationException(Strings.Diarization_CreateFailed);
+        error.Data[DiagnosticsKey] = Diagnostics();
+        throw error;
+    }
+
+    /// <summary>例外の Data に入れる、ログ用の手がかりのキー（MeetingPostProcessor がログに書く）</summary>
+    public const string DiagnosticsKey = "hanasu.diagnostics";
+
+    /// <summary>モデルのパスが ASCII だけか、ファイルがあるか（ユーザーのフォルダ名に日本語などがある場合を見分けるため。DEC-COM-206）</summary>
+    internal string Diagnostics()
+    {
+        var parts = DiarizationModels.All.Select(m =>
+        {
+            var path = models.PathFor(m);
+            return $"{m.FileName}: exists={File.Exists(path)}";
+        });
+        var ascii = models.Directory.All(c => c < 128);
+        return $"handleField={(HandleField is null ? "missing" : "ok")}, asciiPath={ascii}, {string.Join(", ", parts)}";
     }
 }

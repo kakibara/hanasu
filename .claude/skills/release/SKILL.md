@@ -136,6 +136,8 @@ gh release view v<版> --json body --jq .body | head -40
 
 - **公開済みの版**は消さない。直しを入れて、次の patch として出す。
 
+- **v1.3.0〜v2.6.1 は作り直さない**（DEC-REL-006）。これらの Windows の zip は espeak-ng（GPL-3.0）を含んでいたので取り下げた（REQ-REL-005）。`main` のワークフローで作り直すと、windows ジョブの「Check publish output」が zip を上げる前に止めるが、並んで動く mac ジョブは Mac の zip を `--clobber` で差し替えるので、本文の SHA-256 と添付が食い違う。手動の実行の `--ref` は必ず `main` にする（Actions の画面でタグを選んだり、古い run を Re-run したりすると、検査のない古いワークフローが動き、espeak-ng 入りの zip がリリースに戻る）。
+
 ### 公開のあとにリリース文を直すとき
 
 publish ジョブはタグの時点の `docs/releases/v<版>.md` を読むので、`main` のファイルを直して手動で実行しても本文は変わらない（タグの時点の文で作り直される）。誤字などは `gh release edit v<版> --notes-file <直した本文>` で直接直し、記録のために `docs/releases/v<版>.md` も `main` で直しておく。そのあとはその版の手動の実行をしない（タグの時点の文に戻る）。

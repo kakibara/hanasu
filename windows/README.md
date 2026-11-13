@@ -45,6 +45,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
    - 録音（音声ファイル）だけを消すには、上の「録音を削除…」か一覧の右クリックの「録音を削除…」。議事録・文字起こし・メモは残る。録音はごみ箱に入れずに完全に消す（元に戻せない）。確かめのダイアログには、文字起こしが欠けている会議ならその分の会話の記録が残らないことが出る。録音がない会議・記録中・処理中の会議では押せない。
    - 一覧の右クリックの「録音の管理…」（設定 → 会議 の「録音の管理…」でも開く）で、録音が残っている会議を選んで・30 日より前・すべてをまとめて消せる。「30 日より前」「すべて」は、文字起こしが欠けている会議（「文字起こしなし」「一部の文字起こしなし」の印）を含めない。
    - 文字起こしが欠けている・途中で落ちた会議に録音が残っていれば、会議の上の帯に「音声ファイルは残しています」が出る。
+   - 記録中にアプリが落ちた会議（発言がなく、録音が残っている会議）には「録音から文字起こしと議事録を作る」が出る。押すと、今の設定のエンジン（Gemini なら音声を Google に送ること）を確かめてから、残った録音から文字起こし・話者の区別・議事録を作る。作り直した会議の録音は消さない。作り直している間は新しい記録を始められない。
 6. 設定 → 会議 で、ショートカット・話者分離・文字起こしのあとに録音を削除するか・録音を残す期間・保存先・文字起こしに辞書の置き換えルールを当てるか（既定でオン）を変えられる。会議の文字起こしのエンジン（Whisper / Gemini）は 設定 → AI の「文字起こし AI」、議事録の AI とモデルは 設定 → AI の「議事録」。
    - 「録音を残す期間」（無期限（既定）・7・30・90・365 日）を選ぶと、それより前に記録した会議の録音を、アプリの起動時と会議の処理のあとに知らせずに消す。会議ごとに「残す」にした録音も消える。文字起こしが欠けている会議は消さない。期間を短くして今すぐ消える録音があれば、件数と大きさを出して確かめる。
 
@@ -174,7 +175,7 @@ MeetingController（Core。idle → starting → recording → processing → id
   チャンネルごとに「最初の音が録音開始から何秒後に届いたか」（開始のずれ）を `meeting.json` の `audioStartOffsets` に残し、文字起こしの時刻に足す。
   WASAPI のループバックは、PC が何も鳴らしていない間はデータを渡してこないので、届いた時刻と書いた長さの差が 0.25 秒より開いたら、その分の無音を足す（`ChannelTimeline`）。
 - **録音はファイルに直接書く**: 音声入力の `WasapiRecorder` はメモリに溜めるが、会議は長いので 16 kHz・モノラル・16 bit の WAV に書きながら録る（1 時間で 1 チャンネル約 115 MB）。
-  ヘッダーの長さの欄は 5 秒ごとに書き直すので、アプリが落ちても途中までの音声を読める。
+  ヘッダーの長さの欄は 5 秒ごとに書き直すので、アプリが落ちても途中までの音声を読める。録音から作り直すとき（REQ-MTG-128）は、先にヘッダーの長さをファイルの長さから直す（`WavStreamWriter.RepairHeader`）ので、最後の 5 秒より後ろの音も使う。開始のずれは記録中にも 1 秒ごとに保存する。
 - **文字起こしのエンジン**（設定 → 会議）: **Whisper（既定）か Gemini。Windows 標準は会議では選べない。**
   - 理由: Windows 標準の `SpeechRecognizer` は Windows の既定のマイクからしか聞けず、ループバックで録った PC の音（相手）を渡せない。
     「自分だけ Windows 標準・相手は Whisper」も考えたが、結局 Whisper のモデルが要るうえ、チャンネルで認識の質と時刻の精度がそろわず、選んだマイクも使えないので採らなかった。
@@ -356,9 +357,9 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | [Anthropic](https://github.com/anthropics/anthropic-sdk-csharp) 13.4.0（公式の C# SDK。Microsoft.Extensions.AI.Abstractions・System.Text.Json などを含む） | Claude API | Apache-2.0（依存は MIT） |
 | xunit 2.9.3 / xunit.runner.visualstudio 2.8.2 | テストのみ | Apache-2.0 |
 | Microsoft.NET.Test.Sdk 17.14.1 | テストのみ | MIT |
-| [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（org.k2fsa.sherpa.onnx 1.13.8、ONNX Runtime を含む） | 会議の相手側の話者分離 | Apache-2.0（ONNX Runtime は MIT） |
+| [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（org.k2fsa.sherpa.onnx 2.0.1、ONNX Runtime を含む） | 会議の相手側の話者分離 | Apache-2.0（ONNX Runtime は MIT。静的にリンクされた Eigen（MPL-2.0）・BSD のものなどは THIRD_PARTY_NOTICES.md） |
 
-配布物には、Hanasu のライセンス（`LICENSE.txt`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したら、THIRD_PARTY_NOTICES.md にも足すこと。
+配布物には、Hanasu のライセンス（`LICENSE.txt`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したり版を変えたりしたら、THIRD_PARTY_NOTICES.md と `common/third-party-licenses.json` にも足すこと。パッケージのライセンスの表示だけでなく、同梱のネイティブ DLL に静的にリンクされたものも確かめる（sherpa-onnx 1.13.8 は表示が Apache-2.0 なのに、GPL-3.0 の espeak-ng を含んでいた）。CI の `python3 scripts/check-licenses.py` が lock ファイルと突き合わせる（DEC-REL-012）。
 依存の版とハッシュは各プロジェクトの `packages.lock.json` に固定している（CI は locked mode）。パッケージを足したり版を変えたりしたら、`dotnet restore` で lock ファイルを作り直してコミットする。
 
 Whisper のモデル（`ggml-*.bin`）は配布物に含めず、利用者が選んだときに [Hugging Face の ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp) からダウンロードする（OpenAI の Whisper のモデル、MIT）。

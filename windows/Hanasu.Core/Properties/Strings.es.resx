@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>No se puede empezar a grabar la reunión</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>No puedes empezar a grabar mientras se rehace una reunión desde su grabación.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>El dictado está grabando. Vuelve a intentarlo cuando termine.</value>
   </data>
@@ -647,6 +650,9 @@
   </data>
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>La frecuencia de muestreo del modelo de separación de hablantes no es la prevista ({0} Hz).</value>
+  </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>No se pudo cargar el modelo de separación de hablantes.</value>
   </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>No se puede usar la región de Vertex AI "{0}" (solo letras minúsculas, dígitos y guiones; por ejemplo, global, us-central1).</value>
