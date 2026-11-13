@@ -102,6 +102,10 @@ struct MeetingWindowView: View {
                 // 記録を止めたあとの処理中: 同じ会議のまま、文書（議事録を作成中）にする
                 MeetingDetailView(meeting: current, recorder: recorder, panel: panel, processing: true)
             }
+        } else if let meeting = selectedMeeting, meeting.id == recorder.recoveringID {
+            // 要件: REQ-MTG-128
+            // 設計判断: DEC-MTG-158（録音から作り直している間は、記録を止めたあとの処理中と同じ画面にする）
+            MeetingDetailView(meeting: meeting, recorder: recorder, panel: panel, processing: true)
         } else if let meeting = selectedMeeting {
             MeetingDetailView(meeting: meeting, recorder: recorder, panel: panel, jump: jump?.meetingID == meeting.id ? jump : nil,
                               onDelete: { confirmDelete(meeting.id) }, onDeleteAudio: { confirmDeleteAudio(meeting.id) })
@@ -130,7 +134,12 @@ struct MeetingWindowView: View {
             }
             .navigationSplitViewColumnWidth(min: 220, ideal: 260)
         } detail: {
+            // 設計判断: DEC-MTG-155
+            // 真ん中の画面の最小の大きさを中身から切り離す（幅・高さとも 0〜無限にして、提案された大きさをそのまま使う）。
+            // 中身で変わると、記録中に帯の出し入れや文字起こしの更新のたびに分割の列の最小の大きさが変わり、
+            // 制約の更新の最中にレイアウトがやり直しになって、macOS がアプリを落とすことがあった
             detail
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         }
         // 設計判断: DEC-MTG-130（後ろ側のパネルは NavigationSplitView に付ける）
         .inspector(isPresented: inspectorBinding) {
@@ -181,6 +190,7 @@ struct MeetingWindowView: View {
             }
         } else if let meeting = selectedMeeting {
             MeetingDetailInspector(meeting: meeting, recorder: recorder, panel: panel,
+                                   processing: meeting.id == recorder.recoveringID,
                                    highlight: jump?.meetingID == meeting.id ? jump?.terms ?? [] : [])
         }
     }
@@ -254,7 +264,8 @@ struct MeetingWindowView: View {
                 ForEach(MeetingListGrouping.groups(recorder.meetings.filter { $0.id != recorder.current?.id }, now: now ?? Date())) { group in
                     Section(group.title) {
                         ForEach(group.meetings) { meeting in
-                            MeetingRow(meeting: meeting, live: false, busy: meeting.id == recorder.regeneratingID,
+                            MeetingRow(meeting: meeting, live: false,
+                                       busy: meeting.id == recorder.regeneratingID || meeting.id == recorder.recoveringID,
                                        style: MeetingRow.Style(group: group.id))
                                 .tag(meeting.id)
                                 .contextMenu {
@@ -697,12 +708,20 @@ struct MeetingMoreMenuItems: View {
     var onDeleteAudio: (() -> Void)?
     /// 確認用の描き出しで、録音があるかを差し替える（nil ならファイルで決める）
     var hasAudioOverride: Bool?
+    /// 確認用の描き出しで、録音から作り直せるかを差し替える（nil なら recorder.canRecover で決める）
+    var recoverableOverride: Bool?
 
     var body: some View {
         Button(tr("話者名…"), action: onEditSpeakers)
             .disabled(processing || meeting.speakers.isEmpty)
         Button(tr("Finder で表示")) {
             NSWorkspace.shared.activateFileViewerSelecting([MeetingStore.directory(for: meeting)])
+        }
+        // 要件: REQ-MTG-128
+        // 設計判断: DEC-MTG-131, DEC-MTG-158（作り直せる会議だけに出す）
+        if !processing, recoverableOverride ?? recorder.canRecover(meeting) {
+            Button(tr("録音から文字起こしと議事録を作る")) { MeetingRecoveryPrompt.request(meeting, recorder: recorder) }
+                .help(tr("残った録音から、文字起こし・話者の区別・議事録を作ります"))
         }
         if let onDeleteAudio {
             Divider()

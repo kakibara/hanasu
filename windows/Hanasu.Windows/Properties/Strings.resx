@@ -378,6 +378,30 @@ Original: {2}</value>
     <value>Regenerate Minutes</value>
     <comment>Meeting window button</comment>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Transcribe and Make Minutes from Recording</value>
+    <comment>Meeting window button, shown for a meeting with no transcript but with saved audio (e.g. the app quit during recording). REQ-MTG-128</comment>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Transcribes the saved recording, tells speakers apart, and makes the minutes.</value>
+    <comment>Tooltip of the Meeting_RecoverFromAudio button</comment>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>Rebuild this meeting from its recording?</value>
+    <comment>Title of the confirmation dialog shown before rebuilding a meeting from its saved audio</comment>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>Hanasu will transcribe it with your current settings ({0}), tell speakers apart, and make the minutes.</value>
+    <comment>Body of the confirmation dialog. {0} = transcription engine name (Whisper or Gemini)</comment>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>The meeting audio will be sent to Google.</value>
+    <comment>Added to the confirmation dialog body when the transcription engine is Gemini</comment>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Rebuilding from the recording</value>
+    <comment>Meeting window status heading while a meeting is being rebuilt from its saved audio (the current step is shown on the next line)</comment>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Template:</value>
     <comment>Meeting window: label before the template list</comment>

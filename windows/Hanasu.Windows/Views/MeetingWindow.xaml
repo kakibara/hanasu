@@ -133,6 +133,10 @@
                 <TextBlock x:Name="MeetingInfo" Style="{StaticResource Note}" />
                 <WrapPanel x:Name="ActionsPanel" Margin="0,8,0,0">
                     <Button x:Name="RegenerateButton" Content="{x:Static p:Strings.Meeting_Regenerate}" Click="OnRegenerateClick" />
+                    <!-- 要件: REQ-MTG-128 -->
+                    <!-- 設計判断: DEC-MTG-158（出すかは Show で MeetingRecovery.CanRecover から決める） -->
+                    <Button x:Name="RecoverButton" Content="{x:Static p:Strings.Meeting_RecoverFromAudio}" ToolTip="{x:Static p:Strings.Meeting_RecoverFromAudio_Tip}"
+                            Click="OnRecoverClick" Visibility="Collapsed" />
                     <!-- 要件: REQ-DIC-072, REQ-DIC-074 -->
                     <Button x:Name="DictionaryButton" Content="{x:Static p:Strings.Meeting_Dictionary}" Click="OnDictionaryClick" />
                     <TextBlock Text="{x:Static p:Strings.Meeting_TemplateShort}" VerticalAlignment="Center" Margin="4,0,4,0" />

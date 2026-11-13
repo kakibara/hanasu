@@ -41,7 +41,12 @@ enum Permissions {
             throw PermissionError.microphoneDenied
         }
         guard speechRecognition else { return }
+        try await ensureSpeechRecognitionPermission()
+    }
 
+    // 要件: REQ-MTG-128
+    /// 音声認識の権限だけを、未決定なら尋ね、拒否されていればエラーにする（録音から作り直すとき。マイクは使わない）
+    static func ensureSpeechRecognitionPermission() async throws {
         switch speechStatus {
         case .authorized: break
         case .notDetermined:

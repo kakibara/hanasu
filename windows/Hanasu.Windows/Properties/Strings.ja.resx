@@ -287,6 +287,24 @@
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>議事録を作り直す</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>録音から文字起こしと議事録を作る</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>残った録音から、文字起こし・話者の区別・議事録を作ります</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>録音から作り直しますか？</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>今の設定（{0}）で文字起こしし、話者を分け、議事録を作ります。</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>会議の音声を Google に送ります。</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>録音から作り直しています</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>型:</value>
   </data>

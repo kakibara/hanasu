@@ -260,6 +260,8 @@ struct MeetingStatusBanners: View {
     @ObservedObject var recorder: MeetingRecorder
     var processing: Bool
     var onRegenerate: () -> Void
+    /// 確認用の描き出しで、録音から作り直せるかを差し替える（nil なら recorder.canRecover で決める）
+    var recoverableOverride: Bool?
     @ObservedObject private var dismissals = MeetingBannerDismissals.shared
     @State private var showingDetail = false
 
@@ -295,7 +297,9 @@ struct MeetingStatusBanners: View {
     private func banner(_ kind: Kind) -> some View {
         switch kind {
         case .processing:
-            StatusBanner(style: .progress, systemImage: nil, title: tr("議事録を作成中")) {
+            // 要件: REQ-MTG-128（録音から作り直している間は、見出しで分かるようにする）
+            StatusBanner(style: .progress, systemImage: nil,
+                         title: recorder.recoveringID == meeting.id ? tr("録音から作り直しています") : tr("議事録を作成中")) {
                 ProcessingStagesView(stages: recorder.processingStages, current: recorder.processingStage,
                                      message: processingMessage)
             }
@@ -317,6 +321,12 @@ struct MeetingStatusBanners: View {
                         }
                     if meeting.minutes == nil, recorder.state == .idle, !meeting.usedUtterances.isEmpty {
                         Button(tr("議事録を作り直す"), action: onRegenerate)
+                    }
+                    // 要件: REQ-MTG-128
+                    // 設計判断: DEC-MTG-158（落ちた会議など、発言がなく開ける録音があるときだけ）
+                    if recoverableOverride ?? recorder.canRecover(meeting) {
+                        Button(tr("録音から文字起こしと議事録を作る")) { MeetingRecoveryPrompt.request(meeting, recorder: recorder) }
+                            .help(tr("残った録音から、文字起こし・話者の区別・議事録を作ります"))
                     }
                     Button(tr("閉じる")) { dismissals.dismiss(meeting.id, message) }
                 }
@@ -346,6 +356,42 @@ struct MeetingStatusBanners: View {
     private var regeneratingMessage: String {
         if case .processing(let message) = recorder.state { return message }
         return tr("議事録を作り直しています…")
+    }
+}
+
+// 要件: REQ-MTG-128
+// 設計判断: DEC-MTG-158
+/// 「録音から文字起こしと議事録を作る」を押したとき: 使うエンジン（押した時点の設定）を書いて確かめ、準備を確かめてから作り直す
+@MainActor
+enum MeetingRecoveryPrompt {
+    static func request(_ meeting: Meeting, recorder: MeetingRecorder) {
+        let engine = AppSettings.shared.meetingEngine
+        let alert = NSAlert()
+        alert.messageText = tr("録音から作り直しますか？")
+        alert.informativeText = confirmText(engine: engine)
+        alert.addButton(withTitle: tr("作り直す"))
+        alert.addButton(withTitle: tr("キャンセル"))
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        Task {
+            do {
+                try await recorder.prepareRecovery(engine: engine)
+            } catch {
+                // 記録を始めるときと同じ文で理由を出す（会議は変えない）
+                let failure = NSAlert()
+                failure.alertStyle = .warning
+                failure.messageText = error.localizedDescription
+                failure.runModal()
+                return
+            }
+            await recorder.recoverFromAudio(meeting, engine: engine)
+        }
+    }
+
+    /// 確かめの本文。Gemini なら、音声を Google に送ることを足す
+    static func confirmText(engine: TranscriptionEngine) -> String {
+        var text = tr("今の設定（%@）で文字起こしし、話者を分け、議事録を作ります。", engine.shortName)
+        if engine == .gemini { text += "\n" + tr("会議の音声を Google に送ります。") }
+        return text
     }
 }
 

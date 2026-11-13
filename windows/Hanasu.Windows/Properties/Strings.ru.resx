@@ -287,6 +287,24 @@
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>Создать протокол заново</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Расшифровать запись и создать протокол</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Расшифровывает сохранившуюся запись, разделяет говорящих и создает протокол.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>Восстановить встречу по записи?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>Запись будет расшифрована с текущими настройками ({0}), говорящие будут разделены, а протокол — создан.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>Аудио встречи будет отправлено в Google.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Восстановление по записи</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Шаблон:</value>
   </data>

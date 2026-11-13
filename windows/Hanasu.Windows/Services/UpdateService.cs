@@ -141,10 +141,10 @@ internal sealed class UpdateService
     }
 
     // 設計判断: DEC-REL-023
-    /// <summary>録音中・会議の記録中・処理中のほか、議事録の作り直しとモデルのダウンロードも「忙しい」に含める（途中で終わると失われるため）</summary>
+    /// <summary>録音中・会議の記録中・処理中のほか、議事録の作り直し・録音からの作り直し（REQ-MTG-128）とモデルのダウンロードも「忙しい」に含める（途中で終わると失われるため）</summary>
     private bool IsRecordingOrProcessing() =>
         host.Dictation.State != DictationState.Idle || host.Meetings.State != MeetingState.Idle
-        || host.Meetings.IsRegenerating || host.WhisperModels.IsAnyDownloading || host.LocalLlmModels.IsAnyDownloading;
+        || host.Meetings.IsRegenerating || host.Meetings.IsRecovering() || host.WhisperModels.IsAnyDownloading || host.LocalLlmModels.IsAnyDownloading;
 
     /// <summary>ダウンロード全体の上限（これを過ぎたらやめる）</summary>
     private static readonly TimeSpan DownloadTimeout = TimeSpan.FromMinutes(10);

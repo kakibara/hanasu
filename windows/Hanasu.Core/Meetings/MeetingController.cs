@@ -82,6 +82,15 @@ public sealed class MeetingController
     private Task? processing;
     /// <summary>議事録を作り直している会議の ID（その間は削除させない。DEC-MTG-023）</summary>
     private readonly HashSet<string> regenerating = new();
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-158
+    /// <summary>録音から作り直している会議の ID（Current と State は変えない。その間は記録を始めない・消させない）</summary>
+    private readonly HashSet<string> recovering = new();
+    // 設計判断: DEC-MTG-157
+    /// <summary>記録を始めたときの UI のスレッドの文脈（先頭のずれの保存をここで行う）。なければタイマーを動かさない</summary>
+    private SynchronizationContext? uiContext;
+    /// <summary>記録中だけ 1 秒ごとに先頭のずれを保存するタイマー</summary>
+    private Timer? offsetTimer;
 
     public MeetingController(MeetingServices services)
     {
@@ -148,9 +157,20 @@ public sealed class MeetingController
 
     public async Task StartAsync()
     {
+        // 設計判断: DEC-MTG-157（await より前に、呼んだ UI のスレッドの文脈を取っておく）
+        var context = SynchronizationContext.Current;
+        bool recoveringNow;
         lock (gate)
         {
             if (state != MeetingState.Idle) return;
+            recoveringNow = recovering.Count > 0;
+        }
+        // 要件: REQ-MTG-128
+        // 設計判断: DEC-MTG-158（録音から作り直している間は、新しい記録を始めない）
+        if (recoveringNow)
+        {
+            Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_CannotStart, Strings.Meeting_RecoveringCannotStart, true));
+            return;
         }
         if (!CanStart())
         {
@@ -209,6 +229,7 @@ public sealed class MeetingController
             }
             services.Log("meeting started");
             State = MeetingState.Recording;
+            StartOffsetTimer(context);
             MeetingChanged?.Invoke(this, meeting);
         }
         catch (Exception e) when (e is TranscriptionException or IOException or UnauthorizedAccessException)
@@ -240,6 +261,7 @@ public sealed class MeetingController
             if (state != MeetingState.Recording) return;
             pendingSleep = null;
         }
+        StopOffsetTimer();
         var meeting = Current!;
         var settings = recordingSettings!;
         State = MeetingState.Processing;
@@ -264,28 +286,39 @@ public sealed class MeetingController
         await processing.ConfigureAwait(false);
     }
 
+    // 設計判断: DEC-MTG-158（記録を止めたあとと、録音からの作り直しで同じ組み立てを使う）
+    /// <summary>設定から後処理を組み立てる。keepAudio なら録音を消さない（作り直し）</summary>
+    private MeetingPostProcessor CreatePostProcessor(AppSettings settings, ISegmentTranscriber engine, bool keepAudio = false) => new()
+    {
+        Store = Store(settings),
+        Transcriber = engine,
+        Context = Context(settings),
+        Diarizer = settings.DiarizeOthers ? services.CreateDiarizer(settings) : null,
+        MinutesClient = settings.MakeMeetingMinutes ? () => services.CreateMinutesClient(settings) : null,
+        MinutesModel = settings.MinutesModel,
+        MinutesProvider = settings.MeetingAi,
+        Log = services.Log,
+        Dictionary = settings.UserDictionary,
+        ApplyDictionary = settings.ApplyDictionaryToMeetings,
+        KeepAudio = keepAudio,
+    };
+
+    /// <summary>後処理の結果を知らせる（注意・完了・問題あり）</summary>
+    private void NotifyProcessed(Meeting meeting, MeetingProcessResult result)
+    {
+        foreach (var warning in result.Warnings) Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_NoticeTitle, warning, true));
+        Notice?.Invoke(this, meeting.ErrorMessage is null
+            ? new MeetingNotice(Strings.Meeting_Done, meeting.Minutes is null ? Strings.Meeting_TranscriptSaved : Strings.Meeting_TranscriptAndMinutesSaved)
+            : new MeetingNotice(Strings.Meeting_DoneWithProblems, meeting.ErrorMessage, true));
+    }
+
     private async Task ProcessAsync(Meeting meeting, AppSettings settings)
     {
-        var processor = new MeetingPostProcessor
-        {
-            Store = Store(settings),
-            Transcriber = transcriber ?? services.CreateTranscriber(settings),
-            Context = Context(settings),
-            Diarizer = settings.DiarizeOthers ? services.CreateDiarizer(settings) : null,
-            MinutesClient = settings.MakeMeetingMinutes ? () => services.CreateMinutesClient(settings) : null,
-            MinutesModel = settings.MinutesModel,
-            MinutesProvider = settings.MeetingAi,
-            Log = services.Log,
-            Dictionary = settings.UserDictionary,
-            ApplyDictionary = settings.ApplyDictionaryToMeetings,
-        };
+        var processor = CreatePostProcessor(settings, transcriber ?? services.CreateTranscriber(settings));
         try
         {
             var result = await processor.ProcessAsync(meeting, new InlineProgress<string>(SetProgress)).ConfigureAwait(false);
-            foreach (var warning in result.Warnings) Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_NoticeTitle, warning, true));
-            Notice?.Invoke(this, meeting.ErrorMessage is null
-                ? new MeetingNotice(Strings.Meeting_Done, meeting.Minutes is null ? Strings.Meeting_TranscriptSaved : Strings.Meeting_TranscriptAndMinutesSaved)
-                : new MeetingNotice(Strings.Meeting_DoneWithProblems, meeting.ErrorMessage, true));
+            NotifyProcessed(meeting, result);
         }
         catch (Exception e) when (e is IOException or UnauthorizedAccessException or InvalidOperationException)
         {
@@ -307,6 +340,134 @@ public sealed class MeetingController
         // 要件: REQ-MTG-057
         // 設計判断: DEC-MTG-143（後処理が終わったあとに、保存期間を過ぎた録音を消す。MeetingPostProcessor の中では呼ばない）
         PruneExpiredAudio();
+    }
+
+    // MARK: - 先頭のずれの保存
+
+    // 設計判断: DEC-MTG-157
+    private void StartOffsetTimer(SynchronizationContext? context)
+    {
+        StopOffsetTimer();
+        uiContext = context;
+        // UI のスレッドの文脈がない（テスト・CLI）ときは動かさない。メモ・オフレコの保存と同じスレッドで書くため（テストは直接呼ぶ）
+        if (context is null) return;
+        offsetTimer = new Timer(_ => uiContext?.Post(_ => PersistStartOffsetsIfKnown(), null), null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+    }
+
+    private void StopOffsetTimer()
+    {
+        offsetTimer?.Dispose();
+        offsetTimer = null;
+        uiContext = null;
+    }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-157
+    /// <summary>
+    /// 記録中に、チャンネルの先頭のずれが分かっていて、まだ会議に入れていなければ、入れて meeting.json に保存する（1 回の記録で多くて 2 回）。
+    /// 落ちた会議を録音から作り直すときに、2 つの録音の時刻をそろえるのに使う。UI のスレッドから呼ぶ（記録中は 1 秒ごとのタイマーが呼ぶ）。
+    /// 止めたときの保存（StopAsync）は今までどおり
+    /// </summary>
+    public void PersistStartOffsetsIfKnown()
+    {
+        if (State != MeetingState.Recording || Current is not { } meeting || recordingSettings is not { } settings) return;
+        var changed = false;
+        foreach (var recorder in new[] { mic, loopback })
+        {
+            if (recorder?.StartOffset is not { } offset) continue;
+            var key = MeetingRecovery.OffsetKey(recorder.Channel);
+            meeting.AudioStartOffsets ??= new Dictionary<string, double>();
+            if (meeting.AudioStartOffsets.ContainsKey(key)) continue;
+            meeting.AudioStartOffsets[key] = offset;
+            changed = true;
+        }
+        if (!changed) return;
+        try { Store(settings).Save(meeting); } catch (IOException e) { services.Log($"start offsets save failed: {e.Message}"); }
+    }
+
+    // MARK: - 録音から作り直す
+
+    // 要件: REQ-MTG-128
+    /// <summary>録音から作り直している会議があるか（State は変わらないので、アップデートの入れ替え前の確認にも使う）</summary>
+    public bool IsRecovering() { lock (gate) return recovering.Count > 0; }
+
+    // 要件: REQ-MTG-128
+    /// <summary>この会議を録音から作り直しているか</summary>
+    public bool IsRecovering(string meetingId) { lock (gate) return recovering.Contains(meetingId); }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-158
+    /// <summary>この会議に「録音から文字起こしと議事録を作る」を出すか（録音の長さを測る。MeetingRecovery.CanRecover）</summary>
+    public bool CanRecoverFromAudio(Meeting meeting) =>
+        MeetingRecovery.CanRecover(meeting, MeetingRecovery.ReadableAudioSeconds(Store(services.Settings()), meeting), IsRecoveryBusy(meeting));
+
+    private bool IsRecoveryBusy(Meeting meeting)
+    {
+        lock (gate) return state != MeetingState.Idle || recovering.Count > 0 || regenerating.Contains(meeting.Id) || Current?.Id == meeting.Id;
+    }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-158, DEC-MTG-159
+    /// <summary>
+    /// 記録中に落ちた会議を、残った録音（me.wav・others.wav）から、今の設定のエンジンで文字起こし・話者分離・議事録まで作り直す。
+    /// 待機中で、記録・作り直しをしていないときだけ動く（動かなければ false）。Current と State は変えない。
+    /// 始める前にエンジンの準備を確かめ（記録を始めるときと同じ）、通らなければ会議を変えずに TranscriptionException を投げる。
+    /// WAV のヘッダーを直し、会議の長さと終わっていないオフレコを直して保存してから、録音を消さない後処理に渡す。保存期間の削除は呼ばない
+    /// </summary>
+    public async Task<bool> RecoverFromAudioAsync(Meeting meeting, IProgress<string>? progress = null)
+    {
+        lock (gate)
+        {
+            if (state != MeetingState.Idle || recovering.Count > 0 || regenerating.Contains(meeting.Id) || Current?.Id == meeting.Id) return false;
+            recovering.Add(meeting.Id);
+        }
+        services.Log($"meeting recovery started: {meeting.Id}");
+        var settings = services.Settings();
+        var store = Store(settings);
+        try
+        {
+            if (!MeetingRecovery.CanRecover(meeting, MeetingRecovery.ReadableAudioSeconds(store, meeting), busy: false)) return false;
+            // 記録を始めるときと同じ準備の確かめ（Whisper のモデル・Gemini の認証）。通らなければ会議は変えない
+            var engine = services.CreateTranscriber(settings);
+            await engine.PrepareAsync(Context(settings)).ConfigureAwait(false);
+            try
+            {
+                // 設計判断: DEC-MTG-159（ヘッダーより後ろに書かれた音も読む）
+                foreach (var channel in new[] { MeetingChannel.Me, MeetingChannel.Others })
+                {
+                    try
+                    {
+                        if (Audio.WavStreamWriter.RepairHeader(store.AudioPath(meeting, channel))) services.Log($"meeting audio header repaired ({channel})");
+                    }
+                    catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+                    {
+                        services.Log($"meeting audio header repair failed ({channel}): {e.Message}");
+                    }
+                }
+                var seconds = MeetingRecovery.ReadableAudioSeconds(store, meeting);
+                meeting.ErrorMessage = null;
+                meeting.Duration = MeetingRecovery.Duration(meeting.AudioStartOffsets, seconds);
+                MeetingRecovery.CloseOpenOffRecord(meeting.OffRecord, meeting.Duration);
+                store.Save(meeting);
+                var result = await CreatePostProcessor(settings, engine, keepAudio: true).ProcessAsync(meeting, progress).ConfigureAwait(false);
+                services.Log($"meeting recovered: {meeting.Status}, {meeting.Utterances.Count} utterances");
+                NotifyProcessed(meeting, result);
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException or InvalidOperationException)
+            {
+                services.Log($"meeting recovery failed: {e.GetType().Name}: {e.Message}");
+                meeting.Status = MeetingStatus.Failed;
+                meeting.ErrorMessage = string.Format(Strings.Meeting_PostProcessFailedDetail, e.Message);
+                try { store.Save(meeting); } catch (IOException) { }
+                Notice?.Invoke(this, new MeetingNotice(Strings.Meeting_Failed, e.Message, true));
+            }
+            return true;
+        }
+        finally
+        {
+            lock (gate) recovering.Remove(meeting.Id);
+            MeetingChanged?.Invoke(this, meeting);
+        }
     }
 
     // MARK: - スリープ
@@ -476,7 +637,7 @@ public sealed class MeetingController
     /// <summary>録音を消してよい会議か。記録中・処理中の会議は消さない（議事録の作り直し中は消してよい）</summary>
     public bool CanDeleteAudio(Meeting meeting)
     {
-        lock (gate) return Current?.Id != meeting.Id && meeting.Status is not (MeetingStatus.Recording or MeetingStatus.Processing);
+        lock (gate) return Current?.Id != meeting.Id && !recovering.Contains(meeting.Id) && meeting.Status is not (MeetingStatus.Recording or MeetingStatus.Processing);
     }
 
     // 要件: REQ-MTG-055, REQ-MTG-056
@@ -542,7 +703,7 @@ public sealed class MeetingController
     /// <summary>議事録に使う発言の選び方を変えられるか。記録中・処理中・議事録の作り直し中の会議は変えない（処理の保存で消えるため）</summary>
     public bool CanEditMinutesSelection(Meeting meeting)
     {
-        lock (gate) return Current?.Id != meeting.Id && !regenerating.Contains(meeting.Id) && meeting.Status != MeetingStatus.Processing;
+        lock (gate) return Current?.Id != meeting.Id && !regenerating.Contains(meeting.Id) && !recovering.Contains(meeting.Id) && meeting.Status != MeetingStatus.Processing;
     }
 
     // 要件: REQ-MTG-044, REQ-MTG-045, REQ-MTG-046
@@ -701,10 +862,10 @@ public sealed class MeetingController
 
     // 要件: REQ-MTG-028
     // 設計判断: DEC-MTG-023
-    /// <summary>消してよい会議か。記録中・処理中の会議と、議事録を作り直している会議は消さない</summary>
+    /// <summary>消してよい会議か。記録中・処理中の会議と、議事録・録音から作り直している会議は消さない</summary>
     public bool CanDelete(Meeting meeting)
     {
-        lock (gate) return Current?.Id != meeting.Id && !regenerating.Contains(meeting.Id);
+        lock (gate) return Current?.Id != meeting.Id && !regenerating.Contains(meeting.Id) && !recovering.Contains(meeting.Id);
     }
 
     // 要件: REQ-MTG-028

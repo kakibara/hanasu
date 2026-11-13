@@ -247,6 +247,42 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
     }
 
+    // MARK: - 終了
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-160
+    /// 会議の記録中に終了するときは、⌘Q・メニューなら確かめ、録音を閉じてから終わる（ログアウト・再起動・システム終了では確かめない）。
+    /// 会議は「記録中」のまま残り、次の起動で「失敗」になって、録音から作り直せる
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        guard meetingRecorder.state == .recording || meetingRecorder.state == .starting else { return .terminateNow }
+        if !Self.isSystemQuit() {
+            let alert = NSAlert()
+            alert.messageText = tr("会議を記録中です。終了しますか？")
+            alert.informativeText = tr("記録は止まり、次に起動したときに録音から文字起こしと議事録を作れます。")
+            alert.addButton(withTitle: tr("終了"))
+            alert.addButton(withTitle: tr("キャンセル"))
+            NSApp.activate()
+            guard alert.runModal() == .alertFirstButtonReturn else { return .terminateCancel }
+        }
+        let recorder = meetingRecorder
+        Task { @MainActor in
+            await recorder.closeForTermination()
+            sender.reply(toApplicationShouldTerminate: true)
+        }
+        return .terminateLater
+    }
+
+    // 設計判断: DEC-MTG-160
+    /// 終わる理由が、ログアウト・再起動・システム終了か（今の Apple イベントの kAEQuitReason）
+    private static func isSystemQuit() -> Bool {
+        guard let event = NSAppleEventManager.shared().currentAppleEvent,
+              let reason = event.attributeDescriptor(forKeyword: AEKeyword(kAEQuitReason))?.enumCodeValue
+        else { return false }
+        let systemReasons = [kAELogOut, kAEReallyLogOut, kAEShowRestartDialog, kAEShowShutdownDialog, kAERestart, kAEShutDown]
+            .map { OSType($0) }
+        return systemReasons.contains(reason)
+    }
+
     // MARK: - Dock
 
     // 要件: REQ-COM-040

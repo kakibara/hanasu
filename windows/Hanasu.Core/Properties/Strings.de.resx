@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Besprechungsaufzeichnung kann nicht gestartet werden</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>Während eine Besprechung aus ihrer Aufnahme neu erstellt wird, kann keine Aufnahme gestartet werden.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>Ein Diktat wird gerade aufgenommen. Nach dem Ende erneut versuchen.</value>
   </data>

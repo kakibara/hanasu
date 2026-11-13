@@ -2,8 +2,8 @@
 import Foundation
 import Speech
 
-// 要件: REQ-MTG-002, REQ-MTG-003, REQ-MTG-023
-// 設計判断: DEC-MTG-005, DEC-MTG-152
+// 要件: REQ-MTG-002, REQ-MTG-003, REQ-MTG-023, REQ-MTG-128
+// 設計判断: DEC-MTG-005, DEC-MTG-152, DEC-MTG-156
 /// 会議の 1 チャンネル（自分／相手）分の音声を、文字起こししながら音声ファイルにも書き出す。
 /// append はオーディオスレッドなど任意のスレッドから呼んでよい（内部のキューで順番に処理する）。
 final class ChannelTranscriber: @unchecked Sendable {
@@ -21,6 +21,7 @@ final class ChannelTranscriber: @unchecked Sendable {
     private let meetingStart: Date
     /// false なら文字起こしはせず、音声ファイルに書き出すだけ（Whisper / Gemini では記録のあとにまとめて文字起こしする）
     let live: Bool
+    private let realtimeAudio: Bool
 
     private var analyzer: SpeechAnalyzer?
     private var analyzerFormat: AVAudioFormat?
@@ -31,7 +32,15 @@ final class ChannelTranscriber: @unchecked Sendable {
     private var _lastSoundAt: Date?
     private var continuation: AsyncStream<AnalyzerInput>.Continuation?
     private var resultsTask: Task<Void, Never>?
-    private var file: AVAudioFile?
+    // 設計判断: DEC-MTG-156
+    /// 録音の書き出し。閉じたら nil（書き出しの失敗を読むための参照は levelLock の _writer に残す）
+    private var file: MeetingAudioWriter?
+    private var _writer: MeetingAudioWriter?
+    // 設計判断: DEC-MTG-157
+    private var _knownStartOffset: Double?
+    // 設計判断: DEC-MTG-158
+    /// 文字起こしの結果（途中結果を含む）が、このチャンネルの音声のどこまで進んだか（秒）
+    private var _analyzedSeconds: Double = 0
     private var phrases: [TranscribedPhrase] = []
     /// 書いた（文字起こしに渡した）音声の長さ（秒）
     private var writtenSeconds: Double = 0
@@ -43,14 +52,17 @@ final class ChannelTranscriber: @unchecked Sendable {
     static let analyzerChunkSeconds = 0.2
 
     /// - Parameter fixedTimeOffset: 録音開始からのずれが分かっている場合（ファイル入力など）に指定する
+    /// - Parameter realtimeAudio: 実時間の音か（記録中）。ファイルから流すときは false（録音の書き出しが追いつくのを待つ。DEC-MTG-156）
     init(channel: MeetingChannel, inputFormat: AVAudioFormat, fileURL: URL?, meetingStart: Date, fixedTimeOffset: Double? = nil,
-         live: Bool = true) {
+         live: Bool = true, realtimeAudio: Bool = true) {
         self.channel = channel
         self.live = live
+        self.realtimeAudio = realtimeAudio
         self.inputFormat = inputFormat
         self.fileURL = fileURL
         self.meetingStart = meetingStart
         self.timeOffset = fixedTimeOffset
+        self._knownStartOffset = fixedTimeOffset
         self.queue = DispatchQueue(label: "Hanasu.ChannelTranscriber.\(channel.rawValue)")
     }
 
@@ -59,8 +71,12 @@ final class ChannelTranscriber: @unchecked Sendable {
         guard live else {
             // 書き出すだけ。あとで読み直す Whisper / Gemini に合わせて 16 kHz モノラルにする
             let format = TranscriptionAudio.format
-            file = try fileURL.map { try Self.makeFile(url: $0, format: format) }
-            queue.sync { self.analyzerFormat = format }
+            let writer = try fileURL.map { try MeetingAudioWriter(url: $0, format: format, realtime: realtimeAudio) }
+            levelLock.withLock { _writer = writer }
+            queue.sync {
+                self.file = writer
+                self.analyzerFormat = format
+            }
             return
         }
         guard let locale = await SpeechTranscriber.supportedLocale(equivalentTo: Locale(identifier: localeIdentifier)) else {
@@ -91,6 +107,8 @@ final class ChannelTranscriber: @unchecked Sendable {
             do {
                 for try await result in transcriber.results {
                     guard let self else { return }
+                    let reached = max(result.range.end.seconds, result.resultsFinalizationTime.seconds)
+                    if reached.isFinite { self.levelLock.withLock { self._analyzedSeconds = max(self._analyzedSeconds, reached) } }
                     if result.isFinal {
                         self.receiveFinal(result.text, range: result.range)
                     } else {
@@ -108,33 +126,30 @@ final class ChannelTranscriber: @unchecked Sendable {
         }
         try await analyzer.start(inputSequence: stream)
 
-        if let fileURL {
-            file = try Self.makeFile(url: fileURL, format: format)
-        }
+        let writer = try fileURL.map { try MeetingAudioWriter(url: $0, format: format, realtime: realtimeAudio) }
+        levelLock.withLock { _writer = writer }
 
         queue.sync {
+            self.file = writer
             self.analyzer = analyzer
             self.analyzerFormat = format
             self.continuation = continuation
         }
     }
 
-    private static func makeFile(url: URL, format: AVAudioFormat) throws -> AVAudioFile {
-        try AVAudioFile(
-            forWriting: url,
-            settings: [
-                AVFormatIDKey: kAudioFormatMPEG4AAC,
-                AVSampleRateKey: format.sampleRate,
-                AVNumberOfChannelsKey: format.channelCount,
-                AVEncoderBitRateKey: 32000,
-            ],
-            commonFormat: format.commonFormat,
-            interleaved: format.isInterleaved)
-    }
-
     /// このチャンネルの音声（音声ファイルの先頭）が、録音開始から何秒後に始まったか。
     /// 記録のあとに音声ファイルから文字起こしするとき、時刻をそろえるのに使う
     var audioStartOffset: Double { queue.sync { timeOffset ?? 0 } }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-157
+    /// 先頭のずれが分かっていればその値（まだ音が届いていなければ nil）。queue を待たずに読める（メインスレッドの記録中の保存で使う）
+    var knownStartOffset: Double? { levelLock.withLock { _knownStartOffset } }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-156
+    /// 記録中に録音の一部を書けなかった（ディスクがいっぱいなど）
+    var audioWriteFailed: Bool { levelLock.withLock { _writer }?.failure != nil }
 
     // 要件: REQ-MTG-010
     // 設計判断: DEC-MTG-009
@@ -155,13 +170,12 @@ final class ChannelTranscriber: @unchecked Sendable {
                   let analyzerFormat, let converted = convert(buffer, to: analyzerFormat) else { return }
             if timeOffset == nil {
                 let duration = Double(buffer.frameLength) / buffer.format.sampleRate
-                timeOffset = max(0, Date().timeIntervalSince(meetingStart) - duration)
+                let offset = max(0, Date().timeIntervalSince(meetingStart) - duration)
+                timeOffset = offset
+                levelLock.withLock { _knownStartOffset = offset }
             }
-            do {
-                try file?.write(from: converted)
-            } catch {
-                appLog.error("meeting audio write error: \(error.localizedDescription, privacy: .public)")
-            }
+            // 設計判断: DEC-MTG-156（写して書き出しのキューに渡すだけ。ここでは待たない）
+            file?.append(converted)
             writtenSeconds += Double(converted.frameLength) / converted.format.sampleRate
             measureLevel(converted)
             enqueueForAnalyzer(converted)
@@ -256,9 +270,9 @@ final class ChannelTranscriber: @unchecked Sendable {
                 continuation.finish()
             }
             continuation = nil
-            file = nil  // 解放でファイルを閉じる
             return self.analyzer
         }
+        await closeAudioFile()
         if let analyzer {
             do {
                 try await analyzer.finalizeAndFinishThroughEndOfInput()
@@ -270,14 +284,89 @@ final class ChannelTranscriber: @unchecked Sendable {
         return queue.sync { phrases }
     }
 
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-158
+    /// 音声ファイルを文字起こしに流して、全発話を返す（録音から作り直すときと、--meeting-files で使う）。
+    /// 文字起こし（SpeechAnalyzer）は渡した音を自分の中にためるので、ファイルを一度に流すと長い録音ではメモリを使い切る。
+    /// 10 秒ぶん流すごとに、文字起こしが 30 秒ぶんより後ろにいれば追いつくのを待つ（無音の間は結果が出ず進み具合が分からないので、
+    /// 進まないまま 0.5 秒たったら続ける）。読んでいる途中で読めなくなったら（落ちた録音の終わりなど）、そこまでを使う
+    /// - Parameters:
+    ///   - offset: 音声ファイルの先頭が、録音開始から何秒後か
+    ///   - live: false なら文字起こしせず、writingTo に書き出すだけ（Whisper / Gemini はあとでファイルから文字起こしする）
+    ///   - writingTo: 流した音を書き出す録音のファイル（nil なら書かない）
+    /// - Returns: 発話・認識が途中で止まったか・流した音の長さ（秒）
+    static func transcribe(file url: URL, channel: MeetingChannel, offset: Double, live: Bool, writingTo: URL? = nil,
+                           localeIdentifier: String, contextualStrings: [String])
+        async throws -> (phrases: [TranscribedPhrase], recognitionFailed: Bool, seconds: Double)
+    {
+        let file = try AVAudioFile(forReading: url)
+        let transcriber = ChannelTranscriber(
+            channel: channel, inputFormat: file.processingFormat, fileURL: writingTo,
+            meetingStart: Date(), fixedTimeOffset: offset, live: live, realtimeAudio: false)
+        try await transcriber.prepare(localeIdentifier: localeIdentifier, contextualStrings: contextualStrings)
+        var fed = 0.0
+        var lastWait = 0.0
+        while file.framePosition < file.length {
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 8192) else { break }
+            do {
+                try file.read(into: buffer)
+            } catch {
+                appLog.error("meeting audio read stopped (\(channel.rawValue, privacy: .public)) at \(fed, privacy: .public)s: \(error.localizedDescription, privacy: .public)")
+                break
+            }
+            if buffer.frameLength == 0 { break }
+            transcriber.append(buffer)
+            fed += Double(buffer.frameLength) / buffer.format.sampleRate
+            if live, fed - lastWait >= 10 {
+                await transcriber.waitForAnalyzer(window: 30, stallTimeout: 0.5)
+                lastWait = fed
+            }
+        }
+        let phrases = await transcriber.finish()
+        return (phrases, transcriber.recognitionFailed, fed)
+    }
+
+    /// 文字起こしの進み具合が、渡した音の window 秒前より後ろにいれば、追いつくまで待つ。進まないまま stallTimeout 秒たったらやめる
+    private func waitForAnalyzer(window: Double, stallTimeout: Double) async {
+        var lastProgress = -1.0
+        var lastChange = Date()
+        while true {
+            let (fed, analyzer) = queue.sync { (writtenSeconds, self.analyzer) }
+            var progress = levelLock.withLock { _analyzedSeconds }
+            if let range = await analyzer?.volatileRange, range.start.seconds.isFinite {
+                progress = max(progress, range.start.seconds)
+            }
+            if progress >= fed - window { return }
+            if progress != lastProgress {
+                lastProgress = progress
+                lastChange = Date()
+            } else if Date().timeIntervalSince(lastChange) > stallTimeout {
+                return
+            }
+            try? await Task.sleep(nanoseconds: 20_000_000)
+        }
+    }
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-156, DEC-MTG-160
+    /// 録音のファイルを閉じる（それまでに渡した音を書き終えてから。待つのは最大 5 秒）。文字起こしは止めない。
+    /// 2 回目からは何もしない。アプリを終えるときにも呼ぶ
+    func closeAudioFile() async {
+        let writer: MeetingAudioWriter? = queue.sync {
+            defer { file = nil }
+            return file
+        }
+        await writer?.finish()
+    }
+
     func cancel() async {
         let analyzer: SpeechAnalyzer? = queue.sync {
             pendingInput = nil
             continuation?.finish()
             continuation = nil
-            file = nil
             return self.analyzer
         }
+        await closeAudioFile()
         await analyzer?.cancelAndFinishNow()
         resultsTask?.cancel()
     }
