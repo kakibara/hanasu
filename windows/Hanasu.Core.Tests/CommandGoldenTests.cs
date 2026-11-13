@@ -82,6 +82,22 @@ internal static class CommandTestData
             SendAppName = json["sendAppName"]!.GetValue<bool>(),
             DictationAi = TextAiProvider.Gemini,
             MeetingAi = TextAiProvider.Gemini,
+            // 要件: REQ-DIC-023（Mac の customAppStyles・appStyles を、Windows の CustomStyles・AppStyles に移す。アプリは exe で引く）
+            CustomStyles = (json["customAppStyles"]?.AsArray() ?? []).Select(c => new CustomStyle
+            {
+                Id = Guid.Parse(c!["id"]!.GetValue<string>()),
+                Name = c["name"]!.GetValue<string>(),
+                Language = c["language"]!.GetValue<string>(),
+                Rules = c["rules"]!.AsArray().Select(r => r!.GetValue<string>()).ToList(),
+            }).ToList(),
+            AppStyles = json["appStyles"]?.AsArray().Select(a => new AppStyleSetting
+            {
+                Exe = a!["exe"]!.GetValue<string>(),
+                Name = a["name"]!.GetValue<string>(),
+                Preset = a["preset"]!.GetValue<string>(),
+                Rules = a["rules"]?.GetValue<string>() ?? "",
+                CustomStyleId = a["customStyleID"] is { } id ? Guid.Parse(id.GetValue<string>()) : null,
+            }).ToList(),
         };
     }
 

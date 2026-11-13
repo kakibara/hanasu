@@ -74,6 +74,8 @@ internal sealed class AppHost : IDisposable
             Hud = hud,
             History = History,
             ForegroundAppName = foreground.ForegroundAppName,
+            // 要件: REQ-DIC-020（設定の「アプリ別」の文体を、前面のアプリの exe の名前で引く。DEC-DIC-216）
+            ForegroundAppExe = foreground.ForegroundAppExe,
             SetEscapeHotKeyEnabled = SetEscapeHotKey,
             PlaySound = cue =>
             {
@@ -191,13 +193,14 @@ internal sealed class AppHost : IDisposable
     /// 文章の処理（整形・英訳・議事録）に使う AI を、用途ごとの設定（REQ-COM-024）で作る。認証情報がなければ null。
     /// 待ち時間は、音声入力が 15 秒、議事録が Gemini 180 秒・Claude 300 秒
     /// </summary>
-    public ITextAiClient? CreateTextAi(AppSettings settings, TextAiUse use)
+    /// <param name="timeout">待ち時間を決めて作るとき（文体を学ぶのは 120 秒。DEC-DIC-210）。null なら用途ごとの既定</param>
+    public ITextAiClient? CreateTextAi(AppSettings settings, TextAiUse use, TimeSpan? timeout = null)
     {
         var provider = TextAiFactory.ProviderFor(settings, use);
         // ローカルは、モデルの読み込みを含めてもっと長く待つ（LocalLlmClient.MinimumTimeout。DEC-COM-064）
-        var timeout = use == TextAiUse.Dictation ? TimeSpan.FromSeconds(15)
+        timeout ??= use == TextAiUse.Dictation ? TimeSpan.FromSeconds(15)
             : provider == TextAiProvider.Claude ? TimeSpan.FromSeconds(300) : TimeSpan.FromSeconds(180);
-        return TextAiFactory.Create(settings, Secrets, use, timeout);
+        return TextAiFactory.Create(settings, Secrets, use, timeout.Value);
     }
 
     // MARK: - ホットキー

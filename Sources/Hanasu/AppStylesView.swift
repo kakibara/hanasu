@@ -6,6 +6,7 @@ import UniformTypeIdentifiers
 /// 設定画面の「アプリ別」。入力先アプリごとに、文体のプリセット・追加ルール・既定の出力言語を決める。
 struct AppStylesTab: View {
     @ObservedObject var store = AppStyleStore.shared
+    @ObservedObject var customStore = CustomStyleStore.shared
     /// 追加ルールの欄を開いているアプリ
     @State private var expandedID: String?
     @State private var confirmReset = false
@@ -25,6 +26,7 @@ struct AppStylesTab: View {
                 ForEach($store.styles) { $style in
                     AppStyleRow(
                         style: $style,
+                        customStyles: customStore.sorted,
                         expanded: expandedID == style.id,
                         onToggleExpanded: { expandedID = expandedID == style.id ? nil : style.id },
                         onDelete: { delete(style.id) })
@@ -47,6 +49,8 @@ struct AppStylesTab: View {
                 }
             }
             .font(.caption)
+            // 要件: REQ-DIC-022
+            CustomStylesSection(customStore: customStore)
         }
         .formStyle(.grouped)
         .confirmationDialog(tr("アプリ別の設定を初期設定に戻しますか？"), isPresented: $confirmReset) {
@@ -55,7 +59,8 @@ struct AppStylesTab: View {
                 store.resetToDefaults()
             }
         } message: {
-            Text(tr("追加したアプリと、アプリごとの追加ルールが消えます。元に戻せません。"))
+            // 設計判断: DEC-DIC-213（カスタム文体は消さない）
+            Text(tr("追加したアプリと、アプリごとの追加ルールが消えます。カスタム文体は消えません。元に戻せません。"))
         }
     }
 
@@ -114,11 +119,33 @@ struct AppStylesTab: View {
     }
 }
 
+/// プリセットの選択欄の項目（組み込みのプリセットか、カスタム文体）
+private enum StyleChoice: Hashable {
+    case preset(AppStylePreset)
+    case custom(UUID)
+}
+
 private struct AppStyleRow: View {
     @Binding var style: AppStyle
+    var customStyles: [CustomStyle]
     var expanded: Bool
     var onToggleExpanded: () -> Void
     var onDelete: () -> Void
+
+    /// 選択欄の値。見つからないカスタム文体（消した・ほかの版で保存した）は「なし」として出す
+    private var choice: Binding<StyleChoice> {
+        Binding(
+            get: {
+                if let id = style.customStyleID, customStyles.contains(where: { $0.id == id }) { return .custom(id) }
+                return .preset(style.preset)
+            },
+            set: { value in
+                switch value {
+                case .preset(let preset): style.selectPreset(preset)
+                case .custom(let id): style.selectCustomStyle(id)
+                }
+            })
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -130,8 +157,14 @@ private struct AppStyleRow: View {
                     .lineLimit(1)
                     .help(style.bundleID)
                 Spacer()
-                Picker(tr("プリセット"), selection: $style.preset) {
-                    ForEach(AppStylePreset.allCases) { Text($0.label).tag($0) }
+                // 要件: REQ-DIC-023
+                // 設計判断: DEC-DIC-213, DEC-DIC-215（組み込みのあとに区切りを入れてカスタム文体を並べる。組み込みを選んだら割り当てを外す）
+                Picker(tr("プリセット"), selection: choice) {
+                    ForEach(AppStylePreset.allCases) { Text($0.label).tag(StyleChoice.preset($0)) }
+                    if !customStyles.isEmpty {
+                        Divider()
+                        ForEach(customStyles) { Text($0.name).tag(StyleChoice.custom($0.id)) }
+                    }
                 }
                 .labelsHidden()
                 .frame(width: 150)
@@ -218,7 +251,8 @@ func renderAppStylesPNG(to url: URL, expandedFirst: Bool) {
 
 extension AppStylesTab {
     /// 確認用に、追加ルール欄を開いた状態で作る
-    init(initialExpandedID: String?) {
+    init(initialExpandedID: String?, customStore: CustomStyleStore = .shared) {
         _expandedID = State(initialValue: initialExpandedID)
+        self.customStore = customStore
     }
 }

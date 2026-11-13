@@ -1098,4 +1098,55 @@
   <data name="Cmd_UnreadableCount" xml:space="preserve">
     <value>有 {0} 个会议无法读取（{1}）。</value>
   </data>
+  <data name="AppStyle_Preset_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="AppStyle_Preset_Chat" xml:space="preserve">
+    <value>聊天</value>
+  </data>
+  <data name="AppStyle_Preset_Email" xml:space="preserve">
+    <value>邮件</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPolite" xml:space="preserve">
+    <value>文档（礼貌语气）</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPlain" xml:space="preserve">
+    <value>文档（平实语气）</value>
+  </data>
+  <data name="CustomStyle_EmptyName" xml:space="preserve">
+    <value>请输入名称。</value>
+  </data>
+  <data name="CustomStyle_DuplicateName" xml:space="preserve">
+    <value>已有同名的文体。请使用其他名称。</value>
+  </data>
+  <data name="CustomStyle_UnknownLanguage" xml:space="preserve">
+    <value>请选择语言。</value>
+  </data>
+  <data name="CustomStyle_EmptyRules" xml:space="preserve">
+    <value>请至少输入一条规则。</value>
+  </data>
+  <data name="CustomStyle_TooManyRules" xml:space="preserve">
+    <value>规则最多 {0} 行。</value>
+  </data>
+  <data name="CustomStyle_RulesTooLong" xml:space="preserve">
+    <value>规则总共最多 {0} 个字符。</value>
+  </data>
+  <data name="StyleSource_Unsupported" xml:space="preserve">
+    <value>不支持此文件类型（请选择 .docx、.txt 或 .md 文件）。</value>
+  </data>
+  <data name="StyleSource_Unreadable" xml:space="preserve">
+    <value>文件已损坏，或使用了无法读取的字符编码。</value>
+  </data>
+  <data name="StyleSource_TooLarge" xml:space="preserve">
+    <value>文件过大（最大 20 MB）。</value>
+  </data>
+  <data name="StyleLearn_TooShort" xml:space="preserve">
+    <value>文章太短。请至少输入 {0} 个字符。</value>
+  </data>
+  <data name="StyleLearn_InvalidResponse" xml:space="preserve">
+    <value>无法从 AI 的回复中读取文体规则。请重试。</value>
+  </data>
+  <data name="StyleLearn_UnknownLanguage" xml:space="preserve">
+    <value>不支持该文章的语言（{0}）。</value>
+  </data>
 </root>

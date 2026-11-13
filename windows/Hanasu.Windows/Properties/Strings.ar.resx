@@ -1658,4 +1658,187 @@
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0} ({1})</value>
   </data>
+  <data name="Settings_Tab_AppStyles" xml:space="preserve">
+    <value>حسب التطبيق</value>
+  </data>
+  <data name="AppStyles_Enabled" xml:space="preserve">
+    <value>تغيير الأسلوب حسب التطبيق الذي تكتب فيه</value>
+  </data>
+  <data name="AppStyles_EnabledNote" xml:space="preserve">
+    <value>يُحدَّد حسب التطبيق الموجود في المقدمة عند بدء التسجيل (يُتعرَّف عليه من اسم ملف .exe). عند تعارض هذه القواعد مع القواعد الإضافية في علامة التبويب "القاموس والقواعد"، تكون الأولوية لقواعد التطبيق. تعمل جميع تطبيقات المتجر باسم ApplicationFrameHost.exe، لذا لا يمكن التمييز بينها ولا تُطبَّق عليها هذه الإعدادات.</value>
+  </data>
+  <data name="AppStyles_PresetsHeader" xml:space="preserve">
+    <value>الإعدادات المسبقة</value>
+  </data>
+  <data name="AppStyles_PresetLine" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AppStyles_PresetSummary_None" xml:space="preserve">
+    <value>بلا إعداد مسبق (تُستخدم القواعد الإضافية لهذا التطبيق فقط)</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Chat" xml:space="preserve">
+    <value>جمل قصيرة غير رسمية. بلا فقرات</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Email" xml:space="preserve">
+    <value>أسلوب مهذب ورسمي. فقرة لكل فكرة</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPolite" xml:space="preserve">
+    <value>توحيد الأسلوب الكتابي المهذب، مع تقسيم الفقرات</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPlain" xml:space="preserve">
+    <value>توحيد الأسلوب الكتابي التقريري، مع تقسيم الفقرات</value>
+  </data>
+  <data name="CustomStyles_Header" xml:space="preserve">
+    <value>الأساليب المخصصة</value>
+  </data>
+  <data name="CustomStyles_Note" xml:space="preserve">
+    <value>أساليب تعلّمها التطبيق من نصوصك. يُحفظ الاسم واللغة والقواعد فقط، ولا يُحفظ النص. لا يُستخدم الأسلوب المخصص إلا إذا كانت لغة الإخراج هي لغة الأسلوب نفسها.</value>
+  </data>
+  <data name="CustomStyles_Empty" xml:space="preserve">
+    <value>لا توجد أساليب مخصصة بعد.</value>
+  </data>
+  <data name="CustomStyles_RowDetail" xml:space="preserve">
+    <value>{0} · القواعد: {1}</value>
+  </data>
+  <data name="CustomStyles_Learn" xml:space="preserve">
+    <value>التعلّم من نص…</value>
+  </data>
+  <data name="CustomStyles_Edit" xml:space="preserve">
+    <value>تحرير…</value>
+  </data>
+  <data name="CustomStyles_Edit_A11y" xml:space="preserve">
+    <value>تحرير {0}</value>
+  </data>
+  <data name="CustomStyles_Delete" xml:space="preserve">
+    <value>حذف…</value>
+  </data>
+  <data name="CustomStyles_Delete_A11y" xml:space="preserve">
+    <value>حذف {0}</value>
+  </data>
+  <data name="CustomStyles_ConfirmDelete" xml:space="preserve">
+    <value>هل تريد حذف الأسلوب المخصص "{0}"؟
+ستتحول التطبيقات التي تستخدمه (العدد: {1}) إلى "بلا". تبقى القواعد الإضافية لكل تطبيق. لا يمكن التراجع عن هذا الإجراء.</value>
+  </data>
+  <data name="CustomStyles_ConfirmDeleteUnused" xml:space="preserve">
+    <value>هل تريد حذف الأسلوب المخصص "{0}"؟
+لا يستخدمه أي تطبيق. لا يمكن التراجع عن هذا الإجراء.</value>
+  </data>
+  <data name="AppStyles_AppsHeader" xml:space="preserve">
+    <value>التطبيقات</value>
+  </data>
+  <data name="AppStyles_NoApps" xml:space="preserve">
+    <value>لا توجد تطبيقات مسجّلة.</value>
+  </data>
+  <data name="AppStyles_PresetLabel" xml:space="preserve">
+    <value>الإعداد المسبق</value>
+  </data>
+  <data name="AppStyles_Preset_A11y" xml:space="preserve">
+    <value>الإعداد المسبق لـ {0}</value>
+  </data>
+  <data name="AppStyles_RulesLabel" xml:space="preserve">
+    <value>قواعد إضافية لهذا التطبيق (لها الأولوية على الإعداد المسبق)</value>
+  </data>
+  <data name="AppStyles_Rules_A11y" xml:space="preserve">
+    <value>القواعد الإضافية لـ {0}</value>
+  </data>
+  <data name="AppStyles_RulesExample" xml:space="preserve">
+    <value>مثال: لا تستخدم الرموز التعبيرية / لا تستخدم التعداد النقطي</value>
+  </data>
+  <data name="AppStyles_Remove" xml:space="preserve">
+    <value>إزالة من القائمة</value>
+  </data>
+  <data name="AppStyles_Remove_A11y" xml:space="preserve">
+    <value>إزالة {0} من القائمة</value>
+  </data>
+  <data name="AppStyles_AddRunning" xml:space="preserve">
+    <value>إضافة تطبيق قيد التشغيل</value>
+  </data>
+  <data name="AppStyles_NoRunningApps" xml:space="preserve">
+    <value>لا توجد تطبيقات أخرى ذات نوافذ قيد التشغيل.</value>
+  </data>
+  <data name="AppStyles_ChooseExe" xml:space="preserve">
+    <value>اختيار ملف .exe…</value>
+  </data>
+  <data name="AppStyles_ExeFilter" xml:space="preserve">
+    <value>البرامج (*.exe)|*.exe</value>
+  </data>
+  <data name="AppStyles_AlreadyAdded" xml:space="preserve">
+    <value>{0} موجود في القائمة بالفعل.</value>
+  </data>
+  <data name="AppStyles_Reset" xml:space="preserve">
+    <value>إعادة التعيين إلى الافتراضي…</value>
+  </data>
+  <data name="AppStyles_ConfirmReset" xml:space="preserve">
+    <value>هل تريد إعادة تعيين الإعدادات حسب التطبيق إلى الافتراضي؟
+ستُحذف التطبيقات المضافة والقواعد الإضافية لكل تطبيق. لن تُحذف الأساليب المخصصة. لا يمكن التراجع عن هذا الإجراء.</value>
+  </data>
+  <data name="StyleLearning_Title" xml:space="preserve">
+    <value>تعلّم الأسلوب من نص</value>
+  </data>
+  <data name="StyleLearning_EditTitle" xml:space="preserve">
+    <value>تحرير الأسلوب المخصص</value>
+  </data>
+  <data name="StyleLearning_Intro" xml:space="preserve">
+    <value>الصق نصًا كتبته بنفسك، أو اختر ملفات. يقرأ AI المحدد لـ "المحضر" طريقة الكتابة ويكتب قواعد الأسلوب. لا يُحفظ النص؛ يُحفظ الاسم واللغة والقواعد فقط.</value>
+  </data>
+  <data name="StyleLearning_Input_A11y" xml:space="preserve">
+    <value>النص الذي يُتعلَّم منه الأسلوب</value>
+  </data>
+  <data name="StyleLearning_ChooseFiles" xml:space="preserve">
+    <value>اختيار ملفات…</value>
+  </data>
+  <data name="StyleLearning_FileFilter" xml:space="preserve">
+    <value>ملفات Word والملفات النصية وMarkdown|{0}</value>
+  </data>
+  <data name="StyleLearning_FileFailed" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="StyleLearning_InputTruncated" xml:space="preserve">
+    <value>يتسع مربع الإدخال لـ {0} حرف كحد أقصى. لم تتم إضافة الباقي.</value>
+  </data>
+  <data name="StyleLearning_Count" xml:space="preserve">
+    <value>عدد الأحرف: {0}</value>
+  </data>
+  <data name="StyleLearning_CountUsed" xml:space="preserve">
+    <value>عدد الأحرف: {0} (يُرسَل أول {1} فقط)</value>
+  </data>
+  <data name="StyleLearning_NeedMore" xml:space="preserve">
+    <value>أدخل {0} حرف على الأقل لتعلّم الأسلوب.</value>
+  </data>
+  <data name="StyleLearning_Learn" xml:space="preserve">
+    <value>تعلّم الأسلوب</value>
+  </data>
+  <data name="StyleLearning_Learning" xml:space="preserve">
+    <value>جارٍ تعلّم الأسلوب… (حتى {0} ثانية)</value>
+  </data>
+  <data name="StyleLearning_Stop" xml:space="preserve">
+    <value>إيقاف</value>
+  </data>
+  <data name="StyleLearning_Stopped" xml:space="preserve">
+    <value>تم الإيقاف. لا يزال نصك هنا، لذا يمكنك المحاولة مرة أخرى.</value>
+  </data>
+  <data name="StyleLearning_Learned" xml:space="preserve">
+    <value>راجع القواعد وعدّلها، ثم احفظ. AI: {0} ({1})</value>
+  </data>
+  <data name="StyleLearning_Name" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="StyleLearning_Language" xml:space="preserve">
+    <value>اللغة</value>
+  </data>
+  <data name="StyleLearning_LanguageNote" xml:space="preserve">
+    <value>يُستخدم فقط عندما يكون الإخراج بهذه اللغة.</value>
+  </data>
+  <data name="StyleLearning_Rules" xml:space="preserve">
+    <value>القواعد (قاعدة في كل سطر)</value>
+  </data>
+  <data name="StyleLearning_RulesCount" xml:space="preserve">
+    <value>الأسطر: {0}/{1} · الأحرف: {2}/{3}</value>
+  </data>
+  <data name="StyleLearning_Save" xml:space="preserve">
+    <value>حفظ</value>
+  </data>
+  <data name="StyleLearning_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
 </root>

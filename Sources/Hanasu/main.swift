@@ -108,6 +108,8 @@ MainActor.assumeIsolated { ScreenContextCLI.runIfRequested() }
 MainActor.assumeIsolated { PasteFallbackCLI.runIfRequested() }
 // 翻訳する言語の設定の確認（--render-translation-settings）。TranslationSettingsView.swift
 MainActor.assumeIsolated { TranslationSettingsCLI.runIfRequested() }
+// 文章から文体を学ぶ機能の確認（--test-custom-styles / --learn-style / --render-style-learning）。StyleLearningCLI.swift
+MainActor.assumeIsolated { StyleLearningCLI.runIfRequested() }
 // ユーザー辞書の確認（--apply-dictionary / --test-dictionary / --suggest-dictionary / --render-dictionary-settings）。
 // 使い方は DictionaryCLI.swift を参照
 if DictionaryCLI.handles(CommandLine.arguments) {

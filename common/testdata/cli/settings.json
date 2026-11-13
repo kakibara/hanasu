@@ -3,5 +3,54 @@
   "dictionaryText": "はなす, 花須 => Hanasu\nクロード\nえーびーしー => ABC社",
   "extraInstructions": "句読点は「、。」を使う",
   "sendAppName": true,
-  "_comment": "共有のテストデータの設定（架空の値だけ）。Mac は UserDefaults の suite に、Windows は AppSettings に入れて動かす（DEC-COM-192）"
+  "customAppStyles": [
+    {
+      "id": "0F8E4C9A-6B2D-4E1F-9A3C-5D7E8F901234",
+      "name": "報告書（である調）",
+      "language": "ja",
+      "rules": [
+        "文末は である調（だ・である）にそろえる（例: 〜です → 〜である，〜なんですけど → 〜だが）",
+        "読点は「，」を使い，句点は「。」を使う",
+        "一文は短めにし，結論を先に書く"
+      ]
+    },
+    {
+      "id": "1A2B3C4D-5E6F-4A7B-8C9D-0E1F2A3B4C5D",
+      "name": "Casual English",
+      "language": "en",
+      "rules": [
+        "Use short, casual sentences (example: \"I would like to\" → \"I'd like to\")",
+        "Use contractions"
+      ]
+    }
+  ],
+  "appStyles": [
+    {
+      "bundleID": "com.tinyspeck.slackmacgap",
+      "exe": "slack.exe",
+      "name": "Slack",
+      "preset": "chat",
+      "rules": "",
+      "outputLanguage": "japanese"
+    },
+    {
+      "bundleID": "com.example.writer",
+      "exe": "writer.exe",
+      "name": "Writer",
+      "preset": "none",
+      "rules": "",
+      "outputLanguage": "japanese",
+      "customStyleID": "0F8E4C9A-6B2D-4E1F-9A3C-5D7E8F901234"
+    },
+    {
+      "bundleID": "com.example.globalchat",
+      "exe": "globalchat.exe",
+      "name": "GlobalChat",
+      "preset": "none",
+      "rules": "絵文字は使わない",
+      "outputLanguage": "japanese",
+      "customStyleID": "1A2B3C4D-5E6F-4A7B-8C9D-0E1F2A3B4C5D"
+    }
+  ],
+  "_comment": "共有のテストデータの設定（架空の値だけ）。Mac は UserDefaults の suite に、Windows は AppSettings に入れて動かす（DEC-COM-192）。customAppStyles・appStyles は Mac では JSON のデータとして suite に入れ（HanasuGoldenCLI）、Windows は AppSettings の CustomStyles・AppStyles に移す（appStyles の exe を使う）"
 }

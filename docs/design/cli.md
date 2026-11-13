@@ -37,7 +37,7 @@
 - AI は `HanasuAI.choice` で決める（`--ai`・`--model`、なければその用途の設定）。`HanasuAI.makeClient` が、ポリシー `AllowedAIProviders`、ローカルならほかのプロセスのサーバー（`LocalLLMServer.otherProcessServerRunning`）、認証情報（`HanasuAI.credentialStatus`）を確かめてから、`TextAIClient.cli` でクライアントを作る（DEC-COM-185）。誤りは `HanasuAI.mapped` で終了コードに分ける。
 - `ask`・`ask_meetings` の AI は `HanasuAI.askPurpose`（「AI チャット・質問」を保存した人は `chat`、ほかは `meeting`。DEC-COM-190）。保存したかは `AppSettings.isChatAIProviderSaved`。自己テストは、子プロセスの設定を `HANASU_TEST_DEFAULTS_SUITE` の suite（`SettingsDefaults`）に差し替えて確かめる。
 - `ask` は `MeetingAsk.gatherContext` に、検索の仕方として `MeetingSearchIndex.scan` と、指定した期間（`MeetingAsk.Options.period`）を渡し（DEC-MTG-124）、`MeetingAsk.answer` で聞く。アプリの「会議に質問」と同じプロンプト。
-- `refine` は音声入力と同じ `GeminiClient.Request` を作り（辞書・追加のルール・出力の言語・`--app` / `--style` の文体）、`TextAIClient.refine` か `translate` に渡す。`edit` は `TextAIClient.editSelection`。どちらも `DictationHistoryStore` には書かない。失敗したら stdout に出さず、`--fallback-raw` のときだけ原文を出す（DEC-DIC-161）。
+- `refine` は音声入力と同じ `GeminiClient.Request` を作り（辞書・追加のルール・出力の言語・`--app` / `--style` の文体。`--app` のアプリにカスタム文体を割り当てていればそれを使い、`--style` を付けたら割り当てを外してそのプリセットにする。REQ-DIC-023）、`TextAIClient.refine` か `translate` に渡す。`edit` は `TextAIClient.editSelection`。どちらも `DictationHistoryStore` には書かない。失敗したら stdout に出さず、`--fallback-raw` のときだけ原文を出す（DEC-DIC-161）。
 - 文章は `HanasuTextInput.read` が、位置の引数か stdin のどちらかから受け取る（DEC-DIC-160）。
 
 ## 5. MCP（`hanasu mcp`）
@@ -86,7 +86,7 @@ Mac と同じコマンド・同じ JSON・同じ終了コード。中身は `win
 | `MeetingsCommand.cs` | `meetings list / show / search`・`actions`、会議の JSON、会議の指定（`Resolve`）、読めない会議（`LoadedMeetings`） |
 | `MeetingSearch.cs`・`MeetingAsk.cs` | Mac の `MeetingSearchIndex.scan`・`MeetingAsk` の移植（`Fold` は全角半角・大文字小文字・半角カナを畳む。検索語の分け方だけ違う。DEC-MTG-154） |
 | `CommandAi.cs`・`AiCommands.cs` | AI の選び方と認証情報（環境変数・`secrets.json`）、`ask`・`refine`・`edit`・`dict apply`、選択の書き換えのプロンプト（`EditPrompt`） |
-| `SharedText.cs` | Mac と共有のファイル（`Sources/Hanasu/Resources/Command/hanasu.json`。埋め込み）。MCP の英語の文・エージェントへの説明・`--app` の exe の名前の既定の文体 |
+| `SharedText.cs` | Mac と共有のファイル（`Sources/Hanasu/Resources/Command/hanasu.json`。埋め込み）。MCP の英語の文・エージェントへの説明・`--app` の exe の名前の既定の文体（アプリの設定の「アプリ別」を先に `AppStyleLookup.Find` で引き、なければこれ。DEC-DIC-190・216） |
 | `DoctorCommand.cs`・`CommandHelp.cs` | `doctor`（Windows の形の `install`。DEC-COM-197）、ヘルプ・エージェントへの説明・登録の文（`CommandInstall`） |
 | `McpServer.cs` | `hanasu mcp`（`McpServer`・`McpTools`） |
 | `CommandPlatformParts.cs` | Windows Hello の確認の守り（`GuardedPresenceKey`）・入力の読み直し（`CommandEncoding`）・ユーザーの PATH の項目（`CommandPath`） |

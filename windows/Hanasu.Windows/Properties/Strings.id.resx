@@ -1658,4 +1658,187 @@ Buka halaman rilis di browser?</value>
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0} ({1})</value>
   </data>
+  <data name="Settings_Tab_AppStyles" xml:space="preserve">
+    <value>Per Aplikasi</value>
+  </data>
+  <data name="AppStyles_Enabled" xml:space="preserve">
+    <value>Sesuaikan gaya bahasa dengan aplikasi tempat Anda mengetik</value>
+  </data>
+  <data name="AppStyles_EnabledNote" xml:space="preserve">
+    <value>Ditentukan oleh aplikasi yang berada di depan saat Anda mulai merekam (dicari berdasarkan nama .exe-nya). Jika aturan ini bertentangan dengan aturan tambahan di tab "Kamus &amp; Aturan", aturan per aplikasi yang diutamakan. Semua aplikasi Store berjalan sebagai ApplicationFrameHost.exe sehingga tidak dapat dibedakan dan tidak dicari.</value>
+  </data>
+  <data name="AppStyles_PresetsHeader" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="AppStyles_PresetLine" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AppStyles_PresetSummary_None" xml:space="preserve">
+    <value>Tanpa preset (hanya aturan tambahan untuk aplikasi ini)</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Chat" xml:space="preserve">
+    <value>Kalimat singkat dan santai. Tanpa paragraf</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Email" xml:space="preserve">
+    <value>Gaya sopan dan formal. Bagi paragraf per topik</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPolite" xml:space="preserve">
+    <value>Ragam tulis yang konsisten sopan dan formal, dengan paragraf</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPlain" xml:space="preserve">
+    <value>Ragam tulis yang konsisten lugas dan netral, dengan paragraf</value>
+  </data>
+  <data name="CustomStyles_Header" xml:space="preserve">
+    <value>Gaya bahasa kustom</value>
+  </data>
+  <data name="CustomStyles_Note" xml:space="preserve">
+    <value>Gaya bahasa yang dipelajari dari tulisan Anda sendiri. Yang disimpan hanya nama, bahasa, dan aturan, bukan tulisannya. Gaya bahasa kustom hanya digunakan jika bahasa keluaran sama dengan bahasa gaya tersebut.</value>
+  </data>
+  <data name="CustomStyles_Empty" xml:space="preserve">
+    <value>Belum ada gaya bahasa kustom.</value>
+  </data>
+  <data name="CustomStyles_RowDetail" xml:space="preserve">
+    <value>{0} · {1} aturan</value>
+  </data>
+  <data name="CustomStyles_Learn" xml:space="preserve">
+    <value>Pelajari dari Tulisan…</value>
+  </data>
+  <data name="CustomStyles_Edit" xml:space="preserve">
+    <value>Edit…</value>
+  </data>
+  <data name="CustomStyles_Edit_A11y" xml:space="preserve">
+    <value>Edit {0}</value>
+  </data>
+  <data name="CustomStyles_Delete" xml:space="preserve">
+    <value>Hapus…</value>
+  </data>
+  <data name="CustomStyles_Delete_A11y" xml:space="preserve">
+    <value>Hapus {0}</value>
+  </data>
+  <data name="CustomStyles_ConfirmDelete" xml:space="preserve">
+    <value>Hapus gaya bahasa kustom "{0}"?
+Aplikasi yang menggunakannya ({1}) akan beralih ke "Tidak ada". Aturan tambahan tiap aplikasi tetap disimpan. Tindakan ini tidak dapat dibatalkan.</value>
+  </data>
+  <data name="CustomStyles_ConfirmDeleteUnused" xml:space="preserve">
+    <value>Hapus gaya bahasa kustom "{0}"?
+Tidak ada aplikasi yang menggunakannya. Tindakan ini tidak dapat dibatalkan.</value>
+  </data>
+  <data name="AppStyles_AppsHeader" xml:space="preserve">
+    <value>Aplikasi</value>
+  </data>
+  <data name="AppStyles_NoApps" xml:space="preserve">
+    <value>Belum ada aplikasi yang terdaftar.</value>
+  </data>
+  <data name="AppStyles_PresetLabel" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="AppStyles_Preset_A11y" xml:space="preserve">
+    <value>Preset untuk {0}</value>
+  </data>
+  <data name="AppStyles_RulesLabel" xml:space="preserve">
+    <value>Aturan tambahan untuk aplikasi ini (lebih diutamakan daripada preset)</value>
+  </data>
+  <data name="AppStyles_Rules_A11y" xml:space="preserve">
+    <value>Aturan tambahan untuk {0}</value>
+  </data>
+  <data name="AppStyles_RulesExample" xml:space="preserve">
+    <value>Contoh: Jangan gunakan emoji / Jangan gunakan poin-poin</value>
+  </data>
+  <data name="AppStyles_Remove" xml:space="preserve">
+    <value>Hapus dari Daftar</value>
+  </data>
+  <data name="AppStyles_Remove_A11y" xml:space="preserve">
+    <value>Hapus {0} dari daftar</value>
+  </data>
+  <data name="AppStyles_AddRunning" xml:space="preserve">
+    <value>Tambahkan Aplikasi yang Sedang Berjalan</value>
+  </data>
+  <data name="AppStyles_NoRunningApps" xml:space="preserve">
+    <value>Tidak ada aplikasi lain berjendela yang sedang berjalan.</value>
+  </data>
+  <data name="AppStyles_ChooseExe" xml:space="preserve">
+    <value>Pilih .exe…</value>
+  </data>
+  <data name="AppStyles_ExeFilter" xml:space="preserve">
+    <value>Program (*.exe)|*.exe</value>
+  </data>
+  <data name="AppStyles_AlreadyAdded" xml:space="preserve">
+    <value>{0} sudah ada di daftar.</value>
+  </data>
+  <data name="AppStyles_Reset" xml:space="preserve">
+    <value>Kembalikan ke Default…</value>
+  </data>
+  <data name="AppStyles_ConfirmReset" xml:space="preserve">
+    <value>Kembalikan pengaturan per aplikasi ke default?
+Aplikasi yang Anda tambahkan dan aturan tambahan tiap aplikasi akan dihapus. Gaya bahasa kustom tidak dihapus. Tindakan ini tidak dapat dibatalkan.</value>
+  </data>
+  <data name="StyleLearning_Title" xml:space="preserve">
+    <value>Pelajari Gaya Bahasa dari Tulisan</value>
+  </data>
+  <data name="StyleLearning_EditTitle" xml:space="preserve">
+    <value>Edit Gaya Bahasa Kustom</value>
+  </data>
+  <data name="StyleLearning_Intro" xml:space="preserve">
+    <value>Tempel tulisan yang Anda tulis sendiri, atau pilih file. AI yang diatur untuk "Notulen" akan membaca cara penulisannya dan menyusun aturan gaya bahasa. Tulisan tidak disimpan; yang disimpan hanya nama, bahasa, dan aturan.</value>
+  </data>
+  <data name="StyleLearning_Input_A11y" xml:space="preserve">
+    <value>Tulisan untuk dipelajari gaya bahasanya</value>
+  </data>
+  <data name="StyleLearning_ChooseFiles" xml:space="preserve">
+    <value>Pilih File…</value>
+  </data>
+  <data name="StyleLearning_FileFilter" xml:space="preserve">
+    <value>Word, teks, dan Markdown|{0}</value>
+  </data>
+  <data name="StyleLearning_FileFailed" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="StyleLearning_InputTruncated" xml:space="preserve">
+    <value>Kotak ini memuat maksimal {0} karakter. Sisanya tidak ditambahkan.</value>
+  </data>
+  <data name="StyleLearning_Count" xml:space="preserve">
+    <value>{0} karakter</value>
+  </data>
+  <data name="StyleLearning_CountUsed" xml:space="preserve">
+    <value>{0} karakter (hanya {1} karakter pertama yang dikirim)</value>
+  </data>
+  <data name="StyleLearning_NeedMore" xml:space="preserve">
+    <value>Masukkan minimal {0} karakter untuk mempelajari gaya bahasa.</value>
+  </data>
+  <data name="StyleLearning_Learn" xml:space="preserve">
+    <value>Pelajari Gaya Bahasa</value>
+  </data>
+  <data name="StyleLearning_Learning" xml:space="preserve">
+    <value>Sedang mempelajari gaya bahasa… (maksimal {0} detik)</value>
+  </data>
+  <data name="StyleLearning_Stop" xml:space="preserve">
+    <value>Hentikan</value>
+  </data>
+  <data name="StyleLearning_Stopped" xml:space="preserve">
+    <value>Dihentikan. Tulisan Anda masih ada, jadi Anda bisa mencoba lagi.</value>
+  </data>
+  <data name="StyleLearning_Learned" xml:space="preserve">
+    <value>Periksa dan edit aturannya, lalu simpan. AI: {0} ({1})</value>
+  </data>
+  <data name="StyleLearning_Name" xml:space="preserve">
+    <value>Nama</value>
+  </data>
+  <data name="StyleLearning_Language" xml:space="preserve">
+    <value>Bahasa</value>
+  </data>
+  <data name="StyleLearning_LanguageNote" xml:space="preserve">
+    <value>Hanya digunakan jika keluaran dalam bahasa ini.</value>
+  </data>
+  <data name="StyleLearning_Rules" xml:space="preserve">
+    <value>Aturan (satu per baris)</value>
+  </data>
+  <data name="StyleLearning_RulesCount" xml:space="preserve">
+    <value>{0}/{1} baris · {2}/{3} karakter</value>
+  </data>
+  <data name="StyleLearning_Save" xml:space="preserve">
+    <value>Simpan</value>
+  </data>
+  <data name="StyleLearning_Cancel" xml:space="preserve">
+    <value>Batal</value>
+  </data>
 </root>

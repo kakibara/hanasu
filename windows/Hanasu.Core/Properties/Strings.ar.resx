@@ -1098,4 +1098,55 @@
   <data name="Cmd_UnreadableCount" xml:space="preserve">
     <value>تعذّرت قراءة {0} من الاجتماعات ({1}).</value>
   </data>
+  <data name="AppStyle_Preset_None" xml:space="preserve">
+    <value>بلا</value>
+  </data>
+  <data name="AppStyle_Preset_Chat" xml:space="preserve">
+    <value>دردشة</value>
+  </data>
+  <data name="AppStyle_Preset_Email" xml:space="preserve">
+    <value>البريد</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPolite" xml:space="preserve">
+    <value>مستند (أسلوب مهذب)</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPlain" xml:space="preserve">
+    <value>مستند (أسلوب تقريري)</value>
+  </data>
+  <data name="CustomStyle_EmptyName" xml:space="preserve">
+    <value>أدخل اسمًا.</value>
+  </data>
+  <data name="CustomStyle_DuplicateName" xml:space="preserve">
+    <value>يوجد أسلوب بالاسم نفسه. اختر اسمًا آخر.</value>
+  </data>
+  <data name="CustomStyle_UnknownLanguage" xml:space="preserve">
+    <value>اختر لغة.</value>
+  </data>
+  <data name="CustomStyle_EmptyRules" xml:space="preserve">
+    <value>أدخل قاعدة واحدة على الأقل.</value>
+  </data>
+  <data name="CustomStyle_TooManyRules" xml:space="preserve">
+    <value>الحد الأقصى لعدد القواعد هو {0}.</value>
+  </data>
+  <data name="CustomStyle_RulesTooLong" xml:space="preserve">
+    <value>الحد الأقصى لإجمالي طول القواعد هو {0} حرف.</value>
+  </data>
+  <data name="StyleSource_Unsupported" xml:space="preserve">
+    <value>نوع الملف هذا غير مدعوم. اختر ملف .docx أو .txt أو .md.</value>
+  </data>
+  <data name="StyleSource_Unreadable" xml:space="preserve">
+    <value>الملف تالف أو يستخدم ترميز أحرف تتعذّر قراءته.</value>
+  </data>
+  <data name="StyleSource_TooLarge" xml:space="preserve">
+    <value>الملف كبير جدًا (الحد الأقصى 20 MB).</value>
+  </data>
+  <data name="StyleLearn_TooShort" xml:space="preserve">
+    <value>النص قصير جدًا. أدخل {0} حرف على الأقل.</value>
+  </data>
+  <data name="StyleLearn_InvalidResponse" xml:space="preserve">
+    <value>تعذّرت قراءة قواعد الأسلوب من ردّ AI. حاول مرة أخرى.</value>
+  </data>
+  <data name="StyleLearn_UnknownLanguage" xml:space="preserve">
+    <value>لغة النص ({0}) غير مدعومة.</value>
+  </data>
 </root>

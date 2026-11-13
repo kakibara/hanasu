@@ -1,3 +1,4 @@
+using Hanasu.Core.Ai;
 using Hanasu.Core.Dictation;
 using Hanasu.Core.Gemini;
 using Hanasu.Core.Settings;
@@ -107,6 +108,8 @@ internal sealed class Harness
     public FakeTranscriber Transcriber { get; set; } = new();
     public FakeRefiner Refiner { get; } = new();
     public bool HasCredentials { get; set; } = true;
+    /// <summary>前面のアプリの exe の名前（設定の「アプリ別」の文体を引く）</summary>
+    public string? ForegroundExe { get; set; }
     public FakeInserter Inserter { get; } = new();
     public DictationHistoryStore History { get; } = new(TestKeys.TempDirectory());
     public List<bool> Escape { get; } = new();
@@ -129,6 +132,7 @@ internal sealed class Harness
             Hud = Hud,
             History = History,
             ForegroundAppName = () => "Slack",
+            ForegroundAppExe = () => ForegroundExe,
             SetEscapeHotKeyEnabled = Escape.Add,
             PlaySound = Sounds.Add,
             OpenHelp = OpenedHelp.Add,
@@ -560,6 +564,91 @@ public class DictationControllerTests
         Assert.Empty(h.Hud.Shown);
     }
 
+    // MARK: - アプリ別の文体（REQ-DIC-020・023、DEC-DIC-216）
+
+    private static readonly Guid ReportId = Guid.Parse("0F8E4C9A-6B2D-4E1F-9A3C-5D7E8F901234");
+
+    private static async Task<RefineRequest> DictateIn(Harness h, string? exe)
+    {
+        h.ForegroundExe = exe;
+        h.Controller.HandleHotKey(HotKeyEventKind.Pressed, DictationMode.Refine);
+        await Task.Yield();
+        h.Controller.HandleHotKey(HotKeyEventKind.Pressed, DictationMode.Refine);
+        await WaitIdle(h);
+        return Assert.Single(h.Refiner.Calls).Request;
+    }
+
+    // 確かめ方: REQ-DIC-020
+    [Fact]
+    public async Task SlackGetsTheChatRules()
+    {
+        var h = new Harness();
+        var request = await DictateIn(h, "slack.exe");
+        Assert.Equal(AppStylePreset.Chat, request.AppStyle!.Preset);
+        Assert.Contains(AppStylePreset.Chat.RefineRules()[0], GeminiPrompts.UserPrompt(request));
+    }
+
+    // 確かめ方: REQ-DIC-020
+    [Fact]
+    public async Task TurningPerAppStylesOffSendsNoStyle()
+    {
+        var h = new Harness();
+        h.Settings.AppStylesEnabled = false;
+        var request = await DictateIn(h, "slack.exe");
+        Assert.Null(request.AppStyle);
+        Assert.DoesNotContain(AppStylePreset.Chat.RefineRules()[0], GeminiPrompts.UserPrompt(request));
+    }
+
+    // 確かめ方: REQ-DIC-020
+    [Fact]
+    public async Task StoreAppsAreNotLookedUp()
+    {
+        var h = new Harness();
+        h.Settings.AppStyles = [new AppStyleSetting { Exe = "ApplicationFrameHost.exe", Name = "Store", Preset = "chat" }];
+        Assert.Null((await DictateIn(h, "applicationframehost.exe")).AppStyle);
+    }
+
+    // 確かめ方: REQ-DIC-023
+    [Fact]
+    public async Task CustomStyleRulesReachTheAi()
+    {
+        var h = new Harness();
+        h.Settings.CustomStyles = [new CustomStyle { Id = ReportId, Name = "報告書", Language = "ja", Rules = ["読点は「，」を使う"] }];
+        h.Settings.AppStyles = [new AppStyleSetting { Exe = "writer.exe", Name = "Writer", Preset = "none", CustomStyleId = ReportId }];
+        var request = await DictateIn(h, "writer.exe");
+        Assert.Equal(ReportId, request.AppStyle!.Custom!.Id);
+        var prompt = GeminiPrompts.UserPrompt(request);
+        Assert.Contains("- 読点は「，」を使う\n" + Prompts.Text("style.learnedGuard"), prompt);
+        Assert.DoesNotContain("報告書", prompt);
+    }
+
+    // 確かめ方: REQ-DIC-023
+    [Fact]
+    public async Task UnknownCustomStyleIdIsNone()
+    {
+        var h = new Harness();
+        h.Settings.AppStyles = [new AppStyleSetting { Exe = "writer.exe", Name = "Writer", Preset = "none", CustomStyleId = ReportId }];
+        var request = await DictateIn(h, "writer.exe");
+        Assert.Null(request.AppStyle!.Custom);
+        Assert.Equal(AppStylePreset.None, request.AppStyle.Preset);
+        Assert.DoesNotContain(Prompts.Text("style.header"), GeminiPrompts.UserPrompt(request));
+        Assert.Equal(["整形:えーと明日の会議です"], h.Inserter.Inserted);
+    }
+
+    // 確かめ方: REQ-DIC-020
+    // 設計判断: DEC-DIC-046（アプリ名を送らない設定でも文体のルールは渡し、見出しにアプリ名を入れない）
+    [Fact]
+    public async Task StyleRulesAreSentWithoutTheAppName()
+    {
+        var h = new Harness();
+        h.Settings.SendAppName = false;
+        var request = await DictateIn(h, "slack.exe");
+        Assert.Null(request.AppName);
+        var prompt = GeminiPrompts.UserPrompt(request);
+        Assert.Contains(Prompts.Text("style.header") + "\n- " + AppStylePreset.Chat.RefineRules()[0], prompt);
+        Assert.DoesNotContain("Slack", prompt);
+    }
+
     private static async Task WaitState(Harness h, DictationState expected)
     {
         for (var i = 0; i < 200 && h.Controller.State != expected; i++) await Task.Delay(5);
@@ -599,4 +688,5 @@ public class HudTextTests
         var tail = HudText.Tail(text, 10);
         Assert.Equal("…" + new string('あ', 8) + "最後", tail);
     }
+
 }

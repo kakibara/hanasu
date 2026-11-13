@@ -1333,4 +1333,72 @@
   <data name="Cmd_UnreadableCount" xml:space="preserve">
     <value>{0} meetings couldn't be read ({1}).</value>
   </data>
+  <data name="AppStyle_Preset_None" xml:space="preserve">
+    <value>None</value>
+    <comment>Per-app style: preset name (no style). Also used to reject custom style names that collide with it</comment>
+  </data>
+  <data name="AppStyle_Preset_Chat" xml:space="preserve">
+    <value>Chat</value>
+    <comment>Per-app style: preset name</comment>
+  </data>
+  <data name="AppStyle_Preset_Email" xml:space="preserve">
+    <value>Email</value>
+    <comment>Per-app style: preset name</comment>
+  </data>
+  <data name="AppStyle_Preset_DocumentPolite" xml:space="preserve">
+    <value>Document (polite)</value>
+    <comment>Per-app style: preset name (Japanese desu/masu style; polite register in other languages)</comment>
+  </data>
+  <data name="AppStyle_Preset_DocumentPlain" xml:space="preserve">
+    <value>Document (plain)</value>
+    <comment>Per-app style: preset name (Japanese de-aru style; plain written register in other languages)</comment>
+  </data>
+  <data name="CustomStyle_EmptyName" xml:space="preserve">
+    <value>Enter a name.</value>
+    <comment>Custom style: validation error when saving</comment>
+  </data>
+  <data name="CustomStyle_DuplicateName" xml:space="preserve">
+    <value>A style with the same name already exists. Choose a different name.</value>
+    <comment>Custom style: validation error (name collides with another custom style or a built-in preset)</comment>
+  </data>
+  <data name="CustomStyle_UnknownLanguage" xml:space="preserve">
+    <value>Choose a language.</value>
+    <comment>Custom style: validation error</comment>
+  </data>
+  <data name="CustomStyle_EmptyRules" xml:space="preserve">
+    <value>Enter at least one rule.</value>
+    <comment>Custom style: validation error</comment>
+  </data>
+  <data name="CustomStyle_TooManyRules" xml:space="preserve">
+    <value>You can have up to {0} rules.</value>
+    <comment>Custom style: validation error. {0} = maximum number of rule lines (20)</comment>
+  </data>
+  <data name="CustomStyle_RulesTooLong" xml:space="preserve">
+    <value>Rules can be up to {0} characters in total.</value>
+    <comment>Custom style: validation error. {0} = maximum characters (2000)</comment>
+  </data>
+  <data name="StyleSource_Unsupported" xml:space="preserve">
+    <value>This file type isn't supported. Choose a .docx, .txt, or .md file.</value>
+    <comment>Learn style: reason a chosen file couldn't be read</comment>
+  </data>
+  <data name="StyleSource_Unreadable" xml:space="preserve">
+    <value>The file is damaged or uses a character encoding that can't be read.</value>
+    <comment>Learn style: reason a chosen file couldn't be read</comment>
+  </data>
+  <data name="StyleSource_TooLarge" xml:space="preserve">
+    <value>The file is too large (up to 20 MB).</value>
+    <comment>Learn style: reason a chosen file couldn't be read</comment>
+  </data>
+  <data name="StyleLearn_TooShort" xml:space="preserve">
+    <value>The text is too short. Enter at least {0} characters.</value>
+    <comment>Learn style: error. {0} = minimum characters (100)</comment>
+  </data>
+  <data name="StyleLearn_InvalidResponse" xml:space="preserve">
+    <value>Couldn't read style rules from the AI's response. Try again.</value>
+    <comment>Learn style: error</comment>
+  </data>
+  <data name="StyleLearn_UnknownLanguage" xml:space="preserve">
+    <value>The language of the text ({0}) isn't supported.</value>
+    <comment>Learn style: error. {0} = language code the AI returned</comment>
+  </data>
 </root>
