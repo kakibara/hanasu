@@ -651,6 +651,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Die Abtastrate des Modells für die Sprechertrennung entspricht nicht der erwarteten ({0} Hz).</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Das Modell für die Sprechertrennung konnte nicht geladen werden.</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Die Vertex AI-Region „{0}“ kann nicht verwendet werden (nur Kleinbuchstaben, Ziffern und Bindestriche, z. B. global, us-central1).</value>
   </data>

@@ -42,12 +42,15 @@
 - 確かめ方: リリースの添付ファイル（v1.3.0 で `Hanasu-1.3.0-Windows-x64.zip` が付いたことを確かめた。CI の `windows.yml` でも publish の中身を確かめている）
 
 ### REQ-REL-005 PolyForm Noncommercial と追加の許可で配布し、大きい会社には商用ライセンスを求める。配布物にライセンスと第三者の表示を入れる
-- 内容: Hanasu は PolyForm Noncommercial License 1.0.0 と「Hanasu 追加の許可 1.0」で配布する（ソース公開。オープンソースではない）。個人の非商用の利用と小規模事業者の社内の業務は無料で、それより大きい会社の業務での利用と、規模にかかわらず Hanasu を売る・製品やサービスに組み込む・ホスティングで提供することには、商用ライセンスが必要になる。このライセンスに変える前の版は Apache License 2.0（2026-11-03 までは AGPL-3.0）で、その版は Apache License 2.0 のまま。Mac 版・Windows 版の配布物には、Hanasu のライセンス（`LICENSE`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE`）と、組み込んだ第三者のソフトウェアのライセンス表示を入れる。
+- 内容: Hanasu は PolyForm Noncommercial License 1.0.0 と「Hanasu 追加の許可 1.0」で配布する（ソース公開。オープンソースではない）。個人の非商用の利用と小規模事業者の社内の業務は無料で、それより大きい会社の業務での利用と、規模にかかわらず Hanasu を売る・製品やサービスに組み込む・ホスティングで提供することには、商用ライセンスが必要になる。このライセンスに変える前の版は Apache License 2.0（2026-11-03 までは AGPL-3.0）で、その版は Apache License 2.0 のまま。Mac 版・Windows 版の配布物には、Hanasu のライセンス（`LICENSE`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE`）と、組み込んだ第三者のソフトウェアのライセンス表示を入れる。配布物には、GPL・LGPL・AGPL（すべての版）のコードを入れない。ファイル単位のコピーレフト（MPL-2.0 など）は、変えずに使い、表示を入れる場合に限って許す。配布物に入る依存（NuGet・Swift のパッケージ、同梱するビルド済みのバイナリと、それらに静的にリンクされたライブラリ）は、版ごとに、パッケージの表示だけでなく同梱のネイティブのバイナリの中身も確かめて一覧に書き、一覧にない依存や版が変わった依存があれば CI を失敗させる。.NET のランタイム（self-contained で入るランタイムパック）と、Apple・Microsoft の OS のフレームワークは、版の突き合わせから外す（ライセンスは一覧に版なしで書く）。
 - 受け入れ条件: リポジトリの `LICENSE` が PolyForm Noncommercial License 1.0.0 の条文で、`LICENSE-ADDITIONAL-PERMISSION.md`・`COMMERCIAL.md`・`COMMERCIAL.ja.md`・`CONTRIBUTING.md` がある。`Hanasu.app/Contents/Resources` に `LICENSE`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE`・`THIRD_PARTY_NOTICES.md` がある。Windows 版の zip の `Hanasu` フォルダに `LICENSE.txt`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE.txt`・`THIRD_PARTY_NOTICES.md`・`dotnet-THIRD-PARTY-NOTICES.txt` がある。
-- 出典: ユーザーの依頼（2026-11-03「Apache-2.0 にして、Windows のライセンスの問題も修正して」）。v1.3.0 の Windows 版の zip にライセンスの表示が入っていなかったことへの対応。ユーザーの依頼（2026-11-04「大企業などに無制限にこのオープンソースのプロジェクトに乗っ取られることを防ぐべきです。安定度以上の企業が商用利用する場合は契約が必要である、という形で進めたい」）と、そのヒアリングでの合意（看板は手放してよい・線は会社の規模・組み込んで売るなら小さい会社も契約・期限付きの開放はしない）、2026-11-05「ライセンスを書き換え」
+  - `scripts/check-licenses.py` が、`windows/Hanasu.Windows/packages.lock.json`・`windows/Hanasu.Command/packages.lock.json` の解決済みのパッケージ、`Package.resolved` のパッケージ、`scripts/llama-cpp.lock` の版が、すべて `common/third-party-licenses.json` に同じ版で載っていること、配布物に入る項目のライセンスが一覧の許すライセンスに入ること、その項目の名前が THIRD_PARTY_NOTICES に出てくることを確かめ、どれかに外れたら 1 で終わる。CI（`spec.yml`）で、すべての PR と `main` で動く。
+  - Windows 版の zip の exe の隣の `.dll`（再帰）が、espeak-ng の関数名（`espeak_ng_`・`espeak_Initialize`）を含まない（`windows.yml` と `tagpr.yml` の「Check publish output」）。
+  - 限界: 一覧は、依存を足す・上げる人にライセンスを確かめさせる仕組みで、パッケージの表示が中身の GPL を隠している場合（sherpa-onnx 1.13.8 の NuGet の表示は Apache-2.0 だが、ネイティブ DLL に espeak-ng が入っていた）を機械では見つけられない。確かめた中身を一覧の `note` に書く。`Hanasu.exe`（single file で圧縮）の中はバイト列では見られないので、パッケージの一覧で確かめる。
+- 出典: ユーザーの依頼（2026-11-03「Apache-2.0 にして、Windows のライセンスの問題も修正して」）。v1.3.0 の Windows 版の zip にライセンスの表示が入っていなかったことへの対応。ユーザーの依頼（2026-11-04「大企業などに無制限にこのオープンソースのプロジェクトに乗っ取られることを防ぐべきです。安定度以上の企業が商用利用する場合は契約が必要である、という形で進めたい」）と、そのヒアリングでの合意（看板は手放してよい・線は会社の規模・組み込んで売るなら小さい会社も契約・期限付きの開放はしない）、2026-11-05「ライセンスを書き換え」。2026-11-12 の依頼「hanasu に GPL/LGPL のライブラリは含まれていますか？」「外す方法を計画して」（Windows 版の sherpa-onnx 1.13.8 に espeak-ng（GPL-3.0）が入っていた）と、そのヒアリングでの合意（要件に足して CI で確かめる）、2026-11-13 に計画を了承
 - 対象: Mac / Windows
-- 実装の場所: `LICENSE`、`LICENSE-ADDITIONAL-PERMISSION.md`、`COMMERCIAL.md`、`COMMERCIAL.ja.md`、`CONTRIBUTING.md`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、`windows/THIRD_PARTY_NOTICES.md`、`scripts/build-app.sh`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`（publish の中身の確認）
-- 確かめ方: `./scripts/build-app.sh` のあとの `ls build/Hanasu.app/Contents/Resources`、CI の `windows.yml` の「Check publish output」
+- 実装の場所: `LICENSE`、`LICENSE-ADDITIONAL-PERMISSION.md`、`COMMERCIAL.md`、`COMMERCIAL.ja.md`、`CONTRIBUTING.md`、`NOTICE`、`THIRD_PARTY_NOTICES.md`、`windows/THIRD_PARTY_NOTICES.md`、`scripts/build-app.sh`、`windows/Hanasu.Windows/Hanasu.Windows.csproj`、`.github/workflows/windows.yml`（publish の中身の確認）、`.github/workflows/tagpr.yml`（`windows` ジョブの「Check publish output」）、`common/third-party-licenses.json`、`scripts/check-licenses.py`
+- 確かめ方: `./scripts/build-app.sh` のあとの `ls build/Hanasu.app/Contents/Resources`、CI の `windows.yml`・`tagpr.yml` の「Check publish output」、`python3 scripts/check-licenses.py`（CI の `spec.yml` の「Check licenses」）
 
 ### REQ-REL-006 版の上げ幅とリリース文を、決まった手順とテンプレートで作る
 - 内容: リリースのたびに、前の版からの変更をまとめて版の上げ幅（major / minor / patch）を決め、テンプレートに沿ったリリース文を書いて、リリースの本文の先頭に入れる。手順はスキル（Claude Code の `release`）にまとめる。
@@ -152,8 +155,8 @@
 
 ### DEC-REL-006 既存のタグの添付ファイルを、手動の実行で作り直せる
 - 決めたこと: Actions の「tagpr」をタグを指定して手動で実行すると、tagpr を飛ばして両方の zip を作り直す。
-- 理由: ビルドや添付に失敗したときに、タグを打ち直さずにやり直せるようにする。ただし、ワークフローは `main` のものを使うが、ビルドするコードとリリース文（DEC-REL-010）はタグの時点のものなので、タグの時点のコードが原因の失敗はこれでは直らない。公開前の下書きなら、直しを `main` に入れ、下書きとタグを消して、直した `main` にタグを付け直してから手動で実行する（下書きのリリースは公開するまでタグを作らないので、タグを先に push する）。公開済みの版は消さず、次のパッチで直す（v1.4.0 のリリース（2026-11-04）で、タグの時点のコードの不具合（Mac 版の最適化ビルドでだけ起きる型の推論の時間切れ）は手動の実行では直らず、タグを付け直したため。手順は `.claude/skills/release/SKILL.md` の「失敗したとき」）。
-- 決めた場面: 2f0a153、PR #20
+- 理由: ビルドや添付に失敗したときに、タグを打ち直さずにやり直せるようにする。ただし、ワークフローは `main` のものを使うが、ビルドするコードとリリース文（DEC-REL-010）はタグの時点のものなので、タグの時点のコードが原因の失敗はこれでは直らない。公開前の下書きなら、直しを `main` に入れ、下書きとタグを消して、直した `main` にタグを付け直してから手動で実行する（下書きのリリースは公開するまでタグを作らないので、タグを先に push する）。公開済みの版は消さず、次のパッチで直す（v1.4.0 のリリース（2026-11-04）で、タグの時点のコードの不具合（Mac 版の最適化ビルドでだけ起きる型の推論の時間切れ）は手動の実行では直らず、タグを付け直したため。手順は `.claude/skills/release/SKILL.md` の「失敗したとき」）。v1.3.0〜v2.6.1 のタグは作り直さない。これらの Windows の zip は espeak-ng（GPL-3.0）を含むので取り下げた（REQ-REL-005）。`main` の `tagpr.yml` で作り直そうとすると、`windows` ジョブの「Check publish output」が espeak-ng の関数名を見つけて zip を上げる前に失敗し、`publish`（本文を組み直す）は動かないが、並んで動く `mac` ジョブは Mac の zip を `--clobber` で差し替えるので、本文の SHA-256 と添付の Mac の zip が食い違う。Actions の画面でタグを選んで実行したり、古い run を Re-run したりすると、検査のない古いワークフローが動いて espeak-ng 入りの zip がリリースに戻る。
+- 決めた場面: 2f0a153、PR #20。古いタグを作り直さない決まりは、2026-11-12 の依頼「GPL/LGPL のライブラリは含まれていますか？」への対応
 - 関係する要件: REQ-REL-001
 - 対象: Mac / Windows
 - 実装の場所: `.github/workflows/tagpr.yml`（`workflow_dispatch`）
@@ -198,6 +201,14 @@
 - 関係する要件: REQ-REL-005
 - 対象: Mac / Windows
 - 実装の場所: `LICENSE-ADDITIONAL-PERMISSION.md`、`COMMERCIAL.md`、`COMMERCIAL.ja.md`、`CONTRIBUTING.md`、`.github/pull_request_template.md`
+
+### DEC-REL-012 配布物に入る依存は、ライセンスを確かめた一覧と CI で突き合わせる
+- 決めたこと: `common/third-party-licenses.json` に、lock ファイルに出る依存と、それらのバイナリに静的にリンクされたライブラリを、名前・版・ライセンス（SPDX の式。パッケージの表示ではなく中身どおり）・配布物に入るか（`shipped`）・入っている依存（`contained_in`。静的にリンクされたもの）・表示を書いた THIRD_PARTY_NOTICES（`notices`）・確かめたこと（`note`）で並べる。配らない runtime（sherpa-onnx の android・linux・osx・win-arm64・win-x86、`Whisper.net.Runtime.Metal`、Swift の `swift-argument-parser`）は `shipped: false`。.NET のランタイムパックと OS のフレームワークは lock に出ないので、版なしで別の節に書く。許すライセンス（`allowed`）も同じファイルに置く。`scripts/check-licenses.py`（標準ライブラリだけ）は、lock ファイルの依存が一覧に同じ版で載っているか、`shipped` の項目のライセンスの式が許されるか（`AND` はすべての部分が、`OR` はどれか 1 つが `allowed` に入る。`WITH` は例外ごと 1 つの語として見る）、`shipped` の項目の名前が `notices` のファイルに出てくるかを確かめる。テストだけの依存（`Hanasu.Core.Tests`）と、開発用の CLI（`Hanasu.Cli`）だけの依存は入れない。依存を足す・上げるときは、パッケージの表示だけでなく、同梱のネイティブのバイナリの中身（静的にリンクされたもの）も確かめて `note` に書く。
+- 理由: sherpa-onnx 1.13.8 では、NuGet のライセンスの表示（Apache-2.0）が、ネイティブ DLL に静的にリンクされた espeak-ng（GPL-3.0）を隠していた。名前で探す検査では、ほかの依存が持ち込むコピーレフトのコードを捕まえられない。依存の変化を CI で止め、人が中身を確かめる場面を必ず作る。表示の漏れ（ONNX Runtime に入っている Eigen など）も同じ一覧で捕まえる。
+- 決めた場面: 2026-11-12 の依頼「hanasu に GPL/LGPL のライブラリは含まれていますか？」「外す方法を計画して」、2026-11-13 に計画を了承
+- 関係する要件: REQ-REL-005
+- 対象: Mac / Windows
+- 実装の場所: `common/third-party-licenses.json`、`scripts/check-licenses.py`、`.github/workflows/spec.yml`
 
 ### DEC-REL-020 新しい版は GitHub の releases/latest で知り、版は数字ごとに比べる
 - 決めたこと: `https://api.github.com/repos/kakibara/hanasu/releases/latest` を、認証なしで 1 回呼ぶ。下書きとプレリリースは知らせない。`tag_name`（`v1.6.0`）と今の版（Mac は Info.plist の `CFBundleShortVersionString`、Windows はアセンブリの版）を、`.` で区切った数字ごとに比べ、新しいときだけ知らせる。リリース文は本文の `<!-- release-notes -->` の中（なければ「## インストール」の前まで）を出す。

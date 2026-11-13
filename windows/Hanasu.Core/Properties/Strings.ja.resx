@@ -651,6 +651,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>話者分離のモデルの周波数が想定と違います（{0} Hz）</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>話者分離のモデルを読み込めませんでした</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Vertex AI のリージョン「{0}」は使えません（英小文字・数字・ハイフンだけ。例: global、us-central1）</value>
   </data>

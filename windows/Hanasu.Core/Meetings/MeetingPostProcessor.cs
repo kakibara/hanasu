@@ -71,7 +71,9 @@ public sealed class MeetingPostProcessor
             catch (Exception e) when (e is not OperationCanceledException)
             {
                 // 話者分離に失敗しても、相手側を「相手」1 人として続ける（Mac 版と同じ）
-                Log?.Invoke($"diarization failed: {e.GetType().Name}: {e.Message}");
+                // 設計判断: DEC-MTG-104（作れなかったときの手がかりを、知らせには出さずログにだけ書く）
+                var diagnostics = e.Data["hanasu.diagnostics"] is string d ? $" ({d})" : "";
+                Log?.Invoke($"diarization failed: {e.GetType().Name}: {e.Message}{diagnostics}");
                 warnings.Add(string.Format(Strings.Meeting_DiarizationFailed, e.Message));
             }
         }

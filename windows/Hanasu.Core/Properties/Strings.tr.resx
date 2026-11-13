@@ -651,6 +651,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Konuşmacı ayırma modelinin örnekleme hızı beklenen değerde değil ({0} Hz).</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Konuşmacı ayırma modeli yüklenemedi.</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>"{0}" Vertex AI bölgesi kullanılamaz (yalnızca küçük harf, rakam ve kısa çizgi; ör. global, us-central1).</value>
   </data>

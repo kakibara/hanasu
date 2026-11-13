@@ -1,0 +1,566 @@
+{
+  "_comment": "配布物に入る依存と、そのライセンス（設計判断: DEC-REL-012、要件: REQ-REL-005）。scripts/check-licenses.py が lock ファイルと突き合わせる。依存を足す・上げるときは、パッケージの表示だけでなく同梱のネイティブのバイナリの中身（静的にリンクされたもの）も確かめて note に書き、contained に足す。license は SPDX の式で、パッケージの表示ではなく中身どおりに書く。shipped が false の項目は配布物に入らない（ほかの OS・CPU の runtime など）。",
+  "allowed": [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "BSL-1.0",
+    "LicenseRef-Unicode-Data",
+    "MPL-2.0"
+  ],
+  "packages": [
+    {
+      "ecosystem": "nuget",
+      "name": "NAudio.Wasapi",
+      "version": "2.2.1",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "notice_name": "NAudio",
+      "note": "managed のみ（ネイティブのバイナリなし）"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "NAudio.Core",
+      "version": "2.2.1",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "notice_name": "NAudio",
+      "note": "managed のみ"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Management",
+      "version": "8.0.0",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": ".NET Foundation"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.CodeDom",
+      "version": "8.0.0",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": ".NET Foundation"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Security.Cryptography.ProtectedData",
+      "version": "8.0.0",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": ".NET Foundation"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Win32.SystemEvents",
+      "version": "8.0.0",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": ".NET Foundation。cli\\hanasu.exe（Hanasu.Command）が使う"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Anthropic",
+      "version": "13.4.0",
+      "license": "Apache-2.0 AND MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "notice_name": "Anthropic C# SDK",
+      "note": "13.0.0 から Apache-2.0。それより前に入った第三者の貢献はパッケージの LICENSE-MIT。managed のみ"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.AI.Abstractions",
+      "version": "10.5.1",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": ".NET Foundation"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Text.Json",
+      "version": "10.0.6",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": ".NET Foundation"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Text.Encodings.Web",
+      "version": "10.0.6",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": ".NET Foundation"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.IO.Pipelines",
+      "version": "10.0.6",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": ".NET Foundation"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Net.ServerSentEvents",
+      "version": "10.0.1",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": ".NET Foundation"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Whisper.net",
+      "version": "1.9.1",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "managed のみ"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Whisper.net.Runtime",
+      "version": "1.9.1",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "notice_name": "whisper.cpp",
+      "note": "build/win-x64 の whisper.dll・ggml-*-whisper.dll（whisper.cpp / ggml）。2026-11-13 に strings で見て、espeak_ng_ と _deps の外部のソースはなかった。ggml は MSVC の OpenMP（vcomp）を使う"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Whisper.net.Runtime.Metal",
+      "version": "1.9.1",
+      "license": "MIT",
+      "shipped": false,
+      "note": "Apple 用。Windows の配布物には入らない"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "notice_name": "sherpa-onnx",
+      "note": "managed の sherpa-onnx.dll（C# の P/Invoke だけ）"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx.runtime.win-x64",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": true,
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "notice_name": "sherpa-onnx",
+      "note": "sherpa-onnx-c-api.dll と onnxruntime.dll。静的にリンクされたものは contained に書いた。1.13.8 は TTS 付きのビルドで espeak-ng（GPL-3.0）と piper-phonemize を含んでいた。2.0.0 で取り除かれ（k2-fsa/sherpa-onnx#4055）、2026-11-13 に 2.0.1 の DLL に espeak_ng_・espeak_Initialize がないことを strings で確かめた"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx.runtime.win-arm64",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": false,
+      "note": "ARM64 版は配っていない（2.0.1 の DLL にも espeak_ng_ はない）"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx.runtime.win-x86",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": false,
+      "note": "x86 版は配っていない"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx.runtime.android-arm64",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": false,
+      "note": "Windows の配布物には入らない"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx.runtime.android-x64",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": false,
+      "note": "Windows の配布物には入らない"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx.runtime.linux-arm64",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": false,
+      "note": "Windows の配布物には入らない"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx.runtime.linux-x64",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": false,
+      "note": "Windows の配布物には入らない"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx.runtime.osx-arm64",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": false,
+      "note": "Windows の配布物には入らない（Mac 版は sherpa-onnx を使わない）"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "org.k2fsa.sherpa.onnx.runtime.osx-x64",
+      "version": "2.0.1",
+      "license": "Apache-2.0",
+      "shipped": false,
+      "note": "Windows の配布物には入らない"
+    },
+    {
+      "ecosystem": "swift",
+      "name": "fluidaudio",
+      "version": "0.17.7",
+      "license": "Apache-2.0",
+      "shipped": true,
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "notice_name": "FluidAudio",
+      "note": "ソースからビルドする。同梱の第三者のコード（ThirdPartyLicenses）は contained に書いた。ビルド済みの NemoTextProcessing は traits: [] で外している"
+    },
+    {
+      "ecosystem": "swift",
+      "name": "whisperkit",
+      "version": "1.1.1",
+      "license": "MIT AND Apache-2.0",
+      "shipped": true,
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "notice_name": "WhisperKit",
+      "note": "WhisperKit と ArgmaxCore だけを組み込む。ArgmaxCore の External（Hub・Tokenizers）は swift-transformers 由来で Apache-2.0"
+    },
+    {
+      "ecosystem": "swift",
+      "name": "swift-argument-parser",
+      "version": "1.8.2",
+      "license": "Apache-2.0",
+      "shipped": false,
+      "note": "Package.resolved にあるが Hanasu.app には入らない（WhisperKit の CLI の依存）"
+    },
+    {
+      "ecosystem": "llama-cpp",
+      "name": "llama.cpp",
+      "version": "b11770",
+      "license": "MIT",
+      "shipped": true,
+      "notices": ["THIRD_PARTY_NOTICES.md", "windows/THIRD_PARTY_NOTICES.md"],
+      "note": "llama-server と libllama・libggml。Windows の配布物の libomp.dll は contained に書いた"
+    }
+  ],
+  "contained": [
+    {
+      "name": "ONNX Runtime",
+      "version": "1.28.2",
+      "license": "MIT",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll（sha256 7f66f939…8a25。1.13.8 と同じ）。ONNX Runtime が含む第三者のコードは下の項目（_deps のパスと strings で確かめた。完全な一覧は ONNX Runtime の ThirdPartyNotices.txt）"
+    },
+    {
+      "name": "Eigen",
+      "version": "3.4.0",
+      "license": "MPL-2.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "ヘッダーだけのライブラリ。onnxruntime.dll（EIGEN_MPL2_ONLY でビルド。cmake/adjust_global_compile_flags.cmake）と、sherpa-onnx-c-api.dll の kaldi-decoder（Eigen/Dense だけを読む）に入る。LGPL のファイル（疎行列の一部）は使っていない。変えずに使う"
+    },
+    {
+      "name": "Abseil",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "Apache-2.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll（_deps\\abseil_cpp-src）"
+    },
+    {
+      "name": "Protocol Buffers",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "BSD-3-Clause",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll（_deps\\protobuf-src）"
+    },
+    {
+      "name": "ONNX",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "Apache-2.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "notice_name": "github.com/onnx/onnx",
+      "note": "onnxruntime.dll（_deps\\onnx-src）"
+    },
+    {
+      "name": "RE2",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "BSD-3-Clause",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll（_deps\\re2-src）"
+    },
+    {
+      "name": "Windows Implementation Libraries",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "MIT",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll（_deps\\microsoft_wil-src）"
+    },
+    {
+      "name": "FlatBuffers",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "Apache-2.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll"
+    },
+    {
+      "name": "cpuinfo",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "BSD-2-Clause",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll（PyTorch cpuinfo）"
+    },
+    {
+      "name": "PyTorch",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "BSD-3-Clause",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll の一部の演算（Col2Im など）が PyTorch の実装に基づく"
+    },
+    {
+      "name": "SafeInt",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "MIT",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll（ヘッダーだけ）"
+    },
+    {
+      "name": "Guidelines Support Library",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "MIT",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll（Microsoft GSL、ヘッダーだけ）"
+    },
+    {
+      "name": "date",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "MIT",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "notice_name": "Howard Hinnant",
+      "note": "onnxruntime.dll（HowardHinnant/date、ヘッダーだけ）"
+    },
+    {
+      "name": "Boost.Mp11",
+      "version": "ONNX Runtime 1.28.2 に同梱の版",
+      "license": "BSL-1.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "onnxruntime.dll（ヘッダーだけ）"
+    },
+    {
+      "name": "nlohmann/json",
+      "version": "3.11.3（ONNX Runtime）・3.12.0（sherpa-onnx）",
+      "license": "MIT",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "両方の DLL（json_abi_v3_11_3・json_abi_v3_12_0）"
+    },
+    {
+      "name": "kaldi-native-fbank",
+      "version": "1.22.4",
+      "license": "Apache-2.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "sherpa-onnx-c-api.dll（cmake/kaldi-native-fbank.cmake）"
+    },
+    {
+      "name": "kaldi-decoder",
+      "version": "0.3.0",
+      "license": "Apache-2.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "sherpa-onnx-c-api.dll（_deps\\kaldi_decoder-src）"
+    },
+    {
+      "name": "kaldifst",
+      "version": "1.8.0",
+      "license": "Apache-2.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "sherpa-onnx-c-api.dll（_deps\\kaldifst-src。kaldi-decoder が取る。Kaldi の Apache-2.0）"
+    },
+    {
+      "name": "OpenFst",
+      "version": "kaldifst 1.8.0 に同梱の版",
+      "license": "Apache-2.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "sherpa-onnx-c-api.dll（_deps\\openfst-src。csukuangfj/openfst）"
+    },
+    {
+      "name": "simple-sentencepiece",
+      "version": "0.7",
+      "license": "Apache-2.0",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "sherpa-onnx-c-api.dll（_deps\\simple-sentencepiece-src）"
+    },
+    {
+      "name": "darts-clone",
+      "version": "simple-sentencepiece 0.7 に同梱の版",
+      "license": "BSD-2-Clause",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "simple-sentencepiece の ssentencepiece/csrc/darts.h（s-yata/darts-clone。元の Darts の LGPL ではなく BSD-2-Clause の darts-clone）"
+    },
+    {
+      "name": "utf8proc",
+      "version": "2.12.0",
+      "license": "MIT AND LicenseRef-Unicode-Data",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "sherpa-onnx-c-api.dll（2.0 で足された。cmake/utf8proc.cmake）。Unicode のデータの部分は Unicode のライセンス"
+    },
+    {
+      "name": "fastcluster (hclust-cpp)",
+      "version": "2026-02-25",
+      "license": "BSD-2-Clause",
+      "contained_in": ["org.k2fsa.sherpa.onnx.runtime.win-x64"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "notice_name": "hclust-cpp",
+      "note": "sherpa-onnx-c-api.dll（話者分離のクラスタリング。csukuangfj/hclust-cpp）"
+    },
+    {
+      "name": "LLVM OpenMP",
+      "version": "llama.cpp b11770 に同梱の版",
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "contained_in": ["llama.cpp"],
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "Windows の llama/libomp.dll"
+    },
+    {
+      "name": "fastcluster",
+      "version": "FluidAudio 0.17.7 に同梱の版",
+      "license": "BSD-2-Clause",
+      "contained_in": ["fluidaudio"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "note": "FluidAudio の ThirdPartyLicenses/fastcluster-LICENSE.md"
+    },
+    {
+      "name": "VBx",
+      "version": "FluidAudio 0.17.7 に同梱の版",
+      "license": "Apache-2.0",
+      "contained_in": ["fluidaudio"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "notice_name": "vbx",
+      "note": "FluidAudio の ThirdPartyLicenses/vbx-LICENSE.md"
+    },
+    {
+      "name": "UniDic",
+      "version": "FluidAudio 0.17.7 に同梱の版",
+      "license": "BSD-3-Clause",
+      "contained_in": ["fluidaudio"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "note": "unidic-lite（BSD・GPL・LGPL の三重ライセンスのうち BSD を選ぶ）"
+    },
+    {
+      "name": "misaki",
+      "version": "FluidAudio 0.17.7 に同梱の版",
+      "license": "Apache-2.0",
+      "contained_in": ["fluidaudio"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "note": "hexgrad/misaki"
+    },
+    {
+      "name": "cutlet",
+      "version": "FluidAudio 0.17.7 に同梱の版",
+      "license": "MIT",
+      "contained_in": ["fluidaudio"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "note": "polm/cutlet"
+    },
+    {
+      "name": "Convert-Numbers-to-Japanese",
+      "version": "FluidAudio 0.17.7 に同梱の版",
+      "license": "MIT",
+      "contained_in": ["fluidaudio"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "note": "Greatdane/Convert-Numbers-to-Japanese"
+    },
+    {
+      "name": "ipa-dict",
+      "version": "FluidAudio 0.17.7 に同梱の版",
+      "license": "MIT",
+      "contained_in": ["fluidaudio"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "note": "open-dict-data/ipa-dict"
+    },
+    {
+      "name": "CharsiuG2P",
+      "version": "FluidAudio 0.17.7 に同梱の版",
+      "license": "MIT",
+      "contained_in": ["fluidaudio"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "note": "lingjzhu/CharsiuG2P"
+    },
+    {
+      "name": "kokoro-coreml",
+      "version": "FluidAudio 0.17.7 に同梱の版",
+      "license": "Apache-2.0",
+      "contained_in": ["fluidaudio"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "notice_name": "KokoroANE-v3",
+      "note": "FluidAudio の ThirdPartyLicenses/KokoroANE-v3（mattmireles/kokoro-coreml と変換のコード）"
+    },
+    {
+      "name": "swift-transformers",
+      "version": "WhisperKit 1.1.1 に同梱の版",
+      "license": "Apache-2.0",
+      "contained_in": ["whisperkit"],
+      "notices": ["THIRD_PARTY_NOTICES.md"],
+      "note": "ArgmaxCore の External（Hub・Tokenizers）"
+    }
+  ],
+  "unversioned": [
+    {
+      "name": ".NET ランタイム",
+      "license": "MIT",
+      "notices": ["windows/THIRD_PARTY_NOTICES.md"],
+      "note": "self-contained で Hanasu.exe と cli\\hanasu.exe に入るランタイムパック。版は .NET の更新ごとに変わるので突き合わせない。ランタイムが含む第三者のコードは zip の dotnet-THIRD-PARTY-NOTICES.txt"
+    },
+    {
+      "name": "Apple・Microsoft の OS のフレームワーク",
+      "license": "OS のライセンス",
+      "note": "配布物には入らない（OS のものを使う）"
+    }
+  ]
+}

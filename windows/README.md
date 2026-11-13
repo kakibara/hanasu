@@ -355,9 +355,9 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | [Anthropic](https://github.com/anthropics/anthropic-sdk-csharp) 13.4.0（公式の C# SDK。Microsoft.Extensions.AI.Abstractions・System.Text.Json などを含む） | Claude API | Apache-2.0（依存は MIT） |
 | xunit 2.9.3 / xunit.runner.visualstudio 2.8.2 | テストのみ | Apache-2.0 |
 | Microsoft.NET.Test.Sdk 17.14.1 | テストのみ | MIT |
-| [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（org.k2fsa.sherpa.onnx 1.13.8、ONNX Runtime を含む） | 会議の相手側の話者分離 | Apache-2.0（ONNX Runtime は MIT） |
+| [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（org.k2fsa.sherpa.onnx 2.0.1、ONNX Runtime を含む） | 会議の相手側の話者分離 | Apache-2.0（ONNX Runtime は MIT。静的にリンクされた Eigen（MPL-2.0）・BSD のものなどは THIRD_PARTY_NOTICES.md） |
 
-配布物には、Hanasu のライセンス（`LICENSE.txt`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したら、THIRD_PARTY_NOTICES.md にも足すこと。
+配布物には、Hanasu のライセンス（`LICENSE.txt`・`LICENSE-ADDITIONAL-PERMISSION.md`・`NOTICE.txt`）と、これらの第三者のライセンスの表示（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、.NET ランタイムの `dotnet-THIRD-PARTY-NOTICES.txt`）を入れる。依存パッケージを足したり版を変えたりしたら、THIRD_PARTY_NOTICES.md と `common/third-party-licenses.json` にも足すこと。パッケージのライセンスの表示だけでなく、同梱のネイティブ DLL に静的にリンクされたものも確かめる（sherpa-onnx 1.13.8 は表示が Apache-2.0 なのに、GPL-3.0 の espeak-ng を含んでいた）。CI の `python3 scripts/check-licenses.py` が lock ファイルと突き合わせる（DEC-REL-012）。
 依存の版とハッシュは各プロジェクトの `packages.lock.json` に固定している（CI は locked mode）。パッケージを足したり版を変えたりしたら、`dotnet restore` で lock ファイルを作り直してコミットする。
 
 Whisper のモデル（`ggml-*.bin`）は配布物に含めず、利用者が選んだときに [Hugging Face の ggerganov/whisper.cpp](https://huggingface.co/ggerganov/whisper.cpp) からダウンロードする（OpenAI の Whisper のモデル、MIT）。

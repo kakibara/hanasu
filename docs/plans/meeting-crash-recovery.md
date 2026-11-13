@@ -1,6 +1,6 @@
 # 記録中に落ちた会議を、録音から戻す
 
-- 状態: 実装済み（2026-11-13）。要件と設計判断は [spec/meeting.md](../spec/meeting.md) の REQ-MTG-128・DEC-MTG-156〜160、確かめた結果は [verification/meeting.md](../verification/meeting.md) の 19 章
+- 状態: 実装済み（2026-11-13）。要件と設計判断は [spec/meeting.md](../spec/meeting.md) の REQ-MTG-128・DEC-MTG-156〜160、確かめた結果は [verification/meeting.md](../verification/meeting.md) の 20 章
 - 依頼: 2026-11-13「録音していたら以下のエラーが出たので確認調査して修正して」の調査で、落ちた会議の録音が開けないと分かった。同日「このタスクをここで実行してください：「Make meeting audio survive an app crash (Mac)」」。
 - ユーザーに決めてもらったこと（2026-11-13）: 範囲は「録音から作り直すボタン」（記録中の文字起こしの都度保存はしない）。Windows にも入れる。Mac で記録中に終了するときは「確かめてから録音を閉じる」。作り直しで使うエンジンは「押したら確かめる」。今朝の会議の壊れた録音の修復は「試さない」。
 

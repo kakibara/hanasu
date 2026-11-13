@@ -651,6 +651,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Laju sampel model pemisahan pembicara tidak sesuai harapan ({0} Hz).</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Model pemisahan pembicara tidak dapat dimuat.</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Wilayah Vertex AI “{0}” tidak dapat digunakan (hanya huruf kecil, angka, dan tanda hubung; mis. global, us-central1).</value>
   </data>
