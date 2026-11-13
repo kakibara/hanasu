@@ -1429,6 +1429,14 @@
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Core/Command/MeetingAsk.cs`（`Keywords`）
 
+### DEC-MTG-155 会議ノートの真ん中の画面は、最小の大きさを中身から切り離す
+- 決めたこと: `MeetingWindowView` の `NavigationSplitView` の真ん中（detail。記録中の画面・処理中・文書・質問・未選択のどれでも）に、幅と高さの両方とも最小 0・最大無限の `frame` を付け、提案された大きさをそのまま使う。真ん中の最小の幅は、今までどおりウインドウの最小の大きさ（DEC-MTG-130）で確保する。
+- 理由: 真ん中の最小の大きさが中身で変わると、記録中に帯（警告・オフレコ）の出し入れや文字起こしの更新があるたびに、分割の列（SwiftUI の `SplitViewChildController`）が最小の大きさの変更を受けて、ウインドウの制約の更新の最中にレイアウトをやり直す。それが収まらないと AppKit が例外（「more Update Constraints in Window passes than there are views in the window」）を出してアプリが落ちる。2026-11-13 に会議の記録を始めて約 3 分で、この例外で落ちた（macOS 26.6.2、2.6.1）。手元では、左右の分割の左側の最小の幅を 0 にして揺れを大きくした状態で、帯の出し入れと途中結果の更新を繰り返すと毎回同じ例外が出て、真ん中にこの `frame` を付けると出なくなった。高さだけ切り離しても出た。
+- 決めた場面: ユーザーの依頼（2026-11-13「録音していたら以下のエラーが出たので確認調査して修正して」）
+- 関係する要件: REQ-MTG-007, REQ-MTG-054
+- 対象: Mac
+- 実装の場所: `MeetingWindowView.splitView`
+
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。
 - 理由: Mac 版の Process Tap（DEC-MTG-002）にあたる、ドライバーの要らない方法。効果音を鳴らすとループバックに入る。

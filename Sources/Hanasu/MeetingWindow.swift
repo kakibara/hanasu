@@ -130,7 +130,12 @@ struct MeetingWindowView: View {
             }
             .navigationSplitViewColumnWidth(min: 220, ideal: 260)
         } detail: {
+            // 設計判断: DEC-MTG-155
+            // 真ん中の画面の最小の大きさを中身から切り離す（幅・高さとも 0〜無限にして、提案された大きさをそのまま使う）。
+            // 中身で変わると、記録中に帯の出し入れや文字起こしの更新のたびに分割の列の最小の大きさが変わり、
+            // 制約の更新の最中にレイアウトがやり直しになって、macOS がアプリを落とすことがあった
             detail
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         }
         // 設計判断: DEC-MTG-130（後ろ側のパネルは NavigationSplitView に付ける）
         .inspector(isPresented: inspectorBinding) {
