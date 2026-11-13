@@ -287,6 +287,24 @@
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>कार्यवृत्त फिर से बनाएँ</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>रिकॉर्डिंग से ट्रांसक्रिप्ट और कार्यवृत्त बनाएँ</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>बची हुई रिकॉर्डिंग से ट्रांसक्रिप्ट बनाता है, बोलने वालों को अलग करता है और कार्यवृत्त बनाता है.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>रिकॉर्डिंग से फिर से बनाएँ?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>मौजूदा सेटिंग ({0}) से ट्रांसक्रिप्ट बनेगा, बोलने वाले अलग किए जाएँगे और कार्यवृत्त बनेगा.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>मीटिंग का ऑडियो Google को भेजा जाएगा.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>रिकॉर्डिंग से फिर से बनाया जा रहा है</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>टेम्पलेट:</value>
   </data>
@@ -612,8 +630,8 @@
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>जैसा बोला गया</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>हमेशा जापानी</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>{0} में एकरूप करें</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>AI को उस ऐप का नाम बताएँ जिसमें आप टाइप कर रहे हैं (उसकी शैली से मेल खाने के लिए)</value>

@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>无法开始录制会议</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>根据录音重新生成期间，无法开始记录。</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>语音输入正在录音。请在结束后重试。</value>
   </data>

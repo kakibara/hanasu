@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>회의 녹음을 시작할 수 없습니다</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>녹음으로 다시 만드는 동안에는 기록을 시작할 수 없습니다.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>음성 입력이 녹음 중입니다. 끝난 후 다시 시도하세요.</value>
   </data>

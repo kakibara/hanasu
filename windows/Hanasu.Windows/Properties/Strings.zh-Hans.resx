@@ -287,6 +287,24 @@
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>重新生成会议纪要</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>根据录音生成转写和会议纪要</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>根据保留的录音进行转写、区分发言人并生成会议纪要</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>要根据录音重新生成吗？</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>将按当前设置（{0}）进行转写、区分发言人并生成会议纪要。</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>会议音频将发送给 Google。</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>正在根据录音重新生成</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>模板：</value>
   </data>
@@ -612,8 +630,8 @@
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>原语言</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>统一为日语</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>统一为{0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>将正在输入的应用名称告知 AI（以匹配其风格）</value>

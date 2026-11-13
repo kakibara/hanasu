@@ -287,6 +287,24 @@ Bản gốc: {2}</value>
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>Tạo lại biên bản</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Chép lời và tạo biên bản từ bản ghi âm</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Chép lời từ bản ghi âm còn lại, phân biệt người nói và tạo biên bản.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>Tạo lại cuộc họp từ bản ghi âm?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>Hanasu sẽ chép lời bằng cài đặt hiện tại ({0}), phân biệt người nói và tạo biên bản.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>Âm thanh cuộc họp sẽ được gửi đến Google.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Đang tạo lại từ bản ghi âm</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Mẫu:</value>
   </data>
@@ -612,8 +630,8 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Như đã nói</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Luôn là tiếng Nhật</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Thống nhất sang {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Cho AI biết tên ứng dụng bạn đang nhập vào (để phù hợp với văn phong)</value>

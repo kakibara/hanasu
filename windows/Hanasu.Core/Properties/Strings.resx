@@ -720,6 +720,10 @@
     <value>Can't start recording the meeting</value>
     <comment>Notification title</comment>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>You can't start recording while a meeting is being rebuilt from its recording.</value>
+    <comment>Notification body (title Meeting_CannotStart) when the user tries to start recording while a crashed meeting is being transcribed again from its saved audio (REQ-MTG-128)</comment>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>Dictation is recording. Try again when it's finished.</value>
     <comment>Notification body</comment>

@@ -267,6 +267,40 @@ enum MeetingNotesUICLI {
                             size: AppDelegate.meetingWindowMinSize, name: "live-window-min", dir: dir) && ok
         ok = renderInWindow(MeetingWindowView(recorder: live, now: now, initialSelection: recording.id),
                             size: AppDelegate.meetingWindowSize, name: "live-window", dir: dir) && ok
+        // 8. 記録中に落ちた会議（失敗・発言 0 件・録音あり）の帯と「…」のメニュー、録音から作り直している間（REQ-MTG-128）
+        var crashed = Meeting(id: "crashed", title: "週次定例", startedAt: now.addingTimeInterval(-2 * 3600))
+        crashed.status = .failed
+        crashed.errorMessage = "記録の途中でアプリが終了しました。"
+        crashed.notes = [MeetingNote(kind: .note, time: 65, text: "KPI の定義を先に揃える")]
+        let crashedRecorder = MeetingRecorder()
+        crashedRecorder.showMeetingsForRendering([crashed] + others)
+        try MeetingNotesPreview.write(
+            MeetingStatusBanners(meeting: crashed, recorder: crashedRecorder, processing: false, onRegenerate: {},
+                                 recoverableOverride: true)
+                .padding().frame(width: 640),
+            to: dir.appendingPathComponent("recovery-banner.png"))
+        minWidth("帯（録音から作る）", MeetingStatusBanners(meeting: crashed, recorder: crashedRecorder, processing: false,
+                                                     onRegenerate: {}, recoverableOverride: true))
+        try MeetingNotesPreview.write(
+            VStack(alignment: .leading, spacing: 8) {
+                MeetingMoreMenuItems(meeting: crashed, recorder: crashedRecorder, onEditSpeakers: {}, onDelete: {},
+                                     onDeleteAudio: {}, hasAudioOverride: true, recoverableOverride: true)
+            }
+            .padding().frame(width: 300),
+            to: dir.appendingPathComponent("more-menu-recover.png"))
+        var recovering = crashed
+        recovering.status = .processing
+        recovering.errorMessage = nil
+        crashedRecorder.showMeetingsForRendering([recovering] + others)
+        crashedRecorder.showRecoveringForRendering(recovering.id, stages: [.transcribing, .diarizing, .minutes], stage: .transcribing,
+                                                   message: "録音から文字起こししています…")
+        ok = renderInWindow(MeetingWindowView(recorder: crashedRecorder, now: now, initialSelection: recovering.id),
+                            size: AppDelegate.meetingWindowSize, name: "recovering", dir: dir) && ok
+        try MeetingNotesPreview.write(
+            MeetingDocumentView(meeting: recovering, recorder: crashedRecorder, processing: true,
+                                onFocusTranscript: { _ in }, onRegenerate: {}, onEditSpeakers: {})
+                .frame(width: 640, height: 420),
+            to: dir.appendingPathComponent("recovering-document.png"))
         print("wrote: \(dir.path)")
         return ok
     }

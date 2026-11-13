@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>会議の記録を始められません</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>録音から作り直している間は、記録を始められません。</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>音声入力の録音中です。終わってからもう一度試してください。</value>
   </data>

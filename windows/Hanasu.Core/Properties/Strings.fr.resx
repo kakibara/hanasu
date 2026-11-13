@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Impossible de commencer l'enregistrement de la réunion</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>Impossible de commencer un enregistrement pendant qu'une réunion est reconstruite à partir de son enregistrement.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>La dictée est en cours d'enregistrement. Réessayez quand elle sera terminée.</value>
   </data>

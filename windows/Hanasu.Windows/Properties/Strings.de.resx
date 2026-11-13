@@ -287,6 +287,24 @@ Original: {2}</value>
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>Protokoll neu erstellen</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Aus Aufnahme transkribieren und Protokoll erstellen</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Transkribiert die erhaltene Aufnahme, unterscheidet die Sprecher und erstellt das Protokoll.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>Besprechung aus der Aufnahme neu erstellen?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>Mit den aktuellen Einstellungen ({0}) wird transkribiert, nach Sprechern getrennt und das Protokoll erstellt.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>Der Ton der Besprechung wird an Google gesendet.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Wird aus der Aufnahme neu erstellt</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Vorlage:</value>
   </data>
@@ -612,8 +630,8 @@ Protokoll, Transkript, Notizen und Audio werden in den Papierkorb verschoben. Si
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Wie gesprochen</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Immer Japanisch</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Immer {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Der KI den Namen der App mitteilen, in die eingegeben wird (um sich an deren Stil anzupassen)</value>

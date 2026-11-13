@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Toplantı kaydı başlatılamıyor</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>Bir toplantı kaydından yeniden oluşturulurken yeni kayıt başlatılamaz.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>Dikte kaydediliyor. Bittiğinde yeniden deneyin.</value>
   </data>

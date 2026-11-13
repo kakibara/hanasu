@@ -44,26 +44,30 @@ struct GeminiClient {
     }
 
     // 要件: REQ-DIC-082
-    /// 整形の出力の言語。既定は話した言語（英語は英語のまま残し、日本語に訳さない）
+    // 設計判断: DEC-DIC-200
+    /// 整形の出力の言語。既定は話した言語（ほかの言語で話した部分はそのまま残し、訳さない）。
+    /// もう 1 つは、プロンプトの言語（文字起こしの言語）に統一する。言語は保存せず、文字起こしの言語を変えたらそれに合わせて変わる
     enum RefineOutputLanguage: String, CaseIterable, Identifiable {
         case asSpoken
-        case japanese
+        // 設計判断: DEC-DIC-201（保存値は日本語に固定していた版の japanese のまま。前の版に戻しても読める。意味は「統一する」）
+        case unified = "japanese"
 
         var id: String { rawValue }
 
         var label: String {
             switch self {
             case .asSpoken: tr("話した言語")
-            case .japanese: tr("日本語に統一")
+            case .unified: tr("%@に統一", TranslationLanguage(PromptLanguage.current).nameInUILanguage)
             }
         }
 
         // 要件: REQ-COM-061
         // 設計判断: DEC-COM-102（Windows 版の GeminiPrompts.LanguageInstruction と同じ文面。どちらも Prompts の JSON を読む）
+        // 設計判断: DEC-DIC-200（統一の指示は、各言語の JSON に、その言語自身にそろえる文面で書く）
         var instruction: String {
             switch self {
             case .asSpoken: Prompts.text("refine.outputLanguage.asSpoken")
-            case .japanese: Prompts.text("refine.outputLanguage.japanese")
+            case .unified: Prompts.text("refine.outputLanguage.unified")
             }
         }
     }
@@ -136,9 +140,8 @@ struct GeminiClient {
         if !extra.isEmpty {
             lines.append(Prompts.text("user.extraRules") + "\n" + extra)
         }
-        // 設計判断: DEC-DIC-028（出力が日本語なら、日本語の文体のルール）
-        if let section = request.appStyle?.promptSection(appName: request.appName, translation: translation, hasCommonRules: !extra.isEmpty,
-                                                          japaneseOutput: translation == nil && request.outputLanguage == .japanese) {
+        // 設計判断: DEC-DIC-028（和訳なら日本語の文体のルール）、DEC-DIC-200（整形はどちらの整形の言語でもプロンプトの言語のルール）
+        if let section = request.appStyle?.promptSection(appName: request.appName, translation: translation, hasCommonRules: !extra.isEmpty) {
             lines.append(section)
         }
         if let block = request.screenContext?.promptBlock() {
@@ -165,8 +168,9 @@ struct GeminiClient {
     /// 整形のシステムプロンプトと user content。Claude でも同じ文面を使う（TextAIClient）
     static func refinePrompt(_ request: Request) -> (system: String, user: String) {
         // 要件: REQ-DIC-082
+        // 設計判断: DEC-DIC-200（統一の先はプロンプトの言語なので、画面の文脈の指示も話した言語のときと同じ）
         (systemInstruction + "\n\n" + request.outputLanguage.instruction
-            + ScreenContext.instruction(for: request.screenContext, translation: nil, japaneseOutput: request.outputLanguage == .japanese),
+            + ScreenContext.instruction(for: request.screenContext, translation: nil),
          userPrompt(for: request))
     }
 

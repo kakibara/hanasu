@@ -287,6 +287,24 @@ Original: {2}</value>
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>Gerar ata novamente</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Transcrever e gerar ata a partir da gravação</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Transcreve a gravação que ficou salva, separa quem falou e gera a ata.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>Refazer a reunião a partir da gravação?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>A transcrição será feita com as configurações atuais ({0}), as falas serão separadas por participante e a ata será gerada.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>O áudio da reunião será enviado ao Google.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Refazendo a partir da gravação</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Modelo:</value>
   </data>
@@ -612,8 +630,8 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Como falado</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Sempre japonês</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Tudo em {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Informar à IA o nome do aplicativo em que você está digitando (para combinar com o estilo dele)</value>

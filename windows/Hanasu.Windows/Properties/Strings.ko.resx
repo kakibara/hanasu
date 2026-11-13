@@ -287,6 +287,24 @@
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>회의록 다시 만들기</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>녹음으로 텍스트 변환과 회의록 만들기</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>남아 있는 녹음으로 텍스트 변환, 화자 구분, 회의록 작성을 합니다</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>녹음으로 다시 만들까요?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>현재 설정({0})으로 텍스트로 변환하고 화자를 구분한 뒤 회의록을 만듭니다.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>회의 오디오가 Google로 전송됩니다.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>녹음으로 다시 만드는 중</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>템플릿:</value>
   </data>
@@ -612,8 +630,8 @@
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>말한 언어</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>항상 일본어</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>{0}로 통일</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>입력 중인 앱 이름을 AI에 알리기(앱의 스타일에 맞추기 위해)</value>
