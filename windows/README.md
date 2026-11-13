@@ -266,6 +266,7 @@ dotnet run --project Hanasu.Cli -- claude-request "<文章>" [--translate | --mi
 dotnet run --project Hanasu.Cli -- claude-refine "<文章>" [--translate | --translate-to <言語>] [--model <id>] [--app Slack]  # Claude で整形・英訳する（使ったトークンとキャッシュも出す）
 dotnet run --project Hanasu.Cli -- claude-check [--model <id>] [--fake-key]                          # 「接続を試す」と同じ確かめ。--fake-key は偽のキーで 401 の文言を見る
 dotnet run --project Hanasu.Cli -- local-list | local-download <id> | local-refine "<文章>" [--model <id>] [--server <llama-server>] [--models-dir <dir>]  # ローカルの LLM（Mac の llama-server でも動く）
+dotnet run --project Hanasu.Cli -- local-prewarm-check [--model <id>] [--other-model <id>] [--server <llama-server>] [--models-dir <dir>]  # 録音中の先読み（REQ-COM-033）を本物の llama-server で確かめる
 
 # 会議の後処理（2 つの音声を「自分」「相手」として文字起こし → 話者分離 → 話者の割り当て → 議事録）。会議は --meetings-dir の下に作る
 dotnet run --project Hanasu.Cli -- meeting-files me.wav others.wav --meetings-dir <保存先> [--engine whisper|gemini] [--whisper-model base] [--models-dir <dir>] [--download] \

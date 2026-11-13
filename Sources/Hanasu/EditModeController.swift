@@ -32,6 +32,11 @@ final class EditModeController {
     private var client: TextAIClient?
     private var targetAppName: String?
     private var selectionTask: Task<String?, Never>?
+    // 要件: REQ-COM-033
+    /// この録音のローカルのモデルの先読み（DEC-DIC-220）
+    private let localModelWarmHold = LocalModelWarmHold()
+    /// 「準備中…」を出した時刻（録音中になるまでの秒をログに出す）
+    private var preparingStartedAt = Date()
     private var cancellables: Set<AnyCancellable> = []
 
     // 設計判断: DEC-DIC-035
@@ -197,6 +202,7 @@ final class EditModeController {
         // Whisper / Gemini は録音を止めてからまとめて文字起こしするので、HUD の出しかたを変える
         hud.model.batchEngine = settings.dictationEngine.isLive ? nil : settings.dictationEngine
         hud.show(.preparing(tr("準備中…")))
+        preparingStartedAt = Date()
         setEscapeHotKey(enabled: true)
 
         // 選択の読み取りは録音と並行して進める。⌘C で写し取るときは、ショートカットの修飾キーが離されるまで待つため
@@ -234,6 +240,11 @@ final class EditModeController {
             state = .recording
             playSound("Tink")
             hud.show(.recording)
+            // 要件: REQ-COM-033
+            // 設計判断: DEC-DIC-220
+            // 選択の編集は必ず AI を使うので、音声入力の AI がローカルなら録音の間にモデルを読み込み始める
+            appLog.notice("edit recording started: \(String(format: "%.2f", Date().timeIntervalSince(self.preparingStartedAt)), privacy: .public)s")
+            localModelWarmHold.request(settings: settings)
             if stopRequested {
                 await finish()
             }
@@ -306,6 +317,8 @@ final class EditModeController {
 
     private func endSession() {
         state = .idle
+        // ローカルのモデルの先読みの保持を外す（ここから 5 分使わなければ止まる。DEC-DIC-220）
+        localModelWarmHold.release()
         selectionTask?.cancel()
         selectionTask = nil
         client = nil

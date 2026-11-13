@@ -40,6 +40,7 @@ using Hanasu.Whisper;
 // ローカルの LLM（llama.cpp の llama-server。--server <パス> か環境変数 HANASU_LLAMA_SERVER、なければ exe の隣の llama/。Mac の llama-server でも動く）:
 //   hanasu-cli local-list [--models-dir <dir>]   モデルの一覧（ダウンロード済みか）
 //   hanasu-cli local-download <id> [--models-dir <dir>]   モデルをダウンロードし、大きさと SHA-256 を確かめる
+//   hanasu-cli local-prewarm-check [--model <id>] [--other-model <id>] [--server <パス>] [--models-dir <dir>]   録音中の先読み（REQ-COM-033）を本物の llama-server で確かめる（Mac でも動く）
 //   hanasu-cli local-refine "<文章>" [--model <id>] [--translate | --translate-to <言語>] [--server <パス>] [--models-dir <dir>]   ローカルで整形・英訳する
 //   meeting-minutes / meeting-files に --minutes-ai local --minutes-model <id> を付けると、議事録をローカルで作る
 // どのコマンドにも --prompt-language <言語>（en、ja、zh-TW、pt-BR など。ja-JP のような識別子でもよい）を付けると、
@@ -84,8 +85,9 @@ try
         case "local-list": LocalList(args); break;
         case "local-download": await LocalDownload(args); break;
         case "local-refine": await LocalRefine(args); break;
+        case "local-prewarm-check": Environment.ExitCode = await LocalPrewarmCheck(args) ? 0 : 1; break;
         default:
-            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show|meeting-dict-suggest|claude-request|claude-refine|claude-check|local-list|local-download|local-refine ...（Program.cs の先頭を参照）");
+            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show|meeting-dict-suggest|claude-request|claude-refine|claude-check|local-list|local-download|local-refine|local-prewarm-check ...（Program.cs の先頭を参照）");
             return 2;
     }
     return 0;
@@ -369,6 +371,64 @@ static LocalLlmServer ConfigureLocalServer(string[] args)
     if (Option(args, "--models-dir") is { } dir) server.ModelsDirectory = Path.GetFullPath(dir);
     server.Log = message => Console.Error.WriteLine($"[{message}]");
     return server;
+}
+
+// 確かめ方: REQ-COM-033
+/// <summary>
+/// 先読みの起動の途中に来た整形が同じ起動を待つこと（起動は 1 回）と、先読みの起動の途中に違うモデルの議事録が来ても失敗しないことを、
+/// 本物の llama-server で確かめる
+/// </summary>
+static async Task<bool> LocalPrewarmCheck(string[] args)
+{
+    var server = ConfigureLocalServer(args);
+    server.WriteRecords = false;
+    var main = LocalModelOption(Option(args, "--model"), LocalLlmModel.Lfm25JP);
+    var other = LocalModelOption(Option(args, "--other-model"), LocalLlmModel.Qwen35);
+    foreach (var m in new[] { main, other })
+    {
+        if (!server.IsDownloaded(m))
+        {
+            Console.Error.WriteLine($"モデル {m.Id} がありません（local-download {m.Id}）");
+            return false;
+        }
+    }
+    var failures = 0;
+    void Check(string name, bool ok)
+    {
+        Console.WriteLine($"{(ok ? "OK  " : "FAIL")} {name}");
+        if (!ok) failures++;
+    }
+    try
+    {
+        // 1. 先読みの起動の途中に録音を止めた整形は、同じ起動を待つ
+        var started = DateTime.UtcNow;
+        var hold = server.Prewarm(main);
+        await Task.Delay(300);
+        await server.BeginRequestAsync(main, CancellationToken.None);
+        Console.WriteLine($"  {main.Id}: 先読みから使えるまで {(DateTime.UtcNow - started).TotalSeconds:F1} 秒");
+        Check("先読みの起動の途中に来た整形は、同じ起動を待つ（起動は 1 回）", hold is not null && server.LaunchCount == 1);
+        server.FinishRequest();
+        if (hold is { } h) server.ReleaseWarmHold(h);
+        server.Stop();
+
+        // 2. 先読みの起動の途中に違うモデルの議事録が来ても、議事録は失敗せず、そのサーバーが動き続ける
+        server.Prewarm(main);
+        await Task.Delay(300);
+        await server.BeginRequestAsync(other, CancellationToken.None);
+        await Task.Delay(1000);
+        Check("先読みの起動の途中に来た違うモデルの議事録は成功し、そのサーバーが動き続ける", server.ServingModel == other);
+        server.FinishRequest();
+    }
+    catch (Exception e)
+    {
+        Check($"先読みを待った処理が成功する（{e.Message}）", false);
+    }
+    finally
+    {
+        server.Stop();
+    }
+    Console.WriteLine(failures == 0 ? "すべて OK" : $"{failures} 件が NG");
+    return failures == 0;
 }
 
 static LocalLlmModel LocalModelOption(string? id, LocalLlmModel fallback) =>

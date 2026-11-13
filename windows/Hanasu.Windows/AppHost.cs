@@ -83,6 +83,13 @@ internal sealed class AppHost : IDisposable
             },
             OpenHelp = Shell.Open,
             Log = AppLog.Write,
+            // 要件: REQ-COM-033
+            // 設計判断: DEC-DIC-220
+            PrewarmTextAi = (s, mode) =>
+                DictationPrewarm.ModelToPrewarm(s, mode, LocalLlmServer.Shared.IsDownloaded) is { } model
+                    ? LocalLlmServer.Shared.Prewarm(model)
+                    : null,
+            ReleaseTextAiWarmHold = LocalLlmServer.Shared.ReleaseWarmHold,
         });
         Meetings = new MeetingController(new MeetingServices
         {

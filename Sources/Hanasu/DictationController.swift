@@ -69,6 +69,11 @@ final class DictationController {
     /// 音声入力の AI の認証情報があるか（録音を始めたときに見る）
     private var screenshotHasCredentials = true
     private var cancellables: Set<AnyCancellable> = []
+    // 要件: REQ-COM-033
+    /// この録音のローカルのモデルの先読み（DEC-DIC-220）
+    private let localModelWarmHold = LocalModelWarmHold()
+    /// 「準備中…」を出した時刻（録音中になるまでの秒をログに出す）
+    private var preparingStartedAt = Date()
 
     // 要件: REQ-DIC-002
     init() {
@@ -178,6 +183,17 @@ final class DictationController {
         hud.model.translation = translation
         // 翻訳に切り替えると、整形がオフでもスクリーンショットが使われるようになる（DEC-DIC-188）
         updateScreenshot()
+        // 翻訳に切り替えると、整形がオフでも AI を使うので、ローカルのモデルを読み込み始める（DEC-DIC-220）
+        if state == .recording { prewarmLocalModelIfNeeded() }
+    }
+
+    // 要件: REQ-COM-033
+    // 設計判断: DEC-DIC-220
+    /// この録音で AI を使う（整形がオンか翻訳する）なら、音声入力の AI がローカルのとき裏でモデルを読み込み始める。
+    /// 判定はアプリ別の既定の翻訳を反映した self.mode で行う。録音は待たない
+    private func prewarmLocalModelIfNeeded() {
+        guard settings.refineWithGemini || mode.translation != nil else { return }
+        localModelWarmHold.request(settings: settings)
     }
 
     // 要件: REQ-DIC-042
@@ -315,6 +331,7 @@ final class DictationController {
         // Whisper / Gemini は録音を止めてからまとめて文字起こしするので、HUD の出しかたを変える
         hud.model.batchEngine = settings.dictationEngine.isLive ? nil : settings.dictationEngine
         hud.show(.preparing(tr("準備中…")))
+        preparingStartedAt = Date()
         setEscapeHotKey(enabled: true)
 
         Task {
@@ -339,6 +356,10 @@ final class DictationController {
             state = .recording
             playSound("Tink")
             hud.show(.recording)
+            // 要件: REQ-COM-033
+            // 設計判断: DEC-DIC-220
+            appLog.notice("dictation recording started: \(String(format: "%.2f", Date().timeIntervalSince(self.preparingStartedAt)), privacy: .public)s")
+            prewarmLocalModelIfNeeded()
             if stopRequested {
                 await finishDictation()
             }
@@ -351,6 +372,8 @@ final class DictationController {
         case .preparing:
             cancelRequested = true
         case .recording:
+            // 取り消しの間に止める操作が来ても、入力に進まないように（進むと、次の録音の先読みの保持まで外してしまう）
+            state = .processing
             Task {
                 await recognizer.cancel()
                 finishCancelled()
@@ -362,6 +385,7 @@ final class DictationController {
 
     private func finishCancelled() {
         state = .idle
+        localModelWarmHold.release()
         discardScreenshot()
         DictationHistoryStore.shared.discardAudio(pendingAudioURL)
         pendingAudioURL = nil
@@ -371,6 +395,7 @@ final class DictationController {
 
     private func fail(_ message: String) {
         state = .idle
+        localModelWarmHold.release()
         discardScreenshot()
         DictationHistoryStore.shared.discardAudio(pendingAudioURL)
         pendingAudioURL = nil
@@ -460,6 +485,9 @@ final class DictationController {
                 historyError = error.localizedDescription
             }
         }
+
+        // ローカルのモデルの先読みの保持を外す（ここから 5 分使わなければ止まる。DEC-DIC-220）
+        localModelWarmHold.release()
 
         // AI を呼ばなかった録音（整形オフ・スニペットだけ・認証なし・失敗）でも、読み取りを止めて捨てる
         if screenshotCapture != nil {

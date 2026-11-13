@@ -47,12 +47,16 @@ public static class TextAiFactory
         ? Strings.Ai_NotReady_LocalModel
         : string.Format(Strings.Ai_NotReady_Credentials, NameOf(provider));
 
+    /// <summary>その用途に選んだローカルのモデル（なければ既定）</summary>
+    public static LocalLlmModel LocalModelFor(AppSettings settings, TextAiUse use) =>
+        LocalLlmModel.Find(use == TextAiUse.Dictation ? settings.LocalDictationModel : settings.LocalMeetingModel)
+            ?? (use == TextAiUse.Dictation ? LocalLlmModel.DefaultDictation : LocalLlmModel.DefaultMeeting);
+
     /// <summary>ローカルのクライアント（モデルがまだダウンロードされていなければ null）</summary>
     public static LocalLlmClient? CreateLocal(AppSettings settings, TextAiUse use, TimeSpan timeout, LocalLlmServer? server = null)
     {
         server ??= LocalLlmServer.Shared;
-        var model = LocalLlmModel.Find(use == TextAiUse.Dictation ? settings.LocalDictationModel : settings.LocalMeetingModel)
-            ?? (use == TextAiUse.Dictation ? LocalLlmModel.DefaultDictation : LocalLlmModel.DefaultMeeting);
+        var model = LocalModelFor(settings, use);
         if (!server.IsDownloaded(model)) return null;
         var minimum = LocalLlmClient.MinimumTimeout(use);
         return new LocalLlmClient(model, server) { Timeout = timeout > minimum ? timeout : minimum };

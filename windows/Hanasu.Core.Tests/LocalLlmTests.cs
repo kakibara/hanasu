@@ -196,4 +196,97 @@ public class LocalLlmTests
         Assert.DoesNotContain("[{", result.Markdown);
         Assert.Contains("案をまとめる", result.Markdown);
     }
+
+    // 確かめ方: REQ-COM-033
+    // 録音中の先読み（DEC-COM-110）。起動は偽（LaunchOverride）
+    private static LocalLlmServer FakeServer(int delayMs) => new()
+    {
+        WriteRecords = false,
+        ModelsDirectory = TestKeys.TempDirectory(),
+        LaunchOverride = async (_, ct) =>
+        {
+            await Task.Delay(delayMs, ct);
+            return new LocalLlmEndpoint(new Uri("http://127.0.0.1:9/"), "test");
+        },
+    };
+
+    private static async Task WaitUntilServing(LocalLlmServer server, LocalLlmModel model)
+    {
+        for (var i = 0; i < 200 && server.ServingModel != model; i++) await Task.Delay(10);
+    }
+
+    [Fact]
+    public async Task RefiningAfterPrewarmDoesNotRelaunch()
+    {
+        using var server = FakeServer(20);
+        Assert.NotNull(server.Prewarm(LocalLlmModel.Gemma4E4B));
+        await WaitUntilServing(server, LocalLlmModel.Gemma4E4B);
+        await server.BeginRequestAsync(LocalLlmModel.Gemma4E4B, CancellationToken.None);
+        server.FinishRequest();
+        Assert.Equal(1, server.LaunchCount);
+    }
+
+    [Fact]
+    public async Task RefiningDuringPrewarmWaitsForTheSameLaunch()
+    {
+        using var server = FakeServer(300);
+        server.Prewarm(LocalLlmModel.Gemma4E4B);
+        await Task.Delay(50);
+        await server.BeginRequestAsync(LocalLlmModel.Gemma4E4B, CancellationToken.None);
+        server.FinishRequest();
+        Assert.Equal(1, server.LaunchCount);
+    }
+
+    [Fact]
+    public async Task PrewarmDoesNotStopAnotherModelInUse()
+    {
+        using var server = FakeServer(20);
+        await server.BeginRequestAsync(LocalLlmModel.Qwen35, CancellationToken.None);
+        Assert.Null(server.Prewarm(LocalLlmModel.Gemma4E4B));
+        await Task.Delay(100);
+        Assert.Equal(1, server.LaunchCount);
+        Assert.Equal(LocalLlmModel.Qwen35, server.ServingModel);
+        server.FinishRequest();
+    }
+
+    [Fact]
+    public async Task AnotherModelDuringPrewarmSucceedsAfterTheLaunch()
+    {
+        using var server = FakeServer(300);
+        server.Prewarm(LocalLlmModel.Gemma4E4B);
+        await Task.Delay(50);
+        await server.BeginRequestAsync(LocalLlmModel.Qwen35, CancellationToken.None);
+        Assert.Equal(2, server.LaunchCount);
+        Assert.Equal(LocalLlmModel.Qwen35, server.ServingModel);
+        server.FinishRequest();
+    }
+
+    [Fact]
+    public async Task PrewarmLaunchesAgainWhenTheSameModelIsNotServing()
+    {
+        using var server = FakeServer(300);
+        // 同じモデルの起動を途中で取り消す（モデルは覚えているが、使える状態ではない）
+        using var cts = new CancellationTokenSource(50);
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => server.BeginRequestAsync(LocalLlmModel.Gemma4E4B, cts.Token));
+        Assert.Null(server.ServingModel);
+        Assert.NotNull(server.Prewarm(LocalLlmModel.Gemma4E4B));
+        for (var i = 0; i < 200 && server.ServingModel != LocalLlmModel.Gemma4E4B; i++) await Task.Delay(10);
+        Assert.Equal(LocalLlmModel.Gemma4E4B, server.ServingModel);
+        Assert.Equal(2, server.LaunchCount);
+    }
+
+    [Fact]
+    public async Task ServerIsKeptWhileRecordingAndStopsFiveMinutesAfterRelease()
+    {
+        using var server = FakeServer(10);
+        var hold = server.Prewarm(LocalLlmModel.Gemma4E4B);
+        Assert.NotNull(hold);
+        await WaitUntilServing(server, LocalLlmModel.Gemma4E4B);
+        // 先読みの起動が処理として終わる（FinishRequest）のを待つ
+        await Task.Delay(100);
+        Assert.False(server.ShouldStopForIdle(DateTime.UtcNow + LocalLlmServer.IdleTimeout + TimeSpan.FromMinutes(1)));
+        server.ReleaseWarmHold(hold!.Value);
+        Assert.False(server.ShouldStopForIdle(DateTime.UtcNow));
+        Assert.True(server.ShouldStopForIdle(DateTime.UtcNow + LocalLlmServer.IdleTimeout + TimeSpan.FromSeconds(1)));
+    }
 }

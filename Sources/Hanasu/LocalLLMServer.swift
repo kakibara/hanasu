@@ -2,11 +2,12 @@ import Darwin
 import Foundation
 import Security
 
-// 要件: REQ-COM-030, REQ-COM-187
-// 設計判断: DEC-COM-060, DEC-COM-063, DEC-COM-184
+// 要件: REQ-COM-030, REQ-COM-187, REQ-COM-033
+// 設計判断: DEC-COM-060, DEC-COM-063, DEC-COM-184, DEC-COM-110
 /// 同梱した llama.cpp の llama-server を、ローカルの LLM を使うときだけ子プロセスで動かす。
 /// - 127.0.0.1 の空いたポートで、起動のたびに作る API キー（環境変数 LLAMA_API_KEY）を付けて起動する
-/// - 最後の処理から 5 分たつと止める。モデルを変えたら起動し直す。アプリ（CLI も）を終えるときに止める
+/// - 最後の処理から 5 分たつと止める（音声入力の録音中の先読みの保持があれば止めない）。モデルを変えたら起動し直す。アプリ（CLI も）を終えるときに止める
+/// - 音声入力の録音が始まったら、裏で先に起動しておける（prewarm）
 /// - 記録は起動したプロセスごとのファイル（server-<持ち主の pid>.pid）。前回落ちたときに残ったサーバーは、
 ///   持ち主が終わっている記録を見て、アプリの次の起動時に止める（動いているほかのプロセスのサーバーは止めない）
 actor LocalLLMServer {
@@ -61,6 +62,15 @@ actor LocalLLMServer {
     private let pollInterval: Duration
     /// 確かめる用: サーバーを起動した回数
     private(set) var launchCount = 0
+    // 設計判断: DEC-COM-110
+    /// 起動している途中のモデル（/health が通るまで）。同じモデルを求めた処理は、起動し直さずにこの起動を待つ
+    private var launchingModel: LocalLLMModel?
+    /// 起動を始めるたびに増やす。待っている処理が、自分の待った起動かを見分ける
+    private var launchGeneration = 0
+    /// 起動に失敗したときの理由（その起動を待っていた処理に同じ失敗を返す）
+    private var lastLaunchFailure: (generation: Int, error: any Error)?
+    /// 音声入力・選択の編集の録音中の先読みの保持。1 つでもあれば、5 分たっても止めない
+    private var warmHolds: Set<UUID> = []
 
     init(fakeLaunch: (@Sendable (LocalLLMModel) async throws -> Endpoint)? = nil,
          pollInterval: Duration = .milliseconds(500)) {
@@ -138,6 +148,43 @@ actor LocalLLMServer {
         scheduleIdleStop()
     }
 
+    // 要件: REQ-COM-033
+    // 設計判断: DEC-COM-110
+    /// 音声入力・選択の編集の録音が始まったときに、そのモデルを裏で起動しておく（結果は待たない）。
+    /// ほかの処理が違うモデルを使っている・待っているときは何もしないで nil を返す（その処理を止めない）。
+    /// そうでなければ録音中の保持を付けてその ID を返す。録音を止めた・取り消した・失敗したら releaseWarmHold で外す
+    func prewarm(_ model: LocalLLMModel) -> UUID? {
+        let current = launchingModel ?? servingModel
+        if !gate.isIdle, current != model {
+            appLog.notice("local llm prewarm skipped: \(model.rawValue, privacy: .public) (other model in use)")
+            return nil
+        }
+        let hold = UUID()
+        warmHolds.insert(hold)
+        lastUsed = Date()
+        if current == model { return hold }
+        // 起動している間は、使っている処理に数える（起動の途中に来たほかのモデルの処理は、起動が終わるまで待つ）
+        gate.beginPrewarm()
+        Task {
+            do {
+                _ = try await ensureRunning(model)
+            } catch {
+                appLog.error("local llm prewarm failed: \(error.localizedDescription, privacy: .public)")
+            }
+            gate.finish()
+            lastUsed = Date()
+            scheduleIdleStop()
+        }
+        return hold
+    }
+
+    /// 録音中の保持を外す。そこから 5 分使わなければ止める
+    func releaseWarmHold(_ hold: UUID) {
+        guard warmHolds.remove(hold) != nil else { return }
+        lastUsed = Date()
+        scheduleIdleStop()
+    }
+
     /// そのモデルの処理を今送ると、ほかの処理が終わるのを待つことになるか
     func wouldWait(for model: LocalLLMModel, waitsForOtherModel: Bool) -> Bool {
         gate.wouldWait(for: model, serving: servingModel, waitsForOtherModel: waitsForOtherModel)
@@ -157,8 +204,8 @@ actor LocalLLMServer {
         }, operation: body)
     }
 
-    /// 使える状態で動いているモデル（起動中は nil）
-    private var servingModel: LocalLLMModel? {
+    /// 使える状態で動いているモデル（起動中は nil）。確かめる用にも読む
+    var servingModel: LocalLLMModel? {
         guard endpoint != nil, fakeLaunch != nil || process?.isRunning == true else { return nil }
         return model
     }
@@ -188,20 +235,49 @@ actor LocalLLMServer {
 
     // MARK: - 起動
 
+    // 設計判断: DEC-COM-110
     private func ensureRunning(_ model: LocalLLMModel) async throws -> Endpoint {
-        if let process, process.isRunning, self.model == model, let endpoint {
+        if let endpoint, servingModel == model {
             return endpoint
         }
+        // 同じモデルを起動している途中なら、起動し直さずにその起動を待つ（先読みの途中に録音を止めたときなど）
+        // 待つ間に同じモデルの別の起動に代わったら、その起動を待ち直す（止めて起動し直すと、その起動を壊す）
+        while launchingModel == model {
+            let generation = launchGeneration
+            while launchingModel == model, launchGeneration == generation {
+                try await Task.sleep(for: .milliseconds(100))
+            }
+            if let endpoint, servingModel == model { return endpoint }
+            if let failure = lastLaunchFailure, failure.generation == generation { throw failure.error }
+            // 起動した処理が取り消されたなどで、終わりが分からない。ほかの起動がなければ、起動し直す
+        }
+        stop()
+        launchGeneration += 1
+        let generation = launchGeneration
+        launchingModel = model
+        lastLaunchFailure = nil
+        defer { if launchGeneration == generation { launchingModel = nil } }
+        do {
+            return try await launch(model, generation: generation)
+        } catch {
+            if launchGeneration == generation { lastLaunchFailure = (generation, error) }
+            throw error
+        }
+    }
+
+    /// 起動して /health が通るまで待つ。途中で止められた（stop・ほかのモデルの起動）ら失敗にし、後から来たサーバーは止めない
+    private func launch(_ model: LocalLLMModel, generation: Int) async throws -> Endpoint {
+        let started = Date()
         if let fakeLaunch {
-            if self.model == model, let endpoint { return endpoint }
-            stop()
             self.model = model
             launchCount += 1
             let endpoint = try await fakeLaunch(model)
+            guard launchGeneration == generation, self.model == model else {
+                throw Failure.exited(status: SIGTERM, log: "")
+            }
             self.endpoint = endpoint
             return endpoint
         }
-        stop()
         guard let executable = Self.executableURL else { throw Failure.serverNotFound }
         guard LocalLLMStore.isDownloaded(model) else { throw Failure.modelNotDownloaded(model) }
 
@@ -239,20 +315,24 @@ actor LocalLLMServer {
 
         let endpoint = Endpoint(baseURL: URL(string: "http://127.0.0.1:\(port)")!, apiKey: apiKey)
         let deadline = Date().addingTimeInterval(Self.startupTimeout)
+        // 片付け（stop）は、このループが起動したプロセスが今のものと同じときだけ（割り込んで起動したほかのサーバーを止めない）
+        func isCurrent() -> Bool { self.process === process && launchGeneration == generation }
         while true {
-            if !process.isRunning {
-                let status = process.terminationStatus
-                stop()
+            if !process.isRunning || !isCurrent() {
+                let status = process.isRunning ? SIGTERM : process.terminationStatus
+                if isCurrent() { stop() }
                 throw Failure.exited(status: status, log: tail.lastLines(8))
             }
             if await Self.isHealthy(endpoint) { break }
             if Date() > deadline {
-                stop()
+                if isCurrent() { stop() }
                 throw Failure.startupTimedOut
             }
             try await Task.sleep(for: .milliseconds(250))
         }
+        guard isCurrent() else { throw Failure.exited(status: SIGTERM, log: "") }
         self.endpoint = endpoint
+        appLog.notice("local llm server ready: \(model.rawValue, privacy: .public) \(String(format: "%.1f", Date().timeIntervalSince(started)), privacy: .public)s")
         return endpoint
     }
 
@@ -288,10 +368,15 @@ actor LocalLLMServer {
     }
 
     private func stopIfIdle() {
-        // 設計判断: DEC-COM-172（待っている処理があるときも止めない）
-        guard gate.isIdle, Date().timeIntervalSince(lastUsed) >= Self.idleSeconds - 1, process != nil else { return }
+        guard process != nil, shouldStopForIdle(now: Date()) else { return }
         appLog.notice("local llm server stopped (idle)")
         stop()
+    }
+
+    // 設計判断: DEC-COM-172（待っている処理があるときも止めない）、DEC-COM-110（録音中の先読みの保持があるときも止めない）
+    /// 5 分使っていないとして止めてよいか。確かめる用に、時刻を渡して呼べる
+    func shouldStopForIdle(now: Date) -> Bool {
+        gate.isIdle && warmHolds.isEmpty && now.timeIntervalSince(lastUsed) >= Self.idleSeconds - 1
     }
 
     private static func isHealthy(_ endpoint: Endpoint) async -> Bool {
