@@ -1,0 +1,65 @@
+{
+  "_comment": "文体を学ぶ材料の読み込み（DEC-DIC-211）。make-fixtures.py が書く（手で直さない）。text は読んだ本文、error は読めない理由（unsupported・unreadable・tooLarge）",
+  "cases": [
+    {
+      "file": "utf8.txt",
+      "text": "文体の見本です。\n二行目は，読点に全角のカンマを使う。\n\n段落を分けた三行目。"
+    },
+    {
+      "file": "utf8-bom.txt",
+      "text": "文体の見本です。\n二行目は，読点に全角のカンマを使う。\n\n段落を分けた三行目。"
+    },
+    {
+      "file": "utf16le.txt",
+      "text": "文体の見本です。\n二行目は，読点に全角のカンマを使う。\n\n段落を分けた三行目。"
+    },
+    {
+      "file": "utf16be.txt",
+      "text": "文体の見本です。\n二行目は，読点に全角のカンマを使う。\n\n段落を分けた三行目。"
+    },
+    {
+      "file": "sjis.txt",
+      "text": "文体の見本です。\n二行目は，読点に全角のカンマを使う。\n\n段落を分けた三行目。"
+    },
+    {
+      "file": "cr.txt",
+      "text": "文体の見本です。\n二行目は，読点に全角のカンマを使う。\n\n段落を分けた三行目。"
+    },
+    {
+      "file": "sample.md",
+      "text": "# 見出し\n\n- 箇条書きの記号は残す\n- **太字** も記号のまま\n\n本文の段落。\n"
+    },
+    {
+      "file": "sample.markdown",
+      "text": "# 見出し\n\n- 箇条書きの記号は残す\n- **太字** も記号のまま\n\n本文の段落。\n"
+    },
+    {
+      "file": "sample.docx",
+      "text": "報告書の書き方\n一行目\n二行目\n三行目\n見出し\t 本文 \n番号付きの段落\nセル1\nセル2\nセル2の二段落目\n\nA&B <記号>\n足した文字\nタブ位置の定義は読まない"
+    },
+    {
+      "file": "stored.docx",
+      "text": "報告書の書き方\n一行目\n二行目\n三行目\n見出し\t 本文 \n番号付きの段落\nセル1\nセル2\nセル2の二段落目\n\nA&B <記号>\n足した文字\nタブ位置の定義は読まない"
+    },
+    {
+      "file": "sample.rtf",
+      "error": "unsupported"
+    },
+    {
+      "file": "broken.docx",
+      "error": "unreadable"
+    },
+    {
+      "file": "no-document.docx",
+      "error": "unreadable"
+    },
+    {
+      "file": "dtd.docx",
+      "error": "unreadable"
+    },
+    {
+      "file": "bomb.docx",
+      "error": "tooLarge"
+    }
+  ]
+}

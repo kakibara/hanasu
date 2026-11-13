@@ -1092,4 +1092,55 @@
   <data name="Cmd_UnreadableCount" xml:space="preserve">
     <value>読めない会議が {0} 件あります（{1}）。</value>
   </data>
+  <data name="AppStyle_Preset_None" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="AppStyle_Preset_Chat" xml:space="preserve">
+    <value>チャット</value>
+  </data>
+  <data name="AppStyle_Preset_Email" xml:space="preserve">
+    <value>メール</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPolite" xml:space="preserve">
+    <value>文書（です・ます）</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPlain" xml:space="preserve">
+    <value>文書（である）</value>
+  </data>
+  <data name="CustomStyle_EmptyName" xml:space="preserve">
+    <value>名前を入れてください。</value>
+  </data>
+  <data name="CustomStyle_DuplicateName" xml:space="preserve">
+    <value>同じ名前の文体があります。別の名前にしてください。</value>
+  </data>
+  <data name="CustomStyle_UnknownLanguage" xml:space="preserve">
+    <value>言語を選んでください。</value>
+  </data>
+  <data name="CustomStyle_EmptyRules" xml:space="preserve">
+    <value>ルールを 1 つ以上入れてください。</value>
+  </data>
+  <data name="CustomStyle_TooManyRules" xml:space="preserve">
+    <value>ルールは {0} 行までです。</value>
+  </data>
+  <data name="CustomStyle_RulesTooLong" xml:space="preserve">
+    <value>ルールは全体で {0} 字までです。</value>
+  </data>
+  <data name="StyleSource_Unsupported" xml:space="preserve">
+    <value>読めない形式です（.docx・.txt・.md を選んでください）。</value>
+  </data>
+  <data name="StyleSource_Unreadable" xml:space="preserve">
+    <value>ファイルが壊れているか、読めない文字コードです。</value>
+  </data>
+  <data name="StyleSource_TooLarge" xml:space="preserve">
+    <value>ファイルが大きすぎます（20 MB まで）。</value>
+  </data>
+  <data name="StyleLearn_TooShort" xml:space="preserve">
+    <value>文章が短すぎます。{0} 字以上入れてください。</value>
+  </data>
+  <data name="StyleLearn_InvalidResponse" xml:space="preserve">
+    <value>AI の答えから文体のルールを読み取れませんでした。もう一度試してください。</value>
+  </data>
+  <data name="StyleLearn_UnknownLanguage" xml:space="preserve">
+    <value>文章の言語（{0}）は対応していません。</value>
+  </data>
 </root>

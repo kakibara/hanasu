@@ -39,7 +39,8 @@ public sealed record ProcessOutcome(string Output, ProcessStatus Status, string?
 /// <summary>
 /// 認識結果に辞書を当て、AI（設定の「音声入力の AI」。Gemini か Claude）で整形（または翻訳）する。
 /// 失敗したら原文を返して知らせる（話した内容を失わない）。
-/// Mac 版の DictationController.finishDictation の中ほどにあたる（スニペット・アプリ別スタイル・画面の文脈は Windows 版にはない）。
+/// Mac 版の DictationController.finishDictation の中ほどにあたる（スニペット・画面の文脈・アプリごとの既定の出力言語は Windows 版にはない）。
+/// 入力先アプリの文体（設定の「アプリ別」）は、録音を始めたときの前面のアプリの exe の名前で引く（REQ-DIC-020、DEC-DIC-216）。
 /// </summary>
 public sealed class DictationTextProcessor
 {
@@ -55,8 +56,10 @@ public sealed class DictationTextProcessor
     public static bool UsesGemini(AppSettings settings, DictationMode mode) =>
         settings.RefineWithGemini || mode.Translation is not null;
 
+    /// <param name="appName">入力先アプリの名前（アプリ名を送る設定がオフなら送らない）</param>
+    /// <param name="appExe">入力先アプリの exe の名前（設定の「アプリ別」の文体を引く。アプリ名を送らない設定でも引く）</param>
     public async Task<ProcessOutcome> ProcessAsync(string raw, DictationMode mode, string? appName, AppSettings settings,
-        CancellationToken cancellationToken = default)
+        string? appExe = null, CancellationToken cancellationToken = default)
     {
         var dictionary = settings.UserDictionary;
         // ユーザー辞書の置き換えルールを決定的に当てる（Gemini で整形しないときも効く）
@@ -82,6 +85,9 @@ public sealed class DictationTextProcessor
                 DictionaryRules = dictionary.Rules,
                 // 要件: REQ-DIC-082
                 OutputLanguage = settings.RefineOutputLanguage,
+                // 要件: REQ-DIC-020, REQ-DIC-023
+                // 設計判断: DEC-DIC-216, DEC-DIC-046（アプリ名を送らない設定でも文体のルールは渡す。見出しにアプリ名を入れないのは AppName が null になることで決まる）
+                AppStyle = AppStyleLookup.Find(settings, appExe),
             };
             var output = translation is { } language
                 ? await refiner.TranslateAsync(request, language, cancellationToken).ConfigureAwait(false)

@@ -41,25 +41,42 @@ public static class SharedText
         return Prompts.Fill(template, values);
     }
 
+    // 要件: REQ-DIC-160, REQ-DIC-020
+    // 設計判断: DEC-DIC-190
+    /// <summary>既定の文体の一覧（exe の名前ごとに 1 つ。Windows の exe がないアプリは入れない）。AppStyleSetting.Defaults が使う</summary>
+    public static IReadOnlyList<(string Exe, string Name, AppStylePreset Preset)> DefaultAppStyles()
+    {
+        var list = new List<(string, string, AppStylePreset)>();
+        foreach (var entry in Node("defaultAppStyles") as JsonArray ?? [])
+        {
+            if (entry is not JsonObject o || o["windows"] is not JsonArray exes) continue;
+            var preset = AppStylePresets.FromRawValue(o["preset"]?.GetValue<string>()) ?? AppStylePreset.None;
+            var name = o["name"]?.GetValue<string>() ?? "";
+            foreach (var exe in exes)
+            {
+                if (exe?.GetValue<string>() is { Length: > 0 } value) list.Add((AppStyleLookup.NormalizeExe(value), name, preset));
+            }
+        }
+        return list;
+    }
+
     // 要件: REQ-DIC-160
     // 設計判断: DEC-DIC-190
     /// <summary>
     /// --app の exe の名前（大文字小文字を区別しない。.exe は省いてもよい）の既定の文体。一覧になければ、
-    /// 文体なしで、exe の名前から拡張子を外したものをアプリ名にする
+    /// 文体なしで、exe の名前から拡張子を外したものをアプリ名にする（アプリの設定の「アプリ別」は AppStyleLookup.Find で先に引く）
     /// </summary>
     public static AppStyle StyleForApp(string exe)
     {
-        // パスで渡されても名前だけを見る（\ と / のどちらの区切りでも）
+        // パスで渡されても名前だけを見る（\ と / のどちらの区切りでも）。アプリ名は渡された大文字小文字のまま
         var trimmed = exe.Trim();
-        var name = trimmed[(trimmed.LastIndexOfAny(['\\', '/']) + 1)..];
-        var withExe = name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ? name : name + ".exe";
-        foreach (var entry in Node("defaultAppStyles") as JsonArray ?? [])
+        var fileName = trimmed[(trimmed.LastIndexOfAny(['\\', '/']) + 1)..];
+        var bareName = fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ? fileName[..^4] : fileName;
+        var withExe = AppStyleLookup.NormalizeExe(exe);
+        foreach (var (entryExe, name, preset) in DefaultAppStyles())
         {
-            if (entry is not JsonObject o || o["windows"] is not JsonArray exes) continue;
-            if (!exes.Any(e => string.Equals(e?.GetValue<string>(), withExe, StringComparison.OrdinalIgnoreCase))) continue;
-            var preset = AppStylePresets.FromRawValue(o["preset"]?.GetValue<string>()) ?? AppStylePreset.None;
-            return new AppStyle(withExe.ToLowerInvariant(), o["name"]?.GetValue<string>() ?? name, preset);
+            if (entryExe == withExe) return new AppStyle(withExe, name.Length > 0 ? name : bareName, preset);
         }
-        return new AppStyle(withExe.ToLowerInvariant(), withExe[..^4], AppStylePreset.None);
+        return new AppStyle(withExe, bareName, AppStylePreset.None);
     }
 }

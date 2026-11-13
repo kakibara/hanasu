@@ -1640,4 +1640,187 @@
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0} ({1})</value>
   </data>
+  <data name="Settings_Tab_AppStyles" xml:space="preserve">
+    <value>ऐप के अनुसार</value>
+  </data>
+  <data name="AppStyles_Enabled" xml:space="preserve">
+    <value>जिस ऐप में लिख रहे हैं, उसके अनुसार शैली बदलें</value>
+  </data>
+  <data name="AppStyles_EnabledNote" xml:space="preserve">
+    <value>रिकॉर्डिंग शुरू करते समय सामने वाला ऐप तय करता है (उसकी .exe फ़ाइल के नाम से पहचाना जाता है)। जब ये नियम "शब्दकोश और नियम" टैब के अतिरिक्त नियमों से टकराते हैं, तो ऐप के अनुसार नियमों को प्राथमिकता मिलती है। Store ऐप सभी ApplicationFrameHost.exe के रूप में चलते हैं, इसलिए उन्हें अलग-अलग नहीं पहचाना जा सकता और उन पर ये नियम लागू नहीं होते।</value>
+  </data>
+  <data name="AppStyles_PresetsHeader" xml:space="preserve">
+    <value>प्रीसेट</value>
+  </data>
+  <data name="AppStyles_PresetLine" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AppStyles_PresetSummary_None" xml:space="preserve">
+    <value>प्रीसेट का उपयोग न करें (सिर्फ़ इस ऐप के अतिरिक्त नियम)</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Chat" xml:space="preserve">
+    <value>अनौपचारिक छोटे वाक्य। पैराग्राफ़ नहीं</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Email" xml:space="preserve">
+    <value>विनम्र, औपचारिक शैली। हर विषय के लिए अलग पैराग्राफ़</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPolite" xml:space="preserve">
+    <value>लिखित भाषा की विनम्र शैली में एकरूप करें और पैराग्राफ़ बनाएँ</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPlain" xml:space="preserve">
+    <value>लिखित भाषा की सामान्य शैली में एकरूप करें और पैराग्राफ़ बनाएँ</value>
+  </data>
+  <data name="CustomStyles_Header" xml:space="preserve">
+    <value>कस्टम शैलियाँ</value>
+  </data>
+  <data name="CustomStyles_Note" xml:space="preserve">
+    <value>आपके अपने टेक्स्ट से सीखी गई शैलियाँ। सिर्फ़ नाम, भाषा और नियम सहेजे जाते हैं, टेक्स्ट नहीं। कस्टम शैली का उपयोग सिर्फ़ तब होता है जब आउटपुट उसी भाषा में हो जो शैली की भाषा है।</value>
+  </data>
+  <data name="CustomStyles_Empty" xml:space="preserve">
+    <value>अभी कोई कस्टम शैली नहीं है।</value>
+  </data>
+  <data name="CustomStyles_RowDetail" xml:space="preserve">
+    <value>{0} · नियम: {1}</value>
+  </data>
+  <data name="CustomStyles_Learn" xml:space="preserve">
+    <value>टेक्स्ट से सीखें…</value>
+  </data>
+  <data name="CustomStyles_Edit" xml:space="preserve">
+    <value>संपादित करें…</value>
+  </data>
+  <data name="CustomStyles_Edit_A11y" xml:space="preserve">
+    <value>{0} संपादित करें</value>
+  </data>
+  <data name="CustomStyles_Delete" xml:space="preserve">
+    <value>हटाएँ…</value>
+  </data>
+  <data name="CustomStyles_Delete_A11y" xml:space="preserve">
+    <value>{0} हटाएँ</value>
+  </data>
+  <data name="CustomStyles_ConfirmDelete" xml:space="preserve">
+    <value>कस्टम शैली "{0}" हटाएँ?
+इसका उपयोग करने वाले ऐप (संख्या: {1}) "कोई नहीं" पर चले जाएँगे। हर ऐप के अतिरिक्त नियम बने रहेंगे। इसे पूर्ववत नहीं किया जा सकता।</value>
+  </data>
+  <data name="CustomStyles_ConfirmDeleteUnused" xml:space="preserve">
+    <value>कस्टम शैली "{0}" हटाएँ?
+कोई ऐप इसका उपयोग नहीं करता। इसे पूर्ववत नहीं किया जा सकता।</value>
+  </data>
+  <data name="AppStyles_AppsHeader" xml:space="preserve">
+    <value>ऐप</value>
+  </data>
+  <data name="AppStyles_NoApps" xml:space="preserve">
+    <value>कोई ऐप रजिस्टर नहीं है।</value>
+  </data>
+  <data name="AppStyles_PresetLabel" xml:space="preserve">
+    <value>प्रीसेट</value>
+  </data>
+  <data name="AppStyles_Preset_A11y" xml:space="preserve">
+    <value>{0} का प्रीसेट</value>
+  </data>
+  <data name="AppStyles_RulesLabel" xml:space="preserve">
+    <value>इस ऐप के लिए अतिरिक्त नियम (प्रीसेट से ज़्यादा प्राथमिकता)</value>
+  </data>
+  <data name="AppStyles_Rules_A11y" xml:space="preserve">
+    <value>{0} के अतिरिक्त नियम</value>
+  </data>
+  <data name="AppStyles_RulesExample" xml:space="preserve">
+    <value>उदाहरण: इमोजी का उपयोग न करें / बुलेट पॉइंट का उपयोग न करें</value>
+  </data>
+  <data name="AppStyles_Remove" xml:space="preserve">
+    <value>सूची से हटाएँ</value>
+  </data>
+  <data name="AppStyles_Remove_A11y" xml:space="preserve">
+    <value>{0} को सूची से हटाएँ</value>
+  </data>
+  <data name="AppStyles_AddRunning" xml:space="preserve">
+    <value>चल रहा ऐप जोड़ें</value>
+  </data>
+  <data name="AppStyles_NoRunningApps" xml:space="preserve">
+    <value>विंडो वाला कोई दूसरा ऐप नहीं चल रहा है।</value>
+  </data>
+  <data name="AppStyles_ChooseExe" xml:space="preserve">
+    <value>.exe चुनें…</value>
+  </data>
+  <data name="AppStyles_ExeFilter" xml:space="preserve">
+    <value>प्रोग्राम (*.exe)|*.exe</value>
+  </data>
+  <data name="AppStyles_AlreadyAdded" xml:space="preserve">
+    <value>{0} पहले से सूची में है।</value>
+  </data>
+  <data name="AppStyles_Reset" xml:space="preserve">
+    <value>डिफ़ॉल्ट पर रीसेट करें…</value>
+  </data>
+  <data name="AppStyles_ConfirmReset" xml:space="preserve">
+    <value>ऐप के अनुसार सेटिंग्स को डिफ़ॉल्ट पर रीसेट करें?
+जोड़े गए ऐप और हर ऐप के अतिरिक्त नियम हट जाएँगे। कस्टम शैलियाँ नहीं हटेंगी। इसे पूर्ववत नहीं किया जा सकता।</value>
+  </data>
+  <data name="StyleLearning_Title" xml:space="preserve">
+    <value>टेक्स्ट से शैली सीखें</value>
+  </data>
+  <data name="StyleLearning_EditTitle" xml:space="preserve">
+    <value>कस्टम शैली संपादित करें</value>
+  </data>
+  <data name="StyleLearning_Intro" xml:space="preserve">
+    <value>अपना लिखा टेक्स्ट चिपकाएँ या फ़ाइलें चुनें। "मिनट्स" के लिए सेट किया गया AI लिखने का तरीका पढ़कर शैली के नियम लिखता है। टेक्स्ट सहेजा नहीं जाता; सिर्फ़ नाम, भाषा और नियम सहेजे जाते हैं।</value>
+  </data>
+  <data name="StyleLearning_Input_A11y" xml:space="preserve">
+    <value>शैली सीखने के लिए टेक्स्ट</value>
+  </data>
+  <data name="StyleLearning_ChooseFiles" xml:space="preserve">
+    <value>फ़ाइलें चुनें…</value>
+  </data>
+  <data name="StyleLearning_FileFilter" xml:space="preserve">
+    <value>Word, टेक्स्ट और Markdown|{0}</value>
+  </data>
+  <data name="StyleLearning_FileFailed" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="StyleLearning_InputTruncated" xml:space="preserve">
+    <value>इनपुट बॉक्स में अधिकतम {0} अक्षर आ सकते हैं। बाकी हिस्सा नहीं जोड़ा गया।</value>
+  </data>
+  <data name="StyleLearning_Count" xml:space="preserve">
+    <value>{0} अक्षर</value>
+  </data>
+  <data name="StyleLearning_CountUsed" xml:space="preserve">
+    <value>{0} अक्षर (सिर्फ़ शुरुआती {1} अक्षर भेजे जाते हैं)</value>
+  </data>
+  <data name="StyleLearning_NeedMore" xml:space="preserve">
+    <value>शैली सीखने के लिए कम से कम {0} अक्षर डालें।</value>
+  </data>
+  <data name="StyleLearning_Learn" xml:space="preserve">
+    <value>शैली सीखें</value>
+  </data>
+  <data name="StyleLearning_Learning" xml:space="preserve">
+    <value>शैली सीखी जा रही है… (अधिकतम {0} सेकंड)</value>
+  </data>
+  <data name="StyleLearning_Stop" xml:space="preserve">
+    <value>रोकें</value>
+  </data>
+  <data name="StyleLearning_Stopped" xml:space="preserve">
+    <value>रोक दिया गया। आपका टेक्स्ट अभी भी यहाँ है, इसलिए आप फिर से कोशिश कर सकते हैं।</value>
+  </data>
+  <data name="StyleLearning_Learned" xml:space="preserve">
+    <value>नियम जाँचें, ज़रूरत हो तो बदलें, फिर सहेजें। AI: {0} ({1})</value>
+  </data>
+  <data name="StyleLearning_Name" xml:space="preserve">
+    <value>नाम</value>
+  </data>
+  <data name="StyleLearning_Language" xml:space="preserve">
+    <value>भाषा</value>
+  </data>
+  <data name="StyleLearning_LanguageNote" xml:space="preserve">
+    <value>इसका उपयोग सिर्फ़ तब होता है जब आउटपुट इस भाषा में हो।</value>
+  </data>
+  <data name="StyleLearning_Rules" xml:space="preserve">
+    <value>नियम (हर पंक्ति में एक)</value>
+  </data>
+  <data name="StyleLearning_RulesCount" xml:space="preserve">
+    <value>{0}/{1} पंक्तियाँ · {2}/{3} अक्षर</value>
+  </data>
+  <data name="StyleLearning_Save" xml:space="preserve">
+    <value>सहेजें</value>
+  </data>
+  <data name="StyleLearning_Cancel" xml:space="preserve">
+    <value>रद्द करें</value>
+  </data>
 </root>

@@ -1092,4 +1092,55 @@
   <data name="Cmd_UnreadableCount" xml:space="preserve">
     <value>Не удалось прочитать встреч: {0} ({1}).</value>
   </data>
+  <data name="AppStyle_Preset_None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="AppStyle_Preset_Chat" xml:space="preserve">
+    <value>Чат</value>
+  </data>
+  <data name="AppStyle_Preset_Email" xml:space="preserve">
+    <value>Почта</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPolite" xml:space="preserve">
+    <value>Документ (вежливый стиль)</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPlain" xml:space="preserve">
+    <value>Документ (нейтральный стиль)</value>
+  </data>
+  <data name="CustomStyle_EmptyName" xml:space="preserve">
+    <value>Введите название.</value>
+  </data>
+  <data name="CustomStyle_DuplicateName" xml:space="preserve">
+    <value>Стиль с таким названием уже есть. Выберите другое название.</value>
+  </data>
+  <data name="CustomStyle_UnknownLanguage" xml:space="preserve">
+    <value>Выберите язык.</value>
+  </data>
+  <data name="CustomStyle_EmptyRules" xml:space="preserve">
+    <value>Введите хотя бы одно правило.</value>
+  </data>
+  <data name="CustomStyle_TooManyRules" xml:space="preserve">
+    <value>Можно задать не более {0} правил.</value>
+  </data>
+  <data name="CustomStyle_RulesTooLong" xml:space="preserve">
+    <value>Общая длина правил — не более {0} символов.</value>
+  </data>
+  <data name="StyleSource_Unsupported" xml:space="preserve">
+    <value>Этот тип файлов не поддерживается. Выберите файл .docx, .txt или .md.</value>
+  </data>
+  <data name="StyleSource_Unreadable" xml:space="preserve">
+    <value>Файл поврежден или использует кодировку, которую не удается прочитать.</value>
+  </data>
+  <data name="StyleSource_TooLarge" xml:space="preserve">
+    <value>Файл слишком большой (не более 20 МБ).</value>
+  </data>
+  <data name="StyleLearn_TooShort" xml:space="preserve">
+    <value>Текст слишком короткий. Введите не менее {0} символов.</value>
+  </data>
+  <data name="StyleLearn_InvalidResponse" xml:space="preserve">
+    <value>Не удалось извлечь правила стиля из ответа AI. Попробуйте ещё раз.</value>
+  </data>
+  <data name="StyleLearn_UnknownLanguage" xml:space="preserve">
+    <value>Язык текста ({0}) не поддерживается.</value>
+  </data>
 </root>

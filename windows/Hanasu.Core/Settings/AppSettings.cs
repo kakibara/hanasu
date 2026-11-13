@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Hanasu.Core.Dictation;
 using Hanasu.Core.Text;
 
 namespace Hanasu.Core.Settings;
@@ -207,6 +208,21 @@ public sealed class AppSettings
     /// <summary>議事録の「カスタム」の指示。空なら今のプロンプトの言語の既定（読むときは MinutesTemplates.CustomPromptOrDefault）</summary>
     public string MeetingCustomMinutesPrompt { get; set; } = "";
 
+    // アプリ別の文体（設定の「アプリ別」タブ）
+    // 要件: REQ-DIC-020
+    // 設計判断: DEC-DIC-047, DEC-DIC-213, DEC-DIC-216
+    /// <summary>アプリ別の文体を使う（全体のスイッチ。既定はオン。Mac 版と同じ）</summary>
+    public bool AppStylesEnabled { get; set; } = true;
+    /// <summary>アプリごとの文体（exe の名前で引く）。null なら既定の一覧（AppStyleSetting.Defaults）。「初期設定に戻す」で null に戻す</summary>
+    public List<AppStyleSetting>? AppStyles { get; set; }
+    // 要件: REQ-DIC-022
+    /// <summary>文章から学んだカスタム文体（名前・言語・ルールだけ。「初期設定に戻す」でも消さない）</summary>
+    public List<Dictation.CustomStyle> CustomStyles { get; set; } = [];
+
+    /// <summary>今使うアプリごとの文体の一覧（未設定なら既定の一覧）</summary>
+    [JsonIgnore]
+    public IReadOnlyList<AppStyleSetting> EffectiveAppStyles => AppStyles ?? AppStyleSetting.Defaults;
+
     // 辞書・ルール
     public string DictionaryText { get; set; } = "";
     public string ExtraInstructions { get; set; } = "";
@@ -245,6 +261,65 @@ public sealed class AppSettings
         var clone = (AppSettings)MemberwiseClone();
         // 配列は書き換えられても元に響かないよう写す
         clone.TranslationLanguages = [.. TranslationLanguages];
+        clone.AppStyles = AppStyles is null ? null : [.. AppStyles];
+        clone.CustomStyles = [.. CustomStyles];
         return clone;
     }
+}
+
+// 要件: REQ-DIC-020, REQ-DIC-023
+// 設計判断: DEC-DIC-040, DEC-DIC-190, DEC-DIC-213, DEC-DIC-216
+/// <summary>
+/// 設定の「アプリ別」の 1 行（settings.json の appStyles の要素）。Preset は組み込みのプリセットの名前（"chat" など。Mac 版の rawValue）。
+/// カスタム文体を割り当てたら CustomStyleId を持ち、Preset は "none"（前の版で読んでも「なし」になる）
+/// </summary>
+public sealed record AppStyleSetting
+{
+    /// <summary>exe の名前（"slack.exe" など。大文字小文字を区別せずに比べる）</summary>
+    public string Exe { get; init; } = "";
+    /// <summary>アプリ名（画面と、hanasu refine --app で AI に送る名前）</summary>
+    public string Name { get; init; } = "";
+    public string Preset { get; init; } = "none";
+    public Guid? CustomStyleId { get; init; }
+    /// <summary>このアプリ用の追加ルール</summary>
+    public string Rules { get; init; } = "";
+
+    /// <summary>組み込みのプリセット（知らない値は「なし」）</summary>
+    [JsonIgnore]
+    public Dictation.AppStylePreset PresetValue => Dictation.AppStylePresets.FromRawValue(Preset) ?? Dictation.AppStylePreset.None;
+
+    // 設計判断: DEC-DIC-213
+    /// <summary>組み込みのプリセットを選ぶ（画面・hanasu refine --style）。カスタム文体の割り当ては外す</summary>
+    public AppStyleSetting WithPreset(Dictation.AppStylePreset preset) => this with { Preset = preset.RawValue(), CustomStyleId = null };
+
+    /// <summary>カスタム文体を選ぶ。Preset は "none" にする</summary>
+    public AppStyleSetting WithCustomStyle(Guid id) => this with { Preset = Dictation.AppStylePreset.None.RawValue(), CustomStyleId = id };
+
+    // 設計判断: DEC-DIC-190, DEC-DIC-213
+    /// <summary>
+    /// カスタム文体まで解決した文体。割り当てたカスタム文体が見つからなければ「なし」（エラーにしない）。
+    /// アプリ名が空なら、exe の名前から拡張子を外したもの
+    /// </summary>
+    public Dictation.AppStyle Resolve(IEnumerable<Dictation.CustomStyle> customStyles)
+    {
+        var exe = Dictation.AppStyleLookup.NormalizeExe(Exe);
+        var name = Name.Trim().Length > 0 ? Name : exe[..^4];
+        if (CustomStyleId is { } id)
+        {
+            return new Dictation.AppStyle(exe, name, Dictation.AppStylePreset.None, Rules, customStyles.FirstOrDefault(c => c.Id == id));
+        }
+        return new Dictation.AppStyle(exe, name, PresetValue, Rules);
+    }
+
+    // 要件: REQ-DIC-020
+    // 設計判断: DEC-DIC-040, DEC-DIC-190
+    /// <summary>既定の一覧（Mac 版と共有の hanasu.json の defaultAppStyles から。exe ごとに 1 行。Windows の exe がないアプリは入れない）</summary>
+    public static IReadOnlyList<AppStyleSetting> Defaults => DefaultsCache.Value;
+
+    private static readonly Lazy<IReadOnlyList<AppStyleSetting>> DefaultsCache = new(() =>
+        Command.SharedText.DefaultAppStyles().Select(d => new AppStyleSetting { Exe = d.Exe, Name = d.Name, Preset = d.Preset.RawValue() }).ToList());
+
+    // 設計判断: DEC-DIC-213
+    /// <summary>「初期設定に戻す」。アプリの割り当てだけを既定の一覧に戻し、カスタム文体は消さない</summary>
+    public static void ResetToDefaults(AppSettings settings) => settings.AppStyles = null;
 }

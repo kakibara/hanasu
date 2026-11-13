@@ -1092,4 +1092,55 @@
   <data name="Cmd_UnreadableCount" xml:space="preserve">
     <value>{0} toplantı okunamadı ({1}).</value>
   </data>
+  <data name="AppStyle_Preset_None" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="AppStyle_Preset_Chat" xml:space="preserve">
+    <value>Sohbet</value>
+  </data>
+  <data name="AppStyle_Preset_Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPolite" xml:space="preserve">
+    <value>Belge (nazik üslup)</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPlain" xml:space="preserve">
+    <value>Belge (yalın üslup)</value>
+  </data>
+  <data name="CustomStyle_EmptyName" xml:space="preserve">
+    <value>Bir ad girin.</value>
+  </data>
+  <data name="CustomStyle_DuplicateName" xml:space="preserve">
+    <value>Aynı ada sahip bir üslup zaten var. Farklı bir ad seçin.</value>
+  </data>
+  <data name="CustomStyle_UnknownLanguage" xml:space="preserve">
+    <value>Bir dil seçin.</value>
+  </data>
+  <data name="CustomStyle_EmptyRules" xml:space="preserve">
+    <value>En az bir kural girin.</value>
+  </data>
+  <data name="CustomStyle_TooManyRules" xml:space="preserve">
+    <value>En fazla {0} kural girebilirsiniz.</value>
+  </data>
+  <data name="CustomStyle_RulesTooLong" xml:space="preserve">
+    <value>Kurallar toplamda en fazla {0} karakter olabilir.</value>
+  </data>
+  <data name="StyleSource_Unsupported" xml:space="preserve">
+    <value>Bu dosya türü desteklenmiyor. .docx, .txt veya .md dosyası seçin.</value>
+  </data>
+  <data name="StyleSource_Unreadable" xml:space="preserve">
+    <value>Dosya bozuk ya da okunamayan bir karakter kodlaması kullanıyor.</value>
+  </data>
+  <data name="StyleSource_TooLarge" xml:space="preserve">
+    <value>Dosya çok büyük (en fazla 20 MB).</value>
+  </data>
+  <data name="StyleLearn_TooShort" xml:space="preserve">
+    <value>Metin çok kısa. En az {0} karakter girin.</value>
+  </data>
+  <data name="StyleLearn_InvalidResponse" xml:space="preserve">
+    <value>AI yanıtından üslup kuralları okunamadı. Yeniden deneyin.</value>
+  </data>
+  <data name="StyleLearn_UnknownLanguage" xml:space="preserve">
+    <value>Metnin dili ({0}) desteklenmiyor.</value>
+  </data>
 </root>

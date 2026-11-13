@@ -1092,4 +1092,55 @@
   <data name="Cmd_UnreadableCount" xml:space="preserve">
     <value>No se pudieron leer {0} reuniones ({1}).</value>
   </data>
+  <data name="AppStyle_Preset_None" xml:space="preserve">
+    <value>Ninguno</value>
+  </data>
+  <data name="AppStyle_Preset_Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="AppStyle_Preset_Email" xml:space="preserve">
+    <value>Mail</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPolite" xml:space="preserve">
+    <value>Documento (cortés)</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPlain" xml:space="preserve">
+    <value>Documento (neutro)</value>
+  </data>
+  <data name="CustomStyle_EmptyName" xml:space="preserve">
+    <value>Escribe un nombre.</value>
+  </data>
+  <data name="CustomStyle_DuplicateName" xml:space="preserve">
+    <value>Ya existe un estilo con ese nombre. Usa otro nombre.</value>
+  </data>
+  <data name="CustomStyle_UnknownLanguage" xml:space="preserve">
+    <value>Elige un idioma.</value>
+  </data>
+  <data name="CustomStyle_EmptyRules" xml:space="preserve">
+    <value>Escribe al menos una regla.</value>
+  </data>
+  <data name="CustomStyle_TooManyRules" xml:space="preserve">
+    <value>Puedes tener hasta {0} reglas.</value>
+  </data>
+  <data name="CustomStyle_RulesTooLong" xml:space="preserve">
+    <value>Las reglas pueden tener hasta {0} caracteres en total.</value>
+  </data>
+  <data name="StyleSource_Unsupported" xml:space="preserve">
+    <value>Este tipo de archivo no es compatible. Elige un archivo .docx, .txt o .md.</value>
+  </data>
+  <data name="StyleSource_Unreadable" xml:space="preserve">
+    <value>El archivo está dañado o usa una codificación de caracteres que no se puede leer.</value>
+  </data>
+  <data name="StyleSource_TooLarge" xml:space="preserve">
+    <value>El archivo es demasiado grande (máximo 20 MB).</value>
+  </data>
+  <data name="StyleLearn_TooShort" xml:space="preserve">
+    <value>El texto es demasiado corto. Escribe al menos {0} caracteres.</value>
+  </data>
+  <data name="StyleLearn_InvalidResponse" xml:space="preserve">
+    <value>No se pudieron leer las reglas de estilo en la respuesta de la IA. Vuelve a intentarlo.</value>
+  </data>
+  <data name="StyleLearn_UnknownLanguage" xml:space="preserve">
+    <value>El idioma del texto ({0}) no es compatible.</value>
+  </data>
 </root>

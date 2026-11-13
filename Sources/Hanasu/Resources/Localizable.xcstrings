@@ -818,7 +818,7 @@
       }
     },
     "%@ · %@" : {
-      "comment" : "MeetingDocumentView.swift:188, TextAI.swift:73",
+      "comment" : "MeetingDocumentView.swift:188, TextAI.swift:74",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -4286,7 +4286,7 @@
       }
     },
     "%@ を一覧から外す" : {
-      "comment" : "AppStylesView.swift:156",
+      "comment" : "AppStylesView.swift:189",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5509,6 +5509,210 @@
         }
       }
     },
+    "%@ 字" : {
+      "comment" : "StyleLearningSheet.swift:213",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عدد الأحرف: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Zeichen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Characters: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caracteres: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caractères : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ अक्षर"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ karakter"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ caratteri"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@자"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ zn."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ caracteres"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ симв."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ karakter"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ký tự"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 个字"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 個字"
+          }
+        }
+      }
+    },
+    "%@ 字以上入れてください。" : {
+      "comment" : "StyleLearningSheet.swift:180",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل %@ حرف على الأقل."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gib mindestens %@ Zeichen ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter at least %@ characters."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribe al menos %@ caracteres."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez au moins %@ caractères."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कम से कम %@ अक्षर डालें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masukkan minimal %@ karakter."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inserisci almeno %@ caratteri."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@자 이상 입력하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wpisz co najmniej %@ znaków."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insira pelo menos %@ caracteres."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите не менее %@ символов."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En az %@ karakter girin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy nhập ít nhất %@ ký tự."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请至少输入 %@ 个字。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請至少輸入 %@ 個字。"
+          }
+        }
+      }
+    },
     "%@ 文字" : {
       "comment" : "PasteFallbackPanel.swift:236",
       "extractionState" : "manual",
@@ -6015,6 +6219,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@：\n%@\n\n辨識結果：\n%@"
+          }
+        }
+      }
+    },
+    "%@: %@" : {
+      "comment" : "StyleLearningSheet.swift:238",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@：%@"
           }
         }
       }
@@ -8259,6 +8565,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ · %@ 筆"
+          }
+        }
+      }
+    },
+    "%@・ルール %@ 個" : {
+      "comment" : "StyleLearningSheet.swift:24",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · عدد القواعد: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Regeln: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Rules: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Reglas: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Règles : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@ नियम"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@ aturan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · regole: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · 규칙 %@개"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · reguły: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · regras: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · правил: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@ kural"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@ quy tắc"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@ 条规则"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@ 條規則"
           }
         }
       }
@@ -13567,6 +13975,108 @@
         }
       }
     },
+    "AI の答えから文体のルールを読み取れませんでした。もう一度試してください。" : {
+      "comment" : "StyleLearning.swift:209",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّرت قراءة قواعد الأسلوب من رد AI. حاول مرة أخرى."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus der Antwort der KI konnten keine Stilregeln gelesen werden. Versuche es erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't read style rules from the AI's response. Try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudieron leer las reglas de estilo en la respuesta de la IA. Vuelve a intentarlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de lire les règles de style dans la réponse de l’IA. Réessayez."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI के जवाब से शैली के नियम नहीं पढ़े जा सके। फिर से कोशिश करें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aturan gaya bahasa tidak dapat dibaca dari jawaban AI. Coba lagi."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile leggere le regole di stile dalla risposta dell'IA. Riprova."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI의 응답에서 문체 규칙을 읽지 못했습니다. 다시 시도하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się odczytać reguł stylu z odpowiedzi AI. Spróbuj ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível ler as regras de estilo na resposta da IA. Tente novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось извлечь правила стиля из ответа AI. Попробуйте ещё раз."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI yanıtından üslup kuralları okunamadı. Yeniden deneyin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không đọc được quy tắc văn phong từ câu trả lời của AI. Hãy thử lại."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法从 AI 的回答中读取文体规则。请再试一次。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法從 AI 的回答中讀取文體規則。請再試一次。"
+          }
+        }
+      }
+    },
     "AI の認証情報が未設定だったため、原文のまま入力しました。" : {
       "comment" : "DictationHistoryWindow.swift:448",
       "extractionState" : "manual",
@@ -15710,7 +16220,7 @@
       }
     },
     "Apple の Foundation Models（fm）を使えません" : {
-      "comment" : "TextAI.swift:102",
+      "comment" : "TextAI.swift:103",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -18260,7 +18770,7 @@
       }
     },
     "Claude の API キーが設定されていません（設定 →「AI」）" : {
-      "comment" : "ClaudeClient.swift:18, TextAI.swift:100",
+      "comment" : "ClaudeClient.swift:18, TextAI.swift:101",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -20708,7 +21218,7 @@
       }
     },
     "Gemini の認証情報（API キーまたはサービスアカウント）が設定されていません（設定 →「AI」）" : {
-      "comment" : "TextAI.swift:99",
+      "comment" : "TextAI.swift:100",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -30398,7 +30908,7 @@
       }
     },
     "「%@」を削除しますか？" : {
-      "comment" : "MeetingWindow.swift:40, MinutesTemplateViews.swift:304",
+      "comment" : "MeetingWindow.swift:40, MinutesTemplateViews.swift:304, StyleLearningSheet.swift:48",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34478,7 +34988,7 @@
       }
     },
     "このアプリ用の追加ルール" : {
-      "comment" : "AppStylesView.swift:148, AppStylesView.swift:149, AppStylesView.swift:161",
+      "comment" : "AppStylesView.swift:181, AppStylesView.swift:182, AppStylesView.swift:194",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -34580,7 +35090,7 @@
       }
     },
     "このアプリ用の追加ルール（プリセットより優先）" : {
-      "comment" : "AppStylesView.swift:159",
+      "comment" : "AppStylesView.swift:192",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -37431,6 +37941,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "為此指示命名並儲存。可在錄製前或重新製作會議紀錄時選擇。"
+          }
+        }
+      }
+    },
+    "この文体を使っている %@ 個のアプリは「なし」に戻ります。元に戻せません。" : {
+      "comment" : "StyleLearningSheet.swift:57",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ستعود التطبيقات التي تستخدم هذا الأسلوب (%@) إلى «بلا». لا يمكن التراجع عن هذا الإجراء."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apps, die diesen Stil verwenden (%@), werden auf „Keine“ zurückgesetzt. Dies kann nicht widerrufen werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apps using this style (%@) will be set back to “None”. This can't be undone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las apps que usan este estilo (%@) volverán a «Ninguno». No se puede deshacer."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les apps qui utilisent ce style (%@) repasseront à « Aucun ». Cette action est irréversible."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस शैली का उपयोग करने वाले %@ ऐप “कोई नहीं” पर लौट जाएँगे। इसे पहले जैसा नहीं किया जा सकता।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ app yang memakai gaya bahasa ini akan kembali ke “Tidak ada”. Tindakan ini tidak dapat dibatalkan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le app che usano questo stile (%@) torneranno a «Nessuno». Questa azione non può essere annullata."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 문체를 사용하는 앱 %@개는 \"없음\"으로 돌아갑니다. 되돌릴 수 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacje używające tego stylu (%@) wrócą do opcji „Brak”. Tej czynności nie można cofnąć."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os apps que usam este estilo (%@) voltarão para “Nenhum”. Esta ação não pode ser desfeita."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для приложений, использующих этот стиль (%@), будет снова выбрано «Нет». Это действие нельзя отменить."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu üslubu kullanan %@ uygulama “Yok” ayarına döner. Bu işlem geri alınamaz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ứng dụng đang dùng văn phong này sẽ trở về “Không có”. Không thể hoàn tác."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用此文体的 %@ 个应用将恢复为“无”。此操作无法撤销。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用此文體的 %@ 個 App 會改回「無」。此操作無法復原。"
           }
         }
       }
@@ -42331,6 +42943,108 @@
         }
       }
     },
+    "まだありません。「文章から学ぶ…」で、自分の文章から文体を作れます。" : {
+      "comment" : "StyleLearningSheet.swift:17",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد أساليب بعد. استخدم «التعلّم من نص…» لإنشاء أسلوب من نصوصك."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine vorhanden. Mit „Aus Text lernen …“ kannst du aus deinen eigenen Texten einen Stil erstellen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No custom styles yet. Use “Learn from Writing…” to create a style from your own writing."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay ninguno. Con «Aprender de un texto…» puedes crear un estilo a partir de tus propios textos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun style pour l’instant. Avec « Apprendre d’un texte… », créez un style à partir de vos propres textes."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अभी कोई नहीं है। “टेक्स्ट से सीखें…” से अपने लिखे टेक्स्ट से शैली बना सकते हैं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belum ada. Gunakan “Pelajari dari tulisan…” untuk membuat gaya bahasa dari tulisan Anda sendiri."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuno stile. Con «Impara dal testo…» puoi creare uno stile a partire dai tuoi testi."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 없습니다. \"글에서 학습…\"으로 자신이 쓴 글에서 문체를 만들 수 있습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na razie brak. Za pomocą „Ucz się z tekstu…” możesz utworzyć styl na podstawie własnych tekstów."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum estilo ainda. Use “Aprender com texto…” para criar um estilo a partir dos seus próprios textos."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пока ничего нет. С помощью «Стиль из текста…» можно создать стиль по собственным текстам."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Henüz yok. “Metinden öğren…” ile kendi metinlerinizden bir üslup oluşturabilirsiniz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chưa có văn phong nào. Dùng “Học từ văn bản…” để tạo văn phong từ văn bản của chính bạn."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还没有自定义文体。点按“从文章学习…”，即可根据自己的文章创建文体。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尚無自訂文體。按一下「從文章學習…」，即可依自己的文章建立文體。"
+          }
+        }
+      }
+    },
     "まだダウンロードしていません" : {
       "comment" : "LocalLLMSettingsView.swift:35",
       "extractionState" : "manual",
@@ -43352,7 +44066,7 @@
       }
     },
     "やめる" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:161",
+      "comment" : "MeetingAskedQuestionPanel.swift:161, StyleLearningSheet.swift:177",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45902,7 +46616,7 @@
       }
     },
     "アプリ" : {
-      "comment" : "AppStylesView.swift:34",
+      "comment" : "AppStylesView.swift:36",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46004,7 +46718,7 @@
       }
     },
     "アプリが登録されていません" : {
-      "comment" : "AppStylesView.swift:23",
+      "comment" : "AppStylesView.swift:24",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46310,7 +47024,7 @@
       }
     },
     "アプリケーションを選ぶ…" : {
-      "comment" : "AppStylesView.swift:70",
+      "comment" : "AppStylesView.swift:75",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46616,7 +47330,7 @@
       }
     },
     "アプリ別の設定を初期設定に戻しますか？" : {
-      "comment" : "AppStylesView.swift:52",
+      "comment" : "AppStylesView.swift:56",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -48753,6 +49467,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "自訂會議紀錄範本"
+          }
+        }
+      }
+    },
+    "カスタム文体" : {
+      "comment" : "StyleLearningSheet.swift:36",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأساليب المخصصة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutzerdefinierte Stile"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom Styles"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilos personalizados"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Styles personnalisés"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कस्टम शैलियाँ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gaya bahasa kustom"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stili personalizzati"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 지정 문체"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Własne style"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilos personalizados"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Свои стили"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Özel üsluplar"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Văn phong tùy chỉnh"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义文体"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自訂文體"
+          }
+        }
+      }
+    },
+    "カスタム文体を編集" : {
+      "comment" : "StyleLearningSheet.swift:123",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحرير الأسلوب المخصص"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutzerdefinierten Stil bearbeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Custom Style"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar estilo personalizado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier le style personnalisé"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कस्टम शैली संपादित करें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit gaya bahasa kustom"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifica stile personalizzato"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 지정 문체 편집"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edytuj własny styl"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar estilo personalizado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить свой стиль"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Özel üslubu düzenle"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sửa văn phong tùy chỉnh"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "编辑自定义文体"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "編輯自訂文體"
           }
         }
       }
@@ -56713,6 +57631,210 @@
         }
       }
     },
+    "ファイルが壊れているか、読めない文字コードです。" : {
+      "comment" : "StyleLearning.swift:30",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الملف تالف أو يستخدم ترميز أحرف لا يمكن قراءته."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Datei ist beschädigt oder hat eine nicht lesbare Zeichenkodierung."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file is damaged or uses a text encoding that can't be read."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El archivo está dañado o usa una codificación de caracteres que no se puede leer."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le fichier est endommagé ou utilise un encodage de caractères illisible."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "फ़ाइल खराब है या उसकी कैरेक्टर एन्कोडिंग पढ़ी नहीं जा सकती।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File rusak atau menggunakan pengodean karakter yang tidak dapat dibaca."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il file è danneggiato o ha una codifica dei caratteri non leggibile."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "파일이 손상되었거나 읽을 수 없는 문자 인코딩입니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plik jest uszkodzony lub ma nieczytelne kodowanie znaków."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O arquivo está danificado ou usa uma codificação de caracteres ilegível."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл повреждён или в нём нечитаемая кодировка."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dosya bozuk veya okunamayan bir karakter kodlaması kullanıyor."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tệp bị hỏng hoặc dùng bảng mã ký tự không đọc được."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件已损坏，或使用了无法读取的文本编码。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檔案已損毀，或使用無法讀取的文字編碼。"
+          }
+        }
+      }
+    },
+    "ファイルが大きすぎます（20 MB まで）。" : {
+      "comment" : "StyleLearning.swift:31",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الملف كبير جدًا (الحد الأقصى 20 ميغابايت)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Datei ist zu groß (maximal 20 MB)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file is too large (20 MB maximum)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El archivo es demasiado grande (máximo 20 MB)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le fichier est trop volumineux (20 Mo maximum)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "फ़ाइल बहुत बड़ी है (ज़्यादा से ज़्यादा 20 MB)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File terlalu besar (maksimal 20 MB)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il file è troppo grande (massimo 20 MB)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "파일이 너무 큽니다(최대 20 MB)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plik jest za duży (maksymalnie 20 MB)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O arquivo é grande demais (máximo de 20 MB)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл слишком большой (не более 20 МБ)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dosya çok büyük (en fazla 20 MB)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tệp quá lớn (tối đa 20 MB)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件过大（上限 20 MB）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "檔案過大（上限 20 MB）。"
+          }
+        }
+      }
+    },
     "ファイルを読めません: %@" : {
       "comment" : "HanasuAICommands.swift:158",
       "extractionState" : "manual",
@@ -56811,6 +57933,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法讀取檔案：%@"
+          }
+        }
+      }
+    },
+    "ファイルを選ぶ…" : {
+      "comment" : "StyleLearningSheet.swift:162",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختيار ملفات…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien auswählen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Files…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar archivos…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir des fichiers…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "फ़ाइलें चुनें…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih File…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli file…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "파일 선택…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz pliki…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolher arquivos…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбрать файлы…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dosya seç…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chọn tệp…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择文件…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇檔案…"
           }
         }
       }
@@ -57530,7 +58754,7 @@
       }
     },
     "プリセット" : {
-      "comment" : "AppStylesView.swift:42, AppStylesView.swift:133",
+      "comment" : "AppStylesView.swift:44, AppStylesView.swift:162",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59264,7 +60488,7 @@
       }
     },
     "メッセージ" : {
-      "comment" : "AppStyles.swift:184",
+      "comment" : "AppStyles.swift:350",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60590,7 +61814,7 @@
       }
     },
     "メール" : {
-      "comment" : "AppStyles.swift:19, AppStyles.swift:185",
+      "comment" : "AppStyles.swift:19, AppStyles.swift:351",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -62527,6 +63751,312 @@
         }
       }
     },
+    "ルールは %@ 行までです。" : {
+      "comment" : "AppStyles.swift:259",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الحد الأقصى للقواعد %@ سطرًا."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Regeln dürfen höchstens %@ Zeilen lang sein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rules can have up to %@ lines."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reglas pueden tener como máximo %@ líneas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les règles sont limitées à %@ lignes."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नियम ज़्यादा से ज़्यादा %@ पंक्तियों के हो सकते हैं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aturan maksimal %@ baris."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le regole possono occupare al massimo %@ righe."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "규칙은 최대 %@줄입니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reguły mogą mieć najwyżej %@ wierszy."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As regras podem ter no máximo %@ linhas."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Правила могут занимать не более %@ строк."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurallar en fazla %@ satır olabilir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quy tắc tối đa %@ dòng."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "规则最多 %@ 行。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "規則最多 %@ 行。"
+          }
+        }
+      }
+    },
+    "ルールは全体で %@ 字までです。" : {
+      "comment" : "AppStyles.swift:260",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الحد الأقصى لطول القواعد كلها %@ حرف."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Regeln dürfen insgesamt höchstens %@ Zeichen lang sein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rules can be up to %@ characters in total."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reglas pueden tener como máximo %@ caracteres en total."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les règles sont limitées à %@ caractères au total."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सभी नियम मिलाकर ज़्यादा से ज़्यादा %@ अक्षर के हो सकते हैं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total aturan maksimal %@ karakter."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le regole possono contenere al massimo %@ caratteri in totale."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "규칙은 모두 합쳐 최대 %@자입니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reguły mogą mieć łącznie najwyżej %@ znaków."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As regras podem ter no máximo %@ caracteres no total."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Общая длина правил — не более %@ символов."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurallar toplamda en fazla %@ karakter olabilir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tổng các quy tắc tối đa %@ ký tự."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "规则总共最多 %@ 个字。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "規則總共最多 %@ 個字。"
+          }
+        }
+      }
+    },
+    "ルールを 1 つ以上入れてください。" : {
+      "comment" : "AppStyles.swift:258",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل قاعدة واحدة على الأقل."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gib mindestens eine Regel ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter at least one rule."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribe al menos una regla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez au moins une règle."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कम से कम एक नियम डालें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masukkan minimal 1 aturan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inserisci almeno una regola."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "규칙을 1개 이상 입력하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wpisz co najmniej jedną regułę."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insira pelo menos uma regra."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите хотя бы одно правило."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En az bir kural girin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy nhập ít nhất 1 quy tắc."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请至少输入 1 条规则。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請至少輸入 1 條規則。"
+          }
+        }
+      }
+    },
     "ローカル" : {
       "comment" : "TextAI.swift:28",
       "extractionState" : "manual",
@@ -63140,7 +64670,7 @@
       }
     },
     "ローカルの LLM のモデルがまだダウンロードされていません（設定 →「AI」でダウンロードしてください）" : {
-      "comment" : "TextAI.swift:101",
+      "comment" : "TextAI.swift:102",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64874,7 +66404,7 @@
       }
     },
     "一覧から外す" : {
-      "comment" : "AppStylesView.swift:155",
+      "comment" : "AppStylesView.swift:188",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69056,7 +70586,7 @@
       }
     },
     "会議の AI チャット・会議への質問" : {
-      "comment" : "TextAI.swift:59",
+      "comment" : "TextAI.swift:60",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74155,104 +75685,104 @@
         }
       }
     },
-    "作り直しも含む・辞書の候補" : {
-      "comment" : "TextAI.swift:58",
+    "作り直しも含む・辞書の候補・文体を学ぶ" : {
+      "comment" : "TextAI.swift:59",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "بما في ذلك إعادة الإنشاء · مقترحات القاموس"
+            "value" : "بما في ذلك إعادة الإنشاء · مقترحات القاموس · تعلّم الأسلوب"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Auch beim Neuerstellen sowie für Wörterbuchvorschläge"
+            "value" : "Auch beim Neuerstellen sowie für Wörterbuchvorschläge und zum Lernen von Stilen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Creation, Regeneration, and Dictionary Suggestions"
+            "value" : "Creation, Regeneration, Dictionary Suggestions, and Style Learning"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incluida su recreación · candidatos para el diccionario"
+            "value" : "Incluida su recreación · candidatos para el diccionario · aprendizaje de estilo"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recréation comprise · suggestions du dictionnaire"
+            "value" : "Recréation comprise · suggestions du dictionnaire · apprentissage du style"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "दोबारा बनाना भी · शब्दकोश के सुझाव"
+            "value" : "दोबारा बनाना भी · शब्दकोश के सुझाव · शैली सीखना"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Termasuk buat ulang · saran kamus"
+            "value" : "Termasuk buat ulang · saran kamus · pelajari gaya bahasa"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anche quando viene ricreato, e candidati per il dizionario"
+            "value" : "Anche quando viene ricreato, candidati per il dizionario e apprendimento dello stile"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "다시 만들기 포함 · 사전 후보"
+            "value" : "다시 만들기 포함 · 사전 후보 · 문체 학습"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Także ponowne tworzenie, propozycje do słownika"
+            "value" : "Także ponowne tworzenie, propozycje do słownika, nauka stylu"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inclusive ao recriar, e sugestões para o dicionário"
+            "value" : "Inclusive ao recriar, sugestões para o dicionário e aprendizado de estilo"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Включая пересоздание, а также кандидаты для словаря"
+            "value" : "Включая пересоздание, а также кандидаты для словаря и изучение стиля"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden oluşturma dahil, sözlük önerileri"
+            "value" : "Yeniden oluşturma dahil, sözlük önerileri, üslup öğrenme"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kể cả tạo lại · gợi ý từ điển"
+            "value" : "Kể cả tạo lại · gợi ý từ điển · học văn phong"
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "含重新生成·词典候选"
+            "value" : "含重新生成·词典候选·学习文体"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "含重新製作·辭典候選"
+            "value" : "含重新製作·辭典候選·學習文體"
           }
         }
       }
@@ -75992,7 +77522,7 @@
       }
     },
     "例: 絵文字は使わない／箇条書きにしない" : {
-      "comment" : "AppStylesView.swift:162",
+      "comment" : "AppStylesView.swift:195",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -77211,6 +78741,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "儲存失敗"
+          }
+        }
+      }
+    },
+    "保存の前にルールを読んで、要らないもの・内容を足すもの（挨拶を入れる など）は消してください。出力の言語が「言語」と同じときだけ使います。" : {
+      "comment" : "StyleLearningSheet.swift:207",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اقرأ القواعد قبل الحفظ، واحذف ما لا تحتاج إليه وما يضيف محتوى (مثل إضافة تحية). لا يُستخدم الأسلوب إلا إذا كانت لغة الإخراج مطابقة لـ«اللغة»."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lies die Regeln vor dem Sichern und lösche alle, die du nicht brauchst oder die Inhalte hinzufügen (z. B. eine Begrüßung einfügen). Der Stil wird nur verwendet, wenn die Ausgabesprache mit „Sprache“ übereinstimmt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before saving, read the rules and delete any you don't need or that add content (such as adding a greeting). The style is used only when the output language matches “Language”."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antes de guardar, lee las reglas y elimina las que no necesites o las que añadan contenido (como incluir un saludo). Solo se usa cuando el idioma de salida coincide con «Idioma»."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avant d’enregistrer, lisez les règles et supprimez celles qui sont inutiles ou qui ajoutent du contenu (insérer une formule de politesse, par exemple). Ce style n’est utilisé que si la langue de sortie correspond à « Langue »."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सहेजने से पहले नियम पढ़ें, और जो ज़रूरी नहीं हैं या जो सामग्री जोड़ते हैं (जैसे अभिवादन जोड़ना) उन्हें हटा दें। शैली का उपयोग सिर्फ़ तब होता है जब आउटपुट भाषा “भाषा” में चुनी गई भाषा जैसी हो।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sebelum menyimpan, baca aturannya dan hapus yang tidak perlu atau yang menambahkan isi (seperti menyisipkan salam). Hanya dipakai jika bahasa keluaran sama dengan “Bahasa”."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prima di salvare, leggi le regole ed elimina quelle che non servono o che aggiungono contenuti (ad es. inserire un saluto). Lo stile viene usato solo quando la lingua di uscita corrisponde a «Lingua»."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장하기 전에 규칙을 읽고, 필요 없는 규칙과 내용을 덧붙이는 규칙(인사말 넣기 등)은 삭제하세요. 출력 언어가 \"언어\"와 같을 때만 사용합니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przed zachowaniem przeczytaj reguły i usuń zbędne oraz te, które dodają treść (np. wstawianie powitania). Styl jest używany tylko wtedy, gdy język wyjściowy jest taki sam jak w polu „Język”."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antes de salvar, leia as regras e apague as desnecessárias ou as que acrescentam conteúdo (como inserir uma saudação). O estilo só é usado quando o idioma de saída é igual ao “Idioma”."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перед сохранением прочитайте правила и удалите лишние, а также те, что добавляют содержание (например, вставить приветствие). Стиль используется, только если язык вывода совпадает с выбранным в поле «Язык»."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaydetmeden önce kuralları okuyun; gereksiz olanları ve içerik ekleyenleri (selamlama eklemek gibi) silin. Üslup yalnızca çıktı dili “Dil” ile aynı olduğunda kullanılır."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trước khi lưu, hãy đọc các quy tắc và xóa những quy tắc không cần thiết hoặc làm thêm nội dung (như chèn lời chào). Chỉ dùng khi ngôn ngữ đầu ra giống với “Ngôn ngữ”."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "存储前请阅读规则，删除不需要的规则以及会添加内容的规则（如加入问候语）。仅在输出语言与“语言”相同时使用。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "儲存前請閱讀規則，刪除不需要的規則以及會增加內容的規則（如加入問候語）。僅在輸出語言與「語言」相同時使用。"
           }
         }
       }
@@ -79154,7 +80786,7 @@
       }
     },
     "入力先アプリに合わせて文体を変える" : {
-      "comment" : "AppStylesView.swift:16",
+      "comment" : "AppStylesView.swift:17",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79353,6 +80985,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法判斷是否為輸入欄位的元素（%@）"
+          }
+        }
+      }
+    },
+    "入力欄には %@ 字まで入れられます。超えた分は入れていません。" : {
+      "comment" : "StyleLearningSheet.swift:222",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يمكن إدخال %@ حرف كحد أقصى في حقل الإدخال. لم يُضَف ما زاد على ذلك."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Eingabefeld sind höchstens %@ Zeichen möglich. Der Rest wurde nicht übernommen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The text field holds up to %@ characters. The rest wasn't added."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El campo de texto admite hasta %@ caracteres. No se ha añadido lo que sobraba."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le champ de saisie accepte jusqu’à %@ caractères. Le surplus n’a pas été ajouté."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इनपुट फ़ील्ड में ज़्यादा से ज़्यादा %@ अक्षर डाले जा सकते हैं। उससे ज़्यादा हिस्सा नहीं डाला गया।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kolom input hanya bisa diisi hingga %@ karakter. Bagian yang melebihi batas tidak dimasukkan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nel campo si possono inserire al massimo %@ caratteri. La parte in eccesso non è stata inserita."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "입력란에는 최대 %@자까지 넣을 수 있습니다. 넘는 부분은 넣지 않았습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W polu można wpisać najwyżej %@ znaków. Nadmiarowy tekst nie został wstawiony."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O campo aceita no máximo %@ caracteres. O excedente não foi inserido."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В поле можно ввести не более %@ символов. Лишний текст не добавлен."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giriş alanına en fazla %@ karakter girilebilir. Fazlası eklenmedi."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ô nhập chỉ chứa được tối đa %@ ký tự. Phần vượt quá chưa được thêm vào."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输入框最多可输入 %@ 个字。超出的部分未输入。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "輸入欄位最多可輸入 %@ 個字。超出的部分未輸入。"
           }
         }
       }
@@ -80786,7 +82520,7 @@
       }
     },
     "出力言語" : {
-      "comment" : "AppStylesView.swift:138",
+      "comment" : "AppStylesView.swift:171",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81398,7 +83132,7 @@
       }
     },
     "初期設定に戻す" : {
-      "comment" : "AppStylesView.swift:53",
+      "comment" : "AppStylesView.swift:57",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81500,7 +83234,7 @@
       }
     },
     "初期設定に戻す…" : {
-      "comment" : "AppStylesView.swift:37",
+      "comment" : "AppStylesView.swift:39",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83233,6 +84967,108 @@
         }
       }
     },
+    "同じ名前の文体があります。別の名前にしてください。" : {
+      "comment" : "AppStyles.swift:257",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يوجد أسلوب بالاسم نفسه. اختر اسمًا آخر."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es gibt bereits einen Stil mit diesem Namen. Wähle einen anderen Namen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A style with the same name already exists. Choose a different name."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya existe un estilo con ese nombre. Usa otro nombre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un style portant ce nom existe déjà. Choisissez un autre nom."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इसी नाम की शैली पहले से है। कोई दूसरा नाम दें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sudah ada gaya bahasa dengan nama yang sama. Gunakan nama lain."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esiste già uno stile con questo nome. Scegli un altro nome."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "같은 이름의 문체가 있습니다. 다른 이름을 사용하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Styl o tej nazwie już istnieje. Wybierz inną nazwę."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Já existe um estilo com este nome. Escolha outro nome."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стиль с таким названием уже есть. Выберите другое название."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aynı adda bir üslup zaten var. Başka bir ad girin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã có văn phong cùng tên. Hãy đặt tên khác."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已有同名文体。请使用其他名称。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已有相同名稱的文體。請使用其他名稱。"
+          }
+        }
+      }
+    },
     "同じ部屋の話者を分けています…" : {
       "comment" : "MeetingRecorder.swift:383",
       "extractionState" : "manual",
@@ -83438,7 +85274,7 @@
       }
     },
     "名前" : {
-      "comment" : "MinutesTemplateViews.swift:202, MinutesTemplateViews.swift:268",
+      "comment" : "MinutesTemplateViews.swift:202, MinutesTemplateViews.swift:268, StyleLearningSheet.swift:192",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83535,6 +85371,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "名稱"
+          }
+        }
+      }
+    },
+    "名前を入れてください。" : {
+      "comment" : "AppStyles.swift:256",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل اسمًا."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gib einen Namen ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a name."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribe un nombre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez un nom."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नाम डालें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masukkan nama."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inserisci un nome."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이름을 입력하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wpisz nazwę."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insira um nome."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите название."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir ad girin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy nhập tên."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请输入名称。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請輸入名稱。"
           }
         }
       }
@@ -85273,6 +87211,108 @@
         }
       }
     },
+    "学んでいます…" : {
+      "comment" : "StyleLearningSheet.swift:176",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ التعلّم…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stil wird gelernt …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learning…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprendiendo…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apprentissage…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सीखा जा रहा है…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sedang mempelajari…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apprendimento in corso…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "학습하는 중…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trwa nauka stylu…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprendendo…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изучение стиля…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öğreniliyor…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang học…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在学习…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在學習…"
+          }
+        }
+      }
+    },
     "完了" : {
       "comment" : "HUDPanel.swift:333, HanasuMeetingsCommand.swift:377",
       "extractionState" : "manual",
@@ -85886,7 +87926,7 @@
       }
     },
     "実行中のアプリ" : {
-      "comment" : "AppStylesView.swift:64",
+      "comment" : "AppStylesView.swift:69",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89660,7 +91700,7 @@
       }
     },
     "整えられなかったので、整える前の文章を出します（--fallback-raw）。" : {
-      "comment" : "HanasuAICommands.swift:491",
+      "comment" : "HanasuAICommands.swift:492",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90777,6 +92817,312 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "即使在句子中間，只要像「謝謝，郵件簽名」這樣用停頓或逗號隔開說，就只把那部分替換為正文，其餘部分照常潤飾。沒有隔開說的內容，例如「告訴我地址」中的「地址」，不會被替換。"
+          }
+        }
+      }
+    },
+    "文体のルール（1 行に 1 つ）" : {
+      "comment" : "StyleLearningSheet.swift:200, StyleLearningSheet.swift:206",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قواعد الأسلوب (قاعدة واحدة في كل سطر)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stilregeln (eine pro Zeile)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style Rules (one per line)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reglas de estilo (una por línea)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Règles de style (une par ligne)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शैली के नियम (हर पंक्ति में एक)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aturan gaya bahasa (satu per baris)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regole di stile (una per riga)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "문체 규칙(한 줄에 하나)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reguły stylu (jedna w wierszu)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regras de estilo (uma por linha)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Правила стиля (по одному в строке)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üslup kuralları (her satıra bir tane)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quy tắc văn phong (mỗi dòng một quy tắc)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文体规则（每行一条）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文體規則（每行一條）"
+          }
+        }
+      }
+    },
+    "文体を学ぶ" : {
+      "comment" : "StyleLearningSheet.swift:172",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعلّم الأسلوب"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stil lernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn Style"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprender estilo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apprendre le style"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शैली सीखें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pelajari gaya bahasa"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impara lo stile"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "문체 학습"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przeanalizuj styl"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprender estilo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изучить стиль"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üslubu öğren"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Học văn phong"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "学习文体"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "學習文體"
+          }
+        }
+      }
+    },
+    "文体を学ぶ文章" : {
+      "comment" : "StyleLearningSheet.swift:159",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النص الذي يُتعلَّم منه الأسلوب"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text zum Lernen des Stils"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text to learn the style from"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texto del que aprender el estilo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texte dont apprendre le style"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शैली सीखने के लिए टेक्स्ट"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tulisan untuk dipelajari gaya bahasanya"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testo da cui imparare lo stile"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "문체를 학습할 글"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tekst do nauki stylu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texto para aprender o estilo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текст для изучения стиля"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üslubun öğrenileceği metin"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Văn bản để học văn phong"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用于学习文体的文章"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用來學習文體的文章"
           }
         }
       }
@@ -93433,6 +95779,312 @@
         }
       }
     },
+    "文章から学ぶ…" : {
+      "comment" : "StyleLearningSheet.swift:38",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التعلّم من نص…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Text lernen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn from Writing…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprender de un texto…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apprendre d’un texte…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टेक्स्ट से सीखें…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pelajari dari tulisan…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impara dal testo…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "글에서 학습…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ucz się z tekstu…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprender com texto…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стиль из текста…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metinden öğren…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Học từ văn bản…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从文章学习…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從文章學習…"
+          }
+        }
+      }
+    },
+    "文章から文体を学ぶ" : {
+      "comment" : "StyleLearningSheet.swift:123",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعلّم الأسلوب من نص"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stil aus Text lernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn a Style from Your Writing"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprender un estilo de tus textos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apprendre un style à partir de vos textes"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टेक्स्ट से शैली सीखें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pelajari gaya bahasa dari tulisan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impara lo stile da un testo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "글에서 문체 학습"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nauka stylu z tekstu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aprender estilo a partir de texto"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изучение стиля по тексту"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metinden üslup öğren"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Học văn phong từ văn bản"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从文章学习文体"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從文章學習文體"
+          }
+        }
+      }
+    },
+    "文章が短すぎます。%@ 字以上入れてください。" : {
+      "comment" : "StyleLearning.swift:208",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النص قصير جدًا. أدخل %@ حرف على الأقل."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Text ist zu kurz. Gib mindestens %@ Zeichen ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The text is too short. Enter at least %@ characters."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El texto es demasiado corto. Escribe al menos %@ caracteres."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le texte est trop court. Saisissez au moins %@ caractères."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टेक्स्ट बहुत छोटा है। कम से कम %@ अक्षर डालें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tulisan terlalu pendek. Masukkan minimal %@ karakter."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il testo è troppo breve. Inserisci almeno %@ caratteri."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "글이 너무 짧습니다. %@자 이상 입력하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tekst jest za krótki. Wpisz co najmniej %@ znaków."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O texto é curto demais. Insira pelo menos %@ caracteres."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текст слишком короткий. Введите не менее %@ символов."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metin çok kısa. En az %@ karakter girin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Văn bản quá ngắn. Hãy nhập ít nhất %@ ký tự."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章太短。请至少输入 %@ 个字。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章太短。請至少輸入 %@ 個字。"
+          }
+        }
+      }
+    },
     "文章が空です。" : {
       "comment" : "HanasuAICommands.swift:195",
       "extractionState" : "manual",
@@ -93837,6 +96489,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "文字品質細緻。可從 Haiku、Sonnet、Opus 中選擇"
+          }
+        }
+      }
+    },
+    "文章の言語（%@）は対応していません。" : {
+      "comment" : "StyleLearning.swift:210",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لغة النص (%@) غير مدعومة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Sprache des Textes (%@) wird nicht unterstützt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The language of the text (%@) isn't supported."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El idioma del texto (%@) no es compatible."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La langue du texte (%@) n’est pas prise en charge."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "टेक्स्ट की भाषा (%@) समर्थित नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bahasa tulisan (%@) tidak didukung."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La lingua del testo (%@) non è supportata."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "글의 언어(%@)는 지원하지 않습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Język tekstu (%@) nie jest obsługiwany."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O idioma do texto (%@) não é compatível."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Язык текста (%@) не поддерживается."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metnin dili (%@) desteklenmiyor."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không hỗ trợ ngôn ngữ của văn bản (%@)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持文章的语言（%@）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支援文章的語言（%@）。"
           }
         }
       }
@@ -96698,7 +99452,7 @@
       }
     },
     "書き換えの指示を指定してください。" : {
-      "comment" : "HanasuAICommands.swift:432",
+      "comment" : "HanasuAICommands.swift:433",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105980,7 +108734,7 @@
       }
     },
     "知らないコマンドです: %@" : {
-      "comment" : "HanasuAICommands.swift:472, HanasuCommand.swift:141, HanasuMeetingsCommand.swift:26",
+      "comment" : "HanasuAICommands.swift:473, HanasuCommand.swift:141, HanasuMeetingsCommand.swift:26",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -109447,6 +112201,108 @@
         }
       }
     },
+    "編集…" : {
+      "comment" : "StyleLearningSheet.swift:28",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحرير…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bearbeiten …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "संपादित करें…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifica…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "편집…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edytuj…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzenle…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sửa…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "编辑…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "編輯…"
+          }
+        }
+      }
+    },
     "編集のしかた" : {
       "comment" : "DictionarySettingsView.swift:51",
       "extractionState" : "manual",
@@ -111079,6 +113935,108 @@
         }
       }
     },
+    "自分で書いた文章（報告書・メールなど）を貼り付けるか、ファイル（Word・テキスト・Markdown）を選んでください。文章は「議事録」の AI に送って文体を読み取るだけで、保存しません。" : {
+      "comment" : "StyleLearningSheet.swift:151",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الصق نصًا كتبته بنفسك (تقرير، بريد إلكتروني، إلخ) أو اختر ملفات (Word، نص، Markdown). يُرسَل النص إلى AI الخاص بـ«المحضر» لاستخلاص الأسلوب فقط، ولا يُحفظ."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge einen eigenen Text ein (Bericht, E-Mail usw.) oder wähle Dateien aus (Word, Text, Markdown). Der Text wird nur an die KI für „Protokoll“ gesendet, um den Stil zu erkennen, und nicht gespeichert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paste text you wrote yourself (reports, emails, and so on) or choose files (Word, plain text, Markdown). The text is only sent to the “Minutes” AI to read its style; it isn't saved."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pega un texto escrito por ti (informes, correos, etc.) o selecciona archivos (Word, texto, Markdown). El texto solo se envía a la IA de «Acta» para leer el estilo; no se guarda."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collez un texte que vous avez écrit (rapport, e-mail, etc.) ou choisissez des fichiers (Word, texte, Markdown). Le texte est uniquement envoyé à l’IA « Compte rendu » pour en dégager le style ; il n’est pas enregistré."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अपना लिखा टेक्स्ट (रिपोर्ट, ईमेल आदि) पेस्ट करें या फ़ाइलें चुनें (Word, टेक्स्ट, Markdown)। टेक्स्ट सिर्फ़ शैली पहचानने के लिए “मिनट्स” वाले AI को भेजा जाता है, सहेजा नहीं जाता।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tempel tulisan yang Anda tulis sendiri (laporan, email, dll.) atau pilih file (Word, teks, Markdown). Tulisan hanya dikirim ke AI untuk “Notulen” guna membaca gaya bahasanya, dan tidak disimpan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incolla un testo scritto da te (relazione, email, ecc.) oppure scegli dei file (Word, testo, Markdown). Il testo viene inviato all'IA del «Verbale» solo per ricavarne lo stile e non viene salvato."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "직접 쓴 글(보고서, 메일 등)을 붙여넣거나 파일(Word, 텍스트, Markdown)을 선택하세요. 글은 \"회의록\"의 AI에 보내 문체를 읽는 데만 쓰며, 저장하지 않습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wklej własny tekst (raport, e-mail itp.) lub wybierz pliki (Word, tekst, Markdown). Tekst jest wysyłany do AI ustawionej dla „Protokołu” tylko w celu odczytania stylu i nie jest zachowywany."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cole um texto escrito por você (relatório, e-mail etc.) ou escolha arquivos (Word, texto, Markdown). O texto só é enviado à IA da “Ata” para identificar o estilo e não é salvo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вставьте собственный текст (отчёт, письмо и т. п.) или выберите файлы (Word, текст, Markdown). Текст отправляется AI для «Протокола» только для определения стиля и не сохраняется."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kendi yazdığınız bir metni (rapor, e-posta vb.) yapıştırın veya dosya seçin (Word, metin, Markdown). Metin yalnızca üslubu çıkarmak için “Tutanak” AI’ına gönderilir ve kaydedilmez."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy dán văn bản do chính bạn viết (báo cáo, email, v.v.) hoặc chọn tệp (Word, văn bản, Markdown). Văn bản chỉ được gửi tới AI của “Biên bản họp” để đọc văn phong và không được lưu lại."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请粘贴自己写的文章（报告、邮件等），或选择文件（Word、文本、Markdown）。文章只会发送给“会议纪要”的 AI 用于读取文体，不会存储。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請貼上自己寫的文章（報告、郵件等），或選擇檔案（Word、文字、Markdown）。文章只會傳送給「會議紀錄」的 AI 來讀取文體，不會儲存。"
+          }
+        }
+      }
+    },
     "自分の文字起こしはありません。その分の会話の記録は残りません。" : {
       "comment" : "MeetingAudioManager.swift:26",
       "extractionState" : "manual",
@@ -111177,6 +114135,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有我的逐字稿。這部分的對話將不會留下紀錄。"
+          }
+        }
+      }
+    },
+    "自分の文章から学んだ文体です。上の「アプリ」でプリセットとして選べます。出力の言語が学んだ文章の言語と同じときだけ使います。" : {
+      "comment" : "StyleLearningSheet.swift:42",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أساليب تعلّمها التطبيق من نصوصك. يمكنك اختيارها كإعداد مسبق في «التطبيق» أعلاه. لا تُستخدم إلا إذا كانت لغة الإخراج مطابقة للغة النص الذي تم التعلّم منه."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus deinen eigenen Texten gelernte Stile. Du kannst sie oben unter „App“ als Vorlage auswählen. Sie werden nur verwendet, wenn die Ausgabesprache mit der Sprache des gelernten Textes übereinstimmt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Styles learned from your own writing. You can choose them as presets under “App” above. A style is used only when the output language matches the language of the text it was learned from."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilos aprendidos de tus propios textos. Puedes elegirlos como preajuste en «App», más arriba. Solo se usan cuando el idioma de salida coincide con el del texto del que se aprendieron."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Styles appris à partir de vos propres textes. Vous pouvez les choisir comme préréglage dans « App » ci-dessus. Un style n’est utilisé que si la langue de sortie correspond à celle du texte dont il a été appris."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपके अपने टेक्स्ट से सीखी गई शैलियाँ। इन्हें ऊपर “ऐप” में प्रीसेट के रूप में चुन सकते हैं। इनका उपयोग सिर्फ़ तब होता है जब आउटपुट भाषा सीखे गए टेक्स्ट की भाषा जैसी हो।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gaya bahasa yang dipelajari dari tulisan Anda sendiri. Dapat dipilih sebagai preset di “App” di atas. Hanya dipakai jika bahasa keluaran sama dengan bahasa tulisan yang dipelajari."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stili appresi dai tuoi testi. Puoi sceglierli come preset in «App» qui sopra. Vengono usati solo quando la lingua di uscita corrisponde a quella del testo appreso."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자신이 쓴 글에서 학습한 문체입니다. 위의 \"앱\"에서 프리셋으로 선택할 수 있습니다. 출력 언어가 학습한 글의 언어와 같을 때만 사용합니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style wyuczone z Twoich tekstów. Możesz je wybrać jako ustawienie wstępne powyżej w sekcji „Aplikacja”. Są używane tylko wtedy, gdy język wyjściowy jest taki sam jak język tekstu, z którego się uczono."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilos aprendidos a partir dos seus textos. Você pode escolhê-los como predefinição em “App”, acima. Só são usados quando o idioma de saída é igual ao do texto aprendido."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стили, изученные по вашим текстам. Их можно выбрать как пресет выше в разделе «Приложение». Стиль используется, только если язык вывода совпадает с языком изученного текста."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kendi metinlerinizden öğrenilen üsluplar. Yukarıdaki “Uygulama” bölümünde hazır ayar olarak seçebilirsiniz. Yalnızca çıktı dili, öğrenilen metnin diliyle aynı olduğunda kullanılır."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Văn phong học từ văn bản của chính bạn. Có thể chọn làm mẫu thiết lập sẵn ở mục “Ứng dụng” phía trên. Chỉ dùng khi ngôn ngữ đầu ra giống với ngôn ngữ của văn bản đã học."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "根据你自己的文章学到的文体。可以在上方的“应用”中作为预设选择。仅在输出语言与所学文章的语言相同时使用。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從你自己的文章學到的文體。可在上方的「App」中當作預設組選擇。僅在輸出語言與所學文章的語言相同時使用。"
           }
         }
       }
@@ -113115,6 +116175,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "請自由寫下標題結構和寫法（例如：用「## 客戶需求」「## 待辦」作為標題，以簡短的項目符號寫）。待辦事項（負責人·內容·截止日期）和關於說話者的備註會自動附在最後。"
+          }
+        }
+      }
+    },
+    "言語" : {
+      "comment" : "StyleLearningSheet.swift:197",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اللغة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langue"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "भाषा"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bahasa"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lingua"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "언어"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Język"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Язык"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dil"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngôn ngữ"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "語言"
+          }
+        }
+      }
+    },
+    "言語を選んでください。" : {
+      "comment" : "AppStyles.swift:261",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختر لغة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle eine Sprache aus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a language."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige un idioma."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez une langue."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई भाषा चुनें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih bahasa."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli una lingua."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "언어를 선택하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz język."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolha um idioma."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите язык."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir dil seçin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy chọn ngôn ngữ."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请选择语言。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請選擇語言。"
           }
         }
       }
@@ -120361,6 +123625,108 @@
         }
       }
     },
+    "読み込む" : {
+      "comment" : "StyleLearningSheet.swift:231",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فتح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importer"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "खोलें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impor"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가져오기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aç"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhập"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "載入"
+          }
+        }
+      }
+    },
     "読み込めません" : {
       "comment" : "AppUpdate.swift:611",
       "extractionState" : "manual",
@@ -120561,6 +123927,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "有 %1$@ 個會議無法讀取（%2$@）。"
+          }
+        }
+      }
+    },
+    "読めない形式です（.docx・.txt・.md を選んでください）。" : {
+      "comment" : "StyleLearning.swift:29",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنسيق لا يمكن قراءته (اختر ملف .docx أو .txt أو .md)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Format kann nicht gelesen werden (wähle .docx, .txt oder .md)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsupported format (choose a .docx, .txt, or .md file)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formato no compatible (selecciona un archivo .docx, .txt o .md)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format illisible (choisissez un fichier .docx, .txt ou .md)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यह फ़ॉर्मैट पढ़ा नहीं जा सकता (.docx, .txt या .md चुनें)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format tidak dapat dibaca (pilih .docx, .txt, atau .md)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formato non leggibile (scegli un file .docx, .txt o .md)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "읽을 수 없는 형식입니다(.docx, .txt, .md를 선택하세요)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieczytelny format (wybierz plik .docx, .txt lub .md)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formato ilegível (escolha um arquivo .docx, .txt ou .md)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нечитаемый формат (выберите файл .docx, .txt или .md)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okunamayan biçim (.docx, .txt veya .md seçin)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Định dạng không đọc được (hãy chọn .docx, .txt hoặc .md)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取此格式（请选择 .docx、.txt 或 .md）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法讀取此格式（請選擇 .docx、.txt 或 .md）。"
           }
         }
       }
@@ -126482,7 +129950,7 @@
       }
     },
     "追加" : {
-      "comment" : "AppStylesView.swift:72, AppStylesView.swift:108",
+      "comment" : "AppStylesView.swift:77, AppStylesView.swift:113",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -126787,104 +130255,104 @@
         }
       }
     },
-    "追加したアプリと、アプリごとの追加ルールが消えます。元に戻せません。" : {
-      "comment" : "AppStylesView.swift:58",
+    "追加したアプリと、アプリごとの追加ルールが消えます。カスタム文体は消えません。元に戻せません。" : {
+      "comment" : "AppStylesView.swift:63",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ستُحذف التطبيقات المضافة والقواعد الإضافية لكل تطبيق. لا يمكن التراجع عن هذا الإجراء."
+            "value" : "ستُحذف التطبيقات المضافة والقواعد الإضافية لكل تطبيق. لن تُحذف الأساليب المخصصة. لا يمكن التراجع عن هذا الإجراء."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hinzugefügte Apps und die zusätzlichen Regeln pro App werden gelöscht. Dies kann nicht widerrufen werden."
+            "value" : "Hinzugefügte Apps und die zusätzlichen Regeln pro App werden gelöscht. Benutzerdefinierte Stile bleiben erhalten. Dies kann nicht widerrufen werden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Added apps and per-app additional rules will be deleted. This can't be undone."
+            "value" : "Added apps and per-app additional rules will be deleted. Custom styles won't be deleted. This can't be undone."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se eliminarán las apps añadidas y las reglas adicionales de cada app. No se puede deshacer."
+            "value" : "Se eliminarán las apps añadidas y las reglas adicionales de cada app. Los estilos personalizados no se eliminarán. No se puede deshacer."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les apps ajoutées et les règles supplémentaires par app seront supprimées. Cette action est irréversible."
+            "value" : "Les apps ajoutées et les règles supplémentaires par app seront supprimées. Les styles personnalisés ne seront pas supprimés. Cette action est irréversible."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "जोड़े गए ऐप और हर ऐप के अतिरिक्त नियम हट जाएँगे। इसे पहले जैसा नहीं किया जा सकता।"
+            "value" : "जोड़े गए ऐप और हर ऐप के अतिरिक्त नियम हट जाएँगे। कस्टम शैलियाँ नहीं हटेंगी। इसे पहले जैसा नहीं किया जा सकता।"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "App yang ditambahkan dan aturan tambahan per app akan dihapus. Tindakan ini tidak dapat dibatalkan."
+            "value" : "App yang ditambahkan dan aturan tambahan per app akan dihapus. Gaya bahasa kustom tidak akan dihapus. Tindakan ini tidak dapat dibatalkan."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le app aggiunte e le regole aggiuntive per ciascuna app verranno eliminate. Questa azione non può essere annullata."
+            "value" : "Le app aggiunte e le regole aggiuntive per ciascuna app verranno eliminate. Gli stili personalizzati non verranno eliminati. Questa azione non può essere annullata."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "추가한 앱과 앱별 추가 규칙이 삭제됩니다. 되돌릴 수 없습니다."
+            "value" : "추가한 앱과 앱별 추가 규칙이 삭제됩니다. 사용자 지정 문체는 삭제되지 않습니다. 되돌릴 수 없습니다."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dodane aplikacje i dodatkowe reguły dla poszczególnych aplikacji zostaną usunięte. Tej czynności nie można cofnąć."
+            "value" : "Dodane aplikacje i dodatkowe reguły dla poszczególnych aplikacji zostaną usunięte. Własne style nie zostaną usunięte. Tej czynności nie można cofnąć."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Os apps adicionados e as regras adicionais de cada app serão apagados. Esta ação não pode ser desfeita."
+            "value" : "Os apps adicionados e as regras adicionais de cada app serão apagados. Os estilos personalizados não serão apagados. Esta ação não pode ser desfeita."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Добавленные приложения и дополнительные правила для них будут удалены. Это действие нельзя отменить."
+            "value" : "Добавленные приложения и дополнительные правила для них будут удалены. Свои стили не удаляются. Это действие нельзя отменить."
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eklenen uygulamalar ve uygulamaya özel ek kurallar silinir. Bu işlem geri alınamaz."
+            "value" : "Eklenen uygulamalar ve uygulamaya özel ek kurallar silinir. Özel üsluplar silinmez. Bu işlem geri alınamaz."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Các ứng dụng đã thêm và quy tắc bổ sung cho từng ứng dụng sẽ bị xóa. Không thể hoàn tác."
+            "value" : "Các ứng dụng đã thêm và quy tắc bổ sung cho từng ứng dụng sẽ bị xóa. Văn phong tùy chỉnh sẽ không bị xóa. Không thể hoàn tác."
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "添加的应用和各应用的附加规则将被删除。此操作无法撤销。"
+            "value" : "添加的应用和各应用的附加规则将被删除。自定义文体不会被删除。此操作无法撤销。"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "加入的 App 和各 App 的附加規則將被刪除。此操作無法復原。"
+            "value" : "加入的 App 和各 App 的附加規則將被刪除。自訂文體不會被刪除。此操作無法復原。"
           }
         }
       }
@@ -131990,7 +135458,7 @@
       }
     },
     "録音を始めたときに前面にあるアプリで決まります。「辞書・ルール」の追加ルールと食い違うときは、アプリ別のルールを優先します。出力言語を English にしたアプリでは、画面下の表示が English で始まります（そこで切り替えればそちらが優先）。" : {
-      "comment" : "AppStylesView.swift:18",
+      "comment" : "AppStylesView.swift:19",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -133214,7 +136682,7 @@
       }
     },
     "閉じています" : {
-      "comment" : "AppStylesView.swift:150",
+      "comment" : "AppStylesView.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -133418,7 +136886,7 @@
       }
     },
     "開いています" : {
-      "comment" : "AppStylesView.swift:150",
+      "comment" : "AppStylesView.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -137493,6 +140961,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "（已隱藏，共 %@ 個字元）"
+          }
+        }
+      }
+    },
+    "（先頭の %@ 字を使います）" : {
+      "comment" : "StyleLearningSheet.swift:215",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(يُستخدم أول %@ حرف)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(die ersten %@ Zeichen werden verwendet)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(using the first %@ characters)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(se usan los primeros %@ caracteres)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(seuls les %@ premiers caractères sont utilisés)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(शुरू के %@ अक्षर इस्तेमाल होंगे)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(memakai %@ karakter pertama)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(vengono usati i primi %@ caratteri)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(앞부분 %@자를 사용합니다)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(używanych jest pierwszych %@ zn.)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(serão usados os primeiros %@ caracteres)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(используются первые %@ симв.)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(ilk %@ karakter kullanılır)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(dùng %@ ký tự đầu tiên)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（使用开头的 %@ 个字）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（使用開頭的 %@ 個字）"
           }
         }
       }

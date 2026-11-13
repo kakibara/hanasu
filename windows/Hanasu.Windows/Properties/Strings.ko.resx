@@ -1640,4 +1640,187 @@
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0} ({1})</value>
   </data>
+  <data name="Settings_Tab_AppStyles" xml:space="preserve">
+    <value>앱별</value>
+  </data>
+  <data name="AppStyles_Enabled" xml:space="preserve">
+    <value>입력할 앱에 맞춰 문체 바꾸기</value>
+  </data>
+  <data name="AppStyles_EnabledNote" xml:space="preserve">
+    <value>녹음을 시작할 때 앞에 있는 앱(.exe 이름으로 찾음)에 따라 정해집니다. '사전 및 규칙' 탭의 추가 규칙과 충돌하면 앱별 규칙이 우선합니다. Microsoft Store 앱은 모두 ApplicationFrameHost.exe로 실행되어 구분할 수 없으므로 찾지 않습니다.</value>
+  </data>
+  <data name="AppStyles_PresetsHeader" xml:space="preserve">
+    <value>프리셋</value>
+  </data>
+  <data name="AppStyles_PresetLine" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AppStyles_PresetSummary_None" xml:space="preserve">
+    <value>프리셋 사용 안 함(이 앱용 추가 규칙만 사용)</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Chat" xml:space="preserve">
+    <value>가볍고 짧은 문장. 단락을 나누지 않음</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Email" xml:space="preserve">
+    <value>정중한 문체(합니다체). 내용별로 단락을 나눔</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPolite" xml:space="preserve">
+    <value>문어체 합니다체로 통일하고 단락을 나눔</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPlain" xml:space="preserve">
+    <value>문어체 한다체로 통일하고 단락을 나눔</value>
+  </data>
+  <data name="CustomStyles_Header" xml:space="preserve">
+    <value>사용자 지정 문체</value>
+  </data>
+  <data name="CustomStyles_Note" xml:space="preserve">
+    <value>직접 쓴 글에서 학습한 문체입니다. 이름, 언어, 규칙만 저장하고 글은 저장하지 않습니다. 사용자 지정 문체는 출력 언어가 문체의 언어와 같을 때만 사용합니다.</value>
+  </data>
+  <data name="CustomStyles_Empty" xml:space="preserve">
+    <value>아직 사용자 지정 문체가 없습니다.</value>
+  </data>
+  <data name="CustomStyles_RowDetail" xml:space="preserve">
+    <value>{0} · 규칙 {1}개</value>
+  </data>
+  <data name="CustomStyles_Learn" xml:space="preserve">
+    <value>글에서 학습…</value>
+  </data>
+  <data name="CustomStyles_Edit" xml:space="preserve">
+    <value>편집…</value>
+  </data>
+  <data name="CustomStyles_Edit_A11y" xml:space="preserve">
+    <value>{0} 편집</value>
+  </data>
+  <data name="CustomStyles_Delete" xml:space="preserve">
+    <value>삭제…</value>
+  </data>
+  <data name="CustomStyles_Delete_A11y" xml:space="preserve">
+    <value>{0} 삭제</value>
+  </data>
+  <data name="CustomStyles_ConfirmDelete" xml:space="preserve">
+    <value>사용자 지정 문체 '{0}'을(를) 삭제하시겠습니까?
+이 문체를 사용하는 앱({1}개)은 '없음'으로 바뀝니다. 앱별 추가 규칙은 그대로 남습니다. 이 작업은 되돌릴 수 없습니다.</value>
+  </data>
+  <data name="CustomStyles_ConfirmDeleteUnused" xml:space="preserve">
+    <value>사용자 지정 문체 '{0}'을(를) 삭제하시겠습니까?
+이 문체를 사용하는 앱은 없습니다. 이 작업은 되돌릴 수 없습니다.</value>
+  </data>
+  <data name="AppStyles_AppsHeader" xml:space="preserve">
+    <value>앱</value>
+  </data>
+  <data name="AppStyles_NoApps" xml:space="preserve">
+    <value>등록된 앱이 없습니다.</value>
+  </data>
+  <data name="AppStyles_PresetLabel" xml:space="preserve">
+    <value>프리셋</value>
+  </data>
+  <data name="AppStyles_Preset_A11y" xml:space="preserve">
+    <value>{0}의 프리셋</value>
+  </data>
+  <data name="AppStyles_RulesLabel" xml:space="preserve">
+    <value>이 앱용 추가 규칙(프리셋보다 우선)</value>
+  </data>
+  <data name="AppStyles_Rules_A11y" xml:space="preserve">
+    <value>{0}의 추가 규칙</value>
+  </data>
+  <data name="AppStyles_RulesExample" xml:space="preserve">
+    <value>예: 이모티콘을 쓰지 않음 / 글머리 기호로 쓰지 않음</value>
+  </data>
+  <data name="AppStyles_Remove" xml:space="preserve">
+    <value>목록에서 제거</value>
+  </data>
+  <data name="AppStyles_Remove_A11y" xml:space="preserve">
+    <value>{0}을(를) 목록에서 제거</value>
+  </data>
+  <data name="AppStyles_AddRunning" xml:space="preserve">
+    <value>실행 중인 앱 추가</value>
+  </data>
+  <data name="AppStyles_NoRunningApps" xml:space="preserve">
+    <value>창이 있는 다른 앱이 실행 중이지 않습니다.</value>
+  </data>
+  <data name="AppStyles_ChooseExe" xml:space="preserve">
+    <value>.exe 선택…</value>
+  </data>
+  <data name="AppStyles_ExeFilter" xml:space="preserve">
+    <value>프로그램 (*.exe)|*.exe</value>
+  </data>
+  <data name="AppStyles_AlreadyAdded" xml:space="preserve">
+    <value>{0}은(는) 이미 목록에 있습니다.</value>
+  </data>
+  <data name="AppStyles_Reset" xml:space="preserve">
+    <value>기본값으로 복원…</value>
+  </data>
+  <data name="AppStyles_ConfirmReset" xml:space="preserve">
+    <value>앱별 설정을 기본값으로 복원하시겠습니까?
+추가한 앱과 앱별 추가 규칙이 삭제됩니다. 사용자 지정 문체는 삭제되지 않습니다. 이 작업은 되돌릴 수 없습니다.</value>
+  </data>
+  <data name="StyleLearning_Title" xml:space="preserve">
+    <value>글에서 문체 학습</value>
+  </data>
+  <data name="StyleLearning_EditTitle" xml:space="preserve">
+    <value>사용자 지정 문체 편집</value>
+  </data>
+  <data name="StyleLearning_Intro" xml:space="preserve">
+    <value>직접 쓴 글을 붙여 넣거나 파일을 선택하세요. '회의록'용으로 설정한 AI가 글쓰기 방식을 분석해 문체 규칙을 작성합니다. 글은 저장하지 않으며 이름, 언어, 규칙만 저장합니다.</value>
+  </data>
+  <data name="StyleLearning_Input_A11y" xml:space="preserve">
+    <value>문체를 학습할 글</value>
+  </data>
+  <data name="StyleLearning_ChooseFiles" xml:space="preserve">
+    <value>파일 선택…</value>
+  </data>
+  <data name="StyleLearning_FileFilter" xml:space="preserve">
+    <value>Word, 텍스트, Markdown|{0}</value>
+  </data>
+  <data name="StyleLearning_FileFailed" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="StyleLearning_InputTruncated" xml:space="preserve">
+    <value>입력란에는 최대 {0}자까지 넣을 수 있습니다. 나머지는 추가하지 않았습니다.</value>
+  </data>
+  <data name="StyleLearning_Count" xml:space="preserve">
+    <value>{0}자</value>
+  </data>
+  <data name="StyleLearning_CountUsed" xml:space="preserve">
+    <value>{0}자(앞부분 {1}자만 보냄)</value>
+  </data>
+  <data name="StyleLearning_NeedMore" xml:space="preserve">
+    <value>문체를 학습하려면 {0}자 이상 입력하세요.</value>
+  </data>
+  <data name="StyleLearning_Learn" xml:space="preserve">
+    <value>문체 학습</value>
+  </data>
+  <data name="StyleLearning_Learning" xml:space="preserve">
+    <value>문체를 학습하는 중…(최대 {0}초)</value>
+  </data>
+  <data name="StyleLearning_Stop" xml:space="preserve">
+    <value>중단</value>
+  </data>
+  <data name="StyleLearning_Stopped" xml:space="preserve">
+    <value>중단했습니다. 글이 그대로 남아 있으므로 다시 시도할 수 있습니다.</value>
+  </data>
+  <data name="StyleLearning_Learned" xml:space="preserve">
+    <value>규칙을 확인하고 수정한 다음 저장하세요. AI: {0}({1})</value>
+  </data>
+  <data name="StyleLearning_Name" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="StyleLearning_Language" xml:space="preserve">
+    <value>언어</value>
+  </data>
+  <data name="StyleLearning_LanguageNote" xml:space="preserve">
+    <value>출력이 이 언어일 때만 사용합니다.</value>
+  </data>
+  <data name="StyleLearning_Rules" xml:space="preserve">
+    <value>규칙(한 줄에 하나씩)</value>
+  </data>
+  <data name="StyleLearning_RulesCount" xml:space="preserve">
+    <value>{0}/{1}줄 · {2}/{3}자</value>
+  </data>
+  <data name="StyleLearning_Save" xml:space="preserve">
+    <value>저장</value>
+  </data>
+  <data name="StyleLearning_Cancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
 </root>

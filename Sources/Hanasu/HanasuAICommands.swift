@@ -384,7 +384,8 @@ enum HanasuAICommands {
         var style = app.style
         if let preset {
             style = style ?? AppStyle(bundleID: args.values["--app"] ?? "", name: app.name ?? "", preset: preset)
-            style?.preset = preset
+            // 要件: REQ-DIC-023（--style はアプリのカスタム文体より優先。割り当てを外してプリセットにする）
+            style?.selectPreset(preset)
         }
         let translation = requestedTranslation ?? style?.outputLanguage.translation
         // 音声入力と同じく、置き換えルールを当ててから送る

@@ -1092,4 +1092,55 @@
   <data name="Cmd_UnreadableCount" xml:space="preserve">
     <value>{0} मीटिंग नहीं पढ़ी जा सकीं ({1})।</value>
   </data>
+  <data name="AppStyle_Preset_None" xml:space="preserve">
+    <value>कोई नहीं</value>
+  </data>
+  <data name="AppStyle_Preset_Chat" xml:space="preserve">
+    <value>चैट</value>
+  </data>
+  <data name="AppStyle_Preset_Email" xml:space="preserve">
+    <value>मेल</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPolite" xml:space="preserve">
+    <value>दस्तावेज़ (विनम्र शैली)</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPlain" xml:space="preserve">
+    <value>दस्तावेज़ (सामान्य शैली)</value>
+  </data>
+  <data name="CustomStyle_EmptyName" xml:space="preserve">
+    <value>नाम डालें।</value>
+  </data>
+  <data name="CustomStyle_DuplicateName" xml:space="preserve">
+    <value>इसी नाम की शैली पहले से है। कोई दूसरा नाम दें।</value>
+  </data>
+  <data name="CustomStyle_UnknownLanguage" xml:space="preserve">
+    <value>भाषा चुनें।</value>
+  </data>
+  <data name="CustomStyle_EmptyRules" xml:space="preserve">
+    <value>कम से कम एक नियम डालें।</value>
+  </data>
+  <data name="CustomStyle_TooManyRules" xml:space="preserve">
+    <value>अधिकतम {0} नियम हो सकते हैं।</value>
+  </data>
+  <data name="CustomStyle_RulesTooLong" xml:space="preserve">
+    <value>सभी नियम मिलाकर अधिकतम {0} अक्षर हो सकते हैं।</value>
+  </data>
+  <data name="StyleSource_Unsupported" xml:space="preserve">
+    <value>यह फ़ाइल प्रकार समर्थित नहीं है। .docx, .txt या .md फ़ाइल चुनें।</value>
+  </data>
+  <data name="StyleSource_Unreadable" xml:space="preserve">
+    <value>फ़ाइल खराब है या ऐसी कैरेक्टर एन्कोडिंग में है जिसे पढ़ा नहीं जा सकता।</value>
+  </data>
+  <data name="StyleSource_TooLarge" xml:space="preserve">
+    <value>फ़ाइल बहुत बड़ी है (अधिकतम 20 MB)।</value>
+  </data>
+  <data name="StyleLearn_TooShort" xml:space="preserve">
+    <value>टेक्स्ट बहुत छोटा है। कम से कम {0} अक्षर डालें।</value>
+  </data>
+  <data name="StyleLearn_InvalidResponse" xml:space="preserve">
+    <value>AI के जवाब से शैली के नियम नहीं पढ़े जा सके। फिर से कोशिश करें।</value>
+  </data>
+  <data name="StyleLearn_UnknownLanguage" xml:space="preserve">
+    <value>टेक्स्ट की भाषा ({0}) समर्थित नहीं है।</value>
+  </data>
 </root>

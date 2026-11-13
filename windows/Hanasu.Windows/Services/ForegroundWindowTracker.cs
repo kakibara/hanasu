@@ -49,6 +49,36 @@ internal sealed class ForegroundWindowTracker : IDisposable
         return hwnd == IntPtr.Zero ? null : AppNameOf(hwnd);
     }
 
+    // 要件: REQ-DIC-020
+    // 設計判断: DEC-DIC-216
+    /// <summary>
+    /// 今の前面ウインドウの exe の名前（小文字。"slack.exe" など）。ForegroundAppName と同じウインドウの選び方。
+    /// ストアアプリ（ApplicationFrameHost.exe）のときもそのまま返す（引かないのは Core の AppStyleLookup.Find）
+    /// </summary>
+    public string? ForegroundAppExe()
+    {
+        var hwnd = NativeMethods.GetForegroundWindow();
+        if (!IsExternal(hwnd)) hwnd = LastExternalWindow;
+        return hwnd == IntPtr.Zero ? null : ExeOf(hwnd);
+    }
+
+    /// <summary>ウインドウのプロセスの exe のファイル名（小文字）。取れなければ null</summary>
+    internal static string? ExeOf(IntPtr hwnd)
+    {
+        NativeMethods.GetWindowThreadProcessId(hwnd, out var pid);
+        if (pid == 0) return null;
+        if (ProcessPath(pid) is { } path) return Path.GetFileName(path).ToLowerInvariant();
+        try
+        {
+            using var process = Process.GetProcessById((int)pid);
+            return (process.ProcessName + ".exe").ToLowerInvariant();
+        }
+        catch (ArgumentException)
+        {
+            return null;
+        }
+    }
+
     private void OnForegroundChanged(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint thread, uint time) =>
         Remember(hwnd);
 
@@ -102,7 +132,7 @@ internal sealed class ForegroundWindowTracker : IDisposable
     }
 
     /// <summary>管理者として動いているアプリでも読めるよう、PROCESS_QUERY_LIMITED_INFORMATION で開く</summary>
-    private static string? ProcessPath(uint pid)
+    internal static string? ProcessPath(uint pid)
     {
         var handle = NativeMethods.OpenProcess(NativeMethods.PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
         if (handle == IntPtr.Zero) return null;

@@ -1640,4 +1640,187 @@ Mở trang phát hành trong trình duyệt?</value>
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0} ({1})</value>
   </data>
+  <data name="Settings_Tab_AppStyles" xml:space="preserve">
+    <value>Theo ứng dụng</value>
+  </data>
+  <data name="AppStyles_Enabled" xml:space="preserve">
+    <value>Đổi văn phong theo ứng dụng bạn đang nhập</value>
+  </data>
+  <data name="AppStyles_EnabledNote" xml:space="preserve">
+    <value>Được quyết định theo ứng dụng ở phía trước khi bạn bắt đầu ghi âm (tra theo tên tệp .exe). Khi các quy tắc này mâu thuẫn với quy tắc bổ sung ở thẻ "Từ điển &amp; quy tắc", quy tắc theo ứng dụng được ưu tiên. Mọi ứng dụng Store đều chạy dưới tên ApplicationFrameHost.exe nên không thể phân biệt và không được tra.</value>
+  </data>
+  <data name="AppStyles_PresetsHeader" xml:space="preserve">
+    <value>Mẫu thiết lập sẵn</value>
+  </data>
+  <data name="AppStyles_PresetLine" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AppStyles_PresetSummary_None" xml:space="preserve">
+    <value>Không dùng mẫu thiết lập sẵn (chỉ dùng quy tắc bổ sung cho ứng dụng này)</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Chat" xml:space="preserve">
+    <value>Câu ngắn, thân mật. Không chia đoạn</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Email" xml:space="preserve">
+    <value>Văn phong lịch sự, trang trọng. Chia đoạn theo từng ý</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPolite" xml:space="preserve">
+    <value>Văn viết, thống nhất giọng lịch sự, trang trọng, có chia đoạn</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPlain" xml:space="preserve">
+    <value>Văn viết, thống nhất giọng trung tính, khách quan, có chia đoạn</value>
+  </data>
+  <data name="CustomStyles_Header" xml:space="preserve">
+    <value>Văn phong tùy chỉnh</value>
+  </data>
+  <data name="CustomStyles_Note" xml:space="preserve">
+    <value>Văn phong học được từ chính văn bản của bạn. Chỉ lưu tên, ngôn ngữ và quy tắc, không lưu văn bản. Văn phong tùy chỉnh chỉ được dùng khi đầu ra cùng ngôn ngữ với văn phong đó.</value>
+  </data>
+  <data name="CustomStyles_Empty" xml:space="preserve">
+    <value>Chưa có văn phong tùy chỉnh nào.</value>
+  </data>
+  <data name="CustomStyles_RowDetail" xml:space="preserve">
+    <value>{0} · {1} quy tắc</value>
+  </data>
+  <data name="CustomStyles_Learn" xml:space="preserve">
+    <value>Học từ văn bản…</value>
+  </data>
+  <data name="CustomStyles_Edit" xml:space="preserve">
+    <value>Sửa…</value>
+  </data>
+  <data name="CustomStyles_Edit_A11y" xml:space="preserve">
+    <value>Sửa {0}</value>
+  </data>
+  <data name="CustomStyles_Delete" xml:space="preserve">
+    <value>Xóa…</value>
+  </data>
+  <data name="CustomStyles_Delete_A11y" xml:space="preserve">
+    <value>Xóa {0}</value>
+  </data>
+  <data name="CustomStyles_ConfirmDelete" xml:space="preserve">
+    <value>Xóa văn phong tùy chỉnh "{0}"?
+Các ứng dụng đang dùng văn phong này ({1}) sẽ chuyển sang "Không có". Quy tắc bổ sung của từng ứng dụng vẫn được giữ. Không thể hoàn tác thao tác này.</value>
+  </data>
+  <data name="CustomStyles_ConfirmDeleteUnused" xml:space="preserve">
+    <value>Xóa văn phong tùy chỉnh "{0}"?
+Không có ứng dụng nào dùng văn phong này. Không thể hoàn tác thao tác này.</value>
+  </data>
+  <data name="AppStyles_AppsHeader" xml:space="preserve">
+    <value>Ứng dụng</value>
+  </data>
+  <data name="AppStyles_NoApps" xml:space="preserve">
+    <value>Chưa đăng ký ứng dụng nào.</value>
+  </data>
+  <data name="AppStyles_PresetLabel" xml:space="preserve">
+    <value>Mẫu thiết lập sẵn</value>
+  </data>
+  <data name="AppStyles_Preset_A11y" xml:space="preserve">
+    <value>Mẫu thiết lập sẵn cho {0}</value>
+  </data>
+  <data name="AppStyles_RulesLabel" xml:space="preserve">
+    <value>Quy tắc bổ sung cho ứng dụng này (ưu tiên hơn mẫu thiết lập sẵn)</value>
+  </data>
+  <data name="AppStyles_Rules_A11y" xml:space="preserve">
+    <value>Quy tắc bổ sung cho {0}</value>
+  </data>
+  <data name="AppStyles_RulesExample" xml:space="preserve">
+    <value>Ví dụ: Không dùng emoji / Không dùng gạch đầu dòng</value>
+  </data>
+  <data name="AppStyles_Remove" xml:space="preserve">
+    <value>Xóa khỏi danh sách</value>
+  </data>
+  <data name="AppStyles_Remove_A11y" xml:space="preserve">
+    <value>Xóa {0} khỏi danh sách</value>
+  </data>
+  <data name="AppStyles_AddRunning" xml:space="preserve">
+    <value>Thêm ứng dụng đang chạy</value>
+  </data>
+  <data name="AppStyles_NoRunningApps" xml:space="preserve">
+    <value>Không có ứng dụng nào khác có cửa sổ đang chạy.</value>
+  </data>
+  <data name="AppStyles_ChooseExe" xml:space="preserve">
+    <value>Chọn tệp .exe…</value>
+  </data>
+  <data name="AppStyles_ExeFilter" xml:space="preserve">
+    <value>Chương trình (*.exe)|*.exe</value>
+  </data>
+  <data name="AppStyles_AlreadyAdded" xml:space="preserve">
+    <value>{0} đã có trong danh sách.</value>
+  </data>
+  <data name="AppStyles_Reset" xml:space="preserve">
+    <value>Khôi phục mặc định…</value>
+  </data>
+  <data name="AppStyles_ConfirmReset" xml:space="preserve">
+    <value>Khôi phục cài đặt theo ứng dụng về mặc định?
+Các ứng dụng đã thêm và quy tắc bổ sung của từng ứng dụng sẽ bị xóa. Văn phong tùy chỉnh sẽ không bị xóa. Không thể hoàn tác thao tác này.</value>
+  </data>
+  <data name="StyleLearning_Title" xml:space="preserve">
+    <value>Học văn phong từ văn bản</value>
+  </data>
+  <data name="StyleLearning_EditTitle" xml:space="preserve">
+    <value>Sửa văn phong tùy chỉnh</value>
+  </data>
+  <data name="StyleLearning_Intro" xml:space="preserve">
+    <value>Hãy dán văn bản do chính bạn viết hoặc chọn tệp. AI được đặt cho "Biên bản họp" sẽ đọc cách viết và soạn ra các quy tắc văn phong. Văn bản không được lưu; chỉ lưu tên, ngôn ngữ và quy tắc.</value>
+  </data>
+  <data name="StyleLearning_Input_A11y" xml:space="preserve">
+    <value>Văn bản để học văn phong</value>
+  </data>
+  <data name="StyleLearning_ChooseFiles" xml:space="preserve">
+    <value>Chọn tệp…</value>
+  </data>
+  <data name="StyleLearning_FileFilter" xml:space="preserve">
+    <value>Word, văn bản và Markdown|{0}</value>
+  </data>
+  <data name="StyleLearning_FileFailed" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="StyleLearning_InputTruncated" xml:space="preserve">
+    <value>Ô nhập chứa được tối đa {0} ký tự. Phần còn lại không được thêm vào.</value>
+  </data>
+  <data name="StyleLearning_Count" xml:space="preserve">
+    <value>{0} ký tự</value>
+  </data>
+  <data name="StyleLearning_CountUsed" xml:space="preserve">
+    <value>{0} ký tự (chỉ gửi {1} ký tự đầu tiên)</value>
+  </data>
+  <data name="StyleLearning_NeedMore" xml:space="preserve">
+    <value>Hãy nhập ít nhất {0} ký tự để học văn phong.</value>
+  </data>
+  <data name="StyleLearning_Learn" xml:space="preserve">
+    <value>Học văn phong</value>
+  </data>
+  <data name="StyleLearning_Learning" xml:space="preserve">
+    <value>Đang học văn phong… (tối đa {0} giây)</value>
+  </data>
+  <data name="StyleLearning_Stop" xml:space="preserve">
+    <value>Dừng</value>
+  </data>
+  <data name="StyleLearning_Stopped" xml:space="preserve">
+    <value>Đã dừng. Văn bản của bạn vẫn còn đó, bạn có thể thử lại.</value>
+  </data>
+  <data name="StyleLearning_Learned" xml:space="preserve">
+    <value>Hãy kiểm tra, chỉnh sửa quy tắc rồi lưu. AI: {0} ({1})</value>
+  </data>
+  <data name="StyleLearning_Name" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="StyleLearning_Language" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+  <data name="StyleLearning_LanguageNote" xml:space="preserve">
+    <value>Chỉ dùng khi đầu ra bằng ngôn ngữ này.</value>
+  </data>
+  <data name="StyleLearning_Rules" xml:space="preserve">
+    <value>Quy tắc (mỗi dòng một quy tắc)</value>
+  </data>
+  <data name="StyleLearning_RulesCount" xml:space="preserve">
+    <value>{0}/{1} dòng · {2}/{3} ký tự</value>
+  </data>
+  <data name="StyleLearning_Save" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="StyleLearning_Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
 </root>
