@@ -179,6 +179,24 @@
 - 実装の場所: `LocalModelDownloadPrompt`、`LocalModelDownloadView`、`DictationController.finishDictation`、`MeetingRecorder`（議事録の作成と作り直し）、`DictationHistoryStore.retry`
 - 確かめ方: `.build/debug/Hanasu --render-local-model-download /tmp/download.png`（進み具合のウインドウの見た目）。ダイアログ・ダウンロード・続けて整形することは実機で確かめる（`HANASU_MODELS_DIR` を空のフォルダにして起動し、音声入力の AI をローカルにして録音する）
 
+### REQ-COM-033 音声入力の AI がローカルなら、録音が始まったら裏でモデルを読み込み始める
+- 内容: 音声入力整形の AI をローカルにしていて、その録音で AI を使う（音声入力で整形がオン・翻訳して入力する・Mac の選択の編集）とき、録音が始まったら、裏でそのモデルの読み込み（サーバーの起動）を始める。録音の開始はそれを待たない。録音を止めたときに読み込みが終わっていれば、すぐ整形に入る。終わっていなければ、その続きを待つ（最初から読み込み直さない）。録音している間は、5 分たってもサーバーを止めない。
+- 受け入れ条件:
+  - 録音の開始は読み込みを待たない: 「準備中…」から録音中になるまでの時間（ログ `dictation recording started: <秒>`）が、ローカル（Gemma 4 E4B、サーバーが止まっている状態から）とローカルでない AI とで、各 5 回の中央値の差が 0.3 秒以内。
+  - 読み込みが録音より短ければ、止めてからの待ちは読み込み済みのときと同じ: サーバーが止まっている状態から始め、ログ `local llm server ready: <モデル> <秒>` の秒数より長く話して止めたとき、`recognized` から `insert outcome` までの時間が、サーバーが動いているとき（続けてもう 1 回、同じくらいの長さを話したとき）と比べて +1.0 秒以内。そのとき `local llm server started` は録音が始まった直後に 1 回だけで、止めたあとには出ない。
+  - 読み込みより短く話したときは、止めてから読み込みの残りの分だけ待つ（読み込み直さない。`started` は 1 回だけ）。
+  - 録音中に 5 分たっても、サーバーは止まらない（`local llm server stopped (idle)` が出ない）。止めた・取り消した時点から 5 分で止まる。
+  - 読み込みを始めないとき: 整形がオフで翻訳もしない録音、AI がローカルでない、モデルがまだダウンロードされていない（Mac は今どおり止めたあとにダウンロードするかを尋ねる REQ-COM-032、Windows は今どおり設定でダウンロードするよう知らせる）、録音を始められなかった（権限がない・マイクを開けないなど）。
+  - 録音の途中で HUD から翻訳の言語を選んだときは（整形がオフでも）、その時点で読み込みを始める。
+  - 録音を取り消したとき・認識結果が空だったときも、読み込んだサーバーは 5 分使わなければ止まる（取り消しでは止めない）。
+  - 読み込みに失敗しても録音は続く。止めた時点で失敗が分かっていれば、整形が今どおり起動し直す。止めたあとに続きを待っていた読み込みが失敗したら（Mac）、起動し直さず、整形前の文を入力して理由を知らせる（REQ-DIC-007）。
+  - ほかの処理を壊さない: 議事録・辞書の候補・AI チャット・会議への質問が違うモデルでローカルの AI を使っている（または待っている）間は、録音を始めても読み込まない。読み込みの途中に違うモデルの議事録などが来ても、その処理は失敗しない（読み込みが終わるまで待ってから切り替える）。止めたあとの整形の振る舞いは今のまま（DEC-COM-172）。
+- 出典: 2026-11-13 の依頼「音声入力を立ち上げるときに、文字起こしの後のAIをローカルモデルにすると立ち上げまで時間がかかる…音声入力を行っている最中にローカルモデルを読み込むということで、ボタンを押した瞬間に音声入力自体を始めることができるようにしてください」。同日の質問への答え「押してから録音が始まるまで（が待たされる場面）」「選択の編集も含める」、同日に計画（[plans/dictation-local-model-preload.md](../plans/dictation-local-model-preload.md)）を了承。コードと当日のログでは、録音の開始はモデルを待っておらず、待ち（13〜18 秒）は止めたあとに出ていた。録音の開始の秒数をログに出して測り、ローカルのときに遅ければ原因を別に調べる
+- 対象: Mac / Windows（選択の編集は Mac だけの機能）
+- 実装の場所: `DictationController.prewarmLocalModelIfNeeded`・`startDictation`・`selectOutputLanguage`・`finishDictation`、`EditModeController`、`LocalLLMServer.prewarm`・`releaseWarmHold`・`ensureRunning`
+- Windows の実装: `windows/Hanasu.Core/Dictation/DictationController.cs`、`windows/Hanasu.Core/Dictation/DictationPrewarm.cs`、`windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Windows/AppHost.cs`
+- 確かめ方: Mac は `.build/debug/Hanasu --local-llm-prewarm-check [--model <id>] [--other-model <id>]`（本物の llama-server で、同じ起動を待つことと、先読みの途中に来たほかのモデルの処理が失敗しないこと）と `.build/debug/Hanasu --test-local-llm-wait`（先読みのあとに起動し直さない・同じ起動を待つ・ほかのモデルの処理中は先読みしない・先読みの起動中に来たほかのモデルの処理が失敗しない・録音中は止めない・先読みの失敗を待っていた処理が受け取る）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`DictationPrewarmTests`・`LocalLlmTests`・`DictationControllerTests`）と、Mac の本物の llama-server で動かす `dotnet run --project Hanasu.Cli -- local-prewarm-check --server <llama-server> --model <id>`。時間とログは実機（計画の「確かめ方」）
+
 ### REQ-COM-040 メニューバーにもアイコンを出すかを選べる（Mac）
 - 内容: Hanasu のアイコンは Dock にいつも出す（⌘Tab の一覧にもいつも出る）。メニューバーにも出すか（「メニューバーと Dock の両方」）、出さないか（「Dock だけ」）を設定で選べる。既定は両方。もとは Moom のように「メニューバーだけ」も選べたが、2026-11-12 になくした（開き直しで設定画面を出さなくしたので、メニューバーのアイコンがノッチなどで隠れると、設定・終了・出し方の切り替えに辿り着けなくなるため。DEC-COM-009）。
 - 受け入れ条件:
@@ -849,10 +867,10 @@
 - Windows の実装: `windows/Hanasu.Core/Gemini/GeminiClient.cs`（`GenerateAsync`・`RetryDelay`・`MaxRetries`・`RetryBaseDelay`）
 
 ### DEC-COM-060 ローカルの LLM は、llama.cpp の llama-server を同梱し、使うときだけ子プロセスで動かす
-- 決めたこと: Mac・Windows とも、llama.cpp の `llama-server` をアプリに同梱し、ローカルを選んだ処理を始めるときに子プロセスとして起動して、OpenAI 互換の `POST /v1/chat/completions` に送る（streaming は使わない）。チャットの形式は GGUF に入っているテンプレートを llama.cpp の jinja で使う（`--jinja`）。Gemma 4 の考える過程は使わない（`--reasoning off`）。Mac は Metal に全部の層を載せる（`-ngl 99`）。Windows は CPU で動かす。
+- 決めたこと: Mac・Windows とも、llama.cpp の `llama-server` をアプリに同梱し、ローカルを選んだ処理を始めるとき、または音声入力・選択の編集の録音が始まったとき（先読み。DEC-COM-110）に子プロセスとして起動して、OpenAI 互換の `POST /v1/chat/completions` に送る（streaming は使わない）。チャットの形式は GGUF に入っているテンプレートを llama.cpp の jinja で使う（`--jinja`）。Gemma 4 の考える過程は使わない（`--reasoning off`）。Mac は Metal に全部の層を載せる（`-ngl 99`）。Windows は CPU で動かす。
 - 理由: 3 つのモデルのチャットの形式がばらばら（Gemma 4 は `<|turn>`、LFM2.5 は ChatML 風、Sarashina2.2 は `<|system|>…</s>`）で、llama.cpp の C API の組み込みのテンプレートには Gemma 4 と Sarashina がない。llama-server なら GGUF のテンプレートをそのまま使える。Mac と Windows で同じ作りにでき、クライアントは Gemini・Claude と同じ 1 回送って待つ HTTP にできる。MLX（mlx-swift-lm）は `swift build` で Metal のシェーダーを作れず、Windows の LLamaSharp は中の llama.cpp が古くなりがち（0.30.0 で b10221）なので採らなかった。
-- 決めた場面: ローカル LLM に対応した PR
-- 関係する要件: REQ-COM-030
+- 決めた場面: ローカル LLM に対応した PR。先読み（DEC-COM-110）に合わせた書き換えは 2026-11-13 の依頼（REQ-COM-033）
+- 関係する要件: REQ-COM-030, REQ-COM-033
 - 対象: Mac / Windows
 - 実装の場所: `LocalLLMServer`、`LocalLLMClient`
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Core/LocalLlm/LocalLlmClient.cs`
@@ -881,12 +899,12 @@
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmModel.cs`、`windows/Hanasu.Core/Net/ModelDownload.cs`
 
 ### DEC-COM-063 サーバーは 127.0.0.1 の空いたポートで、起動のたびに作る API キーを付け、5 分使わなければ止める
-- 決めたこと: `--host 127.0.0.1` と、空いているポート（OS に選ばせる）で起動する。起動のたびに乱数の API キーを作り、環境変数 `LLAMA_API_KEY` で渡す（コマンドラインに書かない）。Hanasu の CLI が環境変数で受け取るほかのサービスの秘密（`ANTHROPIC_API_KEY`・`GEMINI_API_KEY`・`GEMINI_SERVICE_ACCOUNT_JSON` など。`secretEnvironmentKeys` の一覧）と `LLAMA_ARG_*` は、子プロセスの環境から外す。モデルの名前は `--alias <モデルの id>` で付ける。Web の画面は出さない（`--no-webui`）。同時に 1 つの処理だけ（`--parallel 1`）。最後の処理から 5 分たつと止め、モデルを変えたら起動し直し、アプリを終えるときに止める。Mac は、前回落ちたときに残ったサーバー（自分が起動した記録のあるもの。記録は起動したプロセスごとで、持ち主が終わっているもの。DEC-COM-184）をアプリの起動時に止める。Windows は、ジョブオブジェクトで Hanasu が終わると一緒に終わるようにする。
+- 決めたこと: `--host 127.0.0.1` と、空いているポート（OS に選ばせる）で起動する。起動のたびに乱数の API キーを作り、環境変数 `LLAMA_API_KEY` で渡す（コマンドラインに書かない）。Hanasu の CLI が環境変数で受け取るほかのサービスの秘密（`ANTHROPIC_API_KEY`・`GEMINI_API_KEY`・`GEMINI_SERVICE_ACCOUNT_JSON` など。`secretEnvironmentKeys` の一覧）と `LLAMA_ARG_*` は、子プロセスの環境から外す。モデルの名前は `--alias <モデルの id>` で付ける。Web の画面は出さない（`--no-webui`）。同時に 1 つの処理だけ（`--parallel 1`）。最後の処理（先読みを含む。音声入力・選択の編集の録音をしている間は数えない。DEC-COM-110）から 5 分たつと止め、モデルを変えたら起動し直し、アプリを終えるときに止める。Mac は、前回落ちたときに残ったサーバー（自分が起動した記録のあるもの。記録は起動したプロセスごとで、持ち主が終わっているもの。DEC-COM-184）をアプリの起動時に止める。Windows は、ジョブオブジェクトで Hanasu が終わると一緒に終わるようにする。
 - 理由: ほかの端末から使われないよう、外に開かない。同じ端末のほかのプロセスに勝手に使われないよう、キーを付ける。コマンドラインは `ps` でほかのユーザーにも見えるので、キーは環境変数で渡す。llama-server はキーなしでも `/health` と `/models` に応えるので（ブラウザから DNS リバインディングで 127.0.0.1 のポートを叩かれると読める）、`/models` にモデルのファイルのパス（ユーザー名を含む）が出ないよう別名を付ける。llama-server は自己署名の Mac ではライブラリの検証を外したプロセス（DEC-COM-061）なので、要らない秘密を持たせない。モデルは数 GB のメモリを使い続けるので、使っていないときは返す（続けて使うときは読み込み済みで速い）。
-- 決めた場面: ローカル LLM に対応した PR。環境変数の整理と `--alias` はセキュリティの見直し（2026-11-05）
-- 関係する要件: REQ-COM-030, REQ-COM-022
+- 決めた場面: ローカル LLM に対応した PR。環境変数の整理と `--alias` はセキュリティの見直し（2026-11-05）。先読み（DEC-COM-110）に合わせた書き換えは 2026-11-13 の依頼（REQ-COM-033）
+- 関係する要件: REQ-COM-030, REQ-COM-022, REQ-COM-033
 - 対象: Mac / Windows
-- 実装の場所: `LocalLLMServer`
+- 実装の場所: `LocalLLMServer`（5 分の判定は `stopIfIdle`、録音中の保持は `releaseWarmHold`）
 - Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`、`windows/Hanasu.Platform/ChildProcessJob.cs`
 
 ### DEC-COM-064 文脈の長さと生成の設定は、モデルごとに決める
@@ -1096,6 +1114,20 @@
 - 対象: Windows
 - 実装の場所: なし（作っていない）
 
+### DEC-COM-110 ローカルの LLM の先読みは、同じモデルの起動を 1 つにまとめ、起動の間だけ使っている処理に数え、ほかの処理を止めない
+- 決めたこと:
+  - Mac（`LocalLLMServer`）: `prewarm(_:)` は、ほかの処理が使っている・待っている（`LocalLLMGate.isIdle` が偽）ときで、動いている（起動中を含む）モデルが違うなら何もしないで nil を返す。そうでなければ「録音中の保持」（`warmHolds`）を付けてその ID を返し、そのモデルが動いていなければ裏で起動する。起動している間は `gate.active` に数え（終わったら `gate.finish()`）、ほかのモデルを待つ処理（`waitsForOtherModel` が真）は起動が終わるまで待つ。`releaseWarmHold(_:)` は保持を外し、最後に使った時刻を新しくして 5 分の見張りを付け直す。`stopIfIdle` は保持が 1 つでもあれば止めない。保持はほかの処理の順番（`LocalLLMGate.decision`）には関わらない。
+  - Mac: `ensureRunning` は起動を `launching`（モデルと `Task`）として持つ。同じモデルの起動の途中に来た呼び出しは、その `Task` を待つ（起動し直さない）。違うモデルなら今どおり止めて起動し直す。起動を待つループの片付け（`stop()`）は、そのループが起動したプロセスが今のものと同じときだけ行う。`/health` が通ったら `local llm server ready: <モデル> <秒>` をログに出す。
+  - Windows（`LocalLlmServer`）: `Prewarm` と `ReleaseWarmHold` は Mac と同じ意味。`activeRequests > 0` で動いているモデルが違うなら何もしない。それ以外は保持を付け、裏のタスクで `gate`（`SemaphoreSlim`）を取って `EnsureRunningAsync` で起動する（その間に来た処理は gate で待ち、同じサーバーを使う）。同じモデルが動いていれば最後に使った時刻を新しくする。`StopIfIdle` は保持があれば止めない。テストのために起動を差し替えられる（`LaunchOverride`）。`ready` のログも出す。
+  - 先読みの失敗はログに残すだけで、画面には出さない。Mac で続きを待っていた整形には同じ失敗が返り、整形前の文を入力する（REQ-DIC-007）。Windows は gate を取ってから今どおり起動し直す（gate で 1 つずつなので「続きを待つ」がない）。
+- 理由: 先読みのために起動し直しが起きると、かえって遅くなる。議事録などを録音の開始で止めると、取り消した録音でも議事録が切れる（DEC-COM-172 で守ったもの）。起動中は動いているモデルがまだなく（`servingModel` が nil）、使っている処理にも数えないと、議事録が割り込んで起動し、先読みの片付けがそのサーバーを止めてしまう（計画の敵対的レビューで見つけた）。録音は 5 分を超えうる（Whisper は 10 分まで、Apple の音声認識は上限なし）ので、録音の間は止めない。先読みすると、AI を使わずに終わった録音（取り消し・空・全体がスニペット）でもサーバーが 5 分動き、その間メモリを数 GB 使い、`hanasu`・MCP のローカルの AI は断られ（REQ-COM-187）、ほかの用途で動いていた使っていないモデルは止まる。止めたあとに読み込むのは今と同じなので、損はこれらの録音に限られる。
+- 決めた場面: 2026-11-13 の依頼「音声入力を行っている最中にローカルモデルを読み込む…」、同日に計画（[plans/dictation-local-model-preload.md](../plans/dictation-local-model-preload.md)）を了承
+- 関係する要件: REQ-COM-033, REQ-COM-030, REQ-COM-187
+- 対象: Mac / Windows
+- 実装の場所: `LocalLLMServer.prewarm`・`releaseWarmHold`・`ensureRunning`・`stopIfIdle`
+- Windows の実装: `windows/Hanasu.Core/LocalLlm/LocalLlmServer.cs`
+- 確かめ方: `.build/debug/Hanasu --test-local-llm-wait`、`cd windows && dotnet test Hanasu.Core.Tests`（`LocalLlmTests`）
+
 ### DEC-COM-140 Windows 版の AI の選択は、音声入力と会議で 1 つずつ。設定画面の「Gemini」タブを「AI」タブにする
 - 決めたこと: 設定に `DictationAi`（整形・英訳）と `MeetingAi`（議事録・作り直し）を持ち、どちらも既定は Gemini（今までどおり）。モデルは AI ごとに別に持つ（Gemini は今の `model` と `meetingMinutesModel`、Claude は `claudeModel` と `claudeMinutesModel`）ので、AI を切り替えても前に選んだモデルが残る。設定画面の「Gemini」タブを「AI」タブにして、上に「使う AI とモデル」の 2 行（音声入力・会議。2026-11-11 からは、先頭に「文字起こし AI」の欄を置き、見出しを「文字起こしのあとの AI」、2 行の名前を「音声入力整形」「議事録」にした。DEC-COM-173）、下に Gemini の認証・Claude の API キー・キーの保護・試すを並べる。会議タブの「議事録のモデル」は AI タブへ移した。英訳は AI でしかできないので、「AI で整形する」をオフにしても英訳は音声入力の AI に送る（今までどおり）。Gemini での文字起こし（エンジンが Gemini のとき）は、AI の選択にかかわらず Gemini の認証を使う。モデルは 2026-11-10 までは音声入力の Gemini のモデル（`model`）を共用していたが、2026-11-11 から文字起こし専用の `geminiTranscriptionModel` を使う（DEC-COM-173）。
 - 理由: ユーザーの指示（REQ-COM-024）。音声入力は速さ、議事録は質を優先したいので、用途ごとに選べるほうがよい。認証は AI ごとに 1 つで足りるので、用途ごとには持たない。
@@ -1292,9 +1324,9 @@
 - 実装の場所: `TextAIPurpose`、`AppSettings`（`Keys.chatAIProvider`・`claudeChatModel`・`geminiChatModel`・`localChatModel`）、`ClaudeClient.Model.defaultChat`、`AppSettings.defaultGeminiChatModel`
 
 ### DEC-COM-172 AI チャット・質問と議事録は、ローカルのモデルを切り替えるとき、使っている処理が終わるのを待つ（音声入力は今のまま）
-- 決めたこと: `LocalLLMServer` で、サーバーを使っている処理と、起動を待っている処理を分けて数える（`LocalLLMGate`）。`LocalLLMClient.waitsForOtherModel` が真の処理（AI チャット・会議への質問（`.chat`）と、議事録・辞書の候補（`.meeting`））は、動いているモデルと違うモデルを求めたとき、使っている処理が 0 になるまで待ってから起動し直す。待っている処理は来た順に進み、先に進んだ処理と同じモデルを待っていた処理は、起動し直さずにそのまま通る。待ちには期限（その処理のタイムアウト）を付け、過ぎたら「ほかの処理（議事録の作成など）が終わらないため、ローカルの AI を使えませんでした」で失敗させる。取り消し（「止める」）にも従う。待っている処理があるときは、5 分で止める判定（DEC-COM-063）でも止めない。音声入力（`.dictation`）は今のまま、違うモデルを求めたら処理中でもサーバーを止めて起動し直す。AI チャットと会議に質問は、実際に待っている間だけ「ほかの処理が終わるのを待っています…」と出す（`beginRequest` が待ち始めたときと抜けたときに、呼び出した画面へ知らせる。`LocalLLMServer.observingWait`。送る前の判定だけで決めると、待ちが終わってモデルの起動と生成に入っても出続けるため。PR #95 のレビュー）。
+- 決めたこと: `LocalLLMServer` で、サーバーを使っている処理と、起動を待っている処理を分けて数える（`LocalLLMGate`）。`LocalLLMClient.waitsForOtherModel` が真の処理（AI チャット・会議への質問（`.chat`）と、議事録・辞書の候補（`.meeting`））は、動いているモデルと違うモデルを求めたとき、使っている処理が 0 になるまで待ってから起動し直す。待っている処理は来た順に進み、先に進んだ処理と同じモデルを待っていた処理は、起動し直さずにそのまま通る。待ちには期限（その処理のタイムアウト）を付け、過ぎたら「ほかの処理（議事録の作成など）が終わらないため、ローカルの AI を使えませんでした」で失敗させる。取り消し（「止める」）にも従う。待っている処理があるときは、5 分で止める判定（DEC-COM-063）でも止めない。音声入力（`.dictation`）は今のまま、違うモデルを求めたら処理中でもサーバーを止めて起動し直す。音声入力の録音中の先読み（DEC-COM-110）は、起動している間だけ使っている処理に数える（起動の途中に来たほかのモデルの処理は、起動が終わるまで待つ）。AI チャットと会議に質問は、実際に待っている間だけ「ほかの処理が終わるのを待っています…」と出す（`beginRequest` が待ち始めたときと抜けたときに、呼び出した画面へ知らせる。`LocalLLMServer.observingWait`。送る前の判定だけで決めると、待ちが終わってモデルの起動と生成に入っても出続けるため。PR #95 のレビュー）。
 - 理由: 今は違うモデルを求められると、処理中でもサーバーを止める。AI チャット・質問のローカルのモデルを会議と別にできるので、記録を止めた直後の議事録の作成（ローカルでは最大 30 分）中にチャットで聞くと、議事録が途中で切れてしまう（DEC-MTG-086 の「会議が終わった直後に続けたい」場面）。待てば議事録は守られ、チャットは遅れるだけ。待っている処理を使っている処理と同じに数えると、待つ処理どうしが止まり合うので分ける。音声入力は依頼の外で、待たせると整形が最大 120 秒遅れたうえ失敗しうる（REQ-DIC-007）ので、今の振る舞いを変えない（音声入力が議事録を止めうるのは今と同じ）。
-- 決めた場面: 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承
+- 決めた場面: 2026-11-10 の依頼「AIチャット画面でAIのモデルをデフォルトから切り替えられるようにしてください」「あと、AIチャットのモデルも別に設定できるようにしてください。」、同日に計画（docs/plans/ai-chat-model.md）を了承。先読み（DEC-COM-110）に合わせた書き換えは 2026-11-13 の依頼（REQ-COM-033）
 - 関係する要件: REQ-COM-030, REQ-COM-025, REQ-MTG-048, REQ-MTG-049
 - 対象: Mac（Windows の `LocalLlmServer` にも違うモデルで止める同じ作りがあるが、Windows には AI チャットと会議への質問がなく、今のまま）
 - 実装の場所: `LocalLLMGate`、`LocalLLMServer.beginRequest`・`ensureRunning`・`wouldWait(for:)`・`observingWait`、`LocalLLMClient.waitsForOtherModel`、`TextAIClient.make`

@@ -1015,6 +1015,21 @@
 - 対象: Mac / Windows
 - 実装の場所: `HanasuShared.defaultAppStyles`、`AppStyleStore.defaultStyles`
 
+### DEC-DIC-220 録音中になったとき・HUD で翻訳を選んだときにローカルのモデルの先読みを頼み、止めた・取り消した・失敗したときに保持を外す
+- 決めたこと:
+  - Mac の音声入力: `DictationController.prewarmLocalModelIfNeeded()` を、`state = .recording` にした直後（権限の確認と `recognizer.start` が通ったあと）と、`selectOutputLanguage` で言語を選んだときに呼ぶ。判定は `self.mode`（アプリ別の既定の翻訳を反映した後のもの）で、整形がオンか翻訳する、音声入力の AI がローカル、そのモデルがダウンロード済み。満たせば `LocalLLMServer.shared.prewarm` を裏で呼び（結果は待たない）、返った保持を覚えておく。整形が終わったあと・取り消し・失敗で `releaseWarmHold` を呼ぶ。
+  - Mac の選択の編集: `EditModeController` で、録音中になった直後に、AI がローカル・モデルがダウンロード済みなら同じく先読みを頼む（選択の編集は必ず AI を使う）。AI の呼び出しのあと・取り消し・失敗で保持を外す。
+  - Windows: 判定は `Hanasu.Core` の `DictationPrewarm.ModelToPrewarm`（静的）。`DictationServices.PrewarmTextAi`・`ReleaseTextAiWarmHold`（既定は何もしない）を、`DictationController` が録音中にした直後と `SelectOutputLanguage` で呼び、止めた・取り消した・失敗したときに外す。`AppHost` は判定と `LocalLlmServer.Shared.Prewarm` をつなぐだけ。
+  - 録音中になった時点で、準備中からの秒数をログに出す（Mac は `dictation recording started: <秒>`・`edit recording started: <秒>`、Windows も同じ文面）。
+  - 履歴のやり直しは対象にしない（録音がないため）。
+- 理由: 依頼は「音声入力を行っている最中に読み込む」。準備中のうちに始めると、数 GB の読み込みと GPU への載せ替えが、音声認識の準備・マイクの開始・Whisper の先読みと重なり、録音の開始を遅らせうる。録音を始められなかったときに読み込まないためにも、録音中になってから始める。Whisper の先読み（`WhisperEngine.preload`）と同じ形。翻訳は整形がオフでも AI を使うので、HUD で選んだ時点でも始める。Windows の判定を Core に置くのは、テストのプロジェクトが `Hanasu.Windows` を参照しないため。録音の開始の秒数は、依頼の「押してから録音が始まるまで」が遅いかを測るため（今はログがない）。
+- 決めた場面: 2026-11-13 の依頼と、同日の答え「選択の編集も含める」、同日に計画（[plans/dictation-local-model-preload.md](../plans/dictation-local-model-preload.md)）を了承
+- 関係する要件: REQ-COM-033
+- 対象: Mac / Windows（選択の編集は Mac だけ）
+- 実装の場所: `DictationController.prewarmLocalModelIfNeeded`・`startDictation`・`selectOutputLanguage`・`finishDictation`、`EditModeController`
+- Windows の実装: `windows/Hanasu.Core/Dictation/DictationPrewarm.cs`、`windows/Hanasu.Core/Dictation/DictationController.cs`、`windows/Hanasu.Windows/AppHost.cs`
+- 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`DictationPrewarmTests`・`DictationControllerTests`）。Mac は実機
+
 ### DEC-DIC-070 履歴は 1 つの JSON ファイルに、本人だけが読める権限で保存する
 - 決めたこと: `~/Library/Application Support/Hanasu/History/history.json` に新しい順で保存する。フォルダは 0700、ファイルは 0600、書き込みは atomic。読めないファイルは上書きせず、ウインドウにエラーを出す。Mac 版は、変更のたびに書かず、1 秒まとめてから 1 回書く。エンコードとファイル書き込みはバックグラウンドの直列キューで行い（書く順番は予約した順）、アプリの終了時・読み直しの前には、まとまっていない変更を先に書き切る。追加は日時の合う位置に挿入し、全件の並べ替えはしない。Mac 版の起動時の読み込みは、アプリの起動時に裏で先に読み（読み込みとデコード）、終わったらメインで中身を当てる。先読みが終わる前にメニュー・再入力・音声入力が履歴を使ったら、そこで同期で読み、先読みの結果は捨てる。
 - 理由: 1000 件でも 1 MB 前後で、1 ファイルのままで足りる。ただし 1 件ごとに全件をメインスレッドでエンコードして書くと、音声入力のたびに止まりうるため、遅らせて裏で書く。強制終了などで失いうるのは直近 1 秒の変更だけで、通常の終了では失わない。話した内容が入るので本人だけが読めるようにする。起動時の読み込みも、件数が多いとメインを止めるので裏で行う。ただしメニューと再入力はすぐに履歴が要るので、間に合わなければ同期で読む。履歴のストアができるまではアプリの中で history.json に書くものがないので、先読みした中身が古くなることはなく、遅延保存（flush）とも競合しない。

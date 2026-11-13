@@ -4,7 +4,7 @@ import Foundation
 ///   Hanasu --test-ai-purposes
 ///       使い捨ての UserDefaults で、音声入力・会議・AI チャット・質問の AI とモデル（既定と、変えたとき）を確かめる
 ///   Hanasu --test-local-llm-wait
-///       llama-server を起こさずに、違うモデルの処理を待つ・同じモデルは通す・音声入力は待たない・期限・取り消しを確かめる
+///       llama-server を起こさずに、違うモデルの処理を待つ・同じモデルは通す・音声入力は待たない・期限・取り消し・録音中の先読みを確かめる
 @MainActor
 enum AIPurposeCLI {
     static func runIfRequested(_ args: [String] = CommandLine.arguments) {
@@ -266,7 +266,120 @@ enum AIPurposeCLI {
             await server.finishRequest()
         }
 
+        // 確かめ方: REQ-COM-033
+        // 6. 録音中の先読み（DEC-COM-110）
+        await testPrewarm(c, endpoint: endpoint)
+
         print(c.failures == 0 ? "すべて OK" : "\(c.failures) 件が NG")
         return c.failures == 0
+    }
+
+    // 確かめ方: REQ-COM-033
+    /// 音声入力の録音中の先読み（DEC-COM-110）。起動は偽で、起動にかかる時間と、1 回目だけ失敗させるかを選べる
+    private static func testPrewarm(_ c: Checker, endpoint: LocalLLMServer.Endpoint) async {
+        struct LaunchFailed: Error {}
+        final class Launches: @unchecked Sendable {
+            private let lock = NSLock()
+            private var count = 0
+            func next() -> Int { lock.withLock { count += 1; return count } }
+        }
+        func makeServer(delay: Duration, failFirst: Bool = false) -> LocalLLMServer {
+            let launches = Launches()
+            return LocalLLMServer(fakeLaunch: { _ in
+                let n = launches.next()
+                try await Task.sleep(for: delay)
+                if failFirst, n == 1 { throw LaunchFailed() }
+                return endpoint
+            }, pollInterval: .milliseconds(20))
+        }
+        func waitUntilServing(_ server: LocalLLMServer, _ model: LocalLLMModel) async {
+            for _ in 0..<200 where await server.servingModel != model {
+                try? await Task.sleep(for: .milliseconds(10))
+            }
+        }
+
+        // (a) 先読みが終わったあとの整形は、起動し直さない
+        do {
+            let server = makeServer(delay: .milliseconds(30))
+            let hold = await server.prewarm(.gemma4E4B)
+            await waitUntilServing(server, .gemma4E4B)
+            let ok = (try? await server.beginRequest(.gemma4E4B, waitsForOtherModel: false)) != nil
+            await server.finishRequest()
+            let launches = await server.launchCount
+            c.check("先読みのあとの整形は、起動し直さない（起動は 1 回）", hold != nil && ok && launches == 1)
+        }
+        // (b) 先読みの起動の途中に録音を止めても、同じ起動を待つ
+        do {
+            let server = makeServer(delay: .milliseconds(300))
+            _ = await server.prewarm(.gemma4E4B)
+            try? await Task.sleep(for: .milliseconds(50))
+            let started = Date()
+            let ok = (try? await server.beginRequest(.gemma4E4B, waitsForOtherModel: false)) != nil
+            let elapsed = Date().timeIntervalSince(started)
+            await server.finishRequest()
+            let launches = await server.launchCount
+            c.check("先読みの起動の途中に来た整形は、同じ起動を待つ（起動は 1 回）", ok && launches == 1 && elapsed < 0.5)
+        }
+        // (c) ほかの処理が違うモデルを使っている間は、先読みしない
+        do {
+            let server = makeServer(delay: .milliseconds(30))
+            _ = try? await server.beginRequest(.qwen35, waitsForOtherModel: true)
+            let hold = await server.prewarm(.gemma4E4B)
+            try? await Task.sleep(for: .milliseconds(100))
+            let launches = await server.launchCount
+            let serving = await server.servingModel
+            c.check("議事録などが違うモデルを使っている間は、先読みしない", hold == nil && launches == 1 && serving == .qwen35)
+            await server.finishRequest()
+        }
+        // (d) 先読みの起動の途中に違うモデルの議事録が来ても、議事録は失敗せず、起動が終わるのを待ってから切り替える
+        do {
+            let server = makeServer(delay: .milliseconds(300))
+            _ = await server.prewarm(.gemma4E4B)
+            try? await Task.sleep(for: .milliseconds(50))
+            let started = Date()
+            var minutesOK = false
+            do {
+                _ = try await server.beginRequest(.qwen35, waitsForOtherModel: true, deadline: Date().addingTimeInterval(5))
+                minutesOK = true
+            } catch {}
+            let elapsed = Date().timeIntervalSince(started)
+            let launches = await server.launchCount
+            let serving = await server.servingModel
+            c.check("先読みの起動の途中に来た違うモデルの議事録は、起動が終わるのを待ってから成功する",
+                    minutesOK && elapsed >= 0.15 && launches == 2 && serving == .qwen35)
+            await server.finishRequest()
+        }
+        // (e) 録音中（保持がある間）は、5 分たっても止めない。保持を外したら、そこから 5 分で止める
+        do {
+            let server = makeServer(delay: .milliseconds(10))
+            let hold = await server.prewarm(.gemma4E4B)
+            await waitUntilServing(server, .gemma4E4B)
+            let later = Date().addingTimeInterval(LocalLLMServer.idleSeconds + 60)
+            let keptWhileRecording = !(await server.shouldStopForIdle(now: later))
+            if let hold { await server.releaseWarmHold(hold) }
+            let justReleased = !(await server.shouldStopForIdle(now: Date()))
+            let stopsLater = await server.shouldStopForIdle(now: Date().addingTimeInterval(LocalLLMServer.idleSeconds + 1))
+            c.check("録音中は 5 分たっても止めず、保持を外してから 5 分で止める", hold != nil && keptWhileRecording && justReleased && stopsLater)
+        }
+        // (f) 先読みの起動が失敗したら、続きを待っていた整形は同じ失敗を受け取り、起動し直さない（REQ-DIC-007 の道に進む）
+        do {
+            let server = makeServer(delay: .milliseconds(200), failFirst: true)
+            _ = await server.prewarm(.gemma4E4B)
+            try? await Task.sleep(for: .milliseconds(50))
+            var sameFailure = false
+            do {
+                _ = try await server.beginRequest(.gemma4E4B, waitsForOtherModel: false)
+                await server.finishRequest()
+            } catch is LaunchFailed {
+                sameFailure = true
+            } catch {}
+            let launches = await server.launchCount
+            c.check("先読みの失敗を待っていた整形は、同じ失敗を受け取り、起動し直さない", sameFailure && launches == 1)
+            // 失敗が分かったあとの整形は、今どおり起動し直す
+            let retried = (try? await server.beginRequest(.gemma4E4B, waitsForOtherModel: false)) != nil
+            await server.finishRequest()
+            let relaunches = await server.launchCount
+            c.check("先読みの失敗のあとの整形は、起動し直す", retried && relaunches == 2)
+        }
     }
 }

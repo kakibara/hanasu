@@ -11,12 +11,13 @@ public sealed record LocalLlmEndpoint(Uri BaseUri, string ApiKey);
 /// <summary>
 /// 同梱した llama.cpp の llama-server を、ローカルの LLM を使うときだけ子プロセスで動かす（OS に依存しない。Mac でも動く）。
 /// - 127.0.0.1 の空いたポートで、起動のたびに作る API キー（環境変数 LLAMA_API_KEY）を付けて起動する
-/// - 最後の処理から 5 分たつと止める。モデルを変えたら起動し直す。Dispose で止める
+/// - 最後の処理から 5 分たつと止める（音声入力の録音中の先読みの保持があれば止めない）。モデルを変えたら起動し直す。Dispose で止める
+/// - 音声入力の録音が始まったら、裏で先に起動しておける（Prewarm）
 /// - Windows では、起動した直後に ProcessStarted（ジョブオブジェクトへの登録）を呼ぶ。Hanasu が落ちても一緒に終わるように
 /// Mac 版の LocalLLMServer.swift と同じ考え（両方を直す）
 /// </summary>
-// 要件: REQ-COM-030
-// 設計判断: DEC-COM-060, DEC-COM-063
+// 要件: REQ-COM-030, REQ-COM-033
+// 設計判断: DEC-COM-060, DEC-COM-063, DEC-COM-110
 public sealed class LocalLlmServer : IDisposable
 {
     /// <summary>アプリで 1 つだけ使う。Windows の部品は AppHost で ProcessStarted を設定する</summary>
@@ -36,6 +37,24 @@ public sealed class LocalLlmServer : IDisposable
     private DateTime lastUsed = DateTime.UtcNow;
     private Timer? idleTimer;
     private readonly Queue<string> stderrTail = new();
+    // 設計判断: DEC-COM-110
+    /// <summary>音声入力の録音中の先読みの保持。1 つでもあれば、5 分たっても止めない</summary>
+    private readonly HashSet<Guid> warmHolds = [];
+    private int launchCount;
+
+    /// <summary>確かめる用: サーバーを起動した回数</summary>
+    public int LaunchCount => Volatile.Read(ref launchCount);
+
+    /// <summary>確かめる用: llama-server を起こさずに、起動したことにする（Mac 版の fakeLaunch と同じ）</summary>
+    public Func<LocalLlmModel, CancellationToken, Task<LocalLlmEndpoint>>? LaunchOverride { get; set; }
+
+    /// <summary>使える状態で動いているモデル（起動中は null）</summary>
+    public LocalLlmModel? ServingModel
+    {
+        get { lock (stateLock) return IsServingLocked() ? model : null; }
+    }
+
+    private bool IsServingLocked() => endpoint is not null && model is not null && (LaunchOverride is not null || process is { HasExited: false });
 
     /// <summary>llama-server の場所を明示する（CLI の --server、テスト）。null なら ResolveExecutable で探す</summary>
     public string? ExecutablePath { get; set; }
@@ -105,11 +124,77 @@ public sealed class LocalLlmServer : IDisposable
     public void FinishRequest()
     {
         if (Interlocked.Decrement(ref activeRequests) < 0) Interlocked.Exchange(ref activeRequests, 0);
+        lock (stateLock) TouchLocked();
+    }
+
+    // 要件: REQ-COM-033
+    // 設計判断: DEC-COM-110
+    /// <summary>
+    /// 音声入力の録音が始まったときに、そのモデルを裏で起動しておく（結果は待たない）。
+    /// ほかの処理が違うモデルを使っている（起動中を含む）ときは何もしないで null を返す（その処理を止めない）。
+    /// そうでなければ録音中の保持を付けてその ID を返す。録音を止めた・取り消した・失敗したら ReleaseWarmHold で外す
+    /// </summary>
+    public Guid? Prewarm(LocalLlmModel m)
+    {
+        bool launch;
+        Guid hold;
         lock (stateLock)
         {
+            var current = model;
+            if (Volatile.Read(ref activeRequests) > 0 && current?.Id != m.Id)
+            {
+                Log?.Invoke($"local llm prewarm skipped: {m.Id} (other model in use)");
+                return null;
+            }
+            hold = Guid.NewGuid();
+            warmHolds.Add(hold);
             lastUsed = DateTime.UtcNow;
-            idleTimer?.Dispose();
-            idleTimer = new Timer(_ => StopIfIdle(), null, IdleTimeout, System.Threading.Timeout.InfiniteTimeSpan);
+            launch = current?.Id != m.Id;
+        }
+        if (launch)
+        {
+            // 処理と同じに数え、gate を取って起動する（その間に来た整形は gate で待ち、同じサーバーを使う）
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await BeginRequestAsync(m, CancellationToken.None).ConfigureAwait(false);
+                    FinishRequest();
+                }
+                catch (Exception e)
+                {
+                    Log?.Invoke($"local llm prewarm failed: {e.Message}");
+                }
+            });
+        }
+        return hold;
+    }
+
+    /// <summary>録音中の保持を外す。そこから 5 分使わなければ止める</summary>
+    public void ReleaseWarmHold(Guid hold)
+    {
+        lock (stateLock)
+        {
+            if (!warmHolds.Remove(hold)) return;
+            TouchLocked();
+        }
+    }
+
+    /// <summary>最後に使った時刻を新しくし、5 分の見張りを付け直す</summary>
+    private void TouchLocked()
+    {
+        lastUsed = DateTime.UtcNow;
+        idleTimer?.Dispose();
+        idleTimer = new Timer(_ => StopIfIdle(), null, IdleTimeout, System.Threading.Timeout.InfiniteTimeSpan);
+    }
+
+    // 設計判断: DEC-COM-063, DEC-COM-110
+    /// <summary>5 分使っていないとして止めてよいか（使っている処理も、録音中の保持もない）。確かめる用に時刻を渡せる</summary>
+    public bool ShouldStopForIdle(DateTime nowUtc)
+    {
+        lock (stateLock)
+        {
+            return Volatile.Read(ref activeRequests) == 0 && warmHolds.Count == 0 && nowUtc - lastUsed >= IdleTimeout - TimeSpan.FromSeconds(1);
         }
     }
 
@@ -133,7 +218,7 @@ public sealed class LocalLlmServer : IDisposable
     {
         lock (stateLock)
         {
-            if (Volatile.Read(ref activeRequests) == 0 && DateTime.UtcNow - lastUsed >= IdleTimeout - TimeSpan.FromSeconds(1) && process is not null)
+            if (process is not null && ShouldStopForIdle(DateTime.UtcNow))
             {
                 Log?.Invoke("local llm server stopped (idle)");
                 StopLocked();
@@ -171,8 +256,17 @@ public sealed class LocalLlmServer : IDisposable
     {
         lock (stateLock)
         {
-            if (process is { HasExited: false } && model?.Id == m.Id && endpoint is not null) return endpoint;
+            if (model?.Id == m.Id && IsServingLocked()) return endpoint!;
             StopLocked();
+        }
+        var startedAt = DateTime.UtcNow;
+        if (LaunchOverride is { } fake)
+        {
+            Interlocked.Increment(ref launchCount);
+            lock (stateLock) model = m;
+            var fakeEndpoint = await fake(m, ct).ConfigureAwait(false);
+            lock (stateLock) endpoint = fakeEndpoint;
+            return fakeEndpoint;
         }
         var executable = ExecutablePath ?? ResolveExecutable() ?? throw LocalLlmException.ServerNotFound();
         if (!IsDownloaded(m)) throw LocalLlmException.ModelNotDownloaded(m);
@@ -211,6 +305,7 @@ public sealed class LocalLlmServer : IDisposable
         };
         p.OutputDataReceived += (_, _) => { };
         p.Start();
+        Interlocked.Increment(ref launchCount);
         p.BeginErrorReadLine();
         p.BeginOutputReadLine();
         ProcessStarted?.Invoke(p);
@@ -244,6 +339,7 @@ public sealed class LocalLlmServer : IDisposable
             await Task.Delay(250, ct).ConfigureAwait(false);
         }
         lock (stateLock) endpoint = started;
+        Log?.Invoke($"local llm server ready: {m.Id} {(DateTime.UtcNow - startedAt).TotalSeconds.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}s");
         return started;
     }
 

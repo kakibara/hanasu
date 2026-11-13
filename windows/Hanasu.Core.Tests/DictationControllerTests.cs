@@ -112,6 +112,10 @@ internal sealed class Harness
     public List<bool> Escape { get; } = new();
     public List<SoundCue> Sounds { get; } = new();
     public List<string> OpenedHelp { get; } = new();
+    /// <summary>先読みを頼まれたモード（AI を使う録音のときだけ保持を返す）と、外された保持</summary>
+    public List<DictationMode> Prewarms { get; } = new();
+    public List<Guid> Holds { get; } = new();
+    public List<Guid> Released { get; } = new();
     public DictationController Controller { get; }
 
     public Harness()
@@ -128,6 +132,15 @@ internal sealed class Harness
             SetEscapeHotKeyEnabled = Escape.Add,
             PlaySound = Sounds.Add,
             OpenHelp = OpenedHelp.Add,
+            PrewarmTextAi = (s, mode) =>
+            {
+                Prewarms.Add(mode);
+                if (!DictationTextProcessor.UsesGemini(s, mode)) return null;
+                var hold = Guid.NewGuid();
+                Holds.Add(hold);
+                return hold;
+            },
+            ReleaseTextAiWarmHold = Released.Add,
         });
     }
 }
@@ -264,6 +277,49 @@ public class DictationControllerTests
         await WaitState(h, DictationState.Recording);
         Assert.Equal([TranslationLanguage.Japanese], h.Hud.Choices);
         Assert.Equal(TranslationLanguage.Japanese, h.Hud.Translation);
+    }
+
+    // 確かめ方: REQ-COM-033
+    [Fact]
+    public async Task PrewarmStartsWhenRecordingAndIsReleasedAfterRefining()
+    {
+        var h = new Harness();
+        await h.Controller.StartAsync();
+        Assert.Equal(DictationState.Recording, h.Controller.State);
+        Assert.Equal([DictationMode.Refine], h.Prewarms);
+        await h.Controller.FinishAsync();
+        Assert.Equal(h.Holds, h.Released);
+        Assert.Single(h.Released);
+    }
+
+    // 確かめ方: REQ-COM-033
+    [Fact]
+    public async Task PrewarmIsNotRequestedWhenRecordingCannotStart()
+    {
+        var h = new Harness { Transcriber = { StartError = new InvalidOperationException("マイクがありません") } };
+        await h.Controller.StartAsync();
+        Assert.Equal(DictationState.Idle, h.Controller.State);
+        Assert.Empty(h.Prewarms);
+        Assert.Empty(h.Released);
+    }
+
+    // 確かめ方: REQ-COM-033
+    [Fact]
+    public async Task ChoosingTranslationOnTheHudPrewarmsEvenWhenRefiningIsOff()
+    {
+        var h = new Harness();
+        h.Settings.RefineWithGemini = false;
+        await h.Controller.StartAsync();
+        Assert.Empty(h.Holds);
+        h.Hud.Click(TranslationLanguage.English);
+        Assert.Single(h.Holds);
+        // 2 回目は、もう頼んであるので頼まない
+        h.Hud.Click(TranslationLanguage.Japanese);
+        Assert.Single(h.Holds);
+        Assert.Equal(2, h.Prewarms.Count);
+        h.Controller.Cancel();
+        await WaitIdle(h);
+        Assert.Equal(h.Holds, h.Released);
     }
 
     [Fact]

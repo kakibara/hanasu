@@ -10,6 +10,9 @@ import SwiftUI
 ///   Hanasu --local-llm-delete <id>
 ///   Hanasu --local-llm-test-fit
 ///       長い入力の縮め方（LongInputFitter）を、文字数で数える偽のトークン数で確かめる。失敗があれば終了コード 1
+///   Hanasu --local-llm-prewarm-check [--model <id>] [--other-model <id>]
+///       本物の llama-server で、録音中の先読み（REQ-COM-033）を確かめる。先読みの起動の途中に来た整形が同じ起動を待つこと（起動は 1 回）と、
+///       先読みの起動の途中に違うモデルの議事録が来ても失敗せず、そのサーバーが止められないこと。llama-server は HANASU_LLAMA_SERVER でも指定できる
 ///   Hanasu --render-local-model-download <出力.png> [--model <id>] [--fraction 0.42 | --verifying]
 ///       整形の前にモデルがないとき出す、ダウンロードの進み具合のウインドウの見た目（ダウンロードはしない）
 ///   Hanasu --test-ai-defaults
@@ -72,6 +75,20 @@ enum LocalLLMCLI {
             }
             print("文脈 \(AppleFMClient.contextLength) トークン（未確認の値）。例の見積もり: 「明日の会議の資料です。」= \(AppleFMClient.estimateTokens("明日の会議の資料です。")) トークン、\"Hello, world\" = \(AppleFMClient.estimateTokens("Hello, world")) トークン")
             exit(availability.executableURL == nil ? 1 : 0)
+        }
+        // 確かめ方: REQ-COM-033
+        if args.contains("--local-llm-prewarm-check") {
+            Task { @MainActor in
+                do {
+                    let main = try model(value(after: "--model", in: args) ?? LocalLLMModel.lfm25JP.rawValue)
+                    let other = try model(value(after: "--other-model", in: args) ?? LocalLLMModel.qwen35.rawValue)
+                    exit(await prewarmCheck(main, other: other) ? 0 : 1)
+                } catch {
+                    FileHandle.standardError.write(Data("error: \(error.localizedDescription)\n".utf8))
+                    exit(1)
+                }
+            }
+            RunLoop.main.run()
         }
         if args.contains("--local-llm-test-fit") {
             // 確かめる文面は日本語のプロンプトのもの
@@ -201,6 +218,58 @@ enum LocalLLMCLI {
             AppSettings.preserveAIProviderForExistingUsers(defaults, domainName: name)
             check("システムのキーだけなら AI は保存しない", defaults.string(forKey: "dictationTextAIProvider") == nil)
         }
+        print(failures == 0 ? "すべて OK" : "\(failures) 件が NG")
+        return failures == 0
+    }
+
+    // 確かめ方: REQ-COM-033
+    private static func prewarmCheck(_ main: LocalLLMModel, other: LocalLLMModel) async -> Bool {
+        var failures = 0
+        func check(_ name: String, _ ok: Bool) {
+            print("\(ok ? "OK  " : "FAIL") \(name)")
+            if !ok { failures += 1 }
+        }
+        guard LocalLLMServer.executableURL != nil else {
+            print("llama-server が見つかりません（HANASU_LLAMA_SERVER で指定してください）")
+            return false
+        }
+        for m in [main, other] where !LocalLLMStore.isDownloaded(m) {
+            print("モデル \(m.rawValue) がありません（--local-llm-download \(m.rawValue)）")
+            return false
+        }
+        defer { LocalLLMServer.terminateRunningServer() }
+
+        // 1. 先読みの起動の途中に録音を止めた整形は、同じ起動を待つ
+        let server = LocalLLMServer()
+        let started = Date()
+        let hold = await server.prewarm(main)
+        try? await Task.sleep(for: .milliseconds(300))
+        do {
+            _ = try await server.beginRequest(main, waitsForOtherModel: false)
+            let elapsed = Date().timeIntervalSince(started)
+            let launches = await server.launchCount
+            print("  \(main.rawValue): 先読みから使えるまで \(String(format: "%.1f", elapsed)) 秒")
+            check("先読みの起動の途中に来た整形は、同じ起動を待つ（起動は 1 回）", hold != nil && launches == 1)
+            await server.finishRequest()
+        } catch {
+            check("先読みの起動を待った整形が成功する（\(error.localizedDescription)）", false)
+        }
+        if let hold { await server.releaseWarmHold(hold) }
+        await server.stop()
+
+        // 2. 先読みの起動の途中に違うモデルの議事録が来ても、議事録は失敗せず、そのサーバーは止められない
+        _ = await server.prewarm(main)
+        try? await Task.sleep(for: .milliseconds(300))
+        do {
+            _ = try await server.beginRequest(other, waitsForOtherModel: true, deadline: Date().addingTimeInterval(300))
+            try? await Task.sleep(for: .seconds(1))
+            let serving = await server.servingModel
+            check("先読みの起動の途中に来た違うモデルの議事録は成功し、そのサーバーが動き続ける", serving == other)
+            await server.finishRequest()
+        } catch {
+            check("先読みの起動の途中に来た違うモデルの議事録が成功する（\(error.localizedDescription)）", false)
+        }
+        await server.stop()
         print(failures == 0 ? "すべて OK" : "\(failures) 件が NG")
         return failures == 0
     }

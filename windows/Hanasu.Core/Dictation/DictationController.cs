@@ -48,6 +48,12 @@ public sealed class DictationServices
     /// <summary>直し方のページ（ms-settings: など）を開く</summary>
     public Action<string> OpenHelp { get; init; } = _ => { };
     public Action<string> Log { get; init; } = _ => { };
+    // 要件: REQ-COM-033
+    // 設計判断: DEC-DIC-220
+    /// <summary>録音中に、ローカルのモデルを裏で読み込み始める（設定とモード。読み込まないときは null を返す）。戻り値は録音中の保持</summary>
+    public Func<AppSettings, DictationMode, Guid?> PrewarmTextAi { get; init; } = (_, _) => null;
+    /// <summary>録音中の保持を外す（止めた・取り消した・失敗したとき）</summary>
+    public Action<Guid> ReleaseTextAiWarmHold { get; init; } = _ => { };
 }
 
 /// <summary>
@@ -70,6 +76,10 @@ public sealed class DictationController
     private bool stopRequested;
     private bool cancelRequested;
     private string? targetAppName;
+    /// <summary>この録音のローカルのモデルの先読みの保持（DEC-DIC-220）</summary>
+    private Guid? warmHold;
+    /// <summary>「準備中」を出した時刻（録音中になるまでの秒をログに出す）</summary>
+    private DateTime preparingStartedAt = DateTime.UtcNow;
 
     public DictationController(DictationServices services)
     {
@@ -145,6 +155,24 @@ public sealed class DictationController
         if (State is not (DictationState.Preparing or DictationState.Recording)) return;
         Mode = translation?.ToMode() ?? DictationMode.Refine;
         services.Hud.SetLanguages(translation, languageChoices);
+        // 翻訳に切り替えると、整形がオフでも AI を使うので、ローカルのモデルを読み込み始める（DEC-DIC-220）
+        if (State == DictationState.Recording) PrewarmTextAiIfNeeded();
+    }
+
+    // 要件: REQ-COM-033
+    // 設計判断: DEC-DIC-220
+    /// <summary>この録音で AI を使うなら、音声入力の AI がローカルのとき裏でモデルを読み込み始める（録音は待たない。もう頼んでいれば何もしない）</summary>
+    private void PrewarmTextAiIfNeeded()
+    {
+        if (warmHold is not null) return;
+        warmHold = services.PrewarmTextAi(services.Settings(), Mode);
+    }
+
+    private void ReleaseTextAiWarmHold()
+    {
+        if (warmHold is not { } hold) return;
+        warmHold = null;
+        services.ReleaseTextAiWarmHold(hold);
     }
 
     // 設計判断: DEC-DIC-027
@@ -167,6 +195,7 @@ public sealed class DictationController
         services.Hud.SetLanguages(mode.Translation, languageChoices);
         services.Hud.UpdateTranscript("");
         services.Hud.Show(HudState.Preparing(Strings.Hud_Preparing));
+        preparingStartedAt = DateTime.UtcNow;
         services.SetEscapeHotKeyEnabled(true);
 
         var settings = services.Settings();
@@ -193,6 +222,10 @@ public sealed class DictationController
         State = DictationState.Recording;
         services.PlaySound(SoundCue.Start);
         services.Hud.Show(HudState.Recording);
+        // 要件: REQ-COM-033
+        // 設計判断: DEC-DIC-220
+        services.Log($"dictation recording started: {(DateTime.UtcNow - preparingStartedAt).TotalSeconds.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}s");
+        PrewarmTextAiIfNeeded();
         if (stopRequested) await FinishAsync();
     }
 
@@ -251,6 +284,8 @@ public sealed class DictationController
         if (usesGemini) services.Hud.Show(HudState.Processing(HudText.ProcessingTitle(Mode.Translation, Ai.TextAiFactory.NameOf(settings.DictationAi))));
         var outcome = await services.Processor.ProcessAsync(raw, Mode, targetAppName, settings);
         services.Log($"process: {outcome.Status}, {outcome.Output.Length} chars");
+        // ローカルのモデルの先読みの保持を外す（ここから 5 分使わなければ止まる。DEC-DIC-220）
+        ReleaseTextAiWarmHold();
         // 入力先がずれても取り戻せるよう、貼り付けの前に残す
         // 要件: REQ-DIC-060
         // 設計判断: DEC-DIC-072
@@ -312,6 +347,7 @@ public sealed class DictationController
     private void FinishCancelled()
     {
         State = DictationState.Idle;
+        ReleaseTextAiWarmHold();
         services.SetEscapeHotKeyEnabled(false);
         services.Hud.Show(HudState.Done(Strings.Hud_Canceled));
     }
@@ -326,6 +362,7 @@ public sealed class DictationController
     private void Fail(string message)
     {
         State = DictationState.Idle;
+        ReleaseTextAiWarmHold();
         services.SetEscapeHotKeyEnabled(false);
         services.PlaySound(SoundCue.Error);
         services.Hud.Show(HudState.Error(message));

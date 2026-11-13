@@ -49,6 +49,12 @@ struct LocalLLMGate {
         active += 1
     }
 
+    // 設計判断: DEC-COM-110
+    /// 音声入力の録音中の先読みが、サーバーを起動し始めた。起動の間だけ使っている処理に数え、終わったら finish
+    mutating func beginPrewarm() {
+        active += 1
+    }
+
     /// 使い終わった（または起動に失敗した）
     mutating func finish() {
         active = max(0, active - 1)
