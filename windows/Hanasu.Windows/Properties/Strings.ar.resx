@@ -630,8 +630,8 @@
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>كما نُطق</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>اليابانية دائمًا</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>توحيد إلى {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>إخبار AI باسم التطبيق الذي تكتب فيه (لمطابقة أسلوبه)</value>

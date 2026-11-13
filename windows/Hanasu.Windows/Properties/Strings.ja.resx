@@ -634,8 +634,8 @@
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>話した言語</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>日本語に統一</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>{0}に統一</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>入力先のアプリ名を AI に伝える（体裁の参考にする）</value>

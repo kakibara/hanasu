@@ -834,9 +834,9 @@ The minutes, transcript, notes, and audio will all be moved to the Recycle Bin. 
     <value>As spoken</value>
     <comment>Settings: list item: keep the spoken language</comment>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Always Japanese</value>
-    <comment>Settings: list item: unify the output into Japanese</comment>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Always {0}</value>
+    <comment>Settings: list item: unify the output into the user's language. {0} is the name of the transcription language (e.g. Japanese)</comment>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Tell the AI the name of the app you're typing into (to match its style)</value>

@@ -630,8 +630,8 @@ Notulen, transkrip, catatan, dan audio akan dipindahkan ke Keranjang Sampah. And
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Sesuai ucapan</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Selalu bahasa Jepang</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Seragamkan ke {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Beri tahu AI nama aplikasi tempat Anda mengetik (untuk menyesuaikan gayanya)</value>

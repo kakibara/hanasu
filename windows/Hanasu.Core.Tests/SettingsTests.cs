@@ -30,9 +30,22 @@ public class SettingsTests
     {
         var path = Path.Combine(TestKeys.TempDirectory(), "settings.json");
         var store = new SettingsStore(path);
-        store.Save(new AppSettings { RefineOutputLanguage = RefineOutputLanguage.Japanese });
+        // 「統一する」は、日本語に固定していた版の値 Japanese のまま書く（前の版に戻しても読める。DEC-DIC-201）
+        store.Save(new AppSettings { RefineOutputLanguage = RefineOutputLanguage.Unified, PlaySounds = false });
         Assert.Contains("\"refineOutputLanguage\": \"Japanese\"", File.ReadAllText(path));
-        Assert.Equal(RefineOutputLanguage.Japanese, store.Load().RefineOutputLanguage);
+        Assert.Equal(RefineOutputLanguage.Unified, store.Load().RefineOutputLanguage);
+        store.Save(new AppSettings { RefineOutputLanguage = RefineOutputLanguage.AsSpoken });
+        Assert.Contains("\"refineOutputLanguage\": \"AsSpoken\"", File.ReadAllText(path));
+        // 前の版の「日本語に統一」（Japanese）は「統一する」として読む
+        File.WriteAllText(path, "{ \"refineOutputLanguage\": \"Japanese\", \"playSounds\": false }");
+        var loaded = store.Load();
+        Assert.Equal(RefineOutputLanguage.Unified, loaded.RefineOutputLanguage);
+        Assert.False(loaded.PlaySounds);
+        // 知らない値は「話した言語」にし、ほかの設定は初期値に戻さない
+        File.WriteAllText(path, "{ \"refineOutputLanguage\": \"Unified\", \"playSounds\": false }");
+        loaded = store.Load();
+        Assert.Equal(RefineOutputLanguage.AsSpoken, loaded.RefineOutputLanguage);
+        Assert.False(loaded.PlaySounds);
         // 前の版の settings.json（項目がない）は既定値になる
         File.WriteAllText(path, "{ \"playSounds\": true }");
         Assert.Equal(RefineOutputLanguage.AsSpoken, store.Load().RefineOutputLanguage);

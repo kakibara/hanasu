@@ -47,7 +47,7 @@ README と同じ 17 言語。並びも同じにする（`scripts/check-i18n.py` 
   - 「やること・やらないこと」の項目は減らさず、足さない。
 - **変えないもの**: `${…}`、タグ（`<transcript>`・`<action_items>`・`<selection_…>` など）、例の JSON のキー（`"owner":` など）、`null`・`{}`・`[]`、`MM:SS.s`、`[--:--]`、`★`、`→`、`## `、`M2:`（会議への質問の引用。アプリが `M<番号>:` を読む）。
 - **同じ言語の中でそろえるもの**: 話者のラベル（`speaker.me`・`speaker.remote`・`speaker.room`・`speaker.others`）は、`minutes.intro`・`minutes.speakerNames`・`minutes.actionItems`・`minutes.common`・`minutes.notes`・`ask.system` に同じ文字列で出す。「なし」（`minutes.result.none`）は `minutes.format` と `minutes.sections.sales` に同じ語で出す。「ここ重要」（`minutes.notes.highlight`）は `minutes.notes` の印の名前と同じにする。
-- `refine.outputLanguage.japanese` は、どの言語でも「日本語に統一する」の意味のまま（設定の名前が「日本語に統一」のため）。`translate.english.system` はその言語→英語、`translate.japanese.system` はその言語→日本語の指示にする。
+- `refine.outputLanguage.unified` は、その言語自身にそろえる指示（ko.json なら「韓国語に統一する」。設定の名前が「〈プロンプトの言語〉に統一」のため。REQ-DIC-082・DEC-DIC-200）。言語名を `${…}` で埋めず、その言語の名前をそのまま書く。zh-CN は簡体字の中国語、zh-TW は繁体字の中国語、pt-BR はブラジルのポルトガル語と書く。`translate.english.system` はその言語→英語、`translate.japanese.system` はその言語→日本語の指示にする。
 - 議事録・要点・会議への答えを「どの言語で書くか」は、その言語にする（`minutes.intro`・`longInput.part`・`ask.system`）。
 
 ### 訳を任せる
@@ -67,7 +67,7 @@ README と同じ 17 言語。並びも同じにする（`scripts/check-i18n.py` 
 1. コードに `tr("日本語の原文")` と書く（文の一部をつなぎ合わせず、文ごとに 1 つのキーにする。数や名前は `%@` で入れる）。
 2. `python3 scripts/i18n-strings.py sync`（カタログのキーをコードにそろえる。原文を変えたら、古いキーは消え、新しいキーが足される）。
 3. 訳を入れる: `python3 scripts/i18n-strings.py export <言語> > <作業用>/<言語>.json`（訳のないキーが値 "" で出る）→ 値を訳す → `python3 scripts/i18n-strings.py import <言語> <作業用>/<言語>.json`。16 言語（ja 以外）すべてに入れる。量が多ければ i18n エージェントに、言語を分けて並べて任せる（作業用のファイルだけを書かせ、import は親がまとめてする。カタログは 1 つのファイルなので、並べて import すると取り合う）。
-4. 訳の決まり: Apple のその言語の用語（設定・アクセシビリティ・メニューバーなど）に合わせる。`%@` などの数は原文と同じ（順番を変えるなら全部 `%1$@` の形）。製品名・キーの記号（⌥ ⌘）・ファイル名は変えない。「日本語」「和訳」「日本語に統一」はどの言語でも日本語の意味のまま。見本のデータ（署名・住所）はその言語の架空のものにする。
+4. 訳の決まり: Apple のその言語の用語（設定・アクセシビリティ・メニューバーなど）に合わせる。`%@` などの数は原文と同じ（順番を変えるなら全部 `%1$@` の形）。製品名・キーの記号（⌥ ⌘）・ファイル名は変えない。「日本語」「和訳」はどの言語でも日本語の意味のまま。「%@に統一」（整形の言語）の `%@` は言語名で、格や助詞で形が変わらない言い方にする。見本のデータ（署名・住所）はその言語の架空のものにする。
 5. 確かめる（下の「確かめる」）。画面は `.build/debug/Hanasu --render-… <出力> --ui-language <言語>` で PNG にして見る。
 
 ## UI の文字列（Windows）
