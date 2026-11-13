@@ -149,25 +149,49 @@ public sealed class LocalLlmServer : IDisposable
             hold = Guid.NewGuid();
             warmHolds.Add(hold);
             lastUsed = DateTime.UtcNow;
-            launch = current?.Id != m.Id;
+            // 同じモデルが使える状態で動いていなければ起動する（落ちていた・起動を取り消されたときも）
+            launch = !(current?.Id == m.Id && IsServingLocked());
+            // 処理と同じにここで数える（Mac の beginPrewarm と同じ。起動の途中で 5 分の見張りに止められないように）
+            if (launch) Interlocked.Increment(ref activeRequests);
         }
-        if (launch)
-        {
-            // 処理と同じに数え、gate を取って起動する（その間に来た整形は gate で待ち、同じサーバーを使う）
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await BeginRequestAsync(m, CancellationToken.None).ConfigureAwait(false);
-                    FinishRequest();
-                }
-                catch (Exception e)
-                {
-                    Log?.Invoke($"local llm prewarm failed: {e.Message}");
-                }
-            });
-        }
+        if (launch) _ = Task.Run(() => PrewarmLaunchAsync(m));
         return hold;
+    }
+
+    /// <summary>
+    /// 先読みの起動。gate を取って起動する（その間に来た整形は gate で待ち、同じサーバーを使う）。
+    /// gate を待つ間に、ほかの処理が違うモデルで動き出していたら、その処理を止めないよう起動しない
+    /// </summary>
+    private async Task PrewarmLaunchAsync(LocalLlmModel m)
+    {
+        try
+        {
+            await gate.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                lock (stateLock)
+                {
+                    if (Volatile.Read(ref activeRequests) > 1 && model is { } other && other.Id != m.Id)
+                    {
+                        Log?.Invoke($"local llm prewarm skipped: {m.Id} (other model in use)");
+                        return;
+                    }
+                }
+                await EnsureRunningAsync(m, CancellationToken.None).ConfigureAwait(false);
+            }
+            finally
+            {
+                gate.Release();
+            }
+        }
+        catch (Exception e)
+        {
+            Log?.Invoke($"local llm prewarm failed: {e.Message}");
+        }
+        finally
+        {
+            FinishRequest();
+        }
     }
 
     /// <summary>録音中の保持を外す。そこから 5 分使わなければ止める</summary>

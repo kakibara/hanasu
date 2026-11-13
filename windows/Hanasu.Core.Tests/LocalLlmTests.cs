@@ -262,6 +262,20 @@ public class LocalLlmTests
     }
 
     [Fact]
+    public async Task PrewarmLaunchesAgainWhenTheSameModelIsNotServing()
+    {
+        using var server = FakeServer(300);
+        // 同じモデルの起動を途中で取り消す（モデルは覚えているが、使える状態ではない）
+        using var cts = new CancellationTokenSource(50);
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => server.BeginRequestAsync(LocalLlmModel.Gemma4E4B, cts.Token));
+        Assert.Null(server.ServingModel);
+        Assert.NotNull(server.Prewarm(LocalLlmModel.Gemma4E4B));
+        for (var i = 0; i < 200 && server.ServingModel != LocalLlmModel.Gemma4E4B; i++) await Task.Delay(10);
+        Assert.Equal(LocalLlmModel.Gemma4E4B, server.ServingModel);
+        Assert.Equal(2, server.LaunchCount);
+    }
+
+    [Fact]
     public async Task ServerIsKeptWhileRecordingAndStopsFiveMinutesAfterRelease()
     {
         using var server = FakeServer(10);

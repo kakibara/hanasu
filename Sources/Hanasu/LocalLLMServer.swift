@@ -241,14 +241,15 @@ actor LocalLLMServer {
             return endpoint
         }
         // 同じモデルを起動している途中なら、起動し直さずにその起動を待つ（先読みの途中に録音を止めたときなど）
-        if launchingModel == model {
+        // 待つ間に同じモデルの別の起動に代わったら、その起動を待ち直す（止めて起動し直すと、その起動を壊す）
+        while launchingModel == model {
             let generation = launchGeneration
             while launchingModel == model, launchGeneration == generation {
                 try await Task.sleep(for: .milliseconds(100))
             }
             if let endpoint, servingModel == model { return endpoint }
             if let failure = lastLaunchFailure, failure.generation == generation { throw failure.error }
-            // 起動した処理が取り消されたなどで、終わりが分からない。起動し直す
+            // 起動した処理が取り消されたなどで、終わりが分からない。ほかの起動がなければ、起動し直す
         }
         stop()
         launchGeneration += 1

@@ -372,6 +372,8 @@ final class DictationController {
         case .preparing:
             cancelRequested = true
         case .recording:
+            // 取り消しの間に止める操作が来ても、入力に進まないように（進むと、次の録音の先読みの保持まで外してしまう）
+            state = .processing
             Task {
                 await recognizer.cancel()
                 finishCancelled()

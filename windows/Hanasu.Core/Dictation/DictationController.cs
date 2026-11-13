@@ -288,10 +288,17 @@ public sealed class DictationController
         }
 
         if (usesGemini) services.Hud.Show(HudState.Processing(HudText.ProcessingTitle(Mode.Translation, Ai.TextAiFactory.NameOf(settings.DictationAi))));
-        var outcome = await services.Processor.ProcessAsync(raw, Mode, targetAppName, settings, targetAppExe);
+        ProcessOutcome outcome;
+        try
+        {
+            outcome = await services.Processor.ProcessAsync(raw, Mode, targetAppName, settings, targetAppExe);
+        }
+        finally
+        {
+            // ローカルのモデルの先読みの保持を外す（ここから 5 分使わなければ止まる。思わぬ例外でも外す。DEC-DIC-220）
+            ReleaseTextAiWarmHold();
+        }
         services.Log($"process: {outcome.Status}, {outcome.Output.Length} chars");
-        // ローカルのモデルの先読みの保持を外す（ここから 5 分使わなければ止まる。DEC-DIC-220）
-        ReleaseTextAiWarmHold();
         // 入力先がずれても取り戻せるよう、貼り付けの前に残す
         // 要件: REQ-DIC-060
         // 設計判断: DEC-DIC-072
