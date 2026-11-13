@@ -13976,7 +13976,7 @@
       }
     },
     "AI の答えから文体のルールを読み取れませんでした。もう一度試してください。" : {
-      "comment" : "StyleLearning.swift:209",
+      "comment" : "StyleLearning.swift:220",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -22952,7 +22952,7 @@
       }
     },
     "Hanasu について" : {
-      "comment" : "AppDelegate.swift:325",
+      "comment" : "AppDelegate.swift:327",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23462,7 +23462,7 @@
       }
     },
     "Hanasu の使い方…" : {
-      "comment" : "AppDelegate.swift:238, AppDelegate.swift:330",
+      "comment" : "AppDelegate.swift:238, AppDelegate.swift:332",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23768,7 +23768,7 @@
       }
     },
     "Hanasu を終了" : {
-      "comment" : "AppDelegate.swift:243, AppDelegate.swift:338",
+      "comment" : "AppDelegate.swift:243, AppDelegate.swift:340",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23870,7 +23870,7 @@
       }
     },
     "Hanasu を隠す" : {
-      "comment" : "AppDelegate.swift:333",
+      "comment" : "AppDelegate.swift:335",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23972,7 +23972,7 @@
       }
     },
     "Hanasu 会議ノート" : {
-      "comment" : "AppDelegate.swift:391",
+      "comment" : "AppDelegate.swift:393",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24176,7 +24176,7 @@
       }
     },
     "Hanasu 設定" : {
-      "comment" : "AppDelegate.swift:468",
+      "comment" : "AppDelegate.swift:470",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -39374,7 +39374,7 @@
       }
     },
     "しまう" : {
-      "comment" : "AppDelegate.swift:359",
+      "comment" : "AppDelegate.swift:361",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40190,7 +40190,7 @@
       }
     },
     "すべてを表示" : {
-      "comment" : "AppDelegate.swift:336",
+      "comment" : "AppDelegate.swift:338",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40292,7 +40292,7 @@
       }
     },
     "すべてを選択" : {
-      "comment" : "AppDelegate.swift:355",
+      "comment" : "AppDelegate.swift:357",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42638,7 +42638,7 @@
       }
     },
     "ほかを隠す" : {
-      "comment" : "AppDelegate.swift:334",
+      "comment" : "AppDelegate.swift:336",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -44372,7 +44372,7 @@
       }
     },
     "やり直す" : {
-      "comment" : "AppDelegate.swift:349",
+      "comment" : "AppDelegate.swift:351",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46514,7 +46514,7 @@
       }
     },
     "アップデートを確認…" : {
-      "comment" : "AppDelegate.swift:240, AppDelegate.swift:327",
+      "comment" : "AppDelegate.swift:240, AppDelegate.swift:329",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47840,7 +47840,7 @@
       }
     },
     "ウインドウ" : {
-      "comment" : "AppDelegate.swift:358, AppDelegate.swift:361",
+      "comment" : "AppDelegate.swift:360, AppDelegate.swift:363",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49676,7 +49676,7 @@
       }
     },
     "カット" : {
-      "comment" : "AppDelegate.swift:352",
+      "comment" : "AppDelegate.swift:354",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49778,7 +49778,7 @@
       }
     },
     "キャンセル" : {
-      "comment" : "AISettingsView.swift:221, AISettingsView.swift:317, AppDelegate.swift:268",
+      "comment" : "AISettingsView.swift:221, AISettingsView.swift:317, AppDelegate.swift:263",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51002,7 +51002,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:353, CommandLineSettingsView.swift:537, DictationHistoryWindow.swift:540",
+      "comment" : "AppDelegate.swift:355, CommandLineSettingsView.swift:537, DictationHistoryWindow.swift:540",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59060,7 +59060,7 @@
       }
     },
     "ペースト" : {
-      "comment" : "AppDelegate.swift:354",
+      "comment" : "AppDelegate.swift:356",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69872,7 +69872,7 @@
       }
     },
     "会議" : {
-      "comment" : "AppDelegate.swift:341, AppDelegate.swift:344, SettingsView.swift:18",
+      "comment" : "AppDelegate.swift:343, AppDelegate.swift:346, SettingsView.swift:18",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72422,7 +72422,7 @@
       }
     },
     "会議の記録を停止" : {
-      "comment" : "AppDelegate.swift:311",
+      "comment" : "AppDelegate.swift:313",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72728,7 +72728,7 @@
       }
     },
     "会議の記録を開始" : {
-      "comment" : "AppDelegate.swift:210, AppDelegate.swift:311, MeetingWindow.swift:385",
+      "comment" : "AppDelegate.swift:210, AppDelegate.swift:313, MeetingWindow.swift:385",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74156,7 +74156,7 @@
       }
     },
     "会議を記録中です。終了しますか？" : {
-      "comment" : "AppDelegate.swift:265",
+      "comment" : "AppDelegate.swift:260",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75176,7 +75176,7 @@
       }
     },
     "会議ノートを開く" : {
-      "comment" : "AppDelegate.swift:315, AppDelegate.swift:343, SettingsView.swift:258",
+      "comment" : "AppDelegate.swift:317, AppDelegate.swift:345, SettingsView.swift:258",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84866,7 +84866,7 @@
       }
     },
     "取り消す" : {
-      "comment" : "AppDelegate.swift:348, MeetingNotesViews.swift:65, MeetingNotesViews.swift:183",
+      "comment" : "AppDelegate.swift:350, MeetingNotesViews.swift:65, MeetingNotesViews.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96290,7 +96290,7 @@
       }
     },
     "文章が短すぎます。%@ 字以上入れてください。" : {
-      "comment" : "StyleLearning.swift:208",
+      "comment" : "StyleLearning.swift:219",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96800,7 +96800,7 @@
       }
     },
     "文章の言語（%@）は対応していません。" : {
-      "comment" : "StyleLearning.swift:210",
+      "comment" : "StyleLearning.swift:221",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -111488,7 +111488,7 @@
       }
     },
     "終了" : {
-      "comment" : "AppDelegate.swift:267",
+      "comment" : "AppDelegate.swift:262",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -112610,7 +112610,7 @@
       }
     },
     "編集" : {
-      "comment" : "AppDelegate.swift:347, AppDelegate.swift:356",
+      "comment" : "AppDelegate.swift:349, AppDelegate.swift:358",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -117812,7 +117812,7 @@
       }
     },
     "記録の開始／停止" : {
-      "comment" : "AppDelegate.swift:342, Onboarding.swift:580, SettingsView.swift:270",
+      "comment" : "AppDelegate.swift:344, Onboarding.swift:580, SettingsView.swift:270",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -117914,7 +117914,7 @@
       }
     },
     "記録は止まり、次に起動したときに録音から文字起こしと議事録を作れます。" : {
-      "comment" : "AppDelegate.swift:266",
+      "comment" : "AppDelegate.swift:261",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -120158,7 +120158,7 @@
       }
     },
     "設定…" : {
-      "comment" : "AppDelegate.swift:241, AppDelegate.swift:316, AppDelegate.swift:331",
+      "comment" : "AppDelegate.swift:241, AppDelegate.swift:318, AppDelegate.swift:333",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -120362,7 +120362,7 @@
       }
     },
     "設定の「会議」で別のキーを選んでください。" : {
-      "comment" : "AppDelegate.swift:426",
+      "comment" : "AppDelegate.swift:428",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -138008,7 +138008,7 @@
       }
     },
     "閉じる" : {
-      "comment" : "AppDelegate.swift:360, AppUpdate.swift:797, AppUpdate.swift:1026",
+      "comment" : "AppDelegate.swift:362, AppUpdate.swift:797, AppUpdate.swift:1026",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
