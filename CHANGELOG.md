@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.6.3](https://github.com/kakibara/hanasu/compare/v2.6.2...v2.6.3) - 2026-11-13
+
+- 会議の記録中に落ちるのを直し、落ちた会議を録音から作り直せるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/113
+- REQ-REL-004 の受け入れ条件から、取り下げた v1.3.0〜v2.6.1 の Windows の zip を除く by @kakibara in https://github.com/kakibara/hanasu/pull/116
+- 整形の言語の「日本語に統一」を、文字起こしの言語に統一するようにする by @kakibara in https://github.com/kakibara/hanasu/pull/110
+- 文章から文体を学び、カスタム文体としてアプリ別の文体に使えるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/112
+- 音声入力の録音中に、ローカルのモデルを裏で読み込んでおく by @kakibara in https://github.com/kakibara/hanasu/pull/117
+
 ## [v2.6.2](https://github.com/kakibara/hanasu/compare/v2.6.1...v2.6.2) - 2026-11-13
 
 - Windows 版の sherpa-onnx を 2.0.1 に上げ、GPL-3.0 の espeak-ng を配布物から外す by @kakibara in https://github.com/kakibara/hanasu/pull/111
