@@ -11,12 +11,17 @@ enum RefineLanguageCLI {
         exit(test() ? 0 : 1)
     }
 
-    private static func test() -> Bool {
+    private final class Checker {
         var failures = 0
         func check(_ name: String, _ condition: Bool) {
             print("\(condition ? "OK  " : "FAIL") \(name)")
             if !condition { failures += 1 }
         }
+    }
+
+    private static func test() -> Bool {
+        let checker = Checker()
+        let check = checker.check
         typealias Language = GeminiClient.RefineOutputLanguage
         let savedUI = UILanguage.override
         let savedPrompt = PromptLanguage.override
@@ -62,7 +67,7 @@ enum RefineLanguageCLI {
         // 対応言語にない文字起こしの言語は、英語に統一する（REQ-COM-061）
         check("対応言語にない文字起こしの言語（sv-SE）のプロンプトの言語は英語", PromptLanguage.from(localeIdentifier: "sv-SE") == .en)
 
-        print(failures == 0 ? "すべて OK" : "\(failures) 件の失敗")
-        return failures == 0
+        print(checker.failures == 0 ? "すべて OK" : "\(checker.failures) 件の失敗")
+        return checker.failures == 0
     }
 }
