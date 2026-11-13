@@ -35,10 +35,16 @@ final class MeetingAudioWriter: @unchecked Sendable {
     private let lock = NSLock()
     private var _failure: String?
     private var _backlogFrames: Int64 = 0
+    /// 実時間の音（記録中）か。false（ファイルから流すとき）なら、溜まった音が上限を超えても捨てず、書き出しが追いつくまで append で待つ
+    private let realtime: Bool
 
-    /// - Parameter format: 書く音の標本化周波数とチャンネル数（ChannelTranscriber が書き出しに使う形式）
-    init(url: URL, format: AVAudioFormat, fragmentSeconds: Double = MeetingAudioWriter.fragmentSeconds) throws {
+    /// - Parameters:
+    ///   - format: 書く音の標本化周波数とチャンネル数（ChannelTranscriber が書き出しに使う形式）
+    ///   - realtime: 実時間の音か。ファイルを実時間より速く流すとき（--meeting-files など）は false にする
+    init(url: URL, format: AVAudioFormat, fragmentSeconds: Double = MeetingAudioWriter.fragmentSeconds,
+         realtime: Bool = true) throws {
         self.url = url
+        self.realtime = realtime
         try? FileManager.default.removeItem(at: url)
         guard let pcmFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: format.sampleRate,
                                             channels: format.channelCount, interleaved: true)
@@ -74,11 +80,18 @@ final class MeetingAudioWriter: @unchecked Sendable {
     /// 書けなくなった理由。書けていれば nil
     var failure: String? { lock.withLock { _failure } }
 
-    /// 音を写して、書き出しのキューに渡す（待たない）。書けなくなったあとは何もしない
+    /// 音を写して、書き出しのキューに渡す（実時間の音なら待たない）。書けなくなったあとは何もしない
     func append(_ buffer: AVAudioPCMBuffer) {
         guard buffer.frameLength > 0, failure == nil, let copy = convert(buffer) else { return }
         let frames = Int64(copy.frameLength)
         let backlogLimit = Int64(Self.maxBacklogSeconds * pcmFormat.sampleRate)
+        if !realtime {
+            // ファイルから流すとき: 書き出しは読むより遅いので、上限で捨てずに追いつくのを待つ
+            // （書き出しのキューは 1 回あたり最大 readyWaitSeconds 秒で進むので、いつかは減る）
+            while failure == nil, lock.withLock({ _backlogFrames > 0 && _backlogFrames + frames > backlogLimit }) {
+                Thread.sleep(forTimeInterval: 0.002)
+            }
+        }
         let overflow: Bool = lock.withLock {
             guard _failure == nil else { return false }
             if _backlogFrames + frames > backlogLimit {

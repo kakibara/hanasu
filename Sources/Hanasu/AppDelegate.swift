@@ -247,13 +247,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
     }
 
-    // MARK: - Dock
+    // MARK: - 終了
 
-    // 要件: REQ-COM-040
-    // 設計判断: DEC-COM-009
-    /// Dock のアイコンを押したときや、Finder・Launchpad・Spotlight で開き直したとき。
-    /// 設定画面は出さず、AppKit の既定の動き（アプリを前に出す）に任せる。
-    /// 設定画面へは、メニューバーのメニュー・Dock の右クリックのメニュー・アプリのメニューから行く
     // 要件: REQ-MTG-128
     // 設計判断: DEC-MTG-160
     /// 会議の記録中に終了するときは、⌘Q・メニューなら確かめ、録音を閉じてから終わる（ログアウト・再起動・システム終了では確かめない）。
@@ -288,6 +283,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         return systemReasons.contains(reason)
     }
 
+    // MARK: - Dock
+
+    // 要件: REQ-COM-040
+    // 設計判断: DEC-COM-009
+    /// Dock のアイコンを押したときや、Finder・Launchpad・Spotlight で開き直したとき。
+    /// 設定画面は出さず、AppKit の既定の動き（アプリを前に出す）に任せる。
+    /// 設定画面へは、メニューバーのメニュー・Dock の右クリックのメニュー・アプリのメニューから行く
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         // 設計判断: DEC-COM-093
         // オンボーディングの途中なら、オンボーディングを前に出す

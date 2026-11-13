@@ -414,7 +414,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 
 ### 4.18 記録中に落ちた会議を、録音から戻す
 
-- **録音の書き方**: `ChannelTranscriber` は録音を `MeetingAudioWriter` で書く。`AVAssetWriter` の m4a（AAC 32 kbps）で、`movieFragmentInterval` を 2 秒にして断片を閉じながら書くので、落ちても最後に閉じた断片まで開ける（`AVAudioFile` で書いた m4a は、閉じないと開けなかった）。正常に閉じたファイルは今までの m4a と同じに読める。`ChannelTranscriber` のキューではバッファを写して渡すだけにし、書き出しは専用のキューで、書き手の準備を 1 回 1 秒まで待つ。書き手が止まった・書いていない音が 30 秒ぶんを超えたら書くのをやめ、記録を止めたときにエラーの文に出す（DEC-MTG-156）。
+- **録音の書き方**: `ChannelTranscriber` は録音を `MeetingAudioWriter` で書く。`AVAssetWriter` の m4a（AAC 32 kbps）で、`movieFragmentInterval` を 2 秒にして断片を閉じながら書くので、落ちても最後に閉じた断片まで開ける（`AVAudioFile` で書いた m4a は、閉じないと開けなかった）。正常に閉じたファイルは今までの m4a と同じに読める。`ChannelTranscriber` のキューではバッファを写して渡すだけにし、書き出しは専用のキューで、書き手の準備を 1 回 1 秒まで待つ。書き手が止まった・書いていない音が 30 秒ぶんを超えたら書くのをやめ、記録を止めたときにエラーの文に出す（DEC-MTG-156）。ファイルから実時間より速く流すとき（`ChannelTranscriber.transcribe(file:…)`）は `realtime: false` で、上限で捨てずに追いつくのを待つ。
 - **先頭のずれ**: `ChannelTranscriber.knownStartOffset`（`levelLock` で読む）を、`MeetingRecorder.updateLevels` がチャンネルごとに 1 回、`meeting.json` の `audioStartOffsets` に保存する（DEC-MTG-157）。Windows は `MeetingController.PersistStartOffsetsIfKnown` を 1 秒ごとに UI のスレッドで呼ぶ。
 - **終了するとき**: `AppDelegate.applicationShouldTerminate` が、記録中なら確かめて（ログアウト・再起動では確かめない）、`MeetingRecorder.closeForTermination` で録音を閉じてから終える。会議は「記録中」のまま残り、次の起動で `markInterruptedMeetings` が「失敗」にする（DEC-MTG-160）。
 - **作り直すボタン**: `MeetingRecorder.canRecover` → `MeetingRecovery.canRecover`（発言 0 件・開ける m4a・処理中でない）。開ける録音の長さは `MeetingRecovery.readableAudioSeconds` がファイルの更新日時と大きさごとに覚えておく。ボタンは `MeetingStatusBanners` のエラーの帯と `MeetingMoreMenuItems` に出し、押すと `MeetingRecoveryPrompt` がエンジン名（Gemini なら Google に送ること）を書いた `NSAlert` で確かめ、`prepareRecovery`（`checkReady` と音声認識の許可）を通してから `recoverFromAudio` を呼ぶ。

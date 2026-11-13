@@ -346,6 +346,18 @@ enum MeetingRecoveryCLI {
         } catch {
             c.check(false, "書き手を作れる（\(error)）")
         }
+        // ファイルから実時間より速く流すとき（--meeting-files・--meeting-recover-files）は、捨てずに全部書く
+        do {
+            let url = root.appendingPathComponent("fast.m4a")
+            let writer = try MeetingAudioWriter(url: url, format: format, realtime: false)
+            for i in 0..<120 { writer.append(tone(format: format, index: i, seconds: 1)) }
+            await writer.finish()
+            let read = await readableSeconds(url)
+            c.check(writer.failure == nil && abs((read.file ?? 0) - 120) < 0.5,
+                    "ファイルから速く流しても、120 秒ぶん全部書ける（\(read.file.map { String(format: "%.1f", $0) } ?? "読めない") 秒）")
+        } catch {
+            c.check(false, "書き手を作れる（\(error)）")
+        }
         // 書き出しのキューが詰まったまま、30 秒ぶんを超えて渡したとき
         do {
             let writer = try MeetingAudioWriter(url: root.appendingPathComponent("stalled.m4a"), format: format)

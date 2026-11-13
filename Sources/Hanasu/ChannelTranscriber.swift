@@ -21,6 +21,7 @@ final class ChannelTranscriber: @unchecked Sendable {
     private let meetingStart: Date
     /// false なら文字起こしはせず、音声ファイルに書き出すだけ（Whisper / Gemini では記録のあとにまとめて文字起こしする）
     let live: Bool
+    private let realtimeAudio: Bool
 
     private var analyzer: SpeechAnalyzer?
     private var analyzerFormat: AVAudioFormat?
@@ -51,10 +52,12 @@ final class ChannelTranscriber: @unchecked Sendable {
     static let analyzerChunkSeconds = 0.2
 
     /// - Parameter fixedTimeOffset: 録音開始からのずれが分かっている場合（ファイル入力など）に指定する
+    /// - Parameter realtimeAudio: 実時間の音か（記録中）。ファイルから流すときは false（録音の書き出しが追いつくのを待つ。DEC-MTG-156）
     init(channel: MeetingChannel, inputFormat: AVAudioFormat, fileURL: URL?, meetingStart: Date, fixedTimeOffset: Double? = nil,
-         live: Bool = true) {
+         live: Bool = true, realtimeAudio: Bool = true) {
         self.channel = channel
         self.live = live
+        self.realtimeAudio = realtimeAudio
         self.inputFormat = inputFormat
         self.fileURL = fileURL
         self.meetingStart = meetingStart
@@ -68,7 +71,7 @@ final class ChannelTranscriber: @unchecked Sendable {
         guard live else {
             // 書き出すだけ。あとで読み直す Whisper / Gemini に合わせて 16 kHz モノラルにする
             let format = TranscriptionAudio.format
-            let writer = try fileURL.map { try MeetingAudioWriter(url: $0, format: format) }
+            let writer = try fileURL.map { try MeetingAudioWriter(url: $0, format: format, realtime: realtimeAudio) }
             levelLock.withLock { _writer = writer }
             queue.sync {
                 self.file = writer
@@ -123,7 +126,7 @@ final class ChannelTranscriber: @unchecked Sendable {
         }
         try await analyzer.start(inputSequence: stream)
 
-        let writer = try fileURL.map { try MeetingAudioWriter(url: $0, format: format) }
+        let writer = try fileURL.map { try MeetingAudioWriter(url: $0, format: format, realtime: realtimeAudio) }
         levelLock.withLock { _writer = writer }
 
         queue.sync {
@@ -299,7 +302,7 @@ final class ChannelTranscriber: @unchecked Sendable {
         let file = try AVAudioFile(forReading: url)
         let transcriber = ChannelTranscriber(
             channel: channel, inputFormat: file.processingFormat, fileURL: writingTo,
-            meetingStart: Date(), fixedTimeOffset: offset, live: live)
+            meetingStart: Date(), fixedTimeOffset: offset, live: live, realtimeAudio: false)
         try await transcriber.prepare(localeIdentifier: localeIdentifier, contextualStrings: contextualStrings)
         var fed = 0.0
         var lastWait = 0.0

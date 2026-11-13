@@ -171,7 +171,12 @@ public partial class MeetingWindow : Window
         BuildSpeakerEditors(m);
 
         var live = IsLive(m);
-        var busy = live || m.Status is MeetingStatus.Recording or MeetingStatus.Processing;
+        // 要件: REQ-MTG-128
+        // 設計判断: DEC-MTG-158（録音から作り直している会議は、後処理が同じ会議を保存するので、題名・メモ・話者名も直させない）
+        var recoveringThis = meetings.IsRecovering(m.Id);
+        var busy = live || recoveringThis || m.Status is MeetingStatus.Recording or MeetingStatus.Processing;
+        TitleBox.IsReadOnly = NotesBox.IsReadOnly = recoveringThis;
+        SpeakersPanel.IsEnabled = !recoveringThis;
         RecordingPanel.Visibility = live && meetings.State == MeetingState.Recording ? Visibility.Visible : Visibility.Collapsed;
         RegenerateButton.IsEnabled = TemplateCombo.IsEnabled = SaveNotesAndRegenerateButton.IsEnabled = !busy && m.UsedUtterances.Count > 0;
         // 設計判断: DEC-MTG-092
