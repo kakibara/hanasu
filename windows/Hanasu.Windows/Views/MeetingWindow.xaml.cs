@@ -177,6 +177,9 @@ public partial class MeetingWindow : Window
         // 設計判断: DEC-MTG-092
         MinutesOutdatedPanel.Visibility = m.MinutesOutdated == true ? Visibility.Visible : Visibility.Collapsed;
         MinutesOutdatedRegenerateButton.IsEnabled = TranscriptOutdatedRegenerateButton.IsEnabled = RegenerateButton.IsEnabled;
+        // 要件: REQ-MTG-128
+        // 設計判断: DEC-MTG-158（発言が 0 件で読める録音がある会議。作り直し中・記録中・処理中は出さない）
+        RecoverButton.Visibility = !live && meetings.CanRecoverFromAudio(m) ? Visibility.Visible : Visibility.Collapsed;
         DeleteButton.IsEnabled = !busy && meetings.CanDelete(m);
         // 要件: REQ-MTG-055（議事録の作り直し中も押せる。押せないときは理由をヒントに出す）
         var audioProblem = DeleteAudioProblem(m, hasAudio);
@@ -646,6 +649,56 @@ public partial class MeetingWindow : Window
         finally
         {
             Show(m);
+        }
+    }
+
+    // MARK: - 録音から作り直す
+
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-158
+    /// <summary>
+    /// 「録音から文字起こしと議事録を作る」: 今の設定のエンジン（Gemini なら音声を Google に送ること）を書いた確かめを出し、OK なら作り直す。
+    /// 進み具合は操作の欄（ActionStatus）に出す。エンジンの準備が通らなければ、会議は変えずに理由を出す
+    /// </summary>
+    private async void OnRecoverClick(object sender, RoutedEventArgs e)
+    {
+        if (selected is not { } m || !meetings.CanRecoverFromAudio(m)) return;
+        var gemini = host.Settings.Current.MeetingEngine == TranscriptionEngine.Gemini;
+        var message = string.Format(Strings.Meeting_RecoverFromAudio_Confirm, gemini ? "Gemini" : "Whisper");
+        if (gemini) message += "\n\n" + Strings.Meeting_RecoverFromAudio_GeminiNote;
+        if (MessageBox.Show(this, message, Strings.Meeting_RecoverFromAudio_ConfirmTitle,
+                MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel) != MessageBoxResult.OK)
+        {
+            return;
+        }
+        RecoverButton.Visibility = Visibility.Collapsed;
+        ActionStatus.Text = Strings.Meeting_Recovering;
+        var finished = false;
+        // Progress は UI のスレッドで知らせる。終わったあとに届いた段階の文では上書きしない
+        var progress = new Progress<string>(stage =>
+        {
+            if (!finished && selected?.Id == m.Id) ActionStatus.Text = $"{Strings.Meeting_Recovering}\n{stage}";
+        });
+        try
+        {
+            // 作り直しの印は呼んだときに付くので、そのあとで出し直すとほかの操作が押せなくなる
+            var recovering = meetings.RecoverFromAudioAsync(m, progress);
+            if (selected?.Id == m.Id) Show(m);
+            await recovering;
+            finished = true;
+            // 結果（エラーの文）は帯に出る
+            if (selected?.Id == m.Id) ActionStatus.Text = "";
+            Tabs.SelectedIndex = 0;
+        }
+        catch (Exception ex) when (ex is Core.Transcription.TranscriptionException or IOException or UnauthorizedAccessException)
+        {
+            // 記録を始めるときと同じ理由（モデルがない・認証情報がないなど）。会議は変わっていない
+            finished = true;
+            ActionStatus.Text = ex.Message;
+        }
+        finally
+        {
+            if (selected?.Id == m.Id) Show(m);
         }
     }
 

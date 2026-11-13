@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>يتعذر بدء تسجيل الاجتماع</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>لا يمكن بدء التسجيل أثناء إعادة إنشاء اجتماع من تسجيله.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>الإملاء قيد التسجيل. حاول مرة أخرى عند انتهائه.</value>
   </data>

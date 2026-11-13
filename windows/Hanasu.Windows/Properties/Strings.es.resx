@@ -287,6 +287,24 @@ Original: {2}</value>
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>Regenerar el acta</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Transcribir y crear el acta desde la grabación</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Transcribe la grabación guardada, distingue a los hablantes y crea el acta.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>¿Rehacer la reunión desde la grabación?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>Se transcribirá con la configuración actual ({0}), se distinguirá a los hablantes y se creará el acta.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>El audio de la reunión se enviará a Google.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Rehaciendo desde la grabación</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Plantilla:</value>
   </data>

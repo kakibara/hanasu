@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>No se puede empezar a grabar la reunión</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>No puedes empezar a grabar mientras se rehace una reunión desde su grabación.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>El dictado está grabando. Vuelve a intentarlo cuando termine.</value>
   </data>

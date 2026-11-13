@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Impossibile avviare la registrazione della riunione</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>Non puoi avviare una registrazione mentre una riunione viene ricreata dalla sua registrazione.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>La dettatura sta registrando. Riprova quando ha finito.</value>
   </data>

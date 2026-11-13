@@ -75,6 +75,31 @@ public sealed class WavStreamWriter : IDisposable
         stream.Write(Header(keep, sampleRate));
     }
 
+    // 要件: REQ-MTG-128
+    // 設計判断: DEC-MTG-159
+    /// <summary>
+    /// このクラスで書いた WAV のヘッダーの長さ（RIFF と data）を、ファイルの長さから計算し直して書く（2 バイト単位に切り下げ。<see cref="Truncate"/> と同じ計算）。
+    /// アプリが落ちて最大約 5 秒古いまま（最初の 5 秒なら 0 のまま）残ったヘッダーを直し、後ろに書かれた音も読めるようにする。
+    /// ヘッダーが正しいファイルは書き換えない。直したら true
+    /// </summary>
+    public static bool RepairHeader(string path, int sampleRate = AudioFormat.SampleRate)
+    {
+        if (!File.Exists(path)) return false;
+        using var stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+        if (stream.Length < HeaderLength) return false;
+        var dataLength = (stream.Length - HeaderLength) & ~1L;
+        var expected = Header(dataLength, sampleRate);
+        var current = new byte[HeaderLength];
+        stream.ReadExactly(current);
+        // RIFF の長さ（4〜7 バイト目）と data の長さ（40〜43 バイト目）だけを見る（ほかの欄は書いたときのまま）
+        if (current.AsSpan(4, 4).SequenceEqual(expected.AsSpan(4, 4)) && current.AsSpan(40, 4).SequenceEqual(expected.AsSpan(40, 4))) return false;
+        stream.Position = 4;
+        stream.Write(expected.AsSpan(4, 4));
+        stream.Position = 40;
+        stream.Write(expected.AsSpan(40, 4));
+        return true;
+    }
+
     private void UpdateHeader()
     {
         var position = stream.Position;

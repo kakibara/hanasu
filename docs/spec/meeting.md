@@ -713,6 +713,29 @@
 - Windows の実装: `McpTools`（`windows/Hanasu.Core/Command/McpServer.cs`）
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
+### REQ-MTG-128 記録中にアプリが落ちても、録音が残り、そこから文字起こしと議事録を作れる
+- 内容: 記録の途中でアプリが落ちたり強制終了されたりしても、その直前までの録音を残す。Mac で記録中に終了しようとしたときは確かめ、終了するなら録音を閉じてから終わる。次に起動したあと、その会議の会議ノートから、残った録音を使って文字起こし・話者分離・議事録を作れる。
+- 受け入れ条件:
+  - Mac: 記録を始めて 5 秒より後に、アプリのプロセスを強制終了（`kill -9`）しても、`me.m4a`・`others.m4a` は開ける形で残り、終了した時刻の 3 秒前までの音が入っている。普通の終了（SIGTERM）でも同じ。
+  - Windows: 同じく `me.wav`・`others.wav` は開ける形で残る（DEC-MTG-102 のまま）。作り直すときは、ヘッダーより後ろに書かれた音も使い、終了した時刻の 6 秒前までの音が入る。
+  - Mac: 記録中に ⌘Q（メニューの「終了」も）で終了しようとすると、「会議を記録中です。終了しますか？」と確かめる。「終了」を選ぶと、録音を閉じてから終わる。「キャンセル」なら記録を続ける。ログアウト・再起動・システム終了のときは確かめずに、録音を閉じてから終わる。こうして終わった会議も、次に起動すると落ちた会議と同じく「失敗」になる。
+  - 次に起動すると、その会議は今までどおり「失敗」（「記録の途中でアプリが終了しました。」）。会議ノートで選ぶと、作り直すボタン「録音から文字起こしと議事録を作る」が出る。Mac はエラーの帯と「…」のメニュー、Windows は会議の操作のボタンの並び（`ActionsPanel`）。
+  - ボタンを出す条件は、Mac と Windows で同じ: 発言が 0 件、その OS の後処理が読める録音（Mac は `me.m4a`・`others.m4a`、Windows は `me.wav`・`others.wav`）のうち 1 つ以上が開けて長さが 0 より大きい、状態が「記録中」「処理中」ではない、その会議を作り直していない・議事録を作り直していない、そのアプリで記録・後処理をしていない。状態（失敗・完了）では決めない。
+  - 押すと、使うエンジンを書いた確かめを出す（「今の設定（エンジン名）で文字起こしし、話者を分け、議事録を作ります。」。Gemini なら「会議の音声を Google に送ります。」を足す）。OK を押したときだけ始める。
+  - 始める前に、記録を始めるときと同じ準備の確かめ（Whisper のモデル・Gemini の認証・Mac 標準なら音声認識の許可）をする。通らなければ、会議を変えずに、記録を始めるときと同じ文で理由を出す。
+  - 作り直している間は、その会議の帯（Mac）・操作の欄（Windows）に進み具合（文字起こし → 話者分離 → 議事録）を出す。その会議は一覧の「記録中」には移らない。その間は新しい記録を始められない（Mac はメニューを押せなくし、Windows は始めようとすると理由を出す）。作り直しは途中でやめられない（FUT-210）。
+  - 終わると、発言・話者・議事録が入り、エラーの文は「記録の途中で…」から作り直しの結果に置き換わる（問題がなければ消える）。両方のチャンネルとも文字起こしできず発言が 0 件なら、状態は「失敗」のままで、エラーの文に理由を書き、ボタンはまた出る（もう一度押せる）。片方だけ文字起こしできなければ、状態は「完了」、エラーの文にそのチャンネルを書く（記録を止めたあとと同じ。FUT-211）。
+  - 2 つの録音の時刻はそろう（記録中に保存した先頭のずれを使う。DEC-MTG-157）。メモ・「ここ重要」の印・オフレコは残る。終わっていないオフレコの区間は、録音の終わりで閉じる。会議の長さは、残った録音の終わり（先頭のずれ＋長さの大きいほう）にする。
+  - 作り直した会議の録音は、「文字起こしのあとに録音を削除」がオンの会議でも消さない（REQ-MTG-010 の「記録中・処理中にアプリが終わった会議は録音を残し」のとおり）。不要なら「録音を削除…」で消す。
+  - 開ける録音が 1 つもない会議（この機能より前に落ちた会議、記録を始める途中で失敗した会議、ほかの OS で記録した会議など）には、ボタンを出さない。
+  - 記録中に録音の書き出しが失敗しても（ディスクがいっぱいなど）、記録・文字起こし・停止は固まらない。書けなかったことは、止めたあとのエラーの文に出す。
+- 出典: 2026-11-13 の依頼「録音していたら以下のエラーが出たので確認調査して修正して」の調査で分かった録音の消失と、同日の「このタスクをここで実行してください：「Make meeting audio survive an app crash (Mac)」」。同日に範囲（作り直すボタン。記録中の文字起こしの都度保存はしない）・対象（Windows にも）・終了のときの振る舞い（確かめてから録音を閉じる）・エンジンの見せ方（押したら確かめる）を選んでもらい、計画 [plans/meeting-crash-recovery.md](../plans/meeting-crash-recovery.md) を了承
+- 関係する要件: REQ-MTG-010, REQ-MTG-023, REQ-MTG-054
+- 対象: Mac / Windows
+- 実装の場所: `MeetingAudioWriter`、`ChannelTranscriber`、`MeetingRecovery`、`MeetingRecorder.recoverFromAudio`・`closeForTermination`、`AppDelegate.applicationShouldTerminate`、`MeetingStatusBanners`、`MeetingMoreMenuItems`
+- Windows の実装: `windows/Hanasu.Core/Audio/WavStreamWriter.cs`（`RepairHeader`）、`windows/Hanasu.Core/Meetings/MeetingRecovery.cs`、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`RecoverFromAudioAsync`・`PersistStartOffsetsIfKnown`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+- 確かめ方: `.build/debug/Hanasu --test-meeting-audio-crash`・`--test-meeting-recovery`・`--meeting-recover-files <自分の音声> <相手の音声>`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`MeetingRecoveryTests`）。実機で記録中に `kill -9`・⌘Q して作り直す
+
 ---
 
 ## 設計判断
@@ -848,7 +871,7 @@
 - Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`
 
 ### DEC-MTG-017 会議ごとのフォルダの中身
-- 決めたこと: `~/Documents/Hanasu/Meetings/<日付 時刻 タイトル>/` に `meeting.json`（メタデータ・話者名の対応表・発言・議事録の型・アクションアイテム・メモ・録音を消すか `deleteAudioAfterTranscription`・文字起こしに失敗したチャンネル `transcriptionFailedChannels`）、`transcript.md`、`minutes.md`、`notes.md`（メモがあるときだけ）、`me.m4a`・`others.m4a`（AAC 16kHz モノラル）を置く。
+- 決めたこと: `~/Documents/Hanasu/Meetings/<日付 時刻 タイトル>/` に `meeting.json`（メタデータ・話者名の対応表・発言・議事録の型・アクションアイテム・メモ・録音を消すか `deleteAudioAfterTranscription`・文字起こしに失敗したチャンネル `transcriptionFailedChannels`）、`transcript.md`、`minutes.md`、`notes.md`（メモがあるときだけ）、`me.m4a`・`others.m4a`（AAC 16kHz モノラル。2 秒ごとに断片を閉じる m4a で、落ちても直前まで読める。DEC-MTG-156）を置く。
 - 理由: Markdown なので他のツールでも読める（REQ-MTG-025）。
 - 決めた場面: 初版（a787da8）。項目は PR #10、#13 で足した
 - 関係する要件: REQ-MTG-005, REQ-MTG-025
@@ -856,10 +879,10 @@
 - 実装の場所: `MeetingStore.save`、`Meeting`
 
 ### DEC-MTG-018 途中で落ちた会議は、起動時に「失敗」にする
-- 決めたこと: 起動時に、アプリの終了などで「記録中」「処理中」のまま残った会議を「失敗」にする。エラーのときも、それまでの録音・文字起こしは保存する。録音を消す会議でも録音は残し、「音声ファイルは残しています」は録音があれば表示のときに出す（エラーの文には入れない。DEC-MTG-140）。
+- 決めたこと: 起動時に、アプリの終了などで「記録中」「処理中」のまま残った会議を「失敗」にする。録音は残り（Mac は DEC-MTG-156、Windows は DEC-MTG-102）、発言が 0 件の会議は録音から文字起こしと議事録を作り直せる（REQ-MTG-128）。Mac は記録中の文字起こしを止めたあとに保存するので、落ちた会議には発言が残らない。録音を消す会議でも録音は残し、「音声ファイルは残しています」は録音があれば表示のときに出す（エラーの文には入れない。DEC-MTG-140）。
 - 理由: 一覧に「記録中」のまま残り続けないようにする。
 - 決めた場面: 実機で録音されなかった問題の修正（2026-11-02）
-- 関係する要件: REQ-MTG-007
+- 関係する要件: REQ-MTG-007, REQ-MTG-128
 - 対象: Mac / Windows
 - 実装の場所: `MeetingStore.markInterruptedMeetings`
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingStore.cs`（`MarkInterruptedMeetings`）
@@ -1437,6 +1460,53 @@
 - 対象: Mac
 - 実装の場所: `MeetingWindowView.splitView`
 
+### DEC-MTG-156 Mac の会議の録音は、2 秒ごとに断片を閉じる m4a で、専用のキューで書く
+- 決めたこと: `ChannelTranscriber` の音声ファイルの書き出しを、`AVAudioFile` から `MeetingAudioWriter` に替える。`MeetingAudioWriter` は `AVAssetWriter`（`fileType: .m4a`、`movieFragmentInterval` 2 秒、AAC 32 kbps、標本化周波数・チャンネル数は今と同じ）で書き、時刻は 0 から始める（先頭に空きを入れない。ずれは今までどおり `audioStartOffsets` に持つ）。`ChannelTranscriber` のキューでは PCM のバッファを写して `MeetingAudioWriter` の専用のキューに渡すだけにし、文字起こしへの受け渡しと音量の測定を待たせない。専用のキューでは、`expectsMediaDataInRealTime` を false にして、書き手の準備ができるまで（`status == .writing` の間だけ、1 回あたり最大 1 秒）待ってから書く。書き手が失敗した（`.failed`・待ちの上限・まだ書いていない音が 30 秒ぶんを超えた）ら、そこで書くのをやめ（溜めた音は捨てる）、ログに書き、「録音の一部を書けなかった」印を立てる。記録を止めたとき（`MeetingRecorder.stop`）にその印があれば、エラーの文に「録音の一部を書けませんでした（チャンネル）。」を足す。`finish`・`cancel` は `finishWriting` を待ってから返す（待つのは最大 5 秒）。ファイルの名前と拡張子は変えない。
+- 理由: 断片化した m4a は、落ちても最後に閉じた断片まで読める。今のファイルを読むところ（再生・話者分離・Whisper / Gemini・スリープの切り詰め・書き出し）はそのまま読める（2026-11-13 の手元の実験。[plans/meeting-crash-recovery.md](../plans/meeting-crash-recovery.md)）。非圧縮（CAF）なら全部残るが、2 時間で 1 チャンネル約 230 MB になり、止めたとき・落ちたあとの変換も要る。断片の間隔は、失う長さ（最大約 2 秒）と大きさ（1 秒で約 5%、5 秒で約 3% 増える）の間を取った。準備が間に合わないときに捨てると音が欠けるので待つが、書き手が失敗したまま待ち続けると、文字起こしと停止まで固まる（`ChannelTranscriber` のキューは `queue.sync` で読まれる）ので、書き出しのキューを分け、待ちに上限を付ける。
+- 決めた場面: REQ-MTG-128 の計画（2026-11-13）
+- 関係する要件: REQ-MTG-128, REQ-MTG-002, REQ-MTG-010
+- 対象: Mac
+- 実装の場所: `MeetingAudioWriter`、`ChannelTranscriber`、`MeetingRecorder.stop`
+
+### DEC-MTG-157 2 つの録音の先頭のずれは、分かった時点で保存する
+- 決めたこと: Mac: `ChannelTranscriber` の先頭のずれを、音量と同じく `levelLock` で読める口（`knownStartOffset`）にする（メインスレッドから `queue.sync` しない）。`MeetingRecorder.updateLevels`（0.25 秒ごと、メインスレッド）で、まだ保存していないチャンネルのずれが分かったら `current.audioStartOffsets` に入れて `meeting.json` に保存する（1 回の記録で多くて 2 回）。Windows: `MeetingController.StartAsync` で UI のスレッドの `SynchronizationContext` を取っておき、記録中だけ 1 秒ごとのタイマーで `PersistStartOffsetsIfKnown()` をその文脈に送って呼ぶ。メモ・オフレコの保存と同じ UI のスレッドで `Current` を書き換えて保存するので、同時に書かない。止めたときの保存は、両方とも今までどおり。
+- 理由: 落ちた会議を録音から作り直すとき、2 つの録音の時刻をそろえるのに要る（DEC-MTG-135 と同じ値）。相手側の音は会議の音が鳴り始めてから届くので、ずれは 0 でないことが多い。
+- 決めた場面: REQ-MTG-128 の計画（2026-11-13）
+- 関係する要件: REQ-MTG-128
+- 対象: Mac / Windows
+- 実装の場所: `ChannelTranscriber.knownStartOffset`、`MeetingRecorder.updateLevels`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingController.cs`（`PersistStartOffsetsIfKnown`）
+
+### DEC-MTG-158 録音から作り直すのは、ボタンを押して確かめたときだけ。今の設定のエンジンで、記録を止めたあとと同じ処理をする
+- 決めたこと:
+  - ボタンを出す条件・会議の長さ・終わっていないオフレコの閉じ方は、純粋な関数 `MeetingRecovery`（Mac は Swift、Windows は Core の C#。同じ決まり）に置く。Mac は、開ける録音の長さを `AVAudioFile` で測り、会議の ID とファイルの更新日時ごとに覚えておく（帯を描くたびに開かない）。
+  - 押すと、使うエンジン（押した時点の設定）を書いた確かめを出し、OK で始める。始める前に `checkReady` と権限の確かめ（Mac 標準なら音声認識だけ。マイクと画面収録は要らない）をし、通らなければ会議を変えずに理由を出す。
+  - Mac: `MeetingRecorder.recoverFromAudio`。状態が待機のときだけ動く。`recoveringID` にその会議の ID を入れ、状態を「処理中」にする（`current` には入れない。一覧の「記録中」に移らない）。エラーの文を消し、長さとオフレコを `MeetingRecovery` で直して保存し、文字起こしする。Mac 標準は、録音を `ChannelTranscriber`（録音を書かない、保存したずれを固定）に流す。流すときは 10 秒ぶんごとに、文字起こしへの受け渡しが追いつくのを待つ（2 時間の録音をメモリに積まない）。この流し方は関数にまとめ、`--meeting-files` の Mac 標準でも使う。Whisper / Gemini は `transcribeRecordedAudio`。そのあと `process` に作り直しであることを伝えて呼ぶ。`process` は、作り直しのときは、(1) 両方のチャンネルとも失敗して発言が 0 件なら状態を「失敗」にし、(2) 録音を消さない。終わったら `recoveringID` を外し、状態を待機に戻す。
+  - Windows: `MeetingController.RecoverFromAudioAsync`。`State` が `Idle` で、記録・作り直しをしていないときだけ動く。作り直し中の会議の ID の集まりに入れ、`Current` と `State` は変えない（一覧の先頭の「記録中」に移らない）。作り直しの間は `StartAsync` が理由（`Notice`）を出して始めない。WAV のヘッダーを直し（DEC-MTG-159）、`MeetingRecovery` を当てて保存し、`ProcessAsync` と同じ組み立て（`CreatePostProcessor`）の `MeetingPostProcessor` に、録音を消さない指定（`KeepAudio`）を付けて渡す。進み具合は会議ノートの操作の欄に出す（議事録の作り直しと同じ）。
+  - 作り直しのあとは、両方とも保存期間の削除を呼ばない（DEC-MTG-143）。
+- 理由: 起動のたびに勝手に動かすと、別の会議の記録中や、外出先で AI に音声を送ることになる。会議には記録したときのエンジンが残らないので、押した時点の設定で行い、送り先を押す前に見せる（ユーザーの選択、2026-11-13）。`current` / `Current` に入れると、一覧の「記録中」に昔の会議が出る。作り直しの結果は、落ちた分の欠けがある唯一の録音から作るので、エンジンを替えてやり直せるよう録音は残す（REQ-MTG-010 の今の文のとおり）。両方失敗したら「失敗」のままにして、ボタンが消えないようにする。
+- 決めた場面: REQ-MTG-128 の計画（2026-11-13）
+- 関係する要件: REQ-MTG-128, REQ-MTG-054, REQ-MTG-010, REQ-MTG-023
+- 対象: Mac / Windows
+- 実装の場所: `MeetingRecovery`、`MeetingRecorder.recoverFromAudio`・`process`、`MeetingStatusBanners`、`MeetingMoreMenuItems`
+- Windows の実装: `windows/Hanasu.Core/Meetings/MeetingRecovery.cs`、`windows/Hanasu.Core/Meetings/MeetingController.cs`（`RecoverFromAudioAsync`・`CreatePostProcessor`）、`windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`（`KeepAudio`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
+
+### DEC-MTG-159 Windows は、作り直す前に WAV のヘッダーを直す
+- 決めたこと: `WavStreamWriter.RepairHeader` で、ファイルの長さから data の長さ（2 バイト単位に切り下げ）を計算し直し、RIFF と data の長さを書き直す（`Truncate` と同じ計算）。`MeetingController.RecoverFromAudioAsync` が、後処理の前に 2 つの WAV に当てる。ヘッダーが正しいファイルは変わらない。録音の書き方（5 秒ごとのヘッダーの書き直し。DEC-MTG-102）は変えない。
+- 理由: 落ちた WAV はヘッダーの長さが最大約 5 秒古く、`WavFile.Decode` はヘッダーより後ろを読まない。最初の 5 秒で落ちると長さが 0 で、チャンネルごと無音として飛ばされる。
+- 決めた場面: REQ-MTG-128 の計画（2026-11-13）
+- 関係する要件: REQ-MTG-128
+- 対象: Windows
+- Windows の実装: `windows/Hanasu.Core/Audio/WavStreamWriter.cs`（`RepairHeader`）、`windows/Hanasu.Core/Meetings/MeetingController.cs`
+
+### DEC-MTG-160 Mac で記録中に終了するときは確かめ、録音を閉じてから終わる
+- 決めたこと: `AppDelegate.applicationShouldTerminate` で、会議を記録中なら、終わる理由を `NSAppleEventManager` の今のイベントの `kAEQuitReason` で見る。ログアウト・再起動・システム終了なら確かめない。それ以外（⌘Q・メニュー）なら `NSAlert`（「会議を記録中です。終了しますか？」、ボタン「終了」「キャンセル」）で確かめる。終わるときは `.terminateLater` を返し、`MeetingRecorder.closeForTermination`（音声の取り込みを止め、2 つの `ChannelTranscriber` の書き出しを閉じる。最大 5 秒）を待ってから終わる。会議の状態は「記録中」のままにし、次の起動で `markInterruptedMeetings` が「失敗」にする。記録を止めたあとの処理中・作り直し中の終了は、今までどおり確かめない（処理は失われ、起動時に「失敗」になる。録音は閉じてある）。
+- 理由: 落ちるより、記録中に普通に終了するほうが起きやすい。Windows は記録中の終了を確かめる（DEC-MTG-109）。終了の前に後処理（文字起こし・議事録）まで待つと何分もかかるので、録音を閉じるだけにして、作り直しのボタンに任せる（ユーザーの選択、2026-11-13）。ログアウト・再起動を止めると、システムの終了を妨げる。
+- 決めた場面: REQ-MTG-128 の計画（2026-11-13）
+- 関係する要件: REQ-MTG-128
+- 対象: Mac
+- 実装の場所: `AppDelegate.applicationShouldTerminate`、`MeetingRecorder.closeForTermination`
+
 ### DEC-MTG-100 Windows 版の相手の音は、WASAPI ループバックで録る
 - 決めたこと: 相手の音は NAudio の `WasapiLoopbackCapture` で、会議ノートで選んだ出力の機器で鳴る音すべてを録る。Hanasu 自身の音を除く仕組みがないので、会議の開始・停止・印では効果音を鳴らさない。
 - 理由: Mac 版の Process Tap（DEC-MTG-002）にあたる、ドライバーの要らない方法。効果音を鳴らすとループバックに入る。
@@ -1606,7 +1676,7 @@
 - 実装の場所: `MeetingWindowView`、`MeetingPanelState`、`MeetingDetailInspector`、`LiveInspector`、`AppDelegate.makeMeetingWindow`
 
 ### DEC-MTG-131 会議への操作は、ツールバーと「…」のメニューにまとめる
-- 決めたこと: 記録後のツールバーは、前から「議事録の型」「議事録を作り直す」「辞書」（DEC-DIC-171）「書き出し」「…（話者名…・Finder で表示・録音を削除…・録音の管理…・削除…）」「インスペクタ」。タイトルの欄・日時の行は文書の先頭に置く。日時は `DateFormatter`、長さは `DateComponentsFormatter` で書き、時刻と見間違えないようにする。参加者は話者の色の丸と名前を並べ、押すと「話者名」のシートを開く。
+- 決めたこと: 記録後のツールバーは、前から「議事録の型」「議事録を作り直す」「辞書」（DEC-DIC-171）「書き出し」「…（話者名…・Finder で表示・録音から文字起こしと議事録を作る（作り直せる会議だけ。DEC-MTG-158）・録音を削除…・録音の管理…・削除…）」「インスペクタ」。タイトルの欄・日時の行は文書の先頭に置く。日時は `DateFormatter`、長さは `DateComponentsFormatter` で書き、時刻と見間違えないようにする。参加者は話者の色の丸と名前を並べ、押すと「話者名」のシートを開く。
 - 理由: 前は 5 つのボタンが本文の上で折り返していた。使う頻度の低い操作（Finder・削除）はメニューに入れる。
 - 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
 - 関係する要件: REQ-MTG-050, REQ-MTG-008, REQ-MTG-028, REQ-MTG-055, REQ-MTG-056
@@ -1647,7 +1717,7 @@
 - 実装の場所: `MeetingPlayer`、`MeetingRecorder.stop`、`Meeting.audioStartOffsets`
 
 ### DEC-MTG-136 処理の段階を状態として持ち、処理中のメモは読むだけにする
-- 決めたこと: 記録のあとの処理の段階（`MeetingProcessingStage`: 文字起こし（Whisper / Gemini のときだけ）・話者の区別・議事録）と、出す段階の一覧を `MeetingRecorder.processingStages`・`processingStage` に持つ。帯は一覧を並べ、今の段階に印を付ける。議事録を作らない設定・使う発言がないときは議事録の段階を一覧に入れない。処理の間、文書のメモの欄は読むだけにする。記録を止める前に、メモの入力欄の打ちかけの文を止めた時点のメモとして確定する。
+- 決めたこと: 記録のあとの処理の段階（`MeetingProcessingStage`: 文字起こし（Whisper / Gemini のときと、録音から作り直すとき。DEC-MTG-158）・話者の区別・議事録）と、出す段階の一覧を `MeetingRecorder.processingStages`・`processingStage` に持つ。帯は一覧を並べ、今の段階に印を付ける。議事録を作らない設定・使う発言がないときは議事録の段階を一覧に入れない。処理の間、文書のメモの欄は読むだけにする。記録を止める前に、メモの入力欄の打ちかけの文を止めた時点のメモとして確定する。
 - 理由: 前の処理の状態は自由な文だけで、段階を出せなかった。処理は止めた時点の会議を最後に保存するので、処理中のメモの編集は上書きされて消える。
 - 決めた場面: 2026-11-09 の会議ノートの UI の作り直し（docs/plans/meeting-notes-ui.md）
 - 関係する要件: REQ-MTG-054, REQ-MTG-011
@@ -1712,7 +1782,7 @@
 - Windows の実装: `windows/Hanasu.Core/Meetings/MeetingAudioCleanup.cs`、`windows/Hanasu.Core/Meetings/MeetingPostProcessor.cs`
 
 ### DEC-MTG-143 保存期間で消すのは、起動時・後処理のあと・期間を短くしたとき
-- 決めたこと: 期間は「無期限」（既定）・7・30・90・365 日（音声入力の履歴 `HistorySettings.dayOptions` にそろえる）。消すのは、起動時（会議を「失敗」にしたあと）、記録の後処理が終わったとき（Mac は `MeetingRecorder.stop` で `process` が返ったあと、Windows は `MeetingController` の後処理のあと。`process` / `MeetingPostProcessor` の中では呼ばない）、設定で期間を変えて、今すぐ消える録音を確かめたとき（期間を延ばしても、起動したまま日がたって過ぎた録音があれば確かめる）。起動したまま会議をしない間は、日付が過ぎても消さない。会議ごとの「残す」は保存期間には効かない。
+- 決めたこと: 期間は「無期限」（既定）・7・30・90・365 日（音声入力の履歴 `HistorySettings.dayOptions` にそろえる）。消すのは、起動時（会議を「失敗」にしたあと）、記録の後処理が終わったとき（Mac は `MeetingRecorder.stop` で `process` が返ったあと、Windows は `MeetingController` の後処理のあと。`process` / `MeetingPostProcessor` の中では呼ばない。録音から作り直したあと（DEC-MTG-158）は呼ばない）、設定で期間を変えて、今すぐ消える録音を確かめたとき（期間を延ばしても、起動したまま日がたって過ぎた録音があれば確かめる）。起動したまま会議をしない間は、日付が過ぎても消さない。会議ごとの「残す」は保存期間には効かない。
 - 理由: 記録中には触らず、会議のたびに整理される。期間を変えただけで何十件も黙って消えるのを防ぐ。`process` は確かめ方の CLI（`--meeting-files`）からも本物の保存先で呼ばれるので、そこで消すと開発者の録音が消える。会議ごとの「残す」は「明示的に残す」と「既定のまま」を見分けられないので、期間を全部に効かせ、設定の説明に書く。
 - 決めた場面: 2026-11-10 の録音の削除（docs/plans/meeting-audio-deletion.md）
 - 関係する要件: REQ-MTG-057
