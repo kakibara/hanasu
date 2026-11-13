@@ -105,6 +105,9 @@ public partial class SettingsWindow : Window
 
         RefineCheck.IsChecked = s.RefineWithGemini;
         // 要件: REQ-DIC-082
+        // 設計判断: DEC-DIC-200（統一の先はプロンプトの言語。名前はその言語の名前を表示の言語で書く。読み込むたびに入れ直す）
+        RefineLanguageUnifiedItem.Content = string.Format(Strings.Settings_RefineLanguage_Unified,
+            TranslationLanguage.Of(PromptLanguage.Current).NameInUiLanguage());
         RefineLanguageCombo.SelectedItem = RefineLanguageCombo.Items.OfType<ComboBoxItem>().First(i => (string)i.Tag == s.RefineOutputLanguage.ToString());
         RefineLanguageCombo.IsEnabled = s.RefineWithGemini;
         ApiKeyRadio.IsChecked = s.AuthMode == GeminiAuthMode.ApiKey;

@@ -630,8 +630,8 @@ A ata, a transcrição, as notas e o áudio serão todos movidos para a Lixeira.
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Como falado</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Sempre japonês</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Tudo em {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Informar à IA o nome do aplicativo em que você está digitando (para combinar com o estilo dele)</value>

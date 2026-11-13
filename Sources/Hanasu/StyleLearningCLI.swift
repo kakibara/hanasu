@@ -328,13 +328,13 @@ enum StyleLearningSelfTest {
         check(englishStyle.promptSection(appName: nil, translation: TranslationLanguage(.ko), hasCommonRules: false, customStyles: all) == nil,
               "韓国語への翻訳では英語のカスタム文体を使わない")
 
-        // 出力の言語は文字起こしの言語（整形の言語の統一がオンならその先）
+        // 整形の出力の言語は文字起こしの言語（話した言語のまま・統一のどちらでも。DEC-DIC-200）
         let saved = PromptLanguage.override
         PromptLanguage.override = .en
         check(englishStyle.promptSection(appName: nil, translation: nil, hasCommonRules: false, customStyles: all) != nil,
               "文字起こしの言語が English なら、整形で英語のカスタム文体を使う")
-        check(style.promptSection(appName: nil, translation: nil, hasCommonRules: false, japaneseOutput: true, customStyles: all)?.contains("である調") == true,
-              "日本語に統一するなら、日本語のカスタム文体を使う")
+        check(style.promptSection(appName: nil, translation: nil, hasCommonRules: false, customStyles: all)?.contains("である調") == false,
+              "文字起こしの言語が English なら、整形で日本語のカスタム文体を使わない")
         PromptLanguage.override = saved
 
         var unknown = AppStyle(bundleID: "x", name: "X", preset: .none)

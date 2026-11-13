@@ -44,15 +44,16 @@ public static class GeminiPrompts
     /// <summary>整形の言語の指示。Mac 版の GeminiClient.RefineOutputLanguage.instruction と同じキー</summary>
     public static string LanguageInstruction(RefineOutputLanguage language) => language switch
     {
-        RefineOutputLanguage.Japanese => JapaneseLanguageInstruction,
+        RefineOutputLanguage.Unified => UnifiedLanguageInstruction,
         _ => AsSpokenLanguageInstruction,
     };
 
     /// <summary>話した言語のまま書かせる指示（refine.outputLanguage.asSpoken）</summary>
     public static string AsSpokenLanguageInstruction => Ai.Prompts.Text("refine.outputLanguage.asSpoken");
 
-    /// <summary>日本語に統一させる指示（refine.outputLanguage.japanese）</summary>
-    public static string JapaneseLanguageInstruction => Ai.Prompts.Text("refine.outputLanguage.japanese");
+    // 設計判断: DEC-DIC-200
+    /// <summary>プロンプトの言語に統一させる指示（refine.outputLanguage.unified。各言語の JSON に、その言語自身にそろえる文面がある）</summary>
+    public static string UnifiedLanguageInstruction => Ai.Prompts.Text("refine.outputLanguage.unified");
 
     // 要件: REQ-COM-061
     /// <summary>整形の指示（refine.system。Mac 版の GeminiClient.systemInstruction と同じキー）</summary>
@@ -138,9 +139,7 @@ public static class GeminiPrompts
             lines.Add(Ai.Prompts.Text("user.extraRules", language) + "\n" + extra);
         }
         // 要件: REQ-DIC-020（Mac 版と同じく、追加ルールのあとに文体の節）
-        // 設計判断: DEC-DIC-214（整形の出力の言語。カスタム文体の言語と比べる）
-        var japaneseOutput = translation is null && request.OutputLanguage == RefineOutputLanguage.Japanese;
-        if (request.AppStyle?.PromptSection(request.AppName, translation, extra.Length > 0, japaneseOutput) is { } section)
+        if (request.AppStyle?.PromptSection(request.AppName, translation, extra.Length > 0) is { } section)
         {
             lines.Add(section);
         }

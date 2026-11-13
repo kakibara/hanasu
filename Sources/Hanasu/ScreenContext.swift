@@ -86,12 +86,12 @@ extension ScreenContext {
     /// 英訳は英語向けの screen.translation、ほかの言語への翻訳は訳す先の言語名を埋めた screen.translationOther
     // 設計判断: DEC-DIC-186
     /// スクリーンショットの文字（<screen_ocr>）を渡すときは、その注意（screen.ocr）を後ろに足す。AX の文脈の注意は今までどおり
-    /// 出力が日本語（和訳・整形の「日本語に統一」）なら、整形の指示は日本語の文面（ja.json）にする（DEC-DIC-028）
-    static func instruction(for context: ScreenContext?, translation: TranslationLanguage?, japaneseOutput: Bool = false) -> String {
+    /// 和訳なら、整形の指示は日本語の文面（ja.json）にする（DEC-DIC-028）。整形は、整形の言語がどちらでもプロンプトの言語の文面（DEC-DIC-200）
+    static func instruction(for context: ScreenContext?, translation: TranslationLanguage?) -> String {
         let ocr = context?.ocrBlock() != nil ? ocrInstruction : ""
         guard context?.promptBlock() != nil else { return ocr }
         guard let translation, !translation.outputsJapanese else {
-            let japanese = translation?.outputsJapanese ?? japaneseOutput
+            let japanese = translation?.outputsJapanese ?? false
             return refineInstruction(language: japanese ? .ja : .current) + ocr
         }
         return (translation == .english ? translationInstruction : otherTranslationInstruction(to: translation)) + ocr

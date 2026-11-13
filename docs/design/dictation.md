@@ -1,6 +1,6 @@
 # Hanasu 音声入力 — 設計と技術選定
 
-Typeless のような「話した内容を、自然な文章に整えて今カーソルのある場所へ入力する」macOS アプリ。整形の出力の言語は設定の「整形の言語」に従い、既定は話した言語（英語で話した部分は英語のまま。REQ-DIC-082）。
+Typeless のような「話した内容を、自然な文章に整えて今カーソルのある場所へ入力する」macOS アプリ。整形の出力の言語は設定の「整形の言語」に従い、既定は話した言語（英語で話した部分は英語のまま）。もう 1 つの選択「〈利用者の言語〉に統一」は、プロンプトの言語（文字起こしの言語）にそろえる（REQ-DIC-082）。
 音声認識は macOS 標準の音声入力エンジン（設定で Whisper・Gemini にも切り替えられる。4.10）、整形は Gemini API で行う。
 
 - 対象 OS: macOS 26 (Tahoe) 以降 / Apple Silicon
@@ -354,7 +354,7 @@ Slack とメールで同じ文を整形した結果は [verification/dictation.m
 - **ファイルの読み込み**: `StyleSourceReader` と `DocxText`（`StyleLearning.swift`）。.docx は zip の中の `word/document.xml` だけを読む。zip は中央ディレクトリから引き、deflate は Apple の `Compression` で展開する（外のライブラリを使わない）。文字コードの見分け方、読む要素、大きさの上限は DEC-DIC-211。Windows 版と同じ規則で、共有の固定のファイル（`common/testdata/style/`）で両方を確かめる。
 - **学ぶ**: `StyleLearner.learn`。「議事録」に選んだ AI に、プロンプト `styleLearn.system`・`styleLearn.user` で送り、JSON（名前・言語・ルール）で返させる（DEC-DIC-210）。材料は `<material>` で囲み、区切りのタグを無害にする。長さの上限は AI で変わり、ローカル・Apple はトークンで数える（`StyleLearner.budget`。DEC-DIC-212）。
 - **持ち方**: `CustomStyle`（ID・名前・言語・ルール）を UserDefaults の `customAppStyles` に `CustomStyleStore` で置く。アプリには `AppStyle.customStyleID` で割り当て、そのときの `preset` は `none` にする（DEC-DIC-213）。入れた文章は保存しない。
-- **プロンプト**: `AppStyle.promptSection` で、出力の言語（翻訳なら訳す先、整形なら文字起こしの言語、「日本語に統一」なら日本語）が学んだ言語と同じときだけ、プリセットのルールの位置にカスタム文体のルールを並べ、歯止めの行 `style.learnedGuard` を足す。違えば「なし」と同じ（DEC-DIC-214）。カスタム文体の名前は送らない。
+- **プロンプト**: `AppStyle.promptSection` で、出力の言語（翻訳なら訳す先、整形なら文字起こしの言語。整形の言語を「統一」にしても、統一の先は文字起こしの言語）が学んだ言語と同じときだけ、プリセットのルールの位置にカスタム文体のルールを並べ、歯止めの行 `style.learnedGuard` を足す。違えば「なし」と同じ（DEC-DIC-214）。カスタム文体の名前は送らない。
 - **`hanasu refine`**: `--app` はアプリの割り当てどおりにカスタム文体を使う。`--style` を付けると割り当てを外してそのプリセットにする（`AppStyle.selectPreset`）。カスタム文体を名前で選ぶことはまだできない（[roadmap.md](../roadmap.md) FUT-111）。
 - **Windows 版**: 同じ形で `windows/Hanasu.Core/Dictation/AppStyle.cs`・`StyleLearning.cs`。Windows 版のアプリ別の文体は exe の名前で引く（`AppStyleLookup.Find`。DEC-DIC-216）。
 - 確かめ方: `.build/debug/Hanasu --test-custom-styles`（AI に送らない）、`--learn-style --from-file <ファイル>`（実際の AI）、`--render-style-learning <フォルダ>`。

@@ -93,17 +93,18 @@ public sealed record AppStyle(string Id, string Name, AppStylePreset Preset, str
     /// 整形・翻訳の user content に足す節（Mac 版 AppStyle.promptSection と一字一句同じ組み立て）。足すものがなければ null。
     /// appName: アプリ名を AI に伝える設定がオフなら null。translation: 翻訳の言語（整形なら null）。
     /// hasCommonRules: 共通の追加ルールがプロンプトに入っているか（入っていれば優先順位を書く）。
-    /// japaneseOutput: 整形の出力を日本語に統一するか（REQ-DIC-082。和訳と同じく日本語の文体のルールにする）
+    /// 整形（translation が null）は、整形の言語がどちらでもプロンプトの言語のルール（統一の先もプロンプトの言語。DEC-DIC-200）
     /// </summary>
-    public string? PromptSection(string? appName, TranslationLanguage? translation, bool hasCommonRules, bool japaneseOutput = false)
+    public string? PromptSection(string? appName, TranslationLanguage? translation, bool hasCommonRules)
     {
         if (!HasRules) return null;
-        // 日本語以外に訳すときは、訳す先の言語向けのルールにする。出力が日本語（和訳・日本語に統一）なら、
-        // プロンプトの言語によらず日本語の文体のルール（ja.json）にする（Mac 版と同じ）
-        var japanese = translation is { } tl ? tl.OutputsJapanese : japaneseOutput;
+        // 日本語以外に訳すときは、訳す先の言語向けのルールにする。和訳なら、
+        // プロンプトの言語によらず日本語の文体のルール（ja.json）にする（Mac 版と同じ。DEC-DIC-028）
+        var japanese = translation is { } tl && tl.OutputsJapanese;
         TranslationLanguage? target = japanese ? null : translation;
         // 設計判断: DEC-DIC-214（カスタム文体は、出力の言語が学んだ言語と同じときだけ、プリセットのルールの代わりに渡す。名前は送らない）
-        var outputLanguage = translation?.Language ?? (japaneseOutput ? PromptLanguage.Ja : PromptLanguage.Current);
+        // 出力の言語は、翻訳なら訳す先、整形なら文字起こしの言語（話した言語のまま・統一のどちらでも。DEC-DIC-200）
+        var outputLanguage = translation?.Language ?? PromptLanguage.Current;
         List<string> styleRules;
         if (Custom is { } learned)
         {

@@ -630,8 +630,8 @@ Protokół, transkrypcja, notatki i audio zostaną przeniesione do Kosza. Możes
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Jak wypowiedziano</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Zawsze japoński</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Tylko {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Przekazuj AI nazwę aplikacji, w której piszesz (aby dopasować styl)</value>

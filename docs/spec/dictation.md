@@ -395,19 +395,24 @@
   - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~PasteFallback|FullyQualifiedName~FallbackSetting"`（設定の保存と、入力への渡し方）。クリップボードの中身は実機で確かめる
 
 ### REQ-DIC-082 整形の出力の言語を設定で選べ、既定は話した言語にする
-- 内容: 音声入力の AI による整形（「音声入力を AI で整える」）の出力の言語を、「話した言語」（既定）と「日本語に統一」から選べる。既定では、英語で話した部分は英語のまま残し、日本語に訳さない。
+- 内容: 音声入力の AI による整形（「音声入力を AI で整える」）の出力の言語を、「話した言語」（既定）と「〈利用者の言語〉に統一」から選べる。利用者の言語は、プロンプトの言語（文字起こしの言語。REQ-COM-061。対応言語にない言語なら英語）。既定では、ほかの言語で話した部分はその言語のまま残し、訳さない。
 - 受け入れ条件:
   - 設定の「AI」→「整形の言語」で選べる。整形がオフのときは選べない。
-  - 「話した言語」では、日本語で話した部分は日本語、英語で話した部分は英語のまま出る（英語を日本語に訳さない）。
-  - 「日本語に統一」では、英語で話した部分も日本語になる。固有名詞・製品名・コードなど、訳すと意味が変わるものは原語のまま残す。
+  - 「話した言語」では、日本語で話した部分は日本語、英語で話した部分は英語のまま出る（話した言語を、ほかの言語に訳さない）。
+  - 2 つめの選択肢の名前は、プロンプトの言語の名前を表示の言語で書いたもの（表示もプロンプトも日本語なら「日本語に統一」、表示もプロンプトも韓国語なら「한국어로 통일」、表示が英語でプロンプトが日本語なら「Always Japanese」、表示が日本語でプロンプトが英語なら「英語に統一」）。
+  - 「〈利用者の言語〉に統一」では、ほかの言語で話した部分も利用者の言語になる。固有名詞・製品名・コードなど、訳すと意味が変わるものは原語のまま残す。
+  - 文字起こしの言語を変えたら、選択肢の名前とそろえる先の言語もそれに合わせて変わる（設定は「統一する」のまま）。対応言語にない文字起こしの言語（例: スウェーデン語）では、英語に統一する。
+  - 前の版で「日本語に統一」を保存していた人は、「〈利用者の言語〉に統一」になる（文字起こしの言語が日本語の人は、名前も出力も前と同じ）。文字起こしの言語が日本語でない人が日本語にそろえたいときは、和訳（REQ-DIC-013）を使う。
+  - プロンプトの言語が日本語のとき、整形に送るプロンプトは前（日本語に固定していた版）と一字一句同じ。
   - 整形の指示（システムプロンプト）に、選んだ言語の指示が 1 つだけ入る。履歴の「整形し直す」も同じ設定に従う。
-- 出典: ユーザーの依頼（2026-11-04）「整形の言語を明示的に設定して意図しない動作がなされないようにする必要がある」。プロンプトの言語が日本語でないとき（REQ-COM-061）も、「日本語に統一」は日本語にする（DEC-COM-162）
+- 出典: ユーザーの依頼（2026-11-04）「整形の言語を明示的に設定して意図しない動作がなされないようにする必要がある」。ユーザーの依頼（2026-11-12）「日本語に統一しかないのは多言語化として問題か」で、そろえる先を日本語に固定するのをやめ、利用者の言語にした。そろえる先を文字起こしの言語にすること、前の保存値を「統一する」として読むこと、表示と文字起こしの言語が違う人も文字起こしの言語にそろえること（日本語にするなら和訳）は、2026-11-13 にユーザーに確かめ、同日に計画（[plans/refine-unified-language.md](../plans/refine-unified-language.md)）を了承
 - 対象: Mac / Windows
 - 実装の場所: `GeminiClient.RefineOutputLanguage`、`GeminiClient.refinePrompt`、`AppSettings.refineOutputLanguage`、`AISettingsView`（「整形の言語」）
-- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`（`RefineOutputLanguage`）、`windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（`SystemInstruction`。Mac 版と同じ文面。DEC-COM-102）、`windows/Hanasu.Core/Dictation/DictationText.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`（「AI」タブの「整形の言語」。選択肢は「話した言語」「日本語に統一」）。履歴の「整形し直す」は Windows 版にはない
+- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`（`RefineOutputLanguage`）、`windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（`SystemInstruction`。Mac 版と同じ文面。DEC-COM-102）、`windows/Hanasu.Core/Dictation/DictationText.cs`、`windows/Hanasu.Windows/Views/SettingsWindow.xaml`・`SettingsWindow.xaml.cs`（「AI」タブの「整形の言語」。選択肢は「話した言語」「〈利用者の言語〉に統一」）。履歴の「整形し直す」は Windows 版にはない
 - 確かめ方:
-  - 実機で確かめる（英語と日本語の混ざった発話を、両方の設定で入力する）
-  - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~JapaneseOutputLanguage|FullyQualifiedName~RefineOutputLanguage"`（指示の文面が Mac 版と同じこと、設定の保存）
+  - Mac: `.build/debug/Hanasu --test-refine-language`（保存値の読み方、表示とプロンプトの言語の組み合わせごとの名前、指示の文面）。`--show-prompts --prompt-language <言語>` で整形の指示を見る
+  - 実機で確かめる（ほかの言語の混ざった発話を、両方の設定で入力する）
+  - Windows: `cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~UnifiedOutputLanguage|FullyQualifiedName~RefineOutputLanguage"`（指示の文面が Mac 版と同じこと、設定の保存と前の値の読み方）
 
 ### REQ-DIC-083 貼り付けが届かなかったときは、最新の結果をクリップボードに残す
 - 内容: ⌘V を送っても貼り付け先がクリップボードを受け取らなかったとき（録音中に別のウインドウへ移った・カーソルが入力欄から外れたなど）は、元のクリップボードに戻さず、最新の結果をクリップボードに入れたままにする。入力したい場所で ⌘V を押せば、その結果が貼れる。貼り付け先が遅れて受け取ったときも、古いクリップボードの中身ではなく最新の結果が入る。
@@ -702,14 +707,14 @@
 ### DEC-DIC-028 日本語への翻訳は専用の指示で 1 回で行い、日本語の文体のルールを使う
 - 決めたこと:
   - 日本語への翻訳（和訳）は、英訳とは別の system instruction（`GeminiClient.japaneseTranslationInstruction`）で、誤変換の読み取り・フィラーと言い直しの除去・翻訳を 1 回の呼び出しで行う（DEC-DIC-022 と同じ）。
-  - 出力が日本語なので、共通の追加の整形ルール・アプリ別の日本語の文体ルール（`AppStylePreset.refineRules`）・画面の文脈の整形向けの指示を使う（英訳では使わないもの。DEC-DIC-023・044）。アプリ別の文体ルールと画面の文脈の整形向けの指示は、プロンプトの言語（文字起こしの言語）によらず日本語の文面（ja.json）にする。整形の「日本語に統一」（REQ-DIC-082）も同じ。共通の追加の整形ルールは、プロンプトの言語が日本語のときだけ（DEC-DIC-023）。
+  - 出力が日本語なので、共通の追加の整形ルール・アプリ別の日本語の文体ルール（`AppStylePreset.refineRules`）・画面の文脈の整形向けの指示を使う（英訳では使わないもの。DEC-DIC-023・044）。アプリ別の文体ルールと画面の文脈の整形向けの指示は、プロンプトの言語（文字起こしの言語）によらず日本語の文面（ja.json）にする。整形の「〈利用者の言語〉に統一」（REQ-DIC-082）は出力がプロンプトの言語なので、この例外に当たらない（DEC-DIC-200）。共通の追加の整形ルールは、プロンプトの言語が日本語のときだけ（DEC-DIC-023）。
   - 指示では、直訳でない自然な日本語にする、口調と丁寧さを保つ（丁寧な英語は です・ます、くだけた英語は くだけた日本語）、人名は話した表記のまま（カタカナにせず、敬称も足さない）、固有名詞・製品名・コードは原語のまま、すでに日本語で話した部分はそのまま整える、を書く。
   - 「AI で整形する」がオフでも AI に送る（DEC-DIC-021 と同じ）。
 - 理由: 英訳の指示は日本語から英語への誤り（"Good work." の直訳など）を防ぐ内容で、逆向きには使えない。性別や読みは推測しない（DEC-DIC-024 と同じ考え方）。ほかの言語の JSON の `style.*.refine`・`screen.refine` は、その言語の文体のルール（韓国語なら 합니다체 など）なので、日本語の出力に付けると食い違う（2026-11-11 の多言語の見直し）。
 - 決めた場面: 日本語への翻訳を足した PR（2026-11-04 の依頼）。ほかの言語への翻訳は DEC-DIC-151
 - 関係する要件: REQ-DIC-013
 - 対象: Mac / Windows
-- 実装の場所: `GeminiClient.japaneseTranslationInstruction`、`GeminiClient.translationPrompt`、`AppStyle.promptSection`（`japaneseOutput`）、`AppStylePreset.refineRules(language:)`、`ScreenContext.instruction`、`TranslationLanguage.keepsExtraRules`
+- 実装の場所: `GeminiClient.japaneseTranslationInstruction`、`GeminiClient.translationPrompt`、`AppStyle.promptSection`（`translation.outputsJapanese`）、`AppStylePreset.refineRules(language:)`、`ScreenContext.instruction`、`TranslationLanguage.keepsExtraRules`
 - Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（`JapaneseTranslationInstruction`・`UserPrompt`。Mac 版と同じ文面。DEC-COM-102）
 
 ### DEC-DIC-029 履歴では英訳と和訳を別のモードとして残す
@@ -1108,6 +1113,24 @@
 - 関係する要件: REQ-DIC-020
 - 対象: Windows
 - 実装の場所: `AppStyleLookup.Find`（`windows/Hanasu.Core/Dictation/AppStyle.cs`）、`ForegroundWindowTracker.ForegroundAppExe`、`DictationController`、`DictationTextProcessor.ProcessAsync`
+
+### DEC-DIC-200 整形の言語の統一の先は、プロンプトの言語にし、文体のルールもその言語の文面を使う
+- 決めたこと: 「整形の言語」の統一の先は、プロンプトの言語（Mac は `PromptLanguage.current`、Windows は `PromptLanguage.Current`）。設定には「統一する」ことだけを保存し、言語は保存しない（文字起こしの言語を変えたら、それに合わせて変わる）。指示は `refine.outputLanguage.unified` で、各言語の JSON に、その言語自身にそろえる文面を書く（言語名を `${language}` で埋めない。ja.json は前の `refine.outputLanguage.japanese` と一字一句同じ）。統一のときのアプリ別の文体ルール・画面の文脈の整形の指示・共通の追加の整形ルールは、話した言語のときと同じ（プロンプトの言語の文面）。選択肢の名前は、プロンプトの言語の名前を表示の言語で書く（`%@に統一`）。
+- 理由: 日本語に固定すると、日本語以外の利用者には役に立たない選択肢になる。17 言語から選ぶ形は、翻訳（REQ-DIC-013）と役割が重なり、一覧も長くなる（2026-11-13 にユーザーに確かめた）。統一の先と文体ルールの言語が同じになるので、DEC-DIC-028 の「日本語の出力には ja.json の文体ルール」の例外は整形では要らない。
+- 決めた場面: ユーザーの依頼（2026-11-12）。計画 [plans/refine-unified-language.md](../plans/refine-unified-language.md)
+- 関係する要件: REQ-DIC-082, REQ-COM-061
+- 対象: Mac / Windows
+- 実装の場所: `GeminiClient.RefineOutputLanguage`（`label`・`instruction`）、`GeminiClient.refinePrompt`、`Sources/Hanasu/Resources/Prompts/<言語>.json`（`refine.outputLanguage.unified`）
+- Windows の実装: `windows/Hanasu.Core/Gemini/GeminiPrompts.cs`（`LanguageInstruction`・`UnifiedLanguageInstruction`）、`windows/Hanasu.Windows/Views/SettingsWindow.xaml.cs`（選択肢の名前）
+
+### DEC-DIC-201 整形の言語の保存値は前のまま（japanese / Japanese）にし、意味を「統一する」に変える
+- 決めたこと: 統一の保存値は、Mac の UserDefaults は `japanese`、Windows の settings.json は `Japanese` のまま変えない。意味は「プロンプトの言語に統一する」に変える。コードの名前は Mac は `.unified`、Windows は `Unified`。
+- 理由: 前の版に戻しても設定が読める。Windows は settings.json を `JsonStringEnumConverter` で読むので、知らない値があると設定全体が初期値に戻る（`SettingsStore.Load`）。同じ理由で値を変えない先例がある（DEC-DIC-027・153）。前の版で「日本語に統一」を選んでいた人は、何もしなくても「〈利用者の言語〉に統一」になる（2026-11-13 にユーザーに確かめた）。
+- 決めた場面: ユーザーの依頼（2026-11-12）。計画 [plans/refine-unified-language.md](../plans/refine-unified-language.md)
+- 関係する要件: REQ-DIC-082
+- 対象: Mac / Windows
+- 実装の場所: `GeminiClient.RefineOutputLanguage`（rawValue）
+- Windows の実装: `windows/Hanasu.Core/Settings/AppSettings.cs`（`RefineOutputLanguage.Unified` の JSON の名前）
 
 ### DEC-DIC-070 履歴は 1 つの JSON ファイルに、本人だけが読める権限で保存する
 - 決めたこと: `~/Library/Application Support/Hanasu/History/history.json` に新しい順で保存する。フォルダは 0700、ファイルは 0600、書き込みは atomic。読めないファイルは上書きせず、ウインドウにエラーを出す。Mac 版は、変更のたびに書かず、1 秒まとめてから 1 回書く。エンコードとファイル書き込みはバックグラウンドの直列キューで行い（書く順番は予約した順）、アプリの終了時・読み直しの前には、まとまっていない変更を先に書き切る。追加は日時の合う位置に挿入し、全件の並べ替えはしない。Mac 版の起動時の読み込みは、アプリの起動時に裏で先に読み（読み込みとデコード）、終わったらメインで中身を当てる。先読みが終わる前にメニュー・再入力・音声入力が履歴を使ったら、そこで同期で読み、先読みの結果は捨てる。

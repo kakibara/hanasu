@@ -630,8 +630,8 @@ Biên bản, bản ghi lời, ghi chú và âm thanh sẽ đều được chuy�
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Như đã nói</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Luôn là tiếng Nhật</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Thống nhất sang {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Cho AI biết tên ứng dụng bạn đang nhập vào (để phù hợp với văn phong)</value>

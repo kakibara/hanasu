@@ -44,14 +44,38 @@ public enum PasteFallbackClipboard
 }
 
 // 要件: REQ-DIC-082
-/// <summary>音声入力の AI による整形の出力の言語（Mac 版の GeminiClient.RefineOutputLanguage と同じ）</summary>
-[JsonConverter(typeof(JsonStringEnumConverter<RefineOutputLanguage>))]
+// 設計判断: DEC-DIC-200
+/// <summary>
+/// 音声入力の AI による整形の出力の言語（Mac 版の GeminiClient.RefineOutputLanguage と同じ）。
+/// 統一の先はプロンプトの言語（PromptLanguage.Current）で、言語は保存しない
+/// </summary>
+[JsonConverter(typeof(RefineOutputLanguageJsonConverter))]
 public enum RefineOutputLanguage
 {
-    /// <summary>話した言語（既定）。英語で話した部分は英語のまま残し、日本語に訳さない</summary>
+    /// <summary>話した言語（既定）。ほかの言語で話した部分はそのまま残し、訳さない</summary>
     AsSpoken,
-    /// <summary>日本語に統一する。英語で話した部分も日本語にする</summary>
-    Japanese,
+    /// <summary>プロンプトの言語に統一する。ほかの言語で話した部分もその言語にする。settings.json の値は前の版の Japanese のまま（DEC-DIC-201）</summary>
+    Unified,
+}
+
+// 設計判断: DEC-DIC-201
+/// <summary>
+/// 整形の言語を settings.json に書く・読む。「統一する」は、日本語に固定していた版の値 "Japanese" のまま書く
+/// （前の版に戻しても読める。知らない値で JsonException になると、設定全体が初期値に戻るため）。
+/// 知らない値は「話した言語」として読む
+/// </summary>
+public sealed class RefineOutputLanguageJsonConverter : JsonConverter<RefineOutputLanguage>
+{
+    /// <summary>「統一する」を保存する値</summary>
+    public const string UnifiedStoredValue = "Japanese";
+
+    public override RefineOutputLanguage Read(ref System.Text.Json.Utf8JsonReader reader, Type typeToConvert, System.Text.Json.JsonSerializerOptions options) =>
+        reader.TokenType == System.Text.Json.JsonTokenType.String && reader.GetString() == UnifiedStoredValue
+            ? RefineOutputLanguage.Unified
+            : RefineOutputLanguage.AsSpoken;
+
+    public override void Write(System.Text.Json.Utf8JsonWriter writer, RefineOutputLanguage value, System.Text.Json.JsonSerializerOptions options) =>
+        writer.WriteStringValue(value == RefineOutputLanguage.Unified ? UnifiedStoredValue : nameof(RefineOutputLanguage.AsSpoken));
 }
 
 /// <summary>文章の処理（整形・英訳・議事録）に使う AI</summary>
@@ -125,6 +149,8 @@ public sealed class AppSettings
     public bool RefineWithGemini { get; set; } = true;
     // 要件: REQ-DIC-082
     /// <summary>整形の出力の言語（設定の「AI」→「整形の言語」）。既定は話した言語</summary>
+    // 設計判断: DEC-DIC-201（SettingsStore.JsonOptions の JsonStringEnumConverter より先に使うよう、プロパティに付ける）
+    [JsonConverter(typeof(RefineOutputLanguageJsonConverter))]
     public RefineOutputLanguage RefineOutputLanguage { get; set; } = RefineOutputLanguage.AsSpoken;
     /// <summary>音声入力の整形・英訳に使う AI</summary>
     public TextAiProvider DictationAi { get; set; } = TextAiProvider.Gemini;

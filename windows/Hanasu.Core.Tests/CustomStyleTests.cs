@@ -284,41 +284,36 @@ public class CustomStyleTests
             Writer(korean, "絵文字は使わない").PromptSection("Writer", TranslationLanguage.Of(PromptLanguage.Fr), false));
     }
 
+    // 設計判断: DEC-DIC-214, DEC-DIC-200
     [Fact]
-    public void JapaneseOutputMatchesJapaneseStylesEvenWithAnotherPromptLanguage()
+    public void RefineUsesTheTranscriptionLanguageWhetherAsSpokenOrUnified()
     {
         PromptLanguageFixture.With(PromptLanguage.En, () =>
         {
             Assert.Null(Writer(Report).PromptSection("Writer", null, false));
-            Assert.Contains("読点は「，」を使う", Writer(Report).PromptSection("Writer", null, false, japaneseOutput: true));
             Assert.Contains("Use contractions", Writer(CasualEnglish).PromptSection("Writer", null, false));
-            Assert.Null(Writer(CasualEnglish).PromptSection("Writer", null, false, japaneseOutput: true));
-            // UserPrompt は整形の「日本語に統一」を japaneseOutput として渡す
-            var request = new RefineRequest
+            // 整形の言語を「統一」にしても、統一の先は文字起こしの言語なので、日本語のカスタム文体は使わない
+            foreach (var language in new[] { RefineOutputLanguage.AsSpoken, RefineOutputLanguage.Unified })
             {
-                Transcript = "t",
-                Model = "m",
-                AppStyle = Writer(Report),
-                OutputLanguage = RefineOutputLanguage.Japanese,
-            };
-            Assert.Contains("読点は「，」を使う", GeminiPrompts.UserPrompt(request));
-            Assert.DoesNotContain("読点は「，」を使う", GeminiPrompts.UserPrompt(request with { OutputLanguage = RefineOutputLanguage.AsSpoken }));
+                var request = new RefineRequest { Transcript = "t", Model = "m", AppStyle = Writer(Report), OutputLanguage = language };
+                Assert.DoesNotContain("読点は「，」を使う", GeminiPrompts.UserPrompt(request));
+                Assert.Contains("Use contractions", GeminiPrompts.UserPrompt(request with { AppStyle = Writer(CasualEnglish) }));
+            }
         });
     }
 
     // 確かめ方: REQ-DIC-020
     // 設計判断: DEC-DIC-028
     [Fact]
-    public void JapaneseOutputUsesJapanesePresetRulesWhateverThePromptLanguage()
+    public void JapaneseTranslationUsesJapanesePresetRulesWhateverThePromptLanguage()
     {
         PromptLanguageFixture.With(PromptLanguage.En, () =>
         {
             var chat = new AppStyle("slack.exe", "Slack", AppStylePreset.Chat);
             var japaneseRule = "- " + Prompts.List("style.chat.refine", PromptLanguage.Ja)[0];
             var englishRule = "- " + Prompts.List("style.chat.refine", PromptLanguage.En)[0];
-            // 和訳と「日本語に統一」は日本語の文体のルール（Mac 版の AppStyle.promptSection と同じ）
+            // 和訳は日本語の文体のルール（Mac 版の AppStyle.promptSection と同じ）
             Assert.Contains(japaneseRule, chat.PromptSection("Slack", TranslationLanguage.Japanese, false));
-            Assert.Contains(japaneseRule, chat.PromptSection("Slack", null, false, japaneseOutput: true));
             // 話した言語のままなら、プロンプトの言語のルール
             Assert.Contains(englishRule, chat.PromptSection("Slack", null, false));
         });

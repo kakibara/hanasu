@@ -630,8 +630,8 @@ El acta, la transcripción, las notas y el audio se moverán a la Papelera de re
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Como se habló</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Siempre en japonés</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Todo en {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Indicar a la IA el nombre de la aplicación en la que escribes (para adaptar el estilo)</value>

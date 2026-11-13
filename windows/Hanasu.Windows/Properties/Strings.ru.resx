@@ -630,8 +630,8 @@
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Как сказано</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Всегда японский</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Только {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Сообщать ИИ название приложения, в которое вводится текст (чтобы подстроить стиль)</value>
