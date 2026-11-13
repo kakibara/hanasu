@@ -33,6 +33,10 @@ public sealed class MeetingPostProcessor
     public UserDictionary? Dictionary { get; init; }
     /// <summary>設定の「文字起こしに辞書の置き換えルールを当てる」</summary>
     public bool ApplyDictionary { get; init; }
+    // 要件: REQ-MTG-128, REQ-MTG-010
+    // 設計判断: DEC-MTG-158
+    /// <summary>true なら、会議の「文字起こしのあとに録音を削除」に関わらず録音を消さない（落ちた会議を録音から作り直すとき）</summary>
+    public bool KeepAudio { get; init; }
 
     public async Task<MeetingProcessResult> ProcessAsync(Meeting meeting, IProgress<string>? progress = null,
         CancellationToken cancellationToken = default)
@@ -67,7 +71,9 @@ public sealed class MeetingPostProcessor
             catch (Exception e) when (e is not OperationCanceledException)
             {
                 // 話者分離に失敗しても、相手側を「相手」1 人として続ける（Mac 版と同じ）
-                Log?.Invoke($"diarization failed: {e.GetType().Name}: {e.Message}");
+                // 設計判断: DEC-MTG-104（作れなかったときの手がかりを、知らせには出さずログにだけ書く）
+                var diagnostics = e.Data["hanasu.diagnostics"] is string d ? $" ({d})" : "";
+                Log?.Invoke($"diarization failed: {e.GetType().Name}: {e.Message}{diagnostics}");
                 warnings.Add(string.Format(Strings.Meeting_DiarizationFailed, e.Message));
             }
         }
@@ -131,7 +137,8 @@ public sealed class MeetingPostProcessor
         // 要件: REQ-MTG-010
         // 設計判断: DEC-MTG-139, DEC-MTG-142
         // 設定ではなく会議の値と文字起こしの状態で決める（文字起こしがそろっていなければ残す）。保存期間の削除はここでは行わない（DEC-MTG-143）
-        if (MeetingAudioPolicy.ShouldDeleteAfterProcessing(meeting))
+        // 作り直し（KeepAudio）のときは消さない（DEC-MTG-158）
+        if (!KeepAudio && MeetingAudioPolicy.ShouldDeleteAfterProcessing(meeting))
         {
             var failed = Store.DeleteAudio(meeting);
             Log?.Invoke(failed.Count == 0 ? "meeting audio deleted after processing" : $"meeting audio delete failed: {failed.Count} files");

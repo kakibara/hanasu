@@ -355,22 +355,15 @@ if let index = CommandLine.arguments.firstIndex(of: "--meeting-files"),
             let started = Date()
             var liveFailed: [MeetingChannel] = []
             for (channel, url) in zip([MeetingChannel.me, .others], files) {
-                let file = try AVAudioFile(forReading: url)
-                let transcriber = ChannelTranscriber(
-                    channel: channel, inputFormat: file.processingFormat,
-                    fileURL: MeetingStore.audioURL(for: meeting, channel: channel),
-                    meetingStart: meeting.startedAt, fixedTimeOffset: 0, live: transcription.isLive)
-                try await transcriber.prepare(localeIdentifier: settings.localeIdentifier, contextualStrings: dictionary.contextualStrings)
-                while file.framePosition < file.length {
-                    guard let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: 8192) else { break }
-                    try file.read(into: buffer)
-                    if buffer.frameLength == 0 { break }
-                    transcriber.append(buffer)
-                }
-                phrases[channel] = await transcriber.finish()
+                // 設計判断: DEC-MTG-158（録音から作り直すときと同じ流し方。長い録音でもメモリに積まない）
+                let result = try await ChannelTranscriber.transcribe(
+                    file: url, channel: channel, offset: 0, live: transcription.isLive,
+                    writingTo: MeetingStore.audioURL(for: meeting, channel: channel),
+                    localeIdentifier: settings.localeIdentifier, contextualStrings: dictionary.contextualStrings)
+                phrases[channel] = result.phrases
                 // 設計判断: DEC-MTG-142（失敗がなくても空の配列を書く）
-                if transcriber.recognitionFailed { liveFailed.append(channel) }
-                meeting.duration = max(meeting.duration, Double(file.length) / file.processingFormat.sampleRate)
+                if result.recognitionFailed { liveFailed.append(channel) }
+                meeting.duration = max(meeting.duration, result.seconds)
             }
             meeting.transcriptionFailedChannels = liveFailed
             if !transcription.isLive {
@@ -470,6 +463,8 @@ MeetingSleepCLI.runSelfTestIfRequested()
 MainActor.assumeIsolated { MinutesSelectionCLI.runIfRequested() }
 // 会議ノートの文書・引用・再生の確認（--test-minutes-citations / --test-minutes-document / --test-meeting-player / --render-meeting-window。MeetingNotesUICLI.swift）
 MainActor.assumeIsolated { MeetingNotesUICLI.runIfRequested() }
+// 記録中に落ちた会議を録音から戻す機能の確認（--test-meeting-audio-crash / --test-meeting-recovery / --meeting-recover-files。MeetingRecoveryCLI.swift）
+MeetingRecoveryCLI.runIfRequested()
 // 会議の録音を消す機能の確認（--test-meeting-audio / --render-meeting-audio-manager。MeetingAudioCLI.swift）
 MainActor.assumeIsolated { MeetingAudioCLI.runIfRequested() }
 // 会議ノートから辞書を作る・会議に辞書を当てるの確認（--test-meeting-dictionary / --render-meeting-dictionary。MeetingDictionaryCLI.swift）

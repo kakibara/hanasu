@@ -287,6 +287,24 @@
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>إعادة إنشاء المحضر</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>التفريغ النصي وإنشاء المحضر من التسجيل</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>يفرّغ التسجيل المتبقي نصيًا، ويميّز المتحدثين، وينشئ المحضر.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>هل تريد إعادة إنشاء الاجتماع من التسجيل؟</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>سيُفرَّغ التسجيل نصيًا بالإعدادات الحالية ({0})، ويُميَّز المتحدثون، ثم يُنشأ المحضر.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>سيُرسَل صوت الاجتماع إلى Google.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>جارٍ إعادة الإنشاء من التسجيل</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>القالب:</value>
   </data>

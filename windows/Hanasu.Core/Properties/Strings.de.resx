@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Besprechungsaufzeichnung kann nicht gestartet werden</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>Während eine Besprechung aus ihrer Aufnahme neu erstellt wird, kann keine Aufnahme gestartet werden.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>Ein Diktat wird gerade aufgenommen. Nach dem Ende erneut versuchen.</value>
   </data>
@@ -647,6 +650,9 @@
   </data>
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Die Abtastrate des Modells für die Sprechertrennung entspricht nicht der erwarteten ({0} Hz).</value>
+  </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Das Modell für die Sprechertrennung konnte nicht geladen werden.</value>
   </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Die Vertex AI-Region „{0}“ kann nicht verwendet werden (nur Kleinbuchstaben, Ziffern und Bindestriche, z. B. global, us-central1).</value>

@@ -222,3 +222,43 @@ v1.4.0 で「メモ」タブを開くと、タイトル・タブの切り替え�
 - 手元の再現: 記録中の画面を 20 倍速で 30 分ぶん動かすと、CPU の時間が 51.0 秒 → 5.7 秒。細かいバッファ（256 フレーム）を実時間で流すと、SpeechAnalyzer の記録が 150 秒で約 13,000 件 → 784 件。発言の数は同じ（7 件）。`--render-meeting-notes` の `live.png`・`caption.png` で、途中結果の行が前と同じく出ることを見た。
 - 話者分離（記録を止めたあと。直していない）: FluidAudio 0.17.7 のリリースビルドで、相手側の録音のピークは 29 分で 734 MB、61 分で 827 MB、100 分で 947 MB、138 分で 1,002 MB。長さによらず約 650 MB かかり、1 分ごとに約 2.5 MB 足される（区間の判定結果を小さな配列の集まりで全部持つため）。`autoreleasepool` を足しても変わらなかった。終わったあとも、モデルを持ち続けるので 100〜480 MB 残る。
 - 確かめていないこと: 2 時間を超える記録での直したあとの増え方。Whisper / Gemini のエンジン（記録中は文字起こししない）。
+
+## 18. Windows 版の話者分離を sherpa-onnx 2.0.1 に上げる（2026-11-13、macOS 26.6.2 と、その上の .NET 10 SDK）
+
+関係: REQ-MTG-004、REQ-REL-005、DEC-MTG-104、DEC-COM-206、DEC-REL-012
+
+- きっかけ: sherpa-onnx 1.13.8 の NuGet の `sherpa-onnx-c-api.dll`（win-x64）に、音声合成用の espeak-ng（GPL-3.0）が静的にリンクされていた（大文字と小文字を区別して `espeak_ng_`・`espeak_Initialize` が 26 件）。2.0.1 の win-x64・win-arm64・win-x86 の DLL には 0 件。`onnxruntime.dll` は 1.13.8 と同じもの（ONNX Runtime 1.28.2）。Hanasu が使う C# の話者分離の API のファイルは 1.13.8 と同じ。
+- 同じ音声での比べ: macOS の `say` で 2 つの声（Kyoko・Eddy）が交互に話す 6 文（約 40 秒、16 kHz モノラル）を作り、`windows/Hanasu.Cli` の `meeting-files`（Whisper tiny、議事録なし。sherpa-onnx の osx-arm64）で、1.13.8（main）と 2.0.1（この変更）を流した。どちらも「9 区間・話者 2 人」で、6 つの発言が 話者1・話者2 に交互に正しく分かれ、結果は同じだった。
+- 作れなかったとき: 2.0 から、モデルを読めないと C の API が NULL を返す（k2-fsa/sherpa-onnx#4044）。`DiarizationTests.BrokenModelsThrowInsteadOfCrashing`（大きさだけ合わせた中身のないモデル）で、落ちずに `Diarization_CreateFailed` の例外になることを Mac で確かめた。日本語の名前のフォルダのファイルを UTF-8 で渡すと sherpa-onnx が見つけること（`SherpaReadsUtf8Paths`）も Mac で確かめた。
+- `dotnet test Hanasu.Core.Tests`: 761 件すべて成功。
+- 確かめていないこと（実機）: Windows の実機（win-x64 の DLL）で相手側の話者が分かれること。ユーザーのフォルダ名が日本語のアカウントで、直す前に話者分離が動かなかったか（推測）と、`activeCodePage` を UTF-8 にしたあとで文字起こし（Whisper.net）と話者分離の両方が動くこと（DEC-COM-206）。Windows の CI でのテストの結果は PR で見る。
+
+## 19. 会議の記録中に、制約の更新の例外でアプリが落ちる（2026-11-13、macOS 26.6.2、Mac15,3）
+
+関係: REQ-MTG-007、REQ-MTG-054、DEC-MTG-155
+
+- 依頼: 「録音していたら以下のエラーが出たので確認調査して修正して」。2.6.1 で会議の記録を始めて約 3 分後に、メインスレッドで `NSGenericException`（`-[NSWindow(NSDisplayCycle) _postWindowNeedsUpdateConstraints]`）が出て落ちた。会議ノートは開いていて、後ろ側のパネルは AI チャット。落ちた会議のフォルダには約 3 分ぶんの `me.m4a`・`others.m4a` が残り、`meeting.json` の状態は「記録中」のままだった。
+- 調べ方: クラッシュの報告の積み上げ（SwiftUI の `NSHostingView.updateConstraints` から、親を 4 つたどって `_NSConstraintBasedLayoutHostingView`、さらに 2 つでウインドウ）と、開発版で組み立てた会議ノート・字幕・「何を聞かれた？」・HUD・設定・履歴のビューの階層を比べた。`_NSConstraintBasedLayoutHostingView` は SwiftUI の `AppKitPlatformViewHost` の親クラスで、段数が合うのは会議ノートの `.inspector` の分割の左側（一覧と真ん中を収める `NSHostingView`）だけだった。調べるコードはどれも一時的なもので、変更には入れていない。
+- 手元の再現: 記録中の画面を会議ノートの最小の大きさで出し、50 ms ごとに途中結果・音量・警告の帯・オフレコの帯を切り替えた。そのままでは 10 秒動かしても落ちなかったが、左右の分割の左側の最小の幅を 0 にして揺れを大きくすると、6〜10 秒動かす間に毎回同じ例外（「more Update Constraints in Window passes than there are views in the window」）が出た。例外の積み上げには `SplitViewChildController.hostingView(_:didUpdateMinSize:maxSize:)` があり、一覧と真ん中の分割の列の最小の大きさが、制約の更新の最中に変わっていた。
+- 切り分け（同じ揺れを大きくした状態で 2〜3 回ずつ）: 後ろ側のパネルの中身に最小・最大の `frame` を付けても落ちた。真ん中の高さだけを切り離しても落ちた。真ん中の幅と高さの両方を切り離すと、3 回とも 6 秒動かして落ちなかった。
+- 直したあと: `--render-meeting-window` の最小の幅・文書の幅・ウインドウの中身の大きさの数値は、直す前と同じだった（NG なし）。描いた PNG は、記録中の 3 枚の開始時刻の表示（描いた時刻）を除いて同じだった。
+- 確かめていないこと: 直した版での実機の長い記録（実機で落ちた条件そのものは手元で再現できていない）。
+
+## 20. 記録中に落ちた会議を、録音から戻す（2026-11-13、macOS 26.6.2、Mac15,3）
+
+REQ-MTG-128・DEC-MTG-156〜160。計画は [plans/meeting-crash-recovery.md](../plans/meeting-crash-recovery.md)（落ちたときに残るものの実験もそこに書いた）。
+
+- `--test-meeting-audio-crash`: 子のプロセスで、相手側と同じ形（48 kHz ステレオの Float）の音を実時間で 0.1 秒ずつ `ChannelTranscriber`（書き出しだけ）に渡し、10 秒のところで止めた。`kill -9` でも SIGTERM でも、残った `others.m4a` は `AVAudioFile`・`AVURLAsset`・`TranscriptionAudio.loadSamples` のどれでも 7.9 秒読めた（失ったのは約 2.1 秒。受け入れ条件の 3 秒の内）。4 秒書いて閉じたファイルは 3 つとも 3.99 秒で、2.5 秒の位置に移って読めた。書き手を取り消すと書けなかった印が立ち、そのあとの `append` と閉じるのは 0.04 秒で戻った。書き出しのキューを 3 秒止めたまま 40 秒ぶんを渡すと、`append` は 0.09 秒で戻り、30 秒を超えたところで印が立ち、閉じるのは 2.9 秒で戻った。
+- マージの前のレビューで、ファイルを実時間より速く流す CLI（`--meeting-files`・`--meeting-recover-files`）では書き出しが追いつかず、溜める上限（30 秒ぶん）を超えたところで残りを捨てていた（600 秒の音で 25.6 秒しか書けなかった）と分かった。ファイルから流すときは捨てずに追いつくのを待つようにし、`--test-meeting-audio-crash` に 120 秒ぶんを速く流して全部書けることを足した。アプリの記録（実時間）は今までどおり待たずに捨てる。
+- `--test-meeting-recovery`: ボタンを出す条件（失敗・完了・片方だけの録音・録音なし・長さ 0・発言あり・記録中・処理中・ほかの処理中）、長さ、オフレコの閉じ方、作り直しの前の会議の直し方、作り直しのあとの状態、開ける録音の測り方（m4a だけ・壊れた m4a・音のない m4a は数えない）で 20 件すべて OK。
+- `--meeting-recover-files`（Mac 標準）: `say` で作った自分（約 7.6 秒）と相手（約 6.1 秒、先頭のずれ 2.5 秒）の音声で、落ちた会議と同じ形の会議を作って作り直した。3.4 秒で状態が「完了」になり、相手の発言は 00:02 から始まり（ずれが効いた）、長さは 8.6 秒、終わっていないオフレコは録音の終わりで閉じ、メモ 2 件が残り、「録音を削除」の会議でも録音が残った。この開発用のバイナリには AI の鍵がないので、議事録は作られずエラーの文に理由が出た（どこにも送っていない）。作った会議はゴミ箱に移した。
+- 開発用のバイナリ（`.build/debug/Hanasu`）は権限の説明を持たないので、音声認識の許可を尋ねると TCC に止められる。`--meeting-recover-files` は `prepareRecovery` の代わりに `checkReady` だけを呼ぶ（`--meeting-files` と同じ）。
+- `--render-meeting-window` の `recovery-banner.png`・`more-menu-recover.png`・`recovering-document.png` で、帯のボタン、「…」のメニューの項目、作り直し中の帯（見出し「録音から作り直しています」と段階）を見た。崩れはなかった。
+- Windows: `dotnet test Hanasu.Core.Tests` で 773 件すべて合格（`MeetingRecoveryTests` の 12 件を含む。main の sherpa-onnx 2.0.1 を入れたあと）。`Hanasu.Windows` も Mac の上でビルドできた（警告 0・エラー 0）。
+
+見られなかったこと:
+
+- 実機で記録中に `kill -9`・⌘Q してから、会議ノートのボタンで作り直すこと（確かめのダイアログ、⌘Q の確かめ、ログアウト・再起動のときに確かめないこと、再生で 2 つの録音の時刻がそろうこと）。UI のテスト項目 UX-197・UX-198 に残した。
+- Whisper・Gemini での作り直し（`transcribeRecordedAudio` は記録を止めたあとと同じ関数。この Mac にモデルと鍵がない）。
+- 長い録音（2 時間）を Mac 標準で作り直すときのメモリと速さ。
+- Windows の画面と、実機で落ちた WAV からの作り直し。

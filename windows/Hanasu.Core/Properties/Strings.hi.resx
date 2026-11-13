@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>मीटिंग की रिकॉर्डिंग शुरू नहीं की जा सकती</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>जब तक कोई मीटिंग उसकी रिकॉर्डिंग से फिर से बन रही है, नई रिकॉर्डिंग शुरू नहीं की जा सकती.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>डिक्टेशन रिकॉर्ड हो रहा है. उसके पूरा होने के बाद फिर से प्रयास करें.</value>
   </data>
@@ -647,6 +650,9 @@
   </data>
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>वक्ता पृथक्करण मॉडल की सैंपल दर अपेक्षित नहीं है ({0} Hz).</value>
+  </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>वक्ता पृथक्करण मॉडल लोड नहीं हो सका।</value>
   </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Vertex AI क्षेत्र “{0}” का उपयोग नहीं किया जा सकता (केवल छोटे अक्षर, अंक और हाइफ़न; जैसे global, us-central1).</value>

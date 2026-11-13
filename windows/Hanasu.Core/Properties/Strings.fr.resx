@@ -543,6 +543,9 @@
   <data name="Meeting_CannotStart" xml:space="preserve">
     <value>Impossible de commencer l'enregistrement de la réunion</value>
   </data>
+  <data name="Meeting_RecoveringCannotStart" xml:space="preserve">
+    <value>Impossible de commencer un enregistrement pendant qu'une réunion est reconstruite à partir de son enregistrement.</value>
+  </data>
   <data name="Meeting_DictationInProgress" xml:space="preserve">
     <value>La dictée est en cours d'enregistrement. Réessayez quand elle sera terminée.</value>
   </data>
@@ -647,6 +650,9 @@
   </data>
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>La fréquence d'échantillonnage du modèle de séparation des intervenants n'est pas celle attendue ({0} Hz).</value>
+  </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Impossible de charger le modèle de séparation des intervenants.</value>
   </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Impossible d'utiliser la région Vertex AI « {0} » (lettres minuscules, chiffres et traits d'union uniquement ; par exemple global, us-central1).</value>

@@ -27,6 +27,11 @@ jobs:
       # 訳の漏れ（17 言語のプロンプトと UI の文字列。手順は .claude/skills/i18n/SKILL.md）
       - name: Check translations
         run: python3 scripts/check-i18n.py --summary
+      # 確かめ方: REQ-REL-005
+      # 設計判断: DEC-REL-012
+      # 配布物に入る依存が、ライセンスを確かめた一覧（common/third-party-licenses.json）に同じ版で載り、許すライセンスで、表示があるか
+      - name: Check licenses
+        run: python3 scripts/check-licenses.py
       # 確かめ方: REQ-REL-006
       # リリースの本文の組み立て（リリースのときに初めて動くので、ここで毎回確かめる）
       - name: Check release notes composer

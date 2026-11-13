@@ -85,7 +85,7 @@ Granola のドキュメントでは「マイクを 1 チャンネル、PC で鳴
 設定の「AI」→「文字起こし AI」の「会議の記録」で、エンジンを Mac 標準 / Whisper / Gemini から選べる（音声入力とは別に選ぶ。理由と各エンジンの中身は [design/dictation.md](dictation.md) 4.10）。
 Mac 標準は今までどおり（チャンネルごとの SpeechTranscriber でライブ文字起こし）。Whisper と Gemini は次のようにする。
 
-- **記録中**: `ChannelTranscriber(live: false)` で、文字起こしはせず、チャンネルごとに 16 kHz モノラルの AAC（me.m4a / others.m4a）に書き出すだけにする
+- **記録中**: `ChannelTranscriber(live: false)` で、文字起こしはせず、チャンネルごとに 16 kHz モノラルの AAC（me.m4a / others.m4a。4.18 の断片化した m4a）に書き出すだけにする
   （相手側はステレオのことが多いので左右をまとめる）。音量の表示と「音が入っていません」の注意は今までどおり。
   - **記録中のライブ文字起こしは出さない。** 会議ノートの記録中の画面には「文字起こしは、記録を止めたあとに Whisper で行います」、字幕パネルには「記録を止めたあとに Whisper で文字起こしします」と出す。
     Whisper を数秒ごとに回すと会議中の CPU・電池の負担が大きく、Gemini で細かく送ると呼び出しの数と費用がかさむため。
@@ -231,6 +231,7 @@ macOS 26 で試したところ、`kAudioProcessPropertyIsRunningInput` / `IsRunn
   対象は `Meeting.undoableHighlight(at:)` が返す、10 秒以内のいちばん新しい印だけ。それより古い印は、記録中は右クリックでも消せず、記録のあとに「メモ」タブで消す（DEC-MTG-047）。
 - **印の前後の会話**: 会議ノートの文書の「ここ重要」の欄（`HighlightContextsSection`）が、`Meeting.highlightContexts()` で印ごとに 30 秒前〜15 秒後の発言を出す（議事録の ★ と同じ範囲。DEC-MTG-049）。「前後の会話を見る」で後ろ側のパネルの文字起こしのその発言へ移る。
 - **会議ノートのウインドウの大きさ**: `AppDelegate.makeMeetingWindow` は `NSHostingController.sizingOptions` を空にし、最小の大きさ（1040×560）を `contentMinSize` で決める。中身に合わせると、メモのテキスト欄でウインドウが画面より伸びていた。後ろ側のパネル・帯・チャットの説明文は `fixedSize` にせず行数で抑える。左右に並べる画面が細い幅で最小の高さを測ると、1 文字ずつ折り返した高さを求めて、中身がウインドウからはみ出す（DEC-MTG-048）。
+- **真ん中の画面の最小の大きさ**: `MeetingWindowView.splitView` は `NavigationSplitView` の真ん中に、幅・高さとも最小 0・最大無限の `frame` を付ける。真ん中の最小の大きさが中身（記録中の帯・文字起こし）で変わると、分割の列が制約の更新の最中にレイアウトをやり直し、収まらないと AppKit の例外でアプリが落ちる（DEC-MTG-155）。
 - **テキスト形式**: 会議ノートでの編集・`notes.md`・CLI の `--notes` で同じ形式を使う。1 行 1 件で、`[12:34] 内容`（メモ）、`[12:40] ★ 説明`（印）、時刻なしの行（記録後に書き足したメモ）。
 - **議事録への反映**（メモか印があるときだけ。ない会議の指示と入力は今までと同じ）:
   - 入力に `<user_notes>`（`[時刻] メモ` と `[時刻] ★ここ重要`）を足す。
@@ -396,6 +397,7 @@ idle ──開始──▶ starting ──（権限OK・タップ作成・認識
 recording ──停止──▶ finishing（認識の確定）──▶ processing（話者分離・議事録）──▶ idle
 （Whisper / Gemini のときは processing の最初に「Whisper で文字起こししています…（自分）」などを挟む）
 エラー時は idle に戻り、それまでの録音・文字起こしは保存する
+録音から作り直すとき（4.18）: idle ──押して確かめる──▶ processing（文字起こし・話者分離・議事録。current は空のまま、recoveringID に会議）──▶ idle
 ```
 
 ### 4.17 録音を消す（会議ごと・あとから・保存期間）
@@ -410,6 +412,15 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 - **保存期間**: 設定 `meetingAudioRetentionDays`（0 は無期限）。`MeetingRecorder.pruneExpiredAudio` を、起動時（`AppDelegate` で `markInterruptedMeetings` のあと）と、`stop` で `process` が返ったあとに呼ぶ（`process` は CLI からも呼ばれるので、そこでは呼ばない）。設定で期間を短くして今すぐ消える録音があれば、`MeetingAudioSettingsRows` が確かめてから消す（DEC-MTG-143）。
 - **消したファイル**: 完全に消すが、同期するフォルダ（iCloud Drive など）やバックアップには残ることがある（[security.md](security.md) 5）。
 
+### 4.18 記録中に落ちた会議を、録音から戻す
+
+- **録音の書き方**: `ChannelTranscriber` は録音を `MeetingAudioWriter` で書く。`AVAssetWriter` の m4a（AAC 32 kbps）で、`movieFragmentInterval` を 2 秒にして断片を閉じながら書くので、落ちても最後に閉じた断片まで開ける（`AVAudioFile` で書いた m4a は、閉じないと開けなかった）。正常に閉じたファイルは今までの m4a と同じに読める。`ChannelTranscriber` のキューではバッファを写して渡すだけにし、書き出しは専用のキューで、書き手の準備を 1 回 1 秒まで待つ。書き手が止まった・書いていない音が 30 秒ぶんを超えたら書くのをやめ、記録を止めたときにエラーの文に出す（DEC-MTG-156）。ファイルから実時間より速く流すとき（`ChannelTranscriber.transcribe(file:…)`）は `realtime: false` で、上限で捨てずに追いつくのを待つ。
+- **先頭のずれ**: `ChannelTranscriber.knownStartOffset`（`levelLock` で読む）を、`MeetingRecorder.updateLevels` がチャンネルごとに 1 回、`meeting.json` の `audioStartOffsets` に保存する（DEC-MTG-157）。Windows は `MeetingController.PersistStartOffsetsIfKnown` を 1 秒ごとに UI のスレッドで呼ぶ。
+- **終了するとき**: `AppDelegate.applicationShouldTerminate` が、記録中なら確かめて（ログアウト・再起動では確かめない）、`MeetingRecorder.closeForTermination` で録音を閉じてから終える。会議は「記録中」のまま残り、次の起動で `markInterruptedMeetings` が「失敗」にする（DEC-MTG-160）。
+- **作り直すボタン**: `MeetingRecorder.canRecover` → `MeetingRecovery.canRecover`（発言 0 件・開ける m4a・処理中でない）。開ける録音の長さは `MeetingRecovery.readableAudioSeconds` がファイルの更新日時と大きさごとに覚えておく。ボタンは `MeetingStatusBanners` のエラーの帯と `MeetingMoreMenuItems` に出し、押すと `MeetingRecoveryPrompt` がエンジン名（Gemini なら Google に送ること）を書いた `NSAlert` で確かめ、`prepareRecovery`（`checkReady` と音声認識の許可）を通してから `recoverFromAudio` を呼ぶ。
+- **作り直し**: `recoverFromAudio` は `recoveringID` に会議を入れ（`current` には入れない）、状態を `.processing` にし、`MeetingRecovery.prepared`（エラーの文を消し、長さとオフレコを録音から直す）で保存する。Mac 標準は `ChannelTranscriber.transcribe(file:…)` で録音を文字起こしに流す（`--meeting-files` と同じ関数。10 秒ごとに文字起こしの進み具合を見て、30 秒より遅れていれば待つ）。Whisper / Gemini は `transcribeRecordedAudio`。そのあと `process(…, recovering: true)` で、録音を消さず、`MeetingRecovery.statusAfterRecovery` で状態を決める（DEC-MTG-158）。会議ノートは `recoveringID` の会議を処理中の画面（`MeetingDetailView(processing: true)`）で出し、帯の見出しを「録音から作り直しています」にする。
+- **Windows**: `MeetingController.RecoverFromAudioAsync` が、`WavStreamWriter.RepairHeader` で 2 つの WAV のヘッダーを直し（DEC-MTG-159）、`MeetingRecovery`（Core）を当てて、`CreatePostProcessor(…, keepAudio: true)` の後処理に渡す。ボタンは会議ノートの `RecoverButton`。
+
 ### 5.2 記録中に何度も変わる値
 
 - **音量と途中結果**: `MeetingRecorder.updateLevels`（0.25 秒ごと）の音量と、`ChannelTranscriber.onVolatile` の途中結果は `MeetingLiveSignals`（`MeetingRecorder.signals`）に入れる。`MeetingRecorder` の `@Published` に置くと会議ノートの全体が描き直されるため（DEC-MTG-151）。これを `@ObservedObject` で見るのは `LiveLevelMeters`・`LiveVolatileLines`・`LiveTranscriptPlaceholder`・`MeetingCaptionView` だけ。記録中の値を足すときも、頻繁に変わるものはこちらに置く。
@@ -423,7 +434,7 @@ recording ──停止──▶ finishing（認識の確定）──▶ processi
 ├── transcript.md     # [00:01:23] 話者1: …… の形式
 ├── minutes.md        # Gemini の議事録
 ├── notes.md          # 会議中のメモと「ここ重要」の印（あるときだけ。中身は meeting.json の notes と同じ）
-├── me.m4a            # マイク（AAC 16kHz モノラル。会議ごとに処理後に削除できる。文字起こしがそろっていないときは残す。あとから・保存期間でも消せる。4.17）
+├── me.m4a            # マイク（AAC 16kHz モノラル。2 秒ごとに断片を閉じる m4a で、落ちても直前まで開ける（4.18）。会議ごとに処理後に削除できる。文字起こしがそろっていないときは残す。あとから・保存期間でも消せる。4.17）
 └── others.m4a        # システム音声
 ```
 

@@ -287,6 +287,24 @@ Originale: {2}</value>
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>Rigenera verbale</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Trascrivi e crea il verbale dalla registrazione</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Trascrive la registrazione salvata, distingue chi parla e crea il verbale.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>Ricreare la riunione dalla registrazione?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>Verrà trascritta con le impostazioni attuali ({0}), verranno distinti i partecipanti e verrà creato il verbale.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>L'audio della riunione verrà inviato a Google.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Ricreazione dalla registrazione in corso</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Modello:</value>
   </data>

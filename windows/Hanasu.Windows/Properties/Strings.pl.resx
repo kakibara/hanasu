@@ -287,6 +287,24 @@ Oryginał: {2}</value>
   <data name="Meeting_Regenerate" xml:space="preserve">
     <value>Wygeneruj protokół ponownie</value>
   </data>
+  <data name="Meeting_RecoverFromAudio" xml:space="preserve">
+    <value>Transkrybuj i utwórz protokół z nagrania</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Tip" xml:space="preserve">
+    <value>Transkrybuje zachowane nagranie, rozróżnia mówców i tworzy protokół.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_ConfirmTitle" xml:space="preserve">
+    <value>Odtworzyć spotkanie z nagrania?</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_Confirm" xml:space="preserve">
+    <value>Nagranie zostanie przetranskrybowane z bieżącymi ustawieniami ({0}), mówcy zostaną rozróżnieni, a protokół utworzony.</value>
+  </data>
+  <data name="Meeting_RecoverFromAudio_GeminiNote" xml:space="preserve">
+    <value>Dźwięk ze spotkania zostanie wysłany do Google.</value>
+  </data>
+  <data name="Meeting_Recovering" xml:space="preserve">
+    <value>Odtwarzanie z nagrania</value>
+  </data>
   <data name="Meeting_TemplateShort" xml:space="preserve">
     <value>Szablon:</value>
   </data>
