@@ -98,6 +98,16 @@ jobs:
           # 設計判断: DEC-COM-193（PATH に入れる cli\ に、ほかの DLL を混ぜない）
           $cli = @(Get-ChildItem publish/win-x64/cli | ForEach-Object Name)
           if ($cli.Count -ne 1 -or $cli[0] -ne "hanasu.exe") { throw "cli\ に hanasu.exe 以外があります: $($cli -join ', ')" }
+          # 確かめ方: REQ-REL-005
+          # GPL-3.0 の espeak-ng を含む DLL を配らない（sherpa-onnx 1.13.8 の TTS 付きの DLL に静的にリンクされていた）。
+          # 大文字と小文字を区別する（"OfflineSpeakerDiarization" や "wespeaker" に当たらないように）
+          $latin1 = [System.Text.Encoding]::Latin1
+          foreach ($dll in Get-ChildItem -Recurse publish/win-x64 -Filter *.dll) {
+            $text = $latin1.GetString([System.IO.File]::ReadAllBytes($dll.FullName))
+            foreach ($marker in @("espeak_ng_", "espeak_Initialize")) {
+              if ($text.Contains($marker, [System.StringComparison]::Ordinal)) { throw "GPL-3.0 の espeak-ng が入っています: $($dll.FullName)（$marker）" }
+            }
+          }
           Get-ChildItem -Recurse publish/win-x64 | Select-Object FullName, Length | Format-Table -AutoSize
 
       # 確かめ方: REQ-COM-180, REQ-COM-181, REQ-COM-189, REQ-MTG-120

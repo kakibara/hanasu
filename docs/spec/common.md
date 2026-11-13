@@ -1565,6 +1565,14 @@
 
 ---
 
+### DEC-COM-206 Windows 版のアプリは、ANSI のコードページを UTF-8 にして動く
+- 決めたこと: `windows/Hanasu.Windows/app.manifest` の `windowsSettings` に `activeCodePage`（`UTF-8`）を足す。Hanasu.exe のプロセスでは ANSI のコードページ（CP_ACP）が UTF-8 になり、.NET が `LPStr` で渡す文字列も UTF-8 になる。
+- 理由: sherpa-onnx の C# の API はモデルのパスを `LPStr`（Windows では ANSI のコードページ。日本語の Windows なら CP932）で渡し、ネイティブの側は Windows でパスを UTF-8 とみなして UTF-16 に直して開く（sherpa-onnx の `file-utils.cc` の `ToWideString`）。ユーザーのフォルダ名に ASCII 以外の文字があると、`%LOCALAPPDATA%\Hanasu\Models\diarization` のモデルを見つけられず、話者分離が動かない（1.13.8 ではプロセスが落ちていたと見られる）。sherpa-onnx の C# の構造体と関数を `LPUTF8Str` で自前に書き直すより小さく、ネイティブの構造体の並びを写して持たずに済む。Windows 10 1903 から効き、Hanasu の対象（Windows 10 2004 以降）はすべて入る。Hanasu 自身の P/Invoke はすべて UTF-16（`CharSet.Unicode`・`StringMarshalling.Utf16`）なので影響しない。同じプロセスの Whisper.net（whisper.cpp）は、狭い文字のパスを ANSI のコードページで開くので、渡す側と読む側がそろったまま変わらない。`cli\hanasu.exe`（Hanasu.Command）は別の exe でマニフェストも別なので変わらない。
+- 決めた場面: 2026-11-12 の依頼「GPL/LGPL のライブラリは含まれていますか？」の計画のレビューで見つかり、2026-11-13 の答え「この PR で直す」
+- 関係する要件: REQ-MTG-004
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/app.manifest`
+
 ## 廃止
 
 やめた要件・設計判断は、消さずにここへ移す（`- 状態: 廃止（日付・理由・PR）`）。今はない。
