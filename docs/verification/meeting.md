@@ -232,6 +232,7 @@ v1.4.0 で「メモ」タブを開くと、タイトル・タブの切り替え�
 - 作れなかったとき: 2.0 から、モデルを読めないと C の API が NULL を返す（k2-fsa/sherpa-onnx#4044）。`DiarizationTests.BrokenModelsThrowInsteadOfCrashing`（大きさだけ合わせた中身のないモデル）で、落ちずに `Diarization_CreateFailed` の例外になることを Mac で確かめた。日本語の名前のフォルダのファイルを UTF-8 で渡すと sherpa-onnx が見つけること（`SherpaReadsUtf8Paths`）も Mac で確かめた。
 - `dotnet test Hanasu.Core.Tests`: 761 件すべて成功。
 - 確かめていないこと（実機）: Windows の実機（win-x64 の DLL）で相手側の話者が分かれること。ユーザーのフォルダ名が日本語のアカウントで、直す前に話者分離が動かなかったか（推測）と、`activeCodePage` を UTF-8 にしたあとで文字起こし（Whisper.net）と話者分離の両方が動くこと（DEC-COM-206）。Windows の CI でのテストの結果は PR で見る。
+- 公開と取り下げ（2026-11-13）: v2.6.2 を公開し（Windows の zip 198,240,038 バイト。releases/latest が v2.6.2 を指すことを確かめた）、v1.3.0〜v2.6.1 の 17 のリリースから `Hanasu-<版>-Windows-x64.zip` を消し、本文の Windows のところに取り下げたことと v2.6.2 以降を使うことを書いた。Mac の zip は残した。Actions の artifact `Hanasu-windows-x64` のうち、この修正を含まない run のもの 169 個を消し、残った 6 個がすべて修正を含むことを確かめた（修正を含まないブランチで CI が動くと、またできる）。
 
 ## 19. 会議の記録中に、制約の更新の例外でアプリが落ちる（2026-11-13、macOS 26.6.2、Mac15,3）
 
