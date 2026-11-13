@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.6.2](https://github.com/kakibara/hanasu/compare/v2.6.1...v2.6.2) - 2026-11-13
+
+- Windows 版の sherpa-onnx を 2.0.1 に上げ、GPL-3.0 の espeak-ng を配布物から外す by @kakibara in https://github.com/kakibara/hanasu/pull/111
+
 ## [v2.6.1](https://github.com/kakibara/hanasu/compare/v2.6.0...v2.6.1) - 2026-11-12
 
 - Windows の hanasu を Server GC で動かし、CI の検索の速さの上限を 3 秒にする by @kakibara in https://github.com/kakibara/hanasu/pull/107
