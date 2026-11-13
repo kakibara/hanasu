@@ -38,7 +38,7 @@ enum TextAIProvider: String, CaseIterable, Identifiable {
 enum TextAIPurpose: String, CaseIterable, Identifiable {
     /// 音声入力整形: 整形・英訳・選択の編集
     case dictation
-    /// 議事録: 議事録（作り直しを含む）。辞書の候補探しもこちら（会議の記録を読む長い処理なので）
+    /// 議事録: 議事録（作り直しを含む）。辞書の候補探し・文体を学ぶのもこちら（長い文章を読む処理なので）
     case meeting
     /// AI チャット・質問: 会議の AI チャット（記録中・会議ノート）・会議への質問。対話なので議事録とは別に選ぶ
     case chat
@@ -55,7 +55,8 @@ enum TextAIPurpose: String, CaseIterable, Identifiable {
     var detail: String {
         switch self {
         case .dictation: tr("整形・翻訳・選択の編集")
-        case .meeting: tr("作り直しも含む・辞書の候補")
+        // 設計判断: DEC-DIC-210（文体を学ぶのも議事録の AI）
+        case .meeting: tr("作り直しも含む・辞書の候補・文体を学ぶ")
         case .chat: tr("会議の AI チャット・会議への質問")
         }
     }

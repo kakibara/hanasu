@@ -142,12 +142,15 @@
 - 確かめ方: `.build/debug/Hanasu --test-dictation-level [秒] [--engine apple|whisper|gemini]`（音声入力と同じ経路で録音し、HUD に渡る音量の回数と最大を出す。マイクの許可が要る）、`--render-hud /tmp/hud.png [--engine whisper]`・`--render-edit-hud` で見た目。話したときのバーの動きは実機で確かめる
 
 ### REQ-DIC-020 入力先アプリに合わせて文体を変える
-- 内容: 入力先アプリ（bundle ID）ごとに、Gemini に渡す文体ルール（プリセット 1 つと、そのアプリ用の追加ルール）を決められる。
-- 受け入れ条件: 同じ発話でも、Slack ではくだけた短い文、メールでは丁寧な文で段落を分けた文になる。
-- 出典: PR #5（類似製品を調べた 10 個の改善案の 1 つ。ユーザーがすべてのマージを指示した）
-- 対象: Mac
+- 内容: 入力先アプリ（Mac は bundle ID、Windows は exe の名前）ごとに、AI に渡す文体ルール（プリセット 1 つ（カスタム文体 REQ-DIC-023 を含む）と、そのアプリ用の追加ルール）を決められる。設定の「アプリ別」タブで編集する。既定でオン（Mac も Windows も）。
+- 受け入れ条件:
+  - 同じ発話でも、Slack ではくだけた短い文、メールでは丁寧な文で段落を分けた文になる。
+  - Windows: slack.exe が前面のときに音声入力すると、チャットの文体ルールが AI に渡る。設定の「アプリ別」のスイッチをオフにすると渡らない。ストアアプリ（ApplicationFrameHost.exe）では引かない。
+- 出典: PR #5（類似製品を調べた 10 個の改善案の 1 つ。ユーザーがすべてのマージを指示した）。Windows に広げたのは 2026-11-13 の依頼「テキストを投入すると、そこから文体を学ぶ機能…」の計画（[plans/style-learning.md](../plans/style-learning.md)。Windows にも作る・既定でオン、と確かめ、同日に計画を了承）
+- 対象: Mac / Windows
 - 実装の場所: `AppStyleStore`、`AppStyle.promptSection`、`DictationController.startDictation`
-- 確かめ方: `.build/debug/Hanasu --refine-text "<文>" --app com.tinyspeck.slackmacgap --show-prompt`、`--render-app-styles /tmp/app-styles.png`
+- Windows の実装: `AppStyleLookup.Find`・`AppStyle.PromptSection`（`windows/Hanasu.Core/Dictation/AppStyle.cs`）、`DictationTextProcessor.ProcessAsync`、`ForegroundWindowTracker.ForegroundAppExe`、設定の「アプリ別」タブ（`SettingsWindow`）
+- 確かめ方: `.build/debug/Hanasu --refine-text "<文>" --app com.tinyspeck.slackmacgap --show-prompt`、`--render-app-styles /tmp/app-styles.png`。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`DictationControllerTests`・`CustomStyleTests`）。Windows の画面と前面のアプリでの切り替えは実機で確かめる
 
 ### REQ-DIC-021 入力先アプリごとに、既定の出力言語を決める
 - 内容: アプリごとに既定の出力言語（話した言語か、翻訳の言語 REQ-DIC-013 の 17 言語のどれか）を決められる。English にしたアプリで録音を始めると英訳で始まる（日本語なら和訳、韓国語なら韓国語への翻訳で始まる）。選べる言語は翻訳の言語の一覧から作り、別に持たない（DEC-DIC-150）。
@@ -156,6 +159,41 @@
 - 対象: Mac
 - 実装の場所: `AppOutputLanguage`、`AppStyleRow`、`DictationController.startDictation`
 - 確かめ方: `--refine-text "<文>" --app <bundle id>`（`-appStyles` 引数で出力言語を一時的に English にする）
+
+### REQ-DIC-022 文章から文体を学び、カスタム文体として登録する
+- 内容: 設定の「アプリ別」の「カスタム文体」から、文章を貼り付けるか、Word（.docx）・テキスト（.txt）・Markdown（.md）のファイルを選んで読み込み、AI に文体のルールを書き出してもらう。ルール・名前・学んだ文章の言語は、保存の前に画面で読めて直せる。名前を付けて保存すると、カスタム文体として残る。あとから名前・言語・ルールを直せ、消せる。
+- 受け入れ条件:
+  - 「文章から学ぶ…」で開くシートで、文章を貼り付けて「文体を学ぶ」を押すと、文体のルール（1 行に 1 つ、12 個まで）・名前の案・文章の言語（17 言語のどれか）が出る。直して「保存」すると、カスタム文体の一覧に出る。アプリを再起動しても残る。
+  - ルールは「どう書くか」（文末・丁寧さ・文の長さ・段落と改行・句読点と記号・語彙の硬さ）だけで、「〜を足す」「〜で始める・結ぶ」のような内容を加えるルールと、材料の固有名詞・数字・話題は入れない（DEC-DIC-210）。
+  - 「ファイルを選ぶ…」で .docx・.txt・.md・.markdown を選ぶと、その本文が入力欄に入る（複数選ぶと、空行をはさんで選んだ順に足す）。.txt・.md は UTF-8（BOM の有無を問わない）・UTF-16（BOM あり。LE・BE）・Shift_JIS を読める。読めないファイル（壊れた .docx・ほかの拡張子・20 MB より大きい・展開すると大きすぎる .docx）は、ファイル名と理由を出し、入力欄は変えない。入力欄に入れるのは 100,000 字まで。超えた分は入れず、そのことを出す。
+  - 文章が 100 字より短いと「文体を学ぶ」は押せず、理由を出す。送る上限（DEC-DIC-212）より長いと、先頭から上限までを使うことを、押す前に出す。
+  - 投入した文章は保存しない。シートを閉じると消える。保存するのは名前・言語・ルールだけ。
+  - AI が失敗した・ルールを読み取れなかった・AI の設定がない・文章の言語が 17 言語のどれでもないときは、理由を出し、入力した文章は残したままにする（もう一度押せる）。学んでいる間は「やめる」で止められ、止めても入力欄は残る。学んでいる間にシートを閉じたら、AI への要求を取り消す。
+  - 名前が空・ルールが空・同じ名前（前後の空白と大文字小文字を区別しない。組み込みのプリセットの表示名も含む）は保存できず、理由を出す。ルールは 20 行・全体で 2,000 字までで、超えると保存できず理由を出す。
+  - 一覧からカスタム文体を消すと、確認を出す（使っているアプリの数を出す）。消すと、使っていたアプリのプリセットは「なし」になる（そのアプリの追加ルールは残る）。
+  - 「アプリ」の節の「初期設定に戻す…」では、カスタム文体は消えず、アプリへの割り当てだけが初期の表に戻る（確認の文もそう書く）。
+- 出典: 2026-11-13 の依頼「テキストを投入すると、そこから文体を学ぶ機能を作成してください。学んで、それを新しい文体にカスタム登録できるようにしてください。アップロード形式は Word ファイル、テキストファイル、マークダウンファイルです。コピーでもできるようにして」。同日に計画（[plans/style-learning.md](../plans/style-learning.md)）を了承
+- 関係する要件: REQ-DIC-020, REQ-DIC-023
+- 対象: Mac / Windows
+- 実装の場所: `CustomStyle`・`CustomStyleStore`（`AppStyles.swift`）、`StyleLearner`・`StyleSourceReader`・`DocxText`（`StyleLearning.swift`）、`StyleLearningSheet`・`CustomStylesSection`（`StyleLearningSheet.swift`）
+- Windows の実装: `CustomStyle`・`CustomStyleRules`（`windows/Hanasu.Core/Dictation/AppStyle.cs`）、`StyleLearner`・`StyleSourceReader`・`DocxText`（`windows/Hanasu.Core/Dictation/StyleLearning.cs`）、`StyleLearningWindow`（`windows/Hanasu.Windows/Views/StyleLearningWindow.cs`）、設定の「アプリ別」タブ
+- 確かめ方: `.build/debug/Hanasu --test-custom-styles`、`.build/debug/Hanasu --learn-style --from-file <ファイル>`（実際の AI）、`--render-style-learning <出力フォルダ>`、`cd windows && dotnet test Hanasu.Core.Tests`（`CustomStyleTests`）
+
+### REQ-DIC-023 カスタム文体をアプリに割り当てて、音声入力の文体に使う
+- 内容: アプリ別の設定のプリセットの選択欄に、組み込みのプリセットのあとにカスタム文体を並べ、アプリに割り当てられる。割り当てたアプリで、出力の言語がカスタム文体の言語と同じときは、そのルールを、プリセットのルールと同じ位置・同じ優先順位（DEC-DIC-043）で AI に渡す。違うときは「なし」と同じに扱う。
+- 受け入れ条件:
+  - 特徴のはっきりした固定の材料（`common/testdata/style/plain-comma.txt`: である調・読点に「，」）から学んだカスタム文体を割り当て、決まった発話（です・ます調で「、」を使い、挨拶のない短い文）を実際の AI で `--refine-text` に通すと、出力の文末が である調 になり、読点が「，」になる。話していない挨拶・宛名・署名・定型句は増えない。割り当てがないときの出力とは違う。
+  - `--show-prompt` で見ると、文体の節にカスタム文体のルールが「- 」で並び、組み込みのプリセットのルールは入らない。カスタム文体の名前は送らない。内容を足さない歯止めの行（`style.learnedGuard`）が入る。
+  - 出力の言語（翻訳なら訳す先、整形なら文字起こしの言語。整形の言語の統一（REQ-DIC-082）がオンならその先）がカスタム文体の言語と違うときは、文体の節にカスタム文体のルールが入らない（アプリ別の追加ルールは今までどおり入る）。
+  - カスタム文体のルールを直すと、次の音声入力から直したルールが使われる。
+  - 割り当てたカスタム文体が見つからない（消した・ほかの版で保存した設定）ときは「なし」として扱い、エラーにしない。
+  - `hanasu refine --app <アプリ> --style <プリセット>` は、そのアプリにカスタム文体を割り当てていても、`--style` のプリセットを使う（REQ-DIC-160 の「--style が --app より優先」を保つ）。画面で組み込みのプリセットに選び直したときも、カスタム文体の割り当ては外れる。
+- 出典: REQ-DIC-022 と同じ
+- 関係する要件: REQ-DIC-020, REQ-DIC-022, REQ-DIC-082, REQ-DIC-160
+- 対象: Mac / Windows
+- 実装の場所: `AppStyle.customStyleID`・`AppStyle.hasRules`・`AppStyle.promptSection`、`AppStyleRow`、`HanasuAICommands.runRefine`
+- Windows の実装: `AppStyle.HasRules`・`AppStyle.PromptSection`（`windows/Hanasu.Core/Dictation/AppStyle.cs`）、`AppStyleSetting`（`windows/Hanasu.Core/Settings/AppSettings.cs`）、`DictationTextProcessor.ProcessAsync`、`AiCommands.RefineAsync`
+- 確かめ方: `.build/debug/Hanasu --test-custom-styles`（節の組み立て・言語の一致・`--style` の優先）、`HANASU_TEST_DEFAULTS_SUITE=<suite> .build/debug/Hanasu --refine-text "<発話>" --app <bundle ID> [--show-prompt]`、`--test-hanasu-command` と Windows の `CommandGoldenTests`（`common/testdata/cli/cases.json` のカスタム文体の例）、`cd windows && dotnet test Hanasu.Core.Tests`
 
 ### REQ-DIC-030 決まった言葉で定型文を入力する（スニペット）
 - 内容: 起動フレーズと本文の組を登録しておくと、その言葉を話したときに本文をそのまま入力する。
@@ -423,7 +461,7 @@
 - 関係する要件: REQ-DIC-003, REQ-DIC-070, REQ-DIC-082, REQ-DIC-020, REQ-DIC-021, REQ-DIC-013, REQ-DIC-060, REQ-COM-186
 - 対象: Mac / Windows
 - 実装の場所: `HanasuAICommands.runRefine`、`HanasuTextInput`
-- Windows の実装: `AiCommands.RefineAsync`（`windows/Hanasu.Core/Command/AiCommands.cs`）。`--app` は exe の名前（例: `slack.exe`。DEC-DIC-190）
+- Windows の実装: `AiCommands.RefineAsync`（`windows/Hanasu.Core/Command/AiCommands.cs`）。`--app` は exe の名前（例: `slack.exe`）。アプリの設定の「アプリ別」（REQ-DIC-020。オンのとき）を先に引き、なければ既定の一覧（DEC-DIC-190）を使う
 - 確かめ方: `.build/debug/Hanasu --test-hanasu-command`（偽の `fm` に送られた内容と、失敗したときの出力で確かめる）。Windows は `cd windows && dotnet test Hanasu.Core.Tests`（`CommandGoldenTests`・`CommandTests`・`CommandPlatformTests`）と CI（windows.yml の「Run hanasu」）
 
 ### REQ-DIC-161 `hanasu edit` で、選択を声で編集と同じ書き換えをする
@@ -745,19 +783,19 @@
 - 実装の場所: `EditModeController.finish`
 
 ### DEC-DIC-040 文体のプリセットと、初期の割り当て
-- 決めたこと: プリセットは チャット / メール / 文書（です・ます）/ 文書（である）/ なし。初期の割り当ては、チャット: Slack・Teams（新旧）・Discord・LINE・メッセージ、メール: メール・Outlook・Spark（新旧）、文書（です・ます）: Pages・Word・Notion。「初期設定に戻す」でこの表に戻る。
+- 決めたこと: プリセットは チャット / メール / 文書（です・ます）/ 文書（である）/ なし。初期の割り当ては、チャット: Slack・Teams（新旧）・Discord・LINE・メッセージ、メール: メール・Outlook・Spark（新旧）、文書（です・ます）: Pages・Word・Notion。「初期設定に戻す」でこの表に戻る。 Windows も同じ表（既定の一覧 DEC-DIC-190 のアプリ）を初期の割り当てにする（2026-11-13、REQ-DIC-020 を Windows に広げたとき）。
 - 理由: よく使うアプリに、設定しなくても合う文体が付くようにする。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-020
-- 対象: Mac
-- 実装の場所: `AppStylePreset`、`AppStyleStore`
+- 対象: Mac / Windows
+- 実装の場所: `AppStylePreset`、`AppStyleStore`。Windows は `AppStyleSetting.Defaults`（既定の一覧 DEC-DIC-190 から作る）
 
 ### DEC-DIC-041 チャットのプリセットでも、タメ口にはしない
 - 決めたこと: チャットは、くだけた短い文にし、つなぎの言葉や前置きを削るまで。敬語で話したときは丁寧語を残す。
 - 理由: 日本の仕事用チャットでは上司や社外の人にも書くので、くだけすぎると困る。タメ口にしたいときはアプリ別の追加ルールに書けばプリセットより優先される。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-020
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `AppStylePreset`
 
 ### DEC-DIC-042 文書のプリセットは、です・ます調 と である調 の 2 つにする
@@ -765,15 +803,15 @@
 - 理由: どちらに揃えるかは用途で分かれる。です・ます調 の方が話し言葉から変える量が少ない。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-020
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `AppStylePreset`
 
 ### DEC-DIC-043 文体ルールの優先順位
-- 決めたこと: アプリ別の追加ルール ＞ プリセット ＞ 共通の追加ルール ＞ system instruction の「口調を変えない」。プロンプトにも明記する（共通の追加ルールが空ならその行は入れない）。プリセットには言い換えの例（「〜なんですけど → 〜ですが」など）を入れる。
+- 決めたこと: アプリ別の追加ルール ＞ プリセット（カスタム文体 REQ-DIC-023 を含む。DEC-DIC-214）＞ 共通の追加ルール ＞ system instruction の「口調を変えない」。プロンプトにも明記する（共通の追加ルールが空ならその行は入れない）。プリセットには言い換えの例（「〜なんですけど → 〜ですが」など）を入れる。
 - 理由: より狭い対象に向けて書いたものを優先する。最初は「口調を変えない」に負けてほとんど文体が変わらなかった。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-020
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `AppStyle.promptSection`
 
 ### DEC-DIC-044 英訳のときは、英訳向けのプリセットに切り替える
@@ -782,7 +820,7 @@
 - 理由: 出力を English にしたアプリの追加ルールは、英語で出すことを前提に書かれる。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-020, REQ-DIC-010
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `AppStyle.promptSection`
 
 ### DEC-DIC-045 既定の出力言語が English のアプリでは、英訳で始める
@@ -798,15 +836,15 @@
 - 理由: 設定でアプリ名を送らないと決めた人の意図を守る。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-020
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `AppStyle.promptSection`
 
 ### DEC-DIC-047 アプリ別の設定は、別のストアに持ち、全体のスイッチを付ける
-- 決めたこと: UserDefaults の `appStyles`（JSON）と `appStylesEnabled` に、`AppSettings` とは別の `AppStyleStore` で持つ。設定の「アプリ別」タブで編集し、アプリは実行中のアプリか `/Applications` の .app から足す。スイッチをオフにするとどのアプリでも使わない。
+- 決めたこと: UserDefaults の `appStyles`（JSON）と `appStylesEnabled` に、`AppSettings` とは別の `AppStyleStore` で持つ。カスタム文体は別のキー `customAppStyles` に `CustomStyleStore` で持つ（DEC-DIC-213）。Windows は `settings.json` の `AppStylesEnabled`・`AppStyles`・`CustomStyles` に持つ（DEC-DIC-213・216）。設定の「アプリ別」タブで編集し、アプリは実行中のアプリか `/Applications` の .app から足す。スイッチをオフにするとどのアプリでも使わない。
 - 理由: 共有の設定ファイルへの変更を小さくする（並行して作ったほかの PR との衝突を避けた）。
 - 決めた場面: PR #5
 - 関係する要件: REQ-DIC-020, REQ-DIC-021
-- 対象: Mac
+- 対象: Mac / Windows
 - 実装の場所: `AppStyleStore`、`AppStylesTab`
 
 ### DEC-DIC-050 スニペットの照合は、文字列の比較で決定的に行う
@@ -1013,12 +1051,68 @@
 - 実装の場所: `ScreenRecordingPermission`、`ScreenContextSettingsSection`、`ScreenshotButton`
 
 ### DEC-DIC-190 組み込みの既定の文体の一覧は、Mac の bundle ID と Windows の exe の名前の対応として共有する
-- 決めたこと: 既定の文体（Slack・Teams・Discord・LINE はチャット、Outlook・Spark はメール、Word・Pages・Notion は文書（です・ます））を、`hanasu.json` の `defaultAppStyles` に、Mac の bundle ID・Windows の exe の名前（小文字。大文字小文字を区別せずに比べる）・訳さないアプリ名・文体の組で置く（DEC-COM-191）。Mac の `AppStyleStore.defaultStyles` はこれを読み、名前を訳す Mac だけのアプリ（メッセージ・メール）は Swift のコードで `tr()` して足す。Windows の `hanasu refine --app <exe の名前>` はこの一覧だけを使い（Windows のアプリにアプリ別の文体の設定はない）、AI に送るアプリ名は一覧の名前、一覧になければ exe の名前から拡張子を外したもの。
+- 決めたこと: 既定の文体（Slack・Teams・Discord・LINE はチャット、Outlook・Spark はメール、Word・Pages・Notion は文書（です・ます））を、`hanasu.json` の `defaultAppStyles` に、Mac の bundle ID・Windows の exe の名前（小文字。大文字小文字を区別せずに比べる）・訳さないアプリ名・文体の組で置く（DEC-COM-191）。Mac の `AppStyleStore.defaultStyles` はこれを読み、名前を訳す Mac だけのアプリ（メッセージ・メール）は Swift のコードで `tr()` して足す。Windows の `hanasu refine --app <exe の名前>` は、アプリの設定の「アプリ別」（オンのとき。DEC-DIC-216）を先に引き、なければこの一覧を使う。AI に送るアプリ名は、アプリの設定の名前か一覧の名前、どちらにもなければ exe の名前から拡張子を外したもの。Windows のアプリの「アプリ別」の初期の割り当ても、この一覧から作る（DEC-DIC-040）。
 - 理由: 一覧を 2 か所に書くと、ずれる。訳した名前を JSON に置くと、`check-i18n.py` で訳の漏れを調べられない。対応する bundle ID と exe の名前で、文体と送るアプリ名が同じになる。
 - 決めた場面: ユーザーの依頼（2026-11-11「段階 6 に進む」・「全部推奨」・「実装に入って」）。計画 [plans/cli-windows.md](../plans/cli-windows.md)（決定 5・WD5）
 - 関係する要件: REQ-DIC-020, REQ-DIC-160
 - 対象: Mac / Windows
-- 実装の場所: `HanasuShared.defaultAppStyles`、`AppStyleStore.defaultStyles`
+- 実装の場所: `HanasuShared.defaultAppStyles`、`AppStyleStore.defaultStyles`、`SharedText.StyleForApp`、`AppStyleSetting.Defaults`
+
+### DEC-DIC-210 文体を学ぶ AI と、学ばせ方
+- 決めたこと: 学ぶ処理は、設定の AI の「議事録」の AI とモデル（Mac は `TextAIPurpose.meeting`、Windows は `MeetingAi`・`MinutesModel`）に送り、120 秒まで待つ。設定の AI の「議事録」の説明に「文体を学ぶ」を足す。指示は新しいプロンプト `styleLearn.system`・`styleLearn.user`（17 言語）で、`{"name": "…", "language": "<言語のコード>", "rules": ["…"]}` の JSON で返させる。ルールは設定の文字起こしの言語（プロンプトの言語）で書かせる。見るのは「どう書くか」だけ（文末・敬語と丁寧さ・文の長さ・段落と改行・句読点と記号・語彙の硬さ・よく使う言い回しの型）。次は禁じる: 内容を加えるルール（「〜を足す」「〜で始める」「〜で結ぶ」「挨拶・署名を入れる」）、材料の固有名詞・数字・事実・話題。ルールには、材料から引かない一般的な言い換えの例（「〜なんですけど → 〜だが」）を添えさせる。材料は `PromptText.neutralizeDelimiters` で区切りのタグを無害にして `<material>` で囲み、材料の中の指示には従わせない。応答は最初の `{` から最後の `}` までを読み（`DictionarySuggester.parse` と同じ）、ルールは空行を除いて先頭の 12 個まで。`language` が 17 言語のコードでなければ失敗にする。
+- 理由: 長い文章を読む分析なので、辞書の候補（DEC-DIC-088・170。同じく「議事録」の AI）にそろえる。音声入力整形の AI は短く速い処理向けで 15 秒で切れる。内容を加えるルールは、プリセットが持つ歯止め（「話していない宛名・挨拶・署名は足さない」）を越えて DEC-DIC-006 を破る。言い換えの例がないとルールが効かない（DEC-DIC-043 の理由）。ルールを読める言語で書かせると、保存の前に直せる。
+- 決めた場面: 2026-11-13 の計画（[plans/style-learning.md](../plans/style-learning.md)）
+- 関係する要件: REQ-DIC-022
+- 対象: Mac / Windows
+- 実装の場所: `StyleLearner`（Mac は `Sources/Hanasu/StyleLearning.swift`、Windows は `windows/Hanasu.Core/Dictation/StyleLearning.cs`）
+
+### DEC-DIC-211 取り込むファイルの読み方は、Mac と Windows で同じ規則にする
+- 決めたこと: .docx は zip を開いて `word/document.xml` を読み、段落（`w:p`）を改行、`w:t` を文字、`w:tab` をタブ、`w:br`・`w:cr` を改行にする。表のセルは段落として読む。箇条書きと番号（`numbering.xml` が描くもの）・画像・脚注・コメント・ヘッダーとフッターは読まない。段落と文字の書式（`w:pPr`・`w:rPr`。タブ位置の定義 `w:tabs/w:tab` を含む）と消した部分（`w:del`）の中も読まない。Mac は小さな zip の読み手（中央ディレクトリを読み、raw deflate を Apple の `Compression` で展開）を `DocxText` に書き、Windows は `System.IO.Compression.ZipArchive`。どちらも `document.xml` の展開後の大きさが 50 MB を超えたら読まず、XML の DTD は読まない（Windows は `DtdProcessing.Prohibit`）。.txt・.md は、BOM で UTF-8・UTF-16（LE・BE）を見分け、BOM がなければ UTF-8 で読み、UTF-8 として正しくなければ Shift_JIS（CP932）で読む。Windows は `StyleSourceReader` の中で `CodePagesEncodingProvider.Instance.GetEncoding(932)` を直接使う（アプリの起動で登録していないため）。.md の記号は外さない。20 MB より大きいファイルは読まない。読める拡張子は .docx・.txt・.md・.markdown。ファイルの本文は入力欄に入れ、貼り付けと同じに扱う。改行は LF にそろえる。
+- 理由: Mac の `NSAttributedString` と自前の読み方では番号・表・改行の文字が変わり、同じファイルから学んだ文体が OS で変わる。追加のライブラリなしで、両方で同じ規則にできる。番号の文字は本文にないので、両方とも読まない（.md の箇条書きの記号は本文にあるので残す）。展開の大きさを見ないと、小さな .docx で固まる。日本語の古いテキストは Shift_JIS が多い。本文を入力欄に入れると、送る前に要らない部分（署名・引用）を消せる。
+- 決めた場面: 2026-11-13 の計画（[plans/style-learning.md](../plans/style-learning.md)）
+- 関係する要件: REQ-DIC-022
+- 対象: Mac / Windows
+- 実装の場所: `StyleSourceReader`・`DocxText`。固定のファイルと期待する本文は `common/testdata/style/`
+
+### DEC-DIC-212 送る文章の長さの下限と上限
+- 決めたこと: 字数は Unicode のスカラー値で数える（Swift は `unicodeScalars.count`、C# は `EnumerateRunes().Count()`）。前後の空白を除いて 100 字未満なら学ばない。上限は、Gemini・Claude は 30,000 字。ローカル・Apple は `DictionarySuggester.budget(for:)` と同じ出し方（文脈の長さから出力・system・枠・余白を引いたトークン数）で、`LongInputFitter` に切られる・要約されることがない量だけを送る。超えた分は送らず、先頭から上限までを使い、シートに使う字数を出す。入力欄に入れるのは 100,000 字まで。
+- 理由: 短すぎると特徴が読み取れない。文体は数千字あれば読み取れ、長く送るほど時間と費用がかかる。端末の中のモデルは文脈の長さがモデルで違い（8,192〜32,768）、字数で決め打ちすると、あふれた分が黙って省かれ、返し方の指示まで切れる（DEC-DIC-170 と同じ理由）。数え方を決めないと、Mac と Windows で境目の合否が分かれる。大きすぎる本文を入力欄に入れると画面が固まる。
+- 決めた場面: 2026-11-13 の計画（[plans/style-learning.md](../plans/style-learning.md)）
+- 関係する要件: REQ-DIC-022
+- 対象: Mac / Windows
+- 実装の場所: `StyleLearner.budget`・`StyleLearner.material`（Mac）、`StyleLearner.Budget`・`StyleLearner.Material`（Windows）
+
+### DEC-DIC-213 カスタム文体の持ち方と、アプリへの割り当て方
+- 決めたこと: カスタム文体は ID（UUID）・名前・言語（17 言語のコード）・ルール（1 行に 1 つの文字列）だけを持つ。投入した文章は保存しない。Mac は UserDefaults の `customAppStyles`（JSON の配列）に `CustomStyleStore` で置き、`AppStyle` に `customStyleID`（任意）を足す。カスタム文体を選んだアプリの `preset` は `none` で保存する。`hasRules` はカスタム文体があれば true にする。組み込みのプリセットを選んだら（画面でも `hanasu refine --style` でも）`customStyleID` を消す。Windows は `settings.json` の `CustomStyles`、アプリ別の設定は `AppStylesEnabled`（既定 true）・`AppStyles`（exe の名前・アプリ名・プリセット・カスタム文体の ID・追加ルール。未設定なら既定の一覧 DEC-DIC-190）に置く。名前は前後の空白を取り、大文字小文字を区別せず、カスタム文体どうしと組み込みのプリセットの表示名（今の表示の言語）との重複を禁止する。ルールは 20 行・2,000 字まで。「初期設定に戻す」はアプリの割り当てだけを戻し、カスタム文体は消さない。カスタム文体を消したら、使っていたアプリの割り当てを外す（「なし」）。
+- 理由: ユーザーとの確認で「ルールだけ」に決めた。ID で持つので名前を直しても割り当ては外れない。`preset` を `none` にしておくと、前の版に戻しても知らないキーを無視して「なし」として読める。ルールの長さに上限がないと、毎回の音声入力が長くなり、端末の中の AI では話した内容が要約される。投入した文章は残らないので、初期設定に戻すだけで学んだ文体が消えると作り直せない。
+- 決めた場面: 2026-11-13 の計画（[plans/style-learning.md](../plans/style-learning.md)）
+- 関係する要件: REQ-DIC-022, REQ-DIC-023
+- 対象: Mac / Windows
+- 実装の場所: `CustomStyle`・`CustomStyleStore`・`AppStyle.customStyleID`（Mac）、`CustomStyle`・`CustomStyleRules`・`AppStyleSetting`・`AppSettings.CustomStyles`（Windows）
+
+### DEC-DIC-214 カスタム文体のルールは、出力の言語が同じときだけ、プリセットのルールの代わりに渡す
+- 決めたこと: `AppStyle.promptSection`（Mac）・`AppStyle.PromptSection`（Windows）で、カスタム文体を選んだアプリでは、出力の言語がカスタム文体の言語と同じときだけ、プリセットのルールの位置にカスタム文体のルールを「- 」で並べ、そのあとに歯止めの行 `style.learnedGuard`（17 言語。話していない挨拶・宛名・署名・定型句は足さない。箇条書きや段落への組み替えは、話した内容がそうなっているときだけ）を足す。出力の言語は、翻訳なら訳す先、整形なら文字起こしの言語（整形の言語の統一がオンならその先）。違うときはカスタム文体を「なし」と同じに扱う（アプリ別の追加ルールは今までどおり渡す）。見出し・アプリ別の追加ルール・優先順位の行（DEC-DIC-043）はプリセットと同じ。カスタム文体の名前は送らない。翻訳の読み替えの注記は使わない。
+- 理由: ユーザーとの確認で「学んだ言語と同じときだけ使う」に決めた。学んだルールには表記（句読点・全角半角）も入るので、ほかの言語の出力には合わない。組み込みのプリセットが持つ歯止めがカスタム文体にはないので、固定の行で補う。組み立てをプリセットと同じにすると、Mac と Windows で同じプロンプトにでき、golden で比べられる。
+- 決めた場面: 2026-11-13 の計画（[plans/style-learning.md](../plans/style-learning.md)）
+- 関係する要件: REQ-DIC-023
+- 対象: Mac / Windows
+- 実装の場所: `AppStyle.promptSection`（Mac）、`AppStyle.PromptSection`（Windows）
+
+### DEC-DIC-215 カスタム文体の画面は「アプリ別」タブに置き、学ぶのは 1 つのシートで行う
+- 決めたこと: 設定の「アプリ別」タブ（Mac は `AppStylesTab`、Windows は新しいタブ）の「プリセット」の説明の下に「カスタム文体」の節を置き、一覧（名前・言語・ルールの数）と「文章から学ぶ…」「編集…」「削除…」を並べる。「文章から学ぶ…」はシート（Windows はモーダルのウインドウ）で、上から: 入力欄（貼り付け）と「ファイルを選ぶ…」・字数と使う字数の表示、「文体を学ぶ」（学んでいる間は進み具合と「やめる」）、名前・言語・ルールの欄（学んだあとに出す。手で直せる）、「保存」「キャンセル」。「編集…」は同じシートの名前・言語・ルールの欄だけを出す。プリセットの選択欄は、組み込みのプリセットのあとに区切りを入れてカスタム文体を名前の順に並べる。ファイルのドラッグ＆ドロップは作らない。
+- 理由: 割り当てる場所と同じタブに置くと、作ってすぐ割り当てられる。学ぶ前に文章を見られ、学んだあとに直せる流れを 1 つのシートにまとめる。
+- 決めた場面: 2026-11-13 の計画（[plans/style-learning.md](../plans/style-learning.md)）
+- 関係する要件: REQ-DIC-022, REQ-DIC-023
+- 対象: Mac / Windows
+- 実装の場所: `CustomStylesSection`・`StyleLearningSheet`・`AppStyleRow`（Mac）、`SettingsWindow` の「アプリ別」タブ・`StyleLearningWindow`（Windows）
+
+### DEC-DIC-216 Windows 版のアプリ別の文体は、exe の名前で引き、出力言語は持たない
+- 決めたこと: 録音を始めたときの前面のウインドウ（Hanasu かタスクバーなら最後に前面だったウインドウ。`ForegroundWindowTracker.ForegroundAppName` と同じ選び方）の exe の名前（小文字）で `AppStyles` を引く。`ApplicationFrameHost.exe`（ストアアプリ）は引かない。引く処理（exe の名前 → `AppStyle`。スイッチ・知らない ID・ストアアプリの扱い）は `Hanasu.Core` の純粋な関数（`AppStyleLookup.Find`）にし、`DictationController` には exe の名前を返す関数（`ForegroundAppExe`）を `ForegroundAppName` と同じ形で渡す。`DictationTextProcessor.ProcessAsync` で `RefineRequest.AppStyle` に入れる。設定のタブでは、実行中のアプリ（メインウインドウのあるプロセス）から足すか、「exe を選ぶ…」で足す。行ごとにプリセット（カスタム文体を含む）・追加ルール・一覧から外す、と全体のオンオフ・「初期設定に戻す…」を置く。アプリごとの既定の出力言語（REQ-DIC-021）は作らない。
+- 理由: Windows の既定の一覧（DEC-DIC-190）と `hanasu refine --app` が exe の名前で引くのにそろえる。ストアアプリはどれも同じ exe なので見分けられない。Windows の画面はこの Mac で動かせないので、引く処理を Core に置いて `dotnet test` で確かめる。出力言語は HUD の切り替え（REQ-DIC-011）にも手が要り、今回の依頼の外。
+- 決めた場面: 2026-11-13 の計画（[plans/style-learning.md](../plans/style-learning.md)）
+- 関係する要件: REQ-DIC-020
+- 対象: Windows
+- 実装の場所: `AppStyleLookup.Find`（`windows/Hanasu.Core/Dictation/AppStyle.cs`）、`ForegroundWindowTracker.ForegroundAppExe`、`DictationController`、`DictationTextProcessor.ProcessAsync`
 
 ### DEC-DIC-200 整形の言語の統一の先は、プロンプトの言語にし、文体のルールもその言語の文面を使う
 - 決めたこと: 「整形の言語」の統一の先は、プロンプトの言語（Mac は `PromptLanguage.current`、Windows は `PromptLanguage.Current`）。設定には「統一する」ことだけを保存し、言語は保存しない（文字起こしの言語を変えたら、それに合わせて変わる）。指示は `refine.outputLanguage.unified` で、各言語の JSON に、その言語自身にそろえる文面を書く（言語名を `${language}` で埋めない。ja.json は前の `refine.outputLanguage.japanese` と一字一句同じ）。統一のときのアプリ別の文体ルール・画面の文脈の整形の指示・共通の追加の整形ルールは、話した言語のときと同じ（プロンプトの言語の文面）。選択肢の名前は、プロンプトの言語の名前を表示の言語で書く（`%@に統一`）。

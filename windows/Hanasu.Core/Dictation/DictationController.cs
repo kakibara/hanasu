@@ -42,6 +42,10 @@ public sealed class DictationServices
     public required DictationHistoryStore History { get; init; }
     /// <summary>今の前面アプリの名前（入力先として AI に伝える）</summary>
     public Func<string?> ForegroundAppName { get; init; } = () => null;
+    // 要件: REQ-DIC-020
+    // 設計判断: DEC-DIC-216
+    /// <summary>今の前面アプリの exe の名前（小文字。ForegroundAppName と同じウインドウ）。設定の「アプリ別」の文体を引く</summary>
+    public Func<string?> ForegroundAppExe { get; init; } = () => null;
     /// <summary>録音中だけ Esc を取り消しのショートカットとして登録する</summary>
     public Action<bool> SetEscapeHotKeyEnabled { get; init; } = _ => { };
     public Action<SoundCue> PlaySound { get; init; } = _ => { };
@@ -70,6 +74,7 @@ public sealed class DictationController
     private bool stopRequested;
     private bool cancelRequested;
     private string? targetAppName;
+    private string? targetAppExe;
 
     public DictationController(DictationServices services)
     {
@@ -162,6 +167,7 @@ public sealed class DictationController
         stopRequested = false;
         cancelRequested = false;
         targetAppName = services.ForegroundAppName();
+        targetAppExe = services.ForegroundAppExe();
         // HUD には「話した言語」と設定で選んだ翻訳の言語を出す（設定にない言語で始めたときは、それも出す）
         languageChoices = TranslationLanguages.Normalize(services.Settings().TranslationLanguages.Concat(mode.Translation is { } l ? new[] { l } : Array.Empty<TranslationLanguage>()));
         services.Hud.SetLanguages(mode.Translation, languageChoices);
@@ -249,7 +255,7 @@ public sealed class DictationController
         }
 
         if (usesGemini) services.Hud.Show(HudState.Processing(HudText.ProcessingTitle(Mode.Translation, Ai.TextAiFactory.NameOf(settings.DictationAi))));
-        var outcome = await services.Processor.ProcessAsync(raw, Mode, targetAppName, settings);
+        var outcome = await services.Processor.ProcessAsync(raw, Mode, targetAppName, settings, targetAppExe);
         services.Log($"process: {outcome.Status}, {outcome.Output.Length} chars");
         // 入力先がずれても取り戻せるよう、貼り付けの前に残す
         // 要件: REQ-DIC-060

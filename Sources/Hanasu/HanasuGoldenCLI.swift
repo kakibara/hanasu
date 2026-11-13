@@ -5,7 +5,7 @@ import Foundation
 //   Hanasu --test-hanasu-command の中で、expected.json と比べる
 // Windows 版は windows/Hanasu.Core.Tests/CommandGoldenTests.cs が、同じ cases.json を動かして同じ expected.json と比べる。
 
-// 確かめ方: REQ-COM-180, REQ-COM-181, REQ-MTG-120, REQ-MTG-121, REQ-MTG-123, REQ-MTG-124, REQ-MTG-126, REQ-MTG-127, REQ-DIC-160, REQ-DIC-161, REQ-DIC-162
+// 確かめ方: REQ-COM-180, REQ-COM-181, REQ-MTG-120, REQ-MTG-121, REQ-MTG-123, REQ-MTG-124, REQ-MTG-126, REQ-MTG-127, REQ-DIC-160, REQ-DIC-161, REQ-DIC-162, REQ-DIC-023
 // 設計判断: DEC-COM-192
 enum HanasuGoldenCLI {
     static var directory: URL {
@@ -30,7 +30,14 @@ enum HanasuGoldenCLI {
         let suiteName = "dev.mactypeless.Hanasu.golden-\(ProcessInfo.processInfo.processIdentifier)"
         let suite = UserDefaults(suiteName: suiteName)!
         suite.removePersistentDomain(forName: suiteName)
-        for (key, value) in settings where !key.hasPrefix("_") { suite.set(value, forKey: key) }
+        // 配列（アプリ別の文体・カスタム文体）は、アプリが読む形（JSON のデータ）にして入れる
+        for (key, value) in settings where !key.hasPrefix("_") {
+            if value is [Any], let data = try? JSONSerialization.data(withJSONObject: value) {
+                suite.set(data, forKey: key)
+            } else {
+                suite.set(value, forKey: key)
+            }
+        }
         suite.synchronize()
         defer { suite.removePersistentDomain(forName: suiteName) }
 

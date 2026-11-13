@@ -1658,4 +1658,187 @@ App 內更新會替換整個資料夾，因此只有在 Hanasu 位於專用資�
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0}（{1}）</value>
   </data>
+  <data name="Settings_Tab_AppStyles" xml:space="preserve">
+    <value>依應用程式</value>
+  </data>
+  <data name="AppStyles_Enabled" xml:space="preserve">
+    <value>依輸入目標應用程式調整文體</value>
+  </data>
+  <data name="AppStyles_EnabledNote" xml:space="preserve">
+    <value>依開始錄音時位於前景的應用程式（以 .exe 名稱查詢）決定。與「字典與規則」索引標籤中的額外規則衝突時，以依應用程式設定的規則為優先。Microsoft Store 應用程式都以 ApplicationFrameHost.exe 執行，無法區分，因此不會查詢。</value>
+  </data>
+  <data name="AppStyles_PresetsHeader" xml:space="preserve">
+    <value>預設組</value>
+  </data>
+  <data name="AppStyles_PresetLine" xml:space="preserve">
+    <value>{0}：{1}</value>
+  </data>
+  <data name="AppStyles_PresetSummary_None" xml:space="preserve">
+    <value>不使用預設組（僅使用此應用程式的額外規則）</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Chat" xml:space="preserve">
+    <value>輕鬆簡短的句子。不分段落</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Email" xml:space="preserve">
+    <value>禮貌正式的語氣。依內容分段</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPolite" xml:space="preserve">
+    <value>統一為書面語的禮貌語氣，並分段</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPlain" xml:space="preserve">
+    <value>統一為書面語的平實語氣，並分段</value>
+  </data>
+  <data name="CustomStyles_Header" xml:space="preserve">
+    <value>自訂文體</value>
+  </data>
+  <data name="CustomStyles_Note" xml:space="preserve">
+    <value>從您自己寫的文章中學到的文體。只會儲存名稱、語言和規則，不會儲存文章。只有在輸出語言與文體的語言相同時，才會使用自訂文體。</value>
+  </data>
+  <data name="CustomStyles_Empty" xml:space="preserve">
+    <value>還沒有自訂文體。</value>
+  </data>
+  <data name="CustomStyles_RowDetail" xml:space="preserve">
+    <value>{0} · {1} 條規則</value>
+  </data>
+  <data name="CustomStyles_Learn" xml:space="preserve">
+    <value>從文章學習…</value>
+  </data>
+  <data name="CustomStyles_Edit" xml:space="preserve">
+    <value>編輯…</value>
+  </data>
+  <data name="CustomStyles_Edit_A11y" xml:space="preserve">
+    <value>編輯 {0}</value>
+  </data>
+  <data name="CustomStyles_Delete" xml:space="preserve">
+    <value>刪除…</value>
+  </data>
+  <data name="CustomStyles_Delete_A11y" xml:space="preserve">
+    <value>刪除 {0}</value>
+  </data>
+  <data name="CustomStyles_ConfirmDelete" xml:space="preserve">
+    <value>要刪除自訂文體「{0}」嗎？
+使用它的應用程式（{1} 個）會改為「無」。各應用程式的額外規則會保留。此動作無法復原。</value>
+  </data>
+  <data name="CustomStyles_ConfirmDeleteUnused" xml:space="preserve">
+    <value>要刪除自訂文體「{0}」嗎？
+沒有應用程式使用它。此動作無法復原。</value>
+  </data>
+  <data name="AppStyles_AppsHeader" xml:space="preserve">
+    <value>應用程式</value>
+  </data>
+  <data name="AppStyles_NoApps" xml:space="preserve">
+    <value>尚未登錄任何應用程式。</value>
+  </data>
+  <data name="AppStyles_PresetLabel" xml:space="preserve">
+    <value>預設組</value>
+  </data>
+  <data name="AppStyles_Preset_A11y" xml:space="preserve">
+    <value>{0} 的預設組</value>
+  </data>
+  <data name="AppStyles_RulesLabel" xml:space="preserve">
+    <value>此應用程式的額外規則（優先於預設組）</value>
+  </data>
+  <data name="AppStyles_Rules_A11y" xml:space="preserve">
+    <value>{0} 的額外規則</value>
+  </data>
+  <data name="AppStyles_RulesExample" xml:space="preserve">
+    <value>例如：不使用表情符號／不使用項目符號</value>
+  </data>
+  <data name="AppStyles_Remove" xml:space="preserve">
+    <value>從清單中移除</value>
+  </data>
+  <data name="AppStyles_Remove_A11y" xml:space="preserve">
+    <value>從清單中移除 {0}</value>
+  </data>
+  <data name="AppStyles_AddRunning" xml:space="preserve">
+    <value>新增正在執行的應用程式</value>
+  </data>
+  <data name="AppStyles_NoRunningApps" xml:space="preserve">
+    <value>沒有其他具有視窗的應用程式正在執行。</value>
+  </data>
+  <data name="AppStyles_ChooseExe" xml:space="preserve">
+    <value>選擇 .exe…</value>
+  </data>
+  <data name="AppStyles_ExeFilter" xml:space="preserve">
+    <value>程式 (*.exe)|*.exe</value>
+  </data>
+  <data name="AppStyles_AlreadyAdded" xml:space="preserve">
+    <value>{0} 已在清單中。</value>
+  </data>
+  <data name="AppStyles_Reset" xml:space="preserve">
+    <value>還原為預設設定…</value>
+  </data>
+  <data name="AppStyles_ConfirmReset" xml:space="preserve">
+    <value>要將依應用程式的設定還原為預設設定嗎？
+新增的應用程式和各應用程式的額外規則都會刪除。自訂文體不會刪除。此動作無法復原。</value>
+  </data>
+  <data name="StyleLearning_Title" xml:space="preserve">
+    <value>從文章學習文體</value>
+  </data>
+  <data name="StyleLearning_EditTitle" xml:space="preserve">
+    <value>編輯自訂文體</value>
+  </data>
+  <data name="StyleLearning_Intro" xml:space="preserve">
+    <value>貼上您自己寫的文章，或選擇檔案。為「會議記錄」設定的 AI 會分析寫作方式，並寫出文體規則。文章不會儲存，只會儲存名稱、語言和規則。</value>
+  </data>
+  <data name="StyleLearning_Input_A11y" xml:space="preserve">
+    <value>用來學習文體的文章</value>
+  </data>
+  <data name="StyleLearning_ChooseFiles" xml:space="preserve">
+    <value>選擇檔案…</value>
+  </data>
+  <data name="StyleLearning_FileFilter" xml:space="preserve">
+    <value>Word、文字和 Markdown|{0}</value>
+  </data>
+  <data name="StyleLearning_FileFailed" xml:space="preserve">
+    <value>{0}：{1}</value>
+  </data>
+  <data name="StyleLearning_InputTruncated" xml:space="preserve">
+    <value>輸入方塊最多可容納 {0} 個字元。超出的部分未加入。</value>
+  </data>
+  <data name="StyleLearning_Count" xml:space="preserve">
+    <value>{0} 個字元</value>
+  </data>
+  <data name="StyleLearning_CountUsed" xml:space="preserve">
+    <value>{0} 個字元（只會傳送前 {1} 個字元）</value>
+  </data>
+  <data name="StyleLearning_NeedMore" xml:space="preserve">
+    <value>請至少輸入 {0} 個字元才能學習文體。</value>
+  </data>
+  <data name="StyleLearning_Learn" xml:space="preserve">
+    <value>學習文體</value>
+  </data>
+  <data name="StyleLearning_Learning" xml:space="preserve">
+    <value>正在學習文體…（最長 {0} 秒）</value>
+  </data>
+  <data name="StyleLearning_Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="StyleLearning_Stopped" xml:space="preserve">
+    <value>已停止。文章仍然保留，可以再試一次。</value>
+  </data>
+  <data name="StyleLearning_Learned" xml:space="preserve">
+    <value>請檢查並修改規則，然後儲存。AI：{0}（{1}）</value>
+  </data>
+  <data name="StyleLearning_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="StyleLearning_Language" xml:space="preserve">
+    <value>語言</value>
+  </data>
+  <data name="StyleLearning_LanguageNote" xml:space="preserve">
+    <value>只有在輸出為此語言時才會使用。</value>
+  </data>
+  <data name="StyleLearning_Rules" xml:space="preserve">
+    <value>規則（每行一條）</value>
+  </data>
+  <data name="StyleLearning_RulesCount" xml:space="preserve">
+    <value>{0}/{1} 行 · {2}/{3} 個字元</value>
+  </data>
+  <data name="StyleLearning_Save" xml:space="preserve">
+    <value>儲存</value>
+  </data>
+  <data name="StyleLearning_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
 </root>

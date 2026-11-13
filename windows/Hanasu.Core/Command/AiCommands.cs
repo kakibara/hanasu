@@ -162,8 +162,8 @@ public static class AiCommands
 
     // MARK: - refine
 
-    // 要件: REQ-DIC-160, REQ-DIC-003, REQ-DIC-070, REQ-DIC-082, REQ-DIC-020, REQ-DIC-021, REQ-DIC-013
-    // 設計判断: DEC-DIC-160, DEC-DIC-161, DEC-DIC-190
+    // 要件: REQ-DIC-160, REQ-DIC-003, REQ-DIC-070, REQ-DIC-082, REQ-DIC-020, REQ-DIC-021, REQ-DIC-013, REQ-DIC-023
+    // 設計判断: DEC-DIC-160, DEC-DIC-161, DEC-DIC-190, DEC-DIC-213
     /// <summary>音声入力と同じ整形（翻訳）。音声入力の履歴には残さない</summary>
     public static async Task<HanasuExit> RefineAsync(IReadOnlyList<string> arguments, CommandContext context)
     {
@@ -186,10 +186,11 @@ public static class AiCommands
         var raw = CommandTextInput.Read(args.Positionals, context.Console);
 
         var settings = context.Settings;
-        // --app: そのアプリ向けの既定の文体。--style: プリセットを直接選ぶ（--app の文体より優先）
-        var app = args.Value("--app") is { } exe ? SharedText.StyleForApp(exe) : null;
+        // --app: アプリの設定の「アプリ別」（オンのとき。カスタム文体を含む）を先に引き、なければ既定の一覧の文体。
+        // --style: プリセットを直接選ぶ（--app の文体より優先。カスタム文体の割り当ても外す）
+        var app = args.Value("--app") is { } exe ? AppStyleLookup.Find(settings, exe) ?? SharedText.StyleForApp(exe) : null;
         var style = app;
-        if (preset is { } chosen) style = (style ?? new AppStyle("", "", chosen)) with { Preset = chosen };
+        if (preset is { } chosen) style = (style ?? new AppStyle("", "", chosen)) with { Preset = chosen, Custom = null };
         // 音声入力と同じく、置き換えルールを当ててから送る
         var corrected = settings.UserDictionary.Apply(raw);
         var request = new RefineRequest

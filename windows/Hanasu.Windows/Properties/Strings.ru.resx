@@ -1658,4 +1658,187 @@
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0} ({1})</value>
   </data>
+  <data name="Settings_Tab_AppStyles" xml:space="preserve">
+    <value>Приложения</value>
+  </data>
+  <data name="AppStyles_Enabled" xml:space="preserve">
+    <value>Менять стиль под приложение, в котором вводится текст</value>
+  </data>
+  <data name="AppStyles_EnabledNote" xml:space="preserve">
+    <value>Определяется по приложению на переднем плане в начале записи (по имени файла .exe). Если эти правила противоречат дополнительным правилам на вкладке «Словарь и правила», приоритет у правил для приложения. Все приложения из Microsoft Store работают как ApplicationFrameHost.exe, поэтому их нельзя различить и они не учитываются.</value>
+  </data>
+  <data name="AppStyles_PresetsHeader" xml:space="preserve">
+    <value>Пресеты</value>
+  </data>
+  <data name="AppStyles_PresetLine" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AppStyles_PresetSummary_None" xml:space="preserve">
+    <value>Без пресета (только дополнительные правила для этого приложения)</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Chat" xml:space="preserve">
+    <value>Короткие неформальные фразы, без абзацев</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Email" xml:space="preserve">
+    <value>Вежливый стиль. Абзацы по смысловым блокам</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPolite" xml:space="preserve">
+    <value>Письменный стиль, последовательно вежливый (официальный), с абзацами</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPlain" xml:space="preserve">
+    <value>Письменный стиль, последовательно нейтральный, с абзацами</value>
+  </data>
+  <data name="CustomStyles_Header" xml:space="preserve">
+    <value>Свои стили</value>
+  </data>
+  <data name="CustomStyles_Note" xml:space="preserve">
+    <value>Стили, изученные по вашим текстам. Сохраняются только название, язык и правила, а не сам текст. Свой стиль используется, только если язык вывода совпадает с языком стиля.</value>
+  </data>
+  <data name="CustomStyles_Empty" xml:space="preserve">
+    <value>Своих стилей пока нет.</value>
+  </data>
+  <data name="CustomStyles_RowDetail" xml:space="preserve">
+    <value>{0} · Правил: {1}</value>
+  </data>
+  <data name="CustomStyles_Learn" xml:space="preserve">
+    <value>Стиль из текста…</value>
+  </data>
+  <data name="CustomStyles_Edit" xml:space="preserve">
+    <value>Изменить…</value>
+  </data>
+  <data name="CustomStyles_Edit_A11y" xml:space="preserve">
+    <value>Изменить {0}</value>
+  </data>
+  <data name="CustomStyles_Delete" xml:space="preserve">
+    <value>Удалить…</value>
+  </data>
+  <data name="CustomStyles_Delete_A11y" xml:space="preserve">
+    <value>Удалить {0}</value>
+  </data>
+  <data name="CustomStyles_ConfirmDelete" xml:space="preserve">
+    <value>Удалить свой стиль «{0}»?
+Для приложений, которые его используют ({1}), будет выбрано «Нет». Дополнительные правила каждого приложения сохранятся. Это действие нельзя отменить.</value>
+  </data>
+  <data name="CustomStyles_ConfirmDeleteUnused" xml:space="preserve">
+    <value>Удалить свой стиль «{0}»?
+Он не используется ни в одном приложении. Это действие нельзя отменить.</value>
+  </data>
+  <data name="AppStyles_AppsHeader" xml:space="preserve">
+    <value>Приложения</value>
+  </data>
+  <data name="AppStyles_NoApps" xml:space="preserve">
+    <value>Нет зарегистрированных приложений.</value>
+  </data>
+  <data name="AppStyles_PresetLabel" xml:space="preserve">
+    <value>Пресет</value>
+  </data>
+  <data name="AppStyles_Preset_A11y" xml:space="preserve">
+    <value>Пресет для {0}</value>
+  </data>
+  <data name="AppStyles_RulesLabel" xml:space="preserve">
+    <value>Дополнительные правила для этого приложения (важнее пресета)</value>
+  </data>
+  <data name="AppStyles_Rules_A11y" xml:space="preserve">
+    <value>Дополнительные правила для {0}</value>
+  </data>
+  <data name="AppStyles_RulesExample" xml:space="preserve">
+    <value>Пример: Не использовать эмодзи / Не использовать маркированные списки</value>
+  </data>
+  <data name="AppStyles_Remove" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
+  <data name="AppStyles_Remove_A11y" xml:space="preserve">
+    <value>Убрать {0} из списка</value>
+  </data>
+  <data name="AppStyles_AddRunning" xml:space="preserve">
+    <value>Добавить запущенное приложение</value>
+  </data>
+  <data name="AppStyles_NoRunningApps" xml:space="preserve">
+    <value>Нет других запущенных приложений с окнами.</value>
+  </data>
+  <data name="AppStyles_ChooseExe" xml:space="preserve">
+    <value>Выбрать файл .exe…</value>
+  </data>
+  <data name="AppStyles_ExeFilter" xml:space="preserve">
+    <value>Программы (*.exe)|*.exe</value>
+  </data>
+  <data name="AppStyles_AlreadyAdded" xml:space="preserve">
+    <value>{0} уже есть в списке.</value>
+  </data>
+  <data name="AppStyles_Reset" xml:space="preserve">
+    <value>Сбросить настройки…</value>
+  </data>
+  <data name="AppStyles_ConfirmReset" xml:space="preserve">
+    <value>Сбросить настройки для приложений к значениям по умолчанию?
+Добавленные приложения и дополнительные правила для каждого из них будут удалены. Свои стили не удаляются. Это действие нельзя отменить.</value>
+  </data>
+  <data name="StyleLearning_Title" xml:space="preserve">
+    <value>Изучение стиля по тексту</value>
+  </data>
+  <data name="StyleLearning_EditTitle" xml:space="preserve">
+    <value>Изменить свой стиль</value>
+  </data>
+  <data name="StyleLearning_Intro" xml:space="preserve">
+    <value>Вставьте собственный текст или выберите файлы. AI, выбранный для «Протокола», определит манеру письма и составит правила стиля. Текст не сохраняется — сохраняются только название, язык и правила.</value>
+  </data>
+  <data name="StyleLearning_Input_A11y" xml:space="preserve">
+    <value>Текст для изучения стиля</value>
+  </data>
+  <data name="StyleLearning_ChooseFiles" xml:space="preserve">
+    <value>Выбрать файлы…</value>
+  </data>
+  <data name="StyleLearning_FileFilter" xml:space="preserve">
+    <value>Word, текст и Markdown|{0}</value>
+  </data>
+  <data name="StyleLearning_FileFailed" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="StyleLearning_InputTruncated" xml:space="preserve">
+    <value>В поле помещается не более {0} символов. Остальное не добавлено.</value>
+  </data>
+  <data name="StyleLearning_Count" xml:space="preserve">
+    <value>Символов: {0}</value>
+  </data>
+  <data name="StyleLearning_CountUsed" xml:space="preserve">
+    <value>Символов: {0} (отправляются только первые {1})</value>
+  </data>
+  <data name="StyleLearning_NeedMore" xml:space="preserve">
+    <value>Чтобы изучить стиль, введите не менее {0} символов.</value>
+  </data>
+  <data name="StyleLearning_Learn" xml:space="preserve">
+    <value>Изучить стиль</value>
+  </data>
+  <data name="StyleLearning_Learning" xml:space="preserve">
+    <value>Изучение стиля… (до {0} с)</value>
+  </data>
+  <data name="StyleLearning_Stop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+  <data name="StyleLearning_Stopped" xml:space="preserve">
+    <value>Остановлено. Текст остался в поле, можно попробовать ещё раз.</value>
+  </data>
+  <data name="StyleLearning_Learned" xml:space="preserve">
+    <value>Проверьте и при необходимости исправьте правила, затем сохраните. AI: {0} ({1})</value>
+  </data>
+  <data name="StyleLearning_Name" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="StyleLearning_Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="StyleLearning_LanguageNote" xml:space="preserve">
+    <value>Используется, только если вывод на этом языке.</value>
+  </data>
+  <data name="StyleLearning_Rules" xml:space="preserve">
+    <value>Правила (по одному в строке)</value>
+  </data>
+  <data name="StyleLearning_RulesCount" xml:space="preserve">
+    <value>Строк: {0}/{1} · символов: {2}/{3}</value>
+  </data>
+  <data name="StyleLearning_Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="StyleLearning_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
 </root>

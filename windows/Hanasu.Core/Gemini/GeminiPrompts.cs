@@ -20,8 +20,8 @@ public sealed record RefineRequest
     // 要件: REQ-DIC-082
     /// <summary>整形の出力の言語（翻訳では使わない）</summary>
     public RefineOutputLanguage OutputLanguage { get; init; } = RefineOutputLanguage.AsSpoken;
-    // 要件: REQ-DIC-020, REQ-DIC-160
-    /// <summary>入力先アプリの文体（hanasu refine の --style・--app だけが使う。アプリの音声入力では null）</summary>
+    // 要件: REQ-DIC-020, REQ-DIC-023, REQ-DIC-160
+    /// <summary>入力先アプリの文体（音声入力は設定の「アプリ別」から、hanasu refine は --app・--style から。なければ null）</summary>
     public Dictation.AppStyle? AppStyle { get; init; }
 }
 
@@ -109,7 +109,7 @@ public static class GeminiPrompts
     /// <summary>思考の度合いはモデル名から決める（lite なら minimal、それ以外は low）</summary>
     public static string ThinkingLevel(string model) => model.Contains("lite", StringComparison.Ordinal) ? "minimal" : "low";
 
-    /// <summary>整形・翻訳の user content。Mac 版の GeminiClient.userPrompt と同じ組み立て（アプリ別スタイルと画面の文脈は Windows 版にはない）</summary>
+    /// <summary>整形・翻訳の user content。Mac 版の GeminiClient.userPrompt と同じ組み立て（画面の文脈は Windows 版にはない）</summary>
     /// <param name="translation">翻訳の言語（整形なら null）</param>
     public static string UserPrompt(RefineRequest request, Dictation.TranslationLanguage? translation = null)
     {

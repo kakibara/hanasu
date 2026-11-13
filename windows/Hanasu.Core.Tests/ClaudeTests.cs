@@ -212,9 +212,11 @@ public class ClaudeClientTests
     [Fact]
     public async Task TimeoutIsReported()
     {
+        // 時間切れのタイマー（100 ms）が、偽の応答の待ちの間に必ず発火するよう、待ちを長くとる
+        // （CI の機械が混むとタイマーが遅れ、500 ms では応答のあとに発火して時間切れにならないことがあった）
         var handler = new FakeHandler((_, _) =>
         {
-            Thread.Sleep(500);
+            Thread.Sleep(2_000);
             return FakeHandler.Json(Reply("遅い"));
         });
         var client = new ClaudeClient(Key, new HttpClient(handler)) { Timeout = TimeSpan.FromMilliseconds(100), MaxRetries = 0 };

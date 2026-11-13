@@ -61,6 +61,24 @@ enum PromptsCLI {
             }
         }
 
+        // 要件: REQ-DIC-023
+        // カスタム文体（言語が同じとき・違うとき）
+        let custom = CustomStyle(id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!, name: "X",
+                                 language: PromptLanguage.current.rawValue, rules: ["R1", "R2"])
+        for rules in ["", "絵文字は使わない"] {
+            var style = AppStyle(bundleID: "x", name: "X", preset: .none, rules: rules)
+            style.selectCustomStyle(custom.id)
+            for translation in [nil] + shownTranslations.map(Optional.some) {
+                let text = style.promptSection(appName: "X", translation: translation, hasCommonRules: false, customStyles: [custom])
+                section("style custom rules=\(!rules.isEmpty) translation=\(translation?.rawValue ?? "nil")", text ?? "(nil)")
+            }
+        }
+
+        // 要件: REQ-DIC-022
+        // 文体を学ぶ
+        section("styleLearn / system", StyleLearner.instruction)
+        section("styleLearn / user", StyleLearner.userPrompt(material: "（文章）"))
+
         // 選択を声で編集
         section("edit / system", GeminiClient.editInstruction)
         section("edit / user", GeminiClient.editPrompt(

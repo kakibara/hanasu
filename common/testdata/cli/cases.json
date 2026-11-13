@@ -215,6 +215,87 @@
       "compare": "prompt"
     },
     {
+      "name": "refine-app-custom",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--app",
+        {
+          "mac": "com.example.writer",
+          "windows": "writer.exe"
+        },
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "refine-app-custom-style",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--app",
+        {
+          "mac": "com.example.writer",
+          "windows": "writer.exe"
+        },
+        "--style",
+        "chat",
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "refine-app-custom-translate",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--app",
+        {
+          "mac": "com.example.writer",
+          "windows": "writer.exe"
+        },
+        "--translate",
+        "en",
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "refine-app-custom-other-language",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--app",
+        {
+          "mac": "com.example.globalchat",
+          "windows": "globalchat.exe"
+        },
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
+      "name": "refine-app-custom-translate-match",
+      "args": [
+        "refine",
+        "えーと、はなすで明日は10時からです",
+        "--app",
+        {
+          "mac": "com.example.globalchat",
+          "windows": "globalchat.exe"
+        },
+        "--translate",
+        "en",
+        "--show-prompt"
+      ],
+      "ai": true,
+      "compare": "prompt"
+    },
+    {
       "name": "edit",
       "args": [
         "edit",

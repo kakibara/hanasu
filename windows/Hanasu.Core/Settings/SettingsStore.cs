@@ -146,6 +146,13 @@ public sealed class SettingsStore
         if (string.IsNullOrWhiteSpace(s.GeminiTranscriptionModel)) s.GeminiTranscriptionModel = s.Model;
         s.DictionaryText ??= "";
         s.ExtraInstructions ??= "";
+        // 設計判断: DEC-DIC-213（JSON の null や欠けた値で落ちないよう、空にそろえる）
+        s.CustomStyles = (s.CustomStyles ?? []).Where(c => c is not null)
+            .Select(c => c with { Name = c.Name ?? "", Language = c.Language ?? "", Rules = (c.Rules ?? []).Where(r => r is not null).ToList() })
+            .ToList();
+        s.AppStyles = s.AppStyles?.Where(a => a is not null)
+            .Select(a => a with { Exe = a.Exe ?? "", Name = a.Name ?? "", Preset = a.Preset ?? "none", Rules = a.Rules ?? "" })
+            .ToList();
     }
 }
 

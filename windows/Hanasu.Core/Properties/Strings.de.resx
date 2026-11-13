@@ -1098,4 +1098,55 @@
   <data name="Cmd_UnreadableCount" xml:space="preserve">
     <value>{0} Besprechungen konnten nicht gelesen werden ({1}).</value>
   </data>
+  <data name="AppStyle_Preset_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="AppStyle_Preset_Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="AppStyle_Preset_Email" xml:space="preserve">
+    <value>Mail</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPolite" xml:space="preserve">
+    <value>Dokument (förmlich)</value>
+  </data>
+  <data name="AppStyle_Preset_DocumentPlain" xml:space="preserve">
+    <value>Dokument (sachlich)</value>
+  </data>
+  <data name="CustomStyle_EmptyName" xml:space="preserve">
+    <value>Gib einen Namen ein.</value>
+  </data>
+  <data name="CustomStyle_DuplicateName" xml:space="preserve">
+    <value>Es gibt bereits einen Stil mit diesem Namen. Wähle einen anderen Namen.</value>
+  </data>
+  <data name="CustomStyle_UnknownLanguage" xml:space="preserve">
+    <value>Wähle eine Sprache aus.</value>
+  </data>
+  <data name="CustomStyle_EmptyRules" xml:space="preserve">
+    <value>Gib mindestens eine Regel ein.</value>
+  </data>
+  <data name="CustomStyle_TooManyRules" xml:space="preserve">
+    <value>Es sind höchstens {0} Regeln möglich.</value>
+  </data>
+  <data name="CustomStyle_RulesTooLong" xml:space="preserve">
+    <value>Die Regeln dürfen insgesamt höchstens {0} Zeichen lang sein.</value>
+  </data>
+  <data name="StyleSource_Unsupported" xml:space="preserve">
+    <value>Dieser Dateityp wird nicht unterstützt. Wähle eine .docx-, .txt- oder .md-Datei aus.</value>
+  </data>
+  <data name="StyleSource_Unreadable" xml:space="preserve">
+    <value>Die Datei ist beschädigt oder verwendet eine Zeichencodierung, die nicht gelesen werden kann.</value>
+  </data>
+  <data name="StyleSource_TooLarge" xml:space="preserve">
+    <value>Die Datei ist zu groß (höchstens 20 MB).</value>
+  </data>
+  <data name="StyleLearn_TooShort" xml:space="preserve">
+    <value>Der Text ist zu kurz. Gib mindestens {0} Zeichen ein.</value>
+  </data>
+  <data name="StyleLearn_InvalidResponse" xml:space="preserve">
+    <value>Aus der Antwort der KI konnten keine Stilregeln gelesen werden. Versuche es erneut.</value>
+  </data>
+  <data name="StyleLearn_UnknownLanguage" xml:space="preserve">
+    <value>Die Sprache des Textes ({0}) wird nicht unterstützt.</value>
+  </data>
 </root>

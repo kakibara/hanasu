@@ -346,6 +346,19 @@ Slack とメールで同じ文を整形した結果は [verification/dictation.m
 
 - ブラウザ（Chrome / Safari / Arc）は、開いているサイトにかかわらず、ブラウザのアプリとして 1 つの文体になる。サイトごとに分けることは計画（[roadmap.md](../roadmap.md) FUT-101）。
 
+#### カスタム文体（文章から学んだ文体。REQ-DIC-022・023）
+
+自分の書き方に寄せたいとき、ルールを言葉にするのは難しいので、自分の文章を渡して AI にルールを書き出させ、プリセットの 1 つとして選べるようにした。
+
+- **画面**: 設定の「アプリ別」の「カスタム文体」の節（`CustomStylesSection`）。「文章から学ぶ…」で `StyleLearningSheet` を開き、文章を貼り付けるか、ファイル（.docx・.txt・.md・.markdown）を選んで入力欄に入れる。「文体を学ぶ」で AI に送り、返ってきた名前・言語・ルールを欄に出す。保存の前に読んで直せる。保存したものは、アプリの行のプリセットの選択欄で、組み込みのプリセットのあとに区切りをはさんで並ぶ（DEC-DIC-215）。
+- **ファイルの読み込み**: `StyleSourceReader` と `DocxText`（`StyleLearning.swift`）。.docx は zip の中の `word/document.xml` だけを読む。zip は中央ディレクトリから引き、deflate は Apple の `Compression` で展開する（外のライブラリを使わない）。文字コードの見分け方、読む要素、大きさの上限は DEC-DIC-211。Windows 版と同じ規則で、共有の固定のファイル（`common/testdata/style/`）で両方を確かめる。
+- **学ぶ**: `StyleLearner.learn`。「議事録」に選んだ AI に、プロンプト `styleLearn.system`・`styleLearn.user` で送り、JSON（名前・言語・ルール）で返させる（DEC-DIC-210）。材料は `<material>` で囲み、区切りのタグを無害にする。長さの上限は AI で変わり、ローカル・Apple はトークンで数える（`StyleLearner.budget`。DEC-DIC-212）。
+- **持ち方**: `CustomStyle`（ID・名前・言語・ルール）を UserDefaults の `customAppStyles` に `CustomStyleStore` で置く。アプリには `AppStyle.customStyleID` で割り当て、そのときの `preset` は `none` にする（DEC-DIC-213）。入れた文章は保存しない。
+- **プロンプト**: `AppStyle.promptSection` で、出力の言語（翻訳なら訳す先、整形なら文字起こしの言語。整形の言語を「統一」にしても、統一の先は文字起こしの言語）が学んだ言語と同じときだけ、プリセットのルールの位置にカスタム文体のルールを並べ、歯止めの行 `style.learnedGuard` を足す。違えば「なし」と同じ（DEC-DIC-214）。カスタム文体の名前は送らない。
+- **`hanasu refine`**: `--app` はアプリの割り当てどおりにカスタム文体を使う。`--style` を付けると割り当てを外してそのプリセットにする（`AppStyle.selectPreset`）。カスタム文体を名前で選ぶことはまだできない（[roadmap.md](../roadmap.md) FUT-111）。
+- **Windows 版**: 同じ形で `windows/Hanasu.Core/Dictation/AppStyle.cs`・`StyleLearning.cs`。Windows 版のアプリ別の文体は exe の名前で引く（`AppStyleLookup.Find`。DEC-DIC-216）。
+- 確かめ方: `.build/debug/Hanasu --test-custom-styles`（AI に送らない）、`--learn-style --from-file <ファイル>`（実際の AI）、`--render-style-learning <フォルダ>`。
+
 ### 4.7 スニペット（決まった言葉で定型文を入力）
 
 Wispr Flow の Snippets や Monologue のショートカットにならい、起動フレーズと本文の組を登録しておくと、その言葉を話したときに本文をそのまま入力する（例:「メールの署名」→ 登録した署名）。実装は `Snippets.swift`（照合・組み立て）、`SnippetsSettingsView.swift`（設定画面）、`SnippetsCLI.swift`（確認用 CLI）。
@@ -647,7 +660,7 @@ Wispr Flow や Typeless は辞書を自動で学習する。Hanasu では、自�
 
 ## 7. セキュリティ・プライバシー
 
-- 音声はオンデバイスで処理し、外部には送らない（Mac 標準・Whisper）。文字起こしのエンジンに Gemini を選んだときだけ、録った音声を Gemini に送る。設定画面にそのことを書く（4.10）。整形・英訳で Gemini に送るのは、認識後のテキストと入力先アプリ名（OFF 可）・ユーザー辞書・追加ルール・アプリ別の文体ルール。画面の文脈をオンにしたときは、ウインドウのタイトルと入力欄のカーソル前後の文章（各 500 文字まで）も送る（4.8 参照）。スクリーンショットの文字をオンにしたときは、すべての画面から読み取った文字（AI ごとに 500〜4,000 文字まで。画像は送らない）も送る（4.8）。選択を声で編集するときは、選択した文章も送る（4.5）。
+- 音声はオンデバイスで処理し、外部には送らない（Mac 標準・Whisper）。文字起こしのエンジンに Gemini を選んだときだけ、録った音声を Gemini に送る。設定画面にそのことを書く（4.10）。整形・英訳で Gemini に送るのは、認識後のテキストと入力先アプリ名（OFF 可）・ユーザー辞書・追加ルール・アプリ別の文体ルール。画面の文脈をオンにしたときは、ウインドウのタイトルと入力欄のカーソル前後の文章（各 500 文字まで）も送る（4.8 参照）。スクリーンショットの文字をオンにしたときは、すべての画面から読み取った文字（AI ごとに 500〜4,000 文字まで。画像は送らない）も送る（4.8）。選択を声で編集するときは、選択した文章も送る（4.5）。カスタム文体を学ぶときは、入れた文章（Gemini・Claude は 30,000 字まで）を「議事録」に選んだ AI に送り、文章は保存しない。学んだルールは保存し、割り当てたアプリの整形のたびに送る（4.6）。
 - API キー（Gemini・Claude）はキーチェーン（`kSecClassGenericPassword`）に保存。UserDefaults やログには残さない。守れる範囲と、そのほかの調査の結果は [security.md](security.md)。
 - 整形などの AI に Claude を選んだときは、Gemini に送るのと同じもの（文字起こしの結果・辞書・アプリ名など。音声は送らない）を Claude に送る（3.2.1）。
 - サービスアカウントは鍵ファイルのパスだけを保存し、中身はアプリに取り込まない。アクセストークンはメモリ上だけに置く。
@@ -686,6 +699,8 @@ mac-typeless/
 │   ├── SettingsView.swift         # 設定画面（SwiftUI）
 │   ├── AppStyles.swift            # アプリ別の整形スタイル（プリセット・保存・プロンプトの節）
 │   ├── AppStylesView.swift        # 設定画面の「アプリ別」
+│   ├── StyleLearning.swift        # 文章から文体を学ぶ（ファイルの読み込み・AI に送る）
+│   ├── StyleLearningSheet.swift   # カスタム文体の節と、学ぶシート
 │   ├── ShortcutRecorder.swift     # ショートカット記録 UI
 │   ├── Keychain.swift             # API キー保存
 │   ├── UserDictionary.swift       # ユーザー辞書の読み込みと置き換えルール

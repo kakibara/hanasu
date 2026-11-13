@@ -1658,4 +1658,187 @@ Release-Seite im Browser öffnen?</value>
   <data name="Settings_LocalModelLicense" xml:space="preserve">
     <value>{0} ({1})</value>
   </data>
+  <data name="Settings_Tab_AppStyles" xml:space="preserve">
+    <value>Pro App</value>
+  </data>
+  <data name="AppStyles_Enabled" xml:space="preserve">
+    <value>Schreibstil an die App anpassen, in der du schreibst</value>
+  </data>
+  <data name="AppStyles_EnabledNote" xml:space="preserve">
+    <value>Entscheidend ist die App, die beim Start der Aufnahme im Vordergrund ist (erkannt am Namen ihrer .exe). Bei Widersprüchen zu den zusätzlichen Regeln im Tab „Wörterbuch und Regeln“ haben die Regeln pro App Vorrang. Store-Apps laufen alle als ApplicationFrameHost.exe, lassen sich daher nicht unterscheiden und werden nicht berücksichtigt.</value>
+  </data>
+  <data name="AppStyles_PresetsHeader" xml:space="preserve">
+    <value>Vorlagen</value>
+  </data>
+  <data name="AppStyles_PresetLine" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AppStyles_PresetSummary_None" xml:space="preserve">
+    <value>Keine Vorlage (nur die zusätzlichen Regeln für diese App)</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Chat" xml:space="preserve">
+    <value>Kurze, lockere Sätze. Keine Absätze</value>
+  </data>
+  <data name="AppStyles_PresetSummary_Email" xml:space="preserve">
+    <value>Höflicher Stil. Absätze nach Themen</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPolite" xml:space="preserve">
+    <value>Einheitlich förmlicher Schreibstil, in Absätze gegliedert</value>
+  </data>
+  <data name="AppStyles_PresetSummary_DocumentPlain" xml:space="preserve">
+    <value>Einheitlich sachlicher Schreibstil, in Absätze gegliedert</value>
+  </data>
+  <data name="CustomStyles_Header" xml:space="preserve">
+    <value>Benutzerdefinierte Stile</value>
+  </data>
+  <data name="CustomStyles_Note" xml:space="preserve">
+    <value>Aus deinen eigenen Texten gelernte Stile. Gespeichert werden nur Name, Sprache und Regeln, nicht der Text. Ein benutzerdefinierter Stil wird nur verwendet, wenn die Ausgabe in derselben Sprache ist wie der Stil.</value>
+  </data>
+  <data name="CustomStyles_Empty" xml:space="preserve">
+    <value>Noch keine benutzerdefinierten Stile.</value>
+  </data>
+  <data name="CustomStyles_RowDetail" xml:space="preserve">
+    <value>{0} · Regeln: {1}</value>
+  </data>
+  <data name="CustomStyles_Learn" xml:space="preserve">
+    <value>Aus Text lernen…</value>
+  </data>
+  <data name="CustomStyles_Edit" xml:space="preserve">
+    <value>Bearbeiten…</value>
+  </data>
+  <data name="CustomStyles_Edit_A11y" xml:space="preserve">
+    <value>{0} bearbeiten</value>
+  </data>
+  <data name="CustomStyles_Delete" xml:space="preserve">
+    <value>Löschen…</value>
+  </data>
+  <data name="CustomStyles_Delete_A11y" xml:space="preserve">
+    <value>{0} löschen</value>
+  </data>
+  <data name="CustomStyles_ConfirmDelete" xml:space="preserve">
+    <value>Benutzerdefinierten Stil „{0}“ löschen?
+Apps, die ihn verwenden ({1}), werden auf „Keine“ umgestellt. Die zusätzlichen Regeln der einzelnen Apps bleiben erhalten. Dies kann nicht rückgängig gemacht werden.</value>
+  </data>
+  <data name="CustomStyles_ConfirmDeleteUnused" xml:space="preserve">
+    <value>Benutzerdefinierten Stil „{0}“ löschen?
+Keine App verwendet ihn. Dies kann nicht rückgängig gemacht werden.</value>
+  </data>
+  <data name="AppStyles_AppsHeader" xml:space="preserve">
+    <value>Apps</value>
+  </data>
+  <data name="AppStyles_NoApps" xml:space="preserve">
+    <value>Es sind keine Apps eingetragen.</value>
+  </data>
+  <data name="AppStyles_PresetLabel" xml:space="preserve">
+    <value>Vorlage</value>
+  </data>
+  <data name="AppStyles_Preset_A11y" xml:space="preserve">
+    <value>Vorlage für {0}</value>
+  </data>
+  <data name="AppStyles_RulesLabel" xml:space="preserve">
+    <value>Zusätzliche Regeln für diese App (haben Vorrang vor der Vorlage)</value>
+  </data>
+  <data name="AppStyles_Rules_A11y" xml:space="preserve">
+    <value>Zusätzliche Regeln für {0}</value>
+  </data>
+  <data name="AppStyles_RulesExample" xml:space="preserve">
+    <value>Beispiel: Keine Emojis verwenden / Keine Aufzählungen</value>
+  </data>
+  <data name="AppStyles_Remove" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="AppStyles_Remove_A11y" xml:space="preserve">
+    <value>{0} aus der Liste entfernen</value>
+  </data>
+  <data name="AppStyles_AddRunning" xml:space="preserve">
+    <value>Laufende App hinzufügen</value>
+  </data>
+  <data name="AppStyles_NoRunningApps" xml:space="preserve">
+    <value>Es laufen keine anderen Apps mit Fenster.</value>
+  </data>
+  <data name="AppStyles_ChooseExe" xml:space="preserve">
+    <value>.exe auswählen…</value>
+  </data>
+  <data name="AppStyles_ExeFilter" xml:space="preserve">
+    <value>Programme (*.exe)|*.exe</value>
+  </data>
+  <data name="AppStyles_AlreadyAdded" xml:space="preserve">
+    <value>{0} ist bereits in der Liste.</value>
+  </data>
+  <data name="AppStyles_Reset" xml:space="preserve">
+    <value>Auf Standard zurücksetzen…</value>
+  </data>
+  <data name="AppStyles_ConfirmReset" xml:space="preserve">
+    <value>Einstellungen pro App auf Standard zurücksetzen?
+Hinzugefügte Apps und die zusätzlichen Regeln der einzelnen Apps werden gelöscht. Benutzerdefinierte Stile bleiben erhalten. Dies kann nicht rückgängig gemacht werden.</value>
+  </data>
+  <data name="StyleLearning_Title" xml:space="preserve">
+    <value>Stil aus Text lernen</value>
+  </data>
+  <data name="StyleLearning_EditTitle" xml:space="preserve">
+    <value>Benutzerdefinierten Stil bearbeiten</value>
+  </data>
+  <data name="StyleLearning_Intro" xml:space="preserve">
+    <value>Füge einen Text ein, den du selbst geschrieben hast, oder wähle Dateien aus. Die für „Protokoll“ eingestellte KI erkennt, wie er geschrieben ist, und formuliert daraus Stilregeln. Der Text wird nicht gespeichert, nur Name, Sprache und Regeln.</value>
+  </data>
+  <data name="StyleLearning_Input_A11y" xml:space="preserve">
+    <value>Text zum Lernen des Stils</value>
+  </data>
+  <data name="StyleLearning_ChooseFiles" xml:space="preserve">
+    <value>Dateien auswählen…</value>
+  </data>
+  <data name="StyleLearning_FileFilter" xml:space="preserve">
+    <value>Word, Text und Markdown|{0}</value>
+  </data>
+  <data name="StyleLearning_FileFailed" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="StyleLearning_InputTruncated" xml:space="preserve">
+    <value>Das Feld fasst höchstens {0} Zeichen. Der Rest wurde nicht eingefügt.</value>
+  </data>
+  <data name="StyleLearning_Count" xml:space="preserve">
+    <value>{0} Zeichen</value>
+  </data>
+  <data name="StyleLearning_CountUsed" xml:space="preserve">
+    <value>{0} Zeichen (nur die ersten {1} werden gesendet)</value>
+  </data>
+  <data name="StyleLearning_NeedMore" xml:space="preserve">
+    <value>Gib mindestens {0} Zeichen ein, um einen Stil zu lernen.</value>
+  </data>
+  <data name="StyleLearning_Learn" xml:space="preserve">
+    <value>Stil lernen</value>
+  </data>
+  <data name="StyleLearning_Learning" xml:space="preserve">
+    <value>Stil wird gelernt… (bis zu {0} Sekunden)</value>
+  </data>
+  <data name="StyleLearning_Stop" xml:space="preserve">
+    <value>Stoppen</value>
+  </data>
+  <data name="StyleLearning_Stopped" xml:space="preserve">
+    <value>Gestoppt. Dein Text ist noch da, du kannst es also erneut versuchen.</value>
+  </data>
+  <data name="StyleLearning_Learned" xml:space="preserve">
+    <value>Prüfe und bearbeite die Regeln und speichere sie dann. KI: {0} ({1})</value>
+  </data>
+  <data name="StyleLearning_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="StyleLearning_Language" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="StyleLearning_LanguageNote" xml:space="preserve">
+    <value>Wird nur verwendet, wenn die Ausgabe in dieser Sprache ist.</value>
+  </data>
+  <data name="StyleLearning_Rules" xml:space="preserve">
+    <value>Regeln (eine pro Zeile)</value>
+  </data>
+  <data name="StyleLearning_RulesCount" xml:space="preserve">
+    <value>{0}/{1} Zeilen · {2}/{3} Zeichen</value>
+  </data>
+  <data name="StyleLearning_Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="StyleLearning_Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
 </root>
