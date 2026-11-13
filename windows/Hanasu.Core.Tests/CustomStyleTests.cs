@@ -306,6 +306,24 @@ public class CustomStyleTests
         });
     }
 
+    // 確かめ方: REQ-DIC-020
+    // 設計判断: DEC-DIC-028
+    [Fact]
+    public void JapaneseOutputUsesJapanesePresetRulesWhateverThePromptLanguage()
+    {
+        PromptLanguageFixture.With(PromptLanguage.En, () =>
+        {
+            var chat = new AppStyle("slack.exe", "Slack", AppStylePreset.Chat);
+            var japaneseRule = "- " + Prompts.List("style.chat.refine", PromptLanguage.Ja)[0];
+            var englishRule = "- " + Prompts.List("style.chat.refine", PromptLanguage.En)[0];
+            // 和訳と「日本語に統一」は日本語の文体のルール（Mac 版の AppStyle.promptSection と同じ）
+            Assert.Contains(japaneseRule, chat.PromptSection("Slack", TranslationLanguage.Japanese, false));
+            Assert.Contains(japaneseRule, chat.PromptSection("Slack", null, false, japaneseOutput: true));
+            // 話した言語のままなら、プロンプトの言語のルール
+            Assert.Contains(englishRule, chat.PromptSection("Slack", null, false));
+        });
+    }
+
     [Fact]
     public void WithoutAppNameTheHeaderHasNoAppName()
     {

@@ -86,6 +86,8 @@ struct StyleLearningSheet: View {
     @State private var inputMessage: String?
     @State private var budget: DictionarySuggester.Budget?
     @State private var learnTask: Task<Void, Never>?
+    /// いま学んでいる要求の印（「やめる」の直後に学び直したとき、止めた古い要求が新しい要求を消さないように）
+    @State private var learnID: UUID?
     @State private var learnError: String?
     @State private var learned = false
     @State private var name = ""
@@ -238,7 +240,8 @@ struct StyleLearningSheet: View {
             case .failure(let error): messages.append(tr("%@: %@", url.lastPathComponent, error.message))
             }
         }
-        if !added.isEmpty {
+        // 要件: REQ-DIC-022（読めないファイルがあれば、理由を出して入力欄は変えない。Windows 版と同じ）
+        if messages.isEmpty, !added.isEmpty {
             let joined = added.joined(separator: "\n\n")
             text = text.isEmpty ? joined : text + "\n\n" + joined
         }
@@ -253,19 +256,26 @@ struct StyleLearningSheet: View {
         saveError = nil
         let source = text
         let model = settings.textModel(for: .meeting)
+        let id = UUID()
+        learnID = id
         learnTask = Task {
-            defer { learnTask = nil }
+            defer {
+                if learnID == id {
+                    learnTask = nil
+                    learnID = nil
+                }
+            }
             do {
                 // 文体を学ぶのは長い文章を読む分析なので、議事録の AI を使う（DEC-DIC-210）
                 let client = try TextAIClient.requireFromSettings(settings, for: .meeting)
                 let style = try await StyleLearner.learn(text: source, client: client, model: model)
-                guard !Task.isCancelled else { return }
+                guard !Task.isCancelled, learnID == id else { return }
                 name = style.name
                 language = style.language
                 rulesText = style.rules.joined(separator: "\n")
                 learned = true
             } catch {
-                guard !Task.isCancelled, !(error is CancellationError) else { return }
+                guard !Task.isCancelled, learnID == id, !(error is CancellationError) else { return }
                 learnError = "⚠️ " + error.localizedDescription
             }
         }
@@ -274,6 +284,7 @@ struct StyleLearningSheet: View {
     private func cancelLearning() {
         learnTask?.cancel()
         learnTask = nil
+        learnID = nil
     }
 
     // 要件: REQ-DIC-022

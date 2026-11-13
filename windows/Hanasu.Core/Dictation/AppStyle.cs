@@ -58,8 +58,9 @@ public static class AppStylePresets
 
     // 要件: REQ-COM-061
     /// <summary>話した言語で整えるときのルール（style.&lt;プリセット&gt;.refine）</summary>
-    public static IReadOnlyList<string> RefineRules(this AppStylePreset preset) =>
-        preset == AppStylePreset.None ? Array.Empty<string>() : Prompts.List($"style.{preset.RawValue()}.refine");
+    /// <remarks>出力が日本語（和訳・整形の「日本語に統一」）なら language に Ja を渡して日本語の文体のルールにする（DEC-DIC-028。Mac と同じ）</remarks>
+    public static IReadOnlyList<string> RefineRules(this AppStylePreset preset, PromptLanguage? language = null) =>
+        preset == AppStylePreset.None ? Array.Empty<string>() : Prompts.List($"style.{preset.RawValue()}.refine", language);
 
     // 要件: REQ-COM-061
     /// <summary>日本語以外に訳すときのルール。英訳は style.&lt;プリセット&gt;.translation、ほかの言語は translationOther</summary>
@@ -92,13 +93,15 @@ public sealed record AppStyle(string Id, string Name, AppStylePreset Preset, str
     /// 整形・翻訳の user content に足す節（Mac 版 AppStyle.promptSection と一字一句同じ組み立て）。足すものがなければ null。
     /// appName: アプリ名を AI に伝える設定がオフなら null。translation: 翻訳の言語（整形なら null）。
     /// hasCommonRules: 共通の追加ルールがプロンプトに入っているか（入っていれば優先順位を書く）。
-    /// japaneseOutput: 整形の出力を日本語に統一するか（REQ-DIC-082）。今はカスタム文体の言語の一致の判定にだけ使う
+    /// japaneseOutput: 整形の出力を日本語に統一するか（REQ-DIC-082。和訳と同じく日本語の文体のルールにする）
     /// </summary>
     public string? PromptSection(string? appName, TranslationLanguage? translation, bool hasCommonRules, bool japaneseOutput = false)
     {
         if (!HasRules) return null;
-        // 日本語以外に訳すときは、訳す先の言語向けのルールにする（和訳は整形と同じ日本語のルール）
-        TranslationLanguage? target = translation is { } t && t != TranslationLanguage.Japanese ? t : null;
+        // 日本語以外に訳すときは、訳す先の言語向けのルールにする。出力が日本語（和訳・日本語に統一）なら、
+        // プロンプトの言語によらず日本語の文体のルール（ja.json）にする（Mac 版と同じ）
+        var japanese = translation is { } tl ? tl.OutputsJapanese : japaneseOutput;
+        TranslationLanguage? target = japanese ? null : translation;
         // 設計判断: DEC-DIC-214（カスタム文体は、出力の言語が学んだ言語と同じときだけ、プリセットのルールの代わりに渡す。名前は送らない）
         var outputLanguage = translation?.Language ?? (japaneseOutput ? PromptLanguage.Ja : PromptLanguage.Current);
         List<string> styleRules;
@@ -110,7 +113,7 @@ public sealed record AppStyle(string Id, string Name, AppStylePreset Preset, str
         }
         else
         {
-            var presetRules = target is { } language ? Preset.TranslationRules(language) : Preset.RefineRules();
+            var presetRules = target is { } language ? Preset.TranslationRules(language) : Preset.RefineRules(japanese ? PromptLanguage.Ja : null);
             styleRules = presetRules.Select(r => $"- {r}").ToList();
         }
         var custom = Rules.Trim();

@@ -141,7 +141,8 @@ public static class DocxText
             }
             xml = buffer.ToArray();
         }
-        catch (Exception e) when (e is InvalidDataException or IOException or NotSupportedException)
+        // 細工した zip では ZipArchive がほかの例外（ArgumentOutOfRangeException など）も投げうるので、読めないものにまとめる
+        catch (Exception e) when (e is not StyleSourceException and not OutOfMemoryException)
         {
             throw new StyleSourceException(StyleSourceError.Unreadable, e);
         }

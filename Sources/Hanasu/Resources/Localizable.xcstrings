@@ -5510,7 +5510,7 @@
       }
     },
     "%@ 字" : {
-      "comment" : "StyleLearningSheet.swift:213",
+      "comment" : "StyleLearningSheet.swift:215",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5612,7 +5612,7 @@
       }
     },
     "%@ 字以上入れてください。" : {
-      "comment" : "StyleLearningSheet.swift:180",
+      "comment" : "StyleLearningSheet.swift:182",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6224,7 +6224,7 @@
       }
     },
     "%@: %@" : {
-      "comment" : "StyleLearningSheet.swift:238",
+      "comment" : "StyleLearningSheet.swift:240",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -44066,7 +44066,7 @@
       }
     },
     "やめる" : {
-      "comment" : "MeetingAskedQuestionPanel.swift:161, StyleLearningSheet.swift:177",
+      "comment" : "MeetingAskedQuestionPanel.swift:161, StyleLearningSheet.swift:179",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49574,7 +49574,7 @@
       }
     },
     "カスタム文体を編集" : {
-      "comment" : "StyleLearningSheet.swift:123",
+      "comment" : "StyleLearningSheet.swift:125",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -57938,7 +57938,7 @@
       }
     },
     "ファイルを選ぶ…" : {
-      "comment" : "StyleLearningSheet.swift:162",
+      "comment" : "StyleLearningSheet.swift:164",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79052,7 +79052,7 @@
       }
     },
     "保存の前にルールを読んで、要らないもの・内容を足すもの（挨拶を入れる など）は消してください。出力の言語が「言語」と同じときだけ使います。" : {
-      "comment" : "StyleLearningSheet.swift:207",
+      "comment" : "StyleLearningSheet.swift:209",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -81296,7 +81296,7 @@
       }
     },
     "入力欄には %@ 字まで入れられます。超えた分は入れていません。" : {
-      "comment" : "StyleLearningSheet.swift:222",
+      "comment" : "StyleLearningSheet.swift:224",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -85580,7 +85580,7 @@
       }
     },
     "名前" : {
-      "comment" : "MinutesTemplateViews.swift:202, MinutesTemplateViews.swift:268, StyleLearningSheet.swift:192",
+      "comment" : "MinutesTemplateViews.swift:202, MinutesTemplateViews.swift:268, StyleLearningSheet.swift:194",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -87518,7 +87518,7 @@
       }
     },
     "学んでいます…" : {
-      "comment" : "StyleLearningSheet.swift:176",
+      "comment" : "StyleLearningSheet.swift:178",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93128,7 +93128,7 @@
       }
     },
     "文体のルール（1 行に 1 つ）" : {
-      "comment" : "StyleLearningSheet.swift:200, StyleLearningSheet.swift:206",
+      "comment" : "StyleLearningSheet.swift:202, StyleLearningSheet.swift:208",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93230,7 +93230,7 @@
       }
     },
     "文体を学ぶ" : {
-      "comment" : "StyleLearningSheet.swift:172",
+      "comment" : "StyleLearningSheet.swift:174",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -93332,7 +93332,7 @@
       }
     },
     "文体を学ぶ文章" : {
-      "comment" : "StyleLearningSheet.swift:159",
+      "comment" : "StyleLearningSheet.swift:161",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96188,7 +96188,7 @@
       }
     },
     "文章から文体を学ぶ" : {
-      "comment" : "StyleLearningSheet.swift:123",
+      "comment" : "StyleLearningSheet.swift:125",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -114446,7 +114446,7 @@
       }
     },
     "自分で書いた文章（報告書・メールなど）を貼り付けるか、ファイル（Word・テキスト・Markdown）を選んでください。文章は「議事録」の AI に送って文体を読み取るだけで、保存しません。" : {
-      "comment" : "StyleLearningSheet.swift:151",
+      "comment" : "StyleLearningSheet.swift:153",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -116690,7 +116690,7 @@
       }
     },
     "言語" : {
-      "comment" : "StyleLearningSheet.swift:197",
+      "comment" : "StyleLearningSheet.swift:199",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -124238,7 +124238,7 @@
       }
     },
     "読み込む" : {
-      "comment" : "StyleLearningSheet.swift:231",
+      "comment" : "StyleLearningSheet.swift:233",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -142292,7 +142292,7 @@
       }
     },
     "（先頭の %@ 字を使います）" : {
-      "comment" : "StyleLearningSheet.swift:215",
+      "comment" : "StyleLearningSheet.swift:217",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
