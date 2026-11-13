@@ -648,6 +648,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>A taxa de amostragem do modelo de separação de falantes não é a esperada ({0} Hz).</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Não foi possível carregar o modelo de separação de falantes.</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Não é possível usar a região "{0}" da Vertex AI (somente letras minúsculas, dígitos e hifens; por exemplo, global, us-central1).</value>
   </data>

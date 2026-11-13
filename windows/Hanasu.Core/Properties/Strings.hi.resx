@@ -648,6 +648,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>वक्ता पृथक्करण मॉडल की सैंपल दर अपेक्षित नहीं है ({0} Hz).</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>वक्ता पृथक्करण मॉडल लोड नहीं हो सका।</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Vertex AI क्षेत्र “{0}” का उपयोग नहीं किया जा सकता (केवल छोटे अक्षर, अंक और हाइफ़न; जैसे global, us-central1).</value>
   </data>

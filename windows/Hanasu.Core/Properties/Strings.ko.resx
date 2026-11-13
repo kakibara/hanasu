@@ -648,6 +648,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>화자 분리 모델의 샘플 레이트가 예상과 다릅니다({0} Hz).</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>화자 분리 모델을 불러오지 못했습니다.</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Vertex AI 리전 '{0}'은(는) 사용할 수 없습니다(영문 소문자, 숫자, 하이픈만 사용 가능. 예: global, us-central1).</value>
   </data>

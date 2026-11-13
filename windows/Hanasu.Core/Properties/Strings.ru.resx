@@ -648,6 +648,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Частота дискретизации модели разделения говорящих не соответствует ожидаемой ({0} Гц).</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Не удалось загрузить модель разделения говорящих.</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Регион Vertex AI «{0}» нельзя использовать (только строчные буквы, цифры и дефисы; например, global, us-central1).</value>
   </data>

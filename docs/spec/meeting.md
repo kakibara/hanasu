@@ -1462,9 +1462,9 @@
 - 実装の場所: `windows/Hanasu.Windows/Services/MeetingChannelRecorder.cs`、`windows/Hanasu.Core/Meetings/MeetingTranscription.cs`
 
 ### DEC-MTG-104 Windows 版の話者分離は sherpa-onnx で行う
-- 決めたこと: sherpa-onnx（NuGet の 1.13.8、Apache-2.0）の `OfflineSpeakerDiarization` で、相手側を会議全体で 1 回に分ける。話者の数は決めず、しきい値 0.5 でまとめる。モデル（pyannote segmentation-3.0 の ONNX 版と 3D-Speaker の CAM++、約 34 MB）は初めて使うときに `%LOCALAPPDATA%\Hanasu\Models\diarization` にダウンロードする。失敗したら相手を「相手」1 人にまとめて続け、タスクトレイで知らせる。設定「相手側の話者を分ける」は既定でオン。マイク側の話者分離は作っていない。
-- 理由: FluidAudio（DEC-MTG-010）は Apple 専用。sherpa-onnx は C# の API があり Mac でも動くので CLI で確かめられた。公開から 7 週たった版を選んだ。
-- 決めた場面: PR #19
+- 決めたこと: sherpa-onnx（NuGet の 2.0.1、Apache-2.0）の `OfflineSpeakerDiarization` で、相手側を会議全体で 1 回に分ける。話者の数は決めず、しきい値 0.5 でまとめる。モデル（pyannote segmentation-3.0 の ONNX 版と 3D-Speaker の CAM++、約 34 MB）は初めて使うときに `%LOCALAPPDATA%\Hanasu\Models\diarization` にダウンロードする。失敗したら相手を「相手」1 人にまとめて続け、タスクトレイで知らせる。sherpa-onnx が話者分離を作れなかった（C の API が NULL を返した）ときは、その先のネイティブの関数を呼ばずに例外にして、ほかの失敗と同じく「相手」1 人にまとめる。C# の `OfflineSpeakerDiarization` は NULL を確かめないので、作った直後に private のハンドル（`_handle`）をリフレクションで読んで確かめる（読めなければ同じ例外にする）。このときのログ（`diarization failed`）には、モデルのパスが ASCII だけか、2 つのファイルがあるかを足す。設定「相手側の話者を分ける」は既定でオン。マイク側の話者分離は作っていない。
+- 理由: FluidAudio（DEC-MTG-010）は Apple 専用。sherpa-onnx は C# の API があり Mac でも動くので CLI で確かめられた。最初は公開から 7 週たった 1.13.8 を選んだが、その NuGet のネイティブ DLL は音声合成（TTS）用の espeak-ng（GPL-3.0）を静的にリンクしていたので（REQ-REL-005）、espeak-ng を取り除いた 2.0 系（k2-fsa/sherpa-onnx#4055）の 2.0.1（公開から 18 日。DEC-COM-061 の「2 週間」を満たす）に上げた。C の API は、1.13.8 から設定の検査（モデルのファイルがあるか）に通らないと NULL を返し、2.0 からはモデルを読めない例外のときも NULL を返す（k2-fsa/sherpa-onnx#4044）。確かめないと NULL を参照してプロセスが落ちる。ハンドルを確かめる公開の手段がなく、C の API を自前で P/Invoke し直すのは大きいので、リフレクションにした（版を上げてフィールドがなくなったら、テストが落ちる）。ユーザーのフォルダ名に ASCII 以外の文字があるときに話者分離が動かなかったのは DEC-COM-206 で直した。ログはそれを見分けるため。
+- 決めた場面: PR #19。2.0.1 への更新と NULL の確かめは、2026-11-12 の依頼「GPL/LGPL のライブラリは含まれていますか？」への対応
 - 関係する要件: REQ-MTG-004, REQ-MTG-023
 - 対象: Windows
 - 実装の場所: `windows/Hanasu.Diarization/SherpaSpeakerDiarizer.cs`

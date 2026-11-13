@@ -648,6 +648,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>معدل العينات لنموذج فصل المتحدثين ليس كما هو متوقع ({0} Hz).</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>تعذّر تحميل نموذج فصل المتحدثين.</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>لا يمكن استخدام منطقة Vertex AI “{0}” (أحرف صغيرة وأرقام وشرطات فقط؛ مثل global وus-central1).</value>
   </data>

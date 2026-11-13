@@ -648,6 +648,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>Tần số lấy mẫu của mô hình tách người nói không như dự kiến ({0} Hz).</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>Không thể tải mô hình tách người nói.</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>Không thể dùng khu vực Vertex AI “{0}” (chỉ gồm chữ thường, chữ số và dấu gạch nối; ví dụ: global, us-central1).</value>
   </data>

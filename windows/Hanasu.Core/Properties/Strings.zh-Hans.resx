@@ -648,6 +648,9 @@
   <data name="Diarization_SampleRateMismatch" xml:space="preserve">
     <value>说话人分离模型的采样率与预期不符（{0} Hz）。</value>
   </data>
+  <data name="Diarization_CreateFailed" xml:space="preserve">
+    <value>无法加载说话人分离模型。</value>
+  </data>
   <data name="Gemini_InvalidLocation" xml:space="preserve">
     <value>无法使用 Vertex AI 区域“{0}”（只能使用小写字母、数字和连字符；例如 global、us-central1）。</value>
   </data>

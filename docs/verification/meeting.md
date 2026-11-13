@@ -222,3 +222,13 @@ v1.4.0 で「メモ」タブを開くと、タイトル・タブの切り替え�
 - 手元の再現: 記録中の画面を 20 倍速で 30 分ぶん動かすと、CPU の時間が 51.0 秒 → 5.7 秒。細かいバッファ（256 フレーム）を実時間で流すと、SpeechAnalyzer の記録が 150 秒で約 13,000 件 → 784 件。発言の数は同じ（7 件）。`--render-meeting-notes` の `live.png`・`caption.png` で、途中結果の行が前と同じく出ることを見た。
 - 話者分離（記録を止めたあと。直していない）: FluidAudio 0.17.7 のリリースビルドで、相手側の録音のピークは 29 分で 734 MB、61 分で 827 MB、100 分で 947 MB、138 分で 1,002 MB。長さによらず約 650 MB かかり、1 分ごとに約 2.5 MB 足される（区間の判定結果を小さな配列の集まりで全部持つため）。`autoreleasepool` を足しても変わらなかった。終わったあとも、モデルを持ち続けるので 100〜480 MB 残る。
 - 確かめていないこと: 2 時間を超える記録での直したあとの増え方。Whisper / Gemini のエンジン（記録中は文字起こししない）。
+
+## 18. Windows 版の話者分離を sherpa-onnx 2.0.1 に上げる（2026-11-13、macOS 26.6.2 と、その上の .NET 10 SDK）
+
+関係: REQ-MTG-004、REQ-REL-005、DEC-MTG-104、DEC-COM-206、DEC-REL-012
+
+- きっかけ: sherpa-onnx 1.13.8 の NuGet の `sherpa-onnx-c-api.dll`（win-x64）に、音声合成用の espeak-ng（GPL-3.0）が静的にリンクされていた（大文字と小文字を区別して `espeak_ng_`・`espeak_Initialize` が 26 件）。2.0.1 の win-x64・win-arm64・win-x86 の DLL には 0 件。`onnxruntime.dll` は 1.13.8 と同じもの（ONNX Runtime 1.28.2）。Hanasu が使う C# の話者分離の API のファイルは 1.13.8 と同じ。
+- 同じ音声での比べ: macOS の `say` で 2 つの声（Kyoko・Eddy）が交互に話す 6 文（約 40 秒、16 kHz モノラル）を作り、`windows/Hanasu.Cli` の `meeting-files`（Whisper tiny、議事録なし。sherpa-onnx の osx-arm64）で、1.13.8（main）と 2.0.1（この変更）を流した。どちらも「9 区間・話者 2 人」で、6 つの発言が 話者1・話者2 に交互に正しく分かれ、結果は同じだった。
+- 作れなかったとき: 2.0 から、モデルを読めないと C の API が NULL を返す（k2-fsa/sherpa-onnx#4044）。`DiarizationTests.BrokenModelsThrowInsteadOfCrashing`（大きさだけ合わせた中身のないモデル）で、落ちずに `Diarization_CreateFailed` の例外になることを Mac で確かめた。日本語の名前のフォルダのファイルを UTF-8 で渡すと sherpa-onnx が見つけること（`SherpaReadsUtf8Paths`）も Mac で確かめた。
+- `dotnet test Hanasu.Core.Tests`: 761 件すべて成功。
+- 確かめていないこと（実機）: Windows の実機（win-x64 の DLL）で相手側の話者が分かれること。ユーザーのフォルダ名が日本語のアカウントで、直す前に話者分離が動かなかったか（推測）と、`activeCodePage` を UTF-8 にしたあとで文字起こし（Whisper.net）と話者分離の両方が動くこと（DEC-COM-206）。Windows の CI でのテストの結果は PR で見る。

@@ -20,6 +20,10 @@
       <!-- 画面ごとの拡大率に合わせて描く（HUD の位置を物理ピクセルで決めるため） -->
       <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2</dpiAwareness>
       <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/pm</dpiAware>
+      <!-- 設計判断: DEC-COM-206
+           ANSI のコードページを UTF-8 にする。sherpa-onnx の C# の API はモデルのパスを ANSI で渡し、ネイティブの側は UTF-8 として読むので、
+           ユーザーのフォルダ名に日本語などがあると話者分離のモデルを見つけられない（Windows 10 1903 以降で効く） -->
+      <activeCodePage xmlns="http://schemas.microsoft.com/SMI/2019/WindowsSettings">UTF-8</activeCodePage>
     </windowsSettings>
   </application>
 </assembly>
