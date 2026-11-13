@@ -612,8 +612,8 @@ Le compte rendu, la transcription, les notes et l'audio seront tous déplacés v
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>Telle que parlée</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>Toujours en japonais</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>Toujours en {0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>Indiquer à l'IA le nom de l'application dans laquelle vous saisissez (pour adapter le style)</value>

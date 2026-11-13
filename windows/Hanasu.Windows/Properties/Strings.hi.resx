@@ -612,8 +612,8 @@
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>जैसा बोला गया</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>हमेशा जापानी</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>{0} में एकरूप करें</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>AI को उस ऐप का नाम बताएँ जिसमें आप टाइप कर रहे हैं (उसकी शैली से मेल खाने के लिए)</value>

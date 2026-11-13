@@ -612,8 +612,8 @@
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>原語言</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>一律使用日文</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>統一為{0}</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>將正在輸入的應用程式名稱告知 AI（以配合其風格）</value>

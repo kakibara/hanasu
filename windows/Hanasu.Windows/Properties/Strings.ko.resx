@@ -612,8 +612,8 @@
   <data name="Settings_RefineLanguage_AsSpoken" xml:space="preserve">
     <value>말한 언어</value>
   </data>
-  <data name="Settings_RefineLanguage_Japanese" xml:space="preserve">
-    <value>항상 일본어</value>
+  <data name="Settings_RefineLanguage_Unified" xml:space="preserve">
+    <value>{0}로 통일</value>
   </data>
   <data name="Settings_SendAppName" xml:space="preserve">
     <value>입력 중인 앱 이름을 AI에 알리기(앱의 스타일에 맞추기 위해)</value>

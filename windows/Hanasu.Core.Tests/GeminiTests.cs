@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Hanasu.Core.Ai;
 using Hanasu.Core.Gemini;
 using Hanasu.Core.Settings;
 using Hanasu.Core.Text;
@@ -78,12 +79,13 @@ public class GeminiPromptTests
 
     // 確かめ方: REQ-DIC-082
     [Fact]
-    public void JapaneseOutputLanguageInstructionIsCopiedFromMac()
+    public void UnifiedOutputLanguageInstructionIsCopiedFromMac()
     {
-        // ja.json の refine.outputLanguage.japanese（Mac 版の GeminiClient.RefineOutputLanguage.japanese.instruction も同じキーを読む）
+        // ja.json の refine.outputLanguage.unified（Mac 版の GeminiClient.RefineOutputLanguage.unified.instruction も同じキーを読む）。
+        // 日本語の文面は、日本語に固定していた版の refine.outputLanguage.japanese と一字一句同じ
         const string mac = "出力の言語: 日本語に統一する。英語で話された部分も日本語にする（固有名詞・製品名・コードなど、訳すと意味が変わるものは原語のまま残す）。";
-        Assert.Equal(mac, GeminiPrompts.JapaneseLanguageInstruction);
-        var system = GeminiPrompts.SystemInstruction(RefineOutputLanguage.Japanese).ReplaceLineEndings("\n");
+        Assert.Equal(mac, GeminiPrompts.UnifiedLanguageInstruction);
+        var system = GeminiPrompts.SystemInstruction(RefineOutputLanguage.Unified).ReplaceLineEndings("\n");
         Assert.EndsWith("出力は整形後の本文だけにしてください。\n\n" + mac, system);
         // 言語の指示は 1 つだけ入る
         Assert.DoesNotContain(GeminiPrompts.AsSpokenLanguageInstruction, system);
@@ -93,6 +95,20 @@ public class GeminiPromptTests
     [InlineData("gemini-3.5-flash-lite", "minimal")]
     [InlineData("gemini-3.8-flash", "low")]
     public void ThinkingLevelFollowsModel(string model, string level) => Assert.Equal(level, GeminiPrompts.ThinkingLevel(model));
+}
+
+/// <summary>整形の言語の統一の先は、プロンプトの言語（DEC-DIC-200）。言語を変えるので、ほかのテストと並行に走らせない</summary>
+[Collection(PromptLanguageCollection.Name)]
+public class UnifiedOutputLanguageTests
+{
+    // 確かめ方: REQ-DIC-082
+    [Fact]
+    public void UnifiedOutputLanguageFollowsPromptLanguage() => PromptLanguageFixture.With(PromptLanguage.Ko, () =>
+    {
+        Assert.Equal(Hanasu.Core.Ai.Prompts.Text("refine.outputLanguage.unified", PromptLanguage.Ko), GeminiPrompts.UnifiedLanguageInstruction);
+        Assert.StartsWith("출력 언어: 한국어로 통일한다.", GeminiPrompts.UnifiedLanguageInstruction);
+        Assert.EndsWith(GeminiPrompts.UnifiedLanguageInstruction, GeminiPrompts.SystemInstruction(RefineOutputLanguage.Unified));
+    });
 }
 
 public class GeminiClientTests
