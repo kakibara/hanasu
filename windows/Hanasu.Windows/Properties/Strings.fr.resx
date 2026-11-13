@@ -1841,4 +1841,73 @@ Les applications ajoutées et les règles supplémentaires de chaque application
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Chercher des suggestions pour le &amp;dictionnaire à l'écran…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Chercher des suggestions pour le dictionnaire à l'écran</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Chercher des suggestions pour le dictionnaire à l'écran</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Le texte affiché sur vos écrans est lu sur ce PC (aucune image n'est envoyée ni enregistrée). Les fenêtres de Hanasu, les gestionnaires de mots de passe, les notifications et les fenêtres de connexion ne sont pas lus. Tout le reste est lu, y compris les extensions de gestion de mots de passe du navigateur et les terminaux. Le texte n'est envoyé que lorsque vous cliquez sur « Chercher des suggestions », et uniquement à l'IA choisie pour « Compte rendu » dans l'onglet « AI » des Paramètres (avec « Local », il ne quitte pas ce PC).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Lecture du texte à l'écran…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Écrans lus : {0} · Mots à envoyer : {1} · Lignes à envoyer : {2}</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Envoyer à : {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini et Claude devinent la prononciation de façon plus fiable (modifiable sous « Compte rendu » dans l'onglet « AI » des Paramètres).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>Le texte à l'écran est trop long : seule une partie sera envoyée.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>La reconnaissance de texte pour {0} n'est pas installée dans Windows : le texte a donc été lu en {1}. Vous pouvez ajouter la « Reconnaissance optique de caractères » de cette langue dans Paramètres &gt; Heure et langue &gt; Langue et région.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Mots</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Lignes de l'écran</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(Aucun)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Chercher des suggestions</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Sélectionnez les éléments à ajouter.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Sans prononciation (seul le mot est enregistré)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Prononciation :</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Impossible de lire du texte à l'écran.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>Aucun écran à capturer n'a été trouvé.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Impossible de capturer l'écran : {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Impossible de lire le texte à l'écran : {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Aucune reconnaissance de texte (OCR) n'est installée dans Windows, quelle que soit la langue : l'écran n'a donc pas pu être lu. Ajoutez la « Reconnaissance optique de caractères » d'une langue dans Paramètres &gt; Heure et langue &gt; Langue et région.</value>
+  </data>
 </root>

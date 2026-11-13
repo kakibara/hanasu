@@ -46,7 +46,7 @@ Hanasu terinspirasi oleh Typeless, Wispr Flow, Aqua Voice, dan Granola. Kode sum
 | **Edit dengan suara** | Pilih teks, tekan <kbd>⌃⌥⌘ E</kbd>, lalu ucapkan "buat lebih sopan", "ubah jadi poin-poin", atau "terjemahkan ke bahasa Inggris". |
 | **Gaya per aplikasi** | Di Slack teks dibuat santai dan singkat, di Mail sopan dan berparagraf, dan di Pages, Word, serta Notion memakai gaya bahasa tulis. Anda dapat mengubah preset untuk setiap aplikasi, atau meminta AI mempelajari gaya kustom dari tulisan Anda sendiri (tempel teks atau pilih berkas Word, teks, atau Markdown). |
 | **Snippet** | Ucapkan "tanda tangan email" untuk menyisipkan teks tersimpan persis seperti yang Anda tulis. Snippet tidak pernah dikirim ke AI. |
-| **Kamus** | Tambahkan nama diri dan aturan penggantian seperti `ストックマーク => Stockmark`. Aturan penggantian juga diterapkan pada transkrip rapat. Dari rapat yang dibuka di Catatan rapat, AI dapat menyarankan entri baru dari rapat tersebut (di Mac, juga dari riwayat dan rapat terbaru Anda), dan Anda hanya menambahkan yang Anda pilih. |
+| **Kamus** | Tambahkan nama diri dan aturan penggantian seperti `ストックマーク => Stockmark`. Aturan penggantian juga diterapkan pada transkrip rapat. Dari rapat yang dibuka di Catatan rapat, AI dapat menyarankan entri baru dari rapat tersebut (di Mac, juga dari riwayat dan rapat terbaru Anda), dan Anda hanya menambahkan yang Anda pilih. Dengan **Cari saran kamus dari layar…** di menu, Hanasu membaca kata-kata di layar Anda dan menyarankannya beserta cara kata itu kemungkinan besar dikenali saat diucapkan (misalnya `Jスリー => J3`); Anda dapat melihat apa yang akan dikirim sebelum apa pun dikirim ke AI. |
 | **Konteks layar** *(opsional)* | Hanasu membaca judul jendela dan teks di sekitar kursor, sehingga nama-nama cocok dengan apa yang sudah ada di layar. Kolom kata sandi tidak pernah dibaca. |
 | **Teks tangkapan layar** *(opsional, Mac)* | Hanasu mengambil tangkapan semua layar Anda, membaca teksnya di Mac Anda, dan hanya memberikan teks itu ke AI, sehingga nama dan nomor model di jendela lain (misalnya "QX-7s") ditulis sesuai yang tampil. Gambarnya tidak pernah dikirim atau disimpan. Aktifkan atau nonaktifkan untuk satu perekaman lewat tombol di HUD. Memerlukan izin Perekaman Layar. |
 | **Pilih mikrofon** *(Mac)* | Pilih mikrofon di Pengaturan, atau ganti lewat tombol mikrofon di HUD tanpa menghentikan perekaman. |
@@ -153,7 +153,7 @@ Dapatkan build terbaru dari [**Releases**](https://github.com/kakibara/hanasu/re
 1. Ekstrak berkas dan pindahkan `Hanasu.app` ke **Aplikasi**.
 2. Aplikasi ini ditandatangani sendiri (self-signed) dan belum dinotarisasi, jadi macOS memblokirnya saat pertama kali dibuka. Klik **Selesai**, lalu buka **Pengaturan Sistem → Privasi & Keamanan** dan klik **Tetap Buka**.
    Anda juga bisa menjalankan `xattr -dr com.apple.quarantine /Applications/Hanasu.app` sebagai gantinya.
-3. Saat diminta, izinkan **Mikrofon**, **Pengenalan Ucapan**, dan **Aksesibilitas**. Aksesibilitas diperlukan untuk menempel dengan ⌘V. Izin **Perekaman Layar** hanya diminta jika Anda mengaktifkan teks tangkapan layar.
+3. Saat diminta, izinkan **Mikrofon**, **Pengenalan Ucapan**, dan **Aksesibilitas**. Aksesibilitas diperlukan untuk menempel dengan ⌘V. Izin **Perekaman Layar** hanya diminta jika Anda mengaktifkan teks tangkapan layar atau mencari saran kamus dari layar.
 
 </details>
 
@@ -198,7 +198,7 @@ Anda dapat mengubah semua pintasan di Pengaturan. Panduan pengguna lengkap (dala
 ## Privasi
 
 - **Secara bawaan, audio tetap di perangkat Anda.** Pengenalan ucapan, Whisper, dan pemisahan pembicara semuanya berjalan secara lokal.
-- **AI menerima teks, bukan audio.** Gemini atau Claude menerima transkrip. Tergantung pengaturan Anda, AI juga dapat menerima nama aplikasi tempat Anda mengetik, konteks layar, teks yang dibaca dari tangkapan layar Anda (tidak pernah gambarnya), dan transkrip rapat untuk fitur Tanya dan obrolan AI selama rapat.
+- **AI menerima teks, bukan audio.** Gemini atau Claude menerima transkrip. Tergantung pengaturan Anda, AI juga dapat menerima nama aplikasi tempat Anda mengetik, konteks layar, teks yang dibaca dari tangkapan layar Anda (tidak pernah gambarnya), dan transkrip rapat untuk fitur Tanya dan obrolan AI selama rapat. Saat Anda mencari saran kamus dari layar, kata dan baris yang dibaca dari layar Anda hanya dikirim setelah Anda memeriksanya dan menekan tombol.
 - **Lokal dan Apple juga menyimpan teks di perangkat Anda.** Jika Anda memilih salah satunya, tidak ada yang dikirim ke layanan AI. Satu-satunya yang diunduh adalah model itu sendiri.
 - **Audio dikirim ke Google hanya jika Anda memilihnya.** Jika Anda memilih mesin ucapan Gemini, audio rekaman dikirim ke Google.
 - **Agen mendapat rapat hanya jika Anda menghubungkannya.** Perintah `hanasu` dan server MCP-nya hanya membaca rapat saat Anda atau agen memanggilnya, dan isi yang dikembalikan diteruskan ke agen tersebut dan penyedia AI-nya.

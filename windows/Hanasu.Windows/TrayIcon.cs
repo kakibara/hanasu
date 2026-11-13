@@ -7,7 +7,8 @@ namespace Hanasu.Windows;
 
 /// <summary>
 /// タスクトレイのアイコンとメニュー（Mac 版のメニューバーにあたる）。
-/// 録音を開始 / 翻訳して入力を開始（英訳・和訳） / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く / アップデートを確認 / 設定 / Hanasu を終了。
+/// 録音を開始 / 翻訳して入力を開始（英訳・和訳） / 会議の記録を開始・停止 / 会議ノートを開く / 最近の結果 / 履歴を開く /
+/// 画面から辞書の候補を探す / アップデートを確認 / 設定 / Hanasu を終了。
 /// 文言と並びは Mac 版のメニューバー（AppDelegate の statusMenu）にそろえ、各項目にアクセスキー（&amp;）を付ける。
 /// </summary>
 // 設計判断: DEC-COM-152
@@ -19,6 +20,7 @@ internal sealed class TrayIcon : IDisposable
     private readonly Forms.ToolStripMenuItem translateItem;
     private readonly Forms.ToolStripMenuItem recentItem;
     private readonly Forms.ToolStripMenuItem meetingItem;
+    private readonly Forms.ToolStripMenuItem screenDictionaryItem;
     private readonly Forms.Timer meetingTimer = new() { Interval = 1000 };
     private DictationState state = DictationState.Idle;
     private MeetingState meetingState = MeetingState.Idle;
@@ -34,6 +36,8 @@ internal sealed class TrayIcon : IDisposable
         translateItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.StartFromMenu(host.Dictation.PrimaryTranslateMode));
         recentItem = new Forms.ToolStripMenuItem(Strings.Tray_Recent);
         meetingItem = new Forms.ToolStripMenuItem("", null, (_, _) => host.ToggleMeetingFromMenu());
+        // 要件: REQ-DIC-075
+        screenDictionaryItem = new Forms.ToolStripMenuItem(Strings.Tray_ScreenDictionary, null, (_, _) => host.ShowScreenDictionary());
         menu.Items.Add(dictateItem);
         menu.Items.Add(translateItem);
         menu.Items.Add(new Forms.ToolStripSeparator());
@@ -42,6 +46,7 @@ internal sealed class TrayIcon : IDisposable
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add(recentItem);
         menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_OpenHistory, null, (_, _) => host.ShowHistory()));
+        menu.Items.Add(screenDictionaryItem);
         menu.Items.Add(new Forms.ToolStripSeparator());
         // 要件: REQ-REL-011
         menu.Items.Add(new Forms.ToolStripMenuItem(Strings.Tray_CheckForUpdates, null, async (_, _) => await host.Updates.CheckManuallyAsync()));
@@ -102,6 +107,8 @@ internal sealed class TrayIcon : IDisposable
         var meetingIdle = meetingState == MeetingState.Idle;
         dictateItem.Enabled = state != DictationState.Processing && meetingIdle;
         translateItem.Enabled = state == DictationState.Idle && meetingIdle;
+        // 要件: REQ-DIC-075（音声入力の準備中・録音中・処理中は選べない。選べてしまっても ShowScreenDictionary が何もしない）
+        screenDictionaryItem.Enabled = state == DictationState.Idle;
 
         var elapsed = Meeting.Clock(host.Meetings.ElapsedSeconds);
         meetingItem.Text = meetingState switch

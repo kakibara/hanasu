@@ -1841,4 +1841,73 @@ Se eliminarán las aplicaciones que añadiste y las reglas adicionales de cada a
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Buscar candidatos para el &amp;diccionario en la pantalla…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Buscar candidatos para el diccionario en la pantalla</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Buscar candidatos para el diccionario en la pantalla</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Lee el texto que se muestra en tus pantallas dentro de este equipo (no envía ni guarda la imagen). No lee las ventanas de Hanasu, los administradores de contraseñas, las notificaciones ni los diálogos de inicio de sesión. Todo lo demás sí se lee, incluidas las extensiones de administración de contraseñas del navegador y las terminales. El texto solo se envía cuando haces clic en "Buscar candidatos", y solo a la IA elegida para "Acta" en la pestaña "AI" de Configuración (con "Local", no sale de este equipo).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Leyendo el texto de la pantalla…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Pantallas leídas: {0} · Palabras que se enviarán: {1} · Líneas que se enviarán: {2}</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Enviar a: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini y Claude deducen la pronunciación con más precisión (puedes cambiarlo en "Acta" de la pestaña "AI" de Configuración).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>Hay mucho texto en la pantalla, así que solo se enviará una parte.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>Windows no tiene instalado el reconocimiento de texto para {0}, así que el texto se leyó como {1}. Puedes agregar el "Reconocimiento óptico de caracteres" de ese idioma en Configuración &gt; Hora e idioma &gt; Idioma y región.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Palabras</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Líneas de la pantalla</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(Ninguno)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Buscar candidatos</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Elige los que quieras añadir.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Sin pronunciación (solo se registra la palabra)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Pronunciación:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>No se pudo leer ningún texto de la pantalla.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>No se encontró ninguna pantalla que capturar.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>No se pudo capturar la pantalla: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>No se pudo leer el texto de la pantalla: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Windows no tiene instalado el reconocimiento de texto (OCR) para ningún idioma, así que no se pudo leer la pantalla. Agrega el "Reconocimiento óptico de caracteres" de un idioma en Configuración &gt; Hora e idioma &gt; Idioma y región.</value>
+  </data>
 </root>

@@ -512,7 +512,7 @@
       }
     },
     "%@\n%@前の文章を入力しました。" : {
-      "comment" : "DictationController.swift:458",
+      "comment" : "DictationController.swift:483",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -614,7 +614,7 @@
       }
     },
     "%@\n選択した文章はそのままです。" : {
-      "comment" : "EditModeController.swift:356",
+      "comment" : "EditModeController.swift:369",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3470,7 +3470,7 @@
       }
     },
     "%@ の認証情報が未設定のため、%@せずに入力しました（メニュー → 設定 →「AI」）。" : {
-      "comment" : "DictationController.swift:453",
+      "comment" : "DictationController.swift:478",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -3572,7 +3572,7 @@
       }
     },
     "%@ の認証情報が未設定のため、選択を声で編集できません（メニュー → 設定 →「AI」）。" : {
-      "comment" : "EditModeController.swift:181",
+      "comment" : "EditModeController.swift:186",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5306,7 +5306,7 @@
       }
     },
     "%@ 件を辞書に追加しました。" : {
-      "comment" : "DictionarySettingsView.swift:251, MeetingDictionaryViews.swift:214",
+      "comment" : "DictionarySettingsView.swift:251, MeetingDictionaryViews.swift:214, ScreenDictionaryWindow.swift:237",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -5913,6 +5913,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 天"
+          }
+        }
+      }
+    },
+    "%@ 画面から読み、語 %@ 個・行 %@ 行を送ります。" : {
+      "comment" : "ScreenDictionaryWindow.swift:244",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تمت القراءة من الشاشات: %@. سيُرسل: كلمات %@، وأسطر %@."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelesene Bildschirme: %@ · Zu sendende Wörter: %@ · Zu sendende Zeilen: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read from %@ screen(s). Sending words: %@, lines: %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantallas leídas: %@ · Palabras que se enviarán: %@ · Líneas que se enviarán: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écrans lus : %@ · Mots à envoyer : %@ · Lignes à envoyer : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ स्क्रीन से पढ़ा गया; %@ शब्द और %@ लाइनें भेजी जाएँगी।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dibaca dari %@ layar; %@ kata dan %@ baris akan dikirim."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermi letti: %@ · Parole da inviare: %@ · Righe da inviare: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면 %@개에서 읽어 단어 %@개, 줄 %@개를 보냅니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odczytane ekrany: %@. Do wysłania słów: %@, wierszy: %@."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lido de %@ tela(s). Serão enviadas %@ palavras e %@ linhas."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прочитано экранов: %@. Будет отправлено слов: %@, строк: %@."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ekrandan okundu; %@ sözcük ve %@ satır gönderilecek."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã đọc từ %@ màn hình; sẽ gửi %@ từ và %@ dòng."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已读取 %@ 个屏幕，将发送 %@ 个词语和 %@ 行文字。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已讀取 %@ 個螢幕，將傳送 %@ 個詞語和 %@ 行文字。"
           }
         }
       }
@@ -6530,7 +6632,7 @@
       }
     },
     "%@。選択した文章はそのままです。" : {
-      "comment" : "EditModeController.swift:340",
+      "comment" : "EditModeController.swift:353",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6632,7 +6734,7 @@
       }
     },
     "%@して入力しました" : {
-      "comment" : "DictationController.swift:498",
+      "comment" : "DictationController.swift:526",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -6734,7 +6836,7 @@
       }
     },
     "%@して入力を開始　%@" : {
-      "comment" : "AppDelegate.swift:199",
+      "comment" : "AppDelegate.swift:203",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -7244,7 +7346,7 @@
       }
     },
     "%@のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:434",
+      "comment" : "SettingsView.swift:435",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8162,7 +8264,7 @@
       }
     },
     "%@を許可する" : {
-      "comment" : "SettingsView.swift:430",
+      "comment" : "SettingsView.swift:431",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -8774,7 +8876,7 @@
       }
     },
     "%@前の文章を入力します" : {
-      "comment" : "DictationController.swift:420",
+      "comment" : "DictationController.swift:445",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -14282,7 +14384,7 @@
       }
     },
     "AI の認証情報を読み込めませんでした。" : {
-      "comment" : "EditModeController.swift:335",
+      "comment" : "EditModeController.swift:348",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23054,7 +23156,7 @@
       }
     },
     "Hanasu について" : {
-      "comment" : "AppDelegate.swift:327",
+      "comment" : "AppDelegate.swift:383",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23564,7 +23666,7 @@
       }
     },
     "Hanasu の使い方…" : {
-      "comment" : "AppDelegate.swift:238, AppDelegate.swift:332",
+      "comment" : "AppDelegate.swift:244, AppDelegate.swift:388",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23870,7 +23972,7 @@
       }
     },
     "Hanasu を終了" : {
-      "comment" : "AppDelegate.swift:243, AppDelegate.swift:340",
+      "comment" : "AppDelegate.swift:249, AppDelegate.swift:396",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -23972,7 +24074,7 @@
       }
     },
     "Hanasu を隠す" : {
-      "comment" : "AppDelegate.swift:335",
+      "comment" : "AppDelegate.swift:391",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24074,7 +24176,7 @@
       }
     },
     "Hanasu 会議ノート" : {
-      "comment" : "AppDelegate.swift:393",
+      "comment" : "AppDelegate.swift:449",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -24277,8 +24379,110 @@
         }
       }
     },
+    "Hanasu 画面から辞書の候補を探す" : {
+      "comment" : "ScreenDictionaryWindow.swift:375",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – البحث عن مقترحات للقاموس على الشاشة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu Wörterbuchvorschläge vom Bildschirm"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu — Find Dictionary Suggestions from Screen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – Buscar candidatos para el diccionario en la pantalla"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – Chercher des suggestions pour le dictionnaire à l’écran"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – स्क्रीन से शब्दकोश के सुझाव खोजें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – Cari saran kamus dari layar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – Cerca candidati per il dizionario sullo schermo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu 화면에서 사전 후보 찾기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – propozycje do słownika z ekranu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – Buscar sugestões para o dicionário na tela"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu — поиск кандидатов для словаря на экране"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – Ekrandan Sözlük Önerileri Bul"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu – Tìm gợi ý cho từ điển trên màn hình"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu 从屏幕中查找词典候选"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu 從螢幕尋找辭典候選"
+          }
+        }
+      }
+    },
     "Hanasu 設定" : {
-      "comment" : "AppDelegate.swift:470",
+      "comment" : "AppDelegate.swift:526",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -33763,6 +33967,108 @@
         }
       }
     },
+    "ここにあるアプリは、画面の文脈・スクリーンショットのほか、メニューの「画面から辞書の候補を探す…」でも読みません。" : {
+      "comment" : "ScreenContextSettingsView.swift:86",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التطبيقات المدرجة هنا لا تُقرأ في سياق الشاشة ولقطة الشاشة، ولا في «البحث عن مقترحات للقاموس على الشاشة…» من القائمة أيضًا."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die hier aufgeführten Apps werden weder für den Bildschirmkontext und Bildschirmfotos noch von „Wörterbuchvorschläge vom Bildschirm suchen …“ im Menü gelesen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apps listed here aren't read for screen context or screenshots, or by “Find Dictionary Suggestions from Screen…” in the menu."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las apps de esta lista no se leen para el contexto de la pantalla ni para las capturas de pantalla, ni tampoco con «Buscar candidatos para el diccionario en la pantalla…» del menú."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les apps de cette liste ne sont lues ni pour le contexte de l’écran ni pour les captures d’écran, ni par « Chercher des suggestions pour le dictionnaire à l’écran… » dans le menu."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "यहाँ दिए गए ऐप्स स्क्रीन के संदर्भ और स्क्रीनशॉट में नहीं पढ़े जाते, और मेनू के “स्क्रीन से शब्दकोश के सुझाव खोजें…” में भी नहीं।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App di sini tidak dibaca untuk konteks layar dan tangkapan layar, dan juga tidak oleh “Cari saran kamus dari layar…” di menu."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le app in questo elenco non vengono lette né per il contesto dello schermo e gli screenshot, né da «Cerca candidati per il dizionario sullo schermo…» nel menu."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여기에 있는 앱은 화면 맥락과 스크린샷뿐 아니라 메뉴의 \"화면에서 사전 후보 찾기…\"에서도 읽지 않습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplikacje z tej listy nie są odczytywane ani do kontekstu ekranu i zrzutów ekranu, ani przez polecenie „Znajdź propozycje do słownika na ekranie…” w menu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os apps listados aqui não são lidos pelo contexto da tela nem pela captura de tela, nem pelo item de menu “Buscar sugestões para o dicionário na tela…”."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приложения из этого списка не читаются ни для контекста экрана и снимков экрана, ни пунктом меню «Найти кандидатов для словаря на экране…»."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buradaki uygulamalar ekran bağlamı ve ekran görüntüsünün yanı sıra menüdeki “Ekrandan sözlük önerileri bul…” tarafından da okunmaz."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các ứng dụng ở đây sẽ không bị đọc bởi ngữ cảnh màn hình, ảnh chụp màn hình, cũng như mục “Tìm gợi ý cho từ điển trên màn hình…” trong menu."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此处列出的应用，除了屏幕上下文和截图之外，菜单中的“从屏幕中查找词典候选…”也不会读取。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此處列出的 App，除了螢幕脈絡和截圖之外，選單中的「從螢幕尋找辭典候選…」也不會讀取。"
+          }
+        }
+      }
+    },
     "ここまでの会話について AI に聞けます" : {
       "comment" : "MeetingChatView.swift:314",
       "extractionState" : "manual",
@@ -39476,7 +39782,7 @@
       }
     },
     "しまう" : {
-      "comment" : "AppDelegate.swift:361",
+      "comment" : "AppDelegate.swift:417",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40292,7 +40598,7 @@
       }
     },
     "すべてを表示" : {
-      "comment" : "AppDelegate.swift:338",
+      "comment" : "AppDelegate.swift:394",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -40394,7 +40700,7 @@
       }
     },
     "すべてを選択" : {
-      "comment" : "AppDelegate.swift:357",
+      "comment" : "AppDelegate.swift:413",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42536,7 +42842,7 @@
       }
     },
     "ほかの処理（議事録の作成など）が終わらないため、ローカルの AI を使えませんでした" : {
-      "comment" : "LocalLLMServer.swift:47",
+      "comment" : "LocalLLMServer.swift:48",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -42740,7 +43046,7 @@
       }
     },
     "ほかを隠す" : {
-      "comment" : "AppDelegate.swift:336",
+      "comment" : "AppDelegate.swift:392",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -43454,7 +43760,7 @@
       }
     },
     "まだ求めていません" : {
-      "comment" : "SettingsView.swift:417",
+      "comment" : "SettingsView.swift:418",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -44474,7 +44780,7 @@
       }
     },
     "やり直す" : {
-      "comment" : "AppDelegate.swift:351",
+      "comment" : "AppDelegate.swift:407",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45596,7 +45902,7 @@
       }
     },
     "アクセシビリティが許可されていないため、クリップボードにコピーしました。⌘V で貼り付けてください。設定でオンになっている場合は、一覧から Hanasu を削除（−）して追加し直してください。" : {
-      "comment" : "DictationController.swift:483",
+      "comment" : "DictationController.swift:511",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -45698,7 +46004,7 @@
       }
     },
     "アクセシビリティが許可されていないため、書き換えた文章をクリップボードにコピーしました。⌘V で貼り付けてください。" : {
-      "comment" : "EditModeController.swift:365",
+      "comment" : "EditModeController.swift:378",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -46616,7 +46922,7 @@
       }
     },
     "アップデートを確認…" : {
-      "comment" : "AppDelegate.swift:240, AppDelegate.swift:329",
+      "comment" : "AppDelegate.swift:246, AppDelegate.swift:385",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -47942,7 +48248,7 @@
       }
     },
     "ウインドウ" : {
-      "comment" : "AppDelegate.swift:360, AppDelegate.swift:363",
+      "comment" : "AppDelegate.swift:416, AppDelegate.swift:419",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49778,7 +50084,7 @@
       }
     },
     "カット" : {
-      "comment" : "AppDelegate.swift:354",
+      "comment" : "AppDelegate.swift:410",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -49880,7 +50186,7 @@
       }
     },
     "キャンセル" : {
-      "comment" : "AISettingsView.swift:221, AISettingsView.swift:317, AppDelegate.swift:263",
+      "comment" : "AISettingsView.swift:221, AISettingsView.swift:317, AppDelegate.swift:319",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -51104,7 +51410,7 @@
       }
     },
     "コピー" : {
-      "comment" : "AppDelegate.swift:355, CommandLineSettingsView.swift:537, DictationHistoryWindow.swift:540",
+      "comment" : "AppDelegate.swift:411, CommandLineSettingsView.swift:537, DictationHistoryWindow.swift:540",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52634,7 +52940,7 @@
       }
     },
     "システムオーディオ録音" : {
-      "comment" : "SettingsView.swift:387",
+      "comment" : "SettingsView.swift:388",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -52736,7 +53042,7 @@
       }
     },
     "システムオーディオ録音のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:382",
+      "comment" : "SettingsView.swift:383",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53144,7 +53450,7 @@
       }
     },
     "システム設定を開く" : {
-      "comment" : "ReminderExport.swift:145, SettingsView.swift:355, SettingsView.swift:380",
+      "comment" : "ReminderExport.swift:145, ScreenDictionaryWindow.swift:199, SettingsView.swift:356",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53552,7 +53858,7 @@
       }
     },
     "ショートカット %@ を登録できませんでした" : {
-      "comment" : "AppDelegate.swift:47, AppDelegate.swift:74, AppDelegate.swift:97",
+      "comment" : "AppDelegate.swift:51, AppDelegate.swift:78, AppDelegate.swift:101",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -53959,104 +54265,104 @@
         }
       }
     },
-    "スクリーンショットの文字をオンにするときに求めます" : {
-      "comment" : "SettingsView.swift:353",
+    "スクリーンショットの文字をオンにするときと、画面から辞書の候補を探すときに求めます" : {
+      "comment" : "SettingsView.swift:354",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "يُطلب عند تفعيل نص لقطة الشاشة"
+            "value" : "يُطلب عند تفعيل نص لقطة الشاشة وعند البحث عن مقترحات للقاموس على الشاشة"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wird angefragt, wenn du Text aus Bildschirmfotos einschaltest"
+            "value" : "Wird angefragt, wenn du Text aus Bildschirmfotos einschaltest oder Wörterbuchvorschläge vom Bildschirm suchst"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Requested when you turn on screenshot text"
+            "value" : "Requested when you turn on screenshot text and when you find dictionary suggestions from the screen"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se pide al activar el texto de las capturas de pantalla"
+            "value" : "Se pide al activar el texto de las capturas de pantalla y al buscar candidatos para el diccionario en la pantalla"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Demandée à l’activation du texte des captures d’écran"
+            "value" : "Demandée à l’activation du texte des captures d’écran et lors de la recherche de suggestions pour le dictionnaire à l’écran"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "स्क्रीनशॉट का टेक्स्ट चालू करने पर अनुमति माँगी जाती है"
+            "value" : "स्क्रीनशॉट का टेक्स्ट चालू करने पर और स्क्रीन से शब्दकोश के सुझाव खोजने पर अनुमति माँगी जाती है"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diminta saat Anda mengaktifkan teks tangkapan layar"
+            "value" : "Diminta saat Anda mengaktifkan teks tangkapan layar dan saat mencari saran kamus dari layar"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Viene richiesta quando attivi il testo degli screenshot"
+            "value" : "Viene richiesta quando attivi il testo degli screenshot e quando cerchi candidati per il dizionario sullo schermo"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "스크린샷 텍스트를 켤 때 요청합니다"
+            "value" : "스크린샷 텍스트를 켤 때와 화면에서 사전 후보를 찾을 때 요청합니다"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prośba pojawi się po włączeniu tekstu ze zrzutu ekranu"
+            "value" : "Prośba pojawi się po włączeniu tekstu ze zrzutu ekranu i przy wyszukiwaniu propozycji do słownika na ekranie"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "É solicitada quando você ativa o texto da captura de tela"
+            "value" : "Solicitada ao ativar o texto da captura de tela e ao buscar sugestões para o dicionário na tela"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Запрашивается при включении текста со снимка экрана"
+            "value" : "Запрашивается при включении текста со снимка экрана и при поиске кандидатов для словаря на экране"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekran görüntüsündeki metni açtığınızda istenir"
+            "value" : "Ekran görüntüsündeki metni açtığınızda ve ekrandan sözlük önerileri ararken istenir"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sẽ được yêu cầu khi bật chữ trên ảnh chụp màn hình"
+            "value" : "Sẽ hỏi khi bật chữ trên ảnh chụp màn hình và khi tìm gợi ý cho từ điển trên màn hình"
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开“截图文字”时请求"
+            "value" : "在打开截图文字时，以及从屏幕中查找词典候选时请求"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "開啟「截圖文字」時要求"
+            "value" : "在開啟截圖文字時，以及從螢幕尋找辭典候選時要求"
           }
         }
       }
@@ -59162,7 +59468,7 @@
       }
     },
     "ペースト" : {
-      "comment" : "AppDelegate.swift:356",
+      "comment" : "AppDelegate.swift:412",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -59570,7 +59876,7 @@
       }
     },
     "マイクと音声認識は、初めて録音するときに許可を求めます。アクセシビリティはシステム設定で Hanasu をオンにしてください。再ビルドした後に効かなくなった場合は、一覧から Hanasu を削除して追加し直してください。システムオーディオ録音の許可の状態は、macOS から取れないためここには出ません。" : {
-      "comment" : "SettingsView.swift:399",
+      "comment" : "SettingsView.swift:400",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -60080,7 +60386,7 @@
       }
     },
     "マイクを切り替えられませんでした: %@" : {
-      "comment" : "DictationController.swift:254, EditModeController.swift:142",
+      "comment" : "DictationController.swift:270, EditModeController.swift:147",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -64670,7 +64976,7 @@
       }
     },
     "ローカルの LLM が起動できませんでした（終了コード %@）" : {
-      "comment" : "LocalLLMServer.swift:43",
+      "comment" : "LocalLLMServer.swift:44",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65078,7 +65384,7 @@
       }
     },
     "ローカルの LLM の起動が %@ 秒たっても終わりませんでした" : {
-      "comment" : "LocalLLMServer.swift:45",
+      "comment" : "LocalLLMServer.swift:46",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65180,7 +65486,7 @@
       }
     },
     "ローカルの LLM を動かす llama-server が見つかりません（アプリを入れ直すか、環境変数 HANASU_LLAMA_SERVER でパスを指定してください）" : {
-      "comment" : "LocalLLMServer.swift:37",
+      "comment" : "LocalLLMServer.swift:38",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65384,7 +65690,7 @@
       }
     },
     "ローカルのモデル「%@」がまだダウンロードされていません（設定 →「AI」でダウンロードしてください）" : {
-      "comment" : "LocalLLMServer.swift:41",
+      "comment" : "LocalLLMServer.swift:42",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -65486,7 +65792,7 @@
       }
     },
     "ローカルのモデル「%@」はありません（%@）" : {
-      "comment" : "LocalLLMServer.swift:39",
+      "comment" : "LocalLLMServer.swift:40",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69566,7 +69872,7 @@
       }
     },
     "他のアプリやシステムのショートカットと重なっている可能性があります。設定で「選択を声で編集」に別のキーを選んでください。" : {
-      "comment" : "AppDelegate.swift:75",
+      "comment" : "AppDelegate.swift:79",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69668,7 +69974,7 @@
       }
     },
     "他のアプリやシステムのショートカットと重なっている可能性があります。設定で別のキーを選んでください。" : {
-      "comment" : "AppDelegate.swift:98",
+      "comment" : "AppDelegate.swift:102",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -69974,7 +70280,7 @@
       }
     },
     "会議" : {
-      "comment" : "AppDelegate.swift:343, AppDelegate.swift:346, SettingsView.swift:18",
+      "comment" : "AppDelegate.swift:399, AppDelegate.swift:402, SettingsView.swift:18",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72013,6 +72319,108 @@
         }
       }
     },
+    "会議の記録が終わってから許可してください（許可すると Hanasu を開き直すことになり、記録が切れるため）。" : {
+      "comment" : "ScreenDictionaryWindow.swift:196",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "امنح الإذن بعد انتهاء تسجيل الاجتماع (فبعد منح الإذن يجب إعادة فتح Hanasu، فينقطع التسجيل)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erteile die Berechtigung erst nach dem Ende der Meeting-Aufnahme (danach muss Hanasu neu geöffnet werden, wodurch die Aufnahme abbrechen würde)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow it after the meeting recording ends (allowing it means reopening Hanasu, which would cut the recording short)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concede el permiso cuando termine la grabación de la reunión (al concederlo, habrá que volver a abrir Hanasu y la grabación se cortaría)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accordez l’autorisation une fois l’enregistrement de la réunion terminé (après l’autorisation, il faudra rouvrir Hanasu, ce qui interromprait l’enregistrement)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मीटिंग रिकॉर्डिंग ख़त्म होने के बाद अनुमति दें (अनुमति देने पर Hanasu को दोबारा खोलना पड़ता है, जिससे रिकॉर्डिंग रुक जाती है)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berikan izin setelah perekaman rapat selesai (setelah izin diberikan, Hanasu harus dibuka ulang sehingga perekaman akan terputus)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Concedi l'autorizzazione solo dopo aver terminato la registrazione della riunione (dopo l'autorizzazione bisogna riaprire Hanasu, e la registrazione si interromperebbe)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회의 기록이 끝난 후에 허용하세요(허용하면 Hanasu를 다시 열어야 해서 기록이 끊기기 때문입니다)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udziel uprawnienia po zakończeniu nagrywania spotkania (po jego udzieleniu trzeba ponownie otworzyć Hanasu, co przerwie nagrywanie)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conceda a permissão só depois de terminar a gravação da reunião (ao permitir, o Hanasu precisará ser aberto novamente, e a gravação seria interrompida)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выдайте разрешение после окончания записи встречи (после этого Hanasu придётся открыть заново, и запись прервётся)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toplantı kaydı bittikten sonra izin verin (izin verince Hanasu’nun yeniden açılması gerekir ve kayıt kesilir)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy cấp quyền sau khi ghi cuộc họp xong (cấp quyền thì sẽ phải mở lại Hanasu, khiến bản ghi bị ngắt)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在会议录制结束后再允许（允许后需要重新打开 Hanasu，会导致录制中断）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請在會議錄製結束後再允許（允許後需要重新打開 Hanasu，會導致錄製中斷）。"
+          }
+        }
+      }
+    },
     "会議の記録が終わってから許可してください（許可のあと macOS が Hanasu を開き直すことがあり、記録が途中で切れるため）。" : {
       "comment" : "ScreenContextSettingsView.swift:53",
       "extractionState" : "manual",
@@ -72218,7 +72626,7 @@
       }
     },
     "会議の記録で相手の声に必要" : {
-      "comment" : "SettingsView.swift:388",
+      "comment" : "SettingsView.swift:389",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72524,7 +72932,7 @@
       }
     },
     "会議の記録を停止" : {
-      "comment" : "AppDelegate.swift:313",
+      "comment" : "AppDelegate.swift:369",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72626,7 +73034,7 @@
       }
     },
     "会議の記録を停止（%@）" : {
-      "comment" : "AppDelegate.swift:214",
+      "comment" : "AppDelegate.swift:218",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72728,7 +73136,7 @@
       }
     },
     "会議の記録を準備中…" : {
-      "comment" : "AppDelegate.swift:211",
+      "comment" : "AppDelegate.swift:215",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -72830,7 +73238,7 @@
       }
     },
     "会議の記録を開始" : {
-      "comment" : "AppDelegate.swift:210, AppDelegate.swift:313, MeetingWindow.swift:385",
+      "comment" : "AppDelegate.swift:214, AppDelegate.swift:369, MeetingWindow.swift:385",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -74258,7 +74666,7 @@
       }
     },
     "会議を記録中です。終了しますか？" : {
-      "comment" : "AppDelegate.swift:260",
+      "comment" : "AppDelegate.swift:316",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75278,7 +75686,7 @@
       }
     },
     "会議ノートを開く" : {
-      "comment" : "AppDelegate.swift:317, AppDelegate.swift:345, SettingsView.swift:258",
+      "comment" : "AppDelegate.swift:373, AppDelegate.swift:401, SettingsView.swift:258",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -75380,7 +75788,7 @@
       }
     },
     "会議ノートを開く…" : {
-      "comment" : "AppDelegate.swift:221",
+      "comment" : "AppDelegate.swift:225",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -79766,7 +80174,7 @@
       }
     },
     "候補を探す" : {
-      "comment" : "DictionarySettingsView.swift:188",
+      "comment" : "DictionarySettingsView.swift:188, ScreenDictionaryWindow.swift:286",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -80480,7 +80888,7 @@
       }
     },
     "入力しました" : {
-      "comment" : "DictationController.swift:498",
+      "comment" : "DictationController.swift:526",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -82520,7 +82928,7 @@
       }
     },
     "再確認" : {
-      "comment" : "SettingsView.swift:401",
+      "comment" : "SettingsView.swift:402",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -83030,7 +83438,7 @@
       }
     },
     "初めて会議の記録を始めるときに macOS が求めます" : {
-      "comment" : "SettingsView.swift:378",
+      "comment" : "SettingsView.swift:379",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84866,7 +85274,7 @@
       }
     },
     "取り消しました" : {
-      "comment" : "DictationController.swift:369, EditModeController.swift:298",
+      "comment" : "DictationController.swift:393, EditModeController.swift:309",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -84968,7 +85376,7 @@
       }
     },
     "取り消す" : {
-      "comment" : "AppDelegate.swift:350, MeetingNotesViews.swift:65, MeetingNotesViews.swift:183",
+      "comment" : "AppDelegate.swift:406, MeetingNotesViews.swift:65, MeetingNotesViews.swift:183",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -89354,7 +89762,7 @@
       }
     },
     "履歴を開く…" : {
-      "comment" : "AppDelegate.swift:227",
+      "comment" : "AppDelegate.swift:231",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -90884,7 +91292,7 @@
       }
     },
     "拒否した場合は、システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音 で Hanasu をオンにしてください。" : {
-      "comment" : "SettingsView.swift:389",
+      "comment" : "SettingsView.swift:390",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91088,7 +91496,7 @@
       }
     },
     "指示が聞き取れませんでした。選択した文章はそのままです。" : {
-      "comment" : "EditModeController.swift:340",
+      "comment" : "EditModeController.swift:353",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -91598,7 +92006,7 @@
       }
     },
     "探しています…" : {
-      "comment" : "DictionarySettingsView.swift:188, MeetingDictionaryViews.swift:143",
+      "comment" : "DictionarySettingsView.swift:188, MeetingDictionaryViews.swift:143, ScreenDictionaryWindow.swift:213",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92210,7 +92618,7 @@
       }
     },
     "整形" : {
-      "comment" : "DictationController.swift:414, DictationHistory.swift:73",
+      "comment" : "DictationController.swift:439, DictationHistory.swift:73",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -92924,7 +93332,7 @@
       }
     },
     "整形中…" : {
-      "comment" : "AppDelegate.swift:190",
+      "comment" : "AppDelegate.swift:194",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -96596,7 +97004,7 @@
       }
     },
     "文章が選択されていません。書き換えたい文章を選択してから、もう一度押してください。" : {
-      "comment" : "EditModeController.swift:256",
+      "comment" : "EditModeController.swift:267",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -98840,7 +99248,7 @@
       }
     },
     "新しい候補は見つかりませんでした。" : {
-      "comment" : "DictionarySettingsView.swift:238, MeetingDictionaryViews.swift:148",
+      "comment" : "DictionarySettingsView.swift:238, MeetingDictionaryViews.swift:148, ScreenDictionaryWindow.swift:220",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99656,7 +100064,7 @@
       }
     },
     "書き換えた文章" : {
-      "comment" : "EditModeController.swift:372, PasteFallbackPanel.swift:23",
+      "comment" : "EditModeController.swift:385, PasteFallbackPanel.swift:23",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -99860,7 +100268,7 @@
       }
     },
     "書き換えました（⌘Z で元に戻せます）" : {
-      "comment" : "EditModeController.swift:379",
+      "comment" : "EditModeController.swift:392",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -100064,7 +100472,7 @@
       }
     },
     "書き換え中…" : {
-      "comment" : "EditModeController.swift:79",
+      "comment" : "EditModeController.swift:84",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101084,7 +101492,7 @@
       }
     },
     "最近の結果" : {
-      "comment" : "AppDelegate.swift:224",
+      "comment" : "AppDelegate.swift:228",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -101900,7 +102308,7 @@
       }
     },
     "未許可" : {
-      "comment" : "SettingsView.swift:417",
+      "comment" : "SettingsView.swift:418",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -105572,7 +105980,7 @@
       }
     },
     "準備中…" : {
-      "comment" : "DictationController.swift:317, EditModeController.swift:199, MeetingWindow.swift:391",
+      "comment" : "DictationController.swift:333, EditModeController.swift:204, MeetingWindow.swift:391",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -106285,8 +106693,620 @@
         }
       }
     },
+    "画面から文字を読み取れませんでした。" : {
+      "comment" : "ScreenDictionaryWindow.swift:76",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّرت قراءة النص من الشاشة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf dem Bildschirm konnte kein Text gelesen werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't read any text from the screen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo leer texto de la pantalla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de lire du texte à l’écran."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन से टेक्स्ट नहीं पढ़ा जा सका।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teks tidak dapat dibaca dari layar."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile leggere il testo sullo schermo."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면에서 텍스트를 읽지 못했습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się odczytać tekstu z ekranu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível ler texto na tela."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось распознать текст на экране."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrandan metin okunamadı."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không đọc được chữ trên màn hình."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法从屏幕中读取文字。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法從螢幕讀取文字。"
+          }
+        }
+      }
+    },
+    "画面から辞書の候補を探す" : {
+      "comment" : "ScreenDictionaryWindow.swift:175",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث عن مقترحات للقاموس على الشاشة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörterbuchvorschläge vom Bildschirm suchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find Dictionary Suggestions from Screen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar candidatos para el diccionario en la pantalla"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chercher des suggestions pour le dictionnaire à l’écran"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन से शब्दकोश के सुझाव खोजें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cari saran kamus dari layar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca candidati per il dizionario sullo schermo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면에서 사전 후보 찾기"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znajdź propozycje do słownika na ekranie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar sugestões para o dicionário na tela"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Найти кандидатов для словаря на экране"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrandan sözlük önerileri bul"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tìm gợi ý cho từ điển trên màn hình"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从屏幕中查找词典候选"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從螢幕尋找辭典候選"
+          }
+        }
+      }
+    },
+    "画面から辞書の候補を探す…" : {
+      "comment" : "AppDelegate.swift:233",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث عن مقترحات للقاموس على الشاشة…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörterbuchvorschläge vom Bildschirm suchen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find Dictionary Suggestions from Screen…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar candidatos para el diccionario en la pantalla…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chercher des suggestions pour le dictionnaire à l’écran…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन से शब्दकोश के सुझाव खोजें…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cari saran kamus dari layar…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca candidati per il dizionario sullo schermo…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면에서 사전 후보 찾기…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Znajdź propozycje do słownika na ekranie…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar sugestões para o dicionário na tela…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Найти кандидатов для словаря на экране…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrandan sözlük önerileri bul…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tìm gợi ý cho từ điển trên màn hình…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从屏幕中查找词典候选…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從螢幕尋找辭典候選…"
+          }
+        }
+      }
+    },
+    "画面に表示されている文字を、この Mac の中で読み取ります（画像は送らず、保存もしません）。Hanasu のウインドウ・除外アプリ（設定の「AI」→「画面の文脈」）・通知・認証のダイアログは写しません。ブラウザの中のパスワード管理の拡張や、ほかの画面のターミナルなどは写ります。読んだ文字は、「候補を探す」を押したときだけ、設定の「AI」で「議事録」に選んだ AI に送ります（「ローカル」なら、この Mac の外には送りません。「Apple」では、動いている間、同じ Mac のほかのユーザーにも見えることがあります）。" : {
+      "comment" : "ScreenDictionaryWindow.swift:180",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يقرأ النص الظاهر على الشاشة داخل هذا الـ Mac (لا تُرسل الصورة ولا تُحفظ). لا تظهر في اللقطة نوافذ Hanasu ولا التطبيقات المستثناة (الإعدادات ← «AI» ← «سياق الشاشة») ولا الإشعارات ولا نوافذ المصادقة. لكن تظهر فيها إضافات إدارة كلمات السر داخل المتصفح والطرفية على شاشة أخرى وما شابه. لا يُرسل النص المقروء إلا عند الضغط على «البحث عن مقترحات»، وذلك إلى AI المختار لـ «المحضر» ضمن «AI» في الإعدادات (مع «محلي» لا يُرسل إلى خارج هذا الـ Mac. ومع «Apple» قد يراه أيضًا المستخدمون الآخرون على الـ Mac نفسه أثناء عمله)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liest den auf dem Bildschirm angezeigten Text auf diesem Mac (das Bild wird weder gesendet noch gespeichert). Hanasu-Fenster, ausgenommene Apps („AI“ → „Bildschirmkontext“ in den Einstellungen), Mitteilungen und Authentifizierungsdialoge werden nicht erfasst. Erfasst werden dagegen z. B. Passwortverwaltungs-Erweiterungen im Browser oder ein Terminal auf einem anderen Bildschirm. Der gelesene Text wird nur gesendet, wenn du auf „Vorschläge suchen“ klickst, und zwar an die KI, die in den Einstellungen unter „AI“ für „Protokoll“ gewählt ist (bei „Lokal“ verlässt er diesen Mac nicht; bei „Apple“ kann er während der Verarbeitung auch für andere Benutzer desselben Mac sichtbar sein)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text shown on your screen is read on this Mac (the image isn't sent or saved). Hanasu's windows, excluded apps (“AI” → “Screen Context” in Settings), notifications, and authentication dialogs aren't captured. Password manager extensions inside a browser, Terminal windows on other displays, and the like are captured. The text that's read is sent only when you click “Find Suggestions”, and only to the AI chosen under “Minutes” in “AI” in Settings (with “Local”, nothing leaves this Mac; with “Apple”, it may be visible to other users of the same Mac while it's running)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lee el texto que se muestra en la pantalla dentro de este Mac (no envía ni guarda la imagen). No captura las ventanas de Hanasu, las apps excluidas («AI» → «Contexto de la pantalla» en Ajustes), las notificaciones ni los diálogos de autenticación. Sí captura, por ejemplo, las extensiones de gestión de contraseñas del navegador o una terminal en otra pantalla. El texto leído solo se envía cuando pulsas «Buscar candidatos», a la IA elegida para «Acta» en «AI» de Ajustes (con «Local», no sale de este Mac; con «Apple», mientras se procesa, otros usuarios del mismo Mac podrían verlo)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lit le texte affiché à l’écran, sur ce Mac (aucune image n’est envoyée ni enregistrée). Les fenêtres de Hanasu, les apps exclues (« AI » → « Contexte de l’écran » dans les Réglages), les notifications et les fenêtres d’authentification ne sont pas capturées. En revanche, les extensions de gestion de mots de passe du navigateur ou un terminal sur un autre écran, par exemple, le sont. Le texte lu n’est envoyé que lorsque vous cliquez sur « Chercher des suggestions », à l’IA choisie pour « Compte rendu » dans « AI » des Réglages (avec « Local », rien ne quitte ce Mac ; avec « Apple », pendant le traitement, d’autres utilisateurs du même Mac peuvent le voir)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन पर दिख रहा टेक्स्ट इसी Mac पर पढ़ता है (इमेज न भेजी जाती है, न सहेजी जाती है)। Hanasu की विंडो, बाहर रखे गए ऐप्स (सेटिंग्ज़ → “AI” → “स्क्रीन का संदर्भ”), सूचनाएँ और ऑथेंटिकेशन डायलॉग कैप्चर नहीं होते। ब्राउज़र के अंदर पासवर्ड मैनेजर के एक्सटेंशन, दूसरी स्क्रीन पर खुला टर्मिनल जैसी चीज़ें कैप्चर हो जाती हैं। पढ़ा गया टेक्स्ट सिर्फ़ “सुझाव खोजें” दबाने पर, सेटिंग्ज़ के “AI” में “मिनट्स” के लिए चुने गए AI को भेजा जाता है (“लोकल” हो तो यह इस Mac से बाहर नहीं जाता। “Apple” में, चलने के दौरान यह इसी Mac के दूसरे उपयोगकर्ताओं को भी दिख सकता है)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanasu membaca teks yang tampil di layar di Mac ini (gambarnya tidak dikirim dan tidak disimpan). Jendela Hanasu, app yang dikecualikan (Pengaturan → “AI” → “Konteks layar”), notifikasi, dan dialog autentikasi tidak ikut diambil. Ekstensi pengelola kata sandi di browser, terminal di layar lain, dan sejenisnya tetap ikut diambil. Teks yang dibaca hanya dikirim saat Anda mengeklik “Cari saran”, ke AI yang dipilih untuk “Notulen” di “AI” pada Pengaturan (dengan “Lokal”, teks tidak dikirim ke luar Mac ini. Dengan “Apple”, selama berjalan, teks bisa terlihat oleh pengguna lain di Mac yang sama)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legge il testo visualizzato sullo schermo all'interno di questo Mac (l'immagine non viene inviata né salvata). Non acquisisce le finestre di Hanasu, le app escluse (Impostazioni → «AI» → «Contesto dello schermo»), le notifiche né le finestre di autenticazione. Acquisisce invece, per esempio, le estensioni per la gestione delle password nel browser o un terminale su un altro schermo. Il testo letto viene inviato solo quando premi «Cerca candidati», all'IA scelta per «Verbale» in Impostazioni → «AI» (con «Locale» non esce da questo Mac; con «Apple», durante l'elaborazione, potrebbe essere visibile anche ad altri utenti dello stesso Mac)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면에 표시된 텍스트를 이 Mac 안에서 읽습니다(이미지는 보내지 않으며 저장하지도 않습니다). Hanasu 윈도우, 제외 앱(설정의 \"AI\" → \"화면 맥락\"), 알림, 인증 대화상자는 캡처하지 않습니다. 브라우저 안의 암호 관리 확장 프로그램이나 다른 화면의 터미널 등은 캡처됩니다. 읽은 텍스트는 \"후보 찾기\"를 눌렀을 때만 설정의 \"AI\" → \"회의록\"에서 선택한 AI에 보냅니다(\"로컬\"이면 이 Mac 밖으로 보내지 않습니다. \"Apple\"에서는 실행되는 동안 같은 Mac의 다른 사용자에게도 보일 수 있습니다)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tekst widoczny na ekranie jest odczytywany na tym Macu (obraz nie jest wysyłany ani zachowywany). Okna Hanasu, wykluczone aplikacje (Ustawienia → „AI” → „Kontekst ekranu”), powiadomienia i okna uwierzytelniania nie są przechwytywane. Przechwytywane są natomiast m.in. rozszerzenia menedżerów haseł w przeglądarce czy terminal na innym ekranie. Odczytany tekst jest wysyłany tylko po kliknięciu „Znajdź propozycje” — do AI wybranego w pozycji „Protokół” w Ustawienia → „AI” (przy „Lokalnie” nie opuszcza tego Maca; przy „Apple” w trakcie działania może być widoczny także dla innych użytkowników tego Maca)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O texto exibido na tela é lido neste próprio Mac (a imagem não é enviada nem salva). As janelas do Hanasu, os apps excluídos (Ajustes → “AI” → “Contexto da tela”), as notificações e as caixas de diálogo de autenticação não são capturados. Já extensões de gerenciamento de senhas no navegador, um terminal em outra tela e coisas assim são capturados. O texto lido só é enviado quando você clica em “Buscar sugestões”, para a IA escolhida em Ajustes → “AI” → “Ata” (com “Local”, nada sai deste Mac; com “Apple”, enquanto ele está em execução, o texto pode ficar visível também para outros usuários do mesmo Mac)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текст, отображаемый на экране, распознаётся прямо на этом Mac (изображение не отправляется и не сохраняется). Окна Hanasu, исключённые приложения (Настройки → «AI» → «Контекст экрана»), уведомления и окна аутентификации на снимок не попадают. Расширения менеджеров паролей в браузере, Терминал на другом экране и т. п. попадают. Распознанный текст отправляется только при нажатии «Найти кандидатов» — AI, выбранному в пункте «Протокол» раздела «AI» в Настройках (при «Локально» ничего не покидает этот Mac; при «Apple» во время работы текст могут видеть и другие пользователи этого Mac)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranda görüntülenen metin bu Mac’in içinde okunur (görüntü gönderilmez ve saklanmaz). Hanasu pencereleri, hariç tutulan uygulamalar (Ayarlar → “AI” → “Ekran bağlamı”), bildirimler ve kimlik doğrulama iletişim kutuları görüntüye alınmaz. Tarayıcıdaki parola yöneticisi uzantıları, başka ekrandaki Terminal gibi şeyler görüntüye girer. Okunan metin yalnızca “Öneri bul”a bastığınızda, Ayarlar’daki “AI” bölümünde “Tutanak” için seçilen AI’a gönderilir (“Yerel” seçiliyse hiçbir şey bu Mac’ten çıkmaz; “Apple” ile, çalıştığı sırada aynı Mac’teki diğer kullanıcılar da görebilir)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đọc chữ đang hiển thị trên màn hình ngay trong máy Mac này (không gửi và không lưu hình ảnh). Cửa sổ Hanasu, các ứng dụng bị loại trừ (Cài đặt → “AI” → “Ngữ cảnh màn hình”), thông báo và hộp thoại xác thực không bị chụp. Tiện ích quản lý mật khẩu trong trình duyệt, Terminal ở màn hình khác, v.v. sẽ bị chụp vào. Chữ đã đọc chỉ được gửi khi bạn bấm “Tìm gợi ý”, đến AI đã chọn cho “Biên bản họp” ở mục “AI” trong Cài đặt (với “Cục bộ”, không có gì rời khỏi máy Mac này; với “Apple”, trong lúc đang chạy, người dùng khác trên cùng máy Mac cũng có thể nhìn thấy)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在这台 Mac 上读取屏幕上显示的文字（不发送图像，也不保存）。不会截取 Hanasu 的窗口、排除的应用（设置中的“AI”→“屏幕上下文”）、通知和认证对话框。浏览器中的密码管理扩展、其他屏幕上的终端等会被截取。读取的文字只在点按“查找候选”时，发送给在设置“AI”的“会议纪要”中选择的 AI（选择“本地”时，不会离开这台 Mac；选择“Apple”时，运行期间同一台 Mac 上的其他用户也可能看到）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在這台 Mac 上讀取螢幕上顯示的文字（不傳送影像，也不儲存）。不會擷取 Hanasu 的視窗、排除的 App（設定中的「AI」→「螢幕脈絡」）、通知和認證對話框。瀏覽器中的密碼管理延伸功能、其他螢幕上的終端機等會被擷取。讀取的文字只在按下「尋找候選」時，傳送給在設定「AI」的「會議紀錄」中選擇的 AI（選擇「本機」時，不會離開這台 Mac；選擇「Apple」時，執行期間同一台 Mac 上的其他使用者也可能看到）。"
+          }
+        }
+      }
+    },
+    "画面の文字が多いので、一部だけを送ります。" : {
+      "comment" : "ScreenDictionaryWindow.swift:252",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النص على الشاشة كثير، لذا سيُرسل جزء منه فقط."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf dem Bildschirm ist viel Text, daher wird nur ein Teil gesendet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There's a lot of text on the screen, so only part of it will be sent."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hay mucho texto en la pantalla, así que solo se enviará una parte."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le texte à l’écran est trop long : seule une partie sera envoyée."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन पर टेक्स्ट बहुत ज़्यादा है, इसलिए उसका सिर्फ़ कुछ हिस्सा भेजा जाएगा।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teks di layar terlalu banyak, jadi hanya sebagian yang dikirim."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "C'è molto testo sullo schermo, quindi ne verrà inviata solo una parte."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면의 텍스트가 많아 일부만 보냅니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na ekranie jest dużo tekstu, więc zostanie wysłana tylko jego część."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Há muito texto na tela, então só uma parte será enviada."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На экране слишком много текста, поэтому будет отправлена только часть."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekranda çok fazla metin olduğu için yalnızca bir kısmı gönderilecek."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chữ trên màn hình quá nhiều nên chỉ gửi một phần."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕上的文字较多，因此只发送一部分。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "螢幕上的文字較多，因此只傳送一部分。"
+          }
+        }
+      }
+    },
+    "画面の文字を読んでいます…" : {
+      "comment" : "ScreenDictionaryWindow.swift:205",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ قراءة النص على الشاشة…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text auf dem Bildschirm wird gelesen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading text on the screen…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leyendo el texto de la pantalla…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture du texte à l’écran…"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन का टेक्स्ट पढ़ा जा रहा है…"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Membaca teks di layar…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lettura del testo sullo schermo…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면의 텍스트를 읽는 중…"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odczytywanie tekstu z ekranu…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lendo o texto da tela…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Распознавание текста на экране…"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrandaki metin okunuyor…"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang đọc chữ trên màn hình…"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在读取屏幕上的文字…"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在讀取螢幕上的文字…"
+          }
+        }
+      }
+    },
     "画面の文脈" : {
-      "comment" : "ScreenContextSettingsView.swift:87",
+      "comment" : "ScreenContextSettingsView.swift:91",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -106388,7 +107408,7 @@
       }
     },
     "画面の文脈の読み取りにはアクセシビリティの許可（自動入力と同じもの）を、スクリーンショットには画面収録の許可を使います。画面に表示されている他人のメッセージも AI に送られることがあるので、社外秘の画面などでは除外に入れるか、オフにしてください。" : {
-      "comment" : "ScreenContextSettingsView.swift:89",
+      "comment" : "ScreenContextSettingsView.swift:93",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -106693,8 +107713,212 @@
         }
       }
     },
+    "画面の行" : {
+      "comment" : "ScreenDictionaryWindow.swift:256",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أسطر الشاشة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildschirmzeilen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lines on Screen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Líneas de la pantalla"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lignes de l’écran"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन की लाइनें"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baris layar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Righe dello schermo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면의 줄"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiersze z ekranu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linhas da tela"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Строки с экрана"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekrandaki satırlar"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các dòng trên màn hình"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕上的文字行"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "螢幕上的文字行"
+          }
+        }
+      }
+    },
+    "画面を撮れませんでした: %@" : {
+      "comment" : "AppDelegate.swift:300",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر التقاط الشاشة: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildschirm konnte nicht aufgenommen werden: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't capture the screen: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo capturar la pantalla: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de capturer l’écran : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन कैप्चर नहीं हो सकी: %@"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layar tidak dapat ditangkap: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile acquisire lo schermo: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면을 캡처할 수 없습니다: %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie udało się przechwycić ekranu: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível capturar a tela: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сделать снимок экрана: %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekran görüntüsü alınamadı: %@"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không chụp được màn hình: %@"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法截取屏幕：%@"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法擷取螢幕畫面：%@"
+          }
+        }
+      }
+    },
     "画面収録" : {
-      "comment" : "SettingsView.swift:363",
+      "comment" : "SettingsView.swift:364",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -106898,7 +108122,7 @@
       }
     },
     "画面収録のシステム設定を開く" : {
-      "comment" : "SettingsView.swift:357",
+      "comment" : "SettingsView.swift:358",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -107097,6 +108321,210 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有螢幕錄製權限"
+          }
+        }
+      }
+    },
+    "画面収録の許可がありません。" : {
+      "comment" : "ScreenDictionaryWindow.swift:194",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد إذن تسجيل الشاشة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Berechtigung für Bildschirmaufnahme."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Screen Recording permission hasn't been granted."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay permiso de grabación de pantalla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement de l’écran non autorisé."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन रिकॉर्डिंग की अनुमति नहीं है।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidak ada izin Perekaman Layar."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessuna autorizzazione per la registrazione schermo."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면 기록 권한이 없습니다."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brak uprawnienia Nagrywanie ekranu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem permissão de Gravação de Tela."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет разрешения на запись экрана."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekran Kaydı izni yok."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có quyền Ghi màn hình."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有屏幕录制权限。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有螢幕錄製權限。"
+          }
+        }
+      }
+    },
+    "画面収録を許可したら、Hanasu を終了して開き直し、もう一度選んでください。" : {
+      "comment" : "ScreenDictionaryWindow.swift:197",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بعد السماح بتسجيل الشاشة، أنهِ Hanasu ثم افتحه من جديد، واختر هذا الأمر مرة أخرى."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nachdem du die Bildschirmaufnahme erlaubt hast, beende Hanasu, öffne es erneut und wähle den Befehl noch einmal."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After you allow Screen Recording, quit Hanasu, open it again, and choose this again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Después de permitir la grabación de pantalla, sal de Hanasu, vuelve a abrirlo y elige esta opción de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Après avoir autorisé l’enregistrement de l’écran, quittez Hanasu, rouvrez-le, puis choisissez à nouveau cette commande."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्क्रीन रिकॉर्डिंग की अनुमति देने के बाद Hanasu बंद करके फिर से खोलें, और इसे दोबारा चुनें।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setelah mengizinkan Perekaman Layar, keluar dari Hanasu, buka lagi, lalu pilih lagi dari menu."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dopo aver consentito la registrazione schermo, chiudi Hanasu, riaprilo e scegli di nuovo questo comando."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면 기록을 허용한 후 Hanasu를 종료하고 다시 열어 한 번 더 선택하세요."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Po zezwoleniu na nagrywanie ekranu zakończ Hanasu, otwórz go ponownie i wybierz to polecenie jeszcze raz."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depois de permitir a Gravação de Tela, encerre o Hanasu, abra-o novamente e escolha este item de novo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разрешив запись экрана, закройте Hanasu, откройте снова и выберите этот пункт ещё раз."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekran Kaydı’na izin verdikten sonra Hanasu’dan çıkıp yeniden açın ve bu öğeyi tekrar seçin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sau khi cấp quyền Ghi màn hình, hãy thoát Hanasu, mở lại rồi chọn lại mục này."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许屏幕录制后，请退出 Hanasu 并重新打开，然后再次选择此项。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允許螢幕錄製後，請結束 Hanasu 並重新打開，然後再次選擇此項目。"
           }
         }
       }
@@ -111488,7 +112916,7 @@
       }
     },
     "終了" : {
-      "comment" : "AppDelegate.swift:262",
+      "comment" : "AppDelegate.swift:318",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -112610,7 +114038,7 @@
       }
     },
     "編集" : {
-      "comment" : "AppDelegate.swift:349, AppDelegate.swift:358",
+      "comment" : "AppDelegate.swift:405, AppDelegate.swift:414",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -112916,7 +114344,7 @@
       }
     },
     "編集の指示を止めて書き換え" : {
-      "comment" : "EditModeController.swift:78",
+      "comment" : "EditModeController.swift:83",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -113222,7 +114650,7 @@
       }
     },
     "翻訳" : {
-      "comment" : "DictationController.swift:414, TranslationLanguage.swift:116",
+      "comment" : "DictationController.swift:439, TranslationLanguage.swift:116",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -114854,7 +116282,7 @@
       }
     },
     "自動入力: 有効（アクセシビリティ許可済み）" : {
-      "comment" : "AppDelegate.swift:231",
+      "comment" : "AppDelegate.swift:237",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -114956,7 +116384,7 @@
       }
     },
     "自動入力: 無効 — アクセシビリティを許可…" : {
-      "comment" : "AppDelegate.swift:231",
+      "comment" : "AppDelegate.swift:237",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -117812,7 +119240,7 @@
       }
     },
     "記録の開始／停止" : {
-      "comment" : "AppDelegate.swift:344, Onboarding.swift:580, SettingsView.swift:270",
+      "comment" : "AppDelegate.swift:400, Onboarding.swift:580, SettingsView.swift:270",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -117914,7 +119342,7 @@
       }
     },
     "記録は止まり、次に起動したときに録音から文字起こしと議事録を作れます。" : {
-      "comment" : "AppDelegate.swift:261",
+      "comment" : "AppDelegate.swift:317",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -120158,7 +121586,7 @@
       }
     },
     "設定…" : {
-      "comment" : "AppDelegate.swift:241, AppDelegate.swift:318, AppDelegate.swift:333",
+      "comment" : "AppDelegate.swift:247, AppDelegate.swift:374, AppDelegate.swift:389",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -120362,7 +121790,7 @@
       }
     },
     "設定の「会議」で別のキーを選んでください。" : {
-      "comment" : "AppDelegate.swift:428",
+      "comment" : "AppDelegate.swift:484",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -120464,7 +121892,7 @@
       }
     },
     "設定の「履歴」で別のキーを選んでください。" : {
-      "comment" : "AppDelegate.swift:47",
+      "comment" : "AppDelegate.swift:51",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -120770,7 +122198,7 @@
       }
     },
     "許可する" : {
-      "comment" : "Onboarding.swift:715, Onboarding.swift:728, SettingsView.swift:423",
+      "comment" : "Onboarding.swift:715, Onboarding.swift:728, SettingsView.swift:424",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -120974,7 +122402,7 @@
       }
     },
     "許可済み" : {
-      "comment" : "Onboarding.swift:790, SettingsView.swift:346, SettingsView.swift:417",
+      "comment" : "Onboarding.swift:790, SettingsView.swift:347, SettingsView.swift:418",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -123829,6 +125257,108 @@
         }
       }
     },
+    "語" : {
+      "comment" : "ScreenDictionaryWindow.swift:255",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الكلمات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wörter"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Words"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palabras"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mots"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शब्द"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kata"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parole"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "단어"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Słowa"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palavras"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Слова"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sözcükler"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Từ"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "词语"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "詞語"
+          }
+        }
+      }
+    },
     "説明を見る" : {
       "comment" : "CommandLineSettingsView.swift:98",
       "extractionState" : "manual",
@@ -124029,6 +125559,312 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "隱藏說明"
+          }
+        }
+      }
+    },
+    "読み:" : {
+      "comment" : "ScreenDictionaryWindow.swift:325",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النطق:"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aussprache:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronunciación:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prononciation :"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "उच्चारण:"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bacaan:"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronuncia:"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발음:"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wymowa:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronúncia:"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Произношение:"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okunuş:"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cách đọc:"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "读音："
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "讀音："
+          }
+        }
+      }
+    },
+    "読みなし（語だけを登録します）" : {
+      "comment" : "ScreenDictionaryWindow.swift:320",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بلا نطق (تُسجَّل الكلمة فقط)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Aussprache (nur das Wort wird registriert)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No reading (adds the word only)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin pronunciación (solo se registra la palabra)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans prononciation (seul le mot est enregistré)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "बिना उच्चारण (सिर्फ़ शब्द जोड़ा जाएगा)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanpa bacaan (hanya kata yang didaftarkan)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senza pronuncia (viene registrata solo la parola)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발음 없음(단어만 등록합니다)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bez wymowy (zostanie dodane tylko słowo)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem pronúncia (só a palavra será adicionada)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Без произношения (будет добавлено только слово)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okunuş yok (yalnızca sözcük eklenir)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có cách đọc (chỉ đăng ký từ)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无读音（仅登记词语）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無讀音（僅登錄詞語）"
+          }
+        }
+      }
+    },
+    "読みの推測は、Gemini・Claude のほうが確かです（設定の「AI」の「議事録」で変えられます）。" : {
+      "comment" : "ScreenDictionaryWindow.swift:247",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini وClaude أدقّ في تخمين النطق (يمكنك تغييره من «المحضر» ضمن «AI» في الإعدادات)."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini und Claude schätzen die Aussprache zuverlässiger (änderbar in den Einstellungen unter „AI“ → „Protokoll“)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini and Claude guess readings more accurately (you can change this under “Minutes” in “AI” in Settings)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini y Claude deducen la pronunciación con más precisión (puedes cambiarlo en «Acta» de «AI» en Ajustes)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini et Claude devinent la prononciation de façon plus fiable (modifiable sous « Compte rendu » dans « AI » des Réglages)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "उच्चारण का अनुमान Gemini और Claude ज़्यादा सही लगाते हैं (सेटिंग्ज़ → “AI” → “मिनट्स” में बदल सकते हैं)।"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini dan Claude lebih akurat dalam menebak bacaan (bisa diubah di “Notulen” pada “AI” di Pengaturan)."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini e Claude stimano la pronuncia in modo più affidabile (puoi cambiarlo in Impostazioni → «AI» → «Verbale»)."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발음 추측은 Gemini와 Claude가 더 정확합니다(설정의 \"AI\" → \"회의록\"에서 바꿀 수 있습니다)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini i Claude trafniej odgadują wymowę (można to zmienić w Ustawienia → „AI” → „Protokół”)."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini e Claude adivinham a pronúncia com mais precisão (mude em Ajustes → “AI” → “Ata”)."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Произношение точнее угадывают Gemini и Claude (можно изменить в пункте «Протокол» раздела «AI» в Настройках)."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okunuş tahmininde Gemini ve Claude daha isabetlidir (Ayarlar’daki “AI” bölümünde “Tutanak” altından değiştirilebilir)."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini và Claude đoán cách đọc chính xác hơn (có thể đổi ở “Biên bản họp” trong mục “AI” của Cài đặt)."
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini 和 Claude 推测读音更准确（可在设置“AI”的“会议纪要”中更改）。"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemini 和 Claude 推測讀音較準確（可在設定「AI」的「會議紀錄」中更改）。"
           }
         }
       }
@@ -129950,7 +131786,7 @@
       }
     },
     "辞書の候補" : {
-      "comment" : "MeetingDictionaryViews.swift:162",
+      "comment" : "MeetingDictionaryViews.swift:162, ScreenDictionaryWindow.swift:234",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -130664,7 +132500,7 @@
       }
     },
     "追加したいものを選んでください。" : {
-      "comment" : "MeetingDictionaryViews.swift:151",
+      "comment" : "MeetingDictionaryViews.swift:151, ScreenDictionaryWindow.swift:223",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -130766,7 +132602,7 @@
       }
     },
     "追加したいものを選んでください（%@）。" : {
-      "comment" : "DictionarySettingsView.swift:238, MeetingDictionaryViews.swift:151",
+      "comment" : "DictionarySettingsView.swift:238, MeetingDictionaryViews.swift:151, ScreenDictionaryWindow.swift:223",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -131072,7 +132908,7 @@
       }
     },
     "送り先: %@" : {
-      "comment" : "AIRouteMenu.swift:131",
+      "comment" : "AIRouteMenu.swift:131, ScreenDictionaryWindow.swift:245",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -132500,7 +134336,7 @@
       }
     },
     "選んだ %@ 件を辞書に追加" : {
-      "comment" : "DictionarySettingsView.swift:193, MeetingDictionaryViews.swift:126",
+      "comment" : "DictionarySettingsView.swift:193, MeetingDictionaryViews.swift:126, ScreenDictionaryWindow.swift:291",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -133112,7 +134948,7 @@
       }
     },
     "選択 %@ 文字" : {
-      "comment" : "EditModeController.swift:250, EditModeController.swift:338",
+      "comment" : "EditModeController.swift:261, EditModeController.swift:351",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -133316,7 +135152,7 @@
       }
     },
     "選択が長すぎます（%@ 文字）。%@ 文字以内にしてください。" : {
-      "comment" : "EditModeController.swift:259",
+      "comment" : "EditModeController.swift:270",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -133418,7 +135254,7 @@
       }
     },
     "選択を声で編集" : {
-      "comment" : "EditModeController.swift:77, EditModeSettings.swift:51, Onboarding.swift:553",
+      "comment" : "EditModeController.swift:82, EditModeSettings.swift:51, Onboarding.swift:553",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -133520,7 +135356,7 @@
       }
     },
     "選択を声で編集するには、アクセシビリティの許可が必要です（選択した文章の読み取りと貼り付けに使います）。" : {
-      "comment" : "EditModeController.swift:173",
+      "comment" : "EditModeController.swift:178",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -133622,7 +135458,7 @@
       }
     },
     "選択を読み取り中…" : {
-      "comment" : "EditModeController.swift:196",
+      "comment" : "EditModeController.swift:201",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -135968,7 +137804,7 @@
       }
     },
     "録音を停止して入力" : {
-      "comment" : "AppDelegate.swift:189",
+      "comment" : "AppDelegate.swift:193",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -137294,7 +139130,7 @@
       }
     },
     "録音を開始" : {
-      "comment" : "AppDelegate.swift:188",
+      "comment" : "AppDelegate.swift:192",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -138008,7 +139844,7 @@
       }
     },
     "閉じる" : {
-      "comment" : "AppDelegate.swift:362, AppUpdate.swift:797, AppUpdate.swift:1026",
+      "comment" : "AppDelegate.swift:418, AppUpdate.swift:797, AppUpdate.swift:1026",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -138722,7 +140558,7 @@
       }
     },
     "音声が認識されませんでした" : {
-      "comment" : "DictationController.swift:396",
+      "comment" : "DictationController.swift:421",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -139231,104 +141067,104 @@
         }
       }
     },
-    "音声入力でスクリーンショットの文字を使うときだけ必要（設定の「AI」→「画面の文脈」）" : {
-      "comment" : "SettingsView.swift:364",
+    "音声入力でスクリーンショットの文字を使うとき（設定の「AI」→「画面の文脈」）と、メニューの「画面から辞書の候補を探す…」でだけ必要" : {
+      "comment" : "SettingsView.swift:365",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "مطلوب فقط عند استخدام نص لقطة الشاشة في الإدخال الصوتي (الإعدادات ← «AI» ← «سياق الشاشة»)"
+            "value" : "مطلوب فقط عند استخدام نص لقطة الشاشة في الإدخال الصوتي (الإعدادات ← «AI» ← «سياق الشاشة») ولأمر «البحث عن مقترحات للقاموس على الشاشة…» في القائمة"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nur nötig, wenn das Diktat Text aus Bildschirmfotos verwendet („AI“ → „Bildschirmkontext“ in den Einstellungen)"
+            "value" : "Nur nötig, wenn das Diktat Text aus Bildschirmfotos verwendet („AI“ → „Bildschirmkontext“ in den Einstellungen), und für „Wörterbuchvorschläge vom Bildschirm suchen …“ im Menü"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Needed only to use screenshot text in dictation (“AI” → “Screen Context” in Settings)"
+            "value" : "Needed only for screenshot text in dictation (“AI” → “Screen Context” in Settings) and for “Find Dictionary Suggestions from Screen…” in the menu"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo es necesario para usar el texto de las capturas de pantalla en el dictado («AI» → «Contexto de la pantalla» en Ajustes)"
+            "value" : "Solo es necesario para usar el texto de las capturas de pantalla en el dictado («AI» → «Contexto de la pantalla» en Ajustes) y para «Buscar candidatos para el diccionario en la pantalla…» del menú"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nécessaire uniquement pour utiliser le texte des captures d’écran en dictée (« AI » → « Contexte de l’écran » dans les Réglages)"
+            "value" : "Nécessaire uniquement pour utiliser le texte des captures d’écran en dictée (« AI » → « Contexte de l’écran » dans les Réglages) et pour « Chercher des suggestions pour le dictionnaire à l’écran… » dans le menu"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "सिर्फ़ तब ज़रूरी, जब वॉइस इनपुट में स्क्रीनशॉट का टेक्स्ट इस्तेमाल हो (सेटिंग्ज़ → “AI” → “स्क्रीन का संदर्भ”)"
+            "value" : "सिर्फ़ तब ज़रूरी, जब वॉइस इनपुट में स्क्रीनशॉट का टेक्स्ट इस्तेमाल हो (सेटिंग्ज़ → “AI” → “स्क्रीन का संदर्भ”) या मेनू में “स्क्रीन से शब्दकोश के सुझाव खोजें…” चुना जाए"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hanya diperlukan jika dikte memakai teks tangkapan layar (Pengaturan → “AI” → “Konteks layar”)"
+            "value" : "Hanya diperlukan jika dikte memakai teks tangkapan layar (Pengaturan → “AI” → “Konteks layar”) dan untuk “Cari saran kamus dari layar…” di menu"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Necessaria solo se usi il testo degli screenshot nella dettatura (Impostazioni → «AI» → «Contesto dello schermo»)"
+            "value" : "Necessaria solo se usi il testo degli screenshot nella dettatura (Impostazioni → «AI» → «Contesto dello schermo») e per «Cerca candidati per il dizionario sullo schermo…» nel menu"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "음성 입력에서 스크린샷 텍스트를 사용할 때만 필요(설정의 \"AI\" → \"화면 맥락\")"
+            "value" : "음성 입력에서 스크린샷 텍스트를 사용할 때(설정의 \"AI\" → \"화면 맥락\")와 메뉴의 \"화면에서 사전 후보 찾기…\"에서만 필요"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Potrzebne tylko wtedy, gdy dyktowanie korzysta z tekstu ze zrzutu ekranu (Ustawienia → „AI” → „Kontekst ekranu”)"
+            "value" : "Potrzebne tylko wtedy, gdy dyktowanie korzysta z tekstu ze zrzutu ekranu (Ustawienia → „AI” → „Kontekst ekranu”), oraz dla polecenia „Znajdź propozycje do słownika na ekranie…” w menu"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Necessária só se você usar o texto da captura de tela no ditado (Ajustes → “AI” → “Contexto da tela”)"
+            "value" : "Necessária só para usar o texto da captura de tela no ditado (Ajustes → “AI” → “Contexto da tela”) e para o item de menu “Buscar sugestões para o dicionário na tela…”"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Нужно, только если при диктовке используется текст со снимка экрана (Настройки → «AI» → «Контекст экрана»)"
+            "value" : "Нужно только для использования текста со снимка экрана при диктовке (Настройки → «AI» → «Контекст экрана») и для пункта меню «Найти кандидатов для словаря на экране…»"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yalnızca dikte sırasında ekran görüntüsündeki metni kullanırken gerekir (Ayarlar → “AI” → “Ekran bağlamı”)"
+            "value" : "Yalnızca dikte sırasında ekran görüntüsündeki metni kullanmak (Ayarlar → “AI” → “Ekran bağlamı”) ve menüdeki “Ekrandan sözlük önerileri bul…” için gerekir"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chỉ cần khi dùng chữ trên ảnh chụp màn hình cho nhập bằng giọng nói (Cài đặt → “AI” → “Ngữ cảnh màn hình”)"
+            "value" : "Chỉ cần khi dùng chữ trên ảnh chụp màn hình lúc nhập bằng giọng nói (Cài đặt → “AI” → “Ngữ cảnh màn hình”) và cho mục “Tìm gợi ý cho từ điển trên màn hình…” trong menu"
           }
         },
         "zh-CN" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仅在语音输入中使用截图文字时需要（设置的“AI”→“屏幕上下文”）"
+            "value" : "仅在语音输入中使用截图文字时（设置中的“AI”→“屏幕上下文”）以及使用菜单中的“从屏幕中查找词典候选…”时需要"
           }
         },
         "zh-TW" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "僅在語音輸入中使用截圖文字時需要（設定的「AI」→「螢幕脈絡」）"
+            "value" : "僅在語音輸入中使用截圖文字時（設定中的「AI」→「螢幕脈絡」）以及使用選單中的「從螢幕尋找辭典候選…」時需要"
           }
         }
       }
@@ -141170,7 +143006,7 @@
       }
     },
     "音声認識のモデルをダウンロード中… %@%%" : {
-      "comment" : "DictationController.swift:79, EditModeController.swift:48",
+      "comment" : "DictationController.swift:84, EditModeController.swift:53",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -141879,6 +143715,108 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "（不在此 shell 的 PATH 中）"
+          }
+        }
+      }
+    },
+    "（なし）" : {
+      "comment" : "ScreenDictionaryWindow.swift:265",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(لا شيء)"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(keine)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(None)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(ninguno)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(aucun)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(कुछ नहीं)"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(tidak ada)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(nessuno)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(없음)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(brak)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(vazio)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(нет)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(yok)"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(không có)"
+          }
+        },
+        "zh-CN" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（无）"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（無）"
           }
         }
       }

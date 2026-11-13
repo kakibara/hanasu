@@ -1841,4 +1841,73 @@
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>취소</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>화면에서 사전 후보 찾기(&amp;D)…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — 화면에서 사전 후보 찾기</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>화면에서 사전 후보 찾기</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>화면에 표시된 텍스트를 이 PC 안에서 읽습니다(이미지는 보내지 않으며 저장하지도 않습니다). Hanasu 창, 암호 관리자, 알림, 로그인 대화 상자는 읽지 않습니다. 브라우저 안의 암호 관리 확장 프로그램이나 터미널 등 그 밖의 화면은 읽습니다. 읽은 텍스트는 '후보 찾기'를 눌렀을 때만 설정 → AI에서 '회의록'용으로 선택한 AI에 보냅니다('로컬'이면 이 PC 밖으로 보내지 않습니다).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>화면의 텍스트를 읽는 중…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>화면 {0}개에서 읽어 단어 {1}개, 줄 {2}개를 보냅니다.</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>보낼 곳: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0}({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>발음 추측은 Gemini와 Claude가 더 정확합니다(설정 → AI의 '회의록'에서 바꿀 수 있습니다).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>화면의 텍스트가 많아 일부만 보냅니다.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>Windows에 {0} 텍스트 인식 기능이 설치되어 있지 않아 {1}(으)로 읽었습니다. Windows 설정 → 시간 및 언어 → 언어 및 지역에서 그 언어의 '광학 문자 인식'을 추가할 수 있습니다.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>단어</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>화면의 줄</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(없음)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>후보 찾기</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>추가할 항목을 선택하세요.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>발음 없음(단어만 등록합니다)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>발음:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>화면에서 텍스트를 읽지 못했습니다.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>캡처할 화면을 찾지 못했습니다.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>화면을 캡처할 수 없습니다: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>화면의 텍스트를 읽을 수 없습니다: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Windows에 어떤 언어의 텍스트 인식(광학 문자 인식) 기능도 설치되어 있지 않아 화면을 읽을 수 없습니다. Windows 설정 → 시간 및 언어 → 언어 및 지역에서 언어의 '광학 문자 인식'을 추가하세요.</value>
+  </data>
 </root>

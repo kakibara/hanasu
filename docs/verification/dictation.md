@@ -360,3 +360,14 @@ ScreenCaptureKit と Vision の小さな試作（`SCShareableContent` → `SCScr
   - 「昨日のミーティングの資料を送ります」（画面の語と音が遠い）は、文脈ありでも変わらなかった。
 - Apple の fm: 引数を書き出す偽の fm（`HANASU_FM_PATH`）で、`<screen_ocr>` の中身が上限の 500 文字（書記素の数）に収まっていることを見た。本物の fm は macOS 27 で確かめる。
 - Gemini・Claude: この Mac の CLI からは認証情報が使えず、確かめていない（アプリで確かめる）。
+
+## 21. 画面から辞書の候補を探す（REQ-DIC-075、2026-11-13、macOS 26.6.2、Apple M3・メモリ 24 GB）
+
+- `.build/debug/Hanasu --test-screen-dictionary`: 31 項目すべて OK（材料・上限と truncated・画面からの絞り込み・既定の絞り込みが変わらないこと・共有の例 `common/testdata/logic/screen-terms.json` の 13 件・選んだ読みだけを足すこと・足した辞書で「Jスリーの件ですが」が「J3の件ですが」になること）。
+- `--render-screen-dictionary` を日本語・英語・ロシア語で描き、10 の状態（許可がない・会議の記録中・読んでいる・読んだ・一部だけ送る・探している・候補・0 件・エラー・追加した）で文字が切れたり重なったりしていないことを見た。
+- 実際の AI（`--suggest-dictionary --screen-text`、OCR の行は「J3 の進捗（v2.1 のリリース）」「Kubernetes のクラスタを移行する」「株式会社ストックマーク 営業部 佐藤」「Anews の商談メモ」「ファイル 編集 表示 ウインドウ ヘルプ」の 5 行。材料は語 19 個・行 5 行・221 文字）:
+  - ローカル（Gemma 4 E4B、`--ai local --model gemma-4-e4b`）: 10.7 秒で 2 件。`ジェイスリー => J3`、`ブイ ツー ドット ワン => v2.1`。「Jスリー」の形（実際に認識されやすい形）は出ず、Kubernetes・Anews・社名は挙がらなかった。メニューの語（ファイル・編集など）は挙げなかった。受け入れ条件 7 のローカルは「試して残す」なので不合格にはしない。候補の画面で、ローカルのときは Gemini・Claude のほうが確かだと添えている。
+  - Gemini・Claude: この Mac の CLI に認証情報がなく、確かめていない（受け入れ条件 7 の必須の確かめが残っている。鍵のある環境で `--suggest-dictionary --screen-text <ファイル> --ai gemini|claude` を流す）。
+  - Apple の fm・文字起こしの言語が英語のとき: 確かめていない。
+- 実機の画面を撮る流れ（`--suggest-dictionary --screen`・メニューから選ぶ・許可のダイアログ・全画面表示のアプリの上・録音中にメニューが灰色になること）: 確かめていない（UI のテスト項目 UX-203・204 の remaining）。
+- Windows: この Mac で `dotnet test Hanasu.Core.Tests`（856 件すべて合格。`ScreenDictionaryTests` で共有の例・OCR の単語のつなぎ方・絞り込み・材料・既定の除外の名前を見る）と `dotnet build Hanasu.Windows`（警告 0・エラー 0）。Windows の実機がなく、撮る（BitBlt）・`WDA_EXCLUDEFROMCAPTURE` が BitBlt に効くか・除外のウインドウの黒塗りの位置（DPI の違う画面）・OCR の言語の落ち方・タイル・既定の除外の exe 名（DEC-DIC-235）・画面の見た目は確かめていない。CI の windows-latest の「Dump screen text」（`continue-on-error`）で、偽の KeePassXC の文字が出ないこと・日本語の行が空白なしでつながることを見る。

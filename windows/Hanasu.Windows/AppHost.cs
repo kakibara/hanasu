@@ -33,6 +33,9 @@ internal sealed class AppHost : IDisposable
     private SettingsWindow? settingsWindow;
     private MeetingWindow? meetingWindow;
     private HistoryWindow? historyWindow;
+    private ScreenDictionaryWindow? screenDictionaryWindow;
+    /// <summary>画面から辞書の候補を探すために、メニューが閉じるのを待って撮っている途中か（続けて呼ばれても 2 回撮らない）</summary>
+    private bool capturingScreen;
     private int? meetingHotKeyId;
     private int? highlightHotKeyId;
     private int? dictationHotKeyId;
@@ -348,6 +351,55 @@ internal sealed class AppHost : IDisposable
         }
         if (historyWindow.WindowState == WindowState.Minimized) historyWindow.WindowState = WindowState.Normal;
         historyWindow.Activate();
+    }
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-232, DEC-DIC-234
+    /// <summary>
+    /// 画面から辞書の候補を探す。開いていれば、新しく撮らずに前に出す。音声入力が idle でなければ何もしない（メニューの項目も押せない）。
+    /// タスクトレイのメニューが閉じるのを 0.3 秒待ってからすべての画面を 1 回撮り、撮り終えてからウインドウを開いて読む。
+    /// 撮れなければ理由をウインドウに出す
+    /// </summary>
+    public async void ShowScreenDictionary()
+    {
+        if (screenDictionaryWindow is not null)
+        {
+            if (screenDictionaryWindow.WindowState == WindowState.Minimized) screenDictionaryWindow.WindowState = WindowState.Normal;
+            screenDictionaryWindow.Activate();
+            return;
+        }
+        if (capturingScreen || Dictation.State != Core.Dictation.DictationState.Idle) return;
+        capturingScreen = true;
+        ScreenCapture? capture = null;
+        string? error = null;
+        try
+        {
+            await Task.Delay(300);
+            // 待っているあいだに音声入力が始まったら撮らない（整形した文章の貼り先を奪わないため）
+            if (Dictation.State != Core.Dictation.DictationState.Idle) return;
+            try
+            {
+                capture = ScreenTextReader.CaptureAll();
+            }
+            catch (ScreenTextException e)
+            {
+                error = e.Message;
+            }
+        }
+        finally
+        {
+            capturingScreen = false;
+        }
+        var window = new ScreenDictionaryWindow(this);
+        screenDictionaryWindow = window;
+        window.Closed += (_, _) =>
+        {
+            if (screenDictionaryWindow == window) screenDictionaryWindow = null;
+        };
+        window.Show();
+        window.Activate();
+        if (capture is not null) window.Read(capture);
+        else window.ShowFailure(error ?? Strings.ScreenDictionary_NoScreens);
     }
 
     /// <summary>タスクトレイのメニューから会議の記録を始める・止める</summary>

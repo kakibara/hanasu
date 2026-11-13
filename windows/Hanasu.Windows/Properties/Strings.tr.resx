@@ -1841,4 +1841,73 @@ Eklediğiniz uygulamalar ve her uygulamanın ek kuralları silinir. Özel üslup
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>İptal</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Ekrandan &amp;Sözlük Önerileri Bul…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Ekrandan sözlük önerileri bul</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Ekrandan sözlük önerileri bul</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Ekranlarınızda görüntülenen metin bu bilgisayarda okunur (görüntü gönderilmez ve saklanmaz). Hanasu pencereleri, parola yöneticileri, bildirimler ve oturum açma iletişim kutuları okunmaz. Tarayıcınızdaki parola yöneticisi uzantıları ve terminaller dahil, geri kalan her şey okunur. Metin yalnızca “Öneri bul”a tıkladığınızda ve yalnızca Ayarlar’daki “AI” sekmesinde “Tutanak” için seçilen AI'ye gönderilir (“Yerel” seçiliyse bu bilgisayardan çıkmaz).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Ekrandaki metin okunuyor…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>{0} ekrandan okundu; {1} sözcük ve {2} satır gönderilecek.</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Hedef: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Okunuş tahmininde Gemini ve Claude daha isabetlidir (Ayarlar’daki “AI” sekmesinde “Tutanak” bölümünden değiştirebilirsiniz).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>Ekranda çok fazla metin olduğu için yalnızca bir kısmı gönderilecek.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>Windows'ta {0} için metin tanıma yüklü olmadığından metin {1} ile okundu. Windows Ayarları → Saat ve dil → Dil ve bölge bölümünden bu dilin “Optik karakter tanıma” özelliğini ekleyebilirsiniz.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Sözcükler</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Ekrandaki satırlar</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(yok)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Öneri bul</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Eklemek istediklerinizi seçin.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Okunuş yok (yalnızca sözcük eklenir)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Okunuş:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Ekrandan metin okunamadı.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>Görüntüsü alınabilecek ekran bulunamadı.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Ekran görüntüsü alınamadı: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Ekrandaki metin okunamadı: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Windows'ta hiçbir dil için metin tanıma (OCR) yüklü olmadığından ekran okunamadı. Windows Ayarları → Saat ve dil → Dil ve bölge bölümünden bir dilin “Optik karakter tanıma” özelliğini ekleyin.</value>
+  </data>
 </root>

@@ -127,6 +127,12 @@ enum PromptsCLI {
         section("dictionary suggest", DictionarySuggester.instruction)
         section("dictionary suggest user", DictionarySuggester.userPrompt(material: "（材料）", existing: UserDictionary(text: "")))
         section("dictionary corpus", DictionarySuggester.Corpus(meetings: [meeting]).promptText())
+        // 確かめ方: REQ-DIC-075（画面から辞書の候補を探すときの system と材料）
+        section("dictionary suggest from screen", DictionarySuggester.screenInstruction)
+        section("dictionary screen material", DictionarySuggester.screenMaterial(
+            [ScreenTextLine(text: "J3 の進捗（v2.1）", display: 0, inTarget: false, y: 0, x: 0),
+             ScreenTextLine(text: "Kubernetes のクラスタ", display: 0, inTarget: false, y: 20, x: 0)],
+            budget: .characters(DictionarySuggester.characterLimit)).text)
 
         // 会議の AI チャット
         section("chat / system", MeetingChat.instruction)

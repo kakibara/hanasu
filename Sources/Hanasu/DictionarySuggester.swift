@@ -138,9 +138,13 @@ enum DictionarySuggester {
         }
     }
 
-    // 設計判断: DEC-DIC-089
-    /// 辞書にすでにあるもの・置き換えに使えない読み・材料に出てこないもの（Gemini の思い込み）を除く
-    static func filter(_ candidates: [DictionaryCandidate], existing: UserDictionary, material: String) -> [DictionaryCandidate] {
+    // 設計判断: DEC-DIC-089, DEC-DIC-231
+    /// 辞書にすでにあるもの・置き換えに使えない読み・材料に出てこないもの（Gemini の思い込み）を除く。
+    /// 画面からの候補（REQ-DIC-075）では、読みは推測なので材料と照らし合わせず（readingsMustAppear: false）、
+    /// 表記は読みの有無によらず照らし合わせる（requireSpellingInMaterial: true）。読みの長さと数も絞る
+    static func filter(_ candidates: [DictionaryCandidate], existing: UserDictionary, material: String,
+                       readingsMustAppear: Bool = true, requireSpellingInMaterial: Bool = false,
+                       maxReadings: Int? = nil, maxReadingLength: Int? = nil) -> [DictionaryCandidate] {
         let key = { (s: String) in String(UserDictionary.matchKey(s)) }
         let materialKey = key(material)
         let existingSpellings = Set(existing.spellings.map(key))
@@ -150,17 +154,23 @@ enum DictionarySuggester {
         for var candidate in candidates {
             let spellingKey = key(candidate.spelling)
             guard !spellingKey.isEmpty, !seenSpellings.contains(spellingKey) else { continue }
-            candidate.readings = candidate.readings.filter { reading in
+            // 表記が材料に出てこないものは、AI が作った語なので除く（画面からの候補では、読みがあっても除く）
+            if requireSpellingInMaterial, !materialKey.contains(spellingKey) { continue }
+            var kept: [String] = []
+            for reading in candidate.readings {
+                if let maxReadings, kept.count >= maxReadings { break }
                 let k = key(reading)
-                // 読みが表記と同じ・短すぎる・ほかのルールで使っている、ものは除く。区切り文字も入れない
+                // 読みが表記と同じ・短すぎる・長すぎる・ほかのルールで使っている、ものは除く。区切り文字も入れない
                 guard k != spellingKey, k.count >= UserDictionary.minimumSourceLength, !usedSources.contains(k),
-                      materialKey.contains(k),
+                      maxReadingLength.map({ reading.count <= $0 }) ?? true,
+                      !readingsMustAppear || materialKey.contains(k),
                       !reading.contains(where: { UserDictionary.sourceSeparators.contains($0) }),
                       !UserDictionary.arrows.contains(where: { reading.contains($0) })
-                else { return false }
+                else { continue }
                 usedSources.insert(k)
-                return true
+                kept.append(reading)
             }
+            candidate.readings = kept
             // 表記がすでに辞書にあり、新しい読みもないなら足すものがない
             if existingSpellings.contains(spellingKey), candidate.readings.isEmpty { continue }
             // 読みも表記も材料に出てこないものは、Gemini が作った語なので除く
@@ -200,7 +210,7 @@ enum DictionarySuggester {
     // 設計判断: DEC-DIC-170
     /// 会議の AI に合わせた上限。ローカル・Apple は、文脈の長さから出力・system instruction・既存の辞書・余白の分を引く。
     /// 見積もりは多めなので（DEC-COM-073）、AI の側で黙って後ろを省かれない
-    static func budget(for client: TextAIClient, existing: UserDictionary) -> Budget {
+    static func budget(for client: TextAIClient, existing: UserDictionary, instruction: String = instruction) -> Budget {
         let frame = AppleFMClient.estimateTokens(instruction + userPrompt(material: "", existing: existing)) + LongInputFitter.margin
         switch client.backend {
         case .gemini, .claude:
@@ -261,6 +271,94 @@ enum DictionarySuggester {
             }
         }
         return MeetingMaterial(text: parts.joined(separator: "\n"), cutAt: cutAt)
+    }
+
+    // MARK: - 画面から（REQ-DIC-075）
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-231
+    /// 画面の文字から作った、AI に送る材料。候補の画面はこれをそのまま見せ、同じものを送る
+    struct ScreenMaterial: Equatable, Sendable {
+        var terms: [String] = []
+        var lines: [String] = []
+        /// 上限に入りきらず、語か行を外したか
+        var truncated = false
+
+        var isEmpty: Bool { terms.isEmpty && lines.isEmpty }
+
+        /// AI に送る本文（見出しと、語は「, 」でつなぎ、行は改行でつなぐ）
+        var text: String {
+            var parts: [String] = []
+            if !terms.isEmpty {
+                parts.append(Prompts.text("dictionarySuggest.screenTermsHeader") + "\n" + terms.joined(separator: ", "))
+            }
+            if !lines.isEmpty {
+                parts.append(Prompts.text("dictionarySuggest.screenLinesHeader") + "\n" + lines.joined(separator: "\n"))
+            }
+            return parts.joined(separator: "\n\n")
+        }
+    }
+
+    static var screenInstruction: String { Prompts.text("dictionarySuggest.screenSystem") }
+    /// 画面からの候補の読みの上限（1 候補あたりの数・1 つの長さ）
+    static let screenMaxReadings = 4
+    static let screenMaxReadingLength = 20
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-231
+    /// OCR の行から材料を作る。語の一覧を先に、残りに行を、上限まで詰める（`ScreenSnapshotLayout.layout` の並べ方を使う）
+    static func screenMaterial(_ lines: [ScreenTextLine], budget: Budget) -> ScreenMaterial {
+        // 並べ方だけを使うので、layout では上限をかけない
+        let ocr = ScreenSnapshotLayout.layout(lines, limit: 10_000_000)
+        return screenMaterial(ocr, budget: budget)
+    }
+
+    static func screenMaterial(_ ocr: ScreenOCR, budget: Budget) -> ScreenMaterial {
+        var material = ScreenMaterial()
+        let termsHeader = Prompts.text("dictionarySuggest.screenTermsHeader")
+        let linesHeader = Prompts.text("dictionarySuggest.screenLinesHeader")
+        var used = budget.cost(termsHeader + "\n" + "\n\n" + linesHeader + "\n")
+        for term in ocr.terms {
+            let cost = budget.cost(term + ", ")
+            if used + cost > budget.limit {
+                material.truncated = true
+                break
+            }
+            material.terms.append(term)
+            used += cost
+        }
+        for line in ocr.lines {
+            let cost = budget.cost(line + "\n")
+            // 行の途中では切らない。入らない行は飛ばして、短い行を入れる
+            if used + cost > budget.limit {
+                material.truncated = true
+                continue
+            }
+            material.lines.append(line)
+            used += cost
+        }
+        return material
+    }
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-231
+    /// 画面の材料を送って候補を受け取り、絞り込む（読みは推測を許し、表記はいつも材料と照らし合わせる）
+    static func suggestFromScreen(_ material: ScreenMaterial, existing: UserDictionary, client: TextAIClient, model: String) async throws -> [DictionaryCandidate] {
+        var client = client
+        client.timeout = 120
+        let text = PromptText.neutralizeDelimiters(material.text)
+        let response = try await client.generate(
+            systemInstruction: screenInstruction,
+            userText: userPrompt(material: text, existing: existing),
+            model: model)
+        return filterFromScreen(try parse(response), existing: existing, material: text)
+    }
+
+    /// 画面からの候補の絞り込み（`suggestFromScreen` と確かめ方の CLI で同じものを使う）
+    static func filterFromScreen(_ candidates: [DictionaryCandidate], existing: UserDictionary, material: String) -> [DictionaryCandidate] {
+        filter(candidates, existing: existing, material: material,
+               readingsMustAppear: false, requireSpellingInMaterial: true,
+               maxReadings: screenMaxReadings, maxReadingLength: screenMaxReadingLength)
     }
 
     // 設計判断: DEC-DIC-087

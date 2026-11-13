@@ -81,8 +81,12 @@ struct ScreenContextSettingsSection: View {
                 TextEditor(text: $settings.excludedAppsText)
                     .font(.body.monospaced())
                     .frame(minHeight: 80)
+                // 要件: REQ-DIC-042, REQ-DIC-075
+                // 設計判断: DEC-DIC-180（欄はいつでも編集でき、画面から辞書の候補を探すときにも効く）
+                Text(tr("ここにあるアプリは、画面の文脈・スクリーンショットのほか、メニューの「画面から辞書の候補を探す…」でも読みません。"))
+                    .font(.caption).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .disabled(!settings.enabled && !settings.useScreenshot)
         } header: {
             Text(tr("画面の文脈"))
         } footer: {

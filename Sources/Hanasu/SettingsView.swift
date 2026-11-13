@@ -337,8 +337,9 @@ private struct PermissionsTab: View {
                     deniedHint: tr("システム設定 → プライバシーとセキュリティ → アクセシビリティ で Hanasu をオンにしてください。"),
                     anchor: "Privacy_Accessibility")
                 // 要件: REQ-DIC-042
-                // 設計判断: DEC-DIC-189
-                // 画面収録（音声入力のスクリーンショットの文字）。求めるのは設定の「AI」の欄からだけなので、ここは状態とシステム設定を開くボタンだけ。
+                // 設計判断: DEC-DIC-189, DEC-DIC-233
+                // 画面収録（音声入力のスクリーンショットの文字と、画面から辞書の候補を探すとき）。求めるのは設定の「AI」の欄と、
+                // メニューの「画面から辞書の候補を探す…」からだけなので、ここは状態とシステム設定を開くボタンだけ。
                 // 使っていない人には未許可が普通なので、警告の色にしない
                 LabeledContent {
                     HStack(spacing: 8) {
@@ -350,7 +351,7 @@ private struct PermissionsTab: View {
                                 .padding(.vertical, 3)
                                 .background(Color.green.opacity(0.12), in: Capsule())
                         } else {
-                            Text(tr("スクリーンショットの文字をオンにするときに求めます"))
+                            Text(tr("スクリーンショットの文字をオンにするときと、画面から辞書の候補を探すときに求めます"))
                                 .font(.callout).foregroundStyle(.secondary)
                             Button(tr("システム設定を開く")) { Permissions.openPrivacySettings("Privacy_ScreenCapture") }
                                 .controlSize(.small)
@@ -361,7 +362,7 @@ private struct PermissionsTab: View {
                     Label {
                         VStack(alignment: .leading, spacing: 1) {
                             Text(tr("画面収録"))
-                            Text(tr("音声入力でスクリーンショットの文字を使うときだけ必要（設定の「AI」→「画面の文脈」）"))
+                            Text(tr("音声入力でスクリーンショットの文字を使うとき（設定の「AI」→「画面の文脈」）と、メニューの「画面から辞書の候補を探す…」でだけ必要"))
                                 .font(.caption).foregroundStyle(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
                         }

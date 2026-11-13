@@ -1841,4 +1841,73 @@
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>取消</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>从屏幕中查找词典候选(&amp;D)…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — 从屏幕中查找词典候选</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>从屏幕中查找词典候选</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>在此电脑上读取屏幕上显示的文字（不发送图像，也不保存）。不会读取 Hanasu 的窗口、密码管理器、通知和身份验证对话框。除此之外的屏幕都会读取，包括浏览器中的密码管理扩展和终端等。读取的文字只在点击“查找候选”时，发送给在设置的“AI”中为“会议纪要”选择的 AI（选择“本地”时，不会离开此电脑）。</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>正在读取屏幕上的文字…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>已读取 {0} 个屏幕，将发送 {1} 个词语和 {2} 行文字。</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>发送到：{0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini 和 Claude 推测读音更准确（可在设置的“AI”中的“会议纪要”更改）。</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>屏幕上的文字较多，因此只发送一部分。</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>Windows 中未安装{0}的文字识别功能，因此改用{1}读取。可以在 Windows 设置 → 时间和语言 → 语言和区域中，为该语言添加“光学字符识别”。</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>词语</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>屏幕上的文字行</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>（无）</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>查找候选</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>请选择要添加的候选。</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>无读音（仅登记词语）</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>读音：</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>无法从屏幕中读取文字。</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>找不到可以截取的屏幕。</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>无法截取屏幕：{0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>无法读取屏幕上的文字：{0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Windows 中没有安装任何语言的文字识别（光学字符识别）功能，因此无法读取屏幕。请在 Windows 设置 → 时间和语言 → 语言和区域中，为某种语言添加“光学字符识别”。</value>
+  </data>
 </root>

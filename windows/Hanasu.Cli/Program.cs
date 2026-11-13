@@ -36,6 +36,8 @@ using Hanasu.Whisper;
 //   hanasu-cli meeting-show <会議のフォルダ>   meeting.json を読んで中身を出す（Mac で作った会議が読めるかの確認）
 //   hanasu-cli meeting-dict-suggest <会議のフォルダ> [--dict <辞書ファイル>] [--minutes-ai gemini|claude|local] [--minutes-model <id>]
 //     会議 1 件から辞書の候補を会議の AI に挙げてもらう（会議ノートの「この会議から辞書の候補を探す」と同じ材料。材料の中身は出さない）
+//   hanasu-cli screen-dict-suggest <OCR の行のファイル> [--dict <辞書ファイル>] [--minutes-ai gemini|claude|local] [--minutes-model <id>]
+//     1 行 1 つの OCR の行から、画面から辞書の候補を探すのと同じ材料を作り、会議の AI に候補を挙げてもらう（REQ-DIC-075。実際に AI を呼ぶ）
 //   meeting-files に --dict <辞書ファイル> を付けると、確定した文字起こしに置き換えルールを当てる（--no-meeting-dictionary で当てない）
 // ローカルの LLM（llama.cpp の llama-server。--server <パス> か環境変数 HANASU_LLAMA_SERVER、なければ exe の隣の llama/。Mac の llama-server でも動く）:
 //   hanasu-cli local-list [--models-dir <dir>]   モデルの一覧（ダウンロード済みか）
@@ -79,6 +81,7 @@ try
         case "meeting-minutes": await MeetingMinutes(args); break;
         case "meeting-show": MeetingShow(args); break;
         case "meeting-dict-suggest": await MeetingDictSuggest(args); break;
+        case "screen-dict-suggest": await ScreenDictSuggest(args); break;
         case "claude-request": await ClaudeRequest(args); break;
         case "claude-refine": await ClaudeRefine(args); break;
         case "claude-check": await ClaudeCheck(args); break;
@@ -87,7 +90,7 @@ try
         case "local-refine": await LocalRefine(args); break;
         case "local-prewarm-check": Environment.ExitCode = await LocalPrewarmCheck(args) ? 0 : 1; break;
         default:
-            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show|meeting-dict-suggest|claude-request|claude-refine|claude-check|local-list|local-download|local-refine|local-prewarm-check ...（Program.cs の先頭を参照）");
+            Console.Error.WriteLine("使い方: hanasu-cli refine|transcribe-gemini|transcribe-whisper|dictation|dict|models|meeting-files|meeting-minutes|meeting-show|meeting-dict-suggest|screen-dict-suggest|claude-request|claude-refine|claude-check|local-list|local-download|local-refine|local-prewarm-check ...（Program.cs の先頭を参照）");
             return 2;
     }
     return 0;
@@ -500,6 +503,31 @@ static async Task MeetingDictSuggest(string[] args)
         + (material.ReadMinutes is { } minutes ? $" / 文字起こしの最初の約 {minutes} 分まで" : " / 全部"));
     var sw = Stopwatch.StartNew();
     var candidates = await DictionarySuggester.SuggestAsync(material.Text, dictionary, client, model);
+    Console.WriteLine($"[候補 {model} {sw.Elapsed.TotalSeconds:0.0}s] → {candidates.Count} 件");
+    foreach (var c in candidates) Console.WriteLine($"{c.Entry.LineText}\t# {c.Reason}");
+}
+
+// 確かめ方: REQ-DIC-075
+// 設計判断: DEC-DIC-231, DEC-DIC-237
+/// <summary>
+/// OCR の行のファイル（1 行 1 つ）から、画面から辞書の候補を探すのと同じ材料・上限・絞り込みで候補を挙げてもらう。
+/// 材料の数と、外したか（一部だけを送るか）を出す（材料の中身は出さない）
+/// </summary>
+static async Task ScreenDictSuggest(string[] args)
+{
+    var file = args.ElementAtOrDefault(1) is { } path && !path.StartsWith("--", StringComparison.Ordinal)
+        ? path : throw new IOException("OCR の行のファイルを指定してください");
+    var lines = ScreenDictionary.LinesFromText(File.ReadAllText(file));
+    var dictionary = LoadDictionary(args);
+    var client = MinutesClientFromEnvironment(args);
+    var model = Option(args, "--minutes-model") ?? DefaultMinutesModel(args);
+    var budget = DictionarySuggester.BudgetFor(client, dictionary, DictionarySuggester.ScreenInstruction);
+    var material = DictionarySuggester.ScreenMaterialFor(lines, budget);
+    Console.WriteLine($"材料: 行 {lines.Count} 行から、語 {material.Terms.Count} 個・行 {material.Lines.Count} 行・{material.Text.Length} 字"
+        + $"（上限 {(budget.IsTokens ? "トークン" : "字")} {budget.Limit}）" + (material.Truncated ? " / 一部だけを送る" : " / 全部"));
+    if (material.IsEmpty) throw new IOException("送る材料がありません（2 文字以上の行がない）");
+    var sw = Stopwatch.StartNew();
+    var candidates = await DictionarySuggester.SuggestFromScreenAsync(material, dictionary, client, model);
     Console.WriteLine($"[候補 {model} {sw.Elapsed.TotalSeconds:0.0}s] → {candidates.Count} 件");
     foreach (var c in candidates) Console.WriteLine($"{c.Entry.LineText}\t# {c.Reason}");
 }

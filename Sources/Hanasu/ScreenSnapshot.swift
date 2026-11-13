@@ -272,8 +272,24 @@ enum ScreenSnapshotReader {
         var errorDescription: String? { tr("画面収録の許可がありません") }
     }
 
+    /// 撮った 1 画面（OCR が終わったら捨てる。DEC-DIC-187）
+    struct Shot: @unchecked Sendable {
+        var image: CGImage
+        var displayFrame: CGRect
+        var displayIndex: Int
+        /// 入力先のウインドウの枠（なければすべてを「入力先の外」として扱う）
+        var targetFrame: CGRect?
+    }
+
     /// すべての画面を撮って読み、行を返す。画像はこの中で捨てる
     static func read(_ request: Request) async throws -> [ScreenTextLine] {
+        let shots = try await captureAll(request)
+        return try await recognizeAll(shots, languages: request.languages)
+    }
+
+    // 設計判断: DEC-DIC-181, DEC-DIC-230
+    /// すべての画面を撮る（画面から辞書の候補を探すときは、撮り終えてから候補の画面を開くので、読むのと分ける）
+    static func captureAll(_ request: Request) async throws -> [Shot] {
         guard ScreenRecordingPermission.isGranted else { throw Failure.notPermitted }
         let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
         let excluded = content.applications.filter {
@@ -284,12 +300,26 @@ enum ScreenSnapshotReader {
             content.windows.first { $0.owningApplication?.processID == pid && $0.isOnScreen && $0.windowLayer == 0 }?.frame
         }
         let displays = content.displays
-        return try await withThrowingTaskGroup(of: [ScreenTextLine].self) { group in
+        return try await withThrowingTaskGroup(of: Shot.self) { group in
             for (index, display) in displays.enumerated() {
                 group.addTask {
-                    let image = try await capture(display, excluding: excluded)
-                    return try await recognize(image, displayFrame: display.frame, displayIndex: index,
-                                               targetFrame: targetFrame, languages: request.languages)
+                    Shot(image: try await capture(display, excluding: excluded), displayFrame: display.frame,
+                         displayIndex: index, targetFrame: targetFrame)
+                }
+            }
+            var shots: [Shot] = []
+            for try await shot in group { shots.append(shot) }
+            return shots.sorted { $0.displayIndex < $1.displayIndex }
+        }
+    }
+
+    /// 撮った画面を並べて読む
+    static func recognizeAll(_ shots: [Shot], languages: [String]) async throws -> [ScreenTextLine] {
+        try await withThrowingTaskGroup(of: [ScreenTextLine].self) { group in
+            for shot in shots {
+                group.addTask {
+                    try await recognize(shot.image, displayFrame: shot.displayFrame, displayIndex: shot.displayIndex,
+                                        targetFrame: shot.targetFrame, languages: languages)
                 }
             }
             var lines: [ScreenTextLine] = []

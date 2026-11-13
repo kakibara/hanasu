@@ -1845,4 +1845,73 @@
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>キャンセル</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>画面から辞書の候補を探す(&amp;D)…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu 画面から辞書の候補を探す</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>画面から辞書の候補を探す</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>画面に表示されている文字を、この PC の中で読み取ります（画像は送らず、保存もしません）。Hanasu のウインドウと、パスワード管理アプリ・通知・認証のダイアログは読みません。ブラウザの中のパスワード管理の拡張や、ターミナルなど、それ以外の画面は読みます。読んだ文字は、「候補を探す」を押したときだけ、設定の「AI」で「議事録」に選んだ AI に送ります（「ローカル」なら、この PC の外には送りません）。</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>画面の文字を読んでいます…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>{0} 画面から読み、語 {1} 個・行 {2} 行を送ります。</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>送り先: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>読みの推測は、Gemini・Claude のほうが確かです（設定の「AI」の「議事録」で変えられます）。</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>画面の文字が多いので、一部だけを送ります。</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>{0} の文字を読む機能が Windows に入っていないため、{1} で読みました。設定 → 時刻と言語 → 言語と地域 で、その言語の『光学式文字認識』を追加できます。</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>語</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>画面の行</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>（なし）</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>候補を探す</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>追加したいものを選んでください。</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>読みなし（語だけを登録します）</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>読み:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>画面から文字を読み取れませんでした。</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>撮れる画面が見つかりませんでした。</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>画面を撮れませんでした: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>画面の文字を読めませんでした: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Windows に文字を読む機能（光学式文字認識）がどの言語でも入っていないため、画面を読めませんでした。設定 → 時刻と言語 → 言語と地域 で、言語の『光学式文字認識』を追加してください。</value>
+  </data>
 </root>

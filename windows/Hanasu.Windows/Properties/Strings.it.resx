@@ -1841,4 +1841,73 @@ Le app aggiunte e le regole aggiuntive di ciascuna app verranno rimosse. Gli sti
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>Annulla</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Cerca candidati per il &amp;dizionario sullo schermo…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Cerca candidati per il dizionario sullo schermo</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Cerca candidati per il dizionario sullo schermo</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Il testo visualizzato sugli schermi viene letto su questo PC (l'immagine non viene inviata né salvata). Non vengono lette le finestre di Hanasu, i gestori di password, le notifiche e le finestre di autenticazione. Tutto il resto viene letto, comprese le estensioni per la gestione delle password nel browser e i terminali. Il testo viene inviato solo quando fai clic su "Cerca candidati", e solo all'IA scelta per "Verbale" nella scheda "AI" delle Impostazioni (con "Locale" non esce da questo PC).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Lettura del testo sullo schermo…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Schermi letti: {0} · Parole da inviare: {1} · Righe da inviare: {2}</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Invia a: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini e Claude stimano la pronuncia in modo più affidabile (puoi cambiarlo in "Verbale" nella scheda "AI" delle Impostazioni).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>C'è molto testo sullo schermo, quindi ne verrà inviata solo una parte.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>In Windows non è installato il riconoscimento del testo per {0}, quindi il testo è stato letto in {1}. Puoi aggiungere "Riconoscimento ottico dei caratteri" per quella lingua in Impostazioni di Windows → Data/ora e lingua → Lingua e area geografica.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Parole</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Righe dello schermo</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(Nessuna)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Cerca candidati</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Seleziona quelli da aggiungere.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Senza pronuncia (viene registrata solo la parola)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Pronuncia:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Impossibile leggere il testo sullo schermo.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>Non è stato trovato alcuno schermo da acquisire.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Impossibile acquisire lo schermo: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Impossibile leggere il testo sullo schermo: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>In Windows non è installato il riconoscimento del testo (OCR) per nessuna lingua, quindi non è stato possibile leggere lo schermo. Aggiungi "Riconoscimento ottico dei caratteri" per una lingua in Impostazioni di Windows → Data/ora e lingua → Lingua e area geografica.</value>
+  </data>
 </root>

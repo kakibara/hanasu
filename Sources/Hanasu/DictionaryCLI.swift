@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-// 確かめ方: REQ-DIC-070, REQ-DIC-071, REQ-DIC-072
+// 確かめ方: REQ-DIC-070, REQ-DIC-071, REQ-DIC-072, REQ-DIC-075
 /// ユーザー辞書まわりの動作確認用の CLI モード:
 ///
 ///     Hanasu --apply-dictionary <文> [--dictionary <辞書ファイル>]
@@ -12,6 +12,9 @@ import SwiftUI
 ///         辞書の候補を会議の AI に挙げてもらう。--from-file があればそのファイルを音声入力の結果として使い、
 ///         --meeting があればその会議 1 件（会議ノートの「この会議から辞書の候補を探す」と同じ材料。REQ-DIC-072）を使い、
 ///         どちらもなければ会議の記録（新しい順に 5 件）を使う
+///     Hanasu --suggest-dictionary --screen | --screen-text <OCR の行のファイル> [--dictionary <辞書ファイル>] [--ai …] [--model <id>]
+///         画面から辞書の候補を探す（REQ-DIC-075）。--screen はアプリと同じフィルタで今の画面を撮って読む（画面収録の許可が要る）。
+///         --screen-text はファイルの 1 行を OCR の 1 行として使う。送る材料と、候補を `読み => 表記` の行で出す
 ///     Hanasu --render-dictionary-settings <出力.png> [--dictionary <辞書ファイル>]
 ///         設定画面の辞書の欄を画像にする（見た目の確認用）
 ///
@@ -80,6 +83,11 @@ enum DictionaryCLI {
     @MainActor
     private static func suggest(_ args: [String], dictionary: UserDictionary) async throws {
         let settings = AppSettings.shared
+        // 要件: REQ-DIC-075（--meeting・--from-file と同じく、ここで分ける。後ろに置くと最近の会議が送られる）
+        if args.contains("--screen") || args.contains("--screen-text") {
+            try await suggestFromScreen(args, dictionary: dictionary)
+            return
+        }
         if let folder = value(after: "--meeting", in: args) {
             try await suggestFromMeeting(URL(fileURLWithPath: folder, isDirectory: true), args: args, dictionary: dictionary)
             return
@@ -101,6 +109,42 @@ enum DictionaryCLI {
             corpus: corpus, existing: dictionary, client: client, model: model)
         print(String(format: "[候補 %@ %.1fs] 音声入力 %d 件 / 会議 %d 件 → %d 件", model, Date().timeIntervalSince(started),
                      corpus.dictations.count, corpus.meetings.count, candidates.count))
+        for c in candidates {
+            print("\(c.entry.line)\t# \(c.reason)")
+        }
+    }
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-237
+    /// 画面から候補を探す（候補の画面と同じ材料・上限・絞り込み）
+    @MainActor
+    private static func suggestFromScreen(_ args: [String], dictionary: UserDictionary) async throws {
+        let settings = AppSettings.shared
+        let lines: [ScreenTextLine]
+        var displays = 1
+        if let path = value(after: "--screen-text", in: args) {
+            lines = try String(contentsOfFile: path, encoding: .utf8)
+                .split(whereSeparator: \.isNewline).map(String.init).filter { !$0.isEmpty }
+                .enumerated().map { ScreenTextLine(text: $1, display: 0, inTarget: false, y: Double($0) * 20, x: 0) }
+        } else {
+            let request = ScreenSnapshotReader.Request(
+                targetPID: nil, excludedApps: ScreenContextSettings.shared.excludedApps,
+                languages: ScreenSnapshotReader.languages(localeIdentifier: settings.localeIdentifier))
+            let shots = try await ScreenSnapshotReader.captureAll(request)
+            displays = shots.count
+            lines = try await ScreenSnapshotReader.recognizeAll(shots, languages: request.languages)
+        }
+        let client = try TextAIClient.cli(args: args, settings: settings, for: .meeting, timeout: 120)
+        let model = TextAIClient.cliModel(args: args, settings: settings, for: .meeting)
+        let material = DictionarySuggester.screenMaterial(
+            lines, budget: DictionarySuggester.budget(for: client, existing: dictionary, instruction: DictionarySuggester.screenInstruction))
+        guard !material.isEmpty else { throw GeminiError.emptyResponse(reason: "画面から文字を読み取れませんでした") }
+        print("[材料] \(displays) 画面 / 語 \(material.terms.count) 個 / 行 \(material.lines.count) 行 / \(material.text.count) 文字\(material.truncated ? "（一部を外した）" : "")")
+        print(material.text)
+        print("---")
+        let started = Date()
+        let candidates = try await DictionarySuggester.suggestFromScreen(material, existing: dictionary, client: client, model: model)
+        print(String(format: "[候補 %@ %.1fs] → %d 件", model, Date().timeIntervalSince(started), candidates.count))
         for c in candidates {
             print("\(c.entry.line)\t# \(c.reason)")
         }
