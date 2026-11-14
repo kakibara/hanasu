@@ -336,7 +336,13 @@ final class DictationController {
 
         Task {
             do {
+                // マイクのない Mac（Mac mini など）では、許可の確認や録音の開始で待ったまま戻らないことがあったので、
+                // 先に入力機器の有無を見て、なければすぐエラーにする
+                guard !AudioDevices.inputs.isEmpty else { throw SpeechRecognizerError.noInputDevice }
+                // 準備中から進まないとき、どこで止まったかが分かるように段階を残す
+                appLog.notice("preparing: mic=\(Permissions.microphoneStatus.rawValue) speech=\(Permissions.speechStatus.rawValue) engine=\(self.settings.dictationEngine.rawValue)")
                 try await Permissions.ensureRecordingPermissions(speechRecognition: settings.dictationEngine == .apple)
+                appLog.notice("preparing: permissions ok, starting recognizer")
                 try await recognizer.start(
                     localeIdentifier: settings.localeIdentifier,
                     engine: settings.engine,
@@ -353,6 +359,7 @@ final class DictationController {
                 finishCancelled()
                 return
             }
+            appLog.notice("preparing: recognizer started")
             state = .recording
             playSound("Tink")
             hud.show(.recording)

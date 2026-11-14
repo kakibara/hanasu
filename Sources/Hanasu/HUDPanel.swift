@@ -264,7 +264,11 @@ private struct HUDView: View {
                 .foregroundStyle(.red)
                 .symbolEffect(.pulse)
         case .preparing, .processing:
+            // スピナーは AppKit の部品（NSProgressIndicator）なので、準備中にクリックされると、
+            // SwiftUI のヒットテストが AppKit の部品を調べる経路で落ちた（2.6.1・macOS 27 のクラッシュ報告）。
+            // スピナーはクリックを受けないので、ヒットテストの対象から外す
             ProgressView().controlSize(.small).accessibilityLabel(tr("処理中"))
+                .allowsHitTesting(false)
         case .done:
             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
         case .error:
