@@ -1841,4 +1841,73 @@
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>रद्द करें</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>स्क्रीन से शब्दकोश के सुझाव खोजें(&amp;D)…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — स्क्रीन से शब्दकोश के सुझाव खोजें</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>स्क्रीन से शब्दकोश के सुझाव खोजें</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>आपकी स्क्रीन पर दिख रहा टेक्स्ट इसी PC पर पढ़ा जाता है (इमेज न भेजी जाती है, न सहेजी जाती है)। Hanasu की विंडो, पासवर्ड मैनेजर, सूचनाएँ और साइन-इन डायलॉग नहीं पढ़े जाते। बाकी सब पढ़ा जाता है, जिसमें ब्राउज़र के अंदर पासवर्ड मैनेजर के एक्सटेंशन और टर्मिनल भी शामिल हैं। पढ़ा गया टेक्स्ट सिर्फ़ “सुझाव खोजें” पर क्लिक करने पर भेजा जाता है, और सिर्फ़ उसी AI को जिसे सेटिंग्स के “AI” टैब में “मिनट्स” के लिए चुना गया है (“स्थानीय” हो तो यह इस PC से बाहर नहीं जाता)।</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>स्क्रीन का टेक्स्ट पढ़ा जा रहा है…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>{0} स्क्रीन से पढ़ा गया; {1} शब्द और {2} लाइनें भेजी जाएँगी।</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>भेजें: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>उच्चारण का अनुमान Gemini और Claude ज़्यादा सही लगाते हैं (सेटिंग्स → “AI” → “मिनट्स” में बदल सकते हैं)।</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>स्क्रीन पर टेक्स्ट बहुत ज़्यादा है, इसलिए उसका सिर्फ़ कुछ हिस्सा भेजा जाएगा।</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>Windows में {0} के लिए टेक्स्ट पहचान इंस्टॉल नहीं है, इसलिए टेक्स्ट {1} में पढ़ा गया। Windows सेटिंग्स → समय और भाषा → भाषा और क्षेत्र में उस भाषा के लिए “ऑप्टिकल वर्ण पहचान” जोड़ सकते हैं।</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>शब्द</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>स्क्रीन की लाइनें</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(कुछ नहीं)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>सुझाव खोजें</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>जोड़ने के लिए आइटम चुनें।</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>बिना उच्चारण (सिर्फ़ शब्द जोड़ा जाएगा)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>उच्चारण:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>स्क्रीन से टेक्स्ट नहीं पढ़ा जा सका।</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>कैप्चर करने लायक कोई स्क्रीन नहीं मिली।</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>स्क्रीन कैप्चर नहीं हो सकी: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>स्क्रीन का टेक्स्ट नहीं पढ़ा जा सका: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Windows में किसी भी भाषा के लिए टेक्स्ट पहचान (OCR) इंस्टॉल नहीं है, इसलिए स्क्रीन नहीं पढ़ी जा सकी। Windows सेटिंग्स → समय और भाषा → भाषा और क्षेत्र में किसी भाषा के लिए “ऑप्टिकल वर्ण पहचान” जोड़ें।</value>
+  </data>
 </root>

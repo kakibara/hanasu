@@ -46,7 +46,7 @@ Ele é inspirado no Typeless, Wispr Flow, Aqua Voice e Granola. O código-fonte 
 | **Edite por voz** | Selecione um texto, pressione <kbd>⌃⌥⌘ E</kbd> e diga "deixe mais educado", "transforme em tópicos" ou "traduza para o inglês". |
 | **Estilos por app** | O texto fica informal e curto no Slack, educado e com parágrafos no Mail, e em estilo escrito no Pages, Word e Notion. Você pode mudar a predefinição de cada app ou fazer a IA aprender um estilo personalizado com os seus próprios textos (cole o texto ou escolha um arquivo do Word, de texto ou Markdown). |
 | **Snippets** | Diga "assinatura de e-mail" para inserir um texto salvo exatamente como você o escreveu. Snippets nunca são enviados para a IA. |
-| **Dicionário** | Adicione nomes próprios e regras de substituição como `ストックマーク => Stockmark`. As regras também valem para as transcrições das reuniões. A partir de uma reunião aberta em Anotações de reunião, a IA pode sugerir novas entradas tiradas dessa reunião (no Mac, também do seu histórico e das reuniões recentes), e você adiciona só as que escolher. |
+| **Dicionário** | Adicione nomes próprios e regras de substituição como `ストックマーク => Stockmark`. As regras também valem para as transcrições das reuniões. A partir de uma reunião aberta em Anotações de reunião, a IA pode sugerir novas entradas tiradas dessa reunião (no Mac, também do seu histórico e das reuniões recentes), e você adiciona só as que escolher. Com **Buscar sugestões para o dicionário na tela…** no menu, o Hanasu lê as palavras nas suas telas e as sugere junto com a forma como provavelmente serão reconhecidas quando faladas (por exemplo `Jスリー => J3`); você vê o que será enviado antes que qualquer coisa vá para a IA. |
 | **Contexto da tela** *(opcional)* | O Hanasu lê o título da janela e o texto ao redor do cursor, para que os nomes batam com o que já está na tela. Campos de senha nunca são lidos. |
 | **Texto da captura de tela** *(opcional, Mac)* | O Hanasu faz uma captura de todas as suas telas, lê o texto no seu próprio Mac e passa só esse texto para a IA, para que nomes e números de modelo de outras janelas (por exemplo, “QX-7s”) sejam escritos do jeito que aparecem. A imagem nunca é enviada nem salva. Ative ou desative para uma gravação com o botão no HUD. Precisa da permissão de Gravação de Tela. |
 | **Escolha o microfone** *(Mac)* | Escolha o microfone nos Ajustes, ou troque pelo botão de microfone no HUD sem interromper a gravação. |
@@ -153,7 +153,7 @@ Baixe a versão mais recente em [**Releases**](https://github.com/kakibara/hanas
 1. Descompacte o arquivo e mova `Hanasu.app` para **Aplicativos**.
 2. O app é autoassinado e não notarizado, então o macOS o bloqueia na primeira vez. Clique em **OK**, depois abra **Ajustes do Sistema → Privacidade e Segurança** e clique em **Abrir Mesmo Assim**.
    Você também pode executar `xattr -dr com.apple.quarantine /Applications/Hanasu.app`.
-3. Quando solicitado, permita **Microfone**, **Reconhecimento de Fala** e **Acessibilidade**. A Acessibilidade é necessária para colar com ⌘V. A **Gravação de Tela** só é solicitada se você ativar o texto da captura de tela.
+3. Quando solicitado, permita **Microfone**, **Reconhecimento de Fala** e **Acessibilidade**. A Acessibilidade é necessária para colar com ⌘V. A **Gravação de Tela** só é solicitada se você ativar o texto da captura de tela ou buscar sugestões para o dicionário na tela.
 
 </details>
 
@@ -198,7 +198,7 @@ Você pode mudar todos os atalhos nos Ajustes. O guia completo do usuário (em j
 ## Privacidade
 
 - **Por padrão, o áudio fica no seu dispositivo.** O reconhecimento de fala, o Whisper e a diarização de falantes rodam todos localmente.
-- **A IA recebe texto, não áudio.** O Gemini ou o Claude recebe a transcrição. Dependendo dos seus ajustes, também pode receber o nome do app em que você está digitando, o contexto da tela, o texto lido de uma captura da sua tela (nunca a imagem) e as transcrições de reuniões para a função Perguntar e para o chat com IA da reunião.
+- **A IA recebe texto, não áudio.** O Gemini ou o Claude recebe a transcrição. Dependendo dos seus ajustes, também pode receber o nome do app em que você está digitando, o contexto da tela, o texto lido de uma captura da sua tela (nunca a imagem) e as transcrições de reuniões para a função Perguntar e para o chat com IA da reunião. Quando você busca sugestões para o dicionário na tela, as palavras e linhas lidas das suas telas só são enviadas depois que você as confere e aperta o botão.
 - **Local e Apple também mantêm o texto no seu dispositivo.** Se você escolher qualquer um dos dois, nada é enviado a um serviço de IA. O único download é o próprio modelo.
 - **O áudio só vai para o Google se você escolher.** Se você selecionar o mecanismo de fala Gemini, o áudio gravado é enviado ao Google.
 - **Os agentes só recebem reuniões se você os conectar.** O comando `hanasu` e o servidor MCP dele só leem reuniões quando você ou um agente os chamam, e o que eles retornam vai para esse agente e para o provedor da IA dele.

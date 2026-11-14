@@ -1841,4 +1841,73 @@
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>إلغاء</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>البحث عن مقترحات للقاموس على الشاشة(&amp;D)…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — البحث عن مقترحات للقاموس على الشاشة</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>البحث عن مقترحات للقاموس على الشاشة</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>يُقرأ النص الظاهر على شاشاتك داخل هذا الكمبيوتر (لا تُرسل الصورة ولا تُحفظ). لا تُقرأ نوافذ Hanasu ولا برامج إدارة كلمات السر ولا الإشعارات ولا نوافذ تسجيل الدخول. ويُقرأ كل ما عدا ذلك، بما فيه إضافات إدارة كلمات السر داخل المتصفح والطرفيات. لا يُرسل النص المقروء إلا عند الضغط على “البحث عن مقترحات”، ولا يُرسل إلا إلى AI المختار لـ “المحضر” في علامة التبويب “AI” في الإعدادات (مع “محلي” لا يخرج من هذا الكمبيوتر).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>جارٍ قراءة النص على الشاشة…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>تمت القراءة من الشاشات: {0}. سيُرسل: كلمات {1}، وأسطر {2}.</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>الإرسال إلى: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini وClaude أدقّ في تخمين النطق (يمكنك تغييره من “المحضر” ضمن “AI” في الإعدادات).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>النص على الشاشة كثير، لذا سيُرسل جزء منه فقط.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>التعرف على النص للغة {0} غير مثبت في Windows، لذا قُرئ النص باللغة {1}. يمكنك إضافة “التعرف الضوئي على الحروف” لتلك اللغة في إعدادات Windows ← الوقت واللغة ← اللغة والمنطقة.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>الكلمات</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>أسطر الشاشة</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(لا شيء)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>البحث عن مقترحات</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>اختر ما تريد إضافته.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>بلا نطق (تُسجَّل الكلمة فقط)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>النطق:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>تعذّرت قراءة النص من الشاشة.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>لم يُعثر على شاشة يمكن التقاطها.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>تعذّر التقاط الشاشة: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>تعذّرت قراءة النص على الشاشة: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>التعرف على النص (OCR) غير مثبت في Windows لأي لغة، لذا تعذّرت قراءة الشاشة. أضف “التعرف الضوئي على الحروف” للغةٍ ما في إعدادات Windows ← الوقت واللغة ← اللغة والمنطقة.</value>
+  </data>
 </root>

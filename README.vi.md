@@ -46,7 +46,7 @@ Hanasu lấy cảm hứng từ Typeless, Wispr Flow, Aqua Voice và Granola. Mã
 | **Chỉnh sửa bằng giọng nói** | Chọn một đoạn văn bản, nhấn <kbd>⌃⌥⌘ E</kbd> và nói "viết lịch sự hơn", "chuyển thành gạch đầu dòng" hoặc "dịch sang tiếng Anh". |
 | **Văn phong theo từng ứng dụng** | Trong Slack, văn bản thân mật và ngắn gọn; trong Mail, lịch sự và chia đoạn; trong Pages, Word và Notion, theo văn viết. Bạn có thể đổi thiết lập sẵn cho từng ứng dụng, hoặc để AI học một văn phong tùy chỉnh từ chính bài viết của bạn (dán văn bản hoặc chọn tệp Word, tệp văn bản hay Markdown). |
 | **Đoạn mẫu** | Nói "chữ ký email" để chèn đúng nguyên văn đoạn văn bản bạn đã lưu. Đoạn mẫu không bao giờ được gửi đến AI. |
-| **Từ điển** | Thêm danh từ riêng và quy tắc thay thế như `ストックマーク => Stockmark`. Quy tắc thay thế cũng được áp dụng cho bản chép lời cuộc họp. Khi mở một cuộc họp trong Ghi chép cuộc họp, AI có thể gợi ý mục mới từ chính cuộc họp đó (trên Mac, còn từ lịch sử và các cuộc họp gần đây của bạn), và bạn chỉ thêm những mục mình chọn. |
+| **Từ điển** | Thêm danh từ riêng và quy tắc thay thế như `ストックマーク => Stockmark`. Quy tắc thay thế cũng được áp dụng cho bản chép lời cuộc họp. Khi mở một cuộc họp trong Ghi chép cuộc họp, AI có thể gợi ý mục mới từ chính cuộc họp đó (trên Mac, còn từ lịch sử và các cuộc họp gần đây của bạn), và bạn chỉ thêm những mục mình chọn. Với **Tìm gợi ý cho từ điển trên màn hình…** trong menu, Hanasu đọc các từ trên màn hình của bạn và gợi ý chúng kèm theo cách chúng dễ bị nhận dạng khi nói (ví dụ `Jスリー => J3`); bạn xem được những gì sẽ được gửi trước khi có bất cứ thứ gì đến AI. |
 | **Ngữ cảnh màn hình** *(tùy chọn bật)* | Hanasu đọc tiêu đề cửa sổ và văn bản quanh con trỏ để tên riêng khớp với những gì đã có trên màn hình. Ô mật khẩu không bao giờ bị đọc. |
 | **Chữ trên ảnh chụp màn hình** *(tùy chọn bật, Mac)* | Hanasu chụp tất cả màn hình của bạn, đọc chữ ngay trên Mac và chỉ gửi phần chữ đó cho AI, để tên riêng và số hiệu mẫu ở các cửa sổ khác (ví dụ “QX-7s”) được viết đúng như trên màn hình. Hình ảnh không bao giờ được gửi đi hay lưu lại. Bạn có thể bật hoặc tắt cho từng lần ghi âm bằng nút trên HUD. Cần quyền Ghi màn hình. |
 | **Chọn micrô** *(Mac)* | Chọn micrô trong Cài đặt, hoặc đổi micrô bằng nút micrô trên HUD mà không cần dừng ghi âm. |
@@ -153,7 +153,7 @@ Tải bản mới nhất từ [**Releases**](https://github.com/kakibara/hanasu/
 1. Giải nén tệp và di chuyển `Hanasu.app` vào **Ứng dụng**.
 2. Ứng dụng được tự ký và chưa được Apple công chứng (notarize), nên macOS sẽ chặn ở lần mở đầu tiên. Bấm **Xong**, sau đó mở **Cài đặt hệ thống → Quyền riêng tư & Bảo mật** và bấm **Vẫn mở**.
    Bạn cũng có thể chạy `xattr -dr com.apple.quarantine /Applications/Hanasu.app` thay vào đó.
-3. Khi được hỏi, hãy cho phép **Micrô**, **Nhận dạng giọng nói** và **Trợ năng**. Quyền Trợ năng là cần thiết để dán bằng ⌘V. Quyền **Ghi màn hình** chỉ được hỏi khi bạn bật chữ trên ảnh chụp màn hình.
+3. Khi được hỏi, hãy cho phép **Micrô**, **Nhận dạng giọng nói** và **Trợ năng**. Quyền Trợ năng là cần thiết để dán bằng ⌘V. Quyền **Ghi màn hình** chỉ được hỏi khi bạn bật chữ trên ảnh chụp màn hình hoặc tìm gợi ý cho từ điển trên màn hình.
 
 </details>
 
@@ -198,7 +198,7 @@ Bạn có thể thay đổi mọi phím tắt trong Cài đặt. Hướng dẫn 
 ## Quyền riêng tư
 
 - **Âm thanh mặc định ở lại trên thiết bị của bạn.** Nhận dạng giọng nói, Whisper và phân tách người nói đều chạy cục bộ.
-- **AI nhận văn bản, không nhận âm thanh.** Gemini hoặc Claude nhận bản chép lời. Tùy theo cài đặt, AI cũng có thể nhận tên ứng dụng bạn đang gõ, ngữ cảnh màn hình, chữ đọc được từ ảnh chụp màn hình (không bao giờ gửi hình ảnh) và bản chép lời cuộc họp cho tính năng Hỏi đáp và trò chuyện với AI trong cuộc họp.
+- **AI nhận văn bản, không nhận âm thanh.** Gemini hoặc Claude nhận bản chép lời. Tùy theo cài đặt, AI cũng có thể nhận tên ứng dụng bạn đang gõ, ngữ cảnh màn hình, chữ đọc được từ ảnh chụp màn hình (không bao giờ gửi hình ảnh) và bản chép lời cuộc họp cho tính năng Hỏi đáp và trò chuyện với AI trong cuộc họp. Khi bạn tìm gợi ý cho từ điển trên màn hình, các từ và dòng đọc được từ màn hình chỉ được gửi đi sau khi bạn kiểm tra và nhấn nút.
 - **Cục bộ và Apple cũng giữ văn bản trên thiết bị của bạn.** Nếu bạn chọn một trong hai, không có gì được gửi đến dịch vụ AI nào. Thứ duy nhất được tải về là chính mô hình.
 - **Âm thanh chỉ được gửi đến Google nếu bạn chọn.** Nếu bạn chọn công cụ nhận dạng giọng nói Gemini, âm thanh đã ghi sẽ được gửi đến Google.
 - **Agent chỉ nhận cuộc họp khi bạn kết nối.** Lệnh `hanasu` và máy chủ MCP của nó chỉ đọc cuộc họp khi bạn hoặc một agent gọi đến, và nội dung trả về sẽ được chuyển cho agent đó và nhà cung cấp AI của agent.

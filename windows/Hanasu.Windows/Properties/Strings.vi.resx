@@ -1841,4 +1841,73 @@ Các ứng dụng đã thêm và quy tắc bổ sung của từng ứng dụng s
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>Hủy</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Tìm gợi ý cho từ điể&amp;n trên màn hình…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Tìm gợi ý cho từ điển trên màn hình</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Tìm gợi ý cho từ điển trên màn hình</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Chữ đang hiển thị trên các màn hình được đọc ngay trong PC này (không gửi và không lưu hình ảnh). Cửa sổ Hanasu, trình quản lý mật khẩu, thông báo và hộp thoại đăng nhập không được đọc. Mọi thứ khác đều được đọc, kể cả tiện ích quản lý mật khẩu trong trình duyệt và cửa sổ terminal. Chữ chỉ được gửi khi bạn bấm “Tìm gợi ý”, và chỉ đến AI đã chọn cho “Biên bản họp” trên tab “AI” trong Cài đặt (với “Cục bộ”, không có gì rời khỏi PC này).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Đang đọc chữ trên màn hình…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Đã đọc từ {0} màn hình; sẽ gửi {1} từ và {2} dòng.</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Gửi đến: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini và Claude đoán cách đọc chính xác hơn (có thể đổi ở “Biên bản họp” trên tab “AI” trong Cài đặt).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>Chữ trên màn hình quá nhiều nên chỉ gửi một phần.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>Windows chưa cài tính năng nhận dạng chữ cho {0}, nên chữ đã được đọc bằng {1}. Bạn có thể thêm “Nhận dạng ký tự quang học” của ngôn ngữ đó trong Cài đặt Windows → Thời gian &amp; ngôn ngữ → Ngôn ngữ &amp; khu vực.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Từ</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Các dòng trên màn hình</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(không có)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Tìm gợi ý</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Hãy chọn những mục bạn muốn thêm.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Không có cách đọc (chỉ đăng ký từ)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Cách đọc:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Không đọc được chữ trên màn hình.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>Không tìm thấy màn hình nào để chụp.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Không chụp được màn hình: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Không đọc được chữ trên màn hình: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Windows chưa cài tính năng nhận dạng chữ (OCR) cho ngôn ngữ nào, nên không đọc được màn hình. Hãy thêm “Nhận dạng ký tự quang học” của một ngôn ngữ trong Cài đặt Windows → Thời gian &amp; ngôn ngữ → Ngôn ngữ &amp; khu vực.</value>
+  </data>
 </root>

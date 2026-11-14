@@ -1841,4 +1841,73 @@ Hinzugefügte Apps und die zusätzlichen Regeln der einzelnen Apps werden gelös
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>Abbrechen</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>&amp;Wörterbuchvorschläge vom Bildschirm suchen…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Wörterbuchvorschläge vom Bildschirm suchen</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Wörterbuchvorschläge vom Bildschirm suchen</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Der auf den Bildschirmen angezeigte Text wird auf diesem PC gelesen (das Bild wird weder gesendet noch gespeichert). Hanasu-Fenster, Passwortmanager, Benachrichtigungen und Anmeldedialoge werden nicht gelesen. Alles andere wird gelesen, auch Passwortmanager-Erweiterungen im Browser und Terminals. Der Text wird nur gesendet, wenn auf „Vorschläge suchen“ geklickt wird, und nur an die KI, die im Tab „AI“ der Einstellungen für „Protokoll“ ausgewählt ist (bei „Lokal“ verlässt er diesen PC nicht).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Text auf dem Bildschirm wird gelesen…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Gelesene Bildschirme: {0} · Zu sendende Wörter: {1} · Zu sendende Zeilen: {2}</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Senden an: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini und Claude schätzen die Aussprache zuverlässiger (änderbar unter „Protokoll“ im Tab „AI“ der Einstellungen).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>Auf dem Bildschirm ist viel Text, daher wird nur ein Teil gesendet.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>Die Texterkennung für {0} ist in Windows nicht installiert, daher wurde der Text als {1} gelesen. Die „Optische Zeichenerkennung“ dieser Sprache kann unter Einstellungen &gt; Zeit und Sprache &gt; Sprache und Region hinzugefügt werden.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Wörter</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Bildschirmzeilen</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(Keine)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Vorschläge suchen</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Hinzuzufügende Einträge auswählen.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Ohne Aussprache (nur das Wort wird registriert)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Aussprache:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Vom Bildschirm konnte kein Text gelesen werden.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>Kein Bildschirm zum Aufnehmen gefunden.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Bildschirm konnte nicht aufgenommen werden: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Text auf dem Bildschirm konnte nicht gelesen werden: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>In Windows ist für keine Sprache eine Texterkennung (OCR) installiert, daher konnte der Bildschirm nicht gelesen werden. Die „Optische Zeichenerkennung“ einer Sprache unter Einstellungen &gt; Zeit und Sprache &gt; Sprache und Region hinzufügen.</value>
+  </data>
 </root>

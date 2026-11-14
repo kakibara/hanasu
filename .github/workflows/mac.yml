@@ -8,6 +8,7 @@ on:
       - "Sources/**"
       - "Package.swift"
       - "Package.resolved"
+      - "common/testdata/logic/**"
       - ".github/workflows/mac.yml"
   push:
     branches: ["main"]
@@ -46,6 +47,8 @@ jobs:
           $B --test-saved-templates
           $B --test-speaker-names
           $B --test-dictionary
+          # 確かめ方: REQ-DIC-075（画面は撮らず AI も呼ばない。共有の例 common/testdata/logic/screen-terms.json を読む）
+          $B --test-screen-dictionary
           $B --test-paste-target
           # 確かめ方: REQ-REL-010, REQ-REL-011（通信しない。版の比べ方・リリースの読み方・スキップ・ホストの制限）
           $B --update-selftest

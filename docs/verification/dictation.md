@@ -360,3 +360,18 @@ ScreenCaptureKit と Vision の小さな試作（`SCShareableContent` → `SCScr
   - 「昨日のミーティングの資料を送ります」（画面の語と音が遠い）は、文脈ありでも変わらなかった。
 - Apple の fm: 引数を書き出す偽の fm（`HANASU_FM_PATH`）で、`<screen_ocr>` の中身が上限の 500 文字（書記素の数）に収まっていることを見た。本物の fm は macOS 27 で確かめる。
 - Gemini・Claude: この Mac の CLI からは認証情報が使えず、確かめていない（アプリで確かめる）。
+
+## 21. 画面から辞書の候補を探す（REQ-DIC-075、2026-11-13、macOS 26.6.2、Apple M3・メモリ 24 GB）
+
+- `.build/debug/Hanasu --test-screen-dictionary`: 31 項目すべて OK（材料・上限と truncated・画面からの絞り込み・既定の絞り込みが変わらないこと・共有の例 `common/testdata/logic/screen-terms.json` の 13 件・選んだ読みだけを足すこと・足した辞書で「Jスリーの件ですが」が「J3の件ですが」になること）。
+- `--render-screen-dictionary` を日本語・英語・ロシア語で描き、10 の状態（許可がない・会議の記録中・読んでいる・読んだ・一部だけ送る・探している・候補・0 件・エラー・追加した）で文字が切れたり重なったりしていないことを見た。
+- 実際の AI（`--suggest-dictionary --screen-text`、OCR の行は「J3 の進捗（v2.1 のリリース）」「Kubernetes のクラスタを移行する」「株式会社ストックマーク 営業部 佐藤」「Anews の商談メモ」「ファイル 編集 表示 ウインドウ ヘルプ」の 5 行。材料は語 19 個・行 5 行・221 文字）:
+  - ローカル（Gemma 4 E4B、`--ai local --model gemma-4-e4b`）: 10.7 秒で 2 件。`ジェイスリー => J3`、`ブイ ツー ドット ワン => v2.1`。「Jスリー」の形（実際に認識されやすい形）は出ず、Kubernetes・Anews・社名は挙がらなかった。メニューの語（ファイル・編集など）は挙げなかった。受け入れ条件 7 のローカルは「試して残す」なので不合格にはしない。候補の画面で、ローカルのときは Gemini・Claude のほうが確かだと添えている。
+  - Gemini・Claude: この Mac の CLI に認証情報がなく、確かめていない（受け入れ条件 7 の必須の確かめが残っている。鍵のある環境で `--suggest-dictionary --screen-text <ファイル> --ai gemini|claude` を流す）。
+  - Apple の fm・文字起こしの言語が英語のとき: 確かめていない。
+- 実機の画面を撮る流れ（`--suggest-dictionary --screen`・メニューから選ぶ・許可のダイアログ・全画面表示のアプリの上・録音中にメニューが灰色になること）: 確かめていない（UI のテスト項目 UX-203・204 の remaining）。
+- Windows: この Mac で `dotnet test Hanasu.Core.Tests`（856 件すべて合格。`ScreenDictionaryTests` で共有の例・OCR の単語のつなぎ方・絞り込み・材料・既定の除外の名前を見る）と `dotnet build Hanasu.Windows`（警告 0・エラー 0）。Windows の実機がなく、撮る（BitBlt）・`WDA_EXCLUDEFROMCAPTURE` が BitBlt に効くか・除外のウインドウの黒塗りの位置（DPI の違う画面）・OCR の言語の落ち方・タイル・既定の除外の exe 名（DEC-DIC-235）・画面の見た目は確かめていない。CI の windows-latest の「Dump screen text」（`continue-on-error`）で、偽の KeePassXC の文字が出ないこと・日本語の行が空白なしでつながることを見る。
+- 2026-11-14 追記: PR #118 の最初の CI（windows-latest）で、「Dump screen text」が撮る段階で落ちていた（`CopyFromScreen` に `SourceCopy | CaptureBlt` を渡すと、.NET が列挙の値として不正とみなして例外にする）。`continue-on-error` のためジョブは通っていた。`SourceCopy` だけに直し、直したあとの CI の結果をここに書く。
+- 2026-11-14 追記: マージの前に差分を別のエージェントに読ませ、次を直した。撮っている間（非同期）に音声入力が始まったら候補の画面を出さない（Mac。DEC-DIC-230）、追加して 2 秒後に閉じる処理が、そのあいだに開き直した画面を閉じない（Mac）、読みをすべて外した登録済みの表記を足さない（Mac・Windows。DEC-DIC-231）、行の前後の空白の除き方を Mac にそろえる（Windows。全角空白・NBSP）。`--test-screen-dictionary` と `ScreenDictionaryTests` に項目を足し、どちらも通った（Windows は 858 件）。
+- 2026-11-14 の CI（windows-latest、Windows Server 2025、`fc9b608`）の「Dump screen text」: 撮る・日本語の OCR（`language=ja fallback=false`）・除外（偽の KeePassXC の文字は出ず、名前を変えない notepad では読めた）・日本語の行のつなぎ方（「株式会社ストッ…」が空白なしでつながる）が動いた。手順が失敗にしたのは比べ方が厳しすぎたため（OCR が小さい「ストックマーク」を「ストッりーり」と読み違え、左端の「H」が欠けた）で、比べる文字を「株式会社スト」「SECRET-7Q」に直した。画面の見た目・WDA・DPI の違う画面・実機の除外の exe 名は、まだ確かめていない。
+- 既知の制限（直していない）: 会議の AI がローカルか Apple で、既存の辞書がとても大きいと、材料に使える上限が 0 になり、文字を読めていても「画面から文字を読み取れませんでした。」と出る。正しい理由を出すには新しい文言（17 言語）が要るので、別に直す。

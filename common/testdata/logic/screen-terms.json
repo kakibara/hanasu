@@ -1,0 +1,164 @@
+{
+  "_comment": "画面の文字からの語の取り出し（REQ-DIC-041・075、DEC-DIC-183・234）と、Windows の OCR の単語のつなぎ方（DEC-DIC-234）の例。Mac は .build/debug/Hanasu --test-screen-dictionary、Windows は Hanasu.Core.Tests の ScreenDictionaryTests が読む（DEC-DIC-237）。terms は 1 行から出てきた順に取り出す語。ocrJoin は OCR が返した単語の並びと、つなぎ直した行（両側が漢字・かな・カタカナの単語は空白なしで、ほかは空白でつなぐ）",
+  "terms": [
+    {
+      "line": "J3 の件は v2.1 で対応",
+      "terms": [
+        "J3",
+        "v2.1",
+        "対応"
+      ]
+    },
+    {
+      "line": "Kubernetes と C++ の設定",
+      "terms": [
+        "Kubernetes",
+        "C++",
+        "設定"
+      ]
+    },
+    {
+      "line": "株式会社ストックマークの営業部",
+      "terms": [
+        "株式会社",
+        "ストックマーク",
+        "営業部"
+      ]
+    },
+    {
+      "line": "Müller と Иванов、김예린 さん",
+      "terms": [
+        "Müller",
+        "Иванов",
+        "김예린"
+      ]
+    },
+    {
+      "line": "会議は 2026/11/13 10:30 から",
+      "terms": [
+        "会議"
+      ]
+    },
+    {
+      "line": "全角のＪ３は語にしない",
+      "terms": [
+        "全角"
+      ]
+    },
+    {
+      "line": "ファイル名 report_final-v2.pdf を送る",
+      "terms": [
+        "ファイル",
+        "report_final-v2.pdf"
+      ]
+    },
+    {
+      "line": "مرحبا Hanasu",
+      "terms": [
+        "مرحبا",
+        "Hanasu"
+      ]
+    },
+    {
+      "line": "नमस्ते दुनिया Hanasu",
+      "terms": [
+        "नमस्ते",
+        "दुनिया",
+        "Hanasu"
+      ]
+    },
+    {
+      "line": "API キーと OAuth2.0",
+      "terms": [
+        "API",
+        "キー",
+        "OAuth2.0"
+      ]
+    },
+    {
+      "line": "メニュー ファイル 編集 表示",
+      "terms": [
+        "メニュー",
+        "ファイル",
+        "編集",
+        "表示"
+      ]
+    },
+    {
+      "line": "Ελληνικά και Café",
+      "terms": [
+        "Ελληνικά",
+        "και",
+        "Café"
+      ]
+    },
+    {
+      "line": "1,234円 と ¥500",
+      "terms": []
+    }
+  ],
+  "ocrJoin": [
+    {
+      "words": [
+        "株",
+        "式",
+        "会",
+        "社",
+        "ストックマーク"
+      ],
+      "line": "株式会社ストックマーク"
+    },
+    {
+      "words": [
+        "J3",
+        "の",
+        "件",
+        "は",
+        "v2.1",
+        "で",
+        "対",
+        "応"
+      ],
+      "line": "J3 の件は v2.1 で対応"
+    },
+    {
+      "words": [
+        "Hello",
+        "world"
+      ],
+      "line": "Hello world"
+    },
+    {
+      "words": [
+        "김예린",
+        "씨"
+      ],
+      "line": "김예린 씨"
+    },
+    {
+      "words": [
+        "库",
+        "伯",
+        "内",
+        "特",
+        "斯",
+        "Kubernetes"
+      ],
+      "line": "库伯内特斯 Kubernetes"
+    },
+    {
+      "words": [
+        "メニュー",
+        "ー"
+      ],
+      "line": "メニューー"
+    },
+    {
+      "words": [
+        "API",
+        "キー"
+      ],
+      "line": "API キー"
+    }
+  ]
+}

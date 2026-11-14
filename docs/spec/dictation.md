@@ -236,7 +236,7 @@
   3. 録音中にボタンでオンにすると、その時点の画面を撮る。オフにすると、撮ったものはその録音では AI に渡さない（読み取り中なら止めて捨てる）。止めた時点の状態で決まる。
   4. ボタンを押しても入力先のアプリのフォーカスは動かない（DEC-DIC-025）。
   5. この録音では使われないとき（整形がオフで翻訳もしない・入力先が除外アプリ・音声入力の AI の認証がない）、ボタンは「使われない」見た目（薄い灰色・ツールチップで理由）になる。HUD で翻訳の言語に切り替えるなどで使われるようになれば、通常の見た目に戻る。
-  6. 設定の欄: トグルがオンで画面収録の許可がないとき、欄の下に警告と「許可する…」ボタンを出す（DEC-DIC-068 と同じ形）。会議の記録中は「許可する…」を押せない（理由を添える）。除外アプリの欄は、AX の文脈かスクリーンショットのどちらかがオンなら編集できる。
+  6. 設定の欄: トグルがオンで画面収録の許可がないとき、欄の下に警告と「許可する…」ボタンを出す（DEC-DIC-068 と同じ形）。会議の記録中は「許可する…」を押せない（理由を添える）。除外アプリの欄はいつでも編集でき、画面から辞書の候補を探すとき（REQ-DIC-075）にも効く（2026-11-13 の依頼の回答で、「どちらかがオンなら編集できる」から変えた）。
   7. 選択を声で編集する HUD には出さない。
 - 出典: 2026-11-10 の依頼「常に有効にするのか、あるいは無効にするのか、というデフォルトの動作のオプションとともに、音声入力の開始、または音声入力の画面のところで切り替えられるようにしたい」。同日の回答で、HUD のボタン・許可するまで出さない、を決め、同日に計画を了承
 - 対象: Mac
@@ -355,6 +355,28 @@
 - 実装の場所: `MeetingRecorder.applyDictionary`、`MeetingRecorder.revertDictionary`、`MeetingDictionaryMenu`
 - Windows の実装: `MeetingController.ApplyDictionary`・`RevertDictionary`（`windows/Hanasu.Core/Meetings/MeetingController.cs`）、`windows/Hanasu.Windows/Views/MeetingWindow.xaml.cs`
 - 確かめ方: `.build/debug/Hanasu --test-meeting-dictionary`、`--render-meeting-dictionary <出力フォルダ>`。`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~MeetingDictionary|FullyQualifiedName~MeetingControllerTests"`
+
+### REQ-DIC-075 画面に出ている文字から辞書の候補を挙げてもらい、選んだものだけを足す
+- 内容: メニューの「画面から辞書の候補を探す…」を選ぶと、その時点のすべての画面を撮って文字を読む（OCR。画像はどこにも送らず、ファイルにも残さない）。AI に送る材料（語の一覧と画面の行）を候補の画面に見せ、ユーザーが「候補を探す」を押したときだけ、その材料を会議の AI（辞書の候補探しと同じ。DEC-COM-040）に送り、辞書の候補を挙げてもらう。候補には、画面にある表記と、AI が推測した「話すとこう認識されやすい」読みを付ける。ユーザーが選んだ候補と読みだけを辞書の末尾に足す。
+- 受け入れ条件:
+  1. 入口: Mac はメニューバーのメニュー（「Dock だけ」のときは Dock のメニューにも）、Windows はタスクトレイのメニューに「画面から辞書の候補を探す…」がある。音声入力の準備中・録音中・処理中と、選択を声で編集しているあいだは選べない（灰色）。選べてしまった場合も、何もしない。
+  2. 撮る: 選ぶと、メニューが閉じてから、つないでいるすべての画面を 1 回撮る。撮り終えてから候補の画面を開く（全画面表示のアプリの上で選んでも、そのアプリの画面が撮られる）。撮り直しはしない（もう一度撮るには、画面を閉じてメニューから選び直す）。
+  3. 送る前に見せる: 候補の画面に「画面の文字を読んでいます…」を出し、読み終えたら、実際に送る材料（「語」と「画面の行」の 2 つの欄）、画面・語・行の数、送り先の AI の名前、「候補を探す」ボタンを出す。材料が AI の上限に入りきらず一部を外したときは、ここで「画面の文字が多いので、一部だけを送ります。」と出す（見せた範囲と送る範囲は同じ）。「候補を探す」を押すまで、何も AI に送らない。「キャンセル」で閉じると、OCR も AI の呼び出しも止め、辞書を変えない。
+  4. 探す: 「候補を探す」を押すと「探しています…」を出す。
+  5. 候補と追加: 候補は表記と理由と、読みごとのチェックで並ぶ。既定ではどれもチェックしない。候補をチェックすると、その読みもすべてチェックされ、要らない読みは外せる。「選んだ N 件を辞書に追加」で、チェックした候補が、チェックした読みだけを付けて、辞書の末尾に `読み => 表記`（読みが残らなければ語だけ）の行として入る。追加すると画面を閉じ、「N 件を辞書に追加しました。」と知らせる。候補が 0 件なら「新しい候補は見つかりませんでした。」。
+  6. 絞り込み: 表記は、読みの有無によらず、画面から読んだ材料に出てくるものだけ（AI が作った語は除く）。読みは画面にないので AI の推測を使ってよいが、表記と同じ読み・1 文字の読み・長すぎる読み・既存の辞書や他の候補で使っている読み・区切り文字や矢印を含む読みは除き、1 つの候補の読みは 4 つまで（DEC-DIC-231）。辞書にすでにある表記は、新しい読みがあるときだけ残す。
+  7. 効くこと: 画面に「J3」が出ているとき、Gemini・Claude で探すと「J3」の候補に、音声認識が出しやすい形の読み（「Jスリー」を含む）が付く。その候補を足した辞書で `--apply-dictionary "Jスリーの件ですが"` が「J3の件ですが」になる。ローカル（Gemma 4 E4B。Mac の既定）・Apple の fm と、文字起こしの言語が英語のときは、試して結果を verification に残す（満たさなくても不合格にはしない）。送り先がローカル・Apple のときは、候補の画面に、読みの推測は Gemini・Claude のほうが確かであることを添える。
+  8. 写さないもの: Hanasu 自身のウインドウ（候補の画面・設定・HUD など）は写らない。Mac は、除外アプリ（REQ-DIC-040 と共有）とシステムの秘密が出る部分（DEC-DIC-182）も写らない。Windows は、既定の除外（パスワード管理アプリ・通知・認証のダイアログ。DEC-DIC-235）を読む前に塗りつぶす。候補の画面の説明に、写さないものと、写るもの（ブラウザの中のパスワード管理の拡張・ほかの画面のターミナルなど）を書く。
+  9. 許可（Mac）: 画面収録の許可がないとき、会議の記録中・議事録の作り直し中でなければ macOS の許可のダイアログを出し、候補の画面に「画面収録を許可したら、Hanasu を終了して開き直し、もう一度選んでください。」と「システム設定を開く」を出す。会議の記録中・作り直し中は求めず、「会議の記録が終わってから許可してください」と出す。どちらも撮らず、AI に何も送らない。
+  10. うまくいかないとき: 撮れなかった・文字を読めなかった（真っ黒・文字がない）ときは、理由を出し、送らない。Windows で文字起こしの言語の OCR が入っていないときは、入っている言語（なければ英語）で読み、そのことと追加のしかたを出す。どの言語でも読めないときは理由を出し、送らない。会議の AI が使えない（鍵がない・ローカルのモデルがない）、ネットにつながらない、時間切れ、応答が読めないときは、理由を出し、辞書を変えない。ローカルのモデルがないときは、ダウンロードを尋ねない（DEC-DIC-236）。
+  11. データ: 撮った画像は OCR が終わったら捨て、ディスクに書かない。読んだ文字は候補の画面を閉じるまでメモリの上だけに置き、ファイル・ログ・履歴に残さない。ログには画面の数・語の数・行の数・文字数・時間・送ったかだけを出す。送り先は会議の AI だけ。ローカルなら Mac・PC の外に出ない。Apple の fm では `fm respond` の引数に入り、動いている間は同じ Mac のほかのユーザーにも見える（DEC-COM-070）。これらを候補の画面の説明に書く。
+  12. 1 つだけ: 候補の画面が開いているときにもう一度選ぶと、新しく撮らずに、開いている画面を前に出す。候補の画面はタスクバー（Windows）・ウインドウの一覧（Mac）に出る。
+- 出典: 2026-11-13 の依頼「全画面を取り込んで辞書を登録するという機能を追加してください」。同日の 2 回の回答で、メニューの項目・AI が推測した読みも付ける・REQ-MTG-030 と REQ-DIC-042 を変える・Mac と Windows の両方・送るものを見せてから送る・Windows にも既定の除外、を決め、同日に計画（[plans/screen-dictionary.md](../plans/screen-dictionary.md)）を了承
+- 関係する要件: REQ-DIC-040, REQ-DIC-041, REQ-DIC-042, REQ-DIC-070, REQ-DIC-071, REQ-DIC-072, REQ-DIC-073, REQ-MTG-030, REQ-COM-032
+- 対象: Mac / Windows
+- 実装の場所: `ScreenDictionaryWindow`、`ScreenDictionaryModel`、`AppDelegate.openScreenDictionary`、`DictionarySuggester.screenMaterial`・`suggestFromScreen`、`ScreenSnapshotReader.captureAll`・`recognizeAll`
+- Windows の実装: `windows/Hanasu.Core/Text/ScreenDictionary.cs`、`windows/Hanasu.Core/Text/DictionarySuggester.cs`（`SuggestFromScreenAsync`）、`windows/Hanasu.Windows/Services/ScreenTextReader.cs`、`windows/Hanasu.Windows/Views/ScreenDictionaryWindow.cs`、`windows/Hanasu.Windows/TrayIcon.cs`
+- 確かめ方: `.build/debug/Hanasu --test-screen-dictionary`（AI を呼ばない部分）、`--suggest-dictionary --screen-text <OCR の行のファイル>`・`--suggest-dictionary --screen`（実際に AI を呼ぶ。`--screen` は画面収録の許可が要る）、`--render-screen-dictionary <出力フォルダ>`、`--apply-dictionary`。`cd windows && dotnet test Hanasu.Core.Tests --filter "FullyQualifiedName~ScreenDictionary|FullyQualifiedName~DictionarySuggester"`、`dotnet run --project Hanasu.Cli -- screen-dict-suggest <OCR の行のファイル>`、`Hanasu.exe --dump-screen-text <出力ファイル>`（CI の windows-latest でも動かす）。画面は UI のテスト項目
 
 ### REQ-DIC-080 入力できる場所がないときは、結果を画面に残して自分で貼れるようにする
 - 内容: 音声入力の結果を入れるときに、フォーカスが文字を入力できる場所にない（ペーストできない）と分かったら、結果の文章を画面に表示し、自動では閉じない。表示から文章をコピーでき、閉じるまで残る。
@@ -968,7 +990,7 @@
 - 実装の場所: `ScreenContextSettingsSection`
 
 ### DEC-DIC-180 スクリーンショットの設定は既定でオフにし、AX の画面の文脈とは別のスイッチにする
-- 決めたこと: 設定の「AI」→「画面の文脈」の欄に、既存の「画面の文脈を AI に渡す」とは別のトグル「スクリーンショットの文字も AI に渡す」を置く。既定はオフ。HUD のボタンが切り替えるのはこちらだけ。除外アプリの一覧は共有し、欄はどちらかがオンなら編集できる。欄の説明とフッターは、両方の許可が分かる文にする。
+- 決めたこと: 設定の「AI」→「画面の文脈」の欄に、既存の「画面の文脈を AI に渡す」とは別のトグル「スクリーンショットの文字も AI に渡す」を置く。既定はオフ。HUD のボタンが切り替えるのはこちらだけ。除外アプリの一覧は共有し、欄はいつでも編集できる（画面から辞書の候補を探すときにも使う。REQ-DIC-075。2026-11-13 に「どちらかがオンなら編集できる」から変えた）。欄の説明とフッターは、両方の許可が分かる文にする。
 - 理由: 画面全体の文字（他人のメッセージ・別のウインドウ）を AI に渡し、画面収録という強い許可も要るので、使う人が選んでからにする（DEC-DIC-060）。AX の文脈は軽くて許可も違うので、片方だけ使えるようにする。
 - 決めた場面: 2026-11-10 の計画（[plans/screen-ocr.md](../plans/screen-ocr.md)）
 - 関係する要件: REQ-DIC-041, REQ-DIC-042
@@ -976,7 +998,7 @@
 - 実装の場所: `ScreenContextSettings.useScreenshot`、`ScreenContextSettingsSection`
 
 ### DEC-DIC-181 すべての画面を ScreenCaptureKit で 1 回ずつ撮り、フィルタで除く
-- 決めたこと: `SCShareableContent` のすべての `SCDisplay` を、`SCContentFilter(display:excludingApplications:exceptingWindows:)` で 1 枚ずつ `SCScreenshotManager.captureImage` で撮る。解像度は点（ポイント）の 2 倍。撮るのは、録音を始めたとき（HUD の表示と並べて、非同期）と、HUD でオンにしたときの 1 回ずつ。撮り直しはしない。HUD は撮るときには出ているので、写さないのはフィルタで決める。除くアプリの一覧を作る関数（`ScreenSnapshotFilter`）はアプリと CLI で共有し、Hanasu のバンドル ID（CLI で動かすときは起動中の Hanasu.app も）・除外アプリ・DEC-DIC-182 のものを入れる。入力先のウインドウの枠は、録音開始時の前面のアプリ（PID）の、いちばん手前の画面に出ているウインドウの `frame` から取る。取れなければ、すべてを「入力先の外」として扱う。
+- 決めたこと: `SCShareableContent` のすべての `SCDisplay` を、`SCContentFilter(display:excludingApplications:exceptingWindows:)` で 1 枚ずつ `SCScreenshotManager.captureImage` で撮る。解像度は点（ポイント）の 2 倍。撮るのは、録音を始めたとき（HUD の表示と並べて、非同期）と、HUD でオンにしたときの 1 回ずつ（画面から辞書の候補を探すときは、メニューを選んだときの 1 回。DEC-DIC-230）。撮り直しはしない。HUD は撮るときには出ているので、写さないのはフィルタで決める。除くアプリの一覧を作る関数（`ScreenSnapshotFilter`）はアプリと CLI で共有し、Hanasu のバンドル ID（CLI で動かすときは起動中の Hanasu.app も）・除外アプリ・DEC-DIC-182 のものを入れる。入力先のウインドウの枠は、録音開始時の前面のアプリ（PID）の、いちばん手前の画面に出ているウインドウの `frame` から取る。取れなければ、すべてを「入力先の外」として扱う。
 - 理由: macOS 15 以降、`CGWindowListCreateImage` は使えない。1 回だけにして CPU と電池を使わない。2 倍は 1 倍と OCR の時間がほぼ同じで、読める文字が多い（verification/dictation.md 20）。
 - 決めた場面: 2026-11-10 の計画
 - 関係する要件: REQ-DIC-041
@@ -1043,7 +1065,7 @@
 - 実装の場所: `ScreenSnapshotPolicy`、`DictationController`
 
 ### DEC-DIC-189 画面収録の許可は設定の欄でだけ求め、HUD のボタンは許可したら出す
-- 決めたこと: 許可の状態は `CGPreflightScreenCaptureAccess()` で見る。設定でトグルをオンにしたとき、許可がなければ `CGRequestScreenCaptureAccess()` で求め、出ないとき（以前に拒否した）は「許可する…」でシステム設定の画面収録を開く。許可したあとも状態が変わらないときに備え、警告に「許可したあとで効かないときは、Hanasu を終了して開き直してください」と添える。会議の記録中は「許可する…」を押せなくし、「会議の記録が終わってから」と添える（macOS の「終了して再度開く」で記録が切れるのを防ぐ）。録音中は求めない。HUD のボタンは、許可があるときだけ、録音中に 2 行目の音量の目安の左に出す（音量の目安はマイクのボタンのすぐ左のまま。DEC-DIC-143）。アイコンだけ（`camera.viewfinder`。オンボーディングで AX の画面の文脈に使っている `text.viewfinder` とは分ける）で、`accessibilityLabel` とツールチップを付ける。設定の「権限」タブに「画面収録」の行（状態と、システム設定を開くボタンだけ）を足す。オンボーディングの許可のページには出さない。
+- 決めたこと: 許可の状態は `CGPreflightScreenCaptureAccess()` で見る。許可を求めるのは、設定の欄と、画面から辞書の候補を探すとき（DEC-DIC-233。2026-11-13 に足した）だけ。設定でトグルをオンにしたとき、許可がなければ `CGRequestScreenCaptureAccess()` で求め、出ないとき（以前に拒否した）は「許可する…」でシステム設定の画面収録を開く。許可したあとも状態が変わらないときに備え、警告に「許可したあとで効かないときは、Hanasu を終了して開き直してください」と添える。会議の記録中は「許可する…」を押せなくし、「会議の記録が終わってから」と添える（macOS の「終了して再度開く」で記録が切れるのを防ぐ）。録音中は求めない。HUD のボタンは、許可があるときだけ、録音中に 2 行目の音量の目安の左に出す（音量の目安はマイクのボタンのすぐ左のまま。DEC-DIC-143）。アイコンだけ（`camera.viewfinder`。オンボーディングで AX の画面の文脈に使っている `text.viewfinder` とは分ける）で、`accessibilityLabel` とツールチップを付ける。設定の「権限」タブに「画面収録」の行（状態と、システム設定を開くボタンだけ）を足す。オンボーディングの許可のページには出さない。
 - 理由: 録音中に macOS のダイアログが出ると前面が変わる（DEC-COM-069）。使わない人の HUD を変えない（2026-11-10 の回答）。1 行目は言語の切り替え・取消・完了でいっぱい（DEC-DIC-142）。2 行目は録音中だけ出るので、準備中は押せない。Hanasu には会議の記録を途中から取り戻す仕組みがない。
 - 決めた場面: 2026-11-10 の計画
 - 関係する要件: REQ-DIC-042
@@ -1146,6 +1168,82 @@
 - 実装の場所: `DictationController.prewarmLocalModelIfNeeded`・`startDictation`・`selectOutputLanguage`・`finishDictation`、`EditModeController`
 - Windows の実装: `windows/Hanasu.Core/Dictation/DictationPrewarm.cs`、`windows/Hanasu.Core/Dictation/DictationController.cs`、`windows/Hanasu.Windows/AppHost.cs`
 - 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`DictationPrewarmTests`・`DictationControllerTests`）。Mac は実機
+
+### DEC-DIC-230 Mac は、メニューを選んだときに 1 回だけ、音声入力のスクリーンショットと同じフィルタで撮り、撮り終えてからウインドウを開く
+- 決めたこと: `ScreenSnapshotReader.read` を `captureAll`（すべての画面の画像と枠を返す）と `recognizeAll`（OCR して行を返す）に分け、`read` は 2 つを続けて呼ぶだけにする（音声入力の振る舞いは変えない）。画面から辞書の候補を探すときは、メニューが閉じるのを 0.3 秒待ち（そのあいだに音声入力・選択の編集が始まったら撮らない。`captureAll` は非同期なので、撮り終えたときにももう一度確かめ、始まっていたら撮った画面を捨てて候補の画面を出さない）、`captureAll` を、入力先なし（`targetPID: nil`。すべての行を「入力先の外」として扱う）・除外アプリの設定で呼び、撮り終えてから候補の画面を開いて OCR を始める。OCR の言語は DEC-DIC-183 と同じ。候補の画面は `collectionBehavior` に `.moveToActiveSpace`・`.fullScreenAuxiliary` を付ける。メニューの項目は `validateMenuItem` で、音声入力か選択の編集が idle でないときは無効にし（ステータスメニューは `autoenablesItems` が true なので、`isEnabled` を書いても効かない）、`openScreenDictionary` の頭でも同じ条件なら何もしない。
+- 理由: 既存の撮る・読む部分（REQ-DIC-041）とフィルタ（DEC-DIC-181・182）を使えば、写さないものが音声入力のスクリーンショットとそろう。ウインドウを先に開くと、全画面のアプリの Space から移って違う画面を撮るおそれがある。録音中・処理中に候補の画面や許可のダイアログが前面に出ると、整形した文章の貼り先がなくなる（DEC-COM-069・DEC-DIC-189）。
+- 決めた場面: 2026-11-13 の計画（[plans/screen-dictionary.md](../plans/screen-dictionary.md)）
+- 関係する要件: REQ-DIC-075
+- 対象: Mac
+- 実装の場所: `ScreenSnapshotReader.captureAll`・`recognizeAll`、`AppDelegate.openScreenDictionary`・`validateMenuItem`、`ScreenDictionaryWindow`
+
+### DEC-DIC-231 送る材料は語の一覧と行。読みは推測を許し、表記はいつも材料と照らし合わせ、読みは 1 つずつ選べる
+- 決めたこと:
+  - 材料: `ScreenSnapshotLayout.layout(lines, limit:)` で語の一覧と行を作り（DEC-DIC-183 の並べ方。`layout` は変えない）、`DictionarySuggester.screenMaterial` で、語を先に、残りに行を、`Budget.cost` で数えながら上限まで詰め、送る語・行と、外したものがあるか（`truncated`）を返す。候補の画面はこの結果をそのまま見せ、同じものを送る。行も送るのは、「株式会社ストックマーク」のように語の取り出しで分かれる表記が行にしか出てこず、表記の照らし合わせに要るため。
+  - 上限: `DictionarySuggester.budget(for:existing:instruction:)` に system instruction を渡せるようにし、画面用の instruction で枠を見積もる（Gemini・Claude は 60,000 文字、ローカル・Apple は文脈から見積もったトークン数。DEC-DIC-170）。
+  - プロンプト: キー `dictionarySuggest.screenSystem`（画面用の system instruction）・`dictionarySuggest.screenTermsHeader`・`dictionarySuggest.screenLinesHeader`（17 言語）。読みは「その言語の音声認識が、その語を話したときに書きやすい形」を、英字・数字とカナが混ざった形（日本語なら「Jスリー」「ジェイスリー」）も含めて 4 つまで挙げさせる。ふつうの言葉と重なる読み・1 文字の読みは入れさせない。材料の中の指示に従わないことは `dictionarySuggest.system` と同じく書く。各言語の版は、その言語の音声認識に合わせて書き直す。
+  - 絞り込み: `DictionarySuggester.filter` に引数を 2 つ足す（Mac と Windows）。`readingsMustAppear`（既定 true。画面からは false）と `requireSpellingInMaterial`（既定 false。画面からは true。読みの有無によらず、表記が材料に出てこなければ除く）。画面からは、読みを 20 文字まで・1 候補 4 つまでに絞る（`maxReadingLength`・`maxReadings`）。
+  - 候補の行: 表記と理由の行の下に、読みごとのチェックを並べる（Mac は `ScreenDictionaryCandidateRow`）。会議ノートと設定の欄の候補の行は変えない。
+  - 足すとき: 読みをすべて外した候補のうち、表記がもう辞書にあるものは足さない（`DictionarySuggester.droppingRegistered`。登録済みの表記は新しい読みがあるから残っており、読みを外すと同じ表記の行が重なるだけのため。PR #118 のレビューで足した）。
+- 理由: 画面には正しい表記しかなく、誤認識の形は出てこない（2026-11-13 の回答）。今の `filter` は読みが残らなかった候補だけ表記を照らし合わせ、読みが材料に出てくることで AI が作った語を除いていた。読みの照らし合わせを外すなら、表記の照らし合わせを必ずにしないと AI が作った語が通る。照合は「J」と「ジェイ」を同じにしない（DEC-DIC-081）ので、読みは実際に認識される形で、複数要る。推測の読みには、ふつうの言葉や、画面に埋め込まれた指示から作られたものが混ざりうる。辞書のルールは音声入力にも会議の文字起こしにも決定的に当たる（REQ-DIC-070・073）ので、読みを 1 つずつ外せるようにする。`layout` は文字数で数え、DEC-DIC-183・184 のタグがあるので、変えずに外で詰め直す。
+- 決めた場面: 2026-11-13 の計画（2 回の敵対的レビューで、読みの照らし合わせ・見せる材料・読みのチェックを足した）
+- 関係する要件: REQ-DIC-075, REQ-DIC-071
+- 対象: Mac / Windows
+- 実装の場所: `DictionarySuggester.screenMaterial`・`filter`・`budget`・`droppingRegistered`、`ScreenDictionaryCandidateRow`
+- Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`（`Filter`・`BudgetFor`・`ScreenMaterialFor`・`DroppingRegistered`）、`windows/Hanasu.Windows/Views/ScreenDictionaryWindow.cs`
+
+### DEC-DIC-232 候補の画面は独立したウインドウにし、送る材料を見せてから送る
+- 決めたこと: Mac は SwiftUI の `ScreenDictionaryView` を入れた `NSWindow`、Windows は親を持たない `Window`（`ShowInTaskbar = true`。`MeetingDictionaryWindow` の並びを使う）。どちらも同時に 1 つだけで、開くときに前に出す。状態は「許可がない」「読んでいる」「読んだ（送る材料と『候補を探す』）」「探している」「候補」「0 件」「エラー」。送り先は「AI」タブの「議事録」の AI とモデルの名前で出す。
+- 理由: メニューから開くので親のウインドウがない（親がないままタスクバーに出さないと、裏に回ったとき戻せない）。画面全体の文字は他人のメッセージや社外秘を含みうるので（DEC-DIC-180 と同じ理由）、送る前に、実際に送るものを見せる（2026-11-13 の回答）。会議ノートの候補の画面と見た目をそろえる（DEC-DIC-171）。
+- 決めた場面: 2026-11-13 の計画
+- 関係する要件: REQ-DIC-075
+- 対象: Mac / Windows
+- 実装の場所: `ScreenDictionaryWindow`、`ScreenDictionaryView`、`ScreenDictionaryModel`
+- Windows の実装: `windows/Hanasu.Windows/Views/ScreenDictionaryWindow.cs`、`windows/Hanasu.Windows/AppHost.cs`（`ShowScreenDictionary`）
+
+### DEC-DIC-233 Mac の画面収録の許可は、この機能を選んだときにも求める。求めたら撮らずに、開き直しを案内する
+- 決めたこと: `ScreenRecordingPermission.isGranted` が偽で、会議の記録中でも議事録の作り直し中でもなければ `ScreenRecordingPermission.request()` を呼び、候補の画面に開き直しの案内と「システム設定を開く」を出す（`CGRequestScreenCaptureAccess` は待たずに戻り、許可は開き直すまで効かないため、同じ回では撮らない）。会議の記録中・作り直し中は求めず、案内だけを出す。音声入力の録音中・処理中はメニューの項目が選べない（DEC-DIC-230）。設定の「権限」タブの画面収録の行の文は、この機能を含む文にする。
+- 理由: 2026-11-13 の回答。会議の記録中・作り直し中に求めないのは、macOS の「終了して再度開く」で記録や作り直しが切れるのを防ぐため（DEC-DIC-189 と同じ。終了の確認も両方を見ている）。
+- 決めた場面: 2026-11-13 の計画
+- 関係する要件: REQ-DIC-075, REQ-MTG-030
+- 対象: Mac
+- 実装の場所: `AppDelegate.openScreenDictionary`、`ScreenDictionaryModel`、`PermissionsTab`
+
+### DEC-DIC-234 Windows は、すべてのモニターを GDI で撮り、Hanasu のウインドウはキャプチャから外し、Windows.Media.Ocr で読む
+- 決めたこと: モニターごとに `BitBlt` で撮る（アプリは PerMonitorV2。物理ピクセルで撮る）。撮る前に、開いている Hanasu のウインドウに `SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE)` を立て（最低の OS が 10.0.19041 なので使える）、撮り終えたら元に戻す（戻さないと、Teams などの画面共有で Hanasu のウインドウが見えなくなる）。タスクトレイのメニューが閉じるのを 0.3 秒待ち（そのあいだに音声入力が始まったら撮らない）、撮り終えてから候補の画面を開く。OCR は `Windows.Media.Ocr.OcrEngine` を、文字起こしの言語の OCR があればその言語、なければユーザーのプロファイルの言語、なければ英語で作り、どれに落ちたかを画面に出す。`OcrEngine.MaxImageDimension` を超える画像は、重なりを持たせたタイルに分けて読み、同じ行は 1 つにする。OCR の行は単語（`OcrWord`）をつなぎ直す: 両側が漢字・かなの単語は空白なしで、ほかは空白でつなぐ（日本語・中国語の行が 1 文字ずつ空白で区切られて返ることへの対策）。語の取り出しと並べ方（Mac の `ScreenSnapshotLayout.terms`・`layout` にあたるもの）は `Hanasu.Core/Text/ScreenDictionary.cs` に移植する。Mac の正規表現は ICU の `\p{Han}` と集合の引き算なので、.NET では文字の範囲を書き下ろし、例を `common/testdata/logic/screen-terms.json` に置いて、Mac の `--test-screen-dictionary` と `Hanasu.Core.Tests` の両方で回す。
+- 理由: Windows.Graphics.Capture はモニターを撮ると黄色い枠が出る（消すには追加の許可が要る）。GDI なら許可も枠もなく、`WDA_EXCLUDEFROMCAPTURE` で自分のウインドウを外せる。OCR の言語パックがない言語ではエンジンを作れない。縮めると小さい文字が読めない。語の取り出しを両方で同じにするため、例を共有する。
+- 決めた場面: 2026-11-13 の計画
+- 関係する要件: REQ-DIC-075
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/ScreenTextReader.cs`、`windows/Hanasu.Core/Text/ScreenDictionary.cs`
+
+### DEC-DIC-235 Windows は、既定の除外アプリのウインドウを、読む前に塗りつぶす
+- 決めたこと: 撮る前に `EnumWindows` で、見えていて（`IsWindowVisible`）、最小化されておらず、`DWMWA_CLOAKED` が立っておらず、大きさが 0 でないトップレベルのウインドウを集め、プロセスの exe の名前が既定の一覧（`ScreenDictionary.WindowsExcludedProcesses`）にあるものの枠（`DWMWA_EXTENDED_FRAME_BOUNDS`）を、撮った画像の上で黒く塗ってから OCR する。一覧は固定で、設定の欄は作らない: パスワード管理（KeePass・KeePassXC・1Password・Bitwarden・Dashlane・Keeper・Enpass・LastPass・NordPass・RoboForm・Proton Pass）、通知（`ShellExperienceHost`・スマホ連携の `PhoneExperienceHost`）、認証のダイアログ（`CredentialUIBroker`）、ロック画面（`LockApp`）。ほかのウインドウの下に隠れている部分まで塗ってよい（多く除く側に倒す）。一覧の exe 名は実機で確かめ、確かめられなかったものは verification に書く。
+- 理由: Mac の DEC-DIC-182 と同じく、2FA のコードの通知・認証のダイアログ・パスワードを、Windows の既定の AI（Gemini）に送らない（2026-11-13 の回答）。GDI はアプリを選んで撮れないので、撮ったあとで塗る。`ShellExperienceHost` はスタートメニューなど隠れたウインドウも持ち、cloaked を見ないと画面の大きな範囲を塗ってしまう。
+- 決めた場面: 2026-11-13 の計画
+- 関係する要件: REQ-DIC-075
+- 対象: Windows
+- 実装の場所: `windows/Hanasu.Windows/Services/ScreenTextReader.cs`、`windows/Hanasu.Core/Text/ScreenDictionary.cs`（`WindowsExcludedProcesses`）
+
+### DEC-DIC-236 画面からの候補探しでは、ローカルのモデルがないときにダウンロードを尋ねない
+- 決めたこと: `LocalModelDownloadPrompt.prepare` を呼ばず、`TextAIClient.requireFromSettings` の失敗をそのまま理由として出す。
+- 理由: DEC-COM-069 は、辞書の候補ではダウンロードを尋ねないとしている（設定ですぐダウンロードできるため）。会議ノートの候補の画面（`MeetingDictionarySheet.search`）は尋ねているが、それは今の食い違いで、この変更では直さない。
+- 決めた場面: 2026-11-13 の計画
+- 関係する要件: REQ-DIC-075, REQ-COM-032
+- 対象: Mac
+- 実装の場所: `ScreenDictionaryModel.search`
+
+### DEC-DIC-237 確かめる CLI は、撮る部分と AI を呼ばない部分に分ける
+- 決めたこと:
+  - Mac: `--test-screen-dictionary`（純粋な部分: 材料・上限・絞り込み・`screen-terms.json`。失敗があれば終了コード 1）。`common/testdata/logic/` の例は、共有のテストの入口（`--test-shared-cases`。FUT-017）がまだないので、`--test-screen-dictionary` が読む。`--suggest-dictionary --screen`（実機で撮って呼ぶ）と `--suggest-dictionary --screen-text <ファイル>`（1 行 1 つの OCR の行から呼ぶ）は、`DictionaryCLI.suggest` の中に `--meeting`・`--from-file` と同じ分かれ道として置く（後ろに置くと最近の会議が送られる）。`--render-screen-dictionary <フォルダ>`（状態ごとの画面）。
+  - Windows: `Hanasu.Core.Tests`（`screen-terms.json`・語のつなぎ方・絞り込み・材料）、`Hanasu.Cli` の `screen-dict-suggest <OCR の行のファイル>`、`Hanasu.Windows` の引数 `--dump-screen-text <出力ファイル>`（アプリと同じ撮り方・除外・OCR で読んだ行と、落ちた OCR の言語を書き出して終わる）。
+  - CI: `mac.yml` の自己テストに `--test-screen-dictionary` を、`windows.yml` に `--dump-screen-text` で除外とつなぎ方を見る手順を足し、両方の paths に `common/testdata/logic/**` を足す。
+- 理由: 撮る部分は許可と実機が要るので、純粋な部分と分けて CI で回せるようにする。Windows の撮る・読む部分も、CI の windows-latest で一度は動かす。
+- 決めた場面: 2026-11-13 の計画
+- 関係する要件: REQ-DIC-075
+- 対象: Mac / Windows
+- 実装の場所: `ScreenDictionaryCLI`、`DictionaryCLI.suggest`
+- Windows の実装: `windows/Hanasu.Core.Tests/ScreenDictionaryTests.cs`、`windows/Hanasu.Cli/Program.cs`、`windows/Hanasu.Windows/App.xaml.cs`
 
 ### DEC-DIC-070 履歴は 1 つの JSON ファイルに、本人だけが読める権限で保存する
 - 決めたこと: `~/Library/Application Support/Hanasu/History/history.json` に新しい順で保存する。フォルダは 0700、ファイルは 0600、書き込みは atomic。読めないファイルは上書きせず、ウインドウにエラーを出す。Mac 版は、変更のたびに書かず、1 秒まとめてから 1 回書く。エンコードとファイル書き込みはバックグラウンドの直列キューで行い（書く順番は予約した順）、アプリの終了時・読み直しの前には、まとまっていない変更を先に書き切る。追加は日時の合う位置に挿入し、全件の並べ替えはしない。Mac 版の起動時の読み込みは、アプリの起動時に裏で先に読み（読み込みとデコード）、終わったらメインで中身を当てる。先読みが終わる前にメニュー・再入力・音声入力が履歴を使ったら、そこで同期で読み、先読みの結果は捨てる。
@@ -1286,8 +1384,8 @@
 - 理由: 自動で足すと、誤って当たるルールが黙って増える。
 - 決めた場面: PR #12
 - 関係する要件: REQ-DIC-071
-- 対象: Mac / Windows（Windows は会議ノートの候補の画面だけ。REQ-DIC-072）
-- 実装の場所: `DictionarySuggestionSection`、`MeetingDictionarySheet`、`DictionarySuggester.appending`
+- 対象: Mac / Windows（Windows は会議ノートの候補の画面（REQ-DIC-072）と、画面からの候補の画面（REQ-DIC-075）だけ）
+- 実装の場所: `DictionarySuggestionSection`、`MeetingDictionarySheet`、`ScreenDictionaryWindow`、`DictionarySuggester.appending`
 - Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`（`Appending`）、`windows/Hanasu.Windows/Views/MeetingDictionaryWindow.cs`
 
 ### DEC-DIC-088 候補の材料と呼び出し
@@ -1299,7 +1397,7 @@
 - 実装の場所: `RecentDictations`、`DictionarySuggester.corpus`、`DictionarySuggester.suggest`
 
 ### DEC-DIC-089 材料に出てこない候補は、アプリの側で除く
-- 決めたこと: 辞書にすでにある語（新しい読みがあれば残す）・表記と同じ読み・1 文字の読み・ほかのルールで使っている読み・材料に出てこない読みや表記を除く。
+- 決めたこと: 辞書にすでにある語（新しい読みがあれば残す）・表記と同じ読み・1 文字の読み・ほかのルールで使っている読み・材料に出てこない読みや表記を除く。画面からの候補（REQ-DIC-075）では、読みは材料と照らし合わせず、表記はいつも照らし合わせる（DEC-DIC-231）。
 - 理由: 検証で、Gemini が社名から似た名前の製品名を作ることがあった。
 - 決めた場面: PR #12
 - 関係する要件: REQ-DIC-071

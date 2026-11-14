@@ -471,6 +471,8 @@ MeetingRecoveryCLI.runIfRequested()
 MainActor.assumeIsolated { MeetingAudioCLI.runIfRequested() }
 // 会議ノートから辞書を作る・会議に辞書を当てるの確認（--test-meeting-dictionary / --render-meeting-dictionary。MeetingDictionaryCLI.swift）
 MainActor.assumeIsolated { MeetingDictionaryCLI.runIfRequested() }
+// 画面から辞書の候補を探すの確認（--test-screen-dictionary / --render-screen-dictionary。ScreenDictionaryCLI.swift）
+MainActor.assumeIsolated { ScreenDictionaryCLI.runIfRequested() }
 // 議事録のテンプレートと書き出しの確認（MinutesCLI.swift）
 MainActor.assumeIsolated { MinutesCLI.runIfRequested() }
 // 話者の名前の推測の確認（SpeakerNameInferenceCLI.swift）

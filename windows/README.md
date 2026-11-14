@@ -22,6 +22,7 @@ Mac 版 Hanasu（`Sources/Hanasu`）の Windows 版。タスクトレイに常�
 5. 結果と原文は履歴に残る（既定で 30 日。設定 → 履歴 で 7・30・90・365 日・無期限と、件数の上限を選べる）。
    - タスクトレイのメニュー →「最近の結果」から、直近 10 件をクリップボードにコピーできる。
    - タスクトレイのメニュー →「履歴を開く…」で、日ごとの一覧から検索（結果・原文・アプリ名）・「失敗・未整形」の絞り込み・結果や原文のコピー・削除（Delete キー）ができる。
+6. タスクトレイのメニュー →「画面から辞書の候補を探す…」で、画面に出ている語（資料の固有名詞・型番など）を話す前に辞書へ入れられる。すべてのモニターを撮って文字を読み、送る語と行を見せてから、「候補を探す」を押したときだけ会議の AI（設定 → AI の「議事録」）に送る。候補は表記と、話すとどう認識されやすいかの読みで並び、読みは 1 つずつ外せる。音声入力の録音中は選べない。Hanasu のウインドウと、パスワード管理アプリ・通知・認証のダイアログは読まない。
 
 ### 会議の記録
 
@@ -97,7 +98,8 @@ windows/
 │   ├── Gemini/                  プロンプト（文面は Mac 版と共有の Sources/Hanasu/Resources/Prompts/<言語>.json を埋め込んで読む。Claude にも同じものを送る）・REST クライアント・サービスアカウントの JWT（RS256）・認証の決め方
 │   ├── Net/                     リダイレクトに従わない HttpClient・モデルのダウンロード（ハッシュの確認）
 │   ├── Text/UserDictionary.cs   ユーザー辞書と置き換えルール（Mac 版の UserDictionary.swift の移植）
-│   ├── Text/DictionarySuggester.cs  会議 1 件から辞書の候補を AI に挙げてもらう（Mac 版の DictionarySuggester.swift の会議 1 件の部分の移植）
+│   ├── Text/DictionarySuggester.cs  会議 1 件と画面の文字から辞書の候補を AI に挙げてもらう（Mac 版の DictionarySuggester.swift の会議 1 件・画面の部分の移植）
+│   ├── Text/ScreenDictionary.cs     画面の文字からの語の取り出し・並べ方・OCR の単語のつなぎ方・既定の除外の一覧（Mac 版の ScreenSnapshotLayout の移植）
 │   ├── Settings/                設定（settings.json）・ショートカットの組み合わせ・API キーの保存（SecretStore。DPAPI と Windows Hello はインターフェイスで渡す）
 │   ├── Audio/                   16 kHz・モノラルへの変換（窓付き sinc の再サンプリング）・WAV・無音の判定・効果音
 │   ├── Transcription/           文字起こしのインターフェイス・録ってからまとめて文字起こし・Gemini の文字起こし・Whisper のモデル管理
@@ -259,6 +261,7 @@ dotnet run --project Hanasu.Cli -- transcribe-whisper <wav> --model tiny [--mode
 dotnet run --project Hanasu.Cli -- dictation <wav> --engine whisper|gemini [--translate] [--whisper-model tiny]
 dotnet run --project Hanasu.Cli -- dict <辞書ファイル> "<文章>"
 dotnet run --project Hanasu.Cli -- meeting-dict-suggest <会議のフォルダ> [--dict <辞書ファイル>] [--minutes-ai gemini|claude|local]  # 会議 1 件から辞書の候補を挙げてもらう
+dotnet run --project Hanasu.Cli -- screen-dict-suggest <OCR の行のファイル> [--dict <辞書ファイル>] [--minutes-ai gemini|claude|local]  # 画面の文字（1 行 1 つ）から辞書の候補を挙げてもらう
 dotnet run --project Hanasu.Cli -- models
 
 # Claude
@@ -301,11 +304,12 @@ dotnet run --project Hanasu.Cli -- meeting-show <会議のフォルダ>         
 | アプリ別スタイル | 設定の「アプリ別」タブで、前面のアプリ（exe の名前）ごとにプリセット（カスタム文体を含む）と追加ルールを決める（REQ-DIC-020。既定でオン）。ストアアプリ（ApplicationFrameHost.exe）は見分けられないので使わない。アプリごとの既定の出力言語（Mac の REQ-DIC-021）は**未実装** |
 | スニペット | **未実装** |
 | 画面の文脈 | **未実装** |
-| スクリーンショットの文字（REQ-DIC-041・042） | **未実装** |
+| スクリーンショットの文字（REQ-DIC-041・042） | **未実装**（画面を撮って読む部分は、画面から辞書の候補を探すために作った。下の行） |
 | 履歴ウインドウ | 検索・絞り込み・コピー・削除はできる。**整え直し（整形し直す・英訳し直す）と録音の保存は未実装** |
 | 最後の結果をもう一度入力（`⌥⇧ V`） | **未実装**（「最近の結果」からコピーして貼る） |
 | 選択を声で編集 | **未実装**（`hanasu edit` で、渡した文章を指示どおりに書き換えることはできる） |
-| 辞書の候補を探す（AI で提案） | 会議ノートの会議からは作った（「辞書…」）。設定の「辞書・ルール」から音声入力の結果と最近の会議をまとめて読むのは**未実装** |
+| 辞書の候補を探す（AI で提案） | 会議ノートの会議からと、タスクトレイの「画面から辞書の候補を探す…」（REQ-DIC-075）からは作った。設定の「辞書・ルール」から音声入力の結果と最近の会議をまとめて読むのは**未実装** |
+| 画面から辞書の候補を探すときに写さないもの | Hanasu のウインドウと、決まった一覧のアプリ（パスワード管理・通知・認証のダイアログ・ロック画面。DEC-DIC-235）だけ。Mac 版のような除外アプリの設定の欄はない。画面収録の許可は要らない（GDI で撮る。DEC-DIC-234） |
 | 会議の記録 | 作った（下の表は会議の記録での差） |
 
 会議の記録での差:

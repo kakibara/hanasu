@@ -1841,4 +1841,73 @@ Aplikasi yang Anda tambahkan dan aturan tambahan tiap aplikasi akan dihapus. Gay
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>Batal</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Cari &amp;Saran Kamus dari Layar…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Cari saran kamus dari layar</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Cari saran kamus dari layar</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Teks yang tampil di layar Anda dibaca di PC ini (gambarnya tidak dikirim dan tidak disimpan). Jendela Hanasu, pengelola kata sandi, notifikasi, dan dialog masuk tidak dibaca. Selain itu semuanya dibaca, termasuk ekstensi pengelola kata sandi di browser dan terminal. Teks hanya dikirim saat Anda mengeklik “Cari saran”, dan hanya ke AI yang dipilih untuk “Notulen” di tab “AI” pada Pengaturan (dengan “Lokal”, teks tidak keluar dari PC ini).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Membaca teks di layar…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Dibaca dari {0} layar; {1} kata dan {2} baris akan dikirim.</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Kirim ke: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini dan Claude lebih akurat dalam menebak bacaan (bisa diubah di “Notulen” pada tab “AI” di Pengaturan).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>Teks di layar terlalu banyak, jadi hanya sebagian yang dikirim.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>Windows belum memiliki pengenalan teks untuk {0}, jadi teks dibaca dengan {1}. Anda dapat menambahkan “Pengenalan karakter optik” untuk bahasa tersebut di Pengaturan Windows → Waktu &amp; bahasa → Bahasa &amp; wilayah.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Kata</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Baris layar</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(tidak ada)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Cari saran</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Pilih yang ingin ditambahkan.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Tanpa bacaan (hanya kata yang didaftarkan)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Bacaan:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Teks tidak dapat dibaca dari layar.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>Tidak ditemukan layar yang dapat ditangkap.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Layar tidak dapat ditangkap: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Teks di layar tidak dapat dibaca: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Windows belum memiliki pengenalan teks (OCR) untuk bahasa apa pun, jadi layar tidak dapat dibaca. Tambahkan “Pengenalan karakter optik” untuk salah satu bahasa di Pengaturan Windows → Waktu &amp; bahasa → Bahasa &amp; wilayah.</value>
+  </data>
 </root>

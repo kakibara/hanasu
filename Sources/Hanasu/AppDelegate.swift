@@ -3,7 +3,7 @@ import Combine
 import SwiftUI
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSMenuItemValidation {
     private var statusItem: NSStatusItem!
     private var controller: DictationController!
     private var historyUI: DictationHistoryUI!
@@ -27,6 +27,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private let onboarding = OnboardingWindowController()
     // 要件: REQ-REL-010, REQ-REL-011
     private let updater = AppUpdater()
+    // 要件: REQ-DIC-075
+    private let screenDictionaryUI = ScreenDictionaryWindowController()
+    /// 画面から辞書の候補を探すために撮っている途中（続けて選ばれても 2 回撮らない）
+    private var screenDictionaryCapturing = false
     private var cancellables: Set<AnyCancellable> = []
 
     // 設計判断: DEC-COM-008, DEC-COM-009, DEC-COM-093
@@ -225,6 +229,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         historyItem.submenu = historyUI.makeRecentResultsMenu()
         menu.addItem(historyItem)
         menu.addItem(NSMenuItem(title: tr("履歴を開く…"), action: #selector(openHistoryWindow), keyEquivalent: ""))
+        // 要件: REQ-DIC-075
+        menu.addItem(NSMenuItem(title: tr("画面から辞書の候補を探す…"), action: #selector(openScreenDictionary), keyEquivalent: ""))
 
         let trusted = Permissions.isAccessibilityTrusted(prompt: false)
         let axItem = NSMenuItem(
@@ -244,6 +250,60 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
         for item in menu.items where item.action != nil && item.action != #selector(NSApplication.terminate(_:)) {
             item.target = self
+        }
+    }
+
+    // MARK: - 画面から辞書の候補を探す
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-230
+    /// 音声入力・選択の編集が動いている間は選べない。ステータスメニューは autoenablesItems が true なので、
+    /// isEnabled を書いても効かず、ここで決める
+    func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        if menuItem.action == #selector(openScreenDictionary) { return canOpenScreenDictionary }
+        return true
+    }
+
+    private var canOpenScreenDictionary: Bool {
+        controller.state == .idle && editController.state == .idle && !screenDictionaryCapturing
+    }
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-230, DEC-DIC-233
+    /// メニューが閉じるのを待ってすべての画面を撮り、撮り終えてから候補の画面を開いて読む。
+    /// 許可がなければ（会議の記録中・作り直し中でなければ）求め、撮らずに開き直しを案内する
+    @objc private func openScreenDictionary() {
+        guard canOpenScreenDictionary else { return }
+        if screenDictionaryUI.bringToFront() { return }
+        let settings = AppSettings.shared
+        guard ScreenRecordingPermission.isGranted else {
+            let meetingBusy = meetingRecorder.state != .idle || meetingRecorder.regeneratingID != nil
+            if !meetingBusy { ScreenRecordingPermission.request() }
+            screenDictionaryUI.open(ScreenDictionaryModel(settings: settings, phase: .needsPermission(meetingBusy: meetingBusy)))
+            return
+        }
+        screenDictionaryCapturing = true
+        let request = ScreenSnapshotReader.Request(
+            targetPID: nil, excludedApps: ScreenContextSettings.shared.excludedApps,
+            languages: ScreenSnapshotReader.languages(localeIdentifier: settings.localeIdentifier))
+        Task { @MainActor in
+            defer { screenDictionaryCapturing = false }
+            // メニューが閉じるのを待つ
+            try? await Task.sleep(for: .milliseconds(300))
+            // 待っているあいだに音声入力・選択の編集が始まったら撮らない（整形した文章の貼り先を奪わないため）
+            guard controller.state == .idle, editController.state == .idle else { return }
+            let model = ScreenDictionaryModel(settings: settings)
+            do {
+                let shots = try await ScreenSnapshotReader.captureAll(request)
+                // 撮っているあいだ（非同期で数百 ms）に始まったときも、撮った画面を捨てて前に出さない
+                guard controller.state == .idle, editController.state == .idle else { return }
+                screenDictionaryUI.open(model)
+                model.read(shots, languages: request.languages)
+            } catch {
+                appLog.notice("screen dictionary: capture failed (\(error.localizedDescription, privacy: .public))")
+                model.phase = .failed(tr("画面を撮れませんでした: %@", error.localizedDescription))
+                screenDictionaryUI.open(model)
+            }
         }
     }
 

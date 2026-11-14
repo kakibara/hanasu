@@ -1841,4 +1841,73 @@ Dodane aplikacje i dodatkowe reguły poszczególnych aplikacji zostaną usunięt
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>Anuluj</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Znajdź propozycje &amp;do słownika na ekranie…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Znajdź propozycje do słownika na ekranie</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Znajdź propozycje do słownika na ekranie</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Tekst widoczny na ekranach jest odczytywany na tym komputerze (obraz nie jest wysyłany ani zapisywany). Okna Hanasu, menedżery haseł, powiadomienia i okna logowania nie są odczytywane. Odczytywane jest wszystko inne, w tym rozszerzenia menedżerów haseł w przeglądarce i terminale. Odczytany tekst jest wysyłany tylko po kliknięciu „Znajdź propozycje” i tylko do AI wybranego w pozycji „Protokół” na karcie „AI” w Ustawieniach (przy „Lokalny” nie opuszcza tego komputera).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Odczytywanie tekstu z ekranu…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Odczytane ekrany: {0}. Do wysłania słów: {1}, wierszy: {2}.</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Wyślij do: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini i Claude trafniej odgadują wymowę (można to zmienić w Ustawienia → „AI” → „Protokół”).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>Na ekranie jest dużo tekstu, więc zostanie wysłana tylko jego część.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>W systemie Windows nie zainstalowano rozpoznawania tekstu dla języka {0}, więc do odczytu użyto języka: {1}. Funkcję „Optyczne rozpoznawanie znaków” dla tego języka możesz dodać w Ustawienia systemu Windows → Czas i język → Język i region.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Słowa</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Wiersze z ekranu</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(brak)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Znajdź propozycje</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Zaznacz te, które chcesz dodać.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Bez wymowy (zostanie dodane tylko słowo)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Wymowa:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Nie udało się odczytać tekstu z ekranu.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>Nie znaleziono ekranu, który można przechwycić.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Nie udało się przechwycić ekranu: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Nie udało się odczytać tekstu z ekranu: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>W systemie Windows nie zainstalowano rozpoznawania tekstu (OCR) dla żadnego języka, więc nie udało się odczytać ekranu. Dodaj funkcję „Optyczne rozpoznawanie znaków” dla wybranego języka w Ustawienia systemu Windows → Czas i język → Język i region.</value>
+  </data>
 </root>

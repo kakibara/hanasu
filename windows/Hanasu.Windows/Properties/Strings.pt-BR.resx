@@ -1841,4 +1841,73 @@ Os aplicativos adicionados e as regras adicionais de cada aplicativo serão remo
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Buscar sugestões para o &amp;dicionário na tela…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Buscar sugestões para o dicionário na tela</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Buscar sugestões para o dicionário na tela</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>O texto exibido nas telas é lido neste PC (a imagem não é enviada nem salva). As janelas do Hanasu, os gerenciadores de senhas, as notificações e as caixas de diálogo de autenticação não são lidos. Todo o resto é lido, inclusive extensões de gerenciamento de senhas no navegador e terminais. O texto só é enviado quando você clica em "Buscar sugestões", e somente à IA escolhida para "Ata" na guia "AI" das Configurações (com "Local", ele não sai deste PC).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Lendo o texto da tela…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Lido de {0} tela(s). Serão enviadas {1} palavras e {2} linhas.</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Enviar para: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini e Claude adivinham a pronúncia com mais precisão (você pode mudar isso em "Ata" na guia "AI" das Configurações).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>Há muito texto na tela, então só uma parte será enviada.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>O reconhecimento de texto para {0} não está instalado no Windows, então o texto foi lido em {1}. Você pode adicionar o "Reconhecimento óptico de caracteres" desse idioma em Configurações do Windows → Hora e idioma → Idioma e região.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Palavras</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Linhas da tela</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(Nenhuma)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Buscar sugestões</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Selecione as que deseja adicionar.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Sem pronúncia (só a palavra será adicionada)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Pronúncia:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Não foi possível ler texto na tela.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>Nenhuma tela para capturar foi encontrada.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Não foi possível capturar a tela: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Não foi possível ler o texto da tela: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>O reconhecimento de texto (OCR) não está instalado no Windows para nenhum idioma, então não foi possível ler a tela. Adicione o "Reconhecimento óptico de caracteres" de um idioma em Configurações do Windows → Hora e idioma → Idioma e região.</value>
+  </data>
 </root>

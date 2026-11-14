@@ -58,15 +58,16 @@ public static class DictionarySuggester
         return $"{existingText}\n\n<material>\n{material}\n</material>";
     }
 
-    // 設計判断: DEC-DIC-170
+    // 設計判断: DEC-DIC-170, DEC-DIC-231
     /// <summary>
     /// 会議の AI に合わせた上限。ローカルは、文脈の長さから出力・system instruction・既存の辞書・余白の分を引く。
     /// 見積もりは多めなので、LongInputFitter が黙って後ろを省くことはない
     /// </summary>
-    public static Budget BudgetFor(ITextGenerator client, UserDictionary existing)
+    /// <param name="instruction">送る system instruction（画面からの候補は ScreenInstruction。DEC-DIC-231）。null なら Instruction</param>
+    public static Budget BudgetFor(ITextGenerator client, UserDictionary existing, string? instruction = null)
     {
         if (client is not LocalLlmClient local) return new Budget(false, CharacterLimit);
-        var frame = EstimateTokens(Instruction + UserPrompt("", existing)) + LongInputFitter.Margin;
+        var frame = EstimateTokens((instruction ?? Instruction) + UserPrompt("", existing)) + LongInputFitter.Margin;
         return new Budget(true, Math.Max(0, local.Model.ContextLength - local.Model.MaxOutputTokens(longOutput: true) - frame));
     }
 
@@ -166,9 +167,14 @@ public static class DictionarySuggester
         }
     }
 
-    // 設計判断: DEC-DIC-089
-    /// <summary>辞書にすでにあるもの・置き換えに使えない読み・材料に出てこないもの（AI の思い込み）を除く</summary>
-    public static IReadOnlyList<DictionaryCandidate> Filter(IReadOnlyList<DictionaryCandidate> candidates, UserDictionary existing, string material)
+    // 設計判断: DEC-DIC-089, DEC-DIC-231
+    /// <summary>
+    /// 辞書にすでにあるもの・置き換えに使えない読み・材料に出てこないもの（AI の思い込み）を除く。
+    /// 画面からの候補（REQ-DIC-075）では、読みは推測なので材料と照らし合わせず（readingsMustAppear: false）、
+    /// 表記は読みの有無によらず照らし合わせる（requireSpellingInMaterial: true）。読みの長さと数も絞る（Mac 版 filter と同じ）
+    /// </summary>
+    public static IReadOnlyList<DictionaryCandidate> Filter(IReadOnlyList<DictionaryCandidate> candidates, UserDictionary existing, string material,
+        bool readingsMustAppear = true, bool requireSpellingInMaterial = false, int? maxReadings = null, int? maxReadingLength = null)
     {
         static string Key(string s) => string.Concat(UserDictionary.MatchKey(s));
         var materialKey = Key(material);
@@ -180,13 +186,18 @@ public static class DictionarySuggester
         {
             var spellingKey = Key(candidate.Spelling);
             if (spellingKey.Length == 0 || seenSpellings.Contains(spellingKey)) continue;
+            // 表記が材料に出てこないものは、AI が作った語なので除く（画面からの候補では、読みがあっても除く）
+            if (requireSpellingInMaterial && !materialKey.Contains(spellingKey, StringComparison.Ordinal)) continue;
             var readings = new List<string>();
             foreach (var reading in candidate.Readings)
             {
+                if (maxReadings is { } most && readings.Count >= most) break;
                 var k = Key(reading);
-                // 読みが表記と同じ・短すぎる・ほかのルールで使っている、ものは除く。区切り文字も入れない
+                // 読みが表記と同じ・短すぎる・長すぎる・ほかのルールで使っている、ものは除く。区切り文字も入れない
                 if (k == spellingKey || UserDictionary.MatchKey(reading).Length < UserDictionary.MinimumSourceLength
-                    || usedSources.Contains(k) || !materialKey.Contains(k, StringComparison.Ordinal)
+                    || usedSources.Contains(k)
+                    || (maxReadingLength is { } longest && ScreenDictionary.Length(reading) > longest)
+                    || (readingsMustAppear && !materialKey.Contains(k, StringComparison.Ordinal))
                     || reading.IndexOfAny(UserDictionary.SourceSeparators) >= 0
                     || UserDictionary.Arrows.Any(a => reading.Contains(a, StringComparison.Ordinal))) continue;
                 usedSources.Add(k);
@@ -202,8 +213,109 @@ public static class DictionarySuggester
         return result;
     }
 
+    // MARK: - 画面から（REQ-DIC-075）
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-231
+    /// <summary>画面の文字から作った、AI に送る材料（Mac 版の ScreenMaterial）。候補の画面はこれをそのまま見せ、同じものを送る</summary>
+    /// <param name="Truncated">上限に入りきらず、語か行を外したか</param>
+    public sealed record ScreenMaterial(IReadOnlyList<string> Terms, IReadOnlyList<string> Lines, bool Truncated)
+    {
+        public bool IsEmpty => Terms.Count == 0 && Lines.Count == 0;
+
+        /// <summary>AI に送る本文（見出しと、語は「, 」でつなぎ、行は改行でつなぐ）</summary>
+        public string Text
+        {
+            get
+            {
+                var parts = new List<string>();
+                if (Terms.Count > 0) parts.Add(Prompts.Text("dictionarySuggest.screenTermsHeader") + "\n" + string.Join(", ", Terms));
+                if (Lines.Count > 0) parts.Add(Prompts.Text("dictionarySuggest.screenLinesHeader") + "\n" + string.Join("\n", Lines));
+                return string.Join("\n\n", parts);
+            }
+        }
+    }
+
+    // 要件: REQ-COM-061
+    public static string ScreenInstruction => Prompts.Text("dictionarySuggest.screenSystem");
+
+    /// <summary>画面からの候補の読みの上限（1 候補あたりの数・1 つの長さ）</summary>
+    public const int ScreenMaxReadings = 4;
+    public const int ScreenMaxReadingLength = 20;
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-231
+    /// <summary>OCR の行から材料を作る。語の一覧を先に、残りに行を、上限まで詰める（ScreenDictionary.Layout の並べ方を使う）</summary>
+    public static ScreenMaterial ScreenMaterialFor(IEnumerable<ScreenTextLine> lines, Budget budget) =>
+        // 並べ方だけを使うので、Layout では上限をかけない
+        ScreenMaterialFor(ScreenDictionary.Layout(lines, 10_000_000), budget);
+
+    public static ScreenMaterial ScreenMaterialFor(ScreenOcr ocr, Budget budget)
+    {
+        var terms = new List<string>();
+        var lines = new List<string>();
+        var truncated = false;
+        var termsHeader = Prompts.Text("dictionarySuggest.screenTermsHeader");
+        var linesHeader = Prompts.Text("dictionarySuggest.screenLinesHeader");
+        var used = budget.Cost(termsHeader + "\n" + "\n\n" + linesHeader + "\n");
+        foreach (var term in ocr.Terms)
+        {
+            var cost = budget.Cost(term + ", ");
+            if (used + cost > budget.Limit)
+            {
+                truncated = true;
+                break;
+            }
+            terms.Add(term);
+            used += cost;
+        }
+        foreach (var line in ocr.Lines)
+        {
+            var cost = budget.Cost(line + "\n");
+            // 行の途中では切らない。入らない行は飛ばして、短い行を入れる
+            if (used + cost > budget.Limit)
+            {
+                truncated = true;
+                continue;
+            }
+            lines.Add(line);
+            used += cost;
+        }
+        return new ScreenMaterial(terms, lines, truncated);
+    }
+
+    // 要件: REQ-DIC-075
+    // 設計判断: DEC-DIC-088, DEC-DIC-231
+    /// <summary>
+    /// 画面の材料を送って候補を受け取り、絞り込む（読みは推測を許し、表記はいつも材料と照らし合わせる）。
+    /// 材料の区切りのタグは先に無害にし、絞り込みも無害にした材料で照らし合わせる
+    /// </summary>
+    public static async Task<IReadOnlyList<DictionaryCandidate>> SuggestFromScreenAsync(ScreenMaterial material, UserDictionary existing,
+        ITextGenerator client, string model, CancellationToken cancellationToken = default)
+    {
+        var text = PromptText.NeutralizeDelimiters(material.Text);
+        var response = await client.GenerateTextAsync(TextPurpose.Minutes, ScreenInstruction, UserPrompt(text, existing), model, cancellationToken)
+            .ConfigureAwait(false);
+        return FilterFromScreen(Parse(response), existing, text);
+    }
+
+    // 設計判断: DEC-DIC-231
+    /// <summary>画面からの候補の絞り込み（SuggestFromScreenAsync と確かめ方の CLI・テストで同じものを使う）</summary>
+    public static IReadOnlyList<DictionaryCandidate> FilterFromScreen(IReadOnlyList<DictionaryCandidate> candidates, UserDictionary existing, string material) =>
+        Filter(candidates, existing, material, readingsMustAppear: false, requireSpellingInMaterial: true,
+            maxReadings: ScreenMaxReadings, maxReadingLength: ScreenMaxReadingLength);
+
     // 設計判断: DEC-DIC-087
     /// <summary>選んだ候補を辞書の末尾に足した文字列を返す</summary>
+    // 設計判断: DEC-DIC-231
+    /// <summary>読みをすべて外した候補のうち、表記がもう辞書にあるものを除く（足しても同じ表記の行が重なるだけのため。Mac 版 droppingRegistered と同じ）</summary>
+    public static List<DictionaryCandidate> DroppingRegistered(IEnumerable<DictionaryCandidate> candidates, UserDictionary existing)
+    {
+        static string Key(string s) => string.Concat(UserDictionary.MatchKey(s));
+        var registered = existing.Spellings.Select(Key).ToHashSet();
+        return candidates.Where(c => c.Readings.Count > 0 || !registered.Contains(Key(c.Spelling))).ToList();
+    }
+
     public static string Appending(IReadOnlyList<DictionaryCandidate> candidates, string text)
     {
         if (candidates.Count == 0) return text;

@@ -2416,4 +2416,96 @@ The apps you added and each app's extra rules will be removed. Custom styles are
     <value>Cancel</value>
     <comment>Learn a style window: button</comment>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Find &amp;Dictionary Suggestions from Screen…</value>
+    <comment>Tray menu item (reads text on all screens and asks the meeting AI for dictionary suggestions). &amp; = access key</comment>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — Find Dictionary Suggestions from Screen</value>
+    <comment>Find dictionary suggestions from screen: window title (shown in the taskbar)</comment>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Find Dictionary Suggestions from Screen</value>
+    <comment>Find dictionary suggestions from screen: heading</comment>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Text shown on your screens is read on this PC (the image isn't sent or saved). Hanasu's windows, password managers, notifications, and sign-in dialogs aren't read. Everything else is read, including password manager extensions in your browser and terminals. The text is sent only when you click “Find Suggestions”, and only to the AI chosen for “Minutes” on the “AI” tab in Settings (with “Local”, it doesn't leave this PC).</value>
+    <comment>Find dictionary suggestions from screen: note at the bottom (what is and isn't read, and where the text is sent)</comment>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Reading text on the screen…</value>
+    <comment>Find dictionary suggestions from screen: while OCR is running</comment>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Read from {0} screen(s). Sending words: {1}, lines: {2}.</value>
+    <comment>Find dictionary suggestions from screen. {0} = number of screens, {1} = number of words, {2} = number of lines</comment>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Send to: {0}</value>
+    <comment>Find dictionary suggestions from screen. {0} = AI name, or ScreenDictionary_DestinationModel</comment>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+    <comment>Find dictionary suggestions from screen. {0} = AI name (Gemini, Claude, Local), {1} = model name</comment>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Gemini and Claude guess readings more accurately (you can change this under “Minutes” on the “AI” tab in Settings).</value>
+    <comment>Find dictionary suggestions from screen: shown when the meeting AI is Local</comment>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>There's a lot of text on the screen, so only part of it will be sent.</value>
+    <comment>Find dictionary suggestions from screen: shown when the material didn't fit the AI's limit</comment>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>Windows doesn't have text recognition for {0} installed, so the text was read as {1}. You can add the language's “Optical character recognition” in Settings &gt; Time &amp; language &gt; Language &amp; region.</value>
+    <comment>Find dictionary suggestions from screen. {0} = transcription language name, {1} = language actually used for OCR. Use the Windows Settings names in this language</comment>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Words</value>
+    <comment>Find dictionary suggestions from screen: label of the read-only box listing words to send</comment>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Lines on Screen</value>
+    <comment>Find dictionary suggestions from screen: label of the read-only box listing lines to send</comment>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(None)</value>
+    <comment>Find dictionary suggestions from screen: shown in an empty box</comment>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Find Suggestions</value>
+    <comment>Find dictionary suggestions from screen: button (sends the material to the AI)</comment>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Select the ones you want to add.</value>
+    <comment>Find dictionary suggestions from screen: above the list when the model name is unknown</comment>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>No reading (adds the word only)</value>
+    <comment>Find dictionary suggestions from screen: under a suggestion without readings</comment>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Reading:</value>
+    <comment>Find dictionary suggestions from screen: label before the reading checkboxes</comment>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Couldn't read any text from the screen.</value>
+    <comment>Find dictionary suggestions from screen: error</comment>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>No screen to capture was found.</value>
+    <comment>Find dictionary suggestions from screen: error</comment>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Couldn't capture the screen: {0}</value>
+    <comment>Find dictionary suggestions from screen: error. {0} = reason from Windows</comment>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Couldn't read the text on the screen: {0}</value>
+    <comment>Find dictionary suggestions from screen: error. {0} = reason from Windows</comment>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>Windows doesn't have text recognition (OCR) installed for any language, so the screen couldn't be read. Add a language's “Optical character recognition” in Settings &gt; Time &amp; language &gt; Language &amp; region.</value>
+    <comment>Find dictionary suggestions from screen: error. Use the Windows Settings names in this language</comment>
+  </data>
 </root>

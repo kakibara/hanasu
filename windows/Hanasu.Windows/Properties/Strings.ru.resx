@@ -1841,4 +1841,73 @@
   <data name="StyleLearning_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="Tray_ScreenDictionary" xml:space="preserve">
+    <value>Найти &amp;кандидатов для словаря на экране…</value>
+  </data>
+  <data name="ScreenDictionary_WindowTitle" xml:space="preserve">
+    <value>Hanasu — поиск кандидатов для словаря на экране</value>
+  </data>
+  <data name="ScreenDictionary_Title" xml:space="preserve">
+    <value>Найти кандидатов для словаря на экране</value>
+  </data>
+  <data name="ScreenDictionary_Note" xml:space="preserve">
+    <value>Текст, отображаемый на экранах, распознаётся на этом ПК (изображение не отправляется и не сохраняется). Окна Hanasu, менеджеры паролей, уведомления и окна аутентификации не читаются. Всё остальное читается, включая расширения менеджеров паролей в браузере и терминалы. Текст отправляется только при нажатии «Найти кандидатов» и только AI, выбранному в пункте «Протокол» на вкладке «AI» в параметрах (при «Локальная LLM» ничего не покидает этот ПК).</value>
+  </data>
+  <data name="ScreenDictionary_Reading" xml:space="preserve">
+    <value>Распознавание текста на экране…</value>
+  </data>
+  <data name="ScreenDictionary_Summary" xml:space="preserve">
+    <value>Прочитано экранов: {0}. Будет отправлено слов: {1}, строк: {2}.</value>
+  </data>
+  <data name="ScreenDictionary_Destination" xml:space="preserve">
+    <value>Отправлять в: {0}</value>
+  </data>
+  <data name="ScreenDictionary_DestinationModel" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ScreenDictionary_LocalNote" xml:space="preserve">
+    <value>Произношение точнее угадывают Gemini и Claude (можно изменить в пункте «Протокол» на вкладке «AI» в параметрах).</value>
+  </data>
+  <data name="ScreenDictionary_Truncated" xml:space="preserve">
+    <value>На экране слишком много текста, поэтому будет отправлена только часть.</value>
+  </data>
+  <data name="ScreenDictionary_OcrFallback" xml:space="preserve">
+    <value>В Windows не установлено распознавание текста для языка «{0}», поэтому для распознавания использован язык «{1}». Добавить «Оптическое распознавание символов» для этого языка можно в разделе Параметры Windows → Время и язык → Язык и регион.</value>
+  </data>
+  <data name="ScreenDictionary_Terms" xml:space="preserve">
+    <value>Слова</value>
+  </data>
+  <data name="ScreenDictionary_Lines" xml:space="preserve">
+    <value>Строки с экрана</value>
+  </data>
+  <data name="ScreenDictionary_None" xml:space="preserve">
+    <value>(Нет)</value>
+  </data>
+  <data name="ScreenDictionary_Search" xml:space="preserve">
+    <value>Найти кандидатов</value>
+  </data>
+  <data name="ScreenDictionary_Choose" xml:space="preserve">
+    <value>Выберите, что добавить.</value>
+  </data>
+  <data name="ScreenDictionary_NoReading" xml:space="preserve">
+    <value>Без произношения (будет добавлено только слово)</value>
+  </data>
+  <data name="ScreenDictionary_ReadingLabel" xml:space="preserve">
+    <value>Произношение:</value>
+  </data>
+  <data name="ScreenDictionary_NoText" xml:space="preserve">
+    <value>Не удалось распознать текст на экране.</value>
+  </data>
+  <data name="ScreenDictionary_NoScreens" xml:space="preserve">
+    <value>Не найдено экранов для снимка.</value>
+  </data>
+  <data name="ScreenDictionary_CaptureFailed" xml:space="preserve">
+    <value>Не удалось сделать снимок экрана: {0}</value>
+  </data>
+  <data name="ScreenDictionary_ReadFailed" xml:space="preserve">
+    <value>Не удалось распознать текст на экране: {0}</value>
+  </data>
+  <data name="ScreenDictionary_NoOcr" xml:space="preserve">
+    <value>В Windows не установлено распознавание текста (OCR) ни для одного языка, поэтому прочитать экран не удалось. Добавьте «Оптическое распознавание символов» для какого-либо языка в разделе Параметры Windows → Время и язык → Язык и регион.</value>
+  </data>
 </root>
