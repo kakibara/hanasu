@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.6.3](https://github.com/kakibara/hanasu/compare/v2.6.2...v2.6.3) - 2026-11-13
+## [v2.7.0](https://github.com/kakibara/hanasu/compare/v2.6.2...v2.7.0) - 2026-11-13
 
 - 会議の記録中に落ちるのを直し、落ちた会議を録音から作り直せるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/113
 - REQ-REL-004 の受け入れ条件から、取り下げた v1.3.0〜v2.6.1 の Windows の zip を除く by @kakibara in https://github.com/kakibara/hanasu/pull/116
