@@ -248,12 +248,14 @@ jobs:
           $masked = Dump-ScreenText (Join-Path $temp "screen-masked.txt")
           $failures = @()
           if ($masked.Contains("SECRET")) { $failures += "除外したウインドウ（KeePassXC.exe）の文字が出ました" }
-          if (-not $masked.Contains("株式会社ストックマーク")) { $failures += "日本語の行が空白なしでつながって出ていません" }
+          # OCR は小さいカタカナを読み違えることがある（2026-11-14 の CI で「ストッりーり」）。漢字とかなが空白なしでつながったかだけを見る
+          if (-not $masked.Contains("株式会社スト")) { $failures += "日本語の行が空白なしでつながって出ていません" }
           # 対照: 同じ文字を、名前を変えない notepad で同じ場所に開くと読める
           Stop-Process -Id $keepass.Id -Force
           $plain = Open-Notepad "notepad.exe" $secret 0
           $visible = Dump-ScreenText (Join-Path $temp "screen-visible.txt")
-          if (-not $visible.Contains("HANASU-SECRET")) { $failures += "対照の notepad の文字が読めません（撮れていないため、除外を確かめられません）" }
+          # 左端の 1 文字は欠けることがある（2026-11-14 の CI で「ANASU-SECRET-7Q」）
+          if (-not $visible.Contains("SECRET-7Q")) { $failures += "対照の notepad の文字が読めません（撮れていないため、除外を確かめられません）" }
           Stop-Process -Id $plain.Id, $notepad.Id -Force -ErrorAction SilentlyContinue
           if ($failures.Count -gt 0) { throw ($failures -join "`n") }
           Write-Output "--dump-screen-text: 除外と日本語のつなぎ方を確かめました"
