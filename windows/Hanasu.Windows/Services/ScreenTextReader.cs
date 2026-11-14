@@ -85,7 +85,10 @@ internal static partial class ScreenTextReader
                 var shot = new CapturedScreen(shots.Count, bounds, new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb));
                 shots.Add(shot);
                 using var graphics = Graphics.FromImage(shot.Image);
-                graphics.CopyFromScreen(bounds.Left, bounds.Top, 0, 0, bounds.Size, CopyPixelOperation.SourceCopy | CopyPixelOperation.CaptureBlt);
+                // SourceCopy だけを渡す。CopyFromScreen は列挙の値を検査し、SourceCopy | CaptureBlt の組み合わせを
+                // 「不正な値」として例外にする（PR #118 の CI で見つけた）。DWM が合成した画面から撮るので、
+                // 重ねたウインドウ（layered）も CaptureBlt なしで写る
+                graphics.CopyFromScreen(bounds.Left, bounds.Top, 0, 0, bounds.Size, CopyPixelOperation.SourceCopy);
                 // 設計判断: DEC-DIC-235（ほかのウインドウの下に隠れている部分まで塗ってよい。多く除く側に倒す）
                 foreach (var mask in masks)
                 {

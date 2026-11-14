@@ -371,3 +371,4 @@ ScreenCaptureKit と Vision の小さな試作（`SCShareableContent` → `SCScr
   - Apple の fm・文字起こしの言語が英語のとき: 確かめていない。
 - 実機の画面を撮る流れ（`--suggest-dictionary --screen`・メニューから選ぶ・許可のダイアログ・全画面表示のアプリの上・録音中にメニューが灰色になること）: 確かめていない（UI のテスト項目 UX-203・204 の remaining）。
 - Windows: この Mac で `dotnet test Hanasu.Core.Tests`（856 件すべて合格。`ScreenDictionaryTests` で共有の例・OCR の単語のつなぎ方・絞り込み・材料・既定の除外の名前を見る）と `dotnet build Hanasu.Windows`（警告 0・エラー 0）。Windows の実機がなく、撮る（BitBlt）・`WDA_EXCLUDEFROMCAPTURE` が BitBlt に効くか・除外のウインドウの黒塗りの位置（DPI の違う画面）・OCR の言語の落ち方・タイル・既定の除外の exe 名（DEC-DIC-235）・画面の見た目は確かめていない。CI の windows-latest の「Dump screen text」（`continue-on-error`）で、偽の KeePassXC の文字が出ないこと・日本語の行が空白なしでつながることを見る。
+- 2026-11-14 追記: PR #118 の最初の CI（windows-latest）で、「Dump screen text」が撮る段階で落ちていた（`CopyFromScreen` に `SourceCopy | CaptureBlt` を渡すと、.NET が列挙の値として不正とみなして例外にする）。`continue-on-error` のためジョブは通っていた。`SourceCopy` だけに直し、直したあとの CI の結果をここに書く。
