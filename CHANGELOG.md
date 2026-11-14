@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.7.1](https://github.com/kakibara/hanasu/compare/v2.7.0...v2.7.1) - 2026-11-14
+
+- 画面から辞書の候補を探す（REQ-DIC-075）を Mac と Windows に足す by @kakibara in https://github.com/kakibara/hanasu/pull/118
+
 ## [v2.7.0](https://github.com/kakibara/hanasu/compare/v2.6.2...v2.7.0) - 2026-11-13
 
 - 会議の記録中に落ちるのを直し、落ちた会議を録音から作り直せるようにする by @kakibara in https://github.com/kakibara/hanasu/pull/113
