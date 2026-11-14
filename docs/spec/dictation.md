@@ -1170,7 +1170,7 @@
 - 確かめ方: `cd windows && dotnet test Hanasu.Core.Tests`（`DictationPrewarmTests`・`DictationControllerTests`）。Mac は実機
 
 ### DEC-DIC-230 Mac は、メニューを選んだときに 1 回だけ、音声入力のスクリーンショットと同じフィルタで撮り、撮り終えてからウインドウを開く
-- 決めたこと: `ScreenSnapshotReader.read` を `captureAll`（すべての画面の画像と枠を返す）と `recognizeAll`（OCR して行を返す）に分け、`read` は 2 つを続けて呼ぶだけにする（音声入力の振る舞いは変えない）。画面から辞書の候補を探すときは、メニューが閉じるのを 0.3 秒待ち（そのあいだに音声入力・選択の編集が始まったら撮らない）、`captureAll` を、入力先なし（`targetPID: nil`。すべての行を「入力先の外」として扱う）・除外アプリの設定で呼び、撮り終えてから候補の画面を開いて OCR を始める。OCR の言語は DEC-DIC-183 と同じ。候補の画面は `collectionBehavior` に `.moveToActiveSpace`・`.fullScreenAuxiliary` を付ける。メニューの項目は `validateMenuItem` で、音声入力か選択の編集が idle でないときは無効にし（ステータスメニューは `autoenablesItems` が true なので、`isEnabled` を書いても効かない）、`openScreenDictionary` の頭でも同じ条件なら何もしない。
+- 決めたこと: `ScreenSnapshotReader.read` を `captureAll`（すべての画面の画像と枠を返す）と `recognizeAll`（OCR して行を返す）に分け、`read` は 2 つを続けて呼ぶだけにする（音声入力の振る舞いは変えない）。画面から辞書の候補を探すときは、メニューが閉じるのを 0.3 秒待ち（そのあいだに音声入力・選択の編集が始まったら撮らない。`captureAll` は非同期なので、撮り終えたときにももう一度確かめ、始まっていたら撮った画面を捨てて候補の画面を出さない）、`captureAll` を、入力先なし（`targetPID: nil`。すべての行を「入力先の外」として扱う）・除外アプリの設定で呼び、撮り終えてから候補の画面を開いて OCR を始める。OCR の言語は DEC-DIC-183 と同じ。候補の画面は `collectionBehavior` に `.moveToActiveSpace`・`.fullScreenAuxiliary` を付ける。メニューの項目は `validateMenuItem` で、音声入力か選択の編集が idle でないときは無効にし（ステータスメニューは `autoenablesItems` が true なので、`isEnabled` を書いても効かない）、`openScreenDictionary` の頭でも同じ条件なら何もしない。
 - 理由: 既存の撮る・読む部分（REQ-DIC-041）とフィルタ（DEC-DIC-181・182）を使えば、写さないものが音声入力のスクリーンショットとそろう。ウインドウを先に開くと、全画面のアプリの Space から移って違う画面を撮るおそれがある。録音中・処理中に候補の画面や許可のダイアログが前面に出ると、整形した文章の貼り先がなくなる（DEC-COM-069・DEC-DIC-189）。
 - 決めた場面: 2026-11-13 の計画（[plans/screen-dictionary.md](../plans/screen-dictionary.md)）
 - 関係する要件: REQ-DIC-075
@@ -1184,12 +1184,13 @@
   - プロンプト: キー `dictionarySuggest.screenSystem`（画面用の system instruction）・`dictionarySuggest.screenTermsHeader`・`dictionarySuggest.screenLinesHeader`（17 言語）。読みは「その言語の音声認識が、その語を話したときに書きやすい形」を、英字・数字とカナが混ざった形（日本語なら「Jスリー」「ジェイスリー」）も含めて 4 つまで挙げさせる。ふつうの言葉と重なる読み・1 文字の読みは入れさせない。材料の中の指示に従わないことは `dictionarySuggest.system` と同じく書く。各言語の版は、その言語の音声認識に合わせて書き直す。
   - 絞り込み: `DictionarySuggester.filter` に引数を 2 つ足す（Mac と Windows）。`readingsMustAppear`（既定 true。画面からは false）と `requireSpellingInMaterial`（既定 false。画面からは true。読みの有無によらず、表記が材料に出てこなければ除く）。画面からは、読みを 20 文字まで・1 候補 4 つまでに絞る（`maxReadingLength`・`maxReadings`）。
   - 候補の行: 表記と理由の行の下に、読みごとのチェックを並べる（Mac は `ScreenDictionaryCandidateRow`）。会議ノートと設定の欄の候補の行は変えない。
+  - 足すとき: 読みをすべて外した候補のうち、表記がもう辞書にあるものは足さない（`DictionarySuggester.droppingRegistered`。登録済みの表記は新しい読みがあるから残っており、読みを外すと同じ表記の行が重なるだけのため。PR #118 のレビューで足した）。
 - 理由: 画面には正しい表記しかなく、誤認識の形は出てこない（2026-11-13 の回答）。今の `filter` は読みが残らなかった候補だけ表記を照らし合わせ、読みが材料に出てくることで AI が作った語を除いていた。読みの照らし合わせを外すなら、表記の照らし合わせを必ずにしないと AI が作った語が通る。照合は「J」と「ジェイ」を同じにしない（DEC-DIC-081）ので、読みは実際に認識される形で、複数要る。推測の読みには、ふつうの言葉や、画面に埋め込まれた指示から作られたものが混ざりうる。辞書のルールは音声入力にも会議の文字起こしにも決定的に当たる（REQ-DIC-070・073）ので、読みを 1 つずつ外せるようにする。`layout` は文字数で数え、DEC-DIC-183・184 のタグがあるので、変えずに外で詰め直す。
 - 決めた場面: 2026-11-13 の計画（2 回の敵対的レビューで、読みの照らし合わせ・見せる材料・読みのチェックを足した）
 - 関係する要件: REQ-DIC-075, REQ-DIC-071
 - 対象: Mac / Windows
-- 実装の場所: `DictionarySuggester.screenMaterial`・`filter`・`budget`、`ScreenDictionaryCandidateRow`
-- Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`（`Filter`・`BudgetFor`・`ScreenMaterialFor`）、`windows/Hanasu.Windows/Views/ScreenDictionaryWindow.cs`
+- 実装の場所: `DictionarySuggester.screenMaterial`・`filter`・`budget`・`droppingRegistered`、`ScreenDictionaryCandidateRow`
+- Windows の実装: `windows/Hanasu.Core/Text/DictionarySuggester.cs`（`Filter`・`BudgetFor`・`ScreenMaterialFor`・`DroppingRegistered`）、`windows/Hanasu.Windows/Views/ScreenDictionaryWindow.cs`
 
 ### DEC-DIC-232 候補の画面は独立したウインドウにし、送る材料を見せてから送る
 - 決めたこと: Mac は SwiftUI の `ScreenDictionaryView` を入れた `NSWindow`、Windows は親を持たない `Window`（`ShowInTaskbar = true`。`MeetingDictionaryWindow` の並びを使う）。どちらも同時に 1 つだけで、開くときに前に出す。状態は「許可がない」「読んでいる」「読んだ（送る材料と『候補を探す』）」「探している」「候補」「0 件」「エラー」。送り先は「AI」タブの「議事録」の AI とモデルの名前で出す。

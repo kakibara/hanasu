@@ -207,6 +207,7 @@ internal sealed class ScreenDictionaryWindow : Window
             .Select(r => r.Candidate with { Readings = r.Readings.Where(x => x.Box.IsChecked == true).Select(x => x.Reading).ToList() })
             .ToList();
         if (chosen.Count == 0) return;
+        chosen = DictionarySuggester.DroppingRegistered(chosen, host.Settings.Current.UserDictionary);
         cancellation.Cancel();
         var error = host.Settings.Update(s => s.DictionaryText = DictionarySuggester.Appending(chosen, s.DictionaryText));
         if (error is not null)

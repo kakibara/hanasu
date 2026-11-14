@@ -33,13 +33,25 @@ public static class ScreenDictionary
     /// </summary>
     public static int Length(string text) => text.Length == 0 ? 0 : new StringInfo(text).LengthInTextElements;
 
+    /// <summary>
+    /// 前後の空白を除く。Mac の trimmingCharacters(in: .whitespaces) と同じく、空白の区切り（全角空白・NBSP を含む）とタブを除き、改行は残す
+    /// </summary>
+    public static string TrimSpaces(string text)
+    {
+        static bool IsSpace(char c) => c == '\t' || CharUnicodeInfo.GetUnicodeCategory(c) == UnicodeCategory.SpaceSeparator;
+        int start = 0, end = text.Length;
+        while (start < end && IsSpace(text[start])) start++;
+        while (end > start && IsSpace(text[end - 1])) end--;
+        return text[start..end];
+    }
+
     // 設計判断: DEC-DIC-183
     /// <summary>行から、語の一覧と行を作り、上限（文字数）に収める（Mac 版 ScreenSnapshotLayout.layout の移植）</summary>
     public static ScreenOcr Layout(IEnumerable<ScreenTextLine> lines, int limit)
     {
         if (limit <= 0) return ScreenOcr.Empty;
         // 画面ごとに上から下・左から右。入力先のウインドウの外を先に、中をあとに
-        var sorted = lines.Where(l => Length(l.Text.Trim(' ', '\t')) >= 2).ToList();
+        var sorted = lines.Where(l => Length(TrimSpaces(l.Text)) >= 2).ToList();
         sorted.Sort((a, b) =>
         {
             if (a.InTarget != b.InTarget) return a.InTarget ? 1 : -1;

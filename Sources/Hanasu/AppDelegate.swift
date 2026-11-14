@@ -295,6 +295,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSMenu
             let model = ScreenDictionaryModel(settings: settings)
             do {
                 let shots = try await ScreenSnapshotReader.captureAll(request)
+                // 撮っているあいだ（非同期で数百 ms）に始まったときも、撮った画面を捨てて前に出さない
+                guard controller.state == .idle, editController.state == .idle else { return }
                 screenDictionaryUI.open(model)
                 model.read(shots, languages: request.languages)
             } catch {

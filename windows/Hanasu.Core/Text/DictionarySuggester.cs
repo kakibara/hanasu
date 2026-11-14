@@ -307,6 +307,15 @@ public static class DictionarySuggester
 
     // 設計判断: DEC-DIC-087
     /// <summary>選んだ候補を辞書の末尾に足した文字列を返す</summary>
+    // 設計判断: DEC-DIC-231
+    /// <summary>読みをすべて外した候補のうち、表記がもう辞書にあるものを除く（足しても同じ表記の行が重なるだけのため。Mac 版 droppingRegistered と同じ）</summary>
+    public static List<DictionaryCandidate> DroppingRegistered(IEnumerable<DictionaryCandidate> candidates, UserDictionary existing)
+    {
+        static string Key(string s) => string.Concat(UserDictionary.MatchKey(s));
+        var registered = existing.Spellings.Select(Key).ToHashSet();
+        return candidates.Where(c => c.Readings.Count > 0 || !registered.Contains(Key(c.Spelling))).ToList();
+    }
+
     public static string Appending(IReadOnlyList<DictionaryCandidate> candidates, string text)
     {
         if (candidates.Count == 0) return text;

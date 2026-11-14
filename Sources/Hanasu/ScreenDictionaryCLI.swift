@@ -108,6 +108,15 @@ enum ScreenDictionaryCLI {
         let added = UserDictionary(text: DictionarySuggester.appending(model.chosen, to: ""))
         check("足した辞書で「Jスリーの件ですが」が「J3の件ですが」になる", added.apply(to: "Jスリーの件ですが") == "J3の件ですが")
 
+        // 設計判断: DEC-DIC-231（読みをすべて外した、登録済みの表記は足さない）
+        let kept = DictionarySuggester.droppingRegistered([
+            DictionaryCandidate(spelling: "Kubernetes", readings: [], reason: ""),
+            DictionaryCandidate(spelling: "Stockmark", readings: ["ストックマーク"], reason: ""),
+            DictionaryCandidate(spelling: "Stockmark", readings: [], reason: ""),
+            DictionaryCandidate(spelling: "J3", readings: [], reason: ""),
+        ], existing: UserDictionary(text: "Kubernetes\nスタックマーク => Stockmark"))
+        check("足す: 読みのない登録済みの表記は除き、読みのあるものと新しい語は残す", kept.map(\.spelling) == ["Stockmark", "J3"])
+
         print(failures == 0 ? "すべて OK" : "NG が \(failures) 件")
         return failures == 0
     }

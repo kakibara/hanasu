@@ -151,8 +151,8 @@ final class ScreenDictionaryModel: ObservableObject {
     // 設計判断: DEC-DIC-087
     /// 選んだものを辞書の末尾に足し、知らせを出してから閉じる
     func add() {
-        let chosen = chosen
         guard !chosen.isEmpty else { return }
+        let chosen = DictionarySuggester.droppingRegistered(chosen, existing: settings.userDictionary)
         settings.dictionaryText = DictionarySuggester.appending(chosen, to: settings.dictionaryText)
         phase = .added(chosen.count)
         Task {
@@ -359,7 +359,11 @@ final class ScreenDictionaryWindowController: NSObject, NSWindowDelegate {
     func open(_ model: ScreenDictionaryModel) {
         self.model?.cancel()
         self.model = model
-        model.onClose = { [weak self] in self?.close() }
+        // 追加して 2 秒後に閉じるとき、そのあいだに開き直した別の画面を閉じない
+        model.onClose = { [weak self, weak model] in
+            guard let self, let model, self.model === model else { return }
+            self.close()
+        }
         let window = Self.makeWindow(model: model, close: { [weak self] in self?.close() })
         window.delegate = self
         window.center()

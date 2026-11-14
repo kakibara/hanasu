@@ -286,4 +286,30 @@ public class ScreenDictionaryTests
         // 足すと「読み => 表記」の行になる
         Assert.Equal("Jスリー, ジェイスリー => J3", DictionarySuggester.Appending(found, ""));
     }
+
+    // 設計判断: DEC-DIC-231
+    [Fact]
+    public void DropsRegisteredSpellingWithoutReadings()
+    {
+        var existing = new UserDictionary("Kubernetes\nスタックマーク => Stockmark");
+        var kept = DictionarySuggester.DroppingRegistered(
+        [
+            new DictionaryCandidate("Kubernetes", [], ""),
+            new DictionaryCandidate("Stockmark", ["ストックマーク"], ""),
+            new DictionaryCandidate("Stockmark", [], ""),
+            new DictionaryCandidate("J3", [], ""),
+        ], existing);
+        Assert.Equal(["Stockmark", "J3"], kept.Select(c => c.Spelling));
+    }
+
+    // 設計判断: DEC-DIC-183
+    [Fact]
+    public void TrimsSpacesLikeMac()
+    {
+        Assert.Equal("あ", ScreenDictionary.TrimSpaces("\u3000あ\u00A0\t"));
+        Assert.Equal("a b", ScreenDictionary.TrimSpaces(" a b "));
+        Assert.Equal("\na", ScreenDictionary.TrimSpaces("\na"));
+        // 全角空白を除くと 1 文字の行は、Mac と同じく落ちる
+        Assert.Empty(ScreenDictionary.Layout([new ScreenTextLine("\u3000あ", 0, false, 0, 0)], 1000).Lines);
+    }
 }

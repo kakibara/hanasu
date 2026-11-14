@@ -361,6 +361,14 @@ enum DictionarySuggester {
                maxReadings: screenMaxReadings, maxReadingLength: screenMaxReadingLength)
     }
 
+    // 設計判断: DEC-DIC-231
+    /// 読みをすべて外した候補のうち、表記がもう辞書にあるものを除く（足しても同じ表記の行が重なるだけのため）
+    static func droppingRegistered(_ candidates: [DictionaryCandidate], existing: UserDictionary) -> [DictionaryCandidate] {
+        let key = { (s: String) in String(UserDictionary.matchKey(s)) }
+        let registered = Set(existing.spellings.map(key))
+        return candidates.filter { !$0.readings.isEmpty || !registered.contains(key($0.spelling)) }
+    }
+
     // 設計判断: DEC-DIC-087
     /// 選んだ候補を辞書の末尾に足した文字列を返す
     static func appending(_ candidates: [DictionaryCandidate], to text: String) -> String {
